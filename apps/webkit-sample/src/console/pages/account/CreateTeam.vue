@@ -19,6 +19,7 @@
   import InputText from '@aziontech/webkit/input-text'
   import Item from '@aziontech/webkit/item'
   import Message from '@aziontech/webkit/message'
+  import Switch from '@aziontech/webkit/switch'
   import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
   import { computed, reactive, ref } from 'vue'
@@ -281,14 +282,14 @@
     >
       <CardBox>
         <template #content>
-          <div class="flex flex-col gap-[var(--spacing-md)]">
-            <div class="flex flex-wrap items-center gap-[var(--spacing-xs)]">
+          <div class="flex flex-col gap-(--spacing-md)">
+            <div class="flex flex-wrap items-center gap-(--spacing-xs)">
               <InputText
                 v-model="filterText"
                 size="large"
                 placeholder="Filter permissions"
                 aria-label="Filter permissions"
-                class="min-w-[var(--container-2xs)] flex-1"
+                class="min-w-(--container-2xs) flex-1"
               >
                 <template #iconLeft>
                   <i
@@ -320,17 +321,17 @@
             />
 
             <div
-              class="overflow-hidden rounded-[var(--shape-elements)] border-[length:var(--border-width-default)] border-[var(--border-muted)]"
+              class="overflow-hidden rounded-(--shape-elements) border-(length:--border-width-default) border-(--border-muted)"
             >
               <div
                 v-for="group in visibleGroups"
                 :key="group.label"
-                class="border-b-[length:var(--border-width-default)] border-[var(--border-muted)] last:border-b-0"
+                class="border-b-(length:--border-width-default) border-(--border-muted) last:border-b-0"
               >
                 <!-- Group header: select-all + name on the left, column
                headers on the right. -->
                 <div
-                  class="flex items-center gap-[var(--spacing-sm)] bg-[var(--bg-surface-raised)] px-[var(--spacing-md)] py-[var(--spacing-sm)]"
+                  class="flex items-center gap-(--spacing-sm) bg-(--bg-surface-raised) px-(--spacing-md) py-(--spacing-sm)"
                 >
                   <Checkbox
                     binary
@@ -339,16 +340,16 @@
                     :aria-label="`Select all ${group.label} permissions`"
                     @update:model-value="(checked) => toggleGroup(group, checked)"
                   />
-                  <span class="flex-1 text-label-md text-[var(--text-default)]">
+                  <span class="flex-1 text-label-md text-(--text-default)">
                     {{ group.label }}
                   </span>
                   <!-- Column headers of the permission matrix: the same
                  `text-label-sm` + --text-muted a webkit table head cell
                  uses, so this grid's head reads like every other table's. -->
-                  <span class="w-16 text-center text-label-sm text-[var(--text-muted)]">
+                  <span class="w-16 text-center text-label-sm text-(--text-muted)">
                     View
                   </span>
-                  <span class="w-16 text-center text-label-sm text-[var(--text-muted)]">
+                  <span class="w-16 text-center text-label-sm text-(--text-muted)">
                     Edit
                   </span>
                 </div>
@@ -357,10 +358,10 @@
                 <div
                   v-for="resource in group.resources"
                   :key="resource.key"
-                  class="flex items-center gap-[var(--spacing-sm)] border-t-[length:var(--border-width-default)] border-[var(--border-muted)] px-[var(--spacing-md)] py-[var(--spacing-sm)] hover:bg-[var(--bg-hover)]"
+                  class="flex items-center gap-(--spacing-sm) border-t-(length:--border-width-default) border-(--border-muted) px-(--spacing-md) py-(--spacing-sm) hover:bg-(--bg-hover)"
                 >
                   <span
-                    class="flex-1 pl-[var(--spacing-lg)] text-body-sm text-[var(--text-default)]"
+                    class="flex-1 pl-(--spacing-lg) text-body-sm text-(--text-default)"
                   >
                     {{ resource.label }}
                   </span>
@@ -386,7 +387,7 @@
 
               <p
                 v-if="!visibleGroups.length"
-                class="px-[var(--spacing-md)] py-[var(--spacing-lg)] text-center text-body-sm text-[var(--text-muted)]"
+                class="px-(--spacing-md) py-(--spacing-lg) text-center text-body-sm text-(--text-muted)"
               >
                 No permissions match "{{ filterText }}".
               </p>
