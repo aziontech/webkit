@@ -45,17 +45,17 @@
   // the page (`--bg-surface-raised` + a border + a shadow, the console's one raised
   // plane), so the rows passing beside and under it are simply the page continuing.
   //
-  // ── ONE PLACEMENT, `sticky bottom-0`, AND WHY IT NEEDS NO PROP ──
+  // ── ONE PLACEMENT, `sticky bottom-0` ON A ZERO-HEIGHT STRIP, AND WHY IT NEEDS NO PROP ──
   //
   // The console mounts this bar in three structurally different places, and `sticky`
   // is correct in all of them without being told which:
   //
   //   inside the page's own scroll region (an application's Main Settings, a zone's) —
   //     the scroll region is the scrollport, so the bar pins to the bottom of the visible
-  //     area and the content scrolls under its gradient.
-  //   as a sibling of a scroll region in a flex column (the account's settings) — it has
-  //     no scrolling ancestor of its own, so sticky resolves to in-flow and the flex
-  //     column holds it at the bottom, which is exactly where it belongs.
+  //     area and the content scrolls under it.
+  //   as a sibling of a scroll region in a flex column (the account's settings, a
+  //     function's) — it has no scrolling ancestor of its own, so sticky resolves to
+  //     in-flow at the bottom of the column.
   //   as a sibling of a full-height `main` inside the shell's scroll container (a
   //     workload's Settings tab) — the bar's natural position is one bar-height BELOW the
   //     fold, and sticky is what pulls it back onto the screen.
@@ -66,6 +66,16 @@
   // bar sitting at y=900 in a 900px viewport, present in the DOM, mounted on the right
   // edit, and never once visible. Measured, not eyeballed. One class that is right
   // everywhere beats a prop whose two answers each cover half the cases.
+  //
+  // The strip is `h-0` and the card is absolutely positioned off its bottom edge, because
+  // in the second case — sticky with no scrolling ancestor — a strip with HEIGHT is laid
+  // out, not overlaid: it takes a band of the flex column and the content above it shrinks
+  // by exactly the bar's height (measured on a function's Arguments tab: the editor
+  // reflowed and the bar sat in its own reserved strip below the page). That contradicts
+  // the whole point of a floating card, and it made the bar look like two different
+  // components depending on which page raised it. At zero height it contributes no layout
+  // in ANY of the three cases, so it always FLOATS over the content, and `sticky` still
+  // does the one job left: keep that bottom edge on screen.
   //
   // ── WHY THE LEAVE GUARD LIVES HERE ──
   //
@@ -121,27 +131,38 @@
 </script>
 
 <template>
-  <!-- The bar rises from the bottom edge. `transition-[translate,opacity]` names
-       `translate` — NOT `transform` — because that is the property Tailwind v4's
-       translate utilities actually set, and naming the wrong one animates nothing while
-       still compiling. -->
+  <!-- The bar SCALES in, the way a toast does — it does not rise from the bottom edge.
+       A slide up from off-screen says the bar came from somewhere below the page; it did
+       not. It is a raised plane that appears over content already on screen the moment an
+       edit makes it real, which is the same arrival the console's toasts have, so it takes
+       the same shape: a small scale from `origin-bottom` (it is anchored to the bottom
+       edge, so that is the point it grows out of) plus opacity.
+       `transition-[scale,opacity]` names `scale` — NOT `transform` — because that is the
+       property Tailwind v4's `scale-*` utilities actually set, and naming the wrong one
+       animates nothing while still compiling. -->
   <Transition
-    enter-active-class="transition-[translate,opacity] duration-moderate-02 ease-expressive-entrance motion-reduce:transition-none"
-    enter-from-class="translate-y-full opacity-0"
-    leave-active-class="transition-[translate,opacity] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
-    leave-to-class="translate-y-full opacity-0"
+    enter-active-class="origin-bottom transition-[scale,opacity] duration-moderate-02 ease-expressive-entrance motion-reduce:transition-none"
+    enter-from-class="scale-95 opacity-0"
+    leave-active-class="origin-bottom transition-[scale,opacity] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
+    leave-to-class="scale-95 opacity-0"
   >
     <!-- `pointer-events-none` on the strip, `auto` on the card: the strip spans the full
          width so the card can be centred in it, and without this it would swallow clicks
          on the rows either side of a bar that is only as wide as its own buttons. -->
     <footer
       v-if="dirty || saving"
-      class="pointer-events-none sticky bottom-0 z-10 flex justify-center px-(--spacing-md) pt-(--spacing-xl) pb-(--spacing-lg)"
+      class="pointer-events-none sticky bottom-0 z-10 h-0"
     >
+      <!-- Anchored to the strip's bottom edge and growing UPWARD out of it (`absolute
+           bottom-0` on an auto-height box), which is what lets the strip itself be `h-0`
+           and still put the card above the fold rather than half off it. -->
       <div
-        class="pointer-events-auto flex max-w-[min(100%,var(--container-3xl))] items-center gap-(--spacing-md) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised) py-(--spacing-xs) pr-(--spacing-xs) pl-(--spacing-md) shadow-lg"
+        class="absolute inset-x-0 bottom-0 flex justify-center px-(--spacing-md) pb-(--spacing-lg)"
       >
-        <!-- THE FEEDBACK, on the left of the two buttons. It names WHAT is pending and
+        <div
+          class="pointer-events-auto flex max-w-[min(100%,var(--container-3xl))] items-center gap-(--spacing-xl) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised) py-(--spacing-sm) pr-(--spacing-sm) pl-(--spacing-lg) shadow-lg"
+        >
+          <!-- THE FEEDBACK, on the left of the two buttons. It names WHAT is pending and
              what saving will do, so two bars in the same position on two tabs are two
              different sentences rather than one anonymous pair of buttons — and so the
              reader is never asked to commit something the bar has not named.
@@ -151,38 +172,39 @@
              truncates — a commit bar that hides half of what it is about to do is worse
              than a bar one line taller — so the text wraps and the buttons hold their
              width (`shrink-0` on the group below). -->
-        <div class="flex min-w-0 items-start gap-(--spacing-xs)">
-          <i
-            class="pi pi-info-circle mt-[0.125rem] shrink-0 text-[0.875rem] text-(--text-muted)"
-            aria-hidden="true"
-          />
-          <p class="min-w-0 text-body-sm text-(--text-default)">
-            {{ label }}
-            <span
-              v-if="hint"
-              class="text-(--text-muted)"
-              >{{ hint }}</span
-            >
-          </p>
-        </div>
-        <div class="flex shrink-0 items-center gap-(--spacing-sm)">
-          <Button
-            type="button"
-            label="Discard"
-            kind="outlined"
-            size="medium"
-            :disabled="saving"
-            @click="emit('discard')"
-          />
-          <!-- webkit Button renders a native type="button" and does not forward a `type`
+          <div class="flex min-w-0 items-start gap-(--spacing-xs)">
+            <i
+              class="pi pi-info-circle mt-[0.125rem] shrink-0 text-[0.875rem] text-(--text-muted)"
+              aria-hidden="true"
+            />
+            <p class="min-w-0 text-body-sm text-(--text-default)">
+              {{ label }}
+              <span
+                v-if="hint"
+                class="text-(--text-muted)"
+                >{{ hint }}</span
+              >
+            </p>
+          </div>
+          <div class="flex shrink-0 items-center gap-(--spacing-sm)">
+            <Button
+              type="button"
+              label="Discard"
+              kind="outlined"
+              size="large"
+              :disabled="saving"
+              @click="emit('discard')"
+            />
+            <!-- webkit Button renders a native type="button" and does not forward a `type`
                prop, so the commit is driven from its click rather than from form submit. -->
-          <Button
-            label="Save"
-            kind="primary"
-            size="medium"
-            :loading="saving"
-            @click="emit('save')"
-          />
+            <Button
+              label="Save"
+              kind="primary"
+              size="large"
+              :loading="saving"
+              @click="emit('save')"
+            />
+          </div>
         </div>
       </div>
     </footer>
