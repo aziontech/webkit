@@ -313,7 +313,7 @@
 </script>
 
 <template>
-  <header class="sticky top-0 z-40 border-b border-[var(--border-default)] bg-[var(--bg-surface)]">
+  <header class="sticky top-0 z-40 border-b border-(--border-default) bg-(--bg-surface)">
     <!-- THE BAR IS THE TOP OF THE PAGE'S FRAME, so its content lands inside the same
          layout boundary as everything under it: `--container-5xl` centred, the width the
          hero band, the framed column and the footer all resolve to. It used to be
@@ -327,11 +327,11 @@
     <FrameBox
       borders="x"
       marks="none"
-      class="mx-auto w-full max-w-[var(--container-5xl)]"
+      class="mx-auto w-full max-w-(--container-5xl)"
     >
       <NavigationMenu
         aria-label="Azion"
-        class="flex h-14 w-full min-w-0 items-center gap-[var(--spacing-sm)] px-[var(--spacing-xl)] lg:gap-[var(--spacing-lg)]"
+        class="flex h-14 w-full min-w-0 items-center gap-(--spacing-sm) px-(--spacing-xl) lg:gap-(--spacing-lg)"
       >
         <!-- Below `lg` the menus have no bar to live in, so the bar carries the way into
            them instead. Leading edge, like the docs shell's — the two shells of this app
@@ -348,7 +348,7 @@
         <RouterLink
           to="/site"
           aria-label="Azion — home"
-          class="inline-flex shrink-0 items-center self-center rounded-[var(--shape-elements)] transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] motion-reduce:transition-none"
+          class="inline-flex shrink-0 items-center self-center rounded-(--shape-elements) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
         >
           <Brand
             kind="default"
@@ -356,7 +356,7 @@
           />
         </RouterLink>
 
-        <NavigationMenu.List class="hidden items-center gap-[var(--spacing-xxs)] lg:flex">
+        <NavigationMenu.List class="hidden items-center gap-(--spacing-xxs) lg:flex">
           <NavigationMenu.Item
             v-for="menu in megaMenus"
             :key="menu.value"
@@ -384,7 +384,7 @@
             </NavigationMenu.Trigger>
             <NavigationMenu.Content class="w-full p-0">
               <div
-                class="grid gap-[var(--spacing-md)] p-[var(--spacing-sm)]"
+                class="grid gap-(--spacing-md) p-(--spacing-sm)"
                 :class="{
                   'grid-cols-1': menu.columns === 1,
                   'grid-cols-2': menu.columns === 2,
@@ -429,11 +429,11 @@
            sheet (a row in the tree, a button in its footer), because three buttons and a
            brand do not fit a 375px bar without every one of them shrinking below its own
            hit target. -->
-        <div class="ml-auto flex items-center gap-[var(--spacing-xs)]">
+        <div class="ml-auto flex items-center gap-(--spacing-xs)">
           <!-- The wrapper, not the buttons, carries the breakpoint: `Button`'s own
              `inline-flex` base wins over a `hidden` passed as a class, so a button told
              to hide itself stays on the bar. -->
-          <div class="hidden items-center gap-[var(--spacing-xs)] lg:flex">
+          <div class="hidden items-center gap-(--spacing-xs) lg:flex">
             <Button
               label="Contact"
               kind="text"
@@ -505,7 +505,7 @@
               v-model:path="navPath"
               :groups="navGroups"
               aria-label="Azion"
-              class="w-full p-[var(--spacing-md)]"
+              class="w-full p-(--spacing-md)"
               @navigate="onNavigate"
             >
               <!-- Renders nothing at the root level; heads a pushed one, naming the
@@ -514,7 +514,7 @@
             </Menu>
           </ScrollArea>
 
-          <PanelFooter class="w-full px-[var(--spacing-md)]">
+          <PanelFooter class="w-full px-(--spacing-md)">
             <Button
               label="Login"
               kind="secondary"

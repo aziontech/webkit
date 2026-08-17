@@ -99,28 +99,28 @@
 </script>
 
 <template>
-  <aside class="h-full w-[var(--container-2xs)] shrink-0">
+  <aside class="h-full w-(--container-2xs) shrink-0">
     <Sidebar :aria-label="ariaLabel">
       <template #header>
         <!-- Brand lockup + Webkit badge, linking home. -->
         <RouterLink
           to="/site/hub"
           aria-label="Webkit Hub — home"
-          class="inline-flex shrink-0 items-center gap-[var(--spacing-xs)] rounded-[var(--shape-elements)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-surface)]"
+          class="inline-flex shrink-0 items-center gap-(--spacing-xs) rounded-(--shape-elements) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface)"
         >
           <Brand
             kind="default"
             size="small"
           />
           <span
-            class="rounded-[var(--shape-elements)] border border-[var(--border-muted)] px-[var(--spacing-xxs)] py-px text-overline-sm uppercase tracking-widest text-[var(--text-muted)]"
+            class="rounded-(--shape-elements) border border-(--border-muted) px-(--spacing-xxs) py-px text-overline-sm uppercase tracking-widest text-(--text-muted)"
           >
             Webkit
           </span>
         </RouterLink>
 
         <!-- Nav filter: stays put in the fixed header while the nav scrolls. -->
-        <div class="pt-[var(--spacing-sm)]">
+        <div class="pt-(--spacing-sm)">
           <InputText
             v-model="query"
             placeholder="Search"
@@ -154,15 +154,15 @@
       </SidebarGroup>
       <p
         v-if="!hasResults"
-        class="px-[var(--spacing-xs)] py-[var(--spacing-sm)] text-body-sm text-[var(--text-muted)]"
+        class="px-(--spacing-xs) py-(--spacing-sm) text-body-sm text-(--text-muted)"
       >
         No results for “{{ query.trim() }}”
       </p>
 
       <template #footer>
         <!-- Theme control row, mirroring the console footer's inline switcher. -->
-        <div class="flex items-center gap-[var(--spacing-xs)] pt-[var(--spacing-sm)]">
-          <span class="min-w-0 flex-1 truncate text-label-sm text-[var(--text-default)]">
+        <div class="flex items-center gap-(--spacing-xs) pt-(--spacing-sm)">
+          <span class="min-w-0 flex-1 truncate text-label-sm text-(--text-default)">
             Theme
           </span>
           <ThemeSwitcher

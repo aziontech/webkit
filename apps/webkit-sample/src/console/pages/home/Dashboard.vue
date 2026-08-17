@@ -166,14 +166,14 @@
     :breadcrumb="[{ label: 'Overview' }]"
   >
     <main
-      class="layout-column flex flex-col gap-[var(--layout-boundary-start)] xl:flex-row xl:items-start xl:gap-[var(--layout-section-gap)]"
+      class="layout-column flex flex-col gap-(--layout-boundary-start) xl:flex-row xl:items-start xl:gap-(--layout-section-gap)"
     >
       <!-- Primary column -->
       <div class="flex min-w-0 flex-1 flex-col">
         <!-- Metrics -->
-        <section class="flex flex-col gap-[var(--layout-group-gap)]">
-          <div class="flex items-center gap-[var(--spacing-xs)]">
-            <h2 class="text-heading-xs text-[var(--text-default)]">Metrics</h2>
+        <section class="flex flex-col gap-(--layout-group-gap)">
+          <div class="flex items-center gap-(--spacing-xs)">
+            <h2 class="text-heading-xs text-(--text-default)">Metrics</h2>
             <IconButton
               icon="pi pi-question-circle"
               kind="transparent"
@@ -182,31 +182,31 @@
             />
           </div>
 
-          <div class="grid grid-cols-1 gap-[var(--spacing-md)] sm:grid-cols-2 xl:grid-cols-4">
+          <div class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2 xl:grid-cols-4">
             <CardBox
               v-for="metric in metrics"
               :key="metric.label"
             >
               <template #content>
-                <div class="flex flex-col gap-[var(--spacing-md)]">
-                  <div class="flex items-center gap-[var(--spacing-xs)]">
-                    <span class="min-w-0 truncate text-label-sm text-[var(--text-default)]">
+                <div class="flex flex-col gap-(--spacing-md)">
+                  <div class="flex items-center gap-(--spacing-xs)">
+                    <span class="min-w-0 truncate text-label-sm text-(--text-default)">
                       {{ metric.label }}
                     </span>
                     <Tooltip :text="metric.hint">
                       <i
-                        class="pi pi-info-circle text-body-sm text-[var(--text-muted)]"
+                        class="pi pi-info-circle text-body-sm text-(--text-muted)"
                         aria-hidden="true"
                       />
                     </Tooltip>
                   </div>
-                  <div class="flex items-baseline gap-[var(--spacing-xxs)]">
-                    <span class="text-big-number-sm tabular-nums text-[var(--text-default)]">
+                  <div class="flex items-baseline gap-(--spacing-xxs)">
+                    <span class="text-big-number-sm tabular-nums text-(--text-default)">
                       {{ metric.value }}
                     </span>
                     <span
                       v-if="metric.unit"
-                      class="text-body-xs text-[var(--text-muted)]"
+                      class="text-body-xs text-(--text-muted)"
                     >
                       {{ metric.unit }}
                     </span>
@@ -216,15 +216,15 @@
             </CardBox>
           </div>
 
-          <p class="text-pretty text-right text-body-xxs text-[var(--text-muted)]">
+          <p class="text-pretty text-right text-body-xxs text-(--text-muted)">
             {{ metricsRange }}
           </p>
         </section>
 
         <!-- Resources -->
-        <section class="layout-section-start flex flex-col gap-[var(--layout-group-gap)]">
-          <div class="flex items-center gap-[var(--spacing-xs)]">
-            <h2 class="text-heading-xs text-[var(--text-default)]">Resources</h2>
+        <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
+          <div class="flex items-center gap-(--spacing-xs)">
+            <h2 class="text-heading-xs text-(--text-default)">Resources</h2>
             <IconButton
               icon="pi pi-question-circle"
               kind="transparent"
@@ -242,17 +242,17 @@
               >
                 <template #cell-domain="{ value }">
                   <!-- Domain link (truncates) + external-redirect arrow; copy button pinned to the cell's right edge so it aligns across rows. -->
-                  <div class="flex w-full min-w-0 items-center gap-[var(--spacing-xs)]">
+                  <div class="flex w-full min-w-0 items-center gap-(--spacing-xs)">
                     <a
                       :href="`https://${value}`"
                       target="_blank"
                       rel="noopener noreferrer"
-                      class="flex min-w-0 items-center gap-[var(--spacing-xxs)] hover:underline"
+                      class="flex min-w-0 items-center gap-(--spacing-xxs) hover:underline"
                       @click.stop
                     >
                       <span class="truncate">{{ value }}</span>
                       <i
-                        class="pi pi-arrow-up-right shrink-0 text-[var(--text-muted)]"
+                        class="pi pi-arrow-up-right shrink-0 text-(--text-muted)"
                         aria-hidden="true"
                       />
                     </a>
@@ -303,8 +303,8 @@
         </section>
 
         <!-- Recent Activity -->
-        <section class="layout-section-start flex flex-col gap-[var(--layout-group-gap)]">
-          <h2 class="text-heading-xs text-[var(--text-default)]">Recent Activity</h2>
+        <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
+          <h2 class="text-heading-xs text-(--text-default)">Recent Activity</h2>
 
           <CardBox :padded="false">
             <template #content>
@@ -322,7 +322,7 @@
                   />
                   <span
                     v-else
-                    class="text-[var(--text-default)]"
+                    class="text-(--text-default)"
                     >{{ value }}</span
                   >
                 </template>
@@ -341,23 +341,23 @@
       </div>
 
       <!-- Right rail -->
-      <aside class="flex w-full flex-col xl:max-w-[var(--container-xs)] xl:shrink-0">
+      <aside class="flex w-full flex-col xl:max-w-(--container-xs) xl:shrink-0">
         <!-- Monthly Usage -->
         <CardBox>
           <template #header>
-            <h2 class="text-heading-xs text-[var(--text-default)]">Monthly Usage</h2>
+            <h2 class="text-heading-xs text-(--text-default)">Monthly Usage</h2>
           </template>
           <template #content>
-            <ul class="flex flex-col gap-[var(--spacing-sm)]">
+            <ul class="flex flex-col gap-(--spacing-sm)">
               <li
                 v-for="usage in monthlyUsage"
                 :key="usage.label"
-                class="flex items-center justify-between gap-[var(--spacing-md)]"
+                class="flex items-center justify-between gap-(--spacing-md)"
               >
-                <span class="min-w-0 truncate text-body-sm text-[var(--text-muted)]">
+                <span class="min-w-0 truncate text-body-sm text-(--text-muted)">
                   {{ usage.label }}
                 </span>
-                <span class="shrink-0 text-label-sm tabular-nums text-[var(--text-default)]">
+                <span class="shrink-0 text-label-sm tabular-nums text-(--text-default)">
                   {{ usage.value }}
                 </span>
               </li>
@@ -376,13 +376,13 @@
         <!-- Marketplace Trends -->
         <CardBox class="layout-section-start">
           <template #header>
-            <h2 class="text-heading-xs text-[var(--text-default)]">Marketplace Trends</h2>
+            <h2 class="text-heading-xs text-(--text-default)">Marketplace Trends</h2>
           </template>
           <template #content>
-            <article class="flex flex-col gap-[var(--spacing-sm)]">
-              <div class="flex items-center gap-[var(--spacing-sm)]">
+            <article class="flex flex-col gap-(--spacing-sm)">
+              <div class="flex items-center gap-(--spacing-sm)">
                 <span
-                  class="flex size-6 shrink-0 items-center justify-center rounded-[var(--shape-elements)] bg-[var(--bg-surface-raised)] text-[var(--primary)]"
+                  class="flex size-6 shrink-0 items-center justify-center rounded-(--shape-elements) bg-(--bg-surface-raised) text-(--primary)"
                 >
                   <i
                     class="ai ai-marketplace text-body-sm"
@@ -396,35 +396,35 @@
                   href="#"
                 />
               </div>
-              <p class="text-pretty text-body-xs text-[var(--text-muted)]">
+              <p class="text-pretty text-body-xs text-(--text-muted)">
                 {{ featuredTemplate.description }}
               </p>
               <p
-                class="flex items-center gap-[var(--spacing-md)] text-body-xxs text-[var(--text-muted)]"
+                class="flex items-center gap-(--spacing-md) text-body-xxs text-(--text-muted)"
               >
                 <span>
                   By
-                  <span class="text-[var(--text-default)]">{{ featuredTemplate.author }}</span>
+                  <span class="text-(--text-default)">{{ featuredTemplate.author }}</span>
                 </span>
                 <span>
                   Version
-                  <span class="text-[var(--text-default)]">{{ featuredTemplate.version }}</span>
+                  <span class="text-(--text-default)">{{ featuredTemplate.version }}</span>
                 </span>
               </p>
             </article>
           </template>
           <template #footer>
-            <div class="flex items-center gap-[var(--spacing-sm)]">
+            <div class="flex items-center gap-(--spacing-sm)">
               <IconButton
                 icon="pi pi-chevron-left"
                 kind="transparent"
                 size="small"
                 aria-label="Previous trend"
               />
-              <div class="flex items-center gap-[var(--spacing-xs)]">
-                <span class="size-2 rounded-full bg-[var(--text-default)]" />
-                <span class="size-2 rounded-full bg-[var(--border-default)]" />
-                <span class="size-2 rounded-full bg-[var(--border-default)]" />
+              <div class="flex items-center gap-(--spacing-xs)">
+                <span class="size-2 rounded-full bg-(--text-default)" />
+                <span class="size-2 rounded-full bg-(--border-default)" />
+                <span class="size-2 rounded-full bg-(--border-default)" />
               </div>
               <IconButton
                 icon="pi pi-chevron-right"

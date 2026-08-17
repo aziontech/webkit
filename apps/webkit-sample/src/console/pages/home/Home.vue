@@ -500,11 +500,11 @@
            They stack below `md`, greeting first: the greeting is the heading, and a
            heading does not go second. -->
       <header
-        class="flex flex-col gap-[var(--spacing-md)] md:flex-row md:items-center md:justify-between md:gap-[var(--spacing-lg)]"
+        class="flex flex-col gap-(--spacing-md) md:flex-row md:items-center md:justify-between md:gap-(--spacing-lg)"
       >
-        <h1 class="text-heading-sm text-[var(--text-muted)]">
+        <h1 class="text-heading-sm text-(--text-muted)">
           {{ greeting }},
-          <span class="text-[var(--text-default)]">{{ userName }}</span>
+          <span class="text-(--text-default)">{{ userName }}</span>
         </h1>
 
         <!-- `closable` removes the pill from the LAYOUT (it unmounts — no reserved
@@ -561,12 +561,12 @@
         read as an order, short enough that the two still land together.
       -->
       <main
-        class="layout-section-start flex flex-col gap-[var(--layout-boundary-start)] xl:min-h-0 xl:flex-1"
+        class="layout-section-start flex flex-col gap-(--layout-boundary-start) xl:min-h-0 xl:flex-1"
       >
         <!-- The page's search (see the note above): its own row, full content width,
              above both columns. `shrink-0` so the frame takes its height out of the
              list below and never out of this field. -->
-        <div class="flex min-h-[var(--size-10)] shrink-0 items-center">
+        <div class="flex min-h-(--size-10) shrink-0 items-center">
           <InputText
             v-model="search"
             size="large"
@@ -584,7 +584,7 @@
         </div>
 
         <div
-          class="flex flex-col gap-[var(--layout-boundary-start)] xl:min-h-0 xl:flex-1 xl:flex-row xl:gap-[var(--layout-section-gap)]"
+          class="flex flex-col gap-(--layout-boundary-start) xl:min-h-0 xl:flex-1 xl:flex-row xl:gap-(--layout-section-gap)"
         >
           <!-- Left (minor): account usage — one metric per card, its reading beside a
              small progress bar showing plan consumption. Below `xl` it spans the
@@ -607,15 +607,15 @@
              rail instead of a clipped one — the fourth metric silently cut off
              would be worse than a scrollbar that almost never appears. -->
           <aside
-            class="animate-content-enter motion-reduce:animate-none flex w-full shrink-0 flex-col gap-[var(--layout-group-gap)] xl:w-[30%] xl:max-w-[var(--container-xs)] xl:min-h-0 xl:overflow-y-auto xl:overscroll-contain"
+            class="animate-content-enter motion-reduce:animate-none flex w-full shrink-0 flex-col gap-(--layout-group-gap) xl:w-[30%] xl:max-w-(--container-xs) xl:min-h-0 xl:overflow-y-auto xl:overscroll-contain"
           >
             <!-- `--size-10`, matched by the Resources header opposite it: that one is
                38px tall because the segmented control in it is, and a 32px header
                here put the two column titles 3px out of line with each other across
                the widest gap on the page. Both headers reserve one row of 40px, so
                the titles sit on one line whatever controls ride along. -->
-            <div class="flex min-h-[var(--size-10)] items-center px-[var(--spacing-xs)]">
-              <h2 class="text-heading-xxs text-[var(--text-default)]">Usage</h2>
+            <div class="flex min-h-(--size-10) items-center px-(--spacing-xs)">
+              <h2 class="text-heading-xxs text-(--text-default)">Usage</h2>
             </div>
 
             <!-- 2-up while the aside is full width; single column once it narrows into
@@ -628,7 +628,7 @@
                a mostly-empty panel. The rail is its own height and the row's extra
                space is simply below it. -->
             <div
-              class="grid auto-rows-min grid-cols-2 gap-[var(--layout-group-gap)] xl:grid-cols-1"
+              class="grid auto-rows-min grid-cols-2 gap-(--layout-group-gap) xl:grid-cols-1"
             >
               <CardBox
                 v-for="metric in metrics"
@@ -636,19 +636,19 @@
                 :padded="false"
               >
                 <template #content>
-                  <div class="flex grow flex-col gap-[var(--spacing-sm)] p-[var(--spacing-md)]">
-                    <div class="flex items-center gap-[var(--spacing-xs)]">
-                      <span class="min-w-0 truncate text-label-sm text-[var(--text-default)]">
+                  <div class="flex grow flex-col gap-(--spacing-sm) p-(--spacing-md)">
+                    <div class="flex items-center gap-(--spacing-xs)">
+                      <span class="min-w-0 truncate text-label-sm text-(--text-default)">
                         {{ metric.label }}
                       </span>
                       <Tooltip :text="metric.hint">
                         <i
-                          class="pi pi-info-circle text-body-sm text-[var(--text-muted)]"
+                          class="pi pi-info-circle text-body-sm text-(--text-muted)"
                           aria-hidden="true"
                         />
                       </Tooltip>
                     </div>
-                    <div class="flex items-baseline gap-[var(--spacing-xxs)]">
+                    <div class="flex items-baseline gap-(--spacing-xxs)">
                       <!-- A reading from the scope we just left is worse than no
                          reading: while the switch reloads, the number is a
                          placeholder the size of the number it replaces. -->
@@ -658,12 +658,12 @@
                         height="1.75rem"
                       />
                       <template v-else>
-                        <span class="text-big-number-sm tabular-nums text-[var(--text-default)]">
+                        <span class="text-big-number-sm tabular-nums text-(--text-default)">
                           {{ metric.value }}
                         </span>
                         <span
                           v-if="metric.unit"
-                          class="text-body-xs text-[var(--text-muted)]"
+                          class="text-body-xs text-(--text-muted)"
                           >{{ metric.unit }}</span
                         >
                       </template>
@@ -687,7 +687,7 @@
           <!-- Right (major): RESOURCES — `Recents` at the top of it, then `Older`.
              The entrance's follower — one fast-01 behind the usage column. -->
           <section
-            class="animate-content-enter motion-reduce:animate-none flex w-full min-w-0 flex-col gap-[var(--layout-group-gap)] xl:min-h-0 xl:flex-1 [--content-enter-delay:var(--transition-duration-fast-01)]"
+            class="animate-content-enter motion-reduce:animate-none flex w-full min-w-0 flex-col gap-(--layout-group-gap) xl:min-h-0 xl:flex-1 [--content-enter-delay:var(--transition-duration-fast-01)]"
           >
             <!-- ── RESOURCES ──
                The band's title, and the one control that belongs to the band: the
@@ -704,9 +704,9 @@
                column titles sit on one line across the widest gap on the page even
                though only this one carries a 36px control. -->
             <header
-              class="flex min-h-[var(--size-10)] shrink-0 flex-wrap items-center justify-between gap-[var(--spacing-sm)] pl-(--spacing-xs)"
+              class="flex min-h-(--size-10) shrink-0 flex-wrap items-center justify-between gap-(--spacing-sm) pl-(--spacing-xs)"
             >
-              <h2 class="shrink-0 text-heading-xxs text-[var(--text-default)]">Resources</h2>
+              <h2 class="shrink-0 text-heading-xxs text-(--text-default)">Resources</h2>
 
               <SegmentedButton
                 v-model="selectedType"
@@ -745,7 +745,7 @@
                when that token changes with the breakpoint. The 48px gutter absorbs it. -->
             <div
               ref="scrollRef"
-              class="min-w-0 xl:ml-[calc(var(--layout-boundary-inline)*-1)] xl:min-h-0 xl:flex-1 xl:overflow-x-hidden xl:overflow-y-auto xl:overscroll-contain xl:pl-[var(--layout-boundary-inline)]"
+              class="min-w-0 xl:ml-[calc(var(--layout-boundary-inline)*-1)] xl:min-h-0 xl:flex-1 xl:overflow-x-hidden xl:overflow-y-auto xl:overscroll-contain xl:pl-(--layout-boundary-inline)"
               :style="fadeStyle"
             >
               <!-- ── THE TYPE CHANGE ARRIVES LIKE A TAB ──
@@ -834,16 +834,16 @@
                  `Recents` ends instead of running under its label. -->
                 <div
                   v-else-if="visibleResources.length"
-                  class="flex flex-col gap-[var(--layout-group-gap)]"
+                  class="flex flex-col gap-(--layout-group-gap)"
                 >
                   <section
                     v-for="group in listGroups"
                     :key="group.key"
-                    class="flex flex-col gap-[var(--spacing-xs)]"
+                    class="flex flex-col gap-(--spacing-xs)"
                   >
                     <h3
                       v-if="group.label"
-                      class="px-[var(--spacing-xs)] text-label-sm text-[var(--text-muted)]"
+                      class="px-(--spacing-xs) text-label-sm text-(--text-muted)"
                     >
                       {{ group.label }}
                     </h3>
@@ -889,12 +889,12 @@
                                  before their own name would be noise. -->
                                 <i
                                   v-if="group.recent"
-                                  class="pi pi-history shrink-0 text-body-sm text-[var(--text-default)]"
+                                  class="pi pi-history shrink-0 text-body-sm text-(--text-default)"
                                   aria-hidden="true"
                                 />
                                 <button
                                   type="button"
-                                  class="cursor-pointer truncate rounded-[var(--shape-button)] text-left text-label-md text-[var(--text-default)] outline-none hover:underline focus-visible:ring-2 focus-visible:ring-[var(--ring-color)]"
+                                  class="cursor-pointer truncate rounded-(--shape-button) text-left text-label-md text-(--text-default) outline-none hover:underline focus-visible:ring-2 focus-visible:ring-(--ring-color)"
                                   @click="openResource(resource)"
                                 >
                                   {{ resource.name }}
@@ -927,7 +927,7 @@
                                   :href="resource.subtitleUrl"
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  class="inline-flex max-w-full items-center gap-[var(--spacing-xxs)] rounded-[var(--shape-button)] align-bottom outline-none hover:text-[var(--text-default)] hover:underline focus-visible:ring-2 focus-visible:ring-[var(--ring-color)]"
+                                  class="inline-flex max-w-full items-center gap-(--spacing-xxs) rounded-(--shape-button) align-bottom outline-none hover:text-(--text-default) hover:underline focus-visible:ring-2 focus-visible:ring-(--ring-color)"
                                   @click.stop
                                 >
                                   <span class="truncate">{{ resource.subtitle }}</span>
@@ -945,7 +945,7 @@
                                 <button
                                   v-else-if="resource.subtitlePath"
                                   type="button"
-                                  class="max-w-full cursor-pointer truncate rounded-[var(--shape-button)] text-left align-bottom outline-none hover:text-[var(--text-default)] hover:underline focus-visible:ring-2 focus-visible:ring-[var(--ring-color)]"
+                                  class="max-w-full cursor-pointer truncate rounded-(--shape-button) text-left align-bottom outline-none hover:text-(--text-default) hover:underline focus-visible:ring-2 focus-visible:ring-(--ring-color)"
                                   @click.stop="router.push(resource.subtitlePath)"
                                 >
                                   {{ resource.subtitle }}
@@ -970,7 +970,7 @@
                                up: the glyph already carries the type (it is the frame's
                                `title`), and the list is sorted by this timestamp, so
                                below `lg` the order says what the text did. -->
-                              <span class="hidden text-body-xs text-[var(--text-muted)] lg:inline">
+                              <span class="hidden text-body-xs text-(--text-muted) lg:inline">
                                 {{ resource.typeLabel }} · edited
                                 {{ relativeTime(resource.modifiedAt) }}
                               </span>

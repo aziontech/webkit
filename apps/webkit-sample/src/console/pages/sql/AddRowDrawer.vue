@@ -84,7 +84,7 @@
       title="Values"
       hint="One field per column, in the table's own order. A column the database fills in itself is shown but not editable, and an empty optional column is stored as NULL."
     >
-      <div class="flex min-w-0 flex-col gap-[var(--layout-group-gap)]">
+      <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
         <!-- The LABEL is the column name, in code type, with its Postgres type beside it —
              that pair IS the field's identity here, so it belongs in the label rather
              than in a sentence next to it. -->
@@ -103,7 +103,7 @@
             <span class="font-code">{{ column.name }}</span>
           </template>
           <template #action>
-            <span class="font-code text-body-xs text-[var(--text-muted)]">{{ column.type }}</span>
+            <span class="font-code text-body-xs text-(--text-muted)">{{ column.type }}</span>
           </template>
           <template #default="{ controlId }">
             <InputText

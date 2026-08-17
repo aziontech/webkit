@@ -186,46 +186,46 @@
                  order as the wide layout, read top to bottom instead of left to
                  right. -->
             <div
-              class="grid grid-cols-1 gap-[var(--spacing-lg)] lg:grid-cols-[minmax(0,18rem)_minmax(0,1fr)] lg:gap-[var(--spacing-xl)]"
+              class="grid grid-cols-1 gap-(--spacing-lg) lg:grid-cols-[minmax(0,18rem)_minmax(0,1fr)] lg:gap-(--spacing-xl)"
             >
               <!-- ── Left: what the tier buys ── -->
               <aside
                 v-if="plan?.upgrade"
-                class="flex flex-col gap-[var(--spacing-md)]"
+                class="flex flex-col gap-(--spacing-md)"
               >
                 <p
                   v-if="lead"
-                  class="text-body-sm text-[var(--text-default)]"
+                  class="text-body-sm text-(--text-default)"
                 >
-                  {{ lead.before }}<span class="text-[var(--text-default)]">{{ lead.name }}</span
+                  {{ lead.before }}<span class="text-(--text-default)">{{ lead.name }}</span
                   >{{ lead.after }}
                 </p>
 
-                <div class="flex flex-col gap-[var(--spacing-sm)]">
-                  <h3 class="text-label-md text-[var(--text-default)]">
+                <div class="flex flex-col gap-(--spacing-sm)">
+                  <h3 class="text-label-md text-(--text-default)">
                     {{ plan.upgrade.featuresTitle }}
                   </h3>
 
                   <!-- The checklist. A real list, so a screen reader announces how
                        many things the tier includes instead of reading a run of
                        unrelated lines. -->
-                  <ul class="m-0 flex list-none flex-col gap-[var(--spacing-sm)] p-0">
+                  <ul class="m-0 flex list-none flex-col gap-(--spacing-sm) p-0">
                     <li
                       v-for="feature in plan.upgrade.features"
                       :key="feature.title"
-                      class="flex items-start gap-[var(--spacing-xs)]"
+                      class="flex items-start gap-(--spacing-xs)"
                     >
                       <i
-                        class="pi pi-check mt-[2px] shrink-0 text-[length:var(--text-body-xs)] leading-none text-[var(--success-contrast)]"
+                        class="pi pi-check mt-[2px] shrink-0 text-(length:--text-body-xs) leading-none text-(--success-contrast)"
                         aria-hidden="true"
                       />
-                      <span class="flex min-w-0 flex-col gap-[var(--spacing-xxs)]">
-                        <span class="text-body-sm text-[var(--text-default)]">{{
+                      <span class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                        <span class="text-body-sm text-(--text-default)">{{
                           feature.title
                         }}</span>
                         <span
                           v-if="feature.detail"
-                          class="text-body-xs text-[var(--text-muted)]"
+                          class="text-body-xs text-(--text-muted)"
                           >{{ feature.detail }}</span
                         >
                       </span>
@@ -233,7 +233,7 @@
                   </ul>
                 </div>
 
-                <div class="flex flex-col gap-[var(--spacing-xs)]">
+                <div class="flex flex-col gap-(--spacing-xs)">
                   <Link
                     v-for="link in plan.upgrade.links"
                     :key="link.label"
@@ -247,12 +247,12 @@
               </aside>
 
               <!-- ── Right: the transaction ── -->
-              <div class="flex min-w-0 flex-col gap-[var(--spacing-lg)]">
+              <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
                 <!-- Charged. The period control sits in the card's header, where
                      it reads as the switch that governs the figures under it. -->
                 <CardBox :padded="false">
                   <template #header>
-                    <p class="text-label-lg text-[var(--text-default)]">Charged</p>
+                    <p class="text-label-lg text-(--text-default)">Charged</p>
                     <SegmentedButton
                       v-model="period"
                       :options="periods"
@@ -266,21 +266,21 @@
                       class="flex flex-col"
                     >
                       <div
-                        class="flex flex-col gap-[var(--spacing-md)] px-[var(--spacing-lg)] py-[var(--spacing-lg)]"
+                        class="flex flex-col gap-(--spacing-md) px-(--spacing-lg) py-(--spacing-lg)"
                       >
                         <div
                           v-for="row in charge.rows"
                           :key="row.label"
-                          class="flex flex-wrap items-baseline justify-between gap-[var(--spacing-sm)]"
+                          class="flex flex-wrap items-baseline justify-between gap-(--spacing-sm)"
                         >
-                          <span class="text-body-sm text-[var(--text-muted)]">{{ row.label }}</span>
-                          <span class="flex items-baseline gap-[var(--spacing-xs)]">
-                            <span class="text-heading-xs text-[var(--text-default)]">{{
+                          <span class="text-body-sm text-(--text-muted)">{{ row.label }}</span>
+                          <span class="flex items-baseline gap-(--spacing-xs)">
+                            <span class="text-heading-xs text-(--text-default)">{{
                               row.value
                             }}</span>
                             <span
                               v-if="row.suffix"
-                              class="text-body-sm text-[var(--text-muted)]"
+                              class="text-body-sm text-(--text-muted)"
                               >{{ row.suffix }}</span
                             >
                           </span>
@@ -292,14 +292,14 @@
                       <!-- The total is the one figure the user is agreeing to, so
                            it gets its own band and the largest type in the card. -->
                       <div
-                        class="flex flex-wrap items-baseline justify-between gap-[var(--spacing-sm)] px-[var(--spacing-lg)] py-[var(--spacing-lg)]"
+                        class="flex flex-wrap items-baseline justify-between gap-(--spacing-sm) px-(--spacing-lg) py-(--spacing-lg)"
                       >
-                        <span class="text-heading-xs text-[var(--text-default)]">Total</span>
-                        <span class="flex items-baseline gap-[var(--spacing-xs)]">
-                          <span class="text-heading-md text-[var(--text-default)]">{{
+                        <span class="text-heading-xs text-(--text-default)">Total</span>
+                        <span class="flex items-baseline gap-(--spacing-xs)">
+                          <span class="text-heading-md text-(--text-default)">{{
                             charge.total.value
                           }}</span>
-                          <span class="text-body-sm text-[var(--text-muted)]">{{
+                          <span class="text-body-sm text-(--text-muted)">{{
                             charge.total.suffix
                           }}</span>
                         </span>
@@ -316,7 +316,7 @@
                 >
                   <template #content>
                     <fieldset
-                      class="m-0 flex min-w-0 flex-col gap-[var(--spacing-lg)] border-0 px-[var(--spacing-lg)] py-[var(--spacing-lg)]"
+                      class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 px-(--spacing-lg) py-(--spacing-lg)"
                       :disabled="submitting"
                     >
                       <legend class="sr-only">Address information</legend>
@@ -333,7 +333,7 @@
                            address the invoice will carry, so it is shown whether it
                            came from the account or was typed here. The checkbox
                            fills or clears it (see the watcher); it never hides it. -->
-                      <div class="grid grid-cols-1 gap-[var(--spacing-lg)] sm:grid-cols-2">
+                      <div class="grid grid-cols-1 gap-(--spacing-lg) sm:grid-cols-2">
                         <FieldSelect
                           v-model="address.country"
                           label="Country"

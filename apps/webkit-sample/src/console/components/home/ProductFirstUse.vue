@@ -218,7 +218,7 @@
        shifts when the read lands. -->
   <div
     v-if="tenancyReloading"
-    class="flex flex-col gap-[var(--spacing-md)]"
+    class="flex flex-col gap-(--spacing-md)"
   >
     <!-- The two tiers, at the heights they resolve to: the card, then the promo row. -->
     <Skeleton height="23rem" />
@@ -243,7 +243,7 @@
        section step the promos detached and read as a second, unrelated block. -->
   <div
     v-else
-    class="flex flex-col items-start gap-[var(--spacing-lg)]"
+    class="flex flex-col items-start gap-(--spacing-lg)"
     :class="entranceClass"
   >
     <!-- Overview's empty card, to the element: one flush CardBox holding the
@@ -292,7 +292,7 @@
           </template>
         </EmptyState>
 
-        <Item.List class="border-t border-[var(--border-muted)]">
+        <Item.List class="border-t border-(--border-muted)">
           <Item
             v-for="method in product.methods"
             :key="method.id"
@@ -320,7 +320,7 @@
             <Item.Actions
               :class="
                 method.command
-                  ? 'basis-full justify-end md:basis-auto md:max-w-[var(--container-3xs)] md:flex-1'
+                  ? 'basis-full justify-end md:basis-auto md:max-w-(--container-3xs) md:flex-1'
                   : undefined
               "
             >
@@ -402,7 +402,7 @@
          does not leave one card an inch taller than its neighbour — a pair that reads as
          one row has to end on one line. -->
     <div
-      class="grid w-full gap-[var(--spacing-lg)]"
+      class="grid w-full gap-(--spacing-lg)"
       :class="catalog ? 'md:grid-cols-2' : ''"
     >
       <!-- THE CATALOG. Its copy is the one already authored for this product
@@ -452,7 +452,7 @@
           >
             <AgentMark
               :name="agent"
-              class="size-[18px] text-[var(--text-default)]"
+              class="size-[18px] text-(--text-default)"
             />
           </IconFrame>
         </template>

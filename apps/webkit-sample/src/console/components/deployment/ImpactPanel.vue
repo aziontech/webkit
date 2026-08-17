@@ -73,13 +73,13 @@
        at every breakpoint (unlike --spacing-lg / --spacing-xl, which would drift the elbow
        as the viewport grows). -->
   <div
-    class="flex min-w-0 flex-col gap-[var(--spacing-sm)]"
+    class="flex min-w-0 flex-col gap-(--spacing-sm)"
     style="--tree-rail: var(--spacing-sm); --tree-indent: calc(var(--spacing-sm) * 2)"
   >
     <!-- NOTHING SELECTED -->
     <p
       v-if="state === 'empty'"
-      class="text-body-sm text-[var(--text-muted)]"
+      class="text-body-sm text-(--text-muted)"
     >
       Select Deployment settings to see what this release reaches.
     </p>
@@ -87,11 +87,11 @@
     <!-- LOADING: the shape of the answer, so the panel does not jump when it arrives. -->
     <div
       v-else-if="state === 'loading'"
-      class="flex min-w-0 flex-col gap-[var(--spacing-sm)]"
+      class="flex min-w-0 flex-col gap-(--spacing-sm)"
     >
-      <span class="flex items-center gap-[var(--spacing-xs)]">
-        <Spinner class="size-4 shrink-0 text-[var(--text-muted)]" />
-        <span class="text-body-sm text-[var(--text-muted)]">Computing impact…</span>
+      <span class="flex items-center gap-(--spacing-xs)">
+        <Spinner class="size-4 shrink-0 text-(--text-muted)" />
+        <span class="text-body-sm text-(--text-muted)">Computing impact…</span>
       </span>
       <Skeleton height="var(--size-4)" />
       <Skeleton
@@ -107,14 +107,14 @@
     <!-- UNAVAILABLE: what is unknown, that the deploy still works, and Retry. -->
     <div
       v-else-if="state === 'unavailable'"
-      class="flex min-w-0 flex-col items-start gap-[var(--spacing-sm)]"
+      class="flex min-w-0 flex-col items-start gap-(--spacing-sm)"
     >
       <Message
         severity="warning"
         size="small"
         :label="unavailableMessage"
       />
-      <span class="text-body-xs text-[var(--text-muted)]">
+      <span class="text-body-xs text-(--text-muted)">
         {{ plural(settingsCount, 'Deployment setting', 'Deployment settings') }} selected
       </span>
       <Button
@@ -153,18 +153,18 @@
         >
           <!-- Depth 0: the deploy target. -->
           <span
-            class="flex min-h-8 min-w-0 items-center justify-between gap-[var(--spacing-xs)] pr-[var(--spacing-xxs)]"
+            class="flex min-h-8 min-w-0 items-center justify-between gap-(--spacing-xs) pr-(--spacing-xxs)"
           >
-            <span class="flex min-w-0 items-center gap-[var(--spacing-xs)]">
+            <span class="flex min-w-0 items-center gap-(--spacing-xs)">
               <i
-                class="ai ai-deploy-pillar shrink-0 text-[var(--text-muted)]"
+                class="ai ai-deploy-pillar shrink-0 text-(--text-muted)"
                 aria-hidden="true"
               />
-              <span class="truncate text-label-md text-[var(--text-default)]">
+              <span class="truncate text-label-md text-(--text-default)">
                 {{ settings.name }}
               </span>
             </span>
-            <span class="shrink-0 text-body-xs tabular-nums text-[var(--text-muted)]">
+            <span class="shrink-0 text-body-xs tabular-nums text-(--text-muted)">
               {{ plural(settings.domainsCount, 'domain', 'domains') }}
             </span>
           </span>
@@ -173,58 +173,58 @@
                serves nothing until a workload uses that setting. Said, not left blank. -->
           <p
             v-if="!settings.environments.length"
-            class="pl-[var(--tree-indent)] text-body-xs text-[var(--text-muted)]"
+            class="pl-(--tree-indent) text-body-xs text-(--text-muted)"
           >
             No workloads deploy with this setting yet.
           </p>
 
           <ul
             v-else
-            class="m-0 flex min-w-0 list-none flex-col p-0 pl-[var(--tree-indent)]"
+            class="m-0 flex min-w-0 list-none flex-col p-0 pl-(--tree-indent)"
           >
             <li
               v-for="environment in settings.environments"
               :key="environment.id"
-              class="relative flex min-w-0 flex-col before:absolute before:top-0 before:-left-[var(--tree-rail)] before:h-4 before:w-[var(--tree-rail)] before:rounded-bl-[var(--shape-elements)] before:border-b before:border-l before:border-[var(--border-default)] before:content-[''] after:absolute after:top-4 after:bottom-0 after:-left-[var(--tree-rail)] after:border-l after:border-[var(--border-default)] after:content-[''] last:after:hidden"
+              class="relative flex min-w-0 flex-col before:absolute before:top-0 before:-left-(--tree-rail) before:h-4 before:w-(--tree-rail) before:rounded-bl-(--shape-elements) before:border-b before:border-l before:border-(--border-default) before:content-[''] after:absolute after:top-4 after:bottom-0 after:-left-(--tree-rail) after:border-l after:border-(--border-default) after:content-[''] last:after:hidden"
             >
               <!-- Depth 1: the environment. -->
               <span
-                class="flex min-h-8 min-w-0 items-center justify-between gap-[var(--spacing-xs)] pr-[var(--spacing-xxs)]"
+                class="flex min-h-8 min-w-0 items-center justify-between gap-(--spacing-xs) pr-(--spacing-xxs)"
               >
-                <span class="flex min-w-0 items-center gap-[var(--spacing-xs)]">
+                <span class="flex min-w-0 items-center gap-(--spacing-xs)">
                   <i
-                    class="pi pi-sitemap shrink-0 text-[var(--text-muted)]"
+                    class="pi pi-sitemap shrink-0 text-(--text-muted)"
                     aria-hidden="true"
                   />
-                  <span class="truncate text-label-md text-[var(--text-default)]">
+                  <span class="truncate text-label-md text-(--text-default)">
                     {{ environment.name }}
                   </span>
                 </span>
-                <span class="shrink-0 text-body-xs tabular-nums text-[var(--text-muted)]">
+                <span class="shrink-0 text-body-xs tabular-nums text-(--text-muted)">
                   {{ plural(environment.workloadsCount, 'workload', 'workloads') }}
                 </span>
               </span>
 
-              <ul class="m-0 flex min-w-0 list-none flex-col p-0 pl-[var(--tree-indent)]">
+              <ul class="m-0 flex min-w-0 list-none flex-col p-0 pl-(--tree-indent)">
                 <li
                   v-for="workload in environment.workloads"
                   :key="workload.id"
-                  class="relative flex min-w-0 before:absolute before:top-0 before:-left-[var(--tree-rail)] before:h-4 before:w-[var(--tree-rail)] before:rounded-bl-[var(--shape-elements)] before:border-b before:border-l before:border-[var(--border-default)] before:content-[''] after:absolute after:top-4 after:bottom-0 after:-left-[var(--tree-rail)] after:border-l after:border-[var(--border-default)] after:content-[''] last:after:hidden"
+                  class="relative flex min-w-0 before:absolute before:top-0 before:-left-(--tree-rail) before:h-4 before:w-(--tree-rail) before:rounded-bl-(--shape-elements) before:border-b before:border-l before:border-(--border-default) before:content-[''] after:absolute after:top-4 after:bottom-0 after:-left-(--tree-rail) after:border-l after:border-(--border-default) after:content-[''] last:after:hidden"
                 >
                   <!-- Depth 2: the workloads that will serve it. -->
                   <span
-                    class="flex min-h-8 min-w-0 flex-1 items-center justify-between gap-[var(--spacing-xs)] pr-[var(--spacing-xxs)]"
+                    class="flex min-h-8 min-w-0 flex-1 items-center justify-between gap-(--spacing-xs) pr-(--spacing-xxs)"
                   >
-                    <span class="flex min-w-0 items-center gap-[var(--spacing-xs)]">
+                    <span class="flex min-w-0 items-center gap-(--spacing-xs)">
                       <i
-                        class="ai ai-workloads shrink-0 text-[var(--text-muted)]"
+                        class="ai ai-workloads shrink-0 text-(--text-muted)"
                         aria-hidden="true"
                       />
-                      <span class="truncate text-label-md text-[var(--text-muted)]">
+                      <span class="truncate text-label-md text-(--text-muted)">
                         {{ workload.name }}
                       </span>
                     </span>
-                    <span class="shrink-0 text-body-xs tabular-nums text-[var(--text-muted)]">
+                    <span class="shrink-0 text-body-xs tabular-nums text-(--text-muted)">
                       {{ plural(workload.domainsCount, 'domain', 'domains') }}
                     </span>
                   </span>
@@ -245,7 +245,7 @@
            the page. -->
       <div
         v-else
-        class="flex min-w-0 flex-col gap-[var(--spacing-md)]"
+        class="flex min-w-0 flex-col gap-(--spacing-md)"
       >
         <Flow
           v-for="settings in tree"
@@ -256,18 +256,18 @@
           <Flow.Node unstyled>
             <FlowAnchor>
               <span
-                class="flex min-w-0 flex-col gap-[var(--spacing-xxs)] rounded-[var(--shape-card)] border border-[length:var(--border-width-default)] border-[var(--border-default)] bg-[var(--bg-surface-raised)] px-[var(--spacing-sm)] py-[var(--spacing-xs)]"
+                class="flex min-w-0 flex-col gap-(--spacing-xxs) rounded-(--shape-card) border border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface-raised) px-(--spacing-sm) py-(--spacing-xs)"
               >
-                <span class="flex min-w-0 items-center gap-[var(--spacing-xs)]">
+                <span class="flex min-w-0 items-center gap-(--spacing-xs)">
                   <i
-                    class="ai ai-deploy-pillar shrink-0 text-[var(--text-muted)]"
+                    class="ai ai-deploy-pillar shrink-0 text-(--text-muted)"
                     aria-hidden="true"
                   />
-                  <span class="truncate text-label-md text-[var(--text-default)]">
+                  <span class="truncate text-label-md text-(--text-default)">
                     {{ settings.name }}
                   </span>
                 </span>
-                <span class="text-body-xs tabular-nums text-[var(--text-muted)]">
+                <span class="text-body-xs tabular-nums text-(--text-muted)">
                   {{ plural(settings.domainsCount, 'domain', 'domains') }}
                 </span>
               </span>
@@ -283,7 +283,7 @@
           >
             <FlowAnchor>
               <span
-                class="flex rounded-[var(--shape-card)] border border-[length:var(--border-width-default)] border-dashed border-[var(--border-muted)] px-[var(--spacing-sm)] py-[var(--spacing-xs)] text-body-xs text-[var(--text-muted)]"
+                class="flex rounded-(--shape-card) border border-(length:--border-width-default) border-dashed border-(--border-muted) px-(--spacing-sm) py-(--spacing-xs) text-body-xs text-(--text-muted)"
               >
                 No workloads yet
               </span>
@@ -302,14 +302,14 @@
             >
               <FlowAnchor>
                 <span
-                  class="flex min-w-0 max-w-[var(--container-3xs)] flex-col gap-[var(--spacing-xs)] rounded-[var(--shape-card)] border border-[length:var(--border-width-default)] border-[var(--border-default)] bg-[var(--bg-surface)] px-[var(--spacing-sm)] py-[var(--spacing-xs)]"
+                  class="flex min-w-0 max-w-(--container-3xs) flex-col gap-(--spacing-xs) rounded-(--shape-card) border border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-xs)"
                 >
-                  <span class="flex min-w-0 items-center gap-[var(--spacing-xs)]">
+                  <span class="flex min-w-0 items-center gap-(--spacing-xs)">
                     <i
-                      class="pi pi-sitemap shrink-0 text-[var(--text-muted)]"
+                      class="pi pi-sitemap shrink-0 text-(--text-muted)"
                       aria-hidden="true"
                     />
-                    <span class="truncate text-label-md text-[var(--text-default)]">
+                    <span class="truncate text-label-md text-(--text-default)">
                       {{ environment.name }}
                     </span>
                     <Tag
@@ -323,17 +323,17 @@
                        diagram is about what connects to what, and a diagram that has to
                        scroll to show a count is worse at both. The setting node already
                        carries the domain total. -->
-                  <span class="flex min-w-0 flex-col gap-[var(--spacing-xxs)]">
+                  <span class="flex min-w-0 flex-col gap-(--spacing-xxs)">
                     <span
                       v-for="workload in environment.workloads"
                       :key="workload.id"
-                      class="flex min-w-0 items-center gap-[var(--spacing-xs)]"
+                      class="flex min-w-0 items-center gap-(--spacing-xs)"
                     >
                       <i
-                        class="ai ai-workloads shrink-0 text-[var(--text-muted)]"
+                        class="ai ai-workloads shrink-0 text-(--text-muted)"
                         aria-hidden="true"
                       />
-                      <span class="truncate text-body-sm text-[var(--text-muted)]">
+                      <span class="truncate text-body-sm text-(--text-muted)">
                         {{ workload.name }}
                       </span>
                     </span>

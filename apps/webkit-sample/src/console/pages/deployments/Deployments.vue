@@ -370,7 +370,7 @@
         class="flex min-h-0 flex-1 flex-col overflow-auto"
       >
         <div
-          class="layout-column-focused layout-boundary my-auto flex w-full flex-col py-[var(--spacing-xl)]"
+          class="layout-column-focused layout-boundary my-auto flex w-full flex-col py-(--spacing-xl)"
         >
           <ProductFirstUse :product="firstUse" />
         </div>
@@ -441,11 +441,11 @@
           <!-- The page's parent section. It holds ONE section here: the Message, the
                controls row and the table are all parts of the same band. -->
           <section
-            class="layout-section-start flex min-w-0 flex-col gap-[var(--layout-section-gap)]"
+            class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)"
           >
             <!-- ONE section, at --layout-group-gap: the Message frames the list, the
                  controls row narrows it, the table is what both are about. -->
-            <section class="flex min-w-0 flex-col gap-[var(--layout-group-gap)]">
+            <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
               <!-- Why Settings is a sibling of the history: a strategy is the reusable
                    half of a deployment (which application, firewall and custom page it
                    binds), so it is authored once and applied by many deployments. Note
@@ -469,7 +469,7 @@
                   size="large"
                   placeholder="Search deployments"
                   aria-label="Search deployments"
-                  class="min-w-36 grow basis-[var(--container-2xs)]"
+                  class="min-w-36 grow basis-(--container-2xs)"
                 >
                   <template #iconLeft>
                     <i
@@ -490,7 +490,7 @@
                   size="large"
                   placeholder="Search settings"
                   aria-label="Search deployment settings"
-                  class="min-w-36 grow basis-[var(--container-2xs)]"
+                  class="min-w-36 grow basis-(--container-2xs)"
                 >
                   <template #iconLeft>
                     <i
@@ -558,7 +558,7 @@
                            row nobody in this workspace authored, and the one row the
                            actions menu offers nothing for. -->
                       <template #cell-name="{ value, row }">
-                        <span class="flex min-w-0 items-center gap-[var(--spacing-xs)]">
+                        <span class="flex min-w-0 items-center gap-(--spacing-xs)">
                           <span class="truncate">{{ value }}</span>
                           <Tag
                             v-if="row.system"
@@ -586,7 +586,7 @@
                       <template #cell-firewall="{ value }">
                         <span
                           class="truncate"
-                          :class="value ? '' : 'text-[var(--text-muted)]'"
+                          :class="value ? '' : 'text-(--text-muted)'"
                         >
                           {{ bindingLabel(value) }}
                         </span>
@@ -595,7 +595,7 @@
                       <template #cell-customPage="{ value }">
                         <span
                           class="truncate"
-                          :class="value ? '' : 'text-[var(--text-muted)]'"
+                          :class="value ? '' : 'text-(--text-muted)'"
                         >
                           {{ bindingLabel(value) }}
                         </span>

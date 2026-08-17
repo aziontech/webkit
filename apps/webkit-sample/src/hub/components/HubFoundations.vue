@@ -255,7 +255,7 @@
           :show-line-numbers="false"
           class="h-fit"
         />
-        <p class="m-0 mt-[var(--spacing-md)] max-w-[620px] text-body-sm leading-relaxed text-muted">
+        <p class="m-0 mt-(--spacing-md) max-w-[620px] text-body-sm leading-relaxed text-muted">
           Requirements: Vue 3.5+ (components use defineModel and useId) and VeeValidate 4.x for form
           fields.
         </p>
@@ -274,7 +274,7 @@
           <div
             v-for="standard in standards"
             :key="standard.title"
-            class="flex flex-col bg-[var(--bg-canvas)] p-[var(--spacing-xl)]"
+            class="flex flex-col bg-(--bg-canvas) p-(--spacing-xl)"
           >
             <p class="m-0 mb-1.5 text-heading-xxs text-default">{{ standard.title }}</p>
             <p class="m-0 text-body-xxs leading-relaxed text-muted">{{ standard.body }}</p>
@@ -306,15 +306,15 @@
         description="The source of every token family in @aziontech/theme."
       >
         <div
-          class="overflow-hidden rounded-[var(--shape-elements)] border border-[var(--border-default)]"
+          class="overflow-hidden rounded-(--shape-elements) border border-(--border-default)"
         >
           <table class="w-full border-collapse text-left">
             <thead>
-              <tr class="bg-[var(--bg-surface)]">
-                <th class="px-[var(--spacing-md)] py-[var(--spacing-sm)] text-label-sm text-muted">
+              <tr class="bg-(--bg-surface)">
+                <th class="px-(--spacing-md) py-(--spacing-sm) text-label-sm text-muted">
                   Foundation
                 </th>
-                <th class="px-[var(--spacing-md)] py-[var(--spacing-sm)] text-label-sm text-muted">
+                <th class="px-(--spacing-md) py-(--spacing-sm) text-label-sm text-muted">
                   Source in @aziontech/theme
                 </th>
               </tr>
@@ -323,13 +323,13 @@
               <tr
                 v-for="row in tokenSources"
                 :key="row.page"
-                class="border-t border-[var(--border-muted)]"
+                class="border-t border-(--border-muted)"
               >
-                <td class="px-[var(--spacing-md)] py-[var(--spacing-sm)] text-body-sm text-default">
+                <td class="px-(--spacing-md) py-(--spacing-sm) text-body-sm text-default">
                   {{ row.page }}
                 </td>
                 <td
-                  class="px-[var(--spacing-md)] py-[var(--spacing-sm)] font-code text-code text-muted"
+                  class="px-(--spacing-md) py-(--spacing-sm) font-code text-code text-muted"
                 >
                   {{ row.source }}
                 </td>
@@ -477,7 +477,7 @@
           :show-line-numbers="false"
           class="h-fit"
         />
-        <p class="m-0 mt-[var(--spacing-md)] max-w-[620px] text-body-sm leading-relaxed text-muted">
+        <p class="m-0 mt-(--spacing-md) max-w-[620px] text-body-sm leading-relaxed text-muted">
           Colored brand icons (the -cor set) ship as inline SVG via @aziontech/icons/color-catalog
           and keep their own palette.
         </p>

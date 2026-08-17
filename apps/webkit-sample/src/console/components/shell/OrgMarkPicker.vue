@@ -56,16 +56,16 @@
     class="grid w-full grid-cols-4 sm:grid-cols-7"
   >
     <template #default="{ item }">
-      <span class="flex flex-col items-center gap-[var(--spacing-xs)]">
+      <span class="flex flex-col items-center gap-(--spacing-xs)">
         <!-- Round, so a colour reads as a colour and not as a tiny app icon: the
              square shape belongs to the MARK (the org avatar is a rounded square
              everywhere in the console), and reusing it here made the swatch look
              like a preview of the mark rather than a palette. -->
         <span
-          class="size-[var(--size-8)] rounded-full"
+          class="size-(--size-8) rounded-full"
           :style="swatchOf(item.value)"
         />
-        <span class="text-body-xs text-[var(--text-muted)]">{{ item.label }}</span>
+        <span class="text-body-xs text-(--text-muted)">{{ item.label }}</span>
       </span>
     </template>
   </BoxGridSelection>

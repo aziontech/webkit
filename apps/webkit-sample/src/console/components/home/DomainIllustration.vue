@@ -117,7 +117,7 @@
 
       <!-- Where the lookup leaves the name. `z-1` so the marker paints over the line. -->
       <IllustrationNode
-        class="absolute z-1 rounded-[var(--shape-elements)]"
+        class="absolute z-1 rounded-(--shape-elements)"
         :active="false"
         :style="{ left: `${NODE_LEFT}px`, top: `${NODE_TOP}px` }"
       />

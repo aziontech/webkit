@@ -247,18 +247,18 @@
            which is what `flex-1 justify-center` would have done. -->
       <div
         v-if="accountEmpty"
-        class="my-auto flex w-full flex-col py-[var(--spacing-xl)]"
+        class="my-auto flex w-full flex-col py-(--spacing-xl)"
       >
         <ProductFirstUse :product="firstUse" />
       </div>
 
       <section
         v-else
-        class="layout-section-start flex min-w-0 flex-col gap-[var(--layout-section-gap)]"
+        class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)"
       >
         <!-- ONE section: the controls row narrows the table under it, so the two
              sit at --layout-group-gap. -->
-        <section class="flex min-w-0 flex-col gap-[var(--layout-group-gap)]">
+        <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
           <!-- First-level module list: no PageHeading — the module name already IS the
                header breadcrumb crumb (AppLayout). The page opens with its CONTROLS
                instead — the search, the module's own actions on the right — then the
@@ -273,7 +273,7 @@
               size="large"
               placeholder="Search workloads"
               aria-label="Search workloads"
-              class="min-w-36 grow basis-[var(--container-2xs)]"
+              class="min-w-36 grow basis-(--container-2xs)"
             >
               <template #iconLeft>
                 <i
@@ -323,9 +323,9 @@
                     <!-- The module's own glyph leads its principal column, the way every
                          other module list does (Applications, EdgeDns, SqlDatabase): the
                          row says WHAT it is before it says which one. -->
-                    <div class="flex min-w-0 items-center gap-[var(--spacing-xs)]">
+                    <div class="flex min-w-0 items-center gap-(--spacing-xs)">
                       <i
-                        class="ai ai-workloads shrink-0 text-[1.15em] text-[var(--text-muted)]"
+                        class="ai ai-workloads shrink-0 text-[1.15em] text-(--text-muted)"
                         aria-hidden="true"
                       />
                       <span class="truncate cursor-pointer hover:underline">{{ value }}</span>
@@ -338,21 +338,21 @@
                          button pinned to the cell's right edge so it aligns across rows.
                          The glyph sits OUTSIDE the anchor — it names the column's subject,
                          it is not part of what the link opens. -->
-                    <div class="flex w-full min-w-0 items-center gap-[var(--spacing-xs)]">
+                    <div class="flex w-full min-w-0 items-center gap-(--spacing-xs)">
                       <i
-                        class="ai ai-domains shrink-0 text-[1.15em] text-[var(--text-muted)]"
+                        class="ai ai-domains shrink-0 text-[1.15em] text-(--text-muted)"
                         aria-hidden="true"
                       />
                       <a
                         :href="`https://${value}`"
                         target="_blank"
                         rel="noopener noreferrer"
-                        class="flex min-w-0 items-center gap-[var(--spacing-xxs)] hover:underline"
+                        class="flex min-w-0 items-center gap-(--spacing-xxs) hover:underline"
                         @click.stop
                       >
                         <span class="truncate">{{ value }}</span>
                         <i
-                          class="pi pi-arrow-up-right shrink-0 text-[var(--text-muted)]"
+                          class="pi pi-arrow-up-right shrink-0 text-(--text-muted)"
                           aria-hidden="true"
                         />
                       </a>

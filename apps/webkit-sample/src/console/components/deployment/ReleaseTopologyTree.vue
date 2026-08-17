@@ -49,11 +49,11 @@
 </script>
 
 <template>
-  <div class="flex min-w-0 flex-col gap-[var(--spacing-md)]">
+  <div class="flex min-w-0 flex-col gap-(--spacing-md)">
     <section
       v-for="card in cards"
       :key="card.type"
-      class="flex min-w-0 flex-col rounded-[var(--shape-elements)] border border-[length:var(--border-width-default)] border-[var(--border-default)] bg-[var(--bg-surface)]"
+      class="flex min-w-0 flex-col rounded-(--shape-elements) border border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface)"
       :data-included="card.enabled || null"
     >
       <!-- The header carries a CardBox header's geometry (`min-h-14`, `px-md`, `py-sm`), so
@@ -61,19 +61,19 @@
            Dependencies card nested inside it, and the four top-level cards around them. A 40px
            header above a 56px one inside the same card reads as two different kinds of card. -->
       <header
-        class="flex min-h-14 min-w-0 items-center justify-between gap-[var(--spacing-xs)] border-b border-[var(--border-default)] px-[var(--spacing-md)] py-[var(--spacing-sm)]"
+        class="flex min-h-14 min-w-0 items-center justify-between gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
       >
-        <span class="flex min-w-0 items-center gap-[var(--spacing-xs)]">
+        <span class="flex min-w-0 items-center gap-(--spacing-xs)">
           <i
-            :class="[resourceIcon(card.type), 'shrink-0 text-[var(--text-muted)]']"
+            :class="[resourceIcon(card.type), 'shrink-0 text-(--text-muted)']"
             aria-hidden="true"
           />
-          <span class="truncate text-label-md text-[var(--text-default)]">
+          <span class="truncate text-label-md text-(--text-default)">
             {{ resourceLabel(card.type) }}
           </span>
         </span>
 
-        <span class="flex shrink-0 items-center gap-[var(--spacing-xs)]">
+        <span class="flex shrink-0 items-center gap-(--spacing-xs)">
           <!-- The card's state, as a tag: required, or kept from the release that is
                already serving. Never both — a read-only card is not a decision. -->
           <Tag
@@ -115,18 +115,18 @@
            the card would make an intentional choice look like a missing feature. -->
       <p
         v-if="!card.enabled"
-        class="p-[var(--spacing-md)] text-body-sm text-[var(--text-muted)]"
+        class="p-(--spacing-md) text-body-sm text-(--text-muted)"
       >
         {{ card.note }}
       </p>
 
       <div
         v-else
-        class="flex min-w-0 flex-col gap-[var(--spacing-md)] p-[var(--spacing-md)]"
+        class="flex min-w-0 flex-col gap-(--spacing-md) p-(--spacing-md)"
       >
         <p
           v-if="card.readonly"
-          class="text-body-sm text-[var(--text-muted)]"
+          class="text-body-sm text-(--text-muted)"
         >
           Kept from the active release.
         </p>
@@ -159,8 +159,8 @@
                  reader acts inside, so it is not a muted aside. Its count is a Badge, the
                  same component the group rows below it use, so one adornment says "how many"
                  everywhere in this card. -->
-            <span class="flex min-w-0 items-center gap-[var(--spacing-xs)]">
-              <span class="truncate text-label-md text-[var(--text-default)]">Dependencies</span>
+            <span class="flex min-w-0 items-center gap-(--spacing-xs)">
+              <span class="truncate text-label-md text-(--text-default)">Dependencies</span>
               <Badge
                 v-if="!card.detecting"
                 :label="String(dependencyCount(card))"

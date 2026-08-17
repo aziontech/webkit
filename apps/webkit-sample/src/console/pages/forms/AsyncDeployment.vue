@@ -185,10 +185,10 @@
       <!-- Demo scaffolding, dashed so it reads as not-part-of-the-product. -->
       <aside
         aria-label="Scenario simulation"
-        class="layout-section-start flex flex-col gap-[var(--spacing-md)] rounded-[var(--shape-card)] border border-dashed border-[var(--border-default)] bg-[var(--bg-surface-raised)] p-[var(--spacing-lg)]"
+        class="layout-section-start flex flex-col gap-(--spacing-md) rounded-(--shape-card) border border-dashed border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-lg)"
       >
-        <div class="flex flex-wrap items-center justify-between gap-[var(--spacing-sm)]">
-          <p class="m-0 text-overline-sm text-[var(--text-muted)]">
+        <div class="flex flex-wrap items-center justify-between gap-(--spacing-sm)">
+          <p class="m-0 text-overline-sm text-(--text-muted)">
             Simulation — how this deploy ends
           </p>
           <Tag
@@ -197,12 +197,12 @@
             size="medium"
           />
         </div>
-        <p class="m-0 text-body-sm text-[var(--text-muted)]">
+        <p class="m-0 text-body-sm text-(--text-muted)">
           The ending is held in the URL (<code class="text-label-code-sm">?outcome=</code>), so a
           run is linkable and survives a reload. Pick one, press Deploy, and leave the page — the
           toast follows you and settles wherever you are.
         </p>
-        <div class="flex flex-wrap items-center gap-[var(--spacing-sm)]">
+        <div class="flex flex-wrap items-center gap-(--spacing-sm)">
           <SegmentedButton
             v-model="outcome"
             :options="outcomes"
@@ -260,7 +260,7 @@
           style="--popup-origin: top"
         >
           <template #action>
-            <div class="flex items-center gap-[var(--spacing-xs)]">
+            <div class="flex items-center gap-(--spacing-xs)">
               <Button
                 label="Redeploy"
                 kind="secondary"

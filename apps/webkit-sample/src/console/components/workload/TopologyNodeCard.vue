@@ -48,22 +48,22 @@
     <div
       v-for="field in node.fields"
       :key="field.label"
-      class="flex flex-col gap-[var(--spacing-xxs)]"
+      class="flex flex-col gap-(--spacing-xxs)"
     >
-      <span class="text-label-sm text-[var(--text-muted)]">{{ field.label }}</span>
-      <div class="flex min-w-0 items-center gap-[var(--spacing-xs)]">
+      <span class="text-label-sm text-(--text-muted)">{{ field.label }}</span>
+      <div class="flex min-w-0 items-center gap-(--spacing-xs)">
         <a
           v-if="field.url"
           :href="field.url"
           target="_blank"
           rel="noopener noreferrer"
-          class="truncate text-body-xs text-[var(--text-default)] hover:underline"
+          class="truncate text-body-xs text-(--text-default) hover:underline"
         >
           {{ field.value }}
         </a>
         <span
           v-else
-          class="truncate text-body-xs text-[var(--text-default)]"
+          class="truncate text-body-xs text-(--text-default)"
         >
           {{ field.value }}
         </span>
@@ -82,12 +82,12 @@
          have no href and render no link. -->
     <div
       v-if="node.href || $slots.actions"
-      class="flex items-center gap-[var(--spacing-xs)]"
+      class="flex items-center gap-(--spacing-xs)"
     >
       <router-link
         v-if="node.href"
         :to="{ path: node.href, query: { email } }"
-        class="inline-flex min-w-0 items-center gap-[var(--spacing-xxs)] text-label-sm text-[var(--text-link)] no-underline hover:underline"
+        class="inline-flex min-w-0 items-center gap-(--spacing-xxs) text-label-sm text-(--text-link) no-underline hover:underline"
       >
         <span class="truncate">Open {{ node.kind }}</span>
         <i

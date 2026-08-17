@@ -41,7 +41,7 @@
 </script>
 
 <template>
-  <div class="flex min-h-dvh flex-col bg-[var(--bg-canvas)] lg:h-dvh lg:overflow-hidden">
+  <div class="flex min-h-dvh flex-col bg-(--bg-canvas) lg:h-dvh lg:overflow-hidden">
     <GlobalHeader aria-label="Azion Console">
       <GlobalHeader.Brand>
         <!-- Signed-out screens: the brand mark goes back to the marketing home
@@ -50,9 +50,9 @@
         <RouterLink
           to="/site/home"
           aria-label="Azion home"
-          class="inline-flex shrink-0 items-center self-center rounded-[var(--shape-elements)] transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-surface)] motion-reduce:transition-none"
+          class="inline-flex shrink-0 items-center self-center rounded-(--shape-elements) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
         >
-          <span class="text-[var(--primary)]">
+          <span class="text-(--primary)">
             <svg
               viewBox="0 0 90 18"
               fill="currentColor"

@@ -31,7 +31,7 @@
     id="contact"
     :divided="false"
     :padded="false"
-    class="scroll-mt-[var(--spacing-xxl)]"
+    class="scroll-mt-(--spacing-xxl)"
   >
     <!-- The band is a registration frame like every other brick in the column — without
          one it drew no rules and no ticks at all, so the closing pitch was the one section
@@ -47,9 +47,9 @@
       <div class="grid lg:grid-cols-[minmax(0,7fr)_minmax(0,3fr)]">
         <!-- The pitch, on the raised surface. -->
         <div
-          class="flex flex-col justify-between gap-[var(--spacing-xxl)] bg-[var(--bg-surface-raised)] p-[var(--spacing-xl)]"
+          class="flex flex-col justify-between gap-(--spacing-xxl) bg-(--bg-surface-raised) p-(--spacing-xl)"
         >
-          <div class="flex flex-col gap-[var(--spacing-lg)]">
+          <div class="flex flex-col gap-(--spacing-lg)">
             <Overline
               prefix="//"
               show-cursor
@@ -58,8 +58,8 @@
             <!-- One heading, two tones: the claim in full contrast, its consequence
                  muted. Two spans, not two headings — it is one sentence. -->
             <h2 class="m-0 text-balance text-heading-xl">
-              <span class="block text-[var(--text-default)]">Build once.</span>
-              <span class="block text-[var(--text-muted)]">Run anywhere.</span>
+              <span class="block text-(--text-default)">Build once.</span>
+              <span class="block text-(--text-muted)">Run anywhere.</span>
             </h2>
           </div>
 
@@ -77,9 +77,9 @@
              this cell's, at the frame's own `--border-default`: an internal divider a step
              lighter than the band's rules met them mid-line at the two junctions. -->
         <div
-          class="flex flex-col justify-between gap-[var(--spacing-xxl)] border-t border-[var(--border-default)] p-[var(--spacing-xl)] lg:border-l lg:border-t-0"
+          class="flex flex-col justify-between gap-(--spacing-xxl) border-t border-(--border-default) p-(--spacing-xl) lg:border-l lg:border-t-0"
         >
-          <p class="m-0 text-pretty text-heading-sm text-[var(--text-muted)]">
+          <p class="m-0 text-pretty text-heading-sm text-(--text-muted)">
             Get a faster path to launch, less latency, and less infrastructure overhead.
           </p>
           <Button

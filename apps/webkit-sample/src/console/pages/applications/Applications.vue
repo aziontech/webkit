@@ -295,18 +295,18 @@
            which is what `flex-1 justify-center` would have done. -->
       <div
         v-if="accountEmpty"
-        class="my-auto flex w-full flex-col py-[var(--spacing-xl)]"
+        class="my-auto flex w-full flex-col py-(--spacing-xl)"
       >
         <ProductFirstUse :product="firstUse" />
       </div>
 
       <section
         v-else
-        class="layout-section-start flex min-w-0 flex-col gap-[var(--layout-section-gap)]"
+        class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)"
       >
         <!-- ONE section: the controls row narrows the table under it, so the two
              sit at --layout-group-gap. -->
-        <section class="flex min-w-0 flex-col gap-[var(--layout-group-gap)]">
+        <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
           <!-- First-level module list: no PageHeading — the module name already IS the
                header breadcrumb crumb (AppLayout). The page opens with its CONTROLS
                instead — the filter, then the search, the module's own actions on the
@@ -323,7 +323,7 @@
               size="large"
               placeholder="Search"
               aria-label="Search applications"
-              class="min-w-36 grow basis-[var(--container-2xs)]"
+              class="min-w-36 grow basis-(--container-2xs)"
             >
               <template #iconLeft>
                 <i
@@ -373,7 +373,7 @@
                   @row-click="openApp"
                 >
                   <template #cell-name="{ value, row }">
-                    <div class="flex min-w-0 items-center gap-[var(--spacing-xs)]">
+                    <div class="flex min-w-0 items-center gap-(--spacing-xs)">
                       <i
                         :class="`ai-cor ${presetIcon(row.preset)}`"
                         class="shrink-0 text-[1.15em]"

@@ -272,18 +272,18 @@
                      element at the top of the table header; then search + table
                      controls; then the folder-path breadcrumb (the only
                      "where am I" surface) + "Add to files". -->
-                <div class="flex w-full flex-col gap-[var(--spacing-sm)]">
-                  <div class="flex min-w-0 items-center gap-[var(--spacing-xs)]">
+                <div class="flex w-full flex-col gap-(--spacing-sm)">
+                  <div class="flex min-w-0 items-center gap-(--spacing-xs)">
                     <i
-                      class="ai ai-edge-storage shrink-0 text-[1.15em] text-[var(--text-muted)]"
+                      class="ai ai-edge-storage shrink-0 text-[1.15em] text-(--text-muted)"
                       aria-hidden="true"
                     />
-                    <span class="min-w-0 truncate text-heading-xxs text-[var(--text-default)]">
+                    <span class="min-w-0 truncate text-heading-xxs text-(--text-default)">
                       {{ bucketName }}
                     </span>
                   </div>
 
-                  <div class="flex w-full items-center gap-[var(--spacing-xs)]">
+                  <div class="flex w-full items-center gap-(--spacing-xs)">
                     <Table.Search
                       size="large"
                       placeholder="Search in folder"
@@ -291,7 +291,7 @@
                     />
                   </div>
 
-                  <div class="flex w-full items-center justify-between gap-[var(--spacing-xs)]">
+                  <div class="flex w-full items-center justify-between gap-(--spacing-xs)">
                     <Breadcrumb
                       :items="pathCrumbs"
                       class="min-w-0"
@@ -312,21 +312,21 @@
               </template>
 
               <template #cell-name="{ value, row }">
-                <div class="flex min-w-0 items-center gap-[var(--spacing-xs)]">
+                <div class="flex min-w-0 items-center gap-(--spacing-xs)">
                   <i
                     v-if="row.kind === 'parent'"
-                    class="pi pi-folder-open shrink-0 text-[1.15em] text-[var(--text-muted)]"
+                    class="pi pi-folder-open shrink-0 text-[1.15em] text-(--text-muted)"
                     aria-hidden="true"
                   />
                   <i
                     v-else-if="row.kind === 'folder'"
-                    class="pi pi-folder shrink-0 text-[1.15em] text-[var(--text-link)]"
+                    class="pi pi-folder shrink-0 text-[1.15em] text-(--text-link)"
                     aria-hidden="true"
                   />
                   <i
                     v-else
                     :class="fileIcon(row.ext)"
-                    class="shrink-0 text-[1.15em] text-[var(--text-muted)]"
+                    class="shrink-0 text-[1.15em] text-(--text-muted)"
                     aria-hidden="true"
                   />
                   <span
@@ -339,7 +339,7 @@
               </template>
 
               <template #cell-size="{ value }">
-                <span class="text-[var(--text-muted)]">{{ value }}</span>
+                <span class="text-(--text-muted)">{{ value }}</span>
               </template>
 
               <template #cell-lastModified="{ value, row }">

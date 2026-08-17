@@ -180,7 +180,7 @@
 </script>
 
 <template>
-  <div class="flex h-dvh flex-col bg-[var(--bg-canvas)]">
+  <div class="flex h-dvh flex-col bg-(--bg-canvas)">
     <UnsavedChangesGuard :dirty="dirty" />
 
     <CreationHeader
@@ -208,8 +208,8 @@
             <legend class="sr-only">Create application</legend>
 
             <!-- Section: General -->
-            <section class="flex flex-col gap-[var(--layout-group-gap)]">
-              <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
+            <section class="flex flex-col gap-(--layout-group-gap)">
+              <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
                 General
               </p>
               <CardBox :padded="false">
@@ -222,9 +222,9 @@
                           Give a unique and descriptive name to identify the Application.
                         </Item.Description>
                       </Item.Content>
-                      <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
+                      <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
                         <!-- Empty-required → amber `required` HelperText (not red). -->
-                        <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
+                        <div class="flex w-full flex-col gap-(--spacing-xs)">
                           <InputText
                             v-model="form.name"
                             size="large"
@@ -250,8 +250,8 @@
             </section>
 
             <!-- Section: Delivery Settings -->
-            <section class="layout-section-start flex flex-col gap-[var(--layout-group-gap)]">
-              <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
+            <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
+              <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
                 Delivery Settings
               </p>
               <CardBox :padded="false">
@@ -264,8 +264,8 @@
                       <Item.Content>
                         <Item.Title>Protocol Usage</Item.Title>
                       </Item.Content>
-                      <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
-                        <fieldset class="flex w-full flex-col gap-[var(--spacing-sm)]">
+                      <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
+                        <fieldset class="flex w-full flex-col gap-(--spacing-sm)">
                           <legend class="sr-only">Protocol Usage</legend>
                           <FieldRadioBlock
                             v-for="option in protocolUsageOptions"
@@ -284,8 +284,8 @@
                       <Item.Content>
                         <Item.Title>HTTP ports</Item.Title>
                       </Item.Content>
-                      <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
-                        <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
+                      <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
+                        <div class="flex w-full flex-col gap-(--spacing-xs)">
                           <MultiSelect
                             v-model="form.httpPorts"
                             size="large"
@@ -328,7 +328,7 @@
                           Applies when the Application serves HTTPS traffic.
                         </Item.Description>
                       </Item.Content>
-                      <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
+                      <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
                         <MultiSelect
                           v-model="form.httpsPorts"
                           size="large"
@@ -356,8 +356,8 @@
             </section>
 
             <!-- Section: Origins -->
-            <section class="layout-section-start flex flex-col gap-[var(--layout-group-gap)]">
-              <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
+            <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
+              <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
                 Origins
               </p>
               <CardBox :padded="false">
@@ -370,7 +370,7 @@
                           The origin type is pre-defined and can't be customized.
                         </Item.Description>
                       </Item.Content>
-                      <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
+                      <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
                         <InputText
                           model-value="Single Origin"
                           size="large"
@@ -390,8 +390,8 @@
                           Select the protocol usage between the edge nodes and the origin.
                         </Item.Description>
                       </Item.Content>
-                      <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
-                        <fieldset class="flex w-full flex-col gap-[var(--spacing-sm)]">
+                      <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
+                        <fieldset class="flex w-full flex-col gap-(--spacing-sm)">
                           <legend class="sr-only">Protocol Policy</legend>
                           <FieldRadioBlock
                             v-for="option in protocolPolicyOptions"
@@ -412,8 +412,8 @@
                           Define an origin for the content in FQDN format or an IPv4/IPv6 address.
                         </Item.Description>
                       </Item.Content>
-                      <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
-                        <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
+                      <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
+                        <div class="flex w-full flex-col gap-(--spacing-xs)">
                           <InputText
                             v-model="form.address"
                             size="large"
@@ -440,8 +440,8 @@
                           Identify a virtualhost sent in the Host header to the origin.
                         </Item.Description>
                       </Item.Content>
-                      <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
-                        <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
+                      <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
+                        <div class="flex w-full flex-col gap-(--spacing-xs)">
                           <InputText
                             v-model="form.hostHeader"
                             size="large"
@@ -468,8 +468,8 @@
             </section>
 
             <!-- Section: Cache Expiration Policies -->
-            <section class="layout-section-start flex flex-col gap-[var(--layout-group-gap)]">
-              <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
+            <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
+              <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
                 Cache Expiration Policies
               </p>
               <CardBox :padded="false">
@@ -482,8 +482,8 @@
                       <Item.Content>
                         <Item.Title>Browser Cache Settings</Item.Title>
                       </Item.Content>
-                      <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
-                        <fieldset class="flex w-full flex-col gap-[var(--spacing-sm)]">
+                      <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
+                        <fieldset class="flex w-full flex-col gap-(--spacing-sm)">
                           <legend class="sr-only">Browser Cache Settings</legend>
                           <FieldRadioBlock
                             v-for="option in browserCacheOptions"
@@ -502,7 +502,7 @@
                       <Item.Content>
                         <Item.Title>Maximum TTL (seconds)</Item.Title>
                       </Item.Content>
-                      <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
+                      <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
                         <InputNumber
                           v-model="form.browserMaxTtl"
                           size="large"
@@ -519,8 +519,8 @@
                       <Item.Content>
                         <Item.Title>Cache Settings</Item.Title>
                       </Item.Content>
-                      <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
-                        <fieldset class="flex w-full flex-col gap-[var(--spacing-sm)]">
+                      <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
+                        <fieldset class="flex w-full flex-col gap-(--spacing-sm)">
                           <legend class="sr-only">Cache Settings</legend>
                           <FieldRadioBlock
                             v-for="option in edgeCacheOptions"
@@ -544,7 +544,7 @@
                           greater than 3 seconds.
                         </Item.Description>
                       </Item.Content>
-                      <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
+                      <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
                         <InputNumber
                           v-model="form.edgeMaxTtl"
                           size="large"
@@ -560,8 +560,8 @@
             </section>
 
             <!-- Section: Debug Rules -->
-            <section class="layout-section-start flex flex-col gap-[var(--layout-group-gap)]">
-              <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
+            <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
+              <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
                 Debug Rules
               </p>
               <CardBox :padded="false">
@@ -593,10 +593,10 @@
         <!-- Sticky action bar. Save is the native submit (Enter works); the
            scope stays locked while the request is in flight. -->
         <footer
-          class="sticky bottom-0 border-t-[length:var(--border-width-default)] border-[var(--border-muted)] bg-[var(--bg-surface)]"
+          class="sticky bottom-0 border-t-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface)"
         >
           <div
-            class="layout-column-form layout-boundary-inline flex items-center justify-end gap-[var(--spacing-sm)] py-[var(--spacing-md)]"
+            class="layout-column-form layout-boundary-inline flex items-center justify-end gap-(--spacing-sm) py-(--spacing-md)"
           >
             <Button
               type="button"

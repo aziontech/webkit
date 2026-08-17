@@ -243,7 +243,7 @@
 </script>
 
 <template>
-  <div class="flex h-dvh flex-col overflow-hidden bg-[var(--bg-canvas)]">
+  <div class="flex h-dvh flex-col overflow-hidden bg-(--bg-canvas)">
     <!-- The header spans the FULL width of the app, above the rail — it is the
          one piece of chrome that outranks navigation. Left to right it reads
          outermost tenant inward: the Azion mark, the organization, the account,
@@ -303,16 +303,16 @@
           <RouterLink
             :to="{ path: '/home', query: { email: userEmail } }"
             aria-label="Azion home"
-            class="inline-flex shrink-0 items-center self-center rounded-[var(--shape-elements)] p-[var(--spacing-xxs)] transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-surface)] motion-reduce:transition-none"
+            class="inline-flex shrink-0 items-center self-center rounded-(--shape-elements) p-(--spacing-xxs) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
           >
             <AzionLogoMin
-              class="size-[var(--size-5)]"
+              class="size-(--size-5)"
               aria-label="Azion"
             />
           </RouterLink>
 
           <span
-            class="shrink-0 px-[var(--spacing-xxs)] text-body-sm text-[var(--text-muted)]"
+            class="shrink-0 px-(--spacing-xxs) text-body-sm text-(--text-muted)"
             aria-hidden="true"
             >/</span
           >
@@ -324,7 +324,7 @@
                so a slash with nothing after it is a chain that lost a link. -->
           <template v-if="accountSwitcherVisible">
             <span
-              class="shrink-0 px-[var(--spacing-xxs)] text-body-sm text-[var(--text-muted)]"
+              class="shrink-0 px-(--spacing-xxs) text-body-sm text-(--text-muted)"
               aria-hidden="true"
               >/</span
             >
@@ -340,7 +340,7 @@
                and account survive; the workspace comes back at `md`. -->
           <div class="hidden items-center md:flex">
             <span
-              class="shrink-0 px-[var(--spacing-xxs)] text-body-sm text-[var(--text-muted)]"
+              class="shrink-0 px-(--spacing-xxs) text-body-sm text-(--text-muted)"
               aria-hidden="true"
               >/</span
             >
@@ -362,10 +362,10 @@
              anywhere. -->
         <div
           v-if="showBreadcrumb"
-          class="hidden min-w-0 items-center gap-[var(--spacing-xs)] lg:flex"
+          class="hidden min-w-0 items-center gap-(--spacing-xs) lg:flex"
         >
           <span
-            class="h-4 w-px shrink-0 bg-[var(--border-muted)]"
+            class="h-4 w-px shrink-0 bg-(--border-muted)"
             aria-hidden="true"
           />
           <Breadcrumb
@@ -439,7 +439,7 @@
         <button
           type="button"
           aria-label="Account settings"
-          class="rounded-full transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-surface)] motion-reduce:transition-none"
+          class="rounded-full transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
           @click="openAccount"
         >
           <Avatar

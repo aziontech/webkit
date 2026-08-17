@@ -42,7 +42,7 @@
        (the console AppLayout owns scrolling internally), so this marketing shell
        must own its own scroll region: a full-height, vertically-scrolling column.
        The sticky SiteNav sticks to the top of THIS container as it scrolls. -->
-  <div class="flex h-dvh flex-col overflow-y-auto bg-[var(--bg-canvas)] text-[var(--text-default)]">
+  <div class="flex h-dvh flex-col overflow-y-auto bg-(--bg-canvas) text-(--text-default)">
     <SiteNav />
     <main class="flex-1">
       <slot />

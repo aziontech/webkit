@@ -651,7 +651,7 @@
     collapse-aria-label="Collapse sidebar"
     expand-aria-label="Expand sidebar"
     resize-aria-label="Resize sidebar"
-    :class="['h-full', fluid ? 'w-full' : 'w-[var(--container-2xs)]']"
+    :class="['h-full', fluid ? 'w-full' : 'w-(--container-2xs)']"
   >
     <template #header>
       <!-- Search → CommandMenu. A read-only field carrying the ⌘K hint, in the
@@ -790,13 +790,13 @@
           the avatar and the ⋮ button below the trigger they are supposed to line up with.
           The spacing above the footer belongs to the region, not to one item inside it.
         -->
-      <div class="flex items-center gap-[var(--spacing-xs)]">
+      <div class="flex items-center gap-(--spacing-xs)">
         <Avatar
           :label="user"
           size="small"
           kind="square"
         />
-        <span class="min-w-0 flex-1 truncate text-label-sm text-[var(--text-default)]">
+        <span class="min-w-0 flex-1 truncate text-label-sm text-(--text-default)">
           {{ userName }}
         </span>
 
@@ -829,10 +829,10 @@
                  against. -->
             <template #top>
               <div class="flex min-w-0 flex-col">
-                <span class="truncate text-label-md text-[var(--text-default)]">
+                <span class="truncate text-label-md text-(--text-default)">
                   {{ userName }}
                 </span>
-                <span class="truncate text-body-xs text-[var(--text-muted)]">
+                <span class="truncate text-body-xs text-(--text-muted)">
                   {{ user }}
                 </span>
               </div>
@@ -866,9 +866,9 @@
                  height/padding so its inline control aligns with the rows. -->
           <Dropdown.Group>
             <div
-              class="flex h-8 min-h-8 items-center gap-[var(--spacing-xs)] rounded-[var(--shape-button)] px-[var(--spacing-sm)] py-[var(--spacing-xxs)]"
+              class="flex h-8 min-h-8 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-xxs)"
             >
-              <span class="flex-1 truncate text-left text-label-sm text-[var(--text-default)]">
+              <span class="flex-1 truncate text-left text-label-sm text-(--text-default)">
                 Theme
               </span>
               <ThemeSwitcher
@@ -892,7 +892,7 @@
               label="Sample preset"
             >
               <template #right>
-                <span class="text-body-xs text-[var(--text-muted)]">
+                <span class="text-body-xs text-(--text-muted)">
                   {{ presetSummary }}
                 </span>
               </template>
@@ -983,7 +983,7 @@
                know its own customer. The status line stays either way. -->
           <Dropdown.Group>
             <div
-              class="flex flex-col gap-[var(--spacing-sm)] px-[var(--spacing-xxs)] py-[var(--spacing-xxs)]"
+              class="flex flex-col gap-(--spacing-sm) px-(--spacing-xxs) py-(--spacing-xxs)"
             >
               <Button
                 v-if="upgradePlan"
@@ -993,7 +993,7 @@
                 class="w-full"
                 @click="(event) => onShortcut(event, 'upgrade')"
               />
-              <div class="flex justify-center px-[var(--spacing-xs)]">
+              <div class="flex justify-center px-(--spacing-xs)">
                 <StatusIndicator
                   status="positive"
                   label="All systems normal"

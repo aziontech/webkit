@@ -895,25 +895,25 @@
                to hold a two-up field row. They stack below that, and the copy never names a
                side, because at that width there are no sides. -->
           <section
-            class="layout-section-start grid min-w-0 gap-[var(--layout-section-gap)] xl:grid-cols-[minmax(0,1fr)_minmax(var(--container-xs),var(--container-sm))]"
+            class="layout-section-start grid min-w-0 gap-(--layout-section-gap) xl:grid-cols-[minmax(0,1fr)_minmax(var(--container-xs),var(--container-sm))]"
           >
-            <div class="flex min-w-0 flex-col gap-[var(--layout-group-gap)]">
+            <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
               <!-- WHAT goes out -->
               <CardBox>
                 <template #header>
-                  <span class="flex min-w-0 items-center gap-[var(--spacing-xs)]">
+                  <span class="flex min-w-0 items-center gap-(--spacing-xs)">
                     <i
-                      class="pi pi-sitemap shrink-0 text-[var(--text-muted)]"
+                      class="pi pi-sitemap shrink-0 text-(--text-muted)"
                       aria-hidden="true"
                     />
-                    <span class="truncate text-label-md text-[var(--text-default)]">
+                    <span class="truncate text-label-md text-(--text-default)">
                       Deployment topology
                     </span>
                   </span>
                 </template>
 
                 <template #content>
-                  <div class="flex min-w-0 flex-col gap-[var(--spacing-md)]">
+                  <div class="flex min-w-0 flex-col gap-(--spacing-md)">
                     <!-- Why this release looks the way it does. It comes before the
                          first control, never inside a label. -->
                     <Message
@@ -960,12 +960,12 @@
                    accordion rows own their inset and their hover surface runs card-wide. -->
               <CardBox :padded="false">
                 <template #header>
-                  <span class="flex min-w-0 items-center gap-[var(--spacing-xs)]">
+                  <span class="flex min-w-0 items-center gap-(--spacing-xs)">
                     <i
-                      class="pi pi-link shrink-0 text-[var(--text-muted)]"
+                      class="pi pi-link shrink-0 text-(--text-muted)"
                       aria-hidden="true"
                     />
-                    <span class="truncate text-label-md text-[var(--text-default)]">
+                    <span class="truncate text-label-md text-(--text-default)">
                       Include dependencies
                     </span>
                   </span>
@@ -980,7 +980,7 @@
                   <!-- Explain, then ask: what these rows are for comes before the control that
                        adds one. Padded by hand, since the card is flush for the rows below. -->
                   <p
-                    class="px-[var(--spacing-md)] pt-[var(--spacing-sm)] pb-[var(--spacing-xs)] text-body-sm text-[var(--text-muted)]"
+                    class="px-(--spacing-md) pt-(--spacing-sm) pb-(--spacing-xs) text-body-sm text-(--text-muted)"
                   >
                     Add connectors or network lists that a Function reaches at runtime, which
                     detection cannot find.
@@ -1008,12 +1008,12 @@
                    goes. -->
               <CardBox v-if="!targetSettled">
                 <template #header>
-                  <span class="flex min-w-0 items-center gap-[var(--spacing-xs)]">
+                  <span class="flex min-w-0 items-center gap-(--spacing-xs)">
                     <i
-                      class="ai ai-deploy-pillar shrink-0 text-[var(--text-muted)]"
+                      class="ai ai-deploy-pillar shrink-0 text-(--text-muted)"
                       aria-hidden="true"
                     />
-                    <span class="truncate text-label-md text-[var(--text-default)]">
+                    <span class="truncate text-label-md text-(--text-default)">
                       Deployment settings
                     </span>
                   </span>
@@ -1040,15 +1040,15 @@
                  operator checks against every change they make. It pins at the page's own top
                  inset (`--layout-boundary-start`) rather than at 0, so the pinned card keeps
                  the air it had before it stuck instead of butting against the scroll edge. -->
-            <div class="min-w-0 xl:sticky xl:top-[var(--layout-boundary-start)] xl:self-start">
+            <div class="min-w-0 xl:sticky xl:top-(--layout-boundary-start) xl:self-start">
               <CardBox :key="impactHasTotal">
                 <template #header>
-                  <span class="flex min-w-0 items-center gap-[var(--spacing-xs)]">
+                  <span class="flex min-w-0 items-center gap-(--spacing-xs)">
                     <i
-                      class="pi pi-bullseye shrink-0 text-[var(--text-muted)]"
+                      class="pi pi-bullseye shrink-0 text-(--text-muted)"
                       aria-hidden="true"
                     />
-                    <span class="truncate text-label-md text-[var(--text-default)]">Impact</span>
+                    <span class="truncate text-label-md text-(--text-default)">Impact</span>
                   </span>
 
                   <!-- The view switch belongs to the card, not to the content it switches: in
@@ -1064,7 +1064,7 @@
                     v-model="impactView"
                     :options="IMPACT_VIEWS"
                     aria-label="Impact view"
-                    class="shrink-0 -my-[var(--spacing-xxs)]"
+                    class="shrink-0 -my-(--spacing-xxs)"
                   />
                 </template>
                 <template #content>
@@ -1102,21 +1102,21 @@
       <!-- The commit bar. The blocker is stated next to the button that is blocked, so a
            disabled control never leaves the reader guessing. -->
       <footer
-        class="shrink-0 border-t-[length:var(--border-width-default)] border-[var(--border-muted)] bg-[var(--bg-surface)]"
+        class="shrink-0 border-t-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface)"
       >
         <div
-          class="layout-column-focused layout-boundary-inline flex flex-col gap-[var(--spacing-sm)] py-[var(--spacing-md)] md:flex-row md:items-center md:justify-between"
+          class="layout-column-focused layout-boundary-inline flex flex-col gap-(--spacing-sm) py-(--spacing-md) md:flex-row md:items-center md:justify-between"
         >
-          <p class="text-body-sm text-[var(--text-muted)]">
+          <p class="text-body-sm text-(--text-muted)">
             Deploying builds this release and puts it into traffic.
           </p>
 
           <div
-            class="flex flex-col gap-[var(--spacing-sm)] md:flex-row md:items-center md:justify-end"
+            class="flex flex-col gap-(--spacing-sm) md:flex-row md:items-center md:justify-end"
           >
             <p
               v-if="blocker"
-              class="flex items-center gap-[var(--spacing-xs)] text-body-sm text-[var(--warning-contrast)]"
+              class="flex items-center gap-(--spacing-xs) text-body-sm text-(--warning-contrast)"
             >
               <Spinner
                 v-if="detecting"
@@ -1124,7 +1124,7 @@
               />
               {{ blocker }}
             </p>
-            <div class="flex items-center gap-[var(--spacing-sm)]">
+            <div class="flex items-center gap-(--spacing-sm)">
               <Button
                 class="w-full md:w-auto"
                 type="button"
@@ -1164,7 +1164,7 @@
             <DialogClose />
           </PanelHeader>
           <PanelContent>
-            <p class="text-body-sm text-[var(--text-default)]">{{ confirmBody }}</p>
+            <p class="text-body-sm text-(--text-default)">{{ confirmBody }}</p>
           </PanelContent>
           <PanelFooter class="flex-col md:flex-row md:justify-end">
             <Button

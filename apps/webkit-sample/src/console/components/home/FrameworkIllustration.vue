@@ -146,7 +146,7 @@
         v-for="framework in FRAMEWORKS"
         :key="`node-${framework.icon}`"
         :active="false"
-        class="absolute z-1 rounded-[var(--shape-elements)]"
+        class="absolute z-1 rounded-(--shape-elements)"
         :style="{
           left: `${PATH_FROM - nodeOffset}px`,
           top: `${strokeY(framework.y) - nodeOffset}px`

@@ -31,15 +31,15 @@
 </script>
 
 <template>
-  <header class="flex items-center gap-[var(--layout-group-gap)]">
-    <div class="flex min-w-0 grow items-center gap-[var(--layout-group-gap)]">
+  <header class="flex items-center gap-(--layout-group-gap)">
+    <div class="flex min-w-0 grow items-center gap-(--layout-group-gap)">
       <slot />
     </div>
     <!-- Not rendered at all without the slot, so a page with no actions keeps the
          filters on one full-width row. -->
     <div
       v-if="$slots.actions"
-      class="flex shrink-0 items-center gap-[var(--layout-group-gap)]"
+      class="flex shrink-0 items-center gap-(--layout-group-gap)"
     >
       <slot name="actions" />
     </div>

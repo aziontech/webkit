@@ -125,7 +125,7 @@ azion deploy`
     >
       <div class="grid lg:grid-cols-2">
         <div
-          class="relative flex flex-col justify-between gap-[var(--spacing-xxl)] overflow-hidden p-[var(--spacing-xl)]"
+          class="relative flex flex-col justify-between gap-(--spacing-xxl) overflow-hidden p-(--spacing-xl)"
         >
           <!-- THE PIXELATE FIELD, as this cell's ground — the same backdrop the
                Functions page pools behind its code sample (AzionFunctions.vue), used
@@ -150,8 +150,8 @@ azion deploy`
                goes on a wrapper at the same radius instead of being clipped away.
                `animate-lines` is CodeBlock's own staggered line entrance, which ships with
                its motion-reduce fallback. -->
-          <div class="relative z-10 flex items-start py-[var(--spacing-lg)]">
-            <div class="w-full min-w-0 rounded-[var(--shape-elements)] shadow-[var(--shadow-sm)]">
+          <div class="relative z-10 flex items-start py-(--spacing-lg)">
+            <div class="w-full min-w-0 rounded-(--shape-elements) shadow-(--shadow-sm)">
               <CodeBlock
                 :tabs="promptTabs"
                 default-value="ai-prompt"
@@ -162,15 +162,15 @@ azion deploy`
             </div>
           </div>
 
-          <div class="relative z-10 flex flex-col items-start gap-[var(--spacing-lg)]">
-            <div class="flex flex-col gap-[var(--spacing-md)]">
+          <div class="relative z-10 flex flex-col items-start gap-(--spacing-lg)">
+            <div class="flex flex-col gap-(--spacing-md)">
               <!-- `h3`, not `h2`: the SectionTitle above already opens this section with
                    one. Same `heading-md` token the Functions use cases set, so the two
                    pages read identically while the outline stays honest. -->
-              <h3 class="m-0 text-balance text-heading-md text-[var(--text-default)]">
+              <h3 class="m-0 text-balance text-heading-md text-(--text-default)">
                 Hand the project to an agent
               </h3>
-              <p class="m-0 text-pretty text-body-md text-[var(--text-muted)]">
+              <p class="m-0 text-pretty text-body-md text-(--text-muted)">
                 One prompt links the project, connects the MCP server so the agent works from
                 current Azion docs, adds an inference route, and deploys it.
               </p>
@@ -186,7 +186,7 @@ azion deploy`
         </div>
 
         <div
-          class="relative flex flex-col justify-between gap-[var(--spacing-xxl)] overflow-hidden border-t border-[var(--border-default)] p-[var(--spacing-xl)] lg:border-l lg:border-t-0"
+          class="relative flex flex-col justify-between gap-(--spacing-xxl) overflow-hidden border-t border-(--border-default) p-(--spacing-xl) lg:border-l lg:border-t-0"
         >
           <!-- The mirror of the cell beside it: lit from the TRAILING edge, so the two
                pools sit under their own samples and the rule between the halves stays
@@ -198,8 +198,8 @@ azion deploy`
             <PixelateBanner />
           </div>
 
-          <div class="relative z-10 flex items-start py-[var(--spacing-lg)]">
-            <div class="w-full min-w-0 rounded-[var(--shape-elements)] shadow-[var(--shadow-sm)]">
+          <div class="relative z-10 flex items-start py-(--spacing-lg)">
+            <div class="w-full min-w-0 rounded-(--shape-elements) shadow-(--shadow-sm)">
               <CodeBlock
                 :tabs="cliTabs"
                 default-value="cli"
@@ -210,12 +210,12 @@ azion deploy`
             </div>
           </div>
 
-          <div class="relative z-10 flex flex-col items-start gap-[var(--spacing-lg)]">
-            <div class="flex flex-col gap-[var(--spacing-md)]">
-              <h3 class="m-0 text-balance text-heading-md text-[var(--text-default)]">
+          <div class="relative z-10 flex flex-col items-start gap-(--spacing-lg)">
+            <div class="flex flex-col gap-(--spacing-md)">
+              <h3 class="m-0 text-balance text-heading-md text-(--text-default)">
                 Or ship it from your terminal
               </h3>
-              <p class="m-0 text-pretty text-body-md text-[var(--text-muted)]">
+              <p class="m-0 text-pretty text-body-md text-(--text-muted)">
                 Install and link the CLI, then put the project into traffic — the same two commands
                 whether it is the first deploy or the hundredth.
               </p>

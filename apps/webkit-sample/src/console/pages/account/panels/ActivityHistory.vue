@@ -146,8 +146,8 @@
       <!-- The page's parent section. It holds one section here — the controls row
            over the table it narrows, at the GROUP step — and spaces whatever sits
            inside it at --layout-section-gap. -->
-      <section class="layout-section-start flex min-w-0 flex-col gap-[var(--layout-section-gap)]">
-        <section class="flex min-w-0 flex-col gap-[var(--layout-group-gap)]">
+      <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)">
+        <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
           <!-- The band's CONTROLS: narrowing on the left, the band's own action on the
                right, above the card — the same row every list in the console opens with. -->
           <ControlsHeader>
@@ -160,7 +160,7 @@
               size="large"
               placeholder="Search activity"
               aria-label="Search activity"
-              class="min-w-36 grow basis-[var(--container-2xs)]"
+              class="min-w-36 grow basis-(--container-2xs)"
             >
               <template #iconLeft>
                 <i

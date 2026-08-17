@@ -200,13 +200,13 @@
              ScrollArea around its own padded div, so a class passed to it formats
              the scroller instead of this content. -->
         <PanelContent>
-          <div class="flex flex-col items-center gap-[var(--spacing-lg)]">
+          <div class="flex flex-col items-center gap-(--spacing-lg)">
             <!-- Only when the caller has something to say. The title already states
                  why the drawer opened, and a paragraph restating it in longer words
                  is the kind of copy a reader learns to skip. -->
             <DrawerDescription
               v-if="reason"
-              class="m-0 w-full text-body-sm text-[var(--text-muted)]"
+              class="m-0 w-full text-body-sm text-(--text-muted)"
             >
               {{ reason }}
             </DrawerDescription>
@@ -218,7 +218,7 @@
             />
 
             <div
-              class="flex w-full min-w-0 flex-col items-stretch justify-center gap-[var(--spacing-md)] lg:flex-row"
+              class="flex w-full min-w-0 flex-col items-stretch justify-center gap-(--spacing-md) lg:flex-row"
             >
               <CardPricing
                 v-for="card in cards"
@@ -242,23 +242,23 @@
                 <!-- What the tier includes, from the plan's own upgrade checklist —
                      the first five, because the card is a comparison and the drawer
                      behind the Upgrade button is where the full list lives. -->
-                <ul class="m-0 flex w-full list-none flex-col gap-[var(--spacing-xs)] p-0">
+                <ul class="m-0 flex w-full list-none flex-col gap-(--spacing-xs) p-0">
                   <li
                     v-for="feature in card.features"
                     :key="feature.title"
-                    class="flex items-center gap-[var(--spacing-xs)]"
+                    class="flex items-center gap-(--spacing-xs)"
                   >
                     <i
-                      class="pi pi-check shrink-0 text-body-xs text-[var(--text-muted)]"
+                      class="pi pi-check shrink-0 text-body-xs text-(--text-muted)"
                       aria-hidden="true"
                     />
-                    <span class="text-label-sm text-[var(--text-default)]">
+                    <span class="text-label-sm text-(--text-default)">
                       {{ feature.title }}
                     </span>
                   </li>
                   <li
                     v-if="!card.features.length"
-                    class="text-label-sm text-[var(--text-muted)]"
+                    class="text-label-sm text-(--text-muted)"
                   >
                     Everything you need to put a first project on the edge.
                   </li>

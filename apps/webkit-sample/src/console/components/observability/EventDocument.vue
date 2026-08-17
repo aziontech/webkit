@@ -103,10 +103,10 @@
   <div class="flex min-w-0 flex-col">
     <!-- The answer: padded prose, spaced at the group step. -->
     <div
-      class="flex min-w-0 flex-col gap-[var(--spacing-md)] p-[var(--spacing-md)] pb-[var(--spacing-lg)]"
+      class="flex min-w-0 flex-col gap-(--spacing-md) p-(--spacing-md) pb-(--spacing-lg)"
     >
-      <div class="flex min-w-0 flex-col gap-[var(--spacing-xs)]">
-        <div class="flex flex-wrap items-center gap-[var(--spacing-xs)]">
+      <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
+        <div class="flex flex-wrap items-center gap-(--spacing-xs)">
           <Tag
             :label="event.level"
             :severity="eventLevelSeverity(event.level)"
@@ -118,8 +118,8 @@
             size="medium"
           />
         </div>
-        <p class="text-body-md text-[var(--text-default)]">{{ event.message }}</p>
-        <p class="text-label-code-sm tabular-nums text-[var(--text-muted)]">{{ event.time }}</p>
+        <p class="text-body-md text-(--text-default)">{{ event.message }}</p>
+        <p class="text-label-code-sm tabular-nums text-(--text-muted)">{{ event.time }}</p>
       </div>
 
       <!-- The pairs, as a two-column grid so every label starts on one x and every value
@@ -127,14 +127,14 @@
            its own label ended. `gap-y` at the group step, because six rows crammed at
            the tight step is the density the log itself already has. -->
       <dl
-        class="grid min-w-0 grid-cols-[minmax(0,8rem)_minmax(0,1fr)] items-baseline gap-x-[var(--spacing-md)] gap-y-[var(--spacing-sm)]"
+        class="grid min-w-0 grid-cols-[minmax(0,8rem)_minmax(0,1fr)] items-baseline gap-x-(--spacing-md) gap-y-(--spacing-sm)"
       >
         <template
           v-for="row in summaryRows"
           :key="row.id"
         >
-          <dt class="min-w-0 text-label-sm text-[var(--text-muted)]">{{ row.label }}</dt>
-          <dd class="m-0 min-w-0 break-words text-label-code-sm text-[var(--text-default)]">
+          <dt class="min-w-0 text-label-sm text-(--text-muted)">{{ row.label }}</dt>
+          <dd class="m-0 min-w-0 break-words text-label-code-sm text-(--text-default)">
             {{ row.value }}
           </dd>
         </template>
@@ -143,8 +143,8 @@
 
     <!-- The proof: the whole document, flush to the panel's edges. The heading is padded
          with the prose above it; only the block itself bleeds. -->
-    <div class="flex min-w-0 flex-col gap-[var(--spacing-xs)]">
-      <h3 class="px-[var(--spacing-md)] text-label-sm text-[var(--text-default)]">
+    <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
+      <h3 class="px-(--spacing-md) text-label-sm text-(--text-default)">
         Event document
       </h3>
       <CodeBlock
@@ -152,7 +152,7 @@
         :border="false"
         show-line-numbers
         copy-aria-label="Copy the event document as JSON"
-        class="min-w-0 rounded-none border-y border-[var(--border-default)]"
+        class="min-w-0 rounded-none border-y border-(--border-default)"
       />
     </div>
   </div>

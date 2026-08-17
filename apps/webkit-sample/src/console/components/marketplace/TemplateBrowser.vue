@@ -163,19 +163,19 @@
 
 <template>
   <section
-    class="flex flex-col gap-[var(--layout-group-gap)]"
+    class="flex flex-col gap-(--layout-group-gap)"
     :class="{ 'lg:min-h-0': scrollable }"
   >
     <!-- Section title beside its one control: a Filter Dropdown (Use Cases /
          Technology groups). -->
     <div
-      class="flex min-h-[var(--size-8)] flex-wrap items-center justify-between gap-[var(--spacing-md)]"
+      class="flex min-h-(--size-8) flex-wrap items-center justify-between gap-(--spacing-md)"
     >
-      <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
+      <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
         {{ title }}
       </p>
 
-      <div class="flex items-center gap-[var(--spacing-sm)]">
+      <div class="flex items-center gap-(--spacing-sm)">
         <Dropdown
           placement="bottom-end"
           @select="toggleFilter"
@@ -209,7 +209,7 @@
               <template #left>
                 <i
                   :class="opt.icon"
-                  class="text-[var(--text-muted)]"
+                  class="text-(--text-muted)"
                   aria-hidden="true"
                 />
               </template>
@@ -218,7 +218,7 @@
                 #right
               >
                 <i
-                  class="pi pi-check text-[var(--text-default)]"
+                  class="pi pi-check text-(--text-default)"
                   aria-hidden="true"
                 />
               </template>
@@ -248,12 +248,12 @@
         :aria-label="scrollable ? `${title} results` : undefined"
         :class="
           scrollable
-            ? 'pb-[var(--spacing-xxs)] pr-[var(--spacing-xxs)] lg:min-h-0 lg:flex-1'
+            ? 'pb-(--spacing-xxs) pr-(--spacing-xxs) lg:min-h-0 lg:flex-1'
             : undefined
         "
       >
         <div
-          class="grid items-start gap-[var(--spacing-md)]"
+          class="grid items-start gap-(--spacing-md)"
           :class="gridClass"
         >
           <!-- A card's natural height steps with how many lines its description
@@ -265,7 +265,7 @@
           <TemplateCard
             v-for="(tpl, i) in filteredTemplates"
             :key="`${tpl.title}-${i}`"
-            class="min-h-[var(--size-56)]"
+            class="min-h-(--size-56)"
             :icon="tpl.icon"
             :title="tpl.title"
             :description="tpl.description"

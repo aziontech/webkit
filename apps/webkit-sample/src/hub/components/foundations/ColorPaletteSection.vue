@@ -33,9 +33,9 @@
 </script>
 
 <template>
-  <section class="mb-[var(--spacing-xl)]">
+  <section class="mb-(--spacing-xl)">
     <h3
-      class="m-0 mb-[var(--spacing-sm)] px-[var(--spacing-xxs)] text-overline-sm uppercase tracking-widest text-[var(--text-muted)]"
+      class="m-0 mb-(--spacing-sm) px-(--spacing-xxs) text-overline-sm uppercase tracking-widest text-(--text-muted)"
     >
       {{ title }}
     </h3>
@@ -47,18 +47,18 @@
       @row-click="onRowClick"
     >
       <template #cell-name="{ row }">
-        <span class="flex min-w-0 items-center gap-[var(--spacing-sm)]">
+        <span class="flex min-w-0 items-center gap-(--spacing-sm)">
           <span
-            class="size-7 shrink-0 rounded-[var(--shape-elements)] border border-[var(--border-muted)]"
+            class="size-7 shrink-0 rounded-(--shape-elements) border border-(--border-muted)"
             :style="{ background: row.preview }"
           />
-          <code class="truncate font-code text-body-sm text-[var(--text-default)]">{{
+          <code class="truncate font-code text-body-sm text-(--text-default)">{{
             row.name
           }}</code>
         </span>
       </template>
       <template #cell-usage="{ value }">
-        <code class="font-code text-body-sm text-[var(--text-muted)]">{{ value }}</code>
+        <code class="font-code text-body-sm text-(--text-muted)">{{ value }}</code>
       </template>
     </Table>
   </section>

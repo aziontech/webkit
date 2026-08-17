@@ -69,7 +69,7 @@
        height and `flex-1` opened a hole between the description and the action. -->
   <CardBox :padded="false">
     <template #content>
-      <div class="flex h-full flex-col p-[var(--spacing-sm)]">
+      <div class="flex h-full flex-col p-(--spacing-sm)">
         <!-- The stage, at 4/3. A RATIO rather than a fixed height: the stage then
              scales with the card instead of being a 160px band whose air changes with
              every breakpoint, and three cards in a row still agree on where their
@@ -77,7 +77,7 @@
              scene is drawn on a fixed 170×128 canvas and the narrowest card is
              narrower than that. -->
         <div
-          class="flex aspect-4/3 shrink-0 items-center justify-center overflow-hidden rounded-[var(--shape-elements)] border border-[var(--border-muted)] bg-[var(--bg-surface-raised)]"
+          class="flex aspect-4/3 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
         >
           <!-- A composed scene brings its own <Illustration> root (it needs one, to
                provide size/active to its parts), so it is rendered directly. -->
@@ -100,13 +100,13 @@
         <!-- `flex-1` on the text so the actions land on one line across the row
              without pinning the copy to a pixel height. -->
         <div
-          class="flex flex-1 flex-col gap-[var(--spacing-md)] px-[var(--spacing-sm)] pb-[var(--spacing-sm)] pt-[var(--spacing-md)]"
+          class="flex flex-1 flex-col gap-(--spacing-md) px-(--spacing-sm) pb-(--spacing-sm) pt-(--spacing-md)"
         >
-          <div class="flex flex-1 flex-col gap-[var(--spacing-xs)]">
-            <h3 class="text-label-md text-[var(--text-default)]">{{ title }}</h3>
-            <p class="text-pretty text-body-sm text-[var(--text-muted)]">{{ description }}</p>
+          <div class="flex flex-1 flex-col gap-(--spacing-xs)">
+            <h3 class="text-label-md text-(--text-default)">{{ title }}</h3>
+            <p class="text-pretty text-body-sm text-(--text-muted)">{{ description }}</p>
           </div>
-          <div class="flex items-center gap-[var(--spacing-xs)]">
+          <div class="flex items-center gap-(--spacing-xs)">
             <slot name="action" />
           </div>
         </div>

@@ -19,7 +19,7 @@
   <button
     type="button"
     aria-keyshortcuts="Meta+K"
-    class="flex h-10 w-full cursor-pointer items-center gap-[var(--spacing-xs)] rounded-[var(--shape-elements)] border border-[var(--border-default)] bg-[var(--bg-surface)] px-[var(--spacing-sm)] text-left text-label-md text-[var(--text-muted)] transition-colors duration-150 ease-out hover:border-[var(--border-strong)] hover:text-[var(--text-default)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] motion-reduce:transition-none"
+    class="flex h-10 w-full cursor-pointer items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-left text-label-md text-(--text-muted) transition-colors duration-150 ease-out hover:border-(--border-strong) hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
     @click="$emit('click', $event)"
   >
     <i

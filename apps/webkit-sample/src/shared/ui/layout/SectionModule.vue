@@ -44,7 +44,7 @@
 </script>
 
 <template>
-  <section :class="['w-full', divided && 'border-t border-[var(--border-default)]']">
+  <section :class="['w-full', divided && 'border-t border-(--border-default)']">
     <!-- Header row: a single border-b divides it from the body; its sides are the
          column's border-x. A #header slot overrides the default title row. -->
     <slot name="header">
@@ -53,7 +53,7 @@
         level="h2"
         size="section"
         margin-bottom=""
-        class="border-b border-[var(--border-default)] p-[var(--spacing-xl)]"
+        class="border-b border-(--border-default) p-(--spacing-xl)"
         :title="title"
         :description="description"
       >
@@ -66,7 +66,7 @@
       </PageHeader>
     </slot>
 
-    <div :class="padded && 'p-[var(--spacing-xl)]'">
+    <div :class="padded && 'p-(--spacing-xl)'">
       <slot />
     </div>
   </section>

@@ -118,7 +118,7 @@
           <DrawerClose />
         </PanelHeader>
 
-        <PanelContent class="flex min-h-0 flex-col gap-[var(--spacing-lg)]">
+        <PanelContent class="flex min-h-0 flex-col gap-(--spacing-lg)">
           <DrawerDescription class="sr-only">
             Browse the account hierarchy and switch to another Brand, Reseller, Group, or Client.
           </DrawerDescription>
@@ -127,24 +127,24 @@
                marker, and a shortcut to that account's settings. -->
           <CardBox>
             <template #content>
-              <div class="flex items-center gap-[var(--spacing-sm)]">
+              <div class="flex items-center gap-(--spacing-sm)">
                 <Avatar
                   :label="accountInitials(currentAccount.name)"
                   size="medium"
                   kind="square"
                 />
                 <div
-                  class="flex min-w-0 flex-1 flex-wrap items-center gap-x-[var(--spacing-md)] gap-y-[var(--spacing-xxs)]"
+                  class="flex min-w-0 flex-1 flex-wrap items-center gap-x-(--spacing-md) gap-y-(--spacing-xxs)"
                 >
-                  <span class="truncate text-label-md text-[var(--text-default)]">
+                  <span class="truncate text-label-md text-(--text-default)">
                     {{ currentAccount.name }}
                   </span>
-                  <span class="text-body-sm text-[var(--text-muted)]">
-                    ID <span class="text-[var(--text-default)]">{{ currentAccount.id }}</span>
+                  <span class="text-body-sm text-(--text-muted)">
+                    ID <span class="text-(--text-default)">{{ currentAccount.id }}</span>
                   </span>
-                  <span class="text-body-sm text-[var(--text-muted)]">
+                  <span class="text-body-sm text-(--text-muted)">
                     Client ID
-                    <span class="text-[var(--text-default)]">{{ currentAccount.clientId }}</span>
+                    <span class="text-(--text-default)">{{ currentAccount.clientId }}</span>
                   </span>
                 </div>
                 <Tag
@@ -173,10 +173,10 @@
 
           <!-- Accounts List: pick a level with the SegmentedButton, filter it with
                search, click a row to switch. -->
-          <section class="flex min-h-0 flex-col gap-[var(--spacing-sm)]">
-            <div class="flex flex-col gap-[var(--spacing-xxs)]">
-              <h2 class="text-heading-xs text-[var(--text-default)]">Accounts List</h2>
-              <p class="text-body-sm text-[var(--text-muted)]">
+          <section class="flex min-h-0 flex-col gap-(--spacing-sm)">
+            <div class="flex flex-col gap-(--spacing-xxs)">
+              <h2 class="text-heading-xs text-(--text-default)">Accounts List</h2>
+              <p class="text-body-sm text-(--text-muted)">
                 Type the account name to filter results.
               </p>
             </div>
@@ -213,19 +213,19 @@
                        same account. Brands and Resellers are structure, not
                        identity: their type tag is the only mark they need. -->
                   <template #cell-name="{ value, row }">
-                    <span class="flex min-w-0 items-center gap-[var(--spacing-xs)]">
+                    <span class="flex min-w-0 items-center gap-(--spacing-xs)">
                       <Avatar
                         v-if="row.type === 'group' || row.type === 'client'"
                         :label="accountInitials(row.name)"
                         size="small"
                         kind="square"
                       />
-                      <span class="truncate text-[var(--text-link)] hover:underline">
+                      <span class="truncate text-(--text-link) hover:underline">
                         {{ value }}
                       </span>
                       <i
                         v-if="row.id === currentAccountId"
-                        class="pi pi-check shrink-0 text-body-xs text-[var(--text-muted)]"
+                        class="pi pi-check shrink-0 text-body-xs text-(--text-muted)"
                         aria-hidden="true"
                       />
                     </span>
@@ -247,7 +247,7 @@
                     >
                       <template #icon>
                         <i
-                          class="pi pi-search text-heading-md text-[var(--text-muted)]"
+                          class="pi pi-search text-heading-md text-(--text-muted)"
                           aria-hidden="true"
                         />
                       </template>
@@ -262,7 +262,7 @@
         <!-- Full resource manager: the hierarchy as an expandable, selectable
              tree with bulk actions and a details panel. -->
         <PanelFooter class="justify-between">
-          <span class="text-body-sm text-[var(--text-muted)]"> Need the full hierarchy? </span>
+          <span class="text-body-sm text-(--text-muted)"> Need the full hierarchy? </span>
           <Button
             label="Manage resources"
             kind="outlined"

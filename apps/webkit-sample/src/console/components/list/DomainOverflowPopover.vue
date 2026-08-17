@@ -65,9 +65,9 @@
       <!-- Header and field stay OUT of the scroller, so neither scrolls away
            after the first few of up to ~99 aliases. -->
       <div
-        class="flex flex-col gap-[var(--spacing-xs)] border-b border-[var(--border-default)] px-[var(--spacing-sm)] pb-[var(--spacing-xs)] pt-[var(--spacing-sm)]"
+        class="flex flex-col gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-sm) pb-(--spacing-xs) pt-(--spacing-sm)"
       >
-        <p class="text-label-sm text-[var(--text-muted)]">
+        <p class="text-label-sm text-(--text-muted)">
           {{
             query ? `${matches.length} of ${domains.length} domains` : `${domains.length} domains`
           }}
@@ -92,7 +92,7 @@
            the page, and the panel re-anchors to its trigger on page scroll — so the
            popover slides out from under the pointer mid-scroll. -->
       <div
-        class="max-h-[var(--container-xs)] overflow-auto overscroll-contain p-[var(--spacing-xxs)]"
+        class="max-h-(--container-xs) overflow-auto overscroll-contain p-(--spacing-xxs)"
       >
         <!-- Every alias opens, like the primary domain in the cell behind it —
              same anchor, same arrow, same truncation. -->
@@ -102,19 +102,19 @@
           :href="`https://${domain}`"
           target="_blank"
           rel="noopener noreferrer"
-          class="flex items-center gap-[var(--spacing-xxs)] rounded-[var(--shape-elements)] px-[var(--spacing-xs)] py-[var(--spacing-xxs)] text-body-sm text-[var(--text-default)] hover:bg-[var(--bg-hover)] hover:underline"
+          class="flex items-center gap-(--spacing-xxs) rounded-(--shape-elements) px-(--spacing-xs) py-(--spacing-xxs) text-body-sm text-(--text-default) hover:bg-(--bg-hover) hover:underline"
           @click.stop
         >
           <span class="truncate">{{ domain }}</span>
           <i
-            class="pi pi-arrow-up-right ml-auto shrink-0 text-[var(--text-muted)]"
+            class="pi pi-arrow-up-right ml-auto shrink-0 text-(--text-muted)"
             aria-hidden="true"
           />
         </a>
 
         <p
           v-if="!matches.length"
-          class="px-[var(--spacing-xs)] py-[var(--spacing-sm)] text-center text-body-sm text-[var(--text-muted)]"
+          class="px-(--spacing-xs) py-(--spacing-sm) text-center text-body-sm text-(--text-muted)"
         >
           No domain matches “{{ query }}”.
         </p>

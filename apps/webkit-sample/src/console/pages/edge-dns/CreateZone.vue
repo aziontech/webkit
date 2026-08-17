@@ -415,7 +415,7 @@
         :disabled="submitting"
         @click="openImport"
       />
-      <p class="min-w-0 text-body-sm text-[var(--text-muted)]">
+      <p class="min-w-0 text-body-sm text-(--text-muted)">
         or paste zone file contents in Domain Name
       </p>
       <input

@@ -403,10 +403,10 @@
          gives its "other user" panel. -->
     <aside
       aria-label="Failure simulation"
-      class="flex w-full max-w-[var(--container-sm)] flex-col gap-[var(--spacing-sm)] rounded-[var(--shape-card)] border border-dashed border-[var(--border-default)] bg-[var(--bg-surface-raised)] p-[var(--spacing-md)]"
+      class="flex w-full max-w-(--container-sm) flex-col gap-(--spacing-sm) rounded-(--shape-card) border border-dashed border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-md)"
     >
-      <div class="flex flex-wrap items-center justify-between gap-[var(--spacing-sm)]">
-        <p class="m-0 text-overline-sm text-[var(--text-muted)]">Simulation: the endpoint</p>
+      <div class="flex flex-wrap items-center justify-between gap-(--spacing-sm)">
+        <p class="m-0 text-overline-sm text-(--text-muted)">Simulation: the endpoint</p>
         <Tag
           :label="`${activeScenario.status} · ${activeScenario.carries}`"
           :severity="activeScenario.tone"
@@ -442,12 +442,12 @@
         </Select.Content>
       </Select>
 
-      <p class="m-0 text-body-xs text-[var(--text-muted)]">{{ activeScenario.where }}</p>
+      <p class="m-0 text-body-xs text-(--text-muted)">{{ activeScenario.where }}</p>
     </aside>
 
     <!-- The two cards cross-fade: the leaving one goes out of flow so the incoming
          one owns the layout immediately and the column re-centres once. -->
-    <div class="relative w-full max-w-[var(--container-sm)]">
+    <div class="relative w-full max-w-(--container-sm)">
       <Transition
         enter-active-class="transition-opacity duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
         enter-from-class="opacity-0"
@@ -465,7 +465,7 @@
         >
           <template #content>
             <form
-              class="flex flex-col gap-[var(--spacing-lg)] p-[var(--spacing-lg)]"
+              class="flex flex-col gap-(--spacing-lg) p-(--spacing-lg)"
               aria-label="Sign in to your account"
               novalidate
               @submit.prevent="signIn"
@@ -478,9 +478,9 @@
                 tabindex="-1"
               />
 
-              <header class="flex flex-col gap-[var(--spacing-xxs)]">
-                <h1 class="text-heading-sm text-[var(--text-default)]">Welcome back</h1>
-                <p class="text-body-sm text-[var(--text-muted)]">Sign in to your account.</p>
+              <header class="flex flex-col gap-(--spacing-xxs)">
+                <h1 class="text-heading-sm text-(--text-default)">Welcome back</h1>
+                <p class="text-body-sm text-(--text-muted)">Sign in to your account.</p>
               </header>
 
               <!-- THE notice. Every outcome the server returns lands here; see the
@@ -547,12 +547,12 @@
               </Transition>
 
               <fieldset
-                class="m-0 flex min-w-0 flex-col gap-[var(--spacing-lg)] border-0 p-0"
+                class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0"
                 :disabled="verifying"
               >
                 <legend class="sr-only">Credentials</legend>
 
-                <div class="flex flex-col gap-[var(--spacing-xs)]">
+                <div class="flex flex-col gap-(--spacing-xs)">
                   <Label
                     for="auth-signin-email"
                     label="Email"
@@ -585,7 +585,7 @@
 
                 <!-- No requirements row: this is an existing secret, not one being
                      chosen, and grading it would be both wrong and a hint. -->
-                <div class="flex flex-col gap-[var(--spacing-xs)]">
+                <div class="flex flex-col gap-(--spacing-xs)">
                   <Label
                     for="auth-signin-password"
                     label="Password"
@@ -627,7 +627,7 @@
         >
           <template #content>
             <form
-              class="flex flex-col gap-[var(--spacing-lg)] p-[var(--spacing-lg)]"
+              class="flex flex-col gap-(--spacing-lg) p-(--spacing-lg)"
               aria-label="Sign up for a free account"
               novalidate
               @submit.prevent="signUp"
@@ -639,11 +639,11 @@
                 tabindex="-1"
               />
 
-              <header class="flex flex-col gap-[var(--spacing-xxs)]">
-                <h1 class="text-heading-sm text-[var(--text-default)]">
+              <header class="flex flex-col gap-(--spacing-xxs)">
+                <h1 class="text-heading-sm text-(--text-default)">
                   Sign up for a free account
                 </h1>
-                <p class="text-body-sm text-[var(--text-muted)]">
+                <p class="text-body-sm text-(--text-muted)">
                   US$ 300 credit to use over 12 months, no credit card is required.
                 </p>
               </header>
@@ -697,12 +697,12 @@
               </Transition>
 
               <fieldset
-                class="m-0 flex min-w-0 flex-col gap-[var(--spacing-lg)] border-0 p-0"
+                class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0"
                 :disabled="verifying"
               >
                 <legend class="sr-only">Account credentials</legend>
 
-                <div class="flex flex-col gap-[var(--spacing-xs)]">
+                <div class="flex flex-col gap-(--spacing-xs)">
                   <Label
                     for="auth-signup-email"
                     label="Work email"
@@ -735,7 +735,7 @@
                   />
                 </div>
 
-                <div class="flex flex-col gap-[var(--spacing-xs)]">
+                <div class="flex flex-col gap-(--spacing-xs)">
                   <Label
                     for="auth-signup-password"
                     label="Password"
@@ -774,9 +774,9 @@
     <!-- On the canvas, outside the card — the way out of the demo, the same place
          the real auth screens put the way out of themselves. -->
     <div
-      class="flex w-full max-w-[var(--container-sm)] items-center justify-center gap-[var(--spacing-xs)]"
+      class="flex w-full max-w-(--container-sm) items-center justify-center gap-(--spacing-xs)"
     >
-      <p class="text-body-sm text-[var(--text-default)]">Pattern demo.</p>
+      <p class="text-body-sm text-(--text-default)">Pattern demo.</p>
       <a
         class="text-link text-body-sm"
         href="/forms"

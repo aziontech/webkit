@@ -95,7 +95,7 @@
 </script>
 
 <template>
-  <div class="flex h-dvh flex-col bg-[var(--bg-canvas)]">
+  <div class="flex h-dvh flex-col bg-(--bg-canvas)">
     <UnsavedChangesGuard :dirty="dirty" />
 
     <CreationHeader
@@ -117,7 +117,7 @@
              block padding is set here so the page opens on the same step it puts
              between bands rather than on the tighter boundary default. -->
         <div
-          class="layout-column-form layout-boundary-inline flex flex-1 flex-col pb-[var(--layout-section-gap)] pt-[var(--layout-section-gap)]"
+          class="layout-column-form layout-boundary-inline flex flex-1 flex-col pb-(--layout-section-gap) pt-(--layout-section-gap)"
         >
           <PageHeading
             :title="title"
@@ -128,7 +128,7 @@
           <!-- One flag locks every control while the request is in flight. The bands
                space themselves (Section owns the step), so nothing here sets a gap. -->
           <fieldset
-            class="mx-0 mt-[var(--layout-section-gap)] flex min-w-0 flex-col border-0 p-0"
+            class="mx-0 mt-(--layout-section-gap) flex min-w-0 flex-col border-0 p-0"
             :disabled="submitting"
           >
             <legend class="sr-only">{{ title }}</legend>
@@ -148,10 +148,10 @@
              position, so the band had to fade into the canvas; a card has edges on all
              four sides by design, and the form simply continues around it. -->
         <footer
-          class="pointer-events-none sticky bottom-0 z-10 flex justify-center px-[var(--spacing-md)] pt-[var(--spacing-xl)] pb-[var(--spacing-lg)]"
+          class="pointer-events-none sticky bottom-0 z-10 flex justify-center px-(--spacing-md) pt-(--spacing-xl) pb-(--spacing-lg)"
         >
           <div
-            class="pointer-events-auto flex max-w-full items-center gap-[var(--spacing-md)] rounded-[var(--shape-card)] border border-[var(--border-default)] bg-[var(--bg-surface-raised)] py-[var(--spacing-xs)] pr-[var(--spacing-xs)] pl-[var(--spacing-xs)] shadow-lg"
+            class="pointer-events-auto flex max-w-full items-center gap-(--spacing-md) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised) py-(--spacing-xs) pr-(--spacing-xs) pl-(--spacing-xs) shadow-lg"
           >
             <!-- `#start` is for a bulk path that belongs to the whole form — a zone
                  file to import, a .env to read. It sits opposite the commit, separated
@@ -160,11 +160,11 @@
                  page asks once. -->
             <div
               v-if="$slots.start"
-              class="flex min-w-0 items-center gap-[var(--spacing-sm)]"
+              class="flex min-w-0 items-center gap-(--spacing-sm)"
             >
               <slot name="start" />
             </div>
-            <div class="flex shrink-0 items-center gap-[var(--spacing-sm)]">
+            <div class="flex shrink-0 items-center gap-(--spacing-sm)">
               <Button
                 type="button"
                 label="Cancel"

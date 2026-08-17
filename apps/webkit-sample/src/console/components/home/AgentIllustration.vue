@@ -151,7 +151,7 @@
         v-for="(agent, index) in AGENTS"
         :key="`node-${agent}`"
         :active="false"
-        class="absolute z-1 rounded-[var(--shape-elements)]"
+        class="absolute z-1 rounded-(--shape-elements)"
         :style="{
           left: `${dropStrokeX(index) - nodeOffset}px`,
           top: `${DROP_FROM - nodeOffset}px`

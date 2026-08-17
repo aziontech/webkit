@@ -32,14 +32,14 @@
        window (128). Height is the canvas height, so it sits at the same scale as its neighbours. -->
   <Illustration
     size="large"
-    class="h-[var(--illustration-canvas-height)] w-[274px] max-w-full shrink-0"
+    class="h-(--illustration-canvas-height) w-[274px] max-w-full shrink-0"
   >
     <span class="relative block h-full w-full">
       <!-- The agents, bare marks in `mono` — they are nodes in a drawing here, not a logo row. -->
       <span
         v-for="(agent, index) in AGENTS"
         :key="agent"
-        class="absolute left-0 flex size-5 items-center justify-center text-[var(--text-muted)]"
+        class="absolute left-0 flex size-5 items-center justify-center text-(--text-muted)"
         :style="{ top: `${TOP + index * PITCH}px` }"
       >
         <AgentMark
@@ -85,7 +85,7 @@
         size="medium"
         active
         icon="ai ai-azion"
-        class="absolute left-[68px] top-1/2 -translate-y-1/2 text-[var(--primary)]"
+        class="absolute left-[68px] top-1/2 -translate-y-1/2 text-(--primary)"
       />
 
       <IllustrationConnector

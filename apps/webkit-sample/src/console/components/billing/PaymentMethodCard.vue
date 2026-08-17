@@ -93,17 +93,17 @@
   >
     <template #content>
       <div
-        class="flex flex-col gap-[var(--spacing-lg)] px-[var(--spacing-lg)] py-[var(--spacing-lg)]"
+        class="flex flex-col gap-(--spacing-lg) px-(--spacing-lg) py-(--spacing-lg)"
       >
         <!-- DEFAULT — the card on file. A bordered row rather than an Item from
              the DS, because the row carries a fixed-size brand plate and a
              trailing control, and Item's own paddings would fight the card's. -->
         <div
           v-if="!editing"
-          class="flex min-h-14 flex-wrap items-center gap-[var(--spacing-md)] rounded-[var(--shape-elements)] border border-[var(--border-muted)] bg-[var(--bg-surface)] px-[var(--spacing-sm)] py-[var(--spacing-xs)]"
+          class="flex min-h-14 flex-wrap items-center gap-(--spacing-md) rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-xs)"
         >
           <CardBrandMark />
-          <p class="min-w-0 flex-1 text-label-md text-[var(--text-default)]">
+          <p class="min-w-0 flex-1 text-label-md text-(--text-default)">
             Ended with {{ card.last4 }}
           </p>
           <Button
@@ -120,7 +120,7 @@
              there is room for both. -->
         <template v-else>
           <fieldset
-            class="m-0 flex min-w-0 flex-col gap-[var(--spacing-lg)] border-0 p-0"
+            class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0"
             :disabled="disabled"
           >
             <legend class="sr-only">Payment Method</legend>
@@ -154,7 +154,7 @@
               inputmode="numeric"
             />
 
-            <div class="grid grid-cols-1 gap-[var(--spacing-lg)] sm:grid-cols-2">
+            <div class="grid grid-cols-1 gap-(--spacing-lg) sm:grid-cols-2">
               <FieldText
                 v-model="form.expiry"
                 label="Expiration Date (MM/YY)"
@@ -188,7 +188,7 @@
           </fieldset>
 
           <!-- The form's own commit, separate from the drawer's. -->
-          <div class="flex flex-col gap-[var(--spacing-sm)] sm:flex-row sm:justify-end">
+          <div class="flex flex-col gap-(--spacing-sm) sm:flex-row sm:justify-end">
             <Button
               class="w-full sm:w-auto"
               label="Cancel"

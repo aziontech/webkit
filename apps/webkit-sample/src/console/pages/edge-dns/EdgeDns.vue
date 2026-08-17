@@ -251,20 +251,20 @@
            which is what `flex-1 justify-center` would have done. -->
       <div
         v-if="accountEmpty"
-        class="my-auto flex w-full flex-col py-[var(--spacing-xl)]"
+        class="my-auto flex w-full flex-col py-(--spacing-xl)"
       >
         <ProductFirstUse :product="firstUse" />
       </div>
 
       <section
         v-else
-        class="layout-section-start flex min-h-0 min-w-0 flex-1 flex-col gap-[var(--layout-section-gap)]"
+        class="layout-section-start flex min-h-0 min-w-0 flex-1 flex-col gap-(--layout-section-gap)"
       >
         <!-- ONE section — the module's list band: either the controls row over the
              table it narrows (at --layout-group-gap), or the empty state that replaces
              both. `flex-1` is passed down from the parent so that empty state can
              still centre itself in the page. -->
-        <section class="flex min-h-0 min-w-0 flex-1 flex-col gap-[var(--layout-group-gap)]">
+        <section class="flex min-h-0 min-w-0 flex-1 flex-col gap-(--layout-group-gap)">
           <!-- First-level module list: no PageHeading — the module name already IS the
                header breadcrumb crumb (AppLayout). The page opens with its CONTROLS row
                (the search, the module's own actions on the right), then the filter bar;
@@ -275,7 +275,7 @@
               size="large"
               placeholder="Search zones"
               aria-label="Search zones"
-              class="min-w-36 grow basis-[var(--container-2xs)]"
+              class="min-w-36 grow basis-(--container-2xs)"
             >
               <template #iconLeft>
                 <i
@@ -320,29 +320,29 @@
             v-if="!scopedZones.length"
             class="flex min-h-0 flex-1 items-center justify-center"
           >
-            <CardBox class="w-full max-w-[var(--container-2xl)]">
+            <CardBox class="w-full max-w-(--container-2xl)">
               <template #content>
                 <EmptyState
                   size="medium"
                   title="No zones yet"
                   description="Create your first zone to host a domain on Azion's authoritative DNS."
-                  class="flex-1 rounded-[var(--shape-card)] border border-dashed border-[var(--border-default)] bg-[var(--bg-surface-raised)]"
+                  class="flex-1 rounded-(--shape-card) border border-dashed border-(--border-default) bg-(--bg-surface-raised)"
                 >
                   <template #icon>
                     <span class="relative flex size-10 items-center justify-center">
                       <span
                         aria-hidden="true"
-                        class="absolute left-1/2 top-1/2 size-14 -translate-x-1/2 -translate-y-1/2 rounded-[var(--radius-xl,12px)] border border-[var(--border-strong)] bg-[var(--bg-canvas)] opacity-5"
+                        class="absolute left-1/2 top-1/2 size-14 -translate-x-1/2 -translate-y-1/2 rounded-[var(--radius-xl,12px)] border border-(--border-strong) bg-(--bg-canvas) opacity-5"
                       />
                       <span
                         aria-hidden="true"
-                        class="absolute left-1/2 top-1/2 size-12 -translate-x-1/2 -translate-y-1/2 rounded-[var(--shape-card)] border border-[var(--border-strong)] bg-[var(--bg-canvas)] opacity-10"
+                        class="absolute left-1/2 top-1/2 size-12 -translate-x-1/2 -translate-y-1/2 rounded-(--shape-card) border border-(--border-strong) bg-(--bg-canvas) opacity-10"
                       />
                       <span
-                        class="relative flex size-10 items-center justify-center rounded-[var(--shape-elements)] border border-[var(--border-default)] bg-[var(--bg-surface)]"
+                        class="relative flex size-10 items-center justify-center rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface)"
                       >
                         <i
-                          class="ai ai-edge-dns text-[1rem] leading-none text-[var(--text-default)]"
+                          class="ai ai-edge-dns text-[1rem] leading-none text-(--text-default)"
                           aria-hidden="true"
                         />
                       </span>
@@ -382,9 +382,9 @@
                   @row-click="openZone"
                 >
                   <template #cell-name="{ value }">
-                    <div class="flex min-w-0 items-center gap-[var(--spacing-xs)]">
+                    <div class="flex min-w-0 items-center gap-(--spacing-xs)">
                       <i
-                        class="ai ai-edge-dns shrink-0 text-[1.15em] text-[var(--text-muted)]"
+                        class="ai ai-edge-dns shrink-0 text-[1.15em] text-(--text-muted)"
                         aria-hidden="true"
                       />
                       <span class="truncate cursor-pointer hover:underline">{{ value }}</span>
@@ -392,7 +392,7 @@
                   </template>
 
                   <template #cell-id="{ value }">
-                    <div class="flex w-full min-w-0 items-center gap-[var(--spacing-xs)]">
+                    <div class="flex w-full min-w-0 items-center gap-(--spacing-xs)">
                       <!-- An id is data, not code: it keeps the cell's own type and
                            --text-default, so every column of a row reads at one weight
                            (Applications.vue renders its ID column the same way). -->
@@ -410,17 +410,17 @@
                   <!-- Domain cell: link + external arrow, copy button pinned to the
                        cell's right edge so it aligns across rows. -->
                   <template #cell-domain="{ value }">
-                    <div class="flex w-full min-w-0 items-center gap-[var(--spacing-xs)]">
+                    <div class="flex w-full min-w-0 items-center gap-(--spacing-xs)">
                       <a
                         :href="`https://${value}`"
                         target="_blank"
                         rel="noopener noreferrer"
-                        class="flex min-w-0 items-center gap-[var(--spacing-xxs)] hover:underline"
+                        class="flex min-w-0 items-center gap-(--spacing-xxs) hover:underline"
                         @click.stop
                       >
                         <span class="truncate">{{ value }}</span>
                         <i
-                          class="pi pi-arrow-up-right shrink-0 text-[var(--text-muted)]"
+                          class="pi pi-arrow-up-right shrink-0 text-(--text-muted)"
                           aria-hidden="true"
                         />
                       </a>

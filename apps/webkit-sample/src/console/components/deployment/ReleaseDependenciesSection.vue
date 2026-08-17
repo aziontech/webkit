@@ -84,10 +84,10 @@
        the truth about this version. -->
   <div
     v-if="detecting"
-    class="flex items-center gap-[var(--spacing-xs)] px-[var(--spacing-md)] py-[var(--spacing-sm)]"
+    class="flex items-center gap-(--spacing-xs) px-(--spacing-md) py-(--spacing-sm)"
   >
-    <Spinner class="size-4 shrink-0 text-[var(--text-muted)]" />
-    <span class="text-body-sm text-[var(--text-muted)]">{{ detectingLabel }}</span>
+    <Spinner class="size-4 shrink-0 text-(--text-muted)" />
+    <span class="text-body-sm text-(--text-muted)">{{ detectingLabel }}</span>
   </div>
 
   <Accordion
@@ -101,12 +101,12 @@
       :value="group.type"
     >
       <Accordion.Trigger>
-        <span class="flex flex-1 items-center gap-[var(--spacing-xs)]">
+        <span class="flex flex-1 items-center gap-(--spacing-xs)">
           <i
-            :class="[resourceIcon(group.type), 'shrink-0 text-[var(--text-muted)]']"
+            :class="[resourceIcon(group.type), 'shrink-0 text-(--text-muted)']"
             aria-hidden="true"
           />
-          <span class="truncate text-label-md text-[var(--text-default)]">
+          <span class="truncate text-label-md text-(--text-default)">
             {{ resourceLabel(group.type) }}
           </span>
           <!-- A BADGE, not a tag: this is a COUNT on a label, which is what a badge is for
@@ -123,7 +123,7 @@
       </Accordion.Trigger>
 
       <Accordion.Content>
-        <!-- The webkit Accordion pads its TRIGGER (`px-[var(--spacing-md)]`, so the row's
+        <!-- The webkit Accordion pads its TRIGGER (`px-(--spacing-md)`, so the row's
                  hover surface still spans the full width) and deliberately leaves its PANEL
                  flush, because only the consumer knows what goes in there. So the panel's
                  inset is ours to set, and it is the trigger's own: the rows inside line up
@@ -132,7 +132,7 @@
                  two, so the panel only needs air) and a full step below, so the last row does
                  not sit on the next group's border. -->
         <div
-          class="flex min-w-0 flex-col gap-[var(--spacing-sm)] px-[var(--spacing-md)] pt-[var(--spacing-sm)] pb-[var(--spacing-md)]"
+          class="flex min-w-0 flex-col gap-(--spacing-sm) px-(--spacing-md) pt-(--spacing-sm) pb-(--spacing-md)"
         >
           <!-- The shared caveat, said once for the group instead of on every row it
                  applies to. -->
@@ -145,7 +145,7 @@
 
           <p
             v-if="!group.rows.length"
-            class="text-body-sm text-[var(--text-muted)]"
+            class="text-body-sm text-(--text-muted)"
           >
             This release references no {{ resourceNounPlural(group.type) }}.
           </p>
@@ -153,13 +153,13 @@
           <div
             v-for="(row, index) in group.rows"
             :key="`${group.type}-${row.resourceId || index}`"
-            class="flex min-w-0 flex-col gap-[var(--spacing-xs)] rounded-[var(--shape-elements)] border border-[length:var(--border-width-default)] border-[var(--border-muted)] p-[var(--spacing-sm)]"
+            class="flex min-w-0 flex-col gap-(--spacing-xs) rounded-(--shape-elements) border border-(length:--border-width-default) border-(--border-muted) p-(--spacing-sm)"
           >
             <!-- The row's own header exists only when it has something to say: that
                    the dependency is shared, or that the operator can remove it. -->
             <div
               v-if="row.sharedWith?.length || allowAdd"
-              class="flex min-w-0 items-center justify-between gap-[var(--spacing-xs)]"
+              class="flex min-w-0 items-center justify-between gap-(--spacing-xs)"
             >
               <Tooltip
                 v-if="row.sharedWith?.length"
@@ -233,7 +233,7 @@
                  control with no sentence beside it reads as a bug. -->
           <p
             v-else-if="allowAdd"
-            class="text-body-sm text-[var(--text-muted)]"
+            class="text-body-sm text-(--text-muted)"
           >
             Every {{ resourceNounPlural(group.type) }} in this workspace is already in this release.
           </p>

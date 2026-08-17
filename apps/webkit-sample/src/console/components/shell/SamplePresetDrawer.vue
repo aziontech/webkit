@@ -138,8 +138,8 @@
              passed to it lands on the SCROLL HOST — so `flex flex-col gap-*` would
              format the scroller and leave these sections butted together. -->
         <PanelContent>
-          <div class="flex flex-col gap-[var(--spacing-lg)]">
-            <DrawerDescription class="m-0 text-body-sm text-[var(--text-muted)]">
+          <div class="flex flex-col gap-(--spacing-lg)">
+            <DrawerDescription class="m-0 text-body-sm text-(--text-muted)">
               Which customer this prototype is pretending to be. Nothing here exists in the real
               console — it changes the screens beside this panel as you set it, is remembered for
               the next session, and can be handed to somebody else as a link.
@@ -151,11 +151,11 @@
                  The tag in each card is the tier's PRICE in the tier's own severity —
                  the same colour the profile tag will take, so the card previews the
                  badge without repeating the name written directly above it. -->
-            <section class="flex min-w-0 flex-col gap-[var(--spacing-sm)]">
+            <section class="flex min-w-0 flex-col gap-(--spacing-sm)">
               <!-- "Organization plan", not "Plan": the contract is between Azion and
                    the organization, never the person signed in — which is why the tier
                    is tagged on the organization switcher and not on the profile. -->
-              <h3 class="m-0 text-label-md text-[var(--text-default)]">Organization plan</h3>
+              <h3 class="m-0 text-label-md text-(--text-default)">Organization plan</h3>
               <BoxGridSelection
                 v-model="selectedPlan"
                 :items="SAMPLE_PLANS"
@@ -167,15 +167,15 @@
                     :label="item.price"
                     :severity="item.severity"
                     size="small"
-                    class="mt-[var(--spacing-xxs)] w-fit"
+                    class="mt-(--spacing-xxs) w-fit"
                   />
                 </template>
               </BoxGridSelection>
             </section>
 
             <!-- VERSION. The knob that was in the header until this panel existed. -->
-            <section class="flex min-w-0 flex-col gap-[var(--spacing-sm)]">
-              <h3 class="m-0 text-label-md text-[var(--text-default)]">Account contents</h3>
+            <section class="flex min-w-0 flex-col gap-(--spacing-sm)">
+              <h3 class="m-0 text-label-md text-(--text-default)">Account contents</h3>
               <BoxGridSelection
                 v-model="selectedMode"
                 :items="modeOptions"
@@ -188,8 +188,8 @@
                  organization and one workspace, so those two links are what a Hobby
                  account already shows. Having more than one ACCOUNT is the thing a
                  single-account contract does not have. -->
-            <section class="flex min-w-0 flex-col gap-[var(--spacing-sm)]">
-              <h3 class="m-0 text-label-md text-[var(--text-default)]">Tenancy</h3>
+            <section class="flex min-w-0 flex-col gap-(--spacing-sm)">
+              <h3 class="m-0 text-label-md text-(--text-default)">Tenancy</h3>
               <FieldSwitchBlock
                 v-model="accountSwitcher"
                 label="Account switching"

@@ -189,7 +189,7 @@
 <template>
   <div class="flex min-w-0 flex-col">
     <div
-      class="layout-column-form layout-boundary-inline flex min-w-0 flex-col pb-[var(--layout-section-gap)] pt-[var(--layout-section-gap)]"
+      class="layout-column-form layout-boundary-inline flex min-w-0 flex-col pb-(--layout-section-gap) pt-(--layout-section-gap)"
     >
       <PageHeading
         title="Build"
@@ -197,7 +197,7 @@
         size="small"
       />
 
-      <div class="mt-[var(--layout-section-gap)] flex min-w-0 flex-col">
+      <div class="mt-(--layout-section-gap) flex min-w-0 flex-col">
         <!-- Git repository — the connection (actions/checkout in the workflow).
          A connection, not editable config, so this ItemGroup has no Save. -->
         <Section
@@ -214,7 +214,7 @@
                   <Item.Content>
                     <Item.Title>Connected repository</Item.Title>
                     <Item.Description>
-                      <span class="inline-flex items-center gap-[var(--spacing-xxs)]">
+                      <span class="inline-flex items-center gap-(--spacing-xxs)">
                         <i
                           :class="`ai-cor ${presetIcon(buildConfig.preset)}`"
                           class="text-[1.05em]"
@@ -231,18 +231,18 @@
                           :href="`https://github.com/${repository}`"
                           target="_blank"
                           rel="noopener noreferrer"
-                          class="inline-flex items-center gap-[var(--spacing-xxs)] whitespace-nowrap text-label-sm text-[var(--text-default)] hover:underline"
+                          class="inline-flex items-center gap-(--spacing-xxs) whitespace-nowrap text-label-sm text-(--text-default) hover:underline"
                         >
                           <span>{{ repository }}</span>
                           <i
-                            class="pi pi-arrow-up-right shrink-0 text-[var(--text-muted)]"
+                            class="pi pi-arrow-up-right shrink-0 text-(--text-muted)"
                             aria-hidden="true"
                           />
                         </a>
                       </span>
                     </Item.Description>
                   </Item.Content>
-                  <Item.Actions class="justify-end gap-[var(--spacing-xs)]">
+                  <Item.Actions class="justify-end gap-(--spacing-xs)">
                     <Button
                       label="Disconnect"
                       kind="danger"
@@ -285,7 +285,7 @@
                         <Item.Title>Framework preset</Item.Title>
                         <Item.Description> The preset the Azion CLI builds with. </Item.Description>
                       </Item.Content>
-                      <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
+                      <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
                         <!-- Detected from azion.config — not editable here. The reason
                        rides on a Tooltip over the field itself instead of a
                        permanent HelperText: it is an explanation for one row's
@@ -321,7 +321,7 @@
                           >The command that builds the application.</Item.Description
                         >
                       </Item.Content>
-                      <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
+                      <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
                         <InputText
                           v-model="buildConfig.buildCommand"
                           size="large"
@@ -339,7 +339,7 @@
                           >The command that deploys the build to the edge.</Item.Description
                         >
                       </Item.Content>
-                      <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
+                      <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
                         <InputText
                           v-model="buildConfig.deployCommand"
                           size="large"
@@ -355,7 +355,7 @@
                         <Item.Title>Root directory</Item.Title>
                         <Item.Description>The directory the build runs from.</Item.Description>
                       </Item.Content>
-                      <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
+                      <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
                         <InputText
                           v-model="buildConfig.rootDirectory"
                           size="large"
@@ -373,7 +373,7 @@
                           >Only changes to these paths trigger a build.</Item.Description
                         >
                       </Item.Content>
-                      <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
+                      <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
                         <InputText
                           v-model="buildConfig.watchPaths"
                           size="large"
@@ -419,7 +419,7 @@
                           Pushes to this branch deploy to production.
                         </Item.Description>
                       </Item.Content>
-                      <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
+                      <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
                         <InputText
                           v-model="branch.productionBranch"
                           size="large"
@@ -474,7 +474,7 @@
                       Stored as the AZION_PERSONAL_TOKEN GitHub secret.
                     </Item.Description>
                   </Item.Content>
-                  <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
+                  <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
                     <InputGroup class="w-full">
                       <InputText
                         :model-value="apiTokenName"
@@ -536,7 +536,7 @@
                       Whether each branch keeps its own cache or all branches share one.
                     </Item.Description>
                   </Item.Content>
-                  <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
+                  <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
                     <Select
                       v-model="buildCache.scope"
                       size="large"
@@ -611,17 +611,17 @@
                     <Item.Title>Domain</Item.Title>
                     <Item.Description>The edge domain serving this application.</Item.Description>
                   </Item.Content>
-                  <Item.Actions class="justify-end gap-[var(--spacing-xs)]">
+                  <Item.Actions class="justify-end gap-(--spacing-xs)">
                     <!-- Same view-details logic + external-redirect arrow. -->
                     <a
                       :href="azionState.domainUrl"
                       target="_blank"
                       rel="noopener noreferrer"
-                      class="inline-flex items-center gap-[var(--spacing-xxs)] whitespace-nowrap text-label-sm text-[var(--text-default)] hover:underline"
+                      class="inline-flex items-center gap-(--spacing-xxs) whitespace-nowrap text-label-sm text-(--text-default) hover:underline"
                     >
                       <span>{{ azionState.domainName }}</span>
                       <i
-                        class="pi pi-arrow-up-right shrink-0 text-[var(--text-muted)]"
+                        class="pi pi-arrow-up-right shrink-0 text-(--text-muted)"
                         aria-hidden="true"
                       />
                     </a>
@@ -636,7 +636,7 @@
                   <Item.Content>
                     <Item.Title>Application ID</Item.Title>
                   </Item.Content>
-                  <Item.Actions class="justify-end gap-[var(--spacing-xs)]">
+                  <Item.Actions class="justify-end gap-(--spacing-xs)">
                     <span class="text-label-code-sm">{{ azionState.applicationId }}</span>
                     <CopyButton
                       kind="outlined"
@@ -662,7 +662,7 @@
                     <Item.Title>Last deploy</Item.Title>
                   </Item.Content>
                   <Item.Actions class="justify-end">
-                    <span class="text-[var(--text-muted)]">{{ lastDeploy }}</span>
+                    <span class="text-(--text-muted)">{{ lastDeploy }}</span>
                   </Item.Actions>
                 </Item>
               </Item.List>

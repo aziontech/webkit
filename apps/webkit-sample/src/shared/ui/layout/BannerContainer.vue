@@ -31,11 +31,11 @@
   import { BANNER_NAMES, BANNERS } from '../banners/index.js'
 
   const MAX_W = {
-    '3xl': 'max-w-[var(--container-xl)]',
-    '4xl': 'max-w-[var(--container-2xl)]',
-    '5xl': 'max-w-[var(--container-3xl)]',
-    '6xl': 'max-w-[var(--container-4xl)]',
-    '7xl': 'max-w-[var(--container-5xl)]',
+    '3xl': 'max-w-(--container-xl)',
+    '4xl': 'max-w-(--container-2xl)',
+    '5xl': 'max-w-(--container-3xl)',
+    '6xl': 'max-w-(--container-4xl)',
+    '7xl': 'max-w-(--container-5xl)',
     full: 'max-w-none'
   }
 
@@ -66,7 +66,7 @@
   <section
     :class="[
       'relative w-full overflow-hidden',
-      bordered && 'border-b border-[var(--border-default)]',
+      bordered && 'border-b border-(--border-default)',
       hero && 'flex min-h-[calc(100dvh-var(--banner-offset,0px))] flex-col justify-center'
     ]"
   >
@@ -79,7 +79,7 @@
     <div
       :class="[
         MAX_W[maxWidth],
-        'relative z-10 mx-auto w-full px-[var(--spacing-xl)] py-[var(--spacing-xl)]'
+        'relative z-10 mx-auto w-full px-(--spacing-xl) py-(--spacing-xl)'
       ]"
     >
       <slot />

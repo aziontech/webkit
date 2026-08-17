@@ -92,18 +92,18 @@
         marks="bottom"
       >
         <div
-          class="flex flex-col gap-[var(--spacing-xl)] px-[var(--spacing-xl)] py-[var(--spacing-xxl)]"
+          class="flex flex-col gap-(--spacing-xl) px-(--spacing-xl) py-(--spacing-xxl)"
         >
           <Overline
             prefix="//"
             show-cursor
             >Clients</Overline
           >
-          <div class="grid gap-[var(--spacing-xl)] lg:grid-cols-3">
-            <h2 class="col-span-2 m-0 text-balance text-heading-xl text-[var(--text-default)]">
+          <div class="grid gap-(--spacing-xl) lg:grid-cols-3">
+            <h2 class="col-span-2 m-0 text-balance text-heading-xl text-(--text-default)">
               Organizations shaping the future of the web with us
             </h2>
-            <p class="m-0 text-pretty text-heading-sm text-[var(--text-muted)]">
+            <p class="m-0 text-pretty text-heading-sm text-(--text-muted)">
               From payments to retail to education, teams run their most demanding traffic on the
               same distributed platform.
             </p>
@@ -128,7 +128,7 @@
       borders="y"
       marks="bottom"
     >
-      <div class="relative z-10 flex flex-col gap-[var(--spacing-xxl)] py-[var(--spacing-xxl)]">
+      <div class="relative z-10 flex flex-col gap-(--spacing-xxl) py-(--spacing-xxl)">
         <!-- The row. `snap-x` plus per-card `snap-start` means a swipe or a wheel lands on
            a card edge rather than mid-card.
 
@@ -138,12 +138,12 @@
            scroll padding moves the snap position inward instead, which is what keeps
            the row's left inset at rest. -->
         <div
-          class="flex snap-x snap-mandatory gap-[var(--spacing-xl)] overflow-x-auto scroll-pl-[var(--spacing-xl)] px-[var(--spacing-xl)] pb-[var(--spacing-xs)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          class="flex snap-x snap-mandatory gap-(--spacing-xl) overflow-x-auto scroll-pl-(--spacing-xl) px-(--spacing-xl) pb-(--spacing-xs) [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         >
           <article
             v-for="entry in stories"
             :key="entry.key"
-            class="flex w-[300px] shrink-0 snap-start flex-col gap-[var(--spacing-lg)]"
+            class="flex w-[300px] shrink-0 snap-start flex-col gap-(--spacing-lg)"
           >
             <!-- The card face, as the design composes it: the client's brand fill with its
                two ellipses, the symbol centred, the wordmark standing on the bottom-start
@@ -162,7 +162,7 @@
                theme, and white reads on all four fills. -->
             <div
               v-if="entry.client?.brand"
-              class="relative flex h-[340px] flex-col items-start justify-end overflow-hidden rounded-[var(--shape-card)] border border-[var(--border-default)] pb-[var(--spacing-lg)] pl-[var(--spacing-lg)] pr-[var(--spacing-xl)]"
+              class="relative flex h-[340px] flex-col items-start justify-end overflow-hidden rounded-(--shape-card) border border-(--border-default) pb-(--spacing-lg) pl-(--spacing-lg) pr-(--spacing-xl)"
               :style="cardFace(entry.client)"
             >
               <img
@@ -170,7 +170,7 @@
                 alt=""
                 aria-hidden="true"
                 decoding="async"
-                class="absolute left-1/2 top-1/2 size-20 -translate-x-1/2 -translate-y-1/2 rounded-[var(--shape-card)] object-contain"
+                class="absolute left-1/2 top-1/2 size-20 -translate-x-1/2 -translate-y-1/2 rounded-(--shape-card) object-contain"
               />
               <img
                 :src="entry.client.wordmark"
@@ -180,7 +180,7 @@
               />
             </div>
 
-            <p class="m-0 min-h-[5lh] text-pretty text-body-sm text-[var(--text-default)]">
+            <p class="m-0 min-h-[5lh] text-pretty text-body-sm text-(--text-default)">
               {{ entry.story }}
             </p>
 

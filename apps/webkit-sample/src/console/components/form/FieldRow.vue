@@ -65,14 +65,14 @@
   const actionsClass = computed(() => {
     if (props.kind === 'compact') return 'justify-end'
     if (stacked.value) return 'w-full justify-start'
-    return 'flex-1 justify-end max-w-[var(--container-3xs)]'
+    return 'flex-1 justify-end max-w-(--container-3xs)'
   })
 </script>
 
 <template>
   <Item
     size="small"
-    :class="stacked ? 'flex-col items-stretch gap-[var(--spacing-sm)]' : 'items-start'"
+    :class="stacked ? 'flex-col items-stretch gap-(--spacing-sm)' : 'items-start'"
   >
     <Item.Content>
       <Item.Title>{{ title }}</Item.Title>
@@ -90,7 +90,7 @@
       />
       <div
         v-else
-        class="flex w-full min-w-0 flex-col gap-[var(--spacing-xs)]"
+        class="flex w-full min-w-0 flex-col gap-(--spacing-xs)"
       >
         <slot :message-id="message ? messageId : undefined" />
         <HelperText

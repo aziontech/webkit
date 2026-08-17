@@ -28,8 +28,8 @@
   // means nothing, since the panel is transient — simply doesn't opt in.
   //
   // This replaces the hand-written paragraph the console repeated ~90 times:
-  //   <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">General</p>
-  // The `px-[var(--spacing-xs)]` inset is baked in and is optical, not structural:
+  //   <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">General</p>
+  // The `px-(--spacing-xs)` inset is baked in and is optical, not structural:
   // the CardBox below is flush (`:padded="false"`), so its own rows carry inner
   // padding — the bare title needs the same nudge to line up with the text inside
   // the card rather than with the card's border. The inset sits on the whole
@@ -124,17 +124,17 @@
 <template>
   <header class="group/heading flex flex-col">
     <!-- The header row keeps the optical inset; the bottom region does not. -->
-    <div class="flex items-start justify-between gap-[var(--spacing-md)] px-[var(--spacing-xs)]">
+    <div class="flex items-start justify-between gap-(--spacing-md) px-(--spacing-xs)">
       <div
         v-if="title || description"
-        class="flex min-w-0 flex-col gap-[var(--spacing-xxs)]"
+        class="flex min-w-0 flex-col gap-(--spacing-xxs)"
       >
         <!-- Title + its anchor share a row, so the copy button reads as belonging
              to the heading rather than to the band's actions. `scroll-mt-*` keeps
              the title clear of the sticky tab bar when the deep link lands here —
              without it the heading stops flush against the bar and the section it
              names looks like it starts above the fold. -->
-        <div class="flex min-w-0 items-center gap-[var(--spacing-xxs)]">
+        <div class="flex min-w-0 items-center gap-(--spacing-xxs)">
           <!-- `size` drives TYPOGRAPHY only; the colour is the same muted token at
                every level. A section title is a label for the band below it, not a
                signal about it — a destructive band is marked by its own controls
@@ -144,7 +144,7 @@
             v-if="title"
             :id="anchorId"
             :data-size="size"
-            class="scroll-mt-[var(--spacing-xl)] text-balance text-[var(--text-muted)] data-[size=medium]:text-heading-xxs data-[size=small]:text-label-md"
+            class="scroll-mt-(--spacing-xl) text-balance text-(--text-muted) data-[size=medium]:text-heading-xxs data-[size=small]:text-label-md"
           >
             {{ title }}
           </h2>
@@ -166,14 +166,14 @@
         </div>
         <p
           v-if="description"
-          class="text-pretty text-body-sm text-[var(--text-muted)]"
+          class="text-pretty text-body-sm text-(--text-muted)"
         >
           {{ description }}
         </p>
       </div>
       <div
         v-if="documentation || $slots.actions"
-        class="flex shrink-0 items-center gap-[var(--spacing-xs)]"
+        class="flex shrink-0 items-center gap-(--spacing-xs)"
       >
         <!-- Docs first, so a band's primary control keeps the outer edge.
              Rendered as TEXT, not as a control: at section level the affordance
@@ -189,7 +189,7 @@
           :href="documentation"
           target="_blank"
           rel="noopener noreferrer"
-          class="inline-flex shrink-0 items-center gap-[var(--spacing-xxs)] rounded-[var(--shape-button)] text-label-sm text-[var(--text-link)] underline-offset-2 transition-colors duration-150 ease-out hover:text-[var(--text-link-hover)] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] motion-reduce:transition-none"
+          class="inline-flex shrink-0 items-center gap-(--spacing-xxs) rounded-(--shape-button) text-label-sm text-(--text-link) underline-offset-2 transition-colors duration-150 ease-out hover:text-(--text-link-hover) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
         >
           {{ documentationLabel }}
           <i
@@ -211,7 +211,7 @@
       <div class="min-w-0 overflow-hidden">
         <!-- The gap to the title lives INSIDE the clipped cell, so it collapses
              with the height instead of leaving 12px behind. -->
-        <div class="pt-[var(--spacing-sm)]">
+        <div class="pt-(--spacing-sm)">
           <slot name="bottom" />
         </div>
       </div>

@@ -162,12 +162,12 @@
   }
   const morphTransition = {
     moveClass:
-      'transition-transform duration-[var(--tg-move-duration)] ease-[var(--tg-move-ease)] motion-reduce:transition-none',
+      'transition-transform duration-(--tg-move-duration) ease-(--tg-move-ease) motion-reduce:transition-none',
     enterActiveClass:
-      'transition-all duration-[var(--tg-enter-duration)] ease-[var(--tg-enter-ease)] motion-reduce:transition-none',
-    enterFromClass: '-translate-y-[var(--spacing-xxs)] opacity-0',
+      'transition-all duration-(--tg-enter-duration) ease-(--tg-enter-ease) motion-reduce:transition-none',
+    enterFromClass: '-translate-y-(--spacing-xxs) opacity-0',
     leaveActiveClass:
-      'transition-opacity duration-[var(--tg-leave-duration)] ease-[var(--tg-leave-ease)] motion-reduce:transition-none',
+      'transition-opacity duration-(--tg-leave-duration) ease-(--tg-leave-ease) motion-reduce:transition-none',
     leaveToClass: 'opacity-0'
   }
 
@@ -352,26 +352,26 @@
          flow has always been — so it owns its own rhythm. The shell deliberately sets
          no gap on its fieldset, because a Section-based body spaces itself and a gap
          there would double every band step. -->
-    <div class="flex min-w-0 flex-col gap-[var(--layout-section-gap)]">
+    <div class="flex min-w-0 flex-col gap-(--layout-section-gap)">
       <!-- The variables themselves. Inside a triad the fields sit at the MD step
                      so the three read as one variable; triad → triad takes the section
                      step, like every other block in the panel. -->
       <TransitionGroup
         tag="div"
-        class="flex min-w-0 flex-col gap-[var(--layout-section-gap)]"
+        class="flex min-w-0 flex-col gap-(--layout-section-gap)"
         v-bind="morphTransition"
         :style="morphStyle"
       >
         <div
           v-for="(entry, index) in form.entries"
           :key="entry.id"
-          class="flex min-w-0 flex-col gap-[var(--spacing-md)]"
+          class="flex min-w-0 flex-col gap-(--spacing-md)"
         >
-          <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
+          <div class="flex w-full flex-col gap-(--spacing-xs)">
             <!-- Remove rides the Key label row: it belongs to the whole triad,
                            and only exists once there is more than one to remove — so at rest
                            the three labels sit at exactly the same step above their field. -->
-            <div class="flex items-center justify-between gap-[var(--spacing-xs)]">
+            <div class="flex items-center justify-between gap-(--spacing-xs)">
               <Label :for="keyId(entry)">Key</Label>
               <Tooltip
                 v-if="form.entries.length > 1"
@@ -412,7 +412,7 @@
           <!-- The value is masked while typing and revealed on demand, whether or
                          not it is stored sensitive — a value pasted on a shared screen is
                          the common case. -->
-          <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
+          <div class="flex w-full flex-col gap-(--spacing-xs)">
             <Label :for="valueId(entry)">Value</Label>
             <InputPassword
               :id="valueId(entry)"
@@ -433,7 +433,7 @@
             />
           </div>
 
-          <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
+          <div class="flex w-full flex-col gap-(--spacing-xs)">
             <Label :for="noteId(entry)">Note (Optional)</Label>
             <InputText
               :id="noteId(entry)"
@@ -460,14 +460,14 @@
                      and scoped, below. The wrapper carries the negative inset so the
                      Divider itself stays untouched (a `w-full` flex item with negative
                      margins would shift rather than stretch). -->
-      <div class="-mx-[var(--spacing-lg)]">
+      <div class="-mx-(--spacing-lg)">
         <Divider />
       </div>
 
       <!-- A switch labels itself: the Label points at the control, so the word
                      toggles it too. The hint hangs off a real focusable control, so it is
                      reachable by keyboard and named for a screen reader. -->
-      <div class="flex items-center gap-[var(--spacing-sm)]">
+      <div class="flex items-center gap-(--spacing-sm)">
         <Switch
           :id="sensitiveId"
           v-model="form.sensitive"
@@ -479,7 +479,7 @@
         >
       </div>
 
-      <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
+      <div class="flex w-full flex-col gap-(--spacing-xs)">
         <Label
           :id="`${environmentsId}-label`"
           :for="environmentsId"
@@ -507,7 +507,7 @@
           >
             <template #iconLeft>
               <span
-                class="flex shrink-0 items-center self-stretch border-r border-[var(--border-default)] bg-[color:var(--bg-canvas)] px-[var(--spacing-md)] text-[var(--text-muted)]"
+                class="flex shrink-0 items-center self-stretch border-r border-(--border-default) bg-(color:--bg-canvas) px-(--spacing-md) text-(--text-muted)"
                 aria-hidden="true"
               >
                 <i class="ai ai-layers" />
@@ -532,7 +532,7 @@
         />
       </div>
 
-      <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
+      <div class="flex w-full flex-col gap-(--spacing-xs)">
         <Label
           :id="`${projectsId}-label`"
           :for="projectsId"
@@ -552,7 +552,7 @@
           >
             <template #iconLeft>
               <i
-                class="pi pi-search shrink-0 text-[var(--text-muted)]"
+                class="pi pi-search shrink-0 text-(--text-muted)"
                 aria-hidden="true"
               />
             </template>
@@ -598,7 +598,7 @@
                            a broken filter. -->
             <p
               v-if="!visibleProjects.length"
-              class="px-[var(--spacing-sm)] py-[var(--spacing-xs)] text-body-sm text-[var(--text-muted)]"
+              class="px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-muted)"
             >
               No project matches “{{ projectQuery }}”.
             </p>
@@ -620,7 +620,7 @@
         :disabled="submitting"
         @click="openImport"
       />
-      <p class="min-w-0 text-body-sm text-[var(--text-muted)]">
+      <p class="min-w-0 text-body-sm text-(--text-muted)">
         or paste .env contents in Key input
       </p>
       <input

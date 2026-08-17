@@ -328,7 +328,7 @@
               kind="compact"
               :title="row.domain"
             >
-              <div class="flex shrink-0 items-center gap-[var(--spacing-sm)]">
+              <div class="flex shrink-0 items-center gap-(--spacing-sm)">
                 <Tag
                   :label="row.environment"
                   severity="secondary"
@@ -374,7 +374,7 @@
                   kind="text"
                   size="small"
                   icon="pi pi-plus"
-                  class="-ml-[var(--spacing-xs)] self-start"
+                  class="-ml-(--spacing-xs) self-start"
                   :disabled="submitting"
                   @click="openAddDomain"
                 />
@@ -434,7 +434,7 @@
                   : `No deployment settings linked. ${env.domains.join(', ')} serves nothing until one is.`
               "
             >
-              <div class="flex shrink-0 items-center gap-[var(--spacing-sm)]">
+              <div class="flex shrink-0 items-center gap-(--spacing-sm)">
                 <template v-if="env.settings">
                   <Tag
                     label="Linked"

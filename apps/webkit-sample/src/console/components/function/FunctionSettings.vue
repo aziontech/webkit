@@ -101,7 +101,7 @@
             <!-- A radio group is a group, so it gets a real fieldset/legend: the row's
                  title names the decision, the legend is what a screen reader announces
                  before the options. -->
-            <fieldset class="m-0 flex w-full flex-col gap-[var(--spacing-sm)] border-0 p-0">
+            <fieldset class="m-0 flex w-full flex-col gap-(--spacing-sm) border-0 p-0">
               <legend class="sr-only">Execution environment</legend>
               <FieldRadioBlock
                 v-model="executionEnvironment"

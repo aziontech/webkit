@@ -236,18 +236,18 @@
 </script>
 
 <template>
-  <div class="relative flex w-full flex-col gap-[var(--spacing-xl)]">
+  <div class="relative flex w-full flex-col gap-(--spacing-xl)">
     <!-- ── Actions ──────────────────────────────────────────────────────── -->
     <section
       v-if="showCategory('actions')"
-      class="flex flex-col gap-[var(--spacing-sm)]"
+      class="flex flex-col gap-(--spacing-sm)"
     >
       <div
         v-if="!category"
-        class="flex items-baseline justify-between gap-[var(--spacing-sm)] px-[var(--spacing-xxs)]"
+        class="flex items-baseline justify-between gap-(--spacing-sm) px-(--spacing-xxs)"
       >
-        <h3 class="text-overline-sm uppercase tracking-widest text-[var(--text-muted)]">Actions</h3>
-        <span class="text-body-xs text-[var(--text-muted)]">Buttons &amp; triggers</span>
+        <h3 class="text-overline-sm uppercase tracking-widest text-(--text-muted)">Actions</h3>
+        <span class="text-body-xs text-(--text-muted)">Buttons &amp; triggers</span>
       </div>
       <div class="grid w-full grid-cols-2 gap-0 md:grid-cols-4">
         <ComponentGridCell name="Button">
@@ -313,14 +313,14 @@
     <!-- ── Inputs ───────────────────────────────────────────────────────── -->
     <section
       v-if="showCategory('inputs')"
-      class="flex flex-col gap-[var(--spacing-sm)]"
+      class="flex flex-col gap-(--spacing-sm)"
     >
       <div
         v-if="!category"
-        class="flex items-baseline justify-between gap-[var(--spacing-sm)] px-[var(--spacing-xxs)]"
+        class="flex items-baseline justify-between gap-(--spacing-sm) px-(--spacing-xxs)"
       >
-        <h3 class="text-overline-sm uppercase tracking-widest text-[var(--text-muted)]">Inputs</h3>
-        <span class="text-body-xs text-[var(--text-muted)]">Fields &amp; controls</span>
+        <h3 class="text-overline-sm uppercase tracking-widest text-(--text-muted)">Inputs</h3>
+        <span class="text-body-xs text-(--text-muted)">Fields &amp; controls</span>
       </div>
       <div class="grid w-full grid-cols-2 gap-0 md:grid-cols-4">
         <ComponentGridCell name="InputText">
@@ -466,7 +466,7 @@
             <InputGroupAddon>https://</InputGroupAddon>
             <input
               placeholder="domain"
-              class="h-full min-w-0 flex-1 border-0 bg-[var(--bg-surface)] px-[var(--spacing-md)] text-label-sm text-[var(--text-default)] outline-none placeholder:text-[var(--text-muted)] focus:ring-0"
+              class="h-full min-w-0 flex-1 border-0 bg-(--bg-surface) px-(--spacing-md) text-label-sm text-(--text-default) outline-none placeholder:text-(--text-muted) focus:ring-0"
             />
             <InputGroupAddon>.com</InputGroupAddon>
           </InputGroup>
@@ -607,14 +607,14 @@
     <!-- ── Content ──────────────────────────────────────────────────────── -->
     <section
       v-if="showCategory('content')"
-      class="flex flex-col gap-[var(--spacing-sm)]"
+      class="flex flex-col gap-(--spacing-sm)"
     >
       <div
         v-if="!category"
-        class="flex items-baseline justify-between gap-[var(--spacing-sm)] px-[var(--spacing-xxs)]"
+        class="flex items-baseline justify-between gap-(--spacing-sm) px-(--spacing-xxs)"
       >
-        <h3 class="text-overline-sm uppercase tracking-widest text-[var(--text-muted)]">Content</h3>
-        <span class="text-body-xs text-[var(--text-muted)]">Identity, status &amp; display</span>
+        <h3 class="text-overline-sm uppercase tracking-widest text-(--text-muted)">Content</h3>
+        <span class="text-body-xs text-(--text-muted)">Identity, status &amp; display</span>
       </div>
       <div class="grid w-full grid-cols-2 gap-0 md:grid-cols-4">
         <ComponentGridCell name="Avatar">
@@ -651,7 +651,7 @@
         </ComponentGridCell>
 
         <ComponentGridCell name="Tag">
-          <div class="flex flex-col items-center gap-[var(--spacing-xs)]">
+          <div class="flex flex-col items-center gap-(--spacing-xs)">
             <Tag
               label="Production"
               severity="success"
@@ -701,7 +701,7 @@
             class="w-full"
           >
             <template #content>
-              <p class="text-body-sm text-[var(--text-muted)]">
+              <p class="text-body-sm text-(--text-muted)">
                 Card body content. Place forms, tables, or any markup in the content slot.
               </p>
             </template>
@@ -745,7 +745,7 @@
           <ScrollArea
             orientation="vertical"
             aria-label="Scrollable content"
-            class="h-[180px] w-full rounded-[var(--shape-elements)] border border-[var(--border-default)] p-[var(--spacing-md)] text-body-sm text-[var(--text-default)]"
+            class="h-[180px] w-full rounded-(--shape-elements) border border-(--border-default) p-(--spacing-md) text-body-sm text-(--text-default)"
           >
             <div class="h-[420px]">
               Long content that scrolls vertically inside the area — add enough content to exceed
@@ -774,16 +774,16 @@
     <!-- ── Feedback ─────────────────────────────────────────────────────── -->
     <section
       v-if="showCategory('feedback')"
-      class="flex flex-col gap-[var(--spacing-sm)]"
+      class="flex flex-col gap-(--spacing-sm)"
     >
       <div
         v-if="!category"
-        class="flex items-baseline justify-between gap-[var(--spacing-sm)] px-[var(--spacing-xxs)]"
+        class="flex items-baseline justify-between gap-(--spacing-sm) px-(--spacing-xxs)"
       >
-        <h3 class="text-overline-sm uppercase tracking-widest text-[var(--text-muted)]">
+        <h3 class="text-overline-sm uppercase tracking-widest text-(--text-muted)">
           Feedback
         </h3>
-        <span class="text-body-xs text-[var(--text-muted)]">Messages &amp; progress</span>
+        <span class="text-body-xs text-(--text-muted)">Messages &amp; progress</span>
       </div>
       <div class="grid w-full grid-cols-2 gap-0 md:grid-cols-4">
         <ComponentGridCell name="Skeleton">
@@ -796,7 +796,7 @@
         </ComponentGridCell>
 
         <ComponentGridCell name="Spinner">
-          <Spinner class="size-6 text-[var(--text-default)]" />
+          <Spinner class="size-6 text-(--text-default)" />
         </ComponentGridCell>
 
         <ComponentGridCell name="StatusIndicator">
@@ -816,7 +816,7 @@
         </ComponentGridCell>
 
         <ComponentGridCell name="ProgressBar">
-          <div class="flex w-full flex-col gap-[var(--spacing-md)]">
+          <div class="flex w-full flex-col gap-(--spacing-md)">
             <ProgressBar
               :value="68"
               size="large"
@@ -853,7 +853,7 @@
             description="Get started by creating your first resource."
           >
             <template #actions>
-              <div class="flex gap-[var(--spacing-sm)]">
+              <div class="flex gap-(--spacing-sm)">
                 <Button
                   kind="secondary"
                   label="Secondary"
@@ -878,14 +878,14 @@
     <!-- ── Overlay ──────────────────────────────────────────────────────── -->
     <section
       v-if="showCategory('overlay')"
-      class="flex flex-col gap-[var(--spacing-sm)]"
+      class="flex flex-col gap-(--spacing-sm)"
     >
       <div
         v-if="!category"
-        class="flex items-baseline justify-between gap-[var(--spacing-sm)] px-[var(--spacing-xxs)]"
+        class="flex items-baseline justify-between gap-(--spacing-sm) px-(--spacing-xxs)"
       >
-        <h3 class="text-overline-sm uppercase tracking-widest text-[var(--text-muted)]">Overlay</h3>
-        <span class="text-body-xs text-[var(--text-muted)]">Layered, floating surfaces</span>
+        <h3 class="text-overline-sm uppercase tracking-widest text-(--text-muted)">Overlay</h3>
+        <span class="text-body-xs text-(--text-muted)">Layered, floating surfaces</span>
       </div>
       <div class="grid w-full grid-cols-2 gap-0 md:grid-cols-4">
         <ComponentGridCell name="Tooltip">
@@ -999,7 +999,7 @@
                 <PopoverTitle>Popover title</PopoverTitle>
                 <PopoverClose />
               </PopoverHeader>
-              <div class="p-[var(--spacing-md)] text-body-sm text-[var(--text-default)]">
+              <div class="p-(--spacing-md) text-body-sm text-(--text-default)">
                 This content is rendered inside the popover panel.
               </div>
             </PopoverContent>
@@ -1049,16 +1049,16 @@
     <!-- ── Navigation ───────────────────────────────────────────────────── -->
     <section
       v-if="showCategory('navigation')"
-      class="flex flex-col gap-[var(--spacing-sm)]"
+      class="flex flex-col gap-(--spacing-sm)"
     >
       <div
         v-if="!category"
-        class="flex items-baseline justify-between gap-[var(--spacing-sm)] px-[var(--spacing-xxs)]"
+        class="flex items-baseline justify-between gap-(--spacing-sm) px-(--spacing-xxs)"
       >
-        <h3 class="text-overline-sm uppercase tracking-widest text-[var(--text-muted)]">
+        <h3 class="text-overline-sm uppercase tracking-widest text-(--text-muted)">
           Navigation
         </h3>
-        <span class="text-body-xs text-[var(--text-muted)]">Wayfinding, menus &amp; shells</span>
+        <span class="text-body-xs text-(--text-muted)">Wayfinding, menus &amp; shells</span>
       </div>
       <div class="grid w-full grid-cols-2 gap-0 md:grid-cols-4">
         <ComponentGridCell name="Link">
@@ -1103,12 +1103,12 @@
                 label="Metrics"
               />
             </TabView.List>
-            <TabView.Content class="mt-[var(--spacing-sm)]">
+            <TabView.Content class="mt-(--spacing-sm)">
               <TabView.Panel value="overview">
-                <p class="text-body-sm text-[var(--text-muted)]">Overview content.</p>
+                <p class="text-body-sm text-(--text-muted)">Overview content.</p>
               </TabView.Panel>
               <TabView.Panel value="metrics">
-                <p class="text-body-sm text-[var(--text-muted)]">Metrics content.</p>
+                <p class="text-body-sm text-(--text-muted)">Metrics content.</p>
               </TabView.Panel>
             </TabView.Content>
           </TabView>
@@ -1153,7 +1153,7 @@
         >
           <NavigationMenu
             aria-label="Sections"
-            class="flex w-full items-center gap-[var(--spacing-sm)]"
+            class="flex w-full items-center gap-(--spacing-sm)"
           >
             <NavigationMenu.List>
               <NavigationMenu.Item value="solutions">
@@ -1218,14 +1218,14 @@
     <!-- ── Data ─────────────────────────────────────────────────────────── -->
     <section
       v-if="showCategory('data')"
-      class="flex flex-col gap-[var(--spacing-sm)]"
+      class="flex flex-col gap-(--spacing-sm)"
     >
       <div
         v-if="!category"
-        class="flex items-baseline justify-between gap-[var(--spacing-sm)] px-[var(--spacing-xxs)]"
+        class="flex items-baseline justify-between gap-(--spacing-sm) px-(--spacing-xxs)"
       >
-        <h3 class="text-overline-sm uppercase tracking-widest text-[var(--text-muted)]">Data</h3>
-        <span class="text-body-xs text-[var(--text-muted)]">Tables &amp; display</span>
+        <h3 class="text-overline-sm uppercase tracking-widest text-(--text-muted)">Data</h3>
+        <span class="text-body-xs text-(--text-muted)">Tables &amp; display</span>
       </div>
       <div class="grid w-full grid-cols-2 gap-0 md:grid-cols-4">
         <ComponentGridCell name="PaginationButton">
@@ -1336,14 +1336,14 @@
     <!-- ── Code ─────────────────────────────────────────────────────────── -->
     <section
       v-if="showCategory('code')"
-      class="flex flex-col gap-[var(--spacing-sm)]"
+      class="flex flex-col gap-(--spacing-sm)"
     >
       <div
         v-if="!category"
-        class="flex items-baseline justify-between gap-[var(--spacing-sm)] px-[var(--spacing-xxs)]"
+        class="flex items-baseline justify-between gap-(--spacing-sm) px-(--spacing-xxs)"
       >
-        <h3 class="text-overline-sm uppercase tracking-widest text-[var(--text-muted)]">Code</h3>
-        <span class="text-body-xs text-[var(--text-muted)]">Source &amp; log surfaces</span>
+        <h3 class="text-overline-sm uppercase tracking-widest text-(--text-muted)">Code</h3>
+        <span class="text-body-xs text-(--text-muted)">Source &amp; log surfaces</span>
       </div>
       <div class="grid w-full grid-cols-2 gap-0 md:grid-cols-4">
         <ComponentGridCell

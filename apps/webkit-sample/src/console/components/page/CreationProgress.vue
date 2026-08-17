@@ -82,19 +82,19 @@
     class="w-full"
   >
     <template #header>
-      <p class="text-heading-xs text-[var(--text-default)]">{{ title }}</p>
-      <div class="flex items-center gap-[var(--spacing-sm)]">
+      <p class="text-heading-xs text-(--text-default)">{{ title }}</p>
+      <div class="flex items-center gap-(--spacing-sm)">
         <Tag
           v-if="done"
           label="Completed"
           severity="success"
         />
-        <span class="text-label-sm text-[var(--text-muted)]">
+        <span class="text-label-sm text-(--text-muted)">
           {{ done ? elapsedLabel : `Provisioning… ${elapsed}s` }}
         </span>
         <Spinner
           v-if="!done"
-          class="size-4 text-[var(--text-muted)]"
+          class="size-4 text-(--text-muted)"
         />
       </div>
     </template>
@@ -109,16 +109,16 @@
             <span class="flex size-6 items-center justify-center">
               <Spinner
                 v-if="stepState(index) === 'active'"
-                class="size-4 text-[var(--primary)]"
+                class="size-4 text-(--primary)"
               />
               <i
                 v-else-if="stepState(index) === 'done'"
-                class="pi pi-check-circle text-[16px] leading-none text-[var(--success)]"
+                class="pi pi-check-circle text-[16px] leading-none text-(--success)"
                 aria-hidden="true"
               />
               <span
                 v-else
-                class="size-2 rounded-full bg-[var(--border-strong)]"
+                class="size-2 rounded-full bg-(--border-strong)"
                 aria-hidden="true"
               />
             </span>

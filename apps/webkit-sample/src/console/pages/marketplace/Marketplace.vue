@@ -458,7 +458,7 @@
         v-model:value="activeTab"
         class="layout-section-start"
       >
-        <TabView.List class="justify-center mb-[var(--spacing-lg)]">
+        <TabView.List class="justify-center mb-(--spacing-lg)">
           <TabView.Item
             value="templates"
             label="Templates"
@@ -472,7 +472,7 @@
         <TabView.Content>
           <!-- Templates: pre-built framework starters -->
           <TabView.Panel value="templates">
-            <div class="flex flex-col gap-[var(--spacing-lg)]">
+            <div class="flex flex-col gap-(--spacing-lg)">
               <InputText
                 v-model="templateQuery"
                 size="large"
@@ -497,7 +497,7 @@
 
               <div
                 v-else
-                class="grid grid-cols-2 gap-[var(--spacing-md)] sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5"
+                class="grid grid-cols-2 gap-(--spacing-md) sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5"
               >
                 <TemplateCard
                   v-for="template in filteredTemplates"
@@ -516,9 +516,9 @@
           <TabView.Panel value="integrations">
             <div class="flex flex-col">
               <!-- Featured row: the same card in its spotlight anatomy. -->
-              <section class="flex flex-col gap-[var(--layout-group-gap)]">
-                <p class="text-heading-xxs text-[var(--text-default)]">Featured</p>
-                <div class="grid grid-cols-1 gap-[var(--spacing-md)] sm:grid-cols-2 lg:grid-cols-3">
+              <section class="flex flex-col gap-(--layout-group-gap)">
+                <p class="text-heading-xxs text-(--text-default)">Featured</p>
+                <div class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2 lg:grid-cols-3">
                   <IntegrationCard
                     v-for="item in featuredIntegrations"
                     :key="item.id"
@@ -536,7 +536,7 @@
               <!-- Search + the three filter axes on one row: no label, multiple
                    selection, no checkbox (selection shown by highlight). -->
               <div
-                class="layout-section-start flex flex-col gap-[var(--spacing-sm)] md:flex-row md:items-center"
+                class="layout-section-start flex flex-col gap-(--spacing-sm) md:flex-row md:items-center"
               >
                 <InputText
                   v-model="integrationQuery"
@@ -573,7 +573,7 @@
 
               <div
                 v-else
-                class="layout-group-start grid grid-cols-1 gap-[var(--spacing-md)] sm:grid-cols-2 lg:grid-cols-3"
+                class="layout-group-start grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2 lg:grid-cols-3"
               >
                 <IntegrationCard
                   v-for="item in filteredIntegrations"

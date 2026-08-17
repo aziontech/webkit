@@ -247,17 +247,17 @@
   <div>
     <!-- ── Hero: fluid banner spanning the full content width, bottom border ── -->
     <BannerContainer max-width="6xl">
-      <div class="flex max-w-[var(--container-3xl)] flex-col gap-[var(--spacing-md)]">
-        <h1 class="text-balance text-heading-2xl text-[var(--text-default)]">
+      <div class="flex max-w-(--container-3xl) flex-col gap-(--spacing-md)">
+        <h1 class="text-balance text-heading-2xl text-(--text-default)">
           Welcome to Azion Docs
         </h1>
-        <p class="text-pretty text-body-lg text-[var(--text-muted)]">
+        <p class="text-pretty text-body-lg text-(--text-muted)">
           We make every application fast and reliable. Deploy your projects instantly on the most
           reliable global network, leverage enterprise-grade security, and scale from zero to peak
           without cold starts.
         </p>
         <div
-          class="mt-[var(--spacing-sm)] flex flex-col items-stretch gap-[var(--spacing-sm)] sm:flex-row sm:items-center"
+          class="mt-(--spacing-sm) flex flex-col items-stretch gap-(--spacing-sm) sm:flex-row sm:items-center"
         >
           <Button
             label="Get started"
@@ -289,33 +289,33 @@
         title="A fully managed platform to build, secure, deploy, and observe"
         description="Azion Web Platform unifies serverless, security, content delivery and acceleration, storage, and real-time observability so teams can ship applications worldwide with consistent performance."
       >
-        <ul class="grid gap-[var(--spacing-md)] sm:grid-cols-2 lg:grid-cols-3">
+        <ul class="grid gap-(--spacing-md) sm:grid-cols-2 lg:grid-cols-3">
           <li
             v-for="item in platformIncludes"
             :key="item.text"
-            class="flex items-start gap-[var(--spacing-sm)] rounded-[var(--shape-card)] border border-[var(--border-muted)] bg-[var(--bg-surface)] p-[var(--spacing-md)]"
+            class="flex items-start gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-muted) bg-(--bg-surface) p-(--spacing-md)"
           >
             <span
-              class="flex size-8 shrink-0 items-center justify-center rounded-[var(--shape-elements)] border border-[var(--border-muted)] bg-[var(--bg-surface-raised)]"
+              class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
             >
               <i
-                :class="[item.icon, 'text-body-lg text-[var(--text-default)]']"
+                :class="[item.icon, 'text-body-lg text-(--text-default)']"
                 aria-hidden="true"
               />
             </span>
-            <span class="text-pretty text-body-sm text-[var(--text-default)]">{{ item.text }}</span>
+            <span class="text-pretty text-body-sm text-(--text-default)">{{ item.text }}</span>
           </li>
         </ul>
       </SectionModule>
 
       <!-- ── Core concepts ──────────────────────────────────────────────── -->
       <SectionModule title="Core concepts">
-        <div class="grid gap-[var(--spacing-md)] lg:grid-cols-2">
+        <div class="grid gap-(--spacing-md) lg:grid-cols-2">
           <CardBox class="h-full">
             <template #content>
-              <div class="flex flex-col gap-[var(--spacing-sm)]">
-                <h3 class="text-heading-sm text-[var(--text-default)]">Distributed computing</h3>
-                <p class="text-pretty text-body-sm text-[var(--text-muted)]">
+              <div class="flex flex-col gap-(--spacing-sm)">
+                <h3 class="text-heading-sm text-(--text-default)">Distributed computing</h3>
+                <p class="text-pretty text-body-sm text-(--text-muted)">
                   Azion runs workloads across multiple locations worldwide to reduce latency and
                   improve reliability. This places compute and data closer to where they’re needed —
                   near your users on a global network of points of presence.
@@ -326,16 +326,16 @@
 
           <CardBox class="h-full">
             <template #content>
-              <div class="flex flex-col gap-[var(--spacing-sm)]">
-                <h3 class="text-heading-sm text-[var(--text-default)]">Platform characteristics</h3>
-                <ul class="flex flex-col gap-[var(--spacing-xs)]">
+              <div class="flex flex-col gap-(--spacing-sm)">
+                <h3 class="text-heading-sm text-(--text-default)">Platform characteristics</h3>
+                <ul class="flex flex-col gap-(--spacing-xs)">
                   <li
                     v-for="characteristic in platformCharacteristics"
                     :key="characteristic"
-                    class="flex items-start gap-[var(--spacing-xs)] text-body-sm text-[var(--text-default)]"
+                    class="flex items-start gap-(--spacing-xs) text-body-sm text-(--text-default)"
                   >
                     <i
-                      class="pi pi-check mt-0.5 text-body-xs text-[var(--success)]"
+                      class="pi pi-check mt-0.5 text-body-xs text-(--success)"
                       aria-hidden="true"
                     />
                     {{ characteristic }}
@@ -352,19 +352,19 @@
         title="How Azion handles a request"
         description="Azion Web Platform routes each request through its global network to serve users from the best available location."
       >
-        <ol class="grid gap-[var(--spacing-md)] lg:grid-cols-3">
+        <ol class="grid gap-(--spacing-md) lg:grid-cols-3">
           <li
             v-for="(step, index) in requestSteps"
             :key="step.title"
-            class="relative flex flex-col gap-[var(--spacing-sm)] rounded-[var(--shape-card)] border border-[var(--border-muted)] bg-[var(--bg-surface)] p-[var(--spacing-lg)]"
+            class="relative flex flex-col gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-muted) bg-(--bg-surface) p-(--spacing-lg)"
           >
             <span
-              class="flex size-8 items-center justify-center rounded-full bg-[var(--bg-contrast)] text-label-md tabular-nums text-[var(--text-contrast)]"
+              class="flex size-8 items-center justify-center rounded-full bg-(--bg-contrast) text-label-md tabular-nums text-(--text-contrast)"
             >
               {{ index + 1 }}
             </span>
-            <h3 class="text-label-lg text-[var(--text-default)]">{{ step.title }}</h3>
-            <p class="text-pretty text-body-sm text-[var(--text-muted)]">{{ step.body }}</p>
+            <h3 class="text-label-lg text-(--text-default)">{{ step.title }}</h3>
+            <p class="text-pretty text-body-sm text-(--text-muted)">{{ step.body }}</p>
           </li>
         </ol>
       </SectionModule>
@@ -389,25 +389,25 @@
                 :value="primitive.value"
               >
                 <div
-                  class="rounded-[var(--shape-card)] border border-[var(--border-muted)] mt-[var(--spacing-md)] bg-[var(--bg-surface)] p-[var(--spacing-lg)]"
+                  class="rounded-(--shape-card) border border-(--border-muted) mt-(--spacing-md) bg-(--bg-surface) p-(--spacing-lg)"
                 >
-                  <div class="flex flex-col gap-[var(--spacing-md)]">
-                    <div class="flex items-center gap-[var(--spacing-sm)]">
+                  <div class="flex flex-col gap-(--spacing-md)">
+                    <div class="flex items-center gap-(--spacing-sm)">
                       <span
-                        class="flex size-9 items-center justify-center rounded-[var(--shape-elements)] border border-[var(--border-muted)] bg-[var(--bg-surface-raised)]"
+                        class="flex size-9 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
                       >
                         <i
-                          :class="[primitive.icon, 'text-heading-sm text-[var(--text-default)]']"
+                          :class="[primitive.icon, 'text-heading-sm text-(--text-default)']"
                           aria-hidden="true"
                         />
                       </span>
-                      <h3 class="text-heading-sm text-[var(--text-default)]">
+                      <h3 class="text-heading-sm text-(--text-default)">
                         {{ primitive.title }}
                       </h3>
                     </div>
 
                     <p
-                      class="max-w-[var(--container-2xl)] text-pretty text-body-md text-[var(--text-muted)]"
+                      class="max-w-(--container-2xl) text-pretty text-body-md text-(--text-muted)"
                     >
                       {{ primitive.description }}
                     </p>
@@ -420,7 +420,7 @@
                     />
 
                     <div
-                      class="flex flex-wrap items-center gap-x-[var(--spacing-lg)] gap-y-[var(--spacing-sm)] pt-[var(--spacing-xs)]"
+                      class="flex flex-wrap items-center gap-x-(--spacing-lg) gap-y-(--spacing-sm) pt-(--spacing-xs)"
                     >
                       <Button
                         :label="primitive.cta"
@@ -448,14 +448,14 @@
 
       <!-- ── Common use cases ───────────────────────────────────────────── -->
       <SectionModule title="What you can build">
-        <ul class="grid gap-x-[var(--spacing-lg)] gap-y-[var(--spacing-sm)] sm:grid-cols-2">
+        <ul class="grid gap-x-(--spacing-lg) gap-y-(--spacing-sm) sm:grid-cols-2">
           <li
             v-for="useCase in useCases"
             :key="useCase"
-            class="flex items-start gap-[var(--spacing-sm)] border-t border-[var(--border-muted)] py-[var(--spacing-sm)] text-body-md text-[var(--text-default)]"
+            class="flex items-start gap-(--spacing-sm) border-t border-(--border-muted) py-(--spacing-sm) text-body-md text-(--text-default)"
           >
             <i
-              class="pi pi-arrow-right mt-1 text-body-xs text-[var(--text-muted)]"
+              class="pi pi-arrow-right mt-1 text-body-xs text-(--text-muted)"
               aria-hidden="true"
             />
             {{ useCase }}
@@ -469,7 +469,7 @@
         description="The fastest way to start using the Azion Web Platform. Deploy instantly from dozens of templates — e-commerce, blogs, APIs, full-stack SSR, and more; connect Sanity, Cosmic, ButterCMS, Turso, or your own RESTful CMS. CI/CD is auto-configured so you can focus on your code, not the pipeline."
       >
         <p
-          class="m-0 mb-[var(--spacing-lg)] max-w-[var(--container-3xl)] text-pretty text-body-md text-[var(--text-muted)]"
+          class="m-0 mb-(--spacing-lg) max-w-(--container-3xl) text-pretty text-body-md text-(--text-muted)"
         >
           Here are a few of our most popular templates to get you started. For more information, you
           can visit our
@@ -485,7 +485,7 @@
             v-for="template in templates"
             :key="template.name"
             href="#"
-            class="group flex items-center gap-[var(--spacing-md)] rounded-[var(--shape-card)] border border-[var(--border-muted)] bg-[var(--bg-surface)] p-[var(--spacing-md)] transition-[border-color,transform] duration-moderate-01 ease-productive-entrance hover:-translate-y-0.5 hover:border-[var(--border-default)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] motion-reduce:transform-none motion-reduce:transition-none"
+            class="group flex items-center gap-(--spacing-md) rounded-(--shape-card) border border-(--border-muted) bg-(--bg-surface) p-(--spacing-md) transition-[border-color,transform] duration-moderate-01 ease-productive-entrance hover:-translate-y-0.5 hover:border-(--border-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transform-none motion-reduce:transition-none"
           >
             <i
               :class="[
@@ -495,13 +495,13 @@
               aria-hidden="true"
             />
             <span class="flex min-w-0 flex-col">
-              <span class="truncate text-label-lg text-[var(--text-default)]">{{
+              <span class="truncate text-label-lg text-(--text-default)">{{
                 template.name
               }}</span>
-              <span class="text-body-sm text-[var(--text-muted)]">{{ template.tag }}</span>
+              <span class="text-body-sm text-(--text-muted)">{{ template.tag }}</span>
             </span>
             <i
-              class="pi pi-arrow-up-right ml-auto text-body-sm text-[var(--text-muted)] transition-transform duration-fast-02 group-hover:translate-x-0.5 motion-reduce:transition-none"
+              class="pi pi-arrow-up-right ml-auto text-body-sm text-(--text-muted) transition-transform duration-fast-02 group-hover:translate-x-0.5 motion-reduce:transition-none"
               aria-hidden="true"
             />
           </a>
@@ -517,21 +517,21 @@
           <CardBox
             v-for="tool in tools"
             :key="tool.name"
-            class="h-full transition-[border-color] duration-moderate-01 ease-productive-entrance hover:border-[var(--border-default)] motion-reduce:transition-none"
+            class="h-full transition-[border-color] duration-moderate-01 ease-productive-entrance hover:border-(--border-default) motion-reduce:transition-none"
           >
             <template #content>
               <div class="flex flex-col">
-                <span class="mb-[var(--spacing-md)]">
+                <span class="mb-(--spacing-md)">
                   <i
-                    :class="[tool.icon, 'text-heading-sm text-[var(--text-default)]']"
+                    :class="[tool.icon, 'text-heading-sm text-(--text-default)']"
                     aria-hidden="true"
                   />
                 </span>
-                <h3 class="text-heading-xxs mb-[var(--spacing-sm)] text-[var(--text-default)]">
+                <h3 class="text-heading-xxs mb-(--spacing-sm) text-(--text-default)">
                   {{ tool.name }}
                 </h3>
                 <p
-                  class="text-pretty text-body-xxs mb-[var(--spacing-sm)] text-[var(--text-muted)]"
+                  class="text-pretty text-body-xxs mb-(--spacing-sm) text-(--text-muted)"
                 >
                   {{ tool.description }}
                 </p>
@@ -543,7 +543,7 @@
 
       <!-- ── FAQ ────────────────────────────────────────────────────────── -->
       <SectionModule title="Frequently asked questions">
-        <div class="max-w-[var(--container-3xl)]">
+        <div class="max-w-(--container-3xl)">
           <Accordion
             type="single"
             collapsible
@@ -555,10 +555,10 @@
               :value="faq.value"
             >
               <Accordion.Trigger>
-                <span class="text-label-lg text-[var(--text-default)]">{{ faq.question }}</span>
+                <span class="text-label-lg text-(--text-default)">{{ faq.question }}</span>
               </Accordion.Trigger>
               <Accordion.Content>
-                <p class="text-pretty text-body-md text-[var(--text-muted)]">{{ faq.answer }}</p>
+                <p class="text-pretty text-body-md text-(--text-muted)">{{ faq.answer }}</p>
               </Accordion.Content>
             </Accordion.Item>
           </Accordion>

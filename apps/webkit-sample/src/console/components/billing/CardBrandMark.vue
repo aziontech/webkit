@@ -21,7 +21,7 @@
 
 <template>
   <span
-    class="flex h-7 w-10 shrink-0 items-center justify-center overflow-clip rounded-[var(--shape-elements)] border border-[var(--border-default)] bg-[#2548a0]"
+    class="flex h-7 w-10 shrink-0 items-center justify-center overflow-clip rounded-(--shape-elements) border border-(--border-default) bg-[#2548a0]"
     :role="ariaLabel ? 'img' : undefined"
     :aria-label="ariaLabel || undefined"
     :aria-hidden="ariaLabel ? undefined : 'true'"

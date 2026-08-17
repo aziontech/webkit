@@ -99,7 +99,7 @@
          deployment. A decorative cloud beside that word was the only thing on this
          card that did not report on the run. -->
     <template #header>
-      <p class="truncate text-heading-xs text-[var(--text-default)]">Deployment</p>
+      <p class="truncate text-heading-xs text-(--text-default)">Deployment</p>
       <DeploymentLogsControls
         v-model:view="logView"
         :settled="settled"
@@ -111,26 +111,26 @@
       <!-- Initial: cloning illustration -->
       <div
         v-if="phase === 'initial'"
-        class="flex min-h-[374px] flex-col items-center justify-center gap-[var(--spacing-xl)] p-[var(--spacing-lg)]"
+        class="flex min-h-[374px] flex-col items-center justify-center gap-(--spacing-xl) p-(--spacing-lg)"
       >
         <!-- Browser-window mock -->
         <div
-          class="w-[260px] overflow-hidden rounded-[var(--shape-card)] border border-[var(--primary)] bg-[var(--bg-surface)]"
+          class="w-[260px] overflow-hidden rounded-(--shape-card) border border-(--primary) bg-(--bg-surface)"
         >
           <div
-            class="flex items-center gap-[var(--spacing-xxs)] border-b border-[var(--border-default)]"
+            class="flex items-center gap-(--spacing-xxs) border-b border-(--border-default)"
           >
-            <span class="size-2 rounded-full bg-[var(--danger)]" />
-            <span class="size-2 rounded-full bg-[var(--warning)]" />
-            <span class="size-2 rounded-full bg-[var(--success)]" />
+            <span class="size-2 rounded-full bg-(--danger)" />
+            <span class="size-2 rounded-full bg-(--warning)" />
+            <span class="size-2 rounded-full bg-(--success)" />
           </div>
-          <div class="flex flex-col gap-[var(--spacing-sm)] p-[var(--spacing-md)]">
-            <div class="h-3 w-3/4 rounded-[var(--shape-flat)] bg-[var(--bg-surface-raised)]" />
+          <div class="flex flex-col gap-(--spacing-sm) p-(--spacing-md)">
+            <div class="h-3 w-3/4 rounded-(--shape-flat) bg-(--bg-surface-raised)" />
             <div
-              class="flex items-center justify-center gap-[var(--spacing-lg)] py-[var(--spacing-sm)]"
+              class="flex items-center justify-center gap-(--spacing-lg) py-(--spacing-sm)"
             >
               <span
-                class="flex size-12 items-center justify-center rounded-[var(--shape-elements)] border border-[var(--border-default)] bg-[var(--bg-canvas)] text-[var(--text-default)]"
+                class="flex size-12 items-center justify-center rounded-(--shape-elements) border border-(--border-default) bg-(--bg-canvas) text-(--text-default)"
               >
                 <i
                   class="pi pi-github text-[24px]"
@@ -138,7 +138,7 @@
                 />
               </span>
               <span
-                class="flex size-12 items-center justify-center rounded-[var(--shape-elements)] border border-[var(--border-selected)] bg-[var(--bg-canvas)] text-[var(--primary)]"
+                class="flex size-12 items-center justify-center rounded-(--shape-elements) border border-(--border-selected) bg-(--bg-canvas) text-(--primary)"
               >
                 <svg
                   viewBox="0 0 21 18"
@@ -149,17 +149,17 @@
                 </svg>
               </span>
             </div>
-            <div class="h-3 w-3/4 rounded-[var(--shape-flat)] bg-[var(--bg-surface-raised)]" />
+            <div class="h-3 w-3/4 rounded-(--shape-flat) bg-(--bg-surface-raised)" />
           </div>
         </div>
 
         <!-- Cloning <repo> to <scope> -->
         <div
-          class="flex max-w-[var(--container-lg)] flex-wrap items-center justify-center gap-[var(--spacing-xs)] text-label-sm text-[var(--text-default)]"
+          class="flex max-w-(--container-lg) flex-wrap items-center justify-center gap-(--spacing-xs) text-label-sm text-(--text-default)"
         >
           <span>Cloning</span>
           <span
-            class="inline-flex items-center gap-[var(--spacing-xs)] rounded-[var(--shape-elements)] border border-[var(--border-default)] bg-[var(--bg-surface-raised)] px-[var(--spacing-xs)] py-[var(--spacing-xxs)]"
+            class="inline-flex items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface-raised) px-(--spacing-xs) py-(--spacing-xxs)"
           >
             <i
               class="pi pi-github text-[length:inherit] leading-none"
@@ -167,9 +167,9 @@
             />
             {{ repoOwner }}/{{ repoPath }}
           </span>
-          <span class="text-[var(--text-muted)]">to</span>
+          <span class="text-(--text-muted)">to</span>
           <span
-            class="inline-flex items-center gap-[var(--spacing-xs)] rounded-[var(--shape-elements)] border border-[var(--border-default)] bg-[var(--bg-surface-raised)] px-[var(--spacing-xs)] py-[var(--spacing-xxs)]"
+            class="inline-flex items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface-raised) px-(--spacing-xs) py-(--spacing-xxs)"
           >
             <i
               class="pi pi-github text-[length:inherit] leading-none"

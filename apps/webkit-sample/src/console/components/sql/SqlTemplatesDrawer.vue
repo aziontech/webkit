@@ -149,16 +149,16 @@ LIMIT 3;`
       <DrawerOverlay />
       <DrawerContent>
         <PanelHeader class="w-full">
-          <div class="flex min-w-0 flex-col gap-[var(--spacing-xxs)]">
+          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
             <DrawerTitle>SQL Quick Templates</DrawerTitle>
-            <p class="text-body-sm text-[var(--text-muted)]">
+            <p class="text-body-sm text-(--text-muted)">
               Pick a snippet to load it into the editor.
             </p>
           </div>
           <DrawerClose />
         </PanelHeader>
 
-        <PanelContent class="flex flex-col gap-[var(--spacing-md)]">
+        <PanelContent class="flex flex-col gap-(--spacing-md)">
           <InputText
             v-model="query"
             size="large"
@@ -176,26 +176,26 @@ LIMIT 3;`
 
           <div
             v-if="filtered.length"
-            class="grid grid-cols-1 gap-[var(--spacing-sm)] md:grid-cols-2"
+            class="grid grid-cols-1 gap-(--spacing-sm) md:grid-cols-2"
           >
             <button
               v-for="template in filtered"
               :key="template.id"
               type="button"
-              class="flex flex-col gap-[var(--spacing-xxs)] rounded-[var(--shape-card)] border border-[var(--border-default)] bg-[var(--bg-surface)] p-[var(--spacing-md)] text-left transition-colors duration-fast-02 ease-productive-entrance hover:border-[var(--border-primary)] hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-surface)] motion-reduce:transition-none"
+              class="flex flex-col gap-(--spacing-xxs) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-md) text-left transition-colors duration-fast-02 ease-productive-entrance hover:border-(--border-primary) hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
               @click="choose(template)"
             >
-              <span class="flex items-center gap-[var(--spacing-xs)]">
+              <span class="flex items-center gap-(--spacing-xs)">
                 <i
                   :class="template.icon"
-                  class="text-[var(--text-muted)]"
+                  class="text-(--text-muted)"
                   aria-hidden="true"
                 />
-                <span class="text-label-md text-[var(--text-default)]">
+                <span class="text-label-md text-(--text-default)">
                   {{ template.title }}
                 </span>
               </span>
-              <span class="text-body-xs text-[var(--text-muted)]">
+              <span class="text-body-xs text-(--text-muted)">
                 {{ template.description }}
               </span>
             </button>
@@ -203,7 +203,7 @@ LIMIT 3;`
 
           <p
             v-else
-            class="py-[var(--spacing-lg)] text-center text-body-sm text-[var(--text-muted)]"
+            class="py-(--spacing-lg) text-center text-body-sm text-(--text-muted)"
           >
             No templates match "{{ query }}".
           </p>

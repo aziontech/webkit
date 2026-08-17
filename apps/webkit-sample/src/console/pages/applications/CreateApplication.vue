@@ -302,9 +302,9 @@
                   Give a unique and descriptive name to identify the Application.
                 </Item.Description>
               </Item.Content>
-              <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
+              <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
                 <!-- Empty-required → amber `required` HelperText (not red). -->
-                <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
+                <div class="flex w-full flex-col gap-(--spacing-xs)">
                   <InputText
                     v-model="form.name"
                     size="large"
@@ -397,7 +397,7 @@
                     :href="CONTACT_SALES"
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="inline-flex items-center gap-[var(--spacing-xxs)] rounded-[var(--shape-button)] text-[var(--text-link)] underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance hover:text-[var(--text-link-hover)] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] motion-reduce:transition-none"
+                    class="inline-flex items-center gap-(--spacing-xxs) rounded-(--shape-button) text-(--text-link) underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-link-hover) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
                   >
                     Contact sales
                     <i

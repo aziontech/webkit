@@ -24,22 +24,22 @@
     :href="isLink ? href : undefined"
     :target="isLink ? '_blank' : undefined"
     :rel="isLink ? 'noopener' : undefined"
-    class="flex w-full items-stretch gap-[var(--spacing-md)] overflow-hidden rounded-[var(--shape-card)] border border-[var(--border-default)] bg-[var(--bg-surface)] p-[var(--spacing-sm)] no-underline"
+    class="flex w-full items-stretch gap-(--spacing-md) overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-sm) no-underline"
   >
     <!-- Preview thumbnail -->
     <div class="flex max-w-[192px] flex-1 flex-col items-center justify-center self-stretch">
       <div
-        class="relative h-[120px] w-full overflow-hidden rounded-[var(--shape-elements)] border border-[var(--border-default)]"
+        class="relative h-[120px] w-full overflow-hidden rounded-(--shape-elements) border border-(--border-default)"
       >
         <img
           v-if="thumbnail"
           :src="thumbnail"
           alt=""
-          class="absolute inset-0 size-full rounded-[var(--shape-elements)] object-cover"
+          class="absolute inset-0 size-full rounded-(--shape-elements) object-cover"
         />
         <div
           v-else
-          class="absolute inset-0 flex items-center justify-center bg-[var(--bg-surface-raised)] text-[var(--text-muted)]"
+          class="absolute inset-0 flex items-center justify-center bg-(--bg-surface-raised) text-(--text-muted)"
           aria-hidden="true"
         >
           <i class="pi pi-image text-[1.5rem] leading-none opacity-60" />
@@ -51,29 +51,29 @@
     <div class="flex min-w-0 flex-1 flex-col items-start justify-between self-stretch">
       <!-- Title + description -->
       <div class="flex w-full min-w-0 flex-col overflow-hidden">
-        <span class="flex items-center gap-[var(--spacing-xs)]">
-          <span class="truncate text-heading-xxs text-[var(--text-default)]">
+        <span class="flex items-center gap-(--spacing-xs)">
+          <span class="truncate text-heading-xxs text-(--text-default)">
             {{ title }}
           </span>
           <i
             v-if="isLink"
-            class="pi pi-arrow-up-right text-[length:inherit] leading-none text-[var(--text-muted)]"
+            class="pi pi-arrow-up-right text-[length:inherit] leading-none text-(--text-muted)"
             aria-hidden="true"
           />
         </span>
-        <span class="text-body-xs text-[var(--text-muted)]">
+        <span class="text-body-xs text-(--text-muted)">
           {{ description }}
         </span>
       </div>
 
       <!-- Source info -->
-      <div class="flex w-full flex-col gap-[var(--spacing-xxs)]">
-        <span class="truncate text-body-xxs text-[var(--text-muted)]">
+      <div class="flex w-full flex-col gap-(--spacing-xxs)">
+        <span class="truncate text-body-xxs text-(--text-muted)">
           Cloning from {{ source === 'gitlab' ? 'GitLab' : 'Github' }}
         </span>
-        <div class="flex items-center gap-[var(--spacing-md)]">
+        <div class="flex items-center gap-(--spacing-md)">
           <span
-            class="flex h-5 items-center gap-[var(--spacing-xxs)] text-label-sm text-[var(--text-default)]"
+            class="flex h-5 items-center gap-(--spacing-xxs) text-label-sm text-(--text-default)"
           >
             <i
               :class="['pi', sourceIcon]"
@@ -83,7 +83,7 @@
             {{ repoOwner }}
           </span>
           <span
-            class="flex h-5 items-center gap-[var(--spacing-xxs)] text-label-sm text-[var(--text-muted)]"
+            class="flex h-5 items-center gap-(--spacing-xxs) text-label-sm text-(--text-muted)"
           >
             <i
               class="pi pi-folder text-[length:inherit] leading-none"

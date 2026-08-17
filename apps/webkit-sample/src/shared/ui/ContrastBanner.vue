@@ -89,7 +89,7 @@
        control stays in the tab order. -->
   <div
     v-if="!dismissed"
-    class="inline-flex max-w-full items-center gap-[var(--spacing-xxs)]"
+    class="inline-flex max-w-full items-center gap-(--spacing-xxs)"
   >
     <Tooltip
       text="Copies a setup prompt for your AI coding tool"
@@ -97,13 +97,13 @@
     >
       <button
         type="button"
-        class="group inline-flex max-w-full items-center gap-[var(--spacing-xs)] rounded-full bg-[var(--bg-contrast)] px-[var(--spacing-sm)] py-[var(--spacing-xxs)] text-label-sm text-[var(--text-contrast)] transition-[scale,box-shadow] duration-moderate-01 ease-productive-entrance hover:scale-[1.03] hover:shadow-[0_0_24px_4px_var(--primary-mask)] hover:ring-2 hover:ring-[var(--primary)] active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] motion-reduce:transition-none motion-reduce:scale-100 sm:gap-[var(--spacing-sm)] sm:px-[var(--spacing-md)] sm:py-[var(--spacing-xs)] sm:text-label-md"
+        class="group inline-flex max-w-full items-center gap-(--spacing-xs) rounded-full bg-(--bg-contrast) px-(--spacing-sm) py-(--spacing-xxs) text-label-sm text-(--text-contrast) transition-[scale,box-shadow] duration-moderate-01 ease-productive-entrance hover:scale-[1.03] hover:shadow-[0_0_24px_4px_var(--primary-mask)] hover:ring-2 hover:ring-(--primary) active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--primary) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none motion-reduce:scale-100 sm:gap-(--spacing-sm) sm:px-(--spacing-md) sm:py-(--spacing-xs) sm:text-label-md"
         @click="onCopy"
       >
         <!-- Azion mark — the bare icon. -->
         <AzionLogoMin
           v-if="showLogo"
-          class="h-[var(--size-4)] w-auto shrink-0 sm:h-[var(--size-5)]"
+          class="h-(--size-4) w-auto shrink-0 sm:h-(--size-5)"
           aria-hidden="true"
         />
 
@@ -117,14 +117,14 @@
            treatment is the point. Decorative, so they drop off below `sm` where
            the pill would otherwise overflow a phone; the label carries the CTA. -->
         <span
-          class="ml-[var(--spacing-xxs)] hidden shrink-0 items-center gap-[var(--spacing-xs)] sm:flex"
+          class="ml-(--spacing-xxs) hidden shrink-0 items-center gap-(--spacing-xs) sm:flex"
           aria-hidden="true"
         >
           <AgentMark
             v-for="agent in AGENT_TOOLS"
             :key="agent"
             :name="agent"
-            class="size-[var(--size-5)]"
+            class="size-(--size-5)"
           />
         </span>
       </button>

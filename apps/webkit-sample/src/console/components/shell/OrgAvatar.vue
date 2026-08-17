@@ -43,9 +43,9 @@
   // other two match the Avatar scale (32 / 48) — the list rows and anything
   // that shows an org at rest.
   const sizeClasses = {
-    small: 'size-[var(--size-5)]',
-    medium: 'size-[var(--size-8)]',
-    large: 'size-[var(--size-12)]'
+    small: 'size-(--size-5)',
+    medium: 'size-(--size-8)',
+    large: 'size-(--size-12)'
   }
 </script>
 
@@ -55,7 +55,7 @@
     :aria-label="name"
     :class="[
       sizeClasses[size] ?? sizeClasses.small,
-      'inline-flex shrink-0 overflow-hidden rounded-[var(--shape-button)]'
+      'inline-flex shrink-0 overflow-hidden rounded-(--shape-button)'
     ]"
   >
     <svg

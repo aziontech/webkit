@@ -163,16 +163,16 @@
        <Transition> and a fragment cannot be animated. It carries the column layout
        for its own two pieces — the card and the way out under it — while the
        centring and the half's padding come from AuthSplit. -->
-  <div class="flex w-full flex-col items-center gap-[var(--spacing-md)]">
+  <div class="flex w-full flex-col items-center gap-(--spacing-md)">
     <CardBox
-      class="w-full max-w-[var(--container-sm)]"
+      class="w-full max-w-(--container-sm)"
       :padded="false"
     >
       <template #content>
         <!-- The card's own padding, rather than CardBox's `padded`, which
                  is a tighter step than this composition wants. -->
         <form
-          class="flex flex-col gap-[var(--spacing-lg)] p-[var(--spacing-lg)]"
+          class="flex flex-col gap-(--spacing-lg) p-(--spacing-lg)"
           aria-label="Sign up for a free account"
           novalidate
           @submit.prevent="signUp"
@@ -184,15 +184,15 @@
             aria-hidden="true"
             tabindex="-1"
           />
-          <header class="flex flex-col gap-[var(--spacing-xxs)]">
-            <h1 class="text-heading-sm text-[var(--text-default)]">Sign Up for a Free Account</h1>
-            <p class="text-body-sm text-[var(--text-muted)]">
+          <header class="flex flex-col gap-(--spacing-xxs)">
+            <h1 class="text-heading-sm text-(--text-default)">Sign Up for a Free Account</h1>
+            <p class="text-body-sm text-(--text-muted)">
               US$ 300 credit to use over 12 months, no credit card is required.
             </p>
           </header>
 
           <fieldset
-            class="m-0 flex min-w-0 flex-col gap-[var(--spacing-lg)] border-0 p-0"
+            class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0"
             :disabled="locked"
           >
             <legend class="sr-only">Account credentials</legend>
@@ -203,7 +203,7 @@
                      padlock line in its place. -->
 
             <!-- Work Email -->
-            <div class="flex flex-col gap-[var(--spacing-xs)]">
+            <div class="flex flex-col gap-(--spacing-xs)">
               <Label
                 for="signup-email"
                 required
@@ -242,7 +242,7 @@
                      at rest: the field's own `required` is webkit's amber
                      failed-check state (border + helper tone), which must fire on a
                      failed submit and not before. -->
-            <div class="flex flex-col gap-[var(--spacing-xs)]">
+            <div class="flex flex-col gap-(--spacing-xs)">
               <Label
                 for="signup-password"
                 required
@@ -297,7 +297,7 @@
               <div
                 v-if="providersReady"
                 key="providers"
-                class="flex flex-col gap-[var(--spacing-sm)] transition-opacity duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
+                class="flex flex-col gap-(--spacing-sm) transition-opacity duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
               >
                 <Button
                   type="button"
@@ -328,7 +328,7 @@
                 key="preparing"
                 role="status"
                 aria-label="Preparing sign-up providers"
-                class="flex flex-col gap-[var(--spacing-sm)] transition-opacity duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
+                class="flex flex-col gap-(--spacing-sm) transition-opacity duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
               >
                 <Skeleton height="2.5rem" />
                 <Skeleton height="2.5rem" />
@@ -336,7 +336,7 @@
             </Transition>
           </div>
 
-          <p class="text-center text-body-sm text-[var(--text-muted)]">
+          <p class="text-center text-body-sm text-(--text-muted)">
             By signing up, you agree to the
             <a
               class="text-link"
@@ -359,9 +359,9 @@
     <!-- Below the card, on the canvas — the design puts it outside the box
              because it is not part of signing up. It is the way out of it. -->
     <div
-      class="flex w-full max-w-[var(--container-sm)] items-center justify-center gap-[var(--spacing-xs)]"
+      class="flex w-full max-w-(--container-sm) items-center justify-center gap-(--spacing-xs)"
     >
-      <p class="text-body-sm text-[var(--text-default)]">Already have an account?</p>
+      <p class="text-body-sm text-(--text-default)">Already have an account?</p>
       <a
         class="text-link text-body-sm"
         href="/login"

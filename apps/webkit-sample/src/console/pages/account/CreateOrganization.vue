@@ -197,15 +197,15 @@
               title="Mark"
               description="How the organization is identified in the header and the switcher."
             >
-              <div class="flex flex-col gap-[var(--spacing-md)]">
+              <div class="flex flex-col gap-(--spacing-md)">
                 <OrgMarkPicker
                   v-model="form.accent"
                   :disabled="submitting"
                 />
-                <div class="flex min-w-0 flex-col gap-[var(--spacing-xs)]">
-                  <p class="text-overline-sm text-[var(--text-muted)]">In the header</p>
+                <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
+                  <p class="text-overline-sm text-(--text-muted)">In the header</p>
                   <span
-                    class="inline-flex min-w-0 max-w-[14rem] items-center gap-1.5 self-start rounded-[var(--shape-button)] border-[length:var(--border-width-default)] border-[var(--border-muted)] bg-[var(--bg-canvas)] px-[var(--spacing-xs)] py-[var(--spacing-xxs)]"
+                    class="inline-flex min-w-0 max-w-[14rem] items-center gap-1.5 self-start rounded-(--shape-button) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-canvas) px-(--spacing-xs) py-(--spacing-xxs)"
                   >
                     <OrgAvatar
                       :name="previewName"
@@ -213,7 +213,7 @@
                       size="small"
                     />
                     <span
-                      class="min-w-0 truncate text-label-sm font-medium text-[var(--text-default)]"
+                      class="min-w-0 truncate text-label-sm font-medium text-(--text-default)"
                     >
                       {{ previewName }}
                     </span>

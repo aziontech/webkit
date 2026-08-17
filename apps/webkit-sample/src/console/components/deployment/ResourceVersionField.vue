@@ -81,8 +81,8 @@
 <template>
   <!-- The pair sits on one row from `sm` up, and stacks below it: two Selects side by
        side at 320px are two truncated Selects. -->
-  <div class="grid min-w-0 gap-[var(--spacing-sm)] sm:grid-cols-2">
-    <div class="flex min-w-0 flex-col gap-[var(--spacing-xs)]">
+  <div class="grid min-w-0 gap-(--spacing-sm) sm:grid-cols-2">
+    <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
       <Label
         :for="fixed ? undefined : resourceFieldId"
         :required="!fixed"
@@ -94,11 +94,11 @@
            Select, which invites the click that does nothing. -->
       <div
         v-if="fixed"
-        class="flex min-h-9 min-w-0 items-center justify-between gap-[var(--spacing-xs)] rounded-[var(--shape-elements)] border border-[length:var(--border-width-default)] border-[var(--border-muted)] bg-[var(--bg-surface-raised)] px-[var(--spacing-sm)]"
+        class="flex min-h-9 min-w-0 items-center justify-between gap-(--spacing-xs) rounded-(--shape-elements) border border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised) px-(--spacing-sm)"
       >
-        <span class="truncate text-body-sm text-[var(--text-default)]">{{ name }}</span>
+        <span class="truncate text-body-sm text-(--text-default)">{{ name }}</span>
         <i
-          class="pi pi-lock shrink-0 text-[var(--text-muted)]"
+          class="pi pi-lock shrink-0 text-(--text-muted)"
           aria-hidden="true"
         />
       </div>
@@ -126,7 +126,7 @@
       </Select>
     </div>
 
-    <div class="flex min-w-0 flex-col gap-[var(--spacing-xs)]">
+    <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
       <!-- No required marker: a version is always required and always answered (the
            tracking sentinel is the default), so "(Required)" on every one of a dozen rows
            would be a dozen repetitions that tell the reader nothing. When a version IS
@@ -158,7 +158,7 @@
           >
             Track latest Ready
             <template #tag>
-              <span class="shrink-0 text-body-xs text-[var(--text-muted)]">
+              <span class="shrink-0 text-body-xs text-(--text-muted)">
                 resolves at deploy
               </span>
             </template>
@@ -172,14 +172,14 @@
             >
               {{ option.label }}
               <template #tag>
-                <span class="flex shrink-0 items-center gap-[var(--spacing-xs)]">
+                <span class="flex shrink-0 items-center gap-(--spacing-xs)">
                   <Tag
                     v-if="option.isCurrent"
                     label="Current"
                     severity="success"
                     size="medium"
                   />
-                  <span class="text-body-xs text-[var(--text-muted)]">
+                  <span class="text-body-xs text-(--text-muted)">
                     {{ relativeTime(option.createdAt) }}
                   </span>
                 </span>

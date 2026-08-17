@@ -190,7 +190,7 @@
     :padded="false"
     :breadcrumb="[{ label: 'Diagrams' }]"
   >
-    <div class="flex h-full w-full flex-col gap-[var(--spacing-lg)] p-[var(--spacing-lg)]">
+    <div class="flex h-full w-full flex-col gap-(--spacing-lg) p-(--spacing-lg)">
       <PageHeading
         size="large"
         title-id="diagrams-title"
@@ -231,7 +231,7 @@
 
         <!-- Floating, themed canvas controls — webkit IconButtons over the graph. -->
         <div
-          class="absolute bottom-[var(--spacing-md)] left-[var(--spacing-md)] flex flex-col gap-[var(--spacing-xxs)] rounded-[var(--shape-card)] border border-[var(--border-default)] bg-[var(--bg-surface-overlay)] p-[var(--spacing-xxs)] shadow-sm"
+          class="absolute bottom-(--spacing-md) left-(--spacing-md) flex flex-col gap-(--spacing-xxs) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-overlay) p-(--spacing-xxs) shadow-sm"
         >
           <Tooltip
             text="Zoom in"

@@ -194,7 +194,7 @@
       </PageHeading>
 
       <!-- Action toolbar: create on the left, bulk actions gated by selection. -->
-      <div class="layout-section-start flex flex-wrap items-center gap-[var(--spacing-xs)]">
+      <div class="layout-section-start flex flex-wrap items-center gap-(--spacing-xs)">
         <Button
           label="Create project"
           icon="pi pi-plus"
@@ -210,7 +210,7 @@
           @click="createFolder"
         />
         <div
-          class="mx-[var(--spacing-xs)] h-[var(--size-5)] w-px bg-[var(--border-muted)]"
+          class="mx-(--spacing-xs) h-(--size-5) w-px bg-(--border-muted)"
           role="separator"
           aria-orientation="vertical"
         />
@@ -241,10 +241,10 @@
       </div>
 
       <!-- Split: the resource tree + the info panel. -->
-      <div class="layout-group-start flex min-h-0 flex-1 gap-[var(--spacing-lg)]">
-        <section class="flex min-w-0 flex-1 flex-col gap-[var(--spacing-sm)]">
+      <div class="layout-group-start flex min-h-0 flex-1 gap-(--spacing-lg)">
+        <section class="flex min-w-0 flex-1 flex-col gap-(--spacing-sm)">
           <div class="flex items-center justify-between">
-            <h2 class="text-heading-xs text-[var(--text-default)]">Resources</h2>
+            <h2 class="text-heading-xs text-(--text-default)">Resources</h2>
             <Button
               v-if="hasSelection"
               label="Clear selection"
@@ -291,11 +291,11 @@
                       :grow="1"
                       align="end"
                     >
-                      <span class="inline-flex items-center gap-[var(--spacing-xxs)]">
+                      <span class="inline-flex items-center gap-(--spacing-xxs)">
                         Charges
                         <Tooltip text="Estimated month-to-date charges.">
                           <i
-                            class="pi pi-question-circle text-body-xs text-[var(--text-muted)]"
+                            class="pi pi-question-circle text-body-xs text-(--text-muted)"
                             aria-hidden="true"
                           />
                         </Tooltip>
@@ -347,7 +347,7 @@
                           :grow="5"
                         >
                           <span
-                            class="flex min-w-0 items-center gap-[var(--spacing-xxs)]"
+                            class="flex min-w-0 items-center gap-(--spacing-xxs)"
                             :style="{ paddingLeft: `calc(var(--spacing-md) * ${row.depth})` }"
                           >
                             <Tooltip
@@ -367,7 +367,7 @@
                             </Tooltip>
                             <span
                               v-else
-                              class="size-[var(--size-7)] shrink-0"
+                              class="size-(--size-7) shrink-0"
                               aria-hidden="true"
                             />
                             <!-- Groups and Clients get an avatar: they are the
@@ -385,22 +385,22 @@
                             <i
                               v-else
                               :class="accountTypeOf(row.type).icon"
-                              class="shrink-0 text-body-sm text-[var(--text-muted)]"
+                              class="shrink-0 text-body-sm text-(--text-muted)"
                               aria-hidden="true"
                             />
-                            <span class="truncate text-label-sm text-[var(--text-default)]">
+                            <span class="truncate text-label-sm text-(--text-default)">
                               {{ row.name }}
                             </span>
                             <i
                               v-if="row.id === currentAccountId"
-                              class="pi pi-check shrink-0 text-body-xs text-[var(--text-muted)]"
+                              class="pi pi-check shrink-0 text-body-xs text-(--text-muted)"
                               aria-hidden="true"
                             />
                           </span>
                         </Table.Cell>
 
                         <Table.Cell :grow="1">
-                          <span class="text-body-sm text-[var(--text-muted)]">
+                          <span class="text-body-sm text-(--text-muted)">
                             {{ row.type === 'organization' ? '—' : row.id }}
                           </span>
                         </Table.Cell>
@@ -415,7 +415,7 @@
                         </Table.Cell>
 
                         <Table.Cell :grow="1">
-                          <span class="text-body-sm text-[var(--text-muted)]">
+                          <span class="text-body-sm text-(--text-muted)">
                             {{ row.lastAccessed || '—' }}
                           </span>
                         </Table.Cell>
@@ -429,7 +429,7 @@
                           />
                           <span
                             v-else
-                            class="text-body-sm text-[var(--text-muted)]"
+                            class="text-body-sm text-(--text-muted)"
                             >—</span
                           >
                         </Table.Cell>
@@ -445,7 +445,7 @@
                           />
                           <span
                             v-else
-                            class="text-body-sm text-[var(--text-muted)]"
+                            class="text-body-sm text-(--text-muted)"
                             >—</span
                           >
                         </Table.Cell>
@@ -453,7 +453,7 @@
                         <Table.Cell :grow="1">
                           <span
                             v-if="row.labels && row.labels.length"
-                            class="flex flex-wrap items-center gap-[var(--spacing-xxs)]"
+                            class="flex flex-wrap items-center gap-(--spacing-xxs)"
                           >
                             <Tag
                               v-for="label in row.labels"
@@ -465,7 +465,7 @@
                           </span>
                           <span
                             v-else
-                            class="text-body-sm text-[var(--text-muted)]"
+                            class="text-body-sm text-(--text-muted)"
                             >—</span
                           >
                         </Table.Cell>
@@ -520,7 +520,7 @@
 
           <button
             type="button"
-            class="self-start text-label-sm text-[var(--text-link)] transition-colors hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]"
+            class="self-start text-label-sm text-(--text-link) transition-colors hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
             @click="pendingDeletion"
           >
             Resources pending deletion
@@ -530,13 +530,13 @@
         <!-- Info panel: Permissions / Labels for the current selection. -->
         <aside
           v-if="infoPanelOpen"
-          class="hidden w-[var(--container-xs)] shrink-0 lg:block"
+          class="hidden w-(--container-xs) shrink-0 lg:block"
           aria-label="Resource details"
         >
           <CardBox>
             <template #content>
-              <div class="flex flex-col gap-[var(--spacing-md)]">
-                <h2 class="text-heading-xs text-[var(--text-default)]">{{ selectionTitle }}</h2>
+              <div class="flex flex-col gap-(--spacing-md)">
+                <h2 class="text-heading-xs text-(--text-default)">{{ selectionTitle }}</h2>
 
                 <TabView v-model:value="infoTab">
                   <TabView.List>
@@ -560,29 +560,29 @@
                 <template v-else-if="infoTab === 'permissions'">
                   <div
                     v-if="focused"
-                    class="flex flex-col gap-[var(--spacing-md)]"
+                    class="flex flex-col gap-(--spacing-md)"
                   >
-                    <div class="flex items-center gap-[var(--spacing-xs)]">
+                    <div class="flex items-center gap-(--spacing-xs)">
                       <Tag
                         :label="focused.typeLabel ?? accountTypeOf(focused.type).typeLabel"
                         :icon="accountTypeOf(focused.type).icon"
                         :severity="accountTypeOf(focused.type).severity"
                         size="small"
                       />
-                      <span class="truncate text-label-md text-[var(--text-default)]">
+                      <span class="truncate text-label-md text-(--text-default)">
                         {{ focused.name }}
                       </span>
                     </div>
-                    <ul class="flex flex-col gap-[var(--spacing-xs)]">
+                    <ul class="flex flex-col gap-(--spacing-xs)">
                       <li
                         v-for="binding in roleBindings"
                         :key="binding.role"
-                        class="flex items-center justify-between rounded-[var(--shape-elements)] bg-[var(--bg-surface-raised)] px-[var(--spacing-sm)] py-[var(--spacing-xs)]"
+                        class="flex items-center justify-between rounded-(--shape-elements) bg-(--bg-surface-raised) px-(--spacing-sm) py-(--spacing-xs)"
                       >
-                        <span class="text-label-sm text-[var(--text-default)]">{{
+                        <span class="text-label-sm text-(--text-default)">{{
                           binding.role
                         }}</span>
-                        <span class="text-body-xs text-[var(--text-muted)]">
+                        <span class="text-body-xs text-(--text-muted)">
                           {{ binding.members }} member{{ binding.members === 1 ? '' : 's' }}
                         </span>
                       </li>
@@ -599,7 +599,7 @@
                 <template v-else>
                   <div
                     v-if="focused && focusedLabels.length"
-                    class="flex flex-wrap gap-[var(--spacing-xs)]"
+                    class="flex flex-wrap gap-(--spacing-xs)"
                   >
                     <Tag
                       v-for="label in focusedLabels"

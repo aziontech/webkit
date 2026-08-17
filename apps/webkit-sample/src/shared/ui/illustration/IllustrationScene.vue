@@ -45,18 +45,18 @@
 </script>
 
 <template>
-  <!-- `bg-[var(--bg-canvas)]` is required of every divider-grid child: the grid's 1px
+  <!-- `bg-(--bg-canvas)` is required of every divider-grid child: the grid's 1px
        gaps ARE its rules, and a cell that does not fill its own background lets the
        wrapper's border colour flood it. -->
   <article
-    class="flex flex-col gap-[var(--spacing-lg)] bg-[var(--bg-canvas)] p-[var(--spacing-lg)]"
+    class="flex flex-col gap-(--spacing-lg) bg-(--bg-canvas) p-(--spacing-lg)"
   >
     <header
-      class="flex items-center gap-[var(--spacing-xs)] text-label-code-md text-[var(--text-muted)]"
+      class="flex items-center gap-(--spacing-xs) text-label-code-md text-(--text-muted)"
     >
       <i
         :class="scene.icon"
-        class="leading-none text-[var(--primary)]"
+        class="leading-none text-(--primary)"
         aria-hidden="true"
       />
       {{ scene.title }}
@@ -123,9 +123,9 @@
     <!-- ── Caption ────────────────────────────────────────────────── -->
     <p
       v-if="captioned"
-      class="text-pretty text-body-sm text-[var(--text-muted)]"
+      class="text-pretty text-body-sm text-(--text-muted)"
     >
-      <span class="font-medium text-[var(--text-default)]">{{ scene.lead }}</span>
+      <span class="font-medium text-(--text-default)">{{ scene.lead }}</span>
       {{ ' ' }}{{ scene.body }}
     </p>
   </article>

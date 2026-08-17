@@ -94,9 +94,9 @@
              capabilities at once. Its own vertical rhythm is two gaps, not one: the
              block of copy holds together at `lg`, and the CTA stands off it at `xl`. -->
         <div
-          class="flex flex-col justify-start gap-[var(--spacing-xl)] bg-[var(--bg-canvas)] p-[var(--spacing-xl)] sm:col-span-2 lg:col-span-1 lg:row-span-2"
+          class="flex flex-col justify-start gap-(--spacing-xl) bg-(--bg-canvas) p-(--spacing-xl) sm:col-span-2 lg:col-span-1 lg:row-span-2"
         >
-          <div class="flex flex-col gap-[var(--spacing-lg)]">
+          <div class="flex flex-col gap-(--spacing-lg)">
             <!-- The page's overline anatomy — `//` prefix, accent label, blinking cursor —
                  configured on webkit's Overline. `-ml-1` cancels the 4px `pl-1` the
                  component carries, so the label starts on the cell's own left edge. -->
@@ -108,16 +108,16 @@
             >
             <!-- The headline does not enumerate the four cells — they are right beside it
                  and do that themselves. It states the claim they prove. -->
-            <h2 class="m-0 text-balance text-heading-xl text-[var(--text-default)]">
+            <h2 class="m-0 text-balance text-heading-xl text-(--text-default)">
               Everything your workload needs, on one platform
             </h2>
-            <p class="m-0 text-pretty text-heading-sm text-[var(--text-muted)]">
+            <p class="m-0 text-pretty text-heading-sm text-(--text-muted)">
               Build, accelerate, protect, and run AI on the same distributed network — without
               stitching four providers together to do it.
             </p>
           </div>
 
-          <div class="flex items-center gap-[var(--spacing-md)]">
+          <div class="flex items-center gap-(--spacing-md)">
             <Button
               label="Read the docs"
               kind="outlined"
@@ -134,7 +134,7 @@
         <article
           v-for="capability in capabilities"
           :key="capability.key"
-          class="group/capability flex flex-col bg-[var(--bg-canvas)]"
+          class="group/capability flex flex-col bg-(--bg-canvas)"
         >
           <!-- Fixed height, never stretched: the grid sizes every cell in a row to the
                tallest one, and a growable panel would hand that slack to the art — so two
@@ -142,7 +142,7 @@
                differ in length. `shrink-0` + a fixed height parks the slack under the
                caption instead, which is what keeps all four panels on one line. -->
           <div
-            class="flex h-[clamp(180px,20vw,258px)] shrink-0 items-center justify-center overflow-hidden border-b border-[var(--border-default)] bg-[var(--bg-surface-raised)]"
+            class="flex h-[clamp(180px,20vw,258px)] shrink-0 items-center justify-center overflow-hidden border-b border-(--border-default) bg-(--bg-surface-raised)"
           >
             <!-- Decorative: the caption beneath already carries the meaning, so the
                  illustration takes no `ariaLabel` and stays hidden from assistive tech.
@@ -166,11 +166,11 @@
             />
           </div>
 
-          <div class="flex flex-col gap-[var(--spacing-xxs)] p-[var(--spacing-xl)]">
-            <h3 class="m-0 text-pretty text-heading-xs text-[var(--text-default)]">
+          <div class="flex flex-col gap-(--spacing-xxs) p-(--spacing-xl)">
+            <h3 class="m-0 text-pretty text-heading-xs text-(--text-default)">
               {{ capability.title }}
             </h3>
-            <p class="m-0 text-pretty text-heading-xxs text-[var(--text-muted)]">
+            <p class="m-0 text-pretty text-heading-xxs text-(--text-muted)">
               {{ capability.description }}
             </p>
           </div>

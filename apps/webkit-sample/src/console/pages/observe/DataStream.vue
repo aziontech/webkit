@@ -198,24 +198,24 @@
            which is what `flex-1 justify-center` would have done. -->
       <div
         v-if="accountEmpty"
-        class="my-auto flex w-full flex-col py-[var(--spacing-xl)]"
+        class="my-auto flex w-full flex-col py-(--spacing-xl)"
       >
         <ProductFirstUse :product="firstUse" />
       </div>
 
       <section
         v-else
-        class="layout-section-start flex min-w-0 flex-col gap-[var(--layout-section-gap)]"
+        class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)"
       >
         <!-- ONE band: the controls, the filters and the rows they narrow. -->
-        <section class="flex min-w-0 flex-col gap-[var(--layout-group-gap)]">
+        <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
           <ControlsHeader v-if="scopedStreams.length">
             <InputText
               v-model="search"
               size="large"
               placeholder="Search data streams"
               aria-label="Search data streams"
-              class="min-w-36 grow basis-[var(--container-2xs)]"
+              class="min-w-36 grow basis-(--container-2xs)"
             >
               <template #iconLeft>
                 <i
@@ -250,29 +250,29 @@
             v-if="!scopedStreams.length"
             class="flex min-h-0 flex-1 items-center justify-center"
           >
-            <CardBox class="w-full max-w-[var(--container-2xl)]">
+            <CardBox class="w-full max-w-(--container-2xl)">
               <template #content>
                 <EmptyState
                   size="medium"
                   title="No data streams yet"
                   description="Create a stream to ship edge events to your own observability or storage platform."
-                  class="flex-1 rounded-[var(--shape-card)] border border-dashed border-[var(--border-default)] bg-[var(--bg-surface-raised)]"
+                  class="flex-1 rounded-(--shape-card) border border-dashed border-(--border-default) bg-(--bg-surface-raised)"
                 >
                   <template #icon>
                     <span class="relative flex size-10 items-center justify-center">
                       <span
                         aria-hidden="true"
-                        class="absolute left-1/2 top-1/2 size-14 -translate-x-1/2 -translate-y-1/2 rounded-[var(--radius-xl,12px)] border border-[var(--border-strong)] bg-[var(--bg-canvas)] opacity-5"
+                        class="absolute left-1/2 top-1/2 size-14 -translate-x-1/2 -translate-y-1/2 rounded-[var(--radius-xl,12px)] border border-(--border-strong) bg-(--bg-canvas) opacity-5"
                       />
                       <span
                         aria-hidden="true"
-                        class="absolute left-1/2 top-1/2 size-12 -translate-x-1/2 -translate-y-1/2 rounded-[var(--shape-card)] border border-[var(--border-strong)] bg-[var(--bg-canvas)] opacity-10"
+                        class="absolute left-1/2 top-1/2 size-12 -translate-x-1/2 -translate-y-1/2 rounded-(--shape-card) border border-(--border-strong) bg-(--bg-canvas) opacity-10"
                       />
                       <span
-                        class="relative flex size-10 items-center justify-center rounded-[var(--shape-elements)] border border-[var(--border-default)] bg-[var(--bg-surface)]"
+                        class="relative flex size-10 items-center justify-center rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface)"
                       >
                         <i
-                          class="ai ai-data-stream text-[1rem] leading-none text-[var(--text-default)]"
+                          class="ai ai-data-stream text-[1rem] leading-none text-(--text-default)"
                           aria-hidden="true"
                         />
                       </span>

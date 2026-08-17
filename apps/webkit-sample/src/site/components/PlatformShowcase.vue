@@ -118,9 +118,9 @@
         <article
           v-for="panel in panels"
           :key="panel.key"
-          class="flex flex-col gap-[var(--spacing-lg)] bg-[var(--bg-canvas)] p-[var(--spacing-lg)]"
+          class="flex flex-col gap-(--spacing-lg) bg-(--bg-canvas) p-(--spacing-lg)"
         >
-          <header class="text-label-code-md text-[var(--text-muted)]">{{ panel.title }}</header>
+          <header class="text-label-code-md text-(--text-muted)">{{ panel.title }}</header>
 
           <!-- ── Visual ─────────────────────────────────────────────────── -->
           <!-- Panel 1: git branch graph -->
@@ -184,7 +184,7 @@
             <span
               v-for="node in commitNodes"
               :key="`node-${node}`"
-              class="absolute size-1.5 -translate-x-1/2 -translate-y-1/2 bg-[var(--color-orange-500)]"
+              class="absolute size-1.5 -translate-x-1/2 -translate-y-1/2 bg-(--color-orange-500)"
               :style="{ left: node + '%', top: '55%' }"
               aria-hidden="true"
             />
@@ -193,11 +193,11 @@
             <span
               v-for="chip in branchChips"
               :key="chip.label"
-              class="absolute -translate-x-1/2 -translate-y-1/2 whitespace-nowrap rounded-[var(--shape-elements)] px-[var(--spacing-xs)] py-[var(--spacing-xxs)] text-label-code-sm"
+              class="absolute -translate-x-1/2 -translate-y-1/2 whitespace-nowrap rounded-(--shape-elements) px-(--spacing-xs) py-(--spacing-xxs) text-label-code-sm"
               :class="
                 chip.primary
-                  ? 'bg-[var(--color-orange-500)] text-[var(--color-base-white)]'
-                  : 'border border-[var(--border-default)] bg-[var(--bg-surface-raised)] text-[var(--text-default)]'
+                  ? 'bg-(--color-orange-500) text-(--color-base-white)'
+                  : 'border border-(--border-default) bg-(--bg-surface-raised) text-(--text-default)'
               "
               :style="{ left: chip.left, top: chip.top }"
             >
@@ -210,21 +210,21 @@
             v-else-if="panel.key === 'tokens'"
             class="flex h-48 flex-col"
           >
-            <div class="border-b border-[var(--border-default)]" />
+            <div class="border-b border-(--border-default)" />
             <div
-              class="flex flex-1 flex-col justify-center gap-[var(--spacing-xxs)] pt-[var(--spacing-sm)]"
+              class="flex flex-1 flex-col justify-center gap-(--spacing-xxs) pt-(--spacing-sm)"
             >
               <div
                 v-for="row in tokens"
                 :key="row.token"
-                class="grid grid-cols-[1fr_1.5fr_auto] items-center gap-[var(--spacing-sm)] rounded-[var(--shape-elements)] px-[var(--spacing-xs)] py-[var(--spacing-xxs)] text-label-code-sm"
+                class="grid grid-cols-[1fr_1.5fr_auto] items-center gap-(--spacing-sm) rounded-(--shape-elements) px-(--spacing-xs) py-(--spacing-xxs) text-label-code-sm"
                 :class="
                   row.highlight
-                    ? 'bg-gradient-to-r from-[var(--color-orange-500)] to-[var(--color-orange-600)] text-[var(--color-base-white)]'
-                    : 'text-[var(--text-muted)]'
+                    ? 'bg-gradient-to-r from-(--color-orange-500) to-(--color-orange-600) text-(--color-base-white)'
+                    : 'text-(--text-muted)'
                 "
               >
-                <span :class="row.highlight ? '' : 'text-[var(--text-default)]'">{{
+                <span :class="row.highlight ? '' : 'text-(--text-default)'">{{
                   row.name
                 }}</span>
                 <span>{{ row.token }}</span>
@@ -323,21 +323,21 @@
           <!-- Panel 4: usage chart -->
           <div
             v-else-if="panel.key === 'usage'"
-            class="flex h-48 flex-col gap-[var(--spacing-sm)]"
+            class="flex h-48 flex-col gap-(--spacing-sm)"
           >
-            <div class="text-big-number-sm tabular-nums text-[var(--text-default)]">12</div>
+            <div class="text-big-number-sm tabular-nums text-(--text-default)">12</div>
 
             <div class="relative flex-1">
               <!-- bars -->
-              <div class="absolute inset-0 flex items-end justify-between gap-[var(--spacing-xs)]">
+              <div class="absolute inset-0 flex items-end justify-between gap-(--spacing-xs)">
                 <div
                   v-for="(bar, i) in usageBars"
                   :key="`bar-${i}`"
                   class="min-w-0 flex-1"
                   :class="
                     bar.peak
-                      ? 'bg-gradient-to-t from-[var(--color-orange-600)] to-[var(--color-orange-400)]'
-                      : 'bg-[var(--bg-surface-raised)]'
+                      ? 'bg-gradient-to-t from-(--color-orange-600) to-(--color-orange-400)'
+                      : 'bg-(--bg-surface-raised)'
                   "
                   :style="{ height: bar.height + '%' }"
                 />
@@ -367,8 +367,8 @@
                 class="absolute size-2 -translate-x-1/2 -translate-y-1/2 border"
                 :class="
                   node.peak
-                    ? 'border-[var(--color-base-white)] bg-[var(--color-base-white)]'
-                    : 'border-[var(--color-orange-400)] bg-[var(--bg-canvas)]'
+                    ? 'border-(--color-base-white) bg-(--color-base-white)'
+                    : 'border-(--color-orange-400) bg-(--bg-canvas)'
                 "
                 :style="{ left: node.x + '%', top: node.y + '%' }"
                 aria-hidden="true"
@@ -377,7 +377,7 @@
 
             <!-- x-axis labels -->
             <div
-              class="flex items-center justify-between text-label-code-sm text-[var(--text-muted)]"
+              class="flex items-center justify-between text-label-code-sm text-(--text-muted)"
             >
               <span
                 v-for="(bar, i) in usageBars"
@@ -388,8 +388,8 @@
           </div>
 
           <!-- ── Caption ────────────────────────────────────────────────── -->
-          <p class="text-pretty text-body-sm text-[var(--text-muted)]">
-            <span class="font-medium text-[var(--text-default)]">{{ panel.lead }}</span>
+          <p class="text-pretty text-body-sm text-(--text-muted)">
+            <span class="font-medium text-(--text-default)">{{ panel.lead }}</span>
             {{ ' ' }}{{ panel.body }}
           </p>
         </article>

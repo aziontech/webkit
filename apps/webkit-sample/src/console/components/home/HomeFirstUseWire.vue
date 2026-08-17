@@ -36,36 +36,36 @@
 
 <template>
   <div
-    class="flex min-h-full flex-col justify-center gap-[var(--layout-section-gap)] py-[var(--spacing-xl)]"
+    class="flex min-h-full flex-col justify-center gap-(--layout-section-gap) py-(--spacing-xl)"
     aria-hidden="true"
   >
     <!-- The hero: the line, then the ⌘K field at its real width. -->
-    <div class="flex flex-col items-center gap-[var(--spacing-lg)]">
+    <div class="flex flex-col items-center gap-(--spacing-lg)">
       <Skeleton
         width="19rem"
         height="2.375rem"
       />
-      <div class="flex w-full max-w-[var(--container-2xl)] flex-col items-stretch">
+      <div class="flex w-full max-w-(--container-2xl) flex-col items-stretch">
         <Skeleton height="2.5rem" />
       </div>
     </div>
 
     <!-- The card row, at FirstUseCard's own anatomy: the 4/3 stage, then the text
          block, then the line the action sits on. -->
-    <div class="grid grid-cols-1 gap-[var(--spacing-lg)] md:grid-cols-3">
+    <div class="grid grid-cols-1 gap-(--spacing-lg) md:grid-cols-3">
       <CardBox
         v-for="door in DOORS"
         :key="door"
         :padded="false"
       >
         <template #content>
-          <div class="flex h-full flex-col p-[var(--spacing-sm)]">
+          <div class="flex h-full flex-col p-(--spacing-sm)">
             <!-- The stage is REAL — same frame, same fill, same 4/3 — and only the art
                  inside it is standing in, at the 170×128 canvas every scene is drawn
                  on. Leaving the stage blank made the largest region of the wire the
                  one region that said nothing. -->
             <div
-              class="flex aspect-4/3 shrink-0 items-center justify-center overflow-hidden rounded-[var(--shape-elements)] border border-[var(--border-muted)] bg-[var(--bg-surface-raised)]"
+              class="flex aspect-4/3 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
             >
               <Skeleton
                 width="170px"
@@ -73,13 +73,13 @@
               />
             </div>
             <div
-              class="flex flex-1 flex-col gap-[var(--spacing-md)] px-[var(--spacing-sm)] pb-[var(--spacing-sm)] pt-[var(--spacing-md)]"
+              class="flex flex-1 flex-col gap-(--spacing-md) px-(--spacing-sm) pb-(--spacing-sm) pt-(--spacing-md)"
             >
               <!-- One line of title over two of description, each at the line-height
                    of the type it stands in for, and an action at the height of the
                    TALLEST of the three (the domain card's input, not a button) —
                    equal-height grid tracks mean that card sets the row. -->
-              <div class="flex flex-1 flex-col gap-[var(--spacing-xs)]">
+              <div class="flex flex-1 flex-col gap-(--spacing-xs)">
                 <Skeleton
                   width="55%"
                   height="1.25rem"

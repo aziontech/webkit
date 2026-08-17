@@ -393,7 +393,7 @@
       />
       <!-- The page's parent section: it spaces the bands below at
            --layout-section-gap, whichever branch renders. -->
-      <section class="layout-section-start flex min-w-0 flex-col gap-[var(--layout-section-gap)]">
+      <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)">
         <!-- One request backs all three bands, so its failure is reported once, at
              view level, with the recovery attached to the message itself. -->
         <Message
@@ -406,7 +406,7 @@
 
         <template v-else>
           <!-- Subscription details -->
-          <div class="flex flex-col gap-[var(--layout-group-gap)]">
+          <div class="flex flex-col gap-(--layout-group-gap)">
             <SectionHeading
               title="Subscription details"
               description="An overview of your plan, seats, and next billing date."
@@ -430,12 +430,12 @@
                      reflowing the card. -->
                 <div
                   v-if="loading"
-                  class="grid grid-cols-2 gap-x-[var(--spacing-lg)] gap-y-[var(--spacing-md)] sm:grid-cols-3 xl:grid-cols-5"
+                  class="grid grid-cols-2 gap-x-(--spacing-lg) gap-y-(--spacing-md) sm:grid-cols-3 xl:grid-cols-5"
                 >
                   <div
                     v-for="(fact, index) in SUBSCRIPTION_SKELETON"
                     :key="index"
-                    class="flex flex-col gap-[var(--spacing-xxs)]"
+                    class="flex flex-col gap-(--spacing-xxs)"
                   >
                     <Skeleton
                       kind="shape"
@@ -460,10 +460,10 @@
                      the type scale. -->
                 <dl
                   v-else
-                  class="grid grid-cols-2 gap-x-[var(--spacing-lg)] gap-y-[var(--spacing-md)] sm:grid-cols-3 xl:grid-cols-5"
+                  class="grid grid-cols-2 gap-x-(--spacing-lg) gap-y-(--spacing-md) sm:grid-cols-3 xl:grid-cols-5"
                 >
-                  <div class="flex min-w-0 flex-col gap-[var(--spacing-xxs)]">
-                    <dt class="text-label-sm text-[var(--text-muted)]">Total amount</dt>
+                  <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                    <dt class="text-label-sm text-(--text-muted)">Total amount</dt>
                     <dd class="min-w-0">
                       <Currency
                         :value="totalAmount"
@@ -473,14 +473,14 @@
                     </dd>
                   </div>
 
-                  <div class="flex min-w-0 flex-col gap-[var(--spacing-xxs)]">
-                    <dt class="text-label-sm text-[var(--text-muted)]">Your plan</dt>
+                  <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                    <dt class="text-label-sm text-(--text-muted)">Your plan</dt>
                     <!-- The seat price is stacked, not inline-with-wrap: at this
                          column width it wrapped on some viewports and sat beside the
                          name on others, so the cell changed height with the window.
                          Stacked, it is the same two lines everywhere. -->
-                    <dd class="flex min-w-0 flex-col items-start gap-[var(--spacing-xxs)]">
-                      <span class="max-w-full truncate text-heading-md text-[var(--text-default)]">
+                    <dd class="flex min-w-0 flex-col items-start gap-(--spacing-xxs)">
+                      <span class="max-w-full truncate text-heading-md text-(--text-default)">
                         {{ subscription.plan }}
                       </span>
                       <Tag
@@ -492,23 +492,23 @@
                     </dd>
                   </div>
 
-                  <div class="flex min-w-0 flex-col gap-[var(--spacing-xxs)]">
-                    <dt class="text-label-sm text-[var(--text-muted)]">Seats</dt>
-                    <dd class="text-heading-md tabular-nums text-[var(--text-default)]">
+                  <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                    <dt class="text-label-sm text-(--text-muted)">Seats</dt>
+                    <dd class="text-heading-md tabular-nums text-(--text-default)">
                       {{ subscription.seats }}
                     </dd>
                   </div>
 
-                  <div class="flex min-w-0 flex-col gap-[var(--spacing-xxs)]">
-                    <dt class="text-label-sm text-[var(--text-muted)]">Next invoice on</dt>
-                    <dd class="text-heading-md tabular-nums text-[var(--text-default)]">
+                  <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                    <dt class="text-label-sm text-(--text-muted)">Next invoice on</dt>
+                    <dd class="text-heading-md tabular-nums text-(--text-default)">
                       {{ formatDate(subscription.nextInvoice) }}
                     </dd>
                   </div>
 
-                  <div class="flex min-w-0 flex-col gap-[var(--spacing-xxs)]">
-                    <dt class="text-label-sm text-[var(--text-muted)]">Cycle</dt>
-                    <dd class="text-heading-md text-[var(--text-default)]">
+                  <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                    <dt class="text-label-sm text-(--text-muted)">Cycle</dt>
+                    <dd class="text-heading-md text-(--text-default)">
                       {{ subscription.cycle }}
                     </dd>
                   </div>
@@ -518,7 +518,7 @@
           </div>
 
           <!-- Payment information -->
-          <div class="flex flex-col gap-[var(--layout-group-gap)]">
+          <div class="flex flex-col gap-(--layout-group-gap)">
             <SectionHeading
               title="Payment information"
               description="The card we charge and the address invoices are sent to."
@@ -538,12 +538,12 @@
               <template #content>
                 <div
                   v-if="loading"
-                  class="grid grid-cols-2 gap-x-[var(--spacing-lg)] gap-y-[var(--spacing-md)] xl:grid-cols-4"
+                  class="grid grid-cols-2 gap-x-(--spacing-lg) gap-y-(--spacing-md) xl:grid-cols-4"
                 >
                   <div
                     v-for="(fact, index) in PAYMENT_SKELETON"
                     :key="index"
-                    class="flex flex-col gap-[var(--spacing-xxs)]"
+                    class="flex flex-col gap-(--spacing-xxs)"
                   >
                     <Skeleton
                       kind="shape"
@@ -567,24 +567,24 @@
                      settings the user confirms, not figures they read at a glance. -->
                 <dl
                   v-else
-                  class="grid grid-cols-2 gap-x-[var(--spacing-lg)] gap-y-[var(--spacing-md)] xl:grid-cols-4"
+                  class="grid grid-cols-2 gap-x-(--spacing-lg) gap-y-(--spacing-md) xl:grid-cols-4"
                 >
-                  <div class="flex min-w-0 flex-col gap-[var(--spacing-xxs)]">
-                    <dt class="text-label-sm text-[var(--text-muted)]">Card</dt>
-                    <dd class="flex min-w-0 items-center gap-[var(--spacing-xs)]">
+                  <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                    <dt class="text-label-sm text-(--text-muted)">Card</dt>
+                    <dd class="flex min-w-0 items-center gap-(--spacing-xs)">
                       <span
-                        class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-[var(--shape-elements)] border-[length:var(--border-width-default)] border-[var(--border-muted)] bg-[var(--bg-surface-raised)]"
+                        class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-elements) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised)"
                       >
                         <i
-                          class="pi pi-credit-card text-body-lg leading-none text-[var(--text-default)]"
+                          class="pi pi-credit-card text-body-lg leading-none text-(--text-default)"
                           aria-hidden="true"
                         />
                       </span>
                       <span class="flex min-w-0 flex-col">
-                        <span class="truncate text-label-lg text-[var(--text-default)]">
+                        <span class="truncate text-label-lg text-(--text-default)">
                           {{ paymentMethod.brand }}
                         </span>
-                        <span class="text-body-xs tabular-nums text-[var(--text-muted)]">
+                        <span class="text-body-xs tabular-nums text-(--text-muted)">
                           <span class="sr-only">Card ending in {{ paymentMethod.last4 }}</span>
                           <span aria-hidden="true">•••• {{ paymentMethod.last4 }}</span>
                         </span>
@@ -592,22 +592,22 @@
                     </dd>
                   </div>
 
-                  <div class="flex min-w-0 flex-col gap-[var(--spacing-xxs)]">
-                    <dt class="text-label-sm text-[var(--text-muted)]">Expiry date</dt>
-                    <dd class="text-label-lg tabular-nums text-[var(--text-default)]">
+                  <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                    <dt class="text-label-sm text-(--text-muted)">Expiry date</dt>
+                    <dd class="text-label-lg tabular-nums text-(--text-default)">
                       {{ paymentMethod.expires }}
                     </dd>
                   </div>
 
-                  <div class="flex min-w-0 flex-col gap-[var(--spacing-xxs)]">
-                    <dt class="text-label-sm text-[var(--text-muted)]">Billing email</dt>
-                    <dd class="truncate text-label-lg text-[var(--text-default)]">
+                  <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                    <dt class="text-label-sm text-(--text-muted)">Billing email</dt>
+                    <dd class="truncate text-label-lg text-(--text-default)">
                       {{ paymentMethod.email }}
                     </dd>
                   </div>
 
-                  <div class="flex min-w-0 flex-col gap-[var(--spacing-xxs)]">
-                    <dt class="text-label-sm text-[var(--text-muted)]">Auto-renewal</dt>
+                  <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                    <dt class="text-label-sm text-(--text-muted)">Auto-renewal</dt>
                     <dd class="min-w-0">
                       <StatusIndicator
                         :severity="paymentMethod.autoRenewal ? 'success' : 'neutral'"
@@ -621,7 +621,7 @@
           </div>
 
           <!-- Invoices -->
-          <div class="flex flex-col gap-[var(--layout-group-gap)]">
+          <div class="flex flex-col gap-(--layout-group-gap)">
             <SectionHeading
               title="Invoices"
               description="Your complete invoice history, including payment details."
@@ -639,7 +639,7 @@
                 size="large"
                 placeholder="Search invoices"
                 aria-label="Search invoices"
-                class="min-w-36 grow basis-[var(--container-2xs)]"
+                class="min-w-36 grow basis-(--container-2xs)"
               >
                 <template #iconLeft>
                   <i
@@ -677,7 +677,7 @@
                        the three controls that act on the table rather than filter it,
                        all `medium` so the row shares one height. -->
                   <template #toolbar>
-                    <div class="flex w-full items-center justify-end gap-[var(--spacing-xs)]">
+                    <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
                       <Table.RefreshButton />
                       <Table.Export />
                       <Table.ColumnSelector />
@@ -728,7 +728,7 @@
                   <!-- The sequence number orders the history; the Invoice ID
                        identifies it, so only one of the two is emphasized. -->
                   <template #cell-seq="{ value }">
-                    <span class="tabular-nums text-[var(--text-muted)]">{{ value }}</span>
+                    <span class="tabular-nums text-(--text-muted)">{{ value }}</span>
                   </template>
 
                   <template #cell-seats="{ value }">

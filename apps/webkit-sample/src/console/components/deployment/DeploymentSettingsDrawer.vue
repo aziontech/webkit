@@ -196,9 +196,9 @@
           @submit.prevent="submit"
         >
           <PanelHeader class="w-full">
-            <div class="flex min-w-0 flex-col gap-[var(--spacing-xxs)]">
+            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
               <DrawerTitle>New Deployment Settings</DrawerTitle>
-              <p class="text-body-sm text-[var(--text-muted)]">
+              <p class="text-body-sm text-(--text-muted)">
                 A strategy binds an application, and optionally a firewall and a custom page.
                 Deployments started from any resource apply it.
               </p>
@@ -210,13 +210,13 @@
             <!-- Compact modal body: fields --spacing-md apart. One flag locks the whole
                  scope while the request is in flight. -->
             <fieldset
-              class="m-0 flex min-w-0 flex-col gap-[var(--spacing-md)] border-0 p-0"
+              class="m-0 flex min-w-0 flex-col gap-(--spacing-md) border-0 p-0"
               :disabled="submitting"
             >
               <legend class="sr-only">New Deployment Settings</legend>
 
               <!-- WHAT the strategy is. -->
-              <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
+              <div class="flex w-full flex-col gap-(--spacing-xs)">
                 <Label
                   :for="nameFieldId"
                   required
@@ -247,7 +247,7 @@
               <!-- Full-bleed boundary: what the strategy IS, above; what it BINDS,
                    below. The wrapper carries the negative inset so the Divider itself
                    stays untouched. -->
-              <div class="-mx-[var(--spacing-lg)]">
+              <div class="-mx-(--spacing-lg)">
                 <Divider />
               </div>
 
@@ -257,7 +257,7 @@
               <div
                 v-for="field in bindingFields"
                 :key="field.key"
-                class="flex w-full flex-col gap-[var(--spacing-xs)]"
+                class="flex w-full flex-col gap-(--spacing-xs)"
               >
                 <Label :for="field.id">{{ field.label }}</Label>
                 <Select

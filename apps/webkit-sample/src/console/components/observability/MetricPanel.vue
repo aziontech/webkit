@@ -64,17 +64,17 @@
 <template>
   <CardBox>
     <template #content>
-      <div class="flex min-w-0 flex-col gap-[var(--spacing-sm)]">
-        <div class="flex min-w-0 items-baseline justify-between gap-[var(--spacing-xs)]">
-          <h3 class="min-w-0 truncate text-label-md text-[var(--text-default)]">{{ title }}</h3>
-          <span class="shrink-0 text-body-sm text-[var(--text-muted)]">{{ period }}</span>
+      <div class="flex min-w-0 flex-col gap-(--spacing-sm)">
+        <div class="flex min-w-0 items-baseline justify-between gap-(--spacing-xs)">
+          <h3 class="min-w-0 truncate text-label-md text-(--text-default)">{{ title }}</h3>
+          <span class="shrink-0 text-body-sm text-(--text-muted)">{{ period }}</span>
         </div>
 
-        <p class="flex items-baseline gap-[var(--spacing-xxs)]">
-          <span class="text-heading-md text-[var(--text-default)]">{{ latest }}</span>
+        <p class="flex items-baseline gap-(--spacing-xxs)">
+          <span class="text-heading-md text-(--text-default)">{{ latest }}</span>
           <span
             v-if="unit"
-            class="text-body-sm text-[var(--text-muted)]"
+            class="text-body-sm text-(--text-muted)"
             >{{ unit }}</span
           >
         </p>
@@ -84,7 +84,7 @@
         <svg
           :viewBox="`0 0 ${WIDTH} ${HEIGHT}`"
           preserveAspectRatio="none"
-          class="h-16 w-full text-[var(--primary)]"
+          class="h-16 w-full text-(--primary)"
           aria-hidden="true"
         >
           <polygon

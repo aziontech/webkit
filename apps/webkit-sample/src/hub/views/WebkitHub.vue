@@ -181,7 +181,7 @@
        height:100dvh; overflow:hidden, so this docs shell is a full-height row —
        the sidebar rail fixed on the left, the content column scrolling on the
        right. -->
-  <div class="flex h-dvh overflow-hidden bg-[var(--bg-canvas)] text-[var(--text-default)]">
+  <div class="flex h-dvh overflow-hidden bg-(--bg-canvas) text-(--text-default)">
     <!-- Global navigation rail (hidden below md, matching the docs shell). -->
     <div class="hidden shrink-0 md:block">
       <HubSidebar
@@ -214,7 +214,7 @@
              System. -->
             <template #actions>
               <div
-                class="flex flex-col items-stretch gap-[var(--spacing-sm)] sm:flex-row sm:items-center"
+                class="flex flex-col items-stretch gap-(--spacing-sm) sm:flex-row sm:items-center"
               >
                 <Button
                   label="Getting Started"
@@ -248,7 +248,7 @@
               level="h2"
               size="section"
               margin-bottom=""
-              class="border-b border-[var(--border-default)] p-[var(--spacing-xl)]"
+              class="border-b border-(--border-default) p-(--spacing-xl)"
               title="Explore the Hub"
               description="Four ways in — get set up, learn the foundations, browse every component, and grab the brand assets."
             />
@@ -263,19 +263,19 @@
                 v-for="section in hubSections"
                 :key="section.id"
                 type="button"
-                class="relative flex h-full min-h-[260px] flex-col justify-center bg-[var(--bg-canvas)] p-[var(--spacing-xl)] text-left transition-colors duration-moderate-01 ease-productive-entrance hover:bg-[var(--bg-surface)] focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--ring-color)] motion-reduce:transition-none"
+                class="relative flex h-full min-h-[260px] flex-col justify-center bg-(--bg-canvas) p-(--spacing-xl) text-left transition-colors duration-moderate-01 ease-productive-entrance hover:bg-(--bg-surface) focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) motion-reduce:transition-none"
                 @click="(event) => onNavigate(event, { id: section.id })"
               >
-                <span class="mb-[var(--spacing-md)]">
+                <span class="mb-(--spacing-md)">
                   <i
-                    :class="[section.icon, 'text-heading-sm text-[var(--text-default)]']"
+                    :class="[section.icon, 'text-heading-sm text-(--text-default)']"
                     aria-hidden="true"
                   />
                 </span>
-                <span class="mb-[var(--spacing-sm)] text-heading-xxs text-[var(--text-default)]">
+                <span class="mb-(--spacing-sm) text-heading-xxs text-(--text-default)">
                   {{ section.label }}
                 </span>
-                <span class="text-pretty text-body-xxs text-[var(--text-muted)]">{{
+                <span class="text-pretty text-body-xxs text-(--text-muted)">{{
                   section.description
                 }}</span>
               </button>
@@ -285,14 +285,14 @@
           <!-- Why webkit: same framed module as Browse — a header row (border-b)
            over a box grid of three feature cards. No outer padding; the column's
            border-x owns the sides, and the band's border-t its top. -->
-          <section class="w-full border-t border-[var(--border-default)]">
+          <section class="w-full border-t border-(--border-default)">
             <!-- Module header row: keeps its own p-xxl; a single border-b divides
                it from the cards grid below. -->
             <PageHeader
               level="h2"
               size="section"
               margin-bottom=""
-              class="border-b border-[var(--border-default)] p-[var(--spacing-xl)]"
+              class="border-b border-(--border-default) p-(--spacing-xl)"
               title="One kit powers every Azion interface"
               description="Webkit has grown inside Azion — the same components, tokens, and patterns behind the Azion Console, shaped by the teams who depend on it every day."
             />
@@ -307,15 +307,15 @@
               <div
                 v-for="feat in powersFeatures"
                 :key="feat.title"
-                class="flex flex-col bg-[var(--bg-canvas)] p-[var(--spacing-xl)]"
+                class="flex flex-col bg-(--bg-canvas) p-(--spacing-xl)"
               >
-                <AsciiAsterisk class="mb-[var(--spacing-md)] text-[var(--primary)]" />
+                <AsciiAsterisk class="mb-(--spacing-md) text-(--primary)" />
                 <h3
-                  class="mb-[var(--spacing-sm)] min-h-[2lh] max-w-[20ch] text-balance text-heading-xxs text-[var(--text-default)]"
+                  class="mb-(--spacing-sm) min-h-[2lh] max-w-[20ch] text-balance text-heading-xxs text-(--text-default)"
                 >
                   {{ feat.title }}
                 </h3>
-                <p class="flex-1 text-pretty text-body-xxs text-[var(--text-muted)]">
+                <p class="flex-1 text-pretty text-body-xxs text-(--text-muted)">
                   {{ feat.body }}
                 </p>
               </div>

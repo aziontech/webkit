@@ -36,8 +36,8 @@
 </script>
 
 <template>
-  <div class="flex flex-col gap-[var(--spacing-lg)]">
-    <div class="flex flex-col gap-[var(--spacing-xs)]">
+  <div class="flex flex-col gap-(--spacing-lg)">
+    <div class="flex flex-col gap-(--spacing-xs)">
       <!-- `required` here is PERSISTENT — the indicator states the field must be
            answered from first render, decoupled from the amber prompt below, which
            is only revealed by a submit the user actually pressed. -->
@@ -56,7 +56,7 @@
       />
     </div>
 
-    <div class="flex flex-col gap-[var(--spacing-xs)]">
+    <div class="flex flex-col gap-(--spacing-xs)">
       <Label required>What best describes your role?</Label>
       <BoxGridSelection
         v-model="form.role"

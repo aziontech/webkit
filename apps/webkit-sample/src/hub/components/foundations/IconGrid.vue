@@ -94,7 +94,7 @@
             v-if="searchQuery"
             #iconRight
           >
-            <span class="text-[11px] font-code text-[var(--text-muted)]">
+            <span class="text-[11px] font-code text-(--text-muted)">
               {{ filteredCount }} / {{ totalCount }}
             </span>
           </template>
@@ -121,16 +121,16 @@
       class="flex flex-col gap-3"
     >
       <div
-        class="flex items-baseline justify-between gap-[var(--spacing-sm)] px-[var(--spacing-xxs)]"
+        class="flex items-baseline justify-between gap-(--spacing-sm) px-(--spacing-xxs)"
       >
-        <h3 class="m-0 text-overline-sm uppercase tracking-widest text-[var(--text-muted)]">
+        <h3 class="m-0 text-overline-sm uppercase tracking-widest text-(--text-muted)">
           Azion Icons
         </h3>
-        <span class="text-body-xs text-[var(--text-muted)]"
+        <span class="text-body-xs text-(--text-muted)"
           >{{ azionIcons.length }} / {{ totalAzion }}</span
         >
       </div>
-      <p class="m-0 mb-2 text-body-xs text-[var(--text-muted)]">
+      <p class="m-0 mb-2 text-body-xs text-(--text-muted)">
         Custom Azion product and technology icons.
       </p>
 
@@ -138,7 +138,7 @@
         <button
           v-for="icon in azionIcons"
           :key="icon.name"
-          class="group relative flex cursor-pointer flex-col items-center justify-center gap-2 border border-[var(--border-default)] bg-surface px-4 py-4 font-inherit text-inherit transition-colors duration-fast-02 ease-productive-entrance hover:z-[1] hover:border-dashed hover:border-[var(--primary)] hover:bg-primary/5 focus-visible:z-[1] focus-visible:border-dashed focus-visible:border-[var(--primary)] focus-visible:outline-none motion-reduce:transition-none"
+          class="group relative flex cursor-pointer flex-col items-center justify-center gap-2 border border-(--border-default) bg-surface px-4 py-4 font-inherit text-inherit transition-colors duration-fast-02 ease-productive-entrance hover:z-[1] hover:border-dashed hover:border-(--primary) hover:bg-primary/5 focus-visible:z-[1] focus-visible:border-dashed focus-visible:border-(--primary) focus-visible:outline-none motion-reduce:transition-none"
           :title="'Click to copy: ' + icon.icon"
           @click="copyIconCode(icon)"
         >
@@ -169,16 +169,16 @@
       class="flex flex-col gap-3"
     >
       <div
-        class="flex items-baseline justify-between gap-[var(--spacing-sm)] px-[var(--spacing-xxs)]"
+        class="flex items-baseline justify-between gap-(--spacing-sm) px-(--spacing-xxs)"
       >
-        <h3 class="m-0 text-overline-sm uppercase tracking-widest text-[var(--text-muted)]">
+        <h3 class="m-0 text-overline-sm uppercase tracking-widest text-(--text-muted)">
           Colored Icons
         </h3>
-        <span class="text-body-xs text-[var(--text-muted)]"
+        <span class="text-body-xs text-(--text-muted)"
           >{{ filteredColorIcons.length }} / {{ colorIcons.length }}</span
         >
       </div>
-      <p class="m-0 mb-2 text-body-xs text-[var(--text-muted)]">
+      <p class="m-0 mb-2 text-body-xs text-(--text-muted)">
         Multicolor brand &amp; framework logos, delivered as inline SVG (not part of the icon font,
         so not recolorable).
       </p>
@@ -187,7 +187,7 @@
         <button
           v-for="icon in filteredColorIcons"
           :key="icon.name"
-          class="group relative flex cursor-pointer flex-col items-center justify-center gap-2 border border-[var(--border-default)] bg-surface px-4 py-4 font-inherit text-inherit transition-colors duration-fast-02 ease-productive-entrance hover:z-[1] hover:border-dashed hover:border-[var(--primary)] hover:bg-primary/5 focus-visible:z-[1] focus-visible:border-dashed focus-visible:border-[var(--primary)] focus-visible:outline-none motion-reduce:transition-none"
+          class="group relative flex cursor-pointer flex-col items-center justify-center gap-2 border border-(--border-default) bg-surface px-4 py-4 font-inherit text-inherit transition-colors duration-fast-02 ease-productive-entrance hover:z-[1] hover:border-dashed hover:border-(--primary) hover:bg-primary/5 focus-visible:z-[1] focus-visible:border-dashed focus-visible:border-(--primary) focus-visible:outline-none motion-reduce:transition-none"
           :title="'Click to copy: ' + icon.icon"
           @click="copyIconCode(icon)"
         >
@@ -217,16 +217,16 @@
       class="flex flex-col gap-3"
     >
       <div
-        class="flex items-baseline justify-between gap-[var(--spacing-sm)] px-[var(--spacing-xxs)]"
+        class="flex items-baseline justify-between gap-(--spacing-sm) px-(--spacing-xxs)"
       >
-        <h3 class="m-0 text-overline-sm uppercase tracking-widest text-[var(--text-muted)]">
+        <h3 class="m-0 text-overline-sm uppercase tracking-widest text-(--text-muted)">
           PrimeIcons
         </h3>
-        <span class="text-body-xs text-[var(--text-muted)]"
+        <span class="text-body-xs text-(--text-muted)"
           >{{ primeIcons.length }} / {{ totalPrime }}</span
         >
       </div>
-      <p class="m-0 mb-2 text-body-xs text-[var(--text-muted)]">
+      <p class="m-0 mb-2 text-body-xs text-(--text-muted)">
         General-purpose UI icons from PrimeIcons.
       </p>
 
@@ -234,7 +234,7 @@
         <button
           v-for="icon in primeIcons"
           :key="icon.name"
-          class="group relative flex cursor-pointer flex-col items-center justify-center gap-2 border border-[var(--border-default)] bg-surface px-4 py-4 font-inherit text-inherit transition-colors duration-fast-02 ease-productive-entrance hover:z-[1] hover:border-dashed hover:border-[var(--primary)] hover:bg-primary/5 focus-visible:z-[1] focus-visible:border-dashed focus-visible:border-[var(--primary)] focus-visible:outline-none motion-reduce:transition-none"
+          class="group relative flex cursor-pointer flex-col items-center justify-center gap-2 border border-(--border-default) bg-surface px-4 py-4 font-inherit text-inherit transition-colors duration-fast-02 ease-productive-entrance hover:z-[1] hover:border-dashed hover:border-(--primary) hover:bg-primary/5 focus-visible:z-[1] focus-visible:border-dashed focus-visible:border-(--primary) focus-visible:outline-none motion-reduce:transition-none"
           :title="'Click to copy: ' + icon.icon"
           @click="copyIconCode(icon)"
         >

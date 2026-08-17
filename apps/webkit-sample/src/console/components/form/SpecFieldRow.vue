@@ -140,7 +140,7 @@
         v-else-if="['textarea', 'code', 'list'].includes(field.kind)"
         v-model="model"
         class="w-full"
-        :class="field.kind === 'code' ? 'font-[family-name:var(--font-code)] text-body-sm' : ''"
+        :class="field.kind === 'code' ? 'font-(family-name:--font-code) text-body-sm' : ''"
         :rows="field.kind === 'code' ? 12 : 5"
         :aria-label="field.label"
         :placeholder="field.placeholder"
@@ -181,7 +181,7 @@
            announces before the options. -->
       <fieldset
         v-else-if="field.kind === 'radio'"
-        class="m-0 flex w-full flex-col gap-[var(--spacing-sm)] border-0 p-0"
+        class="m-0 flex w-full flex-col gap-(--spacing-sm) border-0 p-0"
       >
         <legend class="sr-only">{{ field.label }}</legend>
         <FieldRadioBlock
@@ -202,7 +202,7 @@
            injection sensitivity") so neither depends on the row's title to be understood. -->
       <div
         v-else-if="field.kind === 'switch-select'"
-        class="flex w-full min-w-0 items-center justify-end gap-[var(--spacing-sm)]"
+        class="flex w-full min-w-0 items-center justify-end gap-(--spacing-sm)"
       >
         <Select
           v-if="active"

@@ -21,17 +21,17 @@
 </script>
 
 <template>
-  <div class="flex w-full min-w-0 items-center gap-[var(--spacing-xs)]">
+  <div class="flex w-full min-w-0 items-center gap-(--spacing-xs)">
     <a
       :href="`https://${value}`"
       target="_blank"
       rel="noopener noreferrer"
-      class="flex min-w-0 items-center gap-[var(--spacing-xxs)] hover:underline"
+      class="flex min-w-0 items-center gap-(--spacing-xxs) hover:underline"
       @click.stop
     >
       <span class="truncate">{{ value }}</span>
       <i
-        class="pi pi-arrow-up-right shrink-0 text-[var(--text-muted)]"
+        class="pi pi-arrow-up-right shrink-0 text-(--text-muted)"
         aria-hidden="true"
       />
     </a>

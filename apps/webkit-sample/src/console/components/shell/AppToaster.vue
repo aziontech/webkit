@@ -101,7 +101,7 @@
         <ToastDescription v-if="entry.description">
           {{ entry.description }}
         </ToastDescription>
-        <div class="flex flex-wrap items-center gap-[var(--spacing-xs)] pt-[var(--spacing-xxs)]">
+        <div class="flex flex-wrap items-center gap-(--spacing-xs) pt-(--spacing-xxs)">
           <!-- Recovery first: a redeploy settles the failure without leaving
                whatever the user is doing. Outlined, not filled: the toast is
                already a raised surface making its own claim on attention, and a
@@ -143,7 +143,7 @@
         <ToastDescription v-if="entry.description">
           {{ entry.description }}
         </ToastDescription>
-        <div class="flex items-center pt-[var(--spacing-xxs)]">
+        <div class="flex items-center pt-(--spacing-xxs)">
           <Button
             label="View deployment"
             kind="outlined"

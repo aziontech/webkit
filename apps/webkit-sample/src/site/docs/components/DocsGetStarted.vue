@@ -10,7 +10,7 @@
   //   • CardGrid variant="divider" — the boxes get their borders from the grid: 1px gaps
   //     reveal the wrapper's border colour as internal rules, and the perimeter carries
   //     none, so nothing doubles against the column's frame. Each cell fills
-  //     bg-[var(--bg-canvas)] so only the gaps show.
+  //     bg-(--bg-canvas) so only the gaps show.
   //
   // Inside a cell the anatomy is the Hub's card, part for part: a bare glyph stacked
   // above the title and description, on the cell's own padding (see CELL_CLASS). The
@@ -177,8 +177,8 @@ azion deploy`
   // The links are separated by SPACE, not by a dot bullet — one gap token does the
   // separating, and nothing decorative has to be kept in sync with the list.
   const LINKS_BAND_CLASS =
-    'flex flex-wrap items-center gap-x-[var(--spacing-md)] gap-y-[var(--spacing-xxs)] ' +
-    'border-t border-[var(--border-default)] p-[var(--spacing-xl)] text-body-sm text-[var(--text-muted)]'
+    'flex flex-wrap items-center gap-x-(--spacing-md) gap-y-(--spacing-xxs) ' +
+    'border-t border-(--border-default) p-(--spacing-xl) text-body-sm text-(--text-muted)'
 
   const alsoUseful = {
     firstDeploy: [
@@ -201,15 +201,15 @@ azion deploy`
     ]
   }
 
-  const GLYPH_CLASS = 'mb-[var(--spacing-md)] text-heading-sm text-[var(--text-default)]'
-  const TITLE_CLASS = 'text-heading-xxs text-[var(--text-default)]'
-  const DESC_CLASS = 'mt-[var(--spacing-sm)] text-pretty text-body-xxs text-[var(--text-muted)]'
+  const GLYPH_CLASS = 'mb-(--spacing-md) text-heading-sm text-(--text-default)'
+  const TITLE_CLASS = 'text-heading-xxs text-(--text-default)'
+  const DESC_CLASS = 'mt-(--spacing-sm) text-pretty text-body-xxs text-(--text-muted)'
 
   const CELL_CLASS =
-    'group/card relative flex h-full flex-col bg-[var(--bg-canvas)] p-[var(--spacing-xl)] ' +
-    'no-underline transition-colors duration-150 ease-out hover:bg-[var(--bg-surface)] ' +
+    'group/card relative flex h-full flex-col bg-(--bg-canvas) p-(--spacing-xl) ' +
+    'no-underline transition-colors duration-150 ease-out hover:bg-(--bg-surface) ' +
     'focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset ' +
-    'focus-visible:ring-[var(--ring-color)] motion-reduce:transition-none'
+    'focus-visible:ring-(--ring-color) motion-reduce:transition-none'
 
   // ── Page bar: "Copy page" + the LLM-context menu ────────────────────────────────
   // One SplitButton, because the control IS a split: the primary segment does the one
@@ -322,7 +322,7 @@ azion deploy`
          48px are folded into the hero's `--banner-offset` below so the hero underneath
          is still exactly one screen. -->
     <div
-      class="sticky top-0 z-20 flex h-12 items-center gap-[var(--spacing-sm)] border-b border-[var(--border-default)] bg-[var(--bg-canvas)] px-[var(--spacing-md)] md:gap-[var(--spacing-md)] md:px-[var(--spacing-xl)]"
+      class="sticky top-0 z-20 flex h-12 items-center gap-(--spacing-sm) border-b border-(--border-default) bg-(--bg-canvas) px-(--spacing-md) md:gap-(--spacing-md) md:px-(--spacing-xl)"
     >
       <!-- The trail wraps rather than truncates (BreadcrumbList is `flex-wrap`), and a
            two-line trail would double a bar that is pinned for the whole scroll. So the
@@ -384,7 +384,7 @@ azion deploy`
            is wider than a phone — without it the whole hero column grows past the
            viewport and the headline stops wrapping. -->
       <div
-        class="mt-[var(--spacing-xs)] mb-[var(--spacing-xl)] grid grid-cols-1 gap-[var(--spacing-xxl)] lg:mt-[var(--spacing-xl)] xl:grid-cols-2"
+        class="mt-(--spacing-xs) mb-(--spacing-xl) grid grid-cols-1 gap-(--spacing-xxl) lg:mt-(--spacing-xl) xl:grid-cols-2"
       >
         <PageHeader
           id="overview"
@@ -402,7 +402,7 @@ azion deploy`
                instead of compressing until their text spills out of the button. -->
           <template #actions>
             <div
-              class="flex flex-col items-stretch gap-[var(--spacing-md)] sm:flex-row sm:flex-wrap sm:items-center"
+              class="flex flex-col items-stretch gap-(--spacing-md) sm:flex-row sm:flex-wrap sm:items-center"
             >
               <Button
                 label="First deploy"
@@ -452,7 +452,7 @@ azion deploy`
              422 at 1440) and sits on the column's optical middle, so neither edge is
              flush and the ragged one reads as deliberate. -->
         <div
-          class="my-[var(--spacing-lg)] min-w-0 rounded-[var(--shape-elements)] shadow-[var(--shadow-sm)] xl:self-center"
+          class="my-(--spacing-lg) min-w-0 rounded-(--shape-elements) shadow-(--shadow-sm) xl:self-center"
         >
           <CodeBlock
             :tabs="heroTabs"
@@ -644,12 +644,12 @@ azion deploy`
         >
           <Item kind="inline">
             <Item.Content>
-              <span class="text-body-sm text-[var(--text-muted)]">Next Page · Start</span>
-              <Item.Title class="mt-[var(--spacing-xxs)] text-body-lg">Agent Setup</Item.Title>
+              <span class="text-body-sm text-(--text-muted)">Next Page · Start</span>
+              <Item.Title class="mt-(--spacing-xxs) text-body-lg">Agent Setup</Item.Title>
             </Item.Content>
             <Item.Actions>
               <i
-                class="pi pi-arrow-right text-[var(--text-muted)] group-hover/card:text-[var(--text-default)]"
+                class="pi pi-arrow-right text-(--text-muted) group-hover/card:text-(--text-default)"
                 aria-hidden="true"
               />
             </Item.Actions>

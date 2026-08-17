@@ -144,7 +144,7 @@
     @submit.prevent="save"
   >
     <div
-      class="layout-column-form layout-boundary-inline flex min-w-0 flex-col pb-[var(--layout-section-gap)] pt-[var(--layout-section-gap)]"
+      class="layout-column-form layout-boundary-inline flex min-w-0 flex-col pb-(--layout-section-gap) pt-(--layout-section-gap)"
     >
       <PageHeading
         title="Main Settings"
@@ -154,7 +154,7 @@
 
       <!-- One flag locks every control while the request is in flight. -->
       <fieldset
-        class="mx-0 mt-[var(--layout-section-gap)] flex min-w-0 flex-col border-0 p-0"
+        class="mx-0 mt-(--layout-section-gap) flex min-w-0 flex-col border-0 p-0"
         :disabled="saving"
       >
         <legend class="sr-only">Main settings</legend>
@@ -176,7 +176,7 @@
                       A unique and descriptive name to identify the application.
                     </Item.Description>
                   </Item.Content>
-                  <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
+                  <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
                     <InputText
                       v-model="settings.name"
                       size="large"
@@ -265,7 +265,7 @@
                         :href="CONTACT_SALES"
                         target="_blank"
                         rel="noopener noreferrer"
-                        class="inline-flex items-center gap-[var(--spacing-xxs)] rounded-[var(--shape-button)] text-[var(--text-link)] underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance hover:text-[var(--text-link-hover)] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] motion-reduce:transition-none"
+                        class="inline-flex items-center gap-(--spacing-xxs) rounded-(--shape-button) text-(--text-link) underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-link-hover) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
                       >
                         Contact sales
                         <i

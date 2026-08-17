@@ -42,16 +42,16 @@
            to be — a min-height floor, or a row-mate with a longer description.
            Without it a short card's content hangs off the top edge. -->
       <div
-        class="relative z-10 my-auto flex flex-col items-center gap-[var(--spacing-md)] py-[var(--spacing-sm)]"
+        class="relative z-10 my-auto flex flex-col items-center gap-(--spacing-md) py-(--spacing-sm)"
       >
         <i
           :class="icon"
           class="text-[2.5rem] leading-none grayscale transition duration-moderate-01 ease-productive-entrance group-hover:grayscale-0 motion-reduce:transition-none"
           aria-hidden="true"
         />
-        <div class="flex flex-col gap-[var(--spacing-xxs)]">
-          <h3 class="text-label-md text-[var(--text-default)]">{{ title }}</h3>
-          <p class="text-pretty text-body-sm text-[var(--text-muted)]">
+        <div class="flex flex-col gap-(--spacing-xxs)">
+          <h3 class="text-label-md text-(--text-default)">{{ title }}</h3>
+          <p class="text-pretty text-body-sm text-(--text-muted)">
             {{ description }}
           </p>
         </div>

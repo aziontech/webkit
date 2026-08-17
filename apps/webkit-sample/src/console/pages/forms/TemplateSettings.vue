@@ -263,11 +263,11 @@
           <legend class="sr-only">Template settings</legend>
 
           <!-- Repository row — two Fields side by side (Approach B, separated). -->
-          <div class="grid grid-cols-1 items-start gap-[var(--spacing-lg)] sm:grid-cols-2">
+          <div class="grid grid-cols-1 items-start gap-(--spacing-lg) sm:grid-cols-2">
             <!-- Scope — composed Select field: the Label targets the TRIGGER.
                  (Select has no amber state; Scope is preselected, so state 2 does
                  not apply — the required tag on the label carries the intent.) -->
-            <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
+            <div class="flex w-full flex-col gap-(--spacing-xs)">
               <Label
                 for="tpl-scope"
                 required
@@ -303,7 +303,7 @@
             <!-- Private Repository Name — value + inline on/off Switch. The Label
                  is rendered here (always required); the wrapper gets no `label`,
                  so its amber `:required` only fires after an empty submit. -->
-            <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
+            <div class="flex w-full flex-col gap-(--spacing-xs)">
               <Label
                 for="tpl-repo-name"
                 required
@@ -322,12 +322,12 @@
           </div>
 
           <!-- Sub-section: Template Settings -->
-          <section class="layout-section-start flex flex-col gap-[var(--layout-group-gap)]">
-            <h2 class="text-heading-xs text-[var(--text-default)]">Template Settings</h2>
+          <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
+            <h2 class="text-heading-xs text-(--text-default)">Template Settings</h2>
 
             <!-- Required credential: label required always; amber only after an
                  empty submit (state 2). -->
-            <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
+            <div class="flex w-full flex-col gap-(--spacing-xs)">
               <Label
                 for="tpl-access-token"
                 required
@@ -408,17 +408,17 @@
           </section>
 
           <!-- Sub-section: Deployment — the radio family + MultiSelect. -->
-          <section class="layout-section-start flex flex-col gap-[var(--layout-group-gap)]">
-            <h2 class="text-heading-xs text-[var(--text-default)]">Deployment</h2>
+          <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
+            <h2 class="text-heading-xs text-(--text-default)">Deployment</h2>
 
             <!-- Deployment type — RADIO BLOCK group. A group's accessible name is
                  a <fieldset>/<legend>; the visible caption reuses <Label required>.
                  It starts empty, so the amber group HelperText appears on submit. -->
-            <fieldset class="m-0 flex w-full flex-col gap-[var(--spacing-xs)] border-0 p-0">
-              <legend class="mb-[var(--spacing-xs)] p-0">
+            <fieldset class="m-0 flex w-full flex-col gap-(--spacing-xs) border-0 p-0">
+              <legend class="mb-(--spacing-xs) p-0">
                 <Label required>Deployment type</Label>
               </legend>
-              <div class="flex flex-col gap-[var(--spacing-sm)]">
+              <div class="flex flex-col gap-(--spacing-sm)">
                 <FieldRadioBlock
                   v-for="option in deploymentTypes"
                   :key="option.value"
@@ -439,11 +439,11 @@
             </fieldset>
 
             <!-- Runtime — compact inline RADIO group (label only, in a row). -->
-            <fieldset class="m-0 flex w-full flex-col gap-[var(--spacing-xs)] border-0 p-0">
-              <legend class="mb-[var(--spacing-xs)] p-0">
+            <fieldset class="m-0 flex w-full flex-col gap-(--spacing-xs) border-0 p-0">
+              <legend class="mb-(--spacing-xs) p-0">
                 <Label>Runtime</Label>
               </legend>
-              <div class="flex flex-wrap gap-[var(--spacing-lg)]">
+              <div class="flex flex-wrap gap-(--spacing-lg)">
                 <FieldRadio
                   v-for="option in runtimes"
                   :key="option.value"
@@ -458,7 +458,7 @@
             </fieldset>
 
             <!-- Edge regions — MultiSelect (optional). Label targets the trigger. -->
-            <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
+            <div class="flex w-full flex-col gap-(--spacing-xs)">
               <Label for="tpl-regions">Edge regions</Label>
               <MultiSelect
                 v-model="form.regions"
@@ -483,12 +483,12 @@
           </section>
 
           <!-- Sub-section: Build & Runtime — input-group, password, textarea. -->
-          <section class="layout-section-start flex flex-col gap-[var(--layout-group-gap)]">
-            <h2 class="text-heading-xs text-[var(--text-default)]">Build &amp; Runtime</h2>
+          <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
+            <h2 class="text-heading-xs text-(--text-default)">Build &amp; Runtime</h2>
 
             <!-- Build command — FieldInputGroup with a leading addon. Required:
                  amber only after an empty submit. -->
-            <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
+            <div class="flex w-full flex-col gap-(--spacing-xs)">
               <Label
                 for="tpl-build-command"
                 required
@@ -508,14 +508,14 @@
                 "
               >
                 <template #left>
-                  <span class="text-label-sm text-[var(--text-muted)]">$</span>
+                  <span class="text-label-sm text-(--text-muted)">$</span>
                 </template>
               </FieldInputGroup>
             </div>
 
             <!-- Deploy Key — FieldPassword (toggleable). Required (amber) when
                  empty; invalid (red) when filled but shorter than 8 chars. -->
-            <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
+            <div class="flex w-full flex-col gap-(--spacing-xs)">
               <Label
                 for="tpl-deploy-key"
                 required
@@ -553,12 +553,12 @@
           </section>
 
           <!-- Sub-section: Notifications & Alerts — phone + switch family. -->
-          <section class="layout-section-start flex flex-col gap-[var(--layout-group-gap)]">
-            <h2 class="text-heading-xs text-[var(--text-default)]">Notifications &amp; Alerts</h2>
+          <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
+            <h2 class="text-heading-xs text-(--text-default)">Notifications &amp; Alerts</h2>
 
             <!-- Alert phone — FieldPhoneNumber. Required (amber) when empty;
                  invalid (red) when filled with too few digits. -->
-            <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
+            <div class="flex w-full flex-col gap-(--spacing-xs)">
               <Label
                 for="tpl-alert-phone"
                 required
@@ -582,7 +582,7 @@
             </div>
 
             <!-- Switch BLOCK group — bordered rows with label + description. -->
-            <div class="flex flex-col gap-[var(--spacing-sm)]">
+            <div class="flex flex-col gap-(--spacing-sm)">
               <FieldSwitchBlock
                 v-model="form.emailNotifications"
                 label="Email notifications"
@@ -607,10 +607,10 @@
           </section>
 
           <!-- Sub-section: Edge features — the checkbox BLOCK family. -->
-          <section class="layout-section-start flex flex-col gap-[var(--layout-group-gap)]">
-            <h2 class="text-heading-xs text-[var(--text-default)]">Edge features</h2>
+          <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
+            <h2 class="text-heading-xs text-(--text-default)">Edge features</h2>
 
-            <div class="flex flex-col gap-[var(--spacing-sm)]">
+            <div class="flex flex-col gap-(--spacing-sm)">
               <FieldCheckboxBlock
                 v-model="form.edgeCaching"
                 label="Edge caching"
@@ -635,7 +635,7 @@
           <!-- Confirmation — a single inline FieldCheckbox that must be checked.
                Required (amber tag on its label) only after submit; the group-level
                HelperText spells out the requirement. -->
-          <div class="layout-section-start flex flex-col gap-[var(--spacing-xs)]">
+          <div class="layout-section-start flex flex-col gap-(--spacing-xs)">
             <FieldCheckbox
               v-model="form.acceptDeploy"
               input-id="tpl-accept-deploy"

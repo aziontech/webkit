@@ -63,30 +63,30 @@
     :is="tag"
     v-bind="destination"
     :class="href ? 'group' : ''"
-    class="mx-[calc((var(--spacing-xs)+1px)*-1)] flex min-h-11 items-center gap-[var(--spacing-md)] rounded-[var(--shape-card)] border border-transparent p-[var(--spacing-xs)] transition-colors duration-fast-02 ease-productive-entrance hover:border-[var(--border-default)] hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] motion-reduce:transition-none"
+    class="mx-[calc((var(--spacing-xs)+1px)*-1)] flex min-h-11 items-center gap-(--spacing-md) rounded-(--shape-card) border border-transparent p-(--spacing-xs) transition-colors duration-fast-02 ease-productive-entrance hover:border-(--border-default) hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
   >
     <!-- The registration frame: a dashed hairline with a 4px inset, exactly the
          marker the rest of the site draws around a placed element. It holds still
          under the pointer — the plate behind the row is what answers it. -->
     <span
-      class="flex shrink-0 items-center border border-dashed border-[var(--border-default)] p-[var(--spacing-xxs)]"
+      class="flex shrink-0 items-center border border-dashed border-(--border-default) p-(--spacing-xxs)"
     >
-      <span class="flex size-[30px] items-center justify-center bg-[var(--bg-surface-raised)]">
+      <span class="flex size-[30px] items-center justify-center bg-(--bg-surface-raised)">
         <i
           :class="[
             icon,
-            'text-body-md text-[var(--text-default)] transition-colors duration-fast-02 ease-productive-entrance group-hover:text-[var(--primary)] motion-reduce:transition-none'
+            'text-body-md text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance group-hover:text-(--primary) motion-reduce:transition-none'
           ]"
           aria-hidden="true"
         />
       </span>
     </span>
 
-    <span class="flex min-w-0 flex-1 flex-col justify-center gap-[var(--spacing-xxs)] break-words">
-      <span class="text-label-sm leading-none text-[var(--text-default)]">{{ title }}</span>
+    <span class="flex min-w-0 flex-1 flex-col justify-center gap-(--spacing-xxs) break-words">
+      <span class="text-label-sm leading-none text-(--text-default)">{{ title }}</span>
       <span
         v-if="description"
-        class="text-body-xs text-[var(--text-muted)]"
+        class="text-body-xs text-(--text-muted)"
         >{{ description }}</span
       >
     </span>

@@ -137,14 +137,14 @@
     aria-live="polite"
     aria-busy="true"
     data-testid="session-wire"
-    class="fixed inset-0 z-[1200] flex flex-col overflow-hidden bg-[var(--bg-canvas)] animate-fade-in motion-reduce:animate-none"
+    class="fixed inset-0 z-[1200] flex flex-col overflow-hidden bg-(--bg-canvas) animate-fade-in motion-reduce:animate-none"
   >
     <span class="sr-only">Session expired. Signing you out.</span>
 
     <!-- The header, at its measured height: the mark, the tenancy chain, the
          breadcrumb, then the actions and the avatar on the right. -->
     <div
-      class="flex shrink-0 items-center gap-[var(--spacing-xs)] border-b-[length:var(--border-width-default)] border-[var(--border-muted)] bg-[var(--bg-surface)] px-[var(--spacing-md)]"
+      class="flex shrink-0 items-center gap-(--spacing-xs) border-b-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface) px-(--spacing-md)"
       :style="{ height: `${headerHeight}px` }"
     >
       <Skeleton
@@ -170,7 +170,7 @@
         height="0.875rem"
       />
 
-      <div class="ml-auto flex items-center gap-[var(--spacing-xs)]">
+      <div class="ml-auto flex items-center gap-(--spacing-xs)">
         <Skeleton
           width="5.5rem"
           height="2rem"
@@ -195,7 +195,7 @@
            below `md`. -->
       <div
         v-if="railWidth > 0"
-        class="flex shrink-0 flex-col gap-[var(--spacing-lg)] overflow-hidden border-r-[length:var(--border-width-default)] border-[var(--border-muted)] bg-[var(--bg-surface)] p-[var(--spacing-sm)]"
+        class="flex shrink-0 flex-col gap-(--spacing-lg) overflow-hidden border-r-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface) p-(--spacing-sm)"
         :style="{ width: `${railWidth}px` }"
       >
         <Skeleton height="2.5rem" />
@@ -203,7 +203,7 @@
         <div
           v-for="group in NAV_GROUPS"
           :key="group.id"
-          class="flex flex-col gap-[var(--spacing-md)]"
+          class="flex flex-col gap-(--spacing-md)"
         >
           <Skeleton
             v-if="group.labelled"
@@ -220,7 +220,7 @@
 
         <!-- The rail's footer: the signed-in user, which is precisely what the
              expired token stopped identifying. -->
-        <div class="mt-auto flex items-center gap-[var(--spacing-xs)]">
+        <div class="mt-auto flex items-center gap-(--spacing-xs)">
           <Skeleton
             width="1.5rem"
             height="1.5rem"
@@ -238,7 +238,7 @@
              sits OUTSIDE the boundary, exactly as PageTabs does. -->
         <div
           v-if="family === 'detail'"
-          class="layout-boundary-inline flex h-14 shrink-0 items-center gap-[var(--spacing-lg)] border-b-[length:var(--border-width-default)] border-[var(--border-muted)]"
+          class="layout-boundary-inline flex h-14 shrink-0 items-center gap-(--spacing-lg) border-b-(length:--border-width-default) border-(--border-muted)"
         >
           <Skeleton
             v-for="(tab, index) in DETAIL_TABS"
@@ -254,9 +254,9 @@
           <div
             v-if="family === 'list'"
             :class="columnClass"
-            class="flex min-w-0 flex-col gap-[var(--layout-group-gap)]"
+            class="flex min-w-0 flex-col gap-(--layout-group-gap)"
           >
-            <div class="flex items-center gap-[var(--spacing-sm)]">
+            <div class="flex items-center gap-(--spacing-sm)">
               <Skeleton
                 width="2.5rem"
                 height="2.5rem"
@@ -274,7 +274,7 @@
             <CardBox :padded="false">
               <template #content>
                 <div
-                  class="flex items-center gap-[var(--spacing-md)] border-b-[length:var(--border-width-default)] border-[var(--border-default)] px-[var(--spacing-md)] py-[var(--spacing-md)]"
+                  class="flex items-center gap-(--spacing-md) border-b-(length:--border-width-default) border-(--border-default) px-(--spacing-md) py-(--spacing-md)"
                 >
                   <Skeleton
                     v-for="(cell, index) in TABLE_CELLS"
@@ -286,7 +286,7 @@
                 <div
                   v-for="row in TABLE_ROWS"
                   :key="row"
-                  class="flex items-center gap-[var(--spacing-md)] px-[var(--spacing-md)] py-[var(--spacing-md)]"
+                  class="flex items-center gap-(--spacing-md) px-(--spacing-md) py-(--spacing-md)"
                 >
                   <Skeleton
                     v-for="(cell, index) in TABLE_CELLS"
@@ -299,13 +299,13 @@
                      Without it the card stops where the reader knows a footer
                      was. -->
                 <div
-                  class="flex items-center justify-between gap-[var(--spacing-md)] border-t-[length:var(--border-width-default)] border-[var(--border-default)] px-[var(--spacing-md)] py-[var(--spacing-sm)]"
+                  class="flex items-center justify-between gap-(--spacing-md) border-t-(length:--border-width-default) border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
                 >
                   <Skeleton
                     width="11rem"
                     height="0.75rem"
                   />
-                  <div class="flex items-center gap-[var(--spacing-xs)]">
+                  <div class="flex items-center gap-(--spacing-xs)">
                     <Skeleton
                       v-for="index in 4"
                       :key="index"
@@ -330,7 +330,7 @@
             :class="columnClass"
             class="flex min-w-0 flex-col"
           >
-            <div class="flex flex-col gap-[var(--spacing-xs)]">
+            <div class="flex flex-col gap-(--spacing-xs)">
               <Skeleton
                 width="14rem"
                 height="1.5rem"
@@ -341,11 +341,11 @@
               />
             </div>
 
-            <div class="layout-section-start flex flex-col gap-[var(--layout-section-gap)]">
+            <div class="layout-section-start flex flex-col gap-(--layout-section-gap)">
               <div
                 v-for="section in FORM_SECTIONS"
                 :key="section"
-                class="flex flex-col gap-[var(--layout-group-gap)]"
+                class="flex flex-col gap-(--layout-group-gap)"
               >
                 <Skeleton
                   width="7rem"
@@ -356,14 +356,14 @@
                     <div
                       v-for="(field, index) in FORM_ROWS"
                       :key="index"
-                      class="flex items-center gap-[var(--spacing-md)] px-[var(--spacing-md)] py-[var(--spacing-md)]"
+                      class="flex items-center gap-(--spacing-md) px-(--spacing-md) py-(--spacing-md)"
                       :class="
                         index > 0
-                          ? 'border-t-[length:var(--border-width-default)] border-[var(--border-default)]'
+                          ? 'border-t-(length:--border-width-default) border-(--border-default)'
                           : ''
                       "
                     >
-                      <div class="flex min-w-0 flex-1 flex-col gap-[var(--spacing-xs)]">
+                      <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-xs)">
                         <Skeleton
                           width="6rem"
                           height="0.875rem"
@@ -400,7 +400,7 @@
         <!-- The create/edit flows end in a sticky bar, so their wire does too. -->
         <div
           v-if="family === 'form'"
-          class="layout-boundary-inline flex shrink-0 items-center justify-end gap-[var(--spacing-sm)] border-t-[length:var(--border-width-default)] border-[var(--border-muted)] bg-[var(--bg-surface)] py-[var(--spacing-sm)]"
+          class="layout-boundary-inline flex shrink-0 items-center justify-end gap-(--spacing-sm) border-t-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface) py-(--spacing-sm)"
         >
           <Skeleton
             width="5.5rem"

@@ -310,28 +310,28 @@
            `h-full`) so the box still grows when the cards stack on mobile. -->
     <div
       v-else
-      class="my-auto flex w-full flex-col gap-[var(--layout-section-gap)] py-[var(--spacing-xl)]"
+      class="my-auto flex w-full flex-col gap-(--layout-section-gap) py-(--spacing-xl)"
     >
       <!-- The hero. Centred, because there is nothing else on screen to align a
              left edge against; the returning Overview is left-aligned, and the
              difference is part of how the two read as different screens. -->
       <div
-        class="animate-content-enter motion-reduce:animate-none flex flex-col items-center gap-[var(--spacing-lg)]"
+        class="animate-content-enter motion-reduce:animate-none flex flex-col items-center gap-(--spacing-lg)"
       >
         <!-- The greeting, above the hero line rather than instead of it. They do
                two different jobs: the greeting says the console knows who arrived
                and roughly when, the hero line says what this screen is for. The
                populated Overview carries the same greeting as its heading, so /home
                opens the same way in both versions (../lib/greeting.js). -->
-        <div class="flex flex-col items-center gap-[var(--spacing-xs)]">
-          <p class="text-center text-body-md text-[var(--text-muted)]">{{ greeting }}</p>
-          <h1 class="text-balance text-center text-heading-lg text-[var(--text-default)]">
+        <div class="flex flex-col items-center gap-(--spacing-xs)">
+          <p class="text-center text-body-md text-(--text-muted)">{{ greeting }}</p>
+          <h1 class="text-balance text-center text-heading-lg text-(--text-default)">
             Let's build on Azion.
           </h1>
         </div>
 
         <!-- The ⌘K trigger, at hero width. It is the only control in the hero. -->
-        <div class="flex w-full max-w-[var(--container-2xl)] flex-col items-stretch">
+        <div class="flex w-full max-w-(--container-2xl) flex-col items-stretch">
           <!-- Read-only ⌘K trigger: the palette owns the search, the same way the
                  rail's field does. `cursor-pointer` reaches the inner input too, so
                  the whole control reads as pressable rather than typeable. -->
@@ -373,7 +373,7 @@
              and a team whose editor should learn to deploy. One beat behind the hero
              (`--content-enter-delay`) so the page assembles in reading order. -->
       <div
-        class="animate-content-enter motion-reduce:animate-none grid grid-cols-1 gap-[var(--spacing-lg)] md:grid-cols-3 [--content-enter-delay:var(--transition-duration-fast-01)]"
+        class="animate-content-enter motion-reduce:animate-none grid grid-cols-1 gap-(--spacing-lg) md:grid-cols-3 [--content-enter-delay:var(--transition-duration-fast-01)]"
       >
         <FirstUseCard
           v-for="door in firstUseDoors"
@@ -446,9 +446,9 @@
                     <p
                       v-if="check.loading"
                       key="checking"
-                      class="flex items-center justify-center gap-[var(--spacing-xs)] p-[var(--spacing-sm)] text-center text-body-sm text-[var(--text-muted)]"
+                      class="flex items-center justify-center gap-(--spacing-xs) p-(--spacing-sm) text-center text-body-sm text-(--text-muted)"
                     >
-                      <Spinner class="size-4 shrink-0 text-[var(--text-muted)]" />
+                      <Spinner class="size-4 shrink-0 text-(--text-muted)" />
                       Checking {{ check.name }}...
                     </p>
 
@@ -467,9 +467,9 @@
                     <div
                       v-else
                       key="verdict"
-                      class="flex flex-col gap-[var(--spacing-sm)] p-[var(--spacing-sm)]"
+                      class="flex flex-col gap-(--spacing-sm) p-(--spacing-sm)"
                     >
-                      <p class="text-body-sm text-[var(--text-default)]">
+                      <p class="text-body-sm text-(--text-default)">
                         <template v-if="check.registered">
                           {{ check.name }} is already registered. Try another name.
                         </template>

@@ -54,8 +54,8 @@
   }
 
   const ITEM_PADDING = {
-    medium: 'px-[var(--spacing-xl)]',
-    small: 'px-[var(--spacing-lg)]'
+    medium: 'px-(--spacing-xl)',
+    small: 'px-(--spacing-lg)'
   }
 
   const props = defineProps({
@@ -96,7 +96,7 @@
 </script>
 
 <template>
-  <div class="flex flex-col items-center gap-[var(--spacing-xl)]">
+  <div class="flex flex-col items-center gap-(--spacing-xl)">
     <Overline
       v-if="label"
       show-cursor
@@ -126,7 +126,7 @@
               :is="client.href ? 'a' : 'span'"
               :href="client.href || undefined"
               :aria-label="client.href ? client.name : undefined"
-              class="flex items-center text-[var(--text-muted)] opacity-70 transition-[color,opacity] duration-fast-02 ease-productive-entrance hover:text-[var(--text-default)] hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-4 focus-visible:ring-offset-[var(--bg-canvas)] motion-reduce:transition-none"
+              class="flex items-center text-(--text-muted) opacity-70 transition-[color,opacity] duration-fast-02 ease-productive-entrance hover:text-(--text-default) hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-4 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
             >
               <!-- No `loading="lazy"` on any of these: every mark starts off-screen and
                    scrolls into view seconds later, so lazy loading makes them pop in

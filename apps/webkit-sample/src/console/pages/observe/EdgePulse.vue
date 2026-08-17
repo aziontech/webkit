@@ -55,9 +55,9 @@
     :breadcrumb="[{ label: 'Edge Pulse' }]"
   >
     <main class="layout-column flex min-h-full flex-col">
-      <section class="layout-section-start flex min-w-0 flex-col gap-[var(--layout-section-gap)]">
+      <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)">
         <!-- ONE band: the window control, the strip it re-queries, and the panels. -->
-        <section class="flex min-w-0 flex-col gap-[var(--layout-group-gap)]">
+        <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
           <!-- No ControlsHeader: there is no search (nothing to search) and no create
                action, so the row would be an empty container around one chip. -->
           <FilterBar
@@ -66,7 +66,7 @@
           />
 
           <!-- The strip: the four numbers worth reading before any chart. -->
-          <ul class="grid grid-cols-1 gap-[var(--spacing-md)] sm:grid-cols-2 lg:grid-cols-4">
+          <ul class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2 lg:grid-cols-4">
             <li
               v-for="metric in data.strip"
               :key="metric.label"
@@ -74,19 +74,19 @@
             >
               <CardBox class="w-full">
                 <template #content>
-                  <div class="flex min-w-0 flex-col gap-[var(--spacing-xxs)]">
+                  <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
                     <Tooltip :text="metric.hint">
-                      <span class="min-w-0 truncate text-body-sm text-[var(--text-muted)]">
+                      <span class="min-w-0 truncate text-body-sm text-(--text-muted)">
                         {{ metric.label }}
                       </span>
                     </Tooltip>
-                    <p class="flex items-baseline gap-[var(--spacing-xxs)]">
-                      <span class="text-heading-lg text-[var(--text-default)]">
+                    <p class="flex items-baseline gap-(--spacing-xxs)">
+                      <span class="text-heading-lg text-(--text-default)">
                         {{ metric.value }}
                       </span>
                       <span
                         v-if="metric.unit"
-                        class="text-body-md text-[var(--text-muted)]"
+                        class="text-body-md text-(--text-muted)"
                         >{{ metric.unit }}</span
                       >
                     </p>
@@ -98,7 +98,7 @@
 
           <!-- The panels. Two up from `md`, so a series keeps enough width to read as
                a shape rather than a spike. -->
-          <div class="grid grid-cols-1 gap-[var(--spacing-md)] md:grid-cols-2">
+          <div class="grid grid-cols-1 gap-(--spacing-md) md:grid-cols-2">
             <MetricPanel
               v-for="panel in data.panels"
               :key="panel.title"

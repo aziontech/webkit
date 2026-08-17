@@ -112,23 +112,23 @@
       <DialogOverlay />
       <DialogContent>
         <PanelHeader class="w-full">
-          <div class="flex min-w-0 flex-col gap-[var(--spacing-xxs)]">
+          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
             <DialogTitle>{{ title }}</DialogTitle>
-            <p class="text-body-sm text-[var(--text-muted)]">
+            <p class="text-body-sm text-(--text-muted)">
               {{ tally }}. Each Deployment setting activates on its own, and the ones that succeeded
               stay live.
             </p>
           </div>
         </PanelHeader>
 
-        <PanelContent class="flex flex-col gap-[var(--spacing-md)]">
-          <div class="flex min-w-0 flex-col gap-[var(--spacing-xs)]">
+        <PanelContent class="flex flex-col gap-(--spacing-md)">
+          <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
             <ProgressBar
               :value="counts.total ? Math.round((counts.settled / counts.total) * 100) : 0"
             />
             <p
               v-if="activeName"
-              class="text-body-sm text-[var(--text-muted)]"
+              class="text-body-sm text-(--text-muted)"
             >
               Activating {{ activeName }}
             </p>
@@ -140,37 +140,37 @@
             aria-label="Filter deploys by status"
           />
 
-          <ul class="flex min-w-0 flex-col gap-[var(--spacing-xs)]">
+          <ul class="flex min-w-0 flex-col gap-(--spacing-xs)">
             <li
               v-for="item in visibleItems"
               :key="item.id"
-              class="flex min-w-0 items-start justify-between gap-[var(--spacing-sm)] rounded-[var(--shape-elements)] border border-[length:var(--border-width-default)] border-[var(--border-muted)] p-[var(--spacing-sm)]"
+              class="flex min-w-0 items-start justify-between gap-(--spacing-sm) rounded-(--shape-elements) border border-(length:--border-width-default) border-(--border-muted) p-(--spacing-sm)"
             >
-              <span class="flex min-w-0 flex-col gap-[var(--spacing-xxs)]">
-                <span class="flex min-w-0 items-center gap-[var(--spacing-xs)]">
+              <span class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                <span class="flex min-w-0 items-center gap-(--spacing-xs)">
                   <i
-                    class="ai ai-deploy-pillar shrink-0 text-[var(--text-muted)]"
+                    class="ai ai-deploy-pillar shrink-0 text-(--text-muted)"
                     aria-hidden="true"
                   />
-                  <span class="truncate text-label-sm text-[var(--text-default)]">
+                  <span class="truncate text-label-sm text-(--text-default)">
                     {{ item.name }}
                   </span>
                 </span>
-                <span class="truncate text-body-xs text-[var(--text-muted)]">
+                <span class="truncate text-body-xs text-(--text-muted)">
                   {{ item.environments }}
                 </span>
                 <span
                   v-if="item.message"
-                  class="text-body-xs text-[var(--text-muted)]"
+                  class="text-body-xs text-(--text-muted)"
                 >
                   {{ item.message }}
                 </span>
               </span>
 
-              <span class="flex shrink-0 items-center gap-[var(--spacing-xs)]">
+              <span class="flex shrink-0 items-center gap-(--spacing-xs)">
                 <Spinner
                   v-if="item.status === 'deploying'"
-                  class="size-4 text-[var(--text-muted)]"
+                  class="size-4 text-(--text-muted)"
                 />
                 <Tag
                   :label="STATUS_TAG[item.status].label"

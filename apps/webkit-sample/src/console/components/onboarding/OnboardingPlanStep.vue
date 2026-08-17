@@ -117,7 +117,7 @@
 </script>
 
 <template>
-  <div class="flex flex-col gap-[var(--spacing-xs)]">
+  <div class="flex flex-col gap-(--spacing-xs)">
     <!-- `:model-value` + `@update:model-value` rather than `v-model`, deliberately:
          choosing a paid row must not write the answer, it must open the drawer, so
          the group's selection is DERIVED (committed plan, or the row being paid
@@ -137,22 +137,22 @@
         <!-- The option is a flex column, so this one child stretches to the row's
              full width: the tier tag lands on the trailing edge whatever the
              sentence's length. -->
-        <div class="flex w-full items-center justify-between gap-[var(--spacing-sm)]">
-          <div class="flex min-w-0 flex-col gap-[var(--spacing-xxs)]">
-            <span class="text-body-sm text-[var(--text-default)]">{{ item.label }}</span>
-            <span class="text-body-xs text-[var(--text-muted)]">{{ item.description }}</span>
+        <div class="flex w-full items-center justify-between gap-(--spacing-sm)">
+          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+            <span class="text-body-sm text-(--text-default)">{{ item.label }}</span>
+            <span class="text-body-xs text-(--text-muted)">{{ item.description }}</span>
           </div>
           <!-- Tier over price, right-aligned and shrink-0: the tag answers "what
                am I on" and the line under it "what does it cost", which are the
                only two things the user needs before pressing Continue. -->
-          <div class="flex shrink-0 flex-col items-end gap-[var(--spacing-xxs)]">
+          <div class="flex shrink-0 flex-col items-end gap-(--spacing-xxs)">
             <Tag
               :label="planFor(item.value).name"
               :severity="planFor(item.value).severity"
               size="small"
               rounded
             />
-            <span class="text-label-sm text-[var(--text-muted)]">
+            <span class="text-label-sm text-(--text-muted)">
               {{ planFor(item.value).price }}
             </span>
           </div>

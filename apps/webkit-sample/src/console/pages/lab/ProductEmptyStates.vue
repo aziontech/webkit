@@ -83,7 +83,7 @@
            and below, and collapses to 0 when the content is taller than the viewport
            instead of clipping its top. -->
       <div
-        class="my-auto flex w-full flex-col gap-[var(--layout-section-gap)] py-[var(--spacing-xl)]"
+        class="my-auto flex w-full flex-col gap-(--layout-section-gap) py-(--spacing-xl)"
       >
         <!-- ── HOME'S HEADING ──
              A centred hero, not the left-aligned PageHeading a module list carries, for the
@@ -97,16 +97,16 @@
              thing one above the other is the first thing this pattern removed (see the note
              in ui/ProductFirstUse.vue). -->
         <div
-          class="animate-content-enter motion-reduce:animate-none flex flex-col items-center gap-[var(--spacing-lg)]"
+          class="animate-content-enter motion-reduce:animate-none flex flex-col items-center gap-(--spacing-lg)"
         >
           <div
-            class="flex max-w-[var(--container-2xl)] flex-col items-center gap-[var(--spacing-xs)]"
+            class="flex max-w-(--container-2xl) flex-col items-center gap-(--spacing-xs)"
           >
-            <p class="text-center text-body-md text-[var(--text-muted)]">Empty states</p>
-            <h1 class="text-balance text-center text-heading-lg text-[var(--text-default)]">
+            <p class="text-center text-body-md text-(--text-muted)">Empty states</p>
+            <h1 class="text-balance text-center text-heading-lg text-(--text-default)">
               What a product shows before it owns anything.
             </h1>
-            <p class="text-pretty text-center text-body-sm text-[var(--text-muted)]">
+            <p class="text-pretty text-center text-body-sm text-(--text-muted)">
               What the product is, and the gates into it — each one opening the create flow that
               already owns it. Switch the product to see the same block asked in its own terms.
             </p>
@@ -140,7 +140,7 @@
                 <template #left>
                   <i
                     :class="option.icon"
-                    class="text-[var(--text-muted)]"
+                    class="text-(--text-muted)"
                     aria-hidden="true"
                   />
                 </template>
@@ -149,7 +149,7 @@
                   #right
                 >
                   <i
-                    class="pi pi-check text-[var(--text-default)]"
+                    class="pi pi-check text-(--text-default)"
                     aria-hidden="true"
                   />
                 </template>

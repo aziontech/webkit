@@ -30,15 +30,15 @@
 
 <template>
   <div
-    class="cell group relative flex items-center justify-center rounded-[var(--shape-flat)] border border-[var(--border-default)]"
+    class="cell group relative flex items-center justify-center rounded-(--shape-flat) border border-(--border-default)"
     :class="
-      compact ? 'min-h-[7.5rem] p-[var(--spacing-sm)]' : 'min-h-[200px] p-[var(--spacing-md)]'
+      compact ? 'min-h-[7.5rem] p-(--spacing-sm)' : 'min-h-[200px] p-(--spacing-md)'
     "
   >
     <!-- Dashed accent ring sitting on the node's border + a soft accent glow ring. -->
     <span
       aria-hidden="true"
-      class="ring pointer-events-none absolute -inset-px rounded-[var(--shape-flat)] border border-dashed border-[var(--primary)] opacity-0 ring-1 ring-[var(--primary)]"
+      class="ring pointer-events-none absolute -inset-px rounded-(--shape-flat) border border-dashed border-(--primary) opacity-0 ring-1 ring-(--primary)"
     />
     <!-- Floating label pinned inside the box at the top-left corner — a real link
          to the component's Storybook docs (new tab). Revealed on hover / focus via
@@ -48,7 +48,7 @@
       target="_blank"
       rel="noopener noreferrer"
       :aria-label="`Open ${name} docs on Storybook`"
-      class="label absolute left-0 top-0 inline-flex items-center gap-[var(--spacing-xxs)] rounded-[var(--shape-flat)] bg-[var(--accent)] px-[var(--spacing-xxs)] py-px text-label-code-sm leading-none text-[var(--accent-contrast)] opacity-0 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)]"
+      class="label absolute left-0 top-0 inline-flex items-center gap-(--spacing-xxs) rounded-(--shape-flat) bg-(--accent) px-(--spacing-xxs) py-px text-label-code-sm leading-none text-(--accent-contrast) opacity-0 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
     >
       {{ name }}
       <i

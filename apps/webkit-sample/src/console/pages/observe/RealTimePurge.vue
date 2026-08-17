@@ -107,20 +107,20 @@
           description="Evict cached objects from every edge location. Purged content is fetched from your connector on the next request."
         />
 
-        <section class="layout-section-start flex min-w-0 flex-col gap-[var(--layout-section-gap)]">
+        <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)">
           <Message
             severity="warning"
             size="small"
             label="A purge cannot be undone. Every purged object is re-fetched from your connector on its next request, so a broad purge briefly raises origin traffic."
           />
 
-          <section class="flex min-w-0 flex-col gap-[var(--layout-group-gap)]">
+          <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
             <CardBox>
               <template #content>
-                <div class="flex min-w-0 flex-col gap-[var(--layout-group-gap)]">
-                  <fieldset class="flex min-w-0 flex-col gap-[var(--spacing-sm)]">
-                    <legend class="text-label-md text-[var(--text-default)]">Purge type</legend>
-                    <div class="grid grid-cols-1 gap-[var(--spacing-xs)] md:grid-cols-3">
+                <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
+                  <fieldset class="flex min-w-0 flex-col gap-(--spacing-sm)">
+                    <legend class="text-label-md text-(--text-default)">Purge type</legend>
+                    <div class="grid grid-cols-1 gap-(--spacing-xs) md:grid-cols-3">
                       <FieldRadioBlock
                         v-for="entry in PURGE_TYPES"
                         :key="entry.value"
@@ -155,7 +155,7 @@
            of the boundary as the body above it, so its button sits on the same axis as
            the fields it acts on rather than 24px inside them. -->
       <footer
-        class="sticky bottom-0 z-10 border-t border-[var(--border-default)] bg-[var(--bg-canvas)] py-[var(--spacing-sm)]"
+        class="sticky bottom-0 z-10 border-t border-(--border-default) bg-(--bg-canvas) py-(--spacing-sm)"
       >
         <div class="layout-column-form layout-boundary-inline flex items-center justify-end">
           <Button

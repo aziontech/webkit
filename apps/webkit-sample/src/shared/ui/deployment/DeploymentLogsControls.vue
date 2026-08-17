@@ -58,7 +58,7 @@
 
   <div
     v-else
-    class="flex shrink-0 items-center gap-[var(--spacing-sm)]"
+    class="flex shrink-0 items-center gap-(--spacing-sm)"
   >
     <SegmentedButton
       v-model="view"

@@ -85,16 +85,16 @@
        <Transition> and a fragment cannot be animated. The card is the whole of this
        step; the centring and the half's padding come from AuthSplit. -->
   <CardBox
-    class="w-full max-w-[var(--container-sm)]"
+    class="w-full max-w-(--container-sm)"
     :padded="false"
   >
     <template #content>
       <!-- The card's own padding, rather than CardBox's `padded`, which is a
                  tighter step than this composition wants. -->
-      <div class="flex flex-col gap-[var(--spacing-lg)] p-[var(--spacing-lg)]">
-        <header class="flex flex-col gap-[var(--spacing-xxs)]">
-          <h1 class="text-heading-sm text-[var(--text-default)]">Check your inbox</h1>
-          <p class="text-body-sm text-[var(--text-muted)]">
+      <div class="flex flex-col gap-(--spacing-lg) p-(--spacing-lg)">
+        <header class="flex flex-col gap-(--spacing-xxs)">
+          <h1 class="text-heading-sm text-(--text-default)">Check your inbox</h1>
+          <p class="text-body-sm text-(--text-muted)">
             {{ description }}
           </p>
         </header>
@@ -102,12 +102,12 @@
         <!-- The two ways forward — ask for the email again, or (the
                    prototype's stand-in for opening it) follow the link. Same two
                    rows, same order, same wording as Sign In's 'sent' step. -->
-        <div class="flex flex-col gap-[var(--spacing-xs)]">
-          <div class="flex items-center gap-[var(--spacing-xs)]">
-            <p class="text-body-sm text-[var(--text-default)]">Didn't receive the email?</p>
+        <div class="flex flex-col gap-(--spacing-xs)">
+          <div class="flex items-center gap-(--spacing-xs)">
+            <p class="text-body-sm text-(--text-default)">Didn't receive the email?</p>
             <span
               v-if="resending"
-              class="flex items-center gap-[var(--spacing-xxs)] text-label-sm text-[var(--text-muted)]"
+              class="flex items-center gap-(--spacing-xxs) text-label-sm text-(--text-muted)"
             >
               <Spinner class="size-4" />
               Sending…
@@ -120,8 +120,8 @@
               >Resend Email</a
             >
           </div>
-          <div class="flex items-center gap-[var(--spacing-xs)]">
-            <p class="text-body-sm text-[var(--text-default)]">Already opened it?</p>
+          <div class="flex items-center gap-(--spacing-xs)">
+            <p class="text-body-sm text-(--text-default)">Already opened it?</p>
             <a
               class="text-link text-body-sm"
               href="#"

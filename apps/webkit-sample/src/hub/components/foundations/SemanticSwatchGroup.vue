@@ -30,12 +30,12 @@
   // Swatch renders the live token, so it follows the theme toggle.
   function swatchKindClass(item) {
     if (item.kind === 'text') {
-      return 'bg-[var(--swatch-on)] text-[var(--swatch-color)] border-2 border-solid border-[var(--border-muted)]'
+      return 'bg-(--swatch-on) text-(--swatch-color) border-2 border-solid border-(--border-muted)'
     }
     if (item.kind === 'border') {
-      return 'bg-[var(--bg-canvas)] border-4 border-solid border-[var(--swatch-color)]'
+      return 'bg-(--bg-canvas) border-4 border-solid border-(--swatch-color)'
     }
-    return 'bg-[var(--swatch-color)] border-2 border-solid border-[var(--border-muted)]'
+    return 'bg-(--swatch-color) border-2 border-solid border-(--border-muted)'
   }
 
   function onRowClick(event, row) {
@@ -46,16 +46,16 @@
 </script>
 
 <template>
-  <section class="mb-[var(--spacing-xl)]">
-    <div class="mb-[var(--spacing-md)]">
+  <section class="mb-(--spacing-xl)">
+    <div class="mb-(--spacing-md)">
       <h2
-        class="m-0 mb-[var(--spacing-xs)] border-b border-solid border-[var(--border-default)] pb-[var(--spacing-xs)] text-overline-md! text-[var(--text-muted)]"
+        class="m-0 mb-(--spacing-xs) border-b border-solid border-(--border-default) pb-(--spacing-xs) text-overline-md! text-(--text-muted)"
       >
         {{ title }}
       </h2>
       <p
         v-if="description"
-        class="m-0 max-w-[var(--container-3xl)] text-body-sm text-[var(--text-muted)]"
+        class="m-0 max-w-(--container-3xl) text-body-sm text-(--text-muted)"
       >
         {{ description }}
       </p>
@@ -68,23 +68,23 @@
       @row-click="onRowClick"
     >
       <template #cell-name="{ row }">
-        <span class="flex min-w-0 items-center gap-[var(--spacing-sm)]">
+        <span class="flex min-w-0 items-center gap-(--spacing-sm)">
           <span
             :style="swatchVars(row)"
             :class="[
-              'flex size-7 shrink-0 items-center justify-center rounded-[var(--shape-elements)] font-code text-body-xs',
+              'flex size-7 shrink-0 items-center justify-center rounded-(--shape-elements) font-code text-body-xs',
               swatchKindClass(row)
             ]"
           >
             <span v-if="row.kind === 'text'">Aa</span>
           </span>
-          <code class="truncate font-code text-body-sm text-[var(--text-default)]">{{
+          <code class="truncate font-code text-body-sm text-(--text-default)">{{
             row.name
           }}</code>
         </span>
       </template>
       <template #cell-description="{ value }">
-        <span class="text-body-sm text-[var(--text-muted)]">{{ value }}</span>
+        <span class="text-body-sm text-(--text-muted)">{{ value }}</span>
       </template>
     </Table>
   </section>

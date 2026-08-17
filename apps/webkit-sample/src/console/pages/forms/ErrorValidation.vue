@@ -346,7 +346,7 @@
 </script>
 
 <template>
-  <div class="flex h-dvh flex-col bg-[var(--bg-canvas)]">
+  <div class="flex h-dvh flex-col bg-(--bg-canvas)">
     <UnsavedChangesGuard :dirty="dirty" />
 
     <CreationHeader
@@ -374,10 +374,10 @@
                usable and reads as not-part-of-the-product. -->
           <aside
             aria-label="Scenario simulation"
-            class="flex flex-col gap-[var(--spacing-md)] rounded-[var(--shape-card)] border border-dashed border-[var(--border-default)] bg-[var(--bg-surface-raised)] p-[var(--spacing-lg)]"
+            class="flex flex-col gap-(--spacing-md) rounded-(--shape-card) border border-dashed border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-lg)"
           >
-            <div class="flex flex-wrap items-center justify-between gap-[var(--spacing-sm)]">
-              <p class="m-0 text-overline-sm text-[var(--text-muted)]">
+            <div class="flex flex-wrap items-center justify-between gap-(--spacing-sm)">
+              <p class="m-0 text-overline-sm text-(--text-muted)">
                 Simulation — the other user
               </p>
               <Tag
@@ -390,13 +390,13 @@
                 size="medium"
               />
             </div>
-            <p class="m-0 text-body-sm text-[var(--text-muted)]">
+            <p class="m-0 text-body-sm text-(--text-muted)">
               You are User 1: the Application below is filled in and already linked to a Connector,
               four sections down. Have User 2 delete that Connector through the API — nothing will
               tell you, your copy of the list just goes stale. Then press Save, and watch the form
               take you to the one section that needs you.
             </p>
-            <div class="flex flex-wrap items-center gap-[var(--spacing-sm)]">
+            <div class="flex flex-wrap items-center gap-(--spacing-sm)">
               <Button
                 label="User 2 deletes the linked Connector"
                 kind="outlined"
@@ -423,7 +423,7 @@
             <legend class="sr-only">Create application</legend>
 
             <!-- Section 1: General -->
-            <section class="flex flex-col gap-[var(--layout-group-gap)]">
+            <section class="flex flex-col gap-(--layout-group-gap)">
               <SectionHeading title="General" />
               <CardBox :padded="false">
                 <template #content>
@@ -435,8 +435,8 @@
                           Give a unique and descriptive name to identify the Application.
                         </Item.Description>
                       </Item.Content>
-                      <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
-                        <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
+                      <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
+                        <div class="flex w-full flex-col gap-(--spacing-xs)">
                           <InputText
                             v-model="form.name"
                             size="large"
@@ -463,7 +463,7 @@
             </section>
 
             <!-- Section 2: Delivery Settings -->
-            <section class="layout-section-start flex flex-col gap-[var(--layout-group-gap)]">
+            <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
               <SectionHeading title="Delivery Settings" />
               <CardBox :padded="false">
                 <template #content>
@@ -475,8 +475,8 @@
                       <Item.Content>
                         <Item.Title>Protocol Usage</Item.Title>
                       </Item.Content>
-                      <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
-                        <fieldset class="flex w-full flex-col gap-[var(--spacing-sm)]">
+                      <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
+                        <fieldset class="flex w-full flex-col gap-(--spacing-sm)">
                           <legend class="sr-only">Protocol Usage</legend>
                           <FieldRadioBlock
                             v-for="option in protocolUsageOptions"
@@ -499,8 +499,8 @@
                           The ports the Application listens on for HTTP traffic.
                         </Item.Description>
                       </Item.Content>
-                      <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
-                        <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
+                      <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
+                        <div class="flex w-full flex-col gap-(--spacing-xs)">
                           <MultiSelect
                             v-model="form.httpPorts"
                             size="large"
@@ -543,7 +543,7 @@
             </section>
 
             <!-- Section 3: Modules -->
-            <section class="layout-section-start flex flex-col gap-[var(--layout-group-gap)]">
+            <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
               <SectionHeading title="Modules" />
               <CardBox :padded="false">
                 <template #content>
@@ -619,7 +619,7 @@
                  recovery targets (`scrollToOriginAnchor` measures this element). -->
             <section
               ref="originSection"
-              class="layout-section-start flex flex-col gap-[var(--layout-group-gap)]"
+              class="layout-section-start flex flex-col gap-(--layout-group-gap)"
             >
               <!-- The field-scoped server rejection lands in the heading's `bottom`
                    slot: inside the section that needs attention, between its title
@@ -680,8 +680,8 @@
                           Connectors module, so anyone on the account can change it.
                         </Item.Description>
                       </Item.Content>
-                      <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
-                        <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
+                      <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
+                        <div class="flex w-full flex-col gap-(--spacing-xs)">
                           <!-- The option list is arriving: reserve the trigger's
                                exact box (size="large" is 40px) so the row does not
                                reflow when the Select comes back. -->
@@ -740,8 +740,8 @@
                           Identify a virtualhost sent in the Host header to the origin.
                         </Item.Description>
                       </Item.Content>
-                      <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
-                        <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
+                      <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
+                        <div class="flex w-full flex-col gap-(--spacing-xs)">
                           <InputText
                             v-model="form.hostHeader"
                             size="large"
@@ -770,7 +770,7 @@
 
             <!-- Section 5: Cache Expiration Policies — untouched by the rejection,
                  which is the point of scoping the Message to one section. -->
-            <section class="layout-section-start flex flex-col gap-[var(--layout-group-gap)]">
+            <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
               <SectionHeading title="Cache expiration policies" />
               <CardBox :padded="false">
                 <template #content>
@@ -782,7 +782,7 @@
                           How long browsers may keep a cached response.
                         </Item.Description>
                       </Item.Content>
-                      <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
+                      <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
                         <InputNumber
                           v-model="form.browserMaxTtl"
                           size="large"
@@ -801,7 +801,7 @@
                           of at least 3 seconds.
                         </Item.Description>
                       </Item.Content>
-                      <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
+                      <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
                         <InputNumber
                           v-model="form.edgeMaxTtl"
                           size="large"
@@ -818,7 +818,7 @@
             </section>
 
             <!-- Section 6: Debug Rules -->
-            <section class="layout-section-start flex flex-col gap-[var(--layout-group-gap)]">
+            <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
               <SectionHeading title="Debug Rules" />
               <CardBox :padded="false">
                 <template #content>
@@ -851,10 +851,10 @@
              and does not forward a type, so submit is driven from its click; the
              sr-only submit keeps Enter working. -->
         <footer
-          class="sticky bottom-0 z-10 border-t-[length:var(--border-width-default)] border-[var(--border-muted)] bg-[var(--bg-surface)]"
+          class="sticky bottom-0 z-10 border-t-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface)"
         >
           <div
-            class="layout-column-form layout-boundary-inline flex items-center justify-end gap-[var(--spacing-sm)] py-[var(--spacing-md)]"
+            class="layout-column-form layout-boundary-inline flex items-center justify-end gap-(--spacing-sm) py-(--spacing-md)"
           >
             <Button
               type="button"

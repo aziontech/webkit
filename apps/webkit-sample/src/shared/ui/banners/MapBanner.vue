@@ -194,7 +194,7 @@
       :viewBox="viewBox"
       :preserveAspectRatio="fit"
       fill="currentColor"
-      class="absolute left-[var(--map-inset-inline-start)] w-[calc(100%_-_var(--map-inset-inline-start))] text-[var(--text-muted)] opacity-60"
+      class="absolute left-(--map-inset-inline-start) w-[calc(100%_-_var(--map-inset-inline-start))] text-(--text-muted) opacity-60"
       :class="[layerBox, layerMask]"
     >
       <path d="M42.3203 151.85V156.829H47.299V151.85H42.3203Z" />
@@ -5308,7 +5308,7 @@
     <svg
       :viewBox="viewBox"
       :preserveAspectRatio="fit"
-      class="absolute left-[var(--map-inset-inline-start)] w-[calc(100%_-_var(--map-inset-inline-start))] fill-[var(--primary)]"
+      class="absolute left-(--map-inset-inline-start) w-[calc(100%_-_var(--map-inset-inline-start))] fill-(--primary)"
       :class="[layerBox, routeMask]"
     >
       <g class="animate-pulse motion-reduce:animate-none [animation-delay:0ms]!">

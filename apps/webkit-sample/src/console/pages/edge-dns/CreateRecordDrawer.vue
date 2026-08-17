@@ -127,7 +127,7 @@
       title="Settings"
       hint="Which IPs are associated with the domain and how Edge DNS should handle requests. The accepted value's format varies according to the chosen record type."
     >
-      <div class="flex min-w-0 flex-col gap-[var(--layout-group-gap)]">
+      <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
         <!-- Name: subdomain + the zone's root domain as an addon. -->
         <FieldStack
           label="Name"
@@ -259,7 +259,7 @@
       title="Policy"
       hint="How Edge DNS should deal with requests answered by this record. SIMPLE is standard resolution; WEIGHTED distributes answers across records by weight."
     >
-      <div class="flex min-w-0 flex-col gap-[var(--layout-group-gap)]">
+      <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
         <FieldStack label="Policy type">
           <template #default="{ controlId }">
             <Select

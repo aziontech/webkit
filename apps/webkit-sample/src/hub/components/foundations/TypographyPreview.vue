@@ -46,19 +46,19 @@
     @row-click="onRowClick"
   >
     <template #cell-name="{ row }">
-      <code class="font-code text-body-sm text-[var(--text-default)]">{{ row.name }}</code>
+      <code class="font-code text-body-sm text-(--text-default)">{{ row.name }}</code>
     </template>
     <template #cell-usage="{ row }">
       <span
         v-if="row.link"
-        :class="[row.parentClass, 'min-w-0 truncate text-[var(--text-default)]']"
+        :class="[row.parentClass, 'min-w-0 truncate text-(--text-default)']"
       >
         {{ row.before }}<span :class="row.name">{{ row.sample }}</span
         >{{ row.after }}
       </span>
       <span
         v-else
-        :class="[row.name, 'min-w-0 truncate leading-tight text-[var(--text-default)]']"
+        :class="[row.name, 'min-w-0 truncate leading-tight text-(--text-default)']"
       >
         {{ row.sample }}
       </span>

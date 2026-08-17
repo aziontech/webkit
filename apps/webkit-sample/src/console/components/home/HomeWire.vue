@@ -54,7 +54,7 @@
        own (`--layout-boundary-start`, which is what `<main>`'s `layout-section-start`
        margin resolves to). -->
   <div
-    class="flex flex-col gap-[var(--layout-boundary-start)]"
+    class="flex flex-col gap-(--layout-boundary-start)"
     aria-hidden="true"
   >
     <!-- The greeting, and the agent pill beside it when the reader still has one. The
@@ -65,7 +65,7 @@
     <!-- 37px is the header's measured height: the ContrastBanner's, when it is there;
          the greeting's own 24.75px line box otherwise. -->
     <div
-      class="flex items-center justify-between gap-[var(--spacing-lg)]"
+      class="flex items-center justify-between gap-(--spacing-lg)"
       :class="agentOnboardingVisible ? 'min-h-[37px]' : ''"
     >
       <Skeleton
@@ -80,7 +80,7 @@
       />
     </div>
 
-    <div class="flex min-h-[var(--size-10)] items-center">
+    <div class="flex min-h-(--size-10) items-center">
       <Skeleton
         class="w-full"
         height="var(--size-10)"
@@ -88,7 +88,7 @@
     </div>
 
     <div
-      class="flex flex-col gap-[var(--layout-boundary-start)] xl:flex-row xl:gap-[var(--layout-section-gap)]"
+      class="flex flex-col gap-(--layout-boundary-start) xl:flex-row xl:gap-(--layout-section-gap)"
     >
       <!-- Usage: the section title, then one card per metric — 2-up while the rail
          is full width, single column once it narrows at `xl`.
@@ -96,19 +96,19 @@
          real page's (../Home.vue): a wire that resolves into a different column
          split is a layout that jumps on the first frame of real data. -->
       <div
-        class="flex w-full shrink-0 flex-col gap-[var(--layout-group-gap)] xl:w-[30%] xl:max-w-[var(--container-xs)]"
+        class="flex w-full shrink-0 flex-col gap-(--layout-group-gap) xl:w-[30%] xl:max-w-(--container-xs)"
       >
         <Skeleton
           width="4rem"
           height="1rem"
         />
-        <div class="grid auto-rows-fr grid-cols-2 gap-[var(--layout-group-gap)] xl:grid-cols-1">
+        <div class="grid auto-rows-fr grid-cols-2 gap-(--layout-group-gap) xl:grid-cols-1">
           <CardBox
             v-for="metric in METRICS"
             :key="metric"
           >
             <template #content>
-              <div class="flex flex-col gap-[var(--spacing-md)]">
+              <div class="flex flex-col gap-(--spacing-md)">
                 <Skeleton
                   width="60%"
                   height="0.875rem"
@@ -131,8 +131,8 @@
          shift it exists to prevent. The header reserves `--size-10` because the real
          one does — it carries a 36px segmented control and is matched by the Usage
          heading opposite it. -->
-      <div class="flex min-w-0 grow flex-col gap-[var(--layout-group-gap)]">
-        <div class="flex min-h-[var(--size-10)] items-center gap-[var(--spacing-sm)]">
+      <div class="flex min-w-0 grow flex-col gap-(--layout-group-gap)">
+        <div class="flex min-h-(--size-10) items-center gap-(--spacing-sm)">
           <Skeleton
             width="7rem"
             height="1rem"
@@ -147,8 +147,8 @@
         <!-- The group label above the block, at the width of `Recents` and inside the
              18px line box that label's `text-label-sm` actually occupies — measured, and
              the same reason the rows pin their content height. -->
-        <div class="flex flex-col gap-[var(--spacing-xs)]">
-          <div class="flex h-[18px] items-center px-[var(--spacing-xs)]">
+        <div class="flex flex-col gap-(--spacing-xs)">
+          <div class="flex h-[18px] items-center px-(--spacing-xs)">
             <Skeleton
               width="3.5rem"
               height="0.875rem"

@@ -95,8 +95,8 @@
       />
 
       <!-- Group 1 — General (section title, its own footer save). -->
-      <section class="layout-section-start flex flex-col gap-[var(--layout-group-gap)]">
-        <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">General</p>
+      <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
+        <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">General</p>
         <CardBox :padded="false">
           <template #content>
             <fieldset
@@ -110,7 +110,7 @@
                     <Item.Title>Full Name</Item.Title>
                     <Item.Description>The name shown across the console.</Item.Description>
                   </Item.Content>
-                  <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
+                  <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
                     <InputText
                       v-model="general.fullName"
                       size="large"
@@ -126,7 +126,7 @@
                     <Item.Title>Language</Item.Title>
                     <Item.Description>The console interface language.</Item.Description>
                   </Item.Content>
-                  <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
+                  <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
                     <Select
                       v-model="general.language"
                       size="large"
@@ -154,7 +154,7 @@
             </fieldset>
           </template>
           <template #footer>
-            <div class="flex w-full items-center justify-end gap-[var(--spacing-sm)]">
+            <div class="flex w-full items-center justify-end gap-(--spacing-sm)">
               <Button
                 label="Save"
                 kind="secondary"
@@ -168,8 +168,8 @@
       </section>
 
       <!-- Group 2 — Notifications (section title, its own footer save). -->
-      <section class="layout-section-start flex flex-col gap-[var(--layout-group-gap)]">
-        <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
+      <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
+        <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
           Notifications
         </p>
         <CardBox :padded="false">
@@ -215,7 +215,7 @@
             </fieldset>
           </template>
           <template #footer>
-            <div class="flex w-full items-center justify-end gap-[var(--spacing-sm)]">
+            <div class="flex w-full items-center justify-end gap-(--spacing-sm)">
               <Button
                 label="Save"
                 kind="secondary"

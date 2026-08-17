@@ -456,7 +456,7 @@
         },
         {
           term: 'The sticky bar joined the system',
-          text: 'the ten action footers wrote px-[var(--layout-boundary-inline)] by hand: it read the token, but sat outside the system — nothing tied the bar inset to that of the column it submits. It became .layout-boundary-inline, a class the measure rule sees, so the bar aligns with the body by construction rather than by coincidence (measured: body and bar at the same left/width across the six creation pages and the three forms).'
+          text: 'the ten action footers wrote px-(--layout-boundary-inline) by hand: it read the token, but sat outside the system — nothing tied the bar inset to that of the column it submits. It became .layout-boundary-inline, a class the measure rule sees, so the bar aligns with the body by construction rather than by coincidence (measured: body and bar at the same left/width across the six creation pages and the three forms).'
         },
         {
           term: 'Deployments kept its markup, changed its geometry',
@@ -513,20 +513,20 @@
       :title="entry.title"
       :description="entry.summary"
     >
-      <div class="flex flex-col gap-[var(--spacing-lg)] p-[var(--spacing-xl)]">
+      <div class="flex flex-col gap-(--spacing-lg) p-(--spacing-xl)">
         <!-- The substance: the decision in bold, why it went that way after it. -->
-        <ul class="flex flex-col gap-[var(--spacing-md)]">
+        <ul class="flex flex-col gap-(--spacing-md)">
           <li
             v-for="point in entry.points"
             :key="point.term"
-            class="flex gap-[var(--spacing-sm)] text-body-sm text-[var(--text-muted)]"
+            class="flex gap-(--spacing-sm) text-body-sm text-(--text-muted)"
           >
             <span
-              class="mt-[0.55lh] size-[var(--spacing-xxs)] shrink-0 rotate-45 bg-[var(--accent)]"
+              class="mt-[0.55lh] size-(--spacing-xxs) shrink-0 rotate-45 bg-(--accent)"
               aria-hidden="true"
             />
             <p class="text-pretty">
-              <strong class="font-medium text-[var(--text-default)]">{{ point.term }}</strong>
+              <strong class="font-medium text-(--text-default)">{{ point.term }}</strong>
               — {{ point.text }}
             </p>
           </li>
@@ -536,16 +536,16 @@
              viewport never makes the page scroll sideways. -->
         <div
           v-if="entry.table"
-          class="overflow-x-auto rounded-[var(--shape-card)] border border-[var(--border-default)]"
+          class="overflow-x-auto rounded-(--shape-card) border border-(--border-default)"
         >
           <table class="w-full border-collapse text-left text-body-sm">
             <thead>
-              <tr class="border-b border-[var(--border-default)] bg-[var(--bg-surface)]">
+              <tr class="border-b border-(--border-default) bg-(--bg-surface)">
                 <th
                   v-for="head in entry.table.head"
                   :key="head"
                   scope="col"
-                  class="px-[var(--spacing-md)] py-[var(--spacing-sm)] text-body-xs font-medium text-[var(--text-default)]"
+                  class="px-(--spacing-md) py-(--spacing-sm) text-body-xs font-medium text-(--text-default)"
                 >
                   {{ head }}
                 </th>
@@ -555,12 +555,12 @@
               <tr
                 v-for="(row, index) in entry.table.rows"
                 :key="index"
-                class="border-b border-[var(--border-muted)] last:border-b-0"
+                class="border-b border-(--border-muted) last:border-b-0"
               >
                 <td
                   v-for="(cell, cellIndex) in row"
                   :key="cellIndex"
-                  class="px-[var(--spacing-md)] py-[var(--spacing-sm)] align-top text-[var(--text-muted)] first:text-[var(--text-default)]"
+                  class="px-(--spacing-md) py-(--spacing-sm) align-top text-(--text-muted) first:text-(--text-default)"
                 >
                   {{ cell }}
                 </td>
@@ -572,7 +572,7 @@
         <!-- The screens. Relative paths, new tab: the reader keeps the changelog
              open while walking through what it describes. -->
         <div
-          class="flex flex-wrap items-center gap-x-[var(--spacing-lg)] gap-y-[var(--spacing-xs)]"
+          class="flex flex-wrap items-center gap-x-(--spacing-lg) gap-y-(--spacing-xs)"
         >
           <Link
             v-for="link in entry.links"

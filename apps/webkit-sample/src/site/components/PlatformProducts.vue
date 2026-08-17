@@ -131,15 +131,15 @@
         <article
           v-for="product in group.products"
           :key="product.name"
-          class="flex flex-col gap-[var(--spacing-md)] bg-[var(--bg-canvas)] p-[var(--spacing-lg)]"
+          class="flex flex-col gap-(--spacing-md) bg-(--bg-canvas) p-(--spacing-lg)"
         >
           <Illustration
             :name="product.name"
             :aria-label="`${product.title}: ${product.body}`"
           />
-          <div class="flex flex-col gap-[var(--spacing-xxs)]">
-            <h3 class="text-heading-xxs text-[var(--text-default)]">{{ product.title }}</h3>
-            <p class="text-pretty text-body-sm text-[var(--text-muted)]">{{ product.body }}</p>
+          <div class="flex flex-col gap-(--spacing-xxs)">
+            <h3 class="text-heading-xxs text-(--text-default)">{{ product.title }}</h3>
+            <p class="text-pretty text-body-sm text-(--text-muted)">{{ product.body }}</p>
           </div>
         </article>
       </CardGrid>

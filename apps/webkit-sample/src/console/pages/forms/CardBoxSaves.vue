@@ -102,7 +102,7 @@
       >
         <template #content>
           <fieldset
-            class="m-0 flex min-w-0 flex-col gap-[var(--spacing-lg)] border-0 p-0"
+            class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0"
             :disabled="savingToolbar"
           >
             <legend class="sr-only">Azion Toolbar</legend>
@@ -112,8 +112,8 @@
               label="Enable the Azion Toolbar on your Deployments. To use the toolbar in production your team members need the Chrome extension or to enable the toolbar for that domain in the toolbar menu."
             />
 
-            <div class="grid grid-cols-1 gap-[var(--spacing-lg)] sm:grid-cols-2">
-              <div class="flex flex-col gap-[var(--spacing-xs)]">
+            <div class="grid grid-cols-1 gap-(--spacing-lg) sm:grid-cols-2">
+              <div class="flex flex-col gap-(--spacing-xs)">
                 <Label for="tb-preprod">Pre-Production Deployments</Label>
                 <Select
                   v-model="toolbar.preprod"
@@ -133,7 +133,7 @@
                   </Select.Content>
                 </Select>
               </div>
-              <div class="flex flex-col gap-[var(--spacing-xs)]">
+              <div class="flex flex-col gap-(--spacing-xs)">
                 <Label for="tb-prod">Production Deployments</Label>
                 <Select
                   v-model="toolbar.prod"
@@ -157,7 +157,7 @@
           </fieldset>
         </template>
         <template #footer>
-          <div class="flex w-full items-center justify-between gap-[var(--spacing-sm)]">
+          <div class="flex w-full items-center justify-between gap-(--spacing-sm)">
             <Link
               href="#"
               label="Learn more about the Azion Toolbar"
@@ -181,7 +181,7 @@
       >
         <template #content>
           <fieldset
-            class="m-0 flex min-w-0 flex-col gap-[var(--spacing-lg)] border-0 p-0"
+            class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0"
             :disabled="savingProtection"
           >
             <legend class="sr-only">Deployment Protection</legend>
@@ -191,13 +191,13 @@
               label="Control who can access your Deployments. Standard Protection challenges every visitor before a Deployment loads; shareable links let you grant bypass access with a generated URL."
             />
 
-            <div class="flex flex-col gap-[var(--spacing-xs)]">
+            <div class="flex flex-col gap-(--spacing-xs)">
               <Label for="dp-level">Azion Authentication</Label>
               <Select
                 v-model="protection.level"
                 size="large"
                 :disabled="savingProtection"
-                class="sm:max-w-[var(--container-sm)]"
+                class="sm:max-w-(--container-sm)"
                 :display-value="protectionLabel"
               >
                 <Select.Trigger id="dp-level" />
@@ -213,10 +213,10 @@
               </Select>
             </div>
 
-            <div class="flex items-center justify-between gap-[var(--spacing-md)]">
-              <div class="flex min-w-0 flex-col gap-[var(--spacing-xxs)]">
+            <div class="flex items-center justify-between gap-(--spacing-md)">
+              <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
                 <Label id="dp-links-label">Shareable Links</Label>
-                <p class="text-body-sm text-[var(--text-muted)]">
+                <p class="text-body-sm text-(--text-muted)">
                   Allow bypassing protection with a generated link.
                 </p>
               </div>
@@ -229,7 +229,7 @@
           </fieldset>
         </template>
         <template #footer>
-          <div class="flex w-full items-center justify-end gap-[var(--spacing-sm)]">
+          <div class="flex w-full items-center justify-end gap-(--spacing-sm)">
             <Button
               label="Save"
               kind="secondary"

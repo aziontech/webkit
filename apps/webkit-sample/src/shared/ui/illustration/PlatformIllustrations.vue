@@ -188,7 +188,7 @@
              colour makes the seam between them read as the same 1px rule the grids draw
              internally. Grid one is the scenes (3 columns, `observe` spanning two so the
              rows stay full); grid two is the closing 50/50 pair. -->
-        <div class="flex flex-col gap-px bg-[var(--border-muted)]">
+        <div class="flex flex-col gap-px bg-(--border-muted)">
           <CardGrid
             v-if="!deployOnly"
             variant="divider"

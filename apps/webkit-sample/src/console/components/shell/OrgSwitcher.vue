@@ -134,7 +134,7 @@
         type="button"
         :data-state="isOpen ? 'open' : 'closed'"
         :aria-label="`Organization: ${currentOrganization.name}. Switch organization`"
-        class="flex w-auto items-center gap-1.5 rounded-[var(--shape-button)] p-[var(--spacing-xxs)] transition-colors duration-fast-02 ease-productive-entrance hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] data-[state=open]:bg-[var(--bg-hover)] motion-reduce:transition-none"
+        class="flex w-auto items-center gap-1.5 rounded-(--shape-button) p-(--spacing-xxs) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) data-[state=open]:bg-(--bg-hover) motion-reduce:transition-none"
       >
         <OrgAvatar
           :name="currentOrganization.name"
@@ -148,11 +148,11 @@
              ellipsis could never fire — all `truncate` did was open an overflow box
              that sized itself off the flex line rather than off the word in it. The
              name decides the width now. -->
-        <span class="whitespace-nowrap text-label-sm text-[var(--text-default)]">
+        <span class="whitespace-nowrap text-label-sm text-(--text-default)">
           {{ currentOrganization.name }}
         </span>
         <i
-          class="pi pi-chevron-down shrink-0 text-body-xs text-[var(--text-muted)] transition-transform duration-fast-02 ease-productive-entrance data-[state=open]:rotate-180 motion-reduce:transition-none"
+          class="pi pi-chevron-down shrink-0 text-body-xs text-(--text-muted) transition-transform duration-fast-02 ease-productive-entrance data-[state=open]:rotate-180 motion-reduce:transition-none"
           :data-state="isOpen ? 'open' : 'closed'"
           aria-hidden="true"
         />
@@ -171,7 +171,7 @@
              so the three panels behave alike. -->
         <div
           v-if="organizations.length > SEARCH_THRESHOLD"
-          class="border-b border-[var(--border-muted)] p-[var(--spacing-xxs)]"
+          class="border-b border-(--border-muted) p-(--spacing-xxs)"
         >
           <InputText
             v-model="query"
@@ -190,9 +190,9 @@
 
         <!-- The list. Capped so a long roster scrolls inside the panel instead
              of growing it past the viewport. -->
-        <div class="flex max-h-[16rem] flex-col overflow-y-auto p-[var(--spacing-xxs)]">
+        <div class="flex max-h-[16rem] flex-col overflow-y-auto p-(--spacing-xxs)">
           <p
-            class="px-[var(--spacing-xs)] py-[var(--spacing-xxs)] text-label-sm text-[var(--text-muted)]"
+            class="px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-muted)"
           >
             Organizations
           </p>
@@ -205,7 +205,7 @@
             v-for="org in filtered"
             :key="org.id"
             type="button"
-            class="flex items-center gap-[var(--spacing-xs)] rounded-[var(--shape-button)] px-[var(--spacing-xs)] py-[var(--spacing-xs)] text-left transition-colors duration-fast-02 ease-productive-entrance hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--ring-color)] motion-reduce:transition-none"
+            class="flex items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xs) text-left transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) motion-reduce:transition-none"
             @click="selectOrg(org)"
           >
             <OrgAvatar
@@ -213,8 +213,8 @@
               :accent="org.accent"
               size="small"
             />
-            <span class="flex min-w-0 flex-1 items-center gap-[var(--spacing-xxs)]">
-              <span class="truncate text-label-sm text-[var(--text-default)]">
+            <span class="flex min-w-0 flex-1 items-center gap-(--spacing-xxs)">
+              <span class="truncate text-label-sm text-(--text-default)">
                 {{ org.name }}
               </span>
               <!-- The tier in the tier's OWN colour (../../plans.js) — the same tag
@@ -230,7 +230,7 @@
               />
               <i
                 v-if="org.id === currentOrganizationId"
-                class="pi pi-check shrink-0 text-body-xs text-[var(--text-muted)]"
+                class="pi pi-check shrink-0 text-body-xs text-(--text-muted)"
                 aria-hidden="true"
               />
             </span>
@@ -244,7 +244,7 @@
 
           <p
             v-if="!filtered.length"
-            class="px-[var(--spacing-xs)] py-[var(--spacing-sm)] text-body-sm text-[var(--text-muted)]"
+            class="px-(--spacing-xs) py-(--spacing-sm) text-body-sm text-(--text-muted)"
           >
             No organization matches your search.
           </p>
@@ -252,10 +252,10 @@
 
         <!-- Create: the last row, over the line that separates it from the roster it
              adds to — the same footer the account and workspace panels end with. -->
-        <div class="flex flex-col border-t border-[var(--border-muted)] p-[var(--spacing-xxs)]">
+        <div class="flex flex-col border-t border-(--border-muted) p-(--spacing-xxs)">
           <button
             type="button"
-            class="flex w-full items-center gap-[var(--spacing-xs)] rounded-[var(--shape-button)] px-[var(--spacing-xs)] py-[var(--spacing-xs)] text-left text-label-sm text-[var(--text-default)] transition-colors duration-fast-02 ease-productive-entrance hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--ring-color)] motion-reduce:transition-none"
+            class="flex w-full items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xs) text-left text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) motion-reduce:transition-none"
             @click="createOrg"
           >
             <i

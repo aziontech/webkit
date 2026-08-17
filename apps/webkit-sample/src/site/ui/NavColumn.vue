@@ -25,14 +25,14 @@
 </script>
 
 <template>
-  <div class="flex min-w-0 flex-col bg-[var(--bg-canvas)]">
-    <div class="flex items-center border-b border-[var(--border-default)] p-[var(--spacing-lg)]">
+  <div class="flex min-w-0 flex-col bg-(--bg-canvas)">
+    <div class="flex items-center border-b border-(--border-default) p-(--spacing-lg)">
       <!-- `-ml-1` cancels the 4px `pl-1` Overline carries of its own; without it the
            heading sits 4px right of everything beneath it. -->
       <Overline class="-ml-1">{{ title }}</Overline>
     </div>
 
-    <div class="flex flex-col gap-[var(--spacing-lg)] p-[var(--spacing-lg)]">
+    <div class="flex flex-col gap-(--spacing-lg) p-(--spacing-lg)">
       <slot />
     </div>
   </div>

@@ -297,14 +297,14 @@
     ref="field"
     role="list"
     aria-label="Globals available in the Azion Runtime"
-    class="flex flex-col items-center justify-center gap-[var(--spacing-xs)]"
+    class="flex flex-col items-center justify-center gap-(--spacing-xs)"
   >
     <div
       v-for="(row, rowIndex) in rows"
       :key="`row-${rowIndex}`"
       role="none"
       :style="rowStyle(rowIndex)"
-      class="flex w-max shrink-0 items-center gap-[var(--spacing-xs)] will-change-transform"
+      class="flex w-max shrink-0 items-center gap-(--spacing-xs) will-change-transform"
     >
       <!-- `role="listitem"` rides IllustrationPill's attribute passthrough onto the pill's own
            root, so the semantics need no wrapper around each pill — a wrapper would land
@@ -318,10 +318,10 @@
         :label="entry.api.label"
         :class="[
           entry.api.azion
-            ? 'text-[var(--primary)]'
+            ? 'text-(--primary)'
             : lit[entry.index]
-              ? 'text-[var(--text-default)]'
-              : 'text-[var(--text-muted)]',
+              ? 'text-(--text-default)'
+              : 'text-(--text-muted)',
           'transition-colors duration-500 ease-out motion-reduce:transition-none'
         ]"
       />

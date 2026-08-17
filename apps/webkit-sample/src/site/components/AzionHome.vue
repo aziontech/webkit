@@ -231,7 +231,7 @@
          it is what puts the marks on the bottom edge of ONE screen rather than floating
          them a third of the way up it. Functions closes its hero the same way. -->
     <div
-      class="flex min-h-[calc(100dvh-var(--banner-offset,0px)-var(--spacing-xl)*2)] flex-col justify-between gap-[var(--spacing-xxl)]"
+      class="flex min-h-[calc(100dvh-var(--banner-offset,0px)-var(--spacing-xl)*2)] flex-col justify-between gap-(--spacing-xxl)"
     >
       <!-- Hero copy anatomy: headline → description → actions. No eyebrow here — the
            headline opens the page on its own, and its accent phrase carries the brand
@@ -384,7 +384,7 @@ And it stays up when others go down."
                into the artwork's leading edge. The min-height is what the globe
                used to hold open. -->
           <MapBanner />
-          <div class="relative z-10 grid items-center gap-[var(--spacing-xl)] lg:grid-cols-2">
+          <div class="relative z-10 grid items-center gap-(--spacing-xl) lg:grid-cols-2">
             <!-- Copy hangs from the top edge rather than centring in the band: the map
                  behind it is a full-height backdrop, so a centred block floated in the
                  middle of the frame with no edge to hold onto.
@@ -396,9 +396,9 @@ And it stays up when others go down."
                  a solid stack of copy. From lg the copy has its own column again, hangs
                  from the top edge, and falls back to the frame's vertical rhythm. -->
             <div
-              class="flex min-h-[clamp(340px,52vh,620px)] flex-col justify-between gap-[var(--spacing-xl)] px-[var(--spacing-xl)] pt-[clamp(2rem,7vh,3.25rem)] pb-[var(--spacing-xl)] lg:justify-start lg:py-[var(--spacing-xxl)] lg:pt-[var(--spacing-xxl)]"
+              class="flex min-h-[clamp(340px,52vh,620px)] flex-col justify-between gap-(--spacing-xl) px-(--spacing-xl) pt-[clamp(2rem,7vh,3.25rem)] pb-(--spacing-xl) lg:justify-start lg:py-(--spacing-xxl) lg:pt-(--spacing-xxl)"
             >
-              <h2 class="text-balance text-heading-2xl text-[var(--text-default)]">
+              <h2 class="text-balance text-heading-2xl text-(--text-default)">
                 The most reliable infrastructure
               </h2>
               <!-- The claim chips, from the shared list and the shared treatment
@@ -433,19 +433,19 @@ And it stays up when others go down."
           borders="bottom"
           marks="bottom"
         >
-          <div class="grid grid-cols-2 gap-px bg-[var(--border-default)] lg:grid-cols-4">
+          <div class="grid grid-cols-2 gap-px bg-(--border-default) lg:grid-cols-4">
             <FrameBox
               v-for="benefit in benefits"
               :key="benefit.client"
               borders="none"
               marks="none"
-              class="min-w-0 bg-[var(--bg-canvas)]"
+              class="min-w-0 bg-(--bg-canvas)"
             >
               <div
-                class="flex h-full flex-col justify-between gap-[var(--spacing-xl)] p-[var(--spacing-xl)]"
+                class="flex h-full flex-col justify-between gap-(--spacing-xl) p-(--spacing-xl)"
               >
-                <p class="m-0 text-pretty text-heading-sm text-[var(--text-muted)]">
-                  <span class="font-medium text-[var(--text-default)]">{{ benefit.claim }}</span>
+                <p class="m-0 text-pretty text-heading-sm text-(--text-muted)">
+                  <span class="font-medium text-(--text-default)">{{ benefit.claim }}</span>
                   {{ benefit.line }}
                 </p>
                 <!-- The signature strip: a fixed 24px band every cell reserves, so the
@@ -516,7 +516,7 @@ And it stays up when others go down."
         borders="y"
         marks="bottom"
       >
-        <div class="grid gap-px bg-[var(--border-default)]">
+        <div class="grid gap-px bg-(--border-default)">
           <!-- Header band: headline at the start edge, description + actions at the end
              edge. `gap-xxl` is the floor on the span between them — below `lg` the two
              blocks stack and that same gap becomes the vertical air.
@@ -526,12 +526,12 @@ And it stays up when others go down."
           <FrameBox
             borders="none"
             marks="none"
-            class="bg-[var(--bg-canvas)]"
+            class="bg-(--bg-canvas)"
           >
             <div
-              class="flex flex-col gap-[var(--spacing-xxl)] p-[var(--spacing-xl)] lg:flex-row lg:items-start lg:justify-between"
+              class="flex flex-col gap-(--spacing-xxl) p-(--spacing-xl) lg:flex-row lg:items-start lg:justify-between"
             >
-              <div class="flex flex-col gap-[var(--spacing-md)] lg:max-w-[52%]">
+              <div class="flex flex-col gap-(--spacing-md) lg:max-w-[52%]">
                 <Overline
                   prefix="//"
                   show-cursor
@@ -540,7 +540,7 @@ And it stays up when others go down."
                 <!-- `text-heading-lg` is the section-title token — the same size SectionTitle
                  sets on every other section's h2, so this left-aligned opener carries the
                  same weight as the centred ones. -->
-                <h2 class="m-0 text-balance text-heading-lg text-[var(--text-default)]">
+                <h2 class="m-0 text-balance text-heading-lg text-(--text-default)">
                   Plataforma Completa de Desenvolvimento e Segurança de Aplicações
                 </h2>
               </div>
@@ -548,14 +548,14 @@ And it stays up when others go down."
               <!-- The end block: pinned to the module's right rule by the band's
                `justify-between`, but set left-aligned like every other block of copy on
                the page — the edge is what the block registers to, not the ragged line. -->
-              <div class="flex flex-col items-start gap-[var(--spacing-lg)] lg:max-w-[36%]">
-                <p class="m-0 text-pretty text-body-lg text-[var(--text-muted)]">
+              <div class="flex flex-col items-start gap-(--spacing-lg) lg:max-w-[36%]">
+                <p class="m-0 text-pretty text-body-lg text-(--text-muted)">
                   Infraestrutura, runtime, dados e segurança em um só lugar — para construir,
                   distribuir e proteger aplicações modernas sem montar a plataforma peça por peça.
                 </p>
 
                 <div
-                  class="flex flex-col items-stretch gap-[var(--spacing-sm)] sm:flex-row sm:items-center"
+                  class="flex flex-col items-stretch gap-(--spacing-sm) sm:flex-row sm:items-center"
                 >
                   <Button
                     label="Comece agora"
@@ -592,19 +592,19 @@ And it stays up when others go down."
               :key="pillar.label"
               borders="none"
               marks="none"
-              class="bg-[var(--bg-canvas)]"
+              class="bg-(--bg-canvas)"
             >
               <div
-                class="flex h-full flex-col items-start gap-[var(--spacing-sm)] p-[var(--spacing-xl)]"
+                class="flex h-full flex-col items-start gap-(--spacing-sm) p-(--spacing-xl)"
               >
-                <p class="m-0 flex items-center gap-[var(--spacing-xs)] text-body-sm">
+                <p class="m-0 flex items-center gap-(--spacing-xs) text-body-sm">
                   <i
-                    :class="[pillar.icon, 'text-body-md text-[var(--text-muted)]']"
+                    :class="[pillar.icon, 'text-body-md text-(--text-muted)']"
                     aria-hidden="true"
                   />
-                  <span class="text-[var(--text-muted)]">{{ pillar.label }}</span>
+                  <span class="text-(--text-muted)">{{ pillar.label }}</span>
                 </p>
-                <p class="m-0 text-pretty text-body-md text-[var(--text-default)]">
+                <p class="m-0 text-pretty text-body-md text-(--text-default)">
                   {{ pillar.description }}
                 </p>
               </div>

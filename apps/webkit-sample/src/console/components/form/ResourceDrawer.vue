@@ -88,11 +88,11 @@
           @submit.prevent="emit('submit')"
         >
           <PanelHeader class="w-full">
-            <div class="flex min-w-0 flex-col gap-[var(--spacing-xxs)]">
+            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
               <DrawerTitle>{{ title }}</DrawerTitle>
               <p
                 v-if="description"
-                class="text-body-sm text-[var(--text-muted)]"
+                class="text-body-sm text-(--text-muted)"
               >
                 {{ description }}
               </p>
@@ -118,7 +118,7 @@
                the panel. `#start` is for a bulk path that belongs to the whole form (the
                Variables drawer's Import); everything else stays out of here. -->
           <PanelFooter class="flex-wrap justify-between">
-            <div class="flex min-w-0 items-center gap-[var(--spacing-sm)]">
+            <div class="flex min-w-0 items-center gap-(--spacing-sm)">
               <slot name="start" />
             </div>
             <Button

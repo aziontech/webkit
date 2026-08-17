@@ -66,7 +66,7 @@
        beside it to take its height from. Side by side the grid row stretches it
        to the taller half, and a min-height above that would push the page down. -->
   <aside
-    class="relative isolate flex min-h-[420px] flex-col overflow-hidden border-t border-[var(--border-default)] bg-[var(--bg-surface)] py-[var(--spacing-xxl)] lg:min-h-0 lg:border-t-0 lg:border-l"
+    class="relative isolate flex min-h-[420px] flex-col overflow-hidden border-t border-(--border-default) bg-(--bg-surface) py-(--spacing-xxl) lg:min-h-0 lg:border-t-0 lg:border-l"
     aria-label="The Azion network"
   >
     <MapBanner kind="panel" />
@@ -84,10 +84,10 @@
          composition, and a row of pills floated into it would be the one thing in
          front of the part worth looking at. -->
     <header
-      class="relative z-10 flex flex-col items-center gap-[var(--spacing-lg)] px-[var(--spacing-xl)] text-center"
+      class="relative z-10 flex flex-col items-center gap-(--spacing-lg) px-(--spacing-xl) text-center"
     >
       <h2
-        class="max-w-[var(--container-md)] text-balance text-heading-lg text-[var(--text-default)]"
+        class="max-w-(--container-md) text-balance text-heading-lg text-(--text-default)"
       >
         {{ title }}
       </h2>
@@ -95,7 +95,7 @@
       <ClaimChips
         v-if="tags.length"
         :claims="tags"
-        class="max-w-[var(--container-md)] justify-center"
+        class="max-w-(--container-md) justify-center"
       />
     </header>
 
@@ -110,14 +110,14 @@
          are no longer the frame's: at 24px and one ink they are a quiet strip,
          and the tracked mono line above them is nearly as light. Set 16px apart
          the two read as one four-line block of small grey type. -->
-    <footer class="relative z-10 flex flex-col gap-[var(--spacing-xl)]">
+    <footer class="relative z-10 flex flex-col gap-(--spacing-xl)">
       <!-- The same overline the marketing hero puts over this row, so the strip
            is captioned identically wherever it appears. It is short enough to
            hold one line at any width the panel takes, which is why it needs
            neither the balancing nor the tightened gutter the frame's longer
            sentence did — it sits on the headline's own gutter. -->
       <p
-        class="px-[var(--spacing-xl)] text-center text-overline-sm text-[var(--text-muted)] uppercase"
+        class="px-(--spacing-xl) text-center text-overline-sm text-(--text-muted) uppercase"
       >
         Trusted by mission-critical workloads
       </p>

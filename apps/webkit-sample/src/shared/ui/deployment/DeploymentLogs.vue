@@ -455,22 +455,22 @@
          and a running one has no outcome yet. -->
     <div
       v-if="header"
-      class="flex items-center justify-between gap-[var(--spacing-sm)] border-b border-[var(--border-default)] px-[var(--spacing-sm)] py-[var(--spacing-sm)]"
+      class="flex items-center justify-between gap-(--spacing-sm) border-b border-(--border-default) px-(--spacing-sm) py-(--spacing-sm)"
     >
       <p
         v-if="label"
-        class="shrink-0 text-heading-xxs text-[var(--text-default)]"
+        class="shrink-0 text-heading-xxs text-(--text-default)"
       >
         {{ label }}
       </p>
 
-      <div class="ml-auto flex min-w-0 items-center gap-[var(--spacing-sm)]">
+      <div class="ml-auto flex min-w-0 items-center gap-(--spacing-sm)">
         <!-- Running: the progress read. -->
         <template v-if="!settled">
-          <span class="shrink-0 text-label-sm text-[var(--text-default)]">{{ progressLabel }}</span>
+          <span class="shrink-0 text-label-sm text-(--text-default)">{{ progressLabel }}</span>
           <span
             v-if="activeTitle"
-            class="truncate text-label-sm text-[var(--text-muted)]"
+            class="truncate text-label-sm text-(--text-muted)"
           >
             {{ activeTitle }}
           </span>
@@ -499,7 +499,7 @@
              switch would offer a view that scrolls out from under someone who is
              waiting, and there is nothing finished to copy. -->
         <template v-if="controls && settled">
-          <span class="text-label-sm text-[var(--text-muted)]">{{ outcomeLabel }}</span>
+          <span class="text-label-sm text-(--text-muted)">{{ outcomeLabel }}</span>
           <SegmentedButton
             v-model="view"
             :options="views"
@@ -540,7 +540,7 @@
                (min-h-8), and a step row that fits on one line should read at that
                height. The two lines it used to be doubled the list for no
                information — eight rows of chrome instead of eight facts. -->
-          <span class="flex min-h-8 flex-1 items-center gap-[var(--spacing-sm)]">
+          <span class="flex min-h-8 flex-1 items-center gap-(--spacing-sm)">
             <!-- Per-step status glyph — the row's whole state vocabulary, one
                  glyph per row, in the same column down the list so the pipeline
                  reads as a column of states rather than as a stack of sentences. -->
@@ -549,36 +549,36 @@
                    mark at a glance rather than as a stroke among strokes. -->
               <span
                 v-if="stepStatus(i) === 'done'"
-                class="flex size-4 items-center justify-center rounded-full bg-[var(--success)]"
+                class="flex size-4 items-center justify-center rounded-full bg-(--success)"
               >
                 <i
-                  class="pi pi-check text-[9px] leading-none text-[var(--success-contrast)]"
+                  class="pi pi-check text-[9px] leading-none text-(--success-contrast)"
                   aria-hidden="true"
                 />
               </span>
               <i
                 v-else-if="stepStatus(i) === 'failed'"
-                class="pi pi-times-circle text-[var(--danger-contrast)]"
+                class="pi pi-times-circle text-(--danger-contrast)"
                 aria-hidden="true"
               />
               <!-- A skipped step gets a static glyph, never a spinner: nothing
                    about it is still in motion. -->
               <i
                 v-else-if="stepStatus(i) === 'skipped'"
-                class="pi pi-minus-circle text-[var(--text-muted)] opacity-60"
+                class="pi pi-minus-circle text-(--text-muted) opacity-60"
                 aria-hidden="true"
               />
               <Spinner
                 v-else-if="stepStatus(i) === 'running'"
                 key="running"
-                class="size-4 text-[var(--text-default)]"
+                class="size-4 text-(--text-default)"
               />
               <!-- Queued: a hollow ring, NOT a dimmed spinner. A spinner on every
                    queued row had the whole pipeline turning before anything had
                    started; a still ring says "waiting" without claiming motion. -->
               <span
                 v-else
-                class="size-3.5 rounded-full border border-dashed border-[var(--border-default)]"
+                class="size-3.5 rounded-full border border-dashed border-(--border-default)"
               />
             </span>
 
@@ -587,11 +587,11 @@
                  sentence is the reason it broke, so it wraps and reads in full. -->
             <span
               :data-state="stepStatus(i)"
-              class="flex min-w-0 flex-1 items-baseline gap-[var(--spacing-xs)] text-left data-[state=failed]:flex-wrap"
+              class="flex min-w-0 flex-1 items-baseline gap-(--spacing-xs) text-left data-[state=failed]:flex-wrap"
             >
               <span
                 :data-state="stepStatus(i)"
-                class="shrink-0 text-label-sm text-[var(--text-default)] data-[state=pending]:text-[var(--text-muted)] data-[state=skipped]:text-[var(--text-muted)]"
+                class="shrink-0 text-label-sm text-(--text-default) data-[state=pending]:text-(--text-muted) data-[state=skipped]:text-(--text-muted)"
               >
                 {{ step.title }}
               </span>
@@ -605,7 +605,7 @@
               />
               <span
                 :data-state="stepStatus(i)"
-                class="min-w-0 truncate text-body-xs text-[var(--text-muted)] data-[state=failed]:whitespace-normal data-[state=failed]:text-pretty data-[state=failed]:text-[var(--danger-contrast)]"
+                class="min-w-0 truncate text-body-xs text-(--text-muted) data-[state=failed]:whitespace-normal data-[state=failed]:text-pretty data-[state=failed]:text-(--danger-contrast)"
               >
                 {{ step.description }}
               </span>
@@ -615,7 +615,7 @@
             <span class="ml-auto flex shrink-0 items-center">
               <span
                 v-if="durationLabel(i)"
-                class="text-label-code-sm text-[var(--text-muted)]"
+                class="text-label-code-sm text-(--text-muted)"
               >
                 {{ durationLabel(i) }}
               </span>

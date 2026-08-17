@@ -36,7 +36,7 @@
   <Illustration
     size="large"
     aria-label="An application window with the Azion runtime beside it, shipped from Vue, Svelte or React"
-    class="h-[var(--illustration-canvas-height)] w-[var(--illustration-canvas-width)] max-w-full shrink-0"
+    class="h-(--illustration-canvas-height) w-(--illustration-canvas-width) max-w-full shrink-0"
   >
     <span class="relative block h-full w-full">
       <IllustrationWindow
@@ -59,7 +59,7 @@
         size="medium"
         active
         icon="ai ai-azion"
-        class="absolute left-0 top-1/2 -translate-y-1/2 text-[var(--primary)]"
+        class="absolute left-0 top-1/2 -translate-y-1/2 text-(--primary)"
       />
 
       <!-- The frameworks, overhanging the right edge. Same column geometry as the
@@ -67,7 +67,7 @@
            three the width of the widest so their left edges line up and the marks form a
            column of their own. -->
       <span
-        class="absolute right-[-6px] top-1/2 flex w-[94px] -translate-y-1/2 flex-col items-start gap-[var(--spacing-xxs)]"
+        class="absolute right-[-6px] top-1/2 flex w-[94px] -translate-y-1/2 flex-col items-start gap-(--spacing-xxs)"
       >
         <IllustrationPill
           v-for="framework in FRAMEWORKS"

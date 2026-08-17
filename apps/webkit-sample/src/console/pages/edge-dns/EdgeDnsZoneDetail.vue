@@ -308,7 +308,7 @@
                  --layout-section-gap, so no group restates the step (layout.css: the
                  boundary owns the top space, the parent owns the space between). -->
             <section
-              class="layout-section-start flex min-w-0 flex-col gap-[var(--layout-section-gap)]"
+              class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)"
             >
               <!-- One flag locks every editable control while the commit is in flight. -->
               <fieldset
@@ -391,7 +391,7 @@
                           description="Set Azion Edge DNS as the authoritative DNS server for a domain by copying the nameservers values."
                           message="Add the nameservers in your domain provider."
                         >
-                          <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
+                          <div class="flex w-full flex-col gap-(--spacing-xs)">
                             <InputGroup
                               v-for="(ns, index) in NAMESERVERS"
                               :key="ns"
@@ -521,9 +521,9 @@
                --layout-section-gap. It holds one here — the controls row over the table
                it narrows, joined at the GROUP step. -->
           <section
-            class="layout-section-start flex min-w-0 flex-col gap-[var(--layout-section-gap)]"
+            class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)"
           >
-            <section class="flex min-w-0 flex-col gap-[var(--layout-group-gap)]">
+            <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
               <!-- The band's CONTROLS: narrowing on the left, the band's own action on the
                    right, above the card — the same row every list in the console opens with. -->
               <ControlsHeader>
@@ -536,7 +536,7 @@
                   size="large"
                   placeholder="Search records"
                   aria-label="Search records"
-                  class="min-w-36 grow basis-[var(--container-2xs)]"
+                  class="min-w-36 grow basis-(--container-2xs)"
                 >
                   <template #iconLeft>
                     <i
@@ -587,7 +587,7 @@
                     </template>
 
                     <template #cell-value="{ value }">
-                      <div class="flex w-full min-w-0 items-center gap-[var(--spacing-xs)]">
+                      <div class="flex w-full min-w-0 items-center gap-(--spacing-xs)">
                         <span class="min-w-0 truncate">{{ value }}</span>
                         <CopyButton
                           kind="outlined"

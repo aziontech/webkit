@@ -188,7 +188,7 @@
 </script>
 
 <template>
-  <div class="flex h-dvh flex-col bg-[var(--bg-canvas)]">
+  <div class="flex h-dvh flex-col bg-(--bg-canvas)">
     <!-- Global header: back to console, brand + breadcrumb. -->
     <CreationHeader
       :breadcrumb="[{ label: 'Creation Center', current: true }]"
@@ -235,13 +235,13 @@
              step like every other band top; from `lg` up it is the column gutter
              between the two halves, which wants the larger section step. -->
         <div
-          class="layout-section-start flex flex-col gap-[var(--layout-boundary-start)] lg:min-h-0 lg:flex-1 lg:flex-row lg:gap-[var(--layout-section-gap)]"
+          class="layout-section-start flex flex-col gap-(--layout-boundary-start) lg:min-h-0 lg:flex-1 lg:flex-row lg:gap-(--layout-section-gap)"
         >
           <section
-            class="flex w-full min-w-0 flex-col gap-[var(--layout-group-gap)] lg:min-h-0 lg:flex-1"
+            class="flex w-full min-w-0 flex-col gap-(--layout-group-gap) lg:min-h-0 lg:flex-1"
           >
-            <header class="flex min-h-[var(--size-8)] items-center px-[var(--spacing-xs)]">
-              <h2 class="text-heading-xxs text-[var(--text-default)]">Import from Git</h2>
+            <header class="flex min-h-(--size-8) items-center px-(--spacing-xs)">
+              <h2 class="text-heading-xxs text-(--text-default)">Import from Git</h2>
             </header>
 
             <div class="flex flex-col lg:min-h-0 lg:flex-1">
@@ -260,7 +260,7 @@
                     size="medium"
                     title="Connect your repository"
                     description="Choose a Git provider to connect your repository and start the deployment process."
-                    class="rounded-[var(--shape-card)] border border-dashed border-[var(--border-default)] bg-[var(--bg-surface-raised)] lg:min-h-0 lg:flex-1"
+                    class="rounded-(--shape-card) border border-dashed border-(--border-default) bg-(--bg-surface-raised) lg:min-h-0 lg:flex-1"
                   >
                     <template #icon>
                       <!-- Featured icon: a solid GitHub tile framed by two
@@ -268,17 +268,17 @@
                       <span class="relative flex size-10 items-center justify-center">
                         <span
                           aria-hidden="true"
-                          class="absolute left-1/2 top-1/2 size-14 -translate-x-1/2 -translate-y-1/2 rounded-[var(--radius-xl,12px)] border border-[var(--border-strong)] bg-[var(--bg-canvas)] opacity-5"
+                          class="absolute left-1/2 top-1/2 size-14 -translate-x-1/2 -translate-y-1/2 rounded-[var(--radius-xl,12px)] border border-(--border-strong) bg-(--bg-canvas) opacity-5"
                         />
                         <span
                           aria-hidden="true"
-                          class="absolute left-1/2 top-1/2 size-12 -translate-x-1/2 -translate-y-1/2 rounded-[var(--shape-card)] border border-[var(--border-strong)] bg-[var(--bg-canvas)] opacity-10"
+                          class="absolute left-1/2 top-1/2 size-12 -translate-x-1/2 -translate-y-1/2 rounded-(--shape-card) border border-(--border-strong) bg-(--bg-canvas) opacity-10"
                         />
                         <span
-                          class="relative flex size-10 items-center justify-center rounded-[var(--shape-elements)] border border-[var(--border-default)] bg-[var(--bg-surface)]"
+                          class="relative flex size-10 items-center justify-center rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface)"
                         >
                           <i
-                            class="pi pi-github text-[1rem] leading-none text-[var(--text-default)]"
+                            class="pi pi-github text-[1rem] leading-none text-(--text-default)"
                             aria-hidden="true"
                           />
                         </span>
@@ -316,22 +316,22 @@
                      inside itself (see the scroll box below). -->
               <div
                 v-else
-                class="flex flex-col gap-[var(--layout-group-gap)] lg:min-h-0 lg:max-h-full"
+                class="flex flex-col gap-(--layout-group-gap) lg:min-h-0 lg:max-h-full"
               >
                 <!-- Account scope + search -->
-                <div class="flex flex-col gap-[var(--spacing-sm)] sm:flex-row">
+                <div class="flex flex-col gap-(--spacing-sm) sm:flex-row">
                   <Select
                     :model-value="scope"
                     aria-label="Git account scope"
                     size="large"
                     :display-value="(v) => scopes.find((s) => s.value === v)?.label ?? ''"
                     @update:model-value="onSelectScope"
-                    class="shrink-0 sm:w-[var(--container-3xs)]"
+                    class="shrink-0 sm:w-(--container-3xs)"
                   >
                     <Select.Trigger>
                       <template #iconLeft>
                         <i
-                          class="pi pi-github text-[1rem] leading-none shrink-0 text-[var(--text-default)]"
+                          class="pi pi-github text-[1rem] leading-none shrink-0 text-(--text-default)"
                           aria-hidden="true"
                         />
                       </template>
@@ -438,11 +438,11 @@
                         >
                           <Item.Media>
                             <span
-                              class="flex size-7 shrink-0 items-center justify-center rounded-[var(--shape-elements)] border border-[var(--border-muted)] bg-[var(--bg-surface-raised)]"
+                              class="flex size-7 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
                             >
                               <i
                                 :class="repo.icon"
-                                class="text-[1rem] leading-none text-[var(--text-default)]"
+                                class="text-[1rem] leading-none text-(--text-default)"
                                 aria-hidden="true"
                               />
                             </span>
@@ -450,7 +450,7 @@
                           <Item.Content>
                             <Item.Title>{{ repo.name }}</Item.Title>
                             <Item.Description
-                              class="flex items-center gap-[var(--spacing-xxs)] text-body-xs"
+                              class="flex items-center gap-(--spacing-xxs) text-body-xs"
                             >
                               <i
                                 class="pi pi-history"
@@ -471,7 +471,7 @@
                       </Item.List>
                       <p
                         v-else
-                        class="px-[var(--spacing-md)] py-[var(--spacing-lg)] text-center text-body-sm text-[var(--text-muted)]"
+                        class="px-(--spacing-md) py-(--spacing-lg) text-center text-body-sm text-(--text-muted)"
                       >
                         No repositories match “{{ search }}”.
                       </p>

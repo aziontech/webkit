@@ -167,7 +167,7 @@
          that appears below once something is edited. -->
     <div class="min-h-0 flex-1 overflow-auto">
       <div
-        class="layout-column-form layout-boundary-inline flex min-w-0 flex-col pb-[var(--layout-section-gap)] pt-[var(--layout-section-gap)]"
+        class="layout-column-form layout-boundary-inline flex min-w-0 flex-col pb-(--layout-section-gap) pt-(--layout-section-gap)"
       >
         <PageHeading
           title="Account Settings"
@@ -176,7 +176,7 @@
 
         <!-- Section owns the band step, so the fieldset only stacks them. -->
         <fieldset
-          class="mx-0 mt-[var(--layout-section-gap)] flex min-w-0 flex-col border-0 p-0"
+          class="mx-0 mt-(--layout-section-gap) flex min-w-0 flex-col border-0 p-0"
           :disabled="saving"
         >
           <legend class="sr-only">Account settings</legend>
@@ -418,12 +418,12 @@
                       <!-- Git-provider icon frame: 32px square, surface-raised fill,
                            muted hairline border, 20px glyph. -->
                       <span
-                        class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-[var(--shape-elements)] border-[length:var(--border-width-default)] border-[var(--border-muted)] bg-[var(--bg-surface-raised)]"
+                        class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-elements) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised)"
                       >
                         <i
                           :class="[
                             provider.icon,
-                            'text-[18px] leading-none text-[var(--text-default)]'
+                            'text-[18px] leading-none text-(--text-default)'
                           ]"
                           aria-hidden="true"
                         />

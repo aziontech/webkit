@@ -36,8 +36,8 @@
     class="group relative cursor-pointer transition-colors duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
     :class="
       featured
-        ? 'bg-[var(--bg-surface-raised)] hover:border-[var(--border-strong)]'
-        : 'hover:bg-[var(--bg-hover)]'
+        ? 'bg-(--bg-surface-raised) hover:border-(--border-strong)'
+        : 'hover:bg-(--bg-hover)'
     "
     role="button"
     tabindex="0"
@@ -56,7 +56,7 @@
 
       <!-- Corner type Tag, shared by both anatomies. -->
       <Tag
-        class="absolute right-[var(--spacing-md)] top-[var(--spacing-md)] z-10"
+        class="absolute right-(--spacing-md) top-(--spacing-md) z-10"
         :severity="featured ? 'primary' : 'info'"
         size="small"
         :label="badge"
@@ -65,10 +65,10 @@
       <!-- ── Spotlight anatomy: centered column ── -->
       <div
         v-if="featured"
-        class="relative z-[1] flex flex-col items-center gap-[var(--spacing-md)] px-[var(--spacing-sm)] py-[var(--spacing-lg)] text-center"
+        class="relative z-[1] flex flex-col items-center gap-(--spacing-md) px-(--spacing-sm) py-(--spacing-lg) text-center"
       >
         <span
-          class="flex size-10 shrink-0 items-center justify-center rounded-[var(--shape-elements)] border border-[var(--border-muted)] bg-[var(--bg-surface-raised)]"
+          class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
         >
           <i
             v-if="icon"
@@ -82,11 +82,11 @@
             aria-label="Azion Marketplace"
           />
         </span>
-        <div class="flex flex-col items-center gap-[var(--spacing-xxs)]">
-          <h3 class="text-heading-xs text-[var(--text-default)]">{{ title }}</h3>
-          <span class="text-body-xs text-[var(--text-muted)]">by {{ vendor }}</span>
+        <div class="flex flex-col items-center gap-(--spacing-xxs)">
+          <h3 class="text-heading-xs text-(--text-default)">{{ title }}</h3>
+          <span class="text-body-xs text-(--text-muted)">by {{ vendor }}</span>
         </div>
-        <p class="text-pretty text-body-sm text-[var(--text-muted)]">
+        <p class="text-pretty text-body-sm text-(--text-muted)">
           {{ description }}
         </p>
       </div>
@@ -94,10 +94,10 @@
       <!-- ── Dense anatomy: logo left, text right ── -->
       <div
         v-else
-        class="flex items-start gap-[var(--spacing-md)] pr-[var(--spacing-xl)]"
+        class="flex items-start gap-(--spacing-md) pr-(--spacing-xl)"
       >
         <span
-          class="flex size-10 shrink-0 items-center justify-center rounded-[var(--shape-elements)] border border-[var(--border-muted)] bg-[var(--bg-surface-raised)]"
+          class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
         >
           <i
             v-if="icon"
@@ -111,12 +111,12 @@
             aria-label="Azion Marketplace"
           />
         </span>
-        <div class="flex min-w-0 flex-col gap-[var(--spacing-xxs)]">
-          <div class="flex flex-wrap items-baseline gap-x-[var(--spacing-xs)]">
-            <h3 class="text-label-md text-[var(--text-default)]">{{ title }}</h3>
-            <span class="text-body-xs text-[var(--text-muted)]">by {{ vendor }}</span>
+        <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+          <div class="flex flex-wrap items-baseline gap-x-(--spacing-xs)">
+            <h3 class="text-label-md text-(--text-default)">{{ title }}</h3>
+            <span class="text-body-xs text-(--text-muted)">by {{ vendor }}</span>
           </div>
-          <p class="text-pretty text-body-sm text-[var(--text-muted)]">
+          <p class="text-pretty text-body-sm text-(--text-muted)">
             {{ description }}
           </p>
         </div>

@@ -293,11 +293,11 @@
        height:100dvh; overflow:hidden, so this docs shell is a full-height column
        with the top bar fixed and the sidebar + main sharing the remaining height. -->
   <div
-    class="docs-shell flex h-dvh flex-col overflow-hidden bg-[var(--bg-canvas)] text-[var(--text-default)]"
+    class="docs-shell flex h-dvh flex-col overflow-hidden bg-(--bg-canvas) text-(--text-default)"
   >
     <!-- ── Docs top bar ─────────────────────────────────────────────────── -->
     <header
-      class="flex h-14 shrink-0 items-center gap-[var(--spacing-sm)] border-b border-[var(--border-default)] bg-[var(--bg-surface)] px-[var(--spacing-sm)] md:gap-[var(--spacing-lg)] md:px-[var(--spacing-md)]"
+      class="flex h-14 shrink-0 items-center gap-(--spacing-sm) border-b border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) md:gap-(--spacing-lg) md:px-(--spacing-md)"
     >
       <!-- Below `lg` the tree has no rail to live in, so the bar carries the way
            into it. `outlined`, matching the search IconButton at the other end of the
@@ -315,7 +315,7 @@
       <RouterLink
         to="/site/docs"
         aria-label="Azion Docs — home"
-        class="inline-flex shrink-0 items-center gap-[var(--spacing-xs)] rounded-[var(--shape-elements)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-surface)]"
+        class="inline-flex shrink-0 items-center gap-(--spacing-xs) rounded-(--shape-elements) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface)"
       >
         <Brand
           kind="default"
@@ -324,7 +324,7 @@
         <!-- The wordmark already says Azion; on a 390px bar the badge is the one
              piece of the identity that can go. -->
         <span
-          class="hidden rounded-[var(--shape-elements)] border border-[var(--border-muted)] px-[var(--spacing-xxs)] py-px text-overline-sm uppercase tracking-widest text-[var(--text-muted)] sm:inline-block"
+          class="hidden rounded-(--shape-elements) border border-(--border-muted) px-(--spacing-xxs) py-px text-overline-sm uppercase tracking-widest text-(--text-muted) sm:inline-block"
         >
           Docs
         </span>
@@ -336,7 +336,7 @@
         aria-label="Documentation sections"
         class="hidden lg:flex"
       >
-        <NavigationMenu.List class="items-center gap-[var(--spacing-xxs)]">
+        <NavigationMenu.List class="items-center gap-(--spacing-xxs)">
           <NavigationMenu.Item
             v-for="link in topLinks"
             :key="link.href"
@@ -360,7 +360,7 @@
       </NavigationMenu>
 
       <div
-        class="ml-auto flex min-w-0 items-center gap-[var(--spacing-xs)] md:gap-[var(--spacing-sm)]"
+        class="ml-auto flex min-w-0 items-center gap-(--spacing-xs) md:gap-(--spacing-sm)"
       >
         <!-- The way into the palette for the viewports with no rail: an IconButton, not
              the rail's bar — a phone has no ⌘K to hint at and no room for a label, so
@@ -403,7 +403,7 @@
           resize-aria-label="Resize navigation"
           expand-aria-label="Expand navigation"
           collapse-aria-label="Collapse navigation"
-          class="h-full w-[var(--container-2xs)]"
+          class="h-full w-(--container-2xs)"
         >
           <template #header>
             <!-- Search → CommandMenu: the rail's ONE search affordance, at the top
@@ -455,7 +455,7 @@
            shell — that decides what is in it. Absent slot ⇒ no rail at all. -->
       <div
         v-if="$slots.toc"
-        class="hidden w-[var(--container-3xs)] shrink-0 overflow-y-auto border-l border-[var(--border-default)] px-[var(--spacing-md)] py-[var(--spacing-lg)] xl:block"
+        class="hidden w-(--container-3xs) shrink-0 overflow-y-auto border-l border-(--border-default) px-(--spacing-md) py-(--spacing-lg) xl:block"
       >
         <slot name="toc" />
       </div>
@@ -555,7 +555,7 @@
                scrolls under it. It carries its own top padding on mobile, where there is
                no header row above it to provide the air. -->
           <div
-            class="w-full shrink-0 px-[var(--spacing-md)] pb-[var(--spacing-md)] pt-[var(--spacing-md)] md:pt-0"
+            class="w-full shrink-0 px-(--spacing-md) pb-(--spacing-md) pt-(--spacing-md) md:pt-0"
           >
             <DocsSearchTrigger @click="openPalette" />
           </div>
@@ -567,7 +567,7 @@
               :groups="docsNavGroups"
               :active-id="active"
               aria-label="Documentation"
-              class="w-full p-[var(--spacing-md)]"
+              class="w-full p-(--spacing-md)"
               @navigate="onNavigate"
             >
               <Menu.Back />
@@ -586,9 +586,9 @@
                is a control the reader acts on, like the rows above it, not a muted section
                header. -->
           <PanelFooter
-            class="w-full justify-between px-[var(--spacing-md)] text-label-md text-[var(--text-default)] lg:hidden"
+            class="w-full justify-between px-(--spacing-md) text-label-md text-(--text-default) lg:hidden"
           >
-            <span class="pl-[var(--spacing-sm)]">Theme</span>
+            <span class="pl-(--spacing-sm)">Theme</span>
             <ThemeSwitcher
               v-model:value="theme"
               aria-label="Theme"

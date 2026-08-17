@@ -91,19 +91,19 @@
 
 <template>
   <header
-    class="sticky top-0 z-40 flex h-14 shrink-0 items-center gap-[var(--spacing-lg)] border-b border-[var(--border-default)] bg-[var(--bg-surface)] px-[var(--spacing-md)]"
+    class="sticky top-0 z-40 flex h-14 shrink-0 items-center gap-(--spacing-lg) border-b border-(--border-default) bg-(--bg-surface) px-(--spacing-md)"
   >
     <RouterLink
       to="/site/hub"
       aria-label="Webkit Hub — home"
-      class="inline-flex shrink-0 items-center gap-[var(--spacing-xs)] rounded-[var(--shape-elements)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-surface)]"
+      class="inline-flex shrink-0 items-center gap-(--spacing-xs) rounded-(--shape-elements) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface)"
     >
       <Brand
         kind="default"
         size="small"
       />
       <span
-        class="rounded-[var(--shape-elements)] border border-[var(--border-muted)] px-[var(--spacing-xxs)] py-px text-overline-sm uppercase tracking-widest text-[var(--text-muted)]"
+        class="rounded-(--shape-elements) border border-(--border-muted) px-(--spacing-xxs) py-px text-overline-sm uppercase tracking-widest text-(--text-muted)"
       >
         Webkit
       </span>
@@ -113,7 +113,7 @@
       aria-label="Webkit documentation"
       class="hidden md:flex"
     >
-      <NavigationMenu.List class="items-center gap-[var(--spacing-xxs)]">
+      <NavigationMenu.List class="items-center gap-(--spacing-xxs)">
         <NavigationMenu.Item
           v-for="menu in navMenus"
           :key="menu.value"
@@ -140,7 +140,7 @@
             </NavigationMenu.Icon>
           </NavigationMenu.Trigger>
           <NavigationMenu.Content class="w-full p-0">
-            <div class="grid grid-cols-1 gap-[var(--spacing-md)] p-[var(--spacing-sm)]">
+            <div class="grid grid-cols-1 gap-(--spacing-md) p-(--spacing-sm)">
               <NavigationMenu.List
                 v-for="group in menu.groups"
                 :key="group.label"
@@ -182,7 +182,7 @@
       </NavigationMenu.Portal>
     </NavigationMenu>
 
-    <div class="ml-auto flex items-center gap-[var(--spacing-sm)]">
+    <div class="ml-auto flex items-center gap-(--spacing-sm)">
       <div class="hidden w-64 sm:block">
         <InputText
           v-model="query"

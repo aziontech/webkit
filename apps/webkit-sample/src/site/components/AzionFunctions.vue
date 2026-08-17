@@ -312,7 +312,7 @@ export default app;`
     class="[--banner-offset:3.5rem]"
   >
     <div
-      class="relative flex min-h-[calc(100dvh-var(--banner-offset,0px)-var(--spacing-xl)*2)] flex-col justify-between gap-[var(--spacing-xxl)]"
+      class="relative flex min-h-[calc(100dvh-var(--banner-offset,0px)-var(--spacing-xl)*2)] flex-col justify-between gap-(--spacing-xxl)"
     >
       <!-- `grid-cols-1` explicitly, not just the implicit single column: an implicit track is
            `auto`, which sizes to its content's MAX-CONTENT width — and the art half's rows are
@@ -320,7 +320,7 @@ export default app;`
            and stretched the CTAs off-screen with it. `grid-cols-1` is `minmax(0, 1fr)`, which
            clamps the intrinsic contribution to zero and keeps the column at the band's width. -->
       <div
-        class="relative grid flex-1 grid-cols-1 items-center gap-[var(--spacing-xxl)] lg:grid-cols-2"
+        class="relative grid flex-1 grid-cols-1 items-center gap-(--spacing-xxl) lg:grid-cols-2"
       >
         <!-- Hero copy anatomy: overline → headline → actions. No description — the design
            opens on the claim alone, and the runtime's own inventory (the pill field in the
@@ -375,7 +375,7 @@ Run at the edge."
            The grid keeps `lg:grid-cols-2` with the field out of flow, so the copy still
            occupies the first column and never runs under it. -->
         <div
-          class="lg:absolute lg:inset-y-0 lg:right-[calc(50%-50vw)] lg:w-[50vw] lg:-translate-y-[var(--spacing-xl)]"
+          class="lg:absolute lg:inset-y-0 lg:right-[calc(50%-50vw)] lg:w-[50vw] lg:-translate-y-(--spacing-xl)"
         >
           <FunctionsHeroCanvas />
         </div>
@@ -423,17 +423,17 @@ Run at the edge."
         marks="bottom"
       >
         <div class="grid lg:grid-cols-2">
-          <div class="flex flex-col justify-between gap-[var(--spacing-xxl)] p-[var(--spacing-xl)]">
-            <div class="flex items-center justify-center py-[var(--spacing-lg)]">
+          <div class="flex flex-col justify-between gap-(--spacing-xxl) p-(--spacing-xl)">
+            <div class="flex items-center justify-center py-(--spacing-lg)">
               <FrameworkStackScene />
             </div>
 
-            <div class="flex flex-col items-start gap-[var(--spacing-lg)]">
-              <div class="flex flex-col gap-[var(--spacing-md)]">
-                <h2 class="m-0 text-balance text-heading-md text-[var(--text-default)]">
+            <div class="flex flex-col items-start gap-(--spacing-lg)">
+              <div class="flex flex-col gap-(--spacing-md)">
+                <h2 class="m-0 text-balance text-heading-md text-(--text-default)">
                   Build with familiar frameworks
                 </h2>
-                <p class="m-0 text-pretty text-body-md text-[var(--text-muted)]">
+                <p class="m-0 text-pretty text-body-md text-(--text-muted)">
                   Write Functions in TypeScript or JavaScript and ship with the frameworks you
                   already use.
                 </p>
@@ -449,12 +449,12 @@ Run at the edge."
           </div>
 
           <div
-            class="flex flex-col justify-between gap-[var(--spacing-xxl)] border-t border-[var(--border-default)] p-[var(--spacing-xl)] lg:border-l lg:border-t-0"
+            class="flex flex-col justify-between gap-(--spacing-xxl) border-t border-(--border-default) p-(--spacing-xl) lg:border-l lg:border-t-0"
           >
             <!-- The `azion-highlight` asset, by name: the mark framed by two offset square
                  scaffolds — the design's own second illustration, already in the library,
                  so it is selected rather than redrawn. -->
-            <div class="flex items-center justify-center py-[var(--spacing-lg)]">
+            <div class="flex items-center justify-center py-(--spacing-lg)">
               <Illustration
                 name="azion-highlight"
                 size="large"
@@ -462,12 +462,12 @@ Run at the edge."
               />
             </div>
 
-            <div class="flex flex-col items-start gap-[var(--spacing-lg)]">
-              <div class="flex flex-col gap-[var(--spacing-md)]">
-                <h2 class="m-0 text-balance text-heading-md text-[var(--text-default)]">
+            <div class="flex flex-col items-start gap-(--spacing-lg)">
+              <div class="flex flex-col gap-(--spacing-md)">
+                <h2 class="m-0 text-balance text-heading-md text-(--text-default)">
                   Serverless runtime built for modern workloads
                 </h2>
-                <p class="m-0 text-pretty text-body-md text-[var(--text-muted)]">
+                <p class="m-0 text-pretty text-body-md text-(--text-muted)">
                   Use Functions as a programmable layer between users, storefronts, APIs, and
                   origins. Adapt requests in real time without changing your backend architecture.
                 </p>
@@ -503,19 +503,19 @@ Run at the edge."
         marks="bottom"
       >
         <div class="grid lg:grid-cols-[4fr_5fr]">
-          <div class="flex flex-col justify-between gap-[var(--spacing-xxl)] p-[var(--spacing-xl)]">
-            <div class="flex flex-col gap-[var(--spacing-lg)]">
-              <h2 class="m-0 text-balance text-heading-md text-[var(--text-default)]">
+          <div class="flex flex-col justify-between gap-(--spacing-xxl) p-(--spacing-xl)">
+            <div class="flex flex-col gap-(--spacing-lg)">
+              <h2 class="m-0 text-balance text-heading-md text-(--text-default)">
                 From hello world to full-stack applications
               </h2>
-              <p class="m-0 text-pretty text-body-md text-[var(--text-muted)]">
+              <p class="m-0 text-pretty text-body-md text-(--text-muted)">
                 Run application logic with the resources a full-stack product needs: relational
                 data, low-latency state, object storage, and AI responses through Azion libraries.
               </p>
             </div>
 
             <div
-              class="flex flex-col items-stretch gap-[var(--spacing-sm)] sm:flex-row sm:items-center"
+              class="flex flex-col items-stretch gap-(--spacing-sm) sm:flex-row sm:items-center"
             >
               <Button
                 label="Read Azion Docs"
@@ -540,7 +540,7 @@ Run at the edge."
                layer that needs a positioned box to fill, and it is what crops the block's
                tail at the frame's edge. -->
           <div
-            class="relative min-w-0 overflow-hidden border-t border-[var(--border-default)] bg-[var(--bg-surface)] lg:border-l lg:border-t-0"
+            class="relative min-w-0 overflow-hidden border-t border-(--border-default) bg-(--bg-surface) lg:border-l lg:border-t-0"
           >
             <!-- Held down and faded at the edges. At full strength the field is a hard
                  regular grid the whole width of the cell, which competes with the code's
@@ -552,13 +552,13 @@ Run at the edge."
             >
               <PixelateBanner />
             </div>
-            <div class="relative z-10 max-h-[32rem] overflow-hidden p-[var(--spacing-xl)] pb-0">
+            <div class="relative z-10 max-h-[32rem] overflow-hidden p-(--spacing-xl) pb-0">
               <!-- Wrapped so the elevation is cast by a shell of the block's own shape:
                    CodeBlock rounds to --shape-elements and clips its overflow, so the
                    shadow goes on a wrapper at the same radius instead of being clipped
                    away. `animate-lines` is CodeBlock's own staggered line entrance, which
                    ships with its motion-reduce fallback. -->
-              <div class="min-w-0 rounded-[var(--shape-elements)] shadow-[var(--shadow-sm)]">
+              <div class="min-w-0 rounded-(--shape-elements) shadow-(--shadow-sm)">
                 <CodeBlock
                   :tabs="codeTabs"
                   default-value="file-upload"
@@ -571,7 +571,7 @@ Run at the edge."
             <!-- The cut, faded: the block ends at the frame's floor, not at a line the
                  reader is meant to read to. -->
             <div
-              class="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-[var(--spacing-xxl)] bg-gradient-to-b from-transparent to-[var(--bg-surface)]"
+              class="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-(--spacing-xxl) bg-gradient-to-b from-transparent to-(--bg-surface)"
             />
           </div>
         </div>
@@ -599,7 +599,7 @@ Run at the edge."
                (border-box), which held the quote 200px inside the 576px it declares. The
                strip below is the frame's, not the quotation's, so it sits outside the figure
                and keeps its full bleed. -->
-          <figure class="m-0 flex flex-col gap-[var(--spacing-xl)] p-[var(--spacing-xxl)]">
+          <figure class="m-0 flex flex-col gap-(--spacing-xl) p-(--spacing-xxl)">
             <!-- 24px on a 1.3 leading is `text-heading-md` — a quotation set at the size of a
                  section's own sub-heading rather than as a display line.
 
@@ -607,7 +607,7 @@ Run at the edge."
                  quotation Chromium's `pretty` shortens every line to even out the last one,
                  which is a paragraph treatment. Greedy wrapping fills the measure and lands
                  the design's four lines. -->
-            <blockquote class="m-0 max-w-[36rem] text-heading-md text-[var(--text-default)]">
+            <blockquote class="m-0 max-w-[36rem] text-heading-md text-(--text-default)">
               &ldquo;With Azion, Contabilizei improved request delivery at the Edge, reduced
               infrastructure costs, and gained fast access to support whenever needed.&rdquo;
             </blockquote>
@@ -615,10 +615,10 @@ Run at the edge."
             <!-- The signature: the name in the accent, the role beside it in the default ink,
                  both in the overline's mono uppercase — the design's own pairing. -->
             <figcaption
-              class="flex flex-col gap-[var(--spacing-xs)] sm:flex-row sm:items-center sm:gap-[var(--spacing-xl)]"
+              class="flex flex-col gap-(--spacing-xs) sm:flex-row sm:items-center sm:gap-(--spacing-xl)"
             >
               <Overline>Fabrício Santos</Overline>
-              <span class="px-1 text-overline-md uppercase text-[var(--text-default)]">
+              <span class="px-1 text-overline-md uppercase text-(--text-default)">
                 DevSecOps Manager at Contabilizei
               </span>
             </figcaption>

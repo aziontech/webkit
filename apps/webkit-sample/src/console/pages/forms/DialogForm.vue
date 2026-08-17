@@ -113,7 +113,7 @@
                 </PanelHeader>
 
                 <!-- compact modal body: blocks --spacing-md apart -->
-                <PanelContent class="flex flex-col gap-[var(--spacing-md)]">
+                <PanelContent class="flex flex-col gap-(--spacing-md)">
                   <Message
                     severity="warning"
                     label="Once confirmed, this action can't be reversed. The selected Application will be deleted, along with all associated settings or instances. Check the Help Center for more details."

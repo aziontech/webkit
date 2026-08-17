@@ -14,11 +14,11 @@
    *                pass true for a plain prose column.
    */
   const MAX_W = {
-    '3xl': 'max-w-[var(--container-3xl)]',
-    '4xl': 'max-w-[var(--container-4xl)]',
-    '5xl': 'max-w-[var(--container-5xl)]',
-    '6xl': 'max-w-[var(--container-6xl)]',
-    '7xl': 'max-w-[var(--container-7xl)]'
+    '3xl': 'max-w-(--container-3xl)',
+    '4xl': 'max-w-(--container-4xl)',
+    '5xl': 'max-w-(--container-5xl)',
+    '6xl': 'max-w-(--container-6xl)',
+    '7xl': 'max-w-(--container-7xl)'
   }
 
   defineProps({
@@ -43,8 +43,8 @@
     :class="[
       MAX_W[maxWidth],
       'mx-auto w-full',
-      bordered && 'border-x border-[var(--border-default)]',
-      padded && 'px-[var(--spacing-xl)] py-[var(--spacing-xxl)]'
+      bordered && 'border-x border-(--border-default)',
+      padded && 'px-(--spacing-xl) py-(--spacing-xxl)'
     ]"
   >
     <slot />

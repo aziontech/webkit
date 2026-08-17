@@ -286,17 +286,17 @@
           :title="group.title"
           :hint="group.hint"
         >
-          <div class="grid grid-cols-1 gap-[var(--spacing-md)] sm:grid-cols-2 lg:grid-cols-3">
+          <div class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2 lg:grid-cols-3">
             <button
               v-for="example in group.examples"
               :key="example.id"
               type="button"
-              class="flex w-full flex-col gap-[var(--spacing-md)] rounded-[var(--shape-card)] border border-[var(--border-default)] bg-[var(--bg-surface)] p-[var(--spacing-lg)] text-left transition-colors duration-fast-02 ease-productive-entrance hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--bg-canvas)] motion-reduce:transition-none"
+              class="flex w-full flex-col gap-(--spacing-md) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-lg) text-left transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
               @click="open(example)"
             >
-              <div class="flex w-full items-center justify-between gap-[var(--spacing-sm)]">
+              <div class="flex w-full items-center justify-between gap-(--spacing-sm)">
                 <span
-                  class="flex size-2 shrink-0 items-center justify-center rounded-[var(--shape-elements)] border border-[var(--border-default)] bg-[var(--bg-surface-raised)] p-3 text-[var(--primary)]"
+                  class="flex size-2 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface-raised) p-3 text-(--primary)"
                 >
                   <i
                     class="text-body-xs"
@@ -304,7 +304,7 @@
                     aria-hidden="true"
                   />
                 </span>
-                <div class="flex items-center gap-[var(--spacing-xxs)]">
+                <div class="flex items-center gap-(--spacing-xxs)">
                   <Tag
                     :label="example.surface"
                     severity="secondary"
@@ -317,11 +317,11 @@
                   />
                 </div>
               </div>
-              <span class="flex w-full flex-col gap-[var(--spacing-xs)]">
-                <span class="text-label-md text-[var(--text-default)]">
+              <span class="flex w-full flex-col gap-(--spacing-xs)">
+                <span class="text-label-md text-(--text-default)">
                   {{ example.title }}
                 </span>
-                <span class="text-body-xs text-[var(--text-muted)]">
+                <span class="text-body-xs text-(--text-muted)">
                   {{ example.description }}
                 </span>
               </span>

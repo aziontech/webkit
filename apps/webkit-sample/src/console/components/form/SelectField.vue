@@ -56,7 +56,7 @@
 </script>
 
 <template>
-  <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
+  <div class="flex w-full flex-col gap-(--spacing-xs)">
     <Label
       v-if="label"
       :label="label"

@@ -82,11 +82,11 @@
 </script>
 
 <template>
-  <div class="w-full border-t border-[var(--border-default)]">
+  <div class="w-full border-t border-(--border-default)">
     <FrameBox
       flush
       marks="bottom"
-      class="mx-auto w-full max-w-[var(--container-5xl)]"
+      class="mx-auto w-full max-w-(--container-5xl)"
     >
       <Footer aria-label="Footer">
         <Footer.Column
@@ -108,7 +108,7 @@
             kind="default"
             size="small"
           />
-          <div class="flex items-center gap-[var(--spacing-xxs)]">
+          <div class="flex items-center gap-(--spacing-xxs)">
             <IconButton
               v-for="social in socials"
               :key="social.label"
@@ -122,7 +122,7 @@
         </template>
 
         <template #social-end>
-          <span class="text-body-xs text-[var(--text-muted)]">
+          <span class="text-body-xs text-(--text-muted)">
             © {{ year }} Azion Technologies. All rights reserved.
           </span>
           <Footer.Link

@@ -29,12 +29,12 @@
   <!-- `overflow-hidden` because the Azion marks are drawn on their own box and an
        `ai-cor` glyph can otherwise paint past the hairline at this size. -->
   <span
-    class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-[var(--shape-elements)] border-[length:var(--border-width-default)] border-[var(--border-muted)] bg-[var(--bg-surface-raised)]"
+    class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-elements) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised)"
   >
     <slot>
       <i
         :class="icon"
-        class="text-[18px] leading-none text-[var(--text-default)]"
+        class="text-[18px] leading-none text-(--text-default)"
         aria-hidden="true"
       />
     </slot>

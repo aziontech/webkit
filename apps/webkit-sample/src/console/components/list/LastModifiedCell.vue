@@ -35,7 +35,7 @@
 <template>
   <div
     v-if="displayName || relative"
-    class="flex min-w-0 items-center gap-[var(--spacing-xs)]"
+    class="flex min-w-0 items-center gap-(--spacing-xs)"
   >
     <Tooltip
       v-if="displayName"
@@ -49,6 +49,6 @@
         kind="square"
       />
     </Tooltip>
-    <span class="truncate text-body-sm text-[var(--text-muted)]">{{ relative }}</span>
+    <span class="truncate text-body-sm text-(--text-muted)">{{ relative }}</span>
   </div>
 </template>

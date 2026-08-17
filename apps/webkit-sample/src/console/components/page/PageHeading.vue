@@ -35,10 +35,10 @@
 </script>
 
 <template>
-  <header class="flex items-start justify-between gap-[var(--spacing-md)]">
+  <header class="flex items-start justify-between gap-(--spacing-md)">
     <div
       v-if="title || description"
-      class="flex min-w-0 flex-col gap-[var(--spacing-xxs)]"
+      class="flex min-w-0 flex-col gap-(--spacing-xxs)"
     >
       <!-- The title row. `title-suffix` is for an affordance that belongs to the
            TITLE rather than to the page — a copy control on a page whose title is
@@ -46,12 +46,12 @@
            in `actions`, on the other side of the header. -->
       <div
         v-if="title"
-        class="flex min-w-0 items-center gap-[var(--spacing-xs)]"
+        class="flex min-w-0 items-center gap-(--spacing-xs)"
       >
         <h1
           :id="titleId"
           :data-size="size"
-          class="text-balance text-[var(--text-default)] data-[size=small]:text-heading-xs data-[size=medium]:text-heading-sm data-[size=large]:text-heading-lg"
+          class="text-balance text-(--text-default) data-[size=small]:text-heading-xs data-[size=medium]:text-heading-sm data-[size=large]:text-heading-lg"
         >
           {{ title }}
         </h1>
@@ -59,14 +59,14 @@
       </div>
       <p
         v-if="description"
-        class="text-pretty text-body-sm text-[var(--text-muted)]"
+        class="text-pretty text-body-sm text-(--text-muted)"
       >
         {{ description }}
       </p>
     </div>
     <div
       v-if="$slots.actions"
-      class="flex shrink-0 items-center gap-[var(--spacing-xs)]"
+      class="flex shrink-0 items-center gap-(--spacing-xs)"
     >
       <slot name="actions" />
     </div>

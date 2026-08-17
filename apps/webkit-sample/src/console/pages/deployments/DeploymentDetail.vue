@@ -341,7 +341,7 @@
         </PageHeading>
         <!-- The page's parent section: the three bands below, in the order the
              questions arrive. -->
-        <section class="layout-section-start flex min-w-0 flex-col gap-[var(--layout-section-gap)]">
+        <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)">
           <!-- ── 1. Where does it stand? ──────────────────────────────────────
                One banner, matched to the outcome, as the page's status line. The
                running one is the reason it leads: "nothing is published yet" is
@@ -384,17 +384,17 @@
                repeating the page title was the same string twice, 80px apart. -->
           <CardBox>
             <template #header>
-              <p class="text-heading-xs text-[var(--text-default)]">Build Details</p>
+              <p class="text-heading-xs text-(--text-default)">Build Details</p>
             </template>
 
             <template #content>
               <!-- Three columns on wide, two on tablet, one on phone. The order is
                    the order you ask: who made it and from where, then what it runs
                    with, then where it runs. -->
-              <div class="grid grid-cols-1 gap-[var(--spacing-lg)] sm:grid-cols-2 lg:grid-cols-3">
-                <div class="flex flex-col gap-[var(--spacing-xxs)]">
-                  <span class="text-label-sm text-[var(--text-muted)]">Created</span>
-                  <div class="flex min-w-0 items-center gap-[var(--spacing-xs)]">
+              <div class="grid grid-cols-1 gap-(--spacing-lg) sm:grid-cols-2 lg:grid-cols-3">
+                <div class="flex flex-col gap-(--spacing-xxs)">
+                  <span class="text-label-sm text-(--text-muted)">Created</span>
+                  <div class="flex min-w-0 items-center gap-(--spacing-xs)">
                     <!-- The face identifies the person; the tooltip carries the
                          name and the absolute date the relative one hides. -->
                     <Tooltip :text="`${deploy.author} · ${formatListDate(deploy.createdAt)}`">
@@ -406,46 +406,46 @@
                         kind="square"
                       />
                     </Tooltip>
-                    <span class="truncate text-body-sm text-[var(--text-default)]">
+                    <span class="truncate text-body-sm text-(--text-default)">
                       {{ relativeTime(deploy.createdAt) }}
                     </span>
                   </div>
                 </div>
 
-                <div class="flex flex-col gap-[var(--spacing-xxs)]">
+                <div class="flex flex-col gap-(--spacing-xxs)">
                   <!-- Source is the WORKLOAD: the public entry point the
                        deployment publishes under. It links to that workload, so
                        the page is a step in the chain rather than a dead end. -->
-                  <span class="text-label-sm text-[var(--text-muted)]">Source</span>
+                  <span class="text-label-sm text-(--text-muted)">Source</span>
                   <router-link
                     :to="{
                       path: `/workloads/${deploy.workload.id}`,
                       query: { email: userEmail, name: deploy.workload.name }
                     }"
-                    class="flex min-w-0 items-center gap-[var(--spacing-xs)] text-body-sm text-[var(--text-default)] no-underline hover:underline"
+                    class="flex min-w-0 items-center gap-(--spacing-xs) text-body-sm text-(--text-default) no-underline hover:underline"
                   >
                     <i
-                      class="ai ai-workloads shrink-0 text-[var(--text-muted)]"
+                      class="ai ai-workloads shrink-0 text-(--text-muted)"
                       aria-hidden="true"
                     />
                     <span class="truncate">{{ deploy.workload.name }}</span>
                     <i
-                      class="pi pi-arrow-up-right shrink-0 text-[var(--text-muted)]"
+                      class="pi pi-arrow-up-right shrink-0 text-(--text-muted)"
                       aria-hidden="true"
                     />
                   </router-link>
                 </div>
 
-                <div class="flex flex-col gap-[var(--spacing-xxs)]">
-                  <span class="text-label-sm text-[var(--text-muted)]">Environment</span>
-                  <span class="text-body-sm text-[var(--text-default)]">
+                <div class="flex flex-col gap-(--spacing-xxs)">
+                  <span class="text-label-sm text-(--text-muted)">Environment</span>
+                  <span class="text-body-sm text-(--text-default)">
                     {{ deploy.environment }}
                   </span>
                 </div>
 
                 <div
                   v-if="trigger"
-                  class="flex flex-col gap-[var(--spacing-xxs)]"
+                  class="flex flex-col gap-(--spacing-xxs)"
                 >
                   <!-- Azion starts a deployment from exactly two places, and which
                        one it was changes how you reproduce it: the Console (this
@@ -453,7 +453,7 @@
                        vocabulary, not from this page. Absent on a deployment whose
                        trigger was never recorded — an empty "Triggered By" teaches
                        less than no row at all. -->
-                  <span class="text-label-sm text-[var(--text-muted)]">Triggered By</span>
+                  <span class="text-label-sm text-(--text-muted)">Triggered By</span>
                   <div class="flex min-w-0 items-center">
                     <Tooltip :text="trigger.source">
                       <Tag
@@ -466,26 +466,26 @@
                   </div>
                 </div>
 
-                <div class="flex flex-col gap-[var(--spacing-xxs)]">
+                <div class="flex flex-col gap-(--spacing-xxs)">
                   <!-- WHAT was deployed. A deployment targets exactly one resource
                        (see lib/deployments.js), so this block is named by that
                        resource's own kind — Application, Firewall, Custom Page — and
                        links to it where the module exists to link to. -->
-                  <span class="text-label-sm text-[var(--text-muted)]">{{ resource.label }}</span>
+                  <span class="text-label-sm text-(--text-muted)">{{ resource.label }}</span>
                   <component
                     :is="resourceLink ? 'router-link' : 'div'"
                     :to="resourceLink || undefined"
-                    class="flex min-w-0 items-center gap-[var(--spacing-xs)] text-body-sm text-[var(--text-default)] no-underline"
+                    class="flex min-w-0 items-center gap-(--spacing-xs) text-body-sm text-(--text-default) no-underline"
                     :class="resourceLink ? 'hover:underline' : ''"
                   >
                     <i
-                      :class="[resource.icon, 'shrink-0 text-[var(--text-muted)]']"
+                      :class="[resource.icon, 'shrink-0 text-(--text-muted)']"
                       aria-hidden="true"
                     />
                     <span class="truncate">{{ deploy.resource.name }}</span>
                     <i
                       v-if="resourceLink"
-                      class="pi pi-arrow-up-right shrink-0 text-[var(--text-muted)]"
+                      class="pi pi-arrow-up-right shrink-0 text-(--text-muted)"
                       aria-hidden="true"
                     />
                   </component>
@@ -493,12 +493,12 @@
 
                 <div
                   v-if="edge"
-                  class="flex flex-col gap-[var(--spacing-xxs)]"
+                  class="flex flex-col gap-(--spacing-xxs)"
                 >
                   <!-- The build preset from azion.config.js: what turned the repo
                        into the bundle this deployment shipped. Only a run this
                        console recorded has build artifacts to show. -->
-                  <span class="text-label-sm text-[var(--text-muted)]">Preset</span>
+                  <span class="text-label-sm text-(--text-muted)">Preset</span>
                   <div class="flex min-w-0 items-center">
                     <Tooltip text="build.preset in azion.config.js">
                       <Tag
@@ -513,27 +513,27 @@
 
                 <div
                   v-if="edge"
-                  class="flex flex-col gap-[var(--spacing-xxs)] sm:col-span-2 lg:col-span-3"
+                  class="flex flex-col gap-(--spacing-xxs) sm:col-span-2 lg:col-span-3"
                 >
                   <!-- Where the assets went: the bucket and the prefix this run
                        uploaded under. `rotate-prefix` gives every deploy its own
                        prefix, which is exactly what makes a rollback possible — so
                        the prefix is the deployment's most useful artifact id. -->
-                  <span class="text-label-sm text-[var(--text-muted)]">Storage</span>
+                  <span class="text-label-sm text-(--text-muted)">Storage</span>
                   <div
-                    class="flex min-w-0 flex-wrap items-center gap-[var(--spacing-xs)] text-body-sm text-[var(--text-default)]"
+                    class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs) text-body-sm text-(--text-default)"
                   >
                     <i
-                      class="ai ai-edge-storage shrink-0 text-[var(--text-muted)]"
+                      class="ai ai-edge-storage shrink-0 text-(--text-muted)"
                       aria-hidden="true"
                     />
                     <span class="truncate">{{ edge.bucket }}</span>
                     <span
-                      class="text-body-xs text-[var(--text-muted)]"
+                      class="text-body-xs text-(--text-muted)"
                       aria-hidden="true"
                       >·</span
                     >
-                    <span class="text-label-code-sm text-[var(--text-muted)]">
+                    <span class="text-label-code-sm text-(--text-muted)">
                       {{ edge.prefix }}
                     </span>
                   </div>
@@ -556,7 +556,7 @@
             class="w-full"
           >
             <template #header>
-              <p class="text-heading-xs text-[var(--text-default)]">Deployment</p>
+              <p class="text-heading-xs text-(--text-default)">Deployment</p>
               <!-- This side of the header changes with the run: the live status
                    while it is building, the two log controls once it has settled.
                    Both belong to the PIPELINE — "Building…" is a statement about the
@@ -582,7 +582,7 @@
               <EmptyState
                 v-if="!finished && !running"
                 :bordered="false"
-                class="py-[var(--spacing-xl)]"
+                class="py-(--spacing-xl)"
                 icon="pi pi-clock"
                 :title="`${deploy.status} — not started`"
                 :description="

@@ -142,14 +142,14 @@
       v-if="controls"
       #toolbar
     >
-      <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
+      <div class="flex w-full flex-col gap-(--spacing-xs)">
         <div class="flex w-full items-center justify-end">
           <InputText
             v-model="search"
             size="large"
             :placeholder="searchPlaceholder"
             :aria-label="searchPlaceholder"
-            class="min-w-36 grow basis-[var(--container-2xs)]"
+            class="min-w-36 grow basis-(--container-2xs)"
           >
             <template #iconLeft>
               <i
@@ -169,8 +169,8 @@
     <template #cell-versionId="{ value, row }">
       <!-- The tag sits UNDER the id, not beside it: side by side it squeezes the
            id — the row's identity — into an ellipsis. -->
-      <div class="flex min-w-0 items-start gap-[var(--spacing-xxs)]">
-        <span class="truncate text-body-sm text-[var(--text-default)]">{{ value }}</span>
+      <div class="flex min-w-0 items-start gap-(--spacing-xxs)">
+        <span class="truncate text-body-sm text-(--text-default)">{{ value }}</span>
         <Tag
           v-if="row.current"
           label="Current"
@@ -186,7 +186,7 @@
            so the build duration sits beside it instead of spending a second
            line. A finished build reports how long it took; one that has not
            finished has nothing honest to show. -->
-      <div class="flex min-w-0 items-center gap-[var(--spacing-xs)]">
+      <div class="flex min-w-0 items-center gap-(--spacing-xs)">
         <StatusIndicator
           :severity="statusMeta(row.status).severity"
           :loading="statusMeta(row.status).loading"
@@ -194,7 +194,7 @@
         />
         <span
           v-if="row.duration"
-          class="shrink-0 text-body-xs text-[var(--text-muted)]"
+          class="shrink-0 text-body-xs text-(--text-muted)"
         >
           {{ row.duration }}
         </span>
@@ -209,12 +209,12 @@
         <router-link
           v-if="resourceHref(row)"
           :to="{ path: resourceHref(row), query: { email } }"
-          class="flex min-w-0 items-center gap-[var(--spacing-xxs)] text-body-sm text-[var(--text-default)] no-underline hover:underline"
+          class="flex min-w-0 items-center gap-(--spacing-xxs) text-body-sm text-(--text-default) no-underline hover:underline"
           @click.stop
         >
           <span class="truncate">{{ value }}</span>
           <i
-            class="pi pi-arrow-up-right shrink-0 text-[var(--text-muted)]"
+            class="pi pi-arrow-up-right shrink-0 text-(--text-muted)"
             aria-hidden="true"
           />
         </router-link>
@@ -222,7 +222,7 @@
              resources have no page to link to. -->
         <span
           v-else
-          class="truncate text-body-sm text-[var(--text-default)]"
+          class="truncate text-body-sm text-(--text-default)"
           >{{ value }}</span
         >
       </div>

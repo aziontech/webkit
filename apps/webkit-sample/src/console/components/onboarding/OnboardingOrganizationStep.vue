@@ -44,11 +44,11 @@
 </script>
 
 <template>
-  <div class="flex flex-col gap-[var(--spacing-lg)]">
+  <div class="flex flex-col gap-(--spacing-lg)">
     <!-- Who the user is — its own field, independent of the organization's name
          below it. The console greets them by it and the rail shows it; the company
          is named separately. -->
-    <div class="flex flex-col gap-[var(--spacing-xs)]">
+    <div class="flex flex-col gap-(--spacing-xs)">
       <Label
         for="onboarding-full-name"
         required
@@ -75,7 +75,7 @@
          PERSISTENT, decoupled from the field's amber state: :required on the
          wrapper is bound to the post-Continue empty state, so the amber is only
          revealed by a failed step, not from first render. -->
-    <div class="flex flex-col gap-[var(--spacing-xs)]">
+    <div class="flex flex-col gap-(--spacing-xs)">
       <Label
         for="onboarding-org-name"
         required
@@ -100,7 +100,7 @@
          very case the mark exists to prevent. The user picks the colour it is
          painted in; the shape comes from the name itself, so each option previews
          the real mark. -->
-    <div class="flex flex-col gap-[var(--spacing-xs)]">
+    <div class="flex flex-col gap-(--spacing-xs)">
       <Label>Organization mark</Label>
       <OrgMarkPicker
         v-model="form.accent"

@@ -41,9 +41,9 @@
 
 <template>
   <div
-    class="border-b border-[var(--border-default)] pr-[var(--spacing-lg)] pl-[var(--spacing-sm)]"
+    class="border-b border-(--border-default) pr-(--spacing-lg) pl-(--spacing-sm)"
   >
-    <div class="flex items-center gap-[var(--spacing-sm)] py-[var(--spacing-sm)]">
+    <div class="flex items-center gap-(--spacing-sm) py-(--spacing-sm)">
       <TabView
         v-model:value="activeTab"
         class="min-w-0 flex-1"
@@ -71,7 +71,7 @@
            never bind. -->
       <div
         v-if="$slots.actions"
-        class="flex min-h-8 shrink-0 items-center gap-[var(--spacing-xs)]"
+        class="flex min-h-8 shrink-0 items-center gap-(--spacing-xs)"
       >
         <slot name="actions" />
       </div>

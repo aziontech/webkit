@@ -85,7 +85,7 @@
         :href="href || undefined"
         :target="href ? '_blank' : undefined"
         :rel="href ? 'noreferrer' : undefined"
-        class="group relative flex h-full w-full flex-col items-start gap-[var(--spacing-md)] rounded-[var(--shape-card)] p-[var(--spacing-md)] text-left transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-[var(--bg-surface-raised)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-inset"
+        class="group relative flex h-full w-full flex-col items-start gap-(--spacing-md) rounded-(--shape-card) p-(--spacing-md) text-left transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-surface-raised) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset"
         @click="href ? undefined : $emit('activate')"
       >
         <!-- ── THE CLUSTER, AND ITS ONE MOVE ──
@@ -113,11 +113,11 @@
           <slot name="logos" />
         </span>
 
-        <span class="flex min-w-0 flex-col gap-[var(--spacing-xxs)]">
-          <span class="text-heading-xxs text-[var(--text-default)]">{{ title }}</span>
+        <span class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+          <span class="text-heading-xxs text-(--text-default)">{{ title }}</span>
           <span
             v-if="description"
-            class="text-pretty text-body-sm text-[var(--text-muted)]"
+            class="text-pretty text-body-sm text-(--text-muted)"
             >{{ description }}</span
           >
         </span>
@@ -132,7 +132,7 @@
              labels the destination and is not a second thing to look at. -->
         <i
           v-if="goesAway"
-          class="pi pi-external-link absolute right-[var(--spacing-md)] top-[var(--spacing-md)] text-[14px] leading-none text-[var(--text-muted)] transition-colors duration-150 ease-out motion-reduce:transition-none group-hover:text-[var(--text-default)]"
+          class="pi pi-external-link absolute right-(--spacing-md) top-(--spacing-md) text-[14px] leading-none text-(--text-muted) transition-colors duration-150 ease-out motion-reduce:transition-none group-hover:text-(--text-default)"
           aria-hidden="true"
         />
       </component>

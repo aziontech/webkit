@@ -50,8 +50,8 @@
       />
 
       <!-- Section: Appearance — an section title over a flush CardBox. -->
-      <section class="layout-section-start flex flex-col gap-[var(--layout-group-gap)]">
-        <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">Appearance</p>
+      <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
+        <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">Appearance</p>
         <CardBox :padded="false">
           <template #content>
             <Item.List>
@@ -63,7 +63,7 @@
                     demand from Google Fonts.
                   </Item.Description>
                 </Item.Content>
-                <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
+                <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
                   <Select
                     v-model="font"
                     size="large"
@@ -94,7 +94,7 @@
                     Follow the operating system, or force a light or dark theme.
                   </Item.Description>
                 </Item.Content>
-                <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
+                <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
                   <Select
                     v-model="theme"
                     size="large"
@@ -124,31 +124,31 @@
 
       <!-- Section: Preview — shows the active font/theme across the type scale
            and a few components so the swap is immediately visible. -->
-      <section class="layout-section-start flex flex-col gap-[var(--layout-group-gap)]">
-        <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
+      <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
+        <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
           Preview · {{ fontLabel }}
         </p>
         <CardBox>
           <template #content>
-            <div class="flex flex-col gap-[var(--spacing-lg)]">
-              <div class="flex flex-col gap-[var(--spacing-xs)]">
-                <p class="text-heading-2xl text-[var(--text-default)]">
+            <div class="flex flex-col gap-(--spacing-lg)">
+              <div class="flex flex-col gap-(--spacing-xs)">
+                <p class="text-heading-2xl text-(--text-default)">
                   The quick brown fox jumps over the lazy dog
                 </p>
-                <p class="text-heading-md text-[var(--text-default)]">
+                <p class="text-heading-md text-(--text-default)">
                   Heading · 1234567890 · AaBbCcDdEeFfGg
                 </p>
-                <p class="text-body-md text-[var(--text-muted)]">
+                <p class="text-body-md text-(--text-muted)">
                   Body copy renders in the selected sans face while the size, weight, and
                   letter-spacing tokens stay exactly as the design system defines them. Only the
                   family is forced.
                 </p>
-                <p class="text-label-code-md text-[var(--text-muted)]">
+                <p class="text-label-code-md text-(--text-muted)">
                   const code = "stays on Roboto Mono";
                 </p>
               </div>
 
-              <div class="flex flex-wrap items-center gap-[var(--spacing-sm)]">
+              <div class="flex flex-wrap items-center gap-(--spacing-sm)">
                 <Button
                   label="Primary"
                   kind="primary"
@@ -179,7 +179,7 @@
               <InputText
                 model-value="Sample input text"
                 size="large"
-                class="w-full max-w-[var(--container-xs)]"
+                class="w-full max-w-(--container-xs)"
                 aria-label="Sample input"
               />
             </div>

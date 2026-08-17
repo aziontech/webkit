@@ -62,7 +62,7 @@
         {
           'text-heading-lg': size === 'section',
           'text-heading-xl': size === 'page',
-          'text-heading-2xl max-w-[var(--container-4xl)]': size === 'hero'
+          'text-heading-2xl max-w-(--container-4xl)': size === 'hero'
         }
       ]"
     >
@@ -72,7 +72,7 @@
       v-if="description || $slots.default"
       :class="[
         'text-muted m-0 mt-4 text-pretty leading-relaxed',
-        size === 'hero' ? 'max-w-[var(--container-2xl)] text-body-lg' : 'max-w-[620px] text-body-md'
+        size === 'hero' ? 'max-w-(--container-2xl) text-body-lg' : 'max-w-[620px] text-body-md'
       ]"
     >
       <slot>

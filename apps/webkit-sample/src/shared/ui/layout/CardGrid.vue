@@ -13,7 +13,7 @@
    *                 self-contained card (border + radius + bg of its own).
    *   • 'divider' — a hairline box grid: 1px gaps reveal the wrapper's border
    *                 colour as internal rules. Children must fill their own
-   *                 background (bg-[var(--bg-canvas)]) so only the gaps show.
+   *                 background (bg-(--bg-canvas)) so only the gaps show.
    *
    * The divider variant carries no perimeter border, so it nests cleanly inside
    * a SectionContainer whose border-x owns the outer edges.
@@ -64,9 +64,9 @@
       variant === 'divider'
         ? [
             'gap-px',
-            dividerColor === 'muted' ? 'bg-[var(--border-muted)]' : 'bg-[var(--border-default)]'
+            dividerColor === 'muted' ? 'bg-(--border-muted)' : 'bg-(--border-default)'
           ]
-        : 'gap-[var(--spacing-md)]'
+        : 'gap-(--spacing-md)'
     ]"
   >
     <slot />

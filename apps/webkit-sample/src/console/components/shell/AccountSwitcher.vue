@@ -122,7 +122,7 @@
           type="button"
           :data-state="isOpen ? 'open' : 'closed'"
           :aria-label="`Account: ${currentAccount.name}. Switch account`"
-          class="flex w-auto items-center gap-1.5 rounded-[var(--shape-button)] p-[var(--spacing-xxs)] transition-colors duration-fast-02 ease-productive-entrance hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] data-[state=open]:bg-[var(--bg-hover)] motion-reduce:transition-none"
+          class="flex w-auto items-center gap-1.5 rounded-(--shape-button) p-(--spacing-xxs) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) data-[state=open]:bg-(--bg-hover) motion-reduce:transition-none"
         >
           <!-- 20px, not the DS Avatar's 24px `small`: the header chain's box is
                20 + 4 top + 4 bottom = 28. The scale has no 20px step, so the
@@ -131,7 +131,7 @@
             :label="accountInitials(currentAccount.name)"
             size="small"
             kind="square"
-            class="size-[var(--size-5)]"
+            class="size-(--size-5)"
           />
           <!-- Below `md` the header is tight: the account keeps its mark and
                its disclosure, and gives up the name the organization beside it
@@ -140,11 +140,11 @@
                links: the chain is one line of chrome, and weighting one of its three
                names heavier makes that name read as a heading over the page below
                it. What distinguishes the links is their marks, not their weight. -->
-          <span class="hidden whitespace-nowrap text-label-sm text-[var(--text-default)] md:inline">
+          <span class="hidden whitespace-nowrap text-label-sm text-(--text-default) md:inline">
             {{ currentAccount.name }}
           </span>
           <i
-            class="pi pi-chevron-down shrink-0 text-body-xs text-[var(--text-muted)] transition-transform duration-fast-02 ease-productive-entrance data-[state=open]:rotate-180 motion-reduce:transition-none"
+            class="pi pi-chevron-down shrink-0 text-body-xs text-(--text-muted) transition-transform duration-fast-02 ease-productive-entrance data-[state=open]:rotate-180 motion-reduce:transition-none"
             :data-state="isOpen ? 'open' : 'closed'"
             aria-hidden="true"
           />
@@ -162,7 +162,7 @@
                already visible is a field that cannot find anything. -->
           <div
             v-if="accounts.length > SEARCH_THRESHOLD"
-            class="border-b border-[var(--border-muted)] p-[var(--spacing-xxs)]"
+            class="border-b border-(--border-muted) p-(--spacing-xxs)"
           >
             <InputText
               v-model="query"
@@ -179,9 +179,9 @@
             </InputText>
           </div>
 
-          <div class="flex max-h-[16rem] flex-col overflow-y-auto p-[var(--spacing-xxs)]">
+          <div class="flex max-h-[16rem] flex-col overflow-y-auto p-(--spacing-xxs)">
             <p
-              class="px-[var(--spacing-xs)] py-[var(--spacing-xxs)] text-label-sm text-[var(--text-muted)]"
+              class="px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-muted)"
             >
               {{ listLabel }}
             </p>
@@ -190,7 +190,7 @@
               v-for="account in shownAccounts"
               :key="account.id"
               type="button"
-              class="flex items-center gap-[var(--spacing-xs)] rounded-[var(--shape-button)] px-[var(--spacing-xs)] py-[var(--spacing-xs)] text-left transition-colors duration-fast-02 ease-productive-entrance hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--ring-color)] motion-reduce:transition-none"
+              class="flex items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xs) text-left transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) motion-reduce:transition-none"
               @click="(event) => selectAccount(event, account)"
             >
               <!-- 24px, not 32: the row is one line now, and a mark taller than the
@@ -200,8 +200,8 @@
                 size="small"
                 kind="square"
               />
-              <span class="flex min-w-0 flex-1 items-center gap-[var(--spacing-xxs)]">
-                <span class="truncate text-label-sm text-[var(--text-default)]">
+              <span class="flex min-w-0 flex-1 items-center gap-(--spacing-xxs)">
+                <span class="truncate text-label-sm text-(--text-default)">
                   {{ account.name }}
                 </span>
                 <Tag
@@ -216,7 +216,7 @@
                    different fact about a different account on every row. -->
                 <i
                   v-if="account.id === currentAccountId"
-                  class="pi pi-check shrink-0 text-body-xs text-[var(--text-muted)]"
+                  class="pi pi-check shrink-0 text-body-xs text-(--text-muted)"
                   aria-hidden="true"
                 />
               </span>
@@ -239,7 +239,7 @@
 
             <p
               v-if="!shownAccounts.length"
-              class="px-[var(--spacing-xs)] py-[var(--spacing-sm)] text-body-sm text-[var(--text-muted)]"
+              class="px-(--spacing-xs) py-(--spacing-sm) text-body-sm text-(--text-muted)"
             >
               No account matches your search.
             </p>
@@ -248,10 +248,10 @@
           <!-- The way to the whole tree, over the line that separates it from the
                short list above — the organization and workspace panels end the same
                way, with the action that goes beyond what the panel can show. -->
-          <div class="flex flex-col border-t border-[var(--border-muted)] p-[var(--spacing-xxs)]">
+          <div class="flex flex-col border-t border-(--border-muted) p-(--spacing-xxs)">
             <button
               type="button"
-              class="flex w-full items-center gap-[var(--spacing-xs)] rounded-[var(--shape-button)] px-[var(--spacing-xs)] py-[var(--spacing-xs)] text-left text-label-sm text-[var(--text-default)] transition-colors duration-fast-02 ease-productive-entrance hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--ring-color)] motion-reduce:transition-none"
+              class="flex w-full items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xs) text-left text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) motion-reduce:transition-none"
               @click="openSwitchDrawer"
             >
               <i

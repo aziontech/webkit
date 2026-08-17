@@ -135,8 +135,8 @@
       <!-- The page's parent section. It holds one section here — the controls row
            over the table it narrows, at the GROUP step — and spaces whatever sits
            inside it at --layout-section-gap. -->
-      <section class="layout-section-start flex min-w-0 flex-col gap-[var(--layout-section-gap)]">
-        <section class="flex min-w-0 flex-col gap-[var(--layout-group-gap)]">
+      <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)">
+        <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
           <!-- The band's CONTROLS: narrowing on the left, the band's own action on the
                right, above the card — the same row every list in the console opens with. -->
           <ControlsHeader>
@@ -149,7 +149,7 @@
               size="large"
               placeholder="Search teams"
               aria-label="Search teams"
-              class="min-w-36 grow basis-[var(--container-2xs)]"
+              class="min-w-36 grow basis-(--container-2xs)"
             >
               <template #iconLeft>
                 <i
@@ -188,7 +188,7 @@
                 :border="false"
               >
                 <template #cell-name="{ row }">
-                  <div class="flex min-w-0 items-center gap-[var(--spacing-xs)]">
+                  <div class="flex min-w-0 items-center gap-(--spacing-xs)">
                     <Avatar
                       :label="row.name"
                       size="small"
@@ -199,8 +199,8 @@
                 </template>
 
                 <template #cell-permissions="{ row }">
-                  <div class="flex min-w-0 items-center gap-[var(--spacing-xs)]">
-                    <span class="truncate text-body-sm text-[var(--text-default)]">
+                  <div class="flex min-w-0 items-center gap-(--spacing-xs)">
+                    <span class="truncate text-body-sm text-(--text-default)">
                       {{ firstPermission(row) }}
                     </span>
 
@@ -214,7 +214,7 @@
                           <button
                             type="button"
                             :aria-label="`Show all ${row.permissions.length} permissions`"
-                            class="inline-flex shrink-0 items-center rounded-[var(--shape-button)] border border-[var(--border-default)] bg-[var(--bg-surface)] px-[var(--spacing-xs)] py-[var(--spacing-xxs)] text-label-xs text-[var(--text-default)] transition-colors duration-fast-02 ease-productive-entrance hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] motion-reduce:transition-none"
+                            class="inline-flex shrink-0 items-center rounded-(--shape-button) border border-(--border-default) bg-(--bg-surface) px-(--spacing-xs) py-(--spacing-xxs) text-label-xs text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
                           >
                             +{{ overflowCount(row) }}
                           </button>
@@ -223,17 +223,17 @@
 
                       <Popover.Content>
                         <div
-                          class="flex max-h-[var(--container-xs)] flex-col overflow-auto p-[var(--spacing-xxs)]"
+                          class="flex max-h-(--container-xs) flex-col overflow-auto p-(--spacing-xxs)"
                         >
                           <p
-                            class="px-[var(--spacing-xs)] py-[var(--spacing-xxs)] text-overline-sm text-[var(--text-muted)]"
+                            class="px-(--spacing-xs) py-(--spacing-xxs) text-overline-sm text-(--text-muted)"
                           >
                             {{ row.permissions.length }} permissions
                           </p>
                           <span
                             v-for="label in permissionList(row)"
                             :key="label"
-                            class="px-[var(--spacing-xs)] py-[var(--spacing-xxs)] text-body-sm text-[var(--text-default)]"
+                            class="px-(--spacing-xs) py-(--spacing-xxs) text-body-sm text-(--text-default)"
                           >
                             {{ label }}
                           </span>

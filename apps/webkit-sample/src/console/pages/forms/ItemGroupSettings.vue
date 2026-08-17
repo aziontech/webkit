@@ -115,8 +115,8 @@
           <legend class="sr-only">Profile settings</legend>
 
           <!-- Section: General — an section title over a flush CardBox. -->
-          <section class="flex flex-col gap-[var(--layout-group-gap)]">
-            <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
+          <section class="flex flex-col gap-(--layout-group-gap)">
+            <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
               General
             </p>
             <CardBox :padded="false">
@@ -127,11 +127,11 @@
                       <Item.Title>Full Name</Item.Title>
                       <Item.Description>The name shown across the console.</Item.Description>
                     </Item.Content>
-                    <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
+                    <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
                       <!-- No Label in an ItemGroup: the required feedback is an
                            amber `required` HelperText under the control (not red —
                            an empty required field is a prompt, not an error). -->
-                      <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
+                      <div class="flex w-full flex-col gap-(--spacing-xs)">
                         <InputText
                           v-model="form.fullName"
                           size="large"
@@ -156,10 +156,10 @@
                       <Item.Title>Email</Item.Title>
                       <Item.Description>Used for sign-in and notifications.</Item.Description>
                     </Item.Content>
-                    <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
+                    <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
                       <!-- Empty → amber `required`; filled but malformed → red
                            `invalid`. The two are distinct states, never both. -->
-                      <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
+                      <div class="flex w-full flex-col gap-(--spacing-xs)">
                         <InputText
                           v-model="form.email"
                           type="email"
@@ -188,8 +188,8 @@
           </section>
 
           <!-- Section: Preferences -->
-          <section class="layout-section-start flex flex-col gap-[var(--layout-group-gap)]">
-            <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
+          <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
+            <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
               Preferences
             </p>
             <CardBox :padded="false">
@@ -202,7 +202,7 @@
                         >Times across the console are shown in this zone.</Item.Description
                       >
                     </Item.Content>
-                    <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
+                    <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
                       <Select
                         v-model="form.timezone"
                         size="large"
@@ -232,7 +232,7 @@
                       <Item.Title>Language</Item.Title>
                       <Item.Description>The console interface language.</Item.Description>
                     </Item.Content>
-                    <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
+                    <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
                       <Select
                         v-model="form.language"
                         size="large"
@@ -262,8 +262,8 @@
           </section>
 
           <!-- Section: Notifications -->
-          <section class="layout-section-start flex flex-col gap-[var(--layout-group-gap)]">
-            <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
+          <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
+            <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
               Notifications
             </p>
             <CardBox :padded="false">
@@ -293,10 +293,10 @@
 
       <!-- Single scoped save (one unit). -->
       <footer
-        class="sticky bottom-0 border-t-[length:var(--border-width-default)] border-[var(--border-muted)] bg-[var(--bg-surface)]"
+        class="sticky bottom-0 border-t-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface)"
       >
         <div
-          class="layout-column-form layout-boundary-inline flex items-center justify-end gap-[var(--spacing-sm)] py-[var(--spacing-md)]"
+          class="layout-column-form layout-boundary-inline flex items-center justify-end gap-(--spacing-sm) py-(--spacing-md)"
         >
           <Button
             type="button"

@@ -32,7 +32,7 @@
 
 <template>
   <div
-    class="flex w-[210px] flex-col gap-[var(--spacing-xs)] rounded-[var(--shape-elements)] border border-dashed border-[var(--border-strong)] bg-[var(--bg-surface)] p-[var(--spacing-sm)] text-left transition-colors duration-150 ease-out hover:border-[var(--primary)] motion-reduce:transition-none"
+    class="flex w-[210px] flex-col gap-(--spacing-xs) rounded-(--shape-elements) border border-dashed border-(--border-strong) bg-(--bg-surface) p-(--spacing-sm) text-left transition-colors duration-150 ease-out hover:border-(--primary) motion-reduce:transition-none"
   >
     <!-- Handles keep the placeholder wired into the flow, but are not
          connectable: there is nothing to connect until the slot is filled. -->
@@ -43,9 +43,9 @@
       :connectable="false"
     />
 
-    <div class="flex items-center gap-[var(--spacing-xs)]">
+    <div class="flex items-center gap-(--spacing-xs)">
       <span
-        class="flex size-6 shrink-0 items-center justify-center rounded-[var(--shape-elements)] border border-dashed border-[var(--border-default)] text-[var(--text-muted)]"
+        class="flex size-6 shrink-0 items-center justify-center rounded-(--shape-elements) border border-dashed border-(--border-default) text-(--text-muted)"
       >
         <i
           :class="data.icon"
@@ -53,10 +53,10 @@
           aria-hidden="true"
         />
       </span>
-      <span class="truncate text-body-sm text-[var(--text-default)]">{{ data.title }}</span>
+      <span class="truncate text-body-sm text-(--text-default)">{{ data.title }}</span>
     </div>
 
-    <p class="text-body-xs text-[var(--text-muted)]">{{ data.description }}</p>
+    <p class="text-body-xs text-(--text-muted)">{{ data.description }}</p>
 
     <!-- `nodrag` lets the pointer reach the button instead of starting a node drag. -->
     <Button
