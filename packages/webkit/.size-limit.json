@@ -57,6 +57,6 @@
   {
     "name": "footer-root",
     "path": "src/components/layout/footer/footer.vue",
-    "limit": "1.1 KB"
+    "limit": "4 KB"
   }
 ]

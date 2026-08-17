@@ -17,7 +17,7 @@ const { DefaultFooter } = composeStories(stories)
  *
  * The root has no emits and no v-model — the only prop is `ariaLabel` — so this
  * file asserts the compound API resolution, the injected-state propagation, slot
- * placement (including the conditional social bar), testid derivation/override,
+ * placement (including each conditional band), testid derivation/override,
  * the landmark a11y contract, and axe.
  */
 
@@ -31,8 +31,9 @@ const compoundComponents = {
   FooterLink: Footer.Link
 }
 
-// A minimal but realistic composed tree exercising columns, links, and both
-// social-bar clusters.
+// A minimal but realistic composed tree exercising columns, links, and all four
+// consumer-filled bands: the social icons, the status/language pair, and the
+// signature's brand and tagline.
 const composedTemplate = `
   <Footer>
     <FooterColumn title="Products">
@@ -42,12 +43,19 @@ const composedTemplate = `
     <FooterColumn title="Company">
       <FooterLink href="/about">About us</FooterLink>
     </FooterColumn>
-    <template #social-start>
-      <a href="/" aria-label="Azion home"><svg viewBox="0 0 10 10"><rect width="10" height="10" /></svg></a>
+    <template #social>
+      <a href="https://github.com/aziontech" aria-label="Azion on GitHub"><svg viewBox="0 0 10 10"><rect width="10" height="10" /></svg></a>
     </template>
-    <template #social-end>
+    <template #status>
       <a href="https://status.azion.com/">All Systems Operational</a>
     </template>
+    <template #language>
+      <button type="button">EN</button>
+    </template>
+    <template #brand>
+      <a href="/" aria-label="Azion home"><svg viewBox="0 0 10 10"><rect width="10" height="10" /></svg></a>
+    </template>
+    <template #tagline>The web platform for modern workloads</template>
   </Footer>
 `
 
@@ -96,46 +104,64 @@ describe('Footer', () => {
       expect(getByTestId('layout-footer__columns').contains(getByTestId('slotted'))).toBe(true)
     })
 
-    it('omits the social bar when neither social slot is provided', () => {
+    it('omits every optional band when only columns are provided', () => {
       const { queryByTestId } = render(Footer, {
         slots: { default: '<span>columns</span>' }
       })
       expect(queryByTestId('layout-footer__social')).toBeNull()
+      expect(queryByTestId('layout-footer__status')).toBeNull()
+      expect(queryByTestId('layout-footer__signature')).toBeNull()
     })
 
-    it('renders the social bar with each cluster in place when the slots are provided', () => {
+    it('routes each slot to its own band', () => {
       const { getByTestId, getByText } = renderComposed()
-      const social = getByTestId('layout-footer__social')
-      expect(social.contains(getByText('All Systems Operational'))).toBe(true)
-      expect(social.querySelector('a[aria-label="Azion home"]')).toBeTruthy()
+      expect(
+        getByTestId('layout-footer__social').querySelector('a[aria-label="Azion on GitHub"]')
+      ).toBeTruthy()
+      const status = getByTestId('layout-footer__status')
+      expect(status.contains(getByText('All Systems Operational'))).toBe(true)
+      expect(status.contains(getByText('EN'))).toBe(true)
+      const signature = getByTestId('layout-footer__signature')
+      expect(signature.querySelector('a[aria-label="Azion home"]')).toBeTruthy()
+      expect(signature.contains(getByText('The web platform for modern workloads'))).toBe(true)
     })
 
-    it('renders the social bar when only social-start is provided', () => {
-      const { getByTestId } = render({
+    it('renders the status band when only the language slot is provided', () => {
+      const { getByTestId, queryByTestId } = render({
         components: compoundComponents,
         template: `
           <Footer>
-            <template #social-start>
-              <a href="/" aria-label="Azion home">Azion</a>
+            <template #language>
+              <button type="button">EN</button>
             </template>
           </Footer>
         `
       })
-      expect(getByTestId('layout-footer__social')).toBeTruthy()
+      expect(getByTestId('layout-footer__status')).toBeTruthy()
+      expect(queryByTestId('layout-footer__social')).toBeNull()
     })
 
-    it('renders the social bar when only social-end is provided', () => {
+    it('renders the signature band when only the tagline slot is provided', () => {
       const { getByTestId } = render({
         components: compoundComponents,
         template: `
           <Footer>
-            <template #social-end>
-              <a href="https://status.azion.com/">All Systems Operational</a>
-            </template>
+            <template #tagline>The web platform for modern workloads</template>
           </Footer>
         `
       })
-      expect(getByTestId('layout-footer__social')).toBeTruthy()
+      expect(getByTestId('layout-footer__signature')).toBeTruthy()
+    })
+
+    // The gutters and the closing band are page material with no content of their
+    // own, so they must not reach the a11y tree — a screen reader announcing three
+    // empty groups at the end of every page is the failure this pins.
+    it('keeps the hatched gutters and closing band out of the a11y tree', () => {
+      const { getAllByTestId, getByTestId } = renderComposed()
+      for (const gutter of getAllByTestId('layout-footer__gutter')) {
+        expect(gutter.getAttribute('aria-hidden')).toBe('true')
+      }
+      expect(getByTestId('layout-footer__closing').getAttribute('aria-hidden')).toBe('true')
     })
   })
 
@@ -248,11 +274,13 @@ describe('Footer', () => {
   })
 
   describe('composeStories (the Default story fixture runs in-test)', () => {
-    it('Default story renders the landmark with its columns and social bar', () => {
+    it('Default story renders the landmark with its columns and every band', () => {
       const { getByRole, getByTestId, getAllByTestId } = render(DefaultFooter)
       expect(getByRole('contentinfo', { name: 'Footer' })).toBeTruthy()
       expect(getAllByTestId('layout-footer__column')).toHaveLength(4)
       expect(getByTestId('layout-footer__social')).toBeTruthy()
+      expect(getByTestId('layout-footer__status')).toBeTruthy()
+      expect(getByTestId('layout-footer__signature')).toBeTruthy()
     })
 
     it('Default story has no a11y violations', async () => {
