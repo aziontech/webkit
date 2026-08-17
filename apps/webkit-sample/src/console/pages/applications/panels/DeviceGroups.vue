@@ -40,43 +40,54 @@
   import PageHeading from '../../../components/page/PageHeading.vue'
   import Section from '../../../components/page/Section.vue'
   import { sleep } from '../../../lib/behavior/forms'
+  import {
+    addDeviceGroup,
+    DEVICE_GROUP_NAME_PATTERN,
+    DEVICE_GROUP_NAME_RULE,
+    useDeviceGroups
+  } from '../../../lib/data/device-groups'
 
   const columns = [
     { accessorKey: 'name', header: 'Name', principal: true, enableSorting: true },
-    { accessorKey: 'regex', header: 'User-agent match', grow: 2 }
+    { accessorKey: 'userAgent', header: 'User-agent match', grow: 2 }
   ]
 
   // Free-text search, hoisted into the ControlsHeader above the card.
   const search = ref('')
 
-  // Seeded so the tab lands on a populated table like every other tab. The create
-  // drawer below prepends to this list, so a new group appears without a reload.
-  const deviceGroups = ref([
-    { id: 'dg-mobile', name: 'Mobile', regex: '(Mobile|iPhone|Android|BlackBerry)' },
-    { id: 'dg-desktop', name: 'Desktop', regex: 'Mozilla.*(Windows|Macintosh)' }
-  ])
+  // The store, not a local ref: a device group is also referenced from the Cache
+  // Settings tab (Adaptive Delivery varies the cache key by group), so one created
+  // here has to be selectable there in the same session.
+  const deviceGroups = useDeviceGroups()
 
   // ── Create ────────────────────────────────────────────────────────────────
   const createOpen = ref(false)
   // Opened from the page's tab row (ApplicationDetail).
   defineExpose({ openCreate: () => (createOpen.value = true) })
-  const form = reactive({ name: '', regex: '' })
-  const errors = reactive({ name: '', regex: '' })
+  const form = reactive({ name: '', userAgent: '' })
+  const errors = reactive({ name: '', userAgent: '' })
   const submitting = ref(false)
 
   // Reset on close, so reopening never shows the last attempt's values or errors.
   watch(createOpen, (open) => {
     if (open) return
     form.name = ''
-    form.regex = ''
+    form.userAgent = ''
     errors.name = ''
-    errors.regex = ''
+    errors.userAgent = ''
   })
 
   const validate = () => {
-    errors.name = form.name.trim() ? '' : 'Name is required.'
-    errors.regex = form.regex.trim() ? '' : 'A regular expression is required.'
-    return !errors.name && !errors.regex
+    const name = form.name.trim()
+    // The endpoint accepts lowercase alphanumerics ONLY, so the shape is checked here
+    // rather than left for a 400 to explain — a rejected name comes back as `invalid`
+    // (red: cannot be accepted), an empty one as `required` (amber: not answered yet).
+    if (!name) errors.name = 'Name is required.'
+    else if (!DEVICE_GROUP_NAME_PATTERN.test(name)) errors.name = DEVICE_GROUP_NAME_RULE
+    else errors.name = ''
+
+    errors.userAgent = form.userAgent.trim() ? '' : 'A regular expression is required.'
+    return !errors.name && !errors.userAgent
   }
 
   const submit = async () => {
@@ -86,10 +97,7 @@
     submitting.value = true
     try {
       await sleep(900)
-      deviceGroups.value = [
-        { id: `dg-${Date.now()}`, name: form.name.trim(), regex: form.regex.trim() },
-        ...deviceGroups.value
-      ]
+      addDeviceGroup({ name: form.name.trim(), userAgent: form.userAgent.trim() })
       toast.success(`Device Group "${form.name.trim()}" created.`)
       createOpen.value = false
     } catch (error) {
@@ -157,7 +165,7 @@
 
     <ResourceDrawer
       v-model:open="createOpen"
-      title="Create Device Group"
+      title="Add Device Group"
       :submitting="submitting"
       @submit="submit"
     >
@@ -169,6 +177,7 @@
       >
         <FieldStack
           label="Name"
+          :description="DEVICE_GROUP_NAME_RULE"
           :message="errors.name"
           :message-kind="form.name.trim() ? 'invalid' : 'required'"
         >
@@ -178,8 +187,8 @@
               v-model="form.name"
               size="large"
               :disabled="submitting"
-              class="w-full"
-              placeholder="My device group"
+              class="w-full font-code"
+              placeholder="mobiledevices"
               :required="!!errors.name && !form.name.trim()"
               :invalid="!!errors.name && !!form.name.trim()"
               :aria-describedby="describedBy"
@@ -197,19 +206,19 @@
       >
         <FieldStack
           label="Regular expression"
-          :message="errors.regex"
+          :message="errors.userAgent"
           message-kind="required"
         >
           <template #default="{ controlId, describedBy }">
             <Textarea
               :id="controlId"
-              v-model="form.regex"
+              v-model="form.userAgent"
               :disabled="submitting"
               class="w-full font-code"
               placeholder="(Mobile|iP(hone|od)|BlackBerry|IEMobile)"
-              :required="!!errors.regex"
+              :required="!!errors.userAgent"
               :aria-describedby="describedBy"
-              @update:model-value="errors.regex = ''"
+              @update:model-value="errors.userAgent = ''"
             />
           </template>
         </FieldStack>
