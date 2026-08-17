@@ -144,6 +144,16 @@ html {
   flex-direction: column;
   min-height: 0;
 }
+/* The header, the body and the empty block are NOT direct children of the viewport —
+   `Table` wraps them in one `flex w-max min-w-full flex-col` div (the element that lets a
+   wide table scroll sideways). That wrapper is the flex item the viewport actually sizes,
+   so the growth has to be asked for on it too: without this rule the wrapper stayed at its
+   content height and the `flex: 1` below did nothing, leaving the empty state parked under
+   the header instead of centered in the region. */
+.log-table [data-testid$='__viewport'] > * {
+  flex: 1 1 0%;
+  min-height: 0;
+}
 .log-table [data-testid$='__header'],
 .log-table [data-testid$='__body'] {
   flex: none;
@@ -169,4 +179,3 @@ html {
   --layout-split-aside: 20rem;
   --layout-split-gap: 3rem;
 }
-

@@ -236,7 +236,7 @@ falha encontra um usuário que já saiu dali.
 Três consequências, que são o cenário:
 
 1. **A execução não vive no componente.** Timer, estado e toast ficam em escopo de módulo
-   (`src/lib/deploy-runs.js`), então navegar para outra tela não cancela o deploy — o
+   (`src/console/lib/state/deploy-runs.js`), então navegar para outra tela não cancela o deploy — o
    unmount da página não é um evento que o deploy escuta.
 2. **O progresso é um toast de loading** (spinner, sem auto-dismiss) — a única coisa que
    viaja com o usuário pelo console inteiro.
@@ -339,7 +339,7 @@ possui: os registros, o narrowing, e anexar o que o drawer criou.
   um vazio e foca o Key, cada linha além da primeira pode ser removida, e um
   `TransitionGroup` faz o morph da lista nas duas ações, cronometrado pelos tokens de
   animação (nunca valor cravado).
-- **Duas entradas em massa, um único parser** (`src/lib/dotenv.js`): o *Import* do rodapé
+- **Duas entradas em massa, um único parser** (`src/console/lib/format/dotenv.js`): o *Import* do rodapé
   lê um `.env` escolhido, e **colar** o conteúdo de um arquivo em **qualquer** input de Key
   expande em uma linha por par — em vez de despejar o arquivo inteiro numa única key, que é
   exatamente o que a dica do rodapé promete.
