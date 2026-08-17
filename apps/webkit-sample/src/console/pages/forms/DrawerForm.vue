@@ -110,14 +110,14 @@
       </PageHeading>
 
       <!-- The list the drawer creates into -->
-      <ul class="layout-section-start flex flex-col gap-[var(--spacing-xs)]">
+      <ul class="layout-section-start flex flex-col gap-(--spacing-xs)">
         <li
           v-for="env in environments"
           :key="env.id"
-          class="flex items-center justify-between rounded-[var(--shape-card)] border border-[var(--border-default)] bg-[var(--bg-surface)] px-[var(--spacing-md)] py-[var(--spacing-sm)]"
+          class="flex items-center justify-between rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) px-(--spacing-md) py-(--spacing-sm)"
         >
-          <span class="text-label-code-sm text-[var(--text-default)]">{{ env.name }}</span>
-          <span class="text-body-xs text-[var(--text-muted)]">{{ regionLabel(env.region) }}</span>
+          <span class="text-label-code-sm text-(--text-default)">{{ env.name }}</span>
+          <span class="text-body-xs text-(--text-muted)">{{ regionLabel(env.region) }}</span>
         </li>
       </ul>
     </main>
@@ -145,7 +145,7 @@
             <PanelContent>
               <!-- compact modal body: fields --spacing-md apart -->
               <fieldset
-                class="m-0 flex min-w-0 flex-col gap-[var(--spacing-md)] border-0 p-0"
+                class="m-0 flex min-w-0 flex-col gap-(--spacing-md) border-0 p-0"
                 :disabled="submitting"
               >
                 <legend class="sr-only">Create environment</legend>
@@ -153,7 +153,7 @@
                 <!-- The Label carries the required tag ALWAYS (rendered here, so
                      the wrapper gets no `label`); the field's amber :required only
                      fires on an empty submit — required is a prompt, never red. -->
-                <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
+                <div class="flex w-full flex-col gap-(--spacing-xs)">
                   <Label
                     for="env-name"
                     required
@@ -175,7 +175,7 @@
                   />
                 </div>
 
-                <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
+                <div class="flex w-full flex-col gap-(--spacing-xs)">
                   <Label
                     for="env-region"
                     required
@@ -201,7 +201,7 @@
                          (z-[1001]) the dropdown renders behind it and is invisible.
                          Remove this override once webkit stacks overlay popups
                          above Drawer/Dialog. -->
-                    <Select.Content class="!z-[1002]">
+                    <Select.Content class="z-[1002]!">
                       <Select.Option
                         v-for="option in regions"
                         :key="option.value"

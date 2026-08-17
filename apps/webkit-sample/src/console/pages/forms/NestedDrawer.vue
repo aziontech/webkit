@@ -211,14 +211,14 @@
       </PageHeading>
 
       <!-- The list the parent drawer creates into -->
-      <ul class="layout-section-start flex flex-col gap-[var(--spacing-xs)]">
+      <ul class="layout-section-start flex flex-col gap-(--spacing-xs)">
         <li
           v-for="instance in instances"
           :key="instance.id"
-          class="flex items-center justify-between rounded-[var(--shape-card)] border border-[var(--border-default)] bg-[var(--bg-surface)] px-[var(--spacing-md)] py-[var(--spacing-sm)]"
+          class="flex items-center justify-between rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) px-(--spacing-md) py-(--spacing-sm)"
         >
-          <span class="text-label-code-sm text-[var(--text-default)]">{{ instance.name }}</span>
-          <span class="text-body-xs text-[var(--text-muted)]">{{
+          <span class="text-label-code-sm text-(--text-default)">{{ instance.name }}</span>
+          <span class="text-body-xs text-(--text-muted)">{{
             functionLabel(instance.functionId)
           }}</span>
         </li>
@@ -241,9 +241,9 @@
             @submit.prevent="submitParent"
           >
             <PanelHeader class="w-full">
-              <div class="flex min-w-0 flex-col gap-[var(--spacing-xxs)]">
+              <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
                 <DrawerTitle>Create Functions Instance</DrawerTitle>
-                <p class="text-body-sm text-[var(--text-muted)]">
+                <p class="text-body-sm text-(--text-muted)">
                   Instantiate an edge function on this application — pick an existing function or
                   create a new one inline.
                 </p>
@@ -253,14 +253,14 @@
 
             <PanelContent>
               <fieldset
-                class="m-0 flex min-w-0 flex-col gap-[var(--layout-section-gap)] border-0 p-0"
+                class="m-0 flex min-w-0 flex-col gap-(--layout-section-gap) border-0 p-0"
                 :disabled="submitting"
               >
                 <legend class="sr-only">Create functions instance</legend>
 
                 <!-- Section: General -->
-                <section class="flex flex-col gap-[var(--layout-group-gap)]">
-                  <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
+                <section class="flex flex-col gap-(--layout-group-gap)">
+                  <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
                     General
                   </p>
                   <CardBox :padded="false">
@@ -276,8 +276,8 @@
                               Give a unique and descriptive name to identify the instance.
                             </Item.Description>
                           </Item.Content>
-                          <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
-                            <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
+                          <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
+                            <div class="flex w-full flex-col gap-(--spacing-xs)">
                               <InputText
                                 v-model="form.name"
                                 size="large"
@@ -305,8 +305,8 @@
                 </section>
 
                 <!-- Section: Function — the nested-create case -->
-                <section class="flex flex-col gap-[var(--layout-group-gap)]">
-                  <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
+                <section class="flex flex-col gap-(--layout-group-gap)">
+                  <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
                     Function
                   </p>
                   <CardBox :padded="false">
@@ -322,8 +322,8 @@
                               Pick the function to instantiate, or create a new one.
                             </Item.Description>
                           </Item.Content>
-                          <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
-                            <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
+                          <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
+                            <div class="flex w-full flex-col gap-(--spacing-xs)">
                               <!-- CONTROLLED (:model-value) so the sentinel never
                                    commits; @update:model-value routes the sentinel to
                                    the child drawer and otherwise assigns the value. -->
@@ -346,7 +346,7 @@
                                   "
                                 />
                                 <!-- z-[1002]: above the parent Drawer panel (z-[1001]). -->
-                                <Select.Content class="!z-[1002]">
+                                <Select.Content class="z-[1002]!">
                                   <Select.Option
                                     v-for="fn in functions"
                                     :key="fn.value"
@@ -433,9 +433,9 @@
             @submit.prevent="submitChild"
           >
             <PanelHeader class="w-full">
-              <div class="flex min-w-0 flex-col gap-[var(--spacing-xxs)]">
+              <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
                 <DrawerTitle>Create Function</DrawerTitle>
-                <p class="text-body-sm text-[var(--text-muted)]">
+                <p class="text-body-sm text-(--text-muted)">
                   Create a function to instantiate — it becomes available in the selector when
                   saved.
                 </p>
@@ -445,13 +445,13 @@
 
             <PanelContent>
               <fieldset
-                class="m-0 flex min-w-0 flex-col gap-[var(--layout-section-gap)] border-0 p-0"
+                class="m-0 flex min-w-0 flex-col gap-(--layout-section-gap) border-0 p-0"
                 :disabled="childSubmitting"
               >
                 <legend class="sr-only">Create function</legend>
 
-                <section class="flex flex-col gap-[var(--layout-group-gap)]">
-                  <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
+                <section class="flex flex-col gap-(--layout-group-gap)">
+                  <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
                     General
                   </p>
                   <CardBox :padded="false">
@@ -465,8 +465,8 @@
                             <Item.Title>Name</Item.Title>
                             <Item.Description>A unique name for the function.</Item.Description>
                           </Item.Content>
-                          <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
-                            <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
+                          <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
+                            <div class="flex w-full flex-col gap-(--spacing-xs)">
                               <InputText
                                 v-model="childForm.name"
                                 size="large"
@@ -497,8 +497,8 @@
                             <Item.Title>Runtime</Item.Title>
                             <Item.Description>The language the function runs on.</Item.Description>
                           </Item.Content>
-                          <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
-                            <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
+                          <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
+                            <div class="flex w-full flex-col gap-(--spacing-xs)">
                               <Select
                                 v-model="childForm.runtime"
                                 size="large"
@@ -517,7 +517,7 @@
                                   "
                                 />
                                 <!-- z-[1004]: above the nested drawer's content (z-[1003]). -->
-                                <Select.Content class="!z-[1004]">
+                                <Select.Content class="z-[1004]!">
                                   <Select.Option
                                     v-for="option in runtimes"
                                     :key="option.value"

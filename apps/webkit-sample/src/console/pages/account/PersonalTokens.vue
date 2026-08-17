@@ -311,10 +311,10 @@
       <!-- The page's parent section. A module list opens straight on it (no
            PageHeading — the module name is the breadcrumb crumb), so the
            `:first-child` rule zeroes its step and the boundary is its top space. -->
-      <section class="layout-section-start flex min-w-0 flex-col gap-[var(--layout-section-gap)]">
+      <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)">
         <!-- ONE section: the controls row narrows the table under it, so the two
              sit at --layout-group-gap. -->
-        <section class="flex min-w-0 flex-col gap-[var(--layout-group-gap)]">
+        <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
           <!-- First-level module list: no PageHeading — the module name already IS the
                header breadcrumb crumb (AppLayout). The page opens with its CONTROLS row
                (search, with the module's own actions on the right); the table follows.
@@ -327,7 +327,7 @@
               size="large"
               placeholder="Search personal tokens"
               aria-label="Search personal tokens"
-              class="min-w-36 grow basis-[var(--container-2xs)]"
+              class="min-w-36 grow basis-(--container-2xs)"
             >
               <template #iconLeft>
                 <i
@@ -452,9 +452,9 @@
             @submit.prevent="submit"
           >
             <PanelHeader class="w-full">
-              <div class="flex min-w-0 flex-col gap-[var(--spacing-xxs)]">
+              <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
                 <DrawerTitle>Create Personal Token</DrawerTitle>
-                <p class="text-body-sm text-[var(--text-muted)]">
+                <p class="text-body-sm text-(--text-muted)">
                   Create a personal token to securely access your account via API.
                 </p>
               </div>
@@ -463,14 +463,14 @@
 
             <PanelContent>
               <fieldset
-                class="m-0 flex min-w-0 flex-col gap-[var(--layout-section-gap)] border-0 p-0"
+                class="m-0 flex min-w-0 flex-col gap-(--layout-section-gap) border-0 p-0"
                 :disabled="submitting"
               >
                 <legend class="sr-only">Create personal token</legend>
 
                 <!-- Section: General -->
-                <section class="flex flex-col gap-[var(--layout-group-gap)]">
-                  <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
+                <section class="flex flex-col gap-(--layout-group-gap)">
+                  <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
                     General
                   </p>
                   <CardBox :padded="false">
@@ -486,11 +486,11 @@
                               Give a unique and descriptive name to identify the personal token.
                             </Item.Description>
                           </Item.Content>
-                          <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
+                          <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
                             <!-- No Label in an ItemGroup → the validation message is
                                  a HelperText under the control; empty-required is
                                  amber (required is NOT an error). -->
-                            <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
+                            <div class="flex w-full flex-col gap-(--spacing-xs)">
                               <InputText
                                 v-model="form.name"
                                 size="large"
@@ -521,7 +521,7 @@
                               Include a description to specify the token's purpose or usage.
                             </Item.Description>
                           </Item.Content>
-                          <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
+                          <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
                             <Textarea
                               v-model="form.description"
                               class="w-full"
@@ -536,8 +536,8 @@
                 </section>
 
                 <!-- Section: Token -->
-                <section class="flex flex-col gap-[var(--layout-group-gap)]">
-                  <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
+                <section class="flex flex-col gap-(--layout-group-gap)">
+                  <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
                     Token
                   </p>
                   <CardBox :padded="false">
@@ -554,7 +554,7 @@
                               security, the token is only available right after it's created.
                             </Item.Description>
                           </Item.Content>
-                          <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
+                          <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
                             <Select
                               v-model="form.expiresWithin"
                               size="large"
@@ -567,7 +567,7 @@
                                    teleports to body at z-50 but the drawer panel is
                                    z-[1001], so the dropdown renders behind it. Lift
                                    it above the panel until the fix lands. -->
-                              <Select.Content class="!z-[1002]">
+                              <Select.Content class="z-[1002]!">
                                 <Select.Option
                                   v-for="option in expiryOptions"
                                   :key="option.value"
@@ -633,7 +633,7 @@
             <DialogClose />
           </PanelHeader>
 
-          <PanelContent class="flex flex-col gap-[var(--spacing-md)]">
+          <PanelContent class="flex flex-col gap-(--spacing-md)">
             <DialogDescription class="sr-only">
               Copy and store your new personal token. It won't be shown again.
             </DialogDescription>
@@ -643,7 +643,7 @@
               label="This token will only be displayed once. Make sure to copy and store it safely before closing this dialog."
             />
 
-            <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
+            <div class="flex w-full flex-col gap-(--spacing-xs)">
               <Label for="pt-token">Personal Token</Label>
               <FieldPassword
                 input-id="pt-token"

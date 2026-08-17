@@ -248,7 +248,7 @@
 </script>
 
 <template>
-  <div class="flex h-dvh flex-col overflow-hidden bg-[var(--bg-canvas)]">
+  <div class="flex h-dvh flex-col overflow-hidden bg-(--bg-canvas)">
     <UnsavedChangesGuard :dirty="dirty && status === 'form'" />
 
     <!-- Single creation header: back + brand + breadcrumb (hidden on success). -->
@@ -277,19 +277,19 @@
            that was fading in. A phase change is not a reason for the page to change
            width. -->
       <div
-        class="layout-column-focused relative flex flex-col items-center gap-[var(--spacing-xl)] px-[var(--spacing-md)] py-[var(--spacing-xxl)]"
+        class="layout-column-focused relative flex flex-col items-center gap-(--spacing-xl) px-(--spacing-md) py-(--spacing-xxl)"
       >
         <!-- Preview strip for the form/deploy phases. On success it gives way
              to the in-card preview shown on the Congratulations card. -->
         <Transition
           @before-enter="onBeforeEnter"
           @before-leave="onBeforeLeave"
-          enter-from-class="opacity-0 translate-y-[var(--spacing-lg)]"
-          leave-to-class="opacity-0 -translate-y-[var(--spacing-md)]"
+          enter-from-class="opacity-0 translate-y-(--spacing-lg)"
+          leave-to-class="opacity-0 -translate-y-(--spacing-md)"
         >
           <TemplatePreview
             v-if="status !== 'success'"
-            class="!max-w-none motion-reduce:!transition-none motion-reduce:!transform-none"
+            class="max-w-none! motion-reduce:transition-none! motion-reduce:transform-none!"
             :title="template.title"
             :description="template.description"
             :repo-owner="template.repoOwner"
@@ -303,29 +303,29 @@
           @before-enter="onBeforeEnter"
           @enter="onPhaseEnter"
           @before-leave="onBeforeLeave"
-          enter-from-class="opacity-0 translate-y-[var(--spacing-lg)]"
-          leave-to-class="opacity-0 -translate-y-[var(--spacing-md)]"
+          enter-from-class="opacity-0 translate-y-(--spacing-lg)"
+          leave-to-class="opacity-0 -translate-y-(--spacing-md)"
         >
           <div
             :key="status"
-            class="flex w-full flex-col items-center gap-[var(--spacing-xl)] motion-reduce:!transition-none motion-reduce:!transform-none"
+            class="flex w-full flex-col items-center gap-(--spacing-xl) motion-reduce:transition-none! motion-reduce:transform-none!"
           >
             <!-- Configure repository + template settings -->
             <template v-if="status === 'form'">
               <!-- Configuration card -->
               <CardBox class="w-full">
                 <template #content>
-                  <div class="flex flex-col gap-[var(--spacing-lg)]">
-                    <p class="text-body-sm text-pretty text-[var(--text-muted)]">
+                  <div class="flex flex-col gap-(--spacing-lg)">
+                    <p class="text-body-sm text-pretty text-(--text-muted)">
                       Configure your Git repository to integrate your codebase and automate
                       deployments directly from your version control system.
                     </p>
 
                     <!-- Scope + repository name -->
                     <div
-                      class="grid grid-cols-1 items-start gap-[var(--spacing-lg)] sm:grid-cols-2"
+                      class="grid grid-cols-1 items-start gap-(--spacing-lg) sm:grid-cols-2"
                     >
-                      <div class="flex flex-col gap-[var(--spacing-xs)]">
+                      <div class="flex flex-col gap-(--spacing-xs)">
                         <Label
                           label="Scope"
                           required
@@ -351,7 +351,7 @@
                         </Select>
                       </div>
 
-                      <div class="flex flex-col gap-[var(--spacing-xs)]">
+                      <div class="flex flex-col gap-(--spacing-xs)">
                         <Label
                           :label="repoLabel"
                           required
@@ -393,19 +393,19 @@
                     </div>
 
                     <!-- Template-specific settings -->
-                    <p class="text-heading-xxs text-[var(--text-default)]">Template Settings</p>
+                    <p class="text-heading-xxs text-(--text-default)">Template Settings</p>
                     <!-- While the template's settings schema loads, reserve the
                          layout with Skeleton placeholders (label + field +
                          helper text) so nothing jumps when it resolves. -->
                     <div
                       v-if="settingsLoading"
-                      class="flex flex-col gap-[var(--spacing-lg)]"
+                      class="flex flex-col gap-(--spacing-lg)"
                       aria-busy="true"
                     >
                       <div
                         v-for="n in skeletonFieldCount"
                         :key="n"
-                        class="flex flex-col gap-[var(--spacing-xs)]"
+                        class="flex flex-col gap-(--spacing-xs)"
                       >
                         <Skeleton
                           width="30%"
@@ -423,12 +423,12 @@
                     </div>
                     <div
                       v-else-if="template.settings.length"
-                      class="flex flex-col gap-[var(--spacing-lg)]"
+                      class="flex flex-col gap-(--spacing-lg)"
                     >
                       <div
                         v-for="field in template.settings"
                         :key="field.name"
-                        class="flex flex-col gap-[var(--spacing-xs)]"
+                        class="flex flex-col gap-(--spacing-xs)"
                       >
                         <!-- Field triad: the Label's required tag is persistent
                              (bound to the schema, not to submit); guidance is a
@@ -457,7 +457,7 @@
                     </div>
                     <p
                       v-else
-                      class="text-body-sm text-[var(--text-muted)]"
+                      class="text-body-sm text-(--text-muted)"
                     >
                       This template has no additional settings.
                     </p>
@@ -502,12 +502,12 @@
                    and on the glow — not a card header. It announces the outcome;
                    the card below is the record of it. Sized like a first-level
                    page title, since the chrome carries no breadcrumb here. -->
-              <header class="flex w-full flex-col gap-[var(--spacing-xxs)]">
-                <h1 class="text-balance text-heading-lg text-[var(--text-default)]">
+              <header class="flex w-full flex-col gap-(--spacing-xxs)">
+                <h1 class="text-balance text-heading-lg text-(--text-default)">
                   Congratulations!
                 </h1>
                 <p
-                  class="flex flex-wrap items-center gap-[var(--spacing-xs)] text-body-sm text-[var(--text-muted)]"
+                  class="flex flex-wrap items-center gap-(--spacing-xs) text-body-sm text-(--text-muted)"
                 >
                   You just deployed a new application into
                   <Tag
@@ -520,7 +520,7 @@
 
               <CardBox class="w-full">
                 <template #content>
-                  <div class="flex flex-col gap-[var(--spacing-lg)]">
+                  <div class="flex flex-col gap-(--spacing-lg)">
                     <!-- What was shipped, in one horizontal box: the deployed
                          page on the left, the chain it provisioned on the right
                          (Workload → Application → Connector → Storage, in
@@ -534,7 +534,7 @@
                         <div class="flex flex-col lg:flex-row">
                           <!-- Deployed application preview -->
                           <div
-                            class="min-h-[220px] w-full overflow-hidden bg-[var(--bg-surface-raised)] lg:min-h-[320px] lg:w-1/2"
+                            class="min-h-[220px] w-full overflow-hidden bg-(--bg-surface-raised) lg:min-h-[320px] lg:w-1/2"
                           >
                             <img
                               src="/template-nextjs-thumb.png"
@@ -545,10 +545,10 @@
 
                           <!-- Resources created -->
                           <div
-                            class="flex w-full min-w-0 flex-col border-t border-[var(--border-default)] lg:w-1/2 lg:border-l lg:border-t-0"
+                            class="flex w-full min-w-0 flex-col border-t border-(--border-default) lg:w-1/2 lg:border-l lg:border-t-0"
                           >
                             <p
-                              class="flex min-h-14 shrink-0 items-center border-b border-[var(--border-default)] px-[var(--spacing-sm)] text-label-sm text-[var(--text-default)]"
+                              class="flex min-h-14 shrink-0 items-center border-b border-(--border-default) px-(--spacing-sm) text-label-sm text-(--text-default)"
                             >
                               Resources Created
                             </p>
@@ -560,11 +560,11 @@
                               >
                                 <Item.Media>
                                   <span
-                                    class="flex size-8 items-center justify-center rounded-[var(--shape-elements)] border border-[var(--border-muted)] bg-[var(--bg-surface)]"
+                                    class="flex size-8 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface)"
                                   >
                                     <i
                                       :class="resource.icon"
-                                      class="text-[14px] leading-none text-[var(--text-default)]"
+                                      class="text-[14px] leading-none text-(--text-default)"
                                       aria-hidden="true"
                                     />
                                   </span>
@@ -594,7 +594,7 @@
                     <CardBox :padded="false">
                       <template #content>
                         <p
-                          class="flex min-h-14 shrink-0 items-center border-b border-[var(--border-default)] px-[var(--spacing-sm)] text-label-sm text-[var(--text-default)]"
+                          class="flex min-h-14 shrink-0 items-center border-b border-(--border-default) px-(--spacing-sm) text-label-sm text-(--text-default)"
                         >
                           Next Steps
                         </p>
@@ -617,11 +617,11 @@
                             >
                               <Item.Media>
                                 <span
-                                  class="flex size-8 items-center justify-center rounded-[var(--shape-elements)] border border-[var(--border-muted)] bg-[var(--bg-surface)]"
+                                  class="flex size-8 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface)"
                                 >
                                   <i
                                     :class="step.icon"
-                                    class="text-[14px] leading-none text-[var(--text-default)]"
+                                    class="text-[14px] leading-none text-(--text-default)"
                                     aria-hidden="true"
                                   />
                                 </span>
@@ -632,7 +632,7 @@
                               </Item.Content>
                               <Item.Actions>
                                 <i
-                                  class="pi pi-chevron-right text-[var(--text-muted)]"
+                                  class="pi pi-chevron-right text-(--text-muted)"
                                   aria-hidden="true"
                                 />
                               </Item.Actions>

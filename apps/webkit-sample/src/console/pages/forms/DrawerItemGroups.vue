@@ -163,14 +163,14 @@
       </PageHeading>
 
       <!-- The list the drawer creates into -->
-      <ul class="layout-section-start flex flex-col gap-[var(--spacing-xs)]">
+      <ul class="layout-section-start flex flex-col gap-(--spacing-xs)">
         <li
           v-for="service in services"
           :key="service.id"
-          class="flex items-center justify-between rounded-[var(--shape-card)] border border-[var(--border-default)] bg-[var(--bg-surface)] px-[var(--spacing-md)] py-[var(--spacing-sm)]"
+          class="flex items-center justify-between rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) px-(--spacing-md) py-(--spacing-sm)"
         >
-          <span class="text-label-code-sm text-[var(--text-default)]">{{ service.name }}</span>
-          <span class="text-body-xs text-[var(--text-muted)]">{{
+          <span class="text-label-code-sm text-(--text-default)">{{ service.name }}</span>
+          <span class="text-body-xs text-(--text-muted)">{{
             runtimeLabel(service.runtime)
           }}</span>
         </li>
@@ -197,9 +197,9 @@
             @submit.prevent="submit"
           >
             <PanelHeader class="w-full">
-              <div class="flex min-w-0 flex-col gap-[var(--spacing-xxs)]">
+              <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
                 <DrawerTitle>Create service</DrawerTitle>
-                <p class="text-body-sm text-[var(--text-muted)]">
+                <p class="text-body-sm text-(--text-muted)">
                   Define a service across grouped sections — all saved together.
                 </p>
               </div>
@@ -210,14 +210,14 @@
               <!-- Sections are --spacing-lg apart; each section title sits --spacing-sm
                    above its flush CardBox (the Approach A section rhythm). -->
               <fieldset
-                class="m-0 flex min-w-0 flex-col gap-[var(--layout-section-gap)] border-0 p-0"
+                class="m-0 flex min-w-0 flex-col gap-(--layout-section-gap) border-0 p-0"
                 :disabled="submitting"
               >
                 <legend class="sr-only">Create service</legend>
 
                 <!-- Section: General -->
-                <section class="flex flex-col gap-[var(--layout-group-gap)]">
-                  <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
+                <section class="flex flex-col gap-(--layout-group-gap)">
+                  <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
                     General
                   </p>
                   <CardBox :padded="false">
@@ -233,13 +233,13 @@
                               A unique identifier. Lower-case letters, numbers, and hyphen.
                             </Item.Description>
                           </Item.Content>
-                          <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
+                          <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
                             <!-- No Label in an ItemGroup, so the validation message
                                  is a HelperText under the control (--spacing-xs
                                  apart); it appears on a failed submit and clears as
                                  the user edits. Empty → required (amber); filled but
                                  malformed → invalid (red). Required is NOT an error. -->
-                            <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
+                            <div class="flex w-full flex-col gap-(--spacing-xs)">
                               <InputText
                                 v-model="form.name"
                                 size="large"
@@ -272,7 +272,7 @@
                               A short note about what this service does.
                             </Item.Description>
                           </Item.Content>
-                          <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
+                          <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
                             <InputText
                               v-model="form.description"
                               size="large"
@@ -289,8 +289,8 @@
                 </section>
 
                 <!-- Section: Runtime -->
-                <section class="flex flex-col gap-[var(--layout-group-gap)]">
-                  <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
+                <section class="flex flex-col gap-(--layout-group-gap)">
+                  <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
                     Runtime
                   </p>
                   <CardBox :padded="false">
@@ -304,8 +304,8 @@
                             <Item.Title>Runtime</Item.Title>
                             <Item.Description>The language the service runs on.</Item.Description>
                           </Item.Content>
-                          <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
-                            <div class="flex w-full flex-col gap-[var(--spacing-xs)]">
+                          <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
+                            <div class="flex w-full flex-col gap-(--spacing-xs)">
                               <!-- Runtime is required-only: empty → amber required
                                    (no red). Select has no amber border, so the amber
                                    HelperText below carries the cue. -->
@@ -330,7 +330,7 @@
                                      teleports to <body> at z-50, so inside the Drawer panel
                                      (z-[1001]) the dropdown renders behind it and is invisible.
                                      Remove once webkit stacks overlay popups above Drawer/Dialog. -->
-                                <Select.Content class="!z-[1002]">
+                                <Select.Content class="z-[1002]!">
                                   <Select.Option
                                     v-for="option in runtimes"
                                     :key="option.value"
@@ -358,7 +358,7 @@
                             <Item.Title>Region</Item.Title>
                             <Item.Description>Where the service is deployed.</Item.Description>
                           </Item.Content>
-                          <Item.Actions class="justify-end flex-1 max-w-[var(--container-3xs)]">
+                          <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
                             <Select
                               v-model="form.region"
                               size="large"
@@ -370,7 +370,7 @@
                                 id="service-region"
                                 aria-label="Region"
                               />
-                              <Select.Content class="!z-[1002]">
+                              <Select.Content class="z-[1002]!">
                                 <Select.Option
                                   v-for="option in regions"
                                   :key="option.value"
@@ -388,8 +388,8 @@
                 </section>
 
                 <!-- Section: Options -->
-                <section class="flex flex-col gap-[var(--layout-group-gap)]">
-                  <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
+                <section class="flex flex-col gap-(--layout-group-gap)">
+                  <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
                     Options
                   </p>
                   <CardBox :padded="false">

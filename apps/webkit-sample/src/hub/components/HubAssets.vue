@@ -115,13 +115,13 @@
             v-for="lockup in brandLockups"
             :key="lockup.kind"
             :class="lockup.background"
-            class="relative flex min-h-[clamp(240px,34vh,380px)] items-center justify-center overflow-hidden px-[var(--spacing-xl)] py-[var(--spacing-xxl)]"
+            class="relative flex min-h-[clamp(240px,34vh,380px)] items-center justify-center overflow-hidden px-(--spacing-xl) py-(--spacing-xxl)"
           >
             <!-- Corner caption, brand-guide style. -->
             <div
-              class="pointer-events-none absolute inset-x-0 top-0 flex items-start justify-between gap-[var(--spacing-md)] px-[var(--spacing-xl)] py-[var(--spacing-lg)]"
+              class="pointer-events-none absolute inset-x-0 top-0 flex items-start justify-between gap-(--spacing-md) px-(--spacing-xl) py-(--spacing-lg)"
             >
-              <div class="flex flex-col gap-[var(--spacing-xxs)]">
+              <div class="flex flex-col gap-(--spacing-xxs)">
                 <h3 class="text-heading-xxs text-white">{{ lockup.label }}</h3>
                 <p class="max-w-sm text-pretty text-body-xs text-white/60">
                   {{ lockup.description }}
@@ -135,7 +135,7 @@
             <Brand
               :kind="lockup.kind"
               size="large"
-              class="[&>svg]:!h-14 md:[&>svg]:!h-20 lg:[&>svg]:!h-28"
+              class="[&>svg]:h-14! md:[&>svg]:h-20! lg:[&>svg]:h-28!"
             />
           </div>
         </div>
@@ -205,10 +205,10 @@
           <div
             v-for="illustration in illustrations"
             :key="illustration.label"
-            class="flex flex-col gap-[var(--spacing-md)] rounded-[var(--shape-card)] border border-[var(--border-muted)] bg-[var(--bg-surface)] p-[var(--spacing-lg)] transition-[border-color] duration-moderate-01 ease-productive-entrance hover:border-[var(--border-default)] motion-reduce:transition-none"
+            class="flex flex-col gap-(--spacing-md) rounded-(--shape-card) border border-(--border-muted) bg-(--bg-surface) p-(--spacing-lg) transition-[border-color] duration-moderate-01 ease-productive-entrance hover:border-(--border-default) motion-reduce:transition-none"
           >
             <div
-              class="flex min-h-48 items-center justify-center rounded-[var(--shape-elements)] border border-[var(--border-muted)] bg-[var(--bg-surface-raised)] p-[var(--spacing-lg)]"
+              class="flex min-h-48 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised) p-(--spacing-lg)"
             >
               <component
                 :is="illustration.component"
@@ -216,9 +216,9 @@
                 class="max-h-40 w-auto max-w-full"
               />
             </div>
-            <div class="flex flex-col gap-[var(--spacing-xxs)]">
-              <h3 class="text-heading-xxs text-[var(--text-default)]">{{ illustration.label }}</h3>
-              <p class="text-pretty text-body-sm text-[var(--text-muted)]">
+            <div class="flex flex-col gap-(--spacing-xxs)">
+              <h3 class="text-heading-xxs text-(--text-default)">{{ illustration.label }}</h3>
+              <p class="text-pretty text-body-sm text-(--text-muted)">
                 {{ illustration.description }}
               </p>
             </div>

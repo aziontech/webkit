@@ -105,7 +105,7 @@
       title="Column"
       hint="A column is added to the end of the table. The name and the type are what every query against it will use; the default applies to rows that do not supply a value."
     >
-      <div class="flex min-w-0 flex-col gap-[var(--layout-group-gap)]">
+      <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
         <FieldStack
           label="Name"
           :message="nameError ? 'Name is required.' : ''"
@@ -140,7 +140,7 @@
               >
                 <template #iconLeft>
                   <span
-                    class="shrink-0 font-code text-label-code-sm text-[var(--text-muted)]"
+                    class="shrink-0 font-code text-label-code-sm text-(--text-muted)"
                     aria-hidden="true"
                   >
                     {{ glyphOf(form.type) }}
@@ -148,7 +148,7 @@
                 </template>
               </Select.Trigger>
               <Select.Content
-                class="min-w-[var(--container-md)] !max-h-[var(--container-md)] [&_[data-testid$='__list']]:!max-h-[var(--container-sm)]"
+                class="min-w-(--container-md) max-h-(--container-md)! [&_[data-testid$='__list']]:max-h-(--container-sm)!"
               >
                 <template #search>
                   <InputText
@@ -175,17 +175,17 @@
                   >
                     <template #left>
                       <span
-                        class="shrink-0 font-code text-label-code-sm text-[var(--text-muted)]"
+                        class="shrink-0 font-code text-label-code-sm text-(--text-muted)"
                         aria-hidden="true"
                       >
                         {{ type.glyph }}
                       </span>
                     </template>
-                    <span class="flex min-w-0 items-center gap-[var(--spacing-xs)]">
-                      <span class="font-code text-label-code-sm text-[var(--text-default)]">
+                    <span class="flex min-w-0 items-center gap-(--spacing-xs)">
+                      <span class="font-code text-label-code-sm text-(--text-default)">
                         {{ type.label }}
                       </span>
-                      <span class="truncate text-body-xs text-[var(--text-muted)]">
+                      <span class="truncate text-body-xs text-(--text-muted)">
                         {{ type.description }}
                       </span>
                     </span>

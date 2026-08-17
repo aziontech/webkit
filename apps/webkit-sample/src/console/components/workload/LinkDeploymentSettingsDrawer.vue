@@ -198,9 +198,9 @@
           @submit.prevent="submit"
         >
           <PanelHeader class="w-full">
-            <div class="flex min-w-0 flex-col gap-[var(--spacing-xxs)]">
+            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
               <DrawerTitle>{{ title }}</DrawerTitle>
-              <p class="text-body-sm text-[var(--text-muted)]">
+              <p class="text-body-sm text-(--text-muted)">
                 Choose the bundle this environment serves, and the version of each resource it
                 carries.
               </p>
@@ -213,14 +213,14 @@
                  --layout-group-gap above its flush CardBox — the Approach A section
                  rhythm, identical to the create page this drawer opens from. -->
             <fieldset
-              class="m-0 flex min-w-0 flex-col gap-[var(--layout-section-gap)] border-0 p-0"
+              class="m-0 flex min-w-0 flex-col gap-(--layout-section-gap) border-0 p-0"
               :disabled="submitting"
             >
               <legend class="sr-only">{{ title }}</legend>
 
               <!-- Section: which saved bundle serves this environment -->
-              <section class="flex flex-col gap-[var(--layout-group-gap)]">
-                <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
+              <section class="flex flex-col gap-(--layout-group-gap)">
+                <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
                   Deployment Settings
                 </p>
                 <CardBox :padded="false">
@@ -250,7 +250,7 @@
                               aria-label="Bundle"
                               :aria-describedby="messageId"
                             />
-                            <Select.Content class="!z-[1002]">
+                            <Select.Content class="z-[1002]!">
                               <Select.Option
                                 v-for="option in bundleOptions"
                                 :key="option.value"
@@ -272,8 +272,8 @@
                    each control carries its own aria-label, which is what lets a second
                    control sit beside the first without three identical "Version" fields
                    in the tab order. `wide` because two selects cannot work in 256px. -->
-              <section class="flex flex-col gap-[var(--layout-group-gap)]">
-                <p class="px-[var(--spacing-xs)] text-heading-xxs text-[var(--text-default)]">
+              <section class="flex flex-col gap-(--layout-group-gap)">
+                <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
                   Resources
                 </p>
                 <CardBox :padded="false">
@@ -289,7 +289,7 @@
                         message-kind="required"
                       >
                         <template #default="{ messageId }">
-                          <div class="flex min-w-0 gap-[var(--spacing-sm)]">
+                          <div class="flex min-w-0 gap-(--spacing-sm)">
                             <Select
                               v-model="form[row.valueKey]"
                               size="large"
@@ -304,7 +304,7 @@
                                 :aria-label="row.label"
                                 :aria-describedby="messageId"
                               />
-                              <Select.Content class="!z-[1002]">
+                              <Select.Content class="z-[1002]!">
                                 <Select.Option
                                   v-for="option in row.options"
                                   :key="option.value"
@@ -323,7 +323,7 @@
                               :display-value="labelFor(versionOptions)"
                             >
                               <Select.Trigger :aria-label="`${row.label} version`" />
-                              <Select.Content class="!z-[1002]">
+                              <Select.Content class="z-[1002]!">
                                 <Select.Option
                                   v-for="option in versionOptions"
                                   :key="option.value"

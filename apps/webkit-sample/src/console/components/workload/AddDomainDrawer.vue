@@ -131,9 +131,9 @@
           @submit.prevent="submit"
         >
           <PanelHeader class="w-full">
-            <div class="flex min-w-0 flex-col gap-[var(--spacing-xxs)]">
+            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
               <DrawerTitle>Add Domain</DrawerTitle>
-              <p class="text-body-sm text-[var(--text-muted)]">
+              <p class="text-body-sm text-(--text-muted)">
                 Attach a domain to this workload and choose the environment it serves.
               </p>
             </div>
@@ -142,13 +142,13 @@
 
           <PanelContent>
             <fieldset
-              class="m-0 flex min-w-0 flex-col gap-[var(--spacing-lg)] border-0 p-0"
+              class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0"
               :disabled="submitting"
             >
               <legend class="sr-only">Add Domain</legend>
 
               <!-- Domain source -->
-              <fieldset class="flex flex-col gap-[var(--spacing-sm)]">
+              <fieldset class="flex flex-col gap-(--spacing-sm)">
                 <legend class="sr-only">Domain source</legend>
                 <FieldRadioBlock
                   v-for="option in kindOptions"
@@ -166,8 +166,8 @@
               <!-- Domain + environment + certificate -->
               <CardBox :padded="false">
                 <template #content>
-                  <div class="flex flex-col gap-[var(--spacing-lg)] p-[var(--spacing-md)]">
-                    <div class="flex flex-col gap-[var(--spacing-xs)]">
+                  <div class="flex flex-col gap-(--spacing-lg) p-(--spacing-md)">
+                    <div class="flex flex-col gap-(--spacing-xs)">
                       <Label
                         for="add-domain-input"
                         required
@@ -200,7 +200,7 @@
                       label="Your workload is always accessible at an azion.app subdomain based on the workload name. Custom domains allow visitors to reach your project at your own domain."
                     />
 
-                    <div class="flex flex-col gap-[var(--spacing-xs)]">
+                    <div class="flex flex-col gap-(--spacing-xs)">
                       <Label for="add-domain-environment">Environment</Label>
                       <Select
                         v-model="form.environment"
@@ -212,7 +212,7 @@
                         <Select.Trigger id="add-domain-environment" />
                         <!-- Select.Content teleports to <body> at z-50; inside the
                              Drawer panel (z-[1001]) it needs a higher z to show. -->
-                        <Select.Content class="!z-[1002]">
+                        <Select.Content class="z-[1002]!">
                           <Select.Option
                             v-for="option in environmentOptions"
                             :key="option.value"
