@@ -53,5 +53,10 @@
     "name": "footer-root",
     "path": "src/components/layout/footer/footer.vue",
     "limit": "1.1 KB"
+  },
+  {
+    "name": "resizable-panel-root",
+    "path": "src/components/layout/resizable-panel/resizable-panel.vue",
+    "limit": "3 KB"
   }
 ]
