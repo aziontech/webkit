@@ -126,7 +126,7 @@ const FOOTER_CONTENT = `  <Footer.Column title="Products">
     <IconButton kind="transparent" icon="pi pi-twitter" aria-label="Azion on X" href="https://x.com/aziontech" target="_blank" />
     <IconButton kind="transparent" icon="pi pi-instagram" aria-label="Azion on Instagram" href="https://www.instagram.com/aziontech" target="_blank" />
     <IconButton kind="transparent" icon="pi pi-discord" aria-label="Azion on Discord" href="https://discord.gg/azion" target="_blank" />
-    <IconButton kind="transparent" icon="pi pi-reddit" aria-label="Azion on Reddit" href="https://www.reddit.com/r/azion" target="_blank" />
+    <IconButton kind="transparent" icon="pi pi-reddit" aria-label="Azion on Reddit" href="https://www.reddit.com/r/aziontech" target="_blank" />
   </template>
   <template #status>
     <StatusIndicator severity="success" label="All Systems Operational" />
