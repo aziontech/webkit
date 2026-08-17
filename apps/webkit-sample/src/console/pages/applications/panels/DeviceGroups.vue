@@ -36,6 +36,7 @@
 
   import FieldStack from '../../../components/form/FieldStack.vue'
   import ResourceDrawer from '../../../components/form/ResourceDrawer.vue'
+  import LastModifiedCell from '../../../components/list/LastModifiedCell.vue'
   import ControlsHeader from '../../../components/page/ControlsHeader.vue'
   import PageHeading from '../../../components/page/PageHeading.vue'
   import Section from '../../../components/page/Section.vue'
@@ -49,7 +50,8 @@
 
   const columns = [
     { accessorKey: 'name', header: 'Name', principal: true, enableSorting: true },
-    { accessorKey: 'userAgent', header: 'User-agent match', grow: 2 }
+    { accessorKey: 'userAgent', header: 'User-agent match', grow: 2 },
+    { accessorKey: 'lastModified', header: 'Last Modified', enableSorting: true, grow: 2 }
   ]
 
   // Free-text search, hoisted into the ControlsHeader above the card.
@@ -122,8 +124,8 @@
     <!-- The page's parent section. It holds one section here — the controls row
          over the table it narrows, at the GROUP step — and spaces whatever sits
          inside it at --layout-section-gap. -->
-    <section class="layout-section-start flex min-w-0 flex-col gap-[var(--layout-section-gap)]">
-      <section class="flex min-w-0 flex-col gap-[var(--layout-group-gap)]">
+    <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)">
+      <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
         <!-- The band's CONTROLS: narrowing on the left, the band's own action on the
              right, above the card — the same row every list in the console opens with. -->
         <ControlsHeader>
@@ -136,7 +138,7 @@
             size="large"
             placeholder="Search device groups"
             aria-label="Search device groups"
-            class="min-w-36 grow basis-[var(--container-2xs)]"
+            class="min-w-36 grow basis-(--container-2xs)"
           >
             <template #iconLeft>
               <i
@@ -157,6 +159,18 @@
               enable-sorting
               :border="false"
             >
+              <!-- WHO changed the group and WHEN, in one column: the modifier's avatar
+                   (name on its tooltip) over the relative time — the same cell every
+                   console list ends on (ui/LastModifiedCell.vue), which is why there is
+                   no separate author column. The column SORTS on the display string it
+                   is given and RENDERS the instant, so the two cannot disagree. -->
+              <template #cell-lastModified="{ row }">
+                <LastModifiedCell
+                  :author="row.author"
+                  :avatar-src="row.authorAvatar"
+                  :date="row.modifiedAt"
+                />
+              </template>
             </Table>
           </template>
         </CardBox>

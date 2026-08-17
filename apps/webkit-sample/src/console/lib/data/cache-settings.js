@@ -34,6 +34,8 @@
 //                                    only honoured while the Application Accelerator
 //                                    module is active on the application, so it is
 //                                    the collapsed Advanced band.
+import { daysAgo, formatListDate } from '@shared/lib/dates'
+import { authorAt } from '@shared/lib/people'
 import { ref } from 'vue'
 
 // `no-cache` exists on the browser half only: the edge half of a cache setting
@@ -130,31 +132,57 @@ export const toList = (text) => text.split(SEPARATORS).filter(Boolean)
 /** The API's list of strings back as one editable line. */
 export const fromList = (list) => (list ?? []).join(', ')
 
+/**
+ * The stored shape of a cache setting: the request body plus what the list renders of
+ * it. ONE decorator for the seed AND for what the drawer creates, so a setting authored
+ * in this session cannot read differently from one that shipped with the sample.
+ *
+ * `modifiedAt` is the real instant — the Last Modified cell renders it relative — and
+ * `lastModified` (the sortable display string) is derived from it by one formatter
+ * rather than hand-written per row. The author is the sample's round-robin roster, the
+ * face every console list identifies a change by (@shared/lib/people).
+ */
+const decorate = ({ modifiedAt, ...setting }, index = 0) => {
+  const person = authorAt(index)
+  return {
+    ...setting,
+    modifiedAt,
+    lastModified: formatListDate(modifiedAt),
+    author: person.name,
+    authorAvatar: person.avatar
+  }
+}
+
 // The store. Seeded so the tab lands populated, and shaped like the request body it
 // posts — flat only where the request is flat.
-const cacheSettings = ref([
-  {
-    id: 'cs-default',
-    name: 'Default Cache',
-    browserCache: { behavior: 'honor', maxAge: 0 },
-    edgeCache: { behavior: 'override', maxAge: 60 },
-    tieredCache: false
-  },
-  {
-    id: 'cs-static',
-    name: 'Static Assets',
-    browserCache: { behavior: 'override', maxAge: 604800 },
-    edgeCache: { behavior: 'override', maxAge: 2592000 },
-    tieredCache: true
-  }
-])
+const cacheSettings = ref(
+  [
+    {
+      id: 'cs-default',
+      name: 'Default Cache',
+      browserCache: { behavior: 'honor', maxAge: 0 },
+      edgeCache: { behavior: 'override', maxAge: 60 },
+      tieredCache: false,
+      modifiedAt: daysAgo(9)
+    },
+    {
+      id: 'cs-static',
+      name: 'Static Assets',
+      browserCache: { behavior: 'override', maxAge: 604800 },
+      edgeCache: { behavior: 'override', maxAge: 2592000 },
+      tieredCache: true,
+      modifiedAt: daysAgo(31)
+    }
+  ].map(decorate)
+)
 
 /** Every cache setting on this application. */
 export const useCacheSettings = () => cacheSettings
 
 /** Prepends a new cache setting, so it appears in the list without a reload. */
 export const addCacheSetting = (record) => {
-  const created = { id: `cs-${Date.now()}`, ...record }
+  const modifiedAt = new Date()
+  const created = decorate({ id: `cs-${modifiedAt.getTime()}`, ...record, modifiedAt })
   cacheSettings.value = [created, ...cacheSettings.value]
   return created
 }

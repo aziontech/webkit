@@ -51,6 +51,7 @@
 
   import FieldStack from '../../../components/form/FieldStack.vue'
   import ResourceDrawer from '../../../components/form/ResourceDrawer.vue'
+  import LastModifiedCell from '../../../components/list/LastModifiedCell.vue'
   import ControlsHeader from '../../../components/page/ControlsHeader.vue'
   import PageHeading from '../../../components/page/PageHeading.vue'
   import Section from '../../../components/page/Section.vue'
@@ -78,7 +79,8 @@
     { accessorKey: 'name', header: 'Name', principal: true, enableSorting: true },
     { accessorKey: 'browserCacheLabel', header: 'Browser cache' },
     { accessorKey: 'edgeCacheLabel', header: 'Edge cache' },
-    { accessorKey: 'tieredCache', header: 'Tiered cache' }
+    { accessorKey: 'tieredCache', header: 'Tiered cache' },
+    { accessorKey: 'lastModified', header: 'Last Modified', enableSorting: true, grow: 2 }
   ]
 
   // Free-text search, hoisted into the ControlsHeader above the card.
@@ -226,8 +228,8 @@
     <!-- The page's parent section. It holds one section here — the controls row
          over the table it narrows, at the GROUP step — and spaces whatever sits
          inside it at --layout-section-gap. -->
-    <section class="layout-section-start flex min-w-0 flex-col gap-[var(--layout-section-gap)]">
-      <section class="flex min-w-0 flex-col gap-[var(--layout-group-gap)]">
+    <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)">
+      <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
         <!-- The band's CONTROLS: narrowing on the left, the band's own action on the
              right, above the card — the same row every list in the console opens with. -->
         <ControlsHeader>
@@ -240,7 +242,7 @@
             size="large"
             placeholder="Search cache settings"
             aria-label="Search cache settings"
-            class="min-w-36 grow basis-[var(--container-2xs)]"
+            class="min-w-36 grow basis-(--container-2xs)"
           >
             <template #iconLeft>
               <i
@@ -272,9 +274,21 @@
                 />
                 <span
                   v-else
-                  class="text-body-sm text-[var(--text-muted)]"
+                  class="text-body-sm text-(--text-muted)"
                   >Disabled</span
                 >
+              </template>
+
+              <!-- WHO changed the setting and WHEN, in one column: the modifier's avatar
+                   (name on its tooltip) over the relative time — the same cell every
+                   console list ends on (ui/LastModifiedCell.vue), which is why there is
+                   no separate author column. -->
+              <template #cell-lastModified="{ row }">
+                <LastModifiedCell
+                  :author="row.author"
+                  :avatar-src="row.authorAvatar"
+                  :date="row.modifiedAt"
+                />
               </template>
             </Table>
           </template>
@@ -322,7 +336,7 @@
         title="Browser Cache"
         hint="How long the visitor's own browser may reuse a response before asking again. Honoring the origin passes its Cache-Control through untouched; overriding replaces it with the TTL set here."
       >
-        <div class="flex min-w-0 flex-col gap-[var(--layout-group-gap)]">
+        <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
           <FieldStack label="Behavior">
             <template #default="{ controlId }">
               <Select
@@ -378,7 +392,7 @@
         title="Edge Cache"
         hint="How long Azion's edge may serve a stored response before revalidating with the origin. This is the layer that decides your cache hit rate, and 60 seconds is the floor unless Application Accelerator is active on the application."
       >
-        <div class="flex min-w-0 flex-col gap-[var(--layout-group-gap)]">
+        <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
           <FieldStack label="Behavior">
             <template #default="{ controlId }">
               <Select
@@ -511,7 +525,7 @@
         title="Advanced cache key"
         hint="Which parts of a request make two requests two different cached objects. Varying by more fields serves more precise content and stores more copies, so each option says what it costs. Requires the Application Accelerator module on this application."
       >
-        <div class="flex min-w-0 flex-col gap-[var(--layout-group-gap)]">
+        <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
           <FieldStack
             label="Cache by HTTP method"
             description="GET and HEAD are always cached. Selecting POST or OPTIONS puts the request body in the cache key."
