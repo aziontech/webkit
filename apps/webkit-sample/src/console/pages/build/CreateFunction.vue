@@ -18,11 +18,13 @@
   // THE FIELDS ARE THE CONSOLE'S, ONE FOR ONE. The body this page builds is the body the
   // console's own adapter builds — `{ name, code, runtime, execution_environment,
   // default_args, azion_form, active }` — and the tabs carry the same three groups
-  // (Code · Arguments · Main Settings). Two deliberate differences, both stated where
-  // they happen: the name is in the commit bar rather than in Main Settings, and the
-  // Form Builder (`azion_form`: a JSON Schema that renders a form which writes the args)
-  // is not built here — the args are written as JSON, which is what the endpoint receives
-  // either way.
+  // (Code · Arguments · Main Settings). One deliberate difference, stated where it
+  // happens: the name is in the commit bar rather than in Main Settings.
+  //
+  // `azion_form` — the JSON Schema the console renders as a form over the arguments —
+  // is written from the Arguments document's own JSON / Form Builder switch
+  // (../components/function/FunctionArgsForm.vue), which is where both ways of writing
+  // it live: as a list of fields, or as the schema itself.
   //
   // The surface rule is untouched (../lib/surfaces.js): a first-level resource creates
   // on a PAGE, at `/functions/new`, linkable and reload-safe. What changes is the page's
@@ -65,8 +67,8 @@
 
   // TWO tabs, the same two the detail page has (./FunctionDetail.vue). Creating a
   // function and correcting one are the same task on the same record, so the screen is
-  // the same screen: Code — one editor with a Code / Arguments switch over it, a
-  // terminal under it and the response preview beside it — and Settings.
+  // the same screen: Code — one editor with a Code / Arguments switch over it — and
+  // Settings.
   const TABS = [
     { value: 'code', label: 'Code' },
     { value: 'settings', label: 'Settings' }
@@ -83,6 +85,9 @@
   const name = ref('')
   const code = ref(FUNCTION_STARTER)
   const args = ref(FUNCTION_ARGS)
+  // `azion_form` — the JSON Schema the Form Builder writes. Empty until the reader adds
+  // a form; the endpoint takes the function without one.
+  const form = ref('')
   const executionEnvironment = ref('application')
   const active = ref(true)
 
@@ -102,6 +107,7 @@
     name: name.value,
     code: code.value,
     args: args.value,
+    form: form.value,
     executionEnvironment: executionEnvironment.value,
     active: active.value
   }))
@@ -113,6 +119,7 @@
   const nameError = ref('')
   const codeError = ref('')
   const argsError = ref('')
+  const formError = ref('')
 
   const titleId = useId()
   const nameId = useId()
@@ -180,6 +187,18 @@
     }
   }
 
+  /** `azion_form` is posted as an object too, so an unfinished schema is not posted. */
+  const parsedForm = () => {
+    if (!form.value.trim()) return undefined // no form is a valid answer
+    try {
+      const value = JSON.parse(form.value)
+      if (value === null || Array.isArray(value) || typeof value !== 'object') return null
+      return value
+    } catch {
+      return null
+    }
+  }
+
   /**
    * Points the reader at the field that is missing, on the tab that holds it. The name
    * lives in the bar and is always on screen; the code and the arguments live behind
@@ -191,7 +210,15 @@
     nameError.value = name.value.trim() ? '' : 'This field is required.'
     codeError.value = code.value.trim() ? '' : 'This field is required.'
     argsError.value = parsedArgs() ? '' : 'Arguments must be a JSON object.'
+    formError.value = parsedForm() === null ? 'The form schema must be a JSON object.' : ''
 
+    // The FORM first, so a page that fails on both lands the reader on the JSON that is
+    // the harder of the two to have got wrong — the arguments — rather than on the
+    // builder, which would leave the args message behind an unrelated switch.
+    if (formError.value) {
+      tab.value = 'code'
+      editorDocument.value = 'arguments'
+    }
     if (argsError.value) {
       tab.value = 'code'
       editorDocument.value = 'arguments'
@@ -202,7 +229,7 @@
     }
     if (nameError.value) globalThis.document.getElementById(nameId)?.focus()
 
-    return !nameError.value && !codeError.value && !argsError.value
+    return !nameError.value && !codeError.value && !argsError.value && !formError.value
   }
 
   /**
@@ -223,6 +250,7 @@
         runtime: RUNTIME.api,
         execution_environment: executionEnvironment.value,
         default_args: parsedArgs(),
+        azion_form: parsedForm(),
         active: active.value
       })
       // The function joins the LIBRARY (../lib/functions.js), which is the same list
@@ -235,6 +263,7 @@
         executionEnvironment: executionEnvironment.value,
         code: code.value,
         args: parsedArgs(),
+        form: parsedForm(),
         active: active.value
       })
 
@@ -274,7 +303,7 @@
 </script>
 
 <template>
-  <div class="flex h-dvh flex-col bg-[var(--bg-canvas)]">
+  <div class="flex h-dvh flex-col bg-(--bg-canvas)">
     <UnsavedChangesGuard :dirty="dirty" />
 
     <CreationHeader
@@ -320,10 +349,9 @@
           <legend class="sr-only">Create function</legend>
 
           <!-- THE EDITOR, shared with the detail page (ui/FunctionCodeEditor.vue): the
-               same Code / Arguments switch, the same full-bleed editor, the same
-               terminal and response preview. `v-show` rather than `v-if` because Monaco
-               owns undo history, cursor and folding state and unmounting throws all
-               three away. -->
+               same Code / Arguments switch, the same full-bleed editor. `v-show` rather
+               than `v-if` because Monaco owns undo history, cursor and folding state and
+               unmounting throws all three away. -->
           <div
             v-show="tab === 'code'"
             class="flex min-h-0 flex-1 flex-col"
@@ -331,6 +359,7 @@
             <FunctionCodeEditor
               v-model:code="code"
               v-model:args="args"
+              v-model:form="form"
               v-model:document="editorDocument"
               :language="RUNTIME.language"
               :runtime-label="RUNTIME.label"
@@ -370,15 +399,19 @@
              the only field that has to be answered and the editor is where the reader
              spends the whole task: asking for it on a tab would mean a Save that fails for
              a reason on the other screen. -->
-        <footer class="shrink-0 border-t border-[var(--border-default)] bg-[var(--bg-canvas)]">
+        <!-- A SURFACE, not canvas. Painted `--bg-canvas` the bar was the same colour as
+             the page behind it, so the rule above it was the only thing separating them
+             and the Name field and the buttons read as floating on the page rather than
+             sitting on a bar. -->
+        <footer class="shrink-0 border-t border-(--border-default) bg-(--bg-surface)">
           <!-- `min-h-14` rather than `h-14`: at the desktop widths this page is written
                for, the row fits on one line and the bar IS 56px. Below that it wraps and
                grows instead of pushing Save off the edge — a commit bar that overflows is
                a commit you cannot reach. -->
           <div
-            class="layout-boundary-inline flex min-h-14 flex-wrap items-center gap-[var(--spacing-sm)] py-[var(--spacing-xxs)]"
+            class="layout-boundary-inline flex min-h-14 flex-wrap items-center gap-(--spacing-sm) py-(--spacing-xxs)"
           >
-            <div class="mr-auto flex min-w-0 flex-1 items-center gap-[var(--spacing-sm)]">
+            <div class="mr-auto flex min-w-0 flex-1 items-center gap-(--spacing-sm)">
               <!-- No required marker: this page follows the console's validation model —
                    nothing is judged while the reader is still typing, and the amber
                    prompt on a failed submit is where "required" is said. -->
@@ -392,7 +425,7 @@
                 v-model="name"
                 size="medium"
                 placeholder="my-function"
-                class="w-full min-w-0 max-w-[var(--container-3xs)]"
+                class="w-full min-w-0 max-w-(--container-3xs)"
                 autocomplete="off"
                 :required="!!nameError"
                 :aria-describedby="nameError ? nameMessageId : undefined"
@@ -413,7 +446,7 @@
 
             <!-- The pair wraps as one unit: Cancel and Save never end up on different
                  lines from each other. -->
-            <div class="flex shrink-0 items-center gap-[var(--spacing-sm)]">
+            <div class="flex shrink-0 items-center gap-(--spacing-sm)">
               <Button
                 type="button"
                 label="Cancel"

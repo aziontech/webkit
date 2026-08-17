@@ -34,13 +34,24 @@ import { computed, ref } from 'vue'
 
 /**
  * The runtimes the endpoint accepts — `runtime: enum(azion_js, azion_lua)` — with how
- * each reads to a person and which grammar the editor highlights it in. One map, so the
- * list's Runtime column, its filter, the create page's locked field and the detail
- * page's editor all say the same thing.
+ * each reads to a person, which grammar the editor highlights it in, and the GLYPH that
+ * leads it in a list. One map, so the list's Runtime column, its filter, the create
+ * page's locked field, the detail page's editor and every table that shows a function's
+ * runtime all say the same thing.
+ *
+ * The glyph is the language's own brand mark where the icon library ships one
+ * (`ai-cor ai-js` — a colored background-image glyph, sized in `em` like a font icon),
+ * and the neutral code glyph where it does not: a made-up Lua mark would be worse than
+ * an honest generic one.
  */
 export const RUNTIMES = {
-  azion_js: { api: 'azion_js', label: 'JavaScript', language: 'javascript' },
-  azion_lua: { api: 'azion_lua', label: 'Lua', language: 'lua' }
+  azion_js: {
+    api: 'azion_js',
+    label: 'JavaScript',
+    language: 'javascript',
+    icon: 'ai-cor ai-js'
+  },
+  azion_lua: { api: 'azion_lua', label: 'Lua', language: 'lua', icon: 'pi pi-code' }
 }
 
 /** The runtime a function runs on, from its API value. Defaults to JavaScript. */
@@ -192,7 +203,40 @@ const SEED = [
     status: 'Active',
     modifiedAt: daysAgo(11),
     code: JS_IMAGE,
-    args: { defaultFormat: 'webp', quality: 80 }
+    args: { defaultFormat: 'webp', quality: 80 },
+    // THE FORM THIS FUNCTION DECLARES. `args` above are the VALUES an instance starts
+    // from; this is the schema over them, and it is what makes instancing this function
+    // ask two named questions instead of handing its reader a blank JSON editor
+    // (../../components/function/FunctionArgsFields.vue renders it).
+    //
+    // Every property here is an argument the code above actually reads — `args.defaultFormat`
+    // and `args.quality`. A field the function does not read would be a question whose
+    // answer goes nowhere.
+    // `required` LAST, matching what `serializeSchema` writes: the Form Builder round-trips
+    // this document, and a seed in a different key order would be silently rewritten the
+    // first time anyone touched a row on the function's own page.
+    form: {
+      type: 'object',
+      properties: {
+        defaultFormat: {
+          type: 'string',
+          title: 'Default format',
+          description:
+            'Used when the request does not ask for a format. Only these are rewritten — anything else passes through untouched.',
+          enum: ['webp', 'avif'],
+          default: 'webp'
+        },
+        quality: {
+          type: 'integer',
+          title: 'Quality',
+          description: 'Compression quality applied to every rewritten image.',
+          minimum: 1,
+          maximum: 100,
+          default: 80
+        }
+      },
+      required: ['defaultFormat']
+    }
   },
   {
     id: '4021886',
@@ -203,7 +247,26 @@ const SEED = [
     status: 'Active',
     modifiedAt: daysAgo(21),
     code: JS_GEO,
-    args: { defaultCountry: 'US' }
+    args: { defaultCountry: 'US' },
+    // One argument, one field — and the constraints the code relies on said in the
+    // schema rather than left for the instance to get wrong: the path this builds is
+    // `/' + country.toLowerCase()`, so a two-letter code is the only value that works.
+    form: {
+      type: 'object',
+      properties: {
+        defaultCountry: {
+          type: 'string',
+          title: 'Default country',
+          description:
+            'The two-letter country code used when the request carries no geo header. It becomes the first path segment.',
+          minLength: 2,
+          maxLength: 2,
+          pattern: '^[A-Z]{2}$',
+          default: 'US'
+        }
+      },
+      required: ['defaultCountry']
+    }
   },
   {
     id: '4021887',
@@ -274,10 +337,11 @@ const decorate = (fn, index = 0) => {
   const runtime = RUNTIMES[fn.runtimeApi] ?? RUNTIMES.azion_js
   return {
     ...fn,
-    // The display runtime and its grammar are DERIVED from the API value, never typed
-    // twice: the list column, the filter chip and the editor cannot disagree.
+    // The display runtime, its grammar and its glyph are DERIVED from the API value,
+    // never typed twice: the list column, the filter chip and the editor cannot disagree.
     runtime: runtime.label,
     language: runtime.language,
+    runtimeIcon: runtime.icon,
     // `active` is the API's boolean; `status` is the three-way label the list renders
     // (a function is Draft until it has ever been instanced).
     active: fn.status === 'Active',
@@ -311,7 +375,11 @@ const loadAuthored = () => {
     if (!Array.isArray(parsed)) return []
     return parsed.map((fn) => ({
       ...fn,
-      modifiedAt: fn.modifiedAt ? new Date(fn.modifiedAt) : null
+      modifiedAt: fn.modifiedAt ? new Date(fn.modifiedAt) : null,
+      // Re-derived rather than trusted from storage: a session that started before a
+      // runtime gained its glyph holds a record without one, and a list leading with a
+      // missing icon is a hole nothing would report.
+      runtimeIcon: runtimeOf(fn).icon
     }))
   } catch {
     return []
@@ -367,6 +435,8 @@ export const functionOptionsFor = (environment) =>
  * @param {string} [input.executionEnvironment] `application` or `firewall`.
  * @param {string} [input.code] The function's source.
  * @param {object} [input.args] `default_args` — what an instance of it starts from.
+ * @param {object} [input.form] `azion_form` — the JSON Schema the console renders as a
+ *   form over those arguments. Absent when the function has no form.
  * @param {boolean} [input.active] Whether the function may run.
  * @returns {object} The stored function.
  */
@@ -376,6 +446,7 @@ export function addFunction({
   executionEnvironment = 'application',
   code = '',
   args = {},
+  form = undefined,
   active = true
 } = {}) {
   const modifiedAt = new Date()
@@ -388,7 +459,11 @@ export function addFunction({
     status: active ? 'Draft' : 'Inactive',
     modifiedAt,
     code,
-    args: args ?? {}
+    args: args ?? {},
+    // Only carried when there is one: `form: undefined` and no `form` at all read the
+    // same everywhere downstream, and an empty schema on a function that never had a
+    // form would open its editor on a form to remove.
+    ...(form ? { form } : {})
   })
   authored.value.unshift(fn)
   persist()

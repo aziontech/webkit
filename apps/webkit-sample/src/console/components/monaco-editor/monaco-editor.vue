@@ -221,7 +221,7 @@
     :data-invalid="invalid || null"
     :data-fill="fill || null"
     :data-flush="flush || null"
-    class="flex w-full flex-col gap-[var(--spacing-xs)] data-[fill]:min-h-0 data-[fill]:flex-1 data-[flush]:gap-0"
+    class="flex w-full flex-col gap-(--spacing-xs) data-fill:min-h-0 data-fill:flex-1 data-flush:gap-0"
   >
     <!-- A <span>, not webkit's `Label`: that renders a native <label>, and Monaco's
          editable surface is an off-screen textarea inside a widget tree that a `for`
@@ -230,7 +230,7 @@
     <span
       v-if="label"
       :id="labelId"
-      class="inline-flex items-center text-label-sm text-[var(--text-default)]"
+      class="inline-flex items-center text-label-sm text-(--text-default)"
       :data-testid="`${testId}__label`"
       >{{ label }}</span
     >
@@ -240,7 +240,7 @@
     <div
       v-if="loading"
       :data-fill="fill || null"
-      class="data-[fill]:min-h-0 data-[fill]:flex-1"
+      class="data-fill:min-h-0 data-fill:flex-1"
     >
       <Skeleton
         kind="shape"
@@ -261,7 +261,7 @@
       :data-invalid="invalid || null"
       :data-disabled="disabled || null"
       :data-testid="`${testId}__host`"
-      class="min-w-0 h-[var(--monaco-editor-height)] data-[fill]:h-auto data-[fill]:min-h-0 data-[fill]:flex-1 overflow-hidden rounded-[var(--shape-elements)] border border-[var(--border-default)] bg-[var(--bg-surface)] transition-colors duration-150 ease-out motion-reduce:transition-none focus-within:outline-none focus-within:ring-2 focus-within:ring-[var(--ring-color)] focus-within:ring-offset-2 focus-within:ring-offset-[var(--bg-canvas)] data-[invalid]:border-[var(--danger-border)] data-[disabled]:cursor-not-allowed data-[disabled]:bg-[var(--bg-disabled)] data-[flush]:rounded-none data-[flush]:border-0 data-[flush]:bg-transparent data-[flush]:ring-offset-0 data-[flush]:focus-within:ring-0"
+      class="min-w-0 h-(--monaco-editor-height) data-fill:h-auto data-fill:min-h-0 data-fill:flex-1 overflow-hidden rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) transition-colors duration-150 ease-out motion-reduce:transition-none focus-within:outline-none focus-within:ring-2 focus-within:ring-(--ring-color) focus-within:ring-offset-2 focus-within:ring-offset-(--bg-canvas) data-invalid:border-(--danger-border) data-disabled:cursor-not-allowed data-disabled:bg-(--bg-disabled) data-flush:rounded-none data-flush:border-0 data-flush:bg-transparent data-flush:ring-offset-0 data-flush:focus-within:ring-0"
     >
       <VueMonacoEditor
         v-model:value="model"
@@ -304,7 +304,7 @@
       :kind="helperKind"
       :data-flush="flush || null"
       :data-testid="`${testId}__helper`"
-      class="data-[flush]:px-[var(--spacing-sm)] data-[flush]:py-[var(--spacing-xs)]"
+      class="data-flush:px-(--spacing-sm) data-flush:py-(--spacing-xs)"
     />
   </div>
 </template>

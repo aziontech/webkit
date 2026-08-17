@@ -23,7 +23,9 @@
   //               declares the arguments it reads, and the instance is that function with
   //               this application's values for them;
   //   `active`    posted as `true`. The console hard-codes it on create rather than
-  //               asking, so this form does not ask either;
+  //               asking, so this form does not ask either — but the LIST shows it, as a
+  //               Status column: a rule can call an instance that is switched off, and
+  //               "nothing happens" needs an answer the reader can see;
   //   `azion_form` the Form Builder's JSON Schema (a schema renders a form which writes
   //               the args). The sample does not build the Form Builder — the same stance
   //               ../../lib/create-resources.js takes for the function itself — so the
@@ -73,14 +75,19 @@
   import InputText from '@aziontech/webkit/input-text'
   import Select from '@aziontech/webkit/select'
   import Table from '@aziontech/webkit/table'
+  import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
-  import { computed, onMounted, reactive, ref, watch } from 'vue'
+  import Tooltip from '@aziontech/webkit/tooltip'
+  import { daysAgo, formatListDate } from '@shared/lib/dates'
+  import { authorAt } from '@shared/lib/people'
+  import { computed, defineAsyncComponent, onMounted, reactive, ref, watch } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
   import FieldStack from '../../../components/form/FieldStack.vue'
   import ResourceDrawer from '../../../components/form/ResourceDrawer.vue'
+  import FunctionArgsFields from '../../../components/function/FunctionArgsFields.vue'
   import FilterBar from '../../../components/list/FilterBar.vue'
-  import MonacoEditor from '../../../components/monaco-editor/monaco-editor.vue'
+  import LastModifiedCell from '../../../components/list/LastModifiedCell.vue'
   import ControlsHeader from '../../../components/page/ControlsHeader.vue'
   import PageHeading from '../../../components/page/PageHeading.vue'
   import Section from '../../../components/page/Section.vue'
@@ -88,29 +95,88 @@
   import { useListFilters } from '../../../lib/behavior/list-state'
   import { countInstance, functionById, functionOptionsFor } from '../../../lib/data/functions'
 
+  // Monaco is megabytes of editor plus its language workers, and it is only ever
+  // mounted inside this panel's drawer — so it loads when that drawer opens, not
+  // when the application page does. Statically importing it here put the whole
+  // editor back into the entry chunk that ../../build/CreateFunction.vue and
+  // FunctionDetail.vue are lazy specifically to keep it out of.
+  const MonacoEditor = defineAsyncComponent(
+    () => import('../../../components/monaco-editor/monaco-editor.vue')
+  )
+
+  // The Function column LEADS WITH THE BOUND FUNCTION'S RUNTIME GLYPH (the JavaScript
+  // mark, the code glyph for Lua) — the language is the first thing a reader wants of a
+  // function and it costs no column to say it, the way the module's own list does. The
+  // glyph comes from the one RUNTIMES map (../../lib/functions.js), so it cannot
+  // disagree with what the editor highlights.
+  //
+  // Status and Last Modified are the two columns every console list ends on: `active`
+  // is the API's own flag on the binding (a rule can call an inactive instance and
+  // nothing runs), and Last Modified says who touched it and when.
   const columns = [
     { accessorKey: 'name', header: 'Name', principal: true, enableSorting: true },
     { accessorKey: 'edgeFunction', header: 'Function' },
-    { accessorKey: 'args', header: 'Arguments', grow: 2 }
+    { accessorKey: 'args', header: 'Arguments', grow: 2 },
+    { accessorKey: 'status', header: 'Status', enableSorting: true },
+    { accessorKey: 'lastModified', header: 'Last Modified', enableSorting: true, grow: 2 }
   ]
 
   // Free-text search, hoisted into the ControlsHeader above the card.
 
   // An instance stores the function's ID, never its name: the name is the library's to
   // change, and a row holding a copy of it would be the one place in the console still
-  // showing the old one.
-  const instances = ref([
-    { id: 'fi-auth', name: 'auth-guard', functionId: '4021884', args: '{}' },
-    { id: 'fi-img', name: 'img-resize', functionId: '4021885', args: '{ "quality": 80 }' }
-  ])
+  // showing the old one. `active` and `modifiedAt` ARE the instance's own — the binding
+  // is what is switched on and what was edited, not the code behind it.
+  //
+  // The author is STORED on the record, not derived from the row's position: a create
+  // prepends, and an index-derived face would hand every existing row a new person the
+  // moment one is added.
+  const withAuthor = (instance, index = 0) => {
+    const person = authorAt(index)
+    return { ...instance, author: person.name, authorAvatar: person.avatar }
+  }
+
+  const instances = ref(
+    [
+      {
+        id: 'fi-auth',
+        name: 'auth-guard',
+        functionId: '4021884',
+        args: '{}',
+        active: true,
+        modifiedAt: daysAgo(6)
+      },
+      {
+        id: 'fi-img',
+        name: 'img-resize',
+        functionId: '4021885',
+        args: '{ "quality": 80 }',
+        active: false,
+        modifiedAt: daysAgo(23)
+      }
+    ].map(withAuthor)
+  )
 
   // The rows the table renders: the instance, plus the bound function resolved from the
   // library. A function deleted in the Functions module leaves the binding behind, so
-  // the cell says so rather than rendering an empty column.
+  // the cell says so rather than rendering an empty column — and it has no runtime to
+  // lead with either, which is why the glyph is conditional in the cell below.
+  //
+  // `status` and `lastModified` are DERIVED here rather than stored beside `active` and
+  // `modifiedAt`: the label and the sortable date string can then never drift from the
+  // two values that actually hold the state.
   const rows = computed(() =>
     instances.value.map((instance) => {
       const fn = functionById(instance.functionId)
-      return { ...instance, edgeFunction: fn?.name ?? 'Deleted function', functionExists: !!fn }
+      return {
+        ...instance,
+        edgeFunction: fn?.name ?? 'Deleted function',
+        functionExists: !!fn,
+        runtime: fn?.runtime ?? '',
+        runtimeIcon: fn?.runtimeIcon ?? '',
+        status: instance.active ? 'Active' : 'Inactive',
+        lastModified: formatListDate(instance.modifiedAt)
+      }
     })
   )
 
@@ -140,8 +206,22 @@
   // Opened from the page's tab row (ApplicationDetail).
   defineExpose({ openCreate: () => (createOpen.value = true) })
   // One field per property of the request body the endpoint takes (see the header).
+  // THE SELECTED FUNCTION'S FORM. `azion_form` belongs to the FUNCTION; the instance
+  // only answers it. Empty (or absent) means this function declares no form, and the
+  // arguments stay what they have always been here — JSON the reader writes.
+  const argsSchema = computed(() => {
+    const fn = functionById(form.functionId)
+    return fn?.form ? JSON.stringify(fn.form, null, 2) : ''
+  })
+  const hasArgsForm = computed(() => argsSchema.value.trim().length > 0)
+  // The rendered form, so the submit can ask it whether its required fields were answered.
+  const argsFields = ref(null)
+
   const form = reactive({ name: '', functionId: '', args: EMPTY_ARGS })
   const errors = reactive({ name: '', functionId: '', args: '' })
+  // Whether a save has been ATTEMPTED — the rendered form's required fields stay quiet
+  // until then, the same rule every other form in the console follows.
+  const submitted = ref(false)
   const submitting = ref(false)
 
   // Controls the Function Select's dropdown so the quick-add (its footer slot) can
@@ -167,6 +247,7 @@
     form.name = ''
     form.functionId = ''
     form.args = EMPTY_ARGS
+    submitted.value = false
     errors.name = ''
     errors.functionId = ''
     errors.args = ''
@@ -188,8 +269,15 @@
   const validate = () => {
     errors.name = form.name.trim() ? '' : 'Name is required.'
     errors.functionId = form.functionId ? '' : 'Select a function.'
+    submitted.value = true
     errors.args = parsedArgs() ? '' : 'Arguments must be a JSON object.'
-    return !errors.name && !errors.functionId && !errors.args
+    // THE RENDERED FORM'S OWN REQUIRED FIELDS. They are the function's declaration, not
+    // this page's, so the page cannot enumerate them — it asks the surface that rendered
+    // them. No message is set here: each unanswered field says so where it sits, which
+    // is where the reader has to go anyway. An error line up here would be a second
+    // voice pointing at the first.
+    const unanswered = hasArgsForm.value ? (argsFields.value?.unanswered?.length ?? 0) : 0
+    return !errors.name && !errors.functionId && !errors.args && unanswered === 0
   }
 
   const submit = async () => {
@@ -202,15 +290,19 @@
       const name = form.name.trim()
 
       // Stands in for `POST /v4/workspace/applications/{id}/functions`. The row keeps
-      // what that body carries — `active` is posted as `true` and never asked for, so
-      // it is not a column either.
+      // what that body carries — `active` is posted as `true` and never asked for, so a
+      // new instance lands Active — plus the modification this side owns, so the Last
+      // Modified column answers for it immediately instead of leaving a blank cell.
+      const modifiedAt = new Date()
       instances.value = [
-        {
-          id: `fi-${Date.now()}`,
+        withAuthor({
+          id: `fi-${modifiedAt.getTime()}`,
           name,
           functionId: form.functionId,
-          args: JSON.stringify(parsedArgs())
-        },
+          args: JSON.stringify(parsedArgs()),
+          active: true,
+          modifiedAt
+        }),
         ...instances.value
       ]
 
@@ -230,8 +322,9 @@
   }
 
   // ── The filter catalog ────────────────────────────────────────────────────
-  // Function is the one enumerable column — which function an instance runs is
-  // what people narrow by. Name and Arguments are free text, covered by the search.
+  // Function and Status are the enumerable columns — which function an instance runs,
+  // and whether it runs at all, are what people narrow by. Name and Arguments are free
+  // text, covered by the search.
   const filterFields = [
     {
       id: 'edgeFunction',
@@ -243,6 +336,16 @@
           .map((fn) => ({ value: fn, label: fn }))
       },
       match: (instance, values) => values.includes(instance.edgeFunction)
+    },
+    {
+      id: 'status',
+      label: 'Status',
+      kind: 'options',
+      options: [
+        { value: 'Active', label: 'Active' },
+        { value: 'Inactive', label: 'Inactive' }
+      ],
+      match: (instance, values) => values.includes(instance.status)
     }
   ]
 
@@ -359,8 +462,8 @@
     <!-- The page's parent section. It holds one section here — the controls row
          over the table it narrows, at the GROUP step — and spaces whatever sits
          inside it at --layout-section-gap. -->
-    <section class="layout-section-start flex min-w-0 flex-col gap-[var(--layout-section-gap)]">
-      <section class="flex min-w-0 flex-col gap-[var(--layout-group-gap)]">
+    <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)">
+      <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
         <!-- The band's CONTROLS: narrowing on the left, the band's own action on the
              right, above the card — the same row every list in the console opens with. -->
         <ControlsHeader>
@@ -373,7 +476,7 @@
             size="large"
             placeholder="Search functions instances"
             aria-label="Search functions instances"
-            class="min-w-36 grow basis-[var(--container-2xs)]"
+            class="min-w-36 grow basis-(--container-2xs)"
           >
             <template #iconLeft>
               <i
@@ -404,27 +507,63 @@
               <!-- The binding, rendered as what it is: a pointer at a record another
                    module owns — the console's cross-module cell (truncating name +
                    arrow), not a standalone Link component. A function that has since
-                   been deleted has nothing to point at, so its cell is plain text. -->
+                   been deleted has nothing to point at, so its cell is plain text.
+                   The RUNTIME GLYPH leads it, and sits OUTSIDE the anchor: it names the
+                   language of what the link opens, it is not part of the link. Its
+                   tooltip is the runtime's name, so the mark is never the only way to
+                   know which language this is. -->
               <template #cell-edgeFunction="{ row }">
-                <div class="flex min-w-0 items-center">
+                <div class="flex min-w-0 items-center gap-(--spacing-xs)">
+                  <Tooltip
+                    v-if="row.runtimeIcon"
+                    :text="row.runtime"
+                  >
+                    <i
+                      :class="[row.runtimeIcon, 'shrink-0 text-[1.15em]']"
+                      :aria-label="row.runtime"
+                      role="img"
+                    />
+                  </Tooltip>
                   <router-link
                     v-if="row.functionExists"
                     :to="{ path: functionPath(row), query: { email } }"
-                    class="flex min-w-0 items-center gap-[var(--spacing-xxs)] text-body-sm text-[var(--text-default)] no-underline hover:underline"
+                    class="flex min-w-0 items-center gap-(--spacing-xxs) text-body-sm text-(--text-default) no-underline hover:underline"
                     @click.stop
                   >
                     <span class="truncate">{{ row.edgeFunction }}</span>
                     <i
-                      class="pi pi-arrow-up-right shrink-0 text-[var(--text-muted)]"
+                      class="pi pi-arrow-up-right shrink-0 text-(--text-muted)"
                       aria-hidden="true"
                     />
                   </router-link>
                   <span
                     v-else
-                    class="truncate text-body-sm text-[var(--text-muted)]"
+                    class="truncate text-body-sm text-(--text-muted)"
                     >{{ row.edgeFunction }}</span
                   >
                 </div>
+              </template>
+
+              <!-- Status is a chip, Active/Inactive, the same pair every console list
+                   reads (Applications.vue) — never bare text in a cell. -->
+              <template #cell-status="{ value }">
+                <Tag
+                  :label="value"
+                  :severity="value === 'Active' ? 'success' : 'secondary'"
+                  size="medium"
+                />
+              </template>
+
+              <!-- WHO changed the binding and WHEN, in one column: the modifier's avatar
+                   (name on its tooltip) over the relative time — the same cell every
+                   console list ends on (ui/LastModifiedCell.vue), which is why there is
+                   no separate author column. -->
+              <template #cell-lastModified="{ row }">
+                <LastModifiedCell
+                  :author="row.author"
+                  :avatar-src="row.authorAvatar"
+                  :date="row.modifiedAt"
+                />
               </template>
             </Table>
           </template>
@@ -501,7 +640,7 @@
                    <body> at z-50, so inside the Drawer panel (z-[1001]) it renders
                    behind and is invisible. Remove once webkit stacks overlay popups
                    above Drawer. -->
-              <Select.Content class="!z-[1002]">
+              <Select.Content class="z-[1002]!">
                 <Select.Option
                   v-for="fn in functionOptions"
                   :key="fn.value"
@@ -536,7 +675,23 @@
              NOT in a FieldStack: that renders a real `<label for>`, and Monaco's input is
              a hidden textarea a label cannot point at — which is exactly why the editor
              carries its own label and helper row. -->
+        <!-- WHEN THE FUNCTION DECLARES A FORM, the instance ANSWERS it rather than
+             writing JSON: the fields, their guidance and their validation are the
+             function's own (../../../components/function/FunctionArgsFields.vue), and
+             the JSON beside them is a read-only preview of what will be posted.
+             A function with no form falls back to the editor below — unchanged. -->
+        <FunctionArgsFields
+          v-if="hasArgsForm"
+          ref="argsFields"
+          v-model:args="form.args"
+          :schema="argsSchema"
+          :disabled="submitting"
+          :submitted="submitted"
+          test-id="function-instance-args"
+        />
+
         <MonacoEditor
+          v-else
           v-model="form.args"
           label="Arguments"
           language="json"

@@ -8,28 +8,18 @@
   // small properties. Rendering the code as one row in a stack of rows makes the reader
   // scroll past the settings to reach the thing they came to read.
   //
-  // SO THE PAGE IS AN EXPLORER, the same shape SqlDatabaseDetail and RealTimeEvents
-  // take — resizable panels around the thing you came to work on, each scrolling its
-  // own body, the page itself never scrolling:
+  // SO THE PAGE IS THE EDITOR — the thing you came to work on filling the region, its
+  // own body scrolling, the page itself never scrolling:
   //
   //   ┌─ Code | Settings ───────────────────────────────────────────────────────┐
-  //   │ [ Code · Arguments ]   Run                    ┊                          │
-  //   │ the editor, filling                           ┊  Preview — the response  │
-  //   │                                               ┊  the function produces,  │
-  //   ├─ Terminal ────────────────────────────────────┤  rendered                │
-  //   │ what the last run reported                    ┊                          │
-  //   └───────────────────────────────────────────────┴──────────────────────────┘
+  //   │ [ Code · Arguments ]  [ JSON · Form Builder ]   what this document is    │
+  //   ├─────────────────────────────────────────────────────────────────────────┤
+  //   │ the editor, full bleed, filling the region                               │
+  //   └─────────────────────────────────────────────────────────────────────────┘
   //
   // TWO TABS, NOT THREE. Code and Arguments were separate tabs, which made a reader
   // switch pages to see the values the code they are reading is written against. They
-  // are one editor now with a SegmentedButton over it: the same surface, two documents,
-  // and the preview beside them updates from whichever one was last edited.
-  //
-  // THE PANELS ARE THE DESIGN SYSTEM'S — `ResizablePanel`, not `Sidebar`. The code, the
-  // terminal and the preview are three views of one piece of work, not three places to
-  // navigate to, so the edges between them are resizable panes (see
-  // ui/FunctionCodeEditor.vue for why that distinction decides the component). `Sidebar`
-  // stays what its name says: the app's navigation rail.
+  // are one editor now with a SegmentedButton over it: the same surface, two documents.
   //
   // ONE RECORD, ONE COMMIT. Both tabs describe one function, so they share one baseline
   // and one save bar (ui/SettingsSaveBar.vue). Editing the code and flipping Active is
@@ -74,7 +64,11 @@
     code: record?.code ?? '',
     // The editor edits TEXT; `default_args` is an object. Indented on the way in so the
     // reader meets formatted JSON, parsed on the way out.
-    args: JSON.stringify(record?.args ?? {}, null, 2)
+    args: JSON.stringify(record?.args ?? {}, null, 2),
+    // `azion_form`, the same way. `''` — not `'{}'` — when the function has no form:
+    // the empty string is what the Form Builder reads as "no form yet", and a function
+    // that never had one should not open on an empty schema it now has to remove.
+    argsForm: record?.form ? JSON.stringify(record.form, null, 2) : ''
   })
 
   const { dirty, commit } = useBaseline(form)
@@ -116,11 +110,24 @@
   const nameError = ref('')
   const codeError = ref('')
   const argsError = ref('')
+  const formError = ref('')
 
   /** `default_args` is posted as an object, so what is typed has to parse to one. */
   const parsedArgs = () => {
     try {
       const value = JSON.parse(form.args)
+      if (value === null || Array.isArray(value) || typeof value !== 'object') return null
+      return value
+    } catch {
+      return null
+    }
+  }
+
+  /** `azion_form` is posted as an object too — and `undefined` when there is no form. */
+  const parsedForm = () => {
+    if (!form.argsForm.trim()) return undefined
+    try {
+      const value = JSON.parse(form.argsForm)
       if (value === null || Array.isArray(value) || typeof value !== 'object') return null
       return value
     } catch {
@@ -137,7 +144,12 @@
     nameError.value = form.name.trim() ? '' : 'This field is required.'
     codeError.value = form.code.trim() ? '' : 'This field is required.'
     argsError.value = parsedArgs() ? '' : 'Arguments must be a JSON object.'
+    formError.value = parsedForm() === null ? 'The form schema must be a JSON object.' : ''
 
+    if (formError.value) {
+      activeTab.value = 'code'
+      activeDocument.value = 'arguments'
+    }
     if (argsError.value) {
       activeTab.value = 'code'
       activeDocument.value = 'arguments'
@@ -148,7 +160,7 @@
     }
     if (nameError.value) activeTab.value = 'settings'
 
-    return !nameError.value && !codeError.value && !argsError.value
+    return !nameError.value && !codeError.value && !argsError.value && !formError.value
   }
 
   /**
@@ -161,6 +173,7 @@
     runtime: runtime.value.api,
     execution_environment: form.executionEnvironment,
     default_args: parsedArgs(),
+    azion_form: parsedForm(),
     active: form.active
   })
 
@@ -213,8 +226,7 @@
             <!-- ── Code ──
                  `v-show`, not `v-if`: Monaco owns undo history, cursor and folding
                  state, and unmounting the editor on every tab switch throws all three
-                 away. `relative`, because the preview panel's way back is an absolutely
-                 positioned sibling of it. -->
+                 away. -->
             <div
               v-show="activeTab === 'code'"
               class="flex min-h-0 flex-1 flex-col"
@@ -222,6 +234,7 @@
               <FunctionCodeEditor
                 v-model:code="form.code"
                 v-model:args="form.args"
+                v-model:form="form.argsForm"
                 v-model:document="activeDocument"
                 :language="runtime.language"
                 :runtime-label="runtime.label"
@@ -295,10 +308,11 @@
       </section>
 
       <!-- The page commits as ONE record, so the bar is not gated on a tab: an edit made
-           in the editor is still pending while the reader is in Settings. It is a
-           sibling of the scroll region inside this flex column, which is where `sticky
-           bottom-0` resolves to in-flow — so on the Code tab the editor shrinks by the
-           bar's height instead of being covered by it. -->
+           in the editor is still pending while the reader is in Settings. It is a sibling
+           of the scroll region inside this flex column, where `sticky bottom-0` resolves
+           to in-flow — which is why the bar's own strip is `h-0`: it floats over the
+           editor's last rows instead of taking a reserved band out of this column and
+           reflowing everything above it. -->
       <SettingsSaveBar
         :dirty="dirty"
         :saving="saving"
