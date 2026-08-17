@@ -469,15 +469,6 @@ describe('Popover (compound / overlay)', () => {
   })
 
   // ---- Scrolling a long panel ------------------------------------------------------
-  /**
-   * The "+N overflow" shape: a long list scrolling inside the panel. The panel is
-   * anchored to its trigger and re-anchors on page scroll — and that listener is
-   * registered in the CAPTURE phase (scroll does not bubble), so it also sees the
-   * panel's own scroll container. Re-anchoring on it read two bounding rects and
-   * rewrote the inline style on every scrolled frame, for a trigger that had not
-   * moved. Pinned both directions: inner scroll leaves the anchor alone, page
-   * scroll still moves it.
-   */
   const scrollableHost = () =>
     defineComponent({
       components: { Popover, PopoverTrigger, PopoverContent },
@@ -502,9 +493,8 @@ describe('Popover (compound / overlay)', () => {
     await fireEvent.click(trigger)
     await waitFor(() => expect(panel()).not.toBeNull())
 
-    // Re-anchoring is invisible on an inner scroll (the trigger has not moved, so the
-    // recomputed coordinates are identical) — asserting on `style.top` would pass in
-    // the broken state too. The observable difference is the measurement itself.
+    // An inner scroll recomputes to identical coordinates, so `style.top` would pass
+    // either way; whether the trigger is measured at all is the observable difference.
     const measure = vi.spyOn(trigger, 'getBoundingClientRect')
     // Opening anchors the panel over two ticks; let that settle before counting.
     await nextTick()
