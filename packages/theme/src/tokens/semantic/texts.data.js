@@ -44,37 +44,37 @@ export const textsData = {
   'text-heading-2xl': {
     fontSize: { _: fontSize['3xl'], sm: fontSize['5xl'], md: fontSize['6xl'] },
     lineHeight: leading.tight,
-    fontWeight: fontWeight.normal
+    fontWeight: fontWeight.light
   },
   'text-heading-xl': {
     fontSize: { _: fontSize.xl, sm: fontSize['3xl'], md: fontSize['4xl'] },
     lineHeight: leading.tight,
-    fontWeight: fontWeight.normal
+    fontWeight: fontWeight.light
   },
   'text-heading-lg': {
     fontSize: { _: fontSize.lg, md: fontSize['3xl'] },
     lineHeight: leading.tight,
-    fontWeight: fontWeight.normal
+    fontWeight: fontWeight.light
   },
   'text-heading-md': {
     fontSize: { _: fontSize.base, sm: fontSize.xl, md: fontSize['2xl'] },
     lineHeight: leading.tight,
-    fontWeight: fontWeight.normal
+    fontWeight: fontWeight.light
   },
   'text-heading-sm': {
     fontSize: { _: fontSize.sm, sm: fontSize.base, md: fontSize.lg },
     lineHeight: leading.snug,
-    fontWeight: fontWeight.normal
+    fontWeight: fontWeight.light
   },
   'text-heading-xs': {
     fontSize: fontSize.base,
     lineHeight: leading.snug,
-    fontWeight: fontWeight.normal
+    fontWeight: fontWeight.light
   },
   'text-heading-xxs': {
     fontSize: fontSize.sm,
     lineHeight: leading.snug,
-    fontWeight: fontWeight.normal
+    fontWeight: fontWeight.light
   },
   'text-label-lg': {
     fontSize: fontSize.base,
@@ -114,27 +114,27 @@ export const textsData = {
   },
   'text-body-lg': {
     fontSize: { _: fontSize.base, md: fontSize.lg },
-    fontWeight: fontWeight.normal,
+    fontWeight: fontWeight.light,
     lineHeight: leading.snug
   },
   'text-body-md': {
     fontSize: fontSize.base,
-    fontWeight: fontWeight.normal,
+    fontWeight: fontWeight.light,
     lineHeight: leading.snug
   },
   'text-body-sm': {
     fontSize: fontSize.sm,
-    fontWeight: fontWeight.normal,
+    fontWeight: fontWeight.light,
     lineHeight: leading.snug
   },
   'text-body-xs': {
     fontSize: fontSize.xs,
-    fontWeight: fontWeight.normal,
+    fontWeight: fontWeight.light,
     lineHeight: leading.snug
   },
   'text-body-xxs': {
     fontSize: fontSize.xs,
-    fontWeight: fontWeight.normal,
+    fontWeight: fontWeight.light,
     lineHeight: leading.normal
   },
   'text-tag-sm': {

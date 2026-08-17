@@ -249,6 +249,33 @@ const emitSemanticColorUtilities = () => {
  * interactive element loses the hand cursor unless a component overrides it.
  * Disabled controls keep the default cursor.
  */
+/**
+ * Emit a map of `@utility` blocks. A string value is a plain declaration; an object
+ * value is a nested rule keyed by a literal selector (`&:first-child { … }`), the way
+ * the typography utilities nest their `&:hover`.
+ */
+const emitUtilities = (utilities) =>
+  Object.entries(utilities)
+    .map(([name, decls]) => {
+      const body = Object.entries(decls)
+        .map(([prop, value]) =>
+          typeof value === 'object'
+            ? `  ${prop} { ${formatStateDecls(value)}; }`
+            : `  ${prop}: ${value};`,
+        )
+        .join('\n');
+      return `@utility ${name} {\n${body}\n}`;
+    })
+    .join('\n\n');
+
+/**
+ * The container system as `@utility` blocks — same reason as the typography
+ * utilities: `@layer components` classes are opaque to the variant resolver, and a
+ * layout class is exactly the kind a consumer wants behind a variant
+ * (`md:layout-column`).
+ */
+const emitLayoutUtilities = () => emitUtilities(layoutsUtilities);
+
 const emitBaseLayer = () =>
   [
     '@layer base {',
@@ -280,37 +307,13 @@ const emitPropertyRegistrations = () =>
 
 /**
  * Emit illustration classes as Tailwind v4 `@utility` blocks — same reason as the
- * typography utilities: `@layer components` classes are opaque to the variant
- * resolver, and these are applied through variants (`group-hover/card:…`,
- * `motion-reduce:`).
+ * typography and layout utilities above: `@layer components` classes are opaque to the
+ * variant resolver, and these are applied through variants (`group-hover/card:…`,
+ * `motion-reduce:`). Reuses the shared `emitUtilities` declared above; the merge that
+ * brought the container system in carried a second, identical copy of it (and of
+ * `emitLayoutUtilities`) with no conflict, which is what this removes.
  */
-const emitUtilities = (utilities) =>
-  Object.entries(utilities)
-    .map(([name, decls]) => {
-      // An object value is a nested rule (`&::before { … }`), the way the typography
-      // utilities nest their `&:hover`; a string value is a plain declaration.
-      const body = Object.entries(decls)
-        .map(([prop, value]) =>
-          typeof value === 'object'
-            ? `  ${prop} { ${formatStateDecls(value)}; }`
-            : `  ${prop}: ${value};`,
-        )
-        .join('\n');
-      return `@utility ${name} {\n${body}\n}`;
-    })
-    .join('\n\n');
-
 const emitIllustrationUtilities = () => emitUtilities(illustrationsUtilities);
-
-/**
- * The container system as `@utility` blocks — same reason as the illustration and
- * typography utilities: `@layer components` classes are opaque to the variant
- * resolver, and a layout class is exactly the kind a consumer wants behind a variant
- * (`md:layout-column`). This is also what the app-level stylesheet these were promoted
- * from could not offer: it sat outside Tailwind's stylesheet graph, so `@utility` there
- * would never have been processed.
- */
-const emitLayoutUtilities = () => emitUtilities(layoutsUtilities);
 
 /** Emit `@keyframes` blocks at the top level of the stylesheet. */
 const emitKeyframes = () => {
