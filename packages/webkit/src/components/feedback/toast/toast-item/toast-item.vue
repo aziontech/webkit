@@ -56,20 +56,25 @@
     :role="role"
     :data-testid="testId"
     :data-type="type"
-    class="group pointer-events-auto relative flex w-full items-center gap-(--spacing-sm) rounded-(--shape-elements) border-solid border-[length:var(--border-width-default,1px)] border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-sm) text-(--text-default) shadow-(--shadow-sm)"
+    class="group pointer-events-auto relative flex w-full items-start gap-(--spacing-sm) rounded-(--shape-elements) border-solid border-[length:var(--border-width-default,1px)] border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-sm) text-(--text-default) shadow-(--shadow-sm)"
   >
     <div class="flex min-w-0 flex-1 items-start gap-(--spacing-sm)">
-      <Spinner
-        v-if="type === 'loading'"
-        class="size-4 shrink-0 self-center text-(--text-muted)"
-      />
-      <i
-        v-else-if="icon"
-        :class="icon"
-        :data-type="type"
-        class="shrink-0 text-label-md leading-none text-(--text-muted) data-[type=success]:text-(--success-contrast) data-[type=info]:text-(--info-contrast) data-[type=warning]:text-(--warning-contrast) data-[type=error]:text-(--danger-contrast)"
+      <span
+        v-if="type === 'loading' || icon"
+        class="flex h-[1lh] shrink-0 items-center text-label-md"
         aria-hidden="true"
-      />
+      >
+        <Spinner
+          v-if="type === 'loading'"
+          class="size-4 text-(--text-muted)"
+        />
+        <i
+          v-else
+          :class="icon"
+          :data-type="type"
+          class="leading-none text-(--text-muted) data-[type=success]:text-(--success-contrast) data-[type=info]:text-(--info-contrast) data-[type=warning]:text-(--warning-contrast) data-[type=error]:text-(--danger-contrast)"
+        />
+      </span>
       <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-xxs)">
         <slot />
       </div>
