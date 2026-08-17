@@ -8694,6 +8694,140 @@
       "parent": "footer",
       "treeShakeableImport": "@aziontech/webkit/footer-link"
     },
+    "resizable-panel": {
+      "import": "@aziontech/webkit/resizable-panel",
+      "target": "./src/components/layout/resizable-panel/index.ts",
+      "kind": "component",
+      "compoundRoot": true,
+      "treeShakeableImport": "@aziontech/webkit/resizable-panel-root",
+      "subcomponents": [
+        "@aziontech/webkit/resizable-panel-handle",
+        "@aziontech/webkit/resizable-panel-pane"
+      ],
+      "category": "layout",
+      "structure": "composition",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "orientation",
+          "type": "'horizontal' | 'vertical'",
+          "default": "'horizontal'",
+          "required": "false",
+          "doc": "Axis the panes are laid out on; horizontal places them side by side, vertical stacks them."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name for the group as a whole."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "On the root, the panes and handles in the order they appear. On a pane, its content. The handle takes no slot."
+        }
+      ],
+      "purpose": "A group of adjacent regions whose shared edges the reader can drag. It is the layout primitive behind a workspace — an editor with a terminal under it and a preview beside it — where every region is content the reader is working in and the split between them is theirs to set. It exists because `Sidebar` was being used for both jobs. `Sidebar` is the app's NAVIGATION rail: it collapses to icons, it hides, it is the thing you leave to go somewhere. A terminal, a preview and a code editor are not places you navigate to — they are the work — and dressing two of them as navigation rails made a screen with three \"sidebars\" and one document, on an axis `Sidebar` does not even have (it has no horizontal edge, so a terminal under an editor had to hand-roll its own splitter). This component owns the EDGE; `Sidebar` goes back to owning navigation.",
+      "useWhen": [
+        "Two or more content regions share an edge the reader should be able to move (editor + terminal, editor + preview, list + detail).",
+        "The split is a working preference the reader sets many times in a session, not a one-time layout decision.",
+        "A region has to shrink to nothing and come back without losing its state (an editor's undo history, a scroll position).",
+        "The layout needs a horizontal edge — one region above another — which no other component in the package provides."
+      ],
+      "avoidWhen": [
+        "The panel is the app's navigation rail → use `sidebar`, which owns the icon rail, the collapse and the nav semantics.",
+        "The content is a temporary overlay over the page → use `drawer` (a panel that comes and goes) or `dialog`.",
+        "The regions have a fixed relationship the reader should not change → use plain flex/grid layout with the layout tokens.",
+        "The panel is one scrolling region with no movable edge → use `scroll-area`."
+      ],
+      "related": [
+        "sidebar` — the navigation rail. Collapses to icons, hides, and carries nav semantics; reach for it when the panel is how the reader gets somewhere, not what they work in.",
+        "scroll-area` — one region that scrolls. A pane usually contains one.",
+        "drawer` — a panel that arrives over the page and leaves; a resizable pane is always there."
+      ],
+      "bestPractices": [
+        "Give exactly ONE pane in a group no `basis`. That pane absorbs the remaining space, so the group always fills its container and the reader never sees a gap or a scrollbar they did not cause.",
+        "Put the `basis` on the pane whose size the reader cares about (the terminal's height, the preview's width) and let the document be the flexible one.",
+        "Keep the pane's own state alive when it is collapsed — collapse renders it at zero length, it does not unmount it. A code editor that loses its undo history when the reader drags an edge shut has lost the reader's work.",
+        "Give every handle an `ariaLabel` naming the edge it moves (\"Resize the terminal\"), never the generic default: a screen with three handles otherwise reads as three identical controls.",
+        "A control that reopens a collapsed pane belongs OUTSIDE that pane, in the surrounding chrome. A control that only exists inside the thing it hides cannot bring it back."
+      ]
+    },
+    "resizable-panel-root": {
+      "import": "@aziontech/webkit/resizable-panel-root",
+      "target": "./src/components/layout/resizable-panel/resizable-panel.vue",
+      "kind": "root",
+      "rootOf": "resizable-panel",
+      "treeShakeableImport": "@aziontech/webkit/resizable-panel-root",
+      "category": "layout",
+      "structure": "composition",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "orientation",
+          "type": "'horizontal' | 'vertical'",
+          "default": "'horizontal'",
+          "required": "false",
+          "doc": "Axis the panes are laid out on; horizontal places them side by side, vertical stacks them."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name for the group as a whole."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "On the root, the panes and handles in the order they appear. On a pane, its content. The handle takes no slot."
+        }
+      ],
+      "purpose": "A group of adjacent regions whose shared edges the reader can drag. It is the layout primitive behind a workspace — an editor with a terminal under it and a preview beside it — where every region is content the reader is working in and the split between them is theirs to set. It exists because `Sidebar` was being used for both jobs. `Sidebar` is the app's NAVIGATION rail: it collapses to icons, it hides, it is the thing you leave to go somewhere. A terminal, a preview and a code editor are not places you navigate to — they are the work — and dressing two of them as navigation rails made a screen with three \"sidebars\" and one document, on an axis `Sidebar` does not even have (it has no horizontal edge, so a terminal under an editor had to hand-roll its own splitter). This component owns the EDGE; `Sidebar` goes back to owning navigation.",
+      "useWhen": [
+        "Two or more content regions share an edge the reader should be able to move (editor + terminal, editor + preview, list + detail).",
+        "The split is a working preference the reader sets many times in a session, not a one-time layout decision.",
+        "A region has to shrink to nothing and come back without losing its state (an editor's undo history, a scroll position).",
+        "The layout needs a horizontal edge — one region above another — which no other component in the package provides."
+      ],
+      "avoidWhen": [
+        "The panel is the app's navigation rail → use `sidebar`, which owns the icon rail, the collapse and the nav semantics.",
+        "The content is a temporary overlay over the page → use `drawer` (a panel that comes and goes) or `dialog`.",
+        "The regions have a fixed relationship the reader should not change → use plain flex/grid layout with the layout tokens.",
+        "The panel is one scrolling region with no movable edge → use `scroll-area`."
+      ],
+      "related": [
+        "sidebar` — the navigation rail. Collapses to icons, hides, and carries nav semantics; reach for it when the panel is how the reader gets somewhere, not what they work in.",
+        "scroll-area` — one region that scrolls. A pane usually contains one.",
+        "drawer` — a panel that arrives over the page and leaves; a resizable pane is always there."
+      ],
+      "bestPractices": [
+        "Give exactly ONE pane in a group no `basis`. That pane absorbs the remaining space, so the group always fills its container and the reader never sees a gap or a scrollbar they did not cause.",
+        "Put the `basis` on the pane whose size the reader cares about (the terminal's height, the preview's width) and let the document be the flexible one.",
+        "Keep the pane's own state alive when it is collapsed — collapse renders it at zero length, it does not unmount it. A code editor that loses its undo history when the reader drags an edge shut has lost the reader's work.",
+        "Give every handle an `ariaLabel` naming the edge it moves (\"Resize the terminal\"), never the generic default: a screen with three handles otherwise reads as three identical controls.",
+        "A control that reopens a collapsed pane belongs OUTSIDE that pane, in the surrounding chrome. A control that only exists inside the thing it hides cannot bring it back."
+      ]
+    },
+    "resizable-panel-handle": {
+      "import": "@aziontech/webkit/resizable-panel-handle",
+      "target": "./src/components/layout/resizable-panel/resizable-panel-handle/resizable-panel-handle.vue",
+      "kind": "subcomponent",
+      "parent": "resizable-panel",
+      "treeShakeableImport": "@aziontech/webkit/resizable-panel-handle"
+    },
+    "resizable-panel-pane": {
+      "import": "@aziontech/webkit/resizable-panel-pane",
+      "target": "./src/components/layout/resizable-panel/resizable-panel-pane/resizable-panel-pane.vue",
+      "kind": "subcomponent",
+      "parent": "resizable-panel",
+      "treeShakeableImport": "@aziontech/webkit/resizable-panel-pane"
+    },
     "scroll-area": {
       "import": "@aziontech/webkit/scroll-area",
       "target": "./src/components/layout/scroll-area/scroll-area.vue",
@@ -8771,6 +8905,13 @@
           "default": "'Sidebar'",
           "required": "false",
           "doc": "Accessible name for the navigation landmark."
+        },
+        {
+          "name": "side",
+          "type": "'start' | 'end'",
+          "default": "'start'",
+          "required": "false",
+          "doc": "Which edge of the layout the rail is anchored to; `end` mirrors the border, the drag handle, the collapse glyphs and the edge affordance."
         },
         {
           "name": "resizable",
@@ -8851,7 +8992,7 @@
           "notes": "Named slot. The collapse trigger renders after this content in the same row, under one full-width separator, so a profile block and the trigger read as one footer."
         }
       ],
-      "purpose": "Helps users move between views or sections. Composable application sidebar with optional header and footer regions; navigation content scrolls inside a built-in `ScrollArea`. It also owns **the rail gesture** — sizing the sidebar by dragging its trailing edge, and collapsing it out of the layout entirely. That belongs here rather than in each shell: the interaction is not a small one (a pointer drag that crosses the collapse boundary continuously, a keyboard equivalent, token-derived bounds, a phase-aware transition, and an affordance that brings a collapsed rail back), and every app that has a sidebar wants the same one. Two shells re-implementing it is how the two drift apart. Both halves are **opt-in and independent**: `resizable` adds the drag, `collapsible` adds the collapse trigger and the edge affordance. With neither set the component renders exactly as it always has, with the host owning the width — every existing consumer is unaffected."
+      "purpose": "Helps users move between views or sections. Composable application sidebar with optional header and footer regions; navigation content scrolls inside a built-in `ScrollArea`. It also owns **the rail gesture** — sizing the sidebar by dragging its trailing edge, and collapsing it out of the layout entirely. That belongs here rather than in each shell: the interaction is not a small one (a pointer drag that crosses the collapse boundary continuously, a keyboard equivalent, token-derived bounds, a phase-aware transition, and an affordance that brings a collapsed rail back), and every app that has a sidebar wants the same one. Two shells re-implementing it is how the two drift apart. Both halves are **opt-in and independent**: `resizable` adds the drag, `collapsible` adds the collapse trigger and the edge affordance. With neither set the component renders exactly as it always has, with the host owning the width — every existing consumer is unaffected. **`side` is the third opt-in, and it exists so a trailing panel is this component too.** An explorer layout — a log with a detail panel, a database browser with a schema panel — puts a resizable, hideable panel on the *right*, and the only thing that differs there is the direction of every horizontal decision: which edge the border and the handle sit on, which way a drag grows the panel, which way it leaves, and which way the arrow keys and the collapse glyph point. `side: 'end'` mirrors all of them from a single sign, so the trailing panel inherits the same clamping, the same phase-aware transition, the same `inert` collapsed state and the same testids — instead of being re-implemented beside the leading one, which is exactly how the two would drift."
     },
     "sidebar-group": {
       "import": "@aziontech/webkit/sidebar-group",
