@@ -334,7 +334,7 @@
   <ResourceDrawer
     v-model:open="open"
     size="large"
-    :title="editing ? 'Edit rule' : 'Create rule'"
+    :title="editing ? 'Edit Rule' : 'Add Rule'"
     description="Handle the conditional execution of behaviors through logical operators."
     save-label="Save"
     :submitting="submitting"

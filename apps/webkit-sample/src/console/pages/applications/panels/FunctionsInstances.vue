@@ -434,7 +434,7 @@
 
     <ResourceDrawer
       v-model:open="createOpen"
-      title="Create Functions Instance"
+      title="Add Functions Instance"
       :submitting="submitting"
       @submit="submit"
     >

@@ -70,6 +70,22 @@
   // surface (`defineExpose`), so the create drawer and the deploy's pending flag
   // never leave the file that owns them. A tab with nothing to create (Main Settings)
   // simply declares no `action`, and the row is tabs alone.
+  //
+  // ── THE LABEL CARRIES THE PRODUCT MODULE'S OWN NAME ──
+  //
+  // `Add ` + the module's name EXACTLY as Azion spells it: "Add Cache Settings", not
+  // "Add Cache settings" and not "Create cache setting". Two things were wrong with
+  // the sentence-cased version. It renamed the thing — a reader who has just read
+  // "Cache Settings" on the tab, and will read "Cache Settings" in the rule that
+  // references it, met a third spelling on the button between them. And it dropped
+  // the plural that is part of the name: one entry in that list IS a Cache Settings,
+  // the way one entry in Rules Engine is a Rule.
+  //
+  // So the module's name decides the label, and the object's name decides it where
+  // the module is named after the collection rather than the entry: Rules Engine
+  // creates a Rule, Functions Instances creates a Functions Instance. The drawer that
+  // opens carries the SAME words as the button that opened it (see each panel), so an
+  // action never renames itself between its trigger and its form.
   const tabs = [
     {
       value: 'main-settings',
@@ -95,7 +111,7 @@
       label: 'Device Groups',
       component: DeviceGroups,
       props: {},
-      action: { label: 'Create device group', icon: 'pi pi-plus', run: (view) => view.openCreate() }
+      action: { label: 'Add Device Group', icon: 'pi pi-plus', run: (view) => view.openCreate() }
     },
     {
       value: 'cache-settings',
@@ -103,7 +119,7 @@
       component: CacheSettings,
       props: {},
       action: {
-        label: 'Create cache setting',
+        label: 'Add Cache Settings',
         icon: 'pi pi-plus',
         run: (view) => view.openCreate()
       }
@@ -114,7 +130,7 @@
       component: FunctionsInstances,
       props: {},
       action: {
-        label: 'Create functions instance',
+        label: 'Add Functions Instance',
         icon: 'pi pi-plus',
         run: (view) => view.openCreate()
       }
@@ -124,7 +140,7 @@
       label: 'Rules Engine',
       component: RulesEngine,
       props: {},
-      action: { label: 'Create rule', icon: 'pi pi-plus', run: (view) => view.openCreate() }
+      action: { label: 'Add Rule', icon: 'pi pi-plus', run: (view) => view.openCreate() }
     }
   ]
 
