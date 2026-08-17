@@ -15,7 +15,10 @@
 //   2. DRAG IS NEVER THE ONLY WAY. Pointer drag is a mouse gesture, and it is the
 //      one gesture some readers cannot perform at all. The same list therefore
 //      ships explicit move-up / move-down buttons and arrow keys on the grip, and
-//      all three drive the same `move`.
+//      all three drive the same `move`. A LONG list needs one more: drag and the
+//      chevrons are both single-step gestures (a drag across rows that are not on
+//      screen means holding the pointer while the list scrolls), so `moveTo` takes a
+//      position directly — the affordance behind an editable position field.
 //   3. A LIST MAY HAVE A FIXED HEAD. `pinned` is how many leading items are part of
 //      the list's DEFINITION rather than its order — the first rule of a Rules
 //      Engine phase is where the phase starts, so it is not a row that happens to
@@ -36,10 +39,10 @@ export function reorder(list, from, to) {
 // The grip: sized by the caller, focusable, and carrying the grab cursors. Not an
 // IconButton — that component forwards neither `draggable` nor the drag listeners.
 export const GRIP_CLASS =
-  'inline-flex shrink-0 items-center justify-center rounded-[var(--shape-button)] ' +
-  'text-[var(--text-muted)] outline-none transition-colors duration-fast-02 ease-productive-entrance ' +
-  'hover:bg-[var(--bg-hover)] hover:text-[var(--text-default)] ' +
-  'focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] ' +
+  'inline-flex shrink-0 items-center justify-center rounded-(--shape-button) ' +
+  'text-(--text-muted) outline-none transition-colors duration-fast-02 ease-productive-entrance ' +
+  'hover:bg-(--bg-hover) hover:text-(--text-default) ' +
+  'focus-visible:ring-2 focus-visible:ring-(--ring-color) ' +
   'aria-disabled:pointer-events-none aria-disabled:opacity-40 aria-disabled:cursor-default ' +
   'cursor-grab active:cursor-grabbing motion-reduce:transition-none'
 
@@ -47,10 +50,17 @@ export const GRIP_CLASS =
 // `dragging` = the lifted row (dimmed, dashed accent outline);
 // `drop`     = where it will land (a solid accent rule on the leading edge, via
 //              a `before` pseudo-element).
+// `transform` and `translate` are in the list even though this preset never sets them:
+// a row in a `TransitionGroup` is FLIPped by an inline `transform`, and Vue decides
+// whether to run that move by PROBING the row's transition-property. A row that
+// declares only `opacity, outline-color` reports no transform transition, so Vue skips
+// the move outright and the reorder teleports — with the move class applied and
+// nothing wrong to see. Naming them here makes the probe pass wherever this preset is
+// used, instead of relying on the move class winning a specificity race.
 export const DRAG_ROW_CLASS =
-  'relative transition-[opacity,outline-color] duration-fast-02 ' +
-  'data-[dragging]:opacity-60 data-[dragging]:outline-dashed data-[dragging]:outline-2 data-[dragging]:-outline-offset-2 data-[dragging]:outline-[var(--accent)] ' +
-  "data-[drop]:before:pointer-events-none data-[drop]:before:absolute data-[drop]:before:inset-x-0 data-[drop]:before:top-0 data-[drop]:before:z-10 data-[drop]:before:border-t-2 data-[drop]:before:border-[var(--accent)] data-[drop]:before:content-[''] " +
+  'relative transition-[opacity,outline-color,transform,translate] duration-fast-02 ' +
+  'data-dragging:opacity-60 data-dragging:outline-dashed data-dragging:outline-2 data-dragging:-outline-offset-2 data-dragging:outline-(--accent) ' +
+  "data-drop:before:pointer-events-none data-drop:before:absolute data-drop:before:inset-x-0 data-drop:before:top-0 data-drop:before:z-10 data-drop:before:border-t-2 data-drop:before:border-(--accent) data-drop:before:content-[''] " +
   'motion-reduce:transition-none'
 
 /**
@@ -129,5 +139,41 @@ export function useDragReorder(getList, options = {}) {
     if (reorder(getList(), index, to)) onReorder(index, to)
   }
 
-  return { dnd, canMove, isDragging, isDropTarget, onDragStart, onDragEnter, onDragEnd, drop, move }
+  /**
+   * Move the item at `index` to a 1-BASED position — what an editable position field
+   * commits, and the only affordance that crosses a LONG list in one action. A drag
+   * from row 40 to row 3 is a scroll-while-holding; two chevrons is 37 clicks; typing
+   * `3` is the whole gesture.
+   *
+   * The position is CLAMPED into the movable range rather than rejected: a typed `0`
+   * or `99` means "as far up/down as this list allows", which is what the reader meant,
+   * and an error message on a number field they can see the bounds of teaches nothing.
+   * Non-numeric input is the caller's to discard (it has the draft), not this function's.
+   *
+   * @param {number} index
+   * @param {number} position 1-based target position
+   * @returns {number} the index the item ended at — unchanged when the move was refused
+   */
+  const moveTo = (index, position) => {
+    if (!canMove(index)) return index
+    const list = getList()
+    const to = Math.min(Math.max(Math.trunc(position) - 1, pinned()), list.length - 1)
+    if (to === index) return index
+    if (!reorder(list, index, to)) return index
+    onReorder(index, to)
+    return to
+  }
+
+  return {
+    dnd,
+    canMove,
+    isDragging,
+    isDropTarget,
+    onDragStart,
+    onDragEnter,
+    onDragEnd,
+    drop,
+    move,
+    moveTo
+  }
 }

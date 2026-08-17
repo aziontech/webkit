@@ -69,10 +69,10 @@ export const MORPH_TRANSITION = {
     'transition-[transform,translate,opacity]! duration-moderate-02! ease-expressive-entrance! motion-reduce:transition-none!',
   enterActiveClass:
     'transition-all duration-moderate-01 ease-productive-entrance motion-reduce:transition-none',
-  enterFromClass: '-translate-y-[var(--spacing-xxs)] opacity-0',
+  enterFromClass: '-translate-y-(--spacing-xxs) opacity-0',
   leaveActiveClass:
     'absolute! w-full transition-[opacity,translate]! duration-moderate-01! ease-productive-exit! motion-reduce:transition-none!',
-  leaveToClass: '-translate-y-[var(--spacing-xxs)] opacity-0'
+  leaveToClass: '-translate-y-(--spacing-xxs) opacity-0'
 }
 
 /**
@@ -90,8 +90,114 @@ export const BLOCK_SWAP = {
   mode: 'out-in',
   enterActiveClass:
     'transition-[opacity,translate] duration-moderate-01 ease-productive-entrance motion-reduce:transition-none',
-  enterFromClass: 'translate-y-[var(--spacing-xxs)] opacity-0',
+  enterFromClass: 'translate-y-(--spacing-xxs) opacity-0',
   leaveActiveClass:
     'transition-[opacity,translate] duration-fast-02 ease-productive-exit motion-reduce:transition-none',
-  leaveToClass: '-translate-y-[var(--spacing-xxs)] opacity-0'
+  leaveToClass: '-translate-y-(--spacing-xxs) opacity-0'
+}
+
+// ── THE COLLAPSE ──────────────────────────────────────────────────────────────────
+//
+// The morph above fades a leaving row OUT OF FLOW and lets its neighbours FLIP up into
+// the space. That is right for a table, where a row is one line and the survivors moving
+// is the whole story. It is wrong for a REPEATER whose rows are tall and differ in height
+// — a rule's behavior, an argument's field card. There the row vanishing at full size
+// while the list jumps up reads as a delete happening to the LIST; what the reader did
+// was close one row.
+//
+// So this preset collapses the row itself: its own height travels to zero on the way out
+// and up from zero on the way in, and the rows below simply follow. Same tokens, same
+// discipline as every other height animation in this console (../format/animate-height.js
+// and the skill it comes from):
+//
+//   MEASURED WHILE STILL `auto`, pinned only for the length of the move, and released
+//     back to `auto` after — a height left pinned stops answering a resize or a late font.
+//   CLIPPED ONLY WHILE MOVING (`overflow` is set in the hook and cleared with the height),
+//     because a permanent `overflow: hidden` shaves the focus ring off any control sitting
+//     flush with the row's edge.
+//   THE GAP COLLAPSES WITH IT. A flex column's `gap` is not part of the row's height, so a
+//     row easing to zero still holds its gap and the list snaps that many pixels shut at
+//     the end. The hooks read the parent's real `row-gap` and ease a negative
+//     `margin-block-end` by exactly that much, so the space closes all the way.
+//
+// Vue drives the timing from the CSS classes (the hooks only set values), so there is no
+// millisecond here either — and no `done()` callback, which is what Vue would need only
+// if this ran with `css: false`.
+//
+// FAST, because a remove is interaction feedback and not a scene: `fast-02` each way, and
+// the move a step longer at `moderate-01` because crossing three rows is genuinely further
+// than closing in place.
+
+/** The parent's real row gap, in px — `0` when the list has none (an ItemList's dividers). */
+const rowGapOf = (el) => {
+  const parent = el.parentElement
+  if (!parent) return 0
+  const gap = parseFloat(globalThis.getComputedStyle(parent).rowGap)
+  return Number.isFinite(gap) ? gap : 0
+}
+
+/** Pin the height for the move; `''` releases it back to `auto`. */
+const setBox = (el, height, margin) => {
+  el.style.height = height
+  el.style.marginBlockEnd = margin
+}
+
+const release = (el) => {
+  setBox(el, '', '')
+  el.style.overflow = ''
+}
+
+/**
+ * Commit the from-value, in this frame.
+ *
+ * The usual trick for an entrance is two nested `requestAnimationFrame`s, and here that is
+ * WRONG — measurably. Vue times a transition by probing the element right after it applies
+ * the active class; a height that only starts changing two frames later finishes two
+ * frames after Vue's timeout, so Vue calls `after-enter`, the hook releases the height to
+ * `auto`, and the row snaps the rest of the way. Measured: 3 distinct heights across the
+ * whole entrance, against 9 on the leave that was already synchronous.
+ *
+ * Reading `offsetHeight` forces the pending style to be applied NOW, which is all the rAFs
+ * were ever buying — so the from-value is committed and the to-value still lands inside
+ * the frame Vue is timing from.
+ */
+const commit = (el) => void el.offsetHeight
+
+/** Spread onto a `TransitionGroup` with `v-bind`. The container must be `relative`. */
+export const MORPH_COLLAPSE = {
+  moveClass:
+    'transition-[transform,translate,opacity]! duration-moderate-01! ease-productive-entrance! motion-reduce:transition-none!',
+  // `!` for the same reason the leave and the move carry it, and it is the easiest of the
+  // three to leave off: a repeater row declares a `transition-property` of its own (the
+  // drag preset animates `opacity, outline-color`), and Tailwind emits it after this
+  // class — so at equal specificity the row wins and the height never transitions.
+  // Measured on the arguments list: 2 distinct heights across the whole entrance without
+  // the flag, 8 with it.
+  enterActiveClass:
+    'transition-[height,margin,opacity]! duration-fast-02! ease-productive-entrance! motion-reduce:transition-none!',
+  enterFromClass: 'opacity-0',
+  leaveActiveClass:
+    'transition-[height,margin,opacity]! duration-fast-02! ease-productive-exit! motion-reduce:transition-none!',
+  leaveToClass: 'opacity-0',
+
+  onEnter(el) {
+    const gap = rowGapOf(el)
+    el.style.overflow = 'hidden'
+    // Measure while `auto` — the height the row is arriving at — then travel from zero.
+    el.style.height = 'auto'
+    const to = el.offsetHeight
+    setBox(el, '0px', `-${gap}px`)
+    commit(el)
+    setBox(el, `${to}px`, '0px')
+  },
+  onAfterEnter: release,
+  onEnterCancelled: release,
+
+  onLeave(el) {
+    const gap = rowGapOf(el)
+    el.style.overflow = 'hidden'
+    setBox(el, `${el.offsetHeight}px`, '0px') // pin what the reader is looking at
+    commit(el)
+    setBox(el, '0px', `-${gap}px`)
+  }
 }
