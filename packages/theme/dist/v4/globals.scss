@@ -691,6 +691,16 @@
   --z-input-field: 1;
   --z-input-popup: 10;
   --z-input-overlay: 1100;
+  --layout-boundary-inline: var(--spacing-lg);
+  --layout-boundary-end: var(--spacing-lg);
+  --layout-boundary-start: var(--spacing-lg);
+  --layout-section-gap: var(--spacing-xl);
+  --layout-group-gap: var(--spacing-md);
+  --layout-measure: var(--container-7xl);
+  --layout-measure-focused: var(--container-4xl);
+  --layout-measure-form: var(--container-4xl);
+  --layout-measure-form-create: var(--container-5xl);
+  --layout-measure-control: var(--container-3xs);
   --text-big-number-md-font-size: 1.25rem;
   --text-big-number-md-line-height: 1.25;
   --text-big-number-md-font-weight: 400;
@@ -705,25 +715,25 @@
   --text-big-number-lg-font-family: Proto Mono;
   --text-heading-2xl-font-size: 1.875rem;
   --text-heading-2xl-line-height: 1.25;
-  --text-heading-2xl-font-weight: 400;
+  --text-heading-2xl-font-weight: 300;
   --text-heading-xl-font-size: 1.25rem;
   --text-heading-xl-line-height: 1.25;
-  --text-heading-xl-font-weight: 400;
+  --text-heading-xl-font-weight: 300;
   --text-heading-lg-font-size: 1.125rem;
   --text-heading-lg-line-height: 1.25;
-  --text-heading-lg-font-weight: 400;
+  --text-heading-lg-font-weight: 300;
   --text-heading-md-font-size: 1rem;
   --text-heading-md-line-height: 1.25;
-  --text-heading-md-font-weight: 400;
+  --text-heading-md-font-weight: 300;
   --text-heading-sm-font-size: 0.875rem;
   --text-heading-sm-line-height: 1.375;
-  --text-heading-sm-font-weight: 400;
+  --text-heading-sm-font-weight: 300;
   --text-heading-xs-font-size: 1rem;
   --text-heading-xs-line-height: 1.375;
-  --text-heading-xs-font-weight: 400;
+  --text-heading-xs-font-weight: 300;
   --text-heading-xxs-font-size: 0.875rem;
   --text-heading-xxs-line-height: 1.375;
-  --text-heading-xxs-font-weight: 400;
+  --text-heading-xxs-font-weight: 300;
   --text-label-lg-font-size: 1rem;
   --text-label-lg-line-height: 1.5;
   --text-label-lg-font-weight: 400;
@@ -749,21 +759,26 @@
   --text-label-code-lg-font-weight: 400;
   --text-label-code-lg-letter-spacing: 0;
   --text-body-lg-font-size: 1rem;
-  --text-body-lg-line-height: 1.5;
+  --text-body-lg-font-weight: 300;
+  --text-body-lg-line-height: 1.375;
   --text-body-md-font-size: 1rem;
-  --text-body-md-line-height: 1.5;
+  --text-body-md-font-weight: 300;
+  --text-body-md-line-height: 1.375;
   --text-body-sm-font-size: 0.875rem;
-  --text-body-sm-line-height: 1.5;
+  --text-body-sm-font-weight: 300;
+  --text-body-sm-line-height: 1.375;
   --text-body-xs-font-size: 0.75rem;
-  --text-body-xs-line-height: 1.5;
+  --text-body-xs-font-weight: 300;
+  --text-body-xs-line-height: 1.375;
+  --text-body-xxs-font-size: 0.75rem;
+  --text-body-xxs-font-weight: 300;
+  --text-body-xxs-line-height: 1.5;
   --text-tag-sm-font-size: 0.75rem;
   --text-tag-sm-line-height: 1.25;
-  --text-tag-sm-font-weight: 600;
+  --text-tag-sm-font-weight: 400;
   --text-tag-md-font-size: 0.75rem;
   --text-tag-md-line-height: 1.25;
-  --text-tag-md-font-weight: 600;
-  --text-body-xxs-font-size: 0.75rem;
-  --text-body-xxs-line-height: 1.5;
+  --text-tag-md-font-weight: 400;
   --text-overline-md-font-family: Proto Mono;
   --text-overline-md-font-size: 0.75rem;
   --text-overline-md-line-height: 1.375;
@@ -1194,22 +1209,32 @@
 
 @utility text-body-lg {
   font-size: var(--text-body-lg-font-size);
+  font-weight: var(--text-body-lg-font-weight);
   line-height: var(--text-body-lg-line-height);
 }
 
 @utility text-body-md {
   font-size: var(--text-body-md-font-size);
+  font-weight: var(--text-body-md-font-weight);
   line-height: var(--text-body-md-line-height);
 }
 
 @utility text-body-sm {
   font-size: var(--text-body-sm-font-size);
+  font-weight: var(--text-body-sm-font-weight);
   line-height: var(--text-body-sm-line-height);
 }
 
 @utility text-body-xs {
   font-size: var(--text-body-xs-font-size);
+  font-weight: var(--text-body-xs-font-weight);
   line-height: var(--text-body-xs-line-height);
+}
+
+@utility text-body-xxs {
+  font-size: var(--text-body-xxs-font-size);
+  font-weight: var(--text-body-xxs-font-weight);
+  line-height: var(--text-body-xxs-line-height);
 }
 
 @utility text-tag-sm {
@@ -1222,11 +1247,6 @@
   font-size: var(--text-tag-md-font-size);
   line-height: var(--text-tag-md-line-height);
   font-weight: var(--text-tag-md-font-weight);
-}
-
-@utility text-body-xxs {
-  font-size: var(--text-body-xxs-font-size);
-  line-height: var(--text-body-xxs-line-height);
 }
 
 @utility text-overline-md {
@@ -1281,6 +1301,63 @@
 
 @media (prefers-reduced-motion: reduce) {
   .text-link { transition: none; }
+}
+
+@utility layout-boundary {
+  padding-inline: var(--layout-boundary-inline);
+  padding-block-start: var(--layout-boundary-start);
+  padding-block-end: var(--layout-boundary-end);
+}
+
+@utility layout-boundary-inline {
+  padding-inline: var(--layout-boundary-inline);
+}
+
+@utility layout-section-start {
+  margin-block-start: var(--layout-boundary-start);
+  &:first-child { margin-block-start: 0; }
+}
+
+@utility layout-group-start {
+  margin-block-start: var(--layout-group-gap);
+  &:first-child { margin-block-start: 0; }
+}
+
+@utility layout-column {
+  --layout-column-measure: var(--layout-measure);
+  margin-inline: auto;
+  width: 100%;
+  max-width: var(--layout-column-measure);
+  &:is(.layout-boundary, .layout-boundary-inline) { max-width: calc(var(--layout-column-measure) + 2 * var(--layout-boundary-inline)); }
+}
+
+@utility layout-column-focused {
+  --layout-column-measure: var(--layout-measure-focused);
+  margin-inline: auto;
+  width: 100%;
+  max-width: var(--layout-column-measure);
+  &:is(.layout-boundary, .layout-boundary-inline) { max-width: calc(var(--layout-column-measure) + 2 * var(--layout-boundary-inline)); }
+}
+
+@utility layout-column-form {
+  --layout-column-measure: var(--layout-measure-form);
+  margin-inline: auto;
+  width: 100%;
+  max-width: var(--layout-column-measure);
+  &:is(.layout-boundary, .layout-boundary-inline) { max-width: calc(var(--layout-column-measure) + 2 * var(--layout-boundary-inline)); }
+}
+
+@utility layout-form-create {
+  --layout-column-measure: var(--layout-measure-form-create);
+  --layout-measure-control: var(--container-md);
+  margin-inline: auto;
+  width: 100%;
+  max-width: var(--layout-column-measure);
+  &:is(.layout-boundary, .layout-boundary-inline) { max-width: calc(var(--layout-column-measure) + 2 * var(--layout-boundary-inline)); }
+}
+
+@utility layout-field-control {
+  &:not(#\#) { display: flex; flex: 1 1 0%; justify-content: flex-end; max-width: var(--layout-measure-control); }
 }
 
 @utility bg-surface-0 { background-color: var(--surface-0); }

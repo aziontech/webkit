@@ -179,7 +179,31 @@ export const spacingsData = {
 }
 ```
 
-`_` is the base value emitted in `:root`; the breakpoint keys (`sm`, `md`, `lg`, `xl`, `2xl`) become media-query overrides.
+`_` is the base value emitted in `:root`; the breakpoint keys (`sm`, `md`, `lg`, `xl`, `2xl`) become media-query overrides. A bare string is accepted as shorthand for `{ _: value }`.
+
+### Derived groups (`layouts.data.js`)
+
+`semantic/layouts` is a **derived** group: every value is a `var()` reference to `--spacing-*` /
+`--container-*`, never a literal length.
+
+```js
+// tokens/semantic/layouts.data.js
+export const layoutsData = {
+  'layout-boundary-inline': 'var(--spacing-lg)',
+  'layout-measure': 'var(--container-7xl)'
+  // …
+}
+```
+
+That indirection is the whole point, and it is why these carry no breakpoint map of their own: the
+spacing scale is already responsive (`--spacing-lg` is `1rem`, then `1.5rem` from `sm`), and a `var()`
+is substituted at **use** time on the element — so a layout token follows the breakpoint override for
+free. Giving it its own map would duplicate the spacing scale into layout and let the two drift.
+
+The group also ships `layoutsUtilities`, the container-system classes (`.layout-column`,
+`.layout-boundary`, …) emitted as Tailwind v4 `@utility` blocks so they support variants
+(`md:layout-column`). Utilities are shaped exactly like `illustrationsUtilities`: a string value is a
+declaration, an object value is a nested rule keyed by a literal selector (`'&:first-child'`).
 
 ---
 
