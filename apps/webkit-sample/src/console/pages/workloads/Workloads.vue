@@ -319,11 +319,30 @@
                   :loading="tenancyReloading"
                   @row-click="openWorkload"
                 >
+                  <template #cell-name="{ value }">
+                    <!-- The module's own glyph leads its principal column, the way every
+                         other module list does (Applications, EdgeDns, SqlDatabase): the
+                         row says WHAT it is before it says which one. -->
+                    <div class="flex min-w-0 items-center gap-[var(--spacing-xs)]">
+                      <i
+                        class="ai ai-workloads shrink-0 text-[1.15em] text-[var(--text-muted)]"
+                        aria-hidden="true"
+                      />
+                      <span class="truncate cursor-pointer hover:underline">{{ value }}</span>
+                    </div>
+                  </template>
+
                   <template #cell-domain="{ row, value }">
-                    <!-- Primary domain link (truncates) + arrow, then the "+N" overflow
-                         Popover (./ui/DomainOverflowPopover.vue); copy button pinned to
-                         the cell's right edge so it aligns across rows. -->
+                    <!-- Domain glyph, primary domain link (truncates) + arrow, then the
+                         "+N" overflow Popover (./ui/DomainOverflowPopover.vue); copy
+                         button pinned to the cell's right edge so it aligns across rows.
+                         The glyph sits OUTSIDE the anchor — it names the column's subject,
+                         it is not part of what the link opens. -->
                     <div class="flex w-full min-w-0 items-center gap-[var(--spacing-xs)]">
+                      <i
+                        class="ai ai-domains shrink-0 text-[1.15em] text-[var(--text-muted)]"
+                        aria-hidden="true"
+                      />
                       <a
                         :href="`https://${value}`"
                         target="_blank"
