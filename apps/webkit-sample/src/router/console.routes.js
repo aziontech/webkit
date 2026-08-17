@@ -48,7 +48,6 @@ import NestedDrawer from '@console/pages/forms/NestedDrawer.vue'
 import TemplateSettings from '@console/pages/forms/TemplateSettings.vue'
 import Dashboard from '@console/pages/home/Dashboard.vue'
 import Overview from '@console/pages/home/Overview.vue'
-import Diagrams from '@console/pages/lab/Diagrams.vue'
 import Playground from '@console/pages/lab/Playground.vue'
 import ProductEmptyStates from '@console/pages/lab/ProductEmptyStates.vue'
 import DeployTemplate from '@console/pages/marketplace/DeployTemplate.vue'
@@ -284,7 +283,13 @@ export const consoleRoutes = [
   { path: '/resources', name: 'resources', component: ManageResources },
   { path: '/personal-tokens', name: 'personal-tokens', component: PersonalTokens },
   { path: '/playground', name: 'playground', component: Playground },
-  { path: '/diagrams', name: 'diagrams', component: Diagrams },
+  // Lazy for the same reason the Monaco routes above are: @vue-flow/core and its
+  // stylesheet are a graph engine one lab screen uses and the other 60 never touch.
+  {
+    path: '/diagrams',
+    name: 'diagrams',
+    component: () => import('@console/pages/lab/Diagrams.vue')
+  },
   { path: '/teams/new', name: 'teams-new', component: CreateTeam },
   { path: '/teams/:id', name: 'teams-edit', component: CreateTeam }
 ]
