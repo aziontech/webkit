@@ -44,6 +44,7 @@
     ".": "./dist/v4/globals.css",
     "./animations": "./src/tokens/primitives/animations/animate.js",
     "./colors": "./src/tokens/primitives/colors/colors.js",
+    "./layouts": "./src/tokens/semantic/layouts.data.js",
     "./texts": "./src/tokens/semantic/texts.data.js",
     "./theme-colors": "./src/scripts/compile-theme.js"
   }

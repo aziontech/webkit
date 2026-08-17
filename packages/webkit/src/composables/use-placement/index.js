@@ -257,11 +257,14 @@ export function usePlacement({
    */
   function onScroll(event) {
     if (!isOpen.value) return
+    // The listener is in the capture phase (scroll does not bubble), so it also sees
+    // the panel's own scroll container: a scroll inside the panel does not move the
+    // trigger, so there is nothing to re-anchor to and nothing to dismiss.
+    const target = /** @type {Node | null} */ (event?.target ?? null)
+    if (target && panelRef.value?.contains(target)) return
     if (onDismiss) {
       // The panel is anchored once and does not follow the page, so a scroll
-      // outside it dismisses it; a scroll inside the panel is left alone.
-      const target = /** @type {Node | null} */ (event?.target ?? null)
-      if (target && panelRef.value?.contains(target)) return
+      // outside it dismisses it.
       onDismiss()
       return
     }
