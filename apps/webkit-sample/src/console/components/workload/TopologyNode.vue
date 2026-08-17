@@ -90,7 +90,7 @@
   <div
     :data-state="open ? 'open' : 'closed'"
     :data-dashed="dashed || null"
-    class="w-full rounded-[var(--shape-card)] border border-[var(--border-default)] bg-[var(--bg-surface)] shadow-sm transition-colors duration-150 ease-out motion-reduce:transition-none hover:border-[var(--border-strong)] has-[:focus-visible]:border-[var(--border-strong)] data-[dashed]:border-dashed"
+    class="w-full rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) shadow-sm transition-colors duration-150 ease-out motion-reduce:transition-none hover:border-(--border-strong) has-[:focus-visible]:border-(--border-strong) data-dashed:border-dashed"
   >
     <!-- The connectors attach HERE rather than to the card: Flow measures an
          anchor's own box, so every connector stays pinned to the header row instead
@@ -106,19 +106,19 @@
         :aria-expanded="open"
         :aria-controls="bodyId"
         :data-state="open ? 'open' : 'closed'"
-        class="group flex w-full items-center gap-[var(--spacing-sm)] rounded-t-[var(--shape-card)] px-[var(--spacing-md)] py-[var(--spacing-sm)] text-left outline-none transition-colors duration-150 ease-out hover:bg-[var(--bg-hover)] focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-inset motion-reduce:transition-none data-[state=closed]:rounded-b-[var(--shape-card)]"
+        class="group flex w-full items-center gap-(--spacing-sm) rounded-t-(--shape-card) px-(--spacing-md) py-(--spacing-sm) text-left outline-none transition-colors duration-150 ease-out hover:bg-(--bg-hover) focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset motion-reduce:transition-none data-[state=closed]:rounded-b-(--shape-card)"
         @click="open = !open"
       >
-        <span class="flex min-w-0 flex-1 flex-col gap-[var(--spacing-xxs)]">
+        <span class="flex min-w-0 flex-1 flex-col gap-(--spacing-xxs)">
           <!-- Eyebrow: what this node is, and how it is doing. The status keeps
                the right edge it had when the whole card was open. -->
-          <span class="flex items-center gap-[var(--spacing-xs)]">
+          <span class="flex items-center gap-(--spacing-xs)">
             <i
               :class="icon"
-              class="shrink-0 text-[12px] leading-none text-[var(--text-muted)]"
+              class="shrink-0 text-[12px] leading-none text-(--text-muted)"
               aria-hidden="true"
             />
-            <span class="truncate text-label-sm text-[var(--text-muted)]">{{ kind }}</span>
+            <span class="truncate text-label-sm text-(--text-muted)">{{ kind }}</span>
             <Tag
               class="ml-auto shrink-0"
               :severity="tagSeverity"
@@ -136,13 +136,13 @@
                the same size, which is what makes the two lines read as one block. -->
           <span
             v-if="name"
-            class="truncate text-label-sm text-[var(--text-default)]"
+            class="truncate text-label-sm text-(--text-default)"
           >
             {{ name }}
           </span>
         </span>
         <i
-          class="pi pi-chevron-down shrink-0 text-[var(--text-muted)] transition-transform duration-150 ease-out group-data-[state=open]:rotate-180 motion-reduce:transition-none"
+          class="pi pi-chevron-down shrink-0 text-(--text-muted) transition-transform duration-150 ease-out group-data-[state=open]:rotate-180 motion-reduce:transition-none"
           aria-hidden="true"
         />
       </button>
@@ -165,7 +165,7 @@
         <!-- The separator is the body's own top border, so it is clipped away with
              the body: a collapsed node shows one bottom edge, not two. -->
         <div
-          class="flex flex-col gap-[var(--spacing-sm)] border-t border-[var(--border-muted)] p-[var(--spacing-md)]"
+          class="flex flex-col gap-(--spacing-sm) border-t border-(--border-muted) p-(--spacing-md)"
         >
           <slot />
         </div>

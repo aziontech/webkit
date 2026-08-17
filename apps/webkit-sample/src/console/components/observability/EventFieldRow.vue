@@ -45,7 +45,7 @@
 
 <template>
   <div
-    class="group flex items-center gap-[var(--spacing-xs)] rounded-[var(--shape-button)] px-[var(--spacing-xs)] py-[var(--spacing-xxs)] transition-colors duration-fast-02 ease-productive-entrance hover:bg-[var(--bg-hover)] motion-reduce:transition-none"
+    class="group flex items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xxs) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) motion-reduce:transition-none"
   >
     <Checkbox
       binary
@@ -57,7 +57,7 @@
     <label
       :for="inputId"
       :data-locked="locked || null"
-      class="min-w-0 flex-1 truncate text-label-sm text-[var(--text-default)] data-[locked]:text-[var(--text-muted)]"
+      class="min-w-0 flex-1 truncate text-label-sm text-(--text-default) data-locked:text-(--text-muted)"
     >
       {{ field.label }}
     </label>
@@ -73,15 +73,15 @@
         role="button"
         tabindex="0"
         :aria-label="`Filter by ${field.label} — ${count} values`"
-        class="shrink-0 cursor-pointer rounded-[var(--shape-button)] px-[var(--spacing-xxs)] text-label-code-sm tabular-nums text-[var(--text-muted)] transition-colors duration-fast-02 ease-productive-entrance hover:bg-[var(--bg-active)] hover:text-[var(--text-default)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] group-hover:text-[var(--text-default)] motion-reduce:transition-none"
+        class="shrink-0 cursor-pointer rounded-(--shape-button) px-(--spacing-xxs) text-label-code-sm tabular-nums text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-active) hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) group-hover:text-(--text-default) motion-reduce:transition-none"
       >
         {{ count }}
       </Popover.Trigger>
 
       <Popover.Content>
-        <div class="flex min-w-0 flex-col p-[var(--spacing-xxs)]">
+        <div class="flex min-w-0 flex-col p-(--spacing-xxs)">
           <p
-            class="px-[var(--spacing-xs)] py-[var(--spacing-xxs)] text-label-sm text-[var(--text-muted)]"
+            class="px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-muted)"
           >
             {{ field.label }} · top values
           </p>
@@ -93,27 +93,27 @@
             role="menuitemcheckbox"
             :aria-checked="isApplied(entry.value)"
             :data-applied="isApplied(entry.value) || null"
-            class="flex min-w-0 items-center gap-[var(--spacing-xs)] rounded-[var(--shape-button)] px-[var(--spacing-xs)] py-[var(--spacing-xxs)] text-left transition-colors duration-fast-02 ease-productive-entrance hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] data-[applied]:bg-[var(--bg-selected)] motion-reduce:transition-none"
+            class="flex min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xxs) text-left transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) data-applied:bg-(--bg-selected) motion-reduce:transition-none"
             @click="$emit('toggle-value', entry.value)"
           >
-            <span class="min-w-0 flex-1 truncate text-label-code-sm text-[var(--text-default)]">
+            <span class="min-w-0 flex-1 truncate text-label-code-sm text-(--text-default)">
               {{ formatEventValue(field, entry.value) }}
             </span>
-            <span class="shrink-0 text-label-code-sm tabular-nums text-[var(--text-muted)]">
+            <span class="shrink-0 text-label-code-sm tabular-nums text-(--text-muted)">
               {{ entry.count }}
             </span>
             <!-- The check is rendered only when applied: a reserved, empty glyph box would
                  misreport where every row's content ends. -->
             <i
               v-if="isApplied(entry.value)"
-              class="pi pi-check shrink-0 text-[var(--primary)]"
+              class="pi pi-check shrink-0 text-(--primary)"
               aria-hidden="true"
             />
           </button>
 
           <p
             v-if="overflow"
-            class="px-[var(--spacing-xs)] py-[var(--spacing-xxs)] text-body-sm text-[var(--text-muted)]"
+            class="px-(--spacing-xs) py-(--spacing-xxs) text-body-sm text-(--text-muted)"
           >
             {{ overflow }} more values in this window.
           </p>
@@ -125,7 +125,7 @@
          part of the window's truth, and there is nothing to open. -->
     <span
       v-else
-      class="shrink-0 px-[var(--spacing-xxs)] text-label-code-sm tabular-nums text-[var(--text-muted)] data-[empty]:text-[var(--text-disabled)]"
+      class="shrink-0 px-(--spacing-xxs) text-label-code-sm tabular-nums text-(--text-muted) data-empty:text-(--text-disabled)"
       :data-empty="count ? null : true"
       :aria-label="`${count} distinct values`"
     >

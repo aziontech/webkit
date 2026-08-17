@@ -286,7 +286,7 @@
   })
 
   // Toggling the disclosure hands the property back to the class. An inline track
-  // left over from a content change would otherwise beat `data-[open]:grid-rows-[1fr]`
+  // left over from a content change would otherwise beat `data-open:grid-rows-[1fr]`
   // and the band would refuse to open.
   watch(open, () => release?.())
 </script>
@@ -295,13 +295,13 @@
   <section
     :data-stacked="stacked || null"
     :data-divided="divided || null"
-    class="grid grid-cols-1 gap-x-[var(--layout-split-gap,3rem)] gap-y-[var(--spacing-md)] [&:not(:first-of-type)]:mt-[var(--layout-section-gap)] data-[divided]:[&:not(:first-of-type)]:border-t-[length:var(--border-width-default)] data-[divided]:[&:not(:first-of-type)]:border-[var(--border-muted)] data-[divided]:[&:not(:first-of-type)]:pt-[var(--layout-section-gap)] md:not-data-[stacked]:grid-cols-[var(--layout-split-aside,20rem)_minmax(0,1fr)]"
+    class="grid grid-cols-1 gap-x-[var(--layout-split-gap,3rem)] gap-y-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap) data-divided:[&:not(:first-of-type)]:border-t-(length:--border-width-default) data-divided:[&:not(:first-of-type)]:border-(--border-muted) data-divided:[&:not(:first-of-type)]:pt-(--layout-section-gap) md:not-data-stacked:grid-cols-[var(--layout-split-aside,20rem)_minmax(0,1fr)]"
   >
     <!-- Left: what this band is. `self-start` keeps the column at its own height
          so `sticky` has room to work inside the grid row. -->
     <div
       :data-stacked="stacked || null"
-      class="flex min-w-0 flex-col gap-[var(--spacing-xxs)] md:not-data-[stacked]:sticky md:not-data-[stacked]:top-[var(--spacing-lg)] md:not-data-[stacked]:self-start"
+      class="flex min-w-0 flex-col gap-(--spacing-xxs) md:not-data-stacked:sticky md:not-data-stacked:top-(--spacing-lg) md:not-data-stacked:self-start"
     >
       <!-- Title + its anchor share a row, so the copy button reads as belonging to
            the heading. `scroll-mt-*` keeps the title clear of the sticky bar above
@@ -310,7 +310,7 @@
            spreads `$attrs`, so a `class` passed to it is dropped on the floor. -->
       <div
         v-if="title"
-        class="group/heading relative flex min-w-0 items-center gap-[var(--spacing-xxs)]"
+        class="group/heading relative flex min-w-0 items-center gap-(--spacing-xxs)"
       >
         <!-- The deep link lives in the GUTTER, absolutely positioned outside the
              content column, so it costs the page no horizontal space and the title
@@ -323,7 +323,7 @@
           v-if="anchor"
           type="button"
           :aria-label="`Copy link to the ${title} section`"
-          class="absolute -left-[1.5rem] flex size-5 shrink-0 items-center justify-center rounded-[var(--shape-button)] text-[var(--text-muted)] opacity-0 transition-opacity duration-fast-02 ease-productive-entrance hover:text-[var(--text-default)] focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] group-hover/heading:opacity-100 group-focus-within/heading:opacity-100 motion-reduce:transition-none"
+          class="absolute -left-[1.5rem] flex size-5 shrink-0 items-center justify-center rounded-(--shape-button) text-(--text-muted) opacity-0 transition-opacity duration-fast-02 ease-productive-entrance hover:text-(--text-default) focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) group-hover/heading:opacity-100 group-focus-within/heading:opacity-100 motion-reduce:transition-none"
           @click="copyAnchor"
         >
           <i
@@ -338,7 +338,7 @@
              (Enter/Space, aria-expanded, aria-controls). -->
         <h2
           :id="anchorId"
-          class="scroll-mt-[var(--spacing-xl)] text-balance text-heading-xxs text-[var(--text-default)]"
+          class="scroll-mt-(--spacing-xl) text-balance text-heading-xxs text-(--text-default)"
         >
           <button
             v-if="collapsible"
@@ -346,29 +346,29 @@
             :aria-expanded="open"
             :aria-controls="regionId"
             :data-state="open ? 'open' : 'closed'"
-            class="group/disclosure -mx-[var(--spacing-xxs)] flex items-center gap-[var(--spacing-xs)] rounded-[var(--shape-button)] px-[var(--spacing-xxs)] text-left text-[length:inherit] font-[inherit] leading-[inherit] transition-colors duration-fast-02 ease-productive-entrance hover:text-[var(--text-muted)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)] motion-reduce:transition-none"
+            class="group/disclosure -mx-(--spacing-xxs) flex items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xxs) text-left text-[length:inherit] font-[inherit] leading-[inherit] transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-muted) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
             @click="open = !open"
           >
             <i
               v-if="icon"
               :class="icon"
-              class="shrink-0 text-[0.9em] leading-none text-[var(--text-muted)]"
+              class="shrink-0 text-[0.9em] leading-none text-(--text-muted)"
               aria-hidden="true"
             />
             {{ title }}
             <i
-              class="pi pi-chevron-down shrink-0 text-[0.75em] leading-none text-[var(--text-muted)] transition-transform duration-fast-02 ease-productive-entrance group-data-[state=open]/disclosure:rotate-180 motion-reduce:transition-none"
+              class="pi pi-chevron-down shrink-0 text-[0.75em] leading-none text-(--text-muted) transition-transform duration-fast-02 ease-productive-entrance group-data-[state=open]/disclosure:rotate-180 motion-reduce:transition-none"
               aria-hidden="true"
             />
           </button>
           <span
             v-else
-            class="flex items-center gap-[var(--spacing-xs)]"
+            class="flex items-center gap-(--spacing-xs)"
           >
             <i
               v-if="icon"
               :class="icon"
-              class="shrink-0 text-[0.9em] leading-none text-[var(--text-muted)]"
+              class="shrink-0 text-[0.9em] leading-none text-(--text-muted)"
               aria-hidden="true"
             />
             {{ title }}
@@ -403,7 +403,7 @@
       ref="regionRef"
       :inert="!isOpen || undefined"
       :aria-hidden="!isOpen || undefined"
-      class="grid min-w-0 grid-rows-[0fr] transition-[grid-template-rows] duration-moderate-02 ease-expressive-entrance data-[open]:grid-rows-[1fr] motion-reduce:transition-none"
+      class="grid min-w-0 grid-rows-[0fr] transition-[grid-template-rows] duration-moderate-02 ease-expressive-entrance data-open:grid-rows-[1fr] motion-reduce:transition-none"
     >
       <div class="min-w-0 overflow-hidden">
         <!-- The height alone is not the entrance. A clip that opens on its own
@@ -418,7 +418,7 @@
         <div
           ref="contentRef"
           :data-open="isOpen || null"
-          class="flex min-w-0 -translate-y-1 flex-col gap-[var(--spacing-lg)] opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-[open]:translate-y-0 data-[open]:opacity-100 motion-reduce:transition-none"
+          class="flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none"
         >
           <slot />
         </div>

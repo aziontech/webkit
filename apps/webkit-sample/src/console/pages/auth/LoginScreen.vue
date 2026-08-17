@@ -508,14 +508,14 @@
 <template>
   <AuthSplit>
     <CardBox
-      class="w-full max-w-[var(--container-sm)]"
+      class="w-full max-w-(--container-sm)"
       :padded="false"
     >
       <template #content>
         <!-- The card's own padding, rather than CardBox's `padded`, which is a
                  tighter step than this composition wants — and it sits outside the
                  animated box so the height measurement stays honest. -->
-        <div class="p-[var(--spacing-lg)]">
+        <div class="p-(--spacing-lg)">
           <!-- The sized element: height comes from the measurement below, so the
                    card eases between the steps instead of snapping. Clipped only
                    while it moves (see `resizing`), otherwise focus rings on the
@@ -523,11 +523,11 @@
           <div
             :style="cardHeight ? { height: `${cardHeight}px` } : undefined"
             :data-resizing="resizing || null"
-            class="transition-[height] duration-moderate-02 ease-productive-entrance data-[resizing]:overflow-hidden motion-reduce:transition-none"
+            class="transition-[height] duration-moderate-02 ease-productive-entrance data-resizing:overflow-hidden motion-reduce:transition-none"
           >
             <form
               ref="cardContent"
-              class="flex flex-col gap-[var(--spacing-lg)]"
+              class="flex flex-col gap-(--spacing-lg)"
               aria-label="Sign in to your account"
               novalidate
               @submit.prevent="handlePrimary"
@@ -557,16 +557,16 @@
                   <header
                     :key="heading.key"
                     :style="fadeTransitionStyle"
-                    class="flex flex-col gap-[var(--spacing-xxs)] motion-reduce:transition-none"
+                    class="flex flex-col gap-(--spacing-xxs) motion-reduce:transition-none"
                   >
-                    <h1 class="text-heading-sm text-[var(--text-default)]">
+                    <h1 class="text-heading-sm text-(--text-default)">
                       {{ heading.title }}
                     </h1>
                     <!-- The reset-password step runs on its title alone, so the
                              paragraph is dropped rather than reserved empty. -->
                     <p
                       v-if="heading.description"
-                      class="text-body-sm text-[var(--text-muted)]"
+                      class="text-body-sm text-(--text-muted)"
                     >
                       {{ heading.description }}
                     </p>
@@ -619,7 +619,7 @@
                     v-if="step === 'email'"
                     key="email"
                     :style="stepTransitionStyle"
-                    class="flex flex-col gap-[var(--spacing-xs)] motion-reduce:transition-none motion-reduce:transform-none"
+                    class="flex flex-col gap-(--spacing-xs) motion-reduce:transition-none motion-reduce:transform-none"
                   >
                     <Label
                       for="login-email"
@@ -656,7 +656,7 @@
                     v-else-if="step === 'password'"
                     key="password"
                     :style="stepTransitionStyle"
-                    class="flex flex-col gap-[var(--spacing-lg)] motion-reduce:transition-none motion-reduce:transform-none"
+                    class="flex flex-col gap-(--spacing-lg) motion-reduce:transition-none motion-reduce:transform-none"
                   >
                     <!-- The back control arrives on its own delayed entrance
                              (`appear`, so it runs on the step's first render) — it is the
@@ -669,7 +669,7 @@
                     >
                       <div
                         :style="identityTransitionStyle"
-                        class="flex items-center gap-[var(--spacing-sm)] motion-reduce:transition-none motion-reduce:transform-none"
+                        class="flex items-center gap-(--spacing-sm) motion-reduce:transition-none motion-reduce:transform-none"
                       >
                         <!-- Icon-only control: the Tooltip carries the label, so
                                  what it does is readable on hover/focus and not only
@@ -684,7 +684,7 @@
                             @click="backToEmail"
                           />
                         </Tooltip>
-                        <span class="truncate text-label-sm text-[var(--text-default)]">{{
+                        <span class="truncate text-label-sm text-(--text-default)">{{
                           email
                         }}</span>
                       </div>
@@ -695,7 +695,7 @@
                              submit-time message. No requirements row here — this is an
                              existing secret, not one being chosen, and grading it
                              would be both wrong and a hint. -->
-                    <div class="flex flex-col gap-[var(--spacing-xs)]">
+                    <div class="flex flex-col gap-(--spacing-xs)">
                       <Label
                         for="login-password"
                         label="Password"
@@ -721,7 +721,7 @@
                     v-else-if="step === 'reset'"
                     key="reset"
                     :style="stepTransitionStyle"
-                    class="flex flex-col gap-[var(--spacing-lg)] motion-reduce:transition-none motion-reduce:transform-none"
+                    class="flex flex-col gap-(--spacing-lg) motion-reduce:transition-none motion-reduce:transform-none"
                   >
                     <!-- Same delayed, from-the-left entrance the password step's
                              back control uses — one gesture means "this goes back",
@@ -733,7 +733,7 @@
                     >
                       <div
                         :style="identityTransitionStyle"
-                        class="flex items-center gap-[var(--spacing-sm)] motion-reduce:transition-none motion-reduce:transform-none"
+                        class="flex items-center gap-(--spacing-sm) motion-reduce:transition-none motion-reduce:transform-none"
                       >
                         <Tooltip text="Back to sign in">
                           <IconButton
@@ -745,13 +745,13 @@
                             @click="backToSignIn"
                           />
                         </Tooltip>
-                        <span class="truncate text-label-sm text-[var(--text-default)]"
+                        <span class="truncate text-label-sm text-(--text-default)"
                           >Back to sign in</span
                         >
                       </div>
                     </Transition>
 
-                    <div class="flex flex-col gap-[var(--spacing-xs)]">
+                    <div class="flex flex-col gap-(--spacing-xs)">
                       <Label
                         for="reset-email"
                         label="Email"
@@ -800,9 +800,9 @@
                     v-else-if="step === 'new-password'"
                     key="new-password"
                     :style="stepTransitionStyle"
-                    class="flex flex-col gap-[var(--spacing-lg)] motion-reduce:transition-none motion-reduce:transform-none"
+                    class="flex flex-col gap-(--spacing-lg) motion-reduce:transition-none motion-reduce:transform-none"
                   >
-                    <div class="flex flex-col gap-[var(--spacing-xs)]">
+                    <div class="flex flex-col gap-(--spacing-xs)">
                       <Label
                         for="new-password"
                         label="New password"
@@ -823,7 +823,7 @@
                       />
                     </div>
 
-                    <div class="flex flex-col gap-[var(--spacing-xs)]">
+                    <div class="flex flex-col gap-(--spacing-xs)">
                       <Label
                         for="confirm-password"
                         label="Confirm password"
@@ -860,15 +860,15 @@
                     v-else
                     key="sent"
                     :style="stepTransitionStyle"
-                    class="flex flex-col gap-[var(--spacing-xs)] motion-reduce:transition-none motion-reduce:transform-none"
+                    class="flex flex-col gap-(--spacing-xs) motion-reduce:transition-none motion-reduce:transform-none"
                   >
-                    <div class="flex items-center gap-[var(--spacing-xs)]">
-                      <p class="text-body-sm text-[var(--text-default)]">
+                    <div class="flex items-center gap-(--spacing-xs)">
+                      <p class="text-body-sm text-(--text-default)">
                         Didn't receive the email?
                       </p>
                       <span
                         v-if="resending"
-                        class="flex items-center gap-[var(--spacing-xxs)] text-label-sm text-[var(--text-muted)]"
+                        class="flex items-center gap-(--spacing-xxs) text-label-sm text-(--text-muted)"
                       >
                         <Spinner class="size-4" />
                         Sending…
@@ -881,8 +881,8 @@
                         >Resend Email</a
                       >
                     </div>
-                    <div class="flex items-center gap-[var(--spacing-xs)]">
-                      <p class="text-body-sm text-[var(--text-default)]">Already opened it?</p>
+                    <div class="flex items-center gap-(--spacing-xs)">
+                      <p class="text-body-sm text-(--text-default)">Already opened it?</p>
                       <a
                         class="text-link text-body-sm"
                         href="#"
@@ -944,7 +944,7 @@
                       severity="info"
                       size="small"
                       :style="fadeTransitionStyle"
-                      class="absolute right-[var(--spacing-sm)] top-0 -translate-y-1/2 motion-reduce:transition-none"
+                      class="absolute right-(--spacing-sm) top-0 -translate-y-1/2 motion-reduce:transition-none"
                     />
                   </Transition>
                 </div>
@@ -962,7 +962,7 @@
                     <div
                       v-if="step === 'email'"
                       :style="fadeTransitionStyle"
-                      class="flex flex-col gap-[var(--spacing-lg)] pt-[var(--spacing-lg)] motion-reduce:transition-none"
+                      class="flex flex-col gap-(--spacing-lg) pt-(--spacing-lg) motion-reduce:transition-none"
                     >
                       <!-- the same labelled Divider Sign Up uses, so both auth
                                screens frame the social alternatives identically. -->
@@ -984,7 +984,7 @@
                             v-if="providersReady"
                             key="providers"
                             :style="fadeTransitionStyle"
-                            class="flex flex-col gap-[var(--spacing-sm)] motion-reduce:transition-none"
+                            class="flex flex-col gap-(--spacing-sm) motion-reduce:transition-none"
                           >
                             <Button
                               type="button"
@@ -1012,7 +1012,7 @@
                             role="status"
                             aria-label="Preparing sign-in providers"
                             :style="fadeTransitionStyle"
-                            class="flex flex-col gap-[var(--spacing-sm)] motion-reduce:transition-none"
+                            class="flex flex-col gap-(--spacing-sm) motion-reduce:transition-none"
                           >
                             <Skeleton height="2.5rem" />
                             <Skeleton height="2.5rem" />
@@ -1035,10 +1035,10 @@
              inside the branch: it would only lead back to the screen they are
              already on. -->
     <div
-      class="flex w-full max-w-[var(--container-sm)] flex-col items-center gap-[var(--spacing-sm)]"
+      class="flex w-full max-w-(--container-sm) flex-col items-center gap-(--spacing-sm)"
     >
-      <div class="flex items-center justify-center gap-[var(--spacing-xs)]">
-        <p class="text-body-sm text-[var(--text-default)]">Don't have an account?</p>
+      <div class="flex items-center justify-center gap-(--spacing-xs)">
+        <p class="text-body-sm text-(--text-default)">Don't have an account?</p>
         <a
           class="text-link text-body-sm"
           href="/signup"

@@ -303,7 +303,7 @@
          so the scroll starts at the step's true top and `items-center` still centres a
          short step. -->
     <div
-      class="mx-auto grid w-full max-w-[var(--container-7xl)] flex-1 grid-cols-1 items-center gap-[var(--spacing-xxl)] px-[var(--spacing-xl)] py-[var(--spacing-xl)] lg:min-h-0 lg:grid-cols-2 lg:overflow-y-auto"
+      class="mx-auto grid w-full max-w-(--container-7xl) flex-1 grid-cols-1 items-center gap-(--spacing-xxl) px-(--spacing-xl) py-(--spacing-xl) lg:min-h-0 lg:grid-cols-2 lg:overflow-y-auto"
     >
       <!-- Left column: the wizard, capped and centred in its half — the questions
            stay one readable measure wide however wide the window gets, and the
@@ -312,7 +312,7 @@
       <div
         :data-entered="entered || null"
         :style="formEnterStyle"
-        class="mx-auto flex w-full max-w-[var(--container-xl)] -translate-x-6 flex-col opacity-0 data-[entered]:translate-x-0 data-[entered]:opacity-100 motion-reduce:translate-x-0 motion-reduce:opacity-100 motion-reduce:transition-none"
+        class="mx-auto flex w-full max-w-(--container-xl) -translate-x-6 flex-col opacity-0 data-entered:translate-x-0 data-entered:opacity-100 motion-reduce:translate-x-0 motion-reduce:opacity-100 motion-reduce:transition-none"
       >
         <!-- :padded=false so the ProgressBar can reach the card's own edges; the
              questions carry the padding themselves, one step in. -->
@@ -342,10 +342,10 @@
               ref="stepRegion"
               :style="{ height: stepRegionHeight }"
               :data-resizing="stepRegionHeight ? '' : null"
-              class="transition-[height] duration-moderate-02 ease-productive-entrance data-[resizing]:overflow-hidden motion-reduce:transition-none"
+              class="transition-[height] duration-moderate-02 ease-productive-entrance data-resizing:overflow-hidden motion-reduce:transition-none"
             >
               <form
-                class="flex flex-col gap-[var(--spacing-lg)] p-[var(--spacing-md)]"
+                class="flex flex-col gap-(--spacing-lg) p-(--spacing-md)"
                 aria-labelledby="onboarding-title"
                 novalidate
                 @submit.prevent="next"
@@ -366,9 +366,9 @@
                      muted label — it is what the bar means, said in words. The
                      title changes per step, so `aria-labelledby` points at it and
                      the form is renamed as the user advances. -->
-                <header class="flex flex-col gap-[var(--spacing-xs)]">
-                  <div class="flex flex-col gap-[var(--spacing-xxs)]">
-                    <p class="text-label-sm text-[var(--text-muted)]">
+                <header class="flex flex-col gap-(--spacing-xs)">
+                  <div class="flex flex-col gap-(--spacing-xxs)">
+                    <p class="text-label-sm text-(--text-muted)">
                       Step {{ stepIndex + 1 }} of {{ onboardingSteps.length }}
                     </p>
                     <!-- `tabindex="-1"` so the flow can move focus here after the
@@ -378,12 +378,12 @@
                     <h1
                       id="onboarding-title"
                       tabindex="-1"
-                      class="text-heading-sm text-[var(--text-default)] focus:outline-none"
+                      class="text-heading-sm text-(--text-default) focus:outline-none"
                     >
                       {{ step.title }}
                     </h1>
                   </div>
-                  <p class="text-body-sm text-[var(--text-muted)]">{{ step.description }}</p>
+                  <p class="text-body-sm text-(--text-muted)">{{ step.description }}</p>
                 </header>
 
                 <!-- ONE fieldset for the whole active step: it is the entire submit
@@ -391,7 +391,7 @@
                      native input or button, so an ancestor disabled fieldset
                      reaches them all). -->
                 <fieldset
-                  class="m-0 flex min-w-0 flex-col gap-[var(--spacing-lg)] border-0 p-0"
+                  class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0"
                   :disabled="submitting"
                 >
                   <legend class="sr-only">{{ step.title }}</legend>
@@ -431,7 +431,7 @@
                      deliberately: they commit nothing, so there is no real verb
                      for them to name, and inventing one would promise a save
                      that does not happen until the end. -->
-                <div class="flex items-center gap-[var(--spacing-sm)]">
+                <div class="flex items-center gap-(--spacing-sm)">
                   <Button
                     v-if="stepIndex > 0"
                     label="Back"
@@ -466,7 +466,7 @@
       <div
         :data-entered="entered || null"
         :style="wireEnterStyle"
-        class="translate-x-12 opacity-0 data-[entered]:translate-x-0 data-[entered]:opacity-100 motion-reduce:translate-x-0 motion-reduce:opacity-100 motion-reduce:transition-none lg:sticky lg:top-[var(--spacing-xl)] lg:-mr-[var(--spacing-xl)]"
+        class="translate-x-12 opacity-0 data-entered:translate-x-0 data-entered:opacity-100 motion-reduce:translate-x-0 motion-reduce:opacity-100 motion-reduce:transition-none lg:sticky lg:top-(--spacing-xl) lg:-mr-(--spacing-xl)"
       >
         <!-- The workspace link stays in the mock's header even though the flow does
              not ask for it: the console really does open scoped to a workspace, and

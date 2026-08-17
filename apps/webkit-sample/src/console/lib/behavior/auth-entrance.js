@@ -21,7 +21,7 @@
 // easing from theme tokens (the same reason AppLayout does it — DESIGN.md
 // § Motion); the movement and opacity states stay on data-attribute variants, so
 // the caller writes `:data-entered="entered || null"` plus its own offset and
-// `data-[entered]:` landing classes.
+// `data-entered:` landing classes.
 //
 // The animated property is `translate`, NOT `transform`: Tailwind v4 compiles
 // `translate-x-*` to the standalone `translate` property, so a transition

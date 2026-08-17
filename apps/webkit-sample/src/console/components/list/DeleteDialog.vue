@@ -108,13 +108,13 @@
           <DialogClose />
         </PanelHeader>
 
-        <PanelContent class="flex flex-col gap-[var(--spacing-md)]">
+        <PanelContent class="flex flex-col gap-(--spacing-md)">
           <Message
             severity="warning"
             label="Once confirmed, this action can't be reversed."
           />
 
-          <p class="m-0 text-body-sm text-[var(--text-muted)]">
+          <p class="m-0 text-body-sm text-(--text-muted)">
             {{ body }}
             <!-- An inline link inside a sentence is the `text-link` utility, not the Link
                  component: Link is a control with its own box (inline-flex, a min-height,
@@ -130,7 +130,7 @@
 
           <p
             :id="confirmLabelId"
-            class="m-0 flex flex-wrap items-center gap-[var(--spacing-xxs)] text-body-sm text-[var(--text-default)]"
+            class="m-0 flex flex-wrap items-center gap-(--spacing-xxs) text-body-sm text-(--text-default)"
           >
             <span>To confirm, type</span>
             <!-- The name is the control: clicking it copies, so a long name can be
@@ -142,7 +142,7 @@
             >
               <button
                 type="button"
-                class="inline-flex max-w-full cursor-pointer items-center rounded-[var(--shape-elements)] border border-[length:var(--border-width-default)] border-[var(--border-muted)] bg-[var(--bg-surface-overlay)] px-[var(--spacing-xxs)] text-body-sm text-[var(--text-default)] transition-colors duration-fast-02 ease-productive-entrance hover:border-[var(--border-default)] hover:bg-[var(--bg-hover)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--ring-color)] motion-reduce:transition-none"
+                class="inline-flex max-w-full cursor-pointer items-center rounded-(--shape-elements) border border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-overlay) px-(--spacing-xxs) text-body-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:border-(--border-default) hover:bg-(--bg-hover) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color) motion-reduce:transition-none"
                 :aria-label="copied ? `Copied ${name}` : `Copy ${name} to the clipboard`"
                 @click="copyName"
               >
@@ -154,7 +154,7 @@
                      size, which costs no contrast. -->
                 <i
                   :class="copied ? 'pi pi-check' : 'pi pi-copy'"
-                  class="ml-[var(--spacing-xxs)] shrink-0 text-body-xs text-[var(--text-default)]"
+                  class="ml-(--spacing-xxs) shrink-0 text-body-xs text-(--text-default)"
                   aria-hidden="true"
                 />
                 <!-- "Copied" grows the chip instead of appearing in it: the confirmation
@@ -165,11 +165,11 @@
                      on the row inside it, or it would survive the collapse as dead space. -->
                 <span
                   :data-shown="copied || null"
-                  class="grid min-w-0 grid-cols-[0fr] transition-[grid-template-columns] duration-moderate-01 ease-productive-entrance data-[shown]:grid-cols-[1fr] motion-reduce:transition-none"
+                  class="grid min-w-0 grid-cols-[0fr] transition-[grid-template-columns] duration-moderate-01 ease-productive-entrance data-shown:grid-cols-[1fr] motion-reduce:transition-none"
                 >
                   <span class="min-w-0 overflow-hidden">
                     <span
-                      class="block whitespace-nowrap pl-[var(--spacing-xxs)] text-body-xs text-[var(--text-default)]"
+                      class="block whitespace-nowrap pl-(--spacing-xxs) text-body-xs text-(--text-default)"
                     >
                       Copied
                     </span>

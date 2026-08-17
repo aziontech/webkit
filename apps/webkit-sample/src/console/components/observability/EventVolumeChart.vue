@@ -186,7 +186,7 @@
 </script>
 
 <template>
-  <div class="flex min-w-0 flex-col gap-[var(--spacing-xxs)]">
+  <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
     <!-- `relative` is what the crosshair and the card are positioned against; it is on the
          row's wrapper rather than the row so the card can hang below the axis.
          `z-30` because the card overhangs INTO the table, and the table's own sticky
@@ -198,7 +198,7 @@
         role="button"
         tabindex="0"
         :aria-label="rowLabel"
-        class="flex h-20 w-full cursor-crosshair items-end gap-[1px] border-b border-[var(--border-default)] outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)]"
+        class="flex h-20 w-full cursor-crosshair items-end gap-[1px] border-b border-(--border-default) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
         @pointerleave="onLeave"
         @keydown.left.prevent="stepHovered(-1)"
         @keydown.right.prevent="stepHovered(1)"
@@ -211,7 +211,7 @@
           :data-active="hovered === index || null"
           :data-selected="isSelected(index) || null"
           aria-hidden="true"
-          class="flex h-full min-w-0 flex-1 flex-col justify-end transition-colors duration-fast-02 ease-productive-entrance data-[active]:bg-[var(--bg-hover)] data-[selected]:bg-[var(--bg-selected)] motion-reduce:transition-none"
+          class="flex h-full min-w-0 flex-1 flex-col justify-end transition-colors duration-fast-02 ease-productive-entrance data-active:bg-(--bg-hover) data-selected:bg-(--bg-selected) motion-reduce:transition-none"
           @pointerenter="onEnter(index)"
           @pointerdown="onPointerDown(index, $event)"
         >
@@ -219,7 +219,7 @@
             v-for="level in STACK_ORDER"
             :key="level"
             :data-level="level"
-            class="w-full transition-[height] duration-fast-02 ease-productive-entrance data-[level=Debug]:bg-[var(--text-muted)] data-[level=Info]:bg-[var(--info-contrast)] data-[level=Warning]:bg-[var(--warning-contrast)] data-[level=Error]:bg-[var(--danger-contrast)] motion-reduce:transition-none"
+            class="w-full transition-[height] duration-fast-02 ease-productive-entrance data-[level=Debug]:bg-(--text-muted) data-[level=Info]:bg-(--info-contrast) data-[level=Warning]:bg-(--warning-contrast) data-[level=Error]:bg-(--danger-contrast) motion-reduce:transition-none"
             :style="{ height: share(bucket.levels[level]) }"
           />
         </div>
@@ -237,7 +237,7 @@
         <div
           v-if="active"
           aria-hidden="true"
-          class="pointer-events-none absolute inset-y-0 w-px -translate-x-1/2 bg-[var(--border-strong)] transition-[left] duration-fast-02 ease-productive-entrance motion-reduce:transition-none"
+          class="pointer-events-none absolute inset-y-0 w-px -translate-x-1/2 bg-(--border-strong) transition-[left] duration-fast-02 ease-productive-entrance motion-reduce:transition-none"
           :style="{ left: centre }"
         />
       </Transition>
@@ -256,16 +256,16 @@
           v-if="active"
           role="status"
           :data-align="cardAlign"
-          class="pointer-events-none absolute top-[calc(100%+var(--spacing-xxs))] z-30 w-max min-w-[var(--container-3xs)] rounded-[var(--shape-elements)] border border-[var(--border-default)] bg-[var(--bg-surface-raised)] p-[var(--spacing-sm)] shadow-[var(--shadow-sm)] transition-[left] duration-fast-02 ease-productive-entrance data-[align=center]:-translate-x-1/2 data-[align=end]:-translate-x-full motion-reduce:transition-none"
+          class="pointer-events-none absolute top-[calc(100%+var(--spacing-xxs))] z-30 w-max min-w-(--container-3xs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-sm) shadow-(--shadow-sm) transition-[left] duration-fast-02 ease-productive-entrance data-[align=center]:-translate-x-1/2 data-[align=end]:-translate-x-full motion-reduce:transition-none"
           :style="{ left: centre }"
         >
-          <div class="flex min-w-0 flex-col gap-[var(--spacing-xs)]">
-            <p class="text-label-code-sm tabular-nums text-[var(--text-default)]">
+          <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
+            <p class="text-label-code-sm tabular-nums text-(--text-default)">
               {{ formatEventStamp(active.at) }}
             </p>
 
             <dl
-              class="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-x-[var(--spacing-sm)] gap-y-[var(--spacing-xxs)]"
+              class="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-x-(--spacing-sm) gap-y-(--spacing-xxs)"
             >
               <template
                 v-for="level in LEVEL_ORDER"
@@ -274,27 +274,27 @@
                 <span
                   :data-level="level"
                   aria-hidden="true"
-                  class="size-2 shrink-0 rounded-[var(--shape-elements)] data-[level=Debug]:bg-[var(--text-muted)] data-[level=Info]:bg-[var(--info-contrast)] data-[level=Warning]:bg-[var(--warning-contrast)] data-[level=Error]:bg-[var(--danger-contrast)]"
+                  class="size-2 shrink-0 rounded-(--shape-elements) data-[level=Debug]:bg-(--text-muted) data-[level=Info]:bg-(--info-contrast) data-[level=Warning]:bg-(--warning-contrast) data-[level=Error]:bg-(--danger-contrast)"
                 />
-                <dt class="min-w-0 truncate text-label-sm text-[var(--text-muted)]">{{ level }}</dt>
-                <dd class="m-0 text-label-code-sm tabular-nums text-[var(--text-default)]">
+                <dt class="min-w-0 truncate text-label-sm text-(--text-muted)">{{ level }}</dt>
+                <dd class="m-0 text-label-code-sm tabular-nums text-(--text-default)">
                   {{ active.levels[level] }}
                 </dd>
               </template>
             </dl>
 
             <div
-              class="flex items-baseline justify-between gap-[var(--spacing-sm)] border-t border-[var(--border-muted)] pt-[var(--spacing-xs)]"
+              class="flex items-baseline justify-between gap-(--spacing-sm) border-t border-(--border-muted) pt-(--spacing-xs)"
             >
-              <span class="text-label-sm text-[var(--text-default)]">Total</span>
-              <span class="text-label-code-sm tabular-nums text-[var(--text-default)]">
+              <span class="text-label-sm text-(--text-default)">Total</span>
+              <span class="text-label-code-sm tabular-nums text-(--text-default)">
                 {{ active.total }}
               </span>
             </div>
 
             <!-- The gesture is invisible without a line saying it is there, and a chart
                  nobody knows is clickable is a chart that is only ever read. -->
-            <p class="text-body-sm text-[var(--text-muted)]">
+            <p class="text-body-sm text-(--text-muted)">
               Click to filter to this bucket, or drag to select a span.
             </p>
           </div>
@@ -306,7 +306,7 @@
 
     <div
       v-if="axis.length"
-      class="flex items-center justify-between text-label-sm tabular-nums text-[var(--text-muted)]"
+      class="flex items-center justify-between text-label-sm tabular-nums text-(--text-muted)"
       aria-hidden="true"
     >
       <span

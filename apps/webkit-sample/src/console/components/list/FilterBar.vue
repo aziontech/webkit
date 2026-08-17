@@ -317,7 +317,7 @@
   })
 
   const ROW_CLASS =
-    'flex w-full items-center gap-[var(--spacing-sm)] rounded-[var(--shape-elements)] px-[var(--spacing-sm)] py-[var(--spacing-xs)] text-left text-label-sm text-[var(--text-default)] transition-colors duration-fast-02 ease-productive-entrance hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] motion-reduce:transition-none'
+    'flex w-full items-center gap-(--spacing-sm) rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-left text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none'
 </script>
 
 <template>
@@ -326,7 +326,7 @@
        own tail behind an edge. -->
   <div
     ref="barRef"
-    class="flex min-w-0 flex-wrap items-center gap-[var(--spacing-xs)]"
+    class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)"
     data-testid="filter-bar"
   >
     <Popover
@@ -398,7 +398,7 @@
           <span
             v-if="appliedCount"
             data-testid="filter-bar__indicator"
-            class="pointer-events-none absolute top-px right-px size-2 rounded-full bg-[var(--primary)] ring-2 ring-[var(--bg-canvas)]"
+            class="pointer-events-none absolute top-px right-px size-2 rounded-full bg-(--primary) ring-2 ring-(--bg-canvas)"
             aria-hidden="true"
           />
         </span>
@@ -468,7 +468,7 @@
                      first row had been squeezed. -->
                 <div
                   v-if="activeField"
-                  class="flex items-center gap-[var(--spacing-xs)] border-b border-[var(--border-default)] px-[var(--spacing-xs)] py-[var(--spacing-xs)]"
+                  class="flex items-center gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-xs) py-(--spacing-xs)"
                 >
                   <IconButton
                     icon="pi pi-angle-left"
@@ -477,7 +477,7 @@
                     :aria-label="customField ? 'Back to date periods' : 'Back to all filters'"
                     @click="customField ? leaveCustom() : back()"
                   />
-                  <span class="truncate text-label-sm text-[var(--text-default)]">
+                  <span class="truncate text-label-sm text-(--text-default)">
                     {{ activeField.label }}
                   </span>
                 </div>
@@ -485,7 +485,7 @@
                 <!-- LEVEL 3 — the month grid, reached only from `Custom…`. -->
                 <div
                   v-if="customField"
-                  class="px-[var(--spacing-md)] py-[var(--spacing-sm)]"
+                  class="px-(--spacing-md) py-(--spacing-sm)"
                 >
                   <Calendar
                     v-model="customRange"
@@ -504,7 +504,7 @@
                        thing the user is here to change — a "Search" placeholder would
                        name the control instead, and there are two searches on this
                        page. -->
-                  <div class="border-b border-[var(--border-default)] p-[var(--spacing-xs)]">
+                  <div class="border-b border-(--border-default) p-(--spacing-xs)">
                     <InputText
                       v-model="query"
                       size="medium"
@@ -532,7 +532,7 @@
                        the clear below stay put — the two controls that get you out of a
                        long list are the last things that should scroll away with it. -->
                   <div
-                    class="flex max-h-[var(--container-3xs)] flex-col gap-[var(--spacing-xxs)] overflow-y-auto p-[var(--spacing-xxs)]"
+                    class="flex max-h-(--container-3xs) flex-col gap-(--spacing-xxs) overflow-y-auto p-(--spacing-xxs)"
                   >
                     <!-- LEVEL 1 — the fields. An applied field keeps its place in the
                          list and says what it is set to, so the menu and the chip row
@@ -550,12 +550,12 @@
                         <span class="grow truncate">{{ field.label }}</span>
                         <span
                           v-if="isApplied(modelValue, field)"
-                          class="truncate text-[var(--text-muted)]"
+                          class="truncate text-(--text-muted)"
                         >
                           {{ summarizeText(field, modelValue[field.id]) }}
                         </span>
                         <i
-                          class="pi pi-angle-right shrink-0 text-[var(--text-muted)]"
+                          class="pi pi-angle-right shrink-0 text-(--text-muted)"
                           aria-hidden="true"
                         />
                       </button>
@@ -603,12 +603,12 @@
                              either way, so picking does not shift the labels beside it. -->
                         <i
                           v-if="option.custom"
-                          class="pi pi-angle-right shrink-0 text-[var(--text-muted)]"
+                          class="pi pi-angle-right shrink-0 text-(--text-muted)"
                           aria-hidden="true"
                         />
                         <i
                           v-else
-                          class="pi pi-check shrink-0 text-[var(--text-default)]"
+                          class="pi pi-check shrink-0 text-(--text-default)"
                           :class="isPicked(option.value) ? '' : 'invisible'"
                           aria-hidden="true"
                         />
@@ -619,7 +619,7 @@
                          reads as a broken filter rather than an unmatched term. -->
                     <p
                       v-if="!rows.length"
-                      class="px-[var(--spacing-sm)] py-[var(--spacing-xs)] text-label-sm text-[var(--text-muted)]"
+                      class="px-(--spacing-sm) py-(--spacing-xs) text-label-sm text-(--text-muted)"
                     >
                       No match for “{{ query }}”.
                     </p>
@@ -632,7 +632,7 @@
                        to hide in a panel. -->
                   <div
                     v-if="activeField && isApplied(modelValue, activeField)"
-                    class="border-t border-[var(--border-default)] p-[var(--spacing-xxs)]"
+                    class="border-t border-(--border-default) p-(--spacing-xxs)"
                   >
                     <button
                       type="button"
@@ -640,7 +640,7 @@
                       @click="clear(activeField)"
                     >
                       <i
-                        class="pi pi-filter-slash text-[var(--text-muted)]"
+                        class="pi pi-filter-slash text-(--text-muted)"
                         aria-hidden="true"
                       />
                       Clear {{ activeField.label }}
@@ -676,7 +676,7 @@
          so the enter-from class would have been dead on arrival. -->
     <TransitionGroup
       tag="div"
-      class="flex min-w-0 flex-wrap items-center gap-[var(--spacing-xs)]"
+      class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)"
       appear
       move-class="transition-[transform,translate,scale,opacity] duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
       enter-from-class="scale-90 opacity-0"
@@ -700,7 +700,7 @@
         <!-- NO STYLING CLASSES HERE. `kind` carries the whole applied/available
              distinction — `filled` is a value that is applied, `outlined` one that could
              be — and `removable` carries the ×. Both used to be consumer-side overrides
-             on this chip (`data-[offer]:border-…`, plus a hand-rolled × button); they
+             on this chip (`data-offer:border-…`, plus a hand-rolled × button); they
              live in the component now, so any other surface gets the same three chip
              jobs without restyling anything. -->
         <!-- `:label` is not rendered (the slot below wins) — it feeds the remove
@@ -719,7 +719,7 @@
           <span class="flex min-w-0 items-center">
             <!-- Muted either way: on an applied chip it is the prefix the value is read
                  against, on an offer it is the whole recessed invitation. -->
-            <span class="truncate text-[var(--text-muted)]">{{ field.label }}</span>
+            <span class="truncate text-(--text-muted)">{{ field.label }}</span>
 
             <!-- THE WIDTH ANIMATION. A grid track cannot be transitioned from `auto`,
                  but it CAN be transitioned from `0fr` to `1fr` — so the value lives in a
@@ -729,7 +729,7 @@
                  bigger one. It only works because the chip keeps its DOM position, which
                  is why the bar never reorders (see `chips`). -->
             <span
-              class="grid grid-cols-[0fr] transition-[grid-template-columns] duration-moderate-01 ease-productive-entrance data-[shown]:grid-cols-[1fr] motion-reduce:transition-none"
+              class="grid grid-cols-[0fr] transition-[grid-template-columns] duration-moderate-01 ease-productive-entrance data-shown:grid-cols-[1fr] motion-reduce:transition-none"
               :data-shown="isApplied(modelValue, field) || null"
             >
               <!-- Padding on the CLIP would survive the collapse — it is not content, so
@@ -738,7 +738,7 @@
                    the row inside it, which is clipped along with the text. -->
               <span class="min-w-0 overflow-hidden">
                 <span
-                  class="flex min-w-0 items-center gap-[var(--spacing-xxs)] whitespace-nowrap pl-[var(--spacing-xxs)]"
+                  class="flex min-w-0 items-center gap-(--spacing-xxs) whitespace-nowrap pl-(--spacing-xxs)"
                 >
                   <!-- The avatar cluster: who the filter is actually about, recognised
                        before the name beside it is read. Overlapped and ringed in the
@@ -755,14 +755,14 @@
                       :label="option.label"
                       size="small"
                       kind="circle"
-                      class="size-4 ring-1 ring-[var(--bg-surface)]"
+                      class="size-4 ring-1 ring-(--bg-surface)"
                       :class="i > 0 ? '-ml-1' : ''"
                     />
                   </span>
                   <span class="truncate">{{ summaryOf(field)?.label }}</span>
                   <span
                     v-if="summaryOf(field)?.extra"
-                    class="shrink-0 text-[var(--text-muted)]"
+                    class="shrink-0 text-(--text-muted)"
                   >
                     +{{ summaryOf(field).extra }}
                   </span>

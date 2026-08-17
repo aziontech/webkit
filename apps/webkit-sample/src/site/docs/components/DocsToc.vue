@@ -65,7 +65,7 @@
     class="sticky top-0"
   >
     <p
-      class="mb-[var(--spacing-xs)] text-overline-sm uppercase tracking-widest text-[var(--text-muted)]"
+      class="mb-(--spacing-xs) text-overline-sm uppercase tracking-widest text-(--text-muted)"
     >
       On this page
     </p>
@@ -78,7 +78,7 @@
           :href="`#${item.id}`"
           :aria-current="current === item.id ? 'true' : undefined"
           :data-current="current === item.id || null"
-          class="block border-l border-[var(--border-default)] py-[var(--spacing-xxs)] pl-[var(--spacing-sm)] text-body-sm text-[var(--text-muted)] no-underline transition-colors duration-150 ease-out hover:border-[var(--border-strong)] hover:text-[var(--text-default)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] data-[current]:border-[var(--border-selected)] data-[current]:text-[var(--text-default)] motion-reduce:transition-none"
+          class="block border-l border-(--border-default) py-(--spacing-xxs) pl-(--spacing-sm) text-body-sm text-(--text-muted) no-underline transition-colors duration-150 ease-out hover:border-(--border-strong) hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) data-current:border-(--border-selected) data-current:text-(--text-default) motion-reduce:transition-none"
         >
           {{ item.label }}
         </a>

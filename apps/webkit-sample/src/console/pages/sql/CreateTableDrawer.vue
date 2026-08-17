@@ -89,12 +89,12 @@
   }
   const morphTransition = {
     moveClass:
-      'transition-transform duration-[var(--tg-move-duration)] ease-[var(--tg-move-ease)] motion-reduce:transition-none',
+      'transition-transform duration-(--tg-move-duration) ease-(--tg-move-ease) motion-reduce:transition-none',
     enterActiveClass:
-      'transition-all duration-[var(--tg-enter-duration)] ease-[var(--tg-enter-ease)] motion-reduce:transition-none',
-    enterFromClass: '-translate-y-[var(--spacing-xxs)] opacity-0',
+      'transition-all duration-(--tg-enter-duration) ease-(--tg-enter-ease) motion-reduce:transition-none',
+    enterFromClass: '-translate-y-(--spacing-xxs) opacity-0',
     leaveActiveClass:
-      'transition-opacity duration-[var(--tg-leave-duration)] ease-[var(--tg-leave-ease)] motion-reduce:transition-none',
+      'transition-opacity duration-(--tg-leave-duration) ease-(--tg-leave-ease) motion-reduce:transition-none',
     leaveToClass: 'opacity-0'
   }
 
@@ -117,14 +117,14 @@
   const dnd = reactive({ from: -1, over: -1 })
 
   const GRIP_CLASS =
-    'inline-flex shrink-0 cursor-grab items-center justify-center rounded-[var(--shape-button)] ' +
-    'text-[var(--text-muted)] outline-none transition-colors hover:bg-[var(--bg-hover)] hover:text-[var(--text-default)] ' +
-    'focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] active:cursor-grabbing motion-reduce:transition-none'
+    'inline-flex shrink-0 cursor-grab items-center justify-center rounded-(--shape-button) ' +
+    'text-(--text-muted) outline-none transition-colors hover:bg-(--bg-hover) hover:text-(--text-default) ' +
+    'focus-visible:ring-2 focus-visible:ring-(--ring-color) active:cursor-grabbing motion-reduce:transition-none'
 
   const dragRowClass =
-    'relative rounded-[var(--shape-card)] transition-[opacity,transform,outline-color] ' +
-    'data-[dragging]:opacity-70 data-[dragging]:scale-[0.98] data-[dragging]:outline-dashed data-[dragging]:outline-2 data-[dragging]:outline-[var(--accent)] ' +
-    "data-[drop]:before:pointer-events-none data-[drop]:before:absolute data-[drop]:before:inset-x-0 data-[drop]:before:-top-[var(--spacing-xxs)] data-[drop]:before:border-t-2 data-[drop]:before:border-[var(--accent)] data-[drop]:before:content-['']"
+    'relative rounded-(--shape-card) transition-[opacity,transform,outline-color] ' +
+    'data-dragging:opacity-70 data-dragging:scale-[0.98] data-dragging:outline-dashed data-dragging:outline-2 data-dragging:outline-(--accent) ' +
+    "data-drop:before:pointer-events-none data-drop:before:absolute data-drop:before:inset-x-0 data-drop:before:-top-(--spacing-xxs) data-drop:before:border-t-2 data-drop:before:border-(--accent) data-drop:before:content-['']"
 
   const isDragging = (index) => dnd.from === index
   const isDropTarget = (index) => dnd.over === index && dnd.from !== index
@@ -199,7 +199,7 @@
   // One grid template shared by the columns header row and each column row, so
   // their tracks line up: grip · Name · Type · Default Value · Primary · remove.
   const COLUMN_GRID =
-    'grid grid-cols-[auto_minmax(0,1.4fr)_minmax(0,1fr)_minmax(0,1.2fr)_auto_auto] items-center gap-[var(--spacing-xs)]'
+    'grid grid-cols-[auto_minmax(0,1.4fr)_minmax(0,1fr)_minmax(0,1.2fr)_auto_auto] items-center gap-(--spacing-xs)'
 </script>
 
 <template>
@@ -247,7 +247,7 @@
       hint="The table's schema. Every table needs at least one column, and the order here is the order the columns are created in."
     >
       <template #aside>
-        <div class="flex flex-wrap items-center gap-[var(--spacing-xs)]">
+        <div class="flex flex-wrap items-center gap-(--spacing-xs)">
           <Button
             type="button"
             label="About data types"
@@ -271,17 +271,17 @@
 
       <CardBox :padded="false">
         <template #content>
-          <div class="flex flex-col gap-[var(--spacing-sm)] p-[var(--spacing-md)]">
+          <div class="flex flex-col gap-(--spacing-sm) p-(--spacing-md)">
             <!-- Column headers aligned to the row grid. -->
-            <div :class="[COLUMN_GRID, 'px-[var(--spacing-xxs)]']">
+            <div :class="[COLUMN_GRID, 'px-(--spacing-xxs)']">
               <span
                 class="size-8"
                 aria-hidden="true"
               />
-              <span class="text-label-sm text-[var(--text-muted)]">Name</span>
-              <span class="text-label-sm text-[var(--text-muted)]">Type</span>
-              <span class="text-label-sm text-[var(--text-muted)]">Default Value</span>
-              <span class="text-label-sm text-[var(--text-muted)]">Primary</span>
+              <span class="text-label-sm text-(--text-muted)">Name</span>
+              <span class="text-label-sm text-(--text-muted)">Type</span>
+              <span class="text-label-sm text-(--text-muted)">Default Value</span>
+              <span class="text-label-sm text-(--text-muted)">Primary</span>
               <span
                 class="size-8"
                 aria-hidden="true"
@@ -290,7 +290,7 @@
 
             <TransitionGroup
               tag="div"
-              class="relative flex flex-col gap-[var(--spacing-xs)]"
+              class="relative flex flex-col gap-(--spacing-xs)"
               v-bind="morphTransition"
               :style="morphStyle"
             >
@@ -302,7 +302,7 @@
                 :data-drop="isDropTarget(index) || null"
                 :class="[
                   COLUMN_GRID,
-                  'px-[var(--spacing-xxs)] py-[var(--spacing-xxs)]',
+                  'px-(--spacing-xxs) py-(--spacing-xxs)',
                   dragRowClass
                 ]"
                 @dragenter.prevent="onDragEnter(index)"
@@ -347,7 +347,7 @@
                   <Select.Trigger aria-label="Column type">
                     <template #iconLeft>
                       <span
-                        class="shrink-0 font-code text-label-code-sm text-[var(--text-muted)]"
+                        class="shrink-0 font-code text-label-code-sm text-(--text-muted)"
                         aria-hidden="true"
                       >
                         {{ glyphOf(column.type) }}
@@ -362,7 +362,7 @@
                                  inner options-list max-heights (the list ScrollArea
                                  defaults to max-h-60) so more types show at once. -->
                   <Select.Content
-                    class="!z-[1002] min-w-[var(--container-md)] !max-h-[var(--container-md)] [&_[data-testid$='__list']]:!max-h-[var(--container-sm)]"
+                    class="z-[1002]! min-w-(--container-md) max-h-(--container-md)! [&_[data-testid$='__list']]:max-h-(--container-sm)!"
                   >
                     <!-- Searchable, grouped Postgres data types with a
                                    glyph + description per option. -->
@@ -391,17 +391,17 @@
                       >
                         <template #left>
                           <span
-                            class="shrink-0 font-code text-label-code-sm text-[var(--text-muted)]"
+                            class="shrink-0 font-code text-label-code-sm text-(--text-muted)"
                             aria-hidden="true"
                           >
                             {{ type.glyph }}
                           </span>
                         </template>
-                        <span class="flex min-w-0 items-center gap-[var(--spacing-xs)]">
-                          <span class="font-code text-label-code-sm text-[var(--text-default)]">
+                        <span class="flex min-w-0 items-center gap-(--spacing-xs)">
+                          <span class="font-code text-label-code-sm text-(--text-default)">
                             {{ type.label }}
                           </span>
-                          <span class="truncate text-body-xs text-[var(--text-muted)]">
+                          <span class="truncate text-body-xs text-(--text-muted)">
                             {{ type.description }}
                           </span>
                         </span>
@@ -472,7 +472,7 @@
     >
       <CardBox :padded="false">
         <template #content>
-          <div class="flex justify-center p-[var(--spacing-md)]">
+          <div class="flex justify-center p-(--spacing-md)">
             <Button
               type="button"
               label="Add foreign key relation"

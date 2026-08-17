@@ -177,11 +177,11 @@
   // breakpoint (2rem / 4rem / 6rem), so the gutter silently changed width as the
   // viewport grew.
   const GRID_CELL =
-    'flex w-[var(--container-3xs)] shrink-0 items-center gap-[var(--spacing-xxs)] ' +
-    'border-r border-[var(--border-muted)] px-[var(--spacing-sm)] py-[var(--spacing-xs)]'
+    'flex w-(--container-3xs) shrink-0 items-center gap-(--spacing-xxs) ' +
+    'border-r border-(--border-muted) px-(--spacing-sm) py-(--spacing-xs)'
   const GRID_SELECT_CELL =
-    'flex w-10 shrink-0 items-center justify-center border-r border-[var(--border-muted)] py-[var(--spacing-xs)]'
-  const GRID_ACTION_CELL = 'flex shrink-0 items-center px-[var(--spacing-xs)]'
+    'flex w-10 shrink-0 items-center justify-center border-r border-(--border-muted) py-(--spacing-xs)'
+  const GRID_ACTION_CELL = 'flex shrink-0 items-center px-(--spacing-xs)'
   const rowFilter = ref('')
   const filterPlaceholder = computed(() => {
     const names = (selectedTable.value?.columns ?? []).map((column) => column.name)
@@ -495,7 +495,7 @@
           collapse-aria-label="Hide the tables panel"
           expand-aria-label="Show the tables panel"
           resize-aria-label="Resize the tables panel"
-          class="w-[var(--container-2xs)]"
+          class="w-(--container-2xs)"
         >
           <!-- The panel's fixed head: the title, what acts on the whole list, and the
                search that narrows it. In `#header` so it stays put while the list
@@ -505,10 +505,10 @@
                list 8px inside the region. Without the same inset here the title and the
                search field stuck out 8px from every row under them. -->
           <template #header>
-            <div class="flex flex-col gap-[var(--spacing-sm)] px-[var(--spacing-xs)]">
-              <div class="flex items-center justify-between gap-[var(--spacing-xs)]">
-                <span class="text-heading-xxs text-[var(--text-default)]">Tables</span>
-                <div class="flex items-center gap-[var(--spacing-xxs)]">
+            <div class="flex flex-col gap-(--spacing-sm) px-(--spacing-xs)">
+              <div class="flex items-center justify-between gap-(--spacing-xs)">
+                <span class="text-heading-xxs text-(--text-default)">Tables</span>
+                <div class="flex items-center gap-(--spacing-xxs)">
                   <Tooltip text="Refresh tables">
                     <IconButton
                       icon="pi pi-refresh"
@@ -551,33 +551,33 @@
           <div>
             <p
               v-if="!tables.length"
-              class="px-[var(--spacing-xs)] py-[var(--spacing-sm)] text-body-sm text-[var(--text-muted)]"
+              class="px-(--spacing-xs) py-(--spacing-sm) text-body-sm text-(--text-muted)"
             >
               No tables created yet
             </p>
             <p
               v-else-if="!filteredTables.length"
-              class="px-[var(--spacing-xs)] py-[var(--spacing-sm)] text-body-sm text-[var(--text-muted)]"
+              class="px-(--spacing-xs) py-(--spacing-sm) text-body-sm text-(--text-muted)"
             >
               No tables match "{{ tableSearch }}".
             </p>
             <div
               v-else
-              class="flex flex-col gap-[var(--spacing-xxs)]"
+              class="flex flex-col gap-(--spacing-xxs)"
             >
               <div
                 v-for="table in filteredTables"
                 :key="table.id"
-                class="group flex items-center gap-[var(--spacing-xxs)]"
+                class="group flex items-center gap-(--spacing-xxs)"
               >
                 <button
                   type="button"
                   :data-selected="selectedTable && selectedTable.id === table.id ? true : null"
-                  class="flex min-w-0 flex-1 items-center gap-[var(--spacing-xs)] rounded-[var(--shape-button)] px-[var(--spacing-xs)] py-[var(--spacing-xs)] text-left text-label-sm text-[var(--text-default)] transition-colors duration-fast-02 ease-productive-entrance hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] data-[selected]:bg-[var(--bg-hover)] motion-reduce:transition-none"
+                  class="flex min-w-0 flex-1 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xs) text-left text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) data-selected:bg-(--bg-hover) motion-reduce:transition-none"
                   @click="selectTable(table.id)"
                 >
                   <i
-                    class="pi pi-table shrink-0 text-[var(--text-muted)]"
+                    class="pi pi-table shrink-0 text-(--text-muted)"
                     aria-hidden="true"
                   />
                   <span class="min-w-0 truncate">{{ table.name }}</span>
@@ -618,9 +618,9 @@
         <div class="flex min-w-0 flex-1 flex-col overflow-hidden">
           <div
             v-if="!selectedTable"
-            class="flex flex-1 items-center justify-center p-[var(--spacing-md)]"
+            class="flex flex-1 items-center justify-center p-(--spacing-md)"
           >
-            <CardBox class="w-full max-w-[var(--container-2xl)]">
+            <CardBox class="w-full max-w-(--container-2xl)">
               <template #content>
                 <!-- Empty-state pattern (CreationCenter): a solid CardBox framing
                      a dashed, raised EmptyState surface with a featured icon tile
@@ -629,23 +629,23 @@
                   size="medium"
                   title="No tables yet"
                   description="Create your first table to store your data."
-                  class="flex-1 rounded-[var(--shape-card)] border border-dashed border-[var(--border-default)] bg-[var(--bg-surface-raised)]"
+                  class="flex-1 rounded-(--shape-card) border border-dashed border-(--border-default) bg-(--bg-surface-raised)"
                 >
                   <template #icon>
                     <span class="relative flex size-10 items-center justify-center">
                       <span
                         aria-hidden="true"
-                        class="absolute left-1/2 top-1/2 size-14 -translate-x-1/2 -translate-y-1/2 rounded-[var(--radius-xl,12px)] border border-[var(--border-strong)] bg-[var(--bg-canvas)] opacity-5"
+                        class="absolute left-1/2 top-1/2 size-14 -translate-x-1/2 -translate-y-1/2 rounded-[var(--radius-xl,12px)] border border-(--border-strong) bg-(--bg-canvas) opacity-5"
                       />
                       <span
                         aria-hidden="true"
-                        class="absolute left-1/2 top-1/2 size-12 -translate-x-1/2 -translate-y-1/2 rounded-[var(--shape-card)] border border-[var(--border-strong)] bg-[var(--bg-canvas)] opacity-10"
+                        class="absolute left-1/2 top-1/2 size-12 -translate-x-1/2 -translate-y-1/2 rounded-(--shape-card) border border-(--border-strong) bg-(--bg-canvas) opacity-10"
                       />
                       <span
-                        class="relative flex size-10 items-center justify-center rounded-[var(--shape-elements)] border border-[var(--border-default)] bg-[var(--bg-surface)]"
+                        class="relative flex size-10 items-center justify-center rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface)"
                       >
                         <i
-                          class="pi pi-table text-[1rem] leading-none text-[var(--text-default)]"
+                          class="pi pi-table text-[1rem] leading-none text-(--text-default)"
                           aria-hidden="true"
                         />
                       </span>
@@ -673,14 +673,14 @@
           >
             <!-- Table header: name + Data/Definition view toggle -->
             <div
-              class="flex items-center justify-between gap-[var(--spacing-sm)] border-b border-[var(--border-default)] px-[var(--spacing-sm)] py-[var(--spacing-xs)]"
+              class="flex items-center justify-between gap-(--spacing-sm) border-b border-(--border-default) px-(--spacing-sm) py-(--spacing-xs)"
             >
-              <div class="flex min-w-0 items-center gap-[var(--spacing-xs)]">
+              <div class="flex min-w-0 items-center gap-(--spacing-xs)">
                 <i
-                  class="pi pi-table shrink-0 text-[var(--text-muted)]"
+                  class="pi pi-table shrink-0 text-(--text-muted)"
                   aria-hidden="true"
                 />
-                <span class="truncate text-heading-xxs text-[var(--text-default)]">
+                <span class="truncate text-heading-xxs text-(--text-default)">
                   {{ selectedTable.name }}
                 </span>
               </div>
@@ -698,12 +698,12 @@
             >
               <!-- Toolbar: filter + sort + refresh + insert -->
               <div
-                class="flex items-center gap-[var(--spacing-xs)] border-b border-[var(--border-default)] p-[var(--spacing-xs)]"
+                class="flex items-center gap-(--spacing-xs) border-b border-(--border-default) p-(--spacing-xs)"
               >
                 <InputText
                   v-model="rowFilter"
                   size="medium"
-                  class="min-w-0 flex-1 md:max-w-[var(--container-lg)]"
+                  class="min-w-0 flex-1 md:max-w-(--container-lg)"
                   :placeholder="filterPlaceholder"
                   aria-label="Filter rows"
                 >
@@ -714,7 +714,7 @@
                     />
                   </template>
                 </InputText>
-                <div class="ml-auto flex items-center gap-[var(--spacing-xs)]">
+                <div class="ml-auto flex items-center gap-(--spacing-xs)">
                   <Button
                     label="Sort"
                     kind="outlined"
@@ -760,7 +760,7 @@
                        same x as its data, at every column, key or no key. -->
               <div class="min-h-0 flex-1 overflow-auto">
                 <div
-                  class="flex items-stretch border-b border-[var(--border-default)] bg-[var(--bg-surface-raised)]"
+                  class="flex items-stretch border-b border-(--border-default) bg-(--bg-surface-raised)"
                 >
                   <div :class="GRID_SELECT_CELL">
                     <Checkbox
@@ -780,15 +780,15 @@
                          editor, the query result, the history snippets. The name and
                          its type are ONE label ("id int4"), so they sit at the tight
                          step; the key is a separate mark and trails on its own. -->
-                    <span class="truncate text-label-md text-[var(--text-default)]">
+                    <span class="truncate text-label-md text-(--text-default)">
                       {{ column.name }}
                     </span>
-                    <span class="shrink-0 text-body-xs text-[var(--text-muted)]">
+                    <span class="shrink-0 text-body-xs text-(--text-muted)">
                       {{ column.type }}
                     </span>
                     <i
                       v-if="column.primaryKey"
-                      class="pi pi-key ml-auto shrink-0 pl-[var(--spacing-xs)] text-[var(--primary)]"
+                      class="pi pi-key ml-auto shrink-0 pl-(--spacing-xs) text-(--primary)"
                       aria-label="Primary key"
                     />
                   </div>
@@ -810,7 +810,7 @@
                 <div
                   v-for="row in filteredRows"
                   :key="row.__k"
-                  class="group flex items-stretch border-b border-[var(--border-muted)] hover:bg-[var(--bg-hover)]"
+                  class="group flex items-stretch border-b border-(--border-muted) hover:bg-(--bg-hover)"
                 >
                   <div :class="GRID_SELECT_CELL">
                     <Checkbox
@@ -828,8 +828,8 @@
                       class="truncate text-label-md"
                       :class="
                         isNull(row[column.name])
-                          ? 'italic text-[var(--text-muted)]'
-                          : 'text-[var(--text-default)]'
+                          ? 'italic text-(--text-muted)'
+                          : 'text-(--text-default)'
                       "
                     >
                       {{ displayCell(row[column.name]) }}
@@ -852,10 +852,10 @@
                 <!-- Empty: no rows at all, or none matching the filter. -->
                 <div
                   v-if="!tableRows.length"
-                  class="flex flex-col items-center justify-center gap-[var(--spacing-sm)] p-[var(--spacing-xxl)] text-center"
+                  class="flex flex-col items-center justify-center gap-(--spacing-sm) p-(--spacing-xxl) text-center"
                 >
-                  <p class="text-body-sm text-[var(--text-default)]">This table is empty</p>
-                  <div class="flex items-center gap-[var(--spacing-xs)]">
+                  <p class="text-body-sm text-(--text-default)">This table is empty</p>
+                  <div class="flex items-center gap-(--spacing-xs)">
                     <Button
                       label="Insert row"
                       kind="secondary"
@@ -871,13 +871,13 @@
                       @click="comingSoon('Import data from CSV')"
                     />
                   </div>
-                  <p class="text-body-xs text-[var(--text-muted)]">
+                  <p class="text-body-xs text-(--text-muted)">
                     or drag and drop a CSV file here
                   </p>
                 </div>
                 <p
                   v-else-if="!filteredRows.length"
-                  class="p-[var(--spacing-xxl)] text-center text-body-sm text-[var(--text-muted)]"
+                  class="p-(--spacing-xxl) text-center text-body-sm text-(--text-muted)"
                 >
                   No rows match "{{ rowFilter }}".
                 </p>
@@ -885,7 +885,7 @@
 
               <!-- Footer: pagination + record count -->
               <div
-                class="flex items-center gap-[var(--spacing-sm)] border-t border-[var(--border-default)] px-[var(--spacing-sm)] py-[var(--spacing-xs)] text-label-sm text-[var(--text-muted)]"
+                class="flex items-center gap-(--spacing-sm) border-t border-(--border-default) px-(--spacing-sm) py-(--spacing-xs) text-label-sm text-(--text-muted)"
               >
                 <Tooltip text="Previous page">
                   <IconButton
@@ -896,7 +896,7 @@
                     disabled
                   />
                 </Tooltip>
-                <span>Page <span class="text-[var(--text-default)]">1</span> of 1</span>
+                <span>Page <span class="text-(--text-default)">1</span> of 1</span>
                 <Tooltip text="Next page">
                   <IconButton
                     icon="pi pi-chevron-right"
@@ -906,7 +906,7 @@
                     disabled
                   />
                 </Tooltip>
-                <span class="ml-[var(--spacing-md)]">100 rows</span>
+                <span class="ml-(--spacing-md)">100 rows</span>
                 <span class="ml-auto"
                   >{{ tableRows.length }} record{{ tableRows.length === 1 ? '' : 's' }}</span
                 >
@@ -916,10 +916,10 @@
             <!-- Definition view — the schema as a data-driven Table. -->
             <div
               v-else
-              class="flex min-h-0 flex-1 flex-col gap-[var(--layout-group-gap)] overflow-auto p-[var(--spacing-md)]"
+              class="flex min-h-0 flex-1 flex-col gap-(--layout-group-gap) overflow-auto p-(--spacing-md)"
             >
-              <div class="flex items-center justify-between gap-[var(--spacing-sm)]">
-                <p class="text-heading-xxs text-[var(--text-default)]">Columns</p>
+              <div class="flex items-center justify-between gap-(--spacing-sm)">
+                <p class="text-heading-xxs text-(--text-default)">Columns</p>
                 <Button
                   label="Add column"
                   kind="outlined"
@@ -951,7 +951,7 @@
                       />
                     </template>
                     <template #cell-constraints="{ value }">
-                      <span class="text-body-sm text-[var(--text-muted)]">{{ value || '—' }}</span>
+                      <span class="text-body-sm text-(--text-muted)">{{ value || '—' }}</span>
                     </template>
                   </Table>
                 </template>
@@ -977,11 +977,11 @@
           collapse-aria-label="Hide the query history"
           expand-aria-label="Show the query history"
           resize-aria-label="Resize the query history panel"
-          class="w-[var(--container-2xs)]"
+          class="w-(--container-2xs)"
         >
           <template #header>
-            <div class="flex flex-col gap-[var(--spacing-sm)] px-[var(--spacing-xs)]">
-              <span class="text-heading-xxs text-[var(--text-default)]">Query history</span>
+            <div class="flex flex-col gap-(--spacing-sm) px-(--spacing-xs)">
+              <span class="text-heading-xxs text-(--text-default)">Query history</span>
               <InputText
                 v-model="historySearch"
                 size="medium"
@@ -1002,22 +1002,22 @@
           <div>
             <p
               v-if="!filteredHistory.length"
-              class="px-[var(--spacing-xs)] py-[var(--spacing-sm)] text-body-sm text-[var(--text-muted)]"
+              class="px-(--spacing-xs) py-(--spacing-sm) text-body-sm text-(--text-muted)"
             >
               No queries yet
             </p>
             <div
               v-else
-              class="flex flex-col gap-[var(--spacing-xxs)]"
+              class="flex flex-col gap-(--spacing-xxs)"
             >
               <div
                 v-for="item in filteredHistory"
                 :key="item.id"
-                class="flex items-center gap-[var(--spacing-xxs)]"
+                class="flex items-center gap-(--spacing-xxs)"
               >
                 <button
                   type="button"
-                  class="min-w-0 flex-1 truncate rounded-[var(--shape-button)] px-[var(--spacing-xs)] py-[var(--spacing-xs)] text-left font-code text-label-code-sm text-[var(--text-default)] transition-colors duration-fast-02 ease-productive-entrance hover:bg-[var(--bg-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] motion-reduce:transition-none"
+                  class="min-w-0 flex-1 truncate rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xs) text-left font-code text-label-code-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
                   :title="oneLine(item.sql)"
                   @click="loadFromHistory(item)"
                 >
@@ -1076,7 +1076,7 @@
         <div class="flex min-w-0 flex-1 flex-col overflow-auto">
           <!-- Query editor toolbar -->
           <div
-            class="flex items-center gap-[var(--spacing-xs)] border-b border-[var(--border-default)] p-[var(--spacing-xs)]"
+            class="flex items-center gap-(--spacing-xs) border-b border-(--border-default) p-(--spacing-xs)"
           >
             <Button
               label="Run Query"
@@ -1086,7 +1086,7 @@
               :loading="running"
               @click="runQuery"
             />
-            <div class="ml-auto flex items-center gap-[var(--spacing-xs)]">
+            <div class="ml-auto flex items-center gap-(--spacing-xs)">
               <Button
                 label="Prettify"
                 kind="outlined"
@@ -1111,24 +1111,24 @@
             v-model="editorSql"
             :disabled="running"
             resizable="vertical"
-            class="min-h-[var(--container-3xs)] w-full !rounded-none !border-0 font-code"
+            class="min-h-(--container-3xs) w-full rounded-none! border-0! font-code"
             aria-label="SQL editor"
             placeholder="Write your SQL query here"
           />
 
           <!-- Results — separated from the editor by the full-width border. -->
           <div
-            class="flex flex-col border-t-[length:var(--border-width-default)] border-[var(--border-default)]"
+            class="flex flex-col border-t-(length:--border-width-default) border-(--border-default)"
           >
             <!-- Results toolbar: label · search · Table/Json · actions · Insert -->
             <div
-              class="flex flex-wrap items-center gap-[var(--spacing-xs)] border-b border-[var(--border-default)] p-[var(--spacing-xs)]"
+              class="flex flex-wrap items-center gap-(--spacing-xs) border-b border-(--border-default) p-(--spacing-xs)"
             >
-              <span class="shrink-0 text-heading-xxs text-[var(--text-default)]"> Results </span>
+              <span class="shrink-0 text-heading-xxs text-(--text-default)"> Results </span>
               <InputText
                 v-model="resultSearch"
                 size="medium"
-                class="ml-[var(--spacing-sm)] min-w-0 flex-1 md:max-w-[var(--container-sm)]"
+                class="ml-(--spacing-sm) min-w-0 flex-1 md:max-w-(--container-sm)"
                 placeholder="Search"
                 aria-label="Search results"
                 :disabled="!resultRows.length"
@@ -1140,7 +1140,7 @@
                   />
                 </template>
               </InputText>
-              <div class="ml-auto flex items-center gap-[var(--spacing-xs)]">
+              <div class="ml-auto flex items-center gap-(--spacing-xs)">
                 <SegmentedButton
                   v-model="resultView"
                   :options="resultViewOptions"
@@ -1188,7 +1188,7 @@
             </div>
 
             <!-- Body -->
-            <div class="min-h-[var(--container-3xs)]">
+            <div class="min-h-(--container-3xs)">
               <Table
                 v-if="resultRows.length && resultView === 'table'"
                 :data="filteredResultRows"
@@ -1198,11 +1198,11 @@
               />
               <pre
                 v-else-if="resultRows.length && resultView === 'json'"
-                class="overflow-auto p-[var(--spacing-md)] font-code text-label-code-sm text-[var(--text-default)]"
+                class="overflow-auto p-(--spacing-md) font-code text-label-code-sm text-(--text-default)"
                 >{{ resultJson }}</pre>
               <div
                 v-else-if="results && results.type === 'message'"
-                class="p-[var(--spacing-md)]"
+                class="p-(--spacing-md)"
               >
                 <Message
                   severity="success"
@@ -1211,7 +1211,7 @@
               </div>
               <div
                 v-else
-                class="flex min-h-[var(--container-3xs)] items-center justify-center p-[var(--spacing-lg)]"
+                class="flex min-h-(--container-3xs) items-center justify-center p-(--spacing-lg)"
               >
                 <EmptyState
                   title="Ready to execute"
@@ -1222,7 +1222,7 @@
 
             <!-- Footer: Showing X to Y of Z entries + page size + controls -->
             <div
-              class="border-t border-[var(--border-default)] px-[var(--spacing-sm)] py-[var(--spacing-xs)]"
+              class="border-t border-(--border-default) px-(--spacing-sm) py-(--spacing-xs)"
             >
               <Paginator
                 :total="filteredResultRows.length"

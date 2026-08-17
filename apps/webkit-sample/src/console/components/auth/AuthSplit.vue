@@ -80,9 +80,9 @@
       <div
         :data-entered="entered || null"
         :style="leadStyle"
-        class="flex -translate-x-6 flex-col px-[var(--spacing-xl)] py-[var(--spacing-xl)] opacity-0 data-[entered]:translate-x-0 data-[entered]:opacity-100 lg:min-h-0 lg:overflow-y-auto motion-reduce:translate-x-0 motion-reduce:opacity-100 motion-reduce:transition-none"
+        class="flex -translate-x-6 flex-col px-(--spacing-xl) py-(--spacing-xl) opacity-0 data-entered:translate-x-0 data-entered:opacity-100 lg:min-h-0 lg:overflow-y-auto motion-reduce:translate-x-0 motion-reduce:opacity-100 motion-reduce:transition-none"
       >
-        <div class="m-auto flex w-full flex-col items-center gap-[var(--spacing-md)]">
+        <div class="m-auto flex w-full flex-col items-center gap-(--spacing-md)">
           <slot />
         </div>
       </div>
@@ -100,7 +100,7 @@
         :tags="panelTags"
         :data-entered="entered || null"
         :style="followStyle"
-        class="translate-x-6 opacity-0 data-[entered]:translate-x-0 data-[entered]:opacity-100 motion-reduce:translate-x-0 motion-reduce:opacity-100 motion-reduce:transition-none"
+        class="translate-x-6 opacity-0 data-entered:translate-x-0 data-entered:opacity-100 motion-reduce:translate-x-0 motion-reduce:opacity-100 motion-reduce:transition-none"
       />
     </div>
   </AuthShell>

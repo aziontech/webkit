@@ -79,21 +79,21 @@
 </script>
 
 <template>
-  <div class="flex min-w-0 flex-col gap-[var(--spacing-sm)]">
+  <div class="flex min-w-0 flex-col gap-(--spacing-sm)">
     <!-- The explanation comes BEFORE the list it governs: selecting one row is not a
          local choice, and the reader needs to know that before they select. -->
-    <p class="text-body-sm text-[var(--text-muted)]">
+    <p class="text-body-sm text-(--text-muted)">
       A Deployment setting binds an application, and optionally a firewall and a custom page.
       Selecting one deploys into every environment and workload that uses it.
     </p>
 
-    <div class="flex flex-wrap items-center gap-[var(--spacing-sm)]">
+    <div class="flex flex-wrap items-center gap-(--spacing-sm)">
       <InputText
         v-model="search"
         size="large"
         :placeholder="`Search ${total} Deployment settings`"
         aria-label="Search Deployment settings"
-        class="min-w-36 grow basis-[var(--container-2xs)]"
+        class="min-w-36 grow basis-(--container-2xs)"
       >
         <template #iconLeft>
           <i
@@ -103,8 +103,8 @@
         </template>
       </InputText>
 
-      <div class="flex shrink-0 items-center gap-[var(--spacing-xs)]">
-        <span class="text-body-sm text-[var(--text-muted)]">{{ selected.length }} selected</span>
+      <div class="flex shrink-0 items-center gap-(--spacing-xs)">
+        <span class="text-body-sm text-(--text-muted)">{{ selected.length }} selected</span>
         <Button
           label="Select all"
           kind="text"
@@ -126,9 +126,9 @@
          "no results". -->
     <div
       v-if="!groups.length"
-      class="flex min-w-0 flex-col items-start gap-[var(--spacing-xs)] rounded-[var(--shape-elements)] border border-[length:var(--border-width-default)] border-dashed border-[var(--border-muted)] p-[var(--spacing-md)]"
+      class="flex min-w-0 flex-col items-start gap-(--spacing-xs) rounded-(--shape-elements) border border-(length:--border-width-default) border-dashed border-(--border-muted) p-(--spacing-md)"
     >
-      <p class="text-body-sm text-[var(--text-muted)]">No Deployment settings match this search.</p>
+      <p class="text-body-sm text-(--text-muted)">No Deployment settings match this search.</p>
       <Button
         label="Clear search"
         kind="text"
@@ -141,14 +141,14 @@
          impact tree, and a list that grows the page pushes both out of view. -->
     <div
       v-else
-      class="flex max-h-[var(--container-2xs)] min-w-0 flex-col gap-[var(--spacing-md)] overflow-y-auto"
+      class="flex max-h-(--container-2xs) min-w-0 flex-col gap-(--spacing-md) overflow-y-auto"
     >
       <section
         v-for="group in groups"
         :key="group.key"
-        class="flex min-w-0 flex-col gap-[var(--spacing-xs)]"
+        class="flex min-w-0 flex-col gap-(--spacing-xs)"
       >
-        <p class="text-label-sm text-[var(--text-muted)]">{{ group.label }}</p>
+        <p class="text-label-sm text-(--text-muted)">{{ group.label }}</p>
 
         <!-- SELECTABLE rows -->
         <template v-if="group.selectable">
@@ -160,28 +160,28 @@
             :aria-checked="isSelected(settings.id)"
             :aria-disabled="disabled || undefined"
             :data-selected="isSelected(settings.id) || null"
-            class="flex min-w-0 cursor-pointer items-start justify-between gap-[var(--spacing-sm)] rounded-[var(--shape-elements)] border border-[length:var(--border-width-default)] border-[var(--border-muted)] bg-[var(--bg-surface)] p-[var(--spacing-sm)] transition-colors duration-150 ease-out hover:border-[var(--border-default)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] data-[selected]:border-[var(--primary)] data-[selected]:bg-[var(--bg-selected)] motion-reduce:transition-none"
+            class="flex min-w-0 cursor-pointer items-start justify-between gap-(--spacing-sm) rounded-(--shape-elements) border border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface) p-(--spacing-sm) transition-colors duration-150 ease-out hover:border-(--border-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) data-selected:border-(--primary) data-selected:bg-(--bg-selected) motion-reduce:transition-none"
             @click="emit('toggle', settings.id)"
             @keydown="onKeydown($event, settings.id)"
           >
-            <span class="flex min-w-0 flex-col gap-[var(--spacing-xxs)]">
-              <span class="flex min-w-0 items-center gap-[var(--spacing-xs)]">
+            <span class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+              <span class="flex min-w-0 items-center gap-(--spacing-xs)">
                 <i
-                  class="ai ai-deploy-pillar shrink-0 text-[var(--text-muted)]"
+                  class="ai ai-deploy-pillar shrink-0 text-(--text-muted)"
                   aria-hidden="true"
                 />
-                <span class="truncate text-label-md text-[var(--text-default)]">
+                <span class="truncate text-label-md text-(--text-default)">
                   {{ settings.name }}
                 </span>
               </span>
 
               <!-- What the setting binds. This is the release's own content, so it reads as
                    a sentence rather than three tags competing with the environments. -->
-              <span class="truncate text-body-xs text-[var(--text-muted)]">
+              <span class="truncate text-body-xs text-(--text-muted)">
                 {{ bindingsLine(settings) }}
               </span>
 
-              <span class="flex min-w-0 flex-wrap items-center gap-[var(--spacing-xxs)]">
+              <span class="flex min-w-0 flex-wrap items-center gap-(--spacing-xxs)">
                 <Tag
                   v-for="name in envNames(settings).slice(0, ENV_LIMIT)"
                   :key="name"
@@ -210,7 +210,7 @@
               />
               <span
                 v-else
-                class="text-body-xs text-[var(--text-muted)]"
+                class="text-body-xs text-(--text-muted)"
               >
                 {{ workloadsLine(settings) }}
               </span>
@@ -235,14 +235,14 @@
           <div
             v-for="settings in group.items"
             :key="settings.id"
-            class="flex min-w-0 flex-col gap-[var(--spacing-xs)] rounded-[var(--shape-elements)] border border-[length:var(--border-width-default)] border-dashed border-[var(--border-muted)] p-[var(--spacing-sm)]"
+            class="flex min-w-0 flex-col gap-(--spacing-xs) rounded-(--shape-elements) border border-(length:--border-width-default) border-dashed border-(--border-muted) p-(--spacing-sm)"
           >
-            <span class="flex min-w-0 items-center gap-[var(--spacing-xs)]">
+            <span class="flex min-w-0 items-center gap-(--spacing-xs)">
               <i
-                class="pi pi-exclamation-circle shrink-0 text-[var(--warning-contrast)]"
+                class="pi pi-exclamation-circle shrink-0 text-(--warning-contrast)"
                 aria-hidden="true"
               />
-              <span class="truncate text-label-md text-[var(--text-default)]">
+              <span class="truncate text-label-md text-(--text-default)">
                 {{ settings.name }}
               </span>
               <Tag
@@ -252,7 +252,7 @@
                 class="shrink-0"
               />
             </span>
-            <p class="text-body-sm text-[var(--text-muted)]">{{ group.notice }}</p>
+            <p class="text-body-sm text-(--text-muted)">{{ group.notice }}</p>
             <Button
               class="self-start"
               :label="group.action"
