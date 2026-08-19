@@ -117,7 +117,15 @@ export function useSamplePreset() {
   return {
     plan: computed(() => preset.value.plan),
     planInfo: computed(() => planFor(preset.value.plan) ?? azionPlans[0]),
-    accountSwitcherVisible: computed(() => preset.value.accountSwitcher),
+    // The preference as the panel sets it — what the switch in the preset drawer binds
+    // to, so flipping it always moves.
+    accountSwitcher: computed(() => preset.value.accountSwitcher),
+    // Whether the header actually carries the account link, which the preference alone
+    // cannot decide: THE EMPTY VERSION HAS ONE TENANT (./sample-mode.js, ./accounts.js),
+    // and a switcher with nothing to switch to is a control that answers a question the
+    // reader did not have. So the empty account's chain is organization / workspace, and
+    // the account link comes back with the populated version.
+    accountSwitcherVisible: computed(() => preset.value.accountSwitcher && !accountEmpty.value),
     setPlan,
     setAccountSwitcher,
     mode,

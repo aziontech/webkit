@@ -38,6 +38,11 @@
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
+  import {
+    dismissAgentOnboarding,
+    restoreAgentOnboarding,
+    useAgentOnboarding
+  } from '@shared/lib/agent-onboarding'
   import { computed } from 'vue'
 
   import { SAMPLE_MODES } from '../../lib/state/sample-mode'
@@ -45,8 +50,15 @@
 
   const open = defineModel('open', { type: Boolean, default: false })
 
-  const { plan, setPlan, accountSwitcherVisible, setAccountSwitcher, mode, setMode } =
-    useSamplePreset()
+  const {
+    plan,
+    setPlan,
+    accountSwitcher: accountSwitcherPreference,
+    setAccountSwitcher,
+    mode,
+    setMode,
+    accountEmpty
+  } = useSamplePreset()
 
   // Written straight through on change — there is no Save. The screen beside the
   // drawer is the confirmation, and a preset with a Cancel would imply the console
@@ -61,10 +73,43 @@
     set: (value) => setMode(value)
   })
 
+  // Bound to the PREFERENCE, not to whether the link is on screen: the empty version
+  // hides the link whatever this says (../../lib/state/sample-preset.js), and a switch
+  // that snapped back to off would read as broken rather than as overridden.
   const accountSwitcher = computed({
-    get: () => accountSwitcherVisible.value,
+    get: () => accountSwitcherPreference.value,
     set: (value) => setAccountSwitcher(value)
   })
+
+  // The tenancy switch says what it does AND when it cannot: the empty account has one
+  // tenant, so the header drops the link in that version whatever this is set to. Saying
+  // so here is cheaper than leaving the reviewer to flip it and see nothing happen.
+  const accountSwitchingDescription = computed(() =>
+    accountEmpty.value
+      ? 'Adds the account link to the header chain — from the populated version on. The empty account has a single tenant, so its chain stays organization / workspace.'
+      : 'Adds the account link to the header chain. Organization and workspace always show.'
+  )
+
+  // GUIDANCE. The agent onboarding card is dismissible on the page and the answer is
+  // persisted (../../../shared/lib/agent-onboarding.js) — which, with no control anywhere
+  // to undo it, made "dismiss" a one-way door: the card never came back for that reader,
+  // on any screen, and reviewing it again meant clearing a localStorage key by hand. This
+  // is the way back, in the panel that already owns the sample's other remembered state.
+  //
+  // Bound POSITIVELY (on = the reader still has the card), so the switch reads the same way
+  // round as the flag the pages bind.
+  const { agentOnboardingVisible } = useAgentOnboarding()
+
+  const agentOnboarding = computed({
+    get: () => agentOnboardingVisible.value,
+    set: (value) => (value ? restoreAgentOnboarding() : dismissAgentOnboarding())
+  })
+
+  // Says where it shows AND that the first access is not affected: the three doors on an
+  // empty account are that screen's whole content, so they are not something a preset
+  // switch takes away.
+  const agentOnboardingDescription =
+    'Shows the agent setup card at the foot of the usage rail — the populated version of Home. The empty version always offers it as one of its three doors.'
 
   // What each version means on the screens that react to it, said once here rather
   // than left for the reviewer to discover by flipping it (../../lib/sample-mode.js
@@ -193,7 +238,19 @@
               <FieldSwitchBlock
                 v-model="accountSwitcher"
                 label="Account switching"
-                description="Adds the account link to the header chain, with the switch-account drawer behind it. Organization and workspace always show."
+                :description="accountSwitchingDescription"
+              />
+            </section>
+
+            <!-- GUIDANCE. Dismissing the card on Home is persisted, so without this the
+                 decision could not be undone from anywhere in the console — see the note in
+                 the script. -->
+            <section class="flex min-w-0 flex-col gap-(--spacing-sm)">
+              <h3 class="m-0 text-label-md text-(--text-default)">Guidance</h3>
+              <FieldSwitchBlock
+                v-model="agentOnboarding"
+                label="Agent onboarding"
+                :description="agentOnboardingDescription"
               />
             </section>
           </div>

@@ -825,8 +825,8 @@
                  same user is on three different contracts in three organizations, and
                  a tier tagged onto their name claims otherwise. It rides the
                  organization instead, in the header's org switcher
-                 (./OrgSwitcher.vue), which is the thing the contract is actually
-                 against. -->
+                 (./AccountSwitcher.vue, kind="organization"), which is the thing the
+                 contract is actually against. -->
             <template #top>
               <div class="flex min-w-0 flex-col">
                 <span class="truncate text-label-md text-(--text-default)">

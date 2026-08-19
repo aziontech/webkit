@@ -38,13 +38,16 @@
   const elements = computed(() => marbleElements(props.name, colors.value.length))
   const fillOf = (index) => ({ fill: colors.value[elements.value[index].colorIndex] })
 
-  // `small` is 20px, not the design system Avatar's 24px: it is the mark inside
-  // the header's identity pills, whose box is 20 + 4 top + 4 bottom = 28. The
-  // other two match the Avatar scale (32 / 48) — the list rows and anything
-  // that shows an org at rest.
+  // The scale is named for where the mark is used, not for the Avatar's own steps.
+  //
+  // `medium` is 24 — the DS Avatar's `small` — and it is the mark the tenancy
+  // switcher wears in both places it appears: the header pill and the panel rows,
+  // beside the account's and workspace's own 24px marks (./AccountSwitcher.vue).
+  // `small` (20) is the compact mark for a form that previews an org inline, and
+  // `large` (48) the org at rest in the create flow and onboarding.
   const sizeClasses = {
     small: 'size-(--size-5)',
-    medium: 'size-(--size-8)',
+    medium: 'size-(--size-6)',
     large: 'size-(--size-12)'
   }
 </script>

@@ -13,7 +13,7 @@
   //
   // Nothing in this console links to "Change plan" as a page. The drawer opens
   // because an action was refused — today, creating a second organization on Hobby
-  // (./OrgSwitcher.vue) — so it is handed the sentence that says which action, and it
+  // (../shell/AccountSwitcher.vue) — so it is handed the sentence that says which action, and it
   // says it above the cards. A pricing table with no such line is a page that appeared
   // for no reason the reader can name.
   //

@@ -88,12 +88,18 @@ export const accountInitials = (name) => {
   return (words[0] ?? '').slice(0, 2).toUpperCase()
 }
 
-// The account the operator is logged into by default — the first (root) Azion
-// account. Also present in the Clients list, so it shows a "Current account"
-// marker when that type is browsed. Exported because it is also the middle link
-// of the scope that owns every seeded resource row (see lib/tenancy-scope.js):
-// the app boots into the full lists, and switching away projects them.
-export const FIRST_ACCOUNT_ID = 6
+// WHERE THE SAMPLE OPENS: Caixa Econômica Federal, a client account.
+//
+// Not the first row of the roster, which is why this is named for booting and not
+// for being first (its counterpart FIRST_ORGANIZATION_ID happens to be both). A
+// client is what an operator actually logs in as — the reseller and group levels
+// above it exist to be browsed, not inhabited — so the sample should open inside
+// one, with real workloads under it and a brand mark on the header pill.
+//
+// Exported because it is also the middle link of the scope that owns every seeded
+// resource row (see ./tenancy-scope.js): the app boots into the full lists, and
+// switching away projects them.
+export const BOOT_ACCOUNT_ID = 28836
 
 // Seeded tenants across all four levels, linked into one tree by `parentId`
 // (null = a root under the organization). Client accounts are named after the
@@ -130,14 +136,14 @@ const seedAccounts = [
   { id: 9088, name: 'Digital Commerce', clientId: '4710q', type: 'group', parentId: 4471 },
   { id: 9140, name: 'Enterprise Accounts', clientId: '4881r', type: 'group', parentId: 4519 },
 
-  // Clients — one per customer. The five with a `lastAccessed` are the ones the
-  // header's switcher offers as "recently accessed" (it caps at five, current
-  // included); the rest are reachable through the full tree in the Switch
-  // Account drawer. Every one is `active`: these are real companies, and a
-  // seeded "suspended" against a real name states something about them that
-  // isn't ours to state.
+  // Clients — one per customer. The header's switcher lists every account below
+  // (the whole roster, minus the organization root), so `lastAccessed` is no longer
+  // what decides who appears there; it is the "Last accessed" column of the Manage
+  // Resources page. Every one is `active`: these are real companies, and a seeded
+  // "suspended" against a real name states something about them that isn't ours to
+  // state.
   {
-    id: FIRST_ACCOUNT_ID,
+    id: 6,
     name: 'Magalu',
     clientId: '0001a',
     type: 'client',
@@ -180,7 +186,7 @@ const seedAccounts = [
     labels: ['delivery']
   },
   {
-    id: 28836,
+    id: BOOT_ACCOUNT_ID,
     name: 'Caixa Econômica Federal',
     clientId: '3493x',
     type: 'client',
@@ -188,23 +194,52 @@ const seedAccounts = [
     lastAccessed: '1 month ago',
     status: 'active',
     charges: '3,910.75'
-  }
+  },
+
+  // The four customers this repo already owns a square brand mark for but had no
+  // account to show it on: GPA and Itaú ship a purpose-drawn 24px tile
+  // (../../../shared/ui/brand/clients/symbols/), Renner and HeroSpark a white symbol
+  // the site's own home page paints on their brand colour. Same minimal shape as LWSA
+  // above — a real company, an id and a segment, and no invented metrics: the Manage
+  // Resources table renders "—" for what a seed does not claim.
+  { id: 21447, name: 'GPA', clientId: '2298k', type: 'client', parentId: 9032, status: 'active' },
+  {
+    id: 18932,
+    name: 'Renner',
+    clientId: '3120m',
+    type: 'client',
+    parentId: 9032,
+    status: 'active'
+  },
+  {
+    id: 40118,
+    name: 'HeroSpark',
+    clientId: '4880t',
+    type: 'client',
+    parentId: 9088,
+    status: 'active'
+  },
+  { id: 12903, name: 'Itaú', clientId: '1075n', type: 'client', parentId: 9140, status: 'active' }
 ]
 
 const allAccounts = ref(seedAccounts)
-const currentAccountId = ref(FIRST_ACCOUNT_ID)
+const currentAccountId = ref(BOOT_ACCOUNT_ID)
 
 // THE EMPTY VERSION HAS ONE ACCOUNT (./lib/sample-mode.js).
 //
 // A brand-new customer is a single tenant: there is no Brand → Reseller → Group →
-// Client tree above them, so the roster is the one account they operate and the
-// switcher — when the preset shows it at all — has nothing to switch to. Same
-// projection shape as the organization roster next door: one source, no fork, and
-// flipping the preset back restores the whole tree.
+// Client tree above them, so the roster is the one account they operate and there is
+// nothing to switch to — which is why the header drops the account link entirely in
+// this version and the chain reads organization / workspace (../state/sample-preset.js
+// derives that; the preference alone cannot show a link with one tenant behind it).
+// The roster still projects to that one account, because everything else in the
+// console — the profile, Account Settings, the resource scope — still asks who it is.
+// Same shape as the organization roster next door: one source, no fork, and flipping
+// the version back restores the whole tree.
 const accounts = computed(() => {
   if (!accountEmpty.value) return allAccounts.value
   const own =
-    allAccounts.value.find((account) => account.id === FIRST_ACCOUNT_ID) ?? allAccounts.value[0]
+    allAccounts.value.find((account) => account.id === BOOT_ACCOUNT_ID) ?? allAccounts.value[0]
   return own ? [{ ...own, parentId: null }] : []
 })
 

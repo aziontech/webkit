@@ -35,7 +35,7 @@
 // already follows: a resource the operator just created in the empty account is
 // theirs, and watching it appear in a console that had nothing is the whole point
 // of walking the empty version.
-import { FIRST_ACCOUNT_ID, useAccounts } from './accounts'
+import { BOOT_ACCOUNT_ID, useAccounts } from './accounts'
 import { FIRST_ORGANIZATION_ID, useOrganizations } from './organizations'
 import { useSampleMode } from './sample-mode'
 import { useWorkspaces } from './workspaces'
@@ -76,11 +76,11 @@ const seededIds = new Map()
 
 const idOf = (row, index) => String(row?.id ?? index)
 
-// Where the app opens: the first organization, the first account, and that
-// account's first workspace (the switchers seed no explicit workspace pick).
+// Where the app opens: the first organization, the boot account (./accounts.js), and
+// that account's first workspace (the switchers seed no explicit workspace pick).
 const atBootScope = () =>
   currentOrganizationId.value === FIRST_ORGANIZATION_ID &&
-  currentAccountId.value === FIRST_ACCOUNT_ID &&
+  currentAccountId.value === BOOT_ACCOUNT_ID &&
   currentWorkspace.value?.id === workspaces.value[0]?.id
 
 // The rows of `scope` (a module key: 'applications', 'edge-dns', …) that the

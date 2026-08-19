@@ -32,9 +32,7 @@
   import { endSession } from '../../lib/state/session'
   import AccountSwitcher from './AccountSwitcher.vue'
   import AppSidebar from './AppSidebar.vue'
-  import OrgSwitcher from './OrgSwitcher.vue'
   import SamplePresetDrawer from './SamplePresetDrawer.vue'
-  import WorkspaceSwitcher from './WorkspaceSwitcher.vue'
 
   const props = defineProps({
     // Sidebar item id to render as selected.
@@ -316,7 +314,9 @@
             aria-hidden="true"
             >/</span
           >
-          <OrgSwitcher />
+          <!-- One component per link — the switcher is the same control at every
+               level of the chain, told which level it is (./AccountSwitcher.vue). -->
+          <AccountSwitcher kind="organization" />
 
           <!-- The account link, and only when the preset says this customer has more
                than one account to be (../../lib/sample-preset.js). The separator is
@@ -328,10 +328,7 @@
               aria-hidden="true"
               >/</span
             >
-            <AccountSwitcher
-              @select="onAccountSelect"
-              @navigate="onNavigate"
-            />
+            <AccountSwitcher kind="account" />
           </template>
 
           <!-- The innermost link is the first thing the chain gives up: below `md`
@@ -344,7 +341,7 @@
               aria-hidden="true"
               >/</span
             >
-            <WorkspaceSwitcher />
+            <AccountSwitcher kind="workspace" />
           </div>
         </div>
 
