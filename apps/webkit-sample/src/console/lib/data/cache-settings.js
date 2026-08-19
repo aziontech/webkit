@@ -186,3 +186,21 @@ export const addCacheSetting = (record) => {
   cacheSettings.value = [created, ...cacheSettings.value]
   return created
 }
+
+/**
+ * Rewrites a setting in place, keeping its id and its position in the list — an edit
+ * is not a create, so it must not jump to the top of the table the reader opened it
+ * from. The record REPLACES the stored one rather than merging into it: the drawer
+ * carries the whole request body, so a field cleared there has to be cleared here
+ * too, which a merge would silently keep.
+ */
+export const updateCacheSetting = (id, record) => {
+  const modifiedAt = new Date()
+  let updated
+  cacheSettings.value = cacheSettings.value.map((setting) => {
+    if (setting.id !== id) return setting
+    updated = decorate({ id, ...record, modifiedAt })
+    return updated
+  })
+  return updated
+}

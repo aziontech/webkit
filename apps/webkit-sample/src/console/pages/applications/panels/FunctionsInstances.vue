@@ -201,10 +201,33 @@
     errors.args = ''
   }
 
-  // ── LARGE create drawer — the Functions Instance itself ───────────────────
+  /**
+   * Stored arguments as the editor shows them. The record keeps what was POSTED —
+   * `JSON.stringify` with no spacing — and a one-line object is not something anyone
+   * edits, so it is re-indented on the way in. Unparseable text is handed back
+   * verbatim rather than swallowed: the reader has to see what is there to fix it.
+   */
+  const prettyArgs = (args) => {
+    try {
+      return JSON.stringify(JSON.parse(args ?? EMPTY_ARGS), null, 2)
+    } catch {
+      return args ?? EMPTY_ARGS
+    }
+  }
+
+  // ── LARGE drawer — the Functions Instance itself, created AND edited ──────
+  // ONE drawer for both, the shape Rules Engine settled (../CreateRuleDrawer.vue):
+  // an instance's anatomy — the name, the function it binds, the arguments it runs
+  // with — is the same whether it is being written or corrected, and a second
+  // read-only surface for it would be another place the arguments editor has to be
+  // kept in step with. `editing` is what tells the drawer which it is.
+  //
+  // THE ROW IS THE WAY IN. The Arguments column shows a fragment of a JSON object;
+  // the instance ITSELF is that object plus the binding around it, so clicking the
+  // row opens the whole thing in the form that writes it — the create-surface rule's
+  // answer for editing inside a resource (../../lib/surfaces.js).
   const createOpen = ref(false)
-  // Opened from the page's tab row (ApplicationDetail).
-  defineExpose({ openCreate: () => (createOpen.value = true) })
+  const editing = ref(null)
   // One field per property of the request body the endpoint takes (see the header).
   // THE SELECTED FUNCTION'S FORM. `azion_form` belongs to the FUNCTION; the instance
   // only answers it. Empty (or absent) means this function declares no form, and the
@@ -242,8 +265,38 @@
     seedArgs(value)
   }
 
+  const openCreate = () => {
+    editing.value = null
+    createOpen.value = true
+  }
+
+  // Seeded from a COPY of the row, never the record itself: the fields write into
+  // `form` as they are typed, and pointing them at the stored object would rewrite the
+  // row behind the drawer while the reader is still deciding — including if they leave.
+  //
+  // The arguments open as they were SAVED, pretty-printed, and are NOT re-seeded from
+  // the function's `default_args`: those are the honest starting point for a NEW
+  // instance, and the worst possible thing to do to an existing one's values.
+  const openInstance = (event, row) => {
+    editing.value = row
+    form.name = row.name
+    form.functionId = row.functionId
+    form.args = prettyArgs(row.args)
+    submitted.value = false
+    errors.name = ''
+    errors.functionId = ''
+    errors.args = ''
+    createOpen.value = true
+  }
+
+  // Opened from the page's tab row (ApplicationDetail).
+  defineExpose({ openCreate })
+
+  // Reset on close, so reopening never shows the last attempt's values or errors —
+  // and never opens the create with the last edit's record still behind it.
   watch(createOpen, (open) => {
     if (open) return
+    editing.value = null
     form.name = ''
     form.functionId = ''
     form.args = EMPTY_ARGS
@@ -289,33 +342,73 @@
       await sleep(900)
       const name = form.name.trim()
 
-      // Stands in for `POST /v4/workspace/applications/{id}/functions`. The row keeps
-      // what that body carries — `active` is posted as `true` and never asked for, so a
-      // new instance lands Active — plus the modification this side owns, so the Last
-      // Modified column answers for it immediately instead of leaving a blank cell.
+      // Stands in for `POST /v4/workspace/applications/{id}/functions` (and `PATCH`
+      // on the same path for an edit). The row keeps what that body carries — plus
+      // the modification this side owns, so the Last Modified column answers for it
+      // immediately instead of leaving a blank cell.
       const modifiedAt = new Date()
-      instances.value = [
-        withAuthor({
-          id: `fi-${modifiedAt.getTime()}`,
-          name,
-          functionId: form.functionId,
-          args: JSON.stringify(parsedArgs()),
-          active: true,
-          modifiedAt
-        }),
-        ...instances.value
-      ]
+      const previous = editing.value
 
-      // The other half of the relationship: the module's Instances column is this count.
-      countInstance(form.functionId)
+      if (previous) {
+        // An edit REWRITES the row in place: an edit is not a create, so it keeps its
+        // id and its position rather than jumping to the top of the list the reader
+        // opened it from. `active` is the binding's own state and is not asked for in
+        // this form, so it is carried across rather than reset to the create's `true`.
+        instances.value = instances.value.map((instance) =>
+          instance.id === previous.id
+            ? withAuthor({
+                ...instance,
+                name,
+                functionId: form.functionId,
+                args: JSON.stringify(parsedArgs()),
+                modifiedAt
+              })
+            : instance
+        )
 
-      toast.success(`Functions Instance "${name}" created.`)
+        // REBINDING MOVES THE COUNT. The Instances column in the Functions module is
+        // the number of applications instancing that function, so pointing this
+        // instance at a different one has to take it off the old function as well as
+        // put it on the new — otherwise the module's list keeps counting a binding
+        // that no longer exists.
+        if (previous.functionId !== form.functionId) {
+          countInstance(previous.functionId, -1)
+          countInstance(form.functionId)
+        }
+
+        toast.success(`Functions Instance "${name}" saved.`)
+      } else {
+        instances.value = [
+          withAuthor({
+            id: `fi-${modifiedAt.getTime()}`,
+            name,
+            functionId: form.functionId,
+            // `active` is posted as `true` and never asked for, so a new instance
+            // lands Active.
+            args: JSON.stringify(parsedArgs()),
+            active: true,
+            modifiedAt
+          }),
+          ...instances.value
+        ]
+
+        // The other half of the relationship: the module's Instances column is this count.
+        countInstance(form.functionId)
+
+        toast.success(`Functions Instance "${name}" created.`)
+      }
+
       createOpen.value = false
     } catch (error) {
-      toast.error('Could not create the functions instance.', {
-        description: error?.message ?? 'Check your connection and try again.',
-        action: { label: 'Retry', onClick: () => submit() }
-      })
+      toast.error(
+        editing.value
+          ? 'Could not save the functions instance.'
+          : 'Could not create the functions instance.',
+        {
+          description: error?.message ?? 'Check your connection and try again.',
+          action: { label: 'Retry', onClick: () => submit() }
+        }
+      )
     } finally {
       submitting.value = false
     }
@@ -400,6 +493,10 @@
         DRAFT_KEY,
         JSON.stringify({
           path: route.path,
+          // WHICH instance was open, so a hop taken mid-EDIT comes back to that edit
+          // rather than to a create carrying the edited values — which would fork the
+          // row into a second one on save.
+          editingId: editing.value?.id ?? '',
           name: form.name,
           functionId: form.functionId,
           args: form.args
@@ -430,6 +527,9 @@
     const draft = readDraft()
     const createdId = route.query.created ? String(route.query.created) : ''
 
+    editing.value = draft?.editingId
+      ? (instances.value.find((instance) => instance.id === draft.editingId) ?? null)
+      : null
     form.name = draft?.name ?? ''
     form.functionId = createdId || draft?.functionId || ''
     form.args = draft?.args ?? EMPTY_ARGS
@@ -503,7 +603,14 @@
               row-key="id"
               enable-sorting
               :border="false"
+              @row-click="openInstance"
             >
+              <!-- The principal column reads as the way in it is — the row opens the
+                   instance in the same drawer that creates one. -->
+              <template #cell-name="{ value }">
+                <span class="truncate cursor-pointer hover:underline">{{ value }}</span>
+              </template>
+
               <!-- The binding, rendered as what it is: a pointer at a record another
                    module owns — the console's cross-module cell (truncating name +
                    arrow), not a standalone Link component. A function that has since
@@ -573,7 +680,7 @@
 
     <ResourceDrawer
       v-model:open="createOpen"
-      title="Add Functions Instance"
+      :title="editing ? 'Edit Functions Instance' : 'Add Functions Instance'"
       :submitting="submitting"
       @submit="submit"
     >

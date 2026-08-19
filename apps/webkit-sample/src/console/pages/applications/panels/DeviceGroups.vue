@@ -45,6 +45,7 @@
     addDeviceGroup,
     DEVICE_GROUP_NAME_PATTERN,
     DEVICE_GROUP_NAME_RULE,
+    updateDeviceGroup,
     useDeviceGroups
   } from '../../../lib/data/device-groups'
 
@@ -62,17 +63,46 @@
   // here has to be selectable there in the same session.
   const deviceGroups = useDeviceGroups()
 
-  // ── Create ────────────────────────────────────────────────────────────────
+  // ── Create and edit ───────────────────────────────────────────────────────
+  // ONE drawer for both, the shape Rules Engine settled (../CreateRuleDrawer.vue):
+  // a device group's anatomy is the same whether it is being written or corrected,
+  // and a second read-only surface for it would be one more place the two fields
+  // have to be kept in step with. `editing` is what tells the drawer which it is.
+  //
+  // THE ROW IS THE WAY IN. A group's record is its name and its regex — the whole
+  // form — so clicking the row opens that form seeded with it, which is the
+  // create-surface rule's answer for editing inside a resource (../../lib/surfaces.js).
   const createOpen = ref(false)
-  // Opened from the page's tab row (ApplicationDetail).
-  defineExpose({ openCreate: () => (createOpen.value = true) })
+  const editing = ref(null)
   const form = reactive({ name: '', userAgent: '' })
   const errors = reactive({ name: '', userAgent: '' })
   const submitting = ref(false)
 
-  // Reset on close, so reopening never shows the last attempt's values or errors.
+  const openCreate = () => {
+    editing.value = null
+    createOpen.value = true
+  }
+
+  // Seeded from a COPY of the row, never the record itself: the fields write into
+  // `form` as they are typed, and pointing them at the stored object would rewrite the
+  // row behind the drawer while the reader is still deciding — including if they leave.
+  const openGroup = (event, row) => {
+    editing.value = row
+    form.name = row.name
+    form.userAgent = row.userAgent
+    errors.name = ''
+    errors.userAgent = ''
+    createOpen.value = true
+  }
+
+  // Opened from the page's tab row (ApplicationDetail).
+  defineExpose({ openCreate })
+
+  // Reset on close, so reopening never shows the last attempt's values or errors —
+  // and never opens the create with the last edit's record still behind it.
   watch(createOpen, (open) => {
     if (open) return
+    editing.value = null
     form.name = ''
     form.userAgent = ''
     errors.name = ''
@@ -99,14 +129,23 @@
     submitting.value = true
     try {
       await sleep(900)
-      addDeviceGroup({ name: form.name.trim(), userAgent: form.userAgent.trim() })
-      toast.success(`Device Group "${form.name.trim()}" created.`)
+      const record = { name: form.name.trim(), userAgent: form.userAgent.trim() }
+      if (editing.value) {
+        updateDeviceGroup(editing.value.id, record)
+        toast.success(`Device Group "${record.name}" saved.`)
+      } else {
+        addDeviceGroup(record)
+        toast.success(`Device Group "${record.name}" created.`)
+      }
       createOpen.value = false
     } catch (error) {
-      toast.error('Could not create the device group.', {
-        description: error?.message ?? 'Check your connection and try again.',
-        action: { label: 'Retry', onClick: () => submit() }
-      })
+      toast.error(
+        editing.value ? 'Could not save the device group.' : 'Could not create the device group.',
+        {
+          description: error?.message ?? 'Check your connection and try again.',
+          action: { label: 'Retry', onClick: () => submit() }
+        }
+      )
     } finally {
       submitting.value = false
     }
@@ -158,7 +197,14 @@
               row-key="id"
               enable-sorting
               :border="false"
+              @row-click="openGroup"
             >
+              <!-- The principal column reads as the way in it is — the row opens the
+                   group in the same drawer that creates one. -->
+              <template #cell-name="{ value }">
+                <span class="truncate cursor-pointer hover:underline">{{ value }}</span>
+              </template>
+
               <!-- WHO changed the group and WHEN, in one column: the modifier's avatar
                    (name on its tooltip) over the relative time — the same cell every
                    console list ends on (ui/LastModifiedCell.vue), which is why there is
@@ -179,7 +225,7 @@
 
     <ResourceDrawer
       v-model:open="createOpen"
-      title="Add Device Group"
+      :title="editing ? 'Edit Device Group' : 'Add Device Group'"
       :submitting="submitting"
       @submit="submit"
     >

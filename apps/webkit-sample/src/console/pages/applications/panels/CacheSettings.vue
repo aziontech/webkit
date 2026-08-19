@@ -63,10 +63,12 @@
     cacheSummary,
     DEVICE_VARY_BEHAVIORS,
     EDGE_CACHE_BEHAVIORS,
+    fromList,
     optionLabel,
     optionsLabel,
     TIERED_CACHE_TOPOLOGIES,
     toList,
+    updateCacheSetting,
     useCacheSettings,
     VARY_BEHAVIORS
   } from '../../../lib/data/cache-settings'
@@ -98,10 +100,19 @@
     }))
   )
 
-  // ── Create ────────────────────────────────────────────────────────────────
+  // ── Create and edit ───────────────────────────────────────────────────────
+  // ONE drawer for both, the shape Rules Engine settled (../CreateRuleDrawer.vue):
+  // a cache setting's anatomy is the same whether it is being written or corrected,
+  // and a second read-only surface for it would be a third place the four bands have
+  // to be kept in step with. `editing` is what tells the drawer which it is.
+  //
+  // THE ROW IS THE WAY IN. The table summarises a setting in four cells; the setting
+  // ITSELF is the whole request body, so clicking the row opens that body in the form
+  // that writes it — the create-surface rule's answer for editing inside a resource
+  // (../../lib/surfaces.js). The summary columns are a way to FIND the setting, never
+  // a substitute for reading it.
   const createOpen = ref(false)
-  // Opened from the page's tab row (ApplicationDetail).
-  defineExpose({ openCreate: () => (createOpen.value = true) })
+  const editing = ref(null)
 
   // Defaults are the endpoint's own: honor the origin in the browser, override at the
   // edge at 60s — the TTL floor for an application without Application Accelerator.
@@ -126,9 +137,73 @@
     deviceGroups: []
   })
 
+  /**
+   * A stored setting as the flat form the drawer edits — the inverse of what `submit`
+   * builds. Everything falls back to the blank form's value, because the seed records
+   * (and any setting created before a field existed) carry only part of the body: a
+   * missing Advanced band must open on its defaults, not on `undefined`.
+   *
+   * A TTL is only read back when the behavior that uses it is in effect. A setting
+   * that honors the origin stores `maxAge: 0`, and seeding the field with that would
+   * hand the reader a 0-second cache the moment they switched to Override.
+   */
+  const ttlOf = (cache, fallback) =>
+    cache?.behavior === 'override' ? (cache.maxAge ?? fallback) : fallback
+
+  const formFor = (setting) => {
+    const blank = blankForm()
+    if (!setting) return blank
+
+    const accelerator = setting.applicationAccelerator ?? {}
+    const queryString = accelerator.queryString ?? {}
+    const cookies = accelerator.cookies ?? {}
+    const devices = accelerator.devices ?? {}
+    const largeFile = setting.largeFileCache ?? {}
+
+    return {
+      ...blank,
+      name: setting.name ?? blank.name,
+      browserBehavior: setting.browserCache?.behavior ?? blank.browserBehavior,
+      browserMaxAge: ttlOf(setting.browserCache, blank.browserMaxAge),
+      edgeBehavior: setting.edgeCache?.behavior ?? blank.edgeBehavior,
+      edgeMaxAge: ttlOf(setting.edgeCache, blank.edgeMaxAge),
+      staleCache: setting.staleCache ?? blank.staleCache,
+      largeFileCache: largeFile.enabled ?? blank.largeFileCache,
+      largeFileOffset: largeFile.offset ?? blank.largeFileOffset,
+      tieredCache: setting.tieredCache ?? blank.tieredCache,
+      tieredTopology: setting.tieredTopology ?? blank.tieredTopology,
+      varyByMethod: [...(accelerator.varyByMethod ?? blank.varyByMethod)],
+      queryStringBehavior: queryString.behavior ?? blank.queryStringBehavior,
+      queryStringFields: fromList(queryString.fields),
+      queryStringSort: queryString.sortEnabled ?? blank.queryStringSort,
+      cookiesBehavior: cookies.behavior ?? blank.cookiesBehavior,
+      cookieNames: fromList(cookies.cookieNames),
+      devicesBehavior: devices.behavior ?? blank.devicesBehavior,
+      deviceGroups: [...(devices.deviceGroup ?? blank.deviceGroups)]
+    }
+  }
+
   const form = reactive(blankForm())
   const errors = reactive({ name: '' })
   const submitting = ref(false)
+
+  const openCreate = () => {
+    editing.value = null
+    createOpen.value = true
+  }
+
+  // Seeded from a COPY of the row, never the record itself: the fields write into
+  // `form` as they are typed, and pointing them at the stored object would rewrite the
+  // row behind the drawer while the reader is still deciding — including if they leave.
+  const openSetting = (event, row) => {
+    editing.value = row
+    Object.assign(form, formFor(row))
+    errors.name = ''
+    createOpen.value = true
+  }
+
+  // Opened from the page's tab row (ApplicationDetail).
+  defineExpose({ openCreate })
 
   // Which dependent fields apply. Each one is the condition the API itself puts on
   // the field: `max_age` is only read when the behavior overrides, `fields` only when
@@ -150,8 +225,11 @@
   const methodsLabel = (values) => optionsLabel(CACHEABLE_METHODS, values)
   const deviceGroupsLabel = (values) => optionsLabel(deviceGroups.value, values)
 
+  // Reset on close, so reopening never shows the last attempt's values or errors —
+  // and never opens the create with the last edit's record still behind it.
   watch(createOpen, (open) => {
     if (open) return
+    editing.value = null
     Object.assign(form, blankForm())
     errors.name = ''
   })
@@ -171,7 +249,7 @@
       const name = form.name.trim()
       // Built the way the endpoint reads it — a field that does not apply is not sent,
       // so a setting that honors the origin never carries a TTL nobody set.
-      addCacheSetting({
+      const record = {
         name,
         browserCache: {
           behavior: form.browserBehavior,
@@ -203,14 +281,26 @@
             deviceGroup: devicesListed.value ? form.deviceGroups : []
           }
         }
-      })
-      toast.success(`Cache Settings "${name}" created.`)
+      }
+
+      if (editing.value) {
+        updateCacheSetting(editing.value.id, record)
+        toast.success(`Cache Settings "${name}" saved.`)
+      } else {
+        addCacheSetting(record)
+        toast.success(`Cache Settings "${name}" created.`)
+      }
       createOpen.value = false
     } catch (error) {
-      toast.error('Could not create the cache settings.', {
-        description: error?.message ?? 'Check your connection and try again.',
-        action: { label: 'Retry', onClick: () => submit() }
-      })
+      toast.error(
+        editing.value
+          ? 'Could not save the cache settings.'
+          : 'Could not create the cache settings.',
+        {
+          description: error?.message ?? 'Check your connection and try again.',
+          action: { label: 'Retry', onClick: () => submit() }
+        }
+      )
     } finally {
       submitting.value = false
     }
@@ -262,7 +352,14 @@
               row-key="id"
               enable-sorting
               :border="false"
+              @row-click="openSetting"
             >
+              <!-- The principal column reads as the way in it is — the row opens the
+                   setting in the same drawer that creates one. -->
+              <template #cell-name="{ value }">
+                <span class="truncate cursor-pointer hover:underline">{{ value }}</span>
+              </template>
+
               <!-- A second cache layer is on or it is not, so the cell is a state and
                    not a value: a Tag when it is in play, muted text when it is not. -->
               <template #cell-tieredCache="{ row }">
@@ -298,7 +395,7 @@
 
     <ResourceDrawer
       v-model:open="createOpen"
-      title="Add Cache Settings"
+      :title="editing ? 'Edit Cache Settings' : 'Add Cache Settings'"
       :submitting="submitting"
       @submit="submit"
     >

@@ -35,7 +35,12 @@
   // THE ROW OPENS THE RULE. A rule's record is its criteria and its behaviors, which
   // is a whole form, so the row is a way IN to the same drawer that creates one
   // (../../components/CreateRuleDrawer.vue) seeded with the rule — the create-surface
-  // rule's answer for editing inside a resource.
+  // rule's answer for editing inside a resource, and the same gesture the three list
+  // tabs beside this one answer to.
+  //
+  // The ORDER CELL is the exception, and it stops the click itself: its four controls
+  // (the position field, the grip, the two chevrons) are how the row is MOVED, and a
+  // reorder that also opened a form would make every nudge cost a dismissal.
   //
   // SO THE ROW DOES NOT SUMMARISE THE CRITERIA. It identifies the rule and says who
   // touched it last: name, description, status, Last Modified — the four columns every
@@ -627,7 +632,13 @@
                         @dragover.prevent
                         @drop="drop(index)"
                       >
-                        <Table.Row>
+                        <!-- THE ROW OPENS THE RULE, from anywhere that is not a
+                             control: the same drawer the name cell opens, so the
+                             whole row is the target the reader aims at rather than
+                             one word of it. The order cell stops the click (below) —
+                             a position typed or a chevron nudged is that control's
+                             click, not a request to open the form. -->
+                        <Table.Row @click="openRule(rule)">
                           <!-- THE ORDER CELL: the position — typed — the grip, and the two
                          buttons that nudge it one step without a pointer. All four drive
                          one `move`/`moveTo` and all four read one `canMove`, so a rule
@@ -637,6 +648,7 @@
                           <Table.Cell
                             align="center"
                             class="w-48 flex-none! gap-(--spacing-xxs)"
+                            @click.stop
                           >
                             <!-- THE POSITION IS A FIELD, and it is the only control here
                                  that crosses a long list in one action. Committed on Enter

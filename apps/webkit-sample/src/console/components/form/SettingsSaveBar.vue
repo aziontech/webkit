@@ -91,6 +91,7 @@
   // a legitimate one-click way to resolve a navigation. A create page's commit CREATES
   // something, which is why the guard does not offer it there.
   import Button from '@aziontech/webkit/button'
+  import { nextTick, onScopeDispose, ref, watch } from 'vue'
 
   import UnsavedChangesGuard from './UnsavedChangesGuard.vue'
 
@@ -128,6 +129,131 @@
   })
 
   const emit = defineEmits(['save', 'discard'])
+
+  // ── WHAT THE BAR COVERS, AND GIVING IT BACK ───────────────────────────────
+  //
+  // A floating card over a scroll region takes something from it: the rows under the
+  // card cannot be scrolled out from under it, because the region's scroll ENDS at its
+  // own bottom edge and the bar is parked there. Measured on an application's Main
+  // Settings and on a function's Arguments tab — at MAXIMUM scroll the last row was
+  // still behind the card — so the last field of a settings page was unreachable for
+  // exactly as long as there were unsaved changes, which is whenever the reader is
+  // working. The bar has to hand that band back.
+  //
+  // IT GIVES BACK ITS OWN STRIP, not padding on somebody else's box. Padding the
+  // scrollport is the obvious move and it is wrong: the strip is `sticky bottom-0`
+  // INSIDE that port, so shrinking the port's content box lifts the CARD by the same
+  // amount instead of lowering the content — measured, the bar left the bottom edge,
+  // floated 90px up, and the last row was still under it.
+  //
+  // A strip with real height is the opposite. It is the last thing in the column, so
+  // either the page grows by the card's footprint (a content-sized column: the
+  // scrollport gains exactly that much scroll) or a scrolling sibling gives up that
+  // much height (a viewport-sized column: the region ends where the bar begins, and
+  // gains the same scroll). Both readings end with every row reachable and the card
+  // still pinned to the bottom edge. `shrink-0` is what makes the second one true —
+  // the card is absolutely positioned, so the strip has no content of its own and a
+  // flex column that is already full will otherwise shrink it straight back to zero.
+  //
+  // WHEN THE STRIP STAYS AT ZERO. In a column whose height is the viewport's and whose
+  // flexible child does NOT scroll (a function's editor), the height buys nothing: the
+  // editor just loses 90px to a bar that was never in its way. So the reserve is
+  // applied and then CHECKED against the only thing it is for — how much scroll is
+  // reachable around it. No gain, no reserve.
+  //
+  // AND WHERE NO SIBLING CAN REACH — a function's Arguments pane scrolls several
+  // levels below a sibling, not beside one. The footprint is also published as
+  // `--save-bar-inset` on the document root so such a pane can add it to its own
+  // padding (see ../function/FunctionArgsForm.vue). `0rem` when there is no bar.
+  //
+  // `offsetHeight`, not `getBoundingClientRect()`: the bar arrives under a `scale-95`
+  // enter transition and a bounding rect includes that transform, so the first
+  // measurement would be 5% short of the height the bar settles at.
+  const strip = ref(null)
+  const shell = ref(null)
+  /** The height the strip holds for the card. 0 = the strip contributes no layout. */
+  const reserved = ref(0)
+  let observer = null
+
+  const publish = (height) => {
+    const root = globalThis.document?.documentElement
+    if (!root) return
+    if (height) root.style.setProperty('--save-bar-inset', `${height}px`)
+    else root.style.removeProperty('--save-bar-inset')
+  }
+
+  const overflows = (node) => {
+    const overflow = getComputedStyle(node).overflowY
+    return overflow === 'auto' || overflow === 'scroll'
+  }
+
+  /**
+   * How much scroll is reachable around the strip: its own scrollport, plus any
+   * sibling that scrolls. One number, measured the same way before and after, so the
+   * question the reserve has to answer ("did this buy anything?") has one answer.
+   */
+  const reachableScroll = () => {
+    const element = strip.value
+    if (!element) return 0
+    let total = 0
+    let node = element.parentElement
+    while (node && node !== globalThis.document?.body) {
+      if (overflows(node)) {
+        total += node.scrollHeight - node.clientHeight
+        break
+      }
+      node = node.parentElement
+    }
+    for (const sibling of element.parentElement?.children ?? []) {
+      if (sibling !== element && overflows(sibling))
+        total += sibling.scrollHeight - sibling.clientHeight
+    }
+    return total
+  }
+
+  /**
+   * The gate has to see the page WITHOUT the reserve, and only when the footprint has
+   * actually changed.
+   *
+   * Both halves are load-bearing, and leaving either out looks like the reserve simply
+   * not working: the observer fires a second time (the reserve can change a scrollbar,
+   * which changes the card's width), that run measures a `before` that already
+   * CONTAINS the reserve, sees no further gain, and takes it back. So the reserve is
+   * cleared before the baseline is read, and an unchanged height does nothing at all.
+   */
+  let measured = -1
+
+  const measure = async (element) => {
+    const height = element ? element.offsetHeight : 0
+    if (height === measured) return
+    measured = height
+    publish(height)
+    if (reserved.value) {
+      reserved.value = 0
+      await nextTick()
+    }
+    if (!height) return
+    const before = reachableScroll()
+    reserved.value = height
+    await nextTick()
+    if (reachableScroll() <= before) reserved.value = 0
+  }
+
+  // The ref goes null when the element is actually REMOVED, which is after the leave
+  // transition — so the space stays reserved for as long as the card is on screen.
+  watch(shell, (element) => {
+    observer?.disconnect()
+    observer = null
+    if (!element) return measure(null)
+    observer = new globalThis.ResizeObserver(() => measure(element))
+    observer.observe(element)
+    measure(element)
+  })
+
+  onScopeDispose(() => {
+    observer?.disconnect()
+    publish(0)
+  })
 </script>
 
 <template>
@@ -151,12 +277,15 @@
          on the rows either side of a bar that is only as wide as its own buttons. -->
     <footer
       v-if="dirty || saving"
-      class="pointer-events-none sticky bottom-0 z-10 h-0"
+      ref="strip"
+      class="pointer-events-none sticky bottom-0 z-10 h-0 shrink-0"
+      :style="reserved ? { height: `${reserved}px` } : null"
     >
       <!-- Anchored to the strip's bottom edge and growing UPWARD out of it (`absolute
            bottom-0` on an auto-height box), which is what lets the strip itself be `h-0`
            and still put the card above the fold rather than half off it. -->
       <div
+        ref="shell"
         class="absolute inset-x-0 bottom-0 flex justify-center px-(--spacing-md) pb-(--spacing-lg)"
       >
         <div

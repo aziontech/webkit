@@ -149,6 +149,27 @@
     behaviorsFor(form.phase).map(({ value, label }) => ({ value, label }))
   )
 
+  // ── The behavior picker is SEARCHED, not scanned ──
+  // A phase offers around twenty-five behaviors, alphabetical, and the reader arrives
+  // knowing the name of the one they want — so the panel gets its own field
+  // (`Select.Content`'s `#search` slot) and the list narrows as they type. The query is
+  // per ROW, keyed by the behavior's id rather than its index, so it travels with a
+  // reorder and never lands in the payload. Cleared when the panel closes, so the next
+  // open is never pre-filtered.
+  // The argument selects below are NOT searched: connectors, functions and cache
+  // policies are single-digit lists, where a search field is one more thing to read.
+  const behaviorQuery = reactive({})
+
+  const behaviorMatches = (id) => {
+    const query = (behaviorQuery[id] ?? '').trim().toLowerCase()
+    if (!query) return behaviorsForPhase.value
+    return behaviorsForPhase.value.filter((option) => option.label.toLowerCase().includes(query))
+  }
+
+  const onBehaviorPanel = (id, isOpen) => {
+    if (!isOpen) behaviorQuery[id] = ''
+  }
+
   // The record a `select` argument lists — read live from the store that owns those
   // records, so a cache policy created in the tab next door is selectable here.
   const optionsFor = (source) => behaviorOptions(source, form.phase)
@@ -546,7 +567,17 @@
                   @dragover.prevent
                   @drop="dropOnCriteria(gIdx)"
                 >
-                  <div class="flex items-center gap-(--spacing-xs)">
+                  <!-- `min-h-8` RESERVES the tall state of this row. The grip and the
+                       two reorder buttons only exist once there is a second group, so
+                       without it the header grew 16px the instant `Add criteria` was
+                       pressed — everything under it (the conditions, the divider, the
+                       button, the whole Behaviors card) jumped that much in ONE frame
+                       while the arriving group was still easing its height open. Two
+                       answers to one edit, which is the glitch. Measured: 0
+                       interpolated frames on the header against 8 on the new group.
+                       Holding the height means the only thing that moves is the group
+                       that arrived. -->
+                  <div class="flex min-h-8 items-center gap-(--spacing-xs)">
                     <!-- Grip: hold to drag the whole criteria group; the
                                move buttons remain for click / keyboard / touch. -->
                     <span
@@ -847,16 +878,46 @@
                     :disabled="submitting"
                     :display-value="behaviorLabel"
                     @update:model-value="setBehaviorType(bIdx, $event)"
+                    @update:open="onBehaviorPanel(behavior.id, $event)"
                   >
                     <Select.Trigger aria-label="Behavior" />
                     <Select.Content>
+                      <!-- `#search` renders above the scrolling list, so the field
+                           stays put while the options move. `@keydown.stop` keeps the
+                           panel's Arrow/Home/End handler from pulling focus onto an
+                           option while the reader is still typing. -->
+                      <template #search>
+                        <InputText
+                          v-model="behaviorQuery[behavior.id]"
+                          size="medium"
+                          class="w-full"
+                          placeholder="Search behaviors"
+                          aria-label="Search behaviors"
+                          @keydown.stop
+                        >
+                          <template #iconLeft>
+                            <i
+                              class="pi pi-search"
+                              aria-hidden="true"
+                            />
+                          </template>
+                        </InputText>
+                      </template>
                       <Select.Option
-                        v-for="option in behaviorsForPhase"
+                        v-for="option in behaviorMatches(behavior.id)"
                         :key="option.value"
                         :value="option.value"
                       >
                         {{ option.label }}
                       </Select.Option>
+                      <!-- A search that matches nothing must say so; an empty panel
+                           reads as a broken filter. -->
+                      <p
+                        v-if="!behaviorMatches(behavior.id).length"
+                        class="px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-muted)"
+                      >
+                        No behavior matches “{{ behaviorQuery[behavior.id] }}”.
+                      </p>
                     </Select.Content>
                   </Select>
 

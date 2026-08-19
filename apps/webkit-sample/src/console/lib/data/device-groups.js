@@ -77,6 +77,22 @@ export const addDeviceGroup = ({ name, userAgent }) => {
   return record
 }
 
+/**
+ * Rewrites a group in place, keeping its id and its position in the list — an edit
+ * is not a create, so it must not jump to the top of the table the reader opened it
+ * from. It re-decorates, so the Last Modified cell answers for the edit immediately.
+ */
+export const updateDeviceGroup = (id, { name, userAgent }) => {
+  const modifiedAt = new Date()
+  let updated
+  deviceGroups.value = deviceGroups.value.map((group) => {
+    if (group.id !== id) return group
+    updated = decorate({ id, name, userAgent, modifiedAt })
+    return updated
+  })
+  return updated
+}
+
 /** `{ label, value }` options for a selector over the groups. */
 export const deviceGroupOptions = () =>
   deviceGroups.value.map((group) => ({ label: group.name, value: group.id }))
