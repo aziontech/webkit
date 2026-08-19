@@ -1,9 +1,11 @@
 // Agent onboarding — the one prompt, and the tools it is meant to be pasted into.
 //
-// Two surfaces offer this now: the contrast pill (ui/ContrastBanner.vue) and the
-// first-access card (HomeEmptyState.vue). They MUST hand over the same text — a
-// prompt that drifts between two places is two different onboardings, and the reader
-// has no way to tell which one they got. So it lives here, once, and both import it.
+// Three surfaces offer this: the contrast pill (ui/ContrastBanner.vue, on the site and
+// the docs home), the first-access card (console/HomeEmptyState.vue) and the same card at
+// the foot of the populated Overview's usage rail (console/Home.vue). They MUST hand over
+// the same text — a prompt that drifts between places is that many different onboardings,
+// and the reader has no way to tell which one they got. So it lives here, once, and every
+// surface imports it.
 //
 // It is written as instructions to an agent, not as marketing: an imperative per
 // clause, the docs URL first so the agent reads before it writes, and the deliverable
@@ -25,16 +27,16 @@ export const AGENT_TOOLS = ['claude', 'cursor', 'windsurf', 'codex', 'opencode']
 
 // ── DISMISSAL ──
 //
-// The pill is guidance, and guidance the reader has acted on (or decided against)
+// The offer is guidance, and guidance the reader has acted on (or decided against)
 // has to be able to leave the layout and STAY gone. `ContrastBanner` removes itself
 // on the click and emits `close`; whether it comes back is deliberately not its
-// decision (see the note in that file). This is that decision, in the one place both
-// surfaces can share it.
+// decision (see the note in that file). This is that decision, in the one place every
+// surface can share it.
 //
-// It is ONE flag for the whole onboarding, not one per screen. The pill on the
-// populated Overview and the pill on a first access are the same offer — dismissing
-// it on one and meeting it again on the other is the console telling the reader their
-// answer did not count.
+// It is ONE flag for the whole onboarding, not one per screen. The card in the populated
+// Overview's rail and the card on a first access are the same offer — dismissing it on
+// one and meeting it again on the other is the console telling the reader their answer
+// did not count.
 //
 // localStorage, like the theme, the sidebar and the sample version (src/theme.js,
 // src/sidebar.js, lib/sample-mode.js): in the console this is a user preference or

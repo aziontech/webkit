@@ -55,6 +55,7 @@
   // gets "where was I" first and "what do I have" below it, out of one list that the
   // type control and the search both narrow — and a resource appears exactly once.
   import CardBox from '@aziontech/webkit/card-box'
+  import Divider from '@aziontech/webkit/divider'
   import Dropdown from '@aziontech/webkit/dropdown'
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -66,11 +67,12 @@
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { useAgentOnboarding } from '@shared/lib/agent-onboarding'
-  import ContrastBanner from '@shared/ui/ContrastBanner.vue'
+  import { AGENT_SETUP_PROMPT, AGENT_TOOLS, useAgentOnboarding } from '@shared/lib/agent-onboarding'
+  import AgentMark from '@shared/ui/brand/AgentMark.vue'
   import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
+  import FirstUsePromo from '../../components/home/FirstUsePromo.vue'
   import HomeWire from '../../components/home/HomeWire.vue'
   import IconFrame from '../../components/home/IconFrame.vue'
   import DeleteDialog from '../../components/list/DeleteDialog.vue'
@@ -82,6 +84,7 @@
     recentResources,
     RESOURCE_TYPES
   } from '../../lib/data/home-resources'
+  import { AGENT_PROMO } from '../../lib/data/product-empty-states'
   import { presetIcon, presetLabel } from '../../lib/format/presets'
   import { relativeTime } from '../../lib/format/relative-time'
   import { useTenancyReload } from '../../lib/state/tenancy-reload'
@@ -339,9 +342,35 @@
     unobserveScroll()
   })
 
-  // The agent pill, and whether the reader has already sent it away. The flag is
-  // shared and persisted (../lib/agent-onboarding.js) — one answer for the whole
-  // onboarding, not one per screen.
+  // ── THE AGENT ONBOARDING, AT THE FOOT OF THE USAGE RAIL ──
+  //
+  // It was a contrast pill on the greeting row (ui/ContrastBanner.vue): a near-black
+  // capsule in the loudest position the page has, for the one offer on Overview the
+  // reader did not come here for. Two things were wrong with it there.
+  //
+  //   IT WAS THE LOUDEST THING ON A PAGE ABOUT SOMETHING ELSE. Contrast inverts against
+  //     the surface, so the pill outshouted the numbers and the resource list — the two
+  //     reasons the page exists — to advertise a clipboard copy.
+  //   IT MADE THE PAGE OPEN AT TWO HEIGHTS. Dismissible and persisted, riding a row it
+  //     shared with the heading, it set that row to 37px for a reader who still had it
+  //     and 25px for one who did not, and the wire had to read the flag to guess which.
+  //
+  // So the offer keeps its place on the page and loses the volume: it is the SAME quiet
+  // promo card every module's first use already offers it with
+  // (../../components/home/FirstUsePromo.vue, the agent card of ProductFirstUse.vue) —
+  // the editors' own logos in an overlapping cluster, the shared copy under them, and the
+  // whole card as one control that copies. At the bottom of the usage rail, because the
+  // rail is the page's minor column and ends short of the resource list: the card sits in
+  // space nothing else wanted, under the four readings rather than over them, and a reader
+  // who came to work on their infrastructure meets the offer after it and not before.
+  //
+  // Its copy is READ from the shared const (`AGENT_PROMO`, lib/product-empty-states.js)
+  // rather than restated here — the same title and line every product's first use shows,
+  // because one offer described two ways is two offers to the reader.
+  //
+  // Whether the reader has already sent it away. The flag is shared and persisted
+  // (../lib/agent-onboarding.js) — one answer for the whole onboarding, not one per
+  // screen.
   const { agentOnboardingVisible, dismissAgentOnboarding } = useAgentOnboarding()
 
   // The greeting. Five time bands, re-read on the hour so a tab left open overnight
@@ -357,14 +386,32 @@
   const { greeting, nameFor } = useGreeting()
   const userName = computed(() => nameFor(route.query.email))
 
-  // Say what dismissing DID. The pill is gone by the time this is read, so the toast
-  // names the thing that left and where the prompt still lives — a dismissal with no
-  // way back reads as a control that broke something.
+  // The card's whole action is the clipboard — there is no page to open, and a button
+  // that opened one to then offer a copy button would be a step with no decision in it.
+  // Same prompt the first access copies (lib/agent-onboarding.js): one text, two
+  // surfaces, because a prompt that drifts between them is two different onboardings.
+  const copyAgentPrompt = async () => {
+    try {
+      await navigator.clipboard.writeText(AGENT_SETUP_PROMPT)
+      toast.success('Setup prompt copied.', {
+        description: 'Paste it into Claude, Cursor, Windsurf, Codex or OpenCode.'
+      })
+    } catch {
+      toast.error("Couldn't copy the prompt.", {
+        description: 'Clipboard access was blocked by the browser.'
+      })
+    }
+  }
+
+  // Dismissing is SILENT: the card unmounts and the rail closes up, and that is the whole
+  // feedback. It used to raise a toast naming what left, which is the right instinct for a
+  // destructive action and the wrong one here — the toast is the loudest motion the console
+  // has (the Toaster enters from the bottom edge with a scale and a fade), so "no thanks"
+  // to an offer answered with a panel flying in was a bigger event than the thing it
+  // reported. Nothing is lost either: the offer is the same one every product's first use
+  // still makes, so there is no state to explain a way back to.
   const onAgentOnboardingClose = () => {
     dismissAgentOnboarding()
-    toast.info('Agent onboarding removed.', {
-      description: 'The setup prompt stays available from the docs.'
-    })
   }
 
   // A row on Overview goes where the same row goes in its own module — the detail
@@ -489,34 +536,18 @@
     <HomeWire v-if="arriving" />
 
     <template v-else>
-      <!-- THE OPENING ROW: who is here, and the one offer the page makes them.
+      <!-- THE OPENING ROW: who is here, and nothing else.
            The greeting is the only line on Overview addressed to the PERSON rather
-           than to their infrastructure, and it is what gives the agent pill a place
-           to sit that is not a band of its own. The pill was centred on its own row
-           above the columns; once it became dismissible that row had to disappear
-           with it, and a row that exists only sometimes is a page that jumps. Here
-           the greeting holds the row and the pill rides its right edge — dismissing
-           it takes the pill out and moves nothing else.
-           They stack below `md`, greeting first: the greeting is the heading, and a
-           heading does not go second. -->
-      <header
-        class="flex flex-col gap-(--spacing-md) md:flex-row md:items-center md:justify-between md:gap-(--spacing-lg)"
-      >
+           than to their infrastructure, and it holds this row ALONE. The agent
+           onboarding used to ride its right edge as a contrast pill; it is the card at
+           the foot of the usage rail now (see the aside below, and the note in the
+           script). The row therefore has ONE height for every reader — it no longer
+           grows or shrinks with a dismissal the page has to remember. -->
+      <header class="flex items-center">
         <h1 class="text-heading-sm text-(--text-muted)">
           {{ greeting }},
           <span class="text-(--text-default)">{{ userName }}</span>
         </h1>
-
-        <!-- `closable` removes the pill from the LAYOUT (it unmounts — no reserved
-             band, nothing left tabbable), and the answer is persisted in
-             lib/agent-onboarding.js so it survives the reload and the first-access
-             surface that offers the same thing. -->
-        <ContrastBanner
-          v-if="agentOnboardingVisible"
-          closable
-          class="md:shrink-0"
-          @close="onAgentOnboardingClose"
-        />
       </header>
 
       <!-- ── THE SEARCH, AT PAGE LEVEL ──
@@ -627,9 +658,7 @@
                account's, and stretching four metric cards to match that turns each into
                a mostly-empty panel. The rail is its own height and the row's extra
                space is simply below it. -->
-            <div
-              class="grid auto-rows-min grid-cols-2 gap-(--layout-group-gap) xl:grid-cols-1"
-            >
+            <div class="grid auto-rows-min grid-cols-2 gap-(--layout-group-gap) xl:grid-cols-1">
               <CardBox
                 v-for="metric in metrics"
                 :key="metric.label"
@@ -682,6 +711,117 @@
                 </template>
               </CardBox>
             </div>
+
+            <!-- ── THE AGENT ONBOARDING, UNDER THE READINGS ──
+                 The quiet promo card every module's first use already makes this offer
+                 with (../../components/home/FirstUsePromo.vue): the four editors' own
+                 logos as an overlapping cluster, the shared line under them, and the
+                 WHOLE card as one control — pressing it copies the setup prompt. Same
+                 component, same copy (`AGENT_PROMO`), so the offer is one object across
+                 Overview and every product's first use instead of a pill here and a card
+                 there.
+                 It goes at the FOOT of the rail: the rail is the minor column and it ends
+                 short of the resource list, so the card lands in space nothing else wanted,
+                 after the four readings rather than over them. An offer the reader did not
+                 come for does not go above the numbers they did.
+                 No corner glyph on it (no `href`, no `navigates`) — it copies and leaves
+                 the reader exactly where they were, and the glyph is what says a card
+                 takes you somewhere.
+                 `shrink-0` so the rail's `xl:overflow-y-auto` escape hatch scrolls the
+                 card on a very short viewport instead of squeezing it. -->
+            <!-- The rule above it. The rail is otherwise one uninterrupted run of cards,
+                 and the last one is not another reading — it is an offer. A `Divider`
+                 (the DS's, so it is a real `role="separator"` on the border token and not
+                 a styled `<div>`) says the column ends here and something else begins,
+                 which the group gap alone cannot: the gap between the card and the fourth
+                 metric is the same gap that sits between the metrics themselves.
+                 It takes a margin ON TOP of the column's own gap. At the bare group gap
+                 (16px each side) the rule read as one more step in the rail's rhythm — the
+                 same distance that sits between two metric cards — which is the one thing
+                 a separator must not do. `--spacing-sm` on the block axis puts 28px on each
+                 side, so the rule sits in air of its own and the card below it reads as
+                 after the column rather than as the fifth card in it. -->
+            <!-- ── DISMISSING IT IS THE ONE ANIMATED MOMENT IN THE RAIL ──
+                 The rule and the card leave TOGETHER, as one object: `v-if` on its own
+                 unmounted them on the click (measured: zero interpolated frames), which
+                 reads as the page dropping a block rather than as the reader removing it.
+                 So a `<Transition>` wraps BOTH, and only the leave is animated — the card
+                 arrives with the column it sits in (`animate-content-enter` on the aside),
+                 so an enter here would be a second entrance on the same element.
+                 It scales down a hair, slides `--spacing-xs` DOWN and fades — the exact
+                 inverse of the rise the column arrives with, so leaving is the entrance
+                 played backwards and the eye reads it as the same object departing.
+                 UTILITIES, NOT A KEYFRAME: both ends are known at author time, so a
+                 `transition-*` on the leave is the whole mechanism and nothing has to be
+                 added to the animation catalogue. The property list names `scale` and
+                 `translate` — the properties Tailwind v4's `scale-*` / `translate-y-*`
+                 ACTUALLY set (naming `transform` animates nothing, silently: the styling
+                 rule's trap). `motion-reduce:transition-none` so a reader who asked for no
+                 motion gets the instant removal they had before. -->
+            <Transition
+              leave-active-class="transition-[scale,translate,opacity] duration-moderate-01 ease-productive-exit motion-reduce:transition-none"
+              leave-to-class="scale-95 translate-y-(--spacing-xs) opacity-0"
+            >
+              <!-- ONE flex child of the rail, so the two leave as one box. It carries the
+                   column's own `gap` internally, which is what keeps the rule's 28px of air
+                   on both sides (12px margin + 16px gap) now that the card is no longer a
+                   direct sibling of the metric grid. -->
+              <div
+                v-if="agentOnboardingVisible"
+                class="flex flex-col gap-(--layout-group-gap)"
+              >
+                <Divider class="my-(--spacing-sm)" />
+
+                <div class="relative w-full shrink-0">
+                  <FirstUsePromo
+                    :title="AGENT_PROMO.title"
+                    :description="AGENT_PROMO.description"
+                    @activate="copyAgentPrompt"
+                  >
+                    <!-- The marks are the EDITORS themselves, four of the five, matching the
+                     cluster on every product's first use so the two are the same object at
+                     the same width (../../components/home/IconFrame.vue is the one 32px
+                     frame all three surfaces share). In color, not `mono`: here they are a
+                     row of logos, and a reader spots the editor they use before reading a
+                     word. -->
+                    <template #logos>
+                      <IconFrame
+                        v-for="agent in AGENT_TOOLS.slice(0, 4)"
+                        :key="agent"
+                      >
+                        <AgentMark
+                          :name="agent"
+                          class="size-[18px] text-(--text-default)"
+                        />
+                      </IconFrame>
+                    </template>
+                  </FirstUsePromo>
+                  <!-- The dismissal is a SIBLING of the card, never inside it: the card is
+                   itself a `<button>`, and a button inside a button is invalid HTML that
+                   browsers un-nest at parse time — which breaks both controls. So it is
+                   pinned over the corner the card's own glyph would use, and hovering it
+                   does not tint the card underneath (it is outside the `group`).
+                   `transparent` and `small`: it is the quietest control in the rail, and
+                   dismissing UNMOUNTS the card — no reserved band, nothing left tabbable.
+                   The answer is persisted (lib/agent-onboarding.js), so it survives the
+                   reload and the first-access surface offering the same thing. -->
+                  <div class="absolute right-(--spacing-xs) top-(--spacing-xs)">
+                    <Tooltip
+                      text="Dismiss"
+                      placement="top"
+                    >
+                      <IconButton
+                        icon="pi pi-times"
+                        kind="transparent"
+                        size="small"
+                        aria-label="Dismiss agent setup"
+                        @click="onAgentOnboardingClose"
+                      />
+                    </Tooltip>
+                  </div>
+                </div>
+              </div>
+            </Transition>
           </aside>
 
           <!-- Right (major): RESOURCES — `Recents` at the top of it, then `Older`.

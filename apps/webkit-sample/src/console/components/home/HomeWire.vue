@@ -39,6 +39,10 @@
   // Six is also `RECENT_COUNT` there, so the wire's single block resolves into the
   // `Recents` block exactly, and the `Older` one arrives below the fold it was
   // already below.
+  // The agent card's logo cluster — four editor marks, the count ProductFirstUse and the
+  // rail's own card both draw (`AGENT_TOOLS.slice(0, 4)`).
+  const MARKS = 4
+
   const ROWS = 6
 </script>
 
@@ -57,26 +61,16 @@
     class="flex flex-col gap-(--layout-boundary-start)"
     aria-hidden="true"
   >
-    <!-- The greeting, and the agent pill beside it when the reader still has one. The
-         pill is what makes this row 37px instead of the heading's own 25px, and it is
-         dismissible and persisted — so the wire reads the SAME flag the page does
-         (../../lib/agent-onboarding.js) rather than guessing at one of the two heights
-         and being wrong for half the readers. -->
-    <!-- 37px is the header's measured height: the ContrastBanner's, when it is there;
-         the greeting's own 24.75px line box otherwise. -->
-    <div
-      class="flex items-center justify-between gap-(--spacing-lg)"
-      :class="agentOnboardingVisible ? 'min-h-[37px]' : ''"
-    >
+    <!-- The greeting, alone on its row. It used to share the row with the agent pill,
+         which is what made this the one row on the page whose height depended on a
+         persisted answer (37px with the pill, the heading's own 24.75px line box
+         without) — the wire had to read the flag just to pick a height. The onboarding
+         is a card at the foot of the usage rail now (../../pages/home/Home.vue), so
+         this row is one height for every reader. -->
+    <div class="flex items-center">
       <Skeleton
         width="12rem"
         height="1.5rem"
-      />
-      <Skeleton
-        v-if="agentOnboardingVisible"
-        class="shrink-0"
-        width="26rem"
-        height="var(--size-9)"
       />
     </div>
 
@@ -117,6 +111,51 @@
                   width="40%"
                   height="1.75rem"
                 />
+              </div>
+            </template>
+          </CardBox>
+        </div>
+
+        <!-- The agent onboarding card at the foot of the rail, at FirstUsePromo's own
+             anatomy (./FirstUsePromo.vue): the 32px logo cluster, then the title over one
+             line of copy. Behind the same persisted flag the page binds — a card the
+             reader dismissed is not a shape the wire should reserve, and a card they still
+             have is rail the wire cannot leave short without the column jumping on
+             arrival.
+             The cluster stands in as four 32px squares at the real overlap (`-ml-2`), not
+             as one wide block: it is the largest thing in the card, and a bar where four
+             marks resolve is the shift this file exists to prevent. -->
+        <!-- The rule the real rail draws above the card (a DS `Divider` there; a hairline
+             on the same border token here, since nothing about a 1px rule is a
+             placeholder to fill). -->
+        <div
+          v-if="agentOnboardingVisible"
+          class="my-(--spacing-sm) w-full border-t border-(--border-default)"
+        />
+
+        <div
+          v-if="agentOnboardingVisible"
+          class="shrink-0"
+        >
+          <CardBox :padded="false">
+            <template #content>
+              <div class="flex flex-col gap-(--spacing-md) p-(--spacing-md)">
+                <div class="flex items-center [&>*+*]:-ml-2">
+                  <Skeleton
+                    v-for="mark in MARKS"
+                    :key="mark"
+                    kind="shape"
+                    width="2rem"
+                    height="2rem"
+                  />
+                </div>
+                <div class="flex flex-col gap-(--spacing-xxs)">
+                  <Skeleton
+                    width="70%"
+                    height="1.125rem"
+                  />
+                  <Skeleton height="1.0625rem" />
+                </div>
               </div>
             </template>
           </CardBox>
