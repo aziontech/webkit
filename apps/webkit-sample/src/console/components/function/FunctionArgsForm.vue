@@ -68,6 +68,7 @@
     FIELD_TYPES,
     fieldDefault,
     fieldsFromArgs,
+    FORM_JSON_SCHEMA,
     ITEM_TYPES,
     keyError,
     parseSchema,
@@ -93,6 +94,14 @@
   const fields = ref([])
   /** Why the schema could not be read into rows. Empty when it could. */
   const schemaError = ref('')
+  /**
+   * The parts of the schema that are not the rows' to write — a `$schema`, a `title` on the
+   * form itself, an `additionalProperties`, a `required` entry naming a property that is
+   * being renamed. Read off the document and handed back to `serializeSchema` with every
+   * write, so editing one label does not rewrite a pasted schema as the three keywords the
+   * builder knows about.
+   */
+  const kept = ref({ extras: {}, extraRequired: [] })
   /** Which field cards are expanded. A Set, so opening one is not closing another. */
   const expanded = ref(new Set())
   // The schema's own JSON sits BESIDE the rows, not behind a toggle — it is written as
@@ -148,6 +157,7 @@
       const result = parseSchema(text)
       schemaError.value = result.error
       if (!result.ok) return
+      kept.value = { extras: result.extras, extraRequired: result.extraRequired }
       fields.value = result.fields
       // Rows arriving from the schema start collapsed — a pasted schema of twelve
       // properties should read as a list of twelve fields, not as twelve open forms.
@@ -166,7 +176,14 @@
       // the form the reader just removed is written straight back.
       if (!schema.value.trim()) return
 
-      const text = serializeSchema(fields.value)
+      // AND NOTHING TO WRITE OVER A SCHEMA THAT DOES NOT PARSE. The rows on screen are the
+      // last ones read, not the document — the document is the text the reader is in the
+      // middle of typing, and serializing the rows over it would replace their half-written
+      // JSON with the form's version of an older state. The rows are locked while this is
+      // true (`locked`), so the only way in is a change arriving from the host.
+      if (schemaError.value) return
+
+      const text = serializeSchema(fields.value, kept.value)
       if (text !== schema.value) {
         pushedSchema = text
         schema.value = text
@@ -232,6 +249,27 @@
   const invalid = computed(() => Object.values(errors.value).some(Boolean))
   defineExpose({ invalid })
 
+  /**
+   * The field list is READ-ONLY while the schema does not parse.
+   *
+   * The rows stay on screen — they are the last ones the schema described, and blanking them
+   * mid-keystroke reads as the builder having eaten the schema — but they are not the
+   * document while the text disagrees with them, so nothing here may write. The reader's way
+   * forward is the schema itself, which stays fully editable.
+   */
+  const locked = computed(() => props.disabled || !!schemaError.value)
+
+  /**
+   * The one place the trouble is reported. It is said HERE, beside the fields it affects, and
+   * not under the editor as well: the same sentence twice, once in each pane, reads as two
+   * different problems.
+   */
+  const schemaMessage = computed(() => {
+    if (!schemaError.value) return ''
+    if (!fields.value.length) return `${schemaError.value} Correct the schema to build the form.`
+    return `${schemaError.value} The fields are the last ones read from the schema, and stay locked until it is valid.`
+  })
+
   // ── WHEN THE NAME MESSAGE IS ALLOWED TO SPEAK ─────────────────────────────
   //
   // The console judges nothing while the reader is still typing, and `Add field` puts a
@@ -288,7 +326,7 @@
     // observed left the rows empty under a correct-looking schema.
     const seeded = fieldsFromArgs(readArgs() ?? {})
     if (seeded.length) {
-      const text = serializeSchema(seeded)
+      const text = serializeSchema(seeded, kept.value)
       pushedSchema = text
       schema.value = text
       fields.value = seeded
@@ -303,7 +341,7 @@
     const text = JSON.stringify(EMPTY_SCHEMA, null, 2)
     pushedSchema = text
     schema.value = text
-    addField()
+    appendField()
   }
 
   /**
@@ -317,15 +355,35 @@
     schema.value = ''
     fields.value = []
     schemaError.value = ''
+    kept.value = { extras: {}, extraRequired: [] }
   }
 
-  const addField = async () => {
+  /**
+   * Push one blank row and put the cursor in its name.
+   *
+   * The append itself, with no opinion about whether there is a document to append to —
+   * that is `addField`'s question, and asking it here would not work anyway: `schema` is
+   * a model, so the seeding write in `startForm` is not readable back on the same tick.
+   */
+  const appendField = async () => {
     const field = blankField()
     fields.value.push(field)
     open(field.id)
     await nextTick()
     globalThis.document?.getElementById(`${props.testId}-key-${field.id}`)?.focus()
   }
+
+  /**
+   * The header's `Add field` — the one that is on screen in every state, including the
+   * no-form state where the empty state offers its own.
+   *
+   * WITH NO DOCUMENT IT HAS TO START ONE. A row appended over an empty schema is never
+   * written: the rows watcher refuses to serialize over one (that is what keeps `Remove
+   * form` removed), so the field would be named, typed and marked required while
+   * `azion_form` stayed empty and the save posted nothing. Two buttons carrying one
+   * label, in one state, do one thing.
+   */
+  const addField = () => (schema.value.trim() ? appendField() : startForm())
 
   const removeField = (index) => {
     const [removed] = fields.value.splice(index, 1)
@@ -373,7 +431,7 @@
   const listToLines = (list) => (Array.isArray(list) ? list.join('\n') : '')
 
   const { canMove, isDragging, isDropTarget, onDragStart, onDragEnter, onDragEnd, drop, move } =
-    useDragReorder(() => fields.value, { enabled: () => !props.disabled })
+    useDragReorder(() => fields.value, { enabled: () => !locked.value })
 
   const summary = (field) => {
     if (field.raw) return 'Edited in the schema'
@@ -394,130 +452,138 @@
          the shape they are about to fill either way. -->
     <div
       class="flex shrink-0 flex-wrap items-center gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-sm) py-(--spacing-xs)"
-      >
-        <span class="text-label-sm text-(--text-muted)">
-          {{ fields.length }} {{ fields.length === 1 ? 'field' : 'fields' }}
-        </span>
+    >
+      <span class="text-label-sm text-(--text-muted)">
+        {{ fields.length }} {{ fields.length === 1 ? 'field' : 'fields' }}
+      </span>
 
-        <div class="ml-auto flex shrink-0 items-center gap-(--spacing-xs)">
-          <Button
-            label="Add field"
-            kind="outlined"
-            size="medium"
-            icon="pi pi-plus"
-            :disabled="disabled"
-            :data-testid="`${testId}-add-field`"
-            @click="addField"
-          />
-          <Button
-            label="Remove form"
-            kind="outlined"
-            size="medium"
-            icon="pi pi-times"
-            :disabled="disabled"
-            :data-testid="`${testId}-remove-form`"
-            @click="removeForm"
-          />
-        </div>
+      <div class="ml-auto flex shrink-0 items-center gap-(--spacing-xs)">
+        <Button
+          label="Add field"
+          kind="outlined"
+          size="medium"
+          icon="pi pi-plus"
+          :disabled="locked"
+          :data-testid="`${testId}-add-field`"
+          @click="addField"
+        />
+        <Button
+          label="Remove form"
+          kind="outlined"
+          size="medium"
+          icon="pi pi-times"
+          :disabled="disabled"
+          :data-testid="`${testId}-remove-form`"
+          @click="removeForm"
+        />
       </div>
+    </div>
 
-      <!-- THE TWO SURFACES, SIDE BY SIDE — one group, a movable edge between them.
+    <!-- THE TWO SURFACES, SIDE BY SIDE — one group, a movable edge between them.
            Building a field WRITES the JSON on the left as it is typed, so the reader
            sees the document they are producing instead of switching to go and check on
            it. Same document, two views, both live. -->
-      <ResizablePanel
-        class="min-h-0 flex-1 overflow-hidden"
-        aria-label="Argument form"
-      >
-        <!-- LEFT: the schema itself. Sized rather than flexible, because it is the
+    <ResizablePanel
+      class="min-h-0 flex-1 overflow-hidden"
+      aria-label="Argument form"
+    >
+      <!-- LEFT: the schema itself. Sized rather than flexible, because it is the
              narrower read of the two — you glance at it while your hands are on the
              right. `collapsible` for the reader who wants only the fields. -->
-        <ResizablePanelPane
-          v-model:basis="schemaWidth"
-          v-model:collapsed="schemaCollapsed"
-          collapsible
-          :min="280"
-          :max="720"
-          aria-label="Schema"
-          class="bg-(--bg-surface)"
-        >
-          <MonacoEditor
-            v-model="schemaText"
-            fill
-            flush
-            pad-line-numbers
-            size="small"
-            language="json"
-            path="function.form.json"
-            :invalid="!!schemaError"
-            :helper-text="schemaError"
-            :disabled="disabled"
-            aria-label="Argument form schema, as JSON"
-            :data-testid="`${testId}-schema`"
-          />
-        </ResizablePanelPane>
+      <ResizablePanelPane
+        v-model:basis="schemaWidth"
+        v-model:collapsed="schemaCollapsed"
+        collapsible
+        :min="280"
+        :max="720"
+        aria-label="Schema"
+        class="bg-(--bg-surface)"
+      >
+        <MonacoEditor
+          v-model="schemaText"
+          fill
+          flush
+          pad-line-numbers
+          size="small"
+          language="json"
+          path="function.form.json"
+          :json-schema="FORM_JSON_SCHEMA"
+          :invalid="!!schemaError"
+          :disabled="disabled"
+          aria-label="Argument form schema, as JSON"
+          :data-testid="`${testId}-schema`"
+        />
+      </ResizablePanelPane>
 
-        <ResizablePanelHandle aria-label="Resize the schema" />
+      <ResizablePanelHandle aria-label="Resize the schema" />
 
-        <!-- RIGHT: the fields. The flexible pane, so it absorbs whatever the schema
+      <!-- RIGHT: the fields. The flexible pane, so it absorbs whatever the schema
              leaves, and its column is held to the form measure inside that. -->
-        <ResizablePanelPane aria-label="Fields">
-          <!-- THE EMPTY STATE IS THE PANE, not a block inside its scroll column. Left in
+      <ResizablePanelPane aria-label="Fields">
+        <!-- THE EMPTY STATE IS THE PANE, not a block inside its scroll column. Left in
                that column it sized to its own content — 310px inside a 676px pane —
                because the column is `auto` until there is something to scroll, so nothing
                below it had a height to grow into. As a direct flex child of the pane it
                has the pane's height, and it needs no scroller of its own: there is
                nothing here to scroll. -->
-          <div
-            v-if="fields.length === 0 && !schemaError"
-            class="flex min-h-0 flex-1 p-(--spacing-sm)"
+        <div
+          v-if="fields.length === 0 && !schemaError"
+          class="flex min-h-0 flex-1 p-(--spacing-sm)"
+        >
+          <EmptyState
+            bordered
+            icon="pi pi-plus-circle"
+            title="This form has no fields"
+            description="Add the first argument the function reads."
+            class="min-h-0 flex-1"
           >
-            <EmptyState
-              bordered
-              icon="pi pi-plus-circle"
-              title="This form has no fields"
-              description="Add the first argument the function reads."
-              class="min-h-0 flex-1"
-            >
-              <template #actions>
-                <!-- SECONDARY: the reader is not required to build a form, and a primary
+            <template #actions>
+              <!-- SECONDARY: the reader is not required to build a form, and a primary
                      button here would read as the page's main business. -->
-                <Button
-                  label="Add field"
-                  kind="secondary"
-                  size="medium"
-                  icon="pi pi-plus"
-                  :disabled="disabled"
-                  :data-testid="`${testId}-add-first-field`"
-                  @click="startForm"
-                />
-                <Link
-                  label="Read about function arguments"
-                  size="medium"
-                  href="https://www.azion.com/en/documentation/products/build/edge-application/edge-functions/"
-                  target="_blank"
-                />
-              </template>
-            </EmptyState>
-          </div>
-
-          <div
-            v-else
-            class="min-h-0 flex-1 overflow-auto p-(--spacing-sm)"
-          >
-            <div
-              class="layout-column-form mx-auto flex min-w-0 flex-col gap-(--spacing-sm)"
-            >
-              <!-- The schema on screen says more than the rows do. Said once, above them,
-                   rather than by each row that had to be kept whole. -->
-              <Message
-                v-if="schemaError"
-                severity="warning"
-                :label="`${schemaError} The fields below are the last ones that could be read — edit the schema to continue.`"
+              <Button
+                label="Add field"
+                kind="secondary"
+                size="medium"
+                icon="pi pi-plus"
+                :disabled="disabled"
+                :data-testid="`${testId}-add-first-field`"
+                @click="startForm"
               />
+              <Link
+                label="Read about function arguments"
+                size="medium"
+                href="https://www.azion.com/en/documentation/products/build/edge-application/edge-functions/"
+                target="_blank"
+              />
+            </template>
+          </EmptyState>
+        </div>
 
+        <!-- THE SCROLLER CLEARS THE SAVE BAR. The page's bar floats over the bottom
+               of this pane the moment anything is edited, and a scroll region ends at
+               its own bottom edge — so without this the last field's controls sit under
+               the card with no way to scroll them out from under it, for exactly as long
+               as there are unsaved changes. The bar publishes its own footprint
+               (../form/SettingsSaveBar.vue); this adds it to the pane's bottom padding,
+               and it is `0rem` on a page that raises no bar. -->
+        <div
+          v-else
+          class="min-h-0 flex-1 overflow-auto p-(--spacing-sm) pb-[calc(var(--spacing-sm)+var(--save-bar-inset,0rem))]"
+        >
+          <div class="layout-column-form mx-auto flex min-w-0 flex-col gap-(--spacing-sm)">
+            <!-- SAID ONCE, AND SAID HERE. This is the pane the trouble has consequences in
+                   (the fields it describes are locked), so this is where the sentence goes;
+                   the editor no longer repeats it under itself, where the same words in a
+                   second place read as a second problem. Monaco still marks the spot in the
+                   text, which is the one thing this cannot do. -->
+            <Message
+              v-if="schemaMessage"
+              severity="warning"
+              :label="schemaMessage"
+              :data-testid="`${testId}-schema-message`"
+            />
 
-              <!-- THE FIELDS ARE AN ITEMGROUP — one flush `CardBox` whose `Item.List`
+            <!-- THE FIELDS ARE AN ITEMGROUP — one flush `CardBox` whose `Item.List`
                    draws the dividers, one `Item` per argument. This is the console's
                    settings anatomy (/webkit-form Approach A), so a function's arguments
                    read the same way as every other list of configured things.
@@ -526,13 +592,16 @@
                    NOT on a wrapper — `Item.List` draws its dividers with a DIRECT-child
                    selector (`[&>[data-slot=item]]`), so a `<div>` around each row would
                    silently take every divider away. -->
-              <CardBox
-                v-else
-                :padded="false"
-              >
-                <template #content>
-                  <Item.List>
-                    <!-- ADDING AND REMOVING A FIELD ARE HEIGHT MOVES. The row eases its
+            <!-- The rows are rendered whether or not the schema parses: while it does not,
+                   they are the last ones it described, kept on screen and locked rather than
+                   blanked. The reader mid-keystroke needs to see what they had. -->
+            <CardBox
+              v-if="fields.length"
+              :padded="false"
+            >
+              <template #content>
+                <Item.List>
+                  <!-- ADDING AND REMOVING A FIELD ARE HEIGHT MOVES. The row eases its
                          own height open and shut (../../lib/behavior/list-morph.js), so a
                          remove reads as that card closing rather than as the list jumping
                          up by however tall it happened to be.
@@ -541,16 +610,23 @@
                          its rows, so the three divider utilities `Item.List` targets at
                          its direct children are restated here on the element that is now
                          their parent. `relative` is the morph preset's own requirement. -->
-                    <TransitionGroup
-                      tag="div"
-                      v-bind="MORPH_COLLAPSE"
-                      class="relative flex w-full flex-col [&>[data-slot=item]]:rounded-none [&>[data-slot=item]]:border-b-(color:--border-muted) [&>[data-slot=item]:last-child]:border-b-[color:transparent]"
-                    >
+                  <TransitionGroup
+                    tag="div"
+                    v-bind="MORPH_COLLAPSE"
+                    class="relative flex w-full flex-col *:data-[slot=item]:rounded-none *:data-[slot=item]:border-b-(--border-muted) [&>[data-slot=item]:last-child]:border-b-transparent"
+                  >
                     <!-- `flex-nowrap` is REQUIRED, not decoration: `Item`'s own base
                          class is `flex w-full flex-wrap`, and `flex-col` + `flex-wrap`
                          wraps into COLUMNS — the `w-full` summary row and the settings
                          under it end up side by side, overlapping, and the summary row
                          then swallows every click meant for a control below it. -->
+                    <!-- `px-0!` — THE CARD HOLDS NO INLINE PADDING OF ITS OWN, and the
+                         two things inside it pad themselves instead. That is what makes
+                         the settings dividers reach the card's edges; the note on the
+                         settings list below says why the negative margin that used to do
+                         it could not. `!` because `Item`'s own padding is a compound
+                         variant (`:not([data-kind=inline])` + `[data-size=small]`) and
+                         outranks a plain `px-0`. -->
                     <Item
                       v-for="(field, index) in fields"
                       :key="field.id"
@@ -558,7 +634,7 @@
                       data-drag-row
                       :data-dragging="isDragging(index) || null"
                       :data-drop="isDropTarget(index) || null"
-                      :class="['flex-col flex-nowrap items-stretch gap-0', DRAG_ROW_CLASS]"
+                      :class="['flex-col flex-nowrap items-stretch gap-0 px-0!', DRAG_ROW_CLASS]"
                       @dragenter.prevent="onDragEnter(index)"
                       @dragover.prevent
                       @drop="drop(index)"
@@ -567,11 +643,13 @@
                            the controls that act on the whole row. Every control here is
                            a sibling of the others — none is nested inside another, which
                            a row-wide disclosure button would have forced. -->
-                      <div class="flex w-full min-w-0 items-center gap-(--spacing-xs)">
+                      <div
+                        class="flex w-full min-w-0 items-center gap-(--spacing-xs) px-(--spacing-md)"
+                      >
                         <div
                           :class="[GRIP_CLASS, 'size-6']"
-                          :draggable="canMove(index) && !disabled"
-                          :aria-disabled="!canMove(index) || disabled || undefined"
+                          :draggable="canMove(index) && !locked"
+                          :aria-disabled="!canMove(index) || locked || undefined"
                           role="button"
                           tabindex="0"
                           :aria-label="`Reorder ${field.key || 'this field'}`"
@@ -601,7 +679,10 @@
                           <Item.Description class="shrink-0">{{ summary(field) }}</Item.Description>
                         </Item.Content>
 
-                        <Item.Actions class="shrink-0 gap-(--spacing-xxs)">
+                        <!-- `--spacing-xs`, not `xxs`: at 4px the tag and the three
+                             icon buttons read as one undifferentiated block, with the
+                             buttons' outlines all but touching. -->
+                        <Item.Actions class="shrink-0 gap-(--spacing-xs)">
                           <Tag
                             v-if="field.required"
                             key="required"
@@ -621,7 +702,7 @@
                               icon="pi pi-clone"
                               kind="outlined"
                               size="small"
-                              :disabled="disabled || !!field.raw"
+                              :disabled="locked || !!field.raw"
                               :aria-label="`Duplicate ${field.key || 'this field'}`"
                               @click="duplicateField(index)"
                             />
@@ -631,7 +712,7 @@
                               icon="pi pi-trash"
                               kind="outlined"
                               size="small"
-                              :disabled="disabled"
+                              :disabled="locked"
                               :aria-label="`Remove ${field.key || 'this field'}`"
                               :data-testid="`${testId}-remove-${index}`"
                               @click="removeField(index)"
@@ -665,30 +746,37 @@
                       >
                         <div class="overflow-hidden">
                           <!-- A property the rows cannot draw. Shown, named, left alone. -->
+                          <!-- `mx`, because the card no longer pads: everything in this
+                               wrapper is full bleed unless it says otherwise. -->
                           <Message
                             v-if="field.raw"
                             severity="info"
-                            class="mt-(--spacing-xs)"
-                            :label="`\`${field.key}\` uses JSON Schema this builder does not draw as a row — it is kept exactly as written and edited from the pane on the left.`"
+                            class="mx-(--spacing-md) mt-(--spacing-xs)"
+                            :label="`\`${field.key}\` uses JSON Schema this builder does not draw as a row. It is kept exactly as written, and edited in the schema.`"
                           />
 
-                          <!-- FULL-BLEED RULES, ALIGNED CONTENT. The settings list sits
-                               inside the argument `Item`'s own 16px padding, so left to
-                               itself it drew every divider 16px short of the card on both
-                               sides while its labels sat 16px right of the name above
-                               them — inset lines and a broken column, from one cause.
-                               A negative inline margin of exactly that padding pulls the
-                               LIST out to the card's edges, so its rules run the full
-                               width like every other ItemGroup divider; each row then
-                               keeps its OWN padding, which lands its content back on the
-                               summary row's column. One change fixes both edges.
-                               `w-auto!` is required with it: `Item.List` sets `w-full`,
-                               which pins the width to the container — the negative margin
-                               then only SHIFTS the list left instead of widening it, and
-                               the right-hand rule ends up 32px short of the left one. -->
+                          <!-- FULL-BLEED RULES, ALIGNED CONTENT — AND NOT BY A NEGATIVE
+                               MARGIN. The settings list has to reach the card's edges so
+                               its rules run the full width like every other ItemGroup
+                               divider, while each row keeps its OWN padding so its label
+                               lands on the summary row's column.
+                               It used to do that by pulling itself out of the card's
+                               padding with `-mx-(--spacing-md)`, which CANNOT work here:
+                               the disclosure above transitions `grid-template-rows`, so
+                               it wraps this in an `overflow-hidden` box — which clips
+                               back exactly the 16px the list overflows by. Measured: the
+                               list laid out at the card's edges (738→1426) inside a
+                               wrapper clipping at 754→1410, so every divider was cut 16px
+                               short on both sides and the focus ring of the control on
+                               the right was sliced off down its outer edge. The fix was
+                               invisible to `getBoundingClientRect` and visible on screen
+                               as the bug it was meant to fix.
+                               So the padding is gone from the CARD instead (`px-0!`
+                               above) and the two things inside it pay their own. Nothing
+                               overflows the wrapper, so nothing is clipped. -->
                           <Item.List
                             v-else
-                            class="-mx-(--spacing-md) mt-(--spacing-xs) w-auto! border-t border-(--border-muted)"
+                            class="mt-(--spacing-xs) border-t border-(--border-muted)"
                           >
                             <FieldRow
                               title="Name"
@@ -708,7 +796,7 @@
                                   aria-label="Name"
                                   :invalid="!!visibleError(field)"
                                   :aria-describedby="messageId"
-                                  :disabled="disabled"
+                                  :disabled="locked"
                                   @blur="touch(field.id)"
                                 />
                               </template>
@@ -722,7 +810,7 @@
                                 v-model="field.type"
                                 size="medium"
                                 class="w-full"
-                                :disabled="disabled"
+                                :disabled="locked"
                                 :display-value="(value) => fieldTypeLabel(value)"
                                 @update:model-value="onTypeChange(field)"
                               >
@@ -750,7 +838,7 @@
                                 autocomplete="off"
                                 class="w-full"
                                 aria-label="Label"
-                                :disabled="disabled"
+                                :disabled="locked"
                               />
                             </FieldRow>
 
@@ -765,7 +853,7 @@
                                 autocomplete="off"
                                 class="w-full"
                                 aria-label="Description"
-                                :disabled="disabled"
+                                :disabled="locked"
                               />
                             </FieldRow>
 
@@ -777,7 +865,7 @@
                               <Switch
                                 v-model="field.required"
                                 aria-label="Required"
-                                :disabled="disabled"
+                                :disabled="locked"
                               />
                             </FieldRow>
 
@@ -796,7 +884,7 @@
                                 v-if="field.type === 'boolean'"
                                 v-model="field.default"
                                 aria-label="Default"
-                                :disabled="disabled"
+                                :disabled="locked"
                               />
                               <Select
                                 v-else-if="field.type === 'select'"
@@ -804,7 +892,7 @@
                                 size="medium"
                                 class="w-full"
                                 placeholder="No default"
-                                :disabled="disabled || field.options.length === 0"
+                                :disabled="locked || field.options.length === 0"
                               >
                                 <Select.Trigger aria-label="Default" />
                                 <Select.Content>
@@ -824,7 +912,7 @@
                                 placeholder="One value per line"
                                 class="w-full font-code"
                                 aria-label="Default"
-                                :disabled="disabled"
+                                :disabled="locked"
                                 @update:model-value="field.default = linesToList($event)"
                               />
                               <!-- A number's default is a TEXT input, not an InputNumber:
@@ -845,7 +933,7 @@
                                 autocomplete="off"
                                 class="w-full font-code"
                                 aria-label="Default"
-                                :disabled="disabled"
+                                :disabled="locked"
                               />
                             </FieldRow>
 
@@ -864,7 +952,7 @@
                                 placeholder="No minimum"
                                 class="w-full"
                                 aria-label="Minimum length"
-                                :disabled="disabled"
+                                :disabled="locked"
                               />
                             </FieldRow>
                             <FieldRow
@@ -879,7 +967,7 @@
                                 placeholder="No maximum"
                                 class="w-full"
                                 aria-label="Maximum length"
-                                :disabled="disabled"
+                                :disabled="locked"
                               />
                             </FieldRow>
                             <FieldRow
@@ -897,7 +985,7 @@
                                 spellcheck="false"
                                 class="w-full font-code"
                                 aria-label="Pattern"
-                                :disabled="disabled"
+                                :disabled="locked"
                               />
                             </FieldRow>
 
@@ -913,7 +1001,7 @@
                                 placeholder="No minimum"
                                 class="w-full"
                                 aria-label="Minimum"
-                                :disabled="disabled"
+                                :disabled="locked"
                               />
                             </FieldRow>
                             <FieldRow
@@ -928,7 +1016,7 @@
                                 placeholder="No maximum"
                                 class="w-full"
                                 aria-label="Maximum"
-                                :disabled="disabled"
+                                :disabled="locked"
                               />
                             </FieldRow>
 
@@ -945,7 +1033,7 @@
                                 placeholder="webp&#10;avif&#10;jpeg"
                                 class="w-full font-code"
                                 aria-label="Choices"
-                                :disabled="disabled"
+                                :disabled="locked"
                                 @update:model-value="field.options = linesToList($event)"
                               />
                             </FieldRow>
@@ -960,7 +1048,7 @@
                                 v-model="field.itemType"
                                 size="medium"
                                 class="w-full"
-                                :disabled="disabled"
+                                :disabled="locked"
                                 :display-value="
                                   (value) =>
                                     ITEM_TYPES.find((item) => item.value === value)?.label ?? value
@@ -982,13 +1070,13 @@
                         </div>
                       </div>
                     </Item>
-                    </TransitionGroup>
-                  </Item.List>
-                </template>
-              </CardBox>
-            </div>
+                  </TransitionGroup>
+                </Item.List>
+              </template>
+            </CardBox>
           </div>
-        </ResizablePanelPane>
+        </div>
+      </ResizablePanelPane>
     </ResizablePanel>
   </div>
 </template>
