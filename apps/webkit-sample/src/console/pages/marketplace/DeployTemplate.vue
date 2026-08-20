@@ -646,13 +646,15 @@
 
                 <template #footer>
                   <!-- Manage opens the created workload — the chain's entry
-                       point — instead of dropping back on the home page. -->
+                       point — instead of dropping back on the home page. No
+                       glyph: the arrow read as "next", which is the one thing
+                       this button is not — the flow is over, and this leaves it
+                       for the resource it made. -->
                   <Button
                     class="w-full"
                     label="Manage"
                     kind="secondary"
                     size="large"
-                    icon="pi pi-arrow-right"
                     @click="manageWorkload"
                   />
                 </template>
