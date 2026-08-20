@@ -119,22 +119,19 @@ const FOOTER_CONTENT = `  <Footer.Column title="Products">
     <Footer.Link href="/support">Help center</Footer.Link>
     <Footer.Link href="https://status.azion.com/">System status</Footer.Link>
   </Footer.Column>
-  <template #social-start>
-    <a href="/" aria-label="Azion home">
-      <Brand />
-    </a>
-    <div class="flex items-center gap-1">
-      <IconButton kind="transparent" icon="pi pi-github" aria-label="Azion on GitHub" href="https://github.com/aziontech" target="_blank" />
-      <IconButton kind="transparent" icon="pi pi-linkedin" aria-label="Azion on LinkedIn" href="https://www.linkedin.com/company/aziontech" target="_blank" />
-      <IconButton kind="transparent" icon="pi pi-youtube" aria-label="Azion on YouTube" href="https://www.youtube.com/aziontech" target="_blank" />
-      <IconButton kind="transparent" icon="pi pi-twitter" aria-label="Azion on X" href="https://x.com/aziontech" target="_blank" />
-      <IconButton kind="transparent" icon="pi pi-instagram" aria-label="Azion on Instagram" href="https://www.instagram.com/aziontech" target="_blank" />
-      <IconButton kind="transparent" icon="pi pi-discord" aria-label="Azion on Discord" href="https://discord.gg/azion" target="_blank" />
-      <IconButton kind="transparent" icon="pi pi-reddit" aria-label="Azion on Reddit" href="https://www.reddit.com/r/azion" target="_blank" />
-    </div>
+  <template #social>
+    <IconButton kind="transparent" icon="pi pi-github" aria-label="Azion on GitHub" href="https://github.com/aziontech" target="_blank" />
+    <IconButton kind="transparent" icon="pi pi-linkedin" aria-label="Azion on LinkedIn" href="https://www.linkedin.com/company/aziontech" target="_blank" />
+    <IconButton kind="transparent" icon="pi pi-youtube" aria-label="Azion on YouTube" href="https://www.youtube.com/aziontech" target="_blank" />
+    <IconButton kind="transparent" icon="pi pi-twitter" aria-label="Azion on X" href="https://x.com/aziontech" target="_blank" />
+    <IconButton kind="transparent" icon="pi pi-instagram" aria-label="Azion on Instagram" href="https://www.instagram.com/aziontech" target="_blank" />
+    <IconButton kind="transparent" icon="pi pi-discord" aria-label="Azion on Discord" href="https://discord.gg/azion" target="_blank" />
+    <IconButton kind="transparent" icon="pi pi-reddit" aria-label="Azion on Reddit" href="https://www.reddit.com/r/aziontech" target="_blank" />
   </template>
-  <template #social-end>
+  <template #status>
     <StatusIndicator severity="success" label="All Systems Operational" />
+  </template>
+  <template #language>
     <div class="w-24">
       <Select v-model="language" placeholder="Language">
         <Select.Trigger aria-label="Language" />
@@ -147,7 +144,13 @@ const FOOTER_CONTENT = `  <Footer.Column title="Products">
         </Select.Content>
       </Select>
     </div>
-  </template>`
+  </template>
+  <template #brand>
+    <a href="/" aria-label="Azion home">
+      <Brand size="large" />
+    </a>
+  </template>
+  <template #tagline>The web platform for modern workloads</template>`
 
 const SETUP_SNIPPET = `const language = ref('en')
 const languageOptions = [
@@ -184,7 +187,7 @@ export const DefaultFooter = {
     docs: {
       description: {
         story:
-          'The footer composed with four link columns and the social bar: brand plus social icon buttons at the start, the system status indicator at the end.'
+          'The footer composed with four link columns, the status row, the signature band (brand beside its tagline) and the social icon buttons. From lg the icons and the status cluster share one row above the signature; stacked, the order is links, status, signature, icons.'
       },
       source: { code: toSfc([...IMPORT, '', SETUP_SNIPPET], DEFAULT_MARKUP) }
     }

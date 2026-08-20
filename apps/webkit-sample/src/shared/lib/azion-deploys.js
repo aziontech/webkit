@@ -201,7 +201,7 @@ export const AZION_DEPLOY_STEPS = [
   },
   {
     key: 'application',
-    title: 'Edge Application',
+    title: 'Application',
     description: 'Application and cache settings applied',
     pendingDescription: 'Applying the application and its cache settings',
     logs: (deploy) => [

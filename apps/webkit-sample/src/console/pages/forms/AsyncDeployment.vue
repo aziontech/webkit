@@ -68,7 +68,7 @@
   // The step the simulated platform rejects — read from the error record, never
   // re-declared here: the store's copy explains THIS step, so choosing the step
   // separately would let the card say "Failed on Build" under a message about the
-  // Edge Application. Configuring the Edge Application is the LAST step on
+  // Application. Configuring the Application is the LAST step on
   // purpose: the build and the upload already succeeded, so the failure is the
   // recoverable kind and "Redeploy" is a real answer to it.
   const FAIL_STEP = DEPLOY_ERROR.step
@@ -188,9 +188,7 @@
         class="layout-section-start flex flex-col gap-(--spacing-md) rounded-(--shape-card) border border-dashed border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-lg)"
       >
         <div class="flex flex-wrap items-center justify-between gap-(--spacing-sm)">
-          <p class="m-0 text-overline-sm text-(--text-muted)">
-            Simulation — how this deploy ends
-          </p>
+          <p class="m-0 text-overline-sm text-(--text-muted)">Simulation — how this deploy ends</p>
           <Tag
             :label="`${REPO.scope}/${REPO.name}`"
             severity="secondary"

@@ -15,8 +15,15 @@
    not this app's idea: every console-shaped app needs the same pair, and a copy per
    app is a copy that drifts. Pair each with `motion-reduce:animate-none`, and stagger
    a follower with `--content-enter-delay`. */
-/* PrimeIcons — webkit components reference `pi pi-*` glyphs. */
-@import 'primeicons/primeicons.css';
+/* PrimeIcons — webkit components reference `pi pi-*` glyphs.
+
+   From @aziontech/icons, NOT from `primeicons` directly. The icon library rebuilds
+   the font with the glyphs Azion actually uses, and upstream 6.0.1 is missing
+   several the design system references — `pi-lightbulb` (the Tip callout) and
+   `pi-sparkles` among them. A missing glyph fails SILENTLY: the class resolves, the
+   element keeps its 14px box and its colour, and `::before` simply has no content,
+   so the icon column renders blank with nothing in the console to say why. */
+@import '@aziontech/icons/primeicons';
 /* Azion icon library — monochrome brand/UI glyphs (`ai ai-*`, colored via
    text color) plus multicolor brand logos (`ai-cor ai-*`, background-image). */
 @import '@aziontech/icons/azionicons';

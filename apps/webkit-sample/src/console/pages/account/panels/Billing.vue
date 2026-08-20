@@ -27,8 +27,17 @@
   // formatted string.
   //
   // LAYOUT — the invoice table earns the DATA measure (`.layout-column`), and the
-  // fact grids read fine at that width. The view owns its own scroll region
-  // because the shell hands each tab a plain flex column (see AccountSettings.vue).
+  // fact grids read fine at that width. The view owns its own scroll region because the
+  // shell hands each tab a plain flex column (see AccountSettings.vue) — so the page is a
+  // COLUMN: heading, then the tab bar, then the one region that scrolls. The heading and
+  // the bands sit on the page column; the TAB BAR does not, because it is full bleed (its
+  // border is the header's edge and runs the whole width of the content zone).
+  //
+  // HEADING SCALE — `large` on the page title, and the invoice band takes a `small`
+  // PageHeading rather than a SectionHeading: the band is this page's payload, with its
+  // own controls, filters and pagination, and a muted section label titles a card, not
+  // that. The two Payment-tab bands stay SectionHeadings — they title fact grids, and
+  // each one's single action lives on that heading so the card stays pure data.
   import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
   import Currency from '@aziontech/webkit/currency'
@@ -43,13 +52,18 @@
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, onMounted, ref } from 'vue'
+  import { useRoute, useRouter } from 'vue-router'
 
-  import FilterBar from '../../../components/list/FilterBar.vue'
+  import ColumnsButton from '../../../components/list/ColumnsButton.vue'
+  import FilterButton from '../../../components/list/FilterButton.vue'
+  import FilterChips from '../../../components/list/FilterChips.vue'
   import ControlsHeader from '../../../components/page/ControlsHeader.vue'
   import PageHeading from '../../../components/page/PageHeading.vue'
+  import PageTabs from '../../../components/page/PageTabs.vue'
   import SectionHeading from '../../../components/page/SectionHeading.vue'
   import { DATE_PRESETS, formatDateRange, matchDate } from '../../../lib/behavior/filter-bar'
   import { useListFilters } from '../../../lib/behavior/list-state'
+  import { defaultPaymentMethod, PAYMENT_METHODS } from '../../../lib/data/payment-methods'
 
   const DOCS = 'https://www.azion.com/en/documentation/'
 
@@ -59,11 +73,55 @@
   // every invoice row. Nothing on the screen can quietly disagree.
   const SEAT_PRICE = { Business: 40, Starter: 20 }
 
+  const PLAN_START = 'Jan 25, 2023'
+
   const SUBSCRIPTION = {
     plan: 'Business',
     seats: 8,
     cycle: 'Monthly',
     nextInvoice: '2026-08-01'
+  }
+
+  // The cards on the account. A LIST, because an account routinely has more than one
+  // (see ../../lib/data/payment-methods.js) — the band above still shows the DEFAULT,
+  // which is the one figure a reader wants without scrolling.
+  const paymentMethods = ref([...PAYMENT_METHODS])
+  const paymentColumns = [
+    {
+      accessorKey: 'holder',
+      header: 'Card Holder',
+      enableSorting: true,
+      principal: true,
+      hideable: false,
+      grow: 2
+    },
+    { accessorKey: 'cardNumber', header: 'Card Number', grow: 2 },
+    { accessorKey: 'expires', header: 'Expiration Date', enableSorting: true },
+    { id: 'actions', kind: 'action', hideable: false }
+  ]
+
+  const paymentActions = [
+    { label: 'Set as default', value: 'default', icon: 'pi pi-check-circle' },
+    { label: 'Remove', value: 'remove', icon: 'pi pi-trash', danger: true }
+  ]
+
+  const onPaymentAction = (event, action, card) => {
+    if (action === 'default') {
+      paymentMethods.value = paymentMethods.value.map((item) => ({
+        ...item,
+        default: item.id === card.id
+      }))
+      toast.success(`${card.brand} •••• ${card.last4} is now the default.`)
+      return
+    }
+    // The default card cannot be removed: an account with invoices and no card to
+    // charge is a state the console should not be able to reach from this menu.
+    if (card.default) {
+      toast.error('Set another card as the default before removing this one.')
+      return
+    }
+    paymentMethods.value = paymentMethods.value.filter((item) => item.id !== card.id)
+    toast.success(`${card.brand} •••• ${card.last4} removed.`)
   }
 
   const PAYMENT_METHOD = {
@@ -78,6 +136,8 @@
   // February and the team grew through the year, so the Plan column and the
   // amounts both move for a reason. The amount is derived rather than typed —
   // a hand-written total is the one number that can drift from its own row.
+  const defaultCard = defaultPaymentMethod()
+
   const INVOICES = [
     {
       seq: 132,
@@ -181,20 +241,17 @@
     // The real instant beside the ISO string, so the Billing date field can compare
     // it — `withinRange` takes a Date and a string would silently match nothing.
     billedAt: new Date(invoice.billingDate),
-    amount: invoice.seats * SEAT_PRICE[invoice.plan]
+    amount: invoice.seats * SEAT_PRICE[invoice.plan],
+    // Derived from the account's default card rather than typed per row: an invoice
+    // charged to a card the account does not have is the kind of seed drift a reader
+    // spots instantly and cannot explain.
+    paymentMethod: `${defaultCard.brand} •••• ${defaultCard.last4}`
   }))
 
   // Each skeleton cell mirrors the fact cell it stands in for — the bar width
   // follows the value it replaces, and a cell with a detail line (the seat price,
   // the masked card number) reserves that second line too. Without this the card
   // grew by the height of one line the moment the data landed.
-  const SUBSCRIPTION_SKELETON = [
-    { value: '116px' },
-    { value: '104px', detail: '96px' },
-    { value: '24px' },
-    { value: '140px' },
-    { value: '96px' }
-  ]
 
   const PAYMENT_SKELETON = [
     { value: '120px', detail: '64px' },
@@ -259,6 +316,7 @@
       subscription.value = billing.subscription
       paymentMethod.value = billing.paymentMethod
       invoices.value = billing.invoices
+      stampUpdate()
     } catch (requestError) {
       error.value = requestError?.message ?? 'Check your connection and try again.'
       subscription.value = null
@@ -281,25 +339,43 @@
       : ''
   )
 
-  const seatPrice = computed(() =>
-    subscription.value ? formatAmount(SEAT_PRICE[subscription.value.plan]) : ''
-  )
-
   // --- The invoice table ----------------------------------------------------
   // `id` is the principal (identity) column; `billingDate` and `amount` hold RAW
   // values (ISO date, number) so sorting and the numeric filters compare the
   // value rather than its formatting — the cell slots do the formatting.
   const invoiceColumns = [
     { accessorKey: 'seq', header: '№', label: 'Number', enableSorting: true },
-    { accessorKey: 'id', header: 'Invoice ID', enableSorting: true, principal: true, grow: 2 },
+    {
+      accessorKey: 'id',
+      header: 'Invoice ID',
+      enableSorting: true,
+      principal: true,
+      hideable: false,
+      grow: 2
+    },
     { accessorKey: 'plan', header: 'Plan', enableSorting: true },
     { accessorKey: 'cycle', header: 'Cycle', enableSorting: true },
     { accessorKey: 'seats', header: 'Seats', enableSorting: true },
     { accessorKey: 'billingDate', header: 'Billing date', enableSorting: true, grow: 2 },
     { accessorKey: 'amount', header: 'Amount', enableSorting: true },
+    // Which card was charged. The console carries it on the invoice row because "why
+    // did THIS one fail" is answered by the card, not by the amount.
+    { accessorKey: 'paymentMethod', header: 'Payment Method', grow: 2 },
     { accessorKey: 'status', header: 'Status', enableSorting: true },
     { id: 'actions', kind: 'action', hideable: false }
   ]
+
+  // Which columns are switched off, driven by the Columns button on the controls row
+  // (../../../components/list/ColumnsButton.vue). Only a HIDDEN column is ever recorded.
+  //
+  // Nine columns, the widest table on the account side — and the one most likely to be
+  // read for a single question ("which of these failed", "what did April cost"), so the
+  // ability to put six of them away is worth more here than anywhere else.
+  //
+  // `Invoice ID` is the PRINCIPAL column here, so it is locked on rather than hidden by
+  // default the way a secondary `ID` is elsewhere: it is what an invoice IS called, not
+  // a machine key beside a name.
+  const columnVisibility = ref({})
 
   // ── The filter catalog ────────────────────────────────────────────────────
   // The same bar every list in the console carries (the webkit-lists skill), not the
@@ -379,21 +455,134 @@
   const invoiceStatusSeverity = (status) =>
     ({ Paid: 'success', Refunded: 'secondary', Overdue: 'danger' })[status] ?? 'secondary'
 
+  const route = useRoute()
+  const router = useRouter()
+
+  // The two questions this page answers, in the console's own order and words.
+  const BILLING_TABS = [
+    { value: 'bills', label: 'Bills' },
+    { value: 'payment-methods', label: 'Payment Methods' }
+  ]
+
+  // The active tab lives in `?tab=`, so it survives a reload and is linkable — the same
+  // contract every tabbed resource in this console keeps. `replace`, not `push`: moving
+  // between two views of one page is not a step the Back button should have to undo.
+  const activeTab = computed({
+    get: () =>
+      BILLING_TABS.some((tab) => tab.value === route.query.tab) ? route.query.tab : 'bills',
+    set: (value) => router.replace({ query: { ...route.query, tab: value } })
+  })
+
+  // When the figures were last read. A real timestamp, formatted the way the design
+  // spells it, so the refresh beside it has something to change.
+  const lastUpdate = ref('')
+  const stampUpdate = () => {
+    lastUpdate.value = new Date().toLocaleString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
+    })
+  }
+
+  // The four label→value rows of the Subscription Plan card. A list rather than four
+  // hand-written rows: they render identically, and the one that differs (an unset
+  // charge shows the design's `--`) differs in its VALUE, not in its markup.
+  const DASH = '--'
+  const planFacts = computed(() => [
+    { label: 'Plan Start Date', value: PLAN_START },
+    {
+      label: 'Next Charge Date',
+      value: subscription.value ? formatDate(subscription.value.nextInvoice) : DASH
+    },
+    { label: 'Next Charge Value', value: subscription.value ? `$ ${totalAmount.value}` : DASH },
+    {
+      label: 'Payment Method',
+      value: defaultCard ? `${defaultCard.brand} •••• ${defaultCard.last4}` : DASH
+    }
+  ])
+
+  // What the Pro tier adds, from the plan catalog rather than typed here.
+  const proPerks = [
+    '20 Workloads',
+    '20 GB Object Storage',
+    '20M Application requests',
+    '20M Firewall requests',
+    '10 hours Function compute time',
+    '2 GB Real-Time Events Storage',
+    'DDoS Protection included',
+    'SOC 2 Type 2 / SOC 3'
+  ]
+
   const changePlan = () => toast.info('Plan management is disabled in the demo.')
   const updatePayment = () => toast.info('Payment method management is disabled in the demo.')
   const downloadInvoice = (event, invoice) => toast.success(`Downloading ${invoice.id}…`)
 </script>
 
 <template>
-  <div class="min-h-0 flex-1 overflow-auto">
-    <section class="layout-column layout-boundary flex min-w-0 flex-col">
+  <!-- THE PAGE IS A COLUMN, not one scroll box: the heading and the tab bar are the page's
+       header and they stay put, and only the region under them scrolls. That is what lets
+       the tab bar be FULL BLEED — its bottom border runs the whole width of the content
+       zone and reads as the edge of the header, the same shape every tabbed page in the
+       console has (../../applications/ApplicationDetail.vue). Inside a capped, inset
+       column the same bar drew a rule that stopped short of both edges and scrolled away,
+       which is a rule about nothing. -->
+  <div class="flex h-full min-w-0 flex-col">
+    <!-- The heading keeps the page column: it is CONTENT, and it lines up with the bands
+         below. Only the inline half of the boundary plus the boundary's own top step —
+         the bottom step belongs to the tab bar, which brings its own. -->
+    <header
+      class="layout-column layout-boundary-inline flex min-w-0 shrink-0 flex-col pt-(--layout-boundary-start) pb-(--spacing-md)"
+    >
       <PageHeading
         title="Billing"
-        description="Your plan, the card we charge, and every invoice we have issued."
-      />
-      <!-- The page's parent section: it spaces the bands below at
-           --layout-section-gap, whichever branch renders. -->
-      <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)">
+        size="large"
+        description="View and manage invoices, payments, and subscription details."
+        :documentation="DOCS"
+      >
+        <!-- The heading's end slot (Figma 314:13901): when the figures were last read,
+             and the way to read them again. A timestamp with no way to refresh is a
+             number the reader can only distrust. -->
+        <template #actions>
+          <span class="text-label-md text-(--text-default)">Last Update: {{ lastUpdate }}</span>
+          <Tooltip text="Refresh">
+            <IconButton
+              icon="pi pi-refresh"
+              kind="outlined"
+              size="medium"
+              ariaLabel="Refresh billing data"
+              :loading="loading"
+              @click="loadBilling"
+            />
+          </Tooltip>
+        </template>
+      </PageHeading>
+    </header>
+
+    <!-- THE TABS ARE TOP LEVEL and FULL BLEED: directly under the page heading, above
+         everything the page shows, and spanning the whole content zone. They name the two
+         things this page IS, so nothing may sit between them and the heading — a band
+         above the bar reads as page chrome that the tabs then contradict by swapping the
+         content under it. Because they sit outside the page column they are also the one
+         element here that is NOT capped or inset: the bar is the header's edge, and an
+         edge stops at the edge. -->
+    <PageTabs
+      v-model:value="activeTab"
+      :tabs="BILLING_TABS"
+    />
+
+    <!-- Only this region scrolls, so the heading and the bar above it stay while the
+         bands move under them. -->
+    <div class="min-h-0 flex-1 overflow-auto">
+      <!-- The page's parent section: back on the page column, and it spaces the bands at
+           --layout-section-gap whichever branch renders. `layout-boundary` rather than the
+           boundary's start step, because the bar above already closed the header — this is
+           the top of a scroll region, not the top of the page. -->
+      <section
+        class="layout-column layout-boundary flex min-w-0 flex-col gap-(--layout-section-gap)"
+      >
         <!-- One request backs all three bands, so its failure is reported once, at
              view level, with the recovery attached to the message itself. -->
         <Message
@@ -405,373 +594,449 @@
         />
 
         <template v-else>
-          <!-- Subscription details -->
-          <div class="flex flex-col gap-(--layout-group-gap)">
-            <SectionHeading
-              title="Subscription details"
-              description="An overview of your plan, seats, and next billing date."
-              anchor
-              :documentation="DOCS"
-            >
-              <template #actions>
-                <Button
-                  label="Change plan"
-                  kind="primary"
-                  size="medium"
-                  icon="pi pi-arrow-up-right"
-                  :disabled="loading"
-                  @click="changePlan"
-                />
-              </template>
-            </SectionHeading>
-            <CardBox>
-              <template #content>
-                <!-- Skeletons in the grid's own shape, so the values land without
-                     reflowing the card. -->
-                <div
-                  v-if="loading"
-                  class="grid grid-cols-2 gap-x-(--spacing-lg) gap-y-(--spacing-md) sm:grid-cols-3 xl:grid-cols-5"
-                >
-                  <div
-                    v-for="(fact, index) in SUBSCRIPTION_SKELETON"
-                    :key="index"
-                    class="flex flex-col gap-(--spacing-xxs)"
-                  >
-                    <Skeleton
-                      kind="shape"
-                      width="72px"
-                      height="18px"
-                    />
-                    <Skeleton
-                      kind="shape"
-                      :width="fact.value"
-                      height="30px"
-                    />
-                    <Skeleton
-                      v-if="fact.detail"
-                      kind="shape"
-                      :width="fact.detail"
-                      height="24px"
+          <template v-if="activeTab === 'bills'">
+            <!-- THE PLAN, TWO CARDS SIDE BY SIDE (Figma 314:13901). The left one states
+               what you are on; the right one states what you would get by moving. They
+               are a PAIR — the upgrade only means something read against the current
+               plan — so they share a row rather than stacking, and the row wraps whole
+               below `lg` instead of letting either card become a column of scraps. -->
+            <div class="flex min-w-0 flex-col items-stretch gap-(--layout-group-gap) lg:flex-row">
+              <!-- Subscription Plan. `lg:w-[45%]` rather than an even split: the facts on
+                 the left are short label/value rows, the list on the right is eight
+                 items in two columns and needs the width. -->
+              <CardBox class="min-w-0 lg:w-[45%]">
+                <template #header>
+                  <div class="flex min-w-0 items-center justify-between gap-(--spacing-md)">
+                    <span class="text-label-lg text-(--text-default)">Subscription Plan</span>
+                    <Button
+                      label="Change Plan"
+                      kind="outlined"
+                      size="medium"
+                      :disabled="loading"
+                      @click="changePlan"
                     />
                   </div>
-                </div>
-                <!-- A description list, because every cell is a term and its value:
-                     the label/value pairing is carried by the markup, not only by
-                     the type scale. -->
-                <dl
-                  v-else
-                  class="grid grid-cols-2 gap-x-(--spacing-lg) gap-y-(--spacing-md) sm:grid-cols-3 xl:grid-cols-5"
-                >
-                  <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                    <dt class="text-label-sm text-(--text-muted)">Total amount</dt>
-                    <dd class="min-w-0">
-                      <Currency
-                        :value="totalAmount"
-                        size="large"
-                        class="tabular-nums"
+                </template>
+                <template #content>
+                  <div class="flex min-w-0 flex-col gap-(--spacing-sm)">
+                    <div class="flex min-w-0 items-center gap-(--spacing-xs)">
+                      <Skeleton
+                        v-if="loading"
+                        kind="shape"
+                        width="120px"
+                        height="20px"
                       />
-                    </dd>
-                  </div>
+                      <template v-else>
+                        <span class="truncate text-label-lg text-(--text-default)">
+                          {{ subscription.plan }}
+                        </span>
+                        <Tag
+                          label="Actual Plan"
+                          severity="secondary"
+                          size="medium"
+                        />
+                      </template>
+                    </div>
 
-                  <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                    <dt class="text-label-sm text-(--text-muted)">Your plan</dt>
-                    <!-- The seat price is stacked, not inline-with-wrap: at this
-                         column width it wrapped on some viewports and sat beside the
-                         name on others, so the cell changed height with the window.
-                         Stacked, it is the same two lines everywhere. -->
-                    <dd class="flex min-w-0 flex-col items-start gap-(--spacing-xxs)">
-                      <span class="max-w-full truncate text-heading-md text-(--text-default)">
-                        {{ subscription.plan }}
-                      </span>
-                      <Tag
-                        :label="`$${seatPrice} / seat`"
-                        severity="secondary"
-                        size="medium"
-                        rounded
-                      />
-                    </dd>
+                    <!-- A description list, not a grid of facts: each row is one
+                       label→value pair and the value is right-aligned, so the four
+                       read as a column of answers rather than four separate cards. -->
+                    <dl class="flex min-w-0 flex-col gap-(--spacing-sm)">
+                      <div
+                        v-for="fact in planFacts"
+                        :key="fact.label"
+                        class="flex min-w-0 items-center justify-between gap-(--spacing-md)"
+                      >
+                        <dt class="shrink-0 text-label-md text-(--text-muted)">{{ fact.label }}</dt>
+                        <dd class="min-w-0 truncate text-label-md text-(--text-default)">
+                          <Skeleton
+                            v-if="loading"
+                            kind="shape"
+                            width="80px"
+                            height="14px"
+                          />
+                          <template v-else>{{ fact.value }}</template>
+                        </dd>
+                      </div>
+                    </dl>
                   </div>
+                </template>
+                <template #footer>
+                  <p class="text-body-xs text-(--text-default)">
+                    This invoice includes all consumption up to the last day of the month.
+                  </p>
+                </template>
+              </CardBox>
 
-                  <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                    <dt class="text-label-sm text-(--text-muted)">Seats</dt>
-                    <dd class="text-heading-md tabular-nums text-(--text-default)">
-                      {{ subscription.seats }}
-                    </dd>
-                  </div>
-
-                  <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                    <dt class="text-label-sm text-(--text-muted)">Next invoice on</dt>
-                    <dd class="text-heading-md tabular-nums text-(--text-default)">
-                      {{ formatDate(subscription.nextInvoice) }}
-                    </dd>
-                  </div>
-
-                  <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                    <dt class="text-label-sm text-(--text-muted)">Cycle</dt>
-                    <dd class="text-heading-md text-(--text-default)">
-                      {{ subscription.cycle }}
-                    </dd>
-                  </div>
-                </dl>
-              </template>
-            </CardBox>
-          </div>
-
-          <!-- Payment information -->
-          <div class="flex flex-col gap-(--layout-group-gap)">
-            <SectionHeading
-              title="Payment information"
-              description="The card we charge and the address invoices are sent to."
-              anchor
-            >
-              <template #actions>
-                <Button
-                  label="Update"
-                  kind="outlined"
-                  size="medium"
-                  :disabled="loading"
-                  @click="updatePayment"
-                />
-              </template>
-            </SectionHeading>
-            <CardBox>
-              <template #content>
-                <div
-                  v-if="loading"
-                  class="grid grid-cols-2 gap-x-(--spacing-lg) gap-y-(--spacing-md) xl:grid-cols-4"
-                >
-                  <div
-                    v-for="(fact, index) in PAYMENT_SKELETON"
-                    :key="index"
-                    class="flex flex-col gap-(--spacing-xxs)"
-                  >
-                    <Skeleton
-                      kind="shape"
-                      width="72px"
-                      height="18px"
-                    />
-                    <Skeleton
-                      kind="shape"
-                      :width="fact.value"
-                      height="24px"
-                    />
-                    <Skeleton
-                      v-if="fact.detail"
-                      kind="shape"
-                      :width="fact.detail"
-                      height="14px"
-                    />
-                  </div>
-                </div>
-                <!-- One step down the scale from the subscription grid: these are
-                     settings the user confirms, not figures they read at a glance. -->
-                <dl
-                  v-else
-                  class="grid grid-cols-2 gap-x-(--spacing-lg) gap-y-(--spacing-md) xl:grid-cols-4"
-                >
-                  <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                    <dt class="text-label-sm text-(--text-muted)">Card</dt>
-                    <dd class="flex min-w-0 items-center gap-(--spacing-xs)">
-                      <span
-                        class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-elements) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised)"
+              <!-- Upgrade to Pro. The limits come from the plan catalog
+                 (../../lib/data/plans.js) rather than being typed here, so the card
+                 cannot advertise a tier the rest of the console does not sell. -->
+              <CardBox class="min-w-0 flex-1">
+                <template #header>
+                  <span class="text-label-lg text-(--text-default)">Upgrade to Pro</span>
+                </template>
+                <template #content>
+                  <div class="flex min-w-0 flex-col justify-between gap-(--spacing-lg)">
+                    <ul
+                      class="grid min-w-0 grid-cols-1 gap-(--spacing-sm) sm:grid-cols-2"
+                      role="list"
+                    >
+                      <li
+                        v-for="perk in proPerks"
+                        :key="perk"
+                        class="flex min-w-0 items-center gap-(--spacing-xs)"
                       >
                         <i
-                          class="pi pi-credit-card text-body-lg leading-none text-(--text-default)"
+                          class="pi pi-check shrink-0 text-body-sm text-(--success)"
                           aria-hidden="true"
                         />
-                      </span>
-                      <span class="flex min-w-0 flex-col">
-                        <span class="truncate text-label-lg text-(--text-default)">
-                          {{ paymentMethod.brand }}
+                        <span class="min-w-0 truncate text-label-sm text-(--text-default)">
+                          {{ perk }}
                         </span>
-                        <span class="text-body-xs tabular-nums text-(--text-muted)">
-                          <span class="sr-only">Card ending in {{ paymentMethod.last4 }}</span>
-                          <span aria-hidden="true">•••• {{ paymentMethod.last4 }}</span>
-                        </span>
-                      </span>
-                    </dd>
+                      </li>
+                    </ul>
+                    <p class="text-body-sm text-(--text-muted)">
+                      Upgrade to unlock higher limits and keep your applications running at scale.
+                      Explore additional capabilities available with the Pro plan:
+                    </p>
                   </div>
-
-                  <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                    <dt class="text-label-sm text-(--text-muted)">Expiry date</dt>
-                    <dd class="text-label-lg tabular-nums text-(--text-default)">
-                      {{ paymentMethod.expires }}
-                    </dd>
+                </template>
+                <template #footer>
+                  <div
+                    class="flex min-w-0 flex-wrap items-center justify-between gap-(--spacing-md)"
+                  >
+                    <p class="text-body-xs text-(--text-default)">
+                      Learn more about
+                      <a
+                        :href="DOCS"
+                        target="_blank"
+                        rel="noreferrer"
+                        class="text-(--text-link) hover:underline"
+                        >Pricing and Plans.</a
+                      >
+                    </p>
+                    <Button
+                      label="Upgrade to Pro"
+                      kind="primary"
+                      size="medium"
+                      :disabled="loading"
+                      @click="changePlan"
+                    />
                   </div>
+                </template>
+              </CardBox>
+            </div>
 
-                  <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                    <dt class="text-label-sm text-(--text-muted)">Billing email</dt>
-                    <dd class="truncate text-label-lg text-(--text-default)">
-                      {{ paymentMethod.email }}
-                    </dd>
-                  </div>
+            <!-- Invoices. A PAGE HEADING at its small scale, not a section heading: the
+                 band is the page's payload — a full list with its own controls, its own
+                 filters and its own pagination — and a muted `text-heading-xxs` label
+                 titles a card, not that. It is the same treatment every band of this
+                 weight takes (../../workloads/WorkloadDetail.vue: Active Deployment,
+                 Version History). -->
+            <div class="flex flex-col gap-(--layout-group-gap)">
+              <PageHeading
+                title="Invoices"
+                description="Your complete invoice history, including payment details."
+                size="small"
+              />
+              <!-- The band's CONTROLS: narrowing on the left, the band's own action on the
+                   right, above the card — the same row every list in the console opens with. -->
+              <ControlsHeader>
+                <!-- Search drives the table's global filter from outside the card, so the field is
+                     a plain InputText (`Table.Search` is context-aware and only works inside
+                     `<Table>`). One horizontal band: it grows into the row's slack and compresses
+                     rather than wrapping (see ui/ControlsHeader.vue). -->
+                <InputText
+                  v-model="search"
+                  size="medium"
+                  placeholder="Search invoices"
+                  aria-label="Search invoices"
+                  class="min-w-36 grow basis-(--container-2xs)"
+                >
+                  <template #iconLeft>
+                    <i
+                      class="pi pi-search"
+                      aria-hidden="true"
+                    />
+                  </template>
+                </InputText>
+                <FilterButton
+                  v-model="filters"
+                  :fields="invoiceFilterFields"
+                />
+                <ColumnsButton
+                  v-model="columnVisibility"
+                  :columns="invoiceColumns"
+                />
+              </ControlsHeader>
 
-                  <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                    <dt class="text-label-sm text-(--text-muted)">Auto-renewal</dt>
-                    <dd class="min-w-0">
-                      <StatusIndicator
-                        :severity="paymentMethod.autoRenewal ? 'success' : 'neutral'"
-                        :label="paymentMethod.autoRenewal ? 'On' : 'Off'"
+              <FilterChips
+                v-model="filters"
+                :fields="invoiceFilterFields"
+              />
+
+              <CardBox :padded="false">
+                <template #content>
+                  <Table
+                    v-model:pagination="pagination"
+                    v-model:globalFilter="search"
+                    v-model:columnVisibility="columnVisibility"
+                    :data="visibleInvoices"
+                    :columns="invoiceColumns"
+                    row-key="id"
+                    enable-sorting
+                    paginated
+                    :page-size="8"
+                    :border="false"
+                    :loading="loading"
+                    export-filename="invoices.csv"
+                    @refresh="loadBilling"
+                  >
+                    <!-- What is left of the toolbar once narrowing AND the column picker
+                         moved out of the card: the two controls that ACT on the table —
+                         reload it, export it — rather than change what you see of it.
+                         `Table.ColumnSelector` used to be the third; it went up to the
+                         controls row as the same `ColumnsButton` every other list in the
+                         console uses, because a reader who learned that glyph on eighteen
+                         lists should not have to find a different control here. Both are
+                         `medium`, so the row shares one height. -->
+                    <template #toolbar>
+                      <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
+                        <Table.RefreshButton />
+                        <Table.Export />
+                      </div>
+                    </template>
+
+                    <!-- Two empties, two copies: a filter that matches nothing is
+                         recoverable in one click; a history that has not started yet
+                         is not the same problem. -->
+                    <template #empty>
+                      <EmptyState
+                        key="empty-state-1"
+                        v-if="isFiltered"
+                        size="small"
+                        icon="pi pi-filter-slash"
+                        title="No invoices match these filters"
+                        description="Widen the search or clear the filters to see the rest of your history."
+                      >
+                        <template #actions>
+                          <Button
+                            label="Clear filters"
+                            kind="outlined"
+                            size="medium"
+                            @click="clearFilters"
+                          />
+                        </template>
+                      </EmptyState>
+                      <EmptyState
+                        key="empty-state-2"
+                        v-else
+                        size="small"
+                        icon="pi pi-file"
+                        title="No invoices yet"
+                        description="Your first invoice appears here once the first billing cycle closes."
+                      >
+                        <template #actions>
+                          <Button
+                            label="Billing documentation"
+                            kind="outlined"
+                            size="medium"
+                            icon="pi pi-external-link"
+                            :href="DOCS"
+                          />
+                        </template>
+                      </EmptyState>
+                    </template>
+
+                    <!-- The sequence number orders the history; the Invoice ID
+                         identifies it, so only one of the two is emphasized. -->
+                    <template #cell-seq="{ value }">
+                      <span class="tabular-nums text-(--text-muted)">{{ value }}</span>
+                    </template>
+
+                    <template #cell-seats="{ value }">
+                      <span class="tabular-nums">{{ value }}</span>
+                    </template>
+
+                    <template #cell-billingDate="{ value }">
+                      <span class="tabular-nums">{{ formatDate(value) }}</span>
+                    </template>
+
+                    <template #cell-amount="{ value }">
+                      <Currency
+                        :value="formatAmount(value)"
+                        size="small"
+                        class="tabular-nums"
                       />
-                    </dd>
-                  </div>
-                </dl>
-              </template>
-            </CardBox>
-          </div>
+                    </template>
 
-          <!-- Invoices -->
-          <div class="flex flex-col gap-(--layout-group-gap)">
-            <SectionHeading
-              title="Invoices"
-              description="Your complete invoice history, including payment details."
-              anchor
-            />
-            <!-- The band's CONTROLS: narrowing on the left, the band's own action on the
-                 right, above the card — the same row every list in the console opens with. -->
-            <ControlsHeader>
-              <!-- Search drives the table's global filter from outside the card, so the field is
-                   a plain InputText (`Table.Search` is context-aware and only works inside
-                   `<Table>`). One horizontal band: it grows into the row's slack and compresses
-                   rather than wrapping (see ui/ControlsHeader.vue). -->
-              <InputText
-                v-model="search"
-                size="large"
-                placeholder="Search invoices"
-                aria-label="Search invoices"
-                class="min-w-36 grow basis-(--container-2xs)"
+                    <template #cell-status="{ value }">
+                      <Tag
+                        :label="value"
+                        :severity="invoiceStatusSeverity(value)"
+                        size="medium"
+                      />
+                    </template>
+
+                    <template #cell-actions="{ row }">
+                      <Tooltip text="Download invoice">
+                        <IconButton
+                          icon="pi pi-download"
+                          kind="outlined"
+                          size="small"
+                          :aria-label="`Download invoice ${row.id}`"
+                          @click="(event) => downloadInvoice(event, row)"
+                        />
+                      </Tooltip>
+                    </template>
+                  </Table>
+                </template>
+              </CardBox>
+            </div>
+          </template>
+
+          <template v-else>
+            <!-- Payment information -->
+            <div class="flex flex-col gap-(--layout-group-gap)">
+              <SectionHeading
+                title="Payment information"
+                description="Where invoices are sent, and whether the plan renews on its own."
+                anchor
               >
-                <template #iconLeft>
-                  <i
-                    class="pi pi-search"
-                    aria-hidden="true"
+                <template #actions>
+                  <Button
+                    label="Update"
+                    kind="outlined"
+                    size="medium"
+                    :disabled="loading"
+                    @click="updatePayment"
                   />
                 </template>
-              </InputText>
-            </ControlsHeader>
-
-            <!-- The filter bar takes its own row: it grows as filters are applied, so
-                 sharing the controls row would make the search field jump width. -->
-            <FilterBar
-              v-model="filters"
-              :fields="invoiceFilterFields"
-            />
-
-            <CardBox :padded="false">
-              <template #content>
-                <Table
-                  v-model:pagination="pagination"
-                  v-model:globalFilter="search"
-                  :data="visibleInvoices"
-                  :columns="invoiceColumns"
-                  row-key="id"
-                  enable-sorting
-                  paginated
-                  :page-size="8"
-                  :border="false"
-                  :loading="loading"
-                  export-filename="invoices.csv"
-                  @refresh="loadBilling"
-                >
-                  <!-- What is left of the toolbar once narrowing moved out of the card:
-                       the three controls that act on the table rather than filter it,
-                       all `medium` so the row shares one height. -->
-                  <template #toolbar>
-                    <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
-                      <Table.RefreshButton />
-                      <Table.Export />
-                      <Table.ColumnSelector />
-                    </div>
-                  </template>
-
-                  <!-- Two empties, two copies: a filter that matches nothing is
-                       recoverable in one click; a history that has not started yet
-                       is not the same problem. -->
-                  <template #empty>
-                    <EmptyState
-                      key="empty-state-1"
-                      v-if="isFiltered"
-                      size="small"
-                      icon="pi pi-filter-slash"
-                      title="No invoices match these filters"
-                      description="Widen the search or clear the filters to see the rest of your history."
+              </SectionHeading>
+              <CardBox>
+                <template #content>
+                  <div
+                    v-if="loading"
+                    class="grid grid-cols-2 gap-x-(--spacing-lg) gap-y-(--spacing-md) xl:grid-cols-4"
+                  >
+                    <div
+                      v-for="(fact, index) in PAYMENT_SKELETON"
+                      :key="index"
+                      class="flex flex-col gap-(--spacing-xxs)"
                     >
-                      <template #actions>
-                        <Button
-                          label="Clear filters"
-                          kind="outlined"
-                          size="medium"
-                          @click="clearFilters"
-                        />
-                      </template>
-                    </EmptyState>
-                    <EmptyState
-                      key="empty-state-2"
-                      v-else
-                      size="small"
-                      icon="pi pi-file"
-                      title="No invoices yet"
-                      description="Your first invoice appears here once the first billing cycle closes."
-                    >
-                      <template #actions>
-                        <Button
-                          label="Billing documentation"
-                          kind="outlined"
-                          size="medium"
-                          icon="pi pi-external-link"
-                          :href="DOCS"
-                        />
-                      </template>
-                    </EmptyState>
-                  </template>
-
-                  <!-- The sequence number orders the history; the Invoice ID
-                       identifies it, so only one of the two is emphasized. -->
-                  <template #cell-seq="{ value }">
-                    <span class="tabular-nums text-(--text-muted)">{{ value }}</span>
-                  </template>
-
-                  <template #cell-seats="{ value }">
-                    <span class="tabular-nums">{{ value }}</span>
-                  </template>
-
-                  <template #cell-billingDate="{ value }">
-                    <span class="tabular-nums">{{ formatDate(value) }}</span>
-                  </template>
-
-                  <template #cell-amount="{ value }">
-                    <Currency
-                      :value="formatAmount(value)"
-                      size="small"
-                      class="tabular-nums"
-                    />
-                  </template>
-
-                  <template #cell-status="{ value }">
-                    <Tag
-                      :label="value"
-                      :severity="invoiceStatusSeverity(value)"
-                      size="medium"
-                    />
-                  </template>
-
-                  <template #cell-actions="{ row }">
-                    <Tooltip text="Download invoice">
-                      <IconButton
-                        icon="pi pi-download"
-                        kind="outlined"
-                        size="small"
-                        :aria-label="`Download invoice ${row.id}`"
-                        @click="(event) => downloadInvoice(event, row)"
+                      <Skeleton
+                        kind="shape"
+                        width="72px"
+                        height="18px"
                       />
-                    </Tooltip>
-                  </template>
-                </Table>
-              </template>
-            </CardBox>
-          </div>
+                      <Skeleton
+                        kind="shape"
+                        :width="fact.value"
+                        height="24px"
+                      />
+                      <Skeleton
+                        v-if="fact.detail"
+                        kind="shape"
+                        :width="fact.detail"
+                        height="14px"
+                      />
+                    </div>
+                  </div>
+                  <!-- One step down the scale from the subscription grid: these are
+                       settings the user confirms, not figures they read at a glance. -->
+                  <dl
+                    v-else
+                    class="grid grid-cols-2 gap-x-(--spacing-lg) gap-y-(--spacing-md) xl:grid-cols-4"
+                  >
+                    <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                      <dt class="text-label-sm text-(--text-muted)">Billing email</dt>
+                      <dd class="truncate text-label-lg text-(--text-default)">
+                        {{ paymentMethod.email }}
+                      </dd>
+                    </div>
+
+                    <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                      <dt class="text-label-sm text-(--text-muted)">Auto-renewal</dt>
+                      <dd class="min-w-0">
+                        <StatusIndicator
+                          :severity="paymentMethod.autoRenewal ? 'success' : 'secondary'"
+                          :label="paymentMethod.autoRenewal ? 'On' : 'Off'"
+                        />
+                      </dd>
+                    </div>
+                  </dl>
+                </template>
+              </CardBox>
+            </div>
+
+            <!-- Payment methods. The band above states the DEFAULT card as a fact; this
+                 is the full set, because an account routinely has more than one and only
+                 a list can say which of them is the one being charged. Three columns, the
+                 console's own (../../lib/data/payment-methods.js). -->
+            <div class="flex flex-col gap-(--layout-group-gap)">
+              <SectionHeading
+                title="Payment methods"
+                description="Every card on the account. Invoices are charged to the default one."
+                anchor
+              >
+                <template #actions>
+                  <Button
+                    label="Add payment method"
+                    kind="outlined"
+                    size="medium"
+                    icon="pi pi-plus"
+                    :disabled="loading"
+                    @click="updatePayment"
+                  />
+                </template>
+              </SectionHeading>
+              <!-- No controls row: three columns and three rows have nothing to narrow,
+                   and a band with one lone Columns button reads as a row that lost its
+                   search field. -->
+              <CardBox :padded="false">
+                <template #content>
+                  <Table
+                    :data="paymentMethods"
+                    :columns="paymentColumns"
+                    row-key="id"
+                    enable-sorting
+                    :border="false"
+                    :loading="loading"
+                    :row-actions="paymentActions"
+                    @row-action="onPaymentAction"
+                  >
+                    <!-- The default is marked on the holder, not in a column of its own:
+                         it is a property of ONE row, so a whole column would be empty on
+                         every other one. -->
+                    <template #cell-holder="{ row, value }">
+                      <span class="flex min-w-0 items-center gap-(--spacing-xs)">
+                        <span class="truncate">{{ value }}</span>
+                        <Tag
+                          v-if="row.default"
+                          label="Default"
+                          severity="success"
+                          size="small"
+                        />
+                      </span>
+                    </template>
+
+                    <template #cell-cardNumber="{ row, value }">
+                      <span class="flex min-w-0 items-center gap-(--spacing-xs)">
+                        <i
+                          class="pi pi-credit-card shrink-0 text-(--text-muted)"
+                          aria-hidden="true"
+                        />
+                        <span class="truncate">{{ value }}</span>
+                        <span class="sr-only">{{ row.brand }} ending in {{ row.last4 }}</span>
+                      </span>
+                    </template>
+                  </Table>
+                </template>
+              </CardBox>
+            </div>
+          </template>
         </template>
       </section>
-    </section>
+    </div>
   </div>
 </template>

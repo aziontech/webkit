@@ -23,6 +23,7 @@
   import { computed, ref } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
+  import ColumnsButton from '../../components/list/ColumnsButton.vue'
   import DeleteDialog from '../../components/list/DeleteDialog.vue'
   import LastModifiedCell from '../../components/list/LastModifiedCell.vue'
   import AppLayout from '../../components/shell/AppLayout.vue'
@@ -156,11 +157,27 @@
   })
 
   const columns = [
-    { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, grow: 3 },
+    {
+      accessorKey: 'name',
+      header: 'Name',
+      enableSorting: true,
+      principal: true,
+      hideable: false,
+      grow: 3
+    },
     { accessorKey: 'size', header: 'Size', enableSorting: true },
     { accessorKey: 'lastModified', header: 'Last Modified', enableSorting: true, grow: 2 },
     { id: 'actions', kind: 'action', hideable: false }
   ]
+
+  // Which columns are switched off, driven by the Columns button beside the search
+  // (../../components/list/ColumnsButton.vue). Only a HIDDEN column is ever recorded.
+  //
+  // The control is INSIDE the toolbar here, not on a page controls row, because this
+  // table's search is too: a file browser's chrome belongs to the folder it is showing
+  // (the breadcrumb under it is the same argument), so the whole band travels with the
+  // card. Everything else about it is identical — same glyph, same panel, same row.
+  const columnVisibility = ref({})
 
   // ── Navigation ────────────────────────────────────────────────────────────
   const enterFolder = (name) => {
@@ -260,6 +277,7 @@
         <CardBox :padded="false">
           <template #content>
             <Table
+              v-model:columnVisibility="columnVisibility"
               :data="rows"
               :columns="columns"
               row-key="id"
@@ -288,6 +306,13 @@
                       size="large"
                       placeholder="Search in folder"
                       class="flex-1"
+                    />
+                    <!-- `large` to match the field it shares the row with — the toolbar
+                         runs a size above the page controls rows elsewhere. -->
+                    <ColumnsButton
+                      v-model="columnVisibility"
+                      :columns="columns"
+                      size="large"
                     />
                   </div>
 

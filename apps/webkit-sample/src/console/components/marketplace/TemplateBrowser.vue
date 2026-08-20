@@ -9,8 +9,9 @@
   import EmptyState from '@aziontech/webkit/empty-state'
   import ScrollArea from '@aziontech/webkit/scroll-area'
   import SegmentedButton from '@aziontech/webkit/segmented-button'
-  import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
+  import { computed, reactive, ref } from 'vue'
 
+  import { useScrollFade } from '../../lib/behavior/scroll-fade'
   import TemplateCard from './TemplateCard.vue'
 
   const props = defineProps({
@@ -73,92 +74,18 @@
     )
   })
 
-  // Edge fades on the scrolling catalog (scrollable only), so the grid dissolves
-  // into the page instead of ending at a hard line — the cue that content continues
-  // past the viewport.
+  // Edge fades on the scrolling catalog, so the grid dissolves into the page instead of
+  // ending at a hard line — the cue that content continues past the viewport. The
+  // behaviour is shared with the wizard's own scroll boxes
+  // (../../lib/behavior/scroll-fade.js), which is where the reasoning lives; here it
+  // only has to be pointed at the box.
   //
-  // Each edge fades only while there is content past it: nothing at rest, a top band
-  // once the first row has scrolled under the pinned title row, and a bottom band
-  // that shrinks to zero as the last row arrives. Fixed bands would dim the first and
-  // last rows permanently and pop off at the ends of the scroll; tracking the actual
-  // scroll distance means the fade eases itself in and out as you move.
-  //
-  // The mask sits on the *wrapper*, not on the ScrollArea: ScrollArea owns its root's
-  // attributes (it does not forward `$attrs`), and masking the wrapper covers the
-  // scrolled content just the same.
-  const MAX_FADE = 64 // px — --spacing-xl at its widest step
-  const scrollRef = ref(null)
-  const fadeTop = ref(0)
-  const fadeBottom = ref(0)
-
-  // The observed element is held outside the ref so teardown still reaches it after
-  // v-if has already dropped the ref (filtering down to no results).
-  let observedEl = null
-  let scrollObserver = null
-
-  const clampFade = (distance) => Math.max(0, Math.min(MAX_FADE, distance))
-
-  // `scrollRef` is a ScrollArea instance when scrollable, a plain element otherwise.
-  const viewportEl = () => scrollRef.value?.$el ?? scrollRef.value ?? null
-
-  const updateFade = () => {
-    const el = viewportEl()
-    if (!el) {
-      fadeTop.value = 0
-      fadeBottom.value = 0
-      return
-    }
-    fadeTop.value = clampFade(el.scrollTop)
-    fadeBottom.value = clampFade(el.scrollHeight - el.clientHeight - el.scrollTop)
-  }
-
-  const fadeStyle = computed(() => {
-    // No mask at rest: an always-on one costs a compositing layer and would leave the
-    // first and last rows permanently half-lit.
-    if (!fadeTop.value && !fadeBottom.value) return undefined
-    const mask = `linear-gradient(to bottom, transparent 0, #000 ${fadeTop.value}px, #000 calc(100% - ${fadeBottom.value}px), transparent 100%)`
-    return { maskImage: mask, WebkitMaskImage: mask }
-  })
-
-  const unobserveViewport = () => {
-    if (observedEl) observedEl.removeEventListener('scroll', updateFade)
-    scrollObserver?.disconnect()
-    observedEl = null
-    scrollObserver = null
-  }
-
-  const observeViewport = () => {
-    if (!props.scrollable) return
-    const el = viewportEl()
-    if (el && el === observedEl) {
-      updateFade()
-      return
-    }
-    unobserveViewport()
-    if (!el) {
-      updateFade()
-      return
-    }
-    observedEl = el
-    // Listeners are attached here rather than in the template for the same reason the
-    // mask is: ScrollArea does not forward `$attrs`, so a `@scroll` binding on it
-    // would never reach the element that actually scrolls.
-    el.addEventListener('scroll', updateFade, { passive: true })
-    // Catches the viewport resizing; content-height changes come from the filters,
-    // which the watch below covers.
-    scrollObserver = new ResizeObserver(updateFade)
-    scrollObserver.observe(el)
-    updateFade()
-  }
-
-  onMounted(observeViewport)
-
-  watch(filteredTemplates, async () => {
-    await nextTick()
-    observeViewport()
-  })
-
-  onBeforeUnmount(unobserveViewport)
+  // `scroller` goes on the ScrollArea and `fadeStyle` on the WRAPPER around it:
+  // ScrollArea owns its root's attributes (it does not forward `$attrs`), so a style
+  // bound to it would never land, and masking the wrapper covers the scrolled content
+  // just the same. Nothing gates this on `scrollable` — an unbounded grid has no
+  // overflow, so it measures no distance past either edge and gets no mask.
+  const { scroller, fadeStyle } = useScrollFade()
 </script>
 
 <template>
@@ -168,9 +95,7 @@
   >
     <!-- Section title beside its one control: a Filter Dropdown (Use Cases /
          Technology groups). -->
-    <div
-      class="flex min-h-(--size-8) flex-wrap items-center justify-between gap-(--spacing-md)"
-    >
+    <div class="flex min-h-(--size-8) flex-wrap items-center justify-between gap-(--spacing-md)">
       <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
         {{ title }}
       </p>
@@ -191,9 +116,12 @@
 
           <!-- Dimension switch pinned above the option list. -->
           <template #top>
+            <!-- `medium`: this sits inside a dropdown panel, above the option list,
+                 where the rhythm is the 32px one the panel's own rows keep. -->
             <SegmentedButton
               v-model="filterTab"
               :options="filterSegments"
+              size="medium"
               aria-label="Filter dimension"
             />
           </template>
@@ -244,12 +172,10 @@
            would resolve to a zero-height (invisible) grid on the stacked layout. -->
       <component
         :is="scrollable ? ScrollArea : 'div'"
-        ref="scrollRef"
+        ref="scroller"
         :aria-label="scrollable ? `${title} results` : undefined"
         :class="
-          scrollable
-            ? 'pb-(--spacing-xxs) pr-(--spacing-xxs) lg:min-h-0 lg:flex-1'
-            : undefined
+          scrollable ? 'pb-(--spacing-xxs) pr-(--spacing-xxs) lg:min-h-0 lg:flex-1' : undefined
         "
       >
         <div

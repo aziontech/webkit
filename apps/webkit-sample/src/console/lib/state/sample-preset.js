@@ -24,13 +24,13 @@
 //   version          · empty | populated — held next door in ./sample-mode.js,
 //                      re-exported here so one panel can drive the whole preset.
 //
-// ── THE DEFAULTS ARE A NEW ACCOUNT ──
+// ── THE DEFAULTS ──
 //
-// Hobby, no account switcher, empty. A fresh browser therefore opens the console
-// as somebody who just signed up, which is the state it is least designed for and
-// so the one worth meeting first — the same argument ./sample-mode.js makes for
-// opening EMPTY. Everything above it is one panel away (the account menu's
-// "Sample preset").
+// Hobby, no account switcher, POPULATED. A fresh browser opens the console with rows
+// in every module — the version most of a review is actually about — on the smallest
+// contract, so the tier tag and the tenancy chain start at their simplest and grow
+// from there. Every other combination, the empty account included, is one panel away
+// (the account menu's "Sample preset").
 //
 // ── HOW IT IS SET ──
 //

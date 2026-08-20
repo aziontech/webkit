@@ -8,16 +8,17 @@
   // same delivery from the browser's side.
   //
   // That window is the one control it shares with every list in the console, and
-  // deliberately the same one: a filter bar (ui/FilterBar.vue) holding a single
+  // deliberately the same one: the Filter button (list/FilterButton.vue) holding a single
   // `kind: 'range'` field, so picking a period here is the same gesture as picking a
   // status anywhere else. It narrows nothing locally — the fixture reshapes per
-  // period instead (src/lib/observability.js) — so the bar is bound directly rather
+  // period instead (src/lib/observability.js) — so it is bound directly rather
   // than through useListFilters, which exists to filter ROWS.
   import CardBox from '@aziontech/webkit/card-box'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, ref } from 'vue'
 
-  import FilterBar from '../../components/list/FilterBar.vue'
+  import FilterButton from '../../components/list/FilterButton.vue'
+  import FilterChips from '../../components/list/FilterChips.vue'
   import MetricPanel from '../../components/observability/MetricPanel.vue'
   import AppLayout from '../../components/shell/AppLayout.vue'
   import {
@@ -59,8 +60,14 @@
         <!-- ONE band: the window control, the strip it re-queries, and the panels. -->
         <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
           <!-- No ControlsHeader: there is no search (nothing to search) and no create
-               action, so the row would be an empty container around one chip. -->
-          <FilterBar
+               action, so that row would be an empty container around one button. The
+               filter is here all the same — the window control is a filter like any
+               other, and it reads the same on this page as on every list. -->
+          <FilterButton
+            v-model="filters"
+            :fields="filterFields"
+          />
+          <FilterChips
             v-model="filters"
             :fields="filterFields"
           />

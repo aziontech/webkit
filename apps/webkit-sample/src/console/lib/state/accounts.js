@@ -4,34 +4,36 @@
 // persists for the session, so the header pill reflects the choice across
 // every page. The organization that owns this tree lives in organizations.js.
 //
-// The Azion console is multi-tenant: a Brand owns Resellers, a Reseller owns
-// Groups, and a Group owns Client accounts. The switcher lets an operator move
-// across that tree by browsing one type at a time.
+// The console is multi-tenant, and the tenancy words changed: "brand",
+// "reseller" and "client" are retired, and the tiers are now ORGANIZATION owns
+// GROUP owns WORKSPACE, top → bottom. That is a rename of three tiers onto two
+// words plus one that already existed, so the old four-tier chain (brand →
+// reseller → group → client) folds to three: a brand is an Organization, a
+// client is a Workspace, and the reseller tier is gone — the groups it held now
+// hang off the Organization directly, which is the tier a partner channel was
+// standing in for. The switcher renders the whole tree at once
+// (./accounts.js § listAccountTree) rather than one tier at a time.
 import { computed, ref } from 'vue'
 
 import { useSampleMode } from './sample-mode.js'
 
 const { accountEmpty } = useSampleMode()
 
-// The four levels of the hierarchy, top → bottom. `value` drives the type
-// Select; `singular` matches an account's `type`; `icon` + `severity` render
-// the per-row Type tag. Order mirrors the ownership chain.
+// The three tiers of the hierarchy, top → bottom. `singular` matches an
+// account's `type`; `icon` is the tier's glyph — the leading mark on every tree
+// row, so a level is legible before its label is read — and `severity` colours
+// the Type tag. Order mirrors the ownership chain.
+//
+// `value` is the plural slug an API would take as `account_type`; it survives
+// the rename because the tree still has to name a tier to a server.
 export const accountTypes = [
   {
-    value: 'brands',
-    label: 'Brands',
-    singular: 'brand',
-    typeLabel: 'Brand',
-    icon: 'pi pi-globe',
+    value: 'organizations',
+    label: 'Organizations',
+    singular: 'organization',
+    typeLabel: 'Organization',
+    icon: 'pi pi-building',
     severity: 'accent'
-  },
-  {
-    value: 'resellers',
-    label: 'Resellers',
-    singular: 'reseller',
-    typeLabel: 'Reseller',
-    icon: 'pi pi-sitemap',
-    severity: 'info'
   },
   {
     value: 'groups',
@@ -39,35 +41,22 @@ export const accountTypes = [
     singular: 'group',
     typeLabel: 'Group',
     icon: 'pi pi-users',
-    severity: 'warning'
+    severity: 'info'
   },
   {
-    value: 'clients',
-    label: 'Clients',
-    singular: 'client',
-    typeLabel: 'Client',
-    icon: 'pi pi-box',
+    value: 'workspaces',
+    label: 'Workspaces',
+    singular: 'workspace',
+    typeLabel: 'Workspace',
+    icon: 'pi pi-th-large',
     severity: 'secondary'
   }
 ]
 
-// The synthetic root of the resource tree — the organization every top-level
-// brand sits under (mirrors the console's "No organization" node). Kept out of
-// `accountTypes` so it never appears as a switch target in the account drawer.
-export const organizationType = {
-  value: 'organization',
-  label: 'Organization',
-  singular: 'organization',
-  typeLabel: 'Organization',
-  icon: 'pi pi-building',
-  severity: 'contrast'
-}
-
-// Look up the type descriptor for an account's `type` (the singular form).
+// Look up the tier descriptor for an account's `type` (the singular form).
+// Falls back to the leaf tier, which is what an unknown row most likely is.
 export const accountTypeOf = (type) =>
-  type === 'organization'
-    ? organizationType
-    : (accountTypes.find((entry) => entry.singular === type) ?? accountTypes[3])
+  accountTypes.find((entry) => entry.singular === type) ?? accountTypes[2]
 
 // Initials for an account's avatar.
 //
@@ -88,65 +77,61 @@ export const accountInitials = (name) => {
   return (words[0] ?? '').slice(0, 2).toUpperCase()
 }
 
-// WHERE THE SAMPLE OPENS: Caixa Econômica Federal, a client account.
+// WHERE THE SAMPLE OPENS: Caixa Econômica Federal, a workspace.
 //
 // Not the first row of the roster, which is why this is named for booting and not
 // for being first (its counterpart FIRST_ORGANIZATION_ID happens to be both). A
-// client is what an operator actually logs in as — the reseller and group levels
-// above it exist to be browsed, not inhabited — so the sample should open inside
-// one, with real workloads under it and a brand mark on the header pill.
+// WORKSPACE is what an operator actually operates in — the Group and Organization
+// above it are structure, there to be browsed rather than inhabited — so the
+// sample should open inside one, with real workloads under it and the customer's
+// own mark on the header pill.
 //
 // Exported because it is also the middle link of the scope that owns every seeded
 // resource row (see ./tenancy-scope.js): the app boots into the full lists, and
 // switching away projects them.
 export const BOOT_ACCOUNT_ID = 28836
 
-// Seeded tenants across all four levels, linked into one tree by `parentId`
-// (null = a root under the organization). Client accounts are named after the
-// COMPANY that owns them, because that is what a client account is in the
-// console: one customer's traffic, storage and bill. The groups above them are
-// the segments those customers are managed in, so a switcher row reads as a
-// real place ("Magalu", under Retail & Marketplace) rather than a test fixture.
-// A few carry resource metadata (last accessed, labels, monthly charges) so the
-// Manage Resources table reads like the console; the rest render "—".
-const ORG_ID = 0
-
+// Seeded tenants across all three tiers, linked into one tree by `parentId`
+// (`null` = an Organization, the root tier — there is no synthetic node above
+// them any more). WORKSPACES are named after the COMPANY that owns them, because
+// that is what one is in the console: a customer's traffic, storage and bill. The
+// Groups above them are the segments those customers are managed in, so a
+// switcher row reads as a real place ("Magalu", under Retail & Marketplace)
+// rather than a test fixture. A few carry resource metadata (last accessed,
+// labels, monthly charges) so the Manage Resources table reads like the console;
+// the rest render "—".
+//
+// THE RESELLER TIER IS GONE with the rename, and its ids went with it: the two
+// networks that held groups (LatAm 4471, EMEA 4519) were the partner channel the
+// word named, so the Groups they held now hang off the Organization directly, and
+// APAC (4602), which held nothing, has nothing to re-parent.
 const seedAccounts = [
-  // The organization root.
-  { id: ORG_ID, name: 'No organization', clientId: '—', type: 'organization', parentId: null },
-
-  // Brands
+  // Organizations — the root tier.
   {
     id: 1,
-    name: 'Azion Brand',
+    name: 'Azion',
     clientId: '0001b',
-    type: 'brand',
-    parentId: ORG_ID,
+    type: 'organization',
+    parentId: null,
     labels: ['primary']
   },
-  { id: 812, name: 'Nebula Partners', clientId: '0204c', type: 'brand', parentId: ORG_ID },
+  { id: 812, name: 'Nebula Partners', clientId: '0204c', type: 'organization', parentId: null },
 
-  // Resellers
-  { id: 4471, name: 'LatAm Reseller Network', clientId: '1180d', type: 'reseller', parentId: 1 },
-  { id: 4519, name: 'EMEA Distribution', clientId: '2330k', type: 'reseller', parentId: 1 },
-  { id: 4602, name: 'APAC Cloud Partners', clientId: '2515m', type: 'reseller', parentId: 812 },
+  // Groups — the segment each set of customer workspaces is managed in.
+  { id: 9032, name: 'Retail & Marketplace', clientId: '4500p', type: 'group', parentId: 1 },
+  { id: 9088, name: 'Digital Commerce', clientId: '4710q', type: 'group', parentId: 1 },
+  { id: 9140, name: 'Enterprise Accounts', clientId: '4881r', type: 'group', parentId: 1 },
 
-  // Groups — the segment each set of customer accounts is managed in.
-  { id: 9032, name: 'Retail & Marketplace', clientId: '4500p', type: 'group', parentId: 4471 },
-  { id: 9088, name: 'Digital Commerce', clientId: '4710q', type: 'group', parentId: 4471 },
-  { id: 9140, name: 'Enterprise Accounts', clientId: '4881r', type: 'group', parentId: 4519 },
-
-  // Clients — one per customer. The header's switcher lists every account below
-  // (the whole roster, minus the organization root), so `lastAccessed` is no longer
-  // what decides who appears there; it is the "Last accessed" column of the Manage
-  // Resources page. Every one is `active`: these are real companies, and a seeded
-  // "suspended" against a real name states something about them that isn't ours to
-  // state.
+  // Workspaces — one per customer. The switcher's tree renders every tier, so
+  // `lastAccessed` is not what decides who appears there; it is the "Last accessed"
+  // column of the Manage Resources page. Every one is `active`: these are real
+  // companies, and a seeded "suspended" against a real name states something about
+  // them that isn't ours to state.
   {
     id: 6,
     name: 'Magalu',
     clientId: '0001a',
-    type: 'client',
+    type: 'workspace',
     parentId: 9032,
     lastAccessed: '2 hours ago',
     status: 'active',
@@ -157,7 +142,7 @@ const seedAccounts = [
     id: 33024,
     name: 'Madeira Madeira',
     clientId: '1860h',
-    type: 'client',
+    type: 'workspace',
     parentId: 9032,
     lastAccessed: 'Yesterday',
     status: 'active',
@@ -168,18 +153,18 @@ const seedAccounts = [
     id: 29025,
     name: 'Tray',
     clientId: '4797u',
-    type: 'client',
+    type: 'workspace',
     parentId: 9088,
     lastAccessed: '3 days ago',
     status: 'active',
     charges: '42.10'
   },
-  { id: 5791, name: 'LWSA', clientId: '4151o', type: 'client', parentId: 9088, status: 'active' },
+  { id: 5791, name: 'LWSA', clientId: '4151o', type: 'workspace', parentId: 9088, status: 'active' },
   {
     id: 31204,
     name: 'iFood',
     clientId: '4206r',
-    type: 'client',
+    type: 'workspace',
     parentId: 9140,
     lastAccessed: '1 week ago',
     status: 'active',
@@ -189,7 +174,7 @@ const seedAccounts = [
     id: BOOT_ACCOUNT_ID,
     name: 'Caixa Econômica Federal',
     clientId: '3493x',
-    type: 'client',
+    type: 'workspace',
     parentId: 9140,
     lastAccessed: '1 month ago',
     status: 'active',
@@ -202,12 +187,12 @@ const seedAccounts = [
   // the site's own home page paints on their brand colour. Same minimal shape as LWSA
   // above — a real company, an id and a segment, and no invented metrics: the Manage
   // Resources table renders "—" for what a seed does not claim.
-  { id: 21447, name: 'GPA', clientId: '2298k', type: 'client', parentId: 9032, status: 'active' },
+  { id: 21447, name: 'GPA', clientId: '2298k', type: 'workspace', parentId: 9032, status: 'active' },
   {
     id: 18932,
     name: 'Renner',
     clientId: '3120m',
-    type: 'client',
+    type: 'workspace',
     parentId: 9032,
     status: 'active'
   },
@@ -215,11 +200,11 @@ const seedAccounts = [
     id: 40118,
     name: 'HeroSpark',
     clientId: '4880t',
-    type: 'client',
+    type: 'workspace',
     parentId: 9088,
     status: 'active'
   },
-  { id: 12903, name: 'Itaú', clientId: '1075n', type: 'client', parentId: 9140, status: 'active' }
+  { id: 12903, name: 'Itaú', clientId: '1075n', type: 'workspace', parentId: 9140, status: 'active' }
 ]
 
 const allAccounts = ref(seedAccounts)
@@ -227,11 +212,10 @@ const currentAccountId = ref(BOOT_ACCOUNT_ID)
 
 // THE EMPTY VERSION HAS ONE ACCOUNT (./lib/sample-mode.js).
 //
-// A brand-new customer is a single tenant: there is no Brand → Reseller → Group →
-// Client tree above them, so the roster is the one account they operate and there is
-// nothing to switch to — which is why the header drops the account link entirely in
-// this version and the chain reads organization / workspace (../state/sample-preset.js
-// derives that; the preference alone cannot show a link with one tenant behind it).
+// A brand-new customer is a single tenant: there is no Organization → Group →
+// Workspace tree above them, so the roster is the one workspace they operate and
+// there is nothing to switch to (../state/sample-preset.js carries the preference
+// that used to hide the switcher entirely on that version).
 // The roster still projects to that one account, because everything else in the
 // console — the profile, Account Settings, the resource scope — still asks who it is.
 // Same shape as the organization roster next door: one source, no fork, and flipping
@@ -259,26 +243,110 @@ const switchAccount = (account) => {
 export const accountChildren = (parentId) =>
   accounts.value.filter((account) => (account.parentId ?? null) === parentId)
 
-// Flatten the tree into the rows a table renders, honoring which nodes are
-// expanded: a node's children are emitted only when its id is in `expandedIds`.
-// Each row is tagged with `depth` (indentation), `hasChildren` (chevron), and
-// `typeLabel` (Type column + search).
-export function flattenTree(expandedIds) {
-  const out = []
+/**
+ * Flatten a tenancy list into the rows a tree renders.
+ *
+ * ONE implementation for both trees — the switcher's dialog and the Manage
+ * Resources page — so a level's indent, its chevron and its Type label can never
+ * disagree between the two.
+ *
+ * A node is a ROOT when its `parentId` is null or names a node absent from the
+ * list: that is what lets the same function flatten the whole roster and a
+ * search-narrowed subset without a second code path.
+ *
+ * SEARCH prunes and reveals in one pass. A node survives when it matches or when
+ * any descendant does — so the path down to a match stays on screen instead of a
+ * matching workspace appearing at the root with no parent — and while a term is
+ * live every surviving node is forced open, because a match hidden inside a
+ * collapsed parent is a filter that answers with a blank list.
+ *
+ * @param {Array<object>} list Accounts to lay out.
+ * @param {{ expandedIds?: Set<number>, search?: string }} [options]
+ * @returns {Array<object>} Rows tagged with `depth`, `hasChildren`, `expanded`,
+ *   `typeLabel` and `icon`.
+ */
+export function accountTreeRows(list, { expandedIds = new Set(), search = '' } = {}) {
+  const needle = String(search).trim().toLowerCase()
+  const ids = new Set(list.map((account) => account.id))
+
+  const childrenOf = new Map()
+  for (const account of list) {
+    const parent = account.parentId != null && ids.has(account.parentId) ? account.parentId : null
+    if (!childrenOf.has(parent)) childrenOf.set(parent, [])
+    childrenOf.get(parent).push(account)
+  }
+
+  // Name, account id and client id — a support thread carries an id far more often
+  // than a name. The TIER is not in the haystack: it is what the tree itself says.
+  const matches = (account) =>
+    !needle ||
+    `${account.name} ${account.id} ${account.clientId}`.toLowerCase().includes(needle)
+
   const walk = (parentId, depth) => {
-    for (const account of accountChildren(parentId)) {
-      const children = accountChildren(account.id)
+    const out = []
+    for (const account of childrenOf.get(parentId) ?? []) {
+      const children = childrenOf.get(account.id) ?? []
+      const subtree = walk(account.id, depth + 1)
+      if (needle && !matches(account) && subtree.length === 0) continue
+
+      const type = accountTypeOf(account.type)
+      const expanded = needle ? true : expandedIds.has(account.id)
       out.push({
         ...account,
         depth,
         hasChildren: children.length > 0,
-        typeLabel: accountTypeOf(account.type).typeLabel
+        expanded,
+        typeLabel: type.typeLabel,
+        icon: type.icon
       })
-      if (children.length && expandedIds.has(account.id)) walk(account.id, depth + 1)
+      if (expanded) out.push(...subtree)
     }
+    return out
   }
-  walk(null, 0)
-  return out
+
+  return walk(null, 0)
+}
+
+// Every node that owns children — what an "expand all" starts from, and the
+// default the switcher's tree opens on: the whole roster is a couple of dozen
+// rows, so opening it closed would cost three clicks to reach the tier an
+// operator actually switches to.
+export const expandableAccountIds = (list) => {
+  const parents = new Set()
+  for (const account of list) {
+    if (account.parentId != null) parents.add(account.parentId)
+  }
+  return parents
+}
+
+// Flatten the live store's tree (Manage Resources). Same rules as above.
+export function flattenTree(expandedIds) {
+  return accountTreeRows(accounts.value, { expandedIds })
+}
+
+// THE ROSTER IS A REQUEST — the whole tree, once.
+//
+// The console fetched one tier at a time (`listTypeAccountService`, one request per
+// `account_type`), which is what a tier-at-a-time table needs. A TREE needs the
+// shape, not a slice: the switcher renders Organizations with their Groups and
+// Workspaces beneath them, so it asks once and then expands and filters what it is
+// holding — no request per chevron.
+//
+// Here the seed stands in for that API, and the latency is the point: it is what
+// makes the dialog's skeleton rows and its retry path real rather than theoretical.
+const ROSTER_LATENCY_MS = 420
+
+const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+
+/**
+ * Every tenancy the operator can act as, across all three tiers.
+ *
+ * @returns {Promise<{ results: Array<object> }>} The flat list; the caller lays it
+ *   out with `accountTreeRows`.
+ */
+export async function listAccountTree() {
+  await wait(ROSTER_LATENCY_MS)
+  return { results: accounts.value.map((account) => ({ ...account })) }
 }
 
 // One shared instance across every import (module-level singleton).

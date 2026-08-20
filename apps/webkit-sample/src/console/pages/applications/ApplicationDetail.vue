@@ -17,24 +17,25 @@
   // exposes (`defineExpose`), so the drawer, the form, and the pending state stay in
   // the file that renders them.
   //
-  // No Documentation button here. That affordance belongs to a FIRST-LEVEL page — one
-  // the sidebar routes to directly (Applications, Workloads, SQL Database, …), where
-  // it introduces the module. An internal level is already inside the module, so the
-  // row carries only the action this tab can perform; the reference material a band
-  // needs is a SectionHeading `documentation` link next to that band instead.
+  // No Documentation button in THIS row. The reference affordance belongs to the
+  // heading of whatever page carries a list — so the tab pages that hold a table
+  // (Cache Settings, Rules Engine, Device Groups, Functions Instances) each carry
+  // their own `Documentation` on their PageHeading, pointing at the edge-application docs.
+  // This row is the shell's, and stays the action the mounted tab can perform; the
+  // reference material a single BAND needs is a SectionHeading `documentation` link
+  // next to that band.
   //
   // It also owns its own LAYOUT. The tab bar here is second-level navigation, which
   // makes each tab a separate page in one route — so per layout.css the unit that
   // picks a measure is the BAND, not the file: Main Settings is a stacked form on the
   // FORM measure (1192px), while Build and the list tabs carry tables and take the
-  // DATA measure (1620px). AppLayout is therefore `:padded="false"` and each view
+  // DATA measure (1388px). AppLayout is therefore `:padded="false"` and each view
   // applies `.layout-boundary` itself, because the boundary has to sit inside the
   // scroll container, below the fixed tab bar.
   //
   // <KeepAlive> holds the mounted views, so work in progress in one tab (a Device
   // Group just created, a half-typed field) survives a trip to another tab and back —
   // which is what the single-component version gave for free.
-  import Button from '@aziontech/webkit/button'
   import { computed, nextTick, ref } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
@@ -65,11 +66,17 @@
   // to the record itself receive it, so the others don't take an attribute they'd
   // leak onto their root element.
   //
-  // `action` is what the tab puts on the tab row: its label and icon here, its
-  // BEHAVIOUR in the view. `run` / `pending` receive the mounted view's exposed
-  // surface (`defineExpose`), so the create drawer and the deploy's pending flag
-  // never leave the file that owns them. A tab with nothing to create (Main Settings)
-  // simply declares no `action`, and the row is tabs alone.
+  // NO `action` HERE ANY MORE. Each tab renders its own primary control in its own
+  // PageHeading — "Add Cache Settings" beside the Cache Settings heading, "Deploy"
+  // beside Build's — which is where every second-level list in the console puts it.
+  // The shell used to carry it on the tab row and reach into the mounted view through
+  // `defineExpose` ("its position never moves as tabs change"), and the cost was a
+  // control detached from the thing it acts on: the heading that named the list, and
+  // the Documentation beside it, sat one region below a button parked in the navigation.
+  // A tab IS a page; its action belongs on its own heading, at the same 40px step
+  // every other page heading's action takes. The label and behaviour now live in one
+  // file each, so nothing is reached through an exposed surface to be rendered
+  // somewhere else.
   //
   // ── THE LABEL CARRIES THE PRODUCT MODULE'S OWN NAME ──
   //
@@ -97,50 +104,31 @@
       value: 'build',
       label: 'Build',
       component: Build,
-      props: { application },
-      action: {
-        label: 'Deploy',
-        icon: 'pi pi-cloud-upload',
-        // No `pending`: the deploy is not run here. It opens the release page
-        // (./ReleaseComposer.vue), which is where it is reviewed and where it runs.
-        run: (view) => view.deploy()
-      }
+      props: { application }
     },
     {
       value: 'device-groups',
       label: 'Device Groups',
       component: DeviceGroups,
-      props: {},
-      action: { label: 'Add Device Group', icon: 'pi pi-plus', run: (view) => view.openCreate() }
+      props: {}
     },
     {
       value: 'cache-settings',
       label: 'Cache Settings',
       component: CacheSettings,
-      props: {},
-      action: {
-        label: 'Add Cache Settings',
-        icon: 'pi pi-plus',
-        run: (view) => view.openCreate()
-      }
+      props: {}
     },
     {
       value: 'functions-instances',
       label: 'Functions Instances',
       component: FunctionsInstances,
-      props: {},
-      action: {
-        label: 'Add Functions Instance',
-        icon: 'pi pi-plus',
-        run: (view) => view.openCreate()
-      }
+      props: {}
     },
     {
       value: 'rules-engine',
       label: 'Rules Engine',
       component: RulesEngine,
-      props: {},
-      action: { label: 'Add Rule', icon: 'pi pi-plus', run: (view) => view.openCreate() }
+      props: {}
     }
   ]
 
@@ -197,14 +185,6 @@
   useTabEnter(enterRef, activeTab, scrollRef)
 
   const activeView = computed(() => tabs.find((t) => t.value === activeTab.value) ?? tabs[0])
-
-  // The mounted view itself. <KeepAlive> caches the instances, and the ref follows
-  // whichever one is active — so the row's action always reaches the tab on screen.
-  const viewRef = ref(null)
-  const runTabAction = () => activeView.value.action?.run(viewRef.value)
-  const actionPending = computed(() =>
-    Boolean(viewRef.value && activeView.value.action?.pending?.(viewRef.value))
-  )
 </script>
 
 <template>
@@ -214,26 +194,14 @@
     :breadcrumb="[{ label: 'Applications', href: '/applications' }, { label: application.name }]"
   >
     <main class="flex h-full flex-col">
-      <!-- Nav pattern (no PageHeading here): the tabs form the bottom of the
-           header — a fluid full-bleed bar. Each tab's own heading lives inside that
-           tab's view; its primary action trails the tabs on this row, so the page's
-           one control sits in a fixed place instead of moving per tab. -->
+      <!-- Nav pattern (no PageHeading here): the tabs form the bottom of the header — a
+           fluid full-bleed bar, and NOTHING else. Each tab's own heading lives inside
+           that tab's view and carries that tab's primary action, so the button sits
+           beside the list it creates into instead of in the navigation above it. -->
       <PageTabs
         v-model:value="activeTab"
         :tabs="tabs"
-      >
-        <template #actions>
-          <Button
-            v-if="activeView.action"
-            :label="activeView.action.label"
-            :icon="activeView.action.icon"
-            :loading="actionPending"
-            kind="primary"
-            size="medium"
-            @click="runTabAction"
-          />
-        </template>
-      </PageTabs>
+      />
 
       <!-- Only this region scrolls. Each view brings its own `.layout-boundary`
            and its own measure. -->
@@ -258,7 +226,6 @@
           <KeepAlive>
             <component
               :is="activeView.component"
-              ref="viewRef"
               v-bind="activeView.props"
             />
           </KeepAlive>

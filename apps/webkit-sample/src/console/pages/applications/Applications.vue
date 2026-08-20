@@ -1,16 +1,17 @@
 <script setup>
   // Applications list — the Azion Console "Applications" module. The app shell
   // (single sidebar + GlobalHeader with the module breadcrumb) comes from AppLayout;
-  // this page renders only its content: a CONTROLS HEADER (filter + search, with the
-  // column, with the module's own actions on the right) over a data-driven <Table>
-  // whose row actions open a Dropdown menu. As a first-level module list it carries no
-  // navigation tabs.
+  // this page renders only its content: a PAGE HEADING (the module name, one line of
+  // what it is, and the create action) over a CONTROLS HEADER (search, then the filter
+  // bar) over a data-driven <Table> whose row actions open a Dropdown menu. As a
+  // first-level module list it carries no navigation tabs.
   //
-  // No page heading: the module name already IS the header breadcrumb crumb, so an <h1>
-  // repeating it would only push the table down. What the page opens with is what the
-  // user came to do — narrow the list, or add to it (see ui/ControlsHeader.vue).
+  // The heading is back at page level: the breadcrumb says where you are, the heading
+  // says what the page is, and the module's action sits with it — one fixed place above
+  // the list, rather than inside the row that narrows it
+  // (../../components/page/PageHeading.vue, ../../components/page/ControlsHeader.vue).
   //
-  // Narrowing is a FILTER BAR of CHIPS (ui/FilterBar.vue), not a generic
+  // Narrowing is the FILTER BUTTON (list/FilterButton.vue), not a generic
   // field/operator/value builder. The COLUMNS decide the fields: every enumerable
   // column becomes one field (Author, Infrastructure, Status) and the date column
   // becomes a field of relative periods plus a Custom month grid (Last Modified); the
@@ -24,17 +25,16 @@
   // problem — four selectors plus the search plus the module's action truncated every
   // one of them at a laptop width — but paid for it by putting the applied state
   // inside a closed panel: the badge said "2 filters", never which two, and never on
-  // what values. The chips say all three in the row itself, and each carries its own
-  // × so one cut can be undone without opening anything. The fields that are NOT
-  // applied still show as recessed offers, so the vocabulary of the filter stays
-  // visible instead of living behind a trigger the user has to think of pressing.
+  // what values. An applied chip says all three in the row itself — the field, its
+  // value, and a × that undoes exactly that one cut — and the button beside them carries
+  // a badge for the glance. What is NOT applied stays in the panel, one click away,
+  // instead of spending a pill on advertising itself.
   //
   // The table's own filter state still could not host these (its `#filters` band only
   // renders once a filter exists, and `author` is not a column at all — it renders
   // inside the Last Modified cell), so the bar's state pre-filters `:data` and the
   // table sees only the rows that survive. The search field narrows further, through
   // the table's own global filter (`v-model:globalFilter`).
-  import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
   import Dropdown from '@aziontech/webkit/dropdown'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -49,11 +49,16 @@
   import { useRoute, useRouter } from 'vue-router'
 
   import ProductFirstUse from '../../components/home/ProductFirstUse.vue'
+  import AuthorCell from '../../components/list/AuthorCell.vue'
+  import ColumnsButton from '../../components/list/ColumnsButton.vue'
   import DeleteDialog from '../../components/list/DeleteDialog.vue'
   import DomainCell from '../../components/list/DomainCell.vue'
-  import FilterBar from '../../components/list/FilterBar.vue'
+  import FilterButton from '../../components/list/FilterButton.vue'
+  import FilterChips from '../../components/list/FilterChips.vue'
   import LastModifiedCell from '../../components/list/LastModifiedCell.vue'
   import ControlsHeader from '../../components/page/ControlsHeader.vue'
+  import HeadingAction from '../../components/page/HeadingAction.vue'
+  import PageHeading from '../../components/page/PageHeading.vue'
   import AppLayout from '../../components/shell/AppLayout.vue'
   import { DATE_PRESETS, formatDateRange, matchDate } from '../../lib/behavior/filter-bar'
   import { useListFilters } from '../../lib/behavior/list-state'
@@ -88,22 +93,24 @@
   // Column model. `name` is the principal (emphasized) column; the trailing
   // `actions` column (kind: 'action') is auto-pinned to the right edge.
   const columns = [
-    { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true },
+    { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, hideable: false },
     { accessorKey: 'repository', header: 'Repository', grow: 2 },
     { accessorKey: 'id', header: 'ID', enableSorting: true },
     // Domain is shown in full (no truncation) — give it the widest flexible share.
     { accessorKey: 'domainName', header: 'Domain Name', grow: 3 },
     { accessorKey: 'infrastructure', header: 'Infrastructure', enableSorting: true },
     { accessorKey: 'status', header: 'Status', enableSorting: true },
+    { accessorKey: 'author', header: 'Last Editor', enableSorting: true, grow: 2 },
     { accessorKey: 'lastModified', header: 'Last Modified', enableSorting: true, grow: 2 },
     { id: 'actions', kind: 'action', hideable: false }
   ]
 
   // ── The filter catalog ────────────────────────────────────────────────────
   // One field per enumerable column, declared in the order the COLUMNS read — which is
-  // also the order the chips sit in, permanently: a chip holds its position whether it
-  // is applied or not (ui/FilterBar.vue explains what that buys). Each field owns its
-  // own `match`, because only the page knows how a row answers for it (`author` is not
+  // also the order the chips sit in: an applied chip takes its catalog position, so
+  // its neighbours change as filters come and go but the order never contradicts the
+  // panel's (list/FilterButton.vue explains what that buys). Each field owns its own
+  // `match`, because only the page knows how a row answers for it (`author` is not
   // even a column — it renders inside the Last Modified cell).
   //
   // Author options come from the data itself, so the field can never offer a person
@@ -153,7 +160,7 @@
       label: 'Last Modified',
       kind: 'range',
       options: DATE_PRESETS,
-      // A hand-picked range is not in `options`, so the chip cannot look up a label for
+      // A hand-picked range is not in `options`, so the panel cannot look up a label for
       // it — this is what turns `{ start, end }` into "Jun 1 – Jun 17" instead of
       // "[object Object]".
       formatValue: formatDateRange,
@@ -174,9 +181,10 @@
   // The applied state, the search value, the rows that survive the filters, and the
   // pagination they are paged into — all four from one place, so the page cannot
   // forget the rewind that keeps a narrowed list off an empty page offset
-  // (src/lib/list-state.js). The chips ARE the applied count; no badge lives beside
-  // them, because the badge the old popover needed existed only to describe state
-  // the panel was hiding.
+  // (src/lib/list-state.js). The chips say WHICH cuts are applied and the button's
+  // badge says only that some are — between them nothing about the filter is left
+  // inside a closed panel, which is what the old filter popover's bare count could
+  // never manage.
   // `loading` is the tenancy reload window: switching organization, account or
   // workspace skeletons the table while the new scope's applications arrive.
   const {
@@ -186,6 +194,16 @@
     visibleRows: filteredApplications,
     loading: tenancyReloading
   } = useListFilters(filterFields, allApplications)
+
+  // Which columns are switched off, driven by the Columns button beside the filter
+  // (../../components/list/ColumnsButton.vue). Only a HIDDEN column is ever recorded, so this
+  // never has to be kept in step with the column model above.
+  //
+  // ID SHIPS OFF. It is the column an operator wants when they are quoting a resource
+  // into a support thread or an API call, and almost never while scanning the list —
+  // so it starts hidden and is one switch away. That is the whole point of the panel:
+  // a column can be available without being in the way by default.
+  const columnVisibility = ref({ id: false })
 
   // Entering the module and choosing "create" opens the dedicated create PAGE
   // (a form route), not a modal — see CreateApplication.vue.
@@ -263,20 +281,48 @@
     active="applications"
     :breadcrumb="[{ label: 'Applications' }]"
   >
-    <!-- THE MEASURE FOLLOWS THE MODE. A list earns the fluid data measure
-         (`layout-column`, 7xl): columns are the content, and taking width away from
-         them is taking data away. First use has no columns — it is a lead and three
-         rows, which at 7xl becomes a title floating over rows
-         2.5× longer than they read well at. So the empty version takes Overview's
-         FOCUSED measure (4xl), the same one both halves of /home use, and the two
-         first screens of the console stop being two different page widths. -->
+    <!-- THE MEASURE FOLLOWS THE MODE. A populated list takes the STANDARD page
+         container (`layout-column`, --layout-measure / 1388px — the one width home, the
+         overviews and every other listing share): columns are the content, and taking
+         width away from them is taking data away. First use has no columns — it is a
+         lead and three rows, which at the full measure becomes a title floating over
+         rows far longer than they read well at. So the empty version takes the FOCUSED
+         measure (4xl / 1024px), the cap for a single-task screen.
+         The other listings follow this and cite it. /home deliberately does NOT: both
+         of its halves are one width, because there the empty screen BECOMES the
+         populated one under the reader (../home/HomeEmptyState.vue), while a module's
+         empty state and its list are two different pages. -->
     <main
       class="flex min-h-full flex-col"
       :class="accountEmpty ? 'layout-column-focused' : 'layout-column'"
     >
-      <!-- The page's parent section. A module list opens straight on it (no
-           PageHeading — the module name is the breadcrumb crumb), so the
-           `:first-child` rule zeroes its step and the boundary is its top space. -->
+      <!-- THE PAGE HEADING. A first-level resource page names itself: the module name
+           over one line saying what the module is, with the module's own action on the
+           right. The breadcrumb says WHERE you are; the heading says WHAT this page is,
+           and it gives that action one fixed home above the list instead of a control
+           that rides the row narrowing it.
+           `size="medium"` is the first-level list scale (components/page/PageHeading.vue):
+           the title names the collection, and the table under it is what the page is for.
+           The parent section below is no longer `:first-child`, so `.layout-section-start`
+           opens it at the boundary step — the list sits tight under the heading (theme
+           semantic/layouts § "THE PAGE SHAPE"). -->
+      <PageHeading
+        v-if="!accountEmpty"
+        size="medium"
+        title="Applications"
+        description="Build, deploy, and manage your applications."
+        :documentation="firstUse.learnMore.href"
+      >
+        <template #actions>
+          <HeadingAction
+            label="Create application"
+            kind="primary"
+            icon="pi pi-plus"
+            @click="createApplication"
+          />
+        </template>
+      </PageHeading>
+
       <!-- FIRST USE, IN HOME'S CONTAINER.
            The same box the first access uses on /home (./HomeEmptyState.vue) and the
            /empty-states gallery around it (../ProductEmptyStates.vue): centred in the
@@ -307,20 +353,18 @@
         <!-- ONE section: the controls row narrows the table under it, so the two
              sit at --layout-group-gap. -->
         <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-          <!-- First-level module list: no PageHeading — the module name already IS the
-               header breadcrumb crumb (AppLayout). The page opens with its CONTROLS
-               instead — the filter, then the search, the module's own actions on the
-               right — and the borderless Table follows in a flush CardBox, framed
-               edge-to-edge. -->
+          <!-- The CONTROLS row, under the heading: the narrowing, on a list the page can
+               already show — search then Filter on the left, nothing on the right,
+               because the module's action sits in the heading above. -->
           <ControlsHeader>
             <!-- Search drives the table's global filter from outside the card, so the
                  field is a plain InputText (`Table.Search` is context-aware and only
-                 works inside `<Table>`). With narrowing moved to the filter bar on its
-                 own row below, the field keeps this row to itself: it absorbs all the
-                 slack (`grow`) and shares the band only with the module's action. -->
+                 works inside `<Table>`). It absorbs the slack (`grow`) and the Filter
+                 button sits at its end, so the two controls that narrow this list read
+                 as one group. -->
             <InputText
               v-model="search"
-              size="large"
+              size="medium"
               placeholder="Search"
               aria-label="Search applications"
               class="min-w-36 grow basis-(--container-2xs)"
@@ -332,26 +376,17 @@
                 />
               </template>
             </InputText>
-
-            <template #actions>
-              <Button
-                label="New Application"
-                kind="primary"
-                size="large"
-                icon="pi pi-plus"
-                @click="createApplication"
-              />
-            </template>
+            <FilterButton
+              v-model="filters"
+              :fields="filterFields"
+            />
+            <ColumnsButton
+              v-model="columnVisibility"
+              :columns="columns"
+            />
           </ControlsHeader>
 
-          <!-- The filter bar gets its OWN row, between the controls and the table it
-               narrows. It cannot share the controls row: the row of chips grows with
-               every filter applied, and anything sharing that row would be squeezed by
-               a state the user creates — the exact failure the selectors-in-the-band
-               version had. On its own row it wraps downwards into empty space, and it
-               sits directly above the table so the chips and the rows they explain
-               touch. -->
-          <FilterBar
+          <FilterChips
             v-model="filters"
             :fields="filterFields"
           />
@@ -362,6 +397,7 @@
                 <Table
                   v-model:pagination="pagination"
                   v-model:globalFilter="search"
+                  v-model:columnVisibility="columnVisibility"
                   :data="filteredApplications"
                   :columns="columns"
                   row-key="id"
@@ -375,7 +411,7 @@
                   <template #cell-name="{ value, row }">
                     <div class="flex min-w-0 items-center gap-(--spacing-xs)">
                       <i
-                        :class="`ai-cor ${presetIcon(row.preset)}`"
+                        :class="presetIcon(row.preset)"
                         class="shrink-0 text-[1.15em]"
                         :title="presetLabel(row.preset)"
                         aria-hidden="true"
@@ -429,13 +465,17 @@
                       size="medium"
                     />
                   </template>
-
-                  <template #cell-lastModified="{ row }">
-                    <LastModifiedCell
+                  <!-- WHO and WHEN are two columns now, so each cell says one thing:
+                       the face and the name here, the relative time next to it. -->
+                  <template #cell-author="{ row }">
+                    <AuthorCell
                       :author="row.author"
                       :avatar-src="row.authorAvatar"
-                      :date="row.modifiedAt"
                     />
+                  </template>
+
+                  <template #cell-lastModified="{ row }">
+                    <LastModifiedCell :date="row.modifiedAt" />
                   </template>
 
                   <template #cell-actions="{ row }">

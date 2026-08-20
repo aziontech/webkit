@@ -236,9 +236,9 @@
 
 <template>
   <CreatePage
-    :breadcrumb="[{ label: 'Edge DNS', href: '/edge-dns' }, { label: 'Create Zone' }]"
+    :breadcrumb="[{ label: 'Edge DNS', href: '/edge-dns' }, { label: 'Create zone' }]"
     back-label="Back to Edge DNS"
-    title="Create Zone"
+    title="Create zone"
     description="A zone holds the DNS records that answer authoritatively for a domain, served from Azion's distributed infrastructure."
     title-id="create-zone-title"
     :submitting="submitting"

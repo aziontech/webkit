@@ -175,11 +175,18 @@
 /*
  * `@aziontech/webkit` components use arbitrary values (`bg-(--x)`) that
  * Tailwind v4 only picks up when the source files are inside the scan.
- * Auto-detect scans the CWD only, so we point `@source` at the webkit
- * package via a monorepo-relative path (this file is under
+ * Auto-detect scans the CWD only, so we point `@source` at each package
+ * that ships components, via a monorepo-relative path (this file is under
  * `packages/theme/dist/v4/`; walking up three levels reaches `packages/`).
+ *
+ * The scan has to live HERE and not in a consuming app: an app CSS file is
+ * imported from JS, outside the graph that starts at this `@import
+ * "tailwindcss"`, so an `@source` written there is never read. Which means
+ * a package whose classes are not listed below emits no CSS at all in any
+ * app — silently, since the class still reads as correct in the markup.
  */
 @source "../../../webkit/src";
+@source "../../../webkit-docs/src";
 
 @theme {
   --color-base-white: #FFFFFF;
@@ -721,10 +728,11 @@
   --layout-boundary-start: var(--spacing-lg);
   --layout-section-gap: var(--spacing-xl);
   --layout-group-gap: var(--spacing-md);
-  --layout-measure: var(--container-7xl);
+  --layout-measure: var(--container-6xl);
   --layout-measure-focused: var(--container-4xl);
   --layout-measure-form: var(--container-4xl);
   --layout-measure-form-create: var(--container-5xl);
+  --layout-measure-docs: var(--container-2xl);
   --layout-measure-control: var(--container-3xs);
   --text-big-number-md-font-size: 1.25rem;
   --text-big-number-md-line-height: 1.25;
@@ -738,24 +746,31 @@
   --text-big-number-lg-line-height: 1.25;
   --text-big-number-lg-font-weight: 400;
   --text-big-number-lg-font-family: Proto Mono;
+  --text-heading-2xl-text-wrap-style: balance;
   --text-heading-2xl-font-size: 1.875rem;
   --text-heading-2xl-line-height: 1.25;
   --text-heading-2xl-font-weight: 300;
+  --text-heading-xl-text-wrap-style: balance;
   --text-heading-xl-font-size: 1.25rem;
   --text-heading-xl-line-height: 1.25;
   --text-heading-xl-font-weight: 300;
+  --text-heading-lg-text-wrap-style: balance;
   --text-heading-lg-font-size: 1.125rem;
   --text-heading-lg-line-height: 1.25;
   --text-heading-lg-font-weight: 300;
+  --text-heading-md-text-wrap-style: balance;
   --text-heading-md-font-size: 1rem;
   --text-heading-md-line-height: 1.25;
   --text-heading-md-font-weight: 300;
+  --text-heading-sm-text-wrap-style: balance;
   --text-heading-sm-font-size: 0.875rem;
   --text-heading-sm-line-height: 1.375;
   --text-heading-sm-font-weight: 300;
+  --text-heading-xs-text-wrap-style: balance;
   --text-heading-xs-font-size: 1rem;
   --text-heading-xs-line-height: 1.375;
   --text-heading-xs-font-weight: 300;
+  --text-heading-xxs-text-wrap-style: balance;
   --text-heading-xxs-font-size: 0.875rem;
   --text-heading-xxs-line-height: 1.375;
   --text-heading-xxs-font-weight: 300;
@@ -783,18 +798,23 @@
   --text-label-code-lg-line-height: 1;
   --text-label-code-lg-font-weight: 400;
   --text-label-code-lg-letter-spacing: 0;
+  --text-body-lg-text-wrap-style: pretty;
   --text-body-lg-font-size: 1rem;
   --text-body-lg-font-weight: 300;
   --text-body-lg-line-height: 1.375;
+  --text-body-md-text-wrap-style: pretty;
   --text-body-md-font-size: 1rem;
   --text-body-md-font-weight: 300;
   --text-body-md-line-height: 1.375;
+  --text-body-sm-text-wrap-style: pretty;
   --text-body-sm-font-size: 0.875rem;
   --text-body-sm-font-weight: 300;
   --text-body-sm-line-height: 1.375;
+  --text-body-xs-text-wrap-style: pretty;
   --text-body-xs-font-size: 0.75rem;
   --text-body-xs-font-weight: 300;
   --text-body-xs-line-height: 1.375;
+  --text-body-xxs-text-wrap-style: pretty;
   --text-body-xxs-font-size: 0.75rem;
   --text-body-xxs-font-weight: 300;
   --text-body-xxs-line-height: 1.5;
@@ -1190,42 +1210,49 @@
 }
 
 @utility text-heading-2xl {
+  text-wrap-style: var(--text-heading-2xl-text-wrap-style);
   font-size: var(--text-heading-2xl-font-size);
   line-height: var(--text-heading-2xl-line-height);
   font-weight: var(--text-heading-2xl-font-weight);
 }
 
 @utility text-heading-xl {
+  text-wrap-style: var(--text-heading-xl-text-wrap-style);
   font-size: var(--text-heading-xl-font-size);
   line-height: var(--text-heading-xl-line-height);
   font-weight: var(--text-heading-xl-font-weight);
 }
 
 @utility text-heading-lg {
+  text-wrap-style: var(--text-heading-lg-text-wrap-style);
   font-size: var(--text-heading-lg-font-size);
   line-height: var(--text-heading-lg-line-height);
   font-weight: var(--text-heading-lg-font-weight);
 }
 
 @utility text-heading-md {
+  text-wrap-style: var(--text-heading-md-text-wrap-style);
   font-size: var(--text-heading-md-font-size);
   line-height: var(--text-heading-md-line-height);
   font-weight: var(--text-heading-md-font-weight);
 }
 
 @utility text-heading-sm {
+  text-wrap-style: var(--text-heading-sm-text-wrap-style);
   font-size: var(--text-heading-sm-font-size);
   line-height: var(--text-heading-sm-line-height);
   font-weight: var(--text-heading-sm-font-weight);
 }
 
 @utility text-heading-xs {
+  text-wrap-style: var(--text-heading-xs-text-wrap-style);
   font-size: var(--text-heading-xs-font-size);
   line-height: var(--text-heading-xs-line-height);
   font-weight: var(--text-heading-xs-font-weight);
 }
 
 @utility text-heading-xxs {
+  text-wrap-style: var(--text-heading-xxs-text-wrap-style);
   font-size: var(--text-heading-xxs-font-size);
   line-height: var(--text-heading-xxs-line-height);
   font-weight: var(--text-heading-xxs-font-weight);
@@ -1274,30 +1301,35 @@
 }
 
 @utility text-body-lg {
+  text-wrap-style: var(--text-body-lg-text-wrap-style);
   font-size: var(--text-body-lg-font-size);
   font-weight: var(--text-body-lg-font-weight);
   line-height: var(--text-body-lg-line-height);
 }
 
 @utility text-body-md {
+  text-wrap-style: var(--text-body-md-text-wrap-style);
   font-size: var(--text-body-md-font-size);
   font-weight: var(--text-body-md-font-weight);
   line-height: var(--text-body-md-line-height);
 }
 
 @utility text-body-sm {
+  text-wrap-style: var(--text-body-sm-text-wrap-style);
   font-size: var(--text-body-sm-font-size);
   font-weight: var(--text-body-sm-font-weight);
   line-height: var(--text-body-sm-line-height);
 }
 
 @utility text-body-xs {
+  text-wrap-style: var(--text-body-xs-text-wrap-style);
   font-size: var(--text-body-xs-font-size);
   font-weight: var(--text-body-xs-font-weight);
   line-height: var(--text-body-xs-line-height);
 }
 
 @utility text-body-xxs {
+  text-wrap-style: var(--text-body-xxs-text-wrap-style);
   font-size: var(--text-body-xxs-font-size);
   font-weight: var(--text-body-xxs-font-weight);
   line-height: var(--text-body-xxs-line-height);
@@ -1430,6 +1462,14 @@
 @utility layout-form-create {
   --layout-column-measure: var(--layout-measure-form-create);
   --layout-measure-control: var(--container-md);
+  margin-inline: auto;
+  width: 100%;
+  max-width: var(--layout-column-measure);
+  &:is(.layout-boundary, .layout-boundary-inline) { max-width: calc(var(--layout-column-measure) + 2 * var(--layout-boundary-inline)); }
+}
+
+@utility layout-column-docs {
+  --layout-column-measure: var(--layout-measure-docs);
   margin-inline: auto;
   width: 100%;
   max-width: var(--layout-column-measure);

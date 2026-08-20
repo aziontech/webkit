@@ -1,5 +1,5 @@
 <script setup>
-  // Add Domain — the sub-drawer opened from the Domains section of Create Workload.
+  // Add domain — the sub-drawer opened from the Domains section of Create Workload.
   // A MEDIUM drawer whose body chooses between a free azion.app subdomain and a
   // custom ("bring your own") domain, then captures the domain and the environment
   // it serves. On save it emits the domain record back to the parent, which appends
@@ -126,13 +126,13 @@
       <DrawerContent>
         <form
           class="flex min-h-0 flex-1 flex-col"
-          aria-label="Add Domain"
+          aria-label="Add domain"
           novalidate
           @submit.prevent="submit"
         >
           <PanelHeader class="w-full">
             <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-              <DrawerTitle>Add Domain</DrawerTitle>
+              <DrawerTitle>Add domain</DrawerTitle>
               <p class="text-body-sm text-(--text-muted)">
                 Attach a domain to this workload and choose the environment it serves.
               </p>
@@ -145,7 +145,7 @@
               class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0"
               :disabled="submitting"
             >
-              <legend class="sr-only">Add Domain</legend>
+              <legend class="sr-only">Add domain</legend>
 
               <!-- Domain source -->
               <fieldset class="flex flex-col gap-(--spacing-sm)">

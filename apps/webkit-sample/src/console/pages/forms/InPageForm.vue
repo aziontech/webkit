@@ -192,7 +192,7 @@
     <main class="animate-page-enter motion-reduce:animate-none min-h-0 flex-1 overflow-auto">
       <form
         class="flex min-h-full flex-col"
-        aria-label="Create Application"
+        aria-label="Create application"
         novalidate
         @submit.prevent="submit"
       >
@@ -209,9 +209,7 @@
 
             <!-- Section: General -->
             <section class="flex flex-col gap-(--layout-group-gap)">
-              <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
-                General
-              </p>
+              <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">General</p>
               <CardBox :padded="false">
                 <template #content>
                   <Item.List>
@@ -357,9 +355,7 @@
 
             <!-- Section: Origins -->
             <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
-              <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
-                Origins
-              </p>
+              <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">Origins</p>
               <CardBox :padded="false">
                 <template #content>
                   <Item.List>
@@ -561,9 +557,7 @@
 
             <!-- Section: Debug Rules -->
             <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
-              <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
-                Debug Rules
-              </p>
+              <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">Debug Rules</p>
               <CardBox :padded="false">
                 <template #content>
                   <Item.List>

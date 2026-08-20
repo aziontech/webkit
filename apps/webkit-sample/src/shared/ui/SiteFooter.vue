@@ -1,32 +1,34 @@
 <script setup>
-  // Marketing site footer — the azion.com/pt-br footer, now composed from the DS
-  // `Footer` (@aziontech/webkit/footer) instead of a hand-built grid. The component
-  // owns the anatomy: the canvas shell, the 5xl measure, the 2→4 column grid at `md`,
-  // the per-column dividers and the social bar under its hairline. This file supplies
-  // only content — four link columns, the brand and social cluster, and the legal bar.
+  // Marketing site footer — the azion.com/pt-br footer, composed from the DS
+  // `Footer` (@aziontech/webkit/footer) in the anatomy its Storybook "Default"
+  // story documents: four link columns, then a row carrying the social icon
+  // buttons at the left and the status indicator + language select at the right,
+  // then the signature band with the brand mark beside its tagline, and finally
+  // the component's own closing band.
   //
-  // Two site-specific things it still owns:
+  // The component owns all of that — the canvas shell, the 5xl measure, the 2→4
+  // column grid at `md`, the framed gutters that carry the page frame out to the
+  // viewport edges from `xl`, the per-column dividers, and the closing band that
+  // finishes the frame at the bottom of the page. This file supplies only content.
   //
-  //   · the CLOSE of the page frame, built on the HERO's own logic. The hero is a
-  //     full-bleed band that owns the page's top rule edge to edge; the footer is its
-  //     mirror at the bottom — a `w-full` rule OPENS the container, then a FrameBox at the
-  //     column's 5xl measure FINISHES it, so the vertical pair SectionContainer draws down
-  //     the page turns the corner instead of stopping at it. The frame is therefore always
-  //     `flush`: the band's own rule is the one at that pixel, never two.
+  // The one site-specific thing left is the OPEN of that frame: a full-bleed rule
+  // above the footer, built on the HERO's own logic. The hero is a full-bleed band
+  // that owns the page's top rule edge to edge; this rule is its mirror at the
+  // bottom, so the vertical pair SectionContainer draws down the page turns the
+  // corner instead of stopping at it. The footer draws no top rule of its own, so
+  // there are never two at that pixel — and a full-bleed rule is correct under a
+  // page that closes with a spacer AND under one that just ends (the Hub), which a
+  // 5xl rule was not. The band above must simply not draw a bottom rule; the
+  // closing spacer on the landings is a borderless FrameBox for exactly that reason.
   //
-  //     This is also why the footer needs no prop for its neighbour. A full-bleed rule is
-  //     correct under a page that closes with a spacer AND under one that just ends (the
-  //     Hub) — which a 5xl `border-t` was not, since it stopped short of that page's own
-  //     7xl column. The band above must simply not draw a bottom rule; the closing spacer
-  //     on the landings is a borderless FrameBox for exactly that reason.
-  //   · the legal bar, which the DS anatomy has no region for. It rides in `social-end`
-  //     opposite the brand, which is the only cluster shaped to hold it.
-  //
-  // Every link is a `#` anchor for the demo.
+  // Every column link is a `#` anchor for the demo; the social buttons point at the
+  // real profiles, as the story does.
   import Brand from '@aziontech/webkit/brand'
   import Footer from '@aziontech/webkit/footer'
-  import FrameBox from '@aziontech/webkit/frame-box'
   import IconButton from '@aziontech/webkit/icon-button'
+  import Select from '@aziontech/webkit/select'
+  import StatusIndicator from '@aziontech/webkit/status-indicator'
+  import { ref } from 'vue'
 
   const columns = [
     {
@@ -69,71 +71,99 @@
     }
   ]
 
-  const legal = ['Terms of Use', 'Privacy', 'Cookies', 'Security']
-
   const socials = [
-    { icon: 'ai ai-x', label: 'X' },
-    { icon: 'ai ai-medium', label: 'Medium' },
-    { icon: 'pi pi-github', label: 'GitHub' },
-    { icon: 'pi pi-linkedin', label: 'LinkedIn' }
+    { icon: 'pi pi-github', label: 'Azion on GitHub', href: 'https://github.com/aziontech' },
+    {
+      icon: 'pi pi-linkedin',
+      label: 'Azion on LinkedIn',
+      href: 'https://www.linkedin.com/company/aziontech'
+    },
+    { icon: 'pi pi-youtube', label: 'Azion on YouTube', href: 'https://www.youtube.com/aziontech' },
+    { icon: 'ai ai-x', label: 'Azion on X', href: 'https://x.com/aziontech' },
+    {
+      icon: 'pi pi-instagram',
+      label: 'Azion on Instagram',
+      href: 'https://www.instagram.com/aziontech'
+    },
+    { icon: 'pi pi-discord', label: 'Azion on Discord', href: 'https://discord.gg/azion' },
+    { icon: 'pi pi-reddit', label: 'Azion on Reddit', href: 'https://www.reddit.com/r/aziontech' }
   ]
 
-  const year = new Date().getFullYear()
+  const language = ref('en')
+
+  const languageOptions = [
+    { value: 'en', label: 'EN' },
+    { value: 'pt-br', label: 'PT-BR' },
+    { value: 'es', label: 'ES' }
+  ]
 </script>
 
 <template>
   <div class="w-full border-t border-(--border-default)">
-    <FrameBox
-      flush
-      marks="bottom"
-      class="mx-auto w-full max-w-(--container-5xl)"
-    >
-      <Footer aria-label="Footer">
-        <Footer.Column
-          v-for="column in columns"
-          :key="column.label"
-          :title="column.label"
+    <Footer aria-label="Footer">
+      <Footer.Column
+        v-for="column in columns"
+        :key="column.label"
+        :title="column.label"
+      >
+        <Footer.Link
+          v-for="link in column.links"
+          :key="link"
+          href="#"
         >
-          <Footer.Link
-            v-for="link in column.links"
-            :key="link"
-            href="#"
-          >
-            {{ link }}
-          </Footer.Link>
-        </Footer.Column>
+          {{ link }}
+        </Footer.Link>
+      </Footer.Column>
 
-        <template #social-start>
-          <Brand
-            kind="default"
-            size="small"
-          />
-          <div class="flex items-center gap-(--spacing-xxs)">
-            <IconButton
-              v-for="social in socials"
-              :key="social.label"
-              :icon="social.icon"
-              :aria-label="social.label"
-              kind="transparent"
-              size="medium"
-              href="#"
-            />
-          </div>
-        </template>
+      <template #social>
+        <IconButton
+          v-for="social in socials"
+          :key="social.label"
+          kind="transparent"
+          :icon="social.icon"
+          :aria-label="social.label"
+          :href="social.href"
+          target="_blank"
+        />
+      </template>
 
-        <template #social-end>
-          <span class="text-body-xs text-(--text-muted)">
-            © {{ year }} Azion Technologies. All rights reserved.
-          </span>
-          <Footer.Link
-            v-for="item in legal"
-            :key="item"
-            href="#"
+      <template #status>
+        <StatusIndicator
+          severity="success"
+          label="All Systems Operational"
+        />
+      </template>
+
+      <template #language>
+        <div class="w-24">
+          <Select
+            v-model="language"
+            placeholder="Language"
           >
-            {{ item }}
-          </Footer.Link>
-        </template>
-      </Footer>
-    </FrameBox>
+            <Select.Trigger aria-label="Language" />
+            <Select.Content>
+              <Select.Option
+                v-for="option in languageOptions"
+                :key="option.value"
+                :value="option.value"
+              >
+                {{ option.label }}
+              </Select.Option>
+            </Select.Content>
+          </Select>
+        </div>
+      </template>
+
+      <template #brand>
+        <a
+          href="#"
+          aria-label="Azion home"
+        >
+          <Brand size="large" />
+        </a>
+      </template>
+
+      <template #tagline>The web platform for modern workloads</template>
+    </Footer>
   </div>
 </template>

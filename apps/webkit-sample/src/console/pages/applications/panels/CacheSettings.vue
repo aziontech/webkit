@@ -35,9 +35,10 @@
   // own height when that happens (Section owns the move), so answering a select never
   // jumps the fields below it.
   //
-  // The "Cache Settings" button itself is on the page's tab row, not in this heading
-  // (ApplicationDetail owns that row). The flow stays here: the shell calls the
-  // `openCreate` this view exposes.
+  // The "Add Cache Settings" button is IN THIS HEADING, not on the page's tab row it
+  // used to ride. A tab is its own page, so its create action belongs where every
+  // second-level list puts it — beside the heading that names the list — and the label
+  // carries the product module's own name (see ../ApplicationDetail.vue § the tab set).
   import CardBox from '@aziontech/webkit/card-box'
   import FieldSwitchBlock from '@aziontech/webkit/field-switch-block'
   import InputNumber from '@aziontech/webkit/input-number'
@@ -51,8 +52,11 @@
 
   import FieldStack from '../../../components/form/FieldStack.vue'
   import ResourceDrawer from '../../../components/form/ResourceDrawer.vue'
+  import AuthorCell from '../../../components/list/AuthorCell.vue'
+  import ColumnsButton from '../../../components/list/ColumnsButton.vue'
   import LastModifiedCell from '../../../components/list/LastModifiedCell.vue'
   import ControlsHeader from '../../../components/page/ControlsHeader.vue'
+  import HeadingAction from '../../../components/page/HeadingAction.vue'
   import PageHeading from '../../../components/page/PageHeading.vue'
   import Section from '../../../components/page/Section.vue'
   import { sleep } from '../../../lib/behavior/forms'
@@ -73,20 +77,38 @@
     VARY_BEHAVIORS
   } from '../../../lib/data/cache-settings'
   import { deviceGroupOptions } from '../../../lib/data/device-groups'
+  import { productFirstUse } from '../../../lib/data/product-empty-states'
+
+  // Where `Documentation` goes. Taken from the registry rather than restated: these tabs are
+  // parts of an application, so the module's own doc URL is the right destination
+  // and lib/data/product-empty-states.js already holds it.
+  const HELP = productFirstUse('applications').learnMore.href
 
   // Browser and edge cache are one column each: the behavior decides whether the TTL
   // beside it is even in effect, so they are summarised together rather than split
   // into a "behavior" and a "TTL" column where half the TTLs mean nothing.
   const columns = [
-    { accessorKey: 'name', header: 'Name', principal: true, enableSorting: true },
+    { accessorKey: 'name', header: 'Name', principal: true, hideable: false, enableSorting: true },
+    { accessorKey: 'id', header: 'ID' },
     { accessorKey: 'browserCacheLabel', header: 'Browser cache' },
     { accessorKey: 'edgeCacheLabel', header: 'Edge cache' },
     { accessorKey: 'tieredCache', header: 'Tiered cache' },
+    { accessorKey: 'author', header: 'Last Editor', enableSorting: true, grow: 2 },
     { accessorKey: 'lastModified', header: 'Last Modified', enableSorting: true, grow: 2 }
   ]
 
   // Free-text search, hoisted into the ControlsHeader above the card.
   const search = ref('')
+
+  // Which columns are switched off, driven by the Columns button beside the search
+  // (../../../components/list/ColumnsButton.vue). Only a HIDDEN column is ever recorded, so this
+  // never has to be kept in step with the column model above.
+  //
+  // ID SHIPS OFF. It is the column an operator wants when they are quoting a resource
+  // into a support thread or an API call, and almost never while scanning the list —
+  // so it starts hidden and is one switch away. That is the whole point of the panel:
+  // a column can be available without being in the way by default.
+  const columnVisibility = ref({ id: false })
 
   const cacheSettings = useCacheSettings()
 
@@ -203,7 +225,6 @@
   }
 
   // Opened from the page's tab row (ApplicationDetail).
-  defineExpose({ openCreate })
 
   // Which dependent fields apply. Each one is the condition the API itself puts on
   // the field: `max_age` is only read when the behavior overrides, `fields` only when
@@ -313,7 +334,17 @@
       title="Cache Settings"
       description="Define how content is cached at the edge and in browsers."
       size="small"
-    />
+      :documentation="HELP"
+    >
+      <template #actions>
+        <HeadingAction
+          label="Add Cache Settings"
+          kind="primary"
+          icon="pi pi-plus"
+          @click="openCreate"
+        />
+      </template>
+    </PageHeading>
 
     <!-- The page's parent section. It holds one section here — the controls row
          over the table it narrows, at the GROUP step — and spaces whatever sits
@@ -329,7 +360,7 @@
                rather than wrapping (see ui/ControlsHeader.vue). -->
           <InputText
             v-model="search"
-            size="large"
+            size="medium"
             placeholder="Search cache settings"
             aria-label="Search cache settings"
             class="min-w-36 grow basis-(--container-2xs)"
@@ -341,12 +372,17 @@
               />
             </template>
           </InputText>
+          <ColumnsButton
+            v-model="columnVisibility"
+            :columns="columns"
+          />
         </ControlsHeader>
 
         <CardBox :padded="false">
           <template #content>
             <Table
               v-model:globalFilter="search"
+              v-model:columnVisibility="columnVisibility"
               :data="rows"
               :columns="columns"
               row-key="id"
@@ -361,31 +397,33 @@
               </template>
 
               <!-- A second cache layer is on or it is not, so the cell is a state and
-                   not a value: a Tag when it is in play, muted text when it is not. -->
+                   not a value — and a state is a CHIP in both of its readings, the pair
+                   every console list shows (panels/FunctionsInstances.vue, secure/
+                   Firewall.vue): success when it is in play, secondary when it is not,
+                   never bare text. Rendering only the "on" half as a tag made the two
+                   rows read as different KINDS of cell instead of two values of one. -->
               <template #cell-tieredCache="{ row }">
                 <Tag
-                  v-if="row.tieredCache"
-                  label="Enabled"
-                  severity="success"
-                  size="small"
+                  :label="row.tieredCache ? 'Enabled' : 'Disabled'"
+                  :severity="row.tieredCache ? 'success' : 'secondary'"
+                  size="medium"
                 />
-                <span
-                  v-else
-                  class="text-body-sm text-(--text-muted)"
-                  >Disabled</span
-                >
               </template>
 
               <!-- WHO changed the setting and WHEN, in one column: the modifier's avatar
                    (name on its tooltip) over the relative time — the same cell every
                    console list ends on (ui/LastModifiedCell.vue), which is why there is
                    no separate author column. -->
-              <template #cell-lastModified="{ row }">
-                <LastModifiedCell
+              <!-- WHO and WHEN are two columns now, so each cell says one thing. -->
+              <template #cell-author="{ row }">
+                <AuthorCell
                   :author="row.author"
                   :avatar-src="row.authorAvatar"
-                  :date="row.modifiedAt"
                 />
+              </template>
+
+              <template #cell-lastModified="{ row }">
+                <LastModifiedCell :date="row.modifiedAt" />
               </template>
             </Table>
           </template>

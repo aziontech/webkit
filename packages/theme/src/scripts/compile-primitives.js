@@ -7,11 +7,11 @@
  * but for primitives only — no semantic light/dark split.
  */
 
-import { primitives as colorPrimitives } from '../tokens/primitives/colors/colors.js'
 import { animate } from '../tokens/primitives/animations/animate.js'
 import { ease } from '../tokens/primitives/animations/ease.js'
 import { borderWidths } from '../tokens/primitives/border-widths.js'
 import { breakpoints } from '../tokens/primitives/breakpoints.js'
+import { primitives as colorPrimitives } from '../tokens/primitives/colors/colors.js'
 import { blur } from '../tokens/primitives/effects/blur.js'
 import { dropShadow } from '../tokens/primitives/effects/drop-shadow.js'
 import { insetShadow } from '../tokens/primitives/effects/inset-shadow.js'

@@ -1,14 +1,22 @@
 <script setup>
   // The "Component Grid" — every top-level @aziontech/webkit component, live and
-  // fully interactive, plotted into the eight library categories (Actions, Inputs,
-  // Content, Feedback, Overlay, Navigation, Data, Code). Overlay collects the
-  // layered/floating surfaces (Dialog, Drawer, Popover, Tooltip, Dropdown, Toast);
-  // Code collects the source/log surfaces (CodeBlock, LogView). Each component sits in a bordered
-  // ComponentGridCell that highlights on hover/focus. When `category` is set, only
-  // that category's section renders (the Hub drives one category per view); left
-  // empty, every section renders. Category ids match the Hub sidebar's
-  // "Components" items (actions, inputs, content, feedback, overlay, navigation,
-  // data, code).
+  // fully interactive, plotted into the NINE library categories the package itself
+  // is organised by (Actions, Inputs, Content, Feedback, Overlay, Navigation,
+  // Layout, Data, Code) — the same taxonomy as `src/components/<category>/` and
+  // the Storybook tree, so a category here is the category there.
+  //
+  // Overlay collects the layered/floating surfaces (Dialog, Drawer, Popover,
+  // Tooltip, Dropdown, CommandMenu, Toast); Layout collects the structural ones
+  // (Divider, FrameBox, SectionGap, ScrollArea, ResizablePanel) and the shells
+  // (Sidebar, GlobalHeader, Footer) — the last two used to sit under Navigation,
+  // which disagreed with both the source tree and Storybook; Code collects the
+  // source/log surfaces (CodeBlock, LogView).
+  //
+  // Each component sits in a bordered ComponentGridCell that names it and links to
+  // its Storybook page. When `category` is set, only that category's section
+  // renders (the Hub drives one category per view); left empty, every section
+  // renders. Category ids match the Hub sidebar's "Components" items (actions,
+  // inputs, content, feedback, overlay, navigation, layout, data, code).
   //
   // Usage snippets are the canonical minimal forms from each component's Storybook
   // Default story, so the grid can never drift from what ships.
@@ -18,6 +26,7 @@
   import BoxGridSelection from '@aziontech/webkit/box-grid-selection'
   import Brand from '@aziontech/webkit/brand'
   import Breadcrumb from '@aziontech/webkit/breadcrumb'
+  import BreadcrumbItem from '@aziontech/webkit/breadcrumb-item'
   import Button from '@aziontech/webkit/button'
   import ButtonHighlight from '@aziontech/webkit/button-highlight'
   import Calendar from '@aziontech/webkit/calendar'
@@ -26,6 +35,7 @@
   import Checkbox from '@aziontech/webkit/checkbox'
   import Chip from '@aziontech/webkit/chip'
   import CodeBlock from '@aziontech/webkit/code-block'
+  import CommandMenu from '@aziontech/webkit/command-menu'
   import CopyButton from '@aziontech/webkit/copy-button'
   import Currency from '@aziontech/webkit/currency'
   import Dialog from '@aziontech/webkit/dialog'
@@ -54,14 +64,19 @@
   import FieldPhoneNumber from '@aziontech/webkit/field-phone-number'
   import FieldRadio from '@aziontech/webkit/field-radio'
   import FieldRadioBlock from '@aziontech/webkit/field-radio-block'
+  import FieldSelect from '@aziontech/webkit/field-select'
   import FieldSwitch from '@aziontech/webkit/field-switch'
   import FieldSwitchBlock from '@aziontech/webkit/field-switch-block'
   import FieldText from '@aziontech/webkit/field-text'
   import FieldTextSwitch from '@aziontech/webkit/field-text-switch'
   import FieldTextarea from '@aziontech/webkit/field-textarea'
   import Flow from '@aziontech/webkit/flow'
+  import Footer from '@aziontech/webkit/footer'
+  import FrameBox from '@aziontech/webkit/frame-box'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import HelperText from '@aziontech/webkit/helper-text'
+  import HeroTitle from '@aziontech/webkit/hero-title'
+  import Hint from '@aziontech/webkit/hint'
   import IconButton from '@aziontech/webkit/icon-button'
   import InputGroup from '@aziontech/webkit/input-group'
   import InputGroupAddon from '@aziontech/webkit/input-group-addon'
@@ -69,11 +84,13 @@
   import InputPassword from '@aziontech/webkit/input-password'
   import InputText from '@aziontech/webkit/input-text'
   import Item from '@aziontech/webkit/item'
+  import Kbd from '@aziontech/webkit/kbd'
   import Label from '@aziontech/webkit/label'
   import Link from '@aziontech/webkit/link'
   import LogView from '@aziontech/webkit/log-view'
   import LogViewContent from '@aziontech/webkit/log-view-content'
   import LogViewHeader from '@aziontech/webkit/log-view-header'
+  import Menu from '@aziontech/webkit/menu'
   import MenuItem from '@aziontech/webkit/menu-item'
   import Message from '@aziontech/webkit/message'
   import MiniButton from '@aziontech/webkit/mini-button'
@@ -95,7 +112,10 @@
   import PopoverTrigger from '@aziontech/webkit/popover-trigger'
   import ProgressBar from '@aziontech/webkit/progress-bar'
   import RadioButton from '@aziontech/webkit/radio-button'
+  import ResizablePanel from '@aziontech/webkit/resizable-panel'
   import ScrollArea from '@aziontech/webkit/scroll-area'
+  import SectionGap from '@aziontech/webkit/section-gap'
+  import SectionTitle from '@aziontech/webkit/section-title'
   import SegmentedButton from '@aziontech/webkit/segmented-button'
   import Select from '@aziontech/webkit/select'
   import Sidebar from '@aziontech/webkit/sidebar'
@@ -120,7 +140,7 @@
   // When `category` is set the grid renders just that one category's section — so
   // the Hub sidebar can drive a single category into its own content view. Left
   // empty, every category renders. Ids: actions, inputs, content, feedback,
-  // overlay, navigation, data, code.
+  // overlay, navigation, layout, data, code.
   const props = defineProps({
     category: { type: String, default: '' }
   })
@@ -166,6 +186,12 @@
     { value: 'option3', icon: 'pi pi-star', label: 'Option Three', description: 'Third option' }
   ]
   const themeSwitcherValue = ref('system')
+  const fieldSelectValue = ref('')
+  const fieldSelectOptions = [
+    { value: 'us-east-1', label: 'US East (N. Virginia)' },
+    { value: 'us-west-2', label: 'US West (Oregon)' },
+    { value: 'eu-west-1', label: 'EU (Ireland)' }
+  ]
   const fieldTextValue = ref('')
   const fieldPasswordValue = ref('')
   const fieldTextareaValue = ref('')
@@ -182,6 +208,7 @@
   const fieldTextSwitchEnabled = ref(true)
 
   // ── Feedback ──────────────────────────────────────────────────────────────
+  const commandMenuOpen = ref(false)
   const dialogOpen = ref(false)
   const drawerOpen = ref(false)
   const showToast = () =>
@@ -193,6 +220,7 @@
     { label: 'Edge Functions', href: '#' },
     { label: 'my-function', current: true }
   ]
+  const panelBasis = ref(200)
   const tabValue = ref('overview')
 
   // ── Data ──────────────────────────────────────────────────────────────────
@@ -421,6 +449,10 @@
           />
         </ComponentGridCell>
 
+        <ComponentGridCell name="Hint">
+          <Hint text="Values are encrypted at rest and never displayed again after saving." />
+        </ComponentGridCell>
+
         <ComponentGridCell name="Select">
           <div class="w-full">
             <Select
@@ -474,7 +506,7 @@
 
         <ComponentGridCell
           name="BoxGridSelection"
-          class="col-span-2 md:col-span-4"
+          span="full"
         >
           <BoxGridSelection
             v-model="boxGridValue"
@@ -509,6 +541,17 @@
             label="Message"
             placeholder="Write your message"
             helper-text="Up to 500 characters."
+            class="w-full"
+          />
+        </ComponentGridCell>
+
+        <ComponentGridCell name="FieldSelect">
+          <FieldSelect
+            v-model="fieldSelectValue"
+            label="Region"
+            placeholder="Choose a region"
+            helper-text="Choose the closest region for lowest latency."
+            :options="fieldSelectOptions"
             class="w-full"
           />
         </ComponentGridCell>
@@ -733,25 +776,45 @@
           </Item>
         </ComponentGridCell>
 
-        <ComponentGridCell name="Divider">
-          <Divider
-            orientation="horizontal"
-            label="OR"
-            class="w-full"
+        <ComponentGridCell name="AzionLogo">
+          <AzionLogo class="h-8 w-auto text-(--text-default)" />
+        </ComponentGridCell>
+
+        <ComponentGridCell name="Kbd">
+          <div class="flex items-center gap-(--spacing-xs)">
+            <Kbd meta>K</Kbd>
+            <Kbd
+              shift
+              size="small"
+              >Enter</Kbd
+            >
+            <Kbd size="small">Esc</Kbd>
+          </div>
+        </ComponentGridCell>
+
+        <ComponentGridCell
+          name="HeroTitle"
+          span="wide"
+        >
+          <HeroTitle
+            eyebrow="Webkit"
+            highlight="One design system."
+            title="Every component, ready to compose."
+            description="Tokens, accessibility and dark mode, built in."
           />
         </ComponentGridCell>
 
-        <ComponentGridCell name="ScrollArea">
-          <ScrollArea
-            orientation="vertical"
-            aria-label="Scrollable content"
-            class="h-[180px] w-full rounded-(--shape-elements) border border-(--border-default) p-(--spacing-md) text-body-sm text-(--text-default)"
-          >
-            <div class="h-[420px]">
-              Long content that scrolls vertically inside the area — add enough content to exceed
-              the fixed height so the custom scrollbar appears.
-            </div>
-          </ScrollArea>
+        <ComponentGridCell
+          name="SectionTitle"
+          span="wide"
+        >
+          <SectionTitle
+            kind="left"
+            eyebrow="Foundations"
+            title="Built on tokens"
+            description="Every value a component paints comes from the theme."
+            class="w-full"
+          />
         </ComponentGridCell>
 
         <ComponentGridCell name="CardPricing">
@@ -1043,6 +1106,55 @@
             />
           </div>
         </ComponentGridCell>
+
+        <ComponentGridCell
+          name="CommandMenu"
+          span="wide"
+        >
+          <div class="flex w-full flex-col items-center gap-(--spacing-sm)">
+            <Button
+              label="Open command palette"
+              kind="outlined"
+              icon="pi pi-search"
+              @click="commandMenuOpen = true"
+            />
+            <span class="inline-flex items-center gap-(--spacing-xxs) text-body-xs text-(--text-muted)">
+              or press
+              <Kbd
+                meta
+                size="small"
+                >K</Kbd
+              >
+            </span>
+            <CommandMenu
+              v-model:open="commandMenuOpen"
+              aria-label="Command palette"
+            >
+              <CommandMenu.Input placeholder="Search commands…" />
+              <CommandMenu.List>
+                <CommandMenu.Group heading="Suggestions">
+                  <CommandMenu.Item value="deploy">Deploy Project</CommandMenu.Item>
+                  <CommandMenu.Item value="new-app">Create application</CommandMenu.Item>
+                  <CommandMenu.Item value="settings">Go to Settings</CommandMenu.Item>
+                </CommandMenu.Group>
+                <CommandMenu.Separator />
+                <CommandMenu.Group heading="Commands">
+                  <CommandMenu.Item
+                    value="search"
+                    shortcut="meta+k"
+                    >Search Everything</CommandMenu.Item
+                  >
+                  <CommandMenu.Item
+                    value="toggle-theme"
+                    shortcut="meta+shift+l"
+                    >Toggle Theme</CommandMenu.Item
+                  >
+                </CommandMenu.Group>
+                <CommandMenu.Empty>No matching command.</CommandMenu.Empty>
+              </CommandMenu.List>
+            </CommandMenu>
+          </div>
+        </ComponentGridCell>
       </div>
     </section>
 
@@ -1114,42 +1226,9 @@
           </TabView>
         </ComponentGridCell>
 
-        <ComponentGridCell name="Sidebar">
-          <Sidebar
-            aria-label="Application"
-            class="h-[280px] w-full"
-          >
-            <SidebarGroup>
-              <MenuItem
-                label="Home"
-                icon="pi pi-home"
-                href="#"
-                selected
-              />
-              <MenuItem
-                label="Marketplace"
-                icon="pi pi-shopping-cart"
-                href="#"
-              />
-            </SidebarGroup>
-            <SidebarGroup label="Build">
-              <MenuItem
-                label="Applications"
-                icon="pi pi-th-large"
-                href="#"
-              />
-              <MenuItem
-                label="Variables"
-                icon="pi pi-sliders-h"
-                href="#"
-              />
-            </SidebarGroup>
-          </Sidebar>
-        </ComponentGridCell>
-
         <ComponentGridCell
           name="NavigationMenu"
-          class="col-span-2 md:col-span-4"
+          span="full"
         >
           <NavigationMenu
             aria-label="Sections"
@@ -1190,9 +1269,197 @@
           </NavigationMenu>
         </ComponentGridCell>
 
+        <ComponentGridCell name="BreadcrumbItem">
+          <div class="flex items-center gap-(--spacing-xs)">
+            <BreadcrumbItem
+              label="Workloads"
+              href="#"
+            />
+            <BreadcrumbItem
+              label="Current Page"
+              current
+            />
+          </div>
+        </ComponentGridCell>
+
+        <ComponentGridCell
+          name="Menu"
+          span="wide"
+        >
+          <!-- The drill-down stack: activating `Settings` pushes its level in place,
+               moves focus to the Back row, and takes the level that is not current out
+               of the tab order. The host clips with `overflow-clip`, NOT `overflow-hidden`:
+               the leaving level is absolutely positioned outside the box, so a hidden host
+               becomes a scroll container and the browser scrolls it to reveal the newly
+               focused row — shifting the whole menu sideways. `clip` never scrolls. -->
+          <div class="w-full max-w-[264px] overflow-clip">
+            <Menu aria-label="Console navigation">
+              <Menu.Back />
+              <Menu.Group label="Account">
+                <Menu.Item
+                  label="Overview"
+                  icon="pi pi-home"
+                  href="#"
+                  selected
+                />
+                <Menu.Sub>
+                  <Menu.SubTrigger
+                    label="Settings"
+                    kind="drill"
+                  />
+                  <Menu.SubContent>
+                    <Menu.Item
+                      label="General"
+                      icon=""
+                      href="#"
+                    />
+                    <Menu.Item
+                      label="Members"
+                      icon=""
+                      href="#"
+                    />
+                    <Menu.Item
+                      label="Billing"
+                      icon=""
+                      href="#"
+                    />
+                  </Menu.SubContent>
+                </Menu.Sub>
+              </Menu.Group>
+            </Menu>
+          </div>
+        </ComponentGridCell>
+      </div>
+    </section>
+
+    <!-- ── Layout ───────────────────────────────────────────────────────── -->
+    <section
+      v-if="showCategory('layout')"
+      class="flex flex-col gap-(--spacing-sm)"
+    >
+      <div
+        v-if="!category"
+        class="flex items-baseline justify-between gap-(--spacing-sm) px-(--spacing-xxs)"
+      >
+        <h3 class="text-overline-sm uppercase tracking-widest text-(--text-muted)">Layout</h3>
+        <span class="text-body-xs text-(--text-muted)">Structure, frames &amp; shells</span>
+      </div>
+      <div class="grid w-full grid-cols-2 gap-0 md:grid-cols-4">
+        <ComponentGridCell name="Divider">
+          <Divider
+            orientation="horizontal"
+            label="OR"
+            class="w-full"
+          />
+        </ComponentGridCell>
+
+        <ComponentGridCell name="SectionGap">
+          <div class="w-full">
+            <FrameBox borders="y">
+              <div class="p-(--spacing-sm) text-center text-body-xs text-(--text-muted)">
+                Section above
+              </div>
+            </FrameBox>
+            <SectionGap size="medium" />
+            <FrameBox
+              flush
+              marks="bottom"
+              borders="y"
+            >
+              <div class="p-(--spacing-sm) text-center text-body-xs text-(--text-muted)">
+                Section below
+              </div>
+            </FrameBox>
+          </div>
+        </ComponentGridCell>
+
+        <ComponentGridCell name="FrameBox">
+          <FrameBox class="w-full">
+            <div class="p-(--spacing-md) text-center text-body-sm text-(--text-muted)">
+              Framed content
+            </div>
+          </FrameBox>
+        </ComponentGridCell>
+
+        <ComponentGridCell name="ScrollArea">
+          <ScrollArea
+            orientation="vertical"
+            aria-label="Scrollable content"
+            class="h-[180px] w-full rounded-(--shape-elements) border border-(--border-default) p-(--spacing-md) text-body-sm text-(--text-default)"
+          >
+            <div class="h-[420px]">
+              Long content that scrolls vertically inside the area — add enough content to exceed
+              the fixed height so the custom scrollbar appears.
+            </div>
+          </ScrollArea>
+        </ComponentGridCell>
+
+        <ComponentGridCell name="Sidebar">
+          <Sidebar
+            aria-label="Application"
+            class="h-[280px] w-full"
+          >
+            <SidebarGroup>
+              <MenuItem
+                label="Home"
+                icon="pi pi-home"
+                href="#"
+                selected
+              />
+              <MenuItem
+                label="Marketplace"
+                icon="pi pi-shopping-cart"
+                href="#"
+              />
+            </SidebarGroup>
+            <SidebarGroup label="Build">
+              <MenuItem
+                label="Applications"
+                icon="pi pi-th-large"
+                href="#"
+              />
+              <MenuItem
+                label="Variables"
+                icon="pi pi-sliders-h"
+                href="#"
+              />
+            </SidebarGroup>
+          </Sidebar>
+        </ComponentGridCell>
+
+        <ComponentGridCell
+          name="ResizablePanel"
+          span="wide"
+        >
+          <!-- Drag the divider, or focus it and use the arrow keys. The left pane is
+               flexible (no basis), so it absorbs whatever the sized pane leaves. -->
+          <ResizablePanel
+            orientation="horizontal"
+            aria-label="Workspace"
+            class="h-[180px] w-full rounded-(--shape-elements) border border-(--border-default)"
+          >
+            <ResizablePanel.Pane
+              aria-label="Document"
+              class="p-(--spacing-sm) text-body-xs text-(--text-muted)"
+            >
+              Flexible
+            </ResizablePanel.Pane>
+            <ResizablePanel.Handle aria-label="Resize the panel" />
+            <ResizablePanel.Pane
+              v-model:basis="panelBasis"
+              :min="96"
+              :max="320"
+              aria-label="Panel"
+              class="p-(--spacing-sm) text-body-xs text-(--text-muted)"
+            >
+              Sized
+            </ResizablePanel.Pane>
+          </ResizablePanel>
+        </ComponentGridCell>
+
         <ComponentGridCell
           name="GlobalHeader"
-          class="col-span-2 md:col-span-4"
+          span="full"
         >
           <GlobalHeader
             aria-label="Global header"
@@ -1211,6 +1478,43 @@
             <GlobalHeader.Middle />
             <GlobalHeader.Right />
           </GlobalHeader>
+        </ComponentGridCell>
+
+        <ComponentGridCell
+          name="Footer"
+          span="full"
+        >
+          <Footer
+            aria-label="Footer"
+            class="w-full"
+          >
+            <Footer.Column title="Products">
+              <Footer.Link href="#">Applications</Footer.Link>
+              <Footer.Link href="#">Workloads</Footer.Link>
+            </Footer.Column>
+            <Footer.Column title="Developers">
+              <Footer.Link href="#">Documentation</Footer.Link>
+              <Footer.Link href="#">Marketplace</Footer.Link>
+            </Footer.Column>
+            <Footer.Column title="Company">
+              <Footer.Link href="#">About</Footer.Link>
+              <Footer.Link href="#">Careers</Footer.Link>
+            </Footer.Column>
+            <Footer.Column title="Support">
+              <Footer.Link href="#">Help Center</Footer.Link>
+              <Footer.Link href="#">Status</Footer.Link>
+            </Footer.Column>
+            <template #status>
+              <StatusIndicator
+                severity="success"
+                label="All systems operational"
+              />
+            </template>
+            <template #brand>
+              <Brand size="large" />
+            </template>
+            <template #tagline>The web platform for modern workloads</template>
+          </Footer>
         </ComponentGridCell>
       </div>
     </section>
@@ -1247,7 +1551,7 @@
 
         <ComponentGridCell
           name="Paginator"
-          class="col-span-2 md:col-span-4"
+          span="full"
         >
           <Paginator class="w-full">
             <template #info>
@@ -1280,7 +1584,7 @@
 
         <ComponentGridCell
           name="Table"
-          class="col-span-2 md:col-span-4"
+          span="full"
         >
           <Table
             border
@@ -1314,7 +1618,7 @@
 
         <ComponentGridCell
           name="PickList"
-          class="col-span-2 md:col-span-4"
+          span="full"
         >
           <PickList
             v-model="pickListModel"
@@ -1348,7 +1652,7 @@
       <div class="grid w-full grid-cols-2 gap-0 md:grid-cols-4">
         <ComponentGridCell
           name="CodeBlock"
-          class="col-span-2 md:col-span-4"
+          span="full"
         >
           <CodeBlock
             :tabs="codeTabs"
@@ -1360,7 +1664,7 @@
 
         <ComponentGridCell
           name="LogView"
-          class="col-span-2 md:col-span-4"
+          span="full"
         >
           <LogView
             v-model:search="logSearch"

@@ -1,20 +1,31 @@
 <script setup>
   // The single Azion Console app shell, shared by every console page.
   //
-  // The GlobalHeader spans the FULL width of the app, above the sidebar, and owns
-  // the tenancy chain: the Azion mark, then the organization, the account and the
-  // workspace — `Azion / Azion / Magalu / Ecommerce` — followed by the breadcrumb
-  // for the module the user entered. Each link narrows the one before it: who you
-  // belong to, whose infrastructure you operate, which slice of it you are in. The rail below it is navigation and nothing else. That split is
-  // deliberate: identity ("who am I acting as") is global and outranks the rail,
-  // which only answers "where in this tenant am I". Keeping both in the sidebar
-  // made one column answer two unrelated questions, and pinned the switcher to a
-  // rail that collapses.
+  // THE SHAPE: the rail runs the FULL HEIGHT of the window, and the GlobalHeader sits
+  // INSIDE the content zone beside it (`kind="content"`) rather than spanning the app
+  // above it. Cloudflare's console is the reference, and the reason is alignment: the
+  // bar's job at its leading edge is to say WHERE you are, and a breadcrumb read against
+  // the page under it has to start on the same vertical. A window-wide bar cannot find
+  // that vertical — it measures its inset from the window, so the gap moves with the
+  // rail's width. The content-zone bar is FULL BLEED across the zone and takes the page's
+  // own boundary (`--layout-boundary-inline`), which is the whole mechanism: one inset,
+  // measured from the same edge as the page's.
+  //
+  // It does NOT chase a capped, centred page column. A page that narrows its own measure
+  // on purpose — a settings form, a single-task hero — keeps its heading where it put it,
+  // and the bar keeps its leading edge where the zone begins.
+  //
+  // What that displaced: the ACCOUNT SWITCHER used to own this bar's leading edge (as a
+  // whole tenancy chain — organization / account / workspace — kept at
+  // ./archive/TenancySwitcher.vue). It now sits at the top of the rail — see
+  // ./AppSidebar.vue's `tenancy` — which is where Cloudflare puts the same control, and
+  // the only place left that still reads outermost-inward. Below `md` the rail is off
+  // screen entirely, so it comes back into the bar there (`isMobile`), where the
+  // breadcrumb is hidden anyway and nothing is competing for the leading edge.
   //
   // Pages render only their own content through the default slot.
   import Avatar from '@aziontech/webkit/avatar'
   import Breadcrumb from '@aziontech/webkit/breadcrumb'
-  import Button from '@aziontech/webkit/button'
   import ButtonHighlight from '@aziontech/webkit/button-highlight'
   import Drawer from '@aziontech/webkit/drawer'
   import DrawerContent from '@aziontech/webkit/drawer-content'
@@ -22,17 +33,33 @@
   import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import IconButton from '@aziontech/webkit/icon-button'
-  import AzionLogoMin from '@aziontech/webkit/svg/azion/min'
+  import SplitButton from '@aziontech/webkit/split-button'
+  import AzionLogo from '@aziontech/webkit/svg/azion/default'
+  import AzionMark from '@aziontech/webkit/svg/azion/min'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
   import { routeActivation } from '../../lib/behavior/anchor-nav'
-  import { useSamplePreset } from '../../lib/state/sample-preset'
   import { endSession } from '../../lib/state/session'
   import AccountSwitcher from './AccountSwitcher.vue'
   import AppSidebar from './AppSidebar.vue'
   import SamplePresetDrawer from './SamplePresetDrawer.vue'
+
+  // ACCOUNT SWITCHING IS PARKED, FOR NOW.
+  //
+  // The account switcher (./AccountSwitcher.vue) and the roster it opens
+  // (./SwitchAccountDialog.vue) are built and kept whole; what is undecided is whether
+  // the console re-scopes by ACCOUNT at all, and from where. Until that is settled the
+  // control is off rather than half-shown: a chain that names a tenant you cannot
+  // change is a promise the console does not keep, and it takes the rail's first row
+  // and the mobile bar's leading edge to make it.
+  //
+  // ONE flag for BOTH hosts, because there are two mount sites and exactly one of them
+  // may exist at a time (the switcher owns the global ⌘O binding, so a second copy
+  // would toggle a second dialog on the same keystroke). Flip it to `true` to bring the
+  // rail row and the mobile pill back together — nothing else has to move.
+  const ACCOUNT_SWITCHING = false
 
   const props = defineProps({
     // Sidebar item id to render as selected.
@@ -122,16 +149,25 @@
     closeNav()
   }
 
-  // The header always names the current location: the breadcrumb renders on
-  // every page that passes one, from a single first-level crumb (Home,
-  // Applications) up through a nested trail (Applications › New Application).
-  // Crumb links navigate; the last crumb is the current page.
+  // The bar always names the current location: the breadcrumb renders on every page
+  // that passes one, from a single first-level crumb (Home, Applications) up through a
+  // nested trail (Applications › New Application). Crumb links navigate; the last crumb
+  // is the current page. It is the FIRST thing in the bar now — the chain that used to
+  // precede it moved to the rail — which is what lets it share the page's left edge.
   const showBreadcrumb = computed(() => props.breadcrumb.length >= 1)
 
   // The crumb is a real anchor, so the click has to be CLAIMED before it is routed —
   // otherwise the browser follows the same href as a document load on top of the push,
   // which reloads the whole console and, on a settings page with a pending edit, raises
   // the browser's own "Leave site?" beside ours (../../lib/anchor-nav.js).
+  // The brand in the bar, below `md`: a link home, like the one at the top of the rail.
+  // Same guard as the crumb below — a modifier-click stays the browser's, everything else
+  // is claimed for the router so the console does not reload under the push.
+  const onBrand = (event) => {
+    if (!routeActivation(event)) return
+    onNavigate(event, { id: 'overview', label: 'Overview', path: '/home' })
+  }
+
   const onCrumb = (event, href) => {
     if (!routeActivation(event)) return
     if (href && href !== '#') {
@@ -146,6 +182,49 @@
   const openCreationCenter = () =>
     router.push({ path: '/create', query: { email: userEmail.value } })
 
+  // THE GLOBAL CREATE'S OTHER WAYS IN. This is the console's front door for "make
+  // something", so it is the one Create in the product that legitimately offers more than
+  // one object: the reader here has not navigated to a module yet, and the split is what
+  // lets them skip the Creation Center when they already know what they want.
+  //
+  // A resource-level Create is NOT this. On a module list the object is decided by the
+  // page the reader is standing on, so that button stays one plain
+  // `Create <object>` (../page/HeadingAction.vue).
+  //
+  // The menu names the two OBJECTS this door can make — an application and a workload —
+  // and then the one method that is worth naming beside them.
+  //
+  // `Import from Git` is not a third object: it is the same application, entered from a
+  // repository, and it lands on the CREATION CENTER (/create) — the screen that actually
+  // does that work, where a provider is connected, an account scope chosen and a repo
+  // picked (../../pages/resources/CreationCenter.vue). Its wording is the flow's own
+  // rather than "GitHub": the step connects a provider account, but which provider is the
+  // reader's business, and naming one here would narrow a door that is not narrow.
+  //
+  // `Create application` is the OTHER way to the same object, and the difference between
+  // the two rows is only where they put the reader. It opens the application create
+  // (../../pages/applications/CreateApplication.vue), whose FIRST part is the method — so
+  // Import from Git is one of the three answers waiting there, beside from scratch and a
+  // template. A reader who already knows the code sits in a repository takes the Git row
+  // and skips that question; a reader who wants to see the choice takes this one.
+  const CREATE_ACTIONS = [
+    { label: 'Create application', value: 'application', icon: 'ai ai-edge-application' },
+    { label: 'Create workload', value: 'workload', icon: 'ai ai-workloads' },
+    { label: 'Import from Git', value: 'import-git', icon: 'pi pi-github' }
+  ]
+
+  const CREATE_ROUTES = {
+    application: { path: '/applications/new' },
+    workload: { path: '/workloads/new' },
+    'import-git': { path: '/create' }
+  }
+
+  const onCreateAction = (item) => {
+    const target = CREATE_ROUTES[item?.value]
+    if (!target) return
+    router.push({ ...target, query: { email: userEmail.value, ...(target.query ?? {}) } })
+  }
+
   const openAccount = () => router.push({ path: '/account', query: { email: userEmail.value } })
 
   // The sample's own configuration — which customer this prototype is pretending to
@@ -154,11 +233,6 @@
   // so a panel owned there would exist twice and the second copy would open behind
   // the first. The shell is the one thing on screen exactly once.
   const presetOpen = ref(false)
-
-  // Whether the header chain carries the account link at all. A single-account
-  // contract has nothing to switch to, so the link and the slash before it go
-  // together — a chain that ends in a dangling separator reads as a broken row.
-  const { accountSwitcherVisible } = useSamplePreset()
 
   // Account-menu entries (the sidebar footer ⋮ Dropdown). Navigations route to
   // their page; "Personal Tokens" opens the token create flow (the tokens area
@@ -241,139 +315,138 @@
 </script>
 
 <template>
-  <div class="flex h-dvh flex-col overflow-hidden bg-(--bg-canvas)">
-    <!-- The header spans the FULL width of the app, above the rail — it is the
-         one piece of chrome that outranks navigation. Left to right it reads
-         outermost tenant inward: the Azion mark, the organization, the account,
-         then the module breadcrumb. -->
-    <GlobalHeader aria-label="Azion Console">
-      <!-- `justify-start!`, because the DS region ships `justify-end` — a left region
+  <!-- The window: one row. The rail runs its full height, the content zone holds the
+       bar and the page. That is the whole structural change behind the alignment — the
+       bar can only find the page's left edge from inside the box the page is in. -->
+  <div class="relative flex h-dvh overflow-hidden bg-(--bg-canvas)">
+    <!-- The rail, now full-height: it starts at the top of the window, above where the
+         bar used to be. Hidden in focused flows. On a
+         collapsible page the rail stays mounted and its width animates to 0 while its
+         content slides out to the left; the content zone below is `flex-1`, so it morphs
+         to fill the freed space on the same frames. The gesture — the drag on the rail's
+         trailing edge, the collapse trigger at the bottom, the keyboard nudge, the
+         affordance that brings a collapsed rail back — belongs to `Sidebar` itself, so
+         this shell owns only the persisted state and what the rail carries. Below `md`
+         the rail is hidden and navigation moves into the Drawer further down, so the
+         gesture is off there: there is nothing to collapse. -->
+    <AppSidebar
+      v-if="sidebar"
+      ref="rail"
+      class="hidden h-full md:block"
+      :user="userEmail"
+      :active="activeItem"
+      :collapsible="collapsible && !isMobile"
+      :tenancy="ACCOUNT_SWITCHING && !isMobile"
+      aria-label="Main navigation"
+      @navigate="onNavigate"
+      @create="openCreationCenter"
+      @select="onAccountSelect"
+      @logout="signOut"
+    />
+
+    <!-- THE CONTENT ZONE: the bar, then the page. Both are FULL BLEED across the zone and
+         both take the same page boundary inset — `--layout-boundary-inline`, from
+         `kind="content"` on the bar and from `.layout-boundary` on the scroll box below —
+         so the breadcrumb opens on the same vertical as the page's content. Retuning the
+         boundary moves both, in one place (packages/theme's layout tokens). -->
+    <div class="flex min-w-0 flex-1 flex-col">
+      <GlobalHeader
+        kind="content"
+        aria-label="Azion Console"
+      >
+        <!-- `justify-start!`, because the DS region ships `justify-end` — a left region
            that packs its children against its own trailing edge. It is invisible while
            the region is content-sized (it grows 0, so there is no free space to
            distribute), and it becomes visible the moment anything gives the row slack
            or takes it away: the chain drifts toward the middle, and under pressure it
-           overflows off the START edge, clipping the Azion mark instead of the
+           overflows off the START edge, clipping the outermost tenant instead of the
            innermost link. The gap between the links stays the region's own — spacing
            is the gap's job, not the justification's.
            Important, not a plain class: `justify-start` and `justify-end` are the same
            property, and the winner is CSS source order, not the order they are written
            in the attribute. -->
-      <GlobalHeader.Left class="justify-start!">
-        <!-- Mobile nav trigger: below `md` the rail is hidden, so this
+        <GlobalHeader.Left class="justify-start!">
+          <!-- Mobile nav trigger: below `md` the rail is hidden, so this
              hamburger opens the right-side Drawer that carries the full
              navigation. -->
-        <Tooltip
-          v-if="sidebar && isMobile"
-          key="nav-trigger"
-          text="Open navigation"
-          placement="bottom"
-        >
-          <IconButton
-            icon="pi pi-bars"
-            aria-label="Open navigation"
-            kind="outlined"
-            size="medium"
-            @click="navOpen = true"
-          />
-        </Tooltip>
-
-        <!-- The tenancy chain. The mark is the minimal Azion glyph and the way
-             back to the console home; a RouterLink (not a button) so the user
-             keeps middle-click / open-in-new-tab.
-
-             It is NOT wrapped in GlobalHeader.Brand: that region pins any svg
-             inside it to 18px with a descendant rule, which outranks a class on
-             the svg itself. The chain's mark is specified at 20 (`--size-5`),
-             the same box as the org and account marks beside it, so the three
-             sit on one baseline. The glyph is 21x18, so it fits INSIDE the 20px
-             box (preserveAspectRatio) rather than being stretched to fill it. -->
-        <!-- ONE RHYTHM FOR THE WHOLE CHAIN.
-             The chain is a single child of the header region, with NO gap of its own:
-             every element in it — the mark, each slash, each pill — carries the same
-             `--spacing-xxs` of its own padding instead, so the space between any two
-             neighbours is always 4 + 4 and the row reads as one repeating unit.
-             Left to the region's `gap`, the spacing came out uneven in a way that had
-             nothing to do with the design: the gap lands between every child, so each
-             separator collected it TWICE (once before, once after) while the pills
-             added their own padding on top — a pill/slash pair sat at gap + padding
-             and the slash itself at gap + gap, so no two spaces in the chain matched. -->
-        <div class="flex min-w-0 items-center">
-          <RouterLink
-            :to="{ path: '/home', query: { email: userEmail } }"
-            aria-label="Azion home"
-            class="inline-flex shrink-0 items-center self-center rounded-(--shape-elements) p-(--spacing-xxs) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
+          <Tooltip
+            v-if="sidebar && isMobile"
+            key="nav-trigger"
+            text="Open navigation"
+            placement="bottom"
           >
-            <AzionLogoMin
-              class="size-(--size-5)"
-              aria-label="Azion"
+            <IconButton
+              icon="pi pi-bars"
+              aria-label="Open navigation"
+              kind="outlined"
+              size="medium"
+              @click="navOpen = true"
             />
-          </RouterLink>
+          </Tooltip>
 
-          <span
-            class="shrink-0 px-(--spacing-xxs) text-body-sm text-(--text-muted)"
-            aria-hidden="true"
-            >/</span
+          <!-- BRAND, below `md` only: the rail carries it at every wider width, and two
+               copies of the same lockup on one screen is one too many. It is the package
+               asset in both of its two sizes, swapped by width rather than resized — the
+               wordmark does not survive being squeezed, it has to be dropped. Held until
+               `sm` (640px), where a tablet bar still has room for the full lockup beside
+               the hamburger and the tenant chain; below that only the mark stays, which is
+               the widest thing that still fits once the chain takes the rest of the row.
+               Classes, not `isMobile`: both are inert SVG, so mounting both costs nothing
+               and no binding can double up (unlike the switcher below). -->
+          <a
+            href="/home"
+            aria-label="Azion home"
+            class="flex h-6 w-fit shrink-0 items-center rounded-(--shape-button) px-(--spacing-xxs) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none md:hidden [&_svg]:h-[18px] [&_svg]:w-auto"
+            @click="onBrand"
           >
-          <!-- One component per link — the switcher is the same control at every
-               level of the chain, told which level it is (./AccountSwitcher.vue). -->
-          <AccountSwitcher kind="organization" />
-
-          <!-- The account link, and only when the preset says this customer has more
-               than one account to be (../../lib/sample-preset.js). The separator is
-               inside the same condition: the chain reads as links joined by slashes,
-               so a slash with nothing after it is a chain that lost a link. -->
-          <template v-if="accountSwitcherVisible">
-            <span
-              class="shrink-0 px-(--spacing-xxs) text-body-sm text-(--text-muted)"
+            <AzionMark
               aria-hidden="true"
-              >/</span
-            >
-            <AccountSwitcher kind="account" />
-          </template>
-
-          <!-- The innermost link is the first thing the chain gives up: below `md`
-               three marks plus the hamburger and the header actions do not fit,
-               and they collapse into an unreadable row of initials. Organization
-               and account survive; the workspace comes back at `md`. -->
-          <div class="hidden items-center md:flex">
-            <span
-              class="shrink-0 px-(--spacing-xxs) text-body-sm text-(--text-muted)"
+              class="sm:hidden"
+            />
+            <AzionLogo
               aria-hidden="true"
-              >/</span
-            >
-            <AccountSwitcher kind="workspace" />
-          </div>
-        </div>
+              class="hidden sm:block"
+            />
+          </a>
 
-        <!-- Location, separated from identity by a rule rather than another
-             slash: the chain above says WHO you are acting as, the breadcrumb
-             says WHERE you are.
+          <!-- Below `md` the rail — and with it the account switcher at its top — is off
+             screen, so identity comes back HERE, next to the hamburger that opens the
+             nav. It is the only chrome left on a phone that can say which tenant you are
+             acting as, and it costs the breadcrumb nothing: the crumb is hidden at this
+             width anyway (see below), so nothing is competing for the leading edge.
+             `v-if`, not a `hidden md:flex` class: the switcher owns the global ⌘O
+             binding, and a second mounted copy would toggle a second panel on the same
+             keystroke. Exactly one of the two instances exists at any width. -->
+          <AccountSwitcher v-if="ACCOUNT_SWITCHING && isMobile" />
 
-             It appears at `lg`, not `md`, and that is a hard requirement rather
-             than taste: the DS Popover.Trigger is `shrink-0`, so a pill cannot
-             compress to make room. Below `lg` the chain plus the breadcrumb
-             plus the header actions over-subscribe the row, and the overflow
-             does not clip — it paints one control on top of the next. The
-             breadcrumb is what gives way, because the page below it repeats its
-             last crumb as the page heading and the chain does not repeat
-             anywhere. -->
-        <div
-          v-if="showBreadcrumb"
-          class="hidden min-w-0 items-center gap-(--spacing-xs) lg:flex"
-        >
-          <span
-            class="h-4 w-px shrink-0 bg-(--border-muted)"
-            aria-hidden="true"
-          />
+          <!-- LOCATION, and the reason this bar sits in the content zone at all: the first
+             crumb has to land on the same vertical as the page heading below it. That
+             comes from the Row above — the page boundary inset plus the page column's own
+             cap and centring — and from the negative inline margin here, which pulls back
+             the crumb's own `--spacing-xs` of padding (its hover/focus ghost extends past
+             the glyph, so the TEXT is inset by that much from the control's box). Without
+             it the crumb reads 8px right of the heading, which is exactly the kind of
+             near-miss that looks like a mistake rather than a margin.
+
+           `w-auto`, against the DS root's own `w-full`: as a flex item in a
+           content-sized region that is the width of nothing in particular, so the
+           trail collapsed to its `truncate` and read "Custom Pa…" with two thirds of
+           the bar empty beside it. It merges through `cn`, so the later utility wins.
+
+             It appears from `md`, where the rail exists and the chain has moved out of
+             this bar. Below that the chain is here instead and the crumb gives way: the
+             page below repeats its last crumb as the page heading, and the chain repeats
+             nowhere. -->
           <Breadcrumb
+            v-if="showBreadcrumb"
             :items="breadcrumb"
+            class="-ml-(--spacing-xs) hidden w-auto min-w-0 shrink md:flex"
             @navigate="onCrumb"
           />
-        </div>
-      </GlobalHeader.Left>
-      <GlobalHeader.Middle />
-      <GlobalHeader.Right>
-        <!-- Below `md` the header actions collapse to icon-only buttons to fit
+        </GlobalHeader.Left>
+        <GlobalHeader.Middle />
+        <GlobalHeader.Right>
+          <!-- Below `md` the header actions collapse to icon-only buttons to fit
              the narrow bar; from `md` up they carry their labels. A Tooltip
              names each icon on hover/focus, matching the left-side controls.
 
@@ -393,115 +466,89 @@
              square, unlike every other azion icon. Neither set ships a cursor /
              mouse-pointer glyph at all, and Button takes an icon CLASS, not a
              slot, so an inline SVG is not an option here. -->
-        <template v-if="isMobile">
-          <Tooltip
-            text="Create"
-            placement="bottom"
-          >
-            <IconButton
-              icon="pi pi-plus-circle"
+          <template v-if="isMobile">
+            <Tooltip
+              text="Create"
+              placement="bottom"
+            >
+              <IconButton
+                icon="pi pi-plus-circle"
+                kind="secondary"
+                size="medium"
+                aria-label="Create"
+                @click="openCreationCenter"
+              />
+            </Tooltip>
+            <Tooltip
+              text="Agent"
+              placement="bottom"
+            >
+              <IconButton
+                icon="ai ai-ask-azion"
+                kind="outlined"
+                size="medium"
+                aria-label="Agent"
+              />
+            </Tooltip>
+          </template>
+          <template v-else>
+            <!-- The primary segment is the front door it always was; the menu is the
+                 shortcut past it. Mobile keeps the single icon button above: a split
+                 button's second segment is a 20px target beside another 20px target, and
+                 the Creation Center it opens already lists every path as a full row. -->
+            <SplitButton
+              label="Create"
               kind="secondary"
               size="medium"
-              aria-label="Create"
+              icon="pi pi-plus-circle"
+              :model="CREATE_ACTIONS"
               @click="openCreationCenter"
+              @item-click="(event, item) => onCreateAction(item)"
             />
-          </Tooltip>
-          <Tooltip
-            text="Agent"
-            placement="bottom"
-          >
-            <IconButton
-              icon="ai ai-ask-azion"
-              kind="outlined"
+            <ButtonHighlight
+              label="Agent"
               size="medium"
-              aria-label="Agent"
+              icon="ai ai-ask-azion"
             />
-          </Tooltip>
-        </template>
-        <template v-else>
-          <Button
-            label="Create"
-            kind="secondary"
-            size="medium"
-            icon="pi pi-plus-circle"
-            @click="openCreationCenter"
-          />
-          <ButtonHighlight
-            label="Agent"
-            size="medium"
-            icon="ai ai-ask-azion"
-          />
-        </template>
+          </template>
 
-        <button
-          type="button"
-          aria-label="Account settings"
-          class="rounded-full transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
-          @click="openAccount"
-        >
-          <Avatar
-            :label="userEmail"
-            size="medium"
-            kind="square"
-          />
-        </button>
-      </GlobalHeader.Right>
-    </GlobalHeader>
+          <button
+            type="button"
+            aria-label="Account settings"
+            class="rounded-full transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
+            @click="openAccount"
+          >
+            <Avatar
+              :label="userEmail"
+              size="medium"
+              kind="square"
+            />
+          </button>
+        </GlobalHeader.Right>
+      </GlobalHeader>
 
-    <!-- Everything under the header: the navigation rail and the page. -->
-    <div class="relative flex min-h-0 flex-1">
-      <!-- Single, full-height Azion app sidebar (hidden in focused flows). On a
-         collapsible page the rail stays mounted and its width animates to 0 while its
-         content slides out to the left; the content zone below is `flex-1`, so it morphs
-         to fill the freed space on the same frames. The gesture — the drag on the rail's
-         trailing edge, the collapse trigger at the bottom, the keyboard nudge, the
-         affordance that brings a collapsed rail back — belongs to `Sidebar` itself, so
-         this shell owns only the persisted state and what the rail carries. Below `md`
-         the rail is hidden and navigation moves into the Drawer further down, so the
-         gesture is off there: there is nothing to collapse. -->
-      <AppSidebar
-        v-if="sidebar"
-        ref="rail"
-        class="hidden h-full md:block"
-        :user="userEmail"
-        :active="activeItem"
-        :collapsible="collapsible && !isMobile"
-        aria-label="Main navigation"
-        @navigate="onNavigate"
-        @create="openCreationCenter"
-        @select="onAccountSelect"
-        @logout="signOut"
-      />
+      <!--
+        THE ROUTE TRANSITION lives here, on the content zone alone: the page
+        arrives from the left and travels right into place (`animate-page-enter`, see
+        src/styles/motion.css), while the header and the rail — the same chrome
+        before and after — stay put. Sliding those would read as a full reload
+        of an app that did not reload.
 
-      <!-- Content zone: the page itself. The header above owns the breadcrumb.
-           Content inset comes from the app's layout tokens (`.layout-boundary`
-           in src/styles/layout.css): `--layout-boundary-inline` on the sides,
-           one step more at the top so the header's bottom border gets air
-           below it. Retuning the boundary is a one-line edit in that file. -->
-      <div class="flex min-w-0 flex-1 flex-col">
-        <!--
-          THE ROUTE TRANSITION lives here, on the content zone alone: the page
-          arrives from the left and travels right into place (`animate-page-enter`, see
-          src/styles/motion.css), while the header and the rail — the same chrome
-          before and after — stay put. Sliding those would read as a full reload
-          of an app that did not reload.
-
-          `:key="route.path"`, and the path rather than the full path: most
-          routes mount their own component, so the entrance would already play
-          on mount, but one component serves several paths (Settings owns
-          /account, /account/users, /account/teams …) and a detail view stays
-          mounted across a change of id. Keying on the path replays the arrival
-          for those too. The QUERY is deliberately excluded — `?tab=`, a filter
-          or the carried email is the same page answering differently, and
-          re-entering it on every keystroke would be noise.
-        -->
-        <div
-          :key="route.path"
-          class="animate-page-enter motion-reduce:animate-none min-h-0 flex-1 overflow-auto"
-          :class="{ 'layout-boundary': padded }"
-        >
-          <slot />
-        </div>
+        `:key="route.path"`, and the path rather than the full path: most
+        routes mount their own component, so the entrance would already play
+        on mount, but one component serves several paths (Settings owns
+        /account, /account/users, /account/teams …) and a detail view stays
+        mounted across a change of id. Keying on the path replays the arrival
+        for those too. The QUERY is deliberately excluded — `?tab=`, a filter
+        or the carried email is the same page answering differently, and
+        re-entering it on every keystroke would be noise.
+      -->
+      <div
+        :key="route.path"
+        class="animate-page-enter motion-reduce:animate-none min-h-0 flex-1 overflow-auto"
+        :class="{ 'layout-boundary': padded }"
+      >
+        <slot />
       </div>
     </div>
 

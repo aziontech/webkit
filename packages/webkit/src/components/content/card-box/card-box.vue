@@ -58,8 +58,14 @@
     )
   )
 
+  // One inset for the whole card. The header's horizontal padding matches the
+  // content's `p-(--spacing-md)` and the footer's `px-(--spacing-md)`, so the title
+  // sits on the same vertical line as the first thing under it — and, in a flush
+  // card, as the rows of whatever fills it (an ItemList, an Accordion and a LogView
+  // are all inset `--spacing-md`). It used to be `--spacing-sm`, which put every
+  // card header 4px left of its own body.
   const headerClasses =
-    'group flex min-h-14 shrink-0 items-center justify-between gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-sm) py-(--spacing-sm)'
+    'group flex min-h-14 shrink-0 items-center justify-between gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm)'
 
   const titleClasses = 'text-label-md text-(--text-default)'
 

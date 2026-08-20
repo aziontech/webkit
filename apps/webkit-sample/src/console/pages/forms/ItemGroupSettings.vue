@@ -116,9 +116,7 @@
 
           <!-- Section: General — an section title over a flush CardBox. -->
           <section class="flex flex-col gap-(--layout-group-gap)">
-            <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
-              General
-            </p>
+            <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">General</p>
             <CardBox :padded="false">
               <template #content>
                 <Item.List>
@@ -189,9 +187,7 @@
 
           <!-- Section: Preferences -->
           <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
-            <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
-              Preferences
-            </p>
+            <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">Preferences</p>
             <CardBox :padded="false">
               <template #content>
                 <Item.List>
@@ -263,9 +259,7 @@
 
           <!-- Section: Notifications -->
           <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
-            <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
-              Notifications
-            </p>
+            <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">Notifications</p>
             <CardBox :padded="false">
               <template #content>
                 <Item.List>

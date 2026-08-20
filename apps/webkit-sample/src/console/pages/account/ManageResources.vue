@@ -1,14 +1,17 @@
 <script setup>
   // Manage Resources — the console's resource manager, modeled on the cloud
-  // "Manage resources" surface. It renders the account hierarchy (Organization →
-  // Brand → Reseller → Group → Client) as an EXPANDABLE tree table with checkbox
+  // "Manage resources" surface. It renders the tenancy hierarchy (Organization →
+  // Group → Workspace, since "brand", "reseller" and "client" were retired — see
+  // ../../lib/state/accounts.js) as an EXPANDABLE tree table with checkbox
   // multi-select, a toolbar of bulk actions, and a right info panel whose
   // Permissions / Labels tabs reflect the current selection.
   //
-  // The webkit Table has no tree engine, so the tree is built here: `expanded`
-  // holds the open node ids, `flattenTree` (accounts store) emits only the
-  // visible rows tagged with depth + hasChildren, and the Name cell renders the
-  // chevron + indentation. Selection rides the Table's own enableRowSelection.
+  // The webkit Table has no tree engine, so the tree is laid out by the store:
+  // `expanded` holds the open node ids and `flattenTree` emits only the visible
+  // rows tagged with depth + hasChildren — the same function the switcher's own
+  // tree uses (../../components/shell/SwitchAccountDialog.vue), so the two cannot
+  // drift on indent, chevron or tier label. The Name cell renders the chevron and
+  // the indentation. Selection rides the Table's own enableRowSelection.
   import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
@@ -24,6 +27,7 @@
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, ref } from 'vue'
 
+  import TagListCell from '../../components/list/TagListCell.vue'
   import PageHeading from '../../components/page/PageHeading.vue'
   import AppLayout from '../../components/shell/AppLayout.vue'
   import {
@@ -32,6 +36,11 @@
     flattenTree,
     useAccounts
   } from '../../lib/state/accounts.js'
+
+  // Where `Documentation` goes. The docs ROOT: the account hierarchy has no entry in
+  // lib/data/product-empty-states.js (that registry covers the product modules), and an
+  // unverified deep link is worse than the index. Replace when the topic URL is known.
+  const HELP = 'https://www.azion.com/en/documentation/'
 
   const { accounts, currentAccountId } = useAccounts()
 
@@ -172,13 +181,14 @@
       <PageHeading
         title="Manage Resources"
         description="Organize accounts into a hierarchy of brands, resellers, groups, and clients."
+        :documentation="HELP"
       >
         <template #actions>
           <Tooltip text="Refresh">
             <IconButton
               icon="pi pi-refresh"
               kind="outlined"
-              size="medium"
+              size="large"
               aria-label="Refresh resources"
               @click="refresh"
             />
@@ -187,7 +197,7 @@
             :label="infoPanelOpen ? 'Hide info panel' : 'Show info panel'"
             :icon="infoPanelOpen ? 'pi pi-angle-double-right' : 'pi pi-angle-double-left'"
             kind="text"
-            size="medium"
+            size="large"
             @click="toggleInfoPanel"
           />
         </template>
@@ -370,14 +380,14 @@
                               class="size-(--size-7) shrink-0"
                               aria-hidden="true"
                             />
-                            <!-- Groups and Clients get an avatar: they are the
-                                 levels an operator acts as (a switch always
-                                 lands on a Client), so they carry the same mark
-                                 as the header pill. Organizations, Brands and
-                                 Resellers are structure — a type glyph is what
-                                 they are, and it keeps the tree scannable. -->
+                            <!-- Groups and Workspaces get an avatar: they are the
+                                 tiers an operator acts as (a switch lands on a
+                                 Workspace), so they carry the same kind of mark as
+                                 the header pill. An Organization is structure — its
+                                 tier glyph is what it is, and that keeps the tree
+                                 scannable. -->
                             <Avatar
-                              v-if="row.type === 'group' || row.type === 'client'"
+                              v-if="row.type === 'group' || row.type === 'workspace'"
                               :label="accountInitials(row.name)"
                               size="small"
                               kind="square"
@@ -451,23 +461,14 @@
                         </Table.Cell>
 
                         <Table.Cell :grow="1">
-                          <span
-                            v-if="row.labels && row.labels.length"
-                            class="flex flex-wrap items-center gap-(--spacing-xxs)"
-                          >
-                            <Tag
-                              v-for="label in row.labels"
-                              :key="label"
-                              :label="label"
-                              severity="secondary"
-                              size="small"
-                            />
-                          </span>
-                          <span
-                            v-else
-                            class="text-body-sm text-(--text-muted)"
-                            >—</span
-                          >
+                          <!-- ONE LINE, always: labels that outgrow the column go behind
+                               "+N" instead of wrapping and making this row taller than
+                               its neighbours (../../components/list/TagListCell.vue).
+                               The component renders the em dash when there are none. -->
+                          <TagListCell
+                            :items="row.labels ?? []"
+                            noun="labels"
+                          />
                         </Table.Cell>
 
                         <Table.Cell kind="action">
@@ -579,9 +580,7 @@
                         :key="binding.role"
                         class="flex items-center justify-between rounded-(--shape-elements) bg-(--bg-surface-raised) px-(--spacing-sm) py-(--spacing-xs)"
                       >
-                        <span class="text-label-sm text-(--text-default)">{{
-                          binding.role
-                        }}</span>
+                        <span class="text-label-sm text-(--text-default)">{{ binding.role }}</span>
                         <span class="text-body-xs text-(--text-muted)">
                           {{ binding.members }} member{{ binding.members === 1 ? '' : 's' }}
                         </span>

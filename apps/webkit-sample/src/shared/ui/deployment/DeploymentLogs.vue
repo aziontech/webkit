@@ -33,14 +33,17 @@
   //   | -------- | ------------------------------------- | --------------------- |
   //   | running  | the live status ("Building…")          | N/M steps + the step  |
   //   |          |                                       | it is on              |
-  //   | settled  | Phased/Complete + copy all logs       | the outcome tag       |
+  //   | settled  | the Phased/Complete switch            | the outcome tag       |
   //
   // Nothing in the running column is a CONTROL. While a deploy is in flight the
   // question is where it is — which the step rows and the progress bar answer — and
-  // both controls are about reading it afterwards: the Complete view is a log that
-  // scrolls out from under someone who is waiting, and there is nothing worth
-  // copying into a support thread until the run has stopped moving. So the switch
-  // and the copy appear only once the deployment settles, either way.
+  // the switch is about reading it afterwards: the Complete view is a log that
+  // scrolls out from under someone who is waiting. So it appears only once the
+  // deployment settles, either way.
+  //
+  // Copying is nowhere in that table, because it is not this card's control: it is
+  // LogView's, pinned over the lines it copies (see `show-copy` below). Copy-all is
+  // the Complete view's own button; per-step copy is each step's.
   //
   // TWO VIEWS of that output, switched once the deployment has SETTLED — a run in
   // flight only has the first one:
@@ -50,13 +53,12 @@
   //   • Complete — every revealed line of every step in one continuous LogView, in
   //                pipeline order. The raw read — what the CLI actually printed,
   //                which is what you scan when the step summary is not enough (and
-  //                what you copy into a support thread).
+  //                what you copy into a support thread — from LogView's own button).
   // The switch is a VIEW preference, not state: both views render the same lines
   // from the same model, so flipping between them never changes what is true. The
-  // header's status, the progress bar and the copy payload are shared, because they
-  // describe the deployment rather than either view of it.
+  // header's status and the progress bar are shared, because they describe the
+  // deployment rather than either view of it.
   import Accordion from '@aziontech/webkit/accordion'
-  import CopyButton from '@aziontech/webkit/copy-button'
   import LogView from '@aziontech/webkit/log-view'
   import LogViewContent from '@aziontech/webkit/log-view-content'
   import ProgressBar from '@aziontech/webkit/progress-bar'
@@ -105,22 +107,20 @@
     // steps, and the step the run is on) still renders either way.
     label: { type: String, default: 'Deployment Logs' },
     // Draw the Logs row — the label, the progress read / outcome tag, and (unless
-    // `controls` is off) the switch, the copy control and the wall-clock. Off leaves
-    // only the steps and the progress bar, for a surface that shows a deployment as
-    // an ILLUSTRATION of one rather than as a thing to operate (the home page's
-    // deploy cell). With no switch there is no second view, so `phased` is the only
-    // one rendered, and the per-step copy control goes with it — nothing here is for
-    // taking away.
+    // `controls` is off) the switch and the wall-clock. Off leaves only the steps and
+    // the progress bar, for a surface that shows a deployment as an ILLUSTRATION of
+    // one rather than as a thing to operate (the home page's deploy cell). With no
+    // switch there is no second view, so `phased` is the only one rendered, and the
+    // per-step copy control goes with it — nothing here is for taking away.
     header: { type: Boolean, default: true },
-    // Whether the Logs row carries the deployment's CONTROLS and its wall-clock —
-    // the Phased/Complete switch, the copy-all-logs control, and "Failed after 48s".
+    // Whether the Logs row carries the deployment's CONTROL and its wall-clock —
+    // the Phased/Complete switch, and "Failed after 48s".
     //
     // Off on a surface whose own card header carries them instead: the deployment
-    // page hoists the switch and the copy up beside the card title (where the design
-    // puts them, in the row that names the card) and states the timing in the page
-    // heading. Rendering either here as well would put the same control, and the
-    // same number, twice on one screen. Such a host drives the view with
-    // `v-model:view` and reads the copy payload off `logsText` (exposed below).
+    // page hoists the switch up beside the card title (where the design puts it, in
+    // the row that names the card) and states the timing in the page heading.
+    // Rendering either here as well would put the same control, and the same number,
+    // twice on one screen. Such a host drives the view with `v-model:view`.
     controls: { type: Boolean, default: true }
   })
 
@@ -300,20 +300,6 @@
 
   const formatDuration = (s) => (s >= 60 ? `${Math.floor(s / 60)}m ${s % 60}s` : `${s}s`)
 
-  // Every revealed log line, grouped under its step title — the payload the
-  // header's copy button hands to the clipboard as plain text.
-  const allLogsText = computed(() =>
-    stepList.value
-      .map((step, i) => {
-        const lines = linesByStep.value[i]
-        if (!lines.length) return ''
-        const body = lines.map(({ time, message }) => `[${time}] ${message}`).join('\n')
-        return `## ${step.title}\n${body}`
-      })
-      .filter(Boolean)
-      .join('\n\n')
-  )
-
   const elapsedLabel = computed(() => formatDuration(elapsed.value))
   const activeTitle = computed(() => stepList.value[activeStep.value]?.title ?? '')
 
@@ -383,10 +369,13 @@
       if (i + 1 < stepList.value.length) {
         after(STEP_GAP_MS, () => runStep(i + 1))
       } else {
-        // Everything is done: collapse all steps to their success summary, then
-        // hand off (the consumer swaps to whatever comes next).
+        // Everything is done. The phase flips on the SAME frame as the last log line,
+        // not on a timer: `finished` is what retires the progress bar, and a bar left
+        // sitting at a full 100% under a pipeline that has already finished reads as
+        // a deploy still doing something. The steps then collapse to their success
+        // summary a beat later, and the consumer is handed the outcome after that.
+        phase.value = 'finished'
         after(500, () => {
-          phase.value = 'finished'
           openStep.value = null
         })
         after(2200, () => emit('finished'))
@@ -435,14 +424,6 @@
   })
 
   onBeforeUnmount(clearAll)
-
-  // For a host that renders the copy control in its own card header (`controls:
-  // false`): the same payload this component's own control would hand over. It is
-  // exposed rather than recomputed by the host because what is copyable is what has
-  // been REVEALED — the failing step plays its `failLogs`, a skipped step plays
-  // nothing — and that is this component's own bookkeeping. A host deriving it from
-  // the record would drift the day either rule changes.
-  defineExpose({ logsText: allLogsText })
 </script>
 
 <template>
@@ -452,10 +433,14 @@
          while the deployment runs, where it is — how many steps are behind it and
          the one it is on; once it has settled, the outcome. The two never coexist —
          a finished pipeline's step count is "10/10", the tag restated as arithmetic,
-         and a running one has no outcome yet. -->
+         and a running one has no outcome yet.
+
+         Inset `--spacing-md`, the same as the accordion triggers and the LogView
+         lines below it (and, since the card header shares it, as the card's own
+         title): every row of this card starts on one vertical line. -->
     <div
       v-if="header"
-      class="flex items-center justify-between gap-(--spacing-sm) border-b border-(--border-default) px-(--spacing-sm) py-(--spacing-sm)"
+      class="flex min-h-12 items-center justify-between gap-(--spacing-sm) border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
     >
       <p
         v-if="label"
@@ -490,27 +475,24 @@
           severity="danger"
         />
 
-        <!-- The wall-clock and the two controls, for a surface with nowhere else to
+        <!-- The wall-clock and the view switch, for a surface with nowhere else to
              put them. A host that owns a card header takes them over
              (`:controls="false"`) and renders them up there, beside the card's title
              — which is where the design puts them.
 
-             Either way they exist only once the deployment has SETTLED. Mid-run, the
+             Either way they exist only once the deployment has SETTLED: mid-run the
              switch would offer a view that scrolls out from under someone who is
-             waiting, and there is nothing finished to copy. -->
+             waiting.
+
+             No copy control beside the switch. Copying belongs to the LOG, and
+             LogView already carries it — the Complete view's own button copies the
+             whole stream, and each step in the Phased view copies its output. -->
         <template v-if="controls && settled">
           <span class="text-label-sm text-(--text-muted)">{{ outcomeLabel }}</span>
           <SegmentedButton
             v-model="view"
             :options="views"
             aria-label="Log view"
-          />
-          <CopyButton
-            :value="allLogsText"
-            kind="outlined"
-            aria-label="Copy all logs"
-            copied-label="Logs copied"
-            :disabled="!allLogsText"
           />
         </template>
         <!-- No spinner in this row. A running deployment is always in the Phased

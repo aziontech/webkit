@@ -1,5 +1,5 @@
 <script setup>
-  // Add Column — appends a column to an existing SQL table, in a MEDIUM right Drawer.
+  // Add column — appends a column to an existing SQL table, in a MEDIUM right Drawer.
   //
   // TWO BANDS, TWO SHAPES, and the shape is the point. The three things the reader TYPES
   // OR PICKS — name, type, default — are separated fields (./ui/FieldStack.vue, the
@@ -93,7 +93,7 @@
   <ResourceDrawer
     v-model:open="open"
     size="medium"
-    title="Add Column"
+    title="Add column"
     save-label="Save"
     :submitting="submitting"
     @submit="submit"

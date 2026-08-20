@@ -1,12 +1,21 @@
 <script setup>
   // The app's standard left rail: navigation, and only navigation.
   //
-  // The brand mark and the account switcher used to sit at the top of this rail;
-  // they now live in the global header (see AppLayout.vue), next to the
-  // organization that owns the account. Identity is global — it outranks the
-  // rail, and it must not disappear when the rail collapses — so the two
-  // concerns are segregated: the header answers "who am I acting as", the rail
-  // answers "where in this tenant am I".
+  // …plus, at the top of its header, the ACCOUNT SWITCHER (`tenancy`) — the mark and
+  // name of the account being operated, opening the roster (./AccountSwitcher.vue).
+  //
+  // It has moved twice. It began here, went to the app-wide header when identity was
+  // separated from navigation, and came back when the header moved INTO the content
+  // zone (see AppLayout.vue). The reason is the content-zone bar's leading edge: it now
+  // has to carry the breadcrumb on the page column's own vertical, so the chain cannot
+  // sit in front of it. The rail's top is the next place that reads outermost-inward —
+  // which tenant you are acting as, then the way into everything inside it — and it is
+  // where Cloudflare's console puts the same control.
+  //
+  // What that costs: identity goes away with a collapsed rail, and below `md` the rail
+  // is not on screen at all. So the shell keeps the switcher in the header itself below
+  // `md` (AppLayout's `isMobile` branch) and mounts it here only from `md` up — never
+  // both, since the switcher owns the global ⌘O binding.
   //
   // What the rail carries: the search field at the top (the ⌘K affordance for the
   // CommandMenu palette, which carries the same navigation plus the app-level
@@ -29,6 +38,7 @@
   import Menu from '@aziontech/webkit/menu'
   import Sidebar from '@aziontech/webkit/sidebar'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
+  import AzionLogo from '@aziontech/webkit/svg/azion/default'
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -40,6 +50,7 @@
   import { nextPlanUp, useSamplePreset } from '../../lib/state/sample-preset.js'
   import { expireSession } from '../../lib/state/session.js'
   import { reportNavLevel, setNavPath, setNavScroll, useSidebar } from '../../lib/state/sidebar.js'
+  import AccountSwitcher from './AccountSwitcher.vue'
 
   const props = defineProps({
     // Signed-in user's email; the footer shows the local part as the display name.
@@ -69,7 +80,22 @@
     // Global shortcut that opens the command palette. Only ONE mounted sidebar
     // may own it — the shell passes an empty string to the drawer copy so ⌘K
     // never opens two palettes at once.
-    shortcut: { type: String, default: 'meta+k' }
+    shortcut: { type: String, default: 'meta+k' },
+    // Whether this copy carries the TENANCY SWITCHER at the top of its header, above
+    // the search field — the shape the console takes once the app bar moves into the
+    // content zone (see AppLayout.vue): the bar's leading edge belongs to the
+    // breadcrumb, so identity moves to the top of the rail.
+    //
+    // Only ONE mounted copy may carry it: the switcher owns the global ⌘O binding, so
+    // a second instance would toggle a second panel on the same keystroke — the same
+    // reason `palette` / `shortcut` exist. The shell mounts it on the rail from `md`
+    // up, and in the header itself below `md`, where the rail is off screen.
+    //
+    // PARKED FOR NOW: the shell passes `false` at every width while account switching
+    // is off (AppLayout.vue's `ACCOUNT_SWITCHING`), so the rail's header currently
+    // opens on the search field. The prop stays because the row does — flipping the
+    // shell's flag is the whole way back.
+    tenancy: { type: Boolean, default: false }
   })
 
   // `logout` fires when the Logout entry is chosen; `select` fires for any other
@@ -370,6 +396,15 @@
   // `search` is announced whether or not this copy owns the palette, so the shell can
   // react to it (the drawer copy uses it to close the drawer and hand the palette to the
   // rail). Event-first, like every other activation event here.
+  // The brand goes home — the same destination and the same path as the Overview row, so
+  // it routes through the SHELL's `navigate` handler like every other row here rather than
+  // reaching for a router of its own. That also lets the rail mark Overview as it lands,
+  // which is where the reader ends up.
+  const onBrand = (event) => {
+    event.preventDefault()
+    emit('navigate', event, { id: 'overview', label: 'Overview', path: '/home' })
+  }
+
   const openPalette = (event) => {
     emit('search', event)
     if (props.palette) showPalette()
@@ -480,7 +515,7 @@
   const actionCommands = computed(() => [
     {
       id: 'create',
-      label: 'Create Resource',
+      label: 'Create resource',
       icon: 'pi pi-plus-circle',
       // Same event as the header's Create button — not a `navigate` with a
       // synthetic nav item, which would also mark a non-existent rail item active.
@@ -654,15 +689,45 @@
     :class="['h-full', fluid ? 'w-full' : 'w-(--container-2xs)']"
   >
     <template #header>
-      <!-- Search → CommandMenu. A read-only field carrying the ⌘K hint, in the
-             fixed header region so it stays put while the nav below it scrolls.
-             It is the rail's whole header: the brand, the account switcher and
-             Create all live in the global header (see AppLayout.vue). The
-             wrapper takes the click so the icons and the field itself are all
-             part of the target; Enter on the focused field opens it too. The
-             palette teleports to the body, so it works while the rail is
-             collapsed and inside the mobile drawer. -->
-      <div>
+      <!-- The rail's header region: the account switcher (when this copy carries it)
+             over the search field, both fixed so they stay put while the nav below
+             them scrolls. Search → CommandMenu: a read-only field carrying the ⌘K
+             hint, whose wrapper takes the click so the icons and the field itself are
+             all part of the target; Enter on the focused field opens it too. The
+             palette teleports to the body, so it works while the rail is collapsed and
+             inside the mobile drawer. Create still lives in the app bar. -->
+      <div class="flex flex-col gap-(--spacing-xs)">
+        <!-- THE BRAND, at the top of the rail — where Cloudflare's console puts its own
+             mark, and where this one belongs now that the bar below it starts at the
+             content zone and opens with the breadcrumb.
+
+             The EXTENDED lockup at its small size (`svg/azion/default`, 90×18) — mark plus
+             wordmark, the shape a console wears at the top of a rail. `svg/azion/full` is
+             the same lockup at 250×46, which is a marketing size in a 300px rail. Either
+             way it is the asset from the package, never a hand-drawn glyph: the previous
+             header lost its Azion squiggle for exactly that reason (it was not official).
+
+             It is a link home, so the brand does what a brand in a console is expected to
+             do; `routeActivation` is the shell's job, so the anchor emits and the shell
+             routes, like every other nav row here. -->
+        <a
+          href="/home"
+          aria-label="Azion home"
+          class="mb-(--spacing-xs) flex h-6 w-fit items-center rounded-(--shape-button) px-(--spacing-xxs) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none [&_svg]:h-[18px] [&_svg]:w-auto"
+          @click="onBrand"
+        >
+          <AzionLogo aria-hidden="true" />
+        </a>
+
+        <!-- Identity next, then search — the rail reads outermost-inward: whose product
+             this is, which tenant you are acting as, then the way into everything inside
+             it. The switcher is a full-width row here (`fluid`), sized like the field
+             under it, so the two read as one header block. -->
+        <AccountSwitcher
+          v-if="tenancy"
+          fluid
+        />
+
         <div
           class="cursor-pointer [&_input]:cursor-pointer"
           @click="openPalette"
@@ -824,9 +889,9 @@
                  and an ORGANIZATION, not a property of the person signed in — the
                  same user is on three different contracts in three organizations, and
                  a tier tagged onto their name claims otherwise. It rides the
-                 organization instead, in the header's org switcher
-                 (./AccountSwitcher.vue, kind="organization"), which is the thing the
-                 contract is actually against. -->
+                 organization instead — the top tier of the account tree the switcher
+                 at the top of this rail opens (./AccountSwitcher.vue), which is the
+                 thing the contract is actually against. -->
             <template #top>
               <div class="flex min-w-0 flex-col">
                 <span class="truncate text-label-md text-(--text-default)">
@@ -982,9 +1047,7 @@
                account, and a button that offers it anyway is the console failing to
                know its own customer. The status line stays either way. -->
           <Dropdown.Group>
-            <div
-              class="flex flex-col gap-(--spacing-sm) px-(--spacing-xxs) py-(--spacing-xxs)"
-            >
+            <div class="flex flex-col gap-(--spacing-sm) px-(--spacing-xxs) py-(--spacing-xxs)">
               <Button
                 v-if="upgradePlan"
                 :label="`Upgrade to ${upgradePlan.name}`"

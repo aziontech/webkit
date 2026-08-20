@@ -85,7 +85,7 @@
 
   // GitHub is the only connected provider in this prototype. Account scopes are
   // the GitHub accounts the user has linked; the Select lets them add another.
-  const scopes = reactive([{ label: 'cesaroeduardo', value: 'cesaroeduardo' }])
+  const scopes = reactive([{ label: 'git-account', value: 'git-account' }])
   const scope = ref(scopes[0].value)
 
   // Sentinel value for the trailing "Add GitHub Account" option — selecting it

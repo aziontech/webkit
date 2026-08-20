@@ -36,7 +36,7 @@
   // `home` (overview), one per component category under "Componentes", one per
   // foundation under "Foundations" (each its own view rather than a 5-section
   // wall), and the three "Assets" galleries. Ids under "Componentes" match
-  // ComponentGrid's category filter (actions … data); ids under "Foundations"
+  // ComponentGrid's category filter (actions … code); ids under "Foundations"
   // are prefixed `foundation-` so `foundation-icons` never collides with the
   // Assets `icons` gallery.
   const navGroups = [
@@ -55,6 +55,7 @@
         { id: 'feedback', label: 'Feedback', icon: 'pi pi-comment' },
         { id: 'overlay', label: 'Overlay', icon: 'pi pi-clone' },
         { id: 'navigation', label: 'Navigation', icon: 'pi pi-compass' },
+        { id: 'layout', label: 'Layout', icon: 'pi pi-table' },
         { id: 'data', label: 'Data', icon: 'pi pi-database' },
         { id: 'code', label: 'Code', icon: 'pi pi-code' }
       ]

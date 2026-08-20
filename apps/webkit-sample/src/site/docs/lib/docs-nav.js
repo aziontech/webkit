@@ -9,16 +9,25 @@
 // condensed row the docs use for product groups (`Migrate`, `Modules`, `Guides`,
 // `Reference`), nesting four more levels deep inside the section's own.
 //
-// Rows carry no `href`: the prototype is self-contained, so activating a row moves
+// Most rows carry no `href`: the prototype is self-contained, so activating one moves
 // the selection rather than leaving the app. Ids derive from the docs path each row
 // points at, which is what keeps them unique and stable across 275 links.
+//
+// The rows whose page ACTUALLY EXISTS in the sample do carry one, so the tree is how a
+// reader reaches them — a page nobody can navigate to is a URL, not a page. `href` (not
+// a router `to`) because a documentation row is a link: it must be middle-clickable,
+// ⌘-clickable and copyable like every other link in the docs. `DocsLayout` intercepts
+// the plain left click and routes it in-app, so the SPA stays an SPA and the modified
+// click stays the browser's.
+import { menuLeaves } from '@shared/lib/menu-tree.js'
+
 export const docsNavSections = [
   {
     label: 'Start',
     items: [
-      { id: 'get-started', label: 'Getting Started' },
+      { id: 'get-started', label: 'Getting Started', href: '/site/docs' },
       { id: 'agent-setup', label: 'Agent Setup' },
-      { id: 'get-started-first-deploy', label: 'First deploy' },
+      { id: 'get-started-first-deploy', label: 'First deploy', href: '/site/docs/first-deploy' },
       {
         id: 'migrate',
         label: 'Migrate',
@@ -1331,6 +1340,20 @@ export const docsNavGroups = [
     }))
   }
 ]
+
+/**
+ * Every row that has a real page, as `href` → row id.
+ *
+ * The rail's selection follows the ROUTE, not only the click that caused it: arriving at
+ * a page by the palette, by a link in the prose, or by pasting the URL must all light the
+ * same row and open the levels above it. Built from the tree itself so the two can never
+ * disagree about which row a page is.
+ */
+export const docsIdByRoute = new Map(
+  menuLeaves(docsNavSections.flatMap((section) => section.items))
+    .filter((item) => item.href)
+    .map((item) => [item.href, item.id])
+)
 
 /**
  * Which ids are drill LEVELS rather than inline subs. A jump from the palette has to open

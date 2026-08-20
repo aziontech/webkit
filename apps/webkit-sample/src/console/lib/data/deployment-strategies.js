@@ -15,8 +15,8 @@
 //
 // That split is the whole vocabulary of the module:
 //
-//   New Settings    → a new STRATEGY, reusable across deployments
-//   New release     → a real DEPLOY, applying one or more of those strategies
+//   Create Deployment Settings  → a new STRATEGY, reusable across deployments
+//   Create release              → a real DEPLOY, applying one or more of those strategies
 //
 // AZION DEFAULT is the strategy every deploy starts with: it binds the
 // application being deployed and nothing else — no firewall, no custom page —
@@ -202,7 +202,7 @@ export const strategyOptions = computed(() =>
 )
 
 /**
- * Author a strategy — what "New Settings" creates.
+ * Author a strategy — what "Create Deployment Settings" creates.
  *
  * @param {object} input
  * @param {string} input.name Strategy name (`name` in the request body).

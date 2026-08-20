@@ -16,7 +16,7 @@ import { computed, ref } from 'vue'
 /** The setup prompt copied to the clipboard. */
 export const AGENT_SETUP_PROMPT =
   'Set up this project to deploy on Azion. Read https://www.azion.com/en/documentation/, ' +
-  'install the Azion CLI, scaffold an azion.config.js for an edge application, and wire up ' +
+  'install the Azion CLI, scaffold an azion.config.js for an application, and wire up ' +
   'the build + deploy commands so I can ship to the edge.'
 
 /**
@@ -43,11 +43,20 @@ export const AGENT_TOOLS = ['claude', 'cursor', 'windsurf', 'codex', 'opencode']
 // `additional_data` on the organization; here it is the same fact with a smaller
 // backing store, and it has to survive a reload or "dismiss" means "until you press
 // F5". A module-level ref so every mounted surface reacts to the same click.
+//
+// It starts DISMISSED. The offer is the one block on these screens that is an offer
+// and not the product, so the sample opens on the layout without it and the reader
+// asks for it — the "Agent onboarding" switch in the preset panel — rather than
+// clearing it away before they can read anything else. That makes the absence the
+// default and the presence a choice, so the key has to record BOTH answers: an
+// absent entry is "never asked" and reads as dismissed, and restoring writes the
+// explicit `false` instead of deleting the key (deleting it would fall straight back
+// to the default and the switch would not move).
 const DISMISS_KEY = 'webkit-sample-agent-onboarding-dismissed'
 
 const readDismissed = () => {
-  if (typeof localStorage === 'undefined') return false
-  return localStorage.getItem(DISMISS_KEY) === 'true'
+  if (typeof localStorage === 'undefined') return true
+  return localStorage.getItem(DISMISS_KEY) !== 'false'
 }
 
 const dismissed = ref(readDismissed())
@@ -76,5 +85,6 @@ export function dismissAgentOnboarding() {
 /** Put it back — the prototype's way out of a decision with no console UI to undo it. */
 export function restoreAgentOnboarding() {
   dismissed.value = false
-  if (typeof localStorage !== 'undefined') localStorage.removeItem(DISMISS_KEY)
+  // Written, not deleted: an absent entry means "never asked", which is dismissed.
+  if (typeof localStorage !== 'undefined') localStorage.setItem(DISMISS_KEY, 'false')
 }

@@ -1,41 +1,56 @@
 <script setup>
-  // "Get started with Azion" — the Azion documentation's landing content, built on the
-  // same page logic as the Hub home so the two read as one system:
+  // The Azion documentation HOME — the content of www.azion.com/en/documentation/,
+  // composed on this app's own page logic so the docs home and the Hub home read as
+  // one system:
   //
   //   • BannerContainer + PageHeader — the fluid hero band, its border-b becoming the
   //     top edge of the column below it.
   //   • SectionContainer — the bordered content column (border-x owns the outer edges).
   //   • SectionModule — one band per section: a header row divided from its body by a
   //     hairline, and divided from the band above by its own border-t.
-  //   • CardGrid variant="divider" — the boxes get their borders from the grid: 1px gaps
-  //     reveal the wrapper's border colour as internal rules, and the perimeter carries
-  //     none, so nothing doubles against the column's frame. Each cell fills
-  //     bg-(--bg-canvas) so only the gaps show.
+  //   • DocCardGroup + DocCard — THE CARD BANDS COME FROM THE DOCS LAYER, not from this
+  //     page: they are the components an `.mdx` page gets from a `<CardGroup>`, so the
+  //     home's bands and a tutorial's cards are one implementation and cannot drift —
+  //     one frame with its registration marks around the set, hairline rules between
+  //     cells (the grid's 1px gaps over a rule-coloured backdrop), and inside each cell
+  //     the glyph → title → copy stack on the layer's own 24/20 inset.
   //
-  // Inside a cell the anatomy is the Hub's card, part for part: a bare glyph stacked
-  // above the title and description, on the cell's own padding (see CELL_CLASS). The
-  // `Item` — with its boxed icon media — stays for the trailing "next page" ROW, which
-  // is a row and not a card.
+  // That inset is why each band is a PADDED, FRAMED box rather than an edge-to-edge
+  // divider grid: a frameless cell inset 24px puts its text off the 48px left edge the
+  // band's own header and its closing link row sit on. Framed and inset by the module's
+  // padding, the frame takes that edge and the 24px reads as the box's own padding —
+  // exactly how the same band reads on a reading page. Only the grid is padded, not the
+  // module's whole body, so the closing link row stays full-bleed.
+  //
+  // The page's six bands are the live docs home's own sections, in its order: start by
+  // objective, start by interface, ready-made templates, stop attacks, assess risk and
+  // prove compliance, follow along. The trailing "next page" row is `DocPagination`, the
+  // same pair that closes every reading page — with only its `next` half filled, since
+  // the home has no previous.
   import Breadcrumb from '@aziontech/webkit/breadcrumb'
   import Button from '@aziontech/webkit/button'
   import CodeBlock from '@aziontech/webkit/code-block'
-  import Item from '@aziontech/webkit/item'
   import SplitButton from '@aziontech/webkit/split-button'
+  import DocCard from '@aziontech/webkit-docs/doc-card'
+  import DocCardGroup from '@aziontech/webkit-docs/doc-card-group'
+  import DocPagination from '@aziontech/webkit-docs/doc-pagination'
+  import ContrastBanner from '@shared/ui/ContrastBanner.vue'
   import BannerContainer from '@shared/ui/layout/BannerContainer.vue'
-  import CardGrid from '@shared/ui/layout/CardGrid.vue'
   import PageHeader from '@shared/ui/layout/PageHeader.vue'
   import SectionContainer from '@shared/ui/layout/SectionContainer.vue'
   import SectionModule from '@shared/ui/layout/SectionModule.vue'
-  import { ref } from 'vue'
+
+  import { useDocsPageActions } from '../lib/docs-page-actions.js'
 
   const crumbs = [
     { label: 'Documentation', href: '#documentation' },
-    { label: 'Get Started', href: '#get-started', current: true }
+    { label: 'Home', href: '#overview', current: true }
   ]
 
   // Hero: the two ways to hand this platform to a tool. `AI Prompt` is pasted into an
   // agent, `CLI` is pasted into a terminal — same job, two audiences, so they are two
-  // tabs of one CodeBlock rather than two blocks.
+  // tabs of one CodeBlock rather than two blocks. It is the hero's own rendition of the
+  // live page's "Copy prompt" button: same prompt, shown before it is copied.
   //
   // The prompt is hard-wrapped at ~64 columns on purpose: CodeBlock scrolls long lines
   // horizontally (correct for code), but this pane is prose meant to be read before it
@@ -66,150 +81,279 @@ azion deploy`
     { label: 'CLI', value: 'cli', language: 'bash', code: CLI_SNIPPET }
   ]
 
-  const firstDeploy = [
+  // ── Start by objective ───────────────────────────────────────────────────────────
+  // Four jobs, not four products: the reader arrives knowing what they want done, so
+  // the first band is phrased as the doing. Four cards at two columns divide evenly at
+  // every width, so no card needs a span.
+  const objectives = [
     {
-      title: 'Deploy a template via Console',
-      description:
-        'One-click start from ready-made projects: e-commerce, blogs, APIs, full-stack SSR.',
-      icon: 'pi pi-th-large'
+      title: 'Build your application',
+      description: 'Go live from a template, a repo, or the CLI.',
+      icon: 'ai ai-build-pillar',
+      href: '/site/docs/first-deploy'
     },
     {
-      title: 'Import a project from GitHub',
-      description: 'Connect your repository and deploy an existing project.',
-      icon: 'pi pi-github'
-    },
-    {
-      title: 'Deploy with Azion CLI',
-      description: 'Link a local project from your terminal with azion link.',
-      icon: 'ai ai-azion-cli'
-    }
-  ]
-
-  const paths = [
-    {
-      title: 'I’m evaluating Azion',
-      description: 'See what you can build and how much effort the first success takes.',
-      icon: 'pi pi-compass'
-    },
-    {
-      title: 'I need to implement something specific',
-      description: 'Browse how-to guides by product and by capability.',
-      icon: 'pi pi-search'
-    },
-    {
-      title: 'I operate Azion in production',
-      description: 'Administer as code with the CLI and manage your account, teams, and billing.',
-      icon: 'pi pi-cog'
-    },
-    {
-      title: 'I’m comparing vendors',
-      description:
-        'Check what’s included in each plan and how real-world architectures look on Azion.',
-      icon: 'pi pi-chart-line'
-    }
-  ]
-
-  // Framework cards lead with the stack's own mark. The icon library ships 17 COLORED
-  // marks (`ai-cor`); the frameworks it covers use them, and the rest fall back to
-  // their monochrome mark so every card still shows its real logo.
-  //
-  // Astro is the exception: its colored mark is a WHITE logo with fixed fills, so it
-  // vanishes on the light canvas. It takes the monochrome glyph, which inherits
-  // currentColor and therefore reads in both themes.
-  const frameworks = [
-    { title: 'Angular', icon: 'ai-cor ai-angular' },
-    { title: 'Astro', icon: 'ai ai-astro' },
-    { title: 'Docusaurus', icon: 'ai ai-docusaurus' },
-    { title: 'Eleventy', icon: 'ai ai-eleventy' },
-    { title: 'Gatsby', icon: 'ai ai-gatsby' },
-    { title: 'Hexo', icon: 'ai ai-hexo' },
-    { title: 'Hono', icon: 'ai ai-hono' },
-    { title: 'Hugo', icon: 'ai ai-hugo' },
-    { title: 'Jekyll', icon: 'ai ai-jekyll' },
-    { title: 'Next.js', icon: 'ai-cor ai-next' },
-    { title: 'Nextal', icon: 'pi pi-box' },
-    { title: 'React', icon: 'ai-cor ai-react' },
-    { title: 'Svelte', icon: 'ai-cor ai-svelte' },
-    { title: 'VitePress', icon: 'ai ai-vitepress' },
-    { title: 'Vue', icon: 'ai-cor ai-vue' },
-    { title: 'WebAssembly', icon: 'pi pi-code' }
-  ]
-
-  const afterDeploy = [
-    {
-      title: 'Go live with Azion',
-      description: 'Point a custom domain to your application.',
-      icon: 'ai ai-domains'
+      title: 'Accelerate your application',
+      description: 'Cache at the edge so your origin stops repeating itself.',
+      icon: 'pi pi-gauge',
+      href: '#cache-settings'
     },
     {
       title: 'Secure your application',
-      description: 'Protect it with Firewall and WAF.',
-      icon: 'ai ai-secure-pillar'
+      description: 'A firewall in front, with a block rule you can verify.',
+      icon: 'ai ai-secure-pillar',
+      href: '#firewall-quickstart'
     },
     {
-      title: 'Observe your application',
-      description: 'Monitor metrics and events in real time.',
-      icon: 'ai ai-observe-pillar'
+      title: 'Execute AI inference',
+      description: 'A hosted model behind an OpenAI-compatible endpoint.',
+      icon: 'ai ai-ai-pillar',
+      href: '#ai-inference'
     }
   ]
 
-  // One recipe for every grid cell, so the four card bands cannot drift apart. The cell
-  // fills the canvas so the divider grid's 1px gaps are the only lines that show, and
-  // raises itself on focus so its ring is not clipped by a neighbouring cell.
+  // ── Start by interface ───────────────────────────────────────────────────────────
+  // The three surfaces the platform is driven through. Each card closes on its own CTA
+  // line — a `span`, not an `<a>`: the whole card is already the link, and a link inside
+  // a link is invalid HTML that browsers un-nest at parse time.
   //
-  // Anatomy is the Hub's card, not an `Item`: a BARE glyph stacked above the title, no
-  // boxed icon square. The box is a console/list affordance — in a docs card it fought
-  // the cell's own padding (the box's inset made the icon sit off the text's left edge,
-  // and an inline media column pushed the copy off the p-xl grid the bands share).
-  // Stacking glyph → title → description on one padding keeps every card in every band
-  // on the same left edge and the same rhythm, and matches the Hub 1-to-1.
-  // The spacing hangs off the TOP of each part (the description carries the gap above
-  // it), so a card with no description — the framework cells — ends on its title with
-  // no trailing margin, and its bottom padding is the same p-xl as its top.
-  // "Also useful" — the band that closes a module: a hairline row under the grid with a
-  // muted lead-in and the onward pages, dot-separated. One class and one data shape for
-  // every section, so a band cannot drift from its neighbours.
+  // `span` fills the ragged row: three cards over the `sm` two-column grid leave one
+  // hole, and an empty track in a `gap-px` grid shows the rule colour across its whole
+  // face. The third card spans both columns there and goes back to one at `lg`.
+  const interfaces = [
+    {
+      title: 'Platform',
+      description:
+        'Configure it visually in Azion Console: applications, firewall rules, metrics, and events.',
+      cta: 'Open the Console',
+      icon: 'ai ai-azion',
+      href: '#console'
+    },
+    {
+      title: 'CLI',
+      description:
+        'Stay in the terminal: link a project, run it locally, and deploy with a single binary.',
+      cta: 'Install the CLI',
+      icon: 'ai ai-azion-cli',
+      href: '#cli'
+    },
+    {
+      title: 'API',
+      description:
+        'Drive it from your own systems: create and change resources over REST, token authenticated.',
+      cta: 'Call the API',
+      icon: 'ai ai-azion-api',
+      href: '#api',
+      span: 'sm:col-span-2 lg:col-span-1'
+    }
+  ]
+
+  // ── Ready-made templates ─────────────────────────────────────────────────────────
+  // A mark plus one word, which is the case `mobile-cols=2` exists for: a single file of
+  // eight would be a screen of scrolling to say what two columns say in half the height.
+  // Eight at 2 / 2 / 4 columns divides evenly at every breakpoint, so no cell is ever a
+  // rule-coloured hole — "More frameworks" is the ninth link on the live page and belongs
+  // in the closing link row, since it is an onward page and not a template.
+  //
+  // The icon library ships 17 COLORED marks (`ai-cor`); the frameworks it covers use
+  // them, and the rest fall back to their monochrome mark so every tile still shows its
+  // real logo. Astro is the exception: its colored mark is a WHITE logo with fixed
+  // fills, so it vanishes on the light canvas and takes the monochrome glyph, which
+  // inherits currentColor and reads in both themes.
+  const templates = [
+    { title: 'React', icon: 'ai-cor ai-react' },
+    { title: 'Next.js', icon: 'ai-cor ai-next' },
+    { title: 'Astro', icon: 'ai ai-astro' },
+    { title: 'Vue.js', icon: 'ai-cor ai-vue' },
+    { title: 'Angular', icon: 'ai-cor ai-angular' },
+    { title: 'Gatsby Blog', icon: 'ai ai-gatsby' },
+    { title: 'Hono', icon: 'ai ai-hono' },
+    { title: 'Hugo', icon: 'ai ai-hugo' }
+  ]
+
+  // ── Stop attacks ─────────────────────────────────────────────────────────────────
+  // Seven tasks, each phrased as the thing you end up having done. Seven divides by
+  // neither two nor three, so the last card spans the remainder at both breakpoints
+  // rather than leaving one (at `sm`) or two (at `lg`) rule-coloured tracks.
+  const security = [
+    {
+      title: 'Add a firewall',
+      description: 'Bind it to your workload and prove a deny rule with curl.',
+      icon: 'ai ai-edge-firewall',
+      href: '#firewall-quickstart'
+    },
+    {
+      title: 'Block injection attacks',
+      description: 'A SQL Injection rule set, with the blocks visible in events.',
+      icon: 'ai ai-waf-rules',
+      href: '#waf-quickstart'
+    },
+    {
+      title: 'Tune false positives',
+      description: 'Turn WAF false positives into allowed rules.',
+      icon: 'pi pi-list-check',
+      href: '#tune-waf'
+    },
+    {
+      title: 'Deny bad bots',
+      description: 'Deny automated requests that score above your threshold.',
+      icon: 'pi pi-microchip',
+      href: '#bot-manager'
+    },
+    {
+      title: 'Network blocklists',
+      description: 'Drop unwanted traffic before it reaches your application.',
+      icon: 'pi pi-map',
+      href: '#blocklists'
+    },
+    {
+      title: 'Install TLS certificates',
+      description: 'Upload a certificate and key, then check the handshake.',
+      icon: 'pi pi-key',
+      href: '#certificate-manager'
+    },
+    {
+      title: 'Stream to SIEM',
+      description: 'Stream WAF and firewall events where your team watches.',
+      icon: 'pi pi-arrow-right-arrow-left',
+      href: '#integrate-siems',
+      span: 'sm:col-span-2 lg:col-span-3'
+    }
+  ]
+
+  // ── Assess risk and prove compliance ─────────────────────────────────────────────
+  // Six at 1 / 2 / 3 columns divides evenly everywhere, so no card carries a span.
+  const compliance = [
+    {
+      title: 'Shared Responsibility Model',
+      description: 'What Azion covers, and what stays yours.',
+      icon: 'pi pi-verified',
+      href: '#shared-responsibility'
+    },
+    {
+      title: 'Governance, Risk & Compliance',
+      description: 'The tools and certifications behind your compliance work.',
+      icon: 'pi pi-id-card',
+      href: '#governance-risk-compliance'
+    },
+    {
+      title: 'PCI DSS compliance',
+      description: 'PCI-DSS 4.0 Level 1, and what it covers for cardholder data.',
+      icon: 'pi pi-wallet',
+      href: '#pci-dss'
+    },
+    {
+      title: 'SOC compliance',
+      description: 'SOC 2 Type 2 and SOC 3 reports, twice a year.',
+      icon: 'pi pi-lock',
+      href: '#soc'
+    },
+    {
+      title: 'Activity History',
+      description: 'The audit trail: who changed what, and when.',
+      icon: 'pi pi-history',
+      href: '#activity-history'
+    },
+    {
+      title: 'Security Response Team',
+      description: 'Azion mitigates on your behalf during an attack.',
+      icon: 'pi pi-users',
+      href: '#security-response-team'
+    }
+  ]
+
+  // ── Follow along ─────────────────────────────────────────────────────────────────
+  // Where the platform is talked about. The three off-site destinations open in a new
+  // tab — leaving the docs is the point of the card, so it should not cost the reader
+  // their place in them. Five over three columns leaves two tracks empty in the second
+  // row, so the last card spans them.
+  const followAlong = [
+    {
+      title: 'Release notes',
+      description: 'What changed in Azion products, as it ships.',
+      icon: 'pi pi-megaphone',
+      href: '#changelog'
+    },
+    {
+      title: 'Blog',
+      description: 'Engineering posts and how customers run on Azion.',
+      icon: 'pi pi-book',
+      href: 'https://www.azion.com/en/blog/',
+      target: '_blank'
+    },
+    {
+      title: 'YouTube',
+      description: 'Walkthroughs, demos, and recorded sessions.',
+      icon: 'pi pi-youtube',
+      href: 'https://www.youtube.com/aziontech',
+      target: '_blank'
+    },
+    {
+      title: 'Discord',
+      description: 'Ask questions and compare notes with other builders.',
+      icon: 'pi pi-discord',
+      href: 'https://discord.com/invite/Yp9N7RMVZy',
+      target: '_blank'
+    },
+    {
+      title: 'Style Guide',
+      description: 'How Azion writes documentation: voice, structure, and conventions.',
+      icon: 'pi pi-pencil',
+      href: '#style-guide',
+      span: 'sm:col-span-2 lg:col-span-2'
+    }
+  ]
+
+  // The row that closes a module: a hairline row under the grid with a muted lead-in and
+  // the onward pages beside it. One class and one data shape for every band, so a band
+  // cannot drift from its neighbours — only the lead-in changes, because "also useful",
+  // "reference" and "access governance" are three different offers and flattening them
+  // to one word would lose that.
   //
   // The links are anchors carrying the theme's `text-link` utility, not the Link
-  // component: inline in a sentence they must inherit the band's own type (`text-link`
+  // component: inline in a sentence they must inherit the row's own type (`text-link`
   // sets font-size/line-height to `inherit`, plus the link color, hover underline and
-  // focus ring), where a Link would impose its own size.
-  // The links are separated by SPACE, not by a dot bullet — one gap token does the
-  // separating, and nothing decorative has to be kept in sync with the list.
+  // focus ring), where a Link would impose its own size. They are separated by SPACE,
+  // not by a dot bullet — one gap token does the separating, and nothing decorative has
+  // to be kept in sync with the list.
   const LINKS_BAND_CLASS =
     'flex flex-wrap items-center gap-x-(--spacing-md) gap-y-(--spacing-xxs) ' +
     'border-t border-(--border-default) p-(--spacing-xl) text-body-sm text-(--text-muted)'
 
-  const alsoUseful = {
-    firstDeploy: [
-      { label: 'First deploy in a few minutes', href: '#first-deploy' },
-      { label: 'Develop with Azion CLI', href: '#cli' },
-      { label: 'Agent Setup', href: '#agent-setup' }
-    ],
-    paths: [
-      { label: 'Accounts and billing', href: '#accounts' },
-      { label: 'Architectures', href: '#architectures' }
-    ],
-    frameworks: [
-      { label: 'Frameworks overview', href: '#frameworks' },
-      { label: 'First deploy tutorial', href: '#first-deploy' }
-    ],
-    afterDeploy: [
-      { label: 'Workloads', href: '#workloads' },
-      { label: 'About WAF', href: '#waf' },
-      { label: 'Real-Time Metrics', href: '#metrics' }
-    ]
+  const linkBands = {
+    objectives: {
+      lead: 'Also useful:',
+      links: [
+        { label: 'observe your application', href: '#observe' },
+        { label: 'reference architectures', href: '#architectures' }
+      ]
+    },
+    templates: {
+      lead: 'Also useful:',
+      links: [
+        { label: 'first deploy tutorial', href: '/site/docs/first-deploy' },
+        { label: 'More frameworks', href: '#frameworks-compatibility' }
+      ]
+    },
+    security: {
+      lead: 'Reference, when you need the details:',
+      links: [
+        { label: 'DDoS Protection (unmetered, on by default)', href: '#ddos-protection' },
+        { label: 'WAF rule sets', href: '#waf' },
+        { label: 'WAF Exceptions', href: '#waf-exceptions' },
+        { label: 'Bot Manager', href: '#bot-manager' }
+      ]
+    },
+    compliance: {
+      lead: 'Access governance:',
+      links: [
+        { label: 'single sign-on', href: '#sso' },
+        { label: 'multi-factor authentication', href: '#mfa' },
+        { label: 'teams and permissions', href: '#teams-permissions' },
+        { label: 'conditional access by IP address', href: '#conditional-access' }
+      ]
+    }
   }
-
-  const GLYPH_CLASS = 'mb-(--spacing-md) text-heading-sm text-(--text-default)'
-  const TITLE_CLASS = 'text-heading-xxs text-(--text-default)'
-  const DESC_CLASS = 'mt-(--spacing-sm) text-pretty text-body-xxs text-(--text-muted)'
-
-  const CELL_CLASS =
-    'group/card relative flex h-full flex-col bg-(--bg-canvas) p-(--spacing-xl) ' +
-    'no-underline transition-colors duration-150 ease-out hover:bg-(--bg-surface) ' +
-    'focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset ' +
-    'focus-visible:ring-(--ring-color) motion-reduce:transition-none'
 
   // ── Page bar: "Copy page" + the LLM-context menu ────────────────────────────────
   // One SplitButton, because the control IS a split: the primary segment does the one
@@ -219,93 +363,21 @@ azion deploy`
   // model, so the page only supplies the model and handles the choice.
   const PAGE_MARKDOWN =
     `# Welcome to Azion Docs\n\n` +
-    `We make every application fast and reliable. Deploy your projects instantly on ` +
-    `the most reliable global network, leverage enterprise-grade security, and scale ` +
-    `from zero to peak without cold starts.\n\n` +
-    `## Deploy your first application\n\n## Find your path\n\n` +
-    `## Build with your framework\n\n## After the first deploy\n`
+    `We make every application fast and reliable. Deploy on a global network, with ` +
+    `enterprise-grade security and no cold starts.\n\n` +
+    `## Start by objective\n\n## Start by interface\n\n` +
+    `### Your AI agent, fluent in Azion\n\n## Ready-made templates\n\n` +
+    `## Stop attacks\n\n## Assess risk and prove compliance\n\n## Follow along\n`
 
-  const pageUrl = () => globalThis.location?.href ?? 'https://www.azion.com/en/documentation/'
-
-  // What each assistant is handed: the page's URL plus what to do with it. Each entry
-  // builds its own search URL, which is how the published docs' "open in" actions work.
-  const ASK = () => `Read ${pageUrl()} and help me get started building on Azion.`
-
-  const pageActions = [
-    { value: 'link', label: 'Get page link', icon: 'pi pi-link' },
-    { value: 'markdown', label: 'View page as markdown', icon: 'pi pi-file' },
-    {
-      value: 'google',
-      label: 'Open in Google AI',
-      icon: 'pi pi-external-link',
-      url: () => `https://www.google.com/search?udm=50&q=${encodeURIComponent(ASK())}`
-    },
-    {
-      value: 'perplexity',
-      label: 'Open in Perplexity',
-      icon: 'pi pi-external-link',
-      url: () => `https://www.perplexity.ai/search?q=${encodeURIComponent(ASK())}`
-    },
-    {
-      value: 'claude',
-      label: 'Open in Claude',
-      icon: 'pi pi-external-link',
-      url: () => `https://claude.ai/new?q=${encodeURIComponent(ASK())}`
-    },
-    {
-      value: 'chatgpt',
-      label: 'Open in ChatGPT',
-      icon: 'pi pi-external-link',
-      url: () => `https://chatgpt.com/?q=${encodeURIComponent(ASK())}`
-    },
-    {
-      value: 'grok',
-      label: 'Open in Grok',
-      icon: 'pi pi-external-link',
-      url: () => `https://grok.com/?q=${encodeURIComponent(ASK())}`
-    }
-  ]
-
-  // The primary segment reports back on itself for two seconds — a clipboard write has
-  // no other visible outcome, so without it the click looks like nothing happened.
-  const copied = ref(false)
-  const writeClipboard = async (text) => {
-    // `writeText` rejects when the document is not focused (and in browsers that gate
-    // the permission), which would otherwise surface as an unhandled rejection and skip
-    // the confirmation entirely.
-    try {
-      await globalThis.navigator?.clipboard?.writeText(text)
-    } catch {
-      return
-    }
-    copied.value = true
-    globalThis.setTimeout(() => (copied.value = false), 2000)
-  }
-
-  const copyPage = () => writeClipboard(PAGE_MARKDOWN)
-
-  // SplitButton emits (event, item) — event first, per the event-payload convention.
-  const onPageAction = (event, item) => {
-    const action = pageActions.find((entry) => entry.value === item.value)
-    if (!action) return
-
-    if (action.url) {
-      globalThis.open(action.url(), '_blank', 'noopener')
-      return
-    }
-
-    if (action.value === 'link') {
-      writeClipboard(pageUrl())
-      return
-    }
-
-    // "View" really views it: the markdown is served to a new tab from a blob, so the
-    // prototype needs no .md route to show the source of the page it is on.
-    const blob = new globalThis.Blob([PAGE_MARKDOWN], { type: 'text/plain' })
-    const url = globalThis.URL.createObjectURL(blob)
-    globalThis.open(url, '_blank', 'noopener')
-    globalThis.setTimeout(() => globalThis.URL.revokeObjectURL(url), 10000)
-  }
+  // The page bar's control, shared with every other docs page — one definition of the
+  // vendor list, the clipboard confirmation and the markdown view (docs-page-actions.js).
+  const {
+    actions: pageActions,
+    label: copyLabel,
+    icon: copyIcon,
+    copyPage,
+    onPageAction
+  } = useDocsPageActions(() => PAGE_MARKDOWN)
 </script>
 
 <template>
@@ -338,8 +410,8 @@ azion deploy`
         class="min-w-0 flex-1 md:hidden"
       />
       <SplitButton
-        :label="copied ? 'Copied' : 'Copy page'"
-        :icon="copied ? 'pi pi-check' : 'pi pi-copy'"
+        :label="copyLabel"
+        :icon="copyIcon"
         :model="pageActions"
         kind="outlined"
         size="small"
@@ -391,38 +463,31 @@ azion deploy`
           class="min-w-0"
           margin-bottom=""
           size="hero"
-          title="Build into the most reliable edge network"
-          description="We make every application fast and reliable. Deploy your projects instantly on the most reliable global network, leverage enterprise-grade security, and scale from zero to peak without cold starts."
+          title="Welcome to Azion Docs"
+          description="We make every application fast and reliable. Deploy on a global network, with enterprise-grade security and no cold starts."
         >
-          <!-- Below `sm` the three actions STACK, each full width: a phone column fits
-               one of these labels per line anyway, and three ragged part-width buttons
-               read as debris where one full-width stack reads as a list of three ways in.
-               From `sm` up they are a wrapping row again — `flex-wrap` + `shrink-0`, so
-               three long labels in a half-width hero column wrap to a second line
-               instead of compressing until their text spills out of the button. -->
+          <!-- Below `sm` the actions STACK, each full width: a phone column fits one of
+               these labels per line anyway, and two ragged part-width buttons read as
+               debris where one full-width stack reads as a list of two ways in. From
+               `sm` up they are a wrapping row again — `flex-wrap` + `shrink-0`, so long
+               labels in a half-width hero column wrap to a second line instead of
+               compressing until their text spills out of the button. -->
           <template #actions>
             <div
               class="flex flex-col items-stretch gap-(--spacing-md) sm:flex-row sm:flex-wrap sm:items-center"
             >
               <Button
-                label="First deploy"
+                label="Get Started"
                 kind="primary"
                 size="large"
-                href="#first-deploy"
+                href="/site/docs/first-deploy"
                 class="w-full shrink-0 sm:w-auto"
               />
               <Button
-                label="Create an account"
+                label="Per-tool setup"
                 kind="outlined"
                 size="large"
-                href="#create-account"
-                class="w-full shrink-0 sm:w-auto"
-              />
-              <Button
-                label="Platform overview"
-                kind="outlined"
-                size="large"
-                href="#platform-overview"
+                href="#agent-setup"
                 class="w-full shrink-0 sm:w-auto"
               />
             </div>
@@ -451,16 +516,21 @@ azion deploy`
              in its area it keeps its natural height (275px against the headline column's
              422 at 1440) and sits on the column's optical middle, so neither edge is
              flush and the ragged one reads as deliberate. -->
-        <div
-          class="my-(--spacing-lg) min-w-0 rounded-(--shape-elements) shadow-(--shadow-sm) xl:self-center"
-        >
-          <CodeBlock
-            :tabs="heroTabs"
-            default-value="ai-prompt"
-            :show-line-numbers="false"
-            animate-lines
-            copy-aria-label="Copy setup prompt"
-          />
+        <div class="my-(--spacing-lg) min-w-0 xl:self-center">
+          <div class="rounded-(--shape-elements) shadow-(--shadow-sm)">
+            <CodeBlock
+              :tabs="heroTabs"
+              default-value="ai-prompt"
+              :show-line-numbers="false"
+              animate-lines
+              copy-aria-label="Copy setup prompt"
+            />
+          </div>
+          <!-- What the prompt actually does, under the thing it describes — the live
+               page's own caption for its "Copy prompt" button. -->
+          <p class="mt-(--spacing-sm) text-pretty text-body-sm text-(--text-muted)">
+            The prompt hands your coding agent the CLI, live docs over MCP, and this project linked.
+          </p>
         </div>
       </div>
     </BannerContainer>
@@ -474,38 +544,33 @@ azion deploy`
          invisible. border-x owns the outer edges; each module owns its own padding
          and its own top rule, so no line is ever drawn twice. -->
     <SectionContainer max-width="4xl">
-      <!-- ── Deploy your first application ────────────────────────────────── -->
+      <!-- ── Start by objective ───────────────────────────────────────────── -->
       <SectionModule
-        id="deploy-your-first-application"
+        id="start-by-objective"
         :divided="false"
         :padded="false"
-        title="Deploy your first application"
-        description="Three doors, same destination: an application answering on its own Azion domain. Pick the one that matches how you work."
+        title="Start by objective"
+        description="Build something, make it faster, lock it down, or run AI on it."
       >
-        <CardGrid
-          :columns="3"
-          variant="divider"
-        >
-          <a
-            v-for="card in firstDeploy"
-            :key="card.title"
-            href="#first-deploy"
-            :class="CELL_CLASS"
-          >
-            <i
-              :class="[card.icon, GLYPH_CLASS]"
-              aria-hidden="true"
-            />
-            <span :class="TITLE_CLASS">{{ card.title }}</span>
-            <span :class="DESC_CLASS">{{ card.description }}</span>
-          </a>
-        </CardGrid>
+        <div class="p-(--spacing-xl)">
+          <DocCardGroup :cols="2">
+            <DocCard
+              v-for="card in objectives"
+              :key="card.title"
+              :title="card.title"
+              :icon="card.icon"
+              :href="card.href"
+            >
+              {{ card.description }}
+            </DocCard>
+          </DocCardGroup>
+        </div>
 
-        <!-- "Also useful" band: same class, same shape, in every module (LINKS_BAND_CLASS). -->
+        <!-- Closing link row: same class, same shape, in every module (LINKS_BAND_CLASS). -->
         <div :class="LINKS_BAND_CLASS">
-          Also useful:
+          {{ linkBands.objectives.lead }}
           <a
-            v-for="link in alsoUseful.firstDeploy"
+            v-for="link in linkBands.objectives.links"
             :key="link.label"
             :href="link.href"
             class="text-link"
@@ -514,83 +579,118 @@ azion deploy`
         </div>
       </SectionModule>
 
-      <!-- ── Find your path ───────────────────────────────────────────────── -->
+      <!-- ── Start by interface ───────────────────────────────────────────────
+           Two halves of one answer: hand the platform to an agent, or drive it
+           yourself. The agent half comes FIRST and as prose rather than as a fourth
+           card, because it is not a fourth interface — it is the thing that operates
+           the other three. -->
       <SectionModule
-        id="find-your-path"
+        id="start-by-interface"
         :padded="false"
-        title="Find your path"
+        title="Start by interface"
+        description="Hand it to your agent, or drive it yourself. Same platform either way."
       >
-        <CardGrid
-          :columns="2"
-          variant="divider"
+        <!-- The agent block. Its own hairline floor divides it from the card band
+             below, so the two halves read as two rows of one module rather than as
+             one run-on body. -->
+        <div
+          class="flex flex-col gap-(--spacing-md) border-b border-(--border-default) p-(--spacing-xl)"
         >
-          <a
-            v-for="card in paths"
-            :key="card.title"
-            href="#path"
-            :class="CELL_CLASS"
+          <h3
+            id="your-ai-agent-fluent-in-azion"
+            class="text-heading-sm text-(--text-default)"
           >
-            <i
-              :class="[card.icon, GLYPH_CLASS]"
-              aria-hidden="true"
-            />
-            <span :class="TITLE_CLASS">{{ card.title }}</span>
-            <span :class="DESC_CLASS">{{ card.description }}</span>
-          </a>
-        </CardGrid>
+            Your AI agent, fluent in Azion
+          </h3>
+          <p class="max-w-(--container-2xl) text-pretty text-body-md text-(--text-muted)">
+            One prompt teaches any coding agent the platform: current product names, live docs
+            through the
+            <a
+              href="#mcp"
+              class="text-link"
+              >Azion MCP server</a
+            >, and real deploys with the CLI.
+          </p>
+          <!-- The copy affordance is the shared contrast pill, so the docs home and the
+               console Home offer the onboarding as one control with one prompt behind
+               it — not two look-alikes that can drift. -->
+          <ContrastBanner
+            label="Copy prompt"
+            :show-logo="false"
+            :prompt="AGENT_PROMPT"
+            class="self-start"
+          />
+          <p class="text-pretty text-body-sm text-(--text-muted)">
+            Prefer the guided route? Four steps connect Claude Code, Cursor, GitHub Copilot,
+            Windsurf, Codex, or Gemini CLI.
+            <a
+              id="agent-setup"
+              href="#agent-setup"
+              class="text-link"
+              >Agent Setup</a
+            >
+          </p>
+        </div>
 
-        <div :class="LINKS_BAND_CLASS">
-          Also useful:
-          <a
-            v-for="link in alsoUseful.paths"
-            :key="link.label"
-            :href="link.href"
-            class="text-link"
-            >{{ link.label }}</a
-          >
+        <div class="p-(--spacing-xl)">
+          <DocCardGroup :cols="3">
+            <DocCard
+              v-for="card in interfaces"
+              :key="card.title"
+              :title="card.title"
+              :icon="card.icon"
+              :href="card.href"
+              :class="card.span"
+            >
+              {{ card.description }}
+              <!-- The card's own CTA. A `span`, not an `<a>`: the whole card is the
+                   link already, and a nested anchor is invalid HTML. -->
+              <span
+                class="mt-(--spacing-sm) flex items-center gap-(--spacing-xxs) text-label-md text-(--text-link)"
+              >
+                {{ card.cta }}
+                <i
+                  class="pi pi-arrow-right text-body-xs transition-transform duration-fast-02 ease-productive-entrance group-hover:translate-x-0.5 motion-reduce:transition-none"
+                  aria-hidden="true"
+                />
+              </span>
+            </DocCard>
+          </DocCardGroup>
         </div>
       </SectionModule>
 
-      <!-- ── Build with your framework ─────────────────────────────────────────
-           Same band anatomy as every other section — header row over an edge-to-edge
-           divider grid — so the frameworks read as cards in the same column, on the
-           same padding, as the three bands above. 16 frameworks divides evenly by the
-           grid's 2 / 2 / 4 columns, so no breakpoint ever leaves a ragged row of
-           divider-coloured holes; the band's two onward destinations are LINKS in the
-           closing "Also useful" row, not cards — they are not stacks to pick from.
-
-           This is the one band that stays TWO-up on a phone (`mobile-columns`): its
-           cells are a mark plus one word, so a single file of 16 would be a screen and
-           a half of scrolling to say what two columns say in half the height. -->
+      <!-- ── Ready-made templates ────────────────────────────────────────────
+           Same band anatomy as every other section — header row over a framed card
+           grid — so the templates read as cards in the same column, on the same
+           padding, as the bands above. This is the one band that stays TWO-up on a
+           phone (`mobile-cols`): its cells are a mark plus one word, so a single file
+           of eight would be a screen of scrolling to say what two columns say in half
+           the height. -->
       <SectionModule
-        id="build-with-your-framework"
+        id="ready-made-templates"
         :padded="false"
-        title="Build with your framework"
-        description="Ready-made build paths for the stack you already use."
+        title="Ready-made templates"
+        description="Deploy in one click, with CI/CD already wired up."
       >
-        <CardGrid
-          :columns="4"
-          :mobile-columns="2"
-          variant="divider"
-        >
-          <a
-            v-for="framework in frameworks"
-            :key="framework.title"
-            href="#framework"
-            :class="CELL_CLASS"
+        <div class="p-(--spacing-xl)">
+          <DocCardGroup
+            :cols="4"
+            :mobile-cols="2"
           >
-            <i
-              :class="[framework.icon, GLYPH_CLASS]"
-              aria-hidden="true"
+            <DocCard
+              v-for="template in templates"
+              :key="template.title"
+              :title="template.title"
+              :icon="template.icon"
+              href="#template"
             />
-            <span :class="TITLE_CLASS">{{ framework.title }}</span>
-          </a>
-        </CardGrid>
+          </DocCardGroup>
+        </div>
 
         <div :class="LINKS_BAND_CLASS">
-          Also useful:
+          {{ linkBands.templates.lead }}
           <a
-            v-for="link in alsoUseful.frameworks"
+            v-for="link in linkBands.templates.links"
             :key="link.label"
             :href="link.href"
             class="text-link"
@@ -599,35 +699,32 @@ azion deploy`
         </div>
       </SectionModule>
 
-      <!-- ── After the first deploy ────────────────────────────────────────── -->
+      <!-- ── Stop attacks ─────────────────────────────────────────────────── -->
       <SectionModule
-        id="after-the-first-deploy"
+        id="stop-attacks"
         :padded="false"
-        title="After the first deploy"
+        title="Stop attacks"
+        description="Everything you need to protect applications, APIs, and the traffic that reaches them."
       >
-        <CardGrid
-          :columns="3"
-          variant="divider"
-        >
-          <a
-            v-for="card in afterDeploy"
-            :key="card.title"
-            href="#after"
-            :class="CELL_CLASS"
-          >
-            <i
-              :class="[card.icon, GLYPH_CLASS]"
-              aria-hidden="true"
-            />
-            <span :class="TITLE_CLASS">{{ card.title }}</span>
-            <span :class="DESC_CLASS">{{ card.description }}</span>
-          </a>
-        </CardGrid>
+        <div class="p-(--spacing-xl)">
+          <DocCardGroup :cols="3">
+            <DocCard
+              v-for="card in security"
+              :key="card.title"
+              :title="card.title"
+              :icon="card.icon"
+              :href="card.href"
+              :class="card.span"
+            >
+              {{ card.description }}
+            </DocCard>
+          </DocCardGroup>
+        </div>
 
         <div :class="LINKS_BAND_CLASS">
-          Also useful:
+          {{ linkBands.security.lead }}
           <a
-            v-for="link in alsoUseful.afterDeploy"
+            v-for="link in linkBands.security.links"
             :key="link.label"
             :href="link.href"
             class="text-link"
@@ -636,25 +733,75 @@ azion deploy`
         </div>
       </SectionModule>
 
-      <!-- ── Next page ────────────────────────────────────────────────────── -->
-      <SectionModule :padded="false">
-        <a
-          href="#agent-setup"
-          :class="CELL_CLASS"
-        >
-          <Item kind="inline">
-            <Item.Content>
-              <span class="text-body-sm text-(--text-muted)">Next Page · Start</span>
-              <Item.Title class="mt-(--spacing-xxs) text-body-lg">Agent Setup</Item.Title>
-            </Item.Content>
-            <Item.Actions>
-              <i
-                class="pi pi-arrow-right text-(--text-muted) group-hover/card:text-(--text-default)"
-                aria-hidden="true"
-              />
-            </Item.Actions>
-          </Item>
-        </a>
+      <!-- ── Assess risk and prove compliance ─────────────────────────────── -->
+      <SectionModule
+        id="assess-risk-and-prove-compliance"
+        :padded="false"
+        title="Assess risk and prove compliance"
+        description="What the platform covers, what stays with you, and where the evidence lives when an auditor asks for it."
+      >
+        <div class="p-(--spacing-xl)">
+          <DocCardGroup :cols="3">
+            <DocCard
+              v-for="card in compliance"
+              :key="card.title"
+              :title="card.title"
+              :icon="card.icon"
+              :href="card.href"
+            >
+              {{ card.description }}
+            </DocCard>
+          </DocCardGroup>
+        </div>
+
+        <div :class="LINKS_BAND_CLASS">
+          {{ linkBands.compliance.lead }}
+          <a
+            v-for="link in linkBands.compliance.links"
+            :key="link.label"
+            :href="link.href"
+            class="text-link"
+            >{{ link.label }}</a
+          >
+        </div>
+      </SectionModule>
+
+      <!-- ── Follow along ─────────────────────────────────────────────────────
+           No closing link row: this band IS the onward links, so a row of more of
+           them under it would say the same thing twice. -->
+      <SectionModule
+        id="follow-along"
+        :padded="false"
+        title="Follow along"
+        description="Release notes as things ship, plus the blog, the YouTube channel, and the Discord where questions get answered."
+      >
+        <div class="p-(--spacing-xl)">
+          <DocCardGroup :cols="3">
+            <DocCard
+              v-for="card in followAlong"
+              :key="card.title"
+              :title="card.title"
+              :icon="card.icon"
+              :href="card.href"
+              :target="card.target || '_self'"
+              :class="card.span"
+            >
+              {{ card.description }}
+            </DocCard>
+          </DocCardGroup>
+        </div>
+      </SectionModule>
+
+      <!-- ── Next page ──────────────────────────────────────────────────────
+           The layer's own previous/next pair, the same one that closes a reading page,
+           with only the `next` half filled — the home has nothing before it, and
+           DocPagination leaves that half empty rather than collapsing the row, so the
+           link stays anchored to the column's right edge. -->
+      <SectionModule>
+        <DocPagination
+          :next="{ title: 'Agent Setup', href: '#agent-setup' }"
+          next-label="Next Page · Start"
+        />
       </SectionModule>
     </SectionContainer>
   </div>

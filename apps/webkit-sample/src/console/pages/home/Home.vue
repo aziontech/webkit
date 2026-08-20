@@ -55,55 +55,66 @@
   // gets "where was I" first and "what do I have" below it, out of one list that the
   // type control and the search both narrow — and a resource appears exactly once.
   import CardBox from '@aziontech/webkit/card-box'
-  import Divider from '@aziontech/webkit/divider'
   import Dropdown from '@aziontech/webkit/dropdown'
-  import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
   import InputText from '@aziontech/webkit/input-text'
   import Item from '@aziontech/webkit/item'
-  import ProgressBar from '@aziontech/webkit/progress-bar'
-  import SegmentedButton from '@aziontech/webkit/segmented-button'
   import Skeleton from '@aziontech/webkit/skeleton'
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { AGENT_SETUP_PROMPT, AGENT_TOOLS, useAgentOnboarding } from '@shared/lib/agent-onboarding'
   import AgentMark from '@shared/ui/brand/AgentMark.vue'
-  import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
+  import { computed, onMounted, onUnmounted, ref } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
   import FirstUsePromo from '../../components/home/FirstUsePromo.vue'
   import HomeWire from '../../components/home/HomeWire.vue'
   import IconFrame from '../../components/home/IconFrame.vue'
   import DeleteDialog from '../../components/list/DeleteDialog.vue'
-  import { useTabEnter } from '../../lib/behavior/tab-enter'
   import { useGreeting } from '../../lib/data/greeting'
-  import {
-    allResources,
-    matchesSearch,
-    recentResources,
-    RESOURCE_TYPES
-  } from '../../lib/data/home-resources'
+  import { allResources, matchesSearch, recentResources } from '../../lib/data/home-resources'
   import { AGENT_PROMO } from '../../lib/data/product-empty-states'
   import { presetIcon, presetLabel } from '../../lib/format/presets'
-  import { relativeTime } from '../../lib/format/relative-time'
   import { useTenancyReload } from '../../lib/state/tenancy-reload'
 
-  // Account-level usage. `value` + `unit` is the reading; `percent` drives the
-  // small progress bar showing how much of the plan allowance is consumed.
+  // Account-level usage. `value` + `unit` is the whole reading — a label, a number
+  // and its unit, and nothing else.
+  //
+  // THERE IS NO `percent`. Each metric used to carry one, drawn as a bar flush along
+  // the bottom edge of its card. It read as "how much of your plan is gone", and there
+  // is no allowance in this business model for it to be a share of — so it was a gauge
+  // against nothing, in the loudest colour on the card, under every number on the page.
+  // A reading the reader cannot verify is worse than one less thing to look at.
+  //
+  // WHAT REPLACES IT IS `trend`: which way the reading moved against the window before
+  // this one, as a `direction` and the size of the move. It is the one thing the bar
+  // was reaching for and could never say — a number on its own answers "how much" and
+  // says nothing about whether that is more or less than yesterday — and unlike a share
+  // of a plan, a delta between two windows is something this data actually contains.
+  //
+  // THE TAG IS COLOURED BY THE SIGN: `success` when the reading went up, `danger` when
+  // it went down — the DS's own two severities, so the strip reads at a glance and from
+  // across the room, before any of the four numbers has been read. The arrow and the
+  // `+`/`-` say the same thing a second and a third way, which is what keeps it legible
+  // to a reader who cannot separate the two hues and to one hearing it read out.
+  // The colour is about the DIRECTION, not about whether the direction is good news —
+  // these four readings do not share one answer to that (more bandwidth saved is better,
+  // more data transferred is simply more traffic), and the tag is not the place to
+  // adjudicate it.
   const metrics = [
     {
       label: 'Data Transferred',
       value: '842',
       unit: 'GB',
-      percent: 62,
+      trend: { direction: 'up', delta: '12.4%' },
       hint: 'Total bytes delivered across all your resources.'
     },
     {
       label: 'Requests / Second',
       value: '1,240',
       unit: '/s',
-      percent: 41,
+      trend: { direction: 'up', delta: '3.8%' },
       hint: 'Average requests handled per second in the selected window.'
     },
     {
@@ -112,14 +123,14 @@
       label: 'Bandwidth Saving',
       value: '588',
       unit: 'GB',
-      percent: 70,
+      trend: { direction: 'up', delta: '6.2%' },
       hint: 'Bytes served from cache instead of your origin.'
     },
     {
       label: 'Data Offload',
       value: '70',
       unit: '%',
-      percent: 70,
+      trend: { direction: 'down', delta: '1.5%' },
       hint: 'Share of traffic offloaded from your origin to the edge.'
     }
   ]
@@ -131,188 +142,137 @@
   // everything below re-derives.
   const rows = ref(allResources())
 
-  // ── The Resources band ────────────────────────────────────────────────────
-  // `All` leads, and it is the default: the summary's first job is to show what is
-  // there, not to make the reader choose a type before anything appears.
+  // ── THE RESOURCES BAND: THREE MODULE PANELS, NOT ONE FILTERED LIST ────────
   //
-  // NO COUNT, ANYWHERE IN THE BAND. The old tab row carried one per type, which was its
-  // best feature — but a segmented control renders a label and nothing else, and a
-  // number folded INTO the label makes the control's width move as the data does. It
-  // moved beside the heading for a while; it is now gone, because a summary's list
-  // ANSWERS "how many" by being read, and the number was the one thing on the header
-  // row that changed as the reader typed — a moving digit beside a fixed title. What is
-  // on screen is what there is.
-  const typeFilters = computed(() => [
-    { value: 'all', label: 'All' },
-    ...RESOURCE_TYPES.map((type) => ({ value: type.value, label: type.label }))
-  ])
+  // It was one list of everything with a segmented type control above it, and before
+  // that a tab row over a table. Both made the same trade: ONE band, and a control the
+  // reader has to operate before the band says anything about a given module. Two costs
+  // came with it —
+  //
+  //   THE MODULES WERE INVISIBLE UNTIL YOU FILTERED. "How many applications do I have"
+  //     and "is that workload still there" are questions about a module, and a mixed
+  //     list answers them only after a tap that hides everything else.
+  //   THE ROW HAD TO CARRY THE DIFFERENCE. Because any row could be any type, each one
+  //     spelled out its type, its status, its second line and its edit time — four
+  //     fields whose only job was to say which module the row belonged to and how it
+  //     was doing. Under a module's own heading, all four are context the PANEL
+  //     already gives.
+  //
+  // So the band is four panels across one row, each its own module, and the row inside
+  // them is a name and nothing else (see the template).
+  //
+  // WHICH FOUR. The three things the account owns AT THE TOP LEVEL —
+  // `Applications`, `Workloads`, `Domains` — and `Recents` last.
+  // NOT `Functions`, though the type is one of `RESOURCE_TYPES`
+  // (../../lib/data/home-resources.js) and has a module list of its own: a function is
+  // not a thing an operator manages from Overview, it is a thing that runs INSIDE an
+  // application, and a column of function names beside the applications they belong to
+  // invites the reader to treat them as peers. Functions are one click away through
+  // `Applications`, and the recent ones are in the panel below — the same place domains
+  // and functions both lived before either had a column.
+  // `Recents` is the fourth because "where was I" is not a module and never was — it is
+  // the newest of EVERYTHING, so it is the one panel whose rows come from more than one
+  // type (functions included), and the only one that therefore has to say which type
+  // each row is (it names it — see the template).
+  // FIVE ROWS is the ceiling for a panel, not a target. A summary's job is to say what
+  // is there and hand the reader the module list; past five names a column stops being a
+  // glance and starts being a list with the wrong controls on it.
+  const PANEL_ROWS = 5
 
-  const selectedType = ref('all')
+  // The SAMPLE shows fewer of some types on purpose. The seed generates 20 workloads
+  // (one per row of a paginated module list — @shared/lib/workloads.js) and one domain
+  // per workload, so at a flat cap every column in the band opened full and the band
+  // read as five columns of exactly five, which is the one shape a real account never
+  // has. Three workloads and four domains give the band the ragged bottom edge it has in
+  // life — and they are what makes the create row at the foot of a column visible in the
+  // demo instead of only in the empty state. A real console passes `PANEL_ROWS` for
+  // every type; this is mock shaping, and it is the only thing in this file that is.
+  const MOCK_ROWS = { workloads: 3, domains: 4 }
+  const rowsFor = (type) => MOCK_ROWS[type] ?? PANEL_ROWS
+
   const search = ref('')
 
-  const typeLabel = computed(
-    () => typeFilters.value.find((type) => type.value === selectedType.value)?.label ?? 'All'
-  )
-
-  const visibleResources = computed(() =>
-    rows.value.filter(
-      (row) =>
-        (selectedType.value === 'all' || row.type === selectedType.value) &&
-        matchesSearch(row, search.value)
-    )
-  )
-
-  // Two different empties, because they need two different answers: a search that
-  // matched nothing is told so; a type with nothing in it is offered the way to make
-  // one. Nothing here can be BOTH, because `All` on a populated account always has
-  // rows.
+  // Two different empties, and they need two different answers: a search that matched
+  // nothing is told so, and an EMPTY MODULE is offered the way to make one. So the flag
+  // is read per panel rather than for the band.
   const narrowed = computed(() => Boolean(search.value.trim()))
 
-  // ── RECENTS, then OLDER ───────────────────────────────────────────────────
-  // The head of the visible list, labelled. Six: enough of a trail that "where was I"
-  // is answered without scrolling the band, few enough that the `Older` seam still
-  // lands on the first screen. (It was six because six divided the grid's 1/2/3
-  // column counts and left no card stranded beside a gap; a list has no column
-  // arithmetic, and six rows is a trail on its own terms.)
-  const RECENT_COUNT = 6
+  // The search runs across the WHOLE account and lands in whichever panels match — it
+  // is the page's field (a row above the band), not a control of any one module, and a
+  // reader typing a name does not know which module owns it.
+  const matched = computed(() => rows.value.filter((row) => matchesSearch(row, search.value)))
 
-  // A SEARCH IS NOT A LIST WITH A HEAD. Typing produces matches ranked by nothing but
-  // the query, so calling the first six of them "Recents" would be labelling an
-  // accident. A search returns one flat list; the type control keeps the grouping,
-  // because the newest six APPLICATIONS is the same honest answer as the newest six of
-  // everything. The grouping also drops when the list is too short to have a tail.
-  const grouped = computed(() => !narrowed.value && visibleResources.value.length > RECENT_COUNT)
-
-  // The band as BLOCKS, so the row markup is written once whether or not the list is
-  // grouped: ungrouped is a single unlabelled block. A label sits ABOVE its own
-  // `Item.List` rather than inside it — a list's children are its rows, and a heading
-  // spliced between them is a `role="list"` with something in it that is not a
-  // `listitem`. Each block is its own flush CardBox, which is also what makes the seam
-  // legible: the dividers stop at the end of `Recents` instead of running through the
-  // label.
-  //
-  // `recent` rides on the group, not on the row: it is what puts the history glyph on
-  // the title (see the template), and being recent is a fact about the row's POSITION
-  // in this list, not about the resource — the same resource is an `Older` row the
-  // moment six newer ones exist.
-  const listGroups = computed(() => {
-    if (!grouped.value)
-      return [{ key: 'all', label: '', recent: false, resources: visibleResources.value }]
-    return [
-      {
-        key: 'recent',
-        label: 'Recents',
-        recent: true,
-        resources: recentResources(visibleResources.value, RECENT_COUNT)
-      },
-      {
-        key: 'older',
-        label: 'Older',
-        recent: false,
-        resources: visibleResources.value.slice(RECENT_COUNT)
-      }
-    ]
-  })
-
-  // ── THE BAND'S EDGE FADE ──────────────────────────────────────────────────
-  // The resource list is the only scroll region on the page (from `xl`), and it ended
-  // at a hard line against the frame's edge — a row sliced mid-height, which reads as
-  // a rendering fault rather than as "there is more". So the region dissolves into the
-  // page at whichever edge has content past it, exactly as the framework catalog does
-  // (components/marketplace/TemplateBrowser.vue — same 64px band, same formula; when a
-  // third surface needs it, this is the pair to promote into a composable).
-  //
-  // Each edge fades only while there IS content past it: nothing at rest, a top band
-  // once the first row has scrolled under the header, a bottom band that shrinks to
-  // zero as the last row arrives. A fixed band would dim the first and last rows
-  // permanently and pop off at the ends of the scroll; tracking the real scroll
-  // distance lets the fade ease itself in and out as you move.
-  const MAX_FADE = 64 // px — --spacing-xl at its widest step
-  const scrollRef = ref(null)
-  const fadeTop = ref(0)
-  const fadeBottom = ref(0)
-
-  // Held outside the ref so teardown still reaches the element after `v-if` has
-  // dropped it (the band swaps to skeletons on a scope switch, and to an EmptyState
-  // when a search matches nothing).
-  let observedEl = null
-  let scrollObserver = null
-
-  const clampFade = (distance) => Math.max(0, Math.min(MAX_FADE, distance))
-
-  const updateFade = () => {
-    const el = scrollRef.value
-    if (!el) {
-      fadeTop.value = 0
-      fadeBottom.value = 0
-      return
+  // `create` is the module's own create route, which is where the panel's empty state
+  // sends the reader — the console's create surfaces are pages at the first level
+  // (../../lib/behavior/surfaces.js), so this is a link out and not a dialog here.
+  // `Recents` has no create: it is a view of the other panels, not a place to put
+  // anything, so its empty state is a line of prose.
+  const panels = computed(() => [
+    {
+      key: 'applications',
+      label: 'Applications',
+      path: '/applications',
+      create: '/applications/new',
+      createLabel: 'Add Application',
+      recent: false,
+      // Its rows open with the framework mark, so they carry the same leading gutter
+      // `Recents` does — and the heading mirrors it, so the column has ONE label rail
+      // (see the heading in the template).
+      marked: true,
+      resources: matched.value
+        .filter((row) => row.type === 'applications')
+        .slice(0, rowsFor('applications'))
+    },
+    {
+      key: 'workloads',
+      label: 'Workloads',
+      path: '/workloads',
+      create: '/workloads/new',
+      createLabel: 'Add Workload',
+      recent: false,
+      resources: matched.value
+        .filter((row) => row.type === 'workloads')
+        .slice(0, rowsFor('workloads'))
+    },
+    // Domains carry NO heading link, and it is not an omission: this prototype has no
+    // domains LIST page (the type is projected off each workload's primary domain —
+    // ../../lib/data/home-resources.js), so the heading would promise a page that does
+    // not exist. It does have a create page (`/domains/new`, generated from the create
+    // descriptors), so the panel can still be filled from its own empty row.
+    {
+      key: 'domains',
+      label: 'Domains',
+      path: '',
+      create: '/domains/new',
+      createLabel: 'Add domain',
+      recent: false,
+      resources: matched.value.filter((row) => row.type === 'domains').slice(0, rowsFor('domains'))
+    },
+    {
+      key: 'recents',
+      label: 'Recents',
+      path: '',
+      create: '',
+      createLabel: '',
+      recent: true,
+      // `matched` is already newest-first (../../lib/data/home-resources.js sorts it),
+      // so the head of it IS the trail — no second collection to keep in step.
+      resources: recentResources(matched.value, PANEL_ROWS)
     }
-    fadeTop.value = clampFade(el.scrollTop)
-    fadeBottom.value = clampFade(el.scrollHeight - el.clientHeight - el.scrollTop)
-  }
-
-  // No mask at rest: an always-on one costs a compositing layer and would leave the
-  // first and last rows permanently half-lit. Below `xl` the region does not scroll at
-  // all (the page does), so `scrollTop` stays 0 and the overflow is 0 — the mask is
-  // never built there.
-  const fadeStyle = computed(() => {
-    if (!fadeTop.value && !fadeBottom.value) return undefined
-    const mask = `linear-gradient(to bottom, transparent 0, #000 ${fadeTop.value}px, #000 calc(100% - ${fadeBottom.value}px), transparent 100%)`
-    return { maskImage: mask, WebkitMaskImage: mask }
-  })
-
-  const unobserveScroll = () => {
-    if (observedEl) observedEl.removeEventListener('scroll', updateFade)
-    scrollObserver?.disconnect()
-    observedEl = null
-    scrollObserver = null
-  }
-
-  const observeScroll = () => {
-    const el = scrollRef.value
-    if (el && el === observedEl) {
-      updateFade()
-      return
-    }
-    unobserveScroll()
-    if (!el) {
-      updateFade()
-      return
-    }
-    observedEl = el
-    el.addEventListener('scroll', updateFade, { passive: true })
-    // Catches the region resizing (the window, and the `xl` split). Content-height
-    // changes come from the filters, which the watch below covers.
-    scrollObserver = new ResizeObserver(updateFade)
-    scrollObserver.observe(el)
-    updateFade()
-  }
+  ])
 
   // Switching organization, account or workspace reloads Home: usage is metered for
   // the scope in force and the resources below are that scope's, so both go to
   // skeletons and come back re-read (src/lib/tenancy-reload.js).
   const { tenancyReloading } = useTenancyReload()
 
-  // Anything that changes what the band holds changes how far it scrolls: the type,
-  // the search, a delete, and the skeleton/list swap on a scope switch.
-  watch([listGroups, tenancyReloading], async () => {
-    await nextTick()
-    observeScroll()
-  })
-
-  // ── PICKING A TYPE ARRIVES LIKE A TAB ─────────────────────────────────────
-  // The band's type control is a tab row in everything but name — each option replaces
-  // the whole list under it — so it gets the console's tab entrance rather than a
-  // bespoke one: `useTabEnter` replays `animate-page-enter` on the band's stable
-  // wrapper and sends the scroll region back to the top, exactly as the application,
-  // workload and function detail shells do for theirs
-  // (../../lib/behavior/tab-enter.js). One definition, four shells, one feel.
-  //
-  // The scroller is passed explicitly: below `xl` the band does not scroll and the
-  // wrapper's parent is not a scroll region, so the helper's default (the parent) would
-  // reset the wrong element.
-  const bandRef = ref(null)
-  useTabEnter(bandRef, selectedType, scrollRef)
+  // NO TYPE CONTROL, SO NO TAB ENTRANCE. The band used to replay `animate-page-enter`
+  // on every change of the segmented type filter (`useTabEnter`, the entrance the
+  // application / workload / function detail shells give their tab bars), because
+  // picking a type replaced every row under it and doing that in one frame reads as a
+  // repaint. The four panels are all on screen at once and only the SEARCH narrows
+  // them now — and typing is exactly the case that entrance was never for: a list that
+  // animates on every keystroke feels laggy. The panels patch in place.
 
   // THE COLD ARRIVAL. Overview is the console's landing page and nothing on it is
   // held: account usage is metered per scope and the resource list is a query. So
@@ -329,17 +289,12 @@
   const arriving = ref(true)
   let arrivalTimer
   onMounted(() => {
-    arrivalTimer = setTimeout(async () => {
+    arrivalTimer = setTimeout(() => {
       arriving.value = false
-      // The band does not exist until the wire is replaced, so the fade attaches to
-      // the scroll region on the frame after that swap — not on mount.
-      await nextTick()
-      observeScroll()
     }, LOAD_MS)
   })
   onUnmounted(() => {
     clearTimeout(arrivalTimer)
-    unobserveScroll()
   })
 
   // ── THE AGENT ONBOARDING, AT THE FOOT OF THE USAGE RAIL ──
@@ -359,10 +314,11 @@
   // promo card every module's first use already offers it with
   // (../../components/home/FirstUsePromo.vue, the agent card of ProductFirstUse.vue) —
   // the editors' own logos in an overlapping cluster, the shared copy under them, and the
-  // whole card as one control that copies. At the bottom of the usage rail, because the
-  // rail is the page's minor column and ends short of the resource list: the card sits in
-  // space nothing else wanted, under the four readings rather than over them, and a reader
-  // who came to work on their infrastructure meets the offer after it and not before.
+  // whole card as one control that copies. At the END of the usage band at the foot of
+  // the page: the readings are one strip across the bottom and the card takes the last
+  // third of that row, so the offer sits after the numbers rather than over them, and a
+  // reader who came to work on their infrastructure meets it after the work and not
+  // before.
   //
   // Its copy is READ from the shared const (`AGENT_PROMO`, lib/product-empty-states.js)
   // rather than restated here — the same title and line every product's first use shows,
@@ -403,7 +359,8 @@
     }
   }
 
-  // Dismissing is SILENT: the card unmounts and the rail closes up, and that is the whole
+  // Dismissing is SILENT: the card unmounts and the strip takes the width back, and that
+  // is the whole
   // feedback. It used to raise a toast naming what left, which is the right instinct for a
   // destructive action and the wrong one here — the toast is the loudest motion the console
   // has (the Toaster enters from the bottom edge with a scale and a fade), so "no thanks"
@@ -412,6 +369,22 @@
   // still makes, so there is no state to explain a way back to.
   const onAgentOnboardingClose = () => {
     dismissAgentOnboarding()
+  }
+
+  // The create row rides the FOOT of every module panel — its own module has a create
+  // page and the reader is not mid-search. `Recents` has no create page, so it never
+  // shows one; a narrowed panel does not either (see the template).
+  const showCreateRow = (panel) => Boolean(panel.create) && !narrowed.value
+
+  // The muted line a panel shows when it has nothing to list. `Recents` is not a
+  // plural of anything ("No recents match your search" is not English), so it says what
+  // it is: a trail that has not started yet, or a query nothing recent matches.
+  const emptyLine = (panel) => {
+    if (panel.recent)
+      return narrowed.value ? 'Nothing recent matches your search.' : 'Nothing opened here yet.'
+    return narrowed.value
+      ? `No ${panel.label.toLowerCase()} match your search.`
+      : 'Nothing here yet.'
   }
 
   // A row on Overview goes where the same row goes in its own module — the detail
@@ -423,11 +396,6 @@
   const openResource = (resource) => {
     if (resource.path) router.push(resource.path)
   }
-
-  // Colored Tag for a resource that is serving — Applications say "Active", Workloads
-  // say "Live" — and neutral for everything else.
-  const statusSeverity = (value) =>
-    value === 'Active' || value === 'Live' ? 'success' : 'secondary'
 
   // Deleting from Overview removes the SAME resource its module list owns, so it asks
   // the same way: the menu click arms the dialog, and the row goes only once its name
@@ -468,26 +436,29 @@
          This div is the page's container, and it declares both halves of what a
          container is in this system (the catalog: Foundations/Layout, generated
          from packages/theme/src/tokens/semantic/layouts.data.js):
-           THE MEASURE is `.layout-column` — the DATA measure, `--layout-measure`
-             / 1620px. The populated Overview is a usage rail beside a scrolling
-             list of every resource the account owns, which is what that measure
-             is for ("lists and detail dashboards", and they want every pixel
+           THE MEASURE is `.layout-column` — the STANDARD page container,
+             `--layout-measure` / 1388px, the one width home, the product
+             overviews and every listing share (it was 1620px until the
+             container standardization). The populated Overview is a full-width list of every
+             resource the account owns over a strip of usage readings, which is
+             what that measure is for ("lists and detail dashboards", and they want every pixel
              they can get because more rows and columns visible IS the point).
-             It is NOT the focused measure (1024px) any more: that cap is for a
+             It is NOT the focused measure (1024px): that cap is for a
              single task, and it wasted a third of a 1428px content zone on a
              void while the resource rows inside it truncated their own second
              line. It is also not full bleed, which the page ran briefly and
              which has the opposite failure — past ~2000px the row actions end up
              a head-turn away from the name that identifies the row, and there is
              nothing on this page that a 2200px-wide list row tells you that a
-             1620px one does not.
+             1388px one does not. The empty half of /home came down to this
+             same measure, so the two halves are one width (./HomeEmptyState.vue).
            THE BOUNDARY is `.layout-boundary`, carried HERE rather than inherited
              from the shell. Overview.vue passes `padded=false` to AppLayout for
              exactly this reason, so the inset is declared once, on the same block
              as the measure, in the file that owns the layout. This is the
              documented self-padded shape, and the cap grows by exactly the inset
              it now contains (`calc(measure + 2 * --layout-boundary-inline)`), so
-             the CONTENT column is 1620px either way.
+             the CONTENT column is 1388px either way.
          Why the page owns the boundary: the page is a FRAME from `xl` (see
          below), and a frame has to know where its own edges are. With the inset
          on the shell's scroll box it sat OUTSIDE the frame — so the list scrolled
@@ -496,12 +467,12 @@
          looks flush against the viewport lived in a different component. On the
          container, `box-sizing: border-box` puts the inset inside the same 100%
          height the frame measures.
-         The measure no longer decides the column split: the usage rail is 30% of
-         the row capped at 348px and the resources column takes the rest, so it
-         reads 1:2 at `xl` and 1:2.7 once the row reaches the cap. -->
-  <!-- ── ONLY THE RESOURCES COLUMN SCROLLS (from `xl`) ──
-         The page is a FRAME from `xl` up: the greeting, the usage rail, and the
-         Resources header with its type control and its search all hold still,
+         There is no column split left for the measure to decide: the page is ONE
+         column — the resource list at the full content width, the usage strip
+         under it — and the measure is simply how wide a row gets. -->
+  <!-- ── ONLY THE RESOURCE LIST SCROLLS (from `xl`) ──
+         The page is a FRAME from `xl` up: the greeting, the search, the Resources
+         header with its type control, and the usage strip at the foot all hold still,
          and the list under them is the only thing that moves. What the
          reader narrows with therefore cannot scroll away from what it narrows —
          the old page scrolled the whole column, so the search field and the
@@ -540,8 +511,8 @@
            The greeting is the only line on Overview addressed to the PERSON rather
            than to their infrastructure, and it holds this row ALONE. The agent
            onboarding used to ride its right edge as a contrast pill; it is the card at
-           the foot of the usage rail now (see the aside below, and the note in the
-           script). The row therefore has ONE height for every reader — it no longer
+           the end of the usage strip at the foot of the page now (see the aside below,
+           and the note in the script). The row therefore has ONE height for every reader — it no longer
            grows or shrinks with a dismissal the page has to remember. -->
       <header class="flex items-center">
         <h1 class="text-heading-sm text-(--text-muted)">
@@ -551,7 +522,7 @@
       </header>
 
       <!-- ── THE SEARCH, AT PAGE LEVEL ──
-           It spans the whole content width, above both columns, rather than riding
+           It spans the whole content width, above the list, rather than riding
            the Resources header. Three reasons it belongs here:
            IT IS THE PAGE'S OPENING MOVE. A reader who arrives knowing the name of
              what they want should not have to find the field inside the band that
@@ -571,17 +542,15 @@
            in no landmark at all is an axe `region` violation (measured — one node), and
            a page-level search is main content, not a banner. -->
 
-      <!-- Two columns that terminate at the same y. No `items-start`: the row
-           keeps `align-items: stretch`, so its height is max(aside, section) and
-           both columns stretch to it. Each column then needs one internal grow
-           target (the metric grid; the resources CardBox) or the slack would
-           pile up below the blocks. `grow`, never `flex-1` — a zero flex-basis
-           makes a column's intrinsic height contribution ill-defined, and that
-           contribution is exactly what the row height derives from. -->
+      <!-- ONE COLUMN, TWO BLOCKS. The resource list takes the frame's remaining
+           height (`xl:flex-1` on it, `min-h-0` so it can actually shrink) and the
+           usage strip under it is `shrink-0` — so the band the reader operates
+           absorbs every pixel the viewport gives or takes, and the four readings
+           are the same 90px on a laptop and on a 27" display. -->
       <!--
-        THE ENTRANCE. Replacing the wire MOUNTS these two columns, so each one
+        THE ENTRANCE. Replacing the wire MOUNTS these two blocks, so each one
         rises into place as it arrives (`animate-content-enter`, src/styles/motion.css) —
-        usage first, resources one beat behind it, so the page assembles in
+        resources first, usage one beat behind it, so the page assembles in
         reading order instead of popping as one slab. Simultaneous arrival reads
         as a swap; a stagger reads as choreography (the same reasoning as the
         signed-out screens' entrance, ../lib/auth-entrance.js).
@@ -595,7 +564,7 @@
         class="layout-section-start flex flex-col gap-(--layout-boundary-start) xl:min-h-0 xl:flex-1"
       >
         <!-- The page's search (see the note above): its own row, full content width,
-             above both columns. `shrink-0` so the frame takes its height out of the
+             above the list. `shrink-0` so the frame takes its height out of the
              list below and never out of this field. -->
         <div class="flex min-h-(--size-10) shrink-0 items-center">
           <InputText
@@ -614,70 +583,549 @@
           </InputText>
         </div>
 
-        <div
-          class="flex flex-col gap-(--layout-boundary-start) xl:min-h-0 xl:flex-1 xl:flex-row xl:gap-(--layout-section-gap)"
+        <!-- ── RESOURCES: FOUR PANELS, ONE ROW ──
+             `Applications`, `Workloads`, `Domains`, `Recents` side by side from `xl`,
+             two-up from `sm` and three-up from `lg`, stacked below that. The
+             type control that used to sit over one mixed list is gone:
+             a panel per module IS the filter, permanently applied and permanently
+             visible, so the reader never taps to find out whether a module has
+             anything in it.
+             Full content width (the usage rail is a strip at the foot now), and the
+             entrance's LEADER — it is what the reader came for, so it arrives first and
+             the readings follow one fast-01 behind it. -->
+        <section
+          class="animate-content-enter motion-reduce:animate-none grid w-full min-w-0 grid-cols-1 gap-(--layout-group-gap) sm:grid-cols-2 lg:grid-cols-3 xl:min-h-0 xl:flex-1 xl:grid-cols-5 xl:gap-(--layout-section-gap)"
+          aria-label="Resources"
         >
-          <!-- Left (minor): account usage — one metric per card, its reading beside a
-             small progress bar showing plan consumption. Below `xl` it spans the
-             full width above the resources; from `xl` it becomes the narrow rail.
-             THE RAIL IS A SHARE, THEN A CAP. It used to be a flat 348px from `lg`,
-             which inverted the whole page in the 1024-1200 band: the row had 676px
-             of content there, the rail took 348 of it, and the MAJOR column ended up
-             at 264 — narrower than the minor one it is supposed to dominate. A fixed
-             minor column only stays minor while the row is wide.
-             So: side by side from `xl` (below it the rail goes full width and runs
-             its metrics 2-up, which is a better read than a 200px card), sized at
-             30% of the row, capped at `--container-xs`. The share keeps resources at
-             roughly 2x the rail through the middle widths; the cap stops the rail
-             from growing past a metric card's useful width, so everything a full
-             bleed adds past ~1500px goes to resources — 1:2 at `xl`, 1:2.7 at
-             1728px, 1:5 at 2560px. -->
-          <!-- `xl:overflow-y-auto` is an escape hatch, not the design: the rail is
-             four cards and a heading, so it fits the frame at every laptop
-             height. It exists so a very short viewport degrades to a scrollable
-             rail instead of a clipped one — the fourth metric silently cut off
-             would be worse than a scrollbar that almost never appears. -->
-          <aside
-            class="animate-content-enter motion-reduce:animate-none flex w-full shrink-0 flex-col gap-(--layout-group-gap) xl:w-[30%] xl:max-w-(--container-xs) xl:min-h-0 xl:overflow-y-auto xl:overscroll-contain"
+          <!-- Each panel is a column that owns its own height: the heading holds still
+               and only its list scrolls, so four modules of very different sizes end
+               level with each other instead of the row taking the tallest one's height.
+               `min-h-0` on both the column and the scroller is what lets a flex child
+               shrink below its content; without it the panel grows and the page hands
+               the scroll back to the shell. -->
+          <!-- FIVE TRACKS FOR FOUR PANELS, AND `RECENTS` TAKES TWO OF THEM. Its row
+               carries two fields where a module row carries one
+               (`Domain / my-workload-1…`), so at an equal share of the band the type name
+               ate the column and the resource name truncated to a single character
+               (measured: 19px of name in a 212px column). A double track is the honest
+               fix — the panel that says twice as much gets twice the width. -->
+          <div
+            v-for="panel in panels"
+            :key="panel.key"
+            class="flex min-w-0 flex-col gap-(--spacing-xs) xl:min-h-0"
+            :class="panel.recent ? 'xl:col-span-2' : ''"
           >
-            <!-- `--size-10`, matched by the Resources header opposite it: that one is
-               38px tall because the segmented control in it is, and a 32px header
-               here put the two column titles 3px out of line with each other across
-               the widest gap on the page. Both headers reserve one row of 40px, so
-               the titles sit on one line whatever controls ride along. -->
-            <div class="flex min-h-(--size-10) items-center px-(--spacing-xs)">
-              <h2 class="text-heading-xxs text-(--text-default)">Usage</h2>
-            </div>
-
-            <!-- 2-up while the aside is full width; single column once it narrows into
-               the desktop rail at `xl` — the same breakpoint the row splits at.
-
-               `auto-rows-min`, and NO `grow`. The right column used to be one table
-               sized to end level with this rail, so the rail stretched to meet it; it
-               is now a `Recents` block over an `Older` one whose height is the
-               account's, and stretching four metric cards to match that turns each into
-               a mostly-empty panel. The rail is its own height and the row's extra
-               space is simply below it. -->
-            <div class="grid auto-rows-min grid-cols-2 gap-(--layout-group-gap) xl:grid-cols-1">
-              <CardBox
-                v-for="metric in metrics"
-                :key="metric.label"
-                :padded="false"
+            <!-- THE HEADING IS THE WAY IN. A module's panel is a summary of that module,
+                 so its title is the link to it — the chevron says so, and it is the only
+                 chrome on the row. `Recents` is not a module and carries no link, so it
+                 is a plain heading; `<h2>` in both cases, which is the level under the
+                 greeting's `<h1>` now that the band has no title of its own (axe's
+                 `heading-order` catches the jump to `<h3>`).
+                 FULL CONTRAST, not muted. A muted heading is the design's instinct here,
+                 but `--text-muted` measures 3.95:1 on this surface — under AA — and axe
+                 flags every one; a heading is the last text on the page to spend that.
+                 The row reserves `--size-6` so the four titles sit on one line whether
+                 or not they carry a control.
+                 ── IT SITS ON THE LABEL RAIL, NOT ON THE ROW'S EDGE ──
+                 With the card gone there is no box edge to align to, so the heading
+                 aligns to the one thing in the column that matters: the NAME under it.
+                 That rail is not the row's left edge, and the difference was visible in
+                 every column: a row is `px-(--spacing-md)` inside a 1px transparent
+                 border, so its text starts 17px in, not 16 — and in the two columns whose
+                 rows open with a mark (`Applications`' vendor logo, `Recents`' trail
+                 glyph) the label starts a further gutter + gap in. So the inset is the
+                 row's real one, and the mark columns mirror the gutter with an empty
+                 spacer of the same width, at the same `--spacing-xs` gap the row's title
+                 uses. Measured: heading text and name text now start at the same x to
+                 the pixel in all four columns (was 24px out in `Applications`, 24 in
+                 `Recents`, 1 in `Workloads` / `Domains`). -->
+            <h2
+              class="flex min-h-(--size-6) items-center gap-(--spacing-xs) px-[calc(var(--spacing-md)+1px)] text-label-sm text-(--text-default)"
+            >
+              <!-- The mark gutter, mirrored. `aria-hidden` and empty: it is width, not
+                   content — the heading's own text is what the reader needs. -->
+              <span
+                v-if="panel.marked || panel.recent"
+                class="w-(--size-4) shrink-0"
+                aria-hidden="true"
+              />
+              <RouterLink
+                v-if="panel.path"
+                :to="panel.path"
+                class="inline-flex items-center gap-(--spacing-xxs) rounded-(--shape-button) outline-none hover:underline focus-visible:ring-2 focus-visible:ring-(--ring-color)"
               >
-                <template #content>
-                  <div class="flex grow flex-col gap-(--spacing-sm) p-(--spacing-md)">
-                    <div class="flex items-center gap-(--spacing-xs)">
-                      <span class="min-w-0 truncate text-label-sm text-(--text-default)">
-                        {{ metric.label }}
-                      </span>
-                      <Tooltip :text="metric.hint">
+                {{ panel.label }}
+                <i
+                  class="pi pi-chevron-right text-[10px] leading-none text-(--text-muted)"
+                  aria-hidden="true"
+                />
+              </RouterLink>
+              <span v-else>{{ panel.label }}</span>
+            </h2>
+
+            <!-- ── NO CARD AROUND THE LIST ──
+                 It was `Item.List` inside a flush CardBox, the console's one shape for a
+                 collection. Four of them side by side broke it: grid columns stretch to
+                 the row's height, so the two shorter panels became BORDERED BOXES WITH A
+                 VOID IN THEM — the border drew a promise of content that the module did
+                 not have, and the emptiest module got the largest empty box.
+                 Flat, the stretching costs nothing to look at: a column that runs out of
+                 rows simply ends, and the space below it is page. The dividers between
+                 rows come from `Item.List` itself, so the rows still read as one list —
+                 what left is the box around them, not the structure.
+                 `xl:min-h-0 xl:flex-1` + `overflow-y-auto`: the panel still scrolls inside
+                 itself and its heading still never leaves. -->
+            <div class="min-w-0 xl:min-h-0 xl:flex-1 xl:overflow-y-auto xl:overscroll-contain">
+              <!-- Reading the new scope: the rows are that scope's, and a row carried
+                   over from the one we just left is worse than no row. Skeletons stand
+                   in the SAME list, so the panel keeps its frame and its row rhythm. -->
+              <Item.List
+                v-if="tenancyReloading"
+                key="panel-loading"
+                aria-busy="true"
+              >
+                <Item
+                  v-for="index in 3"
+                  :key="`${panel.key}-skeleton-${index}`"
+                  role="listitem"
+                  size="small"
+                >
+                  <!-- On the column's LABEL RAIL, like the heading above it: the two
+                       mark-bearing panels indent their names by the gutter, and a
+                       placeholder bar that ignores it slides sideways on arrival. -->
+                  <Item.Content
+                    class="h-[21px] justify-center"
+                    :class="
+                      panel.marked || panel.recent
+                        ? 'pl-[calc(var(--size-4)+var(--spacing-xs))]'
+                        : ''
+                    "
+                  >
+                    <Skeleton
+                      :width="index % 2 ? '55%' : '42%'"
+                      height="0.875rem"
+                    />
+                  </Item.Content>
+                </Item>
+              </Item.List>
+
+              <Item.List
+                v-else-if="panel.resources.length || showCreateRow(panel)"
+                key="panel-rows"
+              >
+                <!-- `role="listitem"`: `Item.List` declares `role="list"`, but `Item`
+                     does not declare the matching child role, so the list is an
+                     `aria-required-children` violation until the row says what it is.
+                     It belongs in the DS, on `Item`; until then every consumer of
+                     `Item.List` carries it, and this page states it. -->
+                <!-- ── THE WHOLE ROW IS THE TARGET ──
+                     The name was the only thing clickable in it, which made a 58px row
+                     with a 120px target in the middle of it: the reader aims at a word
+                     rather than at the thing the word names, and nothing under the
+                     pointer says the row goes anywhere.
+                     So the row LIGHTS UP on hover (`--bg-hover`, the token the DS's own
+                     `muted` row uses), the NAME UNDERLINES with it — the row's fill says
+                     "this responds", the underline says "and it is a link", which is the
+                     half a fill alone never states — and the name's hit area is STRETCHED
+                     over the row: an
+                     `::after` at `inset-0`, which is what lets one real `<button>` cover
+                     the row without the row becoming a control. That distinction is the
+                     whole reason for the technique: the ⋯ menu lives in this row too, and
+                     a button inside a button is invalid HTML that browsers un-nest at
+                     parse time, breaking both. The menu simply sits ABOVE the stretched
+                     layer (`relative z-10` on the actions), so it takes its own clicks.
+                     KEYBOARD GETS THE SAME ROW. Focus lands on the name (the row is not
+                     focusable — it is a `<div>`), so the ring is drawn on the ROW via
+                     `has-[[data-row-link]:focus-visible]`, scoped to the name so the ⋯
+                     button's own focus does not also ring the whole row; the name takes
+                     its own `focus-visible:underline` so the keyboard reader gets the
+                     same two signals the pointer does.
+                     THE FILL IS A SHAPE, NOT A BAND. `Item.List` sets `rounded-none` on
+                     every row it holds (right for a list inside a card, where the card's
+                     edge is the shape); flat on the page there is no card edge, and a
+                     full-bleed rectangle lighting up reads as a table selection rather
+                     than as an element responding. `--shape-elements` gives it the corner
+                     radius the DS's own small surfaces use. The `!` is not decoration:
+                     the list's `[&>[data-slot=item]]:rounded-none` is an attribute
+                     selector (specificity 0,2,0) and a plain utility (0,1,0) loses to it
+                     outright. -->
+                <Item
+                  v-for="resource in panel.resources"
+                  :key="`${resource.type}-${resource.id}`"
+                  role="listitem"
+                  size="small"
+                  class="relative rounded-(--shape-elements)! transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) has-[[data-row-link]:focus-visible]:ring-2 has-[[data-row-link]:focus-visible]:ring-(--ring-color) has-[[data-row-link]:focus-visible]:ring-inset"
+                >
+                  <!-- ── ONE LINE, AND IT IS THE NAME ──
+                       The row used to carry four more fields: a second line (a domain,
+                       a runtime), a status Tag, the type, and how long ago it was
+                       edited. Under a module's own heading every one of them is either
+                       context the panel gives (the type), or detail the module list one
+                       click away is the right place for (status, edit time, hostname).
+                       What a summary owes the reader is WHICH THINGS EXIST and a way
+                       in — so the row is a name and a chevron, with a vendor logo in
+                       front of it in `Applications` and the trail mark plus the type in
+                       `Recents`. -->
+                  <Item.Content>
+                    <Item.Title class="w-full">
+                      <!-- ── THE MARK BELONGS TO `RECENTS`, AND ONLY TO IT ──
+                           Every row used to open with a 32px framed mark in
+                           `Item.Media`: the framework logo for an application, the type
+                           glyph for everything else. Under a column already titled
+                           `Workloads`, a workload glyph on all six rows is the heading
+                           restated six times — 40px of every row spent saying what the
+                           reader read once above it, in a band that just shed four
+                           fields for exactly that reason.
+                           `Recents` is the one column that is NOT one type, so it is the
+                           one column where the mark carries information: it says which
+                           module each row came from, in less width than the word it
+                           replaces (the row used to spell out "Application /" in front
+                           of the name). The TYPE glyph, deliberately — not the framework
+                           logo an application also has: what a mixed list has to answer
+                           is WHICH MODULE, and a Next.js mark answers a different
+                           question.
+                           ONE glyph for the column, not one per row: the mark says this
+                           is a TRAIL (`pi-history`), and the type is named in words
+                           right after it — `Domain / my-workload-1.azion.app`. A per-row
+                           type glyph was the alternative and it asks the reader to learn
+                           seven marks to answer a question a word answers outright,
+                           while the column's own identity goes unmarked.
+                           Muted, and the type is muted with it, so the NAME is the only
+                           thing at full contrast in the row — five columns of names is
+                           what the band reads as, and this column should not read as
+                           two fields fighting.
+                           A bare glyph on the title line, not a framed tile in
+                           `Item.Media`: the frame is 32px in a row whose line box is
+                           21px, so a tile in this one column made its rows 58px against
+                           the other columns' 54 (measured) — columns whose row
+                           rhythms do not line up read as unrelated lists. -->
+                      <!-- ── THE MARK IS A GUTTER, NOT ITS OWN WIDTH ──
+                           A font glyph is as wide as its advance (measured: 8.67px for
+                           `pi-history`, 16.09 for an `ai-cor` framework mark), so a mark
+                           left to its natural width puts the label a different distance
+                           in on every column that has one — and nothing above can align
+                           to it. Both mark columns reserve the same `--size-4` box and
+                           center the glyph in it, so the label rail is one number the
+                           heading can mirror. -->
+                      <template v-if="panel.recent">
+                        <span
+                          class="flex w-(--size-4) shrink-0 items-center justify-center"
+                          aria-hidden="true"
+                        >
+                          <i class="pi pi-history text-body-xs leading-none text-(--text-muted)" />
+                        </span>
+                        <!-- ── AND THE TYPE IS A COLUMN, NOT A PREFIX ──
+                             At its natural width the type set every name in the panel a
+                             different distance in (measured: `Domain /` 62.8px against
+                             `Application /` 90.2 — a 27px ragged edge down the one
+                             column that has two fields), so the column read as four
+                             unrelated lines rather than as a list of names. `min-w`, not
+                             `w`: the rail is the widest label this prototype can hold
+                             (`Application /`) plus a hair, and a longer type would push
+                             its own row's name across rather than truncate under a
+                             number that stopped being true. -->
+                        <span class="min-w-[5.75rem] shrink-0 text-body-sm text-(--text-muted)"
+                          >{{ resource.typeLabel }} /</span
+                        >
+                      </template>
+
+                      <!-- ── THE VENDOR LOGO STAYS, AND ONLY IN `APPLICATIONS` ──
+                           An application's framework mark is the one mark in this band
+                           that is not its column's heading restated: `Workloads` glyphs
+                           are all the same glyph, but a Next.js row and a Vue row are
+                           told apart by theirs, and it is the fact about an application
+                           a reader scans a list of them FOR. It is the same colored
+                           `ai-cor` glyph at the same `1.15em` the module's own list
+                           draws beside the name (../applications/Applications.vue), so
+                           the row reads the same in both places.
+                           The GUTTER is unconditional and the glyph inside it is not:
+                           an unrecognized preset resolves to no icon class
+                           (../../lib/format/presets.js), and a row that drops the gutter
+                           with it would put its name 24px left of every other name in
+                           the column — the one place in the band where a missing icon
+                           could break the rail. -->
+                      <span
+                        v-else-if="panel.marked"
+                        class="flex w-(--size-4) shrink-0 items-center justify-center"
+                        aria-hidden="true"
+                      >
                         <i
-                          class="pi pi-info-circle text-body-sm text-(--text-muted)"
+                          v-if="presetIcon(resource.preset)"
+                          :class="presetIcon(resource.preset)"
+                          class="text-[1.15em] leading-none"
+                          :title="presetLabel(resource.preset)"
+                        />
+                      </span>
+                      <!-- `after:absolute after:inset-0` is the stretched hit area; the
+                           row's own `relative` is what it resolves against. No ring of
+                           its own — the ROW draws it (see the note above), so the focused
+                           row and the hovered row are the same shape. -->
+                      <button
+                        type="button"
+                        data-row-link
+                        class="min-w-0 cursor-pointer truncate text-left text-label-md text-(--text-default) outline-none group-hover/item:underline focus-visible:underline after:absolute after:inset-0 after:content-['']"
+                        @click="openResource(resource)"
+                      >
+                        {{ resource.name }}
+                      </button>
+                    </Item.Title>
+                  </Item.Content>
+
+                  <!-- `relative z-10`: above the name's stretched `::after`, or the row
+                       would swallow every click meant for the menu.
+                       ── ONE 28px BOX FOR BOTH, NOT TWO SIDE BY SIDE ──
+                       The ⋯ button reserves 28px whether or not it is visible
+                       (`opacity-0` still takes its space, and it has to — a control that
+                       appears on hover and MOVES the name is worse than one that is
+                       always there), and the chevron took 12 more beside it. In a 169px
+                       column that pair was 56px of a row (a third of it) for two things
+                       the reader looks at last, and the NAME paid — measured at 81px,
+                       which truncates every application in the seed.
+                       So they share one `--size-7` box and swap: the chevron at rest, the
+                       ⋯ on hover or keyboard focus. Nothing moves (the box is one size),
+                       both affordances survive, and every name in the band gains 28px. -->
+                  <Item.Actions class="relative z-10 grid size-(--size-7) place-items-center">
+                    <!-- THE MENU IS NOT PART OF THE RESTING ROW. Row actions are the
+                         one thing a summary cannot delegate to the module list (the
+                         reader is here, and deleting from here is the point), but a
+                         control on every row at rest is exactly the noise this band
+                         just shed. So it appears on hover and on keyboard focus
+                         anywhere in the row — `group-focus-within/item` is what keeps it
+                         reachable by Tab, since a control that only exists on hover is
+                         a control a keyboard cannot press.
+                         The group is the DS row's OWN (`group/item`, declared by
+                         `Item`), not a second one added here: two group scopes on one
+                         element is two things to keep in step.
+                         `motion-reduce:transition-none`: the fade is decoration, and a
+                         reader who asked for no motion gets it instantly. -->
+                    <Dropdown
+                      placement="bottom-end"
+                      class="col-start-1 row-start-1 opacity-0 transition-opacity duration-150 ease-out motion-reduce:transition-none group-hover/item:opacity-100 group-focus-within/item:opacity-100"
+                      @select="(event, value) => onRowAction(event, value, resource)"
+                    >
+                      <Dropdown.Trigger>
+                        <Tooltip text="Resource actions">
+                          <IconButton
+                            icon="pi pi-ellipsis-h"
+                            kind="transparent"
+                            size="small"
+                            :aria-label="`Actions for ${resource.name}`"
+                          />
+                        </Tooltip>
+                      </Dropdown.Trigger>
+
+                      <Dropdown.Group>
+                        <Dropdown.Option
+                          value="view"
+                          label="View details"
+                        />
+                        <Dropdown.Option
+                          value="edit"
+                          label="Edit"
+                        />
+                      </Dropdown.Group>
+
+                      <Dropdown.Group>
+                        <Dropdown.Option
+                          value="delete"
+                          label="Delete"
+                        >
+                          <template #left>
+                            <i
+                              class="pi pi-trash"
+                              aria-hidden="true"
+                            />
+                          </template>
+                        </Dropdown.Option>
+                      </Dropdown.Group>
+                    </Dropdown>
+
+                    <!-- The row goes somewhere, and the chevron is the whole of what
+                         says so now that the status and the timestamp are gone.
+                         Decorative: the name beside it is the control. It hands the box
+                         to the ⋯ on hover / focus rather than sitting beside it (see
+                         above), so the two never cost the name more than one control. -->
+                    <i
+                      class="pi pi-chevron-right col-start-1 row-start-1 shrink-0 text-body-xs text-(--text-muted) transition-opacity duration-150 ease-out motion-reduce:transition-none group-hover/item:opacity-0 group-focus-within/item:opacity-0"
+                      aria-hidden="true"
+                    />
+                  </Item.Actions>
+                </Item>
+                <!-- ── THE LAST LINE OF EVERY MODULE COLUMN IS THE WAY TO ADD ONE ──
+                     It used to appear only when the module was EMPTY, as a filled
+                     panel-wide plaque — which made the emptiest column the loudest thing
+                     in the band, and meant the one affordance that puts something in this
+                     account was invisible to every reader who already had one thing.
+                     It is a ROW now, the last one in the same list: same `size="small"`,
+                     same hover fill, same stretched hit area as a resource row, so the
+                     column reads as a list whose final line happens to be "add another".
+                     A panel caps at five names (`PANEL_ROWS`) with this row under them,
+                     so it is always on screen without the column ever scrolling to it.
+                     NOT WHILE NARROWED (see `showCreateRow`): a search is a question
+                     about what exists, and "Add Application" is not an answer to it —
+                     a query that matched nothing gets the muted line below instead.
+                     `Recents` has no create at all: it is a view of the other panels,
+                     not a place to put anything. -->
+                <Item
+                  v-if="showCreateRow(panel)"
+                  role="listitem"
+                  size="small"
+                  class="relative rounded-(--shape-elements)! transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) has-[[data-row-link]:focus-visible]:ring-2 has-[[data-row-link]:focus-visible]:ring-(--ring-color) has-[[data-row-link]:focus-visible]:ring-inset"
+                >
+                  <!-- CENTERED, WHICH IS THE POINT: every other row in the band is a
+                       name on the left edge, so a centered line is legible as NOT one of
+                       them before it is read — the column's own control rather than its
+                       last resource. It is the one thing that distinguishes the two, now
+                       that the create affordance is a row like the rest and no longer a
+                       filled plaque.
+                       `min-h-(--size-7)`: a resource row is 54px because its ⋯ button
+                       reserves 28px beside a 21px line, and this row has no actions at
+                       all — left alone it lands at 47px (measured), so the row would be
+                       the one row in the band with a different height. It reserves the
+                       same 28px the button would have. -->
+                  <Item.Content class="min-h-(--size-7) items-center justify-center">
+                    <Item.Title>
+                      <!-- A real `RouterLink`, not the resource row's `<button>`: this
+                           one goes to a page and has an href, so it should be
+                           middle-clickable and copyable like any link. The `::after` is
+                           the same stretched hit area the resource rows use, so the
+                           whole row is the target. The plus is INSIDE the label rather
+                           than in `Item.Media`: the media slot is the type mark's
+                           column (`Recents` only, see above), and a 32px framed plus
+                           would put a bordered tile in a column that has none.
+                           NO UNDERLINE, unlike a resource name. The underline there says
+                           "this word is the link"; here the whole centered line is, and
+                           the row's fill plus the label going to full contrast is the
+                           entire hover signal. The keyboard reader is not left out — the
+                           ROW draws the focus ring (`has-[[data-row-link]:focus-visible]`
+                           on the `Item`), which is the same signal it draws for a name. -->
+                      <RouterLink
+                        :to="panel.create"
+                        data-row-link
+                        class="inline-flex min-w-0 items-center gap-(--spacing-xxs) truncate text-label-md text-(--text-muted) outline-none transition-colors duration-150 ease-out motion-reduce:transition-none group-hover/item:text-(--text-default) after:absolute after:inset-0 after:content-['']"
+                      >
+                        <i
+                          class="pi pi-plus shrink-0 text-body-xs"
                           aria-hidden="true"
                         />
-                      </Tooltip>
-                    </div>
-                    <div class="flex items-baseline gap-(--spacing-xxs)">
+                        {{ panel.createLabel }}
+                      </RouterLink>
+                    </Item.Title>
+                  </Item.Content>
+                </Item>
+              </Item.List>
+
+              <!-- The one empty left: a search that matched nothing in THIS panel, or
+                   `Recents` before the reader has opened anything. One muted line — it is
+                   not the module's state, it is this query's. -->
+              <p
+                v-else
+                class="px-(--spacing-md) py-(--spacing-sm) text-body-sm text-(--text-muted)"
+              >
+                {{ emptyLine(panel) }}
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── USAGE: A STRIP AT THE FOOT, NOT A RAIL DOWN THE SIDE ──
+
+             It was the page's left column: four stacked cards, each with a progress
+             bar under its reading, holding 30% of every row beside the resource list.
+             Two things were wrong with that, and removing the bar is what settled both.
+
+               THE BAR MEASURED NOTHING. It read as plan consumption, and there is no
+                 allowance in this business model for it to be a share OF — so it drew
+                 a percentage of nothing, in the loudest colour the card had, under
+                 every number on the page. A gauge with no ceiling is not a quiet
+                 detail: it is the first thing the eye lands on and the only thing on
+                 the card that cannot be verified.
+               THE COLUMN WAS SIZED FOR THE BAR. Four cards need a rail only while each
+                 one carries a chart; a label and a number do not — they are one line of
+                 text, and stacking four of them down a 348px column spent a third of
+                 the page's width on eight short lines while the resource rows beside
+                 them truncated.
+
+             So usage is now ONE STRIP: four readings inline, divided by hairlines inside
+             a single card, at the FOOT of the page. Which makes the page a COLUMN — the
+             list takes the full content width and the readings sit under it, in the band
+             a summary's numbers belong in: they are the account's context, read once on
+             arrival, and the resources are what the reader came to operate.
+
+             `shrink-0`, so the frame takes its height out of the list above and never out
+             of these four lines.
+
+             THE ENTRANCE FOLLOWS THE LIST NOW. The stagger is unchanged in kind and
+             reversed in order — whatever is on top arrives first, so the delay token
+             (one fast-01) moved off the resources column and onto this one. -->
+        <aside
+          class="animate-content-enter motion-reduce:animate-none flex w-full shrink-0 flex-col gap-(--layout-group-gap) xl:flex-row xl:items-stretch xl:gap-(--layout-section-gap) [--content-enter-delay:var(--transition-duration-fast-01)]"
+          aria-label="Usage"
+        >
+          <!-- NO SECTION HEADING. The rail had one because a column of four cards needs
+               to say what column it is; a strip of four labelled readings says it in the
+               labels, and a `Usage` title over a 90px band is a row of height spent on a
+               word the cells already carry. The landmark keeps the name for a screen
+               reader (`aria-label` above).
+               ONE CARD, DIVIDED — not four cards in a row. Four separate boxes at this
+               width read as four unrelated panels with three gaps between them; the
+               readings are one set, taken over one window, so they share one surface and
+               a hairline says where each ends. -->
+          <CardBox
+            :padded="false"
+            class="min-w-0 xl:flex-1"
+          >
+            <template #content>
+              <!-- One per row on a phone, 2-up from `sm`, 4-up from `xl` — the same
+                   breakpoint the promo beside it stops stacking, so the strip is only ever
+                   asked to fit four readings while it has the full row to do it in. A
+                   reading is a 28px number and a tag beside it; four of those in a 630px
+                   band (which is what `lg` would have given it, with the card taking the
+                   rest) is where the number and its delta start colliding.
+                   THE RULES ARE DRAWN BY THE CELLS, not by a divider element, so they move
+                   with the wrap: stacked, every cell but the first takes a top rule; at two
+                   columns only the bottom pair does, plus a left rule on the evens; at four
+                   there are no top rules and the left rule is on every cell but the first.
+                   Only INTERNAL edges are ever drawn — the card's own border is the outside.
+                   EACH RULE IS SCOPED TO ITS OWN WIDTH RANGE (`max-sm:`, `sm:max-xl:`, `xl:`)
+                   rather than being switched off again at the next breakpoint. A
+                   `sm:…:border-t-0` written to cancel the stacked layout's top rule does not
+                   cancel it: Tailwind emits both declarations at the same specificity and
+                   sorts `border-t-0` BEFORE `border-t` (the utility's own value order beats
+                   the variant's), so the base rule wins inside the media query and every
+                   cell keeps a top border it should have dropped — measured, and visible as
+                   a stray rule running through the strip at 2-up and 4-up. Ranges cannot
+                   collide, so there is nothing to out-order. -->
+              <!-- `grow`: the band is `items-stretch`, so this card is as tall as the
+                     promo beside it, and without it the grid keeps its content height and
+                     leaves 30px of dead surface under the readings (measured). Growing the
+                     grid stretches its auto rows, and the cells' own `justify-center` then
+                     puts the readings on the card's optical centre. -->
+              <div class="grid grow grid-cols-1 sm:grid-cols-2 xl:grid-cols-4">
+                <div
+                  v-for="metric in metrics"
+                  :key="metric.label"
+                  class="flex min-w-0 flex-col justify-center gap-(--spacing-sm) border-(--border-default) p-(--spacing-md) max-sm:[&:nth-child(n+2)]:border-t sm:max-xl:[&:nth-child(n+3)]:border-t sm:[&:nth-child(even)]:border-l xl:[&:nth-child(n+2)]:border-l"
+                >
+                  <div class="flex items-center gap-(--spacing-xs)">
+                    <span class="min-w-0 truncate text-label-sm text-(--text-default)">
+                      {{ metric.label }}
+                    </span>
+                    <Tooltip :text="metric.hint">
+                      <i
+                        class="pi pi-info-circle text-body-sm text-(--text-muted)"
+                        aria-hidden="true"
+                      />
+                    </Tooltip>
+                  </div>
+                  <!-- The reading on the left, the move on the right. `justify-between`
+                       rather than a gap, so the tag sits on the cell's own right edge and
+                       the four of them line up down the strip instead of each floating at
+                       whatever width its number happened to take. `items-center`: the tag
+                       is a 20px box beside a 28px number, and hanging it off the number's
+                       baseline drops it below the cell's optical centre. -->
+                  <div class="flex items-center justify-between gap-(--spacing-sm)">
+                    <div class="flex min-w-0 items-baseline gap-(--spacing-xxs)">
                       <!-- A reading from the scope we just left is worse than no
                          reading: while the switch reloads, the number is a
                          placeholder the size of the number it replaces. -->
@@ -697,510 +1145,147 @@
                         >
                       </template>
                     </div>
+
+                    <!-- WHICH WAY IT MOVED, against the window before this one. The arrow
+                         and the sign both carry the direction, and the SEVERITY carries it
+                         a third time — `success` for a rise, `danger` for a fall, so the
+                         strip is readable as a shape before it is read as four numbers.
+                         Three signals for one fact on purpose: the colour is the fastest
+                         and the only one a reader who cannot separate the hues, or who is
+                         hearing the page, does not get. See the note on `trend` in the
+                         script for why the colour tracks the direction and not whether the
+                         direction is good news.
+                         It goes with the number, not with the label: it is a fact about
+                         the reading, and it disappears with the reading while the scope
+                         reloads rather than hanging a stale delta over a placeholder.
+                         `aria-label` says the direction in words — a screen reader gets
+                         "Up 12.4%…" instead of a percentage with a decorative arrow in
+                         front of it, and the glyph is `aria-hidden` inside Tag already. -->
+                    <Tag
+                      v-if="!tenancyReloading"
+                      size="small"
+                      :severity="metric.trend.direction === 'up' ? 'success' : 'danger'"
+                      class="shrink-0 tabular-nums"
+                      :icon="
+                        metric.trend.direction === 'up' ? 'pi pi-arrow-up' : 'pi pi-arrow-down'
+                      "
+                      :label="`${metric.trend.direction === 'up' ? '+' : '-'}${metric.trend.delta}`"
+                      :aria-label="`${metric.trend.direction === 'up' ? 'Up' : 'Down'} ${metric.trend.delta} versus the previous window`"
+                    />
                   </div>
-                  <!-- Progress reads as a flush bar on the card's bottom edge — a
-                     consumption "border" that costs no inline space. -->
-                  <ProgressBar
-                    :value="tenancyReloading ? 0 : metric.percent"
-                    :max="100"
-                    size="small"
-                    shape="flat"
-                    class="w-full shrink-0"
-                    :aria-label="`${metric.label} usage`"
-                  />
-                </template>
-              </CardBox>
-            </div>
+                </div>
+              </div>
+            </template>
+          </CardBox>
 
-            <!-- ── THE AGENT ONBOARDING, UNDER THE READINGS ──
-                 The quiet promo card every module's first use already makes this offer
-                 with (../../components/home/FirstUsePromo.vue): the four editors' own
-                 logos as an overlapping cluster, the shared line under them, and the
-                 WHOLE card as one control — pressing it copies the setup prompt. Same
-                 component, same copy (`AGENT_PROMO`), so the offer is one object across
-                 Overview and every product's first use instead of a pill here and a card
-                 there.
-                 It goes at the FOOT of the rail: the rail is the minor column and it ends
-                 short of the resource list, so the card lands in space nothing else wanted,
-                 after the four readings rather than over them. An offer the reader did not
-                 come for does not go above the numbers they did.
-                 No corner glyph on it (no `href`, no `navigates`) — it copies and leaves
-                 the reader exactly where they were, and the glyph is what says a card
-                 takes you somewhere.
-                 `shrink-0` so the rail's `xl:overflow-y-auto` escape hatch scrolls the
-                 card on a very short viewport instead of squeezing it. -->
-            <!-- The rule above it. The rail is otherwise one uninterrupted run of cards,
-                 and the last one is not another reading — it is an offer. A `Divider`
-                 (the DS's, so it is a real `role="separator"` on the border token and not
-                 a styled `<div>`) says the column ends here and something else begins,
-                 which the group gap alone cannot: the gap between the card and the fourth
-                 metric is the same gap that sits between the metrics themselves.
-                 It takes a margin ON TOP of the column's own gap. At the bare group gap
-                 (16px each side) the rule read as one more step in the rail's rhythm — the
-                 same distance that sits between two metric cards — which is the one thing
-                 a separator must not do. `--spacing-sm` on the block axis puts 28px on each
-                 side, so the rule sits in air of its own and the card below it reads as
-                 after the column rather than as the fifth card in it. -->
-            <!-- ── DISMISSING IT IS THE ONE ANIMATED MOMENT IN THE RAIL ──
-                 The rule and the card leave TOGETHER, as one object: `v-if` on its own
-                 unmounted them on the click (measured: zero interpolated frames), which
-                 reads as the page dropping a block rather than as the reader removing it.
-                 So a `<Transition>` wraps BOTH, and only the leave is animated — the card
-                 arrives with the column it sits in (`animate-content-enter` on the aside),
-                 so an enter here would be a second entrance on the same element.
-                 It scales down a hair, slides `--spacing-xs` DOWN and fades — the exact
-                 inverse of the rise the column arrives with, so leaving is the entrance
-                 played backwards and the eye reads it as the same object departing.
-                 UTILITIES, NOT A KEYFRAME: both ends are known at author time, so a
-                 `transition-*` on the leave is the whole mechanism and nothing has to be
-                 added to the animation catalogue. The property list names `scale` and
-                 `translate` — the properties Tailwind v4's `scale-*` / `translate-y-*`
-                 ACTUALLY set (naming `transform` animates nothing, silently: the styling
-                 rule's trap). `motion-reduce:transition-none` so a reader who asked for no
-                 motion gets the instant removal they had before. -->
-            <Transition
-              leave-active-class="transition-[scale,translate,opacity] duration-moderate-01 ease-productive-exit motion-reduce:transition-none"
-              leave-to-class="scale-95 translate-y-(--spacing-xs) opacity-0"
+          <!-- ── THE AGENT ONBOARDING, BESIDE THE READINGS ──
+               The quiet promo card every module's first use already makes this offer with
+               (../../components/home/FirstUsePromo.vue): the four editors' own logos as an
+               overlapping cluster, the shared line under them, and the WHOLE card as one
+               control — pressing it copies the setup prompt. Same component, same copy
+               (`AGENT_PROMO`), so the offer is one object across Overview and every
+               product's first use instead of a pill here and a card there.
+               It rode the foot of the usage rail; with the rail gone it keeps the same
+               place in the reading order — last, after the numbers — by taking the end of
+               the same bottom band. At the rail's own width (30% of the row, capped at
+               `--container-xs`) so it stays a CARD and does not stretch into a banner, and
+               beside the strip rather than under it because the page is a frame from `xl`
+               and a second full-width block down here is height the resource list pays for.
+               The rule that used to sit above it is gone with the stack: two cards side by
+               side are already two objects, and a vertical hairline between them would only
+               repeat what the gap and the borders say.
+               No corner glyph on it (no `href`, no `navigates`) — it copies and leaves the
+               reader exactly where they were, and the glyph is what says a card takes you
+               somewhere. -->
+          <!-- ── DISMISSING IT IS THE ONE ANIMATED MOMENT IN THE BAND ──
+               `v-if` on its own unmounted the card on the click (measured: zero
+               interpolated frames), which reads as the page dropping a block rather than
+               as the reader removing it. So a `<Transition>` wraps it, and only the leave
+               is animated — the card arrives with the band it sits in
+               (`animate-content-enter` on the aside), so an enter here would be a second
+               entrance on the same element.
+               It scales down a hair, slides `--spacing-xs` DOWN and fades — the exact
+               inverse of the rise the band arrives with, so leaving is the entrance played
+               backwards and the eye reads it as the same object departing.
+               UTILITIES, NOT A KEYFRAME: both ends are known at author time, so a
+               `transition-*` on the leave is the whole mechanism and nothing has to be
+               added to the animation catalogue. The property list names `scale` and
+               `translate` — the properties Tailwind v4's `scale-*` / `translate-y-*`
+               ACTUALLY set (naming `transform` animates nothing, silently: the styling
+               rule's trap). `motion-reduce:transition-none` so a reader who asked for no
+               motion gets the instant removal they had before. -->
+          <Transition
+            leave-active-class="transition-[scale,translate,opacity] duration-moderate-01 ease-productive-exit motion-reduce:transition-none"
+            leave-to-class="scale-95 translate-y-(--spacing-xs) opacity-0"
+          >
+            <div
+              v-if="agentOnboardingVisible"
+              class="relative w-full shrink-0 xl:w-[30%] xl:max-w-(--container-xs)"
             >
-              <!-- ONE flex child of the rail, so the two leave as one box. It carries the
-                   column's own `gap` internally, which is what keeps the rule's 28px of air
-                   on both sides (12px margin + 16px gap) now that the card is no longer a
-                   direct sibling of the metric grid. -->
-              <div
-                v-if="agentOnboardingVisible"
-                class="flex flex-col gap-(--layout-group-gap)"
+              <FirstUsePromo
+                :title="AGENT_PROMO.title"
+                :description="AGENT_PROMO.description"
+                @activate="copyAgentPrompt"
               >
-                <Divider class="my-(--spacing-sm)" />
-
-                <div class="relative w-full shrink-0">
-                  <FirstUsePromo
-                    :title="AGENT_PROMO.title"
-                    :description="AGENT_PROMO.description"
-                    @activate="copyAgentPrompt"
-                  >
-                    <!-- The marks are the EDITORS themselves, four of the five, matching the
+                <!-- The marks are the EDITORS themselves, four of the five, matching the
                      cluster on every product's first use so the two are the same object at
                      the same width (../../components/home/IconFrame.vue is the one 32px
                      frame all three surfaces share). In color, not `mono`: here they are a
                      row of logos, and a reader spots the editor they use before reading a
                      word. -->
-                    <template #logos>
-                      <IconFrame
-                        v-for="agent in AGENT_TOOLS.slice(0, 4)"
-                        :key="agent"
-                      >
-                        <AgentMark
-                          :name="agent"
-                          class="size-[18px] text-(--text-default)"
-                        />
-                      </IconFrame>
-                    </template>
-                  </FirstUsePromo>
-                  <!-- The dismissal is a SIBLING of the card, never inside it: the card is
+                <template #logos>
+                  <IconFrame
+                    v-for="agent in AGENT_TOOLS.slice(0, 4)"
+                    :key="agent"
+                  >
+                    <AgentMark
+                      :name="agent"
+                      class="size-[18px] text-(--text-default)"
+                    />
+                  </IconFrame>
+                </template>
+              </FirstUsePromo>
+              <!-- The dismissal is a SIBLING of the card, never inside it: the card is
                    itself a `<button>`, and a button inside a button is invalid HTML that
                    browsers un-nest at parse time — which breaks both controls. So it is
                    pinned over the corner the card's own glyph would use, and hovering it
                    does not tint the card underneath (it is outside the `group`).
-                   `transparent` and `small`: it is the quietest control in the rail, and
-                   dismissing UNMOUNTS the card — no reserved band, nothing left tabbable.
+                   `transparent` and `small`: it is the quietest control in the band, and
+                   dismissing UNMOUNTS the card — no reserved space, nothing left tabbable.
                    The answer is persisted (lib/agent-onboarding.js), so it survives the
                    reload and the first-access surface offering the same thing. -->
-                  <div class="absolute right-(--spacing-xs) top-(--spacing-xs)">
-                    <Tooltip
-                      text="Dismiss"
-                      placement="top"
-                    >
-                      <IconButton
-                        icon="pi pi-times"
-                        kind="transparent"
-                        size="small"
-                        aria-label="Dismiss agent setup"
-                        @click="onAgentOnboardingClose"
-                      />
-                    </Tooltip>
-                  </div>
-                </div>
-              </div>
-            </Transition>
-          </aside>
-
-          <!-- Right (major): RESOURCES — `Recents` at the top of it, then `Older`.
-             The entrance's follower — one fast-01 behind the usage column. -->
-          <section
-            class="animate-content-enter motion-reduce:animate-none flex w-full min-w-0 flex-col gap-(--layout-group-gap) xl:min-h-0 xl:flex-1 [--content-enter-delay:var(--transition-duration-fast-01)]"
-          >
-            <!-- ── RESOURCES ──
-               The band's title, and the one control that belongs to the band: the
-               segmented type filter, on the header's far edge. The search that used to
-               share this row is now the page's own, a row above (see above) — the type
-               narrows THIS list, so it stays with the list; the field searches by name
-               across every type, so it reads as the page's.
-               The header sits OUTSIDE the scroll region on purpose: it is what the
-               reader operates the list with, and a control that leaves the viewport
-               the moment its results are being read is a control you have to scroll
-               back to find. `shrink-0` so the list, not the header, absorbs the
-               frame's height.
-               `min-h-(--size-10)` matches the Usage heading opposite it, so the two
-               column titles sit on one line across the widest gap on the page even
-               though only this one carries a 36px control. -->
-            <header
-              class="flex min-h-(--size-10) shrink-0 flex-wrap items-center justify-between gap-(--spacing-sm) pl-(--spacing-xs)"
-            >
-              <h2 class="shrink-0 text-heading-xxs text-(--text-default)">Resources</h2>
-
-              <SegmentedButton
-                v-model="selectedType"
-                :options="typeFilters"
-                aria-label="Resource type"
-                class="shrink-0"
-              />
-            </header>
-
-            <!-- THE ONLY SCROLL REGION ON THE PAGE (from `xl`).
-               `min-h-0` is what makes it one: a flex child's default `min-height:
-               auto` refuses to shrink below its content, so the column would grow
-               past the frame and hand the scroll back to the shell. `overscroll-contain`
-               keeps a flick at the end of the list from scrolling the app behind it.
-               NO BOTTOM PADDING — THE FADE IS THE BOTTOM TREATMENT. The region used to
-               end 16px short of the frame so a row would not sit flush against its edge;
-               that inset was doing the fade's job badly, because at the end of the scroll
-               (where the fade correctly goes to zero) it read as dead space under the
-               last row, and everywhere else it just shortened the list. The band now runs
-               the full height of the frame and the fade says "there is more" — that is
-               what `fadeStyle`'s 64px band, the framework catalog's own, is for.
-               The mask goes on the SCROLLER, not on the list inside it — masking the
-               content would scroll the gradient along with the rows.
-               ── ROOM FOR THE ENTRANCE TO TRAVEL ──
-               The negative inline-start margin with the matching padding is what lets the
-               band below SLIDE without being cut. A scroll container cannot have
-               `overflow-x: visible` (one axis scrolling forces the other to compute away
-               from `visible`), so anything that travels sideways inside this region is
-               clipped at its edge — which is exactly what ate the card's left edge and
-               rounded corner during `pageEnter`.
-               So the region's BOX is pushed one travel-distance further into the column
-               gutter and its content padded back by the same amount: the card rests
-               precisely where it did before, and the leftward travel now lands ON the
-               box's edge instead of past it. Both use `--layout-boundary-inline` — the
-               same token the keyframe's distance defaults to — so they cannot drift apart
-               when that token changes with the breakpoint. The 48px gutter absorbs it. -->
-            <div
-              ref="scrollRef"
-              class="min-w-0 xl:ml-[calc(var(--layout-boundary-inline)*-1)] xl:min-h-0 xl:flex-1 xl:overflow-x-hidden xl:overflow-y-auto xl:overscroll-contain xl:pl-(--layout-boundary-inline)"
-              :style="fadeStyle"
-            >
-              <!-- ── THE TYPE CHANGE ARRIVES LIKE A TAB ──
-                   A STABLE, DELIBERATELY UNKEYED wrapper: `useTabEnter` replays
-                   `animate-page-enter` on it whenever the type changes, exactly as the
-                   application / workload / function detail shells do for their tab bars
-                   (../../lib/behavior/tab-enter.js). Picking a type replaces every row in
-                   the band, and done in one frame that reads as a repaint — the reader
-                   cannot tell whether the list narrowed or the page reloaded.
-                   A class replay rather than a `<Transition>`, for the same reason the
-                   tab shells use one: keying this wrapper would re-mount the whole band
-                   on every tap. The replay also resets the scroll to the top, which is
-                   what makes the entrance land on content the reader can see — and it
-                   happens under reduced motion too, because arriving mid-list in a set
-                   you have not seen is a correctness problem, not a decorative one.
-                   THE SEARCH IS NOT ANIMATED. Typing narrows these same rows, but a
-                   keystroke that animates feels laggy: the field patches the list in
-                   place, the type swaps it.
-                   IT TRAVELS, at the entrance's own distance
-                   (`--layout-boundary-inline`, what `pageEnter` defaults to). The room it
-                   travels through is made by the scroll region above, which extends its
-                   box one distance further into the gutter and pads the content back —
-                   without that the region clips the slide and the card loses its left edge
-                   for the whole 240ms. -->
-              <div ref="bandRef">
-                <!-- Reading the new scope: the rows are that scope's, and a row carried
-                 over from the one we just left is worse than no row. Skeletons stand in
-                 the SAME list, so the band keeps its frame and its row rhythm instead of
-                 collapsing to a block of placeholders in a different shape. -->
-                <CardBox
-                  v-if="tenancyReloading"
-                  key="resources-loading"
-                  :padded="false"
+              <div class="absolute right-(--spacing-xs) top-(--spacing-xs)">
+                <Tooltip
+                  text="Dismiss"
+                  placement="top"
                 >
-                  <template #content>
-                    <Item.List aria-busy="true">
-                      <Item
-                        v-for="index in 6"
-                        :key="`resource-skeleton-${index}`"
-                        role="listitem"
-                      >
-                        <Item.Media>
-                          <Skeleton
-                            kind="shape"
-                            width="2rem"
-                            height="2rem"
-                          />
-                        </Item.Media>
-                        <!-- The content column is pinned to what a real row's two lines
-                         MEASURE — 37.5px: a 21px title line box (`text-label-md`) over a
-                         16.5px description one (`text-body-xs`) — with the bars pushed to
-                         its ends. A fixed-height Skeleton carries no line-height, so two
-                         bars and a gap come to 34px and every placeholder row is 4px
-                         short: 24px of drift over six of them, paid back as a jump the
-                         moment the data lands. Same shape as the cold-arrival wire
-                         (../../components/home/HomeWire.vue). -->
-                        <Item.Content class="h-[37.5px] justify-between">
-                          <Skeleton
-                            width="35%"
-                            height="0.875rem"
-                          />
-                          <Skeleton
-                            width="55%"
-                            height="0.75rem"
-                          />
-                        </Item.Content>
-                        <Item.Actions>
-                          <Skeleton
-                            width="4rem"
-                            height="1.5rem"
-                          />
-                        </Item.Actions>
-                      </Item>
-                    </Item.List>
-                  </template>
-                </CardBox>
-
-                <!-- THE LIST. `Item.List` inside a flush CardBox — the console's one shape
-                 for a collection of things, so the row a reader learns here is the row
-                 they meet in every module list, repository picker and settings group.
-                 The band is ONE column at every width. The 1/2/3-up card grid that used
-                 to sit here spent the full-bleed width on more columns; a list spends it
-                 on the row instead — a name, a domain-or-runtime and a status align down
-                 a single edge, and the second line stops being truncated at ~230px.
-                 One block per group, each its own CardBox, so the dividers end where
-                 `Recents` ends instead of running under its label. -->
-                <div
-                  v-else-if="visibleResources.length"
-                  class="flex flex-col gap-(--layout-group-gap)"
-                >
-                  <section
-                    v-for="group in listGroups"
-                    :key="group.key"
-                    class="flex flex-col gap-(--spacing-xs)"
-                  >
-                    <h3
-                      v-if="group.label"
-                      class="px-(--spacing-xs) text-label-sm text-(--text-muted)"
-                    >
-                      {{ group.label }}
-                    </h3>
-
-                    <CardBox :padded="false">
-                      <template #content>
-                        <Item.List>
-                          <!-- `role="listitem"`: `Item.List` declares `role="list"`, but `Item`
-                           does not declare the matching child role, so the list is an
-                           `aria-required-children` violation until the row says what it
-                           is (measured with axe — 2 nodes, one per block). It belongs in
-                           the DS, on `Item`; until then every consumer of `Item.List`
-                           carries it, and this page states it. -->
-                          <Item
-                            v-for="resource in group.resources"
-                            :key="`${resource.type}-${resource.id}`"
-                            role="listitem"
-                          >
-                            <Item.Media>
-                              <IconFrame
-                                :icon="
-                                  resource.preset
-                                    ? `ai-cor ${presetIcon(resource.preset)}`
-                                    : resource.icon
-                                "
-                                :title="
-                                  resource.preset
-                                    ? presetLabel(resource.preset)
-                                    : resource.typeLabel
-                                "
-                              />
-                            </Item.Media>
-
-                            <Item.Content>
-                              <Item.Title class="w-full">
-                                <!-- The history glyph marks a RECENTS row, and only a
-                                 recents row: it repeats what the group label already
-                                 says, which is the point — the label is at the top of
-                                 the block and the rows below it scroll, so the mark is
-                                 what still says "you were just here" once the label has
-                                 gone past the header. `aria-hidden`: the label carries
-                                 it for a screen reader, and 6 rows announcing "history"
-                                 before their own name would be noise. -->
-                                <i
-                                  v-if="group.recent"
-                                  class="pi pi-history shrink-0 text-body-sm text-(--text-default)"
-                                  aria-hidden="true"
-                                />
-                                <button
-                                  type="button"
-                                  class="cursor-pointer truncate rounded-(--shape-button) text-left text-label-md text-(--text-default) outline-none hover:underline focus-visible:ring-2 focus-visible:ring-(--ring-color)"
-                                  @click="openResource(resource)"
-                                >
-                                  {{ resource.name }}
-                                </button>
-                              </Item.Title>
-                              <!-- THE ROW'S REASON FOR EXISTING: each type's own second
-                               line — a domain, a runtime and an instance count — which
-                               a shared column set could not have carried.
-                               AND IT IS USUALLY A DESTINATION. An application's and a
-                               workload's line is the live hostname; a domain's names the
-                               workload serving it. The type declares which
-                               (`subtitleUrl` / `subtitlePath` in
-                               ../../lib/data/home-resources.js) rather than the template
-                               sniffing the string, and a function's line — prose —
-                               declares neither and stays text.
-                               The live-hostname shape is the console's existing one
-                               (components/list/DomainCell.vue): the name, then
-                               `pi pi-arrow-up-right`, opening in a new tab. Without its
-                               CopyButton — that cell pins one to a table's right edge,
-                               and 60 of them stacked under 60 names is chrome the row
-                               already answers with its ⋯ menu.
-                               The line keeps its muted colour at rest — the design's,
-                               and the whole point of a second line — and takes the
-                               underline plus full contrast on hover/focus, so what is
-                               clickable is discoverable without a third weight in the
-                               list. -->
-                              <Item.Description class="text-body-xs">
-                                <a
-                                  v-if="resource.subtitleUrl"
-                                  :href="resource.subtitleUrl"
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  class="inline-flex max-w-full items-center gap-(--spacing-xxs) rounded-(--shape-button) align-bottom outline-none hover:text-(--text-default) hover:underline focus-visible:ring-2 focus-visible:ring-(--ring-color)"
-                                  @click.stop
-                                >
-                                  <span class="truncate">{{ resource.subtitle }}</span>
-                                  <!-- Size and colour inherited, unlike DomainCell's copy
-                                     of this glyph: there the cell text is at full
-                                     contrast so the arrow is dimmed to muted, here the
-                                     line is already muted and the arrow rides the
-                                     hover brightening with it. -->
-                                  <i
-                                    class="pi pi-arrow-up-right shrink-0"
-                                    aria-hidden="true"
-                                  />
-                                </a>
-
-                                <button
-                                  v-else-if="resource.subtitlePath"
-                                  type="button"
-                                  class="max-w-full cursor-pointer truncate rounded-(--shape-button) text-left align-bottom outline-none hover:text-(--text-default) hover:underline focus-visible:ring-2 focus-visible:ring-(--ring-color)"
-                                  @click.stop="router.push(resource.subtitlePath)"
-                                >
-                                  {{ resource.subtitle }}
-                                </button>
-
-                                <span
-                                  v-else
-                                  class="block truncate"
-                                  >{{ resource.subtitle }}</span
-                                >
-                              </Item.Description>
-                            </Item.Content>
-
-                            <Item.Actions>
-                              <Tag
-                                :label="resource.status"
-                                :severity="statusSeverity(resource.status)"
-                                size="medium"
-                              />
-                              <!-- The type and the edit time are the row's least-read
-                               fields and the first thing a narrow column should give
-                               up: the glyph already carries the type (it is the frame's
-                               `title`), and the list is sorted by this timestamp, so
-                               below `lg` the order says what the text did. -->
-                              <span class="hidden text-body-xs text-(--text-muted) lg:inline">
-                                {{ resource.typeLabel }} · edited
-                                {{ relativeTime(resource.modifiedAt) }}
-                              </span>
-
-                              <Dropdown
-                                placement="bottom-end"
-                                @select="(event, value) => onRowAction(event, value, resource)"
-                              >
-                                <Dropdown.Trigger>
-                                  <Tooltip text="Resource actions">
-                                    <IconButton
-                                      icon="pi pi-ellipsis-h"
-                                      kind="outlined"
-                                      size="small"
-                                      :aria-label="`Actions for ${resource.name}`"
-                                    />
-                                  </Tooltip>
-                                </Dropdown.Trigger>
-
-                                <Dropdown.Group>
-                                  <Dropdown.Option
-                                    value="view"
-                                    label="View details"
-                                  />
-                                  <Dropdown.Option
-                                    value="edit"
-                                    label="Edit"
-                                  />
-                                </Dropdown.Group>
-
-                                <Dropdown.Group>
-                                  <Dropdown.Option
-                                    value="delete"
-                                    label="Delete"
-                                  >
-                                    <template #left>
-                                      <i
-                                        class="pi pi-trash"
-                                        aria-hidden="true"
-                                      />
-                                    </template>
-                                  </Dropdown.Option>
-                                </Dropdown.Group>
-                              </Dropdown>
-                            </Item.Actions>
-                          </Item>
-                        </Item.List>
-                      </template>
-                    </CardBox>
-                  </section>
-                </div>
-
-                <!-- Nothing matched. A search that found nothing is told so and nothing
-                 else; a TYPE with nothing in it is offered the way to make one. -->
-                <CardBox
-                  v-else
-                  key="resources-empty"
-                  :padded="false"
-                >
-                  <template #content>
-                    <EmptyState
-                      v-if="narrowed"
-                      key="resources-no-match"
-                      size="medium"
-                      icon="pi pi-search"
-                      title="No resources match your search"
-                      :description="`Nothing named &quot;${search}&quot; in ${selectedType === 'all' ? 'this account' : typeLabel}.`"
-                    />
-                    <EmptyState
-                      v-else
-                      key="resources-none"
-                      size="medium"
-                      icon="pi pi-inbox"
-                      :title="`No ${typeLabel.toLowerCase()} yet`"
-                      description="Create one from the module in the navigation to see it here."
-                    />
-                  </template>
-                </CardBox>
+                  <IconButton
+                    icon="pi pi-times"
+                    kind="transparent"
+                    size="small"
+                    aria-label="Dismiss agent setup"
+                    @click="onAgentOnboardingClose"
+                  />
+                </Tooltip>
               </div>
             </div>
-          </section>
-        </div>
-
-        <DeleteDialog
-          v-model:open="deleteOpen"
-          :kind="pendingDelete?.singular ?? 'resource'"
-          :name="pendingDelete?.name ?? ''"
-          @confirm="confirmDelete"
-        />
+          </Transition>
+        </aside>
       </main>
+
+      <!-- OUTSIDE `<main>`, deliberately. The dialog teleports its panel, so what it
+           leaves behind in the flow is an empty node — and inside `<main>` that node was
+           still a flex child, taking one 24px `gap` after the usage strip. In a page that
+           is a frame from `xl` that gap is real height: the strip stopped 24px short of
+           the frame's edge, and the wire (which has no dialog) resolved into a page whose
+           bottom band sat 24px higher. Out here the container has no `gap` of its own, so
+           the dialog costs nothing and the strip ends where the frame does. -->
+      <DeleteDialog
+        v-model:open="deleteOpen"
+        :kind="pendingDelete?.singular ?? 'resource'"
+        :name="pendingDelete?.name ?? ''"
+        @confirm="confirmDelete"
+      />
     </template>
   </div>
 </template>

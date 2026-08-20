@@ -24,7 +24,7 @@
   const agentPrompt =
     'Help me build on Azion. Read the Azion developer docs at ' +
     'https://www.azion.com/en/documentation/, install the Azion CLI, and scaffold ' +
-    'an edge application with an azion.config.js and its build + deploy commands.'
+    'an application with an azion.config.js and its build + deploy commands.'
 
   // Each primitive tab maps to an Azion product pillar (Build / Store / Secure /
   // Observe): the pillar glyph, a one-command deploy story, and the set of

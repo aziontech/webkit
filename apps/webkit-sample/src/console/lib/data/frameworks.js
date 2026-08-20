@@ -73,6 +73,17 @@ export const FRAMEWORKS = [
     hint: [{ code: 'ng build' }, { text: ' output served from the edge' }]
   },
   {
+    tech: 'nuxt',
+    title: 'Nuxt E-commerce',
+    label: 'Nuxt',
+    description: 'Launch a Nuxt e-commerce or content app on the edge.',
+    icon: 'ai-cor ai-nuxt',
+    color: '#00dc82',
+    useCases: ['ecommerce', 'multi-tenant'],
+    tag: 'SSR',
+    hint: [{ code: 'nuxt build' }, { text: ' on the edge runtime' }]
+  },
+  {
     tech: 'astro',
     title: 'Astro Starter',
     label: 'Astro',
@@ -95,48 +106,198 @@ export const FRAMEWORKS = [
     hint: [{ code: 'vite build' }, { text: ' with the adapter' }]
   },
   {
-    tech: 'nuxt',
-    title: 'Nuxt E-commerce',
-    label: 'Nuxt',
-    description: 'Launch a Nuxt e-commerce or content app on the edge.',
-    icon: 'ai-cor ai-nuxt',
-    color: '#00dc82',
-    useCases: ['ecommerce', 'multi-tenant'],
-    tag: 'SSR',
-    hint: [{ code: 'nuxt build' }, { text: ' on the edge runtime' }]
-  },
-  {
-    tech: 'solidjs',
-    title: 'SolidJS Starter',
-    label: 'SolidJS',
-    description: 'Build a fine-grained reactive SolidJS app on the edge.',
-    icon: 'ai-cor ai-solidjs',
-    color: '#4f88c6',
-    useCases: ['ai'],
+    tech: 'preact',
+    title: 'Preact Starter',
+    label: 'Preact',
+    description: 'Deploy a Preact app — the React API in a fraction of the bundle.',
+    icon: 'ai ai-preact',
+    color: '#673ab8',
+    useCases: ['ai', 'marketing'],
     tag: 'SPA',
-    hint: [{ text: 'Fine-grained reactivity, no virtual DOM' }]
+    hint: [{ code: 'vite build' }, { text: ' output served from the edge' }]
   },
   {
-    tech: 'redwood',
-    title: 'RedwoodJS Boilerplate',
-    label: 'RedwoodJS',
-    description: 'Deploy a full-stack RedwoodJS application on the edge.',
-    icon: 'ai-cor ai-redwood',
-    color: '#bf4722',
-    useCases: ['ecommerce', 'multi-tenant'],
+    tech: 'qwik',
+    title: 'Qwik Starter',
+    label: 'Qwik',
+    description: 'Ship a resumable Qwik app that hydrates only what the reader touches.',
+    icon: 'ai ai-qwik',
+    color: '#ac7ef4',
+    useCases: ['ecommerce', 'marketing'],
     tag: 'SSR',
-    hint: [{ text: 'Full-stack React with an API side' }]
+    hint: [{ code: 'qwik build' }, { text: ' on the edge runtime' }]
   },
   {
-    tech: 'flutter',
-    title: 'Flutter Web',
-    label: 'Flutter',
-    description: 'Serve a cross-platform Flutter web build from the edge.',
-    icon: 'ai-cor ai-flutter',
-    color: '#54c5f8',
+    tech: 'opennextjs',
+    title: 'OpenNext Starter',
+    label: 'OpenNext',
+    description: 'Deploy Next.js through the OpenNext adapter, server routes included.',
+    icon: 'ai-cor ai-next',
+    color: '#0070f3',
+    useCases: ['ai', 'ecommerce'],
+    tag: 'SSR',
+    hint: [{ code: 'open-next build' }, { text: ' on the edge runtime' }]
+  },
+  {
+    tech: 'nitro',
+    title: 'Nitro Starter',
+    label: 'Nitro',
+    description: 'Deploy a Nitro server build — the engine behind Nuxt, on its own.',
+    icon: 'pi pi-server',
+    useCases: ['multi-tenant'],
+    tag: 'SSR',
+    hint: [{ code: 'nitro build' }, { text: ' on the edge runtime' }]
+  },
+  {
+    tech: 'gatsby',
+    title: 'Gatsby Starter',
+    label: 'Gatsby',
+    description: 'Publish a Gatsby site built at deploy time and served from the edge.',
+    icon: 'ai ai-gatsby',
+    color: '#663399',
+    useCases: ['blog', 'marketing'],
+    tag: 'Static',
+    hint: [{ code: 'gatsby build' }, { text: ' output served from the edge' }]
+  },
+  {
+    tech: 'docusaurus',
+    title: 'Docusaurus Starter',
+    label: 'Docusaurus',
+    description: 'Publish a Docusaurus documentation site on the edge.',
+    icon: 'ai ai-docusaurus',
+    color: '#3ecc5f',
+    useCases: ['blog'],
+    tag: 'Static',
+    hint: [{ code: 'docusaurus build' }, { text: ' output served from the edge' }]
+  },
+  {
+    tech: 'vitepress',
+    title: 'VitePress Starter',
+    label: 'VitePress',
+    description: 'Publish a VitePress documentation site on the edge.',
+    icon: 'ai ai-vitepress',
+    color: '#646cff',
+    useCases: ['blog'],
+    tag: 'Static',
+    hint: [{ code: 'vitepress build' }, { text: ' output served from the edge' }]
+  },
+  {
+    tech: 'vuepress',
+    title: 'VuePress Starter',
+    label: 'VuePress',
+    description: 'Publish a VuePress documentation site on the edge.',
+    icon: 'ai ai-vuepress',
+    color: '#3eaf7c',
+    useCases: ['blog'],
+    tag: 'Static',
+    hint: [{ code: 'vuepress build' }, { text: ' output served from the edge' }]
+  },
+  {
+    tech: 'hugo',
+    title: 'Hugo Starter',
+    label: 'Hugo',
+    description: 'Publish a Hugo site — thousands of pages built in seconds.',
+    icon: 'ai ai-hugo',
+    color: '#ff4088',
+    useCases: ['blog', 'marketing'],
+    tag: 'Static',
+    hint: [{ code: 'hugo' }, { text: ' output served from the edge' }]
+  },
+  {
+    tech: 'jekyll',
+    title: 'Jekyll Starter',
+    label: 'Jekyll',
+    description: 'Publish a Jekyll site straight from its source.',
+    icon: 'ai ai-jekyll',
+    color: '#cc0000',
+    useCases: ['blog'],
+    tag: 'Static',
+    hint: [{ code: 'jekyll build' }, { text: ' output served from the edge' }]
+  },
+  {
+    tech: 'hexo',
+    title: 'Hexo Starter',
+    label: 'Hexo',
+    description: 'Publish a Hexo blog on the edge.',
+    icon: 'ai ai-hexo',
+    color: '#0e83cd',
+    useCases: ['blog'],
+    tag: 'Static',
+    hint: [{ code: 'hexo generate' }, { text: ' output served from the edge' }]
+  },
+  {
+    tech: 'eleventy',
+    title: 'Eleventy Starter',
+    label: 'Eleventy',
+    description: 'Publish an Eleventy site with no framework runtime shipped to the reader.',
+    icon: 'ai ai-eleventy',
+    useCases: ['blog', 'marketing'],
+    tag: 'Static',
+    hint: [{ code: 'eleventy' }, { text: ' output served from the edge' }]
+  },
+  {
+    tech: 'stencil',
+    title: 'Stencil Starter',
+    label: 'Stencil',
+    description: 'Build framework-agnostic web components with Stencil.',
+    icon: 'pi pi-code',
+    useCases: ['multi-tenant'],
+    tag: 'SPA',
+    hint: [{ code: 'stencil build' }, { text: ' output served from the edge' }]
+  },
+  {
+    tech: 'html',
+    title: 'Static HTML Starter',
+    label: 'HTML',
+    description: 'Serve a folder of HTML, CSS and JavaScript with no build step.',
+    icon: 'pi pi-code',
+    color: '#e34f26',
     useCases: ['marketing'],
     tag: 'Static',
-    hint: [{ code: 'flutter build web' }, { text: ' served from the edge' }]
+    hint: [{ text: 'No build step — the folder is the site' }]
+  },
+  {
+    tech: 'javascript',
+    title: 'JavaScript Starter',
+    label: 'JavaScript',
+    description: 'Run plain JavaScript at the edge — no framework, just a handler.',
+    icon: 'ai-cor ai-js',
+    color: '#f7df1e',
+    useCases: ['ai'],
+    tag: 'Function',
+    hint: [{ text: 'A handler module, bundled as it is' }]
+  },
+  {
+    tech: 'typescript',
+    title: 'TypeScript Starter',
+    label: 'TypeScript',
+    description: 'Run a TypeScript handler at the edge, compiled on build.',
+    icon: 'ai-cor ai-ts',
+    color: '#3178c6',
+    useCases: ['ai'],
+    tag: 'Function',
+    hint: [{ text: 'Compiled and bundled on deploy' }]
+  },
+  {
+    tech: 'rustwasm',
+    title: 'Rust WASM Starter',
+    label: 'Rust + WASM',
+    description: 'Compile Rust to WebAssembly and run it at the edge.',
+    icon: 'pi pi-microchip',
+    color: '#654ff0',
+    useCases: ['ai'],
+    tag: 'WASM',
+    hint: [{ code: 'wasm-pack build' }, { text: ' output run as WebAssembly' }]
+  },
+  {
+    tech: 'emscripten',
+    title: 'Emscripten Starter',
+    label: 'Emscripten',
+    description: 'Bring C or C++ to the edge, compiled to WebAssembly with Emscripten.',
+    icon: 'pi pi-microchip',
+    useCases: ['ai'],
+    tag: 'WASM',
+    hint: [{ code: 'emcc' }, { text: ' output run as WebAssembly' }]
   }
 ]
 
@@ -147,13 +308,31 @@ const TECH_TO_SLUG = {
   react: 'react-boilerplate',
   vue: 'vue-boilerplate',
   angular: 'angular-boilerplate',
+  nuxt: 'nuxt-ecommerce',
   astro: 'astro-starter',
   svelte: 'svelte-boilerplate',
-  nuxt: 'nuxt-ecommerce',
-  solidjs: 'solidjs-starter',
-  redwood: 'redwood-boilerplate',
-  flutter: 'flutter-web'
+  preact: 'preact-starter',
+  qwik: 'qwik-starter',
+  opennextjs: 'opennextjs-starter',
+  nitro: 'nitro-starter',
+  gatsby: 'gatsby-starter',
+  docusaurus: 'docusaurus-starter',
+  vitepress: 'vitepress-starter',
+  vuepress: 'vuepress-starter',
+  hugo: 'hugo-starter',
+  jekyll: 'jekyll-starter',
+  hexo: 'hexo-starter',
+  eleventy: 'eleventy-starter',
+  stencil: 'stencil-starter',
+  html: 'html-starter',
+  javascript: 'javascript-starter',
+  typescript: 'typescript-starter',
+  rustwasm: 'rustwasm-starter',
+  emscripten: 'emscripten-starter'
 }
+
+/** The catalog slug a framework clones from. Falls back to the closest boilerplate. */
+export const templateSlugForTech = (tech) => TECH_TO_SLUG[tech] ?? 'nuxt-ecommerce'
 
 /**
  * Where picking a framework goes — the deploy flow, cloning that catalog template.
@@ -162,7 +341,7 @@ const TECH_TO_SLUG = {
  */
 export const deployTemplateRoute = (tech) => ({
   path: '/deploy',
-  query: { template: TECH_TO_SLUG[tech] ?? 'nuxt-ecommerce' }
+  query: { template: templateSlugForTech(tech) }
 })
 
 /** The /create filter's Technology axis, derived so the list and the catalog agree. */

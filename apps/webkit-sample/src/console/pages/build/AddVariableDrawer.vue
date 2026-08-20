@@ -343,7 +343,7 @@
   <ResourceDrawer
     v-model:open="open"
     size="medium"
-    title="Add environment variable"
+    title="Create variable"
     save-label="Save"
     :submitting="submitting"
     @submit="submit"
@@ -586,7 +586,7 @@
             >
               <template #left>
                 <i
-                  :class="`ai-cor ${presetIcon(option.preset)}`"
+                  :class="presetIcon(option.preset)"
                   class="shrink-0 text-[1.15em]"
                   :title="presetLabel(option.preset)"
                   aria-hidden="true"
@@ -620,9 +620,7 @@
         :disabled="submitting"
         @click="openImport"
       />
-      <p class="min-w-0 text-body-sm text-(--text-muted)">
-        or paste .env contents in Key input
-      </p>
+      <p class="min-w-0 text-body-sm text-(--text-muted)">or paste .env contents in Key input</p>
       <input
         ref="fileRef"
         type="file"

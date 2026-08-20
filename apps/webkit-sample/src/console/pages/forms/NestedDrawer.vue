@@ -46,6 +46,7 @@
   import { toast } from '@aziontech/webkit/toast'
   import { reactive, ref, watch } from 'vue'
 
+  import HeadingAction from '../../components/page/HeadingAction.vue'
   import PageHeading from '../../components/page/PageHeading.vue'
   import AppLayout from '../../components/shell/AppLayout.vue'
 
@@ -69,7 +70,7 @@
   // The list the PARENT drawer creates into (kept in memory for the demo).
   const instances = ref([{ id: 'fi-1', name: 'auth-guard', functionId: 'fn-auth' }])
 
-  // ── PARENT large drawer — Create Functions Instance ──
+  // ── PARENT large drawer — Add Functions Instance ──
   const parentOpen = ref(false)
   const form = reactive({ name: '', functionId: '' })
   const errors = reactive({ name: '', functionId: '' })
@@ -200,10 +201,9 @@
         description="Create a resource whose Select needs a related resource that may not exist yet — the quick-add opens a second drawer, then selects the new resource back into the parent. Each drawer is its own scoped save."
       >
         <template #actions>
-          <Button
-            label="Functions Instance"
+          <HeadingAction
+            label="Add Functions Instance"
             kind="primary"
-            size="medium"
             icon="pi pi-plus"
             @click="openParent"
           />
@@ -236,13 +236,13 @@
         <DrawerContent>
           <form
             class="flex min-h-0 flex-1 flex-col"
-            aria-label="Create Functions Instance"
+            aria-label="Add Functions Instance"
             novalidate
             @submit.prevent="submitParent"
           >
             <PanelHeader class="w-full">
               <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                <DrawerTitle>Create Functions Instance</DrawerTitle>
+                <DrawerTitle>Add Functions Instance</DrawerTitle>
                 <p class="text-body-sm text-(--text-muted)">
                   Instantiate an edge function on this application — pick an existing function or
                   create a new one inline.
@@ -260,9 +260,7 @@
 
                 <!-- Section: General -->
                 <section class="flex flex-col gap-(--layout-group-gap)">
-                  <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
-                    General
-                  </p>
+                  <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">General</p>
                   <CardBox :padded="false">
                     <template #content>
                       <Item.List>
@@ -306,9 +304,7 @@
 
                 <!-- Section: Function — the nested-create case -->
                 <section class="flex flex-col gap-(--layout-group-gap)">
-                  <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
-                    Function
-                  </p>
+                  <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">Function</p>
                   <CardBox :padded="false">
                     <template #content>
                       <Item.List>
@@ -428,13 +424,13 @@
         <DrawerContent class="z-[1003]">
           <form
             class="flex min-h-0 flex-1 flex-col"
-            aria-label="Create Function"
+            aria-label="Create function"
             novalidate
             @submit.prevent="submitChild"
           >
             <PanelHeader class="w-full">
               <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                <DrawerTitle>Create Function</DrawerTitle>
+                <DrawerTitle>Create function</DrawerTitle>
                 <p class="text-body-sm text-(--text-muted)">
                   Create a function to instantiate — it becomes available in the selector when
                   saved.
@@ -451,9 +447,7 @@
                 <legend class="sr-only">Create function</legend>
 
                 <section class="flex flex-col gap-(--layout-group-gap)">
-                  <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
-                    General
-                  </p>
+                  <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">General</p>
                   <CardBox :padded="false">
                     <template #content>
                       <Item.List>

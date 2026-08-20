@@ -64,10 +64,11 @@
   import { menuLeaves, menuPath } from '@shared/lib/menu-tree.js'
   import { useTheme } from '@shared/lib/theme.js'
   import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
-  import { useRouter } from 'vue-router'
+  import { useRoute, useRouter } from 'vue-router'
 
   import {
     DOCS_GET_STARTED_ID,
+    docsIdByRoute,
     docsNavGroups,
     docsNavSections,
     docsSectionIds
@@ -76,6 +77,7 @@
   import DocsSearchTrigger from './DocsSearchTrigger.vue'
 
   const router = useRouter()
+  const route = useRoute()
   const goConsole = () => router.push('/login')
 
   const { theme } = useTheme()
@@ -103,7 +105,7 @@
   // it. Inside a level, a row with `children` is still the condensed (inline) sub-menu the
   // documentation uses for product groups, expanding in place behind the indent rail:
   // `Secure → Firewall → Modules → WAF → Guides` is one drill plus four inline levels.
-  const active = ref(DOCS_GET_STARTED_ID)
+  const active = ref(docsIdByRoute.get(route.path) ?? DOCS_GET_STARTED_ID)
 
   /**
    * The containers above a page, split by the model that opens each: drill sections into the
@@ -163,7 +165,58 @@
     const target = isLevel ? menuLeaves([node])[0] : node
     if (target) active.value = target.id
     if (!isLevel) navOpen.value = false
+    if (!isLevel) followRow(event, node)
   }
+
+  /**
+   * Take a plain left click on a row that HAS a page into the app's own router.
+   *
+   * The row is a real anchor (`href` in the tree), so the browser would leave and reload
+   * the whole SPA. Anything modified — a new tab, a new window, a middle click — is left
+   * alone, which is the only reason the row is a link rather than a button.
+   */
+  const followRow = (event, node) => {
+    if (!node.href || !node.href.startsWith('/')) return
+    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey)
+      return
+    event.preventDefault()
+    if (route.path !== node.href) router.push(node.href)
+  }
+
+  /**
+   * Light a page's row and open every container above it.
+   *
+   * Used by the palette, and by arrival on a page from anywhere else — a link in the
+   * prose, the browser's Back, a pasted URL. A jump that left the row folded away, or
+   * the rail on the level the reader came from, looks like nothing happened.
+   */
+  const revealPage = (id) => {
+    active.value = id
+    if (hasRail.value && collapsed.value) collapsed.value = false
+    const { levels, inline } = ancestorsOf(id)
+    // The stack is REPLACED, not merged: a page in another pillar is in another level, and
+    // the rail can only be in one. Expansion merges — a sub the reader opened by hand in a
+    // level they will come back to is theirs to close.
+    path.value = levels
+    expanded.value = [...new Set([...expanded.value, ...inline])]
+    nextTick(() => {
+      menuRef.value?.$el
+        ?.querySelector('[aria-current="page"]')
+        ?.scrollIntoView({ block: 'nearest' })
+    })
+  }
+
+  // Arriving at a page from OUTSIDE the rail — a link in the prose, a card on the home
+  // page, the browser's Back button, a pasted URL — moves the rail with it. Not
+  // `immediate`: `active` is already seeded from the route above, and `revealPage` reads
+  // state (`hasRail`) that is declared further down this setup.
+  watch(
+    () => route.path,
+    (path) => {
+      const id = docsIdByRoute.get(path)
+      if (id) revealPage(id)
+    }
+  )
 
   // ── ⌘K palette ──────────────────────────────────────────────────────────────
   // The search trigger is a read-only affordance for it (click, or press the
@@ -268,19 +321,10 @@
     if (scope === 'doc') {
       const item = paletteItems.value.find((entry) => entry.id === id)
       if (!item) return
-      active.value = item.id
-      if (hasRail.value && collapsed.value) collapsed.value = false
-      const { levels, inline } = ancestorsOf(item.id)
-      // The stack is REPLACED, not merged: a page in another pillar is in another level, and
-      // the rail can only be in one. Expansion merges — a sub the reader opened by hand in a
-      // level they will come back to is theirs to close.
-      path.value = levels
-      expanded.value = [...new Set([...expanded.value, ...inline])]
-      nextTick(() => {
-        menuRef.value?.$el
-          ?.querySelector('[aria-current="page"]')
-          ?.scrollIntoView({ block: 'nearest' })
-      })
+      revealPage(item.id)
+      // A page that exists is opened, not just selected: the palette is the fastest way
+      // to a page, so it must actually go there.
+      if (item.href?.startsWith('/') && route.path !== item.href) router.push(item.href)
       return
     }
 
@@ -359,9 +403,7 @@
         </NavigationMenu.Portal>
       </NavigationMenu>
 
-      <div
-        class="ml-auto flex min-w-0 items-center gap-(--spacing-xs) md:gap-(--spacing-sm)"
-      >
+      <div class="ml-auto flex min-w-0 items-center gap-(--spacing-xs) md:gap-(--spacing-sm)">
         <!-- The way into the palette for the viewports with no rail: an IconButton, not
              the rail's bar — a phone has no ⌘K to hint at and no room for a label, so
              the glyph alone is the whole control. -->
@@ -448,6 +490,20 @@
       </div>
 
       <main class="min-w-0 flex-1 overflow-y-auto">
+        <!-- The page bar: where the reader is, and what they can do with this page.
+             It belongs to the SHELL's layout but to the PAGE's data — the shell has no
+             idea which crumbs a page has or what its markdown says — so the page fills
+             it through a slot and the shell decides it is pinned to the top of the
+             scroll region, once, above the title. That is what lets a page's own
+             masthead be title + deck and nothing else: a breadcrumb under the title
+             would say the reader's location twice on one screen, and a second Copy
+             control would sit a thumb away from this one. Absent slot ⇒ no bar. -->
+        <div
+          v-if="$slots['page-bar']"
+          class="sticky top-0 z-20 flex h-12 items-center gap-(--spacing-sm) border-b border-(--border-default) bg-(--bg-canvas) px-(--spacing-md) md:gap-(--spacing-md) md:px-(--spacing-xl)"
+        >
+          <slot name="page-bar" />
+        </div>
         <slot />
       </main>
 

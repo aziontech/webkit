@@ -38,6 +38,7 @@
   import { toast } from '@aziontech/webkit/toast'
   import { reactive, ref, watch } from 'vue'
 
+  import HeadingAction from '../../components/page/HeadingAction.vue'
   import PageHeading from '../../components/page/PageHeading.vue'
   import AppLayout from '../../components/shell/AppLayout.vue'
 
@@ -152,10 +153,9 @@
         description="Drawer create whose body is several section-titled ItemGroup sections: the settings layout, in context, with one scoped save."
       >
         <template #actions>
-          <Button
+          <HeadingAction
             label="Create service"
             kind="primary"
-            size="medium"
             icon="pi pi-plus"
             @click="openCreate"
           />
@@ -170,9 +170,7 @@
           class="flex items-center justify-between rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) px-(--spacing-md) py-(--spacing-sm)"
         >
           <span class="text-label-code-sm text-(--text-default)">{{ service.name }}</span>
-          <span class="text-body-xs text-(--text-muted)">{{
-            runtimeLabel(service.runtime)
-          }}</span>
+          <span class="text-body-xs text-(--text-muted)">{{ runtimeLabel(service.runtime) }}</span>
         </li>
       </ul>
     </main>
@@ -217,9 +215,7 @@
 
                 <!-- Section: General -->
                 <section class="flex flex-col gap-(--layout-group-gap)">
-                  <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
-                    General
-                  </p>
+                  <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">General</p>
                   <CardBox :padded="false">
                     <template #content>
                       <Item.List>
@@ -290,9 +286,7 @@
 
                 <!-- Section: Runtime -->
                 <section class="flex flex-col gap-(--layout-group-gap)">
-                  <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
-                    Runtime
-                  </p>
+                  <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">Runtime</p>
                   <CardBox :padded="false">
                     <template #content>
                       <Item.List>
@@ -389,9 +383,7 @@
 
                 <!-- Section: Options -->
                 <section class="flex flex-col gap-(--layout-group-gap)">
-                  <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
-                    Options
-                  </p>
+                  <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">Options</p>
                   <CardBox :padded="false">
                     <template #content>
                       <Item.List>

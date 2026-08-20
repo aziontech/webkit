@@ -100,34 +100,34 @@ export const DEFAULT_DEPLOYMENT_STEPS = [
   {
     key: 'upload',
     title: 'Upload',
-    description: 'Static assets uploaded to Edge Storage',
+    description: 'Static assets uploaded to Object Storage',
     duration: 5,
     logs: [
-      ['13:47:58', '[TASK] - # Uploading static assets to Edge Storage'],
+      ['13:47:58', '[TASK] - # Uploading static assets to Object Storage'],
       ['13:47:59', 'create mode 100644 src/main.js'],
       ['13:47:59', 'create mode 100644 src/router/index.js'],
       ['13:48:01', '[TASK] - # 24 files uploaded (1.2 MB)'],
       ['13:48:02', '[TASK] - # Upload completed successfully!']
     ],
     failLogs: [
-      ['13:47:58', '[TASK] - # Uploading static assets to Edge Storage'],
-      ['13:48:00', '[ERROR] - # Edge Storage returned 503 Service Unavailable'],
+      ['13:47:58', '[TASK] - # Uploading static assets to Object Storage'],
+      ['13:48:00', '[ERROR] - # Object Storage returned 503 Service Unavailable'],
       ['13:48:02', '[ERROR] - # Upload interrupted at 14/24 files.']
     ]
   },
   {
     key: 'application',
-    title: 'Edge Application',
+    title: 'Application',
     description: 'Application and cache settings created',
     duration: 5,
     logs: [
-      ['13:48:03', '[TASK] - # Creating Edge Application'],
+      ['13:48:03', '[TASK] - # Creating Application'],
       ['13:48:05', '[TASK] - # Cache Setting __DEFAULT__ created'],
-      ['13:48:07', '[TASK] - # Edge Application created successfully!']
+      ['13:48:07', '[TASK] - # Application created successfully!']
     ],
     failLogs: [
-      ['13:48:03', '[TASK] - # Creating Edge Application'],
-      ['13:48:05', '[ERROR] - # Edge Application could not be created'],
+      ['13:48:03', '[TASK] - # Creating Application'],
+      ['13:48:05', '[ERROR] - # Application could not be created'],
       ['13:48:06', '403 Forbidden: the account has reached its application limit'],
       ['13:48:07', '[ERROR] - # Deployment aborted.']
     ]

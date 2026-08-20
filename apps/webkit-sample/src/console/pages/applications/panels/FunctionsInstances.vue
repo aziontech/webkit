@@ -68,9 +68,9 @@
   // ../../components/AddVariableDrawer.vue set), with the band's guidance said once in
   // its `Section` hint.
   //
-  // The "Functions Instance" button itself is on the page's tab row, not in this
-  // heading (ApplicationDetail owns that row). The flow stays here: the shell calls
-  // the `openCreate` this view exposes.
+  // The "Add Functions Instance" button is IN THIS HEADING, not on the page's tab row
+  // it used to ride. A tab is its own page, so its create action belongs where every
+  // second-level list puts it — beside the heading that names the list.
   import CardBox from '@aziontech/webkit/card-box'
   import InputText from '@aziontech/webkit/input-text'
   import Select from '@aziontech/webkit/select'
@@ -86,14 +86,24 @@
   import FieldStack from '../../../components/form/FieldStack.vue'
   import ResourceDrawer from '../../../components/form/ResourceDrawer.vue'
   import FunctionArgsFields from '../../../components/function/FunctionArgsFields.vue'
-  import FilterBar from '../../../components/list/FilterBar.vue'
+  import AuthorCell from '../../../components/list/AuthorCell.vue'
+  import ColumnsButton from '../../../components/list/ColumnsButton.vue'
+  import FilterButton from '../../../components/list/FilterButton.vue'
+  import FilterChips from '../../../components/list/FilterChips.vue'
   import LastModifiedCell from '../../../components/list/LastModifiedCell.vue'
   import ControlsHeader from '../../../components/page/ControlsHeader.vue'
+  import HeadingAction from '../../../components/page/HeadingAction.vue'
   import PageHeading from '../../../components/page/PageHeading.vue'
   import Section from '../../../components/page/Section.vue'
   import { sleep } from '../../../lib/behavior/forms'
   import { useListFilters } from '../../../lib/behavior/list-state'
   import { countInstance, functionById, functionOptionsFor } from '../../../lib/data/functions'
+  import { productFirstUse } from '../../../lib/data/product-empty-states'
+
+  // Where `Documentation` goes. Taken from the registry rather than restated: these tabs are
+  // parts of an application, so the module's own doc URL is the right destination
+  // and lib/data/product-empty-states.js already holds it.
+  const HELP = productFirstUse('applications').learnMore.href
 
   // Monaco is megabytes of editor plus its language workers, and it is only ever
   // mounted inside this panel's drawer — so it loads when that drawer opens, not
@@ -114,10 +124,12 @@
   // is the API's own flag on the binding (a rule can call an inactive instance and
   // nothing runs), and Last Modified says who touched it and when.
   const columns = [
-    { accessorKey: 'name', header: 'Name', principal: true, enableSorting: true },
+    { accessorKey: 'name', header: 'Name', principal: true, hideable: false, enableSorting: true },
+    { accessorKey: 'id', header: 'ID' },
     { accessorKey: 'edgeFunction', header: 'Function' },
     { accessorKey: 'args', header: 'Arguments', grow: 2 },
     { accessorKey: 'status', header: 'Status', enableSorting: true },
+    { accessorKey: 'author', header: 'Last Editor', enableSorting: true, grow: 2 },
     { accessorKey: 'lastModified', header: 'Last Modified', enableSorting: true, grow: 2 }
   ]
 
@@ -290,7 +302,6 @@
   }
 
   // Opened from the page's tab row (ApplicationDetail).
-  defineExpose({ openCreate })
 
   // Reset on close, so reopening never shows the last attempt's values or errors —
   // and never opens the create with the last edit's record still behind it.
@@ -446,6 +457,16 @@
   // narrowed set could strand.
   const { filters, search, visibleRows: visibleInstances } = useListFilters(filterFields, rows)
 
+  // Which columns are switched off, driven by the Columns button beside the filter
+  // (../../../components/list/ColumnsButton.vue). Only a HIDDEN column is ever recorded, so this
+  // never has to be kept in step with the column model above.
+  //
+  // ID SHIPS OFF. It is the column an operator wants when they are quoting a resource
+  // into a support thread or an API call, and almost never while scanning the list —
+  // so it starts hidden and is one switch away. That is the whole point of the panel:
+  // a column can be available without being in the way by default.
+  const columnVisibility = ref({ id: false })
+
   // OPENING THE BOUND FUNCTION. The instance is this application's binding; the code is
   // the Functions module's record, so the Function column leaves for that module's own
   // page rather than reproducing a second, lesser view of it here. A `router-link` with
@@ -557,7 +578,17 @@
       title="Functions Instances"
       description="Edge functions instantiated on this application."
       size="small"
-    />
+      :documentation="HELP"
+    >
+      <template #actions>
+        <HeadingAction
+          label="Add Functions Instance"
+          kind="primary"
+          icon="pi pi-plus"
+          @click="openCreate"
+        />
+      </template>
+    </PageHeading>
 
     <!-- The page's parent section. It holds one section here — the controls row
          over the table it narrows, at the GROUP step — and spaces whatever sits
@@ -573,7 +604,7 @@
                rather than wrapping (see ui/ControlsHeader.vue). -->
           <InputText
             v-model="search"
-            size="large"
+            size="medium"
             placeholder="Search functions instances"
             aria-label="Search functions instances"
             class="min-w-36 grow basis-(--container-2xs)"
@@ -585,11 +616,17 @@
               />
             </template>
           </InputText>
+          <FilterButton
+            v-model="filters"
+            :fields="filterFields"
+          />
+          <ColumnsButton
+            v-model="columnVisibility"
+            :columns="columns"
+          />
         </ControlsHeader>
 
-        <!-- The filter bar takes its own row: it grows as filters are applied, so
-               sharing the controls row would make the search field jump width. -->
-        <FilterBar
+        <FilterChips
           v-model="filters"
           :fields="filterFields"
         />
@@ -598,6 +635,7 @@
           <template #content>
             <Table
               v-model:globalFilter="search"
+              v-model:columnVisibility="columnVisibility"
               :data="visibleInstances"
               :columns="columns"
               row-key="id"
@@ -665,12 +703,17 @@
                    (name on its tooltip) over the relative time — the same cell every
                    console list ends on (ui/LastModifiedCell.vue), which is why there is
                    no separate author column. -->
-              <template #cell-lastModified="{ row }">
-                <LastModifiedCell
+              <!-- WHO and WHEN are two columns now, so each cell says one thing:
+                   the face and the name here, the relative time next to it. -->
+              <template #cell-author="{ row }">
+                <AuthorCell
                   :author="row.author"
                   :avatar-src="row.authorAvatar"
-                  :date="row.modifiedAt"
                 />
+              </template>
+
+              <template #cell-lastModified="{ row }">
+                <LastModifiedCell :date="row.modifiedAt" />
               </template>
             </Table>
           </template>

@@ -1,5 +1,5 @@
 <script setup>
-  // Application → Main Settings. Core configuration for one edge application, shaped as
+  // Application → Main Settings. Core configuration for one application, shaped as
   // TWO ItemGroups — General and Modules — committed as ONE page.
   //
   // ONE SAVE FOR THE PAGE, from the shared bar (../../components/ui/SettingsSaveBar.vue),
@@ -109,7 +109,7 @@
     {
       key: 'functions',
       title: 'Functions',
-      description: 'Build ultra-low latency functions that run on the edge.'
+      description: 'Build ultra-low latency functions that run on Azion.'
     },
     {
       key: 'image_processor',
@@ -148,7 +148,7 @@
     >
       <PageHeading
         title="Main Settings"
-        description="Core configuration for this edge application."
+        description="Core configuration for this application."
         size="small"
       />
 
@@ -164,7 +164,7 @@
           anchor
           :divided="false"
           title="General"
-          hint="How this application is identified across the console, and whether it is serving traffic at the edge."
+          hint="How this application is identified across the console, and whether it is serving traffic."
         >
           <CardBox :padded="false">
             <template #content>
@@ -190,7 +190,7 @@
                   <Item.Content>
                     <Item.Title>Active</Item.Title>
                     <Item.Description>
-                      When disabled, the application stops serving traffic at the edge.
+                      When disabled, the application stops serving traffic.
                     </Item.Description>
                   </Item.Content>
                   <Item.Actions class="justify-end">
@@ -301,7 +301,7 @@
       :saving="saving"
       :route-guard="false"
       label="Application settings changed."
-      hint="Saving publishes them to the edge on the next deployment."
+      hint="Saving publishes them on the next deployment."
       @save="save"
       @discard="discard"
     />

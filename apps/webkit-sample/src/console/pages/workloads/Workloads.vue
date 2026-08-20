@@ -1,12 +1,13 @@
 <script setup>
   // Workloads list — the Azion Console "Workloads" module. The app shell (sidebar +
-  // GlobalHeader breadcrumb) comes from AppLayout; this page renders a CONTROLS HEADER
-  // (filter + search, "Documentation" / "New Workload" on the right)
-  // over a data-driven <Table> whose rows open the workload detail view. As a
-  // first-level module list it carries no navigation tabs, and no page heading — the
-  // module name already IS the header breadcrumb crumb (see ui/ControlsHeader.vue).
+  // GlobalHeader breadcrumb) comes from AppLayout; this page renders a PAGE HEADING
+  // (title + description + the "Create workload" create) over a CONTROLS HEADER (search,
+  // then the Filter button) over a data-driven <Table> whose rows open the workload detail
+  // view. As a first-level module list it carries no navigation tabs; the heading names
+  // the module and the controls row only narrows the list
+  // (../../components/page/PageHeading.vue, ../../components/page/ControlsHeader.vue).
   //
-  // Narrowing is a FILTER BAR of CHIPS (ui/FilterBar.vue) — the one shape every
+  // Narrowing is the FILTER BUTTON (list/FilterButton.vue) — the one shape every
   // module list uses, described in the webkit-lists skill. The COLUMNS decide the
   // fields: every enumerable column becomes one field (Author, Status) and the date
   // column becomes relative periods plus a Custom month grid (Last Modified); the
@@ -16,7 +17,6 @@
   // The bar pre-filters `:data`; the search field narrows what is left, through the
   // table's own global filter. See Applications.vue for why the table's own filter
   // state cannot host these.
-  import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
   import CopyButton from '@aziontech/webkit/copy-button'
   import Dropdown from '@aziontech/webkit/dropdown'
@@ -32,11 +32,16 @@
   import { useRoute, useRouter } from 'vue-router'
 
   import ProductFirstUse from '../../components/home/ProductFirstUse.vue'
+  import AuthorCell from '../../components/list/AuthorCell.vue'
+  import ColumnsButton from '../../components/list/ColumnsButton.vue'
   import DeleteDialog from '../../components/list/DeleteDialog.vue'
   import DomainOverflowPopover from '../../components/list/DomainOverflowPopover.vue'
-  import FilterBar from '../../components/list/FilterBar.vue'
+  import FilterButton from '../../components/list/FilterButton.vue'
+  import FilterChips from '../../components/list/FilterChips.vue'
   import LastModifiedCell from '../../components/list/LastModifiedCell.vue'
   import ControlsHeader from '../../components/page/ControlsHeader.vue'
+  import HeadingAction from '../../components/page/HeadingAction.vue'
+  import PageHeading from '../../components/page/PageHeading.vue'
   import AppLayout from '../../components/shell/AppLayout.vue'
   import { DATE_PRESETS, formatDateRange, matchDate } from '../../lib/behavior/filter-bar'
   import { useListFilters } from '../../lib/behavior/list-state'
@@ -64,9 +69,11 @@
   const workloads = ref([...WORKLOADS])
 
   const columns = [
-    { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true },
+    { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, hideable: false },
+    { accessorKey: 'id', header: 'ID' },
     { accessorKey: 'domain', header: 'Domains', grow: 2 },
     { accessorKey: 'status', header: 'Status', enableSorting: true },
+    { accessorKey: 'owner', header: 'Last Editor', enableSorting: true, grow: 2 },
     { accessorKey: 'lastModified', header: 'Last Modified', enableSorting: true, grow: 2 },
     { id: 'actions', kind: 'action', hideable: false }
   ]
@@ -138,6 +145,16 @@
     visibleRows: filteredWorkloads,
     loading: tenancyReloading
   } = useListFilters(filterFields, allWorkloads, { pageSize: 10 })
+
+  // Which columns are switched off, driven by the Columns button beside the filter
+  // (../../components/list/ColumnsButton.vue). Only a HIDDEN column is ever recorded, so this
+  // never has to be kept in step with the column model above.
+  //
+  // ID SHIPS OFF. It is the column an operator wants when they are quoting a resource
+  // into a support thread or an API call, and almost never while scanning the list —
+  // so it starts hidden and is one switch away. That is the whole point of the panel:
+  // a column can be available without being in the way by default.
+  const columnVisibility = ref({ id: false })
 
   const createWorkload = () =>
     router.push({ path: '/workloads/new', query: { email: userEmail.value } })
@@ -226,9 +243,33 @@
       class="flex min-h-full flex-col"
       :class="accountEmpty ? 'layout-column-focused' : 'layout-column'"
     >
-      <!-- The page's parent section. A module list opens straight on it (no
-           PageHeading — the module name is the breadcrumb crumb), so the
-           `:first-child` rule zeroes its step and the boundary is its top space. -->
+      <!-- THE PAGE HEADING. A first-level resource page names itself: the module name
+           over one line saying what the module is, with the module's own action on the
+           right. The breadcrumb says WHERE you are; the heading says WHAT this page is,
+           and it gives that action one fixed home above the list instead of a control
+           that rides the row narrowing it.
+           `size="medium"` is the first-level list scale (components/page/PageHeading.vue):
+           the title names the collection, and the table under it is what the page is for.
+           The parent section below is no longer `:first-child`, so `.layout-section-start`
+           opens it at the boundary step — the list sits tight under the heading (theme
+           semantic/layouts § "THE PAGE SHAPE"). -->
+      <PageHeading
+        v-if="!accountEmpty"
+        size="medium"
+        title="Workloads"
+        description="View and manage your workloads."
+        :documentation="firstUse.learnMore.href"
+      >
+        <template #actions>
+          <HeadingAction
+            label="Create workload"
+            kind="primary"
+            icon="pi pi-plus"
+            @click="createWorkload"
+          />
+        </template>
+      </PageHeading>
+
       <!-- FIRST USE, IN HOME'S CONTAINER.
            The same box the first access uses on /home (./HomeEmptyState.vue) and the
            /empty-states gallery around it (../ProductEmptyStates.vue): centred in the
@@ -259,10 +300,9 @@
         <!-- ONE section: the controls row narrows the table under it, so the two
              sit at --layout-group-gap. -->
         <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-          <!-- First-level module list: no PageHeading — the module name already IS the
-               header breadcrumb crumb (AppLayout). The page opens with its CONTROLS
-               instead — the search, the module's own actions on the right — then the
-               filter bar, and the borderless Table follows in a flush CardBox. -->
+          <!-- The CONTROLS row, under the heading: the narrowing, on a list the page can
+               already show — search on the left, nothing on the right, because the
+               module's action sits in the heading above. -->
           <ControlsHeader>
             <!-- Search drives the table's global filter from outside the card, so the
                  field is a plain InputText (`Table.Search` is context-aware and only
@@ -270,7 +310,7 @@
                  their own row below, so nothing here competes for the slack. -->
             <InputText
               v-model="search"
-              size="large"
+              size="medium"
               placeholder="Search workloads"
               aria-label="Search workloads"
               class="min-w-36 grow basis-(--container-2xs)"
@@ -282,23 +322,17 @@
                 />
               </template>
             </InputText>
-
-            <template #actions>
-              <Button
-                label="New Workload"
-                kind="primary"
-                size="large"
-                icon="pi pi-plus"
-                @click="createWorkload"
-              />
-            </template>
+            <FilterButton
+              v-model="filters"
+              :fields="filterFields"
+            />
+            <ColumnsButton
+              v-model="columnVisibility"
+              :columns="columns"
+            />
           </ControlsHeader>
 
-          <!-- The filter bar takes its own row rather than sitting in the controls
-               header: it grows as filters are applied (a chip gains a value half, and
-               a narrow viewport wraps the row), and sharing a row with the search
-               would make the field jump width as filters come and go. -->
-          <FilterBar
+          <FilterChips
             v-model="filters"
             :fields="filterFields"
           />
@@ -309,6 +343,7 @@
                 <Table
                   v-model:pagination="pagination"
                   v-model:globalFilter="search"
+                  v-model:columnVisibility="columnVisibility"
                   :data="filteredWorkloads"
                   :columns="columns"
                   row-key="id"
@@ -377,13 +412,17 @@
                       size="medium"
                     />
                   </template>
-
-                  <template #cell-lastModified="{ row }">
-                    <LastModifiedCell
+                  <!-- WHO and WHEN are two columns now, so each cell says one thing:
+                       the face and the name here, the relative time next to it. -->
+                  <template #cell-owner="{ row }">
+                    <AuthorCell
                       :author="row.owner"
                       :avatar-src="row.ownerAvatar"
-                      :date="row.modifiedAt"
                     />
+                  </template>
+
+                  <template #cell-lastModified="{ row }">
+                    <LastModifiedCell :date="row.modifiedAt" />
                   </template>
 
                   <template #cell-actions="{ row }">

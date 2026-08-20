@@ -16,6 +16,7 @@
     "@aziontech/icons": "workspace:*",
     "@aziontech/theme": "workspace:*",
     "@aziontech/webkit": "workspace:*",
+    "@aziontech/webkit-docs": "workspace:*",
     "@guolao/vue-monaco-editor": "^1.6.0",
     "@monaco-editor/loader": "^1.7.0",
     "@vue-flow/core": "^1.48.2",

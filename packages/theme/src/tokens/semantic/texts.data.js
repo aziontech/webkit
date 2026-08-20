@@ -9,6 +9,16 @@
  * Optional `states` emits pseudo-class rules (e.g. `.text-link:hover`). Bundles
  * with `fontSize: 'inherit'` are omitted from the Tailwind `fontSize` preset.
  *
+ * `textWrapStyle` — the LONGHAND, never the `textWrap` shorthand. `text-wrap: pretty`
+ * is `text-wrap-mode: wrap` + `text-wrap-style: pretty`, so a typography utility
+ * written that way does not just choose how lines break: it decides THAT the text
+ * wraps, and it beats `truncate` / `whitespace-nowrap` on the same element (equal
+ * specificity, and this utility sorts later). Every `truncate text-body-sm` in the
+ * codebase therefore wrapped to two lines with an ellipsis that never appeared —
+ * measurably, table rows grew from 48px to 56px wherever a cell's text was longer
+ * than its column. The longhand keeps the balance/pretty intent and leaves wrapping
+ * to whoever owns the element.
+ *
  * Mapping used during the port:
  *   old `large`  (≤640) → `_`
  *   old `medium` (≤768) → `sm` (≥640)
@@ -42,36 +52,43 @@ export const textsData = {
     fontFamily: fontFamily.display
   },
   'text-heading-2xl': {
+    textWrapStyle: 'balance',
     fontSize: { _: fontSize['3xl'], sm: fontSize['5xl'], md: fontSize['6xl'] },
     lineHeight: leading.tight,
     fontWeight: fontWeight.light
   },
   'text-heading-xl': {
+    textWrapStyle: 'balance',
     fontSize: { _: fontSize.xl, sm: fontSize['3xl'], md: fontSize['4xl'] },
     lineHeight: leading.tight,
     fontWeight: fontWeight.light
   },
   'text-heading-lg': {
+    textWrapStyle: 'balance',
     fontSize: { _: fontSize.lg, md: fontSize['3xl'] },
     lineHeight: leading.tight,
     fontWeight: fontWeight.light
   },
   'text-heading-md': {
+    textWrapStyle: 'balance',
     fontSize: { _: fontSize.base, sm: fontSize.xl, md: fontSize['2xl'] },
     lineHeight: leading.tight,
     fontWeight: fontWeight.light
   },
   'text-heading-sm': {
+    textWrapStyle: 'balance',
     fontSize: { _: fontSize.sm, sm: fontSize.base, md: fontSize.lg },
     lineHeight: leading.snug,
     fontWeight: fontWeight.light
   },
   'text-heading-xs': {
+    textWrapStyle: 'balance',
     fontSize: fontSize.base,
     lineHeight: leading.snug,
     fontWeight: fontWeight.light
   },
   'text-heading-xxs': {
+    textWrapStyle: 'balance',
     fontSize: fontSize.sm,
     lineHeight: leading.snug,
     fontWeight: fontWeight.light
@@ -113,26 +130,31 @@ export const textsData = {
     letterSpacing: tracking.normal
   },
   'text-body-lg': {
+    textWrapStyle: 'pretty',
     fontSize: { _: fontSize.base, md: fontSize.lg },
     fontWeight: fontWeight.light,
     lineHeight: leading.snug
   },
   'text-body-md': {
+    textWrapStyle: 'pretty',
     fontSize: fontSize.base,
     fontWeight: fontWeight.light,
     lineHeight: leading.snug
   },
   'text-body-sm': {
+    textWrapStyle: 'pretty',
     fontSize: fontSize.sm,
     fontWeight: fontWeight.light,
     lineHeight: leading.snug
   },
   'text-body-xs': {
+    textWrapStyle: 'pretty',
     fontSize: fontSize.xs,
     fontWeight: fontWeight.light,
     lineHeight: leading.snug
   },
   'text-body-xxs': {
+    textWrapStyle: 'pretty',
     fontSize: fontSize.xs,
     fontWeight: fontWeight.light,
     lineHeight: leading.normal

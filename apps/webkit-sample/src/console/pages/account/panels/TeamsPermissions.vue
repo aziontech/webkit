@@ -14,7 +14,6 @@
   // own scroll region because the shell hands each tab a plain flex column (see
   // AccountSettings.vue).
   import Avatar from '@aziontech/webkit/avatar'
-  import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
   import Dropdown from '@aziontech/webkit/dropdown'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -27,12 +26,22 @@
   import { computed, ref } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
+  import ColumnsButton from '../../../components/list/ColumnsButton.vue'
   import DeleteDialog from '../../../components/list/DeleteDialog.vue'
-  import FilterBar from '../../../components/list/FilterBar.vue'
+  import FilterButton from '../../../components/list/FilterButton.vue'
+  import FilterChips from '../../../components/list/FilterChips.vue'
   import ControlsHeader from '../../../components/page/ControlsHeader.vue'
+  import HeadingAction from '../../../components/page/HeadingAction.vue'
   import PageHeading from '../../../components/page/PageHeading.vue'
   import { useListFilters } from '../../../lib/behavior/list-state'
   import { permissionLabel, permissionLabelsFor, useTeams } from '../../../lib/data/teams.js'
+
+  // Where `Documentation` on the page heading goes. The docs ROOT, not a deep link: the
+  // account-side topics have no entry in lib/data/product-empty-states.js (that
+  // registry covers the first-level product modules), and pointing at a path we have
+  // not verified is worse than pointing at the index. Replace with the topic's own URL
+  // when there is one.
+  const HELP = 'https://www.azion.com/en/documentation/'
 
   const route = useRoute()
   const router = useRouter()
@@ -45,11 +54,23 @@
   const { teams, createTeam: addTeam, removeTeam } = useTeams()
 
   const teamColumns = [
-    { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, grow: 2 },
+    {
+      accessorKey: 'name',
+      header: 'Name',
+      enableSorting: true,
+      principal: true,
+      hideable: false,
+      grow: 2
+    },
     { accessorKey: 'permissions', header: 'Permissions', grow: 3 },
     { accessorKey: 'status', header: 'Status' },
     { id: 'actions', kind: 'action', hideable: false }
   ]
+
+  // Which columns are switched off, driven by the Columns button on the controls
+  // row (../../../components/list/ColumnsButton.vue). Only a HIDDEN column is ever
+  // recorded, so this never has to be kept in step with the column model above.
+  const columnVisibility = ref({})
 
   const teamStatusSeverity = (status) =>
     ({ Active: 'success', Inactive: 'secondary' })[status] ?? 'secondary'
@@ -127,10 +148,22 @@
 <template>
   <div class="min-h-0 flex-1 overflow-auto">
     <section class="layout-column layout-boundary flex min-w-0 flex-col">
+      <!-- The page's action is on the HEADING, not in the controls row below it — see
+           the note in ./Credentials.vue. -->
       <PageHeading
         title="Teams Permissions"
         description="Manage your account's teams and the access level each one grants."
-      />
+        :documentation="HELP"
+      >
+        <template #actions>
+          <HeadingAction
+            label="Create team"
+            kind="primary"
+            icon="pi pi-plus"
+            @click="createTeam"
+          />
+        </template>
+      </PageHeading>
 
       <!-- The page's parent section. It holds one section here — the controls row
            over the table it narrows, at the GROUP step — and spaces whatever sits
@@ -146,7 +179,7 @@
                  rather than wrapping (see ui/ControlsHeader.vue). -->
             <InputText
               v-model="search"
-              size="large"
+              size="medium"
               placeholder="Search teams"
               aria-label="Search teams"
               class="min-w-36 grow basis-(--container-2xs)"
@@ -159,20 +192,17 @@
               </template>
             </InputText>
 
-            <template #actions>
-              <Button
-                label="Create team"
-                kind="primary"
-                size="large"
-                icon="pi pi-plus"
-                @click="createTeam"
-              />
-            </template>
+            <FilterButton
+              v-model="filters"
+              :fields="filterFields"
+            />
+            <ColumnsButton
+              v-model="columnVisibility"
+              :columns="teamColumns"
+            />
           </ControlsHeader>
 
-          <!-- The filter bar takes its own row: it grows as filters are applied, so
-               sharing the controls row would make the search field jump width. -->
-          <FilterBar
+          <FilterChips
             v-model="filters"
             :fields="filterFields"
           />
@@ -181,6 +211,7 @@
             <template #content>
               <Table
                 v-model:globalFilter="search"
+                v-model:columnVisibility="columnVisibility"
                 :data="visibleTeams"
                 :columns="teamColumns"
                 row-key="id"
@@ -222,21 +253,30 @@
                       </Popover.Trigger>
 
                       <Popover.Content>
-                        <div
-                          class="flex max-h-(--container-xs) flex-col overflow-auto p-(--spacing-xxs)"
+                        <!-- The count stays OUT of the scroller so it cannot scroll away
+                             from the list it counts. -->
+                        <p
+                          class="border-b border-(--border-default) px-(--spacing-sm) py-(--spacing-xs) text-overline-sm text-(--text-muted)"
                         >
-                          <p
-                            class="px-(--spacing-xs) py-(--spacing-xxs) text-overline-sm text-(--text-muted)"
-                          >
-                            {{ row.permissions.length }} permissions
-                          </p>
+                          {{ row.permissions.length }} permissions
+                        </p>
+
+                        <!-- BLOCK layout, not `flex flex-col`: a flex column under a
+                             max-height shrinks its items to fit instead of overflowing,
+                             which clips every line to a sliver and leaves
+                             `scrollHeight === clientHeight` so `overflow-auto` has
+                             nothing to scroll. `overscroll-contain` keeps the wheel from
+                             chaining to the page, which would re-anchor the panel
+                             mid-scroll. -->
+                        <div
+                          class="max-h-(--container-xs) overflow-auto overscroll-contain p-(--spacing-xxs)"
+                        >
                           <span
                             v-for="label in permissionList(row)"
                             :key="label"
-                            class="px-(--spacing-xs) py-(--spacing-xxs) text-body-sm text-(--text-default)"
+                            class="block truncate px-(--spacing-xs) py-(--spacing-xxs) text-body-sm text-(--text-default)"
+                            >{{ label }}</span
                           >
-                            {{ label }}
-                          </span>
                         </div>
                       </Popover.Content>
                     </Popover>

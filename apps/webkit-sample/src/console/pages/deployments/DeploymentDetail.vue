@@ -43,7 +43,7 @@
   import { formatListDate } from '@shared/lib/dates'
   import DeploymentLogs from '@shared/ui/deployment/DeploymentLogs.vue'
   import DeploymentLogsControls from '@shared/ui/deployment/DeploymentLogsControls.vue'
-  import { computed, ref, useTemplateRef } from 'vue'
+  import { computed, ref } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
   import PageHeading from '../../components/page/PageHeading.vue'
@@ -110,11 +110,23 @@
 
   // The log view, owned here because the CONTROL is here: the switch sits in the
   // pipeline card's header (see the template), so the state it drives cannot live
-  // inside the component below it. The copy payload travels the other way — the
-  // logs component knows which lines are revealed, and exposes them.
+  // inside the component below it. Copying is not owned here at all — LogView carries
+  // its own control, pinned over the lines it copies.
   const logView = ref('phased')
-  const logsRef = useTemplateRef('logsRef')
-  const logsText = computed(() => logsRef.value?.logsText ?? '')
+
+  // A deployment this console did not record streams its pipeline LIVE (see the
+  // template), and that stream is the only thing that knows when it ends: the record
+  // still says "Building", because nothing re-fetches it in this sample. Without
+  // this, such a page kept a spinner and "Building…" in the card header — and kept
+  // the progress bar under a pipeline whose every step had already gone green.
+  const streamSettled = ref(false)
+  const onStreamSettled = () => {
+    streamSettled.value = true
+  }
+
+  // What the CARD reports: the record's own outcome, or the stream's if the run
+  // finished in front of the reader.
+  const settled = computed(() => finished.value || streamSettled.value)
 
   // The heading's supporting line: when the run started, then what it has to show
   // for it. Both halves are facts about the RUN, which is what a heading whose
@@ -277,7 +289,7 @@
               <Button
                 label="Visit"
                 kind="secondary"
-                size="medium"
+                size="large"
                 icon="pi pi-external-link"
                 :href="deploy.url"
                 :disabled="!deploy.url"
@@ -294,7 +306,7 @@
                   <IconButton
                     icon="pi pi-ellipsis-h"
                     kind="outlined"
-                    size="medium"
+                    size="large"
                     aria-label="Deployment actions"
                   />
                 </Tooltip>
@@ -558,19 +570,18 @@
             <template #header>
               <p class="text-heading-xs text-(--text-default)">Deployment</p>
               <!-- This side of the header changes with the run: the live status
-                   while it is building, the two log controls once it has settled.
-                   Both belong to the PIPELINE — "Building…" is a statement about the
-                   steps directly below, and the switch/copy act on their output — so
-                   they sit on the pipeline's own card rather than in the page header.
-                   The rule lives in ui/DeploymentLogsControls.vue, shared with the
-                   deploy flow card so the two cannot disagree. -->
+                   while it is building, the log view switch once it has settled. Both
+                   belong to the PIPELINE — "Building…" is a statement about the steps
+                   directly below, and the switch acts on their output — so they sit on
+                   the pipeline's own card rather than in the page header. The rule
+                   lives in ui/DeploymentLogsControls.vue, shared with the deploy flow
+                   card so the two cannot disagree. -->
               <DeploymentLogsControls
                 v-model:view="logView"
-                :settled="finished"
+                :settled="settled"
                 :status-label="deploy.status"
                 :severity="status.severity"
                 :loading="status.loading"
-                :logs-text="logsText"
               />
             </template>
 
@@ -594,8 +605,8 @@
 
               <!-- `label=\"Logs\"`, not the default \"Deployment Logs\": the card header
                    one line above already says Deployment. `:controls=\"false\"` — the
-                   switch and the copy are rendered in that header, and the wall-clock
-                   is in the page heading.
+                   switch is rendered in that header, and the wall-clock is in the
+                   page heading.
 
                    A recorded run hands over its own pipeline. A row-shaped deployment
                    has none, so `steps` is left undefined and the view falls back to
@@ -604,7 +615,6 @@
                    honest answer to "where is it?". -->
               <DeploymentLogs
                 v-else
-                ref="logsRef"
                 v-model:view="logView"
                 label="Logs"
                 :controls="false"
@@ -613,6 +623,8 @@
                 :fail-at="deploy.failedAt"
                 :active-at="deploy.activeStep"
                 :total-label="deploy.duration"
+                @finished="onStreamSettled"
+                @failed="onStreamSettled"
               />
             </template>
           </CardBox>

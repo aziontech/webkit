@@ -76,14 +76,14 @@ export const RESOURCE_DEPLOY_DURATION_MS = 14_000
  * Exported because `step` and the copy MUST agree: the view names the failing
  * step ("Failed on Rules Engine") while this text explains it, and a
  * page that picked its own failing step would caption a broken Build with a
- * story about the Edge Application. One record, read by both.
+ * story about the Application. One record, read by both.
  */
 export const DEPLOY_ERROR = {
   step: 'rules',
   code: 'rules_engine_conflict',
   message: 'The Rules Engine rejected this deployment.',
   detail:
-    'The template built, its assets were uploaded and the Edge Application was created — but a rule with the same behavior is already bound to this domain, so the Rules Engine refused the configuration. Nothing was published, so a redeploy starts from the same commit.'
+    'The template built, its assets were uploaded and the Application was created — but a rule with the same behavior is already bound to this domain, so the Rules Engine refused the configuration. Nothing was published, so a redeploy starts from the same commit.'
 }
 
 // Every run ever started this session, newest first. A plain module-level ref:

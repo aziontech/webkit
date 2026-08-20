@@ -57,7 +57,8 @@
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
-  import FilterBar from '../../components/list/FilterBar.vue'
+  import FilterButton from '../../components/list/FilterButton.vue'
+  import FilterChips from '../../components/list/FilterChips.vue'
   import EventDocument from '../../components/observability/EventDocument.vue'
   import EventFieldRow from '../../components/observability/EventFieldRow.vue'
   import EventVolumeChart from '../../components/observability/EventVolumeChart.vue'
@@ -561,8 +562,8 @@
         class="flex shrink-0 flex-col gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-lg) py-(--spacing-sm)"
       >
         <ControlsHeader>
-          <!-- No toolbar toggle for the filter bar: the panel owns its own hide trigger
-               and edge affordance, so a second control for the same state is noise. -->
+          <!-- No toolbar toggle for the field panel: it owns its own hide trigger and
+               edge affordance, so a second control for the same state is noise. -->
           <InputText
             v-model="search"
             size="medium"
@@ -588,11 +589,14 @@
               @click="refresh"
             />
           </template>
+          <FilterButton
+            v-model="filters"
+            :fields="filterFields"
+            size="medium"
+          />
         </ControlsHeader>
 
-        <!-- The filter bar takes its own row: it grows as filters are applied, so
-             sharing the controls row would make the search field jump width. -->
-        <FilterBar
+        <FilterChips
           v-model="filters"
           :fields="filterFields"
         />
@@ -624,9 +628,9 @@
           resizable
           collapsible
           aria-label="Fields"
-          collapse-aria-label="Hide the filter bar"
-          expand-aria-label="Show the filter bar"
-          resize-aria-label="Resize the filter bar"
+          collapse-aria-label="Hide the fields panel"
+          expand-aria-label="Show the fields panel"
+          resize-aria-label="Resize the fields panel"
           class="w-(--container-2xs)"
         >
           <template #header>

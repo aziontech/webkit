@@ -11,7 +11,7 @@
   //   deployedAt (Date) · date (display string)
   //   author · authorEmail (the Authors selector's key) · authorAvatar
   //
-  // Narrowing is a FILTER BAR of CHIPS (ui/FilterBar.vue) over the shared catalog in
+  // Narrowing is the FILTER BUTTON (list/FilterButton.vue) over the shared catalog in
   // src/lib/deployments.js — Status, Type, Environment and Author, what every
   // deployment surface narrows by, plus the Deployed window the module list adds. The
   // free-text search stays in the open, narrowing further through the table's global
@@ -41,6 +41,7 @@
   import { computed, ref, watch } from 'vue'
 
   import { applyFilters } from '../../lib/behavior/filter-bar'
+  import { DEPLOYMENT_COLUMNS } from '../../lib/data/deployment-columns'
   import {
     environmentSeverity,
     resourceHref,
@@ -48,7 +49,9 @@
     statusMeta
   } from '../../lib/data/deployments'
   import { useTenancyReload } from '../../lib/state/tenancy-reload'
-  import FilterBar from '../list/FilterBar.vue'
+  import AuthorCell from '../list/AuthorCell.vue'
+  import FilterButton from '../list/FilterButton.vue'
+  import FilterChips from '../list/FilterChips.vue'
   import LastModifiedCell from '../list/LastModifiedCell.vue'
 
   const props = defineProps({
@@ -78,22 +81,10 @@
   // not opt out truthfully (src/lib/tenancy-reload.js).
   const { tenancyReloading } = useTenancyReload()
 
-  // Column model. `versionId` is the principal column; it keeps the principal
-  // default share (2) because the id and the "Current" tag sit on ONE line — at
-  // `grow: 1` the tag squeezes the id, the row's identity, into an ellipsis. The
-  // trailing `actions` column is auto-pinned to the right edge.
-  const columns = [
-    { accessorKey: 'versionId', header: 'Version', enableSorting: true, principal: true },
-    { accessorKey: 'status', header: 'Status', enableSorting: true },
-    { accessorKey: 'resourceName', header: 'Resource', enableSorting: true, grow: 2 },
-    { accessorKey: 'resourceType', header: 'Type', enableSorting: true, grow: 2 },
-    { accessorKey: 'environment', header: 'Environment', enableSorting: true, grow: 2 },
-    // Author and Deployed are one column: the avatar identifies the person (name
-    // on its tooltip) and the timestamp reads relative, left-aligned — the same
-    // Last Modified cell every other console list uses.
-    { accessorKey: 'date', header: 'Deployed', enableSorting: true, grow: 3 },
-    { id: 'actions', kind: 'action', hideable: false }
-  ]
+  // The column model is shared with the pages above (../../lib/data/deployment-columns.js):
+  // they render the Columns button on their own controls row, outside this table.
+  const columns = DEPLOYMENT_COLUMNS
+
 
   // TWO models, not five. Both are `defineModel`, so an internal level that binds
   // neither gets local state for free while a first-level page that hoists the
@@ -102,6 +93,10 @@
   // catalog never adds a model.
   const search = defineModel('search', { type: String, default: '' })
   const filters = defineModel('filters', { type: Object, default: () => ({}) })
+  // Third model, same argument as the two above: a page that hoists the Columns
+  // button onto its controls row drives this; an internal level that binds nothing
+  // gets local state for free.
+  const columnVisibility = defineModel('columnVisibility', { type: Object, default: () => ({}) })
   const pagination = ref({ pageIndex: 0, pageSize: props.pageSize })
 
   // The bar pre-filters the rows, so the Table only ever sees what survives it; the
@@ -123,6 +118,7 @@
   <Table
     v-model:pagination="pagination"
     v-model:globalFilter="search"
+    v-model:columnVisibility="columnVisibility"
     :data="visibleDeployments"
     :columns="columns"
     row-key="id"
@@ -133,20 +129,19 @@
     :loading="tenancyReloading"
     @row-click="(event, row) => emit('row-click', event, row)"
   >
-    <!-- The same two controls the page can hoist, rendered here for an internal level.
-         Stacked, not side by side: the bar grows a value half per applied chip and
-         wraps to a second line, so sharing a row would make the search field jump
-         width as filters come and go — the same reason the page pattern gives the bar
-         its own row under the ControlsHeader. -->
+    <!-- The same controls the page can hoist, rendered here for an internal level, in
+         the same shape the page pattern uses: the search and the Filter button on one
+         row, and the applied chips on a row under them (../list/FilterChips.vue, which
+         renders nothing until something is applied). -->
     <template
       v-if="controls"
       #toolbar
     >
-      <div class="flex w-full flex-col gap-(--spacing-xs)">
-        <div class="flex w-full items-center justify-end">
+      <div class="flex w-full flex-col gap-(--layout-group-gap)">
+        <div class="flex w-full items-center gap-(--layout-group-gap)">
           <InputText
             v-model="search"
-            size="large"
+            size="medium"
             :placeholder="searchPlaceholder"
             :aria-label="searchPlaceholder"
             class="min-w-36 grow basis-(--container-2xs)"
@@ -158,8 +153,12 @@
               />
             </template>
           </InputText>
+          <FilterButton
+            v-model="filters"
+            :fields="fields"
+          />
         </div>
-        <FilterBar
+        <FilterChips
           v-model="filters"
           :fields="fields"
         />
@@ -250,15 +249,15 @@
       />
     </template>
 
-    <template #cell-date="{ row }">
-      <!-- Author + timestamp in one left-aligned cell (Applications.vue's Last
-           Modified): the avatar names the person on its tooltip, so a separate
-           Author column would repeat what this one already says. -->
-      <LastModifiedCell
+    <template #cell-author="{ row }">
+      <AuthorCell
         :author="row.author"
         :avatar-src="row.authorAvatar"
-        :date="row.deployedAt"
       />
+    </template>
+
+    <template #cell-date="{ row }">
+      <LastModifiedCell :date="row.deployedAt" />
     </template>
 
     <template #cell-actions="{ row }">

@@ -37,6 +37,7 @@
   import { useRoute, useRouter } from 'vue-router'
 
   import DeleteDialog from '../../components/list/DeleteDialog.vue'
+  import HeadingAction from '../../components/page/HeadingAction.vue'
   import PageTabs from '../../components/page/PageTabs.vue'
   import AppLayout from '../../components/shell/AppLayout.vue'
   import SqlTemplatesDrawer from '../../components/sql/SqlTemplatesDrawer.vue'
@@ -86,7 +87,7 @@
 
   // The selected table's schema, rendered as a data-driven Table.
   const schemaColumns = [
-    { accessorKey: 'name', header: 'Column', principal: true },
+    { accessorKey: 'name', header: 'Column', principal: true, hideable: false },
     { accessorKey: 'type', header: 'Type' },
     { accessorKey: 'constraints', header: 'Constraints', grow: 2 }
   ]
@@ -652,10 +653,9 @@
                     </span>
                   </template>
                   <template #actions>
-                    <Button
-                      label="Create Table"
+                    <HeadingAction
+                      label="Create table"
                       kind="secondary"
-                      size="large"
                       icon="pi pi-plus"
                       @click="openTableDrawer"
                     />
@@ -871,9 +871,7 @@
                       @click="comingSoon('Import data from CSV')"
                     />
                   </div>
-                  <p class="text-body-xs text-(--text-muted)">
-                    or drag and drop a CSV file here
-                  </p>
+                  <p class="text-body-xs text-(--text-muted)">or drag and drop a CSV file here</p>
                 </div>
                 <p
                   v-else-if="!filteredRows.length"
@@ -1221,9 +1219,7 @@
             </div>
 
             <!-- Footer: Showing X to Y of Z entries + page size + controls -->
-            <div
-              class="border-t border-(--border-default) px-(--spacing-sm) py-(--spacing-xs)"
-            >
+            <div class="border-t border-(--border-default) px-(--spacing-sm) py-(--spacing-xs)">
               <Paginator
                 :total="filteredResultRows.length"
                 :page-size="50"

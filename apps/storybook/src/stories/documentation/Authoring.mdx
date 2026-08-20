@@ -1,0 +1,468 @@
+import { Meta } from '@storybook/blocks'
+
+<Meta
+  title="Documentation/Authoring"
+  parameters={{
+    options: { showPanel: false },
+    controls: { disable: true },
+    actions: { disable: true },
+    docs: {
+      description: {
+        component: 'Everything an author may write in an Azion documentation `.mdx` file.'
+      }
+    }
+  }}
+/>
+
+# Authoring
+
+A documentation page is one `.mdx` file: frontmatter, markdown, and the component tags
+below. This page is the whole supported surface — anything outside it is left as literal
+text rather than silently dropped, so a typo shows up in the render instead of vanishing.
+
+## Frontmatter
+
+```mdx
+---
+title: Deploy an application
+description: By the end of this tutorial, an application will be live on the Azion Web Platform.
+---
+```
+
+`title` and `description` feed the masthead. A page that sets neither still renders — pass
+`title` and `description` to `DocPage` instead.
+
+## Prose
+
+Standard markdown, with no classes anywhere:
+
+<table style={{ width: '100%', borderCollapse: 'collapse', margin: '16px 0' }}>
+  <thead>
+    <tr>
+      <th
+        style={{
+          textAlign: 'left',
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-default)',
+          fontWeight: 500
+        }}
+      >
+        Syntax
+      </th>
+      <th
+        style={{
+          textAlign: 'left',
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-default)',
+          fontWeight: 500
+        }}
+      >
+        Renders as
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        <code>{'## Heading'}</code> / <code>{'### Heading'}</code>
+      </td>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        Section and sub-section headings, anchored and listed in the rail
+      </td>
+    </tr>
+    <tr>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        <code>{'**bold**'}</code>, <code>{'*italic*'}</code>
+      </td>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        Emphasis on the type scale
+      </td>
+    </tr>
+    <tr>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        <code>{'`code`'}</code>
+      </td>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        Inline code chip
+      </td>
+    </tr>
+    <tr>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        <code>{'[text](https://…)'}</code>
+      </td>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        A link; external targets open in a new tab
+      </td>
+    </tr>
+    <tr>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        <code>{'- item'}</code> / <code>{'1. item'}</code>
+      </td>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        Lists, one nesting level
+      </td>
+    </tr>
+    <tr>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        <code>{'> quote'}</code>
+      </td>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        Blockquote
+      </td>
+    </tr>
+    <tr>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        <code>{'| a | b |'}</code>
+      </td>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        A table on the webkit table tokens
+      </td>
+    </tr>
+    <tr>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        <code>{'```lang title="File"'}</code>
+      </td>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        A code block on webkit <code>{'CodeBlock'}</code>
+      </td>
+    </tr>
+    <tr>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        <code>{'---'}</code>
+      </td>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        A rule
+      </td>
+    </tr>
+  </tbody>
+</table>
+Headings at level 2 and 3 build the "On this page" rail. Repeated headings — a tutorial with a
+**Test it** after each path — get numbered anchors (`test-it`, `test-it-2`), so both the rail and
+the deep links stay unique.
+
+## Components
+
+### Callouts
+
+```mdx
+<Note>Templates integrated with GitHub ask you to connect your account first.</Note>
+
+<Warning>Deleting a workload releases its domain immediately.</Warning>
+```
+
+`<Note>`, `<Info>`, `<Tip>`, `<Check>`, `<Warning>`, `<Danger>`, `<Highlight>`. Each carries its
+own severity, icon and name, and **the name is the callout's title** — "Note", "Tip", "Warning" on
+the first row, the sentence the reader came for on the second. So don't repeat it in the copy: a
+`<Note>` that opens with "Note:" (or an `<Info>` that opens with "Before you start:") says the same
+thing twice.
+
+`title` replaces that name, for when there is something sharper to say. It reads as one row with
+the glyph, and the copy sits beneath it either way:
+
+```mdx
+<Warning title="Before you delete">Anything pointing at that domain stops resolving.</Warning>
+```
+
+`<Tip>` and `<Highlight>` are the kinds that claim nothing about stakes — they take the page's own
+surface and rule and spend their emphasis on the glyph, in Azion orange. Reach for them to draw the
+eye without implying risk. `<Highlight>` is also the one kind with no name of its own, so it shows
+a title only when you write one.
+
+A callout body is **inline prose** — sentences, links, inline code. The webkit `Message`
+lays its copy out inside a paragraph, so a list or a fenced block inside a callout would be
+invalid markup. Put those next to the callout, not in it.
+
+### Tooltips
+
+```mdx
+An <Tooltip headline="API" tip="Application Programming Interface: a set of protocols for software applications to communicate." cta="Read our API guide" href="/api-reference">API</Tooltip> is documented once and glossed everywhere it appears.
+```
+
+`tip` is the definition, `headline` names the term above it, and `cta` + `href` add a link the
+reader can travel to. It is the one component that is read **inside** a paragraph rather than
+between them, so the sentence keeps flowing around it.
+
+With no `cta` the panel is a passive tooltip. With one it becomes a small dialog the reader can
+enter — that is the only way the link is reachable without a mouse.
+
+### Steps
+
+```mdx
+<Steps>
+  <Step title="Access Azion Console." />
+  <Step title="Click + Create on the homepage.">Templates are grouped by framework.</Step>
+</Steps>
+```
+
+Never write the numbers. `Steps` numbers its children from the document order and drops the
+connector on the last one, so reordering the file renumbers the page.
+
+### Cards
+
+```mdx
+<CardGroup cols={3}>
+  <Card
+    title="Start from a template"
+    icon="pi pi-th-large"
+    href="/build/templates"
+  >
+    Ready-made projects that go live in a few clicks.
+  </Card>
+</CardGroup>
+```
+
+`cols` is the widest column count — 1, 2, 3 or 4. The grid collapses to one column on a
+phone, because a card is a glyph, a title and a sentence. A set whose cells are a mark plus
+one word can opt into two-up there with `mobileCols={2}`. A `Card` with no `href` is a plain
+surface, not a link, and a `Card` with no copy renders none — it ends on its title.
+
+### Item lists
+
+```mdx
+<ItemGroup>
+  <Item
+    title="Edge Functions"
+    icon="pi pi-code"
+    href="/build/edge-functions"
+  >
+    Build serverless applications on Azion's global network.
+  </Item>
+</ItemGroup>
+```
+
+The other half of `<CardGroup>`: one card, one column, and in each row a glyph, a name and the
+sentence that says what the thing is — the "Related products" band a page ends on. Reach for it
+when each entry needs a sentence to be understood, and for `<CardGroup>` when the names alone
+carry it. The rows are ruled by full-width dividers and sit flush to the card's edges.
+
+An `Item` with an `href` is a link end to end — the whole row is the hit area, one tab stop, and
+a trailing arrow marks it as travelling. Without one the row is inert and draws no hover. The
+`icon` is optional.
+
+### Code groups
+
+````mdx
+<CodeGroup>
+  ```bash npm
+  npx azion deploy --local
+  ```
+
+```bash pnpm
+pnpm dlx azion deploy --local
+```
+
+</CodeGroup>
+````
+
+The word after the language is the tab label; `title="…"` works too and also sets the file
+name in the block header. A lone fence outside a group renders through the same component.
+
+### Tabs and accordions
+
+```mdx
+<Tabs>
+  <Tab title="macOS">…</Tab>
+  <Tab title="Linux">…</Tab>
+</Tabs>
+
+<AccordionGroup>
+  <Accordion title="Why is the first request slower?">…</Accordion>
+</AccordionGroup>
+```
+
+Both read the `title` off their children, so the strip and the panels cannot drift apart.
+Add `defaultOpen` to an `Accordion` to have it open on arrival.
+
+### Frames
+
+```mdx
+<Frame
+  src="/images/console-create.png"
+  alt="The Create dialog"
+  hint="Everything below starts from one screen:"
+  caption="Console, **+ Create** — see the [CLI reference](/cli)."
+/>
+
+<Frame
+  src="/media/first-deploy.mp4"
+  alt="A first deploy"
+  autoplay
+/>
+```
+
+Wraps a screenshot in the bordered surface, so no image floats loose on the canvas. The
+`caption` reads under the frame, centered, as part of the picture; the `hint` reads above
+it on the text's own left edge, as part of the sentence that led the reader here. Both take
+inline markdown — links, bold, emphasis, code — and come out as the same elements a
+paragraph does.
+
+The extension decides what is being framed: a clip source (`.mp4`, `.webm`, `.mov`, `.ogv`,
+`.m4v`) renders a player instead of an image, labelled from the same `alt`. It ships
+controls unless you add `autoplay`, which makes it decoration — muted, inline, looping, and
+without controls, since nobody is there to operate it.
+
+### Updates
+
+```mdx
+<Update
+  label="August 19, 2026"
+  description="v2.4.0"
+  tags={['Console', 'CLI']}
+>
+  Rules Engine conditions now match on request headers.
+</Update>
+```
+
+One entry in a changelog: the label and the version sit in the left column, the notes on
+the right. The label is the entry's anchor — slugified from the label itself, deduplicated
+against the page's headings, and listed in the "On this page" rail — so a release is a URL
+somebody can send. `tags` is the one JSX-shaped value the parser reads: a list of strings,
+split rather than evaluated.
+
+The label renders as an `h2`, so a heading inside an entry starts at `###`. Everything else
+— callouts, code groups, frames — is ordinary page content.
+
+There is no `rss` prop. Mintlify has one because Mintlify builds the feed; this layer
+renders pages, so a feed belongs to whatever builds the site.
+
+## What is deliberately not supported
+
+- **JSX expressions and imports.** The file is content, not a module — no `{expression}`,
+  no `import`. Anything that needs logic belongs in the Vue page around it.
+- **Raw HTML tags.** Write markdown or a component tag; a raw `<div>` is left as text.
+- **Blocks inside a callout.** See above — the surface is a paragraph.
+- **Deep list nesting.** One level. A list that needs more is usually a `<Steps>`.
+- **Bold in prose.** The parser still renders `**bold**` — it has to, since a pasted
+  document will contain some — but do not author it. Bold is a shout, and documentation
+  prose that shouts a UI label in every other sentence ends up with a page of emphasis
+  and therefore none: the reader's eye is pulled to a dozen fragments instead of reading
+  the sentence that explains them. Everything bold was reaching for already has a better
+  home. A UI label or a command is `code`. A thing worth the reader stopping for is a
+  callout. A section is a heading. If a sentence only works with a word bolded, the
+  sentence is the thing to rewrite.
+
+## Rendering a file
+
+```vue
+<script setup>
+  import DocPage from '@aziontech/webkit-docs/doc-page'
+  import source from './deploy-an-application.mdx?raw'
+</script>
+
+<template>
+  <DocPage
+    :source="source"
+    :breadcrumb="[{ label: 'Start', href: '/start' }, { label: 'Deploy an application' }]"
+    :previous="{ title: 'Create an account', href: '/start/create-an-account' }"
+    :next="{ title: 'Configure a domain', href: '/build/configure-a-domain' }"
+  />
+</template>
+```

@@ -82,9 +82,7 @@
            inside a content-height box. `my-auto` splits the flex parent's free space above
            and below, and collapses to 0 when the content is taller than the viewport
            instead of clipping its top. -->
-      <div
-        class="my-auto flex w-full flex-col gap-(--layout-section-gap) py-(--spacing-xl)"
-      >
+      <div class="my-auto flex w-full flex-col gap-(--layout-section-gap) py-(--spacing-xl)">
         <!-- ── HOME'S HEADING ──
              A centred hero, not the left-aligned PageHeading a module list carries, for the
              same reason home's first access is centred: there is no table, no toolbar and no
@@ -99,9 +97,7 @@
         <div
           class="animate-content-enter motion-reduce:animate-none flex flex-col items-center gap-(--spacing-lg)"
         >
-          <div
-            class="flex max-w-(--container-2xl) flex-col items-center gap-(--spacing-xs)"
-          >
+          <div class="flex max-w-(--container-2xl) flex-col items-center gap-(--spacing-xs)">
             <p class="text-center text-body-md text-(--text-muted)">Empty states</p>
             <h1 class="text-balance text-center text-heading-lg text-(--text-default)">
               What a product shows before it owns anything.

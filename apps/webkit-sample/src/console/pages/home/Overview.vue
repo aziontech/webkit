@@ -87,10 +87,12 @@
 
 <template>
   <!-- `padded=false`: BOTH versions carry their own boundary, on the same block as
-       their own measure — Home at the DATA measure (`layout-column layout-boundary`),
-       HomeEmptyState at the focused one (`layout-column-focused layout-boundary`).
-       Two measures under one URL is deliberate: one half is a resource list, the other
-       is a hero (each file argues its own). The shell's inset is the right
+       the measure — and it is now the SAME measure for both, the standard page container
+       (`layout-column layout-boundary`, --layout-measure / 1388px). One width under one
+       URL: the empty half BECOMES the populated one the moment an account creates its
+       first resource, and a container that resized under that transition made a change
+       of content read as a change of page. (The empty half used to keep the focused cap
+       at 1024px; each file carries the argument.) The shell's inset is the right
        default for a page that just flows, and the wrong one for these two: Home is a
        frame from `xl` (only its resource list scrolls), and a frame whose inset lives
        outside it scrolls to an edge it cannot measure. Passing the boundary down means

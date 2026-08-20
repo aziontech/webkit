@@ -88,6 +88,12 @@
       icon: 'pi pi-compass',
       description: 'Wayfinding and menus — breadcrumbs, tabs and shells that move people around.'
     },
+    layout: {
+      label: 'Layout',
+      icon: 'pi pi-table',
+      description:
+        'Structure and shells — the frames, dividers, scroll areas and resizable panes that hold a page together, plus the sidebar, header and footer that wrap it.'
+    },
     data: {
       label: 'Data',
       icon: 'pi pi-database',
@@ -124,7 +130,7 @@
       label: 'Components',
       icon: 'pi pi-th-large',
       description:
-        'Browse the library by category — actions, inputs, content, feedback, overlay, navigation, data and code.'
+        'Browse the library by category — actions, inputs, content, feedback, overlay, navigation, layout, data and code.'
     },
     {
       id: 'brand',

@@ -1,31 +1,35 @@
 <script setup>
   // Deployments — the Azion Console "Deployments" module. The app shell (single
   // sidebar + GlobalHeader with the module breadcrumb) comes from AppLayout; this
-  // page renders only its content, following the Applications.vue list pattern: a
-  // CONTROLS HEADER (filter + search, the tab's own actions on the right) over a
-  // data-driven <Table> living in a flush CardBox. No page heading — the module name
-  // already IS the header breadcrumb crumb (see ui/ControlsHeader.vue).
+  // page renders only its content, in the shape every module list takes: a PAGE
+  // HEADING over a CONTROLS HEADER (search + Filter) over a data-driven <Table>
+  // living in a flush CardBox (../../components/page/PageHeading.vue,
+  // ../../components/page/ControlsHeader.vue).
   //
   // Unlike Applications, this module carries TWO sub-pages behind nav tabs —
   // "All Deployments" (every deploy, from any resource) and "Settings" (the
   // STRATEGIES those deploys apply) — so the active tab is held in the URL (`?tab=`)
-  // the way WorkloadDetail does it: reloadable and linkable. Each tab brings its OWN
-  // controls row, because the two narrow different subjects, and its own create
-  // action, because the two create different things:
+  // the way WorkloadDetail does it: reloadable and linkable. Those tabs are IN
+  // CONTENT, under the heading: the full-bleed PageTabs bar is the bottom edge of the
+  // page header and belongs to pages that carry no heading, so a page that names
+  // itself puts its nav in the content instead (see the PageTabs doc comment). Each
+  // tab brings its OWN controls row, because the two narrow different subjects, and
+  // its own create action — in the heading, where the page's action lives — because
+  // the two create different things:
   //
-  //   New release    → a real deploy. The same release page every resource opens
-  //     (./ReleaseComposer.vue), the console's one deploy surface.
-  //   New Settings   → the strategy itself (ui/DeploymentSettingsDrawer.vue): which
-  //     application, firewall and custom page a deployment binds, authored once and
-  //     applied by deployments started anywhere.
+  //   Create release              → a real deploy. The same release page every resource
+  //     opens (./ReleaseComposer.vue), the console's one deploy surface.
+  //   Create Deployment Settings  → the strategy itself
+  //     (ui/DeploymentSettingsDrawer.vue): which application, firewall and custom page a
+  //     deployment binds, authored once and applied by deployments started anywhere.
   //
   // That split is the platform's own: Azion creates a deployment with one request,
   // `POST /workloads/{id}/deployments`, whose body is `{ name, active, current,
   // strategy }` — the strategy is the reusable half, the rest belongs to one deploy.
   // The Message above the tables is what says so on screen.
   //
-  // Narrowing on both tabs is a FILTER BAR of CHIPS (ui/FilterBar.vue) in its own row
-  // under the controls — the one shape every module list uses (the webkit-lists
+  // Narrowing on both tabs is the FILTER BUTTON (list/FilterButton.vue) beside that
+  // tab's search — the one shape every module list uses (the webkit-lists
   // skill), never a field/operator/value builder. The COLUMNS decide the fields on
   // each tab; they pre-filter `:data`, and the table sees only the rows that survive.
   //
@@ -34,12 +38,12 @@
   // deployment surface narrows by — asked for `{ deployed: true }`, the window only a
   // cross-resource list needs. Being a first level, this page holds the state and
   // binds it into DeploymentsTable as models.
-  import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
   import Dropdown from '@aziontech/webkit/dropdown'
   import IconButton from '@aziontech/webkit/icon-button'
   import InputText from '@aziontech/webkit/input-text'
   import Message from '@aziontech/webkit/message'
+  import TabView from '@aziontech/webkit/tab-view'
   import Table from '@aziontech/webkit/table'
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
@@ -52,14 +56,20 @@
   import DeploymentSettingsDrawer from '../../components/deployment/DeploymentSettingsDrawer.vue'
   import DeploymentsTable from '../../components/deployment/DeploymentsTable.vue'
   import ProductFirstUse from '../../components/home/ProductFirstUse.vue'
+  import AuthorCell from '../../components/list/AuthorCell.vue'
+  import ColumnsButton from '../../components/list/ColumnsButton.vue'
   import DeleteDialog from '../../components/list/DeleteDialog.vue'
-  import FilterBar from '../../components/list/FilterBar.vue'
+  import FilterButton from '../../components/list/FilterButton.vue'
+  import FilterChips from '../../components/list/FilterChips.vue'
   import LastModifiedCell from '../../components/list/LastModifiedCell.vue'
   import ControlsHeader from '../../components/page/ControlsHeader.vue'
-  import PageTabs from '../../components/page/PageTabs.vue'
+  import HeadingAction from '../../components/page/HeadingAction.vue'
+  import PageHeading from '../../components/page/PageHeading.vue'
   import AppLayout from '../../components/shell/AppLayout.vue'
   import { DATE_PRESETS, formatDateRange, matchDate } from '../../lib/behavior/filter-bar'
   import { useListFilters } from '../../lib/behavior/list-state'
+  import { useTabEnter } from '../../lib/behavior/tab-enter'
+  import { DEPLOYMENT_COLUMNS } from '../../lib/data/deployment-columns'
   import {
     azionDefaultStrategy,
     bindingLabel,
@@ -102,6 +112,18 @@
       router.replace({ query: { ...route.query, tab: value } })
     }
   })
+
+  // A TAB SWITCH IS A PAGE CHANGE, so it arrives like one — the same entrance the
+  // detail shells give their tabs (../../lib/behavior/tab-enter.js).
+  //
+  // This page got none. AppLayout replays `animate-page-enter` keyed on `route.path`
+  // and deliberately ignores the QUERY, because a filter or a carried email is the
+  // same page answering differently and re-entering on every keystroke is noise. But
+  // this page's tab IS the query (`?tab=`), so picking Settings swapped the controls
+  // row and the entire table in one frame with nothing to say a different subject had
+  // arrived — the one navigation in the app that still repainted silently.
+  const enterRef = ref(null)
+  useTabEnter(enterRef, activeTab)
 
   // ── All Deployments ────────────────────────────────────────────────────────
   // The statuses, resource types and environments come from src/lib/deployments.js
@@ -164,6 +186,16 @@
     loading: tenancyReloading
   } = useListFilters([], allDeployments)
 
+  // Which columns are switched off, driven by the Columns button beside the filter
+  // (../../components/list/ColumnsButton.vue). Only a HIDDEN column is ever recorded, so this
+  // never has to be kept in step with the column model above.
+  //
+  // ID SHIPS OFF. It is the column an operator wants when they are quoting a resource
+  // into a support thread or an API call, and almost never while scanning the list —
+  // so it starts hidden and is one switch away. That is the whole point of the panel:
+  // a column can be available without being in the way by default.
+  const columnVisibility = ref({ id: false })
+
   // ── Settings (deployment strategies) ───────────────────────────────────────
   // What this tab lists is the `strategy` half of the one request Azion takes for a
   // deployment: which application, firewall and custom page it binds
@@ -171,8 +203,8 @@
   // by deployments started from any resource page — which is the difference between
   // this tab's create action and the history tab's:
   //
-  //   New Settings   → a STRATEGY, reused across deployments
-  //   New release    → a real DEPLOY, applying one or more of those strategies
+  //   Create Deployment Settings  → a STRATEGY, reused across deployments
+  //   Create release              → a real DEPLOY, applying one or more of those strategies
   //
   // AZION DEFAULT leads the list and is platform-owned: it binds whatever
   // application is being deployed and nothing else, it cannot be edited or deleted,
@@ -187,14 +219,14 @@
   // nothing.
 
   // The columns the CLI itself lists a workload's deployments by (`azion list
-  // workload-deployment` prints ID · CURRENT · EDGE APPLICATION · EDGE FIREWALL):
+  // workload-deployment` prints ID · CURRENT · APPLICATION · FIREWALL):
   // what a strategy BINDS is the whole point of it, so the bindings are columns
   // rather than something you open a row to discover. Author and Last Modified are
   // ONE column, as in every other console list — the avatar identifies the person
   // (name on its tooltip) and the timestamp reads relative beside it (see
   // ui/LastModifiedCell.vue).
   const settingColumns = [
-    { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true },
+    { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, hideable: false },
     { accessorKey: 'type', header: 'Type', enableSorting: true },
     { accessorKey: 'firewall', header: 'Firewall', enableSorting: true },
     { accessorKey: 'customPage', header: 'Custom Page', enableSorting: true },
@@ -202,6 +234,13 @@
     { accessorKey: 'lastModified', header: 'Last Modified', enableSorting: true, grow: 2 },
     { id: 'actions', kind: 'action', hideable: false }
   ]
+
+  // The Settings tab's own visibility map. TWO tabs, two column models, two maps: they
+  // list different subjects, so a column switched off on the history has no counterpart
+  // here and sharing one map would have the two tabs hiding each other's columns by
+  // accident (both carry `name`, `status` and `lastModified`).
+  // No `id` column on this tab, so nothing ships off — see the history's map above.
+  const settingColumnVisibility = ref({})
 
   const settingFilterFields = [
     {
@@ -240,13 +279,13 @@
   // ── Actions ────────────────────────────────────────────────────────────────
   // The two create actions of this module, and the whole difference between them:
   //
-  //   New release  → a DEPLOY. It binds a version of every resource and publishes it
-  //     into one or more Deployment settings, opening a deployment per workload those
-  //     settings reach. A page, not a drawer, because it is reviewed before it happens
-  //     (./ReleaseComposer.vue) — and the SAME page every other Deploy in the console
-  //     opens, only with nothing preselected here.
-  //   New Settings → a STRATEGY (ui/DeploymentSettingsDrawer.vue), reused by
-  //     deployments started anywhere.
+  //   Create release              → a DEPLOY. It binds a version of every resource and
+  //     publishes it into one or more Deployment settings, opening a deployment per
+  //     workload those settings reach. A page, not a drawer, because it is reviewed
+  //     before it happens (./ReleaseComposer.vue) — and the SAME page every other Deploy
+  //     in the console opens, only with nothing preselected here.
+  //   Create Deployment Settings  → a STRATEGY (ui/DeploymentSettingsDrawer.vue), reused
+  //     by deployments started anywhere.
   //
   // There is no second, smaller deploy form beside it. This module used to carry a "New
   // Deployment" drawer as well, so the same act had two shapes — a drawer that asked for
@@ -346,347 +385,386 @@
 <template>
   <AppLayout
     active="deployments"
-    :padded="false"
     :breadcrumb="[{ label: 'Deployments' }]"
   >
-    <main class="flex h-full flex-col">
-      <!-- First-level module list: no PageHeading — the module name already IS the
-           header breadcrumb crumb (AppLayout). The NAV BAR leads (the same full-bleed
-           PageTabs the detail pages use, since these two tabs are second-level nav —
-           each is its own page in one route), and each tab's own ACTIONS ride on it,
-           right-aligned: they act on the tab's subject, so they change with the tab
-           while their position never does. Below it, the tab's CONTROLS row (search +
-           selectors), then the table. -->
-      <!-- FIRST USE, IN HOME'S CONTAINER: the same centred box every other module's
-           empty version uses, at the FOCUSED measure (the list's own measure is the data
-           one, 1620px, which a lead and three rows would float in). `:padded="false"`
-           means this page carries its own boundary, so the container brings
-           `layout-boundary` with it. -->
-      <!-- The scroll region is a flex COLUMN here, unlike the populated branch's block
-           one: `my-auto` on the box inside it can only centre when its parent has free
-           space to distribute, and a block parent has none to give. -->
-      <section
-        v-if="accountEmpty"
-        class="flex min-h-0 flex-1 flex-col overflow-auto"
-      >
-        <div
-          class="layout-column-focused layout-boundary my-auto flex w-full flex-col py-(--spacing-xl)"
-        >
-          <ProductFirstUse :product="firstUse" />
-        </div>
-      </section>
-
-      <PageTabs
-        v-else
-        v-model:value="activeTab"
-        :tabs="tabs"
+    <!-- THE MEASURE FOLLOWS THE MODE, the shape every module list carries
+         (../applications/Applications.vue): the populated list takes the STANDARD page
+         container (`layout-column`, 1388px) because its columns ARE the content, and
+         first use takes the FOCUSED one (1024px), where a lead and three rows would
+         otherwise float at a width they do not read at.
+         This page is `padded` again. It used to run `:padded="false"` so the full-bleed
+         PageTabs bar could form the bottom edge of the header and only the region below
+         it scrolled; with the tabs in-content there is no full-bleed element left, so the
+         page takes the boundary from AppLayout and scrolls as one, like every other
+         list. -->
+    <main
+      class="flex min-h-full flex-col"
+      :class="accountEmpty ? 'layout-column-focused' : 'layout-column'"
+    >
+      <!-- THE PAGE HEADING. A first-level resource page names itself: the module name
+           over one line saying what the module is, with the module's own action on the
+           right. The breadcrumb says WHERE you are; the heading says WHAT this page is.
+           `size="medium"` is the first-level list scale (components/page/PageHeading.vue).
+           The ACTION rides here rather than on the tab row, and it still changes with the
+           active tab — the two tabs create different things — because where a page's
+           action sits is a property of the page, not of the tab: one fixed home above the
+           content, whichever subject is showing. -->
+      <PageHeading
+        v-if="!accountEmpty"
+        size="medium"
+        title="Deployments"
+        description="Track every release across your resources, and the settings those releases apply."
+        :documentation="firstUse.learnMore.href"
       >
         <template #actions>
           <!-- The ONE way a deployment is created, here and everywhere else: the release
-               composer (../ReleaseComposer.vue). From the module it opens with nothing
+               composer (./ReleaseComposer.vue). From the module it opens with nothing
                settled — no Deployment setting and no scoped resource, so the operator
                selects the targets first and then composes (§ the `global` scenario);
                from a Workload or a resource the same page opens with that context in
                its URL. -->
-          <Button
+          <HeadingAction
             key="button-0"
             v-if="activeTab === 'all'"
-            label="New release"
+            label="Create release"
             kind="primary"
-            size="medium"
             icon="pi pi-cloud-upload"
             @click="newRelease"
           />
           <!-- The Settings tab creates a CONFIGURATION, not a deployment. -->
-          <Button
+          <HeadingAction
             key="button-2"
             v-else
-            label="New Settings"
+            label="Create Deployment Settings"
             kind="primary"
-            size="medium"
             icon="pi pi-plus"
             @click="newSettings"
           />
         </template>
-      </PageTabs>
+      </PageHeading>
 
-      <!-- Only this region scrolls, below the fixed bar; the page's own boundary and
-           MEASURE sit on the block inside it, the shape every `:padded="false"` page
-           carries (`.layout-column` — the DATA measure, 1620px). That block lands at
-           the same inset and the same content width as a `padded` module list, because
-           the measure classes widen their cap by the boundary they contain — see
-           src/styles/layout.css § "THE BOUNDARY IS NOT PART OF THE MEASURE". Until
-           that rule existed this list read 48px narrower than Workloads at the same
-           viewport, the one module list in the console at its own width.
-
-           This tab used to run full-bleed, on the argument that the Deployments
-           tables are the module's widest (repo, domain, environment, author, two
-           timestamps) and should take every pixel the viewport has. That bought a
-           handful of pixels past 1620px and cost the thing the measure exists to
-           protect: on an ultrawide, a row's actions ended up a head-turn from the
-           version that identifies it — and it made this one list sit at a width no
-           other list in the console uses.
-
-           The RHYTHM is the shared one: the page stack carries no vertical gap, the
-           parent section below the boundary spaces its sections at
-           --layout-section-gap, and each section spaces its own parts at
-           --layout-group-gap. Here the page is ONE section — the Message, whichever
-           tab's controls row is showing, and the table are all parts of one band, so
-           they sit at the group step with nothing at the section step. -->
-      <section
-        v-if="!accountEmpty"
-        class="min-h-0 flex-1 overflow-auto"
+      <!-- FIRST USE, IN HOME'S CONTAINER: the same centred box every other module's
+           empty version uses. A deployment is the record of having shipped, so an account
+           that has shipped nothing has no history AND no strategies — which is why this
+           branch drops the tabs too, rather than offering two tabs over nothing.
+           CENTRED WITH AUTO MARGINS: `my-auto` asks the flex parent to split its free
+           space above and below this one item, and collapses to 0 when the block is
+           taller than the viewport instead of clipping its top. -->
+      <div
+        v-if="accountEmpty"
+        class="my-auto flex w-full flex-col py-(--spacing-xl)"
       >
-        <div class="layout-column layout-boundary flex min-w-0 flex-col">
-          <!-- The page's parent section. It holds ONE section here: the Message, the
-               controls row and the table are all parts of the same band. -->
-          <section
-            class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)"
-          >
-            <!-- ONE section, at --layout-group-gap: the Message frames the list, the
-                 controls row narrows it, the table is what both are about. -->
-            <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-              <!-- Why Settings is a sibling of the history: a strategy is the reusable
-                   half of a deployment (which application, firewall and custom page it
-                   binds), so it is authored once and applied by many deployments. Note
-                   what it is NOT: a deployment belongs to exactly one workload — the
-                   workload is the path parameter of the request that creates it — so it
-                   is the STRATEGY that travels, never the deployment. -->
-              <Message
-                severity="info"
-                size="small"
-                closable
-                label="Deployment Settings are the strategy a deployment applies: the application it binds, and optionally a firewall and a custom page. Author one here and every deployment started from a resource can apply it — Azion Default is the platform's own."
+        <ProductFirstUse :product="firstUse" />
+      </div>
+
+      <!-- The page's parent section. It holds ONE section here: the tabs, the Message,
+           the controls row and the table are all parts of the same band. The RHYTHM is
+           the shared one — the page stack carries no vertical gap, the parent spaces its
+           sections at --layout-section-gap, and each section spaces its own parts at
+           --layout-group-gap (theme semantic/layouts § "THE PAGE SHAPE"). -->
+      <section
+        v-else
+        class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)"
+      >
+        <!-- ONE section, at --layout-group-gap: the tabs choose the subject, the Message
+             frames it, the controls row narrows it, the table is what all three are
+             about. -->
+        <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
+          <!-- THE TABS, IN CONTENT. This module carries two sub-pages — "All Deployments"
+               (every deploy, from any resource) and "Settings" (the STRATEGIES those
+               deploys apply) — held in the URL (`?tab=`) so each is reloadable and
+               linkable.
+               They are a plain TabView here, NOT components/page/PageTabs.vue: that bar
+               is the bottom edge of the page header, full-bleed and bordered, and it
+               exists for pages that carry no heading because each tab heads itself. This
+               page names itself, so the nav sits inside the content under the heading,
+               with no border and no full-bleed inset — a different element, not that bar
+               with a flag flipped (see the PageTabs doc comment). -->
+          <TabView v-model:value="activeTab">
+            <TabView.List>
+              <TabView.Item
+                v-for="tab in tabs"
+                :key="tab.value"
+                :value="tab.value"
+                :label="tab.label"
               />
+            </TabView.List>
+          </TabView>
 
-              <!-- ── All Deployments controls ── -->
-              <ControlsHeader
-                v-if="activeTab === 'all'"
-                key="controls-header-1"
+          <!-- Why Settings is a sibling of the history: a strategy is the reusable
+               half of a deployment (which application, firewall and custom page it
+               binds), so it is authored once and applied by many deployments. Note
+               what it is NOT: a deployment belongs to exactly one workload — the
+               workload is the path parameter of the request that creates it — so it
+               is the STRATEGY that travels, never the deployment. -->
+          <Message
+            severity="info"
+            size="small"
+            closable
+            label="Deployment Settings are the strategy a deployment applies: the application it binds, and optionally a firewall and a custom page. Author one here and every deployment started from a resource can apply it — Azion Default is the platform's own."
+          />
+
+          <!-- EVERYTHING THAT CHANGES WITH THE TAB, in one STABLE wrapper: the two
+               controls rows, the two chip rows and the card that holds either table.
+               `useTabEnter` replays the page entrance on it (never keyed — a key would
+               re-mount the subtree, and the point is to animate the same element the
+               swapped content arrives in).
+               The bar and the Message stay OUTSIDE it. The bar is what you pressed, so
+               animating it would say the navigation itself had changed; the Message
+               states what a Deployment setting is, which is true on both tabs and did
+               not change because you switched.
+               It carries the group gap so the parts inside keep the rhythm they had as
+               direct children of the section (theme semantic/layouts § THE PAGE SHAPE). -->
+          <div
+            ref="enterRef"
+            class="flex min-w-0 flex-col gap-(--layout-group-gap)"
+          >
+            <!-- ── All Deployments controls ── -->
+            <ControlsHeader
+              v-if="activeTab === 'all'"
+              key="controls-header-1"
+            >
+              <InputText
+                v-model="deploySearch"
+                size="medium"
+                placeholder="Search deployments"
+                aria-label="Search deployments"
+                class="min-w-36 grow basis-(--container-2xs)"
               >
-                <InputText
-                  v-model="deploySearch"
-                  size="large"
-                  placeholder="Search deployments"
-                  aria-label="Search deployments"
-                  class="min-w-36 grow basis-(--container-2xs)"
-                >
-                  <template #iconLeft>
-                    <i
-                      class="pi pi-search"
-                      aria-hidden="true"
-                    />
-                  </template>
-                </InputText>
-              </ControlsHeader>
-
-              <!-- ── Settings controls ── -->
-              <ControlsHeader
-                v-else
-                key="controls-header-2"
-              >
-                <InputText
-                  v-model="settingSearch"
-                  size="large"
-                  placeholder="Search settings"
-                  aria-label="Search deployment settings"
-                  class="min-w-36 grow basis-(--container-2xs)"
-                >
-                  <template #iconLeft>
-                    <i
-                      class="pi pi-search"
-                      aria-hidden="true"
-                    />
-                  </template>
-                </InputText>
-              </ControlsHeader>
-
-              <!-- The filter bar takes its own row on whichever tab is open, so both
-                   tabs of this module narrow the same way and by the same gesture. The
-                   history tab reads the shared deployment catalog; Settings reads its
-                   own two fields. -->
-              <FilterBar
-                v-if="activeTab === 'all'"
-                key="filter-bar-1"
+                <template #iconLeft>
+                  <i
+                    class="pi pi-search"
+                    aria-hidden="true"
+                  />
+                </template>
+              </InputText>
+              <FilterButton
                 v-model="deployFilters"
                 :fields="deployFields"
               />
-              <FilterBar
-                v-else
-                key="filter-bar-2"
+              <ColumnsButton
+                v-model="columnVisibility"
+                :columns="DEPLOYMENT_COLUMNS"
+              />
+            </ControlsHeader>
+
+            <FilterChips
+              v-if="activeTab === 'all'"
+              v-model="deployFilters"
+              :fields="deployFields"
+            />
+
+            <!-- ── Settings controls ── -->
+            <ControlsHeader
+              v-else
+              key="controls-header-2"
+            >
+              <InputText
+                v-model="settingSearch"
+                size="medium"
+                placeholder="Search settings"
+                aria-label="Search deployment settings"
+                class="min-w-36 grow basis-(--container-2xs)"
+              >
+                <template #iconLeft>
+                  <i
+                    class="pi pi-search"
+                    aria-hidden="true"
+                  />
+                </template>
+              </InputText>
+              <FilterButton
                 v-model="settingFilters"
                 :fields="settingFilterFields"
               />
+              <ColumnsButton
+                v-model="settingColumnVisibility"
+                :columns="settingColumns"
+              />
+            </ControlsHeader>
 
-              <section class="flex min-h-0 flex-col">
-                <CardBox :padded="false">
-                  <template #content>
-                    <!-- ── All Deployments ── -->
-                    <!-- The shared deployment table owns the columns and the cells; its
-                     controls are hoisted into the page's ControlsHeader and filter row
-                     above (`:controls="false"`), with their state bound back in as the
-                     two models. It applies the catalog itself, so the narrowing happens
-                     in one place whether the controls are hoisted or not. Page size is
-                     the component's default, so every deployment table paginates and
-                     reads the same. -->
-                    <DeploymentsTable
-                      v-if="activeTab === 'all'"
-                      v-model:search="deploySearch"
-                      v-model:filters="deployFilters"
-                      :deployments="allDeployments"
-                      :fields="deployFields"
-                      :email="userEmail"
-                      :controls="false"
-                      @row-click="openDeployment"
-                      @action="onDeploymentAction"
-                    />
+            <FilterChips
+              key="filter-chips-2"
+              v-if="activeTab !== 'all'"
+              v-model="settingFilters"
+              :fields="settingFilterFields"
+            />
 
-                    <!-- ── Settings ── -->
-                    <Table
-                      v-else
-                      v-model:globalFilter="settingSearch"
-                      :data="filteredSettings"
-                      :columns="settingColumns"
-                      row-key="id"
-                      enable-sorting
-                      paginated
-                      :page-size="10"
-                      :border="false"
-                      :loading="tenancyReloading"
-                    >
-                      <!-- The platform's own strategy is marked as such: it is the one
-                           row nobody in this workspace authored, and the one row the
-                           actions menu offers nothing for. -->
-                      <template #cell-name="{ value, row }">
-                        <span class="flex min-w-0 items-center gap-(--spacing-xs)">
-                          <span class="truncate">{{ value }}</span>
-                          <Tag
-                            v-if="row.system"
-                            label="Azion"
-                            severity="secondary"
-                            size="medium"
-                          />
-                        </span>
-                      </template>
+            <section class="flex min-h-0 flex-col">
+              <CardBox :padded="false">
+                <template #content>
+                  <!-- ── All Deployments ── -->
+                  <!-- The shared deployment table owns the columns and the cells; its
+                   controls are hoisted into the page's ControlsHeader and filter row
+                   above (`:controls="false"`), with their state bound back in as the
+                   two models. It applies the catalog itself, so the narrowing happens
+                   in one place whether the controls are hoisted or not. Page size is
+                   the component's default, so every deployment table paginates and
+                   reads the same. -->
+                  <DeploymentsTable
+                    v-if="activeTab === 'all'"
+                    v-model:columnVisibility="columnVisibility"
+                    v-model:search="deploySearch"
+                    v-model:filters="deployFilters"
+                    :deployments="allDeployments"
+                    :fields="deployFields"
+                    :email="userEmail"
+                    :controls="false"
+                    @row-click="openDeployment"
+                    @action="onDeploymentAction"
+                  />
 
-                      <!-- The strategy TYPE — `default` is the only one the platform
-                           exposes today, so the column reads the same down the list and
-                           exists to say which kind of strategy this is at all. -->
-                      <template #cell-type="{ value }">
+                  <!-- ── Settings ── -->
+                  <Table
+                    v-else
+                    v-model:globalFilter="settingSearch"
+                    v-model:columnVisibility="settingColumnVisibility"
+                    :data="filteredSettings"
+                    :columns="settingColumns"
+                    row-key="id"
+                    enable-sorting
+                    paginated
+                    :page-size="10"
+                    :border="false"
+                    :loading="tenancyReloading"
+                  >
+                    <!-- The platform's own strategy is marked as such: it is the one
+                         row nobody in this workspace authored, and the one row the
+                         actions menu offers nothing for. -->
+                    <template #cell-name="{ value, row }">
+                      <span class="flex min-w-0 items-center gap-(--spacing-xs)">
+                        <span class="truncate">{{ value }}</span>
                         <Tag
-                          :label="strategyTypeLabel(value)"
-                          severity="info"
+                          v-if="row.system"
+                          label="Azion"
+                          severity="secondary"
                           size="medium"
                         />
-                      </template>
+                      </span>
+                    </template>
 
-                      <!-- The two nullable bindings, plain text: "Not bound" is the
-                           common, unremarkable case and a Tag on every row would give
-                           the absence of a firewall the weight of a status. -->
-                      <template #cell-firewall="{ value }">
-                        <span
-                          class="truncate"
-                          :class="value ? '' : 'text-(--text-muted)'"
-                        >
-                          {{ bindingLabel(value) }}
-                        </span>
-                      </template>
+                    <!-- The strategy TYPE — `default` is the only one the platform
+                         exposes today, so the column reads the same down the list and
+                         exists to say which kind of strategy this is at all. -->
+                    <template #cell-type="{ value }">
+                      <Tag
+                        :label="strategyTypeLabel(value)"
+                        severity="info"
+                        size="medium"
+                      />
+                    </template>
 
-                      <template #cell-customPage="{ value }">
-                        <span
-                          class="truncate"
-                          :class="value ? '' : 'text-(--text-muted)'"
-                        >
-                          {{ bindingLabel(value) }}
-                        </span>
-                      </template>
+                    <!-- The two nullable bindings, plain text: "Not bound" is the
+                         common, unremarkable case and a Tag on every row would give
+                         the absence of a firewall the weight of a status. -->
+                    <template #cell-firewall="{ value }">
+                      <span
+                        class="truncate"
+                        :class="value ? '' : 'text-(--text-muted)'"
+                      >
+                        {{ bindingLabel(value) }}
+                      </span>
+                    </template>
 
-                      <template #cell-status="{ value }">
-                        <Tag
-                          :label="value"
-                          :severity="value === 'Active' ? 'success' : 'secondary'"
-                          size="medium"
-                        />
-                      </template>
+                    <template #cell-customPage="{ value }">
+                      <span
+                        class="truncate"
+                        :class="value ? '' : 'text-(--text-muted)'"
+                      >
+                        {{ bindingLabel(value) }}
+                      </span>
+                    </template>
 
-                      <template #cell-lastModified="{ row }">
-                        <LastModifiedCell
-                          :author="row.author"
-                          :avatar-src="row.authorAvatar"
-                          :date="row.updatedAt || ''"
-                        />
-                      </template>
+                    <template #cell-status="{ value }">
+                      <Tag
+                        :label="value"
+                        :severity="value === 'Active' ? 'success' : 'secondary'"
+                        size="medium"
+                      />
+                    </template>
+                    <!-- WHO and WHEN are two columns now, so each cell says one thing:
+                         the face and the name here, the relative time next to it. -->
+                    <template #cell-author="{ row }">
+                      <AuthorCell
+                        :author="row.author"
+                        :avatar-src="row.authorAvatar"
+                      />
+                    </template>
 
-                      <!-- The platform's strategy has no row actions: it cannot be
-                           edited or deleted, and a menu whose every option is disabled
-                           is worse than no menu. -->
-                      <template #cell-actions="{ row }">
-                        <Dropdown
-                          v-if="!row.system"
-                          placement="bottom-end"
-                          @select="(event, value) => onSettingAction(event, value, row)"
-                        >
-                          <Dropdown.Trigger>
-                            <Tooltip text="Row actions">
-                              <IconButton
-                                icon="pi pi-ellipsis-h"
-                                kind="outlined"
-                                size="small"
-                                aria-label="Row actions"
+                    <template #cell-lastModified="{ row }">
+                      <LastModifiedCell :date="row.updatedAt || ''" />
+                    </template>
+
+                    <!-- The platform's strategy has no row actions: it cannot be
+                         edited or deleted, and a menu whose every option is disabled
+                         is worse than no menu. -->
+                    <template #cell-actions="{ row }">
+                      <Dropdown
+                        v-if="!row.system"
+                        placement="bottom-end"
+                        @select="(event, value) => onSettingAction(event, value, row)"
+                      >
+                        <Dropdown.Trigger>
+                          <Tooltip text="Row actions">
+                            <IconButton
+                              icon="pi pi-ellipsis-h"
+                              kind="outlined"
+                              size="small"
+                              aria-label="Row actions"
+                            />
+                          </Tooltip>
+                        </Dropdown.Trigger>
+                        <Dropdown.Group>
+                          <Dropdown.Option
+                            value="edit"
+                            label="Edit"
+                          >
+                            <template #left>
+                              <i
+                                class="pi pi-pencil"
+                                aria-hidden="true"
                               />
-                            </Tooltip>
-                          </Dropdown.Trigger>
-                          <Dropdown.Group>
-                            <Dropdown.Option
-                              value="edit"
-                              label="Edit"
-                            >
-                              <template #left>
-                                <i
-                                  class="pi pi-pencil"
-                                  aria-hidden="true"
-                                />
-                              </template>
-                            </Dropdown.Option>
-                            <Dropdown.Option
-                              value="duplicate"
-                              label="Clone"
-                            >
-                              <template #left>
-                                <i
-                                  class="pi pi-clone"
-                                  aria-hidden="true"
-                                />
-                              </template>
-                            </Dropdown.Option>
-                          </Dropdown.Group>
-                          <Dropdown.Group>
-                            <Dropdown.Option
-                              value="delete"
-                              label="Delete"
-                            >
-                              <template #left>
-                                <i
-                                  class="pi pi-trash"
-                                  aria-hidden="true"
-                                />
-                              </template>
-                            </Dropdown.Option>
-                          </Dropdown.Group>
-                        </Dropdown>
-                      </template>
-                    </Table>
-                  </template>
-                </CardBox>
-              </section>
+                            </template>
+                          </Dropdown.Option>
+                          <Dropdown.Option
+                            value="duplicate"
+                            label="Clone"
+                          >
+                            <template #left>
+                              <i
+                                class="pi pi-clone"
+                                aria-hidden="true"
+                              />
+                            </template>
+                          </Dropdown.Option>
+                        </Dropdown.Group>
+                        <Dropdown.Group>
+                          <Dropdown.Option
+                            value="delete"
+                            label="Delete"
+                          >
+                            <template #left>
+                              <i
+                                class="pi pi-trash"
+                                aria-hidden="true"
+                              />
+                            </template>
+                          </Dropdown.Option>
+                        </Dropdown.Group>
+                      </Dropdown>
+                    </template>
+                  </Table>
+                </template>
+              </CardBox>
             </section>
-          </section>
-        </div>
+          </div>
+        </section>
       </section>
     </main>
 
-    <!-- New Settings — the strategy, not a deployment. The Settings tab's own action;
-         the release page's picker opens its own nested instance for the quick-add. -->
+    <!-- Create Deployment Settings — the strategy, not a deployment. The Settings tab's
+         own action; the release page's picker opens its own nested instance for the
+         quick-add. -->
     <DeploymentSettingsDrawer
       v-model:open="settingsOpen"
       @create="onStrategyCreated"

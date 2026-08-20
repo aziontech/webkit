@@ -90,15 +90,26 @@
 
   // ONE ROW, ONE PRECEDENCE. The message is what the field has to say right now, so it
   // wins; the guidance is what it says the rest of the time.
-  const helperShown = computed(
-    () => !!(props.message || props.description || slots.description)
-  )
+  const helperShown = computed(() => !!(props.message || props.description || slots.description))
   const helperKind = computed(() => (props.message ? props.messageKind : 'helper'))
   const describedBy = computed(() => (helperShown.value ? helperId : undefined))
+
+  // THE FIELD IS ITS OWN ANCHOR when it is the reason a submit failed. A form long enough
+  // to scroll can report a miss entirely off-screen — the press then reads as dead — so
+  // ../../lib/behavior/reveal-invalid.js takes the reader to the first field carrying this
+  // attribute. It is on the WRAPPER, so the label and the message travel with the control.
+  //
+  // Only a BLOCKING message counts: `helper` is guidance in the same row and says nothing
+  // failed, while `required` (not answered yet) and `invalid` (cannot be accepted) are both
+  // things the reader has to come back to.
+  const blocking = computed(() => !!props.message && props.messageKind !== 'helper')
 </script>
 
 <template>
-  <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
+  <div
+    :data-field-invalid="blocking || null"
+    class="flex w-full min-w-0 flex-col gap-(--spacing-xs)"
+  >
     <!-- The label row carries a trailing slot for a control that belongs to the whole
          field rather than to its value — the Remove on a repeater row. It rides HERE so
          at rest every label in the form sits at exactly the same step above its input. -->

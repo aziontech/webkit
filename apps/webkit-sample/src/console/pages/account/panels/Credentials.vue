@@ -7,7 +7,6 @@
   // at the group step (see src/styles/layout.css). It owns its
   // own scroll region because the shell hands each tab a plain flex column (see
   // AccountSettings.vue).
-  import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
   import CopyButton from '@aziontech/webkit/copy-button'
   import Dropdown from '@aziontech/webkit/dropdown'
@@ -19,10 +18,20 @@
   import Tooltip from '@aziontech/webkit/tooltip'
   import { ref } from 'vue'
 
-  import FilterBar from '../../../components/list/FilterBar.vue'
+  import ColumnsButton from '../../../components/list/ColumnsButton.vue'
+  import FilterButton from '../../../components/list/FilterButton.vue'
+  import FilterChips from '../../../components/list/FilterChips.vue'
   import ControlsHeader from '../../../components/page/ControlsHeader.vue'
+  import HeadingAction from '../../../components/page/HeadingAction.vue'
   import PageHeading from '../../../components/page/PageHeading.vue'
   import { useListFilters } from '../../../lib/behavior/list-state'
+
+  // Where `Documentation` on the page heading goes. The docs ROOT, not a deep link: the
+  // account-side topics have no entry in lib/data/product-empty-states.js (that
+  // registry covers the first-level product modules), and pointing at a path we have
+  // not verified is worse than pointing at the index. Replace with the topic's own URL
+  // when there is one.
+  const HELP = 'https://www.azion.com/en/documentation/'
 
   const credentials = ref([
     {
@@ -83,7 +92,7 @@
   } = useListFilters(filterFields, credentials, { pageSize: 10 })
 
   const credentialColumns = [
-    { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true },
+    { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, hideable: false },
     { accessorKey: 'token', header: 'Token', grow: 2 },
     { accessorKey: 'created', header: 'Created', enableSorting: true },
     { accessorKey: 'lastUsed', header: 'Last used' },
@@ -91,7 +100,17 @@
     { id: 'actions', kind: 'action', hideable: false }
   ]
 
-  const credentialStatusSeverity = (status) => (status === 'Active' ? 'success' : 'danger')
+  // Which columns are switched off, driven by the Columns button on the controls
+  // row (../../../components/list/ColumnsButton.vue). Only a HIDDEN column is ever
+  // recorded, so this never has to be kept in step with the column model above.
+  const columnVisibility = ref({})
+
+  // The same map, with the same keys and the same severities, that every other table in
+  // the console uses for a credential's life (../PersonalTokens.vue). It was a ternary —
+  // Active or else danger — which read the same today, when Revoked is the only other
+  // status, and would have painted the first Pending or Inactive credential red.
+  const credentialStatusSeverity = (status) =>
+    ({ Active: 'success', Expired: 'danger', Revoked: 'danger' })[status] ?? 'secondary'
 
   const createCredential = () =>
     toast.success('Credential created (demo).', {
@@ -113,10 +132,25 @@
 <template>
   <div class="min-h-0 flex-1 overflow-auto">
     <section class="layout-column layout-boundary flex min-w-0 flex-col">
+      <!-- The page's action is on the HEADING, not in the controls row below it: the
+           controls narrow the list, the heading acts on the module (../../components/
+           page/ControlsHeader.vue states the same rule). It sat in that row, which left
+           a 32px primary under the 40px Documentation beside it — the page's own action
+           reading as the smaller of the two. -->
       <PageHeading
         title="Credentials"
         description="Manage the API tokens used to authenticate against this account."
-      />
+        :documentation="HELP"
+      >
+        <template #actions>
+          <HeadingAction
+            label="Create credential"
+            kind="primary"
+            icon="pi pi-plus"
+            @click="createCredential"
+          />
+        </template>
+      </PageHeading>
 
       <!-- The page's parent section. It holds one section here — the controls row
            over the table it narrows, at the GROUP step — and spaces whatever sits
@@ -132,7 +166,7 @@
                  rather than wrapping (see ui/ControlsHeader.vue). -->
             <InputText
               v-model="search"
-              size="large"
+              size="medium"
               placeholder="Search credentials"
               aria-label="Search credentials"
               class="min-w-36 grow basis-(--container-2xs)"
@@ -145,20 +179,17 @@
               </template>
             </InputText>
 
-            <template #actions>
-              <Button
-                label="Create credential"
-                kind="primary"
-                size="large"
-                icon="pi pi-plus"
-                @click="createCredential"
-              />
-            </template>
+            <FilterButton
+              v-model="filters"
+              :fields="filterFields"
+            />
+            <ColumnsButton
+              v-model="columnVisibility"
+              :columns="credentialColumns"
+            />
           </ControlsHeader>
 
-          <!-- The filter bar takes its own row: it grows as filters are applied, so
-               sharing the controls row would make the search field jump width. -->
-          <FilterBar
+          <FilterChips
             v-model="filters"
             :fields="filterFields"
           />
@@ -168,6 +199,7 @@
               <Table
                 v-model:pagination="pagination"
                 v-model:globalFilter="search"
+                v-model:columnVisibility="columnVisibility"
                 :data="visibleCredentials"
                 :columns="credentialColumns"
                 row-key="id"

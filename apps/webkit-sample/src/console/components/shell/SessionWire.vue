@@ -85,12 +85,13 @@
     return FAMILIES.find(([pattern]) => pattern.test(name))?.[1] ?? 'list'
   })
 
-  // The page column each family is capped at, matching src/styles/layout.css: data
-  // pages get the wide measure, home the focused one, create flows their own.
+  // The page column each family is capped at, matching the theme's layout tokens:
+  // home, the overviews, the detail dashboards and the lists all take the STANDARD page
+  // container (`--layout-measure`, 1388px); create flows take their own.
   const columnClass = computed(
     () =>
       ({
-        home: 'layout-column-focused',
+        home: 'layout-column',
         form: 'layout-form-create',
         detail: 'layout-column',
         list: 'layout-column'

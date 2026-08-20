@@ -34,8 +34,9 @@
 // localStorage, like the sidebar and the theme (src/sidebar.js, src/theme.js): the
 // version is a property of the session the reader is running, not of the page they
 // are on, and having it reset on every reload would make a walkthrough impossible.
-// A fresh browser opens EMPTY — a new account is the state the console is least
-// designed for, so it is the one the sample should make you look at first.
+// A fresh browser opens POPULATED — the console with rows in it is the version most
+// of the review is about, and an empty console is one knob away; opening on nothing
+// made every reader's first move the same click.
 import { computed, ref, watch } from 'vue'
 
 const STORAGE_KEY = 'webkit-sample-mode'
@@ -48,10 +49,12 @@ export const SAMPLE_MODES = [
 
 const isMode = (value) => SAMPLE_MODES.some((option) => option.value === value)
 
+const DEFAULT_MODE = 'populated'
+
 const readStored = () => {
-  if (typeof localStorage === 'undefined') return 'empty'
+  if (typeof localStorage === 'undefined') return DEFAULT_MODE
   const stored = localStorage.getItem(STORAGE_KEY)
-  return isMode(stored) ? stored : 'empty'
+  return isMode(stored) ? stored : DEFAULT_MODE
 }
 
 const mode = ref(readStored())

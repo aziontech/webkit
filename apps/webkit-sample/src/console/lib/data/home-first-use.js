@@ -57,7 +57,7 @@ export const firstUseDoors = [
     // inventing a shortcut here. It is the main road into Azion, it is where importing
     // from Git and starting from a template already live, and a first access is the
     // worst place to teach a path that only exists on one screen.
-    action: { kind: 'create', label: 'Create app' }
+    action: { kind: 'create', label: 'Create application' }
   },
   {
     id: 'domains',

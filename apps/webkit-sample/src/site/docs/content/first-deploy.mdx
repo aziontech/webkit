@@ -1,0 +1,187 @@
+---
+title: First deploy in a few minutes
+description: By the end of this tutorial, an application will be live on the Azion Web Platform, answering HTTP 200 on its own Azion domain. It takes a few minutes.
+lastUpdated: 2026-06-30
+---
+
+Three complete paths get you there. Pick one. They all end in the same place:
+
+<CardGroup cols={3}>
+  <Card title="Deploy a template" icon="pi pi-th-large" href="#deploy-a-template-via-console">
+    You're starting from scratch and want a ready-made project.
+  </Card>
+  <Card title="Import from GitHub" icon="pi pi-github" href="#import-a-project-from-github">
+    Your project already lives in a GitHub repository.
+  </Card>
+  <Card title="Deploy with CLI" icon="pi pi-desktop" href="#deploy-with-azion-cli">
+    Your project is on your machine and you prefer the terminal.
+  </Card>
+</CardGroup>
+
+<Highlight title="Not sure which one?">
+  Take the template path: it needs no local tooling, and everything you learn on it applies to
+  the other two.
+</Highlight>
+
+## Before you start
+
+All you need is an Azion account. You can create one for free, and it doesn't ask for a
+credit card. Anything path-specific is listed in the path itself.
+
+## Deploy a template via Console
+
+Templates are ready-made projects (e-commerce, blogs, APIs, full-stack SSR) that go live in
+a few clicks. You don't need any local tooling.
+
+<Note>
+  Some templates are integrated with third-party services, so you may need to create accounts,
+  generate tokens, or activate Azion products before deploying. Templates integrated with GitHub ask
+  you to connect your account: click Connect with GitHub when prompted and confirm the connection
+  in the pop-up. Each template's guide lists its specific prerequisites.
+</Note>
+
+<Steps>
+  <Step title="Access Azion Console." />
+  <Step title="Click + Create on the homepage." />
+  <Step title="In the modal, select Templates." />
+  <Step title="Browse and pick the one you want to start with." />
+  <Step title="Fill in the configuration page." />
+  <Step title="Click Deploy, in the bottom-right corner." />
+</Steps>
+
+Follow the deploy through the logs window. When it finishes, the page shows your
+application's name, its deploy logs, and its Azion domain. Some templates also create a
+function and apply pre-defined configurations to optimize your application's performance.
+The template's guide lists what's included.
+
+### Test it
+
+Copy the Azion domain from the confirmation page:
+
+```bash Terminal
+curl -I https://<your-azion-domain>
+# HTTP/2 200
+```
+
+Open the same URL in the browser to see your application running.
+
+<Note>
+  New URLs can take a few minutes to propagate to Azion's edge locations. If you get an error right
+  after deploying, wait a moment and try again.
+</Note>
+
+## Import a project from GitHub
+
+<Info>
+  You need a GitHub account and a repository using one of the supported frameworks.
+</Info>
+
+<Steps>
+  <Step title="In Azion Console, click + Create." />
+  <Step title="Select Import from GitHub." />
+  <Step title="Connect your GitHub account." />
+  <Step title="Select your repository." />
+  <Step title="Choose a name for the application and a Framework Preset." />
+  <Step title="Enter the install command (usually npm install)." />
+  <Step title="Confirm and follow the logs until the Azion domain shows up." />
+</Steps>
+
+### Test it
+
+```bash Terminal
+curl -I https://<your-azion-domain>
+# HTTP/2 200
+```
+
+Open the Azion domain in the browser to see your application running. If you get an error
+right away, wait a few minutes: new URLs take a moment to propagate to Azion's edge
+locations.
+
+## Deploy with Azion CLI
+
+<Info>
+  You need the Azion CLI (installed below) and a local project using one of the supported
+  frameworks, with its dependencies installed.
+</Info>
+
+<Tip>
+  Starting from scratch instead? Run `azion init` to create a new project from a framework template,
+  then deploy it the same way. See the CLI overview and the link command reference for details.
+</Tip>
+
+<Steps>
+  <Step title="Install the Azion CLI">
+    ```bash Terminal
+    curl -fsSL https://cli.azion.app/install.sh | bash
+    ```
+  </Step>
+
+  <Step title="Link and deploy">
+    Authenticate:
+
+    ```bash Terminal
+    azion login
+    ```
+
+    In the project's root folder, link it to Azion:
+
+    ```bash Terminal
+    azion link
+    ```
+
+    The CLI guides you from there: confirm the linking, accept or change the suggested
+    application name, and pick a preset matching your framework. When it asks
+    `Do you want to deploy your project?`, answer yes. (If you answer no, run
+    `azion deploy` when you're ready.)
+
+    At the end of the deploy, the CLI prints your application's Azion domain.
+  </Step>
+
+  <Step title="Test it">
+    ```bash Terminal
+    curl -I https://<your-azion-domain>
+    # HTTP/2 200
+    ```
+
+    If you get an error right away, wait a few minutes: new URLs take a moment to propagate to
+    Azion's edge locations.
+  </Step>
+</Steps>
+
+## What you built
+
+You deployed an application to Azion's global network and confirmed it answers on its own
+domain. The workflow is the same one you'll use for production projects.
+
+## Next steps
+
+<CardGroup cols={3}>
+  <Card title="Go live" icon="pi pi-globe" href="/site/docs">
+    Add a custom domain and point your traffic to the application you just deployed.
+  </Card>
+  <Card title="Secure your application" icon="pi pi-shield" href="/site/docs">
+    Enable Firewall and WAF protection.
+  </Card>
+  <Card title="Observe your application" icon="pi pi-chart-line" href="/site/docs">
+    Follow metrics and events in real time.
+  </Card>
+</CardGroup>
+
+## Related products
+
+<ItemGroup>
+  <Item title="Applications" icon="pi pi-server" href="/site/docs">
+    The object you just created: the rules, the origins and the locations that answer for your
+    domain.
+  </Item>
+  <Item title="Functions" icon="pi pi-code" href="/site/docs">
+    Run your own JavaScript at the edge, on the request or on the response, in the same
+    application.
+  </Item>
+  <Item title="Cache" icon="pi pi-bolt" href="/site/docs">
+    Decide what the edge answers from memory, for how long, and by which key.
+  </Item>
+  <Item title="Azion CLI" icon="pi pi-desktop" href="/site/docs">
+    Link, deploy and roll back a project from the terminal you already have open.
+  </Item>
+</ItemGroup>

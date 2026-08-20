@@ -1,8 +1,8 @@
 ---
 name: webkit-microcopy
-description: The writing rules for Azion product interfaces (Console). Use whenever you author or review any interface string: page and section titles, field labels, helper text, buttons, menu and nav items, table headers, tags, tooltips, empty states, toasts, dialogs, validation messages. Fixes punctuation and capitalization (no em dash, no ampersand, no parentheses in labels, no bold in running text, sentence case with Azion product names capitalized), which surface each kind of copy belongs on (label names, description constrains, Message explains impact, Popover defines, Tag states), one word per concept (Select not Pick, Include dependencies not Additional dependencies, Deployment topology not Composition, Review and deploy not Build and activate), navigation and IA naming, and copy that survives every breakpoint.
+description: The writing rules for Azion product interfaces (Console). Use whenever you author or review any interface string: page and section titles, field labels, helper text, buttons, menu and nav items, table headers, tags, tooltips, empty states, toasts, dialogs, validation messages. Fixes punctuation and capitalization (no em dash, no ampersand, no parentheses in labels, no bold in running text, sentence case with Azion product names capitalized), which surface each kind of copy belongs on (label names, description constrains, Message explains impact, Popover defines, Tag states), one word per concept (Select not Pick, Include dependencies not Additional dependencies, Deployment topology not Composition, Review and deploy not Build and activate, Application not Edge Application, and no `edge` as a prefix or a location), navigation and IA naming, and copy that survives every breakpoint.
 status: active
-last_updated: 2026-08-05
+last_updated: 2026-08-20
 scope: general
 enforced_by: [ui-verify, webkit-component-states, webkit-prefer-over-custom, review]
 ---
@@ -119,7 +119,7 @@ section heading, table header, dialog title, button, toast, empty state.
 | Use                 | Not                                      | Note                                                          |
 | ------------------- | ---------------------------------------- | ------------------------------------------------------------- |
 | `Select`            | `Pick`, `Choose`                         | For choosing among existing options                           |
-| `Create`            | `New`, `Add new`, `Set up`               | `Add` is for attaching an existing thing to something else    |
+| `Create`            | `New`, `Add new`, `Set up`               | The object the page lists. See the create button rule below   |
 | `Include`           | `Add additional`, `Attach extra`         | See `Include dependencies` below                              |
 | `Deploy`            | `Publish`, `Activate`, `Ship`, `Go live` | One verb for putting a package into traffic                   |
 | `Review and deploy` | `Build and activate`                     | Names the two steps the reader actually performs              |
@@ -142,6 +142,46 @@ same object all pick the same one.
 | `Composition`             | `Deployment topology`  | Names what the screen does: how the resources connect into the package that receives traffic                          |
 | `Build and activate`      | `Review and deploy`    | The reader reviews a package, then deploys it. Nothing is built at that step                                          |
 | `Pick a workload`         | `Select a workload`    | One verb for selection                                                                                                |
+| `Edge Application`        | `Application`          | The product dropped the prefix. `Edge` named a network the reader never configures, on an object they do              |
+
+### The `edge` prefix
+
+`Edge` is not part of any object's name, and it is not a fact about an object worth telling the
+reader. It survives in exactly two places, and nowhere else.
+
+**Never as a prefix on a product or entity name.** The object is an `Application`, a `Function`, a
+`Firewall`, a `Connector`. The prefix is the older name for the same thing, so a screen carrying it
+gives one object two names, which is the bug section 4 opens with.
+
+```
+❌ Edge Application     ❌ Edge Function     ❌ your edge applications
+✅ Application          ✅ Function          ✅ your applications
+```
+
+**Never as a location in a description.** `served at the edge`, `runs on the edge`,
+`stops serving traffic at the edge`: in every one of these the phrase can be deleted and the sentence
+says the same thing, because the reader has no other place to serve from. Say what the object does,
+not where the network does it.
+
+```
+❌ An application is the code and configuration served at the edge.
+✅ An application is the code Azion runs, and the configuration it runs with.
+
+❌ When disabled, the application is created but stops serving traffic at the edge.
+✅ When disabled, the application is created but does not serve traffic.
+
+❌ Build ultra-low latency functions that run on the edge.
+✅ Build ultra-low latency functions that run on Azion.
+```
+
+**The two places it stays.** Both are cases where deleting the word loses information:
+
+| Keep                                                                         | Because                                                                                            |
+| ---------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| A product whose registered name has it (`Edge DNS`)                          | It is the name, capitalized per section 2. It changes here only when the product itself is renamed |
+| A layer the reader is choosing between (`Edge cache` beside `Browser cache`) | The word is the distinction. Two caches with one name is worse than the prefix                     |
+
+Everywhere else, deleting `edge` shortens the sentence and costs the reader nothing.
 
 **Never invent a synonym for an existing concept.** Before naming anything, search the product for
 the concept and reuse the word already in use. A second word for one concept is a bug, and it costs
@@ -159,6 +199,33 @@ every future screen.
   between its trigger and its confirmation.
 - **An in-progress action switches to the progressive form** and keeps the same verb: `Deploy` becomes
   `Deploying…`, never `Please wait` or a bare spinner with no words.
+
+### The create button
+
+Every list has one create action, and its label is decided by **where the list sits**, not by
+whoever built the page. Three shapes were in use across the Console for the same act: `New Workload`,
+`Create Bucket`, and a bare `Connector` with a plus icon. Only one is correct.
+
+| The list is…                                                                | Label                  | Examples                                                                        |
+| --------------------------------------------------------------------------- | ---------------------- | ------------------------------------------------------------------------------- |
+| A **module the sidebar routes to** (Applications, Workloads, Functions, …)  | `Create <object>`      | `Create application`, `Create function`, `Create network list`, `Create bucket` |
+| A **tab or section inside a resource** (an application's Cache Settings, …) | `Add <Product Module>` | `Add Cache Settings`, `Add Device Group`, `Add Functions Instance`, `Add Rule`  |
+
+- **`Create` at module level, `Add` inside a resource.** At module level the reader brings an object
+  into existence in the collection they navigated to. Inside a resource they attach a configuration
+  to the resource already open, and `Add` is what the Console says for that. This is the one place
+  `Add` covers something that is created rather than attached.
+- **Never a bare noun.** `Connector` under a plus icon is not a label. The icon is not the verb.
+- **Never `New`.** `New Workload` and `New release` use the banned verb from section 4.
+- **Capitalization follows section 2.** At module level the object is an instance, so it is
+  lowercase: `Create workload`, never `Create Workload`. Inside a resource the object is the product
+  module the tab is named for, so it keeps that name's exact capitalization: `Add Cache Settings`,
+  `Add Functions Instance`. Acronyms stay uppercase either way: `Create WAF rule set`.
+- **The label does not change on the way in.** The create page's title and breadcrumb, the drawer's
+  title, and the confirm button repeat the trigger's string exactly. A button reading
+  `Create variable` that opens a drawer titled `Add environment variable` is two names for one act.
+- **The empty state's action is that same button.** A module's first use call to action carries the
+  identical label as the heading's create button, because it starts the identical flow.
 
 ## 6. Feedback
 
@@ -215,6 +282,8 @@ let it breathe wider. Never write long and rely on truncation.
 - [ ] A repeated per row caveat was consolidated into one `Message`.
 - [ ] One word per concept, checked against the verb and noun tables, including the settled renames.
 - [ ] Every button names a real action, verb first, three words or fewer; `Cancel` is `Cancel`.
+- [ ] The create button is `Create <object>` at module level, `Add <Product Module>` inside a
+      resource, and the same string appears on the page or drawer it opens.
 - [ ] Every error says what happened and what to do next; every success names the object.
 - [ ] Nav item, page title, breadcrumb, and document title use one identical name.
 - [ ] Every collapsed section's closed title states the choice in effect.

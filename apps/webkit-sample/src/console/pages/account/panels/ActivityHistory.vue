@@ -14,11 +14,20 @@
   import { daysAgo, formatListDate, hoursAgo } from '@shared/lib/dates'
   import { ref } from 'vue'
 
-  import FilterBar from '../../../components/list/FilterBar.vue'
+  import ColumnsButton from '../../../components/list/ColumnsButton.vue'
+  import FilterButton from '../../../components/list/FilterButton.vue'
+  import FilterChips from '../../../components/list/FilterChips.vue'
   import ControlsHeader from '../../../components/page/ControlsHeader.vue'
   import PageHeading from '../../../components/page/PageHeading.vue'
   import { DATE_PRESETS, formatDateRange, matchDate } from '../../../lib/behavior/filter-bar'
   import { useListFilters } from '../../../lib/behavior/list-state'
+
+  // Where `Documentation` on the page heading goes. The docs ROOT, not a deep link: the
+  // account-side topics have no entry in lib/data/product-empty-states.js (that
+  // registry covers the first-level product modules), and pointing at a path we have
+  // not verified is worse than pointing at the index. Replace with the topic's own URL
+  // when there is one.
+  const HELP = 'https://www.azion.com/en/documentation/'
 
   // `at` is the real instant — the Date field compares it — and `date` (the sortable
   // display string) is derived from it by one formatter rather than hand-written per
@@ -70,17 +79,22 @@
   )
 
   const activityColumns = [
-    { accessorKey: 'action', header: 'Event', principal: true, grow: 2 },
+    { accessorKey: 'action', header: 'Event', principal: true, hideable: false, grow: 2 },
     { accessorKey: 'category', header: 'Category', enableSorting: true },
     { accessorKey: 'user', header: 'User' },
     { accessorKey: 'ip', header: 'IP address' },
     { accessorKey: 'date', header: 'Date', enableSorting: true }
   ]
 
+  // Which columns are switched off, driven by the Columns button on the controls
+  // row (../../../components/list/ColumnsButton.vue). Only a HIDDEN column is ever
+  // recorded, so this never has to be kept in step with the column model above.
+  const columnVisibility = ref({})
+
   const categorySeverity = (category) =>
     ({
       Auth: 'info',
-      Billing: 'accent',
+      Billing: 'primary',
       Security: 'warning',
       Users: 'secondary',
       Deploy: 'success'
@@ -141,6 +155,7 @@
       <PageHeading
         title="Activity History"
         description="Review recent account activity and audit events."
+        :documentation="HELP"
       />
 
       <!-- The page's parent section. It holds one section here — the controls row
@@ -157,7 +172,7 @@
                  rather than wrapping (see ui/ControlsHeader.vue). -->
             <InputText
               v-model="search"
-              size="large"
+              size="medium"
               placeholder="Search activity"
               aria-label="Search activity"
               class="min-w-36 grow basis-(--container-2xs)"
@@ -169,11 +184,17 @@
                 />
               </template>
             </InputText>
+            <FilterButton
+              v-model="filters"
+              :fields="filterFields"
+            />
+            <ColumnsButton
+              v-model="columnVisibility"
+              :columns="activityColumns"
+            />
           </ControlsHeader>
 
-          <!-- The filter bar takes its own row: it grows as filters are applied, so
-               sharing the controls row would make the search field jump width. -->
-          <FilterBar
+          <FilterChips
             v-model="filters"
             :fields="filterFields"
           />
@@ -183,6 +204,7 @@
               <Table
                 v-model:pagination="pagination"
                 v-model:globalFilter="search"
+                v-model:columnVisibility="columnVisibility"
                 :data="visibleActivity"
                 :columns="activityColumns"
                 row-key="id"

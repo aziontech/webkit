@@ -362,7 +362,7 @@
     >
       <form
         class="flex min-h-full flex-col"
-        aria-label="Create Application"
+        aria-label="Create application"
         novalidate
         @submit.prevent="submit"
       >
@@ -377,9 +377,7 @@
             class="flex flex-col gap-(--spacing-md) rounded-(--shape-card) border border-dashed border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-lg)"
           >
             <div class="flex flex-wrap items-center justify-between gap-(--spacing-sm)">
-              <p class="m-0 text-overline-sm text-(--text-muted)">
-                Simulation — the other user
-              </p>
+              <p class="m-0 text-overline-sm text-(--text-muted)">Simulation — the other user</p>
               <Tag
                 :label="
                   deletedByOtherUser

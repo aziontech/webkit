@@ -50,15 +50,7 @@
 
   const open = defineModel('open', { type: Boolean, default: false })
 
-  const {
-    plan,
-    setPlan,
-    accountSwitcher: accountSwitcherPreference,
-    setAccountSwitcher,
-    mode,
-    setMode,
-    accountEmpty
-  } = useSamplePreset()
+  const { plan, setPlan, mode, setMode } = useSamplePreset()
 
   // Written straight through on change — there is no Save. The screen beside the
   // drawer is the confirmation, and a preset with a Cancel would imply the console
@@ -73,28 +65,12 @@
     set: (value) => setMode(value)
   })
 
-  // Bound to the PREFERENCE, not to whether the link is on screen: the empty version
-  // hides the link whatever this says (../../lib/state/sample-preset.js), and a switch
-  // that snapped back to off would read as broken rather than as overridden.
-  const accountSwitcher = computed({
-    get: () => accountSwitcherPreference.value,
-    set: (value) => setAccountSwitcher(value)
-  })
-
-  // The tenancy switch says what it does AND when it cannot: the empty account has one
-  // tenant, so the header drops the link in that version whatever this is set to. Saying
-  // so here is cheaper than leaving the reviewer to flip it and see nothing happen.
-  const accountSwitchingDescription = computed(() =>
-    accountEmpty.value
-      ? 'Adds the account link to the header chain — from the populated version on. The empty account has a single tenant, so its chain stays organization / workspace.'
-      : 'Adds the account link to the header chain. Organization and workspace always show.'
-  )
-
-  // GUIDANCE. The agent onboarding card is dismissible on the page and the answer is
-  // persisted (../../../shared/lib/agent-onboarding.js) — which, with no control anywhere
-  // to undo it, made "dismiss" a one-way door: the card never came back for that reader,
-  // on any screen, and reviewing it again meant clearing a localStorage key by hand. This
-  // is the way back, in the panel that already owns the sample's other remembered state.
+  // GUIDANCE. The agent onboarding card starts OFF and is dismissible on the page, and
+  // either answer is persisted (../../../shared/lib/agent-onboarding.js) — so without a
+  // control anywhere, the card was unreachable for a reader who had never turned it on
+  // and unrecoverable for one who had dismissed it, both fixable only by editing a
+  // localStorage key by hand. This is the switch, in the panel that already owns the
+  // sample's other remembered state.
   //
   // Bound POSITIVELY (on = the reader still has the card), so the switch reads the same way
   // round as the flag the pages bind.
@@ -131,7 +107,7 @@
   // sentence the reader has to reproduce by hand, on a console whose preset is
   // remembered from their LAST session — so they read the wrong screen and reply
   // about it. The link carries the whole configuration in the query the app already
-  // reads on arrival (`?state=` / `?plan=` / `?accounts=`, see ../../lib/sample-preset.js),
+  // reads on arrival (`?state=` / `?plan=`, see ../../lib/state/sample-preset.js),
   // so the URL IS the configuration: it opens the page being discussed, as the
   // account being discussed, on any machine.
   //
@@ -143,7 +119,6 @@
     const url = new URL(globalThis.location.href)
     url.searchParams.set('state', selectedMode.value)
     url.searchParams.set('plan', selectedPlan.value)
-    url.searchParams.set('accounts', accountSwitcher.value ? '1' : '0')
     return url.toString()
   })
 
@@ -229,18 +204,12 @@
               />
             </section>
 
-            <!-- ACCOUNT SWITCHING. One knob, not three: every account has one
-                 organization and one workspace, so those two links are what a Hobby
-                 account already shows. Having more than one ACCOUNT is the thing a
-                 single-account contract does not have. -->
-            <section class="flex min-w-0 flex-col gap-(--spacing-sm)">
-              <h3 class="m-0 text-label-md text-(--text-default)">Tenancy</h3>
-              <FieldSwitchBlock
-                v-model="accountSwitcher"
-                label="Account switching"
-                :description="accountSwitchingDescription"
-              />
-            </section>
+            <!-- NO TENANCY KNOB. Account switching is parked in the shell
+                 (../shell/AppLayout.vue's `ACCOUNT_SWITCHING`), so a switch for it here
+                 would be a control that moves nothing on screen — worse than a missing
+                 one, because a reviewer flips it and concludes the console is broken.
+                 The preference itself is kept in ../../lib/state/sample-preset.js, so
+                 the section comes back with the switcher. -->
 
             <!-- GUIDANCE. Dismissing the card on Home is persisted, so without this the
                  decision could not be undone from anywhere in the console — see the note in

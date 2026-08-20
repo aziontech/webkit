@@ -11,7 +11,6 @@
   // shell hands each tab a plain flex column (see AccountSettings.vue: the Account
   // Settings tab pins its own footer).
   import Avatar from '@aziontech/webkit/avatar'
-  import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
   import Dropdown from '@aziontech/webkit/dropdown'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -22,10 +21,20 @@
   import Tooltip from '@aziontech/webkit/tooltip'
   import { ref } from 'vue'
 
-  import FilterBar from '../../../components/list/FilterBar.vue'
+  import ColumnsButton from '../../../components/list/ColumnsButton.vue'
+  import FilterButton from '../../../components/list/FilterButton.vue'
+  import FilterChips from '../../../components/list/FilterChips.vue'
   import ControlsHeader from '../../../components/page/ControlsHeader.vue'
+  import HeadingAction from '../../../components/page/HeadingAction.vue'
   import PageHeading from '../../../components/page/PageHeading.vue'
   import { useListFilters } from '../../../lib/behavior/list-state'
+
+  // Where `Documentation` on the page heading goes. The docs ROOT, not a deep link: the
+  // account-side topics have no entry in lib/data/product-empty-states.js (that
+  // registry covers the first-level product modules), and pointing at a path we have
+  // not verified is worse than pointing at the index. Replace with the topic's own URL
+  // when there is one.
+  const HELP = 'https://www.azion.com/en/documentation/'
 
   const users = ref([
     {
@@ -110,7 +119,7 @@
   } = useListFilters(filterFields, users, { pageSize: 10 })
 
   const userColumns = [
-    { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true },
+    { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, hideable: false },
     { accessorKey: 'email', header: 'Email', grow: 2 },
     { accessorKey: 'role', header: 'Role', enableSorting: true },
     { accessorKey: 'status', header: 'Status', enableSorting: true },
@@ -118,8 +127,13 @@
     { id: 'actions', kind: 'action', hideable: false }
   ]
 
+  // Which columns are switched off, driven by the Columns button on the controls
+  // row (../../../components/list/ColumnsButton.vue). Only a HIDDEN column is ever
+  // recorded, so this never has to be kept in step with the column model above.
+  const columnVisibility = ref({})
+
   const roleSeverity = (role) =>
-    ({ Owner: 'accent', Admin: 'info', Developer: 'secondary', Viewer: 'secondary' })[role] ??
+    ({ Owner: 'primary', Admin: 'info', Developer: 'secondary', Viewer: 'secondary' })[role] ??
     'secondary'
 
   const statusSeverity = (status) =>
@@ -145,10 +159,23 @@
 <template>
   <div class="min-h-0 flex-1 overflow-auto">
     <section class="layout-column layout-boundary flex min-w-0 flex-col">
+      <!-- The page's action is on the HEADING, not in the controls row below it — see
+           the note in ./Credentials.vue. `Invite`, not `Create`: what this opens sends a
+           mail to a person, and the row it adds is a consequence of them accepting. -->
       <PageHeading
         title="Users management"
         description="Manage the teammates who have access to this account and their roles."
-      />
+        :documentation="HELP"
+      >
+        <template #actions>
+          <HeadingAction
+            label="Invite user"
+            kind="primary"
+            icon="pi pi-user-plus"
+            @click="inviteUser"
+          />
+        </template>
+      </PageHeading>
 
       <!-- The page's parent section. It holds one section here — the controls row
            over the table it narrows, at the GROUP step — and spaces whatever sits
@@ -164,7 +191,7 @@
                  rather than wrapping (see ui/ControlsHeader.vue). -->
             <InputText
               v-model="search"
-              size="large"
+              size="medium"
               placeholder="Search users"
               aria-label="Search users"
               class="min-w-36 grow basis-(--container-2xs)"
@@ -177,20 +204,17 @@
               </template>
             </InputText>
 
-            <template #actions>
-              <Button
-                label="Invite user"
-                kind="primary"
-                size="large"
-                icon="pi pi-user-plus"
-                @click="inviteUser"
-              />
-            </template>
+            <FilterButton
+              v-model="filters"
+              :fields="filterFields"
+            />
+            <ColumnsButton
+              v-model="columnVisibility"
+              :columns="userColumns"
+            />
           </ControlsHeader>
 
-          <!-- The filter bar takes its own row: it grows as filters are applied, so
-               sharing the controls row would make the search field jump width. -->
-          <FilterBar
+          <FilterChips
             v-model="filters"
             :fields="filterFields"
           />
@@ -200,6 +224,7 @@
               <Table
                 v-model:pagination="pagination"
                 v-model:globalFilter="search"
+                v-model:columnVisibility="columnVisibility"
                 :data="visibleUsers"
                 :columns="userColumns"
                 row-key="id"

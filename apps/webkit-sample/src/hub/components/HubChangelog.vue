@@ -57,7 +57,7 @@
       table: {
         head: ['Layout type', 'Measure'],
         rows: [
-          ['Listing (data, wide table)', '1620px'],
+          ['Standard (home, overviews, listings, detail)', '1388px'],
           ['Create (creation flow)', '1024px'],
           ['Settings', '876px'],
           ['Focused (home, creation center)', '1024px']
@@ -199,7 +199,7 @@
           text: 'both flows use the same picker, with swatches instead of previews of the generated art: the brand is generated from the name, so options painted with the live name would repaint on every keystroke. The color is the choice; the art is the name business.'
         }
       ],
-      links: [{ label: 'Create Organization', path: '/organizations/new' }]
+      links: [{ label: 'Create organization', path: '/organizations/new' }]
     },
     {
       id: 'filters',
@@ -401,7 +401,7 @@
           text: 'the panel X, the overlay, and Escape already close it; a second discard in the footer would only compete with Save for attention.'
         }
       ],
-      links: [{ label: 'Variables → Create Variable', path: '/variables' }]
+      links: [{ label: 'Variables → Create variable', path: '/variables' }]
     },
     {
       id: 'submit-lock',

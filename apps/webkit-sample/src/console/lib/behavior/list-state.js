@@ -15,7 +15,7 @@
 // here rather than passed in — it is a module-level flag, and every list binds it.
 //
 // What stays with the page: the field catalog (only the page knows how a row
-// answers for each field) and the columns. See ui/FilterBar.vue for the bar that
+// answers for each field) and the columns. See list/FilterButton.vue for the control that
 // drives `filters`, and lib/filter-bar.js for the model underneath it.
 import { computed, ref, toValue, watch } from 'vue'
 
@@ -29,7 +29,7 @@ import { applyFilters } from './filter-bar'
  *   catalog (lib/filter-bar.js) — a plain array for a fixed catalog, or a ref/getter
  *   for a page whose catalog GROWS at runtime. Real-Time Events is the second kind:
  *   filtering by a document field from its Fields panel adds that field to the catalog,
- *   so the chip bar can show and clear it like any other filter. Resolved with
+ *   so the filter control can show and clear it like any other filter. Resolved with
  *   `toValue`, so an array keeps working exactly as before.
  * @param {import('vue').MaybeRefOrGetter<Array<object>>} rows Every row before filtering —
  *   a ref, a computed or a getter, so a page can compose provisioned rows with
@@ -48,7 +48,7 @@ export function useListFilters(fields, rows, { pageSize = 8 } = {}) {
 
   // `{ author: ['Bruno Germano'], status: ['Active'] }` — an absent or empty entry
   // is not a filter, which is what lets an unfilled field render as a dimmed
-  // suggestion chip rather than disappear from the bar.
+  // plain row in the panel rather than a chip that outlives its value.
   const filters = ref({})
 
   // Free-text search. The page binds it to the table's `v-model:globalFilter`, so

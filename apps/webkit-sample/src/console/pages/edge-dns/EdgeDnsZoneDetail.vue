@@ -17,7 +17,6 @@
   //                   Create Record drawer appends new rows.
   //
   // The active tab lives in the URL (?tab=) so it survives reload and is linkable.
-  import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
   import CopyButton from '@aziontech/webkit/copy-button'
   import Dropdown from '@aziontech/webkit/dropdown'
@@ -35,16 +34,25 @@
 
   import FieldRow from '../../components/form/FieldRow.vue'
   import SettingsSaveBar from '../../components/form/SettingsSaveBar.vue'
+  import ColumnsButton from '../../components/list/ColumnsButton.vue'
   import DeleteDialog from '../../components/list/DeleteDialog.vue'
-  import FilterBar from '../../components/list/FilterBar.vue'
+  import FilterButton from '../../components/list/FilterButton.vue'
+  import FilterChips from '../../components/list/FilterChips.vue'
   import ControlsHeader from '../../components/page/ControlsHeader.vue'
+  import HeadingAction from '../../components/page/HeadingAction.vue'
+  import PageHeading from '../../components/page/PageHeading.vue'
   import PageTabs from '../../components/page/PageTabs.vue'
   import Section from '../../components/page/Section.vue'
   import AppLayout from '../../components/shell/AppLayout.vue'
   import { saveGroup, useBaseline } from '../../lib/behavior/forms'
   import { useListFilters } from '../../lib/behavior/list-state'
   import { NAMESERVERS, POLICY_TYPES, policyLabel, RECORD_TYPES } from '../../lib/data/edge-dns'
+  import { productFirstUse } from '../../lib/data/product-empty-states'
   import CreateRecordDrawer from './CreateRecordDrawer.vue'
+
+  // Where `Documentation` goes: the zone's own module doc, taken from the registry rather
+  // than restated (lib/data/product-empty-states.js).
+  const HELP = productFirstUse('edge-dns').learnMore.href
 
   const route = useRoute()
   const router = useRouter()
@@ -199,7 +207,7 @@
   } = useListFilters(filterFields, records)
 
   const recordColumns = [
-    { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true },
+    { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, hideable: false },
     { accessorKey: 'id', header: 'ID', enableSorting: true },
     { accessorKey: 'type', header: 'Type', enableSorting: true },
     { accessorKey: 'value', header: 'Value', grow: 2 },
@@ -209,6 +217,16 @@
     { accessorKey: 'description', header: 'Description', grow: 2 },
     { id: 'actions', kind: 'action', hideable: false }
   ]
+
+  // Which columns are switched off, driven by the Columns button on the controls
+  // row (../../components/list/ColumnsButton.vue). Only a HIDDEN column is ever
+  // recorded, so this never has to be kept in step with the column model above.
+  //
+  // ID SHIPS OFF. It is the column an operator wants when they are quoting a resource
+  // into a support thread or an API call, and almost never while scanning the list —
+  // so it starts hidden and is one switch away. That is the whole point of the panel:
+  // a column can be available without being in the way by default.
+  const columnVisibility = ref({ id: false })
 
   const recordDrawerOpen = ref(false)
   const openRecordDrawer = () => {
@@ -252,24 +270,14 @@
     ]"
   >
     <main class="flex h-full min-h-0 flex-col">
-      <!-- Nav pattern (ApplicationDetail): the tabs are the full-bleed bottom of
-           the header. The Records tab's "Record" create action trails on the same
-           row; only the content below scrolls. -->
+      <!-- Nav pattern (ApplicationDetail): the tabs are the full-bleed bottom of the
+           header, and nothing else — only the content below scrolls. The Records tab's
+           create action is on the Records HEADING, beside the list it creates into,
+           like every second-level list in the console. -->
       <PageTabs
         v-model:value="activeTab"
         :tabs="tabs"
-      >
-        <template #actions>
-          <Button
-            v-if="activeTab === 'records'"
-            label="Record"
-            kind="primary"
-            size="medium"
-            icon="pi pi-plus"
-            @click="openRecordDrawer"
-          />
-        </template>
-      </PageTabs>
+      />
 
       <!-- Main Settings — Sections over flush cards of FieldRows, committed as one page.
            Only this region scrolls, and it is a flex COLUMN so the save bar below can pin
@@ -307,9 +315,7 @@
             <!-- The tab's parent section: it spaces the groups inside it at
                  --layout-section-gap, so no group restates the step (layout.css: the
                  boundary owns the top space, the parent owns the space between). -->
-            <section
-              class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)"
-            >
+            <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)">
               <!-- One flag locks every editable control while the commit is in flight. -->
               <fieldset
                 class="m-0 flex min-w-0 flex-col border-0 p-0"
@@ -511,18 +517,38 @@
         </form>
       </section>
 
-      <!-- Records — a flush borderless Table; the create action is on the tab bar. -->
+      <!-- Records — a flush borderless Table under the heading that names it. -->
       <section
         v-else
         class="animate-page-enter motion-reduce:animate-none min-h-0 flex-1 overflow-auto"
       >
         <div class="layout-column layout-boundary flex min-w-0 flex-col">
+          <!-- The tab HEADS ITSELF, like every other second-level list: the title, the
+               module's reference link, and the create action on one row, above the
+               controls that narrow the list. This tab had none of it — the zone name in
+               the breadcrumb was doing the naming and the create button was parked in
+               the tab bar — so the one page in the console whose list had no heading was
+               also the one whose action sat furthest from it. -->
+          <PageHeading
+            title="Records"
+            description="The authoritative records this zone answers with."
+            size="small"
+            :documentation="HELP"
+          >
+            <template #actions>
+              <HeadingAction
+                label="Add Record"
+                kind="primary"
+                icon="pi pi-plus"
+                @click="openRecordDrawer"
+              />
+            </template>
+          </PageHeading>
+
           <!-- The tab's parent section: it spaces the sections inside it at
                --layout-section-gap. It holds one here — the controls row over the table
                it narrows, joined at the GROUP step. -->
-          <section
-            class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)"
-          >
+          <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)">
             <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
               <!-- The band's CONTROLS: narrowing on the left, the band's own action on the
                    right, above the card — the same row every list in the console opens with. -->
@@ -533,7 +559,7 @@
                      rather than wrapping (see ui/ControlsHeader.vue). -->
                 <InputText
                   v-model="search"
-                  size="large"
+                  size="medium"
                   placeholder="Search records"
                   aria-label="Search records"
                   class="min-w-36 grow basis-(--container-2xs)"
@@ -545,11 +571,17 @@
                     />
                   </template>
                 </InputText>
+                <FilterButton
+                  v-model="filters"
+                  :fields="filterFields"
+                />
+                <ColumnsButton
+                  v-model="columnVisibility"
+                  :columns="recordColumns"
+                />
               </ControlsHeader>
 
-              <!-- The filter bar takes its own row: it grows as filters are applied, so
-                   sharing the controls row would make the search field jump width. -->
-              <FilterBar
+              <FilterChips
                 v-model="filters"
                 :fields="filterFields"
               />
@@ -559,6 +591,7 @@
                   <Table
                     v-model:pagination="pagination"
                     v-model:globalFilter="search"
+                    v-model:columnVisibility="columnVisibility"
                     :data="visibleRecords"
                     :columns="recordColumns"
                     row-key="id"

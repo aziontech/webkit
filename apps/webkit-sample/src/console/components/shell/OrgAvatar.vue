@@ -42,7 +42,7 @@
   //
   // `medium` is 24 — the DS Avatar's `small` — and it is the mark the tenancy
   // switcher wears in both places it appears: the header pill and the panel rows,
-  // beside the account's and workspace's own 24px marks (./AccountSwitcher.vue).
+  // beside the account's and workspace's own 24px marks (./TenancySwitcher.vue).
   // `small` (20) is the compact mark for a form that previews an org inline, and
   // `large` (48) the org at rest in the create flow and onboarding.
   const sizeClasses = {

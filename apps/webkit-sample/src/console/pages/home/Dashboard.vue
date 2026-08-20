@@ -29,7 +29,7 @@
       label: 'Total Data Transferred',
       value: '0',
       unit: 'Bytes',
-      hint: 'Total bytes delivered across all your edge applications.'
+      hint: 'Total bytes delivered across all your applications.'
     },
     {
       label: 'Requests per Second',
@@ -78,7 +78,7 @@
   ]
 
   const resourceColumns = [
-    { accessorKey: 'zoneName', header: 'Zone Name', principal: true },
+    { accessorKey: 'zoneName', header: 'Zone Name', principal: true, hideable: false },
     { accessorKey: 'domain', header: 'Domain', grow: 2 },
     { accessorKey: 'status', header: 'Status' },
     { accessorKey: 'lastModified', header: 'Last Modified', grow: 2 },
@@ -130,7 +130,7 @@
   ])
 
   const activityColumns = [
-    { accessorKey: 'date', header: 'Date', principal: true },
+    { accessorKey: 'date', header: 'Date', principal: true, hideable: false },
     { accessorKey: 'operation', header: 'Operation' },
     { accessorKey: 'type', header: 'Type' },
     { accessorKey: 'resource', header: 'Resource', grow: 2 },
@@ -399,9 +399,7 @@
               <p class="text-pretty text-body-xs text-(--text-muted)">
                 {{ featuredTemplate.description }}
               </p>
-              <p
-                class="flex items-center gap-(--spacing-md) text-body-xxs text-(--text-muted)"
-              >
+              <p class="flex items-center gap-(--spacing-md) text-body-xxs text-(--text-muted)">
                 <span>
                   By
                   <span class="text-(--text-default)">{{ featuredTemplate.author }}</span>

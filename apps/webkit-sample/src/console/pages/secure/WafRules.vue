@@ -2,17 +2,18 @@
   // WAF Rules — the Azion Console "WAF Rules" module. The app shell (single sidebar +
   // GlobalHeader with the module breadcrumb) comes from AppLayout; this page renders
   // only its content, in the shape every module list takes (the webkit-lists skill):
-  // a CONTROLS HEADER over a FILTER BAR over a data-driven <Table> in a flush CardBox.
-  // As a first-level module list it carries no navigation tabs and no page heading —
-  // the module name already IS the header breadcrumb crumb.
+  // a PAGE HEADING over a CONTROLS HEADER (search + Filter) over a data-driven <Table>
+  // in a flush CardBox. As a first-level module list it carries no navigation tabs; the
+  // heading names the module and holds its create action, and the controls row below it
+  // only narrows the list (../../components/page/PageHeading.vue).
   //
   // A RULE SET is a named threat posture: which families it inspects for, and whether
   // it BLOCKS what it matches or only logs it. That mode is the question this list
   // exists to answer — which of these are actually blocking — so it leads the fields.
   //
-  // Narrowing is the shared FILTER BAR of chips (ui/FilterBar.vue): the COLUMNS decide
-  // the fields, the bar pre-filters `:data`, and the search field narrows what is left
-  // through the table's own global filter.
+  // Narrowing is the shared FILTER BUTTON (list/FilterButton.vue), beside the search in
+  // the controls row: the COLUMNS decide the fields, the button pre-filters `:data`, and
+  // the search narrows what is left through the table's own global filter.
   import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
   import Dropdown from '@aziontech/webkit/dropdown'
@@ -27,14 +28,20 @@
   import { useRoute, useRouter } from 'vue-router'
 
   import ProductFirstUse from '../../components/home/ProductFirstUse.vue'
+  import AuthorCell from '../../components/list/AuthorCell.vue'
+  import ColumnsButton from '../../components/list/ColumnsButton.vue'
   import DeleteDialog from '../../components/list/DeleteDialog.vue'
-  import FilterBar from '../../components/list/FilterBar.vue'
+  import FilterButton from '../../components/list/FilterButton.vue'
+  import FilterChips from '../../components/list/FilterChips.vue'
   import LastModifiedCell from '../../components/list/LastModifiedCell.vue'
+  import TagListCell from '../../components/list/TagListCell.vue'
   import ControlsHeader from '../../components/page/ControlsHeader.vue'
+  import HeadingAction from '../../components/page/HeadingAction.vue'
+  import PageHeading from '../../components/page/PageHeading.vue'
   import AppLayout from '../../components/shell/AppLayout.vue'
   import { DATE_PRESETS, formatDateRange, matchDate } from '../../lib/behavior/filter-bar'
   import { useListFilters } from '../../lib/behavior/list-state'
-  import { createResourcePath, resourceSettingsPath } from '../../lib/data/create-resources'
+  import { createResourcePath } from '../../lib/data/create-resources'
   import { productFirstUse } from '../../lib/data/product-empty-states'
   import { WAF_MODES, WAF_RULES } from '../../lib/data/waf-rules'
   import { useSampleMode } from '../../lib/state/sample-mode'
@@ -55,11 +62,13 @@
   const scopedRuleSets = computed(() => tenancyRows(ruleSets.value, 'waf-rules'))
 
   const columns = [
-    { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true },
+    { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, hideable: false },
+    { accessorKey: 'id', header: 'ID' },
     { accessorKey: 'mode', header: 'Mode', enableSorting: true },
     { accessorKey: 'threatLabels', header: 'Threat Types', grow: 3 },
     { accessorKey: 'sensitivity', header: 'Sensitivity', enableSorting: true },
     { accessorKey: 'status', header: 'Status', enableSorting: true },
+    { accessorKey: 'author', header: 'Last Editor', enableSorting: true, grow: 2 },
     { accessorKey: 'lastModified', header: 'Last Modified', enableSorting: true, grow: 2 },
     { id: 'actions', kind: 'action', hideable: false }
   ]
@@ -120,6 +129,16 @@
     loading: tenancyReloading
   } = useListFilters(filterFields, scopedRuleSets, { pageSize: 8 })
 
+  // Which columns are switched off, driven by the Columns button beside the filter
+  // (../../components/list/ColumnsButton.vue). Only a HIDDEN column is ever recorded, so this
+  // never has to be kept in step with the column model above.
+  //
+  // ID SHIPS OFF. It is the column an operator wants when they are quoting a resource
+  // into a support thread or an API call, and almost never while scanning the list —
+  // so it starts hidden and is one switch away. That is the whole point of the panel:
+  // a column can be available without being in the way by default.
+  const columnVisibility = ref({ id: false })
+
   // Creating: the module's own create page. Its fields come from this resource's
   // POST body in the Azion v4 API (../lib/create-resources.js), so the form asks for
   // what the platform actually takes. The email rides along the way every route in this
@@ -146,16 +165,18 @@
     pendingDelete.value = null
   }
 
+  // The row is the way in: clicking it opens Main Settings, the tab a reader arrives
+  // wanting, and the row menu's Edit lands in exactly the same place.
+  const openRuleSet = (row) => router.push(`/waf-rules/${row.id}`)
+
   const onRowAction = (event, action, row) => {
-    // EDIT OPENS THE SETTINGS PAGE. It used to raise "edit is disabled in the demo", which
-    // left a reader able to create a waf rules and unable to change one. The page is
-    // generated from the same fields as the create page (../lib/create-resources.js via
-    // ./ResourceSettings.vue), and the row hands over the name it already knows.
+    // EDIT OPENS THE RULE SET'S OWN PAGE. Not the generated settings page the other
+    // Secure modules use: a rule set is three surfaces, not one record, so it has a
+    // TABBED detail (./WafRuleDetail.vue) the same way an application does. The generated
+    // route is excluded for this module in ../../router/console.routes.js for the same
+    // reason, so there is exactly one place a rule set is edited.
     if (action === 'edit') {
-      router.push({
-        path: resourceSettingsPath('waf-rules', row.id),
-        query: { name: row.name, email: route.query.email || undefined }
-      })
+      openRuleSet(row)
       return
     }
     if (action === 'delete') {
@@ -179,9 +200,37 @@
       class="flex min-h-full flex-col"
       :class="accountEmpty ? 'layout-column-focused' : 'layout-column'"
     >
-      <!-- The page's parent section. A module list opens straight on it (no
-           PageHeading — the module name is the breadcrumb crumb), so the
-           `:first-child` rule zeroes its step and the boundary is its top space. -->
+      <!-- THE PAGE HEADING. A first-level resource page names itself: the module name
+           over one line saying what the module is, with the module's own action on the
+           right. The breadcrumb says WHERE you are; the heading says WHAT this page is,
+           and it gives that action one fixed home above the list instead of a control
+           that rides the row narrowing it.
+           The action stays here over an EMPTY list as well: where a page's action sits is
+           a property of the page, not of how many rows it has. The empty state's own
+           button is the in-content door — a `secondary` inside the card — not this same
+           control moving.
+           `size="medium"` is the first-level list scale (components/page/PageHeading.vue):
+           the title names the collection, and the table under it is what the page is for.
+           The parent section below is no longer `:first-child`, so `.layout-section-start`
+           opens it at the boundary step — the list sits tight under the heading (theme
+           semantic/layouts § "THE PAGE SHAPE"). -->
+      <PageHeading
+        v-if="!accountEmpty"
+        size="medium"
+        title="WAF Rules"
+        description="Manage the rule sets that inspect traffic for injection, scripting, and file-inclusion attempts."
+        :documentation="firstUse.learnMore.href"
+      >
+        <template #actions>
+          <HeadingAction
+            label="Create WAF rule set"
+            kind="primary"
+            icon="pi pi-plus"
+            @click="create"
+          />
+        </template>
+      </PageHeading>
+
       <!-- FIRST USE, IN HOME'S CONTAINER.
            The same box the first access uses on /home (./HomeEmptyState.vue) and the
            /empty-states gallery around it (../ProductEmptyStates.vue): centred in the
@@ -214,7 +263,7 @@
           <ControlsHeader v-if="scopedRuleSets.length">
             <InputText
               v-model="search"
-              size="large"
+              size="medium"
               placeholder="Search rule sets"
               aria-label="Search rule sets"
               class="min-w-36 grow basis-(--container-2xs)"
@@ -226,21 +275,17 @@
                 />
               </template>
             </InputText>
-
-            <template #actions>
-              <Button
-                label="Rule set"
-                kind="primary"
-                size="large"
-                icon="pi pi-plus"
-                @click="create"
-              />
-            </template>
+            <FilterButton
+              v-model="filters"
+              :fields="filterFields"
+            />
+            <ColumnsButton
+              v-model="columnVisibility"
+              :columns="columns"
+            />
           </ControlsHeader>
 
-          <!-- The filter bar takes its own row: it grows as filters are applied, so
-               sharing the controls row would make the search field jump width. -->
-          <FilterBar
+          <FilterChips
             v-if="scopedRuleSets.length"
             v-model="filters"
             :fields="filterFields"
@@ -282,7 +327,7 @@
                   </template>
                   <template #actions>
                     <Button
-                      label="Rule set"
+                      label="Create WAF rule set"
                       kind="secondary"
                       size="large"
                       icon="pi pi-plus"
@@ -303,6 +348,7 @@
                 <Table
                   v-model:pagination="pagination"
                   v-model:globalFilter="search"
+                  v-model:columnVisibility="columnVisibility"
                   :data="visibleRuleSets"
                   :columns="columns"
                   row-key="id"
@@ -311,7 +357,13 @@
                   :page-size="8"
                   :border="false"
                   :loading="tenancyReloading"
+                  @row-click="(event, row) => openRuleSet(row)"
                 >
+                  <!-- The principal column reads as the way in it is. -->
+                  <template #cell-name="{ value }">
+                    <span class="cursor-pointer truncate hover:underline">{{ value }}</span>
+                  </template>
+
                   <template #cell-mode="{ value }">
                     <Tag
                       :label="value"
@@ -321,15 +373,13 @@
                   </template>
 
                   <template #cell-threatLabels="{ row }">
-                    <span class="flex min-w-0 flex-wrap items-center gap-(--spacing-xxs)">
-                      <Tag
-                        v-for="label in row.threatLabels"
-                        :key="label"
-                        :label="label"
-                        severity="secondary"
-                        size="small"
-                      />
-                    </span>
+                    <!-- ONE LINE, always: the first two threat types, the rest behind
+                         "+N" (../../components/list/TagListCell.vue). A wrapping chip
+                         list made the row as tall as its longest list. -->
+                    <TagListCell
+                      :items="row.threatLabels"
+                      noun="threat types"
+                    />
                   </template>
 
                   <template #cell-status="{ value }">
@@ -339,13 +389,17 @@
                       size="medium"
                     />
                   </template>
-
-                  <template #cell-lastModified="{ row }">
-                    <LastModifiedCell
+                  <!-- WHO and WHEN are two columns now, so each cell says one thing:
+                       the face and the name here, the relative time next to it. -->
+                  <template #cell-author="{ row }">
+                    <AuthorCell
                       :author="row.author"
                       :avatar-src="row.authorAvatar"
-                      :date="row.modifiedAt"
                     />
+                  </template>
+
+                  <template #cell-lastModified="{ row }">
+                    <LastModifiedCell :date="row.modifiedAt" />
                   </template>
 
                   <template #cell-actions="{ row }">

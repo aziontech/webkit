@@ -212,9 +212,7 @@
                       :accent="form.accent"
                       size="small"
                     />
-                    <span
-                      class="min-w-0 truncate text-label-sm font-medium text-(--text-default)"
-                    >
+                    <span class="min-w-0 truncate text-label-sm font-medium text-(--text-default)">
                       {{ previewName }}
                     </span>
                   </span>
@@ -253,7 +251,7 @@
               <Item.Actions class="justify-end">
                 <Tag
                   label="Owner"
-                  severity="accent"
+                  severity="primary"
                   size="medium"
                   icon="pi pi-key"
                 />

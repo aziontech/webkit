@@ -1,0 +1,587 @@
+import { Canvas, Meta } from '@storybook/blocks'
+
+import * as CalloutStories from './Callout.stories'
+import * as StepsStories from './Steps.stories'
+
+<Meta
+  title="Documentation/Overview"
+  parameters={{
+    options: { showPanel: false },
+    controls: { disable: true },
+    actions: { disable: true },
+    docs: {
+      description: {
+        component:
+          'The layer that turns an MDX file into an Azion documentation page — prose styled by tokens, components built from webkit.'
+      }
+    }
+  }}
+/>
+
+# Documentation components
+
+A documentation page is mostly prose, and prose is the part a design system usually leaves
+to whoever is writing. This layer closes that gap: an author writes an `.mdx` file, and
+every heading, paragraph, link, list and table lands on the Azion type scale, in the Azion
+rhythm, without a single class in the source.
+
+It has exactly two halves.
+
+## 1. The prose layer
+
+`DocProse` is the typography contract. MDX text compiles to plain semantic HTML — `h2`,
+`p`, `ul`, `table`, `a`, `code` — and `DocProse` styles those descendants with the theme's
+tokens. Nothing in the markdown carries a class, and nothing in the page overrides a token.
+
+The rhythm comes from the docs.azion.com frame:
+
+<table style={{ width: '100%', borderCollapse: 'collapse', margin: '16px 0' }}>
+  <thead>
+    <tr>
+      <th
+        style={{
+          textAlign: 'left',
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-default)',
+          fontWeight: 500
+        }}
+      >
+        Between
+      </th>
+      <th
+        style={{
+          textAlign: 'left',
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-default)',
+          fontWeight: 500
+        }}
+      >
+        Space
+      </th>
+      <th
+        style={{
+          textAlign: 'left',
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-default)',
+          fontWeight: 500
+        }}
+      >
+        Token
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        A section heading and what precedes it
+      </td>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        48px
+      </td>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        <code>{'--spacing-xl'}</code>
+      </td>
+    </tr>
+    <tr>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        A sub-heading and what precedes it
+      </td>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        24px
+      </td>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        <code>{'--spacing-lg'}</code>
+      </td>
+    </tr>
+    <tr>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        Flowing blocks — paragraphs, lists
+      </td>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        16px
+      </td>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        <code>{'--spacing-md'}</code>
+      </td>
+    </tr>
+    <tr>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        A block component and what precedes it
+      </td>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        48px
+      </td>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        <code>{'--spacing-xl'}</code>
+      </td>
+    </tr>
+  </tbody>
+</table>
+Because it styles descendants rather than itself, the same container works over any pipeline that
+emits semantic HTML — the MDX renderer here, a CMS, or hand-written markup.
+
+## 2. The component layer
+
+Where prose runs out, an author reaches for a component. Each one is assembled from webkit,
+so the surface, the severity colors, the keyboard model and the focus rings are the design
+system's — this layer only decides the documentation-specific anatomy.
+
+<table style={{ width: '100%', borderCollapse: 'collapse', margin: '16px 0' }}>
+  <thead>
+    <tr>
+      <th
+        style={{
+          textAlign: 'left',
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-default)',
+          fontWeight: 500
+        }}
+      >
+        MDX tag
+      </th>
+      <th
+        style={{
+          textAlign: 'left',
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-default)',
+          fontWeight: 500
+        }}
+      >
+        Component
+      </th>
+      <th
+        style={{
+          textAlign: 'left',
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-default)',
+          fontWeight: 500
+        }}
+      >
+        Built on
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        <code>{'<Note>'}</code> <code>{'<Tip>'}</code> <code>{'<Check>'}</code>{' '}
+        <code>{'<Warning>'}</code> <code>{'<Danger>'}</code> <code>{'<Info>'}</code>
+      </td>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        <code>{'DocCallout'}</code>
+      </td>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        webkit <code>{'Message'}</code>
+      </td>
+    </tr>
+    <tr>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        <code>{'<Tooltip>'}</code>
+      </td>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        <code>{'DocTooltip'}</code>
+      </td>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        webkit <code>{'Link'}</code> + <code>{'usePlacement'}</code>
+      </td>
+    </tr>
+    <tr>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        <code>{'<Steps>'}</code> <code>{'<Step>'}</code>
+      </td>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        <code>{'DocSteps'}</code> <code>{'DocStep'}</code>
+      </td>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        tokens + the frame's rail
+      </td>
+    </tr>
+    <tr>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        <code>{'<CardGroup>'}</code> <code>{'<Card>'}</code>
+      </td>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        <code>{'DocCardGroup'}</code> <code>{'DocCard'}</code>
+      </td>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        tokens
+      </td>
+    </tr>
+    <tr>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        <code>{'<ItemGroup>'}</code> <code>{'<Item>'}</code>
+      </td>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        <code>{'DocItemGroup'}</code> <code>{'DocItem'}</code>
+      </td>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        webkit <code>{'CardBox'}</code> + <code>{'ItemList'}</code>
+      </td>
+    </tr>
+    <tr>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        <code>{'<CodeGroup>'}</code> and fenced code
+      </td>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        <code>{'DocCodeGroup'}</code>
+      </td>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        webkit <code>{'CodeBlock'}</code>
+      </td>
+    </tr>
+    <tr>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        <code>{'<Tabs>'}</code> <code>{'<Tab>'}</code>
+      </td>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        <code>{'DocTabs'}</code> <code>{'DocTab'}</code>
+      </td>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        webkit <code>{'TabView'}</code>
+      </td>
+    </tr>
+    <tr>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        <code>{'<AccordionGroup>'}</code> <code>{'<Accordion>'}</code>
+      </td>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        <code>{'DocAccordionGroup'}</code>
+      </td>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        webkit <code>{'Accordion'}</code>
+      </td>
+    </tr>
+    <tr>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        <code>{'<Frame>'}</code>
+      </td>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        <code>{'DocFrame'}</code>
+      </td>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        tokens
+      </td>
+    </tr>
+    <tr>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        <code>{'<Update>'}</code>
+      </td>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        <code>{'DocUpdate'}</code>
+      </td>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        webkit <code>{'Tag'}</code>
+      </td>
+    </tr>
+    <tr>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        Page chrome
+      </td>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        <code>{'DocPageHeader'}</code> <code>{'DocOnThisPage'}</code> <code>{'DocPagination'}</code>
+      </td>
+      <td
+        style={{
+          padding: '8px 12px',
+          borderBottom: '1px solid var(--border-muted)',
+          verticalAlign: 'top'
+        }}
+      >
+        webkit <code>{'Breadcrumb'}</code>, <code>{'SplitButton'}</code>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<Canvas of={StepsStories.Default} />
+
+<Canvas of={CalloutStories.Kinds} />
+
+## The two halves meet in one file
+
+`DocMarkdown` parses the MDX subset and renders both halves together: prose becomes plain
+HTML inside `DocProse`, component tags become the components above. `DocPage` wraps that in
+the page frame — masthead, previous/next, and an "On this page" rail built from the very
+headings the body just rendered, so the rail can never list a section the page does not
+have.
+
+```vue
+<script setup>
+  import DocPage from '@aziontech/webkit-docs/doc-page'
+  import source from './deploy-an-application.mdx?raw'
+</script>
+
+<template>
+  <DocPage
+    :source="source"
+    :breadcrumb="[{ label: 'Start', href: '/start' }, { label: 'Deploy an application' }]"
+    :next="{ title: 'Configure a domain', href: '/build/configure-a-domain' }"
+  />
+</template>
+```
+
+See **Example Page** for a real file rendered end to end, and **Authoring** for the syntax
+an author may write.

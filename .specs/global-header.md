@@ -7,15 +7,17 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4310-19617
   node_id: 4310:19617
-checksum: 54a5c6ef9f6dae107cf3fd0ba4bb865e493649c8b44d984dc15a1d771c5cf98a
+checksum: b9974e26f9419d135af01add71fff1ec08697dffddc5bd153baa0ba508286ec9
 created: 2026-05-23
-last_updated: 2026-06-23
+last_updated: 2026-08-20
 ---
 # Global Header — Component Spec
 
 ## Purpose
 
 Application chrome for the top menubar: a fixed-height horizontal bar with three composable regions (start, center, end) and a dedicated brand slot for Azion logo variants. Matches the Webkit GlobalHeader (Figma node 4310:19617) — a Shell Core part with symmetric horizontal padding, a hairline bottom border, the menu trigger and brand grouped at the start, a growing nav region in the center, and trailing actions (Create, Copilot, Feedback, help, avatar) at the end. Consumers reorder or omit regions; logo and actions are not baked in.
+
+The bar has two placements, chosen with `kind`, and the only difference is which edge the inset is measured from. `app` is the window-wide chrome above the navigation rail, insetting its regions by the shell's own `--spacing-md`. `content` sits inside the content zone beside the rail, full bleed across it, insetting its regions by the page boundary (`--layout-boundary-inline`) so the first region opens on the same vertical as the page content beside it. A breadcrumb in an `app` bar cannot find that vertical — it measures its inset from the window, so the gap moves with the rail's width.
 
 ## Sub-components
 
@@ -30,6 +32,7 @@ Application chrome for the top menubar: a fixed-height horizontal bar with three
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
 | `ariaLabel` | `string` | `'Global header'` | false | Accessible name for the header landmark. |
+| `kind` | `'app' \| 'content'` | `'app'` | false | Where the bar sits: `app` spans the whole window above the navigation rail and insets its regions by the shell's own step; `content` sits inside the content zone beside the rail, full bleed, and insets them by the page boundary instead. |
 
 ## Events
 
@@ -46,6 +49,7 @@ Application chrome for the top menubar: a fixed-height horizontal bar with three
 ## States
 
 - Visual states: `default`
+- Placement: `data-kind="app" | "content"` on the root (from `kind`).
 - No interactive states on the shell; children own focus/hover/disabled.
 
 ## Motion & Animations
@@ -57,7 +61,8 @@ _none_
 | Region | Token (DESIGN.md) |
 |---|---|
 | shell height | `h-14` (56px) |
-| shell padding-x | `var(--spacing-md)` |
+| shell padding-x (`kind="app"`) | `var(--spacing-md)` |
+| shell padding-x (`kind="content"`) | `var(--layout-boundary-inline)` |
 | shell region gap | `var(--spacing-md)` |
 | start cluster (container) gap | `var(--spacing-md)` |
 | start (left) region gap | `var(--spacing-xs)` |
@@ -85,6 +90,7 @@ _none_
 ## Stories (Storybook)
 
 - Default
+- ContentZone — the full-bleed `kind="content"` bar, inset by the page boundary.
 
 ## Constraints — DO NOT
 

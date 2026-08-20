@@ -7,15 +7,26 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5467-1638
   node_id: 5467:1638
-checksum: 7cc4efef4305e63c50c44c3a007001c28265e937d6dfaa153a588893ace37118
+checksum: 419be7c0e171edf7752954ee9eff75d198a33bce060e800e12628e2149af4423
 created: 2026-08-10
-last_updated: 2026-08-11
+last_updated: 2026-08-17
 ---
 # Footer — Component Spec
 
 ## Purpose
 
-Page footer for marketing and product surfaces: the bottom-of-page counterpart to `GlobalHeader`. A canvas-colored shell with a centered content measure holding link columns and a social bar separated by a hairline top border. Matches the Webkit Footer component set (Figma node 5467:1638, `Type=Default` / `Type=Mobile`): the two presentations are one component switching by CSS at the `md` (768px) breakpoint. Content (links, labels, languages, status) always comes from the consumer; the component owns anatomy, tokens, and responsiveness.
+Page footer for marketing and product surfaces: the bottom-of-page counterpart to `GlobalHeader`. A canvas-colored shell whose centered content measure is framed on both sides and divided into bands by hairline rules. Matches the Webkit Footer component set (Figma node 5467:1638, `Type=Default` / `Type=Mobile`).
+
+**Four bands inside a framed measure, flanked by hatched page material.** Top to bottom: the link columns, a row carrying the social icons and the status/language pair, and the signature band (the brand beside its tagline, in its own `FrameBox` with corner marks). Two hatched `FrameBox` gutters flank the measure and a hatched band closes the footer below it — those three hold no content and stay out of the a11y tree.
+
+**The two Figma variants are one component switching by CSS**, and the switch is not one breakpoint:
+
+- The **column grid** folds from four columns to the 2×2 mobile grid below `md` (768px).
+- The **bands recombine at `md`**: stacked, their order is links → status/language → signature → social icons (the Mobile variant's order); from `md` the social icons and the status pair share one row above the signature. All four bands are cells of **one** grid, so each is a single element in a single place in the DOM at every width — the order is `order-*` when stacked and explicit row/column placement from `md`. A wrapper row that existed only on desktop would mean two copies of the markup, so two copies of the consumer's slot content.
+- The **gutters appear at `xl`** (1280px), not with the rest of the desktop presentation, because that is the first breakpoint past the measure itself (1192px). Gated any earlier they resolve to zero width and still paint their corner marks on the measure's own edges.
+- Within the status pair, **`language` and `status` swap order** between the two variants (the phone leads with the select, the row ends with it), which is why they are two slots the row reverses rather than one cluster the consumer orders.
+
+Content (links, labels, languages, status, brand, tagline) always comes from the consumer; the component owns anatomy, tokens, and responsiveness.
 
 ## When to use
 
@@ -30,20 +41,31 @@ Page footer for marketing and product surfaces: the bottom-of-page counterpart t
 ## Related
 
 - `global-header` — the top-of-page chrome counterpart; same shell philosophy (regions composed by the consumer).
-- `brand`, `icon-button`, `status-indicator`, `select` — the components consumers compose inside the social bar; the footer reimplements none of them.
+- `brand`, `icon-button`, `status-indicator`, `select` — the components consumers compose inside the bands; the footer reimplements none of them.
+- `frame-box` — the footer's own frame: the hatched gutters, the closing band and the signature box are `FrameBox` instances (`borders` / `marks` / `hatch`).
 
 ## Best practices
 
-- Compose the social bar from existing DS components (`Brand`, `IconButton kind="transparent"`, `StatusIndicator`, `Select`); never rebuild them inside the slots.
+- Compose every band from existing DS components (`Brand`, `IconButton kind="transparent"`, `StatusIndicator`, `Select`); never rebuild them inside the slots.
 - Keep column titles short (one or two words) — they are group labels, not headings for prose.
 - Give every social `IconButton` an `ariaLabel`; the footer cannot name them for you.
 - Provide four columns for the canonical desktop presentation; the grid folds to two columns below `md` on its own.
+- Keep each band close to the canonical content (up to ~7 social icons; one status indicator; one language select; one brand lockup; a one-line tagline). Every band grows past its `min-h-14` floor rather than clipping, so a longer status string or an extra icon wraps safely — but a much heavier cluster belongs in the columns, not in a band.
+- Give the `tagline` slot plain text, not a heading element: the footer already wraps it in the `.text-heading-xl` measure, and a real `h*` in a `contentinfo` landmark competes with the page's own outline.
+- Leave the gutters and the closing band alone — they are the footer's own page material. A page that needs more air below the footer adds a `SectionGap`, and one that needs none is not this design.
 
 ## Usage
 
 ```vue
 <script setup>
+import Brand from '@aziontech/webkit/brand'
 import Footer from '@aziontech/webkit/footer'
+import IconButton from '@aziontech/webkit/icon-button'
+import Select from '@aziontech/webkit/select'
+import StatusIndicator from '@aziontech/webkit/status-indicator'
+import { ref } from 'vue'
+
+const language = ref('en')
 </script>
 
 <template>
@@ -56,12 +78,21 @@ import Footer from '@aziontech/webkit/footer'
       <Footer.Link href="/about">About us</Footer.Link>
       <Footer.Link href="/careers">Careers</Footer.Link>
     </Footer.Column>
-    <template #social-start>
-      <a href="/" aria-label="Azion home">Azion</a>
+    <template #social>
+      <IconButton kind="transparent" icon="pi pi-github" ariaLabel="Azion on GitHub" href="https://github.com/aziontech" />
     </template>
-    <template #social-end>
-      <a href="https://status.azion.com/">All Systems Operational</a>
+    <template #status>
+      <StatusIndicator severity="success" label="All Systems Operational" />
     </template>
+    <template #language>
+      <Select v-model="language" placeholder="Language">
+        <Select.Trigger ariaLabel="Language" />
+      </Select>
+    </template>
+    <template #brand>
+      <a href="/" aria-label="Azion home"><Brand size="large" /></a>
+    </template>
+    <template #tagline>The web platform for modern workloads</template>
   </Footer>
 </template>
 ```
@@ -96,10 +127,15 @@ import FooterLink from '@aziontech/webkit/footer-link'
 | Slot | Scope | Notes |
 |---|---|---|
 | `default` | — | Root: the `Footer.Column` items; laid out as a 2-column grid that becomes 4 columns at `md`. |
+| `social` | — | Root: the social icon buttons. Renders its own band; centered stacked, at the row's start from `md`. |
+| `status` | — | Root: the system status indicator. Shares the status band with `language`. |
+| `language` | — | Root: the language select. Rendered *before* `status` when stacked and *after* it from `md`, per the two Figma variants. |
+| `brand` | — | Root: the brand lockup of the signature band. |
+| `tagline` | — | Root: the one-line tagline; the footer wraps it in the `.text-heading-xl` measure. |
 | `default` | — | `footer-column`: its `Footer.Link` items. |
 | `default` | — | `footer-link`: the link label. |
 
-> The root also exposes the `social-start` named slot (leading cluster of the social bar: brand + social icon buttons) and the `social-end` named slot (trailing cluster: status indicator + language select; rendered above `social-start` below `md`, per the Mobile variant). They are kept out of the table above because the compliance parser cannot read hyphenated (quoted) slot keys from `defineSlots`. The social bar renders only when `social-start` or `social-end` is provided.
+> Every named slot is a single word, so the compliance parser reads all of them from `defineSlots` — the previous `social-start` / `social-end` pair needed a prose note here because hyphenated (quoted) keys are invisible to it. Each band renders only when at least one of its slots is filled: the status band on `status` or `language`, the signature band on `brand` or `tagline`, the social band on `social`.
 
 ## States
 
@@ -123,12 +159,19 @@ import FooterLink from '@aziontech/webkit/footer-link'
 | column divider (border-right, `md`+) | `var(--border-width-default)` / `var(--border-default)` |
 | column internal gap (title → links) | `var(--spacing-md)` |
 | link stack gap | `var(--spacing-xs)` |
-| social bar border (top) | `var(--border-width-default)` / `var(--border-default)` |
-| social bar height (`md`+) | `h-14` (56px) |
-| social bar padding-y (below `md`) | `var(--spacing-md)` |
-| social bar padding-x | `var(--spacing-lg)` |
-| social bar left-cluster gap (brand ↔ social icons) | `var(--spacing-md)` |
-| social bar right-cluster gap (status ↔ language) | `var(--spacing-lg)` |
+| measure side rules | `var(--border-width-default)` / `var(--border-default)` |
+| band border (top, every band) | `var(--border-width-default)` / `var(--border-default)` |
+| band height floor (`md`+) | `min-h-14` (56px) |
+| band padding-y (stacked) | `var(--spacing-md)` |
+| band padding-x | `var(--spacing-lg)` |
+| social icon gap | `var(--spacing-xxs)` |
+| status ↔ language gap | `var(--spacing-lg)` |
+| signature box padding | `var(--spacing-sm)` inline / `var(--spacing-xl)` block |
+| signature inner padding | `var(--spacing-lg)` |
+| signature brand ↔ tagline gap | `var(--spacing-md)` stacked / `var(--spacing-lg)` from `md` |
+| tagline typography / color | `.text-heading-xl` / `var(--text-default)` |
+| gutter + closing band texture | `FrameBox hatch` (pitch `var(--spacing-lg)`, `var(--border-default)`) |
+| closing band height | `calc(var(--spacing-xxl) * 2)` |
 | column title typography / color | `.text-label-sm` / `var(--text-muted)` |
 | link typography / color | `.text-label-sm` / `var(--text-default)` |
 | link hover color | `var(--text-muted)` |
@@ -138,11 +181,16 @@ import FooterLink from '@aziontech/webkit/footer-link'
 
 | Figma variable | Temporary primitive | Follow-up |
 |---|---|---|
-| `--container-max-width` (1280px content measure) | `max-w-(--container-5xl)` (1192px, nearest container primitive) | `TODO: tokenizar` |
+| `--container-max-width` (1280px content measure) | `max-w-(--container-5xl)` (1192px, nearest container primitive) | `TODO: tokenizar` — still open after the `semantic/layouts` container system (#884), whose `--layout-measure-*` steps are console page measures (1024 / 1192 / 1620), not this 1280 |
+| Brand lockup at 44px (Default) / 16px (Mobile) | `Brand size="large"` (32px) at every width — `size` has no 44px step and is a prop, so it cannot be responsive | `TODO`: add a 44px step to `Brand`, or a responsive `size`. The consumer could pass two `Brand`s behind `hidden`/`md:block`, which the spec deliberately does not ask for |
+| closing band 200px (Default) / 120px (Mobile) | `calc(var(--spacing-xxl) * 2)` → 64px / 192px, the nearest single expression on the responsive step | `TODO`: no token pair matches both ends (the ratio is not constant); revisit if the design fixes one |
+| social icon pitch 6px (Default) / 4px (Mobile) | `var(--spacing-xxs)` (4px) | `TODO`: 2px under Figma at desktop; no semantic step sits between 4 and 8 |
+| tagline weight 400 (`--font-weight-normal`) | `.text-heading-xl`, which renders 300 since #876 lightened the heading scale | None — the theme is the authority on weight; the Figma variable predates that change |
 
 ## Accessibility (WCAG 2.1 AA)
 
 - Root renders as `<footer>` — the implicit `contentinfo` landmark — with `aria-label` from `ariaLabel`.
+- The two hatched gutters and the closing band carry `aria-hidden="true"`: they hold no content, so without it a screen reader announces three empty groups at the end of every page.
 - Each `footer-column` renders a `<nav>` labelled via `aria-labelledby` pointing at its title (`useId`), so link groups are unique, navigable landmarks.
 - Keyboard map: none on the shell; `Tab` moves through links in DOM order; `Enter` activates.
 - Visible focus on links: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`.

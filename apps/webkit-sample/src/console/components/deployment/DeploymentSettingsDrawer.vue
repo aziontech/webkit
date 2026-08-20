@@ -1,11 +1,11 @@
 <script setup>
-  // New Settings — authoring a deployment STRATEGY.
+  // Create Deployment Settings — authoring a deployment STRATEGY.
   //
   // The counterpart of the release page, and the reason the Deployments module has
   // two create actions instead of one:
   //
-  //   New release     → a real deploy, applying one or more strategies
-  //   New Settings    → the STRATEGY itself, applied by many deployments
+  //   Create release              → a real deploy, applying one or more strategies
+  //   Create Deployment Settings  → the STRATEGY itself, applied by many deployments
   //
   // A strategy is the reusable half of the request body Azion accepts for a
   // deployment (../ReleaseComposer.vue composes the whole of it):
@@ -191,13 +191,13 @@
       <DrawerContent :class="nested ? 'z-[1003]' : undefined">
         <form
           class="flex min-h-0 flex-1 flex-col"
-          aria-label="New Deployment Settings"
+          aria-label="Create Deployment Settings"
           novalidate
           @submit.prevent="submit"
         >
           <PanelHeader class="w-full">
             <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-              <DrawerTitle>New Deployment Settings</DrawerTitle>
+              <DrawerTitle>Create Deployment Settings</DrawerTitle>
               <p class="text-body-sm text-(--text-muted)">
                 A strategy binds an application, and optionally a firewall and a custom page.
                 Deployments started from any resource apply it.
@@ -213,7 +213,7 @@
               class="m-0 flex min-w-0 flex-col gap-(--spacing-md) border-0 p-0"
               :disabled="submitting"
             >
-              <legend class="sr-only">New Deployment Settings</legend>
+              <legend class="sr-only">Create Deployment Settings</legend>
 
               <!-- WHAT the strategy is. -->
               <div class="flex w-full flex-col gap-(--spacing-xs)">
@@ -301,7 +301,7 @@
             />
             <Button
               class="w-full md:w-auto"
-              label="Create Settings"
+              label="Create Deployment Settings"
               kind="primary"
               size="medium"
               :loading="submitting"
@@ -313,7 +313,7 @@
               tabindex="-1"
               aria-hidden="true"
             >
-              Create Settings
+              Create Deployment Settings
             </button>
           </PanelFooter>
         </form>

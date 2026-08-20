@@ -190,7 +190,7 @@ export const spacingsData = {
 // tokens/semantic/layouts.data.js
 export const layoutsData = {
   'layout-boundary-inline': 'var(--spacing-lg)',
-  'layout-measure': 'var(--container-7xl)'
+  'layout-measure': 'var(--container-6xl)'
   // …
 }
 ```

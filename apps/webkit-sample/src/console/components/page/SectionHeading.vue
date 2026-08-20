@@ -124,7 +124,12 @@
 <template>
   <header class="group/heading flex flex-col">
     <!-- The header row keeps the optical inset; the bottom region does not. -->
-    <div class="flex items-start justify-between gap-(--spacing-md) px-(--spacing-xs)">
+    <!-- A column below `md`, for the reason PageHeading is one: a band's action carries
+         a prose label and cannot share a phone's width with the title that names the
+         band. -->
+    <div
+      class="flex flex-col gap-(--spacing-md) px-(--spacing-xs) md:flex-row md:items-start md:justify-between"
+    >
       <div
         v-if="title || description"
         class="flex min-w-0 flex-col gap-(--spacing-xxs)"
@@ -171,9 +176,11 @@
           {{ description }}
         </p>
       </div>
+      <!-- Wrapping + full width below `md`, so a `w-full` HeadingAction claims its own
+           line and the documentation link keeps its natural size. -->
       <div
         v-if="documentation || $slots.actions"
-        class="flex shrink-0 items-center gap-(--spacing-xs)"
+        class="flex w-full flex-wrap items-center gap-(--spacing-xs) md:w-auto md:shrink-0 md:flex-nowrap"
       >
         <!-- Docs first, so a band's primary control keeps the outer edge.
              Rendered as TEXT, not as a control: at section level the affordance

@@ -14,12 +14,19 @@
   import { computed, ref } from 'vue'
   import { useRoute } from 'vue-router'
 
-  import FilterBar from '../../components/list/FilterBar.vue'
+  import FilterButton from '../../components/list/FilterButton.vue'
+  import FilterChips from '../../components/list/FilterChips.vue'
   import IntegrationCard from '../../components/marketplace/IntegrationCard.vue'
   import TemplateCard from '../../components/marketplace/TemplateCard.vue'
   import PageHeading from '../../components/page/PageHeading.vue'
   import AppLayout from '../../components/shell/AppLayout.vue'
   import { applyFilters } from '../../lib/behavior/filter-bar'
+  import { FRAMEWORKS } from '../../lib/data/frameworks'
+
+  // Where `Documentation` goes. The catalog's own docs, the URL the template and integration
+  // cards already link for "learn more" (lib/data/product-empty-states.js states it per
+  // product's `startFast`; the module itself has no registry entry of its own).
+  const HELP = 'https://www.azion.com/en/documentation/products/marketplace/'
 
   // ── ARRIVING ON A NAMED ENTRY (`?tab=` + `?q=`) ────────────────────────────
   // A product's first use offers four Marketplace functions by name
@@ -43,80 +50,24 @@
   const integrationQuery = ref(activeTab.value === 'integrations' ? initialQuery : '')
 
   // ── Templates: pre-built framework starters ──
-  // `icon` is a COLORED brand logo (compound `ai-cor ai-*`), grayscale until
-  // hover; `color` is the framework's brand hex for the soft hover glow.
-  const templates = [
-    {
-      id: 'next',
-      name: 'Next.js Boilerplate',
-      description: 'Deploy a full-stack Next.js application to the edge in a few steps.',
-      icon: 'ai-cor ai-next',
-      color: '#0070f3'
-    },
-    {
-      id: 'react',
-      name: 'React Boilerplate',
-      description: 'Automate your React.js deployment process on the edge.',
-      icon: 'ai-cor ai-react',
-      color: '#61dafb'
-    },
-    {
-      id: 'vue',
-      name: 'Vue.js starter',
-      description: 'A lightweight template to rapidly build Vue.js applications on the edge.',
-      icon: 'ai-cor ai-vue',
-      color: '#42b883'
-    },
-    {
-      id: 'angular',
-      name: 'Angular Boilerplate',
-      description: 'Automate your Angular deployment process with this template.',
-      icon: 'ai-cor ai-angular',
-      color: '#dd0031'
-    },
-    {
-      id: 'astro',
-      name: 'Astro Starter',
-      description: 'Ship a content-driven Astro site that renders at the edge.',
-      icon: 'ai-cor ai-astro',
-      color: '#ff5d01'
-    },
-    {
-      id: 'svelte',
-      name: 'Svelte Boilerplate',
-      description: 'Accelerate the deployment of Svelte applications to run on the edge.',
-      icon: 'ai-cor ai-svelte',
-      color: '#ff3e00'
-    },
-    {
-      id: 'nuxt',
-      name: 'Nuxt E-commerce',
-      description: 'Launch a Nuxt e-commerce or content app on the edge.',
-      icon: 'ai-cor ai-nuxt',
-      color: '#00dc82'
-    },
-    {
-      id: 'solid',
-      name: 'SolidJS Starter',
-      description: 'Build a fine-grained reactive SolidJS app on the edge.',
-      icon: 'ai-cor ai-solidjs',
-      color: '#4f88c6'
-    },
-    {
-      id: 'redwood',
-      name: 'RedwoodJS Boilerplate',
-      description: 'Deploy a full-stack RedwoodJS application on the edge.',
-      icon: 'ai-cor ai-redwood',
-      color: '#bf4722'
-    },
-    {
-      id: 'flutter',
-      name: 'Flutter Web',
-      description: 'Serve a cross-platform Flutter web build from the edge.',
-      icon: 'ai-cor ai-flutter',
-      color: '#54c5f8'
-    }
-  ]
+  // READ FROM THE ONE CATALOG (../../lib/data/frameworks.js), not typed again here. This
+  // list used to be its own copy of ten framework starters, which is two catalogs of the
+  // same thing: the create flow's template list grew to the platform's full preset set
+  // (the 25 `@aziontech/presets` exports) and this grid would still have been offering the
+  // same ten — three of which the platform has no preset for at all. `id`/`name` are what
+  // the card below binds, so the shape is mapped once here.
+  //
+  // `icon` is the brand mark — `ai-cor ai-*` for a colored logo, `ai ai-*` for a font
+  // glyph — grayscale until hover; `color` is the framework's brand hex for the soft hover
+  // glow, and the card falls back to `--primary` for a framework whose brand colour we do
+  // not carry.
+  const templates = FRAMEWORKS.map((framework) => ({
+    id: framework.tech,
+    name: framework.title,
+    description: framework.description,
+    icon: framework.icon,
+    color: framework.color
+  }))
 
   // ── Integrations: functions that improve/compose an application. Azion's
   // taxonomy splits them by execution context — Application Functions and Firewall
@@ -389,7 +340,7 @@
   // user narrows it. Empty = no constraint on that axis.
   // The filter catalog. A card grid narrows by the same membership rule a table does
   // — is this integration's publisher one of these — so it takes the same bar
-  // (ui/FilterBar.vue) rather than a row of Selects that had to be width-tuned per
+  // (list/FilterButton.vue) rather than a row of Selects that had to be width-tuned per
   // field. The grid keeps its own search: unlike a table it has no global filter of
   // its own, so the term is matched here across name, vendor and description.
   const integrationFields = [
@@ -451,6 +402,7 @@
         size="medium"
         title="Marketplace"
         description="Find, test, and deploy software that runs anywhere."
+        :documentation="HELP"
       />
 
       <!-- Top-level offerings: Templates | Integrations, centered. -->
@@ -475,7 +427,7 @@
             <div class="flex flex-col gap-(--spacing-lg)">
               <InputText
                 v-model="templateQuery"
-                size="large"
+                size="medium"
                 placeholder="Search templates…"
                 aria-label="Search templates"
                 class="w-full"
@@ -533,14 +485,14 @@
                 </div>
               </section>
 
-              <!-- Search + the three filter axes on one row: no label, multiple
-                   selection, no checkbox (selection shown by highlight). -->
+              <!-- The search and the Filter button on one row, with the applied chips
+                   on a row under them — the same shape every module list opens with. -->
               <div
                 class="layout-section-start flex flex-col gap-(--spacing-sm) md:flex-row md:items-center"
               >
                 <InputText
                   v-model="integrationQuery"
-                  size="large"
+                  size="medium"
                   placeholder="Search integrations…"
                   aria-label="Search integrations"
                   class="w-full md:flex-1"
@@ -552,15 +504,15 @@
                     />
                   </template>
                 </InputText>
+                <FilterButton
+                  v-model="integrationFilters"
+                  :fields="integrationFields"
+                />
               </div>
 
-              <!-- The filter bar takes its own row under the search, the same shape
-                   every module list uses. It wraps rather than scrolling, so a fourth
-                   field costs a line instead of a horizontal scroll nobody finds. -->
-              <FilterBar
+              <FilterChips
                 v-model="integrationFilters"
                 :fields="integrationFields"
-                class="layout-group-start"
               />
 
               <EmptyState

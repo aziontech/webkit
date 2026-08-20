@@ -1,0 +1,50 @@
+{
+  "name": "@aziontech/webkit-docs",
+  "version": "0.1.0",
+  "description": "The Azion documentation layer \u2014 the prose contract and the components an author reaches for when prose is not enough, built on @aziontech/webkit.",
+  "type": "module",
+  "license": "MIT",
+  "sideEffects": [
+    "**/*.vue",
+    "**/*.css"
+  ],
+  "files": [
+    "src",
+    "content"
+  ],
+  "exports": {
+    ".": "./src/index.js",
+    "./doc-accordion-group": "./src/components/doc-accordion-group.vue",
+    "./doc-accordion-item": "./src/components/doc-accordion-item.vue",
+    "./doc-callout": "./src/components/doc-callout.vue",
+    "./doc-card": "./src/components/doc-card.vue",
+    "./doc-card-group": "./src/components/doc-card-group.vue",
+    "./doc-code-group": "./src/components/doc-code-group.vue",
+    "./doc-frame": "./src/components/doc-frame.vue",
+    "./doc-item": "./src/components/doc-item.vue",
+    "./doc-item-group": "./src/components/doc-item-group.vue",
+    "./doc-markdown": "./src/components/doc-markdown.vue",
+    "./doc-on-this-page": "./src/components/doc-on-this-page.vue",
+    "./doc-page": "./src/components/doc-page.vue",
+    "./doc-page-header": "./src/components/doc-page-header.vue",
+    "./doc-pagination": "./src/components/doc-pagination.vue",
+    "./doc-prose": "./src/components/doc-prose.vue",
+    "./doc-shell": "./src/components/doc-shell.vue",
+    "./doc-sidebar": "./src/components/doc-sidebar.vue",
+    "./doc-step": "./src/components/doc-step.vue",
+    "./doc-steps": "./src/components/doc-steps.vue",
+    "./doc-tab": "./src/components/doc-tab.vue",
+    "./doc-tabs": "./src/components/doc-tabs.vue",
+    "./doc-tooltip": "./src/components/doc-tooltip.vue",
+    "./doc-update": "./src/components/doc-update.vue",
+    "./mdx": "./src/lib/mdx.js",
+    "./heading-nav": "./src/lib/heading-nav.js",
+    "./heading-scroll": "./src/lib/heading-scroll.js",
+    "./use-scroll-spy": "./src/lib/use-scroll-spy.js",
+    "./content/*": "./content/*"
+  },
+  "peerDependencies": {
+    "@aziontech/webkit": "workspace:*",
+    "vue": "^3.5.0"
+  }
+}

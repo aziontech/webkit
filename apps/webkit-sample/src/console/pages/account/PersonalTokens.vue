@@ -50,12 +50,21 @@
   import Tooltip from '@aziontech/webkit/tooltip'
   import { reactive, ref, watch } from 'vue'
 
+  import ColumnsButton from '../../components/list/ColumnsButton.vue'
   import DeleteDialog from '../../components/list/DeleteDialog.vue'
-  import FilterBar from '../../components/list/FilterBar.vue'
+  import FilterButton from '../../components/list/FilterButton.vue'
+  import FilterChips from '../../components/list/FilterChips.vue'
   import ControlsHeader from '../../components/page/ControlsHeader.vue'
+  import HeadingAction from '../../components/page/HeadingAction.vue'
+  import PageHeading from '../../components/page/PageHeading.vue'
   import AppLayout from '../../components/shell/AppLayout.vue'
   import { useListFilters } from '../../lib/behavior/list-state'
   import { useSampleMode } from '../../lib/state/sample-mode'
+
+  // Where `Documentation` goes. The docs ROOT: personal tokens have no entry in
+  // lib/data/product-empty-states.js (that registry covers the product modules), and an
+  // unverified deep link is worse than the index. Replace when the topic URL is known.
+  const HELP = 'https://www.azion.com/en/documentation/'
 
   // Switching organization, account or workspace reloads the page like every other
   // module list. The ROWS are not projected (src/lib/tenancy-scope.js): a personal
@@ -139,7 +148,7 @@
   } = useListFilters(filterFields, tokens, { pageSize: 10 })
 
   const columns = [
-    { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true },
+    { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, hideable: false },
     { accessorKey: 'description', header: 'Description', grow: 2 },
     { accessorKey: 'created', header: 'Created', enableSorting: true },
     { accessorKey: 'expires', header: 'Expires', enableSorting: true },
@@ -148,8 +157,17 @@
     { id: 'actions', kind: 'action', hideable: false }
   ]
 
+  // Which columns are switched off, driven by the Columns button on the controls
+  // row (../../components/list/ColumnsButton.vue). Only a HIDDEN column is ever
+  // recorded, so this never has to be kept in step with the column model above.
+  const columnVisibility = ref({})
+
+  // Expired is DANGER, not warning: an expired token cannot authenticate anything, which
+  // is the same terminal state as revoked. `warning` is for a state that still works and
+  // wants attention — Pending — and painting a dead credential amber said the opposite.
+  // Certificates already read it this way (../secure/Certificates.vue).
   const statusSeverity = (status) =>
-    ({ Active: 'success', Expired: 'warning', Revoked: 'danger' })[status] ?? 'secondary'
+    ({ Active: 'success', Expired: 'danger', Revoked: 'danger' })[status] ?? 'secondary'
 
   // Revoke is reversible enough to stay a menu click — the token stays in the list and
   // says "Revoked". Delete is not: it takes the record away, so it goes through the
@@ -308,23 +326,49 @@
     :breadcrumb="[{ label: 'Settings', href: '/account' }, { label: 'Personal Tokens' }]"
   >
     <main class="layout-column flex min-h-full flex-col">
-      <!-- The page's parent section. A module list opens straight on it (no
-           PageHeading — the module name is the breadcrumb crumb), so the
-           `:first-child` rule zeroes its step and the boundary is its top space. -->
+      <!-- THE PAGE HEADING. A first-level resource page names itself: the module name
+           over one line saying what the module is, with the module's own action on the
+           right. The breadcrumb says WHERE you are; the heading says WHAT this page is,
+           and it gives that action one fixed home above the list instead of a control
+           that rides the row narrowing it.
+           The action stays here over an EMPTY list as well: where a page's action sits is
+           a property of the page, not of how many rows it has. The empty state's own
+           button is the in-content door — a `secondary` inside the card — not this same
+           control moving.
+           `size="medium"` is the first-level list scale (components/page/PageHeading.vue):
+           the title names the collection, and the table under it is what the page is for.
+           The parent section below is no longer `:first-child`, so `.layout-section-start`
+           opens it at the boundary step — the list sits tight under the heading (theme
+           semantic/layouts § "THE PAGE SHAPE"). -->
+      <PageHeading
+        size="medium"
+        :documentation="HELP"
+        title="Personal Tokens"
+        description="Personal tokens securely access your account via API. Create one, then copy it — it's shown only once."
+      >
+        <template #actions>
+          <HeadingAction
+            label="Create personal token"
+            kind="primary"
+            icon="pi pi-plus"
+            @click="openCreate"
+          />
+        </template>
+      </PageHeading>
+
       <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)">
         <!-- ONE section: the controls row narrows the table under it, so the two
              sit at --layout-group-gap. -->
         <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-          <!-- First-level module list: no PageHeading — the module name already IS the
-               header breadcrumb crumb (AppLayout). The page opens with its CONTROLS row
-               (search, with the module's own actions on the right); the table follows.
-               Rendered only when there are rows: over an empty state the single clear
-               next action is the state's own, and a search field with nothing to search
-               is noise. -->
+          <!-- The CONTROLS row, under the heading: the narrowing, on a list the page can
+               already show — search on the left, nothing on the right, because the
+               module's action sits in the heading above.
+               Rendered only when there are rows: a search field with nothing to search is
+               noise. -->
           <ControlsHeader v-if="tokens.length">
             <InputText
               v-model="search"
-              size="large"
+              size="medium"
               placeholder="Search personal tokens"
               aria-label="Search personal tokens"
               class="min-w-36 grow basis-(--container-2xs)"
@@ -336,21 +380,18 @@
                 />
               </template>
             </InputText>
-
-            <template #actions>
-              <Button
-                label="Create Personal Token"
-                kind="primary"
-                size="large"
-                icon="pi pi-plus"
-                @click="openCreate"
-              />
-            </template>
+            <FilterButton
+              v-model="filters"
+              :fields="filterFields"
+            />
+            <ColumnsButton
+              v-model="columnVisibility"
+              :columns="columns"
+            />
           </ControlsHeader>
 
-          <!-- The filter bar takes its own row: it grows as filters are applied, so
-               sharing the controls row would make the search field jump width. -->
-          <FilterBar
+          <FilterChips
+            v-if="tokens.length"
             v-model="filters"
             :fields="filterFields"
           />
@@ -361,6 +402,7 @@
                 <Table
                   v-model:pagination="pagination"
                   v-model:globalFilter="search"
+                  v-model:columnVisibility="columnVisibility"
                   :data="visibleTokens"
                   :columns="columns"
                   row-key="id"
@@ -447,13 +489,13 @@
                Enter-to-submit; the fieldset locks every field while in flight. -->
           <form
             class="flex min-h-0 flex-1 flex-col"
-            aria-label="Create Personal Token"
+            aria-label="Create personal token"
             novalidate
             @submit.prevent="submit"
           >
             <PanelHeader class="w-full">
               <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                <DrawerTitle>Create Personal Token</DrawerTitle>
+                <DrawerTitle>Create personal token</DrawerTitle>
                 <p class="text-body-sm text-(--text-muted)">
                   Create a personal token to securely access your account via API.
                 </p>
@@ -470,9 +512,7 @@
 
                 <!-- Section: General -->
                 <section class="flex flex-col gap-(--layout-group-gap)">
-                  <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
-                    General
-                  </p>
+                  <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">General</p>
                   <CardBox :padded="false">
                     <template #content>
                       <Item.List>
@@ -537,9 +577,7 @@
 
                 <!-- Section: Token -->
                 <section class="flex flex-col gap-(--layout-group-gap)">
-                  <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
-                    Token
-                  </p>
+                  <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">Token</p>
                   <CardBox :padded="false">
                     <template #content>
                       <Item.List>

@@ -23,19 +23,19 @@ const MEASURE_ROWS = group('--layout-measure')
 const CONTAINERS = [
   {
     class: 'layout-column',
-    type: 'Data',
+    type: 'Standard',
     token: '--layout-measure',
-    width: '1620px',
-    use: 'Lists and detail dashboards.',
-    why: 'Capped so a table running to the viewport edge on an ultrawide screen does not put its row actions a head-turn away from the name that identifies the row — but no tighter, because more columns visible is the point.'
+    width: '1388px',
+    use: 'The default: home, the product overviews, lists and detail dashboards.',
+    why: 'Capped so a table running to the viewport edge on an ultrawide screen does not put its row actions a head-turn away from the name that identifies the row — but no tighter, because more columns visible is the point. This is the one measure a main page column takes unless it has a reason not to, and the reason is always a narrower payload (a form, a hero, prose), never a wider one. It was 1620px until the container standardization asked for 1300px; 6xl is the nearest slot on the container ladder, which is an anchored geometric progression and so has no 1300 — the page snaps to the scale rather than the scale bending to the page.'
   },
   {
     class: 'layout-column-focused',
     type: 'Focused',
     token: '--layout-measure-focused',
     width: '1024px',
-    use: 'Home, and any single-task page that still goes multi-column.',
-    why: 'One task, but the task is a rail plus a card grid — wide enough for those bands to breathe, and no wider.'
+    use: 'A single-task screen whose payload still goes multi-column — a deploy hero, a running-deployment log, a module first-use screen.',
+    why: 'One task, but the task is a hero plus a card row — wide enough for those bands to breathe, and no wider. Home used to sit here and now takes the standard container, because its payload is a list of every resource an account owns.'
   },
   {
     class: 'layout-column-form',
@@ -51,9 +51,13 @@ const CONTAINERS = [
     token: '--layout-measure-form-create',
     width: '1192px',
     use: 'A dedicated create page — sidebar hidden, sticky action bar.',
-    why: 'A sibling of the form measure rather than the same class, because it also retunes --layout-measure-control (256px → 472px) for every field row inside it. Home is focused too, but it has no field rows to retune.'
+    why: 'A sibling of the form measure rather than the same class, because it also retunes --layout-measure-control (256px → 472px) for every field row inside it. The focused measure has no field rows to retune.'
   }
 ]
+
+// The bar chart's 100% — read off the widest row rather than typed, so retuning a
+// measure in the theme cannot leave the drawing scaled to a width nothing uses.
+const widestContainer = Math.max(...CONTAINERS.map((c) => parseInt(c.width, 10)))
 
 const PAGE_SHAPE = `<!-- Every page: one column class, one parent section, bands inside it. -->
 <div class="layout-column layout-boundary flex min-w-0 flex-col">
@@ -71,7 +75,7 @@ const PAGE_SHAPE = `<!-- Every page: one column class, one parent section, bands
 
 const BOUNDARY_SHAPE = `<!-- A padded page gets the boundary from the app shell, OUTSIDE the capped block -->
 <div class="layout-boundary overflow-auto">        <!-- the scroll box -->
-  <main class="layout-column">…</main>             <!-- 1620px of CONTENT -->
+  <main class="layout-column">…</main>             <!-- 1388px of CONTENT -->
 </div>
 
 <!-- A self-padded page carries both on the SAME block. box-sizing makes the cap
@@ -116,6 +120,7 @@ export const Overview = {
     data() {
       return {
         CONTAINERS,
+        widestContainer,
         BOUNDARY_ROWS,
         RHYTHM_ROWS,
         MEASURE_ROWS,
@@ -159,7 +164,7 @@ export const Overview = {
               <div class="mb-(--spacing-sm) h-2 w-full rounded-full bg-(--bg-surface-raised)">
                 <div
                   class="h-full rounded-full bg-(--primary)"
-                  :style="{ width: Math.round((parseInt(container.width, 10) / 1620) * 100) + '%' }"
+                  :style="{ width: Math.round((parseInt(container.width, 10) / widestContainer) * 100) + '%' }"
                 />
               </div>
 

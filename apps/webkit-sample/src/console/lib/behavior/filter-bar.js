@@ -1,4 +1,4 @@
-// The FILTER BAR's model — the data a list page declares so the bar can narrow it.
+// The FILTER's model — the data a list page declares so the Filter button can narrow it.
 //
 // A FIELD is one thing the list can be narrowed by. The page owns the catalog,
 // because only the page knows which of its columns are enumerable and how a row
@@ -14,13 +14,14 @@
 //
 // APPLIED STATE is a plain object keyed by field id, each holding the ARRAY of
 // picked values — `{ status: ['Active'], created: ['7d'] }`. A missing or empty
-// entry is not a filter. That single rule is what the whole bar reads from: a
-// non-empty entry is a removable chip, an empty one is a dimmed SUGGESTION chip,
-// and "how many filters are applied" is the count of non-empty entries.
+// entry is not a filter. That single rule is what the whole control reads from: a
+// non-empty entry is a removable chip beside the button, an empty one is a plain row
+// in the panel, and "how many filters are applied" — the number in the button's
+// badge — is the count of non-empty entries.
 //
 // `kind` says how many values a field can hold, not how it looks: `'options'`
 // accumulates (three authors is still one filter on Author), `'range'` replaces
-// (two date windows at once would contradict each other). The bar reads it to
+// (two date windows at once would contradict each other). The panel reads it to
 // decide whether picking a value keeps the list open or returns to the fields.
 //
 // The state is a flat object of arrays rather than a list of {field, operator,
@@ -49,12 +50,12 @@ export const appliedFields = (fields, state) => fields.filter((field) => isAppli
  * How many FIELDS are narrowing the list — never how many values.
  *
  * Three authors is one filter on Author; reading "3" for that would suggest three
- * columns are cut when only one is. The bar shows only whether this is > 0, but the
- * number is what the trigger's accessible name says out loud.
+ * columns are cut when only one is. It drives the button's badge only; the chips
+ * beside it are what say WHICH, and what a screen reader reads.
  */
 export const filterCount = (state) => Object.values(state).filter((values) => values?.length).length
 
-/** The fields not narrowing anything yet (the dimmed suggestion chips). */
+/** The fields not narrowing anything yet. */
 export const idleFields = (fields, state) => fields.filter((field) => !isApplied(state, field))
 
 /**
@@ -160,7 +161,7 @@ export const DATE_PRESETS = [
   { value: '7d', label: 'Last 7 days' },
   { value: '30d', label: 'Last 30 days' },
   { value: '3m', label: 'Last 3 months' },
-  // `custom: true` is what the bar looks for to open a calendar rather than commit.
+  // `custom: true` is what the panel looks for to open a calendar rather than commit.
   { value: DATE_CUSTOM, label: 'Custom…', custom: true }
 ]
 

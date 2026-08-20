@@ -6,7 +6,7 @@ import * as stories from '../../../../../../apps/storybook/src/stories/component
 import { expectNoA11yViolations } from '../../../test/axe'
 import GlobalHeader from './index.js'
 
-const { DefaultHeader } = composeStories(stories)
+const { DefaultHeader, ContentZone } = composeStories(stories)
 
 /**
  * global-header is a COMPOSITION component: `index.js` attaches the region
@@ -199,9 +199,54 @@ describe('GlobalHeader', () => {
     })
   })
 
+  describe('kind — the two placements (data-kind drives the inset)', () => {
+    it('defaults to the app placement', () => {
+      const { getByTestId } = render(GlobalHeader)
+      // withDefaults: kind: 'app'. The inset lives on the root in this placement.
+      expect(getByTestId('layout-global-header').getAttribute('data-kind')).toBe('app')
+    })
+
+    it('marks the content placement on the root', () => {
+      const { getByTestId } = render(GlobalHeader, { props: { kind: 'content' } })
+      expect(getByTestId('layout-global-header').getAttribute('data-kind')).toBe('content')
+    })
+
+    it('holds the regions directly — the placement changes the inset, not the anatomy', () => {
+      const { getByTestId } = render({
+        components: compoundComponents,
+        template:
+          '<GlobalHeader kind="content"><GlobalHeaderLeft>L</GlobalHeaderLeft><GlobalHeaderRight>R</GlobalHeaderRight></GlobalHeader>'
+      })
+      const root = getByTestId('layout-global-header')
+      expect(getByTestId('layout-global-header__left').parentElement).toBe(root)
+      expect(getByTestId('layout-global-header__right').parentElement).toBe(root)
+    })
+
+    it('keeps the banner landmark in the content placement', () => {
+      const { getByRole } = render(GlobalHeader, {
+        props: { kind: 'content', ariaLabel: 'Console header' }
+      })
+      expect(getByRole('banner', { name: 'Console header' })).toBeTruthy()
+    })
+  })
+
   describe('a11y (axe against the styled, composed tree)', () => {
     it('a fully composed header has no violations', async () => {
       const { container } = renderComposed()
+      await expectNoA11yViolations(container)
+    })
+
+    it('a content-placed bar has no violations', async () => {
+      const { container } = render({
+        components: compoundComponents,
+        template: `
+          <GlobalHeader kind="content" aria-label="Console header">
+            <GlobalHeaderLeft><a href="/build">Build</a></GlobalHeaderLeft>
+            <GlobalHeaderMiddle />
+            <GlobalHeaderRight><button type="button">Create</button></GlobalHeaderRight>
+          </GlobalHeader>
+        `
+      })
       await expectNoA11yViolations(container)
     })
 
@@ -227,6 +272,20 @@ describe('GlobalHeader', () => {
 
     it('Default story has no a11y violations', async () => {
       const { container } = render(DefaultHeader)
+      await expectNoA11yViolations(container)
+    })
+
+    it('Content zone story renders the full-bleed content placement', () => {
+      const { getByTestId } = render(ContentZone)
+      const root = getByTestId('layout-global-header')
+      // data-kind is what carries the boundary inset instead of the shell step.
+      expect(root.getAttribute('data-kind')).toBe('content')
+      expect(root.contains(getByTestId('layout-global-header__left'))).toBe(true)
+      expect(root.contains(getByTestId('layout-global-header__right'))).toBe(true)
+    })
+
+    it('Content zone story has no a11y violations', async () => {
+      const { container } = render(ContentZone)
       await expectNoA11yViolations(container)
     })
   })

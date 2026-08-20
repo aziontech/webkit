@@ -30,7 +30,6 @@ const PRESET_ALIASES = {
   'next.js': 'next',
   nuxtjs: 'nuxt',
   sveltekit: 'svelte',
-  solidjs: 'solid',
   reactjs: 'react',
   vuejs: 'vue'
 }
@@ -115,7 +114,9 @@ export function provisionDeployment({
   scope = 'gab-az',
   framework = '',
   isPublic = true,
-  templateTitle = ''
+  templateTitle = '',
+  firewall = false,
+  firewallModules = []
 } = {}) {
   const name = slugify(repoName || templateTitle)
   const createdAt = new Date()
@@ -161,10 +162,27 @@ export function provisionDeployment({
   const connector = {
     id: resourceId(),
     name: `${name}-storage`,
-    kind: 'Edge Storage',
+    kind: 'Object Storage',
     address: bucketName,
     status: 'Active'
   }
+
+  // Only when the create asked for it. A firewall is a SEPARATE resource, not a module
+  // flag on the application, so the chain either has one or does not — and the success
+  // screen lists exactly what was provisioned.
+  const firewallRecord = firewall
+    ? {
+        id: resourceId(),
+        name: `${name}-firewall`,
+        status: 'Active',
+        // The labels the create's Protection group had switched on. The vocabulary lives
+        // on the console side (console/lib/data/firewalls.js), which owns it; this module
+        // stores what it is handed.
+        modules: firewallModules,
+        modifiedAt: createdAt,
+        lastModified
+      }
+    : null
 
   const bucket = {
     id: bucketName,
@@ -188,6 +206,7 @@ export function provisionDeployment({
     author,
     workload,
     application,
+    firewall: firewallRecord,
     connector,
     bucket
   }
@@ -255,7 +274,7 @@ export function demoDeployment(workloadId, workloadName = 'Workload Name') {
     connector: {
       id: derivedId(`connector-${id}`),
       name: `${name}-storage`,
-      kind: 'Edge Storage',
+      kind: 'Object Storage',
       address: bucketName,
       status: 'Active'
     },
@@ -378,7 +397,7 @@ export const provisionedBuckets = computed(() => deployments.value.map((record) 
  * @returns {Array<object>} `{ key, kind, icon, name, status, href, reference, fields[] }`
  */
 export function resourceChain(record) {
-  const { workload, application, connector, bucket } = record
+  const { workload, application, firewall, connector, bucket } = record
   return [
     {
       key: 'workload',
@@ -392,6 +411,22 @@ export function resourceChain(record) {
         { label: 'ID', value: workload.id },
         { label: 'Domain', value: workload.domain, copy: true, url: workload.url },
         { label: 'Environment', value: workload.environment }
+      ]
+    },
+    // In traffic order, so the list reads as the path a request takes: the firewall is
+    // between the domain and the code. `null` entries are filtered out below.
+    firewall && {
+      key: 'firewall',
+      kind: 'Firewall',
+      icon: 'ai ai-edge-firewall',
+      name: firewall.name,
+      status: firewall.status,
+      href: '',
+      reference: firewall.id,
+      fields: [
+        { label: 'ID', value: firewall.id },
+        { label: 'Modules', value: firewall.modules.join(', ') || 'None' },
+        { label: 'Status', value: firewall.status }
       ]
     },
     {
@@ -436,5 +471,5 @@ export function resourceChain(record) {
         { label: 'Size', value: bucket.size }
       ]
     }
-  ]
+  ].filter(Boolean)
 }

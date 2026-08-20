@@ -6,12 +6,12 @@
   // settings, and the two `.env` bulk paths). This page keeps only what a LIST owns:
   // the records, the narrowing, and appending whatever the drawer created.
   //
-  // Narrowing follows the module-list pattern (the webkit-lists skill): a FILTER BAR
-  // of CHIPS (ui/FilterBar.vue) in its own row under the controls. The COLUMNS decide
+  // Narrowing follows the module-list pattern (the webkit-lists skill): a FILTER
+  // BUTTON (list/FilterButton.vue) beside the search. The COLUMNS decide
   // the fields — every enumerable column becomes one field (Author, Type) and the
   // date column becomes relative periods plus a Custom month grid (Last Modified),
   // while the free-text columns (Key, Value) are covered by the search field instead
-  // of one field each. The bar pre-filters `:data`; the search narrows what is left,
+  // of one field each. The button pre-filters `:data`; the search narrows what is left,
   // through the table's own global filter.
   //
   // This replaced the generic field/operator/value builder that sat in the table's
@@ -19,7 +19,6 @@
   // state through `inject`, so they could never be hoisted out of the card — and
   // `lastEditor` is not a column at all (it renders inside the Last Modified cell),
   // so the table's own filter state could not have hosted that field either.
-  import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
   import CopyButton from '@aziontech/webkit/copy-button'
   import Dropdown from '@aziontech/webkit/dropdown'
@@ -35,10 +34,15 @@
   import { useRoute, useRouter } from 'vue-router'
 
   import ProductFirstUse from '../../components/home/ProductFirstUse.vue'
+  import AuthorCell from '../../components/list/AuthorCell.vue'
+  import ColumnsButton from '../../components/list/ColumnsButton.vue'
   import DeleteDialog from '../../components/list/DeleteDialog.vue'
-  import FilterBar from '../../components/list/FilterBar.vue'
+  import FilterButton from '../../components/list/FilterButton.vue'
+  import FilterChips from '../../components/list/FilterChips.vue'
   import LastModifiedCell from '../../components/list/LastModifiedCell.vue'
   import ControlsHeader from '../../components/page/ControlsHeader.vue'
+  import HeadingAction from '../../components/page/HeadingAction.vue'
+  import PageHeading from '../../components/page/PageHeading.vue'
   import AppLayout from '../../components/shell/AppLayout.vue'
   import { DATE_PRESETS, formatDateRange, matchDate } from '../../lib/behavior/filter-bar'
   import { useListFilters } from '../../lib/behavior/list-state'
@@ -123,9 +127,11 @@
   // Column model. `key` is the principal (emphasized) column; the trailing
   // `actions` column (kind: 'action') auto-pins to the right edge.
   const columns = [
-    { accessorKey: 'key', header: 'Key', enableSorting: true, principal: true },
+    { accessorKey: 'key', header: 'Key', enableSorting: true, principal: true, hideable: false },
+    { accessorKey: 'id', header: 'ID' },
     { accessorKey: 'value', header: 'Value', grow: 2 },
     { accessorKey: 'secret', header: 'Type', enableSorting: true },
+    { accessorKey: 'lastEditor', header: 'Last Editor', enableSorting: true, grow: 2 },
     { accessorKey: 'lastModified', header: 'Last Modified', enableSorting: true, grow: 2 },
     { id: 'actions', kind: 'action', hideable: false }
   ]
@@ -191,6 +197,16 @@
     visibleRows: filteredVariables,
     loading: tenancyReloading
   } = useListFilters(filterFields, scopedVariables, { pageSize: 10 })
+
+  // Which columns are switched off, driven by the Columns button beside the filter
+  // (../../components/list/ColumnsButton.vue). Only a HIDDEN column is ever recorded, so this
+  // never has to be kept in step with the column model above.
+  //
+  // ID SHIPS OFF. It is the column an operator wants when they are quoting a resource
+  // into a support thread or an API call, and almost never while scanning the list —
+  // so it starts hidden and is one switch away. That is the whole point of the panel:
+  // a column can be available without being in the way by default.
+  const columnVisibility = ref({ id: false })
 
   // Secret values are masked in the list — never render a stored secret in plain
   // text once saved (mirrors the console).
@@ -285,9 +301,41 @@
       class="flex min-h-full flex-col"
       :class="accountEmpty ? 'layout-column-focused' : 'layout-column'"
     >
-      <!-- The page's parent section. A module list opens straight on it (no
-           PageHeading — the module name is the breadcrumb crumb), so the
-           `:first-child` rule zeroes its step and the boundary is its top space. -->
+      <!-- THE PAGE HEADING. A first-level resource page names itself: the module name
+           over one line saying what the module is, with the module's own action on the
+           right. The breadcrumb says WHERE you are; the heading says WHAT this page is,
+           and it gives that action one fixed home above the list instead of a control
+           that rides the row narrowing it.
+           The action stays here over an EMPTY list as well: where a page's action sits is
+           a property of the page, not of how many rows it has. The empty state's own
+           button is the in-content door — a `secondary` inside the card — not this same
+           control moving.
+           `size="medium"` is the first-level list scale (components/page/PageHeading.vue):
+           the title names the collection, and the table under it is what the page is for.
+           `large` was tried and reverted — at 30px the title outweighed the table it
+           introduces, which is the wrong emphasis for a page whose whole job is the rows.
+           The ladder still reads without it: medium here, `small` on a resource's tabs
+           and settings sub-pages.
+           The parent section below is no longer `:first-child`, so `.layout-section-start`
+           opens it at the boundary step — the list sits tight under the heading (theme
+           semantic/layouts § "THE PAGE SHAPE"). -->
+      <PageHeading
+        v-if="!accountEmpty"
+        size="medium"
+        title="Variables"
+        description="Configure variable names, values, and settings for use across Azion's products."
+        :documentation="firstUse.learnMore.href"
+      >
+        <template #actions>
+          <HeadingAction
+            label="Create variable"
+            kind="primary"
+            icon="pi pi-plus"
+            @click="openCreate"
+          />
+        </template>
+      </PageHeading>
+
       <!-- FIRST USE, IN HOME'S CONTAINER.
            The same box the first access uses on /home (./HomeEmptyState.vue) and the
            /empty-states gallery around it (../ProductEmptyStates.vue): centred in the
@@ -318,17 +366,18 @@
         <!-- ONE section: the controls row narrows the table under it, so the two
              sit at --layout-group-gap. -->
         <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-          <!-- First-level module list: no PageHeading — the module name already IS the
-               header breadcrumb crumb (AppLayout). The page opens with its CONTROLS row
-               — the search, the module's own actions on the right — then the filter bar,
-               and the table follows. -->
+          <!-- The CONTROLS row, under the heading: the narrowing, on a list the page can
+               already show — search on the left, nothing on the right, because the
+               module's action sits in the heading above.
+               Rendered only when there are rows: a search field with nothing to search is
+               noise. -->
           <ControlsHeader v-if="scopedVariables.length">
             <!-- Search drives the table's global filter from outside the card, so the
                  field is a plain InputText (`Table.Search` is context-aware and only works
                  inside `<Table>`). It keeps the whole row: the filters sit below. -->
             <InputText
               v-model="search"
-              size="large"
+              size="medium"
               placeholder="Search variables"
               aria-label="Search variables"
               class="min-w-36 grow basis-(--container-2xs)"
@@ -340,22 +389,17 @@
                 />
               </template>
             </InputText>
-
-            <template #actions>
-              <Button
-                label="Create Variable"
-                kind="primary"
-                size="large"
-                icon="pi pi-plus"
-                @click="openCreate"
-              />
-            </template>
+            <FilterButton
+              v-model="filters"
+              :fields="filterFields"
+            />
+            <ColumnsButton
+              v-model="columnVisibility"
+              :columns="columns"
+            />
           </ControlsHeader>
 
-          <!-- The filter bar takes its own row: it grows as filters are applied, and
-               sharing the controls row would make the search field jump width as chips
-               come and go. -->
-          <FilterBar
+          <FilterChips
             v-if="scopedVariables.length"
             v-model="filters"
             :fields="filterFields"
@@ -368,6 +412,7 @@
                 <Table
                   v-model:pagination="pagination"
                   v-model:globalFilter="search"
+                  v-model:columnVisibility="columnVisibility"
                   :data="filteredVariables"
                   :columns="columns"
                   row-key="id"
@@ -396,13 +441,17 @@
                       />
                     </div>
                   </template>
-
-                  <template #cell-lastModified="{ value, row }">
-                    <LastModifiedCell
+                  <!-- WHO and WHEN are two columns now, so each cell says one thing:
+                       the face and the name here, the relative time next to it. -->
+                  <template #cell-lastEditor="{ row }">
+                    <AuthorCell
                       :author="row.lastEditor"
                       :avatar-src="row.lastEditorAvatar"
-                      :date="value"
                     />
+                  </template>
+
+                  <template #cell-lastModified="{ value }">
+                    <LastModifiedCell :date="value" />
                   </template>
 
                   <template #cell-secret="{ value }">

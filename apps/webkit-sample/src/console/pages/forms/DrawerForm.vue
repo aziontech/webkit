@@ -22,6 +22,7 @@
   import { toast } from '@aziontech/webkit/toast'
   import { computed, reactive, ref, watch } from 'vue'
 
+  import HeadingAction from '../../components/page/HeadingAction.vue'
   import PageHeading from '../../components/page/PageHeading.vue'
   import AppLayout from '../../components/shell/AppLayout.vue'
 
@@ -99,10 +100,9 @@
         description="Drawer form: create a resource in context without leaving the list. The drawer owns one scoped save."
       >
         <template #actions>
-          <Button
+          <HeadingAction
             label="Create environment"
             kind="primary"
-            size="medium"
             icon="pi pi-plus"
             @click="openCreate"
           />

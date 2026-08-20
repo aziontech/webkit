@@ -110,7 +110,7 @@
   <ResourceDrawer
     v-model:open="open"
     size="large"
-    title="Create record"
+    title="Add Record"
     :description="
       domain
         ? `A new record in ${domain}, and how Edge DNS should answer requests for it.`

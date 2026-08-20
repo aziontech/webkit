@@ -2,11 +2,10 @@
   // Application → Build. The UI face of the repo's GitHub Actions deploy workflow
   // (azion-deploy.yml): each row maps to a workflow step, and the "Latest deployment"
   // section mirrors azion/azion.json — the platform state the Azion CLI commits back
-  // after every deploy. The Deploy action is the workflow_dispatch analog: it
-  // simulates a build+deploy and bumps the prefix live, closing the
-  // deploy → azion.json → UI loop. Its BUTTON is on the page's tab row
-  // (ApplicationDetail owns that row); the flow and its pending flag stay here and
-  // are reached through `defineExpose`.
+  // after every deploy. The Deploy action is the workflow_dispatch analog: it opens the
+  // release page, which is where a deploy is reviewed and run. Its BUTTON is IN THIS
+  // TAB'S HEADING, not on the page's tab row it used to ride: a tab is its own page, so
+  // its primary action belongs beside the heading that names it.
   //
   // The editable configuration is split into topic groups, each a flush ItemGroup
   // owning its OWN footer Save that locks and dirties INDEPENDENTLY: `buildConfig`
@@ -36,6 +35,7 @@
   import { useRoute, useRouter } from 'vue-router'
 
   import SettingsSaveBar from '../../../components/form/SettingsSaveBar.vue'
+  import HeadingAction from '../../../components/page/HeadingAction.vue'
   import PageHeading from '../../../components/page/PageHeading.vue'
   import Section from '../../../components/page/Section.vue'
   import { saveGroup, useBaseline } from '../../../lib/behavior/forms'
@@ -182,8 +182,6 @@
   // The shell marks this tab and asks before letting the reader leave it with the
   // build configuration uncommitted (../../lib/tab-dirty.js).
   useTabDirty('build', { dirty, saving }, { label: 'Build configuration changed.', save, discard })
-
-  defineExpose({ deploy })
 </script>
 
 <template>
@@ -195,7 +193,16 @@
         title="Build"
         description="Connect your application to a Git repository for automatic builds and deployments."
         size="small"
-      />
+      >
+        <template #actions>
+          <HeadingAction
+            label="Deploy"
+            kind="primary"
+            icon="pi pi-cloud-upload"
+            @click="deploy"
+          />
+        </template>
+      </PageHeading>
 
       <div class="mt-(--layout-section-gap) flex min-w-0 flex-col">
         <!-- Git repository — the connection (actions/checkout in the workflow).
@@ -216,7 +223,7 @@
                     <Item.Description>
                       <span class="inline-flex items-center gap-(--spacing-xxs)">
                         <i
-                          :class="`ai-cor ${presetIcon(buildConfig.preset)}`"
+                          :class="presetIcon(buildConfig.preset)"
                           class="text-[1.05em]"
                           :title="presetLabel(buildConfig.preset)"
                           aria-hidden="true"

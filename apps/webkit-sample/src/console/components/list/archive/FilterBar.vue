@@ -62,7 +62,7 @@
   import Popover from '@aziontech/webkit/popover'
   import { computed, nextTick, ref, watch } from 'vue'
 
-  import { useAnimatedHeight } from '../../lib/behavior/animate-height.js'
+  import { useAnimatedHeight } from '../../../lib/behavior/animate-height.js'
   import {
     clearField,
     filterCount,
@@ -71,7 +71,7 @@
     summarize,
     summarizeText,
     toggleValue
-  } from '../../lib/behavior/filter-bar'
+  } from '../../../lib/behavior/filter-bar'
 
   const props = defineProps({
     /** The page's field catalog — see lib/filter-bar.js for the shape. */

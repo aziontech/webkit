@@ -38,15 +38,15 @@
 // These are Site components, not design-system ones: anything reusable across
 // products belongs in @aziontech/webkit instead. The page-composition rules they
 // follow are documented in .claude/docs/CONTAINERS.md.
-export { default as AgentMark } from '@shared/ui/brand/AgentMark.vue'
 export { default as AiAgentsScene } from './AiAgentsScene.vue'
-export { BANNER_NAMES, BANNERS } from '@shared/ui/banners/index.js'
-export { default as ClaimChips } from '@shared/ui/brand/ClaimChips.vue'
-export { NETWORK_CLAIMS } from '@shared/ui/brand/claims.js'
-export { default as ClientMark } from '@shared/ui/brand/ClientMark.vue'
-export { CLIENTS } from '@shared/ui/brand/clients/index.js'
 export { default as FrameworkStackScene } from './FrameworkStackScene.vue'
 export { default as FunctionsHeroCanvas } from './FunctionsHeroCanvas.vue'
 export { default as NavColumn } from './NavColumn.vue'
 export { default as NavItem } from './NavItem.vue'
 export { default as RuntimeApiCloud } from './RuntimeApiCloud.vue'
+export { BANNER_NAMES, BANNERS } from '@shared/ui/banners/index.js'
+export { default as AgentMark } from '@shared/ui/brand/AgentMark.vue'
+export { default as ClaimChips } from '@shared/ui/brand/ClaimChips.vue'
+export { NETWORK_CLAIMS } from '@shared/ui/brand/claims.js'
+export { default as ClientMark } from '@shared/ui/brand/ClientMark.vue'
+export { CLIENTS } from '@shared/ui/brand/clients/index.js'

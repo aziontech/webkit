@@ -11,12 +11,12 @@
   // EmptyState with the single next action (the /ux-heuristics "empty = one clear
   // action" rule).
   //
-  // Narrowing is a FILTER BAR of CHIPS (ui/FilterBar.vue) — the one shape every
+  // Narrowing is the FILTER BUTTON (list/FilterButton.vue) — the one shape every
   // module list uses, described in the webkit-lists skill. The COLUMNS decide the
   // fields: every enumerable column becomes one field (Author, Status) and the date
   // column becomes relative periods plus a Custom month grid (Last Modified); the
   // free-text columns (Name, ID, Domain) are covered by the search field instead of
-  // one field each. The bar pre-filters `:data`; the search field narrows what is
+  // one field each. The button pre-filters `:data`; the search field narrows what is
   // left, through the table's own global filter.
   //
   // This replaced, in two steps, the field/operator/value builder that used to sit
@@ -41,10 +41,15 @@
   import { useRoute, useRouter } from 'vue-router'
 
   import ProductFirstUse from '../../components/home/ProductFirstUse.vue'
+  import AuthorCell from '../../components/list/AuthorCell.vue'
+  import ColumnsButton from '../../components/list/ColumnsButton.vue'
   import DeleteDialog from '../../components/list/DeleteDialog.vue'
-  import FilterBar from '../../components/list/FilterBar.vue'
+  import FilterButton from '../../components/list/FilterButton.vue'
+  import FilterChips from '../../components/list/FilterChips.vue'
   import LastModifiedCell from '../../components/list/LastModifiedCell.vue'
   import ControlsHeader from '../../components/page/ControlsHeader.vue'
+  import HeadingAction from '../../components/page/HeadingAction.vue'
+  import PageHeading from '../../components/page/PageHeading.vue'
   import AppLayout from '../../components/shell/AppLayout.vue'
   import { DATE_PRESETS, formatDateRange, matchDate } from '../../lib/behavior/filter-bar'
   import { useListFilters } from '../../lib/behavior/list-state'
@@ -109,10 +114,11 @@
   const scopedZones = computed(() => tenancyRows(zones.value, 'edge-dns'))
 
   const columns = [
-    { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true },
+    { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, hideable: false },
     { accessorKey: 'id', header: 'ID', enableSorting: true },
     { accessorKey: 'domain', header: 'Domain', enableSorting: true, grow: 3 },
     { accessorKey: 'status', header: 'Status', enableSorting: true },
+    { accessorKey: 'author', header: 'Last Editor', enableSorting: true, grow: 2 },
     { accessorKey: 'lastModified', header: 'Last Modified', enableSorting: true, grow: 2 },
     { id: 'actions', kind: 'action', hideable: false }
   ]
@@ -165,6 +171,16 @@
     visibleRows: filteredZones,
     loading: tenancyReloading
   } = useListFilters(filterFields, scopedZones)
+
+  // Which columns are switched off, driven by the Columns button beside the filter
+  // (../../components/list/ColumnsButton.vue). Only a HIDDEN column is ever recorded, so this
+  // never has to be kept in step with the column model above.
+  //
+  // ID SHIPS OFF. It is the column an operator wants when they are quoting a resource
+  // into a support thread or an API call, and almost never while scanning the list —
+  // so it starts hidden and is one switch away. That is the whole point of the panel:
+  // a column can be available without being in the way by default.
+  const columnVisibility = ref({ id: false })
 
   // Copy Azion's authoritative nameservers so the user can delegate a domain
   // without opening a zone first.
@@ -230,9 +246,43 @@
       class="flex min-h-full flex-col"
       :class="accountEmpty ? 'layout-column-focused' : 'layout-column'"
     >
-      <!-- The page's parent section. A module list opens straight on it (no
-           PageHeading — the module name is the breadcrumb crumb), so the
-           `:first-child` rule zeroes its step and the boundary is its top space. -->
+      <!-- THE PAGE HEADING. A first-level resource page names itself: the module name
+           over one line saying what the module is, with the module's own action on the
+           right. The breadcrumb says WHERE you are; the heading says WHAT this page is,
+           and it gives that action one fixed home above the list instead of a control
+           that rides the row narrowing it.
+           The action stays here over an EMPTY list as well: where a page's action sits is
+           a property of the page, not of how many rows it has. The empty state's own
+           button is the in-content door — a `secondary` inside the card — not this same
+           control moving.
+           `size="medium"` is the first-level list scale (components/page/PageHeading.vue):
+           the title names the collection, and the table under it is what the page is for.
+           The parent section below is no longer `:first-child`, so `.layout-section-start`
+           opens it at the boundary step — the list sits tight under the heading (theme
+           semantic/layouts § "THE PAGE SHAPE"). -->
+      <PageHeading
+        v-if="!accountEmpty"
+        size="medium"
+        title="Edge DNS"
+        description="Host authoritative DNS zones and serve authoritative DNS responses used to resolve domain names."
+        :documentation="firstUse.learnMore.href"
+      >
+        <template #actions>
+          <HeadingAction
+            label="Copy nameserver values"
+            kind="outlined"
+            icon="pi pi-copy"
+            @click="copyNameservers"
+          />
+          <HeadingAction
+            label="Create zone"
+            kind="primary"
+            icon="pi pi-plus"
+            @click="createZone"
+          />
+        </template>
+      </PageHeading>
+
       <!-- FIRST USE, IN HOME'S CONTAINER.
            The same box the first access uses on /home (./HomeEmptyState.vue) and the
            /empty-states gallery around it (../ProductEmptyStates.vue): centred in the
@@ -265,14 +315,15 @@
              both. `flex-1` is passed down from the parent so that empty state can
              still centre itself in the page. -->
         <section class="flex min-h-0 min-w-0 flex-1 flex-col gap-(--layout-group-gap)">
-          <!-- First-level module list: no PageHeading — the module name already IS the
-               header breadcrumb crumb (AppLayout). The page opens with its CONTROLS row
-               (the search, the module's own actions on the right), then the filter bar;
-               the borderless Table follows in a flush CardBox. -->
+          <!-- The CONTROLS row, under the heading: the narrowing, on a list the page can
+               already show — search on the left, nothing on the right, because the
+               module's action sits in the heading above.
+               Rendered only when there are rows: a search field with nothing to search is
+               noise. -->
           <ControlsHeader v-if="scopedZones.length">
             <InputText
               v-model="search"
-              size="large"
+              size="medium"
               placeholder="Search zones"
               aria-label="Search zones"
               class="min-w-36 grow basis-(--container-2xs)"
@@ -284,31 +335,17 @@
                 />
               </template>
             </InputText>
-
-            <template #actions>
-              <Button
-                label="Copy nameserver values"
-                kind="outlined"
-                size="large"
-                icon="pi pi-copy"
-                @click="copyNameservers"
-              />
-              <Button
-                label="Zone"
-                kind="primary"
-                size="large"
-                icon="pi pi-plus"
-                @click="createZone"
-              />
-            </template>
+            <FilterButton
+              v-model="filters"
+              :fields="filterFields"
+            />
+            <ColumnsButton
+              v-model="columnVisibility"
+              :columns="columns"
+            />
           </ControlsHeader>
 
-          <!-- The filter bar takes its own row: it grows as filters are applied, and
-               sharing the controls row would make the search field jump width as
-               chips come and go. It follows the controls row's own condition — with
-               no zones there is nothing to narrow, and the empty state below owns
-               the page. -->
-          <FilterBar
+          <FilterChips
             v-if="scopedZones.length"
             v-model="filters"
             :fields="filterFields"
@@ -350,7 +387,7 @@
                   </template>
                   <template #actions>
                     <Button
-                      label="Create Zone"
+                      label="Create zone"
                       kind="secondary"
                       size="large"
                       icon="pi pi-plus"
@@ -371,6 +408,7 @@
                 <Table
                   v-model:pagination="pagination"
                   v-model:globalFilter="search"
+                  v-model:columnVisibility="columnVisibility"
                   :data="filteredZones"
                   :loading="tenancyReloading"
                   :columns="columns"
@@ -441,13 +479,17 @@
                       size="medium"
                     />
                   </template>
-
-                  <template #cell-lastModified="{ value, row }">
-                    <LastModifiedCell
+                  <!-- WHO and WHEN are two columns now, so each cell says one thing:
+                       the face and the name here, the relative time next to it. -->
+                  <template #cell-author="{ row }">
+                    <AuthorCell
                       :author="row.author"
                       :avatar-src="row.authorAvatar"
-                      :date="value"
                     />
+                  </template>
+
+                  <template #cell-lastModified="{ value }">
+                    <LastModifiedCell :date="value" />
                   </template>
 
                   <template #cell-actions="{ row }">

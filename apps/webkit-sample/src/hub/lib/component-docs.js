@@ -1,14 +1,22 @@
 // Maps each Component Grid cell to its page on the deployed Webkit Storybook, so
 // a cell's label links straight to that component's docs.
 //
-// The docs id is the Storybook autodocs slug — kebab-case of the story title
-// (`Components/<Category>/<Name>`) + `--docs`. The Storybook category does NOT
-// always match the grid's own section grouping: Dropdown lives under Navigation,
-// Toast under Feedback, Spinner under Utils, and Divider / ScrollArea / Sidebar /
-// GlobalHeader under Layout. Panel and PaginationButton have no dedicated docs
-// page (Panel is shown compositionally; PaginationButton is a Paginator part), so
-// they fall back to the closest page / the docs landing.
-const STORYBOOK_BASE = 'https://dev-webkit.azion.app/?path=/docs/'
+// The docs id is the Storybook autodocs slug: kebab-joined path of the story
+// title (`Components/<Category>/<Name>`) with the NAME LEFT UNSPLIT, plus the
+// `--documentation` suffix — so `Components/Actions/SplitButton` is
+// `components-actions-splitbutton--documentation`, not `…-split-button--docs`.
+//
+// Every id below was generated from the live index at
+// https://webkit.azion.app/index.json — do not hand-write one. To refresh:
+//   curl -s https://webkit.azion.app/index.json | node -e "…entries → type==='docs'"
+//
+// The Storybook category does NOT always match this grid's section grouping:
+// Dropdown / Menu live under Navigation, Toast under Feedback, Spinner under
+// Utils. A handful of shipped components have no docs page yet (Illustration,
+// PasswordRequirements, ResizablePanel, Panel) — they are absent from the map,
+// `hasComponentDocs` reports false, and the cell renders its name as plain text
+// instead of a link that would dump the reader on the docs landing page.
+const STORYBOOK_BASE = 'https://webkit.azion.app/?path=/docs/'
 
 // Landing page used when a cell has no dedicated component docs page.
 const DOCS_HOME = 'get-started--documentation'
@@ -16,94 +24,115 @@ const DOCS_HOME = 'get-started--documentation'
 // Cell name → Storybook docs id.
 const DOCS_IDS = {
   // Actions
-  Button: 'components-actions-button--docs',
-  SplitButton: 'components-actions-split-button--docs',
-  IconButton: 'components-actions-icon-button--docs',
-  MiniButton: 'components-actions-mini-button--docs',
-  CopyButton: 'components-actions-copy-button--docs',
-  ButtonHighlight: 'components-actions-button-highlight--docs',
-  SegmentedButton: 'components-actions-segmented-button--docs',
+  Button: 'components-actions-button--documentation',
+  ButtonHighlight: 'components-actions-buttonhighlight--documentation',
+  CopyButton: 'components-actions-copybutton--documentation',
+  IconButton: 'components-actions-iconbutton--documentation',
+  MiniButton: 'components-actions-minibutton--documentation',
+  SegmentedButton: 'components-actions-segmentedbutton--documentation',
+  SplitButton: 'components-actions-splitbutton--documentation',
 
   // Inputs
-  InputText: 'components-inputs-input-text--docs',
-  InputNumber: 'components-inputs-input-number--docs',
-  InputPassword: 'components-inputs-input-password--docs',
-  Textarea: 'components-inputs-textarea--docs',
-  Checkbox: 'components-inputs-checkbox--docs',
-  RadioButton: 'components-inputs-radio-button--docs',
-  Switch: 'components-inputs-switch--docs',
-  Chip: 'components-inputs-chip--docs',
-  Calendar: 'components-inputs-calendar--docs',
-  ThemeSwitcher: 'components-inputs-theme-switcher--docs',
-  Label: 'components-inputs-label--docs',
-  HelperText: 'components-inputs-helper-text--docs',
-  Select: 'components-inputs-select--docs',
-  MultiSelect: 'components-inputs-multi-select--docs',
-  InputGroup: 'components-inputs-input-group--docs',
-  BoxGridSelection: 'components-inputs-box-grid-selection--docs',
-  FieldText: 'components-inputs-field-text--docs',
-  FieldPassword: 'components-inputs-field-password--docs',
-  FieldTextarea: 'components-inputs-field-textarea--docs',
-  FieldPhoneNumber: 'components-inputs-field-phone-number--docs',
-  FieldInputGroup: 'components-inputs-field-input-group--docs',
-  FieldTextSwitch: 'components-inputs-field-text-switch--docs',
-  FieldCheckbox: 'components-inputs-field-checkbox--docs',
-  FieldCheckboxBlock: 'components-inputs-field-checkbox-block--docs',
-  FieldRadio: 'components-inputs-field-radio--docs',
-  FieldRadioBlock: 'components-inputs-field-radio-block--docs',
-  FieldSwitch: 'components-inputs-field-switch--docs',
-  FieldSwitchBlock: 'components-inputs-field-switch-block--docs',
+  BoxGridSelection: 'components-inputs-boxgridselection--documentation',
+  Calendar: 'components-inputs-calendar--documentation',
+  Checkbox: 'components-inputs-checkbox--documentation',
+  Chip: 'components-inputs-chip--documentation',
+  FieldCheckbox: 'components-inputs-fieldcheckbox--documentation',
+  FieldCheckboxBlock: 'components-inputs-fieldcheckboxblock--documentation',
+  FieldInputGroup: 'components-inputs-fieldinputgroup--documentation',
+  FieldPassword: 'components-inputs-fieldpassword--documentation',
+  FieldPhoneNumber: 'components-inputs-fieldphonenumber--documentation',
+  FieldRadio: 'components-inputs-fieldradio--documentation',
+  FieldRadioBlock: 'components-inputs-fieldradioblock--documentation',
+  FieldSelect: 'components-inputs-fieldselect--documentation',
+  FieldSwitch: 'components-inputs-fieldswitch--documentation',
+  FieldSwitchBlock: 'components-inputs-fieldswitchblock--documentation',
+  FieldText: 'components-inputs-fieldtext--documentation',
+  FieldTextSwitch: 'components-inputs-fieldtextswitch--documentation',
+  FieldTextarea: 'components-inputs-fieldtextarea--documentation',
+  HelperText: 'components-inputs-helpertext--documentation',
+  Hint: 'components-inputs-hint--documentation',
+  InputGroup: 'components-inputs-inputgroup--documentation',
+  InputNumber: 'components-inputs-inputnumber--documentation',
+  InputPassword: 'components-inputs-inputpassword--documentation',
+  InputText: 'components-inputs-inputtext--documentation',
+  Label: 'components-inputs-label--documentation',
+  MultiSelect: 'components-inputs-multiselect--documentation',
+  RadioButton: 'components-inputs-radiobutton--documentation',
+  Select: 'components-inputs-select--documentation',
+  Switch: 'components-inputs-switch--documentation',
+  Textarea: 'components-inputs-textarea--documentation',
+  ThemeSwitcher: 'components-inputs-themeswitcher--documentation',
 
   // Content
-  Avatar: 'components-content-avatar--docs',
-  Badge: 'components-content-badge--docs',
-  Brand: 'components-content-brand--docs',
-  Currency: 'components-content-currency--docs',
-  Overline: 'components-content-overline--docs',
-  Tag: 'components-content-tag--docs',
-  Accordion: 'components-content-accordion--docs',
-  CardBox: 'components-content-card-box--docs',
-  Item: 'components-content-item--docs',
-  CardPricing: 'components-content-card-pricing--docs',
-  Divider: 'components-layout-divider--docs',
-  ScrollArea: 'components-layout-scroll-area--docs',
+  Accordion: 'components-content-accordion--documentation',
+  Avatar: 'components-content-avatar--documentation',
+  AzionLogo: 'components-content-azionlogo--documentation',
+  Badge: 'components-content-badge--documentation',
+  Brand: 'components-content-brand--documentation',
+  CardBox: 'components-content-cardbox--documentation',
+  CardPricing: 'components-content-cardpricing--documentation',
+  Currency: 'components-content-currency--documentation',
+  HeroTitle: 'components-content-herotitle--documentation',
+  Item: 'components-content-item--documentation',
+  Kbd: 'components-content-kbd--documentation',
+  Overline: 'components-content-overline--documentation',
+  SectionTitle: 'components-content-sectiontitle--documentation',
+  Tag: 'components-content-tag--documentation',
 
   // Feedback
-  Skeleton: 'components-feedback-skeleton--docs',
-  Spinner: 'utils-spinner--docs',
-  StatusIndicator: 'components-feedback-status-indicator--docs',
-  Message: 'components-feedback-message--docs',
-  ProgressBar: 'components-feedback-progress-bar--docs',
-  Panel: DOCS_HOME,
-  EmptyState: 'components-feedback-empty-state--docs',
+  EmptyState: 'components-feedback-emptystate--documentation',
+  Message: 'components-feedback-message--documentation',
+  ProgressBar: 'components-feedback-progressbar--documentation',
+  Skeleton: 'components-feedback-skeleton--documentation',
+  StatusIndicator: 'components-feedback-statusindicator--documentation',
+  Toast: 'components-feedback-toast--documentation',
+  Spinner: 'utils-spinner--documentation',
+
+  // Layout
+  Divider: 'components-layout-divider--documentation',
+  Footer: 'components-layout-footer--documentation',
+  FrameBox: 'components-layout-framebox--documentation',
+  GlobalHeader: 'components-layout-globalheader--documentation',
+  ScrollArea: 'components-layout-scrollarea--documentation',
+  SectionGap: 'components-layout-sectiongap--documentation',
+  Sidebar: 'components-layout-sidebar--documentation',
 
   // Overlay
-  Tooltip: 'components-overlay-tooltip--docs',
-  Dialog: 'components-overlay-dialog--docs',
-  Drawer: 'components-overlay-drawer--docs',
-  Popover: 'components-overlay-popover--docs',
-  Dropdown: 'components-navigation-dropdown--docs',
-  Toast: 'components-feedback-toast--docs',
+  CommandMenu: 'components-overlay-commandmenu--documentation',
+  Dialog: 'components-overlay-dialog--documentation',
+  Drawer: 'components-overlay-drawer--documentation',
+  Popover: 'components-overlay-popover--documentation',
+  Tooltip: 'components-overlay-tooltip--documentation',
 
   // Navigation
-  Link: 'components-navigation-link--docs',
-  MenuItem: 'components-navigation-menu-item--docs',
-  Breadcrumb: 'components-navigation-breadcrumb--docs',
-  TabView: 'components-navigation-tab-view--docs',
-  Sidebar: 'components-layout-sidebar--docs',
-  NavigationMenu: 'components-navigation-navigation-menu--docs',
-  GlobalHeader: 'components-layout-global-header--docs',
+  Breadcrumb: 'components-navigation-breadcrumb--documentation',
+  BreadcrumbItem: 'components-navigation-breadcrumbitem--documentation',
+  Dropdown: 'components-navigation-dropdown--documentation',
+  Link: 'components-navigation-link--documentation',
+  Menu: 'components-navigation-menu--documentation',
+  MenuItem: 'components-navigation-menu--documentation',
+  NavigationMenu: 'components-navigation-navigationmenu--documentation',
+  TabView: 'components-navigation-tabview--documentation',
 
   // Data
-  PaginationButton: 'components-data-paginator--docs',
-  Flow: 'components-data-flow--docs',
-  Paginator: 'components-data-paginator--docs',
-  Table: 'components-data-table--docs',
-  PickList: 'components-data-pick-list--docs',
+  Flow: 'components-data-flow--documentation',
+  PaginationButton: 'components-data-paginator--documentation',
+  Paginator: 'components-data-paginator--documentation',
+  PickList: 'components-data-picklist--documentation',
+  Table: 'components-data-table--documentation',
 
   // Code
-  CodeBlock: 'components-code-code-block--docs',
-  LogView: 'components-code-log-view--docs'
+  CodeBlock: 'components-code-codeblock--documentation',
+  LogView: 'components-code-logview--documentation'
+}
+
+/**
+ * Whether this cell has a dedicated Storybook docs page. False for components
+ * that ship but are not documented yet — the cell then shows a plain label.
+ */
+export function hasComponentDocs(name) {
+  return name in DOCS_IDS
 }
 
 /**

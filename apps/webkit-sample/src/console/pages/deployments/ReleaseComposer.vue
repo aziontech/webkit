@@ -850,7 +850,7 @@
   const breadcrumb = computed(() => [
     { label: 'Deployments', href: '/deployments' },
     ...(seedName.value ? [{ label: seedName.value, href: '/deployments' }] : []),
-    { label: 'New release' }
+    { label: 'Create release' }
   ])
 
   // Re-seeding follows the first target: the release being edited is the one serving
@@ -879,7 +879,7 @@
         <!-- FOCUSED measure (`.layout-column-focused`, --container-4xl), not the data one.
              This is a focused flow: one task, composed then committed, and the reader's eye has
              to travel between the release on one side and what it reaches on the other. At the
-             data measure (1620px) those two are a head-turn apart on a wide screen, which is
+             data measure (1388px) those two are a head-turn apart on a wide screen, which is
              exactly what the measure doctrine caps a focused flow for. Every band inside it —
              and the commit bar below — sits on the same measure, so the bar's buttons land on
              the content's own right edge. -->
@@ -1111,9 +1111,7 @@
             Deploying builds this release and puts it into traffic.
           </p>
 
-          <div
-            class="flex flex-col gap-(--spacing-sm) md:flex-row md:items-center md:justify-end"
-          >
+          <div class="flex flex-col gap-(--spacing-sm) md:flex-row md:items-center md:justify-end">
             <p
               v-if="blocker"
               class="flex items-center gap-(--spacing-xs) text-body-sm text-(--warning-contrast)"

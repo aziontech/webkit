@@ -1,0 +1,225 @@
+---
+title: Deploy an application
+description: By the end of this tutorial, an application will be live on the Azion Web Platform, answering HTTP 200 on its own Azion domain. It takes a few minutes.
+label: Deploy an application
+lastUpdated: 2026-06-30
+---
+
+## Overview
+
+There are three ways onto the platform, and they differ only in where your code starts:
+a template you pick from a gallery, a repository you already have on GitHub, or a
+local project you push with the CLI. All three end in the same place — a
+<Tooltip headline="Workload" tip="The binding between an application and the domain that serves it. Deleting one releases its domain immediately." cta="Read the workload guide" href="https://www.azion.com/en/documentation/">workload</Tooltip>
+serving your application from every Azion edge location.
+
+Pick one path. You do not need the other two.
+
+<CardGroup cols={3}>
+  <Card
+    title="Start from a template"
+    icon="pi pi-th-large"
+    href="#deploy-a-template-via-console"
+  >
+    Ready-made projects that go live in a few clicks. No local tooling.
+  </Card>
+  <Card
+    title="Import from GitHub"
+    icon="pi pi-github"
+    href="#import-a-project-from-github"
+  >
+    Connect a repository and let Azion build it on every push.
+  </Card>
+  <Card
+    title="Deploy with the CLI"
+    icon="pi pi-desktop"
+    href="#deploy-with-azion-cli"
+  >
+    Ship the project already open in your editor.
+  </Card>
+</CardGroup>
+
+## Before you start
+
+You need an Azion account and, for the GitHub path, permission to install an app on the
+repository you want to deploy. Everything else is optional.
+
+<Note>
+  Some templates are integrated with third-party services, so you may need to create accounts,
+  generate tokens, or activate Azion products before deploying. Templates integrated with GitHub ask
+  you to connect your account: click Connect with GitHub when prompted and confirm the connection in
+  the pop-up. Each [template's guide](https://www.azion.com/en/documentation/) lists its specific
+  prerequisites.
+</Note>
+
+### Deploy a template via Console
+
+Templates are ready-made projects (e-commerce, blogs, APIs, full-stack SSR) that go live in
+a few clicks. You don't need any local tooling.
+
+<Steps>
+  <Step title="Access Azion Console." />
+  <Step title="Click + Create on the homepage." />
+  <Step title="Select your preferred template to start your project." />
+  <Step title="Fill in the fields the template asks for." />
+  <Step title="Customize the elements using the sidebar tools." />
+  <Step title="Test it">
+    Open the domain Console shows you. A successful deploy answers `200` and serves the
+    template's home page.
+
+    ```bash title="Terminal"
+    curl -sSI https://<your-workload>.map.azionedge.net | head -n 1
+    # HTTP/2 200
+    ```
+  </Step>
+</Steps>
+
+### Import a project from GitHub
+
+Connecting a repository makes Azion build and deploy it on every push to the branch you
+choose. The first import asks you to install the Azion GitHub App.
+
+<Steps>
+  <Step title="Click + Create, then Import from GitHub." />
+  <Step title="Authorize the Azion GitHub App on the account or organization that owns the repository." />
+  <Step title="Pick the repository and the branch to deploy." />
+  <Step title="Confirm the detected framework preset, or set the build command and output directory yourself.">
+    The preset is a guess based on your lockfile and config. Override it when your build does
+    something the framework's default does not.
+
+    | Field              | What it does                            | Default                      |
+    | ------------------ | --------------------------------------- | ---------------------------- |
+    | `Framework preset` | Chooses the build and output convention | Detected from the repository |
+    | `Build command`    | The command run on every deploy         | Preset's own command         |
+    | `Output directory` | Where the built assets are read from    | Preset's own directory       |
+    | `Install command`  | Runs before the build                   | Detected from the lockfile   |
+  </Step>
+  <Step title="Test it">
+    Push a commit to the connected branch and watch the build in Console. The workload updates
+    in place — the domain does not change between deploys.
+  </Step>
+</Steps>
+
+## Deploy with Azion CLI
+
+The CLI ships the project already open in your editor, with no repository in between. It is
+the fastest path when you are iterating.
+
+<Steps>
+  <Step title="Install the Azion CLI">
+    <Tabs>
+      <Tab title="macOS">
+        ```bash
+        brew install azion
+        ```
+      </Tab>
+      <Tab title="Linux">
+        ```bash
+        curl -sL https://downloads.azion.com/linux/x86_64/azion | sudo tee /usr/local/bin/azion > /dev/null
+        sudo chmod +x /usr/local/bin/azion
+        ```
+      </Tab>
+      <Tab title="Windows">
+        ```powershell
+        winget install azion
+        ```
+      </Tab>
+    </Tabs>
+  </Step>
+
+  <Step title="Link and deploy">
+    `azion link` reads your project, picks a preset, and writes the `azion/` folder that
+    describes the workload. `azion deploy` builds it and ships it.
+
+    <CodeGroup>
+      ```bash npm
+      npx azion link
+      npx azion deploy --local
+      ```
+
+      ```bash pnpm
+      pnpm dlx azion link
+      pnpm dlx azion deploy --local
+      ```
+    </CodeGroup>
+
+    <Tip>
+      Pass `--local` when your project uses workspace dependencies. Without it the build runs
+      remotely, where `workspace:*` ranges cannot resolve.
+    </Tip>
+  </Step>
+
+  <Step title="Test it">
+    The CLI prints the domain when the deploy finishes. Hit it, and confirm the response comes
+    from the edge:
+
+    ```bash title="Terminal"
+    curl -sSI https://your-workload.map.azionedge.net | grep -i "server\|x-cache"
+    ```
+  </Step>
+</Steps>
+
+## What you built
+
+A workload — Azion's unit of deployment — bound to a domain, backed by an edge
+application, and running on every Azion location. Whichever path you took, the result is
+the same object, and it is now the thing you configure.
+
+<AccordionGroup>
+  <Accordion title="Why is the first request slower than the rest?">
+    The first request to a location is a cache miss: the edge fetches from origin, stores the
+    response, and serves every subsequent request locally. Warm-up is per location, not global.
+  </Accordion>
+  <Accordion title="Can I point my own domain at this?">
+    Yes. Add the domain to the workload, then create the CNAME your DNS provider asks for. Azion
+    issues and renews the certificate.
+  </Accordion>
+  <Accordion title="What happens to the old version when I deploy again?">
+    The workload updates in place. There is no second domain and no cutover — the next request after
+    the deploy completes gets the new version.
+  </Accordion>
+</AccordionGroup>
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card
+    title="Add a custom domain"
+    icon="pi pi-globe"
+    href="https://www.azion.com/en/documentation/"
+  >
+    Bring your own domain and let Azion manage the certificate.
+  </Card>
+  <Card
+    title="Cache the right things"
+    icon="pi pi-bolt"
+    href="https://www.azion.com/en/documentation/"
+  >
+    Set cache settings and rules so the edge answers more of your traffic.
+  </Card>
+</CardGroup>
+
+<Warning title="Before you delete">
+  Deleting a workload releases its domain immediately. Anything pointing at that domain stops
+  resolving as soon as the deletion completes.
+</Warning>
+
+## Related products
+
+<ItemGroup>
+  <Item
+    title="Edge Functions"
+    icon="pi pi-code"
+    href="https://www.azion.com/en/documentation/"
+  >
+    Build serverless applications on Azion's global network. A workload integrates with functions
+    natively, through a binding.
+  </Item>
+  <Item
+    title="Edge SQL"
+    icon="pi pi-database"
+    href="https://www.azion.com/en/documentation/"
+  >
+    Store relational data across the network and read it from the location that served the request.
+  </Item>
+</ItemGroup>

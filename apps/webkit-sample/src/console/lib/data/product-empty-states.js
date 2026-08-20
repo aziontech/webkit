@@ -426,7 +426,7 @@ export const productEmptyStates = [
         id: 'release',
         title: 'Compose a release',
         description: 'Pick the workloads and resources to promote in one deploy.',
-        action: 'New release',
+        action: 'Create release',
         icon: 'pi pi-cloud-upload',
         route: { path: '/deployments/releases/new' }
       },

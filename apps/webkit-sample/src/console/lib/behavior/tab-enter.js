@@ -37,6 +37,25 @@ const ENTER_CLASS = 'animate-page-enter'
 const prefersReducedMotion = () =>
   globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false
 
+// The nearest ancestor that ACTUALLY scrolls, for callers that do not name one.
+//
+// In the tabbed DETAIL shells the wrapper's own parent is that region — those pages
+// pin their tab bar and give the content below it its own scroll — so the parent was
+// all this ever needed to be. A page that scrolls as ONE (heading, tabs and content
+// together, inside AppLayout's single scroll region) has it several levels up, and
+// `parentElement` there is a plain section with no overflow: the reset ran, wrote
+// `scrollTop` on an element that has none, and silently did nothing. Walking up finds
+// the real region on both shapes, so no caller has to know which one it is.
+const scrollingAncestor = (node) => {
+  for (let el = node.parentElement; el; el = el.parentElement) {
+    const overflow = globalThis.getComputedStyle?.(el).overflowY
+    if ((overflow === 'auto' || overflow === 'scroll') && el.scrollHeight > el.clientHeight) {
+      return el
+    }
+  }
+  return null
+}
+
 /**
  * Replay the page entrance whenever `key` changes.
  *
@@ -46,8 +65,9 @@ const prefersReducedMotion = () =>
  * @param {() => unknown} key
  *   The active tab. Any change replays the entrance.
  * @param {import('vue').Ref<HTMLElement | null>} [scroller]
- *   The scrolling region to send back to the top. Defaults to the wrapper's own
- *   scrolling ancestor when omitted.
+ *   The scrolling region to send back to the top. Omit it and the nearest scrolling
+ *   ancestor of the wrapper is used, which is the right region on both shapes: a tab
+ *   shell that owns its scroll, and a page that scrolls as one inside AppLayout's.
  */
 export function useTabEnter(target, key, scroller = null) {
   watch(key, () => {
@@ -61,7 +81,7 @@ export function useTabEnter(target, key, scroller = null) {
     // The scroll reset is NOT motion, so it happens even under reduced motion:
     // landing mid-page on a screen you have not seen is a correctness problem, not
     // a decorative one.
-    const region = scroller?.value ?? node.parentElement
+    const region = scroller?.value ?? scrollingAncestor(node)
     if (region) region.scrollTop = 0
 
     if (prefersReducedMotion()) return

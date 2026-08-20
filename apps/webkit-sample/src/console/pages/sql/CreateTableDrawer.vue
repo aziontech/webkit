@@ -206,9 +206,9 @@
   <ResourceDrawer
     v-model:open="open"
     size="large"
-    title="Create Table"
+    title="Create table"
     description="Define the table name and its columns. Drag the grip to reorder columns."
-    save-label="Create Table"
+    save-label="Create table"
     :submitting="submitting"
     @submit="submit"
   >
@@ -300,11 +300,7 @@
                 data-drag-row
                 :data-dragging="isDragging(index) || null"
                 :data-drop="isDropTarget(index) || null"
-                :class="[
-                  COLUMN_GRID,
-                  'px-(--spacing-xxs) py-(--spacing-xxs)',
-                  dragRowClass
-                ]"
+                :class="[COLUMN_GRID, 'px-(--spacing-xxs) py-(--spacing-xxs)', dragRowClass]"
                 @dragenter.prevent="onDragEnter(index)"
                 @dragover.prevent
                 @drop="dropOnColumn(index)"

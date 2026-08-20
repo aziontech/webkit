@@ -58,27 +58,47 @@ export const layoutsData = {
   'layout-group-gap': 'var(--spacing-md)', // within a band
 
   /*
-   * MEASURE — the widest a page column may get, by context. Four values, because the
+   * MEASURE — the widest a page column may get, by context. Five values, because the
    * reason a column is capped differs with how wide its payload actually is.
    *
-   * DATA pages (lists, detail dashboards) are capped so a table that runs to the
-   * viewport edge on an ultrawide screen doesn't put its row actions a head-turn away
-   * from the name that identifies the row. They still want every pixel they can get:
-   * more columns visible is the point.
+   * DATA pages (home, the product overviews, lists, detail dashboards) are capped so a
+   * table that runs to the viewport edge on an ultrawide screen doesn't put its row
+   * actions a head-turn away from the name that identifies the row. They still want
+   * every pixel they can get: more columns visible is the point.
    *
-   * FOCUSED pages (home, the create flows) are one task, but that task still goes
-   * multi-column — home is a rail plus a card grid — so they stay wide enough for
-   * those bands to breathe, and no wider.
+   * This is THE STANDARD PAGE CONTAINER — the one measure a main page column takes
+   * unless it has a reason not to, and the reason is always a narrower payload (a form,
+   * a hero, prose), never a wider one. It was 1620px (`7xl`) and is now 1388px (`6xl`),
+   * a single width for home, the overviews and every listing, in both their empty and
+   * populated states. `6xl` is the ladder's nearest slot to the 1300px the design review
+   * asked for; the ladder is an anchored geometric progression
+   * (primitives/shape/container.js), so it has no 1300 and does not get one for a page
+   * decision — the page snaps to the scale, the scale does not bend to the page.
+   *
+   * FOCUSED pages are one task whose payload is still multi-column — a template deploy
+   * hero, a running-deployment log, a release composer's review column — so they stay
+   * wide enough for those bands to breathe, and no wider. Home used to sit here; it is
+   * a usage rail beside a list of every resource an account owns, which is the DATA
+   * measure's job, and it took that measure with its empty state (a page that changed
+   * width when the account gained its first resource was reading as two pages).
    *
    * FORM pages (settings, in-page edit forms) are a single stacked column of fields.
    * Past ~1200px the extra width lands entirely inside the controls: a label sits at
    * the far left of a 1600px row from the input it names, and the eye has to travel
    * the whole measure to pair them.
+   *
+   * DOCS pages are the one column capped by TYPOGRAPHY rather than by layout. Prose is
+   * read line by line, and past ~90 characters the eye loses the start of the next line
+   * on the return sweep — a limit that has nothing to do with how wide the payload is,
+   * which is why it is far tighter than every other measure here and why it does not
+   * move when a rail collapses and frees up room. A docs page is already flanked by two
+   * rails; this caps what is between them.
    */
-  'layout-measure': 'var(--container-7xl)', // 1620px — data pages
-  'layout-measure-focused': 'var(--container-4xl)', // 1024px — home
+  'layout-measure': 'var(--container-6xl)', // 1388px — the standard page container
+  'layout-measure-focused': 'var(--container-4xl)', // 1024px — single-task heroes
   'layout-measure-form': 'var(--container-4xl)', // 1024px — settings, forms
   'layout-measure-form-create': 'var(--container-5xl)', // 1192px — create flows
+  'layout-measure-docs': 'var(--container-2xl)', // 752px — documentation prose
 
   /*
    * MEASURE (control) — the widest the *right side* of an item-group field row may
@@ -109,18 +129,19 @@ const COLUMN_MEASURE = {
   'layout-column': 'var(--layout-measure)',
   'layout-column-focused': 'var(--layout-measure-focused)',
   'layout-column-form': 'var(--layout-measure-form)',
-  'layout-form-create': 'var(--layout-measure-form-create)'
+  'layout-form-create': 'var(--layout-measure-form-create)',
+  'layout-column-docs': 'var(--layout-measure-docs)'
 }
 
 /**
  * A centered column at the measure — every page carries one of these, list pages
- * included. Full-bleed is the absence of all four classes, not a `w-full`.
+ * included. Full-bleed is the absence of all five classes, not a `w-full`.
  *
  * THE BOUNDARY IS NOT PART OF THE MEASURE. A `padded` page gets its boundary from the
  * app shell, on the scroll box OUTSIDE the capped block, so the measure lands as
  * CONTENT width. A page that carries the boundary ITSELF puts it on the same block as
  * the measure, and there `box-sizing: border-box` makes the cap swallow the inset:
- * 1620px of cap minus 24px a side is a 1572px content column, 48px narrower than the
+ * 1388px of cap minus 24px a side is a 1340px content column, 48px narrower than the
  * same measure gives a padded page. That is the measure describing something other
  * than content, which is the one job it has.
  *

@@ -100,9 +100,9 @@
 
 <template>
   <CreatePage
-    :breadcrumb="[{ label: 'SQL Database', href: '/sql-database' }, { label: 'Create Database' }]"
+    :breadcrumb="[{ label: 'SQL Database', href: '/sql-database' }, { label: 'Create database' }]"
     back-label="Back to SQL Database"
-    title="Create Database"
+    title="Create database"
     description="A SQL Database instance that Applications, Functions and APIs can query at the edge."
     title-id="create-database-title"
     :submitting="submitting"

@@ -9,7 +9,7 @@
 // first row.
 //
 // ONE MODULE FOR THE THREE LEVELS, because the rule is identical at each and the three
-// panels are one component (../../components/shell/AccountSwitcher.vue). The scope key
+// panels are one component (../../components/shell/TenancySwitcher.vue). The scope key
 // is that component's own `kind`, so there is nothing to map.
 //
 // NOT PERSISTED, on purpose. The tenancy selection itself is a plain `ref` in

@@ -26,8 +26,8 @@
   //     and its own record) rather than narrowing anything, so it wears no filter
   //     button and earns no row of its own.
   //   Version History / Deployments — narrowing, so it takes the row every list in the
-  //     console opens with (ui/ControlsHeader.vue): the search, then a filter bar of
-  //     chips (ui/FilterBar.vue) over the shared deployment catalog, hoisted out of the
+  //     console opens with (../../components/page/ControlsHeader.vue): the search, then
+  //     the Filter button (list/FilterButton.vue) over the shared deployment catalog, hoisted out of the
   //     table's `#toolbar` under the heading — `:controls="false"`, and this page owns
   //     the state and binds it back in as models. Same catalog as the module list, so
   //     only the place changes and the two can never drift.
@@ -62,7 +62,8 @@
   import FieldRow from '../../components/form/FieldRow.vue'
   import SettingsSaveBar from '../../components/form/SettingsSaveBar.vue'
   import UnsavedChangesGuard from '../../components/form/UnsavedChangesGuard.vue'
-  import FilterBar from '../../components/list/FilterBar.vue'
+  import FilterButton from '../../components/list/FilterButton.vue'
+  import FilterChips from '../../components/list/FilterChips.vue'
   import LastModifiedCell from '../../components/list/LastModifiedCell.vue'
   import ControlsHeader from '../../components/page/ControlsHeader.vue'
   import PageHeading from '../../components/page/PageHeading.vue'
@@ -327,7 +328,7 @@
   // placements cannot drift.
   //
   // No Deployed window here: this list is one workload's own history, short enough
-  // that a date field would be a chip nobody opens (the module list, which spans every
+  // that a date field would be a field nobody opens (the module list, which spans every
   // deployment ever made, asks for it).
   //
   // ONE set of state for both tabs: the Overview's Version History and the Deployments
@@ -721,7 +722,7 @@
                 <ControlsHeader>
                   <InputText
                     v-model="deploySearch"
-                    size="large"
+                    size="medium"
                     placeholder="Search deployments"
                     aria-label="Search deployments"
                     class="min-w-36 grow basis-(--container-2xs)"
@@ -733,8 +734,13 @@
                       />
                     </template>
                   </InputText>
+                  <FilterButton
+                    v-model="deployFilters"
+                    :fields="deployFields"
+                  />
                 </ControlsHeader>
-                <FilterBar
+
+                <FilterChips
                   v-model="deployFilters"
                   :fields="deployFields"
                 />
@@ -772,7 +778,7 @@
                 <ControlsHeader>
                   <InputText
                     v-model="deploySearch"
-                    size="large"
+                    size="medium"
                     placeholder="Search deployments"
                     aria-label="Search deployments"
                     class="min-w-36 grow basis-(--container-2xs)"
@@ -784,8 +790,13 @@
                       />
                     </template>
                   </InputText>
+                  <FilterButton
+                    v-model="deployFilters"
+                    :fields="deployFields"
+                  />
                 </ControlsHeader>
-                <FilterBar
+
+                <FilterChips
                   v-model="deployFilters"
                   :fields="deployFields"
                 />

@@ -1,71 +1,83 @@
 <script setup>
-  // The Applications module "create" flow — a dedicated PAGE (route
-  // /applications/new), sidebar hidden so the form is the only focus.
+  // THE APPLICATION CREATE — a WIZARD, because the first answer decides the rest.
   //
-  // WHERE SAVE LEADS. Creating an application creates a CHAIN: the application plus
-  // the Workload that publishes it, the Connector it reads from and the Storage bucket
-  // holding its assets (src/lib/provisioning.js — the four resources `azion deploy`
-  // creates). Nothing about that chain serves traffic until a DEPLOYMENT binds it —
-  // and Save does NOT start one. Creating is not deploying: publishing spends real
-  // infrastructure, and a button labelled "Save" must not do it as a side effect.
-  // Save creates, then hands back a toast that carries the resource — the
-  // confirmation names what was created and its action opens it — and lands on the
-  // module list. Deploying stays an explicit act, from the application itself.
+  // ── WHY THIS ONE CREATE IS IN PARTS ──
   //
-  // The FIELDS are exactly the body of POST /v4/workspace/applications — `name`,
-  // the four `modules` toggles, `active` and `debug`, nothing else. `form` is keyed
-  // by the API's own names (snake_case inside `modules`) because this object IS the
-  // request body; `payload()` only nests each module flag into its `{ enabled }`
-  // object, so the shape sent is readable straight off the state.
+  // Every other create in this console is one page of Section bands with one Save
+  // (../../components/page/CreatePage.vue), and that is right for them: a DNS zone or a
+  // team asks a fixed set of questions in a fixed order, and splitting a fixed form into
+  // parts buys the reader nothing but clicks. An application is the exception. The
+  // question that matters — WHERE DOES THE CODE COME FROM — changes which questions
+  // follow it, and asking all of them at once means showing a repository field to
+  // somebody starting from scratch.
   //
-  // THE BANDS ARE ORDERED BY HOW LIKELY THE DECISION IS. The endpoint requires
-  // exactly ONE field — `name`; `active`, `debug` and every `modules` flag are
-  // optional and already carry the endpoint's own defaults. But "optional" is not
-  // one bucket: the modules are what the person creating an application came here to
-  // choose, while `active` and `debug` are flags almost nobody touches at creation
-  // time. So General leads, Modules stays open, and Advanced — those two flags —
-  // is collapsed and last. Nothing the endpoint REQUIRES is ever inside the
-  // disclosure, so a failed submit always points at a field already on screen.
+  // So: three flows, each declaring its own parts (../../lib/data/application-flows.js).
   //
-  // Layout is the IN-PAGE create form (`/forms/in-page`), the same anatomy as an
-  // application's Build tab: the form measure, one `<fieldset>` locking the scope,
-  // and bands made of a Section (title + hint) over a flush CardBox whose body is an
-  // Item.List. Every field is a small Item row (`size="small"`) — the Item.Title IS
-  // the label, guidance goes in Item.Description, the control sits right via
-  // Item.Actions — a switch lives in that cell, never loose on the page.
+  //   Import from Git       method → repository → configure
+  //   Start from scratch    method → configure                  (it IS the source)
+  //   Start from a template method → template   → repository → configure
+  //                         method → template   → configure     (an Azion template)
   //
-  // Accessibility (the `/webkit-form` skill):
-  //   - the Item.Title names each field; the control carries an aria-label so it has
-  //     an accessible name (no <Label for> — that's reserved for Fields-separated);
-  //   - the disclosure is the Section's own heading button, so it ships
-  //     `aria-expanded` + `aria-controls`, and the collapsed region is `inert` —
-  //     nobody can tab into a field they cannot see;
-  //   - validation runs on submit only; with no Label the feedback is a HelperText
-  //     under the control. `name` is the only required field, so the state is amber
-  //     `required` (required is NOT an error — never the red `invalid`), rendered on
-  //     submit and cleared as the user edits. No error-summary;
-  //   - one `submitting` flag locks the whole scope (the /webkit-ui-states Pattern 1
-  //     lock): the outer <fieldset :disabled> is the NATIVE safety net, and every
-  //     control ALSO takes :disabled off the same flag — a fieldset blocks
-  //     interaction for the whole subtree but each webkit control renders its
-  //     disabled VISUAL from its own prop, so the fieldset alone would leave the
-  //     controls looking live mid-submit. The lock is the PROP everywhere; no page
-  //     ever hand-styles a locked control. Save carries :loading (webkit Button
-  //     suppresses its own click while loading); request errors toast.
-  import CardBox from '@aziontech/webkit/card-box'
-  import HelperText from '@aziontech/webkit/helper-text'
-  import InputText from '@aziontech/webkit/input-text'
-  import Item from '@aziontech/webkit/item'
-  import Switch from '@aziontech/webkit/switch'
+  // THE TEMPLATE FLOW'S THIRD PART IS CONDITIONAL, and on the answer to the part before
+  // it. A FRAMEWORK STARTER is cloned into the reader's own GitHub account, so it needs
+  // an authorized account and somewhere to land — new repository or one already there
+  // (./wizard/RepositoryStep.vue). An AZION TEMPLATE is configured rather than cloned:
+  // its settings ARE the template, so the part is dropped and the rail goes back to
+  // three rather than asking anybody to authorize GitHub for a clone that never happens
+  // (../../lib/data/templates.js → `requiresRepository`).
+  //
+  // The CHROME is the create page's, unchanged — same header, same measure, same band
+  // rhythm, same floating action bar (../../components/page/WizardPage.vue explains what
+  // it adds and what it borrows). A wizard is not a different kind of page; it is this
+  // create page whose questions arrive in parts.
+  //
+  // ── WHAT MOVED, AND WHAT DID NOT ──
+  //
+  // This page was the API-shaped form: `name`, the seven `modules` switches, `active`
+  // and `debug`, in three open bands. Those fields all still exist, with the same copy
+  // and in the same order — they are the Configure part's ADVANCED disclosure
+  // (./wizard/ConfigureStep.vue), because every one already carries the endpoint's own
+  // default and none of them is the reason anybody opens this flow. `name` stayed open
+  // and required: it is the endpoint's only requirement and the name the whole
+  // provisioned chain takes.
+  //
+  // The CREATION CENTER (/create) and the template deploy (/deploy) are untouched. They
+  // are the header's Create — the console's own front door for "make something" — and
+  // this flow does not replace them; a reader who lands on Applications and presses
+  // Create gets this, a reader who presses Create in the header gets that.
+  //
+  // ── CREATING IS DEPLOYING HERE, AND THE VERB SAYS SO ──
+  //
+  // The old form's Save created an application and stopped, because publishing spends
+  // real infrastructure and a button labelled "Save" must not do that as a side effect.
+  // This flow's commit is labelled "Create and deploy" and does both — honest, because
+  // the reader who arrived by picking a repository came to deploy that repository,
+  // and a create that stopped short would leave them on a list hunting for a Deploy
+  // button. The verb is what makes it consent instead of a surprise.
   import { toast } from '@aziontech/webkit/toast'
-  import Tooltip from '@aziontech/webkit/tooltip'
-  import { provisionDeployment } from '@shared/lib/provisioning'
-  import { computed, reactive, ref } from 'vue'
+  import { provisionDeployment, resourceChain } from '@shared/lib/provisioning'
+  import { computed, reactive, ref, watch } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
-  import CreatePage from '../../components/page/CreatePage.vue'
-  import Section from '../../components/page/Section.vue'
+  import DeploymentFlow from '../../components/deployment/DeploymentFlow.vue'
+  import WizardPage from '../../components/page/WizardPage.vue'
   import { useBaseline } from '../../lib/behavior/forms'
+  import {
+    getApplicationFlow,
+    PROVISIONAL_STEPS,
+    SCRATCH_SOURCE
+  } from '../../lib/data/application-flows'
+  import { defaultModuleState } from '../../lib/data/application-modules'
+  import { defaultFirewallModuleState, enabledFirewallModules } from '../../lib/data/firewalls'
+  import { configuredTemplateSteps } from '../../lib/data/template-provisioning'
+  import ConfigureStep from './wizard/ConfigureStep.vue'
+  import DeploySuccess from './wizard/DeploySuccess.vue'
+  import { provideCreateForm } from './wizard/form-context'
+  import GitSourceStep from './wizard/GitSourceStep.vue'
+  import MethodStep from './wizard/MethodStep.vue'
+  import RepositoryStep from './wizard/RepositoryStep.vue'
+  import SourceSummary from './wizard/SourceSummary.vue'
+  import TemplateSourceStep from './wizard/TemplateSourceStep.vue'
 
   const route = useRoute()
   const router = useRouter()
@@ -73,126 +85,243 @@
   // The email carried over from the login flow (falls back to a placeholder).
   const userEmail = computed(() => route.query.email || 'myemail@azion.com')
 
-  // --- Form state ----------------------------------------------------------
-  // One property per field the create endpoint accepts. The defaults are the
-  // endpoint's own defaults: Cache and Functions ship on, the two paid-feature
-  // modules ship off, the application is created active and undebugged. Because
-  // they ARE the endpoint's defaults, submitting the form untouched sends exactly
-  // what the API would have applied on its own — which is what lets every one of
-  // them sit behind the disclosure.
+  // --- The answers ---------------------------------------------------------
+  // `source` is the first answer: a repository, a template, or from scratch. ONE shape for
+  // all three (see ./wizard/GitSourceStep.vue → emitSource), so nothing downstream has
+  // to know which door the reader came through.
+  const source = ref(null)
+
+  // WHERE THE CLONE LANDS — the template flow's third answer, and only that flow's. One
+  // shape for both ways of answering it (see ./wizard/RepositoryStep.vue):
+  //
+  //   { mode: 'new' | 'existing', owner, name, visibility }
+  //
+  // It is NOT folded into `source`: the source is WHAT is being deployed and is the same
+  // object whichever door the reader came through, while this is WHERE a copy of it goes
+  // — and two of the three flows never have one.
+  const repository = ref(null)
+
+  // --- Phase and position --------------------------------------------------
+  // `phase` is where the FLOW is: asking, running, done. `stepIndex` is where inside the
+  // asking. They are separate because the run and the outcome are not parts — nothing is
+  // asked in either, and neither has a Back.
+  const phase = ref('wizard') // wizard | deploying | success
+  const flowId = ref('')
+  const stepIndex = ref(0)
+
+  const flow = computed(() => getApplicationFlow(flowId.value))
+
+  // Before a method is chosen the progress shows the PROVISIONAL shape (three parts —
+  // what two of the three flows really have), so the first screen of a stepped flow is
+  // not the one screen with no progress on it. Once a flow is chosen the progress is that
+  // flow's own list, which for from scratch is one part shorter. See PROVISIONAL_STEPS.
+  //
+  // THE REPOSITORY PART IS CONDITIONAL. Only the template flow declares it, and only a
+  // framework starter keeps it: an Azion template is configured rather than cloned, so
+  // there is nothing to authorize and nowhere for a clone to land. Before a template is
+  // chosen the part STAYS — the flow's real shape is four, and learning it is one part
+  // shorter after answering is the direction to be wrong in (see PROVISIONAL_STEPS).
+  const needsRepository = computed(
+    () => flowId.value === 'template' && source.value?.requiresRepository !== false
+  )
+
+  const steps = computed(() => {
+    const declared = flow.value?.steps ?? PROVISIONAL_STEPS
+    return needsRepository.value ? declared : declared.filter((part) => part.id !== 'repository')
+  })
+  const step = computed(() => steps.value[stepIndex.value]?.id ?? 'method')
+  const isLastStep = computed(() => stepIndex.value === steps.value.length - 1)
+
+  // The request body. Keyed by the API's own names — `modules` is snake_case because
+  // this object IS the body — plus the two build commands the deploy needs. `settings`
+  // holds whatever the chosen template declares.
   const form = reactive({
     name: '',
-    modules: {
-      application_accelerator: false,
-      cache: true,
-      device_detection: false,
-      functions: true,
-      image_processor: false,
-      load_balancer: false,
-      web_socket_proxy: false
-    },
+    buildCommand: 'npm run build',
+    deployCommand: 'npm run deploy',
+    settings: {},
+    // Not part of the application body: a firewall is its own resource, so it travels to
+    // the provisioning call rather than into `payload()`. Its modules are decided in the
+    // same part that decides whether there is a firewall at all.
+    //
+    // ON by default, and the reader still decides. An application that reaches production
+    // with nothing in front of it is the expensive default, so the flow pre-answers the
+    // question the safe way rather than leaving it to be remembered. The consent is not
+    // skipped, it is moved: the switch is on the part, open and unfolded above its modules
+    // (./wizard/ConfigureStep.vue), so opting out is one visible click before the commit.
+    firewall: true,
+    firewallModules: defaultFirewallModuleState(),
+    modules: defaultModuleState(),
     active: true,
     debug: false
   })
 
-  // The optional application-level flags, in the order Main Settings lists them so a
-  // created application reads the same when it is edited. `key` indexes `form`.
-  const behaviorFields = [
-    {
-      key: 'active',
-      title: 'Active',
-      description:
-        'When disabled, the Application is created but stops serving traffic at the edge.'
-    },
-    {
-      key: 'debug',
-      title: 'Debug',
-      description: 'Expose executed rules in $traceback and $stacktrace.'
-    }
-  ]
+  // Per-field messages, filled on the commit attempt and cleared as the reader edits.
+  const errors = reactive({})
+  const clearErrors = () => Object.keys(errors).forEach((key) => delete errors[key])
 
-  // The module catalog, in the SAME order and with the same copy as an
-  // application's Main Settings, so a created application reads identically the
-  // first time it is edited. `key` indexes `form.modules`.
-  //
-  // Two tiers, and the difference is not cosmetic: `defaultModules` ship on every
-  // plan and are user-toggleable here; `subscriptionModules` are paid add-ons that
-  // cannot be switched on by the person filling in this form at all — activating one
-  // is a sales conversation. So their switch is disabled, a Tooltip on it says why,
-  // and the row itself carries the way FORWARD (a real link to contact sales),
-  // because a tooltip panel is `pointer-events-none` and can never hold one.
-  const defaultModules = [
-    {
-      key: 'application_accelerator',
-      title: 'Application Accelerator',
-      description: 'Optimize protocols and manage dynamic content delivery.'
-    },
-    {
-      key: 'cache',
-      title: 'Cache',
-      description: 'Customize advanced cache settings.'
-    },
-    {
-      key: 'device_detection',
-      title: 'Device Detection',
-      description: 'Activate DeviceAtlas variables to configure responsive rules.'
-    },
-    {
-      key: 'functions',
-      title: 'Functions',
-      description: 'Build ultra-low latency functions that run on the edge.'
-    },
-    {
-      key: 'image_processor',
-      title: 'Image Processor',
-      description: 'Enable dynamic image editing options.'
-    },
-    {
-      key: 'load_balancer',
-      title: 'Load Balancer',
-      description:
-        'Balance traffic to your origins ensuring reliability and network congestion control.'
-    }
-  ]
+  // The parts read and write both through injected context rather than props — see
+  // ./wizard/form-context.js. The Configure part is the one that writes.
+  provideCreateForm({ form, errors })
 
-  const subscriptionModules = [
-    {
-      key: 'web_socket_proxy',
-      title: 'WebSocket Proxy',
-      description:
-        'Enhance real-time data exchange between your Application and backend services using the WebSocket protocol.'
-    }
-  ]
-
-  const CONTACT_SALES = 'https://www.azion.com/en/contact-sales/'
-
-  // Per-field error messages. Empty string = valid.
-  const errors = reactive({
-    name: ''
-  })
-
-  // One flag locks the whole scope while the request is in flight.
   const submitting = ref(false)
 
-  // The leave guard's trigger (ui/UnsavedChangesGuard.vue, mounted by CreatePage): dirty
-  // while the form diverges from the state it opened on. `commit` re-snapshots it, and is
-  // called on the way OUT of a successful create — the page's own navigation must not be
-  // stopped by the guard that exists to protect the input that create just consumed.
-  const { dirty, commit } = useBaseline(form)
+  // The wizard page, so a failed check can hand the reader back to the field that caused it
+  // (./../../components/page/WizardPage.vue → `revealInvalid`). Configure is the part that
+  // needs it: name sits at the top of a card, above the build pair, the template settings,
+  // the protection card and the Advanced band — several screens above the bar that reports
+  // the miss.
+  const page = ref(null)
+  const revealInvalid = () => page.value?.revealInvalid()
 
-  // --- Validation ----------------------------------------------------------
-  // Runs on submit only. A non-empty error flag drives the field's `required`
-  // indicator — the feedback IS the field, rendered as a result of the submit and
-  // cleared as the user edits. `name` is the endpoint's only required field, which
-  // is also why no submit can ever fail on something inside the disclosure.
-  const validate = () => {
-    errors.name = form.name.trim() ? '' : 'This field is required.'
-    return !errors.name
+  // The leave guard's trigger (../../components/form/UnsavedChangesGuard.vue, mounted by
+  // WizardPage): dirty while the flow holds input that has not been committed. The
+  // baseline is re-taken on the way OUT of a successful create — this page's own
+  // navigation must not be stopped by the guard that exists to protect the input the
+  // create just consumed.
+  const { dirty, commit } = useBaseline(() => ({
+    ...form,
+    source: source.value,
+    repository: repository.value
+  }))
+
+  // --- Choosing a source seeds the name ------------------------------------
+  // The project name defaults to the source's own name, because that is what the reader
+  // would type. `nameTouched` keeps a later seed from overwriting a name they typed
+  // themselves — switching template must not silently rename their project.
+  const nameTouched = ref(false)
+  watch(
+    () => form.name,
+    (next) => {
+      if (next && next !== (source.value?.defaultName ?? '')) nameTouched.value = true
+    }
+  )
+
+  const setSource = (next) => {
+    source.value = next
+    clearErrors()
+
+    if (!nameTouched.value) form.name = next?.defaultName ?? ''
+
+    // A different source is a different clone, so where the last one was going does not
+    // survive it — a repository named after the template the reader just abandoned would
+    // otherwise ride along into the deploy.
+    repository.value = null
+
+    // Reset the per-template settings to the new template's schema: values keyed to a
+    // template the reader is no longer deploying would be sent anyway.
+    Object.keys(form.settings).forEach((key) => delete form.settings[key])
+    ;(next?.settings ?? []).forEach((setting) => {
+      form.settings[setting.name] = ''
+    })
   }
 
-  // The request body, exactly as POST /v4/workspace/applications expects it: each
-  // module flag nested under its own `{ enabled }` object.
+  // The repository part writes its answer up on every change, so the message it failed
+  // on clears as the reader fixes it rather than surviving until the next press.
+  const setRepository = (next) => {
+    repository.value = next
+    if (errors.repository) delete errors.repository
+  }
+
+  // CHOOSING A SOURCE IS THE ADVANCE. Picking a repository, committing a URL or picking a
+  // template answers the whole part, so the part is over — the same rule the method rows
+  // follow. A Next beside a chosen row would be a second answer to a question already
+  // answered, and the part the reader lands on opens with a summary of what they picked
+  // (with a Change back to here), so the choice is confirmed on the way forward rather
+  // than by staying put and reading a checkmark.
+  //
+  // Every path into here is an explicit commit — a row click, or the URL field's own
+  // "Use this repository" — so nothing advances while the reader is still typing.
+  const selectSource = (next) => {
+    setSource(next)
+    if (next && !isLastStep.value) stepIndex.value += 1
+  }
+
+  // Choosing a method starts that flow at its part after `method`. From scratch IS its own
+  // source, so it sets one here and lands on Configure — the part it would otherwise
+  // reach by answering a question with one possible answer.
+  const chooseMethod = (id) => {
+    flowId.value = id
+    if (id === 'scratch') setSource({ ...SCRATCH_SOURCE })
+    else setSource(null)
+    stepIndex.value = 1
+  }
+
+  // `?method=<flow>` enters a DEDICATED flow at its first real question, skipping the
+  // chooser — so a link that names one way in delivers that way in.
+  const seedFromQuery = () => {
+    const method = route.query.method
+    if (method && getApplicationFlow(String(method))) {
+      chooseMethod(String(method))
+      commit() // a seeded method is not the reader's unsaved input
+    }
+  }
+  seedFromQuery()
+
+  // --- Moving through the flow ---------------------------------------------
+  const goBack = () => {
+    if (stepIndex.value <= 0) return
+    stepIndex.value -= 1
+    clearErrors()
+    // Stepping back ONTO the method part abandons the flow, so the progress must stop
+    // claiming a flow was chosen.
+    if (stepIndex.value === 0) flowId.value = ''
+  }
+
+  // Only backwards, and only to a part already answered — the progress hands up an index
+  // it has already checked is behind the reader.
+  const goToStep = (index) => {
+    if (index >= stepIndex.value) return
+    stepIndex.value = index
+    clearErrors()
+    if (index === 0) flowId.value = ''
+  }
+
+  const cancel = () => router.push({ path: '/applications', query: { email: userEmail.value } })
+
+  // Validation runs on the COMMIT only, and only over fields on screen: `name` and
+  // whatever the template declared required. Every other field carries the endpoint's
+  // own default, which is what lets them sit behind the Advanced disclosure without a
+  // failed submit ever pointing somewhere the reader cannot see.
+  // The repository part's own check, run on ITS advance rather than at the commit: it is
+  // the one part with a Next that is not the last, so its answer is verified where it is
+  // given instead of two parts later.
+  const validateRepository = () => {
+    clearErrors()
+    const target = repository.value
+    if (!target?.name) {
+      errors.repository =
+        target?.mode === 'existing'
+          ? 'Choose a repository, or create a new one.'
+          : 'This field is required.'
+    }
+    return !errors.repository
+  }
+
+  const validate = () => {
+    clearErrors()
+    if (!form.name.trim()) errors.name = 'This field is required.'
+    ;(source.value?.settings ?? [])
+      .filter((setting) => setting.required)
+      .forEach((setting) => {
+        if (!String(form.settings[setting.name] ?? '').trim()) {
+          errors[setting.name] = 'This field is required.'
+        }
+      })
+    return Object.keys(errors).length === 0
+  }
+
+  // The request body, exactly as POST /v4/workspace/applications expects it: each module
+  // flag nested under its own `{ enabled }` object.
+  // A source with no build contributes no build commands: sending `npm run build` for the
+  // bare Azion layer would describe a build nobody asked for.
+  const buildFields = () =>
+    source.value?.requiresBuild
+      ? { buildCommand: form.buildCommand.trim(), deployCommand: form.deployCommand.trim() }
+      : {}
+
   const payload = () => ({
+    ...buildFields(),
     name: form.name.trim(),
     modules: Object.fromEntries(
       Object.entries(form.modules).map(([key, enabled]) => [key, { enabled }])
@@ -201,266 +330,294 @@
     debug: form.debug
   })
 
-  const cancel = () => router.push({ path: '/applications', query: { email: userEmail.value } })
+  const advance = async () => {
+    if (submitting.value) return
 
-  const submit = async () => {
-    if (submitting.value) return // re-entrancy lock
+    if (!isLastStep.value) {
+      if (step.value === 'repository' && !validateRepository()) {
+        revealInvalid()
+        return
+      }
+      stepIndex.value += 1
+      clearErrors()
+      return
+    }
 
-    // Validation feedback is on the fields themselves (required + :invalid).
-    if (!validate()) return
+    if (!validate()) {
+      revealInvalid()
+      return
+    }
 
-    // Lock the scope off one flag (usability Pattern 1): Save shows :loading and
-    // every field is :disabled while the create request is in flight.
+    // The commit. One flag locks the whole part while the request is in flight; the
+    // fieldset in WizardPage is the native safety net and each control takes the same
+    // flag for its disabled visual.
     submitting.value = true
     try {
-      const application = payload()
       await new Promise((resolve) => setTimeout(resolve, 900))
-
-      // CREATING AN APPLICATION CREATES A CHAIN. An application is code and
-      // configuration; on its own it serves nobody. What makes it reachable is the
-      // rest of what Azion provisions around it — a Workload (the public entry point:
-      // domain, TLS, infrastructure), a Connector (where it reads from) and a Storage
-      // bucket (its static assets) — the same four resources `azion deploy` creates
-      // and the same registry every list in this console reads
-      // (src/lib/provisioning.js).
-      const record = provisionDeployment({
-        repoName: application.name,
-        framework: 'vue',
-        templateTitle: application.name
-      })
-
-      // CREATING IS NOT DEPLOYING. Save creates the application and stops there —
-      // nothing is published until the user asks for it. Deciding to deploy on the
-      // user's behalf spends real infrastructure on an intent they never stated, and
-      // it makes the one irreversible-looking thing on the page a side effect of a
-      // button labelled "Save".
-      //
-      // So the outcome is a toast that CARRIES THE RESOURCE: the confirmation names
-      // what was created and its action opens it, which is the whole reason someone
-      // reads a success toast. Without that link the user lands on a list and has to
-      // find the row they just made.
-      toast.success(`Application "${application.name}" created.`, {
-        description: application.active
-          ? 'Deploy it when you are ready to serve traffic.'
-          : 'Created inactive, so it serves no traffic until you activate it.',
-        action: {
-          label: 'Open application',
-          onClick: () =>
-            router.push({
-              path: `/applications/${record.application.id}`,
-              query: { email: userEmail.value }
-            })
-        }
-      })
-
-      // The create landed: nothing is pending any more, so the leave guard stands down
-      // before this page navigates on its own success.
-      commit()
-
-      // The module list, where the new application is the first row.
-      router.push({ path: '/applications', query: { email: userEmail.value } })
+      phase.value = 'deploying'
     } catch (error) {
-      // Request-level failure → toast with a way to recover. Never silent.
-      toast.error('Could not create the application.', {
+      toast.error('Could not start the deployment.', {
         description: error?.message ?? 'Check your connection and try again.',
-        action: { label: 'Retry', onClick: () => submit() }
+        action: { label: 'Retry', onClick: () => advance() }
       })
     } finally {
-      submitting.value = false // release on success AND failure
+      submitting.value = false
     }
   }
+
+  // --- Whose account this ends up in ---------------------------------------
+  // THE GIT OWNER, or nothing. It is the reader's own account in the two flows that have
+  // one — the repository they imported, or the repository the template was cloned into —
+  // and empty for the rest. A template's own `repoOwner` is `aziontech`, the UPSTREAM
+  // that ships the starter, so printing it would tell the reader they just deployed into
+  // an organisation they have nothing to do with.
+  const gitScope = computed(() => {
+    if (repository.value?.owner) return repository.value.owner
+    return source.value?.kind === 'git' ? (source.value.repoOwner ?? '') : ''
+  })
+
+  // The clone's DESTINATION, as the deploy splash says it: "Cloning aziontech/templates/
+  // nextjs to gab-az/my-repository". The full path, because the account alone does not
+  // say what is being created in it.
+  const cloneDestination = computed(() => {
+    if (repository.value?.name) return `${repository.value.owner}/${repository.value.name}`
+    return gitScope.value || 'gab-az'
+  })
+
+  // --- The run's own story --------------------------------------------------
+  // A CONFIGURED source has no clone and no build, so the card must not narrate one. The
+  // template-deploy pipeline mints a token, clones the starter, installs, builds, uploads
+  // and wires a repository secret — six rows of work that never runs for an Azion
+  // template, whose settings ARE the deploy
+  // (../../lib/data/template-provisioning.js). Same for the splash: "Cloning
+  // aziontech/templates/proxy to gab-az" invents both ends of a copy nobody made.
+  //
+  // A framework starter and a git import keep the deploy story unchanged — they really
+  // are cloned — so all three of these resolve to the card's own defaults for them.
+  const isConfigured = computed(() => source.value?.requiresRepository === false)
+
+  const deploySteps = computed(() =>
+    isConfigured.value
+      ? configuredTemplateSteps({
+          title: source.value?.title ?? 'template',
+          settings: (source.value?.settings ?? []).map((setting) => setting.label)
+        })
+      : undefined
+  )
+
+  const deploySplash = computed(() =>
+    isConfigured.value
+      ? {
+          verb: 'Provisioning',
+          icon: source.value?.icon || 'ai ai-applications',
+          from: source.value?.title ?? 'application',
+          // No destination: a configuration is not copied anywhere, and the card drops
+          // the second chip when `to` is empty.
+          to: ''
+        }
+      : null
+  )
+
+  // --- The run and its outcome ---------------------------------------------
+  // A finished deploy provisions the CHAIN — Workload → Application → Connector →
+  // Storage (../../../shared/lib/provisioning.js) — so the created resources are
+  // immediately real for the rest of the console: they appear in the Workloads,
+  // Applications and Object Storage lists, and Manage opens the new workload.
+  const provisioned = ref(null)
+  const createdResources = computed(() =>
+    provisioned.value ? resourceChain(provisioned.value) : []
+  )
+
+  const onDeployFinished = () => {
+    const application = payload()
+    provisioned.value = provisionDeployment({
+      repoName: application.name,
+      // The account the code actually lives in, so the Application row's repository
+      // reads `gab-az/my-app` and not the upstream that shipped the starter.
+      scope: gitScope.value || 'gab-az',
+      isPublic: repository.value ? repository.value.visibility !== 'private' : true,
+      framework: source.value?.framework ?? '',
+      templateTitle: source.value?.title ?? application.name,
+      firewall: form.firewall,
+      firewallModules: enabledFirewallModules(form.firewallModules)
+    })
+    // The create landed: nothing is pending any more, so the leave guard stands down
+    // before this flow navigates on its own success.
+    commit()
+    phase.value = 'success'
+  }
+
+  // A failed run goes BACK to the part that can fix it, with the reason in a toast. It
+  // does not strand the reader on a dead progress card, and it does not pretend the
+  // deploy succeeded.
+  const onDeployFailed = (failedStep) => {
+    phase.value = 'wizard'
+    toast.error('The deployment did not finish.', {
+      description: `It stopped at ${failedStep}. Check the configuration and deploy again.`,
+      action: { label: 'Try again', onClick: () => advance() }
+    })
+  }
+
+  const manageWorkload = () =>
+    router.push({
+      path: `/workloads/${provisioned.value?.workload.id ?? ''}`,
+      query: { email: userEmail.value, name: provisioned.value?.workload.name }
+    })
+
+  // THE SUMMARY'S WAY BACK. It names two answers, so it hands up WHICH one rather than
+  // an index: the part that holds each is a fact about the flow, and the summary has no
+  // business knowing that from scratch has no source part (so its source lives on the
+  // method part, index 0).
+  const onChangeAnswer = (answer) =>
+    goToStep(answer === 'repository' ? 2 : flowId.value === 'scratch' ? 0 : 1)
+
+  // --- The part's own advance ----------------------------------------------
+  // THE FIRST PART HAS NO BAR. Nothing to go back to and nothing to advance: the flow
+  // has not started, and the reader is choosing WHICH flow it will be — the three rows
+  // are the only forward there is. So the method part declares no advance and the band
+  // itself retires with it (../../components/page/WizardPage.vue renders the footer only
+  // when something is in it), which is also the honest reading of the geometry: an empty
+  // bar at the foot of the first screen is a control strip with no controls.
+  //
+  // EVERY PART AFTER IT CARRIES THE ADVANCE, in the same place with the same label —
+  // Next until the last, where it becomes the commit's own verb. Once the flow is
+  // running, the way forward does not move and does not disappear for a part.
+  const nextLabel = computed(() => {
+    if (step.value === 'method') return ''
+    return isLastStep.value ? 'Create and deploy' : 'Next'
+  })
+
+  // AND IT IS GATED WHERE THERE IS NOTHING TO REPORT. Two kinds of part, two rules:
+  //
+  //   The SOURCE part is answered by CHOOSING: it has no field to fail and no place to
+  //     put a message — the answer is which row was pressed. So its advance is disabled
+  //     until one is. Pressing the row both answers the part and advances it (see
+  //     `selectSource`), so the reader never comes down to the bar to confirm a choice
+  //     they just made; the advance is there to say the flow continues and that this
+  //     part is what is holding it.
+  //   A TYPED part (repository, configure) keeps its advance live and validates on the
+  //     press, so the miss is reported at the field that missed rather than by a button
+  //     the reader cannot press and cannot ask.
+  const nextDisabled = computed(() => step.value === 'source' && !source.value)
 </script>
 
 <template>
-  <CreatePage
+  <WizardPage
+    ref="page"
     :breadcrumb="[
       { label: 'Applications', href: '/applications' },
-      { label: 'Create Application' }
+      { label: 'Create application' }
     ]"
     back-label="Back to Applications"
-    title="Create Application"
-    description="An application is the code and configuration served at the edge. Saving creates it and the workload that publishes it; nothing serves traffic until you deploy."
+    title="Create application"
+    description="An application is the code Azion runs, and the configuration it runs with. Choose where the code comes from, name it, and the last step deploys it along with the workload that publishes it."
     title-id="create-application-title"
+    :heading="phase !== 'success'"
+    :steps="steps"
+    :current-step="stepIndex"
+    :next-label="nextLabel"
+    :next-disabled="nextDisabled"
     :submitting="submitting"
-    :dirty="dirty"
+    :dirty="dirty && phase === 'wizard'"
+    :terminal="phase !== 'wizard'"
+    @back="goBack"
+    @next="advance"
+    @go="goToStep"
     @cancel="cancel"
-    @submit="submit"
   >
-    <Section
-      stacked
-      :divided="false"
-      title="General"
-      hint="The only field this endpoint requires. Everything below it already carries a working default."
-    >
-      <CardBox :padded="false">
-        <template #content>
-          <Item.List>
-            <Item size="small">
-              <Item.Content>
-                <Item.Title>Name</Item.Title>
-                <Item.Description>
-                  Give a unique and descriptive name to identify the Application.
-                </Item.Description>
-              </Item.Content>
-              <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
-                <!-- Empty-required → amber `required` HelperText (not red). -->
-                <div class="flex w-full flex-col gap-(--spacing-xs)">
-                  <InputText
-                    v-model="form.name"
-                    size="large"
-                    class="w-full"
-                    aria-label="Name"
-                    placeholder="My Application"
-                    :disabled="submitting"
-                    :required="!!errors.name"
-                    :aria-describedby="errors.name ? 'app-name-error' : undefined"
-                    @update:model-value="errors.name = ''"
-                  />
-                  <HelperText
-                    v-if="errors.name"
-                    id="app-name-error"
-                    kind="required"
-                    :label="errors.name"
-                  />
-                </div>
-              </Item.Actions>
-            </Item>
-          </Item.List>
-        </template>
-      </CardBox>
-    </Section>
+    <!-- THE PART. One at a time, each a set of Section bands — the same anatomy, in the
+         same order, that every create page in this console uses. -->
+    <MethodStep
+      v-if="step === 'method'"
+      @select="chooseMethod"
+    />
 
-    <!-- The nested `modules` object, as its own band: optional to the
-           endpoint, but it is what the person creating an application came
-           here to choose, so it stays open. Two tiers in one card — the
-           default modules, then a muted label row and the paid add-ons, which
-           is how Main Settings groups them too. -->
-    <Section
-      stacked
-      :divided="false"
-      title="Modules"
-      hint="The capabilities this application runs with. Cache and Functions are on by default, and every module can be changed later in Main Settings."
-    >
-      <CardBox :padded="false">
-        <template #content>
-          <Item.List>
-            <Item
-              v-for="mod in defaultModules"
-              :key="mod.key"
-              size="small"
-            >
-              <Item.Content>
-                <Item.Title>{{ mod.title }}</Item.Title>
-                <Item.Description>{{ mod.description }}</Item.Description>
-              </Item.Content>
-              <Item.Actions class="justify-end">
-                <Switch
-                  v-model="form.modules[mod.key]"
-                  :aria-label="mod.title"
-                  :disabled="submitting"
-                />
-              </Item.Actions>
-            </Item>
-          </Item.List>
-        </template>
-      </CardBox>
-    </Section>
+    <GitSourceStep
+      v-else-if="step === 'source' && flowId === 'git'"
+      :source="source"
+      :disabled="submitting"
+      @update:source="selectSource"
+    />
 
-    <!-- Subscription modules are their own band, not a labelled group inside
-           Modules: nothing here is a decision this form can make. The rows
-           above are switches the user flips; these are a different KIND of
-           thing — locked capabilities with a sales path — and a muted divider
-           row inside one card asked the reader to notice that from a label
-           alone. -->
-    <Section
-      stacked
-      :divided="false"
-      title="Subscription modules"
-      hint="Paid add-ons. They cannot be switched on from this form — activating one starts with a conversation with sales."
-    >
-      <CardBox :padded="false">
-        <template #content>
-          <Item.List>
-            <Item
-              v-for="mod in subscriptionModules"
-              :key="mod.key"
-              size="small"
-            >
-              <Item.Content>
-                <Item.Title>{{ mod.title }}</Item.Title>
-                <Item.Description>
-                  {{ mod.description }}
-                  <!-- The way forward lives on the ROW, not in the tooltip:
-                         a Tooltip panel is `pointer-events-none`, so a link
-                         inside one can never be clicked or tabbed to. -->
-                  <a
-                    :href="CONTACT_SALES"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="inline-flex items-center gap-(--spacing-xxs) rounded-(--shape-button) text-(--text-link) underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-link-hover) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
-                  >
-                    Contact sales
-                    <i
-                      class="pi pi-external-link shrink-0 text-[0.9em] leading-none"
-                      aria-hidden="true"
-                    />
-                  </a>
-                </Item.Description>
-              </Item.Content>
-              <Item.Actions class="justify-end">
-                <!-- Disabled, with the reason on hover/focus. The switch is
-                       not something this form can turn on — activation is a
-                       sales conversation — so it states that rather than
-                       pretending to be interactive. -->
-                <Tooltip text="Contact sales to activate this module.">
-                  <Switch
-                    v-model="form.modules[mod.key]"
-                    disabled
-                    :aria-label="mod.title"
-                  />
-                </Tooltip>
-              </Item.Actions>
-            </Item>
-          </Item.List>
-        </template>
-      </CardBox>
-    </Section>
+    <TemplateSourceStep
+      v-else-if="step === 'source' && flowId === 'template'"
+      :source="source"
+      :disabled="submitting"
+      @update:source="selectSource"
+    />
 
-    <!-- Last, and collapsed: the two application-level flags that already
-           carry the endpoint's defaults. Section owns the trigger semantics
-           (`aria-expanded`/`aria-controls`), the height transition and `inert`
-           while closed, so no hidden field is ever tabbable. Nothing required
-           is in here — a failed submit always points at a visible field. -->
-    <Section
-      stacked
-      collapsible
-      :divided="false"
-      icon="pi pi-cog"
-      title="Advanced"
-    >
-      <CardBox :padded="false">
-        <template #content>
-          <Item.List>
-            <Item
-              v-for="field in behaviorFields"
-              :key="field.key"
-              size="small"
-            >
-              <Item.Content>
-                <Item.Title>{{ field.title }}</Item.Title>
-                <Item.Description>{{ field.description }}</Item.Description>
-              </Item.Content>
-              <Item.Actions class="justify-end">
-                <Switch
-                  v-model="form[field.key]"
-                  :aria-label="field.title"
-                  :disabled="submitting"
-                />
-              </Item.Actions>
-            </Item>
-          </Item.List>
-        </template>
-      </CardBox>
-    </Section>
-  </CreatePage>
+    <!-- WHERE THE CLONE LANDS — framework starters only, and the wizard has already
+         dropped this part for an Azion template (see `needsRepository`). -->
+    <RepositoryStep
+      v-else-if="step === 'repository'"
+      :source="source"
+      :repository="repository"
+      :errors="errors"
+      :disabled="submitting"
+      @update:repository="setRepository"
+    />
+
+    <template v-else-if="step === 'configure'">
+      <!-- WHAT IS BEING CONFIGURED, above the questions about it. The reader chose it one
+           part ago and now has to name and build it, so losing sight of it is how a
+           template deploy ends up with the wrong project name. Change goes back to the
+           part that chose it — or, for from scratch which has no source part, to the
+           method. The same row rides into the run below (see #terminal), read-only. -->
+      <SourceSummary
+        :source="source"
+        :repository="repository"
+        :disabled="submitting"
+        class="mb-(--layout-section-gap)"
+        @change="onChangeAnswer"
+      />
+
+      <ConfigureStep
+        :source="source"
+        :disabled="submitting"
+      />
+    </template>
+
+    <!-- PAST THE QUESTIONS: the run, then the outcome. Both take the whole measure —
+         see WizardPage's `terminal` for why they are this page and not another. -->
+    <template #terminal>
+      <!-- WHAT IS BEING DEPLOYED, still on top. The run's own card narrates the WORK
+           (clone, install, build, provision) and never names the thing the work is for,
+           so without this row the one screen the reader watches the deploy from is the
+           one screen that cannot answer "which template did I just ship". Read-only: the
+           clone is in flight, so there is nothing left to change.
+           It gives way on success — DeploySuccess is the record of what shipped, and the
+           same handoff the Creation Center's template deploy makes with its preview strip
+           (../marketplace/DeployTemplate.vue). -->
+      <template v-if="phase === 'deploying'">
+        <SourceSummary
+          :source="source"
+          :repository="repository"
+          :changeable="false"
+          class="mb-(--layout-section-gap)"
+        />
+
+        <DeploymentFlow
+          :title="isConfigured ? 'Provisioning' : 'Deployment'"
+          :status-label="isConfigured ? 'Creating' : 'Building'"
+          :steps="deploySteps"
+          :splash="deploySplash"
+          :repo-owner="source?.repoOwner ?? 'aziontech'"
+          :repo-path="source?.repoPath ?? 'templates/hello-world'"
+          :scope="cloneDestination"
+          @finished="onDeployFinished"
+          @failed="onDeployFailed"
+        />
+      </template>
+      <!-- The scope tag is the GIT owner, so it is passed only for a git import. From
+           scratch and the templates carry `aziontech` as their upstream `repoOwner`, and
+           printing that would tell the reader they just deployed into an organisation they
+           have nothing to do with. -->
+      <DeploySuccess
+        v-else
+        :resources="createdResources"
+        :scope="gitScope"
+        @manage="manageWorkload"
+      />
+    </template>
+  </WizardPage>
 </template>
