@@ -5,12 +5,33 @@ import { toSfc } from '../_shared/story-source'
 const IMPORT = "import DocFrame from '@aziontech/webkit-docs/doc-frame'"
 
 /*
- * A stand-in screenshot, inline so the story carries its own asset: a flat
- * field with a header band, at the 16:9 a console capture lands on. The frame
- * is what the story is about — this is only something for it to hold.
+ * A real console capture, served from this app's `static/` (see `.storybook/main.js`
+ * → `staticDirs`) rather than inlined as a data URI. Two reasons, and the second is
+ * the one that matters: a frame's whole job is to hold a screenshot, so a synthetic
+ * grey field cannot show whether the border, radius and inset actually work against
+ * a real capture's own edges; and a data URI of any real image is thousands of
+ * characters, which lands verbatim in the "Show code" panel and buries the one
+ * attribute the snippet exists to demonstrate. A `/docs/…` path is what an author
+ * writes, so the snippet stays paste-and-run.
  */
-const SHOT =
-  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 960 540'%3E%3Crect width='960' height='540' fill='gainsboro'/%3E%3Crect width='960' height='64' fill='silver'/%3E%3Crect x='40' y='140' width='420' height='28' rx='6' fill='silver'/%3E%3Crect x='40' y='196' width='880' height='16' rx='6' fill='white'/%3E%3Crect x='40' y='228' width='620' height='16' rx='6' fill='white'/%3E%3C/svg%3E"
+const SHOT = '/docs/create-application-step-3.png'
+
+/* What that capture shows, reused wherever the still appears. */
+const SHOT_ALT =
+  'Step 3 of Create application: the imported repository, the name, build and deploy commands, and the firewall toggle'
+
+/*
+ * Real screen recordings of the same flow, from the same `static/` root. They were
+ * `/media/first-deploy.mp4` and `/media/edge-routing.mp4` — paths that never existed,
+ * so both clip stories rendered an empty player and the one thing they document (that
+ * a clip source becomes a `<video>`, and what autoplay strips from it) could not be
+ * seen at all. The long one carries controls; the short one loops under `autoplay`,
+ * which is the only honest way to show a rule whose whole point is that it repeats.
+ */
+const CLIP = '/media/create-application-flow.webm'
+const CLIP_ALT = 'Creating an application from a Git repository, start to step 3'
+const LOOP = '/media/create-application-step-3-loop.webm'
+const LOOP_ALT = 'Landing on step 3 of Create application'
 
 /* The content a frame holds when the author composes it instead of passing a source. */
 const PANEL = `<div class="w-full rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) p-(--spacing-md)">
@@ -28,7 +49,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "The bordered surface every screenshot, diagram and clip sits on — `<Frame>` in MDX — so no image floats loose on the canvas and all of them share one border, radius and inset. `caption` reads under the frame, centered, as part of the picture; `hint` reads above it, on the text's own left edge, as part of the sentence that led the reader here. Both are inline markdown, rendered through the renderer the page's paragraphs use, so a link or a bold run in a caption is the same link and the same bold as in the prose above it. Pass `src` and the frame decides from the extension whether it is holding a still or a clip; compose the default slot instead when the thing being framed is markup. A clip that plays on its own is muted, inline and looping and ships no controls — the frame applies that rule to the `autoplay` prop and to a clip written by hand in the slot alike."
+          "The bordered surface every screenshot, diagram and clip sits on — `<Frame>` in MDX — so no image floats loose on the canvas and all of them share one border, radius and inset. `caption` reads under the frame, centered, as part of the picture; `hint` reads above it, on the text's own left edge, as part of the sentence that led the reader here. Both are inline markdown, rendered through the renderer the page's paragraphs use, so a link or a bold run in a caption is the same link and the same bold as in the prose above it. Pass `src` and the frame decides from the extension whether it is holding a still or a clip; compose the default slot instead when the thing being framed is markup. A clip that plays on its own is muted, inline and looping and ships no controls — the frame applies that rule to the `autoplay` prop and to a clip written by hand in the slot alike. A STILL OPENS FULL SCREEN: the picture is the button, and it grows out of its own frame rather than fading in over the page, so the reader does not have to re-find what they just clicked. Escape, the backdrop, the close control and the picture itself all send it back, and focus returns to the thumbnail. A clip does not — it carries controls a click would fight — and neither does composed slot content, which has no source to open."
       },
       canvas: { sourceState: 'shown' }
     }
@@ -76,10 +97,10 @@ export const Default = {
 const MEDIA_TEMPLATE = `<div class="flex flex-col gap-(--spacing-lg)">
   <DocFrame
     src="${SHOT}"
-    alt="The Create dialog, with a template picker"
-    caption="Console, + Create"
+    alt="${SHOT_ALT}"
+    caption="Console, **Create application** — step 3"
   />
-  <DocFrame src="/media/first-deploy.mp4" alt="A first deploy, start to finish" caption="One deploy, from build to live edge" />
+  <DocFrame src="${CLIP}" alt="${CLIP_ALT}" caption="The same flow, from the method to the deploy" />
 </div>`
 
 export const Media = {
@@ -98,9 +119,9 @@ export const Media = {
 }
 
 const AUTOPLAY_TEMPLATE = `<div class="flex flex-col gap-(--spacing-lg)">
-  <DocFrame src="/media/edge-routing.mp4" alt="Requests routing to the nearest edge" autoplay caption="Autoplay: muted, inline, looping, no controls" />
+  <DocFrame src="${LOOP}" alt="${LOOP_ALT}" autoplay caption="Autoplay: muted, inline, looping, no controls" />
   <DocFrame caption="The same rule reaches a clip written by hand">
-    <video autoplay src="/media/edge-routing.mp4" class="block h-auto w-full rounded-(--shape-elements)"></video>
+    <video autoplay src="${LOOP}" class="block h-auto w-full rounded-(--shape-elements)"></video>
   </DocFrame>
 </div>`
 
@@ -122,14 +143,14 @@ export const Autoplay = {
 const PROSE_TEMPLATE = `<div class="flex flex-col gap-(--spacing-lg)">
   <DocFrame
     src="${SHOT}"
-    alt="The Create dialog"
+    alt="${SHOT_ALT}"
     hint="Everything below starts from one screen:"
-    caption="Console, + Create"
+    caption="Console, **Create application** — step 3"
   />
   <DocFrame
     src="${SHOT}"
-    alt="The workload list, after the first deploy"
-    caption="The workload is live once **Status** reads *Ready* — see the [CLI reference](https://azion.com/documentation) or run \`azion deploy\`."
+    alt="${SHOT_ALT}"
+    caption="The application is live once **Create and deploy** finishes — see the [CLI reference](https://azion.com/documentation) or run \`azion deploy\`."
   />
 </div>`
 

@@ -14,7 +14,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "The admonition an author reaches for when a sentence has to interrupt the reading order — `<Note>`, `<Tip>`, `<Check>`, `<Warning>`, `<Danger>`, `<Info>` in MDX. It renders on the webkit Message surface, so the severity color, border, icon and radius are the design system's. The anatomy is a title row and then the copy: the kind names itself — Note, Tip, Warning — so the reader decides whether the aside is for them before reading it, and `title` replaces that name when the author has something sharper to say. `tip` and `highlight` are the kinds that claim nothing about stakes: they take the page's own surface and rule and spend their emphasis on the glyph, in Azion orange. A callout body is inline prose; a block that needs its own box belongs outside it."
+          "The admonition an author reaches for when a sentence has to interrupt the reading order — `<Note>`, `<Tip>`, `<Check>`, `<Warning>`, `<Danger>`, `<Info>` in MDX. It renders on the webkit Message surface, so the severity color, border, icon and radius are the design system's. The anatomy is a glyph and one row of prose — there is no title row and no `title` prop: a callout interrupts the reading order, so the sentence the reader came for is the first thing in the box. `tip` is the one kind that claims nothing about stakes: it takes the page's own surface and rule and spends its emphasis on the glyph, in Azion orange. A callout body is inline prose; a block that needs its own box belongs outside it."
       },
       canvas: { sourceState: 'shown' }
     }
@@ -22,13 +22,11 @@ const meta = {
   argTypes: {
     kind: {
       control: 'select',
-      options: ['note', 'info', 'tip', 'check', 'warning', 'danger', 'highlight']
-    },
-    title: { control: 'text' }
+      options: ['note', 'info', 'tip', 'check', 'warning', 'danger']
+    }
   },
   args: {
     kind: 'note',
-    title: '',
     label: ''
   }
 }
@@ -64,7 +62,7 @@ const KINDS_TEMPLATE = `<div class="flex flex-col gap-(--spacing-md)">
   <DocCallout kind="check">The deploy is live once the domain answers <code>200</code>.</DocCallout>
   <DocCallout kind="warning">Deleting a workload releases its domain immediately.</DocCallout>
   <DocCallout kind="danger">Rotating the token invalidates every running CI job.</DocCallout>
-  <DocCallout kind="highlight">Every deploy is atomic: the old version serves every request until the new one is ready.</DocCallout>
+  <DocCallout kind="info">Every deploy is atomic: the old version serves every request until the new one is ready.</DocCallout>
 </div>`
 
 export const Kinds = {
@@ -78,36 +76,9 @@ export const Kinds = {
     docs: {
       description: {
         story:
-          'Each kind carries its own severity, icon and name, so an author picks meaning and never a color. `tip` and `highlight` carry no severity — they keep the page surface, put the emphasis in the glyph, and speak their copy in muted ink.'
+          'Each kind carries its own severity and icon, so an author picks meaning and never a color. `tip` carries no severity — it keeps the page surface and puts the emphasis in the glyph, in Azion orange, while its copy stays the page ink every other kind speaks in.'
       },
       source: { code: toSfc(IMPORT, KINDS_TEMPLATE) }
-    }
-  }
-}
-
-const TITLE_TEMPLATE = `<div class="flex flex-col gap-(--spacing-md)">
-  <DocCallout kind="warning" title="Before you delete">
-    Anything pointing at that domain stops resolving as soon as the deletion completes.
-  </DocCallout>
-  <DocCallout kind="highlight" title="Atomic by default">
-    The old version serves every request until the new one is ready, so a deploy never shows a half-built site.
-  </DocCallout>
-</div>`
-
-export const WithTitle = {
-  name: 'With a title',
-  render: () => ({
-    components: { DocCallout },
-    template: TITLE_TEMPLATE
-  }),
-  parameters: {
-    controls: { disable: true },
-    docs: {
-      description: {
-        story:
-          "A passed `title` replaces the kind's own name in the same row; reach for one when it says something sharper than `Note` or `Warning`. `highlight` is the one kind with no name of its own, so it shows a title only when the author writes one."
-      },
-      source: { code: toSfc(IMPORT, TITLE_TEMPLATE) }
     }
   }
 }

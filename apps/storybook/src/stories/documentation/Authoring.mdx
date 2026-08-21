@@ -258,23 +258,15 @@ the deep links stay unique.
 <Warning>Deleting a workload releases its domain immediately.</Warning>
 ```
 
-`<Note>`, `<Info>`, `<Tip>`, `<Check>`, `<Warning>`, `<Danger>`, `<Highlight>`. Each carries its
-own severity, icon and name, and **the name is the callout's title** — "Note", "Tip", "Warning" on
-the first row, the sentence the reader came for on the second. So don't repeat it in the copy: a
-`<Note>` that opens with "Note:" (or an `<Info>` that opens with "Before you start:") says the same
-thing twice.
+`<Note>`, `<Info>`, `<Tip>`, `<Check>`, `<Warning>`, `<Danger>`. Each carries its
+own severity and icon, and that is the whole anatomy: **one row of prose beside the glyph, no title
+row**. There is no `title` prop — a callout is an interruption in the reading order, not a little
+card with a heading. Don't name the kind in the copy either: a `<Note>` that opens with "Note:" (or
+an `<Info>` that opens with "Before you start:") says what the glyph already said.
 
-`title` replaces that name, for when there is something sharper to say. It reads as one row with
-the glyph, and the copy sits beneath it either way:
-
-```mdx
-<Warning title="Before you delete">Anything pointing at that domain stops resolving.</Warning>
-```
-
-`<Tip>` and `<Highlight>` are the kinds that claim nothing about stakes — they take the page's own
-surface and rule and spend their emphasis on the glyph, in Azion orange. Reach for them to draw the
-eye without implying risk. `<Highlight>` is also the one kind with no name of its own, so it shows
-a title only when you write one.
+`<Tip>` is the one kind that claims nothing about stakes — it takes the page's own surface and rule
+and spends its emphasis on the glyph, in Azion orange. Reach for it to draw the eye without implying
+risk.
 
 A callout body is **inline prose** — sentences, links, inline code. The webkit `Message`
 lays its copy out inside a paragraph, so a list or a fenced block inside a callout would be
