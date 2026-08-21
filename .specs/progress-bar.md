@@ -4,12 +4,12 @@ category: feedback
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 4f2dae7b566e5f02c7d6c280db5700f9e86b85cf45bb0f376588331668a45c6a
+checksum: d60a84a840e994b6fcfe115ea0a263098f46363bbc50861d0760b8fb22fa59be
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=479-870
   node_id: 479:870
 created: 2026-06-26
-last_updated: 2026-06-26
+last_updated: 2026-08-14
 ---
 
 # Progress Bar — Component Spec
@@ -81,13 +81,13 @@ import ProgressBar from '@aziontech/webkit/progress-bar'
 
 | Figma variable | Temporary primitive | Follow-up |
 |---|---|---|
-| `--bg-surface-raised` (track) | `var(--bg-surface-raised)` | `TODO: document --bg-surface-raised in .claude/docs/DESIGN.md § Colors` |
+| `--bg-placeholder` (track) | `var(--bg-placeholder)` | `TODO: document --bg-placeholder in .claude/docs/DESIGN.md § Colors` |
 
 ## Accessibility (WCAG 2.1 AA)
 
 - Non-interactive: the bar is not focusable and takes no keyboard input.
 - ARIA: root uses `role="progressbar"`. Determinate sets `aria-valuemin="0"`, `aria-valuemax="<max>"`, `aria-valuenow="<value>"`; indeterminate omits `aria-valuenow` and sets `aria-busy="true"`.
-- Contrast ≥3:1 between the fill (`var(--primary)`) and the track (`var(--bg-surface-raised)`).
+- Contrast ≥3:1 between the fill (`var(--primary)`) and the track (`var(--bg-placeholder)`). The track is an alpha overlay, not an opaque surface, so it keeps that contrast on any background the bar is placed over (canvas, surface, raised, overlay).
 - `motion-reduce:transition-none` on the determinate width morph and `motion-reduce:animate-none` on the indeterminate animation (it falls back to a static fill under reduced motion).
 
 ## Stories (Storybook)
