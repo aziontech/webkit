@@ -5,23 +5,39 @@
   // for the same reason the client logos do: they are other companies' marks, used by this
   // site's copy about them. The design system ships Azion's own marks and its product glyphs.
   //
-  // Claude keeps its brand colour — it reads on either contrast surface. Cursor, Windsurf,
-  // Codex and OpenCode publish monochrome marks, so they ride `currentColor` and follow whatever
-  // surface they sit on, in both themes.
+  // TWO ROUTES, because the vendors publish two kinds of mark.
   //
-  // Every path is `fill-rule="evenodd"` as published; `viewBox` is a 24-square for all five, so
-  // one size class sizes any of them.
+  //   • A SINGLE-PATH mark, inlined as its path data. Claude keeps its brand colour — it reads
+  //     on either contrast surface. Cursor, Windsurf, Codex and OpenCode publish monochrome
+  //     marks, so they ride `currentColor` and follow whatever surface they sit on, in both
+  //     themes. Every path is `fill-rule="evenodd"` as published, on a 24-square `viewBox`.
+  //   • A FULL-COLOUR mark, kept as its published `.svg` file in ./agents and imported `?raw`.
+  //     Gemini and Copilot are gradients (Gemini's is a masked stack of blurred blobs), so there
+  //     is no path and no single fill to give them: reducing either to one colour would not be
+  //     their logo. The file is inlined verbatim so nothing is redrawn by hand, and its own ids
+  //     are namespaced per instance below.
+  //
+  // Either way the root element is an `<svg>` with a `viewBox` and no intrinsic size, so one size
+  // class from the caller sizes any mark and `[&>svg]` selectors (DocCard's icon region) match.
 
-  defineProps({
+  import { computed, useId } from 'vue'
+
+  import copilotSvg from './agents/copilot.svg?raw'
+  import geminiSvg from './agents/gemini.svg?raw'
+  import { MONOCHROME_FILTER } from './clients/index.js'
+
+  const props = defineProps({
     // Which agent's mark to draw.
     name: {
       type: String,
       required: true,
-      validator: (value) => ['claude', 'cursor', 'windsurf', 'codex', 'opencode'].includes(value)
+      validator: (value) =>
+        ['claude', 'cursor', 'windsurf', 'codex', 'opencode', 'gemini', 'copilot'].includes(value)
     },
     // Drops Claude to `currentColor` like the other four. For a drawing where the marks are
     // parts of one diagram rather than a row of logos — one brand colour in there reads as a
-    // highlight nobody meant, and it collides with Azion's own orange.
+    // highlight nobody meant, and it collides with Azion's own orange. A full-colour mark has
+    // no colour to drop, so it takes the flat-silhouette filter the client marks use instead.
     mono: { type: Boolean, default: false }
   })
 
@@ -39,28 +55,77 @@
 
   const OPENCODE = 'M16 6H8v12h8V6zm4 16H4V2h16v20z'
 
+  /**
+   * A published `.svg` split into the two things the template needs: its `viewBox`, and its
+   * body. The wrapper tag is dropped rather than nested, so the mark's own root IS this
+   * component's root and the caller's size class lands on the element that scales. The
+   * `<title>` goes with it — the root carries the accessible name, and two names on one mark
+   * is one too many.
+   */
+  const parseSvg = (raw) => ({
+    viewBox: raw.match(/viewBox="([^"]+)"/)?.[1] ?? '0 0 24 24',
+    body: raw
+      .replace(/^[\s\S]*?<svg[^>]*>/, '')
+      .replace(/<\/svg>\s*$/, '')
+      .replace(/<title>[\s\S]*?<\/title>/g, '')
+  })
+
+  const GEMINI = parseSvg(geminiSvg)
+  const COPILOT = parseSvg(copilotSvg)
+
   const MARKS = {
     claude: { path: CLAUDE, label: 'Claude', color: '#D97757' },
     cursor: { path: CURSOR, label: 'Cursor', color: 'currentColor' },
     windsurf: { path: WINDSURF, label: 'Windsurf', color: 'currentColor' },
     codex: { path: CODEX, label: 'Codex', color: 'currentColor' },
-    opencode: { path: OPENCODE, label: 'OpenCode', color: 'currentColor' }
+    opencode: { path: OPENCODE, label: 'OpenCode', color: 'currentColor' },
+    gemini: { ...GEMINI, label: 'Gemini' },
+    copilot: { ...COPILOT, label: 'GitHub Copilot' }
   }
+
+  const mark = computed(() => MARKS[props.name])
+
+  /**
+   * A gradient mark carries its own `id`s, and two of the same mark on one page would declare
+   * them twice — the second stack then paints from the first one's defs. Every id is suffixed
+   * with this instance's own, so each copy references only its own gradients, masks and filters.
+   */
+  const uid = useId()
+
+  const body = computed(() =>
+    mark.value.body
+      ?.replace(/id="([^"]+)"/g, `id="$1-${uid}"`)
+      .replace(/url\(#([^)]+)\)/g, `url(#$1-${uid})`)
+  )
 </script>
 
 <template>
+  <!-- A published file, inlined verbatim: its own gradients and filters are the mark, so the
+       body goes in as markup rather than being rebuilt as props. -->
   <svg
+    v-if="body"
+    :viewBox="mark.viewBox"
+    xmlns="http://www.w3.org/2000/svg"
+    role="img"
+    :aria-label="mark.label"
+    :class="['shrink-0', mono && MONOCHROME_FILTER]"
+    :innerHTML.prop="body"
+  />
+
+  <!-- A single-path mark: one fill, so it can ride `currentColor`. -->
+  <svg
+    v-else
     viewBox="0 0 24 24"
     xmlns="http://www.w3.org/2000/svg"
     role="img"
     fill-rule="evenodd"
-    :fill="mono ? 'currentColor' : MARKS[name].color"
-    :aria-label="MARKS[name].label"
+    :fill="mono ? 'currentColor' : mark.color"
+    :aria-label="mark.label"
     class="shrink-0"
   >
     <path
       clip-rule="evenodd"
-      :d="MARKS[name].path"
+      :d="mark.path"
     />
   </svg>
 </template>
