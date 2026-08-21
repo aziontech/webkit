@@ -58,7 +58,7 @@ export const layoutsData = {
   'layout-group-gap': 'var(--spacing-md)', // within a band
 
   /*
-   * MEASURE — the widest a page column may get, by context. Four values, because the
+   * MEASURE — the widest a page column may get, by context. Five values, because the
    * reason a column is capped differs with how wide its payload actually is.
    *
    * DATA pages (lists, detail dashboards) are capped so a table that runs to the
@@ -74,11 +74,19 @@ export const layoutsData = {
    * Past ~1200px the extra width lands entirely inside the controls: a label sits at
    * the far left of a 1600px row from the input it names, and the eye has to travel
    * the whole measure to pair them.
+   *
+   * DOCS pages are the one column capped by TYPOGRAPHY rather than by layout. Prose is
+   * read line by line, and past ~90 characters the eye loses the start of the next line
+   * on the return sweep — a limit that has nothing to do with how wide the payload is,
+   * which is why it is far tighter than every other measure here and why it does not
+   * move when a rail collapses and frees up room. A docs page is already flanked by two
+   * rails; this caps what is between them.
    */
   'layout-measure': 'var(--container-7xl)', // 1620px — data pages
   'layout-measure-focused': 'var(--container-4xl)', // 1024px — home
   'layout-measure-form': 'var(--container-4xl)', // 1024px — settings, forms
   'layout-measure-form-create': 'var(--container-5xl)', // 1192px — create flows
+  'layout-measure-docs': 'var(--container-2xl)', // 752px — documentation prose
 
   /*
    * MEASURE (control) — the widest the *right side* of an item-group field row may
@@ -109,12 +117,13 @@ const COLUMN_MEASURE = {
   'layout-column': 'var(--layout-measure)',
   'layout-column-focused': 'var(--layout-measure-focused)',
   'layout-column-form': 'var(--layout-measure-form)',
-  'layout-form-create': 'var(--layout-measure-form-create)'
+  'layout-form-create': 'var(--layout-measure-form-create)',
+  'layout-column-docs': 'var(--layout-measure-docs)'
 }
 
 /**
  * A centered column at the measure — every page carries one of these, list pages
- * included. Full-bleed is the absence of all four classes, not a `w-full`.
+ * included. Full-bleed is the absence of all five classes, not a `w-full`.
  *
  * THE BOUNDARY IS NOT PART OF THE MEASURE. A `padded` page gets its boundary from the
  * app shell, on the scroll box OUTSIDE the capped block, so the measure lands as
