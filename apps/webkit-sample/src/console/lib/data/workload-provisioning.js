@@ -38,8 +38,11 @@ export const domainForWorkload = (name) => {
  *
  * @param {object} input
  * @param {string} input.name        The workload's name.
- * @param {boolean} [input.protected] Whether a firewall is bound.
+ * @param {boolean} [input.protected] Whether a firewall is in front of the workload.
  * @param {string} [input.firewall]  Which firewall, when protected.
+ * @param {boolean} [input.firewallBound] True when an EXISTING firewall is bound; false
+ *   when the create makes a new one. Creating and binding are different work, so the row
+ *   narrates the one that runs.
  * @param {string} [input.application] The application the release serves.
  * @returns {Array<object>} The step model for DeploymentFlow / DeploymentLogs.
  */
@@ -47,6 +50,7 @@ export function workloadProvisioningSteps({
   name = 'workload',
   protected: isProtected = false,
   firewall = '',
+  firewallBound = true,
   application = ''
 } = {}) {
   const domain = domainForWorkload(name) || 'workload.map.azionedge.net'
@@ -111,23 +115,47 @@ export function workloadProvisioningSteps({
   // Only when the reader asked for protection. A log that narrates a firewall bind on an
   // unprotected workload is a log that lies.
   if (isProtected) {
-    steps.push({
-      key: 'firewall',
-      title: 'Bind firewall',
-      description: firewall || 'Firewall bound',
-      duration: 3,
-      logs: [
-        ['13:47:46', `[TASK] - #. Binding "${firewall}" to the workload!`],
-        ['13:47:47', 'Rule set compiled · 0 warnings'],
-        ['13:47:48', '[TASK] - #. Firewall bound successfully!']
-      ],
-      failLogs: [
-        ['13:47:46', `[TASK] - #. Binding "${firewall}" to the workload!`],
-        ['13:47:47', '[ERROR] - # Could not bind the firewall'],
-        ['13:47:48', `422 Unprocessable: "${firewall}" is bound to another environment`],
-        ['13:47:49', '[ERROR] - # Provisioning aborted.']
-      ]
-    })
+    // The row says which of the two happened. A create that MADE the firewall and one that
+    // bound an existing one are different work with different failures — a new firewall
+    // cannot collide with another environment, and an existing one cannot fail to be
+    // created — so neither the title nor the logs pretend to cover both.
+    steps.push(
+      firewallBound
+        ? {
+            key: 'firewall',
+            title: 'Bind firewall',
+            description: firewall || 'Firewall bound',
+            duration: 3,
+            logs: [
+              ['13:47:46', `[TASK] - #. Binding "${firewall}" to the workload!`],
+              ['13:47:47', 'Rule set compiled · 0 warnings'],
+              ['13:47:48', '[TASK] - #. Firewall bound successfully!']
+            ],
+            failLogs: [
+              ['13:47:46', `[TASK] - #. Binding "${firewall}" to the workload!`],
+              ['13:47:47', '[ERROR] - # Could not bind the firewall'],
+              ['13:47:48', `422 Unprocessable: "${firewall}" is bound to another environment`],
+              ['13:47:49', '[ERROR] - # Provisioning aborted.']
+            ]
+          }
+        : {
+            key: 'firewall',
+            title: 'Create firewall',
+            description: firewall || 'Firewall created',
+            duration: 3,
+            logs: [
+              ['13:47:46', `[TASK] - #. Creating firewall "${firewall}"!`],
+              ['13:47:47', 'Modules enabled · rule set compiled'],
+              ['13:47:48', '[TASK] - #. Firewall created and bound successfully!']
+            ],
+            failLogs: [
+              ['13:47:46', `[TASK] - #. Creating firewall "${firewall}"!`],
+              ['13:47:47', '[ERROR] - # Could not create the firewall'],
+              ['13:47:48', `409 Conflict: a firewall named "${firewall}" already exists`],
+              ['13:47:49', '[ERROR] - # Provisioning aborted.']
+            ]
+          }
+    )
   }
 
   steps.push(

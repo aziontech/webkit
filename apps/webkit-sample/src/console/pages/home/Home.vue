@@ -1,7 +1,8 @@
 <script setup>
-  // Home — Overview for an account that OWNS things: account usage down the left, what
-  // it owns on the right. The app shell (sidebar + GlobalHeader with the breadcrumb)
-  // comes from AppLayout; this page renders only its content.
+  // Home — Overview for an account that OWNS things: a strip of account usage across
+  // the top, the list of what it owns filling the rest. The app shell (sidebar +
+  // GlobalHeader with the breadcrumb) comes from AppLayout; this page renders only its
+  // content.
   //
   // It is one half of /home. The other is the first access (HomeEmptyState.vue), and
   // which one the URL resolves to is the sample's VERSION — empty account or populated
@@ -314,11 +315,11 @@
   // promo card every module's first use already offers it with
   // (../../components/home/FirstUsePromo.vue, the agent card of ProductFirstUse.vue) —
   // the editors' own logos in an overlapping cluster, the shared copy under them, and the
-  // whole card as one control that copies. At the END of the usage band at the foot of
-  // the page: the readings are one strip across the bottom and the card takes the last
-  // third of that row, so the offer sits after the numbers rather than over them, and a
-  // reader who came to work on their infrastructure meets it after the work and not
-  // before.
+  // whole card as one control that copies. At the END of the usage band: the readings are
+  // one strip across the top of the content and the card takes the last third of that
+  // row, so the offer sits after the numbers rather than over them — the last thing on
+  // the page's one non-list row, and the reader passes it on the way into the work
+  // rather than being handed it instead of the work.
   //
   // Its copy is READ from the shared const (`AGENT_PROMO`, lib/product-empty-states.js)
   // rather than restated here — the same title and line every product's first use shows,
@@ -468,12 +469,12 @@
          container, `box-sizing: border-box` puts the inset inside the same 100%
          height the frame measures.
          There is no column split left for the measure to decide: the page is ONE
-         column — the resource list at the full content width, the usage strip
+         column — the usage strip at the full content width, the resource list
          under it — and the measure is simply how wide a row gets. -->
   <!-- ── ONLY THE RESOURCE LIST SCROLLS (from `xl`) ──
-         The page is a FRAME from `xl` up: the greeting, the search, the Resources
-         header with its type control, and the usage strip at the foot all hold still,
-         and the list under them is the only thing that moves. What the
+         The page is a FRAME from `xl` up: the greeting, the search, the usage strip
+         and each panel's own heading all hold still, and the lists under them are the
+         only thing that moves. What the
          reader narrows with therefore cannot scroll away from what it narrows —
          the old page scrolled the whole column, so the search field and the
          segmented control left the viewport as soon as the reader started
@@ -511,8 +512,8 @@
            The greeting is the only line on Overview addressed to the PERSON rather
            than to their infrastructure, and it holds this row ALONE. The agent
            onboarding used to ride its right edge as a contrast pill; it is the card at
-           the end of the usage strip at the foot of the page now (see the aside below,
-           and the note in the script). The row therefore has ONE height for every reader — it no longer
+           the end of the usage strip now (see the aside below, and the note in the
+           script). The row therefore has ONE height for every reader — it no longer
            grows or shrinks with a dismissal the page has to remember. -->
       <header class="flex items-center">
         <h1 class="text-heading-sm text-(--text-muted)">
@@ -542,15 +543,15 @@
            in no landmark at all is an axe `region` violation (measured — one node), and
            a page-level search is main content, not a banner. -->
 
-      <!-- ONE COLUMN, TWO BLOCKS. The resource list takes the frame's remaining
-           height (`xl:flex-1` on it, `min-h-0` so it can actually shrink) and the
-           usage strip under it is `shrink-0` — so the band the reader operates
+      <!-- ONE COLUMN, TWO BLOCKS. The usage strip is `shrink-0` at the top and the
+           resource list under it takes the frame's remaining height (`xl:flex-1` on
+           it, `min-h-0` so it can actually shrink) — so the band the reader operates
            absorbs every pixel the viewport gives or takes, and the four readings
            are the same 90px on a laptop and on a 27" display. -->
       <!--
         THE ENTRANCE. Replacing the wire MOUNTS these two blocks, so each one
         rises into place as it arrives (`animate-content-enter`, src/styles/motion.css) —
-        resources first, usage one beat behind it, so the page assembles in
+        usage first, resources one beat behind it, so the page assembles in
         reading order instead of popping as one slab. Simultaneous arrival reads
         as a swap; a stagger reads as choreography (the same reasoning as the
         signed-out screens' entrance, ../lib/auth-entrance.js).
@@ -583,6 +584,267 @@
           </InputText>
         </div>
 
+        <!-- ── USAGE: A STRIP UNDER THE SEARCH, NOT A RAIL DOWN THE SIDE ──
+
+             It was the page's left column: four stacked cards, each with a progress
+             bar under its reading, holding 30% of every row beside the resource list.
+             Two things were wrong with that, and removing the bar is what settled both.
+
+               THE BAR MEASURED NOTHING. It read as plan consumption, and there is no
+                 allowance in this business model for it to be a share OF — so it drew
+                 a percentage of nothing, in the loudest colour the card had, under
+                 every number on the page. A gauge with no ceiling is not a quiet
+                 detail: it is the first thing the eye lands on and the only thing on
+                 the card that cannot be verified.
+               THE COLUMN WAS SIZED FOR THE BAR. Four cards need a rail only while each
+                 one carries a chart; a label and a number do not — they are one line of
+                 text, and stacking four of them down a 348px column spent a third of
+                 the page's width on eight short lines while the resource rows beside
+                 them truncated.
+
+             So usage is now ONE STRIP: four readings inline, divided by hairlines inside
+             a single card. Which makes the page a COLUMN — the strip takes the full
+             content width directly under the search, and the resource list runs the rest
+             of the frame beneath it.
+
+             ── WHY THE TOP AND NOT THE FOOT ──
+             It ran along the bottom for a while, on the reasoning that resources are
+             what the reader came to operate and the numbers are context they read once.
+             Two things argue the other way, and both are about a frame:
+
+               A SUMMARY'S NUMBERS ARE THE FIRST THING READ, not the last. Overview is the
+                 one page whose job is the state of the account, and the state is these
+                 four readings. Under the list they were the last thing on a page most
+                 readers never scroll to the end of — placed where they read as a
+                 footnote to the thing they are supposed to frame.
+               THE LIST IS THE FRAME'S ELASTIC BLOCK, and an elastic block belongs at the
+                 end of it. With the strip pinned below, the list's bottom edge was a
+                 hard stop mid-viewport and the four readings were the page's last row on
+                 every screen size; with the strip above, the list runs to the frame's own
+                 edge and the scroll ends where the viewport does.
+
+             It is a SIBLING of the list, not a row inside it — same level as the
+             resource band, both direct children of `<main>` — so the strip is a block
+             the page owns and not a header the list carries. `shrink-0`, so the frame
+             takes its height out of the list below and never out of these four lines.
+
+             THE ENTRANCE LEADS NOW. The stagger is unchanged in kind and reversed in
+             order — whatever is on top arrives first, so the delay token (one fast-01)
+             moved off this band and onto the resources column below it. -->
+        <aside
+          class="animate-content-enter motion-reduce:animate-none flex w-full shrink-0 flex-col gap-(--layout-group-gap) xl:flex-row xl:items-stretch xl:gap-(--layout-section-gap)"
+          aria-label="Usage"
+        >
+          <!-- NO SECTION HEADING. The rail had one because a column of four cards needs
+               to say what column it is; a strip of four labelled readings says it in the
+               labels, and a `Usage` title over a 90px band is a row of height spent on a
+               word the cells already carry. The landmark keeps the name for a screen
+               reader (`aria-label` above).
+               ONE CARD, DIVIDED — not four cards in a row. Four separate boxes at this
+               width read as four unrelated panels with three gaps between them; the
+               readings are one set, taken over one window, so they share one surface and
+               a hairline says where each ends. -->
+          <CardBox
+            :padded="false"
+            class="min-w-0 xl:flex-1"
+          >
+            <template #content>
+              <!-- One per row on a phone, 2-up from `sm`, 4-up from `xl` — the same
+                   breakpoint the promo beside it stops stacking, so the strip is only ever
+                   asked to fit four readings while it has the full row to do it in. A
+                   reading is a 28px number and a tag beside it; four of those in a 630px
+                   band (which is what `lg` would have given it, with the card taking the
+                   rest) is where the number and its delta start colliding.
+                   THE RULES ARE DRAWN BY THE CELLS, not by a divider element, so they move
+                   with the wrap: stacked, every cell but the first takes a top rule; at two
+                   columns only the bottom pair does, plus a left rule on the evens; at four
+                   there are no top rules and the left rule is on every cell but the first.
+                   Only INTERNAL edges are ever drawn — the card's own border is the outside.
+                   EACH RULE IS SCOPED TO ITS OWN WIDTH RANGE (`max-sm:`, `sm:max-xl:`, `xl:`)
+                   rather than being switched off again at the next breakpoint. A
+                   `sm:…:border-t-0` written to cancel the stacked layout's top rule does not
+                   cancel it: Tailwind emits both declarations at the same specificity and
+                   sorts `border-t-0` BEFORE `border-t` (the utility's own value order beats
+                   the variant's), so the base rule wins inside the media query and every
+                   cell keeps a top border it should have dropped — measured, and visible as
+                   a stray rule running through the strip at 2-up and 4-up. Ranges cannot
+                   collide, so there is nothing to out-order. -->
+              <!-- `grow`: the band is `items-stretch`, so this card is as tall as the
+                     promo beside it, and without it the grid keeps its content height and
+                     leaves 30px of dead surface under the readings (measured). Growing the
+                     grid stretches its auto rows, and the cells' own `justify-center` then
+                     puts the readings on the card's optical centre. -->
+              <div class="grid grow grid-cols-1 sm:grid-cols-2 xl:grid-cols-4">
+                <div
+                  v-for="metric in metrics"
+                  :key="metric.label"
+                  class="flex min-w-0 flex-col justify-center gap-(--spacing-sm) border-(--border-default) p-(--spacing-md) max-sm:nth-[n+2]:border-t sm:max-xl:[&:nth-child(n+3)]:border-t sm:[&:nth-child(even)]:border-l xl:[&:nth-child(n+2)]:border-l"
+                >
+                  <div class="flex items-center gap-(--spacing-xs)">
+                    <span class="min-w-0 truncate text-label-sm text-(--text-default)">
+                      {{ metric.label }}
+                    </span>
+                    <Tooltip :text="metric.hint">
+                      <i
+                        class="pi pi-info-circle text-body-sm text-(--text-muted)"
+                        aria-hidden="true"
+                      />
+                    </Tooltip>
+                  </div>
+                  <!-- The reading on the left, the move on the right. `justify-between`
+                       rather than a gap, so the tag sits on the cell's own right edge and
+                       the four of them line up down the strip instead of each floating at
+                       whatever width its number happened to take. `items-center`: the tag
+                       is a 20px box beside a 28px number, and hanging it off the number's
+                       baseline drops it below the cell's optical centre. -->
+                  <div class="flex items-center justify-between gap-(--spacing-sm)">
+                    <div class="flex min-w-0 items-baseline gap-(--spacing-xxs)">
+                      <!-- A reading from the scope we just left is worse than no
+                         reading: while the switch reloads, the number is a
+                         placeholder the size of the number it replaces. -->
+                      <Skeleton
+                        v-if="tenancyReloading"
+                        width="4.5rem"
+                        height="1.75rem"
+                      />
+                      <template v-else>
+                        <span class="text-big-number-sm tabular-nums text-(--text-default)">
+                          {{ metric.value }}
+                        </span>
+                        <span
+                          v-if="metric.unit"
+                          class="text-body-xs text-(--text-muted)"
+                          >{{ metric.unit }}</span
+                        >
+                      </template>
+                    </div>
+
+                    <!-- WHICH WAY IT MOVED, against the window before this one. The arrow
+                         and the sign both carry the direction, and the SEVERITY carries it
+                         a third time — `success` for a rise, `danger` for a fall, so the
+                         strip is readable as a shape before it is read as four numbers.
+                         Three signals for one fact on purpose: the colour is the fastest
+                         and the only one a reader who cannot separate the hues, or who is
+                         hearing the page, does not get. See the note on `trend` in the
+                         script for why the colour tracks the direction and not whether the
+                         direction is good news.
+                         It goes with the number, not with the label: it is a fact about
+                         the reading, and it disappears with the reading while the scope
+                         reloads rather than hanging a stale delta over a placeholder.
+                         `aria-label` says the direction in words — a screen reader gets
+                         "Up 12.4%…" instead of a percentage with a decorative arrow in
+                         front of it, and the glyph is `aria-hidden` inside Tag already. -->
+                    <Tag
+                      v-if="!tenancyReloading"
+                      size="small"
+                      :severity="metric.trend.direction === 'up' ? 'success' : 'danger'"
+                      class="shrink-0 tabular-nums"
+                      :icon="
+                        metric.trend.direction === 'up' ? 'pi pi-arrow-up' : 'pi pi-arrow-down'
+                      "
+                      :label="`${metric.trend.direction === 'up' ? '+' : '-'}${metric.trend.delta}`"
+                      :aria-label="`${metric.trend.direction === 'up' ? 'Up' : 'Down'} ${metric.trend.delta} versus the previous window`"
+                    />
+                  </div>
+                </div>
+              </div>
+            </template>
+          </CardBox>
+
+          <!-- ── THE AGENT ONBOARDING, BESIDE THE READINGS ──
+               The quiet promo card every module's first use already makes this offer with
+               (../../components/home/FirstUsePromo.vue): the four editors' own logos as an
+               overlapping cluster, the shared line under them, and the WHOLE card as one
+               control — pressing it copies the setup prompt. Same component, same copy
+               (`AGENT_PROMO`), so the offer is one object across Overview and every
+               product's first use instead of a pill here and a card there.
+               It rode the foot of the usage rail; with the rail gone it keeps the same
+               place in the band's reading order — last, after the numbers — by taking the
+               end of that same row. At the rail's own width (30% of the row, capped at
+               `--container-xs`) so it stays a CARD and does not stretch into a banner, and
+               beside the strip rather than under it because the page is a frame from `xl`
+               and a second full-width block up here is height the resource list pays for.
+               The rule that used to sit above it is gone with the stack: two cards side by
+               side are already two objects, and a vertical hairline between them would only
+               repeat what the gap and the borders say.
+               No corner glyph on it (no `href`, no `navigates`) — it copies and leaves the
+               reader exactly where they were, and the glyph is what says a card takes you
+               somewhere. -->
+          <!-- ── DISMISSING IT IS THE ONE ANIMATED MOMENT IN THE BAND ──
+               `v-if` on its own unmounted the card on the click (measured: zero
+               interpolated frames), which reads as the page dropping a block rather than
+               as the reader removing it. So a `<Transition>` wraps it, and only the leave
+               is animated — the card arrives with the band it sits in
+               (`animate-content-enter` on the aside), so an enter here would be a second
+               entrance on the same element.
+               It scales down a hair, slides `--spacing-xs` DOWN and fades — the exact
+               inverse of the rise the band arrives with, so leaving is the entrance played
+               backwards and the eye reads it as the same object departing.
+               UTILITIES, NOT A KEYFRAME: both ends are known at author time, so a
+               `transition-*` on the leave is the whole mechanism and nothing has to be
+               added to the animation catalogue. The property list names `scale` and
+               `translate` — the properties Tailwind v4's `scale-*` / `translate-y-*`
+               ACTUALLY set (naming `transform` animates nothing, silently: the styling
+               rule's trap). `motion-reduce:transition-none` so a reader who asked for no
+               motion gets the instant removal they had before. -->
+          <Transition
+            leave-active-class="transition-[scale,translate,opacity] duration-moderate-01 ease-productive-exit motion-reduce:transition-none"
+            leave-to-class="scale-95 translate-y-(--spacing-xs) opacity-0"
+          >
+            <div
+              v-if="agentOnboardingVisible"
+              class="relative w-full shrink-0 xl:w-[30%] xl:max-w-(--container-xs)"
+            >
+              <FirstUsePromo
+                :title="AGENT_PROMO.title"
+                :description="AGENT_PROMO.description"
+                @activate="copyAgentPrompt"
+              >
+                <!-- The marks are the EDITORS themselves, four of the five, matching the
+                     cluster on every product's first use so the two are the same object at
+                     the same width (../../components/home/IconFrame.vue is the one 32px
+                     frame all three surfaces share). In color, not `mono`: here they are a
+                     row of logos, and a reader spots the editor they use before reading a
+                     word. -->
+                <template #logos>
+                  <IconFrame
+                    v-for="agent in AGENT_TOOLS.slice(0, 4)"
+                    :key="agent"
+                  >
+                    <AgentMark
+                      :name="agent"
+                      class="size-[18px] text-(--text-default)"
+                    />
+                  </IconFrame>
+                </template>
+              </FirstUsePromo>
+              <!-- The dismissal is a SIBLING of the card, never inside it: the card is
+                   itself a `<button>`, and a button inside a button is invalid HTML that
+                   browsers un-nest at parse time — which breaks both controls. So it is
+                   pinned over the corner the card's own glyph would use, and hovering it
+                   does not tint the card underneath (it is outside the `group`).
+                   `transparent` and `small`: it is the quietest control in the band, and
+                   dismissing UNMOUNTS the card — no reserved space, nothing left tabbable.
+                   The answer is persisted (lib/agent-onboarding.js), so it survives the
+                   reload and the first-access surface offering the same thing. -->
+              <div class="absolute right-(--spacing-xs) top-(--spacing-xs)">
+                <Tooltip
+                  text="Dismiss"
+                  placement="top"
+                >
+                  <IconButton
+                    icon="pi pi-times"
+                    kind="transparent"
+                    size="small"
+                    aria-label="Dismiss agent setup"
+                    @click="onAgentOnboardingClose"
+                  />
+                </Tooltip>
+              </div>
+            </div>
+          </Transition>
+        </aside>
+
         <!-- ── RESOURCES: FOUR PANELS, ONE ROW ──
              `Applications`, `Workloads`, `Domains`, `Recents` side by side from `xl`,
              two-up from `sm` and three-up from `lg`, stacked below that. The
@@ -590,11 +852,12 @@
              a panel per module IS the filter, permanently applied and permanently
              visible, so the reader never taps to find out whether a module has
              anything in it.
-             Full content width (the usage rail is a strip at the foot now), and the
-             entrance's LEADER — it is what the reader came for, so it arrives first and
-             the readings follow one fast-01 behind it. -->
+             Full content width (the usage rail is a strip above it now), and the LAST
+             block in the frame — it is the elastic one, so it takes whatever height is
+             left under the readings and its scroll ends where the viewport does. It
+             arrives one fast-01 behind the strip, in the order it is read. -->
         <section
-          class="animate-content-enter motion-reduce:animate-none grid w-full min-w-0 grid-cols-1 gap-(--layout-group-gap) sm:grid-cols-2 lg:grid-cols-3 xl:min-h-0 xl:flex-1 xl:grid-cols-5 xl:gap-(--layout-section-gap)"
+          class="animate-content-enter motion-reduce:animate-none mt-(--spacing-lg) grid w-full min-w-0 grid-cols-1 gap-(--layout-group-gap) sm:grid-cols-2 lg:grid-cols-3 xl:min-h-0 xl:flex-1 xl:grid-cols-5 xl:gap-(--layout-section-gap) [--content-enter-delay:var(--transition-duration-fast-01)]"
           aria-label="Resources"
         >
           <!-- Each panel is a column that owns its own height: the heading holds still
@@ -640,13 +903,13 @@
                  the pixel in all four columns (was 24px out in `Applications`, 24 in
                  `Recents`, 1 in `Workloads` / `Domains`). -->
             <h2
-              class="flex min-h-(--size-6) items-center gap-(--spacing-xs) px-[calc(var(--spacing-md)+1px)] text-label-sm text-(--text-default)"
+              class="flex min-h-(--size-6) items-center gap-(--spacing-xs) text-label-sm text-(--text-default)"
             >
               <!-- The mark gutter, mirrored. `aria-hidden` and empty: it is width, not
                    content — the heading's own text is what the reader needs. -->
               <span
                 v-if="panel.marked || panel.recent"
-                class="w-(--size-4) shrink-0"
+                class="shrink-0"
                 aria-hidden="true"
               />
               <RouterLink
@@ -809,7 +1072,7 @@
                            heading can mirror. -->
                       <template v-if="panel.recent">
                         <span
-                          class="flex w-(--size-4) shrink-0 items-center justify-center"
+                          class="flex shrink-0 items-center justify-center"
                           aria-hidden="true"
                         >
                           <i class="pi pi-history text-body-xs leading-none text-(--text-muted)" />
@@ -846,7 +1109,7 @@
                            could break the rail. -->
                       <span
                         v-else-if="panel.marked"
-                        class="flex w-(--size-4) shrink-0 items-center justify-center"
+                        class="flex shrink-0 items-center justify-center"
                         aria-hidden="true"
                       >
                         <i
@@ -1027,259 +1290,16 @@
             </div>
           </div>
         </section>
-
-        <!-- ── USAGE: A STRIP AT THE FOOT, NOT A RAIL DOWN THE SIDE ──
-
-             It was the page's left column: four stacked cards, each with a progress
-             bar under its reading, holding 30% of every row beside the resource list.
-             Two things were wrong with that, and removing the bar is what settled both.
-
-               THE BAR MEASURED NOTHING. It read as plan consumption, and there is no
-                 allowance in this business model for it to be a share OF — so it drew
-                 a percentage of nothing, in the loudest colour the card had, under
-                 every number on the page. A gauge with no ceiling is not a quiet
-                 detail: it is the first thing the eye lands on and the only thing on
-                 the card that cannot be verified.
-               THE COLUMN WAS SIZED FOR THE BAR. Four cards need a rail only while each
-                 one carries a chart; a label and a number do not — they are one line of
-                 text, and stacking four of them down a 348px column spent a third of
-                 the page's width on eight short lines while the resource rows beside
-                 them truncated.
-
-             So usage is now ONE STRIP: four readings inline, divided by hairlines inside
-             a single card, at the FOOT of the page. Which makes the page a COLUMN — the
-             list takes the full content width and the readings sit under it, in the band
-             a summary's numbers belong in: they are the account's context, read once on
-             arrival, and the resources are what the reader came to operate.
-
-             `shrink-0`, so the frame takes its height out of the list above and never out
-             of these four lines.
-
-             THE ENTRANCE FOLLOWS THE LIST NOW. The stagger is unchanged in kind and
-             reversed in order — whatever is on top arrives first, so the delay token
-             (one fast-01) moved off the resources column and onto this one. -->
-        <aside
-          class="animate-content-enter motion-reduce:animate-none flex w-full shrink-0 flex-col gap-(--layout-group-gap) xl:flex-row xl:items-stretch xl:gap-(--layout-section-gap) [--content-enter-delay:var(--transition-duration-fast-01)]"
-          aria-label="Usage"
-        >
-          <!-- NO SECTION HEADING. The rail had one because a column of four cards needs
-               to say what column it is; a strip of four labelled readings says it in the
-               labels, and a `Usage` title over a 90px band is a row of height spent on a
-               word the cells already carry. The landmark keeps the name for a screen
-               reader (`aria-label` above).
-               ONE CARD, DIVIDED — not four cards in a row. Four separate boxes at this
-               width read as four unrelated panels with three gaps between them; the
-               readings are one set, taken over one window, so they share one surface and
-               a hairline says where each ends. -->
-          <CardBox
-            :padded="false"
-            class="min-w-0 xl:flex-1"
-          >
-            <template #content>
-              <!-- One per row on a phone, 2-up from `sm`, 4-up from `xl` — the same
-                   breakpoint the promo beside it stops stacking, so the strip is only ever
-                   asked to fit four readings while it has the full row to do it in. A
-                   reading is a 28px number and a tag beside it; four of those in a 630px
-                   band (which is what `lg` would have given it, with the card taking the
-                   rest) is where the number and its delta start colliding.
-                   THE RULES ARE DRAWN BY THE CELLS, not by a divider element, so they move
-                   with the wrap: stacked, every cell but the first takes a top rule; at two
-                   columns only the bottom pair does, plus a left rule on the evens; at four
-                   there are no top rules and the left rule is on every cell but the first.
-                   Only INTERNAL edges are ever drawn — the card's own border is the outside.
-                   EACH RULE IS SCOPED TO ITS OWN WIDTH RANGE (`max-sm:`, `sm:max-xl:`, `xl:`)
-                   rather than being switched off again at the next breakpoint. A
-                   `sm:…:border-t-0` written to cancel the stacked layout's top rule does not
-                   cancel it: Tailwind emits both declarations at the same specificity and
-                   sorts `border-t-0` BEFORE `border-t` (the utility's own value order beats
-                   the variant's), so the base rule wins inside the media query and every
-                   cell keeps a top border it should have dropped — measured, and visible as
-                   a stray rule running through the strip at 2-up and 4-up. Ranges cannot
-                   collide, so there is nothing to out-order. -->
-              <!-- `grow`: the band is `items-stretch`, so this card is as tall as the
-                     promo beside it, and without it the grid keeps its content height and
-                     leaves 30px of dead surface under the readings (measured). Growing the
-                     grid stretches its auto rows, and the cells' own `justify-center` then
-                     puts the readings on the card's optical centre. -->
-              <div class="grid grow grid-cols-1 sm:grid-cols-2 xl:grid-cols-4">
-                <div
-                  v-for="metric in metrics"
-                  :key="metric.label"
-                  class="flex min-w-0 flex-col justify-center gap-(--spacing-sm) border-(--border-default) p-(--spacing-md) max-sm:[&:nth-child(n+2)]:border-t sm:max-xl:[&:nth-child(n+3)]:border-t sm:[&:nth-child(even)]:border-l xl:[&:nth-child(n+2)]:border-l"
-                >
-                  <div class="flex items-center gap-(--spacing-xs)">
-                    <span class="min-w-0 truncate text-label-sm text-(--text-default)">
-                      {{ metric.label }}
-                    </span>
-                    <Tooltip :text="metric.hint">
-                      <i
-                        class="pi pi-info-circle text-body-sm text-(--text-muted)"
-                        aria-hidden="true"
-                      />
-                    </Tooltip>
-                  </div>
-                  <!-- The reading on the left, the move on the right. `justify-between`
-                       rather than a gap, so the tag sits on the cell's own right edge and
-                       the four of them line up down the strip instead of each floating at
-                       whatever width its number happened to take. `items-center`: the tag
-                       is a 20px box beside a 28px number, and hanging it off the number's
-                       baseline drops it below the cell's optical centre. -->
-                  <div class="flex items-center justify-between gap-(--spacing-sm)">
-                    <div class="flex min-w-0 items-baseline gap-(--spacing-xxs)">
-                      <!-- A reading from the scope we just left is worse than no
-                         reading: while the switch reloads, the number is a
-                         placeholder the size of the number it replaces. -->
-                      <Skeleton
-                        v-if="tenancyReloading"
-                        width="4.5rem"
-                        height="1.75rem"
-                      />
-                      <template v-else>
-                        <span class="text-big-number-sm tabular-nums text-(--text-default)">
-                          {{ metric.value }}
-                        </span>
-                        <span
-                          v-if="metric.unit"
-                          class="text-body-xs text-(--text-muted)"
-                          >{{ metric.unit }}</span
-                        >
-                      </template>
-                    </div>
-
-                    <!-- WHICH WAY IT MOVED, against the window before this one. The arrow
-                         and the sign both carry the direction, and the SEVERITY carries it
-                         a third time — `success` for a rise, `danger` for a fall, so the
-                         strip is readable as a shape before it is read as four numbers.
-                         Three signals for one fact on purpose: the colour is the fastest
-                         and the only one a reader who cannot separate the hues, or who is
-                         hearing the page, does not get. See the note on `trend` in the
-                         script for why the colour tracks the direction and not whether the
-                         direction is good news.
-                         It goes with the number, not with the label: it is a fact about
-                         the reading, and it disappears with the reading while the scope
-                         reloads rather than hanging a stale delta over a placeholder.
-                         `aria-label` says the direction in words — a screen reader gets
-                         "Up 12.4%…" instead of a percentage with a decorative arrow in
-                         front of it, and the glyph is `aria-hidden` inside Tag already. -->
-                    <Tag
-                      v-if="!tenancyReloading"
-                      size="small"
-                      :severity="metric.trend.direction === 'up' ? 'success' : 'danger'"
-                      class="shrink-0 tabular-nums"
-                      :icon="
-                        metric.trend.direction === 'up' ? 'pi pi-arrow-up' : 'pi pi-arrow-down'
-                      "
-                      :label="`${metric.trend.direction === 'up' ? '+' : '-'}${metric.trend.delta}`"
-                      :aria-label="`${metric.trend.direction === 'up' ? 'Up' : 'Down'} ${metric.trend.delta} versus the previous window`"
-                    />
-                  </div>
-                </div>
-              </div>
-            </template>
-          </CardBox>
-
-          <!-- ── THE AGENT ONBOARDING, BESIDE THE READINGS ──
-               The quiet promo card every module's first use already makes this offer with
-               (../../components/home/FirstUsePromo.vue): the four editors' own logos as an
-               overlapping cluster, the shared line under them, and the WHOLE card as one
-               control — pressing it copies the setup prompt. Same component, same copy
-               (`AGENT_PROMO`), so the offer is one object across Overview and every
-               product's first use instead of a pill here and a card there.
-               It rode the foot of the usage rail; with the rail gone it keeps the same
-               place in the reading order — last, after the numbers — by taking the end of
-               the same bottom band. At the rail's own width (30% of the row, capped at
-               `--container-xs`) so it stays a CARD and does not stretch into a banner, and
-               beside the strip rather than under it because the page is a frame from `xl`
-               and a second full-width block down here is height the resource list pays for.
-               The rule that used to sit above it is gone with the stack: two cards side by
-               side are already two objects, and a vertical hairline between them would only
-               repeat what the gap and the borders say.
-               No corner glyph on it (no `href`, no `navigates`) — it copies and leaves the
-               reader exactly where they were, and the glyph is what says a card takes you
-               somewhere. -->
-          <!-- ── DISMISSING IT IS THE ONE ANIMATED MOMENT IN THE BAND ──
-               `v-if` on its own unmounted the card on the click (measured: zero
-               interpolated frames), which reads as the page dropping a block rather than
-               as the reader removing it. So a `<Transition>` wraps it, and only the leave
-               is animated — the card arrives with the band it sits in
-               (`animate-content-enter` on the aside), so an enter here would be a second
-               entrance on the same element.
-               It scales down a hair, slides `--spacing-xs` DOWN and fades — the exact
-               inverse of the rise the band arrives with, so leaving is the entrance played
-               backwards and the eye reads it as the same object departing.
-               UTILITIES, NOT A KEYFRAME: both ends are known at author time, so a
-               `transition-*` on the leave is the whole mechanism and nothing has to be
-               added to the animation catalogue. The property list names `scale` and
-               `translate` — the properties Tailwind v4's `scale-*` / `translate-y-*`
-               ACTUALLY set (naming `transform` animates nothing, silently: the styling
-               rule's trap). `motion-reduce:transition-none` so a reader who asked for no
-               motion gets the instant removal they had before. -->
-          <Transition
-            leave-active-class="transition-[scale,translate,opacity] duration-moderate-01 ease-productive-exit motion-reduce:transition-none"
-            leave-to-class="scale-95 translate-y-(--spacing-xs) opacity-0"
-          >
-            <div
-              v-if="agentOnboardingVisible"
-              class="relative w-full shrink-0 xl:w-[30%] xl:max-w-(--container-xs)"
-            >
-              <FirstUsePromo
-                :title="AGENT_PROMO.title"
-                :description="AGENT_PROMO.description"
-                @activate="copyAgentPrompt"
-              >
-                <!-- The marks are the EDITORS themselves, four of the five, matching the
-                     cluster on every product's first use so the two are the same object at
-                     the same width (../../components/home/IconFrame.vue is the one 32px
-                     frame all three surfaces share). In color, not `mono`: here they are a
-                     row of logos, and a reader spots the editor they use before reading a
-                     word. -->
-                <template #logos>
-                  <IconFrame
-                    v-for="agent in AGENT_TOOLS.slice(0, 4)"
-                    :key="agent"
-                  >
-                    <AgentMark
-                      :name="agent"
-                      class="size-[18px] text-(--text-default)"
-                    />
-                  </IconFrame>
-                </template>
-              </FirstUsePromo>
-              <!-- The dismissal is a SIBLING of the card, never inside it: the card is
-                   itself a `<button>`, and a button inside a button is invalid HTML that
-                   browsers un-nest at parse time — which breaks both controls. So it is
-                   pinned over the corner the card's own glyph would use, and hovering it
-                   does not tint the card underneath (it is outside the `group`).
-                   `transparent` and `small`: it is the quietest control in the band, and
-                   dismissing UNMOUNTS the card — no reserved space, nothing left tabbable.
-                   The answer is persisted (lib/agent-onboarding.js), so it survives the
-                   reload and the first-access surface offering the same thing. -->
-              <div class="absolute right-(--spacing-xs) top-(--spacing-xs)">
-                <Tooltip
-                  text="Dismiss"
-                  placement="top"
-                >
-                  <IconButton
-                    icon="pi pi-times"
-                    kind="transparent"
-                    size="small"
-                    aria-label="Dismiss agent setup"
-                    @click="onAgentOnboardingClose"
-                  />
-                </Tooltip>
-              </div>
-            </div>
-          </Transition>
-        </aside>
       </main>
 
       <!-- OUTSIDE `<main>`, deliberately. The dialog teleports its panel, so what it
            leaves behind in the flow is an empty node — and inside `<main>` that node was
-           still a flex child, taking one 24px `gap` after the usage strip. In a page that
-           is a frame from `xl` that gap is real height: the strip stopped 24px short of
-           the frame's edge, and the wire (which has no dialog) resolved into a page whose
-           bottom band sat 24px higher. Out here the container has no `gap` of its own, so
-           the dialog costs nothing and the strip ends where the frame does. -->
+           still a flex child, taking one 24px `gap` after the last block. In a page that
+           is a frame from `xl` that gap is real height: the block above it stopped 24px
+           short of the frame's edge, and the wire (which has no dialog) resolved into a
+           page whose bottom band sat 24px higher. Out here the container has no `gap` of
+           its own, so the dialog costs nothing and the resource list ends where the frame
+           does. -->
       <DeleteDialog
         v-model:open="deleteOpen"
         :kind="pendingDelete?.singular ?? 'resource'"

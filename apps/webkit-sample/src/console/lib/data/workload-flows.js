@@ -22,6 +22,8 @@
 // domain → certificate → firewall → release) and streams it through the same card the
 // application deploy uses, on the workload pipeline (./workload-provisioning.js).
 
+import { firewallModuleLabel } from './firewalls'
+
 /** The one flow's parts, in order. Shape matches ./application-flows.js so the shared
  *  wizard chrome (components/page/WizardPage.vue) reads both without a special case. */
 export const WORKLOAD_STEPS = [
@@ -42,19 +44,32 @@ export const WORKLOAD_FIREWALLS = [
   {
     value: 'Default Firewall',
     label: 'Default Firewall',
-    description: 'Azion’s baseline rule set — DDoS protection and the standard WAF ruleset.'
+    description: 'Azion’s baseline rule set. DDoS protection and the standard WAF rule set.',
+    modules: ['ddos', 'waf']
   },
   {
     value: 'edge-firewall',
     label: 'edge-firewall',
-    description: 'Your own rules, evaluated at the edge before the request reaches the app.'
+    description: 'Your own rules, evaluated before the request reaches the application.',
+    modules: ['ddos', 'waf', 'functions']
   },
   {
     value: 'waf-strict',
     label: 'waf-strict',
-    description: 'The strict WAF profile. Blocks more, and needs tuning against real traffic.'
+    description: 'The strict WAF profile. Blocks more, and needs tuning against real traffic.',
+    modules: ['ddos', 'waf', 'bot-manager']
   }
-]
+].map((firewall) => ({
+  ...firewall,
+  // What it already has ON, in the labels every surface shows — so a workload that BINDS
+  // one of these can report its modules instead of reporting none
+  // (../../../shared/lib/provisioning.js → resourceChain).
+  moduleLabels: firewall.modules.map(firewallModuleLabel)
+}))
+
+/** The module labels of a bindable workload firewall, by name. Empty when unknown. */
+export const workloadFirewallModuleLabels = (name) =>
+  WORKLOAD_FIREWALLS.find((firewall) => firewall.value === name)?.moduleLabels ?? []
 
 /** The applications a release can serve. */
 export const WORKLOAD_APPLICATIONS = [

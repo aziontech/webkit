@@ -72,8 +72,8 @@
     useGitAccount()
 
   const MODES = [
-    { label: 'Create a new repository', value: 'new' },
-    { label: 'Use an existing repository', value: 'existing' }
+    { label: 'New repository', value: 'new' },
+    { label: 'Existing repository', value: 'existing' }
   ]
 
   const mode = ref(props.repository?.mode ?? 'new')
@@ -149,7 +149,7 @@
         icon="pi pi-github"
         size="medium"
         title="Connect a Git account"
-        :description="`Azion copies ${source?.title ?? 'the template'} into a repository you own and deploys every push to it. Authorize once — the account stays available for the applications you create later.`"
+        :description="`Azion copies ${source?.title ?? 'the template'} into a repository you own and deploys every push to it. Authorize once. The account stays available for the applications you create later.`"
         class="rounded-(--shape-card) border border-dashed border-(--border-default) bg-(--bg-surface-raised)"
       >
         <template #actions>
@@ -246,9 +246,9 @@
              way (../../marketplace/DeployTemplate.vue). -->
         <FieldStack
           v-if="mode === 'new'"
-          :label="isPublic ? 'Public repository name' : 'Private repository name'"
+          label="Repository name"
           required
-          description="Created in the account above. Lowercase letters, numbers and hyphens."
+          description="Created in the account you select. Lowercase letters, numbers, and hyphens."
           :message="errors.repository"
           message-kind="required"
         >
@@ -268,15 +268,15 @@
                 :aria-describedby="describedBy"
               />
               <InputGroupAddon>
-                <Tooltip text="Toggle repository visibility (public or private)">
+                <Tooltip text="Make the repository public or private.">
                   <Switch
                     v-model="isPublic"
                     kind="privacy"
                     :disabled="disabled"
                     :aria-label="
                       isPublic
-                        ? 'Repository is public — toggle to make it private'
-                        : 'Repository is private — toggle to make it public'
+                        ? 'Repository is public. Make it private.'
+                        : 'Repository is private. Make it public.'
                     "
                   />
                 </Tooltip>

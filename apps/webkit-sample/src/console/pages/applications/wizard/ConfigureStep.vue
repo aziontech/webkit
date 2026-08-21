@@ -38,6 +38,7 @@
   import Switch from '@aziontech/webkit/switch'
   import Tooltip from '@aziontech/webkit/tooltip'
 
+  import FirewallBinding from '../../../components/firewall/FirewallBinding.vue'
   import FieldStack from '../../../components/form/FieldStack.vue'
   import Section from '../../../components/page/Section.vue'
   import {
@@ -46,7 +47,7 @@
     DEFAULT_MODULES,
     SUBSCRIPTION_MODULES
   } from '../../../lib/data/application-modules'
-  import { FIREWALL_MODULE_FIELDS } from '../../../lib/data/firewalls'
+  import { existingFirewallOptions } from '../../../lib/data/firewalls'
   import { useCreateForm } from './form-context'
 
   const props = defineProps({
@@ -61,6 +62,10 @@
   const { form, errors } = useCreateForm()
 
   const templateSettings = () => props.source?.settings ?? []
+
+  // The account’s real firewalls — the same rows the Secure → Firewall list shows, so
+  // "use an existing one" offers the ones that exist rather than a fixture of its own.
+  const EXISTING_FIREWALLS = existingFirewallOptions()
 </script>
 
 <template>
@@ -93,8 +98,8 @@
           <FieldStack
             label="Name"
             required
-            hint="Names the application, and every resource created alongside it — the workload, the connector and the storage bucket all take it."
-            description="Lowercase letters, numbers and hyphens. It becomes part of the deployed URL."
+            hint="Names the application, and every resource created alongside it. The workload, the connector, and the storage bucket all take it."
+            description="Lowercase letters, numbers, and hyphens. It becomes part of the deployed URL."
             :message="errors.name"
             message-kind="required"
           >
@@ -143,7 +148,7 @@
 
             <FieldStack
               label="Deploy command"
-              hint="Runs after the build to publish the bundle to Azion."
+              hint="Runs after the build to deploy the bundle to Azion."
             >
               <template #default="{ controlId, describedBy }">
                 <InputText
@@ -196,107 +201,28 @@
       </template>
     </CardBox>
 
-    <!-- PROTECTION — ONE card for the whole question: the switch that asks it, and the
-         configuration that exists only once the answer is yes. The firewall's modules used
-         to sit in a SECOND, titled card under the switch, which spent a whole box saying
-         "this belongs to the thing above it". A card is a boundary, and there is no
-         boundary between "is there a firewall" and "what is in it" — they are one section,
-         so the switch is its question, the modules are its content, and a single rule
-         inside one box separates them.
+    <!-- PROTECTION — the same three-part question the repository part asks, in the same
+         control (../../../components/firewall/FirewallBinding.vue): is there a firewall,
+         and if so, one that already exists or a new one?
+         OFF by default, which is the change that matters. This flow used to arrive with
+         the switch ON and create a firewall alongside the application, so a reader who
+         never looked at the row still spent a resource — and the only way to say yes was
+         to make a second firewall beside the ones the account already had. Protection is
+         now a decision made rather than a default absorbed, and binding an existing
+         firewall is one of the two ways to make it.
          OPEN, not behind Advanced: everything inside that disclosure carries the create
-         endpoint's own default, while a firewall is a SEPARATE resource this flow
-         provisions. It is pre-answered YES, so being open is what keeps that honest — the
-         reader sees the resource they are about to spend, and the modules it is created
-         with, next to the switch that declines it. -->
-    <CardBox
-      :padded="false"
+         endpoint’s own default, while a firewall is a SEPARATE resource this flow
+         provisions or binds. The reader sees the resource they are about to spend, next to
+         the switch that declines it. -->
+    <FirewallBinding
+      v-model="form.protection"
       class="mt-(--layout-section-gap)"
-    >
-      <template #content>
-        <!-- NO group heading on this row: "Protection" over a single switch would be a
-             heading for a heading, and the row already says what it does in its own
-             words. -->
-        <Item.List>
-          <Item size="small">
-            <Item.Content>
-              <Item.Title>Protect with Azion Firewall</Item.Title>
-              <Item.Description>
-                Creates a firewall alongside the application and filters requests before they reach
-                your code. On by default — turn it off to deploy without one.
-              </Item.Description>
-            </Item.Content>
-            <Item.Actions class="justify-end">
-              <Switch
-                v-model="form.firewall"
-                aria-label="Protect with Azion Firewall"
-                :disabled="disabled"
-              />
-            </Item.Actions>
-          </Item>
-        </Item.List>
-
-        <!-- WHAT SAYING YES CONFIGURES. The firewall is created here, so the modules it is
-             created WITH are decided here too — hiding them would mean provisioning a
-             firewall whose configuration the reader first meets on another page. The rows
-             are the same catalog the Firewall module's own list reads
-             (../../../lib/data/firewalls.js), so a module's name and meaning exist once.
-             It OPENS: the grid-rows disclosure ../../../components/page/Section.vue uses,
-             so the card grows into its new height instead of jumping to it. The rule and
-             the group heading ride INSIDE the clip, so a closed disclosure reserves
-             nothing and the card is exactly one row tall. `inert` while closed keeps the
-             hidden switches out of the tab order. -->
-        <div
-          :data-open="form.firewall || null"
-          class="grid grid-rows-[0fr] transition-[grid-template-rows] duration-moderate-02 ease-expressive-entrance data-open:grid-rows-[1fr] motion-reduce:transition-none"
-        >
-          <div
-            class="min-w-0 overflow-hidden"
-            :inert="!form.firewall"
-          >
-            <div class="border-t border-(--border-default)">
-              <h3
-                class="px-(--spacing-md) pb-(--spacing-xs) pt-(--spacing-md) text-label-sm text-(--text-muted)"
-              >
-                Firewall modules
-              </h3>
-              <Item.List>
-                <Item
-                  v-for="mod in FIREWALL_MODULE_FIELDS"
-                  :key="mod.key"
-                  size="small"
-                >
-                  <Item.Content>
-                    <Item.Title>{{ mod.title }}</Item.Title>
-                    <Item.Description>{{ mod.description }}</Item.Description>
-                  </Item.Content>
-                  <Item.Actions class="justify-end">
-                    <!-- DDoS Protection is not a switch anywhere on the platform, so it
-                         states why instead of pretending to be one. Same shape as the
-                         subscription modules below. -->
-                    <Tooltip
-                      v-if="mod.locked"
-                      text="DDoS Protection is always on."
-                    >
-                      <Switch
-                        :model-value="true"
-                        disabled
-                        :aria-label="mod.title"
-                      />
-                    </Tooltip>
-                    <Switch
-                      v-else
-                      v-model="form.firewallModules[mod.key]"
-                      :aria-label="mod.title"
-                      :disabled="disabled"
-                    />
-                  </Item.Actions>
-                </Item>
-              </Item.List>
-            </div>
-          </div>
-        </div>
-      </template>
-    </CardBox>
+      :options="EXISTING_FIREWALLS"
+      :default-name="form.name"
+      description="Filters requests before they reach your code. Off by default. Turn it on to bind an existing firewall, or create one with the application."
+      :message="errors.firewall"
+      :disabled="disabled"
+    />
 
     <!-- ADVANCED — the pattern this console already has for it: a collapsible `Section`
          band (../../../components/page/Section.vue), which owns the trigger semantics
@@ -387,7 +313,7 @@
                 <!-- Disabled, with the reason on hover or focus. The switch is not
                      something this form can turn on — activation is a sales conversation
                      — so it states that rather than pretending to be interactive. -->
-                <Tooltip text="Contact sales to activate this module.">
+                <Tooltip text="Contact sales to enable this module.">
                   <Switch
                     v-model="form.modules[mod.key]"
                     disabled

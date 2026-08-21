@@ -255,7 +255,7 @@
         <div
           ref="scroller"
           :style="fadeStyle"
-          class="min-h-0 flex-1 overflow-y-auto [scrollbar-gutter:stable_both-edges]"
+          class="min-h-0 flex-1 overflow-y-auto scrollbar-gutter-both"
         >
           <div class="flex flex-col pb-(--layout-section-gap)">
             <!-- THE HEADING SCROLLS AWAY. It names the page and says what the commit
@@ -374,7 +374,7 @@
              part of a flow whose rows are its own forward. -->
         <footer
           v-if="!terminal && hasActions"
-          class="shrink-0 bg-gradient-to-b from-transparent to-(--bg-canvas) pb-(--spacing-lg) pt-(--spacing-xl)"
+          class="shrink-0 bg-linear-to-b from-transparent to-(--bg-canvas) pb-(--spacing-lg) pt-(--spacing-xl)"
         >
           <div
             class="layout-column-form layout-boundary-inline flex w-full items-center gap-(--spacing-md)"

@@ -68,7 +68,14 @@
     SCRATCH_SOURCE
   } from '../../lib/data/application-flows'
   import { defaultModuleState } from '../../lib/data/application-modules'
-  import { defaultFirewallModuleState, enabledFirewallModules } from '../../lib/data/firewalls'
+  import {
+    defaultFirewallProtection,
+    enabledFirewallModules,
+    firewallBindingName,
+    firewallIdByName,
+    firewallIsBound,
+    firewallModuleLabelsByName
+  } from '../../lib/data/firewalls'
   import { configuredTemplateSteps } from '../../lib/data/template-provisioning'
   import ConfigureStep from './wizard/ConfigureStep.vue'
   import DeploySuccess from './wizard/DeploySuccess.vue'
@@ -141,16 +148,17 @@
     deployCommand: 'npm run deploy',
     settings: {},
     // Not part of the application body: a firewall is its own resource, so it travels to
-    // the provisioning call rather than into `payload()`. Its modules are decided in the
-    // same part that decides whether there is a firewall at all.
+    // the provisioning call rather than into `payload()`. ONE object holds the whole
+    // answer — whether there is a firewall, and whether it is one that already exists or a
+    // new one (`defaultFirewallProtection()` in ../../lib/data/firewalls.js).
     //
-    // ON by default, and the reader still decides. An application that reaches production
-    // with nothing in front of it is the expensive default, so the flow pre-answers the
-    // question the safe way rather than leaving it to be remembered. The consent is not
-    // skipped, it is moved: the switch is on the part, open and unfolded above its modules
-    // (./wizard/ConfigureStep.vue), so opting out is one visible click before the commit.
-    firewall: true,
-    firewallModules: defaultFirewallModuleState(),
+    // OFF by default. It used to arrive ON and create a firewall alongside the
+    // application, which spent a resource on behalf of a reader who never read the row —
+    // and offered no way to say yes other than making a second firewall beside the ones
+    // the account already had. Both are fixed by the same control: the switch is off, and
+    // saying yes asks which of the two ways (./wizard/ConfigureStep.vue →
+    // ../../components/firewall/FirewallBinding.vue).
+    protection: defaultFirewallProtection(),
     modules: defaultModuleState(),
     active: true,
     debug: false
@@ -292,7 +300,7 @@
     if (!target?.name) {
       errors.repository =
         target?.mode === 'existing'
-          ? 'Choose a repository, or create a new one.'
+          ? 'Select a repository, or create a new one.'
           : 'This field is required.'
     }
     return !errors.repository
@@ -301,6 +309,15 @@
   const validate = () => {
     clearErrors()
     if (!form.name.trim()) errors.name = 'This field is required.'
+    // The protection branch the reader is ON is the one that can be incomplete: a firewall
+    // that is being created needs a name, and one being bound needs to be picked. Neither
+    // is asked at all while the switch is off.
+    if (form.protection.enabled && !firewallBindingName(form.protection)) {
+      errors.firewall =
+        form.protection.mode === 'new'
+          ? 'Name the firewall, or bind one that already exists.'
+          : 'Select the firewall to bind, or create a new one.'
+    }
     ;(source.value?.settings ?? [])
       .filter((setting) => setting.required)
       .forEach((setting) => {
@@ -357,7 +374,7 @@
       phase.value = 'deploying'
     } catch (error) {
       toast.error('Could not start the deployment.', {
-        description: error?.message ?? 'Check your connection and try again.',
+        description: error?.message ?? 'Check your connection, then retry.',
         action: { label: 'Retry', onClick: () => advance() }
       })
     } finally {
@@ -438,8 +455,18 @@
       isPublic: repository.value ? repository.value.visibility !== 'private' : true,
       framework: source.value?.framework ?? '',
       templateTitle: source.value?.title ?? application.name,
-      firewall: form.firewall,
-      firewallModules: enabledFirewallModules(form.firewallModules)
+      // A firewall either gets CREATED with the chain or BOUND to it, and the success
+      // screen has to say which — a bound firewall listed as "created" claims work that
+      // never ran.
+      firewall: form.protection.enabled,
+      firewallName: firewallBindingName(form.protection),
+      firewallBound: firewallIsBound(form.protection),
+      firewallId: firewallIdByName(firewallBindingName(form.protection)),
+      // A bound firewall reports the modules it ALREADY has on; a created one reports the
+      // ones this flow switched on for it.
+      firewallModules: firewallIsBound(form.protection)
+        ? firewallModuleLabelsByName(firewallBindingName(form.protection))
+        : enabledFirewallModules(form.protection.modules)
     })
     // The create landed: nothing is pending any more, so the leave guard stands down
     // before this flow navigates on its own success.
@@ -454,7 +481,7 @@
     phase.value = 'wizard'
     toast.error('The deployment did not finish.', {
       description: `It stopped at ${failedStep}. Check the configuration and deploy again.`,
-      action: { label: 'Try again', onClick: () => advance() }
+      action: { label: 'Retry', onClick: () => advance() }
     })
   }
 
@@ -510,7 +537,7 @@
     ]"
     back-label="Back to Applications"
     title="Create application"
-    description="An application is the code Azion runs, and the configuration it runs with. Choose where the code comes from, name it, and the last step deploys it along with the workload that publishes it."
+    description="An application is the code Azion runs, and the configuration it runs with. Select where the code comes from, name it, and the last step deploys it along with the workload that publishes it."
     title-id="create-application-title"
     :heading="phase !== 'success'"
     :steps="steps"

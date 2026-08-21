@@ -33,11 +33,18 @@
   // and the domain the run reports are one function, not two that agree today.
   const domain = computed(() => domainForWorkload(form.name))
 </script>
-
 <template>
-  <CardBox title="Name the workload">
+  <!-- `padded="false"`, with the inset moved onto the two GROUPS inside, so the rule
+       between them spans the card edge to edge. A rule drawn inside the card's own
+       padding stops short of both edges and reads as a field's underline rather than as
+       the card's own division — the same call the application flow's Configure part makes
+       for its template-settings rule (../../applications/wizard/ConfigureStep.vue). -->
+  <CardBox
+    :padded="false"
+    title="Name the workload"
+  >
     <template #content>
-      <div class="flex flex-col gap-(--spacing-lg)">
+      <div class="p-(--spacing-md)">
         <FieldStack
           label="Name"
           required
@@ -60,39 +67,39 @@
             />
           </template>
         </FieldStack>
+      </div>
 
-        <!-- THE DOMAIN THE NAME PRODUCED. A read-only consequence, not a field — so it is
-             framed as a value the reader can copy their eyes over, with the protocol shown
-             so it reads as the address it is rather than as a hostname fragment. -->
+      <!-- THE DOMAIN THE NAME PRODUCED. A read-only consequence, not a field — so it is
+           framed as a value the reader can copy their eyes over, with the protocol shown
+           so it reads as the address it is rather than as a hostname fragment. -->
+      <div
+        class="flex flex-col gap-(--spacing-xs) border-t border-(--border-default) p-(--spacing-md)"
+      >
+        <p class="text-label-sm text-(--text-default)">Domain</p>
         <div
-          class="flex flex-col gap-(--spacing-xs) border-t border-(--border-default) pt-(--spacing-lg)"
+          :data-empty="!domain || null"
+          class="flex min-h-10 min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface-raised) px-(--spacing-sm) data-[empty]:border-dashed"
         >
-          <p class="text-label-sm text-(--text-default)">Domain</p>
-          <div
-            :data-empty="!domain || null"
-            class="flex min-h-10 min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface-raised) px-(--spacing-sm) data-[empty]:border-dashed"
+          <i
+            class="pi pi-globe shrink-0 text-(--text-muted)"
+            aria-hidden="true"
+          />
+          <span
+            v-if="domain"
+            class="min-w-0 truncate text-label-sm text-(--text-default)"
           >
-            <i
-              class="pi pi-globe shrink-0 text-(--text-muted)"
-              aria-hidden="true"
-            />
-            <span
-              v-if="domain"
-              class="min-w-0 truncate text-label-sm text-(--text-default)"
-            >
-              https://{{ domain }}
-            </span>
-            <span
-              v-else
-              class="text-label-sm text-(--text-muted)"
-            >
-              Name the workload to see its domain.
-            </span>
-          </div>
-          <p class="text-label-sm text-(--text-muted)">
-            Provisioned with the workload. Add your own domain to it once it exists.
-          </p>
+            https://{{ domain }}
+          </span>
+          <span
+            v-else
+            class="text-label-sm text-(--text-muted)"
+          >
+            Name the workload to see its domain.
+          </span>
         </div>
+        <p class="text-label-sm text-(--text-muted)">
+          Provisioned with the workload. Add your own domain to it once it exists.
+        </p>
       </div>
     </template>
   </CardBox>

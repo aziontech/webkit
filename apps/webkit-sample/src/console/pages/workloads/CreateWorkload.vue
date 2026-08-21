@@ -44,7 +44,13 @@
   import DeploymentFlow from '../../components/deployment/DeploymentFlow.vue'
   import WizardPage from '../../components/page/WizardPage.vue'
   import { useBaseline } from '../../lib/behavior/forms'
-  import { WORKLOAD_FIREWALLS, WORKLOAD_STEPS } from '../../lib/data/workload-flows'
+  import {
+    defaultFirewallProtection,
+    enabledFirewallModules,
+    firewallBindingName,
+    firewallIsBound
+  } from '../../lib/data/firewalls'
+  import { WORKLOAD_STEPS, workloadFirewallModuleLabels } from '../../lib/data/workload-flows'
   import {
     domainForWorkload,
     workloadProvisioningSteps
@@ -72,18 +78,18 @@
   const isLastStep = computed(() => stepIndex.value === steps.length - 1)
 
   // --- The answers ---------------------------------------------------------
-  // The request body. `protected` + `firewall` are answered on part 2 and CONSUMED by the
-  // release on part 3 — one object, so the release projects them instead of holding a
-  // second copy that could disagree.
+  // The request body. `protection` is answered on part 2 and CONSUMED by the release on
+  // part 3 — one object, so the release projects it instead of holding a second copy that
+  // could disagree.
   //
-  // `protected` starts TRUE, with the first firewall selected: a workload is the public
-  // entry point, so the protected shape is the one the flow proposes. Part 2 is a whole
-  // part about that answer — nothing is hidden, and `Not protected` is one option away in
-  // the same Select that binds the firewall.
+  // It starts OFF. It used to start protected with the first firewall pre-selected, which
+  // bound a firewall the reader never picked — a pre-selection is an answer, not a
+  // proposal. Part 2 is a whole part about this question and now asks it: whether there is
+  // a firewall, and whether it is one that already exists or a new one
+  // (../../lib/data/firewalls.js → `defaultFirewallProtection`).
   const form = reactive({
     name: '',
-    protected: true,
-    firewall: WORKLOAD_FIREWALLS[0].value,
+    protection: defaultFirewallProtection(),
     application: '',
     applicationVersion: 'latest',
     environment: 'Production',
@@ -117,6 +123,24 @@
 
   const domain = computed(() => domainForWorkload(form.name))
 
+  // WHICH firewall this workload ends up behind, by name — one derivation for the parts
+  // that show it (the release summary), the run that narrates it, and the chain that
+  // records it. `''` when the reader declined protection.
+  const firewallName = computed(() => firewallBindingName(form.protection))
+
+  // What the protection row on the release summary says about the answer part 2 settled on.
+  // Read through the one derivation both flows use (../../lib/data/firewalls.js) rather
+  // than re-assembled: a summary that re-derives an answer is a summary that can disagree
+  // with it.
+  const protectionSummary = computed(() => {
+    if (!firewallName.value) {
+      return 'No firewall in front of this workload. Requests reach the application directly.'
+    }
+    return firewallIsBound(form.protection)
+      ? 'An existing firewall, bound to this release. Requests are filtered before the application runs.'
+      : 'Created with this workload and bound to the release. Requests are filtered before the application runs.'
+  })
+
   // --- Moving through the flow ---------------------------------------------
   const goBack = () => {
     if (stepIndex.value <= 0) return
@@ -142,8 +166,17 @@
     if (step.value === 'workload' && !form.name.trim()) {
       errors.name = 'This field is required.'
     }
+    // The protection branch the reader is ON is the one that can be incomplete: a firewall
+    // being created needs a name, one being bound needs to be picked. Neither is asked
+    // while the switch is off.
+    if (step.value === 'protection' && form.protection.enabled && !firewallName.value) {
+      errors.firewall =
+        form.protection.mode === 'new'
+          ? 'Name the firewall, or bind one that already exists.'
+          : 'Select the firewall to bind, or create a new one.'
+    }
     if (step.value === 'release' && !form.application) {
-      errors.application = 'Choose the application this workload serves.'
+      errors.application = 'Select the application this workload serves.'
     }
     return Object.keys(errors).length === 0
   }
@@ -154,8 +187,11 @@
   const provisioningSteps = computed(() =>
     workloadProvisioningSteps({
       name: form.name.trim(),
-      protected: form.protected,
-      firewall: form.firewall,
+      protected: form.protection.enabled,
+      firewall: firewallName.value,
+      // Creating a firewall and binding one are different work, so the run narrates the
+      // one that actually happens rather than one row that covers both.
+      firewallBound: firewallIsBound(form.protection),
       application: form.application
     })
   )
@@ -183,7 +219,7 @@
       phase.value = 'provisioning'
     } catch (error) {
       toast.error('Could not start provisioning.', {
-        description: error?.message ?? 'Check your connection and try again.',
+        description: error?.message ?? 'Check your connection, then retry.',
         action: { label: 'Retry', onClick: () => advance() }
       })
     } finally {
@@ -201,7 +237,18 @@
     provisioned.value = provisionDeployment({
       repoName: form.name.trim(),
       framework: '',
-      templateTitle: form.name.trim()
+      templateTitle: form.name.trim(),
+      // The firewall the reader chose on part 2 — it was asked for and narrated by the
+      // run, so it belongs in the chain the success screen lists. A bound one is marked as
+      // bound rather than credited to this create.
+      firewall: form.protection.enabled,
+      firewallName: firewallName.value,
+      firewallBound: firewallIsBound(form.protection),
+      // A bound firewall reports the modules it ALREADY has on; a created one reports the
+      // ones this part switched on for it.
+      firewallModules: firewallIsBound(form.protection)
+        ? workloadFirewallModuleLabels(firewallName.value)
+        : enabledFirewallModules(form.protection.modules)
     })
     // The create landed: nothing is pending, so the leave guard stands down before this
     // flow navigates on its own success.
@@ -214,8 +261,8 @@
   const onFailed = (failedStep) => {
     phase.value = 'wizard'
     toast.error('Provisioning did not finish.', {
-      description: `It stopped at ${failedStep}. Check the configuration and try again.`,
-      action: { label: 'Try again', onClick: () => advance() }
+      description: `It stopped at ${failedStep}. Check the configuration and deploy again.`,
+      action: { label: 'Retry', onClick: () => advance() }
     })
   }
 
@@ -267,46 +314,83 @@
 
     <template v-else-if="step === 'release'">
       <!-- WHAT IS BEING RELEASED, above the questions about it. The reader named this
-           workload two parts ago and now has to say what it serves; losing sight of the
-           address is how a release ends up bound to the wrong workload. -->
+           workload two parts ago and protected it one part ago, and now has to say what it
+           serves; losing sight of either is how a release ends up bound to the wrong
+           workload, or behind a firewall nobody meant.
+           ONE card of both answers, which is the shape the application flow's counterpart
+           has (../applications/wizard/SourceSummary.vue): projected answers are a summary,
+           and a summary is one card. They used to be two — this row here and a titled
+           "Serving" card inside the release part — which printed the domain twice, 100px
+           apart, and titled one group with a card header while the other had none.
+           Read-only, with a way BACK to the part that OWNS each answer rather than a
+           second control for it here. -->
       <CardBox
         :padded="false"
         class="mb-(--layout-section-gap)"
       >
         <template #content>
-          <Item size="small">
-            <Item.Media>
-              <span
-                class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
-              >
-                <i
-                  class="ai ai-workloads text-[1rem] leading-none text-(--text-default)"
-                  aria-hidden="true"
+          <Item.List>
+            <Item size="small">
+              <Item.Media>
+                <span
+                  class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
+                >
+                  <i
+                    class="ai ai-workloads text-[1rem] leading-none text-(--text-default)"
+                    aria-hidden="true"
+                  />
+                </span>
+              </Item.Media>
+              <Item.Content>
+                <Item.Title>{{ form.name || 'Unnamed workload' }}</Item.Title>
+                <Item.Description>
+                  {{ domain || 'No domain yet' }} — provisioned from the workload name. Traffic
+                  arrives here.
+                </Item.Description>
+              </Item.Content>
+              <Item.Actions>
+                <Button
+                  type="button"
+                  label="Change"
+                  kind="text"
+                  size="small"
+                  :disabled="submitting"
+                  @click="goToStep(0)"
                 />
-              </span>
-            </Item.Media>
-            <Item.Content>
-              <Item.Title>{{ form.name || 'Unnamed workload' }}</Item.Title>
-              <Item.Description>{{ domain || 'No domain yet' }}</Item.Description>
-            </Item.Content>
-            <Item.Actions>
-              <Button
-                type="button"
-                label="Change"
-                kind="text"
-                size="small"
-                :disabled="submitting"
-                @click="goToStep(0)"
-              />
-            </Item.Actions>
-          </Item>
+              </Item.Actions>
+            </Item>
+
+            <Item size="small">
+              <Item.Media>
+                <span
+                  class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
+                >
+                  <i
+                    class="pi pi-shield text-[1rem] leading-none text-(--text-default)"
+                    aria-hidden="true"
+                  />
+                </span>
+              </Item.Media>
+              <Item.Content>
+                <Item.Title>{{ firewallName || 'Not protected' }}</Item.Title>
+                <Item.Description>{{ protectionSummary }}</Item.Description>
+              </Item.Content>
+              <Item.Actions>
+                <Button
+                  type="button"
+                  label="Change"
+                  kind="text"
+                  size="small"
+                  :disabled="submitting"
+                  @click="goToStep(1)"
+                />
+              </Item.Actions>
+            </Item>
+          </Item.List>
         </template>
       </CardBox>
 
-      <ReleaseStep
-        :disabled="submitting"
-        @edit-protection="goToStep(1)"
-      />
+      <ReleaseStep :disabled="submitting" />
     </template>
 
     <!-- PAST THE QUESTIONS: the chain being built, then what it built. The SAME card the

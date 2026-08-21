@@ -107,6 +107,12 @@ const persistRecords = () => {
  * @param {string} [input.framework] Template framework, mapped to a build preset.
  * @param {boolean} [input.isPublic] Repository visibility; also the bucket access.
  * @param {string} [input.templateTitle] Fallback name when there is no repo name.
+ * @param {boolean} [input.firewall] Whether the chain has a firewall at all.
+ * @param {string} [input.firewallName] Its name; defaults to `<name>-firewall`.
+ * @param {Array<string>} [input.firewallModules] The module labels it runs with.
+ * @param {boolean} [input.firewallBound] True when an EXISTING firewall was bound
+ *   rather than a new one created.
+ * @param {string} [input.firewallId] The existing firewall's id, when bound.
  * @returns {object} The stored record: `{ id, workload, application, connector, bucket, … }`.
  */
 export function provisionDeployment({
@@ -116,7 +122,10 @@ export function provisionDeployment({
   isPublic = true,
   templateTitle = '',
   firewall = false,
-  firewallModules = []
+  firewallName = '',
+  firewallModules = [],
+  firewallBound = false,
+  firewallId = ''
 } = {}) {
   const name = slugify(repoName || templateTitle)
   const createdAt = new Date()
@@ -170,14 +179,20 @@ export function provisionDeployment({
   // Only when the create asked for it. A firewall is a SEPARATE resource, not a module
   // flag on the application, so the chain either has one or does not — and the success
   // screen lists exactly what was provisioned.
+  //
+  // `bound` is the difference between the two ways a create gets one: a NEW firewall is
+  // created with the chain, an EXISTING one is bound to it. The record carries which,
+  // because "created" is a claim and the success screen makes it per row.
   const firewallRecord = firewall
     ? {
-        id: resourceId(),
-        name: `${name}-firewall`,
+        id: firewallId || resourceId(),
+        name: firewallName || `${name}-firewall`,
         status: 'Active',
-        // The labels the create's Protection group had switched on. The vocabulary lives
-        // on the console side (console/lib/data/firewalls.js), which owns it; this module
-        // stores what it is handed.
+        bound: Boolean(firewallBound),
+        // The labels the create's Protection card settled on — the ones it switched on for
+        // a new firewall, the ones an existing one already has. The vocabulary lives on the
+        // console side (console/lib/data/firewalls.js), which owns it; this module stores
+        // what it is handed.
         modules: firewallModules,
         modifiedAt: createdAt,
         lastModified
@@ -421,6 +436,10 @@ export function resourceChain(record) {
       icon: 'ai ai-edge-firewall',
       name: firewall.name,
       status: firewall.status,
+      // The one row of the chain that may already have existed: a create can BIND a
+      // firewall instead of making one, and a bound resource listed as created would
+      // claim work that never ran.
+      state: firewall.bound ? 'bound' : 'created',
       href: '',
       reference: firewall.id,
       fields: [

@@ -66,10 +66,10 @@ export const APPLICATION_FLOWS = {
     icon: 'pi pi-github',
     title: 'Import from Git',
     description:
-      'Deploy from a repository you already have. Connect the Git account that owns it and pick the repository to import.',
+      'Deploy from a repository you already have. Connect the Git account that owns it and select the repository to import.',
     steps: [
-      { id: 'method', label: 'Choose a method' },
-      { id: 'source', label: 'Choose a repository' },
+      { id: 'method', label: 'Select a method' },
+      { id: 'source', label: 'Select a repository' },
       { id: 'configure', label: 'Create and deploy' }
     ],
     defaults: NPM_BUILD
@@ -80,10 +80,10 @@ export const APPLICATION_FLOWS = {
     icon: 'pi pi-file',
     title: 'Start from scratch',
     description:
-      'Create the Azion application layer on its own — no repository, no build. Connect your code to it whenever it exists.',
+      'Create the Azion application layer on its own, with no repository and no build. Connect your code to it whenever it exists.',
     // TWO steps, on purpose: from scratch IS the source, so there is nothing to pick.
     steps: [
-      { id: 'method', label: 'Choose a method' },
+      { id: 'method', label: 'Select a method' },
       { id: 'configure', label: 'Create and deploy' }
     ],
     defaults: NPM_BUILD
@@ -94,11 +94,11 @@ export const APPLICATION_FLOWS = {
     icon: 'pi pi-objects-column',
     title: 'Start from a template',
     description:
-      'Clone a framework starter — Next, Astro, Vue, Nuxt and more — already wired to build and deploy on Azion.',
+      'Clone a framework starter already wired to build and deploy on Azion. Next, Astro, Vue, Nuxt, and more.',
     // FOUR parts, and the fourth is conditional — see the note above this object.
     steps: [
-      { id: 'method', label: 'Choose a method' },
-      { id: 'source', label: 'Choose a template' },
+      { id: 'method', label: 'Select a method' },
+      { id: 'source', label: 'Select a template' },
       { id: 'repository', label: 'Connect a repository' },
       { id: 'configure', label: 'Create and deploy' }
     ],
@@ -121,8 +121,8 @@ export const APPLICATION_FLOWS = {
  * opposite.
  */
 export const PROVISIONAL_STEPS = [
-  { id: 'method', label: 'Choose a method' },
-  { id: 'source', label: 'Choose a source' },
+  { id: 'method', label: 'Select a method' },
+  { id: 'source', label: 'Select a source' },
   { id: 'configure', label: 'Create and deploy' }
 ]
 

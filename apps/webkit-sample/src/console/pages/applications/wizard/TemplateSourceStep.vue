@@ -150,7 +150,7 @@
 <template>
   <CardBox
     :padded="false"
-    title="Choose a template"
+    title="Select a template"
   >
     <template #content>
       <div class="border-b border-(--border-default) p-(--spacing-md)">

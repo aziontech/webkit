@@ -114,7 +114,7 @@
           icon="pi pi-github"
           size="medium"
           title="Connect a Git account"
-          description="Azion imports the repository you pick and deploys every push to it. Authorize once — the account stays available for the applications you create later."
+          description="Azion imports the repository you select and deploys every push to it. Authorize once. The account stays available for the applications you create later."
           class="rounded-(--shape-card) border border-dashed border-(--border-default) bg-(--bg-surface-raised)"
         >
           <template #actions>
