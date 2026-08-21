@@ -788,6 +788,12 @@
   --text-label-code-sm-line-height: 1;
   --text-label-code-sm-font-weight: 400;
   --text-label-code-sm-letter-spacing: 0;
+  --text-body-code-sm-text-wrap-style: pretty;
+  --text-body-code-sm-font-family: Roboto Mono;
+  --text-body-code-sm-font-size: 0.75rem;
+  --text-body-code-sm-line-height: 1.625;
+  --text-body-code-sm-font-weight: 400;
+  --text-body-code-sm-letter-spacing: 0;
   --text-label-code-md-font-family: Roboto Mono;
   --text-label-code-md-font-size: 0.875rem;
   --text-label-code-md-line-height: 1;
@@ -1282,6 +1288,15 @@
   line-height: var(--text-label-code-sm-line-height);
   font-weight: var(--text-label-code-sm-font-weight);
   letter-spacing: var(--text-label-code-sm-letter-spacing);
+}
+
+@utility text-body-code-sm {
+  text-wrap-style: var(--text-body-code-sm-text-wrap-style);
+  font-family: var(--text-body-code-sm-font-family);
+  font-size: var(--text-body-code-sm-font-size);
+  line-height: var(--text-body-code-sm-line-height);
+  font-weight: var(--text-body-code-sm-font-weight);
+  letter-spacing: var(--text-body-code-sm-letter-spacing);
 }
 
 @utility text-label-code-md {

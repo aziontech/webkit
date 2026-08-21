@@ -422,6 +422,7 @@
       "--layout-group-gap",
       "--layout-measure",
       "--layout-measure-control",
+      "--layout-measure-docs",
       "--layout-measure-focused",
       "--layout-measure-form",
       "--layout-measure-form-create",
@@ -593,21 +594,32 @@
       "--text-big-number-sm-font-size",
       "--text-big-number-sm-font-weight",
       "--text-big-number-sm-line-height",
+      "--text-body-code-sm-font-family",
+      "--text-body-code-sm-font-size",
+      "--text-body-code-sm-font-weight",
+      "--text-body-code-sm-letter-spacing",
+      "--text-body-code-sm-line-height",
+      "--text-body-code-sm-text-wrap-style",
       "--text-body-lg-font-size",
       "--text-body-lg-font-weight",
       "--text-body-lg-line-height",
+      "--text-body-lg-text-wrap-style",
       "--text-body-md-font-size",
       "--text-body-md-font-weight",
       "--text-body-md-line-height",
+      "--text-body-md-text-wrap-style",
       "--text-body-sm-font-size",
       "--text-body-sm-font-weight",
       "--text-body-sm-line-height",
+      "--text-body-sm-text-wrap-style",
       "--text-body-xs-font-size",
       "--text-body-xs-font-weight",
       "--text-body-xs-line-height",
+      "--text-body-xs-text-wrap-style",
       "--text-body-xxs-font-size",
       "--text-body-xxs-font-weight",
       "--text-body-xxs-line-height",
+      "--text-body-xxs-text-wrap-style",
       "--text-button-lg-font-family",
       "--text-button-lg-font-size",
       "--text-button-lg-font-weight",
@@ -624,24 +636,31 @@
       "--text-heading-2xl-font-size",
       "--text-heading-2xl-font-weight",
       "--text-heading-2xl-line-height",
+      "--text-heading-2xl-text-wrap-style",
       "--text-heading-lg-font-size",
       "--text-heading-lg-font-weight",
       "--text-heading-lg-line-height",
+      "--text-heading-lg-text-wrap-style",
       "--text-heading-md-font-size",
       "--text-heading-md-font-weight",
       "--text-heading-md-line-height",
+      "--text-heading-md-text-wrap-style",
       "--text-heading-sm-font-size",
       "--text-heading-sm-font-weight",
       "--text-heading-sm-line-height",
+      "--text-heading-sm-text-wrap-style",
       "--text-heading-xl-font-size",
       "--text-heading-xl-font-weight",
       "--text-heading-xl-line-height",
+      "--text-heading-xl-text-wrap-style",
       "--text-heading-xs-font-size",
       "--text-heading-xs-font-weight",
       "--text-heading-xs-line-height",
+      "--text-heading-xs-text-wrap-style",
       "--text-heading-xxs-font-size",
       "--text-heading-xxs-font-weight",
       "--text-heading-xxs-line-height",
+      "--text-heading-xxs-text-wrap-style",
       "--text-label-code-lg-font-family",
       "--text-label-code-lg-font-size",
       "--text-label-code-lg-font-weight",
@@ -741,6 +760,7 @@
       "text-big-number-lg",
       "text-big-number-md",
       "text-big-number-sm",
+      "text-body-code-sm",
       "text-body-lg",
       "text-body-md",
       "text-body-sm",
@@ -1190,6 +1210,7 @@
         "--layout-group-gap",
         "--layout-measure",
         "--layout-measure-control",
+        "--layout-measure-docs",
         "--layout-measure-focused",
         "--layout-measure-form",
         "--layout-measure-form-create",
@@ -1391,21 +1412,32 @@
         "--text-big-number-sm-font-size",
         "--text-big-number-sm-font-weight",
         "--text-big-number-sm-line-height",
+        "--text-body-code-sm-font-family",
+        "--text-body-code-sm-font-size",
+        "--text-body-code-sm-font-weight",
+        "--text-body-code-sm-letter-spacing",
+        "--text-body-code-sm-line-height",
+        "--text-body-code-sm-text-wrap-style",
         "--text-body-lg-font-size",
         "--text-body-lg-font-weight",
         "--text-body-lg-line-height",
+        "--text-body-lg-text-wrap-style",
         "--text-body-md-font-size",
         "--text-body-md-font-weight",
         "--text-body-md-line-height",
+        "--text-body-md-text-wrap-style",
         "--text-body-sm-font-size",
         "--text-body-sm-font-weight",
         "--text-body-sm-line-height",
+        "--text-body-sm-text-wrap-style",
         "--text-body-xs-font-size",
         "--text-body-xs-font-weight",
         "--text-body-xs-line-height",
+        "--text-body-xs-text-wrap-style",
         "--text-body-xxs-font-size",
         "--text-body-xxs-font-weight",
         "--text-body-xxs-line-height",
+        "--text-body-xxs-text-wrap-style",
         "--text-button-lg-font-family",
         "--text-button-lg-font-size",
         "--text-button-lg-font-weight",
@@ -1422,24 +1454,31 @@
         "--text-heading-2xl-font-size",
         "--text-heading-2xl-font-weight",
         "--text-heading-2xl-line-height",
+        "--text-heading-2xl-text-wrap-style",
         "--text-heading-lg-font-size",
         "--text-heading-lg-font-weight",
         "--text-heading-lg-line-height",
+        "--text-heading-lg-text-wrap-style",
         "--text-heading-md-font-size",
         "--text-heading-md-font-weight",
         "--text-heading-md-line-height",
+        "--text-heading-md-text-wrap-style",
         "--text-heading-sm-font-size",
         "--text-heading-sm-font-weight",
         "--text-heading-sm-line-height",
+        "--text-heading-sm-text-wrap-style",
         "--text-heading-xl-font-size",
         "--text-heading-xl-font-weight",
         "--text-heading-xl-line-height",
+        "--text-heading-xl-text-wrap-style",
         "--text-heading-xs-font-size",
         "--text-heading-xs-font-weight",
         "--text-heading-xs-line-height",
+        "--text-heading-xs-text-wrap-style",
         "--text-heading-xxs-font-size",
         "--text-heading-xxs-font-weight",
         "--text-heading-xxs-line-height",
+        "--text-heading-xxs-text-wrap-style",
         "--text-label-code-lg-font-family",
         "--text-label-code-lg-font-size",
         "--text-label-code-lg-font-weight",
@@ -2062,7 +2101,7 @@
           "notes": "Emitted after a successful clipboard write with the copied value."
         }
       ],
-      "purpose": "Icon-only control that copies a string to the clipboard and briefly confirms success. Composes `IconButton` for visuals and interaction tokens."
+      "purpose": "Icon-only control that copies a string to the clipboard and briefly confirms success. Composes `IconButton` for visuals and interaction tokens, and `Tooltip` for its name: an icon-only button is silent to a pointer user until hovered, so the glyph is always labelled on hover/focus. The tooltip text is the same string as the accessible name — `ariaLabel` while idle, `copiedLabel` for the two seconds after a write — so the confirmation is seen as well as announced. It is suppressed with `disabled`."
     },
     "segmented-button": {
       "import": "@aziontech/webkit/segmented-button",
@@ -3613,7 +3652,7 @@
           "notes": "Fires after the active tab code is copied to the clipboard."
         }
       ],
-      "purpose": "Read-only code viewer for docs, API examples, and configuration previews. Supports four Figma-documented layouts that share one monolithic shell: 1. **Language switcher** ([4567:33761](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761)) — tabbed snippets with an animated underline, optional filename bar, syntax highlighting, and copy. 2. **Show filename** ([4567:30198](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-30198)) — single snippet with a raised filename bar (language icon + name), no tabs. 3. **Diff** ([4567:29012](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-29012)) — per-line added/removed markers (`+`/`-`), semantic row backgrounds, and a 2 px leading bar; no tabs or filename bar. 4. **Highlighted line** ([4567:31473](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-31473)) — one active line with info background and leading bar; no tabs or filename bar. Regions render conditionally from tab data — the consumer does not pick a separate `kind`. Tab header appears when `tabs.length > 1`. Filename bar appears when the active tab sets `fileName`. Diff and highlight decorations come from `lineChanges` and `highlightedLine` on the active tab. **Syntax highlighting** is driven by the active tab's `language` and resolves to one of three tokenisers, all of which emit the same seven token types (`keyword`, `string`, `function`, `type`, `punctuation`, `identifier`, `comment`) so every language shares the one `--code-sintax-*` palette:"
+      "purpose": "Read-only code viewer for docs, API examples, and configuration previews. Supports four Figma-documented layouts that share one monolithic shell: 1. **Language switcher** ([4567:33761](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761)) — tabbed snippets with a sliding pill, optional filename bar, syntax highlighting, and copy. 2. **Show filename** ([4567:30198](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-30198)) — single snippet with a raised filename bar (language icon + name), no tabs. 3. **Diff** ([4567:29012](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-29012)) — per-line added/removed markers (`+`/`-`), semantic row backgrounds, and a 2 px leading bar; no tabs or filename bar. 4. **Highlighted line** ([4567:31473](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-31473)) — one active line with info background and leading bar; no tabs or filename bar. Regions render conditionally from tab data — the consumer does not pick a separate `kind`. Tab header appears when `tabs.length > 1`. Filename bar appears when the active tab sets `fileName`. Diff and highlight decorations come from `lineChanges` and `highlightedLine` on the active tab. **Syntax highlighting** is driven by the active tab's `language` and resolves to one of three tokenisers, all of which emit the same seven token types (`keyword`, `string`, `function`, `type`, `punctuation`, `identifier`, `comment`) so every language shares the one `--code-sintax-*` palette:"
     },
     "table": {
       "import": "@aziontech/webkit/table",
@@ -8595,6 +8634,31 @@
           "notes": "Root: the `Footer.Column` items; laid out as a 2-column grid that becomes 4 columns at `md`."
         },
         {
+          "name": "social",
+          "scope": "—",
+          "notes": "Root: the social icon buttons. Renders its own band; centered stacked, at the row's start from `md`."
+        },
+        {
+          "name": "status",
+          "scope": "—",
+          "notes": "Root: the system status indicator. Shares the status band with `language`."
+        },
+        {
+          "name": "language",
+          "scope": "—",
+          "notes": "Root: the language select. Rendered *before* `status` when stacked and *after* it from `md`, per the two Figma variants."
+        },
+        {
+          "name": "brand",
+          "scope": "—",
+          "notes": "Root: the brand lockup of the signature band."
+        },
+        {
+          "name": "tagline",
+          "scope": "—",
+          "notes": "Root: the one-line tagline; the footer wraps it in the `.text-heading-xl` measure."
+        },
+        {
           "name": "default",
           "scope": "—",
           "notes": "footer-column`: its `Footer.Link` items."
@@ -8605,7 +8669,7 @@
           "notes": "footer-link`: the link label."
         }
       ],
-      "purpose": "Page footer for marketing and product surfaces: the bottom-of-page counterpart to `GlobalHeader`. A canvas-colored shell with a centered content measure holding link columns and a social bar separated by a hairline top border. Matches the Webkit Footer component set (Figma node 5467:1638, `Type=Default` / `Type=Mobile`): the two presentations are one component switching by CSS at the `md` (768px) breakpoint. Content (links, labels, languages, status) always comes from the consumer; the component owns anatomy, tokens, and responsiveness.",
+      "purpose": "Page footer for marketing and product surfaces: the bottom-of-page counterpart to `GlobalHeader`. A canvas-colored shell whose centered content measure is framed on both sides and divided into bands by hairline rules. Matches the Webkit Footer component set (Figma node 5467:1638, `Type=Default` / `Type=Mobile`). **Four bands inside a framed measure, flanked by hatched page material.** Top to bottom: the link columns, a row carrying the social icons and the status/language pair, and the signature band (the brand beside its tagline, in its own `FrameBox` with corner marks). Two hatched `FrameBox` gutters flank the measure and a hatched band closes the footer below it — those three hold no content and stay out of the a11y tree. **The two Figma variants are one component switching by CSS**, and the switch is not one breakpoint: - The **column grid** folds from four columns to the 2×2 mobile grid below `md` (768px). - The **bands recombine at `md`**: stacked, their order is links → status/language → signature → social icons (the Mobile variant's order); from `md` the social icons and the status pair share one row above the signature. All four bands are cells of **one** grid, so each is a single element in a single place in the DOM at every width — the order is `order-*` when stacked and explicit row/column placement from `md`. A wrapper row that existed only on desktop would mean two copies of the markup, so two copies of the consumer's slot content. - The **gutters appear at `xl`** (1280px), not with the rest of the desktop presentation, because that is the first breakpoint past the measure itself (1192px). Gated any earlier they resolve to zero width and still paint their corner marks on the measure's own edges. - Within the status pair, **`language` and `status` swap order** between the two variants (the phone leads with the select, the row ends with it), which is why they are two slots the row reverses rather than one cluster the consumer orders. Content (links, labels, languages, status, brand, tagline) always comes from the consumer; the component owns anatomy, tokens, and responsiveness.",
       "useWhen": [
         "The page-level footer of a site or application, paired with `GlobalHeader`.",
         "Grouped navigation links at the bottom of the page plus a brand/social/status bar."
@@ -8616,13 +8680,17 @@
       ],
       "related": [
         "global-header` — the top-of-page chrome counterpart; same shell philosophy (regions composed by the consumer).",
-        "brand`, `icon-button`, `status-indicator`, `select` — the components consumers compose inside the social bar; the footer reimplements none of them."
+        "brand`, `icon-button`, `status-indicator`, `select` — the components consumers compose inside the bands; the footer reimplements none of them.",
+        "frame-box` — the footer's own frame: the hatched gutters, the closing band and the signature box are `FrameBox` instances (`borders` / `marks` / `hatch`)."
       ],
       "bestPractices": [
-        "Compose the social bar from existing DS components (`Brand`, `IconButton kind=\"transparent\"`, `StatusIndicator`, `Select`); never rebuild them inside the slots.",
+        "Compose every band from existing DS components (`Brand`, `IconButton kind=\"transparent\"`, `StatusIndicator`, `Select`); never rebuild them inside the slots.",
         "Keep column titles short (one or two words) — they are group labels, not headings for prose.",
         "Give every social `IconButton` an `ariaLabel`; the footer cannot name them for you.",
-        "Provide four columns for the canonical desktop presentation; the grid folds to two columns below `md` on its own."
+        "Provide four columns for the canonical desktop presentation; the grid folds to two columns below `md` on its own.",
+        "Keep each band close to the canonical content (up to ~7 social icons; one status indicator; one language select; one brand lockup; a one-line tagline). Every band grows past its `min-h-14` floor rather than clipping, so a longer status string or an extra icon wraps safely — but a much heavier cluster belongs in the columns, not in a band.",
+        "Give the `tagline` slot plain text, not a heading element: the footer already wraps it in the `.text-heading-xl` measure, and a real `h*` in a `contentinfo` landmark competes with the page's own outline.",
+        "Leave the gutters and the closing band alone — they are the footer's own page material. A page that needs more air below the footer adds a `SectionGap`, and one that needs none is not this design."
       ]
     },
     "footer-root": {
@@ -8650,6 +8718,31 @@
           "notes": "Root: the `Footer.Column` items; laid out as a 2-column grid that becomes 4 columns at `md`."
         },
         {
+          "name": "social",
+          "scope": "—",
+          "notes": "Root: the social icon buttons. Renders its own band; centered stacked, at the row's start from `md`."
+        },
+        {
+          "name": "status",
+          "scope": "—",
+          "notes": "Root: the system status indicator. Shares the status band with `language`."
+        },
+        {
+          "name": "language",
+          "scope": "—",
+          "notes": "Root: the language select. Rendered *before* `status` when stacked and *after* it from `md`, per the two Figma variants."
+        },
+        {
+          "name": "brand",
+          "scope": "—",
+          "notes": "Root: the brand lockup of the signature band."
+        },
+        {
+          "name": "tagline",
+          "scope": "—",
+          "notes": "Root: the one-line tagline; the footer wraps it in the `.text-heading-xl` measure."
+        },
+        {
           "name": "default",
           "scope": "—",
           "notes": "footer-column`: its `Footer.Link` items."
@@ -8660,7 +8753,7 @@
           "notes": "footer-link`: the link label."
         }
       ],
-      "purpose": "Page footer for marketing and product surfaces: the bottom-of-page counterpart to `GlobalHeader`. A canvas-colored shell with a centered content measure holding link columns and a social bar separated by a hairline top border. Matches the Webkit Footer component set (Figma node 5467:1638, `Type=Default` / `Type=Mobile`): the two presentations are one component switching by CSS at the `md` (768px) breakpoint. Content (links, labels, languages, status) always comes from the consumer; the component owns anatomy, tokens, and responsiveness.",
+      "purpose": "Page footer for marketing and product surfaces: the bottom-of-page counterpart to `GlobalHeader`. A canvas-colored shell whose centered content measure is framed on both sides and divided into bands by hairline rules. Matches the Webkit Footer component set (Figma node 5467:1638, `Type=Default` / `Type=Mobile`). **Four bands inside a framed measure, flanked by hatched page material.** Top to bottom: the link columns, a row carrying the social icons and the status/language pair, and the signature band (the brand beside its tagline, in its own `FrameBox` with corner marks). Two hatched `FrameBox` gutters flank the measure and a hatched band closes the footer below it — those three hold no content and stay out of the a11y tree. **The two Figma variants are one component switching by CSS**, and the switch is not one breakpoint: - The **column grid** folds from four columns to the 2×2 mobile grid below `md` (768px). - The **bands recombine at `md`**: stacked, their order is links → status/language → signature → social icons (the Mobile variant's order); from `md` the social icons and the status pair share one row above the signature. All four bands are cells of **one** grid, so each is a single element in a single place in the DOM at every width — the order is `order-*` when stacked and explicit row/column placement from `md`. A wrapper row that existed only on desktop would mean two copies of the markup, so two copies of the consumer's slot content. - The **gutters appear at `xl`** (1280px), not with the rest of the desktop presentation, because that is the first breakpoint past the measure itself (1192px). Gated any earlier they resolve to zero width and still paint their corner marks on the measure's own edges. - Within the status pair, **`language` and `status` swap order** between the two variants (the phone leads with the select, the row ends with it), which is why they are two slots the row reverses rather than one cluster the consumer orders. Content (links, labels, languages, status, brand, tagline) always comes from the consumer; the component owns anatomy, tokens, and responsiveness.",
       "useWhen": [
         "The page-level footer of a site or application, paired with `GlobalHeader`.",
         "Grouped navigation links at the bottom of the page plus a brand/social/status bar."
@@ -8671,13 +8764,17 @@
       ],
       "related": [
         "global-header` — the top-of-page chrome counterpart; same shell philosophy (regions composed by the consumer).",
-        "brand`, `icon-button`, `status-indicator`, `select` — the components consumers compose inside the social bar; the footer reimplements none of them."
+        "brand`, `icon-button`, `status-indicator`, `select` — the components consumers compose inside the bands; the footer reimplements none of them.",
+        "frame-box` — the footer's own frame: the hatched gutters, the closing band and the signature box are `FrameBox` instances (`borders` / `marks` / `hatch`)."
       ],
       "bestPractices": [
-        "Compose the social bar from existing DS components (`Brand`, `IconButton kind=\"transparent\"`, `StatusIndicator`, `Select`); never rebuild them inside the slots.",
+        "Compose every band from existing DS components (`Brand`, `IconButton kind=\"transparent\"`, `StatusIndicator`, `Select`); never rebuild them inside the slots.",
         "Keep column titles short (one or two words) — they are group labels, not headings for prose.",
         "Give every social `IconButton` an `ariaLabel`; the footer cannot name them for you.",
-        "Provide four columns for the canonical desktop presentation; the grid folds to two columns below `md` on its own."
+        "Provide four columns for the canonical desktop presentation; the grid folds to two columns below `md` on its own.",
+        "Keep each band close to the canonical content (up to ~7 social icons; one status indicator; one language select; one brand lockup; a one-line tagline). Every band grows past its `min-h-14` floor rather than clipping, so a longer status string or an extra icon wraps safely — but a much heavier cluster belongs in the columns, not in a band.",
+        "Give the `tagline` slot plain text, not a heading element: the footer already wraps it in the `.text-heading-xl` measure, and a real `h*` in a `contentinfo` landmark competes with the page's own outline.",
+        "Leave the gutters and the closing band alone — they are the footer's own page material. A page that needs more air below the footer adds a `SectionGap`, and one that needs none is not this design."
       ]
     },
     "footer-column": {
@@ -8863,6 +8960,13 @@
           "default": "'Global header'",
           "required": "false",
           "doc": "Accessible name for the header landmark."
+        },
+        {
+          "name": "kind",
+          "type": "'app' | 'content'",
+          "default": "'app'",
+          "required": "false",
+          "doc": "Where the bar sits: `app` spans the whole window above the navigation rail and insets its regions by the shell's own step; `content` sits inside the content zone beside the rail, full bleed, and insets them by the page boundary instead."
         }
       ],
       "slots": [
@@ -8882,7 +8986,7 @@
           "notes": "global-header-brand` exposes `default` for logo markup."
         }
       ],
-      "purpose": "Application chrome for the top menubar: a fixed-height horizontal bar with three composable regions (start, center, end) and a dedicated brand slot for Azion logo variants. Matches the Webkit GlobalHeader (Figma node 4310:19617) — a Shell Core part with symmetric horizontal padding, a hairline bottom border, the menu trigger and brand grouped at the start, a growing nav region in the center, and trailing actions (Create, Copilot, Feedback, help, avatar) at the end. Consumers reorder or omit regions; logo and actions are not baked in."
+      "purpose": "Application chrome for the top menubar: a fixed-height horizontal bar with three composable regions (start, center, end) and a dedicated brand slot for Azion logo variants. Matches the Webkit GlobalHeader (Figma node 4310:19617) — a Shell Core part with symmetric horizontal padding, a hairline bottom border, the menu trigger and brand grouped at the start, a growing nav region in the center, and trailing actions (Create, Copilot, Feedback, help, avatar) at the end. Consumers reorder or omit regions; logo and actions are not baked in. The bar has two placements, chosen with `kind`, and the only difference is which edge the inset is measured from. `app` is the window-wide chrome above the navigation rail, insetting its regions by the shell's own `--spacing-md`. `content` sits inside the content zone beside the rail, full bleed across it, insetting its regions by the page boundary (`--layout-boundary-inline`) so the first region opens on the same vertical as the page content beside it. A breadcrumb in an `app` bar cannot find that vertical — it measures its inset from the window, so the gap moves with the rail's width."
     },
     "sidebar": {
       "import": "@aziontech/webkit/sidebar",

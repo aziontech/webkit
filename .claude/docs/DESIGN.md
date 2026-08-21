@@ -60,16 +60,17 @@ Reference: `packages/webkit/src/components/webkit/actions/button/button.vue`.
 
 ### Available text styles
 
-| Class                                                              | Use for                                  |
-| ------------------------------------------------------------------ | ---------------------------------------- |
-| `text-big-number-lg` / `text-big-number-md` / `text-big-number-sm` | Large numeric displays                   |
-| `text-heading-2xl` … `text-heading-sm`                             | Headings                                 |
-| `text-body-lg` … `text-body-xxs`                                   | Body copy                                |
-| `text-label-sm` / `text-label-md` / `text-label-lg`                | Labels, compact UI text                  |
-| `text-label-code-sm` / `text-label-code-md` / `text-label-code-lg` | Monospace code labels (filename bar, code lines, line numbers) |
-| `text-overline-md` / `text-overline-sm` / `text-overline-xs`       | Overlines (uppercase, tracking baked in) |
-| `text-button-lg` / `text-button-md`                                | Button labels                            |
-| `text-link`                                                        | Inline `<a>` inside body/heading copy (inherits parent size; hover underline) |
+| Class                                                              | Use for                                                                                                                  |
+| ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------ |
+| `text-big-number-lg` / `text-big-number-md` / `text-big-number-sm` | Large numeric displays                                                                                                   |
+| `text-heading-2xl` … `text-heading-sm`                             | Headings                                                                                                                 |
+| `text-body-lg` … `text-body-xxs`                                   | Body copy                                                                                                                |
+| `text-label-sm` / `text-label-md` / `text-label-lg`                | Labels, compact UI text                                                                                                  |
+| `text-label-code-sm` / `text-label-code-md` / `text-label-code-lg` | Monospace code labels (filename bar, code lines, line numbers)                                                           |
+| `text-body-code-sm`                                                | Monospace prose — a mono paragraph that WRAPS (the `label-code-*` set is `leading-none`, made for one-row-per-line code) |
+| `text-overline-md` / `text-overline-sm` / `text-overline-xs`       | Overlines (uppercase, tracking baked in)                                                                                 |
+| `text-button-lg` / `text-button-md`                                | Button labels                                                                                                            |
+| `text-link`                                                        | Inline `<a>` inside body/heading copy (inherits parent size; hover underline)                                            |
 
 These classes are **mobile-first**: font sizes can change at `sm`, `md`, etc. Do not duplicate breakpoint logic in components.
 
@@ -99,7 +100,12 @@ For anchors **inside** body or heading copy, use the `text-link` typography clas
 
 ```html
 <p class="text-body-md">
-  Read the <a href="/docs" class="text-link">documentation</a>.
+  Read the
+  <a
+    href="/docs"
+    class="text-link"
+    >documentation</a
+  >.
 </p>
 ```
 
@@ -124,8 +130,8 @@ Do not use the primitive scale in `packages/theme/src/tokens/primitives/shape/sp
 Always reference the variable for **padding**, **gap**, and **margin** (including axis-specific utilities). Do not use generated `.p-spacing-*` / `.gap-spacing-*` classes in `components/webkit/`:
 
 ```html
-p-(--spacing-md) px-(--spacing-sm) py-(--spacing-xs) gap-(--spacing-sm)
-gap-x-(--spacing-md) m-(--spacing-lg) mt-(--spacing-xs) mb-(--spacing-md)
+p-(--spacing-md) px-(--spacing-sm) py-(--spacing-xs) gap-(--spacing-sm) gap-x-(--spacing-md)
+m-(--spacing-lg) mt-(--spacing-xs) mb-(--spacing-md)
 ```
 
 Breakpoint growth is baked into the CSS variables; you do not duplicate responsive spacing in components.
@@ -164,18 +170,18 @@ Example from Button — horizontal padding and inner gap:
 ### Layout containers (page sections)
 
 A page does **not** pick its own `max-w-*`. It carries one of the four **container types** the layout
-system ships (`semantic/layouts` in `@aziontech/theme`), and the type is chosen by what the page *is*:
+system ships (`semantic/layouts` in `@aziontech/theme`), and the type is chosen by what the page _is_:
 
-| Class | Type | Measure token | Today | Use for |
-|---|---|---|---|---|
-| `.layout-column` | Data | `--layout-measure` | 1620px | Lists, detail dashboards |
-| `.layout-column-focused` | Focused | `--layout-measure-focused` | 1024px | Home, single-task multi-column pages |
-| `.layout-column-form` | Form | `--layout-measure-form` | 1024px | Settings, in-page edit forms |
-| `.layout-form-create` | Create | `--layout-measure-form-create` | 1192px | Dedicated create pages (also retunes `--layout-measure-control`) |
+| Class                    | Type    | Measure token                  | Today  | Use for                                                          |
+| ------------------------ | ------- | ------------------------------ | ------ | ---------------------------------------------------------------- |
+| `.layout-column`         | Data    | `--layout-measure`             | 1620px | Lists, detail dashboards                                         |
+| `.layout-column-focused` | Focused | `--layout-measure-focused`     | 1024px | Home, single-task multi-column pages                             |
+| `.layout-column-form`    | Form    | `--layout-measure-form`        | 1024px | Settings, in-page edit forms                                     |
+| `.layout-form-create`    | Create  | `--layout-measure-form-create` | 1192px | Dedicated create pages (also retunes `--layout-measure-control`) |
 
 Full-bleed is the **absence** of all four, never a `w-full`. The unit that picks a class is the **band**,
 not the file: a tab showing a table is measured as data even when the tab beside it is a form. Within one
-band the class is the same everywhere it must align — the scrolling body *and* its sticky action bar — or
+band the class is the same everywhere it must align — the scrolling body _and_ its sticky action bar — or
 the footer's buttons drift right of the form they submit.
 
 **The boundary is not part of the measure.** `.layout-boundary` (all three insets) and
@@ -274,22 +280,22 @@ Use **theme semantic** CSS variables so light/dark and brand stay consistent.
 ### Pattern
 
 ```html
-bg-(--primary) text-(--primary-contrast) border-(--border-default)
-bg-(--bg-surface) text-(--text-default) text-(--text-muted) ring-(--ring-color)
+bg-(--primary) text-(--primary-contrast) border-(--border-default) bg-(--bg-surface)
+text-(--text-default) text-(--text-muted) ring-(--ring-color)
 ```
 
 ### Common semantic groups
 
-| Role          | Examples                                                                                                  |
-| ------------- | --------------------------------------------------------------------------------------------------------- |
-| Brand actions | `--primary`, `--primary-contrast`, `--secondary`, `--secondary-contrast`                                  |
-| Accent        | `--accent`, `--accent-mask`, `--accent-selected`, `--accent-contrast` — the blue that marks a path or state as *other*, distinct from the brand orange. Mode-invariant. |
-| Surfaces      | `--bg-canvas`, `--bg-surface`, `--bg-surface-raised`, `--bg-surface-overlay`, `--bg-hover`, `--bg-active`, `--bg-selected`, `--bg-disabled`, `--bg-mask` |
-| Placeholders  | `--bg-placeholder`, `--bg-placeholder-highlight` (see § Loading placeholders)                              |
-| Text          | `--text-default`, `--text-muted`, `--text-disabled`                                                       |
-| Borders       | `--border-default`, `--border-muted`, `--border-strong`, `--border-selected`                              |
+| Role          | Examples                                                                                                                                                                                                       |
+| ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Brand actions | `--primary`, `--primary-contrast`, `--secondary`, `--secondary-contrast`                                                                                                                                       |
+| Accent        | `--accent`, `--accent-mask`, `--accent-selected`, `--accent-contrast` — the blue that marks a path or state as _other_, distinct from the brand orange. Mode-invariant.                                        |
+| Surfaces      | `--bg-canvas`, `--bg-surface`, `--bg-surface-raised`, `--bg-surface-overlay`, `--bg-hover`, `--bg-active`, `--bg-selected`, `--bg-disabled`, `--bg-mask`                                                       |
+| Placeholders  | `--bg-placeholder`, `--bg-placeholder-highlight` (see § Loading placeholders)                                                                                                                                  |
+| Text          | `--text-default`, `--text-muted`, `--text-disabled`                                                                                                                                                            |
+| Borders       | `--border-default`, `--border-muted`, `--border-strong`, `--border-selected`                                                                                                                                   |
 | Feedback      | `--success`, `--success-border`, `--success-contrast`, `--warning`, `--warning-border`, `--warning-contrast`, `--danger`, `--danger-border`, `--danger-contrast`, `--info`, `--info-border`, `--info-contrast` |
-| Code syntax   | `--code-sintax-identifier`, `--code-sintax-line-number`, `--code-sintax-keyword`, `--code-sintax-string`, `--code-sintax-function`, `--code-sintax-type`, `--code-sintax-punctuation` |
+| Code syntax   | `--code-sintax-identifier`, `--code-sintax-line-number`, `--code-sintax-keyword`, `--code-sintax-string`, `--code-sintax-function`, `--code-sintax-type`, `--code-sintax-punctuation`                          |
 
 ### Loading placeholders
 
@@ -298,9 +304,9 @@ are opaque and tuned for one background, so a placeholder built from one is only
 picked against — `--bg-surface-overlay` (`#FAFAFA`) on a `--bg-surface` card (`#FFFFFF`) is a contrast ratio of
 **1.02**, effectively invisible. Use the placeholder pair instead:
 
-| Token                        | light                  | dark                   | Role                                          |
-| ---------------------------- | ---------------------- | ---------------------- | --------------------------------------------- |
-| `--bg-placeholder`           | `#00000014` (8% black) | `#FFFFFF1A` (10% white) | The fill that reserves the content's space.   |
+| Token                        | light                   | dark                    | Role                                               |
+| ---------------------------- | ----------------------- | ----------------------- | -------------------------------------------------- |
+| `--bg-placeholder`           | `#00000014` (8% black)  | `#FFFFFF1A` (10% white) | The fill that reserves the content's space.        |
 | `--bg-placeholder-highlight` | `#FFFFFF99` (60% white) | `#FFFFFF1A` (10% white) | The sweep that passes over the fill while loading. |
 
 Both are **translucent by design** — that is what makes one value per mode correct everywhere. The fill
@@ -308,16 +314,15 @@ composites over whatever sits behind it, so the same token holds its contrast on
 `--bg-surface-raised` and `--bg-surface-overlay` alike (ratio `1.19`–`1.32` across all eight combinations)
 instead of being tuned for a single card color.
 
-The highlight is a white alpha in **both** modes: it *lightens* the fill rather than replacing it. Keep the fill
+The highlight is a white alpha in **both** modes: it _lightens_ the fill rather than replacing it. Keep the fill
 as `background-color` and put the sweep in a `background-image` gradient whose other stops are `transparent`, so
 the animated and static states share the same base tone:
 
 ```html
 class="bg-(--bg-placeholder)
-       data-[animated]:motion-safe:bg-[linear-gradient(90deg,transparent_0%,transparent_35%,var(--bg-placeholder-highlight)_50%,transparent_65%,transparent_100%)]
-       data-[animated]:motion-safe:bg-[length:200%_100%]
-       data-[animated]:motion-safe:animate-(--animate-shimmer)
-       motion-reduce:animate-none"
+data-[animated]:motion-safe:bg-[linear-gradient(90deg,transparent_0%,transparent_35%,var(--bg-placeholder-highlight)_50%,transparent_65%,transparent_100%)]
+data-[animated]:motion-safe:bg-[length:200%_100%]
+data-[animated]:motion-safe:animate-(--animate-shimmer) motion-reduce:animate-none"
 ```
 
 Reference: `skeleton.vue`. The sweep pairs with `--animate-shimmer` (see § Motion primitives) and is gated behind
@@ -346,7 +351,7 @@ general component styling.
 
 ### The rim light
 
-Every enclosing part carries a *rim light*: a 135° three-stop ramp, opaque at the two ends of the
+Every enclosing part carries a _rim light_: a 135° three-stop ramp, opaque at the two ends of the
 top-left→bottom-right axis and transparent through the middle, so an edge reads as lit from the
 top-left and again from the bottom-right. `--illustration-rim` is the resting rim, ramping
 **`--border-default`** — the same hairline role every bordered surface uses, so an illustration's
@@ -367,10 +372,9 @@ list, so the layer count cannot drift between the two:
 
 ```html
 class="border-[length:var(--illustration-rim-width)] border-solid border-transparent
-       [background-image:var(--illustration-rim-layers)]
-       [background-origin:var(--illustration-rim-boxes)]
-       [background-clip:var(--illustration-rim-boxes)]
-       data-[active]:[background-image:var(--illustration-rim-layers-active)]"
+[background-image:var(--illustration-rim-layers)] [background-origin:var(--illustration-rim-boxes)]
+[background-clip:var(--illustration-rim-boxes)]
+data-[active]:[background-image:var(--illustration-rim-layers-active)]"
 ```
 
 The fill resolves `--illustration-fill`, which a part sets when its surface is not `--bg-surface`:
@@ -378,22 +382,22 @@ The fill resolves `--illustration-fill`, which a part sets when its surface is n
 
 ### Scale
 
-| Token                                | Value                                    | Use                                        |
-| ------------------------------------ | ---------------------------------------- | ------------------------------------------ |
-| `--illustration-rim`                 | 135° ramp of `--border-default`          | Resting rim on any enclosing part          |
-| `--illustration-rim-active`          | 135° ramp of `--primary`                 | Rim of the emphasized part                 |
-| `--illustration-rim-layers`          | fill · `--illustration-rim` · fill        | Drop into `background-image` (resting)     |
-| `--illustration-rim-layers-active`   | fill · `--illustration-rim-active` · fill | Drop into `background-image` (active)      |
-| `--illustration-rim-boxes`           | `padding-box, border-box, border-box`     | `background-origin` + `background-clip`     |
-| `--illustration-rim-width`           | `var(--border-2)` — 2px                  | Rim thickness, medium and large parts      |
-| `--illustration-rim-width-hairline`  | `var(--border-width-default)` — 0.8px    | Rim thickness, small parts                 |
-| `--illustration-shape-node`          | `var(--radius-sm)` — 2px                 | Corner radius, the 8px node                |
-| `--illustration-shape-small`         | `var(--radius-lg)` — 8px                 | Corner radius, 32px parts                  |
-| `--illustration-shape-medium`        | `var(--radius-xl)` — 12px                | Corner radius, 64px parts                  |
-| `--illustration-shape-large`         | `var(--radius-2xl)` — 16px               | Corner radius, 128px parts                 |
-| `--illustration-label-small`         | `0.5rem`                                 | The one label below the typography floor   |
-| `--illustration-canvas-width`        | `10.625rem` — 170px                      | The frame a registered asset composes on   |
-| `--illustration-canvas-height`       | `8rem` — 128px                           | The frame a registered asset composes on   |
+| Token                               | Value                                     | Use                                      |
+| ----------------------------------- | ----------------------------------------- | ---------------------------------------- |
+| `--illustration-rim`                | 135° ramp of `--border-default`           | Resting rim on any enclosing part        |
+| `--illustration-rim-active`         | 135° ramp of `--primary`                  | Rim of the emphasized part               |
+| `--illustration-rim-layers`         | fill · `--illustration-rim` · fill        | Drop into `background-image` (resting)   |
+| `--illustration-rim-layers-active`  | fill · `--illustration-rim-active` · fill | Drop into `background-image` (active)    |
+| `--illustration-rim-boxes`          | `padding-box, border-box, border-box`     | `background-origin` + `background-clip`  |
+| `--illustration-rim-width`          | `var(--border-2)` — 2px                   | Rim thickness, medium and large parts    |
+| `--illustration-rim-width-hairline` | `var(--border-width-default)` — 0.8px     | Rim thickness, small parts               |
+| `--illustration-shape-node`         | `var(--radius-sm)` — 2px                  | Corner radius, the 8px node              |
+| `--illustration-shape-small`        | `var(--radius-lg)` — 8px                  | Corner radius, 32px parts                |
+| `--illustration-shape-medium`       | `var(--radius-xl)` — 12px                 | Corner radius, 64px parts                |
+| `--illustration-shape-large`        | `var(--radius-2xl)` — 16px                | Corner radius, 128px parts               |
+| `--illustration-label-small`        | `0.5rem`                                  | The one label below the typography floor |
+| `--illustration-canvas-width`       | `10.625rem` — 170px                       | The frame a registered asset composes on |
+| `--illustration-canvas-height`      | `8rem` — 128px                            | The frame a registered asset composes on |
 
 A connector is an SVG stroke, not a border, so it takes no rim — it strokes `--border-default`
 (resting) or `--primary` (active), and its dashed variant animates with `--animate-flow-dash`
@@ -433,27 +437,27 @@ that sets the default.
 
 Use **only** the named utilities below; they ship with `motion-safe` / `motion-reduce` variants enabled by the theme plugin. The `--animate-*` presets are defined in `packages/theme/src/tokens/primitives/animations/animate.js` (each with a one-line `useWhen` note) and their `@keyframes` in the sibling `keyframes.js`; `build-tokens.mjs` emits both into `dist/v4/globals.css`.
 
-| Utility                              | Behavior                                     | Duration · Easing                                                             |
-| ------------------------------------ | -------------------------------------------- | ----------------------------------------------------------------------------- |
-| `animate-fade-in`                    | opacity 0 → 1                                | 220ms · `ease-in-out`                                                         |
-| `animate-fade-out`                   | opacity 1 → 0                                | 220ms · `ease-in-out`                                                         |
-| `animate-slide-down`                 | height 0 → auto                              | 220ms · `ease-in-out`                                                         |
-| `animate-popup-scale-in`             | scale 0.9 → 1 + fade in                      | `moderate-01` · `productive-entrance` (origin: `var(--popup-origin, center)`) |
-| `animate-popup-scale-out`            | scale 1 → 0.9 + fade out                     | `fast-02` · `productive-exit`                                                 |
-| `animate-slide-in-left`              | translateX -100% → 0                         | `moderate-02` · `productive-entrance`                                         |
-| `animate-slide-out-left`             | translateX 0 → -100%                         | `moderate-01` · `productive-exit`                                             |
-| `animate-slide-in-right`             | translateX 100% → 0                          | `moderate-02` · `productive-entrance`                                         |
-| `animate-slide-out-right`            | translateX 0 → 100%                          | `moderate-01` · `productive-exit`                                             |
-| `animate-shimmer`                    | `background-position` 200% → -200% sweep      | 1.6s · `linear` infinite                                                      |
-| `animate-blink`                      | opacity 1/0 cycle                            | 1s · `step-end` infinite                                                      |
-| `animate-highlight-fade`             | row-flash highlight, holds then fades out    | `slow-03` · `ease-in` forwards                                                |
-| `animate-progress-indeterminate`     | indeterminate bar, primary sweep             | `slow-04` · `productive-entrance` infinite                                    |
-| `animate-progress-indeterminate-short` | indeterminate bar, secondary short sweep   | `slow-04` · `expressive-entrance` (delay `slow-03`) infinite                  |
-| `animate-flow-dash`                  | marching dashes along an SVG stroke (`stroke-dashoffset` 24 → 0) | `slow-02` · `linear` infinite                            |
-| `animate-illustration-rim-sweep`     | an illustration's rim light travelling around its edges (ramp angle 135° → 315°) | `slow-04` · `linear` infinite (apply through `.illustration-rim-sweep`; ships paused) |
-| `animate-illustration-chat-scroll`   | a conversation advancing inside an illustrated window, one message per step (translateY 0 → -50% in four 12.5% steps, with holds) | 9s · `productive-entrance` infinite      |
-| `animate-illustration-chat-pop`      | a message landing at the bottom of that scroll (scale 0.9 → 1 + fade, 4% of the cycle) | 9s · `expressive-entrance` infinite          |
-| `animate-spin` · `animate-ping` · `animate-pulse` · `animate-bounce` | Tailwind's stock loading/attention loops, re-registered in `animate.js` | see `animate.js`                    |
+| Utility                                                              | Behavior                                                                                                                          | Duration · Easing                                                                     |
+| -------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| `animate-fade-in`                                                    | opacity 0 → 1                                                                                                                     | 220ms · `ease-in-out`                                                                 |
+| `animate-fade-out`                                                   | opacity 1 → 0                                                                                                                     | 220ms · `ease-in-out`                                                                 |
+| `animate-slide-down`                                                 | height 0 → auto                                                                                                                   | 220ms · `ease-in-out`                                                                 |
+| `animate-popup-scale-in`                                             | scale 0.9 → 1 + fade in                                                                                                           | `moderate-01` · `productive-entrance` (origin: `var(--popup-origin, center)`)         |
+| `animate-popup-scale-out`                                            | scale 1 → 0.9 + fade out                                                                                                          | `fast-02` · `productive-exit`                                                         |
+| `animate-slide-in-left`                                              | translateX -100% → 0                                                                                                              | `moderate-02` · `productive-entrance`                                                 |
+| `animate-slide-out-left`                                             | translateX 0 → -100%                                                                                                              | `moderate-01` · `productive-exit`                                                     |
+| `animate-slide-in-right`                                             | translateX 100% → 0                                                                                                               | `moderate-02` · `productive-entrance`                                                 |
+| `animate-slide-out-right`                                            | translateX 0 → 100%                                                                                                               | `moderate-01` · `productive-exit`                                                     |
+| `animate-shimmer`                                                    | `background-position` 200% → -200% sweep                                                                                          | 1.6s · `linear` infinite                                                              |
+| `animate-blink`                                                      | opacity 1/0 cycle                                                                                                                 | 1s · `step-end` infinite                                                              |
+| `animate-highlight-fade`                                             | row-flash highlight, holds then fades out                                                                                         | `slow-03` · `ease-in` forwards                                                        |
+| `animate-progress-indeterminate`                                     | indeterminate bar, primary sweep                                                                                                  | `slow-04` · `productive-entrance` infinite                                            |
+| `animate-progress-indeterminate-short`                               | indeterminate bar, secondary short sweep                                                                                          | `slow-04` · `expressive-entrance` (delay `slow-03`) infinite                          |
+| `animate-flow-dash`                                                  | marching dashes along an SVG stroke (`stroke-dashoffset` 24 → 0)                                                                  | `slow-02` · `linear` infinite                                                         |
+| `animate-illustration-rim-sweep`                                     | an illustration's rim light travelling around its edges (ramp angle 135° → 315°)                                                  | `slow-04` · `linear` infinite (apply through `.illustration-rim-sweep`; ships paused) |
+| `animate-illustration-chat-scroll`                                   | a conversation advancing inside an illustrated window, one message per step (translateY 0 → -50% in four 12.5% steps, with holds) | 9s · `productive-entrance` infinite                                                   |
+| `animate-illustration-chat-pop`                                      | a message landing at the bottom of that scroll (scale 0.9 → 1 + fade, 4% of the cycle)                                            | 9s · `expressive-entrance` infinite                                                   |
+| `animate-spin` · `animate-ping` · `animate-pulse` · `animate-bounce` | Tailwind's stock loading/attention loops, re-registered in `animate.js`                                                           | see `animate.js`                                                                      |
 
 `animate-shimmer` drives a gradient sweep and expects a `background-image` gradient plus `bg-[length:200%_100%]` — see § Loading placeholders for the canonical class string.
 
@@ -573,10 +577,10 @@ Use semantic surface tokens from `theme/background.js` — never swap the root `
 
 ```html
 relative before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit]
-before:bg-(--bg-hover) before:opacity-0 before:content-[''] after:pointer-events-none
-after:absolute after:inset-0 after:rounded-[inherit] after:bg-(--bg-active) after:opacity-0
-after:content-[''] hover:before:opacity-100 active:after:opacity-100 focus-visible:outline-none
-focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1
+before:bg-(--bg-hover) before:opacity-0 before:content-[''] after:pointer-events-none after:absolute
+after:inset-0 after:rounded-[inherit] after:bg-(--bg-active) after:opacity-0 after:content-['']
+hover:before:opacity-100 active:after:opacity-100 focus-visible:outline-none focus-visible:ring-2
+focus-visible:ring-(--ring-color) focus-visible:ring-offset-1
 focus-visible:ring-offset-(--bg-canvas) disabled:before:hidden disabled:after:hidden
 ```
 
