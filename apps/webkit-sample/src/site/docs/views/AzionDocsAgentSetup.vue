@@ -1,52 +1,43 @@
 <script setup>
-  // Routed docs example, the READING-PAGE shape: one `.mdx` file rendered end to end
-  // by the documentation layer, inside the same docs shell the Get Started landing
-  // uses. Between the two, the sample shows both ways a docs page gets built —
-  // hand-composed Vue when the page is a designed object (a hero, card bands), MDX
-  // when it is prose with components in it, which is most of a documentation site.
+  // Routed docs example: "Agent Setup", the page a reader lands on to connect their AI
+  // coding agent to Azion. It uses the same shell and the same rail as the MDX reading
+  // page — the difference is only in how its BODY is authored (see DocsAgentSetup).
   //
-  // EVERYTHING DOC-SHAPED COMES FROM THE LAYER, including the rail: `DocOnThisPage`
-  // is the outline component, not a local list of anchors. It is presentation only —
-  // it does not know which heading is active or how to reach one, because the PAGE
-  // owns the scroll container. So this view supplies both, from the layer's own
-  // pieces: `useScrollSpy` says which heading is in view, `scrollToHeading` takes the
-  // reader to one inside the column that actually scrolls, and `provideHeadingNav`
-  // hands that same function to every heading's own anchor. Rail and heading link
-  // therefore land identically, which is the whole reason the nav is provided rather
-  // than left to a native hash jump.
+  // The rail is the layer's own: `DocOnThisPage` is presentation only, because the PAGE
+  // owns the scroll container. So this view supplies the two things it cannot know —
+  // `useScrollSpy` for which heading is in view, `scrollToHeading` for how to reach one
+  // inside the column that actually scrolls — and hands the same reach function to every
+  // heading's own anchor with `provideHeadingNav`, so a rail row and a heading link land
+  // identically.
   //
-  // The page contributes three things and the shell places all of them: the page bar
-  // (breadcrumb + Copy page, pinned above the scroll), the body, and the rail. Its own
-  // masthead is title + deck only — see DocsMdxPage.
+  // The outline comes from `AGENT_SETUP_TOC`, the one list the page's own headings are
+  // built from, so the rail cannot name a section the page does not have.
   import Breadcrumb from '@aziontech/webkit/breadcrumb'
   import SplitButton from '@aziontech/webkit/split-button'
   import DocCta from '@aziontech/webkit-docs/doc-cta'
   import DocOnThisPage from '@aziontech/webkit-docs/doc-on-this-page'
   import { provideHeadingNav } from '@aziontech/webkit-docs/heading-nav'
   import { scrollToHeading } from '@aziontech/webkit-docs/heading-scroll'
-  import { collectHeadings, parseMdx } from '@aziontech/webkit-docs/mdx'
   import { useScrollSpy } from '@aziontech/webkit-docs/use-scroll-spy'
   import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 
+  import DocsAgentSetup from '../components/DocsAgentSetup.vue'
   import DocsLayout from '../components/DocsLayout.vue'
-  import DocsMdxPage from '../components/DocsMdxPage.vue'
-  import SOURCE from '../content/first-deploy.mdx?raw'
+  import { AGENT_SETUP_TOC, agentSetupMarkdown } from '../lib/docs-agent-setup.js'
   import { useDocsPageActions } from '../lib/docs-page-actions.js'
   import { docsRailGroups } from '../lib/docs-rail-groups.js'
 
-  // One parse feeds the rail; the body parses the same source for itself. Deriving the
-  // outline from the page's own markdown is what makes it impossible for the rail to
-  // name a section the page does not have, or to miss one an author just added.
-  const headings = computed(() => collectHeadings(parseMdx(SOURCE).nodes))
+  const HEADINGS = AGENT_SETUP_TOC
 
-  // The rail's other half: the repository and the community. They are not the
-  // page's outline, so the rail draws them flush under their own overlines rather
-  // than indented among the headings — and the edit link addresses this page's
-  // own markdown, which is why the groups are built from its source path.
-  const RAIL_GROUPS = docsRailGroups('src/content/docs/en/pages/start/first-deploy.mdx')
+  // The rail's other half — the repository and the community, the same on every page —
+  // with the edit link addressed to THIS page's markdown in the docs repository.
+  const RAIL_GROUPS = docsRailGroups('src/content/docs/en/pages/start/agent-setup.mdx')
 
   const body = ref(null)
-  const { activeId } = useScrollSpy(body, headings)
+  const { activeId } = useScrollSpy(
+    body,
+    computed(() => HEADINGS)
+  )
 
   // The shell's `<main>` is the scroll container — the docs top bar and both rails are
   // fixed around it — so it, not the window, is what gets scrolled.
@@ -56,15 +47,11 @@
 
   provideHeadingNav(goToHeading)
 
-  // THE RAIL STARTS AT THE PAGE'S TITLE, not at the top of its column. The outline is a
-  // peer of the prose, so opening it level with the page bar puts "On this page" beside
-  // the breadcrumb and reads as part of the trail; opening it level with the h1 puts it
-  // beside the thing it is an outline OF.
-  //
-  // Measured rather than typed, because the distance is the sum of two things this view
-  // does not own — the shell's page bar and the masthead's opening step — and it changes
-  // with the breakpoint. The spacer sits ABOVE the sticky wrapper so a reader who scrolls
-  // a long rail still gets it pinned to the top of the column.
+  // THE RAIL STARTS AT THE PAGE'S TITLE, not at the top of its column — the outline is a
+  // peer of the prose, so it opens level with the h1 it is an outline OF rather than level
+  // with the page bar, where it would read as part of the breadcrumb. Measured rather than
+  // typed: the distance is the page bar plus the masthead's opening step, neither of which
+  // this view owns, and both change with the breakpoint.
   const rail = ref(null)
   const railOffset = ref(0)
 
@@ -101,33 +88,32 @@
   onBeforeUnmount(() => observer?.disconnect())
 
   // Reading order through the Start section, matching the rail's own order.
-  const PREVIOUS = { title: 'Agent Setup', href: '/site/docs/agent-setup' }
-  const NEXT = { title: 'Go live', href: '/site/docs' }
+  const PREVIOUS = { title: 'Getting Started', href: '/site/docs' }
+  const NEXT = { title: 'First deploy', href: '/site/docs/first-deploy' }
 
   const CRUMBS = [
     { label: 'Documentation', href: '/site/docs' },
     { label: 'Start', href: '/site/docs' },
-    { label: 'First deploy', current: true }
+    { label: 'Agent Setup', current: true }
   ]
 
-  // The markdown IS the page here, so every action operates on the exact source the
-  // body was rendered from — no second copy of the text to keep in sync.
+  // The page is composed rather than written, so its markdown is BUILT from the same data
+  // the body renders (see docs-agent-setup.js) — not typed out a second time to rot.
   const {
     actions: PAGE_ACTIONS,
     label: copyLabel,
     icon: copyIcon,
     copyPage,
     onPageAction
-  } = useDocsPageActions(() => SOURCE)
+  } = useDocsPageActions(agentSetupMarkdown)
 </script>
 
 <template>
   <DocsLayout>
     <template #page-bar>
-      <!-- The trail wraps rather than truncates, and a two-line trail would double a
-           bar pinned for the whole scroll. Full trail from `md` up, the current page
-           alone below it — where the only ancestor is "Documentation", which the
-           shell's own brand already says. -->
+      <!-- Full trail from `md` up, the current page alone below it: the trail wraps
+           rather than truncates, and a two-line trail would double a bar that is pinned
+           for the whole scroll. -->
       <Breadcrumb
         :items="CRUMBS"
         class="hidden min-w-0 flex-1 md:inline-flex"
@@ -149,8 +135,7 @@
     </template>
 
     <div ref="body">
-      <DocsMdxPage
-        :source="SOURCE"
+      <DocsAgentSetup
         :previous="PREVIOUS"
         :next="NEXT"
       />
@@ -169,14 +154,14 @@
         class="flex flex-1 flex-col gap-(--spacing-xl)"
       >
         <DocOnThisPage
-          :items="headings"
+          :items="HEADINGS"
           :active-id="activeId"
           :groups="RAIL_GROUPS"
           @select="goToHeading"
         />
         <DocCta
           class="mt-auto"
-          label="Deploy your first application for free and scale as your traffic grows. No credit card required."
+          label="Connect your agent and deploy your first application for free. No credit card required."
           primary-href="https://console.azion.com/signup"
           secondary-label="See our plans"
           secondary-href="https://www.azion.com/en/pricing/"

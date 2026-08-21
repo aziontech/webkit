@@ -26,7 +26,7 @@ export const docsNavSections = [
     label: 'Start',
     items: [
       { id: 'get-started', label: 'Getting Started', href: '/site/docs' },
-      { id: 'agent-setup', label: 'Agent Setup' },
+      { id: 'agent-setup', label: 'Agent Setup', href: '/site/docs/agent-setup' },
       { id: 'get-started-first-deploy', label: 'First deploy', href: '/site/docs/first-deploy' },
       {
         id: 'migrate',

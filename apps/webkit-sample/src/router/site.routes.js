@@ -6,6 +6,7 @@
 // its own navigation): see ./hub.routes.js.
 
 import AzionDocs from '@site/docs/views/AzionDocs.vue'
+import AzionDocsAgentSetup from '@site/docs/views/AzionDocsAgentSetup.vue'
 import AzionDocsFirstDeploy from '@site/docs/views/AzionDocsFirstDeploy.vue'
 import LandingAzion from '@site/views/LandingAzion.vue'
 import LandingFunctions from '@site/views/LandingFunctions.vue'
@@ -20,6 +21,14 @@ export const siteRoutes = [
   // platform's. The Products mega-menu's Functions entry points here.
   { path: '/site/functions', name: 'site-functions', component: LandingFunctions },
   { path: '/site/docs', name: 'site-docs', component: AzionDocs },
+  // A docs reading page COMPOSED in Vue: prose, but with a filtering tool picker and
+  // cards carrying other vendors' real marks — neither of which MDX can express. Every
+  // block in it still comes from @aziontech/webkit-docs.
+  {
+    path: '/site/docs/agent-setup',
+    name: 'site-docs-agent-setup',
+    component: AzionDocsAgentSetup
+  },
   // A docs READING page, written as `.mdx` and rendered by @aziontech/webkit-docs —
   // the other half of the docs example. /site/docs is the hand-composed landing.
   {

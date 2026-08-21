@@ -86,13 +86,12 @@
   // docs pages and reloads; `Sidebar` owns the gesture that drives it.
   const { collapsed, railWidth } = useDocsSidebar()
 
-  // Docs top-bar links (mirrors the Cloudflare docs bar), kept as anchors so the
-  // prototype is self-contained.
+  // Docs top-bar links — the three pillars the real Azion documentation header
+  // carries, kept as anchors so the prototype is self-contained.
   const topLinks = [
-    { label: 'Directory', href: '#directory' },
-    { label: 'API', href: '#api' },
-    { label: 'SDKs', href: '#sdks' },
-    { label: 'Changelog', href: '#changelog' }
+    { label: 'Reference', href: '#reference' },
+    { label: 'Guides', href: '#guides' },
+    { label: 'DevTools', href: '#devtools' }
   ]
 
   // The docs navigation itself lives in `lib/docs-nav.js` — the real Azion
@@ -508,10 +507,18 @@
       </main>
 
       <!-- "On this page": the page's own heading list, so it is the page — not the
-           shell — that decides what is in it. Absent slot ⇒ no rail at all. -->
+           shell — that decides what is in it. Absent slot ⇒ no rail at all.
+
+           A COLUMN, not a block, so its content can address the FOOT of the rail and
+           not just the end of the outline. The page's rail is short — ten headings and
+           two link groups — so anything after it would otherwise float halfway up a
+           mostly empty column. A flex column lets the page's own wrapper take the full
+           height (`flex-1`) and push its last block down with `mt-auto`. When the
+           outline is long enough to overflow, the column scrolls as before and that
+           block simply lands at the end of the scroll. -->
       <div
         v-if="$slots.toc"
-        class="hidden w-(--container-3xs) shrink-0 overflow-y-auto border-l border-(--border-default) px-(--spacing-md) py-(--spacing-lg) xl:block"
+        class="hidden w-(--container-3xs) shrink-0 flex-col overflow-y-auto border-l border-(--border-default) px-(--spacing-md) py-(--spacing-lg) xl:flex"
       >
         <slot name="toc" />
       </div>

@@ -55,15 +55,29 @@
        content: it opens on the SECTION step the prose below it already uses between
        h2s, so the page's first landmark is separated from the chrome by as much air
        as its sections are from each other. The boundary step — sized for a console
-       page whose heading sits directly under a tab bar — reads cramped here. -->
-  <article class="layout-column-docs layout-boundary-inline pt-(--spacing-xxl) pb-(--spacing-xxl)">
+       page whose heading sits directly under a tab bar — reads cramped here.
+
+       The INLINE step is retuned DOWN for the same reason, by overriding the token
+       the two rules above both read. Below `2xl` the column never reaches its own
+       measure: the rail and the "on this page" rail claim 556px between them, so the
+       region left for the body is 724px and the 24px-a-side console boundary spends
+       48px of it on air — the prose lands at 676px, 76px short of the 752px measure.
+       Retuning the token (not the padding) is what keeps that honest, because the
+       measure rule caps at `measure + 2 * boundary`: the cap follows the inset down,
+       so the column still resolves to exactly 752px wherever there is room for it and
+       only gains where it was falling short. `md` is also flat at 16px where `lg` steps
+       16→24 at `sm`, so below `sm` the two agree and the single-column phone layout
+       does not move at all. -->
+  <article
+    class="layout-column-docs layout-boundary-inline [--layout-boundary-inline:var(--spacing-md)] pt-(--spacing-xxl) pb-(--spacing-xxl)"
+  >
     <DocPageHeader
       :title="title"
       :description="description"
       :last-updated="lastUpdated"
       :copyable="false"
     />
-    <DocProse class="pt-(--spacing-xs)">
+    <DocProse class="pt-(--spacing-xxl) sm:pt-(--spacing-xl)">
       <DocMarkdown :source="source" />
     </DocProse>
     <!-- Where to go when the page is finished. Reading order, not the tree: the rail

@@ -1,51 +1,46 @@
 <script setup>
-  // The Azion documentation HOME — the content of www.azion.com/en/documentation/,
-  // composed on this app's own page logic so the docs home and the Hub home read as
-  // one system:
+  // The Azion documentation HOME — the content of www.azion.com/en/documentation/.
   //
-  //   • BannerContainer + PageHeader — the fluid hero band, its border-b becoming the
-  //     top edge of the column below it.
-  //   • SectionContainer — the bordered content column (border-x owns the outer edges).
-  //   • SectionModule — one band per section: a header row divided from its body by a
-  //     hairline, and divided from the band above by its own border-t.
-  //   • DocCardGroup + DocCard — THE CARD BANDS COME FROM THE DOCS LAYER, not from this
-  //     page: they are the components an `.mdx` page gets from a `<CardGroup>`, so the
-  //     home's bands and a tutorial's cards are one implementation and cannot drift —
-  //     one frame with its registration marks around the set, hairline rules between
-  //     cells (the grid's 1px gaps over a rule-coloured backdrop), and inside each cell
-  //     the glyph → title → copy stack on the layer's own 24/20 inset.
+  // IT IS A READING PAGE WITH A BANNER ON TOP, and that is the whole design. The home
+  // used to be built the Hub way — a framed column (`SectionContainer`'s border-x) of
+  // banded modules (`SectionModule`'s header rules) — which meant the front door of the
+  // documentation drew a frame no page behind it draws, so the chrome changed under a
+  // reader the moment they followed their first link. Now the body is the same three
+  // lines every other docs page opens with (`layout-column-docs` + the inline boundary
+  // + `DocProse`), and the BANNER is the only thing the home does differently.
   //
-  // That inset is why each band is a PADDED, FRAMED box rather than an edge-to-edge
-  // divider grid: a frameless cell inset 24px puts its text off the 48px left edge the
-  // band's own header and its closing link row sit on. Framed and inset by the module's
-  // padding, the frame takes that edge and the 24px reads as the box's own padding —
-  // exactly how the same band reads on a reading page. Only the grid is padded, not the
-  // module's whole body, so the closing link row stays full-bleed.
+  // So the page's sections are prose sections, not bands: an anchored `DocHeading` h2
+  // opens one, a lead paragraph says what it is for, and `DocCardGroup` frames its set
+  // of cards. Those cards are the docs layer's own (`DocCard`) — the same components an
+  // `.mdx` page gets from a `<CardGroup>` — so the home's grids and a tutorial's cannot
+  // drift, and each card's closing call-to-action is its `link` prop rather than markup
+  // typed here: the layer decides the glyph (a chevron inside the docs, the diagonal
+  // arrow when the destination leaves them) and animates it.
   //
-  // The page's six bands are the live docs home's own sections, in its order: start by
+  // The onward links that used to close each band as a ruled row are plain sentences
+  // now, for the same reason: a muted row under a hairline is a band's footer, and there
+  // are no bands. The trailing "next page" row is `DocPagination`, the same pair that
+  // closes every reading page — with only its `next` half filled, since the home has no
+  // previous.
+  //
+  // The page bar (breadcrumb + Copy page) is not here either: it goes to the shell's
+  // `page-bar` slot from the VIEW, exactly as the two reading pages hand theirs over —
+  // see AzionDocs.vue. Its 48px are still folded into the hero's `--banner-offset`, so
+  // the banner is exactly one screen.
+  //
+  // The page's six sections are the live docs home's own, in its order: start by
   // objective, start by interface, ready-made templates, stop attacks, assess risk and
-  // prove compliance, follow along. The trailing "next page" row is `DocPagination`, the
-  // same pair that closes every reading page — with only its `next` half filled, since
-  // the home has no previous.
-  import Breadcrumb from '@aziontech/webkit/breadcrumb'
+  // prove compliance, follow along.
   import Button from '@aziontech/webkit/button'
   import CodeBlock from '@aziontech/webkit/code-block'
-  import SplitButton from '@aziontech/webkit/split-button'
   import DocCard from '@aziontech/webkit-docs/doc-card'
   import DocCardGroup from '@aziontech/webkit-docs/doc-card-group'
+  import DocHeading from '@aziontech/webkit-docs/doc-heading'
   import DocPagination from '@aziontech/webkit-docs/doc-pagination'
+  import DocProse from '@aziontech/webkit-docs/doc-prose'
   import ContrastBanner from '@shared/ui/ContrastBanner.vue'
   import BannerContainer from '@shared/ui/layout/BannerContainer.vue'
   import PageHeader from '@shared/ui/layout/PageHeader.vue'
-  import SectionContainer from '@shared/ui/layout/SectionContainer.vue'
-  import SectionModule from '@shared/ui/layout/SectionModule.vue'
-
-  import { useDocsPageActions } from '../lib/docs-page-actions.js'
-
-  const crumbs = [
-    { label: 'Documentation', href: '#documentation' },
-    { label: 'Home', href: '#overview', current: true }
-  ]
 
   // Hero: the two ways to hand this platform to a tool. `AI Prompt` is pasted into an
   // agent, `CLI` is pasted into a terminal — same job, two audiences, so they are two
@@ -114,8 +109,9 @@ azion deploy`
 
   // ── Start by interface ───────────────────────────────────────────────────────────
   // The three surfaces the platform is driven through. Each card closes on its own CTA
-  // line — a `span`, not an `<a>`: the whole card is already the link, and a link inside
-  // a link is invalid HTML that browsers un-nest at parse time.
+  // line, passed as `DocCard`'s `link` prop — the layer renders the row, picks the glyph
+  // (chevron here; these three stay inside the docs) and animates it, so the page never
+  // hand-composes a link inside a card that is already a link.
   //
   // `span` fills the ragged row: three cards over the `sm` two-column grid leave one
   // hole, and an empty track in a `gap-px` grid shows the rule colour across its whole
@@ -267,6 +263,12 @@ azion deploy`
   // tab — leaving the docs is the point of the card, so it should not cost the reader
   // their place in them. Five over three columns leaves two tracks empty in the second
   // row, so the last card spans them.
+  //
+  // The three off-site cards carry a `link` line and the two docs pages do not: a card
+  // that leaves the documentation should say so before it is clicked, and its `link`
+  // glyph is the diagonal arrow that means exactly that. The two internal cards need no
+  // line — the whole card is already the link, and a chevron saying "this goes
+  // somewhere" adds nothing on a grid where every cell does.
   const followAlong = [
     {
       title: 'Release notes',
@@ -279,21 +281,24 @@ azion deploy`
       description: 'Engineering posts and how customers run on Azion.',
       icon: 'pi pi-book',
       href: 'https://www.azion.com/en/blog/',
-      target: '_blank'
+      target: '_blank',
+      cta: 'Read the blog'
     },
     {
       title: 'YouTube',
       description: 'Walkthroughs, demos, and recorded sessions.',
       icon: 'pi pi-youtube',
       href: 'https://www.youtube.com/aziontech',
-      target: '_blank'
+      target: '_blank',
+      cta: 'Watch on YouTube'
     },
     {
       title: 'Discord',
       description: 'Ask questions and compare notes with other builders.',
       icon: 'pi pi-discord',
       href: 'https://discord.com/invite/Yp9N7RMVZy',
-      target: '_blank'
+      target: '_blank',
+      cta: 'Join the Discord'
     },
     {
       title: 'Style Guide',
@@ -304,22 +309,11 @@ azion deploy`
     }
   ]
 
-  // The row that closes a module: a hairline row under the grid with a muted lead-in and
-  // the onward pages beside it. One class and one data shape for every band, so a band
-  // cannot drift from its neighbours — only the lead-in changes, because "also useful",
-  // "reference" and "access governance" are three different offers and flattening them
-  // to one word would lose that.
-  //
-  // The links are anchors carrying the theme's `text-link` utility, not the Link
-  // component: inline in a sentence they must inherit the row's own type (`text-link`
-  // sets font-size/line-height to `inherit`, plus the link color, hover underline and
-  // focus ring), where a Link would impose its own size. They are separated by SPACE,
-  // not by a dot bullet — one gap token does the separating, and nothing decorative has
-  // to be kept in sync with the list.
-  const LINKS_BAND_CLASS =
-    'flex flex-wrap items-center gap-x-(--spacing-md) gap-y-(--spacing-xxs) ' +
-    'border-t border-(--border-default) p-(--spacing-xl) text-body-sm text-(--text-muted)'
-
+  // The onward pages that close a section, as a sentence rather than as a ruled row —
+  // one data shape for every section, so no two can drift. Only the lead-in changes,
+  // because "also useful", "reference" and "access governance" are three different
+  // offers and flattening them to one word would lose that. The links are plain
+  // anchors: `DocProse` owns how a link in a paragraph looks, so nothing is typed here.
   const linkBands = {
     objectives: {
       lead: 'Also useful:',
@@ -354,84 +348,21 @@ azion deploy`
       ]
     }
   }
-
-  // ── Page bar: "Copy page" + the LLM-context menu ────────────────────────────────
-  // One SplitButton, because the control IS a split: the primary segment does the one
-  // thing a reader wants most (the page as Markdown, on the clipboard) and the attached
-  // menu carries the variants — the link, the raw markdown, and "ask <assistant> about
-  // this page". SplitButton owns the joined segments, the overlay, and the keyboard
-  // model, so the page only supplies the model and handles the choice.
-  const PAGE_MARKDOWN =
-    `# Welcome to Azion Docs\n\n` +
-    `We make every application fast and reliable. Deploy on a global network, with ` +
-    `enterprise-grade security and no cold starts.\n\n` +
-    `## Start by objective\n\n## Start by interface\n\n` +
-    `### Your AI agent, fluent in Azion\n\n## Ready-made templates\n\n` +
-    `## Stop attacks\n\n## Assess risk and prove compliance\n\n## Follow along\n`
-
-  // The page bar's control, shared with every other docs page — one definition of the
-  // vendor list, the clipboard confirmation and the markdown view (docs-page-actions.js).
-  const {
-    actions: pageActions,
-    label: copyLabel,
-    icon: copyIcon,
-    copyPage,
-    onPageAction
-  } = useDocsPageActions(() => PAGE_MARKDOWN)
 </script>
 
 <template>
   <div>
-    <!-- ══ Page bar ════════════════════════════════════════════════════════════
-         Where the reader is (breadcrumb) and what they can do with this page (copy it,
-         or hand it to an assistant), pinned for the whole scroll — the same job the
-         console's tab bar does at the top of its content zone. Here it is `sticky`
-         rather than a non-scrolling shell row, because both halves belong to the PAGE,
-         not to the docs shell: the shell has no idea which crumbs this page has or what
-         its markdown says.
-
-         It is the first thing in the scroll region, so it is pinned from the start; its
-         48px are folded into the hero's `--banner-offset` below so the hero underneath
-         is still exactly one screen. -->
-    <div
-      class="sticky top-0 z-20 flex h-12 items-center gap-(--spacing-sm) border-b border-(--border-default) bg-(--bg-canvas) px-(--spacing-md) md:gap-(--spacing-md) md:px-(--spacing-xl)"
-    >
-      <!-- The trail wraps rather than truncates (BreadcrumbList is `flex-wrap`), and a
-           two-line trail would double a bar that is pinned for the whole scroll. So the
-           bar carries the full trail from `md` up and the current page alone below it —
-           where the only ancestor is "Documentation", which the shell's own brand and
-           the sheet already say. -->
-      <Breadcrumb
-        :items="crumbs"
-        class="hidden min-w-0 flex-1 md:inline-flex"
-      />
-      <Breadcrumb
-        :items="crumbs.slice(-1)"
-        class="min-w-0 flex-1 md:hidden"
-      />
-      <SplitButton
-        :label="copyLabel"
-        :icon="copyIcon"
-        :model="pageActions"
-        kind="outlined"
-        size="small"
-        class="shrink-0"
-        @click="copyPage"
-        @item-click="onPageAction"
-      />
-    </div>
-
     <!-- ══ Hero band ═══════════════════════════════════════════════════════════
-         Full-bleed and exactly one screen tall: the band spans the whole content
-         region while its copy keeps the 7xl column (1024px at a 1440 window, once the
-         rail's 300px and the band's own p-xl are off), and `hero` centers that copy in
-         `100dvh - --banner-offset` — the offset reading the docs top bar's and the page
-         bar's own heights, so "one screen" means the region actually left for the hero.
-         The reader gets the hero alone on load; everything below it goes back inside
-         the container.
+         THE BANNER IS THE ONLY THING THIS PAGE DOES DIFFERENTLY. Everything under
+         it is the reading-page shape (see the article below), so the home and a
+         tutorial are one pattern with one exception: the home opens on a
+         full-bleed band, exactly one screen tall, because it is the front door.
 
-         Its border-b is the top edge of the framed column below, so the page frame
-         still reads as one continuous border. -->
+         The band spans the whole content region while its copy keeps the 7xl
+         column (1024px at a 1440 window, once the rail's 300px and the band's own
+         p-xl are off), and `hero` centers that copy in `100dvh - --banner-offset`
+         — the offset reading the docs top bar's and the shell page bar's own
+         heights, so "one screen" means the region actually left for the hero. -->
     <BannerContainer
       hero
       max-width="7xl"
@@ -535,274 +466,267 @@ azion deploy`
       </div>
     </BannerContainer>
 
-    <!-- ══ Bordered content column ═════════════════════════════════════════════
-         From the banner's bottom edge down, everything is in the container: one
-         centered column, so the full-bleed hero is the only full-width band on the
-         page. 4xl (1024px) rather than the hub's 6xl (1388px) because the rail eats
-         ~300px of the window — a 6xl column only clears the content region above a
-         ~1690px window, so it read as full width on a laptop and the container was
-         invisible. border-x owns the outer edges; each module owns its own padding
-         and its own top rule, so no line is ever drawn twice. -->
-    <SectionContainer max-width="4xl">
-      <!-- ── Start by objective ───────────────────────────────────────────── -->
-      <SectionModule
-        id="start-by-objective"
-        :divided="false"
-        :padded="false"
-        title="Start by objective"
-        description="Build something, make it faster, lock it down, or run AI on it."
-      >
-        <div class="p-(--spacing-xl)">
-          <DocCardGroup :cols="2">
-            <DocCard
-              v-for="card in objectives"
-              :key="card.title"
-              :title="card.title"
-              :icon="card.icon"
-              :href="card.href"
-            >
-              {{ card.description }}
-            </DocCard>
-          </DocCardGroup>
-        </div>
+    <!-- ══ The page body — THE READING-PAGE SHAPE ══════════════════════════════
+         The same three lines every other documentation page opens with: the docs
+         MEASURE (`layout-column-docs`, the reading column capped by line length),
+         the page's inline boundary, and the section step above the first block. So
+         the home's sections sit on the same column, the same left edge and the same
+         rhythm as a tutorial's — one pattern, not a landing-page pattern beside a
+         reading-page one.
 
-        <!-- Closing link row: same class, same shape, in every module (LINKS_BAND_CLASS). -->
-        <div :class="LINKS_BAND_CLASS">
-          {{ linkBands.objectives.lead }}
-          <a
-            v-for="link in linkBands.objectives.links"
-            :key="link.label"
-            :href="link.href"
-            class="text-link"
-            >{{ link.label }}</a
-          >
-        </div>
-      </SectionModule>
-
-      <!-- ── Start by interface ───────────────────────────────────────────────
-           Two halves of one answer: hand the platform to an agent, or drive it
-           yourself. The agent half comes FIRST and as prose rather than as a fourth
-           card, because it is not a fourth interface — it is the thing that operates
-           the other three. -->
-      <SectionModule
-        id="start-by-interface"
-        :padded="false"
-        title="Start by interface"
-        description="Hand it to your agent, or drive it yourself. Same platform either way."
-      >
-        <!-- The agent block. Its own hairline floor divides it from the card band
-             below, so the two halves read as two rows of one module rather than as
-             one run-on body. -->
-        <div
-          class="flex flex-col gap-(--spacing-md) border-b border-(--border-default) p-(--spacing-xl)"
+         WHAT WENT AWAY WITH IT: the framed column (`SectionContainer`'s border-x)
+         and the banded modules (`SectionModule`'s header rules). Those vertical
+         rules were the page's own frame, and no other documentation page draws one
+         — a reader moving from the home into a page had the chrome change under
+         them. The bands' work is now done by the prose contract itself: an h2 opens
+         a section, its lead says what the section is for, and `DocCardGroup` frames
+         the set of cards. -->
+    <article
+      class="layout-column-docs layout-boundary-inline pt-(--spacing-xxl) pb-(--spacing-xxl)"
+    >
+      <DocProse>
+        <!-- ── Start by objective ─────────────────────────────────────────────
+             Four jobs, not four products. -->
+        <DocHeading
+          id="start-by-objective"
+          :level="2"
         >
-          <h3
-            id="your-ai-agent-fluent-in-azion"
-            class="text-heading-sm text-(--text-default)"
+          Start by objective
+        </DocHeading>
+        <p>Build something, make it faster, lock it down, or run AI on it.</p>
+
+        <DocCardGroup :cols="2">
+          <DocCard
+            v-for="card in objectives"
+            :key="card.title"
+            :title="card.title"
+            :icon="card.icon"
+            :href="card.href"
           >
-            Your AI agent, fluent in Azion
-          </h3>
-          <p class="max-w-(--container-2xl) text-pretty text-body-md text-(--text-muted)">
-            One prompt teaches any coding agent the platform: current product names, live docs
-            through the
-            <a
-              href="#mcp"
-              class="text-link"
-              >Azion MCP server</a
-            >, and real deploys with the CLI.
-          </p>
-          <!-- The copy affordance is the shared contrast pill, so the docs home and the
-               console Home offer the onboarding as one control with one prompt behind
-               it — not two look-alikes that can drift. -->
+            {{ card.description }}
+          </DocCard>
+        </DocCardGroup>
+
+        <!-- The onward links that used to close each band as a ruled row are just a
+             sentence now: in a prose column a muted row under a hairline is a band's
+             footer, and there are no bands. -->
+        <p>
+          {{ linkBands.objectives.lead }}
+          <template
+            v-for="(link, index) in linkBands.objectives.links"
+            :key="link.label"
+          >
+            <a :href="link.href">{{ link.label }}</a
+            ><template v-if="index < linkBands.objectives.links.length - 1">, </template>
+          </template>
+        </p>
+
+        <!-- ── Start by interface ─────────────────────────────────────────────
+             Two halves of one answer: hand the platform to an agent, or drive it
+             yourself. The agent half comes FIRST and as prose rather than as a
+             fourth card, because it is not a fourth interface — it is the thing
+             that operates the other three. -->
+        <DocHeading
+          id="start-by-interface"
+          :level="2"
+        >
+          Start by interface
+        </DocHeading>
+        <p>Hand it to your agent, or drive it yourself. Same platform either way.</p>
+
+        <DocHeading
+          id="your-ai-agent-fluent-in-azion"
+          :level="3"
+        >
+          Your AI agent, fluent in Azion
+        </DocHeading>
+        <p>
+          One prompt teaches any coding agent the platform: current product names, live docs through
+          the <a href="#mcp">Azion MCP server</a>, and real deploys with the CLI.
+        </p>
+        <!-- The copy affordance is the shared contrast pill, so the docs home and the
+             console Home offer the onboarding as one control with one prompt behind it —
+             not two look-alikes that can drift. `data-doc-chrome` stops the prose
+             contract at its edge: the pill is a component with its own type, not copy. -->
+        <div
+          data-doc-chrome
+          class="mt-(--spacing-md) flex"
+        >
           <ContrastBanner
             label="Copy prompt"
             :show-logo="false"
             :prompt="AGENT_PROMPT"
             class="self-start"
           />
-          <p class="text-pretty text-body-sm text-(--text-muted)">
-            Prefer the guided route? Four steps connect Claude Code, Cursor, GitHub Copilot,
-            Windsurf, Codex, or Gemini CLI.
-            <a
-              id="agent-setup"
-              href="#agent-setup"
-              class="text-link"
-              >Agent Setup</a
-            >
-          </p>
         </div>
-
-        <div class="p-(--spacing-xl)">
-          <DocCardGroup :cols="3">
-            <DocCard
-              v-for="card in interfaces"
-              :key="card.title"
-              :title="card.title"
-              :icon="card.icon"
-              :href="card.href"
-              :class="card.span"
-            >
-              {{ card.description }}
-              <!-- The card's own CTA. A `span`, not an `<a>`: the whole card is the
-                   link already, and a nested anchor is invalid HTML. -->
-              <span
-                class="mt-(--spacing-sm) flex items-center gap-(--spacing-xxs) text-label-md text-(--text-link)"
-              >
-                {{ card.cta }}
-                <i
-                  class="pi pi-arrow-right text-body-xs transition-transform duration-fast-02 ease-productive-entrance group-hover:translate-x-0.5 motion-reduce:transition-none"
-                  aria-hidden="true"
-                />
-              </span>
-            </DocCard>
-          </DocCardGroup>
-        </div>
-      </SectionModule>
-
-      <!-- ── Ready-made templates ────────────────────────────────────────────
-           Same band anatomy as every other section — header row over a framed card
-           grid — so the templates read as cards in the same column, on the same
-           padding, as the bands above. This is the one band that stays TWO-up on a
-           phone (`mobile-cols`): its cells are a mark plus one word, so a single file
-           of eight would be a screen of scrolling to say what two columns say in half
-           the height. -->
-      <SectionModule
-        id="ready-made-templates"
-        :padded="false"
-        title="Ready-made templates"
-        description="Deploy in one click, with CI/CD already wired up."
-      >
-        <div class="p-(--spacing-xl)">
-          <DocCardGroup
-            :cols="4"
-            :mobile-cols="2"
+        <p>
+          Prefer the guided route? Four steps connect Claude Code, Cursor, GitHub Copilot, Windsurf,
+          Codex, or Gemini CLI.
+          <a
+            id="agent-setup"
+            href="/site/docs/agent-setup"
+            >Agent Setup</a
           >
-            <DocCard
-              v-for="template in templates"
-              :key="template.title"
-              :title="template.title"
-              :icon="template.icon"
-              href="#template"
-            />
-          </DocCardGroup>
-        </div>
+        </p>
 
-        <div :class="LINKS_BAND_CLASS">
+        <DocCardGroup :cols="3">
+          <DocCard
+            v-for="card in interfaces"
+            :key="card.title"
+            :title="card.title"
+            :icon="card.icon"
+            :href="card.href"
+            :link="card.cta"
+            :class="card.span"
+          >
+            {{ card.description }}
+          </DocCard>
+        </DocCardGroup>
+
+        <!-- ── Ready-made templates ───────────────────────────────────────────
+             This is the one grid that stays TWO-up on a phone (`mobile-cols`): its
+             cells are a mark plus one word, so a single file of eight would be a
+             screen of scrolling to say what two columns say in half the height. -->
+        <DocHeading
+          id="ready-made-templates"
+          :level="2"
+        >
+          Ready-made templates
+        </DocHeading>
+        <p>Deploy in one click, with CI/CD already wired up.</p>
+
+        <DocCardGroup
+          :cols="4"
+          :mobile-cols="2"
+        >
+          <DocCard
+            v-for="template in templates"
+            :key="template.title"
+            :title="template.title"
+            :icon="template.icon"
+            href="#template"
+          />
+        </DocCardGroup>
+
+        <p>
           {{ linkBands.templates.lead }}
-          <a
-            v-for="link in linkBands.templates.links"
+          <template
+            v-for="(link, index) in linkBands.templates.links"
             :key="link.label"
-            :href="link.href"
-            class="text-link"
-            >{{ link.label }}</a
           >
-        </div>
-      </SectionModule>
+            <a :href="link.href">{{ link.label }}</a
+            ><template v-if="index < linkBands.templates.links.length - 1">, </template>
+          </template>
+        </p>
 
-      <!-- ── Stop attacks ─────────────────────────────────────────────────── -->
-      <SectionModule
-        id="stop-attacks"
-        :padded="false"
-        title="Stop attacks"
-        description="Everything you need to protect applications, APIs, and the traffic that reaches them."
-      >
-        <div class="p-(--spacing-xl)">
-          <DocCardGroup :cols="3">
-            <DocCard
-              v-for="card in security"
-              :key="card.title"
-              :title="card.title"
-              :icon="card.icon"
-              :href="card.href"
-              :class="card.span"
-            >
-              {{ card.description }}
-            </DocCard>
-          </DocCardGroup>
-        </div>
+        <!-- ── Stop attacks ───────────────────────────────────────────────────── -->
+        <DocHeading
+          id="stop-attacks"
+          :level="2"
+        >
+          Stop attacks
+        </DocHeading>
+        <p>Everything you need to protect applications, APIs, and the traffic that reaches them.</p>
 
-        <div :class="LINKS_BAND_CLASS">
+        <DocCardGroup :cols="3">
+          <DocCard
+            v-for="card in security"
+            :key="card.title"
+            :title="card.title"
+            :icon="card.icon"
+            :href="card.href"
+            :class="card.span"
+          >
+            {{ card.description }}
+          </DocCard>
+        </DocCardGroup>
+
+        <p>
           {{ linkBands.security.lead }}
-          <a
-            v-for="link in linkBands.security.links"
+          <template
+            v-for="(link, index) in linkBands.security.links"
             :key="link.label"
-            :href="link.href"
-            class="text-link"
-            >{{ link.label }}</a
           >
-        </div>
-      </SectionModule>
+            <a :href="link.href">{{ link.label }}</a
+            ><template v-if="index < linkBands.security.links.length - 1">, </template>
+          </template>
+        </p>
 
-      <!-- ── Assess risk and prove compliance ─────────────────────────────── -->
-      <SectionModule
-        id="assess-risk-and-prove-compliance"
-        :padded="false"
-        title="Assess risk and prove compliance"
-        description="What the platform covers, what stays with you, and where the evidence lives when an auditor asks for it."
-      >
-        <div class="p-(--spacing-xl)">
-          <DocCardGroup :cols="3">
-            <DocCard
-              v-for="card in compliance"
-              :key="card.title"
-              :title="card.title"
-              :icon="card.icon"
-              :href="card.href"
-            >
-              {{ card.description }}
-            </DocCard>
-          </DocCardGroup>
-        </div>
+        <!-- ── Assess risk and prove compliance ───────────────────────────────── -->
+        <DocHeading
+          id="assess-risk-and-prove-compliance"
+          :level="2"
+        >
+          Assess risk and prove compliance
+        </DocHeading>
+        <p>
+          What the platform covers, what stays with you, and where the evidence lives when an
+          auditor asks for it.
+        </p>
 
-        <div :class="LINKS_BAND_CLASS">
+        <DocCardGroup :cols="3">
+          <DocCard
+            v-for="card in compliance"
+            :key="card.title"
+            :title="card.title"
+            :icon="card.icon"
+            :href="card.href"
+          >
+            {{ card.description }}
+          </DocCard>
+        </DocCardGroup>
+
+        <p>
           {{ linkBands.compliance.lead }}
-          <a
-            v-for="link in linkBands.compliance.links"
+          <template
+            v-for="(link, index) in linkBands.compliance.links"
             :key="link.label"
-            :href="link.href"
-            class="text-link"
-            >{{ link.label }}</a
           >
-        </div>
-      </SectionModule>
+            <a :href="link.href">{{ link.label }}</a
+            ><template v-if="index < linkBands.compliance.links.length - 1">, </template>
+          </template>
+        </p>
 
-      <!-- ── Follow along ─────────────────────────────────────────────────────
-           No closing link row: this band IS the onward links, so a row of more of
-           them under it would say the same thing twice. -->
-      <SectionModule
-        id="follow-along"
-        :padded="false"
-        title="Follow along"
-        description="Release notes as things ship, plus the blog, the YouTube channel, and the Discord where questions get answered."
-      >
-        <div class="p-(--spacing-xl)">
-          <DocCardGroup :cols="3">
-            <DocCard
-              v-for="card in followAlong"
-              :key="card.title"
-              :title="card.title"
-              :icon="card.icon"
-              :href="card.href"
-              :target="card.target || '_self'"
-              :class="card.span"
-            >
-              {{ card.description }}
-            </DocCard>
-          </DocCardGroup>
-        </div>
-      </SectionModule>
+        <!-- ── Follow along ───────────────────────────────────────────────────
+             No closing link sentence: this grid IS the onward links. The three
+             off-site destinations carry a `link` line, so the card says where it
+             goes and draws the diagonal arrow that means "leaves the docs". -->
+        <DocHeading
+          id="follow-along"
+          :level="2"
+        >
+          Follow along
+        </DocHeading>
+        <p>
+          Release notes as things ship, plus the blog, the YouTube channel, and the Discord where
+          questions get answered.
+        </p>
 
-      <!-- ── Next page ──────────────────────────────────────────────────────
-           The layer's own previous/next pair, the same one that closes a reading page,
+        <DocCardGroup :cols="3">
+          <DocCard
+            v-for="card in followAlong"
+            :key="card.title"
+            :title="card.title"
+            :icon="card.icon"
+            :href="card.href"
+            :target="card.target || '_self'"
+            :link="card.cta"
+            :class="card.span"
+          >
+            {{ card.description }}
+          </DocCard>
+        </DocCardGroup>
+      </DocProse>
+
+      <!-- The layer's own previous/next pair, the same one that closes a reading page,
            with only the `next` half filled — the home has nothing before it, and
            DocPagination leaves that half empty rather than collapsing the row, so the
            link stays anchored to the column's right edge. -->
-      <SectionModule>
-        <DocPagination
-          :next="{ title: 'Agent Setup', href: '#agent-setup' }"
-          next-label="Next Page · Start"
-        />
-      </SectionModule>
-    </SectionContainer>
+      <DocPagination
+        :next="{ title: 'Agent Setup', href: '/site/docs/agent-setup' }"
+        next-label="Next Page · Start"
+        class="pt-(--spacing-xxl)"
+      />
+    </article>
   </div>
 </template>

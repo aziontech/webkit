@@ -18,10 +18,10 @@ Three complete paths get you there. Pick one. They all end in the same place:
   </Card>
 </CardGroup>
 
-<Highlight title="Not sure which one?">
-  Take the template path: it needs no local tooling, and everything you learn on it applies to
-  the other two.
-</Highlight>
+<Tip>
+  Not sure which one? Take the template path: it needs no local tooling, and everything you learn on
+  it applies to the other two.
+</Tip>
 
 ## Before you start
 
@@ -78,12 +78,22 @@ Open the same URL in the browser to see your application running.
 
 <Steps>
   <Step title="In Azion Console, click + Create." />
-  <Step title="Select Import from GitHub." />
-  <Step title="Connect your GitHub account." />
-  <Step title="Select your repository." />
-  <Step title="Choose a name for the application and a Framework Preset." />
-  <Step title="Enter the install command (usually npm install)." />
-  <Step title="Confirm and follow the logs until the Azion domain shows up." />
+  <Step title="Select Import from Git." />
+  <Step title="Connect the Git account that owns the repository." />
+  <Step title="Pick the repository to import." />
+  <Step title="Name the application and check the build and deploy commands.">
+    Azion reads the commands from the repository, so both arrive filled in for a project it
+    recognises — change them only if your build differs. The name becomes part of the
+    deployed URL.
+
+    <Frame
+      src="/docs/create-application-step-3.png"
+      alt="Step 3 of Create application: the imported repository, the Configure your application card with name, build command and deploy command, and the Protect with Azion Firewall toggle."
+      caption="Step 3 — the last screen before the deploy."
+    />
+  </Step>
+  <Step title="Leave Protect with Azion Firewall off, or turn it on to deploy a firewall alongside the application." />
+  <Step title="Click Create and deploy, then follow the logs until the Azion domain shows up." />
 </Steps>
 
 ### Test it
@@ -108,6 +118,10 @@ locations.
   Starting from scratch instead? Run `azion init` to create a new project from a framework template,
   then deploy it the same way. See the CLI overview and the link command reference for details.
 </Tip>
+
+<Prompt kind="line" title="AI Assistant">
+  Install the Azion CLI, link this project to my Azion account using the preset that matches its framework, deploy it, and print the Azion domain once it answers 200.
+</Prompt>
 
 <Steps>
   <Step title="Install the Azion CLI">
