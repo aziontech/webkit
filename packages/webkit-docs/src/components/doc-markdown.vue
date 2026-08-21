@@ -1,7 +1,6 @@
 <script>
   import { h } from 'vue'
 
-  import { useHeadingNav } from '../lib/heading-nav'
   import { renderInline as renderInlineText } from '../lib/inline'
   import { parseMdx } from '../lib/mdx'
   import DocAccordionGroup from './doc-accordion-group.vue'
@@ -11,8 +10,10 @@
   import DocCardGroup from './doc-card-group.vue'
   import DocCodeGroup from './doc-code-group.vue'
   import DocFrame from './doc-frame.vue'
+  import DocHeading from './doc-heading.vue'
   import DocItem from './doc-item.vue'
   import DocItemGroup from './doc-item-group.vue'
+  import DocPrompt from './doc-prompt.vue'
   import DocStep from './doc-step.vue'
   import DocSteps from './doc-steps.vue'
   import DocTab from './doc-tab.vue'
@@ -26,7 +27,6 @@
     Info: [DocCallout, { kind: 'info' }],
     Tip: [DocCallout, { kind: 'tip' }],
     Check: [DocCallout, { kind: 'check' }],
-    Highlight: [DocCallout, { kind: 'highlight' }],
     Warning: [DocCallout, { kind: 'warning' }],
     Danger: [DocCallout, { kind: 'danger' }],
     Steps: [DocSteps, {}],
@@ -44,6 +44,7 @@
     // is what collapses this one's fences into a single tabbed block.
     CodeGroup: [DocCodeGroup, {}],
     Frame: [DocFrame, {}],
+    Prompt: [DocPrompt, {}],
     Update: [DocUpdate, {}]
   }
 
@@ -55,7 +56,7 @@
    * to become a span, or it nests a paragraph inside a paragraph, which the
    * browser closes early and drops the rest of the row with.
    */
-  const INLINE_BODY_COMPONENTS = new Set([DocCallout, DocItem])
+  const INLINE_BODY_COMPONENTS = new Set([DocCallout, DocItem, DocPrompt])
 
   /**
    * MDX tag -> the component that renders it INSIDE a sentence.
@@ -91,27 +92,6 @@
     'border-b-(length:--border-width-default) border-solid border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-xs) text-start align-middle text-label-sm font-normal text-(--text-muted)'
   const TD_CLASS =
     'border-b-(length:--border-width-default) border-solid border-(--border-default) px-(--spacing-sm) py-(--spacing-xs) text-start align-middle text-label-md text-(--text-default)'
-
-  /*
-   * A heading is an anchor: the whole text is the link to its own id, so a
-   * reader can click the section they are reading and copy the URL to it.
-   *
-   * The affordance stays out of the way until it is wanted — the rule under the
-   * text and the chain glyph after it appear on hover or keyboard focus, and
-   * never occupy layout, so the heading's measure does not shift. `DocProse`
-   * skips `[data-doc-anchor]` in its link rules, so the heading keeps its own
-   * color and weight instead of turning into body-copy link blue.
-   *
-   * Plain inline flow (not `inline-flex`): a long heading has to wrap the way a
-   * heading wraps, with the glyph trailing the last word.
-   */
-  const HEADING_CLASS = 'scroll-mt-(--spacing-lg)'
-  const HEADING_ANCHOR_CLASS =
-    'group/anchor rounded-(--shape-flat) text-inherit no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color)'
-  const HEADING_TEXT_CLASS =
-    'underline-offset-4 decoration-(--border-strong) group-hover/anchor:underline'
-  const HEADING_ICON_CLASS =
-    'pi pi-link ml-(--spacing-xs) align-middle text-label-md text-(--text-muted) opacity-0 transition-opacity duration-150 ease-out group-hover/anchor:opacity-100 group-focus-visible/anchor:opacity-100 motion-reduce:transition-none'
 
   /**
    * Render inline markdown (code, links, bold, italic) and inline components.
@@ -150,30 +130,19 @@
    * @param {number} key - the sibling index, used as the vnode key.
    * @param {boolean} inline - true inside a callout, where the surrounding
    *   element is a paragraph and block tags would be invalid.
-   * @param {(event: MouseEvent, item: { id: string }) => void} nav - takes the
-   *   reader to a heading; supplied by the page that owns the scroll container.
    * @returns {unknown} the vnode.
    */
-  function renderNode(node, key, inline = false, nav = () => {}) {
+  function renderNode(node, key, inline = false) {
     switch (node.type) {
-      case 'heading': {
-        const tag = `h${node.depth}`
-        return h(tag, { key, id: node.id, 'data-doc-heading': node.depth, class: HEADING_CLASS }, [
-          h(
-            'a',
-            {
-              href: `#${node.id}`,
-              'data-doc-anchor': '',
-              class: HEADING_ANCHOR_CLASS,
-              onClick: (event) => nav(event, { id: node.id })
-            },
-            [
-              h('span', { class: HEADING_TEXT_CLASS }, renderInline(node.text)),
-              h('i', { class: HEADING_ICON_CLASS, 'aria-hidden': 'true' })
-            ]
-          )
-        ])
-      }
+      // The anchored heading itself is `DocHeading`, so a prose page and a
+      // hand-composed one render the identical object. It injects the page's own
+      // scroll handler, which is why nothing is threaded through here for it.
+      case 'heading':
+        return h(
+          DocHeading,
+          { key, level: node.depth, id: node.id },
+          { default: () => renderInline(node.text) }
+        )
       case 'paragraph':
         return inline
           ? // Inside a callout the copy is a run of sibling spans, and a callout has no
@@ -189,7 +158,7 @@
           node.items.map((item, index) =>
             h('li', { key: index }, [
               ...renderInline(item.text),
-              ...item.children.map((child, childIndex) => renderNode(child, childIndex, false, nav))
+              ...item.children.map((child, childIndex) => renderNode(child, childIndex, false))
             ])
           )
         )
@@ -251,7 +220,7 @@
         return h(
           'blockquote',
           { key },
-          node.children.map((child, index) => renderNode(child, index, false, nav))
+          node.children.map((child, index) => renderNode(child, index, false))
         )
       case 'divider':
         return h('hr', { key })
@@ -272,9 +241,7 @@
           return h(DocCodeGroup, { key, samples })
         }
         const inlineBody = INLINE_BODY_COMPONENTS.has(component)
-        const children = node.children.map((child, index) =>
-          renderNode(child, index, inlineBody, nav)
-        )
+        const children = node.children.map((child, index) => renderNode(child, index, inlineBody))
         return h(
           component,
           { key, ...presetProps, ...node.props },
@@ -299,9 +266,6 @@
       /** The raw `.mdx` source. */
       source: { type: String, default: '' }
     },
-    setup() {
-      return { nav: useHeadingNav() }
-    },
     computed: {
       parsed() {
         return parseMdx(this.source)
@@ -311,7 +275,7 @@
       return h(
         'div',
         { 'data-testid': 'doc-markdown', class: 'w-full' },
-        this.parsed.nodes.map((node, index) => renderNode(node, index, false, this.nav))
+        this.parsed.nodes.map((node, index) => renderNode(node, index, false))
       )
     }
   }

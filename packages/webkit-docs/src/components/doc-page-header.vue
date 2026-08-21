@@ -108,7 +108,9 @@
       :items="crumbs"
     />
     <div class="flex items-center justify-between gap-10">
-      <h1 class="m-0 min-w-0 flex-1 text-heading-lg text-(--text-default)">{{ title }}</h1>
+      <h1 class="m-0 min-w-0 flex-1 text-heading-lg font-normal text-(--text-default)">
+        {{ title }}
+      </h1>
       <SplitButton
         v-if="copyable"
         kind="outlined"
@@ -122,7 +124,7 @@
     </div>
     <p
       v-if="description"
-      class="m-0 text-body-md text-(--text-muted)"
+      class="m-0 text-body-md font-light text-(--text-default)"
     >
       {{ description }}
     </p>

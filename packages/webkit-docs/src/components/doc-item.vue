@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import ItemActions from '@aziontech/webkit/item-actions'
   import ItemContent from '@aziontech/webkit/item-content'
   import ItemDescription from '@aziontech/webkit/item-description'
   import ItemMedia from '@aziontech/webkit/item-media'
@@ -27,6 +28,32 @@
    * Hover and the focus ring are driven off that one link (`has-[a:…]`), which
    * is also how `Item` is specified to work: the shell draws no interaction of
    * its own and the slotted link owns it.
+   *
+   * THE ROW IS THE CONSOLE'S WIZARD ROW. A "how do you want to start?" row in the
+   * application create is the same object as this one — a glyph, a name, a
+   * sentence, and a chevron saying the row goes somewhere — so it wears the same
+   * clothes: the framed 32px tile (`--shape-elements` / `--border-muted` /
+   * `--bg-surface-raised`, glyph in `--text-default`) rather than `ItemMedia`'s
+   * own `kind="icon"` frame, and `pi-chevron-right` in `ItemActions` rather than
+   * an arrow floating at the row's end — unless the row LEAVES the documentation
+   * (an absolute URL, or an explicit `target="_blank"`), where the glyph becomes
+   * `pi-arrow-up-right` and travels its own diagonal on hover, the same pair
+   * `DocCard`'s closing link draws for the same distinction. The tile classes ride on `ItemMedia`
+   * itself instead of a nested span — one element fewer for the same box, since
+   * the default region already centres its child and top-aligns beside a
+   * description.
+   *
+   * BOTH FLANKS ARE THE SAME 32px SQUARE. The chevron gets the tile's footprint
+   * rather than only its own 14px glyph, so the row is bracketed evenly instead
+   * of trailing off, and every row's text starts and ends on the same two lines
+   * however long its sentence runs. The width is `min-w-8`, not `size-8`:
+   * `ItemActions` ships `w-fit`, and a `w-8` next to it is a coin-toss on
+   * stylesheet order, while a min-width simply wins.
+   *
+   * The density is NOT the wizard's `size="small"`. That row is a control in a
+   * compact card, tight on purpose; this one is read, and at an 8px gap the tile
+   * crowds the name it labels. It keeps the list's default 16px — the same step
+   * the card pads with, so the tile, the text and the card edge share one rhythm.
    *
    * `data-doc-chrome` stops `DocProse` at the row's edge: the description is a
    * real paragraph and the title a heading-ish line, and prose rules would give
@@ -62,6 +89,12 @@
   }>()
 
   const isLink = computed(() => props.href.length > 0)
+
+  // Leaves the documentation: an absolute URL (http(s) or protocol-relative), a
+  // `mailto:`, or a row the page has explicitly told to open in a new tab.
+  const isExternal = computed(
+    () => props.target === '_blank' || /^(https?:)?\/\/|^mailto:/.test(props.href)
+  )
 </script>
 
 <template>
@@ -69,15 +102,15 @@
     role="listitem"
     data-testid="doc-item"
     data-doc-chrome
-    class="items-start transition-colors duration-150 ease-out has-[a:hover]:bg-(--bg-hover) has-[a:focus-visible]:outline-none has-[a:focus-visible]:ring-2 has-[a:focus-visible]:ring-inset has-[a:focus-visible]:ring-(--ring-color) motion-reduce:transition-none"
+    class="group/item items-start transition-colors duration-150 ease-out has-[a:hover]:bg-(--bg-hover) has-[a:focus-visible]:outline-none has-[a:focus-visible]:ring-2 has-[a:focus-visible]:ring-inset has-[a:focus-visible]:ring-(--ring-color) motion-reduce:transition-none"
   >
     <ItemMedia
       v-if="icon"
-      kind="icon"
+      class="size-8 rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
     >
       <i
         :class="icon"
-        class="text-[1rem] leading-none text-(--text-muted)"
+        class="text-[1rem] leading-none text-(--text-default)"
         aria-hidden="true"
       />
     </ItemMedia>
@@ -100,10 +133,19 @@
         <slot>{{ label }}</slot>
       </ItemDescription>
     </ItemContent>
-    <i
+    <ItemActions
       v-if="isLink"
-      class="pi pi-arrow-right shrink-0 self-center text-(--text-muted)"
-      aria-hidden="true"
-    />
+      class="h-8 min-w-8 justify-center self-center"
+    >
+      <i
+        :class="
+          isExternal
+            ? 'pi-arrow-up-right group-hover/item:translate-x-0.5 group-hover/item:-translate-y-0.5'
+            : 'pi-chevron-right group-hover/item:translate-x-0.5'
+        "
+        class="pi text-(--text-muted) transition-[translate] duration-moderate-02 ease-expressive-entrance motion-reduce:transition-none"
+        aria-hidden="true"
+      />
+    </ItemActions>
   </Item>
 </template>

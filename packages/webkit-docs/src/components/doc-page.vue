@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, ref } from 'vue'
+  import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
   import { provideHeadingNav } from '../lib/heading-nav'
   import { scrollToHeading } from '../lib/heading-scroll'
@@ -68,6 +68,22 @@
 
   const body = ref<HTMLElement | null>(null)
   const scroller = ref<HTMLElement | null>(null)
+  const header = ref<{ $el?: HTMLElement } | null>(null)
+
+  /**
+   * How far the rail is pushed down so it starts level with the page title.
+   *
+   * The rail is a peer of the PROSE, not of the breadcrumb above it: read from
+   * the top of the masthead, "On this page" sits beside the trail and looks like
+   * part of it. Starting it at the title's own line puts the outline beside the
+   * thing it is an outline OF.
+   *
+   * The offset is measured, not hard-coded, because what sits above the title is
+   * conditional — a page with no breadcrumb has nothing to clear, and a trail
+   * that wraps has more. It lives inside the rail's scroll container, so it
+   * collapses as the reader scrolls the rail instead of holding a permanent gap.
+   */
+  const railOffset = ref(0)
 
   const parsed = computed(() => parseMdx(props.source))
   const headings = computed(() => (props.source ? parsed.value.headings : collectHeadings([])))
@@ -80,6 +96,40 @@
   )
 
   const { activeId } = useScrollSpy(body, headings)
+
+  const railStyle = computed(() => ({ paddingTop: `${railOffset.value}px` }))
+
+  /** Re-measure where the title starts inside the masthead. */
+  function alignRail() {
+    const root = header.value?.$el
+    const heading = root?.querySelector('h1')
+    if (!root || !heading) {
+      railOffset.value = 0
+      return
+    }
+    railOffset.value = Math.round(
+      heading.getBoundingClientRect().top - root.getBoundingClientRect().top
+    )
+  }
+
+  let observer: ResizeObserver | null = null
+
+  onMounted(async () => {
+    await nextTick()
+    alignRail()
+    const root = header.value?.$el
+    if (typeof globalThis.ResizeObserver === 'function' && root) {
+      observer = new globalThis.ResizeObserver(() => alignRail())
+      observer.observe(root)
+    }
+  })
+
+  onBeforeUnmount(() => observer?.disconnect())
+
+  watch([pageTitle, () => props.breadcrumb, () => props.copyable], async () => {
+    await nextTick()
+    alignRail()
+  })
 
   /** Take the reader to a heading, in the column that actually scrolls. */
   function goToHeading(event: MouseEvent, item: { id: string }) {
@@ -112,6 +162,7 @@
       class="h-full w-full max-w-(--container-2xl) min-w-0 overflow-y-auto overscroll-contain py-(--spacing-xl) 2xl:max-w-(--container-3xl)"
     >
       <DocPageHeader
+        ref="header"
         :title="pageTitle"
         :description="pageDescription"
         :last-updated="pageUpdated"
@@ -121,7 +172,7 @@
       />
       <div
         ref="body"
-        class="pt-(--spacing-xs)"
+        class="pt-(--spacing-xxl) sm:pt-(--spacing-xl)"
       >
         <DocProse>
           <slot>
@@ -140,12 +191,14 @@
       v-if="showToc && headings.length"
       class="hidden h-full w-[225px] shrink-0 overflow-y-auto overscroll-contain py-(--spacing-xl) lg:block"
     >
-      <DocOnThisPage
-        :items="headings"
-        :active-id="activeId"
-        :groups="tocGroups"
-        @select="goToHeading"
-      />
+      <div :style="railStyle">
+        <DocOnThisPage
+          :items="headings"
+          :active-id="activeId"
+          :groups="tocGroups"
+          @select="goToHeading"
+        />
+      </div>
     </aside>
   </div>
 </template>

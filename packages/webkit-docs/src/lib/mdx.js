@@ -33,6 +33,7 @@ export const COMPONENT_TAGS = new Set([
   'CodeGroup',
   'Frame',
   'Columns',
+  'Prompt',
   'Update'
 ])
 
