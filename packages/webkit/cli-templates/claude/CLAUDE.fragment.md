@@ -50,7 +50,7 @@ runs axe + screenshots), and taste is a review concern.
 Start with `/webkit-ui-craft` (the umbrella that routes the rest). Get structure and states right
 before any polish:
 
-- **Structure:** `/webkit-ux-heuristics` (right component per moment) · `/webkit-ui-states` (state surface + async behavior) · `/webkit-form` · `/webkit-tables` (data-driven `<Table>` + cell recipes) · `/webkit-lists` (the index page around it + the filter system) · `/webkit-navigation`
+- **Structure:** `/webkit-ux-heuristics` (right component per moment) · `/webkit-ui-states` (state surface + async behavior) · `/webkit-form` · `/webkit-create-surface` (where a create lives: page vs drawer, Advanced, the commit bar) · `/webkit-errors` (where a failure goes: field, section Message, toast, auth card) · `/webkit-tables` (data-driven `<Table>` + cell recipes) · `/webkit-lists` (the index page around it + the filter system) · `/webkit-navigation`
 - **Foundation:** `/webkit-baseline-ui` (tokens, hierarchy, containers, responsive widths)
 - **Cross-cutting quality:** `/webkit-theming-dark-mode` · `/webkit-data-viz`
 - **Polish:** `/webkit-motion-polish` · `/webkit-impeccable-polish` (finish + earned delight)
