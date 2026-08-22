@@ -68,5 +68,10 @@
     "name": "doc-callout",
     "path": "src/components/documentation/doc-callout/doc-callout.vue",
     "limit": "6.5 KB"
+  },
+  {
+    "name": "doc-card",
+    "path": "src/components/documentation/doc-card/doc-card.vue",
+    "limit": "2 KB"
   }
 ]
