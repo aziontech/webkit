@@ -103,5 +103,10 @@
     "name": "doc-update",
     "path": "src/components/documentation/doc-update/doc-update.vue",
     "limit": "3 KB"
+  },
+  {
+    "name": "doc-prompt",
+    "path": "src/components/documentation/doc-prompt/doc-prompt.vue",
+    "limit": "7 KB"
   }
 ]

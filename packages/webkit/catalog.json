@@ -4837,6 +4837,74 @@
         "Compose rows inside a `FrameBox` (with a solid surface) holding an `ItemList`: the frame draws the single box and the list draws full-width dividers, and the `role=\"list\"` parent is what makes each row's `role=\"listitem\"` valid."
       ]
     },
+    "doc-prompt": {
+      "import": "@aziontech/webkit/doc-prompt",
+      "target": "./src/components/documentation/doc-prompt/doc-prompt.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/doc-prompt",
+      "category": "documentation",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "kind",
+          "type": "'block' | 'line'",
+          "default": "'block'",
+          "required": "false",
+          "doc": "Wrapping paragraph capped at four lines, or one line that scrolls sideways."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "What the block is, in a word or two. Renders as a titled row above the prompt."
+        },
+        {
+          "name": "icon",
+          "type": "string",
+          "default": "'pi pi-sparkles'",
+          "required": "false",
+          "doc": "PrimeIcons class for the glyph beside the title."
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Fallback prompt text when the default slot is empty."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The prompt itself: one or more sentences of literal text. Also the string the copy control carries."
+        }
+      ],
+      "purpose": "DocPrompt renders text the reader is meant to **run, not read** — the block a documentation page uses when the next step is \"say this to your agent\". It is the one component in this layer whose payload is addressed to a machine, so it is the one that ships an affordance for handing it to one: a copy control wired to the exact string on screen. It is deliberately **not** a code block — a prompt is a sentence, so it carries no language, no gutter, and no syntax highlighting, and it is set in the mono face only to say \"this is the literal text, copy it as it stands\".",
+      "useWhen": [
+        "A documentation step, onboarding screen, or empty state whose next action is \"paste this into your agent\".",
+        "A short list of example prompts a reader can try, under a heading that has already said what they are.",
+        "Anywhere a literal string must be copied verbatim and the reader is the one who decides where it goes."
+      ],
+      "avoidWhen": [
+        "The payload is source code, a shell command, or configuration → use a code viewer, which owns languages, gutters, and highlighting; a prompt has none of them.",
+        "The payload is a short inline token (a key, a flag, a variable name) → use `kbd` or inline code in prose.",
+        "The block needs to run the prompt itself, or route it to a named vendor → out of scope; this component only puts the text on the clipboard."
+      ],
+      "related": [
+        "copy-button` — the control DocPrompt composes. Reach for it directly when the value being copied has no block of its own.",
+        "DocCallout` — draws attention to prose the reader should _read_; DocPrompt is for text the reader should _use_.",
+        "DocProse` — the contract around it. The prompt marks itself `data-doc-chrome`, so prose rules stop at its edge, and `data-doc-block`, so it takes the block rung of the ladder."
+      ],
+      "bestPractices": [
+        "Write the prompt once, in the default slot. It is both the visible text and the copied string, so the two cannot drift.",
+        "Give `title` only when the surrounding page has not already said what the block is. Three one-line prompts under a \"Prompts to try\" heading want the bare shape.",
+        "Use `kind=\"line\"` for a single instruction and `kind=\"block\"` for a priming paragraph. A one-sentence prompt broken across three lines reads as three instructions.",
+        "Keep the prompt in the imperative and free of placeholders the reader must fill silently — if a value must be substituted, name it in the prose above."
+      ]
+    },
     "doc-prose": {
       "import": "@aziontech/webkit/doc-prose",
       "target": "./src/components/documentation/doc-prose/doc-prose.vue",
