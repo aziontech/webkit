@@ -402,6 +402,7 @@
       "--layout-group-gap",
       "--layout-measure",
       "--layout-measure-control",
+      "--layout-measure-docs",
       "--layout-measure-focused",
       "--layout-measure-form",
       "--layout-measure-form-create",
@@ -573,12 +574,21 @@
       "--text-big-number-sm-font-size",
       "--text-big-number-sm-font-weight",
       "--text-big-number-sm-line-height",
+      "--text-body-code-sm-font-family",
+      "--text-body-code-sm-font-size",
+      "--text-body-code-sm-font-weight",
+      "--text-body-code-sm-letter-spacing",
+      "--text-body-code-sm-line-height",
+      "--text-body-code-sm-text-wrap-style",
       "--text-body-lg-font-size",
       "--text-body-lg-font-weight",
       "--text-body-lg-line-height",
       "--text-body-md-font-size",
       "--text-body-md-font-weight",
       "--text-body-md-line-height",
+      "--text-body-prose-md-font-size",
+      "--text-body-prose-md-font-weight",
+      "--text-body-prose-md-line-height",
       "--text-body-sm-font-size",
       "--text-body-sm-font-weight",
       "--text-body-sm-line-height",
@@ -721,8 +731,10 @@
       "text-big-number-lg",
       "text-big-number-md",
       "text-big-number-sm",
+      "text-body-code-sm",
       "text-body-lg",
       "text-body-md",
+      "text-body-prose-md",
       "text-body-sm",
       "text-body-xs",
       "text-body-xxs",
@@ -1148,6 +1160,7 @@
         "--layout-group-gap",
         "--layout-measure",
         "--layout-measure-control",
+        "--layout-measure-docs",
         "--layout-measure-focused",
         "--layout-measure-form",
         "--layout-measure-form-create",
@@ -1349,12 +1362,21 @@
         "--text-big-number-sm-font-size",
         "--text-big-number-sm-font-weight",
         "--text-big-number-sm-line-height",
+        "--text-body-code-sm-font-family",
+        "--text-body-code-sm-font-size",
+        "--text-body-code-sm-font-weight",
+        "--text-body-code-sm-letter-spacing",
+        "--text-body-code-sm-line-height",
+        "--text-body-code-sm-text-wrap-style",
         "--text-body-lg-font-size",
         "--text-body-lg-font-weight",
         "--text-body-lg-line-height",
         "--text-body-md-font-size",
         "--text-body-md-font-weight",
         "--text-body-md-line-height",
+        "--text-body-prose-md-font-size",
+        "--text-body-prose-md-font-weight",
+        "--text-body-prose-md-line-height",
         "--text-body-sm-font-size",
         "--text-body-sm-font-weight",
         "--text-body-sm-line-height",
@@ -4464,6 +4486,41 @@
       "kind": "subcomponent",
       "parent": "pick-list",
       "treeShakeableImport": "@aziontech/webkit/pick-list-controls"
+    },
+    "doc-prose": {
+      "import": "@aziontech/webkit/doc-prose",
+      "target": "./src/components/documentation/doc-prose/doc-prose.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/doc-prose",
+      "category": "documentation",
+      "structure": "monolithic",
+      "status": "implemented",
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The document body: markdown-rendered HTML or hand-written markup."
+        }
+      ],
+      "purpose": "The typography contract every documentation page inherits. A markdown or MDX pipeline compiles text to plain semantic HTML — `h2`, `p`, `ul`, `table`, `a`, `code` — and this container is what gives that HTML the Azion type scale, the semantic colors and the vertical rhythm, so an author writes markdown and never a class. It styles **descendants** rather than itself, so it works the same over any renderer's output, a slot of hand-written markup, or raw HTML from a CMS.",
+      "useWhen": [
+        "Wrapping the body of a documentation or changelog page, whatever produced its HTML.",
+        "Giving authored prose inside a documentation block (a step's body, a tab's panel) the same type contract as the page around it."
+      ],
+      "avoidWhen": [
+        "To cap the reading column — `DocProse` has no measure of its own. The consumer sets the width with `.layout-column-docs` (`--layout-measure-docs`, 752px).",
+        "To style a webkit component's internals. Those are chrome and are excluded by design; restyle nothing from here.",
+        "For a single run of body copy in an application screen — use the `text-body-*` tokens directly."
+      ],
+      "related": [
+        "DocPageHeader` — the page masthead above this container; its `h1` is chrome, so authored content starts at `h2`.",
+        "DocCallout` / `DocCard` / `DocSteps` — blocks that sit inside prose and mark themselves `data-doc-chrome` so the contract stops at their edge."
+      ],
+      "bestPractices": [
+        "Mark a documentation component's root `data-doc-chrome` so prose rules stop there, and `data-doc-block` so it takes the block rung of the ladder. A callout is both.",
+        "Do not add per-page overrides. If a rung is wrong, it is wrong for every page and belongs in this contract.",
+        "Keep the consumer's column cap outside this component; it is typography, not layout."
+      ]
     },
     "message": {
       "import": "@aziontech/webkit/message",

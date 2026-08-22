@@ -58,5 +58,10 @@
     "name": "footer-root",
     "path": "src/components/layout/footer/footer.vue",
     "limit": "4 KB"
+  },
+  {
+    "name": "doc-prose",
+    "path": "src/components/documentation/doc-prose/doc-prose.vue",
+    "limit": "1.5 KB"
   }
 ]
