@@ -4680,6 +4680,79 @@
         "Let an incomplete last row be empty; do not stretch the last card to fill it."
       ]
     },
+    "doc-item": {
+      "import": "@aziontech/webkit/doc-item",
+      "target": "./src/components/documentation/doc-item/doc-item.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/doc-item",
+      "category": "documentation",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "The row's name — what the reader is choosing."
+        },
+        {
+          "name": "icon",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "PrimeIcons class for the leading glyph."
+        },
+        {
+          "name": "href",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Destination; when set the whole row becomes the link."
+        },
+        {
+          "name": "target",
+          "type": "'_self' | '_blank'",
+          "default": "'_self'",
+          "required": "false",
+          "doc": "Where the link opens."
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Fallback copy when the default slot is empty."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The row's copy: one or two sentences of inline prose."
+        }
+      ],
+      "purpose": "One row of the documentation's related-content list: a leading glyph in a framed 32px tile, the row's name, and the sentence that says what the thing is. When it has an `href` the title becomes an anchor stretched over the whole row — one tab stop, the full row as the hit area — closed by a trailing chevron, or a diagonal arrow when the destination leaves the documentation. The shell keeps `role=\"listitem\"`, so a set of rows inside an `ItemList` is a real list to assistive technology.",
+      "useWhen": [
+        "The \"Related products\" band a page ends on — peer destinations where each entry needs a sentence to be understood.",
+        "A one-column list of concepts or next steps, read at the page's own measure, with or without links."
+      ],
+      "avoidWhen": [
+        "For a grid of scannable entries whose titles carry most of the meaning — use `DocCard` inside a `DocCardGroup`; a card claims a tile, a row claims one line.",
+        "For an application resource list — compose `Item` and its parts directly; this row is documentation chrome.",
+        "For a single call to action at the end of a page — that is a button, not a row."
+      ],
+      "related": [
+        "DocCard` — the cell counterpart. A card claims a whole tile; this claims one line.",
+        "Item` / `ItemMedia` / `ItemContent` / `ItemTitle` / `ItemDescription` / `ItemActions` — the webkit anatomy this row composes.",
+        "FrameBox` + `ItemList` — the documented group pattern: the page draws one framed surface holding an `ItemList`, and the list rules between the rows. There is no `DocItemGroup` in the package; the group is this composition."
+      ],
+      "bestPractices": [
+        "Keep the title to a noun phrase and let the sentence carry the verb; inline code in the sentence renders as the chip.",
+        "Give every row of one list the same shape — all with glyphs or none, all linked or none — so the column reads as one object.",
+        "Compose rows inside a `FrameBox` (with a solid surface) holding an `ItemList`: the frame draws the single box and the list draws full-width dividers, and the `role=\"list\"` parent is what makes each row's `role=\"listitem\"` valid."
+      ]
+    },
     "doc-prose": {
       "import": "@aziontech/webkit/doc-prose",
       "target": "./src/components/documentation/doc-prose/doc-prose.vue",

@@ -78,5 +78,10 @@
     "name": "doc-card-group",
     "path": "src/components/documentation/doc-card-group/doc-card-group.vue",
     "limit": "3 KB"
+  },
+  {
+    "name": "doc-item",
+    "path": "src/components/documentation/doc-item/doc-item.vue",
+    "limit": "13.5 KB"
   }
 ]
