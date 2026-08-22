@@ -183,6 +183,7 @@
     "./pick-list-source": "./src/components/data/pick-list/pick-list-source/pick-list-source.vue",
     "./pick-list-target": "./src/components/data/pick-list/pick-list-target/pick-list-target.vue",
     "./pick-list-controls": "./src/components/data/pick-list/pick-list-controls/pick-list-controls.vue",
+    "./doc-prose": "./src/components/documentation/doc-prose/doc-prose.vue",
     "./message": "./src/components/feedback/message/message.vue",
     "./empty-state": "./src/components/feedback/empty-state/empty-state.vue",
     "./status-indicator": "./src/components/feedback/status-indicator/status-indicator.vue",
