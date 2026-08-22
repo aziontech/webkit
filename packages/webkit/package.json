@@ -185,6 +185,7 @@
     "./pick-list-controls": "./src/components/data/pick-list/pick-list-controls/pick-list-controls.vue",
     "./doc-callout": "./src/components/documentation/doc-callout/doc-callout.vue",
     "./doc-card": "./src/components/documentation/doc-card/doc-card.vue",
+    "./doc-card-group": "./src/components/documentation/doc-card-group/doc-card-group.vue",
     "./doc-prose": "./src/components/documentation/doc-prose/doc-prose.vue",
     "./message": "./src/components/feedback/message/message.vue",
     "./empty-state": "./src/components/feedback/empty-state/empty-state.vue",

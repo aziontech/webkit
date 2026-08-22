@@ -41,7 +41,7 @@ The admonition a documentation page interrupts itself with — Note, Info, Tip, 
 
 ```vue
 <script setup>
-import DocCallout from '@aziontech/webkit/doc-callout'
+  import DocCallout from '@aziontech/webkit/doc-callout'
 </script>
 
 <template>
@@ -53,10 +53,10 @@ import DocCallout from '@aziontech/webkit/doc-callout'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `kind` | `'note' \| 'info' \| 'tip' \| 'check' \| 'warning' \| 'danger'` | `'note'` | false | Which admonition this is; drives the severity color and the icon. |
-| `label` | `string` | `''` | false | Fallback copy when the default slot is empty. |
+| Prop    | Type                                                            | Default  | Required | JSDoc                                                             |
+| ------- | --------------------------------------------------------------- | -------- | -------- | ----------------------------------------------------------------- |
+| `kind`  | `'note' \| 'info' \| 'tip' \| 'check' \| 'warning' \| 'danger'` | `'note'` | false    | Which admonition this is; drives the severity color and the icon. |
+| `label` | `string`                                                        | `''`     | false    | Fallback copy when the default slot is empty.                     |
 
 ## Events
 
@@ -64,9 +64,9 @@ import DocCallout from '@aziontech/webkit/doc-callout'
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | The callout copy: inline prose, links and inline code. |
+| Slot      | Scope | Notes                                                  |
+| --------- | ----- | ------------------------------------------------------ |
+| `default` | —     | The callout copy: inline prose, links and inline code. |
 
 ## States
 
@@ -81,25 +81,25 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography (copy) | `.text-body-sm` |
-| typography (inline code) | `.text-label-code-sm` |
-| text | `var(--text-default)` |
-| surface (neutral kind) | `var(--bg-surface)` |
-| border (neutral kind) | `var(--border-default)` |
-| glyph (neutral kind) | `var(--primary)` |
-| surface + border (severity kinds) | `Message`'s own `data-severity` tokens |
-| surface (inline code, neutral) | `var(--bg-hover)` |
-| border (inline code, severity) | `var(--info-border)` / `var(--success-border)` / `var(--warning-border)` / `var(--danger-border)` |
-| shape (inline code) | `var(--shape-flat)` |
-| spacing | `var(--spacing-sm)` |
+| Region                            | Token (DESIGN.md)                                                                                 |
+| --------------------------------- | ------------------------------------------------------------------------------------------------- |
+| typography (copy)                 | `.text-body-sm`                                                                                   |
+| typography (inline code)          | `.text-label-code-sm`                                                                             |
+| text                              | `var(--text-default)`                                                                             |
+| surface (neutral kind)            | `var(--bg-surface)`                                                                               |
+| border (neutral kind)             | `var(--border-default)`                                                                           |
+| glyph (neutral kind)              | `var(--primary)`                                                                                  |
+| surface + border (severity kinds) | `Message`'s own `data-severity` tokens                                                            |
+| surface (inline code, neutral)    | `var(--bg-hover)`                                                                                 |
+| border (inline code, severity)    | `var(--info-border)` / `var(--success-border)` / `var(--warning-border)` / `var(--danger-border)` |
+| shape (inline code)               | `var(--shape-flat)`                                                                               |
+| spacing                           | `var(--spacing-sm)`                                                                               |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 

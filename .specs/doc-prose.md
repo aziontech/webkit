@@ -4,7 +4,7 @@ category: documentation
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 105b1dce320d82ce968e8978c67eae10c733cdd1b90452f9384f5e46ec6917de
+checksum: dd8a12ed6c5af4ce121ccc6da993d0951316502dd5276592f730b93166044c2e
 created: 2026-08-21
 last_updated: 2026-08-25
 ---
@@ -41,7 +41,7 @@ The typography contract every documentation page inherits. A markdown or MDX pip
 
 ```vue
 <script setup>
-import DocProse from '@aziontech/webkit/doc-prose'
+  import DocProse from '@aziontech/webkit/doc-prose'
 </script>
 
 <template>
@@ -68,9 +68,9 @@ import DocProse from '@aziontech/webkit/doc-prose'
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | The document body: markdown-rendered HTML or hand-written markup. |
+| Slot      | Scope | Notes                                                             |
+| --------- | ----- | ----------------------------------------------------------------- |
+| `default` | —     | The document body: markdown-rendered HTML or hand-written markup. |
 
 ## States
 
@@ -80,39 +80,39 @@ import DocProse from '@aziontech/webkit/doc-prose'
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| descendant link hover/focus | `transition-colors duration-150 ease-out` | inline (matches catalog) | `motion-reduce:transition-none` |
+| Trigger                     | Animation / Transition                    | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback         |
+| --------------------------- | ----------------------------------------- | ------------------------------------------------- | ------------------------------- |
+| descendant link hover/focus | `transition-colors duration-150 ease-out` | inline (matches catalog)                          | `motion-reduce:transition-none` |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography (h1) | `.text-heading-2xl` / `sm:.text-heading-xl` |
-| typography (h2) | `.text-heading-xl` / `sm:.text-heading-md` |
-| typography (h3) | `.text-heading-lg` / `md:.text-heading-sm` |
-| typography (h4) | `.text-heading-xs` |
-| typography (body, list item) | `.text-body-prose-md` |
-| typography (inline code) | `.text-label-code-sm` |
-| text | `var(--text-default)` |
-| text (blockquote, list marker) | `var(--text-muted)` |
-| link | `var(--text-link)` |
-| link.hover | `var(--text-link-hover)` |
-| surface (inline code) | `var(--bg-hover)` |
-| border (inline code, hr) | `var(--border-default)` |
-| border (blockquote rule) | `var(--border-strong)` |
-| shape (inline code) | `var(--shape-flat)` |
-| spacing (section step) | `var(--spacing-14)` (open, 56) / `var(--spacing-12)` (close, 48) |
-| spacing (block, indent) | `var(--spacing-lg)` |
-| spacing (base rung) | `var(--spacing-md)` |
-| spacing (tightened rungs) | `var(--spacing-sm)` / `var(--spacing-xs)` |
-| ring | `var(--ring-color)` |
+| Region                         | Token (DESIGN.md)                                                |
+| ------------------------------ | ---------------------------------------------------------------- |
+| typography (h1)                | `.text-heading-2xl` / `sm:.text-heading-xl`                      |
+| typography (h2)                | `.text-heading-xl` / `sm:.text-heading-md`                       |
+| typography (h3)                | `.text-heading-lg` / `md:.text-heading-sm`                       |
+| typography (h4)                | `.text-heading-xs`                                               |
+| typography (body, list item)   | `.text-body-prose-md`                                            |
+| typography (inline code)       | `.text-label-code-sm`                                            |
+| text                           | `var(--text-default)`                                            |
+| text (blockquote, list marker) | `var(--text-muted)`                                              |
+| link                           | `var(--text-link)`                                               |
+| link.hover                     | `var(--text-link-hover)`                                         |
+| surface (inline code)          | `var(--bg-hover)`                                                |
+| border (inline code, hr)       | `var(--border-default)`                                          |
+| border (blockquote rule)       | `var(--border-strong)`                                           |
+| shape (inline code)            | `var(--shape-flat)`                                              |
+| spacing (section step)         | `var(--spacing-14)` (open, 56) / `var(--spacing-12)` (close, 48) |
+| spacing (block, indent)        | `var(--spacing-lg)`                                              |
+| spacing (base rung)            | `var(--spacing-md)`                                              |
+| spacing (tightened rungs)      | `var(--spacing-sm)` / `var(--spacing-xs)`                        |
+| ring                           | `var(--ring-color)`                                              |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 

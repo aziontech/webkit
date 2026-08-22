@@ -41,7 +41,7 @@ One cell of the grid a documentation page scans across: a leading glyph, an opti
 
 ```vue
 <script setup>
-import DocCard from '@aziontech/webkit/doc-card'
+  import DocCard from '@aziontech/webkit/doc-card'
 </script>
 
 <template>
@@ -58,15 +58,15 @@ import DocCard from '@aziontech/webkit/doc-card'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `title` | `string` | `''` | false | Card heading. |
-| `overline` | `string` | `''` | false | Small muted line above the title — who makes the thing, when the title does not say. |
-| `icon` | `string` | `''` | false | PrimeIcons class for the leading glyph. Ignored when the `icon` slot is filled. |
-| `href` | `string` | `''` | false | Destination; when set the whole card becomes the link. |
-| `target` | `'_self' \| '_blank'` | `'_self'` | false | Where the link opens. |
-| `label` | `string` | `''` | false | Fallback copy when the default slot is empty. |
-| `link` | `string` | `''` | false | Call-to-action text; when set the card closes on a link row. |
+| Prop       | Type                  | Default   | Required | JSDoc                                                                                |
+| ---------- | --------------------- | --------- | -------- | ------------------------------------------------------------------------------------ |
+| `title`    | `string`              | `''`      | false    | Card heading.                                                                        |
+| `overline` | `string`              | `''`      | false    | Small muted line above the title — who makes the thing, when the title does not say. |
+| `icon`     | `string`              | `''`      | false    | PrimeIcons class for the leading glyph. Ignored when the `icon` slot is filled.      |
+| `href`     | `string`              | `''`      | false    | Destination; when set the whole card becomes the link.                               |
+| `target`   | `'_self' \| '_blank'` | `'_self'` | false    | Where the link opens.                                                                |
+| `label`    | `string`              | `''`      | false    | Fallback copy when the default slot is empty.                                        |
+| `link`     | `string`              | `''`      | false    | Call-to-action text; when set the card closes on a link row.                         |
 
 ## Events
 
@@ -74,10 +74,10 @@ import DocCard from '@aziontech/webkit/doc-card'
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | Card copy. |
-| `icon` | — | The leading mark, when a font glyph will not do. Replaces `icon`. |
+| Slot      | Scope | Notes                                                             |
+| --------- | ----- | ----------------------------------------------------------------- |
+| `default` | —     | Card copy.                                                        |
+| `icon`    | —     | The leading mark, when a font glyph will not do. Replaces `icon`. |
 
 ## States
 
@@ -87,32 +87,32 @@ import DocCard from '@aziontech/webkit/doc-card'
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| hover on a linked card | `transition-colors duration-150 ease-out` | inline (matches catalog) | `motion-reduce:transition-none` |
-| hover on the trailing glyph | `transition-[translate] duration-moderate-02 ease-expressive-entrance` | semantic | `motion-reduce:transition-none` |
+| Trigger                     | Animation / Transition                                                 | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback         |
+| --------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------- | ------------------------------- |
+| hover on a linked card      | `transition-colors duration-150 ease-out`                              | inline (matches catalog)                          | `motion-reduce:transition-none` |
+| hover on the trailing glyph | `transition-[translate] duration-moderate-02 ease-expressive-entrance` | semantic                                          | `motion-reduce:transition-none` |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography (title) | `.text-heading-xs` |
-| typography (copy) | `.text-body-sm` |
-| typography (overline) | `.text-overline-sm` |
-| typography (cta) | `.text-label-md` |
-| text | `var(--text-default)` |
-| text (overline, copy) | `var(--text-muted)` |
-| link (cta) | `var(--text-link)` |
-| surface | `var(--bg-surface)` |
-| surface.hover | `var(--bg-hover)` |
-| spacing | `var(--spacing-md)` / `var(--spacing-sm)` / `var(--spacing-xxs)` |
-| ring | `var(--ring-color)` |
+| Region                | Token (DESIGN.md)                                                |
+| --------------------- | ---------------------------------------------------------------- |
+| typography (title)    | `.text-heading-xs`                                               |
+| typography (copy)     | `.text-body-sm`                                                  |
+| typography (overline) | `.text-overline-sm`                                              |
+| typography (cta)      | `.text-label-md`                                                 |
+| text                  | `var(--text-default)`                                            |
+| text (overline, copy) | `var(--text-muted)`                                              |
+| link (cta)            | `var(--text-link)`                                               |
+| surface               | `var(--bg-surface)`                                              |
+| surface.hover         | `var(--bg-hover)`                                                |
+| spacing               | `var(--spacing-md)` / `var(--spacing-sm)` / `var(--spacing-xxs)` |
+| ring                  | `var(--ring-color)`                                              |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
