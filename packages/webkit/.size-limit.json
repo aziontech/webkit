@@ -98,5 +98,10 @@
     "name": "doc-frame",
     "path": "src/components/documentation/doc-frame/doc-frame.vue",
     "limit": "6.5 KB"
+  },
+  {
+    "name": "doc-update",
+    "path": "src/components/documentation/doc-update/doc-update.vue",
+    "limit": "3 KB"
   }
 ]

@@ -4949,6 +4949,72 @@
         "Give a step a body only when the heading alone does not carry it; the rail stretches to cover whatever the body holds."
       ]
     },
+    "doc-update": {
+      "import": "@aziontech/webkit/doc-update",
+      "target": "./src/components/documentation/doc-update/doc-update.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/doc-update",
+      "category": "documentation",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "The entry's name — a date, a release name. Also its anchor."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Secondary line under the label; usually the version."
+        },
+        {
+          "name": "tags",
+          "type": "string[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "Short labels categorising the entry: a product, an area, a kind of change."
+        },
+        {
+          "name": "anchor",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Anchor override; wins over the slug derived from the label. Set it when two entries share a label."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The release notes: prose, lists, code, or any documentation component."
+        }
+      ],
+      "purpose": "One entry in a changelog: what shipped, when, and under which version. The release's identity sits in a left column — the date, the version under it, the tags under that — the notes sit on the right, and a rule runs between them for the length of the entry and bridges the block gap to the next one, so a set of entries reads as one continuous timeline rather than a stack of boxes. The label is an `h2` and a link to its own id, because every entry is a URL somebody sends — the id is the label slugified, unless an explicit `anchor` overrides it.",
+      "useWhen": [
+        "A changelog or release-notes page: one `DocUpdate` per release, newest first, inside `DocProse`.",
+        "Any dated series a reader scans by its left edge — announcements, incident retrospectives, versioned API changes."
+      ],
+      "avoidWhen": [
+        "For a single dated aside inside a guide — that is a `DocCallout`, not a timeline entry.",
+        "As a styled row inside another section. The label is an `h2`, so every entry claims a slot in the page outline; nesting one under a deeper heading breaks the outline.",
+        "To generate a feed. Mintlify's `rss` prop is deliberately absent — this layer renders pages and generates nothing, so the prop would be inert."
+      ],
+      "related": [
+        "DocProse` — the contract around it: `data-doc-block` takes the block rung of the spacing ladder, and `data-doc-chrome` keeps prose rules off the label column.",
+        "Tag` — renders the entry's tags row (`severity=\"secondary\"`, small, rounded).",
+        "use-heading-nav` — the composable the label anchor calls. A page that owns its scroll container provides a scroller-aware handler with `provideHeadingNav`; rendered outside a provider, the injected default is a no-op — never a throw — and the browser's native hash navigation takes over."
+      ],
+      "bestPractices": [
+        "Put the date (or release name) in `label` and the version in `description` — the left edge is what a reader scans, so the label carries the identity.",
+        "Keep headings inside an entry one level below the label: the label is the entry's `h2`.",
+        "Set `anchor` only when two entries share a label; otherwise let the id derive from the label so shared links match what readers see."
+      ]
+    },
     "message": {
       "import": "@aziontech/webkit/message",
       "target": "./src/components/feedback/message/message.vue",
@@ -11120,6 +11186,12 @@
       "target": "./src/composables/use-focus-trap/index.js",
       "kind": "composable",
       "treeShakeableImport": "@aziontech/webkit/use-focus-trap"
+    },
+    "use-heading-nav": {
+      "import": "@aziontech/webkit/use-heading-nav",
+      "target": "./src/composables/use-heading-nav/index.ts",
+      "kind": "composable",
+      "treeShakeableImport": "@aziontech/webkit/use-heading-nav"
     },
     "use-placement": {
       "import": "@aziontech/webkit/use-placement",

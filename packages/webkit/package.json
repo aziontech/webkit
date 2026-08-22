@@ -191,6 +191,7 @@
     "./doc-prose": "./src/components/documentation/doc-prose/doc-prose.vue",
     "./doc-step": "./src/components/documentation/doc-step/doc-step.vue",
     "./doc-steps": "./src/components/documentation/doc-steps/doc-steps.vue",
+    "./doc-update": "./src/components/documentation/doc-update/doc-update.vue",
     "./message": "./src/components/feedback/message/message.vue",
     "./empty-state": "./src/components/feedback/empty-state/empty-state.vue",
     "./status-indicator": "./src/components/feedback/status-indicator/status-indicator.vue",
@@ -337,6 +338,7 @@
     "./styles/country-flags": "./src/styles/country-flags.css",
     "./use-controllable": "./src/composables/use-controllable/index.js",
     "./use-focus-trap": "./src/composables/use-focus-trap/index.js",
+    "./use-heading-nav": "./src/composables/use-heading-nav/index.ts",
     "./use-placement": "./src/composables/use-placement/index.js",
     "./vite": "./src/vite/index.js"
   }
