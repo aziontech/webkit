@@ -130,6 +130,11 @@ export const textsData = {
     fontWeight: fontWeight.light,
     lineHeight: leading.snug
   },
+  'text-body-prose-md': {
+    fontSize: fontSize.base,
+    fontWeight: fontWeight.light,
+    lineHeight: leading.relaxed
+  },
   'text-body-sm': {
     fontSize: fontSize.sm,
     fontWeight: fontWeight.light,

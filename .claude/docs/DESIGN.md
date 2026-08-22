@@ -65,6 +65,7 @@ Reference: `packages/webkit/src/components/webkit/actions/button/button.vue`.
 | `text-big-number-lg` / `text-big-number-md` / `text-big-number-sm` | Large numeric displays                   |
 | `text-heading-2xl` … `text-heading-sm`                             | Headings                                 |
 | `text-body-lg` … `text-body-xxs`                                   | Body copy                                |
+| `text-body-prose-md`                                               | Long-form prose — body copy at `--leading-relaxed` (1.625); the `text-body-*` set is `snug` (1.375) |
 | `text-label-sm` / `text-label-md` / `text-label-lg`                | Labels, compact UI text                  |
 | `text-label-code-sm` / `text-label-code-md` / `text-label-code-lg` | Monospace code labels (filename bar, code lines, line numbers) |
 | `text-body-code-sm`                                                | Monospace prose — a mono paragraph that WRAPS (the `label-code-*` set is `leading-none`, made for one-row-per-line code) |
