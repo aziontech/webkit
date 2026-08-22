@@ -8528,6 +8528,13 @@
           "doc": "Accessible name for the navigation landmark."
         },
         {
+          "name": "side",
+          "type": "'start' | 'end'",
+          "default": "'start'",
+          "required": "false",
+          "doc": "Which edge of the layout the rail is anchored to; `end` mirrors the border, the drag handle, the collapse glyphs and the edge affordance."
+        },
+        {
           "name": "resizable",
           "type": "boolean",
           "default": "false",
@@ -8606,7 +8613,7 @@
           "notes": "Named slot. The collapse trigger renders after this content in the same row, under one full-width separator, so a profile block and the trigger read as one footer."
         }
       ],
-      "purpose": "Helps users move between views or sections. Composable application sidebar with optional header and footer regions; navigation content scrolls inside a built-in `ScrollArea`. It also owns **the rail gesture** — sizing the sidebar by dragging its trailing edge, and collapsing it out of the layout entirely. That belongs here rather than in each shell: the interaction is not a small one (a pointer drag that crosses the collapse boundary continuously, a keyboard equivalent, token-derived bounds, a phase-aware transition, and an affordance that brings a collapsed rail back), and every app that has a sidebar wants the same one. Two shells re-implementing it is how the two drift apart. Both halves are **opt-in and independent**: `resizable` adds the drag, `collapsible` adds the collapse trigger and the edge affordance. With neither set the component renders exactly as it always has, with the host owning the width — every existing consumer is unaffected."
+      "purpose": "Helps users move between views or sections. Composable application sidebar with optional header and footer regions; navigation content scrolls inside a built-in `ScrollArea`. It also owns **the rail gesture** — sizing the sidebar by dragging its trailing edge, and collapsing it out of the layout entirely. That belongs here rather than in each shell: the interaction is not a small one (a pointer drag that crosses the collapse boundary continuously, a keyboard equivalent, token-derived bounds, a phase-aware transition, and an affordance that brings a collapsed rail back), and every app that has a sidebar wants the same one. Two shells re-implementing it is how the two drift apart. Both halves are **opt-in and independent**: `resizable` adds the drag, `collapsible` adds the collapse trigger and the edge affordance. With neither set the component renders exactly as it always has, with the host owning the width — every existing consumer is unaffected. **`side` is the third opt-in, and it exists so a trailing panel is this component too.** An explorer layout — a log with a detail panel, a database browser with a schema panel — puts a resizable, hideable panel on the *right*, and the only thing that differs there is the direction of every horizontal decision: which edge the border and the handle sit on, which way a drag grows the panel, which way it leaves, and which way the arrow keys and the collapse glyph point. `side: 'end'` mirrors all of them from a single sign, so the trailing panel inherits the same clamping, the same phase-aware transition, the same `inert` collapsed state and the same testids — instead of being re-implemented beside the leading one, which is exactly how the two would drift."
     },
     "sidebar-group": {
       "import": "@aziontech/webkit/sidebar-group",

@@ -425,4 +425,83 @@ describe('Sidebar', () => {
       await waitFor(() => expect(getByTestId('layout-sidebar').style.width).not.toBe(''))
     })
   })
+
+  // A trailing rail is the SAME rail with every horizontal decision mirrored. These
+  // pin the mirror itself — the direction the keys size it, the direction it leaves —
+  // rather than the classes that express it, which is what the CSS-less browser env
+  // can actually observe (see .claude/rules/testing.md).
+  describe('side prop (a trailing rail is the same component)', () => {
+    it('defaults to the leading edge and publishes it on the root', () => {
+      const { getByTestId } = render(Sidebar)
+      expect(getByTestId('layout-sidebar').getAttribute('data-side')).toBe('start')
+    })
+
+    it('publishes the trailing edge on the root', () => {
+      const { getByTestId } = render(Sidebar, { props: { side: 'end' } })
+      expect(getByTestId('layout-sidebar').getAttribute('data-side')).toBe('end')
+    })
+
+    it('mirrors the arrow keys: ArrowLeft GROWS a trailing rail, ArrowRight shrinks it', async () => {
+      const { getByTestId, emitted } = render(Sidebar, {
+        props: { side: 'end', resizable: true, width: 300 },
+        slots: { default: '<a href="/">Home</a>' }
+      })
+
+      getByTestId('layout-sidebar__handle').focus()
+      await userEvent.keyboard('{ArrowLeft}')
+      expect(emitted()['update:width']?.at(-1)).toEqual([316])
+
+      await userEvent.keyboard('{ArrowRight}')
+      expect(emitted()['update:width']?.at(-1)).toEqual([300])
+    })
+
+    it('mirrors the drag: moving the pointer LEFT grows a trailing rail', async () => {
+      const { getByTestId, emitted } = render(Sidebar, {
+        props: { side: 'end', resizable: true, width: 300 },
+        slots: { default: '<a href="/">Home</a>' }
+      })
+
+      const handle = getByTestId('layout-sidebar__handle')
+      await fireEvent.pointerDown(handle, { clientX: 500 })
+      await fireEvent.pointerMove(globalThis.window, { clientX: 460 })
+      await fireEvent.pointerUp(globalThis.window)
+
+      expect(emitted()['update:width']?.at(-1)).toEqual([340])
+    })
+
+    it('a collapsed trailing rail leaves through its own edge, and holds no tab stops', async () => {
+      const { getByTestId } = render(Sidebar, {
+        props: { side: 'end', resizable: true, collapsible: true, collapsed: true, width: 300 },
+        slots: { default: '<a href="/">Home</a>' }
+      })
+
+      const root = getByTestId('layout-sidebar')
+      expect(root.getAttribute('inert')).not.toBeNull()
+      // Positive translate = out through the RIGHT edge (a leading rail is negative).
+      const transform = getByTestId('layout-sidebar__panel').style.transform
+      expect(transform).toContain('translateX(')
+      expect(transform).not.toContain('-')
+    })
+
+    it('a trailing rail has no axe violations, open or collapsed', async () => {
+      const open = render(Sidebar, {
+        props: { side: 'end', resizable: true, collapsible: true, ariaLabel: 'Event' },
+        slots: { default: '<a href="/">Home</a>' }
+      })
+      await expectNoA11yViolations(open.container)
+      open.unmount()
+
+      const closed = render(Sidebar, {
+        props: {
+          side: 'end',
+          resizable: true,
+          collapsible: true,
+          collapsed: true,
+          ariaLabel: 'Event'
+        },
+        slots: { default: '<a href="/">Home</a>' }
+      })
+      await expectNoA11yViolations(closed.container)
+    })
+  })
 })
