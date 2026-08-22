@@ -188,6 +188,8 @@
     "./doc-card-group": "./src/components/documentation/doc-card-group/doc-card-group.vue",
     "./doc-item": "./src/components/documentation/doc-item/doc-item.vue",
     "./doc-prose": "./src/components/documentation/doc-prose/doc-prose.vue",
+    "./doc-step": "./src/components/documentation/doc-step/doc-step.vue",
+    "./doc-steps": "./src/components/documentation/doc-steps/doc-steps.vue",
     "./message": "./src/components/feedback/message/message.vue",
     "./empty-state": "./src/components/feedback/empty-state/empty-state.vue",
     "./status-indicator": "./src/components/feedback/status-indicator/status-indicator.vue",

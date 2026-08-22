@@ -4788,6 +4788,83 @@
         "Keep the consumer's column cap outside this component; it is typography, not layout."
       ]
     },
+    "doc-step": {
+      "import": "@aziontech/webkit/doc-step",
+      "target": "./src/components/documentation/doc-step/doc-step.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/doc-step",
+      "category": "documentation",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "The step heading."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "Optional body under the step heading: prose, code, or another component."
+        }
+      ],
+      "purpose": "One numbered step of a `DocSteps` walkthrough: the circled index, the rail that continues to the next step, the step heading, and any content the author nests underneath. The number and the last-step mark come from the `DocSteps` context — the step registers itself during setup and reads its reactive index back, so an author writes a title and never a number. Rendered outside a `DocSteps` provider it throws (`useDocStepsContext must be used within DocSteps.`) instead of rendering unnumbered.",
+      "useWhen": [
+        "Only as a direct child of `DocSteps`, one per instruction the reader performs."
+      ],
+      "avoidWhen": [
+        "Anywhere outside a `DocSteps` column — the context composable throws by design.",
+        "For a checklist entry or a feature bullet — a step claims an order and a number."
+      ],
+      "related": [
+        "DocSteps` — the sibling root that numbers this; it provides the context this step registers with.",
+        "DocProse` — the step heading marks itself `data-doc-chrome`, so prose rules stop at its edge."
+      ],
+      "bestPractices": [
+        "Lead the title with the verb and keep it to one line of instruction.",
+        "Put elaboration — prose, a code block, another component — in the body slot, not in the title.",
+        "Never restate the number in the title; the circle carries it."
+      ]
+    },
+    "doc-steps": {
+      "import": "@aziontech/webkit/doc-steps",
+      "target": "./src/components/documentation/doc-steps/doc-steps.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/doc-steps",
+      "category": "documentation",
+      "structure": "monolithic",
+      "status": "implemented",
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The `DocStep` children, in the order they should be numbered."
+        }
+      ],
+      "purpose": "The ordered walkthrough from the docs frame: a column of `DocStep` children joined by a rail. Each step registers itself through the context this root provides and reads its number back, so the numbering is a fact of the document order — an author writes titles, never numbers, and reordering the page renumbers it. The final registered step is marked last, which is what drops its connector and trailing space.",
+      "useWhen": [
+        "A procedure the reader performs in order: install, link, deploy.",
+        "Any \"follow these steps\" band in documentation prose, however short."
+      ],
+      "avoidWhen": [
+        "For a wizard or form flow inside the application — that is the console's own stepper surface, not documentation chrome.",
+        "For an unordered list of options or features — order is the whole claim this component makes; a list that has none is a plain list or `DocItem` rows.",
+        "For a single instruction — one step is a sentence, not a walkthrough."
+      ],
+      "related": [
+        "DocStep` — the sibling root this numbers; a step registers with this context on mount and throws when rendered outside one.",
+        "DocProse` — the contract around it. The column marks itself `data-doc-block`, so it takes the block rung of the prose ladder."
+      ],
+      "bestPractices": [
+        "Start each step title with the verb; keep the how in the step's body.",
+        "Let the numbering be the document order — never encode a number into a title.",
+        "Give a step a body only when the heading alone does not carry it; the rail stretches to cover whatever the body holds."
+      ]
+    },
     "message": {
       "import": "@aziontech/webkit/message",
       "target": "./src/components/feedback/message/message.vue",

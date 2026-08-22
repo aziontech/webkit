@@ -83,5 +83,15 @@
     "name": "doc-item",
     "path": "src/components/documentation/doc-item/doc-item.vue",
     "limit": "13.5 KB"
+  },
+  {
+    "name": "doc-steps",
+    "path": "src/components/documentation/doc-steps/doc-steps.vue",
+    "limit": "4 KB"
+  },
+  {
+    "name": "doc-step",
+    "path": "src/components/documentation/doc-step/doc-step.vue",
+    "limit": "3 KB"
   }
 ]
