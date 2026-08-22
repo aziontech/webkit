@@ -186,6 +186,7 @@
     "./doc-callout": "./src/components/documentation/doc-callout/doc-callout.vue",
     "./doc-card": "./src/components/documentation/doc-card/doc-card.vue",
     "./doc-card-group": "./src/components/documentation/doc-card-group/doc-card-group.vue",
+    "./doc-frame": "./src/components/documentation/doc-frame/doc-frame.vue",
     "./doc-item": "./src/components/documentation/doc-item/doc-item.vue",
     "./doc-prose": "./src/components/documentation/doc-prose/doc-prose.vue",
     "./doc-step": "./src/components/documentation/doc-step/doc-step.vue",

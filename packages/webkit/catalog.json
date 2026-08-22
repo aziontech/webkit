@@ -4680,6 +4680,90 @@
         "Let an incomplete last row be empty; do not stretch the last card to fill it."
       ]
     },
+    "doc-frame": {
+      "import": "@aziontech/webkit/doc-frame",
+      "target": "./src/components/documentation/doc-frame/doc-frame.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/doc-frame",
+      "category": "documentation",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "caption",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Caption under the frame, centered; plain-text fallback for the caption slot."
+        },
+        {
+          "name": "hint",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Lead-in above the frame, left aligned; plain-text fallback for the hint slot."
+        },
+        {
+          "name": "src",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Media source; omit to frame slot content instead."
+        },
+        {
+          "name": "alt",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Alternative text for the framed media."
+        },
+        {
+          "name": "autoplay",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "Plays the clip on its own, muted, inline and looping, with no controls."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "Framed content when no `src` is given."
+        },
+        {
+          "name": "caption",
+          "scope": "—",
+          "notes": "Rich caption content; the `caption` prop is its plain-text fallback inside the slot."
+        },
+        {
+          "name": "hint",
+          "scope": "—",
+          "notes": "Rich lead-in content; the `hint` prop is its plain-text fallback inside the slot."
+        }
+      ],
+      "purpose": "The bordered surface every screenshot, diagram and clip in a documentation page sits on, so no media floats loose on the canvas and all of it shares one border, radius and inset. Pass `src` and the frame decides from the extension whether it holds a still or a clip; compose the default slot when the framed thing is markup. A still opens full screen out of its own frame — the picture is the button — while a clip keeps its player controls and composed content has no source to open. The caption reads under the frame, centered, as part of the picture; the hint reads above it on the text's own left edge, as part of the sentence that led the reader here; each is a string prop for the plain case with a slot of the same name for rich content.",
+      "useWhen": [
+        "Any screenshot, diagram or screen recording inside documentation prose — every one of them, so the page's media all shares one border, radius and inset.",
+        "A composed panel or mock the page wants presented as a figure rather than as live UI: fill the default slot.",
+        "A clip that decorates a step (`autoplay`) or one the reader chooses to play (default, with controls)."
+      ],
+      "avoidWhen": [
+        "For an application-screen media block outside documentation prose — use `FrameBox` or compose the layout directly.",
+        "For an image that is itself a link or a card — a frame is a figure, not a navigation target.",
+        "For a gallery or carousel; the frame holds one piece of media at a time."
+      ],
+      "related": [
+        "DocProse` — the page contract around it. The frame marks itself `data-doc-block`, so it takes the block rung of the prose ladder, and its caption and hint arrive unclassed for the page to style.",
+        "DocCallout` — the other block-level interruption; a callout carries words, a frame carries media."
+      ],
+      "bestPractices": [
+        "Always pass `alt` for a still or a clip: it labels the media, names the zoom trigger, and titles the full-screen dialog.",
+        "Keep the caption to one line that belongs to the picture; a paragraph of context belongs in the prose above, or in `hint` when it leads directly into the frame.",
+        "Use the `caption` / `hint` slots only when the sentence needs markup (a link, a bold run, a code chip); the string props cover the plain case in one attribute.",
+        "Reach for `autoplay` only when the clip is decoration: it mutes, inlines and loops the clip and removes its controls, on the prop path and for a clip written by hand in the slot alike."
+      ]
+    },
     "doc-item": {
       "import": "@aziontech/webkit/doc-item",
       "target": "./src/components/documentation/doc-item/doc-item.vue",

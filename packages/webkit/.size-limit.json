@@ -93,5 +93,10 @@
     "name": "doc-step",
     "path": "src/components/documentation/doc-step/doc-step.vue",
     "limit": "3 KB"
+  },
+  {
+    "name": "doc-frame",
+    "path": "src/components/documentation/doc-frame/doc-frame.vue",
+    "limit": "6.5 KB"
   }
 ]
