@@ -63,5 +63,10 @@
     "name": "doc-prose",
     "path": "src/components/documentation/doc-prose/doc-prose.vue",
     "limit": "1.5 KB"
+  },
+  {
+    "name": "doc-callout",
+    "path": "src/components/documentation/doc-callout/doc-callout.vue",
+    "limit": "6.5 KB"
   }
 ]
