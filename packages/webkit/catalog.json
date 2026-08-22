@@ -4487,6 +4487,57 @@
       "parent": "pick-list",
       "treeShakeableImport": "@aziontech/webkit/pick-list-controls"
     },
+    "doc-callout": {
+      "import": "@aziontech/webkit/doc-callout",
+      "target": "./src/components/documentation/doc-callout/doc-callout.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/doc-callout",
+      "category": "documentation",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "kind",
+          "type": "'note' | 'info' | 'tip' | 'check' | 'warning' | 'danger'",
+          "default": "'note'",
+          "required": "false",
+          "doc": "Which admonition this is; drives the severity color and the icon."
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Fallback copy when the default slot is empty."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The callout copy: inline prose, links and inline code."
+        }
+      ],
+      "purpose": "The admonition a documentation page interrupts itself with — Note, Info, Tip, Check, Warning, Danger — rendered on the webkit `Message` surface, so the severity colour, the border, the icon and the radius come from the design system rather than from this layer. Its anatomy is a glyph and one row of inline prose, nothing else.",
+      "useWhen": [
+        "An aside the reader must not miss mid-prose: a caveat, a prerequisite, a warning about data loss.",
+        "A short confirmation that a step worked (`check`), or a shortcut worth knowing (`tip`)."
+      ],
+      "avoidWhen": [
+        "For a block that needs its own box — a list, a fenced sample, a card grid. Those belong outside the callout; its body is inline prose.",
+        "For an application-screen banner or a form error — use `Message` directly, which is what this composes.",
+        "As a section heading. A callout is an interruption, not structure."
+      ],
+      "related": [
+        "Message` — the webkit surface this renders on; reach for it directly outside documentation prose.",
+        "DocProse` — the contract around it. A callout marks itself `data-doc-chrome`, so prose rules stop at its edge, and `data-doc-block`, so it takes the block rung of the ladder."
+      ],
+      "bestPractices": [
+        "Let the glyph and the tint carry the severity; do not restate it in the copy (\"Warning: …\").",
+        "Keep the body to inline prose — a sentence or two, links and inline code.",
+        "Reach for `tip` when the aside claims nothing about stakes. Borrowing `check` for a friendly shortcut paints a shortcut the same green as a confirmed success."
+      ]
+    },
     "doc-prose": {
       "import": "@aziontech/webkit/doc-prose",
       "target": "./src/components/documentation/doc-prose/doc-prose.vue",
