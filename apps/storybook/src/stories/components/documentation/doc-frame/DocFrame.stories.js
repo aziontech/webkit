@@ -149,6 +149,15 @@ export const Autoplay = {
   render: () => ({ components: { DocFrame }, template: AUTOPLAY_TEMPLATE }),
   parameters: {
     controls: { disable: true },
+    /*
+     * No visual snapshot: this clip plays on its own and loops, so the frame on screen
+     * when the screenshot is taken is whatever the video happened to reach. There is no
+     * stable baseline to compare against — successive runs differed by 85KB of image —
+     * and a snapshot that cannot agree with itself fails the gate at random rather than
+     * catching a regression. The other three Frames stories cover the chrome; what is
+     * unique here is the autoplay attribute set, which the browser test asserts.
+     */
+    visual: false,
     docs: {
       description: {
         story:
