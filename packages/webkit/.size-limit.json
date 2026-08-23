@@ -118,5 +118,10 @@
     "name": "doc-pagination",
     "path": "src/components/documentation/doc-pagination/doc-pagination.vue",
     "limit": "1.5 KB"
+  },
+  {
+    "name": "doc-page-header",
+    "path": "src/components/documentation/doc-page-header/doc-page-header.vue",
+    "limit": "24 KB"
   }
 ]

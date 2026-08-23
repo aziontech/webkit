@@ -4837,6 +4837,89 @@
         "Compose rows inside a `FrameBox` (with a solid surface) holding an `ItemList`: the frame draws the single box and the list draws full-width dividers, and the `role=\"list\"` parent is what makes each row's `role=\"listitem\"` valid."
       ]
     },
+    "doc-page-header": {
+      "import": "@aziontech/webkit/doc-page-header",
+      "target": "./src/components/documentation/doc-page-header/doc-page-header.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/doc-page-header",
+      "category": "documentation",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "The page title."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "The deck under the title."
+        },
+        {
+          "name": "breadcrumb",
+          "type": "DocCrumb[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "Ancestor trail, current page last."
+        },
+        {
+          "name": "copyable",
+          "type": "boolean",
+          "default": "true",
+          "required": "false",
+          "doc": "Shows the Copy Page control."
+        },
+        {
+          "name": "source",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "The markdown handed to the clipboard by the primary action."
+        },
+        {
+          "name": "lastUpdated",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "When the page's content last changed. ISO date, or a ready-made string."
+        }
+      ],
+      "events": [
+        {
+          "name": "copy",
+          "payload": "(event: MouseEvent, source: string)",
+          "notes": "Fired when the primary Copy Page action runs, after the copy resolves. Event first, per `event-payloads.md`."
+        },
+        {
+          "name": "action",
+          "payload": "(event: MouseEvent | KeyboardEvent, item: { label: string; value?: string })",
+          "notes": "Fired when one of the attached AI actions is chosen; `item` is the entry that was picked."
+        }
+      ],
+      "purpose": "The masthead of a documentation page: where the reader is (the breadcrumb), what the page is (the title), what they can do with it (a Copy Page control that hands the page to an AI tool), the deck that says what they will have by the end, and when the content last changed. It closes on a rule spanning the column, which is what gives every `h2` below it something to be subordinate to.",
+      "useWhen": [
+        "At the top of any documentation or changelog page, above `DocProse`."
+      ],
+      "avoidWhen": [
+        "For an application screen's title — that is `PageHeading`, which carries console actions rather than a Copy Page control.",
+        "For a section heading inside a page — the content's own `h2` does that, and the masthead's `h1` is chrome."
+      ],
+      "related": [
+        "DocProse` — the body below it. The masthead's `h1` is chrome, so authored content starts at `h2`.",
+        "DocOnThisPage` — the rail beside the body, which lists those `h2`s.",
+        "SplitButton` — the Copy Page control's shape: a primary action plus attached alternatives."
+      ],
+      "bestPractices": [
+        "Give `source` the page's markdown so the primary action copies something a model can read.",
+        "Let `lastUpdated` come from the page's own frontmatter. It is the author's claim that the content changed, not the file's mtime.",
+        "Put the current page last in `breadcrumb`; it is marked as current for you."
+      ]
+    },
     "doc-pagination": {
       "import": "@aziontech/webkit/doc-pagination",
       "target": "./src/components/documentation/doc-pagination/doc-pagination.vue",
