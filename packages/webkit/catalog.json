@@ -4837,6 +4837,72 @@
         "Compose rows inside a `FrameBox` (with a solid surface) holding an `ItemList`: the frame draws the single box and the list draws full-width dividers, and the `role=\"list\"` parent is what makes each row's `role=\"listitem\"` valid."
       ]
     },
+    "doc-on-this-page": {
+      "import": "@aziontech/webkit/doc-on-this-page",
+      "target": "./src/components/documentation/doc-on-this-page/doc-on-this-page.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/doc-on-this-page",
+      "category": "documentation",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "items",
+          "type": "DocTocItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The headings, in document order."
+        },
+        {
+          "name": "activeId",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "The id of the heading currently in view."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "'On this page'",
+          "required": "false",
+          "doc": "The rail's own heading."
+        },
+        {
+          "name": "groups",
+          "type": "DocTocGroup[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "Complementary groups rendered below the outline, in order."
+        }
+      ],
+      "events": [
+        {
+          "name": "select",
+          "payload": "(event: MouseEvent, item: DocTocItem)",
+          "notes": "Fired when a rail entry is activated; the page decides what scrolling means. Event first, per `event-payloads.md`."
+        }
+      ],
+      "purpose": "The \"On this page\" rail: the page's own headings, the active one lit, nested headings indented under their parent — followed by the rail's complementary groups (the repository, the community). The rail is a single path that bends inward as the outline nests, and the active marker is a dash cut from that same path, so moving between headings slides the marker **along** the line, through the bends, rather than jumping a separate bar between two positions.",
+      "useWhen": [
+        "Beside the body of a long documentation page, as in-page navigation over its `h2`/`h3` outline.",
+        "To carry a page's peer links (repository, community) under the outline, each as its own named group."
+      ],
+      "avoidWhen": [
+        "Expecting it to track scroll. It is presentation only: `activeId` is a prop, because the page owns the scroll container and therefore owns which heading is active.",
+        "For navigation _between_ pages — that is `DocPagination` at the foot, or the sidebar.",
+        "For an outline deeper than a couple of levels; the indent is legible for two, not for five."
+      ],
+      "related": [
+        "DocPageHeader` — the masthead above the body, whose `h1` is chrome, so the outline starts at `h2`.",
+        "DocPagination` — navigation between documents, where this is navigation within one.",
+        "use-heading-nav` — the composable a page uses to receive a rail activation and scroll its own container."
+      ],
+      "bestPractices": [
+        "Feed it depth 2 and 3 only; the rail indents each level by 8px and a third level reads as noise.",
+        "Own the active heading in the page (a scroll-spy) and pass it down; do not expect the rail to guess.",
+        "Keep the complementary groups to peers of the page, never sections of it — a reader must not read \"Join us on Discord\" as part of what they are reading."
+      ]
+    },
     "doc-page-header": {
       "import": "@aziontech/webkit/doc-page-header",
       "target": "./src/components/documentation/doc-page-header/doc-page-header.vue",

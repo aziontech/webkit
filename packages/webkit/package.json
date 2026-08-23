@@ -188,6 +188,7 @@
     "./doc-card-group": "./src/components/documentation/doc-card-group/doc-card-group.vue",
     "./doc-frame": "./src/components/documentation/doc-frame/doc-frame.vue",
     "./doc-item": "./src/components/documentation/doc-item/doc-item.vue",
+    "./doc-on-this-page": "./src/components/documentation/doc-on-this-page/doc-on-this-page.vue",
     "./doc-page-header": "./src/components/documentation/doc-page-header/doc-page-header.vue",
     "./doc-pagination": "./src/components/documentation/doc-pagination/doc-pagination.vue",
     "./doc-prompt": "./src/components/documentation/doc-prompt/doc-prompt.vue",
