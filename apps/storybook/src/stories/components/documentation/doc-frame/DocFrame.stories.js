@@ -56,8 +56,7 @@ const meta = {
   argTypes: {
     caption: {
       control: 'text',
-      description:
-        'Caption under the frame, centered; plain-text fallback for the caption slot.',
+      description: 'Caption under the frame, centered; plain-text fallback for the caption slot.',
       table: { type: { summary: 'string' }, defaultValue: { summary: "''" } }
     },
     hint: {

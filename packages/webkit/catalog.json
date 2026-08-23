@@ -5017,6 +5017,93 @@
         "Give a step a body only when the heading alone does not carry it; the rail stretches to cover whatever the body holds."
       ]
     },
+    "doc-tooltip": {
+      "import": "@aziontech/webkit/doc-tooltip",
+      "target": "./src/components/documentation/doc-tooltip/doc-tooltip.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/doc-tooltip",
+      "category": "documentation",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "tip",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "The definition shown inside the panel."
+        },
+        {
+          "name": "headline",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Bold lead-in above the definition — usually the term itself."
+        },
+        {
+          "name": "cta",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Label for the panel's call-to-action link. Needs `href`."
+        },
+        {
+          "name": "href",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Destination for the call-to-action link."
+        },
+        {
+          "name": "placement",
+          "type": "'top' | 'bottom' | 'auto'",
+          "default": "'top'",
+          "required": "false",
+          "doc": "Where the panel opens; `'auto'` picks the side with the most room."
+        },
+        {
+          "name": "delay",
+          "type": "number",
+          "default": "150",
+          "required": "false",
+          "doc": "Hover-open delay in milliseconds."
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Fallback trigger text when the default slot is empty."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The glossed term, rendered inline in the sentence."
+        }
+      ],
+      "purpose": "The inline gloss: a term in running prose that carries its own definition, shown when the reader hovers or focuses it. The trigger is a real button marked with a dotted underline — the convention print has used for a glossed term for a century — so the definition is reachable by keyboard and not only by pointer.",
+      "useWhen": [
+        "A term a page uses in passing but cannot stop to define — a product name, an acronym, a unit.",
+        "A definition worth one or two sentences, optionally closing on a \"read more\" link to the page that does stop to define it."
+      ],
+      "avoidWhen": [
+        "To label an icon button or any control — that is `Tooltip`, the webkit hover hint: one line, on the contrast surface, `pointer-events-none`.",
+        "For an aside the reader must not miss — a gloss is opt-in and easy to never open. Use `DocCallout`.",
+        "For content longer than a couple of sentences, or anything with more than one link — that is a page, not a gloss."
+      ],
+      "related": [
+        "Tooltip` — the webkit hover hint on a control. A different object: one line, unable to hold a link the reader must travel to. The name collision is why this component keeps the `Doc` prefix.",
+        "DocProse` — the prose this sits inside; the gloss marks itself `data-doc-chrome` so prose rules stop at its edge.",
+        "Link` — the call-to-action inside an interactive panel."
+      ],
+      "bestPractices": [
+        "Gloss the term where the reader first meets it, not every time it appears.",
+        "Give `headline` the term itself and `tip` the definition; that pairing is also what names the panel for assistive tech.",
+        "Add `cta` only with an `href`. A call to action needs somewhere to go, and its presence is what turns the panel into a dialog the reader can enter."
+      ]
+    },
     "doc-update": {
       "import": "@aziontech/webkit/doc-update",
       "target": "./src/components/documentation/doc-update/doc-update.vue",

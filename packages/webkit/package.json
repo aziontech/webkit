@@ -192,6 +192,7 @@
     "./doc-prose": "./src/components/documentation/doc-prose/doc-prose.vue",
     "./doc-step": "./src/components/documentation/doc-step/doc-step.vue",
     "./doc-steps": "./src/components/documentation/doc-steps/doc-steps.vue",
+    "./doc-tooltip": "./src/components/documentation/doc-tooltip/doc-tooltip.vue",
     "./doc-update": "./src/components/documentation/doc-update/doc-update.vue",
     "./message": "./src/components/feedback/message/message.vue",
     "./empty-state": "./src/components/feedback/empty-state/empty-state.vue",

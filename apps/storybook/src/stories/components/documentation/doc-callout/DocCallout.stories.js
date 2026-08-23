@@ -14,7 +14,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The admonition a documentation page interrupts itself with, rendered on the webkit Message surface so the severity colour, border, icon and radius come from the design system. The anatomy is a glyph and one row of inline prose — there is no title row and no `title` prop, because the name repeated what the glyph and the tint already say and pushed the sentence the reader came for further down the box. One kind carries no severity: `tip` takes the page\'s own surface and rule and spends its whole emphasis on the glyph, in `--primary`.'
+          "The admonition a documentation page interrupts itself with, rendered on the webkit Message surface so the severity colour, border, icon and radius come from the design system. The anatomy is a glyph and one row of inline prose — there is no title row and no `title` prop, because the name repeated what the glyph and the tint already say and pushed the sentence the reader came for further down the box. One kind carries no severity: `tip` takes the page's own surface and rule and spends its whole emphasis on the glyph, in `--primary`."
       },
       canvas: { sourceState: 'shown' }
     }
@@ -24,7 +24,10 @@ const meta = {
       control: 'select',
       options: ['note', 'info', 'tip', 'check', 'warning', 'danger'],
       description: 'Which admonition this is; drives the severity color and the icon.',
-      table: { type: { summary: "'note' | 'info' | 'tip' | 'check' | 'warning' | 'danger'" }, defaultValue: { summary: 'note' } }
+      table: {
+        type: { summary: "'note' | 'info' | 'tip' | 'check' | 'warning' | 'danger'" },
+        defaultValue: { summary: 'note' }
+      }
     },
     label: {
       control: 'text',
@@ -53,7 +56,9 @@ export const Default = {
   }),
   parameters: {
     docs: {
-      description: { story: 'One row of prose beside the glyph — the whole component, for every kind.' },
+      description: {
+        story: 'One row of prose beside the glyph — the whole component, for every kind.'
+      },
       source: { code: toSfc(IMPORT, DEFAULT_MARKUP) }
     }
   }
@@ -75,7 +80,7 @@ export const Kinds = {
     docs: {
       description: {
         story:
-          'The six kinds together. Five carry a severity — they say something about the copy\'s stakes — and `tip` carries none: it takes the page\'s own surface and rule so a friendly shortcut is not painted the same green as a confirmed success.'
+          "The six kinds together. Five carry a severity — they say something about the copy's stakes — and `tip` carries none: it takes the page's own surface and rule so a friendly shortcut is not painted the same green as a confirmed success."
       },
       source: { code: toSfc(IMPORT, KINDS_TEMPLATE) }
     }

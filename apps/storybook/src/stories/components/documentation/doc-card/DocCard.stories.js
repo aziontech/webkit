@@ -20,13 +20,42 @@ const meta = {
     }
   },
   argTypes: {
-    title: { control: 'text', description: 'Card heading.', table: { type: { summary: 'string' }, defaultValue: { summary: "''" } } },
-    overline: { control: 'text', description: 'Small muted line above the title.', table: { type: { summary: 'string' }, defaultValue: { summary: "''" } } },
-    icon: { control: 'text', description: 'PrimeIcons class for the leading glyph.', table: { type: { summary: 'string' }, defaultValue: { summary: "''" } } },
-    href: { control: 'text', description: 'Destination; when set the whole card becomes the link.', table: { type: { summary: 'string' }, defaultValue: { summary: "''" } } },
-    target: { control: 'inline-radio', options: ['_self', '_blank'], description: 'Where the link opens.', table: { type: { summary: "'_self' | '_blank'" }, defaultValue: { summary: '_self' } } },
-    label: { control: 'text', description: 'Fallback copy when the default slot is empty.', table: { type: { summary: 'string' }, defaultValue: { summary: "''" } } },
-    link: { control: 'text', description: 'Call-to-action text; when set the card closes on a link row.', table: { type: { summary: 'string' }, defaultValue: { summary: "''" } } },
+    title: {
+      control: 'text',
+      description: 'Card heading.',
+      table: { type: { summary: 'string' }, defaultValue: { summary: "''" } }
+    },
+    overline: {
+      control: 'text',
+      description: 'Small muted line above the title.',
+      table: { type: { summary: 'string' }, defaultValue: { summary: "''" } }
+    },
+    icon: {
+      control: 'text',
+      description: 'PrimeIcons class for the leading glyph.',
+      table: { type: { summary: 'string' }, defaultValue: { summary: "''" } }
+    },
+    href: {
+      control: 'text',
+      description: 'Destination; when set the whole card becomes the link.',
+      table: { type: { summary: 'string' }, defaultValue: { summary: "''" } }
+    },
+    target: {
+      control: 'inline-radio',
+      options: ['_self', '_blank'],
+      description: 'Where the link opens.',
+      table: { type: { summary: "'_self' | '_blank'" }, defaultValue: { summary: '_self' } }
+    },
+    label: {
+      control: 'text',
+      description: 'Fallback copy when the default slot is empty.',
+      table: { type: { summary: 'string' }, defaultValue: { summary: "''" } }
+    },
+    link: {
+      control: 'text',
+      description: 'Call-to-action text; when set the card closes on a link row.',
+      table: { type: { summary: 'string' }, defaultValue: { summary: "''" } }
+    },
     default: { description: 'Card copy.', table: { type: { summary: 'slot' } } }
   },
   args: {
@@ -59,7 +88,9 @@ export const Default = {
   }),
   parameters: {
     docs: {
-      description: { story: 'A linked card: glyph, title, copy, and the call-to-action row it closes on.' },
+      description: {
+        story: 'A linked card: glyph, title, copy, and the call-to-action row it closes on.'
+      },
       source: { code: toSfc(IMPORT, DEFAULT_MARKUP) }
     }
   }

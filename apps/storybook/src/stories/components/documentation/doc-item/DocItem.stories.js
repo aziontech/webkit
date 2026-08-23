@@ -28,7 +28,7 @@ const meta = {
   argTypes: {
     title: {
       control: 'text',
-      description: 'The row\'s name — what the reader is choosing.',
+      description: "The row's name — what the reader is choosing.",
       table: { type: { summary: 'string' }, defaultValue: { summary: "''" } }
     },
     icon: {
@@ -53,7 +53,7 @@ const meta = {
       table: { type: { summary: 'string' }, defaultValue: { summary: "''" } }
     },
     default: {
-      description: 'The row\'s copy: one or two sentences of inline prose.',
+      description: "The row's copy: one or two sentences of inline prose.",
       table: { type: { summary: 'slot' } }
     }
   }

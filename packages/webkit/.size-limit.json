@@ -108,5 +108,10 @@
     "name": "doc-prompt",
     "path": "src/components/documentation/doc-prompt/doc-prompt.vue",
     "limit": "7 KB"
+  },
+  {
+    "name": "doc-tooltip",
+    "path": "src/components/documentation/doc-tooltip/doc-tooltip.vue",
+    "limit": "5 KB"
   }
 ]
