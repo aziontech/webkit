@@ -4837,6 +4837,70 @@
         "Compose rows inside a `FrameBox` (with a solid surface) holding an `ItemList`: the frame draws the single box and the list draws full-width dividers, and the `role=\"list\"` parent is what makes each row's `role=\"listitem\"` valid."
       ]
     },
+    "doc-pagination": {
+      "import": "@aziontech/webkit/doc-pagination",
+      "target": "./src/components/documentation/doc-pagination/doc-pagination.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/doc-pagination",
+      "category": "documentation",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "previous",
+          "type": "DocPageLink | null",
+          "default": "null",
+          "required": "false",
+          "doc": "The page before this one."
+        },
+        {
+          "name": "next",
+          "type": "DocPageLink | null",
+          "default": "null",
+          "required": "false",
+          "doc": "The page after this one."
+        },
+        {
+          "name": "previousLabel",
+          "type": "string",
+          "default": "'Previous'",
+          "required": "false",
+          "doc": "Eyebrow over the previous link."
+        },
+        {
+          "name": "nextLabel",
+          "type": "string",
+          "default": "'Next'",
+          "required": "false",
+          "doc": "Eyebrow over the next link."
+        }
+      ],
+      "events": [
+        {
+          "name": "navigate",
+          "payload": "(event: MouseEvent, page: DocPageLink)",
+          "notes": "Fired when either neighbour is activated; `page` is the side that was clicked. Event first, per `event-payloads.md`."
+        }
+      ],
+      "purpose": "The previous / next pair that closes a documentation page. Each side is a link carrying an eyebrow and the destination's title; a side with no neighbour leaves its half of the row empty, so the remaining link stays anchored to its own edge rather than drifting to the centre.",
+      "useWhen": [
+        "At the foot of a page that sits in a reading order — a guide, a tutorial, a numbered series.",
+        "Whenever \"what do I read next\" has a single obvious answer in each direction."
+      ],
+      "avoidWhen": [
+        "To page through a data set — that is `Paginator`, which walks pages of rows and owns a page number. This links two neighbouring documents and knows nothing about a total.",
+        "On a page with no reading order (a reference index, a landing page): a next link that points somewhere arbitrary is worse than none."
+      ],
+      "related": [
+        "Paginator` — the data counterpart; numbered pages over a collection, not two named documents.",
+        "DocOnThisPage` — navigation _within_ the page, where this is navigation _between_ pages."
+      ],
+      "bestPractices": [
+        "Pass the destination's real title, not \"Next page\". The title is what tells the reader whether they want to go.",
+        "Leave a side `null` at the ends of a series rather than looping around.",
+        "Handle `navigate` when the app routes client-side; the anchor's `href` is what makes the link real for everyone else."
+      ]
+    },
     "doc-prompt": {
       "import": "@aziontech/webkit/doc-prompt",
       "target": "./src/components/documentation/doc-prompt/doc-prompt.vue",
