@@ -1,6 +1,6 @@
 ---
 name: <kebab-case-name>
-category: <actions|content|data|feedback|inputs|layout|navigation|overlay|utils>
+category: <actions|code|content|data|documentation|feedback|inputs|layout|navigation|overlay|templates|utils>
 structure: <monolithic|composition>
 status: draft
 spec_version: 1
