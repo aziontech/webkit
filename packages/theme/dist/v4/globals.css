@@ -409,6 +409,8 @@
   --animate-fade-out: fadeOut 220ms ease-in-out;
   --animate-slide-down: slideDown 220ms ease-in-out;
   --animate-highlight-fade: highlight 1100ms ease-in forwards;
+  --animate-page-enter: pageEnter 240ms cubic-bezier(0.39, 0.57, 0.56, 1);
+  --animate-content-enter: contentEnter 240ms cubic-bezier(0.39, 0.57, 0.56, 1) var(--content-enter-delay, 0s) backwards;
   --animate-popup-scale-in: popupScaleIn 150ms cubic-bezier(0.39, 0.57, 0.56, 1);
   --animate-popup-scale-out: popupScaleOut 110ms cubic-bezier(0.55, 0.09, 0.68, 0.53);
   --animate-slide-in-left: slideInLeft 240ms cubic-bezier(0.39, 0.57, 0.56, 1);
@@ -668,6 +670,8 @@
   --animate-fade-out: fadeOut 220ms ease-in-out;
   --animate-slide-down: slideDown 220ms ease-in-out;
   --animate-highlight-fade: highlight 1100ms ease-in forwards;
+  --animate-page-enter: pageEnter 240ms cubic-bezier(0.39, 0.57, 0.56, 1);
+  --animate-content-enter: contentEnter 240ms cubic-bezier(0.39, 0.57, 0.56, 1) var(--content-enter-delay, 0s) backwards;
   --animate-popup-scale-in: popupScaleIn 150ms cubic-bezier(0.39, 0.57, 0.56, 1);
   --animate-popup-scale-out: popupScaleOut 110ms cubic-bezier(0.55, 0.09, 0.68, 0.53);
   --animate-slide-in-left: slideInLeft 240ms cubic-bezier(0.39, 0.57, 0.56, 1);
@@ -700,6 +704,7 @@
   --layout-measure-focused: var(--container-4xl);
   --layout-measure-form: var(--container-4xl);
   --layout-measure-form-create: var(--container-5xl);
+  --container-site: var(--container-5xl);
   --layout-measure-control: var(--container-3xs);
   --text-big-number-md-font-size: 1.25rem;
   --text-big-number-md-line-height: 1.25;
@@ -1026,6 +1031,16 @@
 @keyframes shimmer {
   0% { background-position: 200% 0; }
   100% { background-position: -200% 0; }
+}
+
+@keyframes pageEnter {
+  0% { opacity: 0; translate: calc(var(--page-enter-distance, var(--layout-boundary-inline)) * -1) 0; }
+  100% { opacity: 1; translate: 0 0; }
+}
+
+@keyframes contentEnter {
+  0% { opacity: 0; translate: 0 var(--spacing-xs); }
+  100% { opacity: 1; translate: 0 0; }
 }
 
 @keyframes popupScaleIn {
