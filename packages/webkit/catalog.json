@@ -44,10 +44,12 @@
       "--accent-selected",
       "--animate-blink",
       "--animate-bounce",
+      "--animate-content-enter",
       "--animate-fade-in",
       "--animate-fade-out",
       "--animate-flow-dash",
       "--animate-highlight-fade",
+      "--animate-page-enter",
       "--animate-ping",
       "--animate-popup-scale-in",
       "--animate-popup-scale-out",
@@ -771,10 +773,12 @@
       "animate": [
         "--animate-blink",
         "--animate-bounce",
+        "--animate-content-enter",
         "--animate-fade-in",
         "--animate-fade-out",
         "--animate-flow-dash",
         "--animate-highlight-fade",
+        "--animate-page-enter",
         "--animate-ping",
         "--animate-popup-scale-in",
         "--animate-popup-scale-out",
@@ -1531,10 +1535,12 @@
     "animations": [
       "blink",
       "bounce",
+      "content-enter",
       "fade-in",
       "fade-out",
       "flow-dash",
       "highlight-fade",
+      "page-enter",
       "ping",
       "popup-scale-in",
       "popup-scale-out",
@@ -1558,6 +1564,10 @@
         "value": "bounce 1s infinite",
         "useWhen": "Playful attention bounce (scroll-down hints); use sparingly."
       },
+      "content-enter": {
+        "value": "contentEnter 240ms cubic-bezier(0.39, 0.57, 0.56, 1) var(--content-enter-delay, 0s) backwards",
+        "useWhen": "Content settling INSIDE a page that is already on screen — a loading window resolving, a filtered list swapping, a step changing. Never on first paint of a page whose own entrance is already running (use it after that entrance, or after a wire). Stagger a follower with --content-enter-delay."
+      },
       "fade-in": {
         "value": "fadeIn 220ms ease-in-out",
         "useWhen": "Content or backdrop appearing in place (no directional origin)."
@@ -1573,6 +1583,10 @@
       "highlight-fade": {
         "value": "highlight 1100ms ease-in forwards",
         "useWhen": "Row/item briefly highlighted after an update (recently changed)."
+      },
+      "page-enter": {
+        "value": "pageEnter 240ms cubic-bezier(0.39, 0.57, 0.56, 1)",
+        "useWhen": "A page arriving on a route change — on the CONTENT ZONE only, never the shell. The chrome is the same before and after, and sliding it announces a reload that did not happen. Key it on the route path so a component serving several paths still replays it. Nothing inside the page may animate on mount at the same time: the two run in lockstep and read as one element travelling on a diagonal."
       },
       "ping": {
         "value": "ping 1s cubic-bezier(0, 0, 0.2, 1) infinite",
