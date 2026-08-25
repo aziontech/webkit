@@ -72,9 +72,6 @@ const prefersReducedMotion = (): boolean => {
 export function useSidebarRail(options: UseSidebarRailOptions): UseSidebarRailReturn {
   const { collapsed, width } = options
 
-  // +1 for a leading rail, -1 for a trailing one. It is the ONLY difference between
-  // the two: every place below that reads a horizontal direction multiplies by it,
-  // so a trailing panel cannot drift out of step with a leading one.
   const direction = () => (toValue(options.side ?? 'start') === 'end' ? -1 : 1)
 
   const railEl = shallowRef<globalThis.HTMLElement | null>(null)
@@ -224,7 +221,6 @@ export function useSidebarRail(options: UseSidebarRailOptions): UseSidebarRailRe
     const innerWidth = peeking.value ? railMin.value : width.value
     return {
       width: innerWidth == null ? undefined : `${innerWidth}px`,
-      // A leaving rail slides out through its OWN edge, so the sign follows `side`.
       transform: collapsed.value
         ? `translateX(${(presence.value - 1) * 100 * direction()}%)`
         : undefined,

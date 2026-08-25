@@ -245,10 +245,6 @@ const RESIZABLE_SOURCE = `<div class="relative flex h-screen min-h-0">
   </main>
 </div>`
 
-// The mirror, demonstrated against the thing it mirrors: a leading rail and a
-// trailing panel on one page. The trailing panel is content-only (no header /
-// footer slot) because that is the shape an explorer detail panel takes — the
-// regions are already exercised by Default.
 const TRAILING_PANEL = `<Sidebar
     side="end"
     resizable

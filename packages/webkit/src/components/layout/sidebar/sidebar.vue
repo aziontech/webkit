@@ -106,9 +106,6 @@
 
   const atEnd = computed(() => props.side === 'end')
 
-  // Every horizontal decision the rail makes, mirrored from the one prop. Held here
-  // rather than inline so the template reads as one rail with two anchorings, and so
-  // a future edge (a new affordance, another glyph) has one place to be added to.
   const edge = computed(() =>
     atEnd.value
       ? {
@@ -135,11 +132,6 @@
         }
   )
 
-  /**
-   * Arrow keys resolved in SCREEN space, so the key that grows the rail is always the
-   * one pointing away from its edge: ArrowRight on a leading rail, ArrowLeft on a
-   * trailing one. `nudge` itself stays a pure width delta.
-   */
   const onArrowLeft = () => nudge(atEnd.value ? SIDEBAR_NUDGE_STEP : -SIDEBAR_NUDGE_STEP)
   const onArrowRight = () => nudge(atEnd.value ? -SIDEBAR_NUDGE_STEP : SIDEBAR_NUDGE_STEP)
 
@@ -174,12 +166,7 @@
     transition: railTransition.value
   }))
 
-  // The separator belongs to the footer REGION, not to SidebarFooter: the region spans
-  // the rail edge-to-edge, so the rule reads as the rail's own division. Drawn from
-  // SidebarFooter it stopped at that component's box and skipped a rail whose footer
-  // is only the collapse control. The region gains full padding to sit under it.
-  const FOOTER_REGION_CLASS =
-    'w-full shrink-0 border-t border-(--border-default) p-(--spacing-md)'
+  const FOOTER_REGION_CLASS = 'w-full shrink-0 border-t border-(--border-default) p-(--spacing-md)'
 
   const footerBandClass = computed(() =>
     props.collapsible
