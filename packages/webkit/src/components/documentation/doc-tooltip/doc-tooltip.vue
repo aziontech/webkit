@@ -271,7 +271,7 @@
         <span
           v-if="headline"
           :id="headlineId"
-          class="text-body-sm font-medium text-(--text-default)"
+          class="text-body-sm text-(--text-default)"
         >
           {{ headline }}
         </span>
