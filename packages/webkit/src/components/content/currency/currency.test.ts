@@ -61,7 +61,7 @@ describe('Currency', () => {
     expect(getByTestId('plan-price__suffix').textContent?.trim()).toBe('per month')
   })
 
-  it.each(['small', 'large'] as const)(
+  it.each(['small', 'medium', 'large'] as const)(
     'renders the same value/prefix/suffix content for size "%s"',
     (size) => {
       const { getByTestId } = render(Currency, {
@@ -81,6 +81,13 @@ describe('Currency', () => {
     await expectNoA11yViolations(container)
   })
 
+  it('has no a11y violations at size medium', async () => {
+    const { container } = render(Currency, {
+      props: { value: '20', prefix: '$', suffix: 'per month', size: 'medium' }
+    })
+    await expectNoA11yViolations(container)
+  })
+
   it('has no a11y violations at size large', async () => {
     const { container } = render(Currency, {
       props: { value: '20', prefix: '$', suffix: 'per month', size: 'large' }
@@ -96,11 +103,22 @@ describe('Currency', () => {
     expect(getByTestId('content-currency__suffix').textContent?.trim()).toBe('per month')
   })
 
-  it('composes the Sizes story rendering both size variants', () => {
+  it('composes the Sizes story rendering every step of the ladder', () => {
     const { getAllByTestId } = render(Sizes())
-    // Two <Currency> instances (small + large) -> two value spans, same content.
+    // Three <Currency> instances (small + medium + large) -> three value spans.
     const values = getAllByTestId('content-currency__value')
-    expect(values).toHaveLength(2)
+    expect(values).toHaveLength(3)
     values.forEach((v) => expect(v.textContent?.trim()).toBe('20'))
+  })
+
+  it('mirrors the size prop onto the root as data-size, for every step', () => {
+    // The three text parts read the variant off the root through a named group, so
+    // data-size on the root is the whole switch — if it stops being written, every
+    // size renders identically.
+    for (const size of ['small', 'medium', 'large'] as const) {
+      const { getByTestId, unmount } = render(Currency, { props: { value: '20', size } })
+      expect(getByTestId('content-currency').getAttribute('data-size')).toBe(size)
+      unmount()
+    }
   })
 })
