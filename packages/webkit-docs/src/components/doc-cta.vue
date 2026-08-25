@@ -132,7 +132,7 @@
 
       <p
         v-if="$slots.default || label"
-        class="m-0 mt-(--spacing-xxs) text-pretty text-body-xs text-(--text-muted)"
+        class="m-0 mt-(--spacing-xxs) text-body-xs text-(--text-muted)"
       >
         <slot>{{ label }}</slot>
       </p>

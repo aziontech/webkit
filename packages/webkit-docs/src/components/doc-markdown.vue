@@ -89,7 +89,7 @@
   const THEAD_ROW_CLASS = 'h-11'
   const TBODY_CLASS = '[&>tr:last-child>td]:border-b-0'
   const TH_CLASS =
-    'border-b-(length:--border-width-default) border-solid border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-xs) text-start align-middle text-label-sm font-normal text-(--text-muted)'
+    'border-b-(length:--border-width-default) border-solid border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-xs) text-start align-middle text-label-sm text-(--text-muted)'
   const TD_CLASS =
     'border-b-(length:--border-width-default) border-solid border-(--border-default) px-(--spacing-sm) py-(--spacing-xs) text-start align-middle text-label-md text-(--text-default)'
 

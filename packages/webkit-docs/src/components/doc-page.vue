@@ -19,6 +19,14 @@
    * Give it `source` and it renders an MDX file end to end, deriving the title,
    * the deck and the rail from that one file. Give it the default slot instead
    * and it becomes the shell around hand-composed Vue.
+   *
+   * THE PAGE IS SPACED BY THE SAME SECTION STEP ITS PROSE USES: 56 to open, 48
+   * to close (`pt-14` / `pb-12`, flat at every width — see `DocProse`). So the
+   * column opens on 56 above the masthead, the body opens on 56 under it (the
+   * masthead is a section, and the first thing after it starts a new one), the
+   * previous/next pair is separated from the last section by the closing 48,
+   * and the column ends on 48. The rail takes the same pair so its first entry
+   * stays level with the title it annotates.
    */
   defineOptions({ name: 'DocPage' })
 
@@ -159,7 +167,7 @@
   >
     <main
       ref="scroller"
-      class="h-full w-full max-w-(--container-2xl) min-w-0 overflow-y-auto overscroll-contain py-(--spacing-xl) 2xl:max-w-(--container-3xl)"
+      class="h-full w-full max-w-(--container-2xl) min-w-0 overflow-y-auto overscroll-contain pt-14 pb-12 2xl:max-w-(--container-3xl)"
     >
       <DocPageHeader
         ref="header"
@@ -172,7 +180,7 @@
       />
       <div
         ref="body"
-        class="pt-(--spacing-xxl) sm:pt-(--spacing-xl)"
+        class="pt-14"
       >
         <DocProse>
           <slot>
@@ -180,7 +188,7 @@
           </slot>
         </DocProse>
       </div>
-      <div class="pt-(--spacing-xxl)">
+      <div class="pt-12">
         <DocPagination
           :previous="previous"
           :next="next"
@@ -189,7 +197,7 @@
     </main>
     <aside
       v-if="showToc && headings.length"
-      class="hidden h-full w-[225px] shrink-0 overflow-y-auto overscroll-contain py-(--spacing-xl) lg:block"
+      class="hidden h-full w-[225px] shrink-0 overflow-y-auto overscroll-contain pt-14 pb-12 lg:block"
     >
       <div :style="railStyle">
         <DocOnThisPage

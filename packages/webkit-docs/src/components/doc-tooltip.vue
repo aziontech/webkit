@@ -264,7 +264,7 @@
         <span
           v-if="headline"
           :id="headlineId"
-          class="text-body-sm font-medium text-(--text-default)"
+          class="text-body-sm text-(--text-default)"
         >
           {{ headline }}
         </span>
@@ -272,7 +272,7 @@
           v-if="tip"
           :id="tipId"
           :data-headline="Boolean(headline) || null"
-          class="text-pretty text-body-sm text-(--text-muted) data-[headline]:pt-(--spacing-xxs)"
+          class="text-body-sm text-(--text-muted) data-[headline]:pt-(--spacing-xxs)"
         >
           {{ tip }}
         </span>

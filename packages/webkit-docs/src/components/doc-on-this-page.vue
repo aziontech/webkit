@@ -232,7 +232,16 @@
       :aria-label="title"
       class="flex flex-col gap-(--spacing-xs)"
     >
-      <p class="m-0 text-overline-xs text-(--text-muted)">{{ title }}</p>
+      <!-- `data-toc-title` marks the rail's OPENING LINE. A docs shell aligns the rail
+           against the page bar it sits beside, and it needs a stable thing to measure —
+           the first line of the outline — without reaching through this component's
+           internals to find it. -->
+      <p
+        data-toc-title
+        class="m-0 text-overline-xs text-(--text-muted)"
+      >
+        {{ title }}
+      </p>
 
       <div class="relative">
         <svg

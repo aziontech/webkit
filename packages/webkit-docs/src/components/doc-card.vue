@@ -151,7 +151,7 @@
     <span class="text-heading-xs text-(--text-default)">{{ title }}</span>
     <span
       v-if="$slots.default || label"
-      class="mt-(--spacing-xxs) text-pretty text-body-sm text-(--text-muted) [&>*:first-child]:pt-0! [&_p]:text-body-sm!"
+      class="mt-(--spacing-xxs) text-body-sm text-(--text-muted) [&>*:first-child]:pt-0! [&_p]:text-body-sm!"
     >
       <slot>{{ label }}</slot>
     </span>

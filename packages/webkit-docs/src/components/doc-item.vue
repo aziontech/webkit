@@ -127,6 +127,11 @@
         </a>
         <template v-else>{{ title }}</template>
       </ItemTitle>
+      <!-- `text-pretty` STAYS: `ItemDescription` sets `text-balance` on itself, which
+           overrides the `pretty` that its own `text-body-sm` token declares — so this
+           utility is not a second opinion about wrapping, it is what puts the element
+           back on the token. A balanced wrap is right for a two-word label and wrong
+           for a sentence, which is what a docs item's description is. -->
       <ItemDescription
         class="line-clamp-none text-pretty [&_code]:rounded-(--shape-flat) [&_code]:border [&_code]:border-(--border-default) [&_code]:bg-(--bg-hover) [&_code]:px-1 [&_code]:py-0.5 [&_code]:text-label-code-sm [&_code]:text-(--text-default)"
       >
