@@ -1,5 +1,5 @@
-import { inject, provide } from 'vue'
 import type { InjectionKey } from 'vue'
+import { inject, provide } from 'vue'
 
 /**
  * How a heading takes the reader to itself.
