@@ -732,7 +732,8 @@
   --layout-measure-focused: var(--container-4xl);
   --layout-measure-form: var(--container-4xl);
   --layout-measure-form-create: var(--container-5xl);
-  --layout-measure-docs: var(--container-2xl);
+  --layout-measure-docs: var(--container-4xl);
+  --container-site: var(--container-5xl);
   --layout-measure-control: var(--container-3xs);
   --text-big-number-md-font-size: 1.25rem;
   --text-big-number-md-line-height: 1.25;
@@ -746,34 +747,48 @@
   --text-big-number-lg-line-height: 1.25;
   --text-big-number-lg-font-weight: 400;
   --text-big-number-lg-font-family: Proto Mono;
+  --text-amount-lg-text-wrap-style: balance;
+  --text-amount-lg-font-size: 1.875rem;
+  --text-amount-lg-line-height: 1.25;
+  --text-amount-lg-font-weight: 400;
+  --text-amount-lg-letter-spacing: -0.08em;
+  --text-amount-md-text-wrap-style: balance;
+  --text-amount-md-font-size: 1rem;
+  --text-amount-md-line-height: 1.25;
+  --text-amount-md-font-weight: 400;
+  --text-amount-md-letter-spacing: -0.08em;
+  --text-amount-sm-font-size: 1rem;
+  --text-amount-sm-line-height: 1.5;
+  --text-amount-sm-font-weight: 400;
+  --text-amount-sm-letter-spacing: -0.08em;
   --text-heading-2xl-text-wrap-style: balance;
   --text-heading-2xl-font-size: 1.875rem;
   --text-heading-2xl-line-height: 1.25;
-  --text-heading-2xl-font-weight: 300;
+  --text-heading-2xl-font-weight: 400;
   --text-heading-xl-text-wrap-style: balance;
   --text-heading-xl-font-size: 1.25rem;
   --text-heading-xl-line-height: 1.25;
-  --text-heading-xl-font-weight: 300;
+  --text-heading-xl-font-weight: 400;
   --text-heading-lg-text-wrap-style: balance;
   --text-heading-lg-font-size: 1.125rem;
   --text-heading-lg-line-height: 1.25;
-  --text-heading-lg-font-weight: 300;
+  --text-heading-lg-font-weight: 400;
   --text-heading-md-text-wrap-style: balance;
   --text-heading-md-font-size: 1rem;
   --text-heading-md-line-height: 1.25;
-  --text-heading-md-font-weight: 300;
+  --text-heading-md-font-weight: 400;
   --text-heading-sm-text-wrap-style: balance;
   --text-heading-sm-font-size: 0.875rem;
   --text-heading-sm-line-height: 1.375;
-  --text-heading-sm-font-weight: 300;
+  --text-heading-sm-font-weight: 400;
   --text-heading-xs-text-wrap-style: balance;
   --text-heading-xs-font-size: 1rem;
   --text-heading-xs-line-height: 1.375;
-  --text-heading-xs-font-weight: 300;
+  --text-heading-xs-font-weight: 400;
   --text-heading-xxs-text-wrap-style: balance;
   --text-heading-xxs-font-size: 0.875rem;
   --text-heading-xxs-line-height: 1.375;
-  --text-heading-xxs-font-weight: 300;
+  --text-heading-xxs-font-weight: 400;
   --text-label-lg-font-size: 1rem;
   --text-label-lg-line-height: 1.5;
   --text-label-lg-font-weight: 400;
@@ -806,23 +821,23 @@
   --text-label-code-lg-letter-spacing: 0;
   --text-body-lg-text-wrap-style: pretty;
   --text-body-lg-font-size: 1rem;
-  --text-body-lg-font-weight: 300;
+  --text-body-lg-font-weight: 400;
   --text-body-lg-line-height: 1.375;
   --text-body-md-text-wrap-style: pretty;
   --text-body-md-font-size: 1rem;
-  --text-body-md-font-weight: 300;
+  --text-body-md-font-weight: 400;
   --text-body-md-line-height: 1.375;
   --text-body-sm-text-wrap-style: pretty;
   --text-body-sm-font-size: 0.875rem;
-  --text-body-sm-font-weight: 300;
+  --text-body-sm-font-weight: 400;
   --text-body-sm-line-height: 1.375;
   --text-body-xs-text-wrap-style: pretty;
   --text-body-xs-font-size: 0.75rem;
-  --text-body-xs-font-weight: 300;
+  --text-body-xs-font-weight: 400;
   --text-body-xs-line-height: 1.375;
   --text-body-xxs-text-wrap-style: pretty;
   --text-body-xxs-font-size: 0.75rem;
-  --text-body-xxs-font-weight: 300;
+  --text-body-xxs-font-weight: 400;
   --text-body-xxs-line-height: 1.5;
   --text-tag-sm-font-size: 0.75rem;
   --text-tag-sm-line-height: 1.25;
@@ -871,6 +886,8 @@
     --text-big-number-md-font-size: 1.5rem;
     --text-big-number-sm-font-size: 1.25rem;
     --text-big-number-lg-font-size: 2.25rem;
+    --text-amount-lg-font-size: 3rem;
+    --text-amount-md-font-size: 1.25rem;
     --text-heading-2xl-font-size: 3rem;
     --text-heading-xl-font-size: 1.875rem;
     --text-heading-md-font-size: 1.25rem;
@@ -881,6 +898,8 @@
   @media (min-width: 768px) {
     --text-big-number-md-font-size: 2.25rem;
     --text-big-number-lg-font-size: 3.5rem;
+    --text-amount-lg-font-size: 3.5rem;
+    --text-amount-md-font-size: 1.5rem;
     --text-heading-2xl-font-size: 3.5rem;
     --text-heading-xl-font-size: 2.25rem;
     --text-heading-lg-font-size: 1.875rem;
@@ -1213,6 +1232,29 @@
   line-height: var(--text-big-number-lg-line-height);
   font-weight: var(--text-big-number-lg-font-weight);
   font-family: var(--text-big-number-lg-font-family);
+}
+
+@utility text-amount-lg {
+  text-wrap-style: var(--text-amount-lg-text-wrap-style);
+  font-size: var(--text-amount-lg-font-size);
+  line-height: var(--text-amount-lg-line-height);
+  font-weight: var(--text-amount-lg-font-weight);
+  letter-spacing: var(--text-amount-lg-letter-spacing);
+}
+
+@utility text-amount-md {
+  text-wrap-style: var(--text-amount-md-text-wrap-style);
+  font-size: var(--text-amount-md-font-size);
+  line-height: var(--text-amount-md-line-height);
+  font-weight: var(--text-amount-md-font-weight);
+  letter-spacing: var(--text-amount-md-letter-spacing);
+}
+
+@utility text-amount-sm {
+  font-size: var(--text-amount-sm-font-size);
+  line-height: var(--text-amount-sm-line-height);
+  font-weight: var(--text-amount-sm-font-weight);
+  letter-spacing: var(--text-amount-sm-letter-spacing);
 }
 
 @utility text-heading-2xl {

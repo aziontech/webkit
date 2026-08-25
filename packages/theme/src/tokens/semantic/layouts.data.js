@@ -98,7 +98,24 @@ export const layoutsData = {
   'layout-measure-focused': 'var(--container-4xl)', // 1024px — single-task heroes
   'layout-measure-form': 'var(--container-4xl)', // 1024px — settings, forms
   'layout-measure-form-create': 'var(--container-5xl)', // 1192px — create flows
-  'layout-measure-docs': 'var(--container-2xl)', // 752px — documentation prose
+  'layout-measure-docs': 'var(--container-4xl)', // 1192px — documentation prose
+
+  /*
+   * MEASURE (site) — the marketing site's content column, and the one measure in this
+   * file that is not a console page's.
+   *
+   * The azion.com pages are a single vertical frame: the nav bar, the hero's inner
+   * column, every section below it and the footer all sit on the SAME centred column,
+   * and the border-x that SectionContainer draws down the page is only continuous
+   * because those four agree to the pixel. That is why this is a token rather than a
+   * width re-typed per band — the frame is one decision, and one place is where it has
+   * to live.
+   *
+   * 1388px (`6xl`) is the ladder's nearest slot to the ~1400px azion.com column; `7xl`
+   * (1620px) is 220px past it. The page snaps to the scale, the scale does not bend to
+   * the page — the same rule --layout-measure follows.
+   */
+  'container-site': 'var(--container-5xl)', // 1388px — the marketing site column
 
   /*
    * MEASURE (control) — the widest the *right side* of an item-group field row may
