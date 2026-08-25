@@ -1,0 +1,42 @@
+---
+title: Store Overview
+description: SQL Database and Object Storage — the two ways to keep state on the platform your application already runs on.
+lastUpdated: 2026-07-22
+sourcePath: src/content/docs/en/pages/store/overview.mdx
+---
+
+Welcome to the Azion **Store** products journey. This page introduces **Object Storage** and
+**SQL Database**, the tools for efficient data management and processing at the edge.
+
+<CardGroup cols={2}>
+  <Card title="Object Storage" icon="pi pi-database">
+    S3-compatible buckets, globally distributed, readable from your functions.
+  </Card>
+  <Card title="SQL Database" icon="pi pi-server">
+    ACID-compliant SQL with SQLite's dialect and ultra-low latency querying.
+  </Card>
+</CardGroup>
+
+## Object Storage
+
+Azion **Object Storage** organizes data into buckets. It supports the S3-compatible API,
+classifies data operations into classes, and builds replication into its architecture. Key
+features include the S3-compatible API, public buckets, integration with Functions, global
+distribution across Azion's network, and granular permissions.
+
+### Use cases
+
+Object Storage suits backup and recovery, content management, rich media, static-site
+hosting, unstructured data, and Jamstack websites.
+
+## SQL Database
+
+Azion **SQL Database** is a SQL solution tailored for edge computing, with ultra-low latency
+querying for serverless applications. It is fully ACID-compliant and uses SQLite's dialect,
+so the environment is one developers already know. Its Main/Replicas architecture provides
+resilience through replication across Azion's global infrastructure.
+
+### Use cases
+
+SQL Database suits real-time telemetry storage, access log analysis, efficient access data
+management, and anything that needs quick retrieval close to the reader.

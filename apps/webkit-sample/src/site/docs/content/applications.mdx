@@ -1,0 +1,104 @@
+---
+title: Applications
+description: Build applications that run on Azion's infrastructure. By reducing latency and increasing throughput, Applications brings your application closer to the people using it.
+lastUpdated: 2026-08-12
+sourcePath: src/content/docs/en/pages/build/applications.mdx
+---
+
+<Warning>
+  We're releasing a significant update to the platform. To learn more about the changes and
+  the migration steps they require, see the API v4 rollout page.
+</Warning>
+
+By operating on a reverse proxy architecture, **Applications** lets you create applications
+at the edge and direct traffic from your domain to Azion. Your users reach the application
+through a highly distributed global network of edge nodes, and Azion picks the node closest
+to each of them to handle the request.
+
+Your content must be served from one or more origins. An origin — your application's
+backend — can be one or more web servers in your own infrastructure, a cloud service, or
+Object Storage. A **Connector** is what reaches those sources.
+
+With Applications, you can:
+
+- Define how your content is cached.
+- Execute functions at the edge.
+- Bring your own business rules to any request or response.
+- Optimize content and image delivery.
+
+You can create and manage applications through **Azion Console**, the **Azion API**, the
+**Azion CLI**, or the **Azion Terraform Provider**.
+
+## Implementation
+
+|Scope|Resource|
+|---|---|
+|Applications first steps|First steps|
+|Clone an application|How to clone an application|
+|Delete an application|How to delete an application|
+|Applications Main Settings|Main Settings|
+|Applications Cache Settings|Cache Settings|
+|Get to know Functions|Functions Instances|
+|Get to know Device Groups|Device Groups|
+|Get to know Workloads|Workloads|
+|Get to know Connectors|Connectors|
+|Get to know Real-Time Purge|Real-Time Purge|
+|Rules Engine for Applications|Rules Engine|
+
+## Modules
+
+Modules complement your implementation of **Applications**. You enable or disable them in
+the **Main Settings** tab of your application, provided your account supports them and
+nothing else depends on them.
+
+|Module|Description|
+|---|---|
+|Application Accelerator|Optimize API protocols and manage dynamic content delivery to accelerate applications and APIs.|
+|[Cache](/site/docs/cache)|Configure cache settings to speed up the delivery of static and dynamic content.|
+|Functions|Build ultra-low latency applications and customize content delivery.|
+|Image Processor|Optimize image processing for various devices, browsers, and screen resolutions.|
+|Tiered Cache|Add a cache layer between your users and the edge, to keep objects cached for longer.|
+
+## Advanced settings
+
+**Applications** lets you manage caching, functions, and other settings. These help you
+optimize content delivery for better performance.
+
+|Setting|Description|
+|---|---|
+|Main Settings|Manage modules such as Application Accelerator and Image Processor.|
+|Device Groups|Create groups that change cache and delivery behavior by end-user device.|
+|Cache Settings|Browser and cache expiration time, large file optimization, and advanced cache behavior based on cookies or query strings.|
+|Functions|Instantiate functions created with **Functions**.|
+|Rules Engine|Automate the execution of behaviors based on specific parameters.|
+
+## Real-Time Purge
+
+Use **Real-Time Purge** to clear cached content from the edge or from the tiered cache
+layer, so your application keeps serving accurate content instead of a stale copy.
+
+## Limits
+
+<Tip>
+  **Increase limits.** You can request higher limits based on your plan. Contact the
+  technical support team to ask for it.
+</Tip>
+
+These are the default limits:
+
+|Scope|Limit|
+|---|---|
+|Minimum CDN cache TTL|60 seconds — 0 seconds with the Application Accelerator module|
+|Debug Rules log size|1.5 kB|
+|Edge-client keepalive connection|10 to 15 minutes|
+|Single object size in cache|10 GB|
+
+Azion enforces a keepalive duration limit between users and applications. To avoid
+terminating active connections that need more time, consider file slicing or file
+compression for large files.
+
+These are the default limits per support service:
+
+|Scope|Developer|Business|Enterprise|Mission-Critical|
+|---|---|---|---|---|
+|Applications per account|10|50|200|Customizable|

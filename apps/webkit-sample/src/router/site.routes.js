@@ -5,9 +5,10 @@
 // The Hub lives under the same `/site` prefix but is its own area (its own shell,
 // its own navigation): see ./hub.routes.js.
 
+import { hasDocsPage } from '@site/docs/lib/docs-pages.js'
 import AzionDocs from '@site/docs/views/AzionDocs.vue'
 import AzionDocsAgentSetup from '@site/docs/views/AzionDocsAgentSetup.vue'
-import AzionDocsFirstDeploy from '@site/docs/views/AzionDocsFirstDeploy.vue'
+import AzionDocsPage from '@site/docs/views/AzionDocsPage.vue'
 import LandingAzion from '@site/views/LandingAzion.vue'
 import LandingFunctions from '@site/views/LandingFunctions.vue'
 import LandingPricing from '@site/views/LandingPricing.vue'
@@ -33,11 +34,20 @@ export const siteRoutes = [
     name: 'site-docs-agent-setup',
     component: AzionDocsAgentSetup
   },
-  // A docs READING page, written as `.mdx` and rendered by @aziontech/webkit-docs —
-  // the other half of the docs example. /site/docs is the hand-composed landing.
+  // EVERY OTHER DOCS PAGE, from one route and one view. A reading page is `.mdx` rendered by
+  // @aziontech/webkit-docs — the other half of the docs example, and the way most of a real
+  // documentation site is written — so the pages are files in `site/docs/content/` and the
+  // route resolves the slug against that folder (see docs-pages.js). Adding a page is adding
+  // the file and giving its row in the rail an `href`; no route, no view, no wiring.
+  //
+  // The static routes above win over this one regardless of order (Vue Router ranks static
+  // segments higher), so the two hand-composed pages keep their own views. An unknown slug
+  // has no file behind it and would render an empty page, so it goes to the docs home
+  // instead of a blank column with a full rail beside it.
   {
-    path: '/site/docs/first-deploy',
-    name: 'site-docs-first-deploy',
-    component: AzionDocsFirstDeploy
+    path: '/site/docs/:page',
+    name: 'site-docs-page',
+    component: AzionDocsPage,
+    beforeEnter: (to) => (hasDocsPage(String(to.params.page)) ? true : '/site/docs')
   }
 ]

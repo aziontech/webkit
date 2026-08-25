@@ -1,0 +1,98 @@
+---
+title: Cache
+description: Configure how your application caches content, reducing latency and increasing transfer rates across Azion's network of edge nodes.
+lastUpdated: 2026-08-05
+sourcePath: src/content/docs/en/pages/build/applications/cache.mdx
+---
+
+**Cache** is a module available for [Applications](/site/docs/applications). It enhances
+performance and scalability for your content, and cuts infrastructure costs along the way.
+
+You can customize how long content stays cached at the edge through time-to-live (TTL)
+values. A large TTL optimizes performance, improves the user experience, and reduces load on
+your origin; a low TTL ensures end users always see the most current information. If origin
+servers go down, Cache can keep serving the cached copy from the edge.
+
+## Implementation
+
+|Scope|Resource|
+|---|---|
+|Available cache settings|Cache Settings|
+|Tiered Cache module|Tiered Cache|
+|Configuring a cache policy|How to configure cache policies for Applications|
+
+## Cache status
+
+Azion caches content in a layer that stands between origin servers and the end user. When
+content is successfully cached, it gets a **HIT** status and is delivered from the edge node
+nearest the reader, so the origin is consulted less often.
+
+When the content is not in cache, the module works to minimize the impact on the origin —
+keeping keep-alive connections open where it can, so a cache update does not pay for a fresh
+TCP/IP handshake. Azion also implements **Thundering Herd control**: when many simultaneous
+requests arrive for the same uncached object, only one connection is opened to the origin.
+
+Request the URI with the Azion debug header to read a resource's cache status:
+
+```bash
+curl -I https://yourdomain.com/resource-path/image.jpeg \
+  -H 'Pragma: azion-debug-cache'
+```
+
+A successful response returns an `X-Cache` header with the status, the IP of the edge node,
+and the protocol used:
+
+```http
+X-Cache: HIT from 200.000.000.00 with HTTP/2.0
+```
+
+### Status definitions
+
+|Status|Definition|
+|---|---|
+|**HIT**|Valid, up-to-date content is supplied directly from the cache at the edge.|
+|**MISS**|The content was not found at the edge, so it was fetched from the origin. It may be cached for future requests.|
+|**EXPIRED**|The cached content is past the TTL set at the edge. When the origin responds, the copy is updated.|
+|**STALE**|The origin failed to respond and the cache had expired, so a stale version was served.|
+|**UPDATING**|The content has expired and a stale copy is being served while the origin updates it.|
+|**REVALIDATED**|The cached content was checked against the origin with conditional headers and is still current, so nothing was retransmitted.|
+|**BYPASS**|The edge asked the origin directly instead of using a cached version, because Bypass Cache is active.|
+|**-**|No status: the content is restricted from caching, so nothing was logged.|
+
+## Cache keys
+
+A cache key is an index entry for an object at Azion's edge nodes. The first request for a
+resource is forwarded to the origin, and a cache entry is generated for each object that
+comes back. The next request that matches an existing cache key is answered without touching
+the origin.
+
+The same debug header returns an `X-Cache-Key` header:
+
+```http
+X-Cache-Key: httpsyourdomain.com/resource-path/image.jpeg@@
+```
+
+<Note>
+  The "How to verify application cache indicators using ModHeader for Google Chrome" guide
+  covers automating your browser to read the rest of the cache data.
+</Note>
+
+### Cache key format
+
+The default format concatenates the following URI elements:
+
+- Scheme of the request
+- Host
+- Path to the resource
+- Query strings
+- A variation separator and, when implemented, the appended variations
+
+An object at `https://static.yourdomain.com/page/site.js` generates the cache key
+`httpsstatic.yourdomain.com/page/site.js`. Cache keys are **case sensitive**. When
+variations are enabled, the key ends in the `@@` separator.
+
+|Case|What is appended|Example|
+|---|---|---|
+|Complex request|The method, at the start of the key|`optionshttpsstatic.yourdomain.com/page`|
+|Image Processor|The converted format, after the separator|`…/image_1.jpg?ims=880x@@webp`|
+|Device Groups|The device group name, after the separator|`httpwww.yourdomain.com/@@Mobile`|

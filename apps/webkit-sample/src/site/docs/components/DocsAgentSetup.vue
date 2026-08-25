@@ -2,7 +2,7 @@
   // The Agent Setup page — a docs READING page that is also a DESIGNED OBJECT.
   //
   // It is the third shape in this sample, and it exists because the first two do not
-  // cover it. `DocsGetStarted` is a landing page: bands, a hero, no prose. `DocsMdxPage`
+  // cover it. `DocsHome` is a landing page: bands, a hero, no prose. `DocsMdxPage`
   // is prose an author types in one `.mdx` file. This page is prose with two things MDX
   // cannot express: a picker whose card set FILTERS, and cards whose glyph is another
   // company's real logo — an inline SVG, so a slot, and MDX has no slots.

@@ -1,0 +1,151 @@
+---
+title: Azion Web Platform Overview
+description: A fully managed developer platform to build, secure, deploy, and observe modern applications on a global distributed infrastructure — fast deploys, no cold starts, and real-time visibility.
+lastUpdated: 2026-08-18
+sourcePath: src/content/docs/en/pages/platform/overview.mdx
+---
+
+**Azion Web Platform** unifies **serverless**, **security**, **content delivery and
+acceleration**, **storage**, and **real-time observability** so teams can ship applications
+worldwide with consistent performance. Trusted by global leaders such as Prime Video, Neon,
+Global Fashion Group, and Radware, Azion provides the fastest path to modern applications.
+
+## What the platform includes
+
+Use Azion to:
+
+<ItemGroup>
+  <Item icon="ai ai-build-pillar" title="Run applications and serverless code">
+    Across a distributed global network, with no cold starts and no region to choose.
+  </Item>
+  <Item icon="ai ai-secure-pillar" title="Protect apps and APIs">
+    WAF, DDoS mitigation, and bot protection, applied before a request reaches your origin.
+  </Item>
+  <Item icon="ai ai-store" title="Store and access data">
+    Distributed object storage, a key-value store, and SQL, readable from your functions.
+  </Item>
+  <Item icon="ai ai-observe-pillar" title="Monitor everything">
+    Real-time metrics and events, queryable over GraphQL or streamed to your own tooling.
+  </Item>
+  <Item icon="ai ai-ai-pillar" title="Build AI-powered experiences">
+    Inference on the same platform your application already runs on.
+  </Item>
+</ItemGroup>
+
+## Core concepts
+
+### Distributed computing
+
+Azion runs workloads across multiple locations worldwide to reduce latency and improve
+reliability. This approach places compute and data closer to where they're needed — near
+your users, on a global network of points of presence.
+
+### Platform characteristics
+
+A platform designed for distributed workloads should provide:
+
+- One workflow for **build, security, deployment, and observability**
+- **Self-service** with automation-first operations (NoOps)
+- **Open standards** and API-first management
+- Continuous monitoring with actionable telemetry
+- Performance controls for traffic, caching, and routing
+- Global coverage with smart traffic steering
+
+## How the platform handles a request
+
+**Azion Web Platform** routes each request through its global network to serve users from
+the best available location.
+
+<Steps>
+  <Step title="The request reaches the platform.">
+    Azion selects the best route and forwards it to the nearest location, based on latency,
+    network conditions, and load.
+  </Step>
+  <Step title="Your configuration and logic run there.">
+    Security policies, caching behavior, application code, and any other rules you have
+    configured are applied at that location to generate a response.
+  </Step>
+  <Step title="The origin is consulted only if it has to be.">
+    If the response cannot be produced at the edge, Azion fetches content from your origin
+    and returns the result.
+  </Step>
+  <Step title="The response is delivered to the user." />
+</Steps>
+
+## What you can build
+
+Products are organized around the developer workflow:
+
+<CardGroup cols={3}>
+  <Card title="Build" icon="ai ai-build-pillar">
+    Applications, functions, cache, acceleration, and AI inference.
+  </Card>
+  <Card title="Store" icon="ai ai-store" href="/site/docs/store">
+    Object storage, SQL, and a key-value store.
+  </Card>
+  <Card title="Secure" icon="ai ai-secure-pillar" href="/site/docs/secure">
+    Firewall, WAF, DDoS mitigation, bot management, and DNS.
+  </Card>
+  <Card title="Deploy" icon="pi pi-cloud-upload">
+    Orchestration, services, and nodes.
+  </Card>
+  <Card title="Observe" icon="ai ai-observe-pillar" href="/site/docs/observe">
+    Metrics, events, streaming, and navigation data.
+  </Card>
+  <Card title="Marketplace" icon="pi pi-shopping-bag">
+    Templates and integrations that shorten the first deploy.
+  </Card>
+</CardGroup>
+
+Common use cases:
+
+- Build and deploy [applications](/site/docs/applications) on Azion's global infrastructure.
+- Speed up delivery with templates and integrations.
+- Adopt zero trust architectures for apps and content.
+- Configure [caching rules](/site/docs/cache) and advanced optimizations.
+- Monitor performance with [real-time metrics](/site/docs/observe).
+- Reduce bandwidth and operational costs.
+- Develop with supported frameworks and languages.
+- Migrate your architecture and content.
+- Meet regulatory needs with Azion compliance.
+
+## Manage Azion
+
+Manage **Azion Web Platform** through a UI, an API, and automation tools:
+
+|Surface|What it is for|
+|---|---|
+|**Azion Console**|Configure products, provisioning, billing, and permissions|
+|**Azion CLI**|Manage services from the terminal — Go-based, open source|
+|**Azion API**|A REST API over HTTPS, for integration and automation|
+|**Azion Terraform Provider**|Manage Azion resources as code|
+
+<Tip>
+  For fundamentals on distributed architectures, watch the Introduction to Platform
+  Foundations playlist.
+</Tip>
+
+## FAQ
+
+<AccordionGroup>
+  <Accordion title="What is Azion Web Platform?">
+    A fully managed developer platform to build, secure, deploy, and observe modern
+    applications on a distributed global infrastructure.
+  </Accordion>
+  <Accordion title="Is Azion a CDN?">
+    Azion includes content delivery and caching capabilities, but it is broader than a CDN:
+    it also provides application execution (including serverless), security, storage, and
+    real-time observability.
+  </Accordion>
+  <Accordion title="What security features does Azion provide?">
+    Protections for applications and APIs — including WAF, DDoS mitigation, and bot
+    protection — plus policy-driven controls you can automate via API and IaC.
+  </Accordion>
+  <Accordion title="How do I automate Azion?">
+    Using the Azion API, the Azion CLI, and the Azion Terraform Provider.
+  </Accordion>
+  <Accordion title="Where does Azion run?">
+    Across multiple locations worldwide, through a distributed global network, to improve
+    performance and reliability for end users.
+  </Accordion>
+</AccordionGroup>

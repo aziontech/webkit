@@ -29,6 +29,15 @@ const readStoredWidth = () => {
 const collapsed = ref(readStoredCollapsed())
 const railWidth = ref(readStoredWidth())
 
+// Which CONDENSED rows are expanded. A singleton for the same reason the two above are:
+// `DocsLayout` remounts on every navigation (each view renders its own), so a row the
+// reader opened by hand would fold itself the moment they picked a page inside it — which
+// is the one click that makes folding most wrong. NOT persisted to localStorage: an open
+// row is a position in this visit's reading, not a preference like the rail's width.
+// `Menu` owns the model; this is where the consumer holds it between mounts, which is
+// exactly what its `v-model:expanded` exists for.
+const expanded = ref([])
+
 watch(collapsed, (value) => {
   if (typeof localStorage !== 'undefined') {
     localStorage.setItem(COLLAPSED_KEY, String(value))
@@ -42,5 +51,5 @@ watch(railWidth, (value) => {
 })
 
 export function useDocsSidebar() {
-  return { collapsed, railWidth }
+  return { collapsed, railWidth, expanded }
 }

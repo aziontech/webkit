@@ -2,7 +2,7 @@
   // A documentation page written as MDX, rendered through the documentation layer.
   //
   // This is the SECOND way a docs page is built in this sample, and the one a real
-  // docs site uses. `DocsGetStarted` is hand-composed Vue because a landing page is a
+  // docs site uses. `DocsHome` is hand-composed Vue because a landing page is a
   // designed object — bands, a hero, a card grid. A reading page is not: it is prose
   // with a few components in it, and an author should be able to write the whole thing
   // in one `.mdx` file and never touch a class. So everything below comes from

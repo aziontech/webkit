@@ -2,12 +2,20 @@
 // same eight sections, the same collapsible groups, the same rows, in the same
 // order.
 //
-// Shape: each entry is a docs SECTION — `{ label, items }`. A section is not a group
-// header in the rail any more: it is a LEVEL the reader drills into (see
-// `docsNavGroups` below), so its label names that level and the row that opens it.
-// Within `items`, a node with `children` renders as an inline sub-menu, the
-// condensed row the docs use for product groups (`Migrate`, `Modules`, `Guides`,
-// `Reference`), nesting four more levels deep inside the section's own.
+// Shape: each entry is a docs SECTION — `{ label, items }`, which is `Menu`'s
+// `MenuGroupNode` verbatim: a SEGMENT, a title over its rows. Within `items`, a node
+// with `children` renders as an inline sub-menu — the CONDENSED row the docs use for
+// product groups (`Migrate`, `Modules`, `Guides`, `Reference`), which expands in place
+// behind a chevron and a rail, nesting four more levels deep inside its segment.
+//
+// SEGMENTED, NOT DRILLED. The eight sections used to be drill LEVELS: the rail's root
+// was the eight pillars and choosing one replaced the whole rail with that pillar's own
+// menu behind a Back row. They are segment headers again — one column, eight labels, the
+// condensed rows doing the folding — which is the shape the live docs sidebar has
+// (azion.com/en/documentation/: `Start`, `Build`, `Store`, `Secure`, `Observe`,
+// `Resources`, `Manage`, `Updates & Policies` as headers over their rows). A level that
+// replaces the rail hides seven pillars to show one; a segment that titles its rows hides
+// nothing, and the condensed row is what keeps the column short enough for that to work.
 //
 // Most rows carry no `href`: the prototype is self-contained, so activating one moves
 // the selection rather than leaving the app. Ids derive from the docs path each row
@@ -19,13 +27,20 @@
 // ⌘-clickable and copyable like every other link in the docs. `DocsLayout` intercepts
 // the plain left click and routes it in-app, so the SPA stays an SPA and the modified
 // click stays the browser's.
-import { menuLeaves } from '@shared/lib/menu-tree.js'
+import { menuLeaves, menuPath } from '@shared/lib/menu-tree.js'
 
 export const docsNavSections = [
   {
-    label: 'Start',
+    // `Getting Started` titles the SEGMENT and `Overview` is the page inside it — the docs
+    // home. It used to be the other way round: the segment was `Start` and its first row
+    // was called `Getting Started`, which is the home, so the rail said "Getting Started"
+    // about a page that is a directory of the whole site and had no word left for the
+    // section. The live docs make the same split (a `Start` header over `Agent Setup`,
+    // `First deploy`, …), and it is what keeps the home one thing and the getting-started
+    // route another.
+    label: 'Getting Started',
     items: [
-      { id: 'get-started', label: 'Getting Started', href: '/site/docs' },
+      { id: 'overview', label: 'Overview', href: '/site/docs' },
       { id: 'agent-setup', label: 'Agent Setup', href: '/site/docs/agent-setup' },
       { id: 'get-started-first-deploy', label: 'First deploy', href: '/site/docs/first-deploy' },
       {
@@ -63,7 +78,7 @@ export const docsNavSections = [
         id: 'applications',
         label: 'Applications',
         children: [
-          { id: 'build-applications', label: 'About Applications' },
+          { id: 'build-applications', label: 'About Applications', href: '/site/docs/applications' },
           { id: 'get-started-journeys-launch', label: 'Build an application' },
           {
             id: 'modules',
@@ -77,7 +92,11 @@ export const docsNavSections = [
                 id: 'cache',
                 label: 'Cache',
                 children: [
-                  { id: 'build-applications-cache', label: 'About Cache' },
+                  {
+                    id: 'build-applications-cache',
+                    label: 'About Cache',
+                    href: '/site/docs/cache'
+                  },
                   {
                     id: 'guides',
                     label: 'Guides',
@@ -273,7 +292,7 @@ export const docsNavSections = [
   {
     label: 'Store',
     items: [
-      { id: 'store-overview', label: 'About Store' },
+      { id: 'store-overview', label: 'About Store', href: '/site/docs/store' },
       {
         id: 'kv-store',
         label: 'KV Store',
@@ -388,7 +407,7 @@ export const docsNavSections = [
   {
     label: 'Secure',
     items: [
-      { id: 'secure-overview', label: 'About Secure' },
+      { id: 'secure-overview', label: 'About Secure', href: '/site/docs/secure' },
       {
         id: 'secure-an-application',
         label: 'Secure an application',
@@ -665,7 +684,7 @@ export const docsNavSections = [
   {
     label: 'Observe',
     items: [
-      { id: 'observe-overview', label: 'About Observe' },
+      { id: 'observe-overview', label: 'About Observe', href: '/site/docs/observe' },
       {
         id: 'data-stream',
         label: 'Data Stream',
@@ -1026,7 +1045,11 @@ export const docsNavSections = [
         id: 'platform',
         label: 'Platform',
         children: [
-          { id: 'platform-overview', label: 'About the Platform' },
+          {
+            id: 'platform-overview',
+            label: 'About the Platform',
+            href: '/site/docs/platform-overview'
+          },
           {
             id: 'compliance',
             label: 'Compliance',
@@ -1304,42 +1327,25 @@ export const docsNavSections = [
   }
 ]
 
-/** The row the Get Started page renders as current. */
-export const DOCS_GET_STARTED_ID = 'get-started'
-
-/** `Updates & Policies` → `section-updates-policies`; sections carry no id of their own. */
-const sectionId = (label) =>
-  `section-${label
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-|-$/g, '')}`
+/** The row the docs home renders as current. */
+export const DOCS_HOME_ID = 'overview'
 
 /**
- * The rail's ROOT level: the eight sections as drill rows.
+ * The rail, as `Menu` takes it: the eight sections ARE the eight groups.
  *
- * A section used to be a group — a header titling its rows without folding them — which
- * put all 275 links in one column and asked the reader to scroll past seven pillars they
- * are not in to reach the eighth. As a DRILL, each section is a level: the root is the
- * eight pillars, and choosing one replaces the rail with that pillar's own menu (`groups`
- * is the same shape the root takes, so a level is a menu, not a nested list). Everything
- * below stays exactly as the documentation has it — the inline `children` rows still
- * expand in place inside the level, four more levels deep.
+ * There is nothing to map — a section is already `{ label, items }`, which is exactly
+ * `MenuGroupNode` — so this is an alias rather than a projection, and the two can never
+ * disagree about what the rail contains. It stays a separate export because that is the
+ * name the shell binds to (`:groups`), and because the projection was real while the
+ * sections were drill levels.
  *
- * No glyphs, at any level. Eight rows with a chevron each are already unambiguous, and a
- * documentation pillar is a subject rather than an object — the icons a `Cache` or a
- * `Firewall` earns in the console do not exist for `Resources` or `Updates & Policies`,
- * so the column would be filled with approximations that say less than the labels do.
+ * No glyphs on the group labels. The live docs put one on each (a bolt on `Start`, the
+ * pillar marks on `Build` / `Store` / `Secure` / `Observe`), but `Menu.Group`'s label is
+ * a title, not a row: it has no icon column to sit in, and adding one would need the
+ * label to grow an anatomy it deliberately does not have. The eight labels are unambiguous
+ * on their own.
  */
-export const docsNavGroups = [
-  {
-    items: docsNavSections.map((section) => ({
-      id: sectionId(section.label),
-      label: section.label,
-      kind: 'drill',
-      groups: [{ items: section.items }]
-    }))
-  }
-]
+export const docsNavGroups = docsNavSections
 
 /**
  * Every row that has a real page, as `href` → row id.
@@ -1356,9 +1362,14 @@ export const docsIdByRoute = new Map(
 )
 
 /**
- * Which ids are drill LEVELS rather than inline subs. A jump from the palette has to open
- * every container above the page it selected, and the two kinds are opened by two different
- * models — the drill stack (`path`) and the expansion set (`expanded`) — so the ancestor
- * chain is split against this.
+ * Every container on the way down to a page, so a jump can open them.
+ *
+ * One model now, not two: with the sections back to being segments, the only thing that
+ * folds is the CONDENSED row, so an ancestor chain is entirely `expanded` ids. Segments
+ * never fold, so they never appear here.
  */
-export const docsSectionIds = new Set(docsNavGroups[0].items.map((item) => item.id))
+export const docsParentsOf = (id) =>
+  menuPath(
+    docsNavSections.flatMap((section) => section.items),
+    id
+  ) ?? []

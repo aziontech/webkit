@@ -25,6 +25,7 @@
   import DocsLayout from '../components/DocsLayout.vue'
   import { AGENT_SETUP_TOC, agentSetupMarkdown } from '../lib/docs-agent-setup.js'
   import { useDocsPageActions } from '../lib/docs-page-actions.js'
+  import { docsPageChrome } from '../lib/docs-pages.js'
   import { docsRailGroups } from '../lib/docs-rail-groups.js'
 
   const HEADINGS = AGENT_SETUP_TOC
@@ -48,15 +49,11 @@
   provideHeadingNav(goToHeading)
 
 
-  // Reading order through the Start section, matching the rail's own order.
-  const PREVIOUS = { title: 'Getting Started', href: '/site/docs' }
-  const NEXT = { title: 'First deploy', href: '/site/docs/first-deploy' }
-
-  const CRUMBS = [
-    { label: 'Documentation', href: '/site/docs' },
-    { label: 'Start', href: '/site/docs' },
-    { label: 'Agent Setup', current: true }
-  ]
+  // Trail and reading order come from the RAIL, like every MDX page's do (see
+  // docs-pages.js). Typed out here they went stale the moment the tree changed: the trail
+  // still said `Start` after that segment was retitled `Getting Started`, and `previous`
+  // still called the home "Getting Started" after the rail stopped doing so.
+  const CHROME = docsPageChrome('/site/docs/agent-setup')
 
   // The page is composed rather than written, so its markdown is BUILT from the same data
   // the body renders (see docs-agent-setup.js) — not typed out a second time to rot.
@@ -82,11 +79,11 @@
            and the hover surface keeps its 8px, bleeding into the gutter where there is
            nothing to collide with. -->
       <Breadcrumb
-        :items="CRUMBS"
+        :items="CHROME.crumbs"
         class="hidden -ml-(--spacing-xs) min-w-0 flex-1 md:inline-flex"
       />
       <Breadcrumb
-        :items="CRUMBS.slice(-1)"
+        :items="CHROME.crumbs.slice(-1)"
         class="-ml-(--spacing-xs) min-w-0 flex-1 md:hidden"
       />
       <SplitButton
@@ -103,8 +100,8 @@
 
     <div ref="body">
       <DocsAgentSetup
-        :previous="PREVIOUS"
-        :next="NEXT"
+        :previous="CHROME.previous"
+        :next="CHROME.next"
       />
     </div>
 
