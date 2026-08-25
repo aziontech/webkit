@@ -22,8 +22,6 @@
       `${ctx?.testId ?? 'layout-sidebar'}__footer-region`
   )
 
-  // The separator above the footer belongs to the Sidebar's footer region, which
-  // spans the rail edge-to-edge; this component only lays out its own content.
   const rootClasses = computed(() => cn('w-full shrink-0', attrs.class))
 </script>
 

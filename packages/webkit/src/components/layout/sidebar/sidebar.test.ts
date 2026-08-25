@@ -426,10 +426,6 @@ describe('Sidebar', () => {
     })
   })
 
-  // A trailing rail is the SAME rail with every horizontal decision mirrored. These
-  // pin the mirror itself — the direction the keys size it, the direction it leaves —
-  // rather than the classes that express it, which is what the CSS-less browser env
-  // can actually observe (see .claude/rules/testing.md).
   describe('side prop (a trailing rail is the same component)', () => {
     it('defaults to the leading edge and publishes it on the root', () => {
       const { getByTestId } = render(Sidebar)
@@ -477,7 +473,6 @@ describe('Sidebar', () => {
 
       const root = getByTestId('layout-sidebar')
       expect(root.getAttribute('inert')).not.toBeNull()
-      // Positive translate = out through the RIGHT edge (a leading rail is negative).
       const transform = getByTestId('layout-sidebar__panel').style.transform
       expect(transform).toContain('translateX(')
       expect(transform).not.toContain('-')
