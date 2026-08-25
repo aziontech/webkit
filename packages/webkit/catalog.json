@@ -4508,7 +4508,7 @@
         "Giving authored prose inside a documentation block (a step's body, a tab's panel) the same type contract as the page around it."
       ],
       "avoidWhen": [
-        "To cap the reading column — `DocProse` has no measure of its own. The consumer sets the width with `.layout-column-docs` (`--layout-measure-docs`, 752px).",
+        "To cap the reading column — `DocProse` has no measure of its own. The consumer sets the width with `.layout-column-docs` (`--layout-measure-docs`, 1192px).",
         "To style a webkit component's internals. Those are chrome and are excluded by design; restyle nothing from here.",
         "For a single run of body copy in an application screen — use the `text-body-*` tokens directly."
       ],

@@ -4,9 +4,9 @@ category: documentation
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 590a8a207498deeb49b18a7d6c076c05184f37dc36f6195d3777f7195ab11a2a
+checksum: 105b1dce320d82ce968e8978c67eae10c733cdd1b90452f9384f5e46ec6917de
 created: 2026-08-21
-last_updated: 2026-08-21
+last_updated: 2026-08-25
 ---
 
 # DocProse — Component Spec
@@ -22,7 +22,7 @@ The typography contract every documentation page inherits. A markdown or MDX pip
 
 ## When NOT to use
 
-- To cap the reading column — `DocProse` has no measure of its own. The consumer sets the width with `.layout-column-docs` (`--layout-measure-docs`, 752px).
+- To cap the reading column — `DocProse` has no measure of its own. The consumer sets the width with `.layout-column-docs` (`--layout-measure-docs`, 1192px).
 - To style a webkit component's internals. Those are chrome and are excluded by design; restyle nothing from here.
 - For a single run of body copy in an application screen — use the `text-body-*` tokens directly.
 
@@ -88,9 +88,11 @@ import DocProse from '@aziontech/webkit/doc-prose'
 
 | Region | Token (DESIGN.md) |
 |---|---|
-| typography (h1/h2/h3) | `.text-heading-lg` / `.text-heading-md` / `.text-heading-sm` |
-| typography (h4) | `.text-heading-xxs` |
-| typography (body, list item) | `.text-body-md` |
+| typography (h1) | `.text-heading-2xl` / `sm:.text-heading-xl` |
+| typography (h2) | `.text-heading-xl` / `sm:.text-heading-md` |
+| typography (h3) | `.text-heading-lg` / `md:.text-heading-sm` |
+| typography (h4) | `.text-heading-xs` |
+| typography (body, list item) | `.text-body-prose-md` |
 | typography (inline code) | `.text-label-code-sm` |
 | text | `var(--text-default)` |
 | text (blockquote, list marker) | `var(--text-muted)` |
@@ -100,7 +102,7 @@ import DocProse from '@aziontech/webkit/doc-prose'
 | border (inline code, hr) | `var(--border-default)` |
 | border (blockquote rule) | `var(--border-strong)` |
 | shape (inline code) | `var(--shape-flat)` |
-| spacing (section rung) | `var(--spacing-xxl)` / `var(--spacing-xl)` |
+| spacing (section step) | `var(--spacing-14)` (open, 56) / `var(--spacing-12)` (close, 48) |
 | spacing (block, indent) | `var(--spacing-lg)` |
 | spacing (base rung) | `var(--spacing-md)` |
 | spacing (tightened rungs) | `var(--spacing-sm)` / `var(--spacing-xs)` |
