@@ -403,6 +403,83 @@ describe('MultiSelect (composition / overlay)', () => {
   //      aria-hidden control within a role="option" — a serious violation.
   // The structural/ARIA/keyboard/model assertions above cover behavior
   // directly; the a11y gaps are reported rather than asserted-green.
+  // ---- one leading column + group rhythm ------------------------------------
+  // The reservation is CSS (`group-has-…`) and browser mode compiles no Tailwind,
+  // so `display` cannot be read here. Assert the mechanism: the marker sits on
+  // exactly the options that have a glyph, the box sits on every option, and the
+  // list carries the group that scopes the rule.
+  it('marks only options that have a leading glyph, but gives every option the box', async () => {
+    const WithIcons = defineComponent({
+      setup() {
+        const open = ref(true)
+        return () =>
+          h(MultiSelect, { open: open.value, modelValue: [] }, () => [
+            h(MultiSelectTrigger, { 'aria-label': 'Pick' }),
+            h(MultiSelectContent, null, () => [
+              h(MultiSelectOption, { value: 'a', icon: 'pi pi-heart' }, () => 'With icon'),
+              h(MultiSelectOption, { value: 'b' }, () => 'Without icon')
+            ])
+          ])
+      }
+    })
+
+    render(WithIcons)
+    await nextTick()
+
+    const boxes = Array.from(
+      document.body.querySelectorAll('[data-testid="multi-select-option__leading"]')
+    ) as HTMLElement[]
+    expect(boxes).toHaveLength(2)
+
+    for (const box of boxes) {
+      expect(box.className).toContain('size-4')
+      expect(box.className).toContain('group-has-[[data-leading]]/options:flex')
+    }
+
+    expect(boxes[0].hasAttribute('data-leading')).toBe(true)
+    expect(boxes[1].hasAttribute('data-leading')).toBe(false)
+    expect(boxes[0].querySelector('i.pi-heart')).not.toBeNull()
+    expect(boxes[1].querySelector('i')).toBeNull()
+
+    const list = document.body.querySelector('[data-testid="multi-select-content__list"]')
+    expect(list?.className).toContain('group/options')
+
+    cleanupTeleported()
+  })
+
+  it('spaces every group but the first', async () => {
+    const Grouped = defineComponent({
+      setup() {
+        const open = ref(true)
+        return () =>
+          h(MultiSelect, { open: open.value, modelValue: [] }, () => [
+            h(MultiSelectTrigger, { 'aria-label': 'Pick' }),
+            h(MultiSelectContent, null, () => [
+              h(MultiSelectGroup, { label: 'A' }, () => [
+                h(MultiSelectOption, { value: 'a' }, () => 'A1')
+              ]),
+              h(MultiSelectGroup, { label: 'B' }, () => [
+                h(MultiSelectOption, { value: 'b' }, () => 'B1')
+              ])
+            ])
+          ])
+      }
+    })
+
+    render(Grouped)
+    await nextTick()
+
+    const groups = Array.from(document.body.querySelectorAll('[data-testid="multi-select-group"]'))
+    expect(groups).toHaveLength(2)
+    for (const group of groups) {
+      expect(group.className).toContain('[&:not(:first-child)]:mt-(--spacing-sm)')
+    }
+    expect(groups[0].previousElementSibling).toBeNull()
+    expect(groups[1].previousElementSibling).toBe(groups[0])
+
+    cleanupTeleported()
+  })
+
   it('exposes the documented combobox ARIA wiring on the trigger (a11y attributes)', () => {
     const { getByTestId } = render(Harness, { props: { open: false, required: true } })
     cleanupTeleported()

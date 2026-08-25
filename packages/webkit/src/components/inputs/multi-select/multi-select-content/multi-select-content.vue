@@ -155,7 +155,7 @@
           <slot name="search" />
         </div>
         <ScrollArea
-          class="flex max-h-60 flex-col items-stretch p-(--spacing-xxs)"
+          class="group/options flex max-h-60 flex-col items-stretch px-(--spacing-xxs) py-(--spacing-xs)"
           :data-testid="`${testId}__list`"
         >
           <slot />
