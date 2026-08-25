@@ -53,5 +53,10 @@
     "name": "chip",
     "path": "src/components/inputs/chip/chip.vue",
     "limit": "5 KB"
+  },
+  {
+    "name": "footer-root",
+    "path": "src/components/layout/footer/footer.vue",
+    "limit": "4 KB"
   }
 ]
