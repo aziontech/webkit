@@ -115,7 +115,10 @@
       :items="crumbs"
     />
     <div class="flex items-center justify-between gap-10">
-      <h1 class="m-0 min-w-0 flex-1 text-heading-lg font-normal text-(--text-default)">
+      <!-- The masthead takes the prose h1's pair (see DocProse): a page title that an
+           h2 could overtake — which `heading-lg` did between 640 and 768 — is not a
+           title. -->
+      <h1 class="m-0 min-w-0 flex-1 text-heading-2xl text-(--text-default) sm:text-heading-xl">
         {{ title }}
       </h1>
       <SplitButton
@@ -131,7 +134,7 @@
     </div>
     <p
       v-if="description"
-      class="m-0 text-body-md font-light text-(--text-default)"
+      class="m-0 text-body-md text-(--text-default)"
     >
       {{ description }}
     </p>

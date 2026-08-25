@@ -4,7 +4,7 @@ category: documentation
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 5eb0164634afd249432faf5550da0238f124372dcaf064404687f1075b5950bd
+checksum: c7b7dbe4ce86a9db6a810a542836459839c7b35c749b50e6194aa9ff56afeadb
 created: 2026-08-22
 last_updated: 2026-08-22
 ---
@@ -90,21 +90,21 @@ _none_
 
 ## Tokens
 
-| Region                    | Token (DESIGN.md)                          |
-| ------------------------- | ------------------------------------------ |
-| typography (title)        | `.text-heading-lg`                         |
-| typography (deck)         | `.text-body-md`                            |
-| typography (last updated) | `.text-label-sm`                           |
-| text                      | `var(--text-default)`                      |
-| text (last updated)       | `var(--text-muted)`                        |
-| border (the closing rule) | `var(--border-default)`                    |
-| spacing                   | `var(--spacing-lg)` / `var(--spacing-xxs)` |
+| Region                    | Token (DESIGN.md)                           |
+| ------------------------- | ------------------------------------------- |
+| typography (title)        | `.text-heading-2xl` / `sm:.text-heading-xl` |
+| typography (deck)         | `.text-body-md`                             |
+| typography (last updated) | `.text-label-sm`                            |
+| text                      | `var(--text-default)`                       |
+| text (last updated)       | `var(--text-muted)`                         |
+| border (the closing rule) | `var(--border-default)`                     |
+| spacing                   | `var(--spacing-lg)` / `var(--spacing-xxs)`  |
 
 ## Theme gaps
 
-| Figma variable         | Temporary primitive    | Follow-up                                                                                                                                                                                                                                                                                                                                                           |
-| ---------------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `text-heading-lg` ramp | keep `text-heading-lg` | Theme-owned type inversion: between 640 and 767px the page title (`text-heading-lg`, 18/18/30) renders **smaller** than the prose `h2` below it (`text-heading-md`, 16/20/24) — measured 18 against 20. `text-heading-xl` (20/30/36) is the monotonic replacement but moves the desktop title from 30 to 36, so it is a theme decision rather than a component fix. |
+| Figma variable | Temporary primitive | Follow-up |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
