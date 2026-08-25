@@ -220,7 +220,7 @@
        3.5rem), so the hero still measures one screen with the nav above it. -->
   <BannerContainer
     hero
-    max-width="7xl"
+    max-width="site"
     class="[--banner-offset:3.5rem]"
   >
     <!-- The band holds two things, top to bottom: the copy, and the trust strip standing
@@ -286,7 +286,7 @@ And it stays up when others go down."
        four sides read as one frame with no doubled lines. Each module owns its
        own `border-t` and its own padding — which is why the column is unpadded
        and no module ever draws a side border. -->
-  <SectionContainer max-width="5xl">
+  <SectionContainer max-width="site">
     <!-- The column opens on a Spacer, hatched — the same first brick Functions puts under
          its hero. As the first frame in the column its `flush` top rule lands on the hero's
          border-b, and its bottom rule is what divides it from the module below, which is

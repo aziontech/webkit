@@ -7,7 +7,9 @@
    * edge is the banner's border-b and its bottom edge the footer's border-t, so
    * the whole page frame reads as one continuous border.
    *
-   *   • maxWidth — column width token; match the banner above it.
+   *   • maxWidth — column width token; match the banner above it. `site` is the
+   *                marketing site's own measure (--container-site), the one every
+   *                band of that page frame — nav, hero, sections, footer — shares.
    *   • bordered — draw the vertical frame rules (default true).
    *   • padded   — add inner padding. Leave false for an edge-to-edge stack of
    *                modules that each own their own padding (so nothing doubles);
@@ -18,11 +20,12 @@
     '4xl': 'max-w-(--container-4xl)',
     '5xl': 'max-w-(--container-5xl)',
     '6xl': 'max-w-(--container-6xl)',
-    '7xl': 'max-w-(--container-7xl)'
+    '7xl': 'max-w-(--container-7xl)',
+    site: 'max-w-(--container-site)'
   }
 
   defineProps({
-    // One of the MAX_W keys ('3xl'…'7xl').
+    // One of the MAX_W keys ('3xl'…'7xl', 'site').
     maxWidth: {
       type: String,
       default: '7xl'

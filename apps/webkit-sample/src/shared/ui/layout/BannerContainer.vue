@@ -8,8 +8,9 @@
    * the SectionContainer's border-x below it so the frame reads as one
    * continuous border with no doubled lines.
    *
-   *   • maxWidth — inner column width token ('7xl' hub, '6xl' docs, …), or 'full'
-   *                for a full-bleed band whose content only keeps its padding.
+   *   • maxWidth — inner column width token ('7xl' hub, '6xl' docs, 'site' for the
+   *                marketing site's shared measure), or 'full' for a full-bleed band
+   *                whose content only keeps its padding.
    *   • bordered — draw the bottom hairline (default true).
    *   • hero     — fill the viewport height and center the content vertically.
    *
@@ -36,11 +37,15 @@
     '5xl': 'max-w-(--container-3xl)',
     '6xl': 'max-w-(--container-4xl)',
     '7xl': 'max-w-(--container-5xl)',
+    // The site's bands resolve to --container-site directly rather than through a
+    // ladder key: the hero's inner column is the SAME column as the sections and the
+    // footer below it, so it has to move with them, not with a rung of the scale.
+    site: 'max-w-(--container-site)',
     full: 'max-w-none'
   }
 
   defineProps({
-    // One of the MAX_W keys ('3xl'…'7xl', 'full').
+    // One of the MAX_W keys ('3xl'…'7xl', 'site', 'full').
     maxWidth: {
       type: String,
       default: '7xl'

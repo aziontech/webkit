@@ -15,6 +15,19 @@
   // (`--primary-mask`). A Tooltip on top explains what it does; clicking copies a
   // ready-to-paste setup prompt to the clipboard.
   //
+  // ── THE CONFIRMATION IS THE LABEL, NOT A TOAST ──
+  //
+  // Copying used to fire a success toast, which put the answer to "did that work?" in
+  // the opposite corner of the screen from the control the reader just pressed — and on
+  // the docs pages the pill sits inside the reading column, so the reader had to leave
+  // the sentence they were in to find out. The pill says it itself instead: the label
+  // becomes `copiedLabel` for two seconds and then goes back to offering the action.
+  // Feedback at the point of action, and it matches `CopyButton`, the DS control that
+  // does the same job with an icon and a `copiedLabel`.
+  //
+  // A FAILURE still toasts. A refusal has to say why (clipboard blocked by the browser),
+  // and that reason does not fit in a label the pill has to hand back two seconds later.
+  //
   // ── DISMISSING IT (`closable`) ──
   //
   // The pill is guidance, and guidance a reader has acted on (or decided against) has
@@ -36,7 +49,7 @@
   import AzionLogoMin from '@aziontech/webkit/svg/azion/min'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { ref } from 'vue'
+  import { computed, onBeforeUnmount, ref } from 'vue'
 
   import { AGENT_SETUP_PROMPT, AGENT_TOOLS } from '../lib/agent-onboarding'
   import AgentMark from './brand/AgentMark.vue'
@@ -46,6 +59,9 @@
     brand: { type: String, default: 'Azion' },
     // Overrides the default "Onboard your Agent to {brand}" label when set.
     label: { type: String, default: '' },
+    // What the pill says for the two seconds after a successful write. The
+    // confirmation is the LABEL, not a toast — see the note above.
+    copiedLabel: { type: String, default: 'Prompt copied!' },
     // Shows the leading Azion mark; hide it for a plain text pill.
     showLogo: { type: Boolean, default: true },
     // The prompt copied to the clipboard on click. Shared with the first-access card
@@ -69,18 +85,42 @@
     emit('close', event)
   }
 
+  // Two seconds, the same dwell `CopyButton` uses — long enough to read, short
+  // enough that the pill is back to offering the action before the reader looks again.
+  const COPIED_MS = 2000
+
+  const copied = ref(false)
+  let copiedTimeoutId = null
+
+  // One string names the pill, so the button and its tooltip cannot disagree: the
+  // idle label while idle, the confirmation for the dwell after a write.
+  const idleLabel = computed(() => props.label || `Onboard your Agent to ${props.brand}`)
+  const currentLabel = computed(() => (copied.value ? props.copiedLabel : idleLabel.value))
+
   const onCopy = async () => {
     try {
       await navigator.clipboard.writeText(props.prompt)
-      toast.success('Setup prompt copied.', {
-        description: 'Paste it into your AI coding tool to onboard your agent.'
-      })
     } catch {
+      // The only case that still earns a toast: a refusal needs to say WHY, and the
+      // reason does not fit in a label the pill has to give back two seconds later.
       toast.error("Couldn't copy the prompt", {
         description: 'Clipboard access was blocked by the browser.'
       })
+      return
     }
+
+    copied.value = true
+
+    if (copiedTimeoutId) clearTimeout(copiedTimeoutId)
+    copiedTimeoutId = setTimeout(() => {
+      copied.value = false
+      copiedTimeoutId = null
+    }, COPIED_MS)
   }
+
+  onBeforeUnmount(() => {
+    if (copiedTimeoutId) clearTimeout(copiedTimeoutId)
+  })
 </script>
 
 <template>
@@ -91,12 +131,23 @@
     v-if="!dismissed"
     class="inline-flex max-w-full items-center gap-(--spacing-xxs)"
   >
+    <!-- The tooltip keeps saying what the control DOES, in both states. Echoing the
+         confirmation here would stack the same sentence twice — once in the label, once
+         in a bubble directly above it, over the paragraph the reader is in — and
+         `CopyButton` only puts it in the tooltip because its trigger is icon-only and
+         has no label to put it in.
+
+         Suppressing the tooltip during the dwell (`:disabled="copied"`) was the other
+         option and it is a trap: `Tooltip.setOpen` returns early when `disabled`, so a
+         tooltip that is already open when the state flips can no longer be CLOSED —
+         it would stick over the text for the full two seconds. -->
     <Tooltip
       text="Copies a setup prompt for your AI coding tool"
       placement="top"
     >
       <button
         type="button"
+        :data-state="copied ? 'copied' : 'default'"
         class="group inline-flex max-w-full items-center gap-(--spacing-xs) rounded-full bg-(--bg-contrast) px-(--spacing-sm) py-(--spacing-xxs) text-label-sm text-(--text-contrast) transition-[scale,box-shadow] duration-moderate-01 ease-productive-entrance hover:scale-[1.03] hover:shadow-[0_0_24px_4px_var(--primary-mask)] hover:ring-2 hover:ring-(--primary) active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--primary) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none motion-reduce:scale-100 sm:gap-(--spacing-sm) sm:px-(--spacing-md) sm:py-(--spacing-xs) sm:text-label-md"
         @click="onCopy"
       >
@@ -107,8 +158,16 @@
           aria-hidden="true"
         />
 
-        <span class="min-w-0 truncate font-medium sm:whitespace-nowrap">
-          {{ label || `Onboard your Agent to ${brand}` }}
+        <!-- The label is where the copy is CONFIRMED, so it is a live region: the
+             pill's own text changes under the reader's pointer, and a reader who is
+             not looking at it gets the same confirmation announced. The width does
+             not thrash while it swaps because the pill sizes to its content and both
+             strings are one short line. -->
+        <span
+          aria-live="polite"
+          class="min-w-0 truncate sm:whitespace-nowrap"
+        >
+          {{ currentLabel }}
         </span>
 
         <!-- AI coding tools — bare brand logos on the pill, drawn by AgentMark

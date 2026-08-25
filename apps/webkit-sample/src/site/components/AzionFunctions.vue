@@ -308,7 +308,7 @@ export default app;`
        puts the strip on the bottom edge of one screen rather than a scroll below it. -->
   <BannerContainer
     hero
-    max-width="7xl"
+    max-width="site"
     class="[--banner-offset:3.5rem]"
   >
     <div
@@ -398,7 +398,7 @@ Run at the edge."
        Everything below the hero is a stack of bricks inside one centered column. The column
        carries only `border-x`; its top edge is the hero band's `border-b` and its bottom edge
        the SiteFooter's `border-t`. -->
-  <SectionContainer max-width="5xl">
+  <SectionContainer max-width="site">
     <!-- The design opens the column with a Spacer. As the first frame in the column its
          `flush` top rule lands on the hero's border-b, and its bottom rule is what
          divides it from the module below — which is why that module passes

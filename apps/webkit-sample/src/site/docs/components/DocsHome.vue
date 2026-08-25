@@ -248,10 +248,10 @@
     <!-- ── Hero: fluid banner spanning the full content width, bottom border ── -->
     <BannerContainer max-width="6xl">
       <div class="flex max-w-(--container-3xl) flex-col gap-(--spacing-md)">
-        <h1 class="text-balance text-heading-2xl text-(--text-default)">
+        <h1 class="text-heading-2xl text-(--text-default)">
           Welcome to Azion Docs
         </h1>
-        <p class="text-pretty text-body-lg text-(--text-muted)">
+        <p class="text-body-lg text-(--text-muted)">
           We make every application fast and reliable. Deploy your projects instantly on the most
           reliable global network, leverage enterprise-grade security, and scale from zero to peak
           without cold starts.
@@ -303,7 +303,7 @@
                 aria-hidden="true"
               />
             </span>
-            <span class="text-pretty text-body-sm text-(--text-default)">{{ item.text }}</span>
+            <span class="text-body-sm text-(--text-default)">{{ item.text }}</span>
           </li>
         </ul>
       </SectionModule>
@@ -315,7 +315,7 @@
             <template #content>
               <div class="flex flex-col gap-(--spacing-sm)">
                 <h3 class="text-heading-sm text-(--text-default)">Distributed computing</h3>
-                <p class="text-pretty text-body-sm text-(--text-muted)">
+                <p class="text-body-sm text-(--text-muted)">
                   Azion runs workloads across multiple locations worldwide to reduce latency and
                   improve reliability. This places compute and data closer to where they’re needed —
                   near your users on a global network of points of presence.
@@ -364,7 +364,7 @@
               {{ index + 1 }}
             </span>
             <h3 class="text-label-lg text-(--text-default)">{{ step.title }}</h3>
-            <p class="text-pretty text-body-sm text-(--text-muted)">{{ step.body }}</p>
+            <p class="text-body-sm text-(--text-muted)">{{ step.body }}</p>
           </li>
         </ol>
       </SectionModule>
@@ -407,7 +407,7 @@
                     </div>
 
                     <p
-                      class="max-w-(--container-2xl) text-pretty text-body-md text-(--text-muted)"
+                      class="max-w-(--container-2xl) text-body-md text-(--text-muted)"
                     >
                       {{ primitive.description }}
                     </p>
@@ -469,7 +469,7 @@
         description="The fastest way to start using the Azion Web Platform. Deploy instantly from dozens of templates — e-commerce, blogs, APIs, full-stack SSR, and more; connect Sanity, Cosmic, ButterCMS, Turso, or your own RESTful CMS. CI/CD is auto-configured so you can focus on your code, not the pipeline."
       >
         <p
-          class="m-0 mb-(--spacing-lg) max-w-(--container-3xl) text-pretty text-body-md text-(--text-muted)"
+          class="m-0 mb-(--spacing-lg) max-w-(--container-3xl) text-body-md text-(--text-muted)"
         >
           Here are a few of our most popular templates to get you started. For more information, you
           can visit our
@@ -531,7 +531,7 @@
                   {{ tool.name }}
                 </h3>
                 <p
-                  class="text-pretty text-body-xxs mb-(--spacing-sm) text-(--text-muted)"
+                  class="text-body-xxs mb-(--spacing-sm) text-(--text-muted)"
                 >
                   {{ tool.description }}
                 </p>
@@ -558,7 +558,7 @@
                 <span class="text-label-lg text-(--text-default)">{{ faq.question }}</span>
               </Accordion.Trigger>
               <Accordion.Content>
-                <p class="text-pretty text-body-md text-(--text-muted)">{{ faq.answer }}</p>
+                <p class="text-body-md text-(--text-muted)">{{ faq.answer }}</p>
               </Accordion.Content>
             </Accordion.Item>
           </Accordion>

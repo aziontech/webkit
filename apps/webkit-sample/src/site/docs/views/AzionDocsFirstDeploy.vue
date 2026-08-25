@@ -26,7 +26,7 @@
   import { scrollToHeading } from '@aziontech/webkit-docs/heading-scroll'
   import { collectHeadings, parseMdx } from '@aziontech/webkit-docs/mdx'
   import { useScrollSpy } from '@aziontech/webkit-docs/use-scroll-spy'
-  import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
+  import { computed, ref } from 'vue'
 
   import DocsLayout from '../components/DocsLayout.vue'
   import DocsMdxPage from '../components/DocsMdxPage.vue'
@@ -56,49 +56,6 @@
 
   provideHeadingNav(goToHeading)
 
-  // THE RAIL STARTS AT THE PAGE'S TITLE, not at the top of its column. The outline is a
-  // peer of the prose, so opening it level with the page bar puts "On this page" beside
-  // the breadcrumb and reads as part of the trail; opening it level with the h1 puts it
-  // beside the thing it is an outline OF.
-  //
-  // Measured rather than typed, because the distance is the sum of two things this view
-  // does not own — the shell's page bar and the masthead's opening step — and it changes
-  // with the breakpoint. The spacer sits ABOVE the sticky wrapper so a reader who scrolls
-  // a long rail still gets it pinned to the top of the column.
-  const rail = ref(null)
-  const railOffset = ref(0)
-
-  const railStyle = computed(() => ({ paddingTop: `${railOffset.value}px` }))
-
-  /** Distance from the top of a scroll container's content to `element`. */
-  const offsetWithin = (container, element) =>
-    element.getBoundingClientRect().top -
-    container.getBoundingClientRect().top +
-    container.scrollTop
-
-  const alignRail = () => {
-    const heading = body.value?.querySelector('h1')
-    const main = scroller()
-    const column = rail.value?.parentElement
-    if (!heading || !main || !column) return
-    railOffset.value = Math.max(
-      0,
-      Math.round(offsetWithin(main, heading) - offsetWithin(column, rail.value))
-    )
-  }
-
-  let observer = null
-
-  onMounted(async () => {
-    await nextTick()
-    alignRail()
-    if (typeof globalThis.ResizeObserver === 'function' && body.value) {
-      observer = new globalThis.ResizeObserver(() => alignRail())
-      observer.observe(body.value)
-    }
-  })
-
-  onBeforeUnmount(() => observer?.disconnect())
 
   // Reading order through the Start section, matching the rail's own order.
   const PREVIOUS = { title: 'Agent Setup', href: '/site/docs/agent-setup' }
@@ -128,13 +85,19 @@
            bar pinned for the whole scroll. Full trail from `md` up, the current page
            alone below it — where the only ancestor is "Documentation", which the
            shell's own brand already says. -->
+      <!-- OPTICALLY COMPENSATED: the crumb is a hover pill with `px-(--spacing-xs)`, so
+           left alone its LABEL starts 8px inside the column edge while the title below is
+           flush with it — the trail reads indented against the whole page. The negative
+           margin is exactly the pill's own padding, so the ink lands on the column edge
+           and the hover surface keeps its 8px, bleeding into the gutter where there is
+           nothing to collide with. -->
       <Breadcrumb
         :items="CRUMBS"
-        class="hidden min-w-0 flex-1 md:inline-flex"
+        class="hidden -ml-(--spacing-xs) min-w-0 flex-1 md:inline-flex"
       />
       <Breadcrumb
         :items="CRUMBS.slice(-1)"
-        class="min-w-0 flex-1 md:hidden"
+        class="-ml-(--spacing-xs) min-w-0 flex-1 md:hidden"
       />
       <SplitButton
         :label="copyLabel"
@@ -163,11 +126,7 @@
            furthest thing from the reader's eye when they arrive. The wrapper claims
            the whole column (`flex-1`) so `mt-auto` has room to push against; the gap
            stays the floor between the two, for the case where a long outline fills it. -->
-      <div
-        ref="rail"
-        :style="railStyle"
-        class="flex flex-1 flex-col gap-(--spacing-xl)"
-      >
+      <div class="flex flex-1 flex-col gap-(--spacing-xl)">
         <DocOnThisPage
           :items="headings"
           :active-id="activeId"

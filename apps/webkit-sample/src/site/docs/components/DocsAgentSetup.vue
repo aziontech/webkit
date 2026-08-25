@@ -59,9 +59,7 @@
 <template>
   <!-- The docs MEASURE and the docs masthead, both from where the MDX page takes them,
        so the two reading pages open identically. -->
-  <article
-    class="layout-column-docs layout-boundary-inline [--layout-boundary-inline:var(--spacing-md)] pt-(--spacing-xxl) pb-(--spacing-xxl)"
-  >
+  <article class="layout-column-docs layout-boundary-inline pt-14 pb-12">
     <DocPageHeader
       title="Agent Setup"
       description="Connect your AI coding agent to Azion and ship straight from your editor or terminal."
@@ -69,7 +67,7 @@
       :copyable="false"
     />
 
-    <DocProse class="pt-(--spacing-xxl) sm:pt-(--spacing-xl)">
+    <DocProse class="pt-14">
       <!-- ══ Pick your tool ═══════════════════════════════════════════════════════ -->
       <DocHeading
         id="pick-your-tool"
@@ -178,7 +176,7 @@
       v-if="previous || next"
       :previous="previous"
       :next="next"
-      class="pt-(--spacing-xxl)"
+      class="pt-12"
     />
   </article>
 </template>

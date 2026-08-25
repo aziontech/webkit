@@ -10,6 +10,7 @@ import AzionDocsAgentSetup from '@site/docs/views/AzionDocsAgentSetup.vue'
 import AzionDocsFirstDeploy from '@site/docs/views/AzionDocsFirstDeploy.vue'
 import LandingAzion from '@site/views/LandingAzion.vue'
 import LandingFunctions from '@site/views/LandingFunctions.vue'
+import LandingPricing from '@site/views/LandingPricing.vue'
 
 export const siteRoutes = [
   // Segregated marketing router: landing-page examples that render in the
@@ -20,6 +21,9 @@ export const siteRoutes = [
   // A product page in the same shell: one product's argument, where /site/home is the
   // platform's. The Products mega-menu's Functions entry points here.
   { path: '/site/functions', name: 'site-functions', component: LandingFunctions },
+  // The pricing page in the same shell: the three tiers, the full feature matrix, and the
+  // FAQ. The website nav's `Pricing` entry points here.
+  { path: '/site/pricing', name: 'site-pricing', component: LandingPricing },
   { path: '/site/docs', name: 'site-docs', component: AzionDocs },
   // A docs reading page COMPOSED in Vue: prose, but with a filtering tool picker and
   // cards carrying other vendors' real marks — neither of which MDX can express. Every

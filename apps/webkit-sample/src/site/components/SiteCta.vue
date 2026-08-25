@@ -22,6 +22,26 @@
   import { SectionModule } from '@shared/ui/layout/index.js'
   import { useRouter } from 'vue-router'
 
+  // Every string is a prop so the band can close a second page in that page's own
+  // language (the pt-BR pricing page does). The defaults ARE the homepage's copy, so a
+  // caller that passes nothing renders exactly what this band has always rendered.
+  defineProps({
+    // Accent label above the headline.
+    eyebrow: { type: String, default: 'Build' },
+    // First line of the headline, in full contrast.
+    title: { type: String, default: 'Build once.' },
+    // Second line, muted — the consequence of the first. One sentence, two tones.
+    titleMuted: { type: String, default: 'Run anywhere.' },
+    // The supporting line in the right column.
+    description: {
+      type: String,
+      default: 'Get a faster path to launch, less latency, and less infrastructure overhead.'
+    },
+    // The band's own action, and the secondary one beside it.
+    primaryLabel: { type: String, default: 'Start for free' },
+    secondaryLabel: { type: String, default: 'Talk to our team' }
+  })
+
   const router = useRouter()
   const goSignup = () => router.push('/signup')
 </script>
@@ -53,19 +73,19 @@
             <Overline
               prefix="//"
               show-cursor
-              >Build</Overline
+              >{{ eyebrow }}</Overline
             >
             <!-- One heading, two tones: the claim in full contrast, its consequence
                  muted. Two spans, not two headings — it is one sentence. -->
             <h2 class="m-0 text-balance text-heading-xl">
-              <span class="block text-(--text-default)">Build once.</span>
-              <span class="block text-(--text-muted)">Run anywhere.</span>
+              <span class="block text-(--text-default)">{{ title }}</span>
+              <span class="block text-(--text-muted)">{{ titleMuted }}</span>
             </h2>
           </div>
 
           <div>
             <Button
-              label="Start for free"
+              :label="primaryLabel"
               kind="secondary"
               size="large"
               @click="goSignup"
@@ -80,10 +100,10 @@
           class="flex flex-col justify-between gap-(--spacing-xxl) border-t border-(--border-default) p-(--spacing-xl) lg:border-l lg:border-t-0"
         >
           <p class="m-0 text-pretty text-heading-sm text-(--text-muted)">
-            Get a faster path to launch, less latency, and less infrastructure overhead.
+            {{ description }}
           </p>
           <Button
-            label="Talk to our team"
+            :label="secondaryLabel"
             kind="outlined"
             size="large"
             class="w-full"

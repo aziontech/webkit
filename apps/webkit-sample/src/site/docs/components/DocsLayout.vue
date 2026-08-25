@@ -63,7 +63,7 @@
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
   import { menuLeaves, menuPath } from '@shared/lib/menu-tree.js'
   import { useTheme } from '@shared/lib/theme.js'
-  import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
+  import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
   import {
@@ -329,6 +329,80 @@
 
     commands.value.find((entry) => entry.id === id)?.run(event)
   }
+  // ── "ON THIS PAGE" OPENS ON THE PAGE BAR'S LINE ──
+  //
+  // The rail's first line — the outline's "On this page" — sits on the SAME LINE as the
+  // breadcrumb in the page bar, so the two halves of a page's chrome read as one row
+  // across the shell. It used to open level with the page's h1 instead, which left the
+  // top of its own column empty beside the entire header band.
+  //
+  // It lives HERE because this is the only place that owns both subjects: the bar is the
+  // shell's, the rail's content is the page's, and neither reading view can see the
+  // other. It was previously measured inside each of those views against that page's
+  // h1 — the same forty lines twice, free to drift apart.
+  //
+  // MEASURED, not typed. Both ends move: the bar's height and the overline's line box
+  // are font- and breakpoint-dependent, and what is wanted is not a distance but a
+  // CENTRING — the opening line's centre on the bar's centre, which is what makes it
+  // land on the breadcrumb's line rather than merely near it. The measurement subtracts
+  // the pad it is currently applying, so re-running it on a resize converges on the
+  // same number instead of walking the rail further down the column each time.
+  const pageBar = ref(null)
+  const tocColumn = ref(null)
+  const tocOffset = ref(0)
+  // Whether a measurement has actually landed. Until it has, the column keeps the plain
+  // `pt-(--spacing-lg)` from its class — the shape a page with an outline but NO page bar
+  // wants, since there is then no line to align to and the rail is simply the top of its
+  // own column. An `aligned` flag rather than `tocOffset > 0`, because a measured zero is
+  // a legitimate answer (a bar and an opening line of the same height) and it must not
+  // read as "never measured".
+  const tocAligned = ref(false)
+
+  const tocStyle = computed(() =>
+    tocAligned.value ? { paddingTop: `${tocOffset.value}px` } : null
+  )
+
+  const alignToc = () => {
+    const bar = pageBar.value
+    const title = tocColumn.value?.querySelector('[data-toc-title]')
+    if (!bar || !title) return
+
+    const barBox = bar.getBoundingClientRect()
+    const titleBox = title.getBoundingClientRect()
+    // Below `xl` the column is `hidden`, so every box is zero and the answer would be
+    // garbage. Nothing to align while nothing is drawn.
+    if (barBox.height === 0 || titleBox.height === 0) return
+
+    // Discount the pad ALREADY APPLIED, read off the element rather than remembered — on
+    // the first run that is the class's `pt-(--spacing-lg)` and not this function's own
+    // number, so tracking `tocOffset` instead would misjudge the first measurement by a
+    // whole spacing step and only correct itself on the next resize.
+    const appliedPad =
+      Number.parseFloat(globalThis.getComputedStyle(tocColumn.value).paddingTop) || 0
+    const titleCentreUnpadded = titleBox.top + titleBox.height / 2 - appliedPad
+
+    tocOffset.value = Math.max(0, barBox.top + barBox.height / 2 - titleCentreUnpadded)
+    tocAligned.value = true
+  }
+
+  let tocObserver = null
+
+  onMounted(async () => {
+    await nextTick()
+    alignToc()
+
+    // The BAR and the TITLE are the two things measured, so they are the two things
+    // watched — not the prose, whose height has nothing to do with this alignment. It is
+    // also what catches the `xl` boundary: crossing it takes the title from a zero box to
+    // a real one, which is a resize.
+    if (typeof globalThis.ResizeObserver !== 'function') return
+    tocObserver = new globalThis.ResizeObserver(() => alignToc())
+    if (pageBar.value) tocObserver.observe(pageBar.value)
+    const title = tocColumn.value?.querySelector('[data-toc-title]')
+    if (title) tocObserver.observe(title)
+  })
+
+  onBeforeUnmount(() => tocObserver?.disconnect())
 </script>
 
 <template>
@@ -488,7 +562,15 @@
         </Sidebar>
       </div>
 
-      <main class="min-w-0 flex-1 overflow-y-auto">
+      <!-- THE DOCS INSET IS DECLARED ONCE, HERE. `--layout-boundary-inline` is the token
+           both the page bar below and the page's own column read, and they are siblings
+           in this element rather than in one another — so setting it on their common
+           ancestor is the only place where "the bar and the body are inset by the same
+           amount" is a fact instead of two numbers that have to be kept equal by hand.
+           `xl` (24 → 32 → 48) is the step the docs surface already used for its widest
+           chrome: the home's hero pads its copy with the same token, so the reading
+           column, the bar above it and the banner behind it now share one edge. -->
+      <main class="min-w-0 flex-1 overflow-y-auto [--layout-boundary-inline:var(--spacing-xl)]">
         <!-- The page bar: where the reader is, and what they can do with this page.
              It belongs to the SHELL's layout but to the PAGE's data — the shell has no
              idea which crumbs a page has or what its markdown says — so the page fills
@@ -499,9 +581,22 @@
              control would sit a thumb away from this one. Absent slot ⇒ no bar. -->
         <div
           v-if="$slots['page-bar']"
-          class="sticky top-0 z-20 flex h-12 items-center gap-(--spacing-sm) border-b border-(--border-default) bg-(--bg-canvas) px-(--spacing-md) md:gap-(--spacing-md) md:px-(--spacing-xl)"
+          ref="pageBar"
+          data-page-bar
+          class="sticky top-0 z-20 h-12 border-b border-(--border-default) bg-(--bg-canvas)"
         >
-          <slot name="page-bar" />
+          <!-- The bar is FULL-BLEED (its rule is the edge of the scroll region) while its
+               CONTENT submits to the page's column — the same `layout-column-docs` +
+               `layout-boundary-inline` pair the article below uses. Padding alone would
+               only agree with the body while the column's measure cap is slack: past it
+               the article centres and a padded bar keeps hugging the region, so the trail
+               and the title drift apart exactly on the widest screens. Sharing the column
+               makes the two land on the same left and right edge by construction. -->
+          <div
+            class="layout-column-docs layout-boundary-inline flex h-full items-center gap-(--spacing-sm) md:gap-(--spacing-md)"
+          >
+            <slot name="page-bar" />
+          </div>
         </div>
         <slot />
       </main>
@@ -518,7 +613,9 @@
            block simply lands at the end of the scroll. -->
       <div
         v-if="$slots.toc"
-        class="hidden w-(--container-3xs) shrink-0 flex-col overflow-y-auto border-l border-(--border-default) px-(--spacing-md) py-(--spacing-lg) xl:flex"
+        ref="tocColumn"
+        :style="tocStyle"
+        class="hidden w-(--container-3xs) shrink-0 flex-col overflow-y-auto border-l border-(--border-default) px-(--spacing-md) pt-(--spacing-lg) pb-(--spacing-lg) xl:flex"
       >
         <slot name="toc" />
       </div>

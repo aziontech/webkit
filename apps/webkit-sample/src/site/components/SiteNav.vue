@@ -30,7 +30,6 @@
   import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
   import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import FrameBox from '@aziontech/webkit/frame-box'
   import IconButton from '@aziontech/webkit/icon-button'
   import Menu from '@aziontech/webkit/menu'
   import NavigationMenu from '@aziontech/webkit/navigation-menu'
@@ -230,7 +229,7 @@
   // the bar and the sheet render the same set from one place.
   const plainLinks = [
     { value: 'customers', label: 'Customers', href: '#customers' },
-    { value: 'pricing', label: 'Pricing', href: '#pricing' }
+    { value: 'pricing', label: 'Pricing', href: '/site/pricing' }
   ]
 
   const goLogin = () => router.push('/login')
@@ -314,162 +313,159 @@
 
 <template>
   <header class="sticky top-0 z-40 border-b border-(--border-default) bg-(--bg-surface)">
-    <!-- THE BAR IS THE TOP OF THE PAGE'S FRAME, so its content lands inside the same
-         layout boundary as everything under it: `--container-5xl` centred, the width the
-         hero band, the framed column and the footer all resolve to. It used to be
-         `--container-7xl` with `px-md`, which put the logo 16px from the VIEWPORT while
-         every other block on the page started 172px in — the one element registered to
-         the window instead of to the frame.
-         `borders="x"` continues the column's own side rules up through the bar, so the
-         frame is drawn from the first pixel of the page rather than starting under the
-         hero. `marks="none"`: at 56px tall a corner tick would sit 4px from the logo and
-         read as debris, and the junction below is the bar's own full-bleed rule. -->
-    <FrameBox
-      borders="x"
-      marks="none"
-      class="mx-auto w-full max-w-(--container-5xl)"
+    <!-- THE BAR IS FULL BLEED, INSET BY THE PAGE BOUNDARY. It spans the window and opens
+         its regions at `--layout-boundary-inline` — the rule webkit's own `GlobalHeader`
+         states for a bar that sits in a content zone, and the one every other bar in this
+         app already follows (the console's page bar, the docs shell's, the hub's).
+
+         It used to carry the page's own column instead: a `FrameBox borders="x"` capped at
+         `--container-site`, so the frame's side rules ran up through the bar and the logo
+         started on the hero's left edge. That makes the bar a piece of the PAGE's frame
+         rather than the window's chrome, and it only reads that way while the page happens
+         to be at that exact measure — while everything else this bar owns (the navigation
+         sheet, the mega-menu popups, and the sticky matrix header under it) is registered
+         to the window and cannot follow a centred column. One boundary token, measured
+         from the window, is the shape that holds at every width. -->
+    <NavigationMenu
+      aria-label="Azion"
+      class="layout-boundary-inline flex h-14 w-full min-w-0 items-center gap-(--spacing-sm) lg:gap-(--spacing-lg)"
     >
-      <NavigationMenu
-        aria-label="Azion"
-        class="flex h-14 w-full min-w-0 items-center gap-(--spacing-sm) px-(--spacing-xl) lg:gap-(--spacing-lg)"
+      <!-- Below `lg` the menus have no bar to live in, so the bar carries the way into
+         them instead. Leading edge, like the docs shell's — the two shells of this app
+         put the way into navigation in the same corner. -->
+      <IconButton
+        icon="pi pi-bars"
+        kind="outlined"
+        size="medium"
+        aria-label="Open navigation"
+        class="shrink-0 lg:hidden"
+        @click="navOpen = true"
+      />
+
+      <RouterLink
+        to="/site"
+        aria-label="Azion — home"
+        class="inline-flex shrink-0 items-center self-center rounded-(--shape-elements) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
       >
-        <!-- Below `lg` the menus have no bar to live in, so the bar carries the way into
-           them instead. Leading edge, like the docs shell's — the two shells of this app
-           put the way into navigation in the same corner. -->
-        <IconButton
-          icon="pi pi-bars"
-          kind="outlined"
-          size="medium"
-          aria-label="Open navigation"
-          class="shrink-0 lg:hidden"
-          @click="navOpen = true"
+        <Brand
+          kind="default"
+          size="small"
         />
+      </RouterLink>
 
-        <RouterLink
-          to="/site"
-          aria-label="Azion — home"
-          class="inline-flex shrink-0 items-center self-center rounded-(--shape-elements) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
+      <NavigationMenu.List class="hidden items-center gap-(--spacing-xxs) lg:flex">
+        <NavigationMenu.Item
+          v-for="menu in megaMenus"
+          :key="menu.value"
+          :value="menu.value"
         >
-          <Brand
-            kind="default"
-            size="small"
-          />
-        </RouterLink>
-
-        <NavigationMenu.List class="hidden items-center gap-(--spacing-xxs) lg:flex">
-          <NavigationMenu.Item
-            v-for="menu in megaMenus"
-            :key="menu.value"
-            :value="menu.value"
-          >
-            <NavigationMenu.Trigger>
-              {{ menu.label }}
-              <NavigationMenu.Icon>
-                <svg
-                  width="12"
-                  height="12"
-                  viewBox="0 0 12 12"
-                  fill="none"
-                  aria-hidden="true"
-                >
-                  <path
-                    d="M3 4.5L6 7.5L9 4.5"
-                    stroke="currentColor"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
-              </NavigationMenu.Icon>
-            </NavigationMenu.Trigger>
-            <NavigationMenu.Content class="w-full p-0">
-              <div
-                class="grid gap-(--spacing-md) p-(--spacing-sm)"
-                :class="{
-                  'grid-cols-1': menu.columns === 1,
-                  'grid-cols-2': menu.columns === 2,
-                  'grid-cols-4': menu.columns === 4
-                }"
+          <NavigationMenu.Trigger>
+            {{ menu.label }}
+            <NavigationMenu.Icon>
+              <svg
+                width="12"
+                height="12"
+                viewBox="0 0 12 12"
+                fill="none"
+                aria-hidden="true"
               >
-                <NavigationMenu.List
-                  v-for="group in menu.groups"
-                  :key="group.label"
-                  :label="group.label"
+                <path
+                  d="M3 4.5L6 7.5L9 4.5"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </NavigationMenu.Icon>
+          </NavigationMenu.Trigger>
+          <NavigationMenu.Content class="w-full p-0">
+            <div
+              class="grid gap-(--spacing-md) p-(--spacing-sm)"
+              :class="{
+                'grid-cols-1': menu.columns === 1,
+                'grid-cols-2': menu.columns === 2,
+                'grid-cols-4': menu.columns === 4
+              }"
+            >
+              <NavigationMenu.List
+                v-for="group in menu.groups"
+                :key="group.label"
+                :label="group.label"
+              >
+                <NavigationMenu.Item
+                  v-for="item in group.items"
+                  :key="item.label"
+                  layout="entry"
+                  :href="item.href || '#'"
+                  :description="item.description"
+                  close-on-click
                 >
-                  <NavigationMenu.Item
-                    v-for="item in group.items"
-                    :key="item.label"
-                    layout="entry"
-                    :href="item.href || '#'"
-                    :description="item.description"
-                    close-on-click
-                  >
-                    <template #icon>
-                      <i
-                        :class="item.icon"
-                        aria-hidden="true"
-                      />
-                    </template>
-                    {{ item.label }}
-                  </NavigationMenu.Item>
-                </NavigationMenu.List>
-              </div>
-            </NavigationMenu.Content>
-          </NavigationMenu.Item>
+                  <template #icon>
+                    <i
+                      :class="item.icon"
+                      aria-hidden="true"
+                    />
+                  </template>
+                  {{ item.label }}
+                </NavigationMenu.Item>
+              </NavigationMenu.List>
+            </div>
+          </NavigationMenu.Content>
+        </NavigationMenu.Item>
 
-          <NavigationMenu.Item
-            v-for="link in plainLinks"
-            :key="link.value"
-          >
-            <NavigationMenu.Trigger :href="link.href">{{ link.label }}</NavigationMenu.Trigger>
-          </NavigationMenu.Item>
-        </NavigationMenu.List>
+        <NavigationMenu.Item
+          v-for="link in plainLinks"
+          :key="link.value"
+        >
+          <NavigationMenu.Trigger :href="link.href">{{ link.label }}</NavigationMenu.Trigger>
+        </NavigationMenu.Item>
+      </NavigationMenu.List>
 
-        <!-- Below `lg` the bar keeps ONE action — the CTA. `Contact` and `Login` are in the
-           sheet (a row in the tree, a button in its footer), because three buttons and a
-           brand do not fit a 375px bar without every one of them shrinking below its own
-           hit target. -->
-        <div class="ml-auto flex items-center gap-(--spacing-xs)">
-          <!-- The wrapper, not the buttons, carries the breakpoint: `Button`'s own
-             `inline-flex` base wins over a `hidden` passed as a class, so a button told
-             to hide itself stays on the bar. -->
-          <div class="hidden items-center gap-(--spacing-xs) lg:flex">
-            <Button
-              label="Contact"
-              kind="text"
-              size="medium"
-              href="#contact"
-            />
-            <Button
-              label="Login"
-              kind="secondary"
-              size="medium"
-              @click="goLogin"
-            />
-          </div>
+      <!-- Below `lg` the bar keeps ONE action — the CTA. `Contact` and `Login` are in the
+         sheet (a row in the tree, a button in its footer), because three buttons and a
+         brand do not fit a 375px bar without every one of them shrinking below its own
+         hit target. -->
+      <div class="ml-auto flex items-center gap-(--spacing-xs)">
+        <!-- The wrapper, not the buttons, carries the breakpoint: `Button`'s own
+           `inline-flex` base wins over a `hidden` passed as a class, so a button told
+           to hide itself stays on the bar. -->
+        <div class="hidden items-center gap-(--spacing-xs) lg:flex">
           <Button
-            label="Start for Free"
-            kind="primary"
+            label="Contact"
+            kind="text"
             size="medium"
-            class="shrink-0"
-            @click="goSignup"
+            href="#contact"
+          />
+          <Button
+            label="Login"
+            kind="secondary"
+            size="medium"
+            @click="goLogin"
           />
         </div>
+        <Button
+          label="Start for Free"
+          kind="primary"
+          size="medium"
+          class="shrink-0"
+          @click="goSignup"
+        />
+      </div>
 
-        <NavigationMenu.Portal>
-          <NavigationMenu.Positioner
-            side="bottom"
-            align="start"
-            :side-offset="12"
-          >
-            <NavigationMenu.Popup>
-              <NavigationMenu.Arrow />
-              <NavigationMenu.Viewport />
-            </NavigationMenu.Popup>
-          </NavigationMenu.Positioner>
-        </NavigationMenu.Portal>
-      </NavigationMenu>
-    </FrameBox>
+      <NavigationMenu.Portal>
+        <NavigationMenu.Positioner
+          side="bottom"
+          align="start"
+          :side-offset="12"
+        >
+          <NavigationMenu.Popup>
+            <NavigationMenu.Arrow />
+            <NavigationMenu.Viewport />
+          </NavigationMenu.Popup>
+        </NavigationMenu.Positioner>
+      </NavigationMenu.Portal>
+    </NavigationMenu>
 
     <!-- ── Navigation sheet (below `lg`) ─────────────────────────────────────
          The bar's own menus, in the overlay the DS already gives every panel on a small

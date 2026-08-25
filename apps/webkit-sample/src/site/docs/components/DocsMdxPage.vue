@@ -53,31 +53,28 @@
        inset it now contains for `.layout-boundary-inline` exactly as for the full
        boundary). A docs page needs it because its title is a masthead, not a row of
        content: it opens on the SECTION step the prose below it already uses between
-       h2s, so the page's first landmark is separated from the chrome by as much air
-       as its sections are from each other. The boundary step — sized for a console
-       page whose heading sits directly under a tab bar — reads cramped here.
+       h2s — a flat 56 to open a section and 48 to close one (see DocProse) — so the
+       page's first landmark is separated from the chrome by as much air as its
+       sections are from each other, and the column closes on the same 48 its last
+       section ends on. The boundary step — sized for a console page whose heading
+       sits directly under a tab bar — reads cramped here.
 
-       The INLINE step is retuned DOWN for the same reason, by overriding the token
-       the two rules above both read. Below `2xl` the column never reaches its own
-       measure: the rail and the "on this page" rail claim 556px between them, so the
-       region left for the body is 724px and the 24px-a-side console boundary spends
-       48px of it on air — the prose lands at 676px, 76px short of the 752px measure.
-       Retuning the token (not the padding) is what keeps that honest, because the
-       measure rule caps at `measure + 2 * boundary`: the cap follows the inset down,
-       so the column still resolves to exactly 752px wherever there is room for it and
-       only gains where it was falling short. `md` is also flat at 16px where `lg` steps
-       16→24 at `sm`, so below `sm` the two agree and the single-column phone layout
-       does not move at all. -->
-  <article
-    class="layout-column-docs layout-boundary-inline [--layout-boundary-inline:var(--spacing-md)] pt-(--spacing-xxl) pb-(--spacing-xxl)"
-  >
+       THE INLINE STEP IS NOT SET HERE ANY MORE. It used to be retuned down to `md`
+       (a flat 16) because the docs measure was 752px and the column never reached it —
+       the two rails claim 556px, so a 24px-a-side boundary spent air the prose needed.
+       The measure is 1024px now, so that pressure is gone, and the inset has a
+       different job: it is what makes the reading column line up with the page bar
+       above it. Both read `--layout-boundary-inline` from the shell's `<main>`, which
+       declares it once as `xl` (24 → 32 → 48) — see DocsLayout. Overriding it here
+       would silently unalign the trail from the title. -->
+  <article class="layout-column-docs layout-boundary-inline pt-14 pb-12">
     <DocPageHeader
       :title="title"
       :description="description"
       :last-updated="lastUpdated"
       :copyable="false"
     />
-    <DocProse class="pt-(--spacing-xxl) sm:pt-(--spacing-xl)">
+    <DocProse class="pt-14">
       <DocMarkdown :source="source" />
     </DocProse>
     <!-- Where to go when the page is finished. Reading order, not the tree: the rail
@@ -86,7 +83,7 @@
       v-if="previous || next"
       :previous="previous"
       :next="next"
-      class="pt-(--spacing-xxl)"
+      class="pt-12"
     />
   </article>
 </template>

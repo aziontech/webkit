@@ -23,16 +23,18 @@
   // closes every reading page — with only its `next` half filled, since the home has no
   // previous.
   //
-  // The page bar (breadcrumb + Copy page) is not here either: it goes to the shell's
-  // `page-bar` slot from the VIEW, exactly as the two reading pages hand theirs over —
-  // see AzionDocs.vue. Its 48px are still folded into the hero's `--banner-offset`, so
-  // the banner is exactly one screen.
+  // There is no page bar on this page at all — no trail, no Copy page. Both are reading
+  // chrome and the home is a directory, so the VIEW hands the shell no `page-bar` slot
+  // and the shell draws none (see AzionDocs.vue). The hero's `--banner-offset` therefore
+  // discounts the docs top bar and nothing else, which is what keeps the banner exactly
+  // one screen instead of one screen minus a bar that is not there.
   //
   // The page's six sections are the live docs home's own, in its order: start by
   // objective, start by interface, ready-made templates, stop attacks, assess risk and
   // prove compliance, follow along.
   import Button from '@aziontech/webkit/button'
   import CodeBlock from '@aziontech/webkit/code-block'
+  import FrameBox from '@aziontech/webkit/frame-box'
   import DocCard from '@aziontech/webkit-docs/doc-card'
   import DocCardGroup from '@aziontech/webkit-docs/doc-card-group'
   import DocHeading from '@aziontech/webkit-docs/doc-heading'
@@ -41,6 +43,30 @@
   import ContrastBanner from '@shared/ui/ContrastBanner.vue'
   import BannerContainer from '@shared/ui/layout/BannerContainer.vue'
   import PageHeader from '@shared/ui/layout/PageHeader.vue'
+
+  import { AGENTS } from '../lib/docs-agent-setup.js'
+
+  // How many tools the guided route covers, SPELLED. The sentence it lands in already
+  // spells "Four steps", and a digit beside that word for the same kind of quantity
+  // reads as two conventions in one line. Derived from the list the Agent Setup page
+  // renders, so adding a tool there cannot leave this claiming a smaller number; past
+  // twelve the digit is the natural form anyway, which is what the fallback gives.
+  const COUNT_WORDS = [
+    'zero',
+    'one',
+    'two',
+    'three',
+    'four',
+    'five',
+    'six',
+    'seven',
+    'eight',
+    'nine',
+    'ten',
+    'eleven',
+    'twelve'
+  ]
+  const agentCount = COUNT_WORDS[AGENTS.length] ?? String(AGENTS.length)
 
   // Hero: the two ways to hand this platform to a tool. `AI Prompt` is pasted into an
   // agent, `CLI` is pasted into a terminal — same job, two audiences, so they are two
@@ -361,12 +387,14 @@ azion deploy`
          The band spans the whole content region while its copy keeps the 7xl
          column (1024px at a 1440 window, once the rail's 300px and the band's own
          p-xl are off), and `hero` centers that copy in `100dvh - --banner-offset`
-         — the offset reading the docs top bar's and the shell page bar's own
-         heights, so "one screen" means the region actually left for the hero. -->
+         — the offset reading the docs top bar's own height, the one piece of chrome
+         above this page, so "one screen" means the region actually left for the
+         hero. A reading page adds its page bar under that top bar; the home has no
+         bar, so nothing else comes off. -->
     <BannerContainer
       hero
       max-width="7xl"
-      class="[--banner-offset:calc(var(--bar-height,3.5rem)+var(--page-bar-height,3rem))]"
+      class="[--banner-offset:var(--bar-height,3.5rem)]"
     >
       <!-- No `#background`: the hero sits on plain canvas, the same as the Hub hero, so
            the two still read as one pattern. -->
@@ -459,7 +487,7 @@ azion deploy`
           </div>
           <!-- What the prompt actually does, under the thing it describes — the live
                page's own caption for its "Copy prompt" button. -->
-          <p class="mt-(--spacing-sm) text-pretty text-body-sm text-(--text-muted)">
+          <p class="mt-(--spacing-sm) text-body-sm text-(--text-muted)">
             The prompt hands your coding agent the CLI, live docs over MCP, and this project linked.
           </p>
         </div>
@@ -481,9 +509,7 @@ azion deploy`
          them. The bands' work is now done by the prose contract itself: an h2 opens
          a section, its lead says what the section is for, and `DocCardGroup` frames
          the set of cards. -->
-    <article
-      class="layout-column-docs layout-boundary-inline pt-(--spacing-xxl) pb-(--spacing-xxl)"
-    >
+    <article class="layout-column-docs layout-boundary-inline pt-14 pb-12">
       <DocProse>
         <!-- ── Start by objective ─────────────────────────────────────────────
              Four jobs, not four products. -->
@@ -534,40 +560,124 @@ azion deploy`
         </DocHeading>
         <p>Hand it to your agent, or drive it yourself. Same platform either way.</p>
 
-        <DocHeading
-          id="your-ai-agent-fluent-in-azion"
-          :level="3"
-        >
-          Your AI agent, fluent in Azion
-        </DocHeading>
-        <p>
-          One prompt teaches any coding agent the platform: current product names, live docs through
-          the <a href="#mcp">Azion MCP server</a>, and real deploys with the CLI.
-        </p>
-        <!-- The copy affordance is the shared contrast pill, so the docs home and the
-             console Home offer the onboarding as one control with one prompt behind it —
-             not two look-alikes that can drift. `data-doc-chrome` stops the prose
-             contract at its edge: the pill is a component with its own type, not copy. -->
-        <div
+        <!-- ── The agent offer, as ONE framed block ─────────────────────────
+             The two halves of the same offer used to be four separate items in the
+             prose flow — an h3, a paragraph, a pill in its own div, and a sentence
+             carrying the Agent Setup link — which read as four unrelated beats and
+             buried the onward route in the middle of a running paragraph. They are
+             one decision with two exits ("hand it the prompt" / "walk me through
+             it"), so they are one block with two cells.
+
+             70/30, and that ratio is the CONTENT's: the left cell holds a headline,
+             a sentence and a control, the right holds a question and a button. At
+             the docs measure (752px) that is ~520 / ~225, which is the narrowest the
+             right cell can be and still fit its button on one line — so the split
+             is `7fr_3fr` rather than a half-and-half that would leave the left cell
+             short and the right cell mostly air.
+
+             THE ROW IS THE FRAME, NOT THE CELLS — the same construction every framed
+             grid on the site uses (see AzionHome). The cells declare
+             `borders="none" marks="none"` and the seam between them is the grid's own
+             `gap-px` showing the wrapper's border colour, so the vertical rule is one
+             hairline instead of two abutting borders, and the corner ticks register
+             the block once instead of clustering four squares either side of the seam.
+
+             `hatch` on the right cell is the platform's own texture, and it is the
+             one hatched frame in this view (the spec's limit: one reads as texture,
+             several as noise). It is what makes the guided route read as the quieter,
+             secondary half without a second border or a different fill.
+
+             `data-doc-chrome` stops the prose contract at the block's edge: inside it
+             the type is set here, because a DocProse h3 and p carry the reading
+             column's own rhythm (top padding, relaxed measure) which is wrong inside
+             a cell that owns its padding. `data-doc-block` keeps the block's OUTER
+             spacing in the prose's hands, so it sits in the flow like a card group.
+
+             The heading keeps its `id`: it is the page's own h3 in the outline, and
+             the anchor has to keep resolving from the rail. Same for `agent-setup` on
+             the right cell — the hero's "Per-tool setup" button targets it. -->
+        <FrameBox
+          data-doc-block
           data-doc-chrome
-          class="mt-(--spacing-md) flex"
         >
-          <ContrastBanner
-            label="Copy prompt"
-            :show-logo="false"
-            :prompt="AGENT_PROMPT"
-            class="self-start"
-          />
-        </div>
-        <p>
-          Prefer the guided route? Four steps connect Claude Code, Cursor, GitHub Copilot, Windsurf,
-          Codex, or Gemini CLI.
-          <a
-            id="agent-setup"
-            href="/site/docs/agent-setup"
-            >Agent Setup</a
-          >
-        </p>
+          <div class="grid gap-px bg-(--border-default) lg:grid-cols-[7fr_3fr]">
+            <FrameBox
+              borders="none"
+              marks="none"
+              class="bg-(--bg-canvas)"
+            >
+              <div class="flex h-full flex-col items-start gap-(--spacing-sm) p-(--spacing-lg)">
+                <!-- `heading-xs` up to `md`, not `heading-sm` all the way down: the
+                     `heading-sm` token resolves to 14px below `sm`, which is SMALLER
+                     than the 16px `body-md` paragraph under it — a headline that loses
+                     to its own body copy on a phone. `xs` is a flat 16px, so the pair
+                     never inverts, and `md:` restores the 18px the page's other h3s
+                     take on a desktop. -->
+                <h3
+                  id="your-ai-agent-fluent-in-azion"
+                  class="m-0 text-heading-xs text-(--text-default) md:text-heading-sm"
+                >
+                  Your AI agent, fluent in Azion
+                </h3>
+                <!-- The `#mcp` link this sentence used to carry pointed at an id no
+                     page on this site defines, so it was a dead anchor dressed as a
+                     live one. The onward route out of this block is the right cell's
+                     button, and it goes somewhere. -->
+                <p class="m-0 text-body-md text-(--text-muted)">
+                  One prompt teaches any coding agent the platform: current product names, live docs
+                  through the Azion MCP server, and real deploys with the CLI.
+                </p>
+
+                <!-- The shared contrast pill, so the docs home, this page and the console
+                     Home offer the onboarding as one control with one prompt behind it —
+                     not three look-alikes that can drift. It confirms the copy in its own
+                     label now, which is why it can sit inside a reading column at all:
+                     the answer to "did that work?" no longer arrives in a screen corner
+                     the reader has to leave the sentence to find. -->
+                <ContrastBanner
+                  label="Copy prompt"
+                  :show-logo="false"
+                  :prompt="AGENT_PROMPT"
+                  class="mt-(--spacing-xs)"
+                />
+              </div>
+            </FrameBox>
+
+            <!-- The guided route. `justify-between` pins the button to the cell's bottom
+                 edge, so however the question above it wraps at this width, the button
+                 lands on the block's floor and the two cells share one baseline. -->
+            <FrameBox
+              id="agent-setup"
+              borders="none"
+              marks="none"
+              hatch
+              class="bg-(--bg-canvas)"
+            >
+              <div
+                class="flex h-full flex-col items-start justify-between gap-(--spacing-lg) p-(--spacing-lg)"
+              >
+                <div class="flex flex-col gap-(--spacing-xxs)">
+                  <p class="m-0 text-heading-xs text-(--text-default)">
+                    Prefer the guided route?
+                  </p>
+                  <!-- The count is READ from the agents list the setup page renders, so a
+                       tool added there cannot leave this sentence claiming a smaller
+                       number. Naming three of them and counting the rest was the other
+                       option; at this width the list wrapped to four lines. -->
+                  <p class="m-0 text-body-sm text-(--text-muted)">
+                    Four steps connect any of {{ agentCount }} tools.
+                  </p>
+                </div>
+                <Button
+                  label="Agent Setup"
+                  kind="primary"
+                  size="medium"
+                  href="/site/docs/agent-setup"
+                />
+              </div>
+            </FrameBox>
+          </div>
+        </FrameBox>
 
         <DocCardGroup :cols="3">
           <DocCard
@@ -725,7 +835,7 @@ azion deploy`
       <DocPagination
         :next="{ title: 'Agent Setup', href: '/site/docs/agent-setup' }"
         next-label="Next Page · Start"
-        class="pt-(--spacing-xxl)"
+        class="pt-12"
       />
     </article>
   </div>
