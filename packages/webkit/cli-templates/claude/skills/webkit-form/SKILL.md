@@ -855,6 +855,13 @@ Rules:
 - **Never `toast` a field error.** Missing/invalid input stays on the field. Toast is for
   request/API failures only (see `/webkit-ui-states`).
 
+> **A server rejection scoped to one field is a different case**, and it is the one place a `Message`
+> is right. The value is not malformed — the API rejected it (a referenced object was deleted, a name
+> is already taken), so it takes **both** surfaces: a `Message` inside that field's own section _and_
+> the field's red `invalid` state (never the amber `required` prompt — the value is present). On a
+> long form, scroll-anchor the erroring section. The full placement table — field, section `Message`,
+> toast, auth card, background-job toast — is **`/webkit-errors`**.
+
 ## Submission — native submit, one locked scope, sticky actions
 
 The primary action drives the native submit so **Enter submits**. While the request runs, **one flag
@@ -958,8 +965,10 @@ End with: `form is accessible` or `N gaps — fix before polish`.
 - Field wrappers, `Label`, `HelperText`, `Item`, `CardBox`, `Select`, `Button` import paths: ask the
   webkit MCP `suggest_component`, or read `node_modules/@aziontech/webkit/catalog.json` (`imports`) —
   every key is a real subpath.
-- Companion skills: `/webkit-ux-heuristics` (states + inline error placement) and `/webkit-ui-states`
-  (lock-the-scope + toast for request errors).
+- Companion skills: `/webkit-ux-heuristics` (states + inline error placement), `/webkit-ui-states`
+  (lock-the-scope + toast for request errors), and `/webkit-errors` (where every failure goes: the
+  field, a section `Message`, a toast, the auth card — including the signed-out screens, which never
+  toast).
 - Token catalog (spacing, colour, shape, typography): the `@aziontech/theme` tokens (the `--*` CSS
   variables it ships; the webkit MCP lists them).
 - Compose only webkit components and theme tokens — no external UI libraries, no hex/rgb colours, no
