@@ -713,6 +713,20 @@
   --text-big-number-lg-line-height: 1.25;
   --text-big-number-lg-font-weight: 400;
   --text-big-number-lg-font-family: Proto Mono;
+  --text-amount-lg-text-wrap-style: balance;
+  --text-amount-lg-font-size: 1.875rem;
+  --text-amount-lg-line-height: 1.25;
+  --text-amount-lg-font-weight: 400;
+  --text-amount-lg-letter-spacing: -0.08em;
+  --text-amount-md-text-wrap-style: balance;
+  --text-amount-md-font-size: 1rem;
+  --text-amount-md-line-height: 1.25;
+  --text-amount-md-font-weight: 400;
+  --text-amount-md-letter-spacing: -0.08em;
+  --text-amount-sm-font-size: 1rem;
+  --text-amount-sm-line-height: 1.5;
+  --text-amount-sm-font-weight: 400;
+  --text-amount-sm-letter-spacing: -0.08em;
   --text-heading-2xl-font-size: 1.875rem;
   --text-heading-2xl-line-height: 1.25;
   --text-heading-2xl-font-weight: 300;
@@ -820,6 +834,8 @@
     --text-big-number-md-font-size: 1.5rem;
     --text-big-number-sm-font-size: 1.25rem;
     --text-big-number-lg-font-size: 2.25rem;
+    --text-amount-lg-font-size: 3rem;
+    --text-amount-md-font-size: 1.25rem;
     --text-heading-2xl-font-size: 3rem;
     --text-heading-xl-font-size: 1.875rem;
     --text-heading-md-font-size: 1.25rem;
@@ -830,6 +846,8 @@
   @media (min-width: 768px) {
     --text-big-number-md-font-size: 2.25rem;
     --text-big-number-lg-font-size: 3.5rem;
+    --text-amount-lg-font-size: 3.5rem;
+    --text-amount-md-font-size: 1.5rem;
     --text-heading-2xl-font-size: 3.5rem;
     --text-heading-xl-font-size: 2.25rem;
     --text-heading-lg-font-size: 1.875rem;
@@ -1121,6 +1139,29 @@
   line-height: var(--text-big-number-lg-line-height);
   font-weight: var(--text-big-number-lg-font-weight);
   font-family: var(--text-big-number-lg-font-family);
+}
+
+@utility text-amount-lg {
+  text-wrap-style: var(--text-amount-lg-text-wrap-style);
+  font-size: var(--text-amount-lg-font-size);
+  line-height: var(--text-amount-lg-line-height);
+  font-weight: var(--text-amount-lg-font-weight);
+  letter-spacing: var(--text-amount-lg-letter-spacing);
+}
+
+@utility text-amount-md {
+  text-wrap-style: var(--text-amount-md-text-wrap-style);
+  font-size: var(--text-amount-md-font-size);
+  line-height: var(--text-amount-md-line-height);
+  font-weight: var(--text-amount-md-font-weight);
+  letter-spacing: var(--text-amount-md-letter-spacing);
+}
+
+@utility text-amount-sm {
+  font-size: var(--text-amount-sm-font-size);
+  line-height: var(--text-amount-sm-line-height);
+  font-weight: var(--text-amount-sm-font-weight);
+  letter-spacing: var(--text-amount-sm-letter-spacing);
 }
 
 @utility text-heading-2xl {
