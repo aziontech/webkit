@@ -701,6 +701,7 @@
   --layout-measure-form: var(--container-4xl);
   --layout-measure-form-create: var(--container-5xl);
   --layout-measure-docs: var(--container-4xl);
+  --container-site: var(--container-5xl);
   --layout-measure-control: var(--container-3xs);
   --text-big-number-md-font-size: 1.25rem;
   --text-big-number-md-line-height: 1.25;

@@ -128,5 +128,10 @@
     "name": "doc-on-this-page",
     "path": "src/components/documentation/doc-on-this-page/doc-on-this-page.vue",
     "limit": "4 KB"
+  },
+  {
+    "name": "resizable-panel-root",
+    "path": "src/components/layout/resizable-panel/resizable-panel.vue",
+    "limit": "3 KB"
   }
 ]

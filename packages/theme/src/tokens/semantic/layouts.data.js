@@ -89,6 +89,25 @@ export const layoutsData = {
   'layout-measure-docs': 'var(--container-4xl)', // 1192px — documentation prose
 
   /*
+   * MEASURE (site) — the marketing site's content column, and the one measure in this
+   * file that is not a console page's.
+   *
+   * The azion.com pages are a single vertical frame: the nav bar, the hero's inner
+   * column, every section below it and the footer all sit on the SAME centred column,
+   * and the border-x that runs down the page is only continuous because those four
+   * agree to the pixel. That is why this is a token rather than a width re-typed per
+   * band — the frame is one decision, and one place is where it has to live.
+   *
+   * It is `5xl` (1192px) — a rung of the shared container ladder
+   * (primitives/shape/container.js), not a number chosen for this page. The page snaps
+   * to the scale, the scale does not bend to the page, which is the same rule
+   * --layout-measure follows. It is its own token rather than a reference to one of the
+   * console measures because the two answer different questions: a console measure caps
+   * a payload (a table, a form), while this one is the width of a FRAME whose four bands
+   * have to line up. Retuning either must not move the other.
+   */
+  'container-site': 'var(--container-5xl)', // 1192px — the marketing site column
+  /*
    * MEASURE (control) — the widest the *right side* of an item-group field row may
    * get. An ItemGroup row is two columns: the content names the field (title +
    * guidance) on the left, the actions hold the control on the right. That right side

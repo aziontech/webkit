@@ -330,6 +330,7 @@
       "--container-md",
       "--container-px",
       "--container-py",
+      "--container-site",
       "--container-sm",
       "--container-xl",
       "--container-xs",
@@ -1072,6 +1073,7 @@
         "--container-md",
         "--container-px",
         "--container-py",
+        "--container-site",
         "--container-sm",
         "--container-xl",
         "--container-xs"
@@ -8446,7 +8448,7 @@
           "notes": "Sticky region rendered below the scrollable group list (e.g. footer action)."
         }
       ],
-      "purpose": "Overlay menu that opens from a consumer-supplied trigger and renders a list of selectable options grouped into named sections. The root `Dropdown` owns open/closed state, positioning, focus return, and keyboard navigation; `Dropdown.Trigger` wires `aria-haspopup`/`aria-expanded`/`aria-controls` onto whatever element the consumer passes through its slot; `Dropdown.Group` groups options under an optional uppercase label; `Dropdown.Option` is the selectable row with left/right/command affordances. Replaces and removes the legacy monolithic input `dropdown` and the previous `dropdown-menu` composition — there is one `Dropdown` in the project, in `navigation/`."
+      "purpose": "Overlay menu that opens from a consumer-supplied trigger and renders a list of selectable options grouped into named sections. The root `Dropdown` owns open/closed state, positioning, focus return, and keyboard navigation; `Dropdown.Trigger` wires `aria-haspopup`/`aria-expanded`/`aria-controls` onto whatever element the consumer passes through its slot; `Dropdown.Group` groups options under an optional label; `Dropdown.Option` is the selectable row with left/right/command affordances. Replaces and removes the legacy monolithic input `dropdown` and the previous `dropdown-menu` composition — there is one `Dropdown` in the project, in `navigation/`."
     },
     "dropdown-root": {
       "import": "@aziontech/webkit/dropdown-root",
@@ -8516,7 +8518,7 @@
           "notes": "Sticky region rendered below the scrollable group list (e.g. footer action)."
         }
       ],
-      "purpose": "Overlay menu that opens from a consumer-supplied trigger and renders a list of selectable options grouped into named sections. The root `Dropdown` owns open/closed state, positioning, focus return, and keyboard navigation; `Dropdown.Trigger` wires `aria-haspopup`/`aria-expanded`/`aria-controls` onto whatever element the consumer passes through its slot; `Dropdown.Group` groups options under an optional uppercase label; `Dropdown.Option` is the selectable row with left/right/command affordances. Replaces and removes the legacy monolithic input `dropdown` and the previous `dropdown-menu` composition — there is one `Dropdown` in the project, in `navigation/`."
+      "purpose": "Overlay menu that opens from a consumer-supplied trigger and renders a list of selectable options grouped into named sections. The root `Dropdown` owns open/closed state, positioning, focus return, and keyboard navigation; `Dropdown.Trigger` wires `aria-haspopup`/`aria-expanded`/`aria-controls` onto whatever element the consumer passes through its slot; `Dropdown.Group` groups options under an optional label; `Dropdown.Option` is the selectable row with left/right/command affordances. Replaces and removes the legacy monolithic input `dropdown` and the previous `dropdown-menu` composition — there is one `Dropdown` in the project, in `navigation/`."
     },
     "dropdown-trigger": {
       "import": "@aziontech/webkit/dropdown-trigger",
@@ -9366,6 +9368,140 @@
         "Reach for `hatch` here rather than on a section header: the gap is the one band with no copy of its own, so the texture gives the break identity without sitting behind a headline.",
         "Do not wrap it in a padded container; the gap is the padding."
       ]
+    },
+    "resizable-panel": {
+      "import": "@aziontech/webkit/resizable-panel",
+      "target": "./src/components/layout/resizable-panel/index.ts",
+      "kind": "component",
+      "compoundRoot": true,
+      "treeShakeableImport": "@aziontech/webkit/resizable-panel-root",
+      "subcomponents": [
+        "@aziontech/webkit/resizable-panel-handle",
+        "@aziontech/webkit/resizable-panel-pane"
+      ],
+      "category": "layout",
+      "structure": "composition",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "orientation",
+          "type": "'horizontal' | 'vertical'",
+          "default": "'horizontal'",
+          "required": "false",
+          "doc": "Axis the panes are laid out on; horizontal places them side by side, vertical stacks them."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name for the group as a whole."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "On the root, the panes and handles in the order they appear. On a pane, its content. The handle takes no slot."
+        }
+      ],
+      "purpose": "A group of adjacent regions whose shared edges the reader can drag. It is the layout primitive behind a workspace — an editor with a terminal under it and a preview beside it — where every region is content the reader is working in and the split between them is theirs to set. It exists because `Sidebar` was being used for both jobs. `Sidebar` is the app's NAVIGATION rail: it collapses to icons, it hides, it is the thing you leave to go somewhere. A terminal, a preview and a code editor are not places you navigate to — they are the work — and dressing two of them as navigation rails made a screen with three \"sidebars\" and one document, on an axis `Sidebar` does not even have (it has no horizontal edge, so a terminal under an editor had to hand-roll its own splitter). This component owns the EDGE; `Sidebar` goes back to owning navigation.",
+      "useWhen": [
+        "Two or more content regions share an edge the reader should be able to move (editor + terminal, editor + preview, list + detail).",
+        "The split is a working preference the reader sets many times in a session, not a one-time layout decision.",
+        "A region has to shrink to nothing and come back without losing its state (an editor's undo history, a scroll position).",
+        "The layout needs a horizontal edge — one region above another — which no other component in the package provides."
+      ],
+      "avoidWhen": [
+        "The panel is the app's navigation rail → use `sidebar`, which owns the icon rail, the collapse and the nav semantics.",
+        "The content is a temporary overlay over the page → use `drawer` (a panel that comes and goes) or `dialog`.",
+        "The regions have a fixed relationship the reader should not change → use plain flex/grid layout with the layout tokens.",
+        "The panel is one scrolling region with no movable edge → use `scroll-area`."
+      ],
+      "related": [
+        "sidebar` — the navigation rail. Collapses to icons, hides, and carries nav semantics; reach for it when the panel is how the reader gets somewhere, not what they work in.",
+        "scroll-area` — one region that scrolls. A pane usually contains one.",
+        "drawer` — a panel that arrives over the page and leaves; a resizable pane is always there."
+      ],
+      "bestPractices": [
+        "Give exactly ONE pane in a group no `basis`. That pane absorbs the remaining space, so the group always fills its container and the reader never sees a gap or a scrollbar they did not cause.",
+        "Put the `basis` on the pane whose size the reader cares about (the terminal's height, the preview's width) and let the document be the flexible one.",
+        "Keep the pane's own state alive when it is collapsed — collapse renders it at zero length, it does not unmount it. A code editor that loses its undo history when the reader drags an edge shut has lost the reader's work.",
+        "Give every handle an `ariaLabel` naming the edge it moves (\"Resize the terminal\"), never the generic default: a screen with three handles otherwise reads as three identical controls.",
+        "A control that reopens a collapsed pane belongs OUTSIDE that pane, in the surrounding chrome. A control that only exists inside the thing it hides cannot bring it back."
+      ]
+    },
+    "resizable-panel-root": {
+      "import": "@aziontech/webkit/resizable-panel-root",
+      "target": "./src/components/layout/resizable-panel/resizable-panel.vue",
+      "kind": "root",
+      "rootOf": "resizable-panel",
+      "treeShakeableImport": "@aziontech/webkit/resizable-panel-root",
+      "category": "layout",
+      "structure": "composition",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "orientation",
+          "type": "'horizontal' | 'vertical'",
+          "default": "'horizontal'",
+          "required": "false",
+          "doc": "Axis the panes are laid out on; horizontal places them side by side, vertical stacks them."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name for the group as a whole."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "On the root, the panes and handles in the order they appear. On a pane, its content. The handle takes no slot."
+        }
+      ],
+      "purpose": "A group of adjacent regions whose shared edges the reader can drag. It is the layout primitive behind a workspace — an editor with a terminal under it and a preview beside it — where every region is content the reader is working in and the split between them is theirs to set. It exists because `Sidebar` was being used for both jobs. `Sidebar` is the app's NAVIGATION rail: it collapses to icons, it hides, it is the thing you leave to go somewhere. A terminal, a preview and a code editor are not places you navigate to — they are the work — and dressing two of them as navigation rails made a screen with three \"sidebars\" and one document, on an axis `Sidebar` does not even have (it has no horizontal edge, so a terminal under an editor had to hand-roll its own splitter). This component owns the EDGE; `Sidebar` goes back to owning navigation.",
+      "useWhen": [
+        "Two or more content regions share an edge the reader should be able to move (editor + terminal, editor + preview, list + detail).",
+        "The split is a working preference the reader sets many times in a session, not a one-time layout decision.",
+        "A region has to shrink to nothing and come back without losing its state (an editor's undo history, a scroll position).",
+        "The layout needs a horizontal edge — one region above another — which no other component in the package provides."
+      ],
+      "avoidWhen": [
+        "The panel is the app's navigation rail → use `sidebar`, which owns the icon rail, the collapse and the nav semantics.",
+        "The content is a temporary overlay over the page → use `drawer` (a panel that comes and goes) or `dialog`.",
+        "The regions have a fixed relationship the reader should not change → use plain flex/grid layout with the layout tokens.",
+        "The panel is one scrolling region with no movable edge → use `scroll-area`."
+      ],
+      "related": [
+        "sidebar` — the navigation rail. Collapses to icons, hides, and carries nav semantics; reach for it when the panel is how the reader gets somewhere, not what they work in.",
+        "scroll-area` — one region that scrolls. A pane usually contains one.",
+        "drawer` — a panel that arrives over the page and leaves; a resizable pane is always there."
+      ],
+      "bestPractices": [
+        "Give exactly ONE pane in a group no `basis`. That pane absorbs the remaining space, so the group always fills its container and the reader never sees a gap or a scrollbar they did not cause.",
+        "Put the `basis` on the pane whose size the reader cares about (the terminal's height, the preview's width) and let the document be the flexible one.",
+        "Keep the pane's own state alive when it is collapsed — collapse renders it at zero length, it does not unmount it. A code editor that loses its undo history when the reader drags an edge shut has lost the reader's work.",
+        "Give every handle an `ariaLabel` naming the edge it moves (\"Resize the terminal\"), never the generic default: a screen with three handles otherwise reads as three identical controls.",
+        "A control that reopens a collapsed pane belongs OUTSIDE that pane, in the surrounding chrome. A control that only exists inside the thing it hides cannot bring it back."
+      ]
+    },
+    "resizable-panel-handle": {
+      "import": "@aziontech/webkit/resizable-panel-handle",
+      "target": "./src/components/layout/resizable-panel/resizable-panel-handle/resizable-panel-handle.vue",
+      "kind": "subcomponent",
+      "parent": "resizable-panel",
+      "treeShakeableImport": "@aziontech/webkit/resizable-panel-handle"
+    },
+    "resizable-panel-pane": {
+      "import": "@aziontech/webkit/resizable-panel-pane",
+      "target": "./src/components/layout/resizable-panel/resizable-panel-pane/resizable-panel-pane.vue",
+      "kind": "subcomponent",
+      "parent": "resizable-panel",
+      "treeShakeableImport": "@aziontech/webkit/resizable-panel-pane"
     },
     "scroll-area": {
       "import": "@aziontech/webkit/scroll-area",

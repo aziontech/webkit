@@ -31,11 +31,17 @@
     :aria-label="label"
     :data-testid="testId"
     :class="attrs.class"
-    class="flex flex-col items-stretch"
+    class="flex flex-col items-stretch [&:not(:first-child)]:mt-(--spacing-sm)"
   >
+    <!--
+      Groups never sit flush: `--spacing-sm` above every group but the first, the
+      same rhythm Dropdown puts around its group divider and CommandMenu puts
+      between two bare groups. No hairline here — unlike Dropdown, the Figma frame
+      for this panel separates groups by space alone.
+    -->
     <div
       v-if="label"
-      class="flex items-center px-(--spacing-xs) py-(--spacing-xxs) text-overline-xs text-(--text-muted) uppercase"
+      class="flex items-center px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-muted)"
       :data-testid="`${testId}__label`"
     >
       {{ label }}
