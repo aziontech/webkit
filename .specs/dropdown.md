@@ -7,16 +7,16 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3775-16746&m=dev
   node_id: 3775:16746
-checksum: 5e5b8382be2f30e57c783e75c91422e75b9aa0d81b3ca2742f19f47dcc0225af
+checksum: 82ac0c058497e12cd2c5227a691ac0cc960b6b50425469d5e11a50e1f1075dee
 created: 2026-06-26
-last_updated: 2026-06-29
+last_updated: 2026-08-12
 ---
 
 # Dropdown — Component Spec
 
 ## Purpose
 
-Overlay menu that opens from a consumer-supplied trigger and renders a list of selectable options grouped into named sections. The root `Dropdown` owns open/closed state, positioning, focus return, and keyboard navigation; `Dropdown.Trigger` wires `aria-haspopup`/`aria-expanded`/`aria-controls` onto whatever element the consumer passes through its slot; `Dropdown.Group` groups options under an optional uppercase label; `Dropdown.Option` is the selectable row with left/right/command affordances. Replaces and removes the legacy monolithic input `dropdown` and the previous `dropdown-menu` composition — there is one `Dropdown` in the project, in `navigation/`.
+Overlay menu that opens from a consumer-supplied trigger and renders a list of selectable options grouped into named sections. The root `Dropdown` owns open/closed state, positioning, focus return, and keyboard navigation; `Dropdown.Trigger` wires `aria-haspopup`/`aria-expanded`/`aria-controls` onto whatever element the consumer passes through its slot; `Dropdown.Group` groups options under an optional label; `Dropdown.Option` is the selectable row with left/right/command affordances. Replaces and removes the legacy monolithic input `dropdown` and the previous `dropdown-menu` composition — there is one `Dropdown` in the project, in `navigation/`.
 
 ## Usage
 
@@ -63,8 +63,8 @@ import DropdownOption from '@aziontech/webkit/dropdown-option'
   - Props: _none_.
   - Events: _none_ (the root handles `update:open`).
   - Slots: `default` with scope `{ isOpen: boolean }` — the consumer's trigger element. The wrapper attaches aria + click; the consumer must not bind those props itself.
-- `dropdown-group/dropdown-group.vue` — labeled section. Renders an uppercase `label` row (`text-overline-sm`) above its default slot and a top divider when it is not the first group inside the panel.
-  - Props: `label: string` default `''` — uppercase section label rendered above the options. Omit for an unlabeled group.
+- `dropdown-group/dropdown-group.vue` — labeled section. Renders a `label` row (`text-label-sm` in `--text-muted`, sentence case) above its default slot and a top divider when it is not the first group inside the panel. The divider runs edge-to-edge across the panel's inner width — the panel carries only vertical padding, and the horizontal inset the option rows need lives on the group's own content wrapper — so the hairline reads like the panel's own border rather than a floated rule. It carries `--spacing-sm` above and `--spacing-xs` below.
+  - Props: `label: string` default `''` — section label rendered above the options. Omit for an unlabeled group.
   - Events: _none_.
   - Slots: `default` — one or more `<Dropdown.Option>`; `top` — inline region rendered between the group label and the options (e.g. a per-section search or description); `bottom` — inline region rendered after the options (e.g. a "see all" link).
 - `dropdown-option/dropdown-option.vue` — selectable row. Renders the left slot, the label, the right slot, and an optional `command` hint. Calls injected `selectOption(value, event)` on click / `Enter` / `Space`.
@@ -126,7 +126,7 @@ import DropdownOption from '@aziontech/webkit/dropdown-option'
 | panel border | `var(--border-default)` |
 | panel shape | `var(--shape-card)` |
 | panel shadow | `var(--shadow-sm)` |
-| panel typography (group label) | `.text-overline-sm` + `text-(--text-muted)` |
+| panel typography (group label) | `.text-label-sm` + `text-(--text-muted)` |
 | panel typography (option label) | `.text-label-sm` + `text-(--text-default)` |
 | option shape | `var(--shape-button)` |
 | option spacing.x | `var(--spacing-sm)` |
@@ -136,7 +136,11 @@ import DropdownOption from '@aziontech/webkit/dropdown-option'
 | option selected surface | `var(--bg-selected)` |
 | option disabled text | `var(--text-disabled)` |
 | option command text | `text-(--text-muted)` |
-| group divider | `border-t border-(--border-default)` |
+| group divider | `border-t border-(--border-default)`, full-bleed (no horizontal padding on the panel or the group root) |
+| group divider spacing.above | `var(--spacing-sm)` |
+| group divider spacing.below | `var(--spacing-xs)` |
+| group content inset.x | `var(--spacing-xxs)` |
+| panel spacing.y | `var(--spacing-xs)` — the vertical seam is one step up from the row inset so the first/last row does not crowd the panel border |
 | focus ring | `var(--ring-color)` |
 | popup origin | `var(--popup-origin)` |
 

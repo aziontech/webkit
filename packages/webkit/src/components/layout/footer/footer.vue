@@ -55,6 +55,11 @@
     :data-testid="testId"
     class="flex w-full flex-col bg-(--bg-canvas)"
   >
+    <!-- The column takes --container-site, the marketing site's shared measure, rather
+         than a rung of the container ladder: the nav bar, the hero band, the framed
+         sections and this footer are ONE vertical frame, and its side rules only meet
+         because all four resolve to the same width. Retuning that measure has to move
+         them together, which a hardcoded rung here cannot do. -->
     <div class="flex w-full items-stretch">
       <FrameBox
         :borders="['left']"
@@ -64,7 +69,7 @@
         class="hidden flex-1 xl:block"
       />
       <div
-        class="grid w-full max-w-(--container-5xl) shrink-0 grid-cols-1 border-x border-x-(length:--border-width-default) border-x-(--border-default) md:grid-cols-2"
+        class="grid w-full max-w-(--container-site) shrink-0 grid-cols-1 border-x border-x-(length:--border-width-default) border-x-(--border-default) md:grid-cols-2"
       >
         <div
           :data-testid="`${testId}__columns`"
