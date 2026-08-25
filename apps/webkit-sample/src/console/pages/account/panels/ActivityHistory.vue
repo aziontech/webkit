@@ -15,12 +15,15 @@
   import { ref } from 'vue'
 
   import ColumnsButton from '../../../components/list/ColumnsButton.vue'
+  import ExportButton from '../../../components/list/ExportButton.vue'
   import FilterButton from '../../../components/list/FilterButton.vue'
   import FilterChips from '../../../components/list/FilterChips.vue'
+  import RefreshButton from '../../../components/list/RefreshButton.vue'
   import ControlsHeader from '../../../components/page/ControlsHeader.vue'
   import PageHeading from '../../../components/page/PageHeading.vue'
   import { DATE_PRESETS, formatDateRange, matchDate } from '../../../lib/behavior/filter-bar'
   import { useListFilters } from '../../../lib/behavior/list-state'
+  import { FIT_COLUMN, TAG_COLUMN_WIDE } from '../../../lib/behavior/table-columns'
 
   // Where `Documentation` on the page heading goes. The docs ROOT, not a deep link: the
   // account-side topics have no entry in lib/data/product-empty-states.js (that
@@ -80,10 +83,10 @@
 
   const activityColumns = [
     { accessorKey: 'action', header: 'Event', principal: true, hideable: false, grow: 2 },
-    { accessorKey: 'category', header: 'Category', enableSorting: true },
-    { accessorKey: 'user', header: 'User' },
-    { accessorKey: 'ip', header: 'IP address' },
-    { accessorKey: 'date', header: 'Date', enableSorting: true }
+    { accessorKey: 'category', header: 'Category', enableSorting: true, minWidth: TAG_COLUMN_WIDE },
+    { accessorKey: 'user', header: 'User', minWidth: FIT_COLUMN },
+    { accessorKey: 'ip', header: 'IP address', minWidth: FIT_COLUMN },
+    { accessorKey: 'date', header: 'Date', enableSorting: true, minWidth: FIT_COLUMN }
   ]
 
   // Which columns are switched off, driven by the Columns button on the controls
@@ -145,8 +148,15 @@
     filters,
     search,
     pagination,
-    visibleRows: visibleActivity
+    visibleRows: visibleActivity,
+    loading,
+    refresh
   } = useListFilters(filterFields, activity)
+
+  // The table the controls row drives. Download CSV calls the DS's own `exportCsv()`
+  // through it (../../../components/list/ExportButton.vue), so the file honours the
+  // visible columns and the filtered rows instead of re-serialising them here.
+  const tableRef = ref(null)
 </script>
 
 <template>
@@ -166,6 +176,10 @@
           <!-- The band's CONTROLS: narrowing on the left, the band's own action on the
                right, above the card — the same row every list in the console opens with. -->
           <ControlsHeader>
+            <FilterButton
+              v-model="filters"
+              :fields="filterFields"
+            />
             <!-- Search drives the table's global filter from outside the card, so the field is
                  a plain InputText (`Table.Search` is context-aware and only works inside
                  `<Table>`). One horizontal band: it grows into the row's slack and compresses
@@ -184,14 +198,24 @@
                 />
               </template>
             </InputText>
-            <FilterButton
-              v-model="filters"
-              :fields="filterFields"
-            />
-            <ColumnsButton
-              v-model="columnVisibility"
-              :columns="activityColumns"
-            />
+            <template #actions>
+              <!-- THE RIGHT GROUP: the three controls that act on the LISTING rather
+                   than narrow it — fetch it again, take it away as a file, choose which
+                   columns it shows. All glyphs, all `medium`, so the row shares one
+                   32px height with the field and the Filter button opposite. -->
+              <RefreshButton
+                :loading="loading"
+                @refresh="refresh"
+              />
+              <ExportButton
+                :table="tableRef"
+                filename="activity.csv"
+              />
+              <ColumnsButton
+                v-model="columnVisibility"
+                :columns="activityColumns"
+              />
+            </template>
           </ControlsHeader>
 
           <FilterChips
@@ -202,6 +226,7 @@
           <CardBox :padded="false">
             <template #content>
               <Table
+                ref="tableRef"
                 v-model:pagination="pagination"
                 v-model:globalFilter="search"
                 v-model:columnVisibility="columnVisibility"
@@ -212,6 +237,7 @@
                 paginated
                 :page-size="10"
                 :border="false"
+                :loading="loading"
               >
                 <template #cell-category="{ value }">
                   <Tag

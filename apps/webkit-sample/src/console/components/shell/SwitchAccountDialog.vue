@@ -55,6 +55,7 @@
   import { computed, nextTick, onScopeDispose, ref, watch } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
+  import { FIT_COLUMN, TAG_COLUMN_WIDE } from '../../lib/behavior/table-columns'
   import {
     accountTreeRows,
     accountTypeOf,
@@ -62,6 +63,7 @@
     listAccountTree,
     useAccounts
   } from '../../lib/state/accounts.js'
+  import IdCell from '../list/IdCell.vue'
   import AccountMark from './AccountMark.vue'
 
   const open = defineModel('open', { type: Boolean, default: false })
@@ -168,9 +170,9 @@
   // cuts children away from the parent they belong to. The tree is the order.
   const columns = [
     { accessorKey: 'name', header: 'Name', principal: true, grow: 3 },
-    { accessorKey: 'typeLabel', header: 'Type' },
-    { accessorKey: 'id', header: 'ID' },
-    { accessorKey: 'clientId', header: 'Client ID' }
+    { accessorKey: 'typeLabel', header: 'Type', minWidth: TAG_COLUMN_WIDE },
+    { accessorKey: 'id', header: 'ID', minWidth: FIT_COLUMN },
+    { accessorKey: 'clientId', header: 'Client ID', minWidth: FIT_COLUMN }
   ]
 
   const onSelect = (_event, row) => {
@@ -334,7 +336,10 @@
                   </template>
 
                   <template #cell-id="{ value }">
-                    <span class="tabular-nums">{{ value }}</span>
+                    <IdCell
+                      :value="value"
+                      resource="account"
+                    />
                   </template>
 
                   <!-- Two sentences, because they are two different facts: a term that

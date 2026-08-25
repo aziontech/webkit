@@ -179,7 +179,9 @@
 
         <!-- The incoming page, wired: as many rows as are actually coming, in the
              geometry of the rows above them, so the list grows in place instead of
-             jumping when they land. -->
+             jumping when they land. It sits at the end of the aliases while the footer
+             button below reports the same wait — the list shows WHAT is coming, the
+             button shows that it was asked for. -->
         <div v-if="loading">
           <!-- `h-7` is the height a real row settles at (a 14px/1.375 line between two
                `xxs` paddings), so the list does not jump when the links replace it. -->
@@ -195,23 +197,33 @@
           </div>
         </div>
 
-        <!-- Inside the scroller, at the end of the list: the button belongs to the
-             last row, not to the panel. -->
-        <Button
-          v-else-if="remaining"
-          :label="`Load ${nextBatch} more`"
-          kind="text"
-          size="small"
-          class="w-full"
-          @click.stop="loadMore"
-        />
-
         <p
           v-if="!matches.length"
           class="px-(--spacing-xs) py-(--spacing-sm) text-center text-body-sm text-(--text-muted)"
         >
           No domain matches “{{ query }}”.
         </p>
+      </div>
+
+      <!-- THE NEXT PAGE, asked for from the panel's FOOTER — not from a row at the end
+           of the list. A control that scrolls with the aliases reads as one more entry in
+           the list it is paging, and it scrolls out of reach the moment its page lands.
+           Fixed under the scroller it stays the one thing the panel offers, and it holds
+           its own busy state while the wire above stands in for the incoming rows — so
+           the press is answered in two places at once instead of removing the button the
+           reader just aimed at. -->
+      <div
+        v-if="remaining"
+        class="border-t border-(--border-default) p-(--spacing-xxs)"
+      >
+        <Button
+          :label="`Load ${nextBatch} more`"
+          kind="text"
+          size="small"
+          :loading="loading"
+          class="w-full"
+          @click.stop="loadMore"
+        />
       </div>
 
       <!-- Announced, not just drawn: the wire is aria-hidden, so a screen reader is

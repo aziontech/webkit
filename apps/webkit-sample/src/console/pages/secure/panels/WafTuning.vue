@@ -32,9 +32,13 @@
   import { computed, ref } from 'vue'
 
   import ColumnsButton from '../../../components/list/ColumnsButton.vue'
+  import ExportButton from '../../../components/list/ExportButton.vue'
+  import RefreshButton from '../../../components/list/RefreshButton.vue'
   import ControlsHeader from '../../../components/page/ControlsHeader.vue'
   import HeadingAction from '../../../components/page/HeadingAction.vue'
   import PageHeading from '../../../components/page/PageHeading.vue'
+  import { useListRefresh } from '../../../lib/behavior/list-state'
+  import { FIT_COLUMN } from '../../../lib/behavior/table-columns'
   import { wafTuningFor } from '../../../lib/data/waf-rules'
 
   const props = defineProps({
@@ -47,6 +51,16 @@
   const rows = computed(() => wafTuningFor(props.ruleSet.id))
 
   const search = ref('')
+
+  // What the controls row's Refresh button does, and the flag the table binds for
+  // its skeleton rows — one flag over both causes, a scope switch and a manual
+  // refresh (../../../lib/behavior/list-state.js). This panel narrows by search alone,
+  // so it takes the refresh half on its own rather than through `useListFilters`.
+  const { loading, refresh } = useListRefresh()
+
+  // The table the controls row drives — Download CSV calls its `exportCsv()`
+  // (../../../components/list/ExportButton.vue).
+  const tableRef = ref(null)
   const columnVisibility = ref({})
 
   // TanStack's shape: `{ [rowKey]: true }` for the checked rows, keyed by `row-key`
@@ -65,10 +79,10 @@
       principal: true,
       hideable: false
     },
-    { accessorKey: 'hits', header: 'Hits', enableSorting: true },
-    { accessorKey: 'ipCount', header: 'IPs', enableSorting: true },
-    { accessorKey: 'countryCount', header: 'Countries', enableSorting: true },
-    { accessorKey: 'pathCount', header: 'Paths', enableSorting: true },
+    { accessorKey: 'hits', header: 'Hits', enableSorting: true, minWidth: FIT_COLUMN },
+    { accessorKey: 'ipCount', header: 'IPs', enableSorting: true, minWidth: FIT_COLUMN },
+    { accessorKey: 'countryCount', header: 'Countries', enableSorting: true, minWidth: FIT_COLUMN },
+    { accessorKey: 'pathCount', header: 'Paths', enableSorting: true, minWidth: FIT_COLUMN },
     { accessorKey: 'ips', header: 'Top 10 IP Addresses', grow: 3 },
     { accessorKey: 'countries', header: 'Top 10 Countries', grow: 2 },
     { accessorKey: 'paths', header: 'Top 10 Paths', grow: 3 }
@@ -135,10 +149,25 @@
               />
             </template>
           </InputText>
-          <ColumnsButton
-            v-model="columnVisibility"
-            :columns="columns"
-          />
+          <template #actions>
+            <!-- THE RIGHT GROUP: the three controls that act on the LISTING rather
+                 than narrow it — fetch it again, take it away as a file, choose which
+                 columns it shows. All glyphs, all `medium`, so the row shares one
+                 32px height with the search field opposite. This panel narrows by
+                 search alone, so there is no Filter button leading the row. -->
+            <RefreshButton
+              :loading="loading"
+              @refresh="refresh"
+            />
+            <ExportButton
+              :table="tableRef"
+              filename="waf-tuning.csv"
+            />
+            <ColumnsButton
+              v-model="columnVisibility"
+              :columns="columns"
+            />
+          </template>
         </ControlsHeader>
 
         <CardBox :padded="false">
@@ -155,6 +184,7 @@
             />
             <Table
               v-else
+              ref="tableRef"
               v-model:globalFilter="search"
               v-model:columnVisibility="columnVisibility"
               v-model:rowSelection="rowSelection"
@@ -164,6 +194,7 @@
               enable-row-selection
               enable-sorting
               :border="false"
+              :loading="loading"
             >
               <template #cell-hits="{ value }">
                 <span class="tabular-nums">{{ formatHits(value) }}</span>

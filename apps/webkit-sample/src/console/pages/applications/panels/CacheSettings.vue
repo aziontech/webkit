@@ -54,12 +54,17 @@
   import ResourceDrawer from '../../../components/form/ResourceDrawer.vue'
   import AuthorCell from '../../../components/list/AuthorCell.vue'
   import ColumnsButton from '../../../components/list/ColumnsButton.vue'
+  import ExportButton from '../../../components/list/ExportButton.vue'
+  import IdCell from '../../../components/list/IdCell.vue'
   import LastModifiedCell from '../../../components/list/LastModifiedCell.vue'
+  import RefreshButton from '../../../components/list/RefreshButton.vue'
   import ControlsHeader from '../../../components/page/ControlsHeader.vue'
   import HeadingAction from '../../../components/page/HeadingAction.vue'
   import PageHeading from '../../../components/page/PageHeading.vue'
   import Section from '../../../components/page/Section.vue'
   import { sleep } from '../../../lib/behavior/forms'
+  import { useListRefresh } from '../../../lib/behavior/list-state'
+  import { FIT_COLUMN, TAG_COLUMN_WIDE } from '../../../lib/behavior/table-columns'
   import {
     addCacheSetting,
     BROWSER_CACHE_BEHAVIORS,
@@ -89,16 +94,31 @@
   // into a "behavior" and a "TTL" column where half the TTLs mean nothing.
   const columns = [
     { accessorKey: 'name', header: 'Name', principal: true, hideable: false, enableSorting: true },
-    { accessorKey: 'id', header: 'ID' },
-    { accessorKey: 'browserCacheLabel', header: 'Browser cache' },
-    { accessorKey: 'edgeCacheLabel', header: 'Edge cache' },
-    { accessorKey: 'tieredCache', header: 'Tiered cache' },
-    { accessorKey: 'author', header: 'Last Editor', enableSorting: true, grow: 2 },
-    { accessorKey: 'lastModified', header: 'Last Modified', enableSorting: true, grow: 2 }
+    { accessorKey: 'id', header: 'ID', minWidth: FIT_COLUMN },
+    { accessorKey: 'browserCacheLabel', header: 'Browser cache', minWidth: FIT_COLUMN },
+    { accessorKey: 'edgeCacheLabel', header: 'Edge cache', minWidth: FIT_COLUMN },
+    { accessorKey: 'tieredCache', header: 'Tiered cache', minWidth: TAG_COLUMN_WIDE },
+    { accessorKey: 'author', header: 'Last Editor', enableSorting: true, minWidth: FIT_COLUMN },
+    {
+      accessorKey: 'lastModified',
+      header: 'Last Modified',
+      enableSorting: true,
+      minWidth: FIT_COLUMN
+    }
   ]
 
   // Free-text search, hoisted into the ControlsHeader above the card.
   const search = ref('')
+
+  // What the controls row's Refresh button does, and the flag the table binds for
+  // its skeleton rows — one flag over both causes, a scope switch and a manual
+  // refresh (../../../lib/behavior/list-state.js). This panel narrows by search alone,
+  // so it takes the refresh half on its own rather than through `useListFilters`.
+  const { loading, refresh } = useListRefresh()
+
+  // The table the controls row drives — Download CSV calls its `exportCsv()`
+  // (../../../components/list/ExportButton.vue).
+  const tableRef = ref(null)
 
   // Which columns are switched off, driven by the Columns button beside the search
   // (../../../components/list/ColumnsButton.vue). Only a HIDDEN column is ever recorded, so this
@@ -372,15 +392,31 @@
               />
             </template>
           </InputText>
-          <ColumnsButton
-            v-model="columnVisibility"
-            :columns="columns"
-          />
+          <template #actions>
+            <!-- THE RIGHT GROUP: the three controls that act on the LISTING rather
+                 than narrow it — fetch it again, take it away as a file, choose which
+                 columns it shows. All glyphs, all `medium`, so the row shares one
+                 32px height with the search field opposite. This panel narrows by
+                 search alone, so there is no Filter button leading the row. -->
+            <RefreshButton
+              :loading="loading"
+              @refresh="refresh"
+            />
+            <ExportButton
+              :table="tableRef"
+              filename="cache-settings.csv"
+            />
+            <ColumnsButton
+              v-model="columnVisibility"
+              :columns="columns"
+            />
+          </template>
         </ControlsHeader>
 
         <CardBox :padded="false">
           <template #content>
             <Table
+              ref="tableRef"
               v-model:globalFilter="search"
               v-model:columnVisibility="columnVisibility"
               :data="rows"
@@ -388,12 +424,20 @@
               row-key="id"
               enable-sorting
               :border="false"
+              :loading="loading"
               @row-click="openSetting"
             >
               <!-- The principal column reads as the way in it is — the row opens the
                    setting in the same drawer that creates one. -->
               <template #cell-name="{ value }">
                 <span class="truncate cursor-pointer hover:underline">{{ value }}</span>
+              </template>
+
+              <template #cell-id="{ value }">
+                <IdCell
+                  :value="value"
+                  resource="cache settings"
+                />
               </template>
 
               <!-- A second cache layer is on or it is not, so the cell is a state and

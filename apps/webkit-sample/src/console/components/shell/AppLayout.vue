@@ -64,7 +64,11 @@
   const props = defineProps({
     // Sidebar item id to render as selected.
     active: { type: String, default: '' },
-    // Breadcrumb trail for the current module, e.g. [{ label: "Applications" }].
+    // Breadcrumb trail for the current page, outermost first, e.g.
+    // [{ label: "Applications", href: "/applications" }, { label: application.name }].
+    // A page still passes its trail whatever its depth, but the bar RENDERS it only
+    // from two crumbs up (see `showBreadcrumb`): a first-level page names itself in
+    // its own heading, so a lone crumb of the same word is dropped here.
     breadcrumb: { type: Array, default: () => [] },
     // Whether the nav sidebar is shown. Focused flows (create/edit) hide it so
     // the form is the only thing competing for attention.
@@ -149,12 +153,26 @@
     closeNav()
   }
 
-  // The bar always names the current location: the breadcrumb renders on every page
-  // that passes one, from a single first-level crumb (Home, Applications) up through a
-  // nested trail (Applications › New Application). Crumb links navigate; the last crumb
-  // is the current page. It is the FIRST thing in the bar now — the chain that used to
-  // precede it moved to the rail — which is what lets it share the page's left edge.
-  const showBreadcrumb = computed(() => props.breadcrumb.length >= 1)
+  // THE TRAIL STARTS AT THE SECOND LEVEL. A page the sidebar routes to directly is
+  // already named twice: the rail's active item says which module you are in, and the
+  // page heading opening its content says what the page is (../page/PageHeading.vue).
+  // A lone crumb repeating that same word is a third copy of it, and it spends the
+  // bar's leading edge — the one place a reader looks to ask "where am I" — on an
+  // answer they already had.
+  //
+  // So the breadcrumb renders from TWO crumbs up (Workloads › my-workload,
+  // Applications › New Application), where it does the one job no heading can do:
+  // name the ancestor you came from, as a link back to it. First level, nothing.
+  //
+  // A first-level page still declares its single crumb. It keeps the prop's shape
+  // uniform across the console, it is the label its own children repeat as the first
+  // entry of their trail, and it means the level rule lives HERE, in one line, instead
+  // of in thirty page templates that each have to remember it.
+  //
+  // Crumb links navigate; the last crumb is the current page. It is the FIRST thing in
+  // the bar — the chain that used to precede it moved to the rail — which is what lets
+  // it share the page's left edge.
+  const showBreadcrumb = computed(() => props.breadcrumb.length >= 2)
 
   // The crumb is a real anchor, so the click has to be CLAIMED before it is routed —
   // otherwise the browser follows the same href as a document load on top of the push,
@@ -434,8 +452,9 @@
            the bar empty beside it. It merges through `cn`, so the later utility wins.
 
              It appears from `md`, where the rail exists and the chain has moved out of
-             this bar. Below that the chain is here instead and the crumb gives way: the
-             page below repeats its last crumb as the page heading, and the chain repeats
+             this bar, and only from the SECOND level up (see `showBreadcrumb`). Below
+             `md` the chain is here instead and the crumb gives way: the page below
+             repeats its last crumb as the page heading, and the chain repeats
              nowhere. -->
           <Breadcrumb
             v-if="showBreadcrumb"

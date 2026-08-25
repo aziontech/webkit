@@ -7,8 +7,14 @@
   //   Create release              → a real deploy, applying one or more strategies
   //   Create Deployment Settings  → the STRATEGY itself, applied by many deployments
   //
+  // WHAT THE READER FILLS IN, in the three bands the console's own create form uses:
+  //
+  //   General            name, an internal description, and whether it can be applied
+  //   Routing and policy how versions bind resources, and how many take traffic
+  //   Bindings           the `strategy.attributes` half of the request body
+  //
   // A strategy is the reusable half of the request body Azion accepts for a
-  // deployment (../ReleaseComposer.vue composes the whole of it):
+  // deployment (../../pages/deployments/ReleaseComposer.vue composes the whole of it):
   //
   //   strategy: { type: 'default', attributes: { application, firewall, custom_page } }
   //
@@ -25,64 +31,49 @@
   // `type` is not a field: `default` is the only strategy type the platform exposes,
   // so it rides in the body as a constant instead of as a Select with one option.
   //
-  // FORM — Drawer form, FIELDS SEPARATED (`/webkit-form` Approach B), the same shape
-  // as ./AddVariableDrawer.vue: flat triads on the panel surface — a real
-  // `<Label for>`, the control, and its own message wired through `aria-describedby`,
-  // surfaced only after a failed submit — with a single full-bleed `Divider` splitting
-  // WHAT the strategy is (name, active) from WHAT it binds (the three attributes). A
-  // composed `Select` labels its TRIGGER, never the wrapper. Fields sit at the compact
-  // modal-body step (`--spacing-md`), one `submitting` flag locks the scope, and the
-  // `sr-only` submit keeps Enter working.
+  // FORM — ../form/ResourceDrawer.vue (the one shell every in-resource create uses:
+  // one `<form novalidate>`, one `submitting` flag locking the body fieldset, Save
+  // alone on the right because the X, the overlay and Escape are already the
+  // dismissal). Inside it, `Section` bands and ../form/FieldStack.vue triads — a real
+  // `<Label for>`, the control at full measure, and ONE auxiliary line under it that
+  // carries the guidance until a failed submit replaces it with the message. A
+  // composed `Select` labels its TRIGGER, never the wrapper.
   //
-  // NESTED — opened from the deploy drawer, this is the child of the pair
-  // (`:nested`), so it stacks above the parent panel (overlay `z-[1002]`, content
-  // `z-[1003]`) and the parent keeps everything the user had filled in.
-  import Button from '@aziontech/webkit/button'
-  import Divider from '@aziontech/webkit/divider'
-  import Drawer from '@aziontech/webkit/drawer'
-  import DrawerClose from '@aziontech/webkit/drawer-close'
-  import DrawerContent from '@aziontech/webkit/drawer-content'
-  import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
-  import DrawerPortal from '@aziontech/webkit/drawer-portal'
-  import DrawerTitle from '@aziontech/webkit/drawer-title'
+  // The two policy groups are real `<fieldset>`/`<legend>` sets, because a radio
+  // family's accessible name is its legend and a `<Label for>` can only point at one
+  // of its members. Both start answered (`strict` / `single`, the platform's own
+  // defaults), so neither can fail a submit — Name is the only required answer.
+  import FieldRadio from '@aziontech/webkit/field-radio'
   import FieldSwitchBlock from '@aziontech/webkit/field-switch-block'
-  import FieldText from '@aziontech/webkit/field-text'
   import HelperText from '@aziontech/webkit/helper-text'
+  import InputText from '@aziontech/webkit/input-text'
   import Label from '@aziontech/webkit/label'
-  import PanelContent from '@aziontech/webkit/panel-content'
-  import PanelFooter from '@aziontech/webkit/panel-footer'
-  import PanelHeader from '@aziontech/webkit/panel-header'
   import Select from '@aziontech/webkit/select'
+  import Textarea from '@aziontech/webkit/textarea'
   import { APPLICATIONS } from '@shared/lib/applications'
   import { provisionedApplications } from '@shared/lib/provisioning'
   import { computed, reactive, ref, useId, watch } from 'vue'
 
   import {
     addStrategy,
+    BINDING_POLICIES,
     CUSTOM_PAGE_OPTIONS,
-    FIREWALL_OPTIONS
+    DEFAULT_BINDING_POLICY,
+    DEFAULT_VERSION_POLICY,
+    FIREWALL_OPTIONS,
+    VERSION_POLICIES
   } from '../../lib/data/deployment-strategies'
+  import FieldStack from '../form/FieldStack.vue'
+  import ResourceDrawer from '../form/ResourceDrawer.vue'
+  import Section from '../page/Section.vue'
 
   const open = defineModel('open', { type: Boolean, default: false })
 
-  defineProps({
-    // True when this drawer is stacked over another one (opened from the deploy
-    // drawer's Deployment Settings Select). Each drawer stays its own form with its
-    // own scoped save; this only raises the panel above the parent's — the template
-    // reads `nested` directly.
-    nested: { type: Boolean, default: false }
-  })
-
   const emit = defineEmits(['create'])
 
-  // One id namespace per instance, so every `for` ↔ control pair stays unique.
+  // One id namespace per instance, so two radios of the same family never share a
+  // DOM id with another instance of this drawer.
   const scope = useId()
-  const nameFieldId = `${scope}-name`
-  const fieldIds = {
-    application: `${scope}-application`,
-    firewall: `${scope}-firewall`,
-    customPage: `${scope}-custom-page`
-  }
 
   // "Not bound" is a real choice, not an empty field: `firewall` and `custom_page`
   // are nullable in the request body, and most strategies leave them null.
@@ -102,23 +93,24 @@
   const labelFor = (options) => (value) =>
     options.find((option) => option.value === value)?.label ?? ''
 
-  const form = reactive({
+  const blankForm = () => ({
     name: '',
+    description: '',
+    active: true,
+    bindingPolicy: DEFAULT_BINDING_POLICY,
+    versionPolicy: DEFAULT_VERSION_POLICY,
     application: '',
     firewall: '',
-    customPage: '',
-    active: true
+    customPage: ''
   })
+
+  const form = reactive(blankForm())
   const errors = reactive({ name: '' })
   const submitting = ref(false)
 
   watch(open, (isOpen) => {
     if (isOpen) return
-    form.name = ''
-    form.application = ''
-    form.firewall = ''
-    form.customPage = ''
-    form.active = true
+    Object.assign(form, blankForm())
     errors.name = ''
     submitting.value = false
   })
@@ -128,10 +120,6 @@
     return !errors.name
   }
 
-  const cancel = () => {
-    open.value = false
-  }
-
   const submit = async () => {
     if (submitting.value) return
     if (!validate()) return
@@ -139,13 +127,7 @@
     submitting.value = true
     try {
       await new Promise((resolve) => setTimeout(resolve, 500))
-      const strategy = addStrategy({
-        name: form.name,
-        application: form.application,
-        firewall: form.firewall,
-        customPage: form.customPage,
-        active: form.active
-      })
+      const strategy = addStrategy({ ...form })
       open.value = false
       emit('create', strategy)
     } finally {
@@ -155,169 +137,208 @@
 
   // The three attributes of `strategy.attributes`, one triad each. They share a shape,
   // so the template renders them from a small model instead of repeating the markup.
+  //
+  // Each carries the PLACEHOLDER of its own unbound state. `Select` reads `''` as "no
+  // selection" and falls back to the placeholder, so without one all three triggers
+  // render as empty boxes and the reader cannot tell an unbound field from an
+  // unanswered one. The placeholder is the same sentence the first option carries, so
+  // picking it explicitly changes nothing on screen.
   const bindingFields = computed(() => [
     {
       key: 'application',
-      id: fieldIds.application,
       label: 'Application',
       hint: 'Leave it open and the strategy works for every application; pin one to scope it.',
+      placeholder: ANY_APPLICATION.label,
       options: applicationOptions.value
     },
     {
       key: 'firewall',
-      id: fieldIds.firewall,
       label: 'Firewall',
       hint: 'Inspects requests before they reach the application.',
+      placeholder: NOT_BOUND.label,
       options: firewallOptions
     },
     {
       key: 'customPage',
-      id: fieldIds.customPage,
-      label: 'Custom Page',
-      hint: 'Answers 4xx / 5xx instead of the platform default page.',
+      label: 'Custom page',
+      hint: 'Answers 4xx and 5xx instead of the platform default page.',
+      placeholder: NOT_BOUND.label,
       options: customPageOptions
     }
   ])
 </script>
 
 <template>
-  <Drawer
+  <ResourceDrawer
     v-model:open="open"
-    size="medium"
-    side="right"
+    title="Create Deployment Settings"
+    description="A strategy binds an application, and optionally a firewall and a custom page. Deployments started from any resource apply it."
+    save-label="Create Deployment Settings"
+    :submitting="submitting"
+    @submit="submit"
   >
-    <DrawerPortal>
-      <DrawerOverlay :class="nested ? 'z-[1002]' : undefined" />
-      <DrawerContent :class="nested ? 'z-[1003]' : undefined">
-        <form
-          class="flex min-h-0 flex-1 flex-col"
-          aria-label="Create Deployment Settings"
-          novalidate
-          @submit.prevent="submit"
+    <!-- ── General: what the strategy IS ── -->
+    <Section
+      stacked
+      :divided="false"
+      title="General"
+      hint="How this strategy is identified in the Deployment Settings list and in the field that applies it."
+    >
+      <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
+        <FieldStack
+          label="Name"
+          required
+          description="How this strategy reads in the Deployment Settings field."
+          :message="errors.name"
+          message-kind="required"
         >
-          <PanelHeader class="w-full">
-            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-              <DrawerTitle>Create Deployment Settings</DrawerTitle>
-              <p class="text-body-sm text-(--text-muted)">
-                A strategy binds an application, and optionally a firewall and a custom page.
-                Deployments started from any resource apply it.
-              </p>
-            </div>
-            <DrawerClose />
-          </PanelHeader>
-
-          <PanelContent>
-            <!-- Compact modal body: fields --spacing-md apart. One flag locks the whole
-                 scope while the request is in flight. -->
-            <fieldset
-              class="m-0 flex min-w-0 flex-col gap-(--spacing-md) border-0 p-0"
+          <template #default="{ controlId, describedBy }">
+            <InputText
+              :id="controlId"
+              v-model="form.name"
+              size="large"
+              class="w-full"
+              placeholder="production-hardened"
+              autocomplete="off"
               :disabled="submitting"
+              :required="!!errors.name"
+              :aria-describedby="describedBy"
+              @update:model-value="errors.name = ''"
+            />
+          </template>
+        </FieldStack>
+
+        <!-- The description never reaches traffic: it is how a team recognizes one
+             strategy among ten that bind the same firewall. -->
+        <FieldStack
+          label="Description"
+          description="Optional. Used for internal identification."
+        >
+          <template #default="{ controlId, describedBy }">
+            <Textarea
+              :id="controlId"
+              v-model="form.description"
+              class="w-full"
+              placeholder="Storefront traffic for production"
+              :disabled="submitting"
+              :aria-describedby="describedBy"
+            />
+          </template>
+        </FieldStack>
+
+        <FieldSwitchBlock
+          v-model="form.active"
+          label="Active"
+          description="When disabled, the strategy stays in the list but no deployment can apply it."
+          :disabled="submitting"
+        />
+      </div>
+    </Section>
+
+    <!-- ── Routing and policy: how the versions it publishes behave ── -->
+    <Section
+      stacked
+      :divided="false"
+      title="Routing and policy"
+      hint="How versions bind to the resources they ship with, and how traffic reaches them."
+    >
+      <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
+        <!-- A radio family's accessible name is its legend; the visible caption
+             reuses `Label`, so it sits at the same step above its control as every
+             other field in the drawer. -->
+        <fieldset class="m-0 flex w-full min-w-0 flex-col gap-(--spacing-xs) border-0 p-0">
+          <legend class="mb-(--spacing-xs) p-0">
+            <Label
+              required
+              hint="Defines whether each version locks its resource IDs or allows them to change."
             >
-              <legend class="sr-only">Create Deployment Settings</legend>
+              Binding policy
+            </Label>
+          </legend>
+          <div class="flex flex-col gap-(--spacing-sm)">
+            <FieldRadio
+              v-for="policy in BINDING_POLICIES"
+              :key="policy.value"
+              v-model="form.bindingPolicy"
+              :value="policy.value"
+              name="binding-policy"
+              :input-id="`${scope}-binding-${policy.value}`"
+              :label="policy.label"
+              :description="policy.description"
+              :disabled="submitting"
+            />
+          </div>
+        </fieldset>
 
-              <!-- WHAT the strategy is. -->
-              <div class="flex w-full flex-col gap-(--spacing-xs)">
-                <Label
-                  :for="nameFieldId"
-                  required
-                  >Name</Label
-                >
-                <FieldText
-                  v-model="form.name"
-                  :input-id="nameFieldId"
-                  name="name"
-                  size="large"
-                  placeholder="production-hardened"
-                  :disabled="submitting"
-                  :required="!!errors.name"
-                  :helper-text="
-                    errors.name || 'How this strategy reads in the Deployment Settings field.'
-                  "
-                  @update:model-value="errors.name = ''"
-                />
-              </div>
+        <!-- The one answer here that cannot be revised later, so the consequence is
+             printed under the group rather than hidden behind the hint glyph. -->
+        <fieldset class="m-0 flex w-full min-w-0 flex-col gap-(--spacing-xs) border-0 p-0">
+          <legend class="mb-(--spacing-xs) p-0">
+            <Label
+              required
+              hint="Defines how many versions can receive traffic."
+            >
+              Deployment version policy
+            </Label>
+          </legend>
+          <div class="flex flex-col gap-(--spacing-sm)">
+            <FieldRadio
+              v-for="policy in VERSION_POLICIES"
+              :key="policy.value"
+              v-model="form.versionPolicy"
+              :value="policy.value"
+              name="version-policy"
+              :input-id="`${scope}-version-${policy.value}`"
+              :label="policy.label"
+              :description="policy.description"
+              :disabled="submitting"
+            />
+          </div>
+          <HelperText label="Cannot be changed after the deployment is created." />
+        </fieldset>
+      </div>
+    </Section>
 
-              <FieldSwitchBlock
-                v-model="form.active"
-                label="Active"
-                description="When disabled, the strategy stays in the list but no deployment can apply it."
-                :disabled="submitting"
+    <!-- ── Bindings: `strategy.attributes` ── -->
+    <Section
+      stacked
+      :divided="false"
+      title="Bindings"
+      hint="The resources this strategy attaches to a deployment. None is required: an open application means whichever one is being deployed, and both other bindings are nullable."
+    >
+      <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
+        <FieldStack
+          v-for="field in bindingFields"
+          :key="field.key"
+          :label="field.label"
+          :description="field.hint"
+        >
+          <template #default="{ controlId, describedBy }">
+            <Select
+              v-model="form[field.key]"
+              size="large"
+              class="w-full"
+              :disabled="submitting"
+              :placeholder="field.placeholder"
+              :display-value="labelFor(field.options)"
+            >
+              <Select.Trigger
+                :id="controlId"
+                :aria-describedby="describedBy"
               />
-
-              <!-- Full-bleed boundary: what the strategy IS, above; what it BINDS,
-                   below. The wrapper carries the negative inset so the Divider itself
-                   stays untouched. -->
-              <div class="-mx-(--spacing-lg)">
-                <Divider />
-              </div>
-
-              <!-- `strategy.attributes` — one triad per attribute. None is required:
-                   an open application means "whatever is being deployed", and both
-                   bindings are nullable. -->
-              <div
-                v-for="field in bindingFields"
-                :key="field.key"
-                class="flex w-full flex-col gap-(--spacing-xs)"
-              >
-                <Label :for="field.id">{{ field.label }}</Label>
-                <Select
-                  v-model="form[field.key]"
-                  size="large"
-                  class="w-full"
-                  :disabled="submitting"
-                  :display-value="labelFor(field.options)"
+              <Select.Content>
+                <Select.Option
+                  v-for="option in field.options"
+                  :key="option.value"
+                  :value="option.value"
                 >
-                  <Select.Trigger
-                    :id="field.id"
-                    :aria-describedby="`${field.id}-message`"
-                  />
-                  <Select.Content>
-                    <Select.Option
-                      v-for="option in field.options"
-                      :key="option.value"
-                      :value="option.value"
-                    >
-                      {{ option.label }}
-                    </Select.Option>
-                  </Select.Content>
-                </Select>
-                <HelperText
-                  :id="`${field.id}-message`"
-                  :label="field.hint"
-                />
-              </div>
-            </fieldset>
-          </PanelContent>
-
-          <PanelFooter class="flex-col md:flex-row md:justify-end">
-            <Button
-              class="w-full md:w-auto"
-              type="button"
-              label="Cancel"
-              kind="outlined"
-              size="medium"
-              :disabled="submitting"
-              @click="cancel"
-            />
-            <Button
-              class="w-full md:w-auto"
-              label="Create Deployment Settings"
-              kind="primary"
-              size="medium"
-              :loading="submitting"
-              @click="submit"
-            />
-            <button
-              type="submit"
-              class="sr-only"
-              tabindex="-1"
-              aria-hidden="true"
-            >
-              Create Deployment Settings
-            </button>
-          </PanelFooter>
-        </form>
-      </DrawerContent>
-    </DrawerPortal>
-  </Drawer>
+                  {{ option.label }}
+                </Select.Option>
+              </Select.Content>
+            </Select>
+          </template>
+        </FieldStack>
+      </div>
+    </Section>
+  </ResourceDrawer>
 </template>

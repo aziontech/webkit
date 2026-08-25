@@ -25,8 +25,12 @@
 
   import ColumnsButton from '../../components/list/ColumnsButton.vue'
   import DeleteDialog from '../../components/list/DeleteDialog.vue'
+  import ExportButton from '../../components/list/ExportButton.vue'
   import LastModifiedCell from '../../components/list/LastModifiedCell.vue'
+  import RefreshButton from '../../components/list/RefreshButton.vue'
   import AppLayout from '../../components/shell/AppLayout.vue'
+  import { useListRefresh } from '../../lib/behavior/list-state'
+  import { FIT_COLUMN } from '../../lib/behavior/table-columns'
 
   const route = useRoute()
   const router = useRouter()
@@ -165,8 +169,13 @@
       hideable: false,
       grow: 3
     },
-    { accessorKey: 'size', header: 'Size', enableSorting: true },
-    { accessorKey: 'lastModified', header: 'Last Modified', enableSorting: true, grow: 2 },
+    { accessorKey: 'size', header: 'Size', enableSorting: true, minWidth: FIT_COLUMN },
+    {
+      accessorKey: 'lastModified',
+      header: 'Last Modified',
+      enableSorting: true,
+      minWidth: FIT_COLUMN
+    },
     { id: 'actions', kind: 'action', hideable: false }
   ]
 
@@ -178,6 +187,14 @@
   // (the breadcrumb under it is the same argument), so the whole band travels with the
   // card. Everything else about it is identical — same glyph, same panel, same row.
   const columnVisibility = ref({})
+
+  // What the toolbar's Refresh does, and the flag the table binds for its skeleton
+  // rows — one flag over both causes, a scope switch and a manual refresh
+  // (../../lib/behavior/list-state.js).
+  const { loading, refresh } = useListRefresh()
+
+  // The table the toolbar's Download CSV drives, through its `exportCsv()`.
+  const tableRef = ref(null)
 
   // ── Navigation ────────────────────────────────────────────────────────────
   const enterFolder = (name) => {
@@ -277,12 +294,15 @@
         <CardBox :padded="false">
           <template #content>
             <Table
+              ref="tableRef"
               v-model:columnVisibility="columnVisibility"
               :data="rows"
               :columns="columns"
               row-key="id"
               enable-sorting
               :border="false"
+              :loading="loading"
+              export-filename="objects.csv"
               @row-click="onRowClick"
             >
               <template #toolbar>
@@ -307,8 +327,24 @@
                       placeholder="Search in folder"
                       class="flex-1"
                     />
-                    <!-- `large` to match the field it shares the row with — the toolbar
+                    <!-- The three that act on the LISTING rather than narrow it — the
+                         same right group every module list carries, in the same order.
+                         The shared pair rather than the DS's context-aware
+                         `Table.RefreshButton` / `Table.Export`: those two are fixed at
+                         `medium`, and this toolbar runs at `large`, so a 32px control
+                         beside a 40px field leaves a 4px break top and bottom.
+                         `large` to match the field they share the row with — the toolbar
                          runs a size above the page controls rows elsewhere. -->
+                    <RefreshButton
+                      size="large"
+                      :loading="loading"
+                      @refresh="refresh"
+                    />
+                    <ExportButton
+                      :table="tableRef"
+                      size="large"
+                      filename="objects.csv"
+                    />
                     <ColumnsButton
                       v-model="columnVisibility"
                       :columns="columns"

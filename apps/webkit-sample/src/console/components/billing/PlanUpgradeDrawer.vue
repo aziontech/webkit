@@ -46,7 +46,7 @@
   import SegmentedButton from '@aziontech/webkit/segmented-button'
   import { computed, reactive, ref, watch } from 'vue'
 
-  import { chargeFor, leadPartsFor, planFor } from '../../lib/data/plans.js'
+  import { chargeFor, planFor } from '../../lib/data/plans.js'
   import PaymentMethodCard from './PaymentMethodCard.vue'
 
   const props = defineProps({
@@ -62,7 +62,6 @@
   const emit = defineEmits(['confirm'])
 
   const plan = computed(() => planFor(props.planId))
-  const lead = computed(() => leadPartsFor(props.planId))
 
   // Yearly leads, as in the design: it is the cheaper of the two per month, so
   // opening on Monthly would show the worse deal first and make the discount a
@@ -188,41 +187,70 @@
             <div
               class="grid grid-cols-1 gap-(--spacing-lg) lg:grid-cols-[minmax(0,18rem)_minmax(0,1fr)] lg:gap-(--spacing-xl)"
             >
-              <!-- ── Left: what the tier buys ── -->
+              <!-- ── Left: what the tier buys ──
+                   Everything in this column is inset by the same xs, so the section
+                   heading, the check glyphs and the links share one left edge. The
+                   zebra bands and the divider are the two things that run the full
+                   width of the column, which is what makes them read as the structure
+                   BEHIND the text rather than more text.
+                   Both columns start at the panel's own top padding, which is what
+                   lets the heading below align with the Charged card's header. -->
               <aside
                 v-if="plan?.upgrade"
                 class="flex flex-col gap-(--spacing-md)"
               >
-                <p
-                  v-if="lead"
-                  class="text-body-sm text-(--text-default)"
-                >
-                  {{ lead.before }}<span class="text-(--text-default)">{{ lead.name }}</span
-                  >{{ lead.after }}
-                </p>
+                <div class="flex flex-col gap-(--spacing-xs)">
+                  <!-- The heading is a BAND, not a line of text, and the band is
+                       built to equal the Charged card's header so the two land on one
+                       line. Both columns start at the same top edge, so matching the
+                       BOX is the whole job:
 
-                <div class="flex flex-col gap-(--spacing-sm)">
-                  <h3 class="text-label-md text-(--text-default)">
+                         1px  transparent top border  ← stands in for the card's border
+                         12px py-(--spacing-sm)       ← the card header's own padding
+                         40px the period control      ← what actually sets that header's
+                         12px py-(--spacing-sm)          height; `min-h-14` never applies
+                         ────
+                         65px
+
+                       The min-height spells that sum out rather than hardcoding 65, so
+                       the class and the reason are the same text. Measured, not guessed:
+                       the header renders 65px because its SegmentedButton is 40px, which
+                       exceeds what the 56px `min-h-14` floor leaves after padding — so
+                       the floor never applies and the control is what sets the height.
+                       label-lg is also the rank the right column gives its card
+                       headers: two sections of one screen, one step of the ladder. -->
+                  <h3
+                    class="flex shrink-0 items-center px-(--spacing-xs) text-label-lg text-(--text-default) lg:min-h-[calc(var(--spacing-sm)*2+var(--spacing-10)+1px)] lg:border-t lg:border-t-transparent lg:py-(--spacing-sm)"
+                  >
                     {{ plan.upgrade.featuresTitle }}
                   </h3>
 
                   <!-- The checklist. A real list, so a screen reader announces how
                        many things the tier includes instead of reading a run of
-                       unrelated lines. -->
-                  <ul class="m-0 flex list-none flex-col gap-(--spacing-sm) p-0">
+                       unrelated lines.
+                       Zebra, not gaps: a paid tier's list runs to fifteen entries,
+                       and at that length evenly-spaced lines stop reading as rows —
+                       the eye loses which rate belongs to which allowance. Banding
+                       alternate rows in `--bg-mask` re-establishes the pairing
+                       without a border per row, and costs nothing in either theme
+                       (the token is an alpha, so it tints whatever surface it lands
+                       on). The rows touch on purpose — a gap between them would break
+                       the alternation into detached blocks. -->
+                  <ul class="m-0 flex list-none flex-col p-0">
                     <li
                       v-for="feature in plan.upgrade.features"
                       :key="feature.title"
-                      class="flex items-start gap-(--spacing-xs)"
+                      class="flex items-start gap-(--spacing-xs) rounded-(--shape-elements) px-(--spacing-xs) py-(--spacing-xs) odd:bg-(--bg-mask)"
                     >
                       <i
                         class="pi pi-check mt-[2px] shrink-0 text-(length:--text-body-xs) leading-none text-(--success-contrast)"
                         aria-hidden="true"
                       />
                       <span class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                        <span class="text-body-sm text-(--text-default)">{{
-                          feature.title
-                        }}</span>
+                        <!-- The allowance is the thing being bought and the rate is
+                             what happens after it, so they are not the same weight:
+                             label for the allowance, muted body for the overage. -->
+                        <span class="text-label-md text-(--text-default)">{{ feature.title }}</span>
                         <span
                           v-if="feature.detail"
                           class="text-body-xs text-(--text-muted)"
@@ -233,7 +261,17 @@
                   </ul>
                 </div>
 
+                <!-- The links leave for a page outside this flow, so they are ruled
+                     off from the list they would otherwise read as the last rows of.
+                     They point at this prototype's own pricing page (/site/pricing,
+                     see ../../lib/data/plans.js) and still open in a NEW TAB: this is
+                     a half-finished transaction, and navigating the tab would discard
+                     the drawer along with the tier and period already chosen, so
+                     coming back would mean re-opening Billing and re-picking both.
+                     A reference consulted mid-purchase belongs beside the purchase,
+                     which is also why the trailing glyph stays `external-link`. -->
                 <div class="flex flex-col gap-(--spacing-xs)">
+                  <Divider />
                   <Link
                     v-for="link in plan.upgrade.links"
                     :key="link.label"
@@ -241,12 +279,19 @@
                     :href="link.href"
                     target="_blank"
                     size="small"
-                    class="w-fit"
+                    class="ml-(--spacing-xs) w-fit"
                   />
                 </div>
               </aside>
 
-              <!-- ── Right: the transaction ── -->
+              <!-- ── Right: the transaction ──
+                   The cards keep the panel's own `p-(--spacing-lg)` gutter on every
+                   edge. This column briefly ran full-bleed to the drawer's right edge
+                   with its right border and rounding removed; anchoring to an edge
+                   only reads as deliberate when the block runs the full height of the
+                   panel like a sidebar, and once it needs air above and below, a card
+                   cut off on one side reads as a clipping bug instead. Closed boxes
+                   with a gutter on all four sides — one rule for the whole column. -->
               <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
                 <!-- Charged. The period control sits in the card's header, where
                      it reads as the switch that governs the figures under it. -->
@@ -275,9 +320,7 @@
                         >
                           <span class="text-body-sm text-(--text-muted)">{{ row.label }}</span>
                           <span class="flex items-baseline gap-(--spacing-xs)">
-                            <span class="text-heading-xs text-(--text-default)">{{
-                              row.value
-                            }}</span>
+                            <span class="text-label-md text-(--text-default)">{{ row.value }}</span>
                             <span
                               v-if="row.suffix"
                               class="text-body-sm text-(--text-muted)"
@@ -289,14 +332,19 @@
 
                       <Divider />
 
-                      <!-- The total is the one figure the user is agreeing to, so
-                           it gets its own band and the largest type in the card. -->
+                      <!-- The total is the one figure the user is agreeing to, so it
+                           gets its own band and the largest type in the CARD — capped
+                           there. `DrawerTitle` ships `heading-sm` (18px here) and keeps
+                           it; a body figure at `heading-md` (24px) out-shouted the
+                           screen's own title, which is the one thing no card is allowed
+                           to do. At `heading-xs` the ladder reads top-down: title 18,
+                           total 16, charge rows 14. -->
                       <div
                         class="flex flex-wrap items-baseline justify-between gap-(--spacing-sm) px-(--spacing-lg) py-(--spacing-lg)"
                       >
                         <span class="text-heading-xs text-(--text-default)">Total</span>
                         <span class="flex items-baseline gap-(--spacing-xs)">
-                          <span class="text-heading-md text-(--text-default)">{{
+                          <span class="text-heading-xs text-(--text-default)">{{
                             charge.total.value
                           }}</span>
                           <span class="text-body-sm text-(--text-muted)">{{

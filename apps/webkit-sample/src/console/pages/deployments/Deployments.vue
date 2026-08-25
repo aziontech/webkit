@@ -59,9 +59,11 @@
   import AuthorCell from '../../components/list/AuthorCell.vue'
   import ColumnsButton from '../../components/list/ColumnsButton.vue'
   import DeleteDialog from '../../components/list/DeleteDialog.vue'
+  import ExportButton from '../../components/list/ExportButton.vue'
   import FilterButton from '../../components/list/FilterButton.vue'
   import FilterChips from '../../components/list/FilterChips.vue'
   import LastModifiedCell from '../../components/list/LastModifiedCell.vue'
+  import RefreshButton from '../../components/list/RefreshButton.vue'
   import ControlsHeader from '../../components/page/ControlsHeader.vue'
   import HeadingAction from '../../components/page/HeadingAction.vue'
   import PageHeading from '../../components/page/PageHeading.vue'
@@ -69,13 +71,16 @@
   import { DATE_PRESETS, formatDateRange, matchDate } from '../../lib/behavior/filter-bar'
   import { useListFilters } from '../../lib/behavior/list-state'
   import { useTabEnter } from '../../lib/behavior/tab-enter'
+  import { FIT_COLUMN, TAG_COLUMN } from '../../lib/behavior/table-columns'
   import { DEPLOYMENT_COLUMNS } from '../../lib/data/deployment-columns'
   import {
     azionDefaultStrategy,
     bindingLabel,
+    bindingPolicyLabel,
     removeStrategy,
     strategyStatusOptions,
     strategyTypeLabel,
+    versionPolicyLabel,
     workspaceStrategies
   } from '../../lib/data/deployment-strategies'
   import { deploymentFilterFields } from '../../lib/data/deployments'
@@ -183,8 +188,15 @@
   const {
     filters: deployFilters,
     search: deploySearch,
-    loading: tenancyReloading
+    loading,
+    refresh
   } = useListFilters([], allDeployments)
+
+  // The two tables the controls row drives — one per tab. Download CSV calls the DS's
+  // own `exportCsv()` through them (../../components/list/ExportButton.vue); the
+  // deployments one goes through the shared component, which forwards it.
+  const deploymentsTableRef = ref(null)
+  const settingsTableRef = ref(null)
 
   // Which columns are switched off, driven by the Columns button beside the filter
   // (../../components/list/ColumnsButton.vue). Only a HIDDEN column is ever recorded, so this
@@ -227,11 +239,34 @@
   // ui/LastModifiedCell.vue).
   const settingColumns = [
     { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, hideable: false },
-    { accessorKey: 'type', header: 'Type', enableSorting: true },
-    { accessorKey: 'firewall', header: 'Firewall', enableSorting: true },
-    { accessorKey: 'customPage', header: 'Custom Page', enableSorting: true },
-    { accessorKey: 'status', header: 'Status', enableSorting: true },
-    { accessorKey: 'lastModified', header: 'Last Modified', enableSorting: true, grow: 2 },
+    { accessorKey: 'type', header: 'Type', enableSorting: true, minWidth: TAG_COLUMN },
+    { accessorKey: 'firewall', header: 'Firewall', enableSorting: true, minWidth: FIT_COLUMN },
+    { accessorKey: 'customPage', header: 'Custom Page', enableSorting: true, minWidth: FIT_COLUMN },
+    // The two routing policies the create drawer asks for. They are columns rather
+    // than something a row has to be opened to discover, for the same reason the
+    // bindings are: they are what one setting differs from the next by. Off by
+    // default all the same — the bindings answer "what does this serve", which is
+    // the question the list is scanned for; the policies answer "how", which is
+    // read once, when a setting is chosen.
+    {
+      accessorKey: 'bindingPolicy',
+      header: 'Binding policy',
+      enableSorting: true,
+      minWidth: FIT_COLUMN
+    },
+    {
+      accessorKey: 'versionPolicy',
+      header: 'Version policy',
+      enableSorting: true,
+      minWidth: FIT_COLUMN
+    },
+    { accessorKey: 'status', header: 'Status', enableSorting: true, minWidth: TAG_COLUMN },
+    {
+      accessorKey: 'lastModified',
+      header: 'Last Modified',
+      enableSorting: true,
+      minWidth: FIT_COLUMN
+    },
     { id: 'actions', kind: 'action', hideable: false }
   ]
 
@@ -239,8 +274,10 @@
   // list different subjects, so a column switched off on the history has no counterpart
   // here and sharing one map would have the two tabs hiding each other's columns by
   // accident (both carry `name`, `status` and `lastModified`).
-  // No `id` column on this tab, so nothing ships off — see the history's map above.
-  const settingColumnVisibility = ref({})
+  // The two policies ship OFF: eight columns plus the actions cell is more than the
+  // width holds, and they are the pair a reader turns on deliberately (Columns) when
+  // they are comparing how settings route rather than what they bind.
+  const settingColumnVisibility = ref({ bindingPolicy: false, versionPolicy: false })
 
   const settingFilterFields = [
     {
@@ -524,6 +561,10 @@
               v-if="activeTab === 'all'"
               key="controls-header-1"
             >
+              <FilterButton
+                v-model="deployFilters"
+                :fields="deployFields"
+              />
               <InputText
                 v-model="deploySearch"
                 size="medium"
@@ -538,14 +579,25 @@
                   />
                 </template>
               </InputText>
-              <FilterButton
-                v-model="deployFilters"
-                :fields="deployFields"
-              />
-              <ColumnsButton
-                v-model="columnVisibility"
-                :columns="DEPLOYMENT_COLUMNS"
-              />
+              <template #actions>
+                <!-- THE RIGHT GROUP: the three controls that act on the LISTING rather
+                     than narrow it — fetch it again, take it away as a file, choose
+                     which columns it shows. Download CSV reaches the table through the
+                     shared component that owns it (it forwards `exportCsv`), because
+                     the table itself is one level down. -->
+                <RefreshButton
+                  :loading="loading"
+                  @refresh="refresh"
+                />
+                <ExportButton
+                  :table="deploymentsTableRef"
+                  filename="deployments.csv"
+                />
+                <ColumnsButton
+                  v-model="columnVisibility"
+                  :columns="DEPLOYMENT_COLUMNS"
+                />
+              </template>
             </ControlsHeader>
 
             <FilterChips
@@ -559,6 +611,10 @@
               v-else
               key="controls-header-2"
             >
+              <FilterButton
+                v-model="settingFilters"
+                :fields="settingFilterFields"
+              />
               <InputText
                 v-model="settingSearch"
                 size="medium"
@@ -573,14 +629,20 @@
                   />
                 </template>
               </InputText>
-              <FilterButton
-                v-model="settingFilters"
-                :fields="settingFilterFields"
-              />
-              <ColumnsButton
-                v-model="settingColumnVisibility"
-                :columns="settingColumns"
-              />
+              <template #actions>
+                <RefreshButton
+                  :loading="loading"
+                  @refresh="refresh"
+                />
+                <ExportButton
+                  :table="settingsTableRef"
+                  filename="deployment-settings.csv"
+                />
+                <ColumnsButton
+                  v-model="settingColumnVisibility"
+                  :columns="settingColumns"
+                />
+              </template>
             </ControlsHeader>
 
             <FilterChips
@@ -603,6 +665,7 @@
                    reads the same. -->
                   <DeploymentsTable
                     v-if="activeTab === 'all'"
+                    ref="deploymentsTableRef"
                     v-model:columnVisibility="columnVisibility"
                     v-model:search="deploySearch"
                     v-model:filters="deployFilters"
@@ -610,6 +673,7 @@
                     :fields="deployFields"
                     :email="userEmail"
                     :controls="false"
+                    :loading="loading"
                     @row-click="openDeployment"
                     @action="onDeploymentAction"
                   />
@@ -617,6 +681,7 @@
                   <!-- ── Settings ── -->
                   <Table
                     v-else
+                    ref="settingsTableRef"
                     v-model:globalFilter="settingSearch"
                     v-model:columnVisibility="settingColumnVisibility"
                     :data="filteredSettings"
@@ -626,7 +691,7 @@
                     paginated
                     :page-size="10"
                     :border="false"
-                    :loading="tenancyReloading"
+                    :loading="loading"
                   >
                     <!-- The platform's own strategy is marked as such: it is the one
                          row nobody in this workspace authored, and the one row the
@@ -673,6 +738,18 @@
                       >
                         {{ bindingLabel(value) }}
                       </span>
+                    </template>
+
+                    <!-- The policies read as their label, never as the stored token:
+                         `strict` / `single` are the request body's words, not the
+                         reader's. Both rows always have one, so neither cell has a
+                         muted "not set" case the bindings above need. -->
+                    <template #cell-bindingPolicy="{ value }">
+                      <span class="truncate">{{ bindingPolicyLabel(value) }}</span>
+                    </template>
+
+                    <template #cell-versionPolicy="{ value }">
+                      <span class="truncate">{{ versionPolicyLabel(value) }}</span>
                     </template>
 
                     <template #cell-status="{ value }">
@@ -763,8 +840,9 @@
     </main>
 
     <!-- Create Deployment Settings — the strategy, not a deployment. The Settings tab's
-         own action; the release page's picker opens its own nested instance for the
-         quick-add. -->
+         own action; a second instance stacks over the release page's picker when that
+         quick-add lands (two Drawers of the same z paint in mount order, so the child
+         is on top without a z override). -->
     <DeploymentSettingsDrawer
       v-model:open="settingsOpen"
       @create="onStrategyCreated"

@@ -6,9 +6,10 @@
   // GRIDS — a <dl> of label-over-value cells inside a CardBox — because every
   // value there is a readout with no action of its own; each band's single action
   // lives on its SectionHeading, so the card stays pure data. The invoices are a
-  // data-driven Table (`:data` + `:columns`) under the house toolbar order
-  // (Filter · Search · Refresh · Export · ColumnSelector), every control at
-  // `medium` so the row shares one 32px height.
+  // data-driven Table (`:data` + `:columns`) under the house CONTROLS ROW order
+  // (Filter · Search · … · Refresh · Download CSV · Columns — narrowing left, the
+  // three that act on the listing right), every control at `medium` so the row
+  // shares one 32px height. Nothing is left inside the card's own toolbar.
   //
   // STATES — the view fetches, so it owns the whole surface: Skeletons reserve
   // each fact grid while the data arrives, the Table renders its own skeleton
@@ -54,16 +55,23 @@
   import { computed, onMounted, ref } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
+  import ChangePlanDrawer from '../../../components/billing/ChangePlanDrawer.vue'
+  import PlanUpgradeDrawer from '../../../components/billing/PlanUpgradeDrawer.vue'
   import ColumnsButton from '../../../components/list/ColumnsButton.vue'
+  import ExportButton from '../../../components/list/ExportButton.vue'
   import FilterButton from '../../../components/list/FilterButton.vue'
   import FilterChips from '../../../components/list/FilterChips.vue'
+  import RefreshButton from '../../../components/list/RefreshButton.vue'
   import ControlsHeader from '../../../components/page/ControlsHeader.vue'
   import PageHeading from '../../../components/page/PageHeading.vue'
   import PageTabs from '../../../components/page/PageTabs.vue'
   import SectionHeading from '../../../components/page/SectionHeading.vue'
   import { DATE_PRESETS, formatDateRange, matchDate } from '../../../lib/behavior/filter-bar'
   import { useListFilters } from '../../../lib/behavior/list-state'
+  import { FIT_COLUMN, TAG_COLUMN } from '../../../lib/behavior/table-columns'
   import { defaultPaymentMethod, PAYMENT_METHODS } from '../../../lib/data/payment-methods'
+  import { planFor, planNameFor } from '../../../lib/data/plans'
+  import { useSamplePreset } from '../../../lib/state/sample-preset'
 
   const DOCS = 'https://www.azion.com/en/documentation/'
 
@@ -96,7 +104,12 @@
       grow: 2
     },
     { accessorKey: 'cardNumber', header: 'Card Number', grow: 2 },
-    { accessorKey: 'expires', header: 'Expiration Date', enableSorting: true },
+    {
+      accessorKey: 'expires',
+      header: 'Expiration Date',
+      enableSorting: true,
+      minWidth: FIT_COLUMN
+    },
     { id: 'actions', kind: 'action', hideable: false }
   ]
 
@@ -324,7 +337,8 @@
       invoices.value = []
     } finally {
       // Released on both paths, so a failure can never leave the view stuck in
-      // its skeleton — and Table.RefreshButton (disabled while loading) unlocks.
+      // its skeleton — and the controls row's Refresh (disabled while loading)
+      // unlocks.
       loading.value = false
     }
   }
@@ -344,7 +358,7 @@
   // values (ISO date, number) so sorting and the numeric filters compare the
   // value rather than its formatting — the cell slots do the formatting.
   const invoiceColumns = [
-    { accessorKey: 'seq', header: '№', label: 'Number', enableSorting: true },
+    { accessorKey: 'seq', header: '№', label: 'Number', enableSorting: true, minWidth: FIT_COLUMN },
     {
       accessorKey: 'id',
       header: 'Invoice ID',
@@ -353,15 +367,20 @@
       hideable: false,
       grow: 2
     },
-    { accessorKey: 'plan', header: 'Plan', enableSorting: true },
-    { accessorKey: 'cycle', header: 'Cycle', enableSorting: true },
-    { accessorKey: 'seats', header: 'Seats', enableSorting: true },
-    { accessorKey: 'billingDate', header: 'Billing date', enableSorting: true, grow: 2 },
-    { accessorKey: 'amount', header: 'Amount', enableSorting: true },
+    { accessorKey: 'plan', header: 'Plan', enableSorting: true, minWidth: FIT_COLUMN },
+    { accessorKey: 'cycle', header: 'Cycle', enableSorting: true, minWidth: FIT_COLUMN },
+    { accessorKey: 'seats', header: 'Seats', enableSorting: true, minWidth: FIT_COLUMN },
+    {
+      accessorKey: 'billingDate',
+      header: 'Billing date',
+      enableSorting: true,
+      minWidth: FIT_COLUMN
+    },
+    { accessorKey: 'amount', header: 'Amount', enableSorting: true, minWidth: FIT_COLUMN },
     // Which card was charged. The console carries it on the invoice row because "why
     // did THIS one fail" is answered by the card, not by the amount.
     { accessorKey: 'paymentMethod', header: 'Payment Method', grow: 2 },
-    { accessorKey: 'status', header: 'Status', enableSorting: true },
+    { accessorKey: 'status', header: 'Status', enableSorting: true, minWidth: TAG_COLUMN },
     { id: 'actions', kind: 'action', hideable: false }
   ]
 
@@ -443,6 +462,11 @@
     visibleRows: visibleInvoices
   } = useListFilters(invoiceFilterFields, invoices)
 
+  // The invoice table the controls row drives — Download CSV calls its `exportCsv()`
+  // (../../../components/list/ExportButton.vue), so the file honours the visible
+  // columns and the filtered rows.
+  const invoicesTableRef = ref(null)
+
   const isFiltered = computed(
     () => search.value.length > 0 || Object.values(filters.value).some((values) => values?.length)
   )
@@ -504,19 +528,56 @@
     }
   ])
 
-  // What the Pro tier adds, from the plan catalog rather than typed here.
-  const proPerks = [
-    '20 Workloads',
-    '20 GB Object Storage',
-    '20M Application requests',
-    '20M Firewall requests',
-    '10 hours Function compute time',
-    '2 GB Real-Time Events Storage',
-    'DDoS Protection included',
-    'SOC 2 Type 2 / SOC 3'
-  ]
+  // ── THE UPGRADE PATH IS THE ONBOARDING ONE ──
+  //
+  // The tier this card offers, its name, and every line of what it buys come from the
+  // plan catalog (../../../lib/data/plans.js) — the same record the entrance's plan
+  // step renders and the same one the upgrade drawer reads. This card used to carry a
+  // typed list of eight perks, which is exactly how a billing page ends up advertising
+  // a limit the rest of the console does not sell: the catalog moves, the array does
+  // not, and nothing fails.
+  const upgradePlan = planFor('pro')
 
-  const changePlan = () => toast.info('Plan management is disabled in the demo.')
+  // `{ title, detail }`, the shape the drawer renders. The card shows the titles —
+  // it is a teaser standing next to the plan the account is on, not the contract — and
+  // the metered rate after each allowance is read in the drawer behind the button.
+  const proPerks = computed(() => upgradePlan.upgrade.features)
+
+  // Both buttons open the surfaces the ENTRANCE already uses, instead of reporting
+  // that the demo cannot do this: ChangePlanDrawer answers "which tier", and
+  // PlanUpgradeDrawer — the onboarding flow's own payment step — answers "this one,
+  // and here is the card". One payment surface for the whole sample; two places a
+  // contract can be agreed to is the one thing a billing flow must not have.
+  const { setPlan } = useSamplePreset()
+  const changePlanOpen = ref(false)
+  const upgradeOpen = ref(false)
+
+  const changePlan = () => {
+    changePlanOpen.value = true
+  }
+
+  const upgrade = () => {
+    upgradeOpen.value = true
+  }
+
+  // Paid through the tier card. The preset is what the header tag, the organization
+  // row and the switcher all read, so writing it here is what keeps the console from
+  // saying two different things about the same account.
+  const onUpgradeConfirm = ({ planId }) => {
+    setPlan(planId)
+    toast.success(`You are now on ${planNameFor(planId)}.`, {
+      description: 'The next invoice is charged on the new contract.'
+    })
+  }
+
+  // Paid through the comparison drawer, which has already written the tier itself —
+  // all that is left is to say so.
+  const onPlanChanged = (planId) => {
+    toast.success(`You are now on ${planNameFor(planId)}.`, {
+      description: 'The next invoice is charged on the new contract.'
+    })
+  }
+
   const updatePayment = () => toast.info('Payment method management is disabled in the demo.')
   const downloadInvoice = (event, invoice) => toast.success(`Downloading ${invoice.id}…`)
 </script>
@@ -662,7 +723,10 @@
                   </div>
                 </template>
                 <template #footer>
-                  <p class="text-body-xs text-(--text-default)">
+                  <!-- `w-full`: CardBox lays its footer out `justify-center`, so a child
+                       that does not fill the width is centred. The sentence is a note on
+                       the facts above it, and a note reads from the left edge they do. -->
+                  <p class="w-full text-body-xs text-(--text-default)">
                     This invoice includes all consumption up to the last day of the month.
                   </p>
                 </template>
@@ -673,7 +737,9 @@
                  cannot advertise a tier the rest of the console does not sell. -->
               <CardBox class="min-w-0 flex-1">
                 <template #header>
-                  <span class="text-label-lg text-(--text-default)">Upgrade to Pro</span>
+                  <span class="text-label-lg text-(--text-default)">
+                    Upgrade to {{ upgradePlan.name }}
+                  </span>
                 </template>
                 <template #content>
                   <div class="flex min-w-0 flex-col justify-between gap-(--spacing-lg)">
@@ -683,27 +749,38 @@
                     >
                       <li
                         v-for="perk in proPerks"
-                        :key="perk"
+                        :key="perk.title"
                         class="flex min-w-0 items-center gap-(--spacing-xs)"
                       >
+                        <!-- `--success-contrast`, not `--success`: the pair is a FILL and
+                             the ink that goes on it, so `text-(--success)` paints the
+                             glyph in the swatch colour — #0A2916 on a dark surface, a
+                             pale mint on a light one. Invisible in both themes, and
+                             nothing catches it: the class compiles, the var resolves. -->
                         <i
-                          class="pi pi-check shrink-0 text-body-sm text-(--success)"
+                          class="pi pi-check shrink-0 text-body-sm text-(--success-contrast)"
                           aria-hidden="true"
                         />
                         <span class="min-w-0 truncate text-label-sm text-(--text-default)">
-                          {{ perk }}
+                          {{ perk.title }}
                         </span>
                       </li>
                     </ul>
                     <p class="text-body-sm text-(--text-muted)">
                       Upgrade to unlock higher limits and keep your applications running at scale.
-                      Explore additional capabilities available with the Pro plan:
+                      Explore additional capabilities available with the
+                      {{ upgradePlan.name }} plan:
                     </p>
                   </div>
                 </template>
                 <template #footer>
+                  <!-- `w-full` for the same reason: without it this row is only as
+                       wide as its own content and `justify-between` has nothing to
+                       distribute, so the note and its button sit centred as one clump
+                       instead of the note starting at the card's left edge and the
+                       action ending at its right. -->
                   <div
-                    class="flex min-w-0 flex-wrap items-center justify-between gap-(--spacing-md)"
+                    class="flex w-full min-w-0 flex-wrap items-center justify-between gap-(--spacing-md)"
                   >
                     <p class="text-body-xs text-(--text-default)">
                       Learn more about
@@ -716,11 +793,11 @@
                       >
                     </p>
                     <Button
-                      label="Upgrade to Pro"
+                      :label="`Upgrade to ${upgradePlan.name}`"
                       kind="primary"
                       size="medium"
                       :disabled="loading"
-                      @click="changePlan"
+                      @click="upgrade"
                     />
                   </div>
                 </template>
@@ -742,6 +819,10 @@
               <!-- The band's CONTROLS: narrowing on the left, the band's own action on the
                    right, above the card — the same row every list in the console opens with. -->
               <ControlsHeader>
+                <FilterButton
+                  v-model="filters"
+                  :fields="invoiceFilterFields"
+                />
                 <!-- Search drives the table's global filter from outside the card, so the field is
                      a plain InputText (`Table.Search` is context-aware and only works inside
                      `<Table>`). One horizontal band: it grows into the row's slack and compresses
@@ -760,14 +841,28 @@
                     />
                   </template>
                 </InputText>
-                <FilterButton
-                  v-model="filters"
-                  :fields="invoiceFilterFields"
-                />
-                <ColumnsButton
-                  v-model="columnVisibility"
-                  :columns="invoiceColumns"
-                />
+                <template #actions>
+                  <!-- THE RIGHT GROUP: the three controls that act on the LISTING rather
+                       than narrow it — fetch it again, take it away as a file, choose
+                       which columns it shows. These two used to render in the table's
+                       own `#toolbar`, as `Table.RefreshButton` / `Table.Export`; they
+                       came up to this row so the whole console shows one controls row
+                       instead of a second band of controls inside the card on this one
+                       page. Refresh here drives the page's real `loadBilling()`, which
+                       is what the toolbar's context-aware pair was signalling anyway. -->
+                  <RefreshButton
+                    :loading="loading"
+                    @refresh="loadBilling"
+                  />
+                  <ExportButton
+                    :table="invoicesTableRef"
+                    filename="invoices.csv"
+                  />
+                  <ColumnsButton
+                    v-model="columnVisibility"
+                    :columns="invoiceColumns"
+                  />
+                </template>
               </ControlsHeader>
 
               <FilterChips
@@ -777,7 +872,12 @@
 
               <CardBox :padded="false">
                 <template #content>
+                  <!-- NO `#toolbar`. Narrowing, the column picker, Refresh and Download
+                       CSV are all on the controls row above the card now, which is the
+                       shape every other list in the console has — so the card is a frame
+                       around data only, with no second row of controls inside it. -->
                   <Table
+                    ref="invoicesTableRef"
                     v-model:pagination="pagination"
                     v-model:globalFilter="search"
                     v-model:columnVisibility="columnVisibility"
@@ -790,23 +890,7 @@
                     :border="false"
                     :loading="loading"
                     export-filename="invoices.csv"
-                    @refresh="loadBilling"
                   >
-                    <!-- What is left of the toolbar once narrowing AND the column picker
-                         moved out of the card: the two controls that ACT on the table —
-                         reload it, export it — rather than change what you see of it.
-                         `Table.ColumnSelector` used to be the third; it went up to the
-                         controls row as the same `ColumnsButton` every other list in the
-                         console uses, because a reader who learned that glyph on eighteen
-                         lists should not have to find a different control here. Both are
-                         `medium`, so the row shares one height. -->
-                    <template #toolbar>
-                      <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
-                        <Table.RefreshButton />
-                        <Table.Export />
-                      </div>
-                    </template>
-
                     <!-- Two empties, two copies: a filter that matches nothing is
                          recoverable in one click; a history that has not started yet
                          is not the same problem. -->
@@ -1038,5 +1122,25 @@
         </template>
       </section>
     </div>
+
+    <!-- ── THE ENTRANCE'S TWO PLAN SURFACES, REUSED ──
+         Neither is a page: both are drawers, so the reader keeps their place in the
+         billing history behind them. `Change Plan` compares the three tiers and is
+         handed the question it is answering, the way every other caller hands it one
+         (../../../components/shell/TenancySwitcher.vue) — this one is asked from the
+         subscription card, so the question is about the contract itself. `Upgrade to
+         <tier>` skips the comparison and goes straight to the entrance's payment
+         step, because the button already named the tier. -->
+    <ChangePlanDrawer
+      v-model:open="changePlanOpen"
+      title="Change plan"
+      reason="Compare what each tier includes before moving the account onto it."
+      @upgraded="onPlanChanged"
+    />
+    <PlanUpgradeDrawer
+      v-model:open="upgradeOpen"
+      :plan-id="upgradePlan.id"
+      @confirm="onUpgradeConfirm"
+    />
   </div>
 </template>

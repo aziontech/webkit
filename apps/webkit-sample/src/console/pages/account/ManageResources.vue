@@ -27,6 +27,7 @@
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, ref } from 'vue'
 
+  import IdCell from '../../components/list/IdCell.vue'
   import TagListCell from '../../components/list/TagListCell.vue'
   import PageHeading from '../../components/page/PageHeading.vue'
   import AppLayout from '../../components/shell/AppLayout.vue'
@@ -43,6 +44,40 @@
   const HELP = 'https://www.azion.com/en/documentation/'
 
   const { accounts, currentAccountId } = useAccounts()
+
+  // This table is rendered in COMPOSITION mode (the rows animate their own height), so
+  // its chip columns cannot take the data-driven `minWidth` the other lists use — that
+  // one is MEASURED, and a measurement needs a column the table owns end to end. Here
+  // every row is its own flex container, so a content-sized column would resolve to a
+  // different width per row and drift the header away from the body. These say the
+  // width as an inline flex basis instead, hand-measured against the widest content
+  // each column ever shows. Inline so it beats the cell's own
+  // `data-[grow=1]:flex-[1_0_5rem]` without needing `!important`.
+  //
+  // They are LOCAL numbers, not the shared floors in ../../lib/behavior/table-columns.js:
+  // those are floors for the measurement to grow from, and a floor is by definition
+  // below what a column ends up at — borrowing one here clipped the `retail` / `prod`
+  // chips by 3px, with nothing to grow them back.
+  //
+  // Type is the widest: its chip carries a tier GLYPH as well as a label, so
+  // `Organization` needs 129px where a bare `Active` needs 82 and two labels need 109.
+  const tagColumnStyle = { flex: '0 0 104px' }
+  const tagColumnWideStyle = { flex: '0 0 136px' }
+  const labelsColumnStyle = { flex: '0 0 112px' }
+
+  // Name is the one column here with no natural width — it carries up to four levels of
+  // indentation, a chevron and a tier glyph before the name — and `grow` cannot say so.
+  // The weight is `1 | 2 | 3` (a `data-[grow=N]` variant, so the 5 this column used to
+  // ask for matched NOTHING and it silently became the NARROWEST column in the table at
+  // 60px), and it sets `flex-shrink: 0`, so with eight columns and the info panel open
+  // this table has less room than the bases add up to and something has to give.
+  //
+  // `4 1 0` makes Name the column that gives: it takes four shares of what the chip
+  // columns handed back, and yields first when there is nothing to take, rather than the
+  // table growing a horizontal scrollbar that pushes the row-actions menu off screen.
+  // Not more than four shares — past that the three remaining weighted columns drop
+  // below the width their own headers need and Last accessed ellipsizes.
+  const nameColumnStyle = { flex: '4 1 0' }
 
   // --- Tree state ---------------------------------------------------------
   // Open the path down to the current account so the tree reads on load.
@@ -285,18 +320,19 @@
                       />
                     </Table.HeadCell>
                     <!-- Widest column by a distance: it carries four levels of
-                         indentation, a chevron and a glyph BEFORE the name, so
-                         at depth 3 a `grow=3` column left a client account with
-                         no room to render its name at all. -->
+                         indentation, a chevron and a glyph BEFORE the name, so at
+                         depth 3 there has to be room left to render a workspace's
+                         name at all. It takes what the chip columns give back
+                         (`nameColumnStyle` above) rather than a `grow` weight. -->
                     <Table.HeadCell
                       principal
-                      :grow="5"
+                      :style="nameColumnStyle"
                       >Name</Table.HeadCell
                     >
                     <Table.HeadCell :grow="1">ID</Table.HeadCell>
-                    <Table.HeadCell :grow="1">Type</Table.HeadCell>
+                    <Table.HeadCell :style="tagColumnWideStyle">Type</Table.HeadCell>
                     <Table.HeadCell :grow="1">Last accessed</Table.HeadCell>
-                    <Table.HeadCell :grow="1">Status</Table.HeadCell>
+                    <Table.HeadCell :style="tagColumnStyle">Status</Table.HeadCell>
                     <Table.HeadCell
                       :grow="1"
                       align="end"
@@ -311,7 +347,7 @@
                         </Tooltip>
                       </span>
                     </Table.HeadCell>
-                    <Table.HeadCell :grow="1">Labels</Table.HeadCell>
+                    <Table.HeadCell :style="labelsColumnStyle">Labels</Table.HeadCell>
                     <Table.HeadCell kind="action" />
                   </Table.Row>
                 </Table.Header>
@@ -354,7 +390,7 @@
                              time the tree reached a client. -->
                         <Table.Cell
                           principal
-                          :grow="5"
+                          :style="nameColumnStyle"
                         >
                           <span
                             class="flex min-w-0 items-center gap-(--spacing-xxs)"
@@ -409,13 +445,26 @@
                           </span>
                         </Table.Cell>
 
+                        <!-- The id renders through the shared cell, so it can be
+                             copied here the way it can in every module list
+                             (../../components/list/IdCell.vue) — the id is the one
+                             thing on this row an operator pastes elsewhere. An
+                             Organization has no id of its own, and the em dash is
+                             this column's "not applicable" rather than a blank. -->
                         <Table.Cell :grow="1">
-                          <span class="text-body-sm text-(--text-muted)">
-                            {{ row.type === 'organization' ? '—' : row.id }}
-                          </span>
+                          <span
+                            v-if="row.type === 'organization'"
+                            class="text-body-sm text-(--text-muted)"
+                            >—</span
+                          >
+                          <IdCell
+                            v-else
+                            :value="row.id"
+                            :resource="row.typeLabel.toLowerCase()"
+                          />
                         </Table.Cell>
 
-                        <Table.Cell :grow="1">
+                        <Table.Cell :style="tagColumnWideStyle">
                           <Tag
                             :label="row.typeLabel"
                             :icon="accountTypeOf(row.type).icon"
@@ -430,7 +479,7 @@
                           </span>
                         </Table.Cell>
 
-                        <Table.Cell :grow="1">
+                        <Table.Cell :style="tagColumnStyle">
                           <Tag
                             v-if="row.status"
                             :label="statusLabel(row.status)"
@@ -460,7 +509,7 @@
                           >
                         </Table.Cell>
 
-                        <Table.Cell :grow="1">
+                        <Table.Cell :style="labelsColumnStyle">
                           <!-- ONE LINE, always: labels that outgrow the column go behind
                                "+N" instead of wrapping and making this row taller than
                                its neighbours (../../components/list/TagListCell.vue).

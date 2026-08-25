@@ -41,6 +41,7 @@
   import PageTabs from '../../components/page/PageTabs.vue'
   import AppLayout from '../../components/shell/AppLayout.vue'
   import SqlTemplatesDrawer from '../../components/sql/SqlTemplatesDrawer.vue'
+  import { TAG_COLUMN } from '../../lib/behavior/table-columns'
   import { isIntegerType } from '../../lib/format/postgres-types'
   import AddColumnDrawer from './AddColumnDrawer.vue'
   import AddRowDrawer from './AddRowDrawer.vue'
@@ -88,7 +89,7 @@
   // The selected table's schema, rendered as a data-driven Table.
   const schemaColumns = [
     { accessorKey: 'name', header: 'Column', principal: true, hideable: false },
-    { accessorKey: 'type', header: 'Type' },
+    { accessorKey: 'type', header: 'Type', minWidth: TAG_COLUMN },
     { accessorKey: 'constraints', header: 'Constraints', grow: 2 }
   ]
   const schemaRows = computed(() => {

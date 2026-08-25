@@ -17,10 +17,18 @@
 // What stays with the page: the field catalog (only the page knows how a row
 // answers for each field) and the columns. See list/FilterButton.vue for the control that
 // drives `filters`, and lib/filter-bar.js for the model underneath it.
-import { computed, ref, toValue, watch } from 'vue'
+import { computed, onScopeDispose, ref, toValue, watch } from 'vue'
 
 import { useTenancyReload } from '../state/tenancy-reload'
 import { applyFilters } from './filter-bar'
+
+// How long a manual refresh holds the loading flag open. The sample's rows are already
+// in memory, so there is nothing to wait for — what the window buys is that the control
+// and the table AGREE a fetch happened: the Refresh button spins and the rows become
+// skeletons for one beat. Short enough that nobody waits for it, long enough to read as
+// a fetch rather than a flicker. A real data layer replaces the timer with the request
+// and every state below is already wired to it.
+const REFRESH_MS = 700
 
 /**
  * Filter + search + pagination for one module list.
@@ -40,7 +48,8 @@ import { applyFilters } from './filter-bar'
  *   search: import('vue').Ref<string>,
  *   pagination: import('vue').Ref<{ pageIndex: number, pageSize: number }>,
  *   visibleRows: import('vue').ComputedRef<Array<object>>,
- *   loading: import('vue').ComputedRef<boolean>
+ *   loading: import('vue').ComputedRef<boolean>,
+ *   refresh: () => void
  * }}
  */
 export function useListFilters(fields, rows, { pageSize = 8 } = {}) {
@@ -65,10 +74,46 @@ export function useListFilters(fields, rows, { pageSize = 8 } = {}) {
 
   // The rewind. Watching `filters` (a ref holding a replaced object — the bar never
   // mutates in place) and the reload window covers both ways the set narrows under
-  // a page offset that no longer has rows.
+  // a page offset that no longer has rows. A manual refresh is deliberately NOT in
+  // here: it re-reads the same rows, so the page the reader was on is still theirs.
   watch([filters, tenancyReloading], () => {
     pagination.value = { ...pagination.value, pageIndex: 0 }
   })
 
-  return { filters, search, pagination, visibleRows, loading: tenancyReloading }
+  const { loading, refresh } = useListRefresh()
+
+  return { filters, search, pagination, visibleRows, loading, refresh }
+}
+
+/**
+ * The loading flag a list's table binds, and the refresh that drives it — for a list
+ * that has no filter catalog and so does not call `useListFilters` (a panel whose only
+ * narrowing is its search field).
+ *
+ * ONE FLAG, TWO CAUSES. A scope switch (../state/tenancy-reload.js) and the controls
+ * row's Refresh button both mean "these rows are being fetched", and the table draws
+ * the same skeletons for either — so they are folded here rather than left for each
+ * page to combine. Nothing downstream has to know which one is running.
+ *
+ * @returns {{ loading: import('vue').ComputedRef<boolean>, refresh: () => void }}
+ */
+export function useListRefresh() {
+  const { tenancyReloading } = useTenancyReload()
+
+  // What the controls row's Refresh button does (../../components/list/RefreshButton.vue).
+  const refreshing = ref(false)
+  let timer
+  const refresh = () => {
+    // No-op while a fetch is already in flight — the same guard webkit's Table.reload()
+    // applies, so a second click cannot stack a refresh onto one in progress.
+    if (refreshing.value) return
+    refreshing.value = true
+    clearTimeout(timer)
+    timer = setTimeout(() => {
+      refreshing.value = false
+    }, REFRESH_MS)
+  }
+  onScopeDispose(() => clearTimeout(timer))
+
+  return { loading: computed(() => tenancyReloading.value || refreshing.value), refresh }
 }

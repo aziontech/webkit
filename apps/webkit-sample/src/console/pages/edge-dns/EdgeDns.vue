@@ -44,15 +44,19 @@
   import AuthorCell from '../../components/list/AuthorCell.vue'
   import ColumnsButton from '../../components/list/ColumnsButton.vue'
   import DeleteDialog from '../../components/list/DeleteDialog.vue'
+  import ExportButton from '../../components/list/ExportButton.vue'
   import FilterButton from '../../components/list/FilterButton.vue'
   import FilterChips from '../../components/list/FilterChips.vue'
+  import IdCell from '../../components/list/IdCell.vue'
   import LastModifiedCell from '../../components/list/LastModifiedCell.vue'
+  import RefreshButton from '../../components/list/RefreshButton.vue'
   import ControlsHeader from '../../components/page/ControlsHeader.vue'
   import HeadingAction from '../../components/page/HeadingAction.vue'
   import PageHeading from '../../components/page/PageHeading.vue'
   import AppLayout from '../../components/shell/AppLayout.vue'
   import { DATE_PRESETS, formatDateRange, matchDate } from '../../lib/behavior/filter-bar'
   import { useListFilters } from '../../lib/behavior/list-state'
+  import { FIT_COLUMN, TAG_COLUMN } from '../../lib/behavior/table-columns'
   import { NAMESERVERS } from '../../lib/data/edge-dns'
   import { productFirstUse } from '../../lib/data/product-empty-states'
   import { useSampleMode } from '../../lib/state/sample-mode'
@@ -115,11 +119,16 @@
 
   const columns = [
     { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, hideable: false },
-    { accessorKey: 'id', header: 'ID', enableSorting: true },
+    { accessorKey: 'id', header: 'ID', enableSorting: true, minWidth: FIT_COLUMN },
     { accessorKey: 'domain', header: 'Domain', enableSorting: true, grow: 3 },
-    { accessorKey: 'status', header: 'Status', enableSorting: true },
-    { accessorKey: 'author', header: 'Last Editor', enableSorting: true, grow: 2 },
-    { accessorKey: 'lastModified', header: 'Last Modified', enableSorting: true, grow: 2 },
+    { accessorKey: 'status', header: 'Status', enableSorting: true, minWidth: TAG_COLUMN },
+    { accessorKey: 'author', header: 'Last Editor', enableSorting: true, minWidth: FIT_COLUMN },
+    {
+      accessorKey: 'lastModified',
+      header: 'Last Modified',
+      enableSorting: true,
+      minWidth: FIT_COLUMN
+    },
     { id: 'actions', kind: 'action', hideable: false }
   ]
 
@@ -169,8 +178,14 @@
     search,
     pagination,
     visibleRows: filteredZones,
-    loading: tenancyReloading
+    loading,
+    refresh
   } = useListFilters(filterFields, scopedZones)
+
+  // The table the controls row drives. Download CSV calls the DS's own `exportCsv()`
+  // through it (../../components/list/ExportButton.vue), so the file honours the
+  // visible columns and the filtered rows instead of re-serialising them here.
+  const tableRef = ref(null)
 
   // Which columns are switched off, driven by the Columns button beside the filter
   // (../../components/list/ColumnsButton.vue). Only a HIDDEN column is ever recorded, so this
@@ -321,6 +336,10 @@
                Rendered only when there are rows: a search field with nothing to search is
                noise. -->
           <ControlsHeader v-if="scopedZones.length">
+            <FilterButton
+              v-model="filters"
+              :fields="filterFields"
+            />
             <InputText
               v-model="search"
               size="medium"
@@ -335,14 +354,24 @@
                 />
               </template>
             </InputText>
-            <FilterButton
-              v-model="filters"
-              :fields="filterFields"
-            />
-            <ColumnsButton
-              v-model="columnVisibility"
-              :columns="columns"
-            />
+            <template #actions>
+              <!-- THE RIGHT GROUP: the three controls that act on the LISTING rather
+                   than narrow it — fetch it again, take it away as a file, choose which
+                   columns it shows. All glyphs, all `medium`, so the row shares one
+                   32px height with the field and the Filter button opposite. -->
+              <RefreshButton
+                :loading="loading"
+                @refresh="refresh"
+              />
+              <ExportButton
+                :table="tableRef"
+                filename="dns-zones.csv"
+              />
+              <ColumnsButton
+                v-model="columnVisibility"
+                :columns="columns"
+              />
+            </template>
           </ControlsHeader>
 
           <FilterChips
@@ -406,11 +435,12 @@
             <CardBox :padded="false">
               <template #content>
                 <Table
+                  ref="tableRef"
                   v-model:pagination="pagination"
                   v-model:globalFilter="search"
                   v-model:columnVisibility="columnVisibility"
                   :data="filteredZones"
-                  :loading="tenancyReloading"
+                  :loading="loading"
                   :columns="columns"
                   row-key="id"
                   enable-sorting
@@ -430,19 +460,10 @@
                   </template>
 
                   <template #cell-id="{ value }">
-                    <div class="flex w-full min-w-0 items-center gap-(--spacing-xs)">
-                      <!-- An id is data, not code: it keeps the cell's own type and
-                           --text-default, so every column of a row reads at one weight
-                           (Applications.vue renders its ID column the same way). -->
-                      <span class="min-w-0 truncate">{{ value }}</span>
-                      <CopyButton
-                        kind="outlined"
-                        :value="value"
-                        aria-label="Copy zone ID"
-                        class="ml-auto shrink-0"
-                        @click.stop
-                      />
-                    </div>
+                    <IdCell
+                      :value="value"
+                      resource="zone"
+                    />
                   </template>
 
                   <!-- Domain cell: link + external arrow, copy button pinned to the

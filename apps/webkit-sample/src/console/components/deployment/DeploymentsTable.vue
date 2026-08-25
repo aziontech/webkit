@@ -41,6 +41,7 @@
   import { computed, ref, watch } from 'vue'
 
   import { applyFilters } from '../../lib/behavior/filter-bar'
+  import { useListRefresh } from '../../lib/behavior/list-state'
   import { DEPLOYMENT_COLUMNS } from '../../lib/data/deployment-columns'
   import {
     environmentSeverity,
@@ -48,10 +49,10 @@
     resourceMeta,
     statusMeta
   } from '../../lib/data/deployments'
-  import { useTenancyReload } from '../../lib/state/tenancy-reload'
   import AuthorCell from '../list/AuthorCell.vue'
   import FilterButton from '../list/FilterButton.vue'
   import FilterChips from '../list/FilterChips.vue'
+  import IdCell from '../list/IdCell.vue'
   import LastModifiedCell from '../list/LastModifiedCell.vue'
 
   const props = defineProps({
@@ -69,7 +70,14 @@
     /** Carried on the resource link so the detail page keeps the session's email. */
     email: { type: String, default: '' },
     /** Render the controls in the table's own toolbar. `false` when the page hoists them. */
-    controls: { type: Boolean, default: true }
+    controls: { type: Boolean, default: true },
+    /**
+     * Whether the rows are being fetched — skeletons instead of data. It is OR'd with
+     * this table's own windows (a scope switch, and the Refresh button in the toolbar
+     * below), so a page that hoists the controls passes its own flag here and the two
+     * placements behave identically.
+     */
+    loading: { type: Boolean, default: false }
   })
 
   const emit = defineEmits(['row-click', 'action'])
@@ -78,13 +86,21 @@
   // account or workspace reloads this table wherever it renders — the module list
   // or a workload's history. The flag is read here rather than passed in as a prop:
   // every surface that shows deployments has the same answer, and a caller could
-  // not opt out truthfully (src/lib/tenancy-reload.js).
-  const { tenancyReloading } = useTenancyReload()
+  // not opt out truthfully (src/lib/tenancy-reload.js). `useListRefresh` folds that
+  // window together with the Refresh button's, so one flag covers both causes
+  // (../../lib/behavior/list-state.js), and the caller's `loading` joins them.
+  const { loading: listLoading, refresh } = useListRefresh()
+  const loading = computed(() => props.loading || listLoading.value)
+
+  // The inner DS table. Download CSV in the toolbar below reaches it through the
+  // table context; a page that HOISTS its controls reaches it through the two methods
+  // exposed at the bottom of this block, since it holds a ref to this component and
+  // not to the table inside it.
+  const tableRef = ref(null)
 
   // The column model is shared with the pages above (../../lib/data/deployment-columns.js):
   // they render the Columns button on their own controls row, outside this table.
   const columns = DEPLOYMENT_COLUMNS
-
 
   // TWO models, not five. Both are `defineModel`, so an internal level that binds
   // neither gets local state for free while a first-level page that hoists the
@@ -112,10 +128,20 @@
   watch(visibleDeployments, () => {
     pagination.value = { ...pagination.value, pageIndex: 0 }
   })
+
+  // For a FIRST-LEVEL page: it hoists the controls, so its Refresh and Download CSV
+  // buttons sit outside this component and need a handle on the table inside it.
+  // Forwarded rather than re-implemented — the CSV is still the DS's, over the visible
+  // columns and the filtered rows.
+  defineExpose({
+    exportCsv: (options) => tableRef.value?.exportCsv(options),
+    refresh
+  })
 </script>
 
 <template>
   <Table
+    ref="tableRef"
     v-model:pagination="pagination"
     v-model:globalFilter="search"
     v-model:columnVisibility="columnVisibility"
@@ -126,19 +152,30 @@
     paginated
     :page-size="pageSize"
     :border="false"
-    :loading="tenancyReloading"
+    :loading="loading"
+    export-filename="deployments.csv"
     @row-click="(event, row) => emit('row-click', event, row)"
+    @refresh="refresh"
   >
     <!-- The same controls the page can hoist, rendered here for an internal level, in
-         the same shape the page pattern uses: the search and the Filter button on one
-         row, and the applied chips on a row under them (../list/FilterChips.vue, which
-         renders nothing until something is applied). -->
+         the same shape the page pattern uses: the Filter button then the search on one
+         row, the two listing actions at its right end, and the applied chips on a row
+         under them (../list/FilterChips.vue, which renders nothing until something is
+         applied).
+         Refresh and Download CSV are the DS's OWN sub-components here, not the
+         consumer-side pair the pages use: inside the table they can `inject` its
+         context, which is exactly what those two do. The pages have to pass the table
+         in because their controls row lives outside the card. -->
     <template
       v-if="controls"
       #toolbar
     >
       <div class="flex w-full flex-col gap-(--layout-group-gap)">
         <div class="flex w-full items-center gap-(--layout-group-gap)">
+          <FilterButton
+            v-model="filters"
+            :fields="fields"
+          />
           <InputText
             v-model="search"
             size="medium"
@@ -153,10 +190,12 @@
               />
             </template>
           </InputText>
-          <FilterButton
-            v-model="filters"
-            :fields="fields"
-          />
+          <!-- The two controls that act on the LISTING rather than narrow it. Both
+               `medium`, so the row keeps one 32px height. -->
+          <div class="flex shrink-0 items-center gap-(--spacing-xs)">
+            <Table.RefreshButton />
+            <Table.Export />
+          </div>
         </div>
         <FilterChips
           v-model="filters"
@@ -178,6 +217,13 @@
           icon="pi pi-arrow-circle-up"
         />
       </div>
+    </template>
+
+    <template #cell-id="{ value }">
+      <IdCell
+        :value="value"
+        resource="deployment"
+      />
     </template>
 
     <template #cell-status="{ row }">

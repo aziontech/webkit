@@ -19,6 +19,7 @@
 import { withinRange } from '@shared/lib/dates'
 
 import { DATE_CUSTOM } from '../behavior/filter-bar'
+import { FIT_COLUMN, TAG_COLUMN } from '../behavior/table-columns'
 
 /** Minutes ago, for a log whose rows are minutes apart rather than days. */
 const minutesAgo = (minutes) => new Date(Date.now() - minutes * 60 * 1000)
@@ -243,26 +244,41 @@ export const EVENT_FIELD_CATEGORIES = [
  * Every field an event can carry, in the order the panel lists them.
  *
  * `category` is the doc group above (the spine carries none — it is not optional, so it
- * is never inside a collapsed section). `grow` is the table's flex weight (1–3, the only
- * values the Table's column model takes), `align: 'end'` marks a magnitude — a number
+ * is never inside a collapsed section). `align: 'end'` marks a magnitude — a number
  * column reads right-aligned and in tabular figures — and `mono` marks a value that IS a
  * token rather than prose (a host, a path, an address, an id), so it renders in the code
  * face on every surface.
+ *
+ * SIZING is one of two things, never both. A BOUNDED field takes `minWidth` and the table
+ * fits the column to what it holds — a timestamp, a level chip, a method, a status code, a
+ * duration, a country, a byte count. An OPEN-ENDED one takes a `grow` weight (1–3, the
+ * only values the Table's column model accepts) and shares the leftover with its
+ * neighbours, truncating when there is nothing left: the message, a host, a path, a user
+ * agent. Nineteen fields can be on screen at once here, so a fitted field that then grows
+ * to its longest row would cost the message column the room it exists for.
  */
 export const EVENT_FIELDS = [
-  { id: 'time', label: 'Time', core: true, grow: 2, mono: true },
-  { id: 'level', label: 'Level', core: true },
-  { id: 'sourceLabel', label: 'Source', core: true, grow: 2 },
+  { id: 'time', label: 'Time', core: true, minWidth: FIT_COLUMN, mono: true },
+  { id: 'level', label: 'Level', core: true, minWidth: TAG_COLUMN },
+  { id: 'sourceLabel', label: 'Source', core: true, minWidth: FIT_COLUMN },
   { id: 'message', label: 'Event', core: true, principal: true, grow: 3 },
   { id: 'host', label: 'Host', category: 'request', grow: 2, mono: true },
-  { id: 'requestMethod', label: 'Method', category: 'request', mono: true },
+  { id: 'requestMethod', label: 'Method', category: 'request', minWidth: FIT_COLUMN, mono: true },
   { id: 'requestUri', label: 'Path', category: 'request', grow: 2, mono: true },
-  { id: 'status', label: 'Status', category: 'response', align: 'end', mono: true },
+  {
+    id: 'status',
+    label: 'Status',
+    category: 'response',
+    align: 'end',
+    minWidth: FIT_COLUMN,
+    mono: true
+  },
   {
     id: 'requestTimeMs',
     label: 'Request Time',
     category: 'performance',
     align: 'end',
+    minWidth: FIT_COLUMN,
     format: (v) => `${v} ms`
   },
   {
@@ -270,22 +286,48 @@ export const EVENT_FIELDS = [
     label: 'Bytes Sent',
     category: 'response',
     align: 'end',
+    minWidth: FIT_COLUMN,
     format: (v) => v.toLocaleString('en-US')
   },
-  { id: 'cacheStatus', label: 'Cache Status', category: 'cache', mono: true },
-  { id: 'country', label: 'Country', category: 'geolocation' },
-  { id: 'remoteAddress', label: 'Remote Address', category: 'client', grow: 2, mono: true },
-  { id: 'ruleName', label: 'Rule', category: 'security', grow: 2 },
-  { id: 'functionName', label: 'Function', category: 'functions', mono: true },
+  { id: 'cacheStatus', label: 'Cache Status', category: 'cache', minWidth: FIT_COLUMN, mono: true },
+  { id: 'country', label: 'Country', category: 'geolocation', minWidth: FIT_COLUMN },
+  {
+    id: 'remoteAddress',
+    label: 'Remote Address',
+    category: 'client',
+    minWidth: FIT_COLUMN,
+    mono: true
+  },
+  { id: 'ruleName', label: 'Rule', category: 'security', minWidth: FIT_COLUMN },
+  {
+    id: 'functionName',
+    label: 'Function',
+    category: 'functions',
+    minWidth: FIT_COLUMN,
+    mono: true
+  },
   {
     id: 'functionDurationMs',
     label: 'Function Duration',
     category: 'functions',
     align: 'end',
+    minWidth: FIT_COLUMN,
     format: (v) => `${v} ms`
   },
-  { id: 'requestId', label: 'Request ID', category: 'identifiers', grow: 2, mono: true },
-  { id: 'workloadId', label: 'Workload ID', category: 'identifiers', mono: true },
+  {
+    id: 'requestId',
+    label: 'Request ID',
+    category: 'identifiers',
+    minWidth: FIT_COLUMN,
+    mono: true
+  },
+  {
+    id: 'workloadId',
+    label: 'Workload ID',
+    category: 'identifiers',
+    minWidth: FIT_COLUMN,
+    mono: true
+  },
   { id: 'userAgent', label: 'User Agent', category: 'client', grow: 3, mono: true }
 ]
 

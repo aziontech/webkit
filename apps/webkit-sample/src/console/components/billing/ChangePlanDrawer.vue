@@ -39,7 +39,7 @@
   import { toast } from '@aziontech/webkit/toast'
   import { computed, ref, watch } from 'vue'
 
-  import { azionPlans, chargeFor } from '../../lib/data/plans'
+  import { azionPlans, cardFor } from '../../lib/data/plans'
   import { useSamplePreset } from '../../lib/state/sample-preset'
   import PlanUpgradeDrawer from './PlanUpgradeDrawer.vue'
 
@@ -72,6 +72,7 @@
   const billingOptions = computed(
     () => azionPlans.find((entry) => entry.charge)?.charge.periods ?? []
   )
+
   const period = ref('yearly')
 
   const currentIndex = computed(() =>
@@ -81,11 +82,14 @@
   // What each card's button says, keyed by what pressing it does. A lookup rather
   // than nested ternaries in the template: the four cases are the four outcomes, and
   // they read as a list.
+  // Console casing, not the pricing page's uppercase mono ("COMECE COM PRO"). The
+  // page's actions are a marketing voice; a button in the console reads the way every
+  // other button in the console reads (see the `webkit-microcopy` skill).
   const ACTION_LABELS = {
     current: () => 'Current plan',
-    contact: () => 'Contact Sales',
-    upgrade: (name) => `Upgrade to ${name}`,
-    downgrade: (name) => `Downgrade to ${name}`
+    contact: () => 'Contact sales',
+    upgrade: (name) => `Continue with ${name}`,
+    downgrade: (name) => `Move to ${name}`
   }
 
   // What each card renders. `value` is the tier's headline price as ../../plans.js
@@ -95,13 +99,13 @@
   // the charge table says.
   const cards = computed(() =>
     azionPlans.map((entry, index) => {
-      const charge = chargeFor(entry.id, period.value)
       const isCurrent = entry.id === currentPlanId.value
       const isUp = index > currentIndex.value
       // The figure DECOMPOSED, so CardPricing's Currency typesets it — symbol,
       // amount and period as three parts (../../plans.js § card). Handing it the
       // whole "From $20/mo" string with the prefix off would render money as prose.
-      const card = entry.card ?? { value: entry.price, showPrefix: false, showSuffix: false }
+      // Keyed by the period in force, so the toggle moves the figure and its caveat.
+      const card = cardFor(entry.id, period.value)
       return {
         id: entry.id,
         name: entry.name,
@@ -111,8 +115,21 @@
         suffix: card.suffix ?? '',
         showPrefix: card.showPrefix !== false,
         showSuffix: card.showSuffix !== false && Boolean(card.suffix),
-        details: charge ? `${charge.total.value} ${charge.total.suffix}` : 'No card required.',
-        features: entry.upgrade?.features?.slice(0, 5) ?? [],
+        // The caveat qualifies what the figure means on the term in force ("Billed
+        // annually, save 20%") — the same line the pricing page carries, moving with
+        // the same toggle. It is the card's ONE prose region now (the description band
+        // above the price is gone), so a tier with no caveat falls back to its own
+        // positioning line rather than showing an empty band: Hobby is free, and
+        // "billed annually" would be a lie. The band is reserved either way, so the
+        // row still aligns.
+        details: card.details || entry.description || '',
+        // The five claims the pricing page makes for the tier, glyph and all. Read from
+        // `comparison` rather than the upgrade checklist: the checklist is metered
+        // allowances ("100 Workloads, then $0.10 each"), which answers "what will this
+        // cost me" — the right question one screen later, in the upgrade drawer. Here
+        // the question is "which tier", so the card lists what the tier is FOR.
+        featuresTitle: entry.comparison?.featuresTitle ?? '',
+        features: entry.comparison?.features ?? [],
         isCurrent,
         // Three answers, in order of what the tier can be entered BY:
         //   contact    · a sales-led tier (../../plans.js § contactSales) — negotiated
@@ -200,7 +217,7 @@
              ScrollArea around its own padded div, so a class passed to it formats
              the scroller instead of this content. -->
         <PanelContent>
-          <div class="flex flex-col items-center gap-(--spacing-lg)">
+          <div class="flex flex-col items-center gap-(--spacing-md)">
             <!-- Only when the caller has something to say. The title already states
                  why the drawer opened, and a paragraph restating it in longer words
                  is the kind of copy a reader learns to skip. -->
@@ -220,12 +237,21 @@
             <div
               class="flex w-full min-w-0 flex-col items-stretch justify-center gap-(--spacing-md) lg:flex-row"
             >
+              <!-- `aligned` is what puts the three cards on one grid: `bottom` sizes a
+                   card by its own content, so without it each region inherits whatever
+                   height its own copy wrapped to and the row staggers — Pro's caveat
+                   runs one line, Enterprise's two, Hobby has none, and the feature
+                   lists and buttons end up on three different lines. The prop reserves
+                   each prose band inside the component, which is the only place that
+                   can be done: the regions are CardPricing's, and the arbitrary-variant
+                   selector this used to carry reached past the component's API into its
+                   internal `data-testid`s to fake it. -->
               <CardPricing
                 v-for="card in cards"
                 :key="card.id"
+                aligned
                 class="w-full! min-w-0 max-w-none flex-1"
                 :plan-title="card.name"
-                :description="card.description"
                 :value="card.value"
                 :prefix="card.prefix"
                 :suffix="card.suffix"
@@ -234,35 +260,54 @@
                 :pricing-details="card.details"
                 :show-tag="card.isCurrent"
                 tag-label="Current plan"
-                slot-position="middle"
+                slot-position="bottom"
                 kind="contained"
                 action-label=""
                 :data-testid="`change-plan-drawer__plan-${card.id}`"
               >
-                <!-- What the tier includes, from the plan's own upgrade checklist —
-                     the first five, because the card is a comparison and the drawer
-                     behind the Upgrade button is where the full list lives. -->
-                <ul class="m-0 flex w-full list-none flex-col gap-(--spacing-xs) p-0">
-                  <li
-                    v-for="feature in card.features"
-                    :key="feature.title"
-                    class="flex items-center gap-(--spacing-xs)"
+                <!-- What the tier is FOR, as the pricing page states it: a lead-in
+                     that frames the five claims under it, and one product glyph per
+                     claim. The glyph is per-feature rather than a repeated checkmark —
+                     five identical ticks carry no information beyond "included", while
+                     the product mark says WHICH capability the line is about, which is
+                     the thing a reader comparing tiers is scanning for.
+                     Same copy, same glyphs, same treatment as @site/components/AzionPricing.vue:
+                     one comparison, two surfaces. Only `slotPosition` differs — the
+                     drawer is a compact `bottom` card, the marketing band a full
+                     `middle` one. -->
+                <div class="flex w-full flex-col gap-(--spacing-md)">
+                  <p
+                    v-if="card.featuresTitle"
+                    class="m-0 text-body-sm text-(--text-muted)"
                   >
-                    <i
-                      class="pi pi-check shrink-0 text-body-xs text-(--text-muted)"
-                      aria-hidden="true"
-                    />
-                    <span class="text-label-sm text-(--text-default)">
-                      {{ feature.title }}
-                    </span>
-                  </li>
-                  <li
-                    v-if="!card.features.length"
-                    class="text-label-sm text-(--text-muted)"
-                  >
-                    Everything you need to put a first project on the edge.
-                  </li>
-                </ul>
+                    {{ card.featuresTitle }}
+                  </p>
+                  <ul class="m-0 flex w-full list-none flex-col gap-(--spacing-sm) p-0">
+                    <li
+                      v-for="feature in card.features"
+                      :key="feature.label"
+                      class="flex items-start gap-(--spacing-sm)"
+                    >
+                      <!-- The whole icon-font class comes from the data ('pi pi-globe',
+                           'ai ai-workloads'): the `pi` / `ai` prefix is half of it, and
+                           binding only the name renders an empty box.
+                           `--primary` like the pricing page: the glyph is the one accent
+                           in the card and it is what makes the five lines scan as a list
+                           of capabilities rather than as a paragraph. It is `aria-hidden`
+                           with the label beside it, so the colour carries no meaning on
+                           its own. `items-start` + the half-line nudge sits it on the
+                           label's first line, which is what keeps a wrapping label from
+                           dragging its glyph to the middle. -->
+                      <i
+                        :class="[feature.icon, 'mt-0.5 shrink-0 text-body-sm text-(--primary)']"
+                        aria-hidden="true"
+                      />
+                      <span class="text-body-sm text-(--text-default)">
+                        {{ feature.label }}
+                      </span>
+                    </li>
+                  </ul>
+                </div>
 
                 <!-- One filled button in the drawer at most — the upgrade that can
                      actually be completed here. Contact Sales and Downgrade are

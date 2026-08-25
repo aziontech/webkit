@@ -5,6 +5,12 @@
 //   POST /v4/workspace/workloads/{workload_id}/deployments
 //   { name, active, current, strategy: { type, attributes: { application, firewall, custom_page } } }
 //
+// Beside the bindings a Deployment setting carries its own IDENTITY (a name and an
+// internal description) and its ROUTING POLICY (./BINDING_POLICIES,
+// ./VERSION_POLICIES) — how the versions it publishes bind their resources and how
+// many of them may take traffic. Those are the fields the create drawer asks for and
+// the Settings tab lists.
+//
 // `strategy` is the REUSABLE half of that body — which application, firewall and
 // custom page the deployment binds. That half is what this module owns and what
 // the Deployments module's Settings tab lists: a strategy is authored once and
@@ -61,6 +67,58 @@ export const CUSTOM_PAGE_OPTIONS = [
 /** How an unbound (nullable) attribute reads on screen. */
 export const bindingLabel = (value) => value || 'Not bound'
 
+// ROUTING AND POLICY — the two decisions that are not bindings.
+//
+// A binding says WHICH resource a deployment serves; a policy says HOW its versions
+// reach it. Both are answered once, at create time, and both carry a default, so the
+// reader who has no opinion still ships a valid deployment:
+//
+//   binding policy  does a version lock the resource IDs it shipped with, or may they
+//                   change under it
+//   version policy  how many versions may take traffic at once. Fixed once created,
+//                   because changing it retroactively would re-route live traffic
+//
+// They are a declared vocabulary (option + label + the sentence that explains it) for
+// the same reason STRATEGY_TYPES is: the drawer that asks, the table that lists and the
+// summary that reads it back all take their words from here instead of restating them.
+export const BINDING_POLICIES = [
+  {
+    value: 'strict',
+    label: 'Strict',
+    description: 'Lock resource IDs to each version. Promoted versions stay strict.'
+  },
+  {
+    value: 'flexible',
+    label: 'Flexible',
+    description: 'Allow resource IDs to change across versions.'
+  }
+]
+
+export const VERSION_POLICIES = [
+  {
+    value: 'single',
+    label: 'Single version',
+    description: 'Keep one active version routing all traffic.'
+  },
+  {
+    value: 'multiple',
+    label: 'Multiple versions',
+    description: 'Let several versions take traffic at the same time.'
+  }
+]
+
+/** The default each policy carries when the reader expresses no preference. */
+export const DEFAULT_BINDING_POLICY = 'strict'
+export const DEFAULT_VERSION_POLICY = 'single'
+
+/** The label for a binding policy, falling back to the raw value. */
+export const bindingPolicyLabel = (value) =>
+  BINDING_POLICIES.find((policy) => policy.value === value)?.label ?? value
+
+/** The label for a version policy, falling back to the raw value. */
+export const versionPolicyLabel = (value) =>
+  VERSION_POLICIES.find((policy) => policy.value === value)?.label ?? value
+
 /** Status options for the Settings tab's Status selector. */
 export const strategyStatusOptions = [
   { value: 'Active', label: 'Active' },
@@ -77,6 +135,11 @@ const AZION_DEFAULT = {
   application: '',
   firewall: '',
   customPage: '',
+  // The platform's own deployment is the conservative pair: versions keep the
+  // resource IDs they shipped with, and one of them serves.
+  bindingPolicy: DEFAULT_BINDING_POLICY,
+  versionPolicy: DEFAULT_VERSION_POLICY,
+  description: '',
   status: 'Active',
   // Platform-owned: no edit, no delete, never projected away by the tenancy scope.
   system: true,
@@ -87,23 +150,57 @@ const AZION_DEFAULT = {
 }
 
 // The workspace's own strategies. Seeded with the configurations the sample has
-// always listed, re-cut onto the API's shape: a `type` plus the two nullable
-// bindings, instead of the invented "Single Version / Versioned URL" pair (the
-// platform has one strategy type, and versioning is a property of the deployment,
-// not of its strategy).
+// always listed, re-cut onto the API's shape: a `type`, the two nullable bindings,
+// and the routing policies the console's own create form asks for. The policies vary
+// down the fixture on purpose — a column that reads the same on every row (as `type`
+// does) tells the reader nothing about the rows.
 const SEEDED = [
-  { id: 's1', name: 'magalu-storefront', firewall: 'waf-strict', customPage: '', days: 3 },
-  { id: 's2', name: 'azion-storefront', firewall: 'Default Firewall', customPage: '', days: 11 },
+  {
+    id: 's1',
+    name: 'magalu-storefront',
+    description: 'Storefront traffic for production.',
+    firewall: 'waf-strict',
+    customPage: '',
+    versionPolicy: 'multiple',
+    days: 3
+  },
+  {
+    id: 's2',
+    name: 'azion-storefront',
+    description: 'Azion-run storefront, production traffic.',
+    firewall: 'Default Firewall',
+    customPage: '',
+    days: 11
+  },
   {
     id: 's3',
     name: 'azion-storefront-legacy',
     firewall: '',
     customPage: 'branded-errors',
+    bindingPolicy: 'flexible',
     days: 29,
     status: 'Inactive'
   },
-  { id: 's4', name: 'docs-preview', firewall: '', customPage: '', days: 46, status: 'Inactive' },
-  { id: 's5', name: 'analytics-canary', firewall: 'edge-firewall', customPage: '', days: 58 },
+  {
+    id: 's4',
+    name: 'docs-preview',
+    description: 'Preview builds of the documentation site.',
+    firewall: '',
+    customPage: '',
+    bindingPolicy: 'flexible',
+    versionPolicy: 'multiple',
+    days: 46,
+    status: 'Inactive'
+  },
+  {
+    id: 's5',
+    name: 'analytics-canary',
+    description: 'Canary slice of the analytics application.',
+    firewall: 'edge-firewall',
+    customPage: '',
+    versionPolicy: 'multiple',
+    days: 58
+  },
   {
     id: 's6',
     name: 'auth-service-prod',
@@ -111,7 +208,14 @@ const SEEDED = [
     customPage: 'maintenance-page',
     days: 73
   },
-  { id: 's7', name: 'marketing-site-prod', firewall: 'Default Firewall', customPage: '', days: 88 },
+  {
+    id: 's7',
+    name: 'marketing-site-prod',
+    firewall: 'Default Firewall',
+    customPage: '',
+    bindingPolicy: 'flexible',
+    days: 88
+  },
   {
     id: 's8',
     name: 'status-page-stage',
@@ -121,7 +225,15 @@ const SEEDED = [
     status: 'Inactive'
   },
   { id: 's9', name: 'internal-tools-dev', firewall: '', customPage: '', days: 151 },
-  { id: 's10', name: 'blog-platform-stage', firewall: 'edge-firewall', customPage: '', days: 183 }
+  {
+    id: 's10',
+    name: 'blog-platform-stage',
+    firewall: 'edge-firewall',
+    customPage: '',
+    bindingPolicy: 'flexible',
+    versionPolicy: 'multiple',
+    days: 183
+  }
 ]
 
 // A ref, not a constant: the Settings tab deletes rows, and a deletion has to be
@@ -134,10 +246,13 @@ const seeded = ref(
     return {
       id: strategy.id,
       name: strategy.name,
+      description: strategy.description ?? '',
       type: 'default',
       application: '',
       firewall: strategy.firewall,
       customPage: strategy.customPage,
+      bindingPolicy: strategy.bindingPolicy ?? DEFAULT_BINDING_POLICY,
+      versionPolicy: strategy.versionPolicy ?? DEFAULT_VERSION_POLICY,
       status: strategy.status ?? 'Active',
       system: false,
       updatedAt,
@@ -206,19 +321,25 @@ export const strategyOptions = computed(() =>
  *
  * @param {object} input
  * @param {string} input.name Strategy name (`name` in the request body).
+ * @param {string} [input.description] Internal note; never shown to traffic.
  * @param {string} [input.type] Strategy type; `default` is the only one today.
  * @param {string} [input.application] Pinned application, or `''` for "the one being deployed".
  * @param {string} [input.firewall] Bound firewall, or `''` for none (`null` in the body).
  * @param {string} [input.customPage] Bound custom page, or `''` for none.
+ * @param {string} [input.bindingPolicy] `strict` or `flexible`; see BINDING_POLICIES.
+ * @param {string} [input.versionPolicy] `single` or `multiple`; see VERSION_POLICIES.
  * @param {boolean} [input.active] Whether the strategy can be applied.
  * @returns {object} The stored strategy.
  */
 export function addStrategy({
   name,
+  description = '',
   type = 'default',
   application = '',
   firewall = '',
   customPage = '',
+  bindingPolicy = DEFAULT_BINDING_POLICY,
+  versionPolicy = DEFAULT_VERSION_POLICY,
   active = true
 } = {}) {
   const updatedAt = new Date()
@@ -226,10 +347,13 @@ export function addStrategy({
   const strategy = {
     id: `strategy-${authored.value.length + 1}-${updatedAt.getTime()}`,
     name: String(name || '').trim() || 'Untitled strategy',
+    description: String(description || '').trim(),
     type,
     application,
     firewall,
     customPage,
+    bindingPolicy,
+    versionPolicy,
     status: active ? 'Active' : 'Inactive',
     system: false,
     updatedAt,

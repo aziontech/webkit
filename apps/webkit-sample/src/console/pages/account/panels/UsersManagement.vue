@@ -22,12 +22,15 @@
   import { ref } from 'vue'
 
   import ColumnsButton from '../../../components/list/ColumnsButton.vue'
+  import ExportButton from '../../../components/list/ExportButton.vue'
   import FilterButton from '../../../components/list/FilterButton.vue'
   import FilterChips from '../../../components/list/FilterChips.vue'
+  import RefreshButton from '../../../components/list/RefreshButton.vue'
   import ControlsHeader from '../../../components/page/ControlsHeader.vue'
   import HeadingAction from '../../../components/page/HeadingAction.vue'
   import PageHeading from '../../../components/page/PageHeading.vue'
   import { useListFilters } from '../../../lib/behavior/list-state'
+  import { FIT_COLUMN, TAG_COLUMN } from '../../../lib/behavior/table-columns'
 
   // Where `Documentation` on the page heading goes. The docs ROOT, not a deep link: the
   // account-side topics have no entry in lib/data/product-empty-states.js (that
@@ -115,15 +118,22 @@
     filters,
     search,
     pagination,
-    visibleRows: visibleUsers
+    visibleRows: visibleUsers,
+    loading,
+    refresh
   } = useListFilters(filterFields, users, { pageSize: 10 })
+
+  // The table the controls row drives. Download CSV calls the DS's own `exportCsv()`
+  // through it (../../../components/list/ExportButton.vue), so the file honours the
+  // visible columns and the filtered rows instead of re-serialising them here.
+  const tableRef = ref(null)
 
   const userColumns = [
     { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, hideable: false },
     { accessorKey: 'email', header: 'Email', grow: 2 },
-    { accessorKey: 'role', header: 'Role', enableSorting: true },
-    { accessorKey: 'status', header: 'Status', enableSorting: true },
-    { accessorKey: 'lastActive', header: 'Last Active' },
+    { accessorKey: 'role', header: 'Role', enableSorting: true, minWidth: TAG_COLUMN },
+    { accessorKey: 'status', header: 'Status', enableSorting: true, minWidth: TAG_COLUMN },
+    { accessorKey: 'lastActive', header: 'Last Active', minWidth: FIT_COLUMN },
     { id: 'actions', kind: 'action', hideable: false }
   ]
 
@@ -185,6 +195,10 @@
           <!-- The band's CONTROLS: narrowing on the left, the band's own action on the
                right, above the card — the same row every list in the console opens with. -->
           <ControlsHeader>
+            <FilterButton
+              v-model="filters"
+              :fields="filterFields"
+            />
             <!-- Search drives the table's global filter from outside the card, so the field is
                  a plain InputText (`Table.Search` is context-aware and only works inside
                  `<Table>`). One horizontal band: it grows into the row's slack and compresses
@@ -204,14 +218,24 @@
               </template>
             </InputText>
 
-            <FilterButton
-              v-model="filters"
-              :fields="filterFields"
-            />
-            <ColumnsButton
-              v-model="columnVisibility"
-              :columns="userColumns"
-            />
+            <template #actions>
+              <!-- THE RIGHT GROUP: the three controls that act on the LISTING rather
+                   than narrow it — fetch it again, take it away as a file, choose which
+                   columns it shows. All glyphs, all `medium`, so the row shares one
+                   32px height with the field and the Filter button opposite. -->
+              <RefreshButton
+                :loading="loading"
+                @refresh="refresh"
+              />
+              <ExportButton
+                :table="tableRef"
+                filename="users.csv"
+              />
+              <ColumnsButton
+                v-model="columnVisibility"
+                :columns="userColumns"
+              />
+            </template>
           </ControlsHeader>
 
           <FilterChips
@@ -222,6 +246,7 @@
           <CardBox :padded="false">
             <template #content>
               <Table
+                ref="tableRef"
                 v-model:pagination="pagination"
                 v-model:globalFilter="search"
                 v-model:columnVisibility="columnVisibility"
@@ -232,6 +257,7 @@
                 paginated
                 :page-size="10"
                 :border="false"
+                :loading="loading"
               >
                 <template #cell-name="{ row }">
                   <div class="flex min-w-0 items-center gap-(--spacing-xs)">

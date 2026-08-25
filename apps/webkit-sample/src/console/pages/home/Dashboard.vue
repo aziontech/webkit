@@ -17,6 +17,7 @@
 
   import LastModifiedCell from '../../components/list/LastModifiedCell.vue'
   import AppLayout from '../../components/shell/AppLayout.vue'
+  import { FIT_COLUMN, TAG_COLUMN, TAG_COLUMN_WIDE } from '../../lib/behavior/table-columns'
 
   const route = useRoute()
 
@@ -80,8 +81,8 @@
   const resourceColumns = [
     { accessorKey: 'zoneName', header: 'Zone Name', principal: true, hideable: false },
     { accessorKey: 'domain', header: 'Domain', grow: 2 },
-    { accessorKey: 'status', header: 'Status' },
-    { accessorKey: 'lastModified', header: 'Last Modified', grow: 2 },
+    { accessorKey: 'status', header: 'Status', minWidth: TAG_COLUMN },
+    { accessorKey: 'lastModified', header: 'Last Modified', minWidth: FIT_COLUMN },
     { id: 'actions', kind: 'action', hideable: false }
   ]
 
@@ -131,10 +132,10 @@
 
   const activityColumns = [
     { accessorKey: 'date', header: 'Date', principal: true, hideable: false },
-    { accessorKey: 'operation', header: 'Operation' },
+    { accessorKey: 'operation', header: 'Operation', minWidth: TAG_COLUMN_WIDE },
     { accessorKey: 'type', header: 'Type' },
     { accessorKey: 'resource', header: 'Resource', grow: 2 },
-    { accessorKey: 'email', header: 'Author email', grow: 2 }
+    { accessorKey: 'email', header: 'Author email', minWidth: FIT_COLUMN }
   ]
 
   // Created/Deleted carry a colored Tag; neutral operations (Edited) show as

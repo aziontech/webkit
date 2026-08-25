@@ -36,8 +36,11 @@
   import SettingsSaveBar from '../../components/form/SettingsSaveBar.vue'
   import ColumnsButton from '../../components/list/ColumnsButton.vue'
   import DeleteDialog from '../../components/list/DeleteDialog.vue'
+  import ExportButton from '../../components/list/ExportButton.vue'
   import FilterButton from '../../components/list/FilterButton.vue'
   import FilterChips from '../../components/list/FilterChips.vue'
+  import IdCell from '../../components/list/IdCell.vue'
+  import RefreshButton from '../../components/list/RefreshButton.vue'
   import ControlsHeader from '../../components/page/ControlsHeader.vue'
   import HeadingAction from '../../components/page/HeadingAction.vue'
   import PageHeading from '../../components/page/PageHeading.vue'
@@ -46,6 +49,7 @@
   import AppLayout from '../../components/shell/AppLayout.vue'
   import { saveGroup, useBaseline } from '../../lib/behavior/forms'
   import { useListFilters } from '../../lib/behavior/list-state'
+  import { FIT_COLUMN, TAG_COLUMN } from '../../lib/behavior/table-columns'
   import { NAMESERVERS, POLICY_TYPES, policyLabel, RECORD_TYPES } from '../../lib/data/edge-dns'
   import { productFirstUse } from '../../lib/data/product-empty-states'
   import CreateRecordDrawer from './CreateRecordDrawer.vue'
@@ -203,17 +207,24 @@
     filters,
     search,
     pagination,
-    visibleRows: visibleRecords
+    visibleRows: visibleRecords,
+    loading,
+    refresh
   } = useListFilters(filterFields, records)
+
+  // The table the controls row drives. Download CSV calls the DS's own `exportCsv()`
+  // through it (../../components/list/ExportButton.vue), so the file honours the
+  // visible columns and the filtered rows instead of re-serialising them here.
+  const tableRef = ref(null)
 
   const recordColumns = [
     { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, hideable: false },
-    { accessorKey: 'id', header: 'ID', enableSorting: true },
-    { accessorKey: 'type', header: 'Type', enableSorting: true },
+    { accessorKey: 'id', header: 'ID', enableSorting: true, minWidth: FIT_COLUMN },
+    { accessorKey: 'type', header: 'Type', enableSorting: true, minWidth: TAG_COLUMN },
     { accessorKey: 'value', header: 'Value', grow: 2 },
-    { accessorKey: 'ttl', header: 'TTL (seconds)', enableSorting: true },
-    { accessorKey: 'policy', header: 'Policy' },
-    { accessorKey: 'weight', header: 'Weight' },
+    { accessorKey: 'ttl', header: 'TTL (seconds)', enableSorting: true, minWidth: FIT_COLUMN },
+    { accessorKey: 'policy', header: 'Policy', minWidth: FIT_COLUMN },
+    { accessorKey: 'weight', header: 'Weight', minWidth: FIT_COLUMN },
     { accessorKey: 'description', header: 'Description', grow: 2 },
     { id: 'actions', kind: 'action', hideable: false }
   ]
@@ -553,6 +564,10 @@
               <!-- The band's CONTROLS: narrowing on the left, the band's own action on the
                    right, above the card — the same row every list in the console opens with. -->
               <ControlsHeader>
+                <FilterButton
+                  v-model="filters"
+                  :fields="filterFields"
+                />
                 <!-- Search drives the table's global filter from outside the card, so the field is
                      a plain InputText (`Table.Search` is context-aware and only works inside
                      `<Table>`). One horizontal band: it grows into the row's slack and compresses
@@ -571,14 +586,24 @@
                     />
                   </template>
                 </InputText>
-                <FilterButton
-                  v-model="filters"
-                  :fields="filterFields"
-                />
-                <ColumnsButton
-                  v-model="columnVisibility"
-                  :columns="recordColumns"
-                />
+                <template #actions>
+                  <!-- THE RIGHT GROUP: the three controls that act on the LISTING rather
+                       than narrow it — fetch it again, take it away as a file, choose which
+                       columns it shows. All glyphs, all `medium`, so the row shares one
+                       32px height with the field and the Filter button opposite. -->
+                  <RefreshButton
+                    :loading="loading"
+                    @refresh="refresh"
+                  />
+                  <ExportButton
+                    :table="tableRef"
+                    filename="dns-records.csv"
+                  />
+                  <ColumnsButton
+                    v-model="columnVisibility"
+                    :columns="recordColumns"
+                  />
+                </template>
               </ControlsHeader>
 
               <FilterChips
@@ -589,6 +614,7 @@
               <CardBox :padded="false">
                 <template #content>
                   <Table
+                    ref="tableRef"
                     v-model:pagination="pagination"
                     v-model:globalFilter="search"
                     v-model:columnVisibility="columnVisibility"
@@ -599,16 +625,22 @@
                     paginated
                     :page-size="8"
                     :border="false"
+                    :loading="loading"
                   >
                     <!-- Name, id and value are all data, not code: each keeps the cell's
                          own type and --text-default, so a record row reads at one weight
-                         across its columns (Applications.vue's list is the reference). -->
+                         across its columns (Applications.vue's list is the reference).
+                         The id goes through the shared cell, which is what adds the copy
+                         button (../../components/list/IdCell.vue). -->
                     <template #cell-name="{ value }">
                       <span class="min-w-0 truncate">{{ value }}</span>
                     </template>
 
                     <template #cell-id="{ value }">
-                      <span class="min-w-0 truncate">{{ value }}</span>
+                      <IdCell
+                        :value="value"
+                        resource="record"
+                      />
                     </template>
 
                     <template #cell-type="{ value }">

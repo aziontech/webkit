@@ -410,9 +410,9 @@
                 <!-- THE INCOMING PAGE, WIRED. As many rows as are actually coming, in the
                      geometry of the rows above them — the 32px media tile and the two
                      lines — so the list GROWS IN PLACE instead of jumping when they land.
-                     It replaces the button rather than sitting under it: the button has
-                     already been answered, and leaving it there invites a second press
-                     for a page that is on its way.
+                     It sits at the end of the rows WITH the footer button still under
+                     it: the button spins and stops taking presses, so it cannot be
+                     double-fired, and the reader keeps the control they aimed at.
                      Inside the same Item.List as the real rows, so the wire inherits the
                      row rule and the row height instead of approximating them. -->
                 <template v-if="loading">
@@ -446,13 +446,15 @@
                 </template>
               </Item.List>
 
-              <!-- THE NEXT PAGE, asked for. The button says how many are coming rather
-                   than "Load more", so the reader knows whether the list is nearly done
-                   or barely started. It sits at the END of the rows because it belongs to
-                   the last row, not to the card — and it stands down while its own page is
-                   in flight, where the wire above speaks for it. -->
+              <!-- THE NEXT PAGE, asked for from the part's FOOTER — below the row rule,
+                   never as one more row in the list it is paging. The button says how many
+                   are coming rather than "Load more", so the reader knows whether the list
+                   is nearly done or barely started. It STAYS while its page is in flight
+                   and carries its own busy state: removing the control the reader just
+                   aimed at is what makes a press feel lost, and the wire above already
+                   shows what is arriving. -->
               <div
-                v-if="remaining && !loading"
+                v-if="remaining"
                 class="border-t border-(--border-default) p-(--spacing-xxs)"
               >
                 <Button
@@ -461,6 +463,7 @@
                   kind="text"
                   size="small"
                   class="w-full"
+                  :loading="loading"
                   :disabled="disabled"
                   @click="loadMore"
                 />

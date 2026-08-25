@@ -485,11 +485,18 @@
                 </div>
               </section>
 
-              <!-- The search and the Filter button on one row, with the applied chips
-                   on a row under them — the same shape every module list opens with. -->
+              <!-- The Filter button then the search on one row, with the applied chips
+                   on a row under them — the same shape every module list opens with.
+                   No Refresh or Download CSV beside them: this is a CATALOG of cards,
+                   not a table, so there is nothing to re-fetch here and nothing whose
+                   columns a CSV could honour. -->
               <div
                 class="layout-section-start flex flex-col gap-(--spacing-sm) md:flex-row md:items-center"
               >
+                <FilterButton
+                  v-model="integrationFilters"
+                  :fields="integrationFields"
+                />
                 <InputText
                   v-model="integrationQuery"
                   size="medium"
@@ -504,10 +511,6 @@
                     />
                   </template>
                 </InputText>
-                <FilterButton
-                  v-model="integrationFilters"
-                  :fields="integrationFields"
-                />
               </div>
 
               <FilterChips

@@ -9,16 +9,21 @@
   // fixed place, above the controls row that narrows the list
   // (./ControlsHeader.vue).
   //
-  // Home doesn't use it — there the module name lives in the collapsible header
-  // crumb and the content leads. Neither does a page whose header bottom is the
-  // full-bleed second-level nav bar (./PageTabs.vue): each tab is its own page and
-  // heads itself.
+  // Since the header bar's breadcrumb starts at the SECOND level
+  // (../shell/AppLayout.vue), this heading is the ONLY place a first-level page's own
+  // name appears in the content — including the two metric dashboards that carry no
+  // list under it (Edge Pulse, Real-Time Metrics).
+  //
+  // Home is the one page that still doesn't use it: the content leads there, and the
+  // rail's active item is the only name it needs. Neither does a page whose header
+  // bottom is the full-bleed second-level nav bar (./PageTabs.vue): each tab is its
+  // own page and heads itself.
   import HeadingAction from './HeadingAction.vue'
 
   defineProps({
-    // The page title. Omit on a `collapsible` module page, where the module
-    // name is surfaced as the header breadcrumb crumb instead — printing it
-    // here too would duplicate it.
+    // The page title. A FIRST-LEVEL page always passes one: nothing in the chrome
+    // names it any more — the bar's crumb begins at the second level — so omitting it
+    // leaves the module named only by the rail's active row.
     //
     // A TAB VIEW under a second-level nav bar KEEPS its title: the tab bar is
     // navigation, not the page's heading, so the content still opens with the

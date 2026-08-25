@@ -52,13 +52,16 @@
 
   import ColumnsButton from '../../components/list/ColumnsButton.vue'
   import DeleteDialog from '../../components/list/DeleteDialog.vue'
+  import ExportButton from '../../components/list/ExportButton.vue'
   import FilterButton from '../../components/list/FilterButton.vue'
   import FilterChips from '../../components/list/FilterChips.vue'
+  import RefreshButton from '../../components/list/RefreshButton.vue'
   import ControlsHeader from '../../components/page/ControlsHeader.vue'
   import HeadingAction from '../../components/page/HeadingAction.vue'
   import PageHeading from '../../components/page/PageHeading.vue'
   import AppLayout from '../../components/shell/AppLayout.vue'
   import { useListFilters } from '../../lib/behavior/list-state'
+  import { FIT_COLUMN, TAG_COLUMN } from '../../lib/behavior/table-columns'
   import { useSampleMode } from '../../lib/state/sample-mode'
 
   // Where `Documentation` goes. The docs ROOT: personal tokens have no entry in
@@ -144,16 +147,22 @@
     search,
     pagination,
     visibleRows: visibleTokens,
-    loading: tenancyReloading
+    loading,
+    refresh
   } = useListFilters(filterFields, tokens, { pageSize: 10 })
+
+  // The table the controls row drives. Download CSV calls the DS's own `exportCsv()`
+  // through it (../../components/list/ExportButton.vue), so the file honours the
+  // visible columns and the filtered rows instead of re-serialising them here.
+  const tableRef = ref(null)
 
   const columns = [
     { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, hideable: false },
     { accessorKey: 'description', header: 'Description', grow: 2 },
-    { accessorKey: 'created', header: 'Created', enableSorting: true },
-    { accessorKey: 'expires', header: 'Expires', enableSorting: true },
-    { accessorKey: 'lastUsed', header: 'Last used' },
-    { accessorKey: 'status', header: 'Status' },
+    { accessorKey: 'created', header: 'Created', enableSorting: true, minWidth: FIT_COLUMN },
+    { accessorKey: 'expires', header: 'Expires', enableSorting: true, minWidth: FIT_COLUMN },
+    { accessorKey: 'lastUsed', header: 'Last used', minWidth: FIT_COLUMN },
+    { accessorKey: 'status', header: 'Status', minWidth: TAG_COLUMN },
     { id: 'actions', kind: 'action', hideable: false }
   ]
 
@@ -366,6 +375,10 @@
                Rendered only when there are rows: a search field with nothing to search is
                noise. -->
           <ControlsHeader v-if="tokens.length">
+            <FilterButton
+              v-model="filters"
+              :fields="filterFields"
+            />
             <InputText
               v-model="search"
               size="medium"
@@ -380,14 +393,24 @@
                 />
               </template>
             </InputText>
-            <FilterButton
-              v-model="filters"
-              :fields="filterFields"
-            />
-            <ColumnsButton
-              v-model="columnVisibility"
-              :columns="columns"
-            />
+            <template #actions>
+              <!-- THE RIGHT GROUP: the three controls that act on the LISTING rather
+                   than narrow it — fetch it again, take it away as a file, choose which
+                   columns it shows. All glyphs, all `medium`, so the row shares one
+                   32px height with the field and the Filter button opposite. -->
+              <RefreshButton
+                :loading="loading"
+                @refresh="refresh"
+              />
+              <ExportButton
+                :table="tableRef"
+                filename="personal-tokens.csv"
+              />
+              <ColumnsButton
+                v-model="columnVisibility"
+                :columns="columns"
+              />
+            </template>
           </ControlsHeader>
 
           <FilterChips
@@ -400,6 +423,7 @@
             <CardBox :padded="false">
               <template #content>
                 <Table
+                  ref="tableRef"
                   v-model:pagination="pagination"
                   v-model:globalFilter="search"
                   v-model:columnVisibility="columnVisibility"
@@ -410,7 +434,7 @@
                   paginated
                   :page-size="10"
                   :border="false"
-                  :loading="tenancyReloading"
+                  :loading="loading"
                 >
                   <template #cell-status="{ value }">
                     <Tag

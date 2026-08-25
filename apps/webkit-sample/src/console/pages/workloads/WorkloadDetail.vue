@@ -62,9 +62,11 @@
   import FieldRow from '../../components/form/FieldRow.vue'
   import SettingsSaveBar from '../../components/form/SettingsSaveBar.vue'
   import UnsavedChangesGuard from '../../components/form/UnsavedChangesGuard.vue'
+  import ExportButton from '../../components/list/ExportButton.vue'
   import FilterButton from '../../components/list/FilterButton.vue'
   import FilterChips from '../../components/list/FilterChips.vue'
   import LastModifiedCell from '../../components/list/LastModifiedCell.vue'
+  import RefreshButton from '../../components/list/RefreshButton.vue'
   import ControlsHeader from '../../components/page/ControlsHeader.vue'
   import PageHeading from '../../components/page/PageHeading.vue'
   import PageTabs from '../../components/page/PageTabs.vue'
@@ -72,6 +74,7 @@
   import AppLayout from '../../components/shell/AppLayout.vue'
   import TopologyBindNode from '../../components/workload/TopologyBindNode.vue'
   import TopologyNodeCard from '../../components/workload/TopologyNodeCard.vue'
+  import { useListRefresh } from '../../lib/behavior/list-state'
   import { useTabEnter } from '../../lib/behavior/tab-enter'
   import {
     deploymentFilterFields,
@@ -338,6 +341,18 @@
   const deployFields = computed(() => deploymentFilterFields(deployments.value))
   const deploySearch = ref('')
   const deployFilters = ref({})
+
+  // What the controls row's Refresh button does, and the flag the deployment table
+  // binds for its skeleton rows — one flag over both causes, a scope switch and a
+  // manual refresh (../../lib/behavior/list-state.js).
+  const { loading, refresh } = useListRefresh()
+
+  // The tables the two controls rows drive. Two refs rather than one shared name: the
+  // tabs are `v-if`/`v-else-if` branches, and a single ref would depend on Vue's
+  // mount/unmount order at the moment of the switch. Download CSV goes through the
+  // shared component, which forwards `exportCsv` to the DS table inside it.
+  const versionsTableRef = ref(null)
+  const deploymentsTableRef = ref(null)
 
   // --- Opening a deployment -------------------------------------------------
   // Its PAGE (`/deployments/:versionId`), the same destination the module list uses.
@@ -720,6 +735,10 @@
                      controls row. Same component, same panel, same badge — only the
                      PLACE changes, and this page owns the state it drives. -->
                 <ControlsHeader>
+                  <FilterButton
+                    v-model="deployFilters"
+                    :fields="deployFields"
+                  />
                   <InputText
                     v-model="deploySearch"
                     size="medium"
@@ -734,10 +753,22 @@
                       />
                     </template>
                   </InputText>
-                  <FilterButton
-                    v-model="deployFilters"
-                    :fields="deployFields"
-                  />
+                  <template #actions>
+                    <!-- The two controls that act on the LISTING rather than narrow it.
+                         Download CSV reaches the table through the shared component
+                         that owns it (it forwards `exportCsv`), since the table itself
+                         is one level down. No Columns button on this level: the shared
+                         table's column set is the same everywhere and the page does not
+                         hoist a picker for it. -->
+                    <RefreshButton
+                      :loading="loading"
+                      @refresh="refresh"
+                    />
+                    <ExportButton
+                      :table="versionsTableRef"
+                      filename="deployments.csv"
+                    />
+                  </template>
                 </ControlsHeader>
 
                 <FilterChips
@@ -747,12 +778,14 @@
                 <CardBox :padded="false">
                   <template #content>
                     <DeploymentsTable
+                      ref="versionsTableRef"
                       v-model:search="deploySearch"
                       v-model:filters="deployFilters"
                       :deployments="deployments"
                       :fields="deployFields"
                       :email="userEmail"
                       :controls="false"
+                      :loading="loading"
                       @row-click="openDeployment"
                       @action="onRowAction"
                     />
@@ -776,6 +809,10 @@
                    (see ui/ControlsHeader.vue). -->
               <div class="flex flex-col gap-(--layout-group-gap)">
                 <ControlsHeader>
+                  <FilterButton
+                    v-model="deployFilters"
+                    :fields="deployFields"
+                  />
                   <InputText
                     v-model="deploySearch"
                     size="medium"
@@ -790,10 +827,22 @@
                       />
                     </template>
                   </InputText>
-                  <FilterButton
-                    v-model="deployFilters"
-                    :fields="deployFields"
-                  />
+                  <template #actions>
+                    <!-- The two controls that act on the LISTING rather than narrow it.
+                         Download CSV reaches the table through the shared component
+                         that owns it (it forwards `exportCsv`), since the table itself
+                         is one level down. No Columns button on this level: the shared
+                         table's column set is the same everywhere and the page does not
+                         hoist a picker for it. -->
+                    <RefreshButton
+                      :loading="loading"
+                      @refresh="refresh"
+                    />
+                    <ExportButton
+                      :table="deploymentsTableRef"
+                      filename="deployments.csv"
+                    />
+                  </template>
                 </ControlsHeader>
 
                 <FilterChips
@@ -803,12 +852,14 @@
                 <CardBox :padded="false">
                   <template #content>
                     <DeploymentsTable
+                      ref="deploymentsTableRef"
                       v-model:search="deploySearch"
                       v-model:filters="deployFilters"
                       :deployments="deployments"
                       :fields="deployFields"
                       :email="userEmail"
                       :controls="false"
+                      :loading="loading"
                       @row-click="openDeployment"
                       @action="onRowAction"
                     />

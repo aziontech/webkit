@@ -32,14 +32,18 @@
   import AuthorCell from '../../components/list/AuthorCell.vue'
   import ColumnsButton from '../../components/list/ColumnsButton.vue'
   import DeleteDialog from '../../components/list/DeleteDialog.vue'
+  import ExportButton from '../../components/list/ExportButton.vue'
   import FilterButton from '../../components/list/FilterButton.vue'
   import FilterChips from '../../components/list/FilterChips.vue'
+  import IdCell from '../../components/list/IdCell.vue'
   import LastModifiedCell from '../../components/list/LastModifiedCell.vue'
+  import RefreshButton from '../../components/list/RefreshButton.vue'
   import ControlsHeader from '../../components/page/ControlsHeader.vue'
   import HeadingAction from '../../components/page/HeadingAction.vue'
   import PageHeading from '../../components/page/PageHeading.vue'
   import AppLayout from '../../components/shell/AppLayout.vue'
   import { useListFilters } from '../../lib/behavior/list-state'
+  import { FIT_COLUMN, TAG_COLUMN } from '../../lib/behavior/table-columns'
   import {
     CERTIFICATES,
     certificateTypeOptions,
@@ -67,14 +71,21 @@
 
   const columns = [
     { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, hideable: false },
-    { accessorKey: 'id', header: 'ID' },
-    { accessorKey: 'typeLabel', header: 'Type', enableSorting: true },
+    // Two shares: the cell holds the id AND its copy button, and one share ended
+    // `cert-8801` in an ellipsis (../../components/list/IdCell.vue).
+    { accessorKey: 'id', header: 'ID', grow: 2 },
+    { accessorKey: 'typeLabel', header: 'Type', enableSorting: true, minWidth: FIT_COLUMN },
     { accessorKey: 'subject', header: 'Subject', grow: 2 },
-    { accessorKey: 'issuer', header: 'Issuer', enableSorting: true },
+    { accessorKey: 'issuer', header: 'Issuer', enableSorting: true, minWidth: FIT_COLUMN },
     { accessorKey: 'expires', header: 'Expires', enableSorting: true, grow: 2 },
-    { accessorKey: 'status', header: 'Status', enableSorting: true },
+    { accessorKey: 'status', header: 'Status', enableSorting: true, minWidth: TAG_COLUMN },
     { accessorKey: 'author', header: 'Last Editor', enableSorting: true, grow: 2 },
-    { accessorKey: 'lastModified', header: 'Last Modified', enableSorting: true, grow: 2 },
+    {
+      accessorKey: 'lastModified',
+      header: 'Last Modified',
+      enableSorting: true,
+      minWidth: FIT_COLUMN
+    },
     { id: 'actions', kind: 'action', hideable: false }
   ]
 
@@ -128,8 +139,14 @@
     search,
     pagination,
     visibleRows: visibleCertificates,
-    loading: tenancyReloading
+    loading,
+    refresh
   } = useListFilters(filterFields, scopedCertificates, { pageSize: 8 })
+
+  // The table the controls row drives. Download CSV calls the DS's own `exportCsv()`
+  // through it (../../components/list/ExportButton.vue), so the file honours the
+  // visible columns and the filtered rows instead of re-serialising them here.
+  const tableRef = ref(null)
 
   // Which columns are switched off, driven by the Columns button beside the filter
   // (../../components/list/ColumnsButton.vue). Only a HIDDEN column is ever recorded, so this
@@ -261,6 +278,10 @@
         <!-- ONE band: the controls, the filters and the rows they narrow. -->
         <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
           <ControlsHeader v-if="scopedCertificates.length">
+            <FilterButton
+              v-model="filters"
+              :fields="filterFields"
+            />
             <InputText
               v-model="search"
               size="medium"
@@ -275,14 +296,24 @@
                 />
               </template>
             </InputText>
-            <FilterButton
-              v-model="filters"
-              :fields="filterFields"
-            />
-            <ColumnsButton
-              v-model="columnVisibility"
-              :columns="columns"
-            />
+            <template #actions>
+              <!-- THE RIGHT GROUP: the three controls that act on the LISTING rather
+                   than narrow it — fetch it again, take it away as a file, choose which
+                   columns it shows. All glyphs, all `medium`, so the row shares one
+                   32px height with the field and the Filter button opposite. -->
+              <RefreshButton
+                :loading="loading"
+                @refresh="refresh"
+              />
+              <ExportButton
+                :table="tableRef"
+                filename="certificates.csv"
+              />
+              <ColumnsButton
+                v-model="columnVisibility"
+                :columns="columns"
+              />
+            </template>
           </ControlsHeader>
 
           <FilterChips
@@ -346,6 +377,7 @@
             <CardBox :padded="false">
               <template #content>
                 <Table
+                  ref="tableRef"
                   v-model:pagination="pagination"
                   v-model:globalFilter="search"
                   v-model:columnVisibility="columnVisibility"
@@ -356,8 +388,15 @@
                   paginated
                   :page-size="8"
                   :border="false"
-                  :loading="tenancyReloading"
+                  :loading="loading"
                 >
+                  <template #cell-id="{ value }">
+                    <IdCell
+                      :value="value"
+                      resource="certificate"
+                    />
+                  </template>
+
                   <template #cell-status="{ value }">
                     <Tag
                       :label="value"

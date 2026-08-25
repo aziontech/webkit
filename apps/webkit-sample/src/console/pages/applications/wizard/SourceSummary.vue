@@ -52,84 +52,91 @@
     :padded="false"
   >
     <template #content>
-      <Item size="small">
-        <Item.Media>
-          <span
-            class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
-          >
-            <!-- The mark the source part drew, drawn again: an Azion template is marked
-                 by its vendor there (./TemplateSourceStep.vue), so it is marked by its
-                 vendor here. A row that changes its mark between the part that chose it
-                 and the part that confirms it reads as a different thing. -->
-            <AzionLogoMin
-              v-if="source.vendor === 'Azion'"
-              class="h-4 w-auto shrink-0"
-              aria-hidden="true"
+      <!-- ONE BOX, HAIRLINE-DIVIDED ROWS. `Item.List` is what draws the divider between
+           the source and its destination: it squares the rows' corners and colours only
+           their bottom edge (last row excepted). A hand-written `border-t` on the second
+           row cannot do that job — `cn` merges it over the row shell's
+           `border border-transparent`, so the row took the colour on ALL FOUR sides and
+           drew a rounded box that overlapped the card's own border. -->
+      <Item.List>
+        <Item size="small">
+          <Item.Media>
+            <span
+              class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
+            >
+              <!-- The mark the source part drew, drawn again: an Azion template is marked
+                   by its vendor there (./TemplateSourceStep.vue), so it is marked by its
+                   vendor here. A row that changes its mark between the part that chose it
+                   and the part that confirms it reads as a different thing. -->
+              <AzionLogoMin
+                v-if="source.vendor === 'Azion'"
+                class="h-4 w-auto shrink-0"
+                aria-hidden="true"
+              />
+              <i
+                v-else
+                :class="source.icon"
+                class="text-[1rem] leading-none text-(--text-default)"
+                aria-hidden="true"
+              />
+            </span>
+          </Item.Media>
+          <Item.Content>
+            <Item.Title>{{ source.title }}</Item.Title>
+            <Item.Description>{{ source.description }}</Item.Description>
+          </Item.Content>
+          <Item.Actions v-if="changeable">
+            <Button
+              type="button"
+              label="Change"
+              kind="text"
+              size="small"
+              :disabled="disabled"
+              @click="$emit('change', 'source')"
             />
-            <i
-              v-else
-              :class="source.icon"
-              class="text-[1rem] leading-none text-(--text-default)"
-              aria-hidden="true"
-            />
-          </span>
-        </Item.Media>
-        <Item.Content>
-          <Item.Title>{{ source.title }}</Item.Title>
-          <Item.Description>{{ source.description }}</Item.Description>
-        </Item.Content>
-        <Item.Actions v-if="changeable">
-          <Button
-            type="button"
-            label="Change"
-            kind="text"
-            size="small"
-            :disabled="disabled"
-            @click="$emit('change', 'source')"
-          />
-        </Item.Actions>
-      </Item>
+          </Item.Actions>
+        </Item>
 
-      <!-- AND WHERE IT LANDS, when there is a clone. Every field below this is about the
-           thing that will live there, so the destination stays on screen with its own way
-           back — a template deployed into the wrong account is the mistake this row
-           exists to prevent. -->
-      <Item
-        v-if="repository?.name"
-        size="small"
-        class="border-t border-(--border-default)"
-      >
-        <Item.Media>
-          <span
-            class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
-          >
-            <i
-              class="pi pi-github text-[1rem] leading-none text-(--text-default)"
-              aria-hidden="true"
+        <!-- AND WHERE IT LANDS, when there is a clone. Every field below this is about the
+             thing that will live there, so the destination stays on screen with its own way
+             back — a template deployed into the wrong account is the mistake this row
+             exists to prevent. -->
+        <Item
+          v-if="repository?.name"
+          size="small"
+        >
+          <Item.Media>
+            <span
+              class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
+            >
+              <i
+                class="pi pi-github text-[1rem] leading-none text-(--text-default)"
+                aria-hidden="true"
+              />
+            </span>
+          </Item.Media>
+          <Item.Content>
+            <Item.Title>{{ repository.owner }}/{{ repository.name }}</Item.Title>
+            <Item.Description>
+              {{
+                repository.mode === 'new'
+                  ? `A new ${repository.visibility} repository, created from the template.`
+                  : 'An existing repository of yours, deployed as it is.'
+              }}
+            </Item.Description>
+          </Item.Content>
+          <Item.Actions v-if="changeable">
+            <Button
+              type="button"
+              label="Change"
+              kind="text"
+              size="small"
+              :disabled="disabled"
+              @click="$emit('change', 'repository')"
             />
-          </span>
-        </Item.Media>
-        <Item.Content>
-          <Item.Title>{{ repository.owner }}/{{ repository.name }}</Item.Title>
-          <Item.Description>
-            {{
-              repository.mode === 'new'
-                ? `A new ${repository.visibility} repository, created from the template.`
-                : 'An existing repository of yours, deployed as it is.'
-            }}
-          </Item.Description>
-        </Item.Content>
-        <Item.Actions v-if="changeable">
-          <Button
-            type="button"
-            label="Change"
-            kind="text"
-            size="small"
-            :disabled="disabled"
-            @click="$emit('change', 'repository')"
-          />
-        </Item.Actions>
-      </Item>
+          </Item.Actions>
+        </Item>
+      </Item.List>
     </template>
   </CardBox>
 </template>

@@ -1,21 +1,31 @@
 <script setup>
   // The CONTROLS HEADER — the row between a list page's PAGE HEADING and its table:
   //
-  //     [ Module name                                   + New Thing ]  PageHeading
-  //     [ what the module is, in one line                           ]
-  //     [ search                                        ⚟ Filter  ]  this row
-  //     [ the applied chips (../list/FilterChips.vue), when any     ]
-  //     [ table                                                     ]
+  //     [ Module name                                     + New Thing ]  PageHeading
+  //     [ what the module is, in one line                             ]
+  //     [ ⚟ Filter  search ................    ↻   ⭳   ▤ ]  this row
+  //     [ the applied chips (../list/FilterChips.vue), when any       ]
+  //     [ table                                                       ]
   //
-  // It carries the NARROWING — what the user does to a list they can already see. The
-  // page's own action does NOT live here: it belongs to the page, so it sits in the
+  // TWO GROUPS, AND THE SPLIT IS WHAT EACH CONTROL ACTS ON. The default slot holds the
+  // NARROWING — what the user does to change WHICH ROWS they see: the Filter button
+  // then the search field. The `actions` slot holds what acts on the LISTING ITSELF —
+  // fetch it again (../list/RefreshButton.vue), take it away as a file
+  // (../list/ExportButton.vue), choose which columns it shows
+  // (../list/ColumnsButton.vue) — plus any bulk operation over the rows a filter
+  // selected. It is skipped entirely when nothing is passed.
+  //
+  // FILTER LEADS, THE THREE GLYPHS TRAIL. Narrowing goes coarse-then-fine left to
+  // right — pick a field and its values, then search inside what is left — so Filter
+  // is the first thing on the row and the field grows into everything after it. The
+  // three listing actions are glyphs at the far end, in one cluster: they are the same
+  // three on every list, so a reader learns their corner once. Columns used to sit
+  // glued to the search field's right edge, which split the icon buttons 1 + 2 across
+  // the group gap and made the trio read as two unrelated things.
+  //
+  // The page's own action does NOT live here: it belongs to the page, so it sits in the
   // PageHeading above, where its place never depends on how the list is filtered or on
-  // whether the list has rows at all. Narrowing reads left, where the eye starts, and
-  // the table follows.
-  //
-  // The `actions` slot stays for a control that acts on the LISTING rather than on the
-  // module — a bulk operation over the rows a filter selected — and is skipped entirely
-  // when nothing is passed.
+  // whether the list has rows at all.
   //
   // The controls live OUT of the table, not in its `#toolbar`: they belong to the
   // PAGE — the filters narrow the module's records, not one table's view of them — and
@@ -48,11 +58,11 @@
 <template>
   <header class="flex items-center gap-(--layout-group-gap)">
     <!-- INSIDE a group the controls sit at `--spacing-xs` (8px), not at the group gap:
-         the search field, Filter and Columns are ONE control cluster, and reading them
-         as one is what the tight step buys. At the group gap (16px) they read as three
-         separate things that happen to share a row, and the field gave up 16px of its
-         own width to say so. The GROUP gap stays on the <header> below, between this
-         cluster and the listing actions — that boundary is a real one. -->
+         Filter and the search field are ONE control cluster, and reading them as one is
+         what the tight step buys. At the group gap (16px) they read as two separate
+         things that happen to share a row, and the field gave up 16px of its own width
+         to say so. The GROUP gap stays on the <header> below, between this cluster and
+         the listing actions — that boundary is a real one. -->
     <div class="flex min-w-0 grow items-center gap-(--spacing-xs)">
       <slot />
     </div>

@@ -685,7 +685,7 @@
             value="20"
             prefix="$"
             suffix="per month"
-            size="large"
+            size="medium"
           />
         </ComponentGridCell>
 
@@ -820,7 +820,6 @@
         <ComponentGridCell name="CardPricing">
           <CardPricing
             plan-title="Pro"
-            description="Everything you need to ship at the edge."
             pricing-details="Billed annually or $25/mo billed monthly."
             slot-position="bottom"
             kind="contained"
@@ -843,9 +842,7 @@
         v-if="!category"
         class="flex items-baseline justify-between gap-(--spacing-sm) px-(--spacing-xxs)"
       >
-        <h3 class="text-overline-sm uppercase tracking-widest text-(--text-muted)">
-          Feedback
-        </h3>
+        <h3 class="text-overline-sm uppercase tracking-widest text-(--text-muted)">Feedback</h3>
         <span class="text-body-xs text-(--text-muted)">Messages &amp; progress</span>
       </div>
       <div class="grid w-full grid-cols-2 gap-0 md:grid-cols-4">
@@ -1118,7 +1115,9 @@
               icon="pi pi-search"
               @click="commandMenuOpen = true"
             />
-            <span class="inline-flex items-center gap-(--spacing-xxs) text-body-xs text-(--text-muted)">
+            <span
+              class="inline-flex items-center gap-(--spacing-xxs) text-body-xs text-(--text-muted)"
+            >
               or press
               <Kbd
                 meta
@@ -1167,9 +1166,7 @@
         v-if="!category"
         class="flex items-baseline justify-between gap-(--spacing-sm) px-(--spacing-xxs)"
       >
-        <h3 class="text-overline-sm uppercase tracking-widest text-(--text-muted)">
-          Navigation
-        </h3>
+        <h3 class="text-overline-sm uppercase tracking-widest text-(--text-muted)">Navigation</h3>
         <span class="text-body-xs text-(--text-muted)">Wayfinding, menus &amp; shells</span>
       </div>
       <div class="grid w-full grid-cols-2 gap-0 md:grid-cols-4">

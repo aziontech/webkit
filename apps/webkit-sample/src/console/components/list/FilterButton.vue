@@ -1,9 +1,18 @@
 <script setup>
   // The FILTER BUTTON — one control that opens the fields, plus a chip per APPLIED cut:
   //
-  //   [🔍 Search connectors                                          ⚟ Filter ]
+  //          ②
+  //   [ ⚟ Filter ] [🔍 Search connectors ................]   [↻] [⭳] [▤]
+  //     ╰─ how many fields are narrowing the list           ╰─ refresh · CSV · columns
   //   (Type Storage ×)  (Status Active ×)                    ← ./FilterChips.vue
-  //     ╰─ what is applied, and the × that undoes it
+  //     ╰─ which ones they are, and the × that undoes each
+  //
+  // IT READS BEFORE THE FIELD IT NARROWS. Filter is FIRST on the row: it is the coarse
+  // cut — pick a field, pick its values — and search is the fine one inside whatever is
+  // left. Left-to-right is that order, so the row reads the way the narrowing happens.
+  // It also gives the control a fixed home: at the right end it moved every time the
+  // page gained or lost a column button beside it, while the left margin is the one
+  // place on the row that is the same on all 25 lists.
   //
   //   The panel is a STACK OF LEVELS that slides, not a form:
   //
@@ -34,13 +43,16 @@
   // arrived, and the chips broke onto a second line the moment they outgrew what was
   // left of it, which reads as spill rather than structure.
   //
-  // THE BUTTON SAYS `Filter`, AND ONLY THAT, in every state — that is its job, and the
-  // job does not change once something is applied. What is applied is said beside it, in
-  // words, by the chips; a count on the button would be a second, quieter claim about
-  // state they already spell out in full. (It would also be a silent one: `Button`
-  // forwards no `aria-label` — it drops every attr but `class` — so an overlaid marker
-  // has no channel to announce itself, and colour is not information a screen reader can
-  // read either way.)
+  // THE BUTTON CARRIES A COUNT, THE CHIPS CARRY THE WORDS. The badge on the button's
+  // corner says HOW MANY fields are narrowing the list; the chips under it say WHICH, and offer
+  // the × that undoes each one. The count is what survives the chips being scrolled
+  // past, wrapped, or pushed down the page on a narrow viewport: the control itself
+  // still reads as loaded rather than idle, which is the one thing a reader needs
+  // before they think to look for the chips at all.
+  //
+  // It counts FIELDS, not values — three authors is one cut on Author (see
+  // `filterCount` in ../../lib/behavior/filter-bar.js) — so the number always matches
+  // the number of chips beside it. A count of values would disagree with them on sight.
   //
   // ONE ANCHOR. The panel always opens under the Filter button, whether it was a chip
   // or the button that asked for it — including when a chip is clicked to edit it.
@@ -61,6 +73,7 @@
   // grid, which teleports its own overlay to <body> and would read its own clicks as
   // outside ones. That suspension is scoped to the one level that needs it.
   import Avatar from '@aziontech/webkit/avatar'
+  import Badge from '@aziontech/webkit/badge'
   import Button from '@aziontech/webkit/button'
   import Calendar from '@aziontech/webkit/calendar'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -69,7 +82,13 @@
   import { computed, nextTick, ref, watch } from 'vue'
 
   import { useAnimatedHeight } from '../../lib/behavior/animate-height.js'
-  import { clearField, isApplied, summarizeText, toggleValue } from '../../lib/behavior/filter-bar'
+  import {
+    clearField,
+    filterCount,
+    isApplied,
+    summarizeText,
+    toggleValue
+  } from '../../lib/behavior/filter-bar'
   import { openChannel } from '../../lib/behavior/filter-open.js'
 
   const props = defineProps({
@@ -94,6 +113,11 @@
   })
 
   const emit = defineEmits(['update:modelValue'])
+
+  // HOW MANY FIELDS are narrowing the list — the number in the badge. Fields, never
+  // values: three authors is one cut on Author, and reading `3` for that would claim
+  // three columns are narrowed when only one is (../../lib/behavior/filter-bar.js).
+  const appliedCount = computed(() => filterCount(props.modelValue))
 
   const open = ref(false)
   // Which level the panel is on: `null` is the field list, a field id is its values.
@@ -323,19 +347,23 @@
     class="flex shrink-0 items-center"
     data-testid="filter-button"
   >
-    <!-- BOTTOM-END: the panel hangs DOWN from the button with its RIGHT edge on the
-         button's right edge. This button sits at the right end of the controls row, so
-         `bottom-start` anchored the panel's LEFT edge there and sent 280px of panel
-         off the viewport — where `usePlacement` clamped it back to 8px from the edge.
-         Clamped is not anchored: the panel landed near the corner by accident, and its
+    <!-- BOTTOM-START: the panel hangs DOWN from the button with its LEFT edge on the
+         button's left edge. THE ANCHOR FOLLOWS THE BUTTON. This control used to sit at
+         the RIGHT end of the controls row, where `bottom-start` sent 280px of panel off
+         the viewport and `usePlacement` clamped it back to 8px from the edge — clamped
+         is not anchored: the panel landed near the corner by accident, and its
          `--popup-origin` still said `top left`, so the open animation scaled out of a
-         corner the panel was no longer in.
+         corner the panel was no longer in. So it was anchored `bottom-end` instead.
+         Now the button is FIRST on the row, left of the search field, and the same
+         reasoning runs the other way: `bottom-end` would anchor the panel's right edge
+         to a button at the left margin and push the panel off the LEFT edge, to be
+         clamped there. Leading edge to leading edge is the anchor that is real.
          `flip` is on by default in `usePlacement`, so this stays automatic where it
          has to be: no room below and the panel opens upward from the same edge
-         (top-end), and either way it is clamped inside the viewport. -->
+         (top-start), and either way it is clamped inside the viewport. -->
     <Popover
       v-model:open="open"
-      placement="bottom-end"
+      placement="bottom-start"
       :dismissible="!calendarOpen"
       class="shrink-0"
     >
@@ -343,18 +371,58 @@
            bubbles out of its child, and a handler here would run first and then be
            undone by it. Reopening always lands on the field list because closing
            resets the level. -->
-      <Popover.Trigger>
+      <!-- `relative` so the count below positions against the TRIGGER, which wraps the
+           button tightly (`inline-flex w-fit`) — the trigger's own span, which forwards
+           attrs, so the badge needs no extra box to hang from. -->
+      <Popover.Trigger class="relative">
         <!-- The size comes from the caller, matched to the field beside it — `medium`
-             on a controls row, which is the whole population today (see the prop).
-             Nothing is overlaid on the button — the chips in the row below say what is
-             applied, in words. -->
+             on a controls row, which is the whole population today (see the prop). The
+             button is untouched by the count: the badge is positioned OUT OF FLOW on its
+             corner, so the control keeps one width in every state and nothing in the row
+             moves when a filter is applied or cleared. -->
         <Button
           :label="label"
           kind="outlined"
           :size="size"
-          icon="ai ai-filter-alt"
+          icon="pi pi-filter"
           data-testid="filter-button__trigger"
         />
+        <!-- THE COUNT, on the button's TOP-RIGHT CORNER, straddling it.
+             `-top-2 -right-2` is not a taste choice: 8px is the smallest offset that
+             clears the label. The button's own inset is 12px, so a 20px badge whose left
+             edge must stay right of the text has to sit at least 20 − 12 = 8px outside.
+             Less and it clips the tail of `Filter`; that is the number to change if the
+             badge ever needs more air, and the label is what pays for it.
+             No ring punching it out of the button's border: the badge is opaque, so it
+             simply covers the 1px it overlaps. A `ring-2 ring-(--bg-canvas)` — the
+             obvious next reach — paints 2px BEYOND the badge, which lands past the 8px
+             cluster gap and nicks the border of the control after it.
+             `pointer-events-none` so the corner it covers still belongs to the button —
+             a click on the number must open the panel, not miss it.
+             `min-w-5` makes a single digit a square instead of a narrow slot; a
+             two-digit count then grows sideways on the badge's own padding.
+             `aria-hidden`, deliberately: the badge says HOW MANY, and the chips in the
+             row below say WHICH, in words, with the × that undoes each. They exist
+             exactly when the count does, so a screen reader loses nothing here and is
+             spared a bare number. (`Button` forwards no aria attrs either — it drops
+             every attr but `class` and `data-testid` — so the count could not have
+             reached the button's own accessible name from here.) -->
+        <Transition
+          enter-from-class="scale-75 opacity-0"
+          enter-active-class="transition-[transform,scale,opacity] duration-fast-02 ease-productive-entrance motion-reduce:transition-none"
+          leave-to-class="scale-75 opacity-0"
+          leave-active-class="transition-[transform,scale,opacity] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
+        >
+          <Badge
+            v-if="appliedCount"
+            :label="String(appliedCount)"
+            severity="primary"
+            size="small"
+            aria-hidden="true"
+            data-testid="filter-button__count"
+            class="pointer-events-none absolute -top-2 -right-2 min-w-5"
+          />
+        </Transition>
       </Popover.Trigger>
 
       <Popover.Content>

@@ -20,6 +20,7 @@
   import FilterButton from '../../components/list/FilterButton.vue'
   import FilterChips from '../../components/list/FilterChips.vue'
   import MetricPanel from '../../components/observability/MetricPanel.vue'
+  import PageHeading from '../../components/page/PageHeading.vue'
   import AppLayout from '../../components/shell/AppLayout.vue'
   import {
     DEFAULT_PERIOD,
@@ -56,6 +57,20 @@
     :breadcrumb="[{ label: 'Edge Pulse' }]"
   >
     <main class="layout-column flex min-h-full flex-col">
+      <!-- THE PAGE HEADING, and why a dashboard needs one at all. The console's
+           header bar shows a breadcrumb only from the SECOND level up
+           (../../components/shell/AppLayout.vue): a first-level page repeating its
+           own module name in the bar said nothing the rail's active item had not
+           already said. So the name lives HERE now, in the content, like it does on
+           every module list — this page just has no table under it, and no create
+           action beside it. `size="medium"` is that first-level scale.
+           Without it the module's name appeared nowhere on screen. -->
+      <PageHeading
+        size="medium"
+        title="Edge Pulse"
+        description="Real-user timings collected in the browser, for the selected period."
+      />
+
       <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)">
         <!-- ONE band: the window control, the strip it re-queries, and the panels. -->
         <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">

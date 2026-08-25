@@ -39,7 +39,6 @@
   // SHORT period field (15 minutes to 24 hours — a week of edge events is a report,
   // and reports live in Real-Time Metrics).
   import Accordion from '@aziontech/webkit/accordion'
-  import Button from '@aziontech/webkit/button'
   import Drawer from '@aziontech/webkit/drawer'
   import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
@@ -57,8 +56,10 @@
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
+  import ExportButton from '../../components/list/ExportButton.vue'
   import FilterButton from '../../components/list/FilterButton.vue'
   import FilterChips from '../../components/list/FilterChips.vue'
+  import RefreshButton from '../../components/list/RefreshButton.vue'
   import EventDocument from '../../components/observability/EventDocument.vue'
   import EventFieldRow from '../../components/observability/EventFieldRow.vue'
   import EventVolumeChart from '../../components/observability/EventVolumeChart.vue'
@@ -153,8 +154,14 @@
     search,
     pagination,
     visibleRows: filteredEvents,
-    loading: tenancyReloading
+    loading,
+    refresh: refreshList
   } = useListFilters(() => filterFields.value, scopedEvents, { pageSize: 25 })
+
+  // The log table the controls row drives — Download CSV calls its `exportCsv()`
+  // (../../components/list/ExportButton.vue), so the file carries the columns the
+  // Fields panel has switched on, over the rows the filters left.
+  const tableRef = ref(null)
 
   const activeFieldIds = computed(() =>
     Object.keys(filters.value).filter((id) => !BASE_FILTER_IDS.has(id) && filters.value[id]?.length)
@@ -384,7 +391,13 @@
     header: field.label,
     enableSorting: true,
     ...(field.principal ? { principal: true } : {}),
+    // A field declares EITHER a weight or a floor, never both. A BOUNDED field — a
+    // level chip, a method, a status code, a duration — is as wide as its own content
+    // and asks for no share of the leftover space; an open-ended one (the message, a
+    // host, a path, a user agent) takes a share and truncates
+    // (../../lib/behavior/table-columns.js).
     ...(field.grow ? { grow: field.grow } : {}),
+    ...(field.minWidth ? { minWidth: field.minWidth } : {}),
     ...(field.align ? { align: field.align } : {})
   })
 
@@ -543,8 +556,12 @@
     explorerObserver?.disconnect()
   })
 
-  const refresh = () =>
+  // The list state's refresh window drives the table's skeleton rows; the toast says
+  // why the set comes back the same in the sample.
+  const refresh = () => {
+    refreshList()
     toast.info('Events refreshed.', { description: 'Live streaming is disabled in the demo.' })
+  }
 </script>
 
 <template>
@@ -562,6 +579,11 @@
         class="flex shrink-0 flex-col gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-lg) py-(--spacing-sm)"
       >
         <ControlsHeader>
+          <FilterButton
+            v-model="filters"
+            :fields="filterFields"
+            size="medium"
+          />
           <!-- No toolbar toggle for the field panel: it owns its own hide trigger and
                edge affordance, so a second control for the same state is noise. -->
           <InputText
@@ -580,20 +602,23 @@
           </InputText>
 
           <template #actions>
-            <!-- Refresh, not Create: events are emitted, not authored. -->
-            <Button
-              label="Refresh"
-              kind="outlined"
-              size="medium"
-              icon="pi pi-refresh"
-              @click="refresh"
+            <!-- REFRESH, NOT CREATE: events are emitted, not authored — so where every
+                 other module puts its create action, this page puts the only thing that
+                 changes the set. It is the shared icon control now rather than the
+                 worded Button it used to be: this row is the same right group as every
+                 other list's (refresh · CSV), and one labelled button among glyphs read
+                 as a page action instead of a listing one. There is no Columns button
+                 because the log's columns are chosen in the FIELDS panel beside the
+                 table — the same choice, in the place this page already makes it. -->
+            <RefreshButton
+              :loading="loading"
+              @refresh="refresh"
+            />
+            <ExportButton
+              :table="tableRef"
+              filename="events.csv"
             />
           </template>
-          <FilterButton
-            v-model="filters"
-            :fields="filterFields"
-            size="medium"
-          />
         </ControlsHeader>
 
         <FilterChips
@@ -813,6 +838,7 @@
                  to grow, and that cannot be expressed as a utility here (see the rule and
                  the reason it is plain CSS in src/style.css). -->
             <Table
+              ref="tableRef"
               v-model:pagination="pagination"
               :data="matchedEvents"
               :columns="columns"
@@ -824,7 +850,7 @@
               header-kind="compact"
               max-height="100%"
               class="log-table h-full"
-              :loading="tenancyReloading"
+              :loading="loading"
               @row-click="openDocument"
             >
               <!-- The affordance column carries no visible header — a glyph needs no

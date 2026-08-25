@@ -53,15 +53,19 @@
   import ColumnsButton from '../../components/list/ColumnsButton.vue'
   import DeleteDialog from '../../components/list/DeleteDialog.vue'
   import DomainCell from '../../components/list/DomainCell.vue'
+  import ExportButton from '../../components/list/ExportButton.vue'
   import FilterButton from '../../components/list/FilterButton.vue'
   import FilterChips from '../../components/list/FilterChips.vue'
+  import IdCell from '../../components/list/IdCell.vue'
   import LastModifiedCell from '../../components/list/LastModifiedCell.vue'
+  import RefreshButton from '../../components/list/RefreshButton.vue'
   import ControlsHeader from '../../components/page/ControlsHeader.vue'
   import HeadingAction from '../../components/page/HeadingAction.vue'
   import PageHeading from '../../components/page/PageHeading.vue'
   import AppLayout from '../../components/shell/AppLayout.vue'
   import { DATE_PRESETS, formatDateRange, matchDate } from '../../lib/behavior/filter-bar'
   import { useListFilters } from '../../lib/behavior/list-state'
+  import { FIT_COLUMN, TAG_COLUMN, TAG_COLUMN_WIDE } from '../../lib/behavior/table-columns'
   import { environmentSeverity } from '../../lib/data/deployments'
   import { productFirstUse } from '../../lib/data/product-empty-states'
   import { presetIcon, presetLabel } from '../../lib/format/presets'
@@ -95,13 +99,25 @@
   const columns = [
     { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, hideable: false },
     { accessorKey: 'repository', header: 'Repository', grow: 2 },
-    { accessorKey: 'id', header: 'ID', enableSorting: true },
+    // `grow: 2`: the id is a 10-digit token and the cell also carries the copy
+    // button, so one share truncated it to six digits and an ellipsis.
+    { accessorKey: 'id', header: 'ID', enableSorting: true, minWidth: FIT_COLUMN },
     // Domain is shown in full (no truncation) — give it the widest flexible share.
     { accessorKey: 'domainName', header: 'Domain Name', grow: 3 },
-    { accessorKey: 'infrastructure', header: 'Infrastructure', enableSorting: true },
-    { accessorKey: 'status', header: 'Status', enableSorting: true },
-    { accessorKey: 'author', header: 'Last Editor', enableSorting: true, grow: 2 },
-    { accessorKey: 'lastModified', header: 'Last Modified', enableSorting: true, grow: 2 },
+    {
+      accessorKey: 'infrastructure',
+      header: 'Infrastructure',
+      enableSorting: true,
+      minWidth: TAG_COLUMN_WIDE
+    },
+    { accessorKey: 'status', header: 'Status', enableSorting: true, minWidth: TAG_COLUMN },
+    { accessorKey: 'author', header: 'Last Editor', enableSorting: true, minWidth: FIT_COLUMN },
+    {
+      accessorKey: 'lastModified',
+      header: 'Last Modified',
+      enableSorting: true,
+      minWidth: FIT_COLUMN
+    },
     { id: 'actions', kind: 'action', hideable: false }
   ]
 
@@ -192,8 +208,14 @@
     search,
     pagination,
     visibleRows: filteredApplications,
-    loading: tenancyReloading
+    loading,
+    refresh
   } = useListFilters(filterFields, allApplications)
+
+  // The table the controls row drives. Download CSV calls the DS's own `exportCsv()`
+  // through it (../../components/list/ExportButton.vue), so the file honours the
+  // visible columns and the filtered rows instead of re-serialising them here.
+  const tableRef = ref(null)
 
   // Which columns are switched off, driven by the Columns button beside the filter
   // (../../components/list/ColumnsButton.vue). Only a HIDDEN column is ever recorded, so this
@@ -357,6 +379,10 @@
                already show — search then Filter on the left, nothing on the right,
                because the module's action sits in the heading above. -->
           <ControlsHeader>
+            <FilterButton
+              v-model="filters"
+              :fields="filterFields"
+            />
             <!-- Search drives the table's global filter from outside the card, so the
                  field is a plain InputText (`Table.Search` is context-aware and only
                  works inside `<Table>`). It absorbs the slack (`grow`) and the Filter
@@ -376,14 +402,24 @@
                 />
               </template>
             </InputText>
-            <FilterButton
-              v-model="filters"
-              :fields="filterFields"
-            />
-            <ColumnsButton
-              v-model="columnVisibility"
-              :columns="columns"
-            />
+            <template #actions>
+              <!-- THE RIGHT GROUP: the three controls that act on the LISTING rather
+                   than narrow it — fetch it again, take it away as a file, choose which
+                   columns it shows. All glyphs, all `medium`, so the row shares one
+                   32px height with the field and the Filter button opposite. -->
+              <RefreshButton
+                :loading="loading"
+                @refresh="refresh"
+              />
+              <ExportButton
+                :table="tableRef"
+                filename="applications.csv"
+              />
+              <ColumnsButton
+                v-model="columnVisibility"
+                :columns="columns"
+              />
+            </template>
           </ControlsHeader>
 
           <FilterChips
@@ -395,6 +431,7 @@
             <CardBox :padded="false">
               <template #content>
                 <Table
+                  ref="tableRef"
                   v-model:pagination="pagination"
                   v-model:globalFilter="search"
                   v-model:columnVisibility="columnVisibility"
@@ -405,7 +442,7 @@
                   paginated
                   :page-size="8"
                   :border="false"
-                  :loading="tenancyReloading"
+                  :loading="loading"
                   @row-click="openApp"
                 >
                   <template #cell-name="{ value, row }">
@@ -436,6 +473,13 @@
                     >
                       <span class="min-w-0 truncate">{{ value }}</span>
                     </Tag>
+                  </template>
+
+                  <template #cell-id="{ value }">
+                    <IdCell
+                      :value="value"
+                      resource="application"
+                    />
                   </template>
 
                   <template #cell-domainName="{ value }">

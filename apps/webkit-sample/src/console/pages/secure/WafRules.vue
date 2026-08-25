@@ -31,9 +31,12 @@
   import AuthorCell from '../../components/list/AuthorCell.vue'
   import ColumnsButton from '../../components/list/ColumnsButton.vue'
   import DeleteDialog from '../../components/list/DeleteDialog.vue'
+  import ExportButton from '../../components/list/ExportButton.vue'
   import FilterButton from '../../components/list/FilterButton.vue'
   import FilterChips from '../../components/list/FilterChips.vue'
+  import IdCell from '../../components/list/IdCell.vue'
   import LastModifiedCell from '../../components/list/LastModifiedCell.vue'
+  import RefreshButton from '../../components/list/RefreshButton.vue'
   import TagListCell from '../../components/list/TagListCell.vue'
   import ControlsHeader from '../../components/page/ControlsHeader.vue'
   import HeadingAction from '../../components/page/HeadingAction.vue'
@@ -41,6 +44,7 @@
   import AppLayout from '../../components/shell/AppLayout.vue'
   import { DATE_PRESETS, formatDateRange, matchDate } from '../../lib/behavior/filter-bar'
   import { useListFilters } from '../../lib/behavior/list-state'
+  import { FIT_COLUMN, TAG_COLUMN, TAG_LIST_COLUMN } from '../../lib/behavior/table-columns'
   import { createResourcePath } from '../../lib/data/create-resources'
   import { productFirstUse } from '../../lib/data/product-empty-states'
   import { WAF_MODES, WAF_RULES } from '../../lib/data/waf-rules'
@@ -63,13 +67,23 @@
 
   const columns = [
     { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, hideable: false },
-    { accessorKey: 'id', header: 'ID' },
-    { accessorKey: 'mode', header: 'Mode', enableSorting: true },
-    { accessorKey: 'threatLabels', header: 'Threat Types', grow: 3 },
-    { accessorKey: 'sensitivity', header: 'Sensitivity', enableSorting: true },
-    { accessorKey: 'status', header: 'Status', enableSorting: true },
-    { accessorKey: 'author', header: 'Last Editor', enableSorting: true, grow: 2 },
-    { accessorKey: 'lastModified', header: 'Last Modified', enableSorting: true, grow: 2 },
+    { accessorKey: 'id', header: 'ID', minWidth: FIT_COLUMN },
+    { accessorKey: 'mode', header: 'Mode', enableSorting: true, minWidth: TAG_COLUMN },
+    { accessorKey: 'threatLabels', header: 'Threat Types', minWidth: TAG_LIST_COLUMN },
+    {
+      accessorKey: 'sensitivity',
+      header: 'Sensitivity',
+      enableSorting: true,
+      minWidth: FIT_COLUMN
+    },
+    { accessorKey: 'status', header: 'Status', enableSorting: true, minWidth: TAG_COLUMN },
+    { accessorKey: 'author', header: 'Last Editor', enableSorting: true, minWidth: FIT_COLUMN },
+    {
+      accessorKey: 'lastModified',
+      header: 'Last Modified',
+      enableSorting: true,
+      minWidth: FIT_COLUMN
+    },
     { id: 'actions', kind: 'action', hideable: false }
   ]
 
@@ -126,8 +140,14 @@
     search,
     pagination,
     visibleRows: visibleRuleSets,
-    loading: tenancyReloading
+    loading,
+    refresh
   } = useListFilters(filterFields, scopedRuleSets, { pageSize: 8 })
+
+  // The table the controls row drives. Download CSV calls the DS's own `exportCsv()`
+  // through it (../../components/list/ExportButton.vue), so the file honours the
+  // visible columns and the filtered rows instead of re-serialising them here.
+  const tableRef = ref(null)
 
   // Which columns are switched off, driven by the Columns button beside the filter
   // (../../components/list/ColumnsButton.vue). Only a HIDDEN column is ever recorded, so this
@@ -261,6 +281,10 @@
         <!-- ONE band: the controls, the filters and the rows they narrow. -->
         <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
           <ControlsHeader v-if="scopedRuleSets.length">
+            <FilterButton
+              v-model="filters"
+              :fields="filterFields"
+            />
             <InputText
               v-model="search"
               size="medium"
@@ -275,14 +299,24 @@
                 />
               </template>
             </InputText>
-            <FilterButton
-              v-model="filters"
-              :fields="filterFields"
-            />
-            <ColumnsButton
-              v-model="columnVisibility"
-              :columns="columns"
-            />
+            <template #actions>
+              <!-- THE RIGHT GROUP: the three controls that act on the LISTING rather
+                   than narrow it — fetch it again, take it away as a file, choose which
+                   columns it shows. All glyphs, all `medium`, so the row shares one
+                   32px height with the field and the Filter button opposite. -->
+              <RefreshButton
+                :loading="loading"
+                @refresh="refresh"
+              />
+              <ExportButton
+                :table="tableRef"
+                filename="waf-rule-sets.csv"
+              />
+              <ColumnsButton
+                v-model="columnVisibility"
+                :columns="columns"
+              />
+            </template>
           </ControlsHeader>
 
           <FilterChips
@@ -346,6 +380,7 @@
             <CardBox :padded="false">
               <template #content>
                 <Table
+                  ref="tableRef"
                   v-model:pagination="pagination"
                   v-model:globalFilter="search"
                   v-model:columnVisibility="columnVisibility"
@@ -356,12 +391,19 @@
                   paginated
                   :page-size="8"
                   :border="false"
-                  :loading="tenancyReloading"
+                  :loading="loading"
                   @row-click="(event, row) => openRuleSet(row)"
                 >
                   <!-- The principal column reads as the way in it is. -->
                   <template #cell-name="{ value }">
                     <span class="cursor-pointer truncate hover:underline">{{ value }}</span>
+                  </template>
+
+                  <template #cell-id="{ value }">
+                    <IdCell
+                      :value="value"
+                      resource="WAF rule set"
+                    />
                   </template>
 
                   <template #cell-mode="{ value }">
