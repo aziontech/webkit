@@ -138,8 +138,11 @@ function pickBestPlacement(candidates, triggerRect, panelRect, viewport, offset,
  * @returns {{
  *   resolvedPlacement: import('vue').Ref<Placement>,
  *   panelStyle: import('vue').Ref<Record<string, string>>,
+ *   anchored: import('vue').Ref<boolean>,
  *   updatePosition: () => void
- * }}
+ * }} - `anchored` turns true one frame after the opening placements have landed,
+ *   so a panel can transition its re-anchors while its entrance stays the
+ *   component's own open animation.
  */
 export function usePlacement({
   triggerRef,
@@ -159,13 +162,30 @@ export function usePlacement({
       ? (autoPlacements?.[0] ?? /** @type {Placement} */ ('bottom'))
       : /** @type {Placement} */ (initial)
   const resolvedPlacement = ref(/** @type {Placement} */ (initialResolved))
+  /**
+   * The panel is placed with `translate`, not `top`/`left`.
+   *
+   * Two reasons. A translate is a compositor property, so re-anchoring an open
+   * panel (its content changed size) can be TRANSITIONED into place instead of
+   * snapping a layout property — which is what made the copy control's tooltip
+   * flicker when its label swapped mid-hover. And `translate` is a property of
+   * its own: the open/close keyframes animate `transform: scale(...)`, so the
+   * two compose on the same element instead of overwriting each other, which a
+   * `transform: translate3d(...)` here would.
+   *
+   * `anchored` tracks whether a real position has been written yet, so the very
+   * first placement (from the off-screen seed) is never animated — only later
+   * re-anchors are.
+   */
   const offScreenStyle = /** @type {Record<string, string>} */ ({
     position: 'fixed',
-    top: '-9999px',
-    left: '-9999px',
+    top: '0',
+    left: '0',
+    translate: '-9999px -9999px',
     zIndex: String(zIndex)
   })
   const panelStyle = ref(/** @type {Record<string, string>} */ ({ ...offScreenStyle }))
+  const anchored = ref(false)
 
   function updatePosition() {
     const trigger = triggerRef.value
@@ -176,7 +196,16 @@ export function usePlacement({
     }
 
     const triggerRect = trigger.getBoundingClientRect()
-    const panelRect = panel.getBoundingClientRect()
+    // `getBoundingClientRect` reports the TRANSFORMED box, and the panel opens
+    // under `scale(0.9) → scale(1)`: measured mid-animation it was up to 10%
+    // narrow, which placed a centred tooltip 4.1px off its trigger and left it
+    // there. `offsetWidth`/`offsetHeight` are the layout box, so the placement no
+    // longer depends on which frame of the entrance it is read on.
+    const rawPanelRect = panel.getBoundingClientRect()
+    const panelRect = {
+      width: panel.offsetWidth || rawPanelRect.width,
+      height: panel.offsetHeight || rawPanelRect.height
+    }
     const gap = unref(offset)
     const viewport = {
       width: globalThis.innerWidth ?? 0,
@@ -240,8 +269,9 @@ export function usePlacement({
 
     panelStyle.value = {
       position: 'fixed',
-      top: `${top}px`,
-      left: `${left}px`,
+      top: '0',
+      left: '0',
+      translate: `${Math.round(left)}px ${Math.round(top)}px`,
       zIndex: String(zIndex),
       '--popup-origin': getPopupOrigin(finalPlacement)
     }
@@ -257,9 +287,12 @@ export function usePlacement({
    */
   function onScroll(event) {
     if (!isOpen.value) return
-    // The listener is in the capture phase (scroll does not bubble), so it also sees
-    // the panel's own scroll container: a scroll inside the panel does not move the
-    // trigger, so there is nothing to re-anchor to and nothing to dismiss.
+    // A scroll INSIDE the panel is not a scroll of the page: the trigger has not
+    // moved, so there is nothing to re-anchor to and nothing to dismiss. The
+    // listener is in the capture phase (scroll does not bubble), so it sees the
+    // panel's own scroll container too — and repositioning on it meant a long
+    // scrollable panel read two `getBoundingClientRect`s and wrote its inline
+    // style on every scrolled frame, which is what made the list stutter.
     const target = /** @type {Node | null} */ (event?.target ?? null)
     if (target && panelRef.value?.contains(target)) return
     if (onDismiss) {
@@ -274,11 +307,24 @@ export function usePlacement({
   watch(
     () => isOpen.value,
     async (open) => {
-      if (!open) return
+      if (!open) {
+        // Only the flag resets. The panel is still in the DOM playing its leave
+        // animation, so moving it off-screen here would replace that animation
+        // with a disappearance.
+        anchored.value = false
+        return
+      }
+
       await nextTick()
       updatePosition()
       await nextTick()
       updatePosition()
+      // The entrance is the panel's own scale animation, and it must not be a
+      // translate transition as well: the flag opens one frame AFTER the opening
+      // placements have landed, so re-anchors glide and the entrance does not.
+      globalThis.requestAnimationFrame(() => {
+        if (isOpen.value) anchored.value = true
+      })
     },
     { immediate: true }
   )
@@ -288,6 +334,42 @@ export function usePlacement({
     () => {
       if (isOpen.value) nextTick(() => updatePosition())
     }
+  )
+
+  /** @type {ResizeObserver | null} */
+  let panelObserver = null
+
+  /**
+   * Re-anchor when the OPEN panel's own content changes size.
+   *
+   * The panel is placed from its measured box — a centred panel's `left` is
+   * `trigger centre - panel width / 2` — so a panel that resizes after it is
+   * placed keeps a `left` computed for the width it used to have. Nothing else
+   * here catches it: the window has not resized and the page has not scrolled.
+   * Measured on the copy control, whose tooltip swaps "Copy code" for "Copied"
+   * while the pointer is still on it: the panel lost 21px of width, slid 4px, and
+   * ended 10.4px off the trigger's centre in a single frame — read as a glitch,
+   * and the same for any overlay whose content changes while it is up.
+   *
+   * A transform does not affect the observed box, so the open/close scale
+   * animation cannot drive this, and `updatePosition` only writes `top`/`left`,
+   * so repositioning cannot feed back into a resize.
+   */
+  function observePanelSize() {
+    panelObserver?.disconnect()
+    panelObserver = null
+
+    if (typeof ResizeObserver === 'undefined' || !panelRef.value) return
+
+    panelObserver = new ResizeObserver(() => {
+      if (isOpen.value) updatePosition()
+    })
+    panelObserver.observe(panelRef.value)
+  }
+
+  watch(
+    () => panelRef.value,
+    () => observePanelSize()
   )
 
   onMounted(() => {
@@ -300,7 +382,9 @@ export function usePlacement({
   onBeforeUnmount(() => {
     globalThis.window?.removeEventListener('resize', onResize)
     globalThis.document?.removeEventListener('scroll', onScroll, true)
+    panelObserver?.disconnect()
+    panelObserver = null
   })
 
-  return { resolvedPlacement, panelStyle, updatePosition }
+  return { resolvedPlacement, panelStyle, anchored, updatePosition }
 }
