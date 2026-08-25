@@ -86,7 +86,7 @@ export const layoutsData = {
   'layout-measure-focused': 'var(--container-4xl)', // 1024px — home
   'layout-measure-form': 'var(--container-4xl)', // 1024px — settings, forms
   'layout-measure-form-create': 'var(--container-5xl)', // 1192px — create flows
-  'layout-measure-docs': 'var(--container-2xl)', // 752px — documentation prose
+  'layout-measure-docs': 'var(--container-4xl)', // 1192px — documentation prose
 
   /*
    * MEASURE (control) — the widest the *right side* of an item-group field row may
