@@ -174,7 +174,12 @@
     transition: railTransition.value
   }))
 
-  const FOOTER_REGION_CLASS = 'w-full shrink-0 px-(--spacing-md) pb-(--spacing-md)'
+  // The separator belongs to the footer REGION, not to SidebarFooter: the region spans
+  // the rail edge-to-edge, so the rule reads as the rail's own division. Drawn from
+  // SidebarFooter it stopped at that component's box and skipped a rail whose footer
+  // is only the collapse control. The region gains full padding to sit under it.
+  const FOOTER_REGION_CLASS =
+    'w-full shrink-0 border-t border-(--border-default) p-(--spacing-md)'
 
   const footerBandClass = computed(() =>
     props.collapsible
