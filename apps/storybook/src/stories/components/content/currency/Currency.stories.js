@@ -25,7 +25,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Displays a monetary amount with an optional currency prefix and a muted suffix (e.g. a billing period). Available in small and large size variants.'
+          'Typesets one monetary amount as three separately-styled parts — the currency symbol, the figure, and a trailing period or unit in the code face. The size ladder is a reading distance: small for an amount in a table row, medium for an amount stated on a card, large for the headline figure of a pricing card.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -48,11 +48,11 @@ const meta = {
     },
     size: {
       control: 'select',
-      options: ['small', 'large'],
-      description: 'Visual size token for text and spacing.',
+      options: ['small', 'medium', 'large'],
+      description: 'Size token; affects typography and the gap between the figure and the suffix.',
       table: {
         category: 'props',
-        type: { summary: "'small' | 'large'" },
+        type: { summary: "'small' | 'medium' | 'large'" },
         defaultValue: { summary: "'small'" }
       }
     }
@@ -88,8 +88,9 @@ export const Default = {
   }
 }
 
-const SIZES_TEMPLATE = `<div class="flex flex-col gap-6">
+const SIZES_TEMPLATE = `<div class="flex flex-col items-start gap-6">
   <Currency value="20" prefix="$" suffix="per month" size="small" />
+  <Currency value="20" prefix="$" suffix="per month" size="medium" />
   <Currency value="20" prefix="$" suffix="per month" size="large" />
 </div>`
 
@@ -99,7 +100,10 @@ export const Sizes = {
   parameters: {
     docs: {
       controls: { disable: true },
-      description: { story: 'Both size variants side by side.' },
+      description: {
+        story:
+          'The three steps of the ladder. `large` bottom-aligns the suffix against the figure; the smaller two centre it.'
+      },
       source: { code: toSfc(IMPORT, SIZES_TEMPLATE) }
     }
   }

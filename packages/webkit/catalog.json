@@ -3089,13 +3089,13 @@
         },
         {
           "name": "size",
-          "type": "'small' | 'large'",
+          "type": "'small' | 'medium' | 'large'",
           "default": "'small'",
           "required": "false",
-          "doc": "Size token; affects height, padding, and typography."
+          "doc": "Size token; affects typography and the gap between the figure and the suffix."
         }
       ],
-      "purpose": "Displays content or metadata in the UI. Migrated from the existing implementation at `packages/webkit/src/components/webkit/content/currency/`."
+      "purpose": "Typesets one monetary amount as three separately-styled parts — the currency symbol, the figure, and a trailing period or unit — so money reads the same everywhere in the product instead of being a formatted string each screen spells its own way. The suffix carries the code typeface (`text-label-code-*`), which keeps the unit visually subordinate to the figure and aligns the whole set with the way the system typesets metered values. The size ladder is the house one (`small` / `medium` / `large`) and each step is a different reading distance: `small` is an amount inside a table row or a list cell, `medium` an amount stated as a fact on a card, `large` the headline figure of a pricing card. `large` bottom-aligns the suffix against the figure rather than centring it, because a 56px numeral centred against a 14px unit reads as two unrelated pieces of text."
     },
     "kbd": {
       "import": "@aziontech/webkit/kbd",
