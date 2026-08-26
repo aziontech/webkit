@@ -37,11 +37,12 @@
   // frame stacked under another is `flush`, so it simply does not draw the rule its
   // neighbour already has.
   //
-  // There is NO hero band. The page opens on the first brick of the column — the headline
-  // and the three tiers in one block — so the nav's own rule is the page's top rule, and
-  // the headline sits on the same content column as the plan names under it and every row
-  // label in the matrix below. A separate full-bleed band would have centred that headline
-  // in a column of its own, at its own inset, above the very cards it introduces.
+  // The hero is a BannerContainer — a full-bleed band, so its floor is one rule running
+  // the whole width of the window, and the framed column starts under it. Same opening as
+  // Functions and Home; the three pages of the site draw their first horizontal one way.
+  // The headline still sits on the same content column as the plan names under it and
+  // every row label in the matrix below: the band reads `--layout-boundary-inline` and
+  // caps at `--container-site`, which is exactly what the column below it does.
   import Accordion from '@aziontech/webkit/accordion'
   import Button from '@aziontech/webkit/button'
   import CardPricing from '@aziontech/webkit/card-pricing'
@@ -51,7 +52,12 @@
   import SectionTitle from '@aziontech/webkit/section-title'
   import SegmentedButton from '@aziontech/webkit/segmented-button'
   import BrandCarousel from '@shared/ui/brand/BrandCarousel.vue'
-  import { CardGrid, SectionContainer, SectionModule } from '@shared/ui/layout/index.js'
+  import {
+    BannerContainer,
+    CardGrid,
+    SectionContainer,
+    SectionModule
+  } from '@shared/ui/layout/index.js'
   import { computed, ref } from 'vue'
   import { useRouter } from 'vue-router'
 
@@ -95,22 +101,60 @@
 </script>
 
 <template>
+  <!-- ══ The hero — a full-bleed band, closing on the page's first rule ═══════
+       THE HERO'S FLOOR RUNS TO THE WINDOW'S EDGE, the way Functions' and Home's do. It is
+       a BannerContainer, so the band is the full width of the viewport and its `border-b`
+       is the page's first horizontal — one uninterrupted line, edge to edge, with the
+       framed column starting UNDER it. The rule used to stop at the frame: the hero was
+       the opening band of the plans brick INSIDE the column, so its floor ran the column's
+       1192px and the site's three pages opened three different ways.
+
+       The old objection to a band here was alignment — a hero in a column of its own put
+       the H1 at the band's `xl` against the column's `lg` boundary, a step to the right of
+       every plan name under it. That is gone: BannerContainer reads
+       `--layout-boundary-inline`, the same token the plan names, every matrix row label and
+       the nav's own logo open at, and its column is `--container-site`, the same measure
+       SectionContainer takes below. So the H1 lands on the page's ONE content column by
+       construction rather than by two numbers kept equal by hand.
+
+       `:padded="false"` because the band's own `xl` rhythm is not this hero's: the copy
+       opens on the column's `xxl` with a 96px FLOOR (`--spacing-24`), because
+       `--spacing-xxl` only reaches 6rem at `xl` — below that it steps down to 4rem and
+       2rem, which put the H1 64px and 32px under the nav's rule on a laptop and a phone.
+       `max()` keeps the semantic token in charge wherever it is the larger of the two, so
+       the page opens on at least 96px at EVERY width. `pb-(--spacing-xl)` sets the floor
+       48px under the description against the switch row's 24 below it, so the rule reads as
+       the hero's own floor rather than as the control strip's ceiling.
+
+       `max-w-(--container-3xl)` folds the headline onto two lines so `text-balance` splits
+       it evenly instead of leaving an orphan word, and the description takes a narrower cap
+       so it reads as a second, shorter block rather than a full-width line under it. -->
+  <BannerContainer
+    max-width="site"
+    :padded="false"
+  >
+    <div class="pt-[max(var(--spacing-xxl),var(--spacing-24))] pb-(--spacing-xl)">
+      <HeroTitle
+        eyebrow="Pricing"
+        title="Plans for every stage of your application"
+        description="Every product and feature is available on every plan. Start free and scale as you grow."
+        class="[&>h1]:max-w-(--container-3xl) [&>p]:max-w-(--container-xl)"
+      />
+    </div>
+  </BannerContainer>
+
   <!-- ══ The framed column ═════════════════════════════════════════════════ -->
   <SectionContainer max-width="site">
-    <!-- ── The headline and the three tiers — ONE block ────────────────────
-         The page's opening claim and the thing it is claiming about belong to the same
-         brick: the reader's whole job here is to get to the three columns, so the
-         headline is the block's opening band and the cards are its floor, under one
-         frame. It used to be a full-bleed hero band of its own above the column, which put
-         the H1 in a second centred column at a second inset — the band's own `xl` against
-         the column's `lg` boundary — so the page's first line landed a step to the right of
-         every plan name under it.
+    <!-- ── The term switch and the three tiers — ONE block ─────────────────
+         The control and the thing it controls belong to the same brick: the switch is the
+         cards' own header strip, not a band of its own above them, so both live under one
+         frame and the reader never loses which row the term applies to.
 
-         First brick in the column, so `:divided="false"` — its top edge is the nav's own
-         rule. The band is a registration frame: `borders="y"` hands the vertical rules
-         back to the column, `flush` drops the top rule it would otherwise draw against
-         that same nav rule, and `marks="bottom"` ticks the one junction nothing else
-         draws. -->
+         First brick in the column, so `:divided="false"` — its top edge is the hero band's
+         own full-bleed rule. The block is a registration frame: `borders="y"` hands the
+         vertical rules back to the column, `flush` drops the top rule it would otherwise
+         draw against that same hero rule, and `marks="bottom"` ticks the one junction
+         nothing else draws. -->
     <SectionModule
       id="plans"
       :divided="false"
@@ -121,27 +165,15 @@
         borders="y"
         marks="bottom"
       >
-        <!-- The headline takes the PAGE BOUNDARY and nothing else: `layout-boundary-inline`
-             is the same token the plan names beside it, every matrix row label and every
-             action footer in this app open at, so the H1, the tiers and the comparison all
-             start on ONE content column at whatever the token steps to per breakpoint. The
-             vertical air is the band's, not the boundary's — one `xxl` to open the page —
-             and the switch's own row closes it. `max-w-(--container-3xl)` folds the
-             headline onto two lines so `text-balance` splits it evenly instead of leaving
-             an orphan word, and the description takes a narrower cap so it reads as a
-             second, shorter block rather than a full-width line under it. -->
-        <div class="layout-boundary-inline pt-(--spacing-xxl)">
-          <HeroTitle
-            eyebrow="Pricing"
-            title="Plans for every stage of your application"
-            description="Every product and feature is available on every plan. Start free and scale as you grow."
-            class="[&>h1]:max-w-(--container-3xl) [&>p]:max-w-(--container-xl)"
-          />
-        </div>
-
-        <!-- The term switch closes the opening band — no rule between it and the headline,
-             so the two read as one opening — and ITS bottom rule is the cards' top edge,
-             so the grid below draws none. -->
+        <!-- The term switch is a STRIP between two rules — the hero's floor above it, its
+             own `border-b` below, which is also the edge the card grid's verticals terminate
+             on. That stack of horizontals (hero floor → switch strip → the grid's own top
+             rule) is what CONNECTS the headline to the tiers: the three cards read as the
+             continuation of the sentence above them rather than as a separate object that
+             happens to sit lower on the page. The row runs one even `--spacing-lg`: it used
+             to carry a phone-only 48px below, because the first card arrived 16px under the
+             control with nothing between them, and the strip's own rules are the break that
+             extra padding was standing in for. -->
         <div class="flex justify-center border-b border-(--border-default) p-(--spacing-lg)">
           <SegmentedButton
             v-model="period"
@@ -150,64 +182,128 @@
           />
         </div>
 
-        <CardGrid
-          variant="divider"
-          :columns="3"
-        >
-          <CardPricing
-            v-for="card in cards"
-            :key="card.id"
-            :class="card.highlighted ? 'bg-(--bg-surface)' : 'bg-(--bg-canvas)'"
-            aligned
-            slot-position="middle"
-            kind="transparent"
-            :plan-title="card.name"
-            :value="card.value"
-            :prefix="card.prefix"
-            :suffix="card.suffix"
-            :show-prefix="Boolean(card.prefix)"
-            :show-suffix="Boolean(card.suffix)"
-            :pricing-details="card.caveat"
-            :show-tag="card.highlighted"
-            :tag-label="card.tagLabel"
-            action-label=""
-            :data-testid="`pricing-card-${card.id}`"
-          >
-            <!-- What the tier includes: the lead-in the real page states, then the list.
-                 The lead-in is a caption on the list, not a heading — it says how to read
-                 the five lines under it ("everything available", "scale beyond the
-                 included limits"), which is a different claim per tier. -->
-            <div class="flex flex-col gap-(--spacing-md)">
-              <p class="m-0 text-body-sm text-(--text-muted)">{{ card.featuresTitle }}</p>
-              <ul class="m-0 flex list-none flex-col gap-(--spacing-sm) p-0">
-                <li
-                  v-for="feature in card.features"
-                  :key="feature.label"
-                  class="flex items-start gap-(--spacing-sm)"
-                >
-                  <i
-                    :class="[feature.icon, 'mt-0.5 shrink-0 text-body-sm text-(--primary)']"
-                    aria-hidden="true"
-                  />
-                  <span class="text-body-sm text-(--text-default)">{{ feature.label }}</span>
-                </li>
-              </ul>
-            </div>
+        <!-- ── THE ROW OF CARDS IS ITS OWN FRAMED BOX ────────────────────────
+             The inset belongs to the OUTER CONTAINER, and it is the page boundary itself:
+             the wrapper takes `layout-boundary-inline` on the inline axis and nothing on
+             the block one, so the box steps one boundary in from the band's sides and
+             NOTHING in from its two rules. Its
+             left edge therefore lands on the same vertical as the H1 above it and the nav's
+             logo above that — the boundary the whole page opens on. It is a
+             container's padding rather than a margin on the grid for the reason the
+             token's own utility gives (`layouts.data.js`): the boundary is padding, never
+             margin, and it belongs to the container, not to the thing inside it.
 
-            <!-- One filled button in the row, and it is the brand fill: the recommended
-                 tier gets `primary`, the other two `outlined`. Three filled buttons side
-                 by side name no primary action at all. -->
-            <template #actions>
-              <Button
-                :label="card.action.label"
-                :kind="card.action.kind"
-                size="large"
-                class="w-full"
-                @click="choose(card)"
-              />
-            </template>
-          </CardPricing>
-        </CardGrid>
+             AND THE INSET STOPS AT `lg` — `max-lg:`, the breakpoint below which the grid
+             is one or two columns. Small widths keep it: a stacked or two-up card is a
+             block of prose, and it reads as the page's column when it starts where the H1
+             starts. From `lg` up the row takes the band's FULL WIDTH instead, so the three
+             tiers are FLUID inside the parent frame — every column as wide as the page can
+             make it, and the outer seams landing on the SectionContainer's own `border-x`
+             rather than a second pair of rules inside it. The frame's verticals follow the
+             inset (`lg:border-none`): at full bleed they would sit 1px inside that
+             `border-x` and thicken it into a 2px edge — the doubled hairline `flush` exists
+             to prevent.
+
+             And it is the boundary FLAT — not the boundary minus the card's own
+             `p-(--spacing-lg)`. Compensating for that padding would register the card's
+             TEXT with the column and leave its box hanging 24px outside the inset, which
+             is the wrong edge to align: these are filled cells (the recommended one paints
+             `--bg-surface`), so what the reader sees as a card's start is its box.
+
+             Pulled off the band's rules, the row needs rules of its own — otherwise three
+             cells float in the middle of a frame with nothing registering them. So the
+             grid goes in a FrameBox, drawn at the same `--border-default` as the band
+             around it. The seams inside stay the grid's `gap-px`, which is why
+             `kind="transparent"` cards each fill their own background.
+
+             The box SPANS THE BAND'S TWO RULES: no vertical padding on the wrapper and
+             `flush="y"` on the frame, so the switch row's `border-b` is the box's top edge,
+             the band's own floor is its bottom edge, and what the frame actually draws is
+             the PAIR OF VERTICALS between them — running the full height of the cards and
+             MEETING a rule at each end. That continuity is the whole point: a box floating
+             with air above and below reads as a fourth, unrelated object inside the band,
+             where two rules stepped in by one boundary and terminated by the band's own
+             horizontals read as the band's own column. `flush` is also what keeps each
+             junction ONE hairline instead of two lines a pixel apart, and `marks="none"`
+             follows from it — a corner tick registers a junction nothing else draws, and
+             here both horizontals belong to the band. -->
+        <div class="max-lg:layout-boundary-inline">
+          <FrameBox
+            flush="y"
+            marks="none"
+            class="lg:border-none"
+          >
+            <CardGrid
+              variant="divider"
+              :columns="3"
+            >
+              <!-- THREE TIERS IN A TWO-UP GRID LEAVE ONE CELL EMPTY, and an empty cell of a
+                   `divider` grid is not empty: it shows the wrapper's `--border-default`,
+                   which paints a grey quarter-screen block beside the last tier. So the
+                   last card takes that cell whenever the count is odd — one wide tier
+                   closing the pair above it — and drops back to one column at `lg`, where
+                   three columns divide the row exactly. -->
+              <CardPricing
+                v-for="(card, index) in cards"
+                :key="card.id"
+                :class="[
+                  card.highlighted ? 'bg-(--bg-surface)' : 'bg-(--bg-canvas)',
+                  index === cards.length - 1 && cards.length % 2 === 1
+                    ? 'sm:col-span-2 lg:col-span-1'
+                    : ''
+                ]"
+                aligned
+                slot-position="middle"
+                kind="transparent"
+                :plan-title="card.name"
+                :value="card.value"
+                :prefix="card.prefix"
+                :suffix="card.suffix"
+                :show-prefix="Boolean(card.prefix)"
+                :show-suffix="Boolean(card.suffix)"
+                :pricing-details="card.caveat"
+                :show-tag="card.highlighted"
+                :tag-label="card.tagLabel"
+                action-label=""
+                :data-testid="`pricing-card-${card.id}`"
+              >
+                <!-- What the tier includes: the lead-in the real page states, then the list.
+                     The lead-in is a caption on the list, not a heading — it says how to read
+                     the five lines under it ("everything available", "scale beyond the
+                     included limits"), which is a different claim per tier. -->
+                <div class="flex flex-col gap-(--spacing-md)">
+                  <p class="m-0 text-body-sm text-(--text-muted)">{{ card.featuresTitle }}</p>
+                  <ul class="m-0 flex list-none flex-col gap-(--spacing-sm) p-0">
+                    <li
+                      v-for="feature in card.features"
+                      :key="feature.label"
+                      class="flex items-start gap-(--spacing-sm)"
+                    >
+                      <i
+                        :class="[feature.icon, 'mt-0.5 shrink-0 text-body-sm text-(--primary)']"
+                        aria-hidden="true"
+                      />
+                      <span class="text-body-sm text-(--text-default)">{{ feature.label }}</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <!-- One filled button in the row, and it is the brand fill: the recommended
+                     tier gets `primary`, the other two `outlined`. Three filled buttons side
+                     by side name no primary action at all. -->
+                <template #actions>
+                  <Button
+                    :label="card.action.label"
+                    :kind="card.action.kind"
+                    size="large"
+                    class="w-full"
+                    @click="choose(card)"
+                  />
+                </template>
+              </CardPricing>
+            </CardGrid>
+          </FrameBox>
+        </div>
       </FrameBox>
     </SectionModule>
 
@@ -282,6 +378,7 @@
     >
       <template #header>
         <SectionTitle
+          eyebrow="Platform primitives"
           title="Serverless AI-Native Primitives"
           description="Enterprise-grade reliability, security and performance, without requiring specialized operational expertise."
         />
@@ -295,7 +392,7 @@
         <CardGrid
           variant="divider"
           :columns="4"
-          :mobile-columns="2"
+          :mobile-columns="1"
         >
           <NavColumn
             v-for="group in PRIMITIVE_GROUPS"
@@ -332,15 +429,38 @@
         borders="y"
         marks="bottom"
       >
-        <div class="grid gap-px bg-(--border-default) lg:grid-cols-3">
-          <!-- The heading keeps the page's prose start line across (`xl` — the column the
-               hero and the closing CTA also begin on) and takes the ROW's step down (`md`),
-               so its first line lands on the first question's and the two cells open on one
-               line. It is the one box in this band that does not run a single token on all
-               four sides, because its top edge belongs to the stack beside it rather than to
-               itself: padded `xl` down, the title floated below the two questions it heads. -->
-          <div class="bg-(--bg-canvas) px-(--spacing-xl) py-(--spacing-md)">
-            <h2 class="m-0 text-balance text-heading-lg text-(--text-default)">
+        <div
+          class="grid gap-px bg-(--border-default) [--accordion-inset:var(--spacing-lg)] lg:grid-cols-3 lg:[--accordion-inset:var(--spacing-xl)]"
+        >
+          <!-- The heading takes the BAND'S OWN INSET across — `--accordion-inset`,
+               declared once on the grid above and read by both cells — and the ROW's step
+               down (`md`), so its first line lands on the first question's and the two
+               cells open on one line.
+
+               ── THE INSET IS ONE PROPERTY, AND IT STEPS AT `lg` ──
+
+               BELOW `lg` THE TWO CELLS STACK IN ONE COLUMN: the title sits directly over
+               the questions, so the two have to open on the same vertical. They read the
+               same property, so that alignment is a fact rather than two numbers kept
+               equal by hand — and the value there is the page column itself (`lg`: 24
+               from `sm`, 16 on a phone), which is what puts the title, every question and
+               every answer on the vertical the H1 and the matrix rows already run
+               (measured at 900px: all three at 25). A hard `xl` here put the title 8px
+               right of every question under it, which is where that alignment argument
+               came from.
+
+               FROM `lg` UP THERE IS NOTHING STACKED OVER ANYTHING — two cells side by
+               side, each opening on its own edge — so the alignment the tight inset was
+               buying no longer exists to buy, and the band takes the marketing step
+               instead: `xl`, 32 on a laptop and 48 from `xl`, the same inset every
+               SectionTitle on this page opens at. Heading, questions and answers all
+               widen together, because what moves is the one property they share.
+
+               It is still the one box in this band that does not run a single token on all
+               four sides, because its top edge belongs to the stack beside it rather than
+               to itself. -->
+          <div class="bg-(--bg-canvas) px-(--accordion-inset) py-(--spacing-md)">
+            <h2 class="m-0 mt-(--spacing-md) text-balance text-heading-lg text-(--text-default)">
               Frequently Asked Questions
             </h2>
           </div>
@@ -350,21 +470,27 @@
 
                  ── THE ROW IS THE MATRIX'S ROW ──
 
-                 This band is the page's second ruled stack, so it takes the first one's
-                 box: `--spacing-lg` across, `--spacing-md` down — the same pair every
-                 matrix row uses, landing a 54px row against the matrix's 53. What it held
-                 before was not a box but two decisions: 48 across (`xl`) against 12 down
-                 (`sm`), so the question floated in a field of side space while sitting
-                 tight against the rule above it, and halving the inset is what closes
-                 that gap.
+                 This band is the page's second ruled stack, so while it is STACKED it
+                 takes the first one's box: `--spacing-lg` across, `--spacing-md` down —
+                 the same pair every matrix row uses, landing a 54px row against the
+                 matrix's 53. From `lg` the across step widens with the band (see
+                 `--accordion-inset` above) and the down step does NOT: twelve questions
+                 gain nothing from a taller row, and the row's height is what keeps the
+                 stack scannable. What it held before was not a box but two decisions: 48
+                 across against 12 down (`sm`), so the question floated in a field of side
+                 space while sitting tight against the rule above it — a wide inset is
+                 only wrong when it is not also the band's.
 
                  `--accordion-inset` is the component's own hook for that horizontal step,
-                 set once on the group so the ANSWER can take the same property below and
-                 start on the question's column — one content column, at whatever the
+                 set once on the BAND'S GRID (custom properties inherit) so the heading
+                 cell beside it, the trigger and the ANSWER below all take the same
+                 property and start on the question's column — one content column, at whatever the
                  token itself steps to per breakpoint. The answer had NO padding at all,
                  so it began 48px left of its own question, ran the cell's full width, and
                  touched the rules above and below it. `--container-2xl` caps its measure
-                 at ~73 characters: uncapped it reads 99, which is a rule, not prose.
+                 at ~73 characters stacked and ~68 on desktop — the cap is on the box, so
+                 the wider inset comes out of the text — against 99 uncapped, which is a
+                 rule, not prose.
 
                  ── ONE RULE PER ITEM, AT THE ITEM'S OWN EDGE ──
 
@@ -399,7 +525,6 @@
               type="single"
               collapsible
               size="large"
-              class="[--accordion-inset:var(--spacing-lg)]"
             >
               <Accordion.Item
                 v-for="(item, index) in FAQ"

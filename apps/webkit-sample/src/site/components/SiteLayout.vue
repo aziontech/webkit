@@ -41,7 +41,18 @@
   <!-- The global shell locks html/body/#app to `height: 100dvh; overflow: hidden`
        (the console AppLayout owns scrolling internally), so this marketing shell
        must own its own scroll region: a full-height, vertically-scrolling column.
-       The sticky SiteNav sticks to the top of THIS container as it scrolls. -->
+       The sticky SiteNav sticks to the top of THIS container as it scrolls.
+
+       THE BOUNDARY IS NOT RE-DECLARED HERE. `--layout-boundary-inline` is one token with
+       one value for the whole app, and the nav reads it and every band below it reads
+       it — which is what makes "the bar and the page open on the same vertical" a fact
+       instead of two numbers kept equal by hand. It was two numbers: the nav took the
+       token while the bands hard-coded `xl`, so on every width narrower than the
+       frame's cap — where the frame IS the window — the logo sat inside the headline
+       under it. The bands read the token now (BannerContainer, SectionContainer), so
+       there is nothing left for this shell to say. Above `--container-site` the frame
+       centres and the bar stays registered to the WINDOW, so the two part company there
+       by design — see SiteNav. -->
   <div class="flex h-dvh flex-col overflow-y-auto bg-(--bg-canvas) text-(--text-default)">
     <SiteNav />
     <main class="flex-1">

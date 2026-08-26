@@ -55,9 +55,16 @@
   //     centred under it, so the top of the matrix read as three floating stacks over a
   //     grid. Start-aligned, the three names land on the same rule as `Features` and every
   //     band title below them.
-  //   • a band is a 24px title (`text-heading-md`) over a description capped at `max-w-md`,
-  //     not a full-width line: at 1190px a one-sentence description that runs the whole
-  //     table reads as a rule, not as prose.
+  //   • a band is a title over a description capped at `max-w-md`, not a full-width line:
+  //     at 1190px a one-sentence description that runs the whole table reads as a rule,
+  //     not as prose. The title is the ONE place the matrix steps outside its single 14px
+  //     size, because it is not a row: nine of these are the only landmarks in 105 rows,
+  //     so they are what a reader scrolls BY. It is `text-heading-lg` — ONE token, at
+  //     whatever that token steps to: 18px below `sm`, 30px from `md` up, against the
+  //     rows' flat 14. Worth knowing that this scale inverts itself between 640 and 767
+  //     (`md` steps to 1.25rem at `sm` while `lg` is still at its 1.125rem base), so the
+  //     band is 18px rather than 20 in that one window — the cost of holding one token
+  //     instead of a per-breakpoint ladder, and the band still outranks its rows there.
   //
   // ── ONE PROPORTIONAL BOX, ONE START LINE ──
   //
@@ -67,6 +74,13 @@
   // against 96 down, so the band floated in a field of space while its own rows sat tight
   // against the rule above them. One token per box keeps the ratio fixed at every
   // breakpoint, because the token itself is what steps.
+  //
+  // The band's TOP is the single exception: `pt-(--spacing-xl)`, one step up in the same
+  // family, so it still steps with every other box. That air is not the band's box, it is
+  // the seam between two product sections — the thing the `border-t` beside it only marks
+  // with a hairline — so it belongs above the title and not around it. Below and across
+  // the band stays on `lg`, which is why the title still starts on the matrix's one start
+  // line and its description still closes on the same floor as a row.
   //
   // And it is the same token in every box, so the whole matrix has ONE start line:
   // `Features`, each plan name and its button, every band's eyebrow / title / description,
@@ -259,7 +273,7 @@
             scope="colgroup"
             colspan="4"
             :class="[
-              'border-b border-(--border-default) p-(--spacing-lg) text-left font-normal',
+              'border-b border-(--border-default) p-(--spacing-lg) pt-(--spacing-xl) text-left font-normal',
               sectionIndex > 0 && 'border-t'
             ]"
           >
@@ -268,7 +282,7 @@
                  section openings competing with the single heading each band actually has,
                  and the colour pulls the eye off the plan columns the reader came for. The
                  title is the band's first line, so it carries no leading margin. -->
-            <span class="block text-heading-md text-(--text-default)">
+            <span class="block text-heading-lg text-(--text-default)">
               {{ section.title }}
             </span>
             <span
@@ -298,7 +312,7 @@
             scope="row"
             :class="[
               'py-(--spacing-md) px-(--spacing-lg) text-left align-middle text-label-md font-normal',
-              'group-data-[closing]/row:border-b group-data-[closing]/row:border-(--border-default)',
+              'group-data-closing/row:border-b group-data-closing/row:border-(--border-default)',
               // A group row opens a block, so it carries the rule — unless it is the
               // first, whose top edge is the band's own `border-b`. The rule and the
               // weight are the whole distinction; the rows under it are NOT indented.
@@ -354,7 +368,7 @@
             :key="plan.id"
             :class="[
               'border-l border-(--border-default) px-(--spacing-sm) py-(--spacing-md) text-center align-middle text-label-md text-(--text-default)',
-              'group-data-[closing]/row:border-b',
+              'group-data-closing/row:border-b',
               row.group && rowIndex > 0 && 'border-t',
               columnClass(plan)
             ]"

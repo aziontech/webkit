@@ -311,6 +311,7 @@ And it stays up when others go down."
     >
       <template #header>
         <SectionTitle
+          eyebrow="Platform primitives"
           title="Serverless AI-Native Primitives for Autonomous Workloads"
           description="Every primitive stands on its own and shares the same network, identity, and observability. Compose only what a workload needs, and add the rest without moving anything."
         />
@@ -330,7 +331,7 @@ And it stays up when others go down."
         <CardGrid
           variant="divider"
           :columns="4"
-          :mobile-columns="2"
+          :mobile-columns="1"
         >
           <NavColumn
             v-for="group in primitiveGroups"
@@ -396,7 +397,7 @@ And it stays up when others go down."
                  a solid stack of copy. From lg the copy has its own column again, hangs
                  from the top edge, and falls back to the frame's vertical rhythm. -->
             <div
-              class="flex min-h-[clamp(340px,52vh,620px)] flex-col justify-between gap-(--spacing-xl) px-(--spacing-xl) pt-[clamp(2rem,7vh,3.25rem)] pb-(--spacing-xl) lg:justify-start lg:py-(--spacing-xxl) lg:pt-(--spacing-xxl)"
+              class="flex min-h-[clamp(340px,52vh,620px)] flex-col justify-between gap-(--spacing-xl) md:px-(--spacing-xl) px-(--layout-boundary-inline) pt-[clamp(2rem,7vh,3.25rem)] pb-(--spacing-xl) lg:justify-start lg:py-(--spacing-xxl) lg:pt-(--spacing-xxl)"
             >
               <h2 class="text-balance text-heading-2xl text-(--text-default)">
                 The most reliable infrastructure
@@ -441,9 +442,7 @@ And it stays up when others go down."
               marks="none"
               class="min-w-0 bg-(--bg-canvas)"
             >
-              <div
-                class="flex h-full flex-col justify-between gap-(--spacing-xl) p-(--spacing-xl)"
-              >
+              <div class="flex h-full flex-col justify-between gap-(--spacing-xl) p-(--spacing-xl)">
                 <p class="m-0 text-pretty text-heading-sm text-(--text-muted)">
                   <span class="font-medium text-(--text-default)">{{ benefit.claim }}</span>
                   {{ benefit.line }}
@@ -594,9 +593,7 @@ And it stays up when others go down."
               marks="none"
               class="bg-(--bg-canvas)"
             >
-              <div
-                class="flex h-full flex-col items-start gap-(--spacing-sm) p-(--spacing-xl)"
-              >
+              <div class="flex h-full flex-col items-start gap-(--spacing-sm) p-(--spacing-xl)">
                 <p class="m-0 flex items-center gap-(--spacing-xs) text-body-sm">
                   <i
                     :class="[pillar.icon, 'text-body-md text-(--text-muted)']"

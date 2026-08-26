@@ -43,6 +43,20 @@
     marginBottom: {
       type: String,
       default: 'mb-12'
+    },
+    // Measure of the headline itself, as a `max-w-*` class. `hero` caps at the
+    // page measure by default; pass a narrower one to choose where a short title
+    // breaks (the balance algorithm then splits it into even lines).
+    titleMaxWidth: {
+      type: String,
+      default: ''
+    },
+    // Measure of the description, as a `max-w-*` class. Each scale carries its
+    // own default; pass a narrower one when that default breaks the lead late
+    // and leaves a stub second line (a wide cap rags badly on a short lead).
+    descriptionMaxWidth: {
+      type: String,
+      default: ''
     }
   })
 </script>
@@ -62,8 +76,9 @@
         {
           'text-heading-lg': size === 'section',
           'text-heading-xl': size === 'page',
-          'text-heading-2xl max-w-(--container-4xl)': size === 'hero'
-        }
+          'text-heading-2xl': size === 'hero'
+        },
+        titleMaxWidth || (size === 'hero' ? 'max-w-(--container-4xl)' : '')
       ]"
     >
       {{ title }}
@@ -71,8 +86,9 @@
     <p
       v-if="description || $slots.default"
       :class="[
-        'text-muted m-0 mt-4 text-pretty leading-relaxed',
-        size === 'hero' ? 'max-w-(--container-2xl) text-body-lg' : 'max-w-[620px] text-body-md'
+        'text-muted m-0 text-pretty leading-relaxed',
+        size === 'hero' ? 'mt-(--spacing-lg) text-body-lg' : 'mt-4 text-body-md',
+        descriptionMaxWidth || (size === 'hero' ? 'max-w-(--container-2xl)' : 'max-w-[620px]')
       ]"
     >
       <slot>
@@ -81,7 +97,7 @@
     </p>
     <div
       v-if="$slots.actions"
-      class="mt-6"
+      :class="size === 'hero' ? 'mt-(--spacing-xl)' : 'mt-6'"
     >
       <slot name="actions" />
     </div>

@@ -92,7 +92,7 @@
         marks="bottom"
       >
         <div
-          class="flex flex-col gap-(--spacing-xl) px-(--spacing-xl) py-(--spacing-xxl)"
+          class="flex flex-col gap-(--spacing-xl) md:px-(--spacing-xl) px-(--layout-boundary-inline) py-(--spacing-xxl)"
         >
           <Overline
             prefix="//"
@@ -138,7 +138,7 @@
            scroll padding moves the snap position inward instead, which is what keeps
            the row's left inset at rest. -->
         <div
-          class="flex snap-x snap-mandatory gap-(--spacing-xl) overflow-x-auto scroll-pl-(--spacing-xl) px-(--spacing-xl) pb-(--spacing-xs) [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          class="flex snap-x snap-mandatory gap-(--spacing-xl) overflow-x-auto scroll-pl-(--layout-boundary-inline) px-(--layout-boundary-inline) pb-(--spacing-xs) scrollbar-none [&::-webkit-scrollbar]:hidden"
         >
           <article
             v-for="entry in stories"
