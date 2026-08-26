@@ -2033,7 +2033,7 @@
           "notes": "Emitted after a successful clipboard write with the copied value."
         }
       ],
-      "purpose": "Icon-only control that copies a string to the clipboard and briefly confirms success. Composes `IconButton` for visuals and interaction tokens."
+      "purpose": "Icon-only control that copies a string to the clipboard and briefly confirms success. Composes `IconButton` for visuals and interaction tokens, and `Tooltip` for its name: an icon-only button is silent to a pointer user until hovered, so the glyph is always labelled on hover/focus. The tooltip text is the same string as the accessible name — `ariaLabel` while idle, `copiedLabel` for the two seconds after a write — so the confirmation is seen as well as announced. It is suppressed with `disabled`."
     },
     "segmented-button": {
       "import": "@aziontech/webkit/segmented-button",
