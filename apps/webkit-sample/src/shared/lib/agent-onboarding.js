@@ -1,6 +1,6 @@
 // Agent onboarding — the one prompt, and the tools it is meant to be pasted into.
 //
-// Three surfaces offer this: the contrast pill (ui/ContrastBanner.vue, on the site and
+// Three surfaces offer this: the copy-prompt button (ui/CopyPromptButton.vue, on the site and
 // the docs home), the first-access card (console/HomeEmptyState.vue) and the same card at
 // the foot of the populated Overview's usage rail (console/Home.vue). They MUST hand over
 // the same text — a prompt that drifts between places is that many different onboardings,
@@ -28,7 +28,7 @@ export const AGENT_TOOLS = ['claude', 'cursor', 'windsurf', 'codex', 'opencode']
 // ── DISMISSAL ──
 //
 // The offer is guidance, and guidance the reader has acted on (or decided against)
-// has to be able to leave the layout and STAY gone. `ContrastBanner` removes itself
+// has to be able to leave the layout and STAY gone. `CopyPromptButton` removes itself
 // on the click and emits `close`; whether it comes back is deliberately not its
 // decision (see the note in that file). This is that decision, in the one place every
 // surface can share it.

@@ -24,6 +24,7 @@
   import DocsAgentSetup from '../components/DocsAgentSetup.vue'
   import DocsLayout from '../components/DocsLayout.vue'
   import { AGENT_SETUP_TOC, agentSetupMarkdown } from '../lib/docs-agent-setup.js'
+  import { useDocsCrumbNav } from '../lib/docs-crumb-nav.js'
   import { useDocsPageActions } from '../lib/docs-page-actions.js'
   import { docsPageChrome } from '../lib/docs-pages.js'
   import { docsRailGroups } from '../lib/docs-rail-groups.js'
@@ -48,6 +49,10 @@
 
   provideHeadingNav(goToHeading)
 
+  // A crumb is a real anchor, so the plain left click has to be taken into the app's own
+  // router — otherwise stepping back up the trail reloads the whole SPA. Same split the
+  // rail makes: modified clicks stay the browser's.
+  const onCrumbNavigate = useDocsCrumbNav()
 
   // Trail and reading order come from the RAIL, like every MDX page's do (see
   // docs-pages.js). Typed out here they went stale the moment the tree changed: the trail
@@ -69,9 +74,14 @@
 <template>
   <DocsLayout>
     <template #page-bar>
-      <!-- Full trail from `md` up, the current page alone below it: the trail wraps
-           rather than truncates, and a two-line trail would double a bar that is pinned
-           for the whole scroll. -->
+      <!-- ONE Breadcrumb, and the DESIGN SYSTEM makes it responsive. Below 768 it renders
+           the first crumb, an overflow dropdown holding the middle of the trail, and the
+           current page — every step still reachable, in the width a phone has.
+
+           It used to be TWO instances: the full trail from `md` up, and `crumbs.slice(-1)`
+           below it. That threw the trail away exactly where the rail is also hidden, so a
+           reader on a phone had the name of the page they were already on and no way back
+           up — and it bypassed the collapse this component already ships. -->
       <!-- OPTICALLY COMPENSATED: the crumb is a hover pill with `px-(--spacing-xs)`, so
            left alone its LABEL starts 8px inside the column edge while the title below is
            flush with it — the trail reads indented against the whole page. The negative
@@ -80,11 +90,8 @@
            nothing to collide with. -->
       <Breadcrumb
         :items="CHROME.crumbs"
-        class="hidden -ml-(--spacing-xs) min-w-0 flex-1 md:inline-flex"
-      />
-      <Breadcrumb
-        :items="CHROME.crumbs.slice(-1)"
-        class="-ml-(--spacing-xs) min-w-0 flex-1 md:hidden"
+        class="-ml-(--spacing-xs) min-w-0 flex-1"
+        @navigate="onCrumbNavigate"
       />
       <SplitButton
         :label="copyLabel"

@@ -9,12 +9,20 @@
    * that hands the page to an AI tool), the deck that says what they will have
    * by the end, and when the page was last touched.
    *
-   * IT CLOSES ON A RULE. The masthead is the page's first section, and without
-   * an edge it just runs into the prose — the reader gets the deck and the first
-   * paragraph as one block of text, with only a size change between them. The
-   * rule spans the whole column, so it reads as the page's own horizon rather
-   * than as decoration under the title, and it is what gives every h2 below it
+   * IT CLOSES ON A RULE, AND THE PAGE IS WHAT DRAWS IT. The masthead is the
+   * page's first section, and without an edge it just runs into the prose — the
+   * reader gets the deck and the first paragraph as one block of text, with only
+   * a size change between them. That rule is what gives every h2 below it
    * something to be subordinate TO.
+   *
+   * It is not drawn here because WHERE IT ENDS is a fact only the page holds. A
+   * masthead submits to the reading column, but a rule that stops at the column's
+   * inset reads as decoration under the title; it reads as the page's own horizon
+   * only when it runs to the edge of the region that holds it. Those are two
+   * different widths, and past the column's measure cap they are not even a fixed
+   * distance apart. So the page wraps this masthead in the element that carries
+   * the rule and lets the masthead take the column — the same split a sticky page
+   * bar makes, where the bar's rule is the region's edge and its content is not.
    *
    * LAST UPDATED IS THE AUTHOR'S CLAIM, not the file's mtime. It comes from the
    * page's own frontmatter, so it changes when someone decides the content
@@ -101,7 +109,7 @@
 <template>
   <header
     data-testid="doc-page-header"
-    class="flex w-full flex-col gap-(--spacing-lg) border-b border-(--border-default) pb-(--spacing-lg)"
+    class="flex w-full flex-col gap-(--spacing-lg) pb-(--spacing-lg)"
   >
     <Breadcrumb
       v-if="crumbs.length"

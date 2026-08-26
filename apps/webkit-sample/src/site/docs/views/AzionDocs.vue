@@ -15,8 +15,9 @@
   // assistant. The home is neither — its trail could only point at itself, and what a
   // reader would copy is a directory of links, not a page with an answer in it. So the
   // view fills no `page-bar` slot, DocsLayout draws no bar (the slot is what conjures
-  // it), and the banner meets the top bar directly. The two reading pages still hand
-  // theirs over, which is what makes the chrome appear exactly where it has a job.
+  // it), and the page's own column meets the top bar directly. The two reading pages
+  // still hand theirs over, which is what makes the chrome appear exactly where it has
+  // a job.
   import DocsHome from '../components/DocsHome.vue'
   import DocsLayout from '../components/DocsLayout.vue'
 </script>

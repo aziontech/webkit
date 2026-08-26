@@ -29,6 +29,26 @@
 // click stays the browser's.
 import { menuLeaves, menuPath } from '@shared/lib/menu-tree.js'
 
+import { agentHref,AGENTS } from './docs-agent-setup.js'
+
+/**
+ * The Agent Setup segment's rows, GENERATED from the same list the pages render.
+ *
+ * The section is a container with an overview row and one row per tool — the shape every
+ * product group in this tree already has (`Applications` over `About Applications` and its
+ * modules). Typed out, these eight rows would be a second copy of `AGENTS` free to drift
+ * from the seven the index actually offers, and it would drift in the two places nobody
+ * checks: the rail's ordering, and the previous/next pair `docs-pages.js` derives from it.
+ */
+const agentSetupRows = [
+  { id: 'agent-setup-overview', label: 'About Agent Setup', href: '/site/docs/agent-setup' },
+  ...AGENTS.map((agent) => ({
+    id: `agent-setup-${agent.slug}`,
+    label: agent.name,
+    href: agentHref(agent)
+  }))
+]
+
 export const docsNavSections = [
   {
     // `Getting Started` titles the SEGMENT and `Overview` is the page inside it — the docs
@@ -41,7 +61,7 @@ export const docsNavSections = [
     label: 'Getting Started',
     items: [
       { id: 'overview', label: 'Overview', href: '/site/docs' },
-      { id: 'agent-setup', label: 'Agent Setup', href: '/site/docs/agent-setup' },
+      { id: 'agent-setup', label: 'Agent Setup', children: agentSetupRows },
       { id: 'get-started-first-deploy', label: 'First deploy', href: '/site/docs/first-deploy' },
       {
         id: 'migrate',

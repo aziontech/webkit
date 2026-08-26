@@ -133,22 +133,20 @@ export const Pagination = {
   }
 }
 
-const HEADER_MARKUP = `<DocPageHeader
-  title="Deploy an application"
-  description="By the end of this tutorial, an application will be live on the Azion Web Platform, answering HTTP 200 on its own Azion domain. It takes a few minutes."
-  :breadcrumb="[{ label: 'Start', href: '/start' }, { label: 'Deploy an application' }]"
-/>`
+// The masthead closes on a rule the PAGE draws, not the component: the rule is the edge
+// of the reading region, so it belongs to whatever element spans it — which is how a
+// docs shell can bleed it past the reading column's inset.
+const HEADER_MARKUP = `<div class="border-b border-(--border-default)">
+  <DocPageHeader
+    title="Deploy an application"
+    description="By the end of this tutorial, an application will be live on the Azion Web Platform, answering HTTP 200 on its own Azion domain. It takes a few minutes."
+    :breadcrumb="[{ label: 'Start', href: '/start' }, { label: 'Deploy an application' }]"
+  />
+</div>`
 
 export const PageHeader = {
   name: 'Page header',
-  render: () => ({
-    components: { DocPageHeader },
-    setup: () => ({
-      breadcrumb: [{ label: 'Start', href: '#' }, { label: 'Deploy an application' }]
-    }),
-    template:
-      '<DocPageHeader title="Deploy an application" description="By the end of this tutorial, an application will be live on the Azion Web Platform, answering HTTP 200 on its own Azion domain. It takes a few minutes." :breadcrumb="breadcrumb" />'
-  }),
+  render: () => ({ components: { DocPageHeader }, template: HEADER_MARKUP }),
   parameters: {
     controls: { disable: true },
     docs: {

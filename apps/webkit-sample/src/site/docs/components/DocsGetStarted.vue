@@ -13,7 +13,7 @@
   import CardBox from '@aziontech/webkit/card-box'
   import CodeBlock from '@aziontech/webkit/code-block'
   import TabView from '@aziontech/webkit/tab-view'
-  import ContrastBanner from '@shared/ui/ContrastBanner.vue'
+  import CopyPromptButton from '@shared/ui/CopyPromptButton.vue'
   import BannerContainer from '@shared/ui/layout/BannerContainer.vue'
   import CardGrid from '@shared/ui/layout/CardGrid.vue'
   import SectionContainer from '@shared/ui/layout/SectionContainer.vue'
@@ -272,7 +272,7 @@
           <!-- Copy-prompt affordance, built on the same contrast-pill banner as the
                console Home page: one button that copies a ready-to-paste agent
                prompt pointing at the docs. -->
-          <ContrastBanner
+          <CopyPromptButton
             label="Copy Prompt"
             :show-logo="false"
             :prompt="agentPrompt"

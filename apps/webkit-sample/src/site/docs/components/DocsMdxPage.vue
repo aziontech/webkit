@@ -66,15 +66,26 @@
        different job: it is what makes the reading column line up with the page bar
        above it. Both read `--layout-boundary-inline` from the shell's `<main>`, which
        declares it once as `xl` (24 → 32 → 48) — see DocsLayout. Overriding it here
-       would silently unalign the trail from the title. -->
-  <article class="layout-column-docs layout-boundary-inline pt-14 pb-12">
-    <DocPageHeader
-      :title="title"
-      :description="description"
-      :last-updated="lastUpdated"
-      :copyable="false"
-    />
-    <DocProse class="pt-14">
+       would silently unalign the trail from the title.
+
+       THE COLUMN IS CARRIED PER BLOCK, not by the article, because one thing on the
+       page does not take it: the masthead's RULE. A rule that stops at the column's
+       inset reads as decoration under the title; run to the edge of the reading
+       region it reads as the page's own horizon, which is what every h2 below it is
+       subordinate to. So the rule sits on a full-bleed wrapper and the masthead
+       inside it takes the column — the same split the page bar above makes (see
+       DocsLayout), and the reason both land on one left and right edge. -->
+  <article class="pb-12">
+    <div class="border-b border-(--border-default) pt-14">
+      <DocPageHeader
+        class="layout-column-docs layout-boundary-inline"
+        :title="title"
+        :description="description"
+        :last-updated="lastUpdated"
+        :copyable="false"
+      />
+    </div>
+    <DocProse class="layout-column-docs layout-boundary-inline pt-14">
       <DocMarkdown :source="source" />
     </DocProse>
     <!-- Where to go when the page is finished. Reading order, not the tree: the rail
@@ -83,7 +94,7 @@
       v-if="previous || next"
       :previous="previous"
       :next="next"
-      class="pt-12"
+      class="layout-column-docs layout-boundary-inline pt-12"
     />
   </article>
 </template>

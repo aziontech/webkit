@@ -72,9 +72,15 @@
     data-testid="doc-accordion-group"
     class="w-full overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface)"
   >
+    <!-- `large`, the DS accordion's roomier step: a docs FAQ row is a full question, not
+         a settings label, and at `medium` (min-h-8, `body-sm`) the strip read as a dense
+         list of controls rather than as a section of the page. Large gives the row its
+         40px floor and the body copy its own size — which is also what lets the question
+         carry heading weight over the answer without the row looking cramped. -->
     <Accordion
       :type="type"
       :default-value="defaultValue"
+      size="large"
       collapsible
     >
       <AccordionItem
@@ -84,14 +90,34 @@
         class="last:border-b-0 last:data-[state=closed]:[&_button]:border-b-0"
       >
         <!-- AccordionTrigger forwards $attrs to its button, so the heading it
-             renders is marked through a display:contents wrapper instead. -->
+             renders is marked through a display:contents wrapper instead.
+
+             THE QUESTION OUTRANKS ITS OWN ANSWER. The DS trigger sets its label at
+             `text-body-md` — the same size and weight as the prose that opens
+             underneath it — so a three-line answer read louder than the heading it
+             belongs to, and a closed list of questions read as a list of paragraphs.
+             `text-heading-xs` (the step-title rung) puts the weight back on the
+             question. It is set on the label SPAN rather than on the button, because
+             the button paints its type through a `data-[size]` variant that outranks a
+             plain utility — and the chevron beside the label keeps sizing from the
+             button, which is what keeps it a glyph and not a second heading.
+
+             THE HEADING RUNG ALSO CARRIES `text-wrap-style: balance`, and that is wrong
+             HERE. Balancing is for a heading that owns its line box; this label shares a
+             flex row with a chevron, so on a phone it balanced every two-line question
+             into two short ragged lines with ~100px of dead gutter before the glyph
+             ("The server never / connects in Claude Code"). `pretty` fills the measure
+             and still refuses to leave a one-word last line. It is the LONGHAND, matching
+             the token it overrides: the `text-pretty` shorthand would also set
+             `text-wrap-mode`, which decides THAT the text wraps and beats a `truncate`
+             the DS may put on the same element (see texts.data.js). -->
         <div
           data-doc-chrome
           class="contents"
         >
           <AccordionTrigger
             :level="3"
-            class="focus-visible:ring-inset"
+            class="focus-visible:ring-inset [&>span]:text-heading-xs [&>span]:[text-wrap-style:pretty]"
             >{{ entry.title }}</AccordionTrigger
           >
         </div>

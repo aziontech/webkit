@@ -2,6 +2,8 @@
   import Message from '@aziontech/webkit/message'
   import { computed } from 'vue'
 
+  import { renderInline } from '../lib/inline'
+
   /**
    * A Mintlify-style admonition — Note, Tip, Warning, Danger, Check, Info —
    * rendered on the webkit Message surface the docs frame specifies, so the
@@ -76,7 +78,7 @@
   interface Props {
     /** Which admonition this is; drives the severity color and the icon. */
     kind?: DocCalloutKind
-    /** Fallback copy when the default slot is empty. */
+    /** Copy, when it comes from data rather than a slot. Rendered as inline prose. */
     label?: string
   }
 
@@ -84,6 +86,20 @@
     kind: 'note',
     label: ''
   })
+
+  /*
+   * `label` IS PROSE, NOT A STRING — the same decision DocFrame's caption makes. A note
+   * that names a file, a header or a command has a code span in it, and a callout whose
+   * copy comes from data (a page that renders one callout per row of a list) has no slot
+   * to write that span in. So the prop renders through the layer's own inline renderer,
+   * and a backtick in it becomes the same `code` element a paragraph's would.
+   *
+   * A functional component rather than the `v-for` a slot would use: inline markdown
+   * yields bare strings for the text between the markup, and a string handed to `is` is
+   * read as a component NAME, not as text — the copy would come out empty. Defined once
+   * so its identity is stable across renders.
+   */
+  const LabelText = () => renderInline(props.label)
 
   defineSlots<{
     /** The callout copy: inline prose, links and inline code. */
@@ -144,7 +160,7 @@
       :data-neutral="preset.neutral || null"
       class="block text-(--text-default) [&_strong]:font-normal [&_a]:font-normal [&_a]:text-inherit! [&_a]:underline [&_a]:underline-offset-2 [&_code]:rounded-(--shape-flat) [&_code]:border [&_code]:px-1 [&_code]:py-0.5 [&_code]:text-label-code-sm [&_code]:text-(--text-default) data-[severity=info]:[&_code]:border-(--info-border) data-[severity=info]:[&_code]:bg-(--info-contrast)/10 data-[severity=success]:[&_code]:border-(--success-border) data-[severity=success]:[&_code]:bg-(--success-contrast)/10 data-[severity=warning]:[&_code]:border-(--warning-border) data-[severity=warning]:[&_code]:bg-(--warning-contrast)/10 data-[severity=danger]:[&_code]:border-(--danger-border) data-[severity=danger]:[&_code]:bg-(--danger-contrast)/10 data-[neutral]:[&_code]:border-(--border-default)! data-[neutral]:[&_code]:bg-(--bg-hover)!"
     >
-      <slot>{{ label }}</slot>
+      <slot><LabelText /></slot>
     </span>
   </Message>
 </template>

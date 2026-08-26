@@ -57,6 +57,7 @@
   import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
   import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
+  import GlobalHeader from '@aziontech/webkit/global-header'
   import IconButton from '@aziontech/webkit/icon-button'
   import Menu from '@aziontech/webkit/menu'
   import NavigationMenu from '@aziontech/webkit/navigation-menu'
@@ -386,71 +387,104 @@
   <div
     class="docs-shell flex h-dvh flex-col overflow-hidden bg-(--bg-canvas) text-(--text-default)"
   >
-    <!-- ── Docs top bar ─────────────────────────────────────────────────── -->
-    <header
-      class="flex h-14 shrink-0 items-center gap-(--spacing-sm) border-b border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) md:gap-(--spacing-lg) md:px-(--spacing-md)"
+    <!-- ── Docs top bar ─────────────────────────────────────────────────────
+         The DS bar (`GlobalHeader`), not a hand-rolled `<header>`: the height, the
+         surface, the hairline, the `role="banner"` landmark and the rhythm between the
+         regions all come from the component, and this shell only says what goes in each
+         region — leading cluster, section links, trailing actions.
+
+         `kind="content"`, even though this bar spans the WINDOW and has no content zone
+         beside it: the same call CreationHeader.vue makes, for the same reason. The kind
+         is what decides the INSET, and `app` is a flat `--spacing-md` (16 at every width)
+         while the page bar and every page column below this one open on
+         `--layout-boundary-inline` (16, then 24 from `sm`). They disagreed at exactly the
+         widths where no rail sits between them, which put the logo on a different
+         vertical from the title under it. `content` reads the token the page reads. -->
+    <GlobalHeader
+      kind="content"
+      aria-label="Azion documentation"
     >
-      <!-- Below `lg` the tree has no rail to live in, so the bar carries the way
-           into it. `outlined`, matching the search IconButton at the other end of the
-           bar: the two are the bar's own controls, so they read as a pair. Hidden from
-           `lg` up, where the rail is the way in. -->
-      <IconButton
-        icon="pi pi-bars"
-        kind="outlined"
-        size="medium"
-        aria-label="Open documentation navigation"
-        class="shrink-0 lg:hidden"
-        @click="navOpen = true"
-      />
-
-      <RouterLink
-        to="/site/docs"
-        aria-label="Azion Docs — home"
-        class="inline-flex shrink-0 items-center gap-(--spacing-xs) rounded-(--shape-elements) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface)"
-      >
-        <Brand
-          kind="default"
-          size="small"
+      <!-- `justify-start!`, because the DS region ships `justify-end` — inert while the
+           region is content-sized, but it packs the cluster against its own trailing edge
+           the moment the row has slack, and under pressure it overflows off the START
+           edge, clipping the brand rather than the thing nearest the middle. Important,
+           not a plain class: `justify-start` and `justify-end` are the same property, and
+           the winner is CSS source order, not the order they are written here. -->
+      <GlobalHeader.Left class="justify-start!">
+        <!-- Below `lg` the tree has no rail to live in, so the bar carries the way
+             into it. `outlined`, matching the search IconButton at the other end of the
+             bar: the two are the bar's own controls, so they read as a pair. Hidden from
+             `lg` up, where the rail is the way in. -->
+        <IconButton
+          icon="pi pi-bars"
+          kind="outlined"
+          size="medium"
+          aria-label="Open documentation navigation"
+          class="shrink-0 lg:hidden"
+          @click="navOpen = true"
         />
-        <!-- The wordmark already says Azion; on a 390px bar the badge is the one
-             piece of the identity that can go. -->
-        <span
-          class="hidden rounded-(--shape-elements) border border-(--border-muted) px-(--spacing-xxs) py-px text-overline-sm uppercase tracking-widest text-(--text-muted) sm:inline-block"
+
+        <GlobalHeader.Brand>
+          <RouterLink
+            to="/site/docs"
+            aria-label="Azion Docs — home"
+            class="inline-flex shrink-0 items-center gap-(--spacing-xs) rounded-(--shape-elements) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface)"
+          >
+            <Brand
+              kind="default"
+              size="small"
+            />
+            <!-- The wordmark already says Azion; on a 390px bar the badge is the one
+                 piece of the identity that can go. -->
+            <span
+              class="hidden rounded-(--shape-elements) border border-(--border-muted) px-(--spacing-xxs) py-px text-overline-sm uppercase tracking-widest text-(--text-muted) sm:inline-block"
+            >
+              Docs
+            </span>
+          </RouterLink>
+        </GlobalHeader.Brand>
+      </GlobalHeader.Left>
+
+      <!-- The growing centre region — `Nav` is the DS's own name for it, and section
+           links are what it is for. It stays mounted at every width even though its
+           content does not: it is the region that GROWS, so it is what holds the trailing
+           actions against the end of the bar once the links are gone (below `lg` it is an
+           empty spacer, the same job `GlobalHeader.Middle` does in the console shell).
+           `justify-start!` for the reason the left region needs it, and because these
+           links read FROM the brand — centred, they would float in the middle of a row
+           with nothing on either side of them. -->
+      <GlobalHeader.Nav class="justify-start!">
+        <!-- The section links need the room the rail breakpoint frees up; below `lg`
+             the bar is already carrying the menu button and the search trigger. -->
+        <NavigationMenu
+          aria-label="Documentation sections"
+          class="hidden lg:flex"
         >
-          Docs
-        </span>
-      </RouterLink>
+          <NavigationMenu.List class="items-center gap-(--spacing-xxs)">
+            <NavigationMenu.Item
+              v-for="link in topLinks"
+              :key="link.href"
+            >
+              <NavigationMenu.Trigger :href="link.href">{{ link.label }}</NavigationMenu.Trigger>
+            </NavigationMenu.Item>
+          </NavigationMenu.List>
 
-      <!-- The section links need the room the rail breakpoint frees up; below `lg`
-           the bar is already carrying the menu button and the search trigger. -->
-      <NavigationMenu
-        aria-label="Documentation sections"
-        class="hidden lg:flex"
-      >
-        <NavigationMenu.List class="items-center gap-(--spacing-xxs)">
-          <NavigationMenu.Item
-            v-for="link in topLinks"
-            :key="link.href"
-          >
-            <NavigationMenu.Trigger :href="link.href">{{ link.label }}</NavigationMenu.Trigger>
-          </NavigationMenu.Item>
-        </NavigationMenu.List>
+          <NavigationMenu.Portal>
+            <NavigationMenu.Positioner
+              side="bottom"
+              align="start"
+              :side-offset="12"
+            >
+              <NavigationMenu.Popup>
+                <NavigationMenu.Arrow />
+                <NavigationMenu.Viewport />
+              </NavigationMenu.Popup>
+            </NavigationMenu.Positioner>
+          </NavigationMenu.Portal>
+        </NavigationMenu>
+      </GlobalHeader.Nav>
 
-        <NavigationMenu.Portal>
-          <NavigationMenu.Positioner
-            side="bottom"
-            align="start"
-            :side-offset="12"
-          >
-            <NavigationMenu.Popup>
-              <NavigationMenu.Arrow />
-              <NavigationMenu.Viewport />
-            </NavigationMenu.Popup>
-          </NavigationMenu.Positioner>
-        </NavigationMenu.Portal>
-      </NavigationMenu>
-
-      <div class="ml-auto flex min-w-0 items-center gap-(--spacing-xs) md:gap-(--spacing-sm)">
+      <GlobalHeader.Right>
         <!-- The way into the palette for the viewports with no rail: an IconButton, not
              the rail's bar — a phone has no ⌘K to hint at and no room for a label, so
              the glyph alone is the whole control. -->
@@ -469,8 +503,8 @@
           class="shrink-0"
           @click="goConsole"
         />
-      </div>
-    </header>
+      </GlobalHeader.Right>
+    </GlobalHeader>
 
     <!-- ── Sidebar + main ───────────────────────────────────────────────── -->
     <!-- `relative`, because the collapsed rail's edge affordance is positioned
@@ -532,15 +566,17 @@
         </Sidebar>
       </div>
 
-      <!-- THE DOCS INSET IS DECLARED ONCE, HERE. `--layout-boundary-inline` is the token
-           both the page bar below and the page's own column read, and they are siblings
-           in this element rather than in one another — so setting it on their common
-           ancestor is the only place where "the bar and the body are inset by the same
-           amount" is a fact instead of two numbers that have to be kept equal by hand.
-           `xl` (24 → 32 → 48) is the step the docs surface already used for its widest
-           chrome: the home's hero pads its copy with the same token, so the reading
-           column, the bar above it and the banner behind it now share one edge. -->
-      <main class="min-w-0 flex-1 overflow-y-auto [--layout-boundary-inline:var(--spacing-xl)]">
+      <!-- THE BOUNDARY IS NOT RE-DECLARED HERE. `--layout-boundary-inline` is one token
+           with one value for the whole app, and the top bar above, the page bar below
+           and every page's own column all read it — so "the bar and the body are inset
+           by the same amount" is a fact rather than numbers kept equal by hand. This
+           region used to retune it three times (`sm`, then `md`, then `xl` from `lg`) to
+           chase the top bar's own padding, which is a step the bar no longer has: it
+           reads the boundary too. Below `lg` there is no rail between them, so the docs
+           logo, the trail, the title and the prose all start on one vertical; from `lg`
+           up the rail moves the bar's padding off this column, and the two stop being
+           comparable — which is fine, because neither is chasing the other any more. -->
+      <main class="min-w-0 flex-1 overflow-y-auto">
         <!-- The page bar: where the reader is, and what they can do with this page.
              It belongs to the SHELL's layout but to the PAGE's data — the shell has no
              idea which crumbs a page has or what its markdown says — so the page fills

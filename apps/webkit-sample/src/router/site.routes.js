@@ -5,8 +5,10 @@
 // The Hub lives under the same `/site` prefix but is its own area (its own shell,
 // its own navigation): see ./hub.routes.js.
 
+import { agentBySlug } from '@site/docs/lib/docs-agent-setup.js'
 import { hasDocsPage } from '@site/docs/lib/docs-pages.js'
 import AzionDocs from '@site/docs/views/AzionDocs.vue'
+import AzionDocsAgentPage from '@site/docs/views/AzionDocsAgentPage.vue'
 import AzionDocsAgentSetup from '@site/docs/views/AzionDocsAgentSetup.vue'
 import AzionDocsPage from '@site/docs/views/AzionDocsPage.vue'
 import LandingAzion from '@site/views/LandingAzion.vue'
@@ -33,6 +35,17 @@ export const siteRoutes = [
     path: '/site/docs/agent-setup',
     name: 'site-docs-agent-setup',
     component: AzionDocsAgentSetup
+  },
+  // ONE SETUP PAGE PER AGENT, from one route and one view — the index's card grid opens
+  // these. Composed rather than written as MDX for the same reason the index is: the
+  // closing "Other agents" grid draws six other companies' real logos, which are inline
+  // SVG and therefore a slot. A slug with no agent behind it would render an empty page,
+  // so it goes back to the index rather than to a blank column with a full rail beside it.
+  {
+    path: '/site/docs/agent-setup/:agent',
+    name: 'site-docs-agent-page',
+    component: AzionDocsAgentPage,
+    beforeEnter: (to) => (agentBySlug(String(to.params.agent)) ? true : '/site/docs/agent-setup')
   },
   // EVERY OTHER DOCS PAGE, from one route and one view. A reading page is `.mdx` rendered by
   // @aziontech/webkit-docs — the other half of the docs example, and the way most of a real

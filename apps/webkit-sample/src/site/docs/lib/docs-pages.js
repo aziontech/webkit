@@ -44,15 +44,36 @@ const ROWS = docsNavSections.flatMap((section) =>
   menuLeaves(section.items).map((row) => ({ ...row, section: section.label }))
 )
 
-/** Label of every container in the tree, so a crumb can name one by id. */
-const LABELS = new Map()
-const collectLabels = (items) => {
+/** Every node in the tree by id, so a crumb can name one — and reach its page. */
+const NODES = new Map()
+const collectNodes = (items) => {
   for (const item of items) {
-    LABELS.set(item.id, item.label)
-    if (item.children) collectLabels(item.children)
+    NODES.set(item.id, item)
+    if (item.children) collectNodes(item.children)
   }
 }
-docsNavSections.forEach((section) => collectLabels(section.items))
+docsNavSections.forEach((section) => collectNodes(section.items))
+
+/**
+ * The page a CONTAINER crumb stands for: the first page inside it, which by this tree's
+ * convention is its overview row (`Agent Setup` › `About Agent Setup`, `Applications` ›
+ * `About Applications`).
+ *
+ * A container is not itself a row with an `href` — it is a folder — so without this the
+ * middle of every trail was dead text, and the reader on `agent-setup/cursor` had no way
+ * back to the index they came from except the rail. The container is only linked when its
+ * overview is NOT the page being read: on `/site/docs/cache` the trail's `Cache` crumb and
+ * its current `About Cache` crumb are the same page, and a crumb pointing at the page you
+ * are already on is worse than a crumb that does not point anywhere.
+ *
+ * @param {string} id - the container's id.
+ * @returns {string|undefined} its overview page's route.
+ */
+const containerHref = (id) => {
+  const node = NODES.get(id)
+  if (!node?.children) return undefined
+  return menuLeaves(node.children).find((leaf) => leaf.href?.startsWith('/site/docs'))?.href
+}
 
 /** The rows that are actually reachable, in order — the reading order the pair walks. */
 const REACHABLE = ROWS.filter((row) => row.href?.startsWith('/site/docs'))
@@ -81,13 +102,17 @@ export const docsPageChrome = (path) => {
     docsNavSections.flatMap((section) => section.items),
     row.id
   )
-  const innermost = containers?.length ? LABELS.get(containers[containers.length - 1]) : null
+  const innermostId = containers?.length ? containers[containers.length - 1] : null
+  const innermost = innermostId ? NODES.get(innermostId) : null
+  const innermostHref = innermostId ? containerHref(innermostId) : undefined
 
   return {
     crumbs: [
       { label: 'Documentation', href: '/site/docs' },
       { label: row.section },
-      ...(innermost ? [{ label: innermost }] : []),
+      ...(innermost
+        ? [{ label: innermost.label, href: innermostHref === path ? undefined : innermostHref }]
+        : []),
       { label: row.label, current: true }
     ],
     previous: neighbour(index, -1),

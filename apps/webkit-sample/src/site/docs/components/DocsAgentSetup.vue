@@ -1,33 +1,43 @@
 <script setup>
-  // The Agent Setup page — a docs READING page that is also a DESIGNED OBJECT.
+  // The Agent Setup INDEX — a docs reading page that is also a designed object, and the
+  // door to seven setup pages.
   //
-  // It is the third shape in this sample, and it exists because the first two do not
-  // cover it. `DocsHome` is a landing page: bands, a hero, no prose. `DocsMdxPage`
-  // is prose an author types in one `.mdx` file. This page is prose with two things MDX
-  // cannot express: a picker whose card set FILTERS, and cards whose glyph is another
-  // company's real logo — an inline SVG, so a slot, and MDX has no slots.
+  // It is the third shape in this sample, and it exists because the first two do not cover
+  // it. `DocsHome` is a landing page: bands, a hero, no prose. `DocsMdxPage` is prose an
+  // author types in one `.mdx` file. This page is prose with three things MDX cannot
+  // express: a picker whose card set FILTERS, cards whose glyph is another company's real
+  // logo (an inline SVG, so a slot), and a comparison table that is the design system's
+  // own `Table` rather than a markdown grid.
   //
-  // So the body is composed in Vue and EVERY BLOCK IN IT STILL COMES FROM THE LAYER:
-  // `DocHeading` for the anchored h2s (the same component `DocMarkdown` renders, so this
-  // page's headings behave identically to a prose page's — same anchor, same glyph, same
-  // id for the rail to point at), `DocTabs` for the picker, `DocCardGroup` / `DocCard`
-  // for the grid, `DocItemGroup` / `DocItem` for the resource rows, and `DocPrompt` for
-  // the prompts. `DocProse` wraps the lot, so the leads and the headings take the page's
-  // own type scale and rhythm rather than a set of classes typed here.
+  // So the body is composed in Vue and EVERY BLOCK IN IT STILL COMES FROM A PACKAGE:
+  // `DocHeading` for the anchored h2/h3s (the same component `DocMarkdown` renders, so
+  // this page's headings behave identically to a prose page's — same anchor, same glyph,
+  // same id for the rail to point at), `DocTabs` for the picker, `DocCardGroup` /
+  // `DocCard` for both grids — the agents, and the definitions that close the page — the
+  // webkit `Table` and `Tag` for the comparison, `DocCallout` for the legend, and
+  // `DocProse` around the lot so the leads and headings take the page's own type scale and
+  // rhythm rather than a set of classes typed here.
   //
-  // THE PICKER IS TABS, NOT A ROW OF PILLS. The published page filters with a chip row,
-  // which is the right control when filters combine — several at once, cleared
-  // independently. These do not: a tool is a terminal agent or an IDE, never both, so the
-  // choice is one-of-N and that is a tab strip. Using `DocTabs` also means the strip, the
-  // underline and the whole keyboard model are the design system's.
+  // THE STRUCTURE IS THE REFERENCE'S: pick, compare, understand. A section that hands the
+  // reader seven tools has to answer three questions in that order — which one is mine,
+  // how do they differ, and what do these words mean — and each answer wants a different
+  // object: a filtered grid, a table, and a grid of definitions. The per-tool instructions are
+  // NOT here: they are a page each (see DocsAgentPage), because a reader who has chosen
+  // Cursor should not scroll past six other tools' config files.
+  //
+  // THE PICKER IS TABS, NOT A ROW OF PILLS. Chips are the right control when filters
+  // combine — several at once, cleared independently. These do not: a reader is in a
+  // terminal or in an editor, so the choice is one-of-N and that is a tab strip. Using
+  // `DocTabs` also means the strip, the underline and the whole keyboard model are the
+  // design system's.
+  import Table from '@aziontech/webkit/table'
+  import Tag from '@aziontech/webkit/tag'
+  import DocCallout from '@aziontech/webkit-docs/doc-callout'
   import DocCard from '@aziontech/webkit-docs/doc-card'
   import DocCardGroup from '@aziontech/webkit-docs/doc-card-group'
   import DocHeading from '@aziontech/webkit-docs/doc-heading'
-  import DocItem from '@aziontech/webkit-docs/doc-item'
-  import DocItemGroup from '@aziontech/webkit-docs/doc-item-group'
   import DocPageHeader from '@aziontech/webkit-docs/doc-page-header'
   import DocPagination from '@aziontech/webkit-docs/doc-pagination'
-  import DocPrompt from '@aziontech/webkit-docs/doc-prompt'
   import DocProse from '@aziontech/webkit-docs/doc-prose'
   import DocTab from '@aziontech/webkit-docs/doc-tab'
   import DocTabs from '@aziontech/webkit-docs/doc-tabs'
@@ -35,10 +45,17 @@
 
   import {
     AGENT_FILTERS,
-    AGENT_RESOURCES,
-    AGENTS,
-    BROWSER_PRIMER,
-    SAMPLE_PROMPTS
+    AGENT_SETUP_DESCRIPTION,
+    agentHref,
+    agentsByFilter,
+    COMPARE_COLUMNS,
+    COMPARE_FLAGS,
+    COMPARE_LEGEND,
+    COMPARE_ROWS,
+    COMPARE_TAG_SEVERITY,
+    KEY_CONCEPTS,
+    TRADEOFFS,
+    WORKFLOW_TYPES
   } from '../lib/docs-agent-setup.js'
 
   defineProps({
@@ -49,36 +66,44 @@
   })
 
   // One pass over the filters, so a tab's grid is resolved once rather than each card
-  // re-filtering the list. `All` is not a `kind` — it is the absence of one.
-  const GRIDS = AGENT_FILTERS.map((filter) => {
-    const agents = filter === 'All' ? AGENTS : AGENTS.filter((agent) => agent.kind === filter)
-    return { filter, agents }
-  })
+  // re-filtering the list.
+  const GRIDS = AGENT_FILTERS.map((filter) => ({ filter, agents: agentsByFilter(filter) }))
+
+  // The three columns whose value is a word from a small vocabulary. One slot each, from
+  // one list, because the cell is identical in all three: a Tag, so that two rows carrying
+  // the same answer are visibly the same answer.
+  const TAG_COLUMNS = ['pricing', 'model', 'context']
 </script>
 
 <template>
-  <!-- The docs MEASURE and the docs masthead, both from where the MDX page takes them,
-       so the two reading pages open identically. -->
-  <article class="layout-column-docs layout-boundary-inline pt-14 pb-12">
-    <DocPageHeader
-      title="Agent Setup"
-      description="Connect your AI coding agent to Azion and ship straight from your editor or terminal."
-      last-updated="2026-08-21"
-      :copyable="false"
-    />
+  <!-- The docs MEASURE and the docs masthead, both from where the MDX page takes them, so
+       the two reading pages open identically. The COLUMN is carried by each block rather
+       than by the article, because one thing on this page does not take it: the masthead's
+       rule, which is the reading region's own edge. -->
+  <article class="pb-12">
+    <!-- The masthead's RULE bleeds, its CONTENT does not — the same split the page bar
+         above it makes (see DocsLayout). A rule stopping at the column's inset reads as
+         decoration under the title; run to the edge of the region it reads as the page's
+         horizon, which is what every h2 below is subordinate to. -->
+    <div class="border-b border-(--border-default) pt-14">
+      <DocPageHeader
+        class="layout-column-docs layout-boundary-inline"
+        title="Agent Setup"
+        :description="AGENT_SETUP_DESCRIPTION"
+        last-updated="2026-08-26"
+        :copyable="false"
+      />
+    </div>
 
-    <DocProse class="pt-14">
-      <!-- ══ Pick your tool ═══════════════════════════════════════════════════════ -->
+    <DocProse class="layout-column-docs layout-boundary-inline pt-14">
+      <!-- ══ Pick your agent ══════════════════════════════════════════════════════ -->
       <DocHeading
-        id="pick-your-tool"
+        id="pick-your-agent"
         :level="2"
       >
-        Pick your tool
+        Pick your agent
       </DocHeading>
-      <p>
-        Select a tool for step-by-step setup: Azion MCP server, project context, and a verification
-        prompt.
-      </p>
+      <p>Select an agent to get step-by-step setup instructions.</p>
 
       <DocTabs>
         <DocTab
@@ -89,14 +114,17 @@
           <DocCardGroup :cols="3">
             <DocCard
               v-for="agent in grid.agents"
-              :key="agent.name"
+              :key="agent.slug"
               :title="agent.name"
-              :overline="agent.overline"
-              :href="agent.href"
+              :overline="agent.vendor"
+              :href="agentHref(agent)"
             >
               <!-- Every card draws the vendor's own logo, so the region is the slot and
-                   never the card's font-glyph `icon` prop: a stand-in glyph on one row
-                   of seven reads as a different brand, not as a smaller one. -->
+                   never the card's font-glyph `icon` prop: a stand-in glyph on one row of
+                   seven reads as a different brand, not as a smaller one. The maker's name
+                   is the overline on EVERY card, including the two where the title repeats
+                   it — a grid where five cards open on a maker and two open on the title
+                   has two rows of titles that do not line up. -->
               <template #icon>
                 <AgentMark :name="agent.mark" />
               </template>
@@ -107,76 +135,162 @@
       </DocTabs>
 
       <p>
-        Another MCP-compatible tool? The
-        <a href="#mcp-configuration">MCP Configuration Guide</a> covers more clients.
+        Using something else that speaks MCP? The server is one HTTP endpoint — point your client at
+        <code>mcp.azion.com</code> with a Personal Token and the nine tools show up.
       </p>
 
-      <!-- ══ Start in the browser ═════════════════════════════════════════════════
-           The published page puts two buttons here and both carry the same long priming
-           prompt inside their URL — so the reader is handed a prompt they cannot read.
-           `DocPrompt` shows it instead, capped to four lines with the rest one press
-           away, and hands it to whichever agent the reader already has open. -->
+      <!-- ══ Compare agents ═══════════════════════════════════════════════════════
+           A table, because the question this section answers is a scan across one row and
+           down one column — which the cards above cannot serve at any width. It is the
+           design system's own `Table` (data-driven, its first column frozen so a
+           horizontal scroll never carries the row's name away), so a comparison in the
+           docs and a resource list in the Console are one component to the reader.
+
+           The wrapper is what earns it the prose rhythm (`data-doc-block`) and what keeps
+           the prose OUT of it (`data-doc-chrome`): DocProse styles descendants, and a
+           table full of `<a>` and `<code>` would otherwise take link ink and chip borders
+           inside its cells. -->
       <DocHeading
-        id="start-in-the-browser"
+        id="compare-agents"
         :level="2"
       >
-        Start in the browser
+        Compare agents
       </DocHeading>
-      <p>No editor needed — open a session already primed with Azion context:</p>
 
-      <DocPrompt title="AI Assistant">
-        {{ BROWSER_PRIMER }}
-      </DocPrompt>
-
-      <!-- ══ What your agent can use ══════════════════════════════════════════════ -->
-      <DocHeading
-        id="what-your-agent-can-use"
-        :level="2"
+      <div
+        data-doc-block
+        data-doc-chrome
       >
-        What your agent can use
-      </DocHeading>
-
-      <DocItemGroup>
-        <DocItem
-          v-for="resource in AGENT_RESOURCES"
-          :key="resource.title"
-          :title="resource.title"
-          :icon="resource.icon"
-          :href="resource.href"
-          :target="resource.target ?? '_self'"
+        <Table
+          :data="COMPARE_ROWS"
+          :columns="COMPARE_COLUMNS"
+          row-key="id"
+          border
         >
-          {{ resource.description }}
-        </DocItem>
-      </DocItemGroup>
+          <!-- The row's own name, with its mark — the same mark the card carried, so the
+               reader recognizes the row from the grid they just left. It links to that
+               tool's setup page: by this point the reader has usually decided, and the
+               table is where they decide. -->
+          <template #cell-agent="{ row }">
+            <a
+              :href="row.href"
+              class="flex min-w-0 items-center gap-(--spacing-sm) text-label-md text-(--text-default) no-underline hover:underline"
+            >
+              <AgentMark
+                :name="row.mark"
+                class="size-4 shrink-0"
+              />
+              <span class="truncate">{{ row.agent }}</span>
+            </a>
+          </template>
 
-      <!-- ══ Prompts to try ═══════════════════════════════════════════════════════
-           The bare shape: no description, because the heading and its lead have already
-           said what these are, and three framed paragraphs of explanation would bury
-           the three sentences the reader came for. -->
+          <!-- Yes/no columns — the three workflows and Open source — are one glyph pair:
+               a check when the answer is yes, a minus when it is no. The minus matters as
+               much as the check: an empty cell reads as data nobody filled in, where a
+               minus reads as an answer. The word rides along for a screen reader, since a
+               glyph alone is an empty cell to anyone not looking at it. -->
+          <template
+            v-for="column in COMPARE_FLAGS"
+            :key="column"
+            #[`cell-${column}`]="{ value }"
+          >
+            <i
+              :class="value ? 'pi-check text-(--primary)' : 'pi-minus text-(--text-muted)'"
+              class="pi text-label-md leading-none"
+              aria-hidden="true"
+            />
+            <span class="sr-only">{{ value ? 'Yes' : 'No' }}</span>
+          </template>
+
+          <!-- The word columns: a Tag rather than bare text, so the vocabulary reads as a
+               set of values and not as three columns of prose. ONE severity for all of
+               them — a per-value colour turns a comparison into a recommendation (see
+               COMPARE_TAG_SEVERITY). -->
+          <template
+            v-for="column in TAG_COLUMNS"
+            :key="column"
+            #[`cell-${column}`]="{ value }"
+          >
+            <Tag
+              :label="value"
+              :severity="COMPARE_TAG_SEVERITY"
+              size="small"
+            />
+          </template>
+        </Table>
+      </div>
+
+      <DocCallout kind="note">{{ COMPARE_LEGEND }}</DocCallout>
+
+      <!-- ══ Understanding agents ═════════════════════════════════════════════════
+           The words the two blocks above are written in. It closes the page rather than
+           opening it: a reader who already knows what MCP is should not have to scroll
+           past a glossary to reach the tool they came for. -->
       <DocHeading
-        id="prompts-to-try"
+        id="understanding-agents"
         :level="2"
       >
-        Prompts to try
+        Understanding agents
       </DocHeading>
-      <p>
-        Say one of these to a connected agent. Each exercises a different half of the connection —
-        the documentation search, the CLI, and the configuration it writes.
-      </p>
+      <p>Common types, concepts, and tradeoffs.</p>
 
-      <DocPrompt
-        v-for="prompt in SAMPLE_PROMPTS"
-        :key="prompt"
+      <DocHeading
+        id="workflow"
+        :level="3"
       >
-        {{ prompt }}
-      </DocPrompt>
+        Workflow
+      </DocHeading>
+
+      <DocCardGroup :cols="2">
+        <DocCard
+          v-for="type in WORKFLOW_TYPES"
+          :key="type.title"
+          :title="type.title"
+          :icon="type.icon"
+          :label="type.description"
+        />
+      </DocCardGroup>
+
+      <DocHeading
+        id="key-concepts"
+        :level="3"
+      >
+        Key concepts
+      </DocHeading>
+
+      <DocCardGroup :cols="2">
+        <DocCard
+          v-for="concept in KEY_CONCEPTS"
+          :key="concept.title"
+          :title="concept.title"
+          :icon="concept.icon"
+          :label="concept.description"
+        />
+      </DocCardGroup>
+
+      <DocHeading
+        id="common-tradeoffs"
+        :level="3"
+      >
+        Common tradeoffs
+      </DocHeading>
+
+      <DocCardGroup :cols="2">
+        <DocCard
+          v-for="tradeoff in TRADEOFFS"
+          :key="tradeoff.title"
+          :title="tradeoff.title"
+          :icon="tradeoff.icon"
+          :label="tradeoff.description"
+        />
+      </DocCardGroup>
     </DocProse>
 
     <DocPagination
       v-if="previous || next"
       :previous="previous"
       :next="next"
-      class="pt-12"
+      class="layout-column-docs layout-boundary-inline pt-12"
     />
   </article>
 </template>

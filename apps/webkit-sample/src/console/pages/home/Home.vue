@@ -300,7 +300,7 @@
 
   // ── THE AGENT ONBOARDING, AT THE FOOT OF THE USAGE RAIL ──
   //
-  // It was a contrast pill on the greeting row (ui/ContrastBanner.vue): a near-black
+  // It was a contrast pill on the greeting row (ui/CopyPromptButton.vue): a near-black
   // capsule in the loudest position the page has, for the one offer on Overview the
   // reader did not come here for. Two things were wrong with it there.
   //

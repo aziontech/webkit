@@ -1,14 +1,51 @@
 <script setup>
-  // ContrastBanner — a high-emphasis onboarding pill built on the CONTRAST token
-  // pair (`--bg-contrast` / `--text-contrast`). Contrast inverts against the
-  // surface: a near-black pill in light mode, a near-white pill in dark mode, so
-  // it reads as the loudest thing on the page without borrowing a brand color.
+  // CopyPromptButton — THE control that hands an AI coding tool a ready-to-paste
+  // setup prompt. One click, one clipboard write, one confirmation.
+  //
+  // It was called `ContrastBanner`, which named its SKIN and not its job: every one
+  // of its placements — the site hero, the Hub hero, the docs home hero and the
+  // block further down that page — is offering the same prompt, and a reader who
+  // met "a contrast banner" in the code had to open the file to learn that. The
+  // name is the job now; the appearance is still what it was.
+  //
+  // ── IT IS A LARGE BUTTON, AT EVERY WIDTH ──
+  //
+  // The pill takes `Button size="large"`'s own metrics — `h-10` (40), `px-md` (16)
+  // and a 14px label — flat, with no smaller step on a phone. It used to shrink
+  // below `sm` (12px padding, a 12px label, height falling out of the padding at
+  // 26), which put a 26px control next to the 40px primary it stands beside: two
+  // heights in one row, and the row's rhythm broken at exactly the width where a
+  // row has the least room to explain itself. Height is now declared rather than
+  // derived from padding, so it is 40 against the primary's 40 instead of the 37
+  // the padding happened to add up to.
+  //
+  // The cost is width: at 390 the pair no longer fits one line and wraps to two
+  // left-aligned rows. That is the better trade — two 40px controls stacked read
+  // as a list of two ways in, where a 26px pill beside a 40px button reads as a
+  // control and its footnote.
+  //
+  // THE APPEARANCE: a RAISED SURFACE, not a contrast one. It used to be built on the
+  // contrast pair (`--bg-contrast` / `--text-contrast`), which inverts against the
+  // page — a near-black pill in light mode, a near-white one in dark — so that it
+  // would read as the loudest thing on screen.
+  //
+  // That was one loud thing too many. This control is the SECOND action wherever it
+  // appears: a primary `Button` stands beside it and says "start here", and the pill
+  // says "or hand it to your agent". An inverted slab is heavier than the orange it
+  // is supposed to defer to, so the row had two things shouting and no first thing
+  // to do. On `--bg-surface-raised` with `--text-default` it is a secondary control
+  // that happens to be pill-shaped, and the hierarchy in the row is legible again.
+  //
+  // IT NEEDS THE BORDER. `--bg-surface-raised` is #FFF on a #FAFAFA canvas in light
+  // mode and #141414 on #000 in dark — a real step in both, but far too small to be
+  // the only edge a control has. `--border-default` is what draws it, the same
+  // hairline every other resting surface in this app is bounded by.
   //
   // Left: the bare Azion mark. Right: the AI coding tools this onboarding targets,
-  // rendered as bare brand logos on the pill. Claude keeps its brand color (it
-  // reads on either contrast surface); Cursor, Windsurf, Codex and OpenCode ship
-  // monochrome brand marks, so they ride `currentColor` (`--text-contrast`) and
-  // stay legible in both themes.
+  // rendered as bare brand logos on the pill. Claude keeps its brand color (it reads
+  // on either surface); Cursor, Windsurf, Codex and OpenCode ship monochrome brand
+  // marks, so they ride `currentColor` — now `--text-default` — and stay legible in
+  // both themes.
   //
   // The whole pill is one button. On hover it lifts with a small scale and an
   // orange brand glow — an orange ring (`--primary`) plus a soft orange shadow
@@ -30,8 +67,8 @@
   //
   // ── DISMISSING IT (`closable`) ──
   //
-  // The pill is guidance, and guidance a reader has acted on (or decided against) has
-  // to be able to leave. With `closable` it carries a × that REMOVES it from the
+  // The button is guidance, and guidance a reader has acted on (or decided against)
+  // has to be able to leave. With `closable` it carries a × that REMOVES it from the
   // layout — not `visibility: hidden`, not `opacity-0`: the element unmounts, so it
   // stops taking space, stops being tabbable, and stops being read out.
   //
@@ -148,13 +185,13 @@
       <button
         type="button"
         :data-state="copied ? 'copied' : 'default'"
-        class="group inline-flex max-w-full items-center gap-(--spacing-xs) rounded-full bg-(--bg-contrast) px-(--spacing-sm) py-(--spacing-xxs) text-label-sm text-(--text-contrast) transition-[scale,box-shadow] duration-moderate-01 ease-productive-entrance hover:scale-[1.03] hover:shadow-[0_0_24px_4px_var(--primary-mask)] hover:ring-2 hover:ring-(--primary) active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--primary) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none motion-reduce:scale-100 sm:gap-(--spacing-sm) sm:px-(--spacing-md) sm:py-(--spacing-xs) sm:text-label-md"
+        class="group inline-flex max-w-full h-10 items-center gap-(--spacing-xs) rounded-full border border-(--border-default) bg-(--bg-surface-raised) px-(--spacing-md) text-label-md text-(--text-default) transition-[scale,box-shadow] duration-moderate-01 ease-productive-entrance hover:scale-[1.03] hover:shadow-[0_0_24px_4px_var(--primary-mask)] hover:ring-2 hover:ring-(--primary) active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--primary) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none motion-reduce:scale-100 sm:gap-(--spacing-sm)"
         @click="onCopy"
       >
         <!-- Azion mark — the bare icon. -->
         <AzionLogoMin
           v-if="showLogo"
-          class="h-(--size-4) w-auto shrink-0 sm:h-(--size-5)"
+          class="h-(--size-5) w-auto shrink-0"
           aria-hidden="true"
         />
 
@@ -171,12 +208,19 @@
         </span>
 
         <!-- AI coding tools — bare brand logos on the pill, drawn by AgentMark
-           (Claude keeps its color; the other four ride currentColor). Not
-           `mono` here: on the pill they are a row of logos, so each brand's own
-           treatment is the point. Decorative, so they drop off below `sm` where
-           the pill would otherwise overflow a phone; the label carries the CTA. -->
+             (Claude keeps its color; the other four ride currentColor). Not `mono`
+             here: on the pill they are a row of logos, so each brand's own treatment
+             is the point.
+
+             THEY STAY ON A PHONE. They used to be `hidden sm:flex`, which left the
+             mobile pill as a bare text label — and the marks are not decoration on
+             this control, they are the answer to "which tools?", the one thing the
+             label cannot say in two words. What gives instead is the ROW's own gap:
+             `xxs` (4) below `sm`, the `xs` (8) it is drawn at from `sm` up. Same
+             marks, same size, one rung tighter — 120px of row on a phone against
+             136, so the pill stays a pill on a 320 column. -->
         <span
-          class="ml-(--spacing-xxs) hidden shrink-0 items-center gap-(--spacing-xs) sm:flex"
+          class="ml-(--spacing-xxs) flex shrink-0 items-center gap-(--spacing-xxs) sm:gap-(--spacing-xs)"
           aria-hidden="true"
         >
           <AgentMark

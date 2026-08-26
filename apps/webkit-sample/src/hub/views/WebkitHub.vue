@@ -16,7 +16,7 @@
   // you hand to someone rather than a section of the library docs; it still
   // renders in this shell so a reader who arrives by link can walk into the Hub.
   import Button from '@aziontech/webkit/button'
-  import ContrastBanner from '@shared/ui/ContrastBanner.vue'
+  import CopyPromptButton from '@shared/ui/CopyPromptButton.vue'
   import BannerContainer from '@shared/ui/layout/BannerContainer.vue'
   import CardGrid from '@shared/ui/layout/CardGrid.vue'
   import PageHeader from '@shared/ui/layout/PageHeader.vue'
@@ -38,7 +38,7 @@
     view: { type: String, default: 'home' }
   })
 
-  // "Start" affordance in the hero — a one-click "copy prompt" pill (ContrastBanner)
+  // "Start" affordance in the hero — a one-click "copy prompt" pill (CopyPromptButton)
   // that hands an AI coding tool everything it needs to build with the Azion Design
   // System.
   const webkitPrompt =
@@ -228,7 +228,7 @@
                   size="large"
                   @click="(event) => onNavigate(event, { id: 'getting-started' })"
                 />
-                <ContrastBanner
+                <CopyPromptButton
                   label="Start with Agents"
                   :show-logo="false"
                   :prompt="webkitPrompt"

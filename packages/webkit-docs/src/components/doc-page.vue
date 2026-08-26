@@ -163,21 +163,26 @@
 <template>
   <div
     data-testid="doc-page"
-    class="flex h-full min-h-0 w-full justify-center gap-(--spacing-xl) overflow-hidden bg-(--bg-canvas) px-(--spacing-lg) lg:px-14"
+    class="flex h-full min-h-0 w-full justify-center gap-(--spacing-xl) overflow-hidden bg-(--bg-canvas) px-(--layout-boundary-inline)"
   >
     <main
       ref="scroller"
       class="h-full w-full max-w-(--container-2xl) min-w-0 overflow-y-auto overscroll-contain pt-14 pb-12 2xl:max-w-(--container-3xl)"
     >
-      <DocPageHeader
-        ref="header"
-        :title="pageTitle"
-        :description="pageDescription"
-        :last-updated="pageUpdated"
-        :breadcrumb="breadcrumb"
-        :copyable="copyable"
-        :source="source"
-      />
+      <!-- The masthead closes on a rule, and the page is what draws it: the rule is
+           the edge of the reading region, so it belongs to whatever element spans it.
+           Here the column and the region are the same box, so the wrapper is bare. -->
+      <div class="border-b border-(--border-default)">
+        <DocPageHeader
+          ref="header"
+          :title="pageTitle"
+          :description="pageDescription"
+          :last-updated="pageUpdated"
+          :breadcrumb="breadcrumb"
+          :copyable="copyable"
+          :source="source"
+        />
+      </div>
       <div
         ref="body"
         class="pt-14"
