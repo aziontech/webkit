@@ -43,6 +43,7 @@
 
 <template>
   <div
+    v-bind="$attrs"
     role="list"
     :data-testid="testId"
     :class="outerClass"

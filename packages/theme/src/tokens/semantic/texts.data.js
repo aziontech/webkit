@@ -189,6 +189,11 @@ export const textsData = {
     fontWeight: fontWeight.normal,
     lineHeight: leading.snug
   },
+  'text-body-prose-md': {
+    fontSize: fontSize.base,
+    fontWeight: fontWeight.light,
+    lineHeight: leading.relaxed
+  },
   'text-body-sm': {
     textWrapStyle: 'pretty',
     fontSize: fontSize.sm,
