@@ -100,6 +100,16 @@ body {
   position: relative;
   height: 100dvh;
   overflow: hidden;
+
+  /* THE PAGE BOUNDARY IS NOT SET HERE. `--layout-boundary-inline` is the single inset a
+     surface's BAR and its PAGE both read — the console's GlobalHeader `kind="content"`
+     and `.layout-boundary`, the site nav and its bands, the docs page bar and its
+     reading column — which is what makes "the bar opens on the same vertical as the
+     page" a fact rather than two numbers kept equal by hand. It keeps the theme's own
+     `--spacing-lg` (16 on a phone, 24 from `sm`), so every surface opens on 16 there
+     unless its shell says otherwise: the site and the hub widen from `sm` up to the
+     marketing band inset, and the docs column runs tighter still (12) because it is
+     squeezed between two rails and pays for every pixel twice. */
 }
 
 /* Font playground (test harness): src/font.js sets `--app-font` on <html> to

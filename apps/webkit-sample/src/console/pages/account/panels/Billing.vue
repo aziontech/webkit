@@ -626,12 +626,16 @@
          everything the page shows, and spanning the whole content zone. They name the two
          things this page IS, so nothing may sit between them and the heading — a band
          above the bar reads as page chrome that the tabs then contradict by swapping the
-         content under it. Because they sit outside the page column they are also the one
-         element here that is NOT capped or inset: the bar is the header's edge, and an
-         edge stops at the edge. -->
+         content under it. The BAR is the one element here that is not capped or inset —
+         it is the header's edge, and an edge stops at the edge — but its CONTENT rides
+         the page column (`column="data"`, the same measure the heading above and the
+         bands below take), so the first tab's label sits on the same left edge as
+         "Billing". Without that the two agree only below 1436px, where the column has
+         not started centring yet. -->
     <PageTabs
       v-model:value="activeTab"
       :tabs="BILLING_TABS"
+      column="data"
     />
 
     <!-- Only this region scrolls, so the heading and the bar above it stay while the
@@ -642,7 +646,7 @@
            boundary's start step, because the bar above already closed the header — this is
            the top of a scroll region, not the top of the page. -->
       <section
-        class="layout-column layout-boundary flex min-w-0 flex-col gap-(--layout-section-gap)"
+        class="@container/bands layout-column layout-boundary flex min-w-0 flex-col gap-(--layout-section-gap)"
       >
         <!-- One request backs all three bands, so its failure is reported once, at
              view level, with the recovery attached to the message itself. -->
@@ -660,12 +664,27 @@
                what you are on; the right one states what you would get by moving. They
                are a PAIR — the upgrade only means something read against the current
                plan — so they share a row rather than stacking, and the row wraps whole
-               below `lg` instead of letting either card become a column of scraps. -->
-            <div class="flex min-w-0 flex-col items-stretch gap-(--layout-group-gap) lg:flex-row">
-              <!-- Subscription Plan. `lg:w-[45%]` rather than an even split: the facts on
+               when it is narrow instead of letting either card become a column of scraps.
+
+               A CONTAINER query (`@4xl/bands`, 896px), not `lg:`. The deciding width is
+               the content zone, which is the viewport MINUS the 300px nav rail — so a
+               viewport breakpoint answers the wrong question. `lg:` (viewport 1024) fired
+               at 1028px wide, where the zone is 728px, and put both cards side by side at
+               306px/358px: measured 17 clipped labels and a page heading squeezed into 4
+               lines. The bar for going side-by-side is what the CARDS have, not what the
+               window has.
+
+               `bands` measures the section's CONTENT box — the zone minus the 48px
+               boundary — so 896px here is a 944px zone. That keeps the pair side by side
+               everywhere it already rendered clean (1280px up) and stacks it below, where
+               it did not. -->
+            <div
+              class="flex min-w-0 flex-col items-stretch gap-(--layout-group-gap) @4xl/bands:flex-row"
+            >
+              <!-- Subscription Plan. `w-[45%]` rather than an even split: the facts on
                  the left are short label/value rows, the list on the right is eight
                  items in two columns and needs the width. -->
-              <CardBox class="min-w-0 lg:w-[45%]">
+              <CardBox class="min-w-0 @4xl/bands:w-[45%]">
                 <template #header>
                   <div class="flex min-w-0 items-center justify-between gap-(--spacing-md)">
                     <span class="text-label-lg text-(--text-default)">Subscription Plan</span>
@@ -735,7 +754,7 @@
               <!-- Upgrade to Pro. The limits come from the plan catalog
                  (../../lib/data/plans.js) rather than being typed here, so the card
                  cannot advertise a tier the rest of the console does not sell. -->
-              <CardBox class="min-w-0 flex-1">
+              <CardBox class="@container/plan min-w-0 flex-1">
                 <template #header>
                   <span class="text-label-lg text-(--text-default)">
                     Upgrade to {{ upgradePlan.name }}
@@ -743,8 +762,13 @@
                 </template>
                 <template #content>
                   <div class="flex min-w-0 flex-col justify-between gap-(--spacing-lg)">
+                    <!-- Two columns only once the CARD can hold them (`@md/plan`, 448px
+                         → ~246px a column against a 198px longest label). `sm:` asked the
+                         viewport, which says yes from 640px up and is never the width these
+                         labels actually get: inside the 358px card at a 1028px viewport each
+                         column was 134px and every label but two clipped. -->
                     <ul
-                      class="grid min-w-0 grid-cols-1 gap-(--spacing-sm) sm:grid-cols-2"
+                      class="grid min-w-0 grid-cols-1 gap-(--spacing-sm) @md/plan:grid-cols-2"
                       role="list"
                     >
                       <li

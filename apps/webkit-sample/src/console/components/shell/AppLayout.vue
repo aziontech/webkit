@@ -335,7 +335,14 @@
 <template>
   <!-- The window: one row. The rail runs its full height, the content zone holds the
        bar and the page. That is the whole structural change behind the alignment — the
-       bar can only find the page's left edge from inside the box the page is in. -->
+       bar can only find the page's left edge from inside the box the page is in.
+
+       THE INSET IS NOT DECLARED HERE. The bar and the page both read
+       `--layout-boundary-inline`, and the console takes the token's own value (16 on a
+       phone, 24 from `sm`) — so every console shell, this one and the create flows and
+       the wizards alike, opens on the same vertical without restating it. A surface
+       that wants another step declares its own on its shell root: the site and the hub
+       widen from `sm` up, the docs column runs tighter. See src/style.css. -->
   <div class="relative flex h-dvh overflow-hidden bg-(--bg-canvas)">
     <!-- The rail, now full-height: it starts at the top of the window, above where the
          bar used to be. Hidden in focused flows. On a

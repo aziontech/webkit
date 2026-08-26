@@ -13,6 +13,12 @@
    *                whose content only keeps its padding.
    *   • bordered — draw the bottom hairline (default true).
    *   • hero     — fill the viewport height and center the content vertically.
+   *   • padded   — the band's own vertical rhythm, `--spacing-xl` at each end
+   *                (default true). Pass false when the content owns its block
+   *                padding — a band whose copy opens on a floor of its own, or one
+   *                stacking two rows at different rhythms. The INLINE inset is never
+   *                optional: it is the page boundary, and a band that dropped it
+   *                would put its copy on a different vertical than the bar above it.
    *
    * `hero` subtracts `--banner-offset` from the viewport height, so a banner
    * mounted under a fixed bar (the docs top bar) still fills exactly one screen:
@@ -28,6 +34,12 @@
    *                      given the slot wins, so a page can always override.
    *
    * The default slot is the z-10 copy.
+   *
+   * THE SIDE INSET IS THE SURFACE'S, NOT THIS COMPONENT'S. The inner column pads with
+   * `--layout-boundary-inline`, the same token the surface's bar reads, so a band and
+   * the nav above it open on one vertical by construction. Each shell declares the
+   * token once (SiteLayout, DocsLayout, WebkitHub); this component never picks a
+   * number. The vertical stays `--spacing-xl` — that is band rhythm, not a boundary.
    */
   import { BANNER_NAMES, BANNERS } from '../banners/index.js'
 
@@ -58,6 +70,10 @@
       type: Boolean,
       default: false
     },
+    padded: {
+      type: Boolean,
+      default: true
+    },
     // A registered backdrop key from site/ui/banners/index.js — '' for none.
     banner: {
       type: String,
@@ -84,7 +100,8 @@
     <div
       :class="[
         MAX_W[maxWidth],
-        'relative z-10 mx-auto w-full px-(--spacing-xl) py-(--spacing-xl)'
+        'relative z-10 mx-auto w-full px-(--layout-boundary-inline)',
+        padded && 'py-(--spacing-xl)'
       ]"
     >
       <slot />

@@ -13,7 +13,10 @@
    *   • bordered — draw the vertical frame rules (default true).
    *   • padded   — add inner padding. Leave false for an edge-to-edge stack of
    *                modules that each own their own padding (so nothing doubles);
-   *                pass true for a plain prose column.
+   *                pass true for a plain prose column. The side inset is the
+   *                SURFACE's `--layout-boundary-inline` (declared once per shell),
+   *                so a padded column lines up with the bar above it; the vertical
+   *                is band rhythm and stays `--spacing-xxl`.
    */
   const MAX_W = {
     '3xl': 'max-w-(--container-3xl)',
@@ -47,7 +50,7 @@
       MAX_W[maxWidth],
       'mx-auto w-full',
       bordered && 'border-x border-(--border-default)',
-      padded && 'px-(--spacing-xl) py-(--spacing-xxl)'
+      padded && 'px-(--layout-boundary-inline) py-(--spacing-xxl)'
     ]"
   >
     <slot />
