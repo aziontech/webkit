@@ -6,7 +6,8 @@
   // of its placements — the site hero, the Hub hero, the docs home hero and the
   // block further down that page — is offering the same prompt, and a reader who
   // met "a contrast banner" in the code had to open the file to learn that. The
-  // name is the job now; the appearance is still what it was.
+  // name is the job now, and the appearance has since become the design system's own
+  // AI treatment (below) rather than the contrast slab that earned the old name.
   //
   // ── IT IS A LARGE BUTTON, AT EVERY WIDTH ──
   //
@@ -24,33 +25,77 @@
   // as a list of two ways in, where a 26px pill beside a 40px button reads as a
   // control and its footnote.
   //
-  // THE APPEARANCE: a RAISED SURFACE, not a contrast one. It used to be built on the
-  // contrast pair (`--bg-contrast` / `--text-contrast`), which inverts against the
-  // page — a near-black pill in light mode, a near-white one in dark — so that it
-  // would read as the loudest thing on screen.
+  // ── THE APPEARANCE: THE DESIGN SYSTEM'S AI TREATMENT ──
   //
-  // That was one loud thing too many. This control is the SECOND action wherever it
-  // appears: a primary `Button` stands beside it and says "start here", and the pill
-  // says "or hand it to your agent". An inverted slab is heavier than the orange it
-  // is supposed to defer to, so the row had two things shouting and no first thing
-  // to do. On `--bg-surface-raised` with `--text-default` it is a secondary control
-  // that happens to be pill-shaped, and the hierarchy in the row is legible again.
+  // The pill carries the same background pattern webkit's `ButtonHighlight` uses —
+  // the DS control for an AI flow, ported from the console's Copilot button. Three
+  // stacked layers, in the same tokens at the same durations:
   //
-  // IT NEEDS THE BORDER. `--bg-surface-raised` is #FFF on a #FAFAFA canvas in light
-  // mode and #141414 on #000 in dark — a real step in both, but far too small to be
-  // the only edge a control has. `--border-default` is what draws it, the same
-  // hairline every other resting surface in this app is bounded by.
+  //   THE RIM. A blurred three-stop gradient (white → `--color-blue-500` →
+  //     `--color-brand-primary-500`) rotating once every 8 seconds behind the
+  //     surface. It is the part that says "this one talks to an agent".
   //
-  // Left: the bare Azion mark. Right: the AI coding tools this onboarding targets,
-  // rendered as bare brand logos on the pill. Claude keeps its brand color (it reads
-  // on either surface); Cursor, Windsurf, Codex and OpenCode ship monochrome brand
-  // marks, so they ride `currentColor` — now `--text-default` — and stay legible in
-  // both themes.
+  //     IT REPEATS EVERY 120px, which is what makes the rotation READ. A single
+  //     gradient stretched across a 279px pill puts one colour band on the whole
+  //     ring, so spinning it changes the colour at any given point by almost
+  //     nothing and the pill looks static — measured 9.3 units of ring travel per
+  //     phase. At a 120px period two segments sit on the ring at once and visibly
+  //     chase around it: 18.3 units, twice as much, on the SAME 1px ring.
+  //     `ButtonHighlight` needs no such period because it is ~80px wide, so one band
+  //     already spans it. 120px is a plateau, not a knob to keep turning: 90px
+  //     measures the same (18.6) and 60px is WORSE (13.0) — a period near the 12px
+  //     blur radius averages itself back to grey.
+  //   THE BASE. The brand-accent gradient over it — `accent-900` at 17%,
+  //     `accent-100` at 53%, `accent-600` at 96%, on a 120° axis.
+  //   THE SCRIM. `--bg-backdrop` (black at 80%) over that, which is what makes the
+  //     resting pill dark and holds its white label at contrast.
   //
-  // The whole pill is one button. On hover it lifts with a small scale and an
-  // orange brand glow — an orange ring (`--primary`) plus a soft orange shadow
-  // (`--primary-mask`). A Tooltip on top explains what it does; clicking copies a
-  // ready-to-paste setup prompt to the clipboard.
+  // On hover the base and the scrim both drop to 60% and the rotating rim blooms
+  // through. That reveal REPLACES what this pill used to do on hover (a 1.03 scale,
+  // an orange ring, an orange glow shadow): an AI affordance should have one hover
+  // language across the app, and this is the one the DS ships.
+  //
+  // 60%, where `ButtonHighlight` fades to 25%, because this control reveals about
+  // 3.5× the area: the same floor that reads as a tinted 80px button reads as a pale
+  // lavender slab 281px wide. Holding more of the scrim keeps the bloom a dark plum
+  // instead (mean luminance 105 against 129 at the DS's floor, −19%), which is also
+  // what lets the travelling ring read as its own element rather than dissolving
+  // into the fill. The floor costs nothing in motion: the ring sits OUTSIDE the base
+  // and the scrim, so its 24.7 units of travel are the same at any floor.
+  //
+  // It also settles the hierarchy question the old raised-surface treatment was
+  // solving. This pill is still the SECOND action wherever it appears — but it now
+  // reads as a different KIND of action rather than a quieter one, so it no longer
+  // competes with the orange primary beside it for "loudest thing on screen".
+  //
+  // WHY THE LAYERS ARE MIRRORED HERE rather than rendering `<ButtonHighlight>`: that
+  // component is `label`-only — no slots — and this control's content is an Azion
+  // mark, a label that swaps to a confirmation, and five brand marks. So it borrows
+  // the pattern, not the component. If `ButtonHighlight` ever grows a default slot,
+  // this should compose it and the three spans below should go.
+  //
+  // THE RIM IS AN OVERSIZED SQUARE, not the `inset-0` rect `ButtonHighlight` spins.
+  // A rotating rect only covers its own box at 0° and 180°: at 90° the rim of a
+  // 279×40 pill is a 40px column and both ends of the pill go dark, so the glow
+  // strobes once per revolution. A square whose side clears the pill's diagonal
+  // covers it at every angle. `ButtonHighlight` is ~80px wide, where the same defect
+  // is a mild pulse; at pill width it would be the whole effect. The square costs
+  // nothing now that the gradient carries its own period — coverage and motion are
+  // two separate knobs (the square is the first, the 120px repeat is the second).
+  //
+  // THE RING STAYS 1px, the hairline `ButtonHighlight` leaves. Widening it to 2px was
+  // tried and reverted: it does measure more travel (26.2 against 18.3), but at that
+  // width the ring stops reading as an edge and starts reading as a border drawn round
+  // the pill — a heavier outline than anything else in these rows carries. The period
+  // is what supplies the motion anyway, so the hairline keeps all of it.
+  //
+  // Left: the bare Azion mark, which keeps its own brand orange — it is the one mark
+  // that does not follow the surface. Right: the AI coding tools this onboarding
+  // targets. Claude keeps its brand colour; Cursor, Windsurf, Codex and OpenCode ship
+  // monochrome marks, so they ride `currentColor` — white here, on the dark pill.
+  //
+  // A Tooltip on top explains what it does; clicking copies a ready-to-paste setup
+  // prompt to the clipboard.
   //
   // ── THE CONFIRMATION IS THE LABEL, NOT A TOAST ──
   //
@@ -185,50 +230,81 @@
       <button
         type="button"
         :data-state="copied ? 'copied' : 'default'"
-        class="group inline-flex max-w-full h-10 items-center gap-(--spacing-xs) rounded-full border border-(--border-default) bg-(--bg-surface-raised) px-(--spacing-md) text-label-md text-(--text-default) transition-[scale,box-shadow] duration-moderate-01 ease-productive-entrance hover:scale-[1.03] hover:shadow-[0_0_24px_4px_var(--primary-mask)] hover:ring-2 hover:ring-(--primary) active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--primary) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none motion-reduce:scale-100 sm:gap-(--spacing-sm)"
+        class="group/highlight relative isolate inline-flex h-10 max-w-full items-center justify-center overflow-hidden rounded-(--shape-elements) border-(length:--border-width-default) border-(--border-muted) p-px transition-colors duration-fast-02 ease-productive-entrance focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
         @click="onCopy"
       >
-        <!-- Azion mark — the bare icon. -->
-        <AzionLogoMin
-          v-if="showLogo"
-          class="h-(--size-5) w-auto shrink-0"
+        <!-- THE RIM. The rotating glow, behind everything. `w-[max(110%,6rem)]` +
+             `aspect-square` is the coverage floor: the side has to clear the pill's
+             diagonal at every angle, and the `6rem` floor holds that true even for
+             the shortest label this pill ever carries. `animate-spin` drives the
+             `transform`, so the `-translate-x/y-1/2` that centres it (a separate CSS
+             property in v4) is not overwritten by the rotation. -->
+        <span
           aria-hidden="true"
+          class="pointer-events-none absolute left-1/2 top-1/2 aspect-square w-[max(110%,6rem)] -translate-x-1/2 -translate-y-1/2 animate-spin [animation-duration:8s] [animation-timing-function:linear] bg-[repeating-linear-gradient(90deg,var(--color-base-white),var(--color-blue-500),var(--color-brand-primary-500),var(--color-base-white))] bg-size-[120px_100%] filter-[blur(12px)] motion-reduce:animate-none"
         />
 
-        <!-- The label is where the copy is CONFIRMED, so it is a live region: the
-             pill's own text changes under the reader's pointer, and a reader who is
-             not looking at it gets the same confirmation announced. The width does
-             not thrash while it swaps because the pill sizes to its content and both
-             strings are one short line. -->
+        <!-- THE BASE. The brand-accent gradient, inset by the 1px the root pads out,
+             so the rim reads as a hairline all the way around. -->
         <span
-          aria-live="polite"
-          class="min-w-0 truncate sm:whitespace-nowrap"
-        >
-          {{ currentLabel }}
-        </span>
-
-        <!-- AI coding tools — bare brand logos on the pill, drawn by AgentMark
-             (Claude keeps its color; the other four ride currentColor). Not `mono`
-             here: on the pill they are a row of logos, so each brand's own treatment
-             is the point.
-
-             THEY STAY ON A PHONE. They used to be `hidden sm:flex`, which left the
-             mobile pill as a bare text label — and the marks are not decoration on
-             this control, they are the answer to "which tools?", the one thing the
-             label cannot say in two words. What gives instead is the ROW's own gap:
-             `xxs` (4) below `sm`, the `xs` (8) it is drawn at from `sm` up. Same
-             marks, same size, one rung tighter — 120px of row on a phone against
-             136, so the pill stays a pill on a 320 column. -->
-        <span
-          class="ml-(--spacing-xxs) flex shrink-0 items-center gap-(--spacing-xxs) sm:gap-(--spacing-xs)"
           aria-hidden="true"
+          class="pointer-events-none absolute inset-px rounded-[inherit] bg-[linear-gradient(120deg,var(--color-brand-accent-900)_17%,var(--color-brand-accent-100)_53%,var(--color-brand-accent-600)_96%)] transition-opacity duration-300 ease-out group-hover/highlight:opacity-60 motion-reduce:transition-none"
+        />
+
+        <!-- THE SCRIM. What darkens the resting pill and carries the white label at
+             contrast. It fades with the base, which is the hover bloom. -->
+        <span
+          aria-hidden="true"
+          class="pointer-events-none absolute inset-px rounded-[inherit] bg-(--bg-backdrop) transition-opacity duration-300 ease-out group-hover/highlight:opacity-60 motion-reduce:transition-none"
+        />
+
+        <!-- The content rides above the three layers. `z-1` is enough because the root
+             is `isolate`. -->
+        <span
+          class="relative z-1 flex h-full w-full min-w-0 items-center justify-center gap-(--spacing-xs) px-(--spacing-md) text-label-md text-(--color-base-white) sm:gap-(--spacing-sm)"
         >
-          <AgentMark
-            v-for="agent in AGENT_TOOLS"
-            :key="agent"
-            :name="agent"
-            class="size-(--size-5)"
+          <!-- Azion mark — the bare icon, in its own orange. -->
+          <AzionLogoMin
+            v-if="showLogo"
+            class="h-(--size-5) w-auto shrink-0"
+            aria-hidden="true"
           />
+
+          <!-- The label is where the copy is CONFIRMED, so it is a live region: the
+               pill's own text changes under the reader's pointer, and a reader who is
+               not looking at it gets the same confirmation announced. The width does
+               not thrash while it swaps because the pill sizes to its content and both
+               strings are one short line. -->
+          <span
+            aria-live="polite"
+            class="min-w-0 truncate sm:whitespace-nowrap"
+          >
+            {{ currentLabel }}
+          </span>
+
+          <!-- AI coding tools — bare brand logos on the pill, drawn by AgentMark
+               (Claude keeps its color; the other four ride currentColor). Not `mono`
+               here: on the pill they are a row of logos, so each brand's own treatment
+               is the point.
+
+               THEY STAY ON A PHONE. They used to be `hidden sm:flex`, which left the
+               mobile pill as a bare text label — and the marks are not decoration on
+               this control, they are the answer to "which tools?", the one thing the
+               label cannot say in two words. What gives instead is the ROW's own gap:
+               `xxs` (4) below `sm`, the `xs` (8) it is drawn at from `sm` up. Same
+               marks, same size, one rung tighter — 120px of row on a phone against
+               136, so the pill stays a pill on a 320 column. -->
+          <span
+            class="ml-(--spacing-xxs) flex shrink-0 items-center gap-(--spacing-xxs) sm:gap-(--spacing-xs)"
+            aria-hidden="true"
+          >
+            <AgentMark
+              v-for="agent in AGENT_TOOLS"
+              :key="agent"
+              :name="agent"
+              class="size-(--size-5)"
+            />
+          </span>
         </span>
       </button>
     </Tooltip>
