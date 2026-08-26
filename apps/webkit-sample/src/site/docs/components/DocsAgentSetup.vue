@@ -30,6 +30,8 @@
   // terminal or in an editor, so the choice is one-of-N and that is a tab strip. Using
   // `DocTabs` also means the strip, the underline and the whole keyboard model are the
   // design system's.
+  import Breadcrumb from '@aziontech/webkit/breadcrumb'
+  import SplitButton from '@aziontech/webkit/split-button'
   import Table from '@aziontech/webkit/table'
   import Tag from '@aziontech/webkit/tag'
   import DocCallout from '@aziontech/webkit-docs/doc-callout'
@@ -48,6 +50,7 @@
     AGENT_SETUP_DESCRIPTION,
     agentHref,
     agentsByFilter,
+    agentSetupMarkdown,
     COMPARE_COLUMNS,
     COMPARE_FLAGS,
     COMPARE_LEGEND,
@@ -57,13 +60,33 @@
     TRADEOFFS,
     WORKFLOW_TYPES
   } from '../lib/docs-agent-setup.js'
+  import { useDocsCrumbNav } from '../lib/docs-crumb-nav.js'
+  import { useDocsPageActions } from '../lib/docs-page-actions.js'
 
   defineProps({
+    // The ancestor trail, current page last — derived from the rail by the view.
+    crumbs: { type: Array, default: () => [] },
     // The page before this one in reading order: { title, href }.
     previous: { type: Object, default: null },
     // The page after this one.
     next: { type: Object, default: null }
   })
+
+  // A crumb is a real anchor, so the plain left click has to be taken into the app's own
+  // router — otherwise stepping back up the trail reloads the whole SPA. Same split the
+  // rail makes: modified clicks stay the browser's.
+  const onCrumbNavigate = useDocsCrumbNav()
+
+  // The page is composed rather than written, so its markdown is BUILT from the same data
+  // the body renders (see docs-agent-setup.js) — not typed out a second time to rot. It is
+  // wired HERE rather than in the view because the control it drives is the masthead's.
+  const {
+    actions: PAGE_ACTIONS,
+    label: copyLabel,
+    icon: copyIcon,
+    copyPage,
+    onPageAction
+  } = useDocsPageActions(agentSetupMarkdown)
 
   // One pass over the filters, so a tab's grid is resolved once rather than each card
   // re-filtering the list.
@@ -81,18 +104,39 @@
        than by the article, because one thing on this page does not take it: the masthead's
        rule, which is the reading region's own edge. -->
   <article class="pb-12">
-    <!-- The masthead's RULE bleeds, its CONTENT does not — the same split the page bar
-         above it makes (see DocsLayout). A rule stopping at the column's inset reads as
-         decoration under the title; run to the edge of the region it reads as the page's
-         horizon, which is what every h2 below is subordinate to. -->
-    <div class="border-b border-(--border-default) pt-14">
+    <!-- The masthead's RULE bleeds, its CONTENT does not. A rule stopping at the column's
+         inset reads as decoration under the title; run to the edge of the region it reads
+         as the page's horizon, which is what every h2 below is subordinate to.
+
+         THE TRAIL AND COPY PAGE ARE THE MASTHEAD'S, passed in for the reasons the MDX
+         page passes them (see DocsMdxPage): this trail routes, and this page's action set
+         is its own. They were a sticky bar of their own above the scroll. -->
+    <div class="border-b border-(--border-default) pt-(--spacing-md)">
       <DocPageHeader
         class="layout-column-docs layout-boundary-inline"
         title="Agent Setup"
         :description="AGENT_SETUP_DESCRIPTION"
         last-updated="2026-08-26"
-        :copyable="false"
-      />
+      >
+        <template #breadcrumb>
+          <Breadcrumb
+            :items="crumbs"
+            class="-ml-(--spacing-xs) min-w-0"
+            @navigate="onCrumbNavigate"
+          />
+        </template>
+        <template #actions>
+          <SplitButton
+            :label="copyLabel"
+            :icon="copyIcon"
+            :model="PAGE_ACTIONS"
+            kind="outlined"
+            class="shrink-0"
+            @click="copyPage"
+            @item-click="onPageAction"
+          />
+        </template>
+      </DocPageHeader>
     </div>
 
     <DocProse class="layout-column-docs layout-boundary-inline pt-14">

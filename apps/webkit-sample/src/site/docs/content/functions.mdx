@@ -1,0 +1,85 @@
+---
+title: Functions
+description: Run serverless JavaScript at the edge — event-driven code that executes on Azion Runtime, next to the people using your application, with no cold start to wait for.
+lastUpdated: 2026-08-26
+sourcePath: src/content/docs/en/pages/build/functions.mdx
+---
+
+**Functions** runs serverless, event-driven code on **Azion Runtime**, at the edge node
+closest to whoever made the request. You write JavaScript, deploy it once, and it executes
+with no server to provision and no cold start in front of the first request.
+
+A function is written once and **instantiated** where you need it: on an
+[Application](/site/docs/applications), to shape a request or a response, or on a firewall,
+to decide whether a request goes any further. The same function can back several
+applications, so logic you have already proved does not get copied in order to be reused.
+Environment variables keep credentials and per-environment values out of the code, and are
+read back at execution time.
+
+With Functions, you can:
+
+- Rewrite, redirect, or answer a request before it ever reaches your origin.
+- Personalize a response by user, device, or location without giving up the [Cache](/site/docs/cache).
+- Compose one payload from several backends, and serve it as an API of your own.
+- Read and write state through KV Store, Object Storage, and SQL Database.
+- Run AI agents and inference beside the request instead of a region away from it.
+
+## Implementation
+
+|Scope|Resource|
+|---|---|
+|Write your first function|How to build functions|
+|Instantiate one in an application|Functions Instances|
+|The runtime and the APIs it gives you|Azion Runtime|
+|Build an API by pair programming|How to build an API with Functions and ChatGPT|
+|Run a function on a firewall|Create & Configure a Function on Firewall|
+
+## How a function runs
+
+A function is authored on its own, independent of where it will run. Instantiating it binds
+it to one application and gives it the environment variables and arguments that instance
+should execute with — which is what lets one function serve a staging application and a
+production one without a second copy.
+
+The instance is then invoked by a **Rules Engine** behavior, so the criteria you already use
+to route traffic is the same criteria that decides which requests reach your code: a path
+prefix, a header, a device group, a cookie.
+
+<Note>
+  A function does nothing on its own. The instance is the binding, and the rule is what calls
+  it — an instantiated function with no rule pointing at it never executes.
+</Note>
+
+## Azion Runtime
+
+Azion Runtime is what your code runs on, and it is the reference to read while writing it.
+
+|Surface|What it covers|
+|---|---|
+|Web APIs|The standard platform APIs a request-handling runtime is written against.|
+|Node.js support|Which Node.js APIs are available, and where the runtime diverges.|
+|Web frameworks|The frameworks that build into a function, and what each one supports.|
+
+Framework code is turned into a function by the **Azion Bundler**: Next.js, Astro and Vue
+projects build into something that executes on Azion Runtime rather than on a server you
+keep warm. That is where the absence of cold starts comes from — the platform scales from
+zero to peak on the request itself, instead of provisioning first and answering second.
+
+## On a firewall
+
+The same language and the same runtime also run **in front of** an application, on a
+firewall. The difference is the event, not the tooling: a firewall function sees the request
+before any application does, so it can block it, challenge it, or rewrite it — and only what
+survives goes on to be served.
+
+## AI at the edge
+
+Functions is also where agent workflows run. LangGraph and LangChain are supported, SQL
+Database is integrated natively for retrieval-augmented generation, and the models available
+through the platform — Mistral, Florence, Qwen among them — follow OpenAI's API standard, so
+a client written against it works without a rewrite.
+
+<Tip>
+  **Preview before you ship.** A deploy returns a live preview of its outcome, so a function
+  can be exercised against real traffic conditions before it is the one answering them.
+</Tip>

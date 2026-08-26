@@ -73,10 +73,10 @@
   // closes every reading page — with only its `next` half filled, since the home has no
   // previous.
   //
-  // There is no page bar on this page at all — no trail, no Copy page. Both are reading
-  // chrome and the home is a directory, so the VIEW hands the shell no `page-bar` slot
-  // and the shell draws none (see AzionDocs.vue). The column therefore opens directly
-  // under the docs top bar, which is what the reference does too.
+  // There is no masthead on this page at all — no trail, no title row, no Copy page. All
+  // three are reading chrome and the home is a directory, so the column opens directly
+  // under the docs top bar, which is what the reference does too. Every reading page
+  // carries the trail and Copy page in its own masthead instead (see DocsMdxPage).
   //
   // The page's six sections are the live docs home's own, in its order: start by
   // objective, start by interface, ready-made templates, stop attacks, assess risk and
@@ -113,7 +113,7 @@
 1. Install the Azion CLI:
    curl -fsSL https://cli.azion.app/install.sh | bash
 2. Connect the Azion MCP server (https://mcp.azion.com) so you
-   can search current Azion docs — per-tool setup:
+   can search current Azion docs. Per-tool setup:
    https://www.azion.com/en/documentation/agent-setup/
 3. Review the project and check whether it is already linked
    to Azion; if it is not, run azion link and follow the prompts.
@@ -126,13 +126,13 @@
   const objectives = [
     {
       title: 'Build your application',
-      description: 'Go live from a template, a repo, or the CLI.',
+      description: 'Deploy from a template, a repo, or the CLI.',
       icon: 'ai ai-build-pillar',
       href: '/site/docs/first-deploy'
     },
     {
       title: 'Accelerate your application',
-      description: 'Cache at the edge so your origin stops repeating itself.',
+      description: 'Cache responses so your origin stops repeating itself.',
       icon: 'pi pi-gauge',
       href: '#cache-settings'
     },
@@ -270,14 +270,14 @@
       href: '#shared-responsibility'
     },
     {
-      title: 'Governance, Risk & Compliance',
+      title: 'Governance, Risk and Compliance',
       description: 'The tools and certifications behind your compliance work.',
       icon: 'pi pi-id-card',
       href: '#governance-risk-compliance'
     },
     {
       title: 'PCI DSS compliance',
-      description: 'PCI-DSS 4.0 Level 1, and what it covers for cardholder data.',
+      description: 'PCI DSS 4.0 Level 1, and what it covers for cardholder data.',
       icon: 'pi pi-wallet',
       href: '#pci-dss'
     },
@@ -344,7 +344,7 @@
       cta: 'Join the Discord'
     },
     {
-      title: 'Style Guide',
+      title: 'Style guide',
       description: 'How Azion writes documentation: voice, structure, and conventions.',
       icon: 'pi pi-pencil',
       href: '#style-guide',
@@ -357,26 +357,50 @@
   // because "also useful", "reference" and "access governance" are three different
   // offers and flattening them to one word would lose that. The links are plain
   // anchors: `DocProse` owns how a link in a paragraph looks, so nothing is typed here.
+  //
+  // EVERY LINK IS THE DESTINATION'S OWN NAME, which is the one-name-per-destination
+  // rule (`webkit-microcopy` § 7) and not a style preference. These used to be
+  // descriptive fragments in lower case — `observe your application`,
+  // `reference architectures`, `more frameworks` — so the sentence read
+  // "Also useful: observe your application, reference architectures": four words of
+  // grey lower-case prose where the reader is scanning for a PAGE, and a name they
+  // would then not recognize in the rail, since the rail calls those pages `Observe`
+  // and `Architectures`. Each label is now the string the rail, the page title and the
+  // breadcrumb all carry, so the link and the page it opens have one name.
+  //
+  // WHERE A NAME IS TITLE CASE, THE PRODUCT IS. `DDoS Protection`, `WAF Rule Sets`,
+  // `Bot Manager`, `Multi-Factor Authentication` and `Teams Permissions` are Console
+  // features, so they keep their own capitalization (§ 2's product-name exception) and
+  // match the rail row of the same name. `First deploy` and `Frameworks compatibility`
+  // are documentation PAGES rather than features, so they take sentence case — which is
+  // also what the rail gives the first of them. Each list is therefore internally one
+  // case, and the case says which kind of thing the link opens.
+  //
+  // Two asides went away with the rename, and both were the labels doing a job a
+  // label cannot do: `(unmetered, on by default)` on DDoS Protection was a
+  // parenthetical aside inside a link (§ 1), and `by IP address` on Conditional
+  // Access was the feature's mechanism, not its name. A fact worth telling the reader
+  // belongs in a sentence or on the page, never in the link that opens it.
   const linkBands = {
     objectives: {
       lead: 'Also useful:',
       links: [
-        { label: 'observe your application', href: '#observe' },
-        { label: 'reference architectures', href: '#architectures' }
+        { label: 'Observe', href: '#observe' },
+        { label: 'Architectures', href: '#architectures' }
       ]
     },
     templates: {
       lead: 'Also useful:',
       links: [
-        { label: 'first deploy tutorial', href: '/site/docs/first-deploy' },
-        { label: 'More frameworks', href: '#frameworks-compatibility' }
+        { label: 'First deploy', href: '/site/docs/first-deploy' },
+        { label: 'Frameworks compatibility', href: '#frameworks-compatibility' }
       ]
     },
     security: {
       lead: 'Reference, when you need the details:',
       links: [
-        { label: 'DDoS Protection (unmetered, on by default)', href: '#ddos-protection' },
-        { label: 'WAF rule sets', href: '#waf' },
+        { label: 'DDoS Protection', href: '#ddos-protection' },
+        { label: 'WAF Rule Sets', href: '#waf' },
         { label: 'WAF Exceptions', href: '#waf-exceptions' },
         { label: 'Bot Manager', href: '#bot-manager' }
       ]
@@ -384,10 +408,10 @@
     compliance: {
       lead: 'Access governance:',
       links: [
-        { label: 'single sign-on', href: '#sso' },
-        { label: 'multi-factor authentication', href: '#mfa' },
-        { label: 'teams and permissions', href: '#teams-permissions' },
-        { label: 'conditional access by IP address', href: '#conditional-access' }
+        { label: 'Single Sign-On', href: '#sso' },
+        { label: 'Multi-Factor Authentication', href: '#mfa' },
+        { label: 'Teams Permissions', href: '#teams-permissions' },
+        { label: 'Conditional Access', href: '#conditional-access' }
       ]
     }
   }
@@ -438,14 +462,21 @@
            pays its own step on top — 112 on a phone, 160 on a desktop: the widest gap
            on the page either way, which is what a front door's masthead should be.
 
-           `title-max-width` caps the HEADLINE (not the header) at `--container-lg`
-           (552), which is where "Welcome to Azion Docs" stops fitting on one line:
-           the balance algorithm then splits it "Welcome to" / "Azion Docs", so the
-           product name reads as its own line instead of trailing the greeting. The
-           longest line it has to hold is `Welcome to` at 342px, so the cap has slack
-           at every size the token scale gives the h1 (56 / 48 / 30). Below `sm` the
-           reading column itself (366) is narrower than the whole string at 30px, so
-           the title fits on one line there and the cap never comes into play.
+           `title-max-width` caps the HEADLINE (not the header) at `--container-2xl`
+           (752) — the narrowest rung of the container scale that holds "Welcome to
+           Azion Docs" on ONE line. The string measures 674px at the h1's top size
+           (56px), so the previous 552 (`--container-lg`) cut it in two and balance
+           split it "Welcome to" / "Azion Docs": the front door arrived with its own
+           name broken over two lines. The cap now sits past the string instead of
+           inside it, with 78px of slack, and the column (1024) is wider still — so
+           the room costs nothing else on the page.
+
+           IT HOLDS ONE LINE DOWN TO `sm`, AND THE TYPE SCALE IS WHAT ENDS IT, not the
+           cap: at 48px (`sm` to `md`) the string is 577 and the column gives it 592,
+           and below `sm` the h1 drops to 30px where the string (361) is just past the
+           358 a 390px phone leaves. So a phone is the one width that takes two lines,
+           and balance breaks it after `Welcome to` — the product name still lands
+           whole, on its own line.
 
            `description-max-width` narrows the LEAD one rung, to `--container-xl`
            (644). The `hero` default is `--container-2xl` (752), which is wide enough
@@ -458,8 +489,8 @@
         data-doc-chrome
         margin-bottom="mb-12 sm:mb-16"
         size="hero"
-        title-max-width="max-w-(--container-lg)"
-        description-max-width="max-w-(--container-xl)"
+        title-max-width="max-w-(--container-2xl)"
+        description-max-width="max-w-(--container-lg)"
         title="Welcome to Azion Docs"
         description="We make every application fast and reliable. Deploy on a global network, with enterprise-grade security and no cold starts."
       >
@@ -483,9 +514,9 @@
              starts reading as a second primary. The pair fits a 390px column on one
              line as it is, and wraps to two left-aligned lines on anything narrower. -->
         <template #actions>
-          <div class="flex flex-wrap items-center gap-(--spacing-lg)">
+          <div class="flex flex-wrap items-center gap-(--spacing-sm)">
             <Button
-              label="Get Started"
+              label="Get started"
               kind="primary"
               size="large"
               href="/site/docs/first-deploy"
@@ -569,7 +600,7 @@
         Start by interface
       </DocHeading>
       <p>
-        Hand the platform to a coding agent, or drive it yourself — visually, from the terminal, or
+        Hand the platform to a coding agent, or drive it yourself: visually, from the terminal, or
         over the API.
       </p>
 
@@ -752,7 +783,7 @@
       >
         Ready-made templates
       </DocHeading>
-      <p>Deploy in one click, with CI/CD already wired up.</p>
+      <p>Deploy in one step, with CI/CD already wired up.</p>
 
       <DocCardGroup
         :cols="4"
@@ -883,7 +914,7 @@
            link stays anchored to the column's right edge. -->
     <DocPagination
       :next="{ title: 'Agent Setup', href: '/site/docs/agent-setup' }"
-      next-label="Next Page · Getting Started"
+      next-label="Next page · Getting Started"
       class="pt-16"
     />
   </article>

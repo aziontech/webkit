@@ -38,6 +38,62 @@ const railWidth = ref(readStoredWidth())
 // exactly what its `v-model:expanded` exists for.
 const expanded = ref([])
 
+// Whether the arrival being rendered TRAVELLED between drill levels — into the `Functions`
+// level, or back out to the root column — as opposed to moving between pages of the level
+// the reader was already in.
+//
+// `Menu` cannot work this out for itself, and the reason is worth stating: activating the
+// drill row also NAVIGATES (its landing row is a real page), so the shell remounts and the
+// menu comes back with the same restored stack a navigation *inside* the level would give
+// it. Measured, the entrance was 0 interpolated frames against the 16 a pop plays — the
+// level simply appeared. This is the answer `enter-on-mount` needs, and it lives out here
+// because the remount is exactly what it has to survive.
+const entering = ref(false)
+
+// Which page last reported, the level THAT page was in, and whether the rail has rendered.
+let lastLevelFor = null
+let shownLevel = null
+let levelSeeded = false
+
+/**
+ * Report the level the page being rendered belongs to, and derive whether arriving there is
+ * an entrance.
+ *
+ * Two guards earn their place, both borrowed from the console rail (lib/state/sidebar.js):
+ * - **First render is never an entrance.** A cold load or a pasted link arrives already
+ *   inside the level; it did not travel there, so the menu should be settled, not sliding.
+ * - **One decision per page.** Both homes of the tree can be mounted over this singleton,
+ *   and both report the same page — without keying on the page, the second report would
+ *   clear the flag the first just set.
+ *
+ * @param {string} pageId - id of the row the page marks active.
+ * @param {string[]} levels - the drill stack that page sits in.
+ */
+export function reportDocsLevel(pageId, levels) {
+  const level = levels.join('/')
+  if (pageId === lastLevelFor) return
+  entering.value = levelSeeded && level !== shownLevel
+  lastLevelFor = pageId
+  shownLevel = level
+  levelSeeded = true
+}
+
+/**
+ * Record a level change that came from the menu itself rather than from a page.
+ *
+ * A POP is the one of the two that does not navigate: `Menu.Back` plays its own motion in
+ * the mounted menu and leaves the reader looking at the column it returned to, so recording
+ * that as the shown level is what stops the NEXT navigation from replaying an entrance for a
+ * column already on screen. A push is deliberately left alone — the navigation that follows
+ * it is the arrival that should animate.
+ *
+ * @param {string[]} levels - the stack the menu is now on.
+ * @param {number} previousDepth - how deep it was before.
+ */
+export function recordDocsLevel(levels, previousDepth) {
+  if (levels.length < previousDepth) shownLevel = levels.join('/')
+}
+
 watch(collapsed, (value) => {
   if (typeof localStorage !== 'undefined') {
     localStorage.setItem(COLLAPSED_KEY, String(value))
@@ -51,5 +107,5 @@ watch(railWidth, (value) => {
 })
 
 export function useDocsSidebar() {
-  return { collapsed, railWidth, expanded }
+  return { collapsed, railWidth, expanded, entering }
 }

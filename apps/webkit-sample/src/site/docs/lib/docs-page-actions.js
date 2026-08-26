@@ -1,7 +1,7 @@
 import { computed, ref } from 'vue'
 
 /**
- * The "Copy page" split button, as one definition both docs pages share.
+ * The "Copy page" split button, as one definition every docs masthead shares.
  *
  * The control is a SPLIT because it is a split: the primary segment does the one
  * thing almost everyone wants (put the page on the clipboard), and the menu holds

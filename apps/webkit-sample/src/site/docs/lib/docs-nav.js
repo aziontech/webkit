@@ -8,14 +8,22 @@
 // product groups (`Migrate`, `Modules`, `Guides`, `Reference`), which expands in place
 // behind a chevron and a rail, nesting four more levels deep inside its segment.
 //
-// SEGMENTED, NOT DRILLED. The eight sections used to be drill LEVELS: the rail's root
-// was the eight pillars and choosing one replaced the whole rail with that pillar's own
-// menu behind a Back row. They are segment headers again — one column, eight labels, the
-// condensed rows doing the folding — which is the shape the live docs sidebar has
+// THE SECTIONS ARE SEGMENTED, NOT DRILLED. The eight used to be drill LEVELS: the rail's
+// root was the eight pillars and choosing one replaced the whole rail with that pillar's
+// own menu behind a Back row. They are segment headers again — one column, eight labels,
+// the condensed rows doing the folding — which is the shape the live docs sidebar has
 // (azion.com/en/documentation/: `Start`, `Build`, `Store`, `Secure`, `Observe`,
-// `Resources`, `Manage`, `Updates & Policies` as headers over their rows). A level that
+// `Resources`, `Manage`, `Updates and Policies` as headers over their rows). A level that
 // replaces the rail hides seven pillars to show one; a segment that titles its rows hides
 // nothing, and the condensed row is what keeps the column short enough for that to work.
+//
+// ONE ROW IS A DRILL, and it is `Functions` (search `kind: 'drill'` below) — a product
+// promoted out of `Applications › Modules` to sit BESIDE `Applications` in the `Build`
+// segment, where it owns a whole menu rather than a fifth level of indent. Not a second
+// opinion about the sections: a segment titles rows without hiding any, and this one row
+// is where a level that replaces the column earns what it costs. It is also the working
+// example of the pattern in this prototype: `DocsLayout` wires the stack (`v-model:path`)
+// and the `Menu.Back` row that returns from it, and everything else stays condensed.
 //
 // Most rows carry no `href`: the prototype is self-contained, so activating one moves
 // the selection rather than leaving the app. Ids derive from the docs path each row
@@ -29,7 +37,7 @@
 // click stays the browser's.
 import { menuLeaves, menuPath } from '@shared/lib/menu-tree.js'
 
-import { agentHref,AGENTS } from './docs-agent-setup.js'
+import { agentHref, AGENTS } from './docs-agent-setup.js'
 
 /**
  * The Agent Setup segment's rows, GENERATED from the same list the pages render.
@@ -98,7 +106,11 @@ export const docsNavSections = [
         id: 'applications',
         label: 'Applications',
         children: [
-          { id: 'build-applications', label: 'About Applications', href: '/site/docs/applications' },
+          {
+            id: 'build-applications',
+            label: 'About Applications',
+            href: '/site/docs/applications'
+          },
           { id: 'get-started-journeys-launch', label: 'Build an application' },
           {
             id: 'modules',
@@ -158,53 +170,6 @@ export const docsNavSections = [
                     ]
                   },
                   { id: 'build-applications-cache-tiered-cache', label: 'Tiered Cache' }
-                ]
-              },
-              {
-                id: 'functions',
-                label: 'Functions',
-                children: [
-                  { id: 'build-applications-functions', label: 'About Functions' },
-                  {
-                    id: 'build-applications-reference-functions-instances',
-                    label: 'Functions Instances'
-                  },
-                  {
-                    id: 'guides-2',
-                    label: 'Guides',
-                    children: [
-                      { id: 'get-started-frameworks-javascript', label: 'How to build functions' },
-                      {
-                        id: 'build-functions-guides-altcha',
-                        label: 'How to Use the ALTCHA Function'
-                      },
-                      {
-                        id: 'build-functions-guides-api-builder',
-                        label: 'How to build an API with Functions and ChatGPT'
-                      },
-                      {
-                        id: 'build-functions-guides-browserless-functions',
-                        label: 'How to build a browserless application with Functions'
-                      },
-                      {
-                        id: 'build-functions-guides-debugging-functions-graphql',
-                        label: 'How to debug functions using GraphQL API'
-                      },
-                      {
-                        id: 'build-functions-guides-firewall',
-                        label: 'Create & Configure a Function on Firewall'
-                      },
-                      {
-                        id: 'build-functions-guides-paywall-function-jwt',
-                        label: 'How to set up a paywall with Azion JWT solution'
-                      },
-                      {
-                        id: 'build-functions-guides-serverless-functions',
-                        label: 'How to run serverless functions on Azion'
-                      }
-                    ]
-                  },
-                  { id: 'runtime-overview', label: 'Azion Runtime' }
                 ]
               },
               {
@@ -283,6 +248,88 @@ export const docsNavSections = [
               {
                 id: 'build-applications-reference-rules-engine',
                 label: 'Rules Engine for Applications'
+              }
+            ]
+          }
+        ]
+      },
+      // THE ONE DRILL ROW IN THE TREE. Every other container here is CONDENSED — it
+      // opens its rows in place behind a chevron and the indent rail — and this one
+      // REPLACES the column with the Functions menu behind a Back row.
+      //
+      // It sits BESIDE `Applications`, not inside its `Modules` list. Functions is its
+      // own product, so listing it as a module of Applications put a peer one level under
+      // the row it is a peer of — and made `Build › Applications › Modules › Functions ›
+      // Guides` a fifth level of indent to reach a guide, past the three
+      // `.specs/menu.md` allows ("past that the indent eats the rail's readable width;
+      // restructure with a drill row instead"). Promoted to the segment it is one row from
+      // the top, and its eleven pages are then exactly what a drill is for: a peer row
+      // that unfolded eleven rows in place would bury the segment's other products under
+      // one of them, so the level takes the whole column and hands it back on Back.
+      //
+      // `groups`, not `children`: a drilled level is a MENU, described by the same shape
+      // the root takes — so `Guides` becomes a section title inside it instead of one more
+      // row to unfold. Nothing condenses in here. A second level is already a narrowed
+      // context, so asking for another decision to reach a guide is exactly the cost the
+      // drill was taken to remove.
+      //
+      // No icon, unlike the console's `Settings` drill: a drill row carries one because it
+      // reads as one of the destinations it is listed among, and in this tree none of them
+      // have one.
+      {
+        id: 'functions',
+        label: 'Functions',
+        kind: 'drill',
+        groups: [
+          {
+            // Untitled first block: `About Functions` is the level's LANDING row —
+            // activating `Functions` opens the level and lands here in one action —
+            // and a title over the product's own three pages would only repeat the
+            // name the Back row already carries.
+            items: [
+              {
+                id: 'build-applications-functions',
+                label: 'About Functions',
+                href: '/site/docs/functions'
+              },
+              {
+                id: 'build-applications-reference-functions-instances',
+                label: 'Functions Instances'
+              },
+              { id: 'runtime-overview', label: 'Azion Runtime' }
+            ]
+          },
+          {
+            label: 'Guides',
+            items: [
+              { id: 'get-started-frameworks-javascript', label: 'How to build functions' },
+              {
+                id: 'build-functions-guides-altcha',
+                label: 'How to Use the ALTCHA Function'
+              },
+              {
+                id: 'build-functions-guides-api-builder',
+                label: 'How to build an API with Functions and ChatGPT'
+              },
+              {
+                id: 'build-functions-guides-browserless-functions',
+                label: 'How to build a browserless application with Functions'
+              },
+              {
+                id: 'build-functions-guides-debugging-functions-graphql',
+                label: 'How to debug functions using GraphQL API'
+              },
+              {
+                id: 'build-functions-guides-firewall',
+                label: 'Create and Configure a Function on Firewall'
+              },
+              {
+                id: 'build-functions-guides-paywall-function-jwt',
+                label: 'How to set up a paywall with Azion JWT solution'
+              },
+              {
+                id: 'build-functions-guides-serverless-functions',
+                label: 'How to run serverless functions on Azion'
               }
             ]
           }
@@ -478,7 +525,7 @@ export const docsNavSections = [
                       },
                       {
                         id: 'secure-network-shield-guides-blocklists-ip-addresses-edge',
-                        label: 'Create IP, ASN & Geo Blocklists'
+                        label: 'Create IP, ASN and Geo Blocklists'
                       }
                     ]
                   },
@@ -649,7 +696,7 @@ export const docsNavSections = [
             children: [
               {
                 id: 'secure-firewall-guides-certificate-manager',
-                label: 'Acquire & Register a Digital Certificate'
+                label: 'Acquire and Register a Digital Certificate'
               },
               { id: 'secure-certificate-manager-guides-mtls', label: 'How to configure mTLS' }
             ]
@@ -1076,7 +1123,7 @@ export const docsNavSections = [
             children: [
               {
                 id: 'platform-compliance-governance-risk-compliance',
-                label: 'Strengthen Governance, Risk & Compliance'
+                label: 'Strengthen Governance, Risk and Compliance'
               },
               { id: 'platform-compliance-pci-dss-certification', label: 'PCI Compliance' },
               { id: 'platform-compliance-soc', label: 'SOC Compliance' }
@@ -1233,7 +1280,7 @@ export const docsNavSections = [
     ]
   },
   {
-    label: 'Updates & Policies',
+    label: 'Updates and Policies',
     items: [
       {
         id: 'changelog',
@@ -1245,7 +1292,7 @@ export const docsNavSections = [
       },
       {
         id: 'agreements-policies',
-        label: 'Agreements & Policies',
+        label: 'Agreements and Policies',
         children: [
           { id: 'agreements', label: 'All agreements' },
           { id: 'agreements-acceptable-use-policy', label: 'Acceptable Use Policy' },
@@ -1384,9 +1431,12 @@ export const docsIdByRoute = new Map(
 /**
  * Every container on the way down to a page, so a jump can open them.
  *
- * One model now, not two: with the sections back to being segments, the only thing that
- * folds is the CONDENSED row, so an ancestor chain is entirely `expanded` ids. Segments
- * never fold, so they never appear here.
+ * Segments never fold, so they never appear here — an ancestor chain is containers only.
+ * It is not one model, though: a condensed ancestor belongs to `expanded` and a DRILL
+ * ancestor (`Functions`) belongs to the stack, so the consumer splits this list by kind
+ * rather than handing it to one model (see `DocsLayout`'s `drillIds`). Returned as one
+ * list because it is one fact — the path down — and only the shell knows which of the two
+ * models each step feeds.
  */
 export const docsParentsOf = (id) =>
   menuPath(

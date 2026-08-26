@@ -15,27 +15,25 @@
   // heading's own anchor. Rail and heading link therefore land identically, which is the
   // whole reason the nav is provided rather than left to a native hash jump.
   //
-  // The page contributes three things and the shell places all of them: the page bar
-  // (breadcrumb + Copy page, pinned above the scroll), the body, and the rail. Its own
-  // masthead is title + deck only — see DocsMdxPage.
+  // The page contributes two things and the shell places both: the body and the rail. The
+  // trail and Copy page are the MASTHEAD's — they used to be a sticky bar of their own,
+  // pinned above the scroll by the shell, and a header band whose entire content is two
+  // controls is a band the page does not need (see DocsMdxPage).
   //
   // The trail and the previous/next pair are DERIVED FROM THE RAIL (see docs-pages.js), not
   // typed here: the tree already knows where a page sits and what is next to it.
-  import Breadcrumb from '@aziontech/webkit/breadcrumb'
-  import SplitButton from '@aziontech/webkit/split-button'
   import DocCta from '@aziontech/webkit-docs/doc-cta'
   import DocOnThisPage from '@aziontech/webkit-docs/doc-on-this-page'
   import { provideHeadingNav } from '@aziontech/webkit-docs/heading-nav'
   import { scrollToHeading } from '@aziontech/webkit-docs/heading-scroll'
   import { collectHeadings, parseMdx } from '@aziontech/webkit-docs/mdx'
+  import { scrollParent } from '@aziontech/webkit-docs/scroll-parent'
   import { useScrollSpy } from '@aziontech/webkit-docs/use-scroll-spy'
   import { computed, ref } from 'vue'
   import { useRoute } from 'vue-router'
 
   import DocsLayout from '../components/DocsLayout.vue'
   import DocsMdxPage from '../components/DocsMdxPage.vue'
-  import { useDocsCrumbNav } from '../lib/docs-crumb-nav.js'
-  import { useDocsPageActions } from '../lib/docs-page-actions.js'
   import { docsPageChrome, docsPageSource, docsPageSourcePath } from '../lib/docs-pages.js'
   import { docsRailGroups } from '../lib/docs-rail-groups.js'
 
@@ -60,28 +58,17 @@
   const body = ref(null)
   const { activeId } = useScrollSpy(body, headings)
 
-  // The shell's `<main>` is the scroll container — the docs top bar and both rails are
-  // fixed around it — so it, not the window, is what gets scrolled.
-  const scroller = () => body.value?.closest('main') ?? null
+  // The page scrolls its own column — the docs top bar and both rails are fixed around it —
+  // so the scroll has to be issued on that column and not on the window. WHICH element it is
+  // belongs to the shell: it wraps the page in the design system's `ScrollArea` inside the
+  // `<main>` landmark, so this asks for the nearest scrolling ancestor rather than naming
+  // either element. Same resolution the scroll-spy uses, so the rail lights the section a
+  // click lands on.
+  const scroller = () => scrollParent(body.value)
 
   const goToHeading = (event, item) => scrollToHeading(scroller(), body.value, item.id, event)
 
   provideHeadingNav(goToHeading)
-
-  // A crumb is a real anchor, so the plain left click has to be taken into the app's own
-  // router — otherwise stepping back up the trail reloads the whole SPA. Same split the
-  // rail makes: modified clicks stay the browser's.
-  const onCrumbNavigate = useDocsCrumbNav()
-
-  // The markdown IS the page here, so every action operates on the exact source the body was
-  // rendered from — no second copy of the text to keep in sync.
-  const {
-    actions: PAGE_ACTIONS,
-    label: copyLabel,
-    icon: copyIcon,
-    copyPage,
-    onPageAction
-  } = useDocsPageActions(() => source.value)
 </script>
 
 <template>
@@ -90,41 +77,10 @@
        page's DOM; re-rendering in place would leave the spy watching headings that have been
        replaced and the reader halfway down the previous page's scroll. -->
   <DocsLayout :key="slug">
-    <template #page-bar>
-      <!-- ONE Breadcrumb, and the DESIGN SYSTEM makes it responsive. Below 768 it renders
-           the first crumb, an overflow dropdown holding the middle of the trail, and the
-           current page — every step still reachable, in the width a phone has.
-
-           It used to be TWO instances: the full trail from `md` up, and `crumbs.slice(-1)`
-           below it. That threw the trail away exactly where the rail is also hidden, so a
-           reader on a phone had the name of the page they were already on and no way back
-           up — and it bypassed the collapse this component already ships. -->
-      <!-- OPTICALLY COMPENSATED: the crumb is a hover pill with `px-(--spacing-xs)`, so left
-           alone its LABEL starts 8px inside the column edge while the title below is flush
-           with it — the trail reads indented against the whole page. The negative margin is
-           exactly the pill's own padding, so the ink lands on the column edge and the hover
-           surface keeps its 8px, bleeding into the gutter where there is nothing to collide
-           with. -->
-      <Breadcrumb
-        :items="chrome.crumbs"
-        class="-ml-(--spacing-xs) min-w-0 flex-1"
-        @navigate="onCrumbNavigate"
-      />
-      <SplitButton
-        :label="copyLabel"
-        :icon="copyIcon"
-        :model="PAGE_ACTIONS"
-        kind="outlined"
-        size="small"
-        class="shrink-0"
-        @click="copyPage"
-        @item-click="onPageAction"
-      />
-    </template>
-
     <div ref="body">
       <DocsMdxPage
         :source="source"
+        :crumbs="chrome.crumbs"
         :previous="chrome.previous"
         :next="chrome.next"
       />

@@ -6,9 +6,8 @@
 // a rail row (see `followRow`): the modified click stays the browser's, the plain one
 // becomes a `router.push` so the SPA stays an SPA instead of reloading the whole app.
 //
-// It lives in one file because THREE views render the trail — the MDX reading page, the
-// Agent Setup index, and an agent's own setup page — and each renders it twice (the full
-// trail from `md` up, the current page alone below it). Six bindings, one behaviour.
+// It lives in one file because THREE mastheads render the trail — the MDX reading page,
+// the Agent Setup index, and an agent's own setup page. Three bindings, one behaviour.
 import { useRoute, useRouter } from 'vue-router'
 
 /**

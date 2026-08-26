@@ -353,7 +353,7 @@ export const AGENT_SETUP_DESCRIPTION =
   'Azion ships an MCP server, agent-ready documentation, and a CLI, so your coding agent can build on the platform from your editor or terminal.'
 
 /**
- * The index page as markdown, for the page bar's Copy page control and its "open in
+ * The index page as markdown, for the masthead's Copy page control and its "open in
  * assistant" actions.
  *
  * A hand-composed page has no `.mdx` to hand over, so the markdown is built from the SAME

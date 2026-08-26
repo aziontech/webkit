@@ -19,7 +19,8 @@
   // `DocAccordionGroup` for the FAQ and the troubleshooting pairs, `DocCardGroup` for the
   // grid, and `DocMarkdown` for the copy that lives in data — so a sentence carrying
   // `azion deploy` renders the same inline code chip an MDX page would.
-  import CopyButton from '@aziontech/webkit/copy-button'
+  import Breadcrumb from '@aziontech/webkit/breadcrumb'
+  import SplitButton from '@aziontech/webkit/split-button'
   import Table from '@aziontech/webkit/table'
   import Tag from '@aziontech/webkit/tag'
   import DocAccordionGroup from '@aziontech/webkit-docs/doc-accordion-group'
@@ -38,13 +39,14 @@
   import DocStep from '@aziontech/webkit-docs/doc-step'
   import DocSteps from '@aziontech/webkit-docs/doc-steps'
   import AgentMark from '@shared/ui/brand/AgentMark.vue'
-  import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
+  import { computed } from 'vue'
 
   import {
     AGENT_DOC_LINKS,
     agentContextFile,
     agentFaq,
     agentHeaderLinks,
+    agentPageMarkdown,
     agentSteps,
     agentTips,
     agentTroubleshooting,
@@ -62,15 +64,35 @@
     COMPARE_TAG_SEVERITY,
     otherAgents
   } from '../lib/docs-agent-setup.js'
+  import { useDocsCrumbNav } from '../lib/docs-crumb-nav.js'
+  import { useDocsPageActions } from '../lib/docs-page-actions.js'
 
   const props = defineProps({
     // The row from `AGENTS` this page is about.
     agent: { type: Object, required: true },
+    // The ancestor trail, current page last — derived from the rail by the view.
+    crumbs: { type: Array, default: () => [] },
     // The page before this one in reading order: { title, href }.
     previous: { type: Object, default: null },
     // The page after this one.
     next: { type: Object, default: null }
   })
+
+  // A crumb is a real anchor, so the plain left click has to be taken into the app's own
+  // router — otherwise stepping back up the trail reloads the whole SPA. Same split the
+  // rail makes: modified clicks stay the browser's.
+  const onCrumbNavigate = useDocsCrumbNav()
+
+  // The page is composed rather than written, so its markdown is BUILT from the same data
+  // the body renders (see docs-agent-pages.js) — not typed out a second time to rot. It is
+  // wired HERE rather than in the view because the control it drives is the masthead's.
+  const {
+    actions: PAGE_ACTIONS,
+    label: copyLabel,
+    icon: copyIcon,
+    copyPage,
+    onPageAction
+  } = useDocsPageActions(() => agentPageMarkdown(props.agent))
 
   const steps = computed(() => agentSteps(props.agent))
   const tips = computed(() => agentTips(props.agent))
@@ -79,76 +101,6 @@
   const contextFile = computed(() => agentContextFile(props.agent))
   const others = computed(() => otherAgents(props.agent.slug))
 
-  // ── The MCP tool table, on a phone ──────────────────────────────────────────
-  //
-  // The table is two columns: a 300px frozen name and a description that does not
-  // wrap, so the row is 759px wide at every viewport and the reader scrolls it. That
-  // is right on a laptop — the name stays pinned while the sentence slides under it —
-  // and unusable at 390px, where 300px of a 356px viewport is the name and every
-  // description costs a 403px horizontal drag.
-  //
-  // Below `sm` the row therefore STACKS: name on its own line with its copy control,
-  // description wrapped underneath, no horizontal scroll at all. The stacking itself
-  // is CSS on the wrapper, but the `width` cannot be — the DS applies a fixed column
-  // width as an INLINE `flex: 0 0 300px !important` (table.vue), which no class can
-  // outrank, and in a `flex-col` row that basis would become a 300px tall cell. So the
-  // switch happens in the DATA: below `sm` the column drops both `width` and `frozen`
-  // and the cell falls back to its `data-[grow]` weight, which the wrapper then
-  // neutralises with `flex-none`.
-  const compact = ref(false)
-  let compactQuery = null
-  const syncCompact = (event) => {
-    compact.value = event.matches
-    // Re-bind after the column set changes: the scroll viewport is a stable element
-    // today, but the reference is cheap to refresh and a stale one would silently leave
-    // the fade frozen on whatever it last read.
-    nextTick(bindViewport)
-  }
-
-  const toolColumns = computed(() =>
-    compact.value
-      ? MCP_TOOL_COLUMNS.map(({ width: _width, frozen: _frozen, ...column }) => column)
-      : MCP_TOOL_COLUMNS
-  )
-
-  // ── The frozen column's scroll-fade ─────────────────────────────────────────
-  //
-  // A frozen cell paints a 24px gradient off its right edge, and it is the only thing
-  // that says "this column is pinned and the rest is sliding under it". It used to be
-  // suppressed outright, because at rest it lands on the first word of every
-  // description and dims it whether the table has been scrolled or not — a permanent
-  // shadow to signal something that had not happened yet.
-  //
-  // Gating it on actual scroll keeps the signal and drops the shadow: at `scrollLeft:
-  // 0` the gradient is transparent, and it fades in the moment the table moves. The
-  // listener is passive and reads one number, so it costs nothing per frame.
-  const toolTable = ref(null)
-  const toolsScrolled = ref(false)
-  let toolViewport = null
-  const syncScrolled = () => {
-    toolsScrolled.value = (toolViewport?.scrollLeft ?? 0) > 0
-  }
-
-  const bindViewport = () => {
-    const next = toolTable.value?.querySelector('[data-testid="data-table__viewport"]') ?? null
-    if (next === toolViewport) return syncScrolled()
-    toolViewport?.removeEventListener('scroll', syncScrolled)
-    toolViewport = next
-    toolViewport?.addEventListener('scroll', syncScrolled, { passive: true })
-    syncScrolled()
-  }
-
-  onMounted(() => {
-    compactQuery = window.matchMedia('(max-width: 639.98px)')
-    compact.value = compactQuery.matches
-    compactQuery.addEventListener('change', syncCompact)
-    bindViewport()
-  })
-
-  onBeforeUnmount(() => {
-    compactQuery?.removeEventListener('change', syncCompact)
-    toolViewport?.removeEventListener('scroll', syncScrolled)
-  })
   const facts = computed(() => agentFacts(props.agent))
   const headerLinks = computed(() => agentHeaderLinks(props.agent))
 
@@ -169,6 +121,12 @@
     <!-- The masthead's RULE bleeds and its CONTENT takes the column — the same split every
          other docs page makes (see DocsMdxPage).
 
+         THE TRAIL AND COPY PAGE OPEN AND CLOSE THE IDENTITY, as they do on every other docs
+         page: the trail on its own line above the mark, the action on the title's line.
+         They were a sticky bar of the shell's, pinned above the scroll, which put the
+         reader's location a whole band away from the name of the thing they were located
+         in — and gave a page that already draws its own horizon a second rule above it.
+
          IT IS COMPOSED HERE, NOT `DocPageHeader`. That masthead is a column of title,
          deck and date, which is right for a prose page; this one is an identity card for a
          third-party product, and it has four things that page never has: the vendor's mark
@@ -180,10 +138,20 @@
          question a reader asks about PROSE — is this stale? — where this page's answer to
          "is this current?" is the config snippet itself, and the row of references is what
          a reader scanning the top actually wants. -->
-    <div class="border-b border-(--border-default) pt-14">
+    <div class="border-b border-(--border-default)">
       <header
-        class="layout-column-docs layout-boundary-inline flex flex-col gap-(--spacing-md) pb-(--spacing-lg)"
+        class="layout-column-docs layout-boundary-inline flex flex-col gap-(--spacing-md) pt-(--spacing-md) pb-(--spacing-lg)"
       >
+        <!-- OPTICALLY COMPENSATED: the crumb is a hover pill with `px-(--spacing-xs)`, so
+             left alone its LABEL starts 8px inside the column edge while the tile below is
+             flush with it. The negative margin is exactly the pill's own padding, so the
+             ink lands on the column edge and the hover surface keeps its 8px, bleeding
+             into the gutter where there is nothing to collide with. -->
+        <Breadcrumb
+          :items="crumbs"
+          class="-ml-(--spacing-xs) min-w-0"
+          @navigate="onCrumbNavigate"
+        />
         <!-- THE MARK SITS IN A TILE, not loose on the page: a logo drawn straight onto the
              canvas at 24px reads as a bullet beside the title, where the same mark inside a
              bordered square reads as the product's own icon — and the tile gives seven marks
@@ -226,10 +194,26 @@
             <span class="block text-overline-sm uppercase text-(--primary)">{{
               agent.vendor
             }}</span>
-            <h1 class="m-0 text-heading-2xl text-(--text-default) sm:text-heading-xl">
+            <h1
+              class="m-0 text-heading-xl text-(--text-default) max-sm:[font-size:var(--text-2xl)]"
+            >
               {{ agent.name }} + Azion
             </h1>
           </div>
+          <!-- The page's own action set — the page link, the raw markdown, and each
+               assistant by name — with a primary segment that says `Copied` for two
+               seconds, because a clipboard write has no other visible outcome. It rides
+               the identity row, so it lands on the title's line from `sm` up and under the
+               stacked mark-and-title on a phone, where there is no room beside them. -->
+          <SplitButton
+            :label="copyLabel"
+            :icon="copyIcon"
+            :model="PAGE_ACTIONS"
+            kind="outlined"
+            class="shrink-0"
+            @click="copyPage"
+            @item-click="onPageAction"
+          />
         </div>
 
         <p class="m-0 text-body-md text-(--text-muted)">
@@ -389,67 +373,37 @@
       </p>
 
       <!-- A TABLE, because the tool NAME is what the reader takes away — they will name it
-           in a prompt — and a name in a frozen left column with a copy control beside it
-           is a name they can lift without selecting text. The wrapper earns the prose
-           rhythm (`data-doc-block`) and keeps the prose out of the table
-           (`data-doc-chrome`), exactly as the index's comparison table does. -->
-      <!-- THE FROZEN COLUMN'S SCROLL-FADE IS GATED ON SCROLL, not suppressed. The
-           gradient is the only thing that says "this column is pinned and the rest is
-           sliding under it", but at rest it dims the first word of every description —
-           so it starts transparent and fades in the moment the viewport moves
-           (`data-scrolled`, set from a passive scroll listener above).
-
-           BELOW `sm` THE ROW STACKS. A 300px frozen name in a 356px viewport leaves 56px
-           of description, so the phone gets no table chrome at all: the header row goes,
-           the row becomes a column, and each cell takes the full width — name and copy
-           control on one line, wrapped description under it, nothing to scroll
-           sideways. The cells drop `flex-none` because with the inline width gone (see
-           `toolColumns`) they would otherwise take their `data-[grow]` basis as a
-           HEIGHT in a `flex-col` row, and the DS's width-defining `role=presentation`
-           box drops `w-max` for `w-full` — at max-content it stays 459px wide (the
-           longest description on one unbroken line) and the text never wraps, which is
-           the whole point of stacking. -->
+           in a prompt — and a name against its own one-line description is a scan down one
+           column, which a list of paragraphs is not. The wrapper earns the prose rhythm
+           (`data-doc-block`) and keeps the prose out of the table (`data-doc-chrome`),
+           exactly as the index's comparison table does. -->
+      <!-- THE WHOLE ROW SCROLLS — nothing is pinned. A frozen first column buys a name
+           that stays put while the sentence slides under it, and costs a phone every
+           pixel it holds: 300px of a 356px viewport was the name and nothing else. With
+           the freeze gone the two columns move together, so a narrow viewport drags one
+           table sideways instead of reading one column through a slot — and there is no
+           pinned edge left for the DS's scroll-fade to mark, so that goes with it. -->
       <div
-        ref="toolTable"
         data-doc-block
         data-doc-chrome
-        :data-scrolled="toolsScrolled || null"
-        class="[&_[data-frozen=start]]:after:opacity-0 [&_[data-frozen=start]]:after:transition-opacity [&_[data-frozen=start]]:after:duration-fast-02 [&_[data-frozen=start]]:after:ease-productive-entrance data-[scrolled]:[&_[data-frozen=start]]:after:opacity-100 motion-reduce:[&_[data-frozen=start]]:after:transition-none max-sm:[&_[role=presentation]]:w-full max-sm:[&_[role=rowgroup][data-frozen]]:hidden max-sm:[&_[role=row]]:flex-col max-sm:[&_[role=row]]:items-stretch max-sm:[&_[role=cell]]:w-full max-sm:[&_[role=cell]]:min-h-0 max-sm:[&_[role=cell]]:flex-none"
       >
         <Table
           :data="MCP_TOOLS"
-          :columns="toolColumns"
+          :columns="MCP_TOOL_COLUMNS"
           row-key="id"
           border
         >
           <!-- The name is a CODE CHIP, not plain text in a cell: it is a literal a reader
                types into a prompt, and the chip is what says so — the same bordered,
-               tinted chip an inline `code` span takes in the prose above. The copy control
-               closes the cell on the right, so nine rows put nine copy targets on one
-               vertical line. -->
+               tinted chip an inline `code` span takes in the prose above. No copy control
+               beside it: nine buttons down one edge was nine tab stops and a column of
+               chrome to pay for a string the reader can select, and the chip already
+               marks where that string starts and ends. -->
           <template #cell-title="{ row }">
-            <span class="flex min-w-0 flex-1 items-center justify-between gap-(--spacing-xs)">
-              <code
-                class="min-w-0 truncate rounded-(--shape-flat) border border-(--border-default) bg-(--bg-canvas) px-(--spacing-xs) py-0.5 text-label-code-sm text-(--text-default)"
-                >{{ row.title }}</code
-              >
-              <CopyButton
-                :value="row.title"
-                :aria-label="`Copy ${row.title}`"
-                kind="transparent"
-                size="small"
-                class="shrink-0"
-              />
-            </span>
-          </template>
-
-          <!-- The DS renders a plain cell value inside a `truncate` span, which is
-               right while the row is a row: the sentence is cut, and the scroll (now
-               with its fade back) says there is more. Once the row stacks the cut has
-               nothing behind it — there is no sideways scroll left to reveal the rest —
-               so below `sm` the same span wraps instead. -->
-          <template #cell-description="{ value }">
-            <span class="min-w-0 flex-1 whitespace-normal sm:truncate">{{ value }}</span>
+            <code
+              class="rounded-(--shape-elements) border border-(--border-default) bg-(--bg-hover) px-(--spacing-xs) py-0.5 text-label-code-sm text-(--text-default)"
+              >{{ row.title }}</code
+            >
           </template>
         </Table>
       </div>

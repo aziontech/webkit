@@ -79,26 +79,22 @@ export const MCP_TOOLS = [
  *
  * A TABLE, not a list of rows, because the tool NAME is the thing a reader takes away —
  * they will type it into a prompt ("use search_azion_api_v4_commands for this") — and a
- * name in a fixed left column with a copy control beside it is a name they can lift
- * without selecting text.
+ * name sitting against its own one-line description is a scan down one column.
  *
- * FROZEN, like the comparison table's Agent column: the two columns do not fit the
- * reading measure at any width (759px of row against a 674px docs column), and a
- * horizontal scroll that carries the tool's name away from its own description is the one
- * thing this table must not do.
+ * NOTHING IS FROZEN, and the whole row scrolls together. A pinned first column keeps the
+ * name in view while the description slides under it, which is worth having on a laptop
+ * and unaffordable on a phone: at 300px it took all but 56px of a 356px viewport, so
+ * every description arrived through a slot. Scrolling the table as one piece costs the
+ * name its permanence and gives the reader a whole row at a time.
  *
- * The DS paints a 24px scroll-fade off the frozen cell's right edge. DocsAgentPage gates
- * it on `scrollLeft > 0` rather than suppressing it: at rest the gradient would sit on the
- * description's first word and dim it permanently, and once the reader scrolls it is the
- * only thing that says the name column is pinned.
- *
- * BOTH KEYS BELOW ARE DROPPED ON A PHONE. `width` and `frozen` are what make this a
- * scrolling table, and below `sm` DocsAgentPage strips them so the row stacks instead —
- * 300px of a 356px viewport is a name and nothing else. The width has to go from the DATA
- * because the DS applies it as an inline `!important` flex basis no class can reach.
+ * `minWidth`, not `width`: the DS measures the header and every rendered cell and
+ * resolves ONE width from the larger — so the column lands on the widest tool name with
+ * no dead space, and re-measures if a name changes. The old 300 was a fixed bet sized
+ * around a copy control that is no longer there. It has to be one key or the other:
+ * with neither, each row is its own flex container and the header drifts off the body.
  */
 export const MCP_TOOL_COLUMNS = [
-  { id: 'title', accessorKey: 'title', header: 'Tool', frozen: 'start', width: 300 },
+  { id: 'title', accessorKey: 'title', header: 'Tool', minWidth: 80 },
   { id: 'description', accessorKey: 'description', header: 'What it does', grow: 2 }
 ]
 
@@ -490,6 +486,71 @@ export const agentHeaderLinks = (agent) => [
  * @param {object} agent - the row from `AGENTS`.
  * @returns {object[]} the steps, in order.
  */
+/**
+ * THE GLOSSARY, and the one place each definition is written.
+ *
+ * An agent-setup page is where a reader meets four Azion nouns at once — MCP, a Personal
+ * Token, Connectors, Workloads — and the copy cannot stop to define them without becoming
+ * a different page. A gloss is the print convention for exactly that: the term reads
+ * normally in the sentence, carries a dotted underline, and gives up its definition on
+ * hover or focus. `<Tooltip>` is the layer's inline component for it, and every string
+ * below reaches it through `DocMarkdown`, so a definition written here renders the same
+ * whether it lands in a step, an FAQ answer or a troubleshooting note.
+ *
+ * DEFINED ONCE, GLOSSED MANY TIMES. The term is glossed where a reader first meets it in
+ * a given block and left plain afterwards — a page that underlines every occurrence of
+ * "Workload" is a page nobody reads. The `cta` is the escape hatch for a reader who wants
+ * more than a sentence; a term with nowhere useful to send them carries no link, because
+ * a `cta` turns the panel from a passive tooltip into a small dialog and that is only
+ * worth its keyboard cost when there is somewhere to go.
+ */
+const GLOSSARY = {
+  mcp: {
+    headline: 'MCP',
+    tip: 'Model Context Protocol — the open standard an agent uses to call tools it did not ship with. Azion exposes nine of them over one authenticated HTTP endpoint.',
+    cta: 'See the nine tools',
+    href: '#mcp-server'
+  },
+  token: {
+    headline: 'Personal Token',
+    tip: 'Your own API credential, scoped to the permissions you choose and revocable at any time. The agent authenticates as you with it — it never gets one of its own.',
+    cta: 'Console › Personal Tokens',
+    href: PERSONAL_TOKEN_URL
+  },
+  cli: {
+    headline: 'Azion CLI',
+    tip: 'The command-line tool that builds and deploys from your working copy, and covers the product commands the API does not.',
+    cta: 'Set up the CLI',
+    href: '#azion-cli'
+  },
+  connector: {
+    headline: 'Connectors',
+    tip: 'Where an application fetches content from — a bucket, an origin server, a live stream. Called Origins before v4, which is why a model trained earlier still asks for one.',
+    cta: 'Platform overview',
+    href: '/site/docs/platform-overview'
+  },
+  workload: {
+    headline: 'Workloads',
+    tip: 'The public entry point that binds a domain and its TLS to an application. Called Domains before v4.',
+    cta: 'Platform overview',
+    href: '/site/docs/platform-overview'
+  }
+}
+
+/**
+ * One glossed term, as MDX.
+ *
+ * @param {keyof typeof GLOSSARY} key - which definition to attach.
+ * @param {string} text - the term as it reads in the sentence, so a gloss can be
+ *   singular, plural or possessive without a second entry.
+ * @returns {string} the `<Tooltip>` tag `DocMarkdown` renders inline.
+ */
+const gloss = (key, text) => {
+  const { headline, tip, cta, href } = GLOSSARY[key]
+  const link = href ? ` cta="${cta}" href="${href}"` : ''
+  return `<Tooltip headline="${headline}" tip="${tip}"${link}>${text}</Tooltip>`
+}
+
 export const agentSteps = (agent) => {
   const setup = SETUPS[agent.slug] ?? {}
 
@@ -498,7 +559,7 @@ export const agentSteps = (agent) => {
     {
       key: 'token',
       title: 'Create a Personal Token',
-      body: `The MCP server authenticates as you. Create a token in the Console, give it only the scopes you want ${agent.name} to have, and copy it — it is shown once.`,
+      body: `The ${gloss('mcp', 'MCP server')} authenticates as you. Create a ${gloss('token', 'Personal Token')} in the Console, give it only the scopes you want ${agent.name} to have, and copy it — it is shown once.`,
       link: { label: 'Console › Personal Tokens', href: PERSONAL_TOKEN_URL }
     },
     { key: 'connect', title: 'Connect the Azion MCP server', ...setup.connect },
@@ -548,12 +609,11 @@ export const CONTEXT_EXAMPLE = `# Azion
 export const agentFaq = (agent) => [
   {
     question: 'Should I use the MCP server, the CLI, or both?',
-    answer: `Both, and they do different jobs. The MCP server is how ${agent.name} looks things up and creates configuration through the API; the Azion CLI is how it builds and deploys from your working copy. Ask for a deploy and a connected agent will reach for the CLI on its own.`
+    answer: `Both, and they do different jobs. The ${gloss('mcp', 'MCP server')} is how ${agent.name} looks things up and creates configuration through the API; the ${gloss('cli', 'Azion CLI')} is how it builds and deploys from your working copy. Ask for a deploy and a connected agent will reach for the CLI on its own.`
   },
   {
     question: `What can ${agent.name} do with my Personal Token?`,
-    answer:
-      'Exactly what you scoped it for. The token is yours, not the agent’s — six of the nine tools only read documentation, and the three that write go through the same API a person would. Scope a token per project, and revoke it in the Console the moment the experiment is over.'
+    answer: `Exactly what you scoped it for. The ${gloss('token', 'Personal Token')} is yours, not the agent’s — six of the nine tools only read documentation, and the three that write go through the same API a person would. Scope a token per project, and revoke it in the Console the moment the experiment is over.`
   },
   {
     question: `Can ${agent.name} deploy to Azion without leaving ${agent.workflows.includes('Terminal') ? 'the terminal' : 'the editor'}?`,
@@ -577,8 +637,7 @@ export const agentTroubleshooting = (agent) => {
     },
     {
       question: 'It answers with product names that no longer exist',
-      answer:
-        'That is the training data, not the connection: Origins became Connectors and Domains became Workloads in v4. Point it at the For AI Agents page once per session, or paste the primer above, and it corrects itself.'
+      answer: `That is the training data, not the connection: Origins became ${gloss('connector', 'Connectors')} and Domains became ${gloss('workload', 'Workloads')} in v4. Point it at the For AI Agents page once per session, or paste the primer above, and it corrects itself.`
     },
     {
       question: 'It writes configuration that the CLI then rejects',
@@ -610,7 +669,7 @@ export const AGENT_PAGE_TOC = [
 ]
 
 /**
- * The page as markdown, for the page bar's Copy page control — built from the same values
+ * The page as markdown, for the masthead's Copy page control — built from the same values
  * the page renders, so what an assistant receives is what the reader is looking at.
  *
  * @param {object} agent - the row from `AGENTS`.

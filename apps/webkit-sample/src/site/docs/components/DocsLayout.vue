@@ -16,18 +16,30 @@
   //     eight sections as its groups, plus the shell's own commands. Selecting a page
   //     opens the condensed rows above it and scrolls it into view.
   //
-  // THE RAIL IS SEGMENTED, NOT DRILLED. The eight sections are `Menu.Group` labels — one
+  // THE SECTIONS ARE SEGMENTED, NOT DRILLED. The eight are `Menu.Group` labels — one
   // column, eight titles, and the CONDENSED rows (`Migrate`, `Modules`, `Guides`,
   // `Reference`) doing all of the folding, which is the shape the live docs sidebar has.
   // They were drill levels: the root of the rail was the eight pillars and choosing one
   // replaced the whole rail with that pillar's menu behind a Back row, which hid seven
-  // pillars to show one. So there is no stack and no Back row here — the only model left
-  // is `expanded`.
+  // pillars to show one.
   //
-  // Search lives at the TOP OF THE RAIL, not in the top bar: the rail is what the
-  // documentation tree is, so its search belongs to it. It is a single large button
-  // rather than a field — the palette owns the typing, and it already does what an
-  // in-rail filter did (find a page by name), so the rail carries no second input.
+  // ONE ROW IS A DRILL, and it is `Functions` — a product sitting beside `Applications` in
+  // the `Build` segment, whose eleven pages are a menu rather than a list to unfold under a
+  // peer row. Activating it replaces the column with the Functions menu behind a
+  // `Menu.Back` row, and the same drill carries both homes of the tree: the rail and the
+  // sheet share one stack, so opening the level in one shows it in the other. So the rail
+  // runs TWO models — `expanded` for the condensed rows, and the stack (`path`) for that
+  // one level — and the stack is DERIVED from the page rather than remembered, which is
+  // what makes a pasted link to a page inside the level open it.
+  //
+  // Search lives in the CENTRE OF THE TOP BAR — the shape Google Cloud's console uses,
+  // and the same control the Azion console's bar now carries (@shared/ui/HeaderSearch).
+  // It used to sit at the top of the rail, on the argument that searching the tree
+  // belongs to the tree; what that missed is that the palette does not search the tree,
+  // it searches every PAGE, and it is the way past the tree rather than part of it. In
+  // the bar it is on screen at every width and in every state of the rail — collapsed,
+  // dragged narrow, or absent below `lg` — instead of only while the rail is expanded.
+  // It stays a BUTTON, not a field: the palette owns the typing.
   //
   // RESPONSIVE — one rail, two homes. A persistent rail needs ~300px it does not
   // have below a laptop, so `lg` (1024px) is where the three-region layout starts:
@@ -35,16 +47,19 @@
   //   · below lg  — no rail. The tree moves into a `Drawer` opened from the top
   //     bar's menu button (the DS overlay is a left panel at md and a bottom sheet
   //     below it, which is the same treatment every other overlay in the app gets),
-  //     and the palette gets its own outlined search IconButton in the bar — the pair
-  //     of outlined icon buttons the bar owns at those widths. NAV AND SEARCH ARE TWO
-  //     SEPARATE CONTROLS here: the sheet carries the tree only, no search bar, since
-  //     the button beside it is already the way into the palette;
-  //   · lg and up — the rail is back, resizable, with search at its top;
+  //     and the section links go, which leaves the bar's centre search the room to keep
+  //     its full shape down to ~500px. NAV AND SEARCH ARE TWO SEPARATE CONTROLS here:
+  //     the sheet carries the tree only. On a phone the search collapses to a 32px
+  //     square beside the menu button — that switch is the CENTRE REGION's own width,
+  //     not this breakpoint (see @shared/ui/HeaderSearch.vue);
+  //   · lg and up — the rail is back, resizable, and the section links appear beside the
+  //     brand, which is what they read from. The trailing group is what a reader DOES with
+  //     the documentation: search, then the source on GitHub, then the console;
   //   · xl and up — the page's "On this page" rail joins on the right.
   //
   // THEME LIVES WITH THE NAVIGATION, not in the bar. It is a preference the reader sets
   // once, so it belongs at the bottom of the tree — the same place at every width — and
-  // the bar keeps only what a reader uses per page (brand, links, search, the CTA). So:
+  // the bar keeps only what a reader uses per page (brand, links, search, source, the CTA). So:
   // the rail's own footer from `lg` up, and the nav sheet's footer below it, which is
   // where that tree is. It is driven by the shared app theme singleton either way, so
   // light/dark/system persist across the app like every other route.
@@ -68,7 +83,8 @@
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
   import { menuLeaves } from '@shared/lib/menu-tree.js'
   import { useTheme } from '@shared/lib/theme.js'
-  import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+  import HeaderSearch from '@shared/ui/HeaderSearch.vue'
+  import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
   import {
@@ -78,8 +94,7 @@
     docsNavSections,
     docsParentsOf
   } from '../lib/docs-nav.js'
-  import { useDocsSidebar } from '../lib/docs-sidebar.js'
-  import DocsSearchTrigger from './DocsSearchTrigger.vue'
+  import { recordDocsLevel, reportDocsLevel, useDocsSidebar } from '../lib/docs-sidebar.js'
 
   const router = useRouter()
   const route = useRoute()
@@ -90,7 +105,7 @@
   // Rail state (collapsed + width + which condensed rows are open) is a singleton so it
   // survives navigation between docs pages and reloads; `Sidebar` owns the gesture that
   // drives the first two, `Menu` the third.
-  const { collapsed, railWidth, expanded } = useDocsSidebar()
+  const { collapsed, railWidth, expanded, entering } = useDocsSidebar()
 
   // Docs top-bar links — the three pillars the real Azion documentation header
   // carries, kept as anchors so the prototype is self-contained.
@@ -108,11 +123,71 @@
   // Guides` is four condensed rows inside one segment.
   const active = ref(docsIdByRoute.get(route.path) ?? DOCS_HOME_ID)
 
+  /** Ids of the containers that DRILL rather than condense — `Functions`, and nothing else yet. */
+  const drillIds = (() => {
+    const ids = new Set()
+    const walk = (nodes) =>
+      nodes.forEach((node) => {
+        if (node.kind === 'drill') ids.add(node.id)
+        if (node.children) walk(node.children)
+        if (node.groups) walk(node.groups.flatMap((group) => group.items))
+      })
+    docsNavSections.forEach((section) => walk(section.items))
+    return ids
+  })()
+
+  /**
+   * The rail state a page implies, split by the kind of container each step is.
+   *
+   * `docsParentsOf` walks the tree down to the row and returns the containers above it as
+   * one list, because that is one fact. Which MODEL each step feeds is this shell's
+   * knowledge: a condensed ancestor is an `expanded` id, a drill ancestor is a level on the
+   * stack. Splitting here is what lets a single call seed both.
+   */
+  const railStateFor = (id) => {
+    const ancestors = docsParentsOf(id)
+    return {
+      levels: ancestors.filter((ancestorId) => drillIds.has(ancestorId)),
+      rows: ancestors.filter((ancestorId) => !drillIds.has(ancestorId))
+    }
+  }
+
   // Which condensed rows are open. Seeded from the page that is current, so arriving inside
   // one opens it rather than lighting a row nobody can see. Merged, never replaced — a row
-  // the reader opened by hand is theirs to close. ONE model, because a segment never folds:
-  // every container above a page is a condensed row.
-  expanded.value = [...new Set([...expanded.value, ...docsParentsOf(active.value)])]
+  // the reader opened by hand is theirs to close.
+  //
+  // A drill ancestor's own condensed ancestors belong in here too — `Functions` has none
+  // today, sitting at the top of its segment, but the rule holds for any drill that is
+  // nested: the level is rendered by the sub inside that branch, so a level whose branch is
+  // folded away has nothing to mount, and the row it returns to is not on screen either.
+  expanded.value = [...new Set([...expanded.value, ...railStateFor(active.value).rows])]
+
+  // The drill stack, DERIVED from the page rather than remembered. Every docs view renders
+  // its own `DocsLayout`, so navigating remounts this shell — a level held in a component
+  // would close on the navigation that opened it. The console rail solves that by persisting
+  // the stack in its singleton; here the page itself is enough, because the level a page
+  // belongs to is a fact about the tree, so re-deriving it on mount restores the same view a
+  // stored stack would have — and it also opens the level for a reader who arrived by a
+  // pasted URL or the palette, which a stored stack cannot do.
+  const path = ref(railStateFor(active.value).levels)
+
+  // Whether THIS mount is an entrance is the one thing the menu cannot derive: activating
+  // the drill row navigates, so the shell remounts and a push arrives looking exactly like a
+  // move inside the level. The singleton compares this page against the last one to answer
+  // it, and `enter-on-mount` below is where the answer is spent.
+  reportDocsLevel(active.value, path.value)
+
+  /**
+   * Take the stack back from `Menu`, which owns both ways it changes.
+   *
+   * A push is left to the navigation that follows it — that arrival is what animates. A POP
+   * navigates nothing and plays its own motion here, so it is recorded as seen, or the next
+   * navigation would replay an entrance for a column that never left the screen.
+   */
+  const onPath = (levels) => {
+    recordDocsLevel(levels, path.value.length)
+    path.value = levels
+  }
 
   // The scroll target lives inside the tree, so the ref is on `Menu` rather than on the rail:
   // `Sidebar` renders two roots (the rail, plus the affordance that brings a collapsed one
@@ -125,9 +200,9 @@
 
   // The DS focus trap moves initial focus to the panel's FIRST focusable. Park it on the
   // panel itself instead (`role="dialog"`, `tabindex="-1"`) — the conventional initial
-  // focus for a dialog — so the sheet does not open with its search trigger ringed as if
-  // the reader had already tapped it (and, on mobile Safari, with the viewport zoomed into
-  // it). Tab from there still walks in from the top. Scheduled on a frame because the
+  // focus for a dialog — so the sheet does not open with its first nav row ringed as if
+  // the reader had already picked it. Tab from there still walks in from the top, and the
+  // close button is still one Shift+Tab away. Scheduled on a frame because the
   // trap's own focus call runs in the microtask right after open.
   const navPanel = ref(null)
   watch(navOpen, (open) => {
@@ -135,14 +210,27 @@
     globalThis.requestAnimationFrame(() => navPanel.value?.$el?.focus?.())
   })
 
-  // Only LEAF rows reach here: `Menu` emits nothing for a condensed trigger, which only
-  // toggles its own rows open — that is not a navigation. So a `navigate` is always the
-  // same three things: light the row, close the sheet (the page it opened is behind the
-  // overlay), and route.
+  /**
+   * The row a container stands for: the first page inside it.
+   *
+   * A container is not a destination, so lighting one would mark nothing. The `Functions`
+   * drill row resolves to `About Functions` — its level's landing row — which is what makes
+   * opening the level and arriving somewhere one action instead of two.
+   */
+  const landingOf = (node) => (node.groups || node.children ? menuLeaves([node])[0] : node)
+
+  // Two kinds of row reach here. A LEAF, which is a page. And the `Functions` DRILL row,
+  // which `Menu` announces as it pushes its level — a drill row is a destination as well as
+  // a level, so the reader is not left reading the page they came from while a new menu is
+  // on screen. A condensed trigger emits nothing: unfolding rows is not a navigation.
   const onNavigate = (event, node) => {
-    active.value = node.id
-    navOpen.value = false
-    followRow(event, node)
+    const target = landingOf(node)
+    active.value = target.id
+    // The sheet closes on a page, because the page it opened is behind the overlay — but not
+    // on the drill row, whose whole job is to put a second menu in the sheet the reader is
+    // looking at.
+    if (!node.groups && !node.children) navOpen.value = false
+    followRow(event, target)
   }
 
   /**
@@ -161,7 +249,8 @@
   }
 
   /**
-   * Light a page's row and open every condensed row above it.
+   * Light a page's row and open the tree down to it — every condensed row above it, and the
+   * drill level it sits in.
    *
    * Used by the palette, and by arrival on a page from anywhere else — a link in the
    * prose, the browser's Back, a pasted URL. A jump that left the row folded away, or off
@@ -170,9 +259,15 @@
   const revealPage = (id) => {
     active.value = id
     if (hasRail.value && collapsed.value) collapsed.value = false
+    const { levels, rows } = railStateFor(id)
     // Merged, not replaced: a row the reader opened by hand elsewhere in the column is
     // theirs to close, and nothing about arriving here says they are done with it.
-    expanded.value = [...new Set([...expanded.value, ...docsParentsOf(id)])]
+    expanded.value = [...new Set([...expanded.value, ...rows])]
+    // The stack IS replaced — it is where the reader is, not what they left open. A page
+    // inside the drill level pushes it, a page anywhere else pops back to the root column,
+    // so the rail can never show a level the page being read is not in.
+    reportDocsLevel(id, levels)
+    path.value = levels
     nextTick(() => {
       menuRef.value?.$el
         ?.querySelector('[aria-current="page"]')
@@ -193,10 +288,9 @@
   )
 
   // ── ⌘K palette ──────────────────────────────────────────────────────────────
-  // The search trigger is a read-only affordance for it (click, or press the
-  // shortcut), sitting at the top of the rail on a laptop and in the top bar below
-  // it. The palette carries every documentation PAGE — containers are not
-  // destinations, so each section contributes its leaves — grouped and ordered
+  // The bar's centre control is a read-only affordance for it (click, or press the
+  // shortcut) at every width. The palette carries every documentation PAGE — containers
+  // are not destinations, so each section contributes its leaves — grouped and ordered
   // exactly like the rail, then the shell's own commands.
   const paletteOpen = ref(false)
   const openPalette = () => {
@@ -304,80 +398,6 @@
 
     commands.value.find((entry) => entry.id === id)?.run(event)
   }
-  // ── "ON THIS PAGE" OPENS ON THE PAGE BAR'S LINE ──
-  //
-  // The rail's first line — the outline's "On this page" — sits on the SAME LINE as the
-  // breadcrumb in the page bar, so the two halves of a page's chrome read as one row
-  // across the shell. It used to open level with the page's h1 instead, which left the
-  // top of its own column empty beside the entire header band.
-  //
-  // It lives HERE because this is the only place that owns both subjects: the bar is the
-  // shell's, the rail's content is the page's, and neither reading view can see the
-  // other. It was previously measured inside each of those views against that page's
-  // h1 — the same forty lines twice, free to drift apart.
-  //
-  // MEASURED, not typed. Both ends move: the bar's height and the overline's line box
-  // are font- and breakpoint-dependent, and what is wanted is not a distance but a
-  // CENTRING — the opening line's centre on the bar's centre, which is what makes it
-  // land on the breadcrumb's line rather than merely near it. The measurement subtracts
-  // the pad it is currently applying, so re-running it on a resize converges on the
-  // same number instead of walking the rail further down the column each time.
-  const pageBar = ref(null)
-  const tocColumn = ref(null)
-  const tocOffset = ref(0)
-  // Whether a measurement has actually landed. Until it has, the column keeps the plain
-  // `pt-(--spacing-lg)` from its class — the shape a page with an outline but NO page bar
-  // wants, since there is then no line to align to and the rail is simply the top of its
-  // own column. An `aligned` flag rather than `tocOffset > 0`, because a measured zero is
-  // a legitimate answer (a bar and an opening line of the same height) and it must not
-  // read as "never measured".
-  const tocAligned = ref(false)
-
-  const tocStyle = computed(() =>
-    tocAligned.value ? { paddingTop: `${tocOffset.value}px` } : null
-  )
-
-  const alignToc = () => {
-    const bar = pageBar.value
-    const title = tocColumn.value?.querySelector('[data-toc-title]')
-    if (!bar || !title) return
-
-    const barBox = bar.getBoundingClientRect()
-    const titleBox = title.getBoundingClientRect()
-    // Below `xl` the column is `hidden`, so every box is zero and the answer would be
-    // garbage. Nothing to align while nothing is drawn.
-    if (barBox.height === 0 || titleBox.height === 0) return
-
-    // Discount the pad ALREADY APPLIED, read off the element rather than remembered — on
-    // the first run that is the class's `pt-(--spacing-lg)` and not this function's own
-    // number, so tracking `tocOffset` instead would misjudge the first measurement by a
-    // whole spacing step and only correct itself on the next resize.
-    const appliedPad =
-      Number.parseFloat(globalThis.getComputedStyle(tocColumn.value).paddingTop) || 0
-    const titleCentreUnpadded = titleBox.top + titleBox.height / 2 - appliedPad
-
-    tocOffset.value = Math.max(0, barBox.top + barBox.height / 2 - titleCentreUnpadded)
-    tocAligned.value = true
-  }
-
-  let tocObserver = null
-
-  onMounted(async () => {
-    await nextTick()
-    alignToc()
-
-    // The BAR and the TITLE are the two things measured, so they are the two things
-    // watched — not the prose, whose height has nothing to do with this alignment. It is
-    // also what catches the `xl` boundary: crossing it takes the title from a zero box to
-    // a real one, which is a resize.
-    if (typeof globalThis.ResizeObserver !== 'function') return
-    tocObserver = new globalThis.ResizeObserver(() => alignToc())
-    if (pageBar.value) tocObserver.observe(pageBar.value)
-    const title = tocColumn.value?.querySelector('[data-toc-title]')
-    if (title) tocObserver.observe(title)
-  })
-
-  onBeforeUnmount(() => tocObserver?.disconnect())
 </script>
 
 <template>
@@ -396,13 +416,19 @@
          `kind="content"`, even though this bar spans the WINDOW and has no content zone
          beside it: the same call CreationHeader.vue makes, for the same reason. The kind
          is what decides the INSET, and `app` is a flat `--spacing-md` (16 at every width)
-         while the page bar and every page column below this one open on
+         while every page column below this one opens on
          `--layout-boundary-inline` (16, then 24 from `sm`). They disagreed at exactly the
          widths where no rail sits between them, which put the logo on a different
          vertical from the title under it. `content` reads the token the page reads. -->
+    <!-- `@container`, because the search in the trailing cluster switches between its two
+         shapes on THIS BAR's width. The bar is the only box in the header whose width is
+         independent of what is inside it (`w-full` off the window), and it is ~300px wider
+         than the console's at every window because no rail sits beside it — which is why a
+         viewport breakpoint could not serve both. See @shared/ui/HeaderSearch.vue. -->
     <GlobalHeader
       kind="content"
       aria-label="Azion documentation"
+      class="@container"
     >
       <!-- `justify-start!`, because the DS region ships `justify-end` — inert while the
            region is content-sized, but it packs the cluster against its own trailing edge
@@ -412,9 +438,9 @@
            the winner is CSS source order, not the order they are written here. -->
       <GlobalHeader.Left class="justify-start!">
         <!-- Below `lg` the tree has no rail to live in, so the bar carries the way
-             into it. `outlined`, matching the search IconButton at the other end of the
-             bar: the two are the bar's own controls, so they read as a pair. Hidden from
-             `lg` up, where the rail is the way in. -->
+             into it. `outlined` at 32px, the shape the centre search collapses to at the
+             same width: nav and search are the bar's own two controls there, so they read
+             as a pair across it. Hidden from `lg` up, where the rail is the way in. -->
         <IconButton
           icon="pi pi-bars"
           kind="outlined"
@@ -425,10 +451,15 @@
         />
 
         <GlobalHeader.Brand>
+          <!-- `px-(--spacing-xxs)` for the same reason the console rail carries it on its
+               own brand (AppSidebar.vue): a nav row's LABEL sits 4px inside the row box,
+               so a brand flush to the bar's inset lands 4px to the left of every item in
+               the tree below it. The 4px puts the wordmark on the tree's vertical, and
+               gives the focus ring the same breathing room the rail's brand has. -->
           <RouterLink
             to="/site/docs"
             aria-label="Azion Docs — home"
-            class="inline-flex shrink-0 items-center gap-(--spacing-xs) rounded-(--shape-elements) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface)"
+            class="inline-flex shrink-0 items-center gap-(--spacing-xs) rounded-(--shape-elements) px-(--spacing-xxs) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface)"
           >
             <Brand
               kind="default"
@@ -443,22 +474,16 @@
             </span>
           </RouterLink>
         </GlobalHeader.Brand>
-      </GlobalHeader.Left>
 
-      <!-- The growing centre region — `Nav` is the DS's own name for it, and section
-           links are what it is for. It stays mounted at every width even though its
-           content does not: it is the region that GROWS, so it is what holds the trailing
-           actions against the end of the bar once the links are gone (below `lg` it is an
-           empty spacer, the same job `GlobalHeader.Middle` does in the console shell).
-           `justify-start!` for the reason the left region needs it, and because these
-           links read FROM the brand — centred, they would float in the middle of a row
-           with nothing on either side of them. -->
-      <GlobalHeader.Nav class="justify-start!">
-        <!-- The section links need the room the rail breakpoint frees up; below `lg`
-             the bar is already carrying the menu button and the search trigger. -->
+        <!-- The section links READ FROM THE BRAND, so they sit beside it: this end of the
+             bar is what the documentation IS, and the trailing end is what a reader does
+             with it (search, source, console). They need the room the rail breakpoint frees
+             up; below `lg` the bar is already carrying the menu button and three trailing
+             controls, and the sections are in the sheet's tree anyway. `shrink-0` because
+             the region can shrink and a squashed link row wraps before it truncates. -->
         <NavigationMenu
           aria-label="Documentation sections"
-          class="hidden lg:flex"
+          class="ml-(--spacing-xs) hidden shrink-0 lg:flex"
         >
           <NavigationMenu.List class="items-center gap-(--spacing-xxs)">
             <NavigationMenu.Item
@@ -482,20 +507,48 @@
             </NavigationMenu.Positioner>
           </NavigationMenu.Portal>
         </NavigationMenu>
-      </GlobalHeader.Nav>
+      </GlobalHeader.Left>
+
+      <!-- The empty spacer. `Nav` is the DS's alias for the growing middle region, and what
+           it does here is hold the trailing group against the end of the bar; nothing lives
+           in it. Search used to, packed against its trailing edge — which put the control
+           one region away from the actions it belongs with. It is in `Right` now. -->
+      <GlobalHeader.Nav />
 
       <GlobalHeader.Right>
-        <!-- The way into the palette for the viewports with no rail: an IconButton, not
-             the rail's bar — a phone has no ⌘K to hint at and no room for a label, so
-             the glyph alone is the whole control. -->
-        <IconButton
-          icon="pi pi-search"
-          kind="outlined"
-          size="medium"
-          aria-label="Search docs"
-          class="shrink-0 lg:hidden"
+        <!-- SEARCH LEADS THE GROUP. It is one of the actions — the utility you reach for
+             before you know which page you want — so it sits at the head of this cluster on
+             the cluster's own `--spacing-sm` rhythm, rather than alone in the middle of the
+             bar. Wide it is a 160px field; narrow it is the DS IconButton, the same 32px box
+             as the GitHub link beside it. -->
+        <HeaderSearch
+          label="Search"
           @click="openPalette"
         />
+
+        <!-- SOURCE, beside the search that precedes it and the console that follows: the
+             trailing group is what a reader DOES with the documentation, in widening order
+             — find a page, read the code behind it, go operate it.
+
+             An `href`, so `IconButton` renders a real `<a>` (its own `href` polymorphism)
+             and the link is middle-clickable, copyable and crawlable rather than a button
+             that navigates. `target="_blank"` leaves the docs where they are; the DS adds
+             `rel="noopener noreferrer"` itself for that target. `outlined` at `medium`, so
+             it is the same 32px box as the search square it sits beside below `lg`.
+
+             The glyph is `pi pi-github`, which IS in the set this app loads — verified in
+             @aziontech/icons' primeicons build rather than assumed, since a missing glyph
+             renders as an empty box with no error. -->
+        <IconButton
+          icon="pi pi-github"
+          kind="outlined"
+          size="medium"
+          aria-label="Azion on GitHub"
+          href="https://github.com/aziontech"
+          target="_blank"
+          class="shrink-0"
+        />
+
         <Button
           label="Console"
           kind="secondary"
@@ -528,13 +581,6 @@
           collapse-aria-label="Collapse navigation"
           class="h-full w-(--container-2xs)"
         >
-          <template #header>
-            <!-- Search → CommandMenu: the rail's ONE search affordance, at the top
-                 of the tree it searches (DocsSearchTrigger — glyph, label, ⌘K keycap).
-                 The same control, in its compact shape, is in the top bar below `lg`. -->
-            <DocsSearchTrigger @click="openPalette" />
-          </template>
-
           <!-- Theme at the bottom of the tree, the same place the nav sheet puts it below
                `lg`. `Sidebar` lays this region out as a ROW whose trailing edge belongs to
                its own collapse trigger, so the switcher takes the leading edge — on the
@@ -550,65 +596,83 @@
 
           <!-- The whole sidebar is one Menu: the eight docs sections as `Menu.Group`
                labels — a title over its rows, not a control — with the CONDENSED rows
-               inside them doing the folding, four levels deep. The tree comes from a
-               manifest, so data-driven mode renders that recursion rather than us
-               re-implementing it here. `groups` + `activeId` + `expanded` is the whole
-               wiring: no `path` and no `Menu.Back`, because no level replaces the rail.
+               inside them doing the folding, three levels deep, and the `Functions` DRILL
+               row replacing the column with its own menu. The tree comes from a manifest,
+               so data-driven mode renders that recursion rather than us re-implementing it
+               here: `groups` + `activeId` + the two view models (`expanded` for the
+               condensed rows, `path` for the level) is the whole wiring.
                `role="presentation"` because Sidebar already renders the nav landmark. -->
           <Menu
             ref="menuRef"
             v-model:expanded="expanded"
+            :path="path"
             :groups="docsNavGroups"
             :active-id="active"
+            :enter-on-mount="entering"
             role="presentation"
+            @update:path="onPath"
             @navigate="onNavigate"
-          />
+          >
+            <!-- Declared unconditionally: it renders nothing until a level is pushed, and
+                 it renders INSIDE that level rather than here (the level exposes the anchor
+                 and Back teleports into it), so it travels with the slide and never takes a
+                 row from the column it returns to. -->
+            <Menu.Back />
+          </Menu>
         </Sidebar>
       </div>
 
       <!-- THE BOUNDARY IS NOT RE-DECLARED HERE. `--layout-boundary-inline` is one token
-           with one value for the whole app, and the top bar above, the page bar below
-           and every page's own column all read it — so "the bar and the body are inset
-           by the same amount" is a fact rather than numbers kept equal by hand. This
+           with one value for the whole app, and the top bar above and every page's own
+           column read it — so "the bar and the body are inset by the same amount" is a
+           fact rather than numbers kept equal by hand. This
            region used to retune it three times (`sm`, then `md`, then `xl` from `lg`) to
            chase the top bar's own padding, which is a step the bar no longer has: it
            reads the boundary too. Below `lg` there is no rail between them, so the docs
            logo, the trail, the title and the prose all start on one vertical; from `lg`
            up the rail moves the bar's padding off this column, and the two stop being
            comparable — which is fine, because neither is chasing the other any more. -->
-      <main class="min-w-0 flex-1 overflow-y-auto">
-        <!-- The page bar: where the reader is, and what they can do with this page.
-             It belongs to the SHELL's layout but to the PAGE's data — the shell has no
-             idea which crumbs a page has or what its markdown says — so the page fills
-             it through a slot and the shell decides it is pinned to the top of the
-             scroll region, once, above the title. That is what lets a page's own
-             masthead be title + deck and nothing else: a breadcrumb under the title
-             would say the reader's location twice on one screen, and a second Copy
-             control would sit a thumb away from this one. Absent slot ⇒ no bar. -->
-        <div
-          v-if="$slots['page-bar']"
-          ref="pageBar"
-          data-page-bar
-          class="sticky top-0 z-20 h-12 border-b border-(--border-default) bg-(--bg-canvas)"
-        >
-          <!-- The bar is FULL-BLEED (its rule is the edge of the scroll region) while its
-               CONTENT submits to the page's column — the same `layout-column-docs` +
-               `layout-boundary-inline` pair the article below uses. Padding alone would
-               only agree with the body while the column's measure cap is slack: past it
-               the article centres and a padded bar keeps hugging the region, so the trail
-               and the title drift apart exactly on the widest screens. Sharing the column
-               makes the two land on the same left and right edge by construction. -->
-          <div
-            class="layout-column-docs layout-boundary-inline flex h-full items-center gap-(--spacing-sm) md:gap-(--spacing-md)"
-          >
-            <slot name="page-bar" />
-          </div>
-        </div>
-        <slot />
+      <!-- THE SHELL DRAWS NO PAGE BAR. It used to pin one to the top of this scroll
+           region — a sticky strip carrying the trail and Copy page, filled by the page
+           through a slot. Both are the PAGE's, and a page already has the region that
+           says what it is and what to do with it: its masthead. So a band whose entire
+           content was two controls is gone, and with it the second rule above the one the
+           masthead draws (see DocsMdxPage). This region is the page's scroll container.
+
+           THE SCROLLING IS THE DESIGN SYSTEM'S, not an `overflow-y-auto` typed here.
+           `ScrollArea` is webkit's scroll primitive — the thin, tokenised scrollbar
+           (`--border-muted` thumb over a transparent track) plus the keyboard model a
+           scroll region owes a keyboard-only reader: it is focusable, and arrows / Page
+           / Home / End move it — and it is what `axe` asks of a scrollable region that
+           long stretches of prose give the keyboard no other way to move. The rail on
+           the left already scrolls through it, so a raw scroller here meant the reading
+           column wore the browser's default bar beside a rail wearing ours — two
+           scrollbars, one screen, in two styles.
+
+           THE `<main>` STAYS, as the landmark only. `ScrollArea` renders a plain `div`
+           and does not forward `role`, so swapping the element for it would cost the
+           page its main landmark — the one thing screen-reader users skip TO. So the
+           landmark wraps and the primitive scrolls inside it, and nothing needs to know
+           which of the two is which: everything that has to reach the scrolling element
+           asks `scrollParent` for it (see the views). -->
+      <main class="flex min-h-0 min-w-0 flex-1 flex-col">
+        <ScrollArea class="flex-1">
+          <slot />
+        </ScrollArea>
       </main>
 
       <!-- "On this page": the page's own heading list, so it is the page — not the
            shell — that decides what is in it. Absent slot ⇒ no rail at all.
+
+           IT OPENS ON THE COLUMN BOUNDARY, `pt-(--spacing-md)` — the same step every
+           page opens its own column on (DocsMdxPage / DocsAgentPage / DocsAgentSetup),
+           so the outline and the trail beside it start on one line. It used to be
+           MEASURED instead: forty lines centred the rail's first line on the page's h1
+           through an inline `padding-top`, watched by a ResizeObserver on both ends.
+           That made the rail's top a function of whatever type scale the title happened
+           to render at — an inline number no stylesheet could see, and one that pushed
+           the outline a whole band below the trail it sits next to. The boundary is the
+           guideline; the rail follows it like every other column.
 
            A COLUMN, not a block, so its content can address the FOOT of the rail and
            not just the end of the outline. The page's rail is short — ten headings and
@@ -616,15 +680,27 @@
            mostly empty column. A flex column lets the page's own wrapper take the full
            height (`flex-1`) and push its last block down with `mt-auto`. When the
            outline is long enough to overflow, the column scrolls as before and that
-           block simply lands at the end of the scroll. -->
-      <div
+           block simply lands at the end of the scroll.
+
+           It scrolls through `ScrollArea` for the same reason the reading column does:
+           the third scrollbar on the screen matches the other two. `flex-col` + the
+           `xl:flex` that reveals it survive the swap — the primitive merges the classes
+           it is passed onto its own root, so this stays one element, not a column
+           wrapped in a scroller.
+
+           `tabindex="-1"`, unlike the reading column. A scroll region has to be
+           reachable by keyboard when the keyboard has no other way to move it — which
+           is why the prose column keeps the primitive's focusable default, since whole
+           screenfuls of it hold no link. This column is nothing BUT links: tabbing
+           through them scrolls it, so a stop on the container itself would be a stop
+           that does nothing. Same call `Sidebar` makes for the tree on the left. -->
+      <ScrollArea
         v-if="$slots.toc"
-        ref="tocColumn"
-        :style="tocStyle"
-        class="hidden w-(--container-3xs) shrink-0 flex-col overflow-y-auto border-l border-(--border-default) px-(--spacing-md) pt-(--spacing-lg) pb-(--spacing-lg) xl:flex"
+        tabindex="-1"
+        class="hidden w-(--container-3xs) shrink-0 flex-col border-l border-(--border-default) px-(--spacing-md) pt-(--spacing-md) pb-(--spacing-lg) xl:flex"
       >
         <slot name="toc" />
-      </div>
+      </ScrollArea>
     </div>
 
     <!-- The palette: every documentation page, grouped and ordered like the rail,
@@ -685,11 +761,12 @@
          selection state — the rail is not rebuilt here, it is RE-HOMED, so a row
          tapped in the sheet lands on the page the rail would have opened.
 
-         Search sits at the top of the sheet exactly as it sits at the top of the rail —
-         searching the tree belongs to the tree, and a reader who opened navigation to
-         find a page should not have to close it to search for one. Tapping it REPLACES
-         the sheet with the palette (see the `paletteOpen` watch): only the palette is on
-         screen while searching, never the palette over the nav.
+         THE SHEET IS THE TREE, AND ONLY THE TREE. It used to open on a search row of its
+         own, back when search was something the rail carried; the bar's centre control is
+         on screen behind this sheet at every width, so a second copy in here would be the
+         same trigger twice. Opening the palette still dismisses the sheet rather than
+         stacking over it (see the `paletteOpen` watch) — two overlays would trap focus in
+         the one underneath.
 
          The tree is `w-full` on the sheet's own edges rather than inside PanelContent's
          padding, so a row's hit area runs the full width of the panel exactly as it does
@@ -717,31 +794,31 @@
             <DrawerClose />
           </PanelHeader>
 
-          <!-- Fixed region, like the rail's own header: search stays put while the tree
-               scrolls under it. It carries its own top padding on mobile, where there is
-               no header row above it to provide the air. -->
-          <div
-            class="w-full shrink-0 px-(--spacing-md) pb-(--spacing-md) pt-(--spacing-md) md:pt-0"
-          >
-            <DocsSearchTrigger @click="openPalette" />
-          </div>
-
           <ScrollArea class="min-h-0 min-w-0 w-full flex-1">
+            <!-- The same two models as the rail, from the same refs: the sheet is the
+                 other home of one tree, so a level opened here is open there. `aria-label`
+                 rather than `role="presentation"` — a Drawer panel is not a landmark, so
+                 this menu keeps its own. -->
             <Menu
               v-model:expanded="expanded"
+              :path="path"
               :groups="docsNavGroups"
               :active-id="active"
+              :enter-on-mount="entering"
               aria-label="Documentation"
               class="w-full p-(--spacing-md)"
+              @update:path="onPath"
               @navigate="onNavigate"
-            />
+            >
+              <Menu.Back />
+            </Menu>
           </ScrollArea>
 
           <!-- From `lg` up the tree is the rail, and the rail carries this same footer, so
                here it would duplicate it.
 
-               `--spacing-md` (the sheet's own content boundary, like the search row and
-               the tree) rather than PanelFooter's `--spacing-lg`, so the switcher's right
+               `--spacing-md` (the sheet's own content boundary, the one the tree is on)
+               rather than PanelFooter's `--spacing-lg`, so the switcher's right
                edge lands on the same 16px line as every row's hit area. The label carries
                the tree's extra `--spacing-sm` inset, because a row's TEXT sits 12px inside
                that boundary — so "Theme" reads as one more line of the same column, not as

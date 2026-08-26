@@ -44,12 +44,21 @@ const ROWS = docsNavSections.flatMap((section) =>
   menuLeaves(section.items).map((row) => ({ ...row, section: section.label }))
 )
 
-/** Every node in the tree by id, so a crumb can name one — and reach its page. */
+/**
+ * Every node in the tree by id, so a crumb can name one — and reach its page.
+ *
+ * Descends BOTH shapes a container takes, exactly as `menu-tree.js` does: a condensed
+ * row's `children`, and a drill row's own `groups` (`Functions`). Walking `children`
+ * alone left a whole level out of this map, so a page inside it had a container crumb
+ * that could not be named.
+ */
 const NODES = new Map()
+const childrenOf = (node) => node.children ?? node.groups?.flatMap((group) => group.items)
 const collectNodes = (items) => {
   for (const item of items) {
     NODES.set(item.id, item)
-    if (item.children) collectNodes(item.children)
+    const below = childrenOf(item)
+    if (below) collectNodes(below)
   }
 }
 docsNavSections.forEach((section) => collectNodes(section.items))
@@ -70,9 +79,9 @@ docsNavSections.forEach((section) => collectNodes(section.items))
  * @returns {string|undefined} its overview page's route.
  */
 const containerHref = (id) => {
-  const node = NODES.get(id)
-  if (!node?.children) return undefined
-  return menuLeaves(node.children).find((leaf) => leaf.href?.startsWith('/site/docs'))?.href
+  const below = childrenOf(NODES.get(id))
+  if (!below) return undefined
+  return menuLeaves(below).find((leaf) => leaf.href?.startsWith('/site/docs'))?.href
 }
 
 /** The rows that are actually reachable, in order — the reading order the pair walks. */
