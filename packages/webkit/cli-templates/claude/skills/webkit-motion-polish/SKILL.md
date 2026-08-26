@@ -2,7 +2,7 @@
 name: webkit-motion-polish
 description: Make motion smooth using only @aziontech/theme animate tokens — animate-* utilities, duration-*/ease-*/curve tokens, compositor-props-only, ≤150ms interaction feedback, and a mandatory motion-reduce escape on every motion class. No external animation library, no inline cubic-bezier, no hardcoded ms.
 status: active
-last_updated: 2026-08-11
+last_updated: 2026-08-12
 scope: general
 enforced_by: [webkit-motion, webkit-accessibility, ui-verify]
 ---
@@ -229,6 +229,72 @@ onMounted(() => {
   the card swaps. Give each step its own copy and every step change replays the 400ms slide, so the
   user reads three page loads where they only changed step.
 
+### The two arrivals ship in the theme — do not hand-roll them
+
+`@aziontech/theme` carries both entrances an app shell needs, as ordinary utilities. Use them; a
+per-app copy is a copy that drifts, and the reasoning below is already baked into these.
+
+| Utility                 | What it is for                                                                                                                                                                                                                                  | Where it goes                                                        |
+| ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| `animate-page-enter`    | A page arriving on a route change. Travels in from the LEFT — navigation lives on that edge, so a page arriving from it reads as coming FROM the row that was clicked; a plain fade has no origin and a right-side arrival reads as going back. | The **content zone only**, keyed on the route path. Never the shell. |
+| `animate-content-enter` | Content settling inside a page that is already on screen — a load resolving, a list swapping, a step changing. Rises a hair rather than travelling: the page is in place and only its contents changed.                                         | The block that changed.                                              |
+
+```vue
+<!-- the content zone, in the shell -->
+<div :key="route.path" class="animate-page-enter motion-reduce:animate-none overflow-auto">
+  <slot />
+</div>
+
+<!-- two columns assembling in reading order: lead, then follow one fast-01 behind -->
+<aside class="animate-content-enter motion-reduce:animate-none">…</aside>
+<section
+  class="animate-content-enter motion-reduce:animate-none [--content-enter-delay:var(--transition-duration-fast-01)]"
+>…</section>
+```
+
+- **`--content-enter-delay`** is the stagger knob (default `0s`). One `fast-01` between lead and
+  follow — simultaneous arrival reads as a swap, the offset reads as choreography.
+- **`--page-enter-distance`** is the travel (default: one `--layout-boundary-inline`). Retune it per
+  shell, not per page.
+- **Neither fills forwards, on purpose.** A filled entrance leaves a `translate` on the element,
+  which makes it a containing block for any `position: fixed` descendant — and the page-enter box is
+  usually the scroll container, so its sticky children would start measuring against it.
+- **`motion-reduce:animate-none` on both**, always.
+
+### A page arrives once
+
+The route transition **is** the page's entrance. Anything inside that page which also animates **on
+mount** runs concurrently with it — and because both usually take their timing from the same tokens,
+they run in lockstep, which does not read as two animations. It reads as one element travelling on a
+diagonal.
+
+The signature, sampled across `requestAnimationFrame` on a real navigation:
+
+```
+  8ms   block: opacity 0.10, rising 7.2px      page: opacity 0.10, sliding -21.5px
+ 91ms   block: opacity 0.63, rising 2.96px     page: opacity 0.63, sliding -8.88px
+```
+
+**Identical opacities frame for frame is the tell** — one entrance, played twice, on two axes. Fix it
+so the page lands first (`opacity 1`, `translate none`) and only then does anything inside it move.
+
+A content-settle entrance is earned only when the content changes inside a page that is **already
+standing**. Three shapes this goes wrong in:
+
+| Shape                                                    | What you see                                                            | Fix                                                                                                 |
+| -------------------------------------------------------- | ----------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| A settle class on a block that _is_ the page             | The diagonal above                                                      | Drop it. The route transition carries the arrival; animate only on a swap, or after a load resolves |
+| Two variants of one screen, each rendering its own shell | Chrome blinks and the page re-slides on a switch that navigated nowhere | Hoist the shell to the parent that swaps them, so only the content zone changes                     |
+| A screen whose content is genuinely read on arrival      | Content pops in when the read lands                                     | A wire for the read, then the settle after it — two beats, never overlapping                        |
+
+- **A wire is per shape, not per route.** If one URL resolves to two different layouts, each needs a
+  wire of **its own** shape. A wire that resolves into a different layout is the jump it exists to
+  prevent. Verify by measuring the block's top and height in the wire and after it settles — a couple
+  of px is a settle, tens of px is a jump.
+- **Measure, never eyeball.** A snap and a 240ms ease are indistinguishable by eye in review. Sample
+  the animated property across `requestAnimationFrame` and assert there are interpolated frames
+  between the two ends — and that the page's own frames are finished before the content's begin.
+
 ### Route and step transitions
 
 ```vue
@@ -265,22 +331,24 @@ onMounted(() => {
 Every entry here compiles, lints, and passes type-check. They fail **silently** — that is what makes
 them expensive. When motion "doesn't work" and nothing is red, start here.
 
-| Symptom                                                      | Cause                                                                                                                             | Fix                                                                                |
-| ------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
-| Element lands in the right place, no motion at all           | `transition-[transform]` beside `translate-x-*` / `scale-*` — v4 compiles those to `translate` / `scale`                          | Name the real properties: `transition-[translate,scale,opacity]`                   |
-| Entrance snaps to its final state                            | A single `requestAnimationFrame` — the from-state was never painted                                                               | Two nested `requestAnimationFrame`s                                                |
-| Routed step is blank when navigated to, correct on reload    | `<component :is>` as the direct child of `<Transition mode="out-in">` — the leave completes and the entering branch is dropped    | Wrap it in a stable keyed **element**; keying the component does nothing           |
-| `<Transition>` around a component does nothing               | The component's root is a fragment                                                                                                | Give it one root element                                                           |
-| Growing animates, shrinking snaps                            | Height pinned _before_ `scrollHeight` was read                                                                                    | Measure both heights while still `auto`                                            |
-| Box stays stuck at a pinned height                           | `transitionend` never arrived (interrupted, unmounted)                                                                            | Release on a timeout fallback too                                                  |
-| Height transition jitters / never settles                    | `ResizeObserver` is watching the element being sized                                                                              | Observe an inner element that is never given a height                              |
-| Box dips mid-swap                                            | `out-in` inside a height-animated container                                                                                       | Cross-fade with the leaving block `absolute`                                       |
-| Focus ring is clipped on flush-edge controls                 | Permanent `overflow-hidden` on the animated box                                                                                   | Clip only while moving, via `data-[resizing]:`                                     |
-| Consumer's `transition-*` class is ignored                   | An inline `style="transition: …"` on the same element beats every class                                                           | Express it as a utility, or accept the component owns that transition              |
-| Enter-from opacity has no effect                             | A base `opacity-*` on the same element is emitted after `opacity-0`                                                               | Recede with token colours (border/fill), and leave `opacity` to the transition     |
-| Reordering a list kills the item's own animation             | Re-inserting a node discards any transition pending on it or inside it                                                            | A list either reorders or its items animate in place — not both on one interaction |
-| A badge/dot is cut off, or the control jumps when it appears | The host clips to its own shape (`overflow-hidden`), and an in-flow marker widens the box                                         | Overlay it on a `relative` wrapper _outside_ the control, `pointer-events-none`    |
-| Element fades out but never leaves                           | A DS component's own remove animation completed and _then_ emitted — correct for a thing going away, wrong for a thing that stays | Own the control locally when the element must survive                              |
+| Symptom                                                      | Cause                                                                                                                                     | Fix                                                                                      |
+| ------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| Element lands in the right place, no motion at all           | `transition-[transform]` beside `translate-x-*` / `scale-*` — v4 compiles those to `translate` / `scale`                                  | Name the real properties: `transition-[translate,scale,opacity]`                         |
+| Entrance snaps to its final state                            | A single `requestAnimationFrame` — the from-state was never painted                                                                       | Two nested `requestAnimationFrame`s                                                      |
+| Routed step is blank when navigated to, correct on reload    | `<component :is>` as the direct child of `<Transition mode="out-in">` — the leave completes and the entering branch is dropped            | Wrap it in a stable keyed **element**; keying the component does nothing                 |
+| `<Transition>` around a component does nothing               | The component's root is a fragment                                                                                                        | Give it one root element                                                                 |
+| Growing animates, shrinking snaps                            | Height pinned _before_ `scrollHeight` was read                                                                                            | Measure both heights while still `auto`                                                  |
+| Box stays stuck at a pinned height                           | `transitionend` never arrived (interrupted, unmounted)                                                                                    | Release on a timeout fallback too                                                        |
+| Height transition jitters / never settles                    | `ResizeObserver` is watching the element being sized                                                                                      | Observe an inner element that is never given a height                                    |
+| Box dips mid-swap                                            | `out-in` inside a height-animated container                                                                                               | Cross-fade with the leaving block `absolute`                                             |
+| Focus ring is clipped on flush-edge controls                 | Permanent `overflow-hidden` on the animated box                                                                                           | Clip only while moving, via `data-[resizing]:`                                           |
+| Consumer's `transition-*` class is ignored                   | An inline `style="transition: …"` on the same element beats every class                                                                   | Express it as a utility, or accept the component owns that transition                    |
+| Enter-from opacity has no effect                             | A base `opacity-*` on the same element is emitted after `opacity-0`                                                                       | Recede with token colours (border/fill), and leave `opacity` to the transition           |
+| Reordering a list kills the item's own animation             | Re-inserting a node discards any transition pending on it or inside it                                                                    | A list either reorders or its items animate in place — not both on one interaction       |
+| A badge/dot is cut off, or the control jumps when it appears | The host clips to its own shape (`overflow-hidden`), and an in-flow marker widens the box                                                 | Overlay it on a `relative` wrapper _outside_ the control, `pointer-events-none`          |
+| Content rises while the page is still sliding in             | A mount-time entrance inside a page whose route transition is already running — same tokens, so they lockstep into one diagonal move      | Let the route transition own the arrival; animate content only on a swap or after a load |
+| Chrome blinks and the page re-slides, but nothing navigated  | Two variants of one screen each render their own shell, so swapping variants unmounts the sidebar/header and replays the route transition | Hoist the shell to the parent that swaps the variants                                    |
+| Element fades out but never leaves                           | A DS component's own remove animation completed and _then_ emitted — correct for a thing going away, wrong for a thing that stays         | Own the control locally when the element must survive                                    |
 
 ### Timing only from tokens
 
