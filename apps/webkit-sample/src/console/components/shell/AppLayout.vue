@@ -25,6 +25,7 @@
   //
   // Pages render only their own content through the default slot.
   import Avatar from '@aziontech/webkit/avatar'
+  import Brand from '@aziontech/webkit/brand'
   import Breadcrumb from '@aziontech/webkit/breadcrumb'
   import ButtonHighlight from '@aziontech/webkit/button-highlight'
   import Drawer from '@aziontech/webkit/drawer'
@@ -34,9 +35,8 @@
   import GlobalHeader from '@aziontech/webkit/global-header'
   import IconButton from '@aziontech/webkit/icon-button'
   import SplitButton from '@aziontech/webkit/split-button'
-  import AzionLogo from '@aziontech/webkit/svg/azion/default'
-  import AzionMark from '@aziontech/webkit/svg/azion/min'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import HeaderSearch from '@shared/ui/HeaderSearch.vue'
   import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
@@ -297,16 +297,20 @@
     signOut()
   }
 
-  // Drawer search: the palette REPLACES the nav rather than stacking over it — two
-  // overlays would trap focus in the one underneath, and the reader asked for search,
-  // not search on top of the thing they were searching.
+  // SEARCH, from the head of the bar's trailing cluster (`HeaderSearch`). The trigger is
+  // the bar's; the
+  // PALETTE is still the rail's — its list is the rail's own navigation plus the
+  // app-level commands, all built from the tree in AppSidebar, so moving the list up
+  // here would mean rebuilding that tree twice. The rail stays mounted at every width
+  // (below `md` it is CSS-hidden, not removed) and the palette teleports to the body, so
+  // the one copy is reachable from anywhere — the same forwarding the Overview hero's
+  // search field uses through `defineExpose` below.
   //
-  // The palette opened is the RAIL's, not the drawer copy's: closing the drawer unmounts
-  // everything inside it, and a palette that unmounted a beat after opening is no palette
-  // at all. The rail stays mounted below `md` (it is CSS-hidden, not removed) and its
-  // palette teleports to the body, so it is the copy that can outlive the drawer. Hence
-  // `:palette="false"` on the drawer copy — it announces `search`, it does not own one.
-  const onMobileSearch = () => {
+  // The nav sheet closes first, because the palette REPLACES it rather than stacking over
+  // it: two overlays would trap focus in the one underneath. Below `lg` the trigger is
+  // the bar's own 32px square, so the sheet carries no search row of its own and the
+  // drawer copy of the rail is navigation only (`:palette="false"`).
+  const openPalette = () => {
     closeNav()
     rail.value?.showPalette()
   }
@@ -375,9 +379,16 @@
          so the breadcrumb opens on the same vertical as the page's content. Retuning the
          boundary moves both, in one place (packages/theme's layout tokens). -->
     <div class="flex min-w-0 flex-1 flex-col">
+      <!-- `@container`, because the search in the trailing cluster switches between its two
+           shapes on THIS BAR's width. The bar is the only box in the header whose width is
+           independent of what is inside it (`w-full` off the content zone), and the console
+           bar is ~300px narrower than the docs bar at every window because the rail is
+           beside it — which is why a viewport breakpoint could not serve both.
+           See @shared/ui/HeaderSearch.vue. -->
       <GlobalHeader
         kind="content"
         aria-label="Azion Console"
+        class="@container"
       >
         <!-- `justify-start!`, because the DS region ships `justify-end` — a left region
            that packs its children against its own trailing edge. It is invisible while
@@ -410,27 +421,33 @@
           </Tooltip>
 
           <!-- BRAND, below `md` only: the rail carries it at every wider width, and two
-               copies of the same lockup on one screen is one too many. It is the package
-               asset in both of its two sizes, swapped by width rather than resized — the
-               wordmark does not survive being squeezed, it has to be dropped. Held until
-               `sm` (640px), where a tablet bar still has room for the full lockup beside
-               the hamburger and the tenant chain; below that only the mark stays, which is
-               the widest thing that still fits once the chain takes the rest of the row.
-               Classes, not `isMobile`: both are inert SVG, so mounting both costs nothing
-               and no binding can double up (unlike the switcher below). -->
+               copies of the same lockup on one screen is one too many. The DS `Brand`
+               component in two of its KINDS, swapped by width rather than resized — the
+               wordmark does not survive being squeezed, it has to be dropped. `size` is
+               `small` on both, the same 16px every other header in the app renders, so the
+               mark and the wordmark exchange places without the brand changing height.
+               Held until `sm` (640px), where a tablet bar still has room for the full
+               lockup beside the hamburger and the tenant chain; below that only the
+               `reduced` glyph stays, which is the widest thing that still fits once the
+               chain takes the rest of the row. Classes, not `isMobile`: both are inert
+               SVG, so mounting both costs nothing and no binding can double up (unlike the
+               switcher below) — and the display utility carries `!` because the DS root is
+               `inline-flex`, which otherwise out-orders a plain `hidden`. -->
           <a
             href="/home"
             aria-label="Azion home"
-            class="flex h-6 w-fit shrink-0 items-center rounded-(--shape-button) px-(--spacing-xxs) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none md:hidden [&_svg]:h-[18px] [&_svg]:w-auto"
+            class="flex h-6 w-fit shrink-0 items-center rounded-(--shape-button) px-(--spacing-xxs) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none md:hidden"
             @click="onBrand"
           >
-            <AzionMark
-              aria-hidden="true"
-              class="sm:hidden"
+            <Brand
+              kind="reduced"
+              size="small"
+              class="sm:hidden!"
             />
-            <AzionLogo
-              aria-hidden="true"
-              class="hidden sm:block"
+            <Brand
+              kind="default"
+              size="small"
+              class="hidden! sm:inline-flex!"
             />
           </a>
 
@@ -470,8 +487,28 @@
             @navigate="onCrumb"
           />
         </GlobalHeader.Left>
+        <!-- The empty spacer. It is the region that GROWS, so it is what holds the trailing
+             cluster against the end of the bar; nothing lives in it. Search used to, packed
+             against its trailing edge — which put the control one region away from the
+             actions it belongs with. It is in `Right` now. -->
         <GlobalHeader.Middle />
         <GlobalHeader.Right>
+          <!-- SEARCH LEADS THE ACTIONS. It is one of them — the utility you reach for before
+               you know what you want — so it sits at the head of this cluster rather than
+               alone in the middle of the bar, and takes the cluster's own `--spacing-sm`
+               rhythm like every control beside it. Wide it is a 160px field; narrow it is
+               the DS IconButton, matching the icon-only shapes the rest of the cluster
+               collapses to at the same widths.
+
+               `v-if="sidebar"`, because the palette it opens lives in the rail: a focused
+               flow that drops the rail drops the palette with it, and a search field that
+               opens nothing is worse than no search field. -->
+          <HeaderSearch
+            v-if="sidebar"
+            label="Search"
+            @click="openPalette"
+          />
+
           <!-- Below `md` the header actions collapse to icon-only buttons to fit
              the narrow bar; from `md` up they carry their labels. A Tooltip
              names each icon on hover/focus, matching the left-side controls.
@@ -607,7 +644,6 @@
             @create="onMobileCreate"
             @select="onMobileSelect"
             @logout="onMobileLogout"
-            @search="onMobileSearch"
           />
         </DrawerContent>
       </DrawerPortal>

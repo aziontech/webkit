@@ -17,10 +17,7 @@
   // `md` (AppLayout's `isMobile` branch) and mounts it here only from `md` up — never
   // both, since the switcher owns the global ⌘O binding.
   //
-  // What the rail carries: the search field at the top (the ⌘K affordance for the
-  // CommandMenu palette, which carries the same navigation plus the app-level
-  // commands — Create among them, even though the Create button itself lives in
-  // the global header), the full Azion Console navigation as the default body
+  // What the rail carries: the full Azion Console navigation as the default body
   // (grouped by product area, mirroring the console; a page can override it via
   // the default slot), and the footer — avatar + user name + the account menu, a
   // Dropdown anchored to the overflow (⋮) button with a single account "Settings"
@@ -29,16 +26,14 @@
   // account's plan tag, the theme control, the prototype's own "Sample preset"
   // entry, and Logout.
   import Avatar from '@aziontech/webkit/avatar'
+  import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
   import CommandMenu from '@aziontech/webkit/command-menu'
   import Dropdown from '@aziontech/webkit/dropdown'
   import IconButton from '@aziontech/webkit/icon-button'
-  import InputText from '@aziontech/webkit/input-text'
-  import Kbd from '@aziontech/webkit/kbd'
   import Menu from '@aziontech/webkit/menu'
   import Sidebar from '@aziontech/webkit/sidebar'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import AzionLogo from '@aziontech/webkit/svg/azion/default'
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -73,9 +68,11 @@
     // the mobile drawer, where the drawer panel is what decides how wide navigation is.
     fluid: { type: Boolean, default: false },
     // Whether this copy OWNS the ⌘K palette. Off for the copy inside the mobile drawer:
-    // its search field still fires `search`, but the palette it opens has to outlive the
-    // drawer (closing the drawer unmounts everything inside it, palette included), so the
-    // shell opens the RAIL copy's palette instead — see AppLayout's `onMobileSearch`.
+    // the palette has to outlive the drawer (closing it unmounts everything inside,
+    // palette included), so exactly one copy holds it — the RAIL's, which stays mounted
+    // at every width. The TRIGGER is not here at all any more: it is the bar's centre
+    // control (@shared/ui/HeaderSearch.vue), and the shell forwards the click to this
+    // copy through `showPalette` — see AppLayout's `openPalette`.
     palette: { type: Boolean, default: true },
     // Global shortcut that opens the command palette. Only ONE mounted sidebar
     // may own it — the shell passes an empty string to the drawer copy so ⌘K
@@ -103,7 +100,7 @@
   // fires from the header's Create button and the palette's Create command — one
   // event for both, so the shell has a single way into the creation center. All
   // are event-first per the activation-payload convention.
-  const emit = defineEmits(['logout', 'select', 'navigate', 'create', 'search'])
+  const emit = defineEmits(['logout', 'select', 'navigate', 'create'])
 
   // Azion Console navigation.
   //
@@ -384,18 +381,18 @@
     navScrollEl = null
   })
 
-  // Sidebar search → CommandMenu. The field above the scrolling nav is a
-  // read-only ⌘K affordance: clicking it (or pressing the global shortcut) opens
-  // the palette, which owns the search. The palette carries the whole navigation
-  // — same groups, same order as the rail — plus the app-level commands, so the
-  // rail itself always shows the full nav instead of a second filtered list.
+  // THE PALETTE lives here; its TRIGGER does not. The rail used to open on a readonly
+  // search field carrying the ⌘K hint — that control is now the centre of the global bar
+  // (@shared/ui/HeaderSearch.vue), because search is the way PAST the navigation tree
+  // rather than part of it, and a trigger inside the rail is only reachable while the
+  // rail is. What stays here is the palette itself: its list is this component's own
+  // navigation — same groups, same order as the rows below — plus the app-level
+  // commands, so hosting it anywhere else would mean building that tree twice. The shell
+  // opens it by calling `showPalette` (exposed below), and ⌘K opens it directly.
   const paletteOpen = ref(false)
   const showPalette = () => {
     paletteOpen.value = true
   }
-  // `search` is announced whether or not this copy owns the palette, so the shell can
-  // react to it (the drawer copy uses it to close the drawer and hand the palette to the
-  // rail). Event-first, like every other activation event here.
   // The brand goes home — the same destination and the same path as the Overview row, so
   // it routes through the SHELL's `navigate` handler like every other row here rather than
   // reaching for a router of its own. That also lets the rail mark Overview as it lands,
@@ -405,13 +402,8 @@
     emit('navigate', event, { id: 'overview', label: 'Overview', path: '/home' })
   }
 
-  const openPalette = (event) => {
-    emit('search', event)
-    if (props.palette) showPalette()
-  }
-
-  // `showPalette` is exposed so the SHELL can open this copy's palette — that is how the
-  // mobile drawer's search reaches the rail's palette after the drawer closes.
+  // `showPalette` is exposed so the SHELL can open this copy's palette: the bar's centre
+  // search calls it, and so does the Overview hero's own field, both through AppLayout.
   defineExpose({ measure: () => sidebarRef.value?.measure(), showPalette })
 
   // Flat lookup for resolving a `nav:<id>` palette value back to its nav item. Containers are
@@ -689,23 +681,25 @@
     :class="['h-full', fluid ? 'w-full' : 'w-(--container-2xs)']"
   >
     <template #header>
-      <!-- The rail's header region: the account switcher (when this copy carries it)
-             over the search field, both fixed so they stay put while the nav below
-             them scrolls. Search → CommandMenu: a read-only field carrying the ⌘K
-             hint, whose wrapper takes the click so the icons and the field itself are
-             all part of the target; Enter on the focused field opens it too. The
-             palette teleports to the body, so it works while the rail is collapsed and
-             inside the mobile drawer. Create still lives in the app bar. -->
-      <div class="flex flex-col gap-(--spacing-xs)">
+      <!-- The rail's header region: the brand, then the account switcher when this copy
+             carries it — fixed, so they stay put while the nav below them scrolls.
+             SEARCH IS NOT HERE any more. It was the row under this one (a readonly field
+             carrying the ⌘K hint), and it is now the centre of the global bar
+             (@shared/ui/HeaderSearch.vue) — search reaches everything, and a control that
+             reaches everything should not be reachable only while the rail is. The
+             palette it opens is still this component's, teleported to the body; the shell
+             forwards the click. -->
+      <div class="flex flex-col">
         <!-- THE BRAND, at the top of the rail — where Cloudflare's console puts its own
              mark, and where this one belongs now that the bar below it starts at the
              content zone and opens with the breadcrumb.
 
-             The EXTENDED lockup at its small size (`svg/azion/default`, 90×18) — mark plus
-             wordmark, the shape a console wears at the top of a rail. `svg/azion/full` is
-             the same lockup at 250×46, which is a marketing size in a 300px rail. Either
-             way it is the asset from the package, never a hand-drawn glyph: the previous
-             header lost its Azion squiggle for exactly that reason (it was not official).
+             The DS `Brand` component, not the raw `svg/azion/*` asset: the lockup and its
+             sizes are the component's contract, so the rail cannot drift to a height
+             nobody else uses (this one was hand-pinned to 18px, which matched no other
+             header). `kind="default"` is the wordmark lockup and `size="small"` is 16px —
+             the SAME pair every other header in the app renders (site nav, docs bar, hub
+             bar and rail), so one brand reads at one size across the whole prototype.
 
              It is a link home, so the brand does what a brand in a console is expected to
              do; `routeActivation` is the shell's job, so the anchor emits and the shell
@@ -713,54 +707,30 @@
         <a
           href="/home"
           aria-label="Azion home"
-          class="mb-(--spacing-xs) flex h-6 w-fit items-center rounded-(--shape-button) px-(--spacing-xxs) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none [&_svg]:h-[18px] [&_svg]:w-auto"
+          class="flex h-6 w-fit items-center rounded-(--shape-button) px-(--spacing-xxs) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
           @click="onBrand"
         >
-          <AzionLogo aria-hidden="true" />
+          <Brand
+            kind="default"
+            size="small"
+          />
         </a>
 
-        <!-- Identity next, then search — the rail reads outermost-inward: whose product
-             this is, which tenant you are acting as, then the way into everything inside
-             it. The switcher is a full-width row here (`fluid`), sized like the field
-             under it, so the two read as one header block. -->
+        <!-- Identity under the brand — the rail reads outermost-inward: whose product
+             this is, then which tenant you are acting as, then the tree itself. The
+             switcher is a full-width row here (`fluid`) so it reads as part of the same
+             header block rather than as a control dropped above the nav. -->
         <AccountSwitcher
           v-if="tenancy"
           fluid
         />
 
-        <div
-          class="cursor-pointer [&_input]:cursor-pointer"
-          @click="openPalette"
-          @keydown.enter="openPalette"
-        >
-          <InputText
-            model-value=""
-            placeholder="Search"
-            size="large"
-            readonly
-            aria-label="Search navigation and commands"
-            aria-keyshortcuts="Meta+K"
-          >
-            <template #iconLeft>
-              <i
-                class="pi pi-search"
-                aria-hidden="true"
-              />
-            </template>
-            <template #iconRight>
-              <Kbd
-                meta
-                size="small"
-                >K</Kbd
-              >
-            </template>
-          </InputText>
-        </div>
-
         <!-- The palette: the rail's navigation groups first (same labels, same
                order), then the app-level commands. Groups whose items are all
                filtered out hide themselves. Only the copy that OWNS it renders it
-               (see the `palette` prop) — one palette per app, never one per copy. -->
+               (see the `palette` prop) — one palette per app, never one per copy.
+               It renders here because the LIST is here, not because the trigger is:
+               the trigger is the bar's centre control. -->
         <CommandMenu
           v-if="palette"
           v-model:open="paletteOpen"

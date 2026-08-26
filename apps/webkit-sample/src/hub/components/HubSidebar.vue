@@ -103,11 +103,14 @@
   <aside class="h-full w-(--container-2xs) shrink-0">
     <Sidebar :aria-label="ariaLabel">
       <template #header>
-        <!-- Brand lockup + Webkit badge, linking home. -->
+        <!-- Brand lockup + Webkit badge, linking home. `px-(--spacing-xxs)` matches the
+             console rail (AppSidebar.vue) and the docs bar: a nav row's icon sits 4px
+             inside the row box, so without it the wordmark hangs 4px left of every item
+             below it. -->
         <RouterLink
           to="/site/hub"
           aria-label="Webkit Hub — home"
-          class="inline-flex shrink-0 items-center gap-(--spacing-xs) rounded-(--shape-elements) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface)"
+          class="inline-flex shrink-0 items-center gap-(--spacing-xs) rounded-(--shape-elements) px-(--spacing-xxs) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface)"
         >
           <Brand
             kind="default"
