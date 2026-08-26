@@ -146,19 +146,18 @@
     <div
       class="flex flex-col items-start gap-(--spacing-md) sm:flex-row sm:items-center sm:justify-between sm:gap-10"
     >
-      <!-- The masthead takes the prose h1's rung (see DocProse): a page title that an
+      <!-- The masthead takes the prose h1's pair (see DocProse): a page title that an
            h2 could overtake — which `heading-lg` did between 640 and 768 — is not a
-           title. `heading-xl` IS that rung from 640 up (30px, then 36px past 768), and
-           the token carries the steps itself.
+           title.
 
-           THE PHONE STEP IS PINNED, because the token's own is 20px — exactly what the
-           prose h2 renders at below 640, so the title and the section under it would
-           come out the same size. The heading scale skips 24px on mobile (2xl jumps to
-           30, xl drops to 20), so the pin names the primitive step rather than borrowing
-           a semantic token whose other two widths are wrong. Only the size is
-           overridden; the balance, line-height and weight stay the token's. -->
+           The phone step is the one rung this pair cannot tune. `heading-2xl` renders
+           30px there where 24 would sit better against the deck, but the heading scale
+           skips 24 on mobile (2xl jumps to 30, xl drops to 20 — which is what the prose
+           h2 renders at, so borrowing it would make the title and the section under it
+           the same size). Pinning the primitive is a raw size the typography standard
+           forbids, so the step waits on a token rather than an override here. -->
       <h1
-        class="m-0 w-full min-w-0 text-heading-xl text-(--text-default) max-sm:[font-size:var(--text-2xl)] sm:w-auto sm:flex-1"
+        class="m-0 w-full min-w-0 text-heading-2xl text-(--text-default) sm:w-auto sm:flex-1 sm:text-heading-xl"
       >
         {{ title }}
       </h1>

@@ -4,7 +4,7 @@ category: documentation
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: b9d62f9f8820efb326b0c45ff8e1d87c676fe36138a92488a79489f123c5cd8e
+checksum: 8c3d6de4328cc75a639243b7641df1f6a608b5aaef8d82b8d131ae39f2db70ef
 created: 2026-08-21
 last_updated: 2026-08-26
 ---
@@ -90,7 +90,7 @@ The typography contract every documentation page inherits. A markdown or MDX pip
 
 | Region                         | Token (DESIGN.md)                                                |
 | ------------------------------ | ---------------------------------------------------------------- |
-| typography (h1)                | `.text-heading-xl` (`--text-2xl` below `sm`)                     |
+| typography (h1)                | `.text-heading-2xl` / `sm:.text-heading-xl`                      |
 | typography (h2)                | `.text-heading-xl` / `sm:.text-heading-md`                       |
 | typography (h3)                | `.text-heading-lg` / `md:.text-heading-sm`                       |
 | typography (h4)                | `.text-heading-xs`                                               |
