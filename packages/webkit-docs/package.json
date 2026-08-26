@@ -43,6 +43,7 @@
     "./mdx": "./src/lib/mdx.js",
     "./heading-nav": "./src/lib/heading-nav.js",
     "./heading-scroll": "./src/lib/heading-scroll.js",
+    "./scroll-parent": "./src/lib/scroll-parent.js",
     "./use-scroll-spy": "./src/lib/use-scroll-spy.js",
     "./content/*": "./content/*"
   },

@@ -110,14 +110,22 @@
              and still refuses to leave a one-word last line. It is the LONGHAND, matching
              the token it overrides: the `text-pretty` shorthand would also set
              `text-wrap-mode`, which decides THAT the text wraps and beats a `truncate`
-             the DS may put on the same element (see texts.data.js). -->
+             the DS may put on the same element (see texts.data.js).
+
+             AND THE TRIGGER NEEDS VERTICAL PADDING, which the DS gives it none of: it
+             carries `px-[--accordion-inset]` and a `min-h-10` floor, so a one-line
+             question is centred in the floor and a question that WRAPS is 44px of text
+             in a 44px box — flush against the border, top and bottom. `--spacing-xs`
+             costs the one-line rows nothing (22px of text + 16px still sits under the
+             40px floor, so they stay exactly 40px) and gives a wrapped question 8px of
+             air on each side. -->
         <div
           data-doc-chrome
           class="contents"
         >
           <AccordionTrigger
             :level="3"
-            class="focus-visible:ring-inset [&>span]:text-heading-xs [&>span]:[text-wrap-style:pretty]"
+            class="py-(--spacing-xs) focus-visible:ring-inset [&>span]:text-heading-xs [&>span]:[text-wrap-style:pretty]"
             >{{ entry.title }}</AccordionTrigger
           >
         </div>

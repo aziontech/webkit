@@ -1,5 +1,7 @@
 import { onMounted, onScopeDispose, readonly, ref, watch } from 'vue'
 
+import { scrollParent } from './scroll-parent.js'
+
 /** Distance below the top of the scroll container at which a heading becomes current. */
 const TRIP_LINE = 96
 
@@ -30,7 +32,8 @@ const TRIP_LINE = 96
  *
  * The other half of the fix is measuring against the right thing. A documentation
  * page scrolls its own column, not the window, and that column is usually inset
- * under fixed chrome — so the line is measured from the SCROLL CONTAINER's box.
+ * under fixed chrome — so the line is measured from the SCROLL CONTAINER's box,
+ * resolved by `scrollParent` (the same resolution the heading nav scrolls with).
  * Rooted at the viewport, as it was, a heading scrolled up behind a sticky bar
  * still counted as being in view.
  *
@@ -48,18 +51,6 @@ export function useScrollSpy(container, items, options = {}) {
   let scroller = null
   let headings = []
   let observer = null
-
-  /**
-   * The element that actually scrolls: the nearest ancestor that can, or the
-   * document when nothing between here and the root does.
-   */
-  const findScroller = (from) => {
-    for (let node = from; node && node !== globalThis.document.body; node = node.parentElement) {
-      const overflow = globalThis.getComputedStyle(node).overflowY
-      if (overflow === 'auto' || overflow === 'scroll' || overflow === 'overlay') return node
-    }
-    return globalThis.document.scrollingElement ?? null
-  }
 
   const sync = () => {
     if (!scroller || headings.length === 0) return
@@ -94,7 +85,7 @@ export function useScrollSpy(container, items, options = {}) {
       return
     }
 
-    scroller = findScroller(root)
+    scroller = scrollParent(root)
     headings = items.value
       .map((item) => root.querySelector(`#${globalThis.CSS.escape(item.id)}`))
       .filter(Boolean)
