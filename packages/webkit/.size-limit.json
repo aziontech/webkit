@@ -60,6 +60,76 @@
     "limit": "4 KB"
   },
   {
+    "name": "doc-prose",
+    "path": "src/components/documentation/doc-prose/doc-prose.vue",
+    "limit": "1.5 KB"
+  },
+  {
+    "name": "doc-callout",
+    "path": "src/components/documentation/doc-callout/doc-callout.vue",
+    "limit": "6.5 KB"
+  },
+  {
+    "name": "doc-card",
+    "path": "src/components/documentation/doc-card/doc-card.vue",
+    "limit": "2 KB"
+  },
+  {
+    "name": "doc-card-group",
+    "path": "src/components/documentation/doc-card-group/doc-card-group.vue",
+    "limit": "3 KB"
+  },
+  {
+    "name": "doc-item",
+    "path": "src/components/documentation/doc-item/doc-item.vue",
+    "limit": "13.5 KB"
+  },
+  {
+    "name": "doc-steps",
+    "path": "src/components/documentation/doc-steps/doc-steps.vue",
+    "limit": "4 KB"
+  },
+  {
+    "name": "doc-step",
+    "path": "src/components/documentation/doc-step/doc-step.vue",
+    "limit": "3 KB"
+  },
+  {
+    "name": "doc-frame",
+    "path": "src/components/documentation/doc-frame/doc-frame.vue",
+    "limit": "6.5 KB"
+  },
+  {
+    "name": "doc-update",
+    "path": "src/components/documentation/doc-update/doc-update.vue",
+    "limit": "3 KB"
+  },
+  {
+    "name": "doc-prompt",
+    "path": "src/components/documentation/doc-prompt/doc-prompt.vue",
+    "limit": "7 KB"
+  },
+  {
+    "name": "doc-tooltip",
+    "path": "src/components/documentation/doc-tooltip/doc-tooltip.vue",
+    "limit": "5 KB"
+  },
+  {
+    "name": "doc-pagination",
+    "path": "src/components/documentation/doc-pagination/doc-pagination.vue",
+    "limit": "1.5 KB"
+  },
+  {
+    "name": "doc-page-header",
+    "path": "src/components/documentation/doc-page-header/doc-page-header.vue",
+    "limit": "24 KB"
+  },
+  {
+    "name": "doc-on-this-page",
+    "path": "src/components/documentation/doc-on-this-page/doc-on-this-page.vue",
+    "limit": "4 KB"
+  },
+  {
     "name": "resizable-panel-root",
     "path": "src/components/layout/resizable-panel/resizable-panel.vue",
     "limit": "3 KB"
