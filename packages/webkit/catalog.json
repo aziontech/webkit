@@ -4983,7 +4983,19 @@
           "notes": "Fired when one of the attached AI actions is chosen; `item` is the entry that was picked."
         }
       ],
-      "purpose": "The masthead of a documentation page: where the reader is (the breadcrumb), what the page is (the title), what they can do with it (a Copy Page control that hands the page to an AI tool), the deck that says what they will have by the end, and when the content last changed. It closes on a rule spanning the column, which is what gives every `h2` below it something to be subordinate to.",
+      "slots": [
+        {
+          "name": "breadcrumb",
+          "scope": "—",
+          "notes": "The trail; replaces the built-in `Breadcrumb` fed by the `breadcrumb` prop."
+        },
+        {
+          "name": "actions",
+          "scope": "—",
+          "notes": "What the reader can do with the page; replaces the built-in Copy Page control fed by `source`."
+        }
+      ],
+      "purpose": "The masthead of a documentation page: where the reader is (the breadcrumb), what the page is (the title), what they can do with it (a Copy Page control that hands the page to an AI tool — or, through the `actions` slot, the consumer's own menu; the trail is likewise slottable, for an application whose crumbs route rather than navigate), the deck that says what they will have by the end, and when the content last changed. It closes on a rule spanning the column, which is what gives every `h2` below it something to be subordinate to.",
       "useWhen": [
         "At the top of any documentation or changelog page, above `DocProse`."
       ],

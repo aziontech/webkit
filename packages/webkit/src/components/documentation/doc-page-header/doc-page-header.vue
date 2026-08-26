@@ -10,6 +10,16 @@
    * that hands the page to an AI tool), the deck that says what they will have
    * by the end, and when the page was last touched.
    *
+   * THE TRAIL AND THE ACTION ARE SLOTS OVER THE BUILT-INS. Both regions ship a
+   * working default — a `Breadcrumb` over the `breadcrumb` prop, a Copy Page
+   * `SplitButton` over `source` — which is all a static documentation page
+   * needs. An application needs more than a default can express: a trail whose
+   * plain click must become a router push instead of a document load, and a
+   * menu whose entries are that site's own (the page link, the raw markdown,
+   * each assistant by name) with the primary segment reporting back after a
+   * copy. So the consumer may pass the real controls in and keep everything
+   * else — the region, the order, the title's line, the type scale.
+   *
    * IT CLOSES ON A RULE. The masthead is the page's first section, and without
    * an edge it just runs into the prose — the reader gets the deck and the first
    * paragraph as one block of text, with only a size change between them. The
@@ -61,6 +71,13 @@
     action: [event: MouseEvent | KeyboardEvent, item: { label: string; value?: string }]
   }>()
 
+  defineSlots<{
+    /** The trail; replaces the built-in breadcrumb. */
+    breadcrumb(): unknown
+    /** What the reader can do with the page; replaces the built-in Copy Page control. */
+    actions(): unknown
+  }>()
+
   const attrs = useAttrs()
 
   // A consumer-supplied data-testid wins; otherwise the derived fallback.
@@ -110,27 +127,56 @@
     :data-testid="testId"
     class="flex w-full flex-col gap-(--spacing-lg) border-b border-(--border-default) pb-(--spacing-lg)"
   >
-    <Breadcrumb
-      v-if="crumbs.length"
-      :items="crumbs"
-    />
-    <div class="flex items-center justify-between gap-10">
-      <!-- The masthead takes the prose h1's pair (see DocProse): a page title that an
+    <!-- An unfilled slot with a `v-if`-ed fallback renders NO element, so a masthead
+         with neither a trail nor a passed one pays no gap for the region it does not
+         have — which is why the guard sits on the fallback rather than on a wrapper. -->
+    <slot name="breadcrumb">
+      <Breadcrumb
+        v-if="crumbs.length"
+        :items="crumbs"
+      />
+    </slot>
+    <!-- THE ACTION LEAVES THE TITLE'S LINE ON A PHONE. Beside a `Copy page` control the
+         title had ~150px of a 390 viewport and broke into four lines, because `min-w-0
+         flex-1` lets an h1 shrink to nothing rather than push the row wider. Stacked, the
+         title gets the whole measure and the action reads as the page's utility rather
+         than as something the heading has to flow around. It keeps its natural width: a
+         full-bleed button between a title and its deck reads as the page's call to
+         action, which this is not. -->
+    <div
+      class="flex flex-col items-start gap-(--spacing-md) sm:flex-row sm:items-center sm:justify-between sm:gap-10"
+    >
+      <!-- The masthead takes the prose h1's rung (see DocProse): a page title that an
            h2 could overtake — which `heading-lg` did between 640 and 768 — is not a
-           title. -->
-      <h1 class="m-0 min-w-0 flex-1 text-heading-2xl text-(--text-default) sm:text-heading-xl">
+           title. `heading-xl` IS that rung from 640 up (30px, then 36px past 768), and
+           the token carries the steps itself.
+
+           THE PHONE STEP IS PINNED, because the token's own is 20px — exactly what the
+           prose h2 renders at below 640, so the title and the section under it would
+           come out the same size. The heading scale skips 24px on mobile (2xl jumps to
+           30, xl drops to 20), so the pin names the primitive step rather than borrowing
+           a semantic token whose other two widths are wrong. Only the size is
+           overridden; the balance, line-height and weight stay the token's. -->
+      <h1
+        class="m-0 w-full min-w-0 text-heading-xl text-(--text-default) max-sm:[font-size:var(--text-2xl)] sm:w-auto sm:flex-1"
+      >
         {{ title }}
       </h1>
-      <SplitButton
-        v-if="copyable"
-        kind="outlined"
-        icon="pi pi-copy"
-        label="Copy Page"
-        :model="AI_ACTIONS"
-        class="shrink-0"
-        @click="handleCopy"
-        @item-click="(event, item) => emit('action', event, item)"
-      />
+      <!-- The action sits on the TITLE'S line, so a page that passes its own control
+           gets the same placement as the built-in one rather than having to rebuild the
+           row to reach it. -->
+      <slot name="actions">
+        <SplitButton
+          v-if="copyable"
+          kind="outlined"
+          icon="pi pi-copy"
+          label="Copy Page"
+          :model="AI_ACTIONS"
+          class="shrink-0"
+          @click="handleCopy"
+          @item-click="(event, item) => emit('action', event, item)"
+        />
+      </slot>
     </div>
     <p
       v-if="description"
