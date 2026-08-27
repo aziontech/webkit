@@ -23,10 +23,19 @@
   //     those become "the fields all three happen to share", which is exactly the
   //     information a summary should not be dropping.
   //
-  // So the column is now RESOURCES: a segmented control over the types, and a LIST. A
-  // row carries each type's own second line, so one list holds applications, workloads,
-  // domains and functions without flattening any of them — and the page's own search,
-  // a row above both columns, finds a name without knowing which type owns it.
+  // So the column is now RESOURCES: a panel per type, each one a LIST. A row carries
+  // each type's own second line, so the band holds applications, workloads, domains and
+  // functions without flattening any of them.
+  //
+  // ── AND NO FIELD OF ITS OWN ──
+  //
+  // The page used to carry a search above the band, matching a name across every type.
+  // Finding a resource by name is the console's GLOBAL search now (the ⌘K palette in
+  // the shell — ../../components/shell/AppSidebar.vue), which reaches every module from
+  // every page rather than only this one. A second field here would be the same
+  // question asked in a narrower place: the reader who knows the name types it in the
+  // palette, and Overview is left to answer the one thing only it can — what this
+  // account holds.
   //
   // ── WHY A LIST AND NOT A CARD GRID ──
   //
@@ -49,16 +58,14 @@
   // It was a card of its own above the list, and it held the four most recently
   // touched resources. But the list underneath it is sorted newest first, so those
   // four rows WERE the top of that list — the same resources, twice, in two different
-  // shapes, one of which the filter and the search did not reach.
+  // shapes.
   //
-  // Recents is not a different set. It is the HEAD of this one. So it is a labelled
-  // group at the top of the same list now: `Recents`, then `Older`. The reader still
-  // gets "where was I" first and "what do I have" below it, out of one list that the
-  // type control and the search both narrow — and a resource appears exactly once.
+  // Recents is not a different set. It is the HEAD of this one — so it is a PANEL in
+  // the same band, and the first one: "where was I" is the question a reader arrives
+  // with, and "what do I have" is the answer below it.
   import CardBox from '@aziontech/webkit/card-box'
   import Dropdown from '@aziontech/webkit/dropdown'
   import IconButton from '@aziontech/webkit/icon-button'
-  import InputText from '@aziontech/webkit/input-text'
   import Item from '@aziontech/webkit/item'
   import Skeleton from '@aziontech/webkit/skeleton'
   import Tag from '@aziontech/webkit/tag'
@@ -74,7 +81,7 @@
   import IconFrame from '../../components/home/IconFrame.vue'
   import DeleteDialog from '../../components/list/DeleteDialog.vue'
   import { useGreeting } from '../../lib/data/greeting'
-  import { allResources, matchesSearch, recentResources } from '../../lib/data/home-resources'
+  import { allResources, recentResources } from '../../lib/data/home-resources'
   import { AGENT_PROMO } from '../../lib/data/product-empty-states'
   import { presetIcon, presetLabel } from '../../lib/format/presets'
   import { useTenancyReload } from '../../lib/state/tenancy-reload'
@@ -162,8 +169,8 @@
   // So the band is four panels across one row, each its own module, and the row inside
   // them is a name and nothing else (see the template).
   //
-  // WHICH FOUR. The three things the account owns AT THE TOP LEVEL —
-  // `Applications`, `Workloads`, `Domains` — and `Recents` last.
+  // WHICH FOUR, AND IN WHAT ORDER. The three things the account owns AT THE TOP LEVEL —
+  // `Applications`, `Workloads`, `Domains` — and `Recents` LAST, at the end of the grid.
   // NOT `Functions`, though the type is one of `RESOURCE_TYPES`
   // (../../lib/data/home-resources.js) and has a module list of its own: a function is
   // not a thing an operator manages from Overview, it is a thing that runs INSIDE an
@@ -171,56 +178,51 @@
   // invites the reader to treat them as peers. Functions are one click away through
   // `Applications`, and the recent ones are in the panel below — the same place domains
   // and functions both lived before either had a column.
-  // `Recents` is the fourth because "where was I" is not a module and never was — it is
-  // the newest of EVERYTHING, so it is the one panel whose rows come from more than one
-  // type (functions included), and the only one that therefore has to say which type
+  // `Recents` CLOSES the band, and it is not a module: "where was I" is a different
+  // question from "what do I have", and the band is ordered by the second one — the three
+  // modules in the rail's own order, then the trail at the end of the grid. It reads that
+  // way too: the inventory is the page's answer and the trail is the shortcut off it, so
+  // the shortcut sits where the eye lands last rather than in front of what it qualifies.
+  // It is the newest of EVERYTHING, so it is the one panel whose rows come from more than
+  // one type (functions included), and the only one that therefore has to say which type
   // each row is (it names it — see the template).
-  // FIVE ROWS is the ceiling for a panel, not a target. A summary's job is to say what
-  // is there and hand the reader the module list; past five names a column stops being a
-  // glance and starts being a list with the wrong controls on it.
+  // FIVE ROWS is the ceiling for a MODULE panel, not a target. A summary's job is to say
+  // what is there and hand the reader the module list; past five names a column stops
+  // being a glance and starts being a list with the wrong controls on it.
   const PANEL_ROWS = 5
+
+  // `Recents` holds FIVE, the same ceiling as a module column — a page has the room, and
+  // the trail is worth a full column of it. The console's OTHER recents list is the ⌘K
+  // palette's (../../components/shell/AppSidebar.vue), and that one holds THREE
+  // deliberately: it opens over whatever the reader is doing, above a list of navigation
+  // and commands, and a trail that long there pushes the rest of the palette off the
+  // first screen. Same question, two surfaces, two budgets — so the number lives with
+  // each surface instead of in the data module they share.
 
   // The SAMPLE shows fewer of some types on purpose. The seed generates 20 workloads
   // (one per row of a paginated module list — @shared/lib/workloads.js) and one domain
   // per workload, so at a flat cap every column in the band opened full and the band
   // read as five columns of exactly five, which is the one shape a real account never
   // has. Three workloads and four domains give the band the ragged bottom edge it has in
-  // life — and they are what makes the create row at the foot of a column visible in the
-  // demo instead of only in the empty state. A real console passes `PANEL_ROWS` for
-  // every type; this is mock shaping, and it is the only thing in this file that is.
+  // life. A real console passes `PANEL_ROWS` for every type; this is mock shaping, and it
+  // is the only thing in this file that is.
   const MOCK_ROWS = { workloads: 3, domains: 4 }
   const rowsFor = (type) => MOCK_ROWS[type] ?? PANEL_ROWS
 
-  const search = ref('')
-
-  // Two different empties, and they need two different answers: a search that matched
-  // nothing is told so, and an EMPTY MODULE is offered the way to make one. So the flag
-  // is read per panel rather than for the band.
-  const narrowed = computed(() => Boolean(search.value.trim()))
-
-  // The search runs across the WHOLE account and lands in whichever panels match — it
-  // is the page's field (a row above the band), not a control of any one module, and a
-  // reader typing a name does not know which module owns it.
-  const matched = computed(() => rows.value.filter((row) => matchesSearch(row, search.value)))
-
-  // `create` is the module's own create route, which is where the panel's empty state
-  // sends the reader — the console's create surfaces are pages at the first level
-  // (../../lib/behavior/surfaces.js), so this is a link out and not a dialog here.
-  // `Recents` has no create: it is a view of the other panels, not a place to put
-  // anything, so its empty state is a line of prose.
+  // A panel is a module's own list, capped: its heading links to the module (where the
+  // create surface lives — ../../lib/behavior/surfaces.js), and the rows are resources
+  // only. `Recents` links nowhere: it is a view of the other panels, not a module.
   const panels = computed(() => [
     {
       key: 'applications',
       label: 'Applications',
       path: '/applications',
-      create: '/applications/new',
-      createLabel: 'Add Application',
       recent: false,
       // Its rows open with the framework mark, so they carry the same leading gutter
       // `Recents` does — and the heading mirrors it, so the column has ONE label rail
       // (see the heading in the template).
       marked: true,
-      resources: matched.value
+      resources: rows.value
         .filter((row) => row.type === 'applications')
         .slice(0, rowsFor('applications'))
     },
@@ -228,37 +230,28 @@
       key: 'workloads',
       label: 'Workloads',
       path: '/workloads',
-      create: '/workloads/new',
-      createLabel: 'Add Workload',
       recent: false,
-      resources: matched.value
-        .filter((row) => row.type === 'workloads')
-        .slice(0, rowsFor('workloads'))
+      resources: rows.value.filter((row) => row.type === 'workloads').slice(0, rowsFor('workloads'))
     },
     // Domains carry NO heading link, and it is not an omission: this prototype has no
     // domains LIST page (the type is projected off each workload's primary domain —
     // ../../lib/data/home-resources.js), so the heading would promise a page that does
-    // not exist. It does have a create page (`/domains/new`, generated from the create
-    // descriptors), so the panel can still be filled from its own empty row.
+    // not exist.
     {
       key: 'domains',
       label: 'Domains',
       path: '',
-      create: '/domains/new',
-      createLabel: 'Add domain',
       recent: false,
-      resources: matched.value.filter((row) => row.type === 'domains').slice(0, rowsFor('domains'))
+      resources: rows.value.filter((row) => row.type === 'domains').slice(0, rowsFor('domains'))
     },
     {
       key: 'recents',
       label: 'Recents',
       path: '',
-      create: '',
-      createLabel: '',
       recent: true,
-      // `matched` is already newest-first (../../lib/data/home-resources.js sorts it),
+      // `rows` is already newest-first (../../lib/data/home-resources.js sorts it),
       // so the head of it IS the trail — no second collection to keep in step.
-      resources: recentResources(matched.value, PANEL_ROWS)
+      resources: recentResources(rows.value, PANEL_ROWS)
     }
   ])
 
@@ -271,9 +264,10 @@
   // on every change of the segmented type filter (`useTabEnter`, the entrance the
   // application / workload / function detail shells give their tab bars), because
   // picking a type replaced every row under it and doing that in one frame reads as a
-  // repaint. The four panels are all on screen at once and only the SEARCH narrows
-  // them now — and typing is exactly the case that entrance was never for: a list that
-  // animates on every keystroke feels laggy. The panels patch in place.
+  // repaint. Nothing narrows the band now — the four panels are all on screen at once
+  // and their rows change only when the account does, which is the tenancy re-read
+  // below and has its own skeletons. There is no interaction left for an entrance to
+  // answer for.
 
   // THE COLD ARRIVAL. Overview is the console's landing page and nothing on it is
   // held: account usage is metered per scope and the resource list is a query. So
@@ -372,21 +366,9 @@
     dismissAgentOnboarding()
   }
 
-  // The create row rides the FOOT of every module panel — its own module has a create
-  // page and the reader is not mid-search. `Recents` has no create page, so it never
-  // shows one; a narrowed panel does not either (see the template).
-  const showCreateRow = (panel) => Boolean(panel.create) && !narrowed.value
-
   // The muted line a panel shows when it has nothing to list. `Recents` is not a
-  // plural of anything ("No recents match your search" is not English), so it says what
-  // it is: a trail that has not started yet, or a query nothing recent matches.
-  const emptyLine = (panel) => {
-    if (panel.recent)
-      return narrowed.value ? 'Nothing recent matches your search.' : 'Nothing opened here yet.'
-    return narrowed.value
-      ? `No ${panel.label.toLowerCase()} match your search.`
-      : 'Nothing here yet.'
-  }
+  // plural of anything, so it says what it is: a trail that has not started yet.
+  const emptyLine = (panel) => (panel.recent ? 'Nothing opened here yet.' : 'Nothing here yet.')
 
   // A row on Overview goes where the same row goes in its own module — the detail
   // page. Overview is a way INTO the console, so a row that only highlighted would be
@@ -472,13 +454,12 @@
          column — the usage strip at the full content width, the resource list
          under it — and the measure is simply how wide a row gets. -->
   <!-- ── ONLY THE RESOURCE LIST SCROLLS (from `xl`) ──
-         The page is a FRAME from `xl` up: the greeting, the search, the usage strip
-         and each panel's own heading all hold still, and the lists under them are the
-         only thing that moves. What the
-         reader narrows with therefore cannot scroll away from what it narrows —
-         the old page scrolled the whole column, so the search field and the
-         segmented control left the viewport as soon as the reader started
-         reading results, which is exactly when they are next needed.
+         The page is a FRAME from `xl` up: the greeting, the usage strip and each
+         panel's own heading all hold still, and the lists under them are the only
+         thing that moves. A panel's title is what says which module its rows belong
+         to, so a column that scrolled its heading away would be a list of names with
+         nothing above them saying what they are — and the four readings the page opens
+         with are context for everything below, not a block to be scrolled past.
          `h-full`, not `h-dvh`: the shell's content zone is already a
          definite-height flex child (../../components/shell/AppLayout.vue), so
          100% resolves against it — and because the container's own boundary is
@@ -522,26 +503,16 @@
         </h1>
       </header>
 
-      <!-- ── THE SEARCH, AT PAGE LEVEL ──
-           It spans the whole content width, above the list, rather than riding
-           the Resources header. Three reasons it belongs here:
-           IT IS THE PAGE'S OPENING MOVE. A reader who arrives knowing the name of
-             what they want should not have to find the field inside the band that
-             happens to own it; at the top of the page it is the first thing after the
-             greeting, which is where a search is looked for.
-           IT NEVER COMPETES FOR THE HEADER'S ROW. In the band it shared a
-             `flex-wrap` row with the heading, the count and the segmented control, so
-             at narrow widths the field wrapped to its own line anyway and the header
-             changed height as the viewport moved. The header now holds exactly two
-             things that fit.
-           IT IS OUTSIDE THE SCROLL REGION, still. That was the reason it sat above
-             the list, and it holds a row higher just as well — the control never
-             leaves the viewport while its results are being read.
-           `size="large"` (40px) so it reads as the page's field and not as one of the
-           band's controls.
-           It lives INSIDE `<main>`, not between the greeting and it: content that sits
-           in no landmark at all is an axe `region` violation (measured — one node), and
-           a page-level search is main content, not a banner. -->
+      <!-- ── NO SEARCH FIELD ON THIS PAGE ──
+           A page-level field sat here, full content width above the band, matching a
+           name across every type. Finding a resource by name belongs to the console's
+           GLOBAL search — the ⌘K palette in the shell
+           (../../components/shell/AppSidebar.vue) — which answers the same question
+           from every page in the console instead of only from this one, and reaches
+           modules Overview has no column for. Two fields for one question is the
+           reader having to learn which of them is the one that finds everything.
+           What is left here is what only this page can say: the account's readings,
+           the trail through it, and what each module holds. -->
 
       <!-- ONE COLUMN, TWO BLOCKS. The usage strip is `shrink-0` at the top and the
            resource list under it takes the frame's remaining height (`xl:flex-1` on
@@ -564,27 +535,7 @@
       <main
         class="layout-section-start flex flex-col gap-(--layout-boundary-start) xl:min-h-0 xl:flex-1"
       >
-        <!-- The page's search (see the note above): its own row, full content width,
-             above the list. `shrink-0` so the frame takes its height out of the
-             list below and never out of this field. -->
-        <div class="flex min-h-(--size-10) shrink-0 items-center">
-          <InputText
-            v-model="search"
-            size="large"
-            placeholder="Search resources"
-            aria-label="Search resources"
-            class="w-full"
-          >
-            <template #iconLeft>
-              <i
-                class="pi pi-search"
-                aria-hidden="true"
-              />
-            </template>
-          </InputText>
-        </div>
-
-        <!-- ── USAGE: A STRIP UNDER THE SEARCH, NOT A RAIL DOWN THE SIDE ──
+        <!-- ── USAGE: A STRIP ACROSS THE TOP, NOT A RAIL DOWN THE SIDE ──
 
              It was the page's left column: four stacked cards, each with a progress
              bar under its reading, holding 30% of every row beside the resource list.
@@ -604,8 +555,8 @@
 
              So usage is now ONE STRIP: four readings inline, divided by hairlines inside
              a single card. Which makes the page a COLUMN — the strip takes the full
-             content width directly under the search, and the resource list runs the rest
-             of the frame beneath it.
+             content width under the greeting, and the resource list runs the rest of the
+             frame beneath it.
 
              ── WHY THE TOP AND NOT THE FOOT ──
              It ran along the bottom for a while, on the reasoning that resources are
@@ -846,9 +797,12 @@
         </aside>
 
         <!-- ── RESOURCES: FOUR PANELS, ONE ROW ──
-             `Applications`, `Workloads`, `Domains`, `Recents` side by side from `xl`,
-             two-up from `sm` and three-up from `lg`, stacked below that. The
-             type control that used to sit over one mixed list is gone:
+             `Applications`, `Workloads`, `Domains`, then `Recents` at the end, side by
+             side from `xl`, two-up from `sm` and three-up from `lg`, stacked below that.
+             RECENTS CLOSES the band: the three modules are the account's inventory in the
+             rail's own order, and the trail is the shortcut off it — so it takes the last
+             cell of the grid rather than standing in front of what it qualifies.
+             The type control that used to sit over one mixed list is gone:
              a panel per module IS the filter, permanently applied and permanently
              visible, so the reader never taps to find out whether a module has
              anything in it.
@@ -871,12 +825,19 @@
                (`Domain / my-workload-1…`), so at an equal share of the band the type name
                ate the column and the resource name truncated to a single character
                (measured: 19px of name in a 212px column). A double track is the honest
-               fix — the panel that says twice as much gets twice the width. -->
+               fix — the panel that says twice as much gets twice the width.
+               ── AND IT SPANS THE FULL ROW BELOW `xl`, WHICH IS THE SAME FIX ──
+               The double track used to start at `xl` and nowhere else, so on the 2-up and
+               3-up grids `Recents` was back on an equal share and back to one character of
+               name (measured at 768px: 8px of name — `Workload / w`). The width a row needs
+               is a fact about the ROW, not about which breakpoint is in force, so it takes
+               the whole row at every stacked width too — two tracks of the 2-up, three of
+               the 3-up — and lands as the last, full-width block under the modules. -->
           <div
             v-for="panel in panels"
             :key="panel.key"
             class="flex min-w-0 flex-col gap-(--spacing-xs) xl:min-h-0"
-            :class="panel.recent ? 'xl:col-span-2' : ''"
+            :class="panel.recent ? 'sm:col-span-2 lg:col-span-3 xl:col-span-2' : ''"
           >
             <!-- THE HEADING IS THE WAY IN. A module's panel is a summary of that module,
                  so its title is the link to it — the chevron says so, and it is the only
@@ -973,7 +934,7 @@
               </Item.List>
 
               <Item.List
-                v-else-if="panel.resources.length || showCreateRow(panel)"
+                v-else-if="panel.resources.length"
                 key="panel-rows"
               >
                 <!-- `role="listitem"`: `Item.List` declares `role="list"`, but `Item`
@@ -1214,73 +1175,12 @@
                     />
                   </Item.Actions>
                 </Item>
-                <!-- ── THE LAST LINE OF EVERY MODULE COLUMN IS THE WAY TO ADD ONE ──
-                     It used to appear only when the module was EMPTY, as a filled
-                     panel-wide plaque — which made the emptiest column the loudest thing
-                     in the band, and meant the one affordance that puts something in this
-                     account was invisible to every reader who already had one thing.
-                     It is a ROW now, the last one in the same list: same `size="small"`,
-                     same hover fill, same stretched hit area as a resource row, so the
-                     column reads as a list whose final line happens to be "add another".
-                     A panel caps at five names (`PANEL_ROWS`) with this row under them,
-                     so it is always on screen without the column ever scrolling to it.
-                     NOT WHILE NARROWED (see `showCreateRow`): a search is a question
-                     about what exists, and "Add Application" is not an answer to it —
-                     a query that matched nothing gets the muted line below instead.
-                     `Recents` has no create at all: it is a view of the other panels,
-                     not a place to put anything. -->
-                <Item
-                  v-if="showCreateRow(panel)"
-                  role="listitem"
-                  size="small"
-                  class="relative rounded-(--shape-elements)! transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) has-[[data-row-link]:focus-visible]:ring-2 has-[[data-row-link]:focus-visible]:ring-(--ring-color) has-[[data-row-link]:focus-visible]:ring-inset"
-                >
-                  <!-- CENTERED, WHICH IS THE POINT: every other row in the band is a
-                       name on the left edge, so a centered line is legible as NOT one of
-                       them before it is read — the column's own control rather than its
-                       last resource. It is the one thing that distinguishes the two, now
-                       that the create affordance is a row like the rest and no longer a
-                       filled plaque.
-                       `min-h-(--size-7)`: a resource row is 54px because its ⋯ button
-                       reserves 28px beside a 21px line, and this row has no actions at
-                       all — left alone it lands at 47px (measured), so the row would be
-                       the one row in the band with a different height. It reserves the
-                       same 28px the button would have. -->
-                  <Item.Content class="min-h-(--size-7) items-center justify-center">
-                    <Item.Title>
-                      <!-- A real `RouterLink`, not the resource row's `<button>`: this
-                           one goes to a page and has an href, so it should be
-                           middle-clickable and copyable like any link. The `::after` is
-                           the same stretched hit area the resource rows use, so the
-                           whole row is the target. The plus is INSIDE the label rather
-                           than in `Item.Media`: the media slot is the type mark's
-                           column (`Recents` only, see above), and a 32px framed plus
-                           would put a bordered tile in a column that has none.
-                           NO UNDERLINE, unlike a resource name. The underline there says
-                           "this word is the link"; here the whole centered line is, and
-                           the row's fill plus the label going to full contrast is the
-                           entire hover signal. The keyboard reader is not left out — the
-                           ROW draws the focus ring (`has-[[data-row-link]:focus-visible]`
-                           on the `Item`), which is the same signal it draws for a name. -->
-                      <RouterLink
-                        :to="panel.create"
-                        data-row-link
-                        class="inline-flex min-w-0 items-center gap-(--spacing-xxs) truncate text-label-md text-(--text-muted) outline-none transition-colors duration-150 ease-out motion-reduce:transition-none group-hover/item:text-(--text-default) after:absolute after:inset-0 after:content-['']"
-                      >
-                        <i
-                          class="pi pi-plus shrink-0 text-body-xs"
-                          aria-hidden="true"
-                        />
-                        {{ panel.createLabel }}
-                      </RouterLink>
-                    </Item.Title>
-                  </Item.Content>
-                </Item>
               </Item.List>
 
-              <!-- The one empty left: a search that matched nothing in THIS panel, or
-                   `Recents` before the reader has opened anything. One muted line — it is
-                   not the module's state, it is this query's. -->
+              <!-- Nothing to list: an empty module, or `Recents` before the reader has
+                   opened anything. One muted line, and no offer to create — the band
+                   answers "what do I have", and the module's own page is where something
+                   gets made. -->
               <p
                 v-else
                 class="px-(--spacing-md) py-(--spacing-sm) text-body-sm text-(--text-muted)"

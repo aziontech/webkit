@@ -27,26 +27,30 @@
   // blocked at write time here.
   import { useAgentOnboarding } from '../../../shared/lib/agent-onboarding'
 
-  // The usage strip under the search: one cell per reading. The count matters — a wire
-  // with the wrong number of cells is a layout that shifts the moment it resolves.
+  // The usage strip: one cell per reading. The count matters — a wire with the wrong
+  // number of cells is a layout that shifts the moment it resolves.
   const METRICS = 4
 
   // Whether the greeting row still carries the agent pill — the one thing that changes
   // that row's height (37px with it, 25px without), and a persisted per-reader answer.
   const { agentOnboardingVisible } = useAgentOnboarding()
 
-  // The four PANELS the band resolves into — the three things the account owns at the
-  // top level (`Applications`, `Workloads`, `Domains`) and `Recents` last
-  // (../../pages/home/Home.vue). The count is the column count, so the wire splits the
-  // row exactly where the page does, and a wire one column out is a band that re-flows
-  // on arrival.
+  // The four PANELS the band resolves into, IN THE PAGE'S ORDER — the three things the
+  // account owns at the top level (`Applications`, `Workloads`, `Domains`) and `Recents`
+  // last (../../pages/home/Home.vue). The count is the column count, so the wire splits
+  // the row exactly where the page does, and a wire one column out is a band that
+  // re-flows on arrival. The order matters as much as the count here: `Recents` is the
+  // panel that spans two tracks, so a wire that spans a different one resolves into a
+  // band whose columns all change width on the first frame of real data.
   const PANELS = 4
+  const RECENT_PANEL = PANELS
 
-  // The panels whose rows open with a MARK, by index: `Applications` (the framework
-  // logo) and `Recents` (the trail glyph). Both reserve a `--size-4` gutter before their
-  // label on the real page, and the heading above them mirrors it — so the wire has to
-  // know which two they are or its bars land on a rail the page does not use.
-  const MARKED_PANELS = [1, PANELS]
+  // The panels whose rows open with a MARK, by index: `Applications` (the framework logo)
+  // and `Recents` (the trail glyph) — the first and the last, in the page's order. Both
+  // reserve a `--size-4` gutter before their label on the real page, and the heading
+  // above them mirrors it — so the wire has to know which two they are or its bars land
+  // on a rail the page does not use.
+  const MARKED_PANELS = [1, RECENT_PANEL]
 
   // The ROWS inside a panel, at the count the real page's tenancy-reload skeleton uses:
   // three, which is a panel and not a page of one.
@@ -58,21 +62,22 @@
 </script>
 
 <template>
-  <!-- The page's own stack: the GREETING row, the SEARCH row, the USAGE strip and the
-       RESOURCE list under it — the real page's structure
-       (../../pages/home/Home.vue), where the search is a page-level row inside `<main>`
-       above the strip and not a control of the Resources band.
-       Both leading rows are here because a wire is only worth drawing if it lands where
-       the page lands: without them the blocks opened 62px high (measured) and every
-       first frame of real data pushed the whole page down by that much — the exact
-       shift this component exists to prevent. The gap between the rows is the page's
-       own (`--layout-boundary-start`, which is what `<main>`'s `layout-section-start`
+  <!-- The page's own stack: the GREETING row, the USAGE strip and the RESOURCE list
+       under it — the real page's structure (../../pages/home/Home.vue). The page's
+       search field used to sit between the greeting and the strip and this wire drew a
+       row for it; finding a resource by name is the console's global ⌘K palette now, so
+       neither the page nor the wire carries one.
+       The greeting row is here because a wire is only worth drawing if it lands where
+       the page lands: without it the blocks opened short and every first frame of real
+       data pushed the whole page down by that much — the exact shift this component
+       exists to prevent. The gap between the rows is the page's own
+       (`--layout-boundary-start`, which is what `<main>`'s `layout-section-start`
        margin resolves to). -->
   <!-- `xl:flex-1` + `xl:min-h-0`: from `xl` the real page is a FRAME — the usage strip
-       is pinned under the search and the list takes the height that is left, running to
-       the bottom of the viewport. A wire that stacks at its own content height ends the
-       list short of that edge and it grows the moment the data lands, so the wire claims
-       the frame the same way the page does. -->
+       is pinned under the greeting and the list takes the height that is left, running
+       to the bottom of the viewport. A wire that stacks at its own content height ends
+       the list short of that edge and it grows the moment the data lands, so the wire
+       claims the frame the same way the page does. -->
   <div
     class="flex flex-col gap-(--layout-boundary-start) xl:min-h-0 xl:flex-1"
     aria-hidden="true"
@@ -90,14 +95,7 @@
       />
     </div>
 
-    <div class="flex min-h-(--size-10) items-center">
-      <Skeleton
-        class="w-full"
-        height="var(--size-10)"
-      />
-    </div>
-
-    <!-- Usage: the strip under the SEARCH, above the list — the real page's shape
+    <!-- Usage: the strip under the GREETING, above the list — the real page's shape
          (../../pages/home/Home.vue), where the rail became one divided card of four
          readings and the agent card took the end of that same band. A wire that still
          drew a left rail — or still drew this band at the foot — would resolve into a
@@ -188,7 +186,7 @@
 
     <!-- Resources: the four PANELS the real page draws
          (../../pages/home/Home.vue) — `Applications`, `Workloads`, `Domains` and
-         `Recents` side by side from `xl`, two-up from `sm` and three-up
+         `Recents` last, side by side from `xl`, two-up from `sm` and three-up
          from `lg`, each a muted heading over a flat list of rows. It was one wide list
          under a segmented type control; a wire whose shape resolves into a different
          one is the layout shift it exists to prevent.
@@ -202,12 +200,15 @@
     >
       <!-- Five tracks with the LAST panel over two of them, the real band's split:
            `Recents` names a type in front of every resource name, so it is the one
-           column that carries two fields (../../pages/home/Home.vue). -->
+           column that carries two fields (../../pages/home/Home.vue). Below `xl` it takes
+           the whole row there, so the wire claims the same rows: a wire that splits the
+           2-up grid where the page does not is a band that re-flows on the first frame of
+           real data. -->
       <div
         v-for="panel in PANELS"
         :key="panel"
         class="flex min-w-0 flex-col gap-(--spacing-xs) xl:min-h-0"
-        :class="panel === PANELS ? 'xl:col-span-2' : ''"
+        :class="panel === RECENT_PANEL ? 'sm:col-span-2 lg:col-span-3 xl:col-span-2' : ''"
       >
         <!-- The heading row, at the `--size-6` the real one reserves so the four
              titles land on one line, and on the real page's LABEL RAIL: the row's own

@@ -28,8 +28,7 @@
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { daysAgo, formatListDate } from '@shared/lib/dates'
-  import { authorAt } from '@shared/lib/people'
+  import { formatListDate } from '@shared/lib/dates'
   import { computed, ref, watch } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
@@ -51,6 +50,7 @@
   import { useListFilters } from '../../lib/behavior/list-state'
   import { FIT_COLUMN, TAG_COLUMN } from '../../lib/behavior/table-columns'
   import { productFirstUse } from '../../lib/data/product-empty-states'
+  import { VARIABLES } from '../../lib/data/variables'
   import { useSampleMode } from '../../lib/state/sample-mode'
   import { tenancyRows } from '../../lib/state/tenancy-scope'
   import AddVariableDrawer from './AddVariableDrawer.vue'
@@ -69,57 +69,10 @@
   const editorName = computed(() => userEmail.value.split('@')[0])
 
   // --- The records that back the table (data-driven mode) -------------------
-  // `modifiedAt` is the real instant — the Last Modified filter compares it, the cell
-  // renders it relative, and `lastModified` (the sortable / exportable display string)
-  // is derived from it by one formatter instead of being hand-written per row
-  // (src/lib/dates.js explains why a display string is never parsed back).
-  const variables = ref(
-    [
-      {
-        id: 'v-001',
-        key: 'API_BASE_URL',
-        value: 'https://api.example.com',
-        secret: false,
-        modifiedAt: daysAgo(32)
-      },
-      {
-        id: 'v-002',
-        key: 'STRIPE_SECRET_KEY',
-        value: 'sk_live_51H8sX2eZv...',
-        secret: true,
-        modifiedAt: daysAgo(48)
-      },
-      {
-        id: 'v-003',
-        key: 'FEATURE_FLAGS',
-        value: 'checkout_v2,dark_mode',
-        secret: false,
-        modifiedAt: daysAgo(61)
-      },
-      {
-        id: 'v-004',
-        key: 'DATABASE_PASSWORD',
-        value: 'p4ssw0rd-r0t4t3d',
-        secret: true,
-        modifiedAt: daysAgo(73)
-      },
-      {
-        id: 'v-005',
-        key: 'MAX_UPLOAD_MB',
-        value: '25',
-        secret: false,
-        modifiedAt: daysAgo(99)
-      }
-    ].map((variable, index) => {
-      const person = authorAt(index)
-      return {
-        ...variable,
-        lastEditor: person.name,
-        lastEditorAvatar: person.avatar,
-        lastModified: formatListDate(variable.modifiedAt)
-      }
-    })
-  )
+  // The seed lives in ../../lib/data/variables.js — one module per resource type, so
+  // global search can index it (../../lib/data/search-index.js). This is the page's own
+  // mutable copy: rows created and deleted here never touch the seed.
+  const variables = ref([...VARIABLES])
 
   // Switching organization, account or workspace reloads the module: skeletons while
   // the new scope's variables arrive (src/lib/tenancy-reload.js). A variable belongs

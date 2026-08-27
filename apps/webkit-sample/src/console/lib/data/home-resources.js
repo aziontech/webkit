@@ -150,11 +150,13 @@ export function recentResources(rows, count = 4) {
   return rows.slice(0, count)
 }
 
-/** Free-text match over the fields a reader would actually type. */
-export function matchesSearch(resource, term) {
-  const query = term.trim().toLowerCase()
-  if (!query) return true
-  return [resource.name, resource.subtitle, resource.typeLabel, resource.status]
-    .filter(Boolean)
-    .some((field) => String(field).toLowerCase().includes(query))
-}
+/**
+ * ── FINDING A RESOURCE IS NOT THIS MODULE'S JOB ANY MORE ──
+ *
+ * Overview used to carry a search field above its resource band, narrowed by a
+ * `matchesSearch` helper that lived here. Finding a resource by name is the console's
+ * GLOBAL search now — the ⌘K palette in the shell — which answers from every page instead
+ * of only from this one, and over every type the platform holds instead of the four this
+ * module normalizes. The index and its ranked matcher are ./search-index.js; it reads
+ * `allResources()` above for these four, so a name in the palette is the name on Overview.
+ */

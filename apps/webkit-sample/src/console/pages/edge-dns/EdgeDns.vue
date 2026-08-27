@@ -35,8 +35,6 @@
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { daysAgo, formatListDate } from '@shared/lib/dates'
-  import { authorAt } from '@shared/lib/people'
   import { computed, ref } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
@@ -57,7 +55,7 @@
   import { DATE_PRESETS, formatDateRange, matchDate } from '../../lib/behavior/filter-bar'
   import { useListFilters } from '../../lib/behavior/list-state'
   import { FIT_COLUMN, TAG_COLUMN } from '../../lib/behavior/table-columns'
-  import { NAMESERVERS } from '../../lib/data/edge-dns'
+  import { DNS_ZONES, NAMESERVERS } from '../../lib/data/edge-dns'
   import { productFirstUse } from '../../lib/data/product-empty-states'
   import { useSampleMode } from '../../lib/state/sample-mode'
   import { tenancyRows } from '../../lib/state/tenancy-scope'
@@ -74,42 +72,11 @@
   // The email carried over from the login flow (falls back to a placeholder).
   const userEmail = computed(() => route.query.email || 'myemail@azion.com')
 
-  // The zones that back the table (data-driven mode). The Last Modified avatar
-  // comes from the shared team roster (src/lib/people.js), assigned round-robin.
-  //
-  // `modifiedAt` is the real instant — the Last Modified filter compares it — and
-  // `lastModified` (the sortable display string) is derived from it by one
-  // formatter, never hand-written per row: parsing a display string back into a
-  // Date is engine-dependent, so a filter built on it would compare garbage on
-  // some browsers (src/lib/dates.js).
-  const zones = ref(
-    [
-      {
-        id: '6442',
-        name: 'test',
-        domain: 'edgeflow.com',
-        status: 'Active',
-        dnssec: false,
-        modifiedAt: daysAgo(10)
-      },
-      {
-        id: '6463',
-        name: 'Azion Design',
-        domain: 'azion.design',
-        status: 'Active',
-        dnssec: true,
-        modifiedAt: daysAgo(18)
-      }
-    ].map((zone, index) => {
-      const person = authorAt(index)
-      return {
-        ...zone,
-        lastModified: formatListDate(zone.modifiedAt),
-        author: person.name,
-        authorAvatar: person.avatar
-      }
-    })
-  )
+  // The zones that back the table (data-driven mode). The seed lives in
+  // ../../lib/data/edge-dns.js, beside the rest of the module's shared vocabulary, so
+  // global search can index it (../../lib/data/search-index.js); this is the page's own
+  // mutable copy.
+  const zones = ref([...DNS_ZONES])
 
   // Switching organization, account or workspace reloads the module: the table
   // shows skeletons while the new scope's zones arrive (src/lib/tenancy-reload.js),

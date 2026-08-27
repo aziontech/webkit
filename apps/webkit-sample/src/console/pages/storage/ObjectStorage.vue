@@ -18,8 +18,6 @@
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { daysAgo, formatListDate } from '@shared/lib/dates'
-  import { authorAt } from '@shared/lib/people'
   import { provisionedBuckets, removeDeployment } from '@shared/lib/provisioning'
   import { computed, ref } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
@@ -42,6 +40,7 @@
   import { useListFilters } from '../../lib/behavior/list-state'
   import { FIT_COLUMN, TAG_COLUMN } from '../../lib/behavior/table-columns'
   import { createResourcePath } from '../../lib/data/create-resources'
+  import { BUCKETS } from '../../lib/data/object-storage'
   import { productFirstUse } from '../../lib/data/product-empty-states'
   import { useSampleMode } from '../../lib/state/sample-mode'
   import { tenancyRows } from '../../lib/state/tenancy-scope'
@@ -58,48 +57,10 @@
   // The email carried over from the login flow (falls back to a placeholder).
   const userEmail = computed(() => route.query.email || 'myemail@azion.com')
 
-  // The buckets that back the table (data-driven mode). Object counts / sizes are
-  // mock figures; the file navigator inside a bucket (BucketBrowser.vue) owns the
-  // actual object tree.
-  const buckets = ref(
-    [
-      {
-        id: 'webkit-storybook-dev',
-        name: 'webkit-storybook-dev',
-        access: 'Public',
-        objects: 128,
-        size: '412.6 MB',
-        modifiedAt: daysAgo(29)
-      },
-      {
-        id: 'azion-assets-prod',
-        name: 'azion-assets-prod',
-        access: 'Public',
-        objects: 4210,
-        size: '18.4 GB',
-        modifiedAt: daysAgo(2)
-      },
-      {
-        id: 'user-uploads',
-        name: 'user-uploads',
-        access: 'Private',
-        objects: 902,
-        size: '2.1 GB',
-        modifiedAt: daysAgo(1)
-      }
-    ].map((bucket, index) => {
-      const person = authorAt(index)
-      // `modifiedAt` is the real instant — the Last Modified field compares it — and
-      // `lastModified` (the sortable display string) is derived from it by one
-      // formatter rather than hand-written per row (src/lib/dates.js).
-      return {
-        ...bucket,
-        author: person.name,
-        authorAvatar: person.avatar,
-        lastModified: formatListDate(bucket.modifiedAt)
-      }
-    })
-  )
+  // The buckets that back the table (data-driven mode). The seed lives in
+  // ../../lib/data/object-storage.js — one module per resource type, so global search can
+  // index it (../../lib/data/search-index.js) — and this is the page's own mutable copy.
+  const buckets = ref([...BUCKETS])
 
   // Buckets provisioned by the deploy flow lead the list, newest first — the last
   // link of the chain a deploy creates (src/lib/provisioning.js): the connector's

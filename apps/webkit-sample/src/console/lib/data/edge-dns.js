@@ -2,6 +2,47 @@
 // detail (Main Settings + Records), and the Create Record drawer, so the
 // nameservers, record types, and TTL/policy vocabulary stay identical
 // everywhere the module renders them.
+//
+// …and the ZONES themselves, which lived inside the list page until global search
+// needed them: the palette indexes every resource the platform holds
+// (./search-index.js), and a seed only the page can see is a resource search cannot
+// find. The page keeps its own mutable copy (`ref([...DNS_ZONES])`).
+import { daysAgo, formatListDate } from '@shared/lib/dates'
+import { authorAt } from '@shared/lib/people'
+
+// The zones the sample is seeded with, in list order.
+//
+// `modifiedAt` is the real instant — the Last Modified filter compares it — and
+// `lastModified` (the sortable display string) is derived from it by one formatter,
+// never hand-written per row: parsing a display string back into a Date is
+// engine-dependent, so a filter built on it would compare garbage on some browsers
+// (@shared/lib/dates.js).
+export const DNS_ZONES = [
+  {
+    id: '6442',
+    name: 'test',
+    domain: 'edgeflow.com',
+    status: 'Active',
+    dnssec: false,
+    modifiedAt: daysAgo(10)
+  },
+  {
+    id: '6463',
+    name: 'Azion Design',
+    domain: 'azion.design',
+    status: 'Active',
+    dnssec: true,
+    modifiedAt: daysAgo(18)
+  }
+].map((zone, index) => {
+  const person = authorAt(index)
+  return {
+    ...zone,
+    lastModified: formatListDate(zone.modifiedAt),
+    author: person.name,
+    authorAvatar: person.avatar
+  }
+})
 
 // Azion's authoritative nameservers — the values a user copies into their
 // domain provider to delegate the zone. Shown read-only in the zone detail's

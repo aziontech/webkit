@@ -136,10 +136,15 @@
     mobileMql?.removeEventListener('change', onMobileChange)
   })
 
+  // `item.query` is optional and additive: a nav row carries none, and a global-search
+  // result carries whatever its destination opens on — the generated settings pages read
+  // the record's name from `?name=`, the same way every module's own Edit action hands it
+  // over (../../lib/data/search-index.js). The email rides along on every push, so it
+  // survives the trip like it does everywhere else in the shell.
   const onNavigate = (event, item) => {
     activeItem.value = item.id
     if (item.path && item.path !== route.path) {
-      router.push({ path: item.path, query: { email: userEmail.value } })
+      router.push({ path: item.path, query: { email: userEmail.value, ...item.query } })
     }
   }
 
@@ -421,18 +426,20 @@
           </Tooltip>
 
           <!-- BRAND, below `md` only: the rail carries it at every wider width, and two
-               copies of the same lockup on one screen is one too many. The DS `Brand`
-               component in two of its KINDS, swapped by width rather than resized — the
-               wordmark does not survive being squeezed, it has to be dropped. `size` is
-               `small` on both, the same 16px every other header in the app renders, so the
-               mark and the wordmark exchange places without the brand changing height.
-               Held until `sm` (640px), where a tablet bar still has room for the full
-               lockup beside the hamburger and the tenant chain; below that only the
-               `reduced` glyph stays, which is the widest thing that still fits once the
-               chain takes the rest of the row. Classes, not `isMobile`: both are inert
-               SVG, so mounting both costs nothing and no binding can double up (unlike the
-               switcher below) — and the display utility carries `!` because the DS root is
-               `inline-flex`, which otherwise out-orders a plain `hidden`. -->
+               copies of the same lockup on one screen is one too many.
+
+               THE FULL WORDMARK AT EVERY MOBILE WIDTH. This used to swap kinds by width —
+               `reduced` (the bare "A" glyph) below `sm`, `default` above it — on the
+               assumption that a phone bar could not spend the wordmark's width. It can:
+               `default` at `size="small"` is a 90×18 viewBox at 16px, so 80px of bar, and
+               the row still lays out with room to spare at 320px (measured: 0px of
+               overflow at 320 / 360 / 375 / 414, the phone widths this shell is used at).
+               Which makes the glyph a cost with no payer — it dropped the product's NAME
+               to buy 61px nobody needed, and it made the identity change shape halfway
+               down the viewport. One Brand now covers every width under `md`, in the same
+               `default` + `small` pair the rail above it renders, so the mark reads
+               identically whether the rail is on screen or the bar is standing in for
+               it. -->
           <a
             href="/home"
             aria-label="Azion home"
@@ -440,14 +447,8 @@
             @click="onBrand"
           >
             <Brand
-              kind="reduced"
-              size="small"
-              class="sm:hidden!"
-            />
-            <Brand
               kind="default"
               size="small"
-              class="hidden! sm:inline-flex!"
             />
           </a>
 

@@ -41,6 +41,7 @@
   import { useTheme } from '@shared/lib/theme.js'
   import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
+  import { platformResources, searchPlatform } from '../../lib/data/search-index'
   import { SAMPLE_MODES } from '../../lib/state/sample-mode.js'
   import { nextPlanUp, useSamplePreset } from '../../lib/state/sample-preset.js'
   import { expireSession } from '../../lib/state/session.js'
@@ -89,9 +90,10 @@
     // up, and in the header itself below `md`, where the rail is off screen.
     //
     // PARKED FOR NOW: the shell passes `false` at every width while account switching
-    // is off (AppLayout.vue's `ACCOUNT_SWITCHING`), so the rail's header currently
-    // opens on the search field. The prop stays because the row does — flipping the
-    // shell's flag is the whole way back.
+    // is off (AppLayout.vue's `ACCOUNT_SWITCHING`), so the rail's header region is the
+    // brand band alone and ends exactly on the header's line. The prop stays because the
+    // row does — flipping the shell's flag is the whole way back, and the switcher lands
+    // UNDER that line so the band keeps the bar's 56.
     tenancy: { type: Boolean, default: false }
   })
 
@@ -406,6 +408,84 @@
   // search calls it, and so does the Overview hero's own field, both through AppLayout.
   defineExpose({ measure: () => sidebarRef.value?.measure(), showPalette })
 
+  // ── GLOBAL SEARCH: THE WHOLE PLATFORM, FROM ANY PAGE ──
+  //
+  // The palette indexes EVERY resource the account owns — sixteen types, from applications
+  // and workloads down to buckets, DNS zones, variables and teams
+  // (../../lib/data/search-index.js). Before this, it reached the reader's last three
+  // resources and nothing else, so finding anything older meant first knowing which module
+  // it lived in — the one thing a reader who is searching does not know.
+  //
+  // THE INDEX IS A COMPUTED because it is projected through the tenancy chain in force:
+  // switching organization, account or workspace re-answers the search, and the sample's
+  // EMPTY version searches an account that owns nothing.
+  //
+  // The results are CAPPED. Eight rows is what the panel can show without pushing the
+  // navigation groups under it off the first screen, and the heading says how many matched
+  // when there are more — a palette that silently truncates is a palette that lies about
+  // what the account holds. Typing more narrows it; the ranking (name before second line,
+  // whole word before mid-word) is what makes the first eight the right eight.
+  const RESULT_LIMIT = 8
+
+  // WHAT THE READER HAS TYPED, mirrored out of the palette. `CommandMenu.Input` owns the
+  // query — it writes it straight into the palette's own context — and the root exposes no
+  // `v-model:query`, so the listener below is how this component learns it: Vue merges a
+  // consumer's `@update:model-value` with the field's own handler, so both run.
+  //
+  // It is what decides which groups are on screen at all: the trail at rest, the results
+  // once there is something to search for. Never both — a recent resource that also
+  // matches would otherwise be two rows carrying the same value, and the palette's roving
+  // highlight keys on that value.
+  const paletteQuery = ref('')
+  const onPaletteQuery = (value) => {
+    paletteQuery.value = String(value ?? '')
+  }
+
+  // The palette clears its own query when it opens (and never on close), so the mirror
+  // follows it there rather than guessing.
+  watch(paletteOpen, () => {
+    paletteQuery.value = ''
+  })
+
+  const searchResults = computed(() => searchPlatform(paletteQuery.value, RESULT_LIMIT))
+
+  // "Resources" while it is showing all of them; "Resources · 8 of 34" while it is not.
+  const resultsHeading = computed(() => {
+    const { rows, total } = searchResults.value
+    return total > rows.length ? `Resources · ${rows.length} of ${total}` : 'Resources'
+  })
+
+  // ── THE PALETTE'S RECENTS: THREE, AND THE PALETTE'S OWN NUMBER ──
+  //
+  // The trail the reader is most likely to be after, at the head of the list — off the
+  // SAME index the search reads, so the trail spans the whole platform too: "what was I
+  // just working on" is never a question about four types, and the palette's recents used
+  // to be Overview's four (applications, workloads, domains, functions) purely because
+  // that was the only normalized list there was.
+  //
+  // THREE, WHERE OVERVIEW SHOWS FIVE. The panel is a page's column, read on arrival with
+  // the whole viewport to itself; this list opens OVER whatever the reader is doing, and
+  // everything under it — the navigation tree, the actions, the account — is what the
+  // palette is otherwise for. Five rows of trail push the first navigation heading off
+  // the first screen, so the palette pays for the trail in the one currency it is short
+  // of. It is the same question answered at two budgets, which is why the count lives on
+  // each surface rather than in the module they share.
+  const PALETTE_RECENTS = 3
+
+  // Newest first, across every type. A resource is only indexed when it GOES somewhere
+  // (../../lib/data/search-index.js), so every row here navigates.
+  //
+  // A row with no timestamp is not a recent one — a team carries no `modifiedAt`, and
+  // three teams standing in for a trail is exactly what the sample's EMPTY account would
+  // show (teams are an account resource, so they survive a projection that empties every
+  // module). No trail is the honest answer there; the group hides itself.
+  const recentRows = computed(() =>
+    platformResources()
+      .filter((row) => row.modifiedAt)
+      .sort((a, b) => new Date(b.modifiedAt) - new Date(a.modifiedAt))
+      .slice(0, PALETTE_RECENTS)
+  )
+
   // Flat lookup for resolving a `nav:<id>` palette value back to its nav item. Containers are
   // not destinations — offering "Build" or "Settings" as a result would navigate nowhere — so
   // this walks to the leaves (`menuLeaves`, shared with the docs shell's palette).
@@ -588,11 +668,66 @@
     }
   ]
 
-  // CommandMenu emits (event, value). Values are namespaced (`nav:` / `cmd:`) so a
-  // nav id can never collide with a command id — the console has both a `home` nav
-  // item and a `home` account entry. The palette closes itself on select.
+  // ── WHICH GROUPS SURVIVE THE QUERY ──
+  //
+  // The palette filters each item itself and hides a group whose items are all gone — but
+  // a SEPARATOR has no items, so it survives every query and leaves a rule under the last
+  // surviving group with nothing after it. Search makes that visible constantly: most
+  // queries match resources and nothing else, so the panel ended on a stray line.
+  //
+  // So the shell asks the same question the palette asks, with the palette's own rule (a
+  // case-insensitive substring of `value` + the row's text), and renders a separator only
+  // when there is something on both sides of it.
+  const matchesPalette = (...text) => {
+    const query = paletteQuery.value.trim().toLowerCase()
+    if (!query) return true
+    return text.filter(Boolean).join(' ').toLowerCase().includes(query)
+  }
+
+  const showResults = computed(() => searchResults.value.rows.length > 0)
+  const showRecents = computed(() => !paletteQuery.value && recentRows.value.length > 0)
+  const showNav = computed(() =>
+    paletteGroups.value.some((group) =>
+      group.items.some((item) => matchesPalette(`nav:${item.id}`, item.label))
+    )
+  )
+  const showActions = computed(() =>
+    actionCommands.value.some((command) => matchesPalette(`cmd:${command.id}`, command.label))
+  )
+  const showAccount = computed(() =>
+    accountCommands.some((command) => matchesPalette(`cmd:${command.id}`, command.label))
+  )
+  const showCommands = computed(() => showActions.value || showAccount.value)
+
+  // CommandMenu emits (event, value). Values are namespaced (`nav:` / `cmd:` / `res:`) so
+  // a nav id can never collide with a command id or a resource id — the console has both
+  // a `home` nav item and a `home` account entry, and a resource id is a number from a
+  // fixture. The palette closes itself on select.
+  //
+  // A resource value carries the index KEY (`res:certificates/cert-8801`), which is unique
+  // across types — two modules do seed the same numeric id — and is resolved against the
+  // whole index rather than against whichever group rendered the row, so the trail and the
+  // search results route through one line.
   const onPaletteSelect = (event, value) => {
-    const [scope, id] = String(value).split(':')
+    const raw = String(value)
+    const separator = raw.indexOf(':')
+    const scope = raw.slice(0, separator)
+    const id = raw.slice(separator + 1)
+    if (scope === 'res') {
+      const row = platformResources().find((entry) => entry.key === id)
+      // The MODULE's nav id, not the resource's: the rail marks `Workloads` and the router
+      // lands on the workload, which is exactly what a click in the module list does. The
+      // `query` is what a settings page opens on — every module's own Edit action hands
+      // over the same name (../../lib/data/search-index.js).
+      if (row)
+        emit('navigate', event, {
+          id: row.navId,
+          label: row.name,
+          path: row.path,
+          query: row.query
+        })
+      return
+    }
     if (scope === 'nav') {
       const item = navItems.value.find((entry) => entry.id === id)
       if (item) emit('navigate', event, item)
@@ -689,8 +824,32 @@
              reaches everything should not be reachable only while the rail is. The
              palette it opens is still this component's, teleported to the body; the shell
              forwards the click. -->
-      <div class="flex flex-col">
-        <!-- THE BRAND, at the top of the rail — where Cloudflare's console puts its own
+      <!-- THE PULL. `-m-(--spacing-md)` cancels the DS header region's own inset, and
+             every block below re-declares the one it wants. It is here because the LINE
+             under the brand has to be FULL BLEED and land on an exact pixel, and a border
+             drawn inside the padded box can be neither: it would stop 16px short of both
+             rail edges, and the region's own bottom padding would push it 16px below the
+             bar's. `Sidebar` renders that region itself and it takes no class, so the pull
+             is the only way at it — the same move RealTimeEvents.vue uses to bleed a table
+             out of a padded panel. -->
+      <div class="-m-(--spacing-md) flex flex-col">
+        <!-- THE BRAND BAND — the rail's half of the header line.
+
+             `h-14` is `GlobalHeader`'s own height and `border-b border-(--border-default)`
+             its own bottom border (webkit's global-header.vue). There is no token for the
+             bar's height, so the number is stated here as the literal the DS uses; if the
+             bar ever changes height this band has to follow it in the same commit.
+
+             Both boxes start at the top of the window and both are 56 tall with the border
+             INSIDE (border-box), so the rail's 1px and the bar's 1px are the same pixel
+             row: one rule across the full width of the window, and the rail's top reads as
+             a block rather than as navigation that happens to start high. Measured at
+             1440×900: bar 0→56, band 0→56, both lines at y 55→56, band 0→300 across.
+
+             The inset comes back as `px-(--spacing-md)`, so the brand sits exactly where
+             it did before the pull.
+
+             THE BRAND, at the top of the rail — where Cloudflare's console puts its own
              mark, and where this one belongs now that the bar below it starts at the
              content zone and opens with the breadcrumb.
 
@@ -704,41 +863,156 @@
              It is a link home, so the brand does what a brand in a console is expected to
              do; `routeActivation` is the shell's job, so the anchor emits and the shell
              routes, like every other nav row here. -->
-        <a
-          href="/home"
-          aria-label="Azion home"
-          class="flex h-6 w-fit items-center rounded-(--shape-button) px-(--spacing-xxs) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
-          @click="onBrand"
+        <div
+          class="flex h-14 shrink-0 items-center border-b border-(--border-default) px-(--spacing-md)"
         >
-          <Brand
-            kind="default"
-            size="small"
-          />
-        </a>
+          <a
+            href="/home"
+            aria-label="Azion home"
+            class="flex h-6 w-fit items-center rounded-(--shape-button) px-(--spacing-xs) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+            @click="onBrand"
+          >
+            <Brand
+              kind="default"
+              size="small"
+            />
+          </a>
+        </div>
 
-        <!-- Identity under the brand — the rail reads outermost-inward: whose product
-             this is, then which tenant you are acting as, then the tree itself. The
-             switcher is a full-width row here (`fluid`) so it reads as part of the same
-             header block rather than as a control dropped above the nav. -->
-        <AccountSwitcher
+        <!-- Identity, now UNDER the line — the rail still reads outermost-inward (whose
+             product this is, then which tenant you are acting as, then the tree itself),
+             but the band above it belongs to the header now: anything else in it would
+             push the line off the bar's. So the switcher opens the navigation column
+             instead, in its own inset, still fixed while the tree below scrolls. It is a
+             full-width row here (`fluid`) so it reads as part of the header block rather
+             than as a control dropped above the nav. -->
+        <div
           v-if="tenancy"
-          fluid
-        />
+          class="p-(--spacing-md)"
+        >
+          <AccountSwitcher fluid />
+        </div>
 
-        <!-- The palette: the rail's navigation groups first (same labels, same
-               order), then the app-level commands. Groups whose items are all
-               filtered out hide themselves. Only the copy that OWNS it renders it
-               (see the `palette` prop) — one palette per app, never one per copy.
-               It renders here because the LIST is here, not because the trigger is:
-               the trigger is the bar's centre control. -->
+        <!-- The palette: the reader's RECENT RESOURCES first, then the rail's
+               navigation groups (same labels, same order), then the app-level commands.
+               Groups whose items are all filtered out hide themselves. Only the copy
+               that OWNS it renders it (see the `palette` prop) — one palette per app,
+               never one per copy. It renders here because the LIST is here, not because
+               the trigger is: the trigger is the bar's centre control. -->
         <CommandMenu
           v-if="palette"
           v-model:open="paletteOpen"
           :shortcut="shortcut"
           @select="onPaletteSelect"
         >
-          <CommandMenu.Input placeholder="Search navigation and commands" />
+          <!-- The field the palette owns. `@update:model-value` rides alongside the
+               palette's own handler (Vue merges both) so this component can mirror the
+               query — see `paletteQuery`. The placeholder says what the palette actually
+               reaches now that it reaches everything; the trigger in the bar carries the
+               short form (`Search`), because at 160px that is all that fits
+               (@shared/ui/HeaderSearch.vue). -->
+          <CommandMenu.Input
+            placeholder="Search resources, pages and commands"
+            @update:model-value="onPaletteQuery"
+          />
           <CommandMenu.List>
+            <!-- ── RESULTS, WHILE THERE IS SOMETHING TO SEARCH FOR ──
+                 Every resource the account owns, across sixteen types
+                 (../../lib/data/search-index.js) — ranked, capped at eight, and mounted
+                 ONLY while the reader is typing. Mounting the index at rest would bury the
+                 navigation groups under a hundred rows nobody asked for; mounting it on
+                 the query costs one group appearing, and the palette roves in DOM order,
+                 so a group that mounts late still leads the list it renders at the top of.
+
+                 The row is icon + name + why-it-matched + type. The second line is the
+                 module list's own (a workload's domain, a connector's address, a
+                 certificate's subject), so the reader can see WHICH `api-primary` this is
+                 instead of guessing from a bare name.
+
+                 The row's whole `haystack` is rendered hidden because `CommandMenu.Item`
+                 filters itself on its own text: a row matched on its subtitle or its type
+                 would otherwise be matched by the index and then hidden by the palette,
+                 leaving a count with nothing under it. `aria-hidden` keeps it out of the
+                 accessibility tree — it is a search key, not content. -->
+            <CommandMenu.Group
+              v-if="searchResults.rows.length"
+              key="results"
+              :heading="resultsHeading"
+            >
+              <CommandMenu.Item
+                v-for="row in searchResults.rows"
+                :key="row.key"
+                :value="`res:${row.key}`"
+              >
+                <template #prefix>
+                  <i
+                    :class="row.icon"
+                    aria-hidden="true"
+                  />
+                </template>
+                <span class="flex min-w-0 items-baseline gap-(--spacing-xs)">
+                  <span class="shrink-0">{{ row.name }}</span>
+                  <span class="truncate text-label-sm text-(--text-muted)">{{ row.subtitle }}</span>
+                  <span
+                    class="hidden"
+                    aria-hidden="true"
+                    >{{ row.haystack }}</span
+                  >
+                </span>
+                <template #suffix>
+                  <span class="text-label-sm text-(--text-muted)">{{ row.typeLabel }}</span>
+                </template>
+              </CommandMenu.Item>
+            </CommandMenu.Group>
+
+            <CommandMenu.Separator
+              v-if="showResults && (showNav || showCommands)"
+              key="results-rule"
+            />
+
+            <!-- ── RECENTS, AT THE HEAD OF THE LIST AT REST ──
+                 Three rows (`PALETTE_RECENTS`), where Overview's own panel shows five:
+                 this list opens over the page the reader is working on and everything
+                 below it is what the palette is otherwise for, so the trail gets the
+                 shortest honest answer rather than the fullest one.
+                 It leads because it is the likeliest target — a reader who opens ⌘K
+                 while working is more often going back to a resource than to a module —
+                 and because a group that appears BELOW the navigation tree is a group
+                 the reader has to scroll to find at rest.
+                 It gives way to the RESULTS the moment there is a query: a recent that
+                 also matches would be two rows carrying one value, and the roving
+                 highlight keys on that value.
+                 The row is icon + name + type: the icon is the type's own glyph, the
+                 same one the rail and the module lists use, and the muted suffix names
+                 the type in words because sixteen glyphs at 14px are not sixteen words. -->
+            <CommandMenu.Group
+              v-if="!paletteQuery && recentRows.length"
+              key="recents"
+              heading="Recents"
+            >
+              <CommandMenu.Item
+                v-for="row in recentRows"
+                :key="row.key"
+                :value="`res:${row.key}`"
+              >
+                <template #prefix>
+                  <i
+                    :class="row.icon"
+                    aria-hidden="true"
+                  />
+                </template>
+                {{ row.name }}
+                <template #suffix>
+                  <span class="text-label-sm text-(--text-muted)">{{ row.typeLabel }}</span>
+                </template>
+              </CommandMenu.Item>
+            </CommandMenu.Group>
+
+            <CommandMenu.Separator
+              v-if="showRecents && (showNav || showCommands)"
+              key="recents-rule"
+            />
+
             <CommandMenu.Group
               v-for="group in paletteGroups"
               :key="group.key"
@@ -749,7 +1023,14 @@
                 :key="item.id"
                 :value="`nav:${item.id}`"
               >
-                <template #prefix>
+                <!-- Gated, not always supplied: a drilled level's rows are icon-less by
+                     design (the Settings level), and an unconditional `#prefix` would hand
+                     the Item an empty glyph — which counts as a prefix, so the row would
+                     carry the 16px box and its indent for nothing. -->
+                <template
+                  v-if="item.icon"
+                  #prefix
+                >
                   <i
                     :class="item.icon"
                     aria-hidden="true"
@@ -759,7 +1040,12 @@
               </CommandMenu.Item>
             </CommandMenu.Group>
 
-            <CommandMenu.Separator />
+            <!-- The rule between the destinations above and the app's own commands —
+                 rendered only when there is something on both sides of it. -->
+            <CommandMenu.Separator
+              v-if="(showResults || showRecents || showNav) && showCommands"
+              key="commands-rule"
+            />
 
             <CommandMenu.Group heading="Actions">
               <CommandMenu.Item
@@ -793,7 +1079,7 @@
               </CommandMenu.Item>
             </CommandMenu.Group>
 
-            <CommandMenu.Empty>No navigation or command matches your search.</CommandMenu.Empty>
+            <CommandMenu.Empty>No resource, page or command matches your search.</CommandMenu.Empty>
           </CommandMenu.List>
         </CommandMenu>
       </div>
@@ -802,8 +1088,23 @@
     <slot>
       <!-- Data-driven mode: `navGroups` is already the tree shape Menu takes, and
              hand-composing it would mean re-implementing the recursion here.
-             `role="presentation"` because Sidebar already renders the <nav> landmark. -->
+             `role="presentation"` because Sidebar already renders the <nav> landmark.
+
+             THE MENU STARTS WHERE THE PAGE STARTS. `pt-(--layout-boundary-start)` is the
+             SAME token the page's `.layout-boundary` reads for its own top inset, so the
+             first nav row and the page's first block open on one horizontal — 24 below the
+             header line at this width, 16 below `sm`, and whatever the token becomes next
+             without a second number to keep in step. `Sidebar`'s scroll region ships
+             `pt-(--spacing-xxs)` (4) whenever a header slot is present and takes no class
+             from the consumer, so the 4 is pulled back off with `-mt-(--spacing-xxs)`
+             first: 24 is then the whole distance, not 24 stacked on someone else's 4.
+             Measured at 1440×900: first row 56 → 80, page's first block 56 → 80.
+
+             It rides the fallback content, so a page that REPLACES this slot owns its own
+             start inset — there is nothing between `Sidebar`'s scroll region and the slot
+             to hang it on. -->
       <Menu
+        class="-mt-(--spacing-xxs) pt-(--layout-boundary-start)"
         :path="navPath"
         v-model:expanded="expanded"
         @update:path="setNavPath"

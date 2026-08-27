@@ -19,8 +19,6 @@
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { daysAgo, formatListDate, hoursAgo } from '@shared/lib/dates'
-  import { authorAt } from '@shared/lib/people'
   import { computed, ref } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
@@ -42,6 +40,7 @@
   import { useListFilters } from '../../lib/behavior/list-state'
   import { FIT_COLUMN, TAG_COLUMN } from '../../lib/behavior/table-columns'
   import { productFirstUse } from '../../lib/data/product-empty-states'
+  import { SQL_DATABASES } from '../../lib/data/sql-databases'
   import { useSampleMode } from '../../lib/state/sample-mode'
   import { tenancyRows } from '../../lib/state/tenancy-scope'
 
@@ -57,45 +56,10 @@
   // The email carried over from the login flow (falls back to a placeholder).
   const userEmail = computed(() => route.query.email || 'myemail@azion.com')
 
-  // The database records that back the table (data-driven mode). The Last Modified
-  // avatar comes from the shared team roster (src/lib/people.js), assigned
-  // round-robin per row.
-  const databases = ref(
-    [
-      {
-        id: 'db-store-sessions',
-        name: 'store-sessions',
-        status: 'Created',
-        tables: 4,
-        modifiedAt: daysAgo(1)
-      },
-      {
-        id: 'db-analytics-events',
-        name: 'analytics-events',
-        status: 'Created',
-        tables: 12,
-        modifiedAt: daysAgo(9)
-      },
-      {
-        id: 'db-feature-flags',
-        name: 'feature-flags',
-        status: 'Creating',
-        tables: 0,
-        modifiedAt: hoursAgo(3)
-      }
-    ].map((db, index) => {
-      const person = authorAt(index)
-      // `modifiedAt` is the real instant — the Last Modified field compares it — and
-      // `lastModified` (the sortable display string) is derived from it by one
-      // formatter rather than hand-written per row (src/lib/dates.js).
-      return {
-        ...db,
-        author: person.name,
-        authorAvatar: person.avatar,
-        lastModified: formatListDate(db.modifiedAt)
-      }
-    })
-  )
+  // The database records that back the table (data-driven mode). The seed lives in
+  // ../../lib/data/sql-databases.js — one module per resource type, so global search can
+  // index it (../../lib/data/search-index.js) — and this is the page's own mutable copy.
+  const databases = ref([...SQL_DATABASES])
 
   // Switching organization, account or workspace reloads the module: skeletons while
   // the new scope's databases arrive (src/lib/tenancy-reload.js), and a database
