@@ -111,14 +111,6 @@
 
   const hasVisibleItems = computed(() => items.value.some((item) => item.isVisible.value))
 
-  /**
-   * One icon column for the whole palette. Reserved as soon as a single item
-   * carries a `prefix`, so a list that mixes iconed and icon-less items keeps one
-   * label edge instead of a ragged one — and a palette with no icons at all pays
-   * no indent.
-   */
-  const hasPrefixColumn = computed(() => items.value.some((item) => item.hasPrefix.value))
-
   function setOpen(value: boolean) {
     isOpen.set(value)
   }
@@ -270,7 +262,6 @@
     setActive,
     isActive,
     hasVisibleItems,
-    hasPrefixColumn,
     groupHasVisibleItems,
     onInputKeydown
   })

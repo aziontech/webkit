@@ -64,7 +64,7 @@ const composed = (props: Record<string, unknown> = {}, inputProps: Record<string
 
 /**
  * A palette whose first item carries a `prefix` and whose second does not — the
- * mixed case the reserved icon column exists for.
+ * mixed case that proves an icon-less row renders no prefix box at all.
  */
 const mixedPrefixes = () =>
   defineComponent({
@@ -315,11 +315,11 @@ describe('CommandMenu (overlay: wraps Dialog, composition + provide/inject)', ()
   })
 
   // Vitest browser mode compiles no Tailwind, so an emitted `px` cannot be
-  // measured here. These assert the structural mechanism instead: the reserved
-  // box either exists on every row or on none, which is what makes the label
-  // edge single. Geometry is verified in the browser against the story.
-  describe('one icon column for the whole list', () => {
-    it('reserves the prefix box on every item once any item carries a prefix', async () => {
+  // measured here. These assert the structural mechanism instead: the box is in
+  // the DOM only for the row that supplies a glyph. Geometry is verified in the
+  // browser against the story.
+  describe('the prefix box belongs to the item that has a prefix', () => {
+    it('renders the box only on the item that carries a prefix', async () => {
       render(mixedPrefixes())
       await settle()
 
@@ -328,20 +328,19 @@ describe('CommandMenu (overlay: wraps Dialog, composition + provide/inject)', ()
       )
       expect(items).toHaveLength(2)
 
-      // Both rows get the box — the icon-less one reserves an empty column so its
-      // label starts where the iconed row's does.
-      for (const item of items) {
-        const box = item.querySelector('[data-testid="overlay-command-menu__item__prefix"]')
-        expect(box).not.toBeNull()
-        expect(box?.className).toContain('size-4')
-      }
-
-      // Only the first actually holds a glyph.
+      const iconed = items[0].querySelector('[data-testid="overlay-command-menu__item__prefix"]')
+      expect(iconed).not.toBeNull()
+      expect(iconed?.className).toContain('size-4')
       expect(items[0].querySelector('i.pi-cloud-upload')).not.toBeNull()
+
+      // The icon-less row puts no empty box in the DOM, so it carries no indent.
+      expect(
+        items[1].querySelector('[data-testid="overlay-command-menu__item__prefix"]')
+      ).toBeNull()
       expect(items[1].querySelector('i')).toBeNull()
     })
 
-    it('reserves no column when no item carries a prefix', async () => {
+    it('renders no box at all when no item carries a prefix', async () => {
       render(composed({ defaultOpen: true }))
       await settle()
 
