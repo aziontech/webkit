@@ -29,39 +29,35 @@
   //
   // The pill carries the same background pattern webkit's `ButtonHighlight` uses —
   // the DS control for an AI flow, ported from the console's Copilot button. Three
-  // stacked layers, in the same tokens at the same durations:
+  // stacked layers, IDENTICAL to the DS's: same tokens, same gradients, same
+  // geometry, same durations, same hover floor, same rim border.
   //
-  //   THE RIM. A blurred three-stop gradient (white → `--color-blue-500` →
-  //     `--color-brand-primary-500`) rotating once every 8 seconds behind the
-  //     surface. It is the part that says "this one talks to an agent".
-  //
-  //     IT REPEATS EVERY 120px, which is what makes the rotation READ. A single
-  //     gradient stretched across a 279px pill puts one colour band on the whole
-  //     ring, so spinning it changes the colour at any given point by almost
-  //     nothing and the pill looks static — measured 9.3 units of ring travel per
-  //     phase. At a 120px period two segments sit on the ring at once and visibly
-  //     chase around it: 18.3 units, twice as much, on the SAME 1px ring.
-  //     `ButtonHighlight` needs no such period because it is ~80px wide, so one band
-  //     already spans it. 120px is a plateau, not a knob to keep turning: 90px
-  //     measures the same (18.6) and 60px is WORSE (13.0) — a period near the 12px
-  //     blur radius averages itself back to grey.
+  //   THE GLOW. A blurred three-stop gradient (white → `--color-blue-500` →
+  //     `--color-brand-primary-500`) filling the button box and rotating once every
+  //     8 seconds behind the surface. It is the part that says "this one talks to an
+  //     agent".
   //   THE BASE. The brand-accent gradient over it — `accent-900` at 17%,
   //     `accent-100` at 53%, `accent-600` at 96%, on a 120° axis.
   //   THE SCRIM. `--bg-backdrop` (black at 80%) over that, which is what makes the
   //     resting pill dark and holds its white label at contrast.
   //
-  // On hover the base and the scrim both drop to 60% and the rotating rim blooms
+  // On hover the base and the scrim both drop to 25% and the rotating glow blooms
   // through. That reveal REPLACES what this pill used to do on hover (a 1.03 scale,
   // an orange ring, an orange glow shadow): an AI affordance should have one hover
   // language across the app, and this is the one the DS ships.
   //
-  // 60%, where `ButtonHighlight` fades to 25%, because this control reveals about
-  // 3.5× the area: the same floor that reads as a tinted 80px button reads as a pale
-  // lavender slab 281px wide. Holding more of the scrim keeps the bloom a dark plum
-  // instead (mean luminance 105 against 129 at the DS's floor, −19%), which is also
-  // what lets the travelling ring read as its own element rather than dissolving
-  // into the fill. The floor costs nothing in motion: the ring sits OUTSIDE the base
-  // and the scrim, so its 24.7 units of travel are the same at any floor.
+  // NOTHING HERE IS RE-TUNED FOR THE PILL'S WIDTH. Earlier revisions diverged from
+  // the DS on four axes, each defensible on its own and each a second answer to a
+  // question the DS had already answered: a `repeating-linear-gradient` on a 120px
+  // period (so the rotation read across a 279px pill rather than parking one colour
+  // band on the whole ring), an oversized square (so a rotating rect covered the
+  // pill's diagonal at every angle instead of strobing once per revolution), a 60%
+  // hover floor against the DS's 25% (so the bloom over ~3.5× the area stayed a dark
+  // plum instead of a pale lavender slab), and `--border-muted` for the rim frame.
+  // All four are gone. The cost is real and known — the ring reads flatter at this
+  // width and the hover bloom is lighter — and it buys the thing that matters more:
+  // one AI treatment with one set of numbers, so this pill inherits whatever
+  // `ButtonHighlight` decides next instead of holding its own copy of the answer.
   //
   // It also settles the hierarchy question the old raised-surface treatment was
   // solving. This pill is still the SECOND action wherever it appears — but it now
@@ -73,21 +69,6 @@
   // mark, a label that swaps to a confirmation, and five brand marks. So it borrows
   // the pattern, not the component. If `ButtonHighlight` ever grows a default slot,
   // this should compose it and the three spans below should go.
-  //
-  // THE RIM IS AN OVERSIZED SQUARE, not the `inset-0` rect `ButtonHighlight` spins.
-  // A rotating rect only covers its own box at 0° and 180°: at 90° the rim of a
-  // 279×40 pill is a 40px column and both ends of the pill go dark, so the glow
-  // strobes once per revolution. A square whose side clears the pill's diagonal
-  // covers it at every angle. `ButtonHighlight` is ~80px wide, where the same defect
-  // is a mild pulse; at pill width it would be the whole effect. The square costs
-  // nothing now that the gradient carries its own period — coverage and motion are
-  // two separate knobs (the square is the first, the 120px repeat is the second).
-  //
-  // THE RING STAYS 1px, the hairline `ButtonHighlight` leaves. Widening it to 2px was
-  // tried and reverted: it does measure more travel (26.2 against 18.3), but at that
-  // width the ring stops reading as an edge and starts reading as a border drawn round
-  // the pill — a heavier outline than anything else in these rows carries. The period
-  // is what supplies the motion anyway, so the hairline keeps all of it.
   //
   // Left: the bare Azion mark, which keeps its own brand orange — it is the one mark
   // that does not follow the surface. Right: the AI coding tools this onboarding
@@ -230,32 +211,29 @@
       <button
         type="button"
         :data-state="copied ? 'copied' : 'default'"
-        class="group/highlight relative isolate inline-flex h-10 max-w-full items-center justify-center overflow-hidden rounded-(--shape-elements) border-(length:--border-width-default) border-(--border-muted) p-px transition-colors duration-fast-02 ease-productive-entrance focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
+        class="group/highlight relative isolate inline-flex h-10 max-w-full items-center justify-center overflow-hidden rounded-(--shape-elements) border border-(length:--border-width-default) border-(--secondary-mask) p-px transition-colors duration-fast-02 ease-productive-entrance focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
         @click="onCopy"
       >
-        <!-- THE RIM. The rotating glow, behind everything. `w-[max(110%,6rem)]` +
-             `aspect-square` is the coverage floor: the side has to clear the pill's
-             diagonal at every angle, and the `6rem` floor holds that true even for
-             the shortest label this pill ever carries. `animate-spin` drives the
-             `transform`, so the `-translate-x/y-1/2` that centres it (a separate CSS
-             property in v4) is not overwritten by the rotation. -->
+        <!-- THE GLOW. The rotating glow, behind everything — `ButtonHighlight`'s
+             layer verbatim: `inset-0`, one three-stop gradient with no repeat, no
+             oversized square. -->
         <span
           aria-hidden="true"
-          class="pointer-events-none absolute left-1/2 top-1/2 aspect-square w-[max(110%,6rem)] -translate-x-1/2 -translate-y-1/2 animate-spin [animation-duration:8s] [animation-timing-function:linear] bg-[repeating-linear-gradient(90deg,var(--color-base-white),var(--color-blue-500),var(--color-brand-primary-500),var(--color-base-white))] bg-size-[120px_100%] filter-[blur(12px)] motion-reduce:animate-none"
+          class="pointer-events-none absolute inset-0 animate-spin [animation-duration:8s] [animation-timing-function:linear] [background:linear-gradient(90deg,var(--color-base-white),var(--color-blue-500),var(--color-brand-primary-500))] [filter:blur(12px)] motion-reduce:animate-none"
         />
 
         <!-- THE BASE. The brand-accent gradient, inset by the 1px the root pads out,
              so the rim reads as a hairline all the way around. -->
         <span
           aria-hidden="true"
-          class="pointer-events-none absolute inset-px rounded-[inherit] bg-[linear-gradient(120deg,var(--color-brand-accent-900)_17%,var(--color-brand-accent-100)_53%,var(--color-brand-accent-600)_96%)] transition-opacity duration-300 ease-out group-hover/highlight:opacity-60 motion-reduce:transition-none"
+          class="pointer-events-none absolute inset-px rounded-[inherit] [background-image:linear-gradient(120deg,var(--color-brand-accent-900)_17%,var(--color-brand-accent-100)_53%,var(--color-brand-accent-600)_96%)] transition-opacity duration-300 ease-out group-hover/highlight:opacity-25 motion-reduce:transition-none"
         />
 
         <!-- THE SCRIM. What darkens the resting pill and carries the white label at
              contrast. It fades with the base, which is the hover bloom. -->
         <span
           aria-hidden="true"
-          class="pointer-events-none absolute inset-px rounded-[inherit] bg-(--bg-backdrop) transition-opacity duration-300 ease-out group-hover/highlight:opacity-60 motion-reduce:transition-none"
+          class="pointer-events-none absolute inset-px rounded-[inherit] bg-(--bg-backdrop) transition-opacity duration-300 ease-out group-hover/highlight:opacity-25 motion-reduce:transition-none"
         />
 
         <!-- The content rides above the three layers. `z-1` is enough because the root
