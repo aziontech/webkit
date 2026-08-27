@@ -63,8 +63,8 @@
   import { centreX, SCENE_HEIGHT, SCENE_WIDTH, sceneCanvasStyle } from './scene-canvas'
   import { verticalS } from './scene-curve'
 
-  // Four of the five marks the pill carries (lib/agent-onboarding.js). Four fit the canvas at
-  // a legible size; the fifth would shrink all of them.
+  // Four of the seven marks the pill carries (lib/agent-onboarding.js). Four fit the canvas at
+  // a legible size; the rest would shrink all of them.
   const AGENTS = ['claude', 'cursor', 'windsurf', 'codex']
 
   const BOX_SIZE = 32

@@ -713,6 +713,52 @@
                         :helper-text="verifying ? '' : errors.password"
                         @update:model-value="errors.password = ''"
                       />
+
+                      <!-- The recovery link belongs to the PASSWORD FIELD, so it
+                               lives in the field's own block and lines up with the
+                               label and the input above it rather than floating
+                               centred on the canvas below the card.
+
+                               That placement is also the whole `v-if`. It used to
+                               carry `step === 'email' || step === 'password'` and sit
+                               outside the card, which offered to recover a password on
+                               the screen that has not asked for one yet. Inside the
+                               field it cannot exist before the field does, and it
+                               cannot follow the user into the recovery branch — the
+                               step that renders this block is the only step it appears
+                               on, with no condition to keep in sync.
+
+                               Grey, not blue, and 12px: it was `text-link` at
+                               `text-body-sm`, which put a secondary escape hatch at the
+                               same weight as the primary path and a step LOUDER than
+                               the label naming the field it hangs off. It keeps the
+                               underline — that is what still says "link" once the
+                               colour is gone — and hover returns it to full ink rather
+                               than to blue. 12px is the bottom of the type scale, so it
+                               cannot go under the label; what puts it below is the
+                               muted ink against the label's full one.
+
+                               `self-start` so the hit area is the words, not the width
+                               of the card.
+
+                               It goes out with the rest of the scope while a submit is
+                               in flight. `forgotPassword()` already refused to run
+                               then, but an anchor cannot take `disabled`, so refusing
+                               silently is all it did — the field beside it dimmed, the
+                               button span, and this one link went on looking live and
+                               doing nothing. `aria-disabled` and the two utilities it
+                               gates say so instead, and `tabindex=-1` takes it out of
+                               the tab order so the keyboard cannot reach what the
+                               pointer cannot. The guard in the handler stays: it is
+                               what makes this true rather than decorative. -->
+                      <a
+                        :aria-disabled="verifying || undefined"
+                        :tabindex="verifying ? -1 : undefined"
+                        class="self-start text-body-xs text-(--text-muted) underline underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) aria-disabled:pointer-events-none aria-disabled:opacity-60 motion-reduce:transition-none"
+                        href="#"
+                        @click.prevent="forgotPassword"
+                        >Forgot your password?</a
+                      >
                     </div>
                   </div>
 
@@ -1029,30 +1075,78 @@
       </template>
     </CardBox>
 
-    <!-- Below the card, on the canvas — the design puts the way OUT of signing
-             in outside the box, the same way Sign Up puts "Already have an
-             account?" outside its own. The recovery link drops once the user is
-             inside the branch: it would only lead back to the screen they are
-             already on. -->
+    <!-- Below the card, on the canvas. The card is the form — the fields, the
+             actions, and nothing else; everything that is ABOUT signing in rather
+             than part of it lives out here, which is where the way out already sat
+             and where the consent line joined it.
+
+             Two lines, in that order: the way out first, the legal sentence last.
+             The account link is navigation someone may actually be looking for; the
+             consent sentence is the quietest thing on the screen and belongs at the
+             floor of it. Sign Up's footer is the same two lines in the same order.
+
+             Both are `text-body-xs`. At 14px they were a step ABOVE the 12px labels
+             naming the fields inside the card, so the two quietest things on the page
+             were typographically louder than the form. 12px is the floor of the
+             scale, so they land level with the labels rather than under them; the
+             rest of the demotion is carried by colour. -->
     <div
       class="flex w-full max-w-(--container-sm) flex-col items-center gap-(--spacing-sm)"
     >
       <div class="flex items-center justify-center gap-(--spacing-xs)">
-        <p class="text-body-sm text-(--text-default)">Don't have an account?</p>
+        <p class="text-body-xs text-(--text-default)">Don't have an account?</p>
         <a
-          class="text-link text-body-sm"
+          class="text-link text-body-xs"
           href="/signup"
           @click.prevent="goToSignUp"
           >Sign up</a
         >
       </div>
-      <a
-        v-if="step === 'email' || step === 'password'"
-        class="text-link text-body-sm"
-        href="#"
-        @click.prevent="forgotPassword"
-        >Forgot your password?</a
+
+      <!-- The consent line — the same sentence, in the same voice and the same
+               place that Sign Up carries it (see SignUp.vue for why it is "I agree"
+               and not "you agree"). Both doors into the product say it identically;
+               it would be strange for the agreement to exist on one and not the
+               other.
+
+               It belongs to the SIGN-IN steps only. The recovery branch is not a way
+               in — nobody accepts terms of service by asking for a reset link — and
+               the 'sent' step has no action left to qualify. Out here that condition
+               is the only thing that moves, so it fades rather than cutting; inside
+               the card it also had to keep its wrapper measuring zero on the way out,
+               which is a constraint it no longer has. -->
+      <!-- No out-of-flow leave here, unlike the blocks inside the card: this is the
+               last element on the page, so nothing sits under it to be pushed around
+               while it goes. It simply fades. -->
+      <Transition
+        enter-from-class="opacity-0"
+        enter-to-class="opacity-100"
+        leave-from-class="opacity-100"
+        leave-to-class="opacity-0"
       >
+        <p
+          v-if="step === 'email' || step === 'password'"
+          :style="fadeTransitionStyle"
+          class="text-center text-body-xs text-(--text-muted) motion-reduce:transition-none"
+        >
+          By continuing, I agree to Azion's
+          <a
+            class="text-link"
+            href="https://www.azion.com/en/terms-and-conditions/"
+            target="_blank"
+            rel="noopener noreferrer"
+            >terms of service</a
+          >
+          and
+          <a
+            class="text-link"
+            href="https://www.azion.com/en/privacy-policy/"
+            target="_blank"
+            rel="noopener noreferrer"
+            >privacy policy</a
+          >.
+        </p>
+      </Transition>
     </div>
   </AuthSplit>
 </template>

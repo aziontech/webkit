@@ -49,22 +49,36 @@
 
 <template>
   <AuthShell>
-    <!-- Two equal halves, flush and full-bleed. No max-width and no padding on
-         the split itself: the seam down the middle IS the composition, and any
-         gutter around it would turn one page into two floating panels. The
-         breathing room lives INSIDE each half, so the art half can still bleed
-         its artwork to the page edge. -->
-    <div class="grid flex-1 grid-cols-1 lg:min-h-0 lg:grid-cols-2">
+    <!-- Two halves, flush and full-bleed, split 40 / 60 in the PANEL's favour. No
+         max-width and no padding on the split itself: the seam down the middle IS the
+         composition, and any gutter around it would turn one page into two floating
+         panels. The breathing room lives INSIDE each half, so the art half can still
+         bleed its artwork to the page edge.
+
+         The halves are not equal because they are not doing equal work. The card is a
+         fixed measure — a form capped at `container-sm` that gains nothing from a
+         wider column, it just centres in more air. The panel is a MAP, and its
+         artwork is fitted by width, so every point of column width it gains comes
+         back as both a wider and a taller map. `2fr 3fr` rather than percentages so
+         the ratio survives whatever padding the halves carry. -->
+    <div class="grid flex-1 grid-cols-1 lg:min-h-0 lg:grid-cols-[2fr_3fr]">
       <!-- The card half. It centres its content rather than filling the column —
            the column is as tall as the page, a card is only as tall as its own
            fields, and a card pinned to the top of a full-height column floats
            with nothing under it.
 
-           THE SCROLL LIVES HERE, not on the page (see AuthShell). From `lg` this
+           FROM `lg` THE SCROLL LIVES HERE, not on the page (see AuthShell): this
            column is exactly the leftover viewport height and owns its own overflow,
            so a tall card scrolls WITHIN its half while the panel beside it holds
            still — instead of pushing the whole page down and taking the panel, the
            header and the links under the card off screen with it.
+
+           BELOW `lg` it deliberately owns nothing. The halves are stacked, so the
+           card and the panel are one continuous run of page and splitting that run
+           into two independent scrollers would be the wrong shape entirely — a
+           column that scrolls beside a column that does not, on a screen where they
+           are above and below each other. There the scroll zone is `main` (AuthShell)
+           and this column simply rides it at its natural height.
 
            THE CENTRING IS `m-auto` ON THE INNER BLOCK, not `justify-center` on the
            column, and that is the load-bearing part. A flex container that centres
@@ -76,11 +90,26 @@
 
            The inset drops from `--spacing-xxl` to `--spacing-xl`: at lg that is 96px
            of vertical padding instead of 192px, which is most of the overrun this
-           screen had, spent on nothing but air. -->
+           screen had, spent on nothing but air.
+
+           THE INLINE INSET IS `--layout-boundary-inline`, NOT `--spacing-xl`, and
+           only opens up at `lg`. The two tokens are not the same number: the boundary
+           is `--spacing-lg` (16 on a phone, 24 from `sm`) while `--spacing-xl` is 24
+           then 32. On a phone the card is wider than the column can hold, so the
+           padding IS the inset — and at 24 it sat 8px inside the header above it,
+           whose bar opens on the boundary like every other bar in this app. Measured
+           at 375 and 390: header brand at 16, card at 24. The page edge has to be one
+           line down the whole screen, so below `lg` this column opens on the same
+           token the header does.
+
+           From `lg` it goes back to `--spacing-xl`, where the number stops being a
+           page edge and starts being the gutter between the form and the seam: the
+           card is capped by its own `max-w` and centred in half a page, so the
+           padding is composition rather than boundary. -->
       <div
         :data-entered="entered || null"
         :style="leadStyle"
-        class="flex -translate-x-6 flex-col px-(--spacing-xl) py-(--spacing-xl) opacity-0 data-entered:translate-x-0 data-entered:opacity-100 lg:min-h-0 lg:overflow-y-auto motion-reduce:translate-x-0 motion-reduce:opacity-100 motion-reduce:transition-none"
+        class="flex -translate-x-6 flex-col px-(--layout-boundary-inline) py-(--spacing-xl) opacity-0 data-entered:translate-x-0 data-entered:opacity-100 lg:min-h-0 lg:overflow-y-auto lg:px-(--spacing-xl) motion-reduce:translate-x-0 motion-reduce:opacity-100 motion-reduce:transition-none"
       >
         <div class="m-auto flex w-full flex-col items-center gap-(--spacing-md)">
           <slot />

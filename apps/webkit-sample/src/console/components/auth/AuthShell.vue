@@ -8,7 +8,7 @@
   // defined once and stay identical across the whole signup flow — mirroring how
   // CreationHeader centralizes the header for the creation flows.
   //
-  // ── THE SHELL IS THE VIEWPORT, AND ONLY SCROLLS WHILE STACKED ──
+  // ── THE SHELL IS THE VIEWPORT, AND IT OWNS THE SCROLL ZONE ──
   //
   // A signed-out screen is ONE card. Nothing is below it, so a page that scrolls is a
   // page telling the reader there is more when there is not — and on the split screens
@@ -16,15 +16,27 @@
   // and bottom (6rem each at lg) overran a laptop viewport by enough to hide the bottom
   // of the card and the Sign in / Documentation links under it.
   //
-  // So from `lg` — the breakpoint where the split actually becomes two columns — the
-  // shell IS the viewport: `h-dvh` with the scroll turned OFF, and each half owning its
-  // own overflow (see AuthSplit). A card that genuinely cannot fit scrolls inside its own
-  // column, which is the only honest place for it; the page never moves, and the panel
-  // beside it never scrolls out of view.
+  // So the shell IS the viewport, at EVERY width: `h-dvh`, its own scroll turned off, and
+  // the overflow handed to a region inside it. The page never moves; the header stays put;
+  // whatever cannot fit scrolls in the region that owns it.
   //
-  // BELOW `lg` the two halves are stacked, one above the other, so the page is genuinely
-  // taller than the viewport and scrolling it is correct. `min-h-dvh` + the default page
-  // scroll is what that needs.
+  // WHICH region owns it depends on the layout, and that is the whole rule:
+  //
+  //   from `lg` — the split is two columns, so each HALF owns its overflow (see
+  //     AuthSplit). A tall card scrolls inside its own column while the panel beside it
+  //     holds still, which is the only honest place for that scroll to live.
+  //   below `lg` — the halves are stacked, so there are no columns to scroll and the
+  //     whole stack is one run of page. `main` is the scroll zone.
+  //
+  // THE SCROLL ZONE IS NOT OPTIONAL, and this is the part that was actually broken. The
+  // stacked case used to be `min-h-dvh` plus the DOCUMENT scroll — but this app pins
+  // `html`, `body` and `#app` to `100dvh; overflow: hidden` (src/style.css), because the
+  // console shell scrolls through its own regions and the document must never move. So
+  // there was no document scroll to fall back to: everything past the fold was simply
+  // clipped and unreachable. Measured on a 375x667 phone before this change — /signup
+  // overran by 481px, /login by 290px, /signup/onboarding by 186px, with ZERO scrollable
+  // elements on the page. The network panel and the bottom of the form could not be
+  // reached at all. A shell that is the viewport has to carry the scroll zone itself.
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
   import GlobalHeader from '@aziontech/webkit/global-header'
@@ -42,7 +54,7 @@
 </script>
 
 <template>
-  <div class="flex min-h-dvh flex-col bg-(--bg-canvas) lg:h-dvh lg:overflow-hidden">
+  <div class="flex h-dvh flex-col overflow-hidden bg-(--bg-canvas)">
     <!-- `kind="content"`, the same call the docs bar and the console's own bar make.
          The kind is what decides the INSET: `app` is a flat `--spacing-md` (16 at every
          width) while every other bar in this app opens on `--layout-boundary-inline`
@@ -52,6 +64,7 @@
     <GlobalHeader
       kind="content"
       aria-label="Azion Console"
+      class="shrink-0"
     >
       <GlobalHeader.Brand>
         <!-- Signed-out screens: the brand mark goes back to the marketing home
@@ -92,10 +105,12 @@
       </GlobalHeader.Right>
     </GlobalHeader>
 
-    <!-- `lg:min-h-0` is what lets the body actually be the leftover height instead of
-         its own content height — without it a flex child refuses to shrink below its
-         content and the "no page scroll" above becomes a clip. -->
-    <main class="flex flex-1 flex-col lg:min-h-0">
+    <!-- The body is the leftover height, and below `lg` it is also the SCROLL ZONE.
+         `min-h-0` is what lets it actually be the leftover instead of its own content
+         height — without it a flex child refuses to shrink below its content and the
+         "no page scroll" above becomes a clip with nothing to scroll.
+         From `lg` the scroll moves down a level, into whichever half needs it. -->
+    <main class="flex min-h-0 flex-1 flex-col overflow-y-auto lg:overflow-hidden">
       <slot />
     </main>
   </div>

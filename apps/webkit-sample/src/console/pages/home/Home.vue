@@ -751,7 +751,7 @@
                 :description="AGENT_PROMO.description"
                 @activate="copyAgentPrompt"
               >
-                <!-- The marks are the EDITORS themselves, four of the five, matching the
+                <!-- The marks are the EDITORS themselves, four of the seven, matching the
                      cluster on every product's first use so the two are the same object at
                      the same width (../../components/home/IconFrame.vue is the one 32px
                      frame all three surfaces share). In color, not `mono`: here they are a

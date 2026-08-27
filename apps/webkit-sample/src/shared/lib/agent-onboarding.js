@@ -21,9 +21,29 @@ export const AGENT_SETUP_PROMPT =
 
 /**
  * The AI coding tools this onboarding targets, in the order they read best in a row.
- * Names match the marks `site/ui/AgentMark.vue` can draw.
+ * Names match the marks `ui/brand/AgentMark.vue` can draw.
+ *
+ * ALL SEVEN, matching the agent catalog the docs section documents
+ * (site/docs/lib/docs-agent-setup.js). It was five for a drawing reason and not a product
+ * one: Gemini and Copilot publish gradient marks, and two gradients among five flat glyphs
+ * read as two logos shouting over five, so they were left out of the row. The row's job is
+ * to answer "which tools?", and answering it with five of the seven the docs go on to
+ * document is the worse trade — so the marks are flattened to one ink instead (`mono` on
+ * `AgentMark`) and the list is whole.
+ *
+ * The two join at the END so the surfaces that draw a subset (`AGENT_TOOLS.slice(0, 4)` —
+ * the console Overview's rail card and its first-access twin, which fit four at a legible
+ * size) keep drawing the same four.
  */
-export const AGENT_TOOLS = ['claude', 'cursor', 'windsurf', 'codex', 'opencode']
+export const AGENT_TOOLS = [
+  'claude',
+  'cursor',
+  'windsurf',
+  'codex',
+  'opencode',
+  'gemini',
+  'copilot'
+]
 
 // ── DISMISSAL ──
 //

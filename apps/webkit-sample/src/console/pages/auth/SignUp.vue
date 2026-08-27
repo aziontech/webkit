@@ -335,39 +335,73 @@
               </div>
             </Transition>
           </div>
-
-          <p class="text-center text-body-sm text-(--text-muted)">
-            By signing up, you agree to the
-            <a
-              class="text-link"
-              href="https://www.azion.com/en/documentation/"
-              target="_blank"
-              >Terms of Service</a
-            >
-            and
-            <a
-              class="text-link"
-              href="https://www.azion.com/en/documentation/"
-              target="_blank"
-              >Privacy Policy.</a
-            >
-          </p>
         </form>
       </template>
     </CardBox>
 
-    <!-- Below the card, on the canvas — the design puts it outside the box
-             because it is not part of signing up. It is the way out of it. -->
+    <!-- Below the card, on the canvas. The card is the form — the fields, the
+             actions, and nothing else; everything that is ABOUT signing up rather
+             than part of it lives out here, which is where the way out already sat
+             and where the consent line joined it.
+
+             Two lines, in that order: the way out first, the legal sentence last.
+             The account link is navigation someone may actually be looking for; the
+             consent sentence is the quietest thing on the screen and belongs at the
+             floor of it.
+
+             Both are `text-body-xs`. At 14px they were a step ABOVE the 12px labels
+             naming the fields inside the card, which is the hierarchy upside down —
+             the labels are what the reader is here to act on. 12px is the floor of
+             the scale, so they land level with the labels rather than under them, and
+             the muted ink carries the rest of the demotion. Sign In's footer is the
+             same two lines with the same treatment. -->
     <div
-      class="flex w-full max-w-(--container-sm) items-center justify-center gap-(--spacing-xs)"
+      class="flex w-full max-w-(--container-sm) flex-col items-center gap-(--spacing-sm)"
     >
-      <p class="text-body-sm text-(--text-default)">Already have an account?</p>
-      <a
-        class="text-link text-body-sm"
-        href="/login"
-        @click.prevent="goToSignIn"
-        >Sign in</a
-      >
+      <div class="flex items-center justify-center gap-(--spacing-xs)">
+        <p class="text-body-xs text-(--text-default)">Already have an account?</p>
+        <a
+          class="text-link text-body-xs"
+          href="/login"
+          @click.prevent="goToSignIn"
+          >Sign in</a
+        >
+      </div>
+
+      <!-- The consent line, in the FIRST person. It used to read "By signing up,
+               you agree to…", which is the form telling the reader what they have
+               agreed to; "I agree" is the reader saying it, and a consent sentence
+               only works in the voice of the person consenting.
+
+               "By continuing" rather than "By signing up" because this screen has
+               three ways out — the email form and either provider button — and the
+               sentence has to cover all of them. It is also the same string Sign In
+               carries, so one sentence covers both doors into the product.
+
+               Sentence case per the microcopy standard: `Azion` capitalized, the
+               document names not. The two document names stay LINKS (the link
+               treatment, blue) — unlike the recovery link on Sign In, which went
+               grey. A link inside a sentence has the sentence to explain it and needs
+               the colour to be findable at all; a link standing alone under a field
+               is already the only thing on its line. -->
+      <p class="text-center text-body-xs text-(--text-muted)">
+        By continuing, I agree to Azion's
+        <a
+          class="text-link"
+          href="https://www.azion.com/en/terms-and-conditions/"
+          target="_blank"
+          rel="noopener noreferrer"
+          >terms of service</a
+        >
+        and
+        <a
+          class="text-link"
+          href="https://www.azion.com/en/privacy-policy/"
+          target="_blank"
+          rel="noopener noreferrer"
+          >privacy policy</a
+        >.
+      </p>
     </div>
   </div>
 </template>

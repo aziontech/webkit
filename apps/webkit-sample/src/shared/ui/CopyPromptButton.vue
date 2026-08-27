@@ -66,14 +66,23 @@
   //
   // WHY THE LAYERS ARE MIRRORED HERE rather than rendering `<ButtonHighlight>`: that
   // component is `label`-only — no slots — and this control's content is an Azion
-  // mark, a label that swaps to a confirmation, and five brand marks. So it borrows
+  // mark, a label that swaps to a confirmation, and seven brand marks. So it borrows
   // the pattern, not the component. If `ButtonHighlight` ever grows a default slot,
   // this should compose it and the three spans below should go.
   //
   // Left: the bare Azion mark, which keeps its own brand orange — it is the one mark
-  // that does not follow the surface. Right: the AI coding tools this onboarding
-  // targets. Claude keeps its brand colour; Cursor, Windsurf, Codex and OpenCode ship
-  // monochrome marks, so they ride `currentColor` — white here, on the dark pill.
+  // that does not follow the surface. Right: EVERY AI coding tool this onboarding targets,
+  // all seven, each one flat white on the dark pill.
+  //
+  // The row used to be five brand treatments — Claude in its own orange, four monochrome
+  // marks on `currentColor`, and Gemini and Copilot left out because their published marks
+  // are gradients. Both halves of that are fixed by the same move. The row's job is to
+  // answer "which tools?", and it was answering with five of the seven the docs section
+  // goes on to document; and a row of logos each in its own colour, sitting on a surface
+  // that is already a rotating three-stop glow, is the loudest thing on a button whose
+  // label the reader has not finished reading. `mono` on every mark (AgentMark's own
+  // flatten-to-`currentColor`) buys both: the list is whole, and it reads as a list —
+  // one ink, the pill's own white, seven silhouettes at one weight.
   //
   // A Tooltip on top explains what it does; clicking copies a ready-to-paste setup
   // prompt to the clipboard.
@@ -211,7 +220,7 @@
       <button
         type="button"
         :data-state="copied ? 'copied' : 'default'"
-        class="group/highlight relative isolate inline-flex h-10 max-w-full items-center justify-center overflow-hidden rounded-(--shape-elements) border border-(length:--border-width-default) border-(--secondary-mask) p-px transition-colors duration-fast-02 ease-productive-entrance focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
+        class="group/highlight relative isolate inline-flex h-10 max-w-full items-center justify-center overflow-hidden rounded-(--shape-elements) border-(length:--border-width-default) border-(--border-default) p-px transition-colors duration-fast-02 ease-productive-entrance focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
         @click="onCopy"
       >
         <!-- THE GLOW. The rotating glow, behind everything — `ButtonHighlight`'s
@@ -219,14 +228,14 @@
              oversized square. -->
         <span
           aria-hidden="true"
-          class="pointer-events-none absolute inset-0 animate-spin [animation-duration:8s] [animation-timing-function:linear] [background:linear-gradient(90deg,var(--color-base-white),var(--color-blue-500),var(--color-brand-primary-500))] [filter:blur(12px)] motion-reduce:animate-none"
+          class="pointer-events-none absolute inset-0 animate-spin [animation-duration:8s] [animation-timing-function:linear] [background:linear-gradient(90deg,var(--color-base-white),var(--color-blue-500),var(--color-brand-primary-500))] filter-[blur(12px)] motion-reduce:animate-none"
         />
 
         <!-- THE BASE. The brand-accent gradient, inset by the 1px the root pads out,
              so the rim reads as a hairline all the way around. -->
         <span
           aria-hidden="true"
-          class="pointer-events-none absolute inset-px rounded-[inherit] [background-image:linear-gradient(120deg,var(--color-brand-accent-900)_17%,var(--color-brand-accent-100)_53%,var(--color-brand-accent-600)_96%)] transition-opacity duration-300 ease-out group-hover/highlight:opacity-25 motion-reduce:transition-none"
+          class="pointer-events-none absolute inset-px rounded-[inherit] bg-[linear-gradient(120deg,var(--color-brand-accent-900)_17%,var(--color-brand-accent-100)_53%,var(--color-brand-accent-600)_96%)] transition-opacity duration-300 ease-out group-hover/highlight:opacity-25 motion-reduce:transition-none"
         />
 
         <!-- THE SCRIM. What darkens the resting pill and carries the white label at
@@ -260,18 +269,27 @@
             {{ currentLabel }}
           </span>
 
-          <!-- AI coding tools — bare brand logos on the pill, drawn by AgentMark
-               (Claude keeps its color; the other four ride currentColor). Not `mono`
-               here: on the pill they are a row of logos, so each brand's own treatment
-               is the point.
+          <!-- AI coding tools — all seven, drawn by AgentMark in `mono`, so every mark is
+               a flat silhouette in the pill's own ink (see the note above). `mono` is
+               `currentColor`, not a theme-driven black/white filter, which is what makes it
+               right here: this pill is dark in BOTH themes, so its marks take the white the
+               label is already set in and stop asking the theme.
 
                THEY STAY ON A PHONE. They used to be `hidden sm:flex`, which left the
                mobile pill as a bare text label — and the marks are not decoration on
                this control, they are the answer to "which tools?", the one thing the
                label cannot say in two words. What gives instead is the ROW's own gap:
-               `xxs` (4) below `sm`, the `xs` (8) it is drawn at from `sm` up. Same
-               marks, same size, one rung tighter — 120px of row on a phone against
-               136, so the pill stays a pill on a 320 column. -->
+               `xxs` (4) below `sm`, the `xs` (8) it is drawn at from `sm` up — 164px of
+               row on a phone against 188.
+
+               The two extra marks cost width, and it is worth knowing what they cost:
+               measured at 390, the docs hero's "Copy prompt" pill goes 259 → 307 and the
+               Hub's longer "Start with Agents" 288 → 336. Both still draw as one pill with
+               the label untruncated — the label is `truncate`, so it is what would give
+               first. What moves is where a hero's action ROW breaks: the docs pair needs
+               439px for one line instead of 391, so it stacks below a 465px viewport
+               instead of below 419. Below 419 it stacked already, so a phone sees the same
+               two rows it saw before. -->
           <span
             class="ml-(--spacing-xxs) flex shrink-0 items-center gap-(--spacing-xxs) sm:gap-(--spacing-xs)"
             aria-hidden="true"
@@ -280,6 +298,7 @@
               v-for="agent in AGENT_TOOLS"
               :key="agent"
               :name="agent"
+              mono
               class="size-(--size-5)"
             />
           </span>

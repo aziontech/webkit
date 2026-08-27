@@ -13,9 +13,9 @@
   //     themes. Every path is `fill-rule="evenodd"` as published, on a 24-square `viewBox`.
   //   • A FULL-COLOUR mark, kept as its published `.svg` file in ./agents and imported `?raw`.
   //     Gemini and Copilot are gradients (Gemini's is a masked stack of blurred blobs), so there
-  //     is no path and no single fill to give them: reducing either to one colour would not be
-  //     their logo. The file is inlined verbatim so nothing is redrawn by hand, and its own ids
-  //     are namespaced per instance below.
+  //     is no path and no single fill to give them: at full colour, reducing either to one hex
+  //     would not be their logo. The file is inlined verbatim so nothing is redrawn by hand, and
+  //     its own ids are namespaced per instance below. `mono` flattens them too — see the prop.
   //
   // Either way the root element is an `<svg>` with a `viewBox` and no intrinsic size, so one size
   // class from the caller sizes any mark and `[&>svg]` selectors (DocCard's icon region) match.
@@ -24,7 +24,6 @@
 
   import copilotSvg from './agents/copilot.svg?raw'
   import geminiSvg from './agents/gemini.svg?raw'
-  import { MONOCHROME_FILTER } from './clients/index.js'
 
   const props = defineProps({
     // Which agent's mark to draw.
@@ -34,10 +33,23 @@
       validator: (value) =>
         ['claude', 'cursor', 'windsurf', 'codex', 'opencode', 'gemini', 'copilot'].includes(value)
     },
-    // Drops Claude to `currentColor` like the other four. For a drawing where the marks are
-    // parts of one diagram rather than a row of logos — one brand colour in there reads as a
-    // highlight nobody meant, and it collides with Azion's own orange. A full-colour mark has
-    // no colour to drop, so it takes the flat-silhouette filter the client marks use instead.
+    // Flattens the mark to ONE ink: `currentColor`, whatever the surface holding it is set to.
+    // For a drawing where the marks are parts of one diagram rather than a row of logos — one
+    // brand colour in there reads as a highlight nobody meant, and it collides with Azion's own
+    // orange — and for a surface with its own ink to lend, like the AI pill's white on its dark
+    // scrim (ui/CopyPromptButton.vue).
+    //
+    // A single-path mark simply takes `fill="currentColor"`. A FULL-COLOUR mark has no single
+    // fill to swap, so the fill is set in CSS instead (`MONO_INK`): a CSS declaration beats the
+    // `fill="url(#…)"` presentation attribute the published file ships, so every gradient
+    // collapses to the one ink and the overlapping paths union into the mark's silhouette.
+    //
+    // NOT the client marks' `brightness(0)` + `invert` silhouette (`MONOCHROME_FILTER`): that one
+    // is black or white BY THEME, which is what a mark sitting on the page surface needs and the
+    // wrong answer on a surface that is dark in both themes — it would paint a black Gemini on
+    // the pill in light mode. Asking `currentColor` asks the SURFACE instead of the theme, so
+    // both cases are one rule, and a mono full-colour mark now matches the path marks beside it
+    // (`--text-muted` in a drawing) instead of going pure black or pure white on its own.
     mono: { type: Boolean, default: false }
   })
 
@@ -86,6 +98,20 @@
   const mark = computed(() => MARKS[props.name])
 
   /**
+   * `mono`'s one ink for a mark whose fills live inside the published file.
+   *
+   * The blur filters STAY. Turning them off as well (`filter: none`, so the flattened blobs
+   * would be crisp) tears a hole through Gemini's star: its blobs only cover the mask once they
+   * are blurred, and unblurred they leave a wedge of the star empty. Blurred and flattened, the
+   * overlap is solid — measured against the unblurred variant at 80px, where the wedge is
+   * obvious, and at the 20px the pill draws them, where neither variant shows a seam.
+   *
+   * `path` covers both files inlined here; a future mark drawn with another shape element
+   * extends this selector.
+   */
+  const MONO_INK = '[&_path]:fill-current'
+
+  /**
    * A gradient mark carries its own `id`s, and two of the same mark on one page would declare
    * them twice — the second stack then paints from the first one's defs. Every id is suffixed
    * with this instance's own, so each copy references only its own gradients, masks and filters.
@@ -108,7 +134,7 @@
     xmlns="http://www.w3.org/2000/svg"
     role="img"
     :aria-label="mark.label"
-    :class="['shrink-0', mono && MONOCHROME_FILTER]"
+    :class="['shrink-0', mono && MONO_INK]"
     :innerHTML.prop="body"
   />
 

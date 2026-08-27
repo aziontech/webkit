@@ -432,14 +432,19 @@
       <!-- THE AGENT. Product-independent — the same offer on every module's first use,
            and the same one the pill on Overview makes — so its copy is one shared const
            rather than a line repeated in nine products. The marks are the editors
-           themselves, drawn by AgentMark: four of the five, matching the catalog card's
+           themselves, drawn by AgentMark: four of the seven, matching the catalog card's
            four beside it, so the two clusters are the same object at the same width.
-           IN COLOR, not `mono`. The pill on Overview draws them the same way, and for the
-           same reason: here they are a row of LOGOS, so each brand's own treatment is what
-           makes the row scannable — a reader spots the editor they use before reading a
-           word. (Only Claude actually carries a brand color; the other four ride
-           currentColor by their own guidelines, so this is one warm mark in four rather
-           than four colors competing.) -->
+           IN COLOR, not `mono`: here they are a row of LOGOS in their own 32px frames, so
+           each brand's own treatment is what makes the row scannable — a reader spots the
+           editor they use before reading a word. (Only Claude actually carries a brand
+           color; the other three ride currentColor by their own guidelines, so this is one
+           warm mark in four rather than four colors competing.)
+
+           The pill on Overview used to draw them the same way and no longer does — it
+           carries ALL SEVEN, gradients included, on its own rotating glow, and seven brand
+           treatments there compete with the label instead of scanning; so it flattens its
+           row to one ink (`mono`) while these four, four frames on a plain surface, keep
+           theirs. -->
       <FirstUsePromo
         :title="AGENT_PROMO.title"
         :description="AGENT_PROMO.description"

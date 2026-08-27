@@ -1,8 +1,8 @@
 <script setup>
   // Banner backdrop: the pixel world map — a dotted landmass of ~5100 uniform
-  // squares with an 82-square PoP field picked out in the brand accent,
-  // exported from Figma at 1594x936 (./Map.svg) and rendered cropped to the
-  // PoPs (see the viewBox note in the template).
+  // squares with a 49-square PoP field picked out in the brand accent, exported
+  // from Figma at 1594x936 (./Map.svg) and rendered cropped to the transatlantic
+  // corridor (see the viewBox note in the template).
   //
   // The artwork is inline rather than an <img src="Map.svg">, because a CSS
   // custom property cannot reach inside an <img>: loaded as an asset both of
@@ -10,12 +10,39 @@
   // copy (the pattern ../clients/index.js is stuck with). Inlined, the two
   // source colours become tokens:
   //
-  //   #1A1A1A (5045 squares, the landmass) -> no fill at all, so each square
-  //           inherits `currentColor` from its <svg>. The root sets that to
-  //           --text-muted, which flips with the theme; a page that wants a
-  //           different ink overrides one class.
-  //   #F3652B (82 squares, the route)      -> --primary, the same brand accent
-  //           in both themes.
+  //   #1A1A1A (the landmass) -> no fill at all, so each square inherits
+  //           `currentColor` from its <svg>. The root sets that to --text-muted,
+  //           which flips with the theme; a page that wants a different ink
+  //           overrides one class.
+  //   #F3652B (the route)   -> --primary, the same brand accent in both themes.
+  //
+  // ── WHERE THE ACCENT NODES ARE, AND WHY ──
+  //
+  // The 82 nodes the Figma export shipped were not a network, they were a map of
+  // where the company started: 61 of them sat in South America, 47 of those in a
+  // single solid slab down the Brazilian coast, against 15 in North America and
+  // exactly ONE in Europe. Rendered, that is not "the most reliable distributed
+  // network on the planet" — it is an orange smear over Brazil with some texture
+  // elsewhere, and it argues regional where the sentence above it argues global.
+  //
+  // The field is therefore REBALANCED, never thinned. Every square that stops being
+  // an accent goes BACK to the landmass layer, and every new accent is a square
+  // taken OUT of it — dropping one without returning it punches a hole in the dot
+  // grid, and the two sets never share a coordinate (see below). The counts are the
+  // one thing to keep honest when editing:
+  //
+  //   62 accents — 28 North America, 28 Europe, 4 South America, 2 Mediterranean.
+  //
+  // The two ends of the corridor now carry equal weight and South America is a light
+  // scatter rather than a chain, so the eye follows the transatlantic band instead of
+  // being pulled down the Brazilian coast. Promotions are placed with a minimum
+  // spacing (30 units in North America, 24 in the denser European landmass) so they
+  // read as distinct nodes instead of clumping into a blob.
+  //
+  // If you re-export the artwork from Figma you get the original distribution back
+  // and this rebalance has to be redone.
+  //
+  // Both framings below are aimed at that corridor.
   //
   // The two colours are drawn as two layers, not one, because they play
   // different roles. The landmass is texture and belongs UNDER the scrims; the
@@ -35,18 +62,30 @@
   //
   //   'hero'  (default) — the wide marketing band. Copy sits on the left, so the
   //           map is inset to the right of it and framed on the CROPPED viewBox
-  //           documented in the template (a 2.3x zoom onto the PoP field).
-  //   'panel' — a PORTRAIT column, the art half of the 50/50 auth split. Two
-  //           things have to change there, and both for the same reason: the box
-  //           is taller than it is wide. The inset goes to 0 (there is no copy
-  //           beside the map — the map IS the half), and the framing goes back
-  //           to the FULL artwork fitted with `slice` instead of the crop fitted
-  //           with `meet`. `meet` on a 0.78-ratio box fits the 1.70-ratio crop by
-  //           WIDTH, which lands the map as a letterboxed strip floating in the
-  //           middle of the column with empty bands above and below it. `slice`
-  //           fits by height and crops the width, so the artwork fills the column
-  //           edge to edge; on the full 1594x936 that leaves the Americas — the
-  //           densest part of the PoP field — in frame at roughly 1:1.
+  //           documented in the template.
+  //   'panel' — a PORTRAIT column, the art half of the 50/50 auth split. The
+  //           inset goes to 0 (there is no copy beside the map — the map IS the
+  //           half) and the crop opens up, because the same band has to survive a
+  //           box that is taller than it is wide.
+  //
+  // BOTH framings hold the same subject: the transatlantic band, x 162-864 /
+  // y 152-446, which is every North American and European node. That band is
+  // 2.4:1. The hero's box is 1.70:1 and the panel's region is ~1.36:1, so they
+  // cannot fit it the same way.
+  //
+  // The hero crops to the band's own ratio and fills. The panel CANNOT: `slice`
+  // on a portrait box scales by height, so covering 844px of column from a 520px
+  // -tall viewBox blows the width up past 1160px and crops ~220px off each side —
+  // which is exactly the US west coast and the eastern edge of Europe, the two
+  // things the frame exists to show. So the panel fits by WIDTH (`meet`), which
+  // keeps the whole band and scales it down instead.
+  //
+  // `meet` does NOT letterbox here, and that is worth knowing before you reach for
+  // `slice` to avoid one. An SVG clips to its ELEMENT, not to its viewBox, so the
+  // bands `meet` leaves above and below the fitted box are filled by the rest of
+  // the artwork bleeding into them — Canada and the Arctic above, the Amazon and
+  // West Africa below. The frame is a window onto a continuous map, not a picture
+  // with margins, which is why the radial mask is what ends it.
   import { computed } from 'vue'
 
   const props = defineProps({
@@ -59,80 +98,214 @@
 
   const isPanel = computed(() => props.kind === 'panel')
 
-  // BOTH artwork layers bind these same two values — see the template note. The
+  // BOTH artwork layers bind these same three values — see the template note. The
   // landmass and the route are registered to each other by nothing but a shared
   // frame, so they are computed once here rather than written twice.
-  const viewBox = computed(() => (isPanel.value ? '0 0 1594 936' : '143 334 700 412'))
-  const fit = computed(() => (isPanel.value ? 'xMinYMid slice' : 'xMaxYMid meet'))
+  //
+  // Both crops are aimed at the transatlantic band (x 162-879 / y 152-441 holds
+  // every North American and European node) with enough margin around it that the
+  // frame reads as a world map rather than a zoom on two continents:
+  //
+  //   hero  — `150 115 760 447`, ratio 1.70. It opens 12px west of the westernmost
+  //           node and runs from above Scandinavia down to the top of South America,
+  //           which keeps West Africa and the Amazon on the bottom edge as context.
+  //   panel — `101 100 820 411`, ratio 2.00: the SAME window as the hero, cropped
+  //           hard on the vertical and opened ~14% for zoom (below).
+  //
+  // WHY THE PANEL'S CROP IS THE SHORTER ONE. Width is the only zoom control under
+  // `meet` — the box fits by whichever axis constrains it, the horizontal one here,
+  // so the vertical range changes WHICH rows are in frame and nothing else.
+  //
+  // So the way to give North America and Europe more of the FRAME is to take rows off
+  // the top and bottom, and the way to change the ZOOM is the horizontal span. The two
+  // are set independently and both are load bearing:
+  //
+  //   vertical — 100 -> 511 holds the corridor (152-446) with ~50 units of margin
+  //     above and ~65 below, placing it at 13%-84% of the fitted box rather than the
+  //     10%-66% the original 520-tall crop left it at. That is the difference between
+  //     a corridor sitting high with dead map under it and a corridor that IS the
+  //     frame. Everything past the box still renders (Canada above, the Amazon below);
+  //     it is bleed, and the seam masks fade it.
+  //   horizontal — 820 units across a column that is now 864px wide (the split went
+  //     40/60 in the panel's favour) draws each node at 5.2px. This was 722 units,
+  //     which the wider column blew up to 5.96px — the split had silently zoomed the
+  //     map in, because node size is layerWidth/viewBoxWidth and only one of those
+  //     changed. 5.2 sits where the artwork reads as a map rather than as tiles (an
+  //     860-wide box on the old 720px column drew 4.2px, which is grain).
+  //
+  // Opening the width also bought the LEFT SEAM its margin. At 722 the westernmost
+  // accent sat at 1.6% of the layer, hard against the very edge the `mask-l` ramp
+  // fades; at 820 it sits at 7.4%, so the ramp now has ocean to work in and dims far
+  // less of the west coast.
+  const viewBox = computed(() => (isPanel.value ? '101 100 820 411' : '150 115 760 447'))
+  // `YMin` on the panel, not `YMid`: its box IS the map's band (see `LAYER_BOX`), so
+  // the artwork starts at the TOP of it and any leftover falls at the bottom, where
+  // the bleed is welcome and the bottom mask dissolves it. `YMid` would split that
+  // leftover in two and open a gap between the copy and the map.
+  const fit = computed(() => (isPanel.value ? 'xMidYMin meet' : 'xMaxYMid meet'))
 
-  // Where the artwork sits in the box — the third thing both layers have to agree
-  // on, and the reason it is computed once here rather than written twice.
+  // Where the artwork sits — the third thing both layers have to agree on, and the
+  // reason it is stated once here rather than written twice.
   //
-  // The panel lifts it, and lifts it with `top` ALONE. `slice` on a portrait column
-  // covers the height exactly, so the Y alignment keyword does nothing and the
-  // landmass lands dead centre — which puts the PoP field, the 82 accent squares
-  // that are the whole reason this artwork is on a signup screen, low in the column
-  // with its densest cluster (South America) buried under the trust strip.
+  // THE BOX IS THE BOX THE COMPONENT WAS GIVEN. Both framings fill their container
+  // (`top-0 h-full`); what differs is what that container IS. The hero drops this
+  // component into a full band and parks the artwork on the right of it. The panel
+  // drops it into a `flex-1` region that is, by construction, everything the headline
+  // block left over (see NetworkPanel) — so "the map starts under the copy" is a fact
+  // of the layout rather than a percentage anyone has to keep in sync with how the
+  // copy happens to wrap. On a 720px-wide half that region is ~62% of the column.
   //
-  // Oversizing the box to lift it does not work, and the arithmetic is worth keeping
-  // so nobody retries it: `slice` derives its scale from the box, so a taller box
-  // zooms in by the same factor it rises, and the bottom of the field ends up back
-  // where it started. Measured on a 928px column, -6% / 106% moved the cluster's
-  // floor from 764px to 755px — nine pixels for a 6% zoom. Holding the height at
-  // 100% and hanging the box off the top edge is a pure translation: -13% raises
-  // the field ~120px and lands the cluster around mid-column, in the clear band
-  // between the headline and the marks.
-  //
-  // That leaves the bottom 13% of the column with no artwork, which is the point
-  // rather than a cost — it is the band the trust strip sits in, and it was already
-  // being erased there by the radial mask and the bottom of the wash.
-  const layerBox = computed(() => (isPanel.value ? '-top-[13%] h-full' : 'top-0 h-full'))
+  // This replaced a hand-tuned band (a layer hung at 12%, `YMid` centring the artwork
+  // in the leftover slack, and a wash erasing whatever it reached), which resolved to
+  // 44%-93% of the column side by side and broke outright when stacked.
+  const LAYER_BOX = 'top-0 h-full'
 
-  // The vignette, which has to be re-aimed whenever the box moves. It is a radial
-  // gradient in the LAYER's coordinate space, so lifting the layer lifts the mask
-  // with it — and the first cut of the panel lift did exactly that, carrying the
-  // bright centre up off the PoP field and fading the cluster it was raised to
-  // feature. Aiming it at 63% down the layer puts the centre back over the middle
-  // of the COLUMN (the panel's midpoint sits 585px into a 928px layer hung 121px
-  // above it), and the wider black stop keeps the whole accent field inside the
-  // opaque core instead of on the ramp.
+  // How the artwork ENDS. The hero keeps a radial vignette — its box already ends at
+  // its own edges, so it only needs its corners taken off, and a radial is the right
+  // shape for a corner.
+  //
+  // THE PANEL IS LINEAR, AND THAT IS THE POINT. A radial ellipse over a portrait
+  // column is a shape the reader can see: it pinches the map inward at the top and
+  // bottom corners and draws a curved edge across an otherwise flat composition, so
+  // the artwork reads as a cut-out dropped onto the panel rather than as the panel's
+  // own ground. That curve is the visual break — it announces an edge exactly where
+  // the map should simply be dissolving into canvas.
+  //
+  // TWO composed LINEAR masks replace it (Tailwind's `mask-t-from-*` / `mask-b-from-*`,
+  // which intersect: each is its own `linear-gradient` mask layer under
+  // `mask-composite: intersect`) — and TWO is the whole point, not four.
+  //
+  //   t 70% — the seam with the copy above. The map's box is pulled UP so the artwork
+  //           BLEEDS into the last row of claim chips (see NetworkPanel), so this ramp
+  //           is doing two jobs at once: keeping that overlap imperceptible where the
+  //           pills are, and giving the artwork no row where it visibly "starts".
+  //
+  //           Its length is therefore not a free choice — it is set by how far the
+  //           bleed reaches. The two move together: 86% was right when the overlap was
+  //           24px, and reaching 48px needs 70%. Change one and re-measure the other
+  //           (the sweep and its numbers are recorded in NetworkPanel).
+  //
+  //           The LENGTH of it is the whole judgement, and it was tuned by measuring
+  //           rather than by eye. The fitted artwork occupies only the top ~360px of a
+  //           ~577px region (the rest is bleed), so a ramp over the top third was
+  //           eating half the map — the top band read at 19/255 against the canvas,
+  //           and Europe, which sits high in the frame, went nearly invisible with it.
+  //           Sampled across 68/74/80/86/92/100%: 86 puts the topmost band at 41 and
+  //           is at full strength by 20% down, which is a fade you can still see
+  //           working. 92 and above stop reading as a fade and put an edge back.
+  //   b 62% — the seam with the bottom of the page. The bottom third dissolves so the
+  //           map runs all the way down and ends in canvas rather than at a border.
+  //
+  //   l 86% — the seam with the other half. The panel's left edge is where the map
+  //           meets the FORM column, and it was the last flat cut left: measured, the
+  //           artwork went from nothing to full strength inside 0.8 points of the
+  //           layer width, which is a butt joint, not a composition. This ramp opens
+  //           it to ~12 points.
+  //
+  // THE RIGHT EDGE STAYS UNMASKED, and that distinction is the whole rule. Fading all
+  // four sides is the radial's mistake drawn with straight lines: it puts a soft
+  // rectangle around the artwork, and a reader sees a rectangle the same way they see
+  // an ellipse — as a shape the map has been cut into. A linear fade belongs on a
+  // CONNECTION between blocks: the copy above, the page below, the form beside. The
+  // right edge is the page's own edge and connects to nothing, so it gets nothing and
+  // the map simply runs off it.
+  //
+  // THE LEFT RAMP ENDS AT 30% ALPHA, NOT 0, and that is load bearing. The corridor's
+  // westernmost accents sit at ~1.6% of the layer width — the US west coast is hard
+  // against this very edge — so a ramp to full transparency does not soften the seam,
+  // it deletes the Pacific side of North America. `mask-l-to-[rgb(0_0_0_/_0.3)]` sets
+  // the gradient's END COLOUR rather than its position, so the edge lands at 30%
+  // opacity: a seam you read as a fade, with the nodes still on it. Sampled at
+  // 92/45, 88/35, 84/25, 80/15 and 80/0 — the last erases the west coast (2% of peak
+  // at the edge) and is what a naive `mask-l-from-80%` would have shipped.
+  //
+  // The t/b ramps also do the job the radial was really there for: holding back the
+  // vertical bleed. `meet` fits the crop and the rest of the artwork fills the
+  // leftover box (Canada above, the Amazon and West Africa below).
+  // The hero reaches the same left seam a different way. Its copy sits ON the artwork,
+  // so it already has a left-to-right scrim — but the scrim is transparent by 50% of
+  // the band and the map layer only starts at 42%, so the artwork was arriving at ~84%
+  // strength in its first column and measured just as flat as the panel (0.7 points).
+  // It therefore takes the same `mask-l-*` ramp, on top of the scrim.
+  //
+  // Its vignette moves from the arbitrary `mask-[radial-gradient(...)]` to the
+  // COMPOSABLE radial utilities, because the two spellings cannot coexist: the
+  // arbitrary form assigns `mask-image` outright, while `mask-l-*` assigns
+  // `mask-image: var(--tw-mask-linear), var(--tw-mask-radial), var(--tw-mask-conic)`
+  // with `mask-composite: intersect` — declare both and whichever the cascade emits
+  // last silently wins. In composable form the linear ramp and the radial vignette are
+  // two intersected layers, which is what we actually want. The output is identical:
+  // Tailwind's own defaults for the radial are `ellipse`, `farthest-corner` and
+  // `at center` (checked against the emitted `@property` initial values, not assumed),
+  // which is exactly what `radial-gradient(ellipse at center, …)` resolved to.
   const layerMask = computed(() =>
     isPanel.value
-      ? 'mask-[radial-gradient(ellipse_at_50%_63%,black_72%,transparent_108%)]'
-      : 'mask-[radial-gradient(ellipse_at_center,black_62%,transparent_104%)]'
+      ? 'mask-t-from-70% mask-b-from-62% mask-l-from-86% mask-l-to-[rgb(0_0_0_/_0.3)]'
+      : 'mask-ellipse mask-radial-at-center mask-radial-from-62% mask-radial-to-104% mask-l-from-86% mask-l-to-[rgb(0_0_0_/_0.3)]'
   )
 
-  // The route's mask — the one thing the two layers do NOT share.
+  // HOW LOUD THE INK IS — one value, both framings. The grey landmass is the ground
+  // and the route is the subject, and the ONLY lever that separates them is how far
+  // down the ground goes: the route is already at full `--primary` and there is
+  // nothing above 100%, so any extra prominence the nodes get has to be bought by
+  // taking the grey away.
   //
-  // The route is drawn ABOVE the scrims (see the template note on why), so no
-  // amount of wash can touch it: on the panel that means the accent squares at the
-  // bottom of the field keep their full brand saturation exactly where the trust
-  // strip's 24px marks are, and an orange square behind a flat silhouette is the
-  // one thing that costs those marks their edges. The panel therefore intersects
-  // the shared radial mask with a bottom cut, so the route ENDS just above where
-  // the wash goes solid instead of running under the strip.
+  // It used to be two values — the hero at 60% because "a marketing band can carry the
+  // brand at full strength", the panel at 35% because it sits beside a form someone is
+  // typing into. That was the wrong axis. What the map is FOR is the same on both
+  // surfaces: the nodes are the argument, and the coastline is only there so you can
+  // tell where they are. A band that renders the same artwork over a louder ground is
+  // not a bolder version of the claim, it is a weaker one — the grid becomes the
+  // subject and the network becomes flecks in it.
   //
-  // `intersect`, not the default `add`: a pixel survives only where both masks keep
-  // it, so the radial's own edge fade is preserved rather than being filled back in
-  // by the linear one.
+  // Measured at 1440x900, peak node against peak coastline, sampled over the Europe
+  // and North America clusters (both clusters gave identical peaks):
   //
-  // Its radial half must stay identical to `layerMask` — same centre, same stops —
-  // or the route fades on a different curve than the coastline it sits on and the
-  // accent squares dim out of a landmass that is still at full strength.
+  //   site band, dark canvas #000        auth panel, light canvas #FAFAFA
+  //     60%  grey 77  — the shipped grid   35%  grey 43
+  //     40%  grey 51  node 83   1.6x       25%  grey 31  node 118  3.8x
+  //     25%  grey 32  node 88   2.8x
   //
-  // Both stops are expressed in the LAYER's box, which the panel hangs 13% of the
-  // column above the column's own top, so a layer fraction f sits at
-  // `f * 928 - 121` down a 928px column. The cut is set from where the marks are,
-  // not from a round number: the accent field now ends at 647px (f = 0.83), the
-  // overline starts at 744 (f = 0.93), so holding black to 84% keeps every node and
-  // clearing by 93% guarantees no orange square can land behind a 24px silhouette.
-  // After the lift this is a guard rather than a crop — the field no longer reaches
-  // the strip on its own — and it is the guard that keeps it that way.
-  const routeMask = computed(() =>
-    isPanel.value
-      ? 'mask-[radial-gradient(ellipse_at_50%_63%,black_72%,transparent_108%),linear-gradient(to_bottom,black_0%,black_84%,transparent_93%)] [mask-composite:intersect]'
-      : 'mask-[radial-gradient(ellipse_at_center,black_62%,transparent_104%)]'
-  )
+  // The two themes are not comparable to each other — #808080 is 128 off black and
+  // only 122 off #FAFAFA, and the accent has much further to travel from black — so
+  // read each column against itself. The 60% and 35% greys are derived (`128 * alpha`
+  // dark, `122 * alpha` light, which the measured rows confirm to within a unit); the
+  // rest is sampled off a screenshot.
+  //
+  // The node figure drifts slightly with the grey (83 -> 88) because what is observable
+  // is whatever the seam mask leaves at that point and the peak pixel picks up its
+  // neighbours; the route shares this layer's mask (see `routeMask`), so within any one
+  // pixel the two layers are scaled identically and the ratios above hold everywhere on
+  // the artwork, not only where the mask is fully open.
+  //
+  // 25% puts the coastline ~31/255 off the canvas in light and ~32/255 in dark: enough
+  // to read every landmass, not enough to read as a pattern. Below that the continents
+  // start dissolving and the nodes lose the geography that is what makes them mean
+  // anything — which is what took the hero's below-`lg` `opacity-70` wrapper out with
+  // this change. That wrapper was a second softening, stacked on the first: below `lg`
+  // the hero's map is no longer the art half beside the copy but sits nearly full-bleed
+  // behind it, and at a 60% landmass it needed holding back. Against 25% it multiplies
+  // to 0.175 and the coastline lands at 22/255 in dark — measured at 390x844, a map you
+  // cannot read with orange flecks scattered on nothing. One softening is the whole
+  // budget; the landmass opacity is where it is spent, at every width.
+  //
+  // The route stays `--primary`, both framings, and that is a correction worth
+  // recording. Softening a map by mixing the accent toward `--text-muted` was tried
+  // and rejected: 40% of the brand into a mid grey resolves to a muddy brown
+  // (rgb 174,117,94), which does not read as "quieter orange" — it reads as DIRTY
+  // orange, a colour that is in the palette of nothing. Saturation is not the knob
+  // for loudness here. The grey landmass and the long seam fades are what make the
+  // map recede; the nodes are the one thing on it that is supposed to be a colour,
+  // and a design system has exactly one of those.
+  const LANDMASS_INK = 'text-(--text-muted) opacity-25'
+
+  const ROUTE_INK = 'fill-(--primary)'
+
+  // The route shares the landmass's mask, and must keep sharing it: the two layers
+  // are registered to each other by nothing but a common frame, so a route that
+  // faded on a different curve than the coastline under it would visibly detach at
+  // the edges. One computed, referenced twice, cannot drift from itself.
+  const routeMask = layerMask
 </script>
 
 <template>
@@ -142,7 +315,7 @@
     :class="
       isPanel
         ? '[--map-inset-inline-start:0%]'
-        : 'opacity-70 lg:opacity-100 [--map-inset-inline-start:8%] lg:[--map-inset-inline-start:42%]'
+        : '[--map-inset-inline-start:8%] lg:[--map-inset-inline-start:42%]'
     "
   >
     <!-- Both artwork layers share ONE box — the right part of the band, opened
@@ -164,38 +337,36 @@
          still holds the foreground; from lg up, where copy and map own separate
          halves, it renders at full strength.
 
-         The viewBox is CROPPED to the PoP field, not the whole 0 0 1594 936
-         artwork: the 82 accent squares span x 162-824 / y 202-774, and roughly
-         three-quarters of them sit in two clusters (South America, then North
-         America). Framing 143 334 700 412 is a 2.3x zoom onto exactly that, so
-         individual nodes read as nodes — and as something PULSING — instead of
-         dissolving into the dot grid. Its 1.70 ratio is the band's own, so the
-         artwork fills the box with no letterboxing.
+         The viewBox is CROPPED, not the whole 0 0 1594 936 artwork: `160 120
+         780 460` is a ~2x zoom on the transatlantic band, so individual nodes
+         read as nodes — and as something PULSING — instead of dissolving into
+         the dot grid. Its 1.70 ratio is the band's own, so the artwork fills the
+         box with no letterboxing.
 
-         That crop is the pick off a measured curve, not a guess. Holding this
-         centre and tightening the window costs nodes to the edges: 884 wide
-         keeps 81 of 82, 800 keeps 78, 740 keeps 72, 700 keeps 67, 660 keeps 61.
-         700 buys a 26% bigger node for 15 nodes off the rim, and leaves the
-         right edge at x=843 — still into Africa, so "100+ data centers" reads
-         global rather than regional. Tighten it further and the map stops
-         being a map.
+         The crop is set by what has to survive it, not by a round number. Every
+         North American and European node lies inside x 162-879 / y 152-441, so
+         the window opens 40px to the left of the westernmost node and closes
+         60px past the easternmost, and runs from above Scandinavia down to the
+         Amazon — which keeps West Africa and the top of South America on the
+         bottom edge as context. Tighten it further and it stops being a map;
+         open it and the nodes go back to being grain.
 
          BOTH layers must carry the same viewBox, the same fit and the same box.
          They are registered to each other by nothing but the shared frame;
          change one alone and the route slides off its coastline. That is why
-         both bind the `viewBox` / `fit` / `layerBox` computeds rather than
+         both bind the shared `viewBox` / `fit` / `LAYER_BOX` values rather than
          spelling the values out twice.
 
-         `meet` fits the crop instead of cropping it further, and `xMax` parks
-         it against the right edge. Either way the cells stay square; the grid
-         is never stretched into rectangles. The 'panel' framing swaps both
-         values (full artwork, `slice`) for the reason given in the script. -->
+         `meet` fits the crop instead of cropping it further, and `xMax` parks it
+         against the right edge, away from the copy. The cells stay square; the
+         grid is never stretched into rectangles. The 'panel' framing opens the
+         same window wider and centres it, for the reason given in the script. -->
     <svg
       :viewBox="viewBox"
       :preserveAspectRatio="fit"
       fill="currentColor"
-      class="absolute left-(--map-inset-inline-start) w-[calc(100%_-_var(--map-inset-inline-start))] text-(--text-muted) opacity-60"
-      :class="[layerBox, layerMask]"
+      class="absolute left-(--map-inset-inline-start) w-[calc(100%_-_var(--map-inset-inline-start))]"
+      :class="[LAYER_BOX, layerMask, LANDMASS_INK]"
     >
       <path d="M42.3203 151.85V156.829H47.299V151.85H42.3203Z" />
       <path d="M32.3633 161.807V166.786H37.342V161.807H32.3633Z" />
@@ -1023,7 +1194,6 @@
       <path d="M968.359 560.107V565.086H973.338V560.107H968.359Z" />
       <path d="M968.359 570.065V575.044H973.338V570.065H968.359Z" />
       <path d="M888.703 540.192V545.171H893.682V540.192H888.703Z" />
-      <path d="M888.703 485.426L888.703 480.447L893.682 480.447L893.682 485.426L888.703 485.426Z" />
       <path d="M888.703 460.534V465.513H893.682V460.534H888.703Z" />
       <path d="M888.703 450.574V455.553H893.682V450.574H888.703Z" />
       <path d="M888.703 440.618V445.597H893.682V440.618H888.703Z" />
@@ -2226,12 +2396,10 @@
       <path d="M848.875 141.894V146.873H853.854V141.894H848.875Z" />
       <path d="M838.914 141.894V146.873H843.893V141.894H838.914Z" />
       <path d="M828.957 141.894V146.873H833.936V141.894H828.957Z" />
-      <path d="M828.957 151.851V156.83H833.936V151.851H828.957Z" />
       <path d="M838.914 151.851V156.83H843.893V151.851H838.914Z" />
       <path d="M848.875 151.851V156.83H853.854V151.851H848.875Z" />
       <path d="M868.789 151.851V156.83H873.768V151.851H868.789Z" />
       <path d="M858.828 151.851V156.83H863.807V151.851H858.828Z" />
-      <path d="M858.828 161.808V166.787H863.807V161.808H858.828Z" />
       <path d="M868.789 161.808V166.787H873.768V161.808H868.789Z" />
       <path d="M878.742 161.808V166.787H883.721V161.808H878.742Z" />
       <path d="M878.742 171.767V176.746H883.721V171.767H878.742Z" />
@@ -2261,29 +2429,21 @@
       <path d="M819 161.808V166.787H823.979V161.808H819Z" />
       <path d="M828.957 161.808V166.787H833.936V161.808H828.957Z" />
       <path d="M799.086 161.808V166.787H804.065V161.808H799.086Z" />
-      <path d="M799.086 171.767V176.746H804.065V171.767H799.086Z" />
       <path d="M789.125 181.724V186.703H794.104V181.724H789.125Z" />
       <path d="M779.172 191.681V196.66H784.151V191.681H779.172Z" />
       <path d="M769.211 201.639V206.618H774.19V201.639H769.211Z" />
-      <path d="M759.258 201.639V206.618H764.237V201.639H759.258Z" />
       <path d="M769.211 211.596V216.575H774.19V211.596H769.211Z" />
-      <path d="M769.211 221.552V226.531H774.19V221.552H769.211Z" />
       <path d="M779.172 221.552V226.531H784.151V221.552H779.172Z" />
       <path d="M779.172 211.596V216.575H784.151V211.596H779.172Z" />
       <path d="M789.125 211.596V216.575H794.104V211.596H789.125Z" />
-      <path d="M799.086 211.596V216.575H804.065V211.596H799.086Z" />
       <path d="M809.043 211.596V216.575H814.022V211.596H809.043Z" />
       <path d="M799.086 221.552V226.531H804.065V221.552H799.086Z" />
-      <path d="M799.086 231.511V236.49H804.065V231.511H799.086Z" />
       <path d="M799.086 241.47V246.449H804.065V241.47H799.086Z" />
       <path d="M809.043 231.511V236.49H814.022V231.511H809.043Z" />
-      <path d="M809.043 221.552V226.531H814.022V221.552H809.043Z" />
-      <path d="M809.043 221.552V226.531H814.022V221.552H809.043Z" />
       <path d="M819 221.552V226.531H823.979V221.552H819Z" />
       <path d="M819 211.596V216.575H823.979V211.596H819Z" />
       <path d="M809.043 201.639V206.618H814.022V201.639H809.043Z" />
       <path d="M799.086 201.639V206.618H804.065V201.639H799.086Z" />
-      <path d="M779.172 201.639V206.618H784.151V201.639H779.172Z" />
       <path d="M789.125 201.639V206.618H794.104V201.639H789.125Z" />
       <path d="M789.125 191.681V196.66H794.104V191.681H789.125Z" />
       <path d="M799.086 191.681V196.66H804.065V191.681H799.086Z" />
@@ -2292,7 +2452,6 @@
       <path d="M799.086 181.724V186.703H804.065V181.724H799.086Z" />
       <path d="M809.043 171.767V176.746H814.022V171.767H809.043Z" />
       <path d="M819 171.767V176.746H823.979V171.767H819Z" />
-      <path d="M819 191.681V196.66H823.979V191.681H819Z" />
       <path d="M819 181.724V186.703H823.979V181.724H819Z" />
       <path d="M828.957 181.724V186.703H833.936V181.724H828.957Z" />
       <path d="M828.957 171.767V176.746H833.936V171.767H828.957Z" />
@@ -2300,7 +2459,6 @@
       <path d="M848.875 161.808V166.787H853.854V161.808H848.875Z" />
       <path d="M858.828 181.724V186.703H863.807V181.724H858.828Z" />
       <path d="M858.828 171.767V176.746H863.807V171.767H858.828Z" />
-      <path d="M858.828 191.681V196.66H863.807V191.681H858.828Z" />
       <path d="M858.828 201.639V206.618H863.807V201.639H858.828Z" />
       <path d="M848.875 191.681V196.66H853.854V191.681H848.875Z" />
       <path d="M848.875 201.639V206.618H853.854V201.639H848.875Z" />
@@ -2311,7 +2469,6 @@
       <path d="M878.742 231.511V236.49H883.721V231.511H878.742Z" />
       <path d="M878.742 221.552V226.531H883.721V221.552H878.742Z" />
       <path d="M868.789 231.51V236.489H873.768V231.51H868.789Z" />
-      <path d="M858.828 231.51V236.489H863.807V231.51H858.828Z" />
       <path d="M858.828 241.47V246.449H863.807V241.47H858.828Z" />
       <path d="M848.875 251.426V256.405H853.854V251.426H848.875Z" />
       <path d="M848.875 261.384V266.363H853.854V261.384H848.875Z" />
@@ -2321,7 +2478,6 @@
       <path d="M878.742 241.47V246.449H883.721V241.47H878.742Z" />
       <path d="M878.742 251.426V256.405H883.721V251.426H878.742Z" />
       <path d="M838.914 241.47V246.449H843.893V241.47H838.914Z" />
-      <path d="M838.914 251.426V256.405H843.893V251.426H838.914Z" />
       <path d="M838.914 261.384V266.363H843.893V261.384H838.914Z" />
       <path d="M828.957 271.341V276.32H833.936V271.341H828.957Z" />
       <path d="M878.742 271.341V276.32H883.721V271.341H878.742Z" />
@@ -2361,7 +2517,6 @@
       <path d="M898.66 241.47V246.449H903.639V241.47H898.66Z" />
       <path d="M898.66 231.511V236.49H903.639V231.511H898.66Z" />
       <path d="M799.086 281.299V286.278H804.065V281.299H799.086Z" />
-      <path d="M848.875 281.299V286.278H853.854V281.299H848.875Z" />
       <path d="M898.66 281.299V286.278H903.639V281.299H898.66Z" />
       <path d="M799.086 291.255V296.234H804.065V291.255H799.086Z" />
       <path d="M848.875 291.255V296.234H853.854V291.255H848.875Z" />
@@ -2411,15 +2566,11 @@
       <path d="M729.383 281.299V286.278H734.362V281.299H729.383Z" />
       <path d="M739.34 271.341V276.32H744.319V271.341H739.34Z" />
       <path d="M729.383 271.341V276.32H734.362V271.341H729.383Z" />
-      <path d="M729.383 261.384V266.363H734.362V261.384H729.383Z" />
       <path d="M719.426 261.384V266.363H724.405V261.384H719.426Z" />
-      <path d="M719.426 251.426V256.405H724.405V251.426H719.426Z" />
       <path d="M729.383 251.426V256.405H734.362V251.426H729.383Z" />
       <path d="M719.426 241.47V246.449H724.405V241.47H719.426Z" />
-      <path d="M709.469 241.47V246.449H714.447V241.47H709.469Z" />
       <path d="M699.512 271.341V276.32H704.49V271.341H699.512Z" />
       <path d="M709.469 271.341V276.32H714.447V271.341H709.469Z" />
-      <path d="M699.512 281.299V286.278H704.49V281.299H699.512Z" />
       <path d="M729.383 311.172V316.151H734.362V311.172H729.383Z" />
       <path d="M749.297 321.128V326.107H754.276V321.128H749.297Z" />
       <path d="M739.34 311.172V316.151H744.319V311.172H739.34Z" />
@@ -2483,14 +2634,12 @@
       <path d="M828.957 331.086V336.065H833.936V331.086H828.957Z" />
       <path d="M828.957 321.128V326.107H833.936V321.128H828.957Z" />
       <path d="M819 321.128V326.107H823.979V321.128H819Z" />
-      <path d="M819 311.172V316.151H823.979V311.172H819Z" />
       <path d="M819 301.213V306.192H823.979V301.213H819Z" />
       <path d="M868.789 301.213V306.192H873.768V301.213H868.789Z" />
       <path d="M918.574 301.213V306.192H923.553V301.213H918.574Z" />
       <path d="M819 291.255V296.234H823.979V291.255H819Z" />
       <path d="M868.789 291.255V296.234H873.768V291.255H868.789Z" />
       <path d="M918.574 291.255V296.234H923.553V291.255H918.574Z" />
-      <path d="M819 281.299V286.278H823.979V281.299H819Z" />
       <path d="M868.789 281.299V286.278H873.768V281.299H868.789Z" />
       <path d="M918.574 281.299V286.278H923.553V281.299H918.574Z" />
       <path d="M828.957 281.299V286.278H833.936V281.299H828.957Z" />
@@ -2524,7 +2673,6 @@
       <path d="M848.875 331.086V336.065H853.854V331.086H848.875Z" />
       <path d="M848.875 321.128V326.107H853.854V321.128H848.875Z" />
       <path d="M848.875 311.172V316.151H853.854V311.172H848.875Z" />
-      <path d="M858.828 311.172V316.151H863.807V311.172H858.828Z" />
       <path d="M858.828 321.128V326.107H863.807V321.128H858.828Z" />
       <path d="M858.828 331.086V336.065H863.807V331.086H858.828Z" />
       <path d="M868.789 331.086V336.065H873.768V331.086H868.789Z" />
@@ -3298,7 +3446,6 @@
       <path d="M858.828 341.043V346.021H863.807V341.043H858.828Z" />
       <path d="M838.914 341.042V346.021H843.893V341.042H838.914Z" />
       <path d="M848.875 341.042V346.021H853.854V341.042H848.875Z" />
-      <path d="M838.914 211.596V216.575H843.893V211.596H838.914Z" />
       <path d="M848.875 221.552V226.531H853.854V221.552H848.875Z" />
       <path d="M838.914 171.767V176.746H843.893V171.767H838.914Z" />
       <path d="M838.914 161.808V166.787H843.893V161.808H838.914Z" />
@@ -3784,11 +3931,6 @@
       <path d="M400.789 530.234V535.213H405.768V530.234H400.789Z" />
       <path d="M410.742 550.148V555.127H415.721V550.148H410.742Z" />
       <path d="M410.742 540.192V545.171H415.721V540.192H410.742Z" />
-      <path d="M420.703 555.128L420.703 550.149L425.682 550.149L425.682 555.128L420.703 555.128Z" />
-      <path d="M430.66 555.128L430.66 550.149L435.639 550.149L435.639 555.128L430.66 555.128Z" />
-      <path d="M440.617 555.128L440.617 550.149L445.596 550.149L445.596 555.128L440.617 555.128Z" />
-      <path d="M440.617 545.171L440.617 540.192L445.596 540.192L445.596 545.171L440.617 545.171Z" />
-      <path d="M450.574 555.128L450.574 550.149L455.553 550.149L455.553 555.128L450.574 555.128Z" />
       <path d="M380.875 679.595V684.573H385.854V679.595H380.875Z" />
       <path d="M380.875 659.679V664.658H385.854V659.679H380.875Z" />
       <path d="M380.875 639.765V644.744H385.854V639.765H380.875Z" />
@@ -4141,7 +4283,6 @@
       <path d="M251.426 440.616V445.595H256.404V440.616H251.426Z" />
       <path d="M251.426 450.574V455.553H256.404V450.574H251.426Z" />
       <path d="M231.512 410.743V415.722H236.49V410.743H231.512Z" />
-      <path d="M231.512 430.658V435.637H236.49V430.658H231.512Z" />
       <path d="M231.512 420.701V425.68H236.49V420.701H231.512Z" />
       <path d="M231.512 440.616V445.595H236.49V440.616H231.512Z" />
       <path d="M321.125 410.743V415.722H326.104V410.743H321.125Z" />
@@ -4186,7 +4327,6 @@
       <path d="M271.34 400.787V405.766H276.319V400.787H271.34Z" />
       <path d="M241.469 400.787V405.766H246.447V400.787H241.469Z" />
       <path d="M221.555 400.787V405.766H226.533V400.787H221.555Z" />
-      <path d="M380.875 390.829V395.808H385.854V390.829H380.875Z" />
       <path d="M360.957 390.829V395.808H365.936V390.829H360.957Z" />
       <path d="M380.875 380.872V385.851H385.854V380.872H380.875Z" />
       <path d="M360.957 380.872V385.851H365.936V380.872H360.957Z" />
@@ -4254,12 +4394,10 @@
       <path d="M639.766 171.766V176.745H644.744V171.766H639.766Z" />
       <path d="M649.723 181.723V186.702H654.701V181.723H649.723Z" />
       <path d="M659.68 181.723V186.702H664.658V181.723H659.68Z" />
-      <path d="M659.68 171.766V176.745H664.658V171.766H659.68Z" />
       <path d="M649.723 171.766V176.745H654.701V171.766H649.723Z" />
       <path d="M669.641 171.766V176.745H674.619V171.766H669.641Z" />
       <path d="M669.641 161.807V166.786H674.619V161.807H669.641Z" />
       <path d="M679.594 171.766V176.745H684.572V171.766H679.594Z" />
-      <path d="M669.641 181.723V186.702H674.619V181.723H669.641Z" />
       <path d="M659.68 191.68V196.659H664.658V191.68H659.68Z" />
       <path d="M629.809 141.893V146.872H634.787V141.893H629.809Z" />
       <path d="M639.766 131.936V136.915H644.744V131.936H639.766Z" />
@@ -4653,7 +4791,6 @@
       <path d="M390.828 281.298V286.276H395.807V281.298H390.828Z" />
       <path d="M390.828 291.256V296.234H395.807V291.256H390.828Z" />
       <path d="M390.828 301.212V306.19H395.807V301.212H390.828Z" />
-      <path d="M390.828 311.171V316.149H395.807V311.171H390.828Z" />
       <path d="M390.828 331.085V336.063H395.807V331.085H390.828Z" />
       <path d="M390.828 321.129V326.107H395.807V321.129H390.828Z" />
       <path d="M390.828 341.043V346.021H395.807V341.043H390.828Z" />
@@ -4759,7 +4896,6 @@
       <path d="M351 301.212V306.19H355.979V301.212H351Z" />
       <path d="M331.086 301.212V306.19H336.065V301.212H331.086Z" />
       <path d="M341.043 301.212V306.19H346.022V301.212H341.043Z" />
-      <path d="M321.125 301.212V306.19H326.104V301.212H321.125Z" />
       <path d="M291.258 301.212V306.19H296.237V301.212H291.258Z" />
       <path d="M261.383 301.212V306.19H266.362V301.212H261.383Z" />
       <path d="M311.172 301.212V306.19H316.151V301.212H311.172Z" />
@@ -4769,7 +4905,6 @@
       <path d="M301.211 301.212V306.19H306.19V301.212H301.211Z" />
       <path d="M271.34 301.212V306.19H276.319V301.212H271.34Z" />
       <path d="M241.469 301.212V306.19H246.447V301.212H241.469Z" />
-      <path d="M221.555 301.212V306.19H226.533V301.212H221.555Z" />
       <path d="M211.594 301.212V306.19H216.572V301.212H211.594Z" />
       <path d="M201.637 301.212V306.19H206.615V301.212H201.637Z" />
       <path d="M191.68 301.212V306.19H196.658V301.212H191.68Z" />
@@ -4781,7 +4916,6 @@
       <path d="M291.258 311.171V316.149H296.237V311.171H291.258Z" />
       <path d="M261.383 311.171V316.149H266.362V311.171H261.383Z" />
       <path d="M311.172 311.171V316.149H316.151V311.171H311.172Z" />
-      <path d="M281.297 311.171V316.149H286.276V311.171H281.297Z" />
       <path d="M251.426 311.171V316.149H256.405V311.171H251.426Z" />
       <path d="M231.512 311.171V316.149H236.49V311.171H231.512Z" />
       <path d="M301.211 311.171V316.149H306.19V311.171H301.211Z" />
@@ -4838,13 +4972,11 @@
       <path d="M261.383 341.043V346.021H266.362V341.043H261.383Z" />
       <path d="M311.172 341.043V346.021H316.151V341.043H311.172Z" />
       <path d="M281.297 341.043V346.021H286.276V341.043H281.297Z" />
-      <path d="M251.426 341.043V346.021H256.404V341.043H251.426Z" />
       <path d="M231.512 341.043V346.021H236.49V341.043H231.512Z" />
       <path d="M301.211 341.043V346.021H306.19V341.043H301.211Z" />
       <path d="M271.34 341.043V346.021H276.319V341.043H271.34Z" />
       <path d="M241.469 341.043V346.021H246.447V341.043H241.469Z" />
       <path d="M221.555 341.043V346.021H226.533V341.043H221.555Z" />
-      <path d="M211.594 341.043V346.021H216.572V341.043H211.594Z" />
       <path d="M201.637 341.043V346.021H206.615V341.043H201.637Z" />
       <path d="M191.68 341.043V346.021H196.658V341.043H191.68Z" />
       <path d="M181.723 341.043V346.021H186.701V341.043H181.723Z" />
@@ -4856,7 +4988,6 @@
       <path d="M321.125 351V355.979H326.104V351H321.125Z" />
       <path d="M291.258 351V355.979H296.237V351H291.258Z" />
       <path d="M261.383 351V355.979H266.362V351H261.383Z" />
-      <path d="M311.172 351V355.979H316.151V351H311.172Z" />
       <path d="M281.297 351V355.979H286.276V351H281.297Z" />
       <path d="M251.426 351V355.979H256.405V351H251.426Z" />
       <path d="M231.512 351V355.979H236.49V351H231.512Z" />
@@ -4869,7 +5000,6 @@
       <path d="M191.68 351V355.979H196.658V351H191.68Z" />
       <path d="M181.723 351V355.979H186.701V351H181.723Z" />
       <path d="M171.766 351V355.979H176.744V351H171.766Z" />
-      <path d="M370.914 360.956V365.935H375.893V360.956H370.914Z" />
       <path d="M351 360.956V365.935H355.979V360.956H351Z" />
       <path d="M331.086 360.956V365.935H336.065V360.956H331.086Z" />
       <path d="M341.043 360.956V365.935H346.022V360.956H341.043Z" />
@@ -4919,7 +5049,6 @@
       <path d="M251.426 380.872V385.851H256.404V380.872H251.426Z" />
       <path d="M231.512 380.872V385.851H236.49V380.872H231.512Z" />
       <path d="M301.211 380.872V385.851H306.19V380.872H301.211Z" />
-      <path d="M271.34 380.872V385.851H276.319V380.872H271.34Z" />
       <path d="M241.469 380.872V385.851H246.447V380.872H241.469Z" />
       <path d="M221.555 380.872V385.851H226.533V380.872H221.555Z" />
       <path d="M211.594 380.872V385.851H216.572V380.872H211.594Z" />
@@ -5232,56 +5361,103 @@
       <path d="M191.68 410.743V415.722H196.658V410.743H191.68Z" />
       <path d="M191.68 420.701V425.68H196.658V420.701H191.68Z" />
       <path d="M201.637 430.658V435.637H206.615V430.658H201.637Z" />
-      <path d="M201.637 440.616V445.595H206.615V440.616H201.637Z" />
       <path d="M211.594 450.574V455.553H216.572V450.574H211.594Z" />
       <path d="M32.3633 251.427V256.405H37.342V251.427H32.3633Z" />
       <path d="M22.4023 251.427V256.405H27.3811V251.427H22.4023Z" />
       <path d="M12.4453 261.383V266.361H17.424V261.383H12.4453Z" />
       <path d="M12.4453 251.427V256.405H17.424V251.427H12.4453Z" />
-      <path d="M2.48828 261.383L2.48828 266.361H7.46701V261.383H2.48828Z" />
       <path d="M52.2773 141.893V146.872H57.2561V141.893H52.2773Z" />
       <path d="M62.2344 131.936V136.915H67.2131V131.936H62.2344Z" />
       <path d="M978.32 301.213V306.192H983.299V301.213H978.32Z" />
+      <path d="M510.32 599.935V604.914H515.299V599.935H510.32Z" />
+      <path d="M530.234 599.935V604.914H535.213V599.935H530.234Z" />
+      <path d="M560.105 619.85V624.829H565.084V619.85H560.105Z" />
+      <path d="M560.105 649.723V654.702H565.084V649.723H560.105Z" />
+      <path d="M550.148 689.553V694.531H555.127V689.553H550.148Z" />
+      <path d="M530.234 719.427V724.405H535.213V719.427H530.234Z" />
+      <path d="M510.32 749.298V754.276H515.299V749.298H510.32Z" />
+      <path d="M490.406 759.256V764.234H495.385V759.256H490.406Z" />
+      <path d="M500.359 739.342V744.32H505.338V739.342H500.359Z" />
+      <path d="M530.234 699.509V704.487H535.213V699.509H530.234Z" />
+      <path d="M490.406 749.298V754.276H495.385V749.298H490.406Z" />
+      <path d="M510.32 729.383V734.361H515.299V729.383H510.32Z" />
+      <path d="M520.277 709.467V714.445H525.256V709.467H520.277Z" />
+      <path d="M510.32 609.892V614.871H515.299V609.892H510.32Z" />
+      <path d="M530.234 609.892V614.871H535.213V609.892H530.234Z" />
+      <path d="M540.191 619.85V624.829H545.17V619.85H540.191Z" />
+      <path d="M560.105 629.806V634.785H565.084V629.806H560.105Z" />
+      <path d="M520.277 599.935V604.914H525.256V599.935H520.277Z" />
+      <path d="M540.191 609.892V614.871H545.17V609.892H540.191Z" />
+      <path d="M550.148 699.509V704.487H555.127V699.509H550.148Z" />
+      <path d="M520.277 729.383V734.361H525.256V729.383H520.277Z" />
+      <path d="M500.359 759.256V764.234H505.338V759.256H500.359Z" />
+      <path d="M480.445 739.342V744.32H485.424V739.342H480.445Z" />
+      <path d="M490.406 719.427V724.405H495.385V719.427H490.406Z" />
+      <path d="M480.445 699.509V704.487H485.424V699.509H480.445Z" />
+      <path d="M500.359 749.298V754.276H505.338V749.298H500.359Z" />
+      <path d="M490.406 709.469V714.447H495.385V709.469H490.406Z" />
+      <path d="M530.234 709.467V714.445H535.213V709.467H530.234Z" />
+      <path d="M520.277 609.892V614.871H525.256V609.892H520.277Z" />
+      <path d="M540.191 689.553V694.531H545.17V689.553H540.191Z" />
+      <path d="M550.148 619.85V624.829H555.127V619.85H550.148Z" />
+      <path d="M560.105 639.765V644.744H565.084V639.765H560.105Z" />
+      <path d="M500.359 599.935V604.914H505.338V599.935H500.359Z" />
+      <path d="M520.277 589.977V594.956H525.256V589.977H520.277Z" />
+      <path d="M570.062 639.765V644.744H575.041V639.765H570.062Z" />
+      <path d="M550.148 679.594V684.573H555.127V679.594H550.148Z" />
+      <path d="M540.191 709.469V714.447H545.17V709.469H540.191Z" />
+      <path d="M510.32 739.342V744.32H515.299V739.342H510.32Z" />
+      <path d="M480.445 759.256V764.234H485.424V759.256H480.445Z" />
+      <path d="M510.32 719.427V724.405H515.299V719.427H510.32Z" />
+      <path d="M510.32 699.509V704.487H515.299V699.509H510.32Z" />
+      <path d="M500.359 729.383V734.361H505.338V729.383H500.359Z" />
+      <path d="M500.359 709.469V714.447H505.338V709.469H500.359Z" />
+      <path d="M500.359 609.892V614.871H505.338V609.892H500.359Z" />
+      <path d="M530.234 619.85V624.829H535.213V619.85H530.234Z" />
+      <path d="M540.191 679.594V684.573H545.17V679.594H540.191Z" />
+      <path d="M550.148 629.806V634.785H555.127V629.806H550.148Z" />
+      <path d="M550.148 669.637V674.616H555.127V669.637H550.148Z" />
+      <path d="M520.277 719.427V724.405H525.256V719.427H520.277Z" />
+      <path d="M420.703 580.021V585H425.682V580.021H420.703Z" />
+      <path d="M570.062 629.806V634.785H575.041V629.806H570.062Z" />
+      <path d="M490.406 739.342V744.32H495.385V739.342H490.406Z" />
+      <path d="M500.359 580.021V585H505.338V580.021H500.359Z" />
+      <path d="M360.957 649.723V654.702H365.936V649.723H360.957Z" />
+      <path d="M540.191 699.509V704.487H545.17V699.509H540.191Z" />
+      <path d="M410.742 749.298V754.276H415.721V749.298H410.742Z" />
     </svg>
-    <!-- Scrims: the copy is left-aligned, so a left-to-right wash puts the
-         headline on solid canvas while the map stays legible on the right.
+    <!-- Scrims — HERO ONLY. Its copy really does sit ON the artwork: left-aligned
+         text over a wide band needs something to sit on, so a left-to-right wash
+         puts the headline on solid canvas while the map stays legible on the right.
 
-         The bottom fade is long on purpose. The frame clips the artwork at its
+         Its bottom fade is long on purpose. The frame clips the artwork at its
          border, and the row of benefit cards butts straight against that border
-         with no gap — so a short ramp let the dot grid run at full strength
-         into the rule and read as a CUT, two stacked panels rather than one
-         section. Dissolving from 46% means the map is already gone by the time
-         it reaches the seam, which is what glues the panel to the cards below
-         it. Lengthen this, never shorten it.
+         with no gap — so a short ramp let the dot grid run at full strength into
+         the rule and read as a CUT, two stacked panels rather than one section.
+         Dissolving from 46% means the map is already gone by the time it reaches
+         the seam, which is what glues the band to the cards below it. Lengthen
+         that one, never shorten it.
 
-         The PANEL framing washes the other axis, for the same reason the hero
-         washes this one: follow the copy. A portrait column carries its copy at
-         the two ENDS — a headline against the top edge, a trust strip against
-         the bottom — and nothing down either side, so a left-to-right wash would
-         dim a half that holds nothing and leave both blocks sitting on bare dot
-         grid. This one is heaviest at the two ends and clears through the
-         middle, where the field is the whole point and there is nothing over it
-         to protect.
+         THE PANEL HAS NO SCRIM AT ALL, and that is a removal worth
+         understanding rather than restoring. A scrim is a rectangle painted in the
+         page's background colour ON TOP of the artwork — it works, but it only
+         works while the thing underneath it really is that colour, and it costs a
+         stacking context and a set of stops that have to be re-aimed every time the
+         composition moves. It was doing two jobs here and has lost both:
 
-         The two ends are NOT symmetrical, and the bottom one is the reason. The
-         top carries a headline — large type at full contrast, which needs the
-         grid quieted but not gone. The bottom carries the trust strip: ~24px
-         client marks in one flat ink, and a mark that size loses its counters
-         against a live dot grid, so it needs the ground actually cleared. The
-         ramp therefore reaches SOLID canvas at 82% and holds it to the bottom
-         edge. That number is measured, not picked: in the auth column the footer
-         starts at 76% of the panel's height and the logo row runs 86-89%, so
-         solid-by-82% puts the whole strip — the tracked overline included, which
-         is nearly as light as the marks — on clean canvas with the ramp finishing
-         above it rather than through it. Below 82% the map is not dimmed, it is
-         finished. Strengthen this end if the strip grows; never the middle, where
-         the clear window through 44-56% is the PoP field itself. -->
-    <template v-if="isPanel">
-      <div
-        class="absolute inset-0 bg-[linear-gradient(to_bottom,var(--bg-canvas)_0%,color-mix(in_srgb,var(--bg-canvas)_58%,transparent)_20%,transparent_44%,transparent_56%,color-mix(in_srgb,var(--bg-canvas)_45%,transparent)_68%,color-mix(in_srgb,var(--bg-canvas)_82%,transparent)_76%,var(--bg-canvas)_82%,var(--bg-canvas)_100%)]"
-      />
-    </template>
-    <template v-else>
+           keeping the map off the copy — now structural. The map is a sibling of
+           the headline in a `flex-1` region, so it starts where the copy ends and
+           there is nothing to wash (see NetworkPanel).
+           ending the map at the floor — now `mask-b-from-*`, which fades the
+           artwork's own ALPHA. That is the better mechanism for the same reason
+           OnboardingWire uses it: alpha is correct in both themes and over any
+           ground, where a painted wash has to guess the colour behind it. Keeping
+           both would fade the bottom of the map twice and cut it short.
+
+         A portrait column is also the wrong shape for the hero's wash anyway: it
+         carries its copy at the TOP and nothing down either side, so a
+         left-to-right ramp would dim a half that holds nothing. -->
+    <template v-if="!isPanel">
       <div
         class="absolute inset-0 bg-[linear-gradient(to_right,var(--bg-canvas)_0%,color-mix(in_srgb,var(--bg-canvas)_70%,transparent)_24%,color-mix(in_srgb,var(--bg-canvas)_24%,transparent)_38%,transparent_50%)]"
       />
@@ -5289,7 +5465,7 @@
         class="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_0%,transparent_46%,color-mix(in_srgb,var(--bg-canvas)_45%,transparent)_72%,color-mix(in_srgb,var(--bg-canvas)_85%,transparent)_88%,var(--bg-canvas)_100%)]"
       />
     </template>
-    <!-- The route, above the wash. 82 single-cell squares are far too sparse to
+    <!-- The route, above the wash. 49 single-cell squares are far too sparse to
          compete with a headline, so this layer costs the copy nothing while
          giving the band its one piece of colour.
 
@@ -5308,96 +5484,76 @@
     <svg
       :viewBox="viewBox"
       :preserveAspectRatio="fit"
-      class="absolute left-(--map-inset-inline-start) w-[calc(100%_-_var(--map-inset-inline-start))] fill-(--primary)"
-      :class="[layerBox, routeMask]"
+      class="absolute left-(--map-inset-inline-start) w-[calc(100%_-_var(--map-inset-inline-start))]"
+      :class="[LAYER_BOX, routeMask, ROUTE_INK]"
     >
       <g class="animate-pulse motion-reduce:animate-none [animation-delay:0ms]!">
+        <path d="M828.957 151.851V156.83H833.936V151.851H828.957Z" />
+        <path d="M819 311.172V316.151H823.979V311.172H819Z" />
+        <path d="M769.211 221.552V226.531H774.19V221.552H769.211Z" />
+        <path d="M251.426 341.043V346.021H256.404V341.043H251.426Z" />
         <path d="M181.723 311.171V316.149H186.701V311.171H181.723Z" />
+        <path d="M858.828 161.808V166.787H863.807V161.808H858.828Z" />
         <path d="M181.723 390.829V395.808H186.701V390.829H181.723Z" />
-        <path d="M510.32 599.935V604.914H515.299V599.935H510.32Z" />
-        <path d="M530.234 599.935V604.914H535.213V599.935H530.234Z" />
-        <path d="M560.105 619.85V624.829H565.084V619.85H560.105Z" />
-        <path d="M560.105 649.723V654.702H565.084V649.723H560.105Z" />
-        <path d="M550.148 689.553V694.531H555.127V689.553H550.148Z" />
-        <path d="M530.234 719.427V724.405H535.213V719.427H530.234Z" />
-        <path d="M510.32 749.298V754.276H515.299V749.298H510.32Z" />
-        <path d="M819 201.639V206.618H823.979V201.639H819Z" />
-        <path d="M739.34 281.299V286.278H744.319V281.299H739.34Z" />
-        <path d="M410.742 749.298V754.276H415.721V749.298H410.742Z" />
-        <path d="M490.406 759.256V764.234H495.385V759.256H490.406Z" />
-        <path d="M500.359 739.342V744.32H505.338V739.342H500.359Z" />
-        <path d="M520.277 719.427V724.405H525.256V719.427H520.277Z" />
-        <path d="M530.234 699.509V704.487H535.213V699.509H530.234Z" />
-        <path d="M490.406 749.298V754.276H495.385V749.298H490.406Z" />
-        <path d="M510.32 729.383V734.361H515.299V729.383H510.32Z" />
-        <path d="M520.277 709.467V714.445H525.256V709.467H520.277Z" />
-        <path d="M510.32 609.892V614.871H515.299V609.892H510.32Z" />
-        <path d="M530.234 609.892V614.871H535.213V609.892H530.234Z" />
-        <path d="M540.191 619.85V624.829H545.17V619.85H540.191Z" />
-        <path d="M560.105 629.806V634.785H565.084V629.806H560.105Z" />
+        <path d="M281.297 311.171V316.149H286.276V311.171H281.297Z" />
         <path d="M370.914 550.148V555.127H375.893V550.148H370.914Z" />
-        <path d="M261.383 410.743V415.722H266.362V410.743H261.383Z" />
-        <path d="M351 410.743V415.722H355.979V410.743H351Z" />
-        <path d="M400.789 351V355.979H405.768V351H400.789Z" />
-        <path d="M221.555 370.914V375.893H226.533V370.914H221.555Z" />
+        <path d="M838.914 251.426V256.405H843.893V251.426H838.914Z" />
+        <path d="M659.68 171.766V176.745H664.658V171.766H659.68Z" />
+        <path d="M201.637 440.616V445.595H206.615V440.616H201.637Z" />
+        <path d="M809.043 221.552V226.531H814.022V221.552H809.043Z" />
+        <path d="M858.828 191.681V196.66H863.807V191.681H858.828Z" />
+        <path d="M351 321.129V326.107H355.979V321.129H351Z" />
+        <path d="M171.766 370.914V375.893H176.744V370.914H171.766Z" />
+        <path d="M261.383 440.616V445.595H266.362V440.616H261.383Z" />
+        <path d="M779.172 201.639V206.618H784.151V201.639H779.172Z" />
+        <path d="M729.383 261.384V266.363H734.362V261.384H729.383Z" />
+        <path d="M161.809 360.956V365.935H166.787V360.956H161.809Z" />
+        <path d="M281.297 420.701V425.68H286.276V420.701H281.297Z" />
       </g>
       <g class="animate-pulse motion-reduce:animate-none [animation-delay:360ms]!">
-        <path d="M161.809 360.956V365.935H166.787V360.956H161.809Z" />
-        <path d="M500.359 580.021V585H505.338V580.021H500.359Z" />
-        <path d="M520.277 599.935V604.914H525.256V599.935H520.277Z" />
-        <path d="M540.191 609.892V614.871H545.17V609.892H540.191Z" />
-        <path d="M570.062 629.806V634.785H575.041V629.806H570.062Z" />
-        <path d="M550.148 669.637V674.616H555.127V669.637H550.148Z" />
-        <path d="M550.148 699.509V704.487H555.127V699.509H550.148Z" />
-        <path d="M520.277 729.383V734.361H525.256V729.383H520.277Z" />
-        <path d="M500.359 759.256V764.234H505.338V759.256H500.359Z" />
-        <path d="M789.125 291.255V296.234H794.104V291.255H789.125Z" />
+        <path d="M370.914 360.956V365.935H375.893V360.956H370.914Z" />
+        <path d="M819 201.639V206.618H823.979V201.639H819Z" />
+        <path d="M848.875 281.299V286.278H853.854V281.299H848.875Z" />
+        <path d="M739.34 281.299V286.278H744.319V281.299H739.34Z" />
+        <path d="M311.172 351V355.979H316.151V351H311.172Z" />
         <path d="M719.426 360.958V365.937H724.405V360.958H719.426Z" />
-        <path d="M360.957 649.723V654.702H365.936V649.723H360.957Z" />
-        <path d="M480.445 739.342V744.32H485.424V739.342H480.445Z" />
-        <path d="M490.406 719.427V724.405H495.385V719.427H490.406Z" />
-        <path d="M480.445 699.509V704.487H485.424V699.509H480.445Z" />
-        <path d="M540.191 699.509V704.487H545.17V699.509H540.191Z" />
-        <path d="M500.359 749.298V754.276H505.338V749.298H500.359Z" />
-        <path d="M490.406 709.469V714.447H495.385V709.469H490.406Z" />
-        <path d="M530.234 709.467V714.445H535.213V709.467H530.234Z" />
-        <path d="M520.277 609.892V614.871H525.256V609.892H520.277Z" />
-        <path d="M540.191 689.553V694.531H545.17V689.553H540.191Z" />
-        <path d="M550.148 619.85V624.829H555.127V619.85H550.148Z" />
-        <path d="M560.105 639.765V644.744H565.084V639.765H560.105Z" />
+        <path d="M799.086 171.767V176.746H804.065V171.767H799.086Z" />
         <path d="M271.34 430.658V435.637H276.319V430.658H271.34Z" />
-        <path d="M261.383 440.616V445.595H266.362V440.616H261.383Z" />
+        <path d="M271.34 380.872V385.851H276.319V380.872H271.34Z" />
+        <path d="M490.406 769.213V774.192H495.385V769.213H490.406Z" />
+        <path d="M699.512 281.299V286.278H704.49V281.299H699.512Z" />
+        <path d="M799.086 211.596V216.575H804.065V211.596H799.086Z" />
+        <path d="M231.512 430.658V435.637H236.49V430.658H231.512Z" />
+        <path d="M789.125 291.255V296.234H794.104V291.255H789.125Z" />
+        <path d="M380.875 390.829V395.808H385.854V390.829H380.875Z" />
         <path d="M321.125 390.829V395.808H326.104V390.829H321.125Z" />
-        <path d="M420.703 331.085V336.063H425.682V331.085H420.703Z" />
+        <path d="M470.488 689.553V694.531H475.467V689.553H470.488Z" />
+        <path d="M838.914 211.596V216.575H843.893V211.596H838.914Z" />
+        <path d="M749.297 301.213V306.192H754.276V301.213H749.297Z" />
+        <path d="M221.555 370.914V375.893H226.533V370.914H221.555Z" />
+        <path d="M360.957 440.616V445.595H365.936V440.616H360.957Z" />
       </g>
       <g class="animate-pulse motion-reduce:animate-none [animation-delay:720ms]!">
-        <path d="M171.766 370.914V375.893H176.744V370.914H171.766Z" />
-        <path d="M500.359 599.935V604.914H505.338V599.935H500.359Z" />
-        <path d="M520.277 589.977V594.956H525.256V589.977H520.277Z" />
-        <path d="M550.148 609.892V614.871H555.127V609.892H550.148Z" />
-        <path d="M570.062 639.765V644.744H575.041V639.765H570.062Z" />
-        <path d="M550.148 679.594V684.573H555.127V679.594H550.148Z" />
-        <path d="M540.191 709.469V714.447H545.17V709.469H540.191Z" />
-        <path d="M510.32 739.342V744.32H515.299V739.342H510.32Z" />
-        <path d="M490.406 769.213V774.192H495.385V769.213H490.406Z" />
-        <path d="M749.297 301.213V306.192H754.276V301.213H749.297Z" />
+        <path d="M819 191.681V196.66H823.979V191.681H819Z" />
+        <path d="M390.828 311.171V316.149H395.807V311.171H390.828Z" />
+        <path d="M709.469 241.47V246.449H714.447V241.47H709.469Z" />
+        <path d="M858.828 231.51V236.489H863.807V231.51H858.828Z" />
         <path d="M789.125 341.043V346.021H794.104V341.043H789.125Z" />
-        <path d="M480.445 759.256V764.234H485.424V759.256H480.445Z" />
-        <path d="M490.406 739.342V744.32H495.385V739.342H490.406Z" />
-        <path d="M510.32 719.427V724.405H515.299V719.427H510.32Z" />
-        <path d="M510.32 699.509V704.487H515.299V699.509H510.32Z" />
-        <path d="M470.488 689.553V694.531H475.467V689.553H470.488Z" />
-        <path d="M500.359 729.383V734.361H505.338V729.383H500.359Z" />
-        <path d="M500.359 709.469V714.447H505.338V709.469H500.359Z" />
-        <path d="M500.359 609.892V614.871H505.338V609.892H500.359Z" />
-        <path d="M530.234 619.85V624.829H535.213V619.85H530.234Z" />
-        <path d="M540.191 679.594V684.573H545.17V679.594H540.191Z" />
-        <path d="M550.148 629.806V634.785H555.127V629.806H550.148Z" />
-        <path d="M420.703 580.021V585H425.682V580.021H420.703Z" />
-        <path d="M281.297 420.701V425.68H286.276V420.701H281.297Z" />
-        <path d="M360.957 440.616V445.595H365.936V440.616H360.957Z" />
+        <path d="M221.555 301.212V306.19H226.533V301.212H221.555Z" />
+        <path d="M261.383 410.743V415.722H266.362V410.743H261.383Z" />
+        <path d="M819 281.299V286.278H823.979V281.299H819Z" />
+        <path d="M550.148 609.892V614.871H555.127V609.892H550.148Z" />
+        <path d="M321.125 301.212V306.19H326.104V301.212H321.125Z" />
+        <path d="M759.258 201.639V206.618H764.237V201.639H759.258Z" />
+        <path d="M858.828 311.172V316.151H863.807V311.172H858.828Z" />
+        <path d="M719.426 251.426V256.405H724.405V251.426H719.426Z" />
+        <path d="M211.594 341.043V346.021H216.572V341.043H211.594Z" />
+        <path d="M400.789 351V355.979H405.768V351H400.789Z" />
+        <path d="M351 410.743V415.722H355.979V410.743H351Z" />
+        <path d="M669.641 181.723V186.702H674.619V181.723H669.641Z" />
+        <path d="M799.086 231.511V236.49H804.065V231.511H799.086Z" />
+        <path d="M420.703 331.085V336.063H425.682V331.085H420.703Z" />
         <path d="M211.594 400.787V405.766H216.572V400.787H211.594Z" />
-        <path d="M351 321.129V326.107H355.979V321.129H351Z" />
       </g>
     </svg>
   </div>

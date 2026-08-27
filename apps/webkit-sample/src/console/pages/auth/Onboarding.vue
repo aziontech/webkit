@@ -293,17 +293,25 @@
 
 <template>
   <AuthShell>
-    <!-- `items-center` centres the two columns against each other, so the card and
-         the console sit on one optical middle instead of both hanging from the top
-         of the page.
+    <!-- The two columns sit on one optical middle rather than both hanging from the
+         top of the page — but HOW they are centred changes with who owns the scroll,
+         and that is load-bearing.
 
-         From `lg` the shell is the viewport and does not scroll (see ui/AuthShell.vue),
-         so this block owns its own overflow: a wizard step taller than the window
-         scrolls here rather than being clipped by the shell. The row stays auto-height,
-         so the scroll starts at the step's true top and `items-center` still centres a
-         short step. -->
+         BELOW `lg` the shell's `main` is the scroll zone (see AuthShell) and this grid
+         is only ever as tall as its content, so nothing can overflow it and plain
+         `items-center` is safe.
+
+         FROM `lg` this grid IS the scroll zone, and `align-items: center` on a scroll
+         container is the classic unreachable-top bug: an item taller than the container
+         overflows in BOTH directions, and no scroller can reach what is above its own
+         scrollTop 0 — the first field of a tall wizard step becomes unreachable. CSS has
+         `align-items: safe center` for exactly this, but Tailwind 4.3.3 ships no
+         `items-safe-center` utility (it compiles to nothing — probed, not assumed), so
+         the centring moves to AUTO MARGINS on the columns: they collapse to 0 the moment
+         there is no free space, which centres a short step and scrolls a tall one from
+         its true top. Same trick, same reason, as the card half in AuthSplit. -->
     <div
-      class="mx-auto grid w-full max-w-(--container-7xl) flex-1 grid-cols-1 items-center gap-(--spacing-xxl) px-(--spacing-xl) py-(--spacing-xl) lg:min-h-0 lg:grid-cols-2 lg:overflow-y-auto"
+      class="mx-auto grid w-full max-w-(--container-7xl) flex-1 grid-cols-1 items-center gap-(--spacing-xxl) px-(--layout-boundary-inline) py-(--spacing-xl) lg:min-h-0 lg:grid-cols-2 lg:items-start lg:overflow-y-auto lg:px-(--spacing-xl)"
     >
       <!-- Left column: the wizard, capped and centred in its half — the questions
            stay one readable measure wide however wide the window gets, and the
@@ -312,7 +320,7 @@
       <div
         :data-entered="entered || null"
         :style="formEnterStyle"
-        class="mx-auto flex w-full max-w-(--container-xl) -translate-x-6 flex-col opacity-0 data-entered:translate-x-0 data-entered:opacity-100 motion-reduce:translate-x-0 motion-reduce:opacity-100 motion-reduce:transition-none"
+        class="mx-auto flex w-full max-w-(--container-xl) -translate-x-6 flex-col opacity-0 data-entered:translate-x-0 data-entered:opacity-100 motion-reduce:translate-x-0 motion-reduce:opacity-100 motion-reduce:transition-none lg:my-auto"
       >
         <!-- :padded=false so the ProgressBar can reach the card's own edges; the
              questions carry the padding themselves, one step in. -->
@@ -466,7 +474,7 @@
       <div
         :data-entered="entered || null"
         :style="wireEnterStyle"
-        class="translate-x-12 opacity-0 data-entered:translate-x-0 data-entered:opacity-100 motion-reduce:translate-x-0 motion-reduce:opacity-100 motion-reduce:transition-none lg:sticky lg:top-(--spacing-xl) lg:-mr-(--spacing-xl)"
+        class="translate-x-12 opacity-0 data-entered:translate-x-0 data-entered:opacity-100 motion-reduce:translate-x-0 motion-reduce:opacity-100 motion-reduce:transition-none lg:sticky lg:top-(--spacing-xl) lg:my-auto lg:-mr-(--spacing-xl)"
       >
         <!-- The workspace link stays in the mock's header even though the flow does
              not ask for it: the console really does open scoped to a workspace, and

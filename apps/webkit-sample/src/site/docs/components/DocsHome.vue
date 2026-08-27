@@ -78,9 +78,10 @@
   // under the docs top bar, which is what the reference does too. Every reading page
   // carries the trail and Copy page in its own masthead instead (see DocsMdxPage).
   //
-  // The page's six sections are the live docs home's own, in its order: start by
-  // objective, start by interface, ready-made templates, stop attacks, assess risk and
-  // prove compliance, follow along.
+  // The page's six sections are start by interface, start by objective, ready-made
+  // templates, stop attacks, assess risk and prove compliance, follow along. Interface
+  // leads: the reader who already knows they want the Console, the CLI or an agent
+  // should not have to read four jobs first to find the way in.
   import Button from '@aziontech/webkit/button'
   import FrameBox from '@aziontech/webkit/frame-box'
   import DocCard from '@aziontech/webkit-docs/doc-card'
@@ -119,10 +120,47 @@
    to Azion; if it is not, run azion link and follow the prompts.
 4. Suggest the most relevant next steps.`
 
+  // ── Start by interface ───────────────────────────────────────────────────────────
+  // The three surfaces the platform is driven through. Each card closes on its own CTA
+  // line, passed as `DocCard`'s `link` prop — the layer renders the row, picks the glyph
+  // (chevron here; these three stay inside the docs) and animates it, so the page never
+  // hand-composes a link inside a card that is already a link.
+  //
+  // `span` fills the ragged row: three cards over the `sm` two-column grid leave one
+  // hole, and an empty track in a `gap-px` grid shows the rule colour across its whole
+  // face. The third card spans both columns there and goes back to one at `lg`.
+  const interfaces = [
+    {
+      title: 'Console',
+      description: 'Configure it visually: applications, firewall rules, metrics, and events.',
+      cta: 'Open the Console',
+      icon: 'ai ai-azion',
+      href: '#console'
+    },
+    {
+      title: 'CLI',
+      description:
+        'Stay in the terminal: link a project, run it locally, and deploy with a single binary.',
+      cta: 'Install the CLI',
+      icon: 'ai ai-azion-cli',
+      href: '#cli'
+    },
+    {
+      title: 'API',
+      description:
+        'Drive it from your own systems: create and change resources over REST, token authenticated.',
+      cta: 'Call the API',
+      icon: 'ai ai-azion-api',
+      href: '#api',
+      span: 'sm:col-span-2 lg:col-span-1'
+    }
+  ]
+
   // ── Start by objective ───────────────────────────────────────────────────────────
-  // Four jobs, not four products: the reader arrives knowing what they want done, so
-  // the first band is phrased as the doing. Four cards at two columns divide evenly at
-  // every width, so no card needs a span.
+  // Four jobs, not four products: the reader who arrives knowing what they want done
+  // rather than which surface they want it done in, so the band is phrased as the
+  // doing. Four cards at two columns divide evenly at every width, so no card needs a
+  // span.
   const objectives = [
     {
       title: 'Build your application',
@@ -147,43 +185,6 @@
       description: 'A hosted model behind an OpenAI-compatible endpoint.',
       icon: 'ai ai-ai-pillar',
       href: '#ai-inference'
-    }
-  ]
-
-  // ── Start by interface ───────────────────────────────────────────────────────────
-  // The three surfaces the platform is driven through. Each card closes on its own CTA
-  // line, passed as `DocCard`'s `link` prop — the layer renders the row, picks the glyph
-  // (chevron here; these three stay inside the docs) and animates it, so the page never
-  // hand-composes a link inside a card that is already a link.
-  //
-  // `span` fills the ragged row: three cards over the `sm` two-column grid leave one
-  // hole, and an empty track in a `gap-px` grid shows the rule colour across its whole
-  // face. The third card spans both columns there and goes back to one at `lg`.
-  const interfaces = [
-    {
-      title: 'Platform',
-      description:
-        'Configure it visually in Azion Console: applications, firewall rules, metrics, and events.',
-      cta: 'Open the Console',
-      icon: 'ai ai-azion',
-      href: '#console'
-    },
-    {
-      title: 'CLI',
-      description:
-        'Stay in the terminal: link a project, run it locally, and deploy with a single binary.',
-      cta: 'Install the CLI',
-      icon: 'ai ai-azion-cli',
-      href: '#cli'
-    },
-    {
-      title: 'API',
-      description:
-        'Drive it from your own systems: create and change resources over REST, token authenticated.',
-      cta: 'Call the API',
-      icon: 'ai ai-azion-api',
-      href: '#api',
-      span: 'sm:col-span-2 lg:col-span-1'
     }
   ]
 
@@ -511,8 +512,13 @@
              elsewhere in this app go fluid below `sm` — a full-width primary is the
              right target on a phone — but the pill is `rounded-full` and sizes to its
              content by design: stretched across a phone it stops reading as a pill and
-             starts reading as a second primary. The pair fits a 390px column on one
-             line as it is, and wraps to two left-aligned lines on anything narrower. -->
+             starts reading as a second primary. The pair needs 439px to sit on one
+             line — a 120px primary, the 12px gap and a 307px pill — so it holds one line
+             from a 465px viewport up and stacks to two left-aligned lines below that,
+             phones included. It stacked on a phone before the pill carried all seven
+             agent marks too (it needed 391 then, against the 358 a 390px viewport
+             leaves); the marks moved the threshold, not the behaviour at the widths a
+             phone actually has. -->
         <template #actions>
           <div class="flex flex-wrap items-center gap-(--spacing-sm)">
             <Button
@@ -539,54 +545,22 @@
         </template>
       </PageHeader>
 
-      <!-- ── Start by objective ─────────────────────────────────────────────
-             Four jobs, not four products. -->
-      <DocHeading
-        id="start-by-objective"
-        :level="2"
-      >
-        Start by objective
-      </DocHeading>
-      <p>Build something, make it faster, lock it down, or run AI on it.</p>
-
-      <DocCardGroup :cols="2">
-        <DocCard
-          v-for="card in objectives"
-          :key="card.title"
-          :title="card.title"
-          :icon="card.icon"
-          :href="card.href"
-        >
-          {{ card.description }}
-        </DocCard>
-      </DocCardGroup>
-
-      <!-- The onward links that used to close each band as a ruled row are just a
-             sentence now: in a prose column a muted row under a hairline is a band's
-             footer, and there are no bands. -->
-      <p>
-        {{ linkBands.objectives.lead }}
-        <template
-          v-for="(link, index) in linkBands.objectives.links"
-          :key="link.label"
-        >
-          <a :href="link.href">{{ link.label }}</a
-          ><template v-if="index < linkBands.objectives.links.length - 1">, </template>
-        </template>
-      </p>
-
       <!-- ── Start by interface ─────────────────────────────────────────────
-             Two halves of one answer: hand the platform to an agent, or drive it
+             THE PAGE'S FIRST SECTION: the surface comes before the job. A reader who
+             already knows they want the Console, the terminal or an agent gets their
+             way in immediately, and the one who does not carries on into the four
+             objectives below.
+
+             Two halves of one answer: hand the Console to an agent, or drive it
              yourself. The agent half comes FIRST and as prose rather than as a
              fourth card, because it is not a fourth interface — it is the thing
              that operates the other three.
 
              IT NEEDS ITS OWN h2, and for a while it did not have one — the comment
-             above called this a section but nothing opened it, so the agent block
-             followed the objectives' closing sentence at the BLOCK rung (24) and the
-             whole thing read as one continuous run: four objective cards, a sentence,
-             a bordered banner, three more cards, and only then the next heading. The
-             banner looked like a footnote to "Start by objective" rather than the way
+             above called this a section but nothing opened it, so the agent block ran
+             on from whatever preceded it at the BLOCK rung (24) and the whole thing
+             read as one continuous run: a bordered banner, three cards, and only then
+             the next heading. The banner looked like a footnote rather than the way
              into a section of its own, and the page's outline said the same thing —
              `Your AI agent, fluent in Azion` is an h3, so with no h2 above it, it hung
              off the previous section in the document outline too.
@@ -600,7 +574,7 @@
         Start by interface
       </DocHeading>
       <p>
-        Hand the platform to a coding agent, or drive it yourself: visually, from the terminal, or
+        Hand the Console to a coding agent, or drive it yourself: visually, from the terminal, or
         over the API.
       </p>
 
@@ -772,6 +746,42 @@
           {{ card.description }}
         </DocCard>
       </DocCardGroup>
+
+      <!-- ── Start by objective ─────────────────────────────────────────────
+             Four jobs, not four products. -->
+      <DocHeading
+        id="start-by-objective"
+        :level="2"
+      >
+        Start by objective
+      </DocHeading>
+      <p>Build something, make it faster, lock it down, or run AI on it.</p>
+
+      <DocCardGroup :cols="2">
+        <DocCard
+          v-for="card in objectives"
+          :key="card.title"
+          :title="card.title"
+          :icon="card.icon"
+          :href="card.href"
+        >
+          {{ card.description }}
+        </DocCard>
+      </DocCardGroup>
+
+      <!-- The onward links that used to close each band as a ruled row are just a
+             sentence now: in a prose column a muted row under a hairline is a band's
+             footer, and there are no bands. -->
+      <p>
+        {{ linkBands.objectives.lead }}
+        <template
+          v-for="(link, index) in linkBands.objectives.links"
+          :key="link.label"
+        >
+          <a :href="link.href">{{ link.label }}</a
+          ><template v-if="index < linkBands.objectives.links.length - 1">, </template>
+        </template>
+      </p>
 
       <!-- ── Ready-made templates ───────────────────────────────────────────
              This is the one grid that stays TWO-up on a phone (`mobile-cols`): its

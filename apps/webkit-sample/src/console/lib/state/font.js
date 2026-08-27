@@ -58,6 +58,13 @@ export const FONTS = [
     label: 'Instrument Sans',
     stack: "'Instrument Sans', sans-serif",
     href: 'https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400..700&display=swap'
+  },
+  {
+    // Single-weight family (400 only) — the theme's bolder steps synthesize.
+    value: 'hedvig-letters-sans',
+    label: 'Hedvig Letters Sans',
+    stack: "'Hedvig Letters Sans', sans-serif",
+    href: 'https://fonts.googleapis.com/css2?family=Hedvig+Letters+Sans&display=swap'
   }
 ]
 
