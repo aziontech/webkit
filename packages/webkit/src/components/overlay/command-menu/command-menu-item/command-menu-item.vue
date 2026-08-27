@@ -41,6 +41,7 @@
 
   const hasPrefix = computed(() => Boolean(slots['prefix']))
 
+  const rootRef = ref<HTMLElement | null>(null)
   const labelRef = ref<HTMLElement | null>(null)
   const itemText = ref(String(props.value))
 
@@ -87,6 +88,7 @@
       disabled: disabledRef,
       isVisible,
       hasPrefix,
+      el: rootRef,
       activate
     })
   })
@@ -98,6 +100,7 @@
 
 <template>
   <div
+    ref="rootRef"
     v-show="isVisible"
     v-bind="attrs"
     role="option"

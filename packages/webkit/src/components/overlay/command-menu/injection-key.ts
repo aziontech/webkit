@@ -15,6 +15,13 @@ export interface CommandMenuRegisteredItem {
   isVisible: Ref<boolean>
   /** Whether the item renders leading `prefix` content. */
   hasPrefix: Ref<boolean>
+  /**
+   * The item's root element, so the root can rove in DOM order rather than in the order
+   * items happened to register. A group mounted after the palette opened (a result list
+   * that appears once the reader types) registers last but renders wherever the consumer
+   * put it — `null` only in the tick before it mounts.
+   */
+  el: Ref<HTMLElement | null>
   /** Activates the item, emitting the root `select` event. */
   activate: (event: globalThis.MouseEvent | globalThis.KeyboardEvent) => void
 }

@@ -95,6 +95,42 @@ const mixedPrefixes = () =>
     `
   })
 
+/**
+ * A palette whose leading group is rendered CONDITIONALLY on the query — the shape a
+ * consumer takes when the palette searches a data set and shows the results above its
+ * static navigation (the console's global search). Those items register LAST (they mount
+ * on the first keystroke) while rendering FIRST, which is what the DOM-ordered roving
+ * list exists for.
+ */
+const conditionalResults = () =>
+  defineComponent({
+    components: {
+      CommandMenu,
+      CommandMenuInput,
+      CommandMenuList,
+      CommandMenuGroup,
+      CommandMenuItem
+    },
+    setup() {
+      const open = ref(true)
+      const query = ref('')
+      return { open, query }
+    },
+    template: `
+      <CommandMenu v-model:open="open">
+        <CommandMenuInput placeholder="Search commands…" @update:model-value="query = $event" />
+        <CommandMenuList>
+          <CommandMenuGroup v-if="query" heading="Resources">
+            <CommandMenuItem value="res:storefront">storefront</CommandMenuItem>
+          </CommandMenuGroup>
+          <CommandMenuGroup heading="Navigation">
+            <CommandMenuItem value="nav:storage">Object Storage</CommandMenuItem>
+          </CommandMenuGroup>
+        </CommandMenuList>
+      </CommandMenu>
+    `
+  })
+
 afterEach(async () => {
   await settle()
 })
@@ -217,6 +253,46 @@ describe('CommandMenu (overlay: wraps Dialog, composition + provide/inject)', ()
       // Selecting closes the palette. DialogPortal keeps the panel mounted for
       // the exit animation, so assert the closed state on the root (as dialog does).
       expect(byTestId('overlay-command-menu')?.getAttribute('data-state')).toBe('closed')
+    })
+  })
+
+  describe('a group rendered on the query roves where it renders', () => {
+    // The consumer's `@update:model-value` on the Input reaches the field alongside the
+    // context's own handler (Vue merges both), which is how a consumer learns the query
+    // without the root exposing it.
+    it('highlights the first row of the conditional group on the first keystroke', async () => {
+      render(conditionalResults())
+      await settle()
+
+      const input = byTestId('overlay-command-menu__input')!.querySelector('input')!
+      await fireEvent.update(input, 'sto')
+      await settle()
+
+      // Both rows match "sto" — the conditional one renders first, so it is the one the
+      // highlight (and therefore Enter) lands on, even though it registered last.
+      const rows = Array.from(
+        document.body.querySelectorAll<HTMLElement>('[data-testid="overlay-command-menu__item"]')
+      )
+      expect(rows.map((row) => row.textContent?.trim())).toEqual(['storefront', 'Object Storage'])
+      expect(rows[0].getAttribute('data-active')).toBe('true')
+      expect(rows[1].getAttribute('data-active')).toBeNull()
+    })
+
+    it('ArrowDown walks the rows in DOM order, not registration order', async () => {
+      render(conditionalResults())
+      await settle()
+
+      const input = byTestId('overlay-command-menu__input')!.querySelector('input')!
+      await fireEvent.update(input, 'sto')
+      await settle()
+
+      await fireEvent.keyDown(input, { key: 'ArrowDown' })
+      await settle()
+
+      const rows = Array.from(
+        document.body.querySelectorAll<HTMLElement>('[data-testid="overlay-command-menu__item"]')
+      )
+      expect(rows[1].getAttribute('data-active')).toBe('true')
     })
   })
 
