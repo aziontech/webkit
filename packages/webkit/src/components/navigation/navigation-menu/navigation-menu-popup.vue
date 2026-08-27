@@ -11,12 +11,18 @@
 
   defineOptions({ name: 'NavigationMenuPopup', inheritAttrs: false })
 
+  /** Surface treatment: the raised surface, or the theme's inverted one. */
+  export type NavigationMenuPopupKind = 'default' | 'contrast'
+
   interface Props {
+    /** Surface treatment. */
+    kind?: NavigationMenuPopupKind
     /** Polymorphic popup element. */
     as?: string | object
   }
 
   const props = withDefaults(defineProps<Props>(), {
+    kind: 'default',
     as: 'nav'
   })
 
@@ -41,6 +47,7 @@
   const popupHidden = computed(() => !root.menuPopupMounted.value)
 
   const popupDataAttrs = computed(() => ({
+    'data-kind': props.kind,
     'data-open': root.menuOpen.value ? '' : undefined,
     'data-closed': !root.menuOpen.value ? '' : undefined,
     'data-starting-style': root.popupTransitionStatus.value === 'starting' ? '' : undefined,

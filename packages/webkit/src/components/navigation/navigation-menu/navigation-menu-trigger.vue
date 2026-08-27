@@ -148,6 +148,24 @@
     )
   }
 
+  /**
+   * The keyboard model (Escape closes, Enter/Space toggles, arrows rove between triggers) lives
+   * on the root; this forwards to it for a button trigger and leaves a link trigger to the
+   * browser. It has to be a HANDLER, not an expression: `@keydown="!isLink ? root.onTriggerKeydown : undefined"`
+   * compiles to an inline statement — Vue only treats a bare identifier or member path as a
+   * method handler — so the ternary was evaluated on every keystroke and its result thrown
+   * away. Nothing errored, the trigger simply had no keyboard behaviour at all: `Escape` never
+   * closed the panel and the arrows never moved between triggers, while `Enter` and `Space` kept
+   * working because a native `<button>` turns them into a click.
+   */
+  const onKeydown = (event: globalThis.KeyboardEvent) => {
+    if (isLink.value) {
+      return
+    }
+
+    root.onTriggerKeydown(event)
+  }
+
   const onClick = (event: globalThis.MouseEvent) => {
     if (isLink.value) {
       if (!props.closeOnClick) {
@@ -213,7 +231,7 @@
     @pointerenter="onPointerEnter"
     @pointerleave="onPointerLeave"
     @click="onClick"
-    @keydown="!isLink ? root.onTriggerKeydown : undefined"
+    @keydown="onKeydown"
   >
     <slot />
   </component>
