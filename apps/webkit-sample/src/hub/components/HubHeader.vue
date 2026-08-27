@@ -90,13 +90,18 @@
 </script>
 
 <template>
+  <!-- THE BAR OPENS ON THE PAGE BOUNDARY, like every other bar in this app. The
+       `layout-boundary-inline` utility is the same token webkit's own `GlobalHeader`
+       reads for `kind="content"` (16, then 24 from `sm`) — the site nav carries it the
+       same way, hand-rolled. It used to take a flat `--spacing-md` (16 at every width),
+       which agreed with the rest of the app below `sm` and sat 8px shy of it above. -->
   <header
-    class="sticky top-0 z-40 flex h-14 shrink-0 items-center gap-(--spacing-lg) border-b border-(--border-default) bg-(--bg-surface) px-(--spacing-md)"
+    class="layout-boundary-inline sticky top-0 z-40 flex h-14 shrink-0 items-center gap-(--spacing-lg) border-b border-(--border-default) bg-(--bg-surface)"
   >
     <RouterLink
       to="/site/hub"
       aria-label="Webkit Hub — home"
-      class="inline-flex shrink-0 items-center gap-(--spacing-xs) rounded-(--shape-elements) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface)"
+      class="inline-flex shrink-0 items-center gap-(--spacing-xs) rounded-(--shape-elements) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface)"
     >
       <Brand
         kind="default"

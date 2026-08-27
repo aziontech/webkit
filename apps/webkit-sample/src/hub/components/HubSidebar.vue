@@ -110,7 +110,7 @@
         <RouterLink
           to="/site/hub"
           aria-label="Webkit Hub — home"
-          class="inline-flex shrink-0 items-center gap-(--spacing-xs) rounded-(--shape-elements) px-(--spacing-xxs) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface)"
+          class="inline-flex shrink-0 items-center gap-(--spacing-xs) rounded-(--shape-elements) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface)"
         >
           <Brand
             kind="default"
@@ -166,9 +166,7 @@
       <template #footer>
         <!-- Theme control row, mirroring the console footer's inline switcher. -->
         <div class="flex items-center gap-(--spacing-xs) pt-(--spacing-sm)">
-          <span class="min-w-0 flex-1 truncate text-label-sm text-(--text-default)">
-            Theme
-          </span>
+          <span class="min-w-0 flex-1 truncate text-label-sm text-(--text-default)"> Theme </span>
           <ThemeSwitcher
             v-model:value="theme"
             aria-label="Theme"

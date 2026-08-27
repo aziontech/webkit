@@ -272,9 +272,18 @@ And it stays up when others go down."
            texture, not by a hairline of its own. (Functions closes the same way.) The old
            capability strip lived here; every line of it now has a row in the primitives grid
            below, so the hero keeps the headline and the proof, nothing else. -->
+      <!-- `monochrome`: one white ink for every mark, the same treatment Functions and
+           Pricing already give this strip. Placed honestly — brand colours where the
+           brand ships them — the row was thirteen white marks and one full-colour
+           América Móvil, so the one mark the eye landed on was the one that happened
+           to ship a colour file, and on this dark band its mid-tone blues carried the
+           least contrast of anything in the row. `brightness-0 invert` flattens all
+           fourteen to the same white silhouette against the band, which is both the
+           contrast fix and what makes the three site strips render identically. -->
       <BrandCarousel
         label="Trusted by mission-critical workloads"
         :clients="CLIENTS"
+        monochrome
       />
     </div>
   </BannerContainer>

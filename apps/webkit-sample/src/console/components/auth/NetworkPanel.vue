@@ -130,9 +130,9 @@
            palettes the marks argued with each other and with the form beside them
            (a coloured Agibank pulling harder than the Sign Up button). Flat
            silhouettes let the eye count the row instead of reading it one brand at
-           a time, and they hold up identically on both themes. The marketing hero
-           keeps its true brand colours, where each mark is given room to be a
-           brand. -->
+           a time, and they hold up identically on both themes. Every site strip
+           (Home, Functions, Pricing) now reads the row the same way, so a mark
+           looks the same wherever it appears. -->
       <BrandCarousel
         :clients="CLIENTS"
         size="small"

@@ -48,13 +48,33 @@
   // last thing on the page, and at 32px each mark carried the visual weight of the
   // headline three blocks above it. Smaller also puts ~five marks in frame instead of
   // four, which is what makes the row read as a list rather than as a slideshow.
+  //
+  // 'medium' is a RESPONSIVE step, not one height. The same 48px mark that reads as a
+  // row on a 1440px hero is a slideshow on a phone: at 375px a 48px wordmark plus its
+  // 24px gutters is ~240px, so barely one and a half marks are ever in frame and both
+  // edges sit in the mask's fade — the strip stops reading as a list of clients and
+  // starts reading as one logo drifting past. The ladder below is measured to keep
+  // roughly three marks in frame at every width: 32px on a phone, 40px from `sm`,
+  // and the design's 48px from `md` up, where the row has the width to carry it. The
+  // max-width cap moves with the height for the same reason the base comment gives —
+  // cap it at the desktop 240px on a phone and a wide wordmark never reaches the
+  // shorter height, so two marks in one row measure differently.
+  //
+  // Because the ladder lives HERE and not at the call sites, every site strip (Home,
+  // Functions, Pricing) scales identically; a page cannot drift to its own mobile
+  // size. 'small' stays a single height: it is already phone-sized, and it runs in a
+  // half-page column that does not narrow the way a full-bleed strip does.
   const MARK = {
-    medium: 'h-12 w-auto max-w-[240px] object-contain',
+    medium:
+      'h-8 max-w-[150px] sm:h-10 sm:max-w-[200px] md:h-12 md:max-w-[240px] w-auto object-contain',
     small: 'h-6 w-auto max-w-[120px] object-contain'
   }
 
+  // The gutter shrinks with the mark, or a 32px logo on a phone floats in 24px of air
+  // on each side and the row reads as gaps with logos in them. `--spacing-xl` is
+  // itself responsive (24 / 32 / 48px), so `md:` up is unchanged from the design.
   const ITEM_PADDING = {
-    medium: 'px-(--spacing-xl)',
+    medium: 'px-(--spacing-lg) md:px-(--spacing-xl)',
     small: 'px-(--spacing-lg)'
   }
 

@@ -155,9 +155,13 @@
       </template>
 
       <template #brand>
+        <!-- The same treatment every other brand redirect in the app carries (the site
+             nav, the docs bar, the console rail and its mobile header): one opacity
+             transition on hover, and a focus ring, which this anchor had neither of. -->
         <a
           href="#"
           aria-label="Azion home"
+          class="inline-flex w-fit items-center rounded-(--shape-elements) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
         >
           <Brand size="large" />
         </a>

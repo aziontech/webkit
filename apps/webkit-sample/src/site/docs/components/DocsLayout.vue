@@ -459,7 +459,7 @@
           <RouterLink
             to="/site/docs"
             aria-label="Azion Docs — home"
-            class="inline-flex shrink-0 items-center gap-(--spacing-xs) rounded-(--shape-elements) px-(--spacing-xxs) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface)"
+            class="inline-flex shrink-0 items-center gap-(--spacing-xs) rounded-(--shape-elements) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface)"
           >
             <Brand
               kind="default"

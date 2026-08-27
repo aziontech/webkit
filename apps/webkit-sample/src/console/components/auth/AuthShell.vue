@@ -43,7 +43,16 @@
 
 <template>
   <div class="flex min-h-dvh flex-col bg-(--bg-canvas) lg:h-dvh lg:overflow-hidden">
-    <GlobalHeader aria-label="Azion Console">
+    <!-- `kind="content"`, the same call the docs bar and the console's own bar make.
+         The kind is what decides the INSET: `app` is a flat `--spacing-md` (16 at every
+         width) while every other bar in this app opens on `--layout-boundary-inline`
+         (16, then 24 from `sm`). This bar was the last one left on `app`, so from `sm`
+         up its brand sat 8px to the left of the brand on the site nav the reader just
+         came from and the docs bar the Documentation button leads to. -->
+    <GlobalHeader
+      kind="content"
+      aria-label="Azion Console"
+    >
       <GlobalHeader.Brand>
         <!-- Signed-out screens: the brand mark goes back to the marketing home
              (the console home lives behind the login), matching how the website
