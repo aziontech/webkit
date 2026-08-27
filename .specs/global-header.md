@@ -7,15 +7,19 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4310-19617
   node_id: 4310:19617
-checksum: 54a5c6ef9f6dae107cf3fd0ba4bb865e493649c8b44d984dc15a1d771c5cf98a
+checksum: 5c2c33405be8594b28001ec4927da0b046bd088b4b11593bad75e01ef6e6a2d6
 created: 2026-05-23
-last_updated: 2026-06-23
+last_updated: 2026-08-27
 ---
 # Global Header — Component Spec
 
 ## Purpose
 
 Application chrome for the top menubar: a fixed-height horizontal bar with three composable regions (start, center, end) and a dedicated brand slot for Azion logo variants. Matches the Webkit GlobalHeader (Figma node 4310:19617) — a Shell Core part with symmetric horizontal padding, a hairline bottom border, the menu trigger and brand grouped at the start, a growing nav region in the center, and trailing actions (Create, Copilot, Feedback, help, avatar) at the end. Consumers reorder or omit regions; logo and actions are not baked in.
+
+The bar has three placements, chosen with `kind`, and the only difference is where the inset is measured from. `app` is the window-wide chrome above the navigation rail, insetting its regions by the shell's own `--spacing-md`. `content` sits inside the content zone beside the rail, full bleed across it, insetting its regions by the page boundary (`--layout-boundary-inline`) so the first region opens on the same vertical as the page content beside it. A breadcrumb in an `app` bar cannot find that vertical — it measures its inset from the window, so the gap moves with the rail's width.
+
+`site` is the marketing placement, for a page that is a FRAMED column rather than an app zone: the surface stays full bleed (the hairline and the fill run to the window edges, because a bar is chrome) while the regions are capped at the site measure (`--container-site`) and centred, so the brand opens on the same vertical as the hero headline at every width. It is one declaration, not a sub-component: `padding-inline: max(boundary, (100% - measure) / 2 + boundary)` — the cap and the boundary hand off to each other, so below the measure the boundary is the whole inset and the placement collapses to `content`. An uncapped bar over a capped page comes apart above the measure: the column stops growing and the bar does not, which on a 2560px window put the logo 684px to the left of the headline under it.
 
 ## Sub-components
 
@@ -30,6 +34,7 @@ Application chrome for the top menubar: a fixed-height horizontal bar with three
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
 | `ariaLabel` | `string` | `'Global header'` | false | Accessible name for the header landmark. |
+| `kind` | `'app' \| 'content' \| 'site'` | `'app'` | false | Where the bar sits: `app` spans the whole window above the navigation rail and insets its regions by the shell's own step; `content` sits inside the content zone beside the rail, full bleed, and insets them by the page boundary instead; `site` keeps that full-bleed surface on a framed marketing page but caps the regions at the site measure and centres them, so they land on the page's own column. |
 
 ## Events
 
@@ -46,6 +51,7 @@ Application chrome for the top menubar: a fixed-height horizontal bar with three
 ## States
 
 - Visual states: `default`
+- Placement: `data-kind="app" | "content" | "site"` on the root (from `kind`).
 - No interactive states on the shell; children own focus/hover/disabled.
 
 ## Motion & Animations
@@ -57,7 +63,9 @@ _none_
 | Region | Token (DESIGN.md) |
 |---|---|
 | shell height | `h-14` (56px) |
-| shell padding-x | `var(--spacing-md)` |
+| shell padding-x (`kind="app"`) | `var(--spacing-md)` |
+| shell padding-x (`kind="content"`) | `var(--layout-boundary-inline)` |
+| shell padding-x (`kind="site"`) | `max(var(--layout-boundary-inline), calc((100% - var(--container-site)) / 2 + var(--layout-boundary-inline)))` |
 | shell region gap | `var(--spacing-md)` |
 | start cluster (container) gap | `var(--spacing-md)` |
 | start (left) region gap | `var(--spacing-xs)` |
@@ -85,6 +93,8 @@ _none_
 ## Stories (Storybook)
 
 - Default
+- ContentZone — the full-bleed `kind="content"` bar, inset by the page boundary.
+- SitePlacement — the `kind="site"` bar over a framed marketing column, its regions on the page's own measure.
 
 ## Constraints — DO NOT
 
