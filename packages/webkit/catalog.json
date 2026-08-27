@@ -9899,10 +9899,10 @@
         },
         {
           "name": "kind",
-          "type": "'app' | 'content'",
+          "type": "'app' | 'content' | 'site'",
           "default": "'app'",
           "required": "false",
-          "doc": "Where the bar sits: `app` spans the whole window above the navigation rail and insets its regions by the shell's own step; `content` sits inside the content zone beside the rail, full bleed, and insets them by the page boundary instead."
+          "doc": "Where the bar sits: `app` spans the whole window above the navigation rail and insets its regions by the shell's own step; `content` sits inside the content zone beside the rail, full bleed, and insets them by the page boundary instead; `site` keeps that full-bleed surface on a framed marketing page but caps the regions at the site measure and centres them, so they land on the page's own column."
         }
       ],
       "slots": [
@@ -9922,7 +9922,7 @@
           "notes": "global-header-brand` exposes `default` for logo markup."
         }
       ],
-      "purpose": "Application chrome for the top menubar: a fixed-height horizontal bar with three composable regions (start, center, end) and a dedicated brand slot for Azion logo variants. Matches the Webkit GlobalHeader (Figma node 4310:19617) — a Shell Core part with symmetric horizontal padding, a hairline bottom border, the menu trigger and brand grouped at the start, a growing nav region in the center, and trailing actions (Create, Copilot, Feedback, help, avatar) at the end. Consumers reorder or omit regions; logo and actions are not baked in. The bar has two placements, chosen with `kind`, and the only difference is which edge the inset is measured from. `app` is the window-wide chrome above the navigation rail, insetting its regions by the shell's own `--spacing-md`. `content` sits inside the content zone beside the rail, full bleed across it, insetting its regions by the page boundary (`--layout-boundary-inline`) so the first region opens on the same vertical as the page content beside it. A breadcrumb in an `app` bar cannot find that vertical — it measures its inset from the window, so the gap moves with the rail's width."
+      "purpose": "Application chrome for the top menubar: a fixed-height horizontal bar with three composable regions (start, center, end) and a dedicated brand slot for Azion logo variants. Matches the Webkit GlobalHeader (Figma node 4310:19617) — a Shell Core part with symmetric horizontal padding, a hairline bottom border, the menu trigger and brand grouped at the start, a growing nav region in the center, and trailing actions (Create, Copilot, Feedback, help, avatar) at the end. Consumers reorder or omit regions; logo and actions are not baked in. The bar has three placements, chosen with `kind`, and the only difference is where the inset is measured from. `app` is the window-wide chrome above the navigation rail, insetting its regions by the shell's own `--spacing-md`. `content` sits inside the content zone beside the rail, full bleed across it, insetting its regions by the page boundary (`--layout-boundary-inline`) so the first region opens on the same vertical as the page content beside it. A breadcrumb in an `app` bar cannot find that vertical — it measures its inset from the window, so the gap moves with the rail's width. `site` is the marketing placement, for a page that is a FRAMED column rather than an app zone: the surface stays full bleed (the hairline and the fill run to the window edges, because a bar is chrome) while the regions are capped at the site measure (`--container-site`) and centred, so the brand opens on the same vertical as the hero headline at every width. It is one declaration, not a sub-component: `padding-inline: max(boundary, (100% - measure) / 2 + boundary)` — the cap and the boundary hand off to each other, so below the measure the boundary is the whole inset and the placement collapses to `content`. An uncapped bar over a capped page comes apart above the measure: the column stops growing and the bar does not, which on a 2560px window put the logo 684px to the left of the headline under it."
     },
     "sidebar": {
       "import": "@aziontech/webkit/sidebar",

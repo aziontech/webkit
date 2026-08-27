@@ -1,3 +1,4 @@
+import Brand from '@aziontech/webkit/brand'
 import Breadcrumb from '@aziontech/webkit/breadcrumb'
 import Button from '@aziontech/webkit/button'
 import GlobalHeader from '@aziontech/webkit/global-header'
@@ -8,6 +9,12 @@ import { toSfc } from '../../../_shared/story-source'
 const IMPORT = [
   "import GlobalHeader from '@aziontech/webkit/global-header'",
   "import Default from '@aziontech/webkit/svg/azion/default'"
+]
+
+const SITE_IMPORT = [
+  "import Brand from '@aziontech/webkit/brand'",
+  "import Button from '@aziontech/webkit/button'",
+  "import GlobalHeader from '@aziontech/webkit/global-header'"
 ]
 
 const CONTENT_IMPORT = [
@@ -24,6 +31,7 @@ const CONTENT_IMPORT = [
 // code needs only `import GlobalHeader` — these extra registrations are a
 // Storybook-runtime concern.
 const components = {
+  Brand,
   GlobalHeader,
   'GlobalHeader.Left': GlobalHeader.Left,
   'GlobalHeader.Middle': GlobalHeader.Middle,
@@ -76,11 +84,11 @@ const meta = {
     },
     kind: {
       control: 'inline-radio',
-      options: ['app', 'content'],
+      options: ['app', 'content', 'site'],
       description:
-        "Where the bar sits: `app` spans the whole window above the navigation rail and insets its regions by the shell's own step; `content` sits inside the content zone beside the rail, full bleed, and insets them by the page boundary instead.",
+        "Where the bar sits: `app` spans the whole window above the navigation rail and insets its regions by the shell's own step; `content` sits inside the content zone beside the rail, full bleed, and insets them by the page boundary instead; `site` keeps that full-bleed surface on a framed marketing page but caps the regions at the site measure and centres them, so they land on the page's own column.",
       table: {
-        type: { summary: "'app' | 'content'" },
+        type: { summary: "'app' | 'content' | 'site'" },
         defaultValue: { summary: "'app'" },
         category: 'props'
       }
@@ -174,6 +182,44 @@ export const ContentZone = {
           'The bar placed inside the content zone, beside the navigation rail: full bleed across the zone, with its regions inset by the page boundary instead of the shell step — so the breadcrumb starts on the same vertical as the page content beside it.'
       },
       source: { code: toSfc(CONTENT_IMPORT, CONTENT_ZONE_TEMPLATE) }
+    }
+  }
+}
+
+// The site placement: the SURFACE is still full bleed, and the REGIONS are capped at
+// `--container-site` and centred — so the brand opens on the same vertical as the hero
+// headline under it, at any window width. The mock hero band is here to make that shared
+// vertical visible; it is not part of the component.
+const SITE_TEMPLATE = `<div class="flex w-full flex-col bg-(--bg-canvas)">
+  <GlobalHeader kind="site" aria-label="Azion">
+    <GlobalHeader.Brand>
+      <a href="/" aria-label="Azion home"><Brand kind="default" size="small" /></a>
+    </GlobalHeader.Brand>
+    <GlobalHeader.Middle class="justify-start!">
+      <a class="text-label-md text-(--text-default) no-underline" href="/pricing">Pricing</a>
+    </GlobalHeader.Middle>
+    <GlobalHeader.Right>
+      <Button label="Start for Free" kind="primary" size="medium" />
+    </GlobalHeader.Right>
+  </GlobalHeader>
+  <section class="mx-auto w-full max-w-(--container-site) px-(--layout-boundary-inline) py-(--spacing-xl)">
+    <h1 class="text-heading-xl text-(--text-default)">Distributed infrastructure for modern workloads</h1>
+    <p class="text-body-md text-(--text-muted)">The headline opens on the same vertical as the brand above it.</p>
+  </section>
+</div>`
+
+/** @type {import('@storybook/vue3').StoryObj<typeof GlobalHeader>} */
+export const SitePlacement = {
+  name: 'Site placement',
+  render: () => ({ components, template: SITE_TEMPLATE }),
+  parameters: {
+    controls: { disable: true },
+    docs: {
+      description: {
+        story:
+          "The marketing placement: the bar's surface still spans the window, but its regions are capped at the site measure and centred, so the brand lands on the framed page column instead of drifting to the window edge as the viewport grows."
+      },
+      source: { code: toSfc(SITE_IMPORT, SITE_TEMPLATE) }
     }
   }
 }
