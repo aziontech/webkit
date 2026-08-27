@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, inject, onBeforeUnmount, onMounted, ref, toRef, useAttrs, useSlots } from 'vue'
+  import { computed, inject, onBeforeUnmount, onMounted, ref, toRef, useAttrs } from 'vue'
 
   import Kbd from '../../../content/kbd/kbd.vue'
   import {
@@ -35,12 +35,10 @@
   )
 
   const attrs = useAttrs()
-  const slots = useSlots()
   const ctx = useCommandMenuContext()
   const groupId = inject(CommandMenuGroupIdKey, null)
 
-  const hasPrefix = computed(() => Boolean(slots['prefix']))
-
+  const rootRef = ref<HTMLElement | null>(null)
   const labelRef = ref<HTMLElement | null>(null)
   const itemText = ref(String(props.value))
 
@@ -86,7 +84,7 @@
       groupId,
       disabled: disabledRef,
       isVisible,
-      hasPrefix,
+      el: rootRef,
       activate
     })
   })
@@ -98,6 +96,7 @@
 
 <template>
   <div
+    ref="rootRef"
     v-show="isVisible"
     v-bind="attrs"
     role="option"
@@ -114,13 +113,13 @@
     @mouseenter="!disabled && ctx.setActive(value)"
   >
     <!--
-      Rendered for every item once ANY item in the list carries a prefix, so the
-      icon column is reserved and all labels start on the same x. The box is a
-      fixed `size-4` — the same glyph size Menu rows use — so an item's own icon
-      cannot widen the column and push its label out of line with the others.
+      Rendered only for an item that actually carries a prefix — an icon-less item
+      puts no empty box in the DOM and pays no indent. The box is a fixed `size-4`
+      (the glyph size a Menu row uses) so an oversized icon cannot widen the row
+      and pull its own label out of line with the iconed rows around it.
     -->
     <span
-      v-if="ctx.hasPrefixColumn.value"
+      v-if="$slots['prefix']"
       :data-testid="`${testId}__prefix`"
       class="flex size-4 shrink-0 items-center justify-center overflow-hidden"
     >
