@@ -140,7 +140,9 @@ async function main() {
     let ok = false
     let reason = ''
 
-    if (spec.startsWith('@aziontech/webkit')) {
+    // `@aziontech/webkit` and its subpaths only — NOT a sibling workspace whose name
+    // merely starts with it (`@aziontech/webkit-docs`), which resolves below.
+    if (spec === '@aziontech/webkit' || spec.startsWith('@aziontech/webkit/')) {
       ok = resolveAziontechWebkit(spec)
       reason = 'no matching entry in packages/webkit/package.json#exports'
     } else if (spec.startsWith('@aziontech/')) {
