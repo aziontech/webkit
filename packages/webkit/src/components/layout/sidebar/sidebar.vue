@@ -166,7 +166,22 @@
     transition: railTransition.value
   }))
 
-  const FOOTER_REGION_CLASS = 'w-full shrink-0 border-t border-(--border-default) p-(--spacing-md)'
+  /**
+   * A FIXED 56px BAND THAT CENTRES WHAT IS IN IT, which is two decisions working
+   * together. The height matches the header bar's, so a rail closed by a footer and
+   * a page closed by a bar share one horizontal; and because the height is fixed,
+   * the region is what has to do the centring — `flex` + `items-center` here, rather
+   * than trusting whatever the consumer drops in the slot to be exactly band-height.
+   * On the block box this was, `items-center` would have been inert.
+   *
+   * THE PADDING IS HORIZONTAL ONLY, and that is the fixed height's consequence, not
+   * a preference. `p-(--spacing-md)` leaves a 24px content box inside the 56px band,
+   * which the collapse trigger alone (`IconButton size="small"`, 28px) overflows.
+   * The band's height IS the vertical rhythm; a vertical padding would be a second,
+   * competing answer to the same question.
+   */
+  const FOOTER_REGION_CLASS =
+    'flex h-(--size-14) w-full shrink-0 items-center border-t border-(--border-default) px-(--spacing-md)'
 
   const footerBandClass = computed(() =>
     props.collapsible
