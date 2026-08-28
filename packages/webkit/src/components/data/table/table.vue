@@ -17,7 +17,17 @@
     type VisibilityState
   } from '@tanstack/vue-table'
   import { useDebounceFn } from '@vueuse/core'
-  import { computed, getCurrentInstance, provide, ref, useAttrs, useSlots, watch } from 'vue'
+  import {
+    computed,
+    getCurrentInstance,
+    nextTick,
+    onMounted,
+    provide,
+    ref,
+    useAttrs,
+    useSlots,
+    watch
+  } from 'vue'
 
   import { downloadCsv, toCsv } from '../../../utils/csv'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
@@ -60,6 +70,8 @@
     frozen?: 'start' | 'end'
     /** Fixed width (px) — needed for a frozen column that precedes another frozen column on the same edge, so sticky offsets can be summed. */
     width?: number
+    /** Minimum width (px). The column resolves to the widest of this floor and its own content (its header, with the sort affordance, and every rendered cell) — one width for the whole column, so a chip column reserves nothing it is not using and never clips a chip. `width` wins when both are set. */
+    minWidth?: number
     /** Cell alignment. */
     align?: 'start' | 'center' | 'end'
     /** Body cell kind (action renders a 40px trailing cell, auto-pinned to the right edge). */
@@ -464,6 +476,8 @@
   const RESIZE_FALLBACK_MIN_WIDTH = 40
   const resizeWidths = ref<Record<string, number>>({})
   const resizingColumnId = ref<string | null>(null)
+  // Widths resolved for `minWidth` columns — see the auto-fit block below.
+  const autoWidths = ref<Record<string, number>>({})
 
   // Shared context exposed via inject so descendant slots/controls can reach the
   // TanStack instance, the current selection, and clearSelection.
@@ -688,9 +702,10 @@
   const frozenEdgeOf = (c: TableColumn): 'start' | 'end' | undefined =>
     c.frozen ?? (c.kind === 'action' ? 'end' : undefined)
   // Width a frozen column contributes to a neighbour's sticky offset: its explicit
-  // `width`, or the 40px utility width for an action column (which carries none).
+  // `width`, the width resolved for its `minWidth` floor, or the 40px utility width
+  // for an action column (which carries none).
   const frozenWidthOf = (c: TableColumn): number =>
-    c.width ?? (c.kind === 'action' ? SELECTION_WIDTH : 0)
+    c.width ?? autoWidths.value[columnId(c)] ?? (c.kind === 'action' ? SELECTION_WIDTH : 0)
   const leftFrozenCols = computed<TableColumn[]>(() =>
     props.columns.filter((c: TableColumn) => frozenEdgeOf(c) === 'start')
   )
@@ -769,7 +784,9 @@
     // only the dragged column. The action column keeps its fixed 40px utility
     // width (never resized).
     const width =
-      meta.kind === 'action' ? undefined : (resizeWidths.value[column.id] ?? widthOf(column.id))
+      meta.kind === 'action'
+        ? undefined
+        : (resizeWidths.value[column.id] ?? widthOf(column.id) ?? autoWidths.value[column.id])
     // Fixed width (not min-width) so every row sizes the column identically and
     // the header lines up with the body — flex-grow would distribute differently per row.
     // `!important`: a fixed column carries BOTH this inline width and the
@@ -798,7 +815,7 @@
   // Starting width of a column before any drag: an explicit `width`, else a width
   // derived from its `grow` weight (the emphasized column starts wider).
   const initialColumnWidth = (column: ColumnLike & { id: string }): number =>
-    widthOf(column.id) ?? (metaOf(column).grow ?? 1) * 150
+    widthOf(column.id) ?? autoWidths.value[column.id] ?? (metaOf(column).grow ?? 1) * 150
 
   // Natural (max-content) width of a single header/body cell. The cell is cloned
   // off the live grid and sized purely to its content. The `data-grow` /
@@ -845,6 +862,79 @@
     for (const cell of cells) max = Math.max(max, measureCellContentWidth(cell, host))
     return Math.ceil(max) || RESIZE_FALLBACK_MIN_WIDTH
   }
+
+  // --- Auto-fit: `minWidth` columns ------------------------------------------
+  // A `minWidth` column is sized to the widest thing it actually holds — its header
+  // (with the sort affordance) or any rendered body cell — with the declared number
+  // as the FLOOR, never the cap. A fixed `width` is a bet in both directions: guess
+  // high and the column reserves space the rest of the row needs, guess low and the
+  // content inside it truncates (a chip list ends up as `SQL In…`). The floor only
+  // has to be right about the minimum.
+  //
+  // ONE width is resolved per column and applied to the header and to every body
+  // cell, which is what keeps this inside the invariant fixed widths exist for: the
+  // column resolves identically in every row. A per-cell `min-width` would let each
+  // row size to its own content and drift the header away from the body.
+  //
+  // It has to be measured because a flex row cannot express "as wide as the widest
+  // cell in this column": every row is its own flex container and knows nothing
+  // about its siblings. The measurement is the same clone-based one the resize floor
+  // uses, so a column's auto width and its drag floor can never disagree.
+  const rootEl = ref<HTMLElement | null>(null)
+
+  const measureAutoWidths = (): void => {
+    const root = rootEl.value
+    // Skeleton rows are not the content: measuring while loading would size every
+    // column to a placeholder and then never grow it back.
+    if (!root || props.loading) return
+    const headCells = Array.from(root.querySelectorAll<HTMLElement>('[role="columnheader"]'))
+    const offset = props.enableRowSelection ? 1 : 0
+    const next: Record<string, number> = {}
+    headers.value.forEach((header, index) => {
+      const column = props.columns.find((c: TableColumn) => columnId(c) === header.column.id)
+      // An explicit `width` is the consumer overriding the measurement outright.
+      if (column?.minWidth == null || column.width != null) return
+      const cell = headCells[index + offset]
+      if (!cell) return
+      next[header.column.id] = Math.max(column.minWidth, columnContentMinWidth(cell))
+    })
+    const current = autoWidths.value
+    const ids = new Set([...Object.keys(next), ...Object.keys(current)])
+    for (const id of ids) {
+      if (next[id] !== current[id]) {
+        autoWidths.value = next
+        return
+      }
+    }
+  }
+
+  // Debounced because the rendered content changes in bursts (a sort, a page turn,
+  // a column toggled back on) and one measurement per burst is enough; measuring
+  // reads layout, so an un-coalesced version would reflow per keystroke of a filter.
+  const scheduleAutoFit = useDebounceFn(() => measureAutoWidths(), 32)
+
+  onMounted(() => {
+    void nextTick(() => measureAutoWidths())
+    // Text width is font-dependent, and the first paint can happen on the fallback
+    // face. Re-measure once the real one is in.
+    const fonts = (globalThis.document as Document & { fonts?: { ready?: Promise<unknown> } }).fonts
+    if (fonts?.ready) void fonts.ready.then(() => measureAutoWidths())
+  })
+
+  watch(
+    () => [
+      props.columns,
+      props.loading,
+      props.enableRowSelection,
+      // The rendered page's records and the visible column order — the two things
+      // that change what the cells contain. Same shallow dependency the body rows'
+      // v-memo uses, so a mutation the table does not re-render for cannot desync
+      // the widths either.
+      rows.value.map((row) => row.original),
+      headers.value.map((header) => header.column.id).join('|')
+    ],
+    () => void scheduleAutoFit()
+  )
 
   // Native pointer resize: capture the pointer X and the column's current width,
   // then on move write ONLY this column's new width into the reactive map — the
@@ -911,6 +1001,7 @@
 
 <template>
   <div
+    ref="rootEl"
     v-bind="$attrs"
     role="table"
     :data-testid="testId"
@@ -1074,7 +1165,7 @@
               <TableRow
                 v-for="row in rows"
                 :key="row.id"
-                v-memo="[row.getIsSelected(), row.original, resizeWidths]"
+                v-memo="[row.getIsSelected(), row.original, resizeWidths, autoWidths]"
                 :selected="row.getIsSelected()"
                 @click="onRowClick($event, row)"
               >

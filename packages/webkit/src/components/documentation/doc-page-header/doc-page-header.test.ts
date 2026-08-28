@@ -146,6 +146,36 @@ describe('DocPageHeader', () => {
     })
   })
 
+  describe('the trail and the action are slots over the built-ins', () => {
+    it('replaces the built-in breadcrumb with a passed trail', () => {
+      const { getByText, queryByText } = render(DocPageHeader, {
+        props: { title: 'T', breadcrumb: CRUMBS },
+        slots: { breadcrumb: '<nav aria-label="Trail"><a href="/home">Home</a></nav>' }
+      })
+      expect(getByText('Home')).toBeInTheDocument()
+      // The prop-fed fallback is the slot's content, so passing one replaces it.
+      expect(queryByText('Docs')).not.toBeInTheDocument()
+    })
+
+    it('replaces the built-in Copy Page control with passed actions', () => {
+      const { getByText, queryByText } = render(DocPageHeader, {
+        props: { title: 'T', source: SOURCE },
+        slots: { actions: '<button type="button">Ask an agent</button>' }
+      })
+      expect(getByText('Ask an agent')).toBeInTheDocument()
+      expect(queryByText('Copy Page')).not.toBeInTheDocument()
+    })
+
+    it('keeps the passed action on the title row', () => {
+      const { getByText, getByTestId } = render(DocPageHeader, {
+        props: { title: 'Deploy an application' },
+        slots: { actions: '<button type="button">Ask an agent</button>' }
+      })
+      const row = getByTestId('documentation-doc-page-header').querySelector('h1')?.parentElement
+      expect(row?.contains(getByText('Ask an agent'))).toBe(true)
+    })
+  })
+
   describe('accessibility', () => {
     it('has no violations across every region this component owns', async () => {
       // copyable: false, so the masthead is entirely DocPageHeader's own markup —
