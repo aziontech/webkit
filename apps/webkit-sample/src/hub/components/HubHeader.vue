@@ -92,7 +92,7 @@
 <template>
   <!-- THE BAR OPENS ON THE PAGE BOUNDARY, like every other bar in this app. The
        `layout-boundary-inline` utility is the same token webkit's own `GlobalHeader`
-       reads for `kind="content"` (16, then 24 from `sm`) — the site nav carries it the
+       reads in its default placement (16, then 24 from `sm`) — the site nav carries it the
        same way, hand-rolled. It used to take a flat `--spacing-md` (16 at every width),
        which agreed with the rest of the app below `sm` and sat 8px shy of it above. -->
   <header

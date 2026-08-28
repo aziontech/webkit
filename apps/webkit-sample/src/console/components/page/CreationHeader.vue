@@ -54,16 +54,12 @@
 </script>
 
 <template>
-  <!-- `kind="content"`, even though this bar spans the WINDOW and has no content zone
-       beside it: the kind is what decides the inset, and `app` is a flat 16 while every
-       create and wizard flow below it opens its column on `--layout-boundary-inline`.
-       The two disagreed at every width the form column did not cap at — the back arrow
-       sitting inside the heading it belongs to. `content` puts the bar on the same token
-       the page reads, so they open on one vertical wherever the column is uncapped. -->
-  <GlobalHeader
-    kind="content"
-    aria-label="Azion Console"
-  >
+  <!-- No `kind`: the default placement reads `--layout-boundary-inline`, the same token
+       every create and wizard flow below opens its column on — so wherever that column is
+       uncapped, the back arrow and the heading it belongs to sit on one vertical. This bar
+       spans the WINDOW and has no content zone beside it; the default is still right,
+       because what it answers to is the page, not a rail. -->
+  <GlobalHeader aria-label="Azion Console">
     <GlobalHeader.Left>
       <IconButton
         v-if="showBack"

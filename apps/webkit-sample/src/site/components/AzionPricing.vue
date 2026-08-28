@@ -42,7 +42,7 @@
   // Functions and Home; the three pages of the site draw their first horizontal one way.
   // The headline still sits on the same content column as the plan names under it and
   // every row label in the matrix below: the band reads `--layout-boundary-inline` and
-  // caps at `--container-site`, which is exactly what the column below it does.
+  // caps at `--layout-measure-site`, which is exactly what the column below it does.
   import Accordion from '@aziontech/webkit/accordion'
   import Button from '@aziontech/webkit/button'
   import CardPricing from '@aziontech/webkit/card-pricing'
@@ -107,14 +107,15 @@
        is the page's first horizontal — one uninterrupted line, edge to edge, with the
        framed column starting UNDER it. The rule used to stop at the frame: the hero was
        the opening band of the plans brick INSIDE the column, so its floor ran the column's
-       1192px and the site's three pages opened three different ways.
+       own width and the site's three pages opened three different ways.
 
        The old objection to a band here was alignment — a hero in a column of its own put
        the H1 at the band's `xl` against the column's `lg` boundary, a step to the right of
        every plan name under it. That is gone: BannerContainer reads
-       `--layout-boundary-inline`, the same token the plan names, every matrix row label and
-       the nav's own logo open at, and its column is `--container-site`, the same measure
-       SectionContainer takes below. So the H1 lands on the page's ONE content column by
+       `--layout-boundary-inline`, the same token the plan names and every matrix row label
+       open at, and its column is `--layout-measure-site`, the same measure SectionContainer
+       takes below. (The nav's logo joins them only below the caps: the bar has its own,
+       wider column — see SiteNav.) So the H1 lands on the page's ONE content column by
        construction rather than by two numbers kept equal by hand.
 
        `:padded="false"` because the band's own `xl` rhythm is not this hero's: the copy
@@ -145,15 +146,15 @@
 
   <!-- ══ The framed column ═════════════════════════════════════════════════ ─
        THE COLUMN IS INSET FROM THE WINDOW, AT EVERY WIDTH. On a wide screen that inset is
-       free: `--container-site` (1192px) is narrower than the window, `mx-auto` centres the
+       free: `--layout-measure-site` (1388px) is narrower than the window, `mx-auto` centres the
        column, and its `border-x` reads as the page's vertical frame with canvas either side.
-       Below 1192 the cap stops doing anything — the column becomes the window — and the two
+       Below the cap it stops doing anything — the column becomes the window — and the two
        rules land ON the window edges, where a 1px hairline is not a frame, it is a seam
        against the bezel. So the page frame that organises the whole desktop layout simply
        ceased to exist on a phone.
 
        ONE SYMMETRIC PADDING FIXES IT AT EVERY WIDTH, WITH NO BREAKPOINT. `mx-auto` centres
-       inside the PADDING box, so while `window - 2 × boundary ≥ --container-site` the column
+       inside the PADDING box, so while `window - 2 × boundary ≥ --layout-measure-site` the column
        is capped, not squeezed, and the padding shifts it by exactly nothing: at 1440 the
        column sits at 124…1316 with the wrapper and 124…1316 without it. The padding only
        starts to bite once the window is narrower than the cap — precisely where the cap has
@@ -169,9 +170,8 @@
        between them, inset. That is exactly the desktop relationship — a full-width rule, a
        narrower framed column hanging off it — carried down to the phone instead of collapsing
        there. The header is untouched: it is chrome, and chrome is full-bleed. -->
-  <div class="px-(--layout-boundary-inline)">
-    <SectionContainer max-width="site">
-      <!-- ── The term switch and the three tiers — ONE block ─────────────────
+  <SectionContainer max-width="site">
+    <!-- ── The term switch and the three tiers — ONE block ─────────────────
          The control and the thing it controls belong to the same brick: the switch is the
          cards' own header strip, not a band of its own above them, so both live under one
          frame and the reader never loses which row the term applies to.
@@ -181,17 +181,17 @@
          vertical rules back to the column, `flush` drops the top rule it would otherwise
          draw against that same hero rule, and `marks="bottom"` ticks the one junction
          nothing else draws. -->
-      <SectionModule
-        id="plans"
-        :divided="false"
-        :padded="false"
+    <SectionModule
+      id="plans"
+      :divided="false"
+      :padded="false"
+    >
+      <FrameBox
+        flush
+        borders="y"
+        marks="bottom"
       >
-        <FrameBox
-          flush
-          borders="y"
-          marks="bottom"
-        >
-          <!-- The term switch is a STRIP between two rules — the hero's floor above it, its
+        <!-- The term switch is a STRIP between two rules — the hero's floor above it, its
              own `border-b` below, which is also the edge the card grid's verticals terminate
              on. That stack of horizontals (hero floor → switch strip → the grid's own top
              rule) is what CONNECTS the headline to the tiers: the three cards read as the
@@ -200,15 +200,15 @@
              to carry a phone-only 48px below, because the first card arrived 16px under the
              control with nothing between them, and the strip's own rules are the break that
              extra padding was standing in for. -->
-          <div class="flex justify-center border-b border-(--border-default) p-(--spacing-lg)">
-            <SegmentedButton
-              v-model="period"
-              :options="BILLING_PERIODS"
-              aria-label="Billing period"
-            />
-          </div>
+        <div class="flex justify-center border-b border-(--border-default) p-(--spacing-lg)">
+          <SegmentedButton
+            v-model="period"
+            :options="BILLING_PERIODS"
+            aria-label="Billing period"
+          />
+        </div>
 
-          <!-- ── THE ROW OF CARDS IS ITS OWN FRAMED BOX ────────────────────────
+        <!-- ── THE ROW OF CARDS IS ITS OWN FRAMED BOX ────────────────────────
              The inset belongs to the OUTER CONTAINER, and it is the page boundary itself:
              the wrapper takes `layout-boundary-inline` on the inline axis and nothing on
              the block one, so the box steps one boundary in from the band's sides and
@@ -265,212 +265,212 @@
              junction ONE hairline instead of two lines a pixel apart, and `marks="none"`
              follows from it — a corner tick registers a junction nothing else draws, and
              here both horizontals belong to the band. -->
-          <div class="sm:max-lg:layout-boundary-inline">
-            <FrameBox
-              flush="y"
-              marks="none"
-              class="max-sm:border-none lg:border-none"
+        <div class="sm:max-lg:layout-boundary-inline">
+          <FrameBox
+            flush="y"
+            marks="none"
+            class="max-sm:border-none lg:border-none"
+          >
+            <CardGrid
+              variant="divider"
+              :columns="3"
             >
-              <CardGrid
-                variant="divider"
-                :columns="3"
-              >
-                <!-- THREE TIERS IN A TWO-UP GRID LEAVE ONE CELL EMPTY, and an empty cell of a
+              <!-- THREE TIERS IN A TWO-UP GRID LEAVE ONE CELL EMPTY, and an empty cell of a
                    `divider` grid is not empty: it shows the wrapper's `--border-default`,
                    which paints a grey quarter-screen block beside the last tier. So the
                    last card takes that cell whenever the count is odd — one wide tier
                    closing the pair above it — and drops back to one column at `lg`, where
                    three columns divide the row exactly. -->
-                <CardPricing
-                  v-for="(card, index) in cards"
-                  :key="card.id"
-                  :class="[
-                    card.highlighted ? 'bg-(--bg-surface)' : 'bg-(--bg-canvas)',
-                    index === cards.length - 1 && cards.length % 2 === 1
-                      ? 'sm:col-span-2 lg:col-span-1'
-                      : ''
-                  ]"
-                  aligned
-                  slot-position="middle"
-                  kind="transparent"
-                  :plan-title="card.name"
-                  :value="card.value"
-                  :prefix="card.prefix"
-                  :suffix="card.suffix"
-                  :show-prefix="Boolean(card.prefix)"
-                  :show-suffix="Boolean(card.suffix)"
-                  :pricing-details="card.caveat"
-                  :show-tag="card.highlighted"
-                  :tag-label="card.tagLabel"
-                  action-label=""
-                  :data-testid="`pricing-card-${card.id}`"
-                >
-                  <!-- What the tier includes: the lead-in the real page states, then the list.
+              <CardPricing
+                v-for="(card, index) in cards"
+                :key="card.id"
+                :class="[
+                  card.highlighted ? 'bg-(--bg-surface)' : 'bg-(--bg-canvas)',
+                  index === cards.length - 1 && cards.length % 2 === 1
+                    ? 'sm:col-span-2 lg:col-span-1'
+                    : ''
+                ]"
+                aligned
+                slot-position="middle"
+                kind="transparent"
+                :plan-title="card.name"
+                :value="card.value"
+                :prefix="card.prefix"
+                :suffix="card.suffix"
+                :show-prefix="Boolean(card.prefix)"
+                :show-suffix="Boolean(card.suffix)"
+                :pricing-details="card.caveat"
+                :show-tag="card.highlighted"
+                :tag-label="card.tagLabel"
+                action-label=""
+                :data-testid="`pricing-card-${card.id}`"
+              >
+                <!-- What the tier includes: the lead-in the real page states, then the list.
                      The lead-in is a caption on the list, not a heading — it says how to read
                      the five lines under it ("everything available", "scale beyond the
                      included limits"), which is a different claim per tier. -->
-                  <div class="flex flex-col gap-(--spacing-md)">
-                    <p class="m-0 text-body-sm text-(--text-muted)">{{ card.featuresTitle }}</p>
-                    <ul class="m-0 flex list-none flex-col gap-(--spacing-sm) p-0">
-                      <li
-                        v-for="feature in card.features"
-                        :key="feature.label"
-                        class="flex items-start gap-(--spacing-sm)"
-                      >
-                        <i
-                          :class="[feature.icon, 'mt-0.5 shrink-0 text-body-sm text-(--primary)']"
-                          aria-hidden="true"
-                        />
-                        <span class="text-body-sm text-(--text-default)">{{ feature.label }}</span>
-                      </li>
-                    </ul>
-                  </div>
+                <div class="flex flex-col gap-(--spacing-md)">
+                  <p class="m-0 text-body-sm text-(--text-muted)">{{ card.featuresTitle }}</p>
+                  <ul class="m-0 flex list-none flex-col gap-(--spacing-sm) p-0">
+                    <li
+                      v-for="feature in card.features"
+                      :key="feature.label"
+                      class="flex items-start gap-(--spacing-sm)"
+                    >
+                      <i
+                        :class="[feature.icon, 'mt-0.5 shrink-0 text-body-sm text-(--primary)']"
+                        aria-hidden="true"
+                      />
+                      <span class="text-body-sm text-(--text-default)">{{ feature.label }}</span>
+                    </li>
+                  </ul>
+                </div>
 
-                  <!-- One filled button in the row, and it is the brand fill: the recommended
+                <!-- One filled button in the row, and it is the brand fill: the recommended
                      tier gets `primary`, the other two `outlined`. Three filled buttons side
                      by side name no primary action at all. -->
-                  <template #actions>
-                    <Button
-                      :label="card.action.label"
-                      :kind="card.action.kind"
-                      size="large"
-                      class="w-full"
-                      @click="choose(card)"
-                    />
-                  </template>
-                </CardPricing>
-              </CardGrid>
-            </FrameBox>
-          </div>
-        </FrameBox>
-      </SectionModule>
+                <template #actions>
+                  <Button
+                    :label="card.action.label"
+                    :kind="card.action.kind"
+                    size="large"
+                    class="w-full"
+                    @click="choose(card)"
+                  />
+                </template>
+              </CardPricing>
+            </CardGrid>
+          </FrameBox>
+        </div>
+      </FrameBox>
+    </SectionModule>
 
-      <!-- The tiers and the matrix are two readings of the same comparison, and they were
+    <!-- The tiers and the matrix are two readings of the same comparison, and they were
          sharing one hairline — the cards' floor doubling as the matrix's ceiling, which
          read as one 1500px-tall table. A hatched Spacer between them is the page's own
          way of saying "same subject, new section": it registers the junction with its own
          rules and ticks, and gives the sticky plan header a band to arrive over. -->
-      <SectionGap hatch />
+    <SectionGap hatch />
 
-      <!-- ── The feature matrix ─────────────────────────────────────────────
+    <!-- ── The feature matrix ─────────────────────────────────────────────
          `:divided="false"`: the matrix's own sticky plan header carries the rule that
          divides it from the cards band above. `:padded="false"` because every cell in it
          owns its own inset. -->
-      <SectionModule
-        id="comparison"
-        :divided="false"
-        :padded="false"
-      >
-        <PricingComparison
-          :plans="PLANS"
-          :sections="COMPARISON_SECTIONS"
-          :link="ON_DEMAND_LINK"
-          @select="choose"
-        />
-      </SectionModule>
+    <SectionModule
+      id="comparison"
+      :divided="false"
+      :padded="false"
+    >
+      <PricingComparison
+        :plans="PLANS"
+        :sections="COMPARISON_SECTIONS"
+        :link="ON_DEMAND_LINK"
+        @select="choose"
+      />
+    </SectionModule>
 
-      <SectionGap hatch />
+    <SectionGap hatch />
 
-      <!-- ── Trust ──────────────────────────────────────────────────────────
+    <!-- ── Trust ──────────────────────────────────────────────────────────
          The claim, then the marks that stand behind it. The SectionTitle in the `#header`
          slot is itself a frame and draws its own bottom rule and ticks, so the strip
          below it is `flush` with `marks="bottom"` and owns only its floor. -->
-      <SectionModule
-        :divided="false"
-        :padded="false"
-      >
-        <template #header>
-          <SectionTitle
-            eyebrow="Trusted by industry leaders"
-            title="The Infrastructure Behind High-Performance Applications"
-          />
-        </template>
+    <SectionModule
+      :divided="false"
+      :padded="false"
+    >
+      <template #header>
+        <SectionTitle
+          eyebrow="Trusted by industry leaders"
+          title="The Infrastructure Behind High-Performance Applications"
+        />
+      </template>
 
-        <FrameBox
-          flush
-          borders="y"
-          marks="bottom"
-        >
-          <!-- The strip carries no inset of its own — it is a full-bleed marquee — so the
+      <FrameBox
+        flush
+        borders="y"
+        marks="bottom"
+      >
+        <!-- The strip carries no inset of its own — it is a full-bleed marquee — so the
              band gives it the vertical air. Without it the first row of marks sat directly
              on the SectionTitle's bottom rule. -->
-          <div class="py-(--spacing-xl)">
-            <BrandCarousel
-              :clients="CLIENTS"
-              monochrome
-            />
-          </div>
-        </FrameBox>
-      </SectionModule>
+        <div class="py-(--spacing-xl)">
+          <BrandCarousel
+            :clients="CLIENTS"
+            monochrome
+          />
+        </div>
+      </FrameBox>
+    </SectionModule>
 
-      <SectionGap hatch />
+    <SectionGap hatch />
 
-      <!-- ── Platform primitives ────────────────────────────────────────────
+    <!-- ── Platform primitives ────────────────────────────────────────────
          The same four-column link grid the homepage carries, in this page's pt-BR
          wording. The column heading shares the `lg` inset with its rows, so the label and
          every product name start on one content column; the grid's `gap-px` draws the
          seams, which is why no column carries a border of its own. -->
-      <SectionModule
-        :divided="false"
-        :padded="false"
+    <SectionModule
+      :divided="false"
+      :padded="false"
+    >
+      <template #header>
+        <SectionTitle
+          eyebrow="Platform primitives"
+          title="Serverless AI-Native Primitives"
+          description="Enterprise-grade reliability, security and performance, without requiring specialized operational expertise."
+        />
+      </template>
+
+      <FrameBox
+        flush
+        borders="y"
+        marks="bottom"
       >
-        <template #header>
-          <SectionTitle
-            eyebrow="Platform primitives"
-            title="Serverless AI-Native Primitives"
-            description="Enterprise-grade reliability, security and performance, without requiring specialized operational expertise."
-          />
-        </template>
-
-        <FrameBox
-          flush
-          borders="y"
-          marks="bottom"
+        <CardGrid
+          variant="divider"
+          :columns="4"
+          :mobile-columns="1"
         >
-          <CardGrid
-            variant="divider"
-            :columns="4"
-            :mobile-columns="1"
+          <NavColumn
+            v-for="group in PRIMITIVE_GROUPS"
+            :key="group.label"
+            :title="group.label"
           >
-            <NavColumn
-              v-for="group in PRIMITIVE_GROUPS"
-              :key="group.label"
-              :title="group.label"
-            >
-              <NavItem
-                v-for="primitive in group.items"
-                :key="primitive.title"
-                :icon="primitive.icon"
-                :title="primitive.title"
-                :description="primitive.description"
-                :href="primitive.href || '#'"
-              />
-            </NavColumn>
-          </CardGrid>
-        </FrameBox>
-      </SectionModule>
+            <NavItem
+              v-for="primitive in group.items"
+              :key="primitive.title"
+              :icon="primitive.icon"
+              :title="primitive.title"
+              :description="primitive.description"
+              :href="primitive.href || '#'"
+            />
+          </NavColumn>
+        </CardGrid>
+      </FrameBox>
+    </SectionModule>
 
-      <SectionGap hatch />
+    <SectionGap hatch />
 
-      <!-- ── FAQ ────────────────────────────────────────────────────────────
+    <!-- ── FAQ ────────────────────────────────────────────────────────────
          Two cells at the design's split: the heading holds the left third and the
          questions the right two. The seam between them and the rules between the
          questions are the grid's `gap-px`, so neither cell draws a border — and each
          fills `--bg-canvas`, or the whole band goes border-coloured. -->
-      <SectionModule
-        id="faq"
-        :divided="false"
-        :padded="false"
+    <SectionModule
+      id="faq"
+      :divided="false"
+      :padded="false"
+    >
+      <FrameBox
+        flush
+        borders="y"
+        marks="bottom"
       >
-        <FrameBox
-          flush
-          borders="y"
-          marks="bottom"
+        <div
+          class="grid gap-px bg-(--border-default) [--accordion-inset:var(--spacing-lg)] lg:grid-cols-3 lg:[--accordion-inset:var(--spacing-xl)]"
         >
-          <div
-            class="grid gap-px bg-(--border-default) [--accordion-inset:var(--spacing-lg)] lg:grid-cols-3 lg:[--accordion-inset:var(--spacing-xl)]"
-          >
-            <!-- The heading takes the BAND'S OWN INSET across — `--accordion-inset`,
+          <!-- The heading takes the BAND'S OWN INSET across — `--accordion-inset`,
                declared once on the grid above and read by both cells — and the ROW's step
                down (`md`), so its first line lands on the first question's and the two
                cells open on one line.
@@ -497,13 +497,13 @@
                It is still the one box in this band that does not run a single token on all
                four sides, because its top edge belongs to the stack beside it rather than
                to itself. -->
-            <div class="bg-(--bg-canvas) px-(--accordion-inset) py-(--spacing-md)">
-              <h2 class="m-0 mt-(--spacing-md) text-balance text-heading-lg text-(--text-default)">
-                Frequently Asked Questions
-              </h2>
-            </div>
-            <div class="bg-(--bg-canvas) lg:col-span-2">
-              <!-- `large` because this is a reading surface, not a console panel: the
+          <div class="bg-(--bg-canvas) px-(--accordion-inset) py-(--spacing-md)">
+            <h2 class="m-0 mt-(--spacing-md) text-balance text-heading-lg text-(--text-default)">
+              Frequently Asked Questions
+            </h2>
+          </div>
+          <div class="bg-(--bg-canvas) lg:col-span-2">
+            <!-- `large` because this is a reading surface, not a console panel: the
                  question is body-md and the answer body-sm.
 
                  ── THE ROW IS THE MATRIX'S ROW ──
@@ -559,44 +559,43 @@
                  height-animated box, so padding there cannot compress past itself and jumps
                  at both ends of the transition, and it clips to `overflow-hidden`, so a
                  negative pull on its child is sliced off across the answer's first line. -->
-              <Accordion
-                type="single"
-                collapsible
-                size="large"
+            <Accordion
+              type="single"
+              collapsible
+              size="large"
+            >
+              <Accordion.Item
+                v-for="(item, index) in FAQ"
+                :key="item.value"
+                :value="item.value"
+                :class="[
+                  'border-(--border-default) data-[state=open]:border-b',
+                  index === FAQ.length - 1 && 'border-b-0 data-[state=open]:border-b-0'
+                ]"
               >
-                <Accordion.Item
-                  v-for="(item, index) in FAQ"
-                  :key="item.value"
-                  :value="item.value"
-                  :class="[
-                    'border-(--border-default) data-[state=open]:border-b',
-                    index === FAQ.length - 1 && 'border-b-0 data-[state=open]:border-b-0'
-                  ]"
+                <Accordion.Trigger
+                  class="border-b-0! py-(--spacing-md) data-[state=open]:min-h-0 data-[state=open]:pb-0"
                 >
-                  <Accordion.Trigger
-                    class="border-b-0! py-(--spacing-md) data-[state=open]:min-h-0 data-[state=open]:pb-0"
+                  <span class="text-body-md text-(--text-default)">{{ item.question }}</span>
+                </Accordion.Trigger>
+                <Accordion.Content>
+                  <p
+                    class="m-0 max-w-(--container-2xl) px-(--accordion-inset) pt-(--spacing-xs) pb-(--spacing-md) text-body-sm text-(--text-muted)"
                   >
-                    <span class="text-body-md text-(--text-default)">{{ item.question }}</span>
-                  </Accordion.Trigger>
-                  <Accordion.Content>
-                    <p
-                      class="m-0 max-w-(--container-2xl) px-(--accordion-inset) pt-(--spacing-xs) pb-(--spacing-md) text-body-sm text-(--text-muted)"
-                    >
-                      {{ item.answer }}
-                    </p>
-                  </Accordion.Content>
-                </Accordion.Item>
-              </Accordion>
-            </div>
+                    {{ item.answer }}
+                  </p>
+                </Accordion.Content>
+              </Accordion.Item>
+            </Accordion>
           </div>
-        </FrameBox>
-      </SectionModule>
+        </div>
+      </FrameBox>
+    </SectionModule>
 
-      <SectionGap hatch />
+    <SectionGap hatch />
 
-      <!-- The closing band, shared with the homepage. It takes no props here: its own
+    <!-- The closing band, shared with the homepage. It takes no props here: its own
          defaults are this copy, so the two pages close identically. -->
-      <SiteCta />
-    </SectionContainer>
-  </div>
+    <SiteCta />
+  </SectionContainer>
 </template>

@@ -2,9 +2,9 @@
   // The single Azion Console app shell, shared by every console page.
   //
   // THE SHAPE: the rail runs the FULL HEIGHT of the window, and the GlobalHeader sits
-  // INSIDE the content zone beside it (`kind="content"`) rather than spanning the app
-  // above it. Cloudflare's console is the reference, and the reason is alignment: the
-  // bar's job at its leading edge is to say WHERE you are, and a breadcrumb read against
+  // INSIDE the content zone beside it rather than spanning the app above it. Cloudflare's
+  // console is the reference, and the reason is alignment: the bar's job at its leading
+  // edge is to say WHERE you are, and a breadcrumb read against
   // the page under it has to start on the same vertical. A window-wide bar cannot find
   // that vertical — it measures its inset from the window, so the gap moves with the
   // rail's width. The content-zone bar is FULL BLEED across the zone and takes the page's
@@ -379,10 +379,10 @@
     />
 
     <!-- THE CONTENT ZONE: the bar, then the page. Both are FULL BLEED across the zone and
-         both take the same page boundary inset — `--layout-boundary-inline`, from
-         `kind="content"` on the bar and from `.layout-boundary` on the scroll box below —
-         so the breadcrumb opens on the same vertical as the page's content. Retuning the
-         boundary moves both, in one place (packages/theme's layout tokens). -->
+         both take the same page boundary inset — `--layout-boundary-inline`, from the bar's
+         default placement and from `.layout-boundary` on the scroll box below — so the
+         breadcrumb opens on the same vertical as the page's content. Retuning the boundary
+         moves both, in one place (packages/theme's layout tokens). -->
     <div class="flex min-w-0 flex-1 flex-col">
       <!-- `@container`, because the search in the trailing cluster switches between its two
            shapes on THIS BAR's width. The bar is the only box in the header whose width is
@@ -391,7 +391,6 @@
            beside it — which is why a viewport breakpoint could not serve both.
            See @shared/ui/HeaderSearch.vue. -->
       <GlobalHeader
-        kind="content"
         aria-label="Azion Console"
         class="@container"
       >

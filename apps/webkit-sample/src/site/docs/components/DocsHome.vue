@@ -6,9 +6,28 @@
   // this row "Getting Started" itself, which spent the section's name on one page and left
   // the home with none. The file was called `DocsGetStarted` for the same reason.
   //
-  // IT IS A READING PAGE. Not a landing page, not a page with a landing page on top of
-  // it — the same three lines every other docs page opens with (`layout-column-docs` +
-  // the inline boundary + `DocProse`), and a masthead as its first block.
+  // IT IS A READING PAGE, ON THE SITE'S COLUMN. Not a landing page, not a page with a
+  // landing page on top of it — the same shape every other docs page opens with (the
+  // inline boundary + `DocProse`, and a masthead as its first block) — but the MEASURE is
+  // `--layout-measure-site` and not `--layout-measure-content`.
+  //
+  // THE DOCS MEASURE IS CAPPED BY LINE LENGTH, which is the right cap for a page read
+  // line by line and the wrong one for this page: it holds almost no flowing copy. Every
+  // section here is a heading, one sentence and a bordered grid, and a grid's column
+  // count is a VIEWPORT breakpoint, not a container query (`DocCardGroup` goes 2-up from
+  // `sm`, 3- or 4-up from `lg`) — so a narrower column never folds a set into fewer
+  // columns, it just divides the same three or four cards into a narrower strip each. The
+  // front door of the documentation was showing its card sets smaller than the room it
+  // had to spend on them, to respect a limit its payload never tests.
+  //
+  // `--layout-measure-site` IS THE MARKETING SITE'S OWN FRAME — the column its hero,
+  // sections and footer all share — so the two front doors of this app open on one
+  // measure, and retuning that frame moves both. (The top BAR is not on it: it takes the
+  // wider `--layout-measure-site-header`, because a bar is chrome. See GlobalHeader.)
+  // The reading pages BEHIND this one keep `layout-column-content` (DocsMdxPage,
+  // DocsAgentSetup, DocsAgentPage): they are pages of prose, which is what the
+  // line-length cap is for — and that class is named for its PAYLOAD, not for the docs,
+  // which is why a blog article will take the same column.
   //
   // Two things went away to get here, in that order. First the Hub shape: a framed
   // column (`SectionContainer`'s border-x) of banded modules (`SectionModule`'s header
@@ -420,12 +439,22 @@
 
 <template>
   <!-- ══ THE PAGE — one column, masthead first ═══════════════════════════════
-       The same three lines every other documentation page opens with: the docs
-       MEASURE (`layout-column-docs`, the reading column capped by line length),
-       the page's inline boundary, and the section step above the first block. The
-       home's masthead and its sections sit on that one column, at the same left
-       edge and on the same rhythm as a tutorial's — one pattern, with no exception
-       left in it.
+       The same three lines every other documentation page opens with — a MEASURE,
+       the page's inline boundary, and the section step above the first block — with
+       the SITE's measure in place of the docs one (see the script block). The home's
+       masthead and its sections sit on that one column, at the same left edge and on
+       the same rhythm as a tutorial's; the column is wider, and that is the only
+       exception left in the pattern.
+
+       THE MEASURE IS SPELLED THE WAY THE SITE SPELLS IT — `max-w-(--layout-measure-site)`
+       over `mx-auto w-full`, with the boundary INSIDE the cap — rather than through a
+       `layout-column-*` utility. Those widen their cap by the inset when the element
+       also carries the boundary, so the measure lands as CONTENT width; a site band
+       does the opposite (`BannerContainer` / `SectionContainer`: the same
+       `max-w-(--layout-measure-site)` with `px-(--layout-boundary-inline)` inside it),
+       because there the measure is the width of the FRAME and the copy is inset from
+       it. Taking the token means taking its geometry too — otherwise this page would
+       sit 2 × the boundary wider than the site page it borrows the column from.
 
        WHAT WENT AWAY TO GET HERE: the framed column (`SectionContainer`'s border-x)
        and the banded modules (`SectionModule`'s header rules), and then the
@@ -435,16 +464,17 @@
        done by the prose contract itself: an h2 opens a section, its lead says what
        the section is for, and `DocCardGroup` frames the set of cards.
 
-       THE ONE THING THIS PAGE OVERRIDES is the width of that step: `[&_h2]:pt-16!`
-       / `sm:[&_h2]:pt-24!` opens a section at 64 / 96 instead of the contract's flat
-       56, because this page's sections are grids and not paragraphs (see the note in
-       the script block). It is the only `!` here, it is scoped to this article, and it
+       THE ONE THING THIS PAGE OVERRIDES IN THE PROSE CONTRACT is the width of that
+       step: `[&_h2]:pt-16!` / `sm:[&_h2]:pt-24!` opens a section at 64 / 96 instead of
+       the contract's flat 56, because this page's sections are grids and not paragraphs
+       (see the note in the script block). It is the only `!` here, it is scoped to this
+       article, and it
        moves along the same primitive rungs the contract's own section step is pinned to
        — the page is choosing a coarser rung of the ladder, not stepping off it. The
        column's inset takes the same pair, so the page opens and closes on the
        measurement its sections open on. -->
   <article
-    class="layout-column-docs layout-boundary-inline pt-16 pb-16 [&_h2]:pt-16! sm:pt-24 sm:pb-24 sm:[&_h2]:pt-24!"
+    class="layout-boundary-inline mx-auto w-full max-w-(--layout-measure-site) pt-16 pb-16 [&_h2]:pt-16! sm:pt-24 sm:pb-24 sm:[&_h2]:pt-24!"
   >
     <DocProse>
       <!-- ── The masthead ────────────────────────────────────────────────────
@@ -469,8 +499,8 @@
            (56px), so the previous 552 (`--container-lg`) cut it in two and balance
            split it "Welcome to" / "Azion Docs": the front door arrived with its own
            name broken over two lines. The cap now sits past the string instead of
-           inside it, with 78px of slack, and the column (1024) is wider still — so
-           the room costs nothing else on the page.
+           inside it, with 78px of slack, and the column (`--layout-measure-site`) is wider
+           still — so the room costs nothing else on the page.
 
            IT HOLDS ONE LINE DOWN TO `sm`, AND THE TYPE SCALE IS WHAT ENDS IT, not the
            cap: at 48px (`sm` to `md`) the string is 577 and the column gives it 592,
@@ -491,7 +521,7 @@
         margin-bottom="mb-12 sm:mb-16"
         size="hero"
         title-max-width="max-w-(--container-2xl)"
-        description-max-width="max-w-(--container-lg)"
+        description-max-width="max-w-(--container-xl)"
         title="Welcome to Azion Docs"
         description="We make every application fast and reliable. Deploy on a global network, with enterprise-grade security and no cold starts."
       >

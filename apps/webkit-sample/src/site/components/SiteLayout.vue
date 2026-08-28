@@ -50,9 +50,12 @@
        token while the bands hard-coded `xl`, so on every width narrower than the
        frame's cap — where the frame IS the window — the logo sat inside the headline
        under it. The bands read the token now (BannerContainer, SectionContainer), so
-       there is nothing left for this shell to say. Above `--container-site` the frame
-       centres and the bar stays registered to the WINDOW, so the two part company there
-       by design — see SiteNav. -->
+       there is nothing left for this shell to say. Above the caps the two part company by
+       design: the frame centres at `--layout-measure-site` (1388) while the bar centres at
+       its own `--layout-measure-site-header` (1620). Measured: one shared inset up to 1280,
+       2px apart at 1440 (where the frame has just capped), 82 at 1600, and a flat 92 from
+       1668 up, where the bar caps too — chrome held out at the window's two ends, content
+       held to a reading frame. See SiteNav and `GlobalHeader kind="site"`. -->
   <div class="flex h-dvh flex-col overflow-y-auto bg-(--bg-canvas) text-(--text-default)">
     <SiteNav />
     <main class="flex-1">

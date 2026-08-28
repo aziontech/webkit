@@ -84,6 +84,7 @@
   import { menuLeaves } from '@shared/lib/menu-tree.js'
   import { useTheme } from '@shared/lib/theme.js'
   import HeaderSearch from '@shared/ui/HeaderSearch.vue'
+  import SiteFooter from '@shared/ui/SiteFooter.vue'
   import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
@@ -413,20 +414,17 @@
          regions all come from the component, and this shell only says what goes in each
          region — leading cluster, section links, trailing actions.
 
-         `kind="content"`, even though this bar spans the WINDOW and has no content zone
-         beside it: the same call CreationHeader.vue makes, for the same reason. The kind
-         is what decides the INSET, and `app` is a flat `--spacing-md` (16 at every width)
-         while every page column below this one opens on
-         `--layout-boundary-inline` (16, then 24 from `sm`). They disagreed at exactly the
-         widths where no rail sits between them, which put the logo on a different
-         vertical from the title under it. `content` reads the token the page reads. -->
+         NO `kind`: the default placement reads `--layout-boundary-inline`, the token every
+         page column below this one opens on, so the logo lands on the same vertical as the
+         title under it. This bar spans the WINDOW and has no content zone beside it — the
+         same shape CreationHeader.vue has — and the default is still right, because what a
+         bar answers to is the page, not a rail. -->
     <!-- `@container`, because the search in the trailing cluster switches between its two
          shapes on THIS BAR's width. The bar is the only box in the header whose width is
          independent of what is inside it (`w-full` off the window), and it is ~300px wider
          than the console's at every window because no rail sits beside it — which is why a
          viewport breakpoint could not serve both. See @shared/ui/HeaderSearch.vue. -->
     <GlobalHeader
-      kind="content"
       aria-label="Azion documentation"
       class="@container"
     >
@@ -437,10 +435,19 @@
            not a plain class: `justify-start` and `justify-end` are the same property, and
            the winner is CSS source order, not the order they are written here. -->
       <GlobalHeader.Left class="justify-start!">
-        <!-- Below `lg` the tree has no rail to live in, so the bar carries the way
-             into it. `outlined` at 32px, the shape the centre search collapses to at the
-             same width: nav and search are the bar's own two controls there, so they read
-             as a pair across it. Hidden from `lg` up, where the rail is the way in. -->
+        <!-- Below `lg` the tree has no rail to live in, so the bar carries the way into it.
+             `outlined` at 32px, the shape the centre search collapses to at the same width:
+             nav and search are the bar's own two controls there, so they read as a pair
+             across it. Hidden from `lg` up, where the rail is the way in.
+
+             IT LEADS THE MARK, and that placement is the app's, not this shell's: the
+             console bar puts its own nav trigger in the same corner (AppLayout.vue), so the
+             way into navigation is in one place whichever shell a reader is in. It was
+             briefly moved BEHIND the brand to buy the mark its vertical — a phone starts the
+             wordmark 40px inside the page boundary with the button in front of it — and that
+             is the wrong trade twice over: it breaks the one convention the three shells
+             share, and it strands a lone control mid-bar, close enough to the wordmark to
+             read as part of the lockup while the actions it belongs with sit a region away. -->
         <IconButton
           icon="pi pi-bars"
           kind="outlined"
@@ -658,6 +665,21 @@
       <main class="flex min-h-0 min-w-0 flex-1 flex-col">
         <ScrollArea class="flex-1">
           <slot />
+
+          <!-- THE FOOTER SCROLLS WITH THE PAGE, inside the reading zone's own scroller
+               rather than pinned under it. A footer outside this region would be fixed at
+               the bottom of a viewport-height shell — visible over every article, at the
+               end of none of them — and the end of the article is the only place a footer
+               means anything.
+
+               It is the SAME footer the marketing site closes with (@shared/ui/SiteFooter),
+               in the other placement: `content`, so the bands run full bleed across this
+               zone and open on the page boundary, exactly as the docs top bar above does.
+               `site` would cap them at the marketing measure and draw the side rules, the
+               gutters and the closing band — a page frame the docs shell does not have and
+               nothing above here continues. Same links, same social row, same status: one
+               file, and the placement is the only difference. -->
+          <SiteFooter kind="content" />
         </ScrollArea>
       </main>
 

@@ -49,10 +49,11 @@
     '5xl': 'max-w-(--container-3xl)',
     '6xl': 'max-w-(--container-4xl)',
     '7xl': 'max-w-(--container-5xl)',
-    // The site's bands resolve to --container-site directly rather than through a
+    // The site's bands resolve to --layout-measure-site directly rather than through a
     // ladder key: the hero's inner column is the SAME column as the sections and the
-    // footer below it, so it has to move with them, not with a rung of the scale.
-    site: 'max-w-(--container-site)',
+    // footer below it, so it has to move with them, not with a rung of the scale. The top
+    // bar is not one of them: it takes the wider --layout-measure-site-header.
+    site: 'max-w-(--layout-measure-site)',
     full: 'max-w-none'
   }
 

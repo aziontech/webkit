@@ -8,8 +8,12 @@
    * the whole page frame reads as one continuous border.
    *
    *   • maxWidth — column width token; match the banner above it. `site` is the
-   *                marketing site's own measure (--container-site), the one every
-   *                band of that page frame — nav, hero, sections, footer — shares.
+   *                marketing site's own measure (--layout-measure-site), the one every
+   *                band of that page frame — hero, sections, footer — shares. The top bar
+   *                is not one of them: it takes the wider --layout-measure-site-header.
+   *                The `site` column is inset one boundary from the window below its cap,
+   *                so its rules never land on the bezel; that inset belongs to the column,
+   *                not to this component and not to a wrapper a page puts around it.
    *   • bordered — draw the vertical frame rules (default true).
    *   • padded   — add inner padding. Leave false for an edge-to-edge stack of
    *                modules that each own their own padding (so nothing doubles);
@@ -24,7 +28,12 @@
     '5xl': 'max-w-(--container-5xl)',
     '6xl': 'max-w-(--container-6xl)',
     '7xl': 'max-w-(--container-7xl)',
-    site: 'max-w-(--container-site)'
+    // `site` is the theme's own site COLUMN, not a bare cap: it carries the centring AND
+    // the boundary inset the frame takes once the window is narrower than that measure, so
+    // the frame's rules land on the vertical the page opens on at every width instead of
+    // on the window's own edges. /site/pricing carried this as a wrapper div around this
+    // component before it was a rule — see layouts.data.js.
+    site: 'layout-column-site'
   }
 
   defineProps({

@@ -55,14 +55,11 @@
 
 <template>
   <div class="flex h-dvh flex-col overflow-hidden bg-(--bg-canvas)">
-    <!-- `kind="content"`, the same call the docs bar and the console's own bar make.
-         The kind is what decides the INSET: `app` is a flat `--spacing-md` (16 at every
-         width) while every other bar in this app opens on `--layout-boundary-inline`
-         (16, then 24 from `sm`). This bar was the last one left on `app`, so from `sm`
-         up its brand sat 8px to the left of the brand on the site nav the reader just
-         came from and the docs bar the Documentation button leads to. -->
+    <!-- No `kind`: the default placement insets on `--layout-boundary-inline`, the token
+         every page column in this app opens on, so this bar's brand lands on the same
+         vertical as the brand on the site nav the reader just came from and on the docs bar
+         the Documentation button leads to. -->
     <GlobalHeader
-      kind="content"
       aria-label="Azion Console"
       class="shrink-0"
     >

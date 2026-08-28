@@ -317,7 +317,7 @@
 
   // ── Where the page column starts ────────────────────────────────────────────
   // `GlobalHeader kind="site"` insets itself to the shared column with a formula of its own
-  // (`--container-site` capped by the window, plus `--layout-boundary-inline`). The wide
+  // (`--layout-measure-site-header` capped by the window, plus `--layout-boundary-inline`). The wide
   // Products panel has to land on that same column, and the ONE number the menu needs to do
   // it is how far the column sits from the window edge — which is exactly the bar's own
   // resolved padding. Reading it off the element rather than restating the formula means the
@@ -369,26 +369,35 @@
 
        `kind="site"` is the placement for a page that is a FRAME rather than an app zone.
        The surface stays full bleed — the fill and the hairline run to the window edges,
-       because a bar is chrome — while the REGIONS are capped at `--container-site` and
-       centred, which is exactly BannerContainer's inner column. So the logo opens on the
-       same vertical as the hero headline, the plan names and every matrix row label, at
-       every width, by construction rather than by two numbers kept equal by hand.
+       because a bar is chrome — while the REGIONS are capped and centred. The cap is the
+       bar's OWN measure (`--layout-measure-site-header`, 1620), one rung wider than the
+       page frame (`--layout-measure-site`, 1388) that BannerContainer, SectionContainer
+       and the footer share: a bar carries the brand at one end and the account actions at
+       the other, so it wants the room a reading frame refuses. Below both caps the two are
+       one inset — the boundary — so on a laptop and a phone the logo still opens on the
+       same vertical as the hero headline, the plan names and every matrix row label
+       (measured identical at 390, 1024 and 1280). The gap opens at 1436, where the frame
+       stops growing, and settles at a flat 92px from 1668, where the bar stops too — half
+       the 232 between the two measures, less the boundary the bar keeps. That step is the
+       decision, not a drift.
 
        THE CAP IS THE POINT, and it belongs to the DS, not to this file. The bar used to be
        inset from the WINDOW alone (`--layout-boundary-inline`, uncapped) — correct while
        the window is near the frame, and coming apart above it: the column stops growing at
-       1192px and an uncapped bar does not, so at 2560 the logo sat 684px to the left of the
-       headline under it and the account actions the same distance to the right. Navigation
-       drifting away from the content it navigates is the one thing a top bar cannot afford.
-       Below 1192 the cap is inert and the boundary is the whole inset, so the placement
-       collapses to `content` and nothing moves on a laptop or a phone.
+       its measure and an uncapped bar does not, so at 2560 the logo sat 684px to the left of
+       the headline under it and the account actions the same distance to the right.
+       Navigation drifting UNBOUNDED away from the content it navigates is the one thing a top
+       bar cannot afford; a fixed 92px step out is not that — it is the bar reading as chrome
+       around the page rather than as one more band of it. Below the cap it is inert and the
+       boundary is the whole inset, so the placement collapses to `content` and nothing moves
+       on a laptop or a phone.
 
        It is NOT the page frame climbing into the chrome — the shape the earlier
        `FrameBox borders="x"` version had, which ran the column's side rules up through the
        bar. The bar still draws no rule but its own floor. The navigation sheet and the
        sticky matrix header stay registered to the WINDOW (neither can follow a centred
        column), while the mega-menu panel deliberately takes this same cap — see the
-       positioner below, which re-centres the DS placement on `--container-site` so the
+       positioner below, which re-centres the DS placement on the bar's own column so the
        sheet's edges land on the brand and the actions above it.
 
        `sticky` and the stacking order stay HERE: they are this shell's decision (SiteLayout
@@ -405,9 +414,17 @@
          class — `justify-start` and `justify-end` are the same property, and CSS source
          order decides the winner, not the order they are written here. -->
     <GlobalHeader.Left class="justify-start!">
-      <!-- Below `xl` the menus have no bar to live in, so the bar carries the way into
-           them instead. Leading edge, like the docs shell's — the three shells of this app
-           put the way into navigation in the same corner. -->
+      <!-- Below `xl` the menus have no bar to live in, so the bar carries the way into them
+           instead — LEADING EDGE, ahead of the mark, the same corner the docs and console
+           shells put their own nav trigger in, so the way into navigation is in one place
+           across the app.
+
+           It was briefly moved BEHIND the brand to buy the mark its vertical — with the
+           button in front of it a phone starts the wordmark 40px inside the boundary the
+           H1, the frame's rules and the footer open on. That is the wrong trade twice over:
+           it breaks the one convention the three shells share, and it strands a lone control
+           mid-bar, near enough the wordmark to read as part of the lockup while the actions
+           it belongs with sit a region away. -->
       <IconButton
         icon="pi pi-bars"
         kind="outlined"
@@ -474,7 +491,7 @@
                    panel is sized by its own content, as before — the shared sheet is PLACED
                    on the column, and only this one is STRETCHED to it.
 
-                   The width is that column exactly — `--container-site` capped by the window,
+                   The width is that column exactly — `--layout-measure-site-header` capped by the window,
                    less the boundary on both sides, less the slot's `--spacing-md` padding and
                    the popup's 1px rule on each side, since this grid sits inside both and the
                    sheet has to measure out to the column including them. It goes on the GRID, not on the popup:
@@ -494,7 +511,7 @@
                 :class="{
                   'grid-cols-1': menu.columns === 1,
                   'grid-cols-2': menu.columns === 2,
-                  'grid-cols-4 w-[calc(min(var(--container-site),100vw)_-_2*var(--layout-boundary-inline)_-_2*var(--spacing-md)_-_2px)]':
+                  'grid-cols-4 w-[calc(min(var(--layout-measure-site-header),100vw)_-_2*var(--layout-boundary-inline)_-_2*var(--spacing-md)_-_2px)]':
                     menu.columns === 4
                 }"
               >
