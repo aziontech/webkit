@@ -17,7 +17,6 @@
   "packages/webkit/src/components/content/card-pricing/card-pricing.vue::token:js-class-preset",
   "packages/webkit/src/components/content/card-pricing/card-pricing.vue::token:js-class-preset",
   "packages/webkit/src/components/content/card-pricing/card-pricing.vue::token:js-class-preset",
-  "packages/webkit/src/components/data/code-block/code-block.vue::token:js-class-preset",
   "packages/webkit/src/components/data/code-block/presets/transitions.ts::token:js-class-preset",
   "packages/webkit/src/components/data/flow/flow-anchor/flow-anchor.vue::spec:Animation classes in spec but missing in .vue: animate-flow-dash",
   "packages/webkit/src/components/data/flow/flow-node/flow-node.vue::spec:Animation classes in spec but missing in .vue: animate-flow-dash",
