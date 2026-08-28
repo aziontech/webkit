@@ -4,9 +4,9 @@ category: documentation
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 3c66a5a919cee561da365cf8be282a455e95735b67b78121387185631c3d3bc5
+checksum: dffe6e94e4778720987e52a9d078566f766e666a52b541b9d9dac0e1fee297dd
 created: 2026-08-22
-last_updated: 2026-08-22
+last_updated: 2026-08-28
 ---
 
 # DocPrompt — Component Spec
@@ -80,6 +80,7 @@ DocPrompt renders text the reader is meant to **run, not read** — the block a 
 - `data-expanded` — present on the prompt text when a capped `block` has been opened by the reader
 - `data-capped` — present on the root when a `block` prompt is taller than its four-line cap; absent when it fits, so a prompt that fits earns no disclosure control
 - `data-overflow` — on the `line` shape: `start` | `end` | `both`, whichever edge has text scrolled behind it; absent when the line fits
+- `data-single-line` — on the prompt row when the prompt occupies exactly one line (`line` always; a `block` whose sentence fits its column). The row then centres the prompt against the copy control instead of top-aligning it — the control is 28px and one line of the prompt face is 19.5px, so a top-aligned pair leaves the sentence 4.25px above the control's middle. Absent the moment the prompt wraps.
 - `data-doc-block` + `data-doc-chrome` are the `DocProse` contract (block rung; prose stops here)
 - Empty: an empty slot with an empty `label` renders the shell with no prompt text and no copy control
 

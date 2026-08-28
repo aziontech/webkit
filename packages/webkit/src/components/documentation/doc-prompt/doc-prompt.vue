@@ -53,13 +53,17 @@
    *   instructions. It scrolls sideways instead, with a fade on whichever edge has
    *   text behind it, so the overflow is visible rather than guessed.
    *
-   * That split is also why the copy control's vertical alignment is not one value. The
-   * control is 28px (`size-7`) and a single line of `text-body-code-sm` is 19.5px, so
-   * top-aligning them leaves the prompt sitting 4.25px above the control's centre —
-   * which is correct for `block`, where the paragraph grows downward and a centred
-   * control would drift to the middle of four lines, and plainly wrong for `line`,
-   * which is always exactly one line. So `line` centres the control against its text
-   * and `block` keeps it at the top.
+   * A ONE-LINE PROMPT CENTRES THE ROW; EVERY OTHER PROMPT KEEPS IT AT THE TOP. The control
+   * is 28px (`size-7`) and one line of `text-body-code-sm` is 19.5px, so top-aligning the
+   * two leaves the sentence sitting 4.25px above the control's middle — right for a
+   * paragraph that grows downward, where a centred control would drift to the middle of
+   * four lines, and plainly wrong for a prompt with no second line to grow into. `line`
+   * is one line by definition; a `block` is measured, because whether its sentence fits
+   * depends on the column it lands in.
+   *
+   * It is the ROW that centres, not the control. The control is the taller of the two, so
+   * it is already the one deciding the row's height — `self-center` on it resolves to
+   * where it sits anyway, and the 4.25px stays exactly where it was.
    *
    * The cap and the fades are MEASURED, never assumed. A `block` prompt that fits in
    * four lines gets no button, and a `line` prompt that fits gets no fade — an
@@ -155,8 +159,17 @@
   const capped = ref(false)
   /** `line`, and there is text scrolled off an edge: which one, or both. */
   const overflow = ref<'start' | 'end' | 'both' | ''>('')
+  /** `block`, and the whole sentence fits on one line — measured, never assumed. */
+  const blockFitsOneLine = ref(false)
   /** The pinned `max-height` while a disclosure move is in flight. `''` hands it back to CSS. */
   const capOverride = ref('')
+
+  /**
+   * The prompt is exactly one line, which is the only case where the row centres its two
+   * items instead of top-aligning them. `line` never has a second line; a `block` earns it
+   * by measurement, and loses it the moment its sentence wraps.
+   */
+  const singleLine = computed(() => props.kind === 'line' || blockFitsOneLine.value)
 
   /**
    * The collapsed cap, resolved to px. Read off the element rather than restated here,
@@ -186,9 +199,17 @@
     // animation is easing through, which is not the cap.
     if (expanded.value || capOverride.value) return
 
+    const style = globalThis.getComputedStyle(el)
+
     capped.value = el.scrollHeight > el.clientHeight + 1
-    const cap = Number.parseFloat(globalThis.getComputedStyle(el).maxHeight)
+
+    const cap = Number.parseFloat(style.maxHeight)
     if (Number.isFinite(cap)) capPx = cap
+
+    // One line or more, read off the face's own line box rather than restated as a number
+    // here — the same reason the cap is read rather than repeated.
+    const lineHeight = Number.parseFloat(style.lineHeight)
+    blockFitsOneLine.value = Number.isFinite(lineHeight) && el.scrollHeight <= lineHeight * 1.5
   }
 
   const readPromptText = () => {
@@ -321,12 +342,20 @@
          surfaces it lands on is also what every fade below has to end in, so the row
          publishes it once as `--prompt-bg` instead of each gradient guessing.
 
-         THE COPY BUTTON DROPS BELOW THE PROMPT ON A PHONE. It cannot shrink, so beside
-         the prompt at 390px it takes width the sentence needs more. Under it, the prompt
-         gets the whole measure and the control still reads as belonging to it. -->
+         THE COPY CONTROL STAYS BESIDE THE PROMPT AT EVERY WIDTH, in the block's top-right
+         corner — where a code block keeps its own, and the shape a reader already reaches
+         for. It used to drop below the prompt on a phone, to give the sentence the whole
+         measure; the 28px it hands back there costs a whole row, and a control sitting on
+         its own line under the text reads as a second thing rather than as this block's
+         handle.
+
+         `data-single-line` is the row's vertical alignment, and it has to live here rather
+         than on the control: the control is the taller item, so it is already setting the
+         row's height and nothing said on it can move it. -->
     <div
       :data-titled="title ? '' : undefined"
-      class="flex flex-col gap-(--spacing-sm) px-(--spacing-md) py-(--spacing-sm) [--prompt-bg:var(--bg-surface)] sm:flex-row sm:items-start data-[titled]:border-t data-[titled]:border-(--border-default) data-[titled]:bg-(--bg-canvas) data-[titled]:[--prompt-bg:var(--bg-canvas)]"
+      :data-single-line="singleLine ? '' : undefined"
+      class="flex items-start gap-(--spacing-sm) px-(--spacing-md) py-(--spacing-sm) [--prompt-bg:var(--bg-surface)] data-[single-line]:items-center data-[titled]:border-t data-[titled]:border-(--border-default) data-[titled]:bg-(--bg-canvas) data-[titled]:[--prompt-bg:var(--bg-canvas)]"
     >
       <div class="min-w-0 flex-1">
         <!-- The fades anchor to the TEXT BOX, not to the column: the disclosure below is a
@@ -400,18 +429,12 @@
         </div>
       </div>
 
-      <!-- Wrapped rather than aligned with `self-end`, because the control's own root
+      <!-- Wrapped rather than aligned on the control itself, because the control's own root
            merges the class it is handed into its variant classes — an alignment that
-           depends on that landing is an alignment that can silently not.
-
-           The wrapper is also where the two shapes part company vertically. The control
-           is 28px and one line of the prompt face is 19.5px, so the row's `items-start`
-           leaves a `line` prompt sitting 4.25px high — right for `block`, which grows
-           downward, wrong for `line`, which never has a second line to grow into. -->
+           depends on that landing is an alignment that can silently not. -->
       <div
         v-if="hasPrompt"
-        :data-kind="kind"
-        class="flex shrink-0 justify-end data-[kind=line]:sm:self-center"
+        class="flex shrink-0 justify-end"
       >
         <CopyButton
           :value="promptText"
