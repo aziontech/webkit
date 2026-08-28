@@ -146,25 +146,26 @@ Events below are emitted by the root `Accordion`.
 
 ## Tokens
 
-| Region                                   | Token (DESIGN.md)                         |
-| ---------------------------------------- | ----------------------------------------- |
-| header title typography (large / medium) | `.text-body-md` / `.text-body-sm`         |
-| content body typography (large / medium) | `.text-body-sm` / `.text-body-xs`         |
-| header title text                        | `var(--text-default)`                     |
-| content body text                        | `var(--text-muted)`                       |
-| disabled text                            | `var(--text-disabled)`                    |
-| header divider (bottom border)           | `var(--border-default)`                   |
-| item divider when closed                 | `var(--border-muted)`                     |
-| header padding-x                         | `var(--spacing-md)`                       |
-| header gap (arrow right / left)          | `var(--spacing-sm)` / `var(--spacing-xs)` |
-| focus ring / ring offset                 | `var(--ring-color)` / `var(--bg-canvas)`  |
+| Region                                   | Token (DESIGN.md)                                                                  |
+| ---------------------------------------- | ---------------------------------------------------------------------------------- |
+| header title typography (large / medium) | `.text-body-md` / `.text-body-sm`                                                  |
+| content body typography (large / medium) | `.text-body-sm` / `.text-body-xs`                                                  |
+| header title text                        | `var(--text-default)`                                                              |
+| content body text                        | `var(--text-muted)`                                                                |
+| disabled text                            | `var(--text-disabled)`                                                             |
+| header divider (bottom border, open)     | `var(--border-default)`                                                            |
+| item divider when closed                 | `var(--border-muted)`                                                              |
+| header padding-x                         | `--accordion-inset`, default `var(--spacing-md)`                                   |
+| content padding                          | _none_ — the panel is flush; its inset belongs to whatever the consumer puts in it |
+| header gap (arrow right / left)          | `var(--spacing-sm)` / `var(--spacing-xs)`                                          |
+| focus ring / ring offset                 | `var(--ring-color)` / `var(--bg-canvas)`                                           |
 
 ## Theme gaps
 
 | Figma variable                                                                         | Temporary primitive                                                                              | Follow-up                                                                                                 |
 | -------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------- |
 | `Heading/xss` · `Heading/xs` (Sora Regular, line-height 1.4) used for the header title | `.text-body-sm` · `.text-body-md` (line-height 1.5, same 14px / 16px sizes, same Regular weight) | `TODO: decide whether to surface text-heading-xs/xxs in DESIGN.md, or keep the body family for the title` |
-| `Hover=True` variant (delta not resolvable via the Figma MCP bound-variable API)       | `hover:bg-(--bg-hover)` on the trigger                                                      | `TODO: confirm the header hover treatment with design`                                                    |
+| `Hover=True` variant (delta not resolvable via the Figma MCP bound-variable API)       | `hover:bg-(--bg-hover)` on the trigger                                                           | `TODO: confirm the header hover treatment with design`                                                    |
 | `--border-width-default` (0.8px header / item divider)                                 | `border-b` (1px)                                                                                 | `TODO: tokenize the sub-pixel border width if it must match exactly`                                      |
 
 ## Accessibility (WCAG 2.1 AA)
