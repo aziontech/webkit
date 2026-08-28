@@ -136,7 +136,7 @@
         <template v-else>{{ title }}</template>
       </ItemTitle>
       <ItemDescription
-        class="line-clamp-none text-pretty [&_code]:rounded-(--shape-flat) [&_code]:border [&_code]:border-(--border-default) [&_code]:bg-(--bg-hover) [&_code]:px-1 [&_code]:py-0.5 [&_code]:text-label-code-sm [&_code]:text-(--text-default)"
+        class="line-clamp-none text-pretty [&_code]:rounded-(--shape-elements) [&_code]:border [&_code]:border-(--border-default) [&_code]:bg-(--bg-hover) [&_code]:px-1 [&_code]:py-0.5 [&_code]:text-label-code-sm [&_code]:text-(--text-default)"
       >
         <slot>{{ label }}</slot>
       </ItemDescription>

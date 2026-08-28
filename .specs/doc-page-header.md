@@ -4,16 +4,16 @@ category: documentation
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: c7b7dbe4ce86a9db6a810a542836459839c7b35c749b50e6194aa9ff56afeadb
+checksum: 00817e9b5cb342e6a66c5471bab68265ab19d0e425d0cb92998b187897561ebe
 created: 2026-08-22
-last_updated: 2026-08-22
+last_updated: 2026-08-26
 ---
 
 # DocPageHeader — Component Spec
 
 ## Purpose
 
-The masthead of a documentation page: where the reader is (the breadcrumb), what the page is (the title), what they can do with it (a Copy Page control that hands the page to an AI tool), the deck that says what they will have by the end, and when the content last changed. It closes on a rule spanning the column, which is what gives every `h2` below it something to be subordinate to.
+The masthead of a documentation page: where the reader is (the breadcrumb), what the page is (the title), what they can do with it (a Copy Page control that hands the page to an AI tool — or, through the `actions` slot, the consumer's own menu; the trail is likewise slottable, for an application whose crumbs route rather than navigate), the deck that says what they will have by the end, and when the content last changed. It closes on a rule spanning the column, which is what gives every `h2` below it something to be subordinate to.
 
 ## When to use
 
@@ -76,13 +76,17 @@ The masthead of a documentation page: where the reader is (the breadcrumb), what
 
 ## Slots
 
-| _none_ | — | — |
+| Slot         | Scope | Notes                                                                                              |
+| ------------ | ----- | -------------------------------------------------------------------------------------------------- |
+| `breadcrumb` | —     | The trail; replaces the built-in `Breadcrumb` fed by the `breadcrumb` prop.                         |
+| `actions`    | —     | What the reader can do with the page; replaces the built-in Copy Page control fed by `source`.      |
 
 ## States
 
 - Visual states: `default`. The masthead holds no interactive state of its own; the Copy Page control owns its own open/closed menu.
 - `copyable: false` removes the control entirely rather than disabling it — a page with nothing to copy should not advertise the action.
-- Each region renders only when it has content: no breadcrumb, deck, or "last updated" line appears empty.
+- Each region renders only when it has content: no breadcrumb, deck, or "last updated" line appears empty. An unfilled slot with a `v-if`-ed fallback renders no element, so a masthead with no trail pays no gap for the region.
+- Below `sm` the action leaves the title's line and stacks under it at its natural width; from `sm` up the two share one row.
 
 ## Motion & Animations
 
