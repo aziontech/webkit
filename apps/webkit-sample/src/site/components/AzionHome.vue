@@ -409,7 +409,7 @@ And it stays up when others go down."
               class="flex min-h-[clamp(340px,52vh,620px)] flex-col justify-between gap-(--spacing-xl) md:px-(--spacing-xl) px-(--layout-boundary-inline) pt-[clamp(2rem,7vh,3.25rem)] pb-(--spacing-xl) lg:justify-start lg:py-(--spacing-xxl) lg:pt-(--spacing-xxl)"
             >
               <h2 class="text-balance text-heading-2xl text-(--text-default)">
-                The most reliable infrastructure
+                Build on the most reliable network on the planet
               </h2>
               <!-- The claim chips, from the shared list and the shared treatment
                    (`ui/claims.js` + `ClaimChips`) — the same ones the signed-out

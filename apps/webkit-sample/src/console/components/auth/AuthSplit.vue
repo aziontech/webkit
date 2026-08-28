@@ -49,19 +49,27 @@
 
 <template>
   <AuthShell>
-    <!-- Two halves, flush and full-bleed, split 40 / 60 in the PANEL's favour. No
-         max-width and no padding on the split itself: the seam down the middle IS the
-         composition, and any gutter around it would turn one page into two floating
-         panels. The breathing room lives INSIDE each half, so the art half can still
-         bleed its artwork to the page edge.
+    <!-- Two halves, flush, full-bleed and EQUAL. No max-width and no padding on the
+         split itself: the seam down the middle IS the composition, and any gutter
+         around it would turn one page into two floating panels. The breathing room
+         lives INSIDE each half, so the art half can still bleed its artwork to the
+         page edge.
 
-         The halves are not equal because they are not doing equal work. The card is a
-         fixed measure — a form capped at `container-sm` that gains nothing from a
-         wider column, it just centres in more air. The panel is a MAP, and its
-         artwork is fitted by width, so every point of column width it gains comes
-         back as both a wider and a taller map. `2fr 3fr` rather than percentages so
-         the ratio survives whatever padding the halves carry. -->
-    <div class="grid flex-1 grid-cols-1 lg:min-h-0 lg:grid-cols-[2fr_3fr]">
+         This was `2fr 3fr` — 40 / 60 in the panel's favour — on the argument that the
+         card is a fixed measure while the map is fitted by width, so every point of
+         column width the panel gains comes back as a bigger map. The premise was
+         right and the conclusion was wrong: a wider column does not buy a better map,
+         it ZOOMS one. Node size is layerWidth / viewBoxWidth, so at 864px the same
+         crop drew each node at 5.2px — the artwork stopped reading as a network and
+         started reading as tiles, and the extra 144px went into pushing Europe
+         against the page's right edge. Zoom is set by the CROP (see MapBanner), which
+         is the control that can be aimed; column width is not.
+
+         Equal halves are also the right thing to say. The form and the claim beside
+         it carry the same weight on a signed-out screen — neither is the other's
+         margin — and a page split down the middle is the one proportion that needs no
+         defending. -->
+    <div class="grid flex-1 grid-cols-1 lg:min-h-0 lg:grid-cols-2">
       <!-- The card half. It centres its content rather than filling the column —
            the column is as tall as the page, a card is only as tall as its own
            fields, and a card pinned to the top of a full-height column floats

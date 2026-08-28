@@ -60,7 +60,7 @@
     // The panel's headline.
     title: {
       type: String,
-      default: 'The most reliable distributed network on the planet'
+      default: 'Build on the most reliable network on the planet'
     },
     // Claim chips under the headline, as plain strings. Pass `[]` for a panel that
     // makes its case on the map alone — which is what this panel did before the
@@ -163,30 +163,34 @@
          to edge still read as two boxes: the copy is a rectangle, the map is a
          rectangle, and the join between them is a flat horizontal line across the
          column no matter how softly the artwork fades below it. So the map's box is
-         pulled UP by `--spacing-xl` (48 side by side, 24 stacked) and BLEEDS into the
+         pulled UP by `--spacing-lg` (24 side by side, 16 stacked) and BLEEDS into the
          last row of claim chips. The chips are opaque pills, so they sit on the map's
          leading edge and the two blocks interlock instead of abutting.
 
          HOW FAR IT CAN BLEED IS A TRADE, not a free choice, and the two ends of it
          pull against each other: the further the artwork reaches up, the longer
          MapBanner's top ramp has to be to keep the overlap imperceptible — and a
-         longer ramp is a softer map. Sampled at 1440x900 across pulls of 24/48/72/96/
-         120px against ramps of 86/78/70/62%:
+         longer ramp is a softer map.
 
-           pull 24, ramp 86%  ink behind the chips 19/36  — safe, but barely a bleed
-           pull 48, ramp 70%  19/69                       — SHIPPED
-           pull 72, ramp 62%  18/91                       — the grid starts to read
-           pull 96, ramp 86%  62/356                      — the old bug, back
+         The pull was 48px, against a 30% top ramp. Both halved, and the RAMP is what
+         forced it: the panel's crop now fills the region with map instead of leaving
+         the top third as empty bleed, so a ramp long enough to hide a 48px overlap
+         reaches down into Europe (see MapBanner's mask note for the derivation). With
+         the ramp down to 10%, ~60px, a 48px pull would put the artwork's leading edge
+         almost at full strength under the pills. 24px sits inside the ramp's first
+         third, which is where the bleed is free.
 
-         69 against a map body that peaks at 354 is under a fifth of full strength:
-         texture you notice only as the copy and the artwork belonging to each other,
-         never as a dot grid showing through the gaps between pills.
+         Measured at 1440x900, dark: the map's grey peaks at 11/255 anywhere in the
+         24px overlap band, against 32/255 in the body of the map below it — about a
+         third of full strength, on a canvas it is 11 units away from. That is texture
+         you notice only as the copy and the artwork belonging to each other, never as
+         a dot grid showing through the gaps between pills.
 
          No bottom padding on the aside, and none here: the map is meant to reach the
          floor and dissolve into it on its own alpha (see MapBanner's seam masks), so
          an inset under it would show as a band of bare canvas below a map that just
          stops. -->
-    <div class="relative -mt-(--spacing-xl) max-lg:min-h-[18rem] flex-1">
+    <div class="relative -mt-(--spacing-lg) max-lg:min-h-[18rem] flex-1">
       <MapBanner kind="panel" />
     </div>
   </aside>
