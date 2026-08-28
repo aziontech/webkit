@@ -189,11 +189,20 @@
     <div
       class="flex w-full flex-col items-start group-data-[slot-position=bottom]/card:shrink-0 group-data-[slot-position=middle]/card:min-h-px group-data-[slot-position=middle]/card:flex-1 group-data-[slot-position=middle]/card:gap-(--spacing-lg)"
     >
-      <!-- Name, amount and caveat are ONE column capped at 256px: the caveat is a
-           sentence about the price directly above it, so it wraps on the price's
-           measure instead of running the full width of the card. -->
+      <!-- Name, amount and caveat are ONE column, capped at `--container-xs`: the
+           caveat is a sentence about the price directly above it, so it wraps on the
+           price's measure rather than running the full width of the card.
+
+           The cap is the container ladder's `xs` (348px) and it shipped as `3xs`
+           (256px) — two rungs down, and too narrow for the copy it holds. 256px sets
+           `body-md` at roughly 33 characters, under the 45-75 a prose measure wants,
+           and every real billing caveat on the pricing page ran to THREE lines there
+           (66, 69 and 84 characters, all three). At 348px the same three set in two,
+           with the measure at ~46 characters — inside the band, and still a cap: at
+           1440 the card's own content box is 413px, so the caveat is held to the
+           price's column instead of the card's. -->
       <div
-        class="flex w-full max-w-[256px] shrink-0 flex-col items-start group-data-[slot-position=bottom]/card:gap-(--spacing-xs) group-data-[slot-position=middle]/card:gap-(--spacing-md)"
+        class="flex w-full max-w-(--container-xs) shrink-0 flex-col items-start group-data-[slot-position=bottom]/card:gap-(--spacing-xs) group-data-[slot-position=middle]/card:gap-(--spacing-md)"
         :data-testid="`${testId}__header`"
       >
         <div class="flex min-h-6 w-full shrink-0 items-center gap-(--spacing-xs)">
