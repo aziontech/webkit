@@ -1482,6 +1482,7 @@
           span="full"
         >
           <Footer
+            kind="site"
             aria-label="Footer"
             class="w-full"
           >
