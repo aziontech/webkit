@@ -286,6 +286,12 @@ const readList = (lines, start) => {
     }
     const match = line.match(LIST_ITEM)
     if (!match) break
+    // A CHANGE OF MARKER STARTS A NEW LIST, as it does in CommonMark. The blank-line
+    // branch above keeps a list open across a paragraph break, which is what lets an
+    // author space out a long list — but without this, a numbered list written under a
+    // bulleted one is swallowed by it and its steps come out as bullets. The reader
+    // loses the ordering, and nothing errors.
+    if (Boolean(match[3]) !== ordered) break
     const indent = match[1].length
     if (indent < baseIndent) break
     if (indent > baseIndent) {
