@@ -183,10 +183,19 @@
   const FOOTER_REGION_CLASS =
     'flex h-(--size-14) w-full shrink-0 items-center border-t border-(--border-default) px-(--spacing-md)'
 
+  /**
+   * The band FILLS the region (`min-w-0 flex-1`). Without that it is a
+   * shrink-to-fit flex item, so the footer content and the collapse trigger pack
+   * against the leading edge and the `flex-1` inside the slot has nothing to
+   * distribute — the controls end up beside the label instead of at the trailing
+   * edge of the rail (and `justify-end`, below, is inert on a shrink-to-fit box).
+   */
   const footerBandClass = computed(() =>
-    props.collapsible
-      ? cn('flex items-center gap-(--spacing-xs)', !slots['footer'] ? 'justify-end' : undefined)
-      : undefined
+    cn(
+      'flex min-w-0 flex-1 items-center',
+      props.collapsible ? 'gap-(--spacing-xs)' : undefined,
+      props.collapsible && !slots['footer'] ? 'justify-end' : undefined
+    )
   )
 
   const scrollClass = computed(() =>
@@ -244,7 +253,7 @@
         <div :class="footerBandClass">
           <div
             v-if="$slots['footer']"
-            :class="collapsible ? 'min-w-0 flex-1' : undefined"
+            class="min-w-0 flex-1"
           >
             <slot name="footer" />
           </div>
