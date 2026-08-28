@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, onBeforeUnmount, ref, useAttrs } from 'vue'
 
+  import Tooltip from '../../overlay/tooltip/tooltip.vue'
   import type { IconButtonKind, IconButtonSize } from '../icon-button/icon-button.vue'
   import IconButton from '../icon-button/icon-button.vue'
 
@@ -46,6 +47,14 @@
   )
 
   const icon = computed(() => (copied.value ? 'pi pi-check' : 'pi pi-copy'))
+
+  /**
+   * One string names the control and labels its tooltip, so the two can never
+   * disagree: it is `ariaLabel` while idle and `copiedLabel` for the two seconds
+   * after a write. An icon-only button says nothing to a pointer user until it is
+   * hovered — the tooltip is what makes the glyph legible, and because it tracks
+   * the same state, the confirmation is visible and not only announced.
+   */
   const label = computed(() => (copied.value ? props.copiedLabel : props.ariaLabel))
 
   async function handleCopy(event: MouseEvent) {
@@ -87,14 +96,20 @@
     :data-disabled="disabled ? '' : undefined"
     :data-testid="testId"
   >
-    <IconButton
-      :icon="icon"
-      :ariaLabel="label"
-      :kind="kind"
-      :size="size"
+    <Tooltip
+      :text="label"
       :disabled="disabled"
-      iconTransition
-      @click="handleCopy"
-    />
+      :data-testid="`${testId}__tooltip`"
+    >
+      <IconButton
+        :icon="icon"
+        :ariaLabel="label"
+        :kind="kind"
+        :size="size"
+        :disabled="disabled"
+        iconTransition
+        @click="handleCopy"
+      />
+    </Tooltip>
   </span>
 </template>
