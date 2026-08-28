@@ -4,9 +4,9 @@ category: documentation
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: dd8a12ed6c5af4ce121ccc6da993d0951316502dd5276592f730b93166044c2e
+checksum: 251aa955229c7e4ee3bc908f55cdb7ac789e94895de80c1abbb19e51402b7424
 created: 2026-08-21
-last_updated: 2026-08-25
+last_updated: 2026-08-28
 ---
 
 # DocProse — Component Spec
@@ -22,7 +22,7 @@ The typography contract every documentation page inherits. A markdown or MDX pip
 
 ## When NOT to use
 
-- To cap the reading column — `DocProse` has no measure of its own. The consumer sets the width with `.layout-column-docs` (`--layout-measure-docs`, 1192px).
+- To cap the reading column — `DocProse` has no measure of its own. The consumer sets the width with `.layout-column-content` (`--layout-measure-content`, 876px).
 - To style a webkit component's internals. Those are chrome and are excluded by design; restyle nothing from here.
 - For a single run of body copy in an application screen — use the `text-body-*` tokens directly.
 
@@ -45,7 +45,7 @@ The typography contract every documentation page inherits. A markdown or MDX pip
 </script>
 
 <template>
-  <article class="layout-column-docs">
+  <article class="layout-column-content">
     <DocProse>
       <h2>Deploy an application</h2>
       <p>Templates are ready-made projects that go live in a few clicks.</p>

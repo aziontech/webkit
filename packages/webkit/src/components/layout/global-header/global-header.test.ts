@@ -199,11 +199,13 @@ describe('GlobalHeader', () => {
     })
   })
 
-  describe('kind — the three placements (data-kind drives the inset)', () => {
-    it('defaults to the app placement', () => {
+  describe('kind — the two placements (data-kind drives the inset)', () => {
+    it('defaults to the content placement', () => {
       const { getByTestId } = render(GlobalHeader)
-      // withDefaults: kind: 'app'. The inset lives on the root in this placement.
-      expect(getByTestId('layout-global-header').getAttribute('data-kind')).toBe('app')
+      // withDefaults: kind: 'content' — a bar with no kind reads the page boundary, so it
+      // cannot open on a different vertical from the page under it. The inset geometry
+      // itself belongs to the visual gate; this env renders without Tailwind.
+      expect(getByTestId('layout-global-header').getAttribute('data-kind')).toBe('content')
     })
 
     it('marks the content placement on the root', () => {
@@ -231,7 +233,7 @@ describe('GlobalHeader', () => {
 
     it('marks the site placement on the root', () => {
       const { getByTestId } = render(GlobalHeader, { props: { kind: 'site' } })
-      // The site inset (capped + centred at --container-site) is selected by this
+      // The site inset (capped + centred at --layout-measure-site) is selected by this
       // attribute alone; the geometry itself belongs to the visual gate, since this
       // env renders without Tailwind.
       expect(getByTestId('layout-global-header').getAttribute('data-kind')).toBe('site')

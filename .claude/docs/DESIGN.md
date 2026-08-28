@@ -175,11 +175,18 @@ system ships (`semantic/layouts` in `@aziontech/theme`), and the type is chosen 
 
 | Class | Type | Measure token | Today | Use for |
 |---|---|---|---|---|
-| `.layout-column` | Data | `--layout-measure` | 1620px | Lists, detail dashboards |
+| `.layout-column` | Data | `--layout-measure` | 1388px | Lists, detail dashboards |
 | `.layout-column-focused` | Focused | `--layout-measure-focused` | 1024px | Home, single-task multi-column pages |
 | `.layout-column-form` | Form | `--layout-measure-form` | 1024px | Settings, in-page edit forms |
 | `.layout-form-create` | Create | `--layout-measure-form-create` | 1192px | Dedicated create pages (also retunes `--layout-measure-control`) |
-| `.layout-column-docs` | Docs | `--layout-measure-docs` | 752px | Documentation prose (capped by line length, not by payload) |
+| `.layout-column-content` | Content | `--layout-measure-content` | 876px | Prose columns — documentation, blog (capped by line length, not by payload) |
+
+The marketing site is measured by two more tokens, used as a plain `max-w-(--token)` rather than
+through a column class: `--layout-measure-site` (1388px) is the page's frame — the hero, every
+section, the docs home and the footer share it, which is the only reason the border-x running down
+the page is continuous — and `--layout-measure-site-header` (1620px) is the top bar's own column,
+one rung wider, since a bar's payload is chrome held apart at the two ends of the window rather than
+content read across it. `GlobalHeader kind="site"` is the one consumer of the header token.
 
 Full-bleed is the **absence** of all five, never a `w-full`. The unit that picks a class is the **band**,
 not the file: a tab showing a table is measured as data even when the tab beside it is a form. Within one

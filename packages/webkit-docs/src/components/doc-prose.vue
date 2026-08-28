@@ -374,7 +374,7 @@
          IT LIVES INSIDE THE ROOT DIV, not beside it. A `<Teleport>` counts as a root
          node, so hoisting it to the template's top level makes this component a
          FRAGMENT — and a fragment cannot inherit attributes, which silently drops the
-         `class` every page passes DocProse (`layout-column-docs …`) and un-columns the
+         `class` every page passes DocProse (`layout-column-content …`) and un-columns the
          whole document. Nested here it still renders under `<body>`; the component
          just keeps its single root. -->
     <Teleport to="body">

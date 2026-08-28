@@ -87,38 +87,61 @@ export const layoutsData = {
    * the far left of a 1600px row from the input it names, and the eye has to travel
    * the whole measure to pair them.
    *
-   * DOCS pages are the one column capped by TYPOGRAPHY rather than by layout. Prose is
-   * read line by line, and past ~90 characters the eye loses the start of the next line
-   * on the return sweep — a limit that has nothing to do with how wide the payload is,
-   * which is why it is far tighter than every other measure here and why it does not
-   * move when a rail collapses and frees up room. A docs page is already flanked by two
-   * rails; this caps what is between them.
+   * CONTENT pages are the one column capped by TYPOGRAPHY rather than by layout. Prose
+   * is read line by line, and past ~90 characters the eye loses the start of the next
+   * line on the return sweep — a limit that has nothing to do with how wide the payload
+   * is, which is why it is far tighter than every other measure here and why it does not
+   * move when a rail collapses and frees up room. A documentation page is already
+   * flanked by two rails; this caps what is between them.
+   *
+   * IT IS NAMED FOR THE PAYLOAD, NOT FOR THE SECTION. The cap is a line length, so every
+   * page whose payload is flowing copy takes it — documentation today, the blog and any
+   * other article page next — and none of them has to re-derive the same limit under a
+   * name that says "docs". By the same rule, a page inside the documentation that is NOT
+   * read line by line (its home, a directory of cards) takes a wider measure: what picks
+   * the column is the payload, never the URL.
    */
   'layout-measure': 'var(--container-6xl)', // 1388px — the standard page container
   'layout-measure-focused': 'var(--container-4xl)', // 1024px — single-task heroes
   'layout-measure-form': 'var(--container-4xl)', // 1024px — settings, forms
   'layout-measure-form-create': 'var(--container-5xl)', // 1192px — create flows
-  'layout-measure-docs': 'var(--container-4xl)', // 1192px — documentation prose
+  'layout-measure-content': 'var(--container-3xl)', // 876px — prose columns (docs, blog)
 
   /*
-   * MEASURE (site) — the marketing site's content column, and the one measure in this
-   * file that is not a console page's.
+   * MEASURE (site) — the marketing site's columns, and the only measures in this file
+   * that are not a console page's. There are TWO, because the page and the bar above it
+   * do not answer the same question.
    *
-   * The azion.com pages are a single vertical frame: the nav bar, the hero's inner
-   * column, every section below it and the footer all sit on the SAME centred column,
-   * and the border-x that runs down the page is only continuous because those four
-   * agree to the pixel. That is why this is a token rather than a width re-typed per
-   * band — the frame is one decision, and one place is where it has to live.
+   * --layout-measure-site IS THE PAGE'S FRAME. The azion.com pages are a single
+   * vertical frame: the hero's inner column, every section below it, the docs home and
+   * the footer all sit on the SAME centred column, and the border-x that runs down the
+   * page is only continuous because they agree to the pixel. That is why this is a token
+   * rather than a width re-typed per band — the frame is one decision, and one place is
+   * where it has to live.
    *
-   * It is `5xl` (1192px) — a rung of the shared container ladder
-   * (primitives/shape/container.js), not a number chosen for this page. The page snaps
-   * to the scale, the scale does not bend to the page, which is the same rule
-   * --layout-measure follows. It is its own token rather than a reference to one of the
-   * console measures because the two answer different questions: a console measure caps
-   * a payload (a table, a form), while this one is the width of a FRAME whose four bands
-   * have to line up. Retuning either must not move the other.
+   * --layout-measure-site-header IS THE BAR'S, AND IT IS DELIBERATELY ONE RUNG WIDER.
+   * A bar is chrome, not content: it carries the brand at one end of the window and the
+   * account actions at the other, held apart by a navigation region in the middle, so it
+   * wants the room a reading frame deliberately refuses. Held to the page's measure that
+   * middle region ran out of room on a laptop long before the page did. The bar is the
+   * ONE band allowed outside the frame, and it says so in a token of its own — which is
+   * also what keeps the exception reviewable in both directions: nobody widens the bar by
+   * retuning the page, and nobody widens the page by retuning the bar.
+   *
+   * The two part company only above the caps, and by a fixed step. Measured against the
+   * page frame: one shared inset up to 1280, 2px apart at 1440 (the frame has just
+   * capped), 82 at 1600, and a flat 92 from 1668 up, where the bar caps too — half the
+   * 232px between the two measures, less the boundary the bar keeps.
+   *
+   * Both are rungs of the shared container ladder (primitives/shape/container.js), not
+   * numbers chosen for a page. The page snaps to the scale, the scale does not bend to
+   * the page, which is the same rule --layout-measure follows. They are their own tokens
+   * rather than references to a console measure because the questions differ: a console
+   * measure caps a PAYLOAD (a table, a form), while these are the widths of a FRAME and
+   * of the chrome above it. Retuning any of the three must not move the others.
    */
-  'container-site': 'var(--container-5xl)', // 1192px — the marketing site column
+  'layout-measure-site': 'var(--container-6xl)', // 1388px — the marketing site column
+  'layout-measure-site-header': 'var(--container-7xl)', // 1620px — the site bar, one rung wider
   /*
    * MEASURE (control) — the widest the *right side* of an item-group field row may
    * get. An ItemGroup row is two columns: the content names the field (title +
@@ -149,7 +172,7 @@ const COLUMN_MEASURE = {
   'layout-column-focused': 'var(--layout-measure-focused)',
   'layout-column-form': 'var(--layout-measure-form)',
   'layout-form-create': 'var(--layout-measure-form-create)',
-  'layout-column-docs': 'var(--layout-measure-docs)'
+  'layout-column-content': 'var(--layout-measure-content)'
 }
 
 /**
@@ -256,10 +279,48 @@ export const layoutsUtilities = {
         // 1192px column a 256px control side left every input pinned to the far right,
         // a head-turn away from the label naming it; 472px pulls the control back
         // toward its label and gives the radio blocks room to read.
-        name === 'layout-form-create' ? { '--layout-measure-control': 'var(--container-md)' } : undefined
+        name === 'layout-form-create'
+          ? { '--layout-measure-control': 'var(--container-md)' }
+          : undefined
       )
     ])
   ),
+
+  /*
+   * THE SITE FRAME — the marketing page's column, and the one column in this file whose
+   * cap is a FRAME width rather than a content width.
+   *
+   * IT IS INSET FROM THE WINDOW AT EVERY WIDTH, and that is the whole reason it exists as
+   * a utility. On a wide screen the inset is free: --layout-measure-site is narrower than
+   * the window, `margin-inline: auto` centres the column, and its rules read as the page's
+   * vertical frame with canvas either side. Below the cap that stops doing anything — the
+   * column becomes the window — and the two rules land ON the window edges, where a
+   * hairline is not a frame, it is a seam against the bezel. So the frame that organises
+   * the whole desktop layout simply ceased to exist on a phone, and the headline above it
+   * (which pads by the boundary) opened a boundary inside a rule drawn at x=0.
+   *
+   * ONE `min()` COVERS THE WHOLE RANGE, WITH NO BREAKPOINT. The cap is whichever binds
+   * first: the measure, or the window less a boundary a side. While the measure is the
+   * smaller the column is capped and centred and the boundary term is inert; once the
+   * window is narrower than the measure — precisely where the cap has stopped working —
+   * the boundary term takes over and IS the inset. The two mechanisms hand off to each
+   * other, so a phone gets the same framed column a desktop gets, one boundary in from
+   * each edge.
+   *
+   * NO PADDING, DELIBERATELY. The inset belongs to the frame, not to the copy: the bands
+   * inside are grids whose `gap-px` rules have to reach the frame's own verticals, and a
+   * padding here would pull them off it. A band that wants its content inset too adds
+   * `layout-boundary-inline` on top (that is what SectionContainer's `padded` does).
+   *
+   * This is the shape /site/pricing worked out band by band and carried in a wrapper div;
+   * as a utility it is one element, pixel-identical at every width, and every other page
+   * and the footer get it by naming the column instead of re-deriving it.
+   */
+  'layout-column-site': {
+    'margin-inline': 'auto',
+    width: '100%',
+    'max-width': 'min(var(--layout-measure-site), 100% - 2 * var(--layout-boundary-inline))'
+  },
 
   /*
    * The control side of an item-group field row: the same geometry every settings row

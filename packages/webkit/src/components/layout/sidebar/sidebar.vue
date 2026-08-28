@@ -179,7 +179,8 @@
    * it spans the rail edge-to-edge and is there whatever the consumer puts in the
    * footer slot — and whether or not the rail is collapsible.
    */
-  const FOOTER_REGION_CLASS = 'w-full shrink-0 border-t border-(--border-default) p-(--spacing-md)'
+  const FOOTER_REGION_CLASS =
+    'w-full shrink-0 border-t h-(--size-14) my-auto items-center border-(--border-default) p-(--spacing-md)'
 
   const footerBandClass = computed(() =>
     props.collapsible
