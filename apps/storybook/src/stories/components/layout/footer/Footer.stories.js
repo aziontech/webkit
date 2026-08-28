@@ -59,7 +59,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Page footer, the bottom-of-page counterpart to GlobalHeader: link columns over a social bar, folding from four columns to the stacked mobile presentation at the md breakpoint. Links, brand, status, and language content come from the consumer.'
+          'Page footer, the bottom-of-page counterpart to GlobalHeader: link columns over a social bar, folding from four columns to the stacked mobile presentation at the md breakpoint. Two placements, the same two GlobalHeader has — `content` runs the bands full bleed across the zone that holds them, `site` caps them at the marketing measure and draws the frame that page carries. Links, brand, status, and language content come from the consumer.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -74,24 +74,51 @@ const meta = {
         category: 'props'
       }
     },
+    kind: {
+      control: 'inline-radio',
+      options: ['content', 'site'],
+      description:
+        'Where the footer sits: `content` is the default — the bands run full bleed across whatever zone holds the footer, opening on the page boundary; `site` closes a framed marketing page instead, capping the bands at the site measure and drawing the frame that page carries: the side rules, the hatched gutters and the closing band.',
+      table: {
+        type: { summary: "'content' | 'site'" },
+        defaultValue: { summary: "'content'" },
+        category: 'props'
+      }
+    },
     default: {
       control: false,
       description: 'The Footer.Column items; a 2-column grid that becomes 4 columns at md.',
       table: { type: { summary: '—' }, category: 'slots' }
     },
-    'social-start': {
+    social: {
       control: false,
-      description: 'Leading cluster of the social bar (brand + social icon buttons).',
+      description: 'The social icon buttons; renders its own band.',
       table: { type: { summary: '—' }, category: 'slots' }
     },
-    'social-end': {
+    status: {
       control: false,
-      description: 'Trailing cluster of the social bar (status indicator + language select).',
+      description: 'The system status indicator; shares the status band with language.',
+      table: { type: { summary: '—' }, category: 'slots' }
+    },
+    language: {
+      control: false,
+      description: 'The language select; rendered before status when stacked and after it from md.',
+      table: { type: { summary: '—' }, category: 'slots' }
+    },
+    brand: {
+      control: false,
+      description: 'The brand lockup of the signature band.',
+      table: { type: { summary: '—' }, category: 'slots' }
+    },
+    tagline: {
+      control: false,
+      description: 'The one-line tagline beside the brand.',
       table: { type: { summary: '—' }, category: 'slots' }
     }
   },
   args: {
-    ariaLabel: 'Footer'
+    ariaLabel: 'Footer',
+    kind: 'content'
   }
 }
 
@@ -190,6 +217,44 @@ export const DefaultFooter = {
           'The footer composed with four link columns, the status row, the signature band (brand beside its tagline) and the social icon buttons. From lg the icons and the status cluster share one row above the signature; stacked, the order is links, status, signature, icons.'
       },
       source: { code: toSfc([...IMPORT, '', SETUP_SNIPPET], DEFAULT_MARKUP) }
+    }
+  }
+}
+
+// The site placement: the SAME bands, capped at the marketing measure and centred, with
+// the frame that page carries drawn around them — side rules down both edges, hatched
+// gutters flanking them from `2xl` (the first breakpoint past the measure, so a gutter
+// always has real width to grow into), and the hatched band closing the frame below. The
+// canvas here is narrower than that breakpoint, so the gutters stay out and what the story
+// shows is the cap and the rules; the closing band is visible at every width.
+const SITE_MARKUP = `<Footer kind="site" aria-label="Footer">
+${FOOTER_CONTENT}
+</Footer>`
+
+/** @type {import('@storybook/vue3').StoryObj<typeof Footer>} */
+export const SitePlacement = {
+  name: 'Site placement',
+  render: () => ({
+    components,
+    setup() {
+      const language = ref('en')
+      const languageOptions = [
+        { value: 'en', label: 'EN' },
+        { value: 'pt-br', label: 'PT-BR' },
+        { value: 'es', label: 'ES' }
+      ]
+      return { language, languageOptions }
+    },
+    template: SITE_MARKUP
+  }),
+  parameters: {
+    controls: { disable: true },
+    docs: {
+      description: {
+        story:
+          'The footer closing a framed marketing page: the bands capped at the site measure and centred, with the side rules, the hatched gutters and the closing band that finish the page frame. The hero band and the framed sections above resolve to that same measure, which is the only reason the rules running down the page are continuous.'
+      },
+      source: { code: toSfc([...IMPORT, '', SETUP_SNIPPET], SITE_MARKUP) }
     }
   }
 }

@@ -84,12 +84,12 @@ const meta = {
     },
     kind: {
       control: 'inline-radio',
-      options: ['app', 'content', 'site'],
+      options: ['content', 'site'],
       description:
-        "Where the bar sits: `app` spans the whole window above the navigation rail and insets its regions by the shell's own step; `content` sits inside the content zone beside the rail, full bleed, and insets them by the page boundary instead; `site` keeps that full-bleed surface on a framed marketing page but caps the regions at the site measure and centres them, so they land on the page's own column.",
+        "Where the bar sits: `content` is the default — full bleed across whatever zone holds it, insetting its regions by the page boundary so the first region opens on the same vertical as the page content under or beside it; `site` keeps that full-bleed surface on a framed marketing page but caps the regions at the site header measure and centres them, so they land on the bar's own column, one rung wider than the page frame under it.",
       table: {
-        type: { summary: "'app' | 'content' | 'site'" },
-        defaultValue: { summary: "'app'" },
+        type: { summary: "'content' | 'site'" },
+        defaultValue: { summary: "'content'" },
         category: 'props'
       }
     },
@@ -102,7 +102,7 @@ const meta = {
   },
   args: {
     ariaLabel: 'Global header',
-    kind: 'app'
+    kind: 'content'
   }
 }
 
@@ -149,13 +149,14 @@ export const DefaultHeader = {
   }
 }
 
-// The content-zone placement: FULL BLEED across the content zone (right of the
-// navigation rail), with its regions inset by the page boundary rather than by the
-// shell's own step — so the first crumb opens on the same vertical as the page
-// content beside it. The mock page under the bar is here to make that edge visible;
-// it is not part of the component.
+// The default placement, shown against a page: FULL BLEED across whatever zone holds the
+// bar (here the content zone right of a navigation rail), with its regions inset by the page
+// boundary — so the first crumb opens on the same vertical as the page's own heading. Default
+// above shows the ANATOMY of the bar; this story exists for the one claim the anatomy cannot
+// show, which is that shared vertical, so the mock page under the bar is the point of it. It
+// is not part of the component.
 const CONTENT_ZONE_TEMPLATE = `<div class="flex w-full flex-col bg-(--bg-canvas)">
-  <GlobalHeader kind="content" aria-label="Console header">
+  <GlobalHeader aria-label="Console header">
     <GlobalHeader.Left class="justify-start!">
       <Breadcrumb :items="[{ label: 'Build', href: '/build' }, { label: 'Custom Pages' }]" />
     </GlobalHeader.Left>
@@ -179,17 +180,21 @@ export const ContentZone = {
     docs: {
       description: {
         story:
-          'The bar placed inside the content zone, beside the navigation rail: full bleed across the zone, with its regions inset by the page boundary instead of the shell step — so the breadcrumb starts on the same vertical as the page content beside it.'
+          'The default placement, against a page: full bleed across the zone that holds it, with its regions inset by the page boundary — so the breadcrumb starts on the same vertical as the heading under it, and retuning the boundary moves both. The mock page is here to make that vertical visible.'
       },
       source: { code: toSfc(CONTENT_IMPORT, CONTENT_ZONE_TEMPLATE) }
     }
   }
 }
 
-// The site placement: the SURFACE is still full bleed, and the REGIONS are capped at
-// `--container-site` and centred — so the brand opens on the same vertical as the hero
-// headline under it, at any window width. The mock hero band is here to make that shared
-// vertical visible; it is not part of the component.
+// The site placement: the SURFACE is still full bleed, and the REGIONS are capped at the
+// bar's own `--layout-measure-site-header` (1620) and centred. The mock hero band takes the
+// PAGE frame (`--layout-measure-site`, 1388) — the measure the hero, the sections and the
+// footer share — so the story shows the real relationship between the two: below both caps
+// they resolve to one inset and the brand opens on the headline's vertical; past 1436 the
+// column starts pulling in, and from 1668 the bar sits a flat 92px outside it — a bar reading
+// as chrome around the page rather than as one more band of it. The band is here to make that
+// visible; it is not part of the component.
 const SITE_TEMPLATE = `<div class="flex w-full flex-col bg-(--bg-canvas)">
   <GlobalHeader kind="site" aria-label="Azion">
     <GlobalHeader.Brand>
@@ -202,9 +207,9 @@ const SITE_TEMPLATE = `<div class="flex w-full flex-col bg-(--bg-canvas)">
       <Button label="Start for Free" kind="primary" size="medium" />
     </GlobalHeader.Right>
   </GlobalHeader>
-  <section class="mx-auto w-full max-w-(--container-site) px-(--layout-boundary-inline) py-(--spacing-xl)">
+  <section class="mx-auto w-full max-w-(--layout-measure-site) px-(--layout-boundary-inline) py-(--spacing-xl)">
     <h1 class="text-heading-xl text-(--text-default)">Distributed infrastructure for modern workloads</h1>
-    <p class="text-body-md text-(--text-muted)">The headline opens on the same vertical as the brand above it.</p>
+    <p class="text-body-md text-(--text-muted)">The page frame is one rung narrower than the bar above it: the two share an inset until the window passes their caps.</p>
   </section>
 </div>`
 
@@ -217,7 +222,7 @@ export const SitePlacement = {
     docs: {
       description: {
         story:
-          "The marketing placement: the bar's surface still spans the window, but its regions are capped at the site measure and centred, so the brand lands on the framed page column instead of drifting to the window edge as the viewport grows."
+          "The marketing placement: the bar's surface still spans the window, but its regions are capped at the site header measure (`--layout-measure-site-header`) and centred, so the brand answers to the page instead of drifting to the window edge as the viewport grows. That cap is one rung wider than the page frame the hero, sections and footer share (`--layout-measure-site`): a bar carries the brand at one end and the account actions at the other, so it is the one band deliberately outside the frame."
       },
       source: { code: toSfc(SITE_IMPORT, SITE_TEMPLATE) }
     }
