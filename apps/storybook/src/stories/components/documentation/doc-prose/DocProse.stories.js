@@ -14,7 +14,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The typography contract every documentation page inherits. A markdown or MDX pipeline compiles text to plain semantic HTML, and this container is what gives that HTML the Azion type scale, the semantic colors and the vertical rhythm. The in-content ladder is static — 32px above a section heading, 24px above a sub-section or a block, 16px between flowing blocks — and reads the same at every width; only a section heading opens further, to 48px, on the widest screens. An author writes markdown; the tokens are applied for them. It has no measure of its own: the consumer caps the reading column with `.layout-column-docs`.'
+          'The typography contract every documentation page inherits. A markdown or MDX pipeline compiles text to plain semantic HTML, and this container is what gives that HTML the Azion type scale, the semantic colors and the vertical rhythm. The in-content ladder is static — 32px above a section heading, 24px above a sub-section or a block, 16px between flowing blocks — and reads the same at every width; only a section heading opens further, to 48px, on the widest screens. An author writes markdown; the tokens are applied for them. It has no measure of its own: the consumer caps the reading column with `.layout-column-content`.'
       },
       canvas: { sourceState: 'shown' }
     }
