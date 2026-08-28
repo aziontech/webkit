@@ -4,7 +4,7 @@
 // It lives beside the pages rather than inside them because it is read by FOUR consumers
 // now, not one: the index's card grid and comparison table, every agent page's masthead
 // and its closing "Other agents" grid, the rail (docs-nav.js generates one row per agent
-// from this list), and the markdown the Copy page control hands to an assistant. A second
+// from this list), and the markdown the action belt hands to an assistant. A second
 // copy of the agent list is the copy that rots — and it would rot invisibly in the two
 // consumers nobody looks at, the rail's ordering and the clipboard.
 //
@@ -353,7 +353,7 @@ export const AGENT_SETUP_DESCRIPTION =
   'Azion ships an MCP server, agent-ready documentation, and a CLI, so your coding agent can build on the platform from your editor or terminal.'
 
 /**
- * The index page as markdown, for the masthead's Copy page control and its "open in
+ * The index page as markdown, for the masthead's action belt and its "open in
  * assistant" actions.
  *
  * A hand-composed page has no `.mdx` to hand over, so the markdown is built from the SAME

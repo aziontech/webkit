@@ -1,77 +1,35 @@
 import { computed, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 
 /**
- * The "Copy page" split button, as one definition every docs masthead shares.
+ * The docs page's action belt, as one definition every masthead shares.
  *
- * The control is a SPLIT because it is a split: the primary segment does the one
- * thing almost everyone wants (put the page on the clipboard), and the menu holds
- * the variants — the link, the raw markdown, and handing the page to each
- * assistant by name. Naming the vendors is the point of that list: "Open in AI"
- * makes the reader guess which one, while "Open in Claude" is a decision they can
- * make at a glance.
+ * THE PAGE'S ACTIONS ARE A LINE OF METADATA, not a control on the title's line.
+ * They lived in a `Copy page` split button beside the h1 — a large outlined
+ * control whose menu held the variants (the link, the raw markdown, each
+ * assistant by name). Two problems, and the second is the one that decided it:
+ * the button competed with the page's own name for the eye, and half of what it
+ * offered was one click deep in a menu nobody opens. As entries on the meta line
+ * they sit beside the date they qualify, at the quietest register the masthead
+ * has, and every one of them is visible at a glance.
  *
- * Each assistant entry builds its own search URL from the page's address, which is
- * how the published docs' own "open in" actions work — the assistant fetches the
- * page itself, so nothing has to be pasted and the prompt is the same every time.
- *
- * The glyph is `pi pi-external-link` for all five rather than each vendor's mark:
- * @aziontech/icons ships brand glyphs for the frameworks and for Google, but not
- * for ChatGPT, Claude, Perplexity or Grok, and half a row of real marks beside
- * half a row of fallbacks reads worse than one honest verb glyph. Add the marks to
- * the icon library and they can all become brands together.
+ * ONE ENTRY, ONE SENTENCE. Each carries a `tip` because two or three words cannot
+ * say what a control will do; the masthead shows it on hover and on focus.
  */
 
-/** What each assistant is handed: the page's address plus what to do with it. */
-const ask = (pageUrl) => `Read ${pageUrl} and help me get started building on Azion.`
-
 /**
- * Build the page-action model and its behaviour.
+ * Build the page's action belt and its behaviour.
  *
  * @param {() => string} markdown - the page's own markdown, for copy / view.
- * @returns {{ actions: object[], copied: import('vue').Ref<boolean>,
- *   label: import('vue').ComputedRef<string>, icon: import('vue').ComputedRef<string>,
- *   copyPage: () => void, onPageAction: (event: MouseEvent, item: object) => void }}
+ * @returns {{ metaActions: import('vue').ComputedRef<object[]>,
+ *   onMetaAction: (event: MouseEvent, item: object) => void }}
  */
 export function useDocsPageActions(markdown) {
-  const pageUrl = () => globalThis.location?.href ?? 'https://www.azion.com/en/documentation/'
+  const router = useRouter()
+  const route = useRoute()
 
-  const actions = [
-    { value: 'link', label: 'Get page link', icon: 'pi pi-link' },
-    { value: 'markdown', label: 'View page as markdown', icon: 'pi pi-file' },
-    {
-      value: 'google',
-      label: 'Open in Google AI',
-      icon: 'pi pi-external-link',
-      url: () => `https://www.google.com/search?udm=50&q=${encodeURIComponent(ask(pageUrl()))}`
-    },
-    {
-      value: 'perplexity',
-      label: 'Open in Perplexity',
-      icon: 'pi pi-external-link',
-      url: () => `https://www.perplexity.ai/search?q=${encodeURIComponent(ask(pageUrl()))}`
-    },
-    {
-      value: 'claude',
-      label: 'Open in Claude',
-      icon: 'pi pi-external-link',
-      url: () => `https://claude.ai/new?q=${encodeURIComponent(ask(pageUrl()))}`
-    },
-    {
-      value: 'chatgpt',
-      label: 'Open in ChatGPT',
-      icon: 'pi pi-external-link',
-      url: () => `https://chatgpt.com/?q=${encodeURIComponent(ask(pageUrl()))}`
-    },
-    {
-      value: 'grok',
-      label: 'Open in Grok',
-      icon: 'pi pi-external-link',
-      url: () => `https://grok.com/?q=${encodeURIComponent(ask(pageUrl()))}`
-    }
-  ]
-
-  // The primary segment reports back on itself for two seconds — a clipboard write has
-  // no other visible outcome, so without it the click looks like nothing happened.
+  // The copy entry reports back on itself for two seconds — a clipboard write has no
+  // other visible outcome, so without it the click looks like nothing happened.
   const copied = ref(false)
 
   const writeClipboard = async (text) => {
@@ -87,8 +45,6 @@ export function useDocsPageActions(markdown) {
     globalThis.setTimeout(() => (copied.value = false), 2000)
   }
 
-  const copyPage = () => writeClipboard(markdown())
-
   // "View" really views it: the markdown is served to a new tab from a blob, so the
   // prototype needs no .md route to show the source of the page it is on.
   const viewMarkdown = () => {
@@ -98,21 +54,61 @@ export function useDocsPageActions(markdown) {
     globalThis.setTimeout(() => globalThis.URL.revokeObjectURL(url), 10000)
   }
 
-  // SplitButton emits (event, item) — event first, per the event-payload convention.
-  const onPageAction = (event, item) => {
-    const action = actions.find((entry) => entry.value === item.value)
-    if (!action) return
-    if (action.url) return globalThis.open(action.url(), '_blank', 'noopener')
-    if (action.value === 'link') return writeClipboard(pageUrl())
-    if (action.value === 'markdown') return viewMarkdown()
+  /**
+   * The meta line's controls, in reading order.
+   *
+   * THE COPY ENTRY REPORTS BACK THROUGH ITS GLYPH, not its label. The old split button
+   * could swap `Copy page` for `Copied` because it sat alone at the end of the title's
+   * line, where nothing moved. Here the entry has two neighbours and a rule between each
+   * pair: a label that loses 60px for two seconds shoves the rest of the belt left and
+   * back again, which reads as a glitch rather than as a confirmation. The check glyph
+   * confirms in place, and the entry keeps its measured 147.56px throughout.
+   *
+   * AN ENTRY THAT POINTS AT THE PAGE YOU ARE ON IS NOT AN ENTRY — `Agent setup` drops
+   * itself on `/site/docs/agent-setup`, so the strip never offers a control that would
+   * do nothing.
+   */
+  const metaActions = computed(() =>
+    [
+      {
+        value: 'copy',
+        label: 'Copy as Markdown',
+        icon: copied.value ? 'pi pi-check' : 'pi pi-copy',
+        tip: 'Copy this page as Markdown, ready to paste into an assistant.'
+      },
+      {
+        value: 'markdown',
+        label: 'View as Markdown',
+        icon: 'pi pi-eye',
+        tip: 'Open this page as plain Markdown in a new tab.'
+      },
+      {
+        value: 'agent-setup',
+        label: 'Agent setup',
+        icon: 'pi pi-microchip-ai',
+        href: '/site/docs/agent-setup',
+        tip: 'Set up your coding agent to build on Azion.'
+      }
+    ].filter((action) => action.href !== route.path)
+  )
+
+  // Same split the trail and the rail make (see docs-crumb-nav): an in-app destination is a
+  // real anchor so it can be middle-clicked, ⌘-clicked and copied — and the plain left click
+  // is taken into the router so the SPA stays an SPA. An off-site href is left to the browser.
+  const followInternal = (event, href) => {
+    if (!href || !href.startsWith('/')) return
+    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey)
+      return
+    event.preventDefault()
+    if (route.path !== href) router.push(href)
   }
 
-  return {
-    actions,
-    copied,
-    label: computed(() => (copied.value ? 'Copied' : 'Copy page')),
-    icon: computed(() => (copied.value ? 'pi pi-check' : 'pi pi-copy')),
-    copyPage,
-    onPageAction
+  // DocPageHeader emits (event, item) — event first, per the event-payload convention.
+  const onMetaAction = (event, item) => {
+    if (item.value === 'copy') return writeClipboard(markdown())
+    if (item.value === 'markdown') return viewMarkdown()
+    followInternal(event, item.href)
   }
+
+  return { metaActions, onMetaAction }
 }

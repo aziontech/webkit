@@ -31,7 +31,6 @@
   // `DocTabs` also means the strip, the underline and the whole keyboard model are the
   // design system's.
   import Breadcrumb from '@aziontech/webkit/breadcrumb'
-  import SplitButton from '@aziontech/webkit/split-button'
   import Table from '@aziontech/webkit/table'
   import Tag from '@aziontech/webkit/tag'
   import DocCallout from '@aziontech/webkit-docs/doc-callout'
@@ -79,14 +78,8 @@
 
   // The page is composed rather than written, so its markdown is BUILT from the same data
   // the body renders (see docs-agent-setup.js) — not typed out a second time to rot. It is
-  // wired HERE rather than in the view because the control it drives is the masthead's.
-  const {
-    actions: PAGE_ACTIONS,
-    label: copyLabel,
-    icon: copyIcon,
-    copyPage,
-    onPageAction
-  } = useDocsPageActions(agentSetupMarkdown)
+  // wired HERE rather than in the view because the controls it drives are the masthead's.
+  const { metaActions: META_ACTIONS, onMetaAction } = useDocsPageActions(agentSetupMarkdown)
 
   // One pass over the filters, so a tab's grid is resolved once rather than each card
   // re-filtering the list.
@@ -108,15 +101,21 @@
          inset reads as decoration under the title; run to the edge of the region it reads
          as the page's horizon, which is what every h2 below is subordinate to.
 
-         THE TRAIL AND COPY PAGE ARE THE MASTHEAD'S, passed in for the reasons the MDX
-         page passes them (see DocsMdxPage): this trail routes, and this page's action set
-         is its own. They were a sticky bar of their own above the scroll. -->
+         THE TRAIL IS PASSED IN for the reason the MDX page passes it (see DocsMdxPage):
+         this trail routes. It was a sticky bar of its own above the scroll.
+
+         THE META LINE is the page's action region, from the same composable the MDX page
+         uses, so two reading pages can never disagree about what can be done with a page.
+         On THIS page it is two entries, not three: `Agent setup` points here, and the
+         composable drops an entry that points at the page you are already on. -->
     <div class="border-b border-(--border-default) pt-(--spacing-md)">
       <DocPageHeader
-        class="layout-column-docs layout-boundary-inline"
+        class="layout-column-content layout-boundary-inline"
         title="Agent Setup"
         :description="AGENT_SETUP_DESCRIPTION"
         last-updated="2026-08-26"
+        :meta-actions="META_ACTIONS"
+        @meta-action="onMetaAction"
       >
         <template #breadcrumb>
           <Breadcrumb
@@ -125,21 +124,10 @@
             @navigate="onCrumbNavigate"
           />
         </template>
-        <template #actions>
-          <SplitButton
-            :label="copyLabel"
-            :icon="copyIcon"
-            :model="PAGE_ACTIONS"
-            kind="outlined"
-            class="shrink-0"
-            @click="copyPage"
-            @item-click="onPageAction"
-          />
-        </template>
       </DocPageHeader>
     </div>
 
-    <DocProse class="layout-column-docs layout-boundary-inline pt-14">
+    <DocProse class="layout-column-content layout-boundary-inline pt-14">
       <!-- ══ Pick your agent ══════════════════════════════════════════════════════ -->
       <DocHeading
         id="pick-your-agent"
@@ -334,7 +322,7 @@
       v-if="previous || next"
       :previous="previous"
       :next="next"
-      class="layout-column-docs layout-boundary-inline pt-12"
+      class="layout-column-content layout-boundary-inline pt-12"
     />
   </article>
 </template>
