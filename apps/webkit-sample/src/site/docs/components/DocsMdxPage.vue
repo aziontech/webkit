@@ -10,20 +10,23 @@
   // `DocMarkdown` parses the MDX subset and mounts the components it finds, and
   // `DocPageHeader` renders the title and deck the frontmatter already declared.
   //
-  // THE MASTHEAD CARRIES THE TRAIL AND COPY PAGE. Both used to live in a sticky page
-  // bar of their own, pinned above the scroll by the shell — a second header band whose
-  // only content was those two controls. So the page opened on a strip of chrome, the
-  // trail sat a whole band away from the title it qualifies, and the bar's rule read as
-  // the page's horizon before the masthead had drawn its own. They belong to the PAGE,
-  // and the masthead is where a page says what it is: trail, title, the one action, deck.
-  // One header, one rule, and the reader's location on the line directly above the name
-  // of the thing they are located in.
+  // THE MASTHEAD CARRIES THE TRAIL AND THE PAGE'S ACTIONS. Both used to live in a sticky
+  // page bar of their own, pinned above the scroll by the shell — a second header band
+  // whose only content was those two controls. So the page opened on a strip of chrome,
+  // the trail sat a whole band away from the title it qualifies, and the bar's rule read
+  // as the page's horizon before the masthead had drawn its own. They belong to the PAGE,
+  // and the masthead is where a page says what it is: trail, title, deck, and then the
+  // meta line — when it last changed, and what can be done with it.
+  //
+  // THE TITLE'S LINE IS THE TITLE'S. It carried a `Copy page` split button until the meta
+  // line existed; two action regions in one masthead meant the reader had to look in two
+  // places for the same kind of thing, and the bigger of the two competed with the h1 for
+  // the eye. One region, at the quietest register the masthead has.
   //
   // The page renders the body only. The VIEW derives the rail from the same source
   // and owns the scrolling, because the scroll container is the shell's — see
   // AzionDocsFirstDeploy.
   import Breadcrumb from '@aziontech/webkit/breadcrumb'
-  import SplitButton from '@aziontech/webkit/split-button'
   import DocMarkdown from '@aziontech/webkit-docs/doc-markdown'
   import DocPageHeader from '@aziontech/webkit-docs/doc-page-header'
   import DocPagination from '@aziontech/webkit-docs/doc-pagination'
@@ -58,20 +61,14 @@
 
   // The markdown IS the page here, so every action operates on the exact source the body
   // was rendered from — no second copy of the text to keep in sync. It is wired HERE
-  // rather than in the view because the control it drives is the masthead's, and the
+  // rather than in the view because the controls it drives are the masthead's, and the
   // masthead is this component's.
-  const {
-    actions: PAGE_ACTIONS,
-    label: copyLabel,
-    icon: copyIcon,
-    copyPage,
-    onPageAction
-  } = useDocsPageActions(() => props.source)
+  const { metaActions: META_ACTIONS, onMetaAction } = useDocsPageActions(() => props.source)
 </script>
 
 <template>
   <!-- THE COLUMN COMES FROM THE CONTAINER SYSTEM, not from a width typed here.
-       `layout-column-docs` is the docs MEASURE — the reading column, capped by line
+       `layout-column-content` is the docs MEASURE — the reading column, capped by line
        length rather than by payload — so retuning it is a token edit in
        @aziontech/theme, not a sweep through pages.
 
@@ -107,10 +104,12 @@
   <article class="pb-12">
     <div class="border-b border-(--border-default) pt-(--spacing-md)">
       <DocPageHeader
-        class="layout-column-docs layout-boundary-inline"
+        class="layout-column-content layout-boundary-inline"
         :title="title"
         :description="description"
         :last-updated="lastUpdated"
+        :meta-actions="META_ACTIONS"
+        @meta-action="onMetaAction"
       >
         <!-- ONE Breadcrumb, and the DESIGN SYSTEM makes it responsive. Below 768 it
              renders the first crumb, an overflow dropdown holding the middle of the
@@ -134,25 +133,9 @@
             @navigate="onCrumbNavigate"
           />
         </template>
-        <!-- The page's own action set, over the masthead's three-entry default: the page
-             link, the raw markdown, and each assistant by name — and a primary segment
-             that says `Copied` for two seconds, because a clipboard write has no other
-             visible outcome. `large` (the default) rather than the `small` it wore in the
-             bar: this is a heading action now, and it sits on the title's line. -->
-        <template #actions>
-          <SplitButton
-            :label="copyLabel"
-            :icon="copyIcon"
-            :model="PAGE_ACTIONS"
-            kind="outlined"
-            class="shrink-0"
-            @click="copyPage"
-            @item-click="onPageAction"
-          />
-        </template>
       </DocPageHeader>
     </div>
-    <DocProse class="layout-column-docs layout-boundary-inline pt-14">
+    <DocProse class="layout-column-content layout-boundary-inline pt-14">
       <DocMarkdown :source="source" />
     </DocProse>
     <!-- Where to go when the page is finished. Reading order, not the tree: the rail
@@ -161,7 +144,7 @@
       v-if="previous || next"
       :previous="previous"
       :next="next"
-      class="layout-column-docs layout-boundary-inline pt-12"
+      class="layout-column-content layout-boundary-inline pt-12"
     />
   </article>
 </template>

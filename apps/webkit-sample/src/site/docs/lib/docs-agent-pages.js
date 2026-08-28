@@ -669,7 +669,7 @@ export const AGENT_PAGE_TOC = [
 ]
 
 /**
- * The page as markdown, for the masthead's Copy page control — built from the same values
+ * The page as markdown, for the masthead's action belt — built from the same values
  * the page renders, so what an assistant receives is what the reader is looking at.
  *
  * @param {object} agent - the row from `AGENTS`.

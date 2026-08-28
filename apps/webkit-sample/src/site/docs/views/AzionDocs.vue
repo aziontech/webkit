@@ -11,7 +11,7 @@
   // reason — it used to be named after the row.
   //
   // AND NO MASTHEAD EITHER. A masthead is the reading chrome: a trail that says where in
-  // the documentation you are, the page's name, and a Copy page control for handing that
+  // the documentation you are, the page's name, and an action belt for handing that
   // page to an assistant. The home is none of those — its trail could only point at
   // itself, and what a reader would copy is a directory of links, not a page with an
   // answer in it. So `DocsHome` draws none and its column meets the top bar directly,

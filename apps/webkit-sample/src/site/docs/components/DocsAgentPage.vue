@@ -20,7 +20,6 @@
   // grid, and `DocMarkdown` for the copy that lives in data — so a sentence carrying
   // `azion deploy` renders the same inline code chip an MDX page would.
   import Breadcrumb from '@aziontech/webkit/breadcrumb'
-  import SplitButton from '@aziontech/webkit/split-button'
   import Table from '@aziontech/webkit/table'
   import Tag from '@aziontech/webkit/tag'
   import DocAccordionGroup from '@aziontech/webkit-docs/doc-accordion-group'
@@ -33,6 +32,7 @@
   import DocItem from '@aziontech/webkit-docs/doc-item'
   import DocItemGroup from '@aziontech/webkit-docs/doc-item-group'
   import DocMarkdown from '@aziontech/webkit-docs/doc-markdown'
+  import DocPageHeader from '@aziontech/webkit-docs/doc-page-header'
   import DocPagination from '@aziontech/webkit-docs/doc-pagination'
   import DocPrompt from '@aziontech/webkit-docs/doc-prompt'
   import DocProse from '@aziontech/webkit-docs/doc-prose'
@@ -86,13 +86,9 @@
   // The page is composed rather than written, so its markdown is BUILT from the same data
   // the body renders (see docs-agent-pages.js) — not typed out a second time to rot. It is
   // wired HERE rather than in the view because the control it drives is the masthead's.
-  const {
-    actions: PAGE_ACTIONS,
-    label: copyLabel,
-    icon: copyIcon,
-    copyPage,
-    onPageAction
-  } = useDocsPageActions(() => agentPageMarkdown(props.agent))
+  const { metaActions: META_ACTIONS, onMetaAction } = useDocsPageActions(() =>
+    agentPageMarkdown(props.agent)
+  )
 
   const steps = computed(() => agentSteps(props.agent))
   const tips = computed(() => agentTips(props.agent))
@@ -102,6 +98,11 @@
   const others = computed(() => otherAgents(props.agent.slug))
 
   const facts = computed(() => agentFacts(props.agent))
+
+  // The deck, in the masthead's own words: what the tool is, then who makes it. Built here
+  // rather than in the template because a template literal inside a bound attribute is
+  // exactly the shape that breaks the SFC parser (see .claude/rules/styling.md).
+  const deck = computed(() => `${props.agent.description} Made by ${props.agent.vendor}.`)
   const headerLinks = computed(() => agentHeaderLinks(props.agent))
 
   // `fileName`, not `label`: a single sample renders no tab strip, so the file name is the
@@ -121,38 +122,50 @@
     <!-- The masthead's RULE bleeds and its CONTENT takes the column — the same split every
          other docs page makes (see DocsMdxPage).
 
-         THE TRAIL AND COPY PAGE OPEN AND CLOSE THE IDENTITY, as they do on every other docs
-         page: the trail on its own line above the mark, the action on the title's line.
+         THE TRAIL AND THE ACTION BELT OPEN AND CLOSE THE MASTHEAD, as they do on every
+         other docs page: the trail on its own line above the mark, the belt on the last
+         line, where the other two pages put it beside their date.
          They were a sticky bar of the shell's, pinned above the scroll, which put the
          reader's location a whole band away from the name of the thing they were located
          in — and gave a page that already draws its own horizon a second rule above it.
 
-         IT IS COMPOSED HERE, NOT `DocPageHeader`. That masthead is a column of title,
-         deck and date, which is right for a prose page; this one is an identity card for a
-         third-party product, and it has four things that page never has: the vendor's mark
-         beside the title rather than above it, the maker's name as the title's own
-         overline, the tool's facts as tags, and the references a reader might want INSTEAD
-         of the four steps below. The type scale and the tokens are still the layer's.
-
-         THE DATE IS GONE, and the link row took its place. "Last updated" answers a
-         question a reader asks about PROSE — is this stale? — where this page's answer to
-         "is this current?" is the config snippet itself, and the row of references is what
-         a reader scanning the top actually wants. -->
-    <div class="border-b border-(--border-default)">
-      <header
-        class="layout-column-docs layout-boundary-inline flex flex-col gap-(--spacing-md) pt-(--spacing-md) pb-(--spacing-lg)"
+         IT IS `DocPageHeader`, SLOTTED — not a masthead composed here. This page is an
+         identity card for a third-party product, so it says four things a prose page never
+         does: the vendor's mark beside the title rather than above it, the maker's name as
+         the title's own overline, the tool's facts as tags, and the references a reader
+         might want INSTEAD of the four steps below. Those are the `title` and `details`
+         slots; everything else — the trail's place, the deck, the rhythm between the rows,
+         the action belt that closes the masthead — comes from the shared component, so a
+         change to how a docs page opens lands on all three docs pages at once instead of
+         on two of them. It used to be hand-composed, and the two mastheads had already
+         drifted a step apart in their vertical rhythm. -->
+    <div class="border-b border-(--border-default) pt-(--spacing-md)">
+      <DocPageHeader
+        class="layout-column-content layout-boundary-inline"
+        :description="deck"
+        :meta-actions="META_ACTIONS"
+        @meta-action="onMetaAction"
       >
         <!-- OPTICALLY COMPENSATED: the crumb is a hover pill with `px-(--spacing-xs)`, so
              left alone its LABEL starts 8px inside the column edge while the tile below is
              flush with it. The negative margin is exactly the pill's own padding, so the
              ink lands on the column edge and the hover surface keeps its 8px, bleeding
              into the gutter where there is nothing to collide with. -->
-        <Breadcrumb
-          :items="crumbs"
-          class="-ml-(--spacing-xs) min-w-0"
-          @navigate="onCrumbNavigate"
-        />
-        <!-- THE MARK SITS IN A TILE, not loose on the page: a logo drawn straight onto the
+        <template #breadcrumb>
+          <Breadcrumb
+            :items="crumbs"
+            class="-ml-(--spacing-xs) min-w-0"
+            @navigate="onCrumbNavigate"
+          />
+        </template>
+        <!-- THE IDENTITY IS THE TITLE, so it goes in the masthead's `title` slot rather
+             than into a band of its own: a page about a tool is named by the tool's mark,
+             its maker and its name together, and all three belong where the `h1` belongs.
+             Everything around them — the trail above, the deck below, the rhythm between,
+             the action belt that closes it — is the shared masthead's, so this page and a
+             prose page open identically.
+
+             THE MARK SITS IN A TILE, not loose on the page: a logo drawn straight onto the
              canvas at 24px reads as a bullet beside the title, where the same mark inside a
              bordered square reads as the product's own icon — and the tile gives seven marks
              of seven different aspect ratios one shared footprint, so the seven pages open
@@ -182,93 +195,89 @@
              one the rest of the page reads in. Stacked, the title gets the full measure
              and the mark reads as the page's opening mark rather than as a bullet the
              heading has to flow around. -->
-        <div
-          class="flex flex-col items-start gap-(--spacing-sm) sm:flex-row sm:items-center sm:gap-(--spacing-md)"
-        >
-          <span
-            class="flex size-14 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised) sm:size-16 [&>svg]:size-7 sm:[&>svg]:size-8"
-          >
-            <AgentMark :name="agent.mark" />
-          </span>
-          <div class="min-w-0 flex-1">
-            <span class="block text-overline-sm uppercase text-(--primary)">{{
-              agent.vendor
-            }}</span>
-            <h1
-              class="m-0 text-heading-xl text-(--text-default) max-sm:[font-size:var(--text-2xl)]"
-            >
-              {{ agent.name }} + Azion
-            </h1>
-          </div>
-          <!-- The page's own action set — the page link, the raw markdown, and each
-               assistant by name — with a primary segment that says `Copied` for two
-               seconds, because a clipboard write has no other visible outcome. It rides
-               the identity row, so it lands on the title's line from `sm` up and under the
-               stacked mark-and-title on a phone, where there is no room beside them. -->
-          <SplitButton
-            :label="copyLabel"
-            :icon="copyIcon"
-            :model="PAGE_ACTIONS"
-            kind="outlined"
-            class="shrink-0"
-            @click="copyPage"
-            @item-click="onPageAction"
-          />
-        </div>
-
-        <p class="m-0 text-body-md text-(--text-muted)">
-          {{ agent.description }} Made by {{ agent.vendor }}.
-        </p>
-
-        <!-- The same four axes the comparison table ranks the tools on, as the same tag the
-             table draws — so a reader arriving from that table sees their own row restated.
-             Pill-shaped here: in a table cell a chip is a value, in a masthead it is a
-             badge, and `medium` is Tag's largest step (24px against small's 20) — these sit
-             under a page title with nothing competing for the room, where the table's chips
-             have to fit a 32px cell. -->
-        <div class="flex flex-wrap items-center gap-(--spacing-xs)">
-          <Tag
-            v-for="fact in facts"
-            :key="fact"
-            :label="fact"
-            :severity="COMPARE_TAG_SEVERITY"
-            size="medium"
-            rounded
-          />
-        </div>
-
-        <!-- Every one of these leaves the documentation, so every one carries the external
-             arrow — and the dot between them is a separator, not a bullet: they are one
-             line of references, not a list. -->
-        <div class="flex flex-wrap items-center gap-x-(--spacing-xs) gap-y-(--spacing-xxs)">
-          <template
-            v-for="(link, index) in headerLinks"
-            :key="link.href"
+        <template #title>
+          <div
+            class="flex min-w-0 flex-col items-start gap-(--spacing-sm) sm:flex-1 sm:flex-row sm:items-center sm:gap-(--spacing-md)"
           >
             <span
-              v-if="index > 0"
-              class="text-label-md text-(--text-muted)"
-              aria-hidden="true"
-              >·</span
+              class="flex size-14 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised) sm:size-16 [&>svg]:size-7 sm:[&>svg]:size-8"
             >
-            <a
-              :href="link.href"
-              target="_blank"
-              rel="noreferrer"
-              class="group/link inline-flex items-center gap-(--spacing-xxs) rounded-(--shape-flat) text-label-md text-(--text-muted) no-underline hover:text-(--text-default) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color)"
-            >
-              {{ link.label }}
-              <i
-                class="pi pi-arrow-up-right text-body-xs transition-[translate] duration-moderate-02 ease-expressive-entrance group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5 motion-reduce:transition-none"
-                aria-hidden="true"
+              <AgentMark :name="agent.mark" />
+            </span>
+            <div class="min-w-0 flex-1">
+              <span class="block text-overline-sm uppercase text-(--primary)">{{
+                agent.vendor
+              }}</span>
+              <h1
+                class="m-0 text-heading-xl text-(--text-default) max-sm:[font-size:var(--text-2xl)]"
+              >
+                {{ agent.name }} + Azion
+              </h1>
+            </div>
+          </div>
+        </template>
+        <!-- The rows this page has and a prose page does not: the tool's facts, and the
+             references a reader might want INSTEAD of the four steps below. They are one
+             block, so the tighter step between the two of them is set here while the step
+             to the deck above and the belt below stays the masthead's.
+
+             THE DATE IS GONE, and the link row took its place. "Last updated" answers a
+             question a reader asks about PROSE — is this stale? — where this page's answer
+             to "is this current?" is the config snippet itself, and the row of references
+             is what a reader scanning the top actually wants. -->
+        <template #details>
+          <div class="flex flex-col gap-(--spacing-md)">
+            <!-- The same four axes the comparison table ranks the tools on, as the same tag
+                 the table draws — so a reader arriving from that table sees their own row
+                 restated. Pill-shaped here: in a table cell a chip is a value, in a masthead
+                 it is a badge, and `medium` is Tag's largest step (24px against small's 20)
+                 — these sit under a page title with nothing competing for the room, where
+                 the table's chips have to fit a 32px cell. -->
+            <div class="flex flex-wrap items-center gap-(--spacing-xs)">
+              <Tag
+                v-for="fact in facts"
+                :key="fact"
+                :label="fact"
+                :severity="COMPARE_TAG_SEVERITY"
+                size="medium"
+                rounded
               />
-            </a>
-          </template>
-        </div>
-      </header>
+            </div>
+
+            <!-- Every one of these leaves the documentation, so every one carries the
+                 external arrow — and the dot between them is a separator, not a bullet:
+                 they are one line of references, not a list. -->
+            <div class="flex flex-wrap items-center gap-x-(--spacing-xs) gap-y-(--spacing-xxs)">
+              <template
+                v-for="(link, index) in headerLinks"
+                :key="link.href"
+              >
+                <span
+                  v-if="index > 0"
+                  class="text-label-md text-(--text-muted)"
+                  aria-hidden="true"
+                  >·</span
+                >
+                <a
+                  :href="link.href"
+                  target="_blank"
+                  rel="noreferrer"
+                  class="group/link inline-flex items-center gap-(--spacing-xxs) rounded-(--shape-flat) text-label-md text-(--text-muted) no-underline hover:text-(--text-default) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color)"
+                >
+                  {{ link.label }}
+                  <i
+                    class="pi pi-arrow-up-right text-body-xs transition-[translate] duration-moderate-02 ease-expressive-entrance group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5 motion-reduce:transition-none"
+                    aria-hidden="true"
+                  />
+                </a>
+              </template>
+            </div>
+          </div>
+        </template>
+      </DocPageHeader>
     </div>
 
-    <DocProse class="layout-column-docs layout-boundary-inline pt-14">
+    <DocProse class="layout-column-content layout-boundary-inline pt-14">
       <!-- ══ Quick start ══════════════════════════════════════════════════════════
            Four steps, numbered by `DocSteps` from the document order rather than by hand.
            The token is a step of its own because it is the one thing a reader cannot do
@@ -587,7 +596,7 @@
       v-if="previous || next"
       :previous="previous"
       :next="next"
-      class="layout-column-docs layout-boundary-inline pt-12"
+      class="layout-column-content layout-boundary-inline pt-12"
     />
   </article>
 </template>
