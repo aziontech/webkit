@@ -122,7 +122,7 @@
   {
     "name": "doc-page-header",
     "path": "src/components/documentation/doc-page-header/doc-page-header.vue",
-    "limit": "24.5 KB"
+    "limit": "25 KB"
   },
   {
     "name": "doc-on-this-page",

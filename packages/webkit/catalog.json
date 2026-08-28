@@ -4950,37 +4950,25 @@
           "doc": "Ancestor trail, current page last."
         },
         {
-          "name": "copyable",
-          "type": "boolean",
-          "default": "true",
-          "required": "false",
-          "doc": "Shows the Copy Page control."
-        },
-        {
-          "name": "source",
-          "type": "string",
-          "default": "''",
-          "required": "false",
-          "doc": "The markdown handed to the clipboard by the primary action."
-        },
-        {
           "name": "lastUpdated",
           "type": "string",
           "default": "''",
           "required": "false",
           "doc": "When the page's content last changed. ISO date, or a ready-made string."
+        },
+        {
+          "name": "metaActions",
+          "type": "DocPageAction[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The controls on the meta line, in reading order."
         }
       ],
       "events": [
         {
-          "name": "copy",
-          "payload": "(event: MouseEvent, source: string)",
-          "notes": "Fired when the primary Copy Page action runs, after the copy resolves. Event first, per `event-payloads.md`."
-        },
-        {
-          "name": "action",
-          "payload": "(event: MouseEvent | KeyboardEvent, item: { label: string; value?: string })",
-          "notes": "Fired when one of the attached AI actions is chosen; `item` is the entry that was picked."
+          "name": "meta-action",
+          "payload": "(event: MouseEvent, item: DocPageAction)",
+          "notes": "Fired when a meta-line control is activated; `item` is the entry that was picked. Event first, per `event-payloads.md`. A link's default navigation is the consumer's to keep or to prevent."
         }
       ],
       "slots": [
@@ -4990,9 +4978,19 @@
           "notes": "The trail; replaces the built-in `Breadcrumb` fed by the `breadcrumb` prop."
         },
         {
+          "name": "title",
+          "scope": "—",
+          "notes": "The page's name; replaces the built-in `h1`, for a title that is more than a string."
+        },
+        {
           "name": "actions",
           "scope": "—",
-          "notes": "What the reader can do with the page; replaces the built-in Copy Page control fed by `source`."
+          "notes": "A control on the title's line. Empty by default; the meta line carries the page's actions."
+        },
+        {
+          "name": "details",
+          "scope": "—",
+          "notes": "Rows between the deck and the meta line — a page's own facts, tags or references."
         }
       ],
       "purpose": "The masthead of a documentation page: where the reader is (the breadcrumb), what the page is (the title), what they can do with it (a Copy Page control that hands the page to an AI tool — or, through the `actions` slot, the consumer's own menu; the trail is likewise slottable, for an application whose crumbs route rather than navigate), the deck that says what they will have by the end, and when the content last changed. It closes on a rule spanning the column, which is what gives every `h2` below it something to be subordinate to.",
@@ -5006,12 +5004,14 @@
       "related": [
         "DocProse` — the body below it. The masthead's `h1` is chrome, so authored content starts at `h2`.",
         "DocOnThisPage` — the rail beside the body, which lists those `h2`s.",
-        "SplitButton` — the Copy Page control's shape: a primary action plus attached alternatives."
+        "Button` / `Tooltip` / `Divider` — the meta line's entries: a quiet `text` button (an anchor when the entry has an `href`), the sentence its label has no room for, and the rule between two of them."
       ],
       "bestPractices": [
-        "Give `source` the page's markdown so the primary action copies something a model can read.",
+        "Give every `metaActions` entry a `tip`: two or three words name a control, and only a sentence says what it does.",
+        "Give an entry an `href` when it has a destination, so it is a real link — then prevent the default in `meta-action` if the app routes in-page.",
         "Let `lastUpdated` come from the page's own frontmatter. It is the author's claim that the content changed, not the file's mtime.",
-        "Put the current page last in `breadcrumb`; it is marked as current for you."
+        "Put the current page last in `breadcrumb`; it is marked as current for you.",
+        "Use `title` and `details` for a page ABOUT something (a tool, a product): its mark and maker are a title, and its facts belong between the deck and the meta line."
       ]
     },
     "doc-pagination": {
