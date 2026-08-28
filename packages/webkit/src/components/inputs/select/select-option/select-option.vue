@@ -69,16 +69,29 @@
     @click="onClick"
     @keydown="onKeydown"
   >
-    <slot
-      v-if="$slots['left']"
-      name="left"
-    />
-    <i
-      v-else-if="icon"
-      :class="[icon, 'flex shrink-0 items-center text-(--text-default)']"
-      aria-hidden="true"
-      :data-testid="`${testId}__icon`"
-    />
+    <!--
+      One leading column for the whole list. `data-leading` marks the options that
+      actually have a glyph; `group-has-…` then shows the box on EVERY option, so a
+      list mixing iconed and icon-less options keeps one label edge. `:has()` matches
+      the marker even while the box is hidden, so the rule is self-triggering — and a
+      list with no icons at all reserves nothing and pays no indent.
+    -->
+    <span
+      :data-leading="$slots['left'] || icon ? '' : undefined"
+      :data-testid="`${testId}__leading`"
+      class="hidden size-4 shrink-0 items-center justify-center overflow-hidden group-has-[[data-leading]]/options:flex"
+    >
+      <slot
+        v-if="$slots['left']"
+        name="left"
+      />
+      <i
+        v-else-if="icon"
+        :class="[icon, 'text-(--text-default)']"
+        aria-hidden="true"
+        :data-testid="`${testId}__icon`"
+      />
+    </span>
     <span class="flex-1 truncate text-left">
       <slot />
     </span>
