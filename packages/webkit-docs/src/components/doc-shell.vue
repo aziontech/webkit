@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import DocPage from './doc-page.vue'
+  import { type DocPageAction } from './doc-page-header.vue'
   import DocSidebar from './doc-sidebar.vue'
 
   /**
@@ -20,6 +21,8 @@
     previous?: { title: string; href: string } | null
     /** The page after this one. */
     next?: { title: string; href: string } | null
+    /** The controls on the masthead's meta line, beside the date. */
+    metaActions?: DocPageAction[]
   }
 
   withDefaults(defineProps<Props>(), {
@@ -27,8 +30,14 @@
     nav: () => [],
     breadcrumb: () => [],
     previous: null,
-    next: null
+    next: null,
+    metaActions: () => []
   })
+
+  const emit = defineEmits<{
+    /** Fired when a meta-line control is activated; forwarded from the page. */
+    'meta-action': [event: MouseEvent, item: DocPageAction]
+  }>()
 </script>
 
 <template>
@@ -45,6 +54,8 @@
         :breadcrumb="breadcrumb"
         :previous="previous"
         :next="next"
+        :meta-actions="metaActions"
+        @meta-action="(event, item) => emit('meta-action', event, item)"
       />
     </div>
   </div>

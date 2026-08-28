@@ -8,6 +8,7 @@
   import DocMarkdown from './doc-markdown.vue'
   import DocOnThisPage from './doc-on-this-page.vue'
   import DocPageHeader from './doc-page-header.vue'
+  import { type DocPageAction } from './doc-page-header.vue'
   import DocPagination from './doc-pagination.vue'
   import DocProse from './doc-prose.vue'
 
@@ -45,8 +46,8 @@
     previous?: { title: string; href: string } | null
     /** The page after this one. */
     next?: { title: string; href: string } | null
-    /** Shows the Copy Page control in the masthead. */
-    copyable?: boolean
+    /** The controls on the masthead's meta line, beside the date. */
+    metaActions?: DocPageAction[]
     /** Shows the "On this page" rail. */
     showToc?: boolean
     /** Complementary groups below the rail's outline (repository, community). */
@@ -64,10 +65,15 @@
     breadcrumb: () => [],
     previous: null,
     next: null,
-    copyable: true,
+    metaActions: () => [],
     showToc: true,
     tocGroups: () => []
   })
+
+  const emit = defineEmits<{
+    /** Fired when a meta-line control is activated; forwarded from the masthead. */
+    'meta-action': [event: MouseEvent, item: DocPageAction]
+  }>()
 
   defineSlots<{
     /** Hand-composed body, used instead of `source`. */
@@ -134,7 +140,7 @@
 
   onBeforeUnmount(() => observer?.disconnect())
 
-  watch([pageTitle, () => props.breadcrumb, () => props.copyable], async () => {
+  watch([pageTitle, () => props.breadcrumb, () => props.metaActions], async () => {
     await nextTick()
     alignRail()
   })
@@ -179,8 +185,8 @@
           :description="pageDescription"
           :last-updated="pageUpdated"
           :breadcrumb="breadcrumb"
-          :copyable="copyable"
-          :source="source"
+          :meta-actions="metaActions"
+          @meta-action="(event, item) => emit('meta-action', event, item)"
         />
       </div>
       <div
