@@ -10,6 +10,30 @@ const IMPORT = [
   "import source from './deploy-an-application.mdx?raw'"
 ]
 
+// The page's action belt: one entry per thing a reader can do with the page, each with the
+// sentence its two-word label has no room for. An entry with an href is a real anchor.
+const PAGE_ACTIONS = [
+  {
+    value: 'copy',
+    label: 'Copy as Markdown',
+    icon: 'pi pi-copy',
+    tip: 'Copy this page as Markdown, ready to paste into an assistant.'
+  },
+  {
+    value: 'markdown',
+    label: 'View as Markdown',
+    icon: 'pi pi-eye',
+    tip: 'Open this page as plain Markdown in a new tab.'
+  },
+  {
+    value: 'agent-setup',
+    label: 'Agent setup',
+    icon: 'pi pi-microchip-ai',
+    href: '/docs/agent-setup',
+    tip: 'Set up your coding agent to build on Azion.'
+  }
+]
+
 /** @type {import('@storybook/vue3').Meta<typeof DocPage>} */
 const meta = {
   title: 'Documentation/Example Page',
@@ -28,7 +52,7 @@ const meta = {
   argTypes: {
     source: { control: false, table: { type: { summary: 'string' } } },
     showToc: { control: 'boolean' },
-    copyable: { control: 'boolean' }
+    metaActions: { control: false, table: { type: { summary: 'DocPageAction[]' } } }
   },
   args: {
     source: PAGE_SOURCE,
@@ -36,7 +60,7 @@ const meta = {
     previous: DOC_PREVIOUS,
     next: DOC_NEXT,
     showToc: true,
-    copyable: true
+    metaActions: PAGE_ACTIONS
   }
 }
 
@@ -54,6 +78,11 @@ const PAGE_MARKUP = `<div class="h-screen">
     :breadcrumb="[{ label: 'Build', href: '/build' }, { label: 'Deploy an application' }]"
     :previous="{ title: 'Create an account', href: '/start/create-an-account' }"
     :next="{ title: 'Configure a domain', href: '/build/configure-a-domain' }"
+    :meta-actions="[
+      { value: 'copy', label: 'Copy as Markdown', icon: 'pi pi-copy', tip: 'Copy this page as Markdown, ready to paste into an assistant.' },
+      { value: 'markdown', label: 'View as Markdown', icon: 'pi pi-eye', tip: 'Open this page as plain Markdown in a new tab.' },
+      { value: 'agent-setup', label: 'Agent setup', icon: 'pi pi-microchip-ai', href: '/docs/agent-setup', tip: 'Set up your coding agent to build on Azion.' }
+    ]"
   />
 </div>`
 
@@ -64,7 +93,7 @@ export const Default = {
     docs: {
       description: {
         story:
-          'The page as a reader sees it: breadcrumb, title, Copy Page, the deck, the body, and the rail tracking the heading in view.'
+          "The page as a reader sees it: breadcrumb, title, the deck, the meta line with the page's own actions, the body, and the rail tracking the heading in view."
       },
       source: { code: toSfc(IMPORT, PAGE_MARKUP) }
     }
@@ -116,18 +145,18 @@ export const WithNavigation = {
 export const WithoutToc = {
   name: 'No rail',
   render: Template,
-  args: { showToc: false, copyable: false },
+  args: { showToc: false, metaActions: [] },
   parameters: {
     controls: { disable: true },
     docs: {
       description: {
         story:
-          'A short page — a changelog entry, a reference stub — where a rail would list one heading and the Copy Page control has nothing to hand an assistant.'
+          'A short page — a changelog entry, a reference stub — where a rail would list one heading and there is nothing worth handing an assistant, so the meta line carries the date alone.'
       },
       source: {
         code: toSfc(
           IMPORT,
-          '<div class="h-screen">\n  <DocPage :source="source" :show-toc="false" :copyable="false" />\n</div>'
+          '<div class="h-screen">\n  <DocPage :source="source" :show-toc="false" />\n</div>'
         )
       }
     }
