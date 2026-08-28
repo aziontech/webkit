@@ -1,12 +1,10 @@
 import DocOnThisPage from '@aziontech/webkit-docs/doc-on-this-page'
-import DocPageHeader from '@aziontech/webkit-docs/doc-page-header'
 import DocPagination from '@aziontech/webkit-docs/doc-pagination'
 
 import { toSfc } from '../_shared/story-source'
 
 const TOC_IMPORT = "import DocOnThisPage from '@aziontech/webkit-docs/doc-on-this-page'"
 const PAGINATION_IMPORT = "import DocPagination from '@aziontech/webkit-docs/doc-pagination'"
-const HEADER_IMPORT = "import DocPageHeader from '@aziontech/webkit-docs/doc-page-header'"
 
 const TOC_ITEMS = [
   { id: 'overview', text: 'Overview', depth: 2 },
@@ -66,7 +64,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The three parts that tell a reader where they are and where they can go: the masthead, the "On this page" rail, and the previous/next pair. All three are fed from the page itself — the rail is built from the same headings the body renders, so it can never list a section the page does not have.'
+          'The two rails that tell a reader where they can go from here: the "On this page" outline beside the body, and the previous/next pair that closes it. Both are fed from the page itself — the outline is built from the same headings the body renders, so it can never list a section the page does not have. Where the reader IS, the masthead says: see Documentation/Page header.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -129,32 +127,6 @@ export const Pagination = {
           'The pair that closes a page. A missing neighbour leaves its half empty rather than collapsing the row, so the remaining link stays on its own edge.'
       },
       source: { code: toSfc(PAGINATION_IMPORT, PAGINATION_MARKUP) }
-    }
-  }
-}
-
-// The masthead closes on a rule the PAGE draws, not the component: the rule is the edge
-// of the reading region, so it belongs to whatever element spans it — which is how a
-// docs shell can bleed it past the reading column's inset.
-const HEADER_MARKUP = `<div class="border-b border-(--border-default)">
-  <DocPageHeader
-    title="Deploy an application"
-    description="By the end of this tutorial, an application will be live on the Azion Web Platform, answering HTTP 200 on its own Azion domain. It takes a few minutes."
-    :breadcrumb="[{ label: 'Start', href: '/start' }, { label: 'Deploy an application' }]"
-  />
-</div>`
-
-export const PageHeader = {
-  name: 'Page header',
-  render: () => ({ components: { DocPageHeader }, template: HEADER_MARKUP }),
-  parameters: {
-    controls: { disable: true },
-    docs: {
-      description: {
-        story:
-          'Breadcrumb, title, deck, and the Copy Page split button — whose attached menu hands the page to an assistant as Markdown.'
-      },
-      source: { code: toSfc(HEADER_IMPORT, HEADER_MARKUP) }
     }
   }
 }
