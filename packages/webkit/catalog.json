@@ -44,10 +44,12 @@
       "--accent-selected",
       "--animate-blink",
       "--animate-bounce",
+      "--animate-content-enter",
       "--animate-fade-in",
       "--animate-fade-out",
       "--animate-flow-dash",
       "--animate-highlight-fade",
+      "--animate-page-enter",
       "--animate-ping",
       "--animate-popup-scale-in",
       "--animate-popup-scale-out",
@@ -330,6 +332,7 @@
       "--container-md",
       "--container-px",
       "--container-py",
+      "--container-site",
       "--container-sm",
       "--container-xl",
       "--container-xs",
@@ -402,6 +405,7 @@
       "--layout-group-gap",
       "--layout-measure",
       "--layout-measure-control",
+      "--layout-measure-docs",
       "--layout-measure-focused",
       "--layout-measure-form",
       "--layout-measure-form-create",
@@ -573,12 +577,21 @@
       "--text-big-number-sm-font-size",
       "--text-big-number-sm-font-weight",
       "--text-big-number-sm-line-height",
+      "--text-body-code-sm-font-family",
+      "--text-body-code-sm-font-size",
+      "--text-body-code-sm-font-weight",
+      "--text-body-code-sm-letter-spacing",
+      "--text-body-code-sm-line-height",
+      "--text-body-code-sm-text-wrap-style",
       "--text-body-lg-font-size",
       "--text-body-lg-font-weight",
       "--text-body-lg-line-height",
       "--text-body-md-font-size",
       "--text-body-md-font-weight",
       "--text-body-md-line-height",
+      "--text-body-prose-md-font-size",
+      "--text-body-prose-md-font-weight",
+      "--text-body-prose-md-line-height",
       "--text-body-sm-font-size",
       "--text-body-sm-font-weight",
       "--text-body-sm-line-height",
@@ -721,8 +734,10 @@
       "text-big-number-lg",
       "text-big-number-md",
       "text-big-number-sm",
+      "text-body-code-sm",
       "text-body-lg",
       "text-body-md",
+      "text-body-prose-md",
       "text-body-sm",
       "text-body-xs",
       "text-body-xxs",
@@ -758,10 +773,12 @@
       "animate": [
         "--animate-blink",
         "--animate-bounce",
+        "--animate-content-enter",
         "--animate-fade-in",
         "--animate-fade-out",
         "--animate-flow-dash",
         "--animate-highlight-fade",
+        "--animate-page-enter",
         "--animate-ping",
         "--animate-popup-scale-in",
         "--animate-popup-scale-out",
@@ -1060,6 +1077,7 @@
         "--container-md",
         "--container-px",
         "--container-py",
+        "--container-site",
         "--container-sm",
         "--container-xl",
         "--container-xs"
@@ -1148,6 +1166,7 @@
         "--layout-group-gap",
         "--layout-measure",
         "--layout-measure-control",
+        "--layout-measure-docs",
         "--layout-measure-focused",
         "--layout-measure-form",
         "--layout-measure-form-create",
@@ -1349,12 +1368,21 @@
         "--text-big-number-sm-font-size",
         "--text-big-number-sm-font-weight",
         "--text-big-number-sm-line-height",
+        "--text-body-code-sm-font-family",
+        "--text-body-code-sm-font-size",
+        "--text-body-code-sm-font-weight",
+        "--text-body-code-sm-letter-spacing",
+        "--text-body-code-sm-line-height",
+        "--text-body-code-sm-text-wrap-style",
         "--text-body-lg-font-size",
         "--text-body-lg-font-weight",
         "--text-body-lg-line-height",
         "--text-body-md-font-size",
         "--text-body-md-font-weight",
         "--text-body-md-line-height",
+        "--text-body-prose-md-font-size",
+        "--text-body-prose-md-font-weight",
+        "--text-body-prose-md-line-height",
         "--text-body-sm-font-size",
         "--text-body-sm-font-weight",
         "--text-body-sm-line-height",
@@ -1507,10 +1535,12 @@
     "animations": [
       "blink",
       "bounce",
+      "content-enter",
       "fade-in",
       "fade-out",
       "flow-dash",
       "highlight-fade",
+      "page-enter",
       "ping",
       "popup-scale-in",
       "popup-scale-out",
@@ -1534,6 +1564,10 @@
         "value": "bounce 1s infinite",
         "useWhen": "Playful attention bounce (scroll-down hints); use sparingly."
       },
+      "content-enter": {
+        "value": "contentEnter 240ms cubic-bezier(0.39, 0.57, 0.56, 1) var(--content-enter-delay, 0s) backwards",
+        "useWhen": "Content settling INSIDE a page that is already on screen — a loading window resolving, a filtered list swapping, a step changing. Never on first paint of a page whose own entrance is already running (use it after that entrance, or after a wire). Stagger a follower with --content-enter-delay."
+      },
       "fade-in": {
         "value": "fadeIn 220ms ease-in-out",
         "useWhen": "Content or backdrop appearing in place (no directional origin)."
@@ -1549,6 +1583,10 @@
       "highlight-fade": {
         "value": "highlight 1100ms ease-in forwards",
         "useWhen": "Row/item briefly highlighted after an update (recently changed)."
+      },
+      "page-enter": {
+        "value": "pageEnter 240ms cubic-bezier(0.39, 0.57, 0.56, 1)",
+        "useWhen": "A page arriving on a route change — on the CONTENT ZONE only, never the shell. The chrome is the same before and after, and sliding it announces a reload that did not happen. Key it on the route path so a component serving several paths still replays it. Nothing inside the page may animate on mount at the same time: the two run in lockstep and read as one element travelling on a diagonal."
       },
       "ping": {
         "value": "ping 1s cubic-bezier(0, 0, 0.2, 1) infinite",
@@ -1995,7 +2033,7 @@
           "notes": "Emitted after a successful clipboard write with the copied value."
         }
       ],
-      "purpose": "Icon-only control that copies a string to the clipboard and briefly confirms success. Composes `IconButton` for visuals and interaction tokens."
+      "purpose": "Icon-only control that copies a string to the clipboard and briefly confirms success. Composes `IconButton` for visuals and interaction tokens, and `Tooltip` for its name: an icon-only button is silent to a pointer user until hovered, so the glyph is always labelled on hover/focus. The tooltip text is the same string as the accessible name — `ariaLabel` while idle, `copiedLabel` for the two seconds after a write — so the confirmation is seen as well as announced. It is suppressed with `disabled`."
     },
     "segmented-button": {
       "import": "@aziontech/webkit/segmented-button",
@@ -4464,6 +4502,902 @@
       "kind": "subcomponent",
       "parent": "pick-list",
       "treeShakeableImport": "@aziontech/webkit/pick-list-controls"
+    },
+    "doc-callout": {
+      "import": "@aziontech/webkit/doc-callout",
+      "target": "./src/components/documentation/doc-callout/doc-callout.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/doc-callout",
+      "category": "documentation",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "kind",
+          "type": "'note' | 'info' | 'tip' | 'check' | 'warning' | 'danger'",
+          "default": "'note'",
+          "required": "false",
+          "doc": "Which admonition this is; drives the severity color and the icon."
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Fallback copy when the default slot is empty."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The callout copy: inline prose, links and inline code."
+        }
+      ],
+      "purpose": "The admonition a documentation page interrupts itself with — Note, Info, Tip, Check, Warning, Danger — rendered on the webkit `Message` surface, so the severity colour, the border, the icon and the radius come from the design system rather than from this layer. Its anatomy is a glyph and one row of inline prose, nothing else.",
+      "useWhen": [
+        "An aside the reader must not miss mid-prose: a caveat, a prerequisite, a warning about data loss.",
+        "A short confirmation that a step worked (`check`), or a shortcut worth knowing (`tip`)."
+      ],
+      "avoidWhen": [
+        "For a block that needs its own box — a list, a fenced sample, a card grid. Those belong outside the callout; its body is inline prose.",
+        "For an application-screen banner or a form error — use `Message` directly, which is what this composes.",
+        "As a section heading. A callout is an interruption, not structure."
+      ],
+      "related": [
+        "Message` — the webkit surface this renders on; reach for it directly outside documentation prose.",
+        "DocProse` — the contract around it. A callout marks itself `data-doc-chrome`, so prose rules stop at its edge, and `data-doc-block`, so it takes the block rung of the ladder."
+      ],
+      "bestPractices": [
+        "Let the glyph and the tint carry the severity; do not restate it in the copy (\"Warning: …\").",
+        "Keep the body to inline prose — a sentence or two, links and inline code.",
+        "Reach for `tip` when the aside claims nothing about stakes. Borrowing `check` for a friendly shortcut paints a shortcut the same green as a confirmed success."
+      ]
+    },
+    "doc-card": {
+      "import": "@aziontech/webkit/doc-card",
+      "target": "./src/components/documentation/doc-card/doc-card.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/doc-card",
+      "category": "documentation",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Card heading."
+        },
+        {
+          "name": "overline",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Small muted line above the title — who makes the thing, when the title does not say."
+        },
+        {
+          "name": "icon",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "PrimeIcons class for the leading glyph. Ignored when the `icon` slot is filled."
+        },
+        {
+          "name": "href",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Destination; when set the whole card becomes the link."
+        },
+        {
+          "name": "target",
+          "type": "'_self' | '_blank'",
+          "default": "'_self'",
+          "required": "false",
+          "doc": "Where the link opens."
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Fallback copy when the default slot is empty."
+        },
+        {
+          "name": "link",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Call-to-action text; when set the card closes on a link row."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "Card copy."
+        },
+        {
+          "name": "icon",
+          "scope": "—",
+          "notes": "The leading mark, when a font glyph will not do. Replaces `icon`."
+        }
+      ],
+      "purpose": "One cell of the grid a documentation page scans across: a leading glyph, an optional overline, the title, the copy, and an optional call-to-action row at the foot. It renders as an anchor when it has an `href` and as a plain block when it does not, so a card is either a destination or a statement — never a dead link.",
+      "useWhen": [
+        "A grid of peer destinations: \"what you can build\", the product tiles a landing section opens with.",
+        "A set of short, scannable entries whose titles carry most of the meaning."
+      ],
+      "avoidWhen": [
+        "When each entry needs a sentence to be understood — use `DocItem` rows, one column, so every description is read at the page's own measure instead of squeezed into a cell.",
+        "For a single call to action at the end of a page — that is a button, not a card.",
+        "For an application surface — use `CardBox`, which is the console's carded surface."
+      ],
+      "related": [
+        "DocCardGroup` — the frame and grid this is a cell of; a card outside one has no cell ring.",
+        "DocItem` — the row counterpart. A card claims a whole tile; a row claims one line."
+      ],
+      "bestPractices": [
+        "Keep the title to a noun phrase and let the copy carry the verb.",
+        "Use `overline` only when the title alone does not say who or when; it is not a category label.",
+        "Set `link` when the card should close on an explicit call to action; otherwise the whole tile being the link is enough."
+      ]
+    },
+    "doc-card-group": {
+      "import": "@aziontech/webkit/doc-card-group",
+      "target": "./src/components/documentation/doc-card-group/doc-card-group.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/doc-card-group",
+      "category": "documentation",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "cols",
+          "type": "1 | 2 | 3 | 4",
+          "default": "2",
+          "required": "false",
+          "doc": "Column count at the large breakpoint."
+        },
+        {
+          "name": "mobileCols",
+          "type": "1 | 2",
+          "default": "1",
+          "required": "false",
+          "doc": "Column count on a phone. Two only pays when the cells are a mark plus a word."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The `DocCard` children."
+        }
+      ],
+      "purpose": "The framed, responsive grid a `DocCard` set sits in. The group is the frame, not each card: `FrameBox` draws the perimeter and the four corner registration marks once around the whole set, the grid keeps 1px gaps, and every cell paints a 1px ring into them — so two neighbours share one hairline, an incomplete last row stays simply empty, and the set reads as one object the reader scans across rather than as loose tiles. `cols` names the widest column count; the grid always steps down toward one column on a phone unless a set of tiny cells opts into two with `mobileCols`.",
+      "useWhen": [
+        "Around every `DocCard` set — a card outside a group has no frame and no cell ring.",
+        "The fan-out at the top of a landing or section-index page: product tiles, a framework grid, a \"what you can build\" band."
+      ],
+      "avoidWhen": [
+        "When each entry needs a full-measure sentence to be understood — use `DocItem` rows, one column, instead of cells.",
+        "As a general-purpose layout grid for application screens; it is documentation chrome, tied to the `DocProse` ladder."
+      ],
+      "related": [
+        "DocCard` — the cell this frames; the group draws the perimeter and the cells paint the internal rules.",
+        "FrameBox` — the layout primitive that draws the frame and the corner registration marks.",
+        "DocProse` — the contract around it; `data-doc-block` puts the group on the block rung of the prose ladder."
+      ],
+      "bestPractices": [
+        "Pick `cols` for the widest screen and let the breakpoints do the rest; do not wrap the group in another grid.",
+        "Leave `mobileCols` at 1 unless every cell is a mark plus one word — a card with copy needs the whole phone width.",
+        "Let an incomplete last row be empty; do not stretch the last card to fill it."
+      ]
+    },
+    "doc-frame": {
+      "import": "@aziontech/webkit/doc-frame",
+      "target": "./src/components/documentation/doc-frame/doc-frame.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/doc-frame",
+      "category": "documentation",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "caption",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Caption under the frame, centered; plain-text fallback for the caption slot."
+        },
+        {
+          "name": "hint",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Lead-in above the frame, left aligned; plain-text fallback for the hint slot."
+        },
+        {
+          "name": "src",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Media source; omit to frame slot content instead."
+        },
+        {
+          "name": "alt",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Alternative text for the framed media."
+        },
+        {
+          "name": "autoplay",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "Plays the clip on its own, muted, inline and looping, with no controls."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "Framed content when no `src` is given."
+        },
+        {
+          "name": "caption",
+          "scope": "—",
+          "notes": "Rich caption content; the `caption` prop is its plain-text fallback inside the slot."
+        },
+        {
+          "name": "hint",
+          "scope": "—",
+          "notes": "Rich lead-in content; the `hint` prop is its plain-text fallback inside the slot."
+        }
+      ],
+      "purpose": "The bordered surface every screenshot, diagram and clip in a documentation page sits on, so no media floats loose on the canvas and all of it shares one border, radius and inset. Pass `src` and the frame decides from the extension whether it holds a still or a clip; compose the default slot when the framed thing is markup. A still opens full screen out of its own frame — the picture is the button — while a clip keeps its player controls and composed content has no source to open. The caption reads under the frame, centered, as part of the picture; the hint reads above it on the text's own left edge, as part of the sentence that led the reader here; each is a string prop for the plain case with a slot of the same name for rich content.",
+      "useWhen": [
+        "Any screenshot, diagram or screen recording inside documentation prose — every one of them, so the page's media all shares one border, radius and inset.",
+        "A composed panel or mock the page wants presented as a figure rather than as live UI: fill the default slot.",
+        "A clip that decorates a step (`autoplay`) or one the reader chooses to play (default, with controls)."
+      ],
+      "avoidWhen": [
+        "For an application-screen media block outside documentation prose — use `FrameBox` or compose the layout directly.",
+        "For an image that is itself a link or a card — a frame is a figure, not a navigation target.",
+        "For a gallery or carousel; the frame holds one piece of media at a time."
+      ],
+      "related": [
+        "DocProse` — the page contract around it. The frame marks itself `data-doc-block`, so it takes the block rung of the prose ladder, and its caption and hint arrive unclassed for the page to style.",
+        "DocCallout` — the other block-level interruption; a callout carries words, a frame carries media."
+      ],
+      "bestPractices": [
+        "Always pass `alt` for a still or a clip: it labels the media, names the zoom trigger, and titles the full-screen dialog.",
+        "Keep the caption to one line that belongs to the picture; a paragraph of context belongs in the prose above, or in `hint` when it leads directly into the frame.",
+        "Use the `caption` / `hint` slots only when the sentence needs markup (a link, a bold run, a code chip); the string props cover the plain case in one attribute.",
+        "Reach for `autoplay` only when the clip is decoration: it mutes, inlines and loops the clip and removes its controls, on the prop path and for a clip written by hand in the slot alike."
+      ]
+    },
+    "doc-item": {
+      "import": "@aziontech/webkit/doc-item",
+      "target": "./src/components/documentation/doc-item/doc-item.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/doc-item",
+      "category": "documentation",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "The row's name — what the reader is choosing."
+        },
+        {
+          "name": "icon",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "PrimeIcons class for the leading glyph."
+        },
+        {
+          "name": "href",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Destination; when set the whole row becomes the link."
+        },
+        {
+          "name": "target",
+          "type": "'_self' | '_blank'",
+          "default": "'_self'",
+          "required": "false",
+          "doc": "Where the link opens."
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Fallback copy when the default slot is empty."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The row's copy: one or two sentences of inline prose."
+        }
+      ],
+      "purpose": "One row of the documentation's related-content list: a leading glyph in a framed 32px tile, the row's name, and the sentence that says what the thing is. When it has an `href` the title becomes an anchor stretched over the whole row — one tab stop, the full row as the hit area — closed by a trailing chevron, or a diagonal arrow when the destination leaves the documentation. The shell keeps `role=\"listitem\"`, so a set of rows inside an `ItemList` is a real list to assistive technology.",
+      "useWhen": [
+        "The \"Related products\" band a page ends on — peer destinations where each entry needs a sentence to be understood.",
+        "A one-column list of concepts or next steps, read at the page's own measure, with or without links."
+      ],
+      "avoidWhen": [
+        "For a grid of scannable entries whose titles carry most of the meaning — use `DocCard` inside a `DocCardGroup`; a card claims a tile, a row claims one line.",
+        "For an application resource list — compose `Item` and its parts directly; this row is documentation chrome.",
+        "For a single call to action at the end of a page — that is a button, not a row."
+      ],
+      "related": [
+        "DocCard` — the cell counterpart. A card claims a whole tile; this claims one line.",
+        "Item` / `ItemMedia` / `ItemContent` / `ItemTitle` / `ItemDescription` / `ItemActions` — the webkit anatomy this row composes.",
+        "FrameBox` + `ItemList` — the documented group pattern: the page draws one framed surface holding an `ItemList`, and the list rules between the rows. There is no `DocItemGroup` in the package; the group is this composition."
+      ],
+      "bestPractices": [
+        "Keep the title to a noun phrase and let the sentence carry the verb; inline code in the sentence renders as the chip.",
+        "Give every row of one list the same shape — all with glyphs or none, all linked or none — so the column reads as one object.",
+        "Compose rows inside a `FrameBox` (with a solid surface) holding an `ItemList`: the frame draws the single box and the list draws full-width dividers, and the `role=\"list\"` parent is what makes each row's `role=\"listitem\"` valid."
+      ]
+    },
+    "doc-on-this-page": {
+      "import": "@aziontech/webkit/doc-on-this-page",
+      "target": "./src/components/documentation/doc-on-this-page/doc-on-this-page.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/doc-on-this-page",
+      "category": "documentation",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "items",
+          "type": "DocTocItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The headings, in document order."
+        },
+        {
+          "name": "activeId",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "The id of the heading currently in view."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "'On this page'",
+          "required": "false",
+          "doc": "The rail's own heading."
+        },
+        {
+          "name": "groups",
+          "type": "DocTocGroup[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "Complementary groups rendered below the outline, in order."
+        }
+      ],
+      "events": [
+        {
+          "name": "select",
+          "payload": "(event: MouseEvent, item: DocTocItem)",
+          "notes": "Fired when a rail entry is activated; the page decides what scrolling means. Event first, per `event-payloads.md`."
+        }
+      ],
+      "purpose": "The \"On this page\" rail: the page's own headings, the active one lit, nested headings indented under their parent — followed by the rail's complementary groups (the repository, the community). The rail is a single path that bends inward as the outline nests, and the active marker is a dash cut from that same path, so moving between headings slides the marker **along** the line, through the bends, rather than jumping a separate bar between two positions.",
+      "useWhen": [
+        "Beside the body of a long documentation page, as in-page navigation over its `h2`/`h3` outline.",
+        "To carry a page's peer links (repository, community) under the outline, each as its own named group."
+      ],
+      "avoidWhen": [
+        "Expecting it to track scroll. It is presentation only: `activeId` is a prop, because the page owns the scroll container and therefore owns which heading is active.",
+        "For navigation _between_ pages — that is `DocPagination` at the foot, or the sidebar.",
+        "For an outline deeper than a couple of levels; the indent is legible for two, not for five."
+      ],
+      "related": [
+        "DocPageHeader` — the masthead above the body, whose `h1` is chrome, so the outline starts at `h2`.",
+        "DocPagination` — navigation between documents, where this is navigation within one.",
+        "use-heading-nav` — the composable a page uses to receive a rail activation and scroll its own container."
+      ],
+      "bestPractices": [
+        "Feed it depth 2 and 3 only; the rail indents each level by 8px and a third level reads as noise.",
+        "Own the active heading in the page (a scroll-spy) and pass it down; do not expect the rail to guess.",
+        "Keep the complementary groups to peers of the page, never sections of it — a reader must not read \"Join us on Discord\" as part of what they are reading."
+      ]
+    },
+    "doc-page-header": {
+      "import": "@aziontech/webkit/doc-page-header",
+      "target": "./src/components/documentation/doc-page-header/doc-page-header.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/doc-page-header",
+      "category": "documentation",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "The page title."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "The deck under the title."
+        },
+        {
+          "name": "breadcrumb",
+          "type": "DocCrumb[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "Ancestor trail, current page last."
+        },
+        {
+          "name": "copyable",
+          "type": "boolean",
+          "default": "true",
+          "required": "false",
+          "doc": "Shows the Copy Page control."
+        },
+        {
+          "name": "source",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "The markdown handed to the clipboard by the primary action."
+        },
+        {
+          "name": "lastUpdated",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "When the page's content last changed. ISO date, or a ready-made string."
+        }
+      ],
+      "events": [
+        {
+          "name": "copy",
+          "payload": "(event: MouseEvent, source: string)",
+          "notes": "Fired when the primary Copy Page action runs, after the copy resolves. Event first, per `event-payloads.md`."
+        },
+        {
+          "name": "action",
+          "payload": "(event: MouseEvent | KeyboardEvent, item: { label: string; value?: string })",
+          "notes": "Fired when one of the attached AI actions is chosen; `item` is the entry that was picked."
+        }
+      ],
+      "purpose": "The masthead of a documentation page: where the reader is (the breadcrumb), what the page is (the title), what they can do with it (a Copy Page control that hands the page to an AI tool), the deck that says what they will have by the end, and when the content last changed. It closes on a rule spanning the column, which is what gives every `h2` below it something to be subordinate to.",
+      "useWhen": [
+        "At the top of any documentation or changelog page, above `DocProse`."
+      ],
+      "avoidWhen": [
+        "For an application screen's title — that is `PageHeading`, which carries console actions rather than a Copy Page control.",
+        "For a section heading inside a page — the content's own `h2` does that, and the masthead's `h1` is chrome."
+      ],
+      "related": [
+        "DocProse` — the body below it. The masthead's `h1` is chrome, so authored content starts at `h2`.",
+        "DocOnThisPage` — the rail beside the body, which lists those `h2`s.",
+        "SplitButton` — the Copy Page control's shape: a primary action plus attached alternatives."
+      ],
+      "bestPractices": [
+        "Give `source` the page's markdown so the primary action copies something a model can read.",
+        "Let `lastUpdated` come from the page's own frontmatter. It is the author's claim that the content changed, not the file's mtime.",
+        "Put the current page last in `breadcrumb`; it is marked as current for you."
+      ]
+    },
+    "doc-pagination": {
+      "import": "@aziontech/webkit/doc-pagination",
+      "target": "./src/components/documentation/doc-pagination/doc-pagination.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/doc-pagination",
+      "category": "documentation",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "previous",
+          "type": "DocPageLink | null",
+          "default": "null",
+          "required": "false",
+          "doc": "The page before this one."
+        },
+        {
+          "name": "next",
+          "type": "DocPageLink | null",
+          "default": "null",
+          "required": "false",
+          "doc": "The page after this one."
+        },
+        {
+          "name": "previousLabel",
+          "type": "string",
+          "default": "'Previous'",
+          "required": "false",
+          "doc": "Eyebrow over the previous link."
+        },
+        {
+          "name": "nextLabel",
+          "type": "string",
+          "default": "'Next'",
+          "required": "false",
+          "doc": "Eyebrow over the next link."
+        }
+      ],
+      "events": [
+        {
+          "name": "navigate",
+          "payload": "(event: MouseEvent, page: DocPageLink)",
+          "notes": "Fired when either neighbour is activated; `page` is the side that was clicked. Event first, per `event-payloads.md`."
+        }
+      ],
+      "purpose": "The previous / next pair that closes a documentation page. Each side is a link carrying an eyebrow and the destination's title; a side with no neighbour leaves its half of the row empty, so the remaining link stays anchored to its own edge rather than drifting to the centre.",
+      "useWhen": [
+        "At the foot of a page that sits in a reading order — a guide, a tutorial, a numbered series.",
+        "Whenever \"what do I read next\" has a single obvious answer in each direction."
+      ],
+      "avoidWhen": [
+        "To page through a data set — that is `Paginator`, which walks pages of rows and owns a page number. This links two neighbouring documents and knows nothing about a total.",
+        "On a page with no reading order (a reference index, a landing page): a next link that points somewhere arbitrary is worse than none."
+      ],
+      "related": [
+        "Paginator` — the data counterpart; numbered pages over a collection, not two named documents.",
+        "DocOnThisPage` — navigation _within_ the page, where this is navigation _between_ pages."
+      ],
+      "bestPractices": [
+        "Pass the destination's real title, not \"Next page\". The title is what tells the reader whether they want to go.",
+        "Leave a side `null` at the ends of a series rather than looping around.",
+        "Handle `navigate` when the app routes client-side; the anchor's `href` is what makes the link real for everyone else."
+      ]
+    },
+    "doc-prompt": {
+      "import": "@aziontech/webkit/doc-prompt",
+      "target": "./src/components/documentation/doc-prompt/doc-prompt.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/doc-prompt",
+      "category": "documentation",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "kind",
+          "type": "'block' | 'line'",
+          "default": "'block'",
+          "required": "false",
+          "doc": "Wrapping paragraph capped at four lines, or one line that scrolls sideways."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "What the block is, in a word or two. Renders as a titled row above the prompt."
+        },
+        {
+          "name": "icon",
+          "type": "string",
+          "default": "'pi pi-sparkles'",
+          "required": "false",
+          "doc": "PrimeIcons class for the glyph beside the title."
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Fallback prompt text when the default slot is empty."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The prompt itself: one or more sentences of literal text. Also the string the copy control carries."
+        }
+      ],
+      "purpose": "DocPrompt renders text the reader is meant to **run, not read** — the block a documentation page uses when the next step is \"say this to your agent\". It is the one component in this layer whose payload is addressed to a machine, so it is the one that ships an affordance for handing it to one: a copy control wired to the exact string on screen. It is deliberately **not** a code block — a prompt is a sentence, so it carries no language, no gutter, and no syntax highlighting, and it is set in the mono face only to say \"this is the literal text, copy it as it stands\".",
+      "useWhen": [
+        "A documentation step, onboarding screen, or empty state whose next action is \"paste this into your agent\".",
+        "A short list of example prompts a reader can try, under a heading that has already said what they are.",
+        "Anywhere a literal string must be copied verbatim and the reader is the one who decides where it goes."
+      ],
+      "avoidWhen": [
+        "The payload is source code, a shell command, or configuration → use a code viewer, which owns languages, gutters, and highlighting; a prompt has none of them.",
+        "The payload is a short inline token (a key, a flag, a variable name) → use `kbd` or inline code in prose.",
+        "The block needs to run the prompt itself, or route it to a named vendor → out of scope; this component only puts the text on the clipboard."
+      ],
+      "related": [
+        "copy-button` — the control DocPrompt composes. Reach for it directly when the value being copied has no block of its own.",
+        "DocCallout` — draws attention to prose the reader should _read_; DocPrompt is for text the reader should _use_.",
+        "DocProse` — the contract around it. The prompt marks itself `data-doc-chrome`, so prose rules stop at its edge, and `data-doc-block`, so it takes the block rung of the ladder."
+      ],
+      "bestPractices": [
+        "Write the prompt once, in the default slot. It is both the visible text and the copied string, so the two cannot drift.",
+        "Give `title` only when the surrounding page has not already said what the block is. Three one-line prompts under a \"Prompts to try\" heading want the bare shape.",
+        "Use `kind=\"line\"` for a single instruction and `kind=\"block\"` for a priming paragraph. A one-sentence prompt broken across three lines reads as three instructions.",
+        "Keep the prompt in the imperative and free of placeholders the reader must fill silently — if a value must be substituted, name it in the prose above."
+      ]
+    },
+    "doc-prose": {
+      "import": "@aziontech/webkit/doc-prose",
+      "target": "./src/components/documentation/doc-prose/doc-prose.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/doc-prose",
+      "category": "documentation",
+      "structure": "monolithic",
+      "status": "implemented",
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The document body: markdown-rendered HTML or hand-written markup."
+        }
+      ],
+      "purpose": "The typography contract every documentation page inherits. A markdown or MDX pipeline compiles text to plain semantic HTML — `h2`, `p`, `ul`, `table`, `a`, `code` — and this container is what gives that HTML the Azion type scale, the semantic colors and the vertical rhythm, so an author writes markdown and never a class. It styles **descendants** rather than itself, so it works the same over any renderer's output, a slot of hand-written markup, or raw HTML from a CMS.",
+      "useWhen": [
+        "Wrapping the body of a documentation or changelog page, whatever produced its HTML.",
+        "Giving authored prose inside a documentation block (a step's body, a tab's panel) the same type contract as the page around it."
+      ],
+      "avoidWhen": [
+        "To cap the reading column — `DocProse` has no measure of its own. The consumer sets the width with `.layout-column-docs` (`--layout-measure-docs`, 1192px).",
+        "To style a webkit component's internals. Those are chrome and are excluded by design; restyle nothing from here.",
+        "For a single run of body copy in an application screen — use the `text-body-*` tokens directly."
+      ],
+      "related": [
+        "DocPageHeader` — the page masthead above this container; its `h1` is chrome, so authored content starts at `h2`.",
+        "DocCallout` / `DocCard` / `DocSteps` — blocks that sit inside prose and mark themselves `data-doc-chrome` so the contract stops at their edge."
+      ],
+      "bestPractices": [
+        "Mark a documentation component's root `data-doc-chrome` so prose rules stop there, and `data-doc-block` so it takes the block rung of the ladder. A callout is both.",
+        "Do not add per-page overrides. If a rung is wrong, it is wrong for every page and belongs in this contract.",
+        "Keep the consumer's column cap outside this component; it is typography, not layout."
+      ]
+    },
+    "doc-step": {
+      "import": "@aziontech/webkit/doc-step",
+      "target": "./src/components/documentation/doc-step/doc-step.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/doc-step",
+      "category": "documentation",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "The step heading."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "Optional body under the step heading: prose, code, or another component."
+        }
+      ],
+      "purpose": "One numbered step of a `DocSteps` walkthrough: the circled index, the rail that continues to the next step, the step heading, and any content the author nests underneath. The number and the last-step mark come from the `DocSteps` context — the step registers itself during setup and reads its reactive index back, so an author writes a title and never a number. Rendered outside a `DocSteps` provider it throws (`useDocStepsContext must be used within DocSteps.`) instead of rendering unnumbered.",
+      "useWhen": [
+        "Only as a direct child of `DocSteps`, one per instruction the reader performs."
+      ],
+      "avoidWhen": [
+        "Anywhere outside a `DocSteps` column — the context composable throws by design.",
+        "For a checklist entry or a feature bullet — a step claims an order and a number."
+      ],
+      "related": [
+        "DocSteps` — the sibling root that numbers this; it provides the context this step registers with.",
+        "DocProse` — the step heading marks itself `data-doc-chrome`, so prose rules stop at its edge."
+      ],
+      "bestPractices": [
+        "Lead the title with the verb and keep it to one line of instruction.",
+        "Put elaboration — prose, a code block, another component — in the body slot, not in the title.",
+        "Never restate the number in the title; the circle carries it."
+      ]
+    },
+    "doc-steps": {
+      "import": "@aziontech/webkit/doc-steps",
+      "target": "./src/components/documentation/doc-steps/doc-steps.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/doc-steps",
+      "category": "documentation",
+      "structure": "monolithic",
+      "status": "implemented",
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The `DocStep` children, in the order they should be numbered."
+        }
+      ],
+      "purpose": "The ordered walkthrough from the docs frame: a column of `DocStep` children joined by a rail. Each step registers itself through the context this root provides and reads its number back, so the numbering is a fact of the document order — an author writes titles, never numbers, and reordering the page renumbers it. The final registered step is marked last, which is what drops its connector and trailing space.",
+      "useWhen": [
+        "A procedure the reader performs in order: install, link, deploy.",
+        "Any \"follow these steps\" band in documentation prose, however short."
+      ],
+      "avoidWhen": [
+        "For a wizard or form flow inside the application — that is the console's own stepper surface, not documentation chrome.",
+        "For an unordered list of options or features — order is the whole claim this component makes; a list that has none is a plain list or `DocItem` rows.",
+        "For a single instruction — one step is a sentence, not a walkthrough."
+      ],
+      "related": [
+        "DocStep` — the sibling root this numbers; a step registers with this context on mount and throws when rendered outside one.",
+        "DocProse` — the contract around it. The column marks itself `data-doc-block`, so it takes the block rung of the prose ladder."
+      ],
+      "bestPractices": [
+        "Start each step title with the verb; keep the how in the step's body.",
+        "Let the numbering be the document order — never encode a number into a title.",
+        "Give a step a body only when the heading alone does not carry it; the rail stretches to cover whatever the body holds."
+      ]
+    },
+    "doc-tooltip": {
+      "import": "@aziontech/webkit/doc-tooltip",
+      "target": "./src/components/documentation/doc-tooltip/doc-tooltip.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/doc-tooltip",
+      "category": "documentation",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "tip",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "The definition shown inside the panel."
+        },
+        {
+          "name": "headline",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Bold lead-in above the definition — usually the term itself."
+        },
+        {
+          "name": "cta",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Label for the panel's call-to-action link. Needs `href`."
+        },
+        {
+          "name": "href",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Destination for the call-to-action link."
+        },
+        {
+          "name": "placement",
+          "type": "'top' | 'bottom' | 'auto'",
+          "default": "'top'",
+          "required": "false",
+          "doc": "Where the panel opens; `'auto'` picks the side with the most room."
+        },
+        {
+          "name": "delay",
+          "type": "number",
+          "default": "150",
+          "required": "false",
+          "doc": "Hover-open delay in milliseconds."
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Fallback trigger text when the default slot is empty."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The glossed term, rendered inline in the sentence."
+        }
+      ],
+      "purpose": "The inline gloss: a term in running prose that carries its own definition, shown when the reader hovers or focuses it. The trigger is a real button marked with a dotted underline — the convention print has used for a glossed term for a century — so the definition is reachable by keyboard and not only by pointer.",
+      "useWhen": [
+        "A term a page uses in passing but cannot stop to define — a product name, an acronym, a unit.",
+        "A definition worth one or two sentences, optionally closing on a \"read more\" link to the page that does stop to define it."
+      ],
+      "avoidWhen": [
+        "To label an icon button or any control — that is `Tooltip`, the webkit hover hint: one line, on the contrast surface, `pointer-events-none`.",
+        "For an aside the reader must not miss — a gloss is opt-in and easy to never open. Use `DocCallout`.",
+        "For content longer than a couple of sentences, or anything with more than one link — that is a page, not a gloss."
+      ],
+      "related": [
+        "Tooltip` — the webkit hover hint on a control. A different object: one line, unable to hold a link the reader must travel to. The name collision is why this component keeps the `Doc` prefix.",
+        "DocProse` — the prose this sits inside; the gloss marks itself `data-doc-chrome` so prose rules stop at its edge.",
+        "Link` — the call-to-action inside an interactive panel."
+      ],
+      "bestPractices": [
+        "Gloss the term where the reader first meets it, not every time it appears.",
+        "Give `headline` the term itself and `tip` the definition; that pairing is also what names the panel for assistive tech.",
+        "Add `cta` only with an `href`. A call to action needs somewhere to go, and its presence is what turns the panel into a dialog the reader can enter."
+      ]
+    },
+    "doc-update": {
+      "import": "@aziontech/webkit/doc-update",
+      "target": "./src/components/documentation/doc-update/doc-update.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/doc-update",
+      "category": "documentation",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "The entry's name — a date, a release name. Also its anchor."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Secondary line under the label; usually the version."
+        },
+        {
+          "name": "tags",
+          "type": "string[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "Short labels categorising the entry: a product, an area, a kind of change."
+        },
+        {
+          "name": "anchor",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Anchor override; wins over the slug derived from the label. Set it when two entries share a label."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The release notes: prose, lists, code, or any documentation component."
+        }
+      ],
+      "purpose": "One entry in a changelog: what shipped, when, and under which version. The release's identity sits in a left column — the date, the version under it, the tags under that — the notes sit on the right, and a rule runs between them for the length of the entry and bridges the block gap to the next one, so a set of entries reads as one continuous timeline rather than a stack of boxes. The label is an `h2` and a link to its own id, because every entry is a URL somebody sends — the id is the label slugified, unless an explicit `anchor` overrides it.",
+      "useWhen": [
+        "A changelog or release-notes page: one `DocUpdate` per release, newest first, inside `DocProse`.",
+        "Any dated series a reader scans by its left edge — announcements, incident retrospectives, versioned API changes."
+      ],
+      "avoidWhen": [
+        "For a single dated aside inside a guide — that is a `DocCallout`, not a timeline entry.",
+        "As a styled row inside another section. The label is an `h2`, so every entry claims a slot in the page outline; nesting one under a deeper heading breaks the outline.",
+        "To generate a feed. Mintlify's `rss` prop is deliberately absent — this layer renders pages and generates nothing, so the prop would be inert."
+      ],
+      "related": [
+        "DocProse` — the contract around it: `data-doc-block` takes the block rung of the spacing ladder, and `data-doc-chrome` keeps prose rules off the label column.",
+        "Tag` — renders the entry's tags row (`severity=\"secondary\"`, small, rounded).",
+        "use-heading-nav` — the composable the label anchor calls. A page that owns its scroll container provides a scroller-aware handler with `provideHeadingNav`; rendered outside a provider, the injected default is a no-op — never a throw — and the browser's native hash navigation takes over."
+      ],
+      "bestPractices": [
+        "Put the date (or release name) in `label` and the version in `description` — the left edge is what a reader scans, so the label carries the identity.",
+        "Keep headings inside an entry one level below the label: the label is the entry's `h2`.",
+        "Set `anchor` only when two entries share a label; otherwise let the id derive from the label so shared links match what readers see."
+      ]
     },
     "message": {
       "import": "@aziontech/webkit/message",
@@ -7528,7 +8462,7 @@
           "notes": "Sticky region rendered below the scrollable group list (e.g. footer action)."
         }
       ],
-      "purpose": "Overlay menu that opens from a consumer-supplied trigger and renders a list of selectable options grouped into named sections. The root `Dropdown` owns open/closed state, positioning, focus return, and keyboard navigation; `Dropdown.Trigger` wires `aria-haspopup`/`aria-expanded`/`aria-controls` onto whatever element the consumer passes through its slot; `Dropdown.Group` groups options under an optional uppercase label; `Dropdown.Option` is the selectable row with left/right/command affordances. Replaces and removes the legacy monolithic input `dropdown` and the previous `dropdown-menu` composition — there is one `Dropdown` in the project, in `navigation/`."
+      "purpose": "Overlay menu that opens from a consumer-supplied trigger and renders a list of selectable options grouped into named sections. The root `Dropdown` owns open/closed state, positioning, focus return, and keyboard navigation; `Dropdown.Trigger` wires `aria-haspopup`/`aria-expanded`/`aria-controls` onto whatever element the consumer passes through its slot; `Dropdown.Group` groups options under an optional label; `Dropdown.Option` is the selectable row with left/right/command affordances. Replaces and removes the legacy monolithic input `dropdown` and the previous `dropdown-menu` composition — there is one `Dropdown` in the project, in `navigation/`."
     },
     "dropdown-root": {
       "import": "@aziontech/webkit/dropdown-root",
@@ -7598,7 +8532,7 @@
           "notes": "Sticky region rendered below the scrollable group list (e.g. footer action)."
         }
       ],
-      "purpose": "Overlay menu that opens from a consumer-supplied trigger and renders a list of selectable options grouped into named sections. The root `Dropdown` owns open/closed state, positioning, focus return, and keyboard navigation; `Dropdown.Trigger` wires `aria-haspopup`/`aria-expanded`/`aria-controls` onto whatever element the consumer passes through its slot; `Dropdown.Group` groups options under an optional uppercase label; `Dropdown.Option` is the selectable row with left/right/command affordances. Replaces and removes the legacy monolithic input `dropdown` and the previous `dropdown-menu` composition — there is one `Dropdown` in the project, in `navigation/`."
+      "purpose": "Overlay menu that opens from a consumer-supplied trigger and renders a list of selectable options grouped into named sections. The root `Dropdown` owns open/closed state, positioning, focus return, and keyboard navigation; `Dropdown.Trigger` wires `aria-haspopup`/`aria-expanded`/`aria-controls` onto whatever element the consumer passes through its slot; `Dropdown.Group` groups options under an optional label; `Dropdown.Option` is the selectable row with left/right/command affordances. Replaces and removes the legacy monolithic input `dropdown` and the previous `dropdown-menu` composition — there is one `Dropdown` in the project, in `navigation/`."
     },
     "dropdown-trigger": {
       "import": "@aziontech/webkit/dropdown-trigger",
@@ -8448,6 +9382,140 @@
         "Reach for `hatch` here rather than on a section header: the gap is the one band with no copy of its own, so the texture gives the break identity without sitting behind a headline.",
         "Do not wrap it in a padded container; the gap is the padding."
       ]
+    },
+    "resizable-panel": {
+      "import": "@aziontech/webkit/resizable-panel",
+      "target": "./src/components/layout/resizable-panel/index.ts",
+      "kind": "component",
+      "compoundRoot": true,
+      "treeShakeableImport": "@aziontech/webkit/resizable-panel-root",
+      "subcomponents": [
+        "@aziontech/webkit/resizable-panel-handle",
+        "@aziontech/webkit/resizable-panel-pane"
+      ],
+      "category": "layout",
+      "structure": "composition",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "orientation",
+          "type": "'horizontal' | 'vertical'",
+          "default": "'horizontal'",
+          "required": "false",
+          "doc": "Axis the panes are laid out on; horizontal places them side by side, vertical stacks them."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name for the group as a whole."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "On the root, the panes and handles in the order they appear. On a pane, its content. The handle takes no slot."
+        }
+      ],
+      "purpose": "A group of adjacent regions whose shared edges the reader can drag. It is the layout primitive behind a workspace — an editor with a terminal under it and a preview beside it — where every region is content the reader is working in and the split between them is theirs to set. It exists because `Sidebar` was being used for both jobs. `Sidebar` is the app's NAVIGATION rail: it collapses to icons, it hides, it is the thing you leave to go somewhere. A terminal, a preview and a code editor are not places you navigate to — they are the work — and dressing two of them as navigation rails made a screen with three \"sidebars\" and one document, on an axis `Sidebar` does not even have (it has no horizontal edge, so a terminal under an editor had to hand-roll its own splitter). This component owns the EDGE; `Sidebar` goes back to owning navigation.",
+      "useWhen": [
+        "Two or more content regions share an edge the reader should be able to move (editor + terminal, editor + preview, list + detail).",
+        "The split is a working preference the reader sets many times in a session, not a one-time layout decision.",
+        "A region has to shrink to nothing and come back without losing its state (an editor's undo history, a scroll position).",
+        "The layout needs a horizontal edge — one region above another — which no other component in the package provides."
+      ],
+      "avoidWhen": [
+        "The panel is the app's navigation rail → use `sidebar`, which owns the icon rail, the collapse and the nav semantics.",
+        "The content is a temporary overlay over the page → use `drawer` (a panel that comes and goes) or `dialog`.",
+        "The regions have a fixed relationship the reader should not change → use plain flex/grid layout with the layout tokens.",
+        "The panel is one scrolling region with no movable edge → use `scroll-area`."
+      ],
+      "related": [
+        "sidebar` — the navigation rail. Collapses to icons, hides, and carries nav semantics; reach for it when the panel is how the reader gets somewhere, not what they work in.",
+        "scroll-area` — one region that scrolls. A pane usually contains one.",
+        "drawer` — a panel that arrives over the page and leaves; a resizable pane is always there."
+      ],
+      "bestPractices": [
+        "Give exactly ONE pane in a group no `basis`. That pane absorbs the remaining space, so the group always fills its container and the reader never sees a gap or a scrollbar they did not cause.",
+        "Put the `basis` on the pane whose size the reader cares about (the terminal's height, the preview's width) and let the document be the flexible one.",
+        "Keep the pane's own state alive when it is collapsed — collapse renders it at zero length, it does not unmount it. A code editor that loses its undo history when the reader drags an edge shut has lost the reader's work.",
+        "Give every handle an `ariaLabel` naming the edge it moves (\"Resize the terminal\"), never the generic default: a screen with three handles otherwise reads as three identical controls.",
+        "A control that reopens a collapsed pane belongs OUTSIDE that pane, in the surrounding chrome. A control that only exists inside the thing it hides cannot bring it back."
+      ]
+    },
+    "resizable-panel-root": {
+      "import": "@aziontech/webkit/resizable-panel-root",
+      "target": "./src/components/layout/resizable-panel/resizable-panel.vue",
+      "kind": "root",
+      "rootOf": "resizable-panel",
+      "treeShakeableImport": "@aziontech/webkit/resizable-panel-root",
+      "category": "layout",
+      "structure": "composition",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "orientation",
+          "type": "'horizontal' | 'vertical'",
+          "default": "'horizontal'",
+          "required": "false",
+          "doc": "Axis the panes are laid out on; horizontal places them side by side, vertical stacks them."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name for the group as a whole."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "On the root, the panes and handles in the order they appear. On a pane, its content. The handle takes no slot."
+        }
+      ],
+      "purpose": "A group of adjacent regions whose shared edges the reader can drag. It is the layout primitive behind a workspace — an editor with a terminal under it and a preview beside it — where every region is content the reader is working in and the split between them is theirs to set. It exists because `Sidebar` was being used for both jobs. `Sidebar` is the app's NAVIGATION rail: it collapses to icons, it hides, it is the thing you leave to go somewhere. A terminal, a preview and a code editor are not places you navigate to — they are the work — and dressing two of them as navigation rails made a screen with three \"sidebars\" and one document, on an axis `Sidebar` does not even have (it has no horizontal edge, so a terminal under an editor had to hand-roll its own splitter). This component owns the EDGE; `Sidebar` goes back to owning navigation.",
+      "useWhen": [
+        "Two or more content regions share an edge the reader should be able to move (editor + terminal, editor + preview, list + detail).",
+        "The split is a working preference the reader sets many times in a session, not a one-time layout decision.",
+        "A region has to shrink to nothing and come back without losing its state (an editor's undo history, a scroll position).",
+        "The layout needs a horizontal edge — one region above another — which no other component in the package provides."
+      ],
+      "avoidWhen": [
+        "The panel is the app's navigation rail → use `sidebar`, which owns the icon rail, the collapse and the nav semantics.",
+        "The content is a temporary overlay over the page → use `drawer` (a panel that comes and goes) or `dialog`.",
+        "The regions have a fixed relationship the reader should not change → use plain flex/grid layout with the layout tokens.",
+        "The panel is one scrolling region with no movable edge → use `scroll-area`."
+      ],
+      "related": [
+        "sidebar` — the navigation rail. Collapses to icons, hides, and carries nav semantics; reach for it when the panel is how the reader gets somewhere, not what they work in.",
+        "scroll-area` — one region that scrolls. A pane usually contains one.",
+        "drawer` — a panel that arrives over the page and leaves; a resizable pane is always there."
+      ],
+      "bestPractices": [
+        "Give exactly ONE pane in a group no `basis`. That pane absorbs the remaining space, so the group always fills its container and the reader never sees a gap or a scrollbar they did not cause.",
+        "Put the `basis` on the pane whose size the reader cares about (the terminal's height, the preview's width) and let the document be the flexible one.",
+        "Keep the pane's own state alive when it is collapsed — collapse renders it at zero length, it does not unmount it. A code editor that loses its undo history when the reader drags an edge shut has lost the reader's work.",
+        "Give every handle an `ariaLabel` naming the edge it moves (\"Resize the terminal\"), never the generic default: a screen with three handles otherwise reads as three identical controls.",
+        "A control that reopens a collapsed pane belongs OUTSIDE that pane, in the surrounding chrome. A control that only exists inside the thing it hides cannot bring it back."
+      ]
+    },
+    "resizable-panel-handle": {
+      "import": "@aziontech/webkit/resizable-panel-handle",
+      "target": "./src/components/layout/resizable-panel/resizable-panel-handle/resizable-panel-handle.vue",
+      "kind": "subcomponent",
+      "parent": "resizable-panel",
+      "treeShakeableImport": "@aziontech/webkit/resizable-panel-handle"
+    },
+    "resizable-panel-pane": {
+      "import": "@aziontech/webkit/resizable-panel-pane",
+      "target": "./src/components/layout/resizable-panel/resizable-panel-pane/resizable-panel-pane.vue",
+      "kind": "subcomponent",
+      "parent": "resizable-panel",
+      "treeShakeableImport": "@aziontech/webkit/resizable-panel-pane"
     },
     "scroll-area": {
       "import": "@aziontech/webkit/scroll-area",
@@ -10636,6 +11704,12 @@
       "target": "./src/composables/use-focus-trap/index.js",
       "kind": "composable",
       "treeShakeableImport": "@aziontech/webkit/use-focus-trap"
+    },
+    "use-heading-nav": {
+      "import": "@aziontech/webkit/use-heading-nav",
+      "target": "./src/composables/use-heading-nav/index.ts",
+      "kind": "composable",
+      "treeShakeableImport": "@aziontech/webkit/use-heading-nav"
     },
     "use-placement": {
       "import": "@aziontech/webkit/use-placement",

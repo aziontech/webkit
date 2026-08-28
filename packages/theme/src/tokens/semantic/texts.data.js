@@ -98,6 +98,14 @@ export const textsData = {
     fontWeight: fontWeight.normal,
     letterSpacing: tracking.normal
   },
+  'text-body-code-sm': {
+    textWrapStyle: 'pretty',
+    fontFamily: fontFamily.code,
+    fontSize: fontSize.xs,
+    lineHeight: leading.relaxed,
+    fontWeight: fontWeight.normal,
+    letterSpacing: tracking.normal
+  },
   'text-label-code-md': {
     fontFamily: fontFamily.code,
     fontSize: fontSize.sm,
@@ -121,6 +129,11 @@ export const textsData = {
     fontSize: fontSize.base,
     fontWeight: fontWeight.light,
     lineHeight: leading.snug
+  },
+  'text-body-prose-md': {
+    fontSize: fontSize.base,
+    fontWeight: fontWeight.light,
+    lineHeight: leading.relaxed
   },
   'text-body-sm': {
     fontSize: fontSize.sm,
