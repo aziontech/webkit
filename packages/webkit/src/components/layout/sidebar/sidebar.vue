@@ -166,16 +166,39 @@
     transition: railTransition.value
   }))
 
-  const FOOTER_REGION_CLASS = 'w-full shrink-0 border-t border-(--border-default) p-(--spacing-md)'
+  /**
+   * A FIXED 56px BAND THAT CENTRES WHAT IS IN IT, which is two decisions working
+   * together. The height matches the header bar's, so a rail closed by a footer and
+   * a page closed by a bar share one horizontal; and because the height is fixed,
+   * the region is what has to do the centring — `flex` + `items-center` here, rather
+   * than trusting whatever the consumer drops in the slot to be exactly band-height.
+   * On the block box this was, `items-center` would have been inert.
+   *
+   * THE PADDING IS HORIZONTAL ONLY, and that is the fixed height's consequence, not
+   * a preference. `p-(--spacing-md)` leaves a 24px content box inside the 56px band,
+   * which the collapse trigger alone (`IconButton size="small"`, 28px) overflows.
+   */
+  const FOOTER_REGION_CLASS =
+    'flex h-(--size-14) w-full shrink-0 items-center border-t border-(--border-default) px-(--spacing-md)'
 
+  /**
+   * The band FILLS the region (`min-w-0 flex-1`). Without that it is a shrink-to-fit
+   * flex item — the region became a flex box above — so the footer content and the
+   * collapse trigger pack against the leading edge, the `flex-1` inside the slot has
+   * nothing to distribute, and `justify-end` below is inert for the same reason. The
+   * controls belong at the rail's trailing edge, on the region's own inset.
+   *
+   * NO SEPARATOR AND NO TOP PADDING HERE. Both now belong to the region: the border
+   * so it spans the rail edge-to-edge whatever the consumer puts in the slot, and the
+   * vertical rhythm because the band's fixed height already IS that rhythm — a
+   * `pt` inside it would push the 28px content off the 56px centre.
+   */
   const footerBandClass = computed(() =>
-    props.collapsible
-      ? cn(
-          'flex items-center gap-(--spacing-xs)',
-          'border-t border-(--border-muted) pt-(--spacing-md)',
-          !slots['footer'] ? 'justify-end' : undefined
-        )
-      : undefined
+    cn(
+      'flex min-w-0 flex-1 items-center',
+      props.collapsible ? 'gap-(--spacing-xs)' : undefined,
+      props.collapsible && !slots['footer'] ? 'justify-end' : undefined
+    )
   )
 
   const scrollClass = computed(() =>
@@ -233,7 +256,7 @@
         <div :class="footerBandClass">
           <div
             v-if="$slots['footer']"
-            :class="collapsible ? 'min-w-0 flex-1' : undefined"
+            class="min-w-0 flex-1"
           >
             <slot name="footer" />
           </div>
