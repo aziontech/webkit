@@ -114,6 +114,22 @@ const wideColumns = [
 // column resizable powers the Resizable Columns story.
 const resizableColumns = columns.map((col) => ({ ...col, resizable: true }))
 
+// Floor variant: the two short-content columns declare `minWidth` instead of `width`.
+// The table measures each of them (its header, sort affordance included, and every
+// rendered cell) and pins the column to whichever is larger — so `Status`, whose chips
+// are shorter than the word "Status", settles on its header, while `Protocol` grows past
+// the floor to fit `HTTP & HTTPS`. A fixed `width` cannot do both: the number that fits
+// the protocol wastes space on the status, and the number that fits the status truncates
+// the protocol.
+const floorColumns = [
+  { accessorKey: 'name', header: 'Name', principal: true },
+  { accessorKey: 'status', header: 'Status', minWidth: 96 },
+  { accessorKey: 'protocol', header: 'Protocol', minWidth: 96 },
+  { accessorKey: 'editor', header: 'Last Editor', enableSorting: false, grow: 2 },
+  { accessorKey: 'modified', header: 'Last Modified', grow: 2 },
+  { id: 'actions', header: '', kind: 'action', enableSorting: false }
+]
+
 // One shared, immutable action list — built once, reused by every row's menu.
 // Split into two groups so the navigation `<Dropdown>` renders the divider
 // between the safe actions and the destructive `Delete`.
@@ -910,6 +926,22 @@ export const FixedLayoutWithColumnSizes = {
           'Every column declares an explicit pixel `width`, so the layout is fixed: columns keep their declared size instead of distributing to fill the surface, and the viewport scrolls horizontally if the widths sum past it.'
       },
       source: { code: dataDrivenSnippet({ ...baseArgs }, { cols: sizedColumns }) }
+    }
+  }
+}
+
+/** @type {import('@storybook/vue3').StoryObj<typeof Table>} */
+export const ColumnWidthFloors = {
+  name: 'Column Width Floors',
+  render: makeStory({ rows, columns: floorColumns }),
+  parameters: {
+    controls: { disable: true },
+    docs: {
+      description: {
+        story:
+          'The two short-content columns declare a **`minWidth`** floor instead of a fixed `width`. The table measures each of them — its header (sort affordance included) and every rendered cell — and pins the column to whichever is larger, as one width shared by the header and every body cell. **Status** settles on its header, because the chips under it are shorter than the word; **Protocol** grows past the floor to fit `HTTP & HTTPS`. A fixed `width` is a bet in both directions: wide enough for the protocol wastes space on the status, tight enough for the status truncates the protocol. The measured width tracks the rendered page, so paging or sorting longer content into view can widen the column.'
+      },
+      source: { code: dataDrivenSnippet({ ...baseArgs }, { cols: floorColumns }) }
     }
   }
 }
