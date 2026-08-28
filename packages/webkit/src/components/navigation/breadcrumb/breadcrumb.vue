@@ -149,7 +149,17 @@
               class="inline-flex items-center"
               :data-testid="`${testId}__segment-overflow`"
             >
-              <Dropdown :data-testid="`${testId}__overflow-menu`">
+              <!-- `select` is the DROPDOWN's event, not the option's: `Dropdown.Option`
+                   forwards its activation to the root through the injected context, and the
+                   root is what emits `select(event, value)`. Bound to the option — where it
+                   sat until now — the listener never fired, so picking a collapsed crumb
+                   below `md` did nothing at all: the menu closed and the reader stayed on
+                   the page. That is the whole trail on a phone, since the collapsed shape
+                   is the only one a narrow bar renders. -->
+              <Dropdown
+                :data-testid="`${testId}__overflow-menu`"
+                @select="onOverflowSelect"
+              >
                 <!-- The Trigger is itself role="button"; the icon is decorative
                      content. Nesting a real button here trips axe
                      nested-interactive. Styled to match a transparent/small
@@ -171,7 +181,6 @@
                     :value="item.href ?? '#'"
                     :label="item.label"
                     :data-testid="`${testId}__overflow-item-${index}`"
-                    @select="onOverflowSelect"
                   >
                     <template
                       v-if="item.showIcon && item.icon"
