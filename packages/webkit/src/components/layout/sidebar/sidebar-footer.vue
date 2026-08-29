@@ -22,13 +22,7 @@
       `${ctx?.testId ?? 'layout-sidebar'}__footer-region`
   )
 
-  const rootClasses = computed(() =>
-    cn(
-      'w-full shrink-0',
-      ctx?.collapsible ? undefined : 'border-t border-(--border-muted) pt-(--spacing-md)',
-      attrs.class
-    )
-  )
+  const rootClasses = computed(() => cn('w-full shrink-0', attrs.class))
 </script>
 
 <template>

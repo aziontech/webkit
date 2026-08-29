@@ -29,6 +29,15 @@ Both halves are **opt-in and independent**: `resizable` adds the drag, `collapsi
 collapse trigger and the edge affordance. With neither set the component renders exactly as it
 always has, with the host owning the width — every existing consumer is unaffected.
 
+**`side` is the third opt-in, and it exists so a trailing panel is this component too.** An explorer
+layout — a log with a detail panel, a database browser with a schema panel — puts a resizable,
+hideable panel on the *right*, and the only thing that differs there is the direction of every
+horizontal decision: which edge the border and the handle sit on, which way a drag grows the panel,
+which way it leaves, and which way the arrow keys and the collapse glyph point. `side: 'end'` mirrors
+all of them from a single sign, so the trailing panel inherits the same clamping, the same
+phase-aware transition, the same `inert` collapsed state and the same testids — instead of being
+re-implemented beside the leading one, which is exactly how the two would drift.
+
 ## Usage
 
 Navigation is a [`Menu`](./menu.md) in the default slot. It owns no shell, fills the width the
@@ -269,6 +278,7 @@ between them is the ring-offset surface below.
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
 | `ariaLabel` | `string` | `'Sidebar'` | false | Accessible name for the navigation landmark. |
+| `side` | `'start' \| 'end'` | `'start'` | false | Which edge of the layout the rail is anchored to; `end` mirrors the border, the drag handle, the collapse glyphs and the edge affordance. |
 | `resizable` | `boolean` | `false` | false | Adds the drag handle on the trailing edge; dragging past the minimum collapses the rail. |
 | `collapsible` | `boolean` | `false` | false | Adds the collapse trigger at the bottom of the rail and the edge affordance that brings a collapsed rail back. |
 | `minWidthToken` | `string` | `'--container-3xs'` | false | Theme container token the sized width is clamped up to, read off the document at runtime. |
@@ -312,6 +322,7 @@ and the host's own `class="w-[280px]"` governs exactly as before.
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
+- `data-side` on the root (`start` / `end`) — the edge the rail is anchored to
 - `data-collapsed` on the root while the rail is out of the layout
 - `data-resizing` on the root and on the handle while a pointer drag is in flight
 - `data-preview` on the collapsed edge zone while it is showing the rail's preview sliver
@@ -419,6 +430,10 @@ canvas the tokens fall back to.
   trailing edge, crossing the snap boundary into a collapse, the trigger at the bottom, and the edge
   affordance that brings it back. None of that is expressible as an args delta on a static story,
   and the page morphing beside it needs a sibling to morph against.
+- Trailing — **justified addition.** `side: 'end'` mirrors the whole gesture, and a mirror is only
+  demonstrable against the thing it mirrors: this story puts a leading rail and a trailing panel on
+  the same page so the two edges, the two drag directions and the two collapse glyphs are visible
+  at once. An args delta on Resizable would show the panel with no left rail to read it against.
 
 Every story composes `Menu`; none composes `SidebarGroup` (see Sub-components).
 

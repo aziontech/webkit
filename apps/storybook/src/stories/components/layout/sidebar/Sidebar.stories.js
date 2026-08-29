@@ -245,6 +245,39 @@ const RESIZABLE_SOURCE = `<div class="relative flex h-screen min-h-0">
   </main>
 </div>`
 
+const TRAILING_PANEL = `<Sidebar
+    side="end"
+    resizable
+    collapsible
+    v-model:collapsed="panelCollapsed"
+    v-model:width="panelWidth"
+    aria-label="Event"
+    collapse-aria-label="Hide the event panel"
+    expand-aria-label="Show the event panel"
+    resize-aria-label="Resize the event panel"
+  >
+    <div class="flex flex-col gap-(--spacing-sm)">
+      <p class="text-heading-xxs text-(--text-default)">Event</p>
+      <p class="text-body-sm text-(--text-muted)">
+        The detail of the selected row. Drag its leading edge to size it, or pull it past the minimum to hide it.
+      </p>
+    </div>
+  </Sidebar>`
+
+const TRAILING_SOURCE = `<div class="relative flex h-screen min-h-0">
+  <Sidebar v-model:collapsed="collapsed" v-model:width="width" resizable collapsible aria-label="Console">
+    ${MENU_CONTENT}
+  </Sidebar>
+
+  <main class="min-w-0 flex-1 p-(--spacing-lg)">
+    <p class="text-body-sm text-(--text-muted)">
+      One component, two edges: the rail leads, the panel trails, and both size and hide the same way.
+    </p>
+  </main>
+
+  ${TRAILING_PANEL}
+</div>`
+
 /** @type {import('@storybook/vue3').Meta<typeof Sidebar>} */
 const meta = {
   title: 'Components/Layout/Sidebar',
@@ -284,6 +317,17 @@ const meta = {
         category: 'props',
         type: { summary: 'string' },
         defaultValue: { summary: "'Sidebar'" }
+      }
+    },
+    side: {
+      control: 'inline-radio',
+      options: ['start', 'end'],
+      description:
+        'Which edge of the layout the rail is anchored to; end mirrors the border, the drag handle, the collapse glyphs and the edge affordance.',
+      table: {
+        category: 'props',
+        type: { summary: "'start' | 'end'" },
+        defaultValue: { summary: "'start'" }
       }
     },
     resizable: {
@@ -461,6 +505,58 @@ export const Resizable = {
         code: toSfc(
           [...CONSOLE_IMPORTS, '', 'const collapsed = ref(false)', 'const width = ref(null)'],
           RESIZABLE_SOURCE
+        )
+      }
+    }
+  }
+}
+
+/** @type {import('@storybook/vue3').StoryObj<typeof Sidebar>} */
+export const Trailing = {
+  render: () => ({
+    components: sidebarStoryComponents,
+    setup() {
+      const collapsed = ref(false)
+      const width = ref(null)
+      const panelCollapsed = ref(false)
+      const panelWidth = ref(320)
+      return { collapsed, width, panelCollapsed, panelWidth, ...consoleState() }
+    },
+    template: `
+      <div class="relative flex h-[560px] min-h-0">
+        <Sidebar v-model:collapsed="collapsed" v-model:width="width" resizable collapsible aria-label="Console">
+          ${MENU_CONTENT}
+        </Sidebar>
+
+        <main class="min-w-0 flex-1 p-(--spacing-lg)">
+          <p class="text-body-sm text-(--text-muted)">
+            One component, two edges: the rail leads, the panel trails, and both size and hide the same way.
+          </p>
+        </main>
+
+        ${TRAILING_PANEL}
+      </div>
+    `
+  }),
+  parameters: {
+    controls: { disable: true },
+    docs: {
+      controls: { disable: true },
+      description: {
+        story:
+          'The explorer shape: a leading rail and a trailing detail panel, both the same component. `side="end"` mirrors every horizontal decision from one sign — the border and the drag handle move to the leading edge, a drag GROWS the panel when the pointer moves left, the collapse glyph points right, and the panel leaves through the right edge. Everything else is shared with the rail beside it: the same token bounds, the same phase-aware transition, the same `inert` collapsed state, the same focusable separator reporting its position. The keys follow the screen, not the model, so the arrow pointing away from the panel edge is always the one that grows it.'
+      },
+      source: {
+        code: toSfc(
+          [
+            ...CONSOLE_IMPORTS,
+            '',
+            'const collapsed = ref(false)',
+            'const width = ref(null)',
+            'const panelCollapsed = ref(false)',
+            'const panelWidth = ref(320)'
+          ],
+          TRAILING_SOURCE
         )
       }
     }
