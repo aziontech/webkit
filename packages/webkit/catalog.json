@@ -563,6 +563,20 @@
       "--text-8xl--line-height",
       "--text-9xl",
       "--text-9xl--line-height",
+      "--text-amount-lg-font-size",
+      "--text-amount-lg-font-weight",
+      "--text-amount-lg-letter-spacing",
+      "--text-amount-lg-line-height",
+      "--text-amount-lg-text-wrap-style",
+      "--text-amount-md-font-size",
+      "--text-amount-md-font-weight",
+      "--text-amount-md-letter-spacing",
+      "--text-amount-md-line-height",
+      "--text-amount-md-text-wrap-style",
+      "--text-amount-sm-font-size",
+      "--text-amount-sm-font-weight",
+      "--text-amount-sm-letter-spacing",
+      "--text-amount-sm-line-height",
       "--text-base",
       "--text-base--line-height",
       "--text-big-number-lg-font-family",
@@ -731,6 +745,9 @@
       "--z-input-popup"
     ],
     "typography": [
+      "text-amount-lg",
+      "text-amount-md",
+      "text-amount-sm",
       "text-big-number-lg",
       "text-big-number-md",
       "text-big-number-sm",
@@ -1354,6 +1371,20 @@
         "--text-8xl--line-height",
         "--text-9xl",
         "--text-9xl--line-height",
+        "--text-amount-lg-font-size",
+        "--text-amount-lg-font-weight",
+        "--text-amount-lg-letter-spacing",
+        "--text-amount-lg-line-height",
+        "--text-amount-lg-text-wrap-style",
+        "--text-amount-md-font-size",
+        "--text-amount-md-font-weight",
+        "--text-amount-md-letter-spacing",
+        "--text-amount-md-line-height",
+        "--text-amount-md-text-wrap-style",
+        "--text-amount-sm-font-size",
+        "--text-amount-sm-font-weight",
+        "--text-amount-sm-letter-spacing",
+        "--text-amount-sm-line-height",
         "--text-base",
         "--text-base--line-height",
         "--text-big-number-lg-font-family",
@@ -2641,13 +2672,6 @@
           "doc": "plan Title."
         },
         {
-          "name": "description",
-          "type": "string",
-          "default": "''",
-          "required": "false",
-          "doc": "description."
-        },
-        {
           "name": "pricingDetails",
           "type": "string",
           "default": "''",
@@ -2674,6 +2698,13 @@
           "default": "'Popular'",
           "required": "false",
           "doc": "tag Label."
+        },
+        {
+          "name": "aligned",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "Reserves the caveat's band so a row of cards aligns row-for-row. Set it on every card in the row."
         },
         {
           "name": "slotPosition",
@@ -2706,7 +2737,7 @@
         {
           "name": "suffix",
           "type": "string",
-          "default": "'per month'",
+          "default": "'/ mon'",
           "required": "false",
           "doc": "suffix."
         },
@@ -2744,7 +2775,7 @@
           "notes": "Main content."
         }
       ],
-      "purpose": "Displays content or metadata in the UI. Migrated from the existing implementation at `packages/webkit/src/components/webkit/content/card-pricing/`."
+      "purpose": "One tier of a pricing table: what it is called, what it costs, what that price includes, and the one action that moves the account onto it. The card owns the typographic hierarchy of a price — an overline plan name, the amount as the headline figure, and the billing caveat under it in muted body copy — so a row of tiers reads as a comparison rather than as three differently-typeset cards. `slotPosition` is the axis that decides which of the two compositions the card is. **`bottom`** is the compact tier: the name, a `medium` amount and the caveat stack at the top, the action follows, and the slot sits under it — a card sized by its own content, for a row of tiers a reader scans. **`middle`** is the full tier: the amount becomes the `large` headline figure, the caveat moves up to `body-md`, the slot grows to fill the card, and the action is pinned to the bottom edge so a row of `middle` cards has its buttons on one line whatever each tier's feature list holds. `kind` decides only whether the card draws its own surface (`contained`) or sits on the one behind it (`transparent`); it never changes the composition. The name, the amount and the caveat are **one column**, capped at `--container-xs` (348px) rather than at the card's full width: the caveat is a sentence about the price directly above it, so it wraps on the price's measure. The cap shipped as `--container-3xs` (256px) — two rungs down the ladder, and too narrow for the copy it holds. 256px sets `body-md` at roughly 33 characters, under the 45–75 a prose measure wants, and all three billing caveats on the sample pricing page (66, 69 and 84 characters) ran to three lines there. At 348px the measure is ~46 characters and the same three set in two, while the card's own content box at 1440 is 413px — so the caveat is still held to the price's column instead of the card's. The card carries **one** prose region — the pricing caveat, below the amount. It used to carry a second paragraph above the amount as well, and with `aligned` reserving a band for each, a row of tiers showed two two-line muted blocks around every price doing the same visual job. The Figma component (`3605:2260`) has a single prose region, `Pricing Details`, positioned below the amount, so that is the one the card keeps; a tier's positioning sentence belongs to whatever the consumer puts in the slot. `aligned` makes a ROW of cards read as one comparison. Every region is content-sized by default, which is right for a single card and wrong for three side by side — a tier with a two-line caveat and a tier with none put their feature lists on different lines, and the reader has to re-find the row in every column. It reserves **three** lines for the caveat, in `lh` so the reservation follows the type token rather than a hard-coded height. Three is the design's 64px band expressed in whole lines of the region's own token (`body-md` is a 22px line box, so `3lh` is 66px; `2lh` is 44px and twenty short) — it shipped as `2lh`, and the shortfall stayed invisible until a tier's caveat ran to three lines at the region's then-256px measure, overflowed the band, and pushed that column's feature list 22px below the other two. Opt-in, because reserving empty lines is wrong for a lone card; set it on every card in the row. A caveat past three lines still pushes the row down, like any overflow. The plan title is an **overline** (`.text-overline-md` on an `<h3>`): the token carries the display face, the uppercase transform and the widest tracking step, so the tier reads as a label on the card rather than as a title competing with the price beneath it. It stays an `<h3>` for the document outline — the tier is the section heading — while looking like an overline."
     },
     "hero-title": {
       "import": "@aziontech/webkit/hero-title",
@@ -3096,13 +3127,13 @@
         },
         {
           "name": "size",
-          "type": "'small' | 'large'",
+          "type": "'small' | 'medium' | 'large'",
           "default": "'small'",
           "required": "false",
-          "doc": "Size token; affects height, padding, and typography."
+          "doc": "Size token; affects typography and the gap between the figure and the suffix."
         }
       ],
-      "purpose": "Displays content or metadata in the UI. Migrated from the existing implementation at `packages/webkit/src/components/webkit/content/currency/`."
+      "purpose": "Typesets one monetary amount as three separately-styled parts — the currency symbol, the figure, and a trailing period or unit — so money reads the same everywhere in the product instead of being a formatted string each screen spells its own way. The suffix carries the code typeface (`text-label-code-*`), which keeps the unit visually subordinate to the figure and aligns the whole set with the way the system typesets metered values. The size ladder is the house one (`small` / `medium` / `large`) and each step is a different reading distance: `small` is an amount inside a table row or a list cell, `medium` an amount stated as a fact on a card, `large` the headline figure of a pricing card. `large` bottom-aligns the suffix against the figure rather than centring it, because a 56px numeral centred against a 14px unit reads as two unrelated pieces of text."
     },
     "kbd": {
       "import": "@aziontech/webkit/kbd",

@@ -41,6 +41,46 @@ export const textsData = {
     fontWeight: fontWeight.normal,
     fontFamily: fontFamily.display
   },
+  // ── The amount ladder (Currency) ─────────────────────────────────────────
+  //
+  // The three sizes `Currency` typesets a monetary amount at, one per reading
+  // distance: `sm` inside a table row or list cell, `md` an amount stated as a fact on
+  // a card, `lg` the headline figure of a pricing card. Each MIRRORS the heading/label
+  // token it used to borrow (`text-label-lg`, `text-heading-md`, `text-heading-2xl`) —
+  // same size ramp, same leading, same weight — and adds the one thing that made
+  // borrowing wrong: the amount's negative tracking.
+  //
+  // `-0.08em` is PROPORTIONAL, and deliberately so, which is why it lives here and not
+  // in `tracking.js`. That scale is absolute (`rem`) on purpose so a step resolves to a
+  // fixed measure at any font size (see its docstring), and it therefore holds no
+  // `-0.08em`-equivalent step. A figure is the one place where the tracking has to
+  // scale WITH the glyphs: the Figma amount specifies −1.28px @16px, −1.92px @24px and
+  // −4.48px @56px, which is one ratio, not three steps. Expressing it as `em` is what
+  // makes a single declaration correct at all three sizes and at every breakpoint of
+  // `lg`'s responsive ramp.
+  //
+  // Dedicated tokens rather than tracking added to the borrowed ones: `text-heading-2xl`
+  // sets every hero headline in the system, and a hero is prose, not a numeral.
+  'text-amount-lg': {
+    textWrapStyle: 'balance',
+    fontSize: { _: fontSize['3xl'], sm: fontSize['5xl'], md: fontSize['6xl'] },
+    lineHeight: leading.tight,
+    fontWeight: fontWeight.normal,
+    letterSpacing: '-0.08em'
+  },
+  'text-amount-md': {
+    textWrapStyle: 'balance',
+    fontSize: { _: fontSize.base, sm: fontSize.xl, md: fontSize['2xl'] },
+    lineHeight: leading.tight,
+    fontWeight: fontWeight.normal,
+    letterSpacing: '-0.08em'
+  },
+  'text-amount-sm': {
+    fontSize: fontSize.base,
+    lineHeight: leading.normal,
+    fontWeight: fontWeight.normal,
+    letterSpacing: '-0.08em'
+  },
   'text-heading-2xl': {
     fontSize: { _: fontSize['3xl'], sm: fontSize['5xl'], md: fontSize['6xl'] },
     lineHeight: leading.tight,
