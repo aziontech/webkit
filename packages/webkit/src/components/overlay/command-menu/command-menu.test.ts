@@ -64,7 +64,7 @@ const composed = (props: Record<string, unknown> = {}, inputProps: Record<string
 
 /**
  * A palette whose first item carries a `prefix` and whose second does not — the
- * mixed case the reserved icon column exists for.
+ * mixed case that proves an icon-less row renders no prefix box at all.
  */
 const mixedPrefixes = () =>
   defineComponent({
@@ -89,6 +89,42 @@ const mixedPrefixes = () =>
               Deploy Project
             </CommandMenuItem>
             <CommandMenuItem value="new-app">Create Application</CommandMenuItem>
+          </CommandMenuGroup>
+        </CommandMenuList>
+      </CommandMenu>
+    `
+  })
+
+/**
+ * A palette whose leading group is rendered CONDITIONALLY on the query — the shape a
+ * consumer takes when the palette searches a data set and shows the results above its
+ * static navigation (the console's global search). Those items register LAST (they mount
+ * on the first keystroke) while rendering FIRST, which is what the DOM-ordered roving
+ * list exists for.
+ */
+const conditionalResults = () =>
+  defineComponent({
+    components: {
+      CommandMenu,
+      CommandMenuInput,
+      CommandMenuList,
+      CommandMenuGroup,
+      CommandMenuItem
+    },
+    setup() {
+      const open = ref(true)
+      const query = ref('')
+      return { open, query }
+    },
+    template: `
+      <CommandMenu v-model:open="open">
+        <CommandMenuInput placeholder="Search commands…" @update:model-value="query = $event" />
+        <CommandMenuList>
+          <CommandMenuGroup v-if="query" heading="Resources">
+            <CommandMenuItem value="res:storefront">storefront</CommandMenuItem>
+          </CommandMenuGroup>
+          <CommandMenuGroup heading="Navigation">
+            <CommandMenuItem value="nav:storage">Object Storage</CommandMenuItem>
           </CommandMenuGroup>
         </CommandMenuList>
       </CommandMenu>
@@ -220,6 +256,46 @@ describe('CommandMenu (overlay: wraps Dialog, composition + provide/inject)', ()
     })
   })
 
+  describe('a group rendered on the query roves where it renders', () => {
+    // The consumer's `@update:model-value` on the Input reaches the field alongside the
+    // context's own handler (Vue merges both), which is how a consumer learns the query
+    // without the root exposing it.
+    it('highlights the first row of the conditional group on the first keystroke', async () => {
+      render(conditionalResults())
+      await settle()
+
+      const input = byTestId('overlay-command-menu__input')!.querySelector('input')!
+      await fireEvent.update(input, 'sto')
+      await settle()
+
+      // Both rows match "sto" — the conditional one renders first, so it is the one the
+      // highlight (and therefore Enter) lands on, even though it registered last.
+      const rows = Array.from(
+        document.body.querySelectorAll<HTMLElement>('[data-testid="overlay-command-menu__item"]')
+      )
+      expect(rows.map((row) => row.textContent?.trim())).toEqual(['storefront', 'Object Storage'])
+      expect(rows[0].getAttribute('data-active')).toBe('true')
+      expect(rows[1].getAttribute('data-active')).toBeNull()
+    })
+
+    it('ArrowDown walks the rows in DOM order, not registration order', async () => {
+      render(conditionalResults())
+      await settle()
+
+      const input = byTestId('overlay-command-menu__input')!.querySelector('input')!
+      await fireEvent.update(input, 'sto')
+      await settle()
+
+      await fireEvent.keyDown(input, { key: 'ArrowDown' })
+      await settle()
+
+      const rows = Array.from(
+        document.body.querySelectorAll<HTMLElement>('[data-testid="overlay-command-menu__item"]')
+      )
+      expect(rows[1].getAttribute('data-active')).toBe('true')
+    })
+  })
+
   describe('disabled item', () => {
     it('does not activate or emit select on click', async () => {
       const onSelect = vi.fn()
@@ -239,11 +315,11 @@ describe('CommandMenu (overlay: wraps Dialog, composition + provide/inject)', ()
   })
 
   // Vitest browser mode compiles no Tailwind, so an emitted `px` cannot be
-  // measured here. These assert the structural mechanism instead: the reserved
-  // box either exists on every row or on none, which is what makes the label
-  // edge single. Geometry is verified in the browser against the story.
-  describe('one icon column for the whole list', () => {
-    it('reserves the prefix box on every item once any item carries a prefix', async () => {
+  // measured here. These assert the structural mechanism instead: the box is in
+  // the DOM only for the row that supplies a glyph. Geometry is verified in the
+  // browser against the story.
+  describe('the prefix box belongs to the item that has a prefix', () => {
+    it('renders the box only on the item that carries a prefix', async () => {
       render(mixedPrefixes())
       await settle()
 
@@ -252,20 +328,19 @@ describe('CommandMenu (overlay: wraps Dialog, composition + provide/inject)', ()
       )
       expect(items).toHaveLength(2)
 
-      // Both rows get the box — the icon-less one reserves an empty column so its
-      // label starts where the iconed row's does.
-      for (const item of items) {
-        const box = item.querySelector('[data-testid="overlay-command-menu__item__prefix"]')
-        expect(box).not.toBeNull()
-        expect(box?.className).toContain('size-4')
-      }
-
-      // Only the first actually holds a glyph.
+      const iconed = items[0].querySelector('[data-testid="overlay-command-menu__item__prefix"]')
+      expect(iconed).not.toBeNull()
+      expect(iconed?.className).toContain('size-4')
       expect(items[0].querySelector('i.pi-cloud-upload')).not.toBeNull()
+
+      // The icon-less row puts no empty box in the DOM, so it carries no indent.
+      expect(
+        items[1].querySelector('[data-testid="overlay-command-menu__item__prefix"]')
+      ).toBeNull()
       expect(items[1].querySelector('i')).toBeNull()
     })
 
-    it('reserves no column when no item carries a prefix', async () => {
+    it('renders no box at all when no item carries a prefix', async () => {
       render(composed({ defaultOpen: true }))
       await settle()
 
