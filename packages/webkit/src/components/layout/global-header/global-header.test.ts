@@ -6,7 +6,7 @@ import * as stories from '../../../../../../apps/storybook/src/stories/component
 import { expectNoA11yViolations } from '../../../test/axe'
 import GlobalHeader from './index.js'
 
-const { DefaultHeader } = composeStories(stories)
+const { DefaultHeader, ContentZone, SitePlacement } = composeStories(stories)
 
 /**
  * global-header is a COMPOSITION component: `index.js` attaches the region
@@ -199,9 +199,96 @@ describe('GlobalHeader', () => {
     })
   })
 
+  describe('kind — the two placements (data-kind drives the inset)', () => {
+    it('defaults to the content placement', () => {
+      const { getByTestId } = render(GlobalHeader)
+      // withDefaults: kind: 'content' — a bar with no kind reads the page boundary, so it
+      // cannot open on a different vertical from the page under it. The inset geometry
+      // itself belongs to the visual gate; this env renders without Tailwind.
+      expect(getByTestId('layout-global-header').getAttribute('data-kind')).toBe('content')
+    })
+
+    it('marks the content placement on the root', () => {
+      const { getByTestId } = render(GlobalHeader, { props: { kind: 'content' } })
+      expect(getByTestId('layout-global-header').getAttribute('data-kind')).toBe('content')
+    })
+
+    it('holds the regions directly — the placement changes the inset, not the anatomy', () => {
+      const { getByTestId } = render({
+        components: compoundComponents,
+        template:
+          '<GlobalHeader kind="content"><GlobalHeaderLeft>L</GlobalHeaderLeft><GlobalHeaderRight>R</GlobalHeaderRight></GlobalHeader>'
+      })
+      const root = getByTestId('layout-global-header')
+      expect(getByTestId('layout-global-header__left').parentElement).toBe(root)
+      expect(getByTestId('layout-global-header__right').parentElement).toBe(root)
+    })
+
+    it('keeps the banner landmark in the content placement', () => {
+      const { getByRole } = render(GlobalHeader, {
+        props: { kind: 'content', ariaLabel: 'Console header' }
+      })
+      expect(getByRole('banner', { name: 'Console header' })).toBeTruthy()
+    })
+
+    it('marks the site placement on the root', () => {
+      const { getByTestId } = render(GlobalHeader, { props: { kind: 'site' } })
+      // The site inset (capped + centred at --layout-measure-site) is selected by this
+      // attribute alone; the geometry itself belongs to the visual gate, since this
+      // env renders without Tailwind.
+      expect(getByTestId('layout-global-header').getAttribute('data-kind')).toBe('site')
+    })
+
+    it('holds the regions directly in the site placement too', () => {
+      const { getByTestId } = render({
+        components: compoundComponents,
+        template:
+          '<GlobalHeader kind="site"><GlobalHeaderBrand>Azion</GlobalHeaderBrand><GlobalHeaderRight>R</GlobalHeaderRight></GlobalHeader>'
+      })
+      const root = getByTestId('layout-global-header')
+      expect(getByTestId('layout-global-header__brand').parentElement).toBe(root)
+      expect(getByTestId('layout-global-header__right').parentElement).toBe(root)
+    })
+
+    it('keeps the banner landmark in the site placement', () => {
+      const { getByRole } = render(GlobalHeader, {
+        props: { kind: 'site', ariaLabel: 'Azion' }
+      })
+      expect(getByRole('banner', { name: 'Azion' })).toBeTruthy()
+    })
+  })
+
   describe('a11y (axe against the styled, composed tree)', () => {
     it('a fully composed header has no violations', async () => {
       const { container } = renderComposed()
+      await expectNoA11yViolations(container)
+    })
+
+    it('a content-placed bar has no violations', async () => {
+      const { container } = render({
+        components: compoundComponents,
+        template: `
+          <GlobalHeader kind="content" aria-label="Console header">
+            <GlobalHeaderLeft><a href="/build">Build</a></GlobalHeaderLeft>
+            <GlobalHeaderMiddle />
+            <GlobalHeaderRight><button type="button">Create</button></GlobalHeaderRight>
+          </GlobalHeader>
+        `
+      })
+      await expectNoA11yViolations(container)
+    })
+
+    it('a site-placed bar has no violations', async () => {
+      const { container } = render({
+        components: compoundComponents,
+        template: `
+          <GlobalHeader kind="site" aria-label="Azion">
+            <GlobalHeaderBrand><a href="/" aria-label="Azion home">Azion</a></GlobalHeaderBrand>
+            <GlobalHeaderMiddle><a href="/pricing">Pricing</a></GlobalHeaderMiddle>
+            <GlobalHeaderRight><button type="button">Start for Free</button></GlobalHeaderRight>
+          </GlobalHeader>
+        `
+      })
       await expectNoA11yViolations(container)
     })
 
@@ -227,6 +314,34 @@ describe('GlobalHeader', () => {
 
     it('Default story has no a11y violations', async () => {
       const { container } = render(DefaultHeader)
+      await expectNoA11yViolations(container)
+    })
+
+    it('Content zone story renders the full-bleed content placement', () => {
+      const { getByTestId } = render(ContentZone)
+      const root = getByTestId('layout-global-header')
+      // data-kind is what carries the boundary inset instead of the shell step.
+      expect(root.getAttribute('data-kind')).toBe('content')
+      expect(root.contains(getByTestId('layout-global-header__left'))).toBe(true)
+      expect(root.contains(getByTestId('layout-global-header__right'))).toBe(true)
+    })
+
+    it('Content zone story has no a11y violations', async () => {
+      const { container } = render(ContentZone)
+      await expectNoA11yViolations(container)
+    })
+
+    it('Site placement story renders the capped, centred regions on the site column', () => {
+      const { getByTestId } = render(SitePlacement)
+      const root = getByTestId('layout-global-header')
+      expect(root.getAttribute('data-kind')).toBe('site')
+      expect(root.contains(getByTestId('layout-global-header__brand'))).toBe(true)
+      expect(root.contains(getByTestId('layout-global-header__middle'))).toBe(true)
+      expect(root.contains(getByTestId('layout-global-header__right'))).toBe(true)
+    })
+
+    it('Site placement story has no a11y violations', async () => {
+      const { container } = render(SitePlacement)
       await expectNoA11yViolations(container)
     })
   })

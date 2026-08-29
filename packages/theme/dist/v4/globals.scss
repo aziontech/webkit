@@ -704,8 +704,9 @@
   --layout-measure-focused: var(--container-4xl);
   --layout-measure-form: var(--container-4xl);
   --layout-measure-form-create: var(--container-5xl);
-  --layout-measure-docs: var(--container-4xl);
-  --container-site: var(--container-5xl);
+  --layout-measure-content: var(--container-3xl);
+  --layout-measure-site: var(--container-6xl);
+  --layout-measure-site-header: var(--container-7xl);
   --layout-measure-control: var(--container-3xs);
   --text-big-number-md-font-size: 1.25rem;
   --text-big-number-md-line-height: 1.25;
@@ -1396,12 +1397,18 @@
   &:is(.layout-boundary, .layout-boundary-inline) { max-width: calc(var(--layout-column-measure) + 2 * var(--layout-boundary-inline)); }
 }
 
-@utility layout-column-docs {
-  --layout-column-measure: var(--layout-measure-docs);
+@utility layout-column-content {
+  --layout-column-measure: var(--layout-measure-content);
   margin-inline: auto;
   width: 100%;
   max-width: var(--layout-column-measure);
   &:is(.layout-boundary, .layout-boundary-inline) { max-width: calc(var(--layout-column-measure) + 2 * var(--layout-boundary-inline)); }
+}
+
+@utility layout-column-site {
+  margin-inline: auto;
+  width: 100%;
+  max-width: min(var(--layout-measure-site), 100% - 2 * var(--layout-boundary-inline));
 }
 
 @utility layout-field-control {

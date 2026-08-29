@@ -22,7 +22,7 @@ The typography contract every documentation page inherits. A markdown or MDX pip
 
 ## When NOT to use
 
-- To cap the reading column — `DocProse` has no measure of its own. The consumer sets the width with `.layout-column-docs` (`--layout-measure-docs`, 1192px).
+- To cap the reading column — `DocProse` has no measure of its own. The consumer sets the width with `.layout-column-content` (`--layout-measure-content`, 876px).
 - To style a webkit component's internals. Those are chrome and are excluded by design; restyle nothing from here.
 - For a single run of body copy in an application screen — use the `text-body-*` tokens directly.
 
@@ -45,7 +45,7 @@ The typography contract every documentation page inherits. A markdown or MDX pip
 </script>
 
 <template>
-  <article class="layout-column-docs">
+  <article class="layout-column-content">
     <DocProse>
       <h2>Deploy an application</h2>
       <p>Templates are ready-made projects that go live in a few clicks.</p>
