@@ -96,15 +96,29 @@ class="[--banner-offset:calc(var(--bar-height,3.5rem)+var(--page-bar-height,3rem
 Unset ⇒ `0`, so a banner that owns the whole viewport needs nothing.
 ([`DocsGetStarted.vue:368`](../../apps/webkit-sample/src/site/docs/components/DocsGetStarted.vue#L368))
 
-**`#background` is z-0, copy is z-10.** The heroes ship **no backdrop** — Site, Hub and Docs all
-open on plain `--bg-canvas`, so the headline is the only thing in the band. When a page does dress
-one, the recipe is layered bottom-up:
+**`#background` is z-0, copy is z-10.** A backdrop is named on the container
+(`banner="<key>"`) and resolved from the registry
+([`banners/index.js`](../../apps/webkit-sample/src/shared/ui/banners/index.js)); the `#background`
+slot is the escape hatch for a one-off, and wins over the prop when both are given.
 
-1. A texture at `opacity-60`…`opacity-80` — today only `MapBanner` (`banner="map"`), the one entry
-   left in the banner registry.
+**Every Site hero carries `banner="dot-grid"`.** It is azion.com's own hero texture — a crisp 2px
+square at every intersection of a 48px lattice, flat across the band — measured off the source's
+render rather than eyeballed, and it is what makes the six `/site` pages read as one site. Hub and
+Docs still open on plain `--bg-canvas`.
+
+The registry today: `dot-grid` (the Site hero texture), `map` (the pixel world map), `pixelate`
+(the accent-lit grid with a travelling wave).
+
+When a page dresses a hero with something heavier than a texture, the recipe is layered bottom-up:
+
+1. The artwork at `opacity-60`…`opacity-80`.
 2. A **radial mask** fading it at the edges: `mask-[radial-gradient(ellipse_at_center,black,transparent_75%)]`.
 3. A **scrim** dimming it under the headline — e.g. a `bg-gradient-to-b … to-[var(--bg-canvas)]`
    fade handing the band off to the module below.
+
+A flat texture skips all three: `dot-grid` covers ~0.17% of the band, so there is nothing for the
+headline to compete with, and the ink is a 22% mix of `--text-default` so the field carries the
+same step from the ground on either theme instead of being tuned for the dark one.
 
 ([`WebkitHub.vue:199-202`](../../apps/webkit-sample/src/hub/views/WebkitHub.vue#L199-L202),
 [`AzionHome.vue:211-221`](../../apps/webkit-sample/src/site/components/AzionHome.vue#L211-L221))
