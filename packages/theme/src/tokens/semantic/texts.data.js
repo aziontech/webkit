@@ -191,7 +191,7 @@ export const textsData = {
   },
   'text-body-prose-md': {
     fontSize: fontSize.base,
-    fontWeight: fontWeight.light,
+    fontWeight: fontWeight.normal,
     lineHeight: leading.relaxed
   },
   'text-body-sm': {

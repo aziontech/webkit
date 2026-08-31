@@ -1,6 +1,6 @@
 import { composeStories } from '@storybook/vue3'
-import { render } from '@testing-library/vue'
-import { describe, expect, it } from 'vitest'
+import { fireEvent, render, waitFor } from '@testing-library/vue'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import * as stories from '../../../../../../apps/storybook/src/stories/components/documentation/doc-prose/DocProse.stories'
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -16,6 +16,25 @@ import DocProse from './doc-prose.vue'
 // container renders its slot as-is, adds no semantics of its own, and forwards attributes.
 
 const { Default, ChromeBoundary } = composeStories(stories)
+
+// The real Clipboard API rejects in headless Chromium ("Document is not focused"), so
+// writeText is stubbed to resolve. That substitutes an external side effect, not layout
+// or focus — what is under test is WHICH chips hand a string over and which are left
+// alone. The rejecting stub exercises the other branch, which is a real path in the
+// browser too (an insecure origin, or a denied permission).
+const stubClipboard = (writeText = vi.fn().mockResolvedValue(undefined)) => {
+  vi.stubGlobal('navigator', { ...navigator, clipboard: { writeText } })
+  return writeText
+}
+
+// The tooltip Teleports to the body, so it is outside the render container by design.
+const copyTip = () =>
+  document.body.querySelector('[data-testid="documentation-doc-prose-copy-tip"]')
+
+afterEach(() => {
+  vi.unstubAllGlobals()
+  vi.restoreAllMocks()
+})
 
 describe('DocProse', () => {
   describe('rendering & testid', () => {
@@ -75,6 +94,73 @@ describe('DocProse', () => {
       const root = getByTestId('documentation-doc-prose')
       expect(root.id).toBe('page-body')
       expect(root.getAttribute('lang')).toBe('en')
+    })
+  })
+
+  describe('the inline chip copies', () => {
+    it('copies an authored chip on click and reports it in the tooltip', async () => {
+      const writeText = stubClipboard()
+      const { getByText } = render(DocProse, {
+        slots: { default: '<p>Run <code>azion deploy</code> to publish.</p>' }
+      })
+      await fireEvent.click(getByText('azion deploy'))
+      expect(writeText).toHaveBeenCalledWith('azion deploy')
+      await waitFor(() => expect(copyTip()?.textContent).toBe('Copied'))
+    })
+
+    it('says what still works when the clipboard is refused', async () => {
+      stubClipboard(vi.fn().mockRejectedValue(new Error('denied')))
+      const { getByText } = render(DocProse, {
+        slots: { default: '<p>Run <code>azion deploy</code> to publish.</p>' }
+      })
+      await fireEvent.click(getByText('azion deploy'))
+      await waitFor(() => expect(copyTip()?.textContent).toContain('to copy'))
+    })
+
+    it('offers the copy on hover and withdraws it on leave', async () => {
+      stubClipboard()
+      const { getByText } = render(DocProse, {
+        slots: { default: '<p>Run <code>azion deploy</code> to publish.</p>' }
+      })
+      const chip = getByText('azion deploy')
+      await fireEvent.pointerOver(chip)
+      await waitFor(() => expect(copyTip()?.textContent).toBe('Copy'))
+      expect(copyTip()?.getAttribute('role')).toBe('tooltip')
+
+      await fireEvent.pointerOut(chip, { relatedTarget: document.body })
+      await waitFor(() => expect(copyTip()).toBeNull())
+    })
+
+    it('leaves a fenced block alone — it has its own copy control', async () => {
+      const writeText = stubClipboard()
+      const { getByText } = render(DocProse, {
+        slots: { default: '<pre><code>azion deploy --auto</code></pre>' }
+      })
+      await fireEvent.click(getByText('azion deploy --auto'))
+      expect(writeText).not.toHaveBeenCalled()
+      expect(copyTip()).toBeNull()
+    })
+
+    it('leaves a component-generated chip alone', async () => {
+      const writeText = stubClipboard()
+      const { getByText, getByTestId } = render(DocProse, {
+        slots: {
+          default:
+            '<p><code data-testid="code-block-line">generated</code> and <code><span>tokenized</span></code></p>'
+        }
+      })
+      await fireEvent.click(getByTestId('code-block-line'))
+      await fireEvent.click(getByText('tokenized'))
+      expect(writeText).not.toHaveBeenCalled()
+    })
+
+    it('leaves the navigation to a chip inside a link', async () => {
+      const writeText = stubClipboard()
+      const { getByText } = render(DocProse, {
+        slots: { default: '<p><a href="#cli"><code>azion</code></a></p>' }
+      })
+      await fireEvent.click(getByText('azion'))
+      expect(writeText).not.toHaveBeenCalled()
     })
   })
 

@@ -53,7 +53,7 @@ export type MenuGroupNode = {
 export interface MenuLevel {
   /** Id of the sub that owns the level — its `MenuNode.id` in data-driven mode. */
   id: string
-  /** Label of the trigger that pushed the level; names the level and the Back row. */
+  /** Label of the trigger that pushed the level; names the level, and names it as the destination of a deeper level's Back button. */
   label: string
 }
 
@@ -80,13 +80,13 @@ export interface MenuContext {
    * Announces a drill sub's label and trigger element to the root as soon as its trigger
    * registers — independently of any push. A stack seeded from `v-model:path` (a consumer
    * persisting it across a remount, which is the only way a level survives a navigation) never
-   * ran a push, so without this the level it restores has no label for `Menu.Back` to show and
-   * no element to return focus to.
+   * ran a push, so without this the level it restores reaches the a11y tree nameless, cannot be
+   * named as a deeper level's Back destination, and has no element to return focus to.
    */
   registerLevel: (id: string, label: string, trigger: globalThis.HTMLElement | null) => void
   /** Pops the deepest level and restores focus to the trigger that pushed it. */
   pop: () => void
-  /** Registers the Back row so a push can move focus to it. */
+  /** Registers the Back button so a push can move focus to it. */
   setBackElement: (el: globalThis.HTMLElement | null) => void
   /**
    * Anchor inside the CURRENT drill level that `Menu.Back` renders into. Back heads the

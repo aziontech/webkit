@@ -66,7 +66,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'A vertical, hierarchical navigation menu. It owns no shell and no layout of its own — it is injected into a host (usually Sidebar, but any scroll container works) and renders three structures through one compound: groups that separate rows under a static title, condensed rows that own children and expand in place behind an indent rail, and drill rows that replace the menu with a second-level menu. Every row is typed the same (`.text-label-md`); only a first-level group title is smaller and muted, so hierarchy is carried by the indent and the rail rather than by shrinking each level. An inline trigger heads the rows it expands beneath it and leaves the icon column to them; a drill trigger sits amongst the destinations it is listed with and takes an icon like they do. Inside a `Sidebar` — which already renders the `<nav>` landmark — pass `role="presentation"`, and the menu drops its own role and accessible name together. Every sub-component is attached to the root for dot-notation (`Menu.Group`, `Menu.Sub`, …) and is also importable on its own — the snippets below use the standalone imports.'
+          'A vertical, hierarchical navigation menu. It owns no shell and no layout of its own — it is injected into a host (usually Sidebar, but any scroll container works) and renders three structures through one compound: groups that separate rows under a static title, condensed rows that own children and expand in place behind an indent rail, and drill rows that replace the menu with a second-level menu. A row that owns children is two controls: its label references wherever the row points, and a trailing transparent `IconButton` reveals its children. Every row is typed the same (`.text-label-md`); only a first-level group title is smaller and muted, so hierarchy is carried by the indent and the rail rather than by shrinking each level. An inline trigger heads the rows it expands beneath it and leaves the icon column to them; a drill trigger sits amongst the destinations it is listed with and takes an icon like they do. Inside a `Sidebar` — which already renders the `<nav>` landmark — pass `role="presentation"`, and the menu drops its own role and accessible name together. Every sub-component is attached to the root for dot-notation (`Menu.Group`, `Menu.Sub`, …) and is also importable on its own — the snippets below use the standalone imports.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -110,7 +110,7 @@ const meta = {
     onNavigate: {
       action: 'navigate',
       description:
-        'A leaf row — or a drill row, which is a destination as well as a level — was activated in data-driven mode; `node` is the activated tree node. An inline trigger emits nothing: toggling a disclosure is not a navigation.',
+        'A leaf row — or the LABEL of a row that owns children, of either kind, since such a row is a destination as well as a container — was activated in data-driven mode; `node` is the activated tree node. A row\'s ARROW emits nothing: revealing children is a move inside the menu, not a navigation.',
       table: { category: 'events', type: { summary: '(event: MouseEvent, node: MenuNode)' } }
     },
     'onUpdate:path': {
@@ -229,7 +229,7 @@ export const Types = {
       controls: { disable: true },
       description: {
         story:
-          'Both `SubTrigger` kinds side by side. `kind="inline"` renders a rotating `chevron-down`, expands its children in place, and carries `aria-expanded` + `aria-controls`. `kind="drill"` renders a static `chevron-right` and replaces the menu with the pushed level, so it carries no `aria-expanded` — nothing expands. One affordance per meaning: never mix the two on a row. The icon follows the same split: a drill row is read as one of the destinations it is listed among, so it takes a glyph on their column, while an inline row heads the rows it expands beneath it and leaves that column to them — `icon` is honoured for `kind="drill"` only, and an inline trigger handed one still renders none.'
+          'Both `SubTrigger` kinds side by side. Either way the row is TWO controls: a label that references wherever the row points, and a trailing transparent `IconButton` that reveals its children. A row that owns children is still a destination, and reaching its children must not cost the reader that destination — so the label navigates and the arrow opens, each with its own surface, focus ring and hit area. `kind="inline"` gives the arrow a rotating `chevron-down` that expands the children in place and carries `aria-expanded` + `aria-controls` (they belong on the control that expands them, not on the label); `kind="drill"` gives it a static `chevron-right` that replaces the menu with the pushed level and carries no `aria-expanded` — nothing expands. `ArrowRight` / `ArrowLeft` still work from the label, so a keyboard reader never has to tab to the arrow. The icon follows the same split as before: a drill row is read as one of the destinations it is listed among, so it takes a glyph on their column, while an inline row heads the rows it expands beneath it and leaves that column to them — `icon` is honoured for `kind="drill"` only, and an inline trigger handed one still renders none.'
       },
       source: {
         code: toSfc(
@@ -328,7 +328,7 @@ export const Drill = {
       controls: { disable: true },
       description: {
         story:
-          'The view stack, interactive. Activate the `chevron-right` row to push its level: the root slides out, the level slides in, focus moves to the Back row, and the level that is not current leaves both the accessibility tree and the tab order. The Back row is declared once at the root and renders nothing there, so it needs no `v-if`; its accessible name names the level it returns to. Popping (Back, ArrowLeft or Escape) restores focus to the trigger that pushed. The stack is readable as node ids through `v-model:path`.'
+          'The view stack, interactive. Activate the `chevron-right` ARROW to push its level (the label beside it is a reference to the level\'s landing page and opens nothing): the root slides out, the level slides in, focus moves to the Back button, and the level that is not current leaves both the accessibility tree and the tab order. Back is a compact button rather than another full-width row, so the one control that leaves the level does not read as one of the rows inside it, and its text names where it lands — a bare `Back` when that is the unnamed root, `Back to Settings` from a deeper level, or whatever `label` supplies. It is declared once at the root and renders nothing there, so it needs no `v-if`. Popping (Back, ArrowLeft or Escape) restores focus to the trigger that pushed. The stack is readable as node ids through `v-model:path`.'
       },
       source: {
         code: toSfc(
@@ -370,7 +370,7 @@ export const Disabled = {
       controls: { disable: true },
       description: {
         story:
-          'A disabled row and a disabled trigger alongside enabled ones. Both carry `aria-disabled`, drop their hover and active ghost layers, and are out of the tab order; the trigger neither toggles nor pushes, so its children stay collapsed.'
+          'A disabled row and a disabled trigger alongside enabled ones. Both carry `aria-disabled`, drop their hover and active ghost layers, and are out of the tab order; a disabled trigger suppresses BOTH of its controls — the label announces nothing and the arrow neither toggles nor pushes — so its children stay collapsed.'
       },
       source: {
         code: toSfc(

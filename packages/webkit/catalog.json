@@ -1,6 +1,6 @@
 {
   "package": "@aziontech/webkit",
-  "webkitVersion": "4.3.0",
+  "webkitVersion": "4.4.0",
   "deniedPrefixes": [
     "@aziontech/webkit/src/"
   ],
@@ -5296,40 +5296,50 @@
           "doc": "Ancestor trail, current page last."
         },
         {
-          "name": "copyable",
-          "type": "boolean",
-          "default": "true",
-          "required": "false",
-          "doc": "Shows the Copy Page control."
-        },
-        {
-          "name": "source",
-          "type": "string",
-          "default": "''",
-          "required": "false",
-          "doc": "The markdown handed to the clipboard by the primary action."
-        },
-        {
           "name": "lastUpdated",
           "type": "string",
           "default": "''",
           "required": "false",
           "doc": "When the page's content last changed. ISO date, or a ready-made string."
+        },
+        {
+          "name": "metaActions",
+          "type": "DocPageAction[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The controls on the meta line, in reading order."
         }
       ],
       "events": [
         {
-          "name": "copy",
-          "payload": "(event: MouseEvent, source: string)",
-          "notes": "Fired when the primary Copy Page action runs, after the copy resolves. Event first, per `event-payloads.md`."
-        },
-        {
-          "name": "action",
-          "payload": "(event: MouseEvent | KeyboardEvent, item: { label: string; value?: string })",
-          "notes": "Fired when one of the attached AI actions is chosen; `item` is the entry that was picked."
+          "name": "meta-action",
+          "payload": "(event: MouseEvent, item: DocPageAction)",
+          "notes": "Fired when a meta-line control is activated; `item` is the entry that was picked. Event first, per `event-payloads.md`. A link's default navigation is the consumer's to keep or to prevent."
         }
       ],
-      "purpose": "The masthead of a documentation page: where the reader is (the breadcrumb), what the page is (the title), what they can do with it (a Copy Page control that hands the page to an AI tool), the deck that says what they will have by the end, and when the content last changed. It closes on a rule spanning the column, which is what gives every `h2` below it something to be subordinate to.",
+      "slots": [
+        {
+          "name": "breadcrumb",
+          "scope": "—",
+          "notes": "The trail; replaces the built-in `Breadcrumb` fed by the `breadcrumb` prop."
+        },
+        {
+          "name": "title",
+          "scope": "—",
+          "notes": "The page's name; replaces the built-in `h1`, for a title that is more than a string."
+        },
+        {
+          "name": "actions",
+          "scope": "—",
+          "notes": "A control on the title's line. Empty by default; the meta line carries the page's actions."
+        },
+        {
+          "name": "details",
+          "scope": "—",
+          "notes": "Rows between the deck and the meta line — a page's own facts, tags or references."
+        }
+      ],
+      "purpose": "The masthead of a documentation page: where the reader is (the breadcrumb), what the page is (the title), what they can do with it (a Copy Page control that hands the page to an AI tool — or, through the `actions` slot, the consumer's own menu; the trail is likewise slottable, for an application whose crumbs route rather than navigate), the deck that says what they will have by the end, and when the content last changed. It closes on a rule spanning the column, which is what gives every `h2` below it something to be subordinate to.",
       "useWhen": [
         "At the top of any documentation or changelog page, above `DocProse`."
       ],
@@ -5340,12 +5350,14 @@
       "related": [
         "DocProse` — the body below it. The masthead's `h1` is chrome, so authored content starts at `h2`.",
         "DocOnThisPage` — the rail beside the body, which lists those `h2`s.",
-        "SplitButton` — the Copy Page control's shape: a primary action plus attached alternatives."
+        "Button` / `Tooltip` / `Divider` — the meta line's entries: a quiet `text` button (an anchor when the entry has an `href`), the sentence its label has no room for, and the rule between two of them."
       ],
       "bestPractices": [
-        "Give `source` the page's markdown so the primary action copies something a model can read.",
+        "Give every `metaActions` entry a `tip`: two or three words name a control, and only a sentence says what it does.",
+        "Give an entry an `href` when it has a destination, so it is a real link — then prevent the default in `meta-action` if the app routes in-page.",
         "Let `lastUpdated` come from the page's own frontmatter. It is the author's claim that the content changed, not the file's mtime.",
-        "Put the current page last in `breadcrumb`; it is marked as current for you."
+        "Put the current page last in `breadcrumb`; it is marked as current for you.",
+        "Use `title` and `details` for a page ABOUT something (a tool, a product): its mark and maker are a title, and its facts belong between the deck and the meta line."
       ]
     },
     "doc-pagination": {
@@ -10292,12 +10304,12 @@
         {
           "name": "navigate",
           "payload": "(event: MouseEvent, node: MenuNode)",
-          "notes": "A leaf row — or a `kind: 'drill'` row, which is a destination as well as a level — was activated in data-driven mode; `node` is the activated tree node. An inline trigger does not emit it: toggling a disclosure is not a navigation."
+          "notes": "A leaf row — or the **label** of a row that owns children, of either kind, since such a row is a destination as well as a container — was activated in data-driven mode; `node` is the activated tree node. A row's **arrow** does not emit it: revealing children is a move inside the menu, not a navigation. A node with nothing to point at gives the consumer nothing to route to, which is the consumer's own check."
         },
         {
           "name": "update:path",
           "payload": "string[]",
-          "notes": "v-model:path` — the drill stack as ancestor node ids, outermost first. Empty at the root level. **Persist it when the host remounts** (and always when a drill row navigates, which remounts the shell in most routers) or the level closes on the very navigation that opened it. A stack supplied this way is restored **with its label, its trigger, and its entrance**: every drill sub announces the first two to the root when its trigger mounts (not only when pushed), so `Menu.Back` still names the level and popping still returns focus to the row that owns it; and the level *arrives* rather than simply being there — see the restored-level row in Motion."
+          "notes": "v-model:path` — the drill stack as ancestor node ids, outermost first. Empty at the root level. **Persist it when the host remounts** (and always when a drill row navigates, which remounts the shell in most routers) or the level closes on the very navigation that opened it. A stack supplied this way is restored **with its label, its trigger, and its entrance**: every drill sub announces the first two to the root when its trigger mounts (not only when pushed), so the restored level still names itself in the a11y tree, `Menu.Back` can still name it as a destination from a deeper level, and popping still returns focus to the row that owns it; and the level *arrives* rather than simply being there — see the restored-level row in Motion."
         },
         {
           "name": "update:expanded",
@@ -10348,7 +10360,7 @@
         "**A row renders no icon box when it has no icon.** An empty box misreports where the row's content starts, so the label sits off the column its siblings hold and the rail anchors to blank space. This rule is what makes the column hold.",
         "Hover and active are `::before` / `::after` **ghost layers** per [`DESIGN.md`](../.claude/docs/DESIGN.md) § Interactive states — never a `transition-colors` on the row root, and never a `background-color` swap that discards the selected fill.",
         "Pick one affordance per meaning: `chevron-down` expands children in place, `chevron-right` replaces the menu. A **group title carries no affordance at all** — it separates rows without folding them, so it never competes with the rows it labels. Folding belongs to a row, which has a chevron and a rail to say which rows it owns.",
-        "**The menu is typed in the `label` family, not `body`.** A menu row is compact UI text, which is what `.text-label-*` is for. Rows — `Menu.Item`, `Menu.SubTrigger` and `Menu.Back` alike — are `.text-label-md` (14 px) in `var(--text-default)`. **Only the first-level group title is smaller and muted:** `.text-label-sm` (12 px) in `var(--text-muted)`, which replaced the overline and is the one place the menu changes register. Hierarchy below that is carried by the indent and the rail, not by shrinking each level — and a component with two render branches must give both the same label class, or the same menu renders two sizes.",
+        "**The menu is typed in the `label` family, not `body`.** A menu row is compact UI text, which is what `.text-label-*` is for. Rows — `Menu.Item` and `Menu.SubTrigger` — are `.text-label-md` (14 px) in `var(--text-default)`, and `Menu.Back` keeps that same class even though it is a button rather than a row, so it reads at the rows' size instead of shrinking into chrome. **Only the first-level group title is smaller and muted:** `.text-label-sm` (12 px) in `var(--text-muted)`, which replaced the overline and is the one place the menu changes register. Hierarchy below that is carried by the indent and the rail, not by shrinking each level — and a component with two render branches must give both the same label class, or the same menu renders two sizes.",
         "Prefer `groups` when the tree is data. Hand-composing a recursive tree with `v-for` means re-implementing recursion in the consuming app; the data path renders through the same sub-components.",
         "Draw the elbow with borders, not a glyph: `w-(--spacing-sm) h-4 -left-(--spacing-sm) border-l border-b border-(--border-default) rounded-bl-(--shape-elements)` on the row's `::before`, and the continuation on its `::after`, hidden on `:last-child`. All tokens, no SVG, and it scales with the row.",
         "Do not nest more than three levels. Past that the indent eats the rail's readable width; restructure with a drill row instead.",
@@ -10398,12 +10410,12 @@
         {
           "name": "navigate",
           "payload": "(event: MouseEvent, node: MenuNode)",
-          "notes": "A leaf row — or a `kind: 'drill'` row, which is a destination as well as a level — was activated in data-driven mode; `node` is the activated tree node. An inline trigger does not emit it: toggling a disclosure is not a navigation."
+          "notes": "A leaf row — or the **label** of a row that owns children, of either kind, since such a row is a destination as well as a container — was activated in data-driven mode; `node` is the activated tree node. A row's **arrow** does not emit it: revealing children is a move inside the menu, not a navigation. A node with nothing to point at gives the consumer nothing to route to, which is the consumer's own check."
         },
         {
           "name": "update:path",
           "payload": "string[]",
-          "notes": "v-model:path` — the drill stack as ancestor node ids, outermost first. Empty at the root level. **Persist it when the host remounts** (and always when a drill row navigates, which remounts the shell in most routers) or the level closes on the very navigation that opened it. A stack supplied this way is restored **with its label, its trigger, and its entrance**: every drill sub announces the first two to the root when its trigger mounts (not only when pushed), so `Menu.Back` still names the level and popping still returns focus to the row that owns it; and the level *arrives* rather than simply being there — see the restored-level row in Motion."
+          "notes": "v-model:path` — the drill stack as ancestor node ids, outermost first. Empty at the root level. **Persist it when the host remounts** (and always when a drill row navigates, which remounts the shell in most routers) or the level closes on the very navigation that opened it. A stack supplied this way is restored **with its label, its trigger, and its entrance**: every drill sub announces the first two to the root when its trigger mounts (not only when pushed), so the restored level still names itself in the a11y tree, `Menu.Back` can still name it as a destination from a deeper level, and popping still returns focus to the row that owns it; and the level *arrives* rather than simply being there — see the restored-level row in Motion."
         },
         {
           "name": "update:expanded",
@@ -10454,7 +10466,7 @@
         "**A row renders no icon box when it has no icon.** An empty box misreports where the row's content starts, so the label sits off the column its siblings hold and the rail anchors to blank space. This rule is what makes the column hold.",
         "Hover and active are `::before` / `::after` **ghost layers** per [`DESIGN.md`](../.claude/docs/DESIGN.md) § Interactive states — never a `transition-colors` on the row root, and never a `background-color` swap that discards the selected fill.",
         "Pick one affordance per meaning: `chevron-down` expands children in place, `chevron-right` replaces the menu. A **group title carries no affordance at all** — it separates rows without folding them, so it never competes with the rows it labels. Folding belongs to a row, which has a chevron and a rail to say which rows it owns.",
-        "**The menu is typed in the `label` family, not `body`.** A menu row is compact UI text, which is what `.text-label-*` is for. Rows — `Menu.Item`, `Menu.SubTrigger` and `Menu.Back` alike — are `.text-label-md` (14 px) in `var(--text-default)`. **Only the first-level group title is smaller and muted:** `.text-label-sm` (12 px) in `var(--text-muted)`, which replaced the overline and is the one place the menu changes register. Hierarchy below that is carried by the indent and the rail, not by shrinking each level — and a component with two render branches must give both the same label class, or the same menu renders two sizes.",
+        "**The menu is typed in the `label` family, not `body`.** A menu row is compact UI text, which is what `.text-label-*` is for. Rows — `Menu.Item` and `Menu.SubTrigger` — are `.text-label-md` (14 px) in `var(--text-default)`, and `Menu.Back` keeps that same class even though it is a button rather than a row, so it reads at the rows' size instead of shrinking into chrome. **Only the first-level group title is smaller and muted:** `.text-label-sm` (12 px) in `var(--text-muted)`, which replaced the overline and is the one place the menu changes register. Hierarchy below that is carried by the indent and the rail, not by shrinking each level — and a component with two render branches must give both the same label class, or the same menu renders two sizes.",
         "Prefer `groups` when the tree is data. Hand-composing a recursive tree with `v-for` means re-implementing recursion in the consuming app; the data path renders through the same sub-components.",
         "Draw the elbow with borders, not a glyph: `w-(--spacing-sm) h-4 -left-(--spacing-sm) border-l border-b border-(--border-default) rounded-bl-(--shape-elements)` on the row's `::before`, and the continuation on its `::after`, hidden on `:last-child`. All tokens, no SVG, and it scales with the row.",
         "Do not nest more than three levels. Past that the indent eats the rail's readable width; restructure with a drill row instead.",
