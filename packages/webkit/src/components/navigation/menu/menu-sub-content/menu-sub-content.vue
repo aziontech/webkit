@@ -250,7 +250,7 @@
       >
         <!--
           Back renders in here, not in the root's flow: it heads this level, so it slides with
-          it and leaves the root's layout untouched — a Back row that held space in the root
+          it and leaves the root's layout untouched — a Back button that held space in the root
           would push the returning menu down for the whole pop and snap it back at the end.
         -->
         <div
