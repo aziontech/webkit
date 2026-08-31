@@ -11,7 +11,10 @@ import AzionDocs from '@site/docs/views/AzionDocs.vue'
 import AzionDocsAgentPage from '@site/docs/views/AzionDocsAgentPage.vue'
 import AzionDocsAgentSetup from '@site/docs/views/AzionDocsAgentSetup.vue'
 import AzionDocsPage from '@site/docs/views/AzionDocsPage.vue'
+import LandingApplicationAccelerator from '@site/views/LandingApplicationAccelerator.vue'
 import LandingAzion from '@site/views/LandingAzion.vue'
+import LandingCache from '@site/views/LandingCache.vue'
+import LandingFinancialServices from '@site/views/LandingFinancialServices.vue'
 import LandingFunctions from '@site/views/LandingFunctions.vue'
 import LandingPricing from '@site/views/LandingPricing.vue'
 
@@ -24,6 +27,23 @@ export const siteRoutes = [
   // A product page in the same shell: one product's argument, where /site/home is the
   // platform's. The Products mega-menu's Functions entry points here.
   { path: '/site/functions', name: 'site-functions', component: LandingFunctions },
+  // A second product page in the same shell — the Products mega-menu's Application
+  // Accelerator entry points here.
+  {
+    path: '/site/application-accelerator',
+    name: 'site-application-accelerator',
+    component: LandingApplicationAccelerator
+  },
+  // A third product page in the same shell — the Products mega-menu's Cache entry.
+  { path: '/site/cache', name: 'site-cache', component: LandingCache },
+  // A SOLUTION page in the same shell: an industry's argument, where the pages above are one
+  // product's and /site/home is the platform's. The Solutions mega-menu's Financial Services
+  // entry points here.
+  {
+    path: '/site/financial-services',
+    name: 'site-financial-services',
+    component: LandingFinancialServices
+  },
   // The pricing page in the same shell: the three tiers, the full feature matrix, and the
   // FAQ. The website nav's `Pricing` entry points here.
   { path: '/site/pricing', name: 'site-pricing', component: LandingPricing },

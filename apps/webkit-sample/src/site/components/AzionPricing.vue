@@ -131,6 +131,7 @@
        it evenly instead of leaving an orphan word, and the description takes a narrower cap
        so it reads as a second, shorter block rather than a full-width line under it. -->
   <BannerContainer
+    banner="dot-grid"
     max-width="site"
     :padded="false"
   >

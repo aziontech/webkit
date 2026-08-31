@@ -17,14 +17,16 @@
 //
 // BANNER_NAMES is what BannerContainer validates the `banner` prop against, so a
 // typo fails loudly in dev instead of rendering an empty band.
+import DotGridBanner from './DotGridBanner.vue'
 import MapBanner from './MapBanner.vue'
 import PixelateBanner from './PixelateBanner.vue'
 
 export const BANNERS = {
+  'dot-grid': DotGridBanner,
   map: MapBanner,
   pixelate: PixelateBanner
 }
 
 export const BANNER_NAMES = Object.keys(BANNERS)
 
-export { MapBanner, PixelateBanner }
+export { DotGridBanner, MapBanner, PixelateBanner }

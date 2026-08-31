@@ -290,8 +290,9 @@ export default app;`
 <template>
   <!-- ── Hero — the split band, exactly one viewport tall ──────────────────────
        BannerContainer owns the full-bleed band and the page's top rule; the content is
-       its z-10 copy on plain canvas — the band carries no backdrop, the art half brings
-       its own. `--banner-offset` is the sticky SiteNav's height (h-14 = 3.5rem), so the
+       its z-10 copy over the `dot-grid` backdrop — the source's own hero texture, which
+       every hero on this site carries — and the art half brings a field of its own on top
+       of it. `--banner-offset` is the sticky SiteNav's height (h-14 = 3.5rem), so the
        hero still measures one screen with the nav above it.
 
        The design splits the 1512px frame down the middle — 756 of copy, 756 of art — so
@@ -308,6 +309,7 @@ export default app;`
        puts the strip on the bottom edge of one screen rather than a scroll below it. -->
   <BannerContainer
     hero
+    banner="dot-grid"
     max-width="site"
     class="[--banner-offset:3.5rem]"
   >
@@ -319,9 +321,7 @@ export default app;`
            `w-max` and far wider than a phone. That pushed the whole column past the viewport
            and stretched the CTAs off-screen with it. `grid-cols-1` is `minmax(0, 1fr)`, which
            clamps the intrinsic contribution to zero and keeps the column at the band's width. -->
-      <div
-        class="relative grid flex-1 grid-cols-1 items-center gap-(--spacing-xxl) lg:grid-cols-2"
-      >
+      <div class="relative grid flex-1 grid-cols-1 items-center gap-(--spacing-xxl) lg:grid-cols-2">
         <!-- Hero copy anatomy: overline → headline → actions. No description — the design
            opens on the claim alone, and the runtime's own inventory (the pill field in the
            art half) is what elaborates it.
@@ -514,9 +514,7 @@ Run at the edge."
               </p>
             </div>
 
-            <div
-              class="flex flex-col items-stretch gap-(--spacing-sm) sm:flex-row sm:items-center"
-            >
+            <div class="flex flex-col items-stretch gap-(--spacing-sm) sm:flex-row sm:items-center">
               <Button
                 label="Read Azion Docs"
                 kind="secondary"

@@ -67,12 +67,14 @@
         {
           icon: 'ai ai-tiered-cache',
           label: 'Cache',
-          description: 'Speed up content delivery'
+          description: 'Speed up content delivery',
+          href: '/site/cache'
         },
         {
           icon: 'ai ai-edge-application',
           label: 'Application Accelerator',
-          description: 'Optimize dynamic applications'
+          description: 'Optimize dynamic applications',
+          href: '/site/application-accelerator'
         },
         {
           icon: 'ai ai-edge-ai',
@@ -168,7 +170,8 @@
         {
           icon: 'ai ai-store',
           label: 'Financial Services',
-          description: 'Performance and compliance'
+          description: 'Performance and compliance',
+          href: '/site/financial-services'
         },
         {
           icon: 'ai ai-build-pillar',

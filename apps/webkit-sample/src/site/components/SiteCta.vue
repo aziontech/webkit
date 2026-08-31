@@ -88,6 +88,7 @@
               :label="primaryLabel"
               kind="secondary"
               size="large"
+              class="md:w-fit w-full"
               @click="goSignup"
             />
           </div>
@@ -99,7 +100,7 @@
         <div
           class="flex flex-col justify-between gap-(--spacing-xxl) border-t border-(--border-default) p-(--spacing-xl) lg:border-l lg:border-t-0"
         >
-          <p class="m-0 text-pretty text-heading-sm text-(--text-muted)">
+          <p class="m-0 text-pretty text-heading-sm text-(--text-default)">
             {{ description }}
           </p>
           <Button

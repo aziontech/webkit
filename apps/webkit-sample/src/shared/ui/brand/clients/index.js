@@ -26,6 +26,7 @@
 // if the mark ships a light-theme variant too.
 import americamovil from './americamovil.svg'
 import agibank from './dark/clients/agibank-logo.svg'
+import caixa from './dark/clients/caixa-logo.svg'
 import cocacola from './dark/clients/cocacola-logo.svg'
 import dafiti from './dark/clients/dafiti-logo.svg'
 import fourbank from './dark/clients/fourbank-logo.svg'
@@ -38,6 +39,7 @@ import netshoes from './dark/clients/netshoes-logo.svg'
 import primevideo from './dark/clients/primevideo-logo.svg'
 import radware from './dark/clients/radware-logo.svg'
 import renner from './dark/clients/renner-logo.svg'
+import exame from './exame.svg'
 import herosparkWordmark from './herospark-logo.svg'
 import herosparkSymbol from './herospark-symbol.svg'
 import agibankColor from './light/agibank-logo.svg'
@@ -163,5 +165,18 @@ export const CLIENTS = [
   { name: 'Coca-Cola', logo: cocacola, artwork: 'light' },
   { name: 'Prime Video', logo: primevideo, artwork: 'light' },
   // `fill="currentColor"` → black inside an <img>, so this one inverts on dark.
-  { name: 'Dafiti', logo: dafiti, artwork: 'dark' }
+  { name: 'Dafiti', logo: dafiti, artwork: 'dark' },
+  // The file sits in `dark/clients/` but its fill is `#1A1A1A`, not white — the folder
+  // says where it was exported from, `artwork` says what it actually draws, and only the
+  // second one places a mark correctly. Classified by reading the fills, as above.
+  { name: 'Caixa', logo: caixa, artwork: 'dark' },
+  { name: 'Exame', logo: exame, artwork: 'dark' },
+  // ── Named, no file ────────────────────────────────────────────────────────
+  // Two clients the site states that this repo holds no mark for. They stay in the
+  // registry with no `logo`, which is a legitimate entry: `ClientMark` renders a
+  // typographic wordmark for it, so a list stays COMPLETE instead of quietly dropping a
+  // client — and the missing asset is visible here rather than at each call site. Adding
+  // the file later is one line, and every surface picks it up.
+  { name: 'NZN' },
+  { name: 'Zoop' }
 ]

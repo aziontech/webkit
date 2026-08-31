@@ -1,59 +1,77 @@
 <script setup>
-  // What you build on the platform — the copy-beside-bento band from Figma (node 1626:7014).
+  // What the platform is for — azion.com/en band 7.
   //
-  // Shape: a three-column hairline grid. The first column spans both rows and holds the
-  // section's whole argument (overline → headline → description → one CTA); the other two
-  // hold a 2x2 of capabilities, each an illustration panel over its own caption. The copy
-  // is a GRID CELL here, not a centered SectionTitle header — that is the only structural
-  // difference from the other bands on this page, and it is what makes the four
-  // capabilities read as the substance OF the headline rather than as a list below it.
+  // Four cards in a 2×2 hairline grid, and nothing else in the band: the source states
+  // these as the page's own argument, with no title band over them and no supporting
+  // copy beside them. Each card is one shape — category label, the claim, one action,
+  // and the artwork standing on the card's floor.
+  //
+  // Source → ours:
+  //   • The category line is the source's small uppercase label, rendered as webkit's
+  //     `Overline` (the page's own overline anatomy: `//` prefix, accent label, cursor).
+  //   • The claim is the source's own sentence, at the section-heading step. It is an
+  //     `h3`: this band has no heading of its own, so the cards sit under the page's
+  //     `h1` without an `h2` in between — and skipping a level is what breaks a heading
+  //     outline, so the cards take the level they are.
+  //   • The action is a `MiniButton` on the source's own href. The source writes
+  //     "Learn More" on the security card and "Learn more" on the other three; the
+  //     casing is carried as-is rather than normalized.
+  //   • The art is NOT the source's screenshot. Each card names an asset from webkit's
+  //     Illustration registry, so the scenes are built from the same parts (rim light,
+  //     nodes, connectors) as every other illustration in the system and follow both
+  //     themes for free. This is the one place the band's substance is ours: a
+  //     screenshot of a product UI is not a thing this page language draws.
   //
   // Borders, per CONTAINERS.md, are drawn exactly once:
-  //   • FrameBox owns the band's top rule and the four registration squares. `flush` lands
-  //     that rule ON the SectionGap above instead of beside it, and `borders="y"` hands the
-  //     vertical rules back to the column, so SectionModule passes `:divided="false"`.
-  //   • Every internal rule is the divider grid's own `gap-px` over the border colour —
+  //   • FrameBox owns the band's floor and the pair of ticks registering it. `flush`
+  //     lands its top rule ON the SectionGap above instead of beside it, and
+  //     `borders="y"` hands the vertical rules back to the column — which is why
+  //     SectionModule passes `:divided="false"`.
+  //   • Every internal rule is the divider grid's own `gap-px` over the border colour,
   //     which is why each cell fills its own `--bg-canvas` and none draws a border.
-  //   • The only rule a cell draws is the one under its illustration panel, dividing the
-  //     art from the caption. That edge is inside the cell, so nothing else owns it.
-  //
-  // The art is not redrawn here: each panel names an asset from webkit's Illustration
-  // registry, so the scenes are built from the same parts (rim light, nodes, connectors)
-  // as every other illustration in the system and follow both themes for free.
-  import Button from '@aziontech/webkit/button'
+  //   • The only rule a cell draws is the one above its illustration panel, dividing the
+  //     copy from the art. That edge is inside the cell, so nothing else owns it.
   import FrameBox from '@aziontech/webkit/frame-box'
   import Illustration from '@aziontech/webkit/illustration'
+  import MiniButton from '@aziontech/webkit/mini-button'
   import Overline from '@aziontech/webkit/overline'
   import { CardGrid, SectionModule } from '@shared/ui/layout/index.js'
 
   import { AiAgentsScene } from '../ui/index.js'
 
-  // One cell per capability. `illustration` names an asset in the webkit Illustration
-  // registry, loaded on demand — so a page that never renders this band pays for none of
-  // them. Each name is chosen for what the asset DRAWS, which is why `build` (a site
-  // shipping beside the mark) leads and `optimize-application` (a site with its scores on
-  // a tray) carries the performance cell.
+  // One cell per capability, in the source's order. `illustration` names an asset in the
+  // webkit Illustration registry, loaded on demand — so a page that never renders this
+  // band pays for none of them. Each name is chosen for what the asset DRAWS, which is
+  // why `build` (a site shipping beside the mark) leads and `optimize-application` (a
+  // site with its scores on a tray) carries the performance cell.
   const capabilities = [
     {
       key: 'modern',
       illustration: 'build',
-      title: 'Modern Applications',
-      description:
-        'Build static sites, develop serverless applications, or modernize your legacy applications'
+      label: 'Modern Applications',
+      claim:
+        'Build static sites, develop serverless applications, or modernize your legacy applications',
+      actionLabel: 'Learn more',
+      href: 'https://www.azion.com/en/solutions/#development'
     },
     {
       key: 'optimized',
       illustration: 'optimize-application',
-      title: 'Optimized workloads',
-      description:
-        'Accelerate applications, optimize content delivery (CDN), and process images on demand efficiently'
+      label: 'Optimized workloads',
+      claim:
+        'Accelerate applications, optimize content delivery (CDN), and process images on demand efficiently',
+      actionLabel: 'Learn more',
+      href: 'https://www.azion.com/en/solutions/#performance'
     },
     {
       key: 'protected',
       illustration: 'waf-rules',
-      title: 'Protect applications and APIs',
-      description:
-        'Protect web applications and APIs (WAAP), manage bots, and modernize your security in a programmable and scalable way'
+      label: 'Protect applications and APIs',
+      claim:
+        'Protect web applications and APIs (WAAP), manage bots, and modernize your security in a programmable and scalable way',
+      // The source's own casing on this one card.
+      actionLabel: 'Learn More',
+      href: 'https://www.azion.com/en/solutions/#security'
     },
     {
       key: 'ai',
@@ -61,9 +79,11 @@
       // agents, whose brand marks are this app's to hold, not the design system's. See
       // AiAgentsScene.
       scene: AiAgentsScene,
-      title: 'Build AI applications',
-      description:
-        'Build and deploy AI agents and AI-powered applications on a distributed platform that delivers the best value in the market'
+      label: 'Build AI applications',
+      claim:
+        'Build and deploy AI agents and AI-powered applications on a distributed platform that delivers the best value in the market',
+      actionLabel: 'Learn more',
+      href: 'https://www.azion.com/en/solutions/#ai'
     }
   ]
 </script>
@@ -73,84 +93,63 @@
     :divided="false"
     :padded="false"
   >
-    <!-- `flush` + `marks="bottom"`: the SectionGap above draws the rule they share and
-         ticks its corners, so this band adds neither a second hairline nor a second
-         square beside them — it owns only its own floor. -->
     <FrameBox
       flush
       borders="y"
       marks="bottom"
     >
-      <!-- Three columns at `lg`. Below that the copy takes the full width and the
-           capabilities fall into the 2x2 the grid already gives them, so the band never
-           degrades into a single tall file of four panels. -->
+      <!-- Two columns, two rows — the source's own 2×2. Below `sm` the grid falls to one
+           column and the four cards read in order. -->
       <CardGrid
         variant="divider"
-        :columns="3"
+        :columns="2"
         :mobile-columns="1"
       >
-        <!-- ── The argument ────────────────────────────────────────────────────
-             Spans both rows of the bento at `lg` so the copy sits against all four
-             capabilities at once. Its own vertical rhythm is two gaps, not one: the
-             block of copy holds together at `lg`, and the CTA stands off it at `xl`. -->
-        <div
-          class="flex flex-col justify-start gap-(--spacing-xl) bg-(--bg-canvas) p-(--spacing-xl) sm:col-span-2 lg:col-span-1 lg:row-span-2"
+        <article
+          v-for="capability in capabilities"
+          :key="capability.key"
+          class="group/capability flex min-w-0 flex-col bg-(--bg-canvas)"
         >
-          <div class="flex flex-col gap-(--spacing-lg)">
-            <!-- The page's overline anatomy — `//` prefix, accent label, blinking cursor —
-                 configured on webkit's Overline. `-ml-1` cancels the 4px `pl-1` the
-                 component carries, so the label starts on the cell's own left edge. -->
+          <!-- The copy half hangs from the cell's top edge; `flex-1` hands the row's
+               slack here rather than to the art, so both panels in a row stay one
+               height when their claims differ in length. -->
+          <div class="flex flex-1 flex-col items-start gap-(--spacing-lg) p-(--spacing-xl)">
+            <!-- `-ml-1` cancels the 4px `pl-1` Overline carries, so the label starts on
+                 the cell's own left edge with the copy under it. -->
             <Overline
               prefix="//"
               show-cursor
               class="-ml-1"
-              >Build on Azion</Overline
+              >{{ capability.label }}</Overline
             >
-            <!-- The headline does not enumerate the four cells — they are right beside it
-                 and do that themselves. It states the claim they prove. -->
-            <h2 class="m-0 text-balance text-heading-xl text-(--text-default)">
-              Everything your workload needs, on one platform
-            </h2>
-            <p class="m-0 text-pretty text-heading-sm text-(--text-muted)">
-              Build, accelerate, protect, and run AI on the same distributed network — without
-              stitching four providers together to do it.
-            </p>
+            <h3 class="m-0 text-pretty text-heading-md text-(--text-default)">
+              {{ capability.claim }}
+            </h3>
+            <div class="mt-auto">
+              <MiniButton
+                :label="capability.actionLabel"
+                show-icon
+                icon="pi pi-arrow-right"
+                :href="capability.href"
+              />
+            </div>
           </div>
 
-          <div class="flex items-center gap-(--spacing-md)">
-            <Button
-              label="Read the docs"
-              kind="outlined"
-              size="large"
-              href="/site/docs"
-            />
-          </div>
-        </div>
-
-        <!-- ── The capabilities ────────────────────────────────────────────────
-             Art over caption. The panel is a surface inside the canvas cell, closed by
-             the one rule the cell owns; the caption sits on the canvas below it, on the
-             same 48px inset as the copy column so the whole band shares one padding. -->
-        <article
-          v-for="capability in capabilities"
-          :key="capability.key"
-          class="group/capability flex flex-col bg-(--bg-canvas)"
-        >
           <!-- Fixed height, never stretched: the grid sizes every cell in a row to the
                tallest one, and a growable panel would hand that slack to the art — so two
-               panels in the same row would end up different heights whenever their captions
-               differ in length. `shrink-0` + a fixed height parks the slack under the
-               caption instead, which is what keeps all four panels on one line. -->
+               panels in the same row would end up different heights whenever their claims
+               differ in length. `shrink-0` + a fixed height parks the slack in the copy
+               above instead, which is what keeps both panels in a row on one line. -->
           <div
-            class="flex h-[clamp(180px,20vw,258px)] shrink-0 items-center justify-center overflow-hidden border-b border-(--border-default) bg-(--bg-surface-raised)"
+            class="flex h-[clamp(180px,20vw,258px)] shrink-0 items-center justify-center overflow-hidden border-t border-(--border-default) bg-(--bg-surface-raised)"
           >
-            <!-- Decorative: the caption beneath already carries the meaning, so the
+            <!-- Decorative: the claim above already carries the meaning, so the
                  illustration takes no `ariaLabel` and stays hidden from assistive tech.
 
                  Hovering the cell sweeps the rim light around the scene: the theme's
                  `illustration-rim-sweep` utility re-declares the rim ramp here so its
                  angle animates (it is frozen at 135° in the `:root` copy), and the whole
-                 cell — not just the art — is the target, since the caption is part of the
+                 cell — not just the art — is the target, since the copy is part of the
                  same card. The utility ships the animation paused, so hover only sets it
                  running and leaving freezes the light where it is.
 
@@ -164,15 +163,6 @@
               :name="capability.illustration"
               class="illustration-rim-sweep group-hover/capability:[animation-play-state:running] group-hover/capability:[--illustration-gauge-target:100] motion-reduce:animate-none"
             />
-          </div>
-
-          <div class="flex flex-col gap-(--spacing-xxs) p-(--spacing-xl)">
-            <h3 class="m-0 text-pretty text-heading-xs text-(--text-default)">
-              {{ capability.title }}
-            </h3>
-            <p class="m-0 text-pretty text-heading-xxs text-(--text-muted)">
-              {{ capability.description }}
-            </p>
           </div>
         </article>
       </CardGrid>
