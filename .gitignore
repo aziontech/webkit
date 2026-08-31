@@ -90,3 +90,8 @@ apps/storybook/.storybook/test-visual/__diff_output__/
 apps/storybook/.storybook/test-visual/__image_snapshots__/*
 !apps/storybook/.storybook/test-visual/__image_snapshots__/linux/
 apps/storybook/.storybook/test-visual/__image_snapshots__/darwin/
+
+# site-design-translate scratch: the extractor's default output (block inventories
+# and per-band captures of a source page and of ours). Read during a translation,
+# never a build input — the skill re-runs it on demand.
+site-translate/
