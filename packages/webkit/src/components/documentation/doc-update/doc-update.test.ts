@@ -6,12 +6,8 @@ import * as stories from '../../../../../../apps/storybook/src/stories/component
 import { expectNoA11yViolations } from '../../../test/axe'
 import DocUpdate from './doc-update.vue'
 
-// .claude/rules/testing.md: Vitest browser mode (real Chromium) loads NO Tailwind, so the
-// sticky label column, the inter-entry rule and the chain-glyph fade emit nothing here —
-// those belong to the visual gate. What is real without CSS is what decides the entry's
-// semantics: the section/heading/anchor structure, the id derivation (explicit anchor prop
-// over the slugified label), the aria-labelledby wiring, the Tag chips, the no-op
-// heading-nav degradation outside a provider, and the testid contract.
+// Browser mode loads no Tailwind — sticky column/rule/fade belong to the visual gate;
+// asserted here: structure, id derivation, aria-labelledby wiring, chips, testids.
 
 const { Default, Changelog } = composeStories(stories)
 
@@ -54,8 +50,7 @@ describe('DocUpdate', () => {
         props: { label: 'August 19, 2026' }
       })
       expect(queryAllByTestId('content-tag')).toHaveLength(0)
-      // The description is the only direct span child of the label column; with no
-      // description the column holds nothing but the heading.
+      // The description is the only direct span child of the label column.
       const column = getByTestId('documentation-doc-update').querySelector('[data-doc-chrome]')
       expect(column?.querySelector(':scope > span')).toBeNull()
       expect(column?.children).toHaveLength(1)
@@ -100,8 +95,7 @@ describe('DocUpdate', () => {
       })
       const link = getByRole('link', { name: 'August 19, 2026' })
       await fireEvent.click(link)
-      // The injected default is a no-op, so activation neither throws nor
-      // removes the entry; native hash navigation owns the jump.
+      // The injected default is a no-op; native hash navigation owns the jump.
       expect(link).toBeInTheDocument()
     })
   })

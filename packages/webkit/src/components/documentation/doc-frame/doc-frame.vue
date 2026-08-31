@@ -6,66 +6,11 @@
   import { useFocusTrap } from '../../../composables/use-focus-trap/index.js'
   import { flattenSlot } from './flatten-slot'
 
-  /**
-   * A framed figure: the bordered surface a screenshot, diagram or clip sits on,
-   * with an optional caption underneath and an optional lead-in above. Keeps
-   * media from floating loose on the canvas and gives every piece of it the same
-   * border, radius and inset.
-   *
-   * THE CAPTION AND THE HINT EACH COME TWO WAYS. A string prop covers the plain
-   * case in one attribute; a named slot of the same name carries the sentence
-   * that needs a link, a bold run or a code chip. The slot wins when both are
-   * given — the prop is the fallback content inside it — so the rich case is
-   * real markup the page's own prose layer styles, not a string this component
-   * parses. The elements arrive unclassed, so a link in a caption is the same
-   * link as in the paragraph above it.
-   *
-   * THE CAPTION IS CENTERED AND THE HINT IS NOT. They are two different jobs. A
-   * caption belongs to the image: it is read after it, as one unit with it, so it
-   * centers on the frame the way a plate's title does. A hint is read before the
-   * frame, in the flow of the sentence that led the reader here, so it stays on
-   * the text's own left edge and does not pretend to be part of the picture.
-   *
-   * IT DECIDES image-or-clip FROM THE SOURCE, not from a prop. Mintlify frames a
-   * clip by taking a raw media tag as a child; this layer's MDX subset carries no
-   * raw HTML, so the source is a prop here and the extension is the only honest
-   * signal of what it points at. An author writes one attribute and gets the
-   * right element.
-   *
-   * A STILL OPENS FULL SCREEN, AND IT GROWS OUT OF ITS OWN FRAME. A screenshot in a
-   * docs column is legible at the measure or it is not legible at all — the column is
-   * capped by line length, not by what the picture needs — so a capture of a console
-   * screen lands at roughly half the size it was taken at. Full screen is the reading
-   * size, and the way in is the picture itself.
-   *
-   * The zoom is a FLIP: the frame measures where the thumbnail sits, mounts the overlay,
-   * measures where the full-size copy lands, and animates the second from the first. Not
-   * decoration — it is what says THIS picture opened, so the reader does not have to
-   * re-find in a full-screen view the thing they were already looking at. A canned
-   * scale-in cannot do it, because the starting rectangle is wherever that one image
-   * happens to sit on that one page.
-   *
-   * The transform is inline because it is a MEASUREMENT, not a style choice, and the
-   * transition is a class so a consumer can still override it. Naming `transform` is
-   * correct here and only here: the pair that must never be named is Tailwind's own
-   * translate/scale utilities, which compile to the standalone `translate` and `scale`
-   * properties — this animates an inline `transform`, which is the property it says.
-   *
-   * A CLIP DOES NOT ZOOM. It carries controls a click would fight, and a player already
-   * has fullscreen of its own. Composed slot content does not zoom either: it is markup,
-   * so there is no source to open.
-   *
-   * AUTOPLAY DRAGS THREE ATTRIBUTES BEHIND IT. A clip set to play on its own is
-   * decoration: it must not seize the reader's speakers, must not take over an
-   * iOS viewport by going fullscreen, and — since nobody is there to replay it —
-   * must loop. So autoplay implies muted, inline and looping, and the reader gets
-   * no controls to operate a clip that operates itself. Without autoplay the
-   * inverse holds: the clip is content the reader chooses to play, so it ships
-   * controls and nothing else. That rule is applied twice, because a frame is
-   * authored two ways: on the prop path here, and on the slot path by rewriting a
-   * clip the author wrote by hand — same rule either way, so the two paths cannot
-   * drift.
-   */
+  // A framed figure for a screenshot, diagram or clip. Caption and hint each come as a
+  // prop or a same-named slot (the slot wins; the prop is its fallback); the caption
+  // centers on the frame, the hint keeps the text's left edge. Image-vs-clip is decided
+  // from the src extension, not a prop. A still zooms full screen via FLIP from the
+  // measured thumbnail rect; a clip never zooms — it owns its own controls.
   defineOptions({ name: 'DocFrame', inheritAttrs: false })
 
   interface Props {
@@ -114,22 +59,14 @@
   /** What autoplay implies, applied to a clip the author wrote by hand. */
   const AUTOPLAY_ATTRS = { playsinline: '', loop: '', muted: '' }
 
-  /**
-   * True when a hand-written clip asks to play on its own.
-   *
-   * Both spellings count: a Vue template writes the attribute in lowercase, and
-   * markup pasted out of a React or Mintlify page carries the camelCase one.
-   */
+  /** True for a hand-written autoplaying clip; lowercase and camelCase spellings both count. */
   const playsOnItsOwn = (nodeAttrs: Record<string, unknown> | null) => {
     if (!nodeAttrs) return false
     const value = nodeAttrs['autoplay'] ?? nodeAttrs['autoPlay']
     return value !== undefined && value !== null && value !== false
   }
 
-  /**
-   * Give a hand-written autoplaying clip the three attributes it must not ship
-   * without. Anything else in the slot passes through untouched.
-   */
+  /** Autoplay implies muted, inline and looping — applied on the slot path too, so the two authoring paths cannot drift. */
   const normalizeClip = (node: VNode) =>
     node?.type === 'video' && playsOnItsOwn(node.props) ? cloneVNode(node, AUTOPLAY_ATTRS) : node
 
@@ -143,30 +80,21 @@
   const overlayRef = ref<HTMLElement | null>(null)
   const zoomImageRef = ref<HTMLImageElement | null>(null)
 
-  /* The measured transform that puts the full-size copy back over the thumbnail. */
+  // The measured transform that puts the full-size copy back over the thumbnail. It is
+  // inline because it is a measurement, and naming `transform` in the transition is
+  // right here: it animates this inline transform, not the translate/scale utilities.
   const flip = ref('')
 
-  /*
-   * Whether the transition is armed. The FLIP needs one frame with the transform
-   * applied and NO transition — otherwise the browser animates the jump *to* the
-   * thumbnail as well, and the picture visibly flies backwards before it opens. So
-   * this drives a `data-flip` attribute that turns the transition on, and the class
-   * that names `transform` only exists under `data-[flip=armed]`.
-   */
+  // The FLIP needs one frame with the transform applied and NO transition — otherwise
+  // the browser animates the jump to the thumbnail too and the picture flies backwards.
+  // data-flip arms the transition only after that frame commits.
   const armed = ref(false)
 
   const isScrollLocked = useScrollLock(document.body)
 
-  /**
-   * Map the full-size copy back onto the rectangle the thumbnail occupies.
-   *
-   * Both rectangles are read in viewport coordinates, and the overlay copy is
-   * `position: fixed`, so the two share an origin and no scroll offset enters the
-   * arithmetic. Scale is per-axis: a frame insets its picture, so the thumbnail and
-   * the full-size copy do not always share an aspect ratio, and a single factor
-   * would let the image visibly stretch on the way out. Returns a transform, or an
-   * empty string when either rectangle is degenerate.
-   */
+  // Both rects are viewport coordinates and the copy is fixed, so no scroll offset
+  // enters the arithmetic. Scale is per-axis: the frame insets its picture, so the two
+  // rects need not share an aspect ratio. Empty string when a rect is degenerate.
   const flipTransform = (from: DOMRect, to: DOMRect) => {
     if (!to.width || !to.height) return ''
     const scaleX = from.width / to.width
@@ -176,17 +104,10 @@
     return `translate(${shiftX}px, ${shiftY}px) scale(${scaleX}, ${scaleY})`
   }
 
-  /*
-   * Whether the reader asked for less motion, read at the moment of the gesture rather
-   * than cached: the setting can change mid-session, and this is cheap.
-   *
-   * The FLIP is skipped in JS, not only in CSS, and that is deliberate on two counts.
-   * A transition only interpolates a CHANGE, so never writing the transform is what
-   * actually guarantees no animation — belt to the class's braces. And the close path
-   * unmounts on `transitionend`, which never fires when no transition runs: gating only
-   * in CSS would have left the overlay impossible to close for exactly the readers who
-   * asked for less motion.
-   */
+  // Read at gesture time — the setting can change mid-session. The FLIP is skipped in
+  // JS, not only CSS: the close path unmounts on transitionend, which never fires when
+  // nothing transitions, so CSS-only gating would strand reduced-motion readers in an
+  // overlay that cannot close.
   const prefersReducedMotion = () =>
     typeof window !== 'undefined' &&
     typeof window.matchMedia === 'function' &&
@@ -204,13 +125,8 @@
     const image = zoomImageRef.value
     if (!from || !image) return
     flip.value = flipTransform(from, image.getBoundingClientRect())
-    /*
-     * Two frames, deliberately. The first commits the un-transitioned starting
-     * transform; only in the second is the transition armed and the transform
-     * released, so the browser has a previous value to interpolate FROM. Arming and
-     * releasing together in one frame is the classic FLIP bug: the style resolves
-     * once and nothing animates.
-     */
+    // Two frames, deliberately: the first commits the un-transitioned start transform.
+    // Arming and releasing in one frame resolves the style once and nothing animates.
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         armed.value = true
@@ -230,12 +146,8 @@
     flip.value = flipTransform(from, image.getBoundingClientRect())
   }
 
-  /*
-   * Unmount on the way back, not on a timer: a duration in JS and a duration in a
-   * class are two sources for one number, and they drift. `transitionend` fires on the
-   * property we animate, and the guard keeps a bubbled transition on some other
-   * element from tearing the overlay down early.
-   */
+  // Unmount on transitionend, not a timer: a duration in JS and one in a class drift.
+  // The guard keeps a bubbled transition from tearing the overlay down early.
   const onZoomTransitionEnd = (event: TransitionEvent) => {
     if (event.target !== zoomImageRef.value || event.propertyName !== 'transform') return
     if (flip.value) zoomed.value = false
@@ -245,11 +157,8 @@
     isScrollLocked.value = isOpen
   })
 
-  /*
-   * Focus goes to the close button, which sits OUTSIDE the element being transformed.
-   * That is not only tidier — moving focus into a node while it animates cancels the
-   * transition outright, with no error and no frames interpolated.
-   */
+  // Focus goes to the close button, outside the transformed node: moving focus into a
+  // node while it animates cancels the transition, with no error and no frames.
   useFocusTrap(overlayRef, zoomed)
 
   useEventListener(document, 'keydown', (event: KeyboardEvent) => {
@@ -294,13 +203,9 @@
         :controls="!autoplay || undefined"
         class="block h-auto w-full rounded-(--shape-elements)"
       ></video>
-      <!-- The picture is the button, and it says so twice. `cursor-zoom-in` is the
-           conventional signal but a weak one: it exists only under the pointer, it is
-           invisible to anyone arriving by keyboard, and how faithfully it draws is the
-           OS's business, not ours. So the affordance is also a thing on the page — a
-           badge that fades in on hover AND on keyboard focus, which is the half a cursor
-           can never cover. `group` is what lets the badge react to the button's state
-           without a second handler or any JS. -->
+      <!-- The picture is the button. The zoom cursor is a weak, pointer-only signal, so
+           a badge also fades in on hover and on keyboard focus — the half a cursor can
+           never cover — reacting to the button's own state with no JS. -->
       <button
         v-else-if="zoomable"
         ref="triggerRef"
@@ -346,10 +251,9 @@
       <slot name="caption">{{ caption }}</slot>
     </figcaption>
 
-    <!-- Teleported, so the overlay is never clipped by the prose column's own
-         `overflow-hidden` frame, and `fixed` resolves against the viewport rather than
-         against a scrolled ancestor. z sits above the dialog shell (1001) and the input
-         overlay (1100): a lightbox is the topmost thing on the page while it is open. -->
+    <!-- Teleported so the prose column's overflow clipping cannot cut the overlay, and
+         fixed resolves against the viewport. Its z-index sits above the dialog shell
+         (1001) and the input overlay (1100): an open lightbox is the topmost thing. -->
     <Teleport to="body">
       <div
         v-if="zoomed"
@@ -361,20 +265,11 @@
         :aria-label="alt || 'Image, full screen'"
         class="fixed inset-0 z-1200 flex items-center justify-center p-(--spacing-lg) animate-fade-in motion-reduce:animate-none"
       >
-        <!-- The dismiss surface is its own element, hidden from the a11y tree, exactly as
-             the DS dialog's backdrop is. A click target belongs on something that is not
-             also the dialog container: the container would swallow every click inside it,
-             and a bare div with a click handler and no keyboard path is the thing
-             `click-events-have-key-events` is right to reject. The keyboard path is
-             Escape and the Close button, both real.
-
-             The picture itself is `pointer-events-none`, which does two jobs with one
-             declaration. It stops a near-full-viewport image from sitting on top of the
-             Close button and swallowing it — the image is later in the DOM and also
-             positioned, so at equal z-index it wins, and the button became unclickable.
-             And it lets a click ON the picture fall through to the backdrop, so the
-             obvious gesture in a lightbox — click the thing you opened — closes it,
-             without a second handler or a button wrapped around content. -->
+        <!-- The dismiss surface is its own aria-hidden element, as the DS dialog's
+             backdrop is; the keyboard paths are Escape and the Close button. The picture
+             ignores pointer events for two reasons: later in the DOM and positioned, at
+             equal z-index it would sit over the Close button and swallow it, and letting
+             clicks fall through makes the obvious gesture — click the picture — close. -->
         <div
           aria-hidden="true"
           :data-testid="`${testId}__zoom-backdrop`"

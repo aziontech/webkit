@@ -1,15 +1,9 @@
 import { computed, ref, unref } from 'vue'
 
 /**
- * Controlled / uncontrolled state (shadcn pattern).
- * When `prop` is `undefined`, internal state is used.
- *
- * @template T
- * @param {object} options
- * @param {import('vue').Ref<T | undefined>} options.prop - Controlled value from props (`undefined` when uncontrolled).
- * @param {T} options.defaultProp - Initial value when uncontrolled.
- * @param {(value: T) => void} options.onChange - Called when the value changes (controlled and uncontrolled).
- * @returns {import('vue').ComputedRef<T> & { set: (value: T) => void }}
+ * Controlled / uncontrolled state (shadcn pattern): when the `prop` ref is undefined,
+ * internal state seeded by `defaultProp` is used; `onChange` fires in both modes.
+ * Returns the computed value with a `set` writer attached.
  */
 export function useControllable({ prop, defaultProp, onChange }) {
   const internal = ref(defaultProp)

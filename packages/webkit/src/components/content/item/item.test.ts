@@ -6,16 +6,10 @@ import * as stories from '../../../../../../apps/storybook/src/stories/component
 import { expectNoA11yViolations } from '../../../test/axe'
 import Item from './index'
 
-// Item is a COMPOSITION component: `index.ts` attaches every public sub-component
-// to the root via Object.assign, the root provides an ItemContext (testId/kind/size)
-// through ItemInjectionKey, and every context-aware sub-component derives its
-// data-testid from the injected root testId (`${ctx.testId}__<part>`). It emits no
-// events — its contract is structure + provide/inject + the as-child merge.
 const { Default, Outline, Muted, Small, WithGroup } = composeStories(stories)
 
 describe('Item (composition)', () => {
   describe('compound dot-notation resolves (index.ts Object.assign)', () => {
-    // Every sub-component in index.ts must be reachable off the root binding.
     it.each([
       ['Group', 'ItemGroup'],
       ['Separator', 'ItemSeparator'],
@@ -38,8 +32,6 @@ describe('Item (composition)', () => {
       const { getByTestId } = render(Item, {
         slots: { default: '<span data-testid="child">x</span>' }
       })
-      // Template: <div v-bind="rootBindings"> with data-slot="item", default testid,
-      // data-kind (default) and data-size (medium).
       const root = getByTestId('content-item')
       expect(root.tagName).toBe('DIV')
       expect(root.getAttribute('data-slot')).toBe('item')
@@ -69,9 +61,6 @@ describe('Item (composition)', () => {
   })
 
   describe('provide/inject — the injected testId flows to sub-components', () => {
-    // ItemContext delivers `testId` to every context-aware sub-component, which derive
-    // their own testid as `${ctx.testId}__<part>`. Rendering a composed tree proves the
-    // provide (root) → inject (children) wiring end-to-end.
     it('derives every sub-component testid from the root context testId (default)', () => {
       const Tree = {
         components: {
@@ -101,7 +90,6 @@ describe('Item (composition)', () => {
       }
       const { getByTestId } = render(Tree)
 
-      // Root testId is the default 'content-item'; children append their part suffix.
       expect(getByTestId('content-item__media').getAttribute('data-slot')).toBe('item-media')
       expect(getByTestId('content-item__content').getAttribute('data-slot')).toBe('item-content')
       expect(getByTestId('content-item__header').getAttribute('data-slot')).toBe('item-header')
@@ -117,7 +105,6 @@ describe('Item (composition)', () => {
     })
 
     it('propagates a consumer-overridden root testId into every sub-component testid', () => {
-      // Root data-testid override changes ctx.testId; children must inherit the new base.
       const Tree = {
         components: {
           Item,
@@ -143,14 +130,11 @@ describe('Item (composition)', () => {
       expect(getByTestId('row-1__title')).toBeTruthy()
       expect(getByTestId('row-1__description')).toBeTruthy()
       expect(getByTestId('row-1__separator')).toBeTruthy()
-      // The default base must no longer appear once the root testid is overridden.
       expect(queryByTestId('content-item')).toBeNull()
       expect(queryByTestId('content-item__separator')).toBeNull()
     })
 
     it('falls back to content-item base when a sub-component is used with no root context', () => {
-      // Sub-components read `ctx?.testId ?? 'content-item'` — rendered standalone (no
-      // provider) they must still resolve to the fallback base.
       const { getByTestId } = render(Item.Separator)
       expect(getByTestId('content-item__separator').getAttribute('role')).toBe('separator')
     })
@@ -186,7 +170,6 @@ describe('Item (composition)', () => {
     })
 
     it.each([['icon'], ['image']])('ItemMedia reflects kind="%s" on data-kind', (kind) => {
-      // kind is the one scalar prop on ItemMedia; it drives data-kind.
       const { getByTestId } = render(Item.Media, {
         props: { kind },
         slots: { default: '<span>m</span>' }
@@ -197,15 +180,12 @@ describe('Item (composition)', () => {
 
   describe('asChild — merges root bindings onto the single slotted child (merge-as-child.js)', () => {
     it('renders no wrapper div and merges data-slot/data-kind/data-size onto the child', () => {
-      // With asChild, mergeAsChildSlot clones the single default-slot vnode and merges the
-      // row bindings onto it — the root is the child element itself (here an <a>).
       const { getByTestId } = render(Item, {
         props: { asChild: true, kind: 'outline', size: 'small' },
         slots: { default: '<a href="#" data-testid="link">Docs</a>' }
       })
       const link = getByTestId('link')
       expect(link.tagName).toBe('A')
-      // The merged bindings land directly on the anchor — no intermediate <div data-slot="item">.
       expect(link.getAttribute('data-slot')).toBe('item')
       expect(link.getAttribute('data-kind')).toBe('outline')
       expect(link.getAttribute('data-size')).toBe('small')
@@ -217,7 +197,6 @@ describe('Item (composition)', () => {
         props: { asChild: true },
         slots: { default: '<a href="#" data-testid="link">Docs</a>' }
       })
-      // Exactly one element carries data-slot="item", and it is the anchor itself.
       const slotted = container.querySelectorAll('[data-slot="item"]')
       expect(slotted.length).toBe(1)
       expect(slotted[0]).toBe(getByTestId('link'))
@@ -248,9 +227,7 @@ describe('Item (composition)', () => {
 
     it('WithGroup story wraps rows in a role="list" and renders separators from context', () => {
       const { getByRole, getAllByText } = render(WithGroup)
-      // ItemGroup provides the role="list" landmark for the stacked rows.
       expect(getByRole('list')).toBeTruthy()
-      // Three people rows are rendered from the story data.
       expect(getAllByText(/@vercel\.com/).length).toBe(3)
     })
   })
@@ -279,11 +256,8 @@ describe('Item (composition)', () => {
       await expectNoA11yViolations(container)
     })
 
-    // OMITTED — an axe check of <ItemGroup> (role="list") wrapping <Item> rows fails
-    // aria-required-children ("Required ARIA child role not present: listitem"): ItemGroup
-    // hardcodes role="list" but Item renders a plain <div> with no role="listitem", and a
-    // bare <ItemSeparator role="separator"> is likewise a disallowed child of role="list".
-    // This is a real component a11y gap (not a test artifact); recorded in notes, not faked
-    // and not worked around by editing the .vue. The single-row axe test above still holds.
+    // OMITTED: axe on ItemGroup wrapping Item rows fails aria-required-children —
+    // ItemGroup hardcodes role="list" but Item rows carry no role="listitem" (and a bare
+    // separator is a disallowed child of list). Real component a11y gap, not a test artifact.
   })
 })

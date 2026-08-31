@@ -39,16 +39,11 @@
   const ROOT_CLASS =
     'group relative z-1 text-label-md text-(--text-default) focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) data-[styled]:inline-flex data-[styled]:min-h-10 data-[styled]:items-center data-[styled]:justify-center data-[styled]:whitespace-nowrap data-[styled]:rounded-(--shape-button) data-[styled]:border-solid data-[styled]:border-[length:var(--border-width-default,1px)] data-[styled]:border-(--border-default) data-[styled]:bg-(--bg-surface-raised) data-[styled]:px-(--spacing-md) data-[styled]:py-(--spacing-sm) data-[styled]:shadow-(--shadow-xs) data-[disabled]:text-(--text-disabled) data-[disabled]:opacity-60'
 
-  // The connector port: an 8px square sitting entirely OUTSIDE the node box, flush against
-  // the edge a connector attaches to. `data-flow-port` picks the edge; the border goes
-  // dashed while the step is disabled.
-  //
-  // Two coupled offsets place it, and both are load-bearing. An absolutely positioned child
-  // resolves its offsets against the PADDING box, so `-left-px` backs out the 1px border to
-  // land on the border-box edge; `-translate-x-full` then pushes the whole square clear of
-  // the box. Keeping the port outside the border means the node's surface and its
-  // focus-visible ring never crop it. The border-box edge is the exact point connectors.ts
-  // attaches to, so the line meets the port's inner edge and the square occludes the rest.
+  // Connector port: an 8px square entirely outside the node box, flush against the
+  // attach edge, so the surface and focus ring never crop it. An absolute child
+  // resolves offsets against the PADDING box, so the one-pixel negative inset backs
+  // out the border to reach the border-box edge — the exact point connectors.ts
+  // attaches to — and the full-width translate pushes the square clear of the box.
   const PORT_CLASS =
     'pointer-events-none absolute top-1/2 size-2 -translate-y-1/2 rounded-(--radius-sm) border-solid border-[length:var(--border-width-default,1px)] border-(--border-muted) bg-(--accent) data-[flow-port=end]:-left-px data-[flow-port=end]:-translate-x-full data-[flow-port=start]:-right-px data-[flow-port=start]:translate-x-full group-data-[disabled]:border-dashed'
 

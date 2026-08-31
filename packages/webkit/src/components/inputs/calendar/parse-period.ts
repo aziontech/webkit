@@ -2,14 +2,9 @@ import { endOfDay, startOfDay } from './format'
 import type { CalendarRange } from './injection-key'
 
 /**
- * Parses a relative or fixed period expression into a `{ start, end }` range, or
- * `null` when it cannot be understood. Pure native-`Date` math, no date library.
- *
- * Accepted forms (case-insensitive):
- *   - relative spans: `45m`, `12 hours`, `10d`, `2 weeks`, `3 months`, `1y` → [now − span, now]
- *   - keywords: `today`, `yesterday`, `last week`, `last month`, `last year`, `this month`
- *   - fixed single dates: `1/1`, `1/1/2026`, `Jan 1`, `Jan 1, 2026` → that whole day
- *   - fixed ranges: `1/1 - 1/2`, `Jan 1 - Jan 2` (separators `-`, `–`, `to`)
+ * Parses a period expression into `{ start, end }`, or `null` when not understood; pure native-`Date`
+ * math. Accepts, case-insensitively: relative spans (`45m`, `2 weeks`) → [now − span, now]; keywords
+ * (`today`, `yesterday`, `last week/month/year`, `this month`); fixed dates and ranges (`1/1`, `Jan 1, 2026` → whole day; separators `-`, `–`, `to`).
  */
 export function parsePeriod(input: string, now: Date = new Date()): CalendarRange | null {
   const text = input.trim().toLowerCase()

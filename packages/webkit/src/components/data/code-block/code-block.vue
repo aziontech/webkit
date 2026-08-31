@@ -140,12 +140,9 @@
 
   const showTabHeader = computed(() => normalizedTabs.value.length > 1)
 
-  /**
-   * One line is the only case where the copy control cannot be pinned to a top
-   * inset: the shell is 44px tall, the control is 28px, and a 12px inset leaves
-   * it 4px below the line's own centre — measured, and visible against a single
-   * row of code. On one line the control centres on the row instead.
-   */
+  // On a single line the copy control centres on the row instead of pinning to the
+  // top inset: shell 44px, control 28px, so a 12px inset sits it 4px below the
+  // line's own centre (measured, and visible against one row of code).
   const isSingleLine = computed(() => highlightedLines.value.length === 1)
 
   const showFileNameBar = computed(() => Boolean(activeTab.value?.fileName))
@@ -188,13 +185,9 @@
     return codeBlockEnterOffsetClasses.none
   })
 
-  /**
-   * The swap is animated line by line, not as one sliding block: each row enters
-   * from the direction of travel with a short per-line delay, so the eye reads
-   * the new snippet arriving instead of a slab replacing another. `enter` is the
-   * marketing entrance (`animateLines`, 300ms a line); `swap` is the tab change
-   * (24ms a line, capped) — the same from/to state, two different steps.
-   */
+  // The swap animates line by line, not as one sliding block: each row enters from
+  // the direction of travel with a short per-line delay. `enter` is the marketing
+  // entrance (300ms a line); `swap` is the tab change (24ms a line, capped).
   const lineEnterOffsetClass = computed(() =>
     lineMotionMode.value === 'swap'
       ? panelEnterOffsetClass.value
@@ -263,16 +256,11 @@
     typeof globalThis.matchMedia === 'function' &&
     globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-  /**
-   * Force the browser to flush the pre-transition style before flipping to the
-   * ready state. A swap to a tab with more lines *creates* those rows, and a
-   * transition on a node inserted in the same rendering opportunity has no
-   * previous computed value to interpolate from — the row would simply appear at
-   * `opacity-100`. Reading a layout property is what commits `opacity-0` (and,
-   * for the shell, the outgoing height) as that previous value. Measured: 4 of 5
-   * rows sat at opacity 1 on the first frame without this; 12+ interpolated
-   * frames with it.
-   */
+  // Commit the pre-transition style before flipping to the ready state: a node
+  // inserted in the same rendering opportunity has no previous computed value to
+  // interpolate from, so a freshly created row would appear fully opaque. Reading a
+  // layout property commits the hidden state (and the outgoing shell height) as that
+  // previous value. Measured: 4 of 5 rows skipped the fade without this.
   const flushStyles = () => {
     void contentRef.value?.offsetHeight
   }
@@ -292,19 +280,11 @@
     })
   }
 
-  /**
-   * Pin the shell at the height it has, let the new panel size itself, then
-   * animate between the two — the two tabs rarely hold the same number of lines,
-   * and without this the block's own height (and everything under it on the
-   * page) jumps a whole row set in one frame while the lines are still easing in.
-   *
-   * The measurement happens in the same task as the restore: reading the natural
-   * height with the inline one cleared forces layout, but because the old value
-   * is written back before the frame ends, nothing paints at `auto`. The
-   * inline height is dropped again on `transitionend`, so a later reflow (a wrap,
-   * a resize) is free to resize it.
-   */
-  /** The shell's height right now, before the swap patches the DOM. */
+  // Height swap: pin the shell at its outgoing height, let the new panel size
+  // itself, then animate between the two — tabs rarely hold the same line count.
+  // Reading the natural height with the inline value cleared forces layout, but the
+  // old value is restored in the same task, so nothing paints at auto; transitionend
+  // drops the inline height so later reflows stay free to resize the shell.
   const captureContentHeight = () => {
     const el = contentRef.value
 
@@ -458,14 +438,10 @@
 
   let resizeObserver: ResizeObserver | null = null
 
-  /**
-   * Watch the strip AND every tab in it. The list is stretched to the header, so
-   * a tab that changes size on its own — a web font swapping in after mount, a
-   * relabelled tab — never changes the list's own box and the observer would
-   * never fire: the indicator kept the pre-swap width. Harmless while the
-   * indicator was a 2 px underline, obvious now that it is the filled pill
-   * behind the label (measured 8 px short of its tab after the Sora swap).
-   */
+  // Observe the strip AND every tab: the list is stretched to the header, so a tab
+  // that resizes on its own (a web font swapping in, a relabel) never changes the
+  // list's box and a list-only observer never fires — the pill indicator then keeps
+  // the stale width (measured 8px short of its tab after the Sora font swap).
   const observeTabStrip = () => {
     if (typeof ResizeObserver === 'undefined') {
       return

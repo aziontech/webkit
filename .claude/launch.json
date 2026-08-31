@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "webkit-storybook",
+      "runtimeExecutable": "/Users/isaque.santos/.nvm/versions/node/v24.18.1/bin/pnpm",
+      "runtimeArgs": ["run", "storybook:dev"],
+      "port": 6006
+    }
+  ]
+}

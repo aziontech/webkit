@@ -31,17 +31,11 @@
 </script>
 
 <template>
-  <!-- The three steps are one, two and three times `--spacing-xxl`, the largest step of the
-       theme's own spacing scale — so the gap adds no scale of its own, and it is responsive
-       for free: that token already resolves to 2rem / 4rem / 6rem across the breakpoints,
-       which makes the steps 32/64/96px on a phone and 96/192/288px on a wide screen. The
-       ratio (1 : 2 : 3) is what keeps the three weights unmistakable at every width.
-       `borders="y"` keeps only the two rules that do the dividing; `flush` draws the one it
-       shares with the section above exactly once, and `marks="bottom"` leaves the top pair of
-       ticks to that same neighbour so the shared junction carries one mark per corner.
-
-       The gap is where `hatch` belongs on a framed page: it is the one band with no content of
-       its own, so the texture reads as the page's own material instead of competing with copy. -->
+  <!-- Steps are one, two and three times the theme's largest spacing step, so the gap adds
+       no scale of its own and is responsive for free (32/64/96px on a phone, 96/192/288px
+       wide); the 1:2:3 ratio keeps the weights unmistakable. flush + borders/marks leave a
+       shared junction one rule and one mark per corner. The gap is where hatch belongs: the
+       one band with no copy, so the texture reads as the page's own material. -->
   <FrameBox
     v-bind="$attrs"
     flush

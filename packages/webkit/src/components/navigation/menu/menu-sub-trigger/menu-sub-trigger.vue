@@ -43,11 +43,9 @@
   const isInline = computed(() => props.kind === 'inline')
 
   /**
-   * Only a DRILL row may carry a glyph, and the component enforces that rather than trusting
-   * the caller: an INLINE row heads the rows it expands beneath it, in their own column, so a
-   * glyph there competes with the rows it owns. A drill row has nothing beneath it — it
-   * replaces the menu — so it sits amongst the leaves it is listed with and takes an icon for
-   * the same reason they do.
+   * Only a DRILL row may carry a glyph — enforced here rather than trusted to the caller: an
+   * inline row heads the rows it expands beneath it, in their own column, so a glyph there
+   * competes with them. A drill row sits amongst leaves and takes an icon as they do.
    */
   const showIcon = computed(() => Boolean(props.icon) && !isInline.value)
 
@@ -161,12 +159,8 @@
         aria-hidden="true"
       />
     </span>
-    <!--
-      The same label treatment as a `Menu.Item`: `.text-label-md`, colour inherited from the
-      root (`--text-default`, and the disabled token). `.text-label-sm` + `--text-muted` is
-      reserved for a first-level group title — the thing that replaced the overline — and is
-      not spent on a trigger, however deep it sits.
-    -->
+    <!-- Same label treatment as a Menu.Item, colour inherited from the root; the smaller,
+         muted treatment is reserved for a first-level group title, never a trigger. -->
     <span
       class="min-w-0 flex-1 truncate text-left text-label-md"
       :data-testid="`${testId}__label`"

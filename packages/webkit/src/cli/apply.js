@@ -1,13 +1,6 @@
-// Idempotent executor for an init plan produced by `planInit`.
-//
-// Every action is safe to run twice: files present are skipped or merged, never
-// clobbered; the `.mcp.json` merge adds the webkit server only if absent; the
-// CLAUDE.md fragment is appended only when its marker is not already there;
-// `add-dep` writes a version only for a dependency the project has not pinned.
-//
-// `applyPlan(projectDir, plan, opts)` returns a list of `{ action, result }`
-// records describing what actually happened ('written' | 'merged' | 'appended'
-// | 'skipped' | 'advised'), so the CLI can print an honest summary.
+// Idempotent executor for an init plan produced by `planInit`: every action is
+// safe to run twice (existing files are skipped or merged, never clobbered).
+// Returns `{ action, result }` records of what actually happened.
 
 import {
   chmodSync,
@@ -23,9 +16,7 @@ function ensureDir(filePath) {
   mkdirSync(dirname(filePath), { recursive: true })
 }
 
-// Returns parsed JSON, or null when the file does NOT exist. Throws when the file
-// EXISTS but cannot be parsed — a caller must never overwrite a file it failed to
-// read (that would silently destroy the user's package.json / .mcp.json content).
+// null when missing; throws on unparsable JSON — never overwrite a file we failed to read.
 function readJsonStrict(path) {
   if (!existsSync(path)) return null
   const raw = readFileSync(path, 'utf8')
@@ -43,10 +34,7 @@ function writeJson(path, value) {
   writeFileSync(path, `${JSON.stringify(value, null, 2)}\n`, 'utf8')
 }
 
-// Deep-merge `patch` into `target`, WITHOUT overwriting existing leaf values.
-// (Objects recurse; a key already present with a non-object value is left as-is.)
-// This is what makes `.mcp.json` idempotent: a second run finds `mcpServers.webkit`
-// already set and changes nothing.
+// Deep-merge without overwriting existing leaf values — what makes `.mcp.json` idempotent.
 function mergePreserve(target, patch) {
   let changed = false
   for (const [key, value] of Object.entries(patch)) {
@@ -129,12 +117,9 @@ function applyAppend(projectDir, action) {
   return { action, result: 'appended', detail: action.path }
 }
 
-// Prepend the entry-file imports that are not already there. Bare-import presence is
-// checked by a line-anchored import of the module SPECIFIER, so `import "./webkit.css"`
-// with double quotes — or an import the user moved further down — still counts as wired,
-// while a commented-out `// import './webkit.css'` or a superstring path ('../webkit.css')
-// does not. Named imports are checked by IDENTIFIER (importing something else from the
-// same module must not satisfy them).
+// Prepend missing entry-file imports. Bare imports are matched by line-anchored
+// specifier (either quote style counts; commented-out or superstring paths do not);
+// named imports are matched by identifier, not module path.
 function applyPatchEntry(projectDir, action) {
   const target = join(projectDir, action.path)
   if (!existsSync(target)) {
@@ -177,13 +162,7 @@ function applyCopy(projectDir, action) {
   return { action, result: 'written', detail: action.to }
 }
 
-/**
- * Execute a plan against `projectDir`. Idempotent: safe to run repeatedly.
- *
- * @param {string} projectDir absolute path to the consumer project
- * @param {Array<object>} plan actions from `planInit`
- * @returns {Array<{action: object, result: string, detail?: string}>}
- */
+/** Execute a plan against `projectDir`. Idempotent: safe to run repeatedly. */
 export function applyPlan(projectDir, plan) {
   const results = []
   for (const action of plan) {

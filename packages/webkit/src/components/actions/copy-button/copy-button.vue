@@ -48,13 +48,9 @@
 
   const icon = computed(() => (copied.value ? 'pi pi-check' : 'pi pi-copy'))
 
-  /**
-   * One string names the control and labels its tooltip, so the two can never
-   * disagree: it is `ariaLabel` while idle and `copiedLabel` for the two seconds
-   * after a write. An icon-only button says nothing to a pointer user until it is
-   * hovered — the tooltip is what makes the glyph legible, and because it tracks
-   * the same state, the confirmation is visible and not only announced.
-   */
+  // One string names the control and labels its tooltip so the two cannot disagree:
+  // `ariaLabel` while idle, `copiedLabel` for the two seconds after a write — which
+  // makes the copy confirmation visible on hover, not only announced.
   const label = computed(() => (copied.value ? props.copiedLabel : props.ariaLabel))
 
   async function handleCopy(event: MouseEvent) {

@@ -467,6 +467,18 @@ test('authoring-standards (shared engine: hook + ratchet + consumer lint)', () =
       {
         code: '/** @deprecated since 4.2 — use `kind`. Removed in 5.0 */ export const a = 1',
         filename: 'src/x.js'
+      },
+      // a 5-line comment block is the ceiling, not a violation
+      {
+        code: ['// 1', '// 2', '// 3', '// 4', '// 5', 'export const a = 1'].join('\n'),
+        filename: 'src/z.js'
+      },
+      // one-line JSDoc (mandated on public surface) never counts as prose
+      {
+        code: Array.from({ length: 16 }, (_, i) => `/** doc ${i} */\nexport const v${i} = ${i}`).join(
+          '\n'
+        ),
+        filename: 'src/jsdoc.js'
       }
     ],
     invalid: [
@@ -481,6 +493,26 @@ test('authoring-standards (shared engine: hook + ratchet + consumer lint)', () =
         code: '/** @deprecated */ export const a = 1',
         filename: 'src/y.js',
         errors: [{ messageId: 'deprecated-without-replacement' }]
+      },
+      // 6 consecutive comment lines → verbose-comment-block
+      {
+        code: ['// 1', '// 2', '// 3', '// 4', '// 5', '// 6', 'export const a = 1'].join('\n'),
+        filename: 'src/w.js',
+        errors: [{ messageId: 'verbose-comment-block' }]
+      },
+      // blank lines do not reset the block (no evasion by spacing)
+      {
+        code: ['// 1', '// 2', '// 3', '', '// 4', '// 5', '// 6', 'export const a = 1'].join('\n'),
+        filename: 'src/v.js',
+        errors: [{ messageId: 'verbose-comment-block' }]
+      },
+      // ≥15 prose lines at ≥20% of the file → comment-heavy-file
+      {
+        code: Array.from({ length: 15 }, (_, i) => `// note ${i}\nexport const n${i} = ${i}`).join(
+          '\n'
+        ),
+        filename: 'src/u.js',
+        errors: [{ messageId: 'comment-heavy-file' }]
       }
     ]
   })

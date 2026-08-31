@@ -1,12 +1,7 @@
-// Steers component authors OFF the hand-rolled two-way binding pattern toward `defineModel`.
-// Flags a `<script setup>` that declares BOTH a `modelValue` prop (via defineProps — runtime
-// object, inline type literal, or a referenced `interface`/type alias) AND an `update:modelValue`
-// emit (via defineEmits — runtime array/object, tuple type literal, or call-signature form).
-// That pair is exactly what `defineModel()` replaces (Vue 3.4+): one macro, controlled and
-// uncontrolled for free. See .claude/rules/v-model.md.
-//
-// Focused on the primary `modelValue` model (the measured divergence). Named models are not flagged.
-// Parser-agnostic across typescript-eslint versions (typeArguments | typeParameters). Fail-open.
+// Flags a script setup declaring BOTH a `modelValue` prop and an `update:modelValue`
+// emit (any declaration form) — exactly the pair `defineModel()` replaces (Vue 3.4+).
+// Named models are not flagged. Parser-agnostic across typescript-eslint versions
+// (typeArguments | typeParameters). Fail-open. See .claude/rules/v-model.md.
 
 /** First type argument of a call (defineProps<T>()), across parser versions. */
 function typeArg(node) {
