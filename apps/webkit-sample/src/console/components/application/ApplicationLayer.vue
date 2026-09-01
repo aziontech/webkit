@@ -119,7 +119,7 @@
   const chooseType = (next) => {
     if (connector.value.type === next) return
     connector.value.type = next
-    resetScratchOption(connector.value)
+    resetScratchOption(connector.value, connectorTypeFields(next))
     emit('clear', 'connector.')
   }
 

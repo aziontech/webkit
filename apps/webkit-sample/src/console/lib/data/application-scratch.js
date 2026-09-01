@@ -61,6 +61,17 @@ const select = (name, label, options, extra = {}) => ({
 // to be told is the part it cannot guess — which files it is for, asked underneath the
 // row the moment that row goes on.
 
+/**
+ * The image formats the image policy ARRIVES WITH — the whole common web image set, the
+ * modern formats and the ones a site still has in its history, because an extension left
+ * out of this line is an object that silently misses the cache it was created for.
+ *
+ * One const, because the same list is both the answer the field is filled with and the
+ * placeholder it falls back to once a reader empties it — two literals would let the hint
+ * drift from the value.
+ */
+const IMAGE_EXTENSIONS = 'jpg, jpeg, png, gif, webp, avif, svg, ico, bmp, tiff'
+
 /** The cache policy templates, in the order the step offers them as toggle rows. */
 export const CACHE_POLICY_TEMPLATES = [
   {
@@ -69,8 +80,14 @@ export const CACHE_POLICY_TEMPLATES = [
     description:
       'Caches images for a long TTL and ignores the query string, so one object serves every variation of the same file.',
     fields: [
-      text('extensions', 'Extension matches', 'jpg, png, webp, avif', {
+      // FILLED, not empty. The only reason this field is asked at all is that the
+      // template cannot GUESS the file set — but it can propose the one every image
+      // policy starts from, and a required field that arrives answered is a required
+      // field nobody has to answer. What is left is an edit, which is a smaller ask
+      // than a blank line under a switch that was just turned on.
+      text('extensions', 'Extension matches', IMAGE_EXTENSIONS, {
         required: true,
+        default: IMAGE_EXTENSIONS,
         description:
           'Comma-separated. The policy applies to requests whose path ends in one of them.'
       })
@@ -84,6 +101,20 @@ export const CACHE_POLICY_TEMPLATES = [
     fields: []
   }
 ]
+
+/**
+ * The answers a field list ARRIVES WITH — every descriptor that declares a `default`.
+ *
+ * A descriptor key and not a branch per template, for the reason the fields themselves
+ * are descriptors: a template that wants to arrive filled says so in the catalog, and
+ * the form that renders it needs no change.
+ */
+const seededValues = (fields) =>
+  Object.fromEntries(
+    fields
+      .filter((field) => field.default !== undefined)
+      .map((field) => [field.name, field.default])
+  )
 
 /** The policies currently switched on, in the order the list presents them. */
 export const enabledCachePolicies = (config) =>
@@ -137,7 +168,10 @@ const ADDRESS_FIELD = { http: 'address', storage: 'bucket', 'live-ingest': 'regi
 // ── The answers ───────────────────────────────────────────────────────────────
 
 /**
- * The from-scratch half of the create form, empty.
+ * The from-scratch half of the create form, empty — save for the fields that declare a
+ * `default` and so arrive filled. Filled is not the same as ON: every switch is still
+ * off, so a filled field is an answer waiting inside a disclosure nobody has opened, and
+ * a create that never opens one still provisions nothing.
  *
  * `values` is keyed by field name and shared across the options of one question: switching
  * template or type resets it (see `resetScratchOption`), because a value keyed to an option
@@ -159,15 +193,23 @@ export const defaultScratchConfig = () => ({
     // One part per template, keyed by its value: the policies are independent of each
     // other, so one being on says nothing about the next, and each keeps its own answers.
     policies: Object.fromEntries(
-      CACHE_POLICY_TEMPLATES.map((template) => [template.value, { enabled: false, values: {} }])
+      CACHE_POLICY_TEMPLATES.map((template) => [
+        template.value,
+        { enabled: false, values: seededValues(template.fields) }
+      ])
     )
   },
   connector: { enabled: false, type: 'http', values: {} }
 })
 
-/** Clear the values of a question whose option just changed. */
-export const resetScratchOption = (part) => {
+/**
+ * Clear the values of a question whose option just changed, back to what the NEW option
+ * arrives with — the answers the abandoned option held go, and the ones its replacement
+ * declares (`default`) take their place, so a reset lands where a fresh form would.
+ */
+export const resetScratchOption = (part, fields = []) => {
   Object.keys(part.values).forEach((key) => delete part.values[key])
+  Object.assign(part.values, seededValues(fields))
 }
 
 /**
