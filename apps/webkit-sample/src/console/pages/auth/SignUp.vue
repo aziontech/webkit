@@ -1,14 +1,14 @@
 <script setup>
   // The signup entry — the first step of the signup flow (route /signup), rendered
-  // into the card half of the split its PARENT route owns (see SignupFlow.vue and
-  // AuthSplit.vue). This component is the card and what sits on the canvas under
-  // it; the chrome, the seam, the network panel and the entrance belong to the flow
+  // into the centred column its PARENT route owns (see SignupFlow.vue and
+  // AuthColumn.vue). This component is the card and what sits on the canvas under
+  // it; the chrome, the column, the client strip and the entrance belong to the flow
   // around it, which is what lets the step change without the page re-arriving.
   //
-  // The split is full-bleed rather than a centred container, and that is what puts
-  // the CardBox back. The two halves are not two cells of one bordered box — they
-  // are two halves of the PAGE, so the form needs an edge of its own to sit on or
-  // it floats loose on the canvas.
+  // The CardBox is the form's own edge. The column around it is the PAGE, not a box
+  // drawn for this form — it is the full site measure, a screen away on either side —
+  // so without a surface of its own the fields would float loose in the middle of
+  // it.
   //
   // Form order follows the design: the email path first (fields, then the primary
   // action), the divider, then the providers. The divider means what it says here
@@ -162,7 +162,7 @@
   <!-- One root element, because the flow cross-fades this component inside a
        <Transition> and a fragment cannot be animated. It carries the column layout
        for its own two pieces — the card and the way out under it — while the
-       centring and the half's padding come from AuthSplit. -->
+       centring and the column's rhythm come from AuthColumn. -->
   <div class="flex w-full flex-col items-center gap-(--spacing-md)">
     <CardBox
       class="w-full max-w-(--container-sm)"
@@ -388,7 +388,7 @@
         By continuing, I agree to Azion's
         <a
           class="text-link"
-          href="https://www.azion.com/en/terms-and-conditions/"
+          href="https://www.azion.com/en/documentation/agreements/customer-agreement/"
           target="_blank"
           rel="noopener noreferrer"
           >terms of service</a
@@ -396,7 +396,7 @@
         and
         <a
           class="text-link"
-          href="https://www.azion.com/en/privacy-policy/"
+          href="https://www.azion.com/en/documentation/agreements/privacy-policy/"
           target="_blank"
           rel="noopener noreferrer"
           >privacy policy</a

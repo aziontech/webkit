@@ -309,7 +309,7 @@
          `items-safe-center` utility (it compiles to nothing — probed, not assumed), so
          the centring moves to AUTO MARGINS on the columns: they collapse to 0 the moment
          there is no free space, which centres a short step and scrolls a tall one from
-         its true top. Same trick, same reason, as the card half in AuthSplit. -->
+         its true top. Same trick, same reason, as the module in AuthColumn. -->
     <div
       class="mx-auto grid w-full max-w-(--container-7xl) flex-1 grid-cols-1 items-center gap-(--spacing-xxl) px-(--layout-boundary-inline) py-(--spacing-xl) lg:min-h-0 lg:grid-cols-2 lg:items-start lg:overflow-y-auto lg:px-(--spacing-xl)"
     >

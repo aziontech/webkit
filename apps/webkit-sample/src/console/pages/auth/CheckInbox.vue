@@ -1,9 +1,9 @@
 <script setup>
   // The email-verification screen — the second step of the signup flow (route
-  // /signup/verify), rendered into the card half of the split its PARENT route owns
-  // (see SignupFlow.vue and AuthSplit.vue). Arriving here from Sign Up changes only
-  // this card: the header, the seam and the network panel are the flow's, not this
-  // screen's, so they never re-arrive.
+  // /signup/verify), rendered into the centred column its PARENT route owns
+  // (see SignupFlow.vue and AuthColumn.vue). Arriving here from Sign Up changes only
+  // this card: the header, the page frame and the client strip are the flow's, not
+  // this screen's, so they never re-arrive.
   //
   // It is built on the same pattern as Sign In's "Check your inbox" step, which is
   // the point: the whole signed-out flow is one place with one shape, and the only
@@ -83,7 +83,7 @@
 <template>
   <!-- One root element, because the flow cross-fades this component inside a
        <Transition> and a fragment cannot be animated. The card is the whole of this
-       step; the centring and the half's padding come from AuthSplit. -->
+       step; the centring and the column's padding come from AuthColumn. -->
   <CardBox
     class="w-full max-w-(--container-sm)"
     :padded="false"

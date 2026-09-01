@@ -2,7 +2,7 @@
   // The shared chrome for every unauthenticated screen (Sign Up, Check Inbox,
   // Onboarding): the black GlobalHeader with the Azion brand mark + a
   // Documentation link and a flex-1 slotted body. Screens compose their own
-  // two-column layout inside the default slot.
+  // layout inside the default slot.
   //
   // Kept as one component so the brand and the Documentation affordance are
   // defined once and stay identical across the whole signup flow — mirroring how
@@ -22,11 +22,12 @@
   //
   // WHICH region owns it depends on the layout, and that is the whole rule:
   //
-  //   from `lg` — the split is two columns, so each HALF owns its overflow (see
-  //     AuthSplit). A tall card scrolls inside its own column while the panel beside it
-  //     holds still, which is the only honest place for that scroll to live.
-  //   below `lg` — the halves are stacked, so there are no columns to scroll and the
-  //     whole stack is one run of page. `main` is the scroll zone.
+  //   from `lg` — the page is a framed column with a strip on its floor, so the MODULE
+  //     inside it owns its overflow (see AuthColumn). A tall card scrolls within the
+  //     frame while the strip and the header hold still, which is the only honest place
+  //     for that scroll to live.
+  //   below `lg` — the module and the strip are one run of page, so there is nothing to
+  //     scroll independently. `main` is the scroll zone.
   //
   // THE SCROLL ZONE IS NOT OPTIONAL, and this is the part that was actually broken. The
   // stacked case used to be `min-h-dvh` plus the DOCUMENT scroll — but this app pins
@@ -35,7 +36,7 @@
   // there was no document scroll to fall back to: everything past the fold was simply
   // clipped and unreachable. Measured on a 375x667 phone before this change — /signup
   // overran by 481px, /login by 290px, /signup/onboarding by 186px, with ZERO scrollable
-  // elements on the page. The network panel and the bottom of the form could not be
+  // elements on the page. The bottom of the form, and everything under it, could not be
   // reached at all. A shell that is the viewport has to carry the scroll zone itself.
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
@@ -106,7 +107,7 @@
          `min-h-0` is what lets it actually be the leftover instead of its own content
          height — without it a flex child refuses to shrink below its content and the
          "no page scroll" above becomes a clip with nothing to scroll.
-         From `lg` the scroll moves down a level, into whichever half needs it. -->
+         From `lg` the scroll moves down a level, into the module that needs it. -->
     <main class="flex min-h-0 flex-1 flex-col overflow-y-auto lg:overflow-hidden">
       <slot />
     </main>

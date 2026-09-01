@@ -64,7 +64,7 @@
   import { computed, nextTick, reactive, ref, watch } from 'vue'
   import { useRouter } from 'vue-router'
 
-  import AuthSplit from '../../components/auth/AuthSplit.vue'
+  import AuthColumn from '../../components/auth/AuthColumn.vue'
 
   const router = useRouter()
 
@@ -397,7 +397,7 @@
 </script>
 
 <template>
-  <AuthSplit :panel-tags="[]">
+  <AuthColumn>
     <!-- Demo scaffolding, deliberately dashed and outside the card so it reads as
          not-part-of-the-product, the same treatment `/forms/error-validation`
          gives its "other user" panel. -->
@@ -784,5 +784,5 @@
         >Back to Forms</a
       >
     </div>
-  </AuthSplit>
+  </AuthColumn>
 </template>

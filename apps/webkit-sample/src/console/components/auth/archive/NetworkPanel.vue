@@ -1,4 +1,14 @@
 <script setup>
+  // ARCHIVED — not mounted. See ./README.md.
+  //
+  // The signed-out screens are one CENTRED column now (../AuthColumn.vue): the split
+  // this panel filled the other half of is gone, and what argues for the product at the
+  // floor of the page is the client strip rather than the map. Kept whole because the
+  // panel is a direction we expect to come back to — the map's 'panel' framing, the
+  // claim chips over it and the two editorial props are all still correct, and nothing
+  // about it was defective. Its imports are aliased (`@shared/…`), so mounting it again
+  // is one import line.
+  //
   // The art half of the Sign Up split: the network claim as the headline, its
   // claim chips under it, and the pixel world map as the ground. Two blocks over
   // one full-bleed backdrop — copy at the top, map everywhere else.

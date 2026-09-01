@@ -1,15 +1,14 @@
 <script setup>
-  // The sign-in entry — a dedicated PAGE (route /login) on the shared AuthSplit
-  // composition: AuthShell's chrome, a full-bleed 50 / 50 split, this card on one
-  // half and the network panel on the other. Below lg it collapses to a single
-  // column and the panel stacks under the form.
+  // The sign-in entry — a dedicated PAGE (route /login) on the shared AuthColumn
+  // composition: AuthShell's chrome, one centred column on the canvas, this card
+  // centred in it, and the client strip on the column's floor.
   //
   // The two auth screens were drifting apart — Sign Up a split page, Sign In a lone
   // card centred on the canvas under a header it declared itself. They are one
   // moment in the product, so they share one composition, one entrance and one form
   // discipline; what is left different between them is only what they ask for.
   //
-  // Sign In takes AuthSplit directly rather than through a parent route the way the
+  // Sign In takes AuthColumn directly rather than through a parent route the way the
   // signup flow does: it is a single screen, so it has nothing to stay continuous
   // WITH, and its entrance is exactly right on arrival. Coming from Sign Up, whose
   // card leaves along the same axis, the pair still reads as one horizontal movement
@@ -48,7 +47,7 @@
   import { computed, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
-  import AuthSplit from '../../components/auth/AuthSplit.vue'
+  import AuthColumn from '../../components/auth/AuthColumn.vue'
   import { startSession } from '../../lib/state/session'
 
   const step = ref('email')
@@ -506,7 +505,7 @@
 </script>
 
 <template>
-  <AuthSplit>
+  <AuthColumn>
     <CardBox
       class="w-full max-w-(--container-sm)"
       :padded="false"
@@ -1132,7 +1131,7 @@
           By continuing, I agree to Azion's
           <a
             class="text-link"
-            href="https://www.azion.com/en/terms-and-conditions/"
+            href="https://www.azion.com/en/documentation/agreements/customer-agreement/"
             target="_blank"
             rel="noopener noreferrer"
             >terms of service</a
@@ -1140,7 +1139,7 @@
           and
           <a
             class="text-link"
-            href="https://www.azion.com/en/privacy-policy/"
+            href="https://www.azion.com/en/documentation/agreements/privacy-policy/"
             target="_blank"
             rel="noopener noreferrer"
             >privacy policy</a
@@ -1148,5 +1147,5 @@
         </p>
       </Transition>
     </div>
-  </AuthSplit>
+  </AuthColumn>
 </template>

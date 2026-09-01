@@ -1,15 +1,16 @@
 <script setup>
   // The parent route of the signup flow (/signup and /signup/verify). It owns the
-  // split — and therefore the entrance — so the flow is ONE screen with a changing
+  // column — and therefore the entrance — so the flow is ONE screen with a changing
   // card instead of a sequence of page loads.
   //
   // This is the whole reason the flow is nested rather than two sibling routes.
   // vue-router keeps a parent component instance alive across its children, so
-  // AuthSplit mounts once, on entering the flow: the header, the seam and the
-  // network panel hold perfectly still from "Sign Up for a Free Account" through
-  // "Check your inbox", and only the card between them changes. As siblings, each
-  // step re-mounted the split and re-ran the 400ms slide, so the map arrived three
-  // times over and every step read as leaving the product and coming back.
+  // AuthColumn mounts once, on entering the flow: the header, the page frame and the
+  // client strip at its floor hold perfectly still from "Sign Up for a Free Account"
+  // through "Check your inbox", and only the card between them changes. As siblings,
+  // each step re-mounted the column and re-ran the 400ms slide, so the whole frame
+  // arrived three times over and every step read as leaving the product and coming
+  // back.
   //
   // What the card swap gets instead is a cross-fade an order of magnitude smaller
   // than the entrance — `out-in`, so the two cards never occupy the column at once
@@ -22,11 +23,11 @@
   // actually arrives — the email is verified, the organization gets created, the
   // console appears — and it carries its own composition and its own entrance. The
   // full slide is spent there, once, on the one move that is a real scene change.
-  import AuthSplit from '../../components/auth/AuthSplit.vue'
+  import AuthColumn from '../../components/auth/AuthColumn.vue'
 </script>
 
 <template>
-  <AuthSplit>
+  <AuthColumn>
     <RouterView v-slot="{ Component, route }">
       <Transition
         mode="out-in"
@@ -38,7 +39,7 @@
         leave-to-class="opacity-0"
       >
         <!-- The step's own content: its card, plus whatever belongs on the canvas
-             under it. The column's centring and gap come from AuthSplit.
+             under it. The column's centring and gap come from AuthColumn.
 
              THE KEYED WRAPPER IS LOAD-BEARING. `<Transition mode="out-in">` must
              not take `<component :is>` as its direct child: with a dynamic
@@ -63,5 +64,5 @@
         </div>
       </Transition>
     </RouterView>
-  </AuthSplit>
+  </AuthColumn>
 </template>
