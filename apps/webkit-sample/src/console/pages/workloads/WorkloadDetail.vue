@@ -70,8 +70,10 @@
   import ControlsHeader from '../../components/page/ControlsHeader.vue'
   import PageHeading from '../../components/page/PageHeading.vue'
   import PageTabs from '../../components/page/PageTabs.vue'
+  import ProductionChecklist from '../../components/page/ProductionChecklist.vue'
   import Section from '../../components/page/Section.vue'
   import AppLayout from '../../components/shell/AppLayout.vue'
+  import AddDomainDrawer from '../../components/workload/AddDomainDrawer.vue'
   import TopologyBindNode from '../../components/workload/TopologyBindNode.vue'
   import TopologyNodeCard from '../../components/workload/TopologyNodeCard.vue'
   import { useListRefresh } from '../../lib/behavior/list-state'
@@ -244,6 +246,93 @@
   // deployment's facts and its version history. Nodes are independent, so opening one
   // never closes another.
   const openNodes = reactive({})
+
+  // --- Ship to production ---------------------------------------------------
+  // WHAT IS STILL BETWEEN THIS WORKLOAD AND PRODUCTION, counted in one band at the top
+  // of the Overview (../../components/page/ProductionChecklist.vue). A create can only
+  // ask what it needs to create the thing; these three are the rest, and leaving them to
+  // be discovered is how a workload ends up live on a generated hostname with nothing in
+  // front of it.
+  //
+  // EVERY STEP IS DERIVED FROM THE STATE THIS PAGE ALREADY RENDERS — the domains list,
+  // the two bindable slots of the topology, the firewall the chain was provisioned with.
+  // Nothing is stored as "done": a step is done because the thing exists, so undoing the
+  // work puts the step back, which a click-counter never would.
+  //
+  // The custom domains this page adds are page-local, exactly like `bindings` above: the
+  // topology's bind slots do not survive a reload either, and one of the two persisting
+  // while the other did not would be the confusing half-measure.
+  const customDomains = ref([])
+  const addDomainOpen = ref(false)
+
+  // The firewall is done EITHER WAY it can be there: bound here on the topology, or
+  // provisioned with the chain by a create that asked for protection
+  // (../applications/CreateApplication.vue). Reading only `bindings` would show the step
+  // as pending on a workload that has had a firewall since the day it was made.
+  const boundFirewall = computed(() => bindings.firewall || record.value.firewall?.name || '')
+
+  // Each step is a ROW in the band's Next-steps list, so the title is the act and the
+  // icon is the thing being acted on — there is no separate button label to write: the
+  // row IS the control (../../components/page/ProductionChecklist.vue).
+  const productionSteps = computed(() => [
+    {
+      id: 'domain',
+      icon: 'pi pi-globe',
+      title: 'Add a custom domain',
+      description:
+        'Serve this workload on a domain of your own, with a free HTTPS certificate, instead of the generated Azion hostname.',
+      done: customDomains.value.length > 0,
+      // The FACT, not the verdict: a reader coming back to a done step is checking WHICH
+      // domain it ended up on.
+      doneNote: `Serving ${customDomains.value.map((entry) => entry.domain).join(', ')}.`
+    },
+    {
+      id: 'firewall',
+      icon: 'pi pi-shield',
+      title: 'Enable firewall protection',
+      description:
+        'Bind a firewall so requests are inspected before they reach the application. Rate limiting, WAF rules, and network lists.',
+      done: Boolean(boundFirewall.value),
+      doneNote: `Protected by ${boundFirewall.value}.`
+    },
+    {
+      id: 'customPage',
+      icon: 'pi pi-file',
+      title: 'Set custom error pages',
+      description: "Answer 4xx and 5xx with your own page instead of Azion's default response.",
+      done: Boolean(bindings.customPage),
+      doneNote: `Serving ${bindings.customPage}.`
+    }
+  ])
+
+  // The band is a POINTER, not a second place to configure things: every step but the
+  // domain is already answerable on this page, so pressing one takes the reader to that
+  // control and opens it rather than growing a parallel form beside it. The domain has no
+  // control here, so it gets the drawer the create flow already uses for it
+  // (../../components/workload/AddDomainDrawer.vue) — one surface for adding a domain,
+  // not two that can disagree.
+  const topologyRef = ref(null)
+
+  const onChecklistAction = (step) => {
+    if (step.id === 'domain') {
+      addDomainOpen.value = true
+      return
+    }
+    // The topology's own bind node for that slot, opened where it lives. A bound slot
+    // opens too — the reader pressed Review to see what is in it.
+    openNodes[step.id] = true
+    // Smooth, unless the reader asked for less motion — a scripted scroll is motion like
+    // any other, and it is the one kind a `motion-reduce:` class cannot reach.
+    const reduced = globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+    topologyRef.value?.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'center' })
+  }
+
+  const addDomain = (domain) => {
+    customDomains.value = [...customDomains.value, domain]
+    toast.success(`${domain.domain} added to ${workload.value.name}.`, {
+      description: 'Point your DNS at the workload to finish the handover.'
+    })
+  }
 
   const bindResource = (slotKey, value) => {
     const slot = BINDABLE.find((item) => item.key === slotKey)
@@ -497,6 +586,19 @@
             <!-- The tab's parent section: it spaces the sections inside it at
                  --layout-section-gap. -->
             <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)">
+              <!-- SHIP TO PRODUCTION — first, and only while the reader arrives with
+                   something left to do. It is what this page is FOR on the day the
+                   workload is made: the create provisioned a live chain on a generated
+                   hostname, and these are the three gates between that and production.
+                   It sits above Active Deployment because it is about what the workload
+                   is NOT yet; everything below reports what it already is. Once every
+                   step is done it collapses itself into one line and stops competing
+                   (../../components/page/ProductionChecklist.vue). -->
+              <ProductionChecklist
+                :steps="productionSteps"
+                @action="onChecklistAction"
+              />
+
               <!-- Active Deployment — the same anatomy as Version History below: a
                    small PageHeading, then the band's controls, then a flush CardBox,
                    each at the group gap. The Environment Select is this band's CONTROL,
@@ -618,7 +720,10 @@
                    section gap as the peer of Active Deployment and Version History. No
                    accordion: the bands around it do not fold, and a section that names
                    itself does not need a second control to reveal it. -->
-              <div class="flex flex-col gap-(--layout-group-gap)">
+              <div
+                ref="topologyRef"
+                class="flex flex-col gap-(--layout-group-gap)"
+              >
                 <PageHeading
                   title="Deployment topology"
                   size="small"
@@ -974,6 +1079,15 @@
       :saving="savingSettings"
       @save="saveSettings"
       @discard="discardSettings"
+    />
+
+    <!-- ADD A CUSTOM DOMAIN — the same drawer the create flow uses for it
+         (../../components/workload/AddDomainDrawer.vue), not a second form asking the
+         same question in different words. A drawer and not a page because adding a domain
+         happens INSIDE a resource that already exists. -->
+    <AddDomainDrawer
+      v-model:open="addDomainOpen"
+      @save="addDomain"
     />
 
     <!-- The bar carries the leave guard, and the bar is gated on the tab — so on Overview
