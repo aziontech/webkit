@@ -128,8 +128,8 @@
   // ── Platform state — the mirror of azion/azion.json ───────────────────────
   const azionState = reactive({
     applicationId: props.application.id,
-    domainUrl: 'https://e7b4verynr.map.azionedge.net',
-    domainName: 'e7b4verynr.map.azionedge.net',
+    domainUrl: 'https://e7b4verynr.azion.run',
+    domainName: 'e7b4verynr.azion.run',
     env: 'production',
     prefix: '20260720130245'
   })

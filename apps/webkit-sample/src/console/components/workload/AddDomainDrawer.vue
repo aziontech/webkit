@@ -1,6 +1,6 @@
 <script setup>
   // Add domain — the sub-drawer opened from the Domains section of Create Workload.
-  // A MEDIUM drawer whose body chooses between a free azion.app subdomain and a
+  // A MEDIUM drawer whose body chooses between a free Azion subdomain and a
   // custom ("bring your own") domain, then captures the domain and the environment
   // it serves. On save it emits the domain record back to the parent, which appends
   // it to the Domains list.
@@ -38,6 +38,7 @@
   import { reactive, ref, watch } from 'vue'
 
   import { ENVIRONMENT_OPTIONS } from '../../lib/data/create-resources'
+  import { AZION_DOMAIN_SUFFIX } from '../../lib/data/workload-provisioning'
 
   // Two-way open state; the parent binds v-model:open.
   const open = defineModel('open', { type: Boolean, default: false })
@@ -50,7 +51,7 @@
     {
       value: 'free',
       label: 'Get a free Azion Domain',
-      description: 'You can use a free azion.app domain.'
+      description: `You can use a free ${AZION_DOMAIN_SUFFIX.replace(/^\./, '')} domain.`
     },
     {
       value: 'own',
@@ -95,7 +96,7 @@
     submitting.value = true
     try {
       await new Promise((resolve) => setTimeout(resolve, 600))
-      const suffix = form.kind === 'free' ? '.azion.app' : ''
+      const suffix = form.kind === 'free' ? AZION_DOMAIN_SUFFIX : ''
       emit('save', {
         id: `domain-${Date.now()}`,
         domain: `${form.domain.trim()}${suffix}`,
@@ -185,7 +186,9 @@
                           :aria-describedby="errors.domain ? 'add-domain-error' : undefined"
                           @update:model-value="errors.domain = ''"
                         />
-                        <InputGroupAddon v-if="form.kind === 'free'">.azion.app</InputGroupAddon>
+                        <InputGroupAddon v-if="form.kind === 'free'">
+                          {{ AZION_DOMAIN_SUFFIX }}
+                        </InputGroupAddon>
                       </InputGroup>
                       <HelperText
                         v-if="errors.domain"
@@ -197,7 +200,7 @@
 
                     <Message
                       severity="info"
-                      label="Your workload is always accessible at an azion.app subdomain based on the workload name. Custom domains allow visitors to reach your project at your own domain."
+                      :label="`Your workload is always accessible at an ${AZION_DOMAIN_SUFFIX.replace(/^\./, '')} subdomain based on the workload name. Custom domains allow visitors to reach your project at your own domain.`"
                     />
 
                     <div class="flex flex-col gap-(--spacing-xs)">

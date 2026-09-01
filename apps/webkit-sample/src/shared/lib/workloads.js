@@ -28,8 +28,8 @@ export const WORKLOADS = Array.from({ length: WORKLOAD_COUNT }, (_, i) => {
   // "+N" Popover. `domainCount` is the overflow count (everything after the primary).
   const extraCount = (n * 7) % 99
   const domains = [
-    `my-workload-${n}.azion.app`,
-    ...Array.from({ length: extraCount }, (_, j) => `my-workload-${n}-alias-${j + 1}.azion.app`)
+    `my-workload-${n}.azion.run`,
+    ...Array.from({ length: extraCount }, (_, j) => `my-workload-${n}-alias-${j + 1}.azion.run`)
   ]
   const modified = daysAgo(i * 18)
   return {

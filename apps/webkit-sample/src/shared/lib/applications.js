@@ -31,7 +31,7 @@ export const APPLICATIONS = [
     preset: 'vue',
     repository: 'gab-az/webkit-sample-vue',
     branch: 'main',
-    domainName: 'e7b4verynr.map.azionedge.net',
+    domainName: 'e7b4verynr.azion.run',
     infrastructure: 'Production',
     status: 'Active',
     modifiedAt: daysAgo(2)
@@ -42,7 +42,7 @@ export const APPLICATIONS = [
     preset: 'react',
     repository: 'acme/react-dashboard',
     branch: 'main',
-    domainName: 'd9m8j2k4l5.map.azion.com',
+    domainName: 'd9m8j2k4l5.azion.run',
     infrastructure: 'Staging',
     status: 'Active',
     modifiedAt: daysAgo(375)
@@ -53,7 +53,7 @@ export const APPLICATIONS = [
     preset: 'next',
     repository: 'acme/analytics-pro',
     branch: 'main',
-    domainName: 'q7w8e9r0t1.map.azion.com',
+    domainName: 'q7w8e9r0t1.azion.run',
     infrastructure: 'Production',
     status: 'Active',
     modifiedAt: daysAgo(320)
@@ -64,7 +64,7 @@ export const APPLICATIONS = [
     preset: 'nuxt',
     repository: 'shopco/ecommerce-v2',
     branch: 'develop',
-    domainName: 'y6u7i8o9p0.map.azion.com',
+    domainName: 'y6u7i8o9p0.azion.run',
     infrastructure: 'Development',
     status: 'Inactive',
     modifiedAt: daysAgo(250)
@@ -75,7 +75,7 @@ export const APPLICATIONS = [
     preset: 'svelte',
     repository: 'acme/mobile-app',
     branch: 'main',
-    domainName: 'a1s2d3f4g5.map.azion.com',
+    domainName: 'a1s2d3f4g5.azion.run',
     infrastructure: 'Production',
     status: 'Active',
     modifiedAt: daysAgo(190)
@@ -86,7 +86,7 @@ export const APPLICATIONS = [
     preset: 'astro',
     repository: 'acme/marketing-site',
     branch: 'main',
-    domainName: 'z9x8c7v6b5.map.azion.com',
+    domainName: 'z9x8c7v6b5.azion.run',
     infrastructure: 'Production',
     status: 'Active',
     modifiedAt: daysAgo(141)
@@ -97,7 +97,7 @@ export const APPLICATIONS = [
     preset: 'angular',
     repository: 'acme/internal-tools',
     branch: 'develop',
-    domainName: 'n0m9b8v7c6.map.azion.com',
+    domainName: 'n0m9b8v7c6.azion.run',
     infrastructure: 'Development',
     status: 'Active',
     modifiedAt: daysAgo(88)
@@ -108,7 +108,7 @@ export const APPLICATIONS = [
     preset: 'astro',
     repository: 'acme/blog-platform',
     branch: 'main',
-    domainName: 'k1l2m3n4o5.map.azion.com',
+    domainName: 'k1l2m3n4o5.azion.run',
     infrastructure: 'Staging',
     status: 'Inactive',
     modifiedAt: daysAgo(63)
@@ -119,7 +119,7 @@ export const APPLICATIONS = [
     preset: 'vue',
     repository: 'acme/docs-portal',
     branch: 'main',
-    domainName: 'p9o8i7u6y5.map.azion.com',
+    domainName: 'p9o8i7u6y5.azion.run',
     infrastructure: 'Production',
     status: 'Active',
     modifiedAt: daysAgo(47)
@@ -130,7 +130,7 @@ export const APPLICATIONS = [
     preset: 'svelte',
     repository: 'acme/status-page',
     branch: 'main',
-    domainName: 'm4n5b6v7c8.map.azion.com',
+    domainName: 'm4n5b6v7c8.azion.run',
     infrastructure: 'Staging',
     status: 'Active',
     modifiedAt: daysAgo(21)
@@ -141,7 +141,7 @@ export const APPLICATIONS = [
     preset: 'next',
     repository: 'acme/auth-service',
     branch: 'main',
-    domainName: 't1r2e3w4q5.map.azion.com',
+    domainName: 't1r2e3w4q5.azion.run',
     infrastructure: 'Production',
     status: 'Active',
     modifiedAt: daysAgo(12)
@@ -152,7 +152,7 @@ export const APPLICATIONS = [
     preset: 'react',
     repository: 'acme/legacy-api',
     branch: 'develop',
-    domainName: 'g6h7j8k9l0.map.azion.com',
+    domainName: 'g6h7j8k9l0.azion.run',
     infrastructure: 'Development',
     status: 'Inactive',
     modifiedAt: daysAgo(5)

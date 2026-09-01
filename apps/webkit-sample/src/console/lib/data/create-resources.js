@@ -296,7 +296,7 @@ export const createResources = [
             api: 'workload_domain_allow_access',
             label: 'Keep the Azion domain answering',
             description:
-              'The workload also stays reachable on its own azion.app hostname, which is what you test against before DNS moves.',
+              'The workload also stays reachable on its own azion.run hostname, which is what you test against before DNS moves.',
             default: true
           }
         ]

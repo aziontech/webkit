@@ -61,7 +61,7 @@
     {
       id: 'zone-1',
       zoneName: 'aasdasdasdas',
-      domain: 'r72xyxc3d9.map.azionedge.net',
+      domain: 'r72xyxc3d9.azion.run',
       status: 'Active',
       author: authorAt(0).name,
       authorAvatar: authorAt(0).avatar,
