@@ -25,8 +25,9 @@
   //
   // ONE ROW IS A DRILL, and it is `Functions` — a product sitting beside `Applications` in
   // the `Build` segment, whose eleven pages are a menu rather than a list to unfold under a
-  // peer row. Activating it replaces the column with the Functions menu behind a
-  // `Menu.Back` row, and the same drill carries both homes of the tree: the rail and the
+  // peer row. Activating it replaces the column with the Functions menu behind a `Menu.Back`
+  // button — from anywhere on the row, because the row carries no `href` of its own — and the
+  // same drill carries both homes of the tree: the rail and the
   // sheet share one stack, so opening the level in one shows it in the other. So the rail
   // runs TWO models — `expanded` for the condensed rows, and the stack (`path`) for that
   // one level — and the stack is DERIVED from the page rather than remembered, which is
@@ -186,8 +187,31 @@
    * navigation would replay an entrance for a column that never left the screen.
    */
   const onPath = (levels) => {
+    const previous = path.value
+    // Deeper means a push: remember where the level being left was sitting.
+    const isPush = levels.length > previous.length
+    const el = navScroll.value?.$el
+    if (isPush && el) navScrollMemory.set(navScrollKey(previous), el.scrollTop)
+
     recordDocsLevel(levels, path.value.length)
     path.value = levels
+
+    // A level change REPLACES the column's contents, so the offset has to be set deliberately:
+    // 0 on the way IN (a push made from halfway down the tree would otherwise open the new
+    // level already scrolled past its first rows, or into the blank space below a short one,
+    // which reads as the menu having emptied), and the remembered offset on the way BACK.
+    const target = isPush ? 0 : (navScrollMemory.get(navScrollKey(levels)) ?? 0)
+    const apply = () => {
+      const node = navScroll.value?.$el
+      if (node) node.scrollTop = target
+    }
+    // Twice: `scrollTop` is clamped to the CURRENT scrollHeight, and on a pop the level being
+    // returned to has only just re-entered the flow — the first assignment can land against a
+    // height that has not grown back yet, silently clamping a restore to a smaller offset.
+    nextTick(() => {
+      apply()
+      globalThis.requestAnimationFrame(apply)
+    })
   }
 
   // The scroll target lives inside the tree, so the ref is on `Menu` rather than on the rail:
@@ -198,6 +222,22 @@
   // Below `lg` the same tree lives in a sheet instead of a rail. Its own open state,
   // not the rail's `collapsed`: the rail's is persisted sizing, this is one visit.
   const navOpen = ref(false)
+
+  /** The sheet's scroll container. */
+  const navScroll = ref(null)
+
+  /**
+   * Where each level was left, keyed by the stack that identifies it (`''` is the root column).
+   * A push and a pop want opposite things: going INTO a level is arriving somewhere new, so it
+   * starts at the top; coming BACK is returning to a place the reader already knows, so it
+   * restores the offset they left it at. Landing a pop at the top loses their place in a 275-row
+   * column, which is the whole reason they can drill in the first place.
+   *
+   * Keyed by the stack rather than by depth, so two sibling levels at the same depth keep their
+   * own positions. Plain object, not reactive: nothing renders from it.
+   */
+  const navScrollMemory = new Map()
+  const navScrollKey = (levels) => levels.join('>')
 
   // The DS focus trap moves initial focus to the panel's FIRST focusable. Park it on the
   // panel itself instead (`role="dialog"`, `tabindex="-1"`) — the conventional initial
@@ -220,17 +260,21 @@
    */
   const landingOf = (node) => (node.groups || node.children ? menuLeaves([node])[0] : node)
 
-  // Two kinds of row reach here. A LEAF, which is a page. And the `Functions` DRILL row,
-  // which `Menu` announces as it pushes its level — a drill row is a destination as well as
-  // a level, so the reader is not left reading the page they came from while a new menu is
-  // on screen. A condensed trigger emits nothing: unfolding rows is not a navigation.
+  // Only rows that HAVE a destination reach here, which in this tree means leaf pages: not one
+  // of the 28 container rows carries an `href`, because a container is not a destination (see
+  // `landingOf`). `Menu` reads that same `href` to decide the row's anatomy — with one, the row
+  // is a link plus an arrow; without one, the WHOLE ROW reveals the children — so every
+  // container here unfolds or pushes from its full 268px width and announces nothing.
+  //
+  // That is what lets the sheet close unconditionally. It used to have to exclude the drill
+  // row: one activation both pushed the level and announced it, so closing the sheet would
+  // have taken away the very menu the push had just put in it. Now the two are different
+  // rows entirely, and only an arrival lands here.
   const onNavigate = (event, node) => {
     const target = landingOf(node)
     active.value = target.id
-    // The sheet closes on a page, because the page it opened is behind the overlay — but not
-    // on the drill row, whose whole job is to put a second menu in the sheet the reader is
-    // looking at.
-    if (!node.groups && !node.children) navOpen.value = false
+    // The page it opened is behind the overlay, so the sheet has done its job.
+    navOpen.value = false
     followRow(event, target)
   }
 
@@ -608,7 +652,14 @@
                so data-driven mode renders that recursion rather than us re-implementing it
                here: `groups` + `activeId` + the two view models (`expanded` for the
                condensed rows, `path` for the level) is the whole wiring.
-               `role="presentation"` because Sidebar already renders the nav landmark. -->
+               `role="presentation"` because Sidebar already renders the nav landmark.
+
+               A ROW THAT OWNS CHILDREN SPLITS ONLY IF IT IS ITSELF A DESTINATION — `Menu`
+               keys that off the node's `href`. No container in this tree has one (a container
+               resolves to its first page through `landingOf` instead), so every one of them
+               unfolds or pushes from its whole width, which is the only thing that works on a
+               phone: the split shape leaves a 28px arrow as the sole live target, 7% of the
+               row's area, with the rest navigating away and dismissing the sheet. -->
           <Menu
             ref="menuRef"
             v-model:expanded="expanded"
@@ -623,8 +674,13 @@
             <!-- Declared unconditionally: it renders nothing until a level is pushed, and
                  it renders INSIDE that level rather than here (the level exposes the anchor
                  and Back teleports into it), so it travels with the slide and never takes a
-                 row from the column it returns to. -->
-            <Menu.Back />
+                 row from the column it returns to.
+
+                 `label` names the DESTINATION, which is the one thing Back cannot work out
+                 for itself: the level below `Functions` is the root column, and a root has
+                 no trigger to name it. Without this the button reads a bare `Back`; with it,
+                 `Back to Docs`. -->
+            <Menu.Back label="Docs" />
           </Menu>
         </Sidebar>
       </div>
@@ -816,7 +872,10 @@
             <DrawerClose />
           </PanelHeader>
 
-          <ScrollArea class="min-h-0 min-w-0 w-full flex-1">
+          <ScrollArea
+            ref="navScroll"
+            class="min-h-0 min-w-0 w-full flex-1"
+          >
             <!-- The same two models as the rail, from the same refs: the sheet is the
                  other home of one tree, so a level opened here is open there. `aria-label`
                  rather than `role="presentation"` — a Drawer panel is not a landmark, so
@@ -832,7 +891,8 @@
               @update:path="onPath"
               @navigate="onNavigate"
             >
-              <Menu.Back />
+              <!-- Same destination name as the rail's: one tree, two homes. -->
+              <Menu.Back label="Docs" />
             </Menu>
           </ScrollArea>
 
