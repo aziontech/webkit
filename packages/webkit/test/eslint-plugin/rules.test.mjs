@@ -475,9 +475,10 @@ test('authoring-standards (shared engine: hook + ratchet + consumer lint)', () =
       },
       // one-line JSDoc (mandated on public surface) never counts as prose
       {
-        code: Array.from({ length: 16 }, (_, i) => `/** doc ${i} */\nexport const v${i} = ${i}`).join(
-          '\n'
-        ),
+        code: Array.from(
+          { length: 16 },
+          (_, i) => `/** doc ${i} */\nexport const v${i} = ${i}`
+        ).join('\n'),
         filename: 'src/jsdoc.js'
       }
     ],
