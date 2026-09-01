@@ -55,7 +55,7 @@
   // and a create that stopped short would leave them on a list hunting for a Deploy
   // button. The verb is what makes it consent instead of a surprise.
   import { toast } from '@aziontech/webkit/toast'
-  import { provisionDeployment, resourceChain } from '@shared/lib/provisioning'
+  import { provisionDeployment, publishDeployment, resourceChain } from '@shared/lib/provisioning'
   import { computed, reactive, ref, watch } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
@@ -69,6 +69,13 @@
   } from '../../lib/data/application-flows'
   import { defaultModuleState } from '../../lib/data/application-modules'
   import {
+    defaultScratchConfig,
+    scratchCachePolicies,
+    scratchConnector,
+    validateScratch
+  } from '../../lib/data/application-scratch'
+  import { connectorMeta } from '../../lib/data/connectors'
+  import {
     defaultFirewallProtection,
     enabledFirewallModules,
     firewallBindingName,
@@ -77,12 +84,14 @@
     firewallModuleLabelsByName
   } from '../../lib/data/firewalls'
   import { configuredTemplateSteps } from '../../lib/data/template-provisioning'
+  import { workloadProvisioningSteps } from '../../lib/data/workload-provisioning'
   import ConfigureStep from './wizard/ConfigureStep.vue'
   import DeploySuccess from './wizard/DeploySuccess.vue'
   import { provideCreateForm } from './wizard/form-context'
   import GitSourceStep from './wizard/GitSourceStep.vue'
   import MethodStep from './wizard/MethodStep.vue'
   import RepositoryStep from './wizard/RepositoryStep.vue'
+  import ScratchStep from './wizard/ScratchStep.vue'
   import SourceSummary from './wizard/SourceSummary.vue'
   import TemplateSourceStep from './wizard/TemplateSourceStep.vue'
 
@@ -161,7 +170,12 @@
     protection: defaultFirewallProtection(),
     modules: defaultModuleState(),
     active: true,
-    debug: false
+    debug: false,
+    // THE FROM-SCRATCH HALF — the cache policy and the connector, each a conditional form
+    // whose chosen option decides what else it asks (../../lib/data/application-scratch.js).
+    // It rides on the same object as the rest because it is answered in the same part and
+    // committed by the same press; the flows that never show it never read it.
+    scratch: defaultScratchConfig()
   })
 
   // Per-field messages, filled on the commit attempt and cleared as the reader edits.
@@ -309,6 +323,17 @@
   const validate = () => {
     clearErrors()
     if (!form.name.trim()) errors.name = 'This field is required.'
+
+    // FROM SCRATCH ASKS DIFFERENT QUESTIONS, so it is checked against different ones: the
+    // required fields of the cache template and the connector type currently on screen,
+    // and NONE of the rest — there is no firewall card and no template settings on that
+    // part, so a check for either would fail on something the reader was never shown
+    // (../../lib/data/application-scratch.js → validateScratch).
+    if (flowId.value === 'scratch') {
+      validateScratch(form.scratch, errors)
+      return Object.keys(errors).length === 0
+    }
+
     // The protection branch the reader is ON is the one that can be incomplete: a firewall
     // that is being created needs a name, and one being bound needs to be picked. Neither
     // is asked at all while the switch is off.
@@ -371,6 +396,18 @@
     submitting.value = true
     try {
       await new Promise((resolve) => setTimeout(resolve, 900))
+
+      // FROM SCRATCH CREATES; IT DOES NOT DEPLOY, and the flow stops where the work
+      // stops. The run card narrates a clone, an install and a build
+      // (../../components/deployment/DeploymentFlow.vue) — six rows of work that cannot
+      // happen for an application with no code behind it, so playing it would be inventing
+      // a deploy to fill the time. The two things this create did NOT do are exactly the
+      // two next steps the outcome offers: give it a domain, and ship something to it.
+      if (flowId.value === 'scratch') {
+        finishCreate()
+        return
+      }
+
       phase.value = 'deploying'
     } catch (error) {
       toast.error('Could not start the deployment.', {
@@ -413,27 +450,49 @@
   // are cloned — so all three of these resolve to the card's own defaults for them.
   const isConfigured = computed(() => source.value?.requiresRepository === false)
 
-  const deploySteps = computed(() =>
-    isConfigured.value
-      ? configuredTemplateSteps({
-          title: source.value?.title ?? 'template',
-          settings: (source.value?.settings ?? []).map((setting) => setting.label)
-        })
-      : undefined
-  )
+  // Which door this is. Read by the run's narration below and by the outcome's copy, both
+  // of which differ for from scratch — it neither clones nor publishes on its commit.
+  const isScratch = computed(() => flowId.value === 'scratch')
 
-  const deploySplash = computed(() =>
-    isConfigured.value
-      ? {
-          verb: 'Provisioning',
-          icon: source.value?.icon || 'ai ai-applications',
-          from: source.value?.title ?? 'application',
-          // No destination: a configuration is not copied anywhere, and the card drops
-          // the second chip when `to` is empty.
-          to: ''
-        }
-      : null
-  )
+  // AND THE FROM-SCRATCH RUN IS A THIRD STORY AGAIN. It is not a deploy of code at all —
+  // there is none — it is the workload being provisioned around an application that
+  // already exists, which is exactly the pipeline the workload create narrates
+  // (../../lib/data/workload-provisioning.js): workload → domain → TLS → release →
+  // propagate. Borrowing the template model here would have claimed a clone, an install
+  // and a build for a run that does none of them.
+  const deploySteps = computed(() => {
+    if (isScratch.value)
+      return workloadProvisioningSteps({
+        name: form.name.trim() || 'my-application',
+        application: form.name.trim() || 'my-application'
+      })
+    if (isConfigured.value)
+      return configuredTemplateSteps({
+        title: source.value?.title ?? 'template',
+        settings: (source.value?.settings ?? []).map((setting) => setting.label)
+      })
+    return undefined
+  })
+
+  const deploySplash = computed(() => {
+    if (isScratch.value)
+      return {
+        verb: 'Publishing',
+        icon: 'ai ai-workloads',
+        from: form.name.trim() || 'my-application',
+        // No destination: nothing is copied anywhere, and the card drops the second chip
+        // when `to` is empty.
+        to: ''
+      }
+    if (isConfigured.value)
+      return {
+        verb: 'Provisioning',
+        icon: source.value?.icon || 'ai ai-applications',
+        from: source.value?.title ?? 'application',
+        to: ''
+      }
+    return null
+  })
 
   // --- The run and its outcome ---------------------------------------------
   // A finished deploy provisions the CHAIN — Workload → Application → Connector →
@@ -445,9 +504,50 @@
     provisioned.value ? resourceChain(provisioned.value) : []
   )
 
-  const onDeployFinished = () => {
+  // THE CONNECTOR AND THE CACHE POLICIES THE READER CONFIGURED — from-scratch only, because
+  // it is the only flow that asks. Every other flow's connector is a CONSEQUENCE of the
+  // deploy (it reads from the bucket the upload went to), and the provisioning store keeps
+  // that as its default; here the answer already exists, so it is handed over rather than
+  // derived (../../../shared/lib/provisioning.js).
+  const scratchResources = () => {
+    if (flowId.value !== 'scratch') return {}
+    const name = form.name.trim()
+    return {
+      connector: scratchConnector(
+        form.scratch,
+        name,
+        connectorMeta(form.scratch.connector.type).label
+      ),
+      cachePolicies: scratchCachePolicies(form.scratch, name)
+    }
+  }
+
+  // THE RUN FINISHED — and what that MEANS depends on which run it was.
+  //
+  //   The commit's run (git, template) is the first thing that happens, so it CREATES the
+  //     record: nothing existed before it.
+  //   The outcome's run (from scratch, "Deploy this application") happens to a record that
+  //     already exists, so it PUBLISHES that one. Creating again here would leave two
+  //     applications of the same name, one of them serving nothing — which is exactly the
+  //     bug the `publishDeployment` mutation exists to avoid.
+  const onRunFinished = () => {
+    if (provisioned.value) {
+      provisioned.value = publishDeployment(provisioned.value.id) ?? provisioned.value
+      phase.value = 'success'
+      return
+    }
+    finishCreate()
+  }
+
+  const finishCreate = () => {
     const application = payload()
     provisioned.value = provisionDeployment({
+      ...scratchResources(),
+      // FROM SCRATCH CREATES, IT DOES NOT PUBLISH. No workload, no bucket, no version —
+      // just the application and whatever the two switches added to it. The outcome then
+      // offers the two ways to deploy it, and either one publishes THIS record rather than
+      // making a second application of the same name.
+      publish: flowId.value !== 'scratch',
       repoName: application.name,
       // The account the code actually lives in, so the Application row's repository
       // reads `gab-az/my-app` and not the upstream that shipped the starter.
@@ -478,18 +578,165 @@
   // does not strand the reader on a dead progress card, and it does not pretend the
   // deploy succeeded.
   const onDeployFailed = (failedStep) => {
-    phase.value = 'wizard'
+    // BACK TO WHERE THE READER WAS, which is not always the questions. A failed commit run
+    // has a form to return to; a failed deploy from the OUTCOME has none — the application
+    // exists and the reader was looking at it — so sending them to a wizard they already
+    // finished would ask the create again and offer to make a second one.
+    const fromOutcome = Boolean(provisioned.value)
+    phase.value = fromOutcome ? 'success' : 'wizard'
     toast.error('The deployment did not finish.', {
       description: `It stopped at ${failedStep}. Check the configuration and deploy again.`,
-      action: { label: 'Retry', onClick: () => advance() }
+      action: { label: 'Retry', onClick: () => (fromOutcome ? deployHere() : advance()) }
     })
   }
 
+  // --- What the outcome says, and what it offers next ----------------------
+  // A DEPLOY AND A CREATE END DIFFERENTLY, so the outcome does not read the same for
+  // both. "Application deployed" over a from-scratch create would be the one claim on
+  // that screen that is false: nothing was built and nothing was shipped — an
+  // application layer exists, and the two deploy methods below are how it stops being
+  // only that.
+
+  // The claim follows the STATE, not the door. From scratch says "created" while nothing
+  // serves it — and then says "deployed", because one of the two methods on this very
+  // screen just made that true. A heading still reading "created" over a chain that now
+  // has a Live workload in it would be the screen contradicting its own list.
+  const outcomeTitle = computed(() =>
+    isScratch.value && !published.value ? 'Application created' : 'Application deployed'
+  )
+
+  // THE PAGE'S OWN DESCRIPTION SAYS WHAT THIS FLOW DOES, and the three flows do not do
+  // the same thing. "the last step deploys it along with the workload that publishes it"
+  // is the truth for a repository and a template; over the from-scratch part it promises a
+  // deploy that part deliberately does not run. It changes on the METHOD and not on the
+  // step, so the sentence is settled before the reader reaches the questions.
+  const pageDescription = computed(() =>
+    flowId.value === 'scratch'
+      ? 'An application is the code Azion runs, and the configuration it runs with. Name it, choose how it caches and where it fetches from. The last step creates it, with nothing deployed yet.'
+      : 'An application is the code Azion runs, and the configuration it runs with. Select where the code comes from, name it, and the last step deploys it along with the workload that publishes it.'
+  )
+
+  const outcomeLead = computed(() => {
+    if (!isScratch.value) return 'You deployed a new application.'
+    return published.value
+      ? 'It is live on the workload provisioned for it.'
+      : 'The application layer is ready. Nothing serves it yet. Deploy it from Next steps.'
+  })
+
+  // AND THE NEXT STEPS ARE THE TWO THINGS THIS CREATE DID NOT DO. The post-deploy three
+  // (customize the domain, point traffic, view analytics) are advice for an application
+  // already serving requests; this one serves none yet, so its next steps are the two
+  // acts that get it there — and both are ROUTES in this console, not documentation.
+  // Whether the record the create made is SERVED by anything yet. A from-scratch create
+  // stops at the application (`publish: false`), so this is false until one of the two
+  // deploys below runs — and it is what decides which next steps the outcome offers.
+  const published = computed(() => Boolean(provisioned.value?.workload))
+
+  // ── THE TWO WAYS TO DEPLOY, and they are genuinely different acts ─────────
+  //
+  // An application with nothing in front of it is not reachable. Getting it there means
+  // giving it a workload, and there are two honest ways to do that, so the outcome offers
+  // both rather than picking one on the reader's behalf:
+  //
+  //   DEPLOY THIS APPLICATION — the fast one, and it happens HERE. The same deployment run
+  //     the other two doors end with (../../components/deployment/DeploymentFlow.vue)
+  //     takes over the column, provisions the workload and the bucket around the
+  //     application that already exists, and hands the outcome back with the whole chain
+  //     in it. Nothing is asked, because nothing needs to be: Azion picks the hostname.
+  //   DEPLOY USING A NEW WORKLOAD — the deliberate one, and it LEAVES. The workload
+  //     create (/workloads/new) names the workload, puts a firewall in front of it, and
+  //     composes the release — three questions the fast path answers by default. It
+  //     carries the application id, so its release step arrives already pointed at the
+  //     application this flow just made.
+  //
+  // Both end in a served application. The difference is who chooses the workload.
+  const deployMethods = computed(() => [
+    {
+      icon: 'pi pi-cloud-upload',
+      title: 'Deploy this application',
+      description:
+        'Provision a workload for it and deploy, without leaving this flow. Azion names the domain, and you can change it after.',
+      // No route: this one runs on this page. See `deployHere`.
+      action: true,
+      // THE FLOW TAKES A SIDE. Both rows end in a served application, so a reader with
+      // no preference has no way to pick — and the fast one is the right default here:
+      // it asks nothing, and every question the other one adds (a workload name, a
+      // firewall, the release) is changeable afterwards on the workload it creates.
+      recommended: true
+    },
+    {
+      icon: 'ai ai-workloads',
+      title: 'Deploy using a new workload',
+      description:
+        'Name the workload, put a firewall in front of it, and compose the release yourself.',
+      to: {
+        path: '/workloads/new',
+        query: {
+          email: userEmail.value,
+          // The release step opens already pointed at what this flow just made. Its picker
+          // is keyed by NAME (../../lib/data/workload-flows.js → WORKLOAD_APPLICATIONS),
+          // so the name is what travels — an id would seed nothing.
+          application: provisioned.value?.application.name ?? ''
+        }
+      }
+    }
+  ])
+
+  // Once it IS served, the two deploys are spent and what is left is the thing the deploy
+  // could not do for the reader: put it on a domain of their own.
+  const publishedNextSteps = computed(() => [
+    {
+      icon: 'pi pi-globe',
+      title: 'Customize domain',
+      description:
+        'The workload serves this application on a generated Azion domain. Attach one of your own to it.',
+      to: {
+        path: `/workloads/${provisioned.value?.workload?.id ?? ''}`,
+        query: { email: userEmail.value, name: provisioned.value?.workload?.name }
+      }
+    },
+    {
+      icon: 'ai ai-edge-firewall',
+      title: 'Enable firewall protection',
+      description: 'Bind a firewall so requests are inspected before they reach the application.',
+      to: {
+        path: `/workloads/${provisioned.value?.workload?.id ?? ''}`,
+        query: { email: userEmail.value, name: provisioned.value?.workload?.name }
+      }
+    }
+  ])
+
+  const scratchNextSteps = computed(() =>
+    published.value ? publishedNextSteps.value : deployMethods.value
+  )
+
+  // THE IN-PLACE DEPLOY. It goes back to the RUN — the same phase the other two flows
+  // reach on their commit — with the record already made, so `finishCreate` is not called
+  // again: this deploy publishes what exists rather than creating a second application of
+  // the same name (../../../shared/lib/provisioning.js → publishDeployment).
+  const deployHere = () => {
+    phase.value = 'deploying'
+  }
+
+  const onNextStep = (step) => {
+    if (step.action) deployHere()
+  }
+
+  // MANAGE opens what the flow actually produced: the workload once there is one, and the
+  // application itself until then. A Manage that pointed at `/workloads/` with no id was
+  // the button on a screen where the reader had just been told nothing is served yet.
   const manageWorkload = () =>
-    router.push({
-      path: `/workloads/${provisioned.value?.workload.id ?? ''}`,
-      query: { email: userEmail.value, name: provisioned.value?.workload.name }
-    })
+    router.push(
+      published.value
+        ? {
+            path: `/workloads/${provisioned.value?.workload?.id ?? ''}`,
+            query: { email: userEmail.value, name: provisioned.value?.workload?.name }
+          }
+        : {
+            path: `/applications/${provisioned.value?.application.id ?? ''}`,
+            query: { email: userEmail.value, name: provisioned.value?.application.name }
+          }
+    )
 
   // THE SUMMARY'S WAY BACK. It names two answers, so it hands up WHICH one rather than
   // an index: the part that holds each is a fact about the flow, and the summary has no
@@ -511,7 +758,13 @@
   // running, the way forward does not move and does not disappear for a part.
   const nextLabel = computed(() => {
     if (step.value === 'method') return ''
-    return isLastStep.value ? 'Create and deploy' : 'Next'
+    if (!isLastStep.value) return 'Next'
+    // THE VERB IS WHAT THE PRESS DOES. The two flows that arrive with code create AND
+    // publish, and a button labelled "Save" that spends real infrastructure would be a
+    // surprise rather than consent. From scratch has nothing to publish, so its commit
+    // says only what it does — and "Deploy this application" is offered afterwards, on the
+    // outcome, as the separate act it is.
+    return flowId.value === 'scratch' ? 'Create application' : 'Create and deploy'
   })
 
   // AND IT IS GATED WHERE THERE IS NOTHING TO REPORT. Two kinds of part, two rules:
@@ -537,7 +790,7 @@
     ]"
     back-label="Back to Applications"
     title="Create application"
-    description="An application is the code Azion runs, and the configuration it runs with. Select where the code comes from, name it, and the last step deploys it along with the workload that publishes it."
+    :description="pageDescription"
     title-id="create-application-title"
     :heading="phase !== 'success'"
     :steps="steps"
@@ -584,6 +837,16 @@
       @update:repository="setRepository"
     />
 
+    <!-- FROM SCRATCH ASKS ITS OWN THREE QUESTIONS — name, cache policy, connector — and
+         none of the ones ./wizard/ConfigureStep.vue asks: there is no bundle to build, no
+         template settings to fill, and the module flags all carry the endpoint's own
+         default. No source summary above it either: with two parts the rail already says
+         which door this is, and Back is one press away.  -->
+    <ScratchStep
+      v-else-if="step === 'configure' && flowId === 'scratch'"
+      :disabled="submitting"
+    />
+
     <template v-else-if="step === 'configure'">
       <!-- WHAT IS BEING CONFIGURED, above the questions about it. The reader chose it one
            part ago and now has to name and build it, so losing sight of it is how a
@@ -616,7 +879,12 @@
            same handoff the Creation Center's template deploy makes with its preview strip
            (../marketplace/DeployTemplate.vue). -->
       <template v-if="phase === 'deploying'">
+        <!-- WHAT IS BEING DEPLOYED — for the doors that chose something. From scratch
+             chose nothing: its source is the method itself, there is no summary of it on
+             the configure part either, and a row reading "From scratch" over a run that is
+             provisioning a workload names the wrong thing. -->
         <SourceSummary
+          v-if="!isScratch"
           :source="source"
           :repository="repository"
           :changeable="false"
@@ -631,7 +899,7 @@
           :repo-owner="source?.repoOwner ?? 'aziontech'"
           :repo-path="source?.repoPath ?? 'templates/hello-world'"
           :scope="cloneDestination"
-          @finished="onDeployFinished"
+          @finished="onRunFinished"
           @failed="onDeployFailed"
         />
       </template>
@@ -643,7 +911,11 @@
         v-else
         :resources="createdResources"
         :scope="gitScope"
+        :title="outcomeTitle"
+        :lead="outcomeLead"
+        :next-steps="isScratch ? scratchNextSteps : []"
         @manage="manageWorkload"
+        @select="onNextStep"
       />
     </template>
   </WizardPage>

@@ -22,6 +22,9 @@
 // domain → certificate → firewall → release) and streams it through the same card the
 // application deploy uses, on the workload pipeline (./workload-provisioning.js).
 
+import { provisionedApplications } from '@shared/lib/provisioning'
+import { computed } from 'vue'
+
 import { firewallModuleLabel } from './firewalls'
 
 /** The one flow's parts, in order. Shape matches ./application-flows.js so the shared
@@ -72,12 +75,24 @@ export const workloadFirewallModuleLabels = (name) =>
   WORKLOAD_FIREWALLS.find((firewall) => firewall.value === name)?.moduleLabels ?? []
 
 /** The applications a release can serve. */
-export const WORKLOAD_APPLICATIONS = [
+// The seeded applications a release can bind, PLUS whatever this session has created.
+//
+// A COMPUTED and not a constant, because the from-scratch application create ends by
+// offering "Deploy using a new workload" (../../pages/applications/CreateApplication.vue):
+// the reader arrives here to publish an application they made a moment ago, and a fixture
+// list would land them on a picker that cannot name it. The provisioning store is read the
+// same way ./releases.js reads it, so an application created in this session is bindable
+// everywhere a release is composed, and one that never existed is offered nowhere.
+export const WORKLOAD_APPLICATIONS = computed(() => [
+  ...provisionedApplications.value.map((application) => ({
+    value: application.name,
+    label: application.name
+  })),
   { value: 'edge-shop', label: 'edge-shop' },
   { value: 'azion-docs-site', label: 'azion-docs-site' },
   { value: 'marketing-landing', label: 'marketing-landing' },
   { value: 'internal-admin', label: 'internal-admin' }
-]
+])
 
 /** Version selectors shared by every binding in the release. */
 export const WORKLOAD_VERSIONS = [

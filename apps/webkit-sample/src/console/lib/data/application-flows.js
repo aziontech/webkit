@@ -80,11 +80,14 @@ export const APPLICATION_FLOWS = {
     icon: 'pi pi-file',
     title: 'Start from scratch',
     description:
-      'Create the Azion application layer on its own, with no repository and no build. Connect your code to it whenever it exists.',
+      'Create the Azion application layer on its own: a name, Cache Settings, and a connector. No repository, no build. Connect your code to it whenever it exists.',
     // TWO steps, on purpose: from scratch IS the source, so there is nothing to pick.
+    // And the second part CREATES rather than deploying — there is no code to ship, so
+    // the label says what the press does and the outcome offers the deploy separately
+    // (../../pages/applications/wizard/ScratchStep.vue).
     steps: [
       { id: 'method', label: 'Select a method' },
-      { id: 'configure', label: 'Create and deploy' }
+      { id: 'configure', label: 'Configure and create' }
     ],
     defaults: NPM_BUILD
   },

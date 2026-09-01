@@ -73,7 +73,12 @@ const toDate = (value) => (value ? new Date(value) : null)
 const reviveRecord = (record) => ({
   ...record,
   createdAt: toDate(record.createdAt),
-  workload: { ...record.workload, modifiedAt: toDate(record.workload?.modifiedAt) },
+  // `workload` is NULL on an unpublished record (see `publish` below), and spreading null
+  // would revive it as `{ modifiedAt: null }` — an object where every consumer checks for
+  // its absence, so every list would show a nameless row.
+  workload: record.workload
+    ? { ...record.workload, modifiedAt: toDate(record.workload.modifiedAt) }
+    : null,
   application: { ...record.application, modifiedAt: toDate(record.application?.modifiedAt) }
 })
 
@@ -113,6 +118,19 @@ const persistRecords = () => {
  * @param {boolean} [input.firewallBound] True when an EXISTING firewall was bound
  *   rather than a new one created.
  * @param {string} [input.firewallId] The existing firewall's id, when bound.
+ * @param {object} [input.connector] The connector the create CONFIGURED — `{ name, kind,
+ *   address }`. Omitted, the chain gets the storage connector a deploy implies; supplied,
+ *   the chain gets the one the reader chose (see console/pages/applications/CreateApplication.vue,
+ *   the from-scratch flow, where the connector is a question rather than a consequence).
+ * @param {Array<object>} [input.cachePolicies] The cache policies the create made — each
+ *   `{ name, detail }`. Empty for the flows that do not ask for any, and for a create whose
+ *   policy switches were all left off.
+ * @param {boolean} [input.publish] Whether this create PUBLISHES. True (the default) is a
+ *   deploy: the whole chain exists, workload and bucket included, and the application is
+ *   reachable. False is a create that stopped at the application — no workload, no bucket,
+ *   nothing served — which is what the from-scratch door makes. Such a record is turned
+ *   into a published one later by `publishDeployment()`, so the application the reader
+ *   made is the one that ends up live rather than a second copy of it.
  * @returns {object} The stored record: `{ id, workload, application, connector, bucket, … }`.
  */
 export function provisionDeployment({
@@ -125,7 +143,10 @@ export function provisionDeployment({
   firewallName = '',
   firewallModules = [],
   firewallBound = false,
-  firewallId = ''
+  firewallId = '',
+  connector: connectorInput = null,
+  cachePolicies: cachePoliciesInput = [],
+  publish = true
 } = {}) {
   const name = slugify(repoName || templateTitle)
   const createdAt = new Date()
@@ -138,20 +159,26 @@ export function provisionDeployment({
   const domain = `${domainLabel()}.map.azionedge.net`
   const bucketName = `${name}-assets`
 
-  const workload = {
-    id: resourceId(),
-    name,
-    domain,
-    domains: [domain],
-    domainCount: 0,
-    status: 'Live',
-    url: `https://${domain}`,
-    environment: 'Production',
-    modifiedAt: createdAt,
-    lastModified,
-    owner: author.name,
-    ownerAvatar: author.avatar
-  }
+  // THE PUBLIC HALF OF THE CHAIN, and only for a create that publishes. A workload is the
+  // hostname traffic arrives on and the bucket is what the upload went to; an application
+  // created on its own has neither, and minting them anyway would put a Live workload in
+  // the list for a deploy nobody ran.
+  const workload = publish
+    ? {
+        id: resourceId(),
+        name,
+        domain,
+        domains: [domain],
+        domainCount: 0,
+        status: 'Live',
+        url: `https://${domain}`,
+        environment: 'Production',
+        modifiedAt: createdAt,
+        lastModified,
+        owner: author.name,
+        ownerAvatar: author.avatar
+      }
+    : null
 
   const application = {
     id: resourceId(),
@@ -168,13 +195,37 @@ export function provisionDeployment({
     authorAvatar: author.avatar
   }
 
-  const connector = {
+  // THE CONNECTOR, and it is not always the same one. A deploy provisions the bucket it
+  // uploads to, so its connector reads from that bucket — that is a CONSEQUENCE of
+  // deploying. A create that ASKED where the application fetches from already has the
+  // answer, and overriding it here is what keeps the chain honest: a reader who chose an
+  // HTTP origin must not find a storage connector in the list of what was created.
+  // A configured connector is the reader's; the default one only exists because a deploy
+  // uploaded to a bucket. So a create that publishes nothing AND configured nothing has no
+  // connector at all — inventing a storage connector pointed at a bucket that was never
+  // made would put a broken row in the chain.
+  const connector =
+    connectorInput || publish
+      ? {
+          id: resourceId(),
+          name: connectorInput?.name || `${name}-storage`,
+          kind: connectorInput?.kind || 'Object Storage',
+          address: connectorInput?.address || bucketName,
+          status: 'Active'
+        }
+      : null
+
+  // The cache policies, when the create made any. Each is a resource of the application,
+  // so they belong to the record and to the chain the outcome screen lists — not a field
+  // on the application row. A LIST and not one: the templates are independent of each
+  // other, so a create can switch several on and the chain has to show every one it made
+  // (console/pages/applications/wizard/ScratchStep.vue).
+  const cachePolicies = (cachePoliciesInput ?? []).map((policy) => ({
     id: resourceId(),
-    name: `${name}-storage`,
-    kind: 'Object Storage',
-    address: bucketName,
+    name: policy.name,
+    detail: policy.detail ?? '',
     status: 'Active'
-  }
+  }))
 
   // Only when the create asked for it. A firewall is a SEPARATE resource, not a module
   // flag on the application, so the chain either has one or does not — and the success
@@ -199,10 +250,93 @@ export function provisionDeployment({
       }
     : null
 
-  const bucket = {
+  const bucket = publish
+    ? {
+        id: bucketName,
+        name: bucketName,
+        access: isPublic ? 'Public' : 'Private',
+        objects: 24,
+        size: '1.2 MB',
+        lastModified,
+        author: author.name,
+        authorAvatar: author.avatar
+      }
+    : null
+
+  const record = {
+    // The workload is the chain's identity when there is one; an unpublished record is
+    // identified by the only resource it has.
+    id: workload?.id ?? application.id,
+    createdAt,
+    published: publish,
+    scope,
+    visibility: isPublic ? 'Public' : 'Private',
+    repository: `${scope}/${name}`,
+    // A version is what a DEPLOY produced. An unpublished record has none, so nothing
+    // resolves it as a deployment (`findDeploymentByVersion`) and no history row claims it.
+    versionId: publish ? String(1_200_000_000 + Math.floor(Math.random() * 99_999_999)) : '',
+    preset,
+    author,
+    workload,
+    application,
+    firewall: firewallRecord,
+    connector,
+    cachePolicies,
+    bucket
+  }
+
+  deployments.value.unshift(record)
+  persistRecords()
+  return record
+}
+
+/**
+ * Publish an unpublished record: give it the workload that serves it, the bucket its
+ * assets go to, and the version the deploy produced.
+ *
+ * THE SAME RECORD, mutated — not a second one. A from-scratch create makes an application
+ * and stops (`publish: false` above); deploying it later is that application going live,
+ * so the row the reader sees in the Applications list has to be the row that ends up
+ * served. Provisioning a fresh chain instead would leave two applications of the same name
+ * behind, one of them serving nothing.
+ *
+ * A record that is already published is returned untouched — deploying twice publishes a
+ * new VERSION of the same workload, it does not mint a second one.
+ *
+ * @param {string} recordId The record's id (the application id, while unpublished).
+ * @returns {object|undefined} The published record, or `undefined` when the id is unknown.
+ */
+export function publishDeployment(recordId) {
+  const record = deployments.value.find((entry) => entry.id === String(recordId))
+  if (!record) return undefined
+  if (record.published) return record
+
+  const name = record.application.name
+  const createdAt = new Date()
+  const lastModified = formatListDate(createdAt)
+  const author = record.author ?? authorAt(0)
+  const domain = `${domainLabel()}.map.azionedge.net`
+  const bucketName = `${name}-assets`
+
+  record.workload = {
+    id: resourceId(),
+    name,
+    domain,
+    domains: [domain],
+    domainCount: 0,
+    status: 'Live',
+    url: `https://${domain}`,
+    environment: 'Production',
+    modifiedAt: createdAt,
+    lastModified,
+    owner: author.name,
+    ownerAvatar: author.avatar
+  }
+
+  record.bucket = {
     id: bucketName,
     name: bucketName,
-    access: isPublic ? 'Public' : 'Private',
+    access: record.visibility === 'Private' ? 'Private' : 'Public',
     objects: 24,
     size: '1.2 MB',
     lastModified,
@@ -210,23 +344,22 @@ export function provisionDeployment({
     authorAvatar: author.avatar
   }
 
-  const record = {
-    id: workload.id,
-    createdAt,
-    scope,
-    visibility: isPublic ? 'Public' : 'Private',
-    repository: `${scope}/${name}`,
-    versionId: String(1_200_000_000 + Math.floor(Math.random() * 99_999_999)),
-    preset,
-    author,
-    workload,
-    application,
-    firewall: firewallRecord,
-    connector,
-    bucket
+  // A connector the create never asked for arrives with the deploy that needs one: the
+  // bundle went to a bucket, so something has to read from it. One the reader configured
+  // is left alone — it is the answer they gave.
+  record.connector ??= {
+    id: resourceId(),
+    name: `${name}-storage`,
+    kind: 'Object Storage',
+    address: bucketName,
+    status: 'Active'
   }
 
-  deployments.value.unshift(record)
+  record.versionId = String(1_200_000_000 + Math.floor(Math.random() * 99_999_999))
+  record.published = true
+  // The chain's identity moves to the workload, which is what every lookup and every
+  // resource link uses once one exists.
+  record.id = record.workload.id
   persistRecords()
   return record
 }
@@ -305,7 +438,7 @@ export function demoDeployment(workloadId, workloadName = 'Workload Name') {
 
 /** The provisioned record a workload id belongs to, or `undefined`. */
 export const findDeploymentByWorkload = (workloadId) =>
-  deployments.value.find((record) => record.workload.id === String(workloadId))
+  deployments.value.find((record) => record.workload?.id === String(workloadId))
 
 /**
  * The provisioned record a deployment VERSION id belongs to, or `undefined`.
@@ -383,10 +516,10 @@ export function removeDeployment(resourceIdentifier) {
   const id = String(resourceIdentifier)
   const index = deployments.value.findIndex(
     (record) =>
-      record.workload.id === id ||
+      record.workload?.id === id ||
       record.application.id === id ||
-      record.connector.id === id ||
-      record.bucket.id === id
+      record.connector?.id === id ||
+      record.bucket?.id === id
   )
   if (index === -1) return false
   deployments.value.splice(index, 1)
@@ -394,14 +527,20 @@ export function removeDeployment(resourceIdentifier) {
   return true
 }
 
-/** Rows to prepend to the Workloads / Applications / Object Storage lists. */
+// Rows to prepend to the Workloads / Applications / Object Storage lists.
+//
+// FILTERED, because a record does not always have all three: an application created on its
+// own (`publish: false`) has no workload and no bucket until it is deployed, and letting a
+// `null` through would put an empty row at the top of two lists.
 export const provisionedWorkloads = computed(() =>
-  deployments.value.map((record) => record.workload)
+  deployments.value.map((record) => record.workload).filter(Boolean)
 )
 export const provisionedApplications = computed(() =>
   deployments.value.map((record) => record.application)
 )
-export const provisionedBuckets = computed(() => deployments.value.map((record) => record.bucket))
+export const provisionedBuckets = computed(() =>
+  deployments.value.map((record) => record.bucket).filter(Boolean)
+)
 
 /**
  * The four resources of a record, in provisioning order, shaped for a topology
@@ -413,8 +552,14 @@ export const provisionedBuckets = computed(() => deployments.value.map((record) 
  */
 export function resourceChain(record) {
   const { workload, application, firewall, connector, bucket } = record
+  // `cachePolicy` is the shape a record written before a create could make several
+  // carries — a session that stored one is still readable after a reload.
+  const cachePolicies = record.cachePolicies ?? (record.cachePolicy ? [record.cachePolicy] : [])
   return [
-    {
+    // The workload, the connector and the bucket are each absent on an unpublished record
+    // — an application created on its own is served by nothing and has uploaded nothing.
+    // `null` entries are filtered out at the end, alongside the firewall's.
+    workload && {
       key: 'workload',
       kind: 'Workload',
       icon: 'ai ai-workloads',
@@ -462,7 +607,7 @@ export function resourceChain(record) {
         { label: 'Branch', value: application.branch }
       ]
     },
-    {
+    connector && {
       key: 'connector',
       kind: 'Connector',
       icon: 'ai ai-edge-connectors',
@@ -476,7 +621,25 @@ export function resourceChain(record) {
         { label: 'Address', value: connector.address }
       ]
     },
-    {
+    // AFTER the connector, because that is where they act: a policy decides whether the
+    // request reaches the connector at all. Empty for the flows that never asked for one,
+    // and one node per policy for a create that switched several on — the key carries the
+    // policy's own id, since two of them share the kind.
+    ...cachePolicies.map((cachePolicy) => ({
+      key: `cache-policy-${cachePolicy.id}`,
+      kind: 'Cache Settings',
+      icon: 'ai ai-tiered-cache',
+      name: cachePolicy.name,
+      status: 'Active',
+      href: `/applications/${application.id}`,
+      reference: cachePolicy.id,
+      fields: [
+        { label: 'ID', value: cachePolicy.id },
+        { label: 'Template', value: cachePolicy.detail || '—' },
+        { label: 'Status', value: cachePolicy.status }
+      ]
+    })),
+    bucket && {
       key: 'storage',
       kind: 'Storage',
       icon: 'ai ai-edge-storage',

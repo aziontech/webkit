@@ -20,16 +20,28 @@
   import Item from '@aziontech/webkit/item'
   import Tag from '@aziontech/webkit/tag'
   import { computed } from 'vue'
+  import { RouterLink } from 'vue-router'
 
   const props = defineProps({
     // The chain the deploy provisioned: Workload → Application → Connector → Storage,
     // in creation order (../../../../shared/lib/provisioning.js → resourceChain).
     resources: { type: Array, default: () => [] },
     // Where it was deployed — the Git scope, or the workspace when there is no repo.
-    scope: { type: String, default: '' }
+    scope: { type: String, default: '' },
+    // WHAT HAPPENED, in the flow's own words. A deploy shipped code; a from-scratch
+    // create made the layer and shipped nothing, so a heading reading "Application
+    // deployed" over it would be the one claim on the screen that is false.
+    title: { type: String, default: 'Application deployed' },
+    lead: { type: String, default: 'You deployed a new application.' },
+    // WHAT TO DO ABOUT IT — not part of what happened. Empty means the post-deploy
+    // three below; a flow that ends somewhere else hands up its own, and a step with a
+    // `to` is a route inside the console rather than a documentation link.
+    nextSteps: { type: Array, default: () => [] }
   })
 
-  defineEmits(['manage'])
+  // `manage` is the page's terminal action; `select` is a next step that DOES something
+  // on this page rather than going somewhere — running the deploy in place, for one.
+  defineEmits(['manage', 'select'])
 
   // The heading is a claim about the whole list, so it cannot say "created" when one of
   // the rows was BOUND — a create that binds an existing firewall provisioned three
@@ -41,7 +53,9 @@
   )
 
   // Post-deploy next steps. Documentation links, so each row is a real navigable <a>.
-  const nextSteps = [
+  const DOCUMENTATION = 'https://www.azion.com/en/documentation/'
+
+  const DEFAULT_NEXT_STEPS = [
     {
       icon: 'pi pi-globe',
       title: 'Customize domain',
@@ -59,6 +73,11 @@
       description: 'Gain powerful insights into your performance, availability, and security.'
     }
   ]
+
+  // The prop wins when it has anything in it. A default FACTORY cannot name this list —
+  // props are resolved before setup runs, so the constant is not in scope there — and
+  // resolving it here keeps the fallback one declaration instead of two.
+  const steps = computed(() => (props.nextSteps.length ? props.nextSteps : DEFAULT_NEXT_STEPS))
 </script>
 
 <template>
@@ -76,9 +95,9 @@
     <header
       class="animate-content-enter motion-reduce:animate-none flex w-full flex-col gap-(--spacing-xxs)"
     >
-      <h1 class="text-balance text-heading-lg text-(--text-default)">Application deployed</h1>
+      <h1 class="text-balance text-heading-lg text-(--text-default)">{{ title }}</h1>
       <p class="flex flex-wrap items-center gap-(--spacing-xs) text-body-sm text-(--text-muted)">
-        You deployed a new application
+        {{ lead }}
         <template v-if="scope">
           into
           <Tag
@@ -163,13 +182,109 @@
                  merged onto the anchor, so each next step is one real navigable
                  <a> instead of a <div> wrapping a link. -->
             <Item
-              v-for="step in nextSteps"
+              v-for="step in steps"
               :key="step.title"
               as-child
               size="small"
             >
+              <!-- A step that names a ROUTE is a RouterLink and a step that names a
+                   document is an anchor: they go to different kinds of place, and a next
+                   step inside this console must not open a new tab to get there. Two
+                   elements and not one `<component :is>`: `as-child` clones the single
+                   slot vnode, and a dynamic component resolved through it never reaches
+                   RouterLink's own render — the row came out as a bare `<a>` with no
+                   `href`, navigating nowhere. `v-if`/`v-else` still yields exactly one
+                   vnode, which is all `as-child` requires. -->
+              <!-- A step with neither a route nor a document is an ACT on this page: the
+                   in-place deploy. It is a real <button>, not an <a> to nowhere. -->
+              <button
+                v-if="!step.to && !step.href && step.action"
+                type="button"
+                class="w-full text-left"
+                @click="$emit('select', step)"
+              >
+                <Item.Media>
+                  <span
+                    class="flex size-8 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface)"
+                  >
+                    <i
+                      :class="step.icon"
+                      class="text-[0.875rem] leading-none text-(--text-default)"
+                      aria-hidden="true"
+                    />
+                  </span>
+                </Item.Media>
+                <Item.Content>
+                  <!-- The mark rides IN the title, not in `Item.Actions`: it qualifies
+                       the label, and the row's right edge already belongs to the
+                       chevron. `Item.Title` is a flex row, so it needs no wrapper.
+                       `primary` and not a status severity — the tinted brand chip
+                       reads as an endorsement, where the solid `info`/`success` fills
+                       in the card above are claims about what a resource IS. -->
+                  <Item.Title>
+                    {{ step.title }}
+                    <Tag
+                      v-if="step.recommended"
+                      label="Recommended"
+                      severity="primary"
+                      size="small"
+                    />
+                  </Item.Title>
+                  <Item.Description>{{ step.description }}</Item.Description>
+                </Item.Content>
+                <Item.Actions>
+                  <i
+                    class="pi pi-chevron-right text-(--text-muted)"
+                    aria-hidden="true"
+                  />
+                </Item.Actions>
+              </button>
+
+              <RouterLink
+                v-else-if="step.to"
+                :to="step.to"
+                class="text-left no-underline"
+              >
+                <Item.Media>
+                  <span
+                    class="flex size-8 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface)"
+                  >
+                    <i
+                      :class="step.icon"
+                      class="text-[0.875rem] leading-none text-(--text-default)"
+                      aria-hidden="true"
+                    />
+                  </span>
+                </Item.Media>
+                <Item.Content>
+                  <!-- The mark rides IN the title, not in `Item.Actions`: it qualifies
+                       the label, and the row's right edge already belongs to the
+                       chevron. `Item.Title` is a flex row, so it needs no wrapper.
+                       `primary` and not a status severity — the tinted brand chip
+                       reads as an endorsement, where the solid `info`/`success` fills
+                       in the card above are claims about what a resource IS. -->
+                  <Item.Title>
+                    {{ step.title }}
+                    <Tag
+                      v-if="step.recommended"
+                      label="Recommended"
+                      severity="primary"
+                      size="small"
+                    />
+                  </Item.Title>
+                  <Item.Description>{{ step.description }}</Item.Description>
+                </Item.Content>
+                <Item.Actions>
+                  <i
+                    class="pi pi-chevron-right text-(--text-muted)"
+                    aria-hidden="true"
+                  />
+                </Item.Actions>
+              </RouterLink>
+
               <a
-                href="https://www.azion.com/en/documentation/"
+                v-else
+                :href="step.href ?? DOCUMENTATION"
                 target="_blank"
                 rel="noopener"
                 class="text-left no-underline"
@@ -186,7 +301,21 @@
                   </span>
                 </Item.Media>
                 <Item.Content>
-                  <Item.Title>{{ step.title }}</Item.Title>
+                  <!-- The mark rides IN the title, not in `Item.Actions`: it qualifies
+                       the label, and the row's right edge already belongs to the
+                       chevron. `Item.Title` is a flex row, so it needs no wrapper.
+                       `primary` and not a status severity — the tinted brand chip
+                       reads as an endorsement, where the solid `info`/`success` fills
+                       in the card above are claims about what a resource IS. -->
+                  <Item.Title>
+                    {{ step.title }}
+                    <Tag
+                      v-if="step.recommended"
+                      label="Recommended"
+                      severity="primary"
+                      size="small"
+                    />
+                  </Item.Title>
                   <Item.Description>{{ step.description }}</Item.Description>
                 </Item.Content>
                 <Item.Actions>

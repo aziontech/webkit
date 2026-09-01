@@ -10,21 +10,42 @@
 import { daysAgo, formatListDate } from '@shared/lib/dates'
 import { authorAt, emailOf } from '@shared/lib/people'
 
-/** Connector type → the label and glyph every surface reads. */
+// The `description` is the type in one line — what it fetches FROM. It exists because
+// choosing a type is choosing what the address MEANS, and a list of three product names
+// does not say that: a reader who has not met Object Storage cannot tell it apart from an
+// origin by its name alone. It rides here, next to the label, so the create that offers
+// the types as cards and any surface that later explains one read the same sentence.
+/** Connector type → the label, glyph and one-line meaning every surface reads. */
 export const CONNECTOR_TYPES = {
-  http: { label: 'HTTP', icon: 'ai ai-edge-connectors' },
-  storage: { label: 'Edge Storage', icon: 'ai ai-edge-storage' },
-  'live-ingest': { label: 'Live Ingest', icon: 'ai ai-real-time-events' }
+  http: {
+    label: 'HTTP',
+    icon: 'ai ai-edge-connectors',
+    description: 'An origin server, reached by host name.'
+  },
+  // "Object Storage" and not "Edge Storage": that is what the module is called
+  // everywhere else in this console (Store → Object Storage), and a connector type
+  // that names the same product a second way is a second vocabulary to learn.
+  storage: {
+    label: 'Object Storage',
+    icon: 'ai ai-edge-storage',
+    description: 'A bucket in this workspace, read by name and prefix.'
+  },
+  'live-ingest': {
+    label: 'Live Ingest',
+    icon: 'ai ai-real-time-events',
+    description: 'An Azion region a live stream is ingested from.'
+  }
 }
 
-/** `{ label, icon }` for a connector type, with a safe fallback. */
+/** `{ label, icon, description }` for a connector type, with a safe fallback. */
 export const connectorMeta = (type) =>
-  CONNECTOR_TYPES[type] ?? { label: type, icon: 'ai ai-edge-connectors' }
+  CONNECTOR_TYPES[type] ?? { label: type, icon: 'ai ai-edge-connectors', description: '' }
 
-/** The type list a filter field offers, in the order the product presents them. */
+/** The type list a chooser offers, in the order the product presents them. */
 export const connectorTypeOptions = Object.entries(CONNECTOR_TYPES).map(([value, meta]) => ({
   value,
-  label: meta.label
+  label: meta.label,
+  description: meta.description
 }))
 
 /** The seeded connectors, in list order. */

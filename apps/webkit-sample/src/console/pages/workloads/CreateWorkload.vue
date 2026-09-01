@@ -50,7 +50,11 @@
     firewallBindingName,
     firewallIsBound
   } from '../../lib/data/firewalls'
-  import { WORKLOAD_STEPS, workloadFirewallModuleLabels } from '../../lib/data/workload-flows'
+  import {
+    WORKLOAD_APPLICATIONS,
+    WORKLOAD_STEPS,
+    workloadFirewallModuleLabels
+  } from '../../lib/data/workload-flows'
   import {
     domainForWorkload,
     workloadProvisioningSteps
@@ -100,6 +104,20 @@
     allowAzionDomain: true,
     active: true
   })
+
+  // `?application=<name>` SEEDS THE RELEASE. The from-scratch application create ends by
+  // offering "Deploy using a new workload"
+  // (../applications/CreateApplication.vue → `deployMethods`), and the reader arriving from
+  // there has exactly one application in mind — the one they just made. Seeding it means
+  // the release part opens already pointed at it instead of asking them to find it in a
+  // list they have never seen. Only a NAME the picker actually offers is taken
+  // (../../lib/data/workload-flows.js → WORKLOAD_APPLICATIONS, which now includes what this
+  // session provisioned), so a stale or hand-edited link seeds nothing rather than a value
+  // no option matches.
+  const seededApplication = String(route.query.application || '')
+  if (WORKLOAD_APPLICATIONS.value.some((option) => option.value === seededApplication)) {
+    form.application = seededApplication
+  }
 
   const errors = reactive({})
   const clearErrors = () => Object.keys(errors).forEach((key) => delete errors[key])

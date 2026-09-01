@@ -1,0 +1,246 @@
+// FROM SCRATCH — the three answers an application layer needs, and nothing else.
+//
+// The other two doors into this create arrive WITH code: a repository to import, a
+// starter to clone. From scratch arrives with none, so the questions it can usefully
+// ask are not "what builds it" but "how does it cache" and "where does it fetch from" —
+// the two halves of an application that has no bundle behind it yet.
+//
+// So the from-scratch part asks exactly three things:
+//
+//   NAME          the endpoint's one requirement, and the name the whole chain takes.
+//   CACHE POLICY  a LIST OF TEMPLATES, each on its own switch. A cache policy written
+//                 field by field is a screen of enums (see ./cache-settings.js for the
+//                 full body) and nobody opens "create an application" to fill one in; a
+//                 template is that policy already written, and what is left to ask is the
+//                 part it cannot guess — asked under the row, the moment it goes on.
+//                 SWITCHES AND NOT A ONE-OF CHOICE, because the templates are not variants
+//                 of one policy: an application can cache its images one way and its
+//                 static assets another, and both at once. Which also means the list needs
+//                 no switch above it — none on is none created.
+//   CONNECTOR     chosen by TYPE, because the type is what the address MEANS. An origin
+//                 host, a bucket, an ingest region are three different values that cannot
+//                 share one "address" field without the field lying about two of them.
+//
+// Both of those are CONDITIONAL FORMS, and they are conditional in the same way a rule's
+// behavior is (./rules-engine.js): the choice decides what is asked next, so each option
+// carries its own `fields` and the step renders THAT list instead of growing a chain of
+// `v-if`s per option. Nothing is disabled — a field that does not apply is not rendered,
+// because an input that accepts an answer nobody reads is worse than no input.
+//
+// Everything else the create endpoint takes — the seven module flags, `active`, `debug` —
+// keeps its own default and is not asked here at all. This is the SHORT door.
+import { BUCKETS } from './object-storage'
+
+/** The two regions Azion streams live ingest from, as the console names them elsewhere. */
+const INGEST_REGIONS = [
+  { value: 'br-east-1', label: 'br-east-1, South America' },
+  { value: 'us-east-1', label: 'us-east-1, North America' }
+]
+
+/** A free-text field descriptor. */
+const text = (name, label, placeholder, extra = {}) => ({
+  kind: 'text',
+  name,
+  label,
+  placeholder,
+  ...extra
+})
+
+/** A one-of field descriptor, over a fixed option list. */
+const select = (name, label, options, extra = {}) => ({
+  kind: 'select',
+  name,
+  label,
+  options,
+  ...extra
+})
+
+// ── CACHE POLICY ──────────────────────────────────────────────────────────────
+//
+// The template IS the policy: TTLs, the cache key, what varies. What each one still has
+// to be told is the part it cannot guess — which files it is for, asked underneath the
+// row the moment that row goes on.
+
+/** The cache policy templates, in the order the step offers them as toggle rows. */
+export const CACHE_POLICY_TEMPLATES = [
+  {
+    value: 'images',
+    label: 'Image caching',
+    description:
+      'Caches images for a long TTL and ignores the query string, so one object serves every variation of the same file.',
+    fields: [
+      text('extensions', 'Extension matches', 'jpg, png, webp, avif', {
+        required: true,
+        description:
+          'Comma-separated. The policy applies to requests whose path ends in one of them.'
+      })
+    ]
+  },
+  {
+    value: 'files-optimization',
+    label: 'File optimization',
+    description:
+      'Caches static assets and compresses them on the way out. The template carries the TTLs and the cache key.',
+    fields: []
+  }
+]
+
+/** The policies currently switched on, in the order the list presents them. */
+export const enabledCachePolicies = (config) =>
+  CACHE_POLICY_TEMPLATES.filter((template) => config.cache.policies[template.value]?.enabled)
+
+// ── CONNECTOR ─────────────────────────────────────────────────────────────────
+//
+// Keyed by the SAME type ids the Build → Connectors module uses (./connectors.js owns the
+// label and the glyph), so a connector created here is the same kind of thing as every
+// connector already in the list — one vocabulary, not two.
+
+/** What each connector type asks for, keyed by the type id in ./connectors.js. */
+export const CONNECTOR_TYPE_FIELDS = {
+  http: [
+    text('address', 'Origin address', 'origin.example.com', {
+      required: true,
+      description: 'The host the application fetches from. No scheme.'
+    }),
+    text('path', 'Path', '/', {
+      description: 'Prefixed to the request path before it reaches the origin.'
+    }),
+    text('uriPrefix', 'Apply when $uri starts with', '/api', {
+      description: 'Leave it empty to send every request to this connector.'
+    })
+  ],
+  storage: [
+    select(
+      'bucket',
+      'Bucket',
+      BUCKETS.map((bucket) => ({ value: bucket.name, label: bucket.name })),
+      { required: true, description: 'An Object Storage bucket in this workspace.' }
+    ),
+    text('prefix', 'Prefix', 'assets/', {
+      description: 'The folder inside the bucket the connector reads from.'
+    })
+  ],
+  'live-ingest': [
+    select('region', 'Region', INGEST_REGIONS, {
+      required: true,
+      description: 'Where the stream is ingested. Select the one closest to the broadcaster.'
+    })
+  ]
+}
+
+/** The fields a connector type asks for; `[]` for an unknown type. */
+export const connectorTypeFields = (type) => CONNECTOR_TYPE_FIELDS[type] ?? []
+
+/** The field on each type that IS the connector's address, for the record it creates. */
+const ADDRESS_FIELD = { http: 'address', storage: 'bucket', 'live-ingest': 'region' }
+
+// ── The answers ───────────────────────────────────────────────────────────────
+
+/**
+ * The from-scratch half of the create form, empty.
+ *
+ * `values` is keyed by field name and shared across the options of one question: switching
+ * template or type resets it (see `resetScratchOption`), because a value keyed to an option
+ * the reader has abandoned would be sent anyway.
+ */
+export const defaultScratchConfig = () => ({
+  // EVERYTHING OFF. Neither a cache policy nor a connector is required to create an
+  // application, and a create that arrives with them switched on spends resources on
+  // behalf of a reader who never read the rows — the same mistake the firewall row used
+  // to make (../../components/firewall/FirewallBinding.vue). Off is what makes from
+  // scratch the SHORT door: a name is the whole minimum, and each of these is a decision
+  // made rather than a default absorbed.
+  //
+  // The values survive a switch going off, so toggling back restores what was typed. Only
+  // an OPTION changing resets them (`resetScratchOption`), because those answers belong to
+  // the option that asked for them — and a switched-off policy is never read
+  // (`enabledCachePolicies`), so nothing it still holds can ride into the request.
+  cache: {
+    // One part per template, keyed by its value: the policies are independent of each
+    // other, so one being on says nothing about the next, and each keeps its own answers.
+    policies: Object.fromEntries(
+      CACHE_POLICY_TEMPLATES.map((template) => [template.value, { enabled: false, values: {} }])
+    )
+  },
+  connector: { enabled: false, type: 'http', values: {} }
+})
+
+/** Clear the values of a question whose option just changed. */
+export const resetScratchOption = (part) => {
+  Object.keys(part.values).forEach((key) => delete part.values[key])
+}
+
+/**
+ * Every field currently ON SCREEN, with its `errors` key.
+ *
+ * A switched-off part contributes none: its fields are not rendered, so a check against
+ * them would fail on something the reader was never shown. Same for the fields of an
+ * option they are not on.
+ */
+export const scratchFields = (config) => [
+  // Keyed by POLICY as well as by field, because two policies on at once can both ask for
+  // an `extensions` — one `cache.extensions` message would then be shown under both.
+  ...enabledCachePolicies(config).flatMap((template) =>
+    template.fields.map((field) => ({
+      field,
+      part: config.cache.policies[template.value],
+      key: `cache.${template.value}.${field.name}`
+    }))
+  ),
+  ...(config.connector.enabled ? connectorTypeFields(config.connector.type) : []).map((field) => ({
+    field,
+    part: config.connector,
+    key: `connector.${field.name}`
+  }))
+]
+
+/**
+ * Fill `errors` with a message per required field left empty, and answer whether the
+ * part is complete. Only fields ON SCREEN are checked — the ones the abandoned options
+ * declare are not asked, so they cannot be missed.
+ */
+export const validateScratch = (config, errors) => {
+  let valid = true
+  scratchFields(config).forEach(({ field, part, key }) => {
+    if (!field.required) return
+    if (String(part.values[field.name] ?? '').trim()) return
+    errors[key] = 'This field is required.'
+    valid = false
+  })
+  return valid
+}
+
+/**
+ * The cache policies the create makes — one per switched-on template, and `[]` when none
+ * is on: the create then makes none, and the outcome must not list one it never
+ * provisioned. `detail` is built from whatever that template was told, so a template added
+ * to the catalog needs no change here.
+ */
+export const scratchCachePolicies = (config, applicationName) =>
+  enabledCachePolicies(config).map((template) => {
+    const { values } = config.cache.policies[template.value]
+    const answers = template.fields
+      .map((field) => [field.label, String(values[field.name] ?? '').trim()])
+      .filter(([, value]) => value)
+      .map(([label, value]) => `${label}: ${value}`)
+    return {
+      name: `${applicationName}-${template.value}`,
+      template: template.label,
+      detail: answers.join(' · ') || template.label
+    }
+  })
+
+/**
+ * The connector the create makes, in the shape the provisioning store stores — or `null`
+ * when the switch is off, which leaves the chain the storage connector a provisioned
+ * application gets by default (../../../shared/lib/provisioning.js).
+ */
+export const scratchConnector = (config, applicationName, typeLabel) => {
+  if (!config.connector.enabled) return null
+  const address = String(config.connector.values[ADDRESS_FIELD[config.connector.type]] ?? '').trim()
+  return {
+    name: `${applicationName}-${config.connector.type}`,
+    kind: typeLabel,
+    address
+  }
+}
