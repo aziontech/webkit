@@ -48,7 +48,12 @@ const composed = (
             </MenuSubContent>
           </MenuSub>
           <MenuSub>
-            <MenuSubTrigger label="Settings" kind="drill" :disabled="disabled" />
+            <MenuSubTrigger
+              label="Settings"
+              kind="drill"
+              href="/settings"
+              :disabled="disabled"
+            />
             <MenuSubContent>
               <MenuGroup label="Account">
                 <MenuItem label="General" href="/settings/general" />
@@ -75,6 +80,7 @@ const GROUPS: MenuGroupNode[] = [
         id: 'settings',
         label: 'Settings',
         kind: 'drill',
+        href: '/settings',
         children: [{ id: 'general', label: 'General', href: '/settings/general' }]
       },
       { id: 'blocked', label: 'Blocked', href: '/blocked', disabled: true }
@@ -113,6 +119,7 @@ const NESTED: MenuGroupNode[] = [
         id: 'settings',
         label: 'Settings',
         kind: 'drill',
+        href: '/settings',
         groups: [
           {
             items: [
@@ -120,6 +127,7 @@ const NESTED: MenuGroupNode[] = [
                 id: 'security',
                 label: 'Security',
                 kind: 'drill',
+                href: '/settings/security',
                 children: [{ id: 'tokens', label: 'Tokens', href: '/settings/tokens' }]
               }
             ]
@@ -265,7 +273,11 @@ describe('Menu (composition, drill stack + data mode)', () => {
       }
     })
 
-    await fireEvent.click(view.getByRole('button', { name: 'Settings' }))
+    // Referenced, so the label is a real anchor — middle-click and new-tab still work.
+    const link = view.getByRole('link', { name: 'Settings' })
+    expect(link.getAttribute('href')).toBe('/settings')
+
+    await fireEvent.click(link)
 
     expect(events.map((node) => node.id)).toEqual(['settings'])
     expect(paths).toEqual([])
@@ -295,7 +307,10 @@ describe('Menu (composition, drill stack + data mode)', () => {
   // A CONDENSED row splits the same way a drill row does, so its label is a reference too: the
   // row can point at a landing page and still own children. A node with nothing to point at
   // simply gives the consumer nothing to route to.
-  it('a condensed label navigates without expanding its content', async () => {
+  // A link-less container has nowhere to go, so it never announces a navigation — the whole
+  // row is the disclosure. This is the shape most containers have (the console's Settings, the
+  // site's drawer nav): the parent is not a reference, so the parent opens the children.
+  it('a link-less condensed row reveals its children from the WHOLE row and emits no navigate', async () => {
     const events: MenuNode[] = []
     const view = render(Menu, {
       props: {
@@ -314,15 +329,19 @@ describe('Menu (composition, drill stack + data mode)', () => {
       }
     })
 
-    await fireEvent.click(view.getByRole('button', { name: 'Getting started' }))
+    const row = view.getByRole('button', { name: 'Getting started' })
+    expect(row.getAttribute('aria-expanded')).toBe('false')
 
-    expect(events.map((node) => node.id)).toEqual(['getting-started'])
-    expect(arrowOfKind(view, 'inline').getAttribute('aria-expanded')).toBe('false')
-    expect(view.queryByRole('link', { name: 'Installation' })).toBeNull()
+    await fireEvent.click(row)
+
+    await waitFor(() => expect(row.getAttribute('aria-expanded')).toBe('true'))
+    expect(view.getByRole('link', { name: 'Installation' })).toBeTruthy()
+    // Revealing children is a move inside the menu, not a navigation.
+    expect(events).toEqual([])
   })
 
-  // Revealing children is a move inside the menu, not a navigation — of either kind.
-  it('emits no navigate when a condensed row is expanded by its arrow', async () => {
+  // With an `href` the row splits, and then the LINK is the only thing that navigates.
+  it('a referenced condensed row splits into a link and an arrow', async () => {
     const events: MenuNode[] = []
     const view = render(Menu, {
       props: {
@@ -332,6 +351,7 @@ describe('Menu (composition, drill stack + data mode)', () => {
               {
                 id: 'getting-started',
                 label: 'Getting started',
+                href: '/docs/getting-started',
                 children: [{ id: 'install', label: 'Installation', href: '/docs/install' }]
               }
             ]
@@ -341,10 +361,19 @@ describe('Menu (composition, drill stack + data mode)', () => {
       }
     })
 
-    await userEvent.click(arrowOfKind(view, 'inline'))
+    // The link is a real anchor, so a middle-click or a new tab still works.
+    const link = view.getByRole('link', { name: 'Getting started' })
+    expect(link.getAttribute('href')).toBe('/docs/getting-started')
+    expect(link.hasAttribute('aria-expanded')).toBe(false)
 
+    // The arrow reveals, and announces nothing.
+    await userEvent.click(arrowOfKind(view, 'inline'))
     await waitFor(() => expect(view.getByRole('link', { name: 'Installation' })).toBeTruthy())
     expect(events).toEqual([])
+
+    // The link navigates, and reveals nothing further.
+    await fireEvent.click(link)
+    expect(events.map((node) => node.id)).toEqual(['getting-started'])
   })
 
   // ---- SubTrigger icon: drill only ---------------------------------------------
@@ -405,16 +434,25 @@ describe('Menu (composition, drill stack + data mode)', () => {
   })
 
   // ---- Inline sub --------------------------------------------------------------
-  it('a condensed arrow expands its content in place, wiring aria-expanded and aria-controls', async () => {
+  it('a link-less condensed row expands in place, wiring aria-expanded and aria-controls on the row', async () => {
     const view = render(composed())
 
-    // `aria-expanded` / `aria-controls` belong to the control that expands the children — the
-    // arrow — not to the label beside it, which expands nothing.
-    const trigger = arrowOfKind(view, 'inline')
+    // `aria-expanded` / `aria-controls` belong to the control that expands the children. With no
+    // reference to protect, that is the LABEL control, so it carries them and the arrow does not.
+    const trigger = view.getByRole('button', { name: 'Getting started' })
+    expect(trigger.getAttribute('data-testid')).toBe('navigation-menu-sub-trigger__control')
     expect(
-      view.getByRole('button', { name: 'Getting started' }).hasAttribute('aria-expanded')
-    ).toBe(false)
+      trigger.closest('[data-testid="navigation-menu-sub-trigger"]')?.getAttribute('data-kind')
+    ).toBe('inline')
     expect(trigger.getAttribute('aria-expanded')).toBe('false')
+
+    // The arrow is still a real IconButton — it is the affordance that says the row owns
+    // children — but as a REDUNDANT pointer target it leaves the tab order and the a11y tree
+    // rather than announcing a second control for the one action.
+    const arrowButton = arrowOfKind(view, 'inline')
+    expect(arrowButton.getAttribute('tabindex')).toBe('-1')
+    expect(arrowButton.getAttribute('aria-hidden')).toBe('true')
+    expect(arrowButton.hasAttribute('aria-expanded')).toBe(false)
     expect(view.queryByRole('link', { name: 'Installation' })).toBeNull()
 
     await userEvent.click(trigger)
@@ -425,24 +463,18 @@ describe('Menu (composition, drill stack + data mode)', () => {
     expect(content.getAttribute('data-kind')).toBe('inline')
     expect(content.getAttribute('data-level')).toBe('0')
     expect(view.getByRole('link', { name: 'Installation' })).toBeTruthy()
-
-    // The name says which way it goes next, since the glyph alone says nothing.
-    expect(trigger.getAttribute('aria-label')).toBe('Collapse Getting started')
   })
 
-  // The arrow keys work from the LABEL: they are how a keyboard reader reaches the children
-  // without leaving the row, which is the point of them here now that the pointer target moved.
-  it('ArrowRight expands and ArrowLeft collapses a condensed sub from its label', async () => {
+  it('ArrowRight expands and ArrowLeft collapses a condensed sub', async () => {
     const view = render(composed())
-    const reference = view.getByRole('button', { name: 'Getting started' })
-    const arrowButton = arrowOfKind(view, 'inline')
+    const trigger = view.getByRole('button', { name: 'Getting started' })
 
-    reference.focus()
-    await fireEvent.keyDown(reference, { key: 'ArrowRight' })
-    await waitFor(() => expect(arrowButton.getAttribute('aria-expanded')).toBe('true'))
+    trigger.focus()
+    await fireEvent.keyDown(trigger, { key: 'ArrowRight' })
+    await waitFor(() => expect(trigger.getAttribute('aria-expanded')).toBe('true'))
 
-    await fireEvent.keyDown(reference, { key: 'ArrowLeft' })
-    await waitFor(() => expect(arrowButton.getAttribute('aria-expanded')).toBe('false'))
+    await fireEvent.keyDown(trigger, { key: 'ArrowLeft' })
+    await waitFor(() => expect(trigger.getAttribute('aria-expanded')).toBe('false'))
   })
 
   // ---- Drill stack -------------------------------------------------------------
@@ -457,7 +489,7 @@ describe('Menu (composition, drill stack + data mode)', () => {
     const view = render(composed({ 'onUpdate:path': (value: string[]) => paths.push(value) }))
 
     // Nothing expands, so the attribute would be a lie — on either control.
-    expect(view.getByRole('button', { name: 'Settings' }).hasAttribute('aria-expanded')).toBe(false)
+    expect(view.getByRole('link', { name: 'Settings' }).hasAttribute('aria-expanded')).toBe(false)
     const open = arrow(view, 'Settings')
     expect(open.hasAttribute('aria-expanded')).toBe(false)
 
@@ -651,9 +683,14 @@ describe('Menu (composition, drill stack + data mode)', () => {
       composed({ 'onUpdate:path': (value: string[]) => paths.push(value) }, { disabled: true })
     )
 
-    const settings = view.getByRole('button', { name: 'Settings' })
+    // A disabled row drops its `href` outright, so it is no longer a link at all — an anchor
+    // without a destination is not one, and that is the honest rendering of "nowhere to go".
+    expect(view.queryByRole('link', { name: 'Settings' })).toBeNull()
+    const settings = view.getByTestId('navigation-menu-sub-trigger__reference')
     expect(settings.getAttribute('data-disabled')).toBe('')
     expect(settings.getAttribute('aria-disabled')).toBe('true')
+    expect(settings.hasAttribute('href')).toBe(false)
+    expect(settings.getAttribute('tabindex')).toBe('-1')
 
     // Both controls of the row are suppressed, the arrow included — it is the one that pushes.
     const open = arrow(view, 'Settings')
