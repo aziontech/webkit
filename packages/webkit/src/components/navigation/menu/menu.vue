@@ -273,13 +273,15 @@
             // Honoured for a drill row only; an inline trigger heads the rows beneath it and
             // leaves the icon column to them, which `MenuSubTrigger` itself enforces.
             icon: node.icon ?? '',
+            // The node's own destination, and the thing that decides the row's anatomy: with an
+            // `href` the row is a link plus an arrow that reveals the children; without one the
+            // WHOLE ROW reveals them. A container that is not a destination — which is most of
+            // them — therefore behaves exactly as it did before the split existed.
+            href: node.href ?? '',
             disabled: node.disabled ?? false,
-            // A row that owns children is a DESTINATION as well as a container, of either kind:
-            // its label is a reference and its arrow is what reveals the children. So the label
-            // announces its activation and the consumer routes to wherever the row points —
-            // a node with no destination simply has nothing to route to, which is the
-            // consumer's own check to make (`node.href` / its own landing map). Revealing the
-            // children emits nothing: that is a move inside the menu, not a navigation.
+            // Fires from the LINK only, so it cannot fire for a row that has nowhere to go.
+            // Revealing the children emits nothing either way: that is a move inside the menu,
+            // not a navigation.
             onClick: (event: globalThis.MouseEvent) => emit('navigate', event, node)
           }),
           h(MenuSubContent, null, {
