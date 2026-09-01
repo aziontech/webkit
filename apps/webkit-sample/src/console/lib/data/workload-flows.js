@@ -45,9 +45,11 @@
 // through the same card the application deploy uses, on the workload pipeline
 // (./workload-provisioning.js).
 
+import { APPLICATIONS } from '@shared/lib/applications'
 import { provisionedApplications } from '@shared/lib/provisioning'
 import { computed } from 'vue'
 
+import { presetLabel } from '../format/presets'
 import { strategies } from './deployment-strategies'
 import { domainForWorkload } from './workload-provisioning'
 
@@ -58,50 +60,54 @@ export const WORKLOAD_STEPS = [
   { id: 'binding', label: 'Domain and deployment' }
 ]
 
-// The applications a workload can serve — the seeded ones, PLUS whatever this session has
-// created.
+// THE APPLICATIONS A WORKLOAD CAN SERVE — the account's own, PLUS whatever this session
+// has created.
+//
+// IT USED TO BE A PARALLEL FIXTURE, AND THAT WAS THE BUG. This file carried four names of
+// its own — `edge-shop`, `azion-docs-site`, `marketing-landing`, `internal-admin` — and not
+// one of them is in the Applications module's list (@shared/lib/applications.js). So the
+// create offered four applications the rest of the console had never heard of, while every
+// application the reader could actually see was unbindable. It is the same mistake
+// WORKLOAD_DEPLOYMENTS below is written to avoid, made one question earlier: an account has
+// ONE set of applications, so a create that asks which one to serve has to read that set
+// rather than invent a set of its own.
+//
+// Reading the store also fixes what the reader NOTICED: the picker hides its search and its
+// paging until there are more rows than one page (components/resource/ResourcePicker.vue —
+// a search field over four rows is furniture), so a four-name fixture could never show
+// either. The account has twelve applications, nine of them bindable, which is what the
+// picker is built for.
+//
+// INACTIVE APPLICATIONS ARE DROPPED rather than offered disabled — the same rule the
+// deployments below follow. This is a create: an application that cannot serve is not a
+// choice, and a row that can only be looked at is worse than no row.
 //
 // A COMPUTED and not a constant, because the from-scratch application create ends by
 // offering "Deploy using a new workload" (../../pages/applications/CreateApplication.vue):
-// the reader arrives here to publish an application they made a moment ago, and a fixture
+// the reader arrives here to publish an application they made a moment ago, and a static
 // list would land them on a picker that cannot name it. The provisioning store is read the
 // same way ./releases.js reads it, so an application created in this session is bindable
 // everywhere a release is composed, and one that never existed is offered nowhere.
 //
-// Each row carries a DESCRIPTION now, because the picker rows show one. A list of four
-// bare names asks the reader to remember which is which; the row is where the difference
-// belongs. A session-provisioned application has no editorial description to give, so it
-// says the one true thing about itself — that this session made it.
-const SEEDED_APPLICATIONS = [
-  {
-    value: 'edge-shop',
-    label: 'edge-shop',
-    description: 'The storefront. Next.js, built on every push to main.'
-  },
-  {
-    value: 'azion-docs-site',
-    label: 'azion-docs-site',
-    description: 'Static documentation. Astro, rebuilt nightly.'
-  },
-  {
-    value: 'marketing-landing',
-    label: 'marketing-landing',
-    description: 'Campaign pages. Deployed from the marketing team’s repository.'
-  },
-  {
-    value: 'internal-admin',
-    label: 'internal-admin',
-    description: 'The back office. Behind the corporate firewall rule set.'
-  }
-]
-
+// Each row carries a DESCRIPTION, because the picker rows show one and a column of bare
+// names asks the reader to remember which is which. For an account application that is its
+// preset and its repository — what it is and where its code comes from, the two facts the
+// Applications list leads with. A session-provisioned application has no repository to name
+// yet, so it says the one true thing about itself: that this session made it.
+//
+// MOST RECENT FIRST, and the ones this session made are the most recent of all — they head
+// the list, which is also the order the picker's first page shows.
 export const WORKLOAD_APPLICATIONS = computed(() => [
   ...provisionedApplications.value.map((application) => ({
     value: application.name,
     label: application.name,
     description: 'Created in this session. Its latest version is ready to serve.'
   })),
-  ...SEEDED_APPLICATIONS
+  ...APPLICATIONS.filter((application) => application.status === 'Active').map((application) => ({
+    value: application.name,
+    label: application.name,
+    description: `${presetLabel(application.preset)} · ${application.repository}`
+  }))
 ])
 
 /** The environment the release binds to. */
