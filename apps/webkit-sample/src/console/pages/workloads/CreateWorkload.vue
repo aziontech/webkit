@@ -7,32 +7,54 @@
   // one does not — there is a single path through it. It earns a wizard for the other
   // reason: each part is answerable only once the one before it is settled.
   //
-  //   Name the workload   the name PRODUCES the domain, so naming is choosing the address.
-  //   Protect it          whether a firewall stands in front, and which one.
-  //   Compose the release what the domain SERVES — with the firewall from the part before
-  //                      folded in, not asked again.
+  //   Application  what the domain will SERVE. Nothing downstream means anything without
+  //                it — an address points at THIS. One that already exists, or a new one
+  //                asked the same two questions the application create's from-scratch door
+  //                asks.
+  //   Domain and   the public address, the environment and certificate that answer on it,
+  //   deployment   and where the first release lands. The part that binds it.
   //
-  // Asked together, a reader could compose a release for a workload they had not named and
-  // a firewall they had not chosen. The parts are the dependency order.
+  // Asked together, a reader could bind an address to an application they had not chosen.
+  // The parts are the dependency order.
+  //
+  // ── AND A FIREWALL IS NOT ONE OF THEM ──
+  //
+  // A workload is deployable when it has an APPLICATION: that is what answers on the
+  // domain. A workload with a firewall in front of nothing serves nothing, so protection is
+  // not something this create needs an answer to before it can finish — asking for it here
+  // only put an optional resource between the reader and the two facts that are not
+  // optional. It is asked where the binding actually happens instead: on the workload's own
+  // page (./WorkloadDetail.vue → the topology's bind slots, and the Ship to production band
+  // that points a reader at them). This flow used to carry it as part 2 with its own switch
+  // and its own picker.
+  //
+  // ── THIS ORDER IS A CHANGE, AND THE OLD ONE WAS BACKWARDS ──
+  //
+  // The flow used to open by NAMING the workload — which produced its domain — and only
+  // then ask what it serves, from a bare `Select` over four fixtures. Two costs came out of
+  // that:
+  //
+  //   The address was decided before the thing behind it. A reader chose a public hostname
+  //   for an application they had not yet identified, and if it did not exist there was
+  //   nothing they could do here — a Select over existing applications has nowhere to put a
+  //   new one, so the way through was to abandon the flow and come back.
+  //
+  //   The Azion domain was the only address on offer. Anyone bringing their own hostname
+  //   created the workload on a domain they did not want and added theirs afterwards.
+  //
+  // Now the resource comes first, answered the way every binding question in this console
+  // is — one that exists, or a new one — and the address comes last, in two branches. Every
+  // name the commit uses cascades from the one string typed on that last part
+  // (../../lib/data/workload-flows.js → `workloadNamesFromForm`).
   //
   // ── THE COMMIT PROVISIONS THE CHAIN ──
   //
   // "Create and deploy" does not just POST a workload. It provisions the chain the console
   // already models (../../../shared/lib/provisioning.js) and streams the run through the
-  // SAME card the application deploy uses — on the workload pipeline rather than the
-  // template one (../../lib/data/workload-provisioning.js). That card used to be hardcoded
-  // to a template deploy; it takes its title, splash and steps as props now, so every
-  // resource whose create ends in a chain narrates its OWN work instead of borrowing a
-  // story about cloning a repository.
-  //
-  // ── WHAT THIS PAGE REPLACED ──
-  //
-  // A single-screen create with four open bands (General, Domains, Environments, Advanced),
-  // two sub-drawers, and a Save that created the workload and stopped. The domains band
-  // asked the reader to add a hostname by hand; the name already produces one, so the first
-  // part shows it instead of asking. The environments band asked them to LINK deployment
-  // settings to an environment their domains referenced — which is the release, so it is
-  // the last part rather than a band that read as empty until two other bands were filled.
+  // SAME card the application deploy uses, on the workload pipeline
+  // (../../lib/data/workload-provisioning.js) — whose rows now run in the chain's own
+  // order: resources, environment, deployment, release, and the workload last, because it
+  // is the row that ties an address to all of it.
   import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
   import Item from '@aziontech/webkit/item'
@@ -45,25 +67,29 @@
   import WizardPage from '../../components/page/WizardPage.vue'
   import { useBaseline } from '../../lib/behavior/forms'
   import {
-    defaultFirewallProtection,
-    enabledFirewallModules,
-    firewallBindingName,
-    firewallIsBound
-  } from '../../lib/data/firewalls'
+    defaultScratchConfig,
+    enabledCachePolicies,
+    scratchCachePolicies,
+    scratchConnector,
+    validateScratch
+  } from '../../lib/data/application-scratch'
+  import { connectorMeta } from '../../lib/data/connectors'
+  import {
+    defaultResourceBinding,
+    resourceBindingIsExisting,
+    resourceBindingName
+  } from '../../lib/data/resource-binding'
   import {
     WORKLOAD_APPLICATIONS,
     WORKLOAD_STEPS,
-    workloadFirewallModuleLabels
+    workloadDeploymentName,
+    workloadNamesFromForm
   } from '../../lib/data/workload-flows'
-  import {
-    domainForWorkload,
-    workloadProvisioningSteps
-  } from '../../lib/data/workload-provisioning'
+  import { workloadProvisioningSteps } from '../../lib/data/workload-provisioning'
   import DeploySuccess from '../applications/wizard/DeploySuccess.vue'
+  import ApplicationStep from './wizard/ApplicationStep.vue'
+  import BindingStep from './wizard/BindingStep.vue'
   import { provideWorkloadForm } from './wizard/form-context'
-  import ProtectionStep from './wizard/ProtectionStep.vue'
-  import ReleaseStep from './wizard/ReleaseStep.vue'
-  import WorkloadStep from './wizard/WorkloadStep.vue'
 
   const route = useRoute()
   const router = useRouter()
@@ -78,45 +104,66 @@
   const stepIndex = ref(0)
 
   const steps = WORKLOAD_STEPS
-  const step = computed(() => steps[stepIndex.value]?.id ?? 'workload')
+  const step = computed(() => steps[stepIndex.value]?.id ?? 'application')
   const isLastStep = computed(() => stepIndex.value === steps.length - 1)
 
   // --- The answers ---------------------------------------------------------
-  // The request body. `protection` is answered on part 2 and CONSUMED by the release on
-  // part 3 — one object, so the release projects it instead of holding a second copy that
-  // could disagree.
-  //
-  // It starts OFF. It used to start protected with the first firewall pre-selected, which
-  // bound a firewall the reader never picked — a pre-selection is an answer, not a
-  // proposal. Part 2 is a whole part about this question and now asks it: whether there is
-  // a firewall, and whether it is one that already exists or a new one
-  // (../../lib/data/firewalls.js → `defaultFirewallProtection`).
+  // The request body. The resource question is ONE object
+  // (../../lib/data/resource-binding.js), because it is a pair — which branch, and that
+  // branch's value — and holding them as separate keys means keeping them agreeing by hand.
   const form = reactive({
+    // Part 1 — what the workload serves. `scratch` is the CREATE branch's own half: how a
+    // new application caches and where it fetches from
+    // (../../lib/data/application-scratch.js), the same two answers the application
+    // create's from-scratch door collects. It rides INSIDE the binding object because it
+    // is part of one answer — which branch, and that branch's value — so switching to the
+    // existing list and back does not discard it, exactly as `name` survives the trip.
+    application: defaultResourceBinding({ scratch: defaultScratchConfig() }),
+    // Part 2 — the address, and what answers on it.
+    domainType: 'azion', // azion | own
+    // A KEY PER BRANCH, not one `domain` meaning "a prefix or a hostname, depending". The
+    // two are different facts — `checkout` and `www.example.com` are not the same kind of
+    // string — and one key holding both meant switching branches carried the prefix into a
+    // field asking for a hostname and printed `https://checkout` as the address. Separate
+    // keys also mean switching back and forth discards neither answer, exactly as the
+    // resource question above keeps `existing` and `name` side by side.
+    domainPrefix: '',
+    domainHost: '',
+    // Only on the custom branch: with no prefix to derive from, the workload still needs a
+    // name for every list it appears in.
     name: '',
-    protection: defaultFirewallProtection(),
-    application: '',
-    applicationVersion: 'latest',
     environment: 'Production',
-    customPage: '',
-    // Advanced — every one of these already carries the endpoint's own default.
     certificate: 'azion_san',
+    deploymentMode: 'auto', // auto | existing
+    deployment: '',
+    // Advanced — every one of these already carries the endpoint's own default.
     minimumTlsVersion: 'tls_1_2',
+    customPage: '',
     allowAzionDomain: true,
     active: true
   })
 
-  // `?application=<name>` SEEDS THE RELEASE. The from-scratch application create ends by
+  // `?application=<name>` SEEDS PART 1. The from-scratch application create ends by
   // offering "Deploy using a new workload"
   // (../applications/CreateApplication.vue → `deployMethods`), and the reader arriving from
   // there has exactly one application in mind — the one they just made. Seeding it means
-  // the release part opens already pointed at it instead of asking them to find it in a
-  // list they have never seen. Only a NAME the picker actually offers is taken
-  // (../../lib/data/workload-flows.js → WORKLOAD_APPLICATIONS, which now includes what this
-  // session provisioned), so a stale or hand-edited link seeds nothing rather than a value
-  // no option matches.
+  // the flow opens already pointed at it instead of asking them to find it in a list they
+  // have never seen.
+  //
+  // A NAME NO ROW MATCHES SEEDS THE OTHER BRANCH. The picker is keyed by name
+  // (../../lib/data/workload-flows.js → WORKLOAD_APPLICATIONS, which includes what this
+  // session provisioned), so a stale or hand-written link used to seed nothing at all —
+  // the reader landed on a list that did not contain what the link named and had to notice
+  // that for themselves. Now the link is taken at its word: a name the account does not
+  // have is a name to CREATE, so the flow opens on the create branch with it typed in.
+  // Which is only honest because that branch can now build the whole application (its
+  // cache, its connector) rather than just accepting a name.
   const seededApplication = String(route.query.application || '')
   if (WORKLOAD_APPLICATIONS.value.some((option) => option.value === seededApplication)) {
-    form.application = seededApplication
+    form.application.existing = seededApplication
+  } else if (seededApplication) {
+    form.application.mode = 'new'
+    form.application.name = seededApplication
   }
 
   const errors = reactive({})
@@ -125,9 +172,9 @@
   const submitting = ref(false)
 
   // The wizard page, so a failed check can hand the reader back to the field that caused it
-  // (../../components/page/WizardPage.vue → `revealInvalid`). The release part is the long
-  // one: its Application select sits above the environment, the custom page and the
-  // Advanced band, so the miss it reports is off-screen from the bar that reports it.
+  // (../../components/page/WizardPage.vue → `revealInvalid`). The binding part is the long
+  // one: its domain field sits above the environment, the certificate, the deployment and
+  // the Advanced band, so the miss it reports is off-screen from the bar that reports it.
   const page = ref(null)
 
   // The parts read and write through injected context rather than props — see
@@ -139,24 +186,48 @@
   // that has not been committed. Re-taken on the way OUT of a successful create.
   const { dirty, commit } = useBaseline(form)
 
-  const domain = computed(() => domainForWorkload(form.name))
+  // --- What the answers derive ---------------------------------------------
+  // Every one of these is read through the shared derivation rather than re-assembled
+  // here: a summary that re-derives an answer is a summary that can disagree with it.
+  const names = computed(() => workloadNamesFromForm(form))
 
-  // WHICH firewall this workload ends up behind, by name — one derivation for the parts
-  // that show it (the release summary), the run that narrates it, and the chain that
-  // records it. `''` when the reader declined protection.
-  const firewallName = computed(() => firewallBindingName(form.protection))
+  const applicationName = computed(() => resourceBindingName(form.application))
+  const applicationIsExisting = computed(() => resourceBindingIsExisting(form.application))
 
-  // What the protection row on the release summary says about the answer part 2 settled on.
-  // Read through the one derivation both flows use (../../lib/data/firewalls.js) rather
-  // than re-assembled: a summary that re-derives an answer is a summary that can disagree
-  // with it.
-  const protectionSummary = computed(() => {
-    if (!firewallName.value) {
-      return 'No firewall in front of this workload. Requests reach the application directly.'
+  const deploymentName = computed(() =>
+    form.deploymentMode === 'existing'
+      ? workloadDeploymentName(form.deployment)
+      : names.value.deployment
+  )
+
+  // WHAT ELSE THE CREATE BRANCH IS MAKING — the switched-on cache templates and the
+  // connector, if either was asked for. Read from the same answer the part collected and
+  // the commit provisions, so the three cannot disagree about what gets created. Empty on
+  // the existing branch: nothing is being made, so there is nothing to list.
+  const applicationExtras = computed(() => {
+    if (applicationIsExisting.value) return []
+    const { scratch } = form.application
+    const policies = enabledCachePolicies(scratch)
+    return [
+      policies.length ? `${policies.length} cache setting${policies.length > 1 ? 's' : ''}` : '',
+      scratch.connector.enabled
+        ? `its ${connectorMeta(scratch.connector.type).label} connector`
+        : ''
+    ].filter(Boolean)
+  })
+
+  // What the summary says about part 1's answer.
+  const applicationSummary = computed(() => {
+    if (!applicationName.value) return 'Not chosen yet. Pick one, or create it with the workload.'
+    if (applicationIsExisting.value) {
+      return 'Serving its latest ready version. The domain answers with this.'
     }
-    return firewallIsBound(form.protection)
-      ? 'An existing firewall, bound to this release. Requests are filtered before the application runs.'
-      : 'Created with this workload and bound to the release. Requests are filtered before the application runs.'
+    // The extras are named rather than counted, because they are resources this create
+    // spends: a reader two parts downstream must be able to see that a connector and a
+    // cache setting are riding along before they press the button that makes them.
+    return applicationExtras.value.length
+      ? `Created with the workload, plus ${applicationExtras.value.join(' and ')}.`
+      : 'Created with the workload and built before the release is cut.'
   })
 
   // --- Moving through the flow ---------------------------------------------
@@ -177,40 +248,58 @@
   const cancel = () => router.push({ path: '/workloads', query: { email: userEmail.value } })
 
   // Validation runs PER PART, on its own Next, and only over what that part asks. A wizard
-  // that validated everything on the last button would report a missing name three parts
-  // after the reader left the field that fills it.
+  // that validated everything on the last button would report a missing application two
+  // parts after the reader left the control that fills it.
   const validate = () => {
     clearErrors()
-    if (step.value === 'workload' && !form.name.trim()) {
-      errors.name = 'This field is required.'
+
+    if (step.value === 'application') {
+      if (!applicationName.value) {
+        errors.application = applicationIsExisting.value
+          ? 'Select the application this workload serves, or create a new one.'
+          : 'Name the application, or select one that already exists.'
+      }
+      // The layer's own required fields, and only the ones ON SCREEN: a switched-off
+      // policy and the fields of a connector type the reader is not on are not rendered,
+      // so a check against them would fail on something they were never shown
+      // (../../lib/data/application-scratch.js → validateScratch). Nothing to check at all
+      // on the existing branch — there is no application being created to configure.
+      if (!applicationIsExisting.value) validateScratch(form.application.scratch, errors)
     }
-    // The protection branch the reader is ON is the one that can be incomplete: a firewall
-    // being created needs a name, one being bound needs to be picked. Neither is asked
-    // while the switch is off.
-    if (step.value === 'protection' && form.protection.enabled && !firewallName.value) {
-      errors.firewall =
-        form.protection.mode === 'new'
-          ? 'Name the firewall, or bind one that already exists.'
-          : 'Select the firewall to bind, or create a new one.'
+
+    if (step.value === 'binding') {
+      // Only the branch the reader is ON is checked — the other one's field is not on
+      // screen, and reporting a miss on a control nobody can see is a dead end.
+      if (form.domainType === 'own') {
+        if (!form.domainHost.trim()) {
+          errors.domainHost = 'Enter the hostname that points at this workload.'
+        }
+        // The custom branch is the only one that asks for a name; on the Azion branch the
+        // prefix IS it.
+        if (!form.name.trim()) errors.name = 'Name the workload.'
+      } else if (!form.domainPrefix.trim()) {
+        errors.domainPrefix = 'Enter the prefix for the Azion domain.'
+      }
+      if (form.deploymentMode === 'existing' && !form.deployment) {
+        errors.deployment = 'Select the deployment the first release lands in.'
+      }
     }
-    if (step.value === 'release' && !form.application) {
-      errors.application = 'Select the application this workload serves.'
-    }
+
     return Object.keys(errors).length === 0
   }
 
-  // The provisioning run's own step model, built from the answers: the firewall row only
-  // exists when the reader asked for protection, and the domain row names the domain their
-  // name produced. Computed, so a Back-and-change is reflected in the run that follows.
+  // The provisioning run's own step model, built from the answers: the application row
+  // narrates whether it was created or reused, and the workload row names the address the
+  // reader chose. Computed, so a Back-and-change is reflected in the run that follows.
   const provisioningSteps = computed(() =>
     workloadProvisioningSteps({
-      name: form.name.trim(),
-      protected: form.protection.enabled,
-      firewall: firewallName.value,
-      // Creating a firewall and binding one are different work, so the run narrates the
-      // one that actually happens rather than one row that covers both.
-      firewallBound: firewallIsBound(form.protection),
-      application: form.application
+      workload: names.value.workload,
+      domain: names.value.domain,
+      application: applicationName.value,
+      applicationExisting: applicationIsExisting.value,
+      environment: form.environment,
+      deployment: deploymentName.value,
+      deploymentExisting: form.deploymentMode === 'existing'
     })
   )
 
@@ -251,22 +340,39 @@
     provisioned.value ? resourceChain(provisioned.value) : []
   )
 
+  // THE CONNECTOR AND THE CACHE SETTINGS THE READER CONFIGURED — the create branch only,
+  // because it is the only branch that makes an application to configure. Bound to an
+  // existing one, the chain keeps the connector a deploy implies (it reads from the bucket
+  // the upload went to); created here, the answer already exists, so it is handed over
+  // rather than derived (../../../shared/lib/provisioning.js). The same hand-off the
+  // application create's from-scratch commit makes.
+  const applicationLayer = () => {
+    if (applicationIsExisting.value) return {}
+    const { scratch } = form.application
+    const name = applicationName.value
+    return {
+      connector: scratchConnector(scratch, name, connectorMeta(scratch.connector.type).label),
+      cachePolicies: scratchCachePolicies(scratch, name)
+    }
+  }
+
   const onFinished = () => {
     provisioned.value = provisionDeployment({
-      repoName: form.name.trim(),
+      ...applicationLayer(),
+      repoName: names.value.workload,
       framework: '',
-      templateTitle: form.name.trim(),
-      // The firewall the reader chose on part 2 — it was asked for and narrated by the
-      // run, so it belongs in the chain the success screen lists. A bound one is marked as
-      // bound rather than credited to this create.
-      firewall: form.protection.enabled,
-      firewallName: firewallName.value,
-      firewallBound: firewallIsBound(form.protection),
-      // A bound firewall reports the modules it ALREADY has on; a created one reports the
-      // ones this part switched on for it.
-      firewallModules: firewallIsBound(form.protection)
-        ? workloadFirewallModuleLabels(firewallName.value)
-        : enabledFirewallModules(form.protection.modules)
+      templateTitle: names.value.workload,
+      // The application is named on its OWN part here, so the chain reports the name the
+      // reader typed rather than renaming it after the workload — and says whether it was
+      // created or merely bound.
+      applicationName: applicationName.value,
+      applicationBound: applicationIsExisting.value,
+      // The address the reader watched being derived on part 3. Without this the chain
+      // would report a second, randomly minted domain and contradict the create.
+      domain: names.value.domain
+      // No firewall: this create does not ask for one, so the chain records none and the
+      // workload's own page is where one gets bound (`provisionDeployment` defaults
+      // `firewall` to false — see ../../../shared/lib/provisioning.js).
     })
     // The create landed: nothing is pending, so the leave guard stands down before this
     // flow navigates on its own success.
@@ -290,12 +396,25 @@
       query: { email: userEmail.value, name: provisioned.value?.workload.name }
     })
 
+  // WHAT HAPPENED, in this flow's own words. DeploySuccess defaults to "Application
+  // deployed", which is the application create's claim — this create ships a workload, and
+  // the heading has always been the one false line on the screen at the end of it.
+  //
+  // The lead branches with the domain, because "is live" is only true on one of them. An
+  // Azion domain answers the moment the run finishes; a custom hostname answers when the
+  // reader's DNS points at it, which is work this flow does not do and must not claim.
+  const successLead = computed(() => {
+    const app = applicationName.value || 'the application'
+    return form.domainType === 'own'
+      ? `The workload is serving ${app}. Point ${names.value.domain} at it to send traffic.`
+      : `https://${names.value.domain} is live and serving ${app}.`
+  })
+
   // --- The part's own advance ----------------------------------------------
   const nextLabel = computed(() => (isLastStep.value ? 'Create and deploy' : 'Next'))
 
-  // Part 1 cannot advance without a name — its Next reports that rather than being dead,
-  // so `validate` is what blocks. The release part is the same. Nothing is disabled here:
-  // a button that reports what is missing beats one the reader cannot press and cannot ask.
+  // Nothing is disabled here: a button that reports what is missing beats one the reader
+  // cannot press and cannot ask. `validate` is what blocks.
   const nextDisabled = computed(() => false)
 </script>
 
@@ -305,7 +424,7 @@
     :breadcrumb="[{ label: 'Workloads', href: '/workloads' }, { label: 'Create workload' }]"
     back-label="Back to Workloads"
     title="Create workload"
-    description="A workload is the public entry point: the domain traffic arrives on, what stands in front of it, and what it serves. The last step provisions all of it."
+    description="A workload is the public entry point: what it serves, and the domain traffic arrives on. The last step provisions both."
     title-id="create-workload-title"
     :heading="phase !== 'success'"
     :steps="steps"
@@ -320,28 +439,18 @@
     @go="goToStep"
     @cancel="cancel"
   >
-    <WorkloadStep
-      v-if="step === 'workload'"
+    <ApplicationStep
+      v-if="step === 'application'"
       :disabled="submitting"
     />
 
-    <ProtectionStep
-      v-else-if="step === 'protection'"
-      :disabled="submitting"
-    />
-
-    <template v-else-if="step === 'release'">
-      <!-- WHAT IS BEING RELEASED, above the questions about it. The reader named this
-           workload two parts ago and protected it one part ago, and now has to say what it
-           serves; losing sight of either is how a release ends up bound to the wrong
-           workload, or behind a firewall nobody meant.
-           ONE card of both answers, which is the shape the application flow's counterpart
-           has (../applications/wizard/SourceSummary.vue): projected answers are a summary,
-           and a summary is one card. They used to be two — this row here and a titled
-           "Serving" card inside the release part — which printed the domain twice, 100px
-           apart, and titled one group with a card header while the other had none.
-           Read-only, with a way BACK to the part that OWNS each answer rather than a
-           second control for it here. -->
+    <template v-else-if="step === 'binding'">
+      <!-- WHAT IS BEING BOUND, above the questions about it. The reader chose an
+           application one part ago and now has to give it an address; losing sight of it is
+           how a domain ends up pointed at the wrong application. The shape the application
+           flow's counterpart has (../applications/wizard/SourceSummary.vue): a projected
+           answer is a summary, and a summary is one card. Read-only, with a way BACK to the
+           part that OWNS the answer rather than a second control for it here. -->
       <CardBox
         :padded="false"
         class="mb-(--layout-section-gap)"
@@ -354,17 +463,14 @@
                   class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
                 >
                   <i
-                    class="ai ai-workloads text-[1rem] leading-none text-(--text-default)"
+                    class="ai ai-edge-application text-[1rem] leading-none text-(--text-default)"
                     aria-hidden="true"
                   />
                 </span>
               </Item.Media>
               <Item.Content>
-                <Item.Title>{{ form.name || 'Unnamed workload' }}</Item.Title>
-                <Item.Description>
-                  {{ domain || 'No domain yet' }} — provisioned from the workload name. Traffic
-                  arrives here.
-                </Item.Description>
+                <Item.Title>{{ applicationName || 'No application' }}</Item.Title>
+                <Item.Description>{{ applicationSummary }}</Item.Description>
               </Item.Content>
               <Item.Actions>
                 <Button
@@ -377,38 +483,11 @@
                 />
               </Item.Actions>
             </Item>
-
-            <Item size="small">
-              <Item.Media>
-                <span
-                  class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
-                >
-                  <i
-                    class="pi pi-shield text-[1rem] leading-none text-(--text-default)"
-                    aria-hidden="true"
-                  />
-                </span>
-              </Item.Media>
-              <Item.Content>
-                <Item.Title>{{ firewallName || 'Not protected' }}</Item.Title>
-                <Item.Description>{{ protectionSummary }}</Item.Description>
-              </Item.Content>
-              <Item.Actions>
-                <Button
-                  type="button"
-                  label="Change"
-                  kind="text"
-                  size="small"
-                  :disabled="submitting"
-                  @click="goToStep(1)"
-                />
-              </Item.Actions>
-            </Item>
           </Item.List>
         </template>
       </CardBox>
 
-      <ReleaseStep :disabled="submitting" />
+      <BindingStep :disabled="submitting" />
     </template>
 
     <!-- PAST THE QUESTIONS: the chain being built, then what it built. The SAME card the
@@ -423,7 +502,7 @@
         :splash="{
           verb: 'Provisioning',
           icon: 'ai ai-workloads',
-          from: form.name.trim() || 'workload',
+          from: names.workload || 'workload',
           to: ''
         }"
         @finished="onFinished"
@@ -431,6 +510,8 @@
       />
       <DeploySuccess
         v-else
+        title="Workload deployed"
+        :lead="successLead"
         :resources="createdResources"
         @manage="manageWorkload"
       />

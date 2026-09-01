@@ -457,14 +457,24 @@
   // AND THE FROM-SCRATCH RUN IS A THIRD STORY AGAIN. It is not a deploy of code at all —
   // there is none — it is the workload being provisioned around an application that
   // already exists, which is exactly the pipeline the workload create narrates
-  // (../../lib/data/workload-provisioning.js): workload → domain → TLS → release →
-  // propagate. Borrowing the template model here would have claimed a clone, an install
-  // and a build for a run that does none of them.
+  // (../../lib/data/workload-provisioning.js): the application is CHECKED rather than
+  // created, because this flow's own commit already made it, and the rest of the chain —
+  // environment, deployment, release, workload, edge — runs as it does there. Borrowing
+  // the template model here would have claimed a clone, an install and a build for a run
+  // that does none of them.
+  //
+  // The protection answer this flow also carries is handed over, so a reader who switched
+  // a firewall on watches it being created instead of watching a run that never mentions
+  // it and a success screen that suddenly lists one.
   const deploySteps = computed(() => {
     if (isScratch.value)
       return workloadProvisioningSteps({
-        name: form.name.trim() || 'my-application',
-        application: form.name.trim() || 'my-application'
+        workload: form.name.trim() || 'my-application',
+        application: form.name.trim() || 'my-application',
+        applicationExisting: true,
+        protected: form.protection.enabled,
+        firewall: firewallBindingName(form.protection),
+        firewallBound: firewallIsBound(form.protection)
       })
     if (isConfigured.value)
       return configuredTemplateSteps({

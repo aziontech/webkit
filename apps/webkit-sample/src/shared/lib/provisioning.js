@@ -52,6 +52,13 @@ const slugify = (value) =>
 /** Azion-style numeric resource id (10 digits). */
 const resourceId = () => String(1_000_000_000 + Math.floor(Math.random() * 900_000_000))
 
+/** The suffix every Azion-provided workload domain carries. ONE literal for the whole
+ *  sample: the create's domain field shows it, the derivation appends it, the provisioning
+ *  chain mints one with it and the workload's own page reads it back — four surfaces that
+ *  cannot be allowed to name different hostnames for the same workload. Re-exported by
+ *  console/lib/data/workload-provisioning.js, which is where the console reads it. */
+export const AZION_DOMAIN_SUFFIX = '.azion.run'
+
 /** The random subdomain label an Azion workload domain gets on creation. */
 const domainLabel = () => {
   const alphabet = 'abcdefghijklmnopqrstuvwxyz0123456789'
@@ -112,6 +119,19 @@ const persistRecords = () => {
  * @param {string} [input.framework] Template framework, mapped to a build preset.
  * @param {boolean} [input.isPublic] Repository visibility; also the bucket access.
  * @param {string} [input.templateTitle] Fallback name when there is no repo name.
+ * @param {string} [input.applicationName] The application's OWN name, when the create
+ *   named it separately from the workload. A template deploy names both after the
+ *   repository, so it passes nothing and both keep the one name; the workload create asks
+ *   for each on its own part, and a chain that renamed the application after the workload
+ *   would contradict the name the reader typed two parts earlier.
+ * @param {boolean} [input.applicationBound] True when an EXISTING application was bound
+ *   rather than a new one created — the same claim `firewallBound` makes, for the same
+ *   reason: the success screen says "Created" per row, and a row that already existed must
+ *   not say it.
+ * @param {string} [input.domain] The workload's domain, when the create CHOSE one. Omitted,
+ *   a random Azion label is minted (a template deploy does not ask for an address); the
+ *   workload create shows the reader their domain before the commit, so the chain has to
+ *   report that one and not a second, different address.
  * @param {boolean} [input.firewall] Whether the chain has a firewall at all.
  * @param {string} [input.firewallName] Its name; defaults to `<name>-firewall`.
  * @param {Array<string>} [input.firewallModules] The module labels it runs with.
@@ -139,6 +159,9 @@ export function provisionDeployment({
   framework = '',
   isPublic = true,
   templateTitle = '',
+  applicationName = '',
+  applicationBound = false,
+  domain: domainInput = '',
   firewall = false,
   firewallName = '',
   firewallModules = [],
@@ -156,7 +179,11 @@ export function provisionDeployment({
   const author = authorAt(0)
   const preset = normalizePreset(framework)
 
-  const domain = `${domainLabel()}.map.azionedge.net`
+  // The address the create CHOSE, when it asked for one. A template deploy does not, so it
+  // still gets a minted label.
+  const domain = domainInput || `${domainLabel()}${AZION_DOMAIN_SUFFIX}`
+  // The application's own name, when the create named it apart from the workload.
+  const appName = slugify(applicationName) || name
   const bucketName = `${name}-assets`
 
   // THE PUBLIC HALF OF THE CHAIN, and only for a create that publishes. A workload is the
@@ -182,9 +209,12 @@ export function provisionDeployment({
 
   const application = {
     id: resourceId(),
-    name,
+    name: appName,
     preset,
-    repository: `${scope}/${name}`,
+    // Bound rather than created — the chain's application row reads this the way the
+    // firewall row reads `bound`, so neither claims work that never ran.
+    bound: Boolean(applicationBound),
+    repository: `${scope}/${appName}`,
     branch: 'main',
     domainName: domain,
     infrastructure: 'Production',
@@ -315,7 +345,7 @@ export function publishDeployment(recordId) {
   const createdAt = new Date()
   const lastModified = formatListDate(createdAt)
   const author = record.author ?? authorAt(0)
-  const domain = `${domainLabel()}.map.azionedge.net`
+  const domain = `${domainLabel()}${AZION_DOMAIN_SUFFIX}`
   const bucketName = `${name}-assets`
 
   record.workload = {
@@ -385,7 +415,7 @@ export function demoDeployment(workloadId, workloadName = 'Workload Name') {
   const id = String(workloadId)
   const name = slugify(workloadName)
   const author = authorAt(0)
-  const domain = `w${id}.map.azion.net`
+  const domain = `w${id}${AZION_DOMAIN_SUFFIX}`
   const bucketName = `${name}-assets`
 
   return {
@@ -535,8 +565,11 @@ export function removeDeployment(resourceIdentifier) {
 export const provisionedWorkloads = computed(() =>
   deployments.value.map((record) => record.workload).filter(Boolean)
 )
+// A BOUND application is filtered out: it already exists in the seeded list, and letting it
+// through would put a second `edge-shop` in every applications picker the moment a workload
+// was created in front of the first one.
 export const provisionedApplications = computed(() =>
-  deployments.value.map((record) => record.application)
+  deployments.value.map((record) => record.application).filter((app) => app && !app.bound)
 )
 export const provisionedBuckets = computed(() =>
   deployments.value.map((record) => record.bucket).filter(Boolean)
@@ -599,6 +632,9 @@ export function resourceChain(record) {
       icon: 'ai ai-edge-application',
       name: application.name,
       status: 'Active',
+      // Like the firewall above, this row may name a resource that already existed: the
+      // workload create can BIND an application instead of making one.
+      state: application.bound ? 'bound' : 'created',
       href: `/applications/${application.id}`,
       reference: application.id,
       fields: [

@@ -77,7 +77,14 @@
     },
     // The PERSISTENT required tag on the label — on from first render, so the reader
     // knows the field is mandatory before touching it. Not the amber submit state.
-    required: { type: Boolean, default: false }
+    required: { type: Boolean, default: false },
+    // THE CONTROL IS A GROUP, NOT A LABELABLE ELEMENT — a `radiogroup` (a
+    // BoxGridSelection), a set of checkboxes. `<label for>` only associates with a form
+    // control, so pointing it at a group's wrapper does nothing at all: the name never
+    // reaches the accessibility tree and clicking it focuses nothing, silently. With this
+    // on, the label stops POINTING and starts being pointed AT — the slot receives
+    // `labelId` to hand the group as `aria-labelledby`, which is how a group is named.
+    group: { type: Boolean, default: false }
   })
 
   const slots = defineSlots()
@@ -87,6 +94,7 @@
   // and not by the caller, because a field that owns its label owns the association.
   const controlId = useId()
   const helperId = useId()
+  const labelId = useId()
 
   // ONE ROW, ONE PRECEDENCE. The message is what the field has to say right now, so it
   // wins; the guidance is what it says the rest of the time.
@@ -122,7 +130,8 @@
            still the thing clicking focuses the control. `hint` renders as the ⓘ glyph
            Label already knows how to draw. -->
       <Label
-        :for="controlId"
+        :id="group ? labelId : undefined"
+        :for="group ? undefined : controlId"
         :required="required"
         :hint="hint"
       >
@@ -134,6 +143,7 @@
     <slot
       :control-id="controlId"
       :described-by="describedBy"
+      :label-id="labelId"
     />
 
     <HelperText

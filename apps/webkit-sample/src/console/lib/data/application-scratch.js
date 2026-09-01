@@ -211,6 +211,24 @@ export const validateScratch = (config, errors) => {
 }
 
 /**
+ * Drop every message under a prefix.
+ *
+ * The counterpart of the check above, and it is a FLOW's job rather than the card's: the
+ * card that renders these fields reads the map and reports which part of it an edit just
+ * invalidated (../../components/application/ApplicationLayer.vue → `clear`), and the flow
+ * that filled the map is the one that empties it. Prefix and not key, because the three
+ * things that invalidate a message invalidate different amounts of it: editing a field
+ * clears its own (`cache.images.extensions`), switching a part off clears everything under
+ * it (`cache.images.`), and changing the connector type clears the whole question
+ * (`connector.`).
+ */
+export const clearScratchErrors = (errors, prefix) => {
+  Object.keys(errors).forEach((key) => {
+    if (key.startsWith(prefix)) delete errors[key]
+  })
+}
+
+/**
  * The cache policies the create makes — one per switched-on template, and `[]` when none
  * is on: the create then makes none, and the outcome must not list one it never
  * provisioned. `detail` is built from whatever that template was told, so a template added
