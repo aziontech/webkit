@@ -111,16 +111,22 @@ export function reportNavLevel(activeId, levels) {
 }
 
 /**
- * Takes the stack back from `Menu` (the `path` model). A POP is the one level change that does not
- * navigate: `Menu.Back` plays its own motion in the mounted menu and leaves the reader looking at
- * the level it returned to. Recording that as the shown level is what stops the NEXT navigation
- * from replaying an entrance for a rail already on screen. A push is left alone — the navigation
- * that follows it is the arrival that should animate.
+ * Takes the stack back from `Menu` (the `path` model), and records the level it moved to as SEEN.
+ *
+ * NEITHER DIRECTION NAVIGATES. Activating the `Settings` row pushes the level and `Menu.Back` pops
+ * it; both play their motion in the mounted rail and leave the reader looking at the column they
+ * moved to. So the next navigation must not replay an entrance for a rail already on screen.
+ *
+ * The push used to be left out, on the theory that the navigation following it was the arrival
+ * that should animate — but the push does not navigate, so the reader got the slide twice: once
+ * on `Settings`, once again on the first settings page they opened (measured as two
+ * `data-motion=push` cycles, 300ms apart, on the docs rail's twin of this bug). What still
+ * animates is a level change the RAIL did not make — a pasted URL, the palette, the account menu,
+ * a link on a page — none of which comes through here.
  */
 export function setNavPath(levels) {
-  const isPop = levels.length < navPath.value.length
   navPath.value = levels
-  if (isPop) shownLevel = levels.join('/')
+  shownLevel = levels.join('/')
 }
 
 watch(

@@ -243,11 +243,15 @@
     // expanding under it — the console's second-level pattern. The Back row that returns from
     // it is declared once on the Menu below and renders nothing at the root level.
     //
-    // Settings is a DESTINATION as well as a level: activating it opens the level and routes to
-    // its landing row (General) in the same action, so nobody is left reading the page they came
-    // from while a new menu is on screen. It carries an icon for the same reason the rows above
-    // it do — it is one of the rail's destinations, on their column. An inline trigger would
-    // not: that one heads the rows it expands beneath it, and the column belongs to them.
+    // Settings OPENS THE LEVEL AND NOTHING ELSE. It carries no `href`, so `MenuSubTrigger`
+    // gives the whole row to the disclosure and the reader stays on the page they were reading
+    // while the new column arrives — they pick where to go from it. (The docs rail's `Functions`
+    // takes the other shape, because there the level has a product overview worth landing on:
+    // an `href` splits that row into a link plus an arrow. Settings has no such page — `General`
+    // is one category among several, not an overview of them.) It carries an icon for the same
+    // reason the rows above it do — it is one of the rail's destinations, on their column. An
+    // inline trigger would not: that one heads the rows it expands beneath it, and the column
+    // belongs to them.
     {
       label: 'More',
       items: [
@@ -273,6 +277,12 @@
           // path are the areas the prototype does not build yet; they highlight and stay put.
           groups: [
             {
+              // Titled with the level's own name, because this block is what the level
+              // OPENS on: the Back row above it says where Back goes (the root rail), not
+              // where the reader now is. Untitled, the three account rows read as loose
+              // rows under an arrow while `Access` and `Billing` below them are named —
+              // so the block the level lands in was the only one without a heading.
+              label: 'Settings',
               items: [
                 // The level's LANDING row: activating Settings itself routes here (see
                 // `onNavigate`), so opening the level and arriving somewhere are one action.
@@ -525,12 +535,12 @@
     { immediate: true }
   )
 
-  // A drill row is a destination as well as a level: `Menu` emits `navigate` for it, and the
-  // rail resolves it to the level's LANDING row — the first leaf inside it — before handing it
-  // up. So hitting Settings opens the Settings menu AND lands on General, instead of opening a
-  // second-level menu while the user is still looking at the page they came from. Resolving to
-  // the leaf (not the container) is also what makes the right row read as active on arrival:
-  // the shell highlights whatever id it is given, and a container is not a destination.
+  // The row a container stands for: the first leaf inside it. `Menu` emits `navigate` only from
+  // a row that HAS an `href`, and no container in this rail carries one — so nothing reaches
+  // this today and `Settings` opens its level without moving the page. It stays because it is
+  // the resolution any container-as-destination needs: the shell highlights whatever id it is
+  // given, and lighting the container would mark a row that is not a page. Give `Settings` an
+  // `href` and this is what makes the arrival land on `General` rather than on the container.
   const landingOf = (node) => (node.groups || node.children ? menuLeaves([node])[0] : node)
 
   // Nothing here decides whether the level animates: that is derived from the PAGE the shell
