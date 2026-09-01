@@ -751,12 +751,12 @@
                 :description="AGENT_PROMO.description"
                 @activate="copyAgentPrompt"
               >
-                <!-- The marks are the EDITORS themselves, four of the seven, matching the
-                     cluster on every product's first use so the two are the same object at
-                     the same width (../../components/home/IconFrame.vue is the one 32px
-                     frame all three surfaces share). In color, not `mono`: here they are a
-                     row of logos, and a reader spots the editor they use before reading a
-                     word. -->
+                <!-- The marks are the EDITORS themselves — the same four `AGENT_TOOLS`
+                     names the Overview pill draws — matching the cluster on every product's
+                     first use so the two are the same object at the same width
+                     (../../components/home/IconFrame.vue is the one 32px frame all three
+                     surfaces share). In color, not `mono`: here they are a row of logos, and
+                     a reader spots the editor they use before reading a word. -->
                 <template #logos>
                   <IconFrame
                     v-for="agent in AGENT_TOOLS.slice(0, 4)"
@@ -1010,7 +1010,7 @@
                            question.
                            ONE glyph for the column, not one per row: the mark says this
                            is a TRAIL (`pi-history`), and the type is named in words
-                           right after it — `Domain / my-workload-1.azion.app`. A per-row
+                           right after it — `Domain / my-workload-1.azion.run`. A per-row
                            type glyph was the alternative and it asks the reader to learn
                            seven marks to answer a question a word answers outright,
                            while the column's own identity goes unmarked.

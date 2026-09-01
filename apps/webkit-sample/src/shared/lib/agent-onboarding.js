@@ -20,30 +20,27 @@ export const AGENT_SETUP_PROMPT =
   'the build + deploy commands so I can ship to the edge.'
 
 /**
- * The AI coding tools this onboarding targets, in the order they read best in a row.
+ * The AI coding tools drawn beside the prompt, in the order they read best in a row.
  * Names match the marks `ui/brand/AgentMark.vue` can draw.
  *
- * ALL SEVEN, matching the agent catalog the docs section documents
- * (site/docs/lib/docs-agent-setup.js). It was five for a drawing reason and not a product
- * one: Gemini and Copilot publish gradient marks, and two gradients among five flat glyphs
- * read as two logos shouting over five, so they were left out of the row. The row's job is
- * to answer "which tools?", and answering it with five of the seven the docs go on to
- * document is the worse trade — so the marks are flattened to one ink instead (`mono` on
- * `AgentMark`) and the list is whole.
+ * FOUR, NOT THE WHOLE CATALOG. The docs section documents seven
+ * (site/docs/lib/docs-agent-setup.js) and this row is not that list: a mark row on a
+ * button is an EXAMPLE of what the prompt is for, and the question it answers is "will
+ * it work with mine?" — which four widely-used marks answer as well as seven, in 72px
+ * less of a control that already has a label and an Azion mark to carry. The catalog
+ * stays whole where a reader goes to choose (the Agent Setup index, its comparison
+ * table, the rail's row per agent); this is the doorway to it, not a duplicate of it.
  *
- * The two join at the END so the surfaces that draw a subset (`AGENT_TOOLS.slice(0, 4)` —
- * the console Overview's rail card and its first-access twin, which fit four at a legible
- * size) keep drawing the same four.
+ * The list was all seven for a while, and the reason it was is worth keeping: it had been
+ * five, with Gemini and Copilot left out because their published marks are gradients that
+ * shouted over five flat glyphs. That is fixed by `mono` on `AgentMark` (flatten to
+ * `currentColor`), not by the length — which is why Gemini is in these four.
+ *
+ * The console surfaces that draw a subset (`AGENT_TOOLS.slice(0, 4)` — the Overview's
+ * rail card and its first-access twin, which fit four at a legible size) now draw this
+ * list entire; the slice stays so they keep their four if the row ever grows again.
  */
-export const AGENT_TOOLS = [
-  'claude',
-  'cursor',
-  'windsurf',
-  'codex',
-  'opencode',
-  'gemini',
-  'copilot'
-]
+export const AGENT_TOOLS = ['claude', 'codex', 'gemini', 'cursor']
 
 // ── DISMISSAL ──
 //
