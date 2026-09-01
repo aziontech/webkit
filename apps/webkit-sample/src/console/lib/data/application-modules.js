@@ -39,7 +39,7 @@ export const DEFAULT_MODULES = [
   {
     key: 'device_detection',
     title: 'Device Detection',
-    description: 'Activate DeviceAtlas variables to configure responsive rules.'
+    description: 'Enable DeviceAtlas variables to configure responsive rules.'
   },
   {
     key: 'functions',

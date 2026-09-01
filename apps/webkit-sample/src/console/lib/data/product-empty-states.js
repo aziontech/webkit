@@ -98,10 +98,11 @@
  * hint can open with the literal (`GET/POST with no origin`) or end with it.
  *
  * `unit` is the ONE thing this product creates, singular and in the product's own
- * words (a Function, a DNS zone, a bucket). It exists because the plural module
- * name cannot be dropped into a sentence: "Creating a Edge DNS" and "a new
- * Functions resource" are both wrong, and a screen about first use is the worst
- * place to read machine-assembled English.
+ * words (a function, a DNS zone, a bucket) — sentence case, because it names a
+ * generic instance and not the Console entity the PAGE is named for. It exists
+ * because the plural module name cannot be dropped into a sentence: "Creating a
+ * Edge DNS" and "a new Functions resource" are both wrong, and a screen about
+ * first use is the worst place to read machine-assembled English.
  *
  * `route` (on a method, and on a `startFast` row) is a real destination, and every gate
  * that CREATES or IMPORTS has one wherever the prototype owns that flow:
@@ -180,9 +181,9 @@ export const productEmptyStates = [
     id: 'functions',
     label: 'Functions',
     icon: 'ai ai-edge-functions',
-    headline: 'Deploy your first Function',
+    headline: 'Deploy your first function',
     lead: 'Write an edge function to run serverless code close to your users.',
-    unit: 'Function',
+    unit: 'function',
     methods: [
       {
         // /functions/new is the real create page (lib/create-resources.js → the
@@ -277,9 +278,9 @@ export const productEmptyStates = [
     id: 'applications',
     label: 'Applications',
     icon: 'ai ai-edge-application',
-    headline: 'Deploy your first Application',
+    headline: 'Deploy your first application',
     lead: 'Deploy a static site or a full-stack app, with compute, AI, storage and media on the same build.',
-    unit: 'Application',
+    unit: 'application',
     // APPLICATIONS IS THE ONE PRODUCT WHOSE FIRST USE IS AN EXISTING FLOW.
     // /create already answers "start an Application": import a repository, or clone a
     // framework template, both ending in /deploy. So this screen does not describe a
@@ -290,7 +291,7 @@ export const productEmptyStates = [
       {
         id: 'github',
         title: 'From GitHub',
-        description: 'Import a repo and Azion deploys it on every push.',
+        description: 'Import a repository and Azion deploys it on every push.',
         action: 'Import',
         primary: true,
         icon: 'pi pi-github',
@@ -339,9 +340,9 @@ export const productEmptyStates = [
     id: 'workloads',
     label: 'Workloads',
     icon: 'ai ai-workloads',
-    headline: 'Deploy your first Workload',
+    headline: 'Deploy your first workload',
     lead: 'Create your first deploy starting from scratch, a template or importing your code.',
-    unit: 'Workload',
+    unit: 'workload',
     // A Workload is what SERVES an Application, so importing code for one is the same
     // entrance Applications uses — the create flow, which ends in /deploy and produces
     // both. "From scratch" is the Workload form itself.
@@ -349,7 +350,7 @@ export const productEmptyStates = [
       {
         id: 'github',
         title: 'From GitHub',
-        description: 'Import a repo and Azion deploys it on every push.',
+        description: 'Import a repository and Azion deploys it on every push.',
         action: 'Import',
         primary: true,
         icon: 'pi pi-github',
@@ -413,7 +414,7 @@ export const productEmptyStates = [
       {
         id: 'github',
         title: 'From GitHub',
-        description: 'Import a repo and Azion deploys it on every push.',
+        description: 'Import a repository and Azion deploys it on every push.',
         action: 'Import',
         primary: true,
         icon: 'pi pi-github',
