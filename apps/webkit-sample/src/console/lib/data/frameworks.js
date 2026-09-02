@@ -25,9 +25,13 @@
 //                says how it renders (SSR / SPA / Static), and the literal it
 //                produces. Authored as parts so the copy carries no markup — see
 //                src/product-empty-states.js for why.
+//   creates      the platform objects a deploy of it leaves behind, as the tags a
+//                catalog card wears. DERIVED from `tag` — see `PROVISIONS` below.
+//   markClass    the filter the MARK needs to survive the dark theme. DERIVED from
+//                `icon` — see `DARK_INK_MARKS` below. Empty for almost every one.
 
 /** Every framework the platform offers a template for, most common first. */
-export const FRAMEWORKS = [
+const CATALOG = [
   {
     tech: 'next',
     title: 'Next.js Boilerplate',
@@ -301,6 +305,108 @@ export const FRAMEWORKS = [
   }
 ]
 
+// ── WHAT A DEPLOY OF IT CREATES ──
+//
+// A catalog card sold the template in prose and then stopped: the objects the run
+// actually leaves in the account — the application, the workload that serves it, the
+// function that renders each request, the bucket the build lands in — appeared nowhere
+// until the deploy log streamed them past
+// (@shared/ui/deployment/deployment-steps.js is that pipeline, and the rows below are
+// its rows). So the card says it up front, as tags.
+//
+// DERIVED FROM `tag`, NOT TYPED PER ENTRY. `tag` is the render shape, and the render
+// shape is exactly what decides the objects: an SSR template needs a function to render
+// each request, a SPA or a static site needs a bucket to serve its build from, and a
+// function-only starter has no build to store. Twenty-five hand-written lists would say
+// that same sentence twenty-five times and start disagreeing with the deploy log on the
+// first one anybody edited.
+//
+// ORDER IS THE SAME ON EVERY CARD, and the two every template creates come first: a
+// deploy IS an application and the workload that serves it, so those two are the
+// constant prefix a reader stops reading after the second card, and the tag that
+// differs — Function, Object Storage — is the one their eye lands on.
+/**
+ * The platform objects a run can create, and the one place they are named.
+ *
+ * Exported because the OTHER catalog authors its own lists in this vocabulary: an Azion
+ * template that fronts an origin creates a connector, which no render shape implies, so
+ * ./templates.js states it and resolves the labels through here rather than typing
+ * 'Object Storage' a second time.
+ */
+export const RESOURCE_LABELS = {
+  application: 'Application',
+  workload: 'Workload',
+  function: 'Function',
+  storage: 'Object Storage',
+  connector: 'Connector'
+}
+
+/** A list of resource keys as the labels a card wears. */
+export const resourceLabels = (keys = []) => keys.map((key) => RESOURCE_LABELS[key] ?? key)
+
+const PROVISIONS = {
+  // Renders on request, so it runs as a function, and its static chunks are still
+  // uploaded.
+  SSR: ['application', 'workload', 'function', 'storage'],
+  // A build served from a bucket; every route falls back to its index document.
+  SPA: ['application', 'workload', 'storage'],
+  Static: ['application', 'workload', 'storage'],
+  // Nothing is built into a folder — the code IS the function.
+  Function: ['application', 'workload', 'function'],
+  WASM: ['application', 'workload', 'function']
+}
+
+// ── THE MARKS THAT VANISH ON DARK ──
+//
+// A brand mark is either a FONT GLYPH (`ai ai-hugo`, `pi pi-code`), which paints in
+// `currentColor` and therefore follows the theme for free, or a COLORED LOGO
+// (`ai-cor ai-*`), which is a background-image and cannot inherit anything. The icons
+// package emits a second, light-ink copy of a colored logo whose SVG draws its ink in
+// `currentColor` — Astro has one — so those follow the theme too.
+//
+// What is left is the case neither mechanism covers: a logo whose ink is a HARD-CODED
+// dark value. Next.js is the whole set — a black disc with the wedge knocked out of it
+// in white — and on the dark canvas the disc is the canvas, so the mark reads as a
+// floating white N with no logo around it.
+//
+// `invert()` is the fix and it is exact rather than approximate here, because the mark
+// is monochrome: black disc + white wedge inverts to the white disc + black wedge that
+// is Next's own dark-theme lockup. The theme is read off `[data-theme=dark]` on the
+// document root, NOT Tailwind's stock `dark:` variant — that one follows
+// `prefers-color-scheme`, which says nothing about the theme this app was toggled to
+// (same reason, same class, as the client marks in
+// @shared/ui/brand/clients/index.js).
+//
+// A COLORED logo would be ruined by this, which is why it is a list of two marks and
+// not a blanket rule: inverting the JavaScript badge turns a yellow tile blue.
+const DARK_INK_MARKS = ['ai-next']
+
+const DARK_INK_FILTER = '[[data-theme=dark]_&]:invert'
+
+/**
+ * The filter one icon class needs on dark — `''` for almost all of them.
+ *
+ * Exported for the same reason as the vocabulary above: ./templates.js authors marks of
+ * its own (three of its templates wear the Next.js logo), and a second copy of the list
+ * of dark-ink marks is a second copy that goes stale.
+ */
+export const markFilterFor = (icon = '') =>
+  DARK_INK_MARKS.some((mark) => icon.split(' ').includes(mark)) ? DARK_INK_FILTER : ''
+
+/**
+ * The catalog, each entry carrying the objects its deploy creates and whatever its mark
+ * needs to survive the dark theme.
+ *
+ * A tag falls back to the two every deploy makes rather than to nothing: a new render
+ * shape added above with no row in `PROVISIONS` then understates what it creates,
+ * instead of a card claiming it creates nothing at all.
+ */
+export const FRAMEWORKS = CATALOG.map((framework) => ({
+  ...framework,
+  creates: resourceLabels(PROVISIONS[framework.tag] ?? ['application', 'workload']),
+  markClass: markFilterFor(framework.icon)
+}))
+
 // A chosen framework → the deploy flow's catalog slug. Techs with no dedicated demo
 // template fall back to the closest available boilerplate.
 const TECH_TO_SLUG = {
@@ -351,13 +457,23 @@ export const technologyOptions = FRAMEWORKS.map(({ tech, label, icon }) => ({
   icon
 }))
 
-/** The /create filter's Use Cases axis. */
+/**
+ * The /create filter's Use Cases axis.
+ *
+ * `delivery` is the one value no framework answers for, and it is here because the
+ * catalog is no longer only frameworks: the template gallery lists Azion's own
+ * templates too (./templates.js → `PUBLISHED_TEMPLATES`), and the two traffic-shaped ones
+ * — front an origin, cache it — are a use case the five below have no room for. A
+ * template that answers none of them carries an empty `useCases` and simply does not
+ * survive a use-case cut, which is the honest answer rather than a guessed tag.
+ */
 export const useCaseOptions = [
   { value: 'ai', label: 'AI/Agent', icon: 'pi pi-star' },
   { value: 'ecommerce', label: 'Ecommerce', icon: 'pi pi-shopping-cart' },
   { value: 'blog', label: 'Blog', icon: 'pi pi-pencil' },
   { value: 'marketing', label: 'Marketing sites', icon: 'pi pi-megaphone' },
-  { value: 'multi-tenant', label: 'Multi-tenant platforms', icon: 'pi pi-sitemap' }
+  { value: 'multi-tenant', label: 'Multi-tenant platforms', icon: 'pi pi-sitemap' },
+  { value: 'delivery', label: 'Content delivery', icon: 'pi pi-bolt' }
 ]
 
 /**

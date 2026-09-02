@@ -66,6 +66,10 @@
     name: framework.title,
     description: framework.description,
     icon: framework.icon,
+    // What the mark needs on the dark theme — carried, not re-derived: the Next.js logo
+    // is a black disc, so on dark it is the canvas with a white wedge floating in it
+    // until it is inverted (../../lib/data/frameworks.js → `DARK_INK_MARKS`).
+    markClass: framework.markClass,
     color: framework.color
   }))
 
@@ -451,10 +455,16 @@
                 v-else
                 class="grid grid-cols-2 gap-(--spacing-md) sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5"
               >
+                <!-- NO `creates` here, and that is the grid's decision rather than an
+                     omission: this catalog runs four and five columns wide, where the
+                     four tags a card would wear break to a line each. The Creation
+                     Center's browser shows them because it runs three up
+                     (../../components/marketplace/TemplateBrowser.vue). -->
                 <TemplateCard
                   v-for="template in filteredTemplates"
                   :key="template.id"
                   :icon="template.icon"
+                  :mark-class="template.markClass"
                   :title="template.name"
                   :description="template.description"
                   :color="template.color"

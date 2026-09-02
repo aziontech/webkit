@@ -45,8 +45,24 @@
 //                         false (./application-flows.js → SCRATCH_SOURCE).
 //
 // Both are read as `!== false`, so a framework starter declares neither and gets both.
+//
+// ── TWO AXES AN AUTHORED TEMPLATE ALSO CARRIES ──
+//
+// A framework starter derives both of these from ./frameworks.js. An Azion template has
+// no framework catalog behind it, so it states them:
+//
+//   `useCases`   which of the filter's use cases it answers (./frameworks.js →
+//                `useCaseOptions`). EMPTY IS A REAL ANSWER: the Functions "Hello World"
+//                kit answers none of them, and tagging it with the nearest one would put
+//                it in a cut it does not belong to.
+//   `creates`    the objects its run creates, in the shared resource vocabulary
+//                (./frameworks.js → `RESOURCE_LABELS`). Authored only where the render
+//                shape gets it WRONG: the two traffic-shaped templates create a connector
+//                and no function, which nothing about "javascript" implies. Everything
+//                else inherits its framework's list, so a Next.js template says what
+//                every Next.js deploy says.
 
-import { FRAMEWORKS, templateSlugForTech } from './frameworks'
+import { FRAMEWORKS, markFilterFor, resourceLabels, templateSlugForTech } from './frameworks'
 
 // The templates that carry something the derivation cannot: an Azion template's settings
 // group, a starter's own credentials (Shopify, Turso), a repository path that is not
@@ -58,6 +74,8 @@ const authored = {
     description: 'Front an origin you already run. Azion receives the traffic and passes it on.',
     vendor: 'Azion',
     framework: 'javascript',
+    useCases: ['delivery'],
+    creates: ['application', 'workload', 'connector'],
     icon: 'ai ai-edge-connectors',
     repoOwner: 'aziontech',
     repoPath: 'templates/proxy',
@@ -95,6 +113,8 @@ const authored = {
     description: 'Publish a folder of built files and serve it from Azion.',
     vendor: 'Azion',
     framework: 'javascript',
+    useCases: ['marketing', 'blog'],
+    creates: ['application', 'workload', 'storage'],
     icon: 'ai ai-edge-storage',
     repoOwner: 'aziontech',
     repoPath: 'templates/static-site',
@@ -126,6 +146,7 @@ const authored = {
     title: 'Nuxt E-commerce',
     description: 'Launch a Nuxt e-commerce or content app on the edge.',
     framework: 'nuxt',
+    useCases: ['ecommerce'],
     repoOwner: 'aziontech',
     repoPath: 'templates/nuxt-ecommerce',
     defaultRepoName: 'nuxt-ecommerce',
@@ -157,6 +178,8 @@ const authored = {
     title: 'Turso Starter Kit',
     description: "Integrate a Turso database, built with Turso's LibSQL SDK, into an application.",
     framework: 'nextjs',
+    useCases: ['ai'],
+    creates: ['application', 'workload', 'function', 'storage'],
     repoOwner: 'aziontech',
     repoPath: 'templates/turso-starter',
     defaultRepoName: 'turso-starter-kit',
@@ -197,6 +220,7 @@ const authored = {
     description: 'Create an application running AI models at the edge.',
     vendor: 'Azion',
     framework: 'javascript',
+    useCases: ['ai'],
     icon: 'ai ai-edge-functions',
     repoOwner: 'aziontech',
     repoPath: 'templates/ai-inference',
@@ -218,6 +242,7 @@ const authored = {
     description: 'A modern business marketing website theme/starter built with Astro.',
     vendor: 'Azion',
     framework: 'astro',
+    useCases: ['marketing'],
     icon: 'ai-cor ai-astro',
     repoOwner: 'aziontech',
     repoPath: 'templates/astro-odyssey',
@@ -231,7 +256,12 @@ const authored = {
     description: 'Boost your application to deliver your content using Azion as a CDN.',
     vendor: 'Azion',
     framework: 'javascript',
-    icon: 'ai ai-edge-cache',
+    useCases: ['delivery'],
+    creates: ['application', 'workload', 'connector'],
+    // `ai-tiered-cache`, not `ai-edge-cache` — the latter is not a glyph the icons
+    // package ships, and a font icon that names nothing paints NOTHING: the card carried
+    // an empty 40px hole where its mark belongs and no error anywhere said so.
+    icon: 'ai ai-tiered-cache',
     repoOwner: 'aziontech',
     repoPath: 'templates/file-optimization',
     defaultRepoName: 'file-optimization',
@@ -268,6 +298,7 @@ const authored = {
     description: 'Launch a “Hello World” originless application powered by functions.',
     vendor: 'Azion',
     framework: 'javascript',
+    useCases: [],
     icon: 'ai ai-edge-functions',
     repoOwner: 'aziontech',
     repoPath: 'templates/functions-starter',
@@ -281,6 +312,7 @@ const authored = {
     description: 'A high-performance, server-rendered Next.js App Router AI Chatbot.',
     vendor: 'Azion',
     framework: 'next',
+    useCases: ['ai'],
     icon: 'ai-cor ai-next',
     repoOwner: 'aziontech',
     repoPath: 'templates/nextjs-ai-chatbot',
@@ -302,6 +334,7 @@ const authored = {
     description: 'Ecommerce template built with Next.js and Shopify.',
     vendor: 'Azion',
     framework: 'next',
+    useCases: ['ecommerce'],
     icon: 'ai-cor ai-next',
     repoOwner: 'aziontech',
     repoPath: 'templates/nextjs-commerce',
@@ -329,6 +362,7 @@ const authored = {
     description: 'A minimalistic multi-tenant Next.js starter template.',
     vendor: 'Azion',
     framework: 'next',
+    useCases: ['multi-tenant'],
     icon: 'ai-cor ai-next',
     repoOwner: 'aziontech',
     repoPath: 'templates/nextjs-multi-tenant',
@@ -350,6 +384,8 @@ const authored = {
     description: 'Ecommerce template built with SvelteKit and Shopify.',
     vendor: 'Azion',
     framework: 'svelte',
+    useCases: ['ecommerce'],
+    creates: ['application', 'workload', 'function', 'storage'],
     icon: 'ai-cor ai-svelte',
     repoOwner: 'aziontech',
     repoPath: 'templates/sveltekit-commerce',
@@ -383,6 +419,7 @@ const authored = {
     description: "A custom template built using Cosmic's React components, Blocks.",
     vendor: 'Cosmic',
     framework: 'react',
+    useCases: ['marketing'],
     icon: 'ai-cor ai-react',
     repoOwner: 'cosmicjs',
     repoPath: 'templates/agency-website',
@@ -411,6 +448,7 @@ const authored = {
     description: 'An Astro blog template powered by Cosmic.',
     vendor: 'Cosmic',
     framework: 'astro',
+    useCases: ['blog'],
     icon: 'ai-cor ai-astro',
     repoOwner: 'cosmicjs',
     repoPath: 'templates/simple-astro-blog',
@@ -439,6 +477,7 @@ const authored = {
     description: 'Deploy this starter template to build a blog with the Eleventy site generator.',
     vendor: '11ty',
     framework: 'eleventy',
+    useCases: ['blog'],
     icon: 'ai ai-eleventy',
     repoOwner: '11ty',
     repoPath: 'eleventy-base-blog',
@@ -452,6 +491,7 @@ const authored = {
     description: 'Create a simple landing page template built with 11ty and Tailwind CSS.',
     vendor: '11ty',
     framework: 'eleventy',
+    useCases: ['marketing'],
     icon: 'ai ai-eleventy',
     repoOwner: '11ty',
     repoPath: 'eleventy-landing-page',
@@ -525,3 +565,131 @@ export const PARTNER_TEMPLATES = [
 export const DEFAULT_TEMPLATE = 'nuxt-ecommerce'
 
 export const getTemplate = (slug) => templates[slug] || templates[DEFAULT_TEMPLATE]
+
+// ── THE GALLERY: EVERY TEMPLATE, IN THE SHAPE ITS KIND EARNS ──────────────────
+//
+// THE SAME CATALOG THE WIZARD OFFERS (../../pages/applications/wizard/TemplateSourceStep.vue),
+// for the Creation Center's template pane
+// (../../pages/resources/creation/TemplateGallery.vue) — but in TWO shapes rather than
+// one, because the two kinds of template are answers to two different questions.
+//
+// A FRAMEWORK STARTER is picked by its MARK. "I use Nuxt" is the whole decision, and a
+// logo is faster to find than a sentence — so the frameworks are cards, brand mark
+// centered, and the ones most people arrive with lead (`RECOMMENDED_COUNT`, the catalog's
+// own most-common-first order).
+//
+// AN AZION TEMPLATE is picked by WHAT IT DOES. "AI Inference Starter Kit" and "Next.js AI
+// Chatbot" are not told apart by a mark at all — three of them wear the same Next logo —
+// so they take the row shape the Marketplace already uses for exactly this
+// (../../components/marketplace/IntegrationCard.vue): mark on the left, the name, who
+// publishes it, and the sentence that distinguishes it. Fourteen of those as centered
+// cards would have been fourteen tiles whose only legible difference was their title.
+//
+// The gallery pane orders the bands: recommended frameworks, then the published
+// templates, then the rest of the frameworks.
+const frameworkByTech = new Map(FRAMEWORKS.map((framework) => [framework.tech, framework]))
+
+/**
+ * One authored template as the row the published-template list renders.
+ *
+ * ── THE MARK IS THE VENDOR'S, NOT THE FRAMEWORK'S ──
+ *
+ * An Azion-published row carries NO `icon`, which is how
+ * ../../components/marketplace/IntegrationCard.vue is asked for the Azion mark (it falls
+ * back to it whenever the icon is empty). The same rule the wizard's rows follow
+ * (../../pages/applications/wizard/TemplateSourceStep.vue), for the same reason: a
+ * framework row is told apart BY its mark — a Nuxt row from a Next row — but an Azion
+ * row is not, and the fact the reader is placing when they look at one is WHO PUBLISHES
+ * IT. Three of these are Next.js applications and would otherwise wear three identical
+ * Next discs while the thing that makes them first-party went unsaid.
+ *
+ * A PARTNER row keeps the mark it has: the point of the field is whose template this is,
+ * and we ship no Cosmic logo, so its React mark says more than a blank tile would. 11ty's
+ * mark IS its vendor mark.
+ *
+ * ── NO TECHNOLOGY TAG ──
+ *
+ * The corner Tag used to carry the framework's label, which spent the row's one badge on
+ * the fact its own sentence already states ("built with Next.js and Shopify"). What the
+ * row now shows instead is `creates` — the chain of objects the run leaves in the
+ * account, which was visible nowhere until the deploy log streamed it past. The
+ * technology stays reachable as a FILTER axis, where it is useful as a cut rather than as
+ * a label repeated fourteen times.
+ */
+const publishedRow = (template) => {
+  const framework = frameworkByTech.get(template.framework)
+  const isFirstParty = (template.vendor || 'Azion') === 'Azion'
+  const icon = isFirstParty ? '' : template.icon || framework?.icon || ''
+
+  return {
+    slug: template.slug,
+    title: template.title,
+    description: template.description,
+    icon,
+    markClass: markFilterFor(icon),
+    vendor: template.vendor || 'Azion',
+    tech: template.framework,
+    useCases: template.useCases ?? [],
+    creates: template.creates ? resourceLabels(template.creates) : (framework?.creates ?? [])
+  }
+}
+
+/**
+ * One framework as a gallery entry — the same object whichever shape renders it.
+ *
+ * `vendor: ''` omits the "by {vendor}" byline when it is rendered as a ROW: a framework
+ * starter is not published by anybody in the sense that line means (the row IS the
+ * framework), and sixteen rows each reading "by Azion" would be a column of the same
+ * three words. The card shape ignores the field entirely.
+ */
+const frameworkEntry = (framework) => ({
+  slug: templateSlugForTech(framework.tech),
+  title: framework.title,
+  description: framework.description,
+  icon: framework.icon,
+  markClass: framework.markClass,
+  color: framework.color,
+  vendor: '',
+  tech: framework.tech,
+  useCases: framework.useCases,
+  creates: framework.creates
+})
+
+/**
+ * How many framework cards lead the pane as "Recommended" — NINE, which is the 3×3 the
+ * grid resolves to at its widest. Not a taste number: the grid runs three up, so any
+ * other count leaves the band's last row part-empty, and a "recommended" band with a
+ * hole in it reads as a loading state.
+ *
+ * They are the first nine of the catalog, which is ordered most-common-first — the same
+ * order that decides which four a product's first use offers (./frameworks.js →
+ * `FIRST_USE_TECHS` explains why that order is not reshuffled per surface).
+ */
+export const RECOMMENDED_COUNT = 9
+
+/** The framework starters, most common first. */
+export const FRAMEWORK_ENTRIES = FRAMEWORKS.map(frameworkEntry)
+
+/**
+ * The nine that lead the pane as CARDS, and the rest as ROWS.
+ *
+ * The split is a split of SHAPE, not of content: the head of the catalog is where a
+ * reader is browsing, and a 3×3 of brand marks is the fastest thing to scan; the tail is
+ * where they are HUNTING a name they already have in mind, and sixteen more centered
+ * tiles is four screens of scrolling to read sixteen titles. A row is a third of the
+ * height and puts the title first.
+ */
+export const RECOMMENDED_CARDS = FRAMEWORK_ENTRIES.slice(0, RECOMMENDED_COUNT)
+export const MORE_FRAMEWORKS = FRAMEWORK_ENTRIES.slice(RECOMMENDED_COUNT)
+
+/**
+ * The templates Azion and its partners PUBLISH, as list rows — Azion's own first, in the
+ * same order the wizard lists them (alphabetical, editorial: see AZION_TEMPLATES).
+ */
+export const PUBLISHED_TEMPLATES = [
+  ...AZION_TEMPLATES.map(publishedRow),
+  ...PARTNER_TEMPLATES.map(publishedRow)
+]
+
+/** Where a gallery card goes: the deploy flow, on that template's own slug. */
+export const deploySlugRoute = (slug) => ({ path: '/deploy', query: { template: slug } })
