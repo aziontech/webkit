@@ -3,15 +3,22 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 // One route module per area, in the same order they were declared when this was a
 // single file — site first, then the hub that shares its `/site` prefix, then the
-// console. Splitting them this way is what keeps an area's pages reachable from
-// exactly one place: adding a console screen touches ./console.routes.js and
-// nothing else, and a route that imports across areas is visible as an `@site` /
-// `@hub` / `@console` line in the wrong file.
+// deck preview, then the console. Splitting them this way is what keeps an area's
+// pages reachable from exactly one place: adding a console screen touches
+// ./console.routes.js and nothing else, and a route that imports across areas is
+// visible as an `@site` / `@hub` / `@preview` / `@console` line in the wrong file.
 import { consoleRoutes } from './console.routes'
 import { hubRoutes } from './hub.routes'
+import { previewRoutes } from './preview.routes'
 import { siteRoutes } from './site.routes'
 
-const routes = [{ path: '/', redirect: '/login' }, ...siteRoutes, ...hubRoutes, ...consoleRoutes]
+const routes = [
+  { path: '/', redirect: '/login' },
+  ...siteRoutes,
+  ...hubRoutes,
+  ...previewRoutes,
+  ...consoleRoutes
+]
 
 export const router = createRouter({
   history: createWebHistory(),

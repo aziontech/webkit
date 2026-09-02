@@ -23,7 +23,8 @@ export default defineConfig({
       '@shared': src('shared'),
       '@site': src('site'),
       '@hub': src('hub'),
-      '@console': src('console')
+      '@console': src('console'),
+      '@preview': src('preview')
     }
   },
   // Tailwind v4 CSS-first pipeline: resolves `@import "tailwindcss"` in

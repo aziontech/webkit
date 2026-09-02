@@ -68,7 +68,7 @@
   // If you re-export the artwork from Figma you get the original distribution back
   // and this rebalance has to be redone.
   //
-  // Both framings below hold that field.
+  // All three framings below hold that field.
   //
   // The two colours are drawn as two layers, not one, because they play
   // different roles. The landmass is texture and belongs UNDER the scrims; the
@@ -85,7 +85,7 @@
   //
   // Registered in ./index.js under the key `map`.
   //
-  // Two framings, because the artwork has to serve two very different boxes.
+  // Three framings, because the artwork has to serve three very different boxes.
   // `kind` picks one; everything else about the banner is identical.
   //
   //   'hero'  (default) — the wide marketing band. Copy sits on the left, so the
@@ -95,14 +95,27 @@
   //           inset goes to 0 (there is no copy beside the map — the map IS the
   //           half) and the crop opens up, because the same box has to hold three
   //           regions stacked over ~650 units of latitude.
+  //   'slide' — a FULL-BLEED band on a fixed artboard (the deck's backdrop slide). The
+  //           inset goes to 0, and it carries no scrim and no seam mask: the artwork is
+  //           the slide's GROUND, the frame's rules are what end it, and the copy that
+  //           sits on it brings a wash of its own aimed at its own column.
   //
-  // THE TWO FRAMINGS NO LONGER HOLD THE SAME SUBJECT, and that is the point. The
+  //           ITS CROP IS THE ONE THAT LIVES IN A MODULE — ./map-framing.js — because it
+  //           is the only framing something else draws ON: the deck annotates the map
+  //           with a request travelling from a user to a data centre, and those markers
+  //           are projected through the same crop from the same numbers. The crop and its
+  //           reasoning are documented there.
+  //
+  // THE HERO AND THE PANEL NO LONGER HOLD THE SAME SUBJECT, and that is the point. The
   // hero is a wide horizontal band, so it frames the transatlantic corridor and lets
   // Latin America run off its bottom edge. The panel is a tall column, so it frames
   // the ATLANTIC WORLD — North America, Latin America and Europe together — which is
   // the one arrangement of the three regions that fits a portrait box.
   //
-  // Both fit with `meet`, and both let the rest of the artwork bleed into whatever
+  // The slide takes the hero's subject at the hero's crop — its box is a wide band too —
+  // and differs only in what surrounds it: no inset, no scrim, no mask.
+  //
+  // All three fit with `meet`, and all three let the rest of the artwork bleed into whatever
   // `meet` leaves over. An SVG clips to its ELEMENT, not to its viewBox, so the
   // leftover bands are filled by the map continuing — the Pacific and Alaska on one
   // side, Asia and Africa on the other. The frame is a window onto a continuous map,
@@ -110,15 +123,27 @@
   // viewBox.
   import { computed } from 'vue'
 
+  import { GLOBE_FRAMING, SLIDE_FRAMING, viewBoxOf } from './map-framing.js'
+
   const props = defineProps({
     kind: {
       type: String,
       default: 'hero',
-      validator: (value) => ['hero', 'panel'].includes(value)
+      validator: (value) => ['hero', 'panel', 'slide', 'globe'].includes(value)
     }
   })
 
   const isPanel = computed(() => props.kind === 'panel')
+  const isSlide = computed(() => props.kind === 'slide')
+  // The globe is the slide's crop turned square and re-anchored west — both because the disc's
+  // window is square and because the disc DRIFTS into the bleed east of the crop, which `xMax`
+  // would push outside the element box. Derived in ./map-framing.js.
+  const isGlobe = computed(() => props.kind === 'globe')
+  /** Neither framing ends in open canvas, so neither takes a mask (see `layerMask`). */
+  const isFramed = computed(() => isSlide.value || isGlobe.value)
+  // The hero is the only framing that insets the artwork and the only one that paints a
+  // scrim, so it is worth naming rather than spelling as "neither of the other two".
+  const isHero = computed(() => props.kind === 'hero')
 
   // BOTH artwork layers bind these same three values — see the template note. The
   // landmass and the route are registered to each other by nothing but a shared
@@ -171,7 +196,15 @@
   // observer, and the reason 5.2px read as tiles before was never the number on its
   // own — it was 5.2px on a two-continent crop, where a big cell has nothing around it
   // to be part of. On this crop the same size is a wider view of the same network.
-  const viewBox = computed(() => (isPanel.value ? '100 70 840 730' : '150 115 760 447'))
+  const viewBox = computed(() =>
+    isGlobe.value
+      ? viewBoxOf(GLOBE_FRAMING)
+      : isSlide.value
+        ? viewBoxOf(SLIDE_FRAMING)
+        : isPanel.value
+          ? '100 70 840 730'
+          : '150 115 760 447'
+  )
   // On the panel it is the `xMid` half of this that is load bearing, not the `YMin`.
   // The crop is height-constrained (see above), so there is no vertical leftover for
   // `YMin` / `YMid` / `YMax` to place differently — the artwork fills the region top
@@ -179,7 +212,20 @@
   // edge the map is anchored to if the crop's ratio is ever changed back past the
   // box's. The HORIZONTAL leftover is real (~29px), and `xMid` splitting it is what
   // keeps the accent field centred in the column rather than parked against a seam.
-  const fit = computed(() => (isPanel.value ? 'xMidYMin meet' : 'xMaxYMid meet'))
+  // The slide's alignment travels with its crop, in ./map-framing.js: a square crop in a
+  // 1.83 box leaves ~730px of horizontal slack, and `xMax` parks the artwork against the
+  // right rule so that slack falls on the side the copy's wash covers anyway. (`xMax` is
+  // also the hero's answer, for the neighbouring reason: there the map is the right-hand
+  // half of a band and belongs against the outer edge.)
+  const fit = computed(() =>
+    isGlobe.value
+      ? GLOBE_FRAMING.fit
+      : isPanel.value
+        ? 'xMidYMin meet'
+        : isSlide.value
+          ? SLIDE_FRAMING.fit
+          : 'xMaxYMid meet'
+  )
 
   // Where the artwork sits — the third thing both layers have to agree on, and the
   // reason it is stated once here rather than written twice.
@@ -278,10 +324,19 @@
   // Tailwind's own defaults for the radial are `ellipse`, `farthest-corner` and
   // `at center` (checked against the emitted `@property` initial values, not assumed),
   // which is exactly what `radial-gradient(ellipse at center, …)` resolved to.
+  //
+  // NEITHER SLIDE FRAMING TAKES A MASK. A mask is how the artwork ends when it ends in
+  // open canvas; on a slide it ends at the frame's rules, which are a harder and better
+  // edge than any ramp — and a soft rectangle floating inside a hairline box reads as a
+  // picture placed on the slide rather than as the slide's ground. The globe answers to the
+  // same rule with a circle instead of a rectangle: whatever cuts the artwork is what should
+  // end it, and there it is the clip.
   const layerMask = computed(() =>
-    isPanel.value
-      ? 'mask-t-from-90% mask-b-from-84% mask-l-from-92% mask-l-to-[rgb(0_0_0_/_0.3)]'
-      : 'mask-ellipse mask-radial-at-center mask-radial-from-62% mask-radial-to-104% mask-l-from-86% mask-l-to-[rgb(0_0_0_/_0.3)]'
+    isFramed.value
+      ? ''
+      : isPanel.value
+        ? 'mask-t-from-90% mask-b-from-84% mask-l-from-92% mask-l-to-[rgb(0_0_0_/_0.3)]'
+        : 'mask-ellipse mask-radial-at-center mask-radial-from-62% mask-radial-to-104% mask-l-from-86% mask-l-to-[rgb(0_0_0_/_0.3)]'
   )
 
   // HOW LOUD THE INK IS — one value, both framings. The grey landmass is the ground
@@ -345,7 +400,36 @@
   // for loudness here. The grey landmass and the long seam fades are what make the
   // map recede; the nodes are the one thing on it that is supposed to be a colour,
   // and a design system has exactly one of those.
-  const LANDMASS_INK = 'text-(--text-muted) opacity-30'
+  //
+  // THE GLOBE IS THE ONE FRAMING THAT PAYS TWICE, so it is the one exception to the single
+  // value above. 30% is derived for a map the reader sees at full strength; the disc renders the
+  // same artwork at HALF the cell size (880 units into a 492px disc is scale 0.56, a 2.8px cell,
+  // against the slide's 1.007 and 5.0px) and then multiplies it by a terminator.
+  //
+  // What makes it affordable is that the two layers are independent: the accent squares are a
+  // separate layer at full `--primary` and this opacity does not touch them, so raising the
+  // GROUND does not dim the network — it only closes the gap. And the gap on the globe had
+  // enormous slack. Measured on the rendered disc (p99 per third of the disc, the frame's own
+  // pixels, both under the pulled-back terminator SlideVision now draws — accent peaks carry
+  // some phase noise because the mesh and the drift are animating, the coastline none):
+  //
+  //   30%   coastline 24-39, accents peaking 186-236 — a 6x lead, and a coastline at or below
+  //         the ~25/255 dissolve point this file names above. The geography was gone.
+  //   45%   coastline 36-58. Legible, still visibly a quiet backdrop rather than a globe.
+  //   60%   coastline 48-77 against accents peaking 183-234 — a ~3x lead at the BRIGHTEST point
+  //         of the ground and wider everywhere else, which is still above the 2.3x the slide's
+  //         own map keeps. SHIPPED.
+  //
+  // Every coastline figure is `128 * alpha` to within a unit, as the note above predicts, so
+  // this ladder is derived rather than sampled and a further step is calculable: 70% would put
+  // the ground at ~90 and the lead at 2.6x, which is where the disc stops being a map with a
+  // network on it and becomes a textured ball with flecks — the failure the 60% HERO was retired
+  // for. The hero's number and this one being the same is a coincidence of arithmetic, not a
+  // reversal: there the map sat nearly full-bleed BEHIND copy, and here the copy is capped 278px
+  // west of the disc's limb, so loudness costs no legibility.
+  const landmassInk = computed(() =>
+    isGlobe.value ? 'text-(--text-muted) opacity-60' : 'text-(--text-muted) opacity-30'
+  )
 
   const ROUTE_INK = 'fill-(--primary)'
 
@@ -361,9 +445,9 @@
     aria-hidden="true"
     class="pointer-events-none absolute inset-0 z-0 overflow-hidden"
     :class="
-      isPanel
-        ? '[--map-inset-inline-start:0%]'
-        : '[--map-inset-inline-start:8%] lg:[--map-inset-inline-start:42%]'
+      isHero
+        ? '[--map-inset-inline-start:8%] lg:[--map-inset-inline-start:42%]'
+        : '[--map-inset-inline-start:0%]'
     "
   >
     <!-- Both artwork layers share ONE box — the right part of the band, opened
@@ -412,7 +496,7 @@
       :preserveAspectRatio="fit"
       fill="currentColor"
       class="absolute left-(--map-inset-inline-start) w-[calc(100%_-_var(--map-inset-inline-start))]"
-      :class="[LAYER_BOX, layerMask, LANDMASS_INK]"
+      :class="[LAYER_BOX, layerMask, landmassInk]"
     >
       <path d="M42.3203 151.85V156.829H47.299V151.85H42.3203Z" />
       <path d="M32.3633 161.807V166.786H37.342V161.807H32.3633Z" />
@@ -5486,8 +5570,15 @@
 
          A portrait column is also the wrong shape for the hero's wash anyway: it
          carries its copy at the TOP and nothing down either side, so a
-         left-to-right ramp would dim a half that holds nothing. -->
-    <template v-if="!isPanel">
+         left-to-right ramp would dim a half that holds nothing.
+
+         THE SLIDE HAS NO SCRIM HERE EITHER, for the opposite reason to the panel's:
+         it needs one, but not this one. Its wash has to be aimed at a copy column
+         whose width is a fact of the slide's grid, and it has to sit ABOVE the route
+         so the nodes under the copy go with it — a headline reads on solid canvas or
+         it does not read. So the slide paints its own, over the whole banner, and the
+         one thing it gives up is the western half of the accent field. -->
+    <template v-if="isHero">
       <div
         class="absolute inset-0 bg-[linear-gradient(to_right,var(--bg-canvas)_0%,color-mix(in_srgb,var(--bg-canvas)_70%,transparent)_24%,color-mix(in_srgb,var(--bg-canvas)_24%,transparent)_38%,transparent_50%)]"
       />

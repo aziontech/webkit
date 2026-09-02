@@ -9,7 +9,8 @@
       "@shared/*": ["./src/shared/*"],
       "@site/*": ["./src/site/*"],
       "@hub/*": ["./src/hub/*"],
-      "@console/*": ["./src/console/*"]
+      "@console/*": ["./src/console/*"],
+      "@preview/*": ["./src/preview/*"]
     }
   },
   "include": ["src/**/*.js", "src/**/*.ts", "src/**/*.vue", "vite.config.js"],
