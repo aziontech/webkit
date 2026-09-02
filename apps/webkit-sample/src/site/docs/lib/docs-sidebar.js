@@ -79,19 +79,26 @@ export function reportDocsLevel(pageId, levels) {
 }
 
 /**
- * Record a level change that came from the menu itself rather than from a page.
+ * Record a level change the menu made ITSELF — a push through the drill row's arrow, or a
+ * pop through `Menu.Back`.
  *
- * A POP is the one of the two that does not navigate: `Menu.Back` plays its own motion in
- * the mounted menu and leaves the reader looking at the column it returned to, so recording
- * that as the shown level is what stops the NEXT navigation from replaying an entrance for a
- * column already on screen. A push is deliberately left alone — the navigation that follows
- * it is the arrival that should animate.
+ * BOTH DIRECTIONS COUNT, because both leave the reader looking at the column they moved to:
+ * the mounted menu plays that motion where it stands, and no navigation is involved. So the
+ * level is already shown, and the next navigation must not replay an entrance for a column
+ * that never left the screen.
+ *
+ * The push used to be left out, on the theory that the navigation following it was the
+ * arrival that should animate. It was not: activating the drill row does not navigate (the
+ * arrow only reveals the level), so the reader got the push's own slide and then a second,
+ * identical slide on the first row they opened inside it — measured as two `data-motion=push`
+ * cycles, 300ms apart. What still animates is a level change the menu did NOT make: a pasted
+ * URL, the palette, a link in the prose, or the drill row's own label — none of them touch
+ * this, so `reportDocsLevel` still calls those an entrance.
  *
  * @param {string[]} levels - the stack the menu is now on.
- * @param {number} previousDepth - how deep it was before.
  */
-export function recordDocsLevel(levels, previousDepth) {
-  if (levels.length < previousDepth) shownLevel = levels.join('/')
+export function recordDocsLevel(levels) {
+  shownLevel = levels.join('/')
 }
 
 watch(collapsed, (value) => {

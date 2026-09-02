@@ -280,12 +280,25 @@ export const docsNavSections = [
         id: 'functions',
         label: 'Functions',
         kind: 'drill',
+        // THE ROW IS A DESTINATION AS WELL AS A LEVEL, and the `href` is what says so. It
+        // points at the product's own overview — the page the level opens on — so hitting
+        // `Functions` opens the page AND the sub in one action: the arrival is inside the
+        // level, so the rail drills to it on its own (see `railStateFor` in DocsLayout).
+        //
+        // `MenuSubTrigger` splits the row on this prop and that split is the point: the
+        // LABEL is a link to the overview, the arrow beside it reveals the level without
+        // leaving the page. A reader who wants the product gets it in one hit; one who is
+        // only looking for a guide inside it does not have to load the overview first.
+        href: '/site/docs/functions',
         groups: [
           {
-            // Untitled first block: `About Functions` is the level's LANDING row —
-            // activating `Functions` opens the level and lands here in one action —
-            // and a title over the product's own three pages would only repeat the
-            // name the Back row already carries.
+            // Titled with the product's own name, because this block is what the level
+            // OPENS on: a reader who activated `Functions` lands here, and the Back row
+            // above says where Back goes, not where they are. Without the title the
+            // level's own three pages read as loose rows under an arrow, and `Guides`
+            // below reads as the only named thing on screen instead of one section of
+            // two. `About Functions` is still the landing row inside it.
+            label: 'Functions',
             items: [
               {
                 id: 'build-applications-functions',

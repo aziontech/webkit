@@ -542,13 +542,12 @@
              elsewhere in this app go fluid below `sm` — a full-width primary is the
              right target on a phone — but the pill is `rounded-full` and sizes to its
              content by design: stretched across a phone it stops reading as a pill and
-             starts reading as a second primary. The pair needs 439px to sit on one
-             line — a 120px primary, the 12px gap and a 307px pill — so it holds one line
-             from a 465px viewport up and stacks to two left-aligned lines below that,
-             phones included. It stacked on a phone before the pill carried all seven
-             agent marks too (it needed 391 then, against the 358 a 390px viewport
-             leaves); the marks moved the threshold, not the behaviour at the widths a
-             phone actually has. -->
+             starts reading as a second primary. The pair needs 359.75px to sit on one
+             line — a 112.86px primary, the 12px gap and a 234.89px pill — so it holds one
+             line from a 392px viewport up and stacks to two left-aligned lines below
+             that. The threshold has moved twice with the pill's mark row and the
+             behaviour at a phone's width has not: at 390 (358px of row) it stacks, the
+             same two rows it showed when the row carried seven marks and needed 439. -->
         <template #actions>
           <div class="flex flex-wrap items-center gap-(--spacing-sm)">
             <Button

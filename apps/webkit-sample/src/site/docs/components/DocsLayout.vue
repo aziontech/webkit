@@ -182,9 +182,11 @@
   /**
    * Take the stack back from `Menu`, which owns both ways it changes.
    *
-   * A push is left to the navigation that follows it — that arrival is what animates. A POP
-   * navigates nothing and plays its own motion here, so it is recorded as seen, or the next
-   * navigation would replay an entrance for a column that never left the screen.
+   * EITHER WAY IT IS RECORDED AS SEEN. A push (the drill row's arrow) and a pop (`Menu.Back`)
+   * both navigate nothing and both play their motion in the mounted menu, so the reader is
+   * already looking at the column when it is over — and the next navigation must not replay
+   * an entrance for it. Leaving the push out is what made the level slide in twice: once on
+   * the arrow, once again on the first row opened inside it.
    */
   const onPath = (levels) => {
     const previous = path.value
@@ -193,7 +195,7 @@
     const el = navScroll.value?.$el
     if (isPush && el) navScrollMemory.set(navScrollKey(previous), el.scrollTop)
 
-    recordDocsLevel(levels, path.value.length)
+    recordDocsLevel(levels)
     path.value = levels
 
     // A level change REPLACES the column's contents, so the offset has to be set deliberately:
@@ -260,16 +262,18 @@
    */
   const landingOf = (node) => (node.groups || node.children ? menuLeaves([node])[0] : node)
 
-  // Only rows that HAVE a destination reach here, which in this tree means leaf pages: not one
-  // of the 28 container rows carries an `href`, because a container is not a destination (see
-  // `landingOf`). `Menu` reads that same `href` to decide the row's anatomy — with one, the row
-  // is a link plus an arrow; without one, the WHOLE ROW reveals the children — so every
-  // container here unfolds or pushes from its full 268px width and announces nothing.
+  // Only rows that HAVE a destination reach here. That is every leaf page, plus the ONE
+  // container that is also a destination: the `Functions` drill row carries the product's
+  // overview as its `href`, so activating it opens that page and the level in one action. The
+  // other 27 containers carry none, because a container is not a destination (see
+  // `landingOf`). `Menu` reads that same `href` to decide the row's anatomy — with one, the
+  // row is a link plus an arrow; without one, the WHOLE ROW reveals the children — so those 27
+  // unfold or push from their full 268px width and announce nothing.
   //
-  // That is what lets the sheet close unconditionally. It used to have to exclude the drill
-  // row: one activation both pushed the level and announced it, so closing the sheet would
-  // have taken away the very menu the push had just put in it. Now the two are different
-  // rows entirely, and only an arrival lands here.
+  // That is what lets the sheet close unconditionally, the drill row included. Its two halves
+  // do two different things and only one of them lands here: the LABEL navigates, and closing
+  // the sheet over the page it just opened is right; the ARROW reveals the level and emits
+  // nothing, so the sheet stays open on the menu that push put in it.
   const onNavigate = (event, node) => {
     const target = landingOf(node)
     active.value = target.id
