@@ -73,9 +73,11 @@ Three exceptions, and only three:
 2. **Azion product and entity names** keep their capitalization when they name the product or the
    Console entity: `Azion Console`, `Azion Marketplace`, `Applications`, `Workloads`, `Deployments`,
    `Firewall`, `Connectors`, `Network Lists`, `Custom Pages`, `Functions`, `Edge DNS`,
-   `Object Storage`, `SQL Database`, `Variables`. The same word lowercases when it means the generic
-   thing rather than the entity: `Select a network list` refers to an item, `Network Lists` is the
-   page that holds them.
+   `Object Storage`, `SQL Database`, `Variables`. The same word lowercases **inside a sentence**,
+   where it means the generic thing rather than the entity: `Select a network list` refers to an item,
+   `Network Lists` is the page that holds them. It does **not** lowercase in a create action, where
+   the noun is the entity being brought into existence and the label has to match the page it opens —
+   `Create Network List`, not `Create network list`. See section 5.
 3. **Acronyms** are uppercase: `API`, `DNS`, `TLS`, `WAF`, `HTTP`, `URL`, `JSON`, `TTL`, `CNAME`.
 
 ```
@@ -189,7 +191,7 @@ every future screen.
 
 ## 5. Actions
 
-- **A button names its action, verb first**, in the reader's terms: `Deploy`, `Create workload`,
+- **A button names its action, verb first**, in the reader's terms: `Deploy`, `Create Workload`,
   `Include dependencies`. Never `OK`, `Submit`, `Yes`, `Continue` when a real verb exists.
 - **At most three words.** A button is never a sentence.
 - **A destructive confirmation repeats the verb and names the object.** The title asks, the body
@@ -204,26 +206,36 @@ every future screen.
 
 Every list has one create action, and its label is decided by **where the list sits**, not by
 whoever built the page. Three shapes were in use across the Console for the same act: `New Workload`,
-`Create Bucket`, and a bare `Connector` with a plus icon. Only one is correct.
+`Create bucket`, and a bare `Connector` with a plus icon. Only one is correct.
 
 | The list is…                                                                | Label                  | Examples                                                                        |
 | --------------------------------------------------------------------------- | ---------------------- | ------------------------------------------------------------------------------- |
-| A **module the sidebar routes to** (Applications, Workloads, Functions, …)  | `Create <object>`      | `Create application`, `Create function`, `Create network list`, `Create bucket` |
+| A **module the sidebar routes to** (Applications, Workloads, Functions, …)  | `Create <Object>`      | `Create Application`, `Create Function`, `Create Network List`, `Create Bucket` |
 | A **tab or section inside a resource** (an application's Cache Settings, …) | `Add <Product Module>` | `Add Cache Settings`, `Add Device Group`, `Add Functions Instance`, `Add Rule`  |
 
 - **`Create` at module level, `Add` inside a resource.** At module level the reader brings an object
   into existence in the collection they navigated to. Inside a resource they attach a configuration
   to the resource already open, and `Add` is what the Console says for that. This is the one place
-  `Add` covers something that is created rather than attached.
+  `Add` covers something that is created rather than attached. The verb is the only thing the two
+  rows disagree about.
 - **Never a bare noun.** `Connector` under a plus icon is not a label. The icon is not the verb.
 - **Never `New`.** `New Workload` and `New release` use the banned verb from section 4.
-- **Capitalization follows section 2.** At module level the object is an instance, so it is
-  lowercase: `Create workload`, never `Create Workload`. Inside a resource the object is the product
-  module the tab is named for, so it keeps that name's exact capitalization: `Add Cache Settings`,
-  `Add Functions Instance`. Acronyms stay uppercase either way: `Create WAF rule set`.
+- **The object keeps its entity capitalization, in both rows.** The noun after the verb names a
+  Console entity — the thing the sidebar, the page title and the breadcrumb already name — so it is
+  written the way that entity is written: `Create Workload`, `Create Network List`,
+  `Add Cache Settings`, `Add Functions Instance`. Acronyms stay uppercase: `Create WAF Rule Set`.
+  This is the **product-name exception in section 2**, not a departure from it; a create label is one
+  of the few places sentence case does not reach, because every word after the verb belongs to an
+  entity's name. It also keeps a module page and a tab inside it reading as one system —
+  `Create Application` over `Add Cache Settings` — instead of splitting on a casing rule the reader
+  has no way to see.
+- **Sentence case still governs everything that is not the entity.** A verb that takes no entity is
+  sentence case like any other button (`Create and deploy`), and a repeater control inside a form
+  adds a row rather than an entity, so it stays lowercase: `Add column`, `Add field`, `Add criteria`,
+  `Add behavior`.
 - **The label does not change on the way in.** The create page's title and breadcrumb, the drawer's
   title, and the confirm button repeat the trigger's string exactly. A button reading
-  `Create variable` that opens a drawer titled `Add environment variable` is two names for one act.
+  `Create Variable` that opens a drawer titled `Add Environment Variable` is two names for one act.
 - **The empty state's action is that same button.** A module's first use call to action carries the
   identical label as the heading's create button, because it starts the identical flow.
 
