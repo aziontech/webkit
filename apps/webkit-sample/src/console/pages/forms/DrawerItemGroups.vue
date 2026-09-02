@@ -154,8 +154,8 @@
       >
         <template #actions>
           <HeadingAction
-            label="Create service"
-            kind="primary"
+            label="Create Service"
+            kind="outlined"
             icon="pi pi-plus"
             @click="openCreate"
           />
@@ -190,7 +190,7 @@
                :disabled lock every field while the request is in flight. -->
           <form
             class="flex min-h-0 flex-1 flex-col"
-            aria-label="Create service"
+            aria-label="Create Service"
             novalidate
             @submit.prevent="submit"
           >

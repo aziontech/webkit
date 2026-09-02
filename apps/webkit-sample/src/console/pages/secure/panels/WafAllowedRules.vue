@@ -225,7 +225,7 @@
       <template #actions>
         <HeadingAction
           label="Add Allowed Rule"
-          kind="primary"
+          kind="outlined"
           icon="pi pi-plus"
           @click="openCreate"
         />

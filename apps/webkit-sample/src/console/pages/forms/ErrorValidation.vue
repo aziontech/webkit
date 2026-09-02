@@ -362,7 +362,7 @@
     >
       <form
         class="flex min-h-full flex-col"
-        aria-label="Create application"
+        aria-label="Create Application"
         novalidate
         @submit.prevent="submit"
       >

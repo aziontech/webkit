@@ -51,7 +51,7 @@
 
   const props = defineProps({
     // Breadcrumb trail for the flow, e.g.
-    // [{ label: 'Applications', href: '/applications' }, { label: 'Create application' }]
+    // [{ label: 'Applications', href: '/applications' }, { label: 'Create Application' }]
     breadcrumb: { type: Array, default: () => [] },
     // Accessible label for the header's back button.
     backLabel: { type: String, default: 'Back' },

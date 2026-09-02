@@ -243,8 +243,8 @@
       >
         <template #actions>
           <HeadingAction
-            label="Create WAF rule set"
-            kind="primary"
+            label="Create WAF Rule Set"
+            kind="outlined"
             icon="pi pi-plus"
             @click="create"
           />
@@ -361,7 +361,7 @@
                   </template>
                   <template #actions>
                     <Button
-                      label="Create WAF rule set"
+                      label="Create WAF Rule Set"
                       kind="secondary"
                       size="large"
                       icon="pi pi-plus"

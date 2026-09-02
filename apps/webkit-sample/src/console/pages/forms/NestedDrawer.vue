@@ -203,7 +203,7 @@
         <template #actions>
           <HeadingAction
             label="Add Functions Instance"
-            kind="primary"
+            kind="outlined"
             icon="pi pi-plus"
             @click="openParent"
           />
@@ -424,7 +424,7 @@
         <DrawerContent class="z-[1003]">
           <form
             class="flex min-h-0 flex-1 flex-col"
-            aria-label="Create function"
+            aria-label="Create Function"
             novalidate
             @submit.prevent="submitChild"
           >

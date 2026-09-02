@@ -192,7 +192,7 @@
     <main class="animate-page-enter motion-reduce:animate-none min-h-0 flex-1 overflow-auto">
       <form
         class="flex min-h-full flex-col"
-        aria-label="Create application"
+        aria-label="Create Application"
         novalidate
         @submit.prevent="submit"
       >

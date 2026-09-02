@@ -203,7 +203,7 @@
       <template #actions>
         <HeadingAction
           label="Add Device Group"
-          kind="primary"
+          kind="outlined"
           icon="pi pi-plus"
           @click="openCreate"
         />

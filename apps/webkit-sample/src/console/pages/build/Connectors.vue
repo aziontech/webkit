@@ -221,8 +221,8 @@
       >
         <template #actions>
           <HeadingAction
-            label="Create connector"
-            kind="primary"
+            label="Create Connector"
+            kind="outlined"
             icon="pi pi-plus"
             @click="create"
           />
@@ -339,7 +339,7 @@
                   </template>
                   <template #actions>
                     <Button
-                      label="Create connector"
+                      label="Create Connector"
                       kind="secondary"
                       size="large"
                       icon="pi pi-plus"

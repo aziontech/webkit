@@ -257,8 +257,8 @@
             @click="copyNameservers"
           />
           <HeadingAction
-            label="Create zone"
-            kind="primary"
+            label="Create Zone"
+            kind="outlined"
             icon="pi pi-plus"
             @click="createZone"
           />
@@ -383,7 +383,7 @@
                   </template>
                   <template #actions>
                     <Button
-                      label="Create zone"
+                      label="Create Zone"
                       kind="secondary"
                       size="large"
                       icon="pi pi-plus"

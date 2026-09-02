@@ -109,7 +109,7 @@ export function workloadProvisioningSteps({
         }
       : {
           key: 'application',
-          title: 'Create application',
+          title: 'Create Application',
           description: `${app} · built`,
           duration: 5,
           logs: [
@@ -153,7 +153,7 @@ export function workloadProvisioningSteps({
           }
         : {
             key: 'firewall',
-            title: 'Create firewall',
+            title: 'Create Firewall',
             description: firewall || 'Firewall created',
             duration: 3,
             logs: [
@@ -213,7 +213,7 @@ export function workloadProvisioningSteps({
         }
       : {
           key: 'deployment',
-          title: 'Create deployment',
+          title: 'Create Deployment',
           description: deployment || 'Deployment created',
           duration: 3,
           logs: [
@@ -253,7 +253,7 @@ export function workloadProvisioningSteps({
     // would announce an address that answers nothing.
     {
       key: 'workload',
-      title: 'Create workload',
+      title: 'Create Workload',
       description: address,
       duration: 4,
       logs: [

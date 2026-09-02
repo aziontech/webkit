@@ -1,7 +1,7 @@
 <script setup>
   // Workloads list — the Azion Console "Workloads" module. The app shell (sidebar +
   // GlobalHeader breadcrumb) comes from AppLayout; this page renders a PAGE HEADING
-  // (title + description + the "Create workload" create) over a CONTROLS HEADER (search,
+  // (title + description + the "Create Workload" create) over a CONTROLS HEADER (search,
   // then the Filter button) over a data-driven <Table> whose rows open the workload detail
   // view. As a first-level module list it carries no navigation tabs; the heading names
   // the module and the controls row only narrows the list
@@ -277,8 +277,8 @@
       >
         <template #actions>
           <HeadingAction
-            label="Create workload"
-            kind="primary"
+            label="Create Workload"
+            kind="outlined"
             icon="pi pi-plus"
             @click="createWorkload"
           />

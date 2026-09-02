@@ -343,7 +343,7 @@
   <ResourceDrawer
     v-model:open="open"
     size="medium"
-    title="Create variable"
+    title="Create Variable"
     save-label="Save"
     :submitting="submitting"
     @submit="submit"

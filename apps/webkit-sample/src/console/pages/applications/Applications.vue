@@ -337,8 +337,8 @@
       >
         <template #actions>
           <HeadingAction
-            label="Create application"
-            kind="primary"
+            label="Create Application"
+            kind="outlined"
             icon="pi pi-plus"
             @click="createApplication"
           />

@@ -241,14 +241,14 @@
       <!-- Action toolbar: create on the left, bulk actions gated by selection. -->
       <div class="layout-section-start flex flex-wrap items-center gap-(--spacing-xs)">
         <Button
-          label="Create project"
+          label="Create Project"
           icon="pi pi-plus"
           kind="primary"
           size="medium"
           @click="createProject"
         />
         <Button
-          label="Create folder"
+          label="Create Folder"
           icon="pi pi-folder"
           kind="outlined"
           size="medium"

@@ -146,14 +146,14 @@
 
 <template>
   <CreatePage
-    :breadcrumb="[{ label: 'Organizations' }, { label: 'Create organization' }]"
+    :breadcrumb="[{ label: 'Organizations' }, { label: 'Create Organization' }]"
     back-label="Back to console"
-    title="Create organization"
+    title="Create Organization"
     description="An organization is the outermost thing you work inside: it owns the workspaces, and every resource deployed in them."
     title-id="create-organization-title"
     :submitting="submitting"
     :dirty="dirty"
-    save-label="Create organization"
+    save-label="Create Organization"
     @cancel="cancel"
     @submit="submit"
   >

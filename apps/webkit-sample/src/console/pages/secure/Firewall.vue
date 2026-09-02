@@ -238,8 +238,8 @@
       >
         <template #actions>
           <HeadingAction
-            label="Create firewall"
-            kind="primary"
+            label="Create Firewall"
+            kind="outlined"
             icon="pi pi-plus"
             @click="create"
           />
@@ -356,7 +356,7 @@
                   </template>
                   <template #actions>
                     <Button
-                      label="Create firewall"
+                      label="Create Firewall"
                       kind="secondary"
                       size="large"
                       icon="pi pi-plus"

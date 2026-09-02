@@ -171,8 +171,8 @@
       >
         <template #actions>
           <HeadingAction
-            label="Create team"
-            kind="primary"
+            label="Create Team"
+            kind="outlined"
             icon="pi pi-plus"
             @click="createTeam"
           />

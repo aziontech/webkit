@@ -359,7 +359,7 @@
       <template #actions>
         <HeadingAction
           label="Add Cache Settings"
-          kind="primary"
+          kind="outlined"
           icon="pi pi-plus"
           @click="openCreate"
         />

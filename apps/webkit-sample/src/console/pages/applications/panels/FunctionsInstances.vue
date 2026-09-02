@@ -603,7 +603,7 @@
       <template #actions>
         <HeadingAction
           label="Add Functions Instance"
-          kind="primary"
+          kind="outlined"
           icon="pi pi-plus"
           @click="openCreate"
         />

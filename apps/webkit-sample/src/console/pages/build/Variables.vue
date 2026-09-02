@@ -296,8 +296,8 @@
       >
         <template #actions>
           <HeadingAction
-            label="Create variable"
-            kind="primary"
+            label="Create Variable"
+            kind="outlined"
             icon="pi pi-plus"
             @click="openCreate"
           />

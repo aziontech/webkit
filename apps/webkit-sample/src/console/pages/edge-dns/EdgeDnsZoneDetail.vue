@@ -549,7 +549,7 @@
             <template #actions>
               <HeadingAction
                 label="Add Record"
-                kind="primary"
+                kind="outlined"
                 icon="pi pi-plus"
                 @click="openRecordDrawer"
               />

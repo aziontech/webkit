@@ -215,7 +215,7 @@
   <CreatePage
     :breadcrumb="breadcrumb"
     back-label="Back to Teams Permissions"
-    :title="editing ? 'Edit Team' : 'Create team'"
+    :title="editing ? 'Edit Team' : 'Create Team'"
     description="A team is a named set of permissions. Assign accounts to it and they inherit exactly what it grants. Nothing is granted per person."
     title-id="team-title"
     :submitting="submitting"

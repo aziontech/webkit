@@ -2,7 +2,7 @@
   // SQL Database list — the Azion Console "SQL Database" module (Store area). The
   // app shell (sidebar + GlobalHeader with the module breadcrumb) comes from
   // AppLayout; this page renders only its content: a PageHeading (title +
-  // description + the primary "Create database" action) over a data-driven
+  // description + the primary "Create Database" action) over a data-driven
   // <Table>. As a first-level module list it carries no navigation tabs — the
   // table's own search narrows the set.
   //
@@ -204,8 +204,8 @@
       >
         <template #actions>
           <HeadingAction
-            label="Create database"
-            kind="primary"
+            label="Create Database"
+            kind="outlined"
             icon="pi pi-plus"
             @click="createDatabase"
           />
@@ -333,7 +333,7 @@
                   </template>
                   <template #actions>
                     <Button
-                      label="Create database"
+                      label="Create Database"
                       kind="secondary"
                       size="large"
                       icon="pi pi-plus"

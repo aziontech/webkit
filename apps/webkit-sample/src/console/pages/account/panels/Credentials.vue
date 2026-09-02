@@ -154,8 +154,8 @@
       >
         <template #actions>
           <HeadingAction
-            label="Create credential"
-            kind="primary"
+            label="Create Credential"
+            kind="outlined"
             icon="pi pi-plus"
             @click="createCredential"
           />

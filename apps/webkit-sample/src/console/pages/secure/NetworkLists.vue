@@ -220,8 +220,8 @@
       >
         <template #actions>
           <HeadingAction
-            label="Create network list"
-            kind="primary"
+            label="Create Network List"
+            kind="outlined"
             icon="pi pi-plus"
             @click="create"
           />
@@ -338,7 +338,7 @@
                   </template>
                   <template #actions>
                     <Button
-                      label="Create network list"
+                      label="Create Network List"
                       kind="secondary"
                       size="large"
                       icon="pi pi-plus"

@@ -118,14 +118,33 @@
          one (./ControlsHeader.vue) runs at `medium`, so the size ladder says which is
          which: act on the module here, narrow the list there.
 
-         THE CREATE BUTTON'S LABEL IS NOT A PER-PAGE CHOICE. A list the sidebar routes
-         to reads `Create <object>`, the object lowercase because it is an instance and
-         not the module ("Create workload", "Create network list", "Create bucket"); a
-         list that is a TAB INSIDE a resource reads `Add <Product Module>` in that tab's
-         exact capitalization ("Add Cache Settings", "Add Functions Instance"). Never a
-         bare noun leaning on the plus icon, and never `New`. The page or drawer it opens
-         repeats the same string as its title, so the act keeps one name from the click
-         to the form. The rule and its reasons live in the webkit-microcopy skill § 5. -->
+         EVERY ACTION ON THIS ROW IS `outlined`, the create button included. The one
+         filled button in the console is the Create in the header bar
+         (../shell/AppLayout.vue) — the only act in reach from every screen — so a list
+         page adds no second blue button competing with it two rows below. What the row
+         still carries is the SIZE: `large` here against `medium` in the controls row is
+         what ranks the page's action above the list's filters, without colour having to
+         do it. (`primary` stays available for a COMMIT — Build's Deploy — which writes
+         what the page is holding and has no counterpart in the header.)
+
+         THE CREATE BUTTON'S LABEL IS NOT A PER-PAGE CHOICE. The VERB comes from where
+         the list sits — `Create` for a list the sidebar routes to, `Add` for a list that
+         is a tab inside an open resource, because there the reader attaches something to
+         the resource already in front of them. The OBJECT is written the same way in
+         both: it names a Console entity, so it keeps that entity's capitalization —
+         "Create Workload", "Create Network List", "Add Cache Settings", "Add Functions
+         Instance". Acronyms stay uppercase ("Create WAF Rule Set").
+
+         The object is Title Case and not sentence case because it is the entity, not a
+         generic instance of one: the button names the same thing the sidebar, the page
+         title and the breadcrumb name, and one act should not change its spelling on the
+         way from the rail to the form. It also means a page and a tab inside it read as
+         one system ("Create Application" over "Add Cache Settings") instead of splitting
+         on a casing rule the reader cannot see.
+
+         Never a bare noun leaning on the plus icon, and never `New`. The page or drawer
+         it opens repeats the same string as its title, so the act keeps one name from the
+         click to the form. The rule lives in the webkit-microcopy skill § 5. -->
     <!-- `w-full flex-wrap` below `md` is what stacks the actions, WITHOUT this header
          counting them: a `w-full` item in a wrapping row cannot share a line, so every
          HeadingAction takes one of its own, while a natural-width utility control (a
@@ -141,9 +160,9 @@
            not sit where the eye goes for the primary one.
            It is a BUTTON, not a text link: on this row it is one of two things the
            reader can do with the module — read it or add to it — and the two read as a
-           pair when they are the same shape. `outlined` beside `primary` is the pair
-           the console already uses when a heading carries two actions (Edge DNS's
-           "Copy nameserver values" beside "Create zone"). The BOOK glyph is what names
+           pair when they are the same shape. Both are `outlined`: the row's ranking is
+           its ORDER (reference on the inside, the action on the outer edge), not a fill,
+           since the console's one filled button lives in the header bar. The BOOK glyph is what names
            it as reference material; it replaced the external-link arrow, which said
            only that the destination is elsewhere — true of every link, and not the
            useful half. The anchor is still real: `href` makes `Button` render an <a>,

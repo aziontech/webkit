@@ -449,7 +449,7 @@
                     @click="back"
                   />
                   <Button
-                    :label="isLastStep ? 'Create organization' : 'Continue'"
+                    :label="isLastStep ? 'Create Organization' : 'Continue'"
                     kind="primary"
                     size="large"
                     class="flex-1"

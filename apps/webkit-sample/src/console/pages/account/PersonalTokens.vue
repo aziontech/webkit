@@ -357,8 +357,8 @@
       >
         <template #actions>
           <HeadingAction
-            label="Create personal token"
-            kind="primary"
+            label="Create Personal Token"
+            kind="outlined"
             icon="pi pi-plus"
             @click="openCreate"
           />
@@ -513,7 +513,7 @@
                Enter-to-submit; the fieldset locks every field while in flight. -->
           <form
             class="flex min-h-0 flex-1 flex-col"
-            aria-label="Create personal token"
+            aria-label="Create Personal Token"
             novalidate
             @submit.prevent="submit"
           >

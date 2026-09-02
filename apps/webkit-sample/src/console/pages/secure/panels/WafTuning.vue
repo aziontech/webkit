@@ -124,7 +124,7 @@
         />
         <HeadingAction
           label="Add Allowed Rule"
-          kind="primary"
+          kind="outlined"
           icon="pi pi-plus"
           :disabled="!selected.length"
           @click="createAllowed"

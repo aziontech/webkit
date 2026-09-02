@@ -179,8 +179,8 @@
       >
         <template #actions>
           <HeadingAction
-            label="Invite user"
-            kind="primary"
+            label="Invite User"
+            kind="outlined"
             icon="pi pi-user-plus"
             @click="inviteUser"
           />

@@ -520,12 +520,12 @@
                       @click="refreshTables"
                     />
                   </Tooltip>
-                  <Tooltip text="Create table">
+                  <Tooltip text="Create Table">
                     <IconButton
                       icon="pi pi-plus"
                       kind="outlined"
                       size="small"
-                      aria-label="Create table"
+                      aria-label="Create Table"
                       @click="openTableDrawer"
                     />
                   </Tooltip>
@@ -655,7 +655,7 @@
                   </template>
                   <template #actions>
                     <HeadingAction
-                      label="Create table"
+                      label="Create Table"
                       kind="secondary"
                       icon="pi pi-plus"
                       @click="openTableDrawer"

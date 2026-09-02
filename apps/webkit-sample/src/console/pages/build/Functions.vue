@@ -232,8 +232,8 @@
       >
         <template #actions>
           <HeadingAction
-            label="Create function"
-            kind="primary"
+            label="Create Function"
+            kind="outlined"
             icon="pi pi-plus"
             @click="create"
           />
@@ -350,7 +350,7 @@
                   </template>
                   <template #actions>
                     <Button
-                      label="Create function"
+                      label="Create Function"
                       kind="secondary"
                       size="large"
                       icon="pi pi-plus"

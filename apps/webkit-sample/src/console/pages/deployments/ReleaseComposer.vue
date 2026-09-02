@@ -850,7 +850,7 @@
   const breadcrumb = computed(() => [
     { label: 'Deployments', href: '/deployments' },
     ...(seedName.value ? [{ label: seedName.value, href: '/deployments' }] : []),
-    { label: 'Create release' }
+    { label: 'Create Release' }
   ])
 
   // Re-seeding follows the first target: the release being edited is the one serving

@@ -463,8 +463,8 @@
           <HeadingAction
             key="button-0"
             v-if="activeTab === 'all'"
-            label="Create release"
-            kind="primary"
+            label="Create Release"
+            kind="outlined"
             icon="pi pi-cloud-upload"
             @click="newRelease"
           />
@@ -473,7 +473,7 @@
             key="button-2"
             v-else
             label="Create Deployment Settings"
-            kind="primary"
+            kind="outlined"
             icon="pi pi-plus"
             @click="newSettings"
           />

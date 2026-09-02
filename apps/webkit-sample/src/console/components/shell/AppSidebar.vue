@@ -597,7 +597,7 @@
   const actionCommands = computed(() => [
     {
       id: 'create',
-      label: 'Create resource',
+      label: 'Create Resource',
       icon: 'pi pi-plus-circle',
       // Same event as the header's Create button — not a `navigate` with a
       // synthetic nav item, which would also mark a non-existent rail item active.

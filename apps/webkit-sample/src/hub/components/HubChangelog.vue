@@ -199,7 +199,7 @@
           text: 'both flows use the same picker, with swatches instead of previews of the generated art: the brand is generated from the name, so options painted with the live name would repaint on every keystroke. The color is the choice; the art is the name business.'
         }
       ],
-      links: [{ label: 'Create organization', path: '/organizations/new' }]
+      links: [{ label: 'Create Organization', path: '/organizations/new' }]
     },
     {
       id: 'filters',
@@ -437,7 +437,7 @@
       links: [
         { label: 'Sign In', path: '/login' },
         { label: 'Sign Up', path: '/signup' },
-        { label: 'Create organization', path: '/organizations/new' }
+        { label: 'Create Organization', path: '/organizations/new' }
       ]
     },
     {
@@ -481,7 +481,7 @@
         { label: 'Listing with tabs', path: '/deployments' },
         { label: 'Without tabs (reference)', path: '/workloads' },
         { label: 'Detail with tabs', path: '/applications/1784552864' },
-        { label: 'Create organization', path: '/organizations/new' },
+        { label: 'Create Organization', path: '/organizations/new' },
         { label: 'Onboarding', path: '/signup/onboarding' }
       ]
     }

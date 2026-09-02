@@ -2,12 +2,12 @@
   // Object Storage — the Azion Console "Object Storage" module (Store area). Like
   // SQL Database, the app shell (sidebar + GlobalHeader with the module
   // breadcrumb) comes from AppLayout; this page renders only its content: a
-  // PageHeading (title + description + "Create bucket") over a data-driven
+  // PageHeading (title + description + "Create Bucket") over a data-driven
   // <Table> of buckets. Opening a bucket enters its file navigator
   // (BucketBrowser.vue), where the objects live.
   //
   // Empty = one clear next action: with no buckets the content region swaps to an
-  // EmptyState with the single "Create bucket" action (/ux-heuristics).
+  // EmptyState with the single "Create Bucket" action (/ux-heuristics).
   import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
   import Dropdown from '@aziontech/webkit/dropdown'
@@ -228,8 +228,8 @@
       >
         <template #actions>
           <HeadingAction
-            label="Create bucket"
-            kind="primary"
+            label="Create Bucket"
+            kind="outlined"
             icon="pi pi-plus"
             @click="createBucket"
           />
@@ -354,7 +354,7 @@
                   </template>
                   <template #actions>
                     <Button
-                      label="Create bucket"
+                      label="Create Bucket"
                       kind="secondary"
                       size="large"
                       icon="pi pi-plus"

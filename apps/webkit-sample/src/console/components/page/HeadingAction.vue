@@ -40,9 +40,17 @@
     label: { type: String, required: true },
     // PrimeIcons class. `pi pi-plus` for a create/add.
     icon: { type: String, default: 'pi pi-plus' },
-    // Visual variant, passed straight through — `primary` for the page's own action,
-    // `outlined`/`secondary` for a second control beside it.
-    kind: { type: String, default: 'primary' },
+    // Visual variant, passed straight through. `outlined` is the house shape for a
+    // heading action, INCLUDING the create button: the console's one filled `primary`
+    // is the Create in the header bar (../shell/AppLayout.vue), the only act reachable
+    // from every screen. A list's own create is a narrower version of that same act, so
+    // it reads as outlined under it and a list page carries no filled button of its own
+    // — one blue button per screen, always in the same corner of the chrome.
+    //
+    // `primary` is left for a COMMIT: an action that writes what the page is already
+    // holding (Build's Deploy, a form's Save), which is not a create and has no
+    // counterpart in the header.
+    kind: { type: String, default: 'outlined' },
     disabled: { type: Boolean, default: false },
     loading: { type: Boolean, default: false },
     // When set the action is a LINK, not a button — `Button` renders an <a> and the

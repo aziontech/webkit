@@ -101,8 +101,8 @@
       >
         <template #actions>
           <HeadingAction
-            label="Create environment"
-            kind="primary"
+            label="Create Environment"
+            kind="outlined"
             icon="pi pi-plus"
             @click="openCreate"
           />
@@ -133,7 +133,7 @@
         <DrawerContent>
           <form
             class="flex min-h-0 flex-1 flex-col"
-            aria-label="Create environment"
+            aria-label="Create Environment"
             novalidate
             @submit.prevent="submit"
           >

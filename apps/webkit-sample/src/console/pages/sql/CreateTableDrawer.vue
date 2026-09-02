@@ -206,9 +206,9 @@
   <ResourceDrawer
     v-model:open="open"
     size="large"
-    title="Create table"
+    title="Create Table"
     description="Define the table name and its columns. Drag the grip to reorder columns."
-    save-label="Create table"
+    save-label="Create Table"
     :submitting="submitting"
     @submit="submit"
   >

@@ -240,8 +240,8 @@
       >
         <template #actions>
           <HeadingAction
-            label="Create certificate"
-            kind="primary"
+            label="Create Certificate"
+            kind="outlined"
             icon="pi pi-plus"
             @click="create"
           />
@@ -358,7 +358,7 @@
                   </template>
                   <template #actions>
                     <Button
-                      label="Create certificate"
+                      label="Create Certificate"
                       kind="secondary"
                       size="large"
                       icon="pi pi-plus"

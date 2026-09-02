@@ -225,8 +225,8 @@
       >
         <template #actions>
           <HeadingAction
-            label="Create custom page"
-            kind="primary"
+            label="Create Custom Page"
+            kind="outlined"
             icon="pi pi-plus"
             @click="create"
           />
@@ -343,7 +343,7 @@
                   </template>
                   <template #actions>
                     <Button
-                      label="Create custom page"
+                      label="Create Custom Page"
                       kind="secondary"
                       size="large"
                       icon="pi pi-plus"
