@@ -4,27 +4,26 @@
   // Deployments / Settings) drives the active sub-page, with the active tab held in
   // the URL (`?tab=`) so it survives reload and is linkable.
   //
-  //  - Overview: three bands with the same anatomy — a PageHeading (`size="small"`, so
-  //    the title keeps the heading-xs / `--text-default` weight it had as a card
-  //    header) over a flush CardBox, at the group gap. "Active Deployment" (the
-  //    deployment's facts), "Deployment topology" (a Flow diagram of the four
-  //    resources a deploy provisions — Workload → Application → Connector → Storage,
-  //    src/lib/provisioning.js) and "Version History". The topology used to live
-  //    inside the Active Deployment card, in an Accordion; it is a band of its own now,
-  //    so the chain reads as a peer of the deployment rather than a detail of it.
+  //  - Overview: the workload's own summary block, then two bands with the same anatomy
+  //    — a PageHeading (`size="small"`, so the title keeps the heading-xs /
+  //    `--text-default` weight it had as a card header) over a flush CardBox, at the
+  //    group gap: "Deployment topology" (a Flow diagram of the resources a deploy
+  //    provisions — Workload → Application → Connector → Storage, src/lib/provisioning.js)
+  //    and "Version History".
   //  - Deployments: the same history, unscoped by the Overview's framing.
   //  - Settings: a General ItemGroup + a danger delete row, committed as ONE page from
   //    the shared save bar (ui/SettingsSaveBar.vue) like every settings surface here.
   //
-  // Every band's CONTROLS sit OUT of its card — inside a card header they read as the
-  // card's chrome rather than as the thing that drives it. Where above the card they
-  // land depends on WHAT they are:
+  // AN "ACTIVE DEPLOYMENT" BAND USED TO OPEN THE OVERVIEW — a fact grid (version id,
+  // environment, status, deployed by/when) with an Environment Select on its heading row.
+  // It is gone: the version and its status are a row in Version History directly below,
+  // which is where a deployment is read, and the band restated the top of that table as a
+  // second card. Its Environment Select went with it — the only thing it actually moved
+  // was which host the page reported, and the workload has one address again.
   //
-  //   Active Deployment — the Environment Select rides the heading row as that band's
-  //     action (title left, control right, one line). It is a control, not a filter: it
-  //     picks which deployment the card reports (each environment is its own domain
-  //     and its own record) rather than narrowing anything, so it wears no filter
-  //     button and earns no row of its own.
+  // Every band's CONTROLS sit OUT of its card — inside a card header they read as the
+  // card's chrome rather than as the thing that drives it:
+  //
   //   Version History / Deployments — narrowing, so it takes the row every list in the
   //     console opens with (../../components/page/ControlsHeader.vue): the search, then
   //     the Filter button (list/FilterButton.vue) over the shared deployment catalog, hoisted out of the
@@ -38,14 +37,9 @@
   // deployment's PAGE, which is the only surface a deployment is read on.
   import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
-  import CopyButton from '@aziontech/webkit/copy-button'
   import Flow from '@aziontech/webkit/flow'
-  import IconButton from '@aziontech/webkit/icon-button'
   import InputText from '@aziontech/webkit/input-text'
   import Item from '@aziontech/webkit/item'
-  import Select from '@aziontech/webkit/select'
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import { consoleDeployRowsFor } from '@shared/lib/azion-deploys'
   import { deploymentRowsFor } from '@shared/lib/deployment-history'
@@ -65,7 +59,6 @@
   import ExportButton from '../../components/list/ExportButton.vue'
   import FilterButton from '../../components/list/FilterButton.vue'
   import FilterChips from '../../components/list/FilterChips.vue'
-  import LastModifiedCell from '../../components/list/LastModifiedCell.vue'
   import RefreshButton from '../../components/list/RefreshButton.vue'
   import ControlsHeader from '../../components/page/ControlsHeader.vue'
   import PageHeading from '../../components/page/PageHeading.vue'
@@ -74,16 +67,21 @@
   import Section from '../../components/page/Section.vue'
   import AppLayout from '../../components/shell/AppLayout.vue'
   import AddDomainDrawer from '../../components/workload/AddDomainDrawer.vue'
+  import DeploymentFooter from '../../components/workload/DeploymentFooter.vue'
   import TopologyBindNode from '../../components/workload/TopologyBindNode.vue'
   import TopologyNodeCard from '../../components/workload/TopologyNodeCard.vue'
+  import WorkloadSummary from '../../components/workload/WorkloadSummary.vue'
   import { useListRefresh } from '../../lib/behavior/list-state'
   import { useTabEnter } from '../../lib/behavior/tab-enter'
+  import { CUSTOM_PAGES } from '../../lib/data/custom-pages'
+  import { deploymentFilterFields } from '../../lib/data/deployments'
+  import { existingFirewallOptions } from '../../lib/data/firewalls'
   import {
-    deploymentFilterFields,
-    environmentOptions,
-    statusMeta
-  } from '../../lib/data/deployments'
-  import { releaseSeedForWorkload } from '../../lib/data/releases'
+    currentDeploymentFor,
+    releaseSeedForWorkload,
+    settingsById,
+    settingsIdsForWorkload
+  } from '../../lib/data/releases'
 
   const route = useRoute()
   const router = useRouter()
@@ -120,43 +118,15 @@
     }
   })
 
-  // --- Active deployment (Overview) ----------------------------------------
-  // Environment PICKS which deployment the Active Deployment band reports — each one
-  // is its own domain and its own record — so it is a Select, not a filter: it never
-  // narrows a list and it can never be unset. It renders in the band's controls row
-  // above the card (out of the card's header, where it read as chrome), on the right.
-  const activeEnvironment = ref('Production')
-  const environmentLabel = (value) =>
-    environmentOptions.find((option) => option.value === value)?.label ?? value
-
-  // Each environment resolves to its own domain on the same workload: the rehearsal
-  // environments are the Production host under their own label. Every option the
-  // selector offers is mapped — an environment that fell through to the Production
-  // domain would have the card report the LIVE host under a rehearsal label.
-  const domainsByEnvironment = computed(() => ({
-    Production: workload.value.domain,
-    Preview: `preview-${workload.value.domain}`,
-    Stage: `stage-${workload.value.domain}`
-  }))
-  const activeDomain = computed(
-    () => domainsByEnvironment.value[activeEnvironment.value] ?? workload.value.domain
-  )
-
   // --- Deployment topology --------------------------------------------------
-  // The four provisioned resources, in creation order, as Flow nodes. The workload
-  // node follows the environment Select, so switching Production/Stage re-points
-  // the domain the chain starts from.
-  const topology = computed(() =>
-    resourceChain({
-      ...record.value,
-      workload: {
-        ...workload.value,
-        domain: activeDomain.value,
-        url: `https://${activeDomain.value}`,
-        environment: activeEnvironment.value
-      }
-    })
-  )
+  // The four provisioned resources, in creation order, as Flow nodes.
+  //
+  // The chain is read straight off the record. It used to be spread over a re-pointed
+  // workload, because an Environment Select on the Active Deployment band swapped the
+  // host between Production / Stage / Preview — that band is gone, and with it the only
+  // control that ever moved this page off Production. The workload's own `environment`
+  // and `domain` are what the chain reports now.
+  const topology = computed(() => resourceChain(record.value))
 
   // --- Application-level bindings -------------------------------------------
   // A deployment binds an Application and, optionally, a Firewall and a Custom
@@ -164,6 +134,13 @@
   // `resourceChain()` — but leaving them out of the diagram hides the decision.
   // They render at the Application's own level (a Flow.Parallel column) as EMPTY
   // nodes: the slot stays visible, with the CTA that fills it.
+  //
+  // WHAT A SLOT OFFERS IS THE MODULE'S OWN LIST — the seeded firewalls
+  // (../../lib/data/firewalls.js) and custom pages (../../lib/data/custom-pages.js),
+  // not names invented here. That is what lets a bound slot LINK: `module` + the id
+  // the option carries is the `/<module>/:id/settings` page the module list edits that
+  // row with, so binding here and editing there name one resource. Invented options
+  // could only ever link to a resource that is in no list.
   const BINDABLE = [
     {
       key: 'firewall',
@@ -171,11 +148,13 @@
       icon: 'ai ai-edge-firewall',
       description: 'Not bound. Requests reach the application uninspected.',
       ctaLabel: 'Bind Firewall',
-      options: [
-        { value: 'Default Firewall', label: 'Default Firewall' },
-        { value: 'edge-firewall', label: 'edge-firewall' },
-        { value: 'waf-strict', label: 'waf-strict' }
-      ]
+      module: 'firewall',
+      // The five most recently touched, which is the order `existingFirewallOptions()`
+      // sorts for and the count a create offers — fourteen of them in a ~230px node
+      // column is a picker, not a slot.
+      options: existingFirewallOptions()
+        .slice(0, 5)
+        .map((option) => ({ value: option.id, label: option.label }))
     },
     {
       key: 'customPage',
@@ -183,15 +162,13 @@
       icon: 'ai ai-custom-pages',
       description: "Not bound — 4xx/5xx fall back to Azion's default page.",
       ctaLabel: 'Bind Custom Page',
-      options: [
-        { value: 'Default Custom Page', label: 'Default Custom Page' },
-        { value: 'maintenance-page', label: 'maintenance-page' },
-        { value: 'branded-errors', label: 'branded-errors' }
-      ]
+      module: 'custom-pages',
+      options: CUSTOM_PAGES.map((page) => ({ value: page.id, label: page.name }))
     }
   ]
 
-  // What each slot currently holds; `null` keeps the empty node on the canvas.
+  // What each slot currently holds — `{ id, name }`, because the node shows the name
+  // and links by the id. `null` keeps the empty node on the canvas.
   const bindings = reactive({ firewall: null, customPage: null })
 
   // The Application level of the chain: the Application node itself, plus one
@@ -207,18 +184,23 @@
     return [
       application,
       ...BINDABLE.map((slot) => {
-        const boundName = bindings[slot.key]
-        if (!boundName) return { ...slot, empty: true, terminal: true }
+        const bound = bindings[slot.key]
+        if (!bound) return { ...slot, empty: true, terminal: true }
         return {
           key: slot.key,
           kind: slot.kind,
           icon: slot.icon,
-          name: boundName,
+          name: bound.name,
           status: 'Active',
-          href: '',
+          // A FILLED SLOT IS A REAL RESOURCE, so it goes where its module reads it —
+          // the same `/<module>/:id/settings` page the module list's Edit opens. A
+          // bound slot with no way out was the one node of the chain that named
+          // something and then refused to show it.
+          href: `/${slot.module}/${bound.id}/settings`,
           terminal: true,
           fields: [
-            { label: 'Version', value: 'Latest' },
+            // ID first, like every provisioned node above: it is what the link resolves.
+            { label: 'ID', value: bound.id },
             { label: 'Bound to', value: application?.name ?? '' }
           ]
         }
@@ -235,6 +217,29 @@
         : { key: node.key, nodes: [node] }
     )
   )
+
+  // --- Deployment settings --------------------------------------------------
+  // WHAT THIS WORKLOAD DEPLOYS WITH. A Deployment setting IS the strategy a deployment
+  // applies (../../lib/data/deployment-strategies.js), so this reads the one store the
+  // Deployments module authors into and the release composer deploys from, through the
+  // same projection (`deploymentSettings` in ../../lib/data/releases.js). No fixture:
+  // a setting created in that drawer appears here, and one deleted there leaves.
+  //
+  // A workload can publish into more than one — every third one does, one per environment
+  // — so this is a list, and `settingsIdsForWorkload` is the same pairing the Deploy button
+  // above pins the composer to.
+  const workloadSettings = computed(() =>
+    settingsIdsForWorkload(workloadId)
+      .map((id) => settingsById(id))
+      .filter(Boolean)
+  )
+
+  // WHAT IS LIVE ON THIS WORKLOAD — the row its history marks `current`
+  // (@shared/lib/deployment-history.js, via the same lookup the release seed uses). It is
+  // the deployment the settings above published, so both go on one card, and it is where
+  // the version, its status and "deployed 24s ago by …" now live: the Active Deployment
+  // band that used to carry them is gone.
+  const currentDeployment = computed(() => currentDeploymentFor(workloadId) ?? null)
 
   // --- Which nodes are open -------------------------------------------------
   // Every node of the topology is a disclosure (ui/TopologyNode.vue), and the page
@@ -269,11 +274,15 @@
   // provisioned with the chain by a create that asked for protection
   // (../applications/CreateApplication.vue). Reading only `bindings` would show the step
   // as pending on a workload that has had a firewall since the day it was made.
-  const boundFirewall = computed(() => bindings.firewall || record.value.firewall?.name || '')
+  const boundFirewall = computed(() => bindings.firewall?.name || record.value.firewall?.name || '')
 
-  // Each step is a ROW in the band's Next-steps list, so the title is the act and the
-  // icon is the thing being acted on — there is no separate button label to write: the
-  // row IS the control (../../components/page/ProductionChecklist.vue).
+  // Each step reads on TWO surfaces, and carries what each of them needs
+  // (../../components/page/ProductionChecklist.vue): the band on the page shows only the
+  // `icon` and the `title`, so the title is the act; the drawer behind the band's expand
+  // control adds the `description` — one paragraph on what skipping it costs — and an
+  // `actionLabel`, the verb of that card's own button. The label matches the control the
+  // step actually leads to ("Bind Firewall" is what the topology's own node says), so the
+  // brief and the thing it opens agree on what the reader is about to do.
   const productionSteps = computed(() => [
     {
       id: 'domain',
@@ -281,6 +290,7 @@
       title: 'Add a custom domain',
       description:
         'Serve this workload on a domain of your own, with a free HTTPS certificate, instead of the generated Azion hostname.',
+      actionLabel: 'Add Domain',
       done: customDomains.value.length > 0,
       // The FACT, not the verdict: a reader coming back to a done step is checking WHICH
       // domain it ended up on.
@@ -292,6 +302,7 @@
       title: 'Enable firewall protection',
       description:
         'Bind a firewall so requests are inspected before they reach the application. Rate limiting, WAF rules, and network lists.',
+      actionLabel: 'Bind Firewall',
       done: Boolean(boundFirewall.value),
       doneNote: `Protected by ${boundFirewall.value}.`
     },
@@ -300,8 +311,9 @@
       icon: 'pi pi-file',
       title: 'Set custom error pages',
       description: "Answer 4xx and 5xx with your own page instead of Azion's default response.",
+      actionLabel: 'Bind Custom Page',
       done: Boolean(bindings.customPage),
-      doneNote: `Serving ${bindings.customPage}.`
+      doneNote: `Serving ${bindings.customPage?.name ?? ''}.`
     }
   ])
 
@@ -334,14 +346,18 @@
     })
   }
 
-  const bindResource = (slotKey, value) => {
+  // The Dropdown emits the option's VALUE, which is the resource's id — the slot's own
+  // options are what turn it back into the name the node shows.
+  const bindResource = (slotKey, id) => {
     const slot = BINDABLE.find((item) => item.key === slotKey)
-    bindings[slotKey] = value
+    const option = slot?.options.find((entry) => entry.value === id)
+    if (!option) return
+    bindings[slotKey] = { id: option.value, name: option.label }
     // The slot the user just filled opens, so the node shows what it now holds
     // instead of closing back into the chain the moment it stops being empty.
     openNodes[slotKey] = true
-    toast.success(`${value} bound to ${workload.value.name}`, {
-      description: `${slot?.kind ?? 'Resource'} now applies to this deployment.`
+    toast.success(`${option.label} bound to ${workload.value.name}`, {
+      description: `${slot.kind} now applies to this deployment.`
     })
   }
 
@@ -404,11 +420,6 @@
       return deployment
     })
   })
-
-  // The current (active) deployment drives the Active Deployment card.
-  const activeDeployment = computed(
-    () => deployments.value.find((deployment) => deployment.current) ?? deployments.value[0]
-  )
 
   // --- Deployment table controls -------------------------------------------
   // The controls that narrow the deployment tables sit OUT of the card, in the band's
@@ -542,25 +553,16 @@
         v-model:value="activeTab"
         :tabs="tabs"
       >
-        <!-- Action hierarchy: ONE primary, and it is the thing this page is for —
-             deploying. "Deploy" changes what the workload serves; "Visit" only opens
-             what it already serves in another tab, so it is the secondary affordance
-             and takes `outlined`, and it sits on the LEFT so the primary keeps the
-             outer edge (the last thing on the row, where the eye lands and the pointer
-             travels). It was the other way round: the destination was painted primary
-             and the deploy read as the lesser of the two.
+        <!-- ONE action, and it is the thing this page is for — deploying. "Visit" used
+             to sit beside it as the outlined secondary; it moved onto the workload's own
+             card (../../components/workload/WorkloadSummary.vue), because it opens the
+             ADDRESS, and the address is what that card is. What is left here is the one
+             act that changes what the workload serves.
 
              The label is the one every Deploy in the console carries, because it opens
              the one screen every Deploy opens (../ReleaseComposer.vue). It read "New
              Deployment" while a second, smaller deploy form existed to contrast with. -->
         <template #actions>
-          <Button
-            label="Visit"
-            kind="outlined"
-            size="medium"
-            icon="pi pi-arrow-up-right"
-            @click="visit"
-          />
           <Button
             label="Deploy"
             kind="primary"
@@ -586,138 +588,76 @@
             <!-- The tab's parent section: it spaces the sections inside it at
                  --layout-section-gap. -->
             <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)">
-              <!-- SHIP TO PRODUCTION — first, and only while the reader arrives with
-                   something left to do. It is what this page is FOR on the day the
-                   workload is made: the create provisioned a live chain on a generated
-                   hostname, and these are the three gates between that and production.
-                   It sits above Active Deployment because it is about what the workload
-                   is NOT yet; everything below reports what it already is. Once every
-                   step is done it collapses itself into one line and stops competing
-                   (../../components/page/ProductionChecklist.vue). -->
+              <!-- THE WORKLOAD ITSELF — first, and unconditionally. Everything else on
+                   this page reports something ABOUT the workload (what is left to do, what
+                   it is made of, what it has shipped); this is the workload
+                   (../../components/workload/WorkloadSummary.vue). The page used to open
+                   without ever naming the hostname, which is the one fact a reader comes
+                   to a workload for.
+
+                   The workload goes in as it is. This used to take a re-pointed
+                   `activeDomain` so the address followed the Active Deployment band's
+                   Environment Select; that band is gone, so there is one host again.
+
+                   Both of the card's actions are the PAGE's: `visit` opens the address,
+                   `add-domain` opens the same drawer the checklist's own domain row opens
+                   — one surface for adding a domain, not two that can disagree.
+
+                   IT SITS IN THE COLUMN, not in a row beside the checklist. The two were
+                   tried side by side at a common height, and the pairing cost more than the
+                   vertical space it saved: the summary carries less than the checklist, so
+                   it spent a third of its height on nothing, and half a column squeezed the
+                   strip into two lines and the fact row into columns too narrow for their
+                   own labels. Full width, each says its piece once. -->
+              <WorkloadSummary
+                :workload="workload"
+                :custom-domains="customDomains"
+                @visit="visit"
+                @add-domain="addDomainOpen = true"
+              >
+                <!-- WHAT IS RUNNING ON IT, as the card's footer rather than a card of its
+                     own further down. A deployment is not a peer of the workload — it is
+                     the workload's current state — so the card that says what this
+                     workload IS ends by saying what is live on it, and the Deployment
+                     settings that published it nest one level inside that
+                     (../../components/workload/DeploymentFooter.vue).
+
+                     It was an "Active Deployment" band at the top of this tab, then a card
+                     beside the topology. Both asked the reader to hold two objects where
+                     there is one. -->
+                <template #footer>
+                  <DeploymentFooter
+                    :deployment="currentDeployment"
+                    :settings="workloadSettings"
+                    :email="userEmail"
+                  />
+                </template>
+              </WorkloadSummary>
+
+              <!-- SHIP TO PRODUCTION — what this page is FOR on the day the workload is
+                   made: the create provisioned a live chain on a generated hostname, and
+                   these are the three gates between that and production. It sits above the
+                   topology because it is about what the workload is NOT yet; everything
+                   below reports what it already is.
+                   The band itself is a glance — a count and one labelled line per step —
+                   and the sentence arguing for each one lives behind the expand control on
+                   its header (../../components/page/ProductionChecklist.vue). The
+                   `description` below is that drawer's lead line; the band has no room for
+                   it, which is the reason for the split. -->
               <ProductionChecklist
                 :steps="productionSteps"
+                description="The create put this workload live on a generated hostname. These are the gates between that and production."
                 @action="onChecklistAction"
               />
 
-              <!-- Active Deployment — the same anatomy as Version History below: a
-                   small PageHeading, then the band's controls, then a flush CardBox,
-                   each at the group gap. The Environment Select is this band's CONTROL,
-                   so it sits in that controls row (out of the card) rather than in a
-                   card header: it narrows what the card shows — the version, the
-                   status, the domain the topology starts from — so it belongs above the
-                   surface it narrows, which is where every other list in the console
-                   puts the fields that drive it (see ui/ControlsHeader.vue). -->
-              <div class="flex flex-col gap-(--layout-group-gap)">
-                <!-- The Environment Select rides the HEADING row as that band's action,
-                     out of the card. It is a control, not a filter — it picks which
-                     deployment the card reports (each environment is its own domain and
-                     its own record) rather than narrowing anything — so it wears no
-                     filter button and needs no row of its own: one line, title left,
-                     control right. -->
-                <PageHeading
-                  title="Active Deployment"
-                  size="small"
-                >
-                  <template #actions>
-                    <!-- MIN-width, not width: Select's own root already carries
-                         `w-full`, and Tailwind emits `.w-full` AFTER any width utility
-                         built on a container token, so a width passed in here loses on
-                         source order and the field just sizes to its content. `min-w-*`
-                         is a different property, so it is the one lever a consumer
-                         actually has — `w-full` then resolves against it. -->
-                    <Select
-                      v-model="activeEnvironment"
-                      size="large"
-                      class="min-w-(--container-2xs)"
-                      :display-value="environmentLabel"
-                    >
-                      <Select.Trigger aria-label="Environment" />
-                      <Select.Content>
-                        <Select.Option
-                          v-for="option in environmentOptions"
-                          :key="option.value"
-                          :value="option.value"
-                        >
-                          {{ option.label }}
-                        </Select.Option>
-                      </Select.Content>
-                    </Select>
-                  </template>
-                </PageHeading>
-                <CardBox :padded="false">
-                  <template #content>
-                    <!-- The deployment's four facts. The topology used to sit under this
-                         grid inside a collapsible; it is its own band now, so this card
-                         is the fact grid and nothing else. -->
-                    <div
-                      class="p-(--spacing-md) grid grid-cols-2 gap-(--spacing-sm) lg:grid-cols-4"
-                    >
-                      <div class="flex flex-col gap-(--spacing-xxs)">
-                        <span class="text-label-sm text-(--text-muted)">Version ID</span>
-                        <div class="flex items-center gap-(--spacing-xs)">
-                          <span class="text-body-sm text-(--text-default)">{{
-                            activeDeployment.versionId
-                          }}</span>
-                          <CopyButton
-                            kind="outlined"
-                            :value="activeDeployment.versionId"
-                            aria-label="Copy version ID"
-                          />
-                        </div>
-                      </div>
-                      <div class="flex flex-col gap-(--spacing-xxs)">
-                        <span class="text-label-sm text-(--text-muted)">Environment</span>
-                        <div class="flex items-center gap-(--spacing-xs)">
-                          <span class="text-body-sm text-(--text-default)">{{
-                            activeEnvironment
-                          }}</span>
-                          <Tag
-                            label="Current"
-                            severity="info"
-                            size="small"
-                          />
-                        </div>
-                      </div>
-                      <!-- Status reads horizontally: the StatusIndicator already carries
-                           its own label, so stacking a caption above it spends a second
-                           line on one short word. -->
-                      <div class="flex flex-col items-start gap-(--spacing-xs) self-start">
-                        <span class="text-label-sm text-(--text-muted)">Status</span>
-                        <StatusIndicator
-                          :severity="statusMeta(activeDeployment.status).severity"
-                          :loading="statusMeta(activeDeployment.status).loading"
-                          :label="activeDeployment.status"
-                        />
-                      </div>
-                      <div class="flex items-start justify-between gap-(--spacing-xs)">
-                        <div class="flex flex-col gap-(--spacing-xxs)">
-                          <span class="text-label-sm text-(--text-muted)">Deployed</span>
-                          <LastModifiedCell
-                            :author="activeDeployment.author"
-                            :avatar-src="activeDeployment.authorAvatar"
-                            :date="activeDeployment.deployedAt"
-                          />
-                        </div>
-                        <IconButton
-                          icon="pi pi-ellipsis-v"
-                          kind="transparent"
-                          size="small"
-                          aria-label="Active deployment actions"
-                        />
-                      </div>
-                    </div>
-                  </template>
-                </CardBox>
-              </div>
-
               <!-- Deployment Topology — its own band, with the same anatomy as the two
                    around it: a small PageHeading over a flush CardBox at the group gap.
-                   It used to be an Accordion tucked under the Active Deployment fact
-                   grid, which cost it twice: a whole subsystem read as a DETAIL of that
-                   card, and the accordion trigger had to grow its own heading-xxs title
-                   to name it, competing with the PageHeading above. As a band it is named
-                   once, by the same component every other band uses, and it sits at the
-                   section gap as the peer of Active Deployment and Version History. No
+                   It used to be an Accordion tucked under the Active Deployment band's
+                   fact grid, which cost it twice: a whole subsystem read as a DETAIL of
+                   that card, and the accordion trigger had to grow its own heading-xxs
+                   title to name it, competing with the PageHeading above. As a band it is
+                   named once, by the same component every other band uses, and it sits at
+                   the section gap as the peer of Version History. No
                    accordion: the bands around it do not fold, and a section that names
                    itself does not need a second control to reveal it. -->
               <div

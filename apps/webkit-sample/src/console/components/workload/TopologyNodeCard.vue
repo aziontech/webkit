@@ -21,6 +21,17 @@
     email: { type: String, default: '' }
   })
 
+  // NO BLUE ON A REFERENCE. The link is full ink with a muted underline that firms to full
+  // ink on hover — the same clothes every reference on this page wears (the workload card's
+  // hostname, its custom domain, its deployment). It was `--text-link`, which made a node's
+  // one way out the loudest thing in a card whose job is to name a resource calmly.
+  //
+  // EVERY node links out, so the link is unconditional. The chain's four provisioned
+  // resources go to their detail page; the firewall, the connector and the two bound
+  // slots go to the `/<module>/:id/settings` page their module list edits a row with —
+  // which is generated from the resource descriptor and seeds itself from the URL
+  // (console/pages/resources/ResourceSettings.vue), hence the `name` alongside `email`.
+
   // Forwarded straight to TopologyNode so the PAGE decides which nodes start open.
   const open = defineModel('open', { type: Boolean, default: false })
 
@@ -78,16 +89,15 @@
 
     <!-- The node's own controls, on one row under its fields: the way out to the
          resource on the left, and whatever the page adds (unbinding a bound slot)
-         on the right. Modules without a page yet (Connector, Custom Page) simply
-         have no href and render no link. -->
+         on the right. -->
     <div
       v-if="node.href || $slots.actions"
       class="flex items-center gap-(--spacing-xs)"
     >
       <router-link
         v-if="node.href"
-        :to="{ path: node.href, query: { email } }"
-        class="inline-flex min-w-0 items-center gap-(--spacing-xxs) text-label-sm text-(--text-link) no-underline hover:underline"
+        :to="{ path: node.href, query: { name: node.name || undefined, email } }"
+        class="inline-flex min-w-0 items-center gap-(--spacing-xxs) text-label-sm text-(--text-default) underline decoration-(--text-muted) underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance hover:decoration-(--text-default) motion-reduce:transition-none"
       >
         <span class="truncate">Open {{ node.kind }}</span>
         <i

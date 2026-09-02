@@ -383,8 +383,17 @@ export const deploymentSettings = computed(() =>
     return {
       id: strategy.id,
       name: strategy.name,
+      description: strategy.description || '',
       status: strategy.status,
       system: Boolean(strategy.system),
+      // `strategy.type` and the two routing policies. The composer does not read them —
+      // it picks targets, it does not explain them — but a workload's page reports the
+      // settings it deploys WITH, and a setting is its bindings AND how its versions
+      // reach them (../data/deployment-strategies.js § ROUTING AND POLICY). Projected
+      // here rather than looked up beside this, so there stays one shape for a setting.
+      type: strategy.type,
+      bindingPolicy: strategy.bindingPolicy,
+      versionPolicy: strategy.versionPolicy,
       // `strategy.attributes` — an empty application means "whatever is being deployed".
       bindings: {
         application: strategy.application || '',

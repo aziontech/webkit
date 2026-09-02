@@ -36,6 +36,9 @@ import { daysAgo, formatListDate } from '@shared/lib/dates'
 import { authorAt } from '@shared/lib/people'
 import { computed, ref } from 'vue'
 
+import { existingCustomPageOptions } from './custom-pages'
+import { existingFirewallOptions } from './firewalls'
+
 // `default` is the only strategy type the API exposes today. It stays a declared
 // vocabulary (rather than a hard-coded string in a drawer) so the day a second
 // type ships, the Select that offers it already reads from here.
@@ -52,17 +55,24 @@ export const AZION_DEFAULT_ID = 'azion-default'
 // request body (`null` = not bound), and both are their own resources in Azion —
 // the user creates them in their own module and BINDS them here, which is why
 // they are a choice in this drawer rather than a field of the deployment.
-export const FIREWALL_OPTIONS = [
-  { value: 'Default Firewall', label: 'Default Firewall' },
-  { value: 'edge-firewall', label: 'edge-firewall' },
-  { value: 'waf-strict', label: 'waf-strict' }
-]
+// BOTH LISTS ARE THE MODULES' OWN ROWS, not names invented here. They were three literals
+// each ('waf-strict', 'branded-errors', …) and none of them existed in ./firewalls.js or
+// ./custom-pages.js — so a strategy bound a firewall the Firewall module had never heard
+// of, and every surface that reported the binding was a dead end: there was no row to open,
+// no id to link. Reading the seeded stores is what makes a binding a REFERENCE.
+//
+// The value is the NAME, not the id, because a setting binds by name everywhere (the
+// provisioning log narrates it, `bindingsLine` prints it, `namesFor` in ./releases.js
+// resolves versions from it). `firewallIdByName` / `customPageIdByName` turn it back into
+// the id a link needs.
+//
+// Five each: a Select in a drawer offers the few a reader is likely to want, most recently
+// touched first, which is the order both helpers sort for.
+export const FIREWALL_OPTIONS = existingFirewallOptions()
+  .slice(0, 5)
+  .map((option) => ({ value: option.value, label: option.label }))
 
-export const CUSTOM_PAGE_OPTIONS = [
-  { value: 'Default Custom Page', label: 'Default Custom Page' },
-  { value: 'maintenance-page', label: 'maintenance-page' },
-  { value: 'branded-errors', label: 'branded-errors' }
-]
+export const CUSTOM_PAGE_OPTIONS = existingCustomPageOptions().slice(0, 5)
 
 /** How an unbound (nullable) attribute reads on screen. */
 export const bindingLabel = (value) => value || 'Not bound'
@@ -159,7 +169,7 @@ const SEEDED = [
     id: 's1',
     name: 'magalu-storefront',
     description: 'Storefront traffic for production.',
-    firewall: 'waf-strict',
+    firewall: 'payments-api',
     customPage: '',
     versionPolicy: 'multiple',
     days: 3
@@ -168,7 +178,7 @@ const SEEDED = [
     id: 's2',
     name: 'azion-storefront',
     description: 'Azion-run storefront, production traffic.',
-    firewall: 'Default Firewall',
+    firewall: 'edgeflow-production',
     customPage: '',
     days: 11
   },
@@ -176,7 +186,7 @@ const SEEDED = [
     id: 's3',
     name: 'azion-storefront-legacy',
     firewall: '',
-    customPage: 'branded-errors',
+    customPage: 'Branded 404',
     bindingPolicy: 'flexible',
     days: 29,
     status: 'Inactive'
@@ -196,7 +206,7 @@ const SEEDED = [
     id: 's5',
     name: 'analytics-canary',
     description: 'Canary slice of the analytics application.',
-    firewall: 'edge-firewall',
+    firewall: 'api-hardening',
     customPage: '',
     versionPolicy: 'multiple',
     days: 58
@@ -204,14 +214,14 @@ const SEEDED = [
   {
     id: 's6',
     name: 'auth-service-prod',
-    firewall: 'waf-strict',
-    customPage: 'maintenance-page',
+    firewall: 'partner-gateway',
+    customPage: 'Maintenance window',
     days: 73
   },
   {
     id: 's7',
     name: 'marketing-site-prod',
-    firewall: 'Default Firewall',
+    firewall: 'edgeflow-canary',
     customPage: '',
     bindingPolicy: 'flexible',
     days: 88
@@ -220,7 +230,7 @@ const SEEDED = [
     id: 's8',
     name: 'status-page-stage',
     firewall: '',
-    customPage: 'maintenance-page',
+    customPage: 'Blocked by firewall',
     days: 120,
     status: 'Inactive'
   },
@@ -228,7 +238,7 @@ const SEEDED = [
   {
     id: 's10',
     name: 'blog-platform-stage',
-    firewall: 'edge-firewall',
+    firewall: 'api-hardening',
     customPage: '',
     bindingPolicy: 'flexible',
     versionPolicy: 'multiple',

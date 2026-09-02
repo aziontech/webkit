@@ -32,6 +32,11 @@ export const WORKLOADS = Array.from({ length: WORKLOAD_COUNT }, (_, i) => {
     ...Array.from({ length: extraCount }, (_, j) => `my-workload-${n}-alias-${j + 1}.azion.run`)
   ]
   const modified = daysAgo(i * 18)
+  // `created_at` — a real field of the Workload serializer, and the one the detail card
+  // reports ("Created Aug 14 by …"). Always OLDER than `modifiedAt`: a record cannot have
+  // been edited before it existed, and a fixture that lets that happen is the kind of
+  // detail a reader notices before anything else on the page.
+  const created = daysAgo(i * 18 + 45)
   return {
     id: `10${(20482 + n * 173).toString()}`,
     name: `workload_${String(n).padStart(2, '0')}`,
@@ -42,6 +47,7 @@ export const WORKLOADS = Array.from({ length: WORKLOAD_COUNT }, (_, i) => {
     // Spread across ~12 months (18 days apart) so the Last Modified filter has
     // something to narrow — every row used to carry the identical timestamp.
     modifiedAt: modified,
+    createdAt: created,
     lastModified: formatListDate(modified),
     owner: authorAt(i).name,
     ownerAvatar: authorAt(i).avatar

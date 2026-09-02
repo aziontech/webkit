@@ -173,5 +173,10 @@ export const APPLICATIONS = [
 /** A seeded application by id, or `undefined`. */
 export const applicationById = (id) => APPLICATIONS.find((app) => app.id === String(id))
 
+/** The id of a seeded application by NAME, or `''`. Deployment settings bind by name, so
+ *  this is what turns a binding into a link to the resource's own page. */
+export const applicationIdByName = (name) =>
+  APPLICATIONS.find((app) => app.name === name)?.id ?? ''
+
 /** The application at `index`, wrapping round — the round-robin every list uses. */
 export const applicationAt = (index) => APPLICATIONS[index % APPLICATIONS.length]

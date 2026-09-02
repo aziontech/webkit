@@ -32,6 +32,30 @@ export function formatListDate(date) {
   return `${DATE_FORMAT.format(date)}, ${TIME_FORMAT.format(date)}`
 }
 
+// The COMPACT form, for a fact cell rather than a table column: "Aug 14". The year is
+// added only when it is not the current one — a workload made this year does not need
+// "2026" repeated in every cell, and one made two years ago is misread without it.
+const SHORT_DATE_FORMAT = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' })
+const SHORT_DATE_WITH_YEAR = new Intl.DateTimeFormat('en-US', {
+  month: 'short',
+  day: 'numeric',
+  year: 'numeric'
+})
+
+/**
+ * A short display date: "Aug 14", or "Aug 14, 2024" outside the current year.
+ *
+ * @param {Date} date
+ * @param {Date} [now] Reference for "the current year"; injectable for tests.
+ * @returns {string} Empty string for a missing or invalid date.
+ */
+export function formatShortDate(date, now = new Date()) {
+  if (!(date instanceof Date) || Number.isNaN(date.getTime())) return ''
+  return date.getFullYear() === now.getFullYear()
+    ? SHORT_DATE_FORMAT.format(date)
+    : SHORT_DATE_WITH_YEAR.format(date)
+}
+
 /**
  * `n` days before `from` (default: now), keeping the time of day.
  *

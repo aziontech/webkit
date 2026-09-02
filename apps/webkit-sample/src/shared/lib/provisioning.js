@@ -19,8 +19,9 @@
 // their mock data so a just-deployed resource is immediately manageable.
 import { computed, ref } from 'vue'
 
-import { formatListDate } from './dates'
+import { daysAgo, formatListDate } from './dates'
 import { authorAt, emailOf } from './people'
+import { workloadById } from './workloads'
 
 // The framework the template declares (`framework` in templates.js) is not
 // always the build preset the console shows on an Application row — normalize
@@ -84,7 +85,17 @@ const reviveRecord = (record) => ({
   // would revive it as `{ modifiedAt: null }` — an object where every consumer checks for
   // its absence, so every list would show a nameless row.
   workload: record.workload
-    ? { ...record.workload, modifiedAt: toDate(record.workload.modifiedAt) }
+    ? {
+        ...record.workload,
+        modifiedAt: toDate(record.workload.modifiedAt),
+        // EVERY Date on the workload has to be revived, not just the one the lists sort
+        // by. `createdAt` came back as the ISO STRING it was stored as, and the detail
+        // card's `formatShortDate` takes a real Date — so it returned '' and the Created
+        // line rendered "by Robson Junior" with no date in front of it, on every
+        // provisioned workload in the session. `record.createdAt` is the fallback for a
+        // record stored before the workload carried its own.
+        createdAt: toDate(record.workload.createdAt ?? record.createdAt)
+      }
     : null,
   application: { ...record.application, modifiedAt: toDate(record.application?.modifiedAt) }
 })
@@ -201,6 +212,7 @@ export function provisionDeployment({
         url: `https://${domain}`,
         environment: 'Production',
         modifiedAt: createdAt,
+        createdAt,
         lastModified,
         owner: author.name,
         ownerAvatar: author.avatar
@@ -413,9 +425,18 @@ const derivedId = (seed) => {
  */
 export function demoDeployment(workloadId, workloadName = 'Workload Name') {
   const id = String(workloadId)
-  const name = slugify(workloadName)
   const author = authorAt(0)
-  const domain = `w${id}${AZION_DOMAIN_SUFFIX}`
+  // THE SEEDED ROW WINS, when there is one. A workload reached from the list is one of
+  // ./workloads.js's twenty records, and that record already holds the facts a detail
+  // page has to report — its domains (primary + the aliases behind the "+N"), whether it
+  // is Live, who last edited it and when. Minting a `w<id>.azion.run` beside them made the
+  // detail page contradict the row it was opened from: the list said
+  // `my-workload-1.azion.run`, the page said `w1082318.azion.run`, and both claimed to be
+  // the address this workload answers on. Only a workload this sample does not seed (a
+  // hand-typed id) still falls back to the derived label.
+  const seeded = workloadById(id)
+  const name = slugify(seeded?.name || workloadName)
+  const domain = seeded?.domain || `w${id}${AZION_DOMAIN_SUFFIX}`
   const bucketName = `${name}-assets`
 
   return {
@@ -429,15 +450,21 @@ export function demoDeployment(workloadId, workloadName = 'Workload Name') {
     author,
     workload: {
       id,
-      name: workloadName,
+      name: seeded?.name || workloadName,
       domain,
-      domains: [domain],
-      domainCount: 0,
-      status: 'Live',
+      domains: seeded?.domains ?? [domain],
+      domainCount: seeded?.domainCount ?? 0,
+      status: seeded?.status || 'Live',
       url: `https://${domain}`,
       environment: 'Production',
-      owner: author.name,
-      ownerAvatar: author.avatar
+      modifiedAt: seeded?.modifiedAt ?? null,
+      // A workload this sample does not seed still has to have been made at some point:
+      // `by Robson Junior` with no date in front of it is a line that reads as broken.
+      // Derived from the id like every other field here, so it is stable across renders.
+      createdAt: seeded?.createdAt ?? daysAgo(60 + (Number(derivedId(`created-${id}`)) % 300)),
+      lastModified: seeded?.lastModified || '',
+      owner: seeded?.owner || author.name,
+      ownerAvatar: seeded?.ownerAvatar || author.avatar
     },
     application: {
       id: derivedId(`application-${id}`),
@@ -618,7 +645,10 @@ export function resourceChain(record) {
       // firewall instead of making one, and a bound resource listed as created would
       // claim work that never ran.
       state: firewall.bound ? 'bound' : 'created',
-      href: '',
+      // The module's own edit page — the same `/<module>/:id/settings` the Firewall
+      // list's Edit action opens (console/pages/secure/Firewall.vue). Every node of the
+      // chain names a resource that is read somewhere, so every node says where.
+      href: `/firewall/${firewall.id}/settings`,
       reference: firewall.id,
       fields: [
         { label: 'ID', value: firewall.id },
@@ -649,7 +679,8 @@ export function resourceChain(record) {
       icon: 'ai ai-edge-connectors',
       name: connector.name,
       status: 'Active',
-      href: '',
+      // As above: `/connectors/:id/settings`, what the Connectors list edits a row with.
+      href: `/connectors/${connector.id}/settings`,
       reference: connector.id,
       fields: [
         { label: 'ID', value: connector.id },

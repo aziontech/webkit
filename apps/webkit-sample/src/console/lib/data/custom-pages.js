@@ -67,3 +67,14 @@ export const CUSTOM_PAGES = [
 
 /** A seeded custom page by id, or `undefined`. */
 export const customPageById = (id) => CUSTOM_PAGES.find((page) => page.id === String(id))
+
+/** The id of a seeded custom page by NAME, or `''`. Deployment settings bind by name, so
+ *  this is what turns a binding into a link to the page's own settings. */
+export const customPageIdByName = (name) => CUSTOM_PAGES.find((page) => page.name === name)?.id ?? ''
+
+/** The seeded custom pages as SELECTABLE ROWS — what a create offers under "bind a custom
+ *  page". Most recently touched first, the same order the firewall list uses. */
+export const existingCustomPageOptions = () =>
+  [...CUSTOM_PAGES]
+    .sort((a, b) => b.modifiedAt - a.modifiedAt)
+    .map((page) => ({ value: page.name, label: page.name }))
