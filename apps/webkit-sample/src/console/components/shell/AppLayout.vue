@@ -27,6 +27,7 @@
   import Avatar from '@aziontech/webkit/avatar'
   import Brand from '@aziontech/webkit/brand'
   import Breadcrumb from '@aziontech/webkit/breadcrumb'
+  import Button from '@aziontech/webkit/button'
   import ButtonHighlight from '@aziontech/webkit/button-highlight'
   import Drawer from '@aziontech/webkit/drawer'
   import DrawerContent from '@aziontech/webkit/drawer-content'
@@ -34,7 +35,6 @@
   import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import IconButton from '@aziontech/webkit/icon-button'
-  import SplitButton from '@aziontech/webkit/split-button'
   import Tooltip from '@aziontech/webkit/tooltip'
   import HeaderSearch from '@shared/ui/HeaderSearch.vue'
   import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
@@ -205,48 +205,24 @@
   const openCreationCenter = () =>
     router.push({ path: '/create', query: { email: userEmail.value } })
 
-  // THE GLOBAL CREATE'S OTHER WAYS IN. This is the console's front door for "make
-  // something", so it is the one Create in the product that legitimately offers more than
-  // one object: the reader here has not navigated to a module yet, and the split is what
-  // lets them skip the Creation Center when they already know what they want.
+  // THE GLOBAL CREATE — the console's front door for "make something", and the one Create
+  // in the product that does not name its object: the reader here has not navigated to a
+  // module yet.
   //
-  // A resource-level Create is NOT this. On a module list the object is decided by the
-  // page the reader is standing on, so that button stays one plain
-  // `Create <object>` (../page/HeadingAction.vue).
+  // ONE BUTTON, ONE DESTINATION: the Creation Center
+  // (../../pages/resources/CreationCenter.vue). That screen is where the ways in are laid
+  // out — import a repository, clone a template, or pick a resource — so the header's job
+  // is to get an undecided reader there, not to answer for them.
   //
-  // The menu names the two OBJECTS this door can make — an application and a workload —
-  // and then the one method that is worth naming beside them.
+  // THE MENU IS GONE. It used to be a SplitButton whose second segment listed every
+  // first-level resource, a shortcut past the Creation Center for a reader who already
+  // knew. It cost a second 20px target beside the first, and it duplicated — in a
+  // fourteen-row dropdown — the catalog the screen behind it already lays out as full
+  // rows. The header now makes one promise and keeps it.
   //
-  // `Import from Git` is not a third object: it is the same application, entered from a
-  // repository, and it lands on the CREATION CENTER (/create) — the screen that actually
-  // does that work, where a provider is connected, an account scope chosen and a repo
-  // picked (../../pages/resources/CreationCenter.vue). Its wording is the flow's own
-  // rather than "GitHub": the step connects a provider account, but which provider is the
-  // reader's business, and naming one here would narrow a door that is not narrow.
-  //
-  // `Create application` is the OTHER way to the same object, and the difference between
-  // the two rows is only where they put the reader. It opens the application create
-  // (../../pages/applications/CreateApplication.vue), whose FIRST part is the method — so
-  // Import from Git is one of the three answers waiting there, beside from scratch and a
-  // template. A reader who already knows the code sits in a repository takes the Git row
-  // and skips that question; a reader who wants to see the choice takes this one.
-  const CREATE_ACTIONS = [
-    { label: 'Create application', value: 'application', icon: 'ai ai-edge-application' },
-    { label: 'Create workload', value: 'workload', icon: 'ai ai-workloads' },
-    { label: 'Import from Git', value: 'import-git', icon: 'pi pi-github' }
-  ]
-
-  const CREATE_ROUTES = {
-    application: { path: '/applications/new' },
-    workload: { path: '/workloads/new' },
-    'import-git': { path: '/create' }
-  }
-
-  const onCreateAction = (item) => {
-    const target = CREATE_ROUTES[item?.value]
-    if (!target) return
-    router.push({ ...target, query: { email: userEmail.value, ...(target.query ?? {}) } })
-  }
+  // A resource-level Create is NOT this. On a module list the object is decided by the page
+  // the reader is standing on, so that button stays one plain `Create <object>`
+  // (../page/HeadingAction.vue).
 
   const openAccount = () => router.push({ path: '/account', query: { email: userEmail.value } })
 
@@ -536,7 +512,7 @@
             >
               <IconButton
                 icon="pi pi-plus-circle"
-                kind="secondary"
+                kind="primary"
                 size="medium"
                 aria-label="Create"
                 @click="openCreationCenter"
@@ -555,18 +531,22 @@
             </Tooltip>
           </template>
           <template v-else>
-            <!-- The primary segment is the front door it always was; the menu is the
-                 shortcut past it. Mobile keeps the single icon button above: a split
-                 button's second segment is a 20px target beside another 20px target, and
-                 the Creation Center it opens already lists every path as a full row. -->
-            <SplitButton
+            <!-- One target, one destination — the Creation Center. Mobile carries the same
+                 command as the icon button above, so the two hosts now differ only in
+                 whether the label is shown.
+
+                 IT IS THE CONSOLE'S ONE `primary`. Create is the only act the chrome
+                 offers on every screen, and the header is the only place it is always
+                 in reach — so the filled button lives here, and a list's own create
+                 action is `outlined` under it (../page/HeadingAction.vue). That way a
+                 list page shows one filled button, not two competing ones, and the
+                 filled one is the one that never moves. -->
+            <Button
               label="Create"
-              kind="secondary"
+              kind="primary"
               size="medium"
               icon="pi pi-plus-circle"
-              :model="CREATE_ACTIONS"
               @click="openCreationCenter"
-              @item-click="(event, item) => onCreateAction(item)"
             />
             <ButtonHighlight
               label="Agent"

@@ -65,6 +65,7 @@
 
   import DeploymentFlow from '../../components/deployment/DeploymentFlow.vue'
   import WizardPage from '../../components/page/WizardPage.vue'
+  import { useCreateOrigin } from '../../lib/behavior/create-origin'
   import { useBaseline } from '../../lib/behavior/forms'
   import {
     defaultScratchConfig,
@@ -245,7 +246,13 @@
     clearErrors()
   }
 
-  const cancel = () => router.push({ path: '/workloads', query: { email: userEmail.value } })
+  // WHERE THIS FLOW CAME FROM. The Workloads list by default — its own Create button is
+  // there — or the Creation Center when the reader picked "Workload" out of that rail, which
+  // sends `?from=/create` precisely so the way back is the index they were working from and
+  // not a list they may never have opened (../../lib/behavior/create-origin.js).
+  const { path: originPath, label: originLabel } = useCreateOrigin('/workloads', 'Workloads')
+
+  const cancel = () => router.push({ path: originPath.value, query: { email: userEmail.value } })
 
   // Validation runs PER PART, on its own Next, and only over what that part asks. A wizard
   // that validated everything on the last button would report a missing application two
@@ -421,9 +428,9 @@
 <template>
   <WizardPage
     ref="page"
-    :breadcrumb="[{ label: 'Workloads', href: '/workloads' }, { label: 'Create workload' }]"
-    back-label="Back to Workloads"
-    title="Create workload"
+    :breadcrumb="[{ label: originLabel, href: originPath }, { label: 'Create Workload' }]"
+    :back-label="`Back to ${originLabel}`"
+    title="Create Workload"
     description="A workload is the public entry point: what it serves, and the domain traffic arrives on. The last step provisions both."
     title-id="create-workload-title"
     :heading="phase !== 'success'"

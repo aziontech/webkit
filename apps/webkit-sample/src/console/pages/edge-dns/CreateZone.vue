@@ -45,6 +45,7 @@
   import FieldRow from '../../components/form/FieldRow.vue'
   import CreatePage from '../../components/page/CreatePage.vue'
   import Section from '../../components/page/Section.vue'
+  import { useCreateOrigin } from '../../lib/behavior/create-origin'
   import { useBaseline } from '../../lib/behavior/forms'
   import { parseZoneFile } from '../../lib/format/zone-file'
 
@@ -196,7 +197,11 @@
     )
   }
 
-  const cancel = () => router.push({ path: '/edge-dns', query: { email: userEmail.value } })
+  // Where this page goes back to: Edge DNS, or the Creation Center when the reader picked
+  // `Zone` out of its rail (../../lib/behavior/create-origin.js).
+  const { path: originPath, label: originLabel } = useCreateOrigin('/edge-dns', 'Edge DNS')
+
+  const cancel = () => router.push({ path: originPath.value, query: { email: userEmail.value } })
 
   const submit = async () => {
     if (submitting.value) return // re-entrancy lock
@@ -236,9 +241,9 @@
 
 <template>
   <CreatePage
-    :breadcrumb="[{ label: 'Edge DNS', href: '/edge-dns' }, { label: 'Create zone' }]"
-    back-label="Back to Edge DNS"
-    title="Create zone"
+    :breadcrumb="[{ label: originLabel, href: originPath }, { label: 'Create Zone' }]"
+    :back-label="`Back to ${originLabel}`"
+    title="Create Zone"
     description="A zone holds the DNS records that answer authoritatively for a domain, served from Azion's distributed infrastructure."
     title-id="create-zone-title"
     :submitting="submitting"

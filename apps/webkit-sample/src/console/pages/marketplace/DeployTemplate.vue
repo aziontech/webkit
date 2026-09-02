@@ -16,12 +16,14 @@
   import { computed, onBeforeUnmount, reactive, ref, watch } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
+  import GitProviderConnect from '../../components/creation/GitProviderConnect.vue'
   import DeploymentFlow from '../../components/deployment/DeploymentFlow.vue'
   import UnsavedChangesGuard from '../../components/form/UnsavedChangesGuard.vue'
   import TemplatePreview from '../../components/marketplace/TemplatePreview.vue'
   import CreationHeader from '../../components/page/CreationHeader.vue'
   import { useBaseline } from '../../lib/behavior/forms'
   import { getTemplate } from '../../lib/data/templates.js'
+  import { gitAccounts, gitConnected } from '../../lib/state/git-provider'
 
   const route = useRoute()
   const router = useRouter()
@@ -72,13 +74,24 @@
   ])
   const onBreadcrumbNavigate = () => goToCreationCenter()
 
-  // Git scope (account / organization the repo will be created under).
-  const scopes = [
-    { label: 'gab-az', value: 'gab-az' },
-    { label: 'aziontech', value: 'aziontech' },
-    { label: 'azion-templates', value: 'azion-templates' }
-  ]
-  const scope = ref(scopes[0].value)
+  // Git scope: the account or organization the repository will be created under. The
+  // roster is the ACCOUNT's linked Git accounts (../../lib/state/git-provider.js), which is
+  // also what the Creation Center's importer lists. It used to be three names hard-coded
+  // here, so this page offered a choice of accounts to a reader who had connected none.
+  //
+  // A repo import arrives with its owner on the URL (that is the account it was listed
+  // from); a template deploy starts on the first linked account.
+  const scope = ref(String(route.query.owner || ''))
+
+  watch(
+    gitAccounts,
+    (accounts) => {
+      if (!accounts.length) return
+      if (accounts.some((account) => account.value === scope.value)) return
+      scope.value = accounts[0].value
+    },
+    { immediate: true }
+  )
 
   // Repository visibility. Public is the default ("lock out"); flipping the
   // switch off makes the repository private ("lock in").
@@ -139,6 +152,27 @@
   // Flow status: form -> deploying -> success. The deployment card runs its own
   // internal states and emits `finished`, which advances us to the success view.
   const status = ref('form')
+
+  // WHAT THE FLOW SHOWS, which is not always where the reader has got to. `status` is
+  // their progress; connecting a Git provider is a PRECONDITION of the first phase, and
+  // the account either meets it or does not.
+  //
+  // A template's code is cloned into a repository of the reader's own, so the form cannot
+  // ask for a repository name and a scope before there is an account for the repository to
+  // live in. A reader who came through the Creation Center's importer connected there, and
+  // this page opens straight on the form. A reader who came off a TEMPLATE card never
+  // passed through it: they used to land on a Scope Select offering three accounts nobody
+  // had linked, and a Deploy button that would have created a repository nowhere. Now they
+  // get the same connect card the importer shows, then the same flow.
+  const phase = computed(() =>
+    status.value === 'form' && !gitConnected.value ? 'connect' : status.value
+  )
+
+  // Why the connection is being asked for, in the terms of the thing being deployed.
+  const connectDescription = computed(
+    () =>
+      `Azion clones ${template.value.title} into a repository in your account, then deploys from it on every push.`
+  )
 
   // Brief loading state on the Deploy button before the deployment view opens.
   const submitting = ref(false)
@@ -249,12 +283,12 @@
 
 <template>
   <div class="flex h-dvh flex-col overflow-hidden bg-(--bg-canvas)">
-    <UnsavedChangesGuard :dirty="dirty && status === 'form'" />
+    <UnsavedChangesGuard :dirty="dirty && phase === 'form'" />
 
     <!-- Single creation header: back + brand + breadcrumb (hidden on success). -->
     <CreationHeader
-      :show-back="status !== 'success'"
-      :breadcrumb="status !== 'success' ? breadcrumbItems : []"
+      :show-back="phase !== 'success'"
+      :breadcrumb="phase !== 'success' ? breadcrumbItems : []"
       back-label="Back to Creation Center"
       @back="goToCreationCenter"
       @navigate="onBreadcrumbNavigate"
@@ -288,7 +322,7 @@
           leave-to-class="opacity-0 -translate-y-(--spacing-md)"
         >
           <TemplatePreview
-            v-if="status !== 'success'"
+            v-if="phase !== 'success'"
             class="max-w-none! motion-reduce:transition-none! motion-reduce:transform-none!"
             :title="template.title"
             :description="template.description"
@@ -307,11 +341,31 @@
           leave-to-class="opacity-0 -translate-y-(--spacing-md)"
         >
           <div
-            :key="status"
+            :key="phase"
             class="flex w-full flex-col items-center gap-(--spacing-xl) motion-reduce:transition-none! motion-reduce:transform-none!"
           >
+            <!-- No Git provider connected: the flow's first step is connecting one, on
+                 the same card the Creation Center's importer shows. The template preview
+                 above stays put, so the reader can still see what they picked while being
+                 asked for the one thing the deploy cannot be done without. -->
+            <template v-if="phase === 'connect'">
+              <GitProviderConnect
+                class="w-full"
+                title="Connect a Git provider"
+                :description="connectDescription"
+              />
+
+              <!-- The way out of the step, same control the form phase carries. -->
+              <Button
+                label="Browse Templates"
+                kind="outlined"
+                size="medium"
+                @click="goToCreationCenter"
+              />
+            </template>
+
             <!-- Configure repository + template settings -->
-            <template v-if="status === 'form'">
+            <template v-else-if="phase === 'form'">
               <!-- Configuration card -->
               <CardBox class="w-full">
                 <template #content>
@@ -322,9 +376,7 @@
                     </p>
 
                     <!-- Scope + repository name -->
-                    <div
-                      class="grid grid-cols-1 items-start gap-(--spacing-lg) sm:grid-cols-2"
-                    >
+                    <div class="grid grid-cols-1 items-start gap-(--spacing-lg) sm:grid-cols-2">
                       <div class="flex flex-col gap-(--spacing-xs)">
                         <Label
                           label="Scope"
@@ -336,12 +388,14 @@
                           size="large"
                           placeholder="Select a scope"
                           :disabled="submitting"
-                          :display-value="(v) => scopes.find((s) => s.value === v)?.label ?? ''"
+                          :display-value="
+                            (v) => gitAccounts.find((s) => s.value === v)?.label ?? ''
+                          "
                         >
                           <Select.Trigger />
                           <Select.Content>
                             <Select.Option
-                              v-for="s in scopes"
+                              v-for="s in gitAccounts"
                               :key="s.value"
                               :value="s.value"
                             >
@@ -487,7 +541,7 @@
             </template>
 
             <!-- Deploy in progress: only the Deployment card renders here -->
-            <template v-else-if="status === 'deploying'">
+            <template v-else-if="phase === 'deploying'">
               <DeploymentFlow
                 :repo-owner="template.repoOwner"
                 :repo-path="template.repoPath"
@@ -503,9 +557,7 @@
                    the card below is the record of it. Sized like a first-level
                    page title, since the chrome carries no breadcrumb here. -->
               <header class="flex w-full flex-col gap-(--spacing-xxs)">
-                <h1 class="text-balance text-heading-lg text-(--text-default)">
-                  Congratulations!
-                </h1>
+                <h1 class="text-balance text-heading-lg text-(--text-default)">Congratulations!</h1>
                 <p
                   class="flex flex-wrap items-center gap-(--spacing-xs) text-body-sm text-(--text-muted)"
                 >

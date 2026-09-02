@@ -54,6 +54,7 @@
   import FunctionSettings from '../../components/function/FunctionSettings.vue'
   import CreationHeader from '../../components/page/CreationHeader.vue'
   import PageTabs from '../../components/page/PageTabs.vue'
+  import { useCreateOrigin } from '../../lib/behavior/create-origin'
   import { useBaseline } from '../../lib/behavior/forms'
   import { FUNCTION_ARGS, FUNCTION_STARTER } from '../../lib/data/create-resources'
   import { addFunction, RUNTIMES } from '../../lib/data/functions'
@@ -139,13 +140,20 @@
   // resume marker) and `returnLabel` (what to call it, in the crumb and on Back). Both
   // outcomes return there — saved, with the new function's id; cancelled, with the
   // caller's form intact — so the round trip costs the reader nothing.
-  const returnTo = computed(() => String(route.query.returnTo || ''))
-  const returnLabel = computed(() => String(route.query.returnLabel || 'Functions'))
+  //
+  // And under that, the plain ORIGIN: `?from=`, which the Creation Center's rail sends when
+  // the reader picked `Function` out of it (../../lib/behavior/create-origin.js). It is the
+  // FALLBACK, not a third case — a caller waiting on this function outranks the screen the
+  // reader browsed from, because that caller has a half-filled form to resume.
+  const { path: originPath, label: originLabel } = useCreateOrigin(listPath, 'Functions')
 
-  /** Leave for the caller (or the module list), optionally handing back a result. */
+  const returnTo = computed(() => String(route.query.returnTo || ''))
+  const returnLabel = computed(() => String(route.query.returnLabel || originLabel.value))
+
+  /** Leave for the caller (or the origin the reader came from), handing back any result. */
   const leave = (extraQuery = {}) => {
     if (!returnTo.value) {
-      router.push({ path: listPath, query: { ...extraQuery, email: userEmail.value } })
+      router.push({ path: originPath.value, query: { ...extraQuery, email: userEmail.value } })
       return
     }
     const back = router.resolve(returnTo.value)
@@ -157,13 +165,13 @@
 
   const cancel = () => leave()
 
-  // The first crumb is where Back goes: the module when this page was entered from it,
-  // the caller when one sent us. The caller's crumb is `#` rather than its real path —
+  // The first crumb is where Back goes: the origin — the module, or whatever `?from=` named —
+  // when this page was entered from it, the caller when one sent us. The caller's crumb is `#` rather than its real path —
   // its full location (query and resume marker included) lives in `returnTo`, and `#`
   // is the href `onCrumb` already reads as "the same intent as Back".
   const breadcrumb = computed(() => [
-    { label: returnLabel.value, href: returnTo.value ? '#' : listPath },
-    { label: 'Create function' }
+    { label: returnLabel.value, href: returnTo.value ? '#' : originPath.value },
+    { label: 'Create Function' }
   ])
 
   const onCrumb = (event, href) => {

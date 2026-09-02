@@ -25,6 +25,7 @@
   import FieldRow from '../../components/form/FieldRow.vue'
   import CreatePage from '../../components/page/CreatePage.vue'
   import Section from '../../components/page/Section.vue'
+  import { useCreateOrigin } from '../../lib/behavior/create-origin'
   import { useBaseline } from '../../lib/behavior/forms'
 
   const route = useRoute()
@@ -68,7 +69,11 @@
     return !errors.name
   }
 
-  const cancel = () => router.push({ path: '/sql-database', query: { email: userEmail.value } })
+  // Where this page goes back to: SQL Database, or the Creation Center when the reader picked
+  // `Database` out of its rail (../../lib/behavior/create-origin.js).
+  const { path: originPath, label: originLabel } = useCreateOrigin('/sql-database', 'SQL Database')
+
+  const cancel = () => router.push({ path: originPath.value, query: { email: userEmail.value } })
 
   const submit = async () => {
     if (submitting.value) return // re-entrancy lock
@@ -100,9 +105,9 @@
 
 <template>
   <CreatePage
-    :breadcrumb="[{ label: 'SQL Database', href: '/sql-database' }, { label: 'Create database' }]"
-    back-label="Back to SQL Database"
-    title="Create database"
+    :breadcrumb="[{ label: originLabel, href: originPath }, { label: 'Create Database' }]"
+    :back-label="`Back to ${originLabel}`"
+    title="Create Database"
     description="A SQL Database instance that Applications, Functions and APIs can query at the edge."
     title-id="create-database-title"
     :submitting="submitting"

@@ -51,6 +51,7 @@
   import SpecFieldRow from '../../components/form/SpecFieldRow.vue'
   import CreatePage from '../../components/page/CreatePage.vue'
   import Section from '../../components/page/Section.vue'
+  import { useCreateOrigin } from '../../lib/behavior/create-origin'
   import { useBaseline } from '../../lib/behavior/forms'
   import {
     createFormSeed,
@@ -215,13 +216,18 @@
   const messageFor = (field) => errors[field.id]?.message ?? ''
   const messageKindFor = (field) => errors[field.id]?.kind ?? 'helper'
 
-  // Where Cancel and Save go back to. `?from=` when the caller sent one — Overview has two
-  // pinned addresses for its two versions (/home-empty-state, /home-populated), and
-  // returning to the module's own `listPath` from a pinned one would drop the reader on a
-  // different version of the page they left. Everything else returns to the module list.
-  const returnPath = computed(() => route.query.from || spec.value.listPath)
+  // Where Cancel and Save go back to, and what the first crumb calls it. `?from=` when the
+  // caller sent one — Overview has two pinned addresses for its two versions
+  // (/home-empty-state, /home-populated), and the Creation Center sends its own so a create
+  // started from that rail returns to the rail rather than to a module list the reader has
+  // never seen (../../lib/behavior/create-origin.js). Everything else returns to the
+  // module list.
+  const { path: originPath, label: originLabel } = useCreateOrigin(
+    () => spec.value.listPath,
+    () => spec.value.listLabel
+  )
 
-  const cancel = () => router.push({ path: returnPath.value, query: { email: userEmail.value } })
+  const cancel = () => router.push({ path: originPath.value, query: { email: userEmail.value } })
 
   // The name the toast and the created row carry. Most resources are identified by
   // `name`; a domain is identified by the domain itself, since that is the thing the
@@ -292,7 +298,7 @@
       // query is dropped the moment it is read.
       commit() // the create landed — the leave guard stands down
       router.push({
-        path: returnPath.value,
+        path: originPath.value,
         query: {
           email: userEmail.value,
           ...(props.resource === 'domains' ? { domain: name } : {})
@@ -311,8 +317,8 @@
 
 <template>
   <CreatePage
-    :breadcrumb="[{ label: spec.listLabel, href: returnPath }, { label: spec.title }]"
-    :back-label="`Back to ${spec.listLabel}`"
+    :breadcrumb="[{ label: originLabel, href: originPath }, { label: spec.title }]"
+    :back-label="`Back to ${originLabel}`"
     :title="spec.title"
     :description="spec.guidance"
     :title-id="`${resource}-create-title`"

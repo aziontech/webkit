@@ -61,6 +61,7 @@
 
   import DeploymentFlow from '../../components/deployment/DeploymentFlow.vue'
   import WizardPage from '../../components/page/WizardPage.vue'
+  import { useCreateOrigin } from '../../lib/behavior/create-origin'
   import { useBaseline } from '../../lib/behavior/forms'
   import {
     getApplicationFlow,
@@ -299,7 +300,11 @@
     if (index === 0) flowId.value = ''
   }
 
-  const cancel = () => router.push({ path: '/applications', query: { email: userEmail.value } })
+  // WHERE THIS FLOW CAME FROM — the Applications list, or the Creation Center when the
+  // reader picked "Application" out of that rail (../../lib/behavior/create-origin.js).
+  const { path: originPath, label: originLabel } = useCreateOrigin('/applications', 'Applications')
+
+  const cancel = () => router.push({ path: originPath.value, query: { email: userEmail.value } })
 
   // Validation runs on the COMMIT only, and only over fields on screen: `name` and
   // whatever the template declared required. Every other field carries the endpoint's
@@ -774,7 +779,7 @@
     // surprise rather than consent. From scratch has nothing to publish, so its commit
     // says only what it does — and "Deploy this application" is offered afterwards, on the
     // outcome, as the separate act it is.
-    return flowId.value === 'scratch' ? 'Create application' : 'Create and deploy'
+    return flowId.value === 'scratch' ? 'Create Application' : 'Create and deploy'
   })
 
   // AND IT IS GATED WHERE THERE IS NOTHING TO REPORT. Two kinds of part, two rules:
@@ -794,12 +799,9 @@
 <template>
   <WizardPage
     ref="page"
-    :breadcrumb="[
-      { label: 'Applications', href: '/applications' },
-      { label: 'Create application' }
-    ]"
-    back-label="Back to Applications"
-    title="Create application"
+    :breadcrumb="[{ label: originLabel, href: originPath }, { label: 'Create Application' }]"
+    :back-label="`Back to ${originLabel}`"
+    title="Create Application"
     :description="pageDescription"
     title-id="create-application-title"
     :heading="phase !== 'success'"
