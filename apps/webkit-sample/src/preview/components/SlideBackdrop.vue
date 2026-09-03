@@ -41,7 +41,9 @@
   //
   // Vertically the field runs 12%-82%: the whole of it is inside the frame. Nothing the ROUTE
   // touches — the eastern seaboard, Brazil, the Atlantic between them — is veiled at all.
+  import { MAP_NODES, projectOnMap, SLIDE_FRAMING } from '@shared/ui/banners/map-framing.js'
   import MapBanner from '@shared/ui/banners/MapBanner.vue'
+  import MapMesh from '@shared/ui/banners/MapMesh.vue'
   import ClientMark from '@shared/ui/brand/ClientMark.vue'
   import { CLIENTS } from '@shared/ui/brand/clients/index.js'
   import { TOOLS } from '@shared/ui/brand/tools.js'
@@ -88,6 +90,32 @@
   // outside it, so it is 2px smaller than FRAME on each axis (1618x886, confirmed against the
   // render). MapRoute is sized to that box, so its svg's user units ARE those pixels.
   const BOX = { width: FRAME.width - 2, height: FRAME.height - 2 }
+
+  // ── THE MESH ──────────────────────────────────────────────────────────────────────────
+  //
+  // `mesh` is the other drawing this layout can take, and the two are EXCLUSIVE in practice:
+  // a route is ONE request between two named ends, a mesh is n:n between peers with no ends at
+  // all, and a slide makes one of those two claims. The architecture slide takes the mesh; the
+  // problem slide takes the route. It carried both for a while — the mesh as the network that
+  // already exists, the route as what a centralized control does on top of it — and the cost
+  // was the route: one labelled trip inside seventeen unlabelled ones is a trip you have to
+  // hunt for, on the slide whose headline is that trip. The contrast now lands across the two
+  // slides instead of inside one.
+  //
+  // WHICH NODES MAY TAKE PART IS THE SLIDE'S DECISION, not the mesh's, for the same reason it
+  // is the vision slide's: MapMesh can see its box and its crop, and neither tells it that the
+  // western 44% of this one is under an opaque wash. Handing it the whole field would spend
+  // participants — and the rays they carry — on the Pacific, where the wash deletes them, and
+  // the mesh would come back looking thin for no reason a reader could see. So the pool is the
+  // nodes east of the wash's opaque edge, and what crosses into the ramp is a tail dissolving
+  // into canvas, which is what the map itself does there.
+  const WASH_OPAQUE = 0.44 * BOX.width // 712 — the first stop of the gradient above
+
+  const meshPool = computed(() =>
+    MAP_NODES.filter(
+      (node) => projectOnMap({ framing: SLIDE_FRAMING, box: BOX, point: node }).x >= WASH_OPAQUE
+    )
+  )
 </script>
 
 <template>
@@ -103,6 +131,18 @@
          Africa and Asia a squarer crop parks on the right when it is fitted to a band. -->
     <MapBanner kind="slide" />
 
+    <!-- ── THE MESH ─────────────────────────────────────────────────────────────────────
+         Traffic between arbitrary pairs of the artwork's own PoPs, drawn BELOW the wash — the
+         route above is an annotation on the map and belongs over it, but a mesh is the network
+         itself running, so it dissolves into the copy column with the landmass it sits on. -->
+    <MapMesh
+      v-if="slide.mesh"
+      :box="BOX"
+      :framing="SLIDE_FRAMING"
+      :pool="meshPool"
+      class="z-0"
+    />
+
     <!-- ── THE WASH ─────────────────────────────────────────────────────────────────────
          Opaque canvas through the copy column, then a 26% ramp to nothing. Four stops, the
          same front-loaded shape the marketing hero's scrim uses, shifted right to clear the
@@ -114,10 +154,9 @@
     />
 
     <!-- ── THE ROUTE ────────────────────────────────────────────────────────────────────
-         The annotation, above the wash and below the copy: a round trip between the user and
-         the data centre, drawn in `--accent` because the map's own PoP field is `--primary`
-         and an orange route over an orange node field is a line you have to hunt for. Same
-         component, same gazetteer, same crop as the globe on the vision slide. -->
+         The annotation, above the wash and below the copy: one wire between the user and the
+         data centre, carrying a request each way. Same component, same gazetteer, same crop
+         the map beneath is framed with. -->
     <MapRoute
       v-if="slide.route"
       :from="slide.route.from"
@@ -137,6 +176,7 @@
       <SlideHeading
         :eyebrow="slide.eyebrow"
         :headline="slide.headline"
+        :description="slide.description"
       />
 
       <!-- Bullets are rules, not dots — the divider between two claims belongs to the LOWER
@@ -153,6 +193,25 @@
           {{ bullet }}
         </li>
       </ul>
+
+      <!-- ── THE FIGURES ──────────────────────────────────────────────────────────────
+           Three across the copy column's six columns (218px each), in the same brick the
+           metrics slide uses — the figure in the display face over its caption — so a number
+           reads the same wherever the deck puts one. The rule above is the marks section's:
+           a band under the claim, divided from it by the one line it owns. -->
+      <section
+        v-if="slide.metrics"
+        class="grid grid-cols-3 gap-(--spacing-lg) border-t border-(--border-muted) pt-(--spacing-lg)"
+      >
+        <div
+          v-for="metric in slide.metrics"
+          :key="metric.label"
+          class="flex flex-col gap-(--spacing-sm)"
+        >
+          <span class="text-big-number-lg text-(--primary)">{{ metric.value }}</span>
+          <span class="text-pretty text-heading-sm text-(--text-default)">{{ metric.label }}</span>
+        </div>
+      </section>
 
       <section
         v-if="marks.length"

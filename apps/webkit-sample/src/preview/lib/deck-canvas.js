@@ -32,10 +32,20 @@ export const CANVAS = { width: 1920, height: 1080 }
 // not the page frame's — and the COPY inside it is then capped the way the site caps its
 // hero copy (HEADLINE_MAX / DESCRIPTION_MAX below). Vertically the frame is inset by
 // `--spacing-xxl`, so the bezel is the largest step of the theme's own scale on all sides.
+//
+// The frame's width is named once, above the object, because `x` centres the frame BY it. Written
+// as two independent literals — `x: (CANVAS.width - 1620) / 2` beside `width: 1620` — the two can
+// be edited apart, and the deck then draws a 1620px frame anchored wherever the arithmetic in `x`
+// happened to land: flush to one edge, with the whole difference as dead space on the other. It
+// went out that way once (`- 1920`, x = 0, 300px of nothing down the right of all 23 slides) and
+// nothing caught it, because every slide still rendered and every coordinate was still internally
+// consistent — just consistently off-centre.
+const FRAME_WIDTH = 1620 // --container-7xl
+
 export const FRAME = {
-  x: (CANVAS.width - 1620) / 2, // 150 — (1920 - --container-7xl) / 2
+  x: (CANVAS.width - FRAME_WIDTH) / 2, // 150
   y: 96, // --spacing-xxl @ xl
-  width: 1620, // --container-7xl
+  width: FRAME_WIDTH,
   height: CANVAS.height - 2 * 96 // 888
 }
 
@@ -109,6 +119,23 @@ export const MARK = { size: 6, inset: 4 }
 export const HEADLINE_MAX = 1024 // --container-4xl
 export const DESCRIPTION_MAX = 752 // --container-2xl
 
+// THE QR PLATE on the closing `thanks` slide. Two numbers, and both of them are about being
+// scanned rather than about looking right.
+//
+// `plate` is the white square's side, and it is a run of FOUR GRID COLUMNS rather than a round
+// number of spacing steps. A QR is read at whatever angle the room allows, from wherever the
+// person is sitting, so the code wants to be as large as the composition can carry — but sizing
+// it by "the largest square the half holds" pins it to that half's padding, and the first time
+// anyone re-splits the slide the plate silently overhangs the frame's rule. Four columns is a
+// measure the grid already guarantees: it lands on whole pixels, it fits the six-column half
+// with room on both sides, and it is the same unit every other slide's content is sized in.
+//
+// `quiet` is the light margin the standard requires around a symbol, measured in MODULES, not
+// pixels — a scanner looks for four modules' worth of clear space and can miss the code without
+// it. The layout spends it as the plate's own inset (an SVG viewBox grown by 8 modules), so the
+// white square IS the quiet zone and no padding value can drift away from it.
+export const QR = { plate: span(4), quiet: 4 } // 460
+
 // ── The pinned canvas tokens ────────────────────────────────────────────────────────
 //
 // Only the tokens that CARRY a breakpoint map need pinning; a token with a single value
@@ -145,6 +172,13 @@ export const PALETTE = {
   'bg-canvas': '#000000',
   'bg-surface': '#0A0A0A',
   'bg-surface-raised': '#141414',
+  // The inverted pair, and the deck's only light surface: the `clients` wall flips its half of
+  // the frame to these so every client mark can carry its own brand colours instead of being
+  // filtered to a white silhouette. On this dark theme `bg-contrast` IS #FAFAFA — the same
+  // value as `text-default`, which is the point of the token rather than a duplicate: one is
+  // the ground, the other is the ink, and on a light theme they swap.
+  'bg-contrast': '#FAFAFA',
+  'text-contrast': '#000000',
   'text-default': '#FAFAFA',
   'text-muted': '#808080',
   'text-disabled': '#4D4D4D',
@@ -152,8 +186,15 @@ export const PALETTE = {
   'border-muted': '#242424',
   'border-strong': '#FFFFFF',
   primary: '#F3652B',
+  // White on this deck's dark theme (`primitives.base.white`); black on light. The ink for
+  // anything filled with `--primary` — the route slide's origin disc.
+  'primary-contrast': '#FFFFFF',
   accent: '#0072F5',
   secondary: '#FFFFFF',
+  // The ink on `--secondary`. On this dark deck that pair is a white plate with black on it,
+  // which is what the `thanks` slide's QR is drawn with — the one place the deck needs a
+  // light-on-dark inversion, and a QR has to be dark-on-light to scan reliably.
+  'secondary-contrast': '#000000',
   'success-contrast': '#52E086',
   'warning-contrast': '#F7BD08',
   'danger-contrast': '#ED7878',

@@ -13,13 +13,25 @@
   //          shape is the deck's identity — and it needs the whole canvas, because half its
   //          composition (the mark, the platform line) sits outside the frame it drew.
   import SlideBackdrop from './SlideBackdrop.vue'
+  import SlideBeforeAfter from './SlideBeforeAfter.vue'
   import SlideBullets from './SlideBullets.vue'
+  import SlideCatalog from './SlideCatalog.vue'
   import SlideCells from './SlideCells.vue'
+  import SlideClients from './SlideClients.vue'
   import SlideCopy from './SlideCopy.vue'
   import SlideCover from './SlideCover.vue'
+  import SlideEvidence from './SlideEvidence.vue'
+  import SlideLanes from './SlideLanes.vue'
+  import SlidePlatform from './SlidePlatform.vue'
+  import SlidePrinciple from './SlidePrinciple.vue'
+  import SlideReasons from './SlideReasons.vue'
+  import SlideScale from './SlideScale.vue'
   import SlideSplit from './SlideSplit.vue'
+  import SlideStack from './SlideStack.vue'
   import SlideStage from './SlideStage.vue'
   import SlideTestimonial from './SlideTestimonial.vue'
+  import SlideThanks from './SlideThanks.vue'
+  import SlideVersus from './SlideVersus.vue'
   import SlideVision from './SlideVision.vue'
   import SpecimenMotion from './SpecimenMotion.vue'
   import SpecimenSpacing from './SpecimenSpacing.vue'
@@ -34,10 +46,22 @@
     testimonial: SlideTestimonial,
     closing: SlideCopy,
     bullets: SlideBullets,
+    catalog: SlideCatalog,
+    clients: SlideClients,
+    lanes: SlideLanes,
     backdrop: SlideBackdrop,
     grid: SlideCells,
     metrics: SlideCells,
+    principle: SlidePrinciple,
+    evidence: SlideEvidence,
+    platform: SlidePlatform,
+    reasons: SlideReasons,
+    scale: SlideScale,
     split: SlideSplit,
+    stack: SlideStack,
+    'before-after': SlideBeforeAfter,
+    thanks: SlideThanks,
+    versus: SlideVersus,
     vision: SlideVision,
     'specimen-type': SpecimenType,
     'specimen-spacing': SpecimenSpacing,
@@ -46,11 +70,18 @@
 
   const BLEED = new Set([
     'backdrop',
+    'before-after',
+    'clients',
+    'evidence',
     'grid',
     'metrics',
+    'reasons',
     'split',
+    'stack',
     'specimen-type',
     'testimonial',
+    'thanks',
+    'versus',
     'vision'
   ])
   const HATCH = new Set(['section', 'closing'])

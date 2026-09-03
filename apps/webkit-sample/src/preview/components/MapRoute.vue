@@ -14,12 +14,20 @@
   // because someone nudged a pixel until it looked right — and it stays there in a 1618px
   // frame and in a 396px disc alike, which is the whole reason this is one component.
   //
-  // ── WHY TWO LANES ──
+  // ── ONE WIRE, AND WHERE THE ROUND TRIP WENT ──
   //
-  // A request is a ROUND TRIP, and the latency the slide is arguing about is paid twice. One
-  // line with a single arrowhead states the distance; two lanes state the trip. They bow by
-  // different amounts so they separate into a lens rather than overprinting, and each is
-  // written in its own direction of travel.
+  // A request is a ROUND TRIP, and the latency the slide is arguing about is paid twice. That
+  // used to be DRAWN: two bowed lanes separating into a lens, each with an accent arrowhead on
+  // the tangent where it arrived. Now it is one wire between the two ends, and the trip is
+  // carried by the traffic on it — a request crosses 1 -> 2, and once it has landed a second
+  // crosses 2 -> 1 on that same wire. The distance is still paid twice; it is paid in TIME
+  // instead of stated by a second object.
+  //
+  // Two things were wrong with paying for it in geometry. The lens is a shape the network does
+  // not have — a request does not take a different wire home, it takes the same path the other
+  // way — and the arrowheads were the only marks on the slide in the deck's second colour, so
+  // the loudest detail of the annotation was the one carrying the least of the argument. What
+  // is left is what the slide is about: two named ends and the distance between them.
   //
   // ── HOW IT MOVES: ONE EASED PACKET PER LANE ──
   //
@@ -41,16 +49,25 @@
   // half — so the two legs hand over with no gap and no overlap, and the sequence IS the
   // round trip rather than a caption on one.
   //
-  // ── WHERE THE ACCENT GOES ──
+  // ── THE ACCENT IS NOT SPENT AT ALL ──
   //
-  // On the ARROWHEADS, and nowhere else. They are the only marks on the drawing that say
-  // which way anything is going, so they are the only ones that earn the deck's second
-  // colour; spending it on the line as well made the whole annotation one blue object and
-  // told the reader nothing extra. The route and the packet take the contrast ink, the origin
-  // disc the primary surface, and the destination the contrast surface — canvas inverted, the
-  // one white object on the slide, which is how a single centralized data centre should read
-  // beside a distributed field.
+  // It was earned by one thing only — the arrowheads, the sole marks that said which way
+  // anything was going. With no direction asserted there is nothing for a second colour to
+  // say, and the drawing now agrees with MapMesh: a grey wire, an orange request. What carries
+  // the meaning instead is the pair of ENDS — the origin takes the primary surface, the
+  // destination the contrast surface, canvas inverted and the one white object on the slide,
+  // which is how a single centralized data centre should read beside a distributed field.
   //
+  // THE ORIGIN'S NUMERAL IS KNOCKED OUT, not inked with `--primary-contrast`. That token is
+  // the nominal pair for a primary surface and it is the wrong one here: `--primary` is the
+  // same #F3652B on both themes while its contrast token FLIPS (#000 light, #FFF dark), so on
+  // this dark deck the numeral came out white on orange — 3.0:1, under AA for any text size.
+  // Black on the same orange measures 6.71:1. `--bg-canvas` is that ink and it is the one the
+  // deck's marker band already settled on for the identical pair (see MarkedText, where the
+  // theme gap is recorded); the destination's white-on-black end is untouched.
+  //
+  import '@shared/ui/banners/map-packet.css'
+
   import { MAP_PLACES, projectOnMap, SLIDE_FRAMING } from '@shared/ui/banners/map-framing.js'
   import { computed } from 'vue'
 
@@ -76,14 +93,17 @@
   /** The disc's diameter. Everything else on the marker is a fraction of it. */
   const MARKER = { small: 28, large: 40 }
 
-  // How far each lane's control point sits off the chord, as a fraction of the chord's own
-  // length. Sao Paulo and the US eastern seaboard are ~126px apart in x against ~347 in y at
+  // How far the wire's control point sits off the chord, as a fraction of the chord's own
+  // length. Sao Paulo and the US eastern seaboard are ~143px apart in x against ~356 in y at
   // full frame, so a straight chord is a near-vertical bar — it reads as a divider, not as a
-  // journey. The bow is what makes it a route, and it goes east because west is where the
-  // copy is. A quadratic deviates by HALF its control offset at the midpoint, so the two
-  // numbers below put the lanes ~6.5% of the chord apart at their widest.
-  const OUTBOUND_BOW = 0.26
-  const RETURN_BOW = 0.13
+  // journey. The bow is what makes it a route, and it goes east because west is where the copy
+  // is. A quadratic deviates by HALF its control offset at the midpoint, so this bows the wire
+  // ~13% of the chord (~50px in the full frame).
+  //
+  // It is the LARGER of the two bows the lanes used to carry. With no second lane to separate
+  // from, the only job left is that reading — a journey rather than a divider — and the flatter
+  // of the pair (0.13, ~24px) was flat enough to be read as one.
+  const BOW = 0.26
 
   const marker = computed(() => MARKER[props.size])
 
@@ -92,12 +112,23 @@
   const DASH = '6 6'
   const STROKE = 2
 
-  // The travelling packet, in the normalized units `pathLength="100"` puts the path in. 18 is
-  // ~a fifth of the trip — long enough to read as a moving object rather than a dot, short
-  // enough that the path is mostly empty behind it. The gap exceeds the path so only ever one
-  // packet is on the wire.
-  const PACKET = '18 200'
-  const PACKET_PARKED = 18
+  // THE PACKET IS NOT THIS COMPONENT'S TO DESIGN. A request crossing this route and a request
+  // crossing a mesh ray are the same event on the same network — and the backdrop slide draws
+  // both on one map — so what a request LOOKS like is one definition, `map-packet.css`, imported
+  // above: a dash that grows out of the near end, crosses under `--ease-in-out`, and is clipped
+  // away into the far one, in the brand orange the artwork already paints its PoPs.
+  //
+  // What stays here is the CLOCK, because a labelled round trip has a beat a field of peers does
+  // not: one leg per half cycle, handed over at the halfway mark (see the scoped style below).
+  //
+  // These two are the resting state — what the element carries before the animation's first
+  // frame, and what it returns to under reduced motion. A zero-length dash parked past the end
+  // of the wire is invisible, which is the honest still frame: a route with no request on it.
+  const PACKET_RESTING = '0 200'
+  const PACKET_PARKED = -100
+
+  /** The packet's stroke. Thinner than the route's own line — it is traffic, not the wire. */
+  const PACKET_STROKE = 1.5
 
   const geometry = computed(() => {
     const at = (end) =>
@@ -108,48 +139,34 @@
     // Trim both ends back to the discs' edges, so the dashes start and stop in open water
     // instead of running under a marker.
     const clearance = marker.value / 2 + marker.value * 0.15
-    const arrow = { length: marker.value * 0.3, halfWidth: marker.value * 0.125 }
     const point = (p) => `${p.x.toFixed(1)} ${p.y.toFixed(1)}`
 
-    // One lane: bowed, trimmed at both ends, with a triangle on the tangent where it arrives.
-    const lane = (start, end, offset) => {
-      const chord = { x: end.x - start.x, y: end.y - start.y }
-      const length = Math.hypot(chord.x, chord.y)
-      // The chord's perpendicular, forced to point east whichever way the lane runs — so the
-      // outbound and the return bow the same way in MAP terms while travelling opposite ways.
-      const east = { x: -chord.y / length, y: chord.x / length }
-      if (east.x < 0) {
-        east.x = -east.x
-        east.y = -east.y
-      }
-      const control = {
-        x: (start.x + end.x) / 2 + east.x * offset * length,
-        y: (start.y + end.y) / 2 + east.y * offset * length
-      }
-
-      const unit = (a, b) => {
-        const d = Math.hypot(b.x - a.x, b.y - a.y)
-        return { x: (b.x - a.x) / d, y: (b.y - a.y) / d }
-      }
-      const head = unit(start, control)
-      const tail = unit(control, end)
-      const mouth = { x: start.x + head.x * clearance, y: start.y + head.y * clearance }
-      const tip = { x: end.x - tail.x * clearance, y: end.y - tail.y * clearance }
-      const base = { x: tip.x - tail.x * arrow.length, y: tip.y - tail.y * arrow.length }
-      const wing = { x: -tail.y * arrow.halfWidth, y: tail.x * arrow.halfWidth }
-
-      return {
-        path: `M ${point(mouth)} Q ${point(control)} ${point(tip)}`,
-        arrow: `M ${point(tip)} L ${point({ x: base.x + wing.x, y: base.y + wing.y })} L ${point({ x: base.x - wing.x, y: base.y - wing.y })} Z`
-      }
+    const chord = { x: to.x - from.x, y: to.y - from.y }
+    const length = Math.hypot(chord.x, chord.y)
+    // The chord's perpendicular, forced to point east — west is where the copy is.
+    const east = { x: -chord.y / length, y: chord.x / length }
+    if (east.x < 0) {
+      east.x = -east.x
+      east.y = -east.y
+    }
+    const control = {
+      x: (from.x + to.x) / 2 + east.x * BOW * length,
+      y: (from.y + to.y) / 2 + east.y * BOW * length
     }
 
-    return {
-      from,
-      to,
-      outbound: lane(from, to, OUTBOUND_BOW),
-      return: lane(to, from, -RETURN_BOW)
+    const unit = (a, b) => {
+      const d = Math.hypot(b.x - a.x, b.y - a.y)
+      return { x: (b.x - a.x) / d, y: (b.y - a.y) / d }
     }
+    const head = unit(from, control)
+    const tail = unit(control, to)
+    const mouth = { x: from.x + head.x * clearance, y: from.y + head.y * clearance }
+    const tip = { x: to.x - tail.x * clearance, y: to.y - tail.y * clearance }
+
+    // ONE path, written 1 -> 2. The return leg is the same `d` played backwards (see the
+    // scoped style), so there is exactly one wire and no chance of the two legs disagreeing
+    // about where it runs.
+    return { from, to, path: `M ${point(mouth)} Q ${point(control)} ${point(tip)}` }
   })
 
   // Each end is one row whose DISC is centred on the projected point: the row is positioned by
@@ -185,45 +202,37 @@
       class="absolute inset-0 size-full"
       fill="none"
     >
-      <g
-        v-for="lane in [
-          { key: 'outbound', shape: geometry.outbound },
-          { key: 'return', shape: geometry.return }
-        ]"
-        :key="lane.key"
-      >
-        <!-- The route: always drawn, never moving. -->
-        <path
-          :d="lane.shape.path"
-          class="stroke-(--border-strong) opacity-25"
-          :stroke-width="STROKE"
-          :stroke-dasharray="DASH"
-          stroke-linecap="round"
-        />
+      <!-- The wire: always drawn, never moving. Under reduced motion it is the whole drawing,
+           and that still frame is the slide's claim on its own — two named ends, one route. -->
+      <path
+        :d="geometry.path"
+        class="stroke-(--border-strong) opacity-25"
+        :stroke-width="STROKE"
+        :stroke-dasharray="DASH"
+        stroke-linecap="round"
+      />
 
-        <!-- The request: one packet, easing in and out of the trip. `pathLength` normalizes
-             the path to 100 so the same dash and the same offsets work on both slides.
-             It is CAMELCASE and must stay that way: written kebab (`path-length`) it is
-             emitted verbatim, the browser ignores it, and the dash units silently fall back to
-             USER units — which is how this shipped for a while, with the packet crossing a
-             fixed 100px of a 347px route and stopping there. Nothing errors. -->
-        <path
-          :d="lane.shape.path"
-          class="packet stroke-(--border-strong) motion-reduce:animate-none"
-          :class="`packet-${lane.key}`"
-          pathLength="100"
-          :stroke-width="STROKE"
-          :stroke-dasharray="PACKET"
-          :stroke-dashoffset="PACKET_PARKED"
-          stroke-linecap="round"
-        />
-
-        <!-- The one accent on the drawing: the mark that says which way this lane runs. -->
-        <path
-          :d="lane.shape.arrow"
-          class="fill-(--accent)"
-        />
-      </g>
+      <!-- The two legs, on ONE `d`. Both are the shared crossing (`map-packet` owns its shape,
+           this component owns its clock); `leg-back` plays the same keyframes in reverse, which
+           is what sends it 2 -> 1 without a second path to keep in step.
+           `pathLength` normalizes the path to 100 so the same keyframes read on a 347px route
+           and on the shortest mesh hop; it is CAMELCASE and must stay that way (written kebab it
+           is emitted verbatim, the browser ignores it, and the dash units silently fall back to
+           USER units — which is how this shipped for a while, with the packet crossing a fixed
+           100px and stopping there). `butt`, not `round`: the dash is zero-length at both ends
+           of its trip, and a round cap paints that as a dot parked on the wire. -->
+      <path
+        v-for="leg in ['out', 'back']"
+        :key="leg"
+        :d="geometry.path"
+        class="map-packet stroke-(--primary) motion-reduce:animate-none"
+        :class="`leg-${leg}`"
+        pathLength="100"
+        :stroke-width="PACKET_STROKE"
+        :stroke-dasharray="PACKET_RESTING"
+        :stroke-dashoffset="PACKET_PARKED"
+        stroke-linecap="butt"
+      />
     </svg>
 
     <div
@@ -232,7 +241,7 @@
           key: 'from',
           data: from,
           at: geometry.from,
-          disc: 'bg-(--primary) text-(--primary-contrast)'
+          disc: 'bg-(--primary) text-(--bg-canvas)'
         },
         { key: 'to', data: to, at: geometry.to, disc: 'bg-(--bg-contrast) text-(--text-contrast)' }
       ]"
@@ -261,42 +270,25 @@
 </template>
 
 <style scoped>
-  /* ONE TRIP PER LANE, HANDED OVER AT THE HALFWAY MARK.
-     The packet crosses in the first half of the cycle and is parked off the end for the
-     second; the return lane is delayed by exactly half a cycle, so the two legs meet with no
-     gap and no overlap and the sequence itself is the round trip.
-     `slow-04` (2100ms) is the theme's longest duration step and it is the leg; the cycle is
-     two of them. The curve is `--ease-in-out`, which is the whole ask: the request leaves
-     under acceleration and settles into the far end instead of sliding at a constant rate. */
-  .packet {
-    animation: map-route-travel calc(2 * var(--transition-duration-slow-04)) var(--ease-in-out)
-      infinite;
+  /* ONE TRIP OUT AND ONE BACK, ON ONE WIRE. The crossing itself is `map-packet`'s (imported in
+     the script); the only thing this route decides is how long a leg takes and when the second
+     one starts. `slow-04` (2100ms) is the theme's longest duration step and it is the leg; the
+     cycle is two of them.
+     THE RETURN NEEDS NO DELAY, because `reverse` already places it. The shared crossing occupies
+     the first 45% of the cycle and parks past the far end for the rest — played backwards, that
+     park lands in the FIRST 55% and the crossing in the last 45%. So the request leaves at 0,
+     lands at 45%, sits at the data centre for a beat, and comes home over 55-100%: a round trip
+     with a pause at the far end, from one set of keyframes read in both directions. */
+  .map-packet {
+    animation-duration: calc(2 * var(--transition-duration-slow-04));
   }
 
-  .packet-return {
-    animation-delay: var(--transition-duration-slow-04);
+  .leg-back {
+    animation-direction: reverse;
   }
 
-  /* +18 puts the dash entirely before the path's start and -100 entirely past its end, so the
-     packet is invisible at both extremes and exactly one crossing happens per cycle. */
-  @keyframes map-route-travel {
-    0% {
-      stroke-dashoffset: 18;
-    }
-    50% {
-      stroke-dashoffset: -100;
-    }
-    100% {
-      stroke-dashoffset: -100;
-    }
-  }
-
-  /* Reduced motion keeps the route, the ends and the arrows — the drawing states the trip on
-     its own — and only stops the packet travelling. Parked before the start, it is invisible,
-     which is the honest still frame: a route with no request on it. */
-  @media (prefers-reduced-motion: reduce) {
-    .packet {
-      animation: none;
-    }
-  }
+  /* Reduced motion keeps the wire and the two ends — which is the whole drawing now that the
+     arrowheads are gone — and only stops the request travelling, which `map-packet.css` does.
+     Parked at zero length past the end of the path, it is invisible: a route with no request
+     on it. */
 </style>
