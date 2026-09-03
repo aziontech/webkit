@@ -28,20 +28,11 @@ export type MenuNode = {
   defaultOpen?: boolean
   /** Nested rows; a row with children renders as a sub instead of a leaf. */
   children?: MenuNode[]
-  /**
-   * Sections of a drilled level. A pushed level is a menu, so it is described by the very
-   * same shape the root takes — which is what makes a second-level nav the same anatomy as
-   * the first, groups and labels included. `kind: 'drill'` only (an inline row is a list,
-   * not a level) and it takes precedence over `children`.
-   */
+  /** Sections of a drilled level — same shape as the root's. Drill-only; wins over children. */
   groups?: MenuGroupNode[]
 }
 
-/**
- * A section of the data-driven navigation tree. A section separates rows under a title; it
- * does not fold them — folding belongs to a condensed row, which has a chevron and a rail
- * to say which rows it owns.
- */
+/** A titled section of the tree; separates rows under a label without folding them. */
 export type MenuGroupNode = {
   /** Header text; omit for an unlabeled block. */
   label?: string
@@ -63,9 +54,9 @@ export interface MenuContext {
   /** Direction of the last stack change; back to `none` once the slide has finished. */
   motion: ComputedRef<MenuMotion>
   /**
-   * Whether a level already on the stack at first render plays its entrance. Mirrors the root's
-   * `enterOnMount`, because only the consumer can tell a restored stack that was just *entered*
-   * from one the reader was already inside (both remount the host and restore the same stack).
+   * Whether a level already on the stack at first render plays its entrance. Mirrors the
+   * root's `enterOnMount` — only the consumer can tell a just-entered restored stack from
+   * one the reader was already inside (both remount and restore the same stack).
    */
   enterOnMount: ComputedRef<boolean>
   /** Element a pushed drill level teleports into, so it escapes the hidden root level. */
@@ -77,11 +68,9 @@ export interface MenuContext {
   /** Pushes a drill level; `trigger` is refocused when that level is popped. */
   push: (level: MenuLevel, trigger: globalThis.HTMLElement | null) => void
   /**
-   * Announces a drill sub's label and trigger element to the root as soon as its trigger
-   * registers — independently of any push. A stack seeded from `v-model:path` (a consumer
-   * persisting it across a remount, which is the only way a level survives a navigation) never
-   * ran a push, so without this the level it restores has no label for `Menu.Back` to show and
-   * no element to return focus to.
+   * Announces a drill sub's label and trigger to the root as soon as the trigger registers,
+   * independently of any push: a stack seeded from `v-model:path` never pushed, so its
+   * restored level would have no Back label and no element to return focus to.
    */
   registerLevel: (id: string, label: string, trigger: globalThis.HTMLElement | null) => void
   /** Pops the deepest level and restores focus to the trigger that pushed it. */
@@ -89,9 +78,9 @@ export interface MenuContext {
   /** Registers the Back row so a push can move focus to it. */
   setBackElement: (el: globalThis.HTMLElement | null) => void
   /**
-   * Anchor inside the CURRENT drill level that `Menu.Back` renders into. Back heads the
-   * level, so it lives in the level's own box: it then slides with it and — crucially —
-   * occupies no space in the root's flow, so popping cannot shift the menu it returns to.
+   * Anchor inside the CURRENT drill level that `Menu.Back` renders into: living in the
+   * level's own box it slides with it and takes no space in the root's flow, so popping
+   * cannot shift the menu it returns to.
    */
   backHost: ShallowRef<globalThis.HTMLElement | null>
   /** Registers that anchor; only the level that is current may claim it. */

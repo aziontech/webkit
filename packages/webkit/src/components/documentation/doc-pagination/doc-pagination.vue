@@ -2,10 +2,8 @@
   import { computed, useAttrs } from 'vue'
 
   /**
-   * The previous / next pair that closes every documentation page. Each side is
-   * a link carrying an eyebrow and the destination's title; a side with no
-   * destination simply leaves its half of the row empty, so the remaining link
-   * stays anchored to its edge.
+   * The previous / next pair closing a docs page. A side with no destination
+   * leaves its half of the row empty, so the remaining link stays on its edge.
    */
   defineOptions({ name: 'DocPagination', inheritAttrs: false })
 
@@ -46,11 +44,9 @@
   const testId = computed(() => (attrs['data-testid'] as string) ?? 'documentation-doc-pagination')
 
   /*
-   * The landmark's name has to be overridable, and a static attribute after
-   * `v-bind="$attrs"` would win over the consumer's instead of losing to it. Two
-   * nav landmarks sharing one accessible name is an axe `landmark-unique`
-   * violation, so a page that genuinely carries two paginations must be able to
-   * tell them apart.
+   * Read from attrs so a consumer-supplied aria-label wins (a static attribute
+   * after the attrs bind would beat it): two nav landmarks sharing one accessible
+   * name is an axe landmark-unique violation.
    */
   const ariaLabel = computed(() => (attrs['aria-label'] as string) ?? 'Page navigation')
 </script>

@@ -60,10 +60,9 @@
   const path = defineModel<string[]>('path', { default: () => [] })
 
   /**
-   * Ids of the inline subs currently expanded. The ROOT owns this, not each sub, for two
-   * reasons: a consumer whose shell remounts on navigation can persist it and hand it back,
-   * and expansion is a property of the menu as a whole — one sub opening must not disturb
-   * another, which is exactly what per-sub local state cannot guarantee across a remount.
+   * Ids of the expanded inline subs. The ROOT owns this so a consumer whose shell remounts
+   * can persist and hand it back, and so one sub opening cannot disturb another — per-sub
+   * local state guarantees neither across a remount.
    */
   const expandedModel = defineModel<string[]>('expanded', { default: () => [] })
 
@@ -78,9 +77,8 @@
   const role = computed(() => (attrs['role'] as string | undefined) ?? 'navigation')
 
   /**
-   * The name goes with the role. A presentational element takes no accessible name — ARIA
-   * prohibits it and the a11y tree drops it — so a menu whose host owns the landmark
-   * (`Sidebar` is a `<nav>`) would otherwise carry a label naming nothing.
+   * The name goes with the role: ARIA prohibits an accessible name on a presentational
+   * element (the a11y tree drops it), so a menu whose host owns the landmark gets no label.
    */
   const ariaLabelAttr = computed(() =>
     role.value === 'presentation' || role.value === 'none' ? undefined : props.ariaLabel
@@ -93,7 +91,6 @@
     cn('relative flex w-full flex-col', attrs.class as string | undefined)
   )
 
-  // ---- drill stack -------------------------------------------------------------
   const labels = ref<Record<string, string>>({})
   const triggers = new Map<string, globalThis.HTMLElement | null>()
   const motion = ref<MenuMotion>('none')
@@ -124,10 +121,9 @@
   const isLevelMounted = (id: string) => path.value.includes(id) || leaving.value.includes(id)
 
   /**
-   * A level names itself when its trigger mounts, so the stack does not depend on the push that
-   * would normally have supplied the label. That matters for a `v-model:path` seeded from
-   * outside — the case where a consumer persists the stack so a level survives the host
-   * remounting — which reaches this component as state with no activation behind it.
+   * A level names itself when its trigger mounts, so the stack does not depend on a push
+   * having supplied the label — a `v-model:path` seeded from outside reaches this component
+   * as state with no activation behind it.
    */
   const registerLevel = (id: string, label: string, trigger: globalThis.HTMLElement | null) => {
     triggers.set(id, trigger)
@@ -167,7 +163,6 @@
     backHost.value = el
   }
 
-  // ---- expansion ---------------------------------------------------------------
   /** Seeded once per id, so a sub's `defaultOpen` cannot fight the consumer's own state. */
   const seededExpandable = new Set<string>()
 
@@ -205,19 +200,14 @@
   })
 
   /**
-   * The state this menu mounts with was RESTORED, not travelled to — the consumer persisted
-   * `path` so the view could survive the host remounting. Whether that arrival should look like
-   * an entrance is something only the consumer knows: travelling between levels and navigating
-   * *within* one both remount the host and both restore the same stack, so they are
-   * indistinguishable from here. `enterOnMount` is that answer; without it the menu renders in
-   * place, because replaying the entrance on every navigation inside a level reads as the menu
-   * re-opening under someone who never left it.
+   * A mount with a populated stack was RESTORED. Only the consumer can tell an entrance from
+   * navigation within a level (both remount and restore the same stack) — `enterOnMount` is
+   * that answer; without it the menu renders in place instead of replaying the entrance.
    */
   onMounted(() => {
     if (!props.enterOnMount) return
-    // The DIRECTION falls out of the restored stack rather than being a second thing to pass: a
-    // menu that mounts inside a level was travelled INTO (push), and one that mounts at the root
-    // was travelled BACK to (pop) — the rail arriving is as much an entrance as a level is.
+    // Direction falls out of the restored stack: mounting inside a level was travelled INTO
+    // (push); mounting at the root was travelled BACK to (pop).
     motion.value = path.value.length > 0 ? 'push' : 'pop'
     endMotion()
   })
@@ -233,9 +223,8 @@
     pop()
   }
 
-  // ---- data-driven mode --------------------------------------------------------
-  // The tree is recursive, so it is built with `h` and rendered through the very same
-  // sub-components a hand-composed menu uses.
+  // Recursive tree: built with `h`, rendered through the same sub-components a hand-composed
+  // menu uses.
   const renderNode = (node: MenuNode): VNode => {
     const children = node.children ?? []
     const isDrill = (node.kind ?? 'inline') === 'drill'
@@ -270,23 +259,19 @@
           h(MenuSubTrigger, {
             label: node.label,
             kind: node.kind ?? 'inline',
-            // Honoured for a drill row only; an inline trigger heads the rows beneath it and
-            // leaves the icon column to them, which `MenuSubTrigger` itself enforces.
+            // Honoured for a drill row only — MenuSubTrigger itself enforces it.
             icon: node.icon ?? '',
             disabled: node.disabled ?? false,
             // A drill row is a DESTINATION as well as a level: it announces its activation so
-            // the consumer can route to the level's landing page while the level opens,
-            // instead of leaving the user on the page they were already on. An inline row only
-            // toggles — that is not a navigation — so it emits nothing.
+            // the consumer can route to the level's landing page while the level opens. An
+            // inline row only toggles — not a navigation — so it emits nothing.
             ...(isDrill
               ? { onClick: (event: globalThis.MouseEvent) => emit('navigate', event, node) }
               : {})
           }),
           h(MenuSubContent, null, {
-            // A drilled level is a container so it can hold groups like the root: given
-            // `groups` it renders them through the very same path the root uses, and given
-            // only `children` it wraps them in one unlabeled group to supply the list an
-            // inline level would have been. An inline level IS the list, so rows go in bare.
+            // Given `groups` a drilled level renders them like the root; given only `children`
+            // it wraps them in one unlabeled group. An inline level IS the list, so rows go in bare.
             default: () =>
               isDrill
                 ? (levelGroups ?? [{ items: children }]).map(renderGroup)
@@ -318,23 +303,18 @@
     :class="rootClass"
     @keydown="onKeydown"
   >
-    <!-- The slot renders alongside a data-driven tree, not instead of it: a `Menu.Back`
-         is the one row a `groups` consumer still has to place by hand, and without this
-         a drilled level would have no pointer route back. It comes first so Back sits
-         above the rows it returns from. -->
+    <!-- The slot renders alongside a data-driven tree: Menu.Back is the one row a `groups`
+         consumer still places by hand, and without it a drilled level has no pointer route
+         back. It comes first so Back sits above the rows it returns from. -->
     <slot />
     <component
       v-for="(tree, index) in groupTrees"
       :is="tree"
       :key="index"
     />
-    <!--
-      Deliberately NOT positioned. The host sits after the groups, so a level that is out of
-      flow must resolve its `top-0` against the menu ROOT (which is `relative`) — against the
-      host it would hang below the groups instead of overlaying them, and a level sliding out
-      would trail underneath the menu that replaced it. The CURRENT level stays in flow here,
-      so it still gives the menu its height.
-    -->
+    <!-- Deliberately NOT positioned: an out-of-flow level must resolve its top offset against
+         the menu ROOT — against this host it would hang below the groups instead of overlaying
+         them. The CURRENT level stays in flow here, so it still gives the menu its height. -->
     <div
       ref="levelHost"
       :data-testid="`${testId}__levels`"

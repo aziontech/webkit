@@ -186,18 +186,10 @@ const highlightJavaScriptLine = (line: string): CodeBlockHighlightToken[] => {
   return tokens.length ? tokens : [{ text: line || ' ', type: 'identifier' }]
 }
 
-// Shell / CLI lines. A command line has a different shape from an expression: the FIRST
-// word is the program being run (a function call), flags are its modifiers, and the rest
-// is data. That maps onto the same seven token types as JavaScript, so shell needs no new
-// syntax token — it reuses the code-sintax palette:
-//
-//   comment      # a full-line comment
-//   function     the program, and any program after a pipe / && / ; (curl, azion, bash)
-//   keyword      shell language words (if, for, export) and every -f / --flag
-//   string       quoted text
-//   type         a variable expansion ($HOME, ${VAR}) — the one thing that is a value
-//   punctuation  the operators that join commands (| && || ; > < ( ))
-//   identifier   sub-commands, paths, URLs, whitespace
+// Shell reuses the same seven token types as JavaScript: the program (first word,
+// or the word after a pipe/joiner) is `function`, shell language words and flags
+// are `keyword`, quoted text is `string`, a variable expansion is `type`, joining
+// operators are `punctuation`, and sub-commands / paths / URLs fall to `identifier`.
 const highlightShellLine = (line: string): CodeBlockHighlightToken[] => {
   const tokens: CodeBlockHighlightToken[] = []
 

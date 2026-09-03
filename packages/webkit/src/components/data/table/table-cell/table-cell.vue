@@ -56,13 +56,10 @@
 
   const cellRef = ref<HTMLElement | null>(null)
 
-  // The cell decides whether a click belongs to it or to the row. A cell that
-  // owns its click — a link/clickable cell, the selection checkbox, or a
-  // row-action control — swallows the click so it never also fires the
-  // row-level click; an inert cell lets it bubble to the row, so a table with
-  // no owning cells stays fully row-clickable. The listener is attached
-  // natively (not via @click) so an inert cell remains a plain, non-interactive
-  // element with no implied keyboard affordance.
+  // A cell that owns its click (clickable, checkbox, or action) swallows it so the
+  // row-level click never also fires; an inert cell lets it bubble to the row. The
+  // listener is attached natively rather than via @click so an inert cell stays a
+  // plain non-interactive element with no implied keyboard affordance.
   const ownsClick = computed<boolean>(
     () => props.clickable || props.kind === 'action' || props.kind === 'checkbox'
   )

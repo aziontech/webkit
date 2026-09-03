@@ -1,18 +1,8 @@
 #!/usr/bin/env node
-// @aziontech/webkit — bin name `webkit`.
-//
-//   npx @aziontech/webkit init [--dry-run] [--strict|--recommended] [-y|--yes]
-//                              [--no-icons] [--no-entry]
-//   npx @aziontech/webkit doctor
-//
-// `init` wires the design system into an existing project in one command: dependencies,
-// lint configs, pre-commit, the webkit MCP, the Claude Code bundle, a CLAUDE.md fragment,
-// and the style imports at the app entry (`--dry-run` plans without writing; idempotent
-// by design). On a TTY it asks about the optional pieces — icons, entry wiring — unless
-// `--yes`. Feature-scoped setup (e.g. the toast service) is deliberately NOT part of
-// init: it is wired just-in-time at first use (the component's catalog `setup` recipe,
-// surfaced by the MCP and the Claude bundle), and `doctor` flags it when missing.
-// `doctor` checks that the wiring is healthy and reports resolved dependency versions.
+// @aziontech/webkit — bin name `webkit`. `init` wires the design system into an
+// existing project (idempotent; `--dry-run` plans only); `doctor` checks the wiring.
+// Feature-scoped setup (e.g. toast) is deliberately NOT part of init: it is wired
+// just-in-time from the component's catalog `setup` recipe; `doctor` flags it when missing.
 
 import { applyPlan } from './apply.js'
 import { planDoctor } from './doctor.js'
@@ -72,11 +62,8 @@ function parseArgs(argv) {
   }
 }
 
-// Ask about the optional pieces — icons, entry wiring — one Y/n question each.
-// Only on a real TTY and without --yes: piped/CI runs never hang on a prompt, they take
-// the defaults (all on) minus any --no-* flag. A --no-* flag also suppresses its question.
-// Feature-scoped setup (toast, …) is not asked here — it is wired just-in-time at first
-// use, from the component's catalog `setup` recipe; `doctor` flags it when missing.
+// Prompts only on a real TTY without --yes, so piped/CI runs never hang; a --no-*
+// flag also suppresses its question.
 async function resolveInitOptions(parsed) {
   const opts = {
     recommended: parsed.recommended,
@@ -143,7 +130,6 @@ function labelFor(result) {
 
 function printResult({ action, result, detail }) {
   if (result === 'advised') {
-    // Multi-line reminders / snippets get their own block.
     process.stdout.write(`\nNOTE   ${detail}\n`)
     return
   }
@@ -183,8 +169,7 @@ async function run(argv) {
     return command ? 0 : help ? 0 : 1
   }
 
-  // Reject typo'd flags loudly — silently ignoring `--dryrun` would perform a real
-  // write run when the user meant `--dry-run`.
+  // A silently ignored `--dryrun` would perform a real write run.
   if (unknown.length) {
     process.stderr.write(`Unknown option(s): ${unknown.join(', ')}\n\n${HELP}`)
     return 1

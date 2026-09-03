@@ -9,58 +9,9 @@
   import ItemTitle from '../../content/item/item-title.vue'
 
   /**
-   * One row of the documentation's related-content list: a glyph, a name, and
-   * the sentence that says what the thing is. It is the "Related products"
-   * shape — the list a page ends on, where the reader is choosing what to read
-   * next rather than scanning a grid of sections.
-   *
-   * IT IS A ROW, NOT A CARD. `DocCard` is a cell in a grid and claims a whole
-   * tile; this claims one line of the framed list it sits in. So it reuses the
-   * webkit `Item` anatomy — media, content, title, description — which is the
-   * same row the console lists resources with, and `ItemList` (the list the
-   * page composes, inside a `FrameBox`) rules between the rows. The docs layer
-   * only decides what goes in each region.
-   *
-   * THE LINK IS THE TITLE, STRETCHED OVER THE ROW. The anchor wraps the name, so
-   * its accessible name is that name and nothing has to be duplicated into an
-   * `aria-label`; a full-bleed `::after` then makes the whole row its hit area.
-   * That is what lets the row be a real list item — `role="listitem"` is not a
-   * role an anchor may take (axe `aria-allowed-role`), and an anchor wrapping
-   * the whole row would leave the list's `role="list"` with no allowed children.
-   * Hover and the focus ring are driven off that one link (`has-[a:…]`), which
-   * is also how `Item` is specified to work: the shell draws no interaction of
-   * its own and the slotted link owns it.
-   *
-   * THE ROW IS THE CONSOLE'S WIZARD ROW. A "how do you want to start?" row in the
-   * application create is the same object as this one — a glyph, a name, a
-   * sentence, and a chevron saying the row goes somewhere — so it wears the same
-   * clothes: the framed 32px tile (`--shape-elements` / `--border-muted` /
-   * `--bg-surface-raised`, glyph in `--text-default`) rather than `ItemMedia`'s
-   * own `kind="icon"` frame, and `pi-chevron-right` in `ItemActions` rather than
-   * an arrow floating at the row's end — unless the row LEAVES the documentation
-   * (an absolute URL, or an explicit `target="_blank"`), where the glyph becomes
-   * `pi-arrow-up-right` and travels its own diagonal on hover, the same pair
-   * `DocCard`'s closing link draws for the same distinction. The tile classes ride on `ItemMedia`
-   * itself instead of a nested span — one element fewer for the same box, since
-   * the default region already centres its child and top-aligns beside a
-   * description.
-   *
-   * BOTH FLANKS ARE THE SAME 32px SQUARE. The chevron gets the tile's footprint
-   * rather than only its own 14px glyph, so the row is bracketed evenly instead
-   * of trailing off, and every row's text starts and ends on the same two lines
-   * however long its sentence runs. The width is `min-w-8`, not `size-8`:
-   * `ItemActions` ships `w-fit`, and a `w-8` next to it is a coin-toss on
-   * stylesheet order, while a min-width simply wins.
-   *
-   * The density is NOT the wizard's `size="small"`. That row is a control in a
-   * compact card, tight on purpose; this one is read, and at an 8px gap the tile
-   * crowds the name it labels. It keeps the list's default 16px — the same step
-   * the card pads with, so the tile, the text and the card edge share one rhythm.
-   *
-   * `data-doc-chrome` stops `DocProse` at the row's edge: the description is a
-   * real paragraph and the title a heading-ish line, and prose rules would give
-   * them body-copy spacing and colour, undoing the row. The one thing carried
-   * back in is the inline-code chip, which the author writes inside the sentence.
+   * One row of the docs related-content list, on the webkit Item anatomy. The
+   * anchor wraps only the title, and a full-bleed after-pseudo makes the row its
+   * hit area: listitem is not a role an anchor may take (axe aria-allowed-role).
    */
   defineOptions({ name: 'DocItem', inheritAttrs: false })
 
@@ -97,14 +48,15 @@
 
   const isLink = computed(() => props.href.length > 0)
 
-  // Leaves the documentation: an absolute URL (http(s) or protocol-relative), a
-  // `mailto:`, or a row the page has explicitly told to open in a new tab.
+  // External: an absolute or protocol-relative URL, a mailto, or an explicit new tab.
   const isExternal = computed(
     () => props.target === '_blank' || /^(https?:)?\/\/|^mailto:/.test(props.href)
   )
 </script>
 
 <template>
+  <!-- data-doc-chrome stops DocProse at the row's edge: prose rules would restyle
+       the title and description as body copy. -->
   <Item
     v-bind="$attrs"
     role="listitem"
@@ -141,6 +93,8 @@
         <slot>{{ label }}</slot>
       </ItemDescription>
     </ItemContent>
+    <!-- A min-width, not a fixed width: ItemActions sets its own fit width, and a
+         fixed width beside it would fall to stylesheet order. -->
     <ItemActions
       v-if="isLink"
       class="h-8 min-w-8 justify-center self-center"

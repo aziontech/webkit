@@ -1,24 +1,7 @@
-// Pure planner for `webkit init`.
-//
-// `planInit(projectDir, opts)` returns an ordered list of actions the CLI will
-// apply — WITHOUT touching disk. Every decision that depends on the project's
-// current state (does an eslint config already exist? is the webkit MCP already
-// registered?) is made here by READING the project, never by writing it. That
-// keeps the logic pure and testable: given a project dir, the plan is a value.
-//
-// Action shapes (the `type` field drives `apply.js`):
-//
-//   { type: 'add-dep',   dep, version, dev }              // record a package.json dependency
-//   { type: 'write',     path, content, skipIfExists }    // write a file (skip if present)
-//   { type: 'merge-json', path, merge, description }       // deep-merge into a JSON file
-//   { type: 'append',    path, content, marker }          // append once, guarded by a marker
-//   { type: 'copy',      from, to }                        // copy a template file (only if missing)
-//   { type: 'patch-entry', path, imports }                 // prepend missing import lines to the app entry
-//   { type: 'advise',    message }                         // print-only; never touches disk
-//
-// `advise` actions carry no filesystem effect — they surface reminders and
-// merge snippets the user must apply by hand (e.g. an eslint config already
-// exists, so we print the snippet instead of clobbering it).
+// Pure planner for `webkit init`: `planInit(projectDir, opts)` reads the project and
+// returns an ordered action list without touching disk, so the plan is a testable value.
+// The `type` field drives apply.js: add-dep, write, merge-json, append, copy,
+// patch-entry, advise (print-only — reminders and merge snippets applied by hand).
 
 import { existsSync, readFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
@@ -28,48 +11,39 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 const TEMPLATES = join(__dirname, '../../cli-templates')
 const CLAUDE_TEMPLATES = join(TEMPLATES, 'claude')
 
-// Kept as a floating range so the consumer always resolves the latest published
-// design-system version; `apply.js` never downgrades an existing pin.
+// Floating range so the consumer resolves the latest published design-system
+// version; `apply.js` never downgrades an existing pin.
 const DEP_VERSION = 'latest'
 
-// The eslint plugin, stylelint config and MCP all ship INSIDE @aziontech/webkit
-// (subpaths + bins), so the consumer installs only the design-system package + tooling
-// peers — no separate @aziontech/* toolkit packages.
+// The eslint plugin, stylelint config and MCP ship inside @aziontech/webkit
+// (subpaths + bins) — no separate toolkit packages to install.
 const RUNTIME_DEPS = ['@aziontech/webkit', '@aziontech/theme']
-// The icon font is optional — `init` asks (or takes `--no-icons`); most apps want it.
+// Optional icon font — `init` asks (or takes `--no-icons`).
 const ICONS_DEP = '@aziontech/icons'
 
 const DEV_DEPS = [
   'eslint',
   'stylelint',
   'vue-eslint-parser',
-  // Static a11y lint for .vue composition — backs the accessibility skill with a blocking
-  // floor (the runtime half is axe, run by the webkit-ui-verifier agent).
+  // Static a11y floor backing the accessibility skill (the runtime half is axe).
   'eslint-plugin-vuejs-accessibility',
-  // TS sub-parser: the standards mandate <script setup lang="ts">, which
-  // vue-eslint-parser alone cannot parse.
+  // TS sub-parser: the standards mandate TS script setup, which vue-eslint-parser alone cannot parse.
   '@typescript-eslint/parser',
-  // stylelint needs a custom syntax to parse `.vue` <style> blocks and `.scss` — the
-  // generated .stylelintrc wires these, so they must be installed too.
+  // Custom syntaxes the generated .stylelintrc wires for .vue style blocks and .scss.
   'postcss-html',
   'postcss-scss',
   'husky'
 ]
 
-// Style pipeline deps, pinned to explicit ranges (NOT "latest"). @aziontech/theme ships a
-// Tailwind v4 stylesheet (`@import "tailwindcss"` in its globals), so the consumer runs
-// Tailwind v4 via its PostCSS plugin (`@tailwindcss/postcss`) — Vite auto-detects the
-// generated postcss.config, so no vite.config change is needed. The consumer's Tailwind must
-// still scan webkit's source for the component classes (data-[kind=…]:…) to be generated at
-// all — that is the `@source` directive in the CSS entry below; without it the components
-// render UNSTYLED. (v4 is CSS-first: no tailwind.config, no preset, no autoprefixer.)
+// Pinned ranges (not "latest"). The theme ships a Tailwind v4 stylesheet, so the consumer
+// runs v4 via @tailwindcss/postcss; the CSS entry's `@source` registration is what makes
+// Tailwind compile webkit's component classes — without it the components render unstyled.
 const STYLE_DEV_DEPS = [
   { dep: 'tailwindcss', version: '^4.0.0' },
   { dep: '@tailwindcss/postcss', version: '^4.0.0' }
 ]
 
-// The Claude Code bundle files, relative to templates/claude. Copied into the
-// consumer's `.claude/` (only when the destination file is missing).
+// Claude Code bundle files, copied into the consumer's `.claude/` only when missing.
 const CLAUDE_BUNDLE = [
   // usage rules (consuming webkit)
   'rules/webkit-imports.md',
@@ -145,10 +119,8 @@ function firstExisting(projectDir, candidates) {
 }
 
 function eslintFlatConfig(severityConfig) {
-  // A flat (ESLint 9) config that spreads the webkit preset and wires
-  // `vue-eslint-parser` for `.vue` files — with the TypeScript sub-parser, because the
-  // construction standards mandate `<script setup lang="ts">` and vue-eslint-parser
-  // alone cannot parse it. `severityConfig` is 'strict' or 'recommended'.
+  // Flat ESLint 9 config: webkit preset ('strict' | 'recommended') + vue-eslint-parser
+  // with the TS sub-parser (vue-eslint-parser alone cannot parse TS script setup).
   return `import webkitPlugin from '@aziontech/webkit/eslint-plugin'
 import a11y from 'eslint-plugin-vuejs-accessibility'
 import vueParser from 'vue-eslint-parser'
@@ -185,9 +157,8 @@ export default [
 `
 }
 
-// PostCSS config: Tailwind v4's PostCSS plugin. Vite auto-detects postcss.config.mjs, so
-// this is all the wiring the consumer needs — no vite.config change. `.mjs` forces ESM
-// regardless of package.json `type`. (v4 folds autoprefixer in; no separate plugin.)
+// Vite auto-detects postcss.config.mjs, so no vite.config change; `.mjs` forces ESM
+// regardless of package.json `type`. (v4 folds autoprefixer in.)
 function postcssConfig() {
   return `export default {
   plugins: {
@@ -197,15 +168,10 @@ function postcssConfig() {
 `
 }
 
-// The CSS entry the consumer imports once (e.g. from src/main). `@import '@aziontech/theme'`
-// pulls the design system's Tailwind v4 stylesheet (tokens + `@import "tailwindcss"` + web
-// fonts) in one line; `@import '@aziontech/webkit/styles'` then registers webkit's SOURCE
-// with Tailwind (its `@source` lives inside the package and resolves relative to it) so the
-// component utility classes (data-[kind=…]:bg-(--…)) are generated in the consumer's
-// build — node_modules is excluded from Tailwind's auto content-detection, so without it the
-// webkit components render UNSTYLED. Both imports resolve by package name: no relative
-// ../node_modules path, immune to hoisting / workspace layouts. The consumer's own src is
-// auto-detected.
+// The CSS entry the consumer imports once. The theme import pulls the Tailwind v4
+// stylesheet; the webkit/styles import registers webkit's source with Tailwind
+// (node_modules is excluded from auto content-detection) — without it the components
+// render unstyled. Both resolve by package name, immune to hoisting/workspace layouts.
 function styleEntryContent() {
   return `/* @aziontech/webkit design-system styles. Import this once from your app entry. */
 @import '@aziontech/theme';
@@ -224,8 +190,7 @@ const ESLINT_SNIPPET_HEADER =
 const STYLELINT_SNIPPET_HEADER =
   'A Stylelint config already exists — not overwriting it. Merge the webkit config manually:'
 
-// `.vue` <style> blocks and `.scss` need a custom syntax; the base config leaves that
-// to the consumer, so init wires it here (postcss-html / postcss-scss are in DEV_DEPS).
+// .vue style blocks and .scss need a custom syntax the base config leaves to the consumer.
 const STYLELINT_CONTENT = `${JSON.stringify(
   {
     extends: ['@aziontech/webkit/stylelint-config'],
@@ -238,9 +203,8 @@ const STYLELINT_CONTENT = `${JSON.stringify(
   2
 )}\n`
 
-// husky v9+: the hook file is just the commands. (The old `. .../husky.sh` bootstrap
-// line was removed in v9 and now warns/breaks.) Hooks activate via the `prepare`
-// script (`husky`), which init adds to package.json.
+// husky v9+: the hook file is just the commands (the old husky.sh bootstrap line now
+// warns/breaks); hooks activate via the `prepare` script init adds to package.json.
 const HUSKY_PRECOMMIT = `# Lint with the webkit rules before every commit.
 npx eslint .
 npx stylelint "**/*.{css,scss,vue}"
@@ -251,16 +215,7 @@ function claudeFragment() {
   return read(join(CLAUDE_TEMPLATES, 'CLAUDE.fragment.md')) || ''
 }
 
-/**
- * Build the ordered init plan for `projectDir`.
- *
- * @param {string} projectDir absolute path to the consumer project
- * @param {object} [opts]
- * @param {boolean} [opts.recommended] use the `recommended` eslint preset instead of `strict`
- * @param {boolean} [opts.icons] install @aziontech/icons + wire its import (default true)
- * @param {boolean} [opts.wireEntry] add the style imports to the app entry file (default true)
- * @returns {Array<object>} ordered list of actions (no disk writes)
- */
+/** Build the ordered init plan for `projectDir`. Pure — no disk writes. */
 export function planInit(projectDir, opts = {}) {
   const actions = []
   const severity = opts.recommended ? 'recommended' : 'strict'
@@ -285,11 +240,7 @@ export function planInit(projectDir, opts = {}) {
       'Dependencies recorded in package.json — run your package manager install (npm install / pnpm install / yarn) to fetch them.'
   })
 
-  // 1b. PostCSS (Tailwind v4) — @aziontech/theme ships a v4 stylesheet, so the consumer runs
-  //     Tailwind v4 via its PostCSS plugin; Vite auto-detects postcss.config.mjs (no
-  //     vite.config change). The CSS entry's `@source` points Tailwind at webkit's source so
-  //     its component classes compile — without it the components render unstyled. Write if
-  //     absent; otherwise print a merge snippet.
+  // 1b. PostCSS (Tailwind v4) — write if absent; otherwise print a merge snippet.
   const existingPostcss = firstExisting(projectDir, POSTCSS_CONFIG_CANDIDATES)
   if (existingPostcss) {
     actions.push({
@@ -304,8 +255,7 @@ export function planInit(projectDir, opts = {}) {
       skipIfExists: true
     })
   }
-  // A ready-to-import CSS entry (`@import '@aziontech/theme'` + `@source` over webkit).
-  // Written only if missing; the entry-file advice below points the app at it.
+  // Ready-to-import CSS entry; written only if missing.
   actions.push({
     type: 'write',
     path: 'src/webkit.css',
@@ -313,8 +263,7 @@ export function planInit(projectDir, opts = {}) {
     skipIfExists: true
   })
 
-  // 2. eslint.config.mjs — write if absent; otherwise print a merge snippet. The `.mjs`
-  //    extension guarantees ESM regardless of the project's package.json `type`.
+  // 2. eslint.config.mjs — write if absent; otherwise print a merge snippet.
   const existingEslint = firstExisting(projectDir, ESLINT_CONFIG_CANDIDATES)
   if (existingEslint) {
     actions.push({
@@ -330,8 +279,7 @@ export function planInit(projectDir, opts = {}) {
     })
   }
 
-  // 3. .stylelintrc.json — write if absent; otherwise print a merge snippet (mirrors
-  //    the eslint path so an existing stylelint config is never silently duplicated).
+  // 3. .stylelintrc.json — write if absent; otherwise print a merge snippet.
   const existingStylelint = firstExisting(projectDir, STYLELINT_CONFIG_CANDIDATES)
   const pkgHasStylelint = (() => {
     const raw = read(join(projectDir, 'package.json'))
@@ -364,10 +312,8 @@ export function planInit(projectDir, opts = {}) {
     merge: { mcpServers: { [MCP_SERVER_NAME]: MCP_SERVER_ENTRY } }
   })
 
-  // 5. package.json `prepare` script so husky activates hooks on install (husky v9
-  //    needs this; without it .husky/pre-commit never runs). Merge only if absent —
-  //    and when a DIFFERENT prepare script already exists, say so out loud instead of
-  //    silently leaving the hooks inert.
+  // 5. husky v9 needs scripts.prepare="husky" or .husky/pre-commit never runs; when a
+  //    different prepare script exists, advise loudly instead of leaving hooks inert.
   const existingPrepare = (() => {
     const raw = read(join(projectDir, 'package.json'))
     if (!raw) return undefined
@@ -424,14 +370,9 @@ export function planInit(projectDir, opts = {}) {
     marker: CLAUDE_FRAGMENT_MARKER
   })
 
-  // 8. Wire the design-system imports into the app entry. Importing the generated
-  //    src/webkit.css (not `@aziontech/theme` bare) is what includes the `@source` that
-  //    compiles webkit's component classes — skipping this step is exactly the "installed
-  //    but unstyled" failure. By default the imports are PATCHED into the entry file
-  //    (prepended once, idempotent); `wireEntry: false` (`--no-entry`) falls back to advice.
-  //    Feature-scoped setup (e.g. the toast service) is deliberately NOT wired here — it is
-  //    installed just-in-time at first use from the component's catalog `setup` recipe, and
-  //    `doctor` flags it when missing.
+  // 8. Wire the entry imports. Importing the generated src/webkit.css is what includes
+  //    the `@source` that compiles webkit's classes — skipping it is the "installed but
+  //    unstyled" failure. `--no-entry` falls back to printed advice.
   const entry = firstExisting(projectDir, ENTRY_CANDIDATES)
   const entryImports = ["import './webkit.css'"]
   if (icons) entryImports.push("import '@aziontech/icons'")
@@ -452,8 +393,7 @@ export function planInit(projectDir, opts = {}) {
     })
   }
 
-  // 9. Theme selection — the tokens default to LIGHT (:root). Dark is opt-in via a
-  //    data-theme attribute on <html>; say so, since nothing else in the wiring reveals it.
+  // 9. Tokens default to LIGHT; dark is opt-in — nothing else in the wiring reveals it.
   actions.push({
     type: 'advise',
     message:

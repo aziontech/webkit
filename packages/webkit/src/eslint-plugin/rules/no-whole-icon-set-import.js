@@ -1,9 +1,7 @@
-// Flags a default / namespace BINDING import of @aziontech/icons. That package is an
-// icon FONT: its entry is CSS, so the correct usage is a side-effect import
-// (`import '@aziontech/icons'`) plus the icon CSS classes — a default/namespace binding
-// is meaningless and usually a mistake. Side-effect imports (no specifiers) are allowed.
-// Type-only imports are exempt. A module that intentionally imports the set can opt out
-// via the `allowedFiles` option.
+// Flags a default/namespace BINDING import of @aziontech/icons — an icon FONT whose
+// entry is CSS, so a binding is meaningless; correct usage is a side-effect import plus
+// the icon CSS classes. Side-effect and type-only imports are exempt; a module that
+// intentionally imports the set opts out via the `allowedFiles` option.
 
 export default {
   meta: {

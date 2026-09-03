@@ -42,10 +42,6 @@
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'layout-frame-box')
 
-  // Every "which parts" prop resolves to a set of side / corner names, so a keyword, a single
-  // name and an explicit list are the same thing by the time anything renders. `flush` is the
-  // one that also accepts `true`, because a bare `flush` attribute is how a vertical stack
-  // reads and `top` is what that means.
   function resolveSides(value: boolean | FrameBoxSides): Set<FrameBoxSide> {
     if (value === true) return new Set<FrameBoxSide>(['top'])
     if (value === false || value === 'none') return new Set<FrameBoxSide>()
@@ -68,10 +64,8 @@
 
   const flushSides = computed(() => resolveSides(props.flush))
 
-  // `flush` is a subtraction, not an override: a side a neighbour already draws is simply not
-  // in this frame's set. That is what makes it work on both axes — dropping `left` for a frame
-  // in a horizontal row is the same operation as dropping `top` in a vertical stack — and it
-  // means a shared edge is one rule at one colour, never two hairlines meeting.
+  // `flush` subtracts the sides a neighbour already draws, so a shared edge is
+  // one rule at one colour — never two hairlines meeting.
   const borderSides = computed(() => {
     const sides = resolveSides(props.borders)
     for (const side of flushSides.value) sides.delete(side)
@@ -80,8 +74,8 @@
 
   const markCorners = computed(() => resolveCorners(props.marks))
 
-  // Space-separated so a Tailwind `data-[borders~=top]:` variant can match one name out of the
-  // list; `none` keeps the attribute readable (and unmatchable) when the set is empty.
+  // Space-separated so a data-attribute word-match variant can target one name out
+  // of the list; `none` keeps the attribute unmatchable when the set is empty.
   const listAttr = (names: Set<string>) => (names.size > 0 ? [...names].join(' ') : 'none')
 
   const bordersAttr = computed(() => listAttr(borderSides.value))
@@ -92,18 +86,15 @@
 
   const hasCorner = (corner: FrameBoxCorner) => markCorners.value.has(corner)
 
-  // Each square is anchored to a corner and inset from both rules by its own margin,
-  // so the mark sits INSIDE the frame instead of straddling the border line. At 6px
-  // filled it reads as a tick in the corner, not as a second, competing border.
+  // Anchored to a corner and inset from both rules by its own margin, so the mark
+  // sits inside the frame; at 6px filled it reads as a tick, not a second border.
   const MARK_CLASS = 'pointer-events-none absolute z-20 m-1 block size-1.5 bg-(--border-default)'
 </script>
 
 <template>
-  <!-- Rules, corner marks and hatch are all `--border-default`, an OPAQUE step of the surface
-       palette — so a rule has one identity on every backdrop and two of them meeting cannot
-       composite into a brighter line, which is what made a stacked junction read as a double
-       rule. Sides and corners are addressed individually: `data-borders` carries the resolved
-       side list and each edge matches its own `data-[borders~=…]` variant. -->
+  <!-- Rules, marks and hatch share the default border token, an OPAQUE surface step —
+       so two rules meeting cannot composite into a brighter line (what made a stacked
+       junction read as a double rule). Each edge matches its own resolved side name. -->
   <div
     v-bind="$attrs"
     :data-testid="testId"
@@ -113,19 +104,16 @@
     :data-flush="flushAttr"
     class="relative border-(--border-default) data-[borders~=bottom]:border-b data-[borders~=left]:border-l data-[borders~=right]:border-r data-[borders~=top]:border-t"
   >
-    <!-- Linear hatch texture — vertical rules at a fixed pitch, faded toward the edges by the
-         radial mask alone, so the line colour is the texture's full strength at the centre.
-         It is the design asset that gives a SectionGap its identity; see that component. -->
+    <!-- Hatch: vertical rules at fixed pitch, faded by the radial mask alone — the
+         asset that gives SectionGap its identity. -->
     <div
       v-if="hatch"
       aria-hidden="true"
       class="pointer-events-none absolute inset-0 [background-image:repeating-linear-gradient(to_right,var(--border-default)_0,var(--border-default)_1px,transparent_1px,transparent_var(--spacing-lg))] mask-[radial-gradient(ellipse_at_center,black_35%,transparent_90%)]"
     />
 
-    <!-- Corner registration squares, one per corner. Stacked or abutting frames share an edge,
-         so drawing both neighbours' ticks puts two squares a few pixels apart on one line;
-         addressing corners individually is what lets a stack read as one mark per corner, the
-         same way `flush` gives it one rule per shared edge. -->
+    <!-- Corners are addressed individually so abutting frames can drop duplicate ticks
+         and a stack reads one mark per corner — as `flush` gives one rule per shared edge. -->
     <span
       v-if="hasCorner('top-left')"
       aria-hidden="true"
@@ -147,11 +135,9 @@
       :class="[MARK_CLASS, 'right-0 bottom-0']"
     />
 
-    <!-- Content sits above the hatch texture. `h-full` is what lets a frame used as a
-         grid cell hand its stretched height down to the content: against an auto-height
-         frame it resolves to auto, but when the grid stretches the frame to the tallest
-         cell in the row, the content fills it — so a cell can push its footer onto the
-         row's bottom edge and align with its neighbours. -->
+    <!-- Full height hands a grid-stretched frame's height down to the content (auto
+         against an auto-height frame), so a cell's footer can sit on the row's bottom
+         edge and align with its neighbours. -->
     <div class="relative z-10 h-full">
       <slot />
     </div>

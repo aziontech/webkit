@@ -8,11 +8,8 @@ import { expectNoA11yViolations } from '../../../test/axe'
 import DocStep from '../doc-step/doc-step.vue'
 import DocSteps from './doc-steps.vue'
 
-// .claude/rules/testing.md: Vitest browser mode (real Chromium) loads NO Tailwind, so the
-// circle, the rail's width and every spacing token emit nothing here. Those belong to the
-// visual gate. What is real without CSS is the part that decides the walkthrough's
-// semantics: the provide/inject registry that numbers the steps in document order, the
-// last-step mark that structurally removes the connector element, and the testid contract.
+// Browser mode loads no Tailwind — circle/rail/spacing belong to the visual gate;
+// asserted here: the provide/inject numbering registry, the connector markup, testids.
 
 const { Default, WithBody } = composeStories(stories)
 
@@ -70,8 +67,7 @@ describe('DocSteps', () => {
 
       const steps = view.getAllByTestId('documentation-doc-step')
       expect(steps).toHaveLength(2)
-      // The surviving steps renumber: this is the behaviour registration buys, and
-      // it works because an unmount happens outside the parent's render pass.
+      // Renumbering works because an unmount happens outside the parent's render pass.
       expect(steps.map(circleText)).toEqual(['1', '2'])
     })
   })
@@ -81,12 +77,9 @@ describe('DocSteps', () => {
       const { getAllByTestId, container } = render(host(THREE_STEPS))
       const steps = getAllByTestId('documentation-doc-step')
 
-      // Whether a step is the final one is a question about DOM order, and it is
-      // answered by a last-child CSS variant rather than by a registration count —
-      // a count grows while the parent is still rendering, so each step would read
-      // it as it stood at its own setup and every step would think it was last.
-      // The markup is therefore uniform; the suppression itself belongs to the
-      // visual gate, since this environment loads no Tailwind.
+      // Last-ness is decided by a last-child CSS variant, not the registration count
+      // (a count read at each step's setup would make every step think it is last),
+      // so the markup is uniform and the suppression belongs to the visual gate.
       expect(container.querySelectorAll('[data-step-connector]')).toHaveLength(3)
       for (const step of steps) {
         expect(step.querySelector('[data-step-connector]')).not.toBeNull()

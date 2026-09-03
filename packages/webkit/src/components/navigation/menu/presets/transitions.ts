@@ -1,13 +1,8 @@
 import { curve, duration } from '@aziontech/theme/animations'
 
 /**
- * Menu motion presets — values read only from `animate.js` (`duration`, `curve`).
- *
- * Every phase of this component's motion is per-phase, open-vs-close motion driven by
- * `data-state`, which DESIGN.md § Motion routes through a presets module rather than the
- * catalogued `animate-*` keyframes: those are fixed-direction entrances with baked-in
- * timing and cannot express a push-vs-pop pair off one state. The timing therefore lives
- * here as an inline `transition`; the height / translate themselves stay Tailwind classes.
+ * Menu motion presets, values only from animate.js. Per DESIGN.md § Motion, state-driven
+ * push-vs-pop motion needs a presets module — the catalogued keyframes are fixed-direction.
  */
 
 export type MenuMotionTarget = 'collapse' | 'level'
@@ -37,11 +32,7 @@ export const MENU_COLLAPSE_EXIT_MS = Number.parseInt(menuMotion.collapse.leave.d
 /** Level slide-out duration in ms — how long a popped level stays mounted. */
 export const MENU_LEVEL_EXIT_MS = Number.parseInt(menuMotion.level.leave.duration, 10)
 
-/**
- * Level slide-in duration in ms — the explicit `Transition` enter duration for a level
- * that is mounting. A freshly inserted element has no previous computed style to tween
- * from, so the entering slide is the one phase that needs Vue's from-class + frame.
- */
+/** Level slide-in ms — a fresh element has nothing to tween from, so enter alone needs Vue's from-class. */
 export const MENU_LEVEL_ENTER_MS = Number.parseInt(menuMotion.level.enter.duration, 10)
 
 /** True when the user asked for reduced motion, so every hook short-circuits. */
@@ -55,33 +46,20 @@ export const getMenuCollapseTransitionStyle = (phase: MenuMotionPhase): { transi
 })
 
 /**
- * Inline transition for a drill level. Tailwind v4 compiles `translate-x-*` to the CSS
- * `translate` property, not the `transform` shorthand — so the level must transition
- * `translate`, or the slide would snap into place untweened.
- *
- * `opacity` rides along because `-translate-x-full` moves a level by its own width, which
- * is not enough to clear the clipping edge when the host insets the menu (a `Sidebar`
- * pads by `--spacing-md`, leaving that many pixels of the outgoing level on screen). The
- * component cannot know the host's padding, so the residual sliver is faded out instead
- * of chased with a larger translate.
+ * The transition must name `translate` (Tailwind v4 compiles translate utilities to it, not
+ * `transform`) or the slide snaps. Opacity rides along: a slide moves a level by its own
+ * width only, which cannot clear a host-inset clipping edge — so the sliver is faded.
  */
 export const getMenuLevelTransitionStyle = (
   phase: MenuMotionPhase,
   options: { fade?: boolean } = {}
 ): { transition: string } => {
   const { duration: d, curve: c } = menuMotion.level[phase]
-  // A surface SLIDING BACK IN does not fade: it has to be opaque to cover whatever is leaving
-  // behind it. Fading both sides puts two surfaces in the same space at partial opacity, and
-  // you read the outgoing one straight through the incoming one — which is the "conflict" a
-  // pop shows. Leaving still fades, because the translate alone cannot clear the sliver a
-  // host's padding leaves behind.
+  // A returning surface must stay opaque to cover what leaves (fading both sides reads the
+  // outgoing level through the incoming one); the leave still fades to clear the sliver.
   if (options.fade === false) return { transition: `translate ${d} ${c}` }
-  // Both phases move and fade. The leaving side MUST reach 0%, because the translate alone
-  // cannot clear the sliver a host's padding leaves behind. The earlier ghosting this seemed
-  // to cause was really the level host being positioned: an out-of-flow level resolved its
-  // `top` against the host, which sits after the groups, so it trailed *below* the menu that
-  // replaced it. With the host unpositioned and the current level on `z-10`, the two phases
-  // cross-fade in place as intended.
+  // The leaving side must reach full transparency. The ghosting this once seemed to cause
+  // was really a positioned level host; unpositioned, the two phases cross-fade in place.
   return { transition: `translate ${d} ${c}, opacity ${d} ${c}` }
 }
 
@@ -101,9 +79,8 @@ const runHeightTransition = (
   void node.offsetHeight
   node.style.height = `${to}px`
 
-  // `finish` closes over `fallback`, which is declared after it. That is safe because
-  // `finish` only ever runs from the listener or the timer below, both asynchronous —
-  // and it lets `fallback` stay `const` (a `let` assigned once trips `prefer-const`).
+  // `finish` closes over `fallback` (declared after it) — safe because it only runs from the
+  // listener or the timer, both asynchronous; and it lets `fallback` stay const.
   const finish = () => {
     globalThis.clearTimeout(fallback)
     node.removeEventListener('transitionend', finish)
@@ -119,10 +96,7 @@ const runHeightTransition = (
   const fallback = globalThis.setTimeout(finish, MENU_COLLAPSE_EXIT_MS + 50)
 }
 
-/**
- * `Transition` enter hook that grows a list from 0 to its content height.
- * Taking `done` is what tells Vue to wait for this hook.
- */
+/** Enter hook growing a list from 0 to content height; taking `done` tells Vue to wait for it. */
 export const collapseHeightOnEnter = (el: globalThis.Element, done: () => void): void => {
   const node = el as globalThis.HTMLElement
 

@@ -18,8 +18,7 @@
     label: ''
   })
 
-  // Optional, because the accessible name below depends on whether the consumer
-  // actually passed it — a non-optional signature makes that check always true.
+  // Optional signature — the accessible name below checks whether the slot was passed.
   const slots = defineSlots<{
     default?(): unknown
   }>()
@@ -31,10 +30,7 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'navigation-menu-back'
   )
 
-  /**
-   * Presence follows the level's own anchor, not the stack: on a pop the stack empties at
-   * once, but the level it named is still sliding out and must keep its header.
-   */
+  /** Follows the level's anchor, not the stack — a level still sliding out after a pop keeps its header. */
   const isVisible = computed(() => ctx.backHost.value !== null)
 
   /** The label of the trigger that opened the level this row belongs to. */
@@ -43,10 +39,7 @@
     return levels.length > 0 ? levels[levels.length - 1].label : ''
   })
 
-  /**
-   * Held over the slide-out. `levels` empties the instant a pop starts, so reading it live
-   * would blank the label of the very level the row is still labelling.
-   */
+  /** Held over the slide-out — `levels` empties the instant a pop starts. */
   const lastLabel = ref('')
   watch(levelLabel, (value) => {
     if (value) lastLabel.value = value
@@ -54,28 +47,21 @@
 
   const text = computed(() => props.label || levelLabel.value || lastLabel.value)
 
-  /**
-   * Only named here when the row renders its own text — a consumer slot owns both the
-   * visible text and the accessible name, so the two can never disagree.
-   */
+  /** Unset when the consumer slot renders: the slot then owns both visible text and accessible name. */
   const ariaLabel = computed(() => {
     if (slots.default) return undefined
     return text.value ? `Back to ${text.value}` : 'Back'
   })
 
-  // Back heads the same list as the drilled rows, so it shares `menu-item`'s row geometry
-  // (height, padding, gap, 32px icon box) — otherwise its label sits off the column the
-  // rows beneath it establish.
+  // Shares `menu-item`'s row geometry (height, padding, gap, icon box) so its label sits on
+  // the column the rows beneath it establish.
   const ROOT_CLASS =
-    // `mb` sets the Back row apart from the level's first group instead of letting it read
-    // as that group's first row — it heads the level, it is not part of it.
-    // No motion of its own: it renders INSIDE the current level (see the teleport below), so
-    // the level's slide carries it and its box never sits in the root's flow.
+    // The bottom margin sets Back apart from the level's first group — it heads the level.
+    // No motion of its own: it renders inside the current level, whose slide carries it.
     'group relative flex h-8 w-full shrink-0 items-center gap-(--spacing-xs) ' +
     'mb-(--spacing-sm) ' +
-    // Symmetric padding, unlike a nav row's: the label is centred against the whole row, so
-    // the leading and trailing insets have to match or it lands off-centre by their difference.
-    // The chevron still sits on the same column as an item's icon.
+    // Symmetric insets: the label centres against the whole row, so leading and trailing
+    // padding must match or it lands off-centre by their difference.
     'rounded-(--shape-elements) px-(--spacing-xxs) ' +
     'text-(--text-default) ' +
     "before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:bg-(--bg-hover) before:opacity-0 before:content-[''] before:transition-opacity before:duration-fast-02 before:ease-productive-entrance " +
@@ -93,12 +79,9 @@
 </script>
 
 <template>
-  <!--
-    Renders into the CURRENT level rather than where it is declared. That anchor only exists
-    while a level is pushed, which is exactly when Back should exist — so `isVisible` and the
-    host agree, the level's slide animates Back for free, and the root's flow never reserves
-    a row that is about to leave.
-  -->
+  <!-- Renders into the CURRENT level: that anchor exists only while a level is pushed, so
+       `isVisible` and the host agree, the level's slide animates Back for free, and the
+       root's flow never reserves a row that is about to leave. -->
   <Teleport
     v-if="isVisible"
     :to="ctx.backHost.value"
@@ -126,11 +109,8 @@
       <span class="min-w-0 flex-1 truncate text-center text-label-md">
         <slot>{{ text }}</slot>
       </span>
-      <!--
-        Balances the leading chevron's box so the label is centred against the FULL row rather
-        than against the space left over beside the chevron — otherwise it sits half an icon
-        box off-centre. Empty and hidden from assistive tech; it exists only to hold width.
-      -->
+      <!-- Balances the leading chevron's box so the label centres against the full row;
+           empty and hidden from assistive tech, it exists only to hold width. -->
       <span
         class="size-8 shrink-0"
         aria-hidden="true"

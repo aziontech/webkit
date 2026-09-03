@@ -1,12 +1,6 @@
-// Pure health-check planner for `webkit doctor`.
-//
-// `planDoctor(projectDir)` READS the project and returns an ordered list of
-// `{ check, status: 'ok' | 'warn' | 'fail', detail }` — it writes nothing. `cli.js`
-// prints the list and sets a non-zero exit code when any check is `fail`.
-//
-// Each check mirrors what `init` sets up, so doctor answers "is the toolkit actually
-// wired and healthy in this project?" — the fail-open toolkit is otherwise silent about
-// a half-broken install.
+// Pure health-check planner for `webkit doctor`: reads the project, returns ordered
+// `{ check, status, detail }` records, writes nothing. Each check mirrors what `init`
+// sets up — the fail-open toolkit is otherwise silent about a half-broken install.
 
 import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { createRequire } from 'node:module'

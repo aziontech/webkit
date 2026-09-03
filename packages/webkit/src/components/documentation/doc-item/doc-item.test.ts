@@ -6,13 +6,9 @@ import * as stories from '../../../../../../apps/storybook/src/stories/component
 import { expectNoA11yViolations } from '../../../test/axe'
 import DocItem from './doc-item.vue'
 
-// .claude/rules/testing.md: Vitest browser mode (real Chromium) loads NO Tailwind, so the row
-// hover fill, the ring, the stretched after-pseudo hit area and the glyph travel emit nothing
-// here. Those belong to the visual gate. What is real without CSS is the part that decides the
-// row's semantics: the listitem role on the shell, the anchor that wraps ONLY the title (its
-// accessible name), the link attributes, the external-destination glyph swap, and the testid
-// contract. The axe checks run on the composed FrameBox and ItemList stories, because the
-// listitem role is only valid under a list-role parent.
+// Browser mode loads no Tailwind — hover fill/ring/hit-area belong to the visual gate;
+// asserted here: roles, anchor scope, link attributes, glyph swap, testids. The axe
+// checks run on the composed stories: listitem is only valid under a list-role parent.
 
 const { Default, Variants } = composeStories(stories)
 

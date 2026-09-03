@@ -1,13 +1,9 @@
 import type { ComputedRef, InjectionKey } from 'vue'
 
 /**
- * What a registered step reads back from its DocSteps provider.
- *
- * There is deliberately no "last" flag here. Whether a step is the final one is a
- * question about DOM order, and a count that grows while the parent is still
- * rendering answers it wrong: each step would read the count as it stood at its own
- * setup. The connector and the trailing space are suppressed by a last-child CSS
- * variant instead, which is correct by construction and needs no state.
+ * Deliberately no "last" flag: a count that grows while the parent is still
+ * rendering reads wrong at each step's own setup, so the connector and trailing
+ * space are suppressed by a last-child CSS variant instead.
  */
 export interface DocStepHandle {
   /** 1-based position in document order; reactive to steps mounting and unmounting. */

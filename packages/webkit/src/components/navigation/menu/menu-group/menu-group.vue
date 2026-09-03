@@ -40,47 +40,29 @@
 
   const hasLabel = computed(() => Boolean(props.label) || Boolean(slots.label))
 
-  /**
-   * A group inside a drilled level is part of that level's own anatomy, and the level
-   * slides as one piece — so only a ROOT-level group is a surface that steps aside when a
-   * level is pushed. Without this a nested group would hide itself the moment the stack
-   * was non-empty, taking the pushed level's own rows out of the a11y tree with it.
-   */
-  // Resolved once, synchronously in setup — the component hierarchy cannot change.
+  // Only a ROOT-level group steps aside on a push — a nested one slides with its level;
+  // hiding it would pull the pushed level's own rows out of the a11y tree.
   const isNested = inject(MenuSubInjectionKey, null) !== null
   const isCurrent = computed(() => isNested || ctx.levels.value.length === 0)
 
-  /**
-   * Timing follows the direction this level is travelling: it leaves on a push and comes
-   * back on a pop. The transform itself is a class; only the timing is inline. A nested
-   * group never travels on its own, so it carries no level transition at all.
-   */
+  /** Timing follows the direction of travel (out on a push, back on a pop); only the timing is inline. */
   const levelStyle = computed(() => {
     if (isNested) return undefined
-    // Coming back (a pop) it slides in OPAQUE so it covers the level leaving behind it;
-    // going out (a push) it fades as it goes.
+    // A pop slides in OPAQUE so it covers the leaving level; a push fades as it goes.
     return isCurrent.value
       ? getMenuLevelTransitionStyle('enter', { fade: false })
       : getMenuLevelTransitionStyle('leave')
   })
 
-  /**
-   * Out of flow rather than `display: none` while a level is pushed: an element that was
-   * never rendered has nothing to tween from, so the slide back in on a pop would snap.
-   * Reduced motion drops it out of the box entirely instead of sliding it.
-   */
+  // Out of flow, not unrendered, while hidden: an unrendered element has nothing to tween
+  // from, so the slide back in on a pop would snap. Reduced motion drops it out entirely.
   const ROOT_CLASS =
-    // `relative z-10` / `aria-hidden:z-0`: the hidden level is absolutely positioned, and a
-    // positioned element paints above an in-flow sibling by default — the current level has
-    // to win, or the level being replaced sits on top of the one replacing it.
+    // The hidden level is positioned, so by default it paints above the in-flow current
+    // level — the current one has to win the stacking.
     'relative z-10 flex w-full flex-col my-(--spacing-sm) first-of-type:my-0 translate-x-0 ' +
-    // `-translate-x-full` clears the group's own width but not the host's padding, so a
-    // `Sidebar`-inset menu leaves a sliver of the outgoing level on screen. Fading it is
-    // the only fix available to a component that cannot know its host's padding. Only the
-    // leave transitions opacity (see presets/transitions.ts), so coming back is opaque.
-    // Backgroundless layers cannot occlude one another: sliding two of them across the same
-    // viewport, you read the leaving one through the gaps between the arriving one's rows. A
-    // fill for the duration of the slide is what makes the surfaces actually cover.
+    // The slide clears the group's width but not the host's padding — a sliver of the
+    // outgoing level would show, and fading the leave is the only fix (enter stays opaque;
+    // see presets/transitions.ts). Backgroundless layers need a fill during the slide to occlude.
     'data-[motion=push]:bg-[var(--menu-slide-surface,var(--bg-surface))] ' +
     'data-[motion=pop]:bg-[var(--menu-slide-surface,var(--bg-surface))] ' +
     'aria-hidden:z-0 ' +
@@ -90,29 +72,18 @@
 
   const rootClass = computed(() => cn(ROOT_CLASS, attrs.class as string | undefined))
 
-  /**
-   * The rail ARRIVING is an entrance like a level's. A root group normally slides back into view
-   * on a pop, from a rendered off-canvas position — but when the host remounted on the way back
-   * out of a level there is no such position to tween from, so the entrance needs Vue's from-frame
-   * exactly as a mounting level does. Gated on the root's `enterOnMount` (the consumer's answer to
-   * "was this arrival travelled to") and on there being no level, since a group behind a pushed
-   * level should stay where it is instead of animating in behind it. Nested groups never travel on
-   * their own — the level carries them.
-   */
+  // After a host remount there is no rendered off-canvas position to tween from, so the pop
+  // entrance needs Vue's from-frame like a mounting level's. Gated on `enterOnMount` and an
+  // empty stack — a group behind a pushed level stays put.
   const appear = computed(
     () => !isNested && ctx.enterOnMount.value && ctx.levels.value.length === 0
   )
 </script>
 
 <template>
-  <!--
-    Only the mounting phase needs Vue, and only when the rail is what was arrived at: the
-    from-position has to exist for one frame before the class-driven `translate-x-0` takes over,
-    and `!` outranks it on specificity. The group comes back from the LEFT, the side a pop sends
-    it out to and brings it in from. `motion-safe:` keeps the off-canvas frame out of a
-    reduced-motion render, and no opacity is tweened — an arriving surface stays opaque so it
-    covers whatever is leaving behind it (see presets/transitions.ts).
-  -->
+  <!-- The from-frame must exist one paint before the class-driven resting position wins (the
+       enter-from class outranks it on specificity). No opacity is tweened — an arriving surface
+       stays opaque to cover what leaves — and its guard skips the frame under reduced motion. -->
   <Transition
     :appear="appear"
     :duration="{ enter: MENU_LEVEL_ENTER_MS, leave: 0 }"
@@ -129,12 +100,8 @@
       :class="rootClass"
       :style="levelStyle"
     >
-      <!--
-      A title, not a control: static text with no hover surface and no toggle. A group
-      separates rows; it does not fold them. Folding belongs to a condensed ROW, whose
-      chevron and rail say which rows it owns — a toggle here would read as a nav row and
-      compete with the rows it labels.
-    -->
+      <!-- A title, not a control: a group separates rows, it does not fold them — folding
+           belongs to a condensed ROW, whose chevron and rail say which rows it owns. -->
       <div
         v-if="hasLabel"
         :id="labelId"

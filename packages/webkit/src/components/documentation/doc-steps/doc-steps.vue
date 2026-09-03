@@ -5,17 +5,9 @@
   import { DocStepsInjectionKey } from './injection-key'
 
   /**
-   * The ordered walkthrough from the docs frame: a column of DocStep children
-   * joined by a rail. Each child registers itself through the provided context
-   * and reads its number back, so the numbering is a fact of the document
-   * order — an author writes titles, never numbers, and reordering the page
-   * renumbers it. The final registered step is marked last, which is what
-   * drops its connector and trailing space.
-   *
-   * The registry replaces an earlier version that walked its slot children and
-   * cloned each vnode with an injected index. Reading and rewriting child
-   * vnode props coupled the parent to the slot's render output; the context
-   * couples it only to the steps that actually mount, in the order they mount.
+   * Each DocStep registers itself through the provided context and reads its
+   * reactive number back: numbering is a fact of mount (document) order. A registry,
+   * not vnode cloning — rewriting slot vnodes couples the parent to the slot output.
    */
   defineOptions({ name: 'DocSteps', inheritAttrs: false })
 

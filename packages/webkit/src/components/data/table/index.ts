@@ -1,14 +1,6 @@
-/**
- * Compound API — each sub-component stays available as its own import
- * (`@aziontech/webkit/table-header`, ...) and is also attached to the root
- * for dot-notation usage: `<Table.Header>`, `<Table.Row>`, `<Table.Cell>`, etc.
- *
- * This is a `.ts` file so vue-tsc generates the adjacent `index.d.ts`, giving
- * `<Table.Row>` full type-checking. `Object.assign` keeps one source of truth;
- * the explicit `CompoundTable` annotation lets declaration emit reference the
- * sub-component types instead of expanding the root's private `Props`.
- * See `.claude/rules/compound-api.md`.
- */
+// Compound API (see .claude/rules/compound-api.md). The explicit CompoundTable
+// annotation makes declaration emit reference the sub-component types instead
+// of expanding the root's private Props.
 import Table from './table.vue'
 import TableAppliedFilters from './table-applied-filters/table-applied-filters.vue'
 import TableBody from './table-body/table-body.vue'

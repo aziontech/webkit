@@ -141,16 +141,11 @@ export const useFlowConnectors = (containerRef: Ref<HTMLElement | null>) => {
       container.querySelectorAll<HTMLElement>(':scope > [data-flow-kind]')
     )
 
-    // Mark the two ends of the sequence. Connectors run only BETWEEN consecutive
-    // children, so the first child has no incoming connector and the last has no
-    // outgoing one — a port on either of those edges would attach to nothing, and
-    // flow.vue hides them off these attributes. A lone child gets both.
-    //
-    // It has to be an attribute rather than a `:first-child` / `:last-child` rule:
-    // the connector <svg> is a sibling of the nodes in this same container, so the
-    // positional pseudo-classes address the svg instead of the first node. These two
-    // are outside the MutationObserver's attributeFilter, so stamping them cannot
-    // re-enter measure().
+    // Stamp the sequence ends; flow.vue hides the ports that would attach to nothing
+    // off these attributes. Attributes, not first-child / last-child pseudo-classes:
+    // the connector svg is a sibling of the nodes in this container, so positional
+    // pseudo-classes would address the svg instead of the first node. Both sit outside
+    // the MutationObserver attributeFilter, so stamping cannot re-enter measure().
     elements.forEach((el, index) => {
       el.toggleAttribute('data-flow-leading', index === 0)
       el.toggleAttribute('data-flow-trailing', index === elements.length - 1)

@@ -1,15 +1,9 @@
 import type { InjectionKey, Ref } from 'vue'
 
-// Everything the pane publishes is a GETTER, never the ref itself. The handle only ever
-// reads a value at the moment of a pointer event, and handing out the ref would let a
-// consumer of the context write the pane's length past the pane's own clamp and collapse
-// rules (composables.md: state goes out read-only, writes go through a function).
-
 /**
- * What a pane publishes to the group so a handle beside it can move it. Registered by
- * the pane on mount and removed on unmount, keyed by the pane's own element — which is
- * what lets a handle resolve "the pane before me" / "the pane after me" from the DOM
- * instead of from a fragile registration order.
+ * What a pane publishes so an adjacent handle can move it, keyed by the pane's own
+ * element — neighbours resolve from the DOM, not a fragile registration order. Every
+ * member is a getter, never the ref: a handed-out ref could write past clamp/collapse.
  */
 export interface ResizablePanelPaneApi {
   /** The pane's current length in px along the group axis. */
@@ -31,12 +25,9 @@ export interface ResizablePanelContext {
   /** The axis the panes flow along. A handle's own orientation is the perpendicular. */
   orientation: Readonly<Ref<'horizontal' | 'vertical'>>
   /**
-   * Bumped on every register / unregister. A handle resolves its pane by walking the DOM,
-   * which is not reactive — and the pane AFTER a handle registers after the handle has
-   * already rendered, so without something to invalidate on, the handle would cache
-   * "no pane" forever and publish `aria-valuenow="0"` for a 300px panel. Reading this in
-   * the handle's computed is what makes the lookup re-run when the group's membership
-   * actually changes.
+   * Bumped on register/unregister. The handle's DOM walk is not reactive and the pane
+   * after a handle registers later; without this to invalidate on, the handle caches
+   * "no pane" forever and publishes a zero aria-valuenow. Read it in the handle's computed.
    */
   revision: Readonly<Ref<number>>
   register: (el: globalThis.HTMLElement, api: ResizablePanelPaneApi) => void
