@@ -123,14 +123,47 @@
   // viewBox.
   import { computed } from 'vue'
 
-  import { GLOBE_FRAMING, SLIDE_FRAMING, viewBoxOf } from './map-framing.js'
+  import {
+    GLOBE_FRAMING,
+    HERO_FRAMING,
+    PAIR_FRAMING,
+    SLIDE_FRAMING,
+    viewBoxOf
+  } from './map-framing.js'
 
   const props = defineProps({
     kind: {
       type: String,
       default: 'hero',
-      validator: (value) => ['hero', 'panel', 'slide', 'globe'].includes(value)
-    }
+      validator: (value) => ['hero', 'panel', 'slide', 'globe', 'pair'].includes(value)
+    },
+    /**
+     * Draw the accent PoP field. Pass false for THE ARTWORK WITH NO NETWORK ON IT — the
+     * versus slide shows the same map twice and the only difference between the two is this.
+     *
+     * The field is not hidden, it is DEMOTED: the 78 cells render in the landmass's own ink
+     * and opacity, unanimated, so the dot grid stays complete. Hiding them with a `v-if`
+     * punches 78 holes in the coastline (the two sets never share a coordinate, so a cell
+     * that stops being an accent has nothing under it) — the same failure the rebalance note
+     * above warns about, at 3.5px where it reads as a ragged shore rather than as a network.
+     */
+    nodes: { type: Boolean, default: true },
+    /**
+     * Run the hero's artwork across the WHOLE band instead of parking it in the art half.
+     *
+     * The hero normally opens at 42% and leaves the first columns to the copy, which is the
+     * right shape for a band whose subject is the copy and whose map is the illustration
+     * beside it. A page whose subject IS the network wants the opposite — the map as the
+     * ground, edge to edge, with the copy standing on it — and that is one number: the inset
+     * goes to 0 at every width.
+     *
+     * NOTHING ELSE CHANGES, and that is the reason this is a flag rather than a fourth kind.
+     * The crop, the fit, the ink and both scrims are already right for it: the scrims are
+     * full-bleed children of the wrapper rather than of the artwork's box, so the left-to-right
+     * wash still holds canvas over the copy column and is gone by 50% — over a bleeding map
+     * that IS the fade, where over an inset one it was a wash over mostly nothing.
+     */
+    bleed: { type: Boolean, default: false }
   })
 
   const isPanel = computed(() => props.kind === 'panel')
@@ -139,8 +172,12 @@
   // window is square and because the disc DRIFTS into the bleed east of the crop, which `xMax`
   // would push outside the element box. Derived in ./map-framing.js.
   const isGlobe = computed(() => props.kind === 'globe')
-  /** Neither framing ends in open canvas, so neither takes a mask (see `layerMask`). */
-  const isFramed = computed(() => isSlide.value || isGlobe.value)
+  // The paired maps on the versus slide: the western landmass's own bounding box, centred.
+  // Derived in ./map-framing.js.
+  const isPair = computed(() => props.kind === 'pair')
+  // None of these three needs a mask, for three different reasons (see `layerMask`): the
+  // slide ends at the frame's rules, the globe at its clip, and the pair at its own coastlines.
+  const isFramed = computed(() => isSlide.value || isGlobe.value || isPair.value)
   // The hero is the only framing that insets the artwork and the only one that paints a
   // scrim, so it is worth naming rather than spelling as "neither of the other two".
   const isHero = computed(() => props.kind === 'hero')
@@ -197,13 +234,15 @@
   // own — it was 5.2px on a two-continent crop, where a big cell has nothing around it
   // to be part of. On this crop the same size is a wider view of the same network.
   const viewBox = computed(() =>
-    isGlobe.value
-      ? viewBoxOf(GLOBE_FRAMING)
-      : isSlide.value
-        ? viewBoxOf(SLIDE_FRAMING)
-        : isPanel.value
-          ? '100 70 840 730'
-          : '150 115 760 447'
+    isPair.value
+      ? viewBoxOf(PAIR_FRAMING)
+      : isGlobe.value
+        ? viewBoxOf(GLOBE_FRAMING)
+        : isSlide.value
+          ? viewBoxOf(SLIDE_FRAMING)
+          : isPanel.value
+            ? '100 70 840 730'
+            : viewBoxOf(HERO_FRAMING)
   )
   // On the panel it is the `xMid` half of this that is load bearing, not the `YMin`.
   // The crop is height-constrained (see above), so there is no vertical leftover for
@@ -218,13 +257,15 @@
   // also the hero's answer, for the neighbouring reason: there the map is the right-hand
   // half of a band and belongs against the outer edge.)
   const fit = computed(() =>
-    isGlobe.value
-      ? GLOBE_FRAMING.fit
-      : isPanel.value
-        ? 'xMidYMin meet'
-        : isSlide.value
-          ? SLIDE_FRAMING.fit
-          : 'xMaxYMid meet'
+    isPair.value
+      ? PAIR_FRAMING.fit
+      : isGlobe.value
+        ? GLOBE_FRAMING.fit
+        : isPanel.value
+          ? 'xMidYMin meet'
+          : isSlide.value
+            ? SLIDE_FRAMING.fit
+            : HERO_FRAMING.fit
   )
 
   // Where the artwork sits — the third thing both layers have to agree on, and the
@@ -427,11 +468,30 @@
   // for. The hero's number and this one being the same is a coincidence of arithmetic, not a
   // reversal: there the map sat nearly full-bleed BEHIND copy, and here the copy is capped 278px
   // west of the disc's limb, so loudness costs no legibility.
+  // THE PAIR PAYS ONCE, NOT TWICE, so it sits between the other two. The globe's 60% buys back
+  // a ground that is halved by the cell size AND multiplied by a terminator; this framing halves
+  // the cell size (3.5px against the slide's 5.0) and has no terminator, so it needs one step of
+  // the globe's correction and not both. It also has nothing sitting ON it — the versus slide
+  // puts its copy in columns BESIDE the maps, not over them — so loudness here costs no
+  // legibility, where the 30% derivation above is aimed at a map with a headline on top of it.
+  // At 50% the coastline lands at ~64/255, well clear of the ~25 dissolve point this file names,
+  // and the accent field still leads it by 3.8x.
   const landmassInk = computed(() =>
-    isGlobe.value ? 'text-(--text-muted) opacity-60' : 'text-(--text-muted) opacity-30'
+    isGlobe.value
+      ? 'text-(--text-muted) opacity-60'
+      : isPair.value
+        ? 'text-(--text-muted) opacity-50'
+        : 'text-(--text-muted) opacity-30'
   )
 
   const ROUTE_INK = 'fill-(--primary)'
+
+  // THE FIELD, DEMOTED — what `nodes: false` paints instead of the accent. The landmass's own ink
+  // and opacity (the layer carries `fill="currentColor"`, which `ROUTE_INK` overrides while the
+  // field is live), plus `animate-none` on the three pulse waves: a demoted node must not pulse,
+  // or the map with no network on it still has a heartbeat. The child selector outranks the
+  // `animate-pulse` on each wave — one class plus a type against one class — so it needs no `!`.
+  const demotedInk = computed(() => `${landmassInk.value} [&>g]:animate-none`)
 
   // The route shares the landmass's mask, and must keep sharing it: the two layers
   // are registered to each other by nothing but a common frame, so a route that
@@ -445,7 +505,7 @@
     aria-hidden="true"
     class="pointer-events-none absolute inset-0 z-0 overflow-hidden"
     :class="
-      isHero
+      isHero && !bleed
         ? '[--map-inset-inline-start:8%] lg:[--map-inset-inline-start:42%]'
         : '[--map-inset-inline-start:0%]'
     "
@@ -5605,8 +5665,9 @@
     <svg
       :viewBox="viewBox"
       :preserveAspectRatio="fit"
+      fill="currentColor"
       class="absolute left-(--map-inset-inline-start) w-[calc(100%_-_var(--map-inset-inline-start))]"
-      :class="[LAYER_BOX, routeMask, ROUTE_INK]"
+      :class="[LAYER_BOX, routeMask, nodes ? ROUTE_INK : demotedInk]"
     >
       <g class="animate-pulse motion-reduce:animate-none [animation-delay:0ms]!">
         <path d="M440.617 530.234V535.213H445.596V530.234H440.617Z" />

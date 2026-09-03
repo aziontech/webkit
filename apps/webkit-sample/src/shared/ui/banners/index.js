@@ -19,16 +19,22 @@
 // typo fails loudly in dev instead of rendering an empty band.
 import DitherBanner from './DitherBanner.vue'
 import DotGridBanner from './DotGridBanner.vue'
+import GlobeBanner from './GlobeBanner.vue'
 import MapBanner from './MapBanner.vue'
+import NetworkBanner from './NetworkBanner.vue'
 import PixelateBanner from './PixelateBanner.vue'
 
 export const BANNERS = {
   dither: DitherBanner,
   'dot-grid': DotGridBanner,
+  globe: GlobeBanner,
   map: MapBanner,
+  // The same artwork, full bleed and carrying traffic — the map is the page's
+  // ground rather than the illustration beside its copy. See NetworkBanner.
+  network: NetworkBanner,
   pixelate: PixelateBanner
 }
 
 export const BANNER_NAMES = Object.keys(BANNERS)
 
-export { DitherBanner, DotGridBanner, MapBanner, PixelateBanner }
+export { DitherBanner, DotGridBanner, GlobeBanner, MapBanner, NetworkBanner, PixelateBanner }

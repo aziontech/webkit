@@ -44,10 +44,12 @@ import herosparkWordmark from './herospark-logo.svg'
 import herosparkSymbol from './herospark-symbol.svg'
 import agibankColor from './light/agibank-logo.svg'
 import magaluColor from './light/magalu-logo.svg'
+import nznColor from './light/nzn-logo.svg'
 import madeiraWordmark from './madeira-logo.svg'
 import madeiraSymbol from './madeira-symbol.svg'
 import magaluWordmark from './magalu-logo.svg'
 import magaluSymbol from './magalu-symbol.png'
+import nzn from './nzn-logo.svg'
 import rennerWordmark from './renner-logo.svg'
 import rennerSymbol from './renner-symbol.svg'
 
@@ -87,6 +89,17 @@ export const artworkFilter = (client) => ARTWORK_FILTER[client?.artwork] ?? ARTW
 // transparent-background (the two rasters, itau-logo.webp and
 // magalu-symbol.png, both carry alpha), which is what makes this safe here.
 export const MONOCHROME_FILTER = 'brightness-0 [[data-theme=dark]_&]:invert'
+
+// ── One ink on a FILLED surface ─────────────────────────────────────────────
+// The filter above follows the THEME, which is right for a mark on the page's
+// own canvas and wrong for a mark on a coloured fill: an orange tile is orange
+// on both themes, so an ink that flips with the theme is legible on one of them
+// and not the other. `brightness(0)` alone — the same collapse, without the
+// inversion — is the flat BLACK silhouette, and it is what a mark on
+// `--primary` takes: white on #F3652B measures 3.0:1, black on it 6.71:1, which
+// is the same pair (and the same measurement) that put the deck's marker band on
+// `--bg-canvas` rather than on `--primary-contrast`.
+export const KNOCKOUT_FILTER = 'brightness-0'
 
 // ── The story card: a client's own brand, not ours ──────────────────────────
 // The story cards in Figma (`Illustrations` node 456:140792) paint each card in the
@@ -171,12 +184,16 @@ export const CLIENTS = [
   // second one places a mark correctly. Classified by reading the fills, as above.
   { name: 'Caixa', logo: caixa, artwork: 'dark' },
   { name: 'Exame', logo: exame, artwork: 'dark' },
+  // Two assets again, and the reason is the mark rather than the wordmark: NZN draws
+  // its lettering white on dark and black on light, but the blue diamond is the SAME
+  // blue in both files. A single-asset route would have to invert one of the themes,
+  // which turns that blue orange — so both files ship and neither is filtered.
+  { name: 'NZN', logo: nzn, logoLight: nznColor },
   // ── Named, no file ────────────────────────────────────────────────────────
-  // Two clients the site states that this repo holds no mark for. They stay in the
+  // The one client the site states that this repo holds no mark for. It stays in the
   // registry with no `logo`, which is a legitimate entry: `ClientMark` renders a
   // typographic wordmark for it, so a list stays COMPLETE instead of quietly dropping a
   // client — and the missing asset is visible here rather than at each call site. Adding
   // the file later is one line, and every surface picks it up.
-  { name: 'NZN' },
   { name: 'Zoop' }
 ]

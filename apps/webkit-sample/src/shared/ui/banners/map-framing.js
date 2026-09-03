@@ -1,8 +1,8 @@
-// THE MAP'S SLIDE FRAMING — the one crop something else draws on top of.
+// THE MAP'S SLIDE FRAMING — the first crop something else drew on top of.
 //
-// MapBanner keeps its `hero` and `panel` crops inline, next to the long derivations that
-// produced them. This one is a module because it is READ TWICE: by the banner, to frame the
-// artwork, and by whatever draws ON the artwork — the deck's backdrop slide annotates the map
+// MapBanner keeps its `panel` crop inline, next to the long derivation that produced it. The
+// two here are modules because they are READ TWICE: by the banner, to frame the artwork, and
+// by whatever draws ON the artwork — the deck's backdrop slide annotates the map
 // with a request travelling from a user to a data centre, and a marker that is not projected
 // through the same crop is a marker sitting in the ocean. Two copies of these numbers is the
 // one failure this file exists to make impossible.
@@ -39,6 +39,25 @@ export const SLIDE_FRAMING = {
   fit: 'xMaxYMid meet'
 }
 
+// THE HERO'S FRAMING — the marketing band's crop, and now the second one drawn on top of.
+//
+// The values are MapBanner's own, unchanged; what changed is where they live. They were two
+// literals in that file (`'150 115 760 447'` and `'xMaxYMid meet'`) for as long as nothing
+// else had to agree with them, and `NetworkBanner` draws requests across the same artwork —
+// a mesh is registered to the map by NOTHING but a shared crop, so a second copy of these
+// four numbers is the exact failure the file above exists to prevent.
+//
+// `150 115 760 447` is a ~2x zoom on the transatlantic corridor. Its 1.70 ratio is the
+// marketing band's own, so a hero at that ratio fills with no letterboxing; `xMax` parks the
+// artwork against the outer edge on any band wider than that, which on a bleeding hero is the
+// side away from the copy. The zoom is what makes an individual node read as a node rather
+// than dissolve into the dot grid — the derivation for that is still in MapBanner, beside the
+// panel crop it was reasoned about with.
+export const HERO_FRAMING = {
+  crop: [150, 115, 760, 447],
+  fit: 'xMaxYMid meet'
+}
+
 // THE GLOBE'S FRAMING — the same latitudes, a square crop, and the bleed on the inside.
 //
 // The vision slide clips the map into a disc and TURNS it, and neither of those works on
@@ -66,6 +85,44 @@ export const GLOBE_FRAMING = {
   fit: 'xMinYMid meet'
 }
 
+// THE PAIRED CROP — the western landmass alone, for two small maps shown side by side.
+//
+// The versus slide puts two of these maps either side of one divider: the same world twice, and
+// the only difference between them is how many lights are on. That is a THIRD framing job, and
+// neither of the two above can do it. `SLIDE_FRAMING` is a wide transatlantic band — fitted into
+// a 453x676 column it comes out at 2.85px per cell, half the density the artwork reads at, and
+// it spends a third of the column on the Atlantic and the edge of Europe, which is not what the
+// comparison is about. `GLOBE_FRAMING` is square.
+//
+// ── THE CROP IS THE LANDMASS'S OWN BOUNDING BOX ──
+//
+// Measured off the artwork rather than chosen: every drawn cell west of x 645 — the Americas,
+// Greenland, and Alaska with its Aleutian tail — occupies x 14.9-642.3, y 5.0-931.0. The crop
+// below is that box with 5-10 units of water around it, so NOTHING IS CUT.
+//
+// That last property is what lets this framing carry no mask (see `layerMask` in MapBanner). A
+// crop that slices through a continent has an edge the reader can see, and the artwork then has
+// to be faded into the page; a crop drawn around the whole landmass ends at its own coastlines,
+// which is an edge nobody has to soften. The hero and the panel fade because they cut; the slide
+// and the globe do not fade because a rule and a clip end them. This one does not fade because
+// there is nothing there to end.
+//
+// ── `xMid`, BECAUSE THE PAIR IS MIRRORED ABOUT ONE LINE ──
+//
+// Both other framings anchor the artwork to an edge (`xMax` against a rule, `xMin` into the
+// bleed the disc drifts through). Two maps facing each other across a divider have to be
+// centred in their own boxes instead: anchored, the pair would sit lopsided about the line it
+// is being compared across, and the composition's symmetry is the whole reason the divider
+// reads as a pivot.
+//
+// The ratio is 0.681 against the versus slide's 0.670 column, so the fit is width-constrained
+// by 11px — the crop fills the column and the artwork lands at 3.52px per cell, inside the
+// 3.03-5.33px band MapBanner's own three framings already render at.
+export const PAIR_FRAMING = {
+  crop: [10, 0, 640, 940],
+  fit: 'xMidYMid meet'
+}
+
 /** `crop` as the `viewBox` attribute string. */
 export const viewBoxOf = (framing) => framing.crop.join(' ')
 
@@ -84,7 +141,15 @@ export const MAP_PLACES = {
   /** The US eastern seaboard — the mid-Atlantic coast, where us-east lives. */
   'us-east': [412, 333],
   /** Brazil's southeast — the Sao Paulo / Rio coast. */
-  'br-southeast': [552, 682]
+  'br-southeast': [552, 682],
+  /**
+   * The US west coast — the northern California coast.
+   *
+   * Added for the versus slide's legacy map, which marks the handful of regions a centralized
+   * cloud actually runs in. Verified the way the two above were: it sits INSIDE a drawn cell
+   * (nearest cell centre 174.3 / 363.4, 1.4 units away), not in the Pacific beside one.
+   */
+  'us-west': [174, 363]
 }
 
 // THE ARTWORK'S OWN PoP FIELD, in artwork units — the 78 squares MapBanner picks out of the

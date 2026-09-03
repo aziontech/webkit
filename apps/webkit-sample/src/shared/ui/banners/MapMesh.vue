@@ -1,6 +1,13 @@
 <script setup>
   // TRAFFIC ACROSS THE FIELD — n:n, nobody labelled, nothing at the centre.
   //
+  // IT LIVES BESIDE THE ARTWORK IT DRAWS ON, not beside the deck that first used it. It is a
+  // layer over MapBanner's own PoP field, projected through the crop in `map-framing.js`, and
+  // it is now read by two areas — the deck's backdrop and vision slides, and the Site's globe
+  // (GlobeDisc). A drawing that only makes sense on top of this artwork belongs in the same
+  // folder as the artwork; anywhere else and the second consumer has to reach into the first
+  // consumer's area to get it.
+  //
   // The companion to MapRoute, and its argument's opposite. MapRoute draws ONE request between
   // TWO named ends because the backdrop slide is about a single long round trip to a single
   // data centre: both ends are labelled, both are numbered, and the distance between them is
@@ -86,9 +93,10 @@
   // The link stays `--border-strong` at 0.12, which keeps the split honest — grey topology,
   // orange traffic — and means the one saturated thing on the disc is the part that moves.
   //
-  // (MapRoute spends the deck's other colour, `--accent`, on its arrowheads instead. It has to:
-  // its whole subject is DIRECTION, and its two ends are already `--primary` and `--bg-contrast`.
-  // Here there is no privileged direction and no marker, so the orange is free.)
+  // (MapRoute agrees, and used to not: it spent the deck's other colour, `--accent`, on the
+  // arrowheads that said which way each of its lanes ran. Those are gone — one wire, a request
+  // each way, no direction asserted — so both drawings on this artwork are now grey topology
+  // and orange traffic, and the accent is spent nowhere on the map.)
   //
   // ── IT TAPERS TO NOTHING AT BOTH ENDS ──
   //
@@ -131,8 +139,11 @@
   // for the rest. That duty cycle is what sets the density: at ~45% x 17 rays, seven or eight
   // are in flight at any instant, which is busy enough to read as continuous traffic and
   // sparse enough that individual trips are still followable.
-  import { GLOBE_FRAMING, MAP_NODES, projectOnMap } from '@shared/ui/banners/map-framing.js'
+  import './map-packet.css'
+
   import { computed } from 'vue'
+
+  import { GLOBE_FRAMING, MAP_NODES, projectOnMap } from './map-framing.js'
 
   const props = defineProps({
     /** The box the MAP fills, in canvas pixels. The svg's user units are these pixels. */
@@ -149,7 +160,18 @@
      */
     pool: { type: Array, default: () => MAP_NODES },
     /** How many nodes take part. The ray count follows from this and the degree band. */
-    participants: { type: Number, default: 14 }
+    participants: { type: Number, default: 14 },
+    /**
+     * How present the links are at rest, 0-1.
+     *
+     * The default is tuned for a mesh drawn ON THE ARTWORK: the dotted landmass under it
+     * supplies the drawing's context, so the links only have to imply the topology and a
+     * heavier weight would read as a diagram ruled over the map. A caller with nothing under
+     * the mesh — the deck's tool constellation is one — has the opposite problem: there the
+     * links ARE the drawing, and at 0.12 on bare canvas they are a whisper the argument
+     * depends on. Reduced motion scales this up by the same factor either way (see below).
+     */
+    linkOpacity: { type: Number, default: 0.12 }
   })
 
   /** Fixed, so the same network comes back on every render — see the note above. */
@@ -166,6 +188,18 @@
   // than as traffic on it.
   const LINK_STROKE = 1
   const PACKET_STROKE = 1.5
+
+  // BOTH ARE `non-scaling-stroke`, and that is what lets one drawing serve two sizes.
+  //
+  // The svg's user units are the caller's box, so when the rendered element is bigger than
+  // that box everything in it is multiplied — including the stroke. The deck renders its box
+  // at 1:1 and never noticed; the Site's globe scales the same 492-unit disc up to ~820px, and
+  // at 1.7x these two weights come out at 1.7 and 2.6 — a mesh of ruled grey curves under four
+  // saturated orange slashes, which is a picture of a network rather than traffic on a map.
+  //
+  // `non-scaling-stroke` pins the WIDTH to the viewport's pixels while the GEOMETRY still
+  // scales, so the same rays run between the same coastlines at every size and a hairline
+  // stays a hairline. At 1:1 it changes nothing, which is why the deck is untouched by it.
 
   // The packet's resting state, in the normalized units `pathLength="100"` puts every path in
   // — so one dash and one pair of offsets work on rays of every length. It is parked at ZERO
@@ -279,6 +313,7 @@
   <div
     aria-hidden="true"
     class="pointer-events-none absolute inset-0"
+    :style="{ '--mesh-link-opacity': linkOpacity }"
   >
     <!-- The svg's viewBox IS the box in pixels, so the projected coordinates go in unchanged:
          no second unit system to keep in step. -->
@@ -294,9 +329,10 @@
         <!-- The link: the pair exists whether or not it is carrying anything. -->
         <path
           :d="ray.path"
-          class="link stroke-(--border-strong) opacity-12"
+          class="link stroke-(--border-strong)"
           :stroke-width="LINK_STROKE"
           stroke-linecap="round"
+          vector-effect="non-scaling-stroke"
         />
 
         <!-- The packet. `pathLength` normalizes every ray to 100, so one dash and one pair of
@@ -310,12 +346,13 @@
              whatever length the path happens to be. -->
         <path
           :d="ray.path"
-          class="packet stroke-(--primary) motion-reduce:animate-none"
+          class="map-packet stroke-(--primary) motion-reduce:animate-none"
           pathLength="100"
           :stroke-width="PACKET_STROKE"
           :stroke-dasharray="PACKET_RESTING"
           :stroke-dashoffset="PACKET_PARKED"
           stroke-linecap="butt"
+          vector-effect="non-scaling-stroke"
           :style="ray.style"
         />
       </g>
@@ -324,64 +361,26 @@
 </template>
 
 <style scoped>
-  /* TWO ANIMATIONS, ONE CLOCK. Duration and delay are per-ray and arrive inline, so both
-     entries of every list resolve against the same values; what is shared here is the SHAPE
-     of the cycle. The split is what lets the position stay on ONE smooth curve while the
-     length runs its own ramp — see the derivation in the script. */
-  .packet {
-    animation-name: map-mesh-travel, map-mesh-taper;
-    animation-timing-function: var(--ease-in-out), linear;
-    animation-iteration-count: infinite, infinite;
-  }
+  /* The packet's SHAPE is in `map-packet.css`, shared with MapRoute — one definition of what a
+     request looks like on this artwork. What is per-ray is the clock, and it arrives inline
+     (`ray.style`): a randomized duration and a negative delay, so seventeen rays never pulse
+     together and the field is already mid-conversation on the frame the slide appears. */
 
-  /* TRAVEL — where the dash BEGINS on the path, i.e. the packet's tail. The crossing is the
-     first 45% of the cycle and the rest parks it past the end. `--ease-in-out` is the whole
-     ask on a hop as much as on a round trip: the packet leaves under acceleration and settles
-     into the far node instead of sliding across at a constant rate, which is the difference
-     between traffic and a conveyor belt. */
-  @keyframes map-mesh-travel {
-    0% {
-      stroke-dashoffset: 0;
-    }
-    45%,
-    100% {
-      stroke-dashoffset: -100;
-    }
-  }
-
-  /* TAPER — the dash's LENGTH, so the head is tail + this. Linear on purpose: the curve of the
-     crossing belongs to the travel, and easing the length as well would read as the packet
-     hesitating. The stops sit at a quarter and two thirds of the crossing (45% x 0.24 and
-     x 0.67), which puts the growth over the first 20px or so of a typical ray and leaves the
-     last 40% of the trip to the arrival — where the path's own end is already clipping the
-     head, so the two shorten it together. */
-  @keyframes map-mesh-taper {
-    0% {
-      stroke-dasharray: 0 200;
-    }
-    11% {
-      stroke-dasharray: 30 200;
-    }
-    30% {
-      stroke-dasharray: 30 200;
-    }
-    45%,
-    100% {
-      stroke-dasharray: 0 200;
-    }
+  /* The link's weight comes from the `linkOpacity` prop, through a custom property rather
+     than a utility class, so ONE number feeds both states below — a caller that raises it does
+     not lose the reduced-motion bump, which an inline `opacity` would have overridden. */
+  .link {
+    opacity: var(--mesh-link-opacity);
   }
 
   /* Reduced motion keeps the NETWORK and drops the traffic — the opposite of MapRoute's
      fallback, and for the opposite reason. There, a parked packet leaves a labelled route
      between two named ends, which states the trip on its own. Here the links carry the claim,
-     so they come up to a legible weight and the still frame is the mesh itself. */
+     so they come up to a legible weight and the still frame is the mesh itself. The bump is a
+     FACTOR (2.5x, the old 0.12 -> 0.3), so it lands proportionally whatever the caller set. */
   @media (prefers-reduced-motion: reduce) {
-    .packet {
-      animation: none;
-    }
-
     .link {
-      opacity: 0.3;
+      opacity: calc(var(--mesh-link-opacity) * 2.5);
     }
   }
 </style>

@@ -1,0 +1,84 @@
+/* THE REQUEST — one definition, spent by every drawing on this artwork.
+ *
+ * A packet crossing a mesh ray and a packet crossing the labelled route between a user and a
+ * data centre are the same event on the same network, so they cannot be two motions. They were
+ * for a while: MapMesh grew a tapering orange streak while MapRoute kept a fixed white dash,
+ * and the backdrop slide drew both at once — one map, two conflicting accounts of what a
+ * request looks like. This file is the account, and the two components import it.
+ *
+ * WHAT LIVES HERE is the SHAPE of the cycle: which properties animate, on which curves, and
+ * what the ink does across one crossing. WHAT DOES NOT is the clock. A mesh ray runs on its own
+ * randomized period so seventeen of them never pulse together; a route runs on the theme's
+ * `slow-04` step with its return leg handed over at the halfway mark, because a round trip has
+ * a beat a field of peers does not. Each component sets `animation-duration` / `-delay` itself
+ * — the mesh inline per ray, the route in its scoped style per lane.
+ *
+ * TWO ANIMATIONS, ONE CLOCK. The split is what lets the packet's POSITION stay on one smooth
+ * curve while its LENGTH runs a ramp of its own: travel eases, taper does not.
+ *
+ * It is a plain stylesheet rather than a shared SFC because there is nothing to render — the
+ * consumers own their own geometry and their own `<path>`, and all they need from each other is
+ * this. Vue scopes keyframe NAMES per component, so leaving a copy in each scoped block would
+ * have compiled without complaint and drifted silently. */
+
+.map-packet {
+  animation-iteration-count: infinite, infinite;
+  animation-name: map-packet-travel, map-packet-taper;
+  animation-timing-function: var(--ease-in-out), linear;
+}
+
+/* TRAVEL — where the dash BEGINS on the path, i.e. the packet's tail. The crossing is the first
+   45% of the cycle and the rest parks it past the end, so a ray is carrying something a little
+   under half the time. `--ease-in-out` is the whole ask: the request leaves under acceleration
+   and settles into the far end instead of sliding across at a constant rate, which is the
+   difference between traffic and a conveyor belt.
+
+   The offsets are percentages because every consumer sets `pathLength="100"` on its path. That
+   attribute is CAMELCASE and must stay that way — written kebab (`path-length`) it is emitted
+   verbatim, the browser ignores it, and the units silently fall back to USER units, so a packet
+   crosses a fixed 100px of whatever the path's real length happens to be. Nothing errors. */
+@keyframes map-packet-travel {
+  0% {
+    stroke-dashoffset: 0;
+  }
+
+  45%,
+  100% {
+    stroke-dashoffset: -100;
+  }
+}
+
+/* TAPER — the dash's LENGTH, so the head is tail + this. Linear on purpose: the curve of the
+   crossing belongs to the travel, and easing the length as well would read as the packet
+   hesitating. The stops sit at a quarter and two thirds of the crossing (45% x 0.24 and x 0.67),
+   which puts the growth over the first stretch of the trip and leaves the last 40% to the
+   arrival — where the path's own end is already clipping the head, so the two shorten it
+   together. Zero-length at both extremes is why every consumer draws this with `butt` caps: a
+   round cap paints a zero-length dash as a dot, parked on the wire. */
+@keyframes map-packet-taper {
+  0% {
+    stroke-dasharray: 0 200;
+  }
+
+  11% {
+    stroke-dasharray: 30 200;
+  }
+
+  30% {
+    stroke-dasharray: 30 200;
+  }
+
+  45%,
+  100% {
+    stroke-dasharray: 0 200;
+  }
+}
+
+/* The traffic stops; whatever the drawing says on its own stays. Each consumer decides what
+   that is — the mesh brings its links up to a legible weight, the route keeps its dashed wire
+   and its two labelled ends. */
+@media (prefers-reduced-motion: reduce) {
+  .map-packet {
+    animation: none;
+  }
+}

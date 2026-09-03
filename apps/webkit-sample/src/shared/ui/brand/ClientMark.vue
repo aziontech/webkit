@@ -28,9 +28,14 @@
   // asset, one filter, no per-client data; the reasoning is in ./clients/index.js
   // next to the filter itself.
   //
+  // `knockout` is that same one ink, PINNED to black on both themes, for a mark that
+  // sits on a coloured fill rather than on the page's canvas. A filled surface does not
+  // follow the theme, so an ink that does is legible on one theme and not the other; the
+  // measurement that decides which ink is in ./clients/index.js beside the filter.
+  //
   // Geometry belongs to the caller: pass it through `mark`, since a strip, a card and
   // a benefit cell each set the mark at a different height.
-  import { artworkFilter, MONOCHROME_FILTER } from './clients/index.js'
+  import { artworkFilter, KNOCKOUT_FILTER, MONOCHROME_FILTER } from './clients/index.js'
 
   defineProps({
     // A CLIENTS entry: { name, logo?, logoLight?, artwork? }.
@@ -52,6 +57,11 @@
     monochrome: {
       type: Boolean,
       default: false
+    },
+    // One ink, pinned to black — for a mark on a coloured fill. Implies `monochrome`.
+    knockout: {
+      type: Boolean,
+      default: false
     }
   })
 </script>
@@ -61,11 +71,11 @@
        routes below, and it needs only one of the assets — whichever exists — since
        the filter erases the difference between them anyway. -->
   <img
-    v-if="monochrome && (client.logo || client.logoLight)"
+    v-if="(monochrome || knockout) && (client.logo || client.logoLight)"
     :src="client.logo || client.logoLight"
     :alt="client.name"
     decoding="async"
-    :class="[mark, MONOCHROME_FILTER]"
+    :class="[mark, knockout ? KNOCKOUT_FILTER : MONOCHROME_FILTER]"
   />
 
   <!-- Colour-pinned: the brand file, unfiltered, on either theme. -->
