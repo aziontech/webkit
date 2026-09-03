@@ -223,31 +223,37 @@ means _floating_, which belongs to overlays and has no meaning on a slide.
 
 ## Phase 3 — the layout library
 
-Sixteen `kind`s, each a composition rather than a template. They are implemented in
+Each `kind` is a composition rather than a template — the authoritative list is `SlideRenderer`'s
+own map, not this table's row count, which has drifted twice. They are implemented in
 `apps/webkit-sample/src/preview/components/`, and `SlideRenderer` maps `kind` to one of them
 along with three stage decisions: **bleed** (the layout draws to the frame's rules and owns its
 own padding), **hatch** (the frame's texture, for a band with no content of its own) and
 **frame** (off for a layout that draws its own perimeter — only `cover` does, and it needs the
 whole canvas because its mark and platform line sit outside the frame it drew).
 
-| `kind`             | Composition                                                                                                                                                                                                                                                                 | Bleed | Hatch |
-| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- | ----- |
-| `cover`            | Its OWN perimeter — rounded, top-left corner cut on the diagonal, three squares in the cut — the headline left, the `dither` panel on the last 5 columns, the mark and platform line below the frame                                                                        | —     | —     |
-| `title`            | The hero, verbatim: overline, headline with an orange gradient phrase, description, then a footer strip with the mark and the deck's metadata over a `--border-muted` rule                                                                                                  | —     | —     |
-| `section`          | A divider: the index in the display face at the frame's top-left, the section name and one line at the bottom-left                                                                                                                                                          | —     | ✓     |
-| `statement`        | One sentence at `heading-xl`, vertically centred, capped at 1192. Nothing else                                                                                                                                                                                              | —     | —     |
-| `quote`            | A sentence at `heading-lg` over a rule, attribution as an overline below                                                                                                                                                                                                    | —     | —     |
-| `testimonial`      | A photograph full bleed, desaturated, cut by the frame's rules under one flat veil; the sentence on an opaque `--bg-surface` card over the first 4 columns, a hanging orange quote glyph, a half-measure orange rule, then the name and the role                            | ✓     | —     |
-| `bullets`          | Head block, then claims across 7 columns as hairline-divided rows, and an aside table on the last 4                                                                                                                                                                         | —     | —     |
-| `backdrop`         | The network map full bleed on its own `slide` framing, cut by the frame's rules, under a left-to-right wash; head block, hairline claims, a monochrome mark row and one closing line on the first 6 columns, and a route annotated ON the map — two discs and a dashed line | ✓     | —     |
-| `vision`           | A claim block at the top, three hairline pillars at the bottom, and a turning globe between them — the same map spun inside a circular crop the frame cuts on two sides                                                                                                     | ✓     | —     |
-| `split`            | Two halves in a `gap-px` grid: the argument left on the canvas, the evidence right on `--bg-surface`                                                                                                                                                                        | ✓     | —     |
-| `grid`             | A padded header owning its bottom rule, then 2-4 hairline cells, each with an index, a title and a line                                                                                                                                                                     | ✓     | —     |
-| `metrics`          | Same header, then 3 or 6 figures in the display face over their captions — six as two rows of three, one wall                                                                                                                                                               | ✓     | —     |
-| `specimen-type`    | The type ladder: one row per token, the sample rendered _by_ that token, the spec beside it                                                                                                                                                                                 | ✓     | —     |
-| `specimen-spacing` | The seven steps as bars measured by their own token, the canvas geometry at 1:4, the 12 columns at 1:1                                                                                                                                                                      | —     | —     |
-| `specimen-motion`  | Durations and curves as live bars running the real tokens                                                                                                                                                                                                                   | —     | —     |
-| `closing`          | The hero shape again, with real buttons                                                                                                                                                                                                                                     | —     | ✓     |
+| `kind`             | Composition                                                                                                                                                                                                                                                                                             | Bleed | Hatch |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- | ----- |
+| `cover`            | Its OWN perimeter — rounded, top-left corner cut on the diagonal, three squares in the cut — the headline left, the `dither` panel on the last 5 columns, the mark and platform line below the frame                                                                                                    | —     | —     |
+| `title`            | The hero, verbatim: overline, headline with an orange gradient phrase, description, then a footer strip with the mark and the deck's metadata over a `--border-muted` rule                                                                                                                              | —     | —     |
+| `section`          | A divider: the index in the display face at the frame's top-left, the section name and one line at the bottom-left                                                                                                                                                                                      | —     | ✓     |
+| `statement`        | One sentence at `heading-xl`, vertically centred, capped at 1192. Nothing else                                                                                                                                                                                                                          | —     | —     |
+| `quote`            | A sentence at `heading-lg` over a rule, attribution as an overline below                                                                                                                                                                                                                                | —     | —     |
+| `testimonial`      | A photograph full bleed, desaturated, cut by the frame's rules under one flat veil; the sentence on an opaque `--bg-surface` card over the first 4 columns, a hanging orange quote glyph, a half-measure orange rule, then the name and the role                                                        | ✓     | —     |
+| `bullets`          | Head block, then claims across 7 columns as hairline-divided rows, and an aside table on the last 4                                                                                                                                                                                                     | —     | —     |
+| `backdrop`         | The network map full bleed on its own `slide` framing, cut by the frame's rules, under a left-to-right wash; head block, hairline claims, a monochrome mark row and one closing line on the first 6 columns, and a route annotated ON the map — two discs and a dashed line                             | ✓     | —     |
+| `vision`           | A claim block at the top, three hairline pillars at the bottom, and a turning globe between them — the same map spun inside a circular crop the frame cuts on two sides                                                                                                                                 | ✓     | —     |
+| `split`            | Two halves in a `gap-px` grid: the argument left on the canvas, the evidence right on `--bg-surface` under an orange `dot-grid` lattice (2px dot, 48px pitch, `--primary`), the snippet a card with its own `--border-default` rule and `--shape-elements` radius                                       | ✓     | —     |
+| `stack`            | The claim on the left at `heading-2xl`, a marker band on the phrase named by `emphasis`, and the tool constellation on the right half — the marks the deck data names, on a mesh, each labelled with the one job it does                                                                                | ✓     | —     |
+| `evidence`         | Seven columns of claim — a short marked headline over a wrapped row of concern chips — beside five of cited evidence: three figures in the default ink, each over its finding and the house that measured it, divided by the same hairline gaps                                                         | ✓     | —     |
+| `reasons`          | Four columns of claim at `heading-2xl` beside eight of run: three equal bands on hairlines, each a `big-number-lg` count in `--primary` centred on the band beside a title with one line under it, with the six marks the reason is made of as a 3x2 cluster on the last three columns, in one flat ink | —     | —     |
+| `platform`         | Five columns of head block at `heading-2xl` beside seven of wheel: `n` equal seats on one hairline circle, each a `--shape-card` tile with an icon glyph and an outward caption, wired by one straight `--primary` spoke to a plate ruled 2px in `--primary` under the mark                             | —     | —     |
+| `grid`             | A padded header owning its bottom rule, then 2-4 hairline cells, each with an index, a title and a line                                                                                                                                                                                                 | ✓     | —     |
+| `metrics`          | Same header, then 3 or 6 figures in the display face over their captions — six as two rows of three, one wall                                                                                                                                                                                           | ✓     | —     |
+| `specimen-type`    | The type ladder: one row per token, the sample rendered _by_ that token, the spec beside it                                                                                                                                                                                                             | ✓     | —     |
+| `specimen-spacing` | The seven steps as bars measured by their own token, the canvas geometry at 1:4, the 12 columns at 1:1                                                                                                                                                                                                  | —     | —     |
+| `specimen-motion`  | Durations and curves as live bars running the real tokens                                                                                                                                                                                                                                               | —     | —     |
+| `closing`          | The hero shape again, with real buttons                                                                                                                                                                                                                                                                 | —     | ✓     |
+| `thanks`           | The last slide: six columns of address — `Thank you.` at `heading-2xl`, the email as the slide's one orange thing, the URL muted under it — beside six holding a QR of that same URL, drawn dark-on-light on a `--secondary` plate four grid columns wide, with a caption below                         | ✓     | —     |
 
 ### The rules the library obeys — carry them into Figma
 
@@ -261,6 +267,11 @@ whole canvas because its mark and platform line sit outside the frame it drew).
   same guarantee of one line per junction.
 - **A bleeding layout has no perimeter.** Its outer edge is the frame's rules. Never draw a
   second border 96px inside the first.
+- **A marked phrase is a real `<mark>`, and it is drawn as a rectangle behind the run.** `stack`
+  and `evidence` highlight a phrase with a band of `--primary` and the copy knocked out in
+  `--bg-canvas`. In the browser that is one inline with `box-decoration-clone`, so a run that
+  wraps carries a band on every line; in Figma it is one rectangle per LINE, behind the text
+  node, at the coordinates the measure script reports — never one rectangle spanning three lines.
 - **The brand orange appears once per slide.** The overline, or one figure, or one CTA — not two.
   `testimonial` is the single exception, and only because its two marks are one signature: the
   hanging glyph opens the sentence and the rule closes it, on a card that carries no overline
@@ -268,6 +279,17 @@ whole canvas because its mark and platform line sit outside the frame it drew).
 - **Vertical extremes are deliberate.** `title` and `closing` fill the frame; `section` pushes its
   two blocks to opposite edges; `statement`, `quote` and `bullets` centre. A content slide whose
   copy ends halfway down leaves a void the frame points straight at.
+- **The QR is a real vector, and it is generated — never pasted.** `thanks` draws its code from
+  `link.url` through `preview/lib/qr-code.js`, so the slide cannot show one address and scan to
+  another. It is the exception to the image rule above: the symbol is ONE `<path>` (dark runs
+  merged per row), so `figma.createNodeFromSvg` carries it as a single selectable node rather
+  than the thousands the map would need. Take the path from the preview — do not re-encode the
+  URL with some other generator and do not scale a screenshot of it. Two things break a code
+  silently: dropping the four-module quiet zone (it is the viewBox's own margin, so keep the
+  viewBox), and inverting it — a QR must be dark-on-light, which is why this is the one place
+  in the deck where a plate is `--secondary` with `--secondary-contrast` on it. **Scan the
+  rendered slide with a phone before the deck ships.**
+
 - **A slide whose ground is artwork gets an IMAGE, not vectors.** `vision` and `backdrop` are
   drawn on the site's map — ~5,000 single-cell squares plus a 78-cell accent field. Export the
   rendered layer from the preview and place it as a fill; drawing it cell by cell through the
