@@ -149,7 +149,8 @@
         {
           icon: 'ai ai-edge-application',
           label: 'Web Apps',
-          description: 'Fast, scalable web applications'
+          description: 'Fast, scalable web applications',
+          href: '/site/web-apps'
         },
         {
           icon: 'ai ai-ai-pillar',
@@ -256,6 +257,9 @@
   ]
 
   const goLogin = () => router.push('/login')
+  // The bar's own controls route rather than link: a bare `href="/site/contact"` on an
+  // anchor would reload the app, the same reason the sheet's rows push through onNavigate.
+  const goContact = () => router.push('/site/contact')
   const goSignup = () => router.push('/signup')
 
   // ── Mobile navigation (below `xl`) ──────────────────────────────────────────
@@ -284,7 +288,7 @@
           }))
         })),
         ...plainLinks.map((link) => ({ id: link.value, label: link.label, href: link.href })),
-        { id: 'contact', label: 'Contact', href: '#contact' }
+        { id: 'contact', label: 'Contact', href: '/site/contact' }
       ]
     }
   ])
@@ -608,7 +612,7 @@
           label="Contact"
           kind="text"
           size="medium"
-          href="#contact"
+          @click="goContact"
         />
         <Button
           label="Login"

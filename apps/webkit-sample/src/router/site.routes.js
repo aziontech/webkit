@@ -14,9 +14,12 @@ import AzionDocsPage from '@site/docs/views/AzionDocsPage.vue'
 import LandingApplicationAccelerator from '@site/views/LandingApplicationAccelerator.vue'
 import LandingAzion from '@site/views/LandingAzion.vue'
 import LandingCache from '@site/views/LandingCache.vue'
+import LandingCareers from '@site/views/LandingCareers.vue'
+import LandingContact from '@site/views/LandingContact.vue'
 import LandingFinancialServices from '@site/views/LandingFinancialServices.vue'
 import LandingFunctions from '@site/views/LandingFunctions.vue'
 import LandingPricing from '@site/views/LandingPricing.vue'
+import LandingWebApps from '@site/views/LandingWebApps.vue'
 
 export const siteRoutes = [
   // Segregated marketing router: landing-page examples that render in the
@@ -44,9 +47,20 @@ export const siteRoutes = [
     name: 'site-financial-services',
     component: LandingFinancialServices
   },
+  // A SOLUTION page in the same shell, by USE CASE where Financial Services is by industry:
+  // the Solutions mega-menu's `By Use Case › Web Apps` entry points here.
+  { path: '/site/web-apps', name: 'site-web-apps', component: LandingWebApps },
   // The pricing page in the same shell: the three tiers, the full feature matrix, and the
   // FAQ. The website nav's `Pricing` entry points here.
   { path: '/site/pricing', name: 'site-pricing', component: LandingPricing },
+  // The careers listing in the same shell: a page whose content is a live ATS query rather
+  // than an argument, so what it demonstrates is the frame doing the work — a hero with the
+  // globe in it, and one ruled module holding an area label and its open positions.
+  { path: '/site/careers', name: 'site-careers', component: LandingCareers },
+  // The contact page in the same shell: the pitch and its form side by side in the hero, the
+  // offices as a hairline grid, and the site's own closing CTA. The website nav's `Contact`
+  // entry points here — it used to be a bare `#contact` anchor onto the closing band.
+  { path: '/site/contact', name: 'site-contact', component: LandingContact },
   { path: '/site/docs', name: 'site-docs', component: AzionDocs },
   // A docs reading page COMPOSED in Vue: prose, but with a filtering tool picker and
   // cards carrying other vendors' real marks — neither of which MDX can express. Every

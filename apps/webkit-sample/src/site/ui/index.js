@@ -18,6 +18,9 @@
 //   clients/      the client marks for the trust strip, each tagged with the
 //                 artwork (color / light / dark) that drives its theme handling
 //   ClientMark    one client logo, placed correctly on both themes
+//   ConsoleApplicationScene
+//                 the console's Application detail page, drawn — the art half of the
+//                 Console band, playing one tab of it at a time
 //   FrameworkStackScene
 //                 "your app, shipped from the framework you already use" — webkit
 //                 Illustration parts around the icon library's coloured framework marks
@@ -39,6 +42,7 @@
 // products belongs in @aziontech/webkit instead. The page-composition rules they
 // follow are documented in .claude/docs/CONTAINERS.md.
 export { default as AiAgentsScene } from './AiAgentsScene.vue'
+export { default as ConsoleApplicationScene } from './ConsoleApplicationScene.vue'
 export { default as FrameworkStackScene } from './FrameworkStackScene.vue'
 export { default as FunctionsHeroCanvas } from './FunctionsHeroCanvas.vue'
 export { default as NavColumn } from './NavColumn.vue'
