@@ -63,6 +63,19 @@
 
   const attrs = useAttrs()
 
+  /**
+   * The consumer's attributes reach the real root. `class` and `data-testid` are excluded
+   * because they are already applied explicitly below — `class` merged into `rootClasses`,
+   * `data-testid` through the fallback — and spreading them again would apply each twice.
+   * Same shape as `menu-item`.
+   */
+  const forwardedAttrs = computed(() => {
+    const rest = { ...attrs }
+    delete rest.class
+    delete rest['data-testid']
+    return rest
+  })
+
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'actions-icon-button'
   )
@@ -156,6 +169,7 @@
 <template>
   <a
     v-if="isAnchor"
+    v-bind="forwardedAttrs"
     :href="href"
     :target="target"
     :rel="target === '_blank' ? 'noopener noreferrer' : undefined"
@@ -206,6 +220,7 @@
 
   <button
     v-else
+    v-bind="forwardedAttrs"
     type="button"
     :disabled="disabled"
     :aria-label="ariaLabel"

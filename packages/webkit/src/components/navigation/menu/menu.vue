@@ -143,7 +143,7 @@
     path.value = [...path.value, level.id]
     motion.value = 'push'
     endMotion()
-    // Focus follows the view: the pushed level starts at its Back row.
+    // Focus follows the view: the pushed level starts at its Back button.
     nextTick(() => backEl.value?.focus())
   }
 
@@ -273,14 +273,16 @@
             // Honoured for a drill row only; an inline trigger heads the rows beneath it and
             // leaves the icon column to them, which `MenuSubTrigger` itself enforces.
             icon: node.icon ?? '',
+            // The node's own destination, and the thing that decides the row's anatomy: with an
+            // `href` the row is a link plus an arrow that reveals the children; without one the
+            // WHOLE ROW reveals them. A container that is not a destination — which is most of
+            // them — therefore behaves exactly as it did before the split existed.
+            href: node.href ?? '',
             disabled: node.disabled ?? false,
-            // A drill row is a DESTINATION as well as a level: it announces its activation so
-            // the consumer can route to the level's landing page while the level opens,
-            // instead of leaving the user on the page they were already on. An inline row only
-            // toggles — that is not a navigation — so it emits nothing.
-            ...(isDrill
-              ? { onClick: (event: globalThis.MouseEvent) => emit('navigate', event, node) }
-              : {})
+            // Fires from the LINK only, so it cannot fire for a row that has nowhere to go.
+            // Revealing the children emits nothing either way: that is a move inside the menu,
+            // not a navigation.
+            onClick: (event: globalThis.MouseEvent) => emit('navigate', event, node)
           }),
           h(MenuSubContent, null, {
             // A drilled level is a container so it can hold groups like the root: given
