@@ -56,16 +56,23 @@
   //     arrow. `MiniButton` is the one control in the system whose icon IS trailing and whose
   //     ink is the page's own, so those are MiniButtons; Button's `icon` is leading-only and
   //     Link paints `--text-link`, the product UI's blue, which nothing else on this site uses.
-  //   • Band 8's art is a raster WAAP diagram on the source. Ours is composed from
-  //     Illustration parts — the request, the three protection modules it passes through, the
-  //     origin behind them — so it is drawn on the design system's own canvas rather than
-  //     pasted in as a picture. Its `aria-label` names what OUR art shows, so the source's own
-  //     alt text does not survive the copy diff: it described art we replaced.
+  //   • Band 8's art is a raster WAAP diagram on the source. Ours is the design team's own
+  //     drawing of the same path — the Figma `Per page › Finantial services › Protect
+  //     financial applications` frame, exported at 592x300 and committed beside this page —
+  //     so the band states the application, the protection modules it passes through and the
+  //     payment origin behind them in the art the design file actually holds, rather than as
+  //     a picture pasted from the source. Its `alt` names what OUR art shows, so the source's
+  //     own alt text does not survive the copy diff: it described art we replaced.
+  //   • THE EXPORT IS STRIPPED OF FIGMA'S CHROME. A frame with no fill of its own exports
+  //     whatever sits behind it — a full-bleed page-background rect plus both enclosing
+  //     sections' plates — and the inner plate (`#444444`) covers the entire 592x300 box, so
+  //     the unedited export is a grey card with the scene on top of it. Dropping those five
+  //     nodes leaves a transparent illustration that takes the cell's `--bg-canvas`.
   //
   // ASSET GAPS, recorded:
-  //   • LGPD — the source draws a certification badge we have no file for. The cell keeps the
-  //     name (its `LGPD` check pill is the source's own) and draws no art, rather than
-  //     substituting a similar badge or drawing one from the letters.
+  //   • LGPD — CLOSED. The badge this page had no file for is now exported from the Figma
+  //     `Assets` file (node 1907:30763) and committed beside the other four, so all five
+  //     cells of band 13 draw the art the source draws.
   //   • The source's eighth marquee mark is `radware-logo.svg` carrying `alt="Prime Video"` —
   //     a mislabel on the source. The mark it actually RENDERS is Radware's, so that is the
   //     mark here, under this repo's registry name for it.
@@ -74,18 +81,23 @@
   import Button from '@aziontech/webkit/button'
   import FrameBox from '@aziontech/webkit/frame-box'
   import HeroTitle from '@aziontech/webkit/hero-title'
-  import Illustration from '@aziontech/webkit/illustration'
   import MiniButton from '@aziontech/webkit/mini-button'
   import Overline from '@aziontech/webkit/overline'
   import SectionGap from '@aziontech/webkit/section-gap'
   import SectionTitle from '@aziontech/webkit/section-title'
   import Tag from '@aziontech/webkit/tag'
   import BrandCarousel from '@shared/ui/brand/BrandCarousel.vue'
-  // The three certification badges this repo holds. Vite resolves each to an asset URL,
-  // exactly as the client registries do. Each carries its own brand colours, so none is
-  // filtered on either theme.
+  // The four certification badges this repo holds. Vite resolves each to an asset URL,
+  // exactly as the client registries do. NONE is filtered, and each for its own reason: the
+  // three colour badges carry their own brand colours, and the LGPD mark is one flat
+  // near-white ink (#C1BFBF, its drop shadow drawn as the same ink at a lower opacity),
+  // which is the correct ink here because SiteLayout pins every marketing page to the dark
+  // theme. Were this band ever placed on a THEMED surface, LGPD — and only LGPD — would
+  // need the registry's `light` artwork route: #C1BFBF on a light `--bg-canvas` measures
+  // 1.8:1 and effectively disappears.
   import gdprBadge from '@shared/ui/brand/clients/GDPR-logo.svg'
   import { CLIENTS } from '@shared/ui/brand/clients/index.js'
+  import lgpdBadge from '@shared/ui/brand/clients/LGPD-logo.svg'
   import pciBadge from '@shared/ui/brand/clients/PCI-logo.svg'
   import socBadge from '@shared/ui/brand/clients/SOC-logo.svg'
   import {
@@ -96,6 +108,9 @@
   } from '@shared/ui/layout/index.js'
   import { useRouter } from 'vue-router'
 
+  // Band 8's art, from the Figma `Per page` asset set. Vite resolves it to a hashed asset
+  // URL, exactly as the marks in the CLIENTS registry are resolved.
+  import protectFinancialApplications from '../assets/illustrations/protect-financial-applications.svg'
   import { NavColumn, NavItem } from '../ui/index.js'
   import SiteCta from './SiteCta.vue'
 
@@ -206,13 +221,14 @@
   // ── Band 13 — the five certifications ─────────────────────────────────────────
   // `label` is the source's own check pill; `alt` is the source's own alt text for the badge
   // art. The source draws the SAME AICPA SOC badge for SOC 2 Type 2 and for SOC 3, so one
-  // file serves both cells here too. LGPD has no file in this repo — see ASSET GAPS.
+  // file serves both cells here too. All five cells now draw art — the LGPD badge was this
+  // page's one recorded asset gap.
   const CERTIFICATIONS = [
     { label: 'SOC 2 Type 2', badge: socBadge, alt: 'AICPA SOC 2 Type 2 badge' },
     { label: 'SOC 3', badge: socBadge, alt: 'AICPA SOC 3 badge' },
     { label: 'PCI DSS', badge: pciBadge, alt: 'PCI DSS badge' },
     { label: 'GDPR', badge: gdprBadge, alt: 'GDPR' },
-    { label: 'LGPD', badge: null, alt: 'LGPD badge' }
+    { label: 'LGPD', badge: lgpdBadge, alt: 'LGPD badge' }
   ]
 
   // ── Band 16 — the platform, in four columns ───────────────────────────────────
@@ -472,20 +488,19 @@
 
     <!-- ── Band 8 — the art, then the copy ──────────────────────────────────────
          The source sets a WAAP architecture diagram against the claim, art on the start edge.
-         Ours draws the same path — the request, the three protection modules it passes
-         through, the origin behind them — from Illustration parts on the design system's own
-         canvas. The stack IS the firewall: three lit modules read as the layer, where a
-         separate firewall box beside them would state it twice.
+         Ours is the design file's own drawing of that path: the application, the four
+         protection modules it passes through, the payment origin behind them.
 
-         THE SCENE IS A FIXED-WIDTH ROW AND THE CELL IS NOT. Illustration parts carry their
-         own geometry, so the row does not reflow; it is SCALED (`scale` leaves the layout box
-         alone, so the cell clips anything that does not fit). EVERY RUNG IS MEASURED, not
-         guessed: the scene is 448px, and the cell offers 293 / 526 / 423 / 519 / 597px of
-         content at base / sm / lg / xl / 2xl. The dip at `lg` is real, not a typo — that is
-         where the band splits into two columns and the art gives up half the frame, so it is
-         the one rung between `sm` and `xl` that has to step back down. A ladder copied from a
-         sibling page would clip here, because its scene is a different width. Below `lg` the
-         art is the grid's second row, so the copy leads on a phone. -->
+         THE SCENE SCALES INSTEAD OF BEING SCALED. The export carries a `viewBox`, so
+         `w-full` + the frame's own `aspect-[592/300]` reflows it to whatever the cell offers
+         and the ratio holds at every rung — which is why the measured `scale-*` ladder that
+         stood here is gone, along with the `overflow-hidden` that existed only to clip what
+         a fixed-width row could not fit. The cell is flush and the scene uncapped: the
+         export already centres its subject with its own air around it, so a padded cell paid
+         for that margin twice, and it is vector, so it scales up as cleanly as down. The
+         `width`/`height` attributes reserve the box before the file lands, so the band does
+         not shift as it loads. Below `lg` the art is the grid's second row, so the copy leads
+         on a phone. -->
     <SectionModule
       :divided="false"
       :padded="false"
@@ -497,50 +512,15 @@
       >
         <div class="grid lg:grid-cols-2">
           <div
-            class="order-last flex min-w-0 items-center justify-center overflow-hidden border-t border-(--border-default) p-(--spacing-xl) lg:order-first lg:border-r lg:border-t-0"
+            class="order-last flex min-w-0 items-center justify-center border-t border-(--border-default) lg:order-first lg:border-r lg:border-t-0"
           >
-            <Illustration
-              size="large"
-              aria-label="A request passing through the protection modules on its way to the origin"
-              class="shrink-0 scale-[0.65] sm:scale-100 lg:scale-90 xl:scale-100"
-            >
-              <div class="flex items-center gap-(--spacing-xs)">
-                <Illustration.Box
-                  icon="ai ai-edge-application"
-                  size="medium"
-                />
-                <Illustration.Connector
-                  kind="dashed"
-                  animated
-                />
-                <Illustration.Node />
-
-                <div class="flex flex-col gap-(--spacing-xs)">
-                  <Illustration.Box
-                    icon="ai ai-waf-rules"
-                    size="medium"
-                    active
-                  />
-                  <Illustration.Box
-                    icon="ai ai-network-lists"
-                    size="medium"
-                    active
-                  />
-                  <Illustration.Box
-                    icon="ai ai-origin-shield"
-                    size="medium"
-                    active
-                  />
-                </div>
-
-                <Illustration.Node />
-                <Illustration.Connector kind="dashed" />
-                <Illustration.Box
-                  icon="pi pi-server"
-                  size="medium"
-                />
-              </div>
-            </Illustration>
+            <img
+              :src="protectFinancialApplications"
+              alt="An application passing through the protection modules on its way to the payment origin"
+              width="592"
+              height="300"
+              class="block aspect-[592/300] w-full"
+            />
           </div>
 
           <!-- `justify-center`, not the `justify-between` the sibling pages use: their copy
@@ -622,7 +602,8 @@
     <!-- ── Bands 12 + 13 — the certifications, titled and then shown ────────────
          Five cells, which is one more than CardGrid's widest step, so the hairline grid is
          written out here: `gap-px` over the border colour, every cell filling `--bg-canvas`.
-         The badges carry their own brand colours and are never filtered on either theme.
+         No badge is filtered on this shell: three carry their own brand colours and the
+         fourth is already drawn in the near-white ink a dark-only page wants.
 
          SIX CELLS BELOW `sm`, FIVE FROM `sm` UP. The wrapper's background IS the hairline, so
          at two columns the sixth slot is not empty space — it is a solid block of border
@@ -650,11 +631,10 @@
             :key="certification.label"
             class="flex flex-col items-center justify-end gap-(--spacing-lg) bg-(--bg-canvas) p-(--spacing-xl)"
           >
-            <!-- LGPD draws no art: the badge is an asset gap, and the cell keeps the name
-                 rather than substituting a similar badge. `justify-end` is why the missing one
-                 does not show as a stranded pill: the five labels share one baseline and the
-                 gap is the empty space ABOVE it. Nothing reserves a box for the absent badge —
-                 an empty box would misreport that there is art here to load. -->
+            <!-- `justify-end` keeps the five labels on one baseline whatever each badge's own
+                 aspect ratio is: the art hangs above the pill rather than the pill being pushed
+                 off a shared line. `v-if` stays — a certification is named by its pill, and a
+                 cell whose file is ever missing draws no empty box. -->
             <img
               v-if="certification.badge"
               :src="certification.badge"

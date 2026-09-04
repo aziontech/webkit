@@ -5,8 +5,8 @@
   //
   // Sections, top to bottom, as the design lays them out:
   //
-  //   hero            split band, one screen tall — the claim on the left, the runtime as
-  //                   art on the right, the client marks standing on its floor
+  //   hero            centered band, one screen tall — the live page's copy on the dot
+  //                   field, the client marks standing on its floor
   //   two-up          "familiar frameworks" | "serverless runtime", one illustration each
   //   code            "hello world → full-stack", beside the sample it is talking about
   //   quote           one client sentence, signed, over the pixelate strip
@@ -29,21 +29,34 @@
   // page's own material there instead of competing with copy.
   //
   // Figma → ours, where the two disagree:
-  //   • The design's hero column clips at 662px, which cuts off the pill field drawn
-  //     under the globe. It renders here — see FunctionsHeroCanvas.
-  //   • Its globe is a photograph under a pixelate effect; ours is the registered
-  //     `pixelate` backdrop clipped to a circle (same note).
+  //   • THE HERO IS THE LIVE PAGE'S, NOT THE DESIGN'S. The design opens on a split band —
+  //     a two-line claim ("Write once. / Run at the edge.") beside the runtime's Web-API
+  //     inventory as art. azion.com/en/products/functions opens on centered copy alone, so
+  //     the band takes its headline, its supporting sentence and its two actions verbatim,
+  //     and the art half is gone. That retires this page's two hero notes about the design's
+  //     globe (a photograph under a pixelate effect, redrawn here as the registered
+  //     `pixelate` backdrop clipped to a circle) and its 662px column clip — both described
+  //     art that no longer renders. FunctionsHeroCanvas is left in site/ui with no caller.
   //   • A few product rows in the ProductsMenu carry unfilled placeholders
   //     ("ProductName", "What this product does", "Alert users to updates…"). Those rows
   //     take the one-liners AzionHome already uses for the same products, so the two
   //     pages cannot describe one product two ways.
   //   • Its `LABEL LABEL LABEL` code tabs are placeholders for tabs nobody wrote; the two
   //     real ones ship.
+  //   • THE TWO-UP'S ART IS THE LIVE PAGE'S, NOT THE DESIGN FILE'S. The band used to carry
+  //     art composed for it here (a FrameworkStackScene, and the library's `azion-highlight`
+  //     Illustration). azion.com/en/products/functions draws these two claims with its own
+  //     per-page exports, so the cells now take those — `modern-frontends` (framework marks
+  //     in offset browser windows, the four the source's copy names) and `runtime` (the
+  //     runtime node on the request path, connectors running through it). Same Figma
+  //     `Assets` set the four sibling translations already draw on, so no page states one
+  //     claim in two kinds of drawing. The layout and every line of copy are unchanged.
+  //     FrameworkStackScene is left in site/ui — it is still a Site part, now with no
+  //     caller.
   import Button from '@aziontech/webkit/button'
   import CodeBlock from '@aziontech/webkit/code-block'
   import FrameBox from '@aziontech/webkit/frame-box'
   import HeroTitle from '@aziontech/webkit/hero-title'
-  import Illustration from '@aziontech/webkit/illustration'
   import Overline from '@aziontech/webkit/overline'
   import SectionGap from '@aziontech/webkit/section-gap'
   import SectionTitle from '@aziontech/webkit/section-title'
@@ -67,9 +80,13 @@
   import { computed, ref } from 'vue'
   import { useRouter } from 'vue-router'
 
+  // The two-up band's art, from the same Figma `Assets` per-page set the sibling
+  // translations draw on — the source's own drawings for these two claims, so the two-up
+  // states them the way azion.com does rather than in art we composed for it. Vite
+  // resolves each to a hashed asset URL, exactly as the client marks above do.
+  import modernFrontends from '../assets/illustrations/modern-frontends.svg'
+  import runtimeIllustration from '../assets/illustrations/runtime.svg'
   import { useScrollProgress } from '../composables/useScrollProgress.js'
-  import FrameworkStackScene from '../ui/FrameworkStackScene.vue'
-  import FunctionsHeroCanvas from '../ui/FunctionsHeroCanvas.vue'
   import { CLIENTS, NavColumn, NavItem } from '../ui/index.js'
 
   const router = useRouter()
@@ -316,30 +333,26 @@ export default app;`
     <div
       class="relative flex min-h-[calc(100dvh-var(--banner-offset,0px)-var(--spacing-xl)*2)] flex-col justify-between gap-(--spacing-xxl)"
     >
-      <!-- `grid-cols-1` explicitly, not just the implicit single column: an implicit track is
-           `auto`, which sizes to its content's MAX-CONTENT width — and the art half's rows are
-           `w-max` and far wider than a phone. That pushed the whole column past the viewport
-           and stretched the CTAs off-screen with it. `grid-cols-1` is `minmax(0, 1fr)`, which
-           clamps the intrinsic contribution to zero and keeps the column at the band's width. -->
-      <div class="relative grid flex-1 grid-cols-1 items-center gap-(--spacing-xxl) lg:grid-cols-2">
-        <!-- Hero copy anatomy: overline → headline → actions. No description — the design
-           opens on the claim alone, and the runtime's own inventory (the pill field in the
-           art half) is what elaborates it.
-
-           The headline carries the design's line break as a real newline in the prop, which
-           `whitespace-pre-line` on the h1 then honours. It is two sentences, and the break
-           is between them — a width cap cannot express that (`Write once. Run` is SHORTER
-           than `Run at the edge.`, so any measure that forbids the first allows the second
-           and `text-balance` splits them 14/14 instead). -->
+      <!-- ONE CENTERED COLUMN, NOT A SPLIT BAND. The band used to be the Figma frame's
+           two-up: the claim on the left, the runtime's own Web-API inventory
+           (FunctionsHeroCanvas) broken out of the column to fill the right half of the
+           viewport. azion.com/en/products/functions opens on the copy alone, centered on the
+           dot field, so the art half and everything that placed it are gone — the grid, its
+           explicit `grid-cols-1`, the 50vw break-out and the `-translate-y` that seated the
+           field against the headline. What is left is a flex box that centers one block, and
+           the band's height is still OURS (one screen, per CONTAINERS.md) rather than the
+           source's 548px — form is ours, content is the source's. -->
+      <div class="flex flex-1 items-center justify-center">
         <HeroTitle
+          centered
           eyebrow="Functions"
-          title="Write once.
-Run at the edge."
-          class="min-w-0 [&>h1]:whitespace-pre-line"
+          title="Instant serverless functions for modern applications"
+          description="Build and scale AI-powered applications on a globally integrated platform."
+          class="min-w-0"
         >
           <template #actions>
             <Button
-              label="Start Free"
+              label="Start free"
               kind="secondary"
               size="large"
               @click="goSignup"
@@ -352,33 +365,6 @@ Run at the edge."
             />
           </template>
         </HeroTitle>
-
-        <!-- Below `lg` it is the grid's second row, stacked under the copy at the column's
-           width. From `lg` it leaves the flow and takes the right half of the viewport:
-           `w-[50vw]` for the width, and `right-[calc(50%-50vw)]` to push its right edge out
-           to the viewport's — the standard break-out, correct here because the column is
-           centered (`mx-auto`), so half the difference between the column and the viewport
-           is exactly the inset to cancel. The band's own `overflow-hidden` is what keeps
-           50vw from becoming a horizontal scrollbar.
-
-           Its HEIGHT is `inset-y-0` against the COPY GRID, which is the flex column's
-           `flex-1` child — so it fills everything the band has left after the trust strip
-           takes its own height, and not one pixel more. Declaring the band's full height here
-           instead (as an earlier pass did) ran the field down behind the marks; the grid is
-           already exactly the region the field is allowed to have.
-
-           The `-translate-y-[xl]` on top of that lifts the whole field one step: seated in
-           the grid exactly, its densest rows sat below the headline's own centre line, and the
-           band's `overflow-hidden` is what absorbs the step it gains at the top. It moves the
-           bottom edge up by the same step, so it stays clear of the trust strip.
-
-           The grid keeps `lg:grid-cols-2` with the field out of flow, so the copy still
-           occupies the first column and never runs under it. -->
-        <div
-          class="lg:absolute lg:inset-y-0 lg:right-[calc(50%-50vw)] lg:w-[50vw] lg:-translate-y-(--spacing-xl)"
-        >
-          <FunctionsHeroCanvas />
-        </div>
       </div>
 
       <!-- The trust strip, standing on the floor of the band — inside the hero, not a band
@@ -424,8 +410,27 @@ Run at the edge."
       >
         <div class="grid lg:grid-cols-2">
           <div class="flex flex-col justify-between gap-(--spacing-xxl) p-(--spacing-xl)">
-            <div class="flex items-center justify-center py-(--spacing-lg)">
-              <FrameworkStackScene />
+            <!-- Decorative: the copy beside it carries the meaning, so the art takes no
+                 `ariaLabel` and stays hidden from assistive tech.
+                 THE ART BLEEDS THE CELL'S PADDING (`-mx`/`-mt`), which is not decoration.
+                 Both exports are drawn to run off their own 592x300 frame — this one's
+                 leftmost window is cut at x=0, the runtime's dashed connectors leave both
+                 sides — so inside the cell's padding those cuts land in mid-air and read as
+                 a clipped image. Negative margins put the art on the CONTENT-box edge: it
+                 meets the frame's rules without covering them (padding is inside the border),
+                 and the cuts read as the drawing continuing past the page, which is what
+                 they are. The export already centres its subject with its own air around it,
+                 so nothing pads it further. It is vector, so `w-full` scales it up as
+                 cleanly as down, and the fixed aspect makes both cells' art one height. -->
+            <div class="-mx-(--spacing-xl) -mt-(--spacing-xl) flex items-center justify-center">
+              <img
+                :src="modernFrontends"
+                alt=""
+                aria-hidden="true"
+                width="592"
+                height="300"
+                class="block aspect-[592/300] w-full"
+              />
             </div>
 
             <div class="flex flex-col items-start gap-(--spacing-lg)">
@@ -451,14 +456,19 @@ Run at the edge."
           <div
             class="flex flex-col justify-between gap-(--spacing-xxl) border-t border-(--border-default) p-(--spacing-xl) lg:border-l lg:border-t-0"
           >
-            <!-- The `azion-highlight` asset, by name: the mark framed by two offset square
-                 scaffolds — the design's own second illustration, already in the library,
-                 so it is selected rather than redrawn. -->
-            <div class="flex items-center justify-center py-(--spacing-lg)">
-              <Illustration
-                name="azion-highlight"
-                size="large"
-                aria-label="The Azion runtime, framed"
+            <!-- The `runtime` export, by name: the runtime node on the request path, the
+                 dashed connectors running through it — the source's own drawing of the
+                 "programmable layer between users, storefronts, APIs, and origins" this
+                 cell claims. Decorative, and bled to the content box, for the same reasons
+                 as the cell beside it. -->
+            <div class="-mx-(--spacing-xl) -mt-(--spacing-xl) flex items-center justify-center">
+              <img
+                :src="runtimeIllustration"
+                alt=""
+                aria-hidden="true"
+                width="592"
+                height="300"
+                class="block aspect-[592/300] w-full"
               />
             </div>
 
