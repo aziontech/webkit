@@ -47,14 +47,36 @@ export const SLIDE_FRAMING = {
 // a mesh is registered to the map by NOTHING but a shared crop, so a second copy of these
 // four numbers is the exact failure the file above exists to prevent.
 //
-// `150 115 760 447` is a ~2x zoom on the transatlantic corridor. Its 1.70 ratio is the
+// `74 70 912 536` is a ~1.7x zoom on the transatlantic corridor. Its 1.70 ratio is the
 // marketing band's own, so a hero at that ratio fills with no letterboxing; `xMax` parks the
 // artwork against the outer edge on any band wider than that, which on a bleeding hero is the
 // side away from the copy. The zoom is what makes an individual node read as a node rather
 // than dissolve into the dot grid — the derivation for that is still in MapBanner, beside the
 // panel crop it was reasoned about with.
+//
+// ── IT WAS `150 115 760 447`, AND THE CROP IS THE ZOOM CONTROL ──
+//
+// The band is HEIGHT-constrained (the network band is 469px tall against 803.9px of artwork
+// column, ratio 1.717, over a 1.70 crop), so the crop's HEIGHT is what sets the scale and its
+// width only pans — the same relationship the panel derivation in MapBanner spells out, and
+// the opposite of what `xMax` suggests at a glance. Measured on that band at 1440:
+//
+//   760x447   scale 1.047, a 5.21px cell. The top of the range MapBanner's own framings
+//             render at (3.03-5.33px), and the number that file records as reading "as tiles"
+//             rather than as a network on the crop it was first measured on.
+//   912x536   scale 0.873, a 4.35px cell. SHIPPED. The same 1.70 window opened 20% — near the
+//             4.10px the panel lands at on this viewport, in the middle of the range rather
+//             than at its ceiling.
+//
+// It is opened about the crop's own CENTRE (530, 338.5), so the transatlantic corridor stays
+// the subject and every edge gains equally: x 74-986 puts the whole Americas in frame with the
+// Pacific running into the copy column's wash, and y 70-607 brings the Brazilian coast up off
+// the bottom rule, which is where a third of the accent field lives. The east edge moves from
+// 910 to 986 — past the accent field's own 861 — so there is more networkless landmass in the
+// east than before; that is the price of the wider window, and it is paid on the side the
+// hemisphere already reads as context.
 export const HERO_FRAMING = {
-  crop: [150, 115, 760, 447],
+  crop: [74, 70, 912, 536],
   fit: 'xMaxYMid meet'
 }
 

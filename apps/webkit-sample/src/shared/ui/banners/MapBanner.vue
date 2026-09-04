@@ -476,12 +476,38 @@
   // legibility, where the 30% derivation above is aimed at a map with a headline on top of it.
   // At 50% the coastline lands at ~64/255, well clear of the ~25 dissolve point this file names,
   // and the accent field still leads it by 3.8x.
+  // ── 30% -> 45% ON THE HERO AND THE PANEL ──
+  //
+  // The ladder above is unchanged and still describes the artwork; what moved is which rung
+  // the marketing band stands on. 30% was derived for "a map with a headline on top of it",
+  // and on the hero that premise only holds BELOW `lg`: from `lg` the artwork is inset to 42%
+  // and the copy has its own column beside it, with nothing over the map at all. Measured on
+  // the network band at 1440, p99 over the artwork half of the frame's own pixels, on the
+  // wider crop this shipped with (see HERO_FRAMING):
+  //
+  //   30%   coastline 39 — the geography reading as a texture behind the band, not as a map.
+  //   40%   coastline 51.
+  //   45%   coastline 58, against an accent field peaking 186. SHIPPED.
+  //
+  // A 3.2x lead is still wider than the 2.3x this file keeps as the hero's floor and wider
+  // than the globe's shipped 3x, so the network leads the ground by the margin the derivation
+  // above asks for. Read the accent figures across a change of crop with care: the layer's own
+  // paint is untouched (full `--primary`; `landmassInk` never reaches it), so what moves is the
+  // CELL — at 4.35px fewer pixels land fully inside a square, and the sampler counts more of
+  // its antialiased edge. Same band, same sampler, crop alone: 242 at a 5.21px cell, 219 at
+  // 4.35px, both at 30%. The 45% figure is 186 on that same 4.35px cell.
+  //
+  // Below `lg` the premise the 30% derivation was written for does still hold — the map sits
+  // nearly full-bleed behind the copy — and 45% was checked there rather than assumed: at
+  // 390x844 the headline and every chip stay legible over it, because the chips are opaque
+  // pills and the artwork is at a 1.79px cell (327.5px of column, width-constrained) — 41% of
+  // the desktop density, so the ground it brightens is a much finer one.
   const landmassInk = computed(() =>
     isGlobe.value
       ? 'text-(--text-muted) opacity-60'
       : isPair.value
         ? 'text-(--text-muted) opacity-50'
-        : 'text-(--text-muted) opacity-30'
+        : 'text-(--text-muted) opacity-45'
   )
 
   const ROUTE_INK = 'fill-(--primary)'
