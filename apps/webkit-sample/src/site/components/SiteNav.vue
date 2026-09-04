@@ -177,12 +177,14 @@
         {
           icon: 'ai ai-build-pillar',
           label: 'Technology',
-          description: 'Scale for digital products'
+          description: 'Scale for digital products',
+          href: '/site/technology'
         },
         {
           icon: 'ai ai-marketplace',
           label: 'Retail',
-          description: 'Shopping experiences you can trust'
+          description: 'Shopping experiences you can trust',
+          href: '/site/retail'
         }
       ]
     }

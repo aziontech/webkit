@@ -19,6 +19,8 @@ import LandingContact from '@site/views/LandingContact.vue'
 import LandingFinancialServices from '@site/views/LandingFinancialServices.vue'
 import LandingFunctions from '@site/views/LandingFunctions.vue'
 import LandingPricing from '@site/views/LandingPricing.vue'
+import LandingRetail from '@site/views/LandingRetail.vue'
+import LandingTechnology from '@site/views/LandingTechnology.vue'
 import LandingWebApps from '@site/views/LandingWebApps.vue'
 
 export const siteRoutes = [
@@ -50,6 +52,13 @@ export const siteRoutes = [
   // A SOLUTION page in the same shell, by USE CASE where Financial Services is by industry:
   // the Solutions mega-menu's `By Use Case › Web Apps` entry points here.
   { path: '/site/web-apps', name: 'site-web-apps', component: LandingWebApps },
+  // A SOLUTION page in the same shell, by AUDIENCE where Financial Services is by industry
+  // and Web Apps by use case: the reader is the team building the digital product. The
+  // Solutions mega-menu's `By Industry › Technology` entry points here.
+  { path: '/site/technology', name: 'site-technology', component: LandingTechnology },
+  // A SOLUTION page in the same shell, by INDUSTRY like Financial Services: the storefront
+  // argument. The Solutions mega-menu's `By Industry › Retail` entry points here.
+  { path: '/site/retail', name: 'site-retail', component: LandingRetail },
   // The pricing page in the same shell: the three tiers, the full feature matrix, and the
   // FAQ. The website nav's `Pricing` entry points here.
   { path: '/site/pricing', name: 'site-pricing', component: LandingPricing },
