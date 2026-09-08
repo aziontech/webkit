@@ -44,7 +44,7 @@ export type MenuGroupNode = {
 export interface MenuLevel {
   /** Id of the sub that owns the level — its `MenuNode.id` in data-driven mode. */
   id: string
-  /** Label of the trigger that pushed the level; names the level and the Back row. */
+  /** Label of the trigger that pushed the level; names the level, and names it as the destination of a deeper level's Back button. */
   label: string
 }
 
@@ -75,7 +75,7 @@ export interface MenuContext {
   registerLevel: (id: string, label: string, trigger: globalThis.HTMLElement | null) => void
   /** Pops the deepest level and restores focus to the trigger that pushed it. */
   pop: () => void
-  /** Registers the Back row so a push can move focus to it. */
+  /** Registers the Back button so a push can move focus to it. */
   setBackElement: (el: globalThis.HTMLElement | null) => void
   /**
    * Anchor inside the CURRENT drill level that `Menu.Back` renders into: living in the
