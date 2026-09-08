@@ -13,98 +13,11 @@
   import Button from '../../actions/button/button.vue'
   import CopyButton from '../../actions/copy-button/copy-button.vue'
 
-  /**
-   * A prompt the reader is meant to RUN, not read — the block a docs page uses when
-   * the next step is "say this to your agent". It is the one component in this layer
-   * whose content is addressed to a machine, so it is the one that ships an
-   * affordance for handing it to one.
-   *
-   * IT IS A LINE WITH A HANDLE, NOT A CODE BLOCK. A prompt looks like code and is
-   * not: it is a sentence, so it carries no language, no gutter and no highlighting,
-   * and it is set in the mono face only to say "this is the literal text, copy it as
-   * it stands". Routing it through a code viewer would give it a language tab strip
-   * for a language that does not exist. It is set in `--text-default` rather than the
-   * muted body ink for the same reason: the prompt IS the payload of the block, and
-   * everything around it — the label, the copy control — is chrome.
-   *
-   * The mono face it takes is `text-body-code-sm`, the code face's BODY register. The
-   * `text-label-code-*` set collapses its line height entirely, which is right for
-   * what those were made for — one row per line, the row's own padding doing the
-   * spacing, as a code viewer does it — and wrong here, because a mono paragraph
-   * that WRAPS has no rows to pad and its lines would touch.
-   *
-   * THE ONE CONTROL IS THE CLIPBOARD. It used to also offer a row of "Try in Claude" /
-   * "Try in ChatGPT" buttons that carried the prompt inside a vendor URL, and they are
-   * gone: a docs prompt is read by someone who already has an agent open — in a
-   * terminal, in their editor, in a tab — and a block that names two of the possible
-   * destinations is wrong for everyone using the third. Copy works for all of them,
-   * and it is the one action that cannot be aimed at the wrong tool.
-   *
-   * A PROMPT HAS TWO LENGTHS, AND THEY WANT OPPOSITE THINGS (`kind`):
-   *
-   * - `block` — the priming paragraph. It wraps at the measure, and past four lines it
-   *   is CAPPED rather than shown whole: a nine-line prompt above the step it belongs
-   *   to pushes that step off the screen, and the reader who wants the whole thing
-   *   wants it deliberately. The cut is a fade into the block's own surface plus a
-   *   `Show more` / `Show less` button, never an ellipsis — an ellipsis says "text was
-   *   removed", and nothing here was.
-   * - `line` — the one-sentence prompt, the shape the first-deploy page uses. It does
-   *   NOT wrap: a single instruction broken across three lines reads as three
-   *   instructions. It scrolls sideways instead, with a fade on whichever edge has
-   *   text behind it, so the overflow is visible rather than guessed.
-   *
-   * A ONE-LINE PROMPT CENTRES THE ROW; EVERY OTHER PROMPT KEEPS IT AT THE TOP. The control
-   * is 28px (`size-7`) and one line of `text-body-code-sm` is 19.5px, so top-aligning the
-   * two leaves the sentence sitting 4.25px above the control's middle — right for a
-   * paragraph that grows downward, where a centred control would drift to the middle of
-   * four lines, and plainly wrong for a prompt with no second line to grow into. `line`
-   * is one line by definition; a `block` is measured, because whether its sentence fits
-   * depends on the column it lands in.
-   *
-   * It is the ROW that centres, not the control. The control is the taller of the two, so
-   * it is already the one deciding the row's height — `self-center` on it resolves to
-   * where it sits anyway, and the 4.25px stays exactly where it was.
-   *
-   * The cap and the fades are MEASURED, never assumed. A `block` prompt that fits in
-   * four lines gets no button, and a `line` prompt that fits gets no fade — an
-   * affordance for scrolling that is not there is worse than none. And neither hides
-   * anything from a screen reader: the full text is in the DOM either way, so the
-   * button is a visual convenience and the state it reports is the change in its own
-   * label.
-   *
-   * THE DISCLOSURE IS AN ANIMATED HEIGHT, WHICH IS NOT A KEYFRAME. One end of the move
-   * is the cap (a real length) and the other is the prompt's own content height — a
-   * runtime fact, different on every instance and every viewport — so a catalogued
-   * `animate-*` could only ever be right for the one prompt it was authored against.
-   * It is the measured-height recipe instead: read the height now, pin it, commit that
-   * value across TWO `requestAnimationFrame`s, then set the other end and hand the cap
-   * back to CSS on `transitionend`. Both frames are load-bearing — one can land inside
-   * the frame the browser is already painting, so the start value never commits and
-   * the box snaps. The timing is the tokens (`duration-moderate-02`, and the entrance
-   * / exit curves picked by direction), and `prefers-reduced-motion` skips the move
-   * entirely rather than shortening it.
-   *
-   * THE PROMPT IS WRITTEN ONCE, AND THE CLIPBOARD READS WHAT IS ON SCREEN. The default
-   * slot is the only place the sentence exists; the copy button's value is that
-   * element's own rendered text. A `prompt` prop beside the children would mean
-   * authoring it twice, and the copy that silently rots is always the one nobody can
-   * see.
-   *
-   * The text is read from the RENDERED ELEMENT rather than by walking the slot's
-   * vnodes, which is the same string by a route that cannot go stale. Invoking a slot
-   * outside the render function does not register what the slot depends on (Vue warns
-   * about exactly this), so a prompt whose text comes from a ref would be captured
-   * once and then quietly diverge from the sentence on screen — the one failure this
-   * block is built to make impossible. Whether the copy button exists at all is a
-   * separate, cheaper question — is there a slot or a label — so its presence is
-   * decided in the first render and never waits for a measurement.
-   *
-   * THE TITLE IS A SEPARATE REGISTER, so it gets a separate row: it names what the
-   * block IS ("AI Assistant"), above the payload. A block with no title is the bare
-   * line — the shape a "Prompts to try" list wants, where the heading above has
-   * already said what these are and a framed title on each of three one-line prompts
-   * would be three times the chrome of the content.
-   */
+  // A prompt the reader runs, not reads: a sentence, not code — no language, gutter or
+  // highlighting — set in the mono BODY register because the label-code registers
+  // collapse line height and a wrapping mono paragraph's lines would touch. `block`
+  // wraps, capped past four lines behind a fade plus a disclosure; `line` never wraps
+  // and scrolls sideways. Cap and fades are measured; the full text stays in the DOM.
   defineOptions({ name: 'DocPrompt', inheritAttrs: false })
 
   /** How the prompt occupies its row: a wrapping paragraph, or one unbroken line. */
@@ -139,17 +52,10 @@
   // A consumer-supplied data-testid wins; otherwise the derived fallback.
   const testId = computed(() => (attrs['data-testid'] as string) ?? 'documentation-doc-prompt')
 
-  /**
-   * Is there anything to copy. Answered from the slot's PRESENCE, never by calling it,
-   * so it is settled during the first render and the control never pops in a frame late.
-   */
+  /** Anything to copy? Answered from the slot's presence, never by calling it, so it settles in the first render. */
   const hasPrompt = computed(() => Boolean(slots['default']) || props.label.length > 0)
 
-  /**
-   * What the clipboard carries: the prompt element's own text, whitespace collapsed —
-   * a slot authored across three indented template lines is one sentence, and the
-   * indentation is the author's formatting rather than part of the string.
-   */
+  /** What the clipboard carries: the prompt element's own rendered text, whitespace collapsed. */
   const promptText = ref('')
 
   const promptRef = ref<globalThis.HTMLElement | null>(null)
@@ -164,24 +70,13 @@
   /** The pinned `max-height` while a disclosure move is in flight. `''` hands it back to CSS. */
   const capOverride = ref('')
 
-  /**
-   * The prompt is exactly one line, which is the only case where the row centres its two
-   * items instead of top-aligning them. `line` never has a second line; a `block` earns it
-   * by measurement, and loses it the moment its sentence wraps.
-   */
+  /** The only case where the row centres: `line` by definition, a `block` by measurement. */
   const singleLine = computed(() => props.kind === 'line' || blockFitsOneLine.value)
 
-  /**
-   * The collapsed cap, resolved to px. Read off the element rather than restated here,
-   * so `3.5lh` stays declared once — in the class that applies it — and a change there
-   * cannot leave the collapse animating to a height the class does not use.
-   */
+  /** The collapsed cap in px, read off the element so the class stays its only declaration. */
   let capPx = 0
 
-  /**
-   * One reader for both shapes, because both answers are the same question asked on a
-   * different axis: is there text outside the box, and on which side.
-   */
+  /** One reader for both shapes: is there text outside the box, and on which side. */
   const measure = () => {
     const el = promptRef.value
     if (!el) return
@@ -193,10 +88,8 @@
       return
     }
 
-    // Only answerable while collapsed AND at rest. Expanded, the cap is off and the two
-    // heights agree, so re-reading it would conclude "it fits" and take away the very
-    // button the reader just pressed; mid-move, `max-height` is the pinned value the
-    // animation is easing through, which is not the cap.
+    // Only answerable while collapsed AND at rest: expanded, the two heights agree and
+    // re-reading would remove the very button just pressed; mid-move the cap is pinned.
     if (expanded.value || capOverride.value) return
 
     const style = globalThis.getComputedStyle(el)
@@ -206,12 +99,13 @@
     const cap = Number.parseFloat(style.maxHeight)
     if (Number.isFinite(cap)) capPx = cap
 
-    // One line or more, read off the face's own line box rather than restated as a number
-    // here — the same reason the cap is read rather than repeated.
+    // Read off the face's own line box rather than restated as a number here.
     const lineHeight = Number.parseFloat(style.lineHeight)
     blockFitsOneLine.value = Number.isFinite(lineHeight) && el.scrollHeight <= lineHeight * 1.5
   }
 
+  // From the rendered element, not slot vnodes: a slot invoked outside render tracks
+  // nothing, so a ref-driven prompt would be captured once and silently go stale.
   const readPromptText = () => {
     promptText.value = (promptRef.value?.textContent ?? '').replace(/\s+/g, ' ').trim()
   }
@@ -235,13 +129,11 @@
       return
     }
 
-    // A second press mid-move: land the first one so `from` is a real height and not a
-    // value the previous run is still easing through.
+    // A second press mid-move lands the first, so `from` is a real height.
     releaseMove?.()
 
     const from = el.clientHeight
-    // Growing, the far end is the content's own height; shrinking, it is the cap — both
-    // real lengths, which is what makes them interpolable.
+    // Growing ends at the content's own height, shrinking at the cap — both real lengths.
     const to = next ? el.scrollHeight : capPx
 
     // The class cap flips with `expanded`, but the pin below lands in the same render
@@ -275,7 +167,9 @@
 
     globalThis.requestAnimationFrame(() =>
       globalThis.requestAnimationFrame(() => {
-        // Guard against a release that happened between the two frames.
+        // Both frames are load-bearing: one can land inside the frame already painting,
+        // so the start value never commits and the box snaps. The guard covers a
+        // release that happened between the two frames.
         if (releaseMove === finish) capOverride.value = `${to}px`
       })
     )
@@ -284,23 +178,19 @@
   let observer: globalThis.ResizeObserver | null = null
 
   onMounted(() => {
-    // Reading the text needs the DOM, not layout, so it happens as early as it can: here,
-    // rather than behind the tick the measurement has to wait for. The measurement is the
-    // opposite case, since it needs a laid-out box.
+    // Text needs only the DOM; the measurement waits a tick for a laid-out box.
     readPromptText()
     nextTick(measure)
 
     // The column's width decides both answers, and in a docs page it changes without a
-    // window resize — the rail appears at `lg`, the sidebar collapses, an image above
-    // finishes loading.
+    // window resize: the rail appears, the sidebar collapses, an image finishes loading.
     if (typeof globalThis.ResizeObserver === 'function' && promptRef.value) {
       observer = new globalThis.ResizeObserver(() => measure())
       observer.observe(promptRef.value)
     }
   })
 
-  // Every re-render is a chance the sentence changed, so both answers that depend on it
-  // are taken again: what the clipboard carries, and whether it still overflows.
+  // A re-render can change the sentence; re-take both answers that depend on it.
   onUpdated(() => {
     readPromptText()
     measure()
@@ -336,44 +226,24 @@
       <p class="m-0 text-label-md text-(--text-default)">{{ title }}</p>
     </div>
 
-    <!-- The prompt row. It only takes a rule and the page's own canvas when there is a
-         title above it to be divided from; on its own it IS the block, and a second
-         surface inside a bordered box would read as a box in a box. Which of the two
-         surfaces it lands on is also what every fade below has to end in, so the row
-         publishes it once as `--prompt-bg` instead of each gradient guessing.
-
-         THE COPY CONTROL STAYS BESIDE THE PROMPT AT EVERY WIDTH, in the block's top-right
-         corner — where a code block keeps its own, and the shape a reader already reaches
-         for. It used to drop below the prompt on a phone, to give the sentence the whole
-         measure; the 28px it hands back there costs a whole row, and a control sitting on
-         its own line under the text reads as a second thing rather than as this block's
-         handle.
-
-         `data-single-line` is the row's vertical alignment, and it has to live here rather
-         than on the control: the control is the taller item, so it is already setting the
-         row's height and nothing said on it can move it. -->
+    <!-- The prompt row takes a rule and the canvas only when a title divides it; alone
+         it IS the block. It publishes its own surface as a custom property so every
+         fade below ends in the right color. The single-line flag lives on the row, not
+         the control: the control is the taller item, so it already sets the height. -->
     <div
       :data-titled="title ? '' : undefined"
       :data-single-line="singleLine ? '' : undefined"
       class="flex items-start gap-(--spacing-sm) px-(--spacing-md) py-(--spacing-sm) [--prompt-bg:var(--bg-surface)] data-[single-line]:items-center data-[titled]:border-t data-[titled]:border-(--border-default) data-[titled]:bg-(--bg-canvas) data-[titled]:[--prompt-bg:var(--bg-canvas)]"
     >
       <div class="min-w-0 flex-1">
-        <!-- The fades anchor to the TEXT BOX, not to the column: the disclosure below is a
-             sibling of the prompt, and a gradient stretched over both would wash out the very
-             button it is telling the reader to press. -->
+        <!-- The fades anchor to the text box, not the column: a gradient stretched over
+             the sibling disclosure would wash out the very button it points at. -->
         <div class="relative">
-          <!-- One element for both shapes: same ink, same measure, opposite overflow. The cap
-               is `3.5lh` rather than a round number of lines so the fourth line is cut through
-               the middle of its glyphs — a clean cut at a line boundary reads as the end of the
-               prompt, and the whole point of the fade is to say "this continues".
-
-               The curve is picked by DIRECTION, and `data-expanded` is already the destination
-               when the move starts: growing gets the entrance curve, shrinking the exit one.
-
-               A `line` prompt is FOCUSABLE because it scrolls: a scroll container holding no
-               focusable child is unreachable by keyboard, which is a real dead end (and an axe
-               `scrollable-region-focusable` violation). The `block` shape scrolls nothing — its
-               overflow is the disclosure's job — so it takes no tab stop. -->
+          <!-- One element for both shapes. The cap cuts the fourth line mid-glyph on
+               purpose: a cut at a line boundary reads as the end of the prompt. The curve
+               is picked by direction. A line prompt is focusable because a scroll
+               container with no focusable child is a keyboard dead end (axe
+               scrollable-region-focusable); the block shape scrolls nothing. -->
           <p
             ref="promptRef"
             :data-kind="kind"
@@ -387,13 +257,9 @@
             <slot>{{ label }}</slot>
           </p>
 
-          <!-- Fades, one per overflowing edge, each ending in the row's own surface. Rendered
-               only when there is something behind them: a permanent gradient over a prompt
-               that fits is a promise of text that does not exist.
-
-               The block's fade stays MOUNTED once the prompt is capped and rides opacity
-               instead, so it leaves with the move it belongs to — a `v-if` would cut it on
-               the first frame of a 240ms expand and read as a flicker. -->
+          <!-- One fade per overflowing edge, rendered only when text is behind it. The
+               block's fade stays mounted and rides opacity, so it leaves with the move it
+               belongs to instead of being cut on the expand's first frame. -->
           <div
             v-if="kind === 'block' && capped"
             :data-hidden="expanded ? '' : undefined"
@@ -412,9 +278,8 @@
           />
         </div>
 
-        <!-- The disclosure belongs to the prompt, not to the copy control: it changes the
-             prompt's own height, while the button beside it is about where the prompt GOES.
-             It sits centred under the fade, which is where the text stopped. -->
+        <!-- The disclosure belongs to the prompt (it changes the prompt's own height);
+             it sits centred under the fade, where the text stopped. -->
         <div
           v-if="kind === 'block' && capped"
           class="flex justify-center pt-(--spacing-sm)"
@@ -429,9 +294,8 @@
         </div>
       </div>
 
-      <!-- Wrapped rather than aligned on the control itself, because the control's own root
-           merges the class it is handed into its variant classes — an alignment that
-           depends on that landing is an alignment that can silently not. -->
+      <!-- Wrapped rather than aligned on the control itself: the control merges a passed
+           class into its variants, and an alignment depending on that can silently not land. -->
       <div
         v-if="hasPrompt"
         class="flex shrink-0 justify-end"

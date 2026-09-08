@@ -29,51 +29,27 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'navigation-menu-back'
   )
 
-  /**
-   * Presence follows the level's own anchor, not the stack: on a pop the stack empties at
-   * once, but the level it named is still sliding out and must keep its Back button.
-   */
+  /** Follows the level's own anchor, not the stack — a level still sliding out after a pop keeps its Back button. */
   const isVisible = computed(() => ctx.backHost.value !== null)
 
   /**
-   * Where a pop LANDS — the level beneath the current one — not the level the reader is in.
-   * A back button names its destination; naming the current level would read as travelling
-   * to the place you are already standing. Empty when the destination is the menu root,
-   * which has no trigger to name it: `label` is how a consumer names that one.
-   *
-   * Read LIVE, with no hold across the slide-out. Naming the current level needed one (the
-   * stack empties the instant a pop begins, blanking the label of the level still sliding
-   * away); naming the destination never does. A pop to the root leaves the text unchanged —
-   * the root is unnamed both before and after — and a pop between levels hands the button to
-   * the incoming level, whose own destination is exactly what the live stack now reports.
+   * Where a pop LANDS — the level beneath the current one, not the level the reader is in.
+   * Empty for the menu root, which has no trigger to name it — `label` names that one.
    */
   const destination = computed(() => {
     const levels = ctx.levels.value
     return props.label || (levels.length > 1 ? levels[levels.length - 2].label : '')
   })
 
-  /**
-   * The visible text is also the accessible name, so the two can never disagree — which is
-   * why there is no `aria-label` here. A bare "Back" is the honest fallback when the
-   * destination has no name.
-   */
+  /** The visible text doubles as the accessible name, so the two can never disagree. */
   const text = computed(() => (destination.value ? `Back to ${destination.value}` : 'Back'))
 
-  // A BUTTON, not a row: it hugs its label (`w-fit`) instead of spanning the rail, and its
-  // content is left-aligned. Both are deliberate — a full-width box with a centred label is
-  // the shape of the nav rows beneath it, and reading as one of them makes the single control
-  // that leaves the level the hardest thing in it to find.
+  // A BUTTON, not a row: it hugs its label (`w-fit`) and left-aligns, unlike the nav rows
+  // beneath it — the control that leaves the level should not read as one of them.
   const ROOT_CLASS =
-    // `mb` sets the button apart from the level's first group instead of letting it read as
-    // that group's first row — it heads the level, it is not part of it.
-    // No motion of its own: it renders INSIDE the current level (see the teleport below), so
-    // the level's slide carries it and its box never sits in the root's flow.
     'group relative flex h-8 w-fit max-w-full shrink-0 items-center gap-(--spacing-xxs) ' +
     'mb-(--spacing-sm) ' +
-    // `--spacing-sm` is the menu's single content column, so the chevron's box starts exactly
-    // where a row's icon box centres its glyph — the button sits on the rows' column without
-    // borrowing their 32px icon box, which is what pushed its label onto the rows' label
-    // column and made it read as one of them.
+    // Starts on `--spacing-sm`, the menu's content column, without the rows' 32px icon box.
     'rounded-(--shape-elements) px-(--spacing-sm) ' +
     'text-(--text-default) ' +
     "before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:bg-(--bg-hover) before:opacity-0 before:content-[''] before:transition-opacity before:duration-fast-02 before:ease-productive-entrance " +
@@ -91,12 +67,9 @@
 </script>
 
 <template>
-  <!--
-    Renders into the CURRENT level rather than where it is declared. That anchor only exists
-    while a level is pushed, which is exactly when Back should exist — so `isVisible` and the
-    host agree, the level's slide animates Back for free, and the root's flow never reserves
-    a row that is about to leave.
-  -->
+  <!-- Renders into the CURRENT level: that anchor exists only while a level is pushed, so
+       `isVisible` and the host agree, the level's slide animates Back for free, and the
+       root's flow never reserves a row that is about to leave. -->
   <Teleport
     v-if="isVisible"
     :to="ctx.backHost.value"
@@ -109,10 +82,8 @@
       :class="rootClass"
       @click="ctx.pop()"
     >
-      <!--
-        The chevron carries the whole "this goes back" reading, so it is tight against the
-        label (`--spacing-xxs`) rather than held a row's icon-box away from it.
-      -->
+      <!-- The chevron carries the whole "this goes back" reading, so it sits tight against the
+           label rather than a row's icon-box away from it. -->
       <i
         class="pi pi-chevron-left size-4 shrink-0 leading-none text-[length:inherit] text-(--text-muted)"
         aria-hidden="true"

@@ -127,7 +127,6 @@
   const presetsTriggerRef = ref<globalThis.HTMLElement | null>(null)
   const presetsPanelRef = ref<globalThis.HTMLElement | null>(null)
 
-  /* ---- open state (controlled / uncontrolled) ---- */
   const internalOpen = ref(false)
   const internalPresetsOpen = ref(false)
   const isOpen = computed(() => (props.open !== undefined ? props.open : internalOpen.value))
@@ -149,7 +148,6 @@
 
   const toggleOpen = () => setOpen(!isOpen.value)
 
-  /* ---- presets menu (left segment of the two-part trigger) ---- */
   const isPresetsOpen = computed(() => internalPresetsOpen.value)
   const isPresetsOpenRef = computed(() => isPresetsOpen.value)
 
@@ -165,7 +163,6 @@
 
   const togglePresets = () => setPresetsOpen(!isPresetsOpen.value)
 
-  /* ---- timezone state (controlled / uncontrolled) ---- */
   const internalTimezone = ref(props.timezone)
   const timezoneValue = computed(() => props.timezone || internalTimezone.value)
   const setTimezone = (value: string) => {
@@ -181,7 +178,6 @@
     }
   )
 
-  /* ---- draft (staged selection) ---- */
   const emptyValue = (): CalendarValue =>
     props.mode === 'range' ? { start: null, end: null } : null
 
@@ -361,7 +357,6 @@
     draft.value = emptyValue()
   }
 
-  /* ---- trigger display ---- */
   const displayValue = computed(() =>
     formatValueLabel(props.modelValue, props.mode, timezoneValue.value)
   )
@@ -383,12 +378,11 @@
   const hasPresets = computed(() => props.presets.length > 0 || Boolean(slots['presets']))
 
   /* When presets are configured, the trigger splits into two segments: a preset
-     dropdown (left) and the calendar (right) — the Vercel-style two-part control. */
+     dropdown (left) and the calendar (right). */
   const isTwoPart = computed(() => hasPresets.value && !props.period)
   const presetLabel = computed(() => committedPeriodLabel.value || 'Select Period')
   const rangeText = computed(() => windowLabel.value || props.placeholder)
 
-  /* ---- positioning + focus + dismissal ---- */
   const { resolvedPlacement, panelStyle } = usePlacement({
     triggerRef,
     panelRef,
@@ -640,14 +634,11 @@
     </span>
 
     <Teleport to="body">
-      <!-- The panel is content-sized, so its WIDEST child sets its width — and one of
-           those children is the consumer's `#footer` slot. A row of shortcut chips (or
-           any wide footer content) would otherwise stretch the panel without bound and
-           spread the month grid across it. `max-w` is the hard stop: `44rem` rather than
-           a px container token because the content that grows is text, so the cap has to
-           grow with the root font the same way the grid and the chips do; `90vw` keeps it
-           inside a narrow viewport. It sits above every built-in layout, including
-           `horizontal` (grid + fields column), so nothing that ships is clipped by it. -->
+      <!-- The panel is content-sized, so its widest child — including the consumer's
+           `#footer` slot — sets its width; a wide footer would otherwise stretch the panel
+           and spread the month grid across it. The cap is rem-based (the growing content
+           is text, so it must scale with the root font) with a viewport bound for narrow
+           screens, and it clears every built-in layout, horizontal included. -->
       <Transition
         enter-active-class="animate-popup-scale-in motion-reduce:animate-none"
         leave-active-class="animate-popup-scale-out motion-reduce:animate-none"

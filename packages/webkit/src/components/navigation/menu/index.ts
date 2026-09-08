@@ -7,10 +7,9 @@ import MenuSubContent from './menu-sub-content/menu-sub-content.vue'
 import MenuSubTrigger from './menu-sub-trigger/menu-sub-trigger.vue'
 
 /**
- * The attached members, named explicitly rather than inferred. `Object.assign`'s return
- * type inlines the root's local `Props` interface, which `vue-tsc` then rejects as a
- * private name in the default export (TS4082); casting to a declared static keeps the
- * compound fully typed without exporting `Props`. Same shape as the accordion compound.
+ * Members declared explicitly: `Object.assign`'s return type inlines the root's private
+ * `Props` interface, which `vue-tsc` rejects in the default export (TS4082); casting to a
+ * declared static keeps the compound fully typed without exporting `Props`.
  */
 interface MenuStatic {
   Group: typeof MenuGroup
@@ -21,10 +20,6 @@ interface MenuStatic {
   Back: typeof MenuBack
 }
 
-/**
- * Compound API — `Menu.Group`, `Menu.Item`, `Menu.Sub`, … resolve from this one import.
- * `Item` is the existing `menu-item` component, attached unchanged.
- */
 const Menu = MenuRoot as typeof MenuRoot & MenuStatic
 Menu.Group = MenuGroup
 Menu.Item = MenuItem
