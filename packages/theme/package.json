@@ -1,7 +1,7 @@
 {
   "name": "@aziontech/theme",
   "type": "module",
-  "version": "4.3.0",
+  "version": "4.3.1",
   "author": "aziontech",
   "license": "MIT",
   "repository": {
@@ -44,6 +44,7 @@
     ".": "./dist/v4/globals.css",
     "./animations": "./src/tokens/primitives/animations/animate.js",
     "./colors": "./src/tokens/primitives/colors/colors.js",
+    "./layouts": "./src/tokens/semantic/layouts.data.js",
     "./texts": "./src/tokens/semantic/texts.data.js",
     "./theme-colors": "./src/scripts/compile-theme.js"
   }

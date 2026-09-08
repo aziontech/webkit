@@ -1,7 +1,9 @@
 <script setup lang="ts">
-  import { curve, duration } from '@aziontech/theme/animations'
-  import { computed, ref, useAttrs } from 'vue'
+  import { computed, useAttrs } from 'vue'
 
+  import Tooltip from '../../overlay/tooltip/tooltip.vue'
+
+  export type ChipKind = 'filled' | 'outlined' | 'dashed'
   export type ChipSize = 'small' | 'medium'
 
   defineOptions({
@@ -12,7 +14,9 @@
   interface Props {
     /** Fallback text when the default slot is empty. */
     label?: string
-    /** Size token; `small` is a fixed 20px, `medium`'s height is driven by its vertical padding (~30px). */
+    /** Visual variant. Filled is an applied value, outlined an available one, dashed the control that adds one. */
+    kind?: ChipKind
+    /** Size token; `small` is a fixed 24px, `medium` a fixed 32px. */
     size?: ChipSize
     /** When true, renders a trailing remove button that emits remove. */
     removable?: boolean
@@ -22,6 +26,7 @@
 
   const props = withDefaults(defineProps<Props>(), {
     label: '',
+    kind: 'filled',
     size: 'medium',
     removable: false,
     clickable: false
@@ -40,29 +45,15 @@
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'input-chip')
 
-  // Dismiss motion — same opacity fade-out as the Message component (animations.js tokens).
-  const REMOVE_MS = Number.parseInt(duration['fast-02'], 10)
-  const removeTransitionStyle = {
-    transition: `opacity ${duration['fast-02']} ${curve['productive-exit']}`
-  }
+  // One string for the remove control's tooltip AND its accessible name, so they cannot
+  // drift; in a row of chips, `label` is what tells identical Remove controls apart.
+  const removeLabel = computed(() => (props.label ? `Remove ${props.label}` : 'Remove'))
 
-  const visible = ref(true)
-  let pendingRemoveEvent: MouseEvent | undefined
-
+  // Presence is the consumer's call: emit and stop. A chip that fades itself out before
+  // emitting cannot survive its own removal, and the inline transition style that fade
+  // needs silently overrides any transition utility a consumer puts on the root.
   function onRemove(event: MouseEvent) {
-    if (!visible.value) {
-      return
-    }
-
-    pendingRemoveEvent = event
-    visible.value = false
-  }
-
-  function handleAfterLeave() {
-    if (pendingRemoveEvent) {
-      emit('remove', pendingRemoveEvent, props.label)
-      pendingRemoveEvent = undefined
-    }
+    emit('remove', event, props.label)
   }
 
   function onClick(event: MouseEvent) {
@@ -81,59 +72,68 @@
 
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault()
-      emit('click', event, props.label)
+      // Synthesise a real DOM click, as a native button does: overlay triggers open on the
+      // DOM click that bubbles out of their child, so a chip that only emitted a Vue event
+      // worked with the mouse but did nothing from the keyboard. The dispatched click runs
+      // `onClick`, so `click` is still emitted exactly once.
+      ;(event.currentTarget as globalThis.HTMLElement).click()
     }
   }
 </script>
 
 <template>
-  <Transition
-    :duration="{ enter: 0, leave: REMOVE_MS }"
-    leave-from-class="opacity-100"
-    leave-to-class="opacity-0"
-    leave-active-class="motion-reduce:transition-none"
-    @after-leave="handleAfterLeave"
+  <!-- All three kinds share one surface fill and differ only in elevation (`filled`
+       carries the small shadow) and the dash: the raised-surface token equals the surface
+       token in the light theme, so a fill distinction cannot carry the applied/available
+       contrast. -->
+  <span
+    v-bind="$attrs"
+    :data-testid="testId"
+    :data-kind="kind"
+    :data-size="size"
+    :data-removable="removable || null"
+    :data-clickable="clickable || null"
+    :role="clickable ? 'button' : undefined"
+    :tabindex="clickable ? 0 : undefined"
+    :class="attrs.class"
+    class="relative inline-flex w-fit items-center justify-center overflow-hidden rounded-full border border-solid border-(--border-default) bg-(--bg-surface) text-(--text-default) leading-none transition-[color,background-color,border-color,box-shadow] duration-fast-02 ease-productive-entrance motion-reduce:transition-none text-label-sm before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:bg-(--bg-hover) before:opacity-0 before:content-[''] before:transition-opacity before:duration-fast-02 before:ease-productive-entrance motion-reduce:before:transition-none data-[kind=filled]:shadow-(--shadow-sm) data-[kind=dashed]:border-dashed data-[size=small]:h-6 data-[size=small]:px-(--spacing-xs) data-[size=medium]:h-8 data-[size=medium]:px-(--spacing-sm) data-[size=small]:data-[removable]:pr-(--spacing-xxs) data-[size=medium]:data-[removable]:pr-(--spacing-xxs) data-[clickable]:cursor-pointer data-[clickable]:hover:border-(--border-strong) data-[clickable]:hover:before:opacity-100 data-[clickable]:active:before:opacity-100 data-[clickable]:active:border-(--border-strong) data-[clickable]:focus-visible:outline-none data-[clickable]:focus-visible:ring-2 data-[clickable]:focus-visible:ring-(--ring-color) data-[clickable]:focus-visible:ring-offset-2 data-[clickable]:focus-visible:ring-offset-(--bg-canvas)"
+    @click="onClick"
+    @keydown="onKeydown"
   >
     <span
-      v-if="visible"
-      v-bind="$attrs"
-      :data-testid="testId"
-      :data-size="size"
-      :data-removable="removable || null"
-      :data-clickable="clickable || null"
-      :role="clickable ? 'button' : undefined"
-      :tabindex="clickable ? 0 : undefined"
-      :style="removeTransitionStyle"
-      :class="attrs.class"
-      class="relative inline-flex items-center justify-center overflow-hidden border border-(--border-default) border-(length:--border-width-default) bg-(--bg-surface-raised) text-(--text-default) shadow-(--shadow-sm) leading-none rounded-(--shape-elements) before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:bg-(--bg-hover) before:opacity-0 before:content-[''] before:transition-opacity before:duration-fast-02 before:ease-productive-entrance motion-reduce:before:transition-none data-[size=medium]:text-label-md data-[size=small]:text-label-sm data-[size=medium]:leading-none data-[size=small]:leading-none data-[size=small]:h-5 data-[size=medium]:py-(--spacing-xs) data-[size=medium]:px-(--spacing-sm) data-[size=small]:p-(--spacing-xs) data-[size=medium]:data-[removable]:pr-(--spacing-xs) data-[size=small]:data-[removable]:pr-(--spacing-xxs) data-[clickable]:cursor-pointer data-[clickable]:hover:before:opacity-100 data-[clickable]:active:before:opacity-100 data-[clickable]:active:border-(--border-strong) data-[clickable]:focus-visible:outline-none data-[clickable]:focus-visible:ring-2 data-[clickable]:focus-visible:ring-(--ring-color) data-[clickable]:focus-visible:ring-offset-2 data-[clickable]:focus-visible:ring-offset-(--bg-canvas)"
-      @click="onClick"
-      @keydown="onKeydown"
+      class="relative z-(--z-input-field) inline-flex min-w-0 items-center justify-center gap-(--spacing-xxs)"
     >
+      <slot v-if="$slots['default']" />
       <span
-        class="relative z-(--z-input-field) inline-flex items-center justify-center gap-(--spacing-xxs)"
+        v-else-if="label"
+        :data-testid="`${testId}__label`"
+        class="truncate"
       >
-        <slot v-if="$slots['default']" />
-        <span
-          v-else-if="label"
-          :data-testid="`${testId}__label`"
-        >
-          {{ label }}
-        </span>
+        {{ label }}
+      </span>
+      <!-- 24px at medium is the WCAG 2.5.8 minimum for a pointer target; `small` keeps a
+           16px control — a justified deviation where the chip itself stays the affordance. -->
+      <Tooltip
+        v-if="removable"
+        :text="removeLabel"
+        placement="top"
+      >
         <button
-          v-if="removable"
           type="button"
-          aria-label="Remove"
+          :aria-label="removeLabel"
           :data-testid="`${testId}__remove`"
-          class="inline-flex shrink-0 items-center justify-center rounded-(--shape-elements) text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
+          class="inline-flex shrink-0 items-center justify-center rounded-full text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) data-[size=medium]:size-6 data-[size=small]:size-4"
+          :data-size="size"
           @click.stop="onRemove"
         >
           <i
-            class="pi pi-times flex shrink-0 items-center size-[14px]"
+            class="pi pi-times flex shrink-0 items-center size-[14px] data-[size=small]:size-[10px]"
+            :data-size="size"
             aria-hidden="true"
             :data-testid="`${testId}__remove-icon`"
           />
         </button>
-      </span>
+      </Tooltip>
     </span>
-  </Transition>
+  </span>
 </template>

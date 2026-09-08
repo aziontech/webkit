@@ -79,16 +79,26 @@
       :tabindex="-1"
       :data-testid="`${testId}__indicator`"
     />
-    <slot
-      v-if="$slots['left']"
-      name="left"
-    />
-    <i
-      v-else-if="icon"
-      :class="[icon, 'flex shrink-0 items-center text-(--text-default)']"
-      aria-hidden="true"
-      :data-testid="`${testId}__icon`"
-    />
+    <!-- One leading column for the whole list, after the checkbox: options with a glyph
+         set a marker attribute, and a has() rule on the options group then shows the box
+         on EVERY option, so a mixed list keeps one label edge. A list with no icons at
+         all reserves nothing and pays no indent. -->
+    <span
+      :data-leading="$slots['left'] || icon ? '' : undefined"
+      :data-testid="`${testId}__leading`"
+      class="hidden size-4 shrink-0 items-center justify-center overflow-hidden group-has-[[data-leading]]/options:flex"
+    >
+      <slot
+        v-if="$slots['left']"
+        name="left"
+      />
+      <i
+        v-else-if="icon"
+        :class="[icon, 'text-(--text-default)']"
+        aria-hidden="true"
+        :data-testid="`${testId}__icon`"
+      />
+    </span>
     <span class="flex-1 truncate text-left">
       <slot />
     </span>

@@ -14,6 +14,10 @@
  *                               typography, breakpoints, animations, …)
  *   - `tokens/semantic/{containers,spacings,texts}.data.js`
  *                               responsive-shaped semantic tokens
+ *   - `tokens/semantic/layouts.data.js`
+ *                               layout tokens (all derived from --spacing-* /
+ *                               --container-*) + the `@utility` blocks that
+ *                               build the container system on them
  *   - `tokens/primitives/animations/{animate,keyframes}.js`
  *                               animation utilities (`--animate-*`) + `@keyframes`
  *                               definitions + extra CSS (transform-origin) for
@@ -32,6 +36,7 @@ import { breakpoints } from '../tokens/primitives/breakpoints.js';
 import { compilePrimitivesVars } from './compile-primitives.js';
 import { compileThemeCss, compileThemeVars } from './compile-theme.js';
 import { containersData } from '../tokens/semantic/containers.data.js';
+import { layoutsData, layoutsUtilities } from '../tokens/semantic/layouts.data.js';
 import { spacingsData } from '../tokens/semantic/spacings.data.js';
 import { textsData } from '../tokens/semantic/texts.data.js';
 import { zIndicesData } from '../tokens/semantic/z-indices.data.js';
@@ -92,6 +97,7 @@ const buildFlatModel = () => ({
   containers: flattenSingleValue(containersData, (k) => `--container-${k}`),
   spacings: flattenSingleValue(spacingsData, (k) => `--${k}`),
   zIndices: flattenSingleValue(zIndicesData, (k) => `--${k}`),
+  layouts: flattenSingleValue(layoutsData, (k) => `--${k}`),
   texts: flattenBundle(textsData),
 });
 
@@ -234,6 +240,33 @@ const emitSemanticColorUtilities = () => {
  * interactive element loses the hand cursor unless a component overrides it.
  * Disabled controls keep the default cursor.
  */
+/**
+ * Emit a map of `@utility` blocks. A string value is a plain declaration; an object
+ * value is a nested rule keyed by a literal selector (`&:first-child { … }`), the way
+ * the typography utilities nest their `&:hover`.
+ */
+const emitUtilities = (utilities) =>
+  Object.entries(utilities)
+    .map(([name, decls]) => {
+      const body = Object.entries(decls)
+        .map(([prop, value]) =>
+          typeof value === 'object'
+            ? `  ${prop} { ${formatStateDecls(value)}; }`
+            : `  ${prop}: ${value};`,
+        )
+        .join('\n');
+      return `@utility ${name} {\n${body}\n}`;
+    })
+    .join('\n\n');
+
+/**
+ * The container system as `@utility` blocks — same reason as the typography
+ * utilities: `@layer components` classes are opaque to the variant resolver, and a
+ * layout class is exactly the kind a consumer wants behind a variant
+ * (`md:layout-column`).
+ */
+const emitLayoutUtilities = () => emitUtilities(layoutsUtilities);
+
 const emitBaseLayer = () =>
   [
     '@layer base {',
@@ -310,6 +343,7 @@ const emitCssV4 = () => {
     ...(m.containers._ || {}),
     ...(m.spacings._ || {}),
     ...(m.zIndices._ || {}),
+    ...(m.layouts._ || {}),
     ...(m.texts._ || {}),
   };
 
@@ -319,6 +353,7 @@ const emitCssV4 = () => {
       ...(m.containers[bp] || {}),
       ...(m.spacings[bp] || {}),
       ...(m.zIndices[bp] || {}),
+      ...(m.layouts[bp] || {}),
       ...(m.texts[bp] || {}),
     };
     if (Object.keys(merged).length === 0) continue;
@@ -365,6 +400,8 @@ const emitCssV4 = () => {
     '}',
     '',
     emitTextUtilities(),
+    '',
+    emitLayoutUtilities(),
     '',
     emitSemanticColorUtilities(),
     '',

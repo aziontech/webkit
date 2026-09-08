@@ -1,18 +1,12 @@
 import { composeStories } from '@storybook/vue3'
-import { fireEvent, render, waitFor } from '@testing-library/vue'
+import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
 import * as stories from '../../../../../../apps/storybook/src/stories/components/inputs/chip/Chip.stories'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Chip from './chip.vue'
 
-const { Default, Sizes, Removable } = composeStories(stories)
-
-// @testing-library/vue mounts through @vue/test-utils, which stubs <Transition>
-// by default. The stub skips the JS transition lifecycle, so the component's
-// `@after-leave` (which emits `remove`) never fires. Rendering the REAL
-// transition lets the fade-out run and fire `@after-leave` as it does in prod.
-const realTransition = { global: { stubs: { transition: false } } }
+const { Clickable, Default, Removable, Sizes, Types } = composeStories(stories)
 
 describe('Chip', () => {
   it('renders a <span> root carrying the default data-testid and default size', () => {
@@ -21,6 +15,16 @@ describe('Chip', () => {
     const root = getByTestId('input-chip')
     expect(root.tagName).toBe('SPAN')
     expect(root).toHaveAttribute('data-size', 'medium')
+    expect(root).toHaveAttribute('data-kind', 'filled')
+  })
+
+  it.each([
+    ['filled', 'filled' as const],
+    ['outlined', 'outlined' as const],
+    ['dashed', 'dashed' as const]
+  ])('maps kind=%s onto data-kind', (expected, kind) => {
+    const { getByTestId } = render(Chip, { props: { label: 'K', kind } })
+    expect(getByTestId('input-chip')).toHaveAttribute('data-kind', expected)
   })
 
   it('shows the label prop text via the label sub-node', () => {
@@ -77,7 +81,7 @@ describe('Chip', () => {
       expect(queryByTestId('input-chip__remove')).toBeNull()
     })
 
-    it('renders a remove button with the Remove aria-label and an aria-hidden icon when removable', () => {
+    it('renders a remove button whose accessible name NAMES what it removes', () => {
       const { getByTestId } = render(Chip, { props: { label: 'Removable', removable: true } })
 
       expect(getByTestId('input-chip')).toHaveAttribute('data-removable')
@@ -85,47 +89,87 @@ describe('Chip', () => {
       const removeBtn = getByTestId('input-chip__remove')
       expect(removeBtn.tagName).toBe('BUTTON')
       expect(removeBtn).toHaveAttribute('type', 'button')
-      expect(removeBtn).toHaveAttribute('aria-label', 'Remove')
+      // Four identical "Remove" controls in a row of chips are indistinguishable.
+      expect(removeBtn).toHaveAttribute('aria-label', 'Remove Removable')
 
       const icon = getByTestId('input-chip__remove-icon')
       expect(icon).toHaveAttribute('aria-hidden', 'true')
     })
 
-    it('emits "remove" with the native MouseEvent after the dismiss fade completes', async () => {
-      const { getByTestId, queryByTestId, emitted } = render(Chip, {
-        props: { label: 'Dismiss me', removable: true },
-        ...realTransition
+    it('falls back to a bare "Remove" name when there is no label', () => {
+      const { getByTestId } = render(Chip, {
+        props: { removable: true },
+        slots: { default: 'Slotted' }
+      })
+
+      expect(getByTestId('input-chip__remove')).toHaveAttribute('aria-label', 'Remove')
+    })
+
+    it('wraps the remove control in a tooltip carrying the same text', async () => {
+      const { getByTestId } = render(Chip, { props: { label: 'Env', removable: true } })
+
+      const removeBtn = getByTestId('input-chip__remove')
+      // The tooltip wrapper is the button's parent; hovering it reveals the text.
+      await fireEvent.mouseEnter(removeBtn.parentElement as HTMLElement)
+      await new Promise((resolve) => setTimeout(resolve, 350))
+
+      expect(document.body.textContent).toContain('Remove Env')
+    })
+
+    it('emits "remove" immediately with the native MouseEvent and the label', async () => {
+      const { getByTestId, emitted } = render(Chip, {
+        props: { label: 'Dismiss me', removable: true }
       })
 
       await fireEvent.click(getByTestId('input-chip__remove'))
 
-      // "remove" is emitted from @after-leave, once the leave transition ends.
-      await waitFor(() => {
-        expect(emitted('remove')).toHaveLength(1)
-      })
-      // Payload is the native MouseEvent forwarded from the button click.
+      expect(emitted('remove')).toHaveLength(1)
       expect(emitted('remove')[0][0]).toBeInstanceOf(Event)
-
-      // After the transition, the chip is unmounted.
-      await waitFor(() => {
-        expect(queryByTestId('input-chip')).toBeNull()
-      })
+      expect(emitted('remove')[0][1]).toBe('Dismiss me')
     })
 
-    it('does not emit "remove" a second time on a repeated click after dismissal starts', async () => {
+    it('STAYS MOUNTED after remove — presence belongs to the consumer', async () => {
+      const { getByTestId } = render(Chip, { props: { label: 'Survivor', removable: true } })
+
+      await fireEvent.click(getByTestId('input-chip__remove'))
+
+      // The chip must not hide or unmount itself: a filter bar keeps the field on
+      // screen as an `outlined` offer after its value is dropped, and a self-hiding
+      // chip made that impossible (the instance stayed invisible forever).
+      expect(getByTestId('input-chip')).toBeInTheDocument()
+      expect(getByTestId('input-chip')).toBeVisible()
+    })
+
+    it('emits "remove" once per click, repeatedly', async () => {
       const { getByTestId, emitted } = render(Chip, {
-        props: { label: 'Once', removable: true },
-        ...realTransition
+        props: { label: 'Twice', removable: true }
       })
 
       const removeBtn = getByTestId('input-chip__remove')
       await fireEvent.click(removeBtn)
-      // Second click while already leaving: onRemove guards on visible.value.
       await fireEvent.click(removeBtn)
 
-      await waitFor(() => {
-        expect(emitted('remove')).toHaveLength(1)
+      // No internal "already dismissed" latch swallowing the second activation.
+      expect(emitted('remove')).toHaveLength(2)
+    })
+
+    it('declares no inline transition on the root, so consumer motion is not overridden', () => {
+      const { getByTestId } = render(Chip, { props: { label: 'Motion', removable: true } })
+
+      // An inline `style="transition: …"` beats every class, which silently discarded
+      // any `transition-*` utility a consumer put on the chip.
+      expect(getByTestId('input-chip').style.transition).toBe('')
+    })
+
+    it('does not emit "click" when the remove button is activated', async () => {
+      const { getByTestId, emitted } = render(Chip, {
+        props: { label: 'Both', removable: true, clickable: true }
       })
+
+      await fireEvent.click(getByTestId('input-chip__remove'))
+
+      expect(emitted('remove')).toHaveLength(1)
+      expect(emitted().click).toBeUndefined()
     })
   })
 
@@ -135,6 +179,40 @@ describe('Chip', () => {
   ])('renders the %s size variant', (size, props) => {
     const { getByTestId } = render(Chip, { props })
     expect(getByTestId('input-chip')).toHaveAttribute('data-size', size)
+  })
+
+  describe('clickable', () => {
+    it('is a focusable role=button that emits click with the label', async () => {
+      const { getByTestId, emitted } = render(Chip, {
+        props: { label: 'Pick me', clickable: true }
+      })
+
+      const root = getByTestId('input-chip')
+      expect(root).toHaveAttribute('role', 'button')
+      expect(root).toHaveAttribute('tabindex', '0')
+
+      await fireEvent.click(root)
+      expect(emitted('click')).toHaveLength(1)
+      expect(emitted('click')[0][1]).toBe('Pick me')
+    })
+
+    it.each([['Enter'], [' ']])('activates on %s from the keyboard', async (key) => {
+      const { getByTestId, emitted } = render(Chip, {
+        props: { label: 'Key', clickable: true }
+      })
+
+      await fireEvent.keyDown(getByTestId('input-chip'), { key })
+      expect(emitted('click')).toHaveLength(1)
+    })
+
+    it('emits nothing on activation when not clickable', async () => {
+      const { getByTestId, emitted } = render(Chip, { props: { label: 'Inert' } })
+
+      const root = getByTestId('input-chip')
+      expect(root).not.toHaveAttribute('role')
+      await fireEvent.click(root)
+      expect(emitted().click).toBeUndefined()
+    })
   })
 
   describe('accessibility', () => {
@@ -157,6 +235,13 @@ describe('Chip', () => {
     expect(getByTestId('input-chip')).not.toHaveAttribute('data-removable')
   })
 
+  it('composes the Types story fixture with all three kinds', () => {
+    const { getAllByTestId } = render(Types())
+
+    const kinds = getAllByTestId('input-chip').map((chip) => chip.getAttribute('data-kind'))
+    expect(kinds).toEqual(expect.arrayContaining(['filled', 'outlined', 'dashed']))
+  })
+
   it('composes the Sizes story fixture with both size tokens', () => {
     const { getAllByTestId } = render(Sizes())
 
@@ -170,6 +255,25 @@ describe('Chip', () => {
     const { getByTestId } = render(Removable())
 
     expect(getByTestId('input-chip')).toHaveAttribute('data-removable')
-    expect(getByTestId('input-chip__remove')).toHaveAttribute('aria-label', 'Remove')
+    expect(getByTestId('input-chip__remove')).toHaveAttribute('aria-label', 'Remove Label')
+  })
+
+  it('composes the Clickable story fixture as an interactive root', () => {
+    const { getByTestId } = render(Clickable())
+
+    expect(getByTestId('input-chip')).toHaveAttribute('data-clickable')
+    expect(getByTestId('input-chip')).toHaveAttribute('role', 'button')
+  })
+
+  describe('accessibility of the new kinds', () => {
+    it.each([['outlined' as const], ['dashed' as const]])(
+      'has no a11y violations for a clickable %s chip',
+      async (kind) => {
+        const { container } = render(Chip, {
+          props: { label: 'Offer', kind, clickable: true }
+        })
+        await expectNoA11yViolations(container)
+      }
+    )
   })
 })

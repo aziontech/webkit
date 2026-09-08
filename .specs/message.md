@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=478-892
   node_id: 478:892
-checksum: 7eb084f26d57f6a7e176936035f2f2871d6b15a536ec376a60da89d1a989e712
+checksum: 8ca61e4ceb1c1714a37ed3723f8d642264cbe06ca309f7d37b95f4bdbea54724
 created: 2026-05-22
-last_updated: 2026-07-29
+last_updated: 2026-08-10
 ---
 # Message — Component Spec
 
@@ -85,6 +85,7 @@ import Message from '@aziontech/webkit/message'
 | inline link (anchor inside the message) | `.text-link` |
 | leading icon glyph | `.text-label-md` — 14px at both sizes; the icon does not scale with the banner |
 | leading icon box | `size-3.5` — 14px, matching the glyph so the row height is stable |
+| leading icon alignment | the icon and the copy share an `items-start` block, and the icon rides an alignment box the height of the copy's line box (`h-5.25` medium / `h-4.5` small) — so it centers on the **first** line and stays there when the copy wraps, instead of drifting to the middle of the block |
 | action typography | `.text-button-md` — both Button sizes use this step |
 | action size | tracks `size`: `small` → Button `small` (28px), `medium` → Button `medium` (32px) |
 | action surface | `var(--secondary)` — the built-in action is a `secondary` Button, so it reads as a control against every severity surface rather than as body copy |

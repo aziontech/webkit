@@ -3,6 +3,7 @@ export const COMPONENT_CATEGORIES = [
   'code',
   'content',
   'data',
+  'documentation',
   'feedback',
   'inputs',
   'layout',

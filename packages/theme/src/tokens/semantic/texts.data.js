@@ -98,6 +98,14 @@ export const textsData = {
     fontWeight: fontWeight.normal,
     letterSpacing: tracking.normal
   },
+  'text-body-code-sm': {
+    textWrapStyle: 'pretty',
+    fontFamily: fontFamily.code,
+    fontSize: fontSize.xs,
+    lineHeight: leading.relaxed,
+    fontWeight: fontWeight.normal,
+    letterSpacing: tracking.normal
+  },
   'text-label-code-md': {
     fontFamily: fontFamily.code,
     fontSize: fontSize.sm,
@@ -114,33 +122,43 @@ export const textsData = {
   },
   'text-body-lg': {
     fontSize: { _: fontSize.base, md: fontSize.lg },
-    lineHeight: leading.normal
+    fontWeight: fontWeight.normal,
+    lineHeight: leading.snug
   },
   'text-body-md': {
     fontSize: fontSize.base,
-    lineHeight: leading.normal
+    fontWeight: fontWeight.normal,
+    lineHeight: leading.snug
+  },
+  'text-body-prose-md': {
+    fontSize: fontSize.base,
+    fontWeight: fontWeight.normal,
+    lineHeight: leading.relaxed
   },
   'text-body-sm': {
     fontSize: fontSize.sm,
-    lineHeight: leading.normal
+    fontWeight: fontWeight.normal,
+    lineHeight: leading.snug
   },
   'text-body-xs': {
     fontSize: fontSize.xs,
+    fontWeight: fontWeight.normal,
+    lineHeight: leading.snug
+  },
+  'text-body-xxs': {
+    fontSize: fontSize.xs,
+    fontWeight: fontWeight.normal,
     lineHeight: leading.normal
   },
   'text-tag-sm': {
     fontSize: fontSize.xs,
     lineHeight: leading.tight,
-    fontWeight: fontWeight.semibold
+    fontWeight: fontWeight.normal
   },
   'text-tag-md': {
     fontSize: fontSize.xs,
     lineHeight: leading.tight,
-    fontWeight: fontWeight.semibold
-  },
-  'text-body-xxs': {
-    fontSize: fontSize.xs,
-    lineHeight: leading.normal
+    fontWeight: fontWeight.normal
   },
   'text-overline-md': {
     fontFamily: fontFamily.display,

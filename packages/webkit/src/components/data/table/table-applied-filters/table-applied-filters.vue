@@ -66,10 +66,19 @@
 </script>
 
 <template>
-  <div
+  <!-- Exit motion lives here, not in Chip: Chip emits `remove` and stays mounted, and
+       here dropping a filter really does destroy the chip. Leaving chips are taken out
+       of flow so the survivors slide into the gap instead of jumping. -->
+  <TransitionGroup
     v-bind="$attrs"
+    tag="div"
     :data-testid="testId"
     class="flex flex-wrap items-center gap-(--spacing-xs)"
+    move-class="transition-[transform,translate,opacity] duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
+    enter-from-class="scale-95 opacity-0"
+    enter-active-class="transition-[transform,translate,scale,opacity] duration-fast-02 ease-productive-entrance motion-reduce:transition-none"
+    leave-to-class="scale-95 opacity-0"
+    leave-active-class="absolute transition-[transform,translate,scale,opacity] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
   >
     <template
       v-for="filter in filters"
@@ -91,5 +100,5 @@
         </Chip>
       </slot>
     </template>
-  </div>
+  </TransitionGroup>
 </template>

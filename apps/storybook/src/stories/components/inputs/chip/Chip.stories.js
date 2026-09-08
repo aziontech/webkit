@@ -13,12 +13,23 @@ const meta = {
     docs: {
       description: {
         component:
-          'A compact, dismissible token that labels a user-applied value, such as a removable filter on a data view. When `removable` is set, it renders a trailing button that emits the `remove` event; when `clickable` is set, the chip body becomes interactive and emits the `click` event.'
+          'A compact, pill-shaped token that labels a user-applied value, such as a filter on a data view. `kind` covers the three jobs a chip does in a filter surface: `filled` is a value that IS applied, `outlined` one the user COULD apply, and `dashed` the control that adds one. When `removable` is set, it renders a trailing button that emits `remove` — immediately, without hiding itself, so presence stays the consumer\'s call; when `clickable` is set, the chip body becomes interactive and emits `click`.'
       },
       canvas: { sourceState: 'shown' }
     }
   },
   argTypes: {
+    kind: {
+      control: 'inline-radio',
+      options: ['filled', 'outlined', 'dashed'],
+      description:
+        'Visual variant. Filled is an applied value, outlined an available one, dashed the control that adds one.',
+      table: {
+        category: 'props',
+        type: { summary: "'filled' | 'outlined' | 'dashed'" },
+        defaultValue: { summary: 'filled' }
+      }
+    },
     label: {
       control: 'text',
       description: 'Fallback text when the default slot is empty.',
@@ -27,7 +38,7 @@ const meta = {
     size: {
       control: 'inline-radio',
       options: ['small', 'medium'],
-      description: 'Size token; medium is 24px tall, small is 20px.',
+      description: 'Size token; medium is a fixed 32px, small a fixed 24px.',
       table: {
         category: 'props',
         type: { summary: "'small' | 'medium'" },
@@ -46,7 +57,7 @@ const meta = {
       table: { category: 'props', type: { summary: 'boolean' }, defaultValue: { summary: 'false' } }
     }
   },
-  args: { label: 'Label', size: 'medium', removable: false, clickable: false }
+  args: { label: 'Label', kind: 'filled', size: 'medium', removable: false, clickable: false }
 }
 
 export default meta
@@ -59,7 +70,7 @@ const Template = (args) => ({
   template: '<Chip v-bind="props" />'
 })
 
-const DEFAULT_MARKUP = '<Chip label="Label" size="medium" />'
+const DEFAULT_MARKUP = '<Chip label="Label" kind="filled" size="medium" />'
 
 export const Default = {
   render: Template,
@@ -67,6 +78,29 @@ export const Default = {
     docs: {
       description: { story: 'The baseline Chip rendering its `label`.' },
       source: { code: toSfc(IMPORT, DEFAULT_MARKUP) }
+    }
+  }
+}
+
+const TYPES_TEMPLATE = `<div class="flex flex-wrap items-center gap-4">
+  <Chip label="Production" kind="filled" size="medium" removable />
+  <Chip label="Status" kind="outlined" size="medium" clickable />
+  <Chip label="Add filter" kind="dashed" size="medium" clickable />
+</div>`
+
+export const Types = {
+  render: () => ({
+    components: { Chip },
+    template: TYPES_TEMPLATE
+  }),
+  parameters: {
+    docs: {
+      controls: { disable: true },
+      description: {
+        story:
+          'The three kinds in the order they read in a filter surface: an applied value, an available one, and the control that adds one.'
+      },
+      source: { code: toSfc(IMPORT, TYPES_TEMPLATE) }
     }
   }
 }
@@ -90,7 +124,7 @@ export const Sizes = {
   }
 }
 
-const REMOVABLE_MARKUP = '<Chip label="Label" size="medium" removable />'
+const REMOVABLE_MARKUP = '<Chip label="Label" kind="filled" size="medium" removable />'
 
 export const Removable = {
   args: { removable: true },
@@ -98,13 +132,16 @@ export const Removable = {
   argTypes: { onRemove: { action: 'remove' } },
   parameters: {
     docs: {
-      description: { story: 'Removable chip; the × button emits `remove`.' },
+      description: {
+        story:
+          'Removable chip; the × button emits `remove` immediately. The chip does not hide itself — the consumer decides whether it disappears, stays, or becomes an `outlined` offer.'
+      },
       source: { code: toSfc(IMPORT, REMOVABLE_MARKUP) }
     }
   }
 }
 
-const CLICKABLE_MARKUP = '<Chip label="Label" size="medium" clickable />'
+const CLICKABLE_MARKUP = '<Chip label="Label" kind="filled" size="medium" clickable />'
 
 export const Clickable = {
   args: { clickable: true },

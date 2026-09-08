@@ -51,7 +51,7 @@
     :aria-valuemax="indeterminate ? undefined : max"
     :aria-valuenow="indeterminate ? undefined : value"
     :aria-busy="indeterminate || undefined"
-    class="relative block w-full overflow-hidden bg-(--bg-surface-raised) data-[size=small]:h-2 data-[size=medium]:h-3 data-[size=large]:h-4 data-[shape=rounded]:rounded-(--shape-elements) data-[shape=flat]:rounded-(--shape-flat)"
+    class="relative block w-full overflow-hidden bg-(--bg-placeholder) data-[size=small]:h-2 data-[size=medium]:h-3 data-[size=large]:h-4 data-[shape=rounded]:rounded-(--shape-elements) data-[shape=flat]:rounded-(--shape-flat)"
   >
     <div
       :data-indeterminate="indeterminate || null"

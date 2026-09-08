@@ -22,7 +22,9 @@ overrides:
   brace-expansion: ">=5.0.9" # GHSA-rgw5-rvv9-x895 (DoS, CVE-2026-14257 mitigation bypass), patched 5.0.9 — supersedes GHSA-mh99-v99m-4gvg
   minimatch: ">=9.0.0" # keeps minimatch@3 chains out so the brace-expansion force stays within one API major
   uuid: ">=14.0.0" # GHSA-w5hq-g745-h8pq, patched 11.1.1; jest/storybook chains pin 8.x/9.x
-  fast-uri: ">=3.1.5 <4" # GHSA-7p8r-x3mc-p8w7 (host confusion via backslash), patched 3.1.5; bounded to 3.x — ajv pins ^3
+  fast-uri: ">=3.1.6 <4" # GHSA-jqff-g426-hqxp, GHSA-5jgf-p345-68v8, GHSA-f65p-4m7j-42xc, GHSA-fph4-wmhf-6fwf (host confusion/SSRF), patched 3.1.6; bounded to 3.x — ajv pins ^3
+  qs: ">=6.16.0 <7" # GHSA-4mjr-xmp4-gh2g (DoS via isBuffer) and GHSA-x5fp-wj9c-mxmx (array-limit bypass), patched 6.16.0; bounded to 6.x — express/union pin ^6
+  "@xmldom/xmldom": ">=0.9.12 <0.10" # GHSA-6gmq-8vp8-gcm6 (XML fragment injection), patched 0.9.12; bounded — 0.x minors break API
   "@babel/core": ">=7.29.1 <8" # bounded: peer ranges (^7 || ^8.0.0-0) would jump to Babel 8
   "@hono/node-server": ">=2.0.5" # GHSA-frvp-7c67-39w9; MCP SDK still pins ^1.19.x — drop when the SDK moves to ^2
   hono: ">=4.12.34 <5" # GHSA-8j4g-w8fx-2239 (ReDoS in CORS middleware), patched 4.12.34; bounded to 4.x — MCP SDK pins ^4
