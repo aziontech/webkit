@@ -62,47 +62,17 @@
     :data-kind="kind"
     class="group flex w-full flex-col bg-(--bg-canvas)"
   >
-    <!-- Two placements, the same two `GlobalHeader` has, and the bands are identical in
-         both — what changes is whether they are capped and framed.
-
-         `content` (the DEFAULT) runs them FULL BLEED across whatever zone holds the footer,
-         and it needs no inset of its own to line up: every band already carries
-         `--spacing-lg` inside it, which is the value `--layout-boundary-inline` resolves to,
-         so the first column title opens on the page boundary by construction. Add a padding
-         here and it would open at twice it.
-
-         `site` closes a framed marketing page: the bands take `layout-column-site` — the
-         page's shared measure as a CAP, and, once the window is narrower than it, the page
-         boundary as an INSET — and the frame is drawn around them. The inset is what keeps
-         this footer's side rules on the same vertical as the sections above it: capped
-         alone, the rules land on the window's own edges below the measure, where a hairline
-         reads as a seam against the bezel rather than as the page's frame. That measure is a token
-         rather than a rung of the container ladder because the hero band, the framed
-         sections and this footer are ONE vertical frame whose side rules only meet while
-         all three resolve to the same width — retuning it has to move them together, which
-         a hardcoded rung here cannot do. The top BAR is the one band deliberately outside
-         that frame (--layout-measure-site-header, one rung wider — see GlobalHeader
-         `kind="site"`), which is exactly why the frame's measure is a token of its own and
-         not "whatever the header uses".
-
-         THE FRAME APPARATUS IS `site`-ONLY, and not as a matter of taste. On a full-bleed
-         footer the side rules land on the zone's own edges, where a hairline reads as a seam
-         against the bezel rather than as a frame; and the `flex-1` gutters, having no slack
-         to grow into, collapse to zero width while still painting their borders and corner
-         marks — onto the bands' own edges. -->
-    <!-- `justify-center` is what keeps the capped frame under the page's own. The gutters
-         normally consume the slack symmetrically, but between the measure (1388) and the
-         breakpoint that turns them on (1536) the row holds ONE child, and a capped child in
-         a flex row with no justification is LEFT-aligned — the footer's frame sitting up to
-         148px left of the centred frame it is supposed to close. With it, the footer's column
-         lands on the page column's own vertical at every width: 26 at 1440, 74 at 1536, 266
-         at 1920, 586 at 2560 — the same numbers `mx-auto` inside the page boundary gives. -->
+    <!-- Two placements, identical bands: `content` (default) runs them full bleed with no inset
+         of its own (every band already carries the boundary value); `site` caps them at the
+         site measure token, insets by the page boundary below it, and draws the frame. The
+         frame is site-only: full bleed, the rules would land on the zone's edges and the
+         gutters collapse to zero width while still painting borders. -->
     <div class="flex w-full items-stretch justify-center">
-      <!-- `2xl` (1536) is the first breakpoint PAST the measure (1388), which is the only
-           gate that works: below it the column is the whole row, so a gutter has no slack,
-           resolves to zero width, and paints its border and corner marks on the column's own
-           edge — two hairlines at one pixel. The gate has to move with the measure; it was
-           `xl` while the measure was 1192. -->
+      <!-- Centred because between the measure (1388) and the gutter breakpoint (1536) the row
+           holds one capped child, which an unjustified flex row left-aligns by up to 148px. -->
+      <!-- The gutters turn on at the first breakpoint past the measure: below it the column is
+           the whole row, a gutter has no slack, and its border and marks paint on the column's
+           own edge. Move the breakpoint with the measure. -->
       <FrameBox
         v-if="kind === 'site'"
         key="gutter-start"
@@ -143,16 +113,10 @@
             class="flex flex-col items-start gap-(--spacing-md) p-(--spacing-lg) md:flex-row md:items-center md:justify-between md:gap-(--spacing-lg)"
           >
             <slot name="brand" />
-            <!-- The gap earns its place only between `md` and the width that fits the tagline on
-                 one line: there `justify-between` alone would let a wrapped second line run into
-                 the brand. Past that width the tagline is one line pinned to the right edge and
-                 the gap is slack that never resolves, so it costs the wide layout nothing. -->
-            <!-- `v-if`, like every other band: the paragraph exists only when the consumer
-                 fills it. Rendered unconditionally it was an empty heading-sized `<p>` in the
-                 DOM of every brand-only footer, and — because it is still a flex ITEM — it
-                 spent the row's `gap` too, pushing a lone brand off the band's centre by half
-                 of it (measured 12px at 768–1023). A band with one thing in it should place
-                 that thing as if it were alone, because it is. -->
+            <!-- The gap only matters between md and the width that fits the tagline on one line,
+                 where a wrapped tagline would otherwise run into the brand. -->
+            <!-- Rendered only when filled: an empty paragraph is still a flex item and spends the
+                 row's gap, pushing a lone brand off centre (measured 12px at 768 to 1023). -->
             <p
               v-if="slots.tagline"
               class="text-heading-xl text-(--text-default) md:text-right"
