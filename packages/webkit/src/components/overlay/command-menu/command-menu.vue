@@ -81,17 +81,28 @@
       /mac/i.test(navigator.platform || navigator.userAgent || '')
   )
 
-  const navigableItems = computed(() =>
-    items.value.filter((item) => item.isVisible.value && !item.disabled.value)
-  )
+  /** The items roving navigation walks: filtered, in DOM order rather than registration order.
+   *  A group mounted after the palette opened registers last but renders where the consumer put
+   *  it, so a registration-ordered list would highlight a row further down than the one in view.
+   *  `compareDocumentPosition` reads the live DOM, so hidden rows and Teleported panels compare
+   *  correctly; an item whose element has not mounted keeps its registration position. */
+  const navigableItems = computed(() => {
+    const visible = items.value.filter((item) => item.isVisible.value && !item.disabled.value)
+    return visible
+      .map((item, index) => ({ item, index }))
+      .sort((a, b) => {
+        const left = a.item.el.value
+        const right = b.item.el.value
+        if (!left || !right) return a.index - b.index
+        const position = left.compareDocumentPosition(right)
+        if (position & Node.DOCUMENT_POSITION_FOLLOWING) return -1
+        if (position & Node.DOCUMENT_POSITION_PRECEDING) return 1
+        return a.index - b.index
+      })
+      .map((entry) => entry.item)
+  })
 
   const hasVisibleItems = computed(() => items.value.some((item) => item.isVisible.value))
-
-  /**
-   * One icon column for the whole palette: reserved as soon as any item has a
-   * prefix, so mixed lists keep one label edge and icon-less palettes pay no indent.
-   */
-  const hasPrefixColumn = computed(() => items.value.some((item) => item.hasPrefix.value))
 
   function setOpen(value: boolean) {
     isOpen.set(value)
@@ -207,8 +218,14 @@
     setOpen(!isOpen.value)
   })
 
+  // Twice, on purpose. The synchronous pass re-highlights the first row of the list as it
+  // stands; the `nextTick` pass runs after the DOM has settled, which is the only moment a
+  // group the consumer renders CONDITIONALLY on the query (a result list) has mounted and
+  // registered. Without it, the first keystroke of a search leaves the highlight — and
+  // therefore `Enter` — on a row that is no longer the first one.
   watch(query, () => {
     resetActive()
+    nextTick(() => resetActive())
   })
 
   watch(
@@ -238,7 +255,6 @@
     setActive,
     isActive,
     hasVisibleItems,
-    hasPrefixColumn,
     groupHasVisibleItems,
     onInputKeydown
   })
