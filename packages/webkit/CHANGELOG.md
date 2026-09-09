@@ -4,6 +4,30 @@
 
 - [Inputs] normalize z-index across all inputs (ENG-46735) ([#783](https://github.com/aziontech/webkit/issues/783)) ([25d201d](https://github.com/aziontech/webkit/commit/25d201d5ae0e6054b9189bc81c76b7d9fc8c5055))
 
+## [5.0.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@4.4.0...@aziontech/webkit@5.0.0) (2026-09-09)
+
+
+### ⚠ BREAKING CHANGES
+
+* **theme:** the `description` prop is removed, and `suffix` now defaults to `/ mon` rather than `per month`.
+
+### Features
+
+* add no comment flow ([#951](https://github.com/aziontech/webkit/issues/951)) ([b7f0201](https://github.com/aziontech/webkit/commit/b7f020167b53cbea03c5d74edc63b6e7fdecbd22))
+* **theme:** add the amount type ladder ([#921](https://github.com/aziontech/webkit/issues/921)) ([5594670](https://github.com/aziontech/webkit/commit/55946702e23c0f96c5f3dcecb14ddeff8a6f00db))
+* **webkit:** give Menu rows an arrow control split by href, and make Back a button ([#952](https://github.com/aziontech/webkit/issues/952)) ([cad6c1c](https://github.com/aziontech/webkit/commit/cad6c1c64ea4758d8c1f1fa35b1782ec9c7f0176))
+* **webkit:** give SegmentedButton a size ladder and a fluid mode ([#933](https://github.com/aziontech/webkit/issues/933)) ([6a77749](https://github.com/aziontech/webkit/commit/6a777494ddf59cf422bb2d3812f39b88bd6afeee))
+* **webkit:** rework the NavigationMenu panel and fix its dead keyboard model ([#943](https://github.com/aziontech/webkit/issues/943)) ([f16cd2a](https://github.com/aziontech/webkit/commit/f16cd2ac3aeb6d4eb9429fc4ab7222b4bb34744f))
+
+
+### Bug Fixes
+
+* **webkit:** [ENG-47884] make sidebar collapse/expand animate in CSS, not JS ([#960](https://github.com/aziontech/webkit/issues/960)) ([5c4c055](https://github.com/aziontech/webkit/commit/5c4c05552fe9d8d48d624dc6eb974b94d2fa17a4))
+* **webkit:** name the phone field's country combobox and unclip its dial-code listbox ([#961](https://github.com/aziontech/webkit/issues/961)) ([844f27c](https://github.com/aziontech/webkit/commit/844f27cdf399b525a994e951388faf5917bfb301))
+* **webkit:** place overlay panels with translate so re-anchors can transition ([#932](https://github.com/aziontech/webkit/issues/932)) ([8e5ed03](https://github.com/aziontech/webkit/commit/8e5ed036e4eb463f59ed2ee49fe8dd375ff8f7bf))
+* **webkit:** rove the command palette in DOM order and drop its reserved prefix box ([#941](https://github.com/aziontech/webkit/issues/941)) ([529fac2](https://github.com/aziontech/webkit/commit/529fac2058640d39596a0deef7884025923e7d8a))
+* **webkit:** stop wrapped toast titles overlapping and pin the glyph to line one ([#900](https://github.com/aziontech/webkit/issues/900)) ([80568d2](https://github.com/aziontech/webkit/commit/80568d2bd282ee126a48f19d408da68172245ba9))
+
 ## [4.4.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@4.3.0...@aziontech/webkit@4.4.0) (2026-08-10)
 
 
