@@ -136,16 +136,13 @@
           <div
             class="flex min-w-0 flex-col items-start justify-center gap-(--spacing-lg) p-(--spacing-xl)"
           >
-            <!-- `-ml-1` cancels the 4px `pl-1` Overline carries, so the label starts on
-                 the row's own left edge with the copy under it. -->
             <Overline
               prefix="//"
               show-cursor
-              class="-ml-1"
               >{{ capability.label }}</Overline
             >
             <h3
-              class="m-0 max-w-(--container-2xl) text-pretty text-heading-md text-(--text-default)"
+              class="m-0 max-w-(--container-2xl) text-pretty text-heading-sm text-(--text-default)"
             >
               {{ capability.claim }}
             </h3>
