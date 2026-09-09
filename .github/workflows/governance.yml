@@ -39,6 +39,8 @@ jobs:
               - '.specs/**'
               - '.claude/hooks/**'
               - '.claude/rules/**'
+              - '.claude/skills/**'
+              - '.claude/agents/**'
               - 'apps/storybook/**'
               - 'packages/webkit/**'
             tests:
