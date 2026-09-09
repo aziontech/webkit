@@ -1,13 +1,7 @@
 /**
- * Compound API — each sub-component stays available as its own import
- * (`@aziontech/webkit/calendar-preset`, `@aziontech/webkit/calendar-clear`) and is
- * also attached to the root for dot-notation usage: `<Calendar.Preset>`, `<Calendar.Clear>`.
- *
- * This is a `.ts` file so vue-tsc generates the adjacent `index.d.ts`, giving
- * `<Calendar.Preset>` full type-checking. `Object.assign` keeps one source of truth;
- * the explicit `CompoundCalendar` annotation lets declaration emit reference the
- * sub-component types instead of expanding the root's private `Props`.
- * See `.claude/rules/compound-api.md`.
+ * Compound API per `.claude/rules/compound-api.md`. A `.ts` file so vue-tsc emits the
+ * adjacent `index.d.ts`; the explicit `CompoundCalendar` annotation makes declaration
+ * emit reference the sub-component types instead of expanding the root's private `Props`.
  */
 import Calendar from './calendar.vue'
 import CalendarClear from './calendar-clear/calendar-clear.vue'

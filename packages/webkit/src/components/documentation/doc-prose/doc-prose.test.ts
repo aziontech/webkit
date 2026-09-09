@@ -6,22 +6,15 @@ import * as stories from '../../../../../../apps/storybook/src/stories/component
 import { expectNoA11yViolations } from '../../../test/axe'
 import DocProse from './doc-prose.vue'
 
-// .claude/rules/testing.md: Vitest browser mode (real Chromium) loads NO Tailwind, so
-// every utility on this root emits nothing here. That rules out the whole ladder: the
-// section rung, the tightened heading gaps, the `data-doc-chrome` exclusions and the ink
-// are all CSS, and a computed-style assertion would read the user-agent default whether
-// the class is correct, misspelled, or missing entirely — passing identically in the
-// broken and the fixed state. The rhythm is therefore verified by the visual gate and in
-// the browser; what is asserted here is the part that is real without CSS: that the
-// container renders its slot as-is, adds no semantics of its own, and forwards attributes.
+// Browser mode loads no Tailwind, so the typographic ladder and the chrome exclusions
+// (all CSS) are verified by the visual gate; asserted here: the container renders its
+// slot as-is, adds no semantics of its own, and forwards attributes.
 
 const { Default, ChromeBoundary } = composeStories(stories)
 
 // The real Clipboard API rejects in headless Chromium ("Document is not focused"), so
-// writeText is stubbed to resolve. That substitutes an external side effect, not layout
-// or focus — what is under test is WHICH chips hand a string over and which are left
-// alone. The rejecting stub exercises the other branch, which is a real path in the
-// browser too (an insecure origin, or a denied permission).
+// writeText is stubbed; under test is which chips hand a string over. The rejecting
+// stub exercises a real browser path too (insecure origin, denied permission).
 const stubClipboard = (writeText = vi.fn().mockResolvedValue(undefined)) => {
   vi.stubGlobal('navigator', { ...navigator, clipboard: { writeText } })
   return writeText
@@ -59,7 +52,6 @@ describe('DocProse', () => {
         slots: { default: '<h2>Heading</h2><p>Paragraph</p><ul><li>Item</li></ul>' }
       })
       const root = getByTestId('documentation-doc-prose')
-      // The container styles descendants; it must not restructure them.
       expect(Array.from(root.children).map((el) => el.tagName)).toEqual(['H2', 'P', 'UL'])
       expect(root.querySelector('ul > li')).toBeInTheDocument()
     })
@@ -75,8 +67,7 @@ describe('DocProse', () => {
       const { getByTestId, getByText } = render(DocProse, {
         slots: { default: '<p>Prose</p><div data-doc-chrome><p>Component copy</p></div>' }
       })
-      // The exclusion itself is a CSS selector and is unobservable here; what IS
-      // observable is that marking a subtree does not change what renders.
+      // The CSS exclusion is unobservable here; marking a subtree must not change what renders.
       expect(
         getByTestId('documentation-doc-prose').querySelector('[data-doc-chrome] p')
       ).toBeInTheDocument()

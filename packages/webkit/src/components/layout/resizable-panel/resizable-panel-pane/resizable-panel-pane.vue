@@ -23,11 +23,7 @@
     ariaLabel: ''
   })
 
-  /**
-   * The pane length in pixels along the group axis. A pane that never receives one is
-   * FLEXIBLE: it absorbs whatever the sized panes leave, which is what keeps the group
-   * filling its container without anyone doing arithmetic.
-   */
+  /** Pane length in px along the group axis; a pane that never receives one is flexible and absorbs the remainder. */
   const basis = defineModel<number | undefined>('basis', { default: undefined })
   /** Whether the pane renders at zero length. It stays mounted, so its content keeps its state. */
   const collapsed = defineModel<boolean | undefined>('collapsed', { default: undefined })
@@ -54,13 +50,9 @@
   const clamp = (value: number) => Math.min(Math.max(value, props.min), props.max)
 
   /**
-   * The one place a drag, a keyboard nudge and a programmatic set all land — so the
-   * clamp, the collapse threshold and the restore can only be decided once.
-   *
-   * COLLAPSE IS A SEPARATE FACT FROM LENGTH, and the pane keeps both. A collapsible pane
-   * dragged below half its minimum collapses, and its `basis` is left at the minimum
-   * rather than at zero: that is the length it comes BACK at, and a pane that reopened to
-   * nothing would look like a control that did not work.
+   * The single landing place for drag, nudge, and programmatic sets — clamp and
+   * collapse decided once. Collapse is a separate fact from length: `basis` stays
+   * at the minimum so the pane reopens there, not at zero.
    */
   const setBasis = (next: number) => {
     if (props.collapsible && next < props.min / 2) {
@@ -73,16 +65,9 @@
   }
 
   /**
-   * THE PANE'S SIZE IS AN INLINE STYLE, `flex` INCLUDED — and the `flex` half is the
-   * load-bearing part. Expressed as classes it would be `flex-none` on the base and
-   * `flex-1` under a `data-[flexible]` variant, which is the shape this file started
-   * with and which silently did not work: the two utilities set the same shorthand, and
-   * the flexible pane resolved to `flex: none`. Sized by its content instead of by the
-   * space left over, it stopped shrinking when its neighbour grew — so a drag widened
-   * the whole GROUP past its container (measured: 1140 → 1282) and pushed the far edge
-   * off screen, while the pane the reader was dragging appeared to work perfectly.
-   *
-   * One inline declaration, three mutually exclusive cases, no cascade to lose.
+   * The size is one inline declaration, the flex shorthand included: as base plus
+   * variant utilities both set the same shorthand, the flexible pane resolved to
+   * none, and a drag widened the group past its container (measured 1140 to 1282px).
    */
   const paneStyle = computed<Record<string, string>>(() => {
     const axis = orientation.value === 'horizontal' ? 'width' : 'height'
@@ -127,14 +112,10 @@
 </script>
 
 <template>
-  <!-- A COLLAPSED PANE IS ZERO-SIZED, NOT UNMOUNTED AND NOT `display: none`. Zero size is
-       what lets the content survive the collapse with its state intact (an editor's undo
-       history, a scroll position) AND come back correctly: an element hidden with
-       `display: none` reports no geometry, so anything inside it that measures itself —
-       an editor, a chart, a virtualized list — comes back mis-laid-out.
-       `overflow-hidden` + `min-w-0` / `min-h-0` is the other half: without them a flex
-       item refuses to shrink below its content, and a "collapsed" pane sits there at its
-       content width. -->
+  <!-- A collapsed pane is zero-sized, not unmounted and not display-none: content
+       keeps its state, and self-measuring children (editors, charts) come back laid
+       out correctly. Hidden overflow plus zero min sizes are the other half —
+       without them a flex item refuses to shrink below its content. -->
   <div
     ref="paneRef"
     v-bind="$attrs"

@@ -79,12 +79,10 @@
       :tabindex="-1"
       :data-testid="`${testId}__indicator`"
     />
-    <!--
-      One leading column for the whole list, after the checkbox. `data-leading` marks
-      the options that actually have a glyph; `group-has-…` then shows the box on
-      EVERY option, so a list mixing iconed and icon-less options keeps one label
-      edge. A list with no icons at all reserves nothing and pays no indent.
-    -->
+    <!-- One leading column for the whole list, after the checkbox: options with a glyph
+         set a marker attribute, and a has() rule on the options group then shows the box
+         on EVERY option, so a mixed list keeps one label edge. A list with no icons at
+         all reserves nothing and pays no indent. -->
     <span
       :data-leading="$slots['left'] || icon ? '' : undefined"
       :data-testid="`${testId}__leading`"

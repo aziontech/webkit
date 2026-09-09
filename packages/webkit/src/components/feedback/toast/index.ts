@@ -1,18 +1,7 @@
 /**
- * Compound API — each sub-component stays available as its own import
- * (`@aziontech/webkit/toast-item`, ...) and is also attached to the
- * root for dot-notation usage: `<Toast.Toaster>`, `<Toast.Item>`,
- * `<Toast.Title>`, etc. The same module also exposes the imperative `toast`
- * function (a named export) and the reactive store that backs it.
- *
- * This is a `.ts` file so vue-tsc generates the adjacent `index.d.ts`, giving
- * `<Toast.Toaster>` full type-checking. `Object.assign` keeps one source of
- * truth; the explicit `CompoundToast` annotation lets declaration emit
- * reference the sub-component types instead of expanding private props.
- *
- * There is no `Trigger` / `Content`: a toast has no disclosure open/closed
- * state — its lifecycle is presence in the stack, reflected via `data-type`
- * and the enter/leave transitions. See `.claude/rules/compound-api.md`.
+ * Compound toast API: sub-components attach to the root for dot-notation and stay
+ * individually importable; the imperative toast function and store are named exports.
+ * The CompoundToast annotation keeps declaration emit from expanding private props.
  */
 import type { App, Plugin } from 'vue'
 import { createVNode, render } from 'vue'
@@ -45,7 +34,6 @@ const Toast = Object.assign(Toaster, {
 
 export default Toast
 
-// Named export so the root can be imported directly: `import { Toaster, toast }`.
 export type { ToastPosition } from './toaster.vue'
 export { default as Toaster } from './toaster.vue'
 export type {
@@ -60,16 +48,9 @@ export type {
 type ToasterProps = InstanceType<typeof Toaster>['$props']
 
 /**
- * Two ways to use the toast — both drive the SAME singleton stack:
- *  1. Direct: mount `<Toaster />` once, then `import { toast }`
- *     (or `useToast()`) and call it from anywhere.
- *  2. Service: `app.use(ToastPlugin)` in main.js MOUNTS the toast region
- *     automatically (no manual `<Toaster />`), registers `<Toaster>` globally,
- *     and exposes the imperative API as `this.$toast` and via `inject`.
- *     Region defaults ride the options arg: `app.use(ToastPlugin, { position: 'top-right' })`.
- *
- * A manually mounted `<Toaster />` alongside the plugin is harmless: the store
- * activates only the first registered region, so toasts never render twice.
+ * Direct use (mount Toaster, call toast) and the plugin drive the same singleton
+ * stack. The plugin auto-mounts the region and exposes the API as $toast and via
+ * inject; a second mounted Toaster is inert — only the first region activates.
  */
 export const ToastPlugin: Plugin = {
   install(app: App, options?: ToasterProps) {
