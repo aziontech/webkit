@@ -1,14 +1,7 @@
-// Pure query functions over a loaded webkit catalog.
-//
-// Every function here takes the catalog object returned by `loadCatalog()` and
-// returns plain JSON — no MCP SDK, no I/O, no side effects. This is what makes the
-// tool surface testable with `node --test` alone. `server.js` is a thin adapter that
-// exposes each of these as an MCP tool.
-//
-// The overarching goal: given the version-locked catalog of the webkit the consuming
-// project actually installed, help an AI generate correct + performant webkit code —
-// the right component, the right (tree-shakeable) import, real props, and a runnable
-// SFC — instead of reinventing or reaching for PrimeVue.
+// Pure query functions over a loaded webkit catalog: plain JSON in/out, no MCP SDK,
+// no I/O — testable with `node --test` alone; `server.js` is the thin MCP adapter.
+// Goal: steer AI-generated consumer code to the right component, the right
+// (tree-shakeable) import, real props, and a runnable SFC.
 
 const NOT_AVAILABLE = {
   ok: false,
@@ -84,11 +77,9 @@ export function listCategories(catalog) {
 }
 
 /**
- * The POSITIVE token inventory — what a consumer SHOULD use (the complement of the deny
- * rules in validate_usage). Without a `category`, returns the group index (name + count)
- * plus the typography utility classes. With a `category` (a group name like "primary",
- * "bg", "text", "spacing", "radius", "shadow"), returns that group's CSS custom
- * properties. Answers "I can't hardcode #hex — which token do I use instead?".
+ * The POSITIVE token inventory (complement of validate_usage's deny rules). Without a
+ * `category`: the group index + typography classes; with one: that group's CSS custom
+ * properties. Answers "which token do I use instead of a hardcoded value?".
  */
 export function listTokens(catalog, { category } = {}) {
   if (!catalog.available) return NOT_AVAILABLE
@@ -222,12 +213,9 @@ export function getBestPractices(catalog, name) {
 }
 
 /**
- * The CORRECT + PERFORMANT import line for a component.
- *
- * For a compound root (`compoundRoot: true`) the performant default is the
- * tree-shakeable `<name>-root` import (nothing else is pulled in); the compound
- * dot-notation import is offered as the ergonomic alternative that ships every
- * sub-component. For everything else the tree-shakeable import IS the plain import.
+ * The correct + performant import line. For a compound root the default is the
+ * tree-shakeable `-root` import; the compound dot-notation import is offered as the
+ * ergonomic alternative. For everything else the tree-shakeable import IS the plain one.
  */
 export function getImport(catalog, name) {
   if (!catalog.available) return NOT_AVAILABLE
@@ -428,10 +416,8 @@ function exampleProps(props) {
 }
 
 /**
- * A runnable single-file component synthesized from the entry: a `<script setup>`
- * with the tree-shakeable import, and a `<template>` using the PascalCase tag with
- * a couple of example props derived from the props table. No PrimeVue, no
- * placeholders — paste-and-run.
+ * A runnable SFC synthesized from the entry: tree-shakeable import + PascalCase tag
+ * with example props derived from the props table. No placeholders — paste-and-run.
  */
 export function getUsageExample(catalog, name) {
   if (!catalog.available) return NOT_AVAILABLE
@@ -474,11 +460,8 @@ export function getUsageExample(catalog, name) {
 }
 
 /**
- * Validate a piece of usage before it ships:
- *  - `import`  → is the path a real, non-denied webkit export? (else suggestions)
- *  - `classes` → do any token rules (hex, rgb, tailwind palette, raw text size,
- *    PrimeVue color) fire on the class string?
- * Returns `{ ok, problems: [...] }`.
+ * Validate usage before it ships: `import` → real, non-denied webkit export (else
+ * suggestions); `classes` → token deny rules over the class string. Returns { ok, problems }.
  */
 export function validateUsage(catalog, { import: importPath, classes } = {}) {
   if (!catalog.available) return NOT_AVAILABLE

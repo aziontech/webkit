@@ -271,10 +271,8 @@ toastFn.promise = (promise, messages, options) => {
 toastFn.dismiss = (id) => toastStore.dismiss(id)
 
 /**
- * Imperative entry point. `toast('Saved')` raises a default toast; the typed
- * shortcuts (`toast.success`, `toast.error`, `toast.info`, `toast.warning`,
- * `toast.loading`, `toast.promise`, `toast.dismiss`) cover the common cases.
- * Returns the toast id so it can later be updated or dismissed.
+ * Imperative entry point; the typed shortcuts cover the severity, loading,
+ * promise, and dismiss cases. Returns the toast id for later update or dismissal.
  */
 export const toast: ToastFn = toastFn
 
@@ -286,10 +284,9 @@ export const toast: ToastFn = toastFn
 export const useToast = (): ToastFn => toast
 
 /**
- * Single-active-instance registry. A toast region is a global singleton; if more
- * than one `<Toaster>` is mounted (e.g. several Storybook stories on one Docs
- * page), only the first to mount renders the stack — so toasts never duplicate
- * across overlapping regions.
+ * Single-active-instance registry: with several mounted Toasters (e.g. Storybook
+ * stories on one Docs page) only the first to mount renders the stack, so toasts
+ * never duplicate across overlapping regions.
  */
 let toasterSeq = 0
 const activeToasterId = ref<number | null>(null)

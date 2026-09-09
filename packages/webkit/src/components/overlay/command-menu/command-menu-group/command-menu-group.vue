@@ -48,10 +48,8 @@
     class="flex flex-col [:not([role=separator])+&]:mt-(--spacing-sm)"
   >
     <!--
-      Groups never sit flush. The rhythm is `--spacing-sm` above every group that
-      follows another group, and it deliberately does NOT apply after a
-      `<CommandMenu.Separator>` — the separator owns the space around itself, so
-      the two rules are mutually exclusive and cannot stack.
+      Top margin applies only after a sibling group, never after a separator —
+      the separator owns its surrounding space, so the two spacings cannot stack.
     -->
     <div
       v-if="hasHeading"

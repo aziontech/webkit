@@ -7,12 +7,8 @@ import * as stories from '../../../../../../apps/storybook/src/stories/component
 import { expectNoA11yViolations } from '../../../test/axe'
 import DocTooltip from './doc-tooltip.vue'
 
-// .claude/rules/testing.md: Vitest browser mode (real Chromium) loads NO Tailwind, so the
-// dotted underline, the panel surface and the scale animation emit nothing here — those
-// belong to the visual gate. What a real browser DOES give us is exactly what this
-// component is about: the panel Teleports to <body>, focus really moves, and Escape really
-// fires. So this suite asserts the two a11y contracts (tooltip vs dialog), the ARIA wiring
-// that goes with each, and the focus hand-off — none of which jsdom could tell the truth about.
+// Browser mode loads no Tailwind — underline/surface/animation belong to the visual
+// gate; asserted here: the tooltip-vs-dialog contracts, ARIA wiring, and focus hand-off.
 
 const { Default, Kinds } = composeStories(stories)
 
@@ -27,9 +23,8 @@ const panel = () =>
 const PASSIVE = { headline: 'workload', tip: 'A domain bound to an application.', delay: 0 }
 const INTERACTIVE = { ...PASSIVE, cta: 'Read the guide', href: '/docs/workload' }
 
-// focusin schedules the open through the same timer hover uses (the delay is the
-// component's contract, not an implementation detail), so opening is polled rather
-// than assumed to be synchronous.
+// focusin schedules the open through the same delay timer hover uses, so opening
+// is polled rather than assumed to be synchronous.
 const openByFocus = async (trigger: HTMLElement) => {
   await fireEvent.focusIn(trigger)
   await waitFor(() => expect(panel()).not.toBeNull())
@@ -125,8 +120,7 @@ describe('DocTooltip', () => {
       expect(trigger.getAttribute('aria-expanded')).toBe('true')
       expect(trigger.getAttribute('aria-controls')).toBe(p?.id)
       expect(p?.hasAttribute('data-interactive')).toBe(true)
-      // A dialog with no accessible name is announced as an unlabelled group, so it
-      // is named by the term it glosses.
+      // An unnamed dialog is announced as an unlabelled group, so it is named by the term.
       const labelledBy = p?.getAttribute('aria-labelledby')
       expect(labelledBy).toBeTruthy()
       expect(document.getElementById(labelledBy as string)?.textContent?.trim()).toBe('workload')

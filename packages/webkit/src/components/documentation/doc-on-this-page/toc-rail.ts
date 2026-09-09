@@ -1,10 +1,6 @@
-// Geometry for the "On this page" rail.
-//
-// The rail is one continuous path that indents with the heading level and bends
-// between levels, so the nesting is legible from the line alone. The active
-// heading is not a separate element sliding over that line — it is a dash cut
-// out of the very same path, which is what lets it travel along the curve
-// instead of across it.
+// Geometry for the "On this page" rail: one continuous path that indents with
+// the heading level; the active marker is a dash cut from that same path, which
+// is what lets it travel along the curve instead of across it.
 
 /** Horizontal offset per nesting level, in px. Matches the frame's 8px indent. */
 export const RAIL_INDENT = 8
@@ -12,11 +8,7 @@ export const RAIL_INDENT = 8
 export const RAIL_CURVE = 10
 /** Stroke width of the rail and of the active dash cut from it, in px. */
 export const RAIL_STROKE = 2
-/**
- * Half the stroke, so the line sits on the pixel grid instead of straddling it
- * and its left edge lands at x=0 rather than bleeding outside the rail's box.
- * Derived from the stroke, so changing the width keeps both true.
- */
+/** Half the stroke, so the line sits on the pixel grid with its left edge at x=0. */
 const CRISP = RAIL_STROKE / 2
 
 /** One item's vertical extent and nesting level, relative to the list. */
@@ -48,13 +40,9 @@ export interface RailMeasurement {
 export const railX = (depth: number): number => (Math.max(2, depth) - 2) * RAIL_INDENT + CRISP
 
 /**
- * Build the rail path from the measured bands.
- *
- * The path is emitted as separate commands, and each level change is split into
- * two half-curves that meet exactly on the band boundary. That split is what
- * makes the boundary addressable: the length of the path up to any band edge is
- * the length of a whole number of commands, so the active dash can be measured
- * precisely rather than estimated.
+ * Build the rail path. Each level change is split into two half-curves meeting
+ * on the band boundary, so the path length up to any band edge is that of a
+ * whole number of commands and the active dash can be measured exactly.
  */
 export function buildRail(bands: RailBand[]): RailPath {
   const commands: string[] = []
@@ -73,8 +61,7 @@ export function buildRail(bands: RailBand[]): RailPath {
     if (next && nextX !== x) {
       const reach = Math.min(RAIL_CURVE, (band.bottom - band.top) / 2, (next.bottom - next.top) / 2)
       commands.push(`L ${x} ${edge - reach}`)
-      // The S-bend, split at its midpoint (de Casteljau at t=0.5) so the join
-      // lands exactly on the boundary between the two bands.
+      // S-bend split at its midpoint (de Casteljau at t=0.5) so the join lands on the boundary.
       const mid = (x + nextX) / 2
       commands.push(
         `C ${x} ${edge - reach / 2} ${(3 * x + nextX) / 4} ${edge - reach / 4} ${mid} ${edge}`
@@ -93,10 +80,7 @@ export function buildRail(bands: RailBand[]): RailPath {
   return { commands, boundaries }
 }
 
-/**
- * Measure where each band starts and ends along the built path, using a live path
- * element as a ruler.
- */
+/** Measure each band's span along the built path, using a live path element as a ruler. */
 export function measureRail(
   probe: globalThis.SVGPathElement,
   commands: string[],

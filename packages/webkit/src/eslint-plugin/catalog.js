@@ -1,12 +1,8 @@
-// Version-locked catalog loader shared by every rule.
-//
-// Resolves `@aziontech/webkit/catalog.json` from the LINTED project's node_modules
-// (so the allowed-import list / token rules always match the webkit version that
-// project installed). Fail-open: if webkit (or its catalog) is not resolvable, the
-// catalog reports `available: false` and catalog-dependent rules no-op instead of
-// crashing ESLint on unrelated repos.
-//
-// Test / monorepo-dogfood override: set WEBKIT_CATALOG_PATH to an explicit file.
+// Version-locked catalog loader shared by every rule. Resolves catalog.json from the
+// LINTED project's node_modules so rules always match the installed webkit version.
+// Fail-open: an unresolvable catalog reports `available: false` and catalog-dependent
+// rules no-op instead of crashing ESLint on unrelated repos. WEBKIT_CATALOG_PATH
+// overrides the resolution (tests / monorepo dogfood).
 
 import { readFileSync } from 'node:fs'
 import { createRequire } from 'node:module'
