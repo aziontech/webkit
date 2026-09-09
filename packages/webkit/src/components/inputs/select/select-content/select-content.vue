@@ -158,8 +158,13 @@
         >
           <slot name="search" />
         </div>
+        <!--
+          `group/options` lets a single option reserve the leading-icon column for
+          the whole list (see select-option). The vertical seam is one step up from
+          the row inset so the first/last row does not crowd the panel border.
+        -->
         <ScrollArea
-          class="flex max-h-60 flex-col items-stretch p-(--spacing-xxs)"
+          class="group/options flex max-h-60 flex-col items-stretch px-(--spacing-xxs) py-(--spacing-xs)"
           :data-testid="`${testId}__list`"
         >
           <slot />

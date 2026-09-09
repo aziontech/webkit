@@ -1,30 +1,9 @@
 #!/usr/bin/env node
-// @aziontech/webkit-mcp — a Model Context Protocol server that lets an AI in ANY
-// project generate correct + performant @aziontech/webkit code.
-//
-// It reads the INSTALLED webkit's version-locked catalog.json (resolved from the
-// consuming project, with a WEBKIT_CATALOG_PATH override) and exposes the pure
-// functions in queries.js as MCP tools over stdio.
-//
-// This file is intentionally THIN: it only adapts queries.js to MCP. All logic —
-// and all of the tests — live in queries.js + catalog.js (which need no SDK).
-//
-// RUNTIME DEPENDENCIES (declared in package.json#dependencies, resolved at `npx`
-// time — NOT bundled or vendored here):
-//   - @modelcontextprotocol/sdk  ^1.0.0   → McpServer + StdioServerTransport
-//   - zod                        ^3.23.0  → tool input schemas
-// They are loaded lazily via dynamic import from named constants so that startup
-// can fail with a clear, actionable message if the server is ever run without its
-// dependencies installed (e.g. from source without `npm install`).
-//
-// SDK API assumptions (documented @modelcontextprotocol/sdk, v1.x):
-//   - `McpServer` from '@modelcontextprotocol/sdk/server/mcp.js'
-//   - `StdioServerTransport` from '@modelcontextprotocol/sdk/server/stdio.js'
-//   - `server.registerTool(name, { title, description, inputSchema }, handler)`
-//     where `inputSchema` is a ZOD RAW SHAPE ({ key: z.string(), ... }). This is
-//     the current API; older builds exposed `server.tool(name, shape, handler)`
-//     with the same argument meaning, so a fallback to `.tool` is provided below.
-//   - a handler returns `{ content: [{ type: 'text', text }] }`.
+// @aziontech/webkit-mcp — MCP server (stdio) exposing the pure queries.js functions
+// as tools over the installed webkit's version-locked catalog. Intentionally THIN:
+// all logic and tests live in queries.js + catalog.js. The SDK + zod are loaded
+// lazily via dynamic import so running without installed deps fails with an actionable
+// message; `registerTool` takes a zod RAW SHAPE (legacy `.tool` fallback below).
 
 import { readFileSync } from 'node:fs'
 import { fileURLToPath, URL } from 'node:url'

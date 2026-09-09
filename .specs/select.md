@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10801
   node_id: 3714:10801
-checksum: 1d67317d61c12926c675549ac692a3040a16b383a496c05031d9de395e4a670d
+checksum: cf42bdc6fefb728173a25c37d3d2b75911c62474dcba8ff496c5629e85ed3d5d
 created: 2026-06-15
-last_updated: 2026-06-22
+last_updated: 2026-08-12
 ---
 
 # Select — Component Spec
@@ -49,8 +49,8 @@ const value = defineModel({ default: '' })
 
 - `select-trigger/select-trigger.vue` — Bordered trigger field with optional left icon slot, selected-value label, and chevron-down. Mirrors `InputText` size/state visuals.
 - `select-content/select-content.vue` — Popover panel rendered via the native Popover API + CSS anchor positioning; exposes `#search` and `#footer` slots and scrolls its option list when content exceeds `max-h-[320px]`.
-- `select-group/select-group.vue` — Section wrapper for a labelled group of options; renders an overline-style heading when `label` is set.
-- `select-option/select-option.vue` — Selectable option row with a mode-aware indicator (radio in single mode, checkbox in multi mode), an optional `icon` (PrimeIcons), an optional leading `#left` slot, the option label, and an optional trailing `#tag` slot.
+- `select-group/select-group.vue` — Section wrapper for a labelled group of options; renders a `text-label-sm` heading in `--text-muted` when `label` is set. Groups never sit flush: `--spacing-sm` above every group but the first — the same rhythm Dropdown puts around its group divider and CommandMenu puts between two bare groups. No hairline: unlike Dropdown, this panel separates groups by space alone.
+- `select-option/select-option.vue` — Selectable option row with a mode-aware indicator (radio in single mode, checkbox in multi mode), an optional `icon` (PrimeIcons), an optional leading `#left` slot, the option label, and an optional trailing `#tag` slot. **One leading column for the whole list**: as soon as any option in the panel has an `icon` or a `#left` slot, *every* option reserves the leading box (a fixed `size-4`), so a list mixing iconed and icon-less options keeps a single label edge instead of a ragged one. A panel where no option has either reserves nothing and pays no indent. The reservation is pure CSS — the list carries `group/options`, each option with a glyph carries `data-leading`, and `group-has-[[data-leading]]/options` turns the column on for all of them — so no option registry is needed.
 
 ## Props
 
@@ -102,7 +102,7 @@ const value = defineModel({ default: '' })
 | Region | Token (DESIGN.md) |
 |---|---|
 | typography (trigger, option label) | `.text-label-sm` |
-| typography (group heading) | `.text-overline-xs` |
+| typography (group heading) | `.text-label-sm` + `text-(--text-muted)` |
 | surface (trigger) | `var(--bg-surface)` |
 | surface (trigger disabled) | `var(--bg-disabled)` |
 | surface (panel) | `var(--bg-surface-raised)` |
@@ -117,7 +117,10 @@ const value = defineModel({ default: '' })
 | ring (focus) | `var(--ring-color)` |
 | ring (invalid focus) | `var(--danger)` |
 | spacing (trigger horizontal padding) | `var(--spacing-sm)` |
-| spacing (panel padding) | `var(--spacing-xxs)` |
+| spacing (panel list padding.x) | `var(--spacing-xxs)` |
+| spacing (panel list padding.y) | `var(--spacing-xs)` — the vertical seam is one step up from the row inset so the first/last row does not crowd the panel border |
+| spacing (between groups) | `var(--spacing-sm)` |
+| option leading column | `size-4` (16px), reserved for every option when any option has a glyph |
 | spacing (option padding) | `var(--spacing-xs)` |
 | spacing (option gap) | `var(--spacing-xs)` |
 | shape | `var(--shape-elements)` |

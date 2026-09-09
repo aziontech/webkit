@@ -29,6 +29,12 @@ one it was authored against. Do not add a catalog entry for these; use the recip
 `animate-slide-down` (0 → auto disclosure) is the one *catalogued* size animation and stays that
 way — it does not generalise to the incremental resizes above.
 
+The third row is about a composition whose parts each need their **own** offset and direction — not
+about arrivals in general. A shell's two arrivals ARE fixed journeys and ARE catalogued:
+`animate-page-enter` (a page arriving on a route change) and `animate-content-enter` (content
+settling inside a page already on screen). Reach for those before writing anything; and never run
+both on one element, or on an element whose page is still arriving — see their `useWhen`.
+
 Two failure modes to check for before blaming the catalog, because both compile, lint, type-check
 and animate **nothing**:
 
@@ -49,14 +55,18 @@ The consumer-facing form of all of this — including the full glitch catalog �
 
 ## Steps
 
-### 1. Add the utility + keyframes to `packages/theme/src/tokens/semantic/animations.js`
+### 1. Add the utility + keyframes to `packages/theme/src/tokens/primitives/animations/`
 
-In the `animations` object (inside `addUtilities`), add:
+The theme is CSS-first (Tailwind v4) — `semantic/animations.js` and the v3 plugin are gone.
+An animation is now **two edits in two files**, both under
+`packages/theme/src/tokens/primitives/animations/`, compiled into `dist/v4/globals.css`
+by `pnpm --filter @aziontech/theme build:tokens`:
+
+In the `animate` map of **`animate.js`** (emitted as `@theme { --animate-<name>: … }`, which
+is what makes `animate-<name>` a real utility), add:
 
 ```js
-'.animate-<name>': {
-  animation: '<keyframeName> <duration> <easing>',
-},
+'<name>': `<keyframeName> ${duration['<step>']} ${curve['<curve>']}`,
 ```
 
 - `<duration>` and `<easing>` MUST come from the timing tokens, not raw literals — use a
@@ -66,16 +76,33 @@ In the `animations` object (inside `addUtilities`), add:
   generic `ease` from `primitives/animations/ease.js`. Mirror how the existing entries
   (`.animate-popup-scale-in`, etc.) reference the same timings.
 
-In the `keyframes` object (inside `addComponents`), add the matching block:
+In the `keyframes` map of **`keyframes.js`** (emitted as real `@keyframes` blocks — Tailwind v4
+registers the utility but does **not** generate these), add the matching block. Values are plain
+CSS declaration STRINGS, not the camelCase object form the old v3 plugin took:
 
 ```js
-'@keyframes <keyframeName>': {
-  '0%':   { /* from state */ },
-  '100%': { /* to state */ },
+<keyframeName>: {
+  '0%': 'opacity: 0; translate: 0 var(--spacing-xs)',
+  '100%': 'opacity: 1; translate: 0 0'
 },
 ```
 
-Keep both in sync (the utility's `animation` references `<keyframeName>`).
+Keep both in sync (the utility's shorthand references `<keyframeName>`), and add a one-line
+`useWhen` entry beside the `animate` map — the catalog carries it to the MCP, so it is what steers
+AI-written consumer code toward the right utility.
+
+Two more knobs the maps already use, when the journey is fixed but its size or timing is not:
+
+- **A per-instance value** rides a `var()` with a token default inside the keyframe
+  (`calc(var(--page-enter-distance, var(--layout-boundary-inline)) * -1)`), so the utility works
+  unconfigured and a shell can retune it in one place.
+- **A stagger** rides a `var()` delay in the shorthand
+  (`… var(--content-enter-delay, 0s) backwards`). `backwards` is load-bearing: without it a delayed
+  follower paints its landed state, then jumps back to the start when the delay expires.
+
+**Fill is a decision, not a default.** `forwards` leaves the end state on the element — including a
+`translate`, which makes that element a containing block for any `position: fixed` descendant. An
+entrance whose box is a scroll container (the route transition) must NOT fill forwards.
 
 ### 2. Record the Theme gap (when a component is given)
 
@@ -87,7 +114,10 @@ Add a row to the component's `## Theme gaps` table in `.specs/<component>.md`:
 
 ### 3. Regenerate the catalog
 
-Run `pnpm --filter @aziontech/webkit catalog:build` (or `node packages/webkit/scripts/build-catalog.mjs`).
+Build the theme first (`pnpm --filter @aziontech/theme build:tokens`) — the catalog reads the
+token source, but nothing renders until `dist/v4/globals.css` carries the utility and its
+`@keyframes`. Then run `pnpm --filter @aziontech/webkit catalog:build` (or
+`node packages/webkit/scripts/build-catalog.mjs`).
 Confirm `<name>` now appears in `catalog.json → tokens.animations`. This is what makes
 `validate-spec-compliance` accept `animate-<name>` in the component.
 

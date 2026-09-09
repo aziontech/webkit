@@ -1,5 +1,5 @@
 import { composeStories } from '@storybook/vue3'
-import { fireEvent, render, within } from '@testing-library/vue'
+import { fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { defineComponent, ref } from 'vue'
 
@@ -463,6 +463,83 @@ describe('Table (composition + data-driven)', () => {
       const overridden = render(treeWith('size="large"'))
       const large = within(overridden.container).getByTestId('data-table__search')
       expect(large.closest('[data-size]')?.getAttribute('data-size')).toBe('large')
+    })
+  })
+
+  describe('minWidth columns — measured once per column, applied to header and body', () => {
+    // The declared number is a FLOOR: the column resolves to the larger of it and
+    // the widest of its own header and rendered cells. These assertions read the
+    // inline width our own measurement writes — not a computed style derived from a
+    // utility class — so they are meaningless unless the measurement actually ran.
+    const inlineWidth = (el: Element): number | null => {
+      const px = /width:\s*(\d+(?:\.\d+)?)px/.exec(el.getAttribute('style') ?? '')
+      return px ? Number(px[1]) : null
+    }
+
+    it('resolves ONE width for the column — the header and every body cell agree', async () => {
+      const { getAllByRole } = render(Table, {
+        props: {
+          data: rows,
+          columns: [
+            { accessorKey: 'name', header: 'Name' },
+            { accessorKey: 'status', header: 'Status', minWidth: 40 }
+          ]
+        }
+      })
+
+      await waitFor(() => {
+        const head = getAllByRole('columnheader')[1]
+        expect(inlineWidth(head)).not.toBeNull()
+      })
+
+      const resolved = inlineWidth(getAllByRole('columnheader')[1])
+      expect(resolved).toBeGreaterThanOrEqual(40)
+      // Every body cell in that column carries the same width — the invariant a
+      // per-cell `min-width` would break (each row sizing to its own content).
+      const statusCells = getAllByRole('row')
+        .slice(1)
+        .map((row) => row.children[1] as HTMLElement)
+      expect(statusCells).toHaveLength(3)
+      for (const cell of statusCells) expect(inlineWidth(cell)).toBe(resolved)
+    })
+
+    it('grows past the floor when the content is wider, and never below it', async () => {
+      const long = 'Cross-Site Scripting (XSS) and several more threat types'
+      const { getAllByRole } = render(Table, {
+        props: {
+          data: [{ id: '1', name: 'One', status: long }],
+          columns: [
+            { accessorKey: 'name', header: 'Name' },
+            { accessorKey: 'status', header: 'Status', minWidth: 8 }
+          ]
+        }
+      })
+
+      await waitFor(() => {
+        expect(inlineWidth(getAllByRole('columnheader')[1])).not.toBeNull()
+      })
+      // The floor is 8px; the cell holds a long string, so content decides.
+      const resolved = inlineWidth(getAllByRole('columnheader')[1]) as number
+      expect(resolved).toBeGreaterThan(8)
+      expect(inlineWidth(getAllByRole('row')[1].children[1])).toBe(resolved)
+    })
+
+    it('lets an explicit width win over the floor, and leaves other columns flexible', async () => {
+      const { getAllByRole } = render(Table, {
+        props: {
+          data: rows,
+          columns: [
+            { accessorKey: 'name', header: 'Name' },
+            { accessorKey: 'status', header: 'Status', minWidth: 40, width: 123 }
+          ]
+        }
+      })
+
+      await waitFor(() => {
+        expect(inlineWidth(getAllByRole('columnheader')[1])).toBe(123)
+      })
+      // A column that declares neither stays flex-distributed (no inline width).
+      expect(inlineWidth(getAllByRole('columnheader')[0])).toBeNull()
     })
   })
 
