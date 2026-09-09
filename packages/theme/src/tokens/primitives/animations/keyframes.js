@@ -38,6 +38,14 @@ export const keyframes = {
     '0%': 'background-position: 200% 0',
     '100%': 'background-position: -200% 0'
   },
+  pageEnter: {
+    '0%': 'opacity: 0; translate: calc(var(--page-enter-distance, var(--layout-boundary-inline)) * -1) 0',
+    '100%': 'opacity: 1; translate: 0 0'
+  },
+  contentEnter: {
+    '0%': 'opacity: 0; translate: 0 var(--spacing-xs)',
+    '100%': 'opacity: 1; translate: 0 0'
+  },
   popupScaleIn: {
     '0%': 'opacity: 0; transform: scale(0.9)',
     '100%': 'opacity: 1; transform: scale(1)'

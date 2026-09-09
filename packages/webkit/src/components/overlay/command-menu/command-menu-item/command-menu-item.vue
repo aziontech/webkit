@@ -114,10 +114,9 @@
     @mouseenter="!disabled && ctx.setActive(value)"
   >
     <!--
-      Rendered for every item once ANY item in the list carries a prefix, so the
-      icon column is reserved and all labels start on the same x. The box is a
-      fixed `size-4` — the same glyph size Menu rows use — so an item's own icon
-      cannot widen the column and push its label out of line with the others.
+      Rendered for every item once any item carries a prefix, so all labels
+      start on the same x. The box is fixed to the Menu-row glyph size so an
+      item's own icon cannot widen the column.
     -->
     <span
       v-if="ctx.hasPrefixColumn.value"

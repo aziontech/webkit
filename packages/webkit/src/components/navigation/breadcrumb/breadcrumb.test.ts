@@ -156,12 +156,12 @@ describe('Breadcrumb (composition, data-driven root)', () => {
       expect(option?.querySelector('i.pi-folder')).toBeTruthy()
     })
 
-    // SKIP: selecting an overflow Dropdown option does not surface a `navigate`
-    // emit under test interaction (neither fireEvent nor userEvent triggers the
-    // option's @select in browser mode). The menu open + option render + href are
-    // covered by the test above; the select->navigate wiring needs a component-level
-    // check. Documented gap — not a faked pass. See PR notes.
-    it.skip('emits navigate with the middle item href when its overflow option is selected', async () => {
+    // This was skipped as a harness limitation ("@select does not fire under test
+    // interaction"). It was not: the listener was bound to `Dropdown.Option`, which
+    // never emits `select` — the Dropdown ROOT does, from `selectOption`. Picking a
+    // collapsed crumb below `md` therefore did nothing in a real browser either. The
+    // listener moved to the root, and this is the test that holds it there.
+    it('emits navigate with the middle item href when its overflow option is selected', async () => {
       const { getByTestId, emitted } = render(Breadcrumb, { props: { items: TRAIL } })
 
       await fireEvent.click(getByTestId(`${TESTID}__overflow-trigger`))

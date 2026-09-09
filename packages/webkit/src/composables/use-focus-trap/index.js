@@ -4,13 +4,7 @@ import { nextTick, onUnmounted, watch } from 'vue'
 const FOCUSABLE_SELECTOR =
   'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
 
-/**
- * Trap Tab / Shift+Tab focus inside `containerRef` while `active` is true.
- *
- * @param {import('vue').Ref<HTMLElement | null | undefined>} containerRef
- * @param {import('vue').Ref<boolean>} active
- * @returns {void}
- */
+/** Trap Tab / Shift+Tab focus inside `containerRef` while `active` is true; focuses the first focusable (or the root) on activation. */
 export function useFocusTrap(containerRef, active) {
   const stop = useEventListener(document, 'keydown', (event) => {
     if (!active.value || event.key !== 'Tab') return

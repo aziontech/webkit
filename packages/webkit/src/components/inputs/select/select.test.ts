@@ -495,6 +495,80 @@ describe('Select (compound / overlay)', () => {
     }
   })
 
+  // ---- one leading column + group rhythm ------------------------------------
+  // The reservation is CSS (`group-has-…`) and browser mode compiles no Tailwind,
+  // so `display` cannot be read here. Assert the mechanism instead: the marker is
+  // on exactly the options that have a glyph, the box is on every option, and the
+  // list carries the group that scopes the rule. Geometry is verified in the
+  // browser against the stories.
+  it('marks only options that have a leading glyph, but gives every option the box', async () => {
+    const WithIcons = defineComponent({
+      setup() {
+        const open = ref(true)
+        return () =>
+          h(Select, { open: open.value, placeholder: 'Pick' }, () => [
+            h(SelectTrigger, { 'aria-label': 'Pick' }),
+            h(SelectContent, null, () => [
+              h(SelectOption, { value: 'a', icon: 'pi pi-heart' }, () => 'With icon'),
+              h(SelectOption, { value: 'b' }, () => 'Without icon')
+            ])
+          ])
+      }
+    })
+
+    render(WithIcons)
+    await nextTick()
+
+    const boxes = Array.from(
+      document.body.querySelectorAll('[data-testid="select-option__leading"]')
+    ) as HTMLElement[]
+    expect(boxes).toHaveLength(2)
+
+    for (const box of boxes) {
+      expect(box.className).toContain('size-4')
+      expect(box.className).toContain('group-has-[[data-leading]]/options:flex')
+    }
+
+    // Only the iconed option is marked — that marker is what turns the column on.
+    expect(boxes[0].hasAttribute('data-leading')).toBe(true)
+    expect(boxes[1].hasAttribute('data-leading')).toBe(false)
+    expect(boxes[0].querySelector('i.pi-heart')).not.toBeNull()
+    expect(boxes[1].querySelector('i')).toBeNull()
+
+    // The rule is scoped by the list, so the group marker has to be there.
+    const list = document.body.querySelector('[data-testid="select-content__list"]')
+    expect(list?.className).toContain('group/options')
+  })
+
+  it('spaces every group but the first', async () => {
+    const Grouped = defineComponent({
+      setup() {
+        const open = ref(true)
+        return () =>
+          h(Select, { open: open.value, placeholder: 'Pick' }, () => [
+            h(SelectTrigger, { 'aria-label': 'Pick' }),
+            h(SelectContent, null, () => [
+              h(SelectGroup, { label: 'A' }, () => [h(SelectOption, { value: 'a' }, () => 'A1')]),
+              h(SelectGroup, { label: 'B' }, () => [h(SelectOption, { value: 'b' }, () => 'B1')])
+            ])
+          ])
+      }
+    })
+
+    render(Grouped)
+    await nextTick()
+
+    const groups = Array.from(document.body.querySelectorAll('[data-testid="select-group"]'))
+    expect(groups).toHaveLength(2)
+    // Sibling-scoped variant: the same class sits on both and the selector picks
+    // the non-first, so the leading group is never pushed off the panel's seam.
+    for (const group of groups) {
+      expect(group.className).toContain('[&:not(:first-child)]:mt-(--spacing-sm)')
+    }
+    expect(groups[0].previousElementSibling).toBeNull()
+    expect(groups[1].previousElementSibling).toBe(groups[0])
+  })
+
   // ---- enum smoke floor -----------------------------------------------------
   it.each(['small', 'medium', 'large'] as const)(
     'reflects size "%s" as data-size on root and trigger',

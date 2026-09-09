@@ -63,11 +63,9 @@
   const panelRef = ref<globalThis.HTMLElement | null>(null)
   const panelBodyRef = ref<globalThis.HTMLElement | null>(null)
   /**
-   * Stable teleport target for groups. Captured when the panel body mounts and
-   * cleared only after the close transition ends (see onPanelAfterLeave), so the
-   * teleported options ride the panel's own scale-out instead of unmounting the
-   * instant `isOpen` flips to false — Vue nulls the template ref before the leave
-   * transition completes, which would otherwise empty the panel mid-animation.
+   * Teleport target for groups: captured when the panel body mounts, cleared only after
+   * the close transition ends (onPanelAfterLeave). Vue nulls the template ref the instant
+   * `isOpen` flips, which would otherwise empty the panel mid leave-animation.
    */
   const bodyTarget = ref<globalThis.HTMLElement | null>(null)
   const groupCount = ref(0)
@@ -348,13 +346,13 @@
           :data-state="isOpenRef ? 'open' : 'closed'"
           :data-placement="resolvedPlacementRef"
           :style="panelStyle"
-          class="flex min-w-(--container-3xs) max-w-(--container-2xs) flex-col overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-xxs) shadow-(--shadow-sm) outline-none [transform-origin:var(--popup-origin,top_left)]"
+          class="flex min-w-(--container-3xs) max-w-(--container-2xs) flex-col overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) py-(--spacing-xs) shadow-(--shadow-sm) outline-none [transform-origin:var(--popup-origin,top_left)]"
           @keydown="onPanelKeydown"
         >
           <div
             v-if="$slots['top']"
             :data-testid="`${testId}__top`"
-            class="sticky top-0 z-10 bg-(--bg-surface) pb-(--spacing-xxs)"
+            class="sticky top-0 z-10 bg-(--bg-surface) px-(--spacing-xxs) pb-(--spacing-xxs)"
           >
             <slot name="top" />
           </div>
@@ -368,7 +366,7 @@
           <div
             v-if="$slots['bottom']"
             :data-testid="`${testId}__bottom`"
-            class="sticky bottom-0 z-10 bg-(--bg-surface) pt-(--spacing-xxs)"
+            class="sticky bottom-0 z-10 bg-(--bg-surface) px-(--spacing-xxs) pt-(--spacing-xxs)"
           >
             <slot name="bottom" />
           </div>

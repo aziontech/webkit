@@ -30,47 +30,38 @@ export const TOKEN_CHECKS = [
   },
   {
     id: 'typography-raw-length',
-    // Both v4 spellings of the arbitrary typography token: the bracket form
-    // `text-[length:var(--text-…)]` and the canonical paren form
-    // `text-(length:--text-…)`. Keying on `[` alone let the paren spelling walk
-    // straight through the gate (ENG-47001).
+    // Matches both v4 spellings of the arbitrary typography token (bracket and paren) —
+    // keying on the bracket alone let the paren spelling through the gate (ENG-47001).
     regex: /text-(?:\[length:var\(|\(length:)--text-/g,
     message:
       'Raw typography token. Use generated class from DESIGN.md (text-heading-md, text-body-sm, text-button-lg, ...).'
   },
   {
     id: 'leading-raw',
-    // Any numeric step, not just 3-12: in Tailwind v4 `leading-<n>` resolves to
-    // calc(var(--spacing) * n), so `leading-1` is 0.25rem — not the line-height
-    // of 1 it reads as. `none` stays out of the alternation (allowed on icons).
-    // `[` and `(` both open an arbitrary value (`leading-[…]` / `leading-(--…)`).
+    // Any numeric step: in v4 a numeric leading suffix resolves to a spacing multiple,
+    // not the line-height it reads as. `none` stays out of the alternation (allowed on icons).
     regex: /\bleading-(?:\d+|tight|snug|relaxed|loose|[[(])/g,
     message:
       'Raw leading-* class. Line-height is part of the generated typography class (DESIGN.md); do not override.'
   },
   {
     id: 'tracking-raw',
-    // `tightest` is not a step on the tracking scale, so Tailwind emits nothing
-    // for it and the class silently does nothing. It belongs here so the dead
-    // override is reported rather than read as working code. `[`/`(` both open an
-    // arbitrary value (`tracking-[…]` / `tracking-(--…)`).
+    // `tightest` is not a step on the tracking scale — Tailwind emits nothing and the
+    // dead override reads as working code, so it is reported here.
     regex: /\btracking-(?:tightest|tighter|tight|wide|wider|widest|[[(])/g,
     message:
       'Raw tracking-* class. Letter-spacing is part of the generated typography class (DESIGN.md); do not override.'
   },
   {
     id: 'font-family-raw',
-    // Both spellings of the arbitrary family: `font-[family-name:…]` and
-    // `font-(family-name:--…)`.
     regex: /\b(?:font-(?:sans|serif|mono|sora|proto-mono)\b|font-[[(]family-name:)/g,
     message:
       'Raw font-family. Font family is part of the generated typography class (DESIGN.md); do not override.'
   },
   {
     id: 'legacy-color-util',
-    // The leading (?<![\w-]) excludes matches embedded in a CSS variable name
-    // (e.g. the sanctioned `var(--bg-surface-overlay)`), so only the bare
-    // legacy utility class (`surface-overlay`, `text-color`, ...) is caught.
+    // The leading lookbehind excludes matches embedded inside a CSS variable name,
+    // so only the bare legacy utility class is caught.
     regex:
       /(?<![\w-])(?:text-color|surface-(?:0|50|100|200|300|400|500|600|700|800|900|ground|section|card|overlay|border|hover))\b/g,
     message:
@@ -78,12 +69,10 @@ export const TOKEN_CHECKS = [
   },
   {
     id: 'zero-with-unit',
-    // The math-function lookbehind balances parens ONE level deep. A zero sitting ≥2
-    // nested calls in — calc(min(max(1px, 2px), 3px) - 0px) — or behind grouping parens
-    // is reported here (as a bare-zero violation) instead of by zero-unit-in-calc, so
-    // the message will say `0` where the position actually requires `0rem`. Keep in
-    // sync with ZERO_WITH_UNIT in packages/theme/src/scripts/zero-unit.mjs (theme
-    // sits below webkit in the dependency graph, so it cannot import this engine).
+    // The math-function lookbehind balances parens ONE level deep: a zero nested two or
+    // more calls in is reported here (as a bare-zero violation) instead of by
+    // zero-unit-in-calc. Keep in sync with ZERO_WITH_UNIT in
+    // packages/theme/src/scripts/zero-unit.mjs (theme sits below webkit; cannot import this).
     regex:
       /(?<![\w.])(?<!(?:calc|min|max|clamp)\((?:[^()]|\([^()]*\))*)0(?:px|rem|em|ex|rex|ch|rch|cap|rcap|ic|ric|lh|rlh|vw|vh|vi|vb|vmin|vmax|svw|svh|svi|svb|svmin|svmax|lvw|lvh|lvi|lvb|lvmin|lvmax|dvw|dvh|dvi|dvb|dvmin|dvmax|cqw|cqh|cqi|cqb|cqmin|cqmax|cm|mm|Q|in|pt|pc)(?![\w%])/gi,
     message:
@@ -100,27 +89,11 @@ export const TOKEN_CHECKS = [
   },
   {
     id: 'dead-token-shorthand',
-    // A MALFORMED token shorthand never reaches the element, silently. Two spellings,
-    // both found in the wild, failing at two different stages:
-    //   `bg-(--token )`      a stray space TERMINATES the Tailwind candidate, so it sees
-    //                        the unterminated `bg-(--token` and emits NOTHING at all.
-    //   `min-h-[--(token)]`  bracket/paren inverted. This one DOES emit a rule — with the
-    //                        declaration `min-height: --(token)`, an invalid value the
-    //                        browser discards at parse time. Same outcome, later stage.
-    // Neither is a lint, type, or build error anywhere else, and the class reads as correct
-    // forever. chip's `filled` kind was transparent in BOTH themes from the day it shipped
-    // because of the first, and its own visual baselines were generated from the broken
-    // render — so they encoded the bug as correct and nothing ever failed.
-    //
-    // The scan is over raw file text, so a COMMENT quoting a malformed class trips this
-    // too. Describe such a class ("an inverted bracket/paren shorthand") rather than
-    // spelling it out.
-    //
-    // Read as: `-(`, whose contents mention a custom property, contain whitespace ANYWHERE
-    // (before the `--`, inside it, or trailing), and then close. Requiring the `--` via
-    // lookahead is what keeps this off ordinary subtraction — JS `x -(y + z)` has no `--`
-    // — and `var(--a, var(--b))` never matches because the character before that paren is
-    // `r`, not `-`, so a nested var with a fallback is untouched.
+    // A malformed shorthand (whitespace inside the parens, or the bracket/paren order
+    // inverted) silently never styles the element and is a lint/type/build error nowhere
+    // else — chip's filled kind shipped transparent this way and its visual baselines
+    // encoded the bug as correct. The custom-property lookahead keeps this off ordinary
+    // subtraction and off nested var fallbacks. Raw-text scan: never QUOTE the pattern.
     regex: /-\((?=[^)]*--)[^)]*\s[^)]*\)|\[--\(/g,
     message:
       'Malformed token shorthand — the style NEVER applies (Tailwind emits nothing for a space inside the parens; an inverted `[--(token)]` emits an invalid value the browser discards). Write `prop-(--token)` / `prop-(type:--token)` with no whitespace inside the parens, and `[--token:value]` to DECLARE a custom property (.claude/rules/styling.md).'
@@ -161,14 +134,12 @@ export const TOKEN_CHECKS = [
   },
   {
     id: 'animate-arbitrary',
-    // `animate-[…]` and the paren shorthand `animate-(--…)` are both arbitrary.
     regex: /\banimate-[[(]/g,
     message:
       'Arbitrary animate-[…] value. Use a catalogued animate-* utility, or add one via /add-animation (semantic/animations.js).'
   },
   {
     id: 'motion-hardcoded',
-    // `[` and `(` both open an arbitrary value (`duration-[…]` / `duration-(--…)`).
     regex: /\b(?:duration|delay|ease)-[[(]/g,
     message:
       'Hardcoded duration/ease/delay. Use the duration/curve/ease tokens from primitives/animations (DESIGN.md § Animations).'
@@ -178,11 +149,9 @@ export const TOKEN_CHECKS = [
 export const TOKEN_MESSAGES = Object.fromEntries(TOKEN_CHECKS.map((c) => [c.id, c.message]))
 
 /**
- * Shared file filter (write-time hook + CI ratchet): component sources, excluding test
- * files. Tests legitimately reference raw class strings as assertions
- * (`toContain('text-sm')`), assert browser-serialized values (`'0px'`), and use
- * `@ts-expect-error` to exercise the type surface, so the token discipline does not
- * apply to `*.test.*` / `*.spec.*` or the `src/test/` helpers.
+ * Shared file filter (write-time hook + CI ratchet): component sources, excluding
+ * tests — tests legitimately reference raw class strings, browser-serialized
+ * lengths, and type-error suppressions as assertions.
  */
 export function tokenChecksApply(rel) {
   return (
@@ -193,9 +162,8 @@ export function tokenChecksApply(rel) {
 }
 
 /**
- * All violated token-check ids for a file's full content — one entry PER MATCH, so the
- * ratchet's multiset diff catches a second occurrence of an already-baselined id (a
- * boolean-per-file scan would let it evade).
+ * All violated ids for a file's content, one entry PER MATCH — the ratchet's multiset
+ * diff catches a second occurrence of an already-baselined id (boolean-per-file would not).
  */
 export function scanTokens(content) {
   const found = []

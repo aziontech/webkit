@@ -348,6 +348,12 @@ prevention, and it never fires a global toast.
 | Request failed (network, 5xx, 4xx not tied to one field) | `toast.error` / `toast.promise`                 |
 | Long request succeeded / started                         | `toast.success` (optional)                      |
 
+Two more rows exist, and both are places a toast is **wrong**: a server rejection **scoped to one
+field** (→ a `Message` in that field's own section + the field's `invalid` state) and anything on a
+**signed-out** screen (→ one `Message` in the card; **auth never toasts**). The inverse case — a
+failure that arrives **after** the user left the screen — is the one that _must_ be a toast, and a
+permanent, closable one. The full table lives in **`/webkit-errors`**.
+
 ## Hard rules
 
 - Every fetch/filter/submit/paginate view renders loading **and** empty **and** error — not just the

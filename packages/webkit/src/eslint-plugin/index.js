@@ -1,10 +1,6 @@
-// @aziontech/eslint-plugin-webkit — forces correct + performant usage of the
-// @aziontech/webkit design system. Flat-config first (ESLint 9). Namespace: `webkit`.
-//
-// Presets (flat-config arrays):
-//   recommended  — everything = error (nothing out of standard is a mere warning)
-//   strict       — everything = error (alias of recommended today)
-//   performance  — only the performance rules, all error
+// @aziontech/eslint-plugin-webkit — forces correct + performant usage of the design
+// system. Flat-config first (ESLint 9), namespace `webkit`. Presets: recommended and
+// strict (everything = error; aliases today) and performance (performance rules only).
 
 import authoringStandards from './rules/authoring-standards.js'
 import noBarrelImport from './rules/no-barrel-import.js'
