@@ -4,24 +4,27 @@ category: content
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 53813253abbcfd426ec53c0109238dc88bd9dba0f8409df37614844b249d6a52
+checksum: 092d3bc30e7a43aca8d92d9396c95bdb607fa4f830f99b02fa47b63fe12e16c7
 created: 2026-05-22
-last_updated: 2026-05-27
+last_updated: 2026-08-24
 ---
+
 # Currency — Component Spec
 
 ## Purpose
 
-Displays content or metadata in the UI. Migrated from the existing implementation at `packages/webkit/src/components/webkit/content/currency/`.
+Typesets one monetary amount as three separately-styled parts — the currency symbol, the figure, and a trailing period or unit — so money reads the same everywhere in the product instead of being a formatted string each screen spells its own way. The suffix carries the code typeface (`text-label-code-*`), which keeps the unit visually subordinate to the figure and aligns the whole set with the way the system typesets metered values.
+
+The size ladder is the house one (`small` / `medium` / `large`) and each step is a different reading distance: `small` is an amount inside a table row or a list cell, `medium` an amount stated as a fact on a card, `large` the headline figure of a pricing card. `large` bottom-aligns the suffix against the figure rather than centring it, because a 56px numeral centred against a 14px unit reads as two unrelated pieces of text.
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `value` | `string` | `''` | false | value. |
-| `prefix` | `string` | `'$'` | false | prefix. |
-| `suffix` | `string` | `''` | false | suffix. |
-| `size` | `'small' \| 'large'` | `'small'` | false | Size token; affects height, padding, and typography. |
+| Prop     | Type                             | Default   | Required | JSDoc                                                                         |
+| -------- | -------------------------------- | --------- | -------- | ----------------------------------------------------------------------------- |
+| `value`  | `string`                         | `''`      | false    | value.                                                                        |
+| `prefix` | `string`                         | `'$'`     | false    | prefix.                                                                       |
+| `suffix` | `string`                         | `''`      | false    | suffix.                                                                       |
+| `size`   | `'small' \| 'medium' \| 'large'` | `'small'` | false    | Size token; affects typography and the gap between the figure and the suffix. |
 
 ## Events
 
@@ -41,20 +44,24 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography | .text-body-sm |
-| surface | `var(--bg-surface)` |
-| text | `var(--text-default)` |
-| spacing | `var(--spacing-3)` |
-| shape | `var(--shape-elements)` |
-| ring | `var(--ring-color)` |
+| Region                                 | Token (DESIGN.md)     |
+| -------------------------------------- | --------------------- |
+| amount typography — `small`            | `.text-amount-sm`     |
+| amount typography — `medium`           | `.text-amount-md`     |
+| amount typography — `large`            | `.text-amount-lg`     |
+| suffix typography — `small`            | `.text-label-code-sm` |
+| suffix typography — `medium` / `large` | `.text-label-code-md` |
+| amount text                            | `var(--text-default)` |
+| suffix text                            | `var(--text-muted)`   |
+| gap — `small`                          | `var(--spacing-xxs)`  |
+| gap — `medium` / `large`               | `var(--spacing-xs)`   |
+| suffix baseline offset — `large`       | `var(--spacing-md)`   |
 
 ## Theme gaps
 
-| Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+_none_ — the amount's `-0.08em` letter-spacing, previously shipped without, is now carried by the dedicated `text-amount-sm` / `-md` / `-lg` tokens (`packages/theme/src/tokens/semantic/texts.data.js`). Each mirrors the heading/label token the amount used to borrow — same size ramp, same leading, same weight — and adds the tracking. It is expressed in `em` because the design specifies one proportional ratio (−1.28px @16px, −1.92px @24px, −4.48px @56px), which the `rem`-based `tracking.js` scale cannot hold; dedicated tokens rather than tracking on the borrowed ones, because `text-heading-2xl` sets every hero headline in the system and a hero is prose, not a numeral.
+
+> Follow-up outside this spec: the three new tokens are not yet listed in `.claude/docs/DESIGN.md` (this pipeline may not edit that file). Whoever owns the catalog should add them beside the `text-heading-*` / `text-label-*` families.
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -68,8 +75,7 @@ _none_
 ## Stories (Storybook)
 
 - Default
-- Small (size)
-- Large (size)
+- Sizes (small / medium / large)
 
 ## Constraints — DO NOT
 

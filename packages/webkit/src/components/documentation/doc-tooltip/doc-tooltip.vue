@@ -5,28 +5,9 @@
   import Link from '../../navigation/link/link.vue'
 
   /**
-   * The inline gloss — a term in running prose that carries its own definition,
-   * shown when the reader hovers or focuses it.
-   *
-   * IT IS NOT THE WEBKIT TOOLTIP, and the reason is the call to action. The
-   * webkit tooltip is a one-line label on the contrast surface with
-   * `pointer-events-none` — correct for naming an icon button, and unable to
-   * hold a link the reader must be able to travel to. A doc gloss is three
-   * things stacked on the raised surface (headline, definition, an optional
-   * "read more"), so it takes the popover's surface tokens and keeps its pointer
-   * events. Everything else — the placement composable, the scale animation, the
-   * link — is the design system's.
-   *
-   * The CTA is what splits the a11y contract in two, so the component follows
-   * the shape it actually has: with no CTA it is a real `role="tooltip"`
-   * describing its trigger; with one it is a small `role="dialog"` the reader
-   * can enter, announced through `aria-expanded`. A `role="tooltip"` holding a
-   * link is a trap — the link is unreachable to anyone who is not using a mouse.
-   *
-   * The trigger is a real button element, never a bare inline span: a definition only
-   * available to a pointer is a definition half the readers never get. It keeps
-   * the surrounding type and marks itself with a dotted underline, the
-   * convention print has used for a glossed term for a century.
+   * Inline gloss. With no CTA the panel is a real role tooltip describing its
+   * trigger; with one it is a small role dialog announced via aria-expanded, since
+   * a tooltip holding a link is unreachable without a mouse (so no webkit tooltip).
    */
   defineOptions({ name: 'DocTooltip', inheritAttrs: false })
 
@@ -88,12 +69,8 @@
   const isOpen = computed(() => open.value && hasContent.value)
 
   /*
-   * An interactive panel is a `role="dialog"`, and a dialog with no accessible
-   * name is announced as an unlabelled group — axe flags it `aria-dialog-name`,
-   * and a screen-reader user entering it is told nothing about what they entered.
-   * So it is named by the term it glosses (the headline) and, when there is none,
-   * by the definition itself: naming a one-sentence panel after that sentence is
-   * honest, and infinitely better than a generic "dialog".
+   * A dialog with no accessible name fails axe aria-dialog-name, so the panel is
+   * named by the headline it glosses — or by the tip itself when there is none.
    */
   const labelledBy = computed(() => (props.headline ? headlineId : tipId))
   const placementRef = computed(() => props.placement)
@@ -105,8 +82,7 @@
     placement: placementRef,
     offset: 8,
     autoPlacements: ['top', 'bottom'],
-    // The floating-overlay tier, the same one the webkit tooltip and the menus
-    // sit on, so a gloss opened inside a docs panel is never occluded by it.
+    // The shared floating-overlay tier, so a gloss inside a docs panel is not occluded.
     zIndex: 1100,
     onDismiss: () => close()
   })
@@ -132,11 +108,9 @@
   }
 
   /*
-   * Leaving the trigger cannot close an interactive panel immediately: the
-   * pointer has to cross the 8px gap to reach the CTA, and a close on the first
-   * `mouseleave` makes that link unclickable. So the close is deferred by one
-   * short beat, and entering the panel cancels it. A passive panel has nothing
-   * to travel to, so it closes at once.
+   * An interactive panel closes on a short delay: the pointer must cross the 8px
+   * gap to reach the CTA, and closing on the first mouseleave makes it unclickable.
+   * Entering the panel cancels the close; a passive panel closes at once.
    */
   function scheduleClose() {
     clearTimers()
@@ -158,20 +132,9 @@
   }
 
   /*
-   * The panel is teleported to the end of the document body, so DOM order does NOT put it
-   * after the trigger: a reader who Tabs off the glossed term lands on whatever
-   * follows it in the sentence, and the CTA — the whole reason this panel is
-   * interactive — is never reached. Focus is therefore handed across explicitly.
-   * Tab from the trigger enters the panel; Tab or Shift+Tab from inside it closes
-   * the panel and puts focus back on the term, so the reader continues from where
-   * they were and the next Tab simply moves on.
-   */
-  /*
-   * Closing and handing focus back to the trigger is one move, not two: focusing
-   * the term fires `focusin`, which is the very thing that OPENS the panel — so a
-   * naive close-then-focus re-opened it ~150ms later and trapped the reader in a
-   * loop where Tab could never get past the glossed word. The flag makes that one
-   * focus event inert.
+   * The panel teleports to body, so Tab order skips it and focus is handed across
+   * by hand. Refocusing the trigger fires the same focusin that opens the panel —
+   * the flag makes that one event inert, or Tab could never pass the glossed word.
    */
   function returnFocusToTrigger() {
     restoringFocus.value = true

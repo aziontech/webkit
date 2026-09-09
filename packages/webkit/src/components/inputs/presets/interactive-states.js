@@ -1,9 +1,4 @@
-/**
- * Hover, active, and focus-visible patterns for webkit inputs (DESIGN.md § Interactive states).
- *
- * Spread these into component class groups named like `button.vue`:
- * `sharedClasses`, `disabledClasses`, `rootClasses`, plus state maps (`checkedClasses`, `invalidClasses`, …).
- */
+/** Hover, active, and focus-visible patterns for webkit inputs (DESIGN.md § Interactive states). */
 
 /** Ghost overlay layers — hover on `::before`, active on `::after`. */
 export const ghostLayerClasses = [

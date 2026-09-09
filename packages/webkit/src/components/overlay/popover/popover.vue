@@ -90,8 +90,8 @@
     offset: offsetRef,
     autoPlacements: ['bottom-start', 'bottom-end', 'top-start', 'top-end'],
     // Floating-overlay tier (matches Select/Dropdown menus). Kept at this level — not a
-    // modal tier — so overlays opened from inside the panel (e.g. a Select, teleported
-    // to <body> later) stack above it instead of being occluded by it.
+    // modal tier — so overlays opened from inside the panel (e.g. a Select teleported
+    // to the body later) stack above it instead of being occluded by it.
     zIndex: 50
   })
 
@@ -105,12 +105,10 @@
   function focusTrigger() {
     const trigger = triggerRef.value
     if (!trigger) return
-    // `PopoverTrigger` is a PASSTHROUGH <span> with no tabindex, so focusing it directly
-    // is a no-op: the focusable thing is the consumer's child (a Button, a link). Calling
-    // `.focus()` on the wrapper therefore left focus wherever it was — and since the
-    // panel is unmounting at that moment, the browser dropped it on <body>, silently
-    // losing the user's place every time an overlay closed with focus inside it.
-    // (Dialog/Drawer triggers do not have this problem: their wrappers carry tabindex="0".)
+    // The trigger wrapper is a passthrough span with no tabindex, so focusing it
+    // directly is a no-op — the browser then dropped focus on the document body as
+    // the panel unmounted, losing the user's place. Focus the wrapper only when it
+    // is itself focusable, otherwise its first focusable descendant.
     const target = trigger.matches(FOCUSABLE_SELECTOR)
       ? trigger
       : (trigger.querySelector<globalThis.HTMLElement>(FOCUSABLE_SELECTOR) ?? trigger)

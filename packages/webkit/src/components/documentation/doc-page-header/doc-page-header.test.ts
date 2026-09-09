@@ -1,36 +1,26 @@
 import { composeStories } from '@storybook/vue3'
-import { fireEvent, render, waitFor } from '@testing-library/vue'
-import { afterEach, describe, expect, it, vi } from 'vitest'
+import { fireEvent, render } from '@testing-library/vue'
+import { describe, expect, it } from 'vitest'
 
 import * as stories from '../../../../../../apps/storybook/src/stories/components/documentation/doc-page-header/DocPageHeader.stories'
 import { expectNoA11yViolations } from '../../../test/axe'
 import DocPageHeader from './doc-page-header.vue'
 
 // .claude/rules/testing.md: Vitest browser mode (real Chromium) loads NO Tailwind, so the
-// closing rule and the column layout emit nothing here — the visual gate owns those. What
-// is real without CSS: which regions render, the heading level, the date formatting (pure
-// JS), the time element's machine-readable value, and the two event payloads.
-//
-// The real Clipboard API rejects in headless Chromium ("Document is not focused"), so
-// writeText is stubbed to resolve. That substitutes an external side effect, not layout or
-// focus — what is under test is WHICH string the component hands over, and that the event
-// still fires when the clipboard is unavailable.
+// closing rule, the column layout and the meta line's left compensation emit nothing here —
+// the visual gate owns those. What is real without CSS: which regions render, the heading
+// level, the date formatting (pure JS), the time element's machine-readable value, which
+// element each meta entry becomes (anchor vs button), and the event payload.
 
-const { Default, Regions } = composeStories(stories)
+const { Default, Actions, Regions, Slots } = composeStories(stories)
 
 const CRUMBS = [{ label: 'Docs', href: '/docs' }, { label: 'Deploy an application' }]
-const SOURCE = '# Deploy an application\n\nTemplates are ready-made projects.'
 
-const stubClipboard = () => {
-  const writeText = vi.fn().mockResolvedValue(undefined)
-  vi.stubGlobal('navigator', { ...navigator, clipboard: { writeText } })
-  return writeText
-}
-
-afterEach(() => {
-  vi.unstubAllGlobals()
-  vi.restoreAllMocks()
-})
+const META_ACTIONS = [
+  { value: 'copy', label: 'Copy as Markdown', icon: 'pi pi-copy', tip: 'Copy the page.' },
+  { value: 'agent', label: 'Agent setup', icon: 'pi pi-microchip-ai', href: '/docs/agent-setup' },
+  { value: 'source', label: 'Edit this page', href: 'https://example.test/edit', target: '_blank' }
+]
 
 describe('DocPageHeader', () => {
   describe('rendering & testid', () => {
@@ -72,22 +62,31 @@ describe('DocPageHeader', () => {
       expect(getByTestId('documentation-doc-page-header').querySelector('p')).toBeNull()
     })
 
-    it('omits the last-updated line when there is no date', () => {
+    it('renders no meta line without a date or an entry', () => {
       const { getByTestId } = render(DocPageHeader, { props: { title: 'T' } })
-      expect(getByTestId('documentation-doc-page-header').querySelector('time')).toBeNull()
+      const root = getByTestId('documentation-doc-page-header')
+      expect(root.querySelector('time')).toBeNull()
+      expect(root.querySelector('[data-testid="actions-button"]')).toBeNull()
     })
 
-    it('shows the Copy Page control by default', () => {
-      const { getByText } = render(DocPageHeader, { props: { title: 'T' } })
-      expect(getByText('Copy Page')).toBeInTheDocument()
+    it('marks the meta line undated when the entries stand alone', () => {
+      const { getByTestId } = render(DocPageHeader, {
+        props: { title: 'T', metaActions: META_ACTIONS }
+      })
+      const line = getByTestId('documentation-doc-page-header').querySelector('[data-undated]')
+      // The attribute is what the left compensation hangs off; the offset itself is CSS,
+      // which this environment does not load.
+      expect(line).not.toBeNull()
+      expect(line?.querySelector('time')).toBeNull()
     })
 
-    it('removes the Copy Page control entirely when copyable is false', () => {
-      // Scoped to this render's own container: two renders share one document, so a
-      // document-wide query would find the other one's control.
-      const { container } = render(DocPageHeader, { props: { title: 'T', copyable: false } })
-      // Removed, not disabled: a page with nothing to copy should not advertise it.
-      expect(container.textContent).not.toContain('Copy Page')
+    it('drops the undated flag once there is a date', () => {
+      const { getByTestId } = render(DocPageHeader, {
+        props: { title: 'T', lastUpdated: '2026-06-30', metaActions: META_ACTIONS }
+      })
+      const root = getByTestId('documentation-doc-page-header')
+      expect(root.querySelector('[data-undated]')).toBeNull()
+      expect(root.querySelector('time')).not.toBeNull()
     })
   })
 
@@ -112,41 +111,79 @@ describe('DocPageHeader', () => {
     })
   })
 
-  describe('the copy event', () => {
-    it('hands the source to the clipboard and emits (event, source)', async () => {
-      const writeText = stubClipboard()
-      const { getByText, emitted } = render(DocPageHeader, {
-        props: { title: 'T', source: SOURCE }
+  describe('the meta line', () => {
+    it('renders one control per entry, in reading order', () => {
+      const { getByTestId } = render(DocPageHeader, {
+        props: { title: 'T', lastUpdated: '2026-06-30', metaActions: META_ACTIONS }
       })
-
-      await fireEvent.click(getByText('Copy Page'))
-      await waitFor(() => expect(emitted().copy).toBeTruthy())
-
-      expect(writeText).toHaveBeenCalledWith(SOURCE)
-      const calls = emitted().copy as unknown[][]
-      // event-payloads.md: the DOM event is always first, the subject second.
-      expect(calls[0][0]).toBeInstanceOf(MouseEvent)
-      expect(calls[0][1]).toBe(SOURCE)
+      const labels = [
+        ...getByTestId('documentation-doc-page-header').querySelectorAll(
+          '[data-testid="actions-button"]'
+        )
+      ].map((control) => control.textContent?.trim())
+      expect(labels).toEqual(['Copy as Markdown', 'Agent setup', 'Edit this page'])
     })
 
-    it('still emits when the clipboard is unavailable', async () => {
-      vi.stubGlobal('navigator', {
-        ...navigator,
-        clipboard: { writeText: vi.fn().mockRejectedValue(new Error('denied')) }
+    it('makes an entry with an href a real anchor and one without a button', () => {
+      const { getByText } = render(DocPageHeader, {
+        props: { title: 'T', metaActions: META_ACTIONS }
       })
+      // A link the reader can middle-click, copy and open in a tab — not a button that
+      // navigates, which none of those gestures reach.
+      const link = getByText('Agent setup').closest('a')
+      expect(link?.getAttribute('href')).toBe('/docs/agent-setup')
+      expect(getByText('Copy as Markdown').closest('a')).toBeNull()
+      expect(getByText('Copy as Markdown').closest('button')).not.toBeNull()
+    })
+
+    it('opens an external entry in a new tab with a safe rel', () => {
+      const { getByText } = render(DocPageHeader, {
+        props: { title: 'T', metaActions: META_ACTIONS }
+      })
+      const link = getByText('Edit this page').closest('a')
+      expect(link?.getAttribute('target')).toBe('_blank')
+      expect(link?.getAttribute('rel')).toContain('noopener')
+    })
+
+    it('emits (event, item) when an entry is activated', async () => {
       const { getByText, emitted } = render(DocPageHeader, {
-        props: { title: 'T', source: SOURCE }
+        props: { title: 'T', metaActions: META_ACTIONS }
       })
 
-      await fireEvent.click(getByText('Copy Page'))
-      // The rejection is swallowed on purpose: an embedded context with no clipboard
-      // must not break the page, and the consumer still learns the action ran.
-      await waitFor(() => expect(emitted().copy).toBeTruthy())
-      expect((emitted().copy as unknown[][])[0][1]).toBe(SOURCE)
+      await fireEvent.click(getByText('Copy as Markdown'))
+
+      const calls = emitted()['meta-action'] as unknown[][]
+      expect(calls).toHaveLength(1)
+      // event-payloads.md: the DOM event is always first, the subject second.
+      expect(calls[0][0]).toBeInstanceOf(MouseEvent)
+      expect(calls[0][1]).toMatchObject({ value: 'copy', label: 'Copy as Markdown' })
+    })
+
+    it('emits for a link too, so an app can route in-page', async () => {
+      const { getByText, emitted } = render(DocPageHeader, {
+        props: { title: 'T', metaActions: META_ACTIONS }
+      })
+
+      await fireEvent.click(getByText('Agent setup'))
+
+      const calls = emitted()['meta-action'] as unknown[][]
+      expect(calls[0][1]).toMatchObject({ value: 'agent', href: '/docs/agent-setup' })
+    })
+
+    it('hides the separators from the accessibility tree', () => {
+      const { getByTestId } = render(DocPageHeader, {
+        props: { title: 'T', lastUpdated: '2026-06-30', metaActions: META_ACTIONS }
+      })
+      const separators = getByTestId('documentation-doc-page-header').querySelectorAll(
+        '[data-testid="layout-divider"]'
+      )
+      expect(separators.length).toBeGreaterThan(0)
+      // Three announced separators on the way to three controls is noise, not structure.
+      separators.forEach((rule) => expect(rule.closest('[aria-hidden="true"]')).not.toBeNull())
     })
   })
 
-  describe('the trail and the action are slots over the built-ins', () => {
+  describe('every region is a slot over its built-in', () => {
     it('replaces the built-in breadcrumb with a passed trail', () => {
       const { getByText, queryByText } = render(DocPageHeader, {
         props: { title: 'T', breadcrumb: CRUMBS },
@@ -157,16 +194,16 @@ describe('DocPageHeader', () => {
       expect(queryByText('Docs')).not.toBeInTheDocument()
     })
 
-    it('replaces the built-in Copy Page control with passed actions', () => {
+    it('replaces the built-in h1 with a passed title', () => {
       const { getByText, queryByText } = render(DocPageHeader, {
-        props: { title: 'T', source: SOURCE },
-        slots: { actions: '<button type="button">Ask an agent</button>' }
+        props: { title: 'Deploy an application' },
+        slots: { title: '<h1>Claude Code + Azion</h1>' }
       })
-      expect(getByText('Ask an agent')).toBeInTheDocument()
-      expect(queryByText('Copy Page')).not.toBeInTheDocument()
+      expect(getByText('Claude Code + Azion')).toBeInTheDocument()
+      expect(queryByText('Deploy an application')).not.toBeInTheDocument()
     })
 
-    it('keeps the passed action on the title row', () => {
+    it('ships nothing on the title line and keeps a passed control on it', () => {
       const { getByText, getByTestId } = render(DocPageHeader, {
         props: { title: 'Deploy an application' },
         slots: { actions: '<button type="button">Ask an agent</button>' }
@@ -174,38 +211,60 @@ describe('DocPageHeader', () => {
       const row = getByTestId('documentation-doc-page-header').querySelector('h1')?.parentElement
       expect(row?.contains(getByText('Ask an agent'))).toBe(true)
     })
+
+    it('puts details between the deck and the meta line', () => {
+      const { getByTestId, getByText } = render(DocPageHeader, {
+        props: { title: 'T', description: 'The deck.', lastUpdated: '2026-06-30' },
+        slots: { details: '<div data-testid="facts">Terminal</div>' }
+      })
+      const rows = [...getByTestId('documentation-doc-page-header').children]
+      const deck = rows.findIndex((row) => row.textContent?.trim() === 'The deck.')
+      const facts = rows.indexOf(getByText('Terminal'))
+      const meta = rows.findIndex((row) => row.querySelector('time'))
+      expect(deck).toBeLessThan(facts)
+      expect(facts).toBeLessThan(meta)
+    })
   })
 
   describe('accessibility', () => {
     it('has no violations across every region this component owns', async () => {
-      // copyable: false, so the masthead is entirely DocPageHeader's own markup —
-      // breadcrumb, h1, deck and the dated line. See the skip below for why the
-      // Copy Page control cannot be included yet.
       const { container } = render(DocPageHeader, {
         props: {
           title: 'Deploy an application',
           description: 'Go from a template to a live edge application.',
           breadcrumb: CRUMBS,
           lastUpdated: '2026-06-30',
-          copyable: false
+          metaActions: META_ACTIONS
         }
       })
       await expectNoA11yViolations(container)
     })
 
-    // Blocked by a pre-existing defect in SplitButton, not in this component:
-    // Dropdown.Trigger renders a span[role=button][tabindex=0] and SplitButton nests a
-    // real IconButton inside it, which axe flags as nested-interactive (serious).
-    // Reproducible from main; needs fixing in Dropdown.Trigger / SplitButton.
-    it.skip('has no violations with the Copy Page control (SplitButton nested-interactive)', async () => {
-      stubClipboard()
+    // The masthead's own control used to be a SplitButton, whose Dropdown.Trigger nests a
+    // real IconButton inside a span[role=button] — axe's nested-interactive, which forced
+    // these three to be skipped. The meta line is plain buttons and anchors, so they run.
+    it('has no violations on the default story', async () => {
       const { container } = render(Default())
       await expectNoA11yViolations(container)
     })
 
-    it.skip('has no violations across the region variants (same SplitButton defect)', async () => {
-      stubClipboard()
+    it('has no violations across the belt', async () => {
+      const { container } = render(Actions())
+      await expectNoA11yViolations(container)
+    })
+
+    // The Regions story is deliberately a GALLERY — four mastheads stacked so the optional
+    // regions can be compared — and four `header`s in one container is four `banner`
+    // landmarks, which axe rightly flags. That is the story's shape, not the component's:
+    // a page has one masthead, and each variant it shows is covered by the prop-driven
+    // renders above. Asserting here would be asserting the gallery.
+    it('renders every region variant', () => {
       const { container } = render(Regions())
+      expect(container.querySelectorAll('header')).toHaveLength(4)
+    })
+
+    it('has no violations with the title and details slots filled', async () => {
+      const { container } = render(Slots())
       await expectNoA11yViolations(container)
     })
   })
