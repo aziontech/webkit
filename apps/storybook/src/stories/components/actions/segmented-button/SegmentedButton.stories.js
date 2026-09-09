@@ -83,6 +83,25 @@ const meta = {
         defaultValue: { summary: 'undefined' }
       }
     },
+    size: {
+      control: 'inline-radio',
+      options: ['small', 'medium', 'large'],
+      description: "Size token, on the same 28 / 32 / 40 rhythm every other control uses.",
+      table: {
+        category: 'props',
+        type: { summary: "'small' | 'medium' | 'large'" },
+        defaultValue: { summary: "'large'" }
+      }
+    },
+    fluid: {
+      control: 'boolean',
+      description: 'Stretches the group to its container and lets the options share that width.',
+      table: {
+        category: 'props',
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' }
+      }
+    },
     'onUpdate:modelValue': {
       action: 'update:modelValue',
       description: 'Emitted when the selected value changes.',
@@ -92,7 +111,9 @@ const meta = {
   args: {
     modelValue: 'option-1',
     options: defaultOptions,
-    ariaLabel: 'Segmented options'
+    ariaLabel: 'Segmented options',
+    size: 'large',
+    fluid: false
   }
 }
 
@@ -176,6 +197,85 @@ export const WithDisabledOption = {
         story: 'Four options with one disabled segment showing the lock affordance.'
       },
       source: { code: toSfc(DISABLED_SNIPPET_SCRIPT, DEFAULT_MARKUP) }
+    }
+  }
+}
+
+const SIZES_TEMPLATE = `<div class="flex flex-col items-start gap-4">
+  <SegmentedButton :options="options" default-value="option-1" size="small" aria-label="Small" />
+  <SegmentedButton :options="options" default-value="option-1" size="medium" aria-label="Medium" />
+  <SegmentedButton :options="options" default-value="option-1" size="large" aria-label="Large" />
+</div>`
+
+const SIZES_SNIPPET_SCRIPT = [
+  IMPORT,
+  '',
+  'const options = [',
+  "  { label: 'Label', value: 'option-1' },",
+  "  { label: 'Label', value: 'option-2' },",
+  "  { label: 'Label', value: 'option-3' }",
+  ']'
+]
+
+/** @type {import('@storybook/vue3').StoryObj<typeof SegmentedButton>} */
+export const Sizes = {
+  render: () => ({
+    components: { SegmentedButton },
+    setup: () => ({
+      options: [
+        { label: 'Label', value: 'option-1' },
+        { label: 'Label', value: 'option-2' },
+        { label: 'Label', value: 'option-3' }
+      ]
+    }),
+    template: SIZES_TEMPLATE
+  }),
+  parameters: {
+    controls: { disable: true },
+    docs: {
+      description: {
+        story:
+          'The three steps: 28px, 32px and 40px tall. Pick the one the row it sits in already uses \u2014 a group 6px off its neighbour reads as a rendering mistake.'
+      },
+      source: { code: toSfc(SIZES_SNIPPET_SCRIPT, SIZES_TEMPLATE) }
+    }
+  }
+}
+
+const FLUID_TEMPLATE = `<div class="flex w-[34rem] flex-col gap-4">
+  <SegmentedButton :options="options" default-value="new" aria-label="Hug its labels" />
+  <SegmentedButton :options="options" default-value="new" aria-label="Fill the row" fluid />
+</div>`
+
+const FLUID_SNIPPET_SCRIPT = [
+  IMPORT,
+  '',
+  'const options = [',
+  "  { label: 'Create a new repository', value: 'new' },",
+  "  { label: 'Use an existing repository', value: 'existing' }",
+  ']'
+]
+
+/** @type {import('@storybook/vue3').StoryObj<typeof SegmentedButton>} */
+export const Fluid = {
+  render: () => ({
+    components: { SegmentedButton },
+    setup: () => ({
+      options: [
+        { label: 'Create a new repository', value: 'new' },
+        { label: 'Use an existing repository', value: 'existing' }
+      ]
+    }),
+    template: FLUID_TEMPLATE
+  }),
+  parameters: {
+    controls: { disable: true },
+    docs: {
+      description: {
+        story:
+          'By default the group hugs its labels (top). `fluid` gives it the container width and lets the options divide that row between them (bottom) \u2014 which is what a two-answer question at the head of a form card wants, instead of two pills bunched at the left with dead space beside them.'
+      },
+      source: { code: toSfc(FLUID_SNIPPET_SCRIPT, FLUID_TEMPLATE) }
     }
   }
 }
