@@ -17,8 +17,9 @@ minimumReleaseAgeExclude:
   - '@aziontech/theme@4.0.0'
 
 overrides:
-  # Minimal validated set (2026-07-25): each entry guards a live advisory or a
-  # proven resolution hazard; the tree is audit-clean without anything else.
+  # Minimal validated set (2026-07-25, last bumped 2026-09-09): each entry
+  # guards a live advisory or a proven resolution hazard; the tree is
+  # audit-clean without anything else.
   brace-expansion: ">=5.0.9" # GHSA-rgw5-rvv9-x895 (DoS, CVE-2026-14257 mitigation bypass), patched 5.0.9 — supersedes GHSA-mh99-v99m-4gvg
   minimatch: ">=9.0.0" # keeps minimatch@3 chains out so the brace-expansion force stays within one API major
   uuid: ">=14.0.0" # GHSA-w5hq-g745-h8pq, patched 11.1.1; jest/storybook chains pin 8.x/9.x
@@ -27,7 +28,12 @@ overrides:
   "@xmldom/xmldom": ">=0.9.12 <0.10" # GHSA-6gmq-8vp8-gcm6 (XML fragment injection), patched 0.9.12; bounded — 0.x minors break API
   "@babel/core": ">=7.29.1 <8" # bounded: peer ranges (^7 || ^8.0.0-0) would jump to Babel 8
   "@hono/node-server": ">=2.0.5" # GHSA-frvp-7c67-39w9; MCP SDK still pins ^1.19.x — drop when the SDK moves to ^2
-  hono: ">=4.12.34 <5" # GHSA-8j4g-w8fx-2239 (ReDoS in CORS middleware), patched 4.12.34; bounded to 4.x — MCP SDK pins ^4
-  "js-yaml@3": ">=3.15.1 <4" # GHSA-5p4m-2wfm-xmqj (CVE-2026-59870, quadratic CPU in !!omap), patched 3.15.1; bounded — 4.x removed the legacy safeLoad API
-  "js-yaml@4": ">=4.3.1 <5" # GHSA-5p4m-2wfm-xmqj (CVE-2026-59870), patched 4.3.1; bounded to 4.x — 5.x is ESM-only
+  hono: ">=4.13.5 <5" # GHSA-gqvv-2mrq-wpjv (toSSG path traversal), GHSA-g6gw-c38x-mqfc (parseBody nesting memory exhaustion), GHSA-crvj-82cr-hjcx (query parser fragment desync), patched 4.13.5; bounded to 4.x — MCP SDK pins ^4
+  "js-yaml@3": ">=3.15.2 <4" # GHSA-2883-xcg3-v3hh (maxTotalMergeKeys does not limit CPU use for empty merge sources), patched 3.15.2; supersedes the GHSA-5p4m-2wfm-xmqj floor; bounded — 4.x removed the legacy safeLoad API
+  "js-yaml@4": ">=4.3.2 <5" # GHSA-2883-xcg3-v3hh, patched 4.3.2; supersedes the GHSA-5p4m-2wfm-xmqj floor; bounded to 4.x — 5.x is ESM-only
   "nanoid@3": ">=3.3.17 <4" # GHSA-2v37-7h3g-55p8 (CVE-2026-67213, infinite loop with size 0), patched 3.3.17; bounded to 3.x (CJS) — postcss pins ^3; 4.x+ is ESM-only (5.x patched at 5.1.6, not in tree)
+  colord: ">=2.9.4 <3" # GHSA-2wm5-q62r-hmrv (slow rejection of oversized malformed color strings), patched 2.9.4; bounded — stylelint pins ^2.9.x, no 3.x published
+  "joi@17": ">=17.13.6 <18" # GHSA-6w3j-5fw6-r9vr, GHSA-gg4h-3hg2-grpc (prototype pollution via rename()/custom messages), patched 17.13.6; bounded to 17.x — wait-on@7 (storybook's jest-playwright-preset chain) pins ^17
+  "joi@18": ">=18.2.5 <19" # GHSA-6w3j-5fw6-r9vr, GHSA-gg4h-3hg2-grpc, patched 18.2.5; bounded to 18.x — wait-on@8 (storybook) pins ^18
+  vitest: ">=4.1.11 <5" # GHSA-82fw-gwwq-j7x9 (path traversal / arbitrary file read via @vitest/mocker redirect mock), patched 4.1.11; already inside the ^4.1.x devDependency range — lockfile was just stale
+  "@vitest/mocker": ">=4.1.11 <5" # GHSA-82fw-gwwq-j7x9, same fix as vitest above; bounded to 4.x

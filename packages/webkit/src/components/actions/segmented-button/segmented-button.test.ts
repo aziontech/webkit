@@ -32,6 +32,35 @@ describe('SegmentedButton', () => {
     expect(root.getAttribute('aria-label')).toBe('Choose one')
   })
 
+  it.each([
+    ['small', 'small'],
+    ['medium', 'medium'],
+    ['large', 'large']
+  ] as const)('maps size=%s onto data-size on the group root', (size, expected) => {
+    const { getByTestId } = render(SegmentedButton, { props: { options: OPTIONS, size } })
+
+    expect(getByTestId('actions-segmented-button').getAttribute('data-size')).toBe(expected)
+  })
+
+  it('defaults data-size to large', () => {
+    const { getByTestId } = render(SegmentedButton, { props: { options: OPTIONS } })
+
+    expect(getByTestId('actions-segmented-button').getAttribute('data-size')).toBe('large')
+  })
+
+  it('exposes data-fluid on the group root only when fluid is set', () => {
+    const { getByTestId, unmount } = render(SegmentedButton, {
+      props: { options: OPTIONS, fluid: true }
+    })
+
+    expect(getByTestId('actions-segmented-button').getAttribute('data-fluid')).toBe('true')
+    unmount()
+
+    const { getByTestId: getDefault } = render(SegmentedButton, { props: { options: OPTIONS } })
+
+    expect(getDefault('actions-segmented-button').hasAttribute('data-fluid')).toBe(false)
+  })
+
   it('renders one radio button per option with the option testid', () => {
     const { getAllByTestId } = render(SegmentedButton, {
       props: { options: OPTIONS }
