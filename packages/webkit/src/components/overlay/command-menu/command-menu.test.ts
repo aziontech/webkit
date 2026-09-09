@@ -95,13 +95,9 @@ const mixedPrefixes = () =>
     `
   })
 
-/**
- * A palette whose leading group is rendered CONDITIONALLY on the query — the shape a
- * consumer takes when the palette searches a data set and shows the results above its
- * static navigation (the console's global search). Those items register LAST (they mount
- * on the first keystroke) while rendering FIRST, which is what the DOM-ordered roving
- * list exists for.
- */
+/** A palette whose leading group renders conditionally on the query (a data-set search above
+ *  static navigation, like the console's global search): those items register LAST, on the
+ *  first keystroke, while rendering FIRST, which is what the DOM-ordered roving list is for. */
 const conditionalResults = () =>
   defineComponent({
     components: {
