@@ -235,7 +235,34 @@ describe('Sidebar', () => {
       expect(root.getAttribute('data-collapsed')).toBe('')
       expect(root.getAttribute('aria-hidden')).toBe('true')
       expect(root.hasAttribute('inert')).toBe(true)
-      expect(root.style.width).toBe('0px')
+      expect((getByTestId('layout-sidebar__collapse-input') as HTMLInputElement).checked).toBe(true)
+    })
+
+    it('renders a hidden checkbox whose checked state mirrors collapsed, CSS-only motion driver', () => {
+      const { getByTestId } = render(Sidebar, {
+        props: { collapsible: true, collapsed: true },
+        slots: { default: '<a href="/">Home</a>' }
+      })
+
+      const input = getByTestId('layout-sidebar__collapse-input') as HTMLInputElement
+      expect(input.type).toBe('checkbox')
+      expect(input.checked).toBe(true)
+      expect(input.getAttribute('aria-hidden')).toBe('true')
+      expect(input.getAttribute('tabindex')).toBe('-1')
+    })
+
+    it('toggling the hidden checkbox drives the collapsed model, the same state the trigger drives', async () => {
+      const { getByTestId, emitted } = render(Sidebar, {
+        props: { collapsible: true },
+        slots: { default: '<a href="/">Home</a>' }
+      })
+
+      const input = getByTestId('layout-sidebar__collapse-input') as HTMLInputElement
+      await fireEvent.click(input)
+
+      expect(input.checked).toBe(true)
+      expect(emitted()['update:collapsed']?.at(-1)).toEqual([true])
+      expect(getByTestId('layout-sidebar').getAttribute('data-collapsed')).toBe('')
     })
 
     it('the way back is a sibling of the rail, because a collapsed rail would clip it', async () => {
@@ -257,7 +284,6 @@ describe('Sidebar', () => {
 
       const rail = getByTestId('layout-sidebar')
       const zone = await waitFor(() => getByTestId('layout-sidebar__expand'))
-      expect(rail.style.width).toBe('0px')
 
       await fireEvent.pointerEnter(zone)
       expect(zone.getAttribute('data-preview')).toBe('')
@@ -265,7 +291,7 @@ describe('Sidebar', () => {
 
       await fireEvent.pointerLeave(zone)
       expect(zone.hasAttribute('data-preview')).toBe(false)
-      expect(rail.style.width).toBe('0px')
+      expect(rail.style.width).toBe('')
     })
 
     it('previewing: focus reaching the edge zone opens the same sliver as the pointer', async () => {
@@ -281,7 +307,7 @@ describe('Sidebar', () => {
       expect(rail.style.width).toBe('40px')
 
       await fireEvent.focusOut(zone)
-      expect(rail.style.width).toBe('0px')
+      expect(rail.style.width).toBe('')
     })
 
     it('previewing: the sliver stays out of the tab order — it is a preview, not a restore', async () => {
@@ -422,7 +448,9 @@ describe('Sidebar', () => {
 
       expect(getByTestId('layout-sidebar__handle')).toBeTruthy()
       expect(getByTestId('layout-sidebar__collapse')).toBeTruthy()
-      await waitFor(() => expect(getByTestId('layout-sidebar').style.width).not.toBe(''))
+      await waitFor(() =>
+        expect(getByTestId('layout-sidebar').style.getPropertyValue('--sidebar-width')).not.toBe('')
+      )
     })
   })
 })
