@@ -64,13 +64,10 @@ export function useNavigationMenuViewportSize({
     const previousScale = popup.style.scale
     popup.style.scale = '1'
 
-    // `fit-content`, not `auto`: the popup is a BLOCK child of the positioner, so `width: auto`
-    // is "fill the parent" — which reads as the panel's natural width only while the positioner
-    // is itself shrink-wrapped (its default `min-width: max-content`). Give the positioner a
-    // width of its own — a mega-menu laid on a page column — and `auto` measures every panel as
-    // that column, so they all morph to one width and none of them is ever measured. `fit-content`
-    // shrink-wraps to the content and is still clamped by what the positioner leaves available,
-    // which is what `--popup-width` is supposed to mean in both cases.
+    // `fit-content`, not `auto`: the popup is a block child of the positioner, so `auto`
+    // means "fill the parent" and only reads as the natural width while the positioner
+    // itself shrink-wraps. A positioner with a real width (a mega-menu on a page column)
+    // would then measure every panel as that column, so none is ever measured on its own.
     popup.style.setProperty(POPUP_WIDTH, 'fit-content')
     popup.style.setProperty(POPUP_HEIGHT, 'auto')
     target?.style.setProperty(VIEWPORT_WIDTH, 'max-content')
@@ -78,12 +75,10 @@ export function useNavigationMenuViewportSize({
     // Pass 1 — the panel's natural width, as clamped by whatever the popup's box allows.
     const { width } = getCssDimensions(popup)
 
-    // Pass 2 — the height at the width the panel will actually be laid out at. Measuring it
-    // while the target is still `max-content` reads the height of a WIDER layout: every
-    // description that will wrap at the real width is still on one line, so the height comes
-    // back short and the popup — which is `overflow-hidden` at exactly this height — clips
-    // its own last row. When nothing constrains the popup the two passes lay out identically
-    // and this is a no-op.
+    // Pass 2 — height at the real width. Reading it while still `max-content` measures a
+    // WIDER layout where text hasn't wrapped yet, so the height comes back short and the
+    // popup (overflow-hidden at that height) clips its last row. No-op when nothing
+    // constrains the popup.
     target?.style.setProperty(VIEWPORT_WIDTH, `${width}px`)
     const { height } = getCssDimensions(popup)
 
