@@ -4,25 +4,9 @@
   import { buildRail, measureRail, RAIL_INDENT, RAIL_STROKE } from './toc-rail'
 
   /**
-   * The "On this page" rail from the docs frame: the page's own headings, the
-   * active one lit, nested headings indented under their parent — followed by
-   * the rail's COMPLEMENTARY groups (the repository, the community).
-   *
-   * The rail is a single path that bends inward as the outline nests, and the
-   * active marker is a dash cut from that same path — so moving between headings
-   * slides the marker *along* the line, through the bends, instead of jumping a
-   * separate bar between two positions. Because both come from one geometry,
-   * the marker cannot drift out of register with the rail at any scroll offset.
-   *
-   * The complementary groups are NOT part of that outline and are not drawn as
-   * if they were: no rail, no indent, no active marker. They sit flush at the
-   * rail's left edge, each under its own overline, because they are peers of the
-   * outline rather than entries in it — a reader must never read "Join us on
-   * Discord" as a section of the page they are on. Each is its own named nav, so
-   * the three groups are three landmarks instead of one long list of links.
-   *
-   * It is presentation only: the page owns which heading is active, because the
-   * page owns the scroll container.
+   * "On this page" rail. The rail is one svg path and the active marker a dash
+   * cut from that same path, so it travels along the bends and cannot drift out
+   * of register. Complementary groups are separate nav landmarks, not entries.
    */
   defineOptions({ name: 'DocOnThisPage', inheritAttrs: false })
 
@@ -84,25 +68,15 @@
     () => (attrs['data-testid'] as string) ?? 'documentation-doc-on-this-page'
   )
 
-  /**
-   * Whether a complementary link leaves the documentation.
-   *
-   * The community and repository links do, so they open in a new tab; an
-   * in-site link (a relative path) stays in this one.
-   */
+  /** Whether a complementary link leaves the documentation (opens in a new tab). */
   const isExternal = (href: string) => /^[a-z]+:/i.test(href) || href.startsWith('//')
 
   const listRef = ref<HTMLElement | null>(null)
   const probeRef = ref<SVGPathElement | null>(null)
   const entryRefs = ref<HTMLElement[]>([])
 
-  /**
-   * The hovered entry's box, relative to the list, and whether it is showing.
-   *
-   * One element moves between entries instead of each entry painting its own
-   * background, so the highlight morphs down the outline the way the
-   * NavigationMenu selector morphs between its triggers.
-   */
+  // One element moves between entries (instead of per-entry hover backgrounds), so
+  // the highlight morphs down the outline like the NavigationMenu selector.
   const highlight = ref({ top: 0, left: 0, width: 0, height: 0 })
   const highlighting = ref(false)
   const highlightIndex = ref(-1)
@@ -132,10 +106,7 @@
     highlightIndex.value = index
   }
 
-  /**
-   * Hide the highlight when the pointer leaves the list itself — not when it
-   * crosses from one entry to the next, which is the move that should morph.
-   */
+  /** Hide the highlight only when the pointer leaves the list itself, not between entries. */
   function handleListLeave(event: PointerEvent) {
     const related = event.relatedTarget as Node | null
     if (related && listRef.value?.contains(related)) return
@@ -156,10 +127,8 @@
   const activeIndex = computed(() => props.items.findIndex((item) => item.id === props.activeId))
 
   /**
-   * The dash that reveals only the active band of the rail.
-   *
-   * `stroke-dasharray` sets the lit length, `stroke-dashoffset` sets where along
-   * the path it starts — transitioning both is what makes the marker travel.
+   * The active dash: dasharray sets the lit length, dashoffset where along the
+   * path it starts — transitioning both is what makes the marker travel.
    */
   const marker = computed(() => {
     const span = spans.value[activeIndex.value]
@@ -172,10 +141,8 @@
   })
 
   /**
-   * Re-measure the rendered entries and rebuild the path.
-   *
-   * Runs after mount, whenever the outline changes, and on resize — a narrow
-   * rail wraps a long heading onto two lines, which moves every band below it.
+   * Re-measure the entries and rebuild the path: on mount, outline change, and
+   * resize — a narrow rail wraps a heading onto two lines, moving every band below.
    */
   function remeasure() {
     const list = listRef.value
@@ -185,9 +152,8 @@
       return
     }
     const listTop = list.getBoundingClientRect().top
-    // Function refs keep whatever the last, longer outline left behind, so the
-    // list is trimmed to the current items before measuring — otherwise a page
-    // with fewer headings would fail the length check below and freeze the rail.
+    // Function refs keep entries from a longer previous outline; trim to the
+    // current items, or the length check below would freeze the rail.
     entryRefs.value.length = props.items.length
     const bands = entryRefs.value.filter(Boolean).map((element, index) => {
       const box = element.getBoundingClientRect()
@@ -240,10 +206,8 @@
       :aria-label="title"
       class="flex flex-col gap-(--spacing-xs)"
     >
-      <!-- `data-toc-title` marks the rail's OPENING LINE. A docs shell aligns the rail
-           against the page bar it sits beside, and it needs a stable thing to measure —
-           the first line of the outline — without reaching through this component's
-           internals to find it. -->
+      <!-- data-toc-title marks the rail's first line: the stable box a docs shell
+           measures to align the rail against the page bar beside it. -->
       <p
         data-toc-title
         class="m-0 text-overline-xs text-(--text-muted)"
@@ -320,8 +284,6 @@
       </div>
     </nav>
 
-    <!-- The complementary groups. Flush left (no rail, no indent) and plain
-         links: they are peers of the outline, not entries in it. -->
     <nav
       v-for="group in groups"
       :key="group.label"

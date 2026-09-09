@@ -4,16 +4,16 @@ category: documentation
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: c7b7dbe4ce86a9db6a810a542836459839c7b35c749b50e6194aa9ff56afeadb
+checksum: 0f497e00e7d9821b5fd7faa38768717c38f90bd082daabeeb4de10471e18501a
 created: 2026-08-22
-last_updated: 2026-08-22
+last_updated: 2026-08-28
 ---
 
 # DocPageHeader — Component Spec
 
 ## Purpose
 
-The masthead of a documentation page: where the reader is (the breadcrumb), what the page is (the title), what they can do with it (a Copy Page control that hands the page to an AI tool), the deck that says what they will have by the end, and when the content last changed. It closes on a rule spanning the column, which is what gives every `h2` below it something to be subordinate to.
+The masthead of a documentation page: where the reader is (the breadcrumb), what the page is (the title), what they can do with it (a Copy Page control that hands the page to an AI tool — or, through the `actions` slot, the consumer's own menu; the trail is likewise slottable, for an application whose crumbs route rather than navigate), the deck that says what they will have by the end, and when the content last changed. It closes on a rule spanning the column, which is what gives every `h2` below it something to be subordinate to.
 
 ## When to use
 
@@ -28,13 +28,15 @@ The masthead of a documentation page: where the reader is (the breadcrumb), what
 
 - `DocProse` — the body below it. The masthead's `h1` is chrome, so authored content starts at `h2`.
 - `DocOnThisPage` — the rail beside the body, which lists those `h2`s.
-- `SplitButton` — the Copy Page control's shape: a primary action plus attached alternatives.
+- `Button` / `Tooltip` / `Divider` — the meta line's entries: a quiet `text` button (an anchor when the entry has an `href`), the sentence its label has no room for, and the rule between two of them.
 
 ## Best practices
 
-- Give `source` the page's markdown so the primary action copies something a model can read.
+- Give every `metaActions` entry a `tip`: two or three words name a control, and only a sentence says what it does.
+- Give an entry an `href` when it has a destination, so it is a real link — then prevent the default in `meta-action` if the app routes in-page.
 - Let `lastUpdated` come from the page's own frontmatter. It is the author's claim that the content changed, not the file's mtime.
 - Put the current page last in `breadcrumb`; it is marked as current for you.
+- Use `title` and `details` for a page ABOUT something (a tool, a product): its mark and maker are a title, and its facts belong between the deck and the meta line.
 
 ## Usage
 
@@ -49,40 +51,58 @@ The masthead of a documentation page: where the reader is (the breadcrumb), what
     description="Go from a template to a live edge application in a few clicks."
     :breadcrumb="[{ label: 'Docs', href: '/docs' }, { label: 'Deploy an application' }]"
     last-updated="2026-06-30"
-    :source="markdown"
-    @copy="(event, source) => toast('Page copied')"
-    @action="(event, item) => openIn(item.value)"
+    :meta-actions="[
+      {
+        value: 'copy',
+        label: 'Copy as Markdown',
+        icon: 'pi pi-copy',
+        tip: 'Copy this page as Markdown, ready to paste into an assistant.'
+      },
+      {
+        value: 'agent',
+        label: 'Agent setup',
+        icon: 'pi pi-microchip-ai',
+        href: '/docs/agent-setup',
+        tip: 'Set up your coding agent to build on Azion.'
+      }
+    ]"
+    @meta-action="(event, item) => onPageAction(event, item)"
   />
 </template>
 ```
 
 ## Props
 
-| Prop          | Type         | Default | Required | JSDoc                                                                   |
-| ------------- | ------------ | ------- | -------- | ----------------------------------------------------------------------- |
-| `title`       | `string`     | `''`    | false    | The page title.                                                         |
-| `description` | `string`     | `''`    | false    | The deck under the title.                                               |
-| `breadcrumb`  | `DocCrumb[]` | `[]`    | false    | Ancestor trail, current page last.                                      |
-| `copyable`    | `boolean`    | `true`  | false    | Shows the Copy Page control.                                            |
-| `source`      | `string`     | `''`    | false    | The markdown handed to the clipboard by the primary action.             |
-| `lastUpdated` | `string`     | `''`    | false    | When the page's content last changed. ISO date, or a ready-made string. |
+| Prop          | Type              | Default | Required | JSDoc                                                                   |
+| ------------- | ----------------- | ------- | -------- | ----------------------------------------------------------------------- |
+| `title`       | `string`          | `''`    | false    | The page title.                                                         |
+| `description` | `string`          | `''`    | false    | The deck under the title.                                               |
+| `breadcrumb`  | `DocCrumb[]`      | `[]`    | false    | Ancestor trail, current page last.                                      |
+| `lastUpdated` | `string`          | `''`    | false    | When the page's content last changed. ISO date, or a ready-made string. |
+| `metaActions` | `DocPageAction[]` | `[]`    | false    | The controls on the meta line, in reading order.                        |
 
 ## Events
 
-| Event    | Payload                                                                         | Notes                                                                                                        |
-| -------- | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
-| `copy`   | `(event: MouseEvent, source: string)`                                           | Fired when the primary Copy Page action runs, after the copy resolves. Event first, per `event-payloads.md`. |
-| `action` | `(event: MouseEvent \| KeyboardEvent, item: { label: string; value?: string })` | Fired when one of the attached AI actions is chosen; `item` is the entry that was picked.                    |
+| Event         | Payload                                    | Notes                                                                                                                                                                                        |
+| ------------- | ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `meta-action` | `(event: MouseEvent, item: DocPageAction)` | Fired when a meta-line control is activated; `item` is the entry that was picked. Event first, per `event-payloads.md`. A link's default navigation is the consumer's to keep or to prevent. |
 
 ## Slots
 
-| _none_ | — | — |
+| Slot         | Scope | Notes                                                                                      |
+| ------------ | ----- | ------------------------------------------------------------------------------------------ |
+| `breadcrumb` | —     | The trail; replaces the built-in `Breadcrumb` fed by the `breadcrumb` prop.                |
+| `title`      | —     | The page's name; replaces the built-in `h1`, for a title that is more than a string.       |
+| `actions`    | —     | A control on the title's line. Empty by default; the meta line carries the page's actions. |
+| `details`    | —     | Rows between the deck and the meta line — a page's own facts, tags or references.          |
 
 ## States
 
-- Visual states: `default`. The masthead holds no interactive state of its own; the Copy Page control owns its own open/closed menu.
-- `copyable: false` removes the control entirely rather than disabling it — a page with nothing to copy should not advertise the action.
-- Each region renders only when it has content: no breadcrumb, deck, or "last updated" line appears empty.
+- Visual states: `default`. The masthead holds no interactive state of its own; each meta-line entry owns its own hover, focus and tooltip.
+- Each region renders only when it has content: no breadcrumb, deck, or meta line appears empty. An unfilled slot with a `v-if`-ed fallback renders no element, so a masthead with no trail pays no gap for the region; an empty `metaActions` with no date renders no meta line at all.
+- `data-undated` on the meta line when there is no date: the line then starts with a `text` button, whose label sits one spacing step inside its own box, so the row is pulled left by exactly that padding to keep the ink on the column.
+- The rules between entries render from `md` up only. Below that the line wraps per entry, and a rule at the end of a wrapped line has nothing after it.
+- Below `sm` a passed `actions` control leaves the title's line and stacks under it at its natural width; from `sm` up the two share one row.
 
 ## Motion & Animations
 
@@ -95,9 +115,11 @@ _none_
 | typography (title)        | `.text-heading-2xl` / `sm:.text-heading-xl` |
 | typography (deck)         | `.text-body-md`                             |
 | typography (last updated) | `.text-label-sm`                            |
+| typography (meta entry)   | `Button` `kind="text"` `size="small"`       |
 | text                      | `var(--text-default)`                       |
 | text (last updated)       | `var(--text-muted)`                         |
 | border (the closing rule) | `var(--border-default)`                     |
+| border (entry separator)  | `Divider` `orientation="vertical"`          |
 | spacing                   | `var(--spacing-lg)` / `var(--spacing-xxs)`  |
 
 ## Theme gaps
@@ -108,17 +130,19 @@ _none_
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: inherited from `Breadcrumb` and `SplitButton`; the masthead adds no focusable element of its own.
-- Keyboard map: `Tab` reaches the breadcrumb links and the Copy Page control; the control owns its own menu keyboard model.
+- Visible focus: inherited from `Breadcrumb`, `Button` and `Tooltip`; the masthead adds no focusable element of its own.
+- Keyboard map: `Tab` reaches the breadcrumb links and then each meta-line entry in reading order; a `tip` opens on focus, not on hover alone, so a definition is never pointer-only. The separators are `aria-hidden` — three announced separators on the way to three controls is noise.
 - ARIA: the root is a `header`. The title is the page's single `h1`, so authored content must start at `h2`. The "last updated" glyph is decorative (`aria-hidden`) because the words "Last updated" sit beside it, and the date is wrapped in `<time datetime>` so the machine-readable value survives formatting.
 - The ISO date is parsed and rendered in **UTC** on purpose: read as local time, a bare `2026-06-30` becomes the 29th for every reader west of Greenwich.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons).
-- Touch target: the Copy Page control is a standard button; nothing else is interactive.
+- Touch target: each meta-line entry is a standard `small` button (28px) with its own hover surface; nothing else is interactive.
 
 ## Stories (Storybook)
 
-- Default — the full masthead: breadcrumb, title, Copy Page, deck and last-updated line.
-- Regions — composite story showing the masthead with each optional region absent (no breadcrumb, no deck, `copyable: false`, no date), which is the only way to see that the layout closes up rather than leaving gaps. Justified in writing here because every region is independently optional and no single-arg story shows that.
+- Default — the full masthead: breadcrumb, title, deck and the meta line.
+- Actions — composite story of the belt's entry shapes in one line: a button, an in-app link, and an external link. Justified in writing here because the shapes differ only by the entry's own fields, which no single-arg story shows.
+- Undated — the meta line with no date, which is the only way to see the left compensation that keeps the first label on the column.
+- Slots — the `title` and `details` regions carrying an identity card, which is what those slots exist for.
 
 ## Constraints — DO NOT
 

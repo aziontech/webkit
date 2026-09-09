@@ -1,11 +1,7 @@
-// Performance: when a compound component is imported from its compound entry
-// (`@aziontech/webkit/table`, which Object.assigns every sub-component and so is
-// retained whole by bundlers) but the file only ever renders the root `<Table>`
-// (never `<Table.Row>` dot-notation, nor `Table.Row` in script), suggest the
-// tree-shakeable standalone root `@aziontech/webkit/table-root`.
-//
-// Only suggests — a compound root `X` is detected from the catalog (entry.compoundRoot).
-// Conservative: any dotted usage / member access / namespace-ish use suppresses it.
+// Performance: when a compound component is imported from its compound entry (which
+// Object.assigns every sub-component, so bundlers retain them all) but the file only
+// renders the bare root, suggest the tree-shakeable standalone `-root` entry instead.
+// Suggestion only; conservative — any dotted / member / namespace-ish use suppresses it.
 
 import { loadCatalog } from '../catalog.js'
 import { ctxCwd } from '../util.js'

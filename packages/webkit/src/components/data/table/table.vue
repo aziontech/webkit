@@ -17,7 +17,17 @@
     type VisibilityState
   } from '@tanstack/vue-table'
   import { useDebounceFn } from '@vueuse/core'
-  import { computed, getCurrentInstance, provide, ref, useAttrs, useSlots, watch } from 'vue'
+  import {
+    computed,
+    getCurrentInstance,
+    nextTick,
+    onMounted,
+    provide,
+    ref,
+    useAttrs,
+    useSlots,
+    watch
+  } from 'vue'
 
   import { downloadCsv, toCsv } from '../../../utils/csv'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
@@ -60,6 +70,8 @@
     frozen?: 'start' | 'end'
     /** Fixed width (px) — needed for a frozen column that precedes another frozen column on the same edge, so sticky offsets can be summed. */
     width?: number
+    /** Minimum width (px). The column resolves to the widest of this floor and its own content (its header, with the sort affordance, and every rendered cell) — one width for the whole column, so a chip column reserves nothing it is not using and never clips a chip. `width` wins when both are set. */
+    minWidth?: number
     /** Cell alignment. */
     align?: 'start' | 'center' | 'end'
     /** Body cell kind (action renders a 40px trailing cell, auto-pinned to the right edge). */
@@ -451,19 +463,16 @@
   const headers = computed(() => table.getHeaderGroups()[0]?.headers ?? [])
   const rows = computed(() => table.getRowModel().rows)
 
-  // --- Column resize (native pointer events) ---------------------------------
-  // The @tanstack/vue-table exception covers sorting / pagination / selection /
-  // visibility — NOT column sizing. Resize is implemented with native pointer/
-  // mouse events writing to a reactive width map keyed by column id. Only the
-  // dragged column's entry ever changes, so a resize never touches the other
-  // columns (PrimeVue "expand" behaviour): that column grows and the table
-  // scrolls horizontally. Drives the body rows' v-memo for live updates.
-  // The lower bound of a drag is the column's own content (header label + the
-  // visible body cells), measured at drag start — see columnContentMinWidth.
-  // This fallback only applies when that measurement can't run (no DOM handle).
+  // Column resize is native pointer events (the tanstack exception does not cover
+  // column sizing) writing to a width map keyed by column id: only the dragged
+  // column's entry changes, so a resize grows that column and scrolls the table
+  // instead of reflowing siblings. The drag floor is the column's own content,
+  // measured at drag start; this fallback applies only when measuring can't run.
   const RESIZE_FALLBACK_MIN_WIDTH = 40
   const resizeWidths = ref<Record<string, number>>({})
   const resizingColumnId = ref<string | null>(null)
+  // Widths resolved for `minWidth` columns — see the auto-fit block below.
+  const autoWidths = ref<Record<string, number>>({})
 
   // Shared context exposed via inject so descendant slots/controls can reach the
   // TanStack instance, the current selection, and clearSelection.
@@ -629,18 +638,10 @@
   )
   const pageIndex = computed<number>(() => table.getState().pagination.pageIndex)
   const currentPageSize = computed<number>(() => table.getState().pagination.pageSize)
-  // Skeleton placeholder rows shown while `loading`. The count mirrors the number
-  // of rows the table actually displays, so the placeholder reserves the same
-  // vertical space the loaded content occupies (no jump on load → data): the
-  // current page size when paginated (honouring a controlled `pagination` model
-  // or the footer page-size selector), otherwise the current row count — falling
-  // back to `pageSize` before the first data arrives.
-  // Number of skeleton rows while loading. It mirrors the rows the current view
-  // will actually show, so the placeholder and the loaded content share the same
-  // height (no jump when the skeleton is swapped for data): the current page's
-  // row count when paginated — which is fewer than pageSize on a partial last
-  // page — else the dataset length, each falling back to pageSize before any
-  // rows exist (e.g. the first server-side fetch).
+  // Skeleton row count mirrors the rows the current view will actually show, so
+  // the placeholder and the loaded content share the same height (no jump on the
+  // swap): the current page's row count when paginated, else the dataset length,
+  // each falling back to pageSize before any rows exist (first server-side fetch).
   const skeletonRowCount = computed<number>(() => {
     const displayed = props.paginated
       ? rows.value.length || currentPageSize.value
@@ -665,13 +666,10 @@
     return 'none'
   }
 
-  // Row click and cell click are distinct concerns, and the decision to swallow
-  // a click belongs to the CELL, not the row. A TableCell that owns its click
-  // (kind="action", kind="checkbox", or clickable) stops propagation itself, so
-  // this row-level click fires only for inert cells. A table whose cells never
-  // stop is therefore fully row-clickable. See table-cell.vue.
-  // When `selectOnRowClick` is set, a click on the inert row area toggles that
-  // row's selection (the checkbox cell already toggles it directly).
+  // Swallowing a click is the CELL's decision (see table-cell.vue): an owning cell
+  // stops propagation itself, so this row-level click fires only from inert cells.
+  // With `selectOnRowClick`, a click on the inert row area toggles the row's
+  // selection (the checkbox cell already toggles it directly).
   const onRowClick = (event: MouseEvent, row: Row<RowRecord>) => {
     if (props.selectOnRowClick && props.enableRowSelection) {
       row.toggleSelected()
@@ -688,9 +686,10 @@
   const frozenEdgeOf = (c: TableColumn): 'start' | 'end' | undefined =>
     c.frozen ?? (c.kind === 'action' ? 'end' : undefined)
   // Width a frozen column contributes to a neighbour's sticky offset: its explicit
-  // `width`, or the 40px utility width for an action column (which carries none).
+  // `width`, the width resolved for its `minWidth` floor, or the 40px utility width
+  // for an action column (which carries none).
   const frozenWidthOf = (c: TableColumn): number =>
-    c.width ?? (c.kind === 'action' ? SELECTION_WIDTH : 0)
+    c.width ?? autoWidths.value[columnId(c)] ?? (c.kind === 'action' ? SELECTION_WIDTH : 0)
   const leftFrozenCols = computed<TableColumn[]>(() =>
     props.columns.filter((c: TableColumn) => frozenEdgeOf(c) === 'start')
   )
@@ -701,16 +700,11 @@
     () => props.enableRowSelection && leftFrozenCols.value.length > 0
   )
 
-  // Body enter animation. The translate-y + fade slide is reserved for the
-  // "load and return" cycle (loading → data) and the initial mount; a filter or
-  // search that merely crosses empty ↔ data uses an opacity-only fade, so the
-  // body doesn't slide on an unrelated action. `justLoaded` gates the slide: set
-  // when `loading` clears (or on first mount), reset once the body has entered.
-  //
-  // A `transform` on an ancestor also re-parents `position: sticky` descendants
-  // (the sticky box then resolves against the transformed body instead of the
-  // scroll viewport), so a translate-y enter makes pinned columns jump. When the
-  // table has consumer-pinned columns, drop the slide and fade only.
+  // Body enter motion. The slide-and-fade is reserved for the loading-to-data
+  // cycle and the initial mount (`justLoaded` gates it); a filter merely crossing
+  // empty/data fades opacity only. A transform on an ancestor also re-parents
+  // position: sticky descendants (they resolve against the transformed body, not
+  // the scroll viewport), so with pinned columns the slide is dropped entirely.
   const justLoaded = ref<boolean>(true)
   watch(
     () => props.loading,
@@ -760,26 +754,20 @@
   const cellStyleOf = (column: ColumnLike & { id: string }): Record<string, string> | undefined => {
     const style: Record<string, string> = {}
     const meta = metaOf(column)
-    // Column width (px). A column is fixed ONLY when it has been resized (a
-    // resizeWidths entry) or declares an explicit `width`; otherwise it has no
-    // inline width and falls back to its `data-[grow]` flex weight, so the
-    // columns distribute across — and fill — the available space. The first drag
-    // of any divider snapshots every flexible column's current width into
-    // resizeWidths (see startResize), freezing the whole row so a resize grows
-    // only the dragged column. The action column keeps its fixed 40px utility
-    // width (never resized).
+    // A column is fixed only when resized or given an explicit `width`; otherwise
+    // it keeps its flex weight and distributes across the available space. The
+    // first drag snapshots every flexible column's width into resizeWidths (see
+    // startResize), so a resize grows only the dragged column. Action columns
+    // keep the fixed 40px utility width.
     const width =
-      meta.kind === 'action' ? undefined : (resizeWidths.value[column.id] ?? widthOf(column.id))
-    // Fixed width (not min-width) so every row sizes the column identically and
-    // the header lines up with the body — flex-grow would distribute differently per row.
-    // `!important`: a fixed column carries BOTH this inline width and the
-    // `data-[grow=N]:flex-[N_0_5rem]` weight class on the same element. Under a
-    // Tailwind `important: true` config (Storybook, PrimeVue-hosted apps), that
-    // weight class compiles to `flex: N 0 5rem !important` and would otherwise
-    // beat this inline style — dropping the column back into grow/distribute mode,
-    // where a resize redistributes space across siblings instead of growing only
-    // the dragged column. Marking the fixed size important keeps each resized
-    // column independent regardless of the host config.
+      meta.kind === 'action'
+        ? undefined
+        : (resizeWidths.value[column.id] ?? widthOf(column.id) ?? autoWidths.value[column.id])
+    // Fixed width (not min-width) so every row resolves the column identically and
+    // the header lines up with the body. `!important` because the element also
+    // carries its grow flex utility, which a host Tailwind `important: true`
+    // config (Storybook, PrimeVue-hosted apps) emits as important — that would
+    // beat a plain inline width and drop the column back into distribute mode.
     if (width) {
       style['flex'] = `0 0 ${width}px !important`
       style['width'] = `${width}px !important`
@@ -798,15 +786,13 @@
   // Starting width of a column before any drag: an explicit `width`, else a width
   // derived from its `grow` weight (the emphasized column starts wider).
   const initialColumnWidth = (column: ColumnLike & { id: string }): number =>
-    widthOf(column.id) ?? (metaOf(column).grow ?? 1) * 150
+    widthOf(column.id) ?? autoWidths.value[column.id] ?? (metaOf(column).grow ?? 1) * 150
 
-  // Natural (max-content) width of a single header/body cell. The cell is cloned
-  // off the live grid and sized purely to its content. The `data-grow` /
-  // `data-frozen` attributes are removed so their Tailwind flex/sticky classes —
-  // which a host `important: true` config emits as `!important` — no longer match
-  // the clone, and the constraint properties are forced `important` inline so the
-  // clone shrinks to its content regardless of the host config. Cloning preserves
-  // arbitrary slot content (links, badges), so the measurement holds for any cell.
+  // Natural (max-content) width of one header/body cell, measured on a clone sized
+  // purely to its content. The grow/frozen data attributes are stripped so their
+  // flex/sticky utilities (important under a host `important: true` config) stop
+  // matching, and the constraints are forced important inline. Cloning preserves
+  // arbitrary slot content, so the measurement holds for any cell.
   const measureCellContentWidth = (cellEl: HTMLElement, host: HTMLElement): number => {
     const clone = cellEl.cloneNode(true) as HTMLElement
     clone.removeAttribute('data-grow')
@@ -846,6 +832,67 @@
     return Math.ceil(max) || RESIZE_FALLBACK_MIN_WIDTH
   }
 
+  // Auto-fit: a `minWidth` column sizes to the widest content it actually holds
+  // (header with sort affordance, or any rendered body cell); the number is the
+  // floor, never the cap. ONE width per column — a per-cell min-width would drift
+  // the header from the body. Measured (a flex row knows nothing of its column
+  // siblings) with the same clone as the resize floor, so the two never disagree.
+  const rootEl = ref<HTMLElement | null>(null)
+
+  const measureAutoWidths = (): void => {
+    const root = rootEl.value
+    // Skeleton rows are not the content: measuring while loading would size every
+    // column to a placeholder and then never grow it back.
+    if (!root || props.loading) return
+    const headCells = Array.from(root.querySelectorAll<HTMLElement>('[role="columnheader"]'))
+    const offset = props.enableRowSelection ? 1 : 0
+    const next: Record<string, number> = {}
+    headers.value.forEach((header, index) => {
+      const column = props.columns.find((c: TableColumn) => columnId(c) === header.column.id)
+      // An explicit `width` is the consumer overriding the measurement outright.
+      if (column?.minWidth == null || column.width != null) return
+      const cell = headCells[index + offset]
+      if (!cell) return
+      next[header.column.id] = Math.max(column.minWidth, columnContentMinWidth(cell))
+    })
+    const current = autoWidths.value
+    const ids = new Set([...Object.keys(next), ...Object.keys(current)])
+    for (const id of ids) {
+      if (next[id] !== current[id]) {
+        autoWidths.value = next
+        return
+      }
+    }
+  }
+
+  // Debounced because the rendered content changes in bursts (a sort, a page turn,
+  // a column toggled back on) and one measurement per burst is enough; measuring
+  // reads layout, so an un-coalesced version would reflow per keystroke of a filter.
+  const scheduleAutoFit = useDebounceFn(() => measureAutoWidths(), 32)
+
+  onMounted(() => {
+    void nextTick(() => measureAutoWidths())
+    // Text width is font-dependent, and the first paint can happen on the fallback
+    // face. Re-measure once the real one is in.
+    const fonts = (globalThis.document as Document & { fonts?: { ready?: Promise<unknown> } }).fonts
+    if (fonts?.ready) void fonts.ready.then(() => measureAutoWidths())
+  })
+
+  watch(
+    () => [
+      props.columns,
+      props.loading,
+      props.enableRowSelection,
+      // The rendered page's records and the visible column order — the two things
+      // that change what the cells contain. Same shallow dependency the body rows'
+      // v-memo uses, so a mutation the table does not re-render for cannot desync
+      // the widths either.
+      rows.value.map((row) => row.original),
+      headers.value.map((header) => header.column.id).join('|')
+    ],
+    () => void scheduleAutoFit()
+  )
+
   // Native pointer resize: capture the pointer X and the column's current width,
   // then on move write ONLY this column's new width into the reactive map — the
   // other columns never change. The listeners live on the document so the drag
@@ -858,12 +905,11 @@
       'touches' in e ? (e.touches[0]?.clientX ?? 0) : e.clientX
     const target = event.currentTarget as HTMLElement | null
     const headEl = target?.closest('[role="columnheader"]') as HTMLElement | null
-    // Freeze every flexible column at its current rendered width before the drag.
-    // Until the first drag, un-resized columns are flex-distributed to fill the
-    // space; from now on they become individually fixed, so moving one never
-    // reflows the others. Measured from the header cells (header and body resolve
-    // to the same per-column width). Frozen and action columns are already fixed,
-    // and a column already in resizeWidths keeps its value.
+    // Freeze every flexible column at its current rendered width before the drag:
+    // from now on they are individually fixed, so moving one never reflows the
+    // others. Measured from the header cells (header and body resolve to the same
+    // width); frozen/action columns are already fixed, and a column already in
+    // resizeWidths keeps its value.
     const headerRow = headEl?.closest('[role="row"]') as HTMLElement | null
     if (headerRow) {
       const headerCells = Array.from(
@@ -911,6 +957,7 @@
 
 <template>
   <div
+    ref="rootEl"
     v-bind="$attrs"
     role="table"
     :data-testid="testId"
@@ -1074,7 +1121,7 @@
               <TableRow
                 v-for="row in rows"
                 :key="row.id"
-                v-memo="[row.getIsSelected(), row.original, resizeWidths]"
+                v-memo="[row.getIsSelected(), row.original, resizeWidths, autoWidths]"
                 :selected="row.getIsSelected()"
                 @click="onRowClick($event, row)"
               >

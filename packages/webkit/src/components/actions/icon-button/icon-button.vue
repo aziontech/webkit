@@ -63,6 +63,14 @@
 
   const attrs = useAttrs()
 
+  // `class`/`data-testid` are excluded — already applied explicitly below, so spreading them again would double-apply.
+  const forwardedAttrs = computed(() => {
+    const rest = { ...attrs }
+    delete rest.class
+    delete rest['data-testid']
+    return rest
+  })
+
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'actions-icon-button'
   )
@@ -156,6 +164,7 @@
 <template>
   <a
     v-if="isAnchor"
+    v-bind="forwardedAttrs"
     :href="href"
     :target="target"
     :rel="target === '_blank' ? 'noopener noreferrer' : undefined"
@@ -206,6 +215,7 @@
 
   <button
     v-else
+    v-bind="forwardedAttrs"
     type="button"
     :disabled="disabled"
     :aria-label="ariaLabel"

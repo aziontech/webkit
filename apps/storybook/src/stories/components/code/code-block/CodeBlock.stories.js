@@ -126,6 +126,34 @@ export AZION_TOKEN="$MY_TOKEN"
 azion link --preset vue
 azion deploy --auto # ship it`
 
+const unevenTabs = [
+  {
+    label: 'Shell',
+    value: 'shell',
+    language: 'bash',
+    code: 'npx azion deploy --local'
+  },
+  {
+    label: 'Javascript',
+    value: 'js',
+    language: 'javascript',
+    code: `const response = await fetch('https://api.azion.com/v4/workspace/workloads', {
+  headers: { Authorization: \`Token \${token}\` }
+})
+
+const { results } = await response.json()`
+  }
+]
+
+const singleLineTabs = [
+  {
+    label: 'Shell',
+    value: 'single',
+    language: 'bash',
+    code: 'npx azion deploy --local'
+  }
+]
+
 const shellTabs = [
   {
     label: 'Shell',
@@ -420,6 +448,42 @@ export const Borderless = {
       source: {
         code: snippet(languageSwitcherTabs, 'default-value="js" show-line-numbers :border="false"')
       }
+    }
+  }
+}
+
+/** @type {import('@storybook/vue3').StoryObj<typeof CodeBlock>} */
+export const SingleLine = {
+  args: {
+    tabs: singleLineTabs,
+    showLineNumbers: false
+  },
+  render: Template,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The smallest block there is: one line, no tabs, no filename bar. The copy control is centred on that single row instead of pinned to a top inset it would overshoot, and the line reserves the control its own width so a long command scrolls under nothing.'
+      },
+      source: { code: snippet(singleLineTabs, ':show-line-numbers="false"') }
+    }
+  }
+}
+
+/** @type {import('@storybook/vue3').StoryObj<typeof CodeBlock>} */
+export const UnevenTabs = {
+  args: {
+    tabs: unevenTabs,
+    showLineNumbers: false
+  },
+  render: Template,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Two tabs holding a different number of lines — the only geometry where the shell changes height on a swap. It animates between the two heights while the new snippet enters line by line, so neither the block nor the page under it jumps a whole row set in one frame.'
+      },
+      source: { code: snippet(unevenTabs, 'default-value="shell" :show-line-numbers="false"') }
     }
   }
 }

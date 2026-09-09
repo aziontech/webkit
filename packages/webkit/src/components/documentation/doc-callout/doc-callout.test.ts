@@ -6,12 +6,8 @@ import * as stories from '../../../../../../apps/storybook/src/stories/component
 import { expectNoA11yViolations } from '../../../test/axe'
 import DocCallout from './doc-callout.vue'
 
-// .claude/rules/testing.md: Vitest browser mode (real Chromium) loads NO Tailwind, so the
-// tint, the border and the glyph colour of each kind emit nothing here — a computed-style
-// assertion would read the user-agent default whether the class is right, misspelled or
-// missing, passing identically in the broken and fixed states. What is asserted here is the
-// part that survives without CSS: which severity and glyph each kind resolves to (they reach
-// Message as props and land as attributes), the testid contract, and the copy.
+// Browser mode loads no Tailwind, so per-kind colours are unverifiable here;
+// asserted instead: the severity/glyph each kind resolves to, testid, and copy.
 
 const { Default, Kinds } = composeStories(stories)
 
@@ -57,7 +53,6 @@ describe('DocCallout', () => {
       })
       const root = getByTestId('documentation-doc-callout')
       expect(root.getAttribute('data-kind')).toBe(entry.kind)
-      // The glyph reaches Message as its `icon` prop and lands on an <i>.
       expect(container.querySelector(`i.${entry.icon.split(' ').join('.')}`)).toBeInTheDocument()
     })
 
