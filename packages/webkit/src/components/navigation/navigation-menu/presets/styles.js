@@ -23,24 +23,28 @@ export function getNavigationMenuTriggerClasses(isLink, extra) {
 export function getNavigationMenuRootClasses(extra) {
   return cn('relative', navigationMenuNavSelectorVar, extra)
 }
+/** The entry's 1px border is transparent — reserved so the box doesn't resize the day it needs to paint an outline (hover, focus, selection). */
 export const navigationMenuEntryAnchorClasses = [
   'group flex min-h-14 w-full items-start gap-(--spacing-xs)',
-  'rounded-(--shape-button) p-(--spacing-xs) no-underline',
+  'rounded-(--shape-button) border border-transparent px-(--spacing-md) py-(--spacing-sm) no-underline',
   'text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none',
   'hover:bg-(--bg-hover)',
   'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)',
   'focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)'
 ]
+/** 16×16 matches `MenuItem`'s row-glyph box; `mt-0.5` optically centres it on the title's 21px line box. */
 export const navigationMenuEntryIconClasses =
-  'mt-0.5 flex size-3.5 shrink-0 items-center justify-center text-(--text-default) [&_i]:text-body-xs'
+  'mt-0.5 flex size-4 shrink-0 items-center justify-center text-(--text-default) [&_i]:text-body-md'
 export const navigationMenuEntryTextClasses = 'flex min-w-0 flex-col'
 export const navigationMenuEntryTitleClasses = [
   'text-label-md text-(--text-default)',
   'group-hover:text-(--text-default)',
   'data-[featured]:text-(--text-link) data-[featured]:group-hover:text-(--text-link)'
 ]
-export const navigationMenuEntryDescriptionClasses = 'text-body-xs text-(--text-muted)'
-export const navigationMenuListGroupClasses = 'm-0 flex list-none flex-col gap-(--spacing-xs) p-0'
+/** 14px matches the title's `text-label-md` so weight/colour, not size, carries the hierarchy between the two lines. */
+export const navigationMenuEntryDescriptionClasses = 'text-body-sm text-(--text-muted)'
+/** No gap: spacing comes only from each entry's own padding, so hover surfaces stack edge to edge. */
+export const navigationMenuListGroupClasses = 'm-0 flex list-none flex-col p-0'
 export const navigationMenuListRootClasses = [
   'relative z-1 m-0 flex list-none items-center gap-(--spacing-xs) p-0'
 ]
@@ -51,11 +55,20 @@ export const navigationMenuIconClasses = [
   'inline-flex transition-transform duration-moderate-02 ease-productive-entrance motion-reduce:transition-none',
   'data-[open]:rotate-180'
 ]
+/** `kind="contrast"` INVERTS the panel via `--bg-contrast`/`--text-contrast` — raising `--bg-surface-raised` directly would drop `--text-muted` under the 4.5:1 floor by ~#181818. */
+/** Redefines the tokens the panel's parts already paint from (`--bg-surface-raised`, `--border-default`, `--text-default`, `--text-muted`, `--bg-hover`, `--bg-canvas`) instead of restyling any sub-component. */
+/** `--text-muted`/`--border-default` are derived (color-mix), not blanked — `--border-default` is also every rule drawn inside the panel, so blanking it would erase those too. */
 export const navigationMenuPopupSurfaceClasses = [
   'relative overflow-hidden rounded-(--shape-card)',
   'border border-solid border-(--border-default)',
   'bg-(--bg-surface-raised) shadow-(--shadow-lg)',
-  'max-h-[var(--available-height,100vh)]'
+  'max-h-[var(--available-height,100vh)]',
+  'data-[kind=contrast]:[--bg-surface-raised:var(--bg-contrast)]',
+  'data-[kind=contrast]:[--border-default:color-mix(in_srgb,var(--text-contrast)_20%,var(--bg-contrast))]',
+  'data-[kind=contrast]:[--text-default:var(--text-contrast)]',
+  'data-[kind=contrast]:[--text-muted:color-mix(in_srgb,var(--text-contrast)_60%,var(--bg-contrast))]',
+  'data-[kind=contrast]:[--bg-hover:color-mix(in_srgb,var(--text-contrast)_8%,transparent)]',
+  'data-[kind=contrast]:[--bg-canvas:var(--bg-contrast)]'
 ]
 export const navigationMenuBackdropClasses = [
   'fixed inset-0 z-40',
@@ -75,4 +88,16 @@ export const navigationMenuPositionerLayoutClasses = [
   'max-w-[min(var(--available-width,100vw),100vw)]'
 ]
 export const navigationMenuContentPaddingClasses = 'p-(--spacing-md)'
-export const navigationMenuOverlineClasses = 'mb-(--spacing-sm) px-(--spacing-sm)'
+/** OVERLINE style (`text-overline-xs`, `--text-muted`), not the `Overline` component — that one paints brand primary at `text-overline-md` with its own padding. */
+/** Inset is a MARGIN (not padding) so the label text aligns to the entries' icon column, while the rule spans the column's own content rather than the shared track. */
+export const navigationMenuGroupLabelClasses =
+  'flex shrink-0 items-center border border-transparent border-b-(--border-default) mx-(--spacing-md) pb-(--spacing-xs) mb-(--spacing-xs) text-overline-xs text-(--text-muted)'
+
+/** Adds only pointer + hover ink + focus ring on top of the plain heading — no hover fill (would read as an entry) and no radius (a line of text, not a control). */
+export const navigationMenuGroupLabelLinkClasses = [
+  'cursor-pointer no-underline',
+  'transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none',
+  'hover:text-(--text-default)',
+  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)',
+  'focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)'
+]
