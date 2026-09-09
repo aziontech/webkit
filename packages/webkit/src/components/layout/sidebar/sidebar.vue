@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, provide, useAttrs, useSlots } from 'vue'
+  import { computed, onMounted, provide, ref, useAttrs, useSlots } from 'vue'
 
   import { cn } from '../../../utils/cn'
   import IconButton from '../../actions/icon-button/icon-button.vue'
@@ -84,7 +84,6 @@
     valueMin,
     valueMax,
     railStyle,
-    railTransition,
     innerStyle,
     startResize,
     tapToExpand,
@@ -102,16 +101,43 @@
 
   const isOut = computed(() => collapsed.value && railEnabled.value)
 
+  const hydrated = ref(false)
+
+  onMounted(() => {
+    hydrated.value = true
+  })
+
   const setRailEl = (el: unknown) => {
     railEl.value = (el as globalThis.HTMLElement | null) ?? null
   }
+
+  const cssVars = computed(() => {
+    if (!railEnabled.value) return {}
+    return {
+      '--sidebar-width': width.value == null ? undefined : `${width.value}px`,
+      '--sidebar-min-width': `var(${props.minWidthToken})`,
+      '--sidebar-max-width': `var(${props.maxWidthToken})`
+    }
+  })
+
+  const asideStyle = computed(() => ({ ...cssVars.value, ...railStyle.value }))
+
+  const RAIL_MOTION_CLASS =
+    'transition-[width] duration-moderate-02 ease-expressive-entrance has-checked:ease-expressive-exit data-[resizing]:transition-none motion-reduce:transition-none'
 
   const rootClass = computed(() =>
     cn(
       'flex h-full min-h-0 w-full min-w-0 flex-col',
       'border-r border-(--border-muted) bg-(--bg-surface)',
       railEnabled.value
-        ? 'relative shrink-0 overflow-hidden data-[collapsed]:border-r-0'
+        ? cn(
+            'relative shrink-0 overflow-hidden',
+            'data-[collapsed]:border-r-0 has-checked:border-r-0',
+            'w-(--sidebar-width) has-checked:w-0',
+            'min-w-(--sidebar-min-width) has-checked:min-w-0 max-w-(--sidebar-max-width)',
+            RAIL_MOTION_CLASS,
+            props.resizable ? 'resize-x data-[hydrated]:resize-none' : undefined
+          )
         : undefined,
       attrs.class
     )
@@ -122,15 +148,14 @@
 
   const HEADER_REGION_CLASS = 'w-full shrink-0 p-(--spacing-md)'
 
-  const INNER_CLASS = 'flex h-full min-h-0 w-full flex-col'
+  const INNER_MOTION_CLASS =
+    'transition-[translate,opacity] duration-moderate-02 ease-expressive-entrance has-checked:ease-expressive-exit data-[resizing]:transition-none motion-reduce:transition-none motion-reduce:translate-none'
 
-  const affordanceStyle = computed(() => ({
-    transform: previewing.value
-      ? 'translateY(-50%)'
-      : 'translateY(-50%) translateX(calc(-1 * var(--size-10)))',
-    opacity: previewing.value ? '1' : '0',
-    transition: railTransition.value
-  }))
+  const INNER_CLASS = cn(
+    'flex h-full min-h-0 w-full flex-col',
+    'w-(--sidebar-width) translate-x-0 has-checked:-translate-x-full opacity-100 has-checked:opacity-20',
+    INNER_MOTION_CLASS
+  )
 
   const FOOTER_REGION_CLASS = 'w-full shrink-0 px-(--spacing-md) pb-(--spacing-md)'
 
@@ -158,11 +183,12 @@
     :ref="setRailEl"
     v-bind="$attrs"
     :class="rootClass"
-    :style="railStyle"
+    :style="asideStyle"
     :aria-label="ariaLabel"
     :data-testid="testId"
     :data-collapsed="isOut ? '' : undefined"
     :data-resizing="resizing ? '' : undefined"
+    :data-hydrated="hydrated ? '' : undefined"
     :inert="isOut ? true : undefined"
     :aria-hidden="isOut ? 'true' : undefined"
   >
@@ -171,6 +197,15 @@
       :style="innerStyle"
       :data-testid="`${testId}__panel`"
     >
+      <input
+        v-if="railEnabled"
+        v-model="collapsed"
+        type="checkbox"
+        class="sr-only"
+        tabindex="-1"
+        aria-hidden="true"
+        :data-testid="`${testId}__collapse-input`"
+      />
       <div
         v-if="$slots['header']"
         :class="HEADER_REGION_CLASS"
@@ -255,8 +290,7 @@
       :data-resizing="resizing ? '' : undefined"
       :data-preview="previewing ? '' : undefined"
       :data-testid="`${testId}__expand`"
-      :style="{ transition: railTransition }"
-      class="group absolute inset-y-0 left-0 z-20 w-(--size-6) data-[preview]:w-(--size-10)"
+      class="group absolute inset-y-0 left-0 z-20 w-(--size-6) hover:w-(--size-10) focus-within:w-(--size-10) transition-[width] duration-moderate-02 ease-expressive-exit hover:ease-expressive-entrance focus-within:ease-expressive-entrance motion-reduce:transition-none"
       @pointerenter="startPreview"
       @pointerleave="endPreview"
       @focusin="startPreview"
@@ -278,8 +312,7 @@
       />
 
       <div
-        :style="affordanceStyle"
-        class="pointer-events-none absolute left-full top-1/2 pl-(--spacing-xxs) group-data-[preview]:pointer-events-auto"
+        class="pointer-events-none absolute left-full top-1/2 -translate-y-1/2 translate-x-[calc(-1_*_var(--size-10))] pl-(--spacing-xxs) opacity-0 transition-[translate,opacity] duration-moderate-02 ease-expressive-exit group-hover:translate-x-0 group-hover:opacity-100 group-hover:pointer-events-auto group-hover:ease-expressive-entrance group-focus-within:translate-x-0 group-focus-within:opacity-100 group-focus-within:pointer-events-auto group-focus-within:ease-expressive-entrance motion-reduce:transition-none motion-reduce:translate-none"
       >
         <Tooltip
           :text="expandAriaLabel"

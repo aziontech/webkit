@@ -9,13 +9,19 @@
     inheritAttrs: false
   })
 
+  /** Where the footer sits. */
+  export type FooterKind = 'content' | 'site'
+
   interface Props {
     /** Accessible name for the contentinfo landmark. */
     ariaLabel?: string
+    /** Where the footer sits: `content` is the default — the bands run full bleed across whatever zone holds the footer, opening on the page boundary; `site` closes a framed marketing page instead, capping the bands at the site measure and drawing the frame that page carries: the side rules, the hatched gutters and the closing band. */
+    kind?: FooterKind
   }
 
   withDefaults(defineProps<Props>(), {
-    ariaLabel: 'Footer'
+    ariaLabel: 'Footer',
+    kind: 'content'
   })
 
   const slots = defineSlots<{
@@ -53,23 +59,31 @@
     v-bind="$attrs"
     :aria-label="ariaLabel"
     :data-testid="testId"
-    class="flex w-full flex-col bg-(--bg-canvas)"
+    :data-kind="kind"
+    class="group flex w-full flex-col bg-(--bg-canvas)"
   >
-    <!-- The column takes --container-site, the marketing site's shared measure, rather
-         than a rung of the container ladder: the nav bar, the hero band, the framed
-         sections and this footer are ONE vertical frame, and its side rules only meet
-         because all four resolve to the same width. Retuning that measure has to move
-         them together, which a hardcoded rung here cannot do. -->
-    <div class="flex w-full items-stretch">
+    <!-- Two placements, identical bands: `content` (default) runs them full bleed with no inset
+         of its own (every band already carries the boundary value); `site` caps them at the
+         site measure token, insets by the page boundary below it, and draws the frame. The
+         frame is site-only: full bleed, the rules would land on the zone's edges and the
+         gutters collapse to zero width while still painting borders. -->
+    <div class="flex w-full items-stretch justify-center">
+      <!-- Centred because between the measure (1388) and the gutter breakpoint (1536) the row
+           holds one capped child, which an unjustified flex row left-aligns by up to 148px. -->
+      <!-- The gutters turn on at the first breakpoint past the measure: below it the column is
+           the whole row, a gutter has no slack, and its border and marks paint on the column's
+           own edge. Move the breakpoint with the measure. -->
       <FrameBox
+        v-if="kind === 'site'"
+        key="gutter-start"
         :borders="['left']"
         marks="all"
         aria-hidden="true"
         :data-testid="`${testId}__gutter`"
-        class="hidden flex-1 xl:block"
+        class="hidden flex-1 2xl:block"
       />
       <div
-        class="grid w-full max-w-(--container-site) shrink-0 grid-cols-1 border-x border-x-(length:--border-width-default) border-x-(--border-default) md:grid-cols-2"
+        class="grid w-full shrink-0 grid-cols-1 group-data-[kind=site]:layout-column-site group-data-[kind=site]:border-x group-data-[kind=site]:border-x-(length:--border-width-default) group-data-[kind=site]:border-x-(--border-default) md:grid-cols-2"
       >
         <div
           :data-testid="`${testId}__columns`"
@@ -99,11 +113,14 @@
             class="flex flex-col items-start gap-(--spacing-md) p-(--spacing-lg) md:flex-row md:items-center md:justify-between md:gap-(--spacing-lg)"
           >
             <slot name="brand" />
-            <!-- The gap earns its place only between `md` and the width that fits the tagline on
-                 one line: there `justify-between` alone would let a wrapped second line run into
-                 the brand. Past that width the tagline is one line pinned to the right edge and
-                 the gap is slack that never resolves, so it costs the wide layout nothing. -->
-            <p class="text-heading-xl text-(--text-default) md:text-right">
+            <!-- The gap only matters between md and the width that fits the tagline on one line,
+                 where a wrapped tagline would otherwise run into the brand. -->
+            <!-- Rendered only when filled: an empty paragraph is still a flex item and spends the
+                 row's gap, pushing a lone brand off centre (measured 12px at 768 to 1023). -->
+            <p
+              v-if="slots.tagline"
+              class="text-heading-xl text-(--text-default) md:text-right"
+            >
               <slot name="tagline" />
             </p>
           </div>
@@ -119,15 +136,21 @@
       </div>
 
       <FrameBox
+        v-if="kind === 'site'"
+        key="gutter-end"
         :borders="['right']"
         marks="all"
         aria-hidden="true"
         :data-testid="`${testId}__gutter`"
-        class="hidden flex-1 xl:block"
+        class="hidden flex-1 2xl:block"
       />
     </div>
 
+    <!-- The frame's bottom edge, so it belongs to `site` with the gutters: it is hatched
+         page material finishing a frame, and a footer that draws no frame has none to
+         finish. -->
     <FrameBox
+      v-if="kind === 'site'"
       borders="all"
       marks="bottom"
       aria-hidden="true"

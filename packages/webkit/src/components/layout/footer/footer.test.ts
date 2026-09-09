@@ -1,5 +1,5 @@
 import { composeStories } from '@storybook/vue3'
-import { render } from '@testing-library/vue'
+import { render, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
 import * as stories from '../../../../../../apps/storybook/src/stories/components/layout/footer/Footer.stories'
@@ -15,10 +15,10 @@ const { DefaultFooter } = composeStories(stories)
  * own testid as `${ctx.testId}__<part>`, so overriding the root testid proves
  * provide/inject flows through the whole tree.
  *
- * The root has no emits and no v-model — the only prop is `ariaLabel` — so this
- * file asserts the compound API resolution, the injected-state propagation, slot
- * placement (including each conditional band), testid derivation/override,
- * the landmark a11y contract, and axe.
+ * The root has no emits and no v-model — its props are `ariaLabel` and `kind` — so
+ * this file asserts the compound API resolution, the injected-state propagation, slot
+ * placement (including each conditional band), the two placements and the frame parts
+ * each one renders, testid derivation/override, the landmark a11y contract, and axe.
  */
 
 // The runtime string-template compiler resolves component tags from the
@@ -34,8 +34,7 @@ const compoundComponents = {
 // A minimal but realistic composed tree exercising columns, links, and all four
 // consumer-filled bands: the social icons, the status/language pair, and the
 // signature's brand and tagline.
-const composedTemplate = `
-  <Footer>
+const composedBands = `
     <FooterColumn title="Products">
       <FooterLink href="/products/edge-application">Edge Application</FooterLink>
       <FooterLink href="/products/edge-firewall">Edge Firewall</FooterLink>
@@ -56,11 +55,18 @@ const composedTemplate = `
       <a href="/" aria-label="Azion home"><svg viewBox="0 0 10 10"><rect width="10" height="10" /></svg></a>
     </template>
     <template #tagline>The web platform for modern workloads</template>
-  </Footer>
 `
+
+// Same tree in either placement, so a difference in what renders can only come from
+// `kind` — which is the whole claim: the bands are identical and the FRAME is not.
+const composedTemplate = `<Footer>${composedBands}</Footer>`
+const composedSiteTemplate = `<Footer kind="site">${composedBands}</Footer>`
 
 const renderComposed = (options = {}) =>
   render({ components: compoundComponents, template: composedTemplate }, options)
+
+const renderComposedSite = (options = {}) =>
+  render({ components: compoundComponents, template: composedSiteTemplate }, options)
 
 describe('Footer', () => {
   describe('compound API (index.ts Object.assign)', () => {
@@ -155,13 +161,59 @@ describe('Footer', () => {
 
     // The gutters and the closing band are page material with no content of their
     // own, so they must not reach the a11y tree — a screen reader announcing three
-    // empty groups at the end of every page is the failure this pins.
+    // empty groups at the end of every page is the failure this pins. They exist only
+    // in the `site` placement, which is where this renders them.
     it('keeps the hatched gutters and closing band out of the a11y tree', () => {
-      const { getAllByTestId, getByTestId } = renderComposed()
+      const { getAllByTestId, getByTestId } = renderComposedSite()
       for (const gutter of getAllByTestId('layout-footer__gutter')) {
         expect(gutter.getAttribute('aria-hidden')).toBe('true')
       }
       expect(getByTestId('layout-footer__closing').getAttribute('aria-hidden')).toBe('true')
+    })
+  })
+
+  describe('kind — the two placements (data-kind drives the cap; the frame is site-only)', () => {
+    it('defaults to the content placement', () => {
+      const { getByTestId } = render(Footer)
+      // withDefaults: kind: 'content' — a footer with no kind closes an app or docs zone,
+      // which is the placement that draws no frame. The cap and the side rules are read off
+      // this attribute by `group-data-[kind=site]:`; the geometry belongs to the visual gate,
+      // since this env renders without Tailwind.
+      expect(getByTestId('layout-footer').getAttribute('data-kind')).toBe('content')
+    })
+
+    it('marks the site placement on the root', () => {
+      const { getByTestId } = render(Footer, { props: { kind: 'site' } })
+      expect(getByTestId('layout-footer').getAttribute('data-kind')).toBe('site')
+    })
+
+    it('draws no frame in the content placement — no gutters, no closing band', () => {
+      const { queryAllByTestId, queryByTestId } = renderComposed()
+      expect(queryAllByTestId('layout-footer__gutter')).toHaveLength(0)
+      expect(queryByTestId('layout-footer__closing')).toBeNull()
+    })
+
+    it('draws both gutters and the closing band in the site placement', () => {
+      const { getAllByTestId, getByTestId } = renderComposedSite()
+      expect(getAllByTestId('layout-footer__gutter')).toHaveLength(2)
+      expect(getByTestId('layout-footer__closing')).toBeTruthy()
+    })
+
+    // Both trees are on the page at once, so every query is scoped to its own
+    // container — the default scope is document.body, which would see four columns.
+    it('keeps every band in both placements — the frame changes, the content does not', () => {
+      for (const { container } of [renderComposed(), renderComposedSite()]) {
+        const scope = within(container)
+        expect(scope.getAllByTestId('layout-footer__column')).toHaveLength(2)
+        expect(scope.getByTestId('layout-footer__social')).toBeTruthy()
+        expect(scope.getByTestId('layout-footer__status')).toBeTruthy()
+        expect(scope.getByTestId('layout-footer__signature')).toBeTruthy()
+      }
+    })
+
+    it('a site footer has no a11y violations either', async () => {
+      const { container } = renderComposedSite()
+      await expectNoA11yViolations(container)
     })
   })
 
