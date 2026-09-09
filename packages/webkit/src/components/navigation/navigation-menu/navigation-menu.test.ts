@@ -244,6 +244,52 @@ describe('NavigationMenu (composition + overlay + recursive)', () => {
     })
   })
 
+  // The keyboard model lives on the root (`onTriggerKeydown`) and reaches a button
+  // trigger through the trigger's own `@keydown`. It is asserted here because the
+  // forwarding is easy to break WITHOUT breaking anything else: an inline ternary
+  // handler compiles to a discarded expression, which leaves `Enter`/`Space` working
+  // (a native button turns those into a click) while `Escape` and the arrows go dead
+  // and nothing errors.
+  describe('keyboard model on a button trigger (root.onTriggerKeydown)', () => {
+    it('Escape closes the open panel', async () => {
+      const { getByRole, getByTestId } = renderTree(COMPOSED)
+
+      const trigger = getByRole('button', { name: /Solutions/ })
+      await userEvent.click(trigger)
+      await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'true'), {
+        timeout: OPEN_TIMEOUT
+      })
+
+      await fireEvent.keyDown(trigger, { key: 'Escape' })
+
+      await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'false'), {
+        timeout: OPEN_TIMEOUT
+      })
+      expect(getByTestId('navigation-menu')).not.toHaveAttribute('data-open')
+    })
+
+    it('ArrowRight roves to the next trigger and opens it', async () => {
+      const { getByRole } = renderTree(COMPOSED)
+
+      const solutions = getByRole('button', { name: /Solutions/ })
+      const products = getByRole('button', { name: /Products/ })
+
+      await userEvent.click(solutions)
+      await waitFor(() => expect(solutions).toHaveAttribute('aria-expanded', 'true'), {
+        timeout: OPEN_TIMEOUT
+      })
+
+      await fireEvent.keyDown(solutions, { key: 'ArrowRight' })
+
+      // Roving moves BOTH focus and the open value onto the next trigger.
+      await waitFor(() => expect(products).toHaveAttribute('aria-expanded', 'true'), {
+        timeout: OPEN_TIMEOUT
+      })
+      expect(document.activeElement).toBe(products)
+      expect(solutions).toHaveAttribute('aria-expanded', 'false')
+    })
+  })
+
   describe('events on real user actions (navigation-menu-root.vue emits)', () => {
     it('emits update:value with the item value when a submenu opens', async () => {
       const updateValues: Array<unknown> = []
@@ -393,7 +439,7 @@ describe('NavigationMenu (composition + overlay + recursive)', () => {
   })
 
   describe('recursive / nested composition (list -> item -> content -> list -> entry)', () => {
-    it('renders the nested panel list group with its overline heading and entry rows two levels deep', async () => {
+    it('renders the nested panel list group with its group heading and entry rows two levels deep', async () => {
       const { getByRole } = renderTree(COMPOSED)
       const trigger = getByRole('button', { name: /Solutions/ })
 
