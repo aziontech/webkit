@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3735-14866
   node_id: 3735:14866
-checksum: 5c704379efc3736a1e965f972767b47e50dbe3dc8dc1da27c0e631602e8103d8
+checksum: 820bd02fec567b4fa5092e1bea9001ecf13f1dad9245cf1c9248f7c04815b1db
 created: 2026-05-22
-last_updated: 2026-08-06
+last_updated: 2026-09-08
 ---
 # Sidebar — Component Spec
 
@@ -315,35 +315,64 @@ and the host's own `class="w-[280px]"` governs exactly as before.
 - `data-collapsed` on the root while the rail is out of the layout
 - `data-resizing` on the root and on the handle while a pointer drag is in flight
 - `data-preview` on the collapsed edge zone while it is showing the rail's preview sliver
-- Region testids derived from the root: `__panel` (the fixed-width inner panel), `__header`,
-  `__nav`, `__scroll`, `__footer`, `__collapse` (the trigger), `__handle` (the drag separator),
-  `__expand` / `__expand-button` (the collapsed affordance)
+- `data-collapsed` / `data-resizing` / `data-preview` are **reported state, not the motion
+  driver**: the collapse/expand animation itself runs off the hidden checkbox's `:checked` (see
+  Motion & Animations), so these attributes exist for consumer styling hooks and for tests, not
+  because the component's own CSS depends on them for that transition.
+- `data-hydrated` on the root once Vue has mounted — internal only (switches the native
+  `resize: horizontal` pre-hydration fallback back off in favor of the JS-driven handle); not a
+  documented consumer styling hook.
+- Region testids derived from the root: `__panel` (the fixed-width inner panel),
+  `__collapse-input` (the hidden checkbox that carries `collapsed` for CSS — not an interactive
+  control; see Accessibility), `__header`, `__nav`, `__scroll`, `__footer`, `__collapse` (the
+  trigger), `__handle` (the drag separator), `__expand` / `__expand-button` (the collapsed
+  affordance)
 - A collapsed rail carries `inert` + `aria-hidden`, so it holds no tab stops while it is out
 
 ## Motion & Animations
 
-Collapsing and expanding is **per-phase, open-vs-close motion driven by state**, which
-[`DESIGN.md`](../.claude/docs/DESIGN.md) § Motion routes through a **`presets/transitions.ts`**
-module rather than the catalogued keyframe utilities: those are fixed-direction entrances with baked
-in timing and cannot express an enter/leave pair off one boolean, and none of them animates a width.
-So `sidebar/presets/transitions.ts` imports `duration` / `curve` from the theme and returns the
-inline `transition`; the width, transform and opacity themselves are inline styles because they are
-continuous values a gesture writes frame by frame, not variants.
+Collapsing and expanding is **CSS-only, driven by a hidden native checkbox** — not by JavaScript
+computing an inline `transition` string. A `<input type="checkbox" class="sr-only">` mirrors
+`collapsed` (`v-model`), and the root's `has-checked:` variants carry the width/translate/opacity
+targets and the leave-phase easing. Because a native checkbox reflects `:checked` the instant it is
+toggled — by a real click, by `Space`, or simply by the server-rendered `checked` attribute before
+Vue has hydrated — this animation runs correctly even before the component's JavaScript has loaded,
+which a JS-computed `transition` string never could. `sidebar/presets/transitions.ts` no longer
+exists: the only place that still computes a transition in JS is the collapsed-rail preview sliver
+below, because its width comes from a pointer/focus gesture on a *sibling* element, not from that
+boolean, and CSS has no way to react to a sibling's hover state without an intrusive DOM
+restructuring this component does not take on.
 
-| Trigger | Animation / Transition | Token (from `presets/transitions.ts`) | Reduced-motion fallback |
+| Trigger | Animation / Transition | Mechanism | Reduced-motion fallback |
 |---|---|---|---|
-| rail expands | `width` 0 → sized, `translate-x` -100% → 0, `opacity` → 1 | `duration['moderate-02']` · `curve['expressive-entrance']` | `prefers-reduced-motion` short-circuit — `transition: none`, the rail simply is where it lands |
-| rail collapses | `width` sized → 0, `translate-x` 0 → -100%, `opacity` → floor | `duration['moderate-02']` · `curve['expressive-exit']` | same short-circuit |
-| drag in flight | none — width tracks the pointer frame for frame | — | — |
-| collapsed edge affordance appears | `opacity` 0 → 1 | `duration['moderate-01']` · `curve['productive-entrance']` | `motion-reduce:transition-none` |
-| collapsed rail previews / retracts | `width` 0 ↔ `--size-10` (the panel does not move — the sliver is surface only) | `duration['moderate-02']` · `curve['expressive-entrance']` in, `['expressive-exit']` out | `prefers-reduced-motion` short-circuit — `transition: none`, the sliver is simply there or not |
-| preview zone widens to the sliver | `width` `--size-6` ↔ `--size-10` | shares `railTransition` | inherited — the preset returns `none` |
-| expand affordance rides the sliver in | `transform` `translateX(calc(-1 * --size-10))` ↔ 0, `opacity` 0 ↔ 1 | shares `railTransition` | inherited — the preset returns `none` |
+| rail expands | `width` 0 → sized, `translate` -100% → 0, `opacity` → 1 | root `has-checked:` off — base classes: `duration-moderate-02` · `ease-expressive-entrance` | `motion-reduce:transition-none motion-reduce:translate-none` |
+| rail collapses | `width` sized → 0, `translate` 0 → -100%, `opacity` → floor | root `has-checked:` on — `ease-expressive-exit` (same duration) | same |
+| drag in flight | none — width tracks the pointer frame for frame | `data-resizing` forces `transition-none` | — |
+| collapsed edge affordance appears | `opacity` 0 → 1 | Vue `<Transition>`, unchanged | `motion-reduce:transition-none` |
+| collapsed rail previews / retracts | `width` 0 ↔ `--size-10` (the panel does not move — the sliver is surface only) | JS-computed inline `transition` (`duration['moderate-02']` · `curve['expressive-entrance']`) while entering; CSS `has-checked:` exit curve takes over the instant the inline style is cleared on leave | `prefers-reduced-motion` short-circuit while entering; `motion-reduce:transition-none` on leave |
+| preview zone widens to the sliver | `width` `--size-6` ↔ `--size-10` | pure CSS `hover:` / `focus-within:` on the zone itself — no JS | `motion-reduce:transition-none` |
+| expand affordance rides the sliver in | `translate` `calc(-1 * --size-10)` ↔ 0, `opacity` 0 ↔ 1 | pure CSS `group-hover:` / `group-focus-within:` — no JS | `motion-reduce:transition-none motion-reduce:translate-none` |
 | rail trailing-edge line on hover / focus / drag / preview | `transition-opacity` | Tailwind default (see note) | `motion-reduce:transition-none` |
 
 An eased width would lag behind the cursor and read as a broken handle, so the transition is
-suppressed for the duration of a drag and handed back on release — whatever fraction the rail was
-pulled to then animates to fully in or fully out.
+suppressed for the duration of a drag (`data-[resizing]:transition-none`) and handed back on
+release — whatever fraction the rail was pulled to then animates to fully in or fully out.
+
+### Progressive enhancement — what still needs JavaScript, and what does not
+
+| Interaction | Works before hydration? | Why |
+|---|---|---|
+| Initial paint — correct width/collapsed state, no flash | Yes | The checkbox's `checked` attribute and the width/min/max custom properties are all in the server-rendered HTML; the CSS reacts with no script running |
+| Collapse / expand *motion* once triggered | Yes, as CSS | The animation itself (`has-checked:` width/translate/opacity, the enter/exit curve) is CSS, not a JS-computed `transition` string — it plays correctly whenever the checkbox's `:checked` changes, by any means |
+| Collapsing / expanding *before hydration* | No | The visible trigger is the `IconButton`'s `@click`, which needs Vue's event binding; the hidden checkbox is intentionally `tabindex="-1"` + `aria-hidden`, so nothing pre-hydration can reach it either. Only the motion mechanism is CSS-only, not yet the trigger |
+| Trailing-edge accent line, hover/focus states already visible on the page | Yes | Plain `:hover`/`:focus-visible` on elements Vue did not need to attach — real from first paint |
+| Collapsed-rail hover/focus preview sliver | No | The zone that is hovered and the rail whose width grows are siblings (the rail must stay a sibling of the affordance — see "The collapsed rail previews itself" — so CSS has no cross-sibling hook without restructuring the DOM) |
+| Drag-to-resize | Baseline only | `resizable` adds native CSS `resize: horizontal` on the root as a zero-JS fallback (works pre-hydration, respects the same `min-width`/`max-width`); once mounted (`data-hydrated`) it is switched off (`resize-none`) in favor of the custom `role="separator"` handle, which alone provides the accessible name, `aria-valuenow`, keyboard nudge, snap-to-collapse, and a consistent cross-browser affordance the native resize grip cannot |
+| Keyboard nudge, snap-to-collapse | No | Inherently require reading pointer/key input; no CSS equivalent |
+
+The native `resize` grip renders at the box's corner and is not stylable consistently across
+browsers (Chromium exposes `::-webkit-resizer`; Firefox does not) — it is a functional, not visual,
+fallback for the brief pre-hydration window, not a replacement for the handle's design.
 
 ## Tokens
 
@@ -400,6 +429,10 @@ canvas the tokens fall back to.
 - A **collapsed rail carries `inert` and `aria-hidden`** — the content is still mounted so its width
   can animate, and it must not be reachable while it is out of the layout. That is why the control
   that brings it back is a sibling of the rail rather than inside it.
+- The **hidden checkbox that mirrors `collapsed`** (`__collapse-input`) carries `aria-hidden="true"`
+  and `tabindex="-1"`: it is a CSS state carrier, not a second control, so it is never reachable by
+  keyboard or announced by a screen reader. The trigger's accessible name and role are unaffected —
+  the consumer-facing control is still the `IconButton`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states; the width /
   transform / opacity transition is dropped entirely under `prefers-reduced-motion`.
