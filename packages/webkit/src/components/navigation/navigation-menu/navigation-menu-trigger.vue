@@ -148,6 +148,17 @@
     )
   }
 
+  // Must be a HANDLER reference, not an inline ternary: `@keydown="!isLink ? x : undefined"`
+  // compiles to an expression Vue won't bind as a method, so it evaluated on every
+  // keystroke and discarded the result silently — no error, no keyboard behaviour at all.
+  const onKeydown = (event: globalThis.KeyboardEvent) => {
+    if (isLink.value) {
+      return
+    }
+
+    root.onTriggerKeydown(event)
+  }
+
   const onClick = (event: globalThis.MouseEvent) => {
     if (isLink.value) {
       if (!props.closeOnClick) {
@@ -213,7 +224,7 @@
     @pointerenter="onPointerEnter"
     @pointerleave="onPointerLeave"
     @click="onClick"
-    @keydown="!isLink ? root.onTriggerKeydown : undefined"
+    @keydown="onKeydown"
   >
     <slot />
   </component>
