@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4281-4543
   node_id: 4281:4543
-checksum: 72000bf21e660c4cadd4af45041be64a21e7f0f936880aad8281efe6987da059
+checksum: 803042cf5b98067d7634cb4e269d2f0c2cc0d929c5b322e28c3b00a65b821b2a
 created: 2026-06-02
-last_updated: 2026-06-02
+last_updated: 2026-08-19
 ---
 
 # Tooltip — Component Spec
@@ -64,6 +64,7 @@ import IconButton from '@aziontech/webkit/icon-button'
 - `data-state` values: `open` | `closed`
 - `data-disabled` mirrors the `disabled` prop
 - `data-placement`: `top` | `right` | `bottom` | `left`
+- `data-anchored` on the panel once its opening position has landed — the flag that lets a re-anchor animate while the entrance stays the open animation
 
 ## Motion & Animations
 
@@ -71,8 +72,11 @@ import IconButton from '@aziontech/webkit/icon-button'
 |---|---|---|---|
 | open | `animate-popup-scale-in` | semantic (150ms · cubic-bezier) | `motion-reduce:animate-none` (instant) |
 | close | `animate-popup-scale-out` | semantic (110ms · cubic-bezier) | `motion-reduce:animate-none` (instant) |
+| re-anchor while open (the text changed size) | `transition-[translate] duration-fast-02 ease-productive-entrance`, gated on `data-anchored` | `duration-fast-02` · `ease-productive-entrance` | `motion-reduce:transition-none` |
 
 `--popup-origin` is set per instance based on `placement` (e.g. `top` → `bottom center`).
+
+The panel is positioned with the standalone **`translate`** property, never `top`/`left` — that is what lets a re-anchor be a compositor transition, and it keeps the position independent of the `transform: scale()` the open and close animations use. A tooltip whose text changes while it is up (the copy control swapping `Copy` for `Copied` under the pointer) therefore glides back onto its trigger's centre instead of jumping: measured 21px of width lost, 10.4px off-centre, snapped in one frame before this. The entrance is deliberately excluded — `data-anchored` is only set one frame after the opening placement, so the panel scales in where it belongs rather than travelling in from the off-screen seed.
 
 ## Tokens
 
