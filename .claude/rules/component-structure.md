@@ -1,3 +1,9 @@
+---
+paths:
+  - 'packages/webkit/src/components/**/*.{vue,ts}'
+  - '.specs/**/*.md'
+---
+
 # Rule: component structure — fixed folder layout, fixed `<script setup>` order
 
 Two components should differ only in what they *do*, never in how their files are arranged or in what order their `<script setup>` reads. A consumer (or an agent) opening any component finds the parts in the same places. This rule fixes the **folder layout** of a component and the **section order** inside `<script setup>`.

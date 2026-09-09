@@ -1,3 +1,9 @@
+---
+paths:
+  - 'packages/webkit/src/components/**/*.{vue,ts}'
+  - '.specs/**/*.md'
+---
+
 # Rule: two-way state — `defineModel`, one way, controlled and uncontrolled at once
 
 Every two-way value a component exposes goes through **`defineModel()`** (Vue 3.4+). Not a `modelValue` prop plus a hand-written `emit('update:modelValue')`; not a local `ref` mirrored into a `watch`. One macro, because it solves the two problems every stateful component has — **the controlled/uncontrolled split** and **the boilerplate** — in a single, uniform declaration.

@@ -1,3 +1,9 @@
+---
+paths:
+  - 'packages/webkit/src/components/**/*.{vue,ts}'
+  - '.specs/**/*.md'
+---
+
 # Rule: event payloads — activation events emit `(event, item)`
 
 Every **activation event** a component emits — a `click`, an `item-click`, a `select`, a `remove`, a `row-click`, a `step-click`, any event that fires because the user *activated* something — carries the **DOM event first** and, when the activation targets a specific subject, **that subject second**:

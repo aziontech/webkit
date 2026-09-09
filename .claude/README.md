@@ -7,7 +7,8 @@ standard code. This is the entry-point map; each area links to its own index.
 
 ```
 .claude/
-├── rules/                 # the 23 construction standards (one .md each) — see rules/README.md
+├── rules/                 # the 27 construction standards (one .md each) — see rules/README.md
+│                          #   most are `paths:`-scoped; only no-invention + git-workflow are always-on
 │   └── README.md          #   ↳ index (foundational/construction · general/webkit · enforcer)
 ├── hooks/                 # write-time gates — exit 2 blocks (PreToolUse, except where noted)
 │   ├── validate-authoring.mjs        # blocks off-standard component authoring
@@ -15,7 +16,9 @@ standard code. This is the entry-point map; each area links to its own index.
 │   ├── validate-tokens.mjs           # tokens only; no hex/palette/raw typography
 │   ├── validate-references.mjs       # no phantom imports / forbidden deps
 │   ├── validate-story-source.mjs     # runnable "Show code"
+│   ├── validate-authoring-docs.mjs   # skills/agents frontmatter (PostToolUse)
 │   ├── enforce-spec-exists.mjs       # no .vue without an approved spec
+│   ├── enforce-test-exists.mjs       # every root component ships a test (PostToolUse)
 │   ├── enforce-component-create.mjs  # authoring only via the pipeline
 │   └── _lib/              # shared, single-source engines
 │       ├── standards.mjs         #   the registry: rule ↔ enforcement + scope (general/webkit)
@@ -33,7 +36,7 @@ packages/webkit/           # the parts of the system that live in the package
 ├── scripts/check-authoring.mjs      # CI ratchet — runs the four shared engines repo-wide
 ├── scripts/authoring-baseline.json  #   frozen debt; a new violation fails the PR
 ├── test/standards/invariant.test.mjs# the meta-check: rule ↔ enforcement can't drift
-├── src/eslint-plugin/     # consumer lints (11 rules, all error)
+├── src/eslint-plugin/     # consumer lints (12 rules, all error)
 ├── src/mcp/               # MCP server (guides the AI to the right usage)
 ├── docs/GUIDELINES.md     # consumer-facing styleguide (build & use)
 └── catalog.json           # generated manifest read by the lints + MCP

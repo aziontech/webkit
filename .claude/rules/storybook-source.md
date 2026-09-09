@@ -1,3 +1,8 @@
+---
+paths:
+  - 'apps/storybook/**/*.{js,ts,vue}'
+---
+
 # Rule: Storybook "Show code" must be a runnable SFC
 
 The Docs **"Show code"** panel is a contract with the consumer: whatever it shows must compile and render **as-is** when pasted into their app. It must express **100% of what the canvas renders** — same component, same props, same slot content — and nothing that does not run. This is non-negotiable.

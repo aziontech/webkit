@@ -1,3 +1,9 @@
+---
+paths:
+  - 'packages/webkit/src/components/**/*.{vue,ts}'
+  - '.specs/**/*.md'
+---
+
 # Rule: accessibility — role, keyboard, focus, motion, owned by the component
 
 A component in this package is accessible **by construction**, not by the consumer's remediation. Every interactive component ships its role, its keyboard model, its focus behaviour, and its reduced-motion fallback. This rule fixes that contract so a consumer who drops in `<Dialog>` or `<Table>` gets WCAG-correct behaviour without wiring anything.
@@ -40,7 +46,7 @@ A component in this package is accessible **by construction**, not by the consum
 ## Enforcement
 
 - **`eslint-plugin-vuejs-accessibility`** runs in the flat config ([`eslint.config.js`](../../eslint.config.js)) at `error` — today `alt-text`, `aria-props`, `aria-role`, and `click-events-have-key-events` are **blocking** in CI (`lint` job, zero warnings). Expanding to the full `flat/recommended` a11y set is a **ratchet**: enable the rest, fix the violations they surface, then keep them at `error`.
-- **Automated a11y (`axe`)** is the planned per-story gate (Storybook a11y addon + `axe` assertions in the component-testing frontier, owned by the testing workstream). **It does not run yet** — until it lands, behavioural a11y (focus, keyboard, restore) is gated by mandatory review.
+- **Automated a11y (`axe`)** runs in the unit suite: [`packages/webkit/src/test/axe.ts`](../../packages/webkit/src/test/axe.ts) exports `expectNoA11yViolations(container)`, and [`testing.md`](./testing.md) makes it a required assertion for every component test (row 7 of its coverage table). It checks **semantics** — role, name, ARIA relationships, focus order — not contrast: the unit env loads no CSS, so colour contrast is real only in Storybook and the visual gate. Behavioural a11y that axe cannot see (focus trap, restore-on-close, the keyboard map) is still gated by mandatory review.
 - **[`validate-spec-compliance.mjs`](../hooks/validate-spec-compliance.mjs)** enforces the `ariaLabel` naming; the spec's a11y section (role + keyboard map) is required by [`.specs/_template.md`](../../.specs/_template.md).
 
 ## Why this rule exists

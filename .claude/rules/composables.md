@@ -1,3 +1,10 @@
+---
+paths:
+  - 'packages/webkit/src/composables/**/*.{ts,js}'
+  - 'packages/webkit/src/components/**/composables/**/*.{ts,js}'
+  - 'packages/webkit/src/components/**/use-*.{ts,js}'
+---
+
 # Rule: composables — one shape, `readonly` outward, cleanup on scope dispose
 
 A composable is a reusable piece of a component's logic, extracted into a `useXxx` function. In this design system it is a **public building block** as much as a component is: it is imported, typed, and relied on by consumers. So it follows a contract as strict as a component's — a predictable surface, a predictable lifetime, and no surprises on destructure. This rule fixes that contract so every composable in the package reads the same way and none of them leak state, listeners, or reactivity.

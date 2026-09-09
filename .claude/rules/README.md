@@ -8,6 +8,13 @@ files is checked in CI by
 [`packages/webkit/test/standards/invariant.test.mjs`](../../packages/webkit/test/standards/invariant.test.mjs).
 This table is the human-readable summary of that registry — when in doubt, the registry wins.
 
+**Loading.** A rule carries a `paths:` frontmatter block naming the globs it governs, so it reaches
+the agent only when the work touches those files. Two rules are triggered by **intent** rather than
+by a file read and therefore stay always-on with no `paths:` — [`no-invention`](./no-invention.md)
+and [`git-workflow`](./git-workflow.md). Scoping the other 25 is what keeps the standards complete
+without spending the whole context window on them before the first edit. When a rule grows a new
+surface, widen its `paths:` in the same change.
+
 ## Foundational (11)
 
 | Rule | Scope | Fixes | Blocks via |
@@ -22,7 +29,7 @@ This table is the human-readable summary of that registry — when in doubt, the
 | [migration](./migration.md) | webkit | Rewrite inherited artifacts, never copy as-is | output checks · ratchet · review |
 | [storybook-source](./storybook-source.md) | webkit | "Show code" is a runnable SFC | story-source · ratchet |
 | [release-types](./release-types.md) | webkit | Commit type → bump identical across 4 sources | commitlint |
-| [git-workflow](./git-workflow.md) | webkit | Branch/PR via command, based on `dev` | commitlint · branch-protection |
+| [git-workflow](./git-workflow.md) | webkit | Branch/PR via command, based on `main` | commitlint · branch-protection |
 
 ## Construction (16)
 
@@ -34,15 +41,15 @@ This table is the human-readable summary of that registry — when in doubt, the
 | [emits](./emits.md) | general | Typed `defineEmits`; no echo events duplicating `update:*` | authoring · spec-compliance · ratchet |
 | [event-payloads](./event-payloads.md) | general | Activation events emit `(event, item?)` — event always first | spec-compliance · ratchet · review |
 | [slots](./slots.md) | general | Typed `defineSlots`; fallback in the slot | authoring · spec-compliance · ratchet |
-| [composables](./composables.md) | general | `readonly` out, `toValue` args, `onScopeDispose` | authoring · ratchet |
+| [composables](./composables.md) | general | `readonly` out, `toValue` args, `onScopeDispose` | authoring · ratchet · *(dedicated hook + 2 lints pending)* |
 | [root-element](./root-element.md) | general | Own root; `href` polymorphism; `$attrs`+`cn`; minimal `defineExpose` | tokens · references · ratchet · review |
 | [component-states](./component-states.md) | general | Rendered state surface via `data-*` + DS components | spec-compliance · ratchet · review |
 | [accessibility](./accessibility.md) | general | Role, keyboard, focus, `motion-reduce` | vuejs-accessibility · review |
 | [testid](./testid.md) | general | `data-testid` derived `<category>-<name>` | spec-compliance · ratchet |
 | [deprecation](./deprecation.md) | general | `@deprecated` → one major → remove | authoring · ratchet · lint |
 | [bundle-budget](./bundle-budget.md) | webkit | `size-limit` per entry; tree-shaking | size-limit · review |
-| [testing](./testing.md) | webkit | One `<name>.test.ts` per component (Vitest browser + axe) | vitest (CI) · references · review |
+| [testing](./testing.md) | general | One `<name>.test.ts` per component (Vitest browser + axe) | vitest (CI) · test-gate (CI) · references · review |
 | [comments](./comments.md) | general | Comments rare + objective; ≤5-line blocks, ≤20% prose | authoring · ratchet · lint · review |
 | [authoring-docs](./authoring-docs.md) | webkit | Skills/agents carry conforming frontmatter; no file-as-example | authoring-docs · doc-standards (CI) |
 
-**Split:** 15 `general` (ship to projects — see [`packages/webkit/docs/GUIDELINES.md`](../../packages/webkit/docs/GUIDELINES.md)) · 12 `webkit` (internal). Nothing is advisory — every rule blocks the merge, automatically or by mandatory review. The full process map (creation → release, adoption → enforcement) is [`packages/webkit/docs/PROCESS.md`](../../packages/webkit/docs/PROCESS.md).
+**Split:** 16 `general` (ship to projects — see [`packages/webkit/docs/GUIDELINES.md`](../../packages/webkit/docs/GUIDELINES.md)) · 11 `webkit` (internal). Nothing is advisory — every rule blocks the merge, automatically or by mandatory review. The full process map (creation → release, adoption → enforcement) is [`packages/webkit/docs/PROCESS.md`](../../packages/webkit/docs/PROCESS.md).

@@ -1,3 +1,10 @@
+---
+paths:
+  - 'packages/webkit/src/components/**/*.{vue,ts}'
+  - '.specs/**/*.md'
+  - 'packages/webkit/package.json'
+---
+
 # Rule: compound API — composition first, props for data, names from anatomy
 
 Composition (`structure: composition`) components in the webkit layer expose a **compound API**: every public sub-component is importable on its own **and** attached to the root for dot-notation (`<Table.Row>`, `<Paginator.Button>`). The root itself stays importable two ways — as the **compound** (`@aziontech/webkit/table`, every sub-component attached) and as a **standalone, tree-shakeable root** (`@aziontech/webkit/table-root`, nothing attached). This rule fixes how that API is shaped, named, and typed so every composition component reads the same way.

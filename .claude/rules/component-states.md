@@ -1,3 +1,9 @@
+---
+paths:
+  - 'packages/webkit/src/components/**/*.{vue,ts}'
+  - '.specs/**/*.md'
+---
+
 # Rule: component states — a declared, rendered state surface
 
 A component is not just its happy path. Every interactive component has a **state surface** — the set of conditions it must visibly handle — and that surface is **declared in the spec** and **rendered through `data-*` + the package's own components**, never improvised per screen. This rule fixes which states are canonical and how they are expressed. It is the DS-side of "estados definidos": the component owns its states; the consuming application only supplies the trigger (a boolean, or async data).

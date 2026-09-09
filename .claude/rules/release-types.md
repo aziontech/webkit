@@ -1,3 +1,11 @@
+---
+paths:
+  - 'commitlint.config.js'
+  - 'release-please-config.json'
+  - 'CONTRIBUTING.md'
+  - '.claude/commands/*.md'
+---
+
 # Rule: release types — one single set of types across commitlint, release-please, CONTRIBUTING and commands
 
 The set of Conventional Commit `type`s and the **release effect** of each one are versioned in four places. They **must be identical**. When they diverge, commitlint accepts a commit that the release automation silently ignores (or the docs promise a bump that never happens), and the `/open-pr` / `/create-branch` flows start offering a type that does not produce the expected release. This rule was originally written for `semantic-release` (`.releaserc` `releaseRules`); **#798 replaced semantic-release with release-please**, whose bump semantics are **not configurable per type** — so the four surfaces now align on release-please's stock behavior instead of a custom table.

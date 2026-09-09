@@ -85,6 +85,23 @@ Bypassed for legacy components (same whitelist). Shared parser library: [`_lib/s
 
 PostToolUse hook on `Write` of a **root** component `.vue` (`packages/webkit/src/components/<category>/<name>/<name>.vue` — file name equals its folder). Warns (exit 2, surfaced to the agent) when the co-located `<name>.test.ts` is missing, so every component ships the browser-mode functional suite mandated by [`../rules/testing.md`](../rules/testing.md). PostToolUse (not Pre) so it never deadlocks `/component-create`, which writes the `.vue` before a test can exist. Composition sub-components are skipped (tested through their root). Bypassed for legacy components (same whitelist).
 
+### [`validate-authoring-docs.mjs`](./validate-authoring-docs.mjs)
+
+PostToolUse hook on `Write|Edit|MultiEdit` of a skill (`SKILL.md`) or agent doc, in either the internal
+`.claude/` bundle or the consumer bundle shipped from `packages/webkit/cli-templates/claude/`. Blocks a
+**newly introduced** violation of [`../rules/authoring-docs.md`](../rules/authoring-docs.md): missing
+frontmatter, `name` that disagrees with the folder/filename, blank `description`, missing/invalid/mismatched
+`scope`, empty `enforced_by`, a consumer skill without the `webkit-` prefix or without `status` /
+`last_updated`, and the four file-as-example bans (a hardcoded component source path, a file named as an
+exemplar, a `../src/components/` climb, `#exports` used as a lookup). Pre-existing debt is grandfathered in
+[`doc-standards-baseline.json`](../../packages/webkit/scripts/doc-standards-baseline.json).
+
+Only `SKILL.md` and `<agent>.md` are governed — a `references/*.md` inside a skill folder, and `_README.md`,
+are not scanned.
+
+Engine: [`_lib/authoring-docs-checks.mjs`](./_lib/authoring-docs-checks.mjs) — shared with the CI ratchet
+[`check-authoring-docs.mjs`](../../packages/webkit/scripts/check-authoring-docs.mjs) (the `toolkit` job).
+
 ## Adding a new hook
 
 1. Create `<name>.mjs` in this directory.

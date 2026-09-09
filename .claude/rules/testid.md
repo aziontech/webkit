@@ -1,3 +1,9 @@
+---
+paths:
+  - 'packages/webkit/src/components/**/*.{vue,ts}'
+  - '.specs/**/*.md'
+---
+
 # Rule: `data-testid` — derived name on the root, overridable
 
 Every component root carries a **`data-testid`** with a name derived from the component's own name, so tests (and the consuming app's tests) can target it without the consumer inventing selectors. This rule fixes the derivation and the override path. The name is one of the six naming surfaces governed by [`naming.md`](./naming.md).

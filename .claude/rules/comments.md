@@ -1,3 +1,10 @@
+---
+paths:
+  - 'packages/webkit/src/**/*.{vue,ts,js}'
+  - 'packages/theme/src/**/*.{js,ts}'
+  - 'apps/storybook/src/**/*.{js,ts,vue}'
+---
+
 # Rule: comments — rare, objective, never prose
 
 The code is the document; a comment is the exception. A comment exists only to state what the code **cannot** show — a constraint, a non-obvious why, a measured value the classes were fitted to. Everything else (what the next line does, how the code arrived here, why a change is correct, design essays) is noise that rots the moment the code moves.

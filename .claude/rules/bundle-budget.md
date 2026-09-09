@@ -1,3 +1,10 @@
+---
+paths:
+  - 'packages/webkit/.size-limit.json'
+  - 'packages/webkit/package.json'
+  - 'packages/webkit/scripts/check-size.mjs'
+---
+
 # Rule: bundle budget — every entry has a size limit, tree-shaking stays intact
 
 A design system is imported into every consumer, so its size is the consumer's size. This rule keeps each public entry under a **declared budget** and keeps the package **tree-shakeable**, so a component cannot bloat unnoticed and importing one component cannot drag in the whole catalog.

@@ -1,3 +1,10 @@
+---
+paths:
+  - 'packages/webkit/src/components/**/*.vue'
+  - 'packages/theme/src/**/*.{js,ts,css}'
+  - 'apps/storybook/src/**/*.vue'
+---
+
 # Rule: styling — classes on the root, never as JS presets
 
 Styles live on the **template root element's `class` attribute**, not in JavaScript variables, not in `<style>` blocks, not in component-local CSS files. Variants are driven by `data-*` attributes on the same root, consumed by Tailwind's `data-[attr=value]:` variants.

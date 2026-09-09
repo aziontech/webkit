@@ -1,3 +1,9 @@
+---
+paths:
+  - 'packages/webkit/src/components/**/*.{vue,ts}'
+  - '.specs/**/*.md'
+---
+
 # Rule: slots — typed `defineSlots`, kebab names, fallback inside the slot
 
 Slots are the **anatomy** surface of a component (where the consumer puts content), the counterpart to props (data + scalar config). This rule fixes how slots are *declared and typed*; **which** parts of a component are slots vs. sub-components vs. props is decided by [`compound-api.md`](./compound-api.md).

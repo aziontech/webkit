@@ -1,3 +1,11 @@
+---
+paths:
+  - '.claude/skills/**/*.md'
+  - 'packages/webkit/cli-templates/claude/**/*.md'
+  - '.claude/hooks/_lib/authoring-docs-checks.mjs'
+  - 'packages/webkit/scripts/check-authoring-docs.mjs'
+---
+
 # Rule: authoring docs — skills and agents carry conforming frontmatter, name no files as examples
 
 The `.claude` bundle that steers the AI — the **skills** and **agents**, both the DS-internal set and the consumer-facing set shipped in `packages/webkit/cli-templates/claude/` — is a public interface as much as a component is. A skill whose `name` disagrees with its folder, an agent with an empty `description`, a doc missing its `scope`, or a skill that hardcodes a component **source path** as an example are all the same class of drift the component standards already forbid in code. This rule fixes the frontmatter shape and bans the file-as-example anti-pattern, and it is enforced write-time and in CI exactly like every other standard.

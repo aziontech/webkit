@@ -1,3 +1,9 @@
+---
+paths:
+  - 'packages/webkit/package.json'
+  - 'packages/webkit/src/**/*.{vue,ts,js}'
+---
+
 # Rule: dependencies — CSS-only, zero external positioning/animation libs
 
 The webkit layer **must not** depend on external libraries for positioning, anchoring, or animation. We control these concerns via plain CSS + the design tokens in [`packages/theme/src/tokens/`](../../packages/theme/src/tokens/). This rule is non-negotiable and exists for three reasons:

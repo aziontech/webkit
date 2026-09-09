@@ -1,3 +1,9 @@
+---
+paths:
+  - 'packages/webkit/src/components/**/*.{vue,ts}'
+  - '.specs/**/*.md'
+---
+
 # Rule: prop vocabulary — one name, one type, one default per concept
 
 The same concept must ship under the **same prop name, type, and default** on every component. When one component calls it `variant` and another `kind`, or one spells it `closeable` and another `closable`, the consumer relearns the API per component and the AI guesses wrong. This rule fixes the canonical name for each recurring concept and makes it machine-enforced — on component **creation and on every edit**.

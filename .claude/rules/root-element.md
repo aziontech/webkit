@@ -1,3 +1,9 @@
+---
+paths:
+  - 'packages/webkit/src/components/**/*.{vue,ts}'
+  - '.specs/**/*.md'
+---
+
 # Rule: the root element — own it, forward attrs, expose the minimum
 
 A component renders **its own root element**. It does not delegate the root to a polymorphism helper it does not own, and it does not hide the root behind a wrapper `<div>` that swallows the consumer's attributes. This rule fixes three things about that root: **which element it is** (polymorphism), **how the consumer's attributes reach it** (forwarding), and **what the component exposes imperatively** (`defineExpose`).

@@ -1,3 +1,11 @@
+---
+paths:
+  - 'packages/webkit/src/components/**/*.{vue,ts}'
+  - '.specs/**/*.md'
+  - 'packages/webkit/package.json'
+  - 'packages/webkit/catalog.json'
+---
+
 # Rule: deprecation — mark, keep one major cycle, then remove
 
 Removing or renaming a public part (a component, a prop, an event, a slot) is a **breaking change**. This rule fixes the lifecycle between "we want this gone" and "it is gone", so a consumer always has a migration window and a machine-readable warning — never a silent removal.

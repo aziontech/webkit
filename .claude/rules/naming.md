@@ -1,3 +1,10 @@
+---
+paths:
+  - 'packages/webkit/src/components/**/*.{vue,ts}'
+  - '.specs/**/*.md'
+  - 'apps/storybook/src/stories/**/*.stories.{js,ts}'
+---
+
 # Rule: one name, everywhere
 
 A component has **one** name. That name appears on six surfaces, and they must all agree. A component called singular in one place and plural in another (`import Chip from '@aziontech/webkit/chips'`) is a bug — and the kind of bug a guardrail must make impossible, not a thing reviewers chase by eye.

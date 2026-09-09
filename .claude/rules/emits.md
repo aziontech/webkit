@@ -1,3 +1,9 @@
+---
+paths:
+  - 'packages/webkit/src/components/**/*.{vue,ts}'
+  - '.specs/**/*.md'
+---
+
 # Rule: emits — typed `defineEmits`, kebab names, model vs. activation
 
 Events are declared with the **type-only `defineEmits`** form, named in **kebab-case**, and split into two kinds with two different payload shapes. This rule fixes the declaration and the naming; the **payload of activation events** (event-first `(event, item)`) is fixed by [`event-payloads.md`](./event-payloads.md), and it is the authority whenever the two overlap.

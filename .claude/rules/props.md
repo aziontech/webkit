@@ -1,3 +1,9 @@
+---
+paths:
+  - 'packages/webkit/src/components/**/*.{vue,ts}'
+  - '.specs/**/*.md'
+---
+
 # Rule: props — typed interface, `withDefaults`, JSDoc, exported variant unions
 
 Props are the **data + scalar configuration** surface of a component (anatomy is elements, not props — see [`compound-api.md`](./compound-api.md)). This rule fixes how that surface is *typed and defaulted*; the **naming** of each prop is fixed separately by [`prop-vocabulary.md`](./prop-vocabulary.md), and whether a prop is allowed at all by [`no-invention.md`](./no-invention.md) (only props the spec lists).

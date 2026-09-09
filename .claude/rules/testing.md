@@ -1,3 +1,10 @@
+---
+paths:
+  - 'packages/webkit/src/**/*.test.{ts,js}'
+  - 'packages/webkit/src/test/**/*.{ts,js}'
+  - 'packages/webkit/vitest.config.ts'
+---
+
 # Rule: testing — every component ships a functional browser-mode suite
 
 **Scope: `general`.** Shipping a functional test alongside every component is a universal quality practice, not a webkit-only one — this standard travels to consuming projects (it is part of the `general` set the adoption toolkit ships out). The paths and stack below are this repo's instantiation; the invariant — a test exists for every component and moves with it — is the general rule.

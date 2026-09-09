@@ -1,3 +1,10 @@
+---
+paths:
+  - 'packages/webkit/package.json'
+  - 'packages/webkit/src/components/**/*.{vue,ts}'
+  - 'apps/storybook/src/stories/**/*.stories.{js,ts}'
+---
+
 # Rule: imports — flat public name, category in the folder only
 
 Every webkit component is published under a **flat, single-segment public name**. The category (`feedback`, `content`, `inputs`, `data`, `actions`, …) organizes the **source folder** and the **Storybook tree**, but it never appears in the public import path or the `package.json` export key.
