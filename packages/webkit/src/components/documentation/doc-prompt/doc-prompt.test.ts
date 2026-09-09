@@ -7,21 +7,16 @@ import * as stories from '../../../../../../apps/storybook/src/stories/component
 import { expectNoA11yViolations } from '../../../test/axe'
 import DocPrompt from './doc-prompt.vue'
 
-// .claude/rules/testing.md: Vitest browser mode (real Chromium), no Tailwind.
-// Every utility class emits nothing here, so the cap (`max-h-[3.5lh]`) and the
-// overflow it creates DO NOT EXIST in this environment: scrollHeight always
-// equals clientHeight, `capped` is always false, and no fade or disclosure ever
-// renders. Anything that depends on those measurements is therefore asserted
-// through the visual gate and Storybook, not here — an assertion that reads the
-// unstyled geometry passes identically in the broken and the fixed state.
+// Browser mode loads no Tailwind, so the height cap and its overflow do not exist
+// here (scrollHeight === clientHeight, `capped` always false) — the cap, fade and
+// disclosure are asserted through the visual gate, not this suite.
 
 const { Default, Kinds, Bare } = composeStories(stories)
 
 const PROMPT = 'Deploy this repository to Azion and show me the edge URL when it is live.'
 
 // The real Clipboard API rejects in headless Chromium ("Document is not focused"),
-// so writeText is stubbed to resolve. This substitutes an external side effect, not
-// layout/focus/Teleport — what is under test is WHICH string the component hands it.
+// so writeText is stubbed; under test is which string the component hands it.
 afterEach(() => {
   vi.restoreAllMocks()
 })
@@ -120,8 +115,6 @@ describe('DocPrompt', () => {
         props: { title: '' },
         slots: { default: PROMPT }
       })
-      // The row is what carries the surface split, so its absence is what makes
-      // the bare shape a single unbroken block rather than a box in a box.
       expect(getByTestId('documentation-doc-prompt').querySelector('[data-title-row]')).toBeNull()
       expect(queryByText('AI Assistant')).toBeNull()
     })
@@ -152,7 +145,6 @@ describe('DocPrompt', () => {
       expect(glyph?.getAttribute('aria-hidden')).toBe('true')
       withTitle.unmount()
 
-      // No title means no title row, so the glyph has nowhere to sit.
       const withoutTitle = render(DocPrompt, {
         props: { icon: 'pi pi-bolt' },
         slots: { default: PROMPT }
@@ -174,13 +166,11 @@ describe('DocPrompt', () => {
       expect(queryByRole('button', { name: 'Copy prompt' })).toBeNull()
     })
 
-    // The value is read off the rendered element, so it is settled one render after
-    // mount — `nextTick` is that render. Not a wait for a timer or an animation: without
-    // it the assertion would be testing whether a pointer can outrun a microtask.
+    // The copied value is read off the rendered element and settles one render
+    // after mount — the nextTick is that render, not a timer wait.
     it('copies the rendered sentence, whitespace collapsed', async () => {
       const write = vi.spyOn(navigator.clipboard, 'writeText').mockResolvedValue()
-      // Authored across indented template lines, the way a consumer writes it — the
-      // indentation is formatting, not part of the string.
+      // Indented like consumer-authored template lines; indentation must not be copied.
       const { getByRole } = render(DocPrompt, {
         slots: { default: `\n        ${PROMPT}\n      ` }
       })
@@ -204,8 +194,7 @@ describe('DocPrompt', () => {
       await rerender({ label: 'second prompt' })
       await nextTick()
       await fireEvent.click(getByRole('button', { name: 'Copy prompt' }))
-      // Reading the rendered element is what makes this true: a value captured once at
-      // setup would still be handing out 'first prompt' here.
+      // A value captured once at setup would still hand out 'first prompt' here.
       await waitFor(() => expect(write).toHaveBeenCalledWith('second prompt'))
       expect(write).not.toHaveBeenCalledWith('first prompt')
     })

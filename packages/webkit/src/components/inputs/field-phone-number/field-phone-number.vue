@@ -138,12 +138,12 @@
       <Select
         :model-value="country"
         :disabled="disabled || readonly"
+        :display-value="() => selectedCountry.dialCode"
         :data-testid="`${testId}__country`"
-        aria-label="Country dial code"
         @update:model-value="onCountryChange"
       >
-        <SelectTrigger>{{ selectedCountry.dialCode }}</SelectTrigger>
-        <SelectContent>
+        <SelectTrigger aria-label="Country dial code" />
+        <SelectContent class="min-w-max">
           <SelectOption
             v-for="c in countries"
             :key="c.code"

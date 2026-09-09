@@ -10,6 +10,13 @@
 
 * bump fast-uri version from 4.1.0 to 4.1.1 ([#773](https://github.com/aziontech/webkit/issues/773)) ([2f43cbb](https://github.com/aziontech/webkit/commit/2f43cbb0e128fdc8fbea16b6ed04bcf63356b08f))
 
+## [4.1.1](https://github.com/aziontech/webkit/compare/@aziontech/icons@4.1.0...@aziontech/icons@4.1.1) (2026-08-28)
+
+
+### Bug Fixes
+
+* **icons:** resolve currentColor per theme in the colored-icon CSS ([#930](https://github.com/aziontech/webkit/issues/930)) ([a517b14](https://github.com/aziontech/webkit/commit/a517b147c7e545d1fae9d3a726c6dade419f35bb))
+
 ## [1.4.0](https://github.com/aziontech/webkit/compare/@aziontech/icons@1.3.0...@aziontech/icons@1.4.0) (2026-03-25)
 
 ### Features
