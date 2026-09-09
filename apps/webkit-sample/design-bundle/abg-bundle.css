@@ -1,0 +1,2373 @@
+/* abg-bundle:start */
+/*
+ * AZION BRAND GUIDELINES — composable report, document and slide primitives.
+ *
+ * Every selector and custom property is namespaced (`.abg-*` / `--abg-*`), so this
+ * file drops into any page without touching the host's own styles and without
+ * requiring Tailwind, a build step, or `@aziontech/webkit`.
+ *
+ * PROVENANCE. Every value below is transcribed from the compiled output of
+ * `@aziontech/theme` (`dist/v4/globals.css`) — the same tokens the design system's
+ * components consume — not re-derived by eye:
+ *   · palette + semantic roles ...... the `:root` / `[data-theme=dark]` blocks
+ *   · type ladder + breakpoints ..... semantic/texts.data.js, as compiled
+ *   · spacing ladder ................ semantic/spacings.data.js, as compiled
+ *   · measures ...................... primitives/shape/container.js
+ *   · motion ........................ primitives/animations/animate.js
+ *   · the framed grid ............... .claude/docs/CONTAINERS.md
+ *
+ * THREE DELIBERATE DEPARTURES from the component tokens, each because this file
+ * targets long-form documents read by outside audiences rather than product UI.
+ * They are the only places a value here disagrees with the theme:
+ *
+ *   1. SECONDARY INK. `--text-muted` (#808080) measures 3.78:1 on the light canvas
+ *      — below the 4.5:1 WCAG AA floor for body text. Captions, metadata and table
+ *      notes are secondary text on nearly every page of a report, so shipping it
+ *      would fail AA on nearly every page. `--abg-ink-secondary` is #666666 in
+ *      light (5.50:1) and #999999 in dark (6.95:1). #808080 survives as
+ *      `--abg-ink-subtle`, for non-text and disabled marks only.
+ *   2. EMPHASIS WEIGHT. All 30 theme text tokens are weight 400; hierarchy comes
+ *      from size, family, tracking and case. That holds here for every structural
+ *      role. `--abg-weight-emphasis` (500) exists only for inline <strong>, <th>
+ *      and <dt> — a document needs to mark a column header and an emphatic clause.
+ *   3. ORANGE IS NOT INK IN LIGHT MODE. #F3652B measures 3.00:1 on the light
+ *      canvas. It is a mark, rule and fill colour; `--abg-primary-ink` (#B03C02,
+ *      5.76:1) is the separate token for the rare case of orange *text* on light.
+ *
+ * Brand faces are served from Azion's own CDN and declared below, so one <link>
+ * to this file is the whole dependency. No Google Fonts request is needed.
+ */
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   1 · BRAND FACES
+   Sora carries everything read as language. Proto Mono is the technical voice —
+   overlines and big numbers only; it is proprietary and not on Google Fonts.
+   Roboto Mono is code and raw identifiers.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+@font-face {
+  font-family: 'Sora';
+  src: url('https://fonts.azion.com/sora/Sora-VariableFont_wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Proto Mono';
+  src: url('https://fonts.azion.com/proto-mono/ProtoMono-Light.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Proto Mono';
+  src: url('https://fonts.azion.com/proto-mono/ProtoMono-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Proto Mono';
+  src: url('https://fonts.azion.com/proto-mono/ProtoMono-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Proto Mono';
+  src: url('https://fonts.azion.com/proto-mono/ProtoMono-SemiBold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Roboto Mono';
+  src: url('https://fonts.azion.com/roboto-mono/roboto-mono-regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Roboto Mono';
+  src: url('https://fonts.azion.com/roboto-mono/roboto-mono-light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   2 · TOKENS
+   ───────────────────────────────────────────────────────────────────────────── */
+
+:where(.abg-report) {
+  color-scheme: light;
+
+  --abg-font-sans: 'Sora', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --abg-font-display: 'Proto Mono', 'Roboto Mono', ui-monospace, monospace;
+  --abg-font-mono: 'Roboto Mono', ui-monospace, 'SFMono-Regular', Consolas, monospace;
+
+  /* Palette — the ladders a page-owned rule may read. */
+  --abg-gray-50: #fafafa;
+  --abg-gray-100: #f5f5f5;
+  --abg-gray-150: #ececec;
+  --abg-gray-200: #e5e5e5;
+  --abg-gray-250: #dadada;
+  --abg-gray-300: #b2b2b2;
+  --abg-gray-400: #999999;
+  --abg-gray-500: #808080;
+  --abg-gray-600: #666666;
+  --abg-gray-700: #4d4d4d;
+  --abg-gray-750: #2b2b2b;
+  --abg-gray-775: #242424;
+  --abg-gray-800: #1a1a1a;
+  --abg-gray-900: #141414;
+  --abg-gray-950: #0a0a0a;
+  --abg-orange-100: #ffe7d8;
+  --abg-orange-300: #ffb180;
+  --abg-orange-500: #f3652b;
+  --abg-orange-600: #d94a03;
+  --abg-orange-700: #b03c02;
+  --abg-orange-900: #692402;
+  --abg-blue-300: #66adff;
+  --abg-blue-400: #3392ff;
+  --abg-blue-500: #0072f5;
+  --abg-blue-600: #005fcc;
+  --abg-blue-700: #004799;
+
+  /* Brand. Orange is a mark, a rule and a fill — see `--abg-primary-ink` for text. */
+  --abg-primary: var(--abg-orange-500);
+  --abg-primary-ink: var(--abg-orange-700);
+  --abg-accent: var(--abg-blue-500);
+
+  /* Ground and ink. */
+  --abg-canvas: var(--abg-gray-50);
+  --abg-surface: #ffffff;
+  --abg-surface-raised: #ffffff;
+  --abg-ink: var(--abg-gray-900);
+  --abg-ink-secondary: var(--abg-gray-600);
+  --abg-ink-subtle: var(--abg-gray-500);
+  --abg-link: var(--abg-blue-600);
+
+  /* The two band tones. `inverse` flips with the theme (the design system's
+     `--bg-contrast`); `dark` is the brand's black band and never flips. */
+  --abg-inverse: var(--abg-gray-900);
+  --abg-ink-on-inverse: var(--abg-gray-50);
+  --abg-ink-on-inverse-secondary: var(--abg-gray-400);
+  --abg-rule-on-inverse: #ffffff26;
+  --abg-dark: #000000;
+  --abg-ink-on-dark: var(--abg-gray-50);
+  --abg-ink-on-dark-secondary: var(--abg-gray-400);
+  --abg-rule-on-dark: #ffffff26;
+
+  /* Rules. The frame is drawn in `--abg-rule`; interior rules step back to muted. */
+  --abg-rule: var(--abg-gray-250);
+  --abg-rule-muted: var(--abg-gray-150);
+  --abg-rule-strong: #000000;
+  --abg-rule-accent: var(--abg-primary);
+  --abg-rule-width: 1px;
+  --abg-focus: var(--abg-blue-600);
+
+  /* Feedback. Every fill/ink pair below measures 5.0:1 or better. */
+  --abg-success: #a4f4c0;
+  --abg-success-ink: #12542b;
+  --abg-success-rule: #22c55e66;
+  --abg-warning: #fce49c;
+  --abg-warning-ink: #634b03;
+  --abg-warning-rule: #f7bd0880;
+  --abg-danger: #f9d2d2;
+  --abg-danger-ink: #891010;
+  --abg-danger-rule: #e51a1a66;
+  --abg-info: #cce4ff;
+  --abg-info-ink: #004799;
+  --abg-info-rule: #0072f566;
+
+  /* Chart series. One subject in orange, everything else recedes to the gray
+     ladder — the "one accent per reading moment" rule, expressed as tokens. */
+  --abg-series-1: var(--abg-primary);
+  --abg-series-2: var(--abg-gray-900);
+  --abg-series-3: var(--abg-gray-600);
+  --abg-series-4: var(--abg-gray-400);
+  --abg-series-5: var(--abg-gray-750);
+  --abg-series-6: var(--abg-gray-300);
+  --abg-plot-rule: var(--abg-rule);
+  --abg-plot-fill: var(--abg-gray-150);
+
+  /* Spacing — the semantic ladder, with the theme's own breakpoint growth. */
+  --abg-space-xxs: 0.25rem;
+  --abg-space-xs: 0.5rem;
+  --abg-space-sm: 0.75rem;
+  --abg-space-md: 1rem;
+  --abg-space-lg: 1rem;
+  --abg-space-xl: 1.5rem;
+  --abg-space-xxl: 2rem;
+
+  /* Rhythm. Two steps and no more: between sections, and within one section. */
+  --abg-section-gap: var(--abg-space-xxl);
+  --abg-group-gap: var(--abg-space-xl);
+  --abg-copy-gap: var(--abg-space-md);
+  --abg-tight-gap: var(--abg-space-xs);
+
+  /* Measures. */
+  --abg-measure-content: 876px;
+  --abg-measure-focused: 1024px;
+  --abg-measure-page: 1388px;
+  --abg-measure-wide: 1620px;
+  --abg-measure-control: 256px;
+  --abg-reading: 68ch;
+  --abg-headline-measure: 24ch;
+  --abg-display-measure: 20ch;
+
+  /* Shape. Structure is square; only controls and cards carry a radius, and 8px
+     is the ceiling — nothing in this language is pill-shaped. */
+  --abg-radius-flat: 0;
+  --abg-radius-control: 6px;
+  --abg-radius-card: 8px;
+
+  /* Type. Mobile-first; the `sm` / `md` steps are re-declared below. */
+  --abg-type-display: 1.875rem;
+  --abg-type-title: 1.25rem;
+  --abg-type-heading: 1.125rem;
+  --abg-type-subheading: 1rem;
+  --abg-type-minor: 0.875rem;
+  --abg-type-lede: 1rem;
+  --abg-type-body: 1rem;
+  --abg-type-compact: 0.875rem;
+  --abg-type-label: 0.875rem;
+  --abg-type-metadata: 0.75rem;
+  --abg-type-overline: 0.75rem;
+  --abg-type-amount: 1.875rem;
+  --abg-type-amount-sm: 1rem;
+  --abg-type-figure: 1.25rem;
+
+  --abg-leading-display: 1.25;
+  --abg-leading-heading: 1.25;
+  --abg-leading-body: 1.375;
+  --abg-leading-prose: 1.625;
+  --abg-leading-label: 1.5;
+  --abg-leading-none: 1;
+
+  --abg-tracking-amount: -0.08em;
+  --abg-tracking-overline: 0.1rem;
+
+  --abg-weight-regular: 400;
+  --abg-weight-emphasis: 500;
+
+  /* Motion. */
+  --abg-duration-fast: 110ms;
+  --abg-duration-moderate: 150ms;
+  --abg-duration-slow: 240ms;
+  --abg-ease-entrance: cubic-bezier(0.39, 0.57, 0.56, 1);
+  --abg-ease-exit: cubic-bezier(0.55, 0.09, 0.68, 0.53);
+
+  /* Elevation exists for floating UI only. The page language uses NO shadow —
+     a shadow means "this floats", and nothing in a framed grid floats. */
+  --abg-shadow-overlay: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+
+  box-sizing: border-box;
+  margin: 0;
+  min-height: 100dvh;
+  background: var(--abg-canvas);
+  color: var(--abg-ink);
+  font-family: var(--abg-font-sans);
+  font-size: var(--abg-type-body);
+  font-weight: var(--abg-weight-regular);
+  line-height: var(--abg-leading-body);
+  font-optical-sizing: auto;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* The theme grows spacing and type at `sm` and `xl`; a document inherits that
+   growth instead of restating responsive rules per block. */
+@media (min-width: 640px) {
+  :where(.abg-report) {
+    --abg-space-lg: 1.5rem;
+    --abg-space-xl: 2rem;
+    --abg-space-xxl: 4rem;
+    --abg-type-display: 3rem;
+    --abg-type-title: 1.875rem;
+    --abg-type-subheading: 1.25rem;
+    --abg-type-minor: 1rem;
+    --abg-type-overline: 0.875rem;
+    --abg-type-amount: 3rem;
+    --abg-type-amount-sm: 1.25rem;
+    --abg-type-figure: 1.5rem;
+  }
+}
+
+@media (min-width: 768px) {
+  :where(.abg-report) {
+    --abg-type-display: 3.5rem;
+    --abg-type-title: 2.25rem;
+    --abg-type-heading: 1.875rem;
+    --abg-type-subheading: 1.5rem;
+    --abg-type-minor: 1.125rem;
+    --abg-type-lede: 1.125rem;
+    --abg-type-amount: 3.5rem;
+    --abg-type-amount-sm: 1.5rem;
+    --abg-type-figure: 2.25rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  :where(.abg-report) {
+    --abg-space-xl: 3rem;
+    --abg-space-xxl: 6rem;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   3 · THEME
+   Light and dark are implicit. Do not ship a visible theme switcher.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+@media (prefers-color-scheme: dark) {
+  :where(.abg-report:not([data-theme='light']):not(.abg-light)) {
+    color-scheme: dark;
+    --abg-canvas: #000000;
+    --abg-surface: var(--abg-gray-950);
+    --abg-surface-raised: var(--abg-gray-900);
+    --abg-ink: var(--abg-gray-50);
+    --abg-ink-secondary: var(--abg-gray-400);
+    --abg-ink-subtle: var(--abg-gray-500);
+    --abg-link: var(--abg-blue-400);
+    --abg-primary-ink: var(--abg-primary);
+    --abg-inverse: var(--abg-gray-50);
+    --abg-ink-on-inverse: var(--abg-gray-900);
+    --abg-ink-on-inverse-secondary: var(--abg-gray-600);
+    --abg-rule-on-inverse: #00000026;
+    --abg-rule: var(--abg-gray-750);
+    --abg-rule-muted: var(--abg-gray-775);
+    --abg-rule-strong: #ffffff;
+    --abg-success: #0a2916;
+    --abg-success-ink: #52e086;
+    --abg-warning: #312602;
+    --abg-warning-ink: #f7bd08;
+    --abg-danger: #5b0b0b;
+    --abg-danger-ink: #ed7878;
+    --abg-info: #001833;
+    --abg-info-ink: #66adff;
+    --abg-series-2: var(--abg-gray-50);
+    --abg-series-3: var(--abg-gray-300);
+    --abg-series-4: var(--abg-gray-500);
+    --abg-series-5: var(--abg-gray-200);
+    --abg-series-6: var(--abg-gray-600);
+    --abg-plot-fill: var(--abg-gray-800);
+  }
+}
+
+/* An explicit choice wins over the OS preference, in both directions. */
+:where(.abg-report[data-theme='dark'], .abg-report.abg-dark) {
+  color-scheme: dark;
+  --abg-canvas: #000000;
+  --abg-surface: var(--abg-gray-950);
+  --abg-surface-raised: var(--abg-gray-900);
+  --abg-ink: var(--abg-gray-50);
+  --abg-ink-secondary: var(--abg-gray-400);
+  --abg-ink-subtle: var(--abg-gray-500);
+  --abg-link: var(--abg-blue-400);
+  --abg-primary-ink: var(--abg-primary);
+  --abg-inverse: var(--abg-gray-50);
+  --abg-ink-on-inverse: var(--abg-gray-900);
+  --abg-ink-on-inverse-secondary: var(--abg-gray-600);
+  --abg-rule-on-inverse: #00000026;
+  --abg-rule: var(--abg-gray-750);
+  --abg-rule-muted: var(--abg-gray-775);
+  --abg-rule-strong: #ffffff;
+  --abg-success: #0a2916;
+  --abg-success-ink: #52e086;
+  --abg-warning: #312602;
+  --abg-warning-ink: #f7bd08;
+  --abg-danger: #5b0b0b;
+  --abg-danger-ink: #ed7878;
+  --abg-info: #001833;
+  --abg-info-ink: #66adff;
+  --abg-series-2: var(--abg-gray-50);
+  --abg-series-3: var(--abg-gray-300);
+  --abg-series-4: var(--abg-gray-500);
+  --abg-series-5: var(--abg-gray-200);
+  --abg-series-6: var(--abg-gray-600);
+  --abg-plot-fill: var(--abg-gray-800);
+}
+
+:where(.abg-report[data-theme='light'], .abg-report.abg-light) {
+  color-scheme: light;
+}
+
+@supports selector(body:has(> .abg-report)) {
+  body:has(> .abg-report) {
+    margin: 0;
+  }
+}
+
+:where(.abg-report *, .abg-report *::before, .abg-report *::after) {
+  box-sizing: inherit;
+}
+
+.abg-report[hidden],
+:where(.abg-report) [hidden] {
+  display: none !important;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   4 · BASE TYPOGRAPHY
+   Hierarchy is size, family, tracking and case. Never weight — all 30 type
+   tokens in the design system are weight 400, and that is the house voice.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+:where(.abg-report) :where(h1, h2, h3, h4, h5, h6, p, ul, ol, dl, figure, blockquote, pre, table) {
+  margin-block-start: 0;
+}
+
+:where(.abg-report) :where(h1, h2, h3, h4, h5, h6) {
+  color: var(--abg-ink);
+  font-family: var(--abg-font-sans);
+  font-weight: var(--abg-weight-regular);
+  text-wrap: balance;
+}
+
+:where(.abg-report) :where([id]) {
+  scroll-margin-top: var(--abg-space-xl);
+}
+
+:where(.abg-report) h1,
+:where(.abg-report) .abg-display {
+  max-width: var(--abg-display-measure);
+  margin-block-end: var(--abg-space-md);
+  font-size: var(--abg-type-display);
+  line-height: var(--abg-leading-display);
+}
+
+:where(.abg-report) h2,
+:where(.abg-report) .abg-title {
+  max-width: var(--abg-headline-measure);
+  margin-block-end: var(--abg-space-md);
+  font-size: var(--abg-type-title);
+  line-height: var(--abg-leading-heading);
+}
+
+:where(.abg-report) h3,
+:where(.abg-report) .abg-heading {
+  margin-block-end: var(--abg-space-sm);
+  font-size: var(--abg-type-subheading);
+  line-height: var(--abg-leading-heading);
+}
+
+:where(.abg-report) h4,
+:where(.abg-report) .abg-subheading {
+  margin-block-end: var(--abg-space-xs);
+  font-size: var(--abg-type-minor);
+  line-height: var(--abg-leading-body);
+}
+
+:where(.abg-report) p {
+  margin-block-end: var(--abg-copy-gap);
+  line-height: var(--abg-leading-body);
+  text-wrap: pretty;
+}
+
+:where(.abg-report) .abg-lede {
+  color: var(--abg-ink);
+  font-size: var(--abg-type-lede);
+  line-height: var(--abg-leading-body);
+  text-wrap: pretty;
+}
+
+/* Long-form reading takes the prose leading (1.625), not the UI leading (1.375). */
+:where(.abg-report) .abg-prose,
+:where(.abg-report) .abg-reading > :where(p, li, dd) {
+  line-height: var(--abg-leading-prose);
+}
+
+:where(.abg-report) :where(ul, ol) {
+  margin-block-end: var(--abg-copy-gap);
+  padding-inline-start: 1.25rem;
+}
+
+:where(.abg-report) li {
+  line-height: inherit;
+}
+
+:where(.abg-report) :where(.abg-reading, .abg-flow, .abg-list) li + li {
+  margin-block-start: var(--abg-tight-gap);
+}
+
+:where(.abg-report) :where(.abg-reading, .abg-flow, .abg-list) li > :where(p, ul, ol) {
+  margin-block-end: 0;
+}
+
+:where(.abg-report) :where(.abg-reading, .abg-flow, .abg-list) li > :where(p + p, ul, ol) {
+  margin-block-start: var(--abg-tight-gap);
+}
+
+:where(.abg-report) ::marker {
+  color: var(--abg-ink-secondary);
+}
+
+:where(.abg-report) dl {
+  margin-block-end: var(--abg-copy-gap);
+}
+
+:where(.abg-report) dt {
+  color: var(--abg-ink);
+  font-weight: var(--abg-weight-emphasis);
+}
+
+:where(.abg-report) dd {
+  margin-inline-start: 0;
+  color: var(--abg-ink-secondary);
+}
+
+:where(.abg-report) dt:not(:first-child) {
+  margin-block-start: var(--abg-copy-gap);
+}
+
+:where(.abg-report) dt + dd {
+  margin-block-start: var(--abg-space-xxs);
+}
+
+/* A pull quote is set off by a single accent rule on the leading edge — the one
+   place orange marks running text, because it is a rule and not the ink. */
+:where(.abg-report) blockquote {
+  margin-inline: 0;
+  margin-block-end: var(--abg-copy-gap);
+  border-inline-start: 2px solid var(--abg-rule-accent);
+  padding-inline-start: var(--abg-space-md);
+  color: var(--abg-ink);
+  font-size: var(--abg-type-lede);
+  line-height: var(--abg-leading-prose);
+}
+
+:where(.abg-report) blockquote > :last-child {
+  margin-block-end: 0;
+}
+
+:where(.abg-report) :where(p, li, dd, figcaption) strong,
+:where(.abg-report) :where(p, li, dd, figcaption) b {
+  color: var(--abg-ink);
+  font-weight: var(--abg-weight-emphasis);
+}
+
+:where(.abg-report) :where(h1, h2, h3, h4, .abg-display, .abg-title, .abg-heading) strong {
+  color: inherit;
+  font-weight: inherit;
+}
+
+:where(.abg-report) hr {
+  border: 0;
+  border-block-start: var(--abg-rule-width) solid var(--abg-rule);
+  margin-block: var(--abg-section-gap);
+}
+
+:where(.abg-report) a {
+  color: var(--abg-link);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+:where(.abg-report) a:hover {
+  text-decoration-color: currentColor;
+}
+
+:where(.abg-report) :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--abg-focus);
+  outline-offset: 2px;
+}
+
+:where(.abg-report) :where(code, kbd, samp, pre) {
+  font-family: var(--abg-font-mono);
+  font-variant-numeric: tabular-nums slashed-zero;
+}
+
+:where(.abg-report) :where(code, kbd) {
+  border: var(--abg-rule-width) solid var(--abg-rule-muted);
+  border-radius: var(--abg-radius-control);
+  background: var(--abg-surface);
+  padding: 0.1em 0.32em;
+  font-size: 0.875em;
+}
+
+:where(.abg-report) pre {
+  overflow: auto;
+  border: var(--abg-rule-width) solid var(--abg-rule);
+  border-radius: var(--abg-radius-flat);
+  background: var(--abg-surface);
+  padding: var(--abg-space-md);
+  font-size: var(--abg-type-metadata);
+  line-height: var(--abg-leading-prose);
+}
+
+:where(.abg-report) pre code {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  padding: 0;
+  font-size: inherit;
+}
+
+:where(.abg-report) :where(img, svg, video, canvas) {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+:where(.abg-report) figure {
+  margin-inline: 0;
+  margin-block-end: var(--abg-group-gap);
+}
+
+:where(.abg-report) figcaption,
+:where(.abg-report) .abg-caption {
+  margin-block-start: var(--abg-space-sm);
+  color: var(--abg-ink-secondary);
+  font-size: var(--abg-type-compact);
+  line-height: var(--abg-leading-label);
+  text-wrap: pretty;
+}
+
+:where(.abg-report) :where(p, li, dd, figcaption, .abg-label, .abg-meta) {
+  overflow-wrap: anywhere;
+}
+
+:where(.abg-report) :where(td, th) {
+  overflow-wrap: break-word;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   5 · TYPE ROLES
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/* The overline is Azion's technical voice: Proto Mono, uppercase, tracking baked
+   in. It is load-bearing brand, not a decorative kicker — one per band, never a
+   label on every section. */
+:where(.abg-report) .abg-overline {
+  display: block;
+  color: var(--abg-ink-secondary);
+  font-family: var(--abg-font-display);
+  font-size: var(--abg-type-overline);
+  font-weight: var(--abg-weight-regular);
+  line-height: var(--abg-leading-body);
+  letter-spacing: var(--abg-tracking-overline);
+  text-transform: uppercase;
+  text-wrap: nowrap;
+}
+
+/* On the Site the eyebrow carries a leading orange dot. */
+:where(.abg-report) .abg-overline[data-marker]::before {
+  content: '';
+  display: inline-block;
+  width: 0.375em;
+  height: 0.375em;
+  margin-inline-end: 0.6em;
+  border-radius: var(--abg-radius-card);
+  background: var(--abg-primary);
+  vertical-align: 0.1em;
+}
+
+:where(.abg-report) .abg-label {
+  color: var(--abg-ink-secondary);
+  font-size: var(--abg-type-label);
+  font-weight: var(--abg-weight-regular);
+  line-height: var(--abg-leading-label);
+}
+
+:where(.abg-report) .abg-meta {
+  color: var(--abg-ink-secondary);
+  font-size: var(--abg-type-metadata);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--abg-leading-label);
+}
+
+:where(.abg-report) .abg-mono {
+  font-family: var(--abg-font-mono);
+  font-size: 0.9em;
+  font-variant-numeric: tabular-nums slashed-zero;
+}
+
+:where(.abg-report) .abg-numeric {
+  font-variant-numeric: tabular-nums;
+  text-align: end;
+}
+
+/* A currency or count read as a headline. Tight tracking is what makes a big
+   number read as one figure rather than as spaced digits. */
+:where(.abg-report) .abg-amount {
+  display: block;
+  color: var(--abg-ink);
+  font-size: var(--abg-type-amount);
+  font-weight: var(--abg-weight-regular);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--abg-leading-display);
+  letter-spacing: var(--abg-tracking-amount);
+  text-wrap: balance;
+}
+
+:where(.abg-report) .abg-amount[data-size='small'] {
+  font-size: var(--abg-type-amount-sm);
+  line-height: var(--abg-leading-heading);
+}
+
+/* A measured quantity in the technical voice — Proto Mono, no tight tracking. */
+:where(.abg-report) .abg-figure {
+  display: block;
+  color: var(--abg-ink);
+  font-family: var(--abg-font-display);
+  font-size: var(--abg-type-figure);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--abg-leading-display);
+}
+
+:where(.abg-report) .abg-visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+  clip-path: inset(50%) !important;
+  white-space: nowrap !important;
+}
+
+:where(.abg-report) .abg-formula {
+  display: block;
+  min-inline-size: 0;
+  max-width: 100%;
+  color: var(--abg-ink-secondary);
+  font-family: var(--abg-font-mono);
+  font-size: var(--abg-type-compact);
+  line-height: var(--abg-leading-prose);
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+:where(.abg-report) .abg-sources {
+  color: var(--abg-ink-secondary);
+  font-size: var(--abg-type-metadata);
+  line-height: var(--abg-leading-label);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   6 · IDENTITY
+   The wordmark and the reduced "A" ship as masks, so a single `color` drives
+   them and they inherit whatever tone their band sets. Geometry is transcribed
+   from the design system's own brand SVGs (90x18 and 21x18).
+   ───────────────────────────────────────────────────────────────────────────── */
+
+:where(.abg-report) .abg-identity {
+  display: flex;
+  min-width: max-content;
+  align-items: center;
+  gap: var(--abg-space-sm);
+  color: var(--abg-primary);
+  font-size: var(--abg-type-compact);
+  line-height: var(--abg-leading-label);
+  white-space: nowrap;
+}
+
+:where(.abg-report) .abg-wordmark,
+:where(.abg-report) .abg-mark {
+  display: inline-block;
+  flex: none;
+  background: currentColor;
+  -webkit-mask-position: left center;
+  mask-position: left center;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+}
+
+:where(.abg-report) .abg-wordmark {
+  width: 90px;
+  height: 18px;
+  -webkit-mask-image: var(--abg-wordmark-mask);
+  mask-image: var(--abg-wordmark-mask);
+}
+
+:where(.abg-report) .abg-mark {
+  width: 21px;
+  height: 18px;
+  -webkit-mask-image: var(--abg-mark-mask);
+  mask-image: var(--abg-mark-mask);
+}
+
+/* A lockup may be set larger; width follows from the aspect ratio. */
+:where(.abg-report) .abg-wordmark[data-size='large'] {
+  width: 120px;
+  height: 24px;
+}
+:where(.abg-report) .abg-mark[data-size='large'] {
+  width: 28px;
+  height: 24px;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   7 · THE FRAMED GRID — Azion's page language
+   ─────────────────────────────────────────────────────────────────────────────
+   The whole page is ONE CONTINUOUS FRAME, and every edge in it is owned by
+   exactly one element; the neighbour on the other side of that edge draws
+   nothing. A doubled line is the one unmistakable failure of this language.
+
+     Top rule of the page body ....... the band          (border-block-end, full bleed)
+     Left + right rules .............. the column        (border-inline)
+     Rule between two modules ........ the LOWER module  (border-block-start)
+     Rule under a module header ...... the header row    (border-block-end)
+     Left/right edge of a module ..... NOBODY — the column's border owns it
+     Internal rules of a cell grid ... the grid's 1px gap showing its own ground
+     Bottom rule of the page ......... the footer        (border-block-start)
+
+   Nothing floats, nothing structural is rounded, and there is no shadow
+   anywhere in this language — a shadow means "this floats", and nothing in a
+   drawn grid floats.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+:where(.abg-report) .abg-shell {
+  width: 100%;
+  margin-inline: auto;
+  container-name: abg-shell;
+  container-type: inline-size;
+}
+
+/* 7a · THE BAND — full bleed, owns the rule beneath it. The contrast between one
+   edge-to-edge rule and the narrower column hanging below is what makes the
+   frame read as drawn ON the page rather than as a card sitting on it. */
+:where(.abg-report) .abg-band {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-block-end: var(--abg-rule-width) solid var(--abg-rule);
+  background: var(--abg-canvas);
+}
+
+:where(.abg-report) .abg-band > .abg-band-body {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: var(--abg-measure-page);
+  margin-inline: auto;
+  padding: var(--abg-space-xl);
+}
+
+/* A hero band fills exactly one screen, minus any fixed chrome above it. Pass
+   the chrome height in as `--abg-band-offset`; unset resolves to 0. */
+:where(.abg-report) .abg-band[data-size='hero'] {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: calc(100dvh - var(--abg-band-offset, 0px));
+}
+
+:where(.abg-report) .abg-band[data-size='compact'] > .abg-band-body {
+  padding-block: var(--abg-space-lg);
+}
+
+/* The two band tones. Each owns the ink, rule and control colours of everything
+   nested inside it, so a band never needs per-child overrides. */
+:where(.abg-report) .abg-band[data-tone='inverse'] {
+  background: var(--abg-inverse);
+  color: var(--abg-ink-on-inverse);
+  --abg-ink: var(--abg-ink-on-inverse);
+  --abg-ink-secondary: var(--abg-ink-on-inverse-secondary);
+  --abg-rule: var(--abg-rule-on-inverse);
+  --abg-rule-muted: var(--abg-rule-on-inverse);
+  --abg-canvas: var(--abg-inverse);
+  --abg-surface: transparent;
+}
+
+:where(.abg-report) .abg-band[data-tone='dark'] {
+  background: var(--abg-dark);
+  color: var(--abg-ink-on-dark);
+  --abg-ink: var(--abg-ink-on-dark);
+  --abg-ink-secondary: var(--abg-ink-on-dark-secondary);
+  --abg-rule: var(--abg-rule-on-dark);
+  --abg-rule-muted: var(--abg-rule-on-dark);
+  --abg-canvas: var(--abg-dark);
+  --abg-surface: transparent;
+  --abg-link: var(--abg-blue-400);
+  --abg-primary-ink: var(--abg-primary);
+}
+
+/* 7b · THE HERO TEXTURE — azion.com's own field: a 2px square at every
+   intersection of a 48px lattice, flat across the band. The ink is a 22% mix of
+   the page's own text colour, so the field carries the same step from the ground
+   in both themes instead of being tuned for one of them. Texture is always
+   masked and always below opacity 1 — it never competes with copy. */
+:where(.abg-report) .abg-texture {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: radial-gradient(
+    circle at 1px 1px,
+    color-mix(in srgb, var(--abg-ink) 22%, transparent) 0 1px,
+    transparent 1.5px
+  );
+  background-size: 48px 48px;
+}
+
+:where(.abg-report) .abg-texture[data-pattern='hatch'] {
+  background-image: repeating-linear-gradient(
+    to right,
+    var(--abg-rule-muted) 0,
+    var(--abg-rule-muted) 1px,
+    transparent 1px,
+    transparent var(--abg-space-lg)
+  );
+  background-size: auto;
+  opacity: 0.4;
+  -webkit-mask-image: radial-gradient(ellipse at center, #000, transparent 85%);
+  mask-image: radial-gradient(ellipse at center, #000, transparent 85%);
+}
+
+:where(.abg-report) .abg-texture[data-pattern='grid'] {
+  background-image:
+    repeating-linear-gradient(
+      to right,
+      var(--abg-rule) 0,
+      var(--abg-rule) 1px,
+      transparent 1px,
+      transparent 48px
+    ),
+    repeating-linear-gradient(
+      to bottom,
+      var(--abg-rule) 0,
+      var(--abg-rule) 1px,
+      transparent 1px,
+      transparent 48px
+    );
+  background-size: auto;
+  opacity: 0.5;
+}
+
+/* 7c · THE COLUMN — centred, capped, and carrying ONLY the side rules.
+   It is unpadded by default: a stack of modules each own their padding, and
+   column padding would double it and pull the modules off the frame. */
+:where(.abg-report) .abg-column {
+  width: 100%;
+  max-width: var(--abg-measure-page);
+  margin-inline: auto;
+  border-inline: var(--abg-rule-width) solid var(--abg-rule);
+}
+
+:where(.abg-report) .abg-column[data-measure='wide'] {
+  max-width: var(--abg-measure-wide);
+}
+:where(.abg-report) .abg-column[data-measure='focused'] {
+  max-width: var(--abg-measure-focused);
+}
+:where(.abg-report) .abg-column[data-measure='content'] {
+  max-width: var(--abg-measure-content);
+}
+:where(.abg-report) .abg-column[data-bordered='false'] {
+  border-inline: 0;
+}
+
+/* Only a plain prose column with no modules takes its own padding. */
+:where(.abg-report) .abg-column[data-padded] {
+  padding: var(--abg-space-xl);
+}
+
+/* 7d · THE MODULE — the brick. A header row divided from its body by a hairline,
+   and divided from the module above by a hairline it owns itself. */
+:where(.abg-report) .abg-module {
+  width: 100%;
+  border-block-start: var(--abg-rule-width) solid var(--abg-rule);
+}
+
+/* The FIRST module in a column draws no top rule — its top edge is already the
+   band's bottom rule. This is automatic; `data-divided="false"` is the manual
+   escape for a module that opens a column with no band above it. */
+:where(.abg-report) .abg-column > .abg-module:first-child,
+:where(.abg-report) .abg-module[data-divided='false'] {
+  border-block-start: 0;
+}
+
+:where(.abg-report) .abg-module-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--abg-space-sm) var(--abg-space-lg);
+  border-block-end: var(--abg-rule-width) solid var(--abg-rule);
+  padding: var(--abg-space-xl);
+}
+
+:where(.abg-report) .abg-module-header > * {
+  min-width: 0;
+  margin-block: 0;
+}
+
+:where(.abg-report) .abg-module-header > :last-child:not(:first-child) {
+  margin-inline-start: auto;
+}
+
+:where(.abg-report) .abg-module-body {
+  padding: var(--abg-space-xl);
+}
+
+/* A module whose body is an edge-to-edge cell grid drops its padding, so the
+   grid's rules meet the column's frame with no gutter. */
+:where(.abg-report) .abg-module-body[data-padded='false'] {
+  padding: 0;
+}
+
+:where(.abg-report) .abg-module-body > :last-child {
+  margin-block-end: 0;
+}
+
+/* 7e · THE HAIRLINE CELL GRID — the signature industrial module. Its internal
+   rules are the GAP showing the wrapper's own ground, not borders, which is how
+   a 3x3 grid gets exactly one line between neighbours. It carries no perimeter
+   border, so it sits flush inside a column whose side rules already own the
+   outer edges.
+
+   Children MUST fill their own background, or the whole cell goes rule-coloured.
+   The rule below does that for every direct child, so a consumer cannot get it
+   wrong; a child that wants a different ground sets `--abg-cell-fill`. */
+:where(.abg-report) .abg-cell-grid {
+  display: grid;
+  gap: var(--abg-rule-width);
+  background: var(--abg-rule);
+  grid-template-columns: repeat(var(--abg-cells, 1), minmax(0, 1fr));
+}
+
+:where(.abg-report) .abg-cell-grid > * {
+  min-width: 0;
+  margin: 0;
+  background: var(--abg-cell-fill, var(--abg-canvas));
+  padding: var(--abg-space-xl);
+}
+
+:where(.abg-report) .abg-cell-grid[data-rule='muted'] {
+  background: var(--abg-rule-muted);
+}
+
+:where(.abg-report) .abg-cell-grid[data-density='compact'] > * {
+  padding: var(--abg-space-lg);
+}
+
+/* A cell's own anatomy: overline, then figure or heading, then one line of support. */
+:where(.abg-report) .abg-cell-grid > * > :where(p, h3, h4, .abg-amount, .abg-figure) {
+  margin-block-end: 0;
+}
+
+:where(.abg-report) .abg-cell-grid > * > * + * {
+  margin-block-start: var(--abg-space-xs);
+}
+
+/* A TRACK IS NEVER RESERVED WITHOUT A CELL TO FILL IT. Because the internal
+   rules are this grid's own ground showing through a 1px gap, an empty track is
+   not an empty cell — it is a slab of rule colour the width of a whole column.
+   Every column count is therefore gated on a child actually existing at that
+   position, so an under-filled grid collapses to the count it can fill instead
+   of painting the shortfall. This is what makes the gap trick safe to hand to
+   an author who abbreviates their markup. */
+@media (min-width: 640px) {
+  :where(.abg-report) .abg-cell-grid:has(> :nth-child(2)) {
+    --abg-cells: 2;
+  }
+  :where(.abg-report) .abg-cell-grid[data-columns='5']:has(> :nth-child(3)) {
+    --abg-cells: 3;
+  }
+}
+
+@media (min-width: 1024px) {
+  :where(.abg-report) .abg-cell-grid[data-columns='3']:has(> :nth-child(3)) {
+    --abg-cells: 3;
+  }
+  :where(.abg-report) .abg-cell-grid[data-columns='4']:has(> :nth-child(4)) {
+    --abg-cells: 4;
+  }
+  :where(.abg-report) .abg-cell-grid[data-columns='5']:has(> :nth-child(5)) {
+    --abg-cells: 5;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   7f · FRAMEBOX — the registration frame
+   ─────────────────────────────────────────────────────────────────────────────
+   The most literal piece of the industrial language: a thin bordered box with a
+   crosshair registration mark straddling each corner, as on a technical drawing
+   or a print trim sheet. It is the closing move — the final call to action of a
+   report, the summary panel of a deck, the one block that says this document is
+   drawn rather than decorated.
+
+   Each crosshair is centred ON its corner, so half of every arm falls outside
+   the frame. That straddle is the whole effect: a mark tucked inside the box
+   reads as an ornament instead of a registration. Because a background can only
+   paint inside its own box, the marks ride on a pseudo-element inset by
+   NEGATIVE half a mark on every side — its box is the frame grown by 5.5px, so
+   all four crosshairs land whole. Eight gradient layers, no markup, so the marks
+   cannot be forgotten and cannot be doubled.
+
+   Use it ONCE per page. Two registration frames are two closing moves, and
+   neither closes.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+:where(.abg-report) .abg-frame-box {
+  --abg-mark: 11px;
+  --abg-mark-color: var(--abg-rule);
+  position: relative;
+  border: var(--abg-rule-width) solid var(--abg-rule-muted);
+  padding: var(--abg-space-xl);
+}
+
+:where(.abg-report) .abg-frame-box > * {
+  position: relative;
+  z-index: 2;
+}
+
+:where(.abg-report) .abg-frame-box > :last-child {
+  margin-block-end: 0;
+}
+
+/* The four corner crosshairs. `--abg-arm` is the offset that centres a 1px arm
+   on the grown box's edge: half a mark, less half the arm's own thickness. */
+:where(.abg-report) .abg-frame-box::before {
+  --abg-arm: calc(var(--abg-mark) / 2 - 0.5px);
+  content: '';
+  position: absolute;
+  z-index: 3;
+  inset: calc(var(--abg-mark) / -2);
+  pointer-events: none;
+  background-image:
+    linear-gradient(var(--abg-mark-color), var(--abg-mark-color)),
+    linear-gradient(var(--abg-mark-color), var(--abg-mark-color)),
+    linear-gradient(var(--abg-mark-color), var(--abg-mark-color)),
+    linear-gradient(var(--abg-mark-color), var(--abg-mark-color)),
+    linear-gradient(var(--abg-mark-color), var(--abg-mark-color)),
+    linear-gradient(var(--abg-mark-color), var(--abg-mark-color)),
+    linear-gradient(var(--abg-mark-color), var(--abg-mark-color)),
+    linear-gradient(var(--abg-mark-color), var(--abg-mark-color));
+  background-size:
+    var(--abg-mark) 1px,
+    1px var(--abg-mark),
+    var(--abg-mark) 1px,
+    1px var(--abg-mark),
+    var(--abg-mark) 1px,
+    1px var(--abg-mark),
+    var(--abg-mark) 1px,
+    1px var(--abg-mark);
+  background-position:
+    left 0 top var(--abg-arm),
+    left var(--abg-arm) top 0,
+    right 0 top var(--abg-arm),
+    right var(--abg-arm) top 0,
+    left 0 bottom var(--abg-arm),
+    left var(--abg-arm) bottom 0,
+    right 0 bottom var(--abg-arm),
+    right var(--abg-arm) bottom 0;
+  background-repeat: no-repeat;
+}
+
+:where(.abg-report) .abg-frame-box[data-marks='none']::before {
+  content: none;
+}
+
+/* The optional vertical hatch — rules every `--abg-space-lg`, drawn as a
+   repeating gradient, held at 0.4 opacity and radially masked so it fades out
+   before it reaches the copy. Texture in this language is never raw. */
+:where(.abg-report) .abg-frame-box[data-hatch]::after {
+  content: '';
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.4;
+  background-image: repeating-linear-gradient(
+    to right,
+    var(--abg-rule-muted) 0,
+    var(--abg-rule-muted) 1px,
+    transparent 1px,
+    transparent var(--abg-space-lg)
+  );
+  -webkit-mask-image: radial-gradient(ellipse at center, #000, transparent 85%);
+  mask-image: radial-gradient(ellipse at center, #000, transparent 85%);
+}
+
+/* An accent frame box swaps the perimeter and marks to the brand rule — for the
+   single most consequential panel in a document. */
+:where(.abg-report) .abg-frame-box[data-tone='accent'] {
+  --abg-mark: 13px;
+  --abg-mark-color: var(--abg-rule-accent);
+  border-color: var(--abg-rule-accent);
+}
+
+/* A frame box that sits flush inside a column drops the column's own inset. */
+:where(.abg-report) .abg-frame-box[data-flush] {
+  border-inline: 0;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   8 · DOCUMENT SHELL
+   Header carries the wordmark on the left and at most two sourced fields on the
+   right. Footer stays quiet: the reduced mark left, one ownership line right.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.abg-skip-link {
+  position: fixed;
+  inset-block-start: var(--abg-space-sm, 12px);
+  inset-inline-start: var(--abg-space-sm, 12px);
+  z-index: 1000;
+  transform: translateY(calc(-100% - 32px));
+  background: var(--abg-ink, #141414);
+  color: var(--abg-canvas, #fafafa);
+  padding: 0.5rem 0.75rem;
+  font-family: var(--abg-font-sans, 'Sora', sans-serif);
+  font-size: 0.875rem;
+}
+
+.abg-skip-link:focus {
+  transform: translateY(0);
+}
+
+:where(.abg-report) .abg-masthead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--abg-space-sm) var(--abg-space-xl);
+  border-block-end: var(--abg-rule-width) solid var(--abg-rule);
+  padding: var(--abg-space-lg) var(--abg-space-xl);
+}
+
+:where(.abg-report) .abg-masthead > * {
+  min-width: 0;
+  margin-block: 0;
+}
+
+/* At most two sourced fields. Sentence case. Never invented metadata. */
+:where(.abg-report) .abg-document-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--abg-space-xs) var(--abg-space-lg);
+  color: var(--abg-ink-secondary);
+  font-size: var(--abg-type-metadata);
+  line-height: var(--abg-leading-label);
+  text-align: end;
+}
+
+:where(.abg-report) .abg-document-meta > * {
+  margin: 0;
+}
+
+:where(.abg-report) .abg-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--abg-space-sm) var(--abg-space-xl);
+  border-block-start: var(--abg-rule-width) solid var(--abg-rule);
+  padding: var(--abg-space-lg) var(--abg-space-xl);
+  color: var(--abg-ink-secondary);
+  font-size: var(--abg-type-metadata);
+  line-height: var(--abg-leading-label);
+}
+
+:where(.abg-report) .abg-footer > * {
+  min-width: 0;
+  margin-block: 0;
+}
+
+:where(.abg-report) .abg-footer .abg-mark {
+  color: var(--abg-primary);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   9 · LAYOUT INSIDE A MODULE
+   A 12-column grid on desktop, 6 on tablet, 4 on mobile — the same grid the
+   masthead, the modules and the footer align to.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+:where(.abg-report) .abg-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--abg-space-lg);
+  row-gap: var(--abg-group-gap);
+}
+
+:where(.abg-report) .abg-grid > * {
+  grid-column: 1 / -1;
+  min-width: 0;
+  margin-block: 0;
+}
+
+:where(.abg-report) .abg-span-3 {
+  grid-column: span 3;
+}
+:where(.abg-report) .abg-span-4 {
+  grid-column: span 4;
+}
+:where(.abg-report) .abg-span-5 {
+  grid-column: span 5;
+}
+:where(.abg-report) .abg-span-6 {
+  grid-column: span 6;
+}
+:where(.abg-report) .abg-span-7 {
+  grid-column: span 7;
+}
+:where(.abg-report) .abg-span-8 {
+  grid-column: span 8;
+}
+:where(.abg-report) .abg-span-12 {
+  grid-column: 1 / -1;
+}
+
+/* A split introduction aligns its heading and paragraph on their FIRST TEXT
+   BASELINES, not on their unlike top edges. */
+:where(.abg-report) .abg-grid[data-align='baseline'] > * {
+  align-self: baseline;
+}
+
+/* `abg-flow` owns the gap between its children; the children add no margin of
+   their own, so every visible gap has exactly one owner. */
+:where(.abg-report) .abg-flow > * {
+  margin-block: 0;
+}
+
+:where(.abg-report) .abg-flow > * + * {
+  margin-block-start: var(--abg-copy-gap);
+}
+
+:where(.abg-report) .abg-flow > :where(h2, .abg-title):not(:first-child) {
+  margin-block-start: var(--abg-section-gap);
+}
+
+:where(.abg-report) .abg-flow > :where(h3, .abg-heading):not(:first-child) {
+  margin-block-start: var(--abg-group-gap);
+}
+
+:where(.abg-report) .abg-flow > :where(h2, h3, h4, .abg-title, .abg-heading, .abg-subheading) + * {
+  margin-block-start: var(--abg-space-sm);
+}
+
+:where(.abg-report) .abg-flow > .abg-overline + * {
+  margin-block-start: var(--abg-space-xs);
+}
+
+:where(.abg-report) .abg-stack {
+  display: grid;
+  gap: var(--abg-space-xs);
+}
+
+:where(.abg-report) .abg-stack > * {
+  margin-block: 0;
+  min-width: 0;
+}
+
+:where(.abg-report) .abg-cluster {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--abg-space-sm) var(--abg-space-lg);
+}
+
+:where(.abg-report) .abg-cluster > * {
+  margin-block: 0;
+}
+
+/* Prose is capped by line length, never by the payload around it. */
+:where(.abg-report) .abg-reading {
+  max-width: var(--abg-reading);
+}
+
+:where(.abg-report) .abg-module-body > :where(p, ul, ol, dl, blockquote),
+:where(.abg-report) .abg-flow > :where(p, ul, ol, dl) {
+  max-width: var(--abg-reading);
+}
+
+/* Published layout primitives never widen the page; intrinsic content scrolls
+   inside its own viewport instead. */
+:where(.abg-report)
+  :where(
+    .abg-grid,
+    .abg-flow,
+    .abg-stack,
+    .abg-cluster,
+    .abg-cell-grid,
+    .abg-table-wrap,
+    .abg-chart,
+    .abg-plot-viewport,
+    .abg-calculator
+  ) {
+  min-inline-size: 0;
+  max-inline-size: 100%;
+}
+
+@media (min-width: 600px) and (max-width: 1023px) {
+  :where(.abg-report) .abg-grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+  :where(.abg-report) :where(.abg-span-3, .abg-span-4) {
+    grid-column: span 3;
+  }
+  :where(.abg-report) :where(.abg-span-5, .abg-span-6, .abg-span-7, .abg-span-8) {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 599px) {
+  :where(.abg-report) .abg-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    row-gap: var(--abg-copy-gap);
+  }
+  :where(.abg-report) .abg-grid > * {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   10 · EVIDENCE — figures
+   A stat is an overline, a value and one line of context, in that order. Peers
+   share the value role exactly; priority is expressed OUTSIDE the peer group,
+   never by resizing one member of it.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+:where(.abg-report) .abg-stat-strip {
+  display: grid;
+  gap: var(--abg-rule-width);
+  background: var(--abg-rule);
+  grid-template-columns: repeat(var(--abg-cells, 1), minmax(0, 1fr));
+}
+
+:where(.abg-report) .abg-stat {
+  display: grid;
+  align-content: start;
+  gap: var(--abg-space-xxs);
+  min-width: 0;
+  background: var(--abg-cell-fill, var(--abg-canvas));
+  padding: var(--abg-space-xl);
+}
+
+:where(.abg-report) .abg-stat > * {
+  margin: 0;
+  min-width: 0;
+  text-align: start;
+}
+
+:where(.abg-report) .abg-stat-label {
+  color: var(--abg-ink-secondary);
+  font-family: var(--abg-font-display);
+  font-size: var(--abg-type-overline);
+  line-height: var(--abg-leading-body);
+  letter-spacing: var(--abg-tracking-overline);
+  text-transform: uppercase;
+}
+
+:where(.abg-report) .abg-stat-value {
+  color: var(--abg-ink);
+  font-size: var(--abg-type-amount-sm);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--abg-leading-display);
+  letter-spacing: var(--abg-tracking-amount);
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+:where(.abg-report) .abg-stat-detail {
+  color: var(--abg-ink-secondary);
+  font-size: var(--abg-type-metadata);
+  line-height: var(--abg-leading-label);
+}
+
+/* The one stat a page is actually about may lead — outside the peer strip. */
+:where(.abg-report) .abg-stat[data-priority='primary'] .abg-stat-value {
+  font-size: var(--abg-type-amount);
+}
+
+:where(.abg-report) .abg-stat[data-priority='primary'] .abg-stat-label {
+  color: var(--abg-primary-ink);
+}
+
+/* Same guard as the cell grid — a declared `data-count` never outruns the
+   stats actually present. */
+@media (min-width: 640px) {
+  :where(.abg-report) .abg-stat-strip:has(> :nth-child(2)) {
+    --abg-cells: 2;
+  }
+  :where(.abg-report) .abg-stat-strip[data-count='3']:has(> :nth-child(3)) {
+    --abg-cells: 3;
+  }
+}
+
+@media (min-width: 1024px) {
+  :where(.abg-report) .abg-stat-strip[data-count='4']:has(> :nth-child(4)) {
+    --abg-cells: 4;
+  }
+  :where(.abg-report) .abg-stat-strip[data-count='5']:has(> :nth-child(5)) {
+    --abg-cells: 5;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   11 · EVIDENCE — tables
+   A table is evidence, not decoration. It owns the full width of its module, its
+   header alignment matches every cell in that column, and its body cells align
+   on the row's FIRST TEXT BASELINE so a wrapping cell does not drag its row.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+:where(.abg-report) .abg-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scrollbar-gutter: stable;
+}
+
+:where(.abg-report) table {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+
+:where(.abg-report) caption {
+  margin-block-end: var(--abg-space-sm);
+  color: var(--abg-ink-secondary);
+  font-size: var(--abg-type-compact);
+  line-height: var(--abg-leading-label);
+  text-align: start;
+}
+
+:where(.abg-report) thead th {
+  border-block-end: var(--abg-rule-width) solid var(--abg-rule);
+  color: var(--abg-ink);
+  font-size: var(--abg-type-metadata);
+  font-weight: var(--abg-weight-emphasis);
+  line-height: var(--abg-leading-label);
+  text-align: start;
+  vertical-align: bottom;
+  white-space: nowrap;
+}
+
+:where(.abg-report) :where(th, td) {
+  padding: var(--abg-space-sm) var(--abg-space-md);
+  vertical-align: baseline;
+}
+
+:where(.abg-report) :where(th, td):first-child {
+  padding-inline-start: var(--abg-space-xl);
+}
+
+:where(.abg-report) :where(th, td):last-child {
+  padding-inline-end: var(--abg-space-xl);
+}
+
+:where(.abg-report) tbody th {
+  color: var(--abg-ink);
+  font-weight: var(--abg-weight-regular);
+  text-align: start;
+}
+
+:where(.abg-report) tbody td {
+  color: var(--abg-ink-secondary);
+  font-size: var(--abg-type-compact);
+  line-height: var(--abg-leading-label);
+}
+
+:where(.abg-report) tbody tr + tr :where(th, td) {
+  border-block-start: var(--abg-rule-width) solid var(--abg-rule-muted);
+}
+
+:where(.abg-report) tfoot :where(th, td) {
+  border-block-start: var(--abg-rule-width) solid var(--abg-rule);
+  color: var(--abg-ink);
+  font-size: var(--abg-type-compact);
+}
+
+/* Numeric columns align right — the HEADER too. A body-cell class does not
+   align its header, so `abg-numeric` goes on the <th> as well as every <td>. */
+:where(.abg-report) :where(th, td).abg-numeric,
+:where(.abg-report) :where(th, td)[data-align='numeric'] {
+  font-variant-numeric: tabular-nums;
+  text-align: end;
+}
+
+/* The row a document recommends — marked by an accent rule on its leading edge,
+   never by a colour fill. Only when the source supports the recommendation. */
+:where(.abg-report) tbody tr[data-highlight] :where(th, td) {
+  background: var(--abg-surface);
+  color: var(--abg-ink);
+}
+
+:where(.abg-report) tbody tr[data-highlight] :where(th, td):first-child {
+  box-shadow: inset 2px 0 0 0 var(--abg-rule-accent);
+}
+
+:where(.abg-report) table[data-density='compact'] :where(th, td) {
+  padding-block: var(--abg-space-xs);
+}
+
+/* A group label spanning a run of rows, instead of repeating a category column. */
+:where(.abg-report) tbody th[scope='colgroup'],
+:where(.abg-report) tbody tr[data-group] th {
+  color: var(--abg-ink-secondary);
+  font-family: var(--abg-font-display);
+  font-size: var(--abg-type-overline);
+  letter-spacing: var(--abg-tracking-overline);
+  text-transform: uppercase;
+}
+
+/* Shown only when the table actually scrolls; a static hint is noise. */
+:where(.abg-report) .abg-overflow-cue {
+  display: none;
+  color: var(--abg-ink-secondary);
+  font-size: var(--abg-type-compact);
+}
+
+:where(.abg-report) .abg-overflow-cue::after {
+  content: ' \2192';
+  color: var(--abg-ink);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   12 · EVIDENCE — plots
+   Inline SVG only. No chart library is needed and none is allowed by default.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+:where(.abg-report) .abg-chart {
+  min-width: 0;
+  margin: 0;
+}
+
+:where(.abg-report) .abg-chart-header {
+  display: grid;
+  gap: var(--abg-space-xxs);
+  margin-block-end: var(--abg-space-md);
+}
+
+:where(.abg-report) .abg-chart-header > * {
+  max-width: var(--abg-reading);
+  margin-block: 0;
+}
+
+:where(.abg-report) .abg-chart-title {
+  color: var(--abg-ink);
+  font-size: var(--abg-type-body);
+  line-height: var(--abg-leading-body);
+}
+
+:where(.abg-report) .abg-chart-description {
+  color: var(--abg-ink-secondary);
+  font-size: var(--abg-type-compact);
+  line-height: var(--abg-leading-label);
+}
+
+:where(.abg-report) .abg-plot-viewport {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+}
+
+:where(.abg-report) .abg-chart svg {
+  width: 100%;
+  max-width: 100%;
+  overflow: visible;
+}
+
+:where(.abg-report) .abg-chart text {
+  fill: var(--abg-ink-secondary);
+  font-family: var(--abg-font-sans);
+  font-size: 12px;
+}
+
+:where(.abg-report) .abg-chart .abg-plot-value,
+:where(.abg-report) .abg-chart .abg-plot-label {
+  fill: var(--abg-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+:where(.abg-report) .abg-chart .abg-plot-axis {
+  stroke: var(--abg-rule);
+  stroke-width: 1;
+}
+
+:where(.abg-report) .abg-chart .abg-plot-gridline {
+  stroke: var(--abg-rule-muted);
+  stroke-width: 1;
+}
+
+:where(.abg-report) .abg-chart .abg-plot-annotation {
+  stroke: var(--abg-rule-accent);
+  stroke-dasharray: 4 4;
+  stroke-width: 1;
+}
+
+:where(.abg-report) .abg-series-stroke {
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+:where(.abg-report) .abg-series-1 {
+  --abg-series: var(--abg-series-1);
+}
+:where(.abg-report) .abg-series-2 {
+  --abg-series: var(--abg-series-2);
+}
+:where(.abg-report) .abg-series-3 {
+  --abg-series: var(--abg-series-3);
+}
+:where(.abg-report) .abg-series-4 {
+  --abg-series: var(--abg-series-4);
+}
+:where(.abg-report) .abg-series-5 {
+  --abg-series: var(--abg-series-5);
+}
+:where(.abg-report) .abg-series-6 {
+  --abg-series: var(--abg-series-6);
+}
+:where(.abg-report) .abg-series-stroke {
+  stroke: var(--abg-series, var(--abg-ink));
+}
+:where(.abg-report) .abg-series-fill {
+  fill: var(--abg-series, var(--abg-ink));
+}
+
+/* Direct labels, never a legend, whenever the geometry leaves room for one. */
+:where(.abg-report) .abg-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--abg-space-xs) var(--abg-space-lg);
+  margin: var(--abg-space-sm) 0 0;
+  padding: 0;
+  list-style: none;
+  color: var(--abg-ink-secondary);
+  font-size: var(--abg-type-metadata);
+}
+
+:where(.abg-report) .abg-legend > li {
+  display: flex;
+  align-items: center;
+  gap: var(--abg-space-xs);
+}
+
+:where(.abg-report) .abg-legend > li::before {
+  content: '';
+  width: 10px;
+  height: 2px;
+  flex: none;
+  background: var(--abg-series, var(--abg-ink));
+}
+
+/* A flat length comparison: one shared label lane, one plot lane, one value lane,
+   so every track starts and ends on the same grid lines and only the fill
+   length varies. Sized as ONE layout, never row by row. */
+:where(.abg-report) .abg-bar-list {
+  display: grid;
+  gap: var(--abg-space-md);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+:where(.abg-report) .abg-bar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) max-content;
+  align-items: baseline;
+  gap: var(--abg-space-xs) var(--abg-space-md);
+  min-inline-size: 0;
+}
+
+:where(.abg-report) :where(.abg-bar-label, .abg-bar-value) {
+  min-inline-size: 0;
+  color: var(--abg-ink);
+  font-size: var(--abg-type-compact);
+  line-height: var(--abg-leading-label);
+}
+
+:where(.abg-report) .abg-bar-value {
+  justify-self: end;
+  font-variant-numeric: tabular-nums;
+  text-align: end;
+}
+
+:where(.abg-report) .abg-bar-track {
+  display: block;
+  grid-column: 1 / -1;
+  inline-size: 100%;
+  block-size: 8px;
+  overflow: hidden;
+  background: var(--abg-plot-fill);
+}
+
+:where(.abg-report) .abg-bar-fill {
+  display: block;
+  inline-size: 0;
+  max-inline-size: 100%;
+  block-size: 100%;
+  background: var(--abg-ink-secondary);
+}
+
+/* The subject of the comparison is the one orange bar; peers recede. */
+:where(.abg-report) .abg-bar[data-role='primary'] .abg-bar-fill {
+  background: var(--abg-primary);
+}
+
+:where(.abg-report) .abg-bar[data-role='primary'] .abg-bar-label {
+  color: var(--abg-ink);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   13 · EVIDENCE — qualitative
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/* A comparison of peers. If one column needs a different structure, it is not
+   a peer grid — rank them instead. */
+:where(.abg-report) .abg-comparison {
+  display: grid;
+  gap: var(--abg-rule-width);
+  background: var(--abg-rule);
+  grid-template-columns: repeat(var(--abg-cells, 1), minmax(0, 1fr));
+}
+
+:where(.abg-report) .abg-comparison > * {
+  min-width: 0;
+  background: var(--abg-cell-fill, var(--abg-canvas));
+  padding: var(--abg-space-xl);
+}
+
+:where(.abg-report) .abg-comparison > * > :last-child {
+  margin-block-end: 0;
+}
+
+@media (min-width: 768px) {
+  :where(.abg-report) .abg-comparison:has(> :nth-child(2)) {
+    --abg-cells: 2;
+  }
+  :where(.abg-report) .abg-comparison[data-count='3']:has(> :nth-child(3)) {
+    --abg-cells: 3;
+  }
+  :where(.abg-report) .abg-comparison[data-count='4']:has(> :nth-child(4)) {
+    --abg-cells: 4;
+  }
+}
+
+/* A note is a sourced qualifier, not an attention device. It carries a single
+   leading rule in its tone; the tone tokens are all AA-verified pairs. */
+:where(.abg-report) .abg-note {
+  border-inline-start: 2px solid var(--abg-rule);
+  padding: var(--abg-space-sm) 0 var(--abg-space-sm) var(--abg-space-md);
+  color: var(--abg-ink-secondary);
+  font-size: var(--abg-type-compact);
+  line-height: var(--abg-leading-prose);
+}
+
+:where(.abg-report) .abg-note > :last-child {
+  margin-block-end: 0;
+}
+
+:where(.abg-report) .abg-note[data-tone='info'] {
+  border-inline-start-color: var(--abg-accent);
+}
+:where(.abg-report) .abg-note[data-tone='success'] {
+  border-inline-start-color: var(--abg-success-ink);
+}
+:where(.abg-report) .abg-note[data-tone='warning'] {
+  border-inline-start-color: var(--abg-warning-ink);
+}
+:where(.abg-report) .abg-note[data-tone='danger'] {
+  border-inline-start-color: var(--abg-danger-ink);
+}
+
+/* A status word beside a value. It is a text role, not a capsule — no pill, no
+   rounded badge for ordinary metadata. */
+:where(.abg-report) .abg-status {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.4em;
+  color: var(--abg-ink-secondary);
+  font-size: var(--abg-type-metadata);
+  line-height: var(--abg-leading-label);
+}
+
+:where(.abg-report) .abg-status::before {
+  content: '';
+  width: 0.5em;
+  height: 0.5em;
+  flex: none;
+  background: currentColor;
+  transform: translateY(-0.1em);
+}
+
+:where(.abg-report) .abg-status[data-tone='success'] {
+  color: var(--abg-success-ink);
+}
+:where(.abg-report) .abg-status[data-tone='warning'] {
+  color: var(--abg-warning-ink);
+}
+:where(.abg-report) .abg-status[data-tone='danger'] {
+  color: var(--abg-danger-ink);
+}
+:where(.abg-report) .abg-status[data-tone='info'] {
+  color: var(--abg-info-ink);
+}
+:where(.abg-report) .abg-status[data-tone='accent'] {
+  color: var(--abg-primary-ink);
+}
+
+:where(.abg-report) details {
+  border-block-start: var(--abg-rule-width) solid var(--abg-rule-muted);
+  padding-block: var(--abg-space-md);
+}
+
+:where(.abg-report) summary {
+  cursor: pointer;
+  font-weight: var(--abg-weight-emphasis);
+}
+
+:where(.abg-report) details[open] > summary {
+  margin-block-end: var(--abg-space-sm);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   14 · CONTROLS AND CALCULATORS
+   Interaction is evidence. A calculator makes one model legible and lets the
+   reader test the assumptions that materially change the result.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+:where(.abg-report) .abg-calculator {
+  display: grid;
+  gap: var(--abg-group-gap);
+  min-width: 0;
+}
+
+@media (min-width: 900px) {
+  :where(.abg-report) .abg-calculator {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: var(--abg-space-xxl);
+    align-items: start;
+  }
+}
+
+:where(.abg-report) .abg-calculator-inputs,
+:where(.abg-report) .abg-calculator-output {
+  display: grid;
+  gap: var(--abg-space-lg);
+  align-content: start;
+  min-width: 0;
+}
+
+:where(.abg-report) .abg-field {
+  display: grid;
+  gap: var(--abg-space-xxs);
+  min-width: 0;
+}
+
+:where(.abg-report) .abg-field > label,
+:where(.abg-report) .abg-field > .abg-label {
+  color: var(--abg-ink);
+  font-size: var(--abg-type-label);
+  line-height: var(--abg-leading-label);
+}
+
+:where(.abg-report) :where(input, select, textarea) {
+  width: 100%;
+  min-width: 0;
+  min-height: 36px;
+  border: var(--abg-rule-width) solid var(--abg-rule);
+  border-radius: var(--abg-radius-control);
+  background: var(--abg-surface);
+  padding: var(--abg-space-xs) var(--abg-space-sm);
+  color: var(--abg-ink);
+  font-family: inherit;
+  font-size: var(--abg-type-compact);
+  line-height: var(--abg-leading-label);
+}
+
+:where(.abg-report) :where(input, select, textarea):hover {
+  border-color: var(--abg-ink-subtle);
+}
+
+:where(.abg-report) input[type='range'] {
+  min-height: 0;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  accent-color: var(--abg-primary);
+}
+
+:where(.abg-report) textarea {
+  min-height: 96px;
+  resize: vertical;
+}
+
+:where(.abg-report) :where(input, select, textarea)[aria-invalid='true'] {
+  border-color: var(--abg-danger-ink);
+}
+
+/* A unit sits inside the bordered field; the label and helper stay outside it. */
+:where(.abg-report) .abg-unit-field {
+  display: flex;
+  align-items: stretch;
+  min-width: 0;
+  border: var(--abg-rule-width) solid var(--abg-rule);
+  border-radius: var(--abg-radius-control);
+  background: var(--abg-surface);
+}
+
+:where(.abg-report) .abg-unit-field:focus-within {
+  outline: 2px solid var(--abg-focus);
+  outline-offset: 2px;
+}
+
+:where(.abg-report) .abg-unit-field > :where(input, select) {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+:where(.abg-report) .abg-unit-field > :where(input, select):focus-visible {
+  outline: none;
+}
+
+:where(.abg-report) :where(.abg-unit-prefix, .abg-unit-suffix) {
+  display: flex;
+  flex: none;
+  align-items: center;
+  padding-inline: var(--abg-space-sm);
+  color: var(--abg-ink-secondary);
+  font-size: var(--abg-type-compact);
+}
+
+:where(.abg-report) .abg-unit-prefix {
+  border-inline-end: var(--abg-rule-width) solid var(--abg-rule-muted);
+}
+
+:where(.abg-report) .abg-unit-suffix {
+  border-inline-start: var(--abg-rule-width) solid var(--abg-rule-muted);
+}
+
+:where(.abg-report) .abg-helper,
+:where(.abg-report) .abg-error {
+  margin: 0;
+  font-size: var(--abg-type-metadata);
+  line-height: var(--abg-leading-label);
+}
+
+:where(.abg-report) .abg-helper {
+  color: var(--abg-ink-secondary);
+}
+
+:where(.abg-report) .abg-error {
+  color: var(--abg-danger-ink);
+}
+
+:where(.abg-report) .abg-error:empty {
+  display: none;
+}
+
+:where(.abg-report) .abg-range-ends {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--abg-space-sm);
+  color: var(--abg-ink-secondary);
+  font-size: var(--abg-type-metadata);
+  font-variant-numeric: tabular-nums;
+}
+
+:where(.abg-report) .abg-result {
+  display: grid;
+  align-content: start;
+  gap: var(--abg-space-xxs);
+  border-block-start: var(--abg-rule-width) solid var(--abg-rule-muted);
+  padding-block-start: var(--abg-space-md);
+  font-variant-numeric: tabular-nums;
+}
+
+:where(.abg-report) .abg-calculator-output > .abg-result:first-child {
+  border-block-start: 0;
+  padding-block-start: 0;
+}
+
+:where(.abg-report) .abg-result > * {
+  text-align: start;
+}
+
+:where(.abg-report) .abg-result-label {
+  margin: 0;
+  color: var(--abg-ink-secondary);
+  font-family: var(--abg-font-display);
+  font-size: var(--abg-type-overline);
+  letter-spacing: var(--abg-tracking-overline);
+  text-transform: uppercase;
+}
+
+:where(.abg-report) .abg-result-value {
+  margin: 0;
+  color: var(--abg-ink);
+  font-size: var(--abg-type-amount-sm);
+  line-height: var(--abg-leading-display);
+  letter-spacing: var(--abg-tracking-amount);
+  font-variant-numeric: tabular-nums;
+}
+
+:where(.abg-report) .abg-result[data-priority='primary'] .abg-result-value {
+  font-size: var(--abg-type-amount);
+}
+
+:where(.abg-report) .abg-result-detail {
+  margin: 0;
+  color: var(--abg-ink-secondary);
+  font-size: var(--abg-type-metadata);
+  line-height: var(--abg-leading-label);
+}
+
+/* The action. `primary` is the brand fill; `outlined` is the default for a
+   heading-level action; `text` is the section-closing link-like control. */
+:where(.abg-report) .abg-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--abg-space-xs);
+  min-height: 40px;
+  border: var(--abg-rule-width) solid var(--abg-rule);
+  border-radius: var(--abg-radius-control);
+  background: var(--abg-surface);
+  padding-inline: var(--abg-space-md);
+  color: var(--abg-ink);
+  font-family: inherit;
+  font-size: var(--abg-type-compact);
+  line-height: var(--abg-leading-heading);
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background-color var(--abg-duration-fast) var(--abg-ease-entrance),
+    border-color var(--abg-duration-fast) var(--abg-ease-entrance);
+}
+
+:where(.abg-report) .abg-button:hover {
+  border-color: var(--abg-ink-subtle);
+}
+
+:where(.abg-report) .abg-button[data-kind='primary'] {
+  border-color: var(--abg-primary);
+  background: var(--abg-primary);
+  color: #000000;
+}
+
+:where(.abg-report) .abg-button[data-kind='primary']:hover {
+  background: var(--abg-orange-600);
+  border-color: var(--abg-orange-600);
+}
+
+:where(.abg-report) .abg-button[data-kind='text'] {
+  min-height: 0;
+  border-color: transparent;
+  background: transparent;
+  padding-inline: 0;
+  color: var(--abg-link);
+}
+
+:where(.abg-report) .abg-button[data-size='medium'] {
+  min-height: 32px;
+  font-size: var(--abg-type-metadata);
+}
+
+:where(.abg-report) .abg-button[disabled],
+:where(.abg-report) .abg-button[aria-disabled='true'] {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   15 · SLIDES — presentation mode
+   ─────────────────────────────────────────────────────────────────────────────
+   A slide is a FIXED ARTBOARD, and that is why it needs its own block. Every
+   other surface here takes its measure from the window: the spacing and type
+   tokens carry breakpoint maps, so `--abg-space-xl` is 24px on a phone and 48px
+   on a wide screen. A 1920x1080 slide has no viewport of its own — it is 1920
+   wide whether it is previewed in a 1280px window or projected on a 4K display —
+   so `.abg-slide` PINS every responsive token to the step the system intends for
+   a wide screen (the `xl` step, >=1280px). Pinning is the one place a literal
+   length is correct.
+
+   Geometry, all from the same scale the deck and the Figma artboard share:
+     canvas ....... 1920 x 1080
+     frame ........ 1620 wide (the widest measure), inset 96px vertically
+     padding ...... 96px from the frame's rules to its content
+     content ...... 1428 x 696
+     grid ......... 12 columns of 97px with 24px gutters — 12*97 + 11*24 = 1428,
+                    so a half (702), a third (460) and a quarter (339) all land
+                    on whole pixels, in the browser and in Figma alike.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+:where(.abg-report) .abg-deck {
+  display: grid;
+  gap: var(--abg-space-xl);
+  justify-items: center;
+}
+
+:where(.abg-report) .abg-slide {
+  /* Pinned to the `xl` step — a fixed artboard resolves no breakpoint. */
+  --abg-space-lg: 1.5rem;
+  --abg-space-xl: 3rem;
+  --abg-space-xxl: 6rem;
+  --abg-type-display: 3.5rem;
+  --abg-type-title: 2.25rem;
+  --abg-type-heading: 1.875rem;
+  --abg-type-subheading: 1.5rem;
+  --abg-type-minor: 1.125rem;
+  --abg-type-lede: 1.125rem;
+  --abg-type-overline: 0.875rem;
+  --abg-type-amount: 3.5rem;
+  --abg-type-amount-sm: 1.5rem;
+  --abg-type-figure: 2.25rem;
+
+  position: relative;
+  flex: none;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  background: var(--abg-canvas);
+  color: var(--abg-ink);
+}
+
+:where(.abg-report) .abg-slide[data-tone='dark'] {
+  background: var(--abg-dark);
+  color: var(--abg-ink-on-dark);
+  --abg-ink: var(--abg-ink-on-dark);
+  --abg-ink-secondary: var(--abg-ink-on-dark-secondary);
+  --abg-rule: var(--abg-rule-on-dark);
+  --abg-rule-muted: var(--abg-rule-on-dark);
+  --abg-canvas: var(--abg-dark);
+  --abg-primary-ink: var(--abg-primary);
+}
+
+/* The deck's signature: one bordered box per slide, with a registration tick in
+   each corner. It takes the widest measure (1620) because a slide is chrome held
+   at the two ends of a fixed canvas, not a column of prose read down a page. */
+:where(.abg-report) .abg-slide-frame {
+  position: absolute;
+  inset-block: 96px;
+  inset-inline: 150px;
+  padding: 96px;
+  border: var(--abg-rule-width) solid var(--abg-rule);
+}
+
+:where(.abg-report) .abg-slide-frame > :last-child {
+  margin-block-end: 0;
+}
+
+:where(.abg-report) .abg-slide-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 97px);
+  gap: 24px;
+  width: 1428px;
+}
+
+:where(.abg-report) .abg-slide-grid > * {
+  grid-column: span 12;
+  min-width: 0;
+  margin-block: 0;
+}
+
+/* A deck previewed inside a document scales the whole artboard down; the
+   pinned tokens keep every measure proportional. Set `--abg-slide-scale`. */
+:where(.abg-report) .abg-deck[data-fit] {
+  --abg-slide-scale: 0.5;
+}
+
+:where(.abg-report) .abg-deck[data-fit] > .abg-slide {
+  transform: scale(var(--abg-slide-scale));
+  transform-origin: top center;
+  margin-block-end: calc(1080px * (var(--abg-slide-scale) - 1));
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   16 · MOTION, ACCESSIBILITY, PRINT
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/* Default to stillness. The only motion here is a state change confirming an
+   interaction; nothing reveals on scroll and nothing loops. */
+@media (prefers-reduced-motion: reduce) {
+  :where(.abg-report) *,
+  :where(.abg-report) *::before,
+  :where(.abg-report) *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media (forced-colors: active) {
+  :where(.abg-report) .abg-wordmark,
+  :where(.abg-report) .abg-mark {
+    background: CanvasText;
+  }
+
+  :where(.abg-report) :where(.abg-cell-grid, .abg-stat-strip, .abg-comparison) {
+    background: CanvasText;
+  }
+
+  :where(.abg-report) .abg-bar-fill {
+    background: CanvasText;
+  }
+
+  :where(.abg-report) .abg-bar-track {
+    border: 1px solid CanvasText;
+  }
+
+  :where(.abg-report) .abg-texture,
+  :where(.abg-report) .abg-frame-box[data-hatch]::after {
+    display: none;
+  }
+}
+
+@media print {
+  :where(.abg-report) {
+    --abg-canvas: #ffffff;
+    --abg-surface: #ffffff;
+    --abg-ink: #000000;
+    --abg-ink-secondary: #4d4d4d;
+    background: #ffffff;
+  }
+
+  .abg-skip-link,
+  :where(.abg-report) .abg-texture {
+    display: none !important;
+  }
+
+  :where(.abg-report) .abg-module,
+  :where(.abg-report) .abg-frame-box,
+  :where(.abg-report) .abg-table-wrap,
+  :where(.abg-report) .abg-chart,
+  :where(.abg-report) .abg-stat-strip {
+    break-inside: avoid;
+  }
+
+  :where(.abg-report) :where(h1, h2, h3, .abg-display, .abg-title, .abg-heading) {
+    break-after: avoid;
+  }
+
+  :where(.abg-report) thead {
+    display: table-header-group;
+  }
+
+  /* A deck prints one artboard per landscape page, at full size. */
+  :where(.abg-report) .abg-deck[data-fit] > .abg-slide {
+    transform: none;
+    margin-block-end: 0;
+  }
+
+  :where(.abg-report) .abg-slide {
+    break-after: page;
+  }
+}
+
+/* Brand-mark geometry, transcribed from the design system's own SVGs. Declared
+   last so the data URIs stay out of the way of the readable token block. */
+:where(.abg-report) {
+  --abg-wordmark-mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2090%2018'%3E%3Cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M86.637%200L85.1445%207.79033L87.861%2011.1671L90%200H86.637ZM72.5099%200L69.1465%2017.561H72.5111L74.8163%205.52224L84.5333%2017.561H86.637L87.0518%2015.4112L74.6131%200H72.5099Z'/%3E%3Cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M51.6563%200L48.293%2017.561H65.7833L69.1466%200H51.6563ZM54.3884%203.31794H65.1392L63.0467%2014.243H52.296L54.3884%203.31794Z'/%3E%3Cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M45.0001%200L41.707%2017.561H44.9994L48.2924%200H45.0001Z'/%3E%3Cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M24.217%200L23.5814%203.31801H35.1962L21.3511%2014.9756L20.8535%2017.561H38.3437L38.9793%2014.243H27.3646L41.2126%202.58289L41.7072%200H24.217Z'/%3E%3Cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M18.2868%200L0.490892%2014.9821L0%2017.561H2.5639L16.349%205.96141L14.1271%2017.561H17.4898L20.8537%200H18.2868Z'/%3E%3C/svg%3E");
+  --abg-mark-mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2021%2018'%3E%3Cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M18.2868%200L0.490892%2014.9821L0%2017.561H2.5639L16.349%205.96141L14.1271%2017.561H17.4898L20.8537%200H18.2868Z'/%3E%3C/svg%3E");
+}
+
+/* abg-bundle:end */
