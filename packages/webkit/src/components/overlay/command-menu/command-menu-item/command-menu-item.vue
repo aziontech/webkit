@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, inject, onBeforeUnmount, onMounted, ref, toRef, useAttrs, useSlots } from 'vue'
+  import { computed, inject, onBeforeUnmount, onMounted, ref, toRef, useAttrs } from 'vue'
 
   import Kbd from '../../../content/kbd/kbd.vue'
   import {
@@ -35,12 +35,10 @@
   )
 
   const attrs = useAttrs()
-  const slots = useSlots()
   const ctx = useCommandMenuContext()
   const groupId = inject(CommandMenuGroupIdKey, null)
 
-  const hasPrefix = computed(() => Boolean(slots['prefix']))
-
+  const rootRef = ref<HTMLElement | null>(null)
   const labelRef = ref<HTMLElement | null>(null)
   const itemText = ref(String(props.value))
 
@@ -86,7 +84,7 @@
       groupId,
       disabled: disabledRef,
       isVisible,
-      hasPrefix,
+      el: rootRef,
       activate
     })
   })
@@ -98,6 +96,7 @@
 
 <template>
   <div
+    ref="rootRef"
     v-show="isVisible"
     v-bind="attrs"
     role="option"
@@ -113,13 +112,11 @@
     @keydown.space.prevent="!disabled && activate($event)"
     @mouseenter="!disabled && ctx.setActive(value)"
   >
-    <!--
-      Rendered for every item once any item carries a prefix, so all labels
-      start on the same x. The box is fixed to the Menu-row glyph size so an
-      item's own icon cannot widen the column.
-    -->
+    <!-- Rendered only for an item with a prefix, so an icon-less item pays no indent. The
+         box is fixed to the Menu-row glyph size so an oversized icon cannot widen the row
+         and pull its label out of line with the rows around it. -->
     <span
-      v-if="ctx.hasPrefixColumn.value"
+      v-if="$slots['prefix']"
       :data-testid="`${testId}__prefix`"
       class="flex size-4 shrink-0 items-center justify-center overflow-hidden"
     >
