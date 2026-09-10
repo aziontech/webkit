@@ -5,18 +5,24 @@
 // just-in-time from the component's catalog `setup` recipe; `doctor` flags it when missing.
 
 import { applyPlan } from './apply.js'
+import { runCanary } from './canary.js'
 import { planDoctor } from './doctor.js'
 import { planInit } from './plan.js'
+import { FAIL_MODES, runReport } from './report.js'
 
 const HELP = `@aziontech/webkit — adopt the design system in one command
 
 Usage:
   npx @aziontech/webkit init [options]
   npx @aziontech/webkit doctor
+  npx @aziontech/webkit report [options]
+  npx @aziontech/webkit canary
 
 Commands:
   init            Wire @aziontech/webkit into the current project.
   doctor          Check the wiring is healthy; report resolved dependency versions.
+  report          Measure design-system adoption; Markdown on stdout for a CI summary.
+  canary          Prove the design-system rules still reach this project.
 
 Options (init):
   --dry-run       Print the plan without writing anything.
@@ -27,12 +33,25 @@ Options (init):
   --no-entry      Do not edit the app entry (src/main.*); print the imports instead.
   -h, --help      Show this help.
 
+Options (report):
+  --format <fmt>  markdown (default) or json.
+  --baseline <f>  Baseline file (default .webkit-baseline.json).
+  --update        Rewrite the baseline from this run, then exit.
+  --fail-on <m>   never (default) · new (only violations absent from the baseline) · any.
+
 Run interactively (a TTY, no --yes) and init asks about the optional pieces —
 icons, entry wiring — before writing anything.
 `
 
-const COMMANDS = new Set(['init', 'doctor'])
+const COMMANDS = new Set(['init', 'doctor', 'report', 'canary'])
+// Flags that take a value; parseArgs must not mistake the value for a command.
+const VALUE_FLAGS = new Set(['--format', '--baseline', '--fail-on'])
+
 const KNOWN_FLAGS = new Set([
+  '--format',
+  '--baseline',
+  '--update',
+  '--fail-on',
   '--dry-run',
   '--strict',
   '--recommended',
@@ -46,18 +65,42 @@ const KNOWN_FLAGS = new Set([
 
 function parseArgs(argv) {
   const args = argv.slice(2)
-  const command = args.find((a) => !a.startsWith('-')) || null
-  const flagList = args.filter((a) => a.startsWith('-'))
+  const flagList = []
+  const positional = []
+  const values = new Map()
+
+  // Walk in order: a VALUE_FLAG consumes the next token, so `report --format json`
+  // does not read "json" as the command.
+  for (let i = 0; i < args.length; i++) {
+    const arg = args[i]
+    if (!arg.startsWith('-')) {
+      positional.push(arg)
+      continue
+    }
+    flagList.push(arg)
+    if (VALUE_FLAGS.has(arg)) {
+      const next = args[i + 1]
+      if (next !== undefined && !next.startsWith('-')) {
+        values.set(arg, next)
+        i += 1
+      } else {
+        values.set(arg, null) // present but with no value — the command reports it
+      }
+    }
+  }
+
   const unknown = flagList.filter((f) => !KNOWN_FLAGS.has(f))
   const flags = new Set(flagList)
   return {
-    command,
+    command: positional[0] ?? null,
     unknown,
+    values,
     dryRun: flags.has('--dry-run'),
     recommended: flags.has('--recommended') && !flags.has('--strict'),
     yes: flags.has('--yes') || flags.has('-y'),
     noIcons: flags.has('--no-icons'),
     noEntry: flags.has('--no-entry'),
+    update: flags.has('--update'),
     help: flags.has('-h') || flags.has('--help')
   }
 }
@@ -97,6 +140,39 @@ async function resolveInitOptions(parsed) {
     rl.close()
   }
   return opts
+}
+
+async function runReportCommand(projectDir, parsed) {
+  const format = parsed.values.get('--format') ?? 'markdown'
+  if (format !== 'markdown' && format !== 'json') {
+    process.stderr.write(`--format must be markdown or json (got "${format}").\n`)
+    return 1
+  }
+  const failOn = parsed.values.get('--fail-on') ?? 'never'
+  if (!FAIL_MODES.has(failOn)) {
+    process.stderr.write(`--fail-on must be never, new or any (got "${failOn}").\n`)
+    return 1
+  }
+  const baseline = parsed.values.get('--baseline') ?? undefined
+  if (baseline === null) {
+    process.stderr.write('--baseline needs a file path.\n')
+    return 1
+  }
+
+  const result = await runReport(projectDir, {
+    format,
+    failOn,
+    baseline,
+    update: parsed.update,
+    log: (line) => process.stderr.write(`${line}\n`)
+  })
+
+  if (result.error) {
+    process.stderr.write(`${result.error}\n`)
+    return result.exitCode
+  }
+  if (result.stdout) process.stdout.write(result.stdout)
+  return result.exitCode
 }
 
 const DOCTOR_LABEL = { ok: 'OK   ', warn: 'WARN ', fail: 'FAIL ' }
@@ -184,6 +260,16 @@ async function run(argv) {
 
   if (command === 'doctor') {
     return runDoctor(projectDir)
+  }
+
+  if (command === 'report') {
+    return runReportCommand(projectDir, parsed)
+  }
+
+  if (command === 'canary') {
+    const { exitCode, lines } = runCanary(projectDir)
+    process.stdout.write(`${lines.join('\n')}\n`)
+    return exitCode
   }
 
   const initOpts = await resolveInitOptions(parsed)
