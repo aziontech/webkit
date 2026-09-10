@@ -1,0 +1,243 @@
+name: Webkit Consumer Gate
+
+# The design-system gate, as one line in a consumer's workflow:
+#
+#   jobs:
+#     webkit:
+#       uses: aziontech/webkit/.github/workflows/webkit-consumer-gate.yml@main
+#
+# Four stages, deliberately not equally strict:
+#
+#   wiring   — `webkit doctor`: the catalog resolves, the lint configs exist, the MCP is
+#              registered, no dependency is pinned to `latest`. BLOCKS: if the wiring is
+#              broken the stages below are measuring the wrong thing.
+#   canary   — `webkit canary`: fixtures that violate a rule on purpose must still be
+#              flagged by that exact rule. BLOCKS: this is the only stage that fails when
+#              the measurement itself stops working, and every way of losing the rules is
+#              otherwise silent (the adoption number just reads better).
+#   adoption — `webkit report`: the score and the tables, written to the run Summary.
+#              REPORTS by default. Set `fail-on: new` to make it a ratchet — existing debt
+#              frozen in a committed baseline, failing only on what the PR introduces.
+#   style    — the shipped stylelint config over CSS/SCSS/Vue/Astro. Reports by default.
+#
+# `webkit-gate` is the single check to mark required: it passes when every stage either
+# succeeded or was cleanly skipped.
+
+on:
+  workflow_call:
+    inputs:
+      paths:
+        description: 'Lint targets passed to ESLint. Default "." — the project decides via its own config and ignores.'
+        type: string
+        default: '.'
+      style-paths:
+        description: 'Glob for the stylelint stage.'
+        type: string
+        default: 'src/**/*.{css,scss,vue,astro}'
+      node-version-file:
+        description: 'File to read the Node version from. Ignored when node-version is set.'
+        type: string
+        default: '.nvmrc'
+      node-version:
+        description: 'Explicit Node version. Overrides node-version-file.'
+        type: string
+        default: ''
+      package-manager:
+        description: 'pnpm, npm or yarn — decides the install command and the setup-node cache.'
+        type: string
+        default: 'pnpm'
+      install-command:
+        description: 'Override the install command entirely.'
+        type: string
+        default: ''
+      webkit-version:
+        description: 'Version of @aziontech/webkit whose CLI runs the stages. Default: the one the project has installed.'
+        type: string
+        default: ''
+      baseline:
+        description: 'Baseline file for the adoption ratchet.'
+        type: string
+        default: '.webkit-baseline.json'
+      fail-on:
+        description: 'Adoption stage: never (report only) · new (ratchet — fail on violations absent from the baseline) · any.'
+        type: string
+        default: 'never'
+      block-wiring:
+        description: 'Let a broken wiring fail the gate.'
+        type: boolean
+        default: true
+      block-canary:
+        description: 'Let a silent rule failure fail the gate. Turning this off means the adoption number is unverified.'
+        type: boolean
+        default: true
+      block-style:
+        description: 'Let stylelint fail the gate.'
+        type: boolean
+        default: false
+      timeout-minutes:
+        description: 'Per-stage timeout.'
+        type: number
+        default: 20
+    outputs:
+      violations:
+        description: 'Total webkit/* violations found by the adoption stage.'
+        value: ${{ jobs.adoption.outputs.violations }}
+      score:
+        description: 'Share of UI files with no violation, as a percentage.'
+        value: ${{ jobs.adoption.outputs.score }}
+      introduced:
+        description: 'Violations not present in the baseline. Empty when no baseline exists.'
+        value: ${{ jobs.adoption.outputs.introduced }}
+
+permissions:
+  contents: read
+
+jobs:
+  wiring:
+    name: Wiring (webkit doctor)
+    runs-on: ubuntu-latest
+    timeout-minutes: ${{ inputs.timeout-minutes }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v4
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+        if: inputs.package-manager == 'pnpm'
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: ${{ inputs.node-version || '' }}
+          node-version-file: ${{ inputs.node-version && '' || inputs.node-version-file }}
+          cache: ${{ inputs.package-manager }}
+      - name: Install
+        run: ${{ inputs.install-command || (inputs.package-manager == 'npm' && 'npm ci' || inputs.package-manager == 'yarn' && 'yarn install --frozen-lockfile' || 'pnpm install --frozen-lockfile') }}
+      - name: Check the wiring
+        continue-on-error: ${{ !inputs.block-wiring }}
+        run: npx${{ inputs.webkit-version && format(' -p @aziontech/webkit@{0}', inputs.webkit-version) || '' }} @aziontech/webkit doctor
+
+  canary:
+    name: Canary (the rules still reach this project)
+    runs-on: ubuntu-latest
+    timeout-minutes: ${{ inputs.timeout-minutes }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v4
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+        if: inputs.package-manager == 'pnpm'
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: ${{ inputs.node-version || '' }}
+          node-version-file: ${{ inputs.node-version && '' || inputs.node-version-file }}
+          cache: ${{ inputs.package-manager }}
+      - name: Install
+        run: ${{ inputs.install-command || (inputs.package-manager == 'npm' && 'npm ci' || inputs.package-manager == 'yarn' && 'yarn install --frozen-lockfile' || 'pnpm install --frozen-lockfile') }}
+      - name: Run the canaries
+        continue-on-error: ${{ !inputs.block-canary }}
+        run: npx${{ inputs.webkit-version && format(' -p @aziontech/webkit@{0}', inputs.webkit-version) || '' }} @aziontech/webkit canary
+
+  adoption:
+    name: Adoption report
+    runs-on: ubuntu-latest
+    timeout-minutes: ${{ inputs.timeout-minutes }}
+    outputs:
+      violations: ${{ steps.measure.outputs.violations }}
+      score: ${{ steps.measure.outputs.score }}
+      introduced: ${{ steps.measure.outputs.introduced }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v4
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+        if: inputs.package-manager == 'pnpm'
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: ${{ inputs.node-version || '' }}
+          node-version-file: ${{ inputs.node-version && '' || inputs.node-version-file }}
+          cache: ${{ inputs.package-manager }}
+      - name: Install
+        run: ${{ inputs.install-command || (inputs.package-manager == 'npm' && 'npm ci' || inputs.package-manager == 'yarn' && 'yarn install --frozen-lockfile' || 'pnpm install --frozen-lockfile') }}
+
+      # JSON first for the outputs, then Markdown for the Summary. Two runs of the same
+      # measurement would be wasteful, so the JSON is reused for both.
+      - name: Measure
+        id: measure
+        run: |
+          set -o pipefail
+          npx${{ inputs.webkit-version && format(' -p @aziontech/webkit@{0}', inputs.webkit-version) || '' }} @aziontech/webkit report \
+            --format json --baseline '${{ inputs.baseline }}' > webkit-adoption.json
+          node -e '
+            const r = JSON.parse(require("fs").readFileSync("webkit-adoption.json", "utf-8"))
+            const out = require("fs").createWriteStream(process.env.GITHUB_OUTPUT, { flags: "a" })
+            out.write(`violations=${r.total}\n`)
+            out.write(`score=${r.score}\n`)
+            out.write(`introduced=${(r.introduced ?? []).length}\n`)
+            out.end()
+          '
+
+      - name: Write the report to the Summary
+        if: always()
+        run: |
+          npx${{ inputs.webkit-version && format(' -p @aziontech/webkit@{0}', inputs.webkit-version) || '' }} @aziontech/webkit report \
+            --baseline '${{ inputs.baseline }}' >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Keep the JSON as an artifact
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: webkit-adoption
+          path: webkit-adoption.json
+          if-no-files-found: warn
+
+      # Separate from the measurement so the report is always published first, whatever
+      # the ratchet decides.
+      - name: Enforce the ratchet
+        if: inputs.fail-on != 'never'
+        run: |
+          npx${{ inputs.webkit-version && format(' -p @aziontech/webkit@{0}', inputs.webkit-version) || '' }} @aziontech/webkit report \
+            --format json --baseline '${{ inputs.baseline }}' --fail-on '${{ inputs.fail-on }}' > /dev/null
+
+  style:
+    name: Tokens in CSS (stylelint)
+    runs-on: ubuntu-latest
+    timeout-minutes: ${{ inputs.timeout-minutes }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v4
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+        if: inputs.package-manager == 'pnpm'
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: ${{ inputs.node-version || '' }}
+          node-version-file: ${{ inputs.node-version && '' || inputs.node-version-file }}
+          cache: ${{ inputs.package-manager }}
+      - name: Install
+        run: ${{ inputs.install-command || (inputs.package-manager == 'npm' && 'npm ci' || inputs.package-manager == 'yarn' && 'yarn install --frozen-lockfile' || 'pnpm install --frozen-lockfile') }}
+      - name: Lint the stylesheets
+        continue-on-error: ${{ !inputs.block-style }}
+        run: npx stylelint "${{ inputs.style-paths }}" --allow-empty-input
+
+  webkit-gate:
+    name: Webkit Gate
+    needs: [wiring, canary, adoption, style]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      # `skipped` counts as OK, which is what lets a consumer disable a stage and still
+      # mark this one check required.
+      - name: Check every stage passed or was skipped
+        run: |
+          declare -A results=(
+            [wiring]="${{ needs.wiring.result }}"
+            [canary]="${{ needs.canary.result }}"
+            [adoption]="${{ needs.adoption.result }}"
+            [style]="${{ needs.style.result }}"
+          )
+          failed=0
+          for stage in "${!results[@]}"; do
+            result="${results[$stage]}"
+            if [[ "$result" != "success" && "$result" != "skipped" ]]; then
+              echo "FAIL  $stage: $result"
+              failed=1
+            else
+              echo "ok    $stage: $result"
+            fi
+          done
+          if [[ $failed -eq 1 ]]; then
+            echo "The webkit gate did not pass. The Summary of the adoption stage says where the project stands."
+            exit 1
+          fi
+          echo "Webkit gate passed."
