@@ -27,7 +27,15 @@ test('collect counts only webkit/* rules', () => {
 test('collect ignores fatal parse errors, which carry a null ruleId', () => {
   // A fatal error is not a violation — counting it would inflate the number, and a file
   // that failed to parse was not measured at all.
-  const report = collect([{ filePath: `${CWD}/src/a.astro`, messages: [{ ruleId: null, fatal: true, message: 'Parsing error' }] }], CWD)
+  const report = collect(
+    [
+      {
+        filePath: `${CWD}/src/a.astro`,
+        messages: [{ ruleId: null, fatal: true, message: 'Parsing error' }]
+      }
+    ],
+    CWD
+  )
   assert.equal(report.total, 0)
   assert.equal(report.uiFilesTotal, 1)
 })
@@ -37,7 +45,12 @@ test('the score counts clean UI files, not violations', () => {
   // findings must not read worse than several files with one each.
   const report = collect(
     [
-      result('src/dirty.vue', 'webkit/no-hardcoded-color', 'webkit/no-hardcoded-color', 'webkit/no-style-override'),
+      result(
+        'src/dirty.vue',
+        'webkit/no-hardcoded-color',
+        'webkit/no-hardcoded-color',
+        'webkit/no-style-override'
+      ),
       result('src/clean.vue')
     ],
     CWD
@@ -50,7 +63,11 @@ test('the score counts clean UI files, not violations', () => {
 
 test('the score denominator is UI files only', () => {
   const report = collect(
-    [result('src/a.vue'), result('src/b.astro'), result('scripts/tool.ts', 'webkit/no-barrel-import')],
+    [
+      result('src/a.vue'),
+      result('src/b.astro'),
+      result('scripts/tool.ts', 'webkit/no-barrel-import')
+    ],
     CWD
   )
   assert.equal(report.uiFilesTotal, 2, 'the .ts file is not part of the denominator')
@@ -69,7 +86,10 @@ test('UI_EXTENSIONS covers the two file types the design system governs', () => 
 })
 
 test('baseline keys are one per occurrence, file plus rule', () => {
-  const report = collect([result('src/a.vue', 'webkit/no-style-override', 'webkit/no-style-override')], CWD)
+  const report = collect(
+    [result('src/a.vue', 'webkit/no-style-override', 'webkit/no-style-override')],
+    CWD
+  )
   assert.deepEqual(report.keys, [
     'src/a.vue::webkit/no-style-override',
     'src/a.vue::webkit/no-style-override'
@@ -107,7 +127,11 @@ test('the markdown always states what was not looked at', () => {
   const report = collect([result('src/a.vue', 'webkit/no-style-override')], CWD)
   const md = renderMarkdown(report, { catalog, diff: null, baselinePath: null })
   assert.match(md, /Coverage — what this did and did not look at/)
-  assert.match(md, /no-style-override.*cannot run on `\.astro`/s, 'names the rule that cannot cover Astro')
+  assert.match(
+    md,
+    /no-style-override.*cannot run on `\.astro`/s,
+    'names the rule that cannot cover Astro'
+  )
   assert.match(md, /caught by no rule yet/, 'names the raw-markup gap')
   assert.match(md, /@aziontech\/webkit@4\.4\.0/, 'names the version it measured against')
 })
