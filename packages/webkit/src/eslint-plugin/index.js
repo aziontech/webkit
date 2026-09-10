@@ -30,7 +30,20 @@ const rules = {
   'authoring-standards': authoringStandards
 }
 
-const FILES = ['**/*.vue', '**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx', '**/*.mjs', '**/*.cjs']
+// `.astro` is here so the rules reach Astro consumers at all. The AST-based rules (imports,
+// tokens, motion, foreign libraries) work on the frontmatter and the markup; the two that need
+// vue-eslint-parser's template visitor — no-style-override, and any future template rule —
+// degrade to their script visitor there instead of throwing.
+const FILES = [
+  '**/*.vue',
+  '**/*.astro',
+  '**/*.js',
+  '**/*.jsx',
+  '**/*.ts',
+  '**/*.tsx',
+  '**/*.mjs',
+  '**/*.cjs'
+]
 
 const plugin = {
   meta: { name: '@aziontech/eslint-plugin-webkit', version: '0.0.0' },
