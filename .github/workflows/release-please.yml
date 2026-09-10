@@ -18,15 +18,47 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
+      actions: write
 
     steps:
       # Maintains the single Release PR (version bumps + changelogs) while
       # features land on main; when that PR merges, this same job creates the
-      # per-package tags and GitHub Releases — which trigger the publish
-      # workflows (package-*.yml) via `release: published`.
+      # per-package tags and GitHub Releases.
       - name: Run release-please
+        id: release
         uses: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7 # v5.0.0
         with:
           token: ${{ github.token }}
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
+
+      # Releases created with `github.token` do not fire a `release: published`
+      # event that other workflows can react to — GitHub suppresses events
+      # produced by the default token to prevent recursive runs. workflow_dispatch
+      # is exempt from that rule, so dispatch each package's publish workflow
+      # explicitly instead of relying on `release: published`.
+      - name: Dispatch publish workflows for released packages
+        if: steps.release.outputs.releases_created == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          WEBKIT_RELEASED: ${{ steps.release.outputs['packages/webkit--release_created'] }}
+          WEBKIT_TAG: ${{ steps.release.outputs['packages/webkit--tag_name'] }}
+          THEME_RELEASED: ${{ steps.release.outputs['packages/theme--release_created'] }}
+          THEME_TAG: ${{ steps.release.outputs['packages/theme--tag_name'] }}
+          ICONS_RELEASED: ${{ steps.release.outputs['packages/icons--release_created'] }}
+          ICONS_TAG: ${{ steps.release.outputs['packages/icons--tag_name'] }}
+        run: |
+          failed=0
+          dispatch() {
+            local workflow="$1" tag="$2"
+            if ! gh workflow run "$workflow" -f tag="$tag"; then
+              echo "::error::failed to dispatch $workflow for tag $tag"
+              failed=1
+            fi
+          }
+
+          [ "$WEBKIT_RELEASED" = "true" ] && dispatch package-webkit.yml "$WEBKIT_TAG"
+          [ "$THEME_RELEASED" = "true" ] && dispatch package-theme.yml "$THEME_TAG"
+          [ "$ICONS_RELEASED" = "true" ] && dispatch package-icons.yml "$ICONS_TAG"
+
+          exit "$failed"
