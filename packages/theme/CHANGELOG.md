@@ -11,6 +11,17 @@
 
 * [Inputs] normalize z-index across all inputs (ENG-46735) ([#783](https://github.com/aziontech/webkit/issues/783)) ([25d201d](https://github.com/aziontech/webkit/commit/25d201d5ae0e6054b9189bc81c76b7d9fc8c5055))
 
+## [5.0.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@4.3.1...@aziontech/theme@5.0.0) (2026-09-09)
+
+
+### ⚠ BREAKING CHANGES
+
+* **theme:** the `description` prop is removed, and `suffix` now defaults to `/ mon` rather than `per month`.
+
+### Features
+
+* **theme:** add the amount type ladder ([#921](https://github.com/aziontech/webkit/issues/921)) ([5594670](https://github.com/aziontech/webkit/commit/55946702e23c0f96c5f3dcecb14ddeff8a6f00db))
+
 ## [4.3.1](https://github.com/aziontech/webkit/compare/@aziontech/theme@4.3.0...@aziontech/theme@4.3.1) (2026-08-10)
 
 
