@@ -48,12 +48,17 @@ jobs:
           ICONS_RELEASED: ${{ steps.release.outputs['packages/icons--release_created'] }}
           ICONS_TAG: ${{ steps.release.outputs['packages/icons--tag_name'] }}
         run: |
-          if [ "$WEBKIT_RELEASED" = "true" ]; then
-            gh workflow run package-webkit.yml -f tag="$WEBKIT_TAG"
-          fi
-          if [ "$THEME_RELEASED" = "true" ]; then
-            gh workflow run package-theme.yml -f tag="$THEME_TAG"
-          fi
-          if [ "$ICONS_RELEASED" = "true" ]; then
-            gh workflow run package-icons.yml -f tag="$ICONS_TAG"
-          fi
+          failed=0
+          dispatch() {
+            local workflow="$1" tag="$2"
+            if ! gh workflow run "$workflow" -f tag="$tag"; then
+              echo "::error::failed to dispatch $workflow for tag $tag"
+              failed=1
+            fi
+          }
+
+          [ "$WEBKIT_RELEASED" = "true" ] && dispatch package-webkit.yml "$WEBKIT_TAG"
+          [ "$THEME_RELEASED" = "true" ] && dispatch package-theme.yml "$THEME_TAG"
+          [ "$ICONS_RELEASED" = "true" ] && dispatch package-icons.yml "$ICONS_TAG"
+
+          exit "$failed"
