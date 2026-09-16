@@ -1,9 +1,6 @@
-// Idempotent executor for an init plan produced by `planInit`: every action is
-// safe to run twice (existing files are skipped or merged, never clobbered).
-// Returns `{ action, result }` records of what actually happened. `fence` is the
-// exception to "never clobbered" for a good reason: it owns one marker-delimited block
-// (see bundle.js) and intentionally replaces that block's content on every run, so
-// template updates reach a consumer that already ran `init` once.
+// Idempotent executor for an init plan produced by `planInit`. Returns `{ action, result }`
+// records. `fence` deliberately replaces its block's content on every run — see
+// docs/toolkit/cli.md and bundle.js.
 
 import {
   chmodSync,
@@ -154,10 +151,7 @@ function applyPatchEntry(projectDir, action) {
   }
 }
 
-// Fence action: replaces (or creates) a marker-delimited block in `action.path` with
-// `action.content`, via `spliceFragment` — a fenced block is updated in place on every
-// run (never append-once), and a pre-fence legacy marker (single or duplicated) is
-// migrated/repaired into the new fenced form.
+// Replaces the fenced block in `action.path` with `action.content` (see bundle.js).
 function applyFence(projectDir, action) {
   const target = join(projectDir, action.path)
   const existed = existsSync(target)
