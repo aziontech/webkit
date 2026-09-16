@@ -192,20 +192,9 @@ export function spliceFragment(source, body, { start = FRAGMENT_START, end = FRA
 }
 
 // --- Provenance marker (webkit sync) -------------------------------------------------
-//
-// Every bundle file (rule/skill/agent) copied into a consumer's .claude/ carries one
-// inert HTML-comment line recording where it came from, at what webkit version, and a
-// content hash of its own body:
-//
-//   <!-- webkit-sync source=claude/rules/webkit-imports.md version=5.0.0 sha256=<16 hex> -->
-//
-// It is placed at line 1 for a file with no frontmatter, or as the first line after the
-// closing `---` of a YAML frontmatter block (skills/agents) — never inside the
-// frontmatter itself, so it never becomes a YAML key Claude Code would try to validate.
-// `sha256` is the first 16 hex chars of sha256(body), where `body` is the file's content
-// with the marker line removed and line endings normalized \r\n -> \n. Comparing that
-// hash to a freshly computed one is how `sync` tells a pristine copy from a locally
-// edited one without needing a second source of truth.
+// One inert HTML-comment line stamped into every copied bundle file: source, webkit
+// version, and a content hash of its own body. See docs/toolkit/cli.md ("sync") for
+// the marker format, placement rule, and how `sync` uses it to classify a file.
 
 const MARKER_LINE_RE =
   /^<!-- webkit-sync source=(\S+) version=(\S+) sha256=([0-9a-f]{16}) -->\r?\n?/m
@@ -252,28 +241,8 @@ export function stamp(content, { source, version }) {
 }
 
 /**
- * Classify a consumer file against its template counterpart. `consumerContent` is `null`
- * when the file does not exist in the consumer yet.
- *
- *  - `missing`              — no consumer file at all.
- *  - `current`               — marker present; consumer body matches its own marker hash,
- *                              and the template's body hashes to the same value.
- *  - `stale`                 — marker present; consumer body still matches its own marker
- *                              hash (untouched since it was stamped), but the template has
- *                              since changed (its body hash differs from the marker).
- *  - `modified`              — marker present; the consumer body no longer hashes to its
- *                              own marker (locally edited after stamping).
- *  - `unstamped-identical`   — no marker; consumer body is byte-identical to the template
- *                              body (e.g. a copy made before sync existed).
- *  - `unstamped-different`   — no marker; consumer body differs from the template body —
- *                              treated the same as `modified` by the sync policy.
- *
- * Note: if a marker's `sha256` is tampered with (edited by hand) while the body stays
- * pristine, the recomputed body hash will no longer equal the (tampered) marker hash, so
- * this is classified as `modified` — the same outcome as a genuine local edit. There is
- * no way to distinguish "someone edited the body" from "someone edited the marker" from
- * content alone, and treating both as `modified` is the safe choice: sync never
- * overwrites either without `--force`.
+ * Classify a consumer file against its template counterpart (`consumerContent` is `null`
+ * when it doesn't exist yet). States and their policy: docs/toolkit/cli.md ("sync").
  */
 export function classify(templateContent, consumerContent) {
   const templateHash = bodyHash(templateContent)

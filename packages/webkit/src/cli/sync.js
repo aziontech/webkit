@@ -1,12 +1,6 @@
-// Pure planner for `webkit sync`: keeps a consumer's copied `.claude/` bundle (rules,
-// skills, agents) and the CLAUDE.md fragment up to date with the templates this webkit
-// version ships, without ever clobbering a file the consumer has edited on purpose.
-//
-// `init` copied the bundle once, skip-if-exists, with no way to tell a pristine copy
-// from a locally edited one and no way for an upstream template update to ever reach a
-// consumer. `sync` fixes both: every copy is stamped with a provenance marker (see
-// bundle.js — stamp/parseMarker/classify), so a later `sync` can classify each file as
-// missing/current/stale/modified/orphan and act only on the safe cases.
+// Pure planner for `webkit sync`: reconciles the copied `.claude/` bundle and CLAUDE.md
+// fragment with the templates this webkit version ships, without clobbering local edits.
+// See docs/toolkit/cli.md ("sync") and bundle.js (stamp/parseMarker/classify).
 
 import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { join, sep } from 'node:path'
@@ -99,23 +93,8 @@ function classifyFragment(claudeMdContent, fragmentBody) {
 }
 
 /**
- * Plan a `sync`: classify every bundle file + the CLAUDE.md fragment against the
- * consumer project, and produce the action list that applies the safe updates.
- *
- * Policy:
- *  - `missing`                        → copy stamped (new file).
- *  - `stale` / `unstamped-identical`  → rewrite stamped (template changed, or a
- *                                        pre-sync byte-identical copy gets a marker).
- *  - `modified` / `unstamped-different` → skipped and reported; with `force: true`,
- *                                        overwritten stamped instead.
- *  - `orphan`                         → reported only, never deleted.
- *  - `current`                        → nothing.
- *  - CLAUDE.md fragment: `legacy`/`stale`/`missing` → fence (replace/create the
- *    block); `current` → nothing.
- *
- * Pure — reads the filesystem, writes nothing. `templatesDir`/`version` are injectable
- * so tests (and a future "what would sync do against version X" check) can simulate a
- * template change without touching the real cli-templates directory.
+ * Plan a `sync`: classify every bundle file + the CLAUDE.md fragment, and produce the
+ * action list. Policy per state: docs/toolkit/cli.md ("sync"). Pure — writes nothing.
  */
 export function planSync(
   projectDir,

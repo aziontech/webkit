@@ -89,6 +89,8 @@ The `CLAUDE.md` fragment is tracked separately (it isn't one file among many; it
 
 **`drift`** — the condition `--check`'s exit code reports — is true when anything is `missing`, `stale`, or `orphan`, or the fragment is anything but `current`. A `modified` file is **not** drift: it is a deliberate local edit, reported so you know about it, never touched without `--force`.
 
+If a marker's `sha256` is hand-edited while the body stays pristine, the recomputed body hash no longer matches the (tampered) marker hash, so the file classifies as `modified` — indistinguishable from, and treated the same as, a genuine local edit. That's deliberate: there's no way to tell "the body changed" from "the marker changed" from content alone, and `modified` is the safe side to err on — sync never overwrites either without `--force`.
+
 ### Flags
 
 | Flag        | Effect                                                                                      |
