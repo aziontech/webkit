@@ -1,15 +1,13 @@
 // Pure planner for `webkit init`: `planInit(projectDir, opts)` reads the project and
 // returns an ordered action list without touching disk, so the plan is a testable value.
 // The `type` field drives apply.js: add-dep, write, merge-json, append, copy,
-// patch-entry, advise (print-only — reminders and merge snippets applied by hand).
+// patch-entry, fence, advise (print-only — reminders and merge snippets applied by hand).
 
 import { existsSync, readFileSync } from 'node:fs'
-import { dirname, join } from 'node:path'
-import { fileURLToPath } from 'node:url'
+import { join } from 'node:path'
 
-const __dirname = dirname(fileURLToPath(import.meta.url))
-const TEMPLATES = join(__dirname, '../../cli-templates')
-const CLAUDE_TEMPLATES = join(TEMPLATES, 'claude')
+import { LEGACY_MARKER, listBundle } from './bundle.js'
+import { planSync } from './sync.js'
 
 // Floating range so the consumer resolves the latest published design-system
 // version; `apply.js` never downgrades an existing pin.
@@ -44,60 +42,15 @@ const STYLE_DEV_DEPS = [
 ]
 
 // Claude Code bundle files, copied into the consumer's `.claude/` only when missing.
-const CLAUDE_BUNDLE = [
-  // usage rules (consuming webkit)
-  'rules/webkit-imports.md',
-  'rules/webkit-tokens.md',
-  'rules/webkit-performance.md',
-  'rules/webkit-prefer-over-custom.md',
-  'rules/webkit-style-override.md',
-  // construction standards (building your own components) — the scope:general set
-  'rules/webkit-construction-standards.md',
-  'rules/webkit-prop-vocabulary.md',
-  'rules/webkit-styling.md',
-  'rules/webkit-component-structure.md',
-  'rules/webkit-props.md',
-  'rules/webkit-v-model.md',
-  'rules/webkit-emits.md',
-  'rules/webkit-slots.md',
-  'rules/webkit-composables.md',
-  'rules/webkit-root-element.md',
-  'rules/webkit-component-states.md',
-  'rules/webkit-accessibility.md',
-  'rules/webkit-motion.md',
-  'rules/webkit-testid.md',
-  'rules/webkit-deprecation.md',
-  // Mechanics — how to consume webkit correctly (imports, tokens, tree-shaking).
-  'skills/webkit-usage/SKILL.md',
-  // UI-craft pack — umbrella + structure + foundation, then polish (build product UI on webkit).
-  'skills/webkit-ui-craft/SKILL.md',
-  'skills/webkit-ux-heuristics/SKILL.md',
-  'skills/webkit-ui-states/SKILL.md',
-  'skills/webkit-form/SKILL.md',
-  'skills/webkit-create-surface/SKILL.md',
-  'skills/webkit-errors/SKILL.md',
-  'skills/webkit-microcopy/SKILL.md',
-  'skills/webkit-tables/SKILL.md',
-  'skills/webkit-lists/SKILL.md',
-  'skills/webkit-navigation/SKILL.md',
-  'skills/webkit-baseline-ui/SKILL.md',
-  'skills/webkit-theming-dark-mode/SKILL.md',
-  'skills/webkit-data-viz/SKILL.md',
-  'skills/webkit-motion-polish/SKILL.md',
-  'skills/webkit-impeccable-polish/SKILL.md',
-  // Verify + migrate.
-  'skills/webkit-ui-verify/SKILL.md',
-  'skills/webkit-ds-adoption/SKILL.md',
-  // Specialist agents.
-  'agents/webkit-expert.md',
-  'agents/webkit-adopter.md',
-  'agents/webkit-reviewer.md',
-  'agents/webkit-ui-verifier.md',
-  'agents/webkit-adoption-auditor.md'
-]
+// Derived from the templates directory itself (every .md under rules/, skills/, agents/)
+// instead of a hand-maintained list, so a new template ships automatically — see bundle.js.
+const CLAUDE_BUNDLE = listBundle()
 
-// Marker line that guards the CLAUDE.md fragment so it is appended exactly once.
-export const CLAUDE_FRAGMENT_MARKER = '<!-- @aziontech/webkit -->'
+// Legacy single-line marker, re-exported under its old name: earlier `init` runs guarded
+// the CLAUDE.md fragment with this line alone (append-once, never updated in place).
+// `spliceFragment` (bundle.js) still recognizes it, so an existing fragment is migrated
+// into the new fenced form instead of being duplicated.
+export const CLAUDE_FRAGMENT_MARKER = LEGACY_MARKER
 
 // The webkit MCP server entry merged into `.mcp.json`.
 export const MCP_SERVER_NAME = 'webkit'
@@ -209,11 +162,6 @@ const HUSKY_PRECOMMIT = `# Lint with the webkit rules before every commit.
 npx eslint .
 npx stylelint "**/*.{css,scss,vue}"
 `
-
-// The CLAUDE.md fragment body (the marker line is prepended at apply time).
-function claudeFragment() {
-  return read(join(CLAUDE_TEMPLATES, 'CLAUDE.fragment.md')) || ''
-}
 
 /** Build the ordered init plan for `projectDir`. Pure — no disk writes. */
 export function planInit(projectDir, opts = {}) {
@@ -353,22 +301,12 @@ export function planInit(projectDir, opts = {}) {
       'Husky pre-commit hook written. Run your package manager install (which runs the "prepare" script) to activate git hooks.'
   })
 
-  // 6. Copy the Claude Code bundle into .claude/ (only missing files).
-  for (const rel of CLAUDE_BUNDLE) {
-    actions.push({
-      type: 'copy',
-      from: join(CLAUDE_TEMPLATES, rel),
-      to: join('.claude', rel)
-    })
-  }
-
-  // 7. Append the CLAUDE.md fragment (guarded by a marker line).
-  actions.push({
-    type: 'append',
-    path: 'CLAUDE.md',
-    content: `\n${CLAUDE_FRAGMENT_MARKER}\n${claudeFragment()}`,
-    marker: CLAUDE_FRAGMENT_MARKER
-  })
+  // 6-7. Copy the Claude Code bundle into .claude/ (provenance-stamped) and fence the
+  //    CLAUDE.md fragment — delegated to `planSync` so `init` and `sync` share one
+  //    policy. On a fresh project every bundle file is `missing` and the fragment is
+  //    `missing`, so this yields exactly the same "copy everything, fence once" plan
+  //    `init` always produced — now with every copy stamped for future `sync` runs.
+  actions.push(...planSync(projectDir).actions)
 
   // 8. Wire the entry imports. Importing the generated src/webkit.css is what includes
   //    the `@source` that compiles webkit's classes — skipping it is the "installed but
