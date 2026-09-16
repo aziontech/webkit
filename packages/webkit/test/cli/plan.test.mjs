@@ -343,7 +343,7 @@ test('planInit copies the .claude/rules/webkit-*.md bundle', () => {
   const dir = makeProject()
   try {
     const plan = planInit(dir, {})
-    const copies = plan.filter((a) => a.type === 'copy').map((a) => a.to)
+    const copies = plan.filter((a) => a.type === 'copy-stamped').map((a) => a.to)
     for (const rel of [
       '.claude/rules/webkit-imports.md',
       '.claude/rules/webkit-tokens.md',
@@ -523,13 +523,15 @@ test('applyPlan migrates a pre-existing legacy CLAUDE.md marker into a fenced bl
       'the legacy body must be replaced with the current one'
     )
 
-    // Idempotent: applying again reports skipped, not merged again.
+    // Idempotent: applying again either reports skipped, or plans no fence action at all
+    // (the fragment already classifies as `current`, so `planSync` omits the action) —
+    // either way the file must not be rewritten.
     const results2 = applyPlan(dir, planInit(dir, {}))
     const fenceResult2 = results2.find(
       (r) => r.action.type === 'fence' && r.action.path === 'CLAUDE.md'
     )
     assert.equal(
-      fenceResult2.result,
+      fenceResult2?.result ?? 'skipped',
       'skipped',
       'a second run must not rewrite an already-fenced file'
     )
