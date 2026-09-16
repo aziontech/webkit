@@ -250,6 +250,77 @@ describe('NavigationMenu (composition + overlay + recursive)', () => {
   // handler compiles to a discarded expression, which leaves `Enter`/`Space` working
   // (a native button turns those into a click) while `Escape` and the arrows go dead
   // and nothing errors.
+  describe('size-aware placement (ENG-47063) — shared computePlacement geometry', () => {
+    // No CSS is loaded in browser mode, so the trigger is pinned with inline styles and
+    // the positioner's inline transform / CSS vars are what get asserted.
+    const positioner = () => body().getByTestId('navigation-menu__positioner')
+
+    const TALL_PANEL = (rows: number, wrapperStyle: string) => `
+      <div style="${wrapperStyle}">
+        <NavigationMenu aria-label="Primary">
+          <NavigationMenuList :highlight="false">
+            <NavigationMenuItem value="solutions">
+              <NavigationMenuTrigger>Solutions</NavigationMenuTrigger>
+              <NavigationMenuContent>
+                <NavigationMenuList label="Rows">
+                  <NavigationMenuItem
+                    v-for="i in ${rows}"
+                    :key="i"
+                    layout="entry"
+                    :href="'https://example.com/' + i"
+                    style="display:block;height:24px"
+                  >Row {{ i }}</NavigationMenuItem>
+                </NavigationMenuList>
+              </NavigationMenuContent>
+            </NavigationMenuItem>
+          </NavigationMenuList>
+          <NavigationMenuPortal>
+            <NavigationMenuPositioner side="bottom" align="start">
+              <NavigationMenuPopup>
+                <NavigationMenuViewport />
+              </NavigationMenuPopup>
+            </NavigationMenuPositioner>
+          </NavigationMenuPortal>
+        </NavigationMenu>
+      </div>
+    `
+
+    it('flips above the trigger when there is no room below', async () => {
+      const { getByRole } = renderTree(
+        TALL_PANEL(6, 'position:fixed;left:8px;right:8px;bottom:8px')
+      )
+      const trigger = getByRole('button', { name: /Solutions/ })
+      await userEvent.click(trigger)
+      await waitFor(() => expect(positioner()).toHaveAttribute('data-side', 'top'), {
+        timeout: OPEN_TIMEOUT
+      })
+      await waitFor(
+        () => {
+          const pr = positioner().getBoundingClientRect()
+          expect(pr.bottom).toBeLessThanOrEqual(trigger.getBoundingClientRect().top)
+        },
+        { timeout: OPEN_TIMEOUT }
+      )
+      expect(positioner()).not.toHaveAttribute('data-constrained')
+    })
+
+    it('caps the popup to the free space and marks the positioner constrained when nothing fits', async () => {
+      const { getByRole } = renderTree(TALL_PANEL(80, 'position:fixed;left:8px;right:8px;top:8px'))
+      const trigger = getByRole('button', { name: /Solutions/ })
+      await userEvent.click(trigger)
+      await waitFor(() => expect(positioner()).toHaveAttribute('data-constrained', ''), {
+        timeout: OPEN_TIMEOUT
+      })
+      const p = positioner()
+      expect(p).toHaveAttribute('data-side', 'bottom')
+      const available = Number.parseFloat(p.style.getPropertyValue('--available-height'))
+      const triggerRect = trigger.getBoundingClientRect()
+      // The cap ends collisionPadding (8px) above the viewport edge, below the trigger.
+      expect(available).toBeGreaterThan(0)
+      expect(triggerRect.bottom + 8 + available).toBeLessThanOrEqual(window.innerHeight - 8 + 1)
+    })
+  })
+
   describe('keyboard model on a button trigger (root.onTriggerKeydown)', () => {
     it('Escape closes the open panel', async () => {
       const { getByRole, getByTestId } = renderTree(COMPOSED)

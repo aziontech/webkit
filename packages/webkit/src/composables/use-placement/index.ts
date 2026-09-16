@@ -47,6 +47,8 @@ export interface ComputePlacementInput {
   offset: number
   /** Minimum distance kept from every boundary edge. */
   collisionPadding: number
+  /** Shift along the alignment axis, in px (towards the end for `start`/`center`, towards the start for `end`). */
+  alignOffset?: number
   /** Vertical sides only: the panel spans exactly the trigger, so it is never shifted or capped across. */
   matchTriggerWidth?: boolean
 }
@@ -134,6 +136,7 @@ function clamp(value: number, min: number, max: number): number {
  */
 export function computePlacement(input: ComputePlacementInput): ComputePlacementResult {
   const { triggerRect: trigger, panelSize, boundary, offset, collisionPadding: padding } = input
+  const alignOffset = input.alignOffset ?? 0
 
   const mainSize = (side: Side) => (isVertical(side) ? panelSize.height : panelSize.width)
   /** Free main-axis space on `side`, between the trigger and the boundary. */
@@ -194,14 +197,14 @@ export function computePlacement(input: ComputePlacementInput): ComputePlacement
   let left: number
   if (vertical) {
     top = side === 'top' ? trigger.top - height - offset : trigger.bottom + offset
-    if (align === 'start') left = trigger.left
-    else if (align === 'end') left = trigger.right - width
-    else left = trigger.left + trigger.width / 2 - width / 2
+    if (align === 'start') left = trigger.left + alignOffset
+    else if (align === 'end') left = trigger.right - width - alignOffset
+    else left = trigger.left + trigger.width / 2 - width / 2 + alignOffset
   } else {
     left = side === 'left' ? trigger.left - width - offset : trigger.right + offset
-    if (align === 'start') top = trigger.top
-    else if (align === 'end') top = trigger.bottom - height
-    else top = trigger.top + trigger.height / 2 - height / 2
+    if (align === 'start') top = trigger.top + alignOffset
+    else if (align === 'end') top = trigger.bottom - height - alignOffset
+    else top = trigger.top + trigger.height / 2 - height / 2 + alignOffset
   }
 
   if (!locked) left = clamp(left, boundary.left + padding, boundary.right - padding - width)

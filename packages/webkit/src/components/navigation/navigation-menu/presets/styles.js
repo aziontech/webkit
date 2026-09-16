@@ -62,7 +62,7 @@ export const navigationMenuPopupSurfaceClasses = [
   'relative overflow-hidden rounded-(--shape-card)',
   'border border-solid border-(--border-default)',
   'bg-(--bg-surface-raised) shadow-(--shadow-lg)',
-  'max-h-[var(--available-height,100vh)]',
+  'max-h-[var(--available-height,100vh)] max-w-[var(--available-width,100vw)]',
   'data-[kind=contrast]:[--bg-surface-raised:var(--bg-contrast)]',
   'data-[kind=contrast]:[--border-default:color-mix(in_srgb,var(--text-contrast)_20%,var(--bg-contrast))]',
   'data-[kind=contrast]:[--text-default:var(--text-contrast)]',
@@ -83,10 +83,8 @@ export const navigationMenuArrowClasses = [
   'data-[side=bottom]:-top-1.5 data-[side=bottom]:border-b-0 data-[side=bottom]:border-r-0',
   'data-[side=top]:-bottom-1.5 data-[side=top]:border-l-0 data-[side=top]:border-t-0'
 ]
-export const navigationMenuPositionerLayoutClasses = [
-  'fixed z-50 max-h-[var(--available-height,100vh)]',
-  'max-w-[min(var(--available-width,100vw),100vw)]'
-]
+/** The caps live on the popup, not here: the positioner shrink-wraps so the popup's natural size can be measured. */
+export const navigationMenuPositionerLayoutClasses = 'group/positioner fixed z-50'
 export const navigationMenuContentPaddingClasses = 'p-(--spacing-md)'
 /** OVERLINE style (`text-overline-xs`, `--text-muted`), not the `Overline` component — that one paints brand primary at `text-overline-md` with its own padding. */
 /** Inset is a MARGIN (not padding) so the label text aligns to the entries' icon column, while the rule spans the column's own content rather than the shared track. */
