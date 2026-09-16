@@ -113,7 +113,6 @@ function findLegacyBlocks(source) {
         break
       }
       if (lineEnd === -1) {
-        cursor = source.length
         break
       }
       cursor = lineEnd + 1
