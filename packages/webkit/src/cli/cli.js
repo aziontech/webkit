@@ -5,18 +5,24 @@
 // just-in-time from the component's catalog `setup` recipe; `doctor` flags it when missing.
 
 import { applyPlan } from './apply.js'
+import { runCanary } from './canary.js'
 import { planDoctor } from './doctor.js'
 import { planInit } from './plan.js'
+import { FAIL_MODES, FORMATS, runReport } from './report.js'
 
 const HELP = `@aziontech/webkit — adopt the design system in one command
 
 Usage:
   npx @aziontech/webkit init [options]
   npx @aziontech/webkit doctor
+  npx @aziontech/webkit report [options] [patterns...]
+  npx @aziontech/webkit canary
 
 Commands:
   init            Wire @aziontech/webkit into the current project.
   doctor          Check the wiring is healthy; report resolved dependency versions.
+  report          Measure webkit adoption via this project's own ESLint.
+  canary          Prove the design-system lint rules still reach this project.
 
 Options (init):
   --dry-run       Print the plan without writing anything.
@@ -27,11 +33,16 @@ Options (init):
   --no-entry      Do not edit the app entry (src/main.*); print the imports instead.
   -h, --help      Show this help.
 
+Options (report):
+  --format <markdown|json>   Output format (default: markdown).
+  --fail-on <never|any>      Exit 1 when violations exist (default: never).
+  [patterns...]              ESLint file patterns to lint (default: .).
+
 Run interactively (a TTY, no --yes) and init asks about the optional pieces —
 icons, entry wiring — before writing anything.
 `
 
-const COMMANDS = new Set(['init', 'doctor'])
+const COMMANDS = new Set(['init', 'doctor', 'report', 'canary'])
 const KNOWN_FLAGS = new Set([
   '--dry-run',
   '--strict',
@@ -43,13 +54,33 @@ const KNOWN_FLAGS = new Set([
   '-h',
   '--help'
 ])
+// Flags that take a value as the next argv token (report only, so far).
+const VALUE_FLAGS = new Set(['--format', '--fail-on'])
 
 function parseArgs(argv) {
   const args = argv.slice(2)
   const command = args.find((a) => !a.startsWith('-')) || null
-  const flagList = args.filter((a) => a.startsWith('-'))
+
+  // Pull out `--flag value` pairs first so their value never gets mistaken for another
+  // flag or for a positional pattern.
+  const values = {}
+  const rest = []
+  for (let i = 0; i < args.length; i++) {
+    const a = args[i]
+    if (VALUE_FLAGS.has(a)) {
+      values[a] = args[i + 1]
+      i += 1
+      continue
+    }
+    rest.push(a)
+  }
+
+  const flagList = rest.filter((a) => a.startsWith('-'))
   const unknown = flagList.filter((f) => !KNOWN_FLAGS.has(f))
   const flags = new Set(flagList)
+  // Positional args after the command (and after the value-flag pairs already removed).
+  const positionals = rest.filter((a) => a !== command && !a.startsWith('-'))
+
   return {
     command,
     unknown,
@@ -58,7 +89,10 @@ function parseArgs(argv) {
     yes: flags.has('--yes') || flags.has('-y'),
     noIcons: flags.has('--no-icons'),
     noEntry: flags.has('--no-entry'),
-    help: flags.has('-h') || flags.has('--help')
+    help: flags.has('-h') || flags.has('--help'),
+    format: values['--format'],
+    failOn: values['--fail-on'],
+    patterns: positionals
   }
 }
 
@@ -184,6 +218,38 @@ async function run(argv) {
 
   if (command === 'doctor') {
     return runDoctor(projectDir)
+  }
+
+  if (command === 'report') {
+    const format = parsed.format ?? 'markdown'
+    const failOn = parsed.failOn ?? 'never'
+    if (!FORMATS.has(format)) {
+      process.stderr.write(`Unknown --format value: ${format} (expected markdown or json)\n`)
+      return 1
+    }
+    if (!FAIL_MODES.has(failOn)) {
+      process.stderr.write(`Unknown --fail-on value: ${failOn} (expected never or any)\n`)
+      return 1
+    }
+    const patterns = parsed.patterns.length ? parsed.patterns : ['.']
+    const result = runReport(projectDir, {
+      format,
+      failOn,
+      patterns,
+      log: (line) => process.stderr.write(`${line}\n`)
+    })
+    if (result.error) {
+      process.stderr.write(`${result.error}\n`)
+      return result.exitCode
+    }
+    process.stdout.write(result.stdout)
+    return result.exitCode
+  }
+
+  if (command === 'canary') {
+    const result = runCanary(projectDir)
+    for (const line of result.lines) process.stdout.write(`${line}\n`)
+    return result.exitCode
   }
 
   const initOpts = await resolveInitOptions(parsed)
