@@ -35,7 +35,9 @@ npx @aziontech/webkit init
 ```
 
 `init` reads your project first and never clobbers existing files — run with `--dry-run`
-to preview the plan. See [`docs/toolkit/cli.md`](./docs/toolkit/cli.md).
+to preview the plan. See [`docs/toolkit/cli.md`](./docs/toolkit/cli.md). To enforce the
+wiring in CI, `uses:` the reusable [webkit consumer gate](./docs/toolkit/consumer-gate.md)
+instead of hand-rolling it.
 
 ### 2 · Add the theme CSS
 

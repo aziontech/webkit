@@ -66,6 +66,10 @@ It writes nothing and exits non-zero if any check is `FAIL` — safe to run in C
 
 `init` is safe to run repeatedly: existing files are skipped or merged, never overwritten; the MCP server, the `prepare` script, and the CLAUDE.md fragment are added only if absent. A malformed `package.json` / `.mcp.json` is reported as an error and left untouched — never replaced. `doctor` is read-only.
 
+## CI
+
+Enforcing `doctor`, `sync --check`, `canary`, and `report` in your own CI (instead of running them ad hoc) is a one-line `uses:` away — see [`docs/toolkit/consumer-gate.md`](./consumer-gate.md) for the reusable `workflow_call` gate this repo publishes.
+
 ## License
 
 MIT

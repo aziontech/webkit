@@ -1,0 +1,272 @@
+name: Webkit Consumer Gate
+
+# Reusable `workflow_call` gate for any project that consumes @aziontech/webkit.
+# webkit ships the rules (ESLint plugin, Stylelint config, catalog, MCP, CLI) but has
+# no way to enforce that a consumer actually stays wired to them over time — this
+# workflow is that enforcement, published once here so every consumer (docs, site,
+# console-kit, ...) can `uses:` it instead of hand-rolling its own adoption CI.
+#
+# Four independent stages, each individually blocking or advisory via its own input:
+#   1. wiring   — `webkit doctor` + `webkit sync --check`: is the project's toolkit
+#                 wiring (lint configs, MCP, .claude/ bundle, CLAUDE.md fragment) intact
+#                 and in sync with what webkit ships? (block-wiring, default true)
+#   2. canary   — `webkit canary`: do webkit's own lint rules still actually reach this
+#                 project (a broken import path or disabled rule would silently let
+#                 every other check pass for the wrong reason)? (block-canary, default true)
+#   3. adoption — `webkit report`: what fraction of this project's UI already renders
+#                 through webkit components/tokens vs hand-rolled markup? Always
+#                 published to the Job Summary and as a downloadable artifact; only
+#                 turned into a hard failure when the caller opts in via `fail-on: any`
+#                 (default `never` — publish-only, since adoption is usually a gradual
+#                 migration, not a merge-blocking gate, until a consumer decides otherwise).
+#   4. style    — `stylelint` over the consumer's own styles. Off by default
+#                 (block-style: false) because a consumer may not use Stylelint the
+#                 same way webkit's own repo does; opt in once your own stylelint
+#                 config is wired.
+#
+# `webkit-gate` is the single aggregate job — mark THAT as the required check on the
+# branch, not the individual stage jobs, so toggling a stage on/off in `with:` never
+# requires touching branch protection.
+#
+# IMPORTANT — this file has no `on:` trigger of its own (workflow_call workflows can't
+# have one). The CALLING workflow owns when this runs. In particular: if the caller's
+# own workflow is gated by a `paths:` filter, and this gate is the required check, a PR
+# that touches no matching path never gets a run at all — GitHub then blocks the merge
+# FOREVER waiting for a check that will never report. Callers MUST trigger this
+# unconditionally (no `paths:` filter on the caller's `pull_request:` trigger) if they
+# mark `webkit-gate` as a required status check.
+on:
+  workflow_call:
+    inputs:
+      paths:
+        description: >-
+          Positional path patterns passed to `webkit report` (the adoption scan).
+          Defaults to the whole project.
+        type: string
+        default: '.'
+      style-paths:
+        description: 'Glob passed to `stylelint` when `block-style` (or a style run) is enabled.'
+        type: string
+        default: 'src/**/*.{css,scss,vue,astro}'
+      node-version-file:
+        description: 'Path to the Node version file (e.g. .nvmrc) used when `node-version` is empty.'
+        type: string
+        default: '.nvmrc'
+      node-version:
+        description: 'Explicit Node version. Overrides `node-version-file` when set.'
+        type: string
+        default: ''
+      package-manager:
+        description: 'Package manager used to install and run the CLI: pnpm, npm, or yarn.'
+        type: string
+        default: 'pnpm'
+      install-command:
+        description: >-
+          Command used to install dependencies. Defaults (when empty) to
+          `pnpm install --frozen-lockfile`, `npm ci`, or `yarn install --frozen-lockfile`
+          based on `package-manager`.
+        type: string
+        default: ''
+      fail-on:
+        description: >-
+          Passed to `webkit report --fail-on`: `never` (publish the report only) or
+          `any` (fail the adoption job on any violation).
+        type: string
+        default: 'never'
+      block-wiring:
+        description: 'Fail the gate when `webkit doctor` / `webkit sync --check` fail.'
+        type: boolean
+        default: true
+      block-canary:
+        description: 'Fail the gate when `webkit canary` reports a broken fixture.'
+        type: boolean
+        default: true
+      block-style:
+        description: 'Fail the gate when the stylelint pass reports errors.'
+        type: boolean
+        default: false
+      timeout-minutes:
+        description: 'Per-job timeout, in minutes.'
+        type: number
+        default: 20
+    outputs:
+      violations:
+        description: 'Total adoption-report violations (the `total` field of the JSON report).'
+        value: ${{ jobs.adoption.outputs.violations }}
+      score:
+        description: 'Adoption score (the `score` field of the JSON report).'
+        value: ${{ jobs.adoption.outputs.score }}
+
+permissions:
+  contents: read
+
+jobs:
+  wiring:
+    name: Wiring (webkit doctor + sync --check)
+    runs-on: ubuntu-latest
+    timeout-minutes: ${{ inputs.timeout-minutes }}
+    continue-on-error: ${{ !inputs.block-wiring }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup pnpm
+        if: inputs.package-manager == 'pnpm'
+        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: ${{ inputs.node-version }}
+          node-version-file: ${{ inputs.node-version == '' && inputs.node-version-file || '' }}
+          cache: ${{ inputs.package-manager }}
+
+      - name: Install dependencies
+        run: ${{ inputs.install-command != '' && inputs.install-command || (inputs.package-manager == 'pnpm' && 'pnpm install --frozen-lockfile') || (inputs.package-manager == 'npm' && 'npm ci') || 'yarn install --frozen-lockfile' }}
+
+      # `npx --no-install` (not `npx -p @aziontech/webkit@latest`) so this always runs
+      # the version of the CLI the CONSUMER actually has installed — the gate must
+      # measure what the project is really wired to, not whatever "latest" happens to be.
+      # `--no-install` works the same way whether the CLI was fetched by pnpm, npm, or
+      # yarn, so one invocation covers all three `package-manager` values.
+      - name: webkit doctor
+        run: npx --no-install webkit doctor
+
+      - name: webkit sync --check
+        run: npx --no-install webkit sync --check
+
+  canary:
+    name: Canary (the rules still reach this project)
+    runs-on: ubuntu-latest
+    timeout-minutes: ${{ inputs.timeout-minutes }}
+    continue-on-error: ${{ !inputs.block-canary }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup pnpm
+        if: inputs.package-manager == 'pnpm'
+        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: ${{ inputs.node-version }}
+          node-version-file: ${{ inputs.node-version == '' && inputs.node-version-file || '' }}
+          cache: ${{ inputs.package-manager }}
+
+      - name: Install dependencies
+        run: ${{ inputs.install-command != '' && inputs.install-command || (inputs.package-manager == 'pnpm' && 'pnpm install --frozen-lockfile') || (inputs.package-manager == 'npm' && 'npm ci') || 'yarn install --frozen-lockfile' }}
+
+      - name: webkit canary
+        run: npx --no-install webkit canary
+
+  adoption:
+    name: Adoption (webkit report)
+    runs-on: ubuntu-latest
+    timeout-minutes: ${{ inputs.timeout-minutes }}
+    outputs:
+      violations: ${{ steps.report.outputs.violations }}
+      score: ${{ steps.report.outputs.score }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup pnpm
+        if: inputs.package-manager == 'pnpm'
+        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: ${{ inputs.node-version }}
+          node-version-file: ${{ inputs.node-version == '' && inputs.node-version-file || '' }}
+          cache: ${{ inputs.package-manager }}
+
+      - name: Install dependencies
+        run: ${{ inputs.install-command != '' && inputs.install-command || (inputs.package-manager == 'pnpm' && 'pnpm install --frozen-lockfile') || (inputs.package-manager == 'npm' && 'npm ci') || 'yarn install --frozen-lockfile' }}
+
+      # Step 1: measure and publish the machine-readable report FIRST, unconditionally —
+      # every run gets a number, whether or not `fail-on` ends up failing the job below.
+      - name: webkit report (JSON)
+        id: report
+        run: |
+          npx --no-install webkit report --format json ${{ inputs.paths }} > webkit-adoption.json
+          node -e "
+            const r = JSON.parse(require('fs').readFileSync('webkit-adoption.json', 'utf8'));
+            const out = process.env.GITHUB_OUTPUT;
+            require('fs').appendFileSync(out, \`violations=\${r.total}\n\`);
+            require('fs').appendFileSync(out, \`score=\${r.score}\n\`);
+          "
+
+      # Step 2: human-readable summary, published even when the run already failed
+      # upstream — the number must always reach the Job Summary, not only on success.
+      - name: webkit report (Summary)
+        if: always()
+        run: npx --no-install webkit report ${{ inputs.paths }} >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload adoption report
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: webkit-adoption
+          path: webkit-adoption.json
+          if-no-files-found: warn
+
+      # Step 4: the actual gate, run AFTER the report is published above so a
+      # consumer always gets the artifact + summary even when this step fails the job.
+      - name: Enforce fail-on threshold
+        if: inputs.fail-on != 'never'
+        run: npx --no-install webkit report --format json --fail-on ${{ inputs.fail-on }} ${{ inputs.paths }} > /dev/null
+
+  style:
+    name: Style (stylelint)
+    runs-on: ubuntu-latest
+    timeout-minutes: ${{ inputs.timeout-minutes }}
+    continue-on-error: ${{ !inputs.block-style }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup pnpm
+        if: inputs.package-manager == 'pnpm'
+        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: ${{ inputs.node-version }}
+          node-version-file: ${{ inputs.node-version == '' && inputs.node-version-file || '' }}
+          cache: ${{ inputs.package-manager }}
+
+      - name: Install dependencies
+        run: ${{ inputs.install-command != '' && inputs.install-command || (inputs.package-manager == 'pnpm' && 'pnpm install --frozen-lockfile') || (inputs.package-manager == 'npm' && 'npm ci') || 'yarn install --frozen-lockfile' }}
+
+      - name: stylelint
+        run: npx --no-install stylelint "${{ inputs.style-paths }}" --allow-empty-input
+
+  webkit-gate:
+    name: Webkit Gate
+    runs-on: ubuntu-latest
+    needs: [wiring, canary, adoption, style]
+    if: always()
+    steps:
+      - name: Check all stages passed or were skipped/advisory
+        run: |
+          declare -A results=(
+            [wiring]="${{ needs.wiring.result }}"
+            [canary]="${{ needs.canary.result }}"
+            [adoption]="${{ needs.adoption.result }}"
+            [style]="${{ needs.style.result }}"
+          )
+          failed=0
+          for job in "${!results[@]}"; do
+            result="${results[$job]}"
+            if [[ "$result" != "success" && "$result" != "skipped" ]]; then
+              echo "❌ $job: $result"
+              failed=1
+            else
+              echo "✅ $job: $result"
+            fi
+          done
+          if [[ $failed -eq 1 ]]; then
+            echo "Webkit consumer gate failed"
+            exit 1
+          fi
+          echo "All webkit consumer gate stages passed or were cleanly skipped"
