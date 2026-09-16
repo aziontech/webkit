@@ -17,7 +17,7 @@ export interface PopoverContext {
   /** Panel width preset (data-width); undefined = fluid default. */
   width: Ref<'small' | 'medium' | 'large' | undefined>
   /** Fixed-position style (top/left/z-index/--popup-origin) for the floating panel. */
-  panelStyle: Ref<Record<string, string>>
+  panelStyle: Readonly<Ref<Record<string, string>>>
   /** Stable element ids used to wire aria-controls / aria-labelledby / aria-describedby. */
   triggerId: string
   contentId: string
