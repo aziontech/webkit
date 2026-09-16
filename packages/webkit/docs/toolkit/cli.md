@@ -20,8 +20,8 @@ On a TTY (and without `--yes`), `init` first asks about the optional pieces — 
 4. **`src/webkit.css`** — the one CSS entry: `@import '@aziontech/theme'` (tokens + Tailwind v4 + fonts) and `@import '@aziontech/webkit/styles'`, which registers webkit's source with Tailwind so its component classes compile. Both resolve by package name — no `../node_modules` path in your CSS (the `@source` ships inside the package and resolves relative to it, so hoisting/workspace layouts can't break it).
 5. **`.mcp.json`** — the `webkit` MCP server merged in (other servers untouched).
 6. **`prepare` script + `.husky/pre-commit`** — lint on commit. The install runs `prepare` (husky), which activates the hooks.
-7. **`.claude/` bundle** — rules, the `webkit-usage` skill, and agents — only files that are missing.
-8. **`CLAUDE.md` fragment** — appended once, guarded by a marker.
+7. **`.claude/` bundle** — every rule, skill, and agent template, derived from the templates directory itself (so a new template ships automatically instead of needing a hand-maintained list) — only files that are missing are copied.
+8. **`CLAUDE.md` fragment** — kept in a fenced block (`<!-- @aziontech/webkit:start -->` … `<!-- @aziontech/webkit:end -->`) that is replaced in place on every `init` run, so template updates reach a project that already ran `init` once. A pre-fence legacy marker (`<!-- @aziontech/webkit -->`) from an older `init` is migrated into the fence automatically; a fragment duplicated at more than one position (however it got that way) is repaired down to a single fenced block.
 9. **Entry wiring** — `import './webkit.css'` and `import '@aziontech/icons'` prepended once to `src/main.*`; skipped when already imported, `--no-entry` prints the imports instead of editing the file.
 
 Feature-scoped setup is deliberately **not** part of `init`. A component that needs one-time app wiring (e.g. toast: `.use(ToastPlugin)` on `createApp()` — the plugin mounts the region automatically) declares it in its catalog entry's `setup` field, surfaced by the MCP's `get_component` / `get_best_practices` — so it is wired **just-in-time at first use**, by you or your AI, instead of preloading unused code for everyone. `doctor` backstops it mechanically (see below).
@@ -73,7 +73,7 @@ It writes nothing and exits non-zero if any check is `FAIL` — safe to run in C
 
 ## Idempotency
 
-`init` is safe to run repeatedly: existing files are skipped or merged, never overwritten; the MCP server, the `prepare` script, and the CLAUDE.md fragment are added only if absent. A malformed `package.json` / `.mcp.json` is reported as an error and left untouched — never replaced. `doctor` is read-only.
+`init` is safe to run repeatedly: existing files are skipped or merged, never overwritten; the MCP server and the `prepare` script are added only if absent. The CLAUDE.md fragment is the one piece of wiring that is **not** add-once: its fenced block is kept current in place on every run, so a later `@aziontech/webkit` version's updated invariants/skills reach a project that already ran `init` — while everything outside the fence is left untouched. A malformed `package.json` / `.mcp.json` is reported as an error and left untouched — never replaced. `doctor` is read-only.
 
 ## License
 

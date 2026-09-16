@@ -188,6 +188,9 @@ function printPlan(plan) {
       case 'patch-entry':
         process.stdout.write(`PLAN   patch ${action.path} (${action.imports.join(' · ')})\n`)
         break
+      case 'fence':
+        process.stdout.write(`PLAN   fence ${action.path}\n`)
+        break
       default:
         process.stdout.write(`PLAN   ${action.type} ${action.path || ''}\n`)
     }
