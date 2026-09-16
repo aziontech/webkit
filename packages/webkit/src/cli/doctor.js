@@ -12,12 +12,12 @@ import {
   ENTRY_CANDIDATES,
   ESLINT_CONFIG_CANDIDATES,
   firstExisting,
-  HUSKY_HOOK_MARKER,
   MCP_SERVER_NAME,
   POSTCSS_CONFIG_CANDIDATES,
   read,
   STYLELINT_CONFIG_CANDIDATES
 } from './plan.js'
+import { planSync } from './sync.js'
 
 const WEBKIT_PKGS = ['@aziontech/webkit']
 
@@ -187,9 +187,12 @@ export function planDoctor(projectDir) {
       : 'missing scripts.prepare="husky" — git hooks will not activate on install.'
   )
 
-  // 6. husky pre-commit hook with the lint block.
+  // 6. husky pre-commit hook lints on commit. Checked loosely (any stylelint invocation)
+  //    rather than requiring the exact `HUSKY_HOOK_MARKER` line — a consumer who adjusted
+  //    the hook to their own staged-file pattern (e.g. lint-staged) still passes; the
+  //    exact marker is kept only as `init`'s append-once guard (see plan.js/apply.js).
   const hook = read(join(projectDir, '.husky/pre-commit'))
-  const hasHook = Boolean(hook && hook.includes(HUSKY_HOOK_MARKER))
+  const hasHook = Boolean(hook && /stylelint/.test(hook))
   add(
     'pre-commit hook',
     hasHook ? 'ok' : 'warn',
@@ -276,6 +279,41 @@ export function planDoctor(projectDir) {
     } else {
       add('dependency versions', 'ok', lines.join('\n'))
     }
+  }
+
+  // 9. Claude bundle drift — every copied rule/skill/agent still matches what this
+  //    webkit version ships, and the CLAUDE.md fragment is current. `sync` never runs
+  //    automatically (it would overwrite files the consumer may have edited on purpose),
+  //    so doctor is what surfaces drift between releases.
+  const sync = planSync(projectDir)
+  const missingOrStale = sync.entries.filter((e) => e.state === 'missing' || e.state === 'stale')
+  const orphans = sync.entries.filter((e) => e.state === 'orphan')
+  const modified = sync.entries.filter(
+    (e) => e.state === 'modified' || e.state === 'unstamped-different'
+  )
+  if (sync.drift) {
+    const lines = [
+      ...missingOrStale.map((e) => `${e.state}: .claude/${e.rel}`),
+      ...orphans.map((e) => `orphan: .claude/${e.rel}`),
+      ...(sync.fragment.state === 'current'
+        ? []
+        : [`fragment: CLAUDE.md is ${sync.fragment.state}`])
+    ]
+    add(
+      'claude bundle',
+      'fail',
+      `out of date — run \`npx @aziontech/webkit sync\`.\n${lines.join('\n')}`
+    )
+  } else if (modified.length) {
+    add(
+      'claude bundle',
+      'warn',
+      `${modified.length} file(s) edited locally after sync stamped them (left alone) — run \`npx @aziontech/webkit sync --force\` to overwrite, or ignore if intentional.\n${modified
+        .map((e) => `modified: .claude/${e.rel}`)
+        .join('\n')}`
+    )
+  } else {
+    add('claude bundle', 'ok', 'every bundle file and the CLAUDE.md fragment are current')
   }
 
   return checks

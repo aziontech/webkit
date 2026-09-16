@@ -5,12 +5,17 @@ import { tmpdir } from 'node:os'
 import { join, sep } from 'node:path'
 
 import {
+  bodyHash,
+  classify,
   CLAUDE_TEMPLATES,
   FRAGMENT_END,
   FRAGMENT_START,
   LEGACY_MARKER,
   listBundle,
-  spliceFragment
+  parseMarker,
+  spliceFragment,
+  stamp,
+  stripMarker
 } from '../../src/cli/bundle.js'
 
 function walkMarkdownRelative(dir, base = dir) {
@@ -31,7 +36,9 @@ function walkMarkdownRelative(dir, base = dir) {
   return out
 }
 
-test('listBundle equals a plain directory walk of rules/, skills/, agents/', () => {
+// Alarm, not just coverage: a template outside the bundle shape (a skill's references/)
+// fails here, so shipping it to consumers becomes a deliberate decision.
+test('every .md under the templates dir is in the bundle (nothing is silently dropped)', () => {
   const expected = []
   for (const sub of ['rules', 'skills', 'agents']) {
     const abs = join(CLAUDE_TEMPLATES, sub)
@@ -87,6 +94,10 @@ test('listBundle accepts an injected templates dir (for testing exclusions/fixtu
     writeFileSync(join(dir, 'skills', 'foo', 'SKILL.md'), '# skill')
     writeFileSync(join(dir, 'agents', 'b.md'), '# b')
     writeFileSync(join(dir, 'rules', 'ignored.txt'), 'not markdown')
+    mkdirSync(join(dir, 'skills', 'foo', 'references'), { recursive: true })
+    writeFileSync(join(dir, 'skills', 'foo', 'references', 'notes.md'), '# not shipped')
+    mkdirSync(join(dir, 'skills', 'no-skill-file'), { recursive: true })
+    writeFileSync(join(dir, 'skills', 'no-skill-file', 'README.md'), '# not a skill')
 
     const bundle = listBundle(dir)
     assert.deepEqual(bundle, ['agents/b.md', 'rules/a.md', 'skills/foo/SKILL.md'])
@@ -160,6 +171,23 @@ test('spliceFragment: a legacy block does not stop early at its own heading', ()
   assert.equal(result, `${FRAGMENT_START}\nNEWBODY\n${FRAGMENT_END}\n`)
 })
 
+test('spliceFragment: a legacy block survives a renamed fragment heading', () => {
+  // The heading right after the marker is the fragment's own, whatever its text.
+  const source = `${LEGACY_MARKER}\n## Renamed design system title\nLine one.\n## User Section\nkeep\n`
+  const result = spliceFragment(source, 'NEWBODY')
+  assert.ok(!result.includes('Line one.'))
+  assert.ok(result.includes('## User Section\nkeep'))
+})
+
+test('spliceFragment: a heading that exists in the new body is not a foreign boundary', () => {
+  const body = '## Title\nIntro.\n## Second own section\nMore.'
+  const source = `${LEGACY_MARKER}\n## Title\nOld intro.\n## Second own section\nOld more.\n## User Section\nkeep\n`
+  const result = spliceFragment(source, body)
+  assert.ok(!result.includes('Old intro.'))
+  assert.ok(!result.includes('Old more.'))
+  assert.ok(result.includes('## User Section\nkeep'))
+})
+
 test('spliceFragment: a legacy block stops at the next foreign heading, preserving it', () => {
   const source = `${LEGACY_MARKER}\n## @aziontech/webkit design system\nOld.\n## User Section\nkeep this\n`
   const result = spliceFragment(source, 'NEWBODY')
@@ -198,4 +226,97 @@ test('spliceFragment is idempotent across every case', () => {
   for (const [source, body] of cases) {
     assert.ok(idempotent(source, body), `not idempotent for source: ${JSON.stringify(source)}`)
   }
+})
+
+// --- Provenance marker: stamp / parseMarker / stripMarker / bodyHash / classify -------
+
+const MARKER_RE = /^<!-- webkit-sync source=\S+ version=\S+ sha256=[0-9a-f]{16} -->$/m
+
+test('stamp places the marker on line 1 for a file with no frontmatter', () => {
+  const content = 'line one\nline two\n'
+  const stamped = stamp(content, { source: 'claude/rules/x.md', version: '5.0.0' })
+  const lines = stamped.split('\n')
+  assert.match(lines[0], MARKER_RE)
+  assert.ok(lines[0].includes('source=claude/rules/x.md'))
+  assert.ok(lines[0].includes('version=5.0.0'))
+  assert.equal(stamped.slice(lines[0].length + 1), content)
+})
+
+test('stamp places the marker right after the closing --- of a frontmatter block', () => {
+  const content = '---\nname: webkit-foo\ndescription: bar\n---\n\n# Skill: webkit-foo\nBody.\n'
+  const stamped = stamp(content, { source: 'claude/skills/webkit-foo/SKILL.md', version: '5.0.0' })
+  const fmEnd = stamped.indexOf('---\n', 4) + 4
+  const rest = stamped.slice(fmEnd)
+  assert.match(rest.split('\n')[0], MARKER_RE)
+  // Frontmatter itself is byte-identical, untouched.
+  assert.equal(stamped.slice(0, fmEnd), content.slice(0, content.indexOf('---\n', 4) + 4))
+})
+
+test('parseMarker / stripMarker round-trip a stamped file', () => {
+  const content = 'Hello.\n'
+  const stamped = stamp(content, { source: 'claude/rules/x.md', version: '5.0.0' })
+  const marker = parseMarker(stamped)
+  assert.equal(marker.source, 'claude/rules/x.md')
+  assert.equal(marker.version, '5.0.0')
+  assert.match(marker.sha256, /^[0-9a-f]{16}$/)
+  assert.equal(stripMarker(stamped), content)
+  assert.equal(parseMarker(content), null)
+})
+
+test('bodyHash ignores the marker line and normalizes CRLF', () => {
+  const content = 'a\nb\n'
+  const stamped = stamp(content, { source: 'claude/rules/x.md', version: '5.0.0' })
+  assert.equal(bodyHash(stamped), bodyHash(content))
+  assert.equal(bodyHash(content), bodyHash(content.replace(/\n/g, '\r\n')))
+})
+
+test('stamp is deterministic: stamping twice with the same source/version repeats the hash', () => {
+  const content = 'same content\n'
+  const a = stamp(content, { source: 'claude/rules/x.md', version: '5.0.0' })
+  const b = stamp(stripMarker(a), { source: 'claude/rules/x.md', version: '5.0.0' })
+  assert.equal(a, b)
+})
+
+test('classify: missing when the consumer file does not exist', () => {
+  assert.equal(classify('template body\n', null), 'missing')
+})
+
+test('classify: current when consumer is freshly stamped from this exact template', () => {
+  const template = 'body\n'
+  const consumer = stamp(template, { source: 'claude/rules/x.md', version: '5.0.0' })
+  assert.equal(classify(template, consumer), 'current')
+})
+
+test('classify: stale when the template changed since the consumer was stamped', () => {
+  const oldTemplate = 'body v1\n'
+  const consumer = stamp(oldTemplate, { source: 'claude/rules/x.md', version: '5.0.0' })
+  const newTemplate = 'body v2\n'
+  assert.equal(classify(newTemplate, consumer), 'stale')
+})
+
+test('classify: modified when the consumer body was edited after stamping', () => {
+  const template = 'body\n'
+  const stamped = stamp(template, { source: 'claude/rules/x.md', version: '5.0.0' })
+  const edited = `${stamped}extra line\n`
+  assert.equal(classify(template, edited), 'modified')
+})
+
+test('classify: a tampered marker sha (body untouched) is still reported as modified', () => {
+  // There is no way to tell "the body was edited" from "the marker was edited" using
+  // content alone — classify treats both as `modified`, the safe (never-overwrite)
+  // choice; sync only touches this file again with --force.
+  const template = 'body\n'
+  const stamped = stamp(template, { source: 'claude/rules/x.md', version: '5.0.0' })
+  const tampered = stamped.replace(/sha256=[0-9a-f]{16}/, 'sha256=0000000000000000')
+  assert.equal(classify(template, tampered), 'modified')
+})
+
+test('classify: unstamped-identical for a byte-identical copy made before sync existed', () => {
+  const template = 'body\n'
+  assert.equal(classify(template, template), 'unstamped-identical')
+})
+
+test('classify: unstamped-different for an unmarked copy that diverged from the template', () => {
+  const template = 'body\n'
+  assert.equal(classify(template, 'a different body\n'), 'unstamped-different')
 })
