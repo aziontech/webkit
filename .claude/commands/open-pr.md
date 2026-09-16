@@ -23,6 +23,13 @@ Run `git diff` (staged + unstaged) and determine, from the change itself:
 - **scope** → the package without its namespace (`webkit`, `theme`, `icons`), inferred from the changed paths.
 - **breaking?** → a removed or renamed public prop, event, slot, or export ⇒ major. Mark it with `!` and a `BREAKING CHANGE:` footer. **Confirm with the user before marking a change breaking.**
 
+### 1b. Version gate — before any commit or PR
+State the bump the change will produce for each touched package (`major` / `minor` / `patch` / `none`), derived from step 1 plus any commit already on the branch (`git log origin/main..HEAD` — a `!` or `BREAKING CHANGE:` anywhere in the branch makes the squash-merged PR a major).
+- **`major`:** stop. Ask the user explicitly: "This will release a **major** of `@aziontech/<scope>` (`<current>` → `<next>`). Is that what you want?" Do not commit, push, or open the PR until they answer yes. If they say no, drop the `!`/footer and re-derive the type, or split the breaking part into its own PR the user chooses to open.
+- **`minor` / `patch` / `none`:** state it and continue; the plan in step 5 shows it again.
+
+Never infer consent to a major from the task itself — a request to "remove the deprecated prop" still gets the question.
+
 If the diff spans multiple packages, prefer **one commit per scope** (CONTRIBUTING: "one package per commit when possible").
 
 ### 2. Related issue (optional)
@@ -41,7 +48,7 @@ If the diff spans multiple packages, prefer **one commit per scope** (CONTRIBUTI
 - Let the hooks run — `commit-msg` runs commitlint and the header must pass. **Do not** use `--no-verify` to skip commitlint. If `pre-commit` (lint-staged) fails for an environmental reason, report it and ask the user before retrying.
 
 ### 5. Show the plan and confirm
-- Show the planned commit header(s), the implied version bump (minor/patch/major/none), and the target base (`main`). Confirm with the user before pushing.
+- Show the planned commit header(s), the implied version bump (minor/patch/major/none), and the target base (`main`). Confirm with the user before pushing. A `major` here must already have been confirmed in step 1b — if it was not, go back and ask.
 
 ### 6. Push and open the PR
 - `git push -u origin <branch>`.
@@ -66,5 +73,6 @@ If the diff spans multiple packages, prefer **one commit per scope** (CONTRIBUTI
 ## Rules
 
 - The base branch is always `main`.
+- A major bump is never decided by the command. Every commit and PR passes the version gate (step 1b); a `major` needs the user's explicit yes first.
 - Commit and push only as part of this command (running it is the authorization). Do not commit unrelated changes.
 - Keep imports/exports in the public flat form per [`.claude/rules/imports.md`](../rules/imports.md) when the diff touches `package.json#exports` or stories.
