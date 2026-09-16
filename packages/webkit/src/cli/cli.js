@@ -9,6 +9,7 @@ import { runCanary } from './canary.js'
 import { planDoctor } from './doctor.js'
 import { planInit } from './plan.js'
 import { FAIL_MODES, FORMATS, runReport } from './report.js'
+import { planSync } from './sync.js'
 
 const HELP = `@aziontech/webkit — adopt the design system in one command
 
@@ -17,12 +18,15 @@ Usage:
   npx @aziontech/webkit doctor
   npx @aziontech/webkit report [options] [patterns...]
   npx @aziontech/webkit canary
+  npx @aziontech/webkit sync [options]
 
 Commands:
   init            Wire @aziontech/webkit into the current project.
   doctor          Check the wiring is healthy; report resolved dependency versions.
   report          Measure webkit adoption via this project's own ESLint.
   canary          Prove the design-system lint rules still reach this project.
+  sync            Reconcile the copied .claude/ bundle + CLAUDE.md fragment against
+                   this webkit version's templates.
 
 Options (init):
   --dry-run       Print the plan without writing anything.
@@ -38,11 +42,17 @@ Options (report):
   --fail-on <never|any>      Exit 1 when violations exist (default: never).
   [patterns...]              ESLint file patterns to lint (default: .).
 
+Options (sync):
+  --check         Apply nothing; print the state table; exit 1 if anything has drifted.
+  --dry-run       Apply nothing; print what would happen; always exits 0.
+  --force         Also overwrite files edited locally after they were stamped.
+  --json          Print the report as JSON instead of the state table.
+
 Run interactively (a TTY, no --yes) and init asks about the optional pieces —
 icons, entry wiring — before writing anything.
 `
 
-const COMMANDS = new Set(['init', 'doctor', 'report', 'canary'])
+const COMMANDS = new Set(['init', 'doctor', 'report', 'canary', 'sync'])
 const KNOWN_FLAGS = new Set([
   '--dry-run',
   '--strict',
@@ -51,6 +61,9 @@ const KNOWN_FLAGS = new Set([
   '-y',
   '--no-icons',
   '--no-entry',
+  '--check',
+  '--force',
+  '--json',
   '-h',
   '--help'
 ])
@@ -92,7 +105,10 @@ function parseArgs(argv) {
     help: flags.has('-h') || flags.has('--help'),
     format: values['--format'],
     failOn: values['--fail-on'],
-    patterns: positionals
+    patterns: positionals,
+    check: flags.has('--check'),
+    force: flags.has('--force'),
+    json: flags.has('--json')
   }
 }
 
@@ -149,6 +165,86 @@ function runDoctor(projectDir) {
   return fails ? 1 : 0
 }
 
+// Labels for `sync`'s state table — one line per acted-on entry, plus a summary. `force`
+// only changes the label for modified/unstamped-different entries (the only states whose
+// action depends on it); every other state's action is unconditional.
+function syncLabel(state, forced) {
+  switch (state) {
+    case 'missing':
+      return 'COPY  '
+    case 'stale':
+      return 'UPDATE'
+    case 'unstamped-identical':
+      return 'STAMP '
+    case 'modified':
+    case 'unstamped-different':
+      return forced ? 'STAMP ' : 'SKIP  '
+    case 'orphan':
+      return 'ORPHAN'
+    default:
+      return state.toUpperCase()
+  }
+}
+
+function printSyncTable(plan) {
+  let acted = 0
+  for (const entry of plan.entries) {
+    if (!entry.action) continue
+    acted += 1
+    const forced = entry.action.forced === true
+    process.stdout.write(
+      `${syncLabel(entry.state, forced)} .claude/${entry.rel} (${entry.state})\n`
+    )
+  }
+  if (plan.fragment.action) {
+    acted += 1
+    process.stdout.write(`FENCE  CLAUDE.md (fragment ${plan.fragment.state})\n`)
+  }
+  const current = plan.entries.length - plan.entries.filter((e) => e.action).length
+  process.stdout.write(
+    `\n${acted} action(s), ${current} current, fragment ${plan.fragment.state}, drift: ${plan.drift ? 'yes' : 'no'}\n`
+  )
+}
+
+function runSync(projectDir, { check, dryRun, force, json }) {
+  const applyNothing = check || dryRun
+  try {
+    const plan = planSync(projectDir, { force })
+
+    if (json) {
+      process.stdout.write(
+        `${JSON.stringify(
+          {
+            drift: plan.drift,
+            fragment: plan.fragment.state,
+            entries: plan.entries.map((e) => ({
+              rel: e.rel,
+              state: e.state,
+              action: e.action ? e.action.type : null
+            }))
+          },
+          null,
+          2
+        )}\n`
+      )
+    } else {
+      process.stdout.write(
+        `\n@aziontech/webkit sync${applyNothing ? ' (no changes applied)' : ''}\nproject: ${projectDir}\n\n`
+      )
+      printSyncTable(plan)
+    }
+
+    if (!applyNothing) {
+      applyPlan(projectDir, plan.actions)
+    }
+
+    return check && plan.drift ? 1 : 0
+  } catch (err) {
+    process.stderr.write(`${err?.message || err}\n`)
+    return 2
+  }
+}
+
 function labelFor(result) {
   return (
     {
@@ -185,8 +281,17 @@ function printPlan(plan) {
       case 'copy':
         process.stdout.write(`PLAN   copy ${action.to}\n`)
         break
+      case 'copy-stamped':
+        process.stdout.write(`PLAN   copy (stamped) ${action.to}\n`)
+        break
       case 'patch-entry':
         process.stdout.write(`PLAN   patch ${action.path} (${action.imports.join(' · ')})\n`)
+        break
+      case 'fence':
+        process.stdout.write(`PLAN   fence ${action.path}\n`)
+        break
+      case 'report':
+        process.stdout.write(`PLAN   report ${action.state}: .claude/${action.rel}\n`)
         break
       default:
         process.stdout.write(`PLAN   ${action.type} ${action.path || ''}\n`)
@@ -250,6 +355,15 @@ async function run(argv) {
     const result = runCanary(projectDir)
     for (const line of result.lines) process.stdout.write(`${line}\n`)
     return result.exitCode
+  }
+
+  if (command === 'sync') {
+    return runSync(projectDir, {
+      check: parsed.check,
+      dryRun: dryRun,
+      force: parsed.force,
+      json: parsed.json
+    })
   }
 
   const initOpts = await resolveInitOptions(parsed)

@@ -1,6 +1,6 @@
-// Idempotent executor for an init plan produced by `planInit`: every action is
-// safe to run twice (existing files are skipped or merged, never clobbered).
-// Returns `{ action, result }` records of what actually happened.
+// Idempotent executor for an init plan produced by `planInit`. Returns `{ action, result }`
+// records. `fence` deliberately replaces its block's content on every run — see
+// docs/toolkit/cli.md and bundle.js.
 
 import {
   chmodSync,
@@ -11,6 +11,8 @@ import {
   writeFileSync
 } from 'node:fs'
 import { dirname, join } from 'node:path'
+
+import { spliceFragment } from './bundle.js'
 
 function ensureDir(filePath) {
   mkdirSync(dirname(filePath), { recursive: true })
@@ -149,6 +151,20 @@ function applyPatchEntry(projectDir, action) {
   }
 }
 
+// Replaces the fenced block in `action.path` with `action.content` (see bundle.js).
+function applyFence(projectDir, action) {
+  const target = join(projectDir, action.path)
+  const existed = existsSync(target)
+  const existing = existed ? readFileSync(target, 'utf8') : ''
+  const next = spliceFragment(existing, action.content, { start: action.start, end: action.end })
+  if (existed && next === existing) {
+    return { action, result: 'skipped', detail: `${action.path} already up to date` }
+  }
+  ensureDir(target)
+  writeFileSync(target, next, 'utf8')
+  return { action, result: existed ? 'merged' : 'written', detail: action.path }
+}
+
 function applyCopy(projectDir, action) {
   const target = join(projectDir, action.to)
   if (existsSync(target)) {
@@ -160,6 +176,26 @@ function applyCopy(projectDir, action) {
   ensureDir(target)
   copyFileSync(action.from, target)
   return { action, result: 'written', detail: action.to }
+}
+
+// Writes `action.content` (already provenance-stamped) to `action.to`, always
+// overwriting whatever is there — the counterpart to `copy`'s skip-if-exists behavior.
+// Used by `sync` (via planSync) for `missing`/`stale`/`unstamped-identical` entries, and
+// for `modified`/`unstamped-different` entries only when the caller opted into `--force`.
+function applyCopyStamped(projectDir, action) {
+  const target = join(projectDir, action.to)
+  const existed = existsSync(target)
+  ensureDir(target)
+  writeFileSync(target, action.content, 'utf8')
+  return { action, result: existed ? 'merged' : 'written', detail: action.to }
+}
+
+// Reports a `modified` / `unstamped-different` / `orphan` bundle entry without touching
+// disk (sync's default policy: never overwrite a consumer's local edit, never delete an
+// orphan). Exists purely so these states flow through `applyPlan` like every other
+// action instead of `sync` special-casing them.
+function applyReportOnly(action) {
+  return { action, result: action.reportResult || 'skipped', detail: action.detail }
 }
 
 /** Execute a plan against `projectDir`. Idempotent: safe to run repeatedly. */
@@ -182,11 +218,20 @@ export function applyPlan(projectDir, plan) {
       case 'copy':
         results.push(applyCopy(projectDir, action))
         break
+      case 'copy-stamped':
+        results.push(applyCopyStamped(projectDir, action))
+        break
       case 'patch-entry':
         results.push(applyPatchEntry(projectDir, action))
         break
+      case 'fence':
+        results.push(applyFence(projectDir, action))
+        break
       case 'advise':
         results.push({ action, result: 'advised', detail: action.message })
+        break
+      case 'report':
+        results.push(applyReportOnly(action))
         break
       default:
         results.push({ action, result: 'skipped', detail: `unknown action type: ${action.type}` })
