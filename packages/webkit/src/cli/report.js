@@ -43,13 +43,9 @@ function extensionOf(path) {
 }
 
 /**
- * Resolve the consumer's own ESLint entry point. Always the `node_modules/.bin/eslint`
- * shim when present: under pnpm, both `new ESLint().lintFiles()` and
- * `node node_modules/.../eslint/bin/eslint.js` return a fatal parse error for every
- * `.astro` file (0 findings, silently) — pnpm's shim exports `NODE_PATH` before exec'ing
- * node, which `astro-eslint-parser` needs to resolve; without it ESLint falls back to the
- * default parser. Falls back to resolving `eslint/package.json`'s own `bin` entry only
- * when the shim is missing (unusual install layout).
+ * Always the `node_modules/.bin/eslint` shim, never the ESLint Node API (both silently
+ * drop `.astro` findings under pnpm; docs/toolkit/report.md § Why the shim). Falls back
+ * to `eslint/package.json#bin` only when the shim itself is missing.
  */
 export function resolveEslintBin(cwd) {
   const shim = join(
@@ -103,13 +99,9 @@ function runESLint(cwd, patterns) {
 }
 
 /**
- * Aggregate raw ESLint JSON results into the report shape. Pure — no I/O.
- *
- * The score counts CLEAN FILES, not violations: a file with twenty findings weighs the
- * same as a file with one, so the number moves when a file is finished, not when the
- * cheapest findings across the repo are cleared (same shape as console-kit's architecture
- * report). `keys` is a flat `"<relpath>::<rule>"` list, one entry per occurrence, so a
- * future `--baseline`/`--fail-on new` can diff it as a multiset without changing the shape.
+ * Aggregate raw ESLint JSON results into the report shape. Pure — no I/O. Scores by clean
+ * file, not by finding count; `keys` is a flat multiset for a future baseline diff. See
+ * docs/toolkit/report.md § The score counts clean files, not violations.
  */
 export function collect(results, cwd) {
   const byRule = new Map()

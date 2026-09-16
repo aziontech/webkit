@@ -1,9 +1,6 @@
-// `webkit canary` — proves the design-system rules still reach this project.
-//
-// Inverted logic: each fixture violates one rule on purpose and must keep being flagged
-// by that exact rule. A fixture that comes back clean means the rules stopped arriving,
-// which otherwise only ever makes the adoption number look better. See
-// docs/toolkit/report.md § Why canary exists.
+// `webkit canary` — proves the design-system rules still reach this project. Inverted
+// logic: each fixture violates one rule on purpose and must keep being flagged by that
+// exact rule. See docs/toolkit/report.md § Why canary exists.
 
 import { spawnSync } from 'node:child_process'
 import { mkdirSync, rmSync, writeFileSync } from 'node:fs'
