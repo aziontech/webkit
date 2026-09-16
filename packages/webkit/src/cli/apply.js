@@ -1,6 +1,9 @@
 // Idempotent executor for an init plan produced by `planInit`: every action is
 // safe to run twice (existing files are skipped or merged, never clobbered).
-// Returns `{ action, result }` records of what actually happened.
+// Returns `{ action, result }` records of what actually happened. `fence` is the
+// exception to "never clobbered" for a good reason: it owns one marker-delimited block
+// (see bundle.js) and intentionally replaces that block's content on every run, so
+// template updates reach a consumer that already ran `init` once.
 
 import {
   chmodSync,
@@ -11,6 +14,8 @@ import {
   writeFileSync
 } from 'node:fs'
 import { dirname, join } from 'node:path'
+
+import { spliceFragment } from './bundle.js'
 
 function ensureDir(filePath) {
   mkdirSync(dirname(filePath), { recursive: true })
@@ -149,6 +154,23 @@ function applyPatchEntry(projectDir, action) {
   }
 }
 
+// Fence action: replaces (or creates) a marker-delimited block in `action.path` with
+// `action.content`, via `spliceFragment` — a fenced block is updated in place on every
+// run (never append-once), and a pre-fence legacy marker (single or duplicated) is
+// migrated/repaired into the new fenced form.
+function applyFence(projectDir, action) {
+  const target = join(projectDir, action.path)
+  const existed = existsSync(target)
+  const existing = existed ? readFileSync(target, 'utf8') : ''
+  const next = spliceFragment(existing, action.content, { start: action.start, end: action.end })
+  if (existed && next === existing) {
+    return { action, result: 'skipped', detail: `${action.path} already up to date` }
+  }
+  ensureDir(target)
+  writeFileSync(target, next, 'utf8')
+  return { action, result: existed ? 'merged' : 'written', detail: action.path }
+}
+
 function applyCopy(projectDir, action) {
   const target = join(projectDir, action.to)
   if (existsSync(target)) {
@@ -184,6 +206,9 @@ export function applyPlan(projectDir, plan) {
         break
       case 'patch-entry':
         results.push(applyPatchEntry(projectDir, action))
+        break
+      case 'fence':
+        results.push(applyFence(projectDir, action))
         break
       case 'advise':
         results.push({ action, result: 'advised', detail: action.message })
