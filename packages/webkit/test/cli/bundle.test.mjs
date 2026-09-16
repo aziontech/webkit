@@ -36,7 +36,9 @@ function walkMarkdownRelative(dir, base = dir) {
   return out
 }
 
-test('listBundle equals a plain directory walk of rules/, skills/, agents/', () => {
+// Alarm, not just coverage: a template outside the bundle shape (a skill's references/)
+// fails here, so shipping it to consumers becomes a deliberate decision.
+test('every .md under the templates dir is in the bundle (nothing is silently dropped)', () => {
   const expected = []
   for (const sub of ['rules', 'skills', 'agents']) {
     const abs = join(CLAUDE_TEMPLATES, sub)
@@ -92,6 +94,10 @@ test('listBundle accepts an injected templates dir (for testing exclusions/fixtu
     writeFileSync(join(dir, 'skills', 'foo', 'SKILL.md'), '# skill')
     writeFileSync(join(dir, 'agents', 'b.md'), '# b')
     writeFileSync(join(dir, 'rules', 'ignored.txt'), 'not markdown')
+    mkdirSync(join(dir, 'skills', 'foo', 'references'), { recursive: true })
+    writeFileSync(join(dir, 'skills', 'foo', 'references', 'notes.md'), '# not shipped')
+    mkdirSync(join(dir, 'skills', 'no-skill-file'), { recursive: true })
+    writeFileSync(join(dir, 'skills', 'no-skill-file', 'README.md'), '# not a skill')
 
     const bundle = listBundle(dir)
     assert.deepEqual(bundle, ['agents/b.md', 'rules/a.md', 'skills/foo/SKILL.md'])
@@ -163,6 +169,23 @@ test('spliceFragment: a legacy block does not stop early at its own heading', ()
     'the whole legacy body must be replaced, not just the marker line'
   )
   assert.equal(result, `${FRAGMENT_START}\nNEWBODY\n${FRAGMENT_END}\n`)
+})
+
+test('spliceFragment: a legacy block survives a renamed fragment heading', () => {
+  // The heading right after the marker is the fragment's own, whatever its text.
+  const source = `${LEGACY_MARKER}\n## Renamed design system title\nLine one.\n## User Section\nkeep\n`
+  const result = spliceFragment(source, 'NEWBODY')
+  assert.ok(!result.includes('Line one.'))
+  assert.ok(result.includes('## User Section\nkeep'))
+})
+
+test('spliceFragment: a heading that exists in the new body is not a foreign boundary', () => {
+  const body = '## Title\nIntro.\n## Second own section\nMore.'
+  const source = `${LEGACY_MARKER}\n## Title\nOld intro.\n## Second own section\nOld more.\n## User Section\nkeep\n`
+  const result = spliceFragment(source, body)
+  assert.ok(!result.includes('Old intro.'))
+  assert.ok(!result.includes('Old more.'))
+  assert.ok(result.includes('## User Section\nkeep'))
 })
 
 test('spliceFragment: a legacy block stops at the next foreign heading, preserving it', () => {
