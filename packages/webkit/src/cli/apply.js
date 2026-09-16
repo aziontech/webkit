@@ -178,6 +178,26 @@ function applyCopy(projectDir, action) {
   return { action, result: 'written', detail: action.to }
 }
 
+// Writes `action.content` (already provenance-stamped) to `action.to`, always
+// overwriting whatever is there — the counterpart to `copy`'s skip-if-exists behavior.
+// Used by `sync` (via planSync) for `missing`/`stale`/`unstamped-identical` entries, and
+// for `modified`/`unstamped-different` entries only when the caller opted into `--force`.
+function applyCopyStamped(projectDir, action) {
+  const target = join(projectDir, action.to)
+  const existed = existsSync(target)
+  ensureDir(target)
+  writeFileSync(target, action.content, 'utf8')
+  return { action, result: existed ? 'merged' : 'written', detail: action.to }
+}
+
+// Reports a `modified` / `unstamped-different` / `orphan` bundle entry without touching
+// disk (sync's default policy: never overwrite a consumer's local edit, never delete an
+// orphan). Exists purely so these states flow through `applyPlan` like every other
+// action instead of `sync` special-casing them.
+function applyReportOnly(action) {
+  return { action, result: action.reportResult || 'skipped', detail: action.detail }
+}
+
 /** Execute a plan against `projectDir`. Idempotent: safe to run repeatedly. */
 export function applyPlan(projectDir, plan) {
   const results = []
@@ -198,6 +218,9 @@ export function applyPlan(projectDir, plan) {
       case 'copy':
         results.push(applyCopy(projectDir, action))
         break
+      case 'copy-stamped':
+        results.push(applyCopyStamped(projectDir, action))
+        break
       case 'patch-entry':
         results.push(applyPatchEntry(projectDir, action))
         break
@@ -206,6 +229,9 @@ export function applyPlan(projectDir, plan) {
         break
       case 'advise':
         results.push({ action, result: 'advised', detail: action.message })
+        break
+      case 'report':
+        results.push(applyReportOnly(action))
         break
       default:
         results.push({ action, result: 'skipped', detail: `unknown action type: ${action.type}` })
