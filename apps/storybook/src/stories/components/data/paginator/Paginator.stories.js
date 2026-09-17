@@ -138,12 +138,12 @@ const DEFAULT_TEMPLATE = `<Paginator>
     <Paginator.Info>Showing 1 to 10 of 20 entries</Paginator.Info>
   </template>
 
-  <Paginator.Button kind="previous" disabled>Previous</Paginator.Button>
+  <Paginator.Button kind="previous" aria-label="Previous page" disabled />
   <Paginator.Button kind="number" selected>1</Paginator.Button>
   <Paginator.Button kind="number">2</Paginator.Button>
   <Paginator.Button kind="number">3</Paginator.Button>
   <Paginator.Button kind="more" />
-  <Paginator.Button kind="next">Next</Paginator.Button>
+  <Paginator.Button kind="next" aria-label="Next page" />
 
   <template #controls>
     <Paginator.PageSize :model-value="10" :options="[10, 25, 50, 100]" />
@@ -173,18 +173,18 @@ export const Default = {
 }
 
 const BUTTONS_TEMPLATE = `<div class="flex flex-col gap-(--spacing-md)">
-  <div class="flex flex-wrap items-center gap-(--spacing-xs)">
-    <Paginator.Button kind="previous">Previous</Paginator.Button>
+  <Paginator aria-label="Pagination kinds">
+    <Paginator.Button kind="previous" aria-label="Previous page" />
     <Paginator.Button kind="number">1</Paginator.Button>
     <Paginator.Button kind="number" selected>2</Paginator.Button>
     <Paginator.Button kind="more" />
-    <Paginator.Button kind="next">Next</Paginator.Button>
-  </div>
-  <div class="flex flex-wrap items-center gap-(--spacing-xs)">
-    <Paginator.Button kind="previous" disabled>Previous</Paginator.Button>
+    <Paginator.Button kind="next" aria-label="Next page" />
+  </Paginator>
+  <Paginator aria-label="Pagination disabled states">
+    <Paginator.Button kind="previous" aria-label="Previous page" disabled />
     <Paginator.Button kind="number" disabled>1</Paginator.Button>
-    <Paginator.Button kind="next" disabled>Next</Paginator.Button>
-  </div>
+    <Paginator.Button kind="next" aria-label="Next page" disabled />
+  </Paginator>
 </div>`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Paginator>} */
@@ -195,7 +195,7 @@ export const Buttons = {
       controls: { disable: true },
       description: {
         story:
-          '`Paginator.Button` kinds (previous / next / number / more) and states: default, selected (current page), and disabled.'
+          '`Paginator.Button` kinds (previous / next / number / more) and states: default, selected (current page), and disabled. The buttons are butted into one segmented strip — the frame, border and end radii come from the `Paginator` root, so a consumer composes the buttons and nothing else.'
       },
       source: { code: toSfc(IMPORT, BUTTONS_TEMPLATE) }
     }

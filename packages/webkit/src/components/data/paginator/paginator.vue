@@ -151,10 +151,10 @@
         </PaginatorInfo>
       </slot>
     </div>
-    <div
-      class="flex flex-auto flex-wrap items-center justify-end gap-x-(--spacing-sm) gap-y-(--spacing-xs)"
-    >
-      <div class="flex flex-wrap items-center justify-center gap-(--spacing-xxs)">
+    <div class="flex flex-auto flex-wrap items-center justify-end gap-(--spacing-xs)">
+      <div
+        class="inline-flex items-center rounded-(--shape-elements) border-(length:--border-width-default) border-solid border-(--border-default)"
+      >
         <template v-if="dataDriven">
           <PaginationButton
             kind="previous"
