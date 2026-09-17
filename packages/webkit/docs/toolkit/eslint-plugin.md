@@ -36,6 +36,21 @@ Nothing out of standard is ever a warning — **every rule in every preset is `e
 | `recommended` | every rule                                                                                             |
 | `performance` | tree-shaking rules only (`no-barrel-import`, `prefer-tree-shakeable-root`, `no-whole-icon-set-import`) |
 
+### File coverage
+
+Every preset's `files` glob covers `**/*.vue`, `**/*.astro`, `**/*.js`, `**/*.jsx`, `**/*.ts`,
+`**/*.tsx`, `**/*.mjs`, and `**/*.cjs` — `.astro` files are linted by the presets like any other
+source file, no extra config required. Import/token/authoring-standard rules run on `.astro`
+files exactly as they do elsewhere. The one exception is `no-style-override`: it needs
+`vue-eslint-parser`'s template-body visitor to inspect class/style attributes on component tags
+in a template, which `astro-eslint-parser` does not provide, so it is a **no-op** on `.astro`
+files (it still runs its script-level checks, and it never throws). If your project hand-declared
+its own `**/*.astro` override block re-listing rules to work around the previous gap, you can
+remove it — the shipped presets now cover `.astro` on their own.
+
+Consumers upgrading past this change will see new findings in `.astro` files that were
+previously unmeasured by these presets — that's the fix working, not a regression.
+
 ## Rules
 
 | Rule                         | What it catches                                                                                                                                                                                                                                            |
