@@ -22,8 +22,8 @@ Key Storybook addons: `@storybook/addon-essentials`, `@storybook/addon-links`, `
 
 Make sure you have the following installed:
 
-- Node.js >= 22.18.0 (see `engines` in `package.json`)
-- pnpm 10.x (the repo pins `pnpm@10.30.3` via `packageManager`)
+- Node.js >= 24 (see `engines` in the root `package.json`)
+- pnpm 11.x (the root `packageManager` field pins the exact version; `corepack enable` picks it up)
 
 ### Installation
 
