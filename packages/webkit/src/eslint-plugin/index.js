@@ -30,7 +30,16 @@ const rules = {
   'authoring-standards': authoringStandards
 }
 
-const FILES = ['**/*.vue', '**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx', '**/*.mjs', '**/*.cjs']
+const FILES = [
+  '**/*.vue',
+  '**/*.astro',
+  '**/*.js',
+  '**/*.jsx',
+  '**/*.ts',
+  '**/*.tsx',
+  '**/*.mjs',
+  '**/*.cjs'
+]
 
 const plugin = {
   meta: { name: '@aziontech/eslint-plugin-webkit', version: '0.0.0' },

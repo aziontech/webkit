@@ -1,4 +1,4 @@
-# webkit CLI — `init` + `doctor` + `sync`
+# webkit CLI — `init` + `doctor` + `report` + `canary` + `sync`
 
 One command to adopt the [`@aziontech/webkit`](https://github.com/aziontech/webkit) design system in an existing project — correctly and performantly by construction. The CLI ships **inside** `@aziontech/webkit` (the `webkit` bin) — there is no separate CLI package.
 
@@ -38,6 +38,15 @@ Feature-scoped setup is deliberately **not** part of `init`. A component that ne
 | `--no-entry`    | Do not edit `src/main.*`; print the imports to add instead.     |
 
 Unknown flags are rejected (so a typo'd `--dryrun` never becomes a real write run).
+
+## `report` and `canary` — measure and verify webkit adoption
+
+```bash
+npx @aziontech/webkit report   # adoption score via this project's own ESLint
+npx @aziontech/webkit canary   # proves the design-system rules still reach this project
+```
+
+Full documentation: [`docs/toolkit/report.md`](./report.md).
 
 ## `doctor` — check the wiring is healthy
 
