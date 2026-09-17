@@ -6,13 +6,8 @@
 import { existsSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 
-import {
-  CLAUDE_TEMPLATES,
-  FRAGMENT_END,
-  FRAGMENT_START,
-  LEGACY_MARKER,
-  listBundle
-} from './bundle.js'
+import { LEGACY_MARKER, listBundle } from './bundle.js'
+import { planSync } from './sync.js'
 
 // Floating range so the consumer resolves the latest published design-system
 // version; `apply.js` never downgrades an existing pin.
@@ -168,11 +163,6 @@ npx eslint .
 npx stylelint "**/*.{css,scss,vue}"
 `
 
-// The CLAUDE.md fragment body (the marker line is prepended at apply time).
-function claudeFragment() {
-  return read(join(CLAUDE_TEMPLATES, 'CLAUDE.fragment.md')) || ''
-}
-
 /** Build the ordered init plan for `projectDir`. Pure — no disk writes. */
 export function planInit(projectDir, opts = {}) {
   const actions = []
@@ -311,24 +301,12 @@ export function planInit(projectDir, opts = {}) {
       'Husky pre-commit hook written. Run your package manager install (which runs the "prepare" script) to activate git hooks.'
   })
 
-  // 6. Copy the Claude Code bundle into .claude/ (only missing files).
-  for (const rel of CLAUDE_BUNDLE) {
-    actions.push({
-      type: 'copy',
-      from: join(CLAUDE_TEMPLATES, rel),
-      to: join('.claude', rel)
-    })
-  }
-
-  // 7. Fence the CLAUDE.md fragment so future template updates replace it in place; a
-  //    pre-fence legacy marker (or a duplicated one) is migrated/repaired automatically.
-  actions.push({
-    type: 'fence',
-    path: 'CLAUDE.md',
-    start: FRAGMENT_START,
-    end: FRAGMENT_END,
-    content: claudeFragment()
-  })
+  // 6-7. Copy the Claude Code bundle into .claude/ (provenance-stamped) and fence the
+  //    CLAUDE.md fragment — delegated to `planSync` so `init` and `sync` share one
+  //    policy. On a fresh project every bundle file is `missing` and the fragment is
+  //    `missing`, so this yields exactly the same "copy everything, fence once" plan
+  //    `init` always produced — now with every copy stamped for future `sync` runs.
+  actions.push(...planSync(projectDir).actions)
 
   // 8. Wire the entry imports. Importing the generated src/webkit.css is what includes
   //    the `@source` that compiles webkit's classes — skipping it is the "installed but

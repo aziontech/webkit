@@ -2,60 +2,60 @@
 // See docs/toolkit/cli.md for why (drift-proof bundle, in-place fragment updates,
 // legacy-marker migration/repair).
 
-import { existsSync, readdirSync } from 'node:fs'
-import { dirname, join, relative, sep } from 'node:path'
+import { createHash } from 'node:crypto'
+import { existsSync, readdirSync, readFileSync } from 'node:fs'
+import { dirname, join, sep } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const TEMPLATES = join(__dirname, '../../cli-templates')
 export const CLAUDE_TEMPLATES = join(TEMPLATES, 'claude')
 
-// Walked in this order; see listBundle().
-const BUNDLE_DIRS = ['rules', 'skills', 'agents']
-
-// Extension point for a template that ships on disk but should never be copied.
-const EXCLUDE = new Set()
+// Version of the installed webkit, stamped into every provenance marker.
+function resolveWebkitVersion() {
+  try {
+    const pkg = JSON.parse(readFileSync(join(__dirname, '../../package.json'), 'utf8'))
+    return pkg.version || '0.0.0'
+  } catch {
+    return '0.0.0'
+  }
+}
+export const WEBKIT_VERSION = resolveWebkitVersion()
 
 function toPosix(path) {
   return sep === '/' ? path : path.split(sep).join('/')
 }
 
-/** Recursively collect `.md` files under `dir`, returned as POSIX paths relative to `dir`. */
-function walkMarkdown(dir) {
-  if (!existsSync(dir)) return []
-  const out = []
-  const stack = [dir]
-  while (stack.length) {
-    const current = stack.pop()
-    let entries = []
-    try {
-      entries = readdirSync(current, { withFileTypes: true })
-    } catch {
-      continue
-    }
-    for (const entry of entries) {
-      const full = join(current, entry.name)
-      if (entry.isDirectory()) {
-        stack.push(full)
-      } else if (entry.isFile() && entry.name.endsWith('.md')) {
-        out.push(full)
-      }
-    }
+function listDir(dir) {
+  try {
+    return readdirSync(dir, { withFileTypes: true })
+  } catch {
+    return []
   }
-  return out
 }
 
-/** Every `.md` template under `rules/`, `skills/`, `agents/`, as sorted POSIX paths relative to `templatesDir`. */
+// The bundle has a fixed shape; a template outside it (a skill's references/) is not
+// shipped. bundle.test.mjs fails when the templates dir grows past this shape.
+function flatMarkdown(dir) {
+  return listDir(dir)
+    .filter((e) => e.isFile() && e.name.endsWith('.md'))
+    .map((e) => e.name)
+}
+
+function skillFiles(dir) {
+  return listDir(dir)
+    .filter((e) => e.isDirectory() && existsSync(join(dir, e.name, 'SKILL.md')))
+    .map((e) => `${e.name}/SKILL.md`)
+}
+
+/** `rules/*.md`, `agents/*.md` and `skills/*\/SKILL.md`, as sorted POSIX paths relative to `templatesDir`. */
 export function listBundle(templatesDir = CLAUDE_TEMPLATES) {
-  const rels = []
-  for (const bundleDir of BUNDLE_DIRS) {
-    const abs = join(templatesDir, bundleDir)
-    for (const file of walkMarkdown(abs)) {
-      const rel = toPosix(join(bundleDir, relative(abs, file)))
-      if (!EXCLUDE.has(rel)) rels.push(rel)
-    }
-  }
-  return rels.sort()
+  const rels = [
+    ...flatMarkdown(join(templatesDir, 'rules')).map((name) => `rules/${name}`),
+    ...skillFiles(join(templatesDir, 'skills')).map((rel) => `skills/${rel}`),
+    ...flatMarkdown(join(templatesDir, 'agents')).map((name) => `agents/${name}`)
+  ]
+  return rels.map(toPosix).sort()
 }
 
 // --- CLAUDE.md fragment fencing ------------------------------------------------------
@@ -64,9 +64,6 @@ export const FRAGMENT_START = '<!-- @aziontech/webkit:start -->'
 export const FRAGMENT_END = '<!-- @aziontech/webkit:end -->'
 // Pre-fence marker from older `init` runs; detected only to migrate/repair.
 export const LEGACY_MARKER = '<!-- @aziontech/webkit -->'
-
-// The fragment's own heading — excluded from the "next section" boundary check below.
-const FRAGMENT_OWN_HEADING = '## @aziontech/webkit design system'
 
 function findFencedBlocks(source, startMarker, endMarker) {
   const blocks = []
@@ -83,12 +80,21 @@ function findFencedBlocks(source, startMarker, endMarker) {
   return blocks
 }
 
-function isForeignHeading(line) {
-  return /^#{1,2}\s/.test(line) && line.trim() !== FRAGMENT_OWN_HEADING
+const HEADING_RE = /^#{1,2}\s/
+
+function headingsOf(text) {
+  return new Set(
+    text
+      .split('\n')
+      .filter((line) => HEADING_RE.test(line))
+      .map((line) => line.trim())
+  )
 }
 
 // A legacy block runs from its marker to the next foreign heading, the next marker, or EOF.
-function findLegacyBlocks(source) {
+// Own (not foreign): the heading right after the marker, and any heading in `body`.
+function findLegacyBlocks(source, body = '') {
+  const ownHeadings = headingsOf(body)
   const blocks = []
   const markerIndexes = []
   let searchFrom = 0
@@ -104,14 +110,17 @@ function findLegacyBlocks(source) {
     let end = source.length
     let cursor = source.indexOf('\n', start)
     cursor = cursor === -1 ? source.length : cursor + 1
+    let firstLine = true
     while (cursor < source.length) {
       if (nextMarker !== undefined && cursor > nextMarker) break
       const lineEnd = source.indexOf('\n', cursor)
       const line = source.slice(cursor, lineEnd === -1 ? source.length : lineEnd)
-      if (isForeignHeading(line)) {
+      const isHeading = HEADING_RE.test(line)
+      if (isHeading && !firstLine && !ownHeadings.has(line.trim())) {
         end = cursor
         break
       }
+      if (line.trim() !== '') firstLine = false
       if (lineEnd === -1) {
         break
       }
@@ -159,7 +168,7 @@ export function spliceFragment(source, body, { start = FRAGMENT_START, end = FRA
     return normalize(result)
   }
 
-  const legacy = findLegacyBlocks(source)
+  const legacy = findLegacyBlocks(source, body)
   if (legacy.length) {
     let result =
       source.slice(0, legacy[0].start) +
@@ -167,7 +176,7 @@ export function spliceFragment(source, body, { start = FRAGMENT_START, end = FRA
       '\n' +
       source.slice(legacy[0].end)
     for (let i = 1; i < legacy.length; i += 1) {
-      const extra = findLegacyBlocks(result)[0]
+      const extra = findLegacyBlocks(result, body)[0]
       if (!extra) break
       result = result.slice(0, extra.start) + result.slice(extra.end)
     }
@@ -177,4 +186,74 @@ export function spliceFragment(source, body, { start = FRAGMENT_START, end = FRA
   const trimmed = source.replace(/\s+$/, '')
   const separator = trimmed ? '\n\n' : ''
   return normalize(`${trimmed}${separator}${fence(body, start, end)}\n`)
+}
+
+// --- Provenance marker (webkit sync) -------------------------------------------------
+// One inert HTML-comment line stamped into every copied bundle file: source, webkit
+// version, and a content hash of its own body. See docs/toolkit/cli.md ("sync") for
+// the marker format, placement rule, and how `sync` uses it to classify a file.
+
+const MARKER_LINE_RE =
+  /^<!-- webkit-sync source=(\S+) version=(\S+) sha256=([0-9a-f]{16}) -->\r?\n?/m
+
+function normalizeNewlines(content) {
+  return content.replace(/\r\n/g, '\n')
+}
+
+function sha256Short(text) {
+  return createHash('sha256').update(text, 'utf8').digest('hex').slice(0, 16)
+}
+
+/** Remove the provenance marker line, if present. Normalizes line endings first. */
+export function stripMarker(content) {
+  return normalizeNewlines(content).replace(MARKER_LINE_RE, '')
+}
+
+/** Parse the provenance marker out of `content`, or `null` when there is none. */
+export function parseMarker(content) {
+  const match = normalizeNewlines(content).match(MARKER_LINE_RE)
+  if (!match) return null
+  return { source: match[1], version: match[2], sha256: match[3] }
+}
+
+/** sha256 (first 16 hex chars) of `content`'s body — the marker line stripped first. */
+export function bodyHash(content) {
+  return sha256Short(stripMarker(content))
+}
+
+/**
+ * Stamp `content` with a fresh provenance marker for `source`/`version`, computed over
+ * its own body (any existing marker is stripped before hashing/re-inserting). Placement:
+ * line 1, or right after a leading YAML frontmatter block's closing `---` line.
+ */
+export function stamp(content, { source, version }) {
+  const body = stripMarker(content)
+  const marker = `<!-- webkit-sync source=${source} version=${version} sha256=${sha256Short(body)} -->`
+  const frontmatter = body.match(/^---\n[\s\S]*?\n---\n/)
+  if (frontmatter) {
+    const end = frontmatter[0].length
+    return `${body.slice(0, end)}${marker}\n${body.slice(end)}`
+  }
+  return `${marker}\n${body}`
+}
+
+/**
+ * Classify a consumer file against its template counterpart (`consumerContent` is `null`
+ * when it doesn't exist yet). States and their policy: docs/toolkit/cli.md ("sync").
+ */
+export function classify(templateContent, consumerContent) {
+  const templateHash = bodyHash(templateContent)
+  if (consumerContent === null || consumerContent === undefined) return 'missing'
+
+  const marker = parseMarker(consumerContent)
+  const consumerBody = stripMarker(consumerContent)
+  const consumerHash = sha256Short(consumerBody)
+
+  if (marker) {
+    if (consumerHash !== marker.sha256) return 'modified'
+    return templateHash === marker.sha256 ? 'current' : 'stale'
+  }
+
+  const templateBody = stripMarker(templateContent)
+  return consumerBody === templateBody ? 'unstamped-identical' : 'unstamped-different'
 }
