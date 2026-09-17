@@ -82,6 +82,7 @@
     "@vitest/browser-playwright": "^4.1.9",
     "@vitest/coverage-v8": "^4.1.9",
     "@vitest/ui": "^4.1.9",
+    "astro-eslint-parser": "^3.1.0",
     "axe-core": "^4.10.3",
     "eslint": "^9.39.3",
     "playwright": "^1.61.1",
