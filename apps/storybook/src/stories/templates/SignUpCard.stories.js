@@ -1,13 +1,53 @@
-import SignUpCard from '@aziontech/webkit/sign-up-card'
+import Button from '@aziontech/webkit/button'
 
 import { toSfc } from '../_shared/story-source'
 
-const IMPORT = "import SignUpCard from '@aziontech/webkit/sign-up-card'"
+const IMPORT = "import Button from '@aziontech/webkit/button'"
 
-/** @type {import('@storybook/vue3').Meta<typeof SignUpCard>} */
+const LINK_CLASS =
+  'rounded-(--shape-button) text-(--text-link) transition-colors hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-(--ring-color) motion-reduce:transition-none'
+
+const SOCIAL_BLOCK = `      <div class="flex w-full shrink-0 flex-col items-start gap-(--spacing-sm)">
+        <Button label="Continue with Github" kind="outlined" size="large" icon="pi pi-github" class="w-full" />
+        <Button label="Continue with Google" kind="outlined" size="large" icon="ai-cor ai-google" class="w-full" />
+      </div>
+      <hr class="m-0 w-full shrink-0 border-0 border-t border-t-(--border-default)" />
+`
+
+// One template builder for both stories so the canvas and "Show code" never drift.
+const signUpTemplate = ({ social }) => `<div class="flex w-full max-w-(--container-sm) flex-col items-center gap-(--spacing-xs)">
+  <article class="flex w-full shrink-0 flex-col items-start overflow-clip rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface)">
+    <div class="flex w-full shrink-0 flex-col items-start gap-(--spacing-xl) px-(--spacing-xl) py-(--spacing-xl)">
+      <header class="flex w-full max-w-(--container-sm) shrink-0 flex-col items-start gap-(--spacing-xs) [word-break:break-word]">
+        <h2 class="w-full text-heading-sm text-(--text-default)">Sign Up for a Free Account</h2>
+        <p class="w-full text-body-sm text-(--text-muted)">US$ 300 credit to use over 12 months, no credit card is required.</p>
+      </header>
+
+      <div class="flex w-full shrink-0 flex-col items-start gap-(--spacing-xl)">
+${social ? SOCIAL_BLOCK : ''}      <Button label="Sign Up with Work Email" kind="primary" size="large" class="w-full" />
+      </div>
+
+      <p class="w-full shrink-0 text-center text-body-sm text-(--text-muted) [word-break:break-word]">
+        By signing up, you agree to the
+        <a href="#" class="${LINK_CLASS}">Terms of Service</a>
+        and
+        <a href="#" class="${LINK_CLASS}">Privacy Policy</a>
+      </p>
+    </div>
+  </article>
+
+  <div class="flex w-full shrink-0 items-center justify-center gap-(--spacing-xs)">
+    <p class="shrink-0 whitespace-nowrap text-center text-body-sm text-(--text-muted)">Already have an account?</p>
+    <a href="#" class="inline-flex h-10 shrink-0 items-center text-body-sm ${LINK_CLASS}">Sign in</a>
+  </div>
+</div>`
+
+const components = { Button }
+
+/** @type {import('@storybook/vue3').Meta<typeof Button>} */
 const meta = {
   title: 'Templates/SignUpCard',
-  component: SignUpCard,
+  component: Button,
   tags: ['autodocs'],
   parameters: {
     layout: 'centered',
@@ -25,211 +65,49 @@ const meta = {
     docs: {
       description: {
         component:
-          'Sign-up card template for a product onboarding flow: optional social sign-up actions (GitHub, Google), a primary email sign-up button, legal links, and a sign-in footer prompt.'
+          'Sign-up card for a product onboarding flow, composed from `Button` and plain token-styled markup: optional social sign-up actions (GitHub, Google), a primary email sign-up button, legal links, and a sign-in footer prompt.'
       },
       canvas: { sourceState: 'shown' }
     }
   },
-  argTypes: {
-    title: {
-      control: 'text',
-      description: 'Card heading.',
-      table: {
-        category: 'props',
-        type: { summary: 'string' },
-        defaultValue: { summary: "'Sign Up for a Free Account'" }
-      }
-    },
-    subtitle: {
-      control: 'text',
-      description: 'Supporting copy below the heading.',
-      table: {
-        category: 'props',
-        type: { summary: 'string' },
-        defaultValue: {
-          summary: "'US$ 300 credit to use over 12 months, no credit card is required.'"
-        }
-      }
-    },
-    githubLabel: {
-      control: 'text',
-      description: 'Label for the GitHub sign-up action.',
-      table: {
-        category: 'props',
-        type: { summary: 'string' },
-        defaultValue: { summary: "'Continue with Github'" }
-      }
-    },
-    googleLabel: {
-      control: 'text',
-      description: 'Label for the Google sign-up action.',
-      table: {
-        category: 'props',
-        type: { summary: 'string' },
-        defaultValue: { summary: "'Continue with Google'" }
-      }
-    },
-    emailLabel: {
-      control: 'text',
-      description: 'Label for the primary email sign-up action.',
-      table: {
-        category: 'props',
-        type: { summary: 'string' },
-        defaultValue: { summary: "'Sign Up with Work Email'" }
-      }
-    },
-    signInPrompt: {
-      control: 'text',
-      description: 'Footer prompt shown before the sign-in link.',
-      table: {
-        category: 'props',
-        type: { summary: 'string' },
-        defaultValue: { summary: "'Already have an account?'" }
-      }
-    },
-    signInLabel: {
-      control: 'text',
-      description: 'Sign-in link label.',
-      table: {
-        category: 'props',
-        type: { summary: 'string' },
-        defaultValue: { summary: "'Sign in'" }
-      }
-    },
-    termsHref: {
-      control: 'text',
-      description: 'Terms of Service link URL.',
-      table: {
-        category: 'props',
-        type: { summary: 'string' },
-        defaultValue: { summary: "'#'" }
-      }
-    },
-    privacyHref: {
-      control: 'text',
-      description: 'Privacy Policy link URL.',
-      table: {
-        category: 'props',
-        type: { summary: 'string' },
-        defaultValue: { summary: "'#'" }
-      }
-    },
-    signInHref: {
-      control: 'text',
-      description: 'Sign-in link URL.',
-      table: {
-        category: 'props',
-        type: { summary: 'string' },
-        defaultValue: { summary: "'#'" }
-      }
-    },
-    showGithub: {
-      control: 'boolean',
-      description: 'Whether the GitHub sign-up button is shown.',
-      table: {
-        category: 'props',
-        type: { summary: 'boolean' },
-        defaultValue: { summary: 'true' }
-      }
-    },
-    showGoogle: {
-      control: 'boolean',
-      description: 'Whether the Google sign-up button is shown.',
-      table: {
-        category: 'props',
-        type: { summary: 'boolean' },
-        defaultValue: { summary: 'true' }
-      }
-    },
-    onGithubClick: {
-      action: 'github-click',
-      description: 'Emitted when the GitHub sign-up button is activated.',
-      table: { category: 'events', type: { summary: 'MouseEvent' } }
-    },
-    onGoogleClick: {
-      action: 'google-click',
-      description: 'Emitted when the Google sign-up button is activated.',
-      table: { category: 'events', type: { summary: 'MouseEvent' } }
-    },
-    onEmailClick: {
-      action: 'email-click',
-      description: 'Emitted when the primary email sign-up button is activated.',
-      table: { category: 'events', type: { summary: 'MouseEvent' } }
-    },
-    onSignInClick: {
-      action: 'sign-in-click',
-      description: 'Emitted when the sign-in footer link is activated.',
-      table: { category: 'events', type: { summary: 'MouseEvent' } }
-    },
-    onTermsClick: {
-      action: 'terms-click',
-      description: 'Emitted when the Terms of Service link is activated.',
-      table: { category: 'events', type: { summary: 'MouseEvent' } }
-    },
-    onPrivacyClick: {
-      action: 'privacy-click',
-      description: 'Emitted when the Privacy Policy link is activated.',
-      table: { category: 'events', type: { summary: 'MouseEvent' } }
-    }
-  },
-  args: {
-    title: 'Sign Up for a Free Account',
-    subtitle: 'US$ 300 credit to use over 12 months, no credit card is required.',
-    githubLabel: 'Continue with Github',
-    googleLabel: 'Continue with Google',
-    emailLabel: 'Sign Up with Work Email',
-    signInPrompt: 'Already have an account?',
-    signInLabel: 'Sign in',
-    termsHref: '#',
-    privacyHref: '#',
-    signInHref: '#',
-    showGithub: true,
-    showGoogle: true
-  }
+  argTypes: {},
+  args: {}
 }
 
 export default meta
 
-const Template = (args) => ({
-  components: { SignUpCard },
-  setup() {
-    return { args }
-  },
-  template: '<SignUpCard v-bind="args" />'
-})
+const DEFAULT_TEMPLATE = signUpTemplate({ social: true })
 
-const DEFAULT_MARKUP = '<SignUpCard />'
-
-/** @type {import('@storybook/vue3').StoryObj<typeof SignUpCard>} */
+/** @type {import('@storybook/vue3').StoryObj<typeof Button>} */
 export const Default = {
-  render: Template,
+  render: () => ({ components, template: DEFAULT_TEMPLATE }),
   parameters: {
+    controls: { disable: true },
     docs: {
+      controls: { disable: true },
       description: {
         story:
-          'Default sign-up card with both social actions, the primary email action, legal links, and the sign-in footer prompt.'
+          'Sign-up card with both social actions, the primary email action, legal links, and the sign-in footer prompt.'
       },
-      source: { code: toSfc(IMPORT, DEFAULT_MARKUP) }
+      source: { code: toSfc(IMPORT, DEFAULT_TEMPLATE) }
     }
   }
 }
 
-const EMAIL_ONLY_MARKUP = '<SignUpCard :show-github="false" :show-google="false" />'
+const EMAIL_ONLY_TEMPLATE = signUpTemplate({ social: false })
 
-/** @type {import('@storybook/vue3').StoryObj<typeof SignUpCard>} */
+/** @type {import('@storybook/vue3').StoryObj<typeof Button>} */
 export const EmailOnly = {
-  args: {
-    showGithub: false,
-    showGoogle: false
-  },
-  render: Template,
+  render: () => ({ components, template: EMAIL_ONLY_TEMPLATE }),
   parameters: {
+    controls: { disable: true },
     docs: {
+      controls: { disable: true },
       description: {
         story:
-          'Both social actions hidden, leaving only the primary email sign-up action, legal links, and sign-in footer.'
+          'Social actions and their divider left out, leaving only the primary email sign-up action, legal links, and sign-in footer.'
       },
-      source: { code: toSfc(IMPORT, EMAIL_ONLY_MARKUP) }
+      source: { code: toSfc(IMPORT, EMAIL_ONLY_TEMPLATE) }
     }
   }
 }

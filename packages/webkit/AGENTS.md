@@ -8,7 +8,7 @@ You are working inside the `@aziontech/webkit` package. Universal monorepo guida
 packages/webkit/src/
 ├── components/          ← the design-system components (spec-driven; see .claude/)
 │   ├── actions/  content/  data/  feedback/  inputs/  layout/
-│   ├── navigation/  overlay/  templates/  code/  utils/
+│   ├── navigation/  overlay/  code/  utils/
 │   └── avatar/, tag/, overline/   (legacy flat folders — migrate into a category when touched)
 ├── composables/         use-controllable, use-focus-trap, use-placement
 ├── utils/               cn (clsx + tailwind-merge), csv
