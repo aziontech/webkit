@@ -113,6 +113,17 @@
     // switch there is no second view, so `phased` is the only one rendered, and the
     // per-step copy control goes with it — nothing here is for taking away.
     header: { type: Boolean, default: true },
+    // Whether the log is OPERABLE — whether its per-step copy control is offered.
+    // Independent of `header` because a host can render the header row itself (the
+    // deployment page puts it on the accordion trigger) and still own a log people
+    // copy out of. An ILLUSTRATION of a deployment turns it off: nothing there is
+    // for taking away.
+    copyable: { type: Boolean, default: true },
+    // Whether the flush progress bar is drawn along the bottom edge while the run
+    // is in flight. Off where the host already reports motion — the deployment
+    // page puts a live StatusIndicator on the disclosure that holds this view, so
+    // a second moving thing for the same run is noise.
+    progressBar: { type: Boolean, default: true },
     // Whether the Logs row carries the deployment's CONTROL and its wall-clock —
     // the Phased/Complete switch, and "Failed after 48s".
     //
@@ -492,6 +503,7 @@
           <SegmentedButton
             v-model="view"
             :options="views"
+            size="medium"
             aria-label="Log view"
           />
         </template>
@@ -518,11 +530,11 @@
         :value="step.key"
       >
         <Accordion.Trigger>
-          <!-- No padding of its own: the trigger already carries the DS row height
-               (min-h-8), and a step row that fits on one line should read at that
-               height. The two lines it used to be doubled the list for no
-               information — eight rows of chrome instead of eight facts. -->
-          <span class="flex min-h-8 flex-1 items-center gap-(--spacing-sm)">
+          <!-- No padding of its own: the row carries its height (min-h-10), and a
+               step row that fits on one line should read at that height. The two
+               lines it used to be doubled the list for no information — eight rows
+               of chrome instead of eight facts. -->
+          <span class="flex min-h-10 flex-1 items-center gap-(--spacing-sm)">
             <!-- Per-step status glyph — the row's whole state vocabulary, one
                  glyph per row, in the same column down the list so the pipeline
                  reads as a column of states rather than as a stack of sentences. -->
@@ -611,16 +623,16 @@
                (its spinner promises lines). A skipped step is not waiting for
                anything, so it renders the empty body with a sentence that says
                why it has no output. -->
-          <!-- `show-copy` follows the SETTLED state, not just `header`: while the
-               deployment is in flight there is nothing copyable anywhere on this
-               card, per-step included. A step's log is still being written — copying
-               it hands over a fragment that stops mid-pipeline and reads, in a
-               support thread, as the whole story. Copy comes back with the outcome,
-               when the log is final. -->
+          <!-- `show-copy` follows the SETTLED state: while the deployment is in
+               flight there is nothing copyable anywhere on this card, per-step
+               included. A step's log is still being written — copying it hands over
+               a fragment that stops mid-pipeline and reads, in a support thread, as
+               the whole story. Copy comes back with the outcome, when the log is
+               final. -->
           <LogView
             :lines="linesByStep[i]"
             :border="false"
-            :show-copy="header && settled"
+            :show-copy="copyable && settled"
             :loading="stepStatus(i) === 'pending'"
             loading-label="Waiting to start…"
           >
@@ -661,7 +673,7 @@
          deployment settles either way, since there is no more motion to convey
          (a bar frozen mid-track under a failed deploy reads as still running). -->
     <ProgressBar
-      v-if="!settled"
+      v-if="progressBar && !settled"
       :value="progress"
       :max="100"
       size="small"

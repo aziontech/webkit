@@ -28,6 +28,7 @@
   // `azion deploy` pipeline and whose artifacts are this app's real ones
   // (azion.config.js + azion/azion.json) — the production deployment there is the
   // deploy that actually shipped this app.
+  import Accordion from '@aziontech/webkit/accordion'
   import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
@@ -36,18 +37,27 @@
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
   import Message from '@aziontech/webkit/message'
+  import SegmentedButton from '@aziontech/webkit/segmented-button'
+  import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { deployPageRecord, triggerMeta } from '@shared/lib/azion-deploys'
   import { formatListDate } from '@shared/lib/dates'
+  import { workloadById } from '@shared/lib/workloads'
+  import { LOG_VIEWS } from '@shared/ui/deployment/deployment-steps.js'
   import DeploymentLogs from '@shared/ui/deployment/DeploymentLogs.vue'
-  import DeploymentLogsControls from '@shared/ui/deployment/DeploymentLogsControls.vue'
   import { computed, ref } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
-  import PageHeading from '../../components/page/PageHeading.vue'
+  import DomainOverflowPopover from '../../components/list/DomainOverflowPopover.vue'
   import AppLayout from '../../components/shell/AppLayout.vue'
+  import {
+    azionDefaultStrategy,
+    bindingPolicyLabel,
+    strategies,
+    versionPolicyLabel
+  } from '../../lib/data/deployment-strategies'
   import { resourceMeta, statusMeta } from '../../lib/data/deployments'
   import { relativeTime } from '../../lib/format/relative-time'
 
@@ -114,6 +124,13 @@
   // its own control, pinned over the lines it copies.
   const logView = ref('phased')
 
+  // Which item of the logs accordion is open — `null` while it is collapsed, which
+  // is how it arrives. The page holds it because the VIEW SWITCH depends on it: the
+  // switch acts on the output behind this disclosure, so it is only offered while
+  // that output is on screen. Offering it over a closed panel is a control for
+  // something the reader cannot see.
+  const logsOpen = ref(null)
+
   // A deployment this console did not record streams its pipeline LIVE (see the
   // template), and that stream is the only thing that knows when it ends: the record
   // still says "Building", because nothing re-fetches it in this sample. Without
@@ -127,28 +144,6 @@
   // What the CARD reports: the record's own outcome, or the stream's if the run
   // finished in front of the reader.
   const settled = computed(() => finished.value || streamSettled.value)
-
-  // The heading's supporting line: when the run started, then what it has to show
-  // for it. Both halves are facts about the RUN, which is what a heading whose
-  // title is an opaque id owes the reader — the prose about what was deployed and
-  // where moved into Build Details, which states it as fields you can click.
-  //
-  // The second clause is derived, never a fixed "Completed in": a deployment in
-  // flight has no duration to report (the fixture leaves it empty), so a template
-  // that assumed one printed "Completed in ." on the one status where the reader
-  // most needs the truth.
-  const timing = computed(() => {
-    if (!deploy.value) return ''
-    const { duration } = deploy.value
-    const started = `Started ${formatListDate(deploy.value.createdAt)}`
-    if (running.value) return `${started} · Running`
-    if (failed.value)
-      return duration ? `${started} · Failed after ${duration}` : `${started} · Failed`
-    if (deploy.value.status === 'Ready')
-      return duration ? `${started} · Completed in ${duration}` : `${started} · Completed`
-    // Queued / Draft: nothing has been spent yet, and the banner names the state.
-    return started
-  })
 
   // The status banner — one per state, and every state the console's deployment
   // vocabulary carries (lib/deployments.js), not just the three a recorded run ends
@@ -190,6 +185,62 @@
         ? `Live at ${url} — published to ${where} in ${duration}.`
         : `Live — serving ${where}${duration ? ` · published in ${duration}` : ''}.`
     }
+  })
+
+  // The Deployment Settings this run applied — the STRATEGY half of the create body
+  // (lib/data/deployment-strategies.js): which application, firewall and custom page
+  // its versions bind, and under which routing policies. A recorded run carries the
+  // strategy it was started with by name; everything else falls back to Azion
+  // Default, which that module documents as the strategy every deploy starts with
+  // (it binds the application being deployed and nothing else).
+  const strategy = computed(
+    () =>
+      strategies.value.find((entry) => entry.name === deploy.value?.strategyName) ??
+      azionDefaultStrategy
+  )
+
+  // The rows the settings panel lists: the ROUTING POLICY half of the strategy —
+  // how the versions it publishes bind their resources, and how many of them may
+  // take traffic. The bindings themselves (application, firewall, custom page) are
+  // named by the card above and by the strategy's own record, so repeating them
+  // here would be the same facts twice on one screen.
+  const strategyFields = computed(() => [
+    { label: 'Binding Policy', value: bindingPolicyLabel(strategy.value.bindingPolicy) },
+    { label: 'Version Policy', value: versionPolicyLabel(strategy.value.versionPolicy) }
+  ])
+
+  // The hostnames this deployment answers on. They belong to the WORKLOAD, not to
+  // the deployment — a deploy publishes under the workload's domains — so they are
+  // read from that record.
+  //
+  // UNCAPPED. It used to slice to three, which is a cap with no way past it: the
+  // rest of a workload's aliases (up to ~99 of them) simply were not reachable from
+  // here. The cell below is the Workloads list's own instead — primary domain on the
+  // line, everything after it behind the "+N" Popover that pages and filters them.
+  const domains = computed(() => {
+    const workload = workloadById(deploy.value?.workload?.id)
+    const list = workload?.domains ?? []
+    const primary = deploy.value?.workload?.domain
+    return primary && !list.includes(primary) ? [primary, ...list] : list
+  })
+
+  const primaryDomain = computed(() => domains.value[0] ?? '')
+
+  // What the "+N" tag counts: everything after the primary.
+  const aliasCount = computed(() => Math.max(domains.value.length - 1, 0))
+
+  // Where Visit goes. A run this console recorded publishes a real address and
+  // carries it; a seeded row does not — but a READY deployment is, by definition,
+  // serving, and what it serves under is its workload's domain. So the address is
+  // derived from the workload rather than left empty, and Visit is live for every
+  // deployment that is actually live. Anything not Ready has published nothing, so
+  // it still has nowhere to go and the button stays inert with the reason in its
+  // tooltip.
+  const visitUrl = computed(() => {
+    if (deploy.value?.url) return deploy.value.url
+    if (deploy.value?.status !== 'Ready') return ''
+    const domain = deploy.value.workload.domain || workloadById(deploy.value.workload.id)?.domain
+    return domain ? `https://${domain}` : ''
   })
 
   const goToDeployments = () =>
@@ -234,11 +285,11 @@
       { label: deploy?.id ?? 'Deployment' }
     ]"
   >
-    <!-- The FOCUSED measure. This was `layout-column layout-focused` — a class that
-         does not exist, so the page silently fell back to the DATA measure and ran
-         edge to edge. It is one deployment read end to end (identity, then the
-         pipeline, then what to do), with no table, so it takes the focused column. -->
-    <main class="layout-column-focused flex min-h-full flex-col">
+    <!-- FULL BLEED. The page is a stack of cards whose own headers name every
+         region, so it takes the whole content width inside the shell's boundary
+         rather than a measured column — the fields read as a grid across the card
+         instead of wrapping early in a 4xl column. -->
+    <main class="flex min-h-full w-full flex-col">
       <!-- An id that is not a deployment gets an answer, not an empty page. -->
       <EmptyState
         v-if="!deploy"
@@ -258,99 +309,6 @@
       </EmptyState>
 
       <template v-else>
-        <!-- The id IS the title: a deployment has no name, and its id is what a
-             support thread, a CLI output and a URL all refer to. Which is also why
-             the copy control sits IN the title row (`title-suffix`) rather than
-             among the actions — it copies that id, so it belongs where the id is,
-             and the card below no longer has to restate the id to be copyable. -->
-        <PageHeading
-          size="small"
-          :title="deploy.id"
-          :description="timing"
-        >
-          <template #title-suffix>
-            <CopyButton
-              :value="deploy.id"
-              kind="outlined"
-              aria-label="Copy deployment id"
-              copied-label="Deployment id copied"
-            />
-          </template>
-
-          <template #actions>
-            <!-- Visit is the page's one primary act, and it is the one action whose
-                 availability is a FACT of the record: a deployment that has not
-                 published yet has no URL to open. Rendering it disabled rather than
-                 hiding it keeps the header stable as the run settles, and the
-                 tooltip says why it is off — a button that vanishes teaches nothing.
-                 With no `href` it is a real `<button disabled>`, so it is inert to
-                 the keyboard too, not just visually. -->
-            <Tooltip :text="deploy.url ? deploy.url : 'Available once the deployment is live'">
-              <Button
-                label="Visit"
-                kind="secondary"
-                size="large"
-                icon="pi pi-external-link"
-                :href="deploy.url"
-                :disabled="!deploy.url"
-                target="_blank"
-              />
-            </Tooltip>
-
-            <Dropdown
-              placement="bottom-end"
-              @select="onAction"
-            >
-              <Dropdown.Trigger>
-                <Tooltip text="Deployment actions">
-                  <IconButton
-                    icon="pi pi-ellipsis-h"
-                    kind="outlined"
-                    size="large"
-                    aria-label="Deployment actions"
-                  />
-                </Tooltip>
-              </Dropdown.Trigger>
-              <Dropdown.Group>
-                <Dropdown.Option
-                  value="logs"
-                  label="Logs"
-                >
-                  <template #left>
-                    <i
-                      class="pi pi-align-left"
-                      aria-hidden="true"
-                    />
-                  </template>
-                </Dropdown.Option>
-                <Dropdown.Option
-                  value="requests"
-                  label="Requests"
-                >
-                  <template #left>
-                    <i
-                      class="pi pi-arrow-right-arrow-left"
-                      aria-hidden="true"
-                    />
-                  </template>
-                </Dropdown.Option>
-              </Dropdown.Group>
-              <Dropdown.Group>
-                <Dropdown.Option
-                  value="redeploy"
-                  label="Redeploy"
-                >
-                  <template #left>
-                    <i
-                      class="pi pi-refresh"
-                      aria-hidden="true"
-                    />
-                  </template>
-                </Dropdown.Option>
-              </Dropdown.Group>
-            </Dropdown>
-          </template>
-        </PageHeading>
         <!-- The page's parent section: the three bands below, in the order the
              questions arrive. -->
         <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)">
@@ -394,9 +352,86 @@
                to the two places that already carry it: the heading, and the
                pipeline card whose progress the status describes. A card header
                repeating the page title was the same string twice, 80px apart. -->
-          <CardBox>
+          <!-- `[&>footer]:min-h-12` — the footer holds ONE flush 48px accordion row,
+               and CardBox floors its footer at min-h-14 (56px). Left alone, the band
+               stays 56px while the trigger inside it is 48px, so the row's hover fill
+               and its border stop short of the card edge. The override lowers only
+               that floor; the row's height is the accordion's own. -->
+          <CardBox class="[&>footer]:min-h-12">
             <template #header>
-              <p class="text-heading-xs text-(--text-default)">Build Details</p>
+              <p class="text-heading-xs text-(--text-default)">Deployment Details</p>
+
+              <!-- The page's actions live on this card, because this card is now
+                   what names the deployment. Visit is the one primary act and the
+                   one whose availability is a FACT of the record — a deployment that
+                   has not published has no URL — so it renders disabled with the
+                   reason in its tooltip rather than vanishing. -->
+              <div class="flex shrink-0 items-center gap-(--spacing-xs)">
+                <Tooltip :text="visitUrl || 'Available once the deployment is live'">
+                  <Button
+                    label="Visit"
+                    kind="secondary"
+                    size="medium"
+                    icon="pi pi-external-link"
+                    :href="visitUrl"
+                    :disabled="!visitUrl"
+                    target="_blank"
+                  />
+                </Tooltip>
+
+                <Dropdown
+                  placement="bottom-end"
+                  @select="onAction"
+                >
+                  <Dropdown.Trigger>
+                    <Tooltip text="Deployment actions">
+                      <IconButton
+                        icon="pi pi-ellipsis-h"
+                        kind="outlined"
+                        size="medium"
+                        aria-label="Deployment actions"
+                      />
+                    </Tooltip>
+                  </Dropdown.Trigger>
+                  <Dropdown.Group>
+                    <Dropdown.Option
+                      value="logs"
+                      label="Logs"
+                    >
+                      <template #left>
+                        <i
+                          class="pi pi-align-left"
+                          aria-hidden="true"
+                        />
+                      </template>
+                    </Dropdown.Option>
+                    <Dropdown.Option
+                      value="requests"
+                      label="Requests"
+                    >
+                      <template #left>
+                        <i
+                          class="pi pi-arrow-right-arrow-left"
+                          aria-hidden="true"
+                        />
+                      </template>
+                    </Dropdown.Option>
+                  </Dropdown.Group>
+                  <Dropdown.Group>
+                    <Dropdown.Option
+                      value="redeploy"
+                      label="Redeploy"
+                    >
+                      <template #left>
+                        <i
+                          class="pi pi-refresh"
+                          aria-hidden="true"
+                        />
+                      </template>
+                    </Dropdown.Option>
+                  </Dropdown.Group>
+                </Dropdown>
+              </div>
             </template>
 
             <template #content>
@@ -419,42 +454,115 @@
                       />
                     </Tooltip>
                     <span class="truncate text-body-sm text-(--text-default)">
+                      {{ deploy.author }}
+                    </span>
+                    <span class="shrink-0 text-body-sm text-(--text-muted)">
                       {{ relativeTime(deploy.createdAt) }}
                     </span>
                   </div>
                 </div>
-
                 <div class="flex flex-col gap-(--spacing-xxs)">
-                  <!-- Source is the WORKLOAD: the public entry point the
-                       deployment publishes under. It links to that workload, so
-                       the page is a step in the chain rather than a dead end. -->
-                  <span class="text-label-sm text-(--text-muted)">Source</span>
-                  <router-link
-                    :to="{
-                      path: `/workloads/${deploy.workload.id}`,
-                      query: { email: userEmail, name: deploy.workload.name }
-                    }"
-                    class="flex min-w-0 items-center gap-(--spacing-xs) text-body-sm text-(--text-default) no-underline hover:underline"
-                  >
-                    <i
-                      class="ai ai-workloads shrink-0 text-(--text-muted)"
-                      aria-hidden="true"
+                  <span class="text-label-sm text-(--text-muted)">Status</span>
+                  <div class="flex min-w-0 items-center gap-(--spacing-xs)">
+                    <!-- A deployment's status is a LIVE state, not a classification:
+                         it moves while you are looking at it, and StatusIndicator is
+                         what carries that (a dot per severity, a spinner and an
+                         ellipsis while it is still going). -->
+                    <StatusIndicator
+                      :severity="status.severity"
+                      :loading="status.loading"
+                      :label="deploy.status"
                     />
-                    <span class="truncate">{{ deploy.workload.name }}</span>
-                    <i
-                      class="pi pi-arrow-up-right shrink-0 text-(--text-muted)"
-                      aria-hidden="true"
-                    />
-                  </router-link>
+                    <!-- `current` is the request body's own flag: the deployment that
+                         SERVES. It reads as a word beside the state rather than as a
+                         second badge — "Ready" and "Latest" are one sentence about
+                         this record, not two labels competing for the same row. -->
+                    <span
+                      v-if="deploy.current"
+                      class="shrink-0 text-body-sm text-(--text-muted)"
+                    >
+                      Latest
+                    </span>
+                  </div>
                 </div>
-
+                <div class="flex flex-col gap-(--spacing-xxs)">
+                  <span class="text-label-sm text-(--text-muted)">Duration</span>
+                  <div class="flex min-w-0 items-center gap-(--spacing-xs)">
+                    <i
+                      class="pi pi-clock shrink-0 text-(--text-muted)"
+                      aria-hidden="true"
+                    />
+                    <span class="truncate text-body-sm text-(--text-default)">
+                      {{ deploy.duration || '—' }}
+                    </span>
+                  </div>
+                </div>
                 <div class="flex flex-col gap-(--spacing-xxs)">
                   <span class="text-label-sm text-(--text-muted)">Environment</span>
-                  <span class="text-body-sm text-(--text-default)">
-                    {{ deploy.environment }}
-                  </span>
+                  <div class="flex min-w-0 items-center">
+                    <Tag
+                      severity="secondary"
+                      size="medium"
+                      :label="deploy.environment"
+                    />
+                  </div>
                 </div>
-
+                <div class="flex flex-col gap-(--spacing-xxs)">
+                  <span class="text-label-sm text-(--text-muted)">Workload</span>
+                  <!-- EVERY EXTERNAL MARK SAYS WHERE IT GOES. The glyph announces that
+                       the name leaves this page; the tooltip names the page it leaves
+                       for, so the reader decides before the click instead of after. -->
+                  <Tooltip :text="`Open ${deploy.workload.name} in Workloads`">
+                    <router-link
+                      :to="{
+                        path: `/workloads/${deploy.workload.id}`,
+                        query: { email: userEmail, name: deploy.workload.name }
+                      }"
+                      class="group/link inline-flex min-w-0 items-center gap-(--spacing-xxs) text-body-sm text-(--text-default) no-underline"
+                    >
+                      <span class="truncate underline-offset-2 group-hover/link:underline">
+                        {{ deploy.workload.name }}
+                      </span>
+                      <i
+                        class="pi pi-external-link shrink-0 text-body-xs leading-none"
+                        aria-hidden="true"
+                      />
+                    </router-link>
+                  </Tooltip>
+                </div>
+                <div class="flex flex-col gap-(--spacing-xxs)">
+                  <!-- WHAT was deployed. A deployment targets exactly one resource
+                       (see lib/deployments.js), so this block is named by that
+                       resource's own kind — Application, Firewall, Custom Page — and
+                       links to it where the module exists to link to. -->
+                  <span class="text-label-sm text-(--text-muted)">{{ resource.label }}</span>
+                  <!-- `disabled` when there is no route: a tooltip promising a
+                       destination on a name that opens nothing is worse than silence. -->
+                  <Tooltip
+                    :text="`Open ${deploy.resource.name} in ${resource.label}`"
+                    :disabled="!resourceLink"
+                  >
+                    <component
+                      :is="resourceLink ? 'router-link' : 'div'"
+                      :to="resourceLink || undefined"
+                      class="group/link inline-flex min-w-0 items-center gap-(--spacing-xxs) text-body-sm text-(--text-default) no-underline"
+                    >
+                      <span
+                        class="truncate underline-offset-2"
+                        :class="resourceLink ? 'group-hover/link:underline' : ''"
+                      >
+                        {{ deploy.resource.name }}
+                      </span>
+                      <!-- No route, no glyph: a mark that leads nowhere is worse than
+                           no mark, which is why this leg renders as a plain `<div>`. -->
+                      <i
+                        v-if="resourceLink"
+                        class="pi pi-external-link shrink-0 text-body-xs leading-none"
+                        aria-hidden="true"
+                      />
+                    </component>
+                  </Tooltip>
+                </div>
                 <div
                   v-if="trigger"
                   class="flex flex-col gap-(--spacing-xxs)"
@@ -477,32 +585,6 @@
                     </Tooltip>
                   </div>
                 </div>
-
-                <div class="flex flex-col gap-(--spacing-xxs)">
-                  <!-- WHAT was deployed. A deployment targets exactly one resource
-                       (see lib/deployments.js), so this block is named by that
-                       resource's own kind — Application, Firewall, Custom Page — and
-                       links to it where the module exists to link to. -->
-                  <span class="text-label-sm text-(--text-muted)">{{ resource.label }}</span>
-                  <component
-                    :is="resourceLink ? 'router-link' : 'div'"
-                    :to="resourceLink || undefined"
-                    class="flex min-w-0 items-center gap-(--spacing-xs) text-body-sm text-(--text-default) no-underline"
-                    :class="resourceLink ? 'hover:underline' : ''"
-                  >
-                    <i
-                      :class="[resource.icon, 'shrink-0 text-(--text-muted)']"
-                      aria-hidden="true"
-                    />
-                    <span class="truncate">{{ deploy.resource.name }}</span>
-                    <i
-                      v-if="resourceLink"
-                      class="pi pi-arrow-up-right shrink-0 text-(--text-muted)"
-                      aria-hidden="true"
-                    />
-                  </component>
-                </div>
-
                 <div
                   v-if="edge"
                   class="flex flex-col gap-(--spacing-xxs)"
@@ -522,7 +604,6 @@
                     </Tooltip>
                   </div>
                 </div>
-
                 <div
                   v-if="edge"
                   class="flex flex-col gap-(--spacing-xxs) sm:col-span-2 lg:col-span-3"
@@ -550,82 +631,275 @@
                     </span>
                   </div>
                 </div>
+                <div
+                  v-if="primaryDomain"
+                  class="flex flex-col gap-(--spacing-xxs) sm:col-span-2 lg:col-span-3"
+                >
+                  <!-- The hostnames this deployment answers on once it is current —
+                       the workload's own domains (@shared/lib/workloads). A deployment
+                       has none of its own: it publishes UNDER the workload's.
+
+                       SAME CELL AS THE WORKLOADS LIST, not a second reading of the
+                       same records: the glyph naming the subject (outside the anchor —
+                       it is not part of what the link opens), the primary domain as
+                       the link, the aliases behind the "+N" Popover that pages and
+                       filters them (../../components/list/DomainOverflowPopover.vue),
+                       and the copy control last. A stacked list of the first three was
+                       both a shape these records have nowhere else and a dead end for
+                       the other ninety-six. -->
+                  <span class="text-label-sm text-(--text-muted)">Domains</span>
+                  <div class="flex min-w-0 items-center gap-(--spacing-xs)">
+                    <i
+                      class="ai ai-domains shrink-0 text-[1.15em] text-(--text-muted)"
+                      aria-hidden="true"
+                    />
+                    <Tooltip :text="`Open ${primaryDomain} in a new tab`">
+                      <a
+                        :href="`https://${primaryDomain}`"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="group/link inline-flex min-w-0 items-center gap-(--spacing-xxs) text-body-sm text-(--text-default) no-underline"
+                      >
+                        <span class="truncate underline-offset-2 group-hover/link:underline">
+                          {{ primaryDomain }}
+                        </span>
+                        <i
+                          class="pi pi-external-link shrink-0 text-body-xs leading-none"
+                          aria-hidden="true"
+                        />
+                      </a>
+                    </Tooltip>
+                    <DomainOverflowPopover
+                      v-if="aliasCount"
+                      :domains="domains"
+                      :count="aliasCount"
+                    />
+                    <CopyButton
+                      kind="outlined"
+                      :value="primaryDomain"
+                      aria-label="Copy domain name"
+                      class="shrink-0"
+                    />
+                  </div>
+                </div>
               </div>
+            </template>
+
+            <!-- ── Deployment Settings ────────────────────────────────────────
+                 The STRATEGY this run applied, as a disclosure on the card's own
+                 bottom edge: it is a property OF this deployment, not a section
+                 beside it, and it is the answer to a second question ("what did it
+                 bind?") that only some readers ask. Closed by default for that
+                 reason.
+
+                 Flush: the negative margins cancel the footer's own inset so the
+                 row spans the card edge to edge and its inset comes from
+                 `--accordion-inset`, which is set to the card's `--spacing-md` so
+                 the trigger starts on the same vertical line as the card title and
+                 the fields above it. -->
+            <template #footer>
+              <Accordion
+                class="-mx-(--spacing-md) -my-(--spacing-sm) w-[calc(100%+2*var(--spacing-md))] [--accordion-inset:var(--spacing-md)]"
+                type="single"
+                arrow-position="left"
+                collapsible
+              >
+                <Accordion.Item value="settings">
+                  <div class="relative">
+                    <Accordion.Trigger>
+                      <span class="flex min-h-12 flex-1 items-center gap-(--spacing-sm)">
+                        <span class="text-label-md text-(--text-default)">Deployment Settings</span>
+                      </span>
+                    </Accordion.Trigger>
+
+                    <!-- The strategy NAMES a record that lives in its own module
+                         (Deployments → Settings), so it is a way OUT of this screen and
+                         takes the console's cross-resource link shape: the name, then a
+                         12px `pi-external-link`. It cannot sit inside the trigger — that
+                         is a `<button>`, and an anchor nested in one is invalid markup —
+                         so it is layered onto the row the same way the logs switch is,
+                         with `pointer-events-none` on the layer and `auto` on the link,
+                         leaving the rest of the row a disclosure target. -->
+                    <div
+                      class="pointer-events-none absolute inset-y-0 right-0 flex max-w-[calc(100%-12rem)] items-center pr-(--spacing-md)"
+                    >
+                      <Tooltip
+                        class="pointer-events-auto"
+                        :text="`Open ${strategy.name} in Deployment Settings`"
+                      >
+                        <router-link
+                          :to="{
+                            path: '/deployments',
+                            query: { tab: 'settings', email: userEmail }
+                          }"
+                          class="group/link inline-flex min-w-0 items-center gap-(--spacing-xxs) text-body-sm text-(--text-default) no-underline"
+                        >
+                          <span class="truncate underline-offset-2 group-hover/link:underline">
+                            {{ strategy.name }}
+                          </span>
+                          <i
+                            class="pi pi-external-link shrink-0 text-body-xs leading-none"
+                            aria-hidden="true"
+                          />
+                        </router-link>
+                      </Tooltip>
+                    </div>
+                  </div>
+                  <Accordion.Content>
+                    <!-- Padded inside the slot: the panel is flush by contract. -->
+                    <div
+                      class="grid grid-cols-1 gap-(--spacing-lg) px-(--spacing-md) pt-(--spacing-xs) pb-(--spacing-md) sm:grid-cols-2 lg:grid-cols-3"
+                    >
+                      <div
+                        v-for="field in strategyFields"
+                        :key="field.label"
+                        class="flex flex-col gap-(--spacing-xxs)"
+                      >
+                        <span class="text-label-sm text-(--text-muted)">{{ field.label }}</span>
+                        <span class="truncate text-body-sm text-(--text-default)">
+                          {{ field.value }}
+                        </span>
+                      </div>
+                    </div>
+                  </Accordion.Content>
+                </Accordion.Item>
+              </Accordion>
             </template>
           </CardBox>
 
           <!-- ── 3. What happened? ────────────────────────────────────────────
-               The pipeline, in ui/DeploymentFlow.vue's anatomy — the same one the
-               template deploy and the async deploy render: a flush "Deployment"
-               card, its title on the left and the run's source muted on the right,
-               wrapping the SAME step view that flow streams
-               (ui/DeploymentLogs.vue). One row per step: status glyph, title,
-               feedback Tag, the CLI's timing, and its own log inside. What this
-               page hands it is only the record — which step failed, which one is in
-               flight, and how long the whole deployment took. -->
+               The pipeline, behind a disclosure. It is the longest region on the
+               page and the one you open only when the summary above is not enough
+               — so it is closed by default like the settings panel, and the card is
+               its own chrome: one flush accordion whose trigger names the region
+               and reports the outcome, and whose panel is the step view the deploy
+               flow streams (ui/DeploymentLogs.vue).
+
+               `label=""` — the trigger one line above already names it, and the
+               prop exists for exactly this case; DeploymentLogs keeps its own Logs
+               row so the view switch and the wall-clock stay attached to the output
+               they act on, now that the card header is a trigger and cannot hold a
+               control of its own. -->
           <CardBox
             :padded="false"
             class="w-full"
           >
-            <template #header>
-              <p class="text-heading-xs text-(--text-default)">Deployment</p>
-              <!-- This side of the header changes with the run: the live status
-                   while it is building, the log view switch once it has settled. Both
-                   belong to the PIPELINE — "Building…" is a statement about the steps
-                   directly below, and the switch acts on their output — so they sit on
-                   the pipeline's own card rather than in the page header. The rule
-                   lives in ui/DeploymentLogsControls.vue, shared with the deploy flow
-                   card so the two cannot disagree. -->
-              <DeploymentLogsControls
-                v-model:view="logView"
-                :settled="settled"
-                :status-label="deploy.status"
-                :severity="status.severity"
-                :loading="status.loading"
-              />
-            </template>
-
             <template #content>
-              <!-- A deployment that has not STARTED has no pipeline, and drawing one
-                   is the worst thing this card can do: ten green steps under the word
-                   "Queued" is a screen that contradicts itself. So it says what is
-                   true and what will happen — the rows appear when the run does. -->
-              <EmptyState
-                v-if="!finished && !running"
-                :bordered="false"
-                class="py-(--spacing-xl)"
-                icon="pi pi-clock"
-                :title="`${deploy.status} — not started`"
-                :description="
-                  deploy.status === 'Draft'
-                    ? 'A draft is prepared and never published, so it has no pipeline to show.'
-                    : 'The steps appear here as soon as the deployment starts running.'
-                "
-              />
+              <Accordion
+                v-model:value="logsOpen"
+                class="[--accordion-inset:var(--spacing-md)]"
+                type="single"
+                arrow-position="left"
+                collapsible
+              >
+                <Accordion.Item value="logs">
+                  <!-- `relative` scopes the layer below to the TRIGGER ROW rather
+                       than to the whole item, so the switch cannot drift onto the
+                       open panel. -->
+                  <div class="relative">
+                    <Accordion.Trigger>
+                      <span class="flex min-h-14 flex-1 items-center gap-(--spacing-sm)">
+                        <span class="text-label-md text-(--text-default)">Deployment Logs</span>
+                        <!-- Collapsed, this trigger is the only thing the reader sees
+                           of the run, so it reports the OUTCOME. A wall-clock is a
+                           MEASUREMENT, not a state — it reads as text beside the
+                           name, the way the step rows report their own timings.
+                           A Tag is kept for the states that are a verdict (Error,
+                           Building, Queued), where the severity is the message. -->
+                        <span
+                          v-if="settled && !failed && deploy.duration"
+                          class="text-label-sm text-(--text-muted)"
+                        >
+                          {{ deploy.duration }}
+                        </span>
+                        <StatusIndicator
+                          v-else
+                          :severity="status.severity"
+                          :loading="status.loading"
+                          :label="deploy.status"
+                        />
+                      </span>
+                    </Accordion.Trigger>
 
-              <!-- `label=\"Logs\"`, not the default \"Deployment Logs\": the card header
-                   one line above already says Deployment. `:controls=\"false\"` — the
-                   switch is rendered in that header, and the wall-clock is in the
-                   page heading.
+                    <!-- The status / view switch, layered ONTO the trigger row left
+                         of its chevron. It cannot sit INSIDE the trigger: that is a
+                         `<button>`, and a SegmentedButton nested in one is invalid
+                         markup the browser takes apart. As a sibling painted on top
+                         it keeps its own clicks, and `pointer-events-none` on the
+                         layer (with `auto` on the control) leaves every other pixel
+                         of the row hitting the trigger — so the disclosure stays a
+                         full-width target.
 
-                   A recorded run hands over its own pipeline. A row-shaped deployment
-                   has none, so `steps` is left undefined and the view falls back to
-                   the canonical pipeline — streamed live while it is Building, which
-                   is the one state where an illustration of the steps is still an
-                   honest answer to "where is it?". -->
-              <DeploymentLogs
-                v-else
-                v-model:view="logView"
-                label="Logs"
-                :controls="false"
-                :steps="recorded ? steps : undefined"
-                :live="!recorded && running"
-                :fail-at="deploy.failedAt"
-                :active-at="deploy.activeStep"
-                :total-label="deploy.duration"
-                @finished="onStreamSettled"
-                @failed="onStreamSettled"
-              />
+                         Hidden below `sm`: the switch is 199px and the row's content
+                         box is 334px at phone width, so it cannot share a line with
+                         the name — it would paint over it. The Phased view is the
+                         default and keeps its per-step copy, so nothing is stranded
+                         there; only the whole-log view waits for the width. -->
+                    <div
+                      class="pointer-events-none absolute inset-y-0 right-0 hidden items-center pr-(--spacing-md) sm:flex"
+                    >
+                      <div class="pointer-events-auto flex items-center">
+                        <!-- Only the switch. The run's status sits on the trigger
+                             beside the name, so it is never reported twice and
+                             never disappears with this layer at phone width.
+
+                             Two conditions, for two different reasons: the run has
+                             SETTLED (mid-run the switch would offer a view that
+                             scrolls out from under someone who is waiting), and the
+                             panel is OPEN (it acts on the output, so it appears
+                             with it). -->
+                        <SegmentedButton
+                          v-if="settled && logsOpen === 'logs'"
+                          v-model="logView"
+                          :options="LOG_VIEWS"
+                          class="shrink-0"
+                          size="medium"
+                          aria-label="Log view"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <Accordion.Content>
+                    <!-- A deployment that has not STARTED has no pipeline, and drawing
+                         one is the worst thing this card can do: ten green steps under
+                         the word "Queued" is a screen that contradicts itself. So it
+                         says what is true and what will happen — the rows appear when
+                         the run does. -->
+                    <EmptyState
+                      v-if="!finished && !running"
+                      :bordered="false"
+                      class="py-(--spacing-xl)"
+                      icon="pi pi-clock"
+                      :title="`${deploy.status} — not started`"
+                      :description="
+                        deploy.status === 'Draft'
+                          ? 'A draft is prepared and never published, so it has no pipeline to show.'
+                          : 'The steps appear here as soon as the deployment starts running.'
+                      "
+                    />
+
+                    <!-- A recorded run hands over its own pipeline. A row-shaped
+                         deployment has none, so `steps` is left undefined and the view
+                         falls back to the canonical pipeline — streamed live while it
+                         is Building, which is the one state where an illustration of
+                         the steps is still an honest answer to "where is it?". -->
+                    <DeploymentLogs
+                      v-else
+                      v-model:view="logView"
+                      :header="false"
+                      :progress-bar="false"
+                      :steps="recorded ? steps : undefined"
+                      :live="!recorded && running"
+                      :fail-at="deploy.failedAt"
+                      :active-at="deploy.activeStep"
+                      :total-label="deploy.duration"
+                      @finished="onStreamSettled"
+                      @failed="onStreamSettled"
+                    />
+                  </Accordion.Content>
+                </Accordion.Item>
+              </Accordion>
             </template>
           </CardBox>
         </section>

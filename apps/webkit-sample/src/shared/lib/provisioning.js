@@ -194,7 +194,7 @@ export function provisionDeployment({
   // still gets a minted label.
   const domain = domainInput || `${domainLabel()}${AZION_DOMAIN_SUFFIX}`
   // The application's own name, when the create named it apart from the workload.
-  const appName = slugify(applicationName) || name
+  const appName = applicationName ? slugify(applicationName) : name
   const bucketName = `${name}-assets`
 
   // THE PUBLIC HALF OF THE CHAIN, and only for a create that publishes. A workload is the

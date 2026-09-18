@@ -26,13 +26,18 @@
 // of it goes out, plus the versions of everything those resources reference.
 import { APPLICATIONS } from '@shared/lib/applications'
 import { daysAgo, hoursAgo } from '@shared/lib/dates'
-import { DEPLOYMENT_HISTORY } from '@shared/lib/deployment-history'
+import { DEPLOYMENT_HISTORY, ENVIRONMENT_SPREAD } from '@shared/lib/deployment-history'
 import { authorAt } from '@shared/lib/people'
 import { provisionedApplications } from '@shared/lib/provisioning'
 import { WORKLOADS } from '@shared/lib/workloads'
 import { computed } from 'vue'
 
-import { CUSTOM_PAGE_OPTIONS, FIREWALL_OPTIONS, strategies } from './deployment-strategies'
+import {
+  AZION_DEFAULT_ID,
+  CUSTOM_PAGE_OPTIONS,
+  FIREWALL_OPTIONS,
+  strategies
+} from './deployment-strategies'
 
 // ── Vocabulary ──────────────────────────────────────────────────────────────
 // `label` names the ENTITY (a heading, a card title, a Console page) and keeps its
@@ -326,6 +331,10 @@ export const dependenciesOf = (parentType, resourceId) => {
 // state real rather than theoretical.
 const SEEDED_SETTINGS_IDS = ['s1', 's2', 's3', 's4', 's5', 's6', 's7', 's8', 's9', 's10']
 
+// The environments a workload publishes into, in order. Production always exists; a
+// second one is what `ENVIRONMENT_SPREAD` gives every third workload.
+const ENVIRONMENT_ORDER = ['Production', 'Stage']
+
 /**
  * The Deployment settings a workload already deploys with, in order. Every third workload
  * publishes into two of them (one per environment), which is the case that makes deploying
@@ -333,11 +342,36 @@ const SEEDED_SETTINGS_IDS = ['s1', 's2', 's3', 's4', 's5', 's6', 's7', 's8', 's9
  */
 export const settingsIdsForWorkload = (workloadId) => {
   const index = WORKLOADS.findIndex((workload) => workload.id === String(workloadId))
-  if (index < 0) return []
+  // EVERY workload deploys with a Deployment setting — there is no such thing as one
+  // without. A workload this fixture does not seed (one provisioned in this session)
+  // deploys with AZION DEFAULT, the platform's own strategy, which is exactly what
+  // `azion deploy` applies to a project that declares no bindings of its own
+  // (../data/deployment-strategies.js). Returning [] here made that workload's page
+  // say it "does not deploy with any Deployment setting yet", which is never true.
+  if (index < 0) return [AZION_DEFAULT_ID]
   const primary = SEEDED_SETTINGS_IDS[index % SEEDED_SETTINGS_IDS.length]
-  if (index % 3 !== 0) return [primary]
+  if (index % ENVIRONMENT_SPREAD !== 0) return [primary]
   return [primary, SEEDED_SETTINGS_IDS[(index + 4) % SEEDED_SETTINGS_IDS.length]]
 }
+
+/**
+ * THE PAIRING, IN ONE PLACE: a workload's environments, each with the ONE Deployment
+ * setting it publishes with there.
+ *
+ * A deployment applies exactly one setting — that is the request body's own shape
+ * (`strategy` is an object, not a list) — so a release is 1:1 with a setting. What a
+ * workload can have several of is ENVIRONMENTS, and each of those has its own current
+ * deployment and therefore its own setting. Reading the settings as a flat list made a
+ * workload look like it published with two at once; it publishes with one, twice.
+ *
+ * The order is the environment order: index 0 is Production, index 1 the second
+ * environment — the same order `historyFor` stamps its rows in.
+ */
+export const environmentsForWorkload = (workloadId) =>
+  settingsIdsForWorkload(workloadId).map((settingsId, index) => ({
+    name: ENVIRONMENT_ORDER[index] ?? ENVIRONMENT_ORDER[0],
+    settingsId
+  }))
 
 /** The inverse: the workloads that deploy with a given Deployment setting. */
 export const workloadsForSettings = (settingsId) =>
@@ -348,9 +382,14 @@ export const workloadsForSettings = (settingsId) =>
  * workload's history is the application deployment, so this names the application the
  * workload serves and the environment it serves in (./deployment-history.js).
  */
-export const currentDeploymentFor = (workloadId) =>
+export const currentDeploymentFor = (workloadId, environment = '') =>
   DEPLOYMENT_HISTORY.find(
-    (deployment) => deployment.workloadId === String(workloadId) && deployment.current
+    (deployment) =>
+      deployment.workloadId === String(workloadId) &&
+      // Newest-first, so the first row in an environment IS that environment's current
+      // one. Without an environment the question is "what serves this workload", which
+      // is the row the history marks.
+      (environment ? deployment.environment === environment : deployment.current)
   )
 
 /** The application a workload is serving, or `''` for one with no history. */

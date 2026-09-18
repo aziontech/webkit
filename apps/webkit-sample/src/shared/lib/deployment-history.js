@@ -66,6 +66,13 @@ const resourceFor = (target, application) => {
 }
 
 /**
+ * Every Nth workload publishes into TWO environments. The Deployment settings pairing
+ * (`settingsIdsForWorkload` in the console's lib/data/releases.js) reads the same rule
+ * off the same index, which is what keeps one environment paired to one setting.
+ */
+export const ENVIRONMENT_SPREAD = 3
+
+/**
  * One workload's deployment history, newest first.
  *
  * Deterministic in `(workload, index)`: the same workload reads the same history on
@@ -78,6 +85,7 @@ const resourceFor = (target, application) => {
  */
 export function historyFor(workload, index) {
   const application = applicationAt(index)
+  const twoEnvironments = index % ENVIRONMENT_SPREAD === 0
 
   return TARGETS.map((target, slot) => {
     const status = STATUSES[slot][(index + slot) % STATUSES[slot].length]
@@ -98,7 +106,14 @@ export function historyFor(workload, index) {
       current: slot === 0,
       status,
       duration: status === 'Ready' ? DURATIONS[(index + slot) % DURATIONS.length] : '',
-      environment: slot === 0 || (index + slot) % 2 === 0 ? 'Production' : 'Stage',
+      // ONE ENVIRONMENT PER SETTING, and they agree by construction: a workload
+      // publishes into a second environment on exactly the rule the Deployment
+      // settings pairing uses (`settingsIdsForWorkload`, every third workload), so
+      // the environments a workload has and the settings it deploys with are the
+      // same list read two ways. They used to be rolled independently — `(index +
+      // slot) % 2` — which gave half the two-setting workloads no Stage deployment
+      // at all and stamped Stage on workloads that publish into one environment.
+      environment: twoEnvironments && slot === 1 ? 'Stage' : 'Production',
       // `deployedAt` is the real instant — the Deployed range compares it and the
       // cell renders it relative; `date` (the sortable, exportable display string)
       // is derived from it by one formatter, never hand-written per row.

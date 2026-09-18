@@ -172,6 +172,7 @@
               :live="mode === 'live'"
               :interval="140"
               :header="false"
+              :copyable="false"
             />
           </div>
         </template>

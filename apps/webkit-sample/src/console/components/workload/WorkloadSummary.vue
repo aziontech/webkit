@@ -42,6 +42,7 @@
   import CardBox from '@aziontech/webkit/card-box'
   import Chip from '@aziontech/webkit/chip'
   import CopyButton from '@aziontech/webkit/copy-button'
+  import Dropdown from '@aziontech/webkit/dropdown'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { formatShortDate } from '@shared/lib/dates'
@@ -53,13 +54,23 @@
     /** The record's workload — `{ id, name, domain, domains, domainCount, status, owner, ownerAvatar, modifiedAt }`. */
     workload: { type: Object, required: true },
     /** The reader's own domains on this workload — `{ domain }[]`, the API's `domains[]`. */
-    customDomains: { type: Array, default: () => [] }
+    customDomains: { type: Array, default: () => [] },
+    /**
+     * The environments this workload publishes into — `{ name, settingsId }[]`
+     * (../../lib/data/releases.js). One entry renders as a label, several as a Select.
+     */
+    environments: { type: Array, default: () => [] }
   })
+
+  // WHICH ENVIRONMENT THE CARD IS REPORTING. Two-way, because the footer under this card
+  // answers for the same environment: the live deployment and the Deployment setting that
+  // published it are both facts ABOUT one, and the page owns that pairing.
+  const environment = defineModel('environment', { type: String, default: '' })
 
   // Visit is the card's own action, so the card only says it was pressed — the PAGE owns
   // what opening the workload does, exactly as it did while the button lived in the tab
   // bar. Nothing about "open this address" belongs to a summary component.
-  const emit = defineEmits(['visit', 'add-domain'])
+  const emit = defineEmits(['visit', 'add-domain', 'create-environment'])
 
   // The hostname the workload is being READ on. The Environment Select re-points it per
   // environment, so the block takes the domain it is handed rather than reaching for
@@ -70,6 +81,20 @@
   // A record minted by a create carries exactly one; a seeded row carries its aliases.
   const domains = computed(() => props.workload.domains ?? [domain.value])
   const aliasCount = computed(() => props.workload.domainCount ?? 0)
+
+  const environmentLabel = computed(
+    () => environment.value || props.environments[0]?.name || 'Production'
+  )
+
+  // The create row's sentinel value. It is an ACTION in a list of values, so it is told
+  // apart by identity rather than by position — a picker whose last row happens to mean
+  // something else is one reorder away from a bug.
+  const CREATE = '__create__'
+
+  const onSelect = (value) => {
+    if (value === CREATE) return emit('create-environment')
+    environment.value = value
+  }
 
   // `active` — whether the address answers at all. `Live` is the word the Workloads list
   // uses for it, so the row and the page it opens agree.
@@ -184,7 +209,7 @@
            instead of a primary and a secondary competing for the same corner. The card's
            domain link goes to the same place; the button is the affordance for a reader
            who is scanning the card rather than reading it. -->
-        <div class="ml-auto flex shrink-0 items-center">
+        <div class="ml-auto flex shrink-0 items-center gap-(--spacing-xs)">
           <Button
             label="Visit"
             kind="outlined"
@@ -192,14 +217,70 @@
             icon="pi pi-arrow-up-right"
             @click="emit('visit')"
           />
+
+          <!-- THE ENVIRONMENT PICKER, at the strip's action end — the placement
+               console-kit gives it: everything under this card (the live deployment, the
+               Deployment setting that published it) is a fact about ONE environment, so
+               the card has to say which, let the reader move it, and let them add one.
+
+               A PICKER, NOT A SELECT, because the answer set is not closed: a Select
+               offers what exists, and this also offers to ADD one. That is a different
+               kind of row — an action, not a value — so it sits in its own group under a
+               rule instead of pretending to be another environment. It is also why a
+               workload with one environment still gets the control: there is always
+               something to do in it.
+
+               `Dropdown.Trigger` is already the button (a `span` with `role="button"`),
+               so what goes inside is a plain `span` wearing the closed-Select chrome — a
+               real `<button>` there would be a control nested inside a control. Medium
+               (32px), so it sits at the same height as Visit beside it. -->
+          <Tooltip text="Select an environment to see its deployment and settings, or add one">
+            <Dropdown
+              placement="bottom-end"
+              @select="(event, value) => onSelect(value)"
+            >
+              <Dropdown.Trigger>
+                <span
+                  class="flex h-8 min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-label-sm text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:border-(--border-strong)"
+                >
+                  <i
+                    class="ai ai-layers shrink-0 text-(--text-muted)"
+                    aria-hidden="true"
+                  />
+                  <span class="truncate">{{ environmentLabel }}</span>
+                  <i
+                    class="pi pi-chevron-down shrink-0 text-(--text-muted)"
+                    aria-hidden="true"
+                  />
+                </span>
+              </Dropdown.Trigger>
+
+              <Dropdown.Group label="Environments">
+                <Dropdown.Option
+                  v-for="option in environments"
+                  :key="option.name"
+                  :value="option.name"
+                  :label="option.name"
+                  :selected="option.name === environmentLabel"
+                />
+              </Dropdown.Group>
+
+              <Dropdown.Group>
+                <Dropdown.Option
+                  :value="CREATE"
+                  label="Create Environment"
+                />
+              </Dropdown.Group>
+            </Dropdown>
+          </Tooltip>
         </div>
       </div>
 
       <!-- THE RECORD. Four facts, each a caption over a value.
 
          EVERY VALUE LINE IS THE SAME BOX: `min-h-7 items-center`. The four values are
-         made of different things — a number beside a 24px copy button, a 24px chip, a
-         status dot, a name beside a 24px avatar — so left to their natural heights they
+         made of different things — a 24px chip, a status dot, a number beside a 24px copy
+         button, a name beside a 24px avatar — so left to their natural heights they
          sat on four different baselines and the row read as ragged even though the
          captions above it were flush. Pinning the line to the tallest control's height and
          centring in it is what makes the values align across the row; the captions never
@@ -215,21 +296,6 @@
       <div
         class="grid grid-cols-2 gap-(--spacing-sm) border-t border-(--border-muted) p-(--spacing-md) sm:grid-cols-4"
       >
-        <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-          <span class="text-label-sm text-(--text-muted)">Workload ID</span>
-          <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
-            <span class="truncate text-body-sm tabular-nums text-(--text-default)">
-              {{ workload.id }}
-            </span>
-            <CopyButton
-              kind="outlined"
-              :value="String(workload.id)"
-              aria-label="Copy workload ID"
-              class="shrink-0"
-            />
-          </div>
-        </div>
-
         <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
           <span class="text-label-sm text-(--text-muted)">Custom domains</span>
           <!-- EMPTY IS A CONTROL, not an em dash. This is the one field on the card the
@@ -297,6 +363,21 @@
             <StatusIndicator
               :severity="live ? 'success' : 'neutral'"
               :label="live ? 'Live' : 'Inactive'"
+            />
+          </div>
+        </div>
+
+        <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+          <span class="text-label-sm text-(--text-muted)">Workload ID</span>
+          <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
+            <span class="truncate text-body-sm tabular-nums text-(--text-default)">
+              {{ workload.id }}
+            </span>
+            <CopyButton
+              kind="outlined"
+              :value="String(workload.id)"
+              aria-label="Copy workload ID"
+              class="shrink-0"
             />
           </div>
         </div>

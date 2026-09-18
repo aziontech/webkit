@@ -49,7 +49,7 @@
     provisionedDeployRow,
     resourceChain
   } from '@shared/lib/provisioning'
-  import { computed, reactive, ref } from 'vue'
+  import { computed, reactive, ref, watch } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
   import DeploymentsTable from '../../components/deployment/DeploymentsTable.vue'
@@ -68,20 +68,19 @@
   import AppLayout from '../../components/shell/AppLayout.vue'
   import AddDomainDrawer from '../../components/workload/AddDomainDrawer.vue'
   import DeploymentFooter from '../../components/workload/DeploymentFooter.vue'
+  import EnvironmentDrawer from '../../components/workload/EnvironmentDrawer.vue'
   import TopologyBindNode from '../../components/workload/TopologyBindNode.vue'
   import TopologyNodeCard from '../../components/workload/TopologyNodeCard.vue'
   import WorkloadSummary from '../../components/workload/WorkloadSummary.vue'
   import { useListRefresh } from '../../lib/behavior/list-state'
   import { useTabEnter } from '../../lib/behavior/tab-enter'
-  import { CUSTOM_PAGES } from '../../lib/data/custom-pages'
+  import { createResourcePath } from '../../lib/data/create-resources'
+  import { allCustomPages } from '../../lib/data/custom-pages'
+  import { AZION_DEFAULT_ID } from '../../lib/data/deployment-strategies'
   import { deploymentFilterFields } from '../../lib/data/deployments'
   import { existingFirewallOptions } from '../../lib/data/firewalls'
-  import {
-    currentDeploymentFor,
-    releaseSeedForWorkload,
-    settingsById,
-    settingsIdsForWorkload
-  } from '../../lib/data/releases'
+  import { releaseSeedForWorkload, settingsById } from '../../lib/data/releases'
+  import { addEnvironment, environmentsFor } from '../../lib/state/workload-environments'
 
   const route = useRoute()
   const router = useRouter()
@@ -163,7 +162,7 @@
       description: "Not bound — 4xx/5xx fall back to Azion's default page.",
       ctaLabel: 'Bind Custom Page',
       module: 'custom-pages',
-      options: CUSTOM_PAGES.map((page) => ({ value: page.id, label: page.name }))
+      options: allCustomPages().map((page) => ({ value: page.id, label: page.name }))
     }
   ]
 
@@ -225,21 +224,50 @@
   // same projection (`deploymentSettings` in ../../lib/data/releases.js). No fixture:
   // a setting created in that drawer appears here, and one deleted there leaves.
   //
-  // A workload can publish into more than one — every third one does, one per environment
-  // — so this is a list, and `settingsIdsForWorkload` is the same pairing the Deploy button
-  // above pins the composer to.
-  const workloadSettings = computed(() =>
-    settingsIdsForWorkload(workloadId)
-      .map((id) => settingsById(id))
-      .filter(Boolean)
+  // ONE SETTING PER ENVIRONMENT — a deployment applies exactly one (`strategy` is an
+  // object in the request body, not a list), so a release is 1:1 with a setting. A
+  // workload having several settings is a workload having several ENVIRONMENTS, each
+  // with its own current deployment. `environmentsForWorkload` is that pairing, and the
+  // Deploy button above pins the composer to the same ids.
+  const environments = computed(() => environmentsFor(workloadId))
+
+  // WHICH ENVIRONMENT THE CARD REPORTS. Production leads (it is index 0 of the pairing),
+  // and the card's selector moves it — the same control console-kit puts on this card,
+  // for the same reason: everything under it (the live deployment, the setting that
+  // published it) is a fact ABOUT an environment, so there has to be one selected.
+  const selectedEnvironment = ref(environments.value[0]?.name ?? 'Production')
+
+  watch(environments, (list) => {
+    if (list.some((environment) => environment.name === selectedEnvironment.value)) return
+    selectedEnvironment.value = list[0]?.name ?? 'Production'
+  })
+
+  const environmentDrawerOpen = ref(false)
+
+  // A create the reader cannot see the result of is a create that appears to have done
+  // nothing — so the new environment is SELECTED, and the card is already reporting it by
+  // the time the drawer closes.
+  const onEnvironmentCreated = (environment) => {
+    const created = addEnvironment(workloadId, environment)
+    selectedEnvironment.value = created.name
+  }
+
+  const activeEnvironment = computed(
+    () =>
+      environments.value.find((environment) => environment.name === selectedEnvironment.value) ??
+      environments.value[0] ??
+      null
   )
 
-  // WHAT IS LIVE ON THIS WORKLOAD — the row its history marks `current`
-  // (@shared/lib/deployment-history.js, via the same lookup the release seed uses). It is
-  // the deployment the settings above published, so both go on one card, and it is where
-  // the version, its status and "deployed 24s ago by …" now live: the Active Deployment
-  // band that used to carry them is gone.
-  const currentDeployment = computed(() => currentDeploymentFor(workloadId) ?? null)
+  // NEVER EMPTY. A workload always deploys with a Deployment setting — that is the
+  // platform's rule, not this page's presentation choice: Azion Default is applied to
+  // anything that binds nothing of its own. So if the setting this workload was paired
+  // with has since been deleted from the store, it falls back to that one rather than
+  // reporting a workload that deploys with nothing, which cannot exist.
+  const workloadSetting = computed(
+    () =>
+      settingsById(activeEnvironment.value?.settingsId) ?? settingsById(AZION_DEFAULT_ID) ?? null
+  )
 
   // --- Which nodes are open -------------------------------------------------
   // Every node of the topology is a disclosure (ui/TopologyNode.vue), and the page
@@ -365,6 +393,25 @@
     const slot = BINDABLE.find((item) => item.key === slotKey)
     bindings[slotKey] = null
     toast.info(`${slot?.kind ?? 'Resource'} unbound`)
+  }
+
+  // A slot can also be filled with a resource that does not exist yet, and a firewall and
+  // a custom page are both first-level resources — so the create is the module's own create
+  // PAGE, not a drawer grown here (../../lib/behavior/surfaces.js). The workload travels in
+  // `?from=` with its name, so Cancel and a finished create both land back on this page
+  // rather than on a module list the reader was not in
+  // (../../lib/behavior/create-origin.js).
+  const createBindable = (slotKey) => {
+    const slot = BINDABLE.find((item) => item.key === slotKey)
+    if (!slot) return
+    router.push({
+      path: createResourcePath(slot.module),
+      query: {
+        email: route.query.email || undefined,
+        from: route.path,
+        fromLabel: workload.value.name
+      }
+    })
   }
 
   // --- Deployments ---------------------------------------------------------
@@ -610,10 +657,13 @@
                    strip into two lines and the fact row into columns too narrow for their
                    own labels. Full width, each says its piece once. -->
               <WorkloadSummary
+                v-model:environment="selectedEnvironment"
                 :workload="workload"
                 :custom-domains="customDomains"
+                :environments="environments"
                 @visit="visit"
                 @add-domain="addDomainOpen = true"
+                @create-environment="environmentDrawerOpen = true"
               >
                 <!-- WHAT IS RUNNING ON IT, as the card's footer rather than a card of its
                      own further down. A deployment is not a peer of the workload — it is
@@ -627,8 +677,7 @@
                      there is one. -->
                 <template #footer>
                   <DeploymentFooter
-                    :deployment="currentDeployment"
-                    :settings="workloadSettings"
+                    :setting="workloadSetting"
                     :email="userEmail"
                   />
                 </template>
@@ -736,6 +785,7 @@
                             :cta-label="node.ctaLabel"
                             :options="node.options"
                             @bind="(event, value) => bindResource(node.key, value)"
+                            @create="createBindable(node.key)"
                           />
                           <TopologyNodeCard
                             v-else
@@ -1028,6 +1078,16 @@
     <AddDomainDrawer
       v-model:open="addDomainOpen"
       @save="addDomain"
+    />
+
+    <!-- CREATE ENVIRONMENT — opened from the summary card's environment picker. A drawer
+         and not a page for the same reason the domain one is: it happens INSIDE a resource
+         that already exists. `taken` is the picker's own list, so the create cannot mint a
+         second "Production". -->
+    <EnvironmentDrawer
+      v-model:open="environmentDrawerOpen"
+      :taken="environments.map((environment) => environment.name)"
+      @save="onEnvironmentCreated"
     />
 
     <!-- The bar carries the leave guard, and the bar is gated on the tab — so on Overview
