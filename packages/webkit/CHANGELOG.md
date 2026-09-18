@@ -4,6 +4,28 @@
 
 - [Inputs] normalize z-index across all inputs (ENG-46735) ([#783](https://github.com/aziontech/webkit/issues/783)) ([25d201d](https://github.com/aziontech/webkit/commit/25d201d5ae0e6054b9189bc81c76b7d9fc8c5055))
 
+## [5.1.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@5.0.0...@aziontech/webkit@5.1.0) (2026-09-18)
+
+
+### Features
+
+* **webkit:** [ENG-48075] drop templates exports; Templates stories become compositions ([#977](https://github.com/aziontech/webkit/issues/977)) ([661acf4](https://github.com/aziontech/webkit/commit/661acf4122e4f2b3feee3a3e850aa54c87c355d2))
+* **webkit:** add webkit report and webkit canary ([#967](https://github.com/aziontech/webkit/issues/967)) ([b22b124](https://github.com/aziontech/webkit/commit/b22b124bd32d56d2d464c2598c5ee0193593f442))
+* **webkit:** add webkit sync — provenance-stamped Claude bundle copies ([#970](https://github.com/aziontech/webkit/issues/970)) ([d0df1b3](https://github.com/aziontech/webkit/commit/d0df1b32d04cd40078639a018b6ce13f239a5b54))
+* **webkit:** derive the Claude bundle from cli-templates and fence the CLAUDE.md fragment ([#968](https://github.com/aziontech/webkit/issues/968)) ([444e357](https://github.com/aziontech/webkit/commit/444e357460e0bcd7ef4cbe56d0749333bf54ae3b))
+* **webkit:** lint .astro files with the ESLint presets ([#966](https://github.com/aziontech/webkit/issues/966)) ([79e92d0](https://github.com/aziontech/webkit/commit/79e92d0273de54b65fb95d28ef50e4ef4a35f27f))
+
+
+### Bug Fixes
+
+* **webkit:** [ENG-47063] flip, then shrink and scroll floating panels instead of clipping them ([#973](https://github.com/aziontech/webkit/issues/973)) ([d9b5fba](https://github.com/aziontech/webkit/commit/d9b5fba012ea73c79cea81a91f6112a57b40980c))
+* **webkit:** render the paginator page buttons as one segmented strip ([#975](https://github.com/aziontech/webkit/issues/975)) ([7a4a4b1](https://github.com/aziontech/webkit/commit/7a4a4b1bacc685fe0230e984450818eb6d462c0e))
+
+
+### Documentation
+
+* [ENG-48074] add Storybook getting started to README and align Node/pnpm versions ([#976](https://github.com/aziontech/webkit/issues/976)) ([b45b4cd](https://github.com/aziontech/webkit/commit/b45b4cd3474a7703201e6974105716f1c2f09902))
+
 ## [5.0.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@4.4.0...@aziontech/webkit@5.0.0) (2026-09-09)
 
 

@@ -1,6 +1,6 @@
 {
   "name": "@aziontech/webkit",
-  "version": "5.0.0",
+  "version": "5.1.0",
   "description": "Reusable UI components and design system utilities for building Azion web interfaces.",
   "license": "MIT",
   "type": "module",
