@@ -95,65 +95,75 @@ export const textsData = {
     textWrapStyle: 'balance',
     fontSize: { _: fontSize['3xl'], sm: fontSize['5xl'], md: fontSize['6xl'] },
     lineHeight: leading.tight,
-    fontWeight: fontWeight.normal
+    fontWeight: fontWeight.normal,
+    letterSpacing: tracking.tighter
   },
   'text-heading-xl': {
     textWrapStyle: 'balance',
     fontSize: { _: fontSize.xl, sm: fontSize['3xl'], md: fontSize['4xl'] },
     lineHeight: leading.tight,
-    fontWeight: fontWeight.normal
+    fontWeight: fontWeight.normal,
+    letterSpacing: tracking.tighter
   },
   'text-heading-lg': {
     textWrapStyle: 'balance',
     fontSize: { _: fontSize.lg, md: fontSize['3xl'] },
     lineHeight: leading.tight,
-    fontWeight: fontWeight.normal
+    fontWeight: fontWeight.normal,
+    letterSpacing: tracking.tighter
   },
   'text-heading-md': {
     textWrapStyle: 'balance',
     fontSize: { _: fontSize.base, sm: fontSize.xl, md: fontSize['2xl'] },
     lineHeight: leading.tight,
-    fontWeight: fontWeight.normal
+    fontWeight: fontWeight.normal,
+    letterSpacing: tracking.tighter
   },
   'text-heading-sm': {
     textWrapStyle: 'balance',
     fontSize: { _: fontSize.sm, sm: fontSize.base, md: fontSize.lg },
     lineHeight: leading.snug,
-    fontWeight: fontWeight.normal
+    fontWeight: fontWeight.normal,
+    letterSpacing: tracking.tighter
   },
   'text-heading-xs': {
     textWrapStyle: 'balance',
     fontSize: fontSize.base,
     lineHeight: leading.snug,
-    fontWeight: fontWeight.normal
+    fontWeight: fontWeight.normal,
+    letterSpacing: tracking.tighter
   },
   'text-heading-xxs': {
     textWrapStyle: 'balance',
     fontSize: fontSize.sm,
     lineHeight: leading.snug,
-    fontWeight: fontWeight.normal
+    fontWeight: fontWeight.normal,
+    letterSpacing: tracking.tighter
   },
   'text-label-lg': {
     fontSize: fontSize.base,
     lineHeight: leading.normal,
-    fontWeight: fontWeight.normal
+    fontWeight: fontWeight.normal,
+    letterSpacing: tracking.tight,
   },
   'text-label-md': {
     fontSize: fontSize.sm,
     lineHeight: leading.normal,
-    fontWeight: fontWeight.normal
+    fontWeight: fontWeight.normal,
+    letterSpacing: tracking.tight,
   },
   'text-label-sm': {
     fontSize: fontSize.xs,
     lineHeight: leading.normal,
-    fontWeight: fontWeight.normal
+    fontWeight: fontWeight.normal,
+    letterSpacing: tracking.tight,
   },
   'text-label-code-sm': {
     fontFamily: fontFamily.code,
     fontSize: fontSize.xs,
     lineHeight: leading.none,
     fontWeight: fontWeight.normal,
-    letterSpacing: tracking.normal
+    letterSpacing: tracking.wide
   },
   'text-body-code-sm': {
     textWrapStyle: 'pretty',
@@ -161,21 +171,21 @@ export const textsData = {
     fontSize: fontSize.xs,
     lineHeight: leading.relaxed,
     fontWeight: fontWeight.normal,
-    letterSpacing: tracking.normal
+    letterSpacing: tracking.wide
   },
   'text-label-code-md': {
     fontFamily: fontFamily.code,
     fontSize: fontSize.sm,
     lineHeight: leading.none,
     fontWeight: fontWeight.normal,
-    letterSpacing: tracking.normal
+    letterSpacing: tracking.wide
   },
   'text-label-code-lg': {
     fontFamily: fontFamily.code,
     fontSize: fontSize.base,
     lineHeight: leading.none,
     fontWeight: fontWeight.normal,
-    letterSpacing: tracking.normal
+    letterSpacing: tracking.wide
   },
   'text-body-lg': {
     textWrapStyle: 'pretty',

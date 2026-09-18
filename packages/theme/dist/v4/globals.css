@@ -728,7 +728,7 @@
   --layout-boundary-start: var(--spacing-lg);
   --layout-section-gap: var(--spacing-xl);
   --layout-group-gap: var(--spacing-md);
-  --layout-measure: var(--container-6xl);
+  --layout-measure: var(--container-7xl);
   --layout-measure-focused: var(--container-4xl);
   --layout-measure-form: var(--container-4xl);
   --layout-measure-form-create: var(--container-5xl);
@@ -766,60 +766,70 @@
   --text-heading-2xl-font-size: 1.875rem;
   --text-heading-2xl-line-height: 1.25;
   --text-heading-2xl-font-weight: 400;
+  --text-heading-2xl-letter-spacing: -0.05rem;
   --text-heading-xl-text-wrap-style: balance;
   --text-heading-xl-font-size: 1.25rem;
   --text-heading-xl-line-height: 1.25;
   --text-heading-xl-font-weight: 400;
+  --text-heading-xl-letter-spacing: -0.05rem;
   --text-heading-lg-text-wrap-style: balance;
   --text-heading-lg-font-size: 1.125rem;
   --text-heading-lg-line-height: 1.25;
   --text-heading-lg-font-weight: 400;
+  --text-heading-lg-letter-spacing: -0.05rem;
   --text-heading-md-text-wrap-style: balance;
   --text-heading-md-font-size: 1rem;
   --text-heading-md-line-height: 1.25;
   --text-heading-md-font-weight: 400;
+  --text-heading-md-letter-spacing: -0.05rem;
   --text-heading-sm-text-wrap-style: balance;
   --text-heading-sm-font-size: 0.875rem;
   --text-heading-sm-line-height: 1.375;
   --text-heading-sm-font-weight: 400;
+  --text-heading-sm-letter-spacing: -0.05rem;
   --text-heading-xs-text-wrap-style: balance;
   --text-heading-xs-font-size: 1rem;
   --text-heading-xs-line-height: 1.375;
   --text-heading-xs-font-weight: 400;
+  --text-heading-xs-letter-spacing: -0.05rem;
   --text-heading-xxs-text-wrap-style: balance;
   --text-heading-xxs-font-size: 0.875rem;
   --text-heading-xxs-line-height: 1.375;
   --text-heading-xxs-font-weight: 400;
+  --text-heading-xxs-letter-spacing: -0.05rem;
   --text-label-lg-font-size: 1rem;
   --text-label-lg-line-height: 1.5;
   --text-label-lg-font-weight: 400;
+  --text-label-lg-letter-spacing: -0.025rem;
   --text-label-md-font-size: 0.875rem;
   --text-label-md-line-height: 1.5;
   --text-label-md-font-weight: 400;
+  --text-label-md-letter-spacing: -0.025rem;
   --text-label-sm-font-size: 0.75rem;
   --text-label-sm-line-height: 1.5;
   --text-label-sm-font-weight: 400;
+  --text-label-sm-letter-spacing: -0.025rem;
   --text-label-code-sm-font-family: Roboto Mono;
   --text-label-code-sm-font-size: 0.75rem;
   --text-label-code-sm-line-height: 1;
   --text-label-code-sm-font-weight: 400;
-  --text-label-code-sm-letter-spacing: 0;
+  --text-label-code-sm-letter-spacing: 0.025rem;
   --text-body-code-sm-text-wrap-style: pretty;
   --text-body-code-sm-font-family: Roboto Mono;
   --text-body-code-sm-font-size: 0.75rem;
   --text-body-code-sm-line-height: 1.625;
   --text-body-code-sm-font-weight: 400;
-  --text-body-code-sm-letter-spacing: 0;
+  --text-body-code-sm-letter-spacing: 0.025rem;
   --text-label-code-md-font-family: Roboto Mono;
   --text-label-code-md-font-size: 0.875rem;
   --text-label-code-md-line-height: 1;
   --text-label-code-md-font-weight: 400;
-  --text-label-code-md-letter-spacing: 0;
+  --text-label-code-md-letter-spacing: 0.025rem;
   --text-label-code-lg-font-family: Roboto Mono;
   --text-label-code-lg-font-size: 1rem;
   --text-label-code-lg-line-height: 1;
   --text-label-code-lg-font-weight: 400;
-  --text-label-code-lg-letter-spacing: 0;
+  --text-label-code-lg-letter-spacing: 0.025rem;
   --text-body-lg-text-wrap-style: pretty;
   --text-body-lg-font-size: 1rem;
   --text-body-lg-font-weight: 400;
@@ -1266,6 +1276,7 @@
   font-size: var(--text-heading-2xl-font-size);
   line-height: var(--text-heading-2xl-line-height);
   font-weight: var(--text-heading-2xl-font-weight);
+  letter-spacing: var(--text-heading-2xl-letter-spacing);
 }
 
 @utility text-heading-xl {
@@ -1273,6 +1284,7 @@
   font-size: var(--text-heading-xl-font-size);
   line-height: var(--text-heading-xl-line-height);
   font-weight: var(--text-heading-xl-font-weight);
+  letter-spacing: var(--text-heading-xl-letter-spacing);
 }
 
 @utility text-heading-lg {
@@ -1280,6 +1292,7 @@
   font-size: var(--text-heading-lg-font-size);
   line-height: var(--text-heading-lg-line-height);
   font-weight: var(--text-heading-lg-font-weight);
+  letter-spacing: var(--text-heading-lg-letter-spacing);
 }
 
 @utility text-heading-md {
@@ -1287,6 +1300,7 @@
   font-size: var(--text-heading-md-font-size);
   line-height: var(--text-heading-md-line-height);
   font-weight: var(--text-heading-md-font-weight);
+  letter-spacing: var(--text-heading-md-letter-spacing);
 }
 
 @utility text-heading-sm {
@@ -1294,6 +1308,7 @@
   font-size: var(--text-heading-sm-font-size);
   line-height: var(--text-heading-sm-line-height);
   font-weight: var(--text-heading-sm-font-weight);
+  letter-spacing: var(--text-heading-sm-letter-spacing);
 }
 
 @utility text-heading-xs {
@@ -1301,6 +1316,7 @@
   font-size: var(--text-heading-xs-font-size);
   line-height: var(--text-heading-xs-line-height);
   font-weight: var(--text-heading-xs-font-weight);
+  letter-spacing: var(--text-heading-xs-letter-spacing);
 }
 
 @utility text-heading-xxs {
@@ -1308,24 +1324,28 @@
   font-size: var(--text-heading-xxs-font-size);
   line-height: var(--text-heading-xxs-line-height);
   font-weight: var(--text-heading-xxs-font-weight);
+  letter-spacing: var(--text-heading-xxs-letter-spacing);
 }
 
 @utility text-label-lg {
   font-size: var(--text-label-lg-font-size);
   line-height: var(--text-label-lg-line-height);
   font-weight: var(--text-label-lg-font-weight);
+  letter-spacing: var(--text-label-lg-letter-spacing);
 }
 
 @utility text-label-md {
   font-size: var(--text-label-md-font-size);
   line-height: var(--text-label-md-line-height);
   font-weight: var(--text-label-md-font-weight);
+  letter-spacing: var(--text-label-md-letter-spacing);
 }
 
 @utility text-label-sm {
   font-size: var(--text-label-sm-font-size);
   line-height: var(--text-label-sm-line-height);
   font-weight: var(--text-label-sm-font-weight);
+  letter-spacing: var(--text-label-sm-letter-spacing);
 }
 
 @utility text-label-code-sm {
@@ -1698,6 +1718,11 @@
 @utility border-info-contrast { border-color: var(--info-contrast); }
 
 @layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
   button:not(:disabled),
   [role="button"]:not([aria-disabled="true"]),
   summary {

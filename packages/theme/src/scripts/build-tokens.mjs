@@ -279,6 +279,11 @@ const emitLayoutUtilities = () => emitUtilities(layoutsUtilities);
 const emitBaseLayer = () =>
   [
     '@layer base {',
+    '  html {',
+    '    -webkit-font-smoothing: antialiased;',
+    '    -moz-osx-font-smoothing: grayscale;',
+    '  }',
+    '',
     '  button:not(:disabled),',
     '  [role="button"]:not([aria-disabled="true"]),',
     '  summary {',
