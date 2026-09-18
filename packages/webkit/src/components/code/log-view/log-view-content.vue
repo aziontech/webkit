@@ -129,7 +129,7 @@
       class="flex h-full min-h-0 flex-col items-center justify-center gap-(--spacing-md) bg-(--bg-canvas) py-(--spacing-xl)"
     >
       <Spinner class="size-6 text-(--text-default)" />
-      <span class="font-code text-label-sm text-(--text-muted)">
+      <span class="text-label-code-sm text-(--text-muted)">
         {{ ctx.loadingLabel.value }}
       </span>
     </div>
@@ -149,7 +149,7 @@
             :key="line.id"
             :data-testid="`${ctx.testId}__line`"
             :data-type="line.type"
-            class="font-code text-label-sm relative flex gap-(--spacing-md) border-l-2 border-l-transparent px-(--spacing-md) py-(--spacing-xxs) transition-colors duration-150 ease-out before:pointer-events-none before:absolute before:inset-0 before:bg-(--bg-hover) before:opacity-0 before:transition-opacity before:duration-150 before:ease-out before:content-[''] hover:border-l-(--ring-color) hover:bg-(--bg-surface-raised) hover:before:opacity-100 data-[type=warning]:bg-(--warning) data-[type=warning]:hover:bg-(--warning) motion-reduce:transition-none motion-reduce:before:transition-none"
+            class="text-label-code-sm relative flex gap-(--spacing-md) border-l-2 border-l-transparent px-(--spacing-md) py-(--spacing-xxs) transition-colors duration-150 ease-out before:pointer-events-none before:absolute before:inset-0 before:bg-(--bg-hover) before:opacity-0 before:transition-opacity before:duration-150 before:ease-out before:content-[''] hover:border-l-(--ring-color) hover:bg-(--bg-surface-raised) hover:before:opacity-100 data-[type=warning]:bg-(--warning) data-[type=warning]:hover:bg-(--warning) motion-reduce:transition-none motion-reduce:before:transition-none"
           >
             <span
               :data-testid="`${ctx.testId}__line-time`"
@@ -328,7 +328,7 @@
       <div
         v-else
         :data-testid="`${ctx.testId}__empty`"
-        class="font-code px-(--spacing-md) py-(--spacing-sm) text-label-sm text-(--text-muted)"
+        class="px-(--spacing-md) py-(--spacing-sm) text-label-code-sm text-(--text-muted)"
       >
         <slot name="empty">No log lines match the current filters.</slot>
       </div>

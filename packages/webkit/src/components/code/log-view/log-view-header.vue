@@ -46,7 +46,7 @@
       <slot name="left">
         <span
           :data-testid="`${testId}__line-count`"
-          class="font-code text-label-sm text-(--text-muted)"
+          class="text-label-code-sm text-(--text-muted)"
         >
           {{ ctx.lineCountLabel.value }}
         </span>
