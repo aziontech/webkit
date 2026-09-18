@@ -652,7 +652,7 @@
           :data-state="isOpen ? 'open' : 'closed'"
           :data-placement="resolvedPlacement"
           :style="panelStyle"
-          class="flex max-w-[min(90vw,44rem)] flex-col overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised) shadow-(--shadow-sm) outline-none [transform-origin:var(--popup-origin,top_left)]"
+          class="flex max-w-[min(90vw,44rem)] flex-col overflow-x-hidden overflow-y-auto rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised) shadow-(--shadow-sm) outline-none [transform-origin:var(--popup-origin,top_left)]"
           @keydown="onPanelKeydown"
         >
           <div
@@ -717,7 +717,7 @@
           :data-state="isPresetsOpen ? 'open' : 'closed'"
           :data-placement="presetsPlacement"
           :style="presetsPanelStyle"
-          class="flex min-w-(--container-4xs) flex-col gap-(--spacing-xxs) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-xxs) shadow-(--shadow-sm) outline-none [transform-origin:var(--popup-origin,top_left)]"
+          class="flex min-w-(--container-4xs) flex-col gap-(--spacing-xxs) overflow-y-auto rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-xxs) shadow-(--shadow-sm) outline-none [transform-origin:var(--popup-origin,top_left)]"
           @keydown="onPresetsKeydown"
         >
           <slot name="presets">

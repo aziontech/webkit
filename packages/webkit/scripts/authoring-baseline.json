@@ -217,8 +217,6 @@
   "packages/webkit/src/components/templates/sign-up-card/sign-up-card.vue::token:js-class-preset",
   "packages/webkit/src/components/utils/spinner/spinner.vue::spec:Animation classes in .vue but not in spec: animate-spin",
   "packages/webkit/src/components/utils/spinner/spinner.vue::spec:data-testid fallback \"'utils-spinner'\" not found in <script setup>. Expected: ?? 'utils-spinner'",
-  "packages/webkit/src/composables/use-placement/index.js::comment-heavy-file",
-  "packages/webkit/src/composables/use-placement/index.js::verbose-comment-block",
   "packages/webkit/src/test/axe.test.ts::verbose-comment-block",
   "packages/webkit/src/test/axe.ts::comment-heavy-file",
   "packages/webkit/src/test/axe.ts::verbose-comment-block",

@@ -11150,7 +11150,7 @@
     },
     "use-placement": {
       "import": "@aziontech/webkit/use-placement",
-      "target": "./src/composables/use-placement/index.js",
+      "target": "./src/composables/use-placement/index.ts",
       "kind": "composable",
       "treeShakeableImport": "@aziontech/webkit/use-placement"
     },
