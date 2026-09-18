@@ -30,12 +30,18 @@ export default {
     const STYLE_SIGNAL =
       /[:;{}]|--|\[#|\b(?:bg|text|border|ring|outline|fill|stroke|divide|placeholder|caret|accent|from|via|to|shadow|decoration)-|\b(?:rgba?|hsla?|var|color|background)\b/
     const FULL_HEX = /#[0-9a-fA-F]{6}(?:[0-9a-fA-F]{2})?\b/
+    // A hash glued to a URL character is a fragment, not a color: in
+    // https://api.azion.com/#75d2b32f-fb8a-… the first eight hex digits spell a valid
+    // #RRGGBBAA. A color literal opens the string or follows whitespace, a quote, [ ( , : =.
+    const URL_FRAGMENT = /(?<=[\w/.~%?&-])#[\w-]+/g
 
     function scan(node, text) {
       if (typeof text !== 'string' || !text) return
       for (const rule of rules) {
-        if (rule.id === 'hex-color' && !FULL_HEX.test(text) && !STYLE_SIGNAL.test(text)) continue
-        const m = text.match(rule.re)
+        const subject = rule.id === 'hex-color' ? text.replace(URL_FRAGMENT, '') : text
+        if (rule.id === 'hex-color' && !FULL_HEX.test(subject) && !STYLE_SIGNAL.test(subject))
+          continue
+        const m = subject.match(rule.re)
         if (m) {
           context.report({
             node,
