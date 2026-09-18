@@ -138,6 +138,10 @@ Consumers are expected to keep their `.claude/` copies **committed**, and to run
 
 `init` is safe to run repeatedly: existing files are skipped or merged, never overwritten; the MCP server and the `prepare` script are added only if absent. The CLAUDE.md fragment is the one piece of wiring that is **not** add-once: its fenced block is kept current in place on every run, so a later `@aziontech/webkit` version's updated invariants/skills reach a project that already ran `init` — while everything outside the fence is left untouched. A malformed `package.json` / `.mcp.json` is reported as an error and left untouched — never replaced. `doctor` is read-only.
 
+## CI
+
+Enforcing `doctor`, `sync --check`, `canary`, and `report` in your own CI (instead of running them ad hoc) is a one-line `uses:` away — see [`docs/toolkit/consumer-gate.md`](./consumer-gate.md) for the reusable `workflow_call` gate this repo publishes.
+
 ## License
 
 MIT
