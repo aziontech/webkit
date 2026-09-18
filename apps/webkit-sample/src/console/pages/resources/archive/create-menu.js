@@ -40,7 +40,7 @@
 //     the URL cannot describe.
 //   ORGANIZATIONS AND TEAMS. Account structure rather than platform resources: their lists
 //     live under Settings, and that is where they are created.
-import { createResource, createResourcePath } from './create-resources'
+import { createResource, createResourcePath } from '../../../lib/data/create-resources'
 
 // The four flows that own their create page, with the title that page renders. Everything
 // else about a row is read from the resource spec.

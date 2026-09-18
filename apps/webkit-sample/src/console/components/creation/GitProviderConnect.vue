@@ -51,11 +51,14 @@
        the page's box, the dashed inner surface is the thing that is missing. -->
   <CardBox>
     <template #content>
+      <!-- The dashed surface takes whatever height the card was given — a no-op when the
+           card is content-sized (the deploy flow), and what centres the content inside a
+           column-height card (the importer beside the template catalog). -->
       <EmptyState
         size="medium"
         :title="title"
         :description="description"
-        class="rounded-(--shape-card) border border-dashed border-(--border-default) bg-(--bg-surface-raised)"
+        class="rounded-(--shape-card) border border-dashed border-(--border-default) bg-(--bg-surface-raised) lg:min-h-0 lg:flex-1"
       >
         <template #icon>
           <!-- Featured icon: a solid provider tile framed by two concentric
@@ -89,6 +92,13 @@
             :loading="gitConnecting"
             @click="connect"
           />
+          <!-- THE OTHER ARM OF THE FORK, when the flow has one. Connecting is the better
+               deploy — Azion watches the repository and redeploys on every push — but it is
+               not a precondition of shipping, so a flow that can proceed without a provider
+               puts its way through here, next to the connect it is an alternative to
+               (../../pages/marketplace/DeployTemplate.vue). Empty everywhere else: there is
+               no way to IMPORT a repository without a provider. -->
+          <slot name="alternative" />
           <!-- Same `size` as the Button above it: the two are one stacked action
                group, so they sit on one step of the ramp (h-10 / text-button-lg)
                rather than two. -->

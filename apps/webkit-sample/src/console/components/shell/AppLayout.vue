@@ -211,8 +211,8 @@
   //
   // ONE BUTTON, ONE DESTINATION: the Creation Center
   // (../../pages/resources/CreationCenter.vue). That screen is where the ways in are laid
-  // out — import a repository, clone a template, or pick a resource — so the header's job
-  // is to get an undecided reader there, not to answer for them.
+  // out — import a repository or clone a template — so the header's job is to get an
+  // undecided reader there, not to answer for them.
   //
   // THE MENU IS GONE. It used to be a SplitButton whose second segment listed every
   // first-level resource, a shortcut past the Creation Center for a reader who already

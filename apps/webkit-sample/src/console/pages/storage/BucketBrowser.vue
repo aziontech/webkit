@@ -31,6 +31,7 @@
   import AppLayout from '../../components/shell/AppLayout.vue'
   import { useListRefresh } from '../../lib/behavior/list-state'
   import { FIT_COLUMN } from '../../lib/behavior/table-columns'
+  import { glyphForExtension } from '../../lib/format/file-glyph'
 
   const route = useRoute()
   const router = useRouter()
@@ -107,22 +108,10 @@
 
   const isFolder = (entry) => Boolean(entry && entry.children)
 
-  // File-type glyph. Folders/parent are handled in the cell template.
-  const fileIcon = (ext) => {
-    const map = {
-      svg: 'pi pi-image',
-      png: 'pi pi-image',
-      jpg: 'pi pi-image',
-      jpeg: 'pi pi-image',
-      html: 'pi pi-code',
-      json: 'pi pi-database',
-      md: 'pi pi-file-edit',
-      txt: 'pi pi-file',
-      log: 'pi pi-align-left',
-      woff2: 'pi pi-star'
-    }
-    return map[ext] ?? 'pi pi-file'
-  }
+  // File-type glyph. Folders/parent are handled in the cell template. The map is shared
+  // with the project drop's listing (../../lib/format/file-glyph.js) so the same
+  // extension does not get two different marks in two listings.
+  const fileIcon = (ext) => glyphForExtension(ext)
 
   // Rows for the Table: a synthetic ".." parent when nested, then folders, then
   // files — folders first, each block alphabetical (console convention).

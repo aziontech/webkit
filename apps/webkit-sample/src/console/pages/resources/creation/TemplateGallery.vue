@@ -1,5 +1,5 @@
 <script setup>
-  // TEMPLATEGALLERY — the Creation Center's "start from a template" pane.
+  // TEMPLATEGALLERY — the Creation Center's "start from a template" column.
   //
   // A thin host for the shared TemplateBrowser module: it declares the BANDS and their
   // reading order, the two filter axes come from ../../../lib/data/frameworks.js, and
@@ -7,9 +7,8 @@
   //
   // ── THE ORDER, AND WHY IT IS THIS ONE ──
   //
-  //   1. RECOMMENDED — the nine framework starters most people arrive with, which is a
-  //      3×3 grid at the pane's full width. A reader who came here already knowing
-  //      their framework is done in one glance, which is the common case.
+  //   1. RECOMMENDED — the nine framework starters most people arrive with. A reader who
+  //      came here already knowing their framework meets it first, which is the common case.
   //   2. AZION TEMPLATES — the applications Azion and its partners publish, as the
   //      Marketplace's catalog ROWS. Second rather than first because the reader who
   //      wants a framework outnumbers the one shopping for a solution; second rather
@@ -25,7 +24,7 @@
   //      the shape changes with the job.
   //
   // Every band is narrowed by the ONE filter above them, and a band a cut empties is
-  // dropped whole — so filtering by "Ecommerce" collapses the pane to the five
+  // dropped whole — so filtering by "Ecommerce" collapses the column to the five
   // templates that answer it, whichever band they came from.
   import { computed } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
@@ -36,7 +35,8 @@
     deploySlugRoute,
     MORE_FRAMEWORKS,
     PUBLISHED_TEMPLATES,
-    RECOMMENDED_CARDS
+    RECOMMENDED_CARDS,
+    templateKindOptions
   } from '../../../lib/data/templates.js'
 
   const route = useRoute()
@@ -61,17 +61,20 @@
 </script>
 
 <template>
-  <!-- Its own title row is the same height as the importer's header, so either pane starts
-       its content on the line the rail's first row does. `scrollable` makes the catalog the
+  <!-- Its own title row is the same height as the importer's header beside it, so the two
+       columns start their content on the same line. `scrollable` makes the catalog the
        page's only scroll box from `lg` up, so it can grow without pushing the layout past
-       the viewport. No `grid-class`: the module's default (1 / 2 / 3) is written for a
-       full-width pane, which is what this is — and it is what makes the Recommended band a
-       3×3, since the band holds exactly nine. -->
+       the viewport.
+
+       THREE ACROSS, the module's own default: the cards are a mark, a title and a
+       sentence, so they hold at the third of this column a 3-up grid gives them. Below
+       `lg` the columns stack and the grid steps down with the width. -->
   <TemplateBrowser
     class="w-full min-w-0 lg:min-h-0 lg:flex-1"
     scrollable
     title="Start from Template"
     :sections="SECTIONS"
+    :kind-options="templateKindOptions"
     :use-case-options="useCaseOptions"
     :technology-options="technologyOptions"
     @select="deployTemplate"

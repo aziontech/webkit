@@ -1,12 +1,10 @@
 <script setup>
-  // GITIMPORTER — the Creation Center's "import a repository" pane.
+  // GITIMPORTER — the Creation Center's "import a repository" column.
   //
-  // It lived inside ../CreationCenter.vue, which was right while that page WAS these two
-  // halves side by side. The page is now a rail over a pane, and the pane holds one of six
-  // views — this one, the template catalog, and the four resource creates — so the page
-  // owns the rail and each view owns itself. What is left here is exactly what importing a
-  // repository needs: a provider to connect, an account scope, and the repositories under
-  // it.
+  // The page is the two ways to start a deploy side by side, and each half is a component
+  // of its own: what importing a repository needs and what browsing the catalog needs have
+  // nothing to do with each other. What is here is exactly the first of those — a provider
+  // to connect, an account scope, and the repositories under it.
   //
   // Everything in it is a MOCK of the GitHub handshake — connecting, "fetching" the account
   // and switching scope are timers, and the repositories are a fixture. The flow they lead
@@ -44,10 +42,17 @@
 
   // Importing a repository routes into the same deploy flow, cloning the selected
   // repo under the current account scope instead of a catalog template.
+  // `framework` carries the repository's own stack across, so the deploy screen leads with
+  // the glyph the reader just clicked here rather than a generic mark.
   const importRepo = (repo) =>
     router.push({
       path: '/deploy',
-      query: { email: userEmail.value, repo: repo.name, owner: scope.value }
+      query: {
+        email: userEmail.value,
+        repo: repo.name,
+        owner: scope.value,
+        framework: repo.tech
+      }
     })
 
   const search = ref('')
@@ -166,13 +171,18 @@
   // has more than one repo — the list is what the column's height is for, and one
   // row in a full-height box reads as a broken empty state.
   const repos = [
-    { name: 'next-js-boilerplate', age: '2 hours ago', icon: 'ai-cor ai-next' },
-    { name: 'azion-docs-site', age: '5 hours ago', icon: 'ai-cor ai-astro' },
-    { name: 'edge-functions-playground', age: 'yesterday', icon: 'ai-cor ai-vue' },
-    { name: 'storefront-checkout', age: '3 days ago', icon: 'ai-cor ai-react' },
-    { name: 'observability-dashboard', age: '6 days ago', icon: 'ai-cor ai-svelte' },
-    { name: 'marketing-landing', age: '2 weeks ago', icon: 'ai-cor ai-nuxt' },
-    { name: 'internal-admin', age: 'last month', icon: 'ai-cor ai-angular' }
+    { name: 'next-js-boilerplate', age: '2 hours ago', tech: 'next', icon: 'ai-cor ai-next' },
+    { name: 'azion-docs-site', age: '5 hours ago', tech: 'astro', icon: 'ai-cor ai-astro' },
+    { name: 'edge-functions-playground', age: 'yesterday', tech: 'vue', icon: 'ai-cor ai-vue' },
+    { name: 'storefront-checkout', age: '3 days ago', tech: 'react', icon: 'ai-cor ai-react' },
+    {
+      name: 'observability-dashboard',
+      age: '6 days ago',
+      tech: 'svelte',
+      icon: 'ai-cor ai-svelte'
+    },
+    { name: 'marketing-landing', age: '2 weeks ago', tech: 'nuxt', icon: 'ai-cor ai-nuxt' },
+    { name: 'internal-admin', age: 'last month', tech: 'angular', icon: 'ai-cor ai-angular' }
   ]
 
   const filteredRepos = computed(() => {
@@ -189,19 +199,17 @@
     </header>
 
     <div class="flex flex-col lg:min-h-0 lg:flex-1">
-      <!-- No provider connected yet — the connect card is the whole pane, since there is
+      <!-- No provider connected yet — the connect card is the whole column, since there is
          nothing to list until there is an account to list it from. Shared with the
          template deploy flow, which opens on the same card for the same reason
          (../../../components/creation/GitProviderConnect.vue).
 
-         CONTENT-SIZED, not column-height. The card used to stretch to fill the column so
-         its dashed surface ended on the same line as the template catalog beside it; with
-         one pane at a time there is nothing to line up with, and a full-height dashed box
-         on a wide window is a screenful of nothing above a single button. It sits at the
-         top of the pane instead. -->
+         COLUMN-HEIGHT from `lg` up: the dashed surface ends on the same line as the
+         template catalog beside it, and its content stays centred in the box the catalog
+         occupies. Stacked, the card is content-sized like everything else on the page. -->
       <GitProviderConnect
         v-if="!gitConnected"
-        class="lg:min-h-0"
+        class="lg:min-h-0 lg:flex-1"
       />
 
       <!-- Connected: the account scope + search above the repository
