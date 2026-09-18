@@ -20,9 +20,31 @@
 // can set the cache policy or pick the connector to fetch from; a response rule is
 // looking at something already fetched and can only shape what leaves. A behavior
 // absent from a phase is not disabled there, it is not offered.
+import { createdRowsFor } from '../state/created-resources'
 import { useCacheSettings } from './cache-settings'
 import { CONNECTORS } from './connectors'
 import { functions } from './functions'
+
+/**
+ * The two programs a rule can belong to, in the order they run. Declared here rather than
+ * in the drawer so both engines are described the same way — the firewall's vocabulary
+ * carries a single-phase version of this list (./firewall-rules.js).
+ */
+export const PHASES = [
+  {
+    value: 'request',
+    label: 'Request Phase',
+    description: 'Configure the requests made to the edge.'
+  },
+  {
+    value: 'response',
+    label: 'Response Phase',
+    description: 'Configure the responses delivered to end-users.'
+  }
+]
+
+export const PHASE_HINT =
+  'When the rule runs. Request rules act on what arrives at the edge; response rules act on what leaves it. The two are separate programs and never interleave.'
 
 /** The comparison operators a condition is written with. */
 export const OPERATORS = [
@@ -45,6 +67,17 @@ export const operatorLabel = (value) => OPERATORS.find((o) => o.value === value)
  * is present at all, so the argument input is dropped from the row entirely.
  */
 export const takesArgument = (operator) => operator !== 'exists' && operator !== 'does-not-exist'
+
+/**
+ * What an operator COMPARES AGAINST — the counterpart of `behaviorArgument` for the other
+ * half of a rule. Free text everywhere in this engine: a request's variables are compared
+ * to values the reader writes. The firewall's engine has one that is not
+ * (./firewall-rules.js — a network list is a record, so it is picked, not typed).
+ *
+ * @param {string} operator
+ * @returns {{kind: string}} `{ kind: 'text' }`, or a `select` with the store to list.
+ */
+export const operatorArgument = () => ({ kind: 'text' })
 
 // ── The behavior catalog ──────────────────────────────────────────────────────
 //
@@ -213,7 +246,10 @@ export const behaviorOptions = (source, phase) => {
     return useCacheSettings().value.map((setting) => ({ value: setting.id, label: setting.name }))
   }
   if (source === 'connectors') {
-    return CONNECTORS.map((connector) => ({ value: connector.id, label: connector.name }))
+    return [...createdRowsFor('connectors'), ...CONNECTORS].map((connector) => ({
+      value: connector.id,
+      label: connector.name
+    }))
   }
   if (source === 'functions') {
     return functions.value
@@ -229,3 +265,4 @@ export const behaviorArgumentNote = (source, phase) =>
   source === 'functions' && phase === 'response'
     ? 'Only functions with the Lua runtime run in the response phase.'
     : ''
+

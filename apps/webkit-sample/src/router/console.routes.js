@@ -62,6 +62,7 @@ import CreationCenter from '@console/pages/resources/CreationCenter.vue'
 import ResourceSettings from '@console/pages/resources/ResourceSettings.vue'
 import Certificates from '@console/pages/secure/Certificates.vue'
 import Firewall from '@console/pages/secure/Firewall.vue'
+import FirewallDetail from '@console/pages/secure/FirewallDetail.vue'
 import NetworkLists from '@console/pages/secure/NetworkLists.vue'
 import WafRules from '@console/pages/secure/WafRules.vue'
 import CreateSqlDatabase from '@console/pages/sql/CreateSqlDatabase.vue'
@@ -174,6 +175,10 @@ export const consoleRoutes = [
   { path: '/custom-pages', name: 'custom-pages', component: CustomPages },
   // Secure
   { path: '/firewall', name: 'firewall', component: Firewall },
+  // A firewall holds a PROGRAM — the rules that run before a request reaches the
+  // application it protects — so its record gets a page with the two tabs that program
+  // needs, not the generated settings form (@console/pages/secure/FirewallDetail.vue).
+  { path: '/firewall/:id', name: 'firewall-detail', component: FirewallDetail },
   { path: '/waf-rules', name: 'waf-rules', component: WafRules },
   { path: '/certificates', name: 'certificates', component: Certificates },
   { path: '/network-lists', name: 'network-lists', component: NetworkLists },

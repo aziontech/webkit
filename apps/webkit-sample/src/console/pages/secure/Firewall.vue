@@ -50,10 +50,11 @@
     TAG_COLUMN_WIDE,
     TAG_LIST_COLUMN
   } from '../../lib/behavior/table-columns'
-  import { createResourcePath, resourceSettingsPath } from '../../lib/data/create-resources'
+  import { createResourcePath } from '../../lib/data/create-resources'
   import { environmentSeverity } from '../../lib/data/deployments'
   import { FIREWALLS } from '../../lib/data/firewalls'
   import { productFirstUse } from '../../lib/data/product-empty-states'
+  import { createdRowsFor, removeCreatedResource } from '../../lib/state/created-resources'
   import { useSampleMode } from '../../lib/state/sample-mode'
   import { tenancyRows } from '../../lib/state/tenancy-scope'
 
@@ -65,7 +66,12 @@
 
   // This page holds its own copy of the seed because it deletes rows; mutating the
   // shared array would leak that into every surface reading it.
-  const firewalls = ref([...FIREWALLS])
+  // WHAT THIS SESSION MADE, THEN THE SEED. A resource created on the module's create
+  // page is stored as the answers the reader gave and derived back into a row by this
+  // module's own row builder (../../lib/state/created-resources.js), so it arrives here
+  // indistinguishable from a seeded one — newest first, which is where a reader looks
+  // for the thing they just made.
+  const firewalls = ref([...createdRowsFor('firewall'), ...FIREWALLS])
 
   // A firewall belongs to one place in the tenancy chain, so the seed is projected
   // through the organization / account / workspace in force (src/lib/tenancy-scope.js).
@@ -177,19 +183,21 @@
   const confirmDelete = () => {
     const row = pendingDelete.value
     if (!row) return
+    // Out of the store as well, or the next mount seeds it back in.
+    removeCreatedResource('firewall', row.id)
     firewalls.value = firewalls.value.filter((item) => item.id !== row.id)
     toast.success(`${row.name} deleted.`)
     pendingDelete.value = null
   }
 
   const onRowAction = (event, action, row) => {
-    // EDIT OPENS THE SETTINGS PAGE. It used to raise "edit is disabled in the demo", which
-    // left a reader able to create a firewall and unable to change one. The page is
-    // generated from the same fields as the create page (../lib/create-resources.js via
-    // ./ResourceSettings.vue), and the row hands over the name it already knows.
+    // EDIT OPENS THE FIREWALL'S OWN PAGE. It used to open the generated settings form,
+    // which had nowhere to put the thing a firewall actually holds — the rules that run
+    // before a request reaches the application it protects. That page now carries both
+    // (./FirewallDetail.vue), and the row hands over the name it already knows.
     if (action === 'edit') {
       router.push({
-        path: resourceSettingsPath('firewall', row.id),
+        path: `/firewall/${row.id}`,
         query: { name: row.name, email: route.query.email || undefined }
       })
       return

@@ -88,6 +88,7 @@
   import { daysAgo } from '@shared/lib/dates'
   import { authorAt } from '@shared/lib/people'
   import { computed, nextTick, ref, watch } from 'vue'
+  import { useRoute, useRouter } from 'vue-router'
 
   import SettingsSaveBar from '../../../components/form/SettingsSaveBar.vue'
   import LastModifiedCell from '../../../components/list/LastModifiedCell.vue'
@@ -97,6 +98,7 @@
   import { DRAG_ROW_CLASS, useDragReorder } from '../../../lib/behavior/drag-reorder'
   import { MORPH_TRANSITION } from '../../../lib/behavior/list-morph'
   import { useTabDirty } from '../../../lib/behavior/tab-dirty'
+  import { bindingRecord, bindingRuleDraft } from '../../../lib/data/create-bindings'
   import { productFirstUse } from '../../../lib/data/product-empty-states'
   import CreateRuleDrawer from '../CreateRuleDrawer.vue'
 
@@ -496,16 +498,49 @@
   // create clears it, so the two can never be confused for one another.
   const drawerOpen = ref(false)
   const editingRule = ref(null)
+  const draftRule = ref(null)
 
   const openCreate = () => {
     editingRule.value = null
+    draftRule.value = null
     drawerOpen.value = true
   }
 
   const openRule = (rule) => {
     editingRule.value = rule
+    draftRule.value = null
     drawerOpen.value = true
   }
+
+  const route = useRoute()
+  const router = useRouter()
+
+  const clearHandoff = () => {
+    if (!route.query.bind) return
+    const query = { ...route.query }
+    delete query.bind
+    delete query.record
+    router.replace({ query })
+  }
+
+  watch(
+    () => [route.query.bind, route.query.record],
+    ([resource, id]) => {
+      const record = bindingRecord(String(resource ?? ''), String(id ?? ''))
+      const draft = bindingRuleDraft(String(resource ?? ''), record)
+      if (!draft) return
+      editingRule.value = null
+      draftRule.value = draft
+      drawerOpen.value = true
+    },
+    { immediate: true }
+  )
+
+  watch(drawerOpen, (isOpen) => {
+    if (isOpen) return
+    draftRule.value = null
+    clearHandoff()
+  })
 
   /**
    * Stamps a saved rule with WHO touched it and WHEN — the record the drawer emits is
@@ -970,6 +1005,7 @@
     <CreateRuleDrawer
       v-model:open="drawerOpen"
       :rule="editingRule"
+      :draft="draftRule"
       @created="onCreated"
       @updated="onUpdated"
     />

@@ -35,18 +35,7 @@
   import Section from '../../components/page/Section.vue'
   import { useAnimatedHeight } from '../../lib/behavior/animate-height.js'
   import { MORPH_COLLAPSE } from '../../lib/behavior/list-morph'
-  import {
-    behaviorAllowedIn,
-    behaviorArgument,
-    behaviorArgumentNote,
-    behaviorLabel,
-    behaviorOptions,
-    behaviorsFor,
-    isTerminalBehavior,
-    operatorLabel,
-    OPERATORS,
-    takesArgument
-  } from '../../lib/data/rules-engine'
+  import * as applicationRules from '../../lib/data/rules-engine'
 
   const open = defineModel('open', { type: Boolean, default: false })
 
@@ -55,12 +44,37 @@
     // rule's anatomy is the same whether it is being written or corrected, and a
     // second read-only surface for it would be a third place the criteria repeater
     // has to be kept in step with.
-    rule: { type: Object, default: null }
+    rule: { type: Object, default: null },
+    // A rule the CREATE opens already written — what a function create hands over so
+    // the reader only has to read it and save. It is not an edit: nothing exists yet,
+    // so the drawer keeps its create title and still emits `created`.
+    draft: { type: Object, default: null },
+    // WHICH ENGINE this rule belongs to. A rule's anatomy does not change between the
+    // application's engine and the firewall's — same criteria repeater, same conditional
+    // arguments, same commit — only the WORDS do: which phases exist, which behaviors
+    // they offer, and what each behavior is given. So the vocabulary is a prop
+    // (../../lib/data/rules-engine.js, ../../lib/data/firewall-rules.js) and this drawer
+    // is one file rather than two that drift.
+    vocabulary: { type: Object, default: () => applicationRules }
   })
 
   const emit = defineEmits(['created', 'updated'])
 
   const editing = computed(() => Boolean(props.rule))
+
+  const PHASES = computed(() => props.vocabulary.PHASES ?? applicationRules.PHASES)
+  const phaseHint = computed(() => props.vocabulary.PHASE_HINT ?? applicationRules.PHASE_HINT)
+  const OPERATORS = computed(() => props.vocabulary.OPERATORS)
+  const operatorLabel = (value) => props.vocabulary.operatorLabel(value)
+  const takesArgument = (operator) => props.vocabulary.takesArgument(operator)
+  const behaviorsFor = (phase) => props.vocabulary.behaviorsFor(phase)
+  const behaviorArgument = (type) => props.vocabulary.behaviorArgument(type)
+  const behaviorAllowedIn = (type, phase) => props.vocabulary.behaviorAllowedIn(type, phase)
+  const behaviorOptions = (source, phase) => props.vocabulary.behaviorOptions(source, phase)
+  const behaviorArgumentNote = (source, phase) => props.vocabulary.behaviorArgumentNote(source, phase)
+  const isTerminalBehavior = (type) => props.vocabulary.isTerminalBehavior(type)
+  const behaviorLabel = (type) => props.vocabulary.behaviorLabel(type)
+  const operatorArgument = (operator) => props.vocabulary.operatorArgument(operator)
 
   // Stable keys for repeater rows (order-independent).
   let nextId = 0
@@ -79,7 +93,7 @@
   const blankForm = () => ({
     name: '',
     description: '',
-    phase: 'request',
+    phase: PHASES.value[0]?.value ?? 'request',
     criteria: [newGroup()],
     behaviors: [newBehavior()],
     active: true
@@ -97,7 +111,7 @@
       : {
           name: rule.name ?? '',
           description: rule.description ?? '',
-          phase: rule.phase ?? 'request',
+          phase: rule.phase ?? PHASES.value[0]?.value ?? 'request',
           criteria: (rule.criteria ?? []).length
             ? rule.criteria.map((group) => ({
                 id: uid(),
@@ -123,12 +137,17 @@
     form.criteria.reduce((sum, group) => sum + group.conditions.length, 0)
   )
 
-  // Seeded on OPEN and reset on close, so the drawer never shows the previous rule
+  // Seeded on OPEN — and on mount, since a handed-over rule opens the drawer before this
+  // component exists — and reset on close, so the drawer never shows the previous rule
   // for a frame while the new one loads in.
-  watch(open, (isOpen) => {
-    Object.assign(form, formFor(isOpen ? props.rule : null))
-    submitted.value = false
-  })
+  watch(
+    open,
+    (isOpen) => {
+      Object.assign(form, formFor(isOpen ? (props.rule ?? props.draft) : null))
+      submitted.value = false
+    },
+    { immediate: true }
+  )
 
   // ── The two conditional forms ─────────────────────────────────────────────
   //
@@ -212,6 +231,19 @@
   // inside one. Held here rather than discovered on save.
   const canAddCriteria = computed(() => form.criteria.length < 5)
   const canAddCondition = (group) => group.conditions.length < 10
+
+  /**
+   * Changing an operator can change what its argument IS — a picked record on one, a typed
+   * value on the next — so an answer the new operator cannot read is dropped. Carrying it
+   * over would leave a network list's id sitting in a text box, or a typed string selected
+   * in a list that does not contain it.
+   */
+  const setConditionOperator = (condition, operator) => {
+    const before = operatorArgument(condition.operator)
+    const after = operatorArgument(operator)
+    condition.operator = operator
+    if (before.kind !== after.kind || before.source !== after.source) condition.argument = ''
+  }
 
   // Changing the phase changes which behaviors exist. Any behavior the new phase does
   // not offer falls back to Deliver — the one behavior both phases have and the only
@@ -489,12 +521,15 @@
       </div>
     </Section>
 
-    <!-- Section: Phase (ItemGroup with radio blocks) -->
+    <!-- Section: Phase (ItemGroup with radio blocks) — only when the engine HAS more than
+         one. The firewall's has a single phase, and a radio group with one option is a
+         sentence pretending to be a control. -->
     <Section
+      v-if="PHASES.length > 1"
       stacked
       :divided="false"
       title="Phase"
-      hint="When the rule runs. Request rules act on what arrives at the edge; response rules act on what leaves it. The two are separate programs and never interleave."
+      :hint="phaseHint"
     >
       <CardBox :padded="false">
         <template #content>
@@ -502,33 +537,23 @@
             <!-- THE PHASE IS FIXED ONCE THE RULE EXISTS. It is not a preference the rule
                  carries, it is WHICH PROGRAM the rule belongs to: the two phases offer
                  different behaviors, and the watch that guards that falls every behavior
-                 the new phase does not offer back to Deliver. On a rule being written
-                 that is a correction the reader is making as they go; on a rule that
-                 already runs it would silently empty the thing they opened to edit.
-                 So the switch is offered on create and locked afterwards — moving a rule
-                 to the other phase is writing the rule that belongs there. -->
+                 the new phase does not offer back to the first one both share. On a rule
+                 being written that is a correction the reader is making as they go; on a
+                 rule that already runs it would silently empty the thing they opened to
+                 edit. So the switch is offered on create and locked afterwards — moving a
+                 rule to the other phase is writing the rule that belongs there. -->
             <div class="flex flex-col gap-(--spacing-xs)">
               <FieldRadioBlock
+                v-for="phase in PHASES"
+                :key="phase.value"
                 v-model="form.phase"
-                value="request"
+                :value="phase.value"
                 name="rule-phase"
-                input-id="rule-phase-request"
-                label="Request Phase"
-                description="Configure the requests made to the edge."
+                :input-id="`rule-phase-${phase.value}`"
+                :label="phase.label"
+                :description="phase.description"
                 :disabled="submitting || editing"
               />
-              <FieldRadioBlock
-                v-model="form.phase"
-                value="response"
-                name="rule-phase"
-                input-id="rule-phase-response"
-                label="Response Phase"
-                description="Configure the responses delivered to end-users."
-                :disabled="submitting || editing"
-              />
-              <!-- The disabled state says WHY, and what to do instead — the one case
-                   /webkit-form keeps `kind="disabled"` for: a persistent lock whose
-                   reason is not obvious from the control. -->
               <HelperText
                 v-if="editing"
                 kind="disabled"
@@ -684,11 +709,12 @@
                           </InputText>
 
                           <Select
-                            v-model="cond.operator"
+                            :model-value="cond.operator"
                             size="large"
                             class="w-full"
                             :disabled="submitting"
                             :display-value="operatorLabel"
+                            @update:model-value="setConditionOperator(cond, $event)"
                           >
                             <Select.Trigger aria-label="Operator" />
                             <Select.Content>
@@ -707,8 +733,41 @@
                                  rendered rather than rendered and ignored. The cell
                                  stays in the grid, so the row's columns do not shift
                                  under the operator that dropped its argument. -->
+                          <!-- AND WHAT IT COMPARES AGAINST IS NOT ALWAYS TYPED. A firewall
+                                 rule can test an address against a NETWORK LIST, which is a
+                                 record the account owns — so that operator's argument is
+                                 picked from the store that holds them, exactly as a
+                                 behavior's `select` argument is. A text box there would
+                                 take a name nothing resolves. -->
+                          <Select
+                            v-if="
+                              takesArgument(cond.operator) &&
+                              operatorArgument(cond.operator).kind === 'select'
+                            "
+                            v-model="cond.argument"
+                            size="large"
+                            class="w-full"
+                            :disabled="submitting"
+                            :placeholder="`Select a ${operatorArgument(cond.operator).label.toLowerCase()}`"
+                            :display-value="
+                              (value) => optionLabelIn(operatorArgument(cond.operator).source, value)
+                            "
+                          >
+                            <Select.Trigger
+                              :aria-label="operatorArgument(cond.operator).label"
+                            />
+                            <Select.Content>
+                              <Select.Option
+                                v-for="option in optionsFor(operatorArgument(cond.operator).source)"
+                                :key="option.value"
+                                :value="option.value"
+                              >
+                                {{ option.label }}
+                              </Select.Option>
+                            </Select.Content>
+                          </Select>
                           <InputText
-                            v-if="takesArgument(cond.operator)"
+                            v-else-if="takesArgument(cond.operator)"
                             v-model="cond.argument"
                             size="large"
                             class="w-full"

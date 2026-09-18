@@ -9,6 +9,8 @@
 import { daysAgo, formatListDate } from '@shared/lib/dates'
 import { authorAt, emailOf } from '@shared/lib/people'
 
+import { createdRowsFor } from '../state/created-resources'
+
 /** Firewall module → the label every surface shows for it. */
 export const FIREWALL_MODULES = {
   ddos: 'DDoS Protection',
@@ -245,7 +247,21 @@ export const FIREWALLS = [
     status: 'Inactive',
     modifiedAt: daysAgo(58)
   }
-].map((firewall, index) => {
+].map(firewallRow)
+
+/**
+ * A firewall as a LIST ROW — the record itself plus the fields its table displays.
+ *
+ * Exported because the seed is not the only source of rows any more: a firewall created
+ * in this session is stored as the answers the reader gave (../state/created-resources.js)
+ * and has to arrive in the list as the SAME row, derived fields and all. Two projections
+ * would be two lists that disagree about what a row is.
+ *
+ * @param {object} firewall The base record.
+ * @param {number} [index] Position in the seed — picks the round-robin author.
+ * @returns {object} The row.
+ */
+export function firewallRow(firewall, index = 0) {
   const person = authorAt(index)
   return {
     ...firewall,
@@ -255,10 +271,21 @@ export const FIREWALLS = [
     authorAvatar: person.avatar,
     lastModified: formatListDate(firewall.modifiedAt)
   }
-})
+}
 
-/** A seeded firewall by id, or `undefined`. */
-export const firewallById = (id) => FIREWALLS.find((firewall) => firewall.id === String(id))
+/**
+ * EVERY firewall there is — the ones created in this session, then the seed.
+ *
+ * The seed stopped being the whole answer the day the create page started storing what it
+ * made (../state/created-resources.js). Everything below reads this rather than `FIREWALLS`
+ * so a firewall a reader just created can be bound, linked and named exactly like a seeded
+ * one; `FIREWALLS` stays the seed, and the module list adds its own created rows the same
+ * way.
+ */
+export const allFirewalls = () => [...createdRowsFor('firewall'), ...FIREWALLS]
+
+/** A firewall by id, or `undefined`. */
+export const firewallById = (id) => allFirewalls().find((firewall) => firewall.id === String(id))
 
 /**
  * The seeded firewalls as SELECTABLE ROWS — what a create offers under "use an existing
@@ -271,7 +298,7 @@ export const existingFirewallOptions = () =>
   // decides nothing. Activity is the proxy this data actually has: the firewall someone
   // changed this week is the one they are about to bind, and a rule count says how big a
   // firewall is, not how current it is.
-  [...FIREWALLS]
+  allFirewalls()
     .sort((a, b) => b.modifiedAt - a.modifiedAt)
     .map((firewall) => ({
       value: firewall.name,
@@ -280,9 +307,9 @@ export const existingFirewallOptions = () =>
       description: `${firewall.rules} ${firewall.rules === 1 ? 'rule' : 'rules'} · ${firewall.moduleLabels.join(', ')}`
     }))
 
-/** The id of a seeded firewall by NAME, or `''`. */
-export const firewallIdByName = (name) => FIREWALLS.find((f) => f.name === name)?.id ?? ''
+/** The id of a firewall by NAME, or `''`. */
+export const firewallIdByName = (name) => allFirewalls().find((f) => f.name === name)?.id ?? ''
 
-/** The module LABELS a seeded firewall already has on, by name. Empty when unknown. */
+/** The module LABELS a firewall already has on, by name. Empty when unknown. */
 export const firewallModuleLabelsByName = (name) =>
-  FIREWALLS.find((f) => f.name === name)?.moduleLabels ?? []
+  allFirewalls().find((f) => f.name === name)?.moduleLabels ?? []
