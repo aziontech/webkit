@@ -5,25 +5,28 @@
   import HelperText from '@aziontech/webkit/helper-text'
   import InputGroup, { InputGroupAddon } from '@aziontech/webkit/input-group'
   import InputText from '@aziontech/webkit/input-text'
-  import Item from '@aziontech/webkit/item'
   import Label from '@aziontech/webkit/label'
   import Select from '@aziontech/webkit/select'
   import Skeleton from '@aziontech/webkit/skeleton'
   import Switch from '@aziontech/webkit/switch'
-  import Tag from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { provisionDeployment, resourceChain } from '@shared/lib/provisioning'
   import { computed, onBeforeUnmount, reactive, ref, watch } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
   import GitProviderConnect from '../../components/creation/GitProviderConnect.vue'
+  import UploadedProject from '../../components/creation/UploadedProject.vue'
   import DeploymentFlow from '../../components/deployment/DeploymentFlow.vue'
   import UnsavedChangesGuard from '../../components/form/UnsavedChangesGuard.vue'
   import TemplatePreview from '../../components/marketplace/TemplatePreview.vue'
   import CreationHeader from '../../components/page/CreationHeader.vue'
   import { useBaseline } from '../../lib/behavior/forms'
+  import { defaultRootFile, picksRootFile } from '../../lib/behavior/project-upload'
+  import { FRAMEWORKS, markFilterFor } from '../../lib/data/frameworks'
   import { getTemplate } from '../../lib/data/templates.js'
+  import { droppedProjectFor } from '../../lib/state/dropped-project'
   import { gitAccounts, gitConnected } from '../../lib/state/git-provider'
+  import DeploySuccess from '../applications/wizard/DeploySuccess.vue'
 
   const route = useRoute()
   const router = useRouter()
@@ -31,13 +34,29 @@
   // Carry the signed-in user across the flow (falls back to a placeholder).
   const userEmail = computed(() => route.query.email || 'myemail@azion.com')
 
-  // A deploy starts either from a catalog template (?template=slug) or from
-  // importing an existing Git repository (?repo=name&owner=account). A repo import
-  // synthesizes a template-shaped source (no template-specific settings) so the
-  // rest of the flow — preview, form, deployment, success — is identical.
+  // A deploy starts from one of three sources: a catalog template (?template=slug), an
+  // existing Git repository (?repo=name&owner=account), or a project the reader handed us
+  // from their own machine (?upload=name). The last two synthesize a template-shaped
+  // source (no template-specific settings) so the rest of the flow — preview, form,
+  // deployment, success — is identical.
   const isRepoImport = computed(() => Boolean(route.query.repo))
+  const isUpload = computed(() => Boolean(route.query.upload))
 
   const template = computed(() => {
+    if (isUpload.value) {
+      const name = String(route.query.upload)
+      const framework = String(route.query.framework || '')
+      return {
+        slug: `upload:${name}`,
+        title: name,
+        description: 'Deploy this project straight from your machine.',
+        framework,
+        icon: framework ? '' : 'pi pi-folder',
+        requiresRepository: false,
+        defaultRepoName: name,
+        settings: []
+      }
+    }
     if (isRepoImport.value) {
       const name = String(route.query.repo)
       const owner = String(route.query.owner || 'gab-az')
@@ -55,6 +74,19 @@
     return getTemplate(route.query.template)
   })
 
+  // THE MARK OF THE THING BEING DEPLOYED — the template's own glyph when it authors one
+  // (the Azion templates do, since no framework stands behind them), otherwise the logo of
+  // the framework it scaffolds. Either way it is the mark the reader just clicked: the
+  // catalog card for a template, the repository row for an import
+  // (../resources/creation/GitImporter.vue, which carries the stack across in `framework`).
+  // A repository with no framework resolves to nothing and the card falls back to the
+  // Azion mark, which is the honest answer — we do not know what it is built with.
+  const templateMark = computed(() => {
+    const framework = FRAMEWORKS.find((entry) => entry.tech === template.value.framework)
+    const icon = template.value.icon || framework?.icon || ''
+    return { icon, markClass: markFilterFor(icon) }
+  })
+
   const goToCreationCenter = () =>
     router.push({ path: '/create', query: { email: userEmail.value } })
 
@@ -68,11 +100,47 @@
 
   // Breadcrumb trail: clickable root back to the Creation Center, then the
   // current template as the active (last) crumb.
+  const breadcrumbSource = computed(() => {
+    if (isUpload.value) return 'Upload a Project'
+    return isRepoImport.value ? 'Import from Git' : 'Start from a Template'
+  })
+
   const breadcrumbItems = computed(() => [
-    { label: isRepoImport.value ? 'Import from Git' : 'Start from a Template' },
+    { label: breadcrumbSource.value },
     { label: template.value.title, current: true }
   ])
   const onBreadcrumbNavigate = () => goToCreationCenter()
+
+  // ── DOES THIS DEPLOY GO THROUGH A REPOSITORY? ──
+  //
+  // Three answers, and only one of them is the reader's:
+  //
+  //   `none`      an AZION TEMPLATE has no project to copy — its settings ARE the template
+  //               (../../lib/data/templates.js → `requiresRepository`). Asking it to
+  //               authorize a provider would be asking for a clone that never happens, and
+  //               the application wizard has always known this
+  //               (../applications/CreateApplication.vue); this page did not, so Azion
+  //               Proxy opened on a connect wall and a preview reading "Cloning from
+  //               Github".
+  //   `required`  a REPOSITORY IMPORT is a repository. There is nothing to deploy without
+  //               it, so the provider is the source, not a preference.
+  //   `optional`  a FRAMEWORK STARTER, which is the case this whole choice exists for.
+  //               Cloning it into the reader's account is the better deploy — Azion watches
+  //               it and ships every push — but it is not what makes the code deployable.
+  //               A reader who does not want Azion holding a GitHub token, or who is trying
+  //               the platform before they commit an account to it, deploys the code once
+  //               and connects later. Binding a provider is a capability, not a toll.
+  const repositoryMode = computed(() => {
+    if (template.value.requiresRepository === false) return 'none'
+    if (isRepoImport.value) return 'required'
+    return 'optional'
+  })
+
+  // The reader took the `optional` fork the other way. Reset whenever another template is
+  // opened in place — the choice was about the template they were looking at.
+  const skipGit = ref(false)
+
+  const usesGit = computed(() => repositoryMode.value !== 'none' && !skipGit.value)
 
   // Git scope: the account or organization the repository will be created under. The
   // roster is the ACCOUNT's linked Git accounts (../../lib/state/git-provider.js), which is
@@ -96,8 +164,67 @@
   // Repository visibility. Public is the default ("lock out"); flipping the
   // switch off makes the repository private ("lock in").
   const isPublic = ref(true)
-  const repoLabel = computed(() =>
-    isPublic.value ? 'Public Repository Name' : 'Private Repository Name'
+
+  // ONE FIELD, TWO JOBS. It names the thing being deployed; when a repository is created
+  // it is also that repository's name, and the visibility toggle beside it applies. With
+  // no repository there is nothing to make public or private, so the field is just the
+  // project's name.
+  const repoLabel = computed(() => {
+    if (!usesGit.value) return 'Project Name'
+    return isPublic.value ? 'Public Repository Name' : 'Private Repository Name'
+  })
+  const repoPlaceholder = computed(() => (usesGit.value ? 'my-repository' : 'my-project'))
+
+  // THE UPLOAD CARD LEADS WITH THE ACT, as a heading. The other modes open on a muted
+  // paragraph that explains the thing being deployed — a template's settings, a
+  // repository's clone — because the reader did not bring that thing and has to be told
+  // what it is. An upload's subject is the reader's OWN project, sitting listed two
+  // fields below; what the card owes them is not an explanation but a title for what
+  // they are about to do with it.
+  const formTitle = computed(() => (isUpload.value ? 'Deploy your project' : ''))
+
+  // What the form says it is about to do, which is a different act in each mode.
+  const formIntro = computed(() => {
+    if (isUpload.value) {
+      return 'Connect a Git provider later to ship every push automatically.'
+    }
+    if (repositoryMode.value === 'none') {
+      return 'Fill in the settings below. Azion provisions this template directly — there is no repository to connect.'
+    }
+    if (!usesGit.value) {
+      return 'Azion deploys this code once. Connect a Git provider later to ship every push automatically.'
+    }
+    return 'Configure your Git repository to integrate your codebase and automate deployments directly from your version control system.'
+  })
+
+  // ── THE PROJECT THE READER DROPPED ──
+  //
+  // The name and the framework came across on the URL; the FILES came across in the store,
+  // because a `File` has no query-string form (../../lib/state/dropped-project.js says why).
+  // A reload therefore keeps the form and loses the listing, which is the honest outcome —
+  // the browser no longer holds the files, so the screen falls back to what a template
+  // deploy shows and the reader can drop the project again to get the listing back.
+  const dropped = computed(() =>
+    isUpload.value ? droppedProjectFor(String(route.query.upload)) : null
+  )
+
+  const picksRoot = computed(() =>
+    picksRootFile({ files: dropped.value?.files ?? [], framework: template.value.framework })
+  )
+
+  // Which dropped file answers `GET /`. Seeded with the drop's own best answer
+  // (`index.html` when there is one) and re-seeded whenever another project is opened in
+  // place, so the previous drop's root never carries into the next one's form.
+  const rootFile = ref(defaultRootFile(dropped.value?.files))
+
+  const settingsTitle = computed(() => {
+    if (!isUpload.value) return 'Template Settings'
+    return dropped.value ? 'Project Files' : 'Project Settings'
+  })
+  const settingsEmpty = computed(() =>
+    isUpload.value
+      ? 'This project needs no additional settings.'
+      : 'This template has no additional settings.'
   )
 
   // Repo name + template-specific setting values are seeded from the template
@@ -117,11 +244,19 @@
 
   const initFromTemplate = (t) => {
     repoName.value = t.defaultRepoName
+    rootFile.value = defaultRootFile(dropped.value?.files)
     Object.keys(settingsValues).forEach((k) => delete settingsValues[k])
     t.settings.forEach((s) => (settingsValues[s.name] = ''))
 
-    settingsLoading.value = true
+    // Only a TEMPLATE has a settings schema to go and get. An upload's fields are the
+    // files already sitting in memory, so running the placeholder here would reserve
+    // space for a fetch that never happens and delay a listing we can draw immediately.
     if (settingsTimer) clearTimeout(settingsTimer)
+    if (isUpload.value) {
+      settingsLoading.value = false
+      return
+    }
+    settingsLoading.value = true
     settingsTimer = setTimeout(() => {
       settingsLoading.value = false
     }, 900)
@@ -132,18 +267,26 @@
   // first seed, so the values the template itself supplies are the starting point and not
   // an edit — and it is re-taken whenever another template is opened in place, or switching
   // templates would read as unsaved work the reader never typed.
-  const { dirty, commit } = useBaseline(() => ({ repoName: repoName.value, ...settingsValues }))
+  const { dirty, commit } = useBaseline(() => ({
+    repoName: repoName.value,
+    rootFile: rootFile.value,
+    ...settingsValues
+  }))
   watch(
     () => template.value.slug,
     () => {
+      skipGit.value = false
       initFromTemplate(template.value)
       commit()
     }
   )
 
-  // Deploy is enabled once the repo name and every required setting are filled.
+  // Deploy is enabled once the repo name, the site's root, and every required setting are
+  // filled. The root counts as required exactly when it is asked for — a static drop has
+  // nothing else that can answer `GET /`, and a framework drop is never asked.
   const canDeploy = computed(() => {
     if (!repoName.value.trim()) return false
+    if (picksRoot.value && !rootFile.value) return false
     return template.value.settings
       .filter((s) => s.required)
       .every((s) => (settingsValues[s.name] || '').trim())
@@ -165,13 +308,27 @@
   // had linked, and a Deploy button that would have created a repository nowhere. Now they
   // get the same connect card the importer shows, then the same flow.
   const phase = computed(() =>
-    status.value === 'form' && !gitConnected.value ? 'connect' : status.value
+    status.value === 'form' && usesGit.value && !gitConnected.value ? 'connect' : status.value
   )
 
   // Why the connection is being asked for, in the terms of the thing being deployed.
   const connectDescription = computed(
     () =>
       `Azion clones ${template.value.title} into a repository in your account, then deploys from it on every push.`
+  )
+
+  // WHAT THE RUN SAYS IT IS DOING while the logs spin up. The card's default story is a
+  // GitHub clone (../../components/deployment/DeploymentFlow.vue), which is right whenever
+  // one happens; a deploy with no repository is one subject and no destination, so it
+  // describes itself and leaves the second chip undrawn.
+  const deploySplash = computed(() =>
+    usesGit.value
+      ? null
+      : {
+          verb: 'Deploying',
+          icon: templateMark.value.icon || 'pi pi-cloud-upload',
+          from: template.value.title
+        }
   )
 
   // Brief loading state on the Deploy button before the deployment view opens.
@@ -209,7 +366,7 @@
   // Starting a deploy parks the deployment card at the top of the scroll box. The
   // template preview above it and the card together are taller than the viewport,
   // so without this the flow starts running below the fold and the user has to hunt
-  // for it — scrolling back and forth between the thumbnail and the steps to watch
+  // for it — scrolling back and forth between the preview and the steps to watch
   // their own deploy. The preview has done its job by then; the steps are the page.
   //
   // Same shape as ErrorValidation's recovery anchor: measured against the SCROLL
@@ -252,33 +409,13 @@
   const onDeployFinished = () => {
     provisioned.value = provisionDeployment({
       repoName: repoName.value,
-      scope: scope.value,
+      scope: usesGit.value ? scope.value : undefined,
       framework: template.value.framework,
       isPublic: isPublic.value,
       templateTitle: template.value.title
     })
     status.value = 'success'
   }
-
-  // Post-deploy "Next Steps" shown on the success screen.
-  const nextSteps = [
-    {
-      icon: 'pi pi-globe',
-      title: 'Customize Domain',
-      description: 'Associate a custom domain and subdomains to Azion to handle user access.'
-    },
-    {
-      icon: 'pi pi-sitemap',
-      title: 'Point traffic',
-      description:
-        'Redirect the traffic of a domain to Azion and take advantage of the distributed network.'
-    },
-    {
-      icon: 'pi pi-chart-line',
-      title: 'View analytics',
-      description: 'Gain powerful insights into your performance, availability, and security.'
-    }
-  ]
 </script>
 
 <template>
@@ -326,9 +463,11 @@
             class="max-w-none! motion-reduce:transition-none! motion-reduce:transform-none!"
             :title="template.title"
             :description="template.description"
+            :icon="templateMark.icon"
+            :mark-class="templateMark.markClass"
+            :cloned="usesGit"
             :repo-owner="template.repoOwner"
             :repo-path="template.repoPath"
-            thumbnail="/template-nextjs-thumb.png"
           />
         </Transition>
 
@@ -353,7 +492,23 @@
                 class="w-full"
                 title="Connect a Git provider"
                 :description="connectDescription"
-              />
+              >
+                <!-- THE OTHER WAY THROUGH. Connecting buys push-to-deploy; it does not buy
+                     the deploy itself, so refusing it cannot be the end of the flow. Text
+                     kind, not a second solid button: the two are not equal offers — one is
+                     what we recommend, the other is what we allow. -->
+                <template
+                  v-if="repositoryMode === 'optional'"
+                  #alternative
+                >
+                  <Button
+                    label="Continue without Git"
+                    kind="text"
+                    size="large"
+                    @click="skipGit = true"
+                  />
+                </template>
+              </GitProviderConnect>
 
               <!-- The way out of the step, same control the form phase carries. -->
               <Button
@@ -370,14 +525,30 @@
               <CardBox class="w-full">
                 <template #content>
                   <div class="flex flex-col gap-(--spacing-lg)">
-                    <p class="text-body-sm text-pretty text-(--text-muted)">
-                      Configure your Git repository to integrate your codebase and automate
-                      deployments directly from your version control system.
-                    </p>
+                    <div class="flex flex-col gap-(--spacing-xxs)">
+                      <h2
+                        v-if="formTitle"
+                        class="text-heading-xs text-(--text-default)"
+                      >
+                        {{ formTitle }}
+                      </h2>
+                      <p class="text-body-sm text-pretty text-(--text-muted)">
+                        {{ formIntro }}
+                      </p>
+                    </div>
 
-                    <!-- Scope + repository name -->
-                    <div class="grid grid-cols-1 items-start gap-(--spacing-lg) sm:grid-cols-2">
-                      <div class="flex flex-col gap-(--spacing-xs)">
+                    <!-- Scope + repository name — a PAIR only when a repository is being
+                         created. With none, the scope has nothing to own and the
+                         visibility switch has nothing to hide, so the grid collapses to the
+                         one field that still means something: what to call this. -->
+                    <div
+                      class="grid grid-cols-1 items-start gap-(--spacing-lg)"
+                      :class="usesGit ? 'sm:grid-cols-2' : ''"
+                    >
+                      <div
+                        v-if="usesGit"
+                        class="flex flex-col gap-(--spacing-xs)"
+                      >
                         <Label
                           label="Scope"
                           required
@@ -424,11 +595,11 @@
                             id="repoName"
                             v-model="repoName"
                             size="large"
-                            placeholder="my-repository"
+                            :placeholder="repoPlaceholder"
                             class="flex-1"
                             :disabled="submitting"
                           />
-                          <InputGroupAddon>
+                          <InputGroupAddon v-if="usesGit">
                             <Tooltip text="Toggle repository visibility (public or private)">
                               <Switch
                                 v-model="isPublic"
@@ -447,7 +618,7 @@
                     </div>
 
                     <!-- Template-specific settings -->
-                    <p class="text-heading-xxs text-(--text-default)">Template Settings</p>
+                    <p class="text-heading-xxs text-(--text-default)">{{ settingsTitle }}</p>
                     <!-- While the template's settings schema loads, reserve the
                          layout with Skeleton placeholders (label + field +
                          helper text) so nothing jumps when it resolves. -->
@@ -509,11 +680,24 @@
                         />
                       </div>
                     </div>
+                    <!-- An UPLOAD's settings are its files: what arrived, and which one
+                         answers `GET /`. This is the branch a dropped project lands in —
+                         `template.settings` is empty for one by construction, so without
+                         it the reader named a project over a blank panel. It falls through
+                         to the line below when the listing did not survive a reload. -->
+                    <UploadedProject
+                      v-else-if="dropped"
+                      v-model="rootFile"
+                      :files="dropped.files"
+                      :truncated="dropped.truncated"
+                      :framework="template.framework"
+                      :disabled="submitting"
+                    />
                     <p
                       v-else
                       class="text-body-sm text-(--text-muted)"
                     >
-                      This template has no additional settings.
+                      {{ settingsEmpty }}
                     </p>
                   </div>
                 </template>
@@ -546,171 +730,22 @@
                 :repo-owner="template.repoOwner"
                 :repo-path="template.repoPath"
                 :scope="scope"
+                :splash="deploySplash"
                 @finished="onDeployFinished"
               />
             </template>
 
-            <!-- Success: Congratulations + deployed preview + Next Steps -->
+            <!-- Success: the same outcome record every other create in the console ends
+                 on (../applications/wizard/DeploySuccess.vue). -->
             <template v-else>
-              <!-- The congratulation is the page's own heading, on the canvas
-                   and on the glow — not a card header. It announces the outcome;
-                   the card below is the record of it. Sized like a first-level
-                   page title, since the chrome carries no breadcrumb here. -->
-              <header class="flex w-full flex-col gap-(--spacing-xxs)">
-                <h1 class="text-balance text-heading-lg text-(--text-default)">Congratulations!</h1>
-                <p
-                  class="flex flex-wrap items-center gap-(--spacing-xs) text-body-sm text-(--text-muted)"
-                >
-                  You just deployed a new application into
-                  <Tag
-                    :label="scope"
-                    severity="secondary"
-                    icon="pi pi-github"
-                  />
-                </p>
-              </header>
-
-              <CardBox class="w-full">
-                <template #content>
-                  <div class="flex flex-col gap-(--spacing-lg)">
-                    <!-- What was shipped, in one horizontal box: the deployed
-                         page on the left, the chain it provisioned on the right
-                         (Workload → Application → Connector → Storage, in
-                         creation order — the same records back the workload's
-                         deployment topology). Side by side because they are two
-                         readings of one outcome: what the user sees, and what
-                         Azion built to serve it. Stacks below `lg`, where the
-                         two halves would each be too narrow to read. -->
-                    <CardBox :padded="false">
-                      <template #content>
-                        <div class="flex flex-col lg:flex-row">
-                          <!-- Deployed application preview -->
-                          <div
-                            class="min-h-[220px] w-full overflow-hidden bg-(--bg-surface-raised) lg:min-h-[320px] lg:w-1/2"
-                          >
-                            <img
-                              src="/template-nextjs-thumb.png"
-                              alt=""
-                              class="size-full object-cover"
-                            />
-                          </div>
-
-                          <!-- Resources created -->
-                          <div
-                            class="flex w-full min-w-0 flex-col border-t border-(--border-default) lg:w-1/2 lg:border-l lg:border-t-0"
-                          >
-                            <p
-                              class="flex min-h-14 shrink-0 items-center border-b border-(--border-default) px-(--spacing-sm) text-label-sm text-(--text-default)"
-                            >
-                              Resources Created
-                            </p>
-                            <Item.List>
-                              <Item
-                                v-for="resource in createdResources"
-                                :key="resource.key"
-                                size="small"
-                              >
-                                <Item.Media>
-                                  <span
-                                    class="flex size-8 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface)"
-                                  >
-                                    <i
-                                      :class="resource.icon"
-                                      class="text-[14px] leading-none text-(--text-default)"
-                                      aria-hidden="true"
-                                    />
-                                  </span>
-                                </Item.Media>
-                                <Item.Content>
-                                  <Item.Title>{{ resource.name }}</Item.Title>
-                                  <Item.Description>
-                                    {{ resource.kind }} · {{ resource.reference }}
-                                  </Item.Description>
-                                </Item.Content>
-                                <Item.Actions>
-                                  <Tag
-                                    label="Created"
-                                    severity="success"
-                                    size="small"
-                                  />
-                                </Item.Actions>
-                              </Item>
-                            </Item.List>
-                          </div>
-                        </div>
-                      </template>
-                    </CardBox>
-
-                    <!-- Next Steps — its own box under the horizontal one: not
-                         part of what just happened, but what to do next. -->
-                    <CardBox :padded="false">
-                      <template #content>
-                        <p
-                          class="flex min-h-14 shrink-0 items-center border-b border-(--border-default) px-(--spacing-sm) text-label-sm text-(--text-default)"
-                        >
-                          Next Steps
-                        </p>
-                        <Item.List>
-                          <!-- as-child: the row shell (layout + hover/active
-                               ghost + focus ring) is merged onto the anchor,
-                               so each Next Step is one real navigable <a>
-                               instead of a <div> wrapping a link. -->
-                          <Item
-                            v-for="step in nextSteps"
-                            :key="step.title"
-                            as-child
-                            size="small"
-                          >
-                            <a
-                              href="https://www.azion.com/en/documentation/"
-                              target="_blank"
-                              rel="noopener"
-                              class="text-left no-underline"
-                            >
-                              <Item.Media>
-                                <span
-                                  class="flex size-8 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface)"
-                                >
-                                  <i
-                                    :class="step.icon"
-                                    class="text-[14px] leading-none text-(--text-default)"
-                                    aria-hidden="true"
-                                  />
-                                </span>
-                              </Item.Media>
-                              <Item.Content>
-                                <Item.Title>{{ step.title }}</Item.Title>
-                                <Item.Description>{{ step.description }}</Item.Description>
-                              </Item.Content>
-                              <Item.Actions>
-                                <i
-                                  class="pi pi-chevron-right text-(--text-muted)"
-                                  aria-hidden="true"
-                                />
-                              </Item.Actions>
-                            </a>
-                          </Item>
-                        </Item.List>
-                      </template>
-                    </CardBox>
-                  </div>
-                </template>
-
-                <template #footer>
-                  <!-- Manage opens the created workload — the chain's entry
-                       point — instead of dropping back on the home page. No
-                       glyph: the arrow read as "next", which is the one thing
-                       this button is not — the flow is over, and this leaves it
-                       for the resource it made. -->
-                  <Button
-                    class="w-full"
-                    label="Manage"
-                    kind="secondary"
-                    size="large"
-                    @click="manageWorkload"
-                  />
-                </template>
-              </CardBox>
+              <DeploySuccess
+                title="Congratulations!"
+                lead="You just deployed a new application"
+                :resources="createdResources"
+                :scope="scope"
+                :domain="provisioned?.workload?.domain ?? ''"
+                @manage="manageWorkload"
+              />
             </template>
           </div>
         </Transition>

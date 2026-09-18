@@ -9,6 +9,7 @@
   // the two things that decide which one (the mark and the sentence) at a third of the
   // height. Same catalog either way — ../../../lib/data/frameworks.js is the one list,
   // so a template added there appears in every surface that offers one.
+  import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
   import InputText from '@aziontech/webkit/input-text'
   import Item from '@aziontech/webkit/item'
@@ -16,10 +17,19 @@
   import Tag from '@aziontech/webkit/tag'
   import { computed, ref } from 'vue'
 
+  import FilterButton from '../../../components/list/FilterButton.vue'
+  import FilterChips from '../../../components/list/FilterChips.vue'
   import SuccessMark from '../../../components/page/SuccessMark.vue'
+  import { applyFilters } from '../../../lib/behavior/filter-bar'
   import { useScrollFade } from '../../../lib/behavior/scroll-fade'
-  import { FRAMEWORKS, templateSlugForTech } from '../../../lib/data/frameworks'
-  import { AZION_TEMPLATES, getTemplate, PARTNER_TEMPLATES } from '../../../lib/data/templates.js'
+  import { FRAMEWORKS, templateSlugForTech, useCaseOptions } from '../../../lib/data/frameworks'
+  import {
+    AZION_TEMPLATES,
+    getTemplate,
+    PARTNER_TEMPLATES,
+    templateKindOptions,
+    templateSource
+  } from '../../../lib/data/templates.js'
 
   const props = defineProps({
     // The source already chosen, so coming BACK to this part shows the answer.
@@ -56,6 +66,9 @@
     description: template.description,
     icon: template.icon,
     vendor: template.vendor,
+    kind: template.kind,
+    tech: template.framework,
+    useCases: template.useCases ?? [],
     template
   })
 
@@ -73,12 +86,37 @@
     label: framework.label,
     description: framework.description,
     icon: framework.icon,
+    kind: 'framework',
+    tech: framework.tech,
+    useCases: framework.useCases ?? [],
     featured: index < 3,
     template: getTemplate(templateSlugForTech(framework.tech))
   })).filter((row) => !listedAbove.has(row.template.slug))
 
   const matches = (row, q) =>
     [row.title, row.label ?? '', row.description].some((field) => field.toLowerCase().includes(q))
+
+  const fields = [
+    {
+      id: 'kind',
+      label: 'Type',
+      kind: 'options',
+      options: templateKindOptions,
+      match: (row, values) => values.includes(row.kind)
+    },
+    {
+      id: 'useCases',
+      label: 'Use Case',
+      kind: 'options',
+      options: useCaseOptions,
+      match: (row, values) => row.useCases.some((useCase) => values.includes(useCase))
+    }
+  ]
+
+  const filters = ref({})
+  const clearFilters = () => {
+    filters.value = {}
+  }
 
   // THE GROUPS, in reading order: who publishes it, then what it is built with.
   //
@@ -103,7 +141,11 @@
     ]
       .map((group) => ({
         ...group,
-        rows: q ? group.rows.filter((row) => matches(row, q)) : group.rows
+        rows: applyFilters(
+          q ? group.rows.filter((row) => matches(row, q)) : group.rows,
+          fields,
+          filters.value
+        )
       }))
       .filter((group) => group.rows.length)
   })
@@ -118,33 +160,7 @@
   // settings the Configure part then asks for (a Shopify token, a database URL, a proxy's
   // origin). Emitting the resolved template, not the row, is what keeps the next part
   // from having to look anything up.
-  const choose = (row) => {
-    const { template } = row
-    emit('update:source', {
-      kind: 'template',
-      slug: template.slug,
-      title: template.title,
-      description: template.description,
-      framework: template.framework,
-      icon: row.icon,
-      // Carried so the Configure part draws the SAME mark this row drew
-      // (../CreateApplication.vue) — an Azion template must not become a glyph one
-      // part later.
-      vendor: template.vendor,
-      repoOwner: template.repoOwner,
-      repoPath: template.repoPath,
-      defaultName: template.defaultRepoName,
-      // The template says whether there is anything to build, and whether it lands in a
-      // repository of the reader's own. A framework starter is CLONED into their GitHub
-      // account and arrives WITH code, so the flow gains a repository part and the
-      // Configure part asks how to build it; an Azion template is CONFIGURED — no clone,
-      // no bundle — so it skips both (../../../lib/data/templates.js explains the split,
-      // ../CreateApplication.vue drops the part).
-      requiresRepository: template.requiresRepository !== false,
-      requiresBuild: template.requiresBuild !== false,
-      settings: template.settings
-    })
-  }
+  const choose = (row) => emit('update:source', templateSource(row.template, row.icon))
 </script>
 
 <template>
@@ -153,22 +169,36 @@
     title="Select a template"
   >
     <template #content>
-      <div class="border-b border-(--border-default) p-(--spacing-md)">
-        <InputText
-          v-model="search"
-          size="large"
-          class="w-full"
-          placeholder="Search templates"
-          aria-label="Search templates"
-          :disabled="disabled"
-        >
-          <template #iconLeft>
-            <i
-              class="pi pi-search"
-              aria-hidden="true"
-            />
-          </template>
-        </InputText>
+      <div
+        class="flex flex-col gap-(--spacing-sm) border-b border-(--border-default) p-(--spacing-md)"
+      >
+        <div class="flex items-center gap-(--spacing-sm)">
+          <FilterButton
+            v-model="filters"
+            :fields="fields"
+          />
+
+          <InputText
+            v-model="search"
+            size="large"
+            class="min-w-0 flex-1"
+            placeholder="Search templates"
+            aria-label="Search templates"
+            :disabled="disabled"
+          >
+            <template #iconLeft>
+              <i
+                class="pi pi-search"
+                aria-hidden="true"
+              />
+            </template>
+          </InputText>
+        </div>
+
+        <FilterChips
+          v-model="filters"
+          :fields="fields"
+        />
       </div>
 
       <!-- The catalog scrolls inside the card, so the action bar stays reachable however
@@ -266,12 +296,26 @@
           </section>
         </template>
 
-        <p
+        <div
           v-else
-          class="px-(--spacing-md) py-(--spacing-lg) text-center text-body-sm text-(--text-muted)"
+          class="flex flex-col items-center gap-(--spacing-xs) px-(--spacing-md) py-(--spacing-lg) text-center"
         >
-          No templates match “{{ search }}”.
-        </p>
+          <p class="text-body-sm text-(--text-muted)">
+            {{
+              search.trim()
+                ? `No templates match “${search.trim()}”.`
+                : 'No templates match your filters.'
+            }}
+          </p>
+          <Button
+            v-if="Object.values(filters).some((values) => values?.length)"
+            type="button"
+            label="Clear filters"
+            kind="text"
+            size="small"
+            @click="clearFilters"
+          />
+        </div>
       </div>
     </template>
   </CardBox>

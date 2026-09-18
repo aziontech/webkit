@@ -17,6 +17,7 @@
   // own URL. Same content, now inside the flow that produced it.
   import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
+  import CopyButton from '@aziontech/webkit/copy-button'
   import Item from '@aziontech/webkit/item'
   import Tag from '@aziontech/webkit/tag'
   import { computed } from 'vue'
@@ -28,6 +29,14 @@
     resources: { type: Array, default: () => [] },
     // Where it was deployed — the Git scope, or the workspace when there is no repo.
     scope: { type: String, default: '' },
+    // THE ADDRESS THE DEPLOY PRODUCED — the hostname, without a scheme. It is the one
+    // thing on this page the reader came for, so it has its own block above the record
+    // rather than a line inside it. Empty for a create that published nothing.
+    domain: { type: String, default: '' },
+    // Whether that address ANSWERS yet. An Azion domain does the moment the run finishes;
+    // a hostname the reader brought answers when their DNS points at it, which is work
+    // this flow does not do — so it is shown to be copied, not opened.
+    live: { type: Boolean, default: true },
     // WHAT HAPPENED, in the flow's own words. A deploy shipped code; a from-scratch
     // create made the layer and shipped nothing, so a heading reading "Application
     // deployed" over it would be the one claim on the screen that is false.
@@ -51,6 +60,8 @@
       ? 'Resources'
       : 'Resources created'
   )
+
+  const deployedUrl = computed(() => (props.domain ? `https://${props.domain}` : ''))
 
   // Post-deploy next steps. Documentation links, so each row is a real navigable <a>.
   const DOCUMENTATION = 'https://www.azion.com/en/documentation/'
@@ -119,6 +130,55 @@
     <div
       class="animate-content-enter motion-reduce:animate-none flex w-full flex-col gap-(--spacing-lg) [--content-enter-delay:var(--transition-duration-fast-01)]"
     >
+      <CardBox v-if="domain">
+        <template #content>
+          <div class="flex flex-wrap items-center gap-(--spacing-sm)">
+            <span
+              class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface)"
+            >
+              <i
+                class="pi pi-globe text-[0.875rem] leading-none text-(--text-default)"
+                aria-hidden="true"
+              />
+            </span>
+
+            <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-xxs)">
+              <span class="text-label-sm text-(--text-muted)">Domain</span>
+              <a
+                v-if="live"
+                :href="deployedUrl"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="w-fit max-w-full break-all text-label-md text-(--text-default) no-underline hover:underline"
+                >{{ domain }}</a
+              >
+              <span
+                v-else
+                class="break-all text-label-md text-(--text-default)"
+                >{{ domain }}</span
+              >
+            </div>
+
+            <div class="ml-auto flex shrink-0 items-center gap-(--spacing-xs)">
+              <CopyButton
+                kind="outlined"
+                size="medium"
+                :value="domain"
+                aria-label="Copy domain"
+              />
+              <Button
+                v-if="live"
+                label="Visit"
+                kind="outlined"
+                size="medium"
+                :href="deployedUrl"
+                target="_blank"
+              />
+            </div>
+          </div>
+        </template>
+      </CardBox>
+
       <!-- WHAT WAS PROVISIONED. It used to share a box with a still of the deployed
            page, two-up: the reader's own result beside the chain that serves it. The
            still is gone — it was a stock thumbnail standing in for a page nobody has

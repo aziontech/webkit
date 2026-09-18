@@ -58,7 +58,7 @@
   // the reference repo gab-az/webkit-sample-vue so the Build tab is coherent.
   const application = {
     id: route.params.id || '1784552864',
-    name: 'webkit-sample-vue'
+    name: String(route.query.name || 'webkit-sample-vue')
   }
 
   // The resource's sub-pages. Each tab is a navigation destination, not a filter, and

@@ -8,14 +8,19 @@
   //
   // A band declares `kind`, and it decides how the reader picks from it:
   //
-  //   `cards`  a grid of centered brand marks (./TemplateCard.vue). For FRAMEWORK
-  //            starters, which are chosen BY THEIR MARK — "I use Nuxt" is the whole
-  //            decision, and a logo is found faster than a sentence is read.
-  //   `list`   the Marketplace's own catalog row (./IntegrationCard.vue): mark on the
-  //            left, then the name, who publishes it, and the sentence. For the
-  //            templates Azion and its partners PUBLISH, which are chosen by WHAT THEY
-  //            DO — three of them wear the same Next.js logo, so a grid of centered
-  //            marks would be tiles whose only legible difference is their title.
+  //   `cards`  the framework starter as a COLUMN (./TemplateCard.vue): the framed brand
+  //            mark, then the title, then the sentence. Its mark is grayscale until
+  //            hover, because a framework IS chosen by its mark — "I use Nuxt" is the
+  //            whole decision, and a column packs three marks across where a row packs
+  //            two.
+  //   `list`   the Marketplace's own catalog ROW (./IntegrationCard.vue): the same framed
+  //            mark, laid sideways, plus who publishes it. For the templates Azion and
+  //            its partners PUBLISH, which are chosen by WHAT THEY DO — three of them
+  //            wear the same Next.js logo, so the publisher is the fact their mark
+  //            cannot carry.
+  //
+  // ONE MARK TREATMENT, TWO ARRANGEMENTS: both frame the mark in the same 40px tile, so
+  // the bands read as one catalog even where they stack differently.
   //
   // The bands share ONE filter. A band left empty by a cut is dropped whole — an
   // empty heading is a heading for nothing — and when every band empties, the
@@ -41,17 +46,23 @@
     sections: { type: Array, default: () => [] },
     useCaseOptions: { type: Array, default: () => [] },
     technologyOptions: { type: Array, default: () => [] },
+    kindOptions: { type: Array, default: () => [] },
     // Grid density for a `cards` band — overridable so a narrow column can drop to
-    // fewer columns.
-    //
-    // THREE UP, not the six this used to run to. A card now names the objects its
-    // deploy creates (./TemplateCard.vue), and four tags in a 200px card is a tag per
-    // line; three columns is the width that holds the row. It is also the density every
-    // other card catalog in the console reads at — the Marketplace's integrations grid
-    // is the same 1 / 2 / 3 — so a reader meets one grid, not two.
+    // fewer columns. A card stacks its mark ABOVE its text, so the text gets the whole
+    // card width and three across is legible where a row would not be.
     gridClass: {
       type: String,
       default: 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
+    },
+    // Grid density for a `list` band, which is NOT the cards' — a row is horizontal
+    // (mark, then a text column beside it), so a third column takes its width from the
+    // half that has to be read: measured at 1440 in the Creation Center's column, three
+    // up leaves a row 212px wide and ~130px of text, where "Dynamic and Static File
+    // Optimization" wraps to three lines and the sentence under it runs two words a
+    // line. Two up is 326px, which holds the title on one line.
+    listGridClass: {
+      type: String,
+      default: 'grid-cols-1 sm:grid-cols-2'
     },
     // Keep the module inside its parent's height and scroll the catalog instead of
     // the page: the title row and its controls stay pinned, only the bands move.
@@ -83,6 +94,13 @@
   // axis gets a one-row panel rather than a dead row.
   const fields = computed(() =>
     [
+      props.kindOptions.length && {
+        id: 'kind',
+        label: 'Type',
+        kind: 'options',
+        options: props.kindOptions,
+        match: (template, values) => values.includes(template.kind)
+      },
       props.useCaseOptions.length && {
         id: 'useCases',
         label: 'Use Case',
@@ -201,11 +219,10 @@
             <div
               v-if="section.kind === 'list'"
               class="grid gap-(--spacing-md)"
-              :class="gridClass"
+              :class="listGridClass"
             >
               <!-- No `badge`: the corner Tag is for a TYPE, and a band already headed
-                   "Azion Templates" does not need every row to repeat it. What the row
-                   carries instead is `creates` — the chain of objects its run makes. -->
+                   "Azion Templates" does not need every row to repeat it. -->
               <IntegrationCard
                 v-for="item in section.items"
                 :key="item.slug"
@@ -215,20 +232,17 @@
                 :icon="item.icon"
                 :mark-class="item.markClass"
                 badge=""
-                :creates="item.creates"
                 @select="emit('select', item)"
               />
             </div>
 
             <!-- ── A `cards` band: the framework grid ── -->
             <!-- A card's natural height steps with how many lines its description wraps
-                 to AND with how many objects it creates — a fourth tag breaks the row
-                 onto a second line, which is a 14px step. The floor (224px,
-                 `--size-56`) puts every card on the same base, and the grid STRETCHES
-                 the rest: a row is as tall as its tallest card, so neighbours share a
-                 bottom edge instead of ending 14px apart. The card centres its own
-                 content (`my-auto` in ./TemplateCard.vue), so a stretched card is
-                 padded, not top-heavy. -->
+                 to. The floor (176px, `--size-44`) puts every card on the same base, and
+                 the grid STRETCHES the rest: a row is as tall as its tallest card, so
+                 neighbours share a bottom edge instead of ending 14px apart. The card
+                 anchors its column to the top (./TemplateCard.vue), so the slack falls
+                 below the sentence and every mark along the row shares a line. -->
             <div
               v-else
               class="grid gap-(--spacing-md)"
@@ -237,13 +251,12 @@
               <TemplateCard
                 v-for="item in section.items"
                 :key="item.slug"
-                class="min-h-(--size-56)"
+                class="min-h-(--size-44)"
                 :icon="item.icon"
                 :mark-class="item.markClass"
                 :title="item.title"
                 :description="item.description"
                 :color="item.color"
-                :creates="item.creates"
                 @select="emit('select', item)"
               />
             </div>

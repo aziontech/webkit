@@ -61,6 +61,7 @@
 
   import DeploymentFlow from '../../components/deployment/DeploymentFlow.vue'
   import WizardPage from '../../components/page/WizardPage.vue'
+  import { resolveApplicationChoice } from '../../lib/behavior/application-binding'
   import { useCreateOrigin } from '../../lib/behavior/create-origin'
   import { useBaseline } from '../../lib/behavior/forms'
   import {
@@ -84,16 +85,23 @@
     firewallIsBound,
     firewallModuleLabelsByName
   } from '../../lib/data/firewalls'
+  import { AZION_COMMANDS } from '../../lib/data/frameworks'
+  import { installIntegration } from '../../lib/data/template-integrations'
   import { configuredTemplateSteps } from '../../lib/data/template-provisioning'
+  import { getTemplate, templateSource } from '../../lib/data/templates.js'
   import { workloadProvisioningSteps } from '../../lib/data/workload-provisioning'
+  import { addCreatedResource } from '../../lib/state/created-resources'
+  import { rememberTemplateInstall } from '../../lib/state/template-install'
   import ConfigureStep from './wizard/ConfigureStep.vue'
   import DeploySuccess from './wizard/DeploySuccess.vue'
   import { provideCreateForm } from './wizard/form-context'
   import GitSourceStep from './wizard/GitSourceStep.vue'
+  import InstallStep from './wizard/InstallStep.vue'
   import MethodStep from './wizard/MethodStep.vue'
   import RepositoryStep from './wizard/RepositoryStep.vue'
   import ScratchStep from './wizard/ScratchStep.vue'
   import SourceSummary from './wizard/SourceSummary.vue'
+  import TargetStep from './wizard/TargetStep.vue'
   import TemplateSourceStep from './wizard/TemplateSourceStep.vue'
 
   const route = useRoute()
@@ -117,6 +125,8 @@
   // object whichever door the reader came through, while this is WHERE a copy of it goes
   // — and two of the three flows never have one.
   const repository = ref(null)
+
+  const target = ref(null)
 
   // --- Phase and position --------------------------------------------------
   // `phase` is where the FLOW is: asking, running, done. `stepIndex` is where inside the
@@ -142,9 +152,19 @@
     () => flowId.value === 'template' && source.value?.requiresRepository !== false
   )
 
+  const isIntegrationSource = computed(() => Boolean(source.value?.integration))
+  const needsTarget = computed(() => flowId.value === 'template' && isIntegrationSource.value)
+
+  const isInstall = computed(() => needsTarget.value && target.value?.mode === 'existing')
+
   const steps = computed(() => {
     const declared = flow.value?.steps ?? PROVISIONAL_STEPS
-    return needsRepository.value ? declared : declared.filter((part) => part.id !== 'repository')
+    return declared
+      .filter((part) => (part.id === 'repository' ? needsRepository.value : true))
+      .filter((part) => (part.id === 'target' ? needsTarget.value : true))
+      .map((part) =>
+        part.id === 'configure' && isInstall.value ? { ...part, label: 'Review and add' } : part
+      )
   })
   const step = computed(() => steps.value[stepIndex.value]?.id ?? 'method')
   const isLastStep = computed(() => stepIndex.value === steps.value.length - 1)
@@ -154,8 +174,8 @@
   // holds whatever the chosen template declares.
   const form = reactive({
     name: '',
-    buildCommand: 'npm run build',
-    deployCommand: 'npm run deploy',
+    buildCommand: AZION_COMMANDS.buildCommand,
+    deployCommand: AZION_COMMANDS.deployCommand,
     settings: {},
     // Not part of the application body: a firewall is its own resource, so it travels to
     // the provisioning call rather than into `payload()`. ONE object holds the whole
@@ -205,7 +225,8 @@
   const { dirty, commit } = useBaseline(() => ({
     ...form,
     source: source.value,
-    repository: repository.value
+    repository: repository.value,
+    target: target.value
   }))
 
   // --- Choosing a source seeds the name ------------------------------------
@@ -230,6 +251,7 @@
     // survive it — a repository named after the template the reader just abandoned would
     // otherwise ride along into the deploy.
     repository.value = null
+    target.value = null
 
     // Reset the per-template settings to the new template's schema: values keyed to a
     // template the reader is no longer deploying would be sent anyway.
@@ -244,6 +266,16 @@
   const setRepository = (next) => {
     repository.value = next
     if (errors.repository) delete errors.repository
+  }
+
+  const setTarget = (next) => {
+    target.value = next
+    clearErrors()
+    if (next?.mode === 'new') {
+      form.name = next.name
+      nameTouched.value = true
+    }
+    if (next && !isLastStep.value) stepIndex.value += 1
   }
 
   // CHOOSING A SOURCE IS THE ADVANCE. Picking a repository, committing a URL or picking a
@@ -274,10 +306,19 @@
   // chooser — so a link that names one way in delivers that way in.
   const seedFromQuery = () => {
     const method = route.query.method
-    if (method && getApplicationFlow(String(method))) {
-      chooseMethod(String(method))
-      commit() // a seeded method is not the reader's unsaved input
+    if (!method || !getApplicationFlow(String(method))) return
+    chooseMethod(String(method))
+
+    const slug = route.query.template
+    if (slug && String(method) === 'template') {
+      const template = getTemplate(String(slug))
+      if (template.slug === String(slug)) {
+        setSource(templateSource(template))
+        stepIndex.value = 2
+      }
     }
+
+    commit() // a seeded method is not the reader's unsaved input
   }
   seedFromQuery()
 
@@ -289,6 +330,7 @@
     // Stepping back ONTO the method part abandons the flow, so the progress must stop
     // claiming a flow was chosen.
     if (stepIndex.value === 0) flowId.value = ''
+    if (step.value === 'target') target.value = null
   }
 
   // Only backwards, and only to a part already answered — the progress hands up an index
@@ -298,6 +340,7 @@
     stepIndex.value = index
     clearErrors()
     if (index === 0) flowId.value = ''
+    if (steps.value[index]?.id === 'target') target.value = null
   }
 
   // WHERE THIS FLOW CAME FROM — the Applications list, or the Creation Center when the
@@ -325,8 +368,24 @@
     return !errors.repository
   }
 
+  const validateSettings = () => {
+    ;(source.value?.settings ?? [])
+      .filter((setting) => setting.required)
+      .forEach((setting) => {
+        if (!String(form.settings[setting.name] ?? '').trim()) {
+          errors[setting.name] = 'This field is required.'
+        }
+      })
+  }
+
   const validate = () => {
     clearErrors()
+
+    if (isInstall.value) {
+      validateSettings()
+      return Object.keys(errors).length === 0
+    }
+
     if (!form.name.trim()) errors.name = 'This field is required.'
 
     // FROM SCRATCH ASKS DIFFERENT QUESTIONS, so it is checked against different ones: the
@@ -348,19 +407,13 @@
           ? 'Name the firewall, or bind one that already exists.'
           : 'Select the firewall to bind, or create a new one.'
     }
-    ;(source.value?.settings ?? [])
-      .filter((setting) => setting.required)
-      .forEach((setting) => {
-        if (!String(form.settings[setting.name] ?? '').trim()) {
-          errors[setting.name] = 'This field is required.'
-        }
-      })
+    validateSettings()
     return Object.keys(errors).length === 0
   }
 
   // The request body, exactly as POST /v4/workspace/applications expects it: each module
   // flag nested under its own `{ enabled }` object.
-  // A source with no build contributes no build commands: sending `npm run build` for the
+  // A source with no build contributes no build commands: sending `azion build` for the
   // bare Azion layer would describe a build nobody asked for.
   const buildFields = () =>
     source.value?.requiresBuild
@@ -402,6 +455,11 @@
     try {
       await new Promise((resolve) => setTimeout(resolve, 900))
 
+      if (isInstall.value) {
+        installOnExisting()
+        return
+      }
+
       // FROM SCRATCH CREATES; IT DOES NOT DEPLOY, and the flow stops where the work
       // stops. The run card narrates a clone, an install and a build
       // (../../components/deployment/DeploymentFlow.vue) — six rows of work that cannot
@@ -422,6 +480,44 @@
     } finally {
       submitting.value = false
     }
+  }
+
+  // --- Installing an integration -------------------------------------------
+  const storeConnector = (form_) => addCreatedResource('connectors', form_)
+
+  const installOnExisting = () => {
+    const host = resolveApplicationChoice(target.value)
+    if (!host) {
+      toast.error('That application is no longer there.', {
+        description: 'Pick another one, or create a new application for it.'
+      })
+      return
+    }
+
+    const install = installIntegration(source.value.slug, form.settings, host.name, storeConnector)
+
+    rememberTemplateInstall({
+      slug: source.value.slug,
+      title: source.value.title,
+      application: host.name,
+      rule: install.rule
+    })
+
+    toast.success(`${source.value.title} is ready to install.`, {
+      description: `Save the rule to apply it on ${host.name}.`
+    })
+
+    commit()
+    router.push({
+      path: `/applications/${host.id}`,
+      query: {
+        email: userEmail.value,
+        name: host.name,
+        tab: 'rules-engine',
+        bind: 'templates',
+        record: source.value.slug
+      }
+    })
   }
 
   // --- Whose account this ends up in ---------------------------------------
@@ -515,9 +611,28 @@
   // immediately real for the rest of the console: they appear in the Workloads,
   // Applications and Object Storage lists, and Manage opens the new workload.
   const provisioned = ref(null)
-  const createdResources = computed(() =>
-    provisioned.value ? resourceChain(provisioned.value) : []
-  )
+  const createdResources = computed(() => {
+    if (!provisioned.value) return []
+    const chain = resourceChain(provisioned.value)
+    if (!installedRule.value) return chain
+    const application = provisioned.value.application
+    return [
+      ...chain,
+      {
+        key: 'rule',
+        kind: 'Rules Engine rule',
+        icon: 'pi pi-sliders-h',
+        name: installedRule.value.name,
+        status: 'Active',
+        href: `/applications/${application.id}`,
+        reference: application.id,
+        fields: [
+          { label: 'Phase', value: 'Request' },
+          { label: 'Description', value: installedRule.value.description }
+        ]
+      }
+    ]
+  })
 
   // THE CONNECTOR AND THE CACHE POLICIES THE READER CONFIGURED — from-scratch only, because
   // it is the only flow that asks. Every other flow's connector is a CONSEQUENCE of the
@@ -534,6 +649,33 @@
         connectorMeta(form.scratch.connector.type).label
       ),
       cachePolicies: scratchCachePolicies(form.scratch, name)
+    }
+  }
+
+  const installedRule = ref(null)
+
+  const integrationResources = () => {
+    if (!isIntegrationSource.value) return {}
+    const name = form.name.trim() || 'my-application'
+    const install = installIntegration(source.value.slug, form.settings, name, storeConnector)
+    installedRule.value = install.rule
+    return {
+      connector: install.connector
+        ? {
+            name: install.connector.name,
+            kind: connectorMeta(install.connector.type).label,
+            address: install.connector.address || install.connector.bucket || ''
+          }
+        : null,
+      cachePolicies: install.cachePolicy
+        ? [
+            {
+              name: install.cachePolicy.name,
+              template: 'Cache policy',
+              detail: `Browser ${install.cachePolicy.browserCache.maxAge}s · Edge ${install.cachePolicy.edgeCache.maxAge}s`
+            }
+          ]
+        : []
     }
   }
 
@@ -558,6 +700,7 @@
     const application = payload()
     provisioned.value = provisionDeployment({
       ...scratchResources(),
+      ...integrationResources(),
       // FROM SCRATCH CREATES, IT DOES NOT PUBLISH. No workload, no bucket, no version —
       // just the application and whatever the two switches added to it. The outcome then
       // offers the two ways to deploy it, and either one publishes THIS record rather than
@@ -779,6 +922,7 @@
     // surprise rather than consent. From scratch has nothing to publish, so its commit
     // says only what it does — and "Deploy this application" is offered afterwards, on the
     // outcome, as the separate act it is.
+    if (isInstall.value) return `Add to ${target.value?.name ?? 'application'}`
     return flowId.value === 'scratch' ? 'Create Application' : 'Create and deploy'
   })
 
@@ -793,7 +937,9 @@
   //   A TYPED part (repository, configure) keeps its advance live and validates on the
   //     press, so the miss is reported at the field that missed rather than by a button
   //     the reader cannot press and cannot ask.
-  const nextDisabled = computed(() => step.value === 'source' && !source.value)
+  const nextDisabled = computed(
+    () => (step.value === 'source' && !source.value) || (step.value === 'target' && !target.value)
+  )
 </script>
 
 <template>
@@ -848,6 +994,30 @@
       :disabled="submitting"
       @update:repository="setRepository"
     />
+
+    <TargetStep
+      v-else-if="step === 'target'"
+      :source="source"
+      :target="target"
+      :disabled="submitting"
+      @update:target="setTarget"
+    />
+
+    <template v-else-if="step === 'configure' && isInstall">
+      <SourceSummary
+        :source="source"
+        :repository="repository"
+        :disabled="submitting"
+        class="mb-(--layout-section-gap)"
+        @change="onChangeAnswer"
+      />
+
+      <InstallStep
+        :source="source"
+        :target="target"
+        :disabled="submitting"
+      />
+    </template>
 
     <!-- FROM SCRATCH ASKS ITS OWN THREE QUESTIONS — name, cache policy, connector — and
          none of the ones ./wizard/ConfigureStep.vue asks: there is no bundle to build, no
@@ -925,6 +1095,7 @@
         :scope="gitScope"
         :title="outcomeTitle"
         :lead="outcomeLead"
+        :domain="provisioned?.workload?.domain ?? ''"
         :next-steps="isScratch ? scratchNextSteps : []"
         @manage="manageWorkload"
         @select="onNextStep"

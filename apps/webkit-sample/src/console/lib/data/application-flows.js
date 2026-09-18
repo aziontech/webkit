@@ -52,9 +52,6 @@
 // promised an import that stopped at the first private repository. The reader who has
 // no repository to connect has the other two doors: a template, or from scratch.
 
-/** The build defaults a flow starts the Configure step with. */
-const NPM_BUILD = { buildCommand: 'npm run build', deployCommand: 'npm run deploy' }
-
 /**
  * The flows, keyed by id. `steps` is the ordered rail for that flow; `icon` is the
  * glyph on the method row; `title`/`description` are the row's copy AND the heading
@@ -71,8 +68,7 @@ export const APPLICATION_FLOWS = {
       { id: 'method', label: 'Select a method' },
       { id: 'source', label: 'Select a repository' },
       { id: 'configure', label: 'Create and deploy' }
-    ],
-    defaults: NPM_BUILD
+    ]
   },
 
   scratch: {
@@ -88,8 +84,7 @@ export const APPLICATION_FLOWS = {
     steps: [
       { id: 'method', label: 'Select a method' },
       { id: 'configure', label: 'Configure and create' }
-    ],
-    defaults: NPM_BUILD
+    ]
   },
 
   template: {
@@ -98,14 +93,37 @@ export const APPLICATION_FLOWS = {
     title: 'Start from a template',
     description:
       'Clone a framework starter already wired to build and deploy on Azion. Next, Astro, Vue, Nuxt, and more.',
-    // FOUR parts, and the fourth is conditional — see the note above this object.
+    // FOUR parts, and the third is conditional — see the note above this object. Two
+    // parts compete for that slot and never both appear: a framework starter is cloned
+    // and needs a `repository`; an integration template installs on an application and
+    // needs a `target`.
     steps: [
       { id: 'method', label: 'Select a method' },
       { id: 'source', label: 'Select a template' },
       { id: 'repository', label: 'Connect a repository' },
+      { id: 'target', label: 'Select an application' },
       { id: 'configure', label: 'Create and deploy' }
-    ],
-    defaults: NPM_BUILD
+    ]
+  }
+}
+
+/**
+ * The two hosts an integration template can install on: an application the account
+ * already runs, or one this flow creates with the rule already in place.
+ */
+export const TEMPLATE_TARGETS = {
+  existing: {
+    id: 'existing',
+    icon: 'ai ai-edge-application',
+    title: 'Add to an existing application',
+    description:
+      'Install the rule on an application you already run. It opens on its Rules Engine for you to save.'
+  },
+  new: {
+    id: 'new',
+    icon: 'pi pi-plus',
+    title: 'Create a new application',
+    description: 'Create an application with the rule already in place. Nothing left to save.'
   }
 }
 

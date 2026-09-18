@@ -455,11 +455,6 @@
                 v-else
                 class="grid grid-cols-2 gap-(--spacing-md) sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5"
               >
-                <!-- NO `creates` here, and that is the grid's decision rather than an
-                     omission: this catalog runs four and five columns wide, where the
-                     four tags a card would wear break to a line each. The Creation
-                     Center's browser shows them because it runs three up
-                     (../../components/marketplace/TemplateBrowser.vue). -->
                 <TemplateCard
                   v-for="template in filteredTemplates"
                   :key="template.id"

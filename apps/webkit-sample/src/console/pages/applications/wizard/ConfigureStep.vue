@@ -1,5 +1,6 @@
 <script setup>
-  // THE LAST PART — CONFIGURE AND DEPLOY. One card of FIELDS, then the Advanced band.
+  // THE LAST PART — CONFIGURE AND DEPLOY. One card of FIELDS, one card of COMMANDS, then
+  // the Advanced band.
   //
   // Anatomy: the fields live inside a single CardBox as the webkit triad (FieldStack —
   // Label + control + one helper region), because every one of them is something the
@@ -10,10 +11,14 @@
   // ── WHAT IS OPEN AND WHAT IS BEHIND THE DISCLOSURE ──
   //
   // Open: the project NAME (the endpoint's only required field, and the name the whole
-  // provisioned chain takes), the two BUILD commands, and any settings the chosen
-  // template declares — a Shopify token, a database URL. Those last ones are open
-  // BECAUSE the template asked for them: a template-required credential hidden behind
-  // "Advanced" is a failed deploy the reader could not see coming.
+  // provisioned chain takes) and any settings the chosen template declares — a Shopify
+  // token, a database URL. Those last ones are open BECAUSE the template asked for them:
+  // a template-required credential hidden behind "Advanced" is a failed deploy the reader
+  // could not see coming.
+  //
+  // The two BUILD COMMANDS are their own card, one disclosure each: both arrive carrying
+  // what the Azion CLI runs (../../../lib/data/frameworks.js), so the closed row states
+  // the command that will run and only somebody who wants a different one opens it.
   //
   // Behind Advanced: the seven `modules` flags plus `active` and `debug`. Every one of
   // them already carries the create endpoint's own default, so submitting untouched
@@ -32,10 +37,13 @@
   // child writing into a prop object is what `vue/no-mutating-props` forbids). This part
   // writes into it and validates nothing on its own: the wizard validates on the commit,
   // because the commit is the last Next.
+  import Accordion from '@aziontech/webkit/accordion'
+  import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
   import InputText from '@aziontech/webkit/input-text'
   import Item from '@aziontech/webkit/item'
   import Switch from '@aziontech/webkit/switch'
+  import Tag from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
 
   import FirewallBinding from '../../../components/firewall/FirewallBinding.vue'
@@ -48,6 +56,7 @@
     SUBSCRIPTION_MODULES
   } from '../../../lib/data/application-modules'
   import { existingFirewallOptions } from '../../../lib/data/firewalls'
+  import { AZION_COMMANDS } from '../../../lib/data/frameworks'
   import { useCreateForm } from './form-context'
 
   const props = defineProps({
@@ -60,6 +69,31 @@
 
   // The request body and the commit's validation messages, shared from the wizard.
   const { form, errors } = useCreateForm()
+
+  const COMMANDS = [
+    {
+      field: 'buildCommand',
+      label: 'Build command',
+      fallback: AZION_COMMANDS.buildCommand,
+      empty: 'No build step',
+      description: 'Produces the bundle. Leave it empty for a site that needs no build.'
+    },
+    {
+      field: 'deployCommand',
+      label: 'Deploy command',
+      fallback: AZION_COMMANDS.deployCommand,
+      empty: 'Not set',
+      description: 'Runs after the build to deploy the bundle to Azion.'
+    }
+  ]
+
+  const isEdited = (command) => form[command.field].trim() !== command.fallback
+
+  const resetCommand = (command) => {
+    form[command.field] = command.fallback
+  }
+
+  const editedCommands = COMMANDS.filter(isEdited).map((command) => command.field)
 
   const templateSettings = () => props.source?.settings ?? []
 
@@ -116,53 +150,6 @@
               />
             </template>
           </FieldStack>
-
-          <!-- The two build commands, side by side from `sm` up: one decision read
-               together — what produces the bundle, and what ships it.
-               ONLY WHEN THERE IS SOMETHING TO BUILD. From scratch is the Azion application
-               LAYER on its own — no repository, no bundle, nothing to run — so asking it
-               for a build command would be asking about code that does not exist yet. The
-               source says whether it needs one (`requiresBuild`,
-               ../../../lib/data/application-flows.js), because that is a property of where
-               the code comes from and not of this form. -->
-          <div
-            v-if="source?.requiresBuild"
-            class="grid grid-cols-1 gap-(--spacing-lg) sm:grid-cols-2"
-          >
-            <FieldStack
-              label="Build command"
-              hint="Produces the bundle. Leave it empty for a site that needs no build."
-            >
-              <template #default="{ controlId, describedBy }">
-                <InputText
-                  :id="controlId"
-                  v-model="form.buildCommand"
-                  size="large"
-                  class="w-full"
-                  placeholder="npm run build"
-                  :disabled="disabled"
-                  :aria-describedby="describedBy"
-                />
-              </template>
-            </FieldStack>
-
-            <FieldStack
-              label="Deploy command"
-              hint="Runs after the build to deploy the bundle to Azion."
-            >
-              <template #default="{ controlId, describedBy }">
-                <InputText
-                  :id="controlId"
-                  v-model="form.deployCommand"
-                  size="large"
-                  class="w-full"
-                  placeholder="npm run deploy"
-                  :disabled="disabled"
-                  :aria-describedby="describedBy"
-                />
-              </template>
-            </FieldStack>
-          </div>
         </div>
 
         <!-- Template settings, when the chosen template declares any. In the SAME card
@@ -198,6 +185,81 @@
             </template>
           </FieldStack>
         </div>
+      </template>
+    </CardBox>
+
+    <!-- ONLY WHEN THERE IS SOMETHING TO BUILD. From scratch is the Azion application
+         LAYER on its own — no repository, no bundle, nothing to run — so asking it
+         for a build command would be asking about code that does not exist yet. The
+         source says whether it needs one (`requiresBuild`,
+         ../../../lib/data/application-flows.js), because that is a property of where
+         the code comes from and not of this form. -->
+    <CardBox
+      v-if="source?.requiresBuild"
+      class="mt-(--layout-section-gap)"
+      :padded="false"
+      title="Build and deploy commands"
+    >
+      <template #content>
+        <Accordion
+          type="multiple"
+          :default-value="editedCommands"
+        >
+          <Accordion.Item
+            v-for="command in COMMANDS"
+            :key="command.field"
+            :value="command.field"
+            class="last:border-b-0"
+          >
+            <Accordion.Trigger>
+              <span class="flex min-w-0 items-center gap-(--spacing-sm)">
+                <span class="shrink-0 text-label-md text-(--text-default)">
+                  {{ command.label }}
+                </span>
+                <span
+                  class="min-w-0 flex-1 truncate font-(family-name:--font-code) text-body-sm text-(--text-muted)"
+                >
+                  {{ form[command.field].trim() || command.empty }}
+                </span>
+                <Tag
+                  v-if="isEdited(command)"
+                  label="Edited"
+                  severity="info"
+                  size="small"
+                  class="shrink-0"
+                />
+              </span>
+            </Accordion.Trigger>
+
+            <Accordion.Content>
+              <div
+                class="flex min-w-0 flex-col gap-(--spacing-sm) px-(--spacing-md) pt-(--spacing-sm) pb-(--spacing-md)"
+              >
+                <InputText
+                  v-model="form[command.field]"
+                  size="large"
+                  class="w-full font-(family-name:--font-code)"
+                  :aria-label="command.label"
+                  :placeholder="command.fallback"
+                  :disabled="disabled"
+                />
+                <div class="flex min-w-0 items-center justify-between gap-(--spacing-sm)">
+                  <p class="min-w-0 text-body-sm text-(--text-muted)">
+                    {{ command.description }}
+                  </p>
+                  <Button
+                    v-if="isEdited(command)"
+                    kind="text"
+                    size="small"
+                    label="Use the default"
+                    :disabled="disabled"
+                    @click="resetCommand(command)"
+                  />
+                </div>
+              </div>
+            </Accordion.Content>
+          </Accordion.Item>
+        </Accordion>
       </template>
     </CardBox>
 

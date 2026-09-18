@@ -46,23 +46,17 @@
 //
 // Both are read as `!== false`, so a framework starter declares neither and gets both.
 //
-// ── TWO AXES AN AUTHORED TEMPLATE ALSO CARRIES ──
+// ── THE AXIS AN AUTHORED TEMPLATE ALSO CARRIES ──
 //
-// A framework starter derives both of these from ./frameworks.js. An Azion template has
-// no framework catalog behind it, so it states them:
+// A framework starter derives this from ./frameworks.js. An Azion template has no
+// framework catalog behind it, so it states it:
 //
 //   `useCases`   which of the filter's use cases it answers (./frameworks.js →
 //                `useCaseOptions`). EMPTY IS A REAL ANSWER: the Functions "Hello World"
 //                kit answers none of them, and tagging it with the nearest one would put
 //                it in a cut it does not belong to.
-//   `creates`    the objects its run creates, in the shared resource vocabulary
-//                (./frameworks.js → `RESOURCE_LABELS`). Authored only where the render
-//                shape gets it WRONG: the two traffic-shaped templates create a connector
-//                and no function, which nothing about "javascript" implies. Everything
-//                else inherits its framework's list, so a Next.js template says what
-//                every Next.js deploy says.
 
-import { FRAMEWORKS, markFilterFor, resourceLabels, templateSlugForTech } from './frameworks'
+import { FRAMEWORKS, markFilterFor, templateSlugForTech } from './frameworks'
 
 // The templates that carry something the derivation cannot: an Azion template's settings
 // group, a starter's own credentials (Shopify, Turso), a repository path that is not
@@ -75,7 +69,6 @@ const authored = {
     vendor: 'Azion',
     framework: 'javascript',
     useCases: ['delivery'],
-    creates: ['application', 'workload', 'connector'],
     icon: 'ai ai-edge-connectors',
     repoOwner: 'aziontech',
     repoPath: 'templates/proxy',
@@ -114,7 +107,6 @@ const authored = {
     vendor: 'Azion',
     framework: 'javascript',
     useCases: ['marketing', 'blog'],
-    creates: ['application', 'workload', 'storage'],
     icon: 'ai ai-edge-storage',
     repoOwner: 'aziontech',
     repoPath: 'templates/static-site',
@@ -179,7 +171,6 @@ const authored = {
     description: "Integrate a Turso database, built with Turso's LibSQL SDK, into an application.",
     framework: 'nextjs',
     useCases: ['ai'],
-    creates: ['application', 'workload', 'function', 'storage'],
     repoOwner: 'aziontech',
     repoPath: 'templates/turso-starter',
     defaultRepoName: 'turso-starter-kit',
@@ -257,7 +248,6 @@ const authored = {
     vendor: 'Azion',
     framework: 'javascript',
     useCases: ['delivery'],
-    creates: ['application', 'workload', 'connector'],
     // `ai-tiered-cache`, not `ai-edge-cache` — the latter is not a glyph the icons
     // package ships, and a font icon that names nothing paints NOTHING: the card carried
     // an empty 40px hole where its mark belongs and no error anywhere said so.
@@ -385,7 +375,6 @@ const authored = {
     vendor: 'Azion',
     framework: 'svelte',
     useCases: ['ecommerce'],
-    creates: ['application', 'workload', 'function', 'storage'],
     icon: 'ai-cor ai-svelte',
     repoOwner: 'aziontech',
     repoPath: 'templates/sveltekit-commerce',
@@ -523,7 +512,28 @@ const frameworkStarters = Object.fromEntries(
     ])
 )
 
-export const templates = { ...authored, ...frameworkStarters }
+export const templates = Object.fromEntries(
+  Object.entries({ ...authored, ...frameworkStarters }).map(([slug, template]) => [
+    slug,
+    { ...template, kind: template.requiresRepository === false ? 'integration' : 'framework' }
+  ])
+)
+
+/**
+ * The two kinds of template, as the Type axis of the catalog's filter.
+ *
+ * `integration` is a template with no project behind it: nothing is cloned and nothing is
+ * built, and what it installs is a Rules Engine rule on an application. `framework` is
+ * everything that arrives as code — the starters and the applications published on top of
+ * them.
+ */
+export const templateKindOptions = [
+  { value: 'integration', label: 'Integrations', icon: 'pi pi-sliders-h' },
+  { value: 'framework', label: 'Frameworks', icon: 'pi pi-code' }
+]
+
+/** Whether this template is configuration on an application rather than code. */
+export const isIntegration = (template) => template?.kind === 'integration'
 
 /**
  * The AZION-PUBLISHED templates, in list order — the group that wears the Azion mark.
@@ -610,9 +620,7 @@ const frameworkByTech = new Map(FRAMEWORKS.map((framework) => [framework.tech, f
  * ── NO TECHNOLOGY TAG ──
  *
  * The corner Tag used to carry the framework's label, which spent the row's one badge on
- * the fact its own sentence already states ("built with Next.js and Shopify"). What the
- * row now shows instead is `creates` — the chain of objects the run leaves in the
- * account, which was visible nowhere until the deploy log streamed it past. The
+ * the fact its own sentence already states ("built with Next.js and Shopify"). The
  * technology stays reachable as a FILTER axis, where it is useful as a cut rather than as
  * a label repeated fourteen times.
  */
@@ -629,8 +637,8 @@ const publishedRow = (template) => {
     markClass: markFilterFor(icon),
     vendor: template.vendor || 'Azion',
     tech: template.framework,
-    useCases: template.useCases ?? [],
-    creates: template.creates ? resourceLabels(template.creates) : (framework?.creates ?? [])
+    kind: template.kind,
+    useCases: template.useCases ?? []
   }
 }
 
@@ -651,15 +659,15 @@ const frameworkEntry = (framework) => ({
   color: framework.color,
   vendor: '',
   tech: framework.tech,
-  useCases: framework.useCases,
-  creates: framework.creates
+  kind: 'framework',
+  useCases: framework.useCases
 })
 
 /**
  * How many framework cards lead the pane as "Recommended" — NINE, which is the 3×3 the
- * grid resolves to at its widest. Not a taste number: the grid runs three up, so any
- * other count leaves the band's last row part-empty, and a "recommended" band with a
- * hole in it reads as a loading state.
+ * grid resolves to at its widest. Not a taste number: the band must divide by the grid,
+ * or its last row is half-empty and a "recommended" band with a hole in it reads as a
+ * loading state.
  *
  * They are the first nine of the catalog, which is ordered most-common-first — the same
  * order that decides which four a product's first use offers (./frameworks.js →
@@ -691,5 +699,41 @@ export const PUBLISHED_TEMPLATES = [
   ...PARTNER_TEMPLATES.map(publishedRow)
 ]
 
-/** Where a gallery card goes: the deploy flow, on that template's own slug. */
-export const deploySlugRoute = (slug) => ({ path: '/deploy', query: { template: slug } })
+/**
+ * Where a gallery card goes.
+ *
+ * A framework starter goes to the deploy flow on its own slug. An INTEGRATION goes to the
+ * application create instead: it installs on an application, so the first thing it has to
+ * ask is which one — the gate the deploy flow has no part for.
+ */
+export const deploySlugRoute = (slug) =>
+  isIntegration(templates[slug])
+    ? { path: '/applications/new', query: { method: 'template', template: slug } }
+    : { path: '/deploy', query: { template: slug } }
+
+/**
+ * A catalog template as the SOURCE the application wizard carries through its parts.
+ *
+ * One shape for every door into the flow, so a template picked from the catalog and one
+ * named on the URL produce the same object.
+ *
+ * @param {object} template A catalog entry.
+ * @param {string} icon The mark the row that chose it drew, when it differs from the
+ *   template's own (a framework row wears its framework's logo).
+ */
+export const templateSource = (template, icon = '') => ({
+  kind: 'template',
+  slug: template.slug,
+  title: template.title,
+  description: template.description,
+  framework: template.framework,
+  icon: icon || template.icon || '',
+  vendor: template.vendor,
+  repoOwner: template.repoOwner,
+  repoPath: template.repoPath,
+  defaultName: template.defaultRepoName,
+  requiresRepository: template.requiresRepository !== false,
+  requiresBuild: template.requiresBuild !== false,
+  integration: template.kind === 'integration',
+  settings: template.settings
+})

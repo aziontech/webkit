@@ -30,13 +30,6 @@
     markClass: { type: String, default: '' },
     // Short type label shown in the corner Tag (e.g. "Integration").
     badge: { type: String, default: 'Integration' },
-    // THE RESOURCES A RUN OF IT CREATES, in the order it creates them — rendered as a
-    // chain under the description ('Application → Workload → Connector'). For a template
-    // row, this is the fact the corner Tag used to spend itself on: the technology is
-    // already in the mark and in the sentence, while what the run will leave in the
-    // account was visible nowhere until the deploy log streamed it past. Empty on an
-    // integration, which provisions nothing of its own.
-    creates: { type: Array, default: () => [] },
     // Switches the card anatomy: spotlight (true) vs. dense grid card (false).
     featured: { type: Boolean, default: false }
   })
@@ -147,42 +140,6 @@
           </div>
           <p class="text-pretty text-body-sm text-(--text-muted)">
             {{ description }}
-          </p>
-          <!-- The chain, last: it is what the row promises, read after the sentence that
-               says what the thing is. A CHAIN rather than the tag row the cards wear
-               (./TemplateCard.vue) — a row is horizontal and 287px wide, where four tags
-               cost two lines and four arrow-joined names cost one, and the arrows say the
-               extra thing a tag cannot: the order the run creates them in.
-               The arrows are `aria-hidden` and the lead word is the accessible one, so a
-               screen reader reads "Creates Application Workload Connector" instead of
-               three nouns with no verb. -->
-          <!-- `gap-(--spacing-xxs)`, NOT the axis-specific `gap-x-(--spacing-xxs)`:
-               measured, the axis form of the paren shorthand emits no CSS at all in this
-               build (`column-gap: normal`), so the chain rendered as one word —
-               "CreatesApplication→Workload". Both spellings compile, lint and type-check
-               identically; only the DOM tells them apart. The two-axis form is also what
-               the wrapped chain wants, since a second line needs the row gap. -->
-          <p
-            v-if="creates.length"
-            class="mt-(--spacing-xxs) flex flex-wrap items-center gap-(--spacing-xxs) text-body-xs text-(--text-muted)"
-          >
-            <!-- The lead word takes the line's own muted ink, not the disabled token:
-                 `--text-disabled` measures ~2:1 on the dark card surface, which is
-                 legible for a SEPARATOR (the arrows below, aria-hidden) and not for a
-                 word that has to be read for the rest of the line to mean anything. -->
-            <span>Creates</span>
-            <template
-              v-for="(resource, index) in creates"
-              :key="resource"
-            >
-              <span
-                v-if="index"
-                aria-hidden="true"
-                class="text-(--text-disabled)"
-                >→</span
-              >
-              <span>{{ resource }}</span>
-            </template>
           </p>
         </div>
         <!-- The type Tag, in the flow: `shrink-0` so it keeps its width and the text
