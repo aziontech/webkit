@@ -124,9 +124,8 @@
   <!-- Every rule stops at the data-doc-chrome boundary: restyling the paragraphs and
        code inside a wrapped webkit component would break the component that owns them.
        Nested authored prose (a step's body, a tab's panel) keeps the contract. The
-       first-block reset reaches through a renderer wrapper (Astro's astro-slot) so the
-       page opens flush; it zeroes the margin of whatever comes first, but the padding
-       only of prose — a chrome block's padding is its own, not a rung of the ladder. -->
+       first-block reset zeroes the margin of whatever opens the page, but the padding
+       only of prose — a chrome block's padding is its own. -->
   <div
     ref="proseRef"
     v-bind="$attrs"
