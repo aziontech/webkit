@@ -42,6 +42,7 @@
   import { createResourcePath } from '../../lib/data/create-resources'
   import { BUCKETS } from '../../lib/data/object-storage'
   import { productFirstUse } from '../../lib/data/product-empty-states'
+  import { createdRowsFor, removeCreatedResource } from '../../lib/state/created-resources'
   import { useSampleMode } from '../../lib/state/sample-mode'
   import { tenancyRows } from '../../lib/state/tenancy-scope'
 
@@ -60,7 +61,12 @@
   // The buckets that back the table (data-driven mode). The seed lives in
   // ../../lib/data/object-storage.js — one module per resource type, so global search can
   // index it (../../lib/data/search-index.js) — and this is the page's own mutable copy.
-  const buckets = ref([...BUCKETS])
+  // WHAT THIS SESSION MADE, THEN THE SEED. A resource created on the module's create
+  // page is stored as the answers the reader gave and derived back into a row by this
+  // module's own row builder (../../lib/state/created-resources.js), so it arrives here
+  // indistinguishable from a seeded one — newest first, which is where a reader looks
+  // for the thing they just made.
+  const buckets = ref([...createdRowsFor('object-storage'), ...BUCKETS])
 
   // Buckets provisioned by the deploy flow lead the list, newest first — the last
   // link of the chain a deploy creates (src/lib/provisioning.js): the connector's
@@ -177,6 +183,8 @@
     const row = pendingDelete.value
     if (!row) return
     removeDeployment(row.id)
+    // Out of the store as well, or the next mount seeds it back in.
+    removeCreatedResource('object-storage', row.id)
     buckets.value = buckets.value.filter((b) => b.id !== row.id)
     toast.success(`Bucket "${row.name}" deleted.`)
     pendingDelete.value = null

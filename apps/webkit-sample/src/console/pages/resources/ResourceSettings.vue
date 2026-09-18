@@ -31,9 +31,12 @@
   //     the first real edit and offers Discard, which is the console's settings model
   //     everywhere else (an application's Main Settings, a workload's, the account's).
   //   The values — a create page opens on the API's defaults. This one opens on the stored
-  //     record, and the prototype has no store for these ten resources, so the row hands
-  //     over what it knows in the query string (`?name=`) and the rest falls back to those
-  //     same defaults. The seeding is deliberately generic — any field id is a valid query
+  //     record when there is one: a resource created in this session is kept as the answers
+  //     the reader gave (../../lib/state/created-resources.js), so its settings page opens
+  //     on exactly what they typed, `code` fields included, and Save writes back to it. A
+  //     SEEDED record has no such form — the fixtures are rows, not answers — so it still
+  //     falls back to what the row hands over in the query string (`?name=`) and then to the
+  //     API defaults. That seeding is deliberately generic — any field id is a valid query
   //     key — so a list that later carries more of a row can pass it without touching this
   //     file.
   import CardBox from '@aziontech/webkit/card-box'
@@ -54,6 +57,7 @@
     resourceFields,
     resourceSidebarKey
   } from '../../lib/data/create-resources'
+  import { createdFormFor, updateCreatedResource } from '../../lib/state/created-resources'
 
   const props = defineProps({
     /** Which resource this page configures — the `id` of a `createResources` entry. */
@@ -64,11 +68,15 @@
 
   const spec = computed(() => createResource(props.resource))
 
-  // The record being edited. The prototype stores none of these ten resources, so its
-  // identity is what the URL carries: the id in the path and the name the row passed.
+  // The record being edited. Its identity is what the URL carries: the id in the path and
+  // the name the row passed — which is also the key the created-resources store is read by.
   const recordId = computed(() => String(route.params.id ?? ''))
   const recordName = computed(() =>
-    String(route.query.name || `${spec.value.unit} ${recordId.value}`)
+    String(
+      createdFormFor(props.resource, recordId.value)?.name ||
+        route.query.name ||
+        `${spec.value.unit} ${recordId.value}`
+    )
   )
 
   // Stored values first, API defaults behind them. Only string controls are read from the
@@ -77,6 +85,13 @@
   // that is in no list prints a raw string in its trigger).
   const seedForm = () => {
     const seed = createFormSeed(spec.value)
+
+    // A record this session created is the whole answer — it holds every field, including
+    // the `code` ones a URL cannot carry — so it wins outright and the query seeding below
+    // is skipped rather than allowed to overwrite it with a subset.
+    const stored = createdFormFor(props.resource, recordId.value)
+    if (stored) return { ...seed, ...stored }
+
     for (const field of resourceFields(spec.value)) {
       const value = route.query[field.id]
       if (typeof value !== 'string' || !value) continue
@@ -197,6 +212,10 @@
   const save = () => {
     if (!validate()) return
     saveGroup(saving, `${form.name || recordName.value} saved.`, () => {
+      // Back into the store, so the edit survives leaving the page — a rename shows up in
+      // the module list as the row's new name, not as the name it was created with. A
+      // seeded record is not in the store and is left as the fixture it is.
+      updateCreatedResource(props.resource, recordId.value, form)
       commit()
       snapshot.value = JSON.parse(JSON.stringify(form))
     })

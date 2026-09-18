@@ -410,11 +410,15 @@
   // The lead branches with the domain, because "is live" is only true on one of them. An
   // Azion domain answers the moment the run finishes; a custom hostname answers when the
   // reader's DNS points at it, which is work this flow does not do and must not claim.
+  //
+  // Neither branch SPELLS the address any more — the outcome carries it in its own block,
+  // as a link, and a lead repeating the hostname one line above it printed the same string
+  // twice on a screen whose whole job is to hand the reader that string once.
   const successLead = computed(() => {
     const app = applicationName.value || 'the application'
     return form.domainType === 'own'
-      ? `The workload is serving ${app}. Point ${names.value.domain} at it to send traffic.`
-      : `https://${names.value.domain} is live and serving ${app}.`
+      ? `The workload is serving ${app}. Point your DNS at it to send traffic.`
+      : `The workload is live and serving ${app}.`
   })
 
   // --- The part's own advance ----------------------------------------------
@@ -520,6 +524,8 @@
         title="Workload deployed"
         :lead="successLead"
         :resources="createdResources"
+        :domain="names.domain"
+        :live="form.domainType !== 'own'"
         @manage="manageWorkload"
       />
     </template>

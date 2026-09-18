@@ -82,7 +82,21 @@ export const NETWORK_LISTS = [
     status: 'Active',
     modifiedAt: daysAgo(41)
   }
-].map((list, index) => {
+].map(networkListRow)
+
+/**
+ * A network list as a LIST ROW — the record itself plus the fields its table displays.
+ *
+ * Exported because the seed is not the only source of rows any more: a network list created
+ * in this session is stored as the answers the reader gave (../state/created-resources.js)
+ * and has to arrive in the list as the SAME row, derived fields and all. Two projections
+ * would be two lists that disagree about what a row is.
+ *
+ * @param {object} list The base record.
+ * @param {number} [index] Position in the seed — picks the round-robin author.
+ * @returns {object} The row.
+ */
+export function networkListRow(list, index = 0) {
   const person = authorAt(index)
   return {
     ...list,
@@ -92,7 +106,7 @@ export const NETWORK_LISTS = [
     authorAvatar: person.avatar,
     lastModified: formatListDate(list.modifiedAt)
   }
-})
+}
 
 /** A seeded network list by id, or `undefined`. */
 export const networkListById = (id) => NETWORK_LISTS.find((list) => list.id === String(id))

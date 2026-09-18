@@ -99,7 +99,21 @@ export const DATA_STREAMS = [
     status: 'Active',
     modifiedAt: daysAgo(46)
   }
-].map((stream, index) => {
+].map(dataStreamRow)
+
+/**
+ * A data stream as a LIST ROW — the record itself plus the fields its table displays.
+ *
+ * Exported because the seed is not the only source of rows any more: a stream created
+ * in this session is stored as the answers the reader gave (../state/created-resources.js)
+ * and has to arrive in the list as the SAME row, derived fields and all. Two projections
+ * would be two lists that disagree about what a row is.
+ *
+ * @param {object} stream The base record.
+ * @param {number} [index] Position in the seed — picks the round-robin author.
+ * @returns {object} The row.
+ */
+export function dataStreamRow(stream, index = 0) {
   const person = authorAt(index)
   return {
     ...stream,
@@ -111,7 +125,7 @@ export const DATA_STREAMS = [
     authorAvatar: person.avatar,
     lastModified: formatListDate(stream.modifiedAt)
   }
-})
+}
 
 /** A seeded data stream by id, or `undefined`. */
 export const dataStreamById = (id) => DATA_STREAMS.find((stream) => stream.id === String(id))

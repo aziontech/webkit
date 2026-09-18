@@ -46,7 +46,7 @@
   import InputText from '@aziontech/webkit/input-text'
   import Label from '@aziontech/webkit/label'
   import { toast } from '@aziontech/webkit/toast'
-  import { computed, ref, useId } from 'vue'
+  import { computed, ref, useId, watch } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
   import UnsavedChangesGuard from '../../components/form/UnsavedChangesGuard.vue'
@@ -54,8 +54,12 @@
   import FunctionSettings from '../../components/function/FunctionSettings.vue'
   import CreationHeader from '../../components/page/CreationHeader.vue'
   import PageTabs from '../../components/page/PageTabs.vue'
-  import { useCreateOrigin } from '../../lib/behavior/create-origin'
+  import ApplicationBindingSummary from '../../components/resource/ApplicationBindingSummary.vue'
+  import ApplicationGate from '../../components/resource/ApplicationGate.vue'
+  import { hostOptions, HOSTS, resolveHostChoice } from '../../lib/behavior/application-binding'
+  import { CREATION_CENTER_PATH, useCreateOrigin } from '../../lib/behavior/create-origin'
   import { useBaseline } from '../../lib/behavior/forms'
+  import { bindingFor } from '../../lib/data/create-bindings'
   import { FUNCTION_ARGS, FUNCTION_STARTER } from '../../lib/data/create-resources'
   import { addFunction, RUNTIMES } from '../../lib/data/functions'
 
@@ -92,6 +96,10 @@
   const executionEnvironment = ref('application')
   const active = ref(true)
 
+  // The gate's answer: `{ mode, name }`, or null when the reader continued without an
+  // application. Resolved (and provisioned, on the new branch) at SAVE, not here.
+  const applicationChoice = ref(null)
+
   // A new function is written in JavaScript. The endpoint's other runtime (`azion_lua`)
   // exists on functions the platform already holds, but nothing here writes Lua, so the
   // create page states one runtime instead of asking a question with one useful answer.
@@ -110,7 +118,8 @@
     args: args.value,
     form: form.value,
     executionEnvironment: executionEnvironment.value,
-    active: active.value
+    active: active.value,
+    applicationChoice: applicationChoice.value
   }))
 
   // Validation runs on SUBMIT only — nothing is judged while the reader is still typing,
@@ -181,6 +190,51 @@
     }
     router.push({ path: href, query: { email: userEmail.value } })
   }
+
+  // ── WHERE THIS FUNCTION RUNS ──────────────────────────────────────────────
+  //
+  // A function is inert until an application holds it and a rule calls it
+  // (../../lib/data/create-bindings.js reads that off the API), so the page opens on the
+  // question rather than burying it in a tab: the gate is the first screen, and the editor
+  // is behind it.
+  //
+  // TWO READERS SKIP IT. One arrived from a form that is already binding this function (a
+  // `returnTo` caller — an application's Functions Instances drawer), and one is writing a
+  // FIREWALL function, whose host is a firewall this prototype cannot write a rule into.
+  // Both get the editor directly, and the second loses the answer if they switch the
+  // environment after giving one.
+  const applicationBindingSpec = bindingFor('functions')
+  const hostSpec = HOSTS[applicationBindingSpec.host]
+  const hostChoices = computed(() => hostOptions(applicationBindingSpec.host))
+
+  const canBindApplication = computed(
+    () => !returnTo.value && executionEnvironment.value === 'application'
+  )
+
+  const gateOpen = ref(Boolean(applicationBindingSpec) && !returnTo.value)
+
+  const boundApplicationName = computed(() => applicationChoice.value?.name ?? '')
+
+  const onGateChoose = (choice) => {
+    applicationChoice.value = choice
+    gateOpen.value = false
+  }
+
+  // Past the question: the function is written now and bound later. The Settings tab says
+  // so, in the function's own terms, so the consequence is not hidden behind the skip.
+  const onGateSkip = () => {
+    applicationChoice.value = null
+    gateOpen.value = false
+  }
+
+  // An account with no application cannot answer the gate at all — so the way on is the
+  // Creation Center, where an application is made.
+  const goToCreationCenter = () =>
+    router.push({ path: CREATION_CENTER_PATH, query: { email: userEmail.value } })
+
+  watch(executionEnvironment, (environment) => {
+    if (environment !== 'application') applicationChoice.value = null
+  })
 
   /** `default_args` is posted as an object, so what is typed has to parse. */
   const parsedArgs = () => {
@@ -275,6 +329,22 @@
         active: active.value
       })
 
+      const application = canBindApplication.value
+        ? resolveHostChoice(applicationBindingSpec.host, applicationChoice.value)
+        : null
+
+      if (application) {
+        toast.success(`${record.name} created.`, {
+          description: application.created
+            ? `${application.name} was created for it. Save the rule to start running it.`
+            : `Save the rule to run it on ${application.name}.`
+        })
+        commit()
+        const target = applicationBindingSpec.destination({ host: application, record })
+        router.push({ path: target.path, query: { email: userEmail.value, ...target.query } })
+        return
+      }
+
       // The success toast CARRIES THE RESOURCE: it names what was created and its action
       // opens THE FUNCTION, in the same three tabs this page wrote it in (Functions.vue §
       // OPENING A FUNCTION) — not the module list, which is where we are already landing
@@ -311,7 +381,32 @@
 </script>
 
 <template>
-  <div class="flex h-dvh flex-col bg-(--bg-canvas)">
+  <!-- THE GATE IS THE FIRST SCREEN. Not a step INSIDE the editor page: it is the question
+       that decides where this create ends, and the editor is what comes after it
+       (../../components/resource/ApplicationGate.vue). The leave guard rides with it, so
+       backing out of the gate with a half-written function still asks. -->
+  <ApplicationGate
+    v-if="gateOpen"
+    :title="'Create Function'"
+    icon="ai ai-edge-functions"
+    :noun="hostSpec.noun"
+    :host-icon="hostSpec.icon"
+    :can-create="hostSpec.canCreate"
+    :empty-label="hostSpec.emptyLabel"
+    :options="hostChoices"
+    :breadcrumb="breadcrumb"
+    :back-label="`Back to ${returnLabel}`"
+    @choose="onGateChoose"
+    @skip="onGateSkip"
+    @empty-action="goToCreationCenter"
+    @back="cancel"
+    @navigate="onCrumb"
+  />
+
+  <div
+    v-else
+    class="flex h-dvh flex-col bg-(--bg-canvas)"
+  >
     <UnsavedChangesGuard :dirty="dirty" />
 
     <CreationHeader
@@ -397,6 +492,15 @@
                 v-model:active="active"
                 :runtime-label="RUNTIME.label"
                 :disabled="saving"
+              />
+
+              <ApplicationBindingSummary
+                v-if="canBindApplication"
+                :binding="applicationBindingSpec"
+                :host="hostSpec"
+                :application="boundApplicationName"
+                :disabled="saving"
+                @change="gateOpen = true"
               />
             </div>
           </div>

@@ -41,7 +41,21 @@ export const BUCKETS = [
     size: '2.1 GB',
     modifiedAt: daysAgo(1)
   }
-].map((bucket, index) => {
+].map(bucketRow)
+
+/**
+ * A bucket as a LIST ROW — the record itself plus the fields its table displays.
+ *
+ * Exported because the seed is not the only source of rows any more: a bucket created
+ * in this session is stored as the answers the reader gave (../state/created-resources.js)
+ * and has to arrive in the list as the SAME row, derived fields and all. Two projections
+ * would be two lists that disagree about what a row is.
+ *
+ * @param {object} bucket The base record.
+ * @param {number} [index] Position in the seed — picks the round-robin author.
+ * @returns {object} The row.
+ */
+export function bucketRow(bucket, index = 0) {
   const person = authorAt(index)
   return {
     ...bucket,
@@ -49,4 +63,4 @@ export const BUCKETS = [
     authorAvatar: person.avatar,
     lastModified: formatListDate(bucket.modifiedAt)
   }
-})
+}

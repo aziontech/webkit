@@ -51,8 +51,12 @@
   import SpecFieldRow from '../../components/form/SpecFieldRow.vue'
   import CreatePage from '../../components/page/CreatePage.vue'
   import Section from '../../components/page/Section.vue'
-  import { useCreateOrigin } from '../../lib/behavior/create-origin'
+  import ApplicationBindingSummary from '../../components/resource/ApplicationBindingSummary.vue'
+  import ApplicationGate from '../../components/resource/ApplicationGate.vue'
+  import { hostOptions, HOSTS, resolveHostChoice } from '../../lib/behavior/application-binding'
+  import { CREATION_CENTER_PATH, useCreateOrigin } from '../../lib/behavior/create-origin'
   import { useBaseline } from '../../lib/behavior/forms'
+  import { bindingFor, bindingWritesRule } from '../../lib/data/create-bindings'
   import {
     createFormSeed,
     createResource,
@@ -60,6 +64,7 @@
     resourceFields,
     resourceSettingsPath
   } from '../../lib/data/create-resources'
+  import { addCreatedResource, storesCreated } from '../../lib/state/created-resources'
 
   const props = defineProps({
     /** Which resource this page creates — the `id` of a `createResources` entry. */
@@ -125,11 +130,64 @@
   // One flag locks the whole scope while the create request is in flight.
   const submitting = ref(false)
 
+  // ── WHAT THIS RESOURCE STILL NEEDS TO DO ANYTHING ─────────────────────────
+  //
+  // A connector is an address nothing fetches from until an application's rule points at
+  // it — so its create page asks where it runs and ends on that rule, rather than handing
+  // back a record that does nothing (../../lib/data/create-bindings.js holds which
+  // resources are in that position, and what their rule is). A resource with no entry
+  // there renders no band and is created exactly as before.
+  const applicationBindingSpec = computed(() => bindingFor(props.resource))
+  const hostSpec = computed(() => HOSTS[applicationBindingSpec.value?.host] ?? HOSTS.application)
+  const hostChoices = computed(() => hostOptions(applicationBindingSpec.value?.host))
+
+  // The gate's answer: `{ mode, name }`, or null when the reader continued without an
+  // application. Resolved (and provisioned, on the new branch) at SUBMIT, not here.
+  const applicationChoice = ref(null)
+  const gateOpen = ref(Boolean(applicationBindingSpec.value))
+
+  const boundApplicationName = computed(() => applicationChoice.value?.name ?? '')
+
+  const onGateChoose = (choice) => {
+    applicationChoice.value = choice
+    gateOpen.value = false
+  }
+
+  // Past the question: the resource is created now and bound later. The band at the top of
+  // the form says it is bound to nothing, and what that means for this resource.
+  const onGateSkip = () => {
+    applicationChoice.value = null
+    gateOpen.value = false
+  }
+
+  // An account with no host cannot answer the gate at all — so the way on is where that
+  // host is made: the Creation Center for an application, the firewall's own gated create
+  // for a firewall.
+  const goToHostCreate = () =>
+    router.push({
+      path: hostSpec.value.emptyPath ?? CREATION_CENTER_PATH,
+      query: { email: userEmail.value }
+    })
+
+  // Switching between two create routes reuses this component, so the answer to a question
+  // the next resource may not even ask goes with the form it belonged to — and the next
+  // resource opens on its own gate, or on its form when it needs no host.
+  watch(
+    () => props.resource,
+    () => {
+      applicationChoice.value = null
+      gateOpen.value = Boolean(applicationBindingSpec.value)
+    }
+  )
+
   // The leave guard's trigger (ui/UnsavedChangesGuard.vue, mounted by CreatePage): dirty
   // while the form diverges from the state it opened on. `commit` re-snapshots it, and is
   // called on the way OUT of a successful create — the page's own navigation must not be
   // stopped by the guard that exists to protect the input that create just consumed.
-  const { dirty, commit } = useBaseline(form)
+  const { dirty, commit } = useBaseline(() => ({
+    ...form,
+    applicationChoice: applicationChoice.value
+  }))
 
   // Only the sections and fields being asked for right now — see the note above.
   const askedSections = computed(() =>
@@ -249,12 +307,16 @@
       ? `/object-storage/${id}`
       : resourceSettingsPath(props.resource, id)
 
-  // The prototype stores none of these ten resources, so the record travels in the URL,
-  // the same way a list row hands one over (`?name=`) — only this page knows more than a
-  // row does, so it also carries the answers just given, which the settings page seeds
-  // itself from field id by field id. Two exclusions: a `code` field, because one of them
-  // is a certificate's private key and a key does not belong in a URL, and a hidden field,
-  // because it was neither asked nor posted.
+  // A record the store does not keep still travels in the URL, the same way a list row
+  // hands one over (`?name=`) — only this page knows more than a row does, so it also
+  // carries the answers just given, which the settings page seeds itself from field id by
+  // field id. Two exclusions: a `code` field, because one of them is a certificate's
+  // private key and a key does not belong in a URL, and a hidden field, because it was
+  // neither asked nor posted.
+  //
+  // For the eight resources the store DOES keep (../../lib/state/created-resources.js) the
+  // query is redundant and harmless: the settings page finds the record and opens on it,
+  // including the `code` fields a URL cannot carry.
   const createdQuery = (name) => {
     const query = { email: userEmail.value, name }
     for (const field of askedFields.value) {
@@ -273,11 +335,42 @@
     try {
       await new Promise((resolve) => globalThis.setTimeout(resolve, 900))
       const name = createdName()
-      const id = `${props.resource}-${Date.now().toString(36)}`
+      // THE RECORD IS STORED, and the store mints its id — a bucket's id is its name,
+      // which is what `/object-storage/:bucket` resolves. A resource with no projection
+      // yet (a domain, whose create is a signal to Overview rather than a row in a list)
+      // keeps the prototype's own opaque id and travels in the URL alone.
+      const stored = storesCreated(props.resource) ? addCreatedResource(props.resource, form) : null
+      const id = stored?.id ?? `${props.resource}-${Date.now().toString(36)}`
       // Snapshot, not a closure over the live form: by the time the action is clicked this
       // page is unmounted and the reader is on the list, and the URL has to describe the
       // record as it was created.
       const created = { path: openPath(id), query: createdQuery(name) }
+
+      // BOUND: the record is only half of what the reader asked for. The application
+      // is resolved (or provisioned, on the new branch) and the flow ends on its Rules
+      // Engine with the rule that names this resource already written — the reader reads
+      // it and saves. Nothing about the record changes; what changes is where the create
+      // finishes (../applications/panels/RulesEngine.vue reads the two markers).
+      const host = resolveHostChoice(applicationBindingSpec.value?.host, applicationChoice.value)
+
+      if (host) {
+        const created = { id, name }
+        // WHAT HAPPENS NEXT, and it is not the same sentence for all of them: three of
+        // these land on a rule the reader still has to save, and a firewall lands on its
+        // own empty engine because nothing calls a firewall.
+        const writesRule = bindingWritesRule(props.resource)
+        toast.success(`${name} created.`, {
+          description: host.created
+            ? `${host.name} was created for it. Save the rule to start using it.`
+            : writesRule
+              ? `Save the rule to start using it on ${host.name}.`
+              : `It runs in front of ${host.name}.`
+        })
+        commit()
+        const target = applicationBindingSpec.value.destination({ host, record: created })
+        router.push({ path: target.path, query: { email: userEmail.value, ...target.query } })
+        return
+      }
 
       // The success toast CARRIES THE RESOURCE: it names what was created and its
       // action opens THE RECORD, which is the whole reason someone reads a success
@@ -316,7 +409,28 @@
 </script>
 
 <template>
+  <!-- THE GATE IS THE FIRST SCREEN for a resource the API leaves inert without a host
+       (../../lib/data/create-bindings.js) — the question that decides where this create
+       ends, asked before the form rather than under it. -->
+  <ApplicationGate
+    v-if="gateOpen && applicationBindingSpec"
+    :title="spec.title"
+    :icon="spec.icon"
+    :noun="hostSpec.noun"
+    :host-icon="hostSpec.icon"
+    :can-create="hostSpec.canCreate"
+    :empty-label="hostSpec.emptyLabel"
+    :options="hostChoices"
+    :breadcrumb="[{ label: originLabel, href: originPath }, { label: spec.title }]"
+    :back-label="`Back to ${originLabel}`"
+    @choose="onGateChoose"
+    @skip="onGateSkip"
+    @empty-action="goToHostCreate"
+    @back="cancel"
+  />
+
   <CreatePage
+    v-else
     :breadcrumb="[{ label: originLabel, href: originPath }, { label: spec.title }]"
     :back-label="`Back to ${originLabel}`"
     :title="spec.title"
@@ -327,6 +441,15 @@
     @cancel="cancel"
     @submit="submit"
   >
+    <ApplicationBindingSummary
+      v-if="applicationBindingSpec"
+      :binding="applicationBindingSpec"
+      :host="hostSpec"
+      :application="boundApplicationName"
+      :disabled="submitting"
+      @change="gateOpen = true"
+    />
+
     <!-- One band per section the spec asks for right now, its guidance carried as the
          Hint beside the title rather than as a paragraph the reader has to cross to
          reach the controls. `divided` is off throughout: the cards already draw those

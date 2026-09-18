@@ -52,6 +52,7 @@
   } from '../../lib/data/certificates'
   import { createResourcePath, resourceSettingsPath } from '../../lib/data/create-resources'
   import { productFirstUse } from '../../lib/data/product-empty-states'
+  import { createdRowsFor, removeCreatedResource } from '../../lib/state/created-resources'
   import { useSampleMode } from '../../lib/state/sample-mode'
   import { tenancyRows } from '../../lib/state/tenancy-scope'
 
@@ -63,7 +64,12 @@
 
   // This page holds its own copy of the seed because it deletes rows; mutating the
   // shared array would leak that into every surface reading it.
-  const certificates = ref([...CERTIFICATES])
+  // WHAT THIS SESSION MADE, THEN THE SEED. A resource created on the module's create
+  // page is stored as the answers the reader gave and derived back into a row by this
+  // module's own row builder (../../lib/state/created-resources.js), so it arrives here
+  // indistinguishable from a seeded one — newest first, which is where a reader looks
+  // for the thing they just made.
+  const certificates = ref([...createdRowsFor('certificates'), ...CERTIFICATES])
 
   // A certificate belongs to one place in the tenancy chain, so the seed is projected
   // through the organization / account / workspace in force (src/lib/tenancy-scope.js).
@@ -179,6 +185,8 @@
   const confirmDelete = () => {
     const row = pendingDelete.value
     if (!row) return
+    // Out of the store as well, or the next mount seeds it back in.
+    removeCreatedResource('certificates', row.id)
     certificates.value = certificates.value.filter((item) => item.id !== row.id)
     toast.success(`${row.name} deleted.`)
     pendingDelete.value = null
@@ -395,6 +403,23 @@
                       :value="value"
                       resource="certificate"
                     />
+                  </template>
+
+                  <!-- SUBJECT, ISSUER AND EXPIRY ARE PARSED OUT OF THE PEM by the
+                       platform, so a certificate uploaded in this session has none of
+                       them yet. Three blank cells read as a broken row; an em dash reads
+                       as the absence it is, which is what every other cell in this console
+                       does for a value its record does not claim. -->
+                  <template #cell-subject="{ value }">
+                    <span class="min-w-0 truncate">{{ value || '—' }}</span>
+                  </template>
+
+                  <template #cell-issuer="{ value }">
+                    <span class="min-w-0 truncate">{{ value || '—' }}</span>
+                  </template>
+
+                  <template #cell-expires="{ value }">
+                    <span class="min-w-0 truncate">{{ value || '—' }}</span>
                   </template>
 
                   <template #cell-status="{ value }">

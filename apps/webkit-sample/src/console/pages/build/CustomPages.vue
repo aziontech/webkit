@@ -48,6 +48,7 @@
   import { createResourcePath, resourceSettingsPath } from '../../lib/data/create-resources'
   import { CUSTOM_PAGES } from '../../lib/data/custom-pages'
   import { productFirstUse } from '../../lib/data/product-empty-states'
+  import { createdRowsFor, removeCreatedResource } from '../../lib/state/created-resources'
   import { useSampleMode } from '../../lib/state/sample-mode'
   import { tenancyRows } from '../../lib/state/tenancy-scope'
 
@@ -59,7 +60,12 @@
 
   // This page holds its own copy of the seed because it deletes rows; mutating the
   // shared array would leak that into every surface reading it.
-  const pages = ref([...CUSTOM_PAGES])
+  // WHAT THIS SESSION MADE, THEN THE SEED. A resource created on the module's create
+  // page is stored as the answers the reader gave and derived back into a row by this
+  // module's own row builder (../../lib/state/created-resources.js), so it arrives here
+  // indistinguishable from a seeded one — newest first, which is where a reader looks
+  // for the thing they just made.
+  const pages = ref([...createdRowsFor('custom-pages'), ...CUSTOM_PAGES])
 
   // A custom page belongs to one place in the tenancy chain, so the seed is projected
   // through the organization / account / workspace in force (src/lib/tenancy-scope.js).
@@ -164,6 +170,8 @@
   const confirmDelete = () => {
     const row = pendingDelete.value
     if (!row) return
+    // Out of the store as well, or the next mount seeds it back in.
+    removeCreatedResource('custom-pages', row.id)
     pages.value = pages.value.filter((item) => item.id !== row.id)
     toast.success(`${row.name} deleted.`)
     pendingDelete.value = null

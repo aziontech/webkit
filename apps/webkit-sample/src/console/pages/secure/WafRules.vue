@@ -48,6 +48,7 @@
   import { createResourcePath } from '../../lib/data/create-resources'
   import { productFirstUse } from '../../lib/data/product-empty-states'
   import { WAF_MODES, WAF_RULES } from '../../lib/data/waf-rules'
+  import { createdRowsFor, removeCreatedResource } from '../../lib/state/created-resources'
   import { useSampleMode } from '../../lib/state/sample-mode'
   import { tenancyRows } from '../../lib/state/tenancy-scope'
 
@@ -59,7 +60,12 @@
 
   // This page holds its own copy of the seed because it deletes rows; mutating the
   // shared array would leak that into every surface reading it.
-  const ruleSets = ref([...WAF_RULES])
+  // WHAT THIS SESSION MADE, THEN THE SEED. A resource created on the module's create
+  // page is stored as the answers the reader gave and derived back into a row by this
+  // module's own row builder (../../lib/state/created-resources.js), so it arrives here
+  // indistinguishable from a seeded one — newest first, which is where a reader looks
+  // for the thing they just made.
+  const ruleSets = ref([...createdRowsFor('waf-rules'), ...WAF_RULES])
 
   // A rule set belongs to one place in the tenancy chain, so the seed is projected
   // through the organization / account / workspace in force (src/lib/tenancy-scope.js).
@@ -180,6 +186,8 @@
   const confirmDelete = () => {
     const row = pendingDelete.value
     if (!row) return
+    // Out of the store as well, or the next mount seeds it back in.
+    removeCreatedResource('waf-rules', row.id)
     ruleSets.value = ruleSets.value.filter((item) => item.id !== row.id)
     toast.success(`${row.name} deleted.`)
     pendingDelete.value = null

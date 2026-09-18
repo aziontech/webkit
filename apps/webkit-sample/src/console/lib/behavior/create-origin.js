@@ -5,22 +5,23 @@
 //
 //   THE MODULE'S OWN LIST — the default, and what the flow assumes when nothing says
 //     otherwise. Its own Create button is right there, so back means the list.
-//   THE CREATION CENTER — the screen that lists every way in (`/create`). A reader who
-//     picked "Workload" out of that rail did not come from the Workloads list and has
-//     probably never seen it; dropping them there afterwards is a page they did not ask
-//     for, and it silently loses the index they were working from.
+//   A SCREEN THAT SENT THEM — Overview's first-use card sends its own pinned address
+//     (`from=/home-empty-state`), so a create started there returns to the version of
+//     Overview that opened it rather than to a list the reader has never seen.
 //
 // So the ORIGIN travels in `?from=`, and the flow's chrome reads it: the breadcrumb's first
 // crumb, the header's back button, Cancel, and the navigation that follows a successful
 // create all point at the place the reader actually came from. Nothing else about the flow
 // changes — it is the same page at the same URL either way, which is the whole reason it
-// stayed a page instead of being embedded in the pane it was opened from.
+// stayed a page instead of being embedded in the screen it was opened from.
 //
-// `?from=` PREDATES THIS and keeps working exactly as it did: Overview's first-use card
-// already sends its own pinned address (`from=/home-empty-state`) so a create started there
-// returns to the version of Overview that opened it. Only the LABEL is new, and only for the
-// Creation Center — the one origin whose name we know. Everything else keeps the module's
-// own label, which is what those callers were already showing.
+// The LABEL is the origin's name, and a caller that HAS one sends it in `?fromLabel=` —
+// a workload sends its own name, so a firewall created from its topology is framed by
+// the workload the reader is still working in rather than by the module list they never
+// opened. One origin carries a name we know without being told: the Creation Center,
+// whose rail of resource rows is archived (../../pages/resources/archive/) and would send
+// `from=/create` again if it were remounted. Everything else that sends no label keeps the
+// module's own, which is what they were already showing.
 import { computed, toValue } from 'vue'
 import { useRoute } from 'vue-router'
 
@@ -34,7 +35,8 @@ export const CREATION_CENTER_LABEL = 'Creation Center'
  * @param {string | (() => string)} fallbackPath where to go when nothing sent an origin —
  *   the module's own list. A getter, for a flow whose module is decided by a prop
  *   (the generated create page serves ten of them).
- * @param {string | (() => string)} fallbackLabel that list's name, same shape.
+ * @param {string | (() => string)} fallbackLabel that list's name, same shape. Used unless
+ *   the origin sent a name of its own in `?fromLabel=`.
  * @returns {{ path: import('vue').ComputedRef<string>, label: import('vue').ComputedRef<string> }}
  */
 export function useCreateOrigin(fallbackPath, fallbackLabel) {
@@ -46,10 +48,17 @@ export function useCreateOrigin(fallbackPath, fallbackLabel) {
     typeof route.query.from === 'string' ? route.query.from.split('?')[0] : ''
   )
 
+  // Only read when an origin was actually sent: a label pointing at the module's own list
+  // would name it something the list never calls itself.
+  const fromLabel = computed(() =>
+    from.value && typeof route.query.fromLabel === 'string' ? route.query.fromLabel.trim() : ''
+  )
+
   return {
     path: computed(() => from.value || toValue(fallbackPath)),
-    label: computed(() =>
-      from.value === CREATION_CENTER_PATH ? CREATION_CENTER_LABEL : toValue(fallbackLabel)
-    )
+    label: computed(() => {
+      if (from.value === CREATION_CENTER_PATH) return CREATION_CENTER_LABEL
+      return fromLabel.value || toValue(fallbackLabel)
+    })
   }
 }

@@ -106,7 +106,21 @@ export const CONNECTORS = [
     status: 'Active',
     modifiedAt: daysAgo(27)
   }
-].map((connector, index) => {
+].map(connectorRow)
+
+/**
+ * A connector as a LIST ROW — the record itself plus the fields its table displays.
+ *
+ * Exported because the seed is not the only source of rows any more: a connector created
+ * in this session is stored as the answers the reader gave (../state/created-resources.js)
+ * and has to arrive in the list as the SAME row, derived fields and all. Two projections
+ * would be two lists that disagree about what a row is.
+ *
+ * @param {object} connector The base record.
+ * @param {number} [index] Position in the seed — picks the round-robin author.
+ * @returns {object} The row.
+ */
+export function connectorRow(connector, index = 0) {
   const person = authorAt(index)
   return {
     ...connector,
@@ -116,7 +130,7 @@ export const CONNECTORS = [
     authorAvatar: person.avatar,
     lastModified: formatListDate(connector.modifiedAt)
   }
-})
+}
 
 /** A seeded connector by id, or `undefined`. */
 export const connectorById = (id) => CONNECTORS.find((connector) => connector.id === String(id))

@@ -126,7 +126,21 @@ export const WAF_RULES = [
     status: 'Active',
     modifiedAt: daysAgo(1)
   }
-].map((ruleSet, index) => {
+].map(wafRuleRow)
+
+/**
+ * A WAF rule set as a LIST ROW — the record itself plus the fields its table displays.
+ *
+ * Exported because the seed is not the only source of rows any more: a rule set created
+ * in this session is stored as the answers the reader gave (../state/created-resources.js)
+ * and has to arrive in the list as the SAME row, derived fields and all. Two projections
+ * would be two lists that disagree about what a row is.
+ *
+ * @param {object} ruleSet The base record.
+ * @param {number} [index] Position in the seed — picks the round-robin author.
+ * @returns {object} The row.
+ */
+export function wafRuleRow(ruleSet, index = 0) {
   const person = authorAt(index)
   return {
     ...ruleSet,
@@ -136,7 +150,7 @@ export const WAF_RULES = [
     authorAvatar: person.avatar,
     lastModified: formatListDate(ruleSet.modifiedAt)
   }
-})
+}
 
 /** A seeded rule set by id, or `undefined`. */
 export const wafRuleById = (id) => WAF_RULES.find((ruleSet) => ruleSet.id === String(id))

@@ -29,7 +29,8 @@
     // navigation, not the page's heading, so the content still opens with the
     // heading that names it. Do not "de-duplicate" it against the tab label.
     title: { type: String, default: '' },
-    // Optional supporting line under the title.
+    // Optional supporting line under the title. The `description` slot renders in the
+    // same place, for copy that carries markup.
     description: { type: String, default: '' },
     // Title scale: 'medium' on a FIRST-LEVEL LIST page — one the sidebar routes
     // to directly (Applications, Workloads, Edge DNS, Object Storage, SQL
@@ -86,7 +87,7 @@
        title gets the full width and the action gets its own row under it. -->
   <header class="flex flex-col gap-(--spacing-md) md:flex-row md:items-start md:justify-between">
     <div
-      v-if="title || description"
+      v-if="title || description || $slots.description"
       class="flex min-w-0 flex-col gap-(--spacing-xxs)"
     >
       <!-- The title row. `title-suffix` is for an affordance that belongs to the
@@ -107,10 +108,10 @@
         <slot name="title-suffix" />
       </div>
       <p
-        v-if="description"
+        v-if="description || $slots.description"
         class="text-pretty text-body-sm text-(--text-muted)"
       >
-        {{ description }}
+        <slot name="description">{{ description }}</slot>
       </p>
     </div>
     <!-- `actions` is the PAGE's action — the module's create button, first of all —
