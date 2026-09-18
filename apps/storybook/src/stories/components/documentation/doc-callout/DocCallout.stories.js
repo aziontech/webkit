@@ -14,7 +14,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "The admonition a documentation page interrupts itself with, rendered on the webkit Message surface so the severity colour, border, icon and radius come from the design system. The anatomy is a glyph and one row of inline prose — there is no title row and no `title` prop, because the name repeated what the glyph and the tint already say and pushed the sentence the reader came for further down the box. One kind carries no severity: `tip` takes the page's own surface and rule and spends its whole emphasis on the glyph, in `--primary`."
+          "The admonition a documentation page interrupts itself with, rendered on the webkit Message surface so the severity colour, border, icon and radius come from the design system. The anatomy is a glyph and a column of prose — a sentence, or a few short paragraphs and a list — and there is no title row and no `title` prop, because the name repeated what the glyph and the tint already say and pushed the sentence the reader came for further down the box. One kind carries no severity: `tip` takes the page's own surface and rule and spends its whole emphasis on the glyph, in `--primary`."
       },
       canvas: { sourceState: 'shown' }
     }
@@ -35,7 +35,8 @@ const meta = {
       table: { type: { summary: 'string' }, defaultValue: { summary: "''" } }
     },
     default: {
-      description: 'The callout copy: inline prose, links and inline code.',
+      description:
+        'The callout copy: prose with links and inline code, or paragraphs and a list, laid out by the callout since DocProse stops at its edge.',
       table: { type: { summary: 'slot' } }
     }
   },
@@ -72,6 +73,28 @@ const KINDS_TEMPLATE = `<div class="flex flex-col gap-(--spacing-md)">
   <DocCallout kind="warning">Changing the preset rebuilds every function in the workload.</DocCallout>
   <DocCallout kind="danger">Deleting a workload releases its domain and cannot be undone.</DocCallout>
 </div>`
+
+const PROSE_MARKUP = `<DocCallout kind="warning">
+  <p>Certificates cross-signed by the retired root stop validating on older devices. It will be necessary to take the following actions:</p>
+  <ul>
+    <li><strong>Certificates on the retired chain</strong>: migrate to the new chain or to an Azion certificate.</li>
+    <li><strong>Other certificates</strong>: no action needed; they are unaffected.</li>
+  </ul>
+</DocCallout>`
+
+export const Prose = {
+  render: () => ({ components: { DocCallout }, template: PROSE_MARKUP }),
+  parameters: {
+    controls: { disable: true },
+    docs: {
+      description: {
+        story:
+          'A paragraph followed by a list. The copy region is a flow container, so block markup arriving from a server render stays inside the box instead of being pushed beside it, and the callout lays out the rhythm itself because DocProse stops at its edge.'
+      },
+      source: { code: toSfc(IMPORT, PROSE_MARKUP) }
+    }
+  }
+}
 
 export const Kinds = {
   render: () => ({ components: { DocCallout }, template: KINDS_TEMPLATE }),
