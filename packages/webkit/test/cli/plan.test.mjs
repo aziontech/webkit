@@ -118,6 +118,10 @@ test('planInit wires the Tailwind + PostCSS pipeline and a CSS entry', () => {
     // Critically, it must register webkit's source so component classes compile — via the
     // package-name import (the @source ships inside webkit), never a ../node_modules path.
     assert.match(cssEntry.content, /@import '@aziontech\/webkit\/styles'/)
+    // Font smoothing ships in the consumer's own file, inside `@layer base`, so it stays
+    // overridable by their unlayered rules and is visible where they can edit it.
+    assert.match(cssEntry.content, /@layer base \{[\s\S]*-webkit-font-smoothing: antialiased;/)
+    assert.match(cssEntry.content, /-moz-osx-font-smoothing: grayscale;/)
     assert.doesNotMatch(
       cssEntry.content,
       /node_modules/,
