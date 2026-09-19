@@ -68,12 +68,14 @@ export const layoutsData = {
    *
    * This is THE STANDARD PAGE CONTAINER — the one measure a main page column takes
    * unless it has a reason not to, and the reason is always a narrower payload (a form,
-   * a hero, prose), never a wider one. It was 1620px (`7xl`) and is now 1388px (`6xl`),
-   * a single width for home, the overviews and every listing, in both their empty and
-   * populated states. `6xl` is the ladder's nearest slot to the 1300px the design review
-   * asked for; the ladder is an anchored geometric progression
-   * (primitives/shape/container.js), so it has no 1300 and does not get one for a page
-   * decision — the page snaps to the scale, the scale does not bend to the page.
+   * a hero, prose), never a wider one. It is 1620px (`7xl`): a single width for home,
+   * the overviews and every listing, in both their empty and populated states.
+   *
+   * A design review asked for ~1300px, which would be `6xl` (1388px) — the ladder is an
+   * anchored geometric progression (primitives/shape/container.js), so it has no 1300
+   * and does not get one for a page decision; the page snaps to the scale, the scale
+   * does not bend to the page. That narrowing is NOT in effect: the rung below is the
+   * value to change when it is, and this paragraph goes with it.
    *
    * FOCUSED pages are one task whose payload is still multi-column — a template deploy
    * hero, a running-deployment log, a release composer's review column — so they stay
@@ -101,7 +103,7 @@ export const layoutsData = {
    * read line by line (its home, a directory of cards) takes a wider measure: what picks
    * the column is the payload, never the URL.
    */
-  'layout-measure': 'var(--container-7xl)', // 1388px — the standard page container
+  'layout-measure': 'var(--container-7xl)', // 1620px — the standard page container
   'layout-measure-focused': 'var(--container-4xl)', // 1024px — single-task heroes
   'layout-measure-form': 'var(--container-4xl)', // 1024px — settings, forms
   'layout-measure-form-create': 'var(--container-5xl)', // 1192px — create flows
@@ -183,7 +185,7 @@ const COLUMN_MEASURE = {
  * app shell, on the scroll box OUTSIDE the capped block, so the measure lands as
  * CONTENT width. A page that carries the boundary ITSELF puts it on the same block as
  * the measure, and there `box-sizing: border-box` makes the cap swallow the inset:
- * 1388px of cap minus 24px a side is a 1340px content column, 48px narrower than the
+ * 1620px of cap minus 24px a side is a 1572px content column, 48px narrower than the
  * same measure gives a padded page. That is the measure describing something other
  * than content, which is the one job it has.
  *

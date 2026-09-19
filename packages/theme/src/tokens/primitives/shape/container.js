@@ -3,7 +3,7 @@
  *
  * The scale is anchored at both ends: `3xs` stays 256px (the narrowest useful
  * field/rail width) and `7xl` is 1620px (the widest container in the system —
- * a full-bleed hero or marketing band; the standard page measure is `6xl`). The eleven
+ * a full-bleed hero or marketing band, and the standard page measure). The eleven
  * slots between them are `256 × r^n` with r = (1620 / 256)^(1/12) ≈ 1.1662 —
  * so every neighbouring pair sits at the same ~+16.6% apart and the whole set
  * reads as one progression instead of two grids spliced together (the previous
