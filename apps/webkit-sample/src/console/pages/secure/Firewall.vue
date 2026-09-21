@@ -417,6 +417,7 @@
                       :label="value"
                       :severity="environmentSeverity(value)"
                       size="medium"
+                      rounded
                     />
                   </template>
 

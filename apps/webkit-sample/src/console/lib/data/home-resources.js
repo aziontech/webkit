@@ -34,8 +34,8 @@
 //
 // Never both. A line has one destination or none, and string-sniffing in the template
 // ("does it contain a dot?") is exactly the guess this pair exists to remove.
-import { APPLICATIONS } from '@shared/lib/applications'
-import { WORKLOADS } from '@shared/lib/workloads'
+import { APPLICATIONS } from './applications'
+import { WORKLOADS } from './workloads'
 
 import { FUNCTIONS, runtimeOf } from './functions'
 

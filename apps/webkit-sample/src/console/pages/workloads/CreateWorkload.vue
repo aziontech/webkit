@@ -59,7 +59,7 @@
   import CardBox from '@aziontech/webkit/card-box'
   import Item from '@aziontech/webkit/item'
   import { toast } from '@aziontech/webkit/toast'
-  import { provisionDeployment, resourceChain } from '@shared/lib/provisioning'
+  import { provisionDeployment, resourceChain } from '../../lib/data/provisioning'
   import { computed, reactive, ref } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
@@ -76,6 +76,11 @@
   } from '../../lib/data/application-scratch'
   import { connectorMeta } from '../../lib/data/connectors'
   import {
+    bindingPolicyLabel,
+    deploymentPolicyLabel,
+    strategyById
+  } from '../../lib/data/deployment-strategies'
+  import {
     defaultResourceBinding,
     resourceBindingIsExisting,
     resourceBindingName
@@ -87,6 +92,7 @@
     workloadNamesFromForm
   } from '../../lib/data/workload-flows'
   import { workloadProvisioningSteps } from '../../lib/data/workload-provisioning'
+  import { settingsIdsForWorkload } from '../../lib/state/workload-settings'
   import DeploySuccess from '../applications/wizard/DeploySuccess.vue'
   import ApplicationStep from './wizard/ApplicationStep.vue'
   import BindingStep from './wizard/BindingStep.vue'
@@ -343,9 +349,50 @@
 
   // --- The run and its outcome ---------------------------------------------
   const provisioned = ref(null)
-  const createdResources = computed(() =>
-    provisioned.value ? resourceChain(provisioned.value) : []
-  )
+
+  // THE CHAIN, PLUS THE DEPLOYMENT SETTING THE WORKLOAD WAS CREATED WITH.
+  //
+  // `resourceChain` builds the shared half — workload, firewall, application, connector,
+  // bucket. The Deployment setting is not in it because it is made by the console's own
+  // binding store when the workload appears
+  // (../../lib/state/workload-settings.js), not by the provisioning record.
+  //
+  // It belongs on this screen all the same: it is a record this create made, it is what
+  // every future deploy of this workload will apply, and a reader who never sees it
+  // created is a reader who later finds a setting they do not remember authoring. It
+  // sits directly after the workload, because it belongs to it and to nothing else —
+  // which is also the fact worth reading here: one workload, one setting, nothing else
+  // affected until someone shares it.
+  const settingsNode = () => {
+    const workload = provisioned.value?.workload
+    if (!workload) return null
+    const setting = strategyById(settingsIdsForWorkload(workload.id)[0])
+    if (!setting) return null
+    return {
+      key: 'deployment-settings',
+      kind: 'Deployment Setting',
+      icon: 'ai ai-deploy-pillar',
+      name: setting.name,
+      status: setting.status,
+      href: '/account/build-deployment',
+      reference: setting.id,
+      fields: [
+        { label: 'Reach', value: 'This workload only' },
+        { label: 'Binding policy', value: bindingPolicyLabel(setting.bindingPolicy) },
+        { label: 'Deployment policy', value: deploymentPolicyLabel(setting.deploymentPolicy) }
+      ]
+    }
+  }
+
+  const createdResources = computed(() => {
+    if (!provisioned.value) return []
+    const chain = resourceChain(provisioned.value)
+    const settings = settingsNode()
+    if (!settings) return chain
+    const at = chain.findIndex((node) => node.key === 'workload')
+    if (at === -1) return [...chain, settings]
+    return [...chain.slice(0, at + 1), settings, ...chain.slice(at + 1)]
+  })
 
   // THE CONNECTOR AND THE CACHE SETTINGS THE READER CONFIGURED — the create branch only,
   // because it is the only branch that makes an application to configure. Bound to an

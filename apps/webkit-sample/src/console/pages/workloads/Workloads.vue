@@ -26,8 +26,8 @@
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { provisionedWorkloads, removeDeployment } from '@shared/lib/provisioning'
-  import { WORKLOADS } from '@shared/lib/workloads'
+  import { provisionedWorkloads, removeDeployment } from '../../lib/data/provisioning'
+  import { WORKLOADS } from '../../lib/data/workloads'
   import { computed, ref } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
@@ -45,6 +45,7 @@
   import ControlsHeader from '../../components/page/ControlsHeader.vue'
   import HeadingAction from '../../components/page/HeadingAction.vue'
   import PageHeading from '../../components/page/PageHeading.vue'
+  import ResourceLink from '../../components/resource/ResourceLink.vue'
   import AppLayout from '../../components/shell/AppLayout.vue'
   import { DATE_PRESETS, formatDateRange, matchDate } from '../../lib/behavior/filter-bar'
   import { useListFilters } from '../../lib/behavior/list-state'
@@ -415,19 +416,10 @@
                         class="ai ai-domains shrink-0 text-[1.15em] text-(--text-muted)"
                         aria-hidden="true"
                       />
-                      <a
+                      <ResourceLink
+                        :label="value"
                         :href="`https://${value}`"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="flex min-w-0 items-center gap-(--spacing-xxs) hover:underline"
-                        @click.stop
-                      >
-                        <span class="truncate">{{ value }}</span>
-                        <i
-                          class="pi pi-arrow-up-right shrink-0 text-(--text-muted)"
-                          aria-hidden="true"
-                        />
-                      </a>
+                      />
                       <DomainOverflowPopover
                         v-if="row.domainCount"
                         :domains="row.domains"

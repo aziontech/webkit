@@ -28,7 +28,7 @@
 // appended to the success log, which would leave a "successfully" line sitting above the
 // error that contradicts it.
 
-import { AZION_DOMAIN_SUFFIX } from '@shared/lib/provisioning'
+import { AZION_DOMAIN_SUFFIX } from './provisioning'
 
 // The suffix every Azion-provided workload domain carries. It lives in the shared
 // provisioning module because the CHAIN mints domains too (a template deploy is given one

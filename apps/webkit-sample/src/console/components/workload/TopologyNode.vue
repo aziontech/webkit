@@ -15,17 +15,16 @@
   // property of the page, not of the card. Today it opens none of them, which is
   // what lets the diagram itself arrive expanded.
   //
-  // The header therefore has to IDENTIFY the node on its own, so it keeps
-  // everything that was readable at a glance before the body could close: the kind
-  // as the eyebrow (the node's place in the chain) with the status on that same
-  // line, and the resource's own name below it. A node that is an open SLOT has no
-  // name, so its header is the eyebrow line alone — which is also what makes an
-  // unfilled slot legible while collapsed.
+  // A COLLAPSED NODE STILL ANSWERS THE TWO QUESTIONS THE DIAGRAM IS READ FOR, so
+  // only the node's FIELDS sit behind the disclosure. Above it are two rows that
+  // never collapse: the header, which is the kind (the node's place in the chain)
+  // with its status on the same line, and the identity row under it, which names
+  // the resource and carries whatever can be done to it.
   //
   // The trigger is a real <button> spanning the whole header (`aria-expanded` +
   // `aria-controls`), so nothing interactive may live inside it — a nested button
-  // or anchor is invalid and unreachable. A node's ACTIONS (open its module page,
-  // unbind the slot) belong to the body, which is where the platform puts them.
+  // or anchor is invalid and unreachable. That is why the name (a link out to the
+  // resource) and the controls are a row of their own rather than part of it.
   import FlowAnchor from '@aziontech/webkit/flow-anchor'
   import Tag from '@aziontech/webkit/tag'
   import { computed, useId } from 'vue'
@@ -106,47 +105,49 @@
         :aria-expanded="open"
         :aria-controls="bodyId"
         :data-state="open ? 'open' : 'closed'"
-        class="group flex w-full items-center gap-(--spacing-sm) rounded-t-(--shape-card) px-(--spacing-md) py-(--spacing-sm) text-left outline-none transition-colors duration-150 ease-out hover:bg-(--bg-hover) focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset motion-reduce:transition-none data-[state=closed]:rounded-b-(--shape-card)"
+        class="group flex w-full items-center gap-(--spacing-xxs) rounded-t-(--shape-card) px-(--spacing-md) pt-(--spacing-sm) pb-(--spacing-xxs) text-left outline-none transition-colors duration-150 ease-out hover:bg-(--bg-hover) focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset motion-reduce:transition-none"
         @click="open = !open"
       >
-        <span class="flex min-w-0 flex-1 flex-col gap-(--spacing-xxs)">
-          <!-- Eyebrow: what this node is, and how it is doing. The status keeps
-               the right edge it had when the whole card was open. -->
-          <span class="flex items-center gap-(--spacing-xs)">
-            <i
-              :class="icon"
-              class="shrink-0 text-[12px] leading-none text-(--text-muted)"
-              aria-hidden="true"
-            />
-            <span class="truncate text-label-sm text-(--text-muted)">{{ kind }}</span>
-            <Tag
-              class="ml-auto shrink-0"
-              :severity="tagSeverity"
-              :label="status"
-              size="small"
-            />
-          </span>
-          <!-- Identity: the resource's own name, truncated rather than wrapped so
-               a long name cannot change the node's height and re-route the
-               diagram's connectors. Absent on an open slot.
-
-               `label-sm` (12px), not `label-md`: a node column is ~230px, so the whole
-               chain is read at a glance rather than sentence by sentence — the header
-               earns compactness more than it earns weight. Its muted `kind` eyebrow is
-               the same size, which is what makes the two lines read as one block. -->
-          <span
-            v-if="name"
-            class="truncate text-label-sm text-(--text-default)"
-          >
-            {{ name }}
-          </span>
-        </span>
+        <i
+          :class="icon"
+          class="shrink-0 text-[12px] leading-none text-(--text-muted)"
+          aria-hidden="true"
+        />
+        <span class="truncate text-label-sm text-(--text-muted)">{{ kind }}</span>
+        <Tag
+          class="ml-auto shrink-0"
+          :severity="tagSeverity"
+          :label="status"
+          size="small"
+        />
         <i
           class="pi pi-chevron-down shrink-0 text-(--text-muted) transition-transform duration-150 ease-out group-data-[state=open]:rotate-180 motion-reduce:transition-none"
           aria-hidden="true"
         />
       </button>
     </FlowAnchor>
+
+    <!-- IDENTITY ROW — what this node holds and what can be done to it, outside the
+         disclosure. It stays visible while the node is collapsed because those are the
+         two things a reader looks for on a diagram: which resource is in this position,
+         and how to change it. Keeping it out of the trigger is also what makes the
+         controls legal markup: the header is one full-width button, and a link or a
+         button nested inside it is invalid and unreachable by keyboard.
+
+         `identity` falls back to the plain name, truncated rather than wrapped so a long
+         one cannot change the node's height and re-route the diagram's connectors; an
+         open slot has none and renders the em dash. -->
+    <div class="flex min-w-0 items-center gap-(--spacing-xs) px-(--spacing-md) pb-(--spacing-sm)">
+      <slot name="identity">
+        <span class="min-w-0 truncate text-label-sm text-(--text-default)">{{ name || '—' }}</span>
+      </slot>
+      <div
+        v-if="$slots.actions"
+        class="ml-auto flex shrink-0 items-center"
+      >
+        <slot name="actions" />
+      </div>
+    </div>
 
     <!-- The collapse is CSS-only: a one-row grid animated from `0fr` to `1fr`, so
          the body's own height is what it opens to and nothing has to be measured

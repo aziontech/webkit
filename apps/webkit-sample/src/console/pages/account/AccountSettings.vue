@@ -8,7 +8,7 @@
   // `/account/billing`, …). The categories used to be a `PageTabs` bar switched by
   // `?tab=`; they are now rows in the sidebar's Settings level, and the rail is the
   // navigation. Two second-level navigations for one module (a rail level AND a tab
-  // bar under it) made the same six destinations exist twice, in two different
+  // bar under it) made the same destinations exist twice, in two different
   // orders, with only one of them reachable from anywhere else in the console.
   //
   // Each category is a SELF-CONTAINED view under src/views/account/ that owns its
@@ -17,7 +17,7 @@
   // the sidebar row that reads as active, and the breadcrumb.
   //
   // LAYOUT — measure per page: "Account Settings" is a stacked form on
-  // `.layout-column-form`; the other five are tables on the data measure
+  // `.layout-column-form`; the rest are tables on the data measure
   // `.layout-column` (see src/styles/layout.css). Each view applies
   // `.layout-boundary` itself, because the boundary belongs inside the view's own
   // scroll container.
@@ -38,17 +38,38 @@
   import AppLayout from '../../components/shell/AppLayout.vue'
   import ActivityHistory from './panels/ActivityHistory.vue'
   import Billing from './panels/Billing.vue'
+  import BuildDeployment from './panels/BuildDeployment.vue'
   import Credentials from './panels/Credentials.vue'
+  import Environments from './panels/Environments.vue'
   import Settings from './panels/Settings.vue'
   import TeamsPermissions from './panels/TeamsPermissions.vue'
   import UsersManagement from './panels/UsersManagement.vue'
 
-  // The six categories, keyed by the route that addresses each one. `id` is the
+  // The eight categories, keyed by the route that addresses each one. `id` is the
   // sidebar row the page marks active — the same ids the Settings level declares in
   // AppSidebar, so the rail highlights the page you are on without a second mapping.
   // `label` is the page's crumb; the view carries its own heading.
   const SETTINGS_PAGES = {
     '/account': { id: 'settings-general', label: 'General', component: Settings },
+    // Build & Deployment holds the account's DEPLOYMENT SETTINGS — the reusable
+    // strategy half of a deployment, authored once and applied by deployments started
+    // from any resource. It was a second tab of the Deployments module, beside the
+    // history of what had shipped; a deployment belongs to one workload, a strategy
+    // belongs to the account, so the two are not siblings and the module now lists
+    // workload deployments only.
+    '/account/build-deployment': {
+      id: 'settings-build-deployment',
+      label: 'Build & Deployment',
+      component: BuildDeployment
+    },
+    // Environments sit beside Build & Deployment because the two are one decision read
+    // from two ends: an environment declares its deployment policy, a Deployment Setting
+    // carries the same field, and matching them is what links the two.
+    '/account/environments': {
+      id: 'settings-environments',
+      label: 'Environments',
+      component: Environments
+    },
     '/account/users': {
       id: 'settings-users',
       label: 'Users management',

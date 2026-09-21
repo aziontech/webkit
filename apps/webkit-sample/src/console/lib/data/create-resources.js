@@ -1,3 +1,6 @@
+import { environmentNameOptions } from './environments'
+import { allWorkloads } from '../state/workload-settings'
+
 // Create flows, per first-level resource — the FIELDS, taken from the Azion API.
 //
 // Every first-level module in the sidebar can create its own resource, and until now
@@ -186,31 +189,24 @@ const CUSTOM_PAGE_CODES = [
   '505'
 ]
 
-// The sample's existing resources, offered where a create flow has to point at one. A
-// real console reads these from the API; the prototype holds the same three names the
-// rest of the sample uses so a created resource can be pointed at something real.
-const SAMPLE_WORKLOADS = [
-  { value: 'my-workload', label: 'my-workload' },
-  { value: 'storefront', label: 'storefront' },
-  { value: 'api-gateway', label: 'api-gateway' }
-]
-
-// The environments a DOMAIN can answer in. Two, not the three ../lib/deployments.js
-// filters by: Preview is where a deployment lands before it is promoted, addressed by
-// the preview hostname the platform mints per deployment — a name the reader owns is
-// never bound to it. Production and Stage are the two a domain is pointed at, and they
-// are the same two the Add Domain drawer offers from the workload side
-// (../components/ui/AddDomainDrawer.vue), so the two surfaces cannot disagree.
-export const ENVIRONMENT_OPTIONS = [
-  { value: 'Production', label: 'Production' },
-  { value: 'Stage', label: 'Stage' }
-]
-
+// THE ENVIRONMENTS A DOMAIN CAN ANSWER IN are the account's own
+// (./environments.js), read live rather than listed here.
+//
+// They were a hardcoded `Production | Stage` pair, on the reasoning that Preview is
+// reached by the per-deployment hostname the platform mints rather than by a name the
+// reader owns. That was a rule about ONE environment, written as a closed list of two —
+// so an environment authored on the Environments page could never be named by a domain,
+// and the environment record's whole point is that a domain names it
+// (../state/workload-settings.js). The list is the store now, and the same list the Add
+// Domain drawer offers from the workload side
+// (../../components/workload/AddEnvironmentDrawer.vue), so the two surfaces cannot
+// disagree.
+//
 // INFRASTRUCTURE_OPTIONS lived here and is gone. The workload create page asked which
 // network map a workload was minted on; the versioned create flow does not carry that
 // field at all — the environment a domain answers on decides where it is served, and
-// that is asked on the domain (ENVIRONMENT_OPTIONS above). Nothing reads it now, so it
-// is not kept around as a descriptor a future page could pick up by accident.
+// that is asked on the domain. Nothing reads it now, so it is not kept around as a
+// descriptor a future page could pick up by accident.
 
 const SAMPLE_CONNECTORS = [
   { value: 'origin-http', label: 'origin-http' },
@@ -256,7 +252,8 @@ export const createResources = [
   // therefore like a required field, but a domain and the workload that serves it are
   // bound in two directions, and the OTHER direction is the one that already exists in
   // the console: a workload adds its domains from its own Domains section
-  // (../components/ui/AddDomainDrawer.vue). Making it required here would mean a reader
+  // (../../components/workload/AddEnvironmentDrawer.vue). Making it required here would
+  // mean a reader
   // who registers a name before deciding what serves it has to invent an answer, and an
   // invented binding is worse than an absent one — it points live traffic somewhere.
   // So the binding a domain owns by itself is its ENVIRONMENT, which it always has, and
@@ -313,10 +310,15 @@ export const createResources = [
             api: 'environment',
             label: 'Environment',
             required: true,
-            options: ENVIRONMENT_OPTIONS,
+            // A GETTER, not a value: the descriptors are module constants and the
+            // environments are a store, so the options have to be read when the field is
+            // rendered rather than frozen when this file is first loaded.
+            get options() {
+              return environmentNameOptions.value
+            },
             default: 'Production',
             helper:
-              'Production is the live name your users type. Stage answers the same workload with the same certificate, for the rehearsal.'
+              'The environment the domain answers on. Its deployment policy decides which Deployment Settings publish to it.'
           },
           {
             id: 'workload',
@@ -324,7 +326,19 @@ export const createResources = [
             api: 'workload_id',
             label: 'Workload',
             placeholder: 'Select a workload',
-            options: SAMPLE_WORKLOADS,
+            // A GETTER, for the same reason the Environment field above is one: the
+            // workloads are a store (seed plus whatever this session provisioned), and a
+            // list frozen when this module loads cannot contain a workload made since.
+            //
+            // It used to be three literal names — `my-workload`, `storefront`,
+            // `api-gateway` — that existed nowhere else in the console, so this Select
+            // offered three workloads no other screen had ever heard of.
+            get options() {
+              return allWorkloads.value.map((workload) => ({
+                value: workload.name,
+                label: workload.name
+              }))
+            },
             helper:
               'Optional. A workload binds its own domains from its Domains section, so a domain can be registered first and pointed at a workload later.'
           }

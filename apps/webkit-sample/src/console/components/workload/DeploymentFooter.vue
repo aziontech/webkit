@@ -43,10 +43,14 @@
   // ../../lib/data/releases.js). Create one in that drawer and it appears here; delete one
   // and it leaves. There is no fixture behind this file.
   import Accordion from '@aziontech/webkit/accordion'
+  import Message from '@aziontech/webkit/message'
+  import Tag from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed } from 'vue'
 
-  import { bindingPolicyLabel, versionPolicyLabel } from '../../lib/data/deployment-strategies'
+  import { bindingPolicyLabel, deploymentPolicyLabel } from '../../lib/data/deployment-strategies'
+  import { reachLabel } from '../../lib/state/workload-settings'
+  import StateMark from '../page/StateMark.vue'
 
   const props = defineProps({
     /**
@@ -61,7 +65,12 @@
     // card's own selector moves between.
     setting: { type: Object, default: null },
     /** Carried into the settings links so the demo keeps the signed-in email. */
-    email: { type: String, default: '' }
+    email: { type: String, default: '' },
+    /**
+     * The workload this footer belongs to. Used to name the OTHERS a shared setting
+     * reaches — "and 2 others" is the fact, but which two is the question that follows.
+     */
+    workloadId: { type: String, default: '' }
   })
 
   // One panel, so its value is a constant rather than a prop: nothing outside this file
@@ -72,22 +81,61 @@
   // own settings disclosure puts it: the record this deployment applied, by name.
   const settingsLabel = computed(() => props.setting?.name ?? '')
 
-  // WHAT THE PANEL REPORTS: the ROUTING POLICY, and only that — the same two fields
-  // the deployment page's own settings disclosure lists.
+  // ── WHAT THIS SETTING REACHES ────────────────────────────────────────────────
   //
-  // It used to report the whole record here: the name with its Active / Platform tags
-  // and environment chips, its description, the three resources it binds, and its type.
-  // That was a second full reading of a record whose home is the Deployments module —
-  // and the bindings in particular are already named by the topology on this very page.
-  // The row above links to the record; this says how the versions it publishes bind.
-  const policyFields = computed(() =>
-    props.setting
-      ? [
-          { label: 'Binding policy', value: bindingPolicyLabel(props.setting.bindingPolicy) },
-          { label: 'Version policy', value: versionPolicyLabel(props.setting.versionPolicy) }
-        ]
-      : []
+  // A workload is created with a Deployment setting of its own, so the ordinary answer
+  // here is "this workload, and nothing else" — and an ordinary answer does not need a
+  // badge. What needs one is the OTHER case: someone pointed a second workload at this
+  // setting, so deploying from this page now publishes to workloads that are not this
+  // one, and nothing else on the screen would say so.
+  //
+  // The count comes from the projection every surface shares
+  // (`deploymentSettings` in ../../lib/data/releases.js → ../../lib/state/workload-settings.js),
+  // so this badge, the account list's Workloads column and the release composer's warning
+  // can never report three different blast radii for one setting.
+  const shared = computed(() => Boolean(props.setting?.shared))
+
+  const reach = computed(() => reachLabel(props.setting?.workloadsCount ?? 0))
+
+  /** The workloads this setting reaches OTHER than the one being read. */
+  const otherWorkloads = computed(() =>
+    (props.setting?.workloads ?? [])
+      .filter((workload) => String(workload.id) !== String(props.workloadId))
+      .map((workload) => workload.name)
   )
+
+  // A SAFEGUARD FIELD: a filled mark and the word it illustrates.
+  //
+  // ENABLED / DISABLED, not On / Off — the word the platform uses for a switch, and the
+  // one the reference reads. `state` is what the mark is drawn from
+  // (../page/StateMark.vue); the word carries the meaning, so the mark is decoration.
+  const safeguard = (label, enabled) => ({
+    label,
+    value: enabled ? 'Enabled' : 'Disabled',
+    state: Boolean(enabled),
+    tone: enabled ? 'text-(--text-default)' : 'text-(--text-muted)'
+  })
+
+  // WHAT THE PANEL REPORTS: four facts at one length. The two policies name themselves;
+  // the two safeguards read On or Off and nothing more, in the disabled ink every absent
+  // value on this card uses.
+  const policyFields = computed(() => {
+    const setting = props.setting
+    if (!setting) return []
+    const canary = setting.strategyDefaults?.canary
+    const skew = setting.strategyDefaults?.skewProtection
+    return [
+      { label: 'Binding policy', value: bindingPolicyLabel(setting.bindingPolicy) },
+      { label: 'Deployment policy', value: deploymentPolicyLabel(setting.deploymentPolicy) },
+      // A yes/no field scanned in a row of four is read by SHAPE before it is read by
+      // word, which is why the mark is there at all.
+      //
+      // Disabled is a real answer, not an absent value, so it takes muted ink rather than
+      // the disabled ink this card uses for a field with nothing in it.
+      safeguard('Canary', canary?.enabled),
+      safeguard('Skew protection', skew?.enabled)
+    ]
+  })
 </script>
 
 <template>
@@ -127,6 +175,15 @@
         <Accordion.Trigger :level="3">
           <span class="flex min-h-12 flex-1 items-center gap-(--spacing-sm)">
             <span class="text-label-md text-(--text-default)">Deployment Settings</span>
+            <!-- ONLY WHEN IT IS SHARED. A workload publishing with its own setting is the
+                 default state; tagging that would put a badge on every workload in the
+                 console and teach the reader to stop seeing it. -->
+            <Tag
+              v-if="shared"
+              :label="`Shared · ${reach}`"
+              severity="warning"
+              size="medium"
+            />
           </span>
         </Accordion.Trigger>
 
@@ -145,10 +202,10 @@
         >
           <Tooltip
             class="pointer-events-auto"
-            :text="`Open ${settingsLabel} in Deployment Settings`"
+            :text="`Open ${settingsLabel} in Build & Deployment settings`"
           >
             <router-link
-              :to="{ path: '/deployments', query: { tab: 'settings', email } }"
+              :to="{ path: '/account/build-deployment', query: { email } }"
               class="group/link inline-flex min-w-0 items-center gap-(--spacing-xxs) text-body-sm text-(--text-default) no-underline"
             >
               <span class="truncate underline-offset-2 group-hover/link:underline">
@@ -171,8 +228,24 @@
              DeploymentSettingCard reports. The record's name is on the trigger row, and
              what it BINDS is the topology diagram further down this page: repeating the
              application, firewall and custom page here was the same three facts twice. -->
+        <!-- THE BLAST RADIUS, where someone can act on it. This page has a Deploy
+             action; a person using it is looking at ONE workload and about to publish to
+             several, which is the whole hazard of a shared setting. The Message names the
+             others rather than counting them, because "which ones" is the question that
+             decides whether they go ahead. -->
         <div
-          class="grid grid-cols-1 gap-(--spacing-lg) px-(--spacing-md) pt-(--spacing-xs) pb-(--spacing-md) sm:grid-cols-2 lg:grid-cols-3"
+          v-if="shared"
+          class="px-(--spacing-md) pt-(--spacing-xs)"
+        >
+          <Message
+            severity="warning"
+            size="small"
+            :label="`Deploying with this setting also publishes to ${otherWorkloads.join(', ')}.`"
+          />
+        </div>
+
+        <div
+          class="grid grid-cols-1 gap-(--spacing-lg) px-(--spacing-md) pt-(--spacing-xs) pb-(--spacing-md) sm:grid-cols-2 lg:grid-cols-4"
         >
           <div
             v-for="field in policyFields"
@@ -180,7 +253,20 @@
             class="flex min-w-0 flex-col gap-(--spacing-xxs)"
           >
             <span class="text-label-sm text-(--text-muted)">{{ field.label }}</span>
-            <span class="truncate text-body-sm text-(--text-default)">{{ field.value }}</span>
+            <span class="flex min-w-0 items-center gap-(--spacing-xxs)">
+              <!-- The mark is decoration: the word beside it carries the meaning, so a
+                   reader who cannot see it loses nothing (../page/StateMark.vue). -->
+              <StateMark
+                v-if="field.state !== undefined"
+                :enabled="field.state"
+              />
+              <span
+                class="truncate text-body-sm"
+                :class="field.tone ?? 'text-(--text-default)'"
+              >
+                {{ field.value }}
+              </span>
+            </span>
           </div>
         </div>
       </Accordion.Content>

@@ -10,7 +10,7 @@
   import Skeleton from '@aziontech/webkit/skeleton'
   import Switch from '@aziontech/webkit/switch'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { provisionDeployment, resourceChain } from '@shared/lib/provisioning'
+  import { provisionDeployment, resourceChain } from '../../lib/data/provisioning'
   import { computed, onBeforeUnmount, reactive, ref, watch } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
@@ -175,26 +175,17 @@
   })
   const repoPlaceholder = computed(() => (usesGit.value ? 'my-repository' : 'my-project'))
 
-  // THE UPLOAD CARD LEADS WITH THE ACT, as a heading. The other modes open on a muted
-  // paragraph that explains the thing being deployed — a template's settings, a
-  // repository's clone — because the reader did not bring that thing and has to be told
-  // what it is. An upload's subject is the reader's OWN project, sitting listed two
-  // fields below; what the card owes them is not an explanation but a title for what
-  // they are about to do with it.
-  const formTitle = computed(() => (isUpload.value ? 'Deploy your project' : ''))
-
   // What the form says it is about to do, which is a different act in each mode.
   const formIntro = computed(() => {
-    if (isUpload.value) {
-      return 'Connect a Git provider later to ship every push automatically.'
-    }
     if (repositoryMode.value === 'none') {
-      return 'Fill in the settings below. Azion provisions this template directly — there is no repository to connect.'
+      return isUpload.value
+        ? 'Azion deploys these files once. Connect a Git provider later to ship every push automatically.'
+        : 'Azion provisions this template directly. There is no repository to connect.'
     }
     if (!usesGit.value) {
       return 'Azion deploys this code once. Connect a Git provider later to ship every push automatically.'
     }
-    return 'Configure your Git repository to integrate your codebase and automate deployments directly from your version control system.'
+    return 'Azion deploys from this repository and ships every push automatically.'
   })
 
   // ── THE PROJECT THE READER DROPPED ──
@@ -412,7 +403,10 @@
       scope: usesGit.value ? scope.value : undefined,
       framework: template.value.framework,
       isPublic: isPublic.value,
-      templateTitle: template.value.title
+      templateTitle: template.value.title,
+      // A cloned template leaves a repository behind; an uploaded or dropped project does
+      // not, and the application it creates is updated from the reader's own terminal.
+      source: usesGit.value ? 'git' : 'cli'
     })
     status.value = 'success'
   }
@@ -526,12 +520,7 @@
                 <template #content>
                   <div class="flex flex-col gap-(--spacing-lg)">
                     <div class="flex flex-col gap-(--spacing-xxs)">
-                      <h2
-                        v-if="formTitle"
-                        class="text-heading-xs text-(--text-default)"
-                      >
-                        {{ formTitle }}
-                      </h2>
+                      <h2 class="text-heading-xs text-(--text-default)">Deploy your project</h2>
                       <p class="text-body-sm text-pretty text-(--text-muted)">
                         {{ formIntro }}
                       </p>
@@ -618,7 +607,7 @@
                     </div>
 
                     <!-- Template-specific settings -->
-                    <p class="text-heading-xxs text-(--text-default)">{{ settingsTitle }}</p>
+                    <h3 class="text-heading-xxs text-(--text-default)">{{ settingsTitle }}</h3>
                     <!-- While the template's settings schema loads, reserve the
                          layout with Skeleton placeholders (label + field +
                          helper text) so nothing jumps when it resolves. -->

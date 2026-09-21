@@ -287,6 +287,19 @@
                 // The level's LANDING row: activating Settings itself routes here (see
                 // `onNavigate`), so opening the level and arriving somewhere are one action.
                 { id: 'settings-general', label: 'General', path: '/account' },
+                // The account's Deployment Settings — the reusable strategy a deployment
+                // applies. It used to be a tab of the Deployments module; that module
+                // lists workload deployments, and a strategy is account configuration.
+                {
+                  id: 'settings-build-deployment',
+                  label: 'Build & Deployment',
+                  path: '/account/build-deployment'
+                },
+                {
+                  id: 'settings-environments',
+                  label: 'Environments',
+                  path: '/account/environments'
+                },
                 { id: 'settings-users', label: 'Users management', path: '/account/users' },
                 { id: 'settings-teams', label: 'Teams and permissions', path: '/account/teams' }
               ]

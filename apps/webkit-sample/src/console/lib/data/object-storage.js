@@ -4,7 +4,7 @@
 // every resource the platform holds (./search-index.js), and a seed that lives inside a
 // page component is invisible to it. The page keeps its own mutable copy
 // (`ref([...BUCKETS])`) and still leads the list with what this session's deploy
-// provisioned (@shared/lib/provisioning.js) — that half is session state, not seed.
+// provisioned (./provisioning.js) — that half is session state, not seed.
 //
 // Object counts and sizes are mock figures; the file navigator inside a bucket
 // (../../pages/storage/BucketBrowser.vue) owns the actual object tree.

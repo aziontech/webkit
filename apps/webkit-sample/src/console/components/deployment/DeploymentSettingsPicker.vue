@@ -28,7 +28,7 @@
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed } from 'vue'
 
-  import { bindingsLine } from '../../lib/data/releases'
+  import { bindingPolicyLabel, deploymentPolicyLabel } from '../../lib/data/deployment-strategies'
 
   const props = defineProps({
     // `[{ key, label, selectable, notice, action, items: [deploymentSettings] }]`
@@ -71,6 +71,11 @@
   // How far this row reaches. A setting nobody deploys with yet reaches nothing, and says
   // so: the release is still created, it just serves nothing until a workload deploys with
   // it.
+  // The two routing decisions, as one line. Same words the account list's columns and
+  // the workload footer use, from the same labellers.
+  const policyLine = (settings) =>
+    `${bindingPolicyLabel(settings.bindingPolicy)} · ${deploymentPolicyLabel(settings.deploymentPolicy)}`
+
   const workloadsLine = (settings) => {
     const count = settings.workloadsCount
     if (!count) return 'No workloads deploy with it yet'
@@ -173,12 +178,24 @@
                 <span class="truncate text-label-md text-(--text-default)">
                   {{ settings.name }}
                 </span>
+                <!-- SHARED, in the same word and the same severity the account list and
+                     the workload footer use. The line below already counts the workloads;
+                     this is what makes a row reaching several of them scannable against a
+                     row reaching one, which is the difference that decides whether
+                     selecting it is routine or not. -->
+                <Tag
+                  v-if="settings.shared"
+                  label="Shared"
+                  severity="warning"
+                  size="small"
+                />
               </span>
 
-              <!-- What the setting binds. This is the release's own content, so it reads as
-                   a sentence rather than three tags competing with the environments. -->
+              <!-- HOW it routes — the whole of what a setting is now. What the release
+                   CARRIES is the topology below this picker, chosen once for the release,
+                   so repeating it per row would be the same three facts twice. -->
               <span class="truncate text-body-xs text-(--text-muted)">
-                {{ bindingsLine(settings) }}
+                {{ policyLine(settings) }}
               </span>
 
               <span class="flex min-w-0 flex-wrap items-center gap-(--spacing-xxs)">

@@ -24,20 +24,23 @@
 //
 // A release therefore reads: for each resource a Deployment setting binds, which VERSION
 // of it goes out, plus the versions of everything those resources reference.
-import { APPLICATIONS } from '@shared/lib/applications'
+import { APPLICATIONS } from './applications'
+import {
+  getVersionCapability,
+  RESOURCES,
+  resourceMeta,
+  VERSION_STATES
+} from './versioning'
 import { daysAgo, hoursAgo } from '@shared/lib/dates'
-import { DEPLOYMENT_HISTORY, ENVIRONMENT_SPREAD } from '@shared/lib/deployment-history'
+import { DEPLOYMENT_HISTORY } from './deployment-history'
 import { authorAt } from '@shared/lib/people'
-import { provisionedApplications } from '@shared/lib/provisioning'
-import { WORKLOADS } from '@shared/lib/workloads'
+import { findDeploymentByWorkload, provisionedApplications } from './provisioning'
 import { computed } from 'vue'
 
-import {
-  AZION_DEFAULT_ID,
-  CUSTOM_PAGE_OPTIONS,
-  FIREWALL_OPTIONS,
-  strategies
-} from './deployment-strategies'
+import { boundWorkloads, reachLabel, settingsIdsForWorkload } from '../state/workload-settings'
+import { existingCustomPageOptions } from './custom-pages'
+import { strategies } from './deployment-strategies'
+import { existingFirewallOptions } from './firewalls'
 
 // ── Vocabulary ──────────────────────────────────────────────────────────────
 // `label` names the ENTITY (a heading, a card title, a Console page) and keeps its
@@ -45,52 +48,18 @@ import {
 // a separate string on purpose: lowercasing a label works for "Connectors" and produces
 // "waf" for WAF, and trimming a trailing "s" gives "custom page" from "Custom Pages" but
 // nonsense from anything irregular. Two fields, no string surgery at the call site.
-export const RESOURCE_META = {
-  application: {
-    label: 'Application',
-    one: 'application',
-    many: 'applications',
-    icon: 'ai ai-edge-application'
-  },
-  firewall: { label: 'Firewall', one: 'firewall', many: 'firewalls', icon: 'ai ai-edge-firewall' },
-  custom_page: {
-    label: 'Custom Pages',
-    one: 'custom page',
-    many: 'custom pages',
-    icon: 'ai ai-custom-pages'
-  },
-  function: {
-    label: 'Functions',
-    one: 'function',
-    many: 'functions',
-    icon: 'ai ai-edge-functions'
-  },
-  connector: {
-    label: 'Connectors',
-    one: 'connector',
-    many: 'connectors',
-    icon: 'ai ai-edge-connectors'
-  },
-  network_list: {
-    label: 'Network Lists',
-    one: 'network list',
-    many: 'network lists',
-    icon: 'ai ai-network-lists'
-  },
-  waf: { label: 'WAF', one: 'WAF rule', many: 'WAF rules', icon: 'ai ai-waf-rules' }
-}
-
-/** Label for a resource type, falling back to the raw value. */
-export const resourceLabel = (type) => RESOURCE_META[type]?.label ?? type
+// Resource identity — label, nouns and icon — comes from ./versioning.js, the one catalog
+// keyed on the API's own `resource_type`. This module used to keep a seven-entry copy of it.
+export const resourceLabel = (type) => resourceMeta(type).label
 
 /** The type as a singular noun inside a sentence ("Add a connector"). */
-export const resourceNoun = (type) => RESOURCE_META[type]?.one ?? type
+export const resourceNoun = (type) => resourceMeta(type).one
 
 /** The type as a plural noun inside a sentence ("references no network lists"). */
-export const resourceNounPlural = (type) => RESOURCE_META[type]?.many ?? type
+export const resourceNounPlural = (type) => resourceMeta(type).many
 
 /** Glyph for a resource type, falling back to the generic box. */
-export const resourceIcon = (type) => RESOURCE_META[type]?.icon ?? 'pi pi-box'
+export const resourceIcon = (type) => resourceMeta(type).icon || 'pi pi-box'
 
 /**
  * The three resources a Deployment setting binds — `strategy.attributes` in the request
@@ -105,12 +74,6 @@ export const SINGLETON_TYPES = ['application', 'firewall', 'custom_page']
 export const OPTIONAL_SINGLETON_TYPES = ['firewall', 'custom_page']
 
 /** The strategy attribute each singleton type reads from. */
-export const BINDING_KEY = {
-  application: 'application',
-  firewall: 'firewall',
-  custom_page: 'customPage'
-}
-
 /**
  * Which dependency types each parent can own. A firewall references Functions, Network
  * Lists and WAF rules; a custom page only Connectors. `included` is the parent of the
@@ -134,7 +97,13 @@ export const INCLUDED_PARENT = 'included'
 export const LATEST_READY = 'LATEST'
 
 /** Dependency versions must be `ready`; a singleton may also deploy the serving `active` one. */
-const DEPENDENCY_TYPES = ['function', 'connector', 'network_list', 'waf']
+// A DEPENDENCY is a resource that cannot be deployed on its own — it is carried into a
+// deployment by the application or firewall that references it. That is the same sentence
+// as `canDeploy: false`, so the list is not written twice: it IS the capability matrix
+// (./versioning.js `RESOURCE_CAPABILITY`), read here rather than restated.
+const DEPENDENCY_TYPES = Object.keys(RESOURCES).filter(
+  (type) => getVersionCapability(type).canDeploy === false
+)
 
 // ── The resource catalogs ───────────────────────────────────────────────────
 // Resources are keyed by NAME, because a Deployment setting binds them by name
@@ -158,8 +127,12 @@ const applicationNames = computed(() => [
 
 const namesFor = (type) => {
   if (type === 'application') return applicationNames.value
-  if (type === 'firewall') return FIREWALL_OPTIONS.map((option) => option.value)
-  if (type === 'custom_page') return CUSTOM_PAGE_OPTIONS.map((option) => option.value)
+  // The modules' OWN rows. They used to come through the strategy store, which kept a
+  // five-item slice of each for its binding Selects; the strategy no longer binds
+  // anything, so the release reads the modules directly — which is where a release's
+  // resources have always actually come from.
+  if (type === 'firewall') return existingFirewallOptions().map((option) => option.value)
+  if (type === 'custom_page') return existingCustomPageOptions().map((option) => option.value)
   return DEPENDENCY_CATALOG[type] ?? []
 }
 
@@ -205,6 +178,15 @@ const COMMENTS = [
  */
 export const NO_READY_VERSION = new Set(['legacy-api'])
 
+/** Resources carrying a version that FAILED its build. A build can fail, so one seeded
+ *  resource says so — and an `error` version is editable (it resumes the same draft),
+ *  which is the part of the model a screen cannot show if nothing is ever in it. */
+const BUILD_FAILED = new Set(['ecommerce-v2'])
+
+/** Resources with work in progress on top of what is serving: a `draft` that has never
+ *  been built, so it is not deployable however new it is. */
+const HAS_DRAFT = new Set(['marketing-site'])
+
 /**
  * Resources whose FIRST dependency detection fails. The console cannot promise a detector
  * never breaks, so one seeded resource makes the error panel and its Retry real.
@@ -213,14 +195,33 @@ export const DETECTION_FAILS_ONCE = new Set(['analytics-pro'])
 
 const versionCache = new Map()
 
+const versionId = (step) => `A${(step * 7919).toString(36).toUpperCase().slice(0, 6)}`
+
+// THE STATE OF EACH VERSION, in the vocabulary the platform uses (./versioning.js).
+//
+// The newest built version is ACTIVE — it is what the resource is serving. The ones behind
+// it are READY (built, deployable, not serving) except the oldest of a long history, which
+// is ARCHIVED. On top of that, two narratives the model has to be able to show: a DRAFT
+// that was never built, and a build that ended in ERROR.
+const stateFor = (name, index, count) => {
+  if (index === 0 && HAS_DRAFT.has(name)) return VERSION_STATES.DRAFT
+  if (index === 0 && BUILD_FAILED.has(name)) return VERSION_STATES.ERROR
+  const built = HAS_DRAFT.has(name) || BUILD_FAILED.has(name) ? index - 1 : index
+  if (built === 0) return VERSION_STATES.ACTIVE
+  return built === count - 1 && count > 2 ? VERSION_STATES.ARCHIVED : VERSION_STATES.READY
+}
+
 const buildVersions = (name) => {
   const seed = hash(name)
+  // A resource that has never shipped: one DRAFT and nothing else. It is not deployable
+  // because it was never built — which is the state itself saying so, rather than a flag
+  // beside it that a screen has to remember to read.
   if (NO_READY_VERSION.has(name)) {
     return [
       {
-        id: `A${(seed * 7).toString(36).toUpperCase().slice(0, 6)}`,
+        id: versionId(seed),
         comment: 'refactor: drop legacy shim',
-        state: 'error',
+        state: VERSION_STATES.DRAFT,
         isCurrent: false,
         createdAt: daysAgo(9 + (seed % 40)),
         author: authorAt(seed).name
@@ -228,16 +229,17 @@ const buildVersions = (name) => {
     ]
   }
 
-  const count = 1 + (seed % 3)
+  const count = 1 + (seed % 3) + (HAS_DRAFT.has(name) || BUILD_FAILED.has(name) ? 1 : 0)
   return Array.from({ length: count }, (_, index) => {
     const step = seed + index * 977
     const hours = 3 + (step % 300)
+    const state = stateFor(name, index, count)
     return {
-      id: `A${(step * 7919).toString(36).toUpperCase().slice(0, 6)}`,
+      id: versionId(step),
       comment: COMMENTS[(step + index) % COMMENTS.length],
-      state: 'ready',
-      // The newest version is what the resource is serving today.
-      isCurrent: index === 0,
+      state,
+      // What the resource is serving today — the ACTIVE one, never a draft on top of it.
+      isCurrent: state === VERSION_STATES.ACTIVE,
       createdAt: hours < 48 ? hoursAgo(hours) : daysAgo(Math.round(hours / 24)),
       author: authorAt(step).name
     }
@@ -256,7 +258,9 @@ const versionsOf = (name) => {
  * already serving elsewhere, and pinning it here would tie two releases together.
  */
 export const versionOptions = (type, id) => {
-  const states = DEPENDENCY_TYPES.includes(type) ? ['ready'] : ['ready', 'active']
+  const states = DEPENDENCY_TYPES.includes(type)
+    ? [VERSION_STATES.READY]
+    : [VERSION_STATES.READY, VERSION_STATES.ACTIVE]
   return versionsOf(id)
     .filter((entry) => states.includes(entry.state))
     .map((entry) => ({
@@ -329,53 +333,21 @@ export const dependenciesOf = (parentType, resourceId) => {
 // Authored settings (and Azion Default) start bound to NOTHING: a setting reaches no
 // workload until a deployment applies it. That is what makes the composer's empty-impact
 // state real rather than theoretical.
-const SEEDED_SETTINGS_IDS = ['s1', 's2', 's3', 's4', 's5', 's6', 's7', 's8', 's9', 's10']
-
-// The environments a workload publishes into, in order. Production always exists; a
-// second one is what `ENVIRONMENT_SPREAD` gives every third workload.
-const ENVIRONMENT_ORDER = ['Production', 'Stage']
 
 /**
- * The Deployment settings a workload already deploys with, in order. Every third workload
- * publishes into two of them (one per environment), which is the case that makes deploying
- * a workload a multi-target action.
- */
-export const settingsIdsForWorkload = (workloadId) => {
-  const index = WORKLOADS.findIndex((workload) => workload.id === String(workloadId))
-  // EVERY workload deploys with a Deployment setting — there is no such thing as one
-  // without. A workload this fixture does not seed (one provisioned in this session)
-  // deploys with AZION DEFAULT, the platform's own strategy, which is exactly what
-  // `azion deploy` applies to a project that declares no bindings of its own
-  // (../data/deployment-strategies.js). Returning [] here made that workload's page
-  // say it "does not deploy with any Deployment setting yet", which is never true.
-  if (index < 0) return [AZION_DEFAULT_ID]
-  const primary = SEEDED_SETTINGS_IDS[index % SEEDED_SETTINGS_IDS.length]
-  if (index % ENVIRONMENT_SPREAD !== 0) return [primary]
-  return [primary, SEEDED_SETTINGS_IDS[(index + 4) % SEEDED_SETTINGS_IDS.length]]
-}
-
-/**
- * THE PAIRING, IN ONE PLACE: a workload's environments, each with the ONE Deployment
- * setting it publishes with there.
+ * THE PAIRING LIVES IN ../state/workload-settings.js, and is re-exported here because
+ * every consumer of this module reads it beside the projection below.
  *
- * A deployment applies exactly one setting — that is the request body's own shape
- * (`strategy` is an object, not a list) — so a release is 1:1 with a setting. What a
- * workload can have several of is ENVIRONMENTS, and each of those has its own current
- * deployment and therefore its own setting. Reading the settings as a flat list made a
- * workload look like it published with two at once; it publishes with one, twice.
- *
- * The order is the environment order: index 0 is Production, index 1 the second
- * environment — the same order `historyFor` stamps its rows in.
+ * It moved there when a Deployment setting stopped being something a workload was paired
+ * with by a rule and became something a workload is CREATED WITH: the binding is now a
+ * record this session can change (point a workload at another workload's setting) rather
+ * than a function of the workload's index, so it needs a store, and there is still
+ * exactly one of it.
  */
-export const environmentsForWorkload = (workloadId) =>
-  settingsIdsForWorkload(workloadId).map((settingsId, index) => ({
-    name: ENVIRONMENT_ORDER[index] ?? ENVIRONMENT_ORDER[0],
-    settingsId
-  }))
+export { environmentsForWorkload, settingsIdsForWorkload } from '../state/workload-settings'
 
 /** The inverse: the workloads that deploy with a given Deployment setting. */
-export const workloadsForSettings = (settingsId) =>
-  WORKLOADS.filter((workload) => settingsIdsForWorkload(workload.id).includes(settingsId))
+export const workloadsForSettings = (settingsId) => boundWorkloads(settingsId)
 
 /**
  * What a workload is serving right now: its CURRENT deployment record. Slot 0 of a
@@ -392,12 +364,27 @@ export const currentDeploymentFor = (workloadId, environment = '') =>
       (environment ? deployment.environment === environment : deployment.current)
   )
 
-/** The application a workload is serving, or `''` for one with no history. */
+/**
+ * The application a workload is serving, or `''` for one that serves none.
+ *
+ * TWO PLACES HOLD THE ANSWER, and reading only the first was a bug the reader met at the
+ * worst moment. `currentDeploymentFor` searches the seeded history — which, by definition,
+ * a workload CREATED IN THIS SESSION is not in. Deploying such a workload therefore
+ * recorded `application: { id: '', name: '' }`, and its deployment page showed an
+ * Application field with no name and no link: the one page whose job is to say what was
+ * deployed, unable to say it, for exactly the deployment the reader had just made.
+ *
+ * So the provisioning chain is the fallback — a workload created here has its application
+ * there (./provisioning.js), which is the same record every other surface reads it from.
+ *
+ * @param {string} workloadId
+ * @returns {string} The application's name, or `''`.
+ */
 export const servingApplication = (workloadId) => {
   const current = currentDeploymentFor(workloadId)
-  if (current?.resourceType !== 'application') return ''
   // The record names the resource; a release binds it by that same name.
-  return current.resourceName
+  if (current?.resourceType === 'application' && current.resourceName) return current.resourceName
+  return findDeploymentByWorkload(workloadId)?.application?.name ?? ''
 }
 
 // ── The projection: Deployment settings as deploy targets ───────────────────
@@ -432,16 +419,22 @@ export const deploymentSettings = computed(() =>
       // here rather than looked up beside this, so there stays one shape for a setting.
       type: strategy.type,
       bindingPolicy: strategy.bindingPolicy,
-      versionPolicy: strategy.versionPolicy,
-      // `strategy.attributes` — an empty application means "whatever is being deployed".
-      bindings: {
-        application: strategy.application || '',
-        firewall: strategy.firewall || '',
-        customPage: strategy.customPage || ''
-      },
+      deploymentPolicy: strategy.deploymentPolicy,
+      // `strategy_defaults` — the rollout safeguards every deployment applying this
+      // setting inherits. Projected so a workload's footer can report them without
+      // reaching back into the store for a record it already has.
+      strategyDefaults: strategy.strategyDefaults,
       workloads,
       environmentNames,
       workloadsCount: workloads.length,
+      // THE BLAST RADIUS, on the record itself. A setting that publishes to more than one
+      // workload is SHARED: a deploy into it reaches all of them, and the person starting
+      // that deploy is usually looking at one. Every surface that can start one reads
+      // these two fields rather than counting `workloads` itself, so the warning and the
+      // list column can never disagree about what a deploy reaches
+      // (../state/workload-settings.js).
+      shared: workloads.length > 1,
+      reach: reachLabel(workloads.length),
       domainsCount: workloads.reduce((total, workload) => total + workload.domains.length, 0)
     }
   })
@@ -450,21 +443,6 @@ export const deploymentSettings = computed(() =>
 /** One projected Deployment setting by id. */
 export const settingsById = (id) =>
   deploymentSettings.value.find((settings) => settings.id === String(id))
-
-/**
- * What a setting binds, as one line. Only what it ACTUALLY binds: an unpinned application
- * and an unbound firewall are the common, unremarkable case, and printing "not bound" on
- * every row is a caveat repeated until the reader stops seeing any of it. A setting that
- * binds nothing beyond the application says so, once, in its own row.
- */
-export const bindingsLine = (settings) => {
-  if (!settings) return ''
-  const parts = []
-  if (settings.bindings.application) parts.push(`Application: ${settings.bindings.application}`)
-  if (settings.bindings.firewall) parts.push(`Firewall: ${settings.bindings.firewall}`)
-  if (settings.bindings.customPage) parts.push(`Custom Page: ${settings.bindings.customPage}`)
-  return parts.length ? parts.join(' · ') : 'Binds no firewall or custom page'
-}
 
 /**
  * The Deployment settings a WORKLOAD entry lands on, already selected. Deploying a workload
@@ -481,41 +459,33 @@ export const releaseSeedForWorkload = (workloadId) => ({
 /**
  * Group the settings for the release being composed, in the order the picker renders them.
  *
- *   linked    already bound to this application. The expected target.
- *   available accepts it: the setting pins no application, so it binds whatever is deployed.
+ *   available accepts it. Every active setting does now: a setting says how a deploy
+ *             routes, not what it carries, so there is no such thing as one that only
+ *             fits a particular application (../data/deployment-strategies.js).
  *   inactive  cannot apply a deployment at all (the drawer's own rule: "when disabled, the
  *             strategy stays in the list but no deployment can apply it"). Not selectable.
  *
- * An ACTIVE setting pinned to a DIFFERENT application is hidden rather than disabled: it is
- * not a target the operator can act on, and a permanently dead row teaches nothing.
+ * The third group this returned — `linked`, the settings PINNED to the application being
+ * released — died with `strategy.attributes`. So did `hidden`, which existed only to keep
+ * a setting pinned to a DIFFERENT application out of the list. Nothing is hidden now:
+ * every active setting is a legal target, which is the point of making a setting reusable.
  */
-export const classifyDeploymentSettings = ({ settings, applicationName }) => {
-  const groups = { linked: [], available: [], inactive: [] }
-  const hidden = []
+export const classifyDeploymentSettings = ({ settings }) => {
+  const groups = { available: [], inactive: [] }
 
   settings.forEach((entry) => {
     if (entry.status === 'Inactive') {
       groups.inactive.push(entry)
       return
     }
-    const pinned = entry.bindings.application
-    if (pinned && applicationName && pinned === applicationName) {
-      groups.linked.push(entry)
-      return
-    }
-    if (!pinned) {
-      groups.available.push(entry)
-      return
-    }
-    hidden.push(entry)
+    groups.available.push(entry)
   })
 
-  return { groups, hidden }
+  return { groups, hidden: [] }
 }
 
 /** The picker's group headings, and what a non-selectable group says and offers. */
 export const DS_GROUPS = [
-  { key: 'linked', label: 'Already bound to this application', selectable: true },
   { key: 'available', label: 'Available', selectable: true },
   {
     key: 'inactive',
@@ -547,7 +517,22 @@ export const DEPLOY_FAILURE_MESSAGE =
  * @returns {{ id: string, name: string, preset: string }} What ./deploy-runs.js opens the
  *   deployment with.
  */
-export const applicationRecord = (name) => {
-  const match = APPLICATIONS.find((application) => application.name === name)
-  return { id: match?.id ?? name ?? '', name: name ?? '', preset: match?.preset ?? 'vue' }
+export const applicationRecord = (nameOrId) => {
+  const key = String(nameOrId ?? '').trim()
+  if (!key) return { id: '', name: '', preset: 'vue' }
+  // BOTH POOLS. An application provisioned in this session is not in the seed, so matching
+  // the seed alone left a just-created application unresolved — and the `id` fell back to
+  // the NAME, which reads as an id everywhere downstream and links to `/applications/<name>`,
+  // a page that does not exist. A link that 404s is worse than no link.
+  const pool = [...APPLICATIONS, ...provisionedApplications.value]
+  // By name first, because that is what a release and a workload's history bind by; by id
+  // second, so a caller holding one resolves too rather than being told the id is a name.
+  const match =
+    pool.find((application) => application.name === key) ??
+    pool.find((application) => String(application.id) === key)
+  return {
+    id: match?.id ?? '',
+    name: match?.name ?? key,
+    preset: match?.preset ?? 'vue'
+  }
 }

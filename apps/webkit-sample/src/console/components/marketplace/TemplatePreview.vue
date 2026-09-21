@@ -75,7 +75,7 @@
           </span>
           <i
             v-if="isLink"
-            class="pi pi-arrow-up-right text-[length:inherit] leading-none text-(--text-muted)"
+            class="pi pi-external-link shrink-0 text-body-xs leading-none"
             aria-hidden="true"
           />
         </span>

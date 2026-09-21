@@ -55,7 +55,7 @@ import {
   settleConsoleDeploy,
   startConsoleDeploy
 } from '@shared/lib/azion-deploys'
-import { provisionDeployment } from '@shared/lib/provisioning'
+import { provisionDeployment } from '../data/provisioning'
 import { computed, reactive, ref } from 'vue'
 
 /** How long a simulated deploy runs. Long on purpose: leaving is the scenario. */

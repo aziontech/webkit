@@ -43,8 +43,8 @@
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { APPLICATIONS } from '@shared/lib/applications'
-  import { provisionedApplications, removeDeployment } from '@shared/lib/provisioning'
+  import { APPLICATIONS } from '../../lib/data/applications'
+  import { provisionedApplications, removeDeployment } from '../../lib/data/provisioning'
   import { computed, ref } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
@@ -104,12 +104,6 @@
     { accessorKey: 'id', header: 'ID', enableSorting: true, minWidth: FIT_COLUMN },
     // Domain is shown in full (no truncation) — give it the widest flexible share.
     { accessorKey: 'domainName', header: 'Domain Name', grow: 3 },
-    {
-      accessorKey: 'infrastructure',
-      header: 'Infrastructure',
-      enableSorting: true,
-      minWidth: TAG_COLUMN_WIDE
-    },
     { accessorKey: 'status', header: 'Status', enableSorting: true, minWidth: TAG_COLUMN },
     { accessorKey: 'author', header: 'Last Editor', enableSorting: true, minWidth: FIT_COLUMN },
     {
@@ -145,19 +139,6 @@
       kind: 'options',
       options: authorOptions,
       match: (app, values) => values.includes(app.author)
-    },
-    {
-      // Listed in the order the promotion path runs — Production, Staging,
-      // Development — rather than alphabetically, which would scramble it.
-      id: 'infrastructure',
-      label: 'Infrastructure',
-      kind: 'options',
-      options: [
-        { value: 'Production', label: 'Production' },
-        { value: 'Staging', label: 'Staging' },
-        { value: 'Development', label: 'Development' }
-      ],
-      match: (app, values) => values.includes(app.infrastructure)
     },
     {
       id: 'status',
@@ -463,8 +444,13 @@
                          default slot with `truncate` so a long repo shrinks with an
                          ellipsis instead of overflowing the Tag (whose justify-center +
                          overflow-hidden would otherwise clip the leading GitHub icon).
-                         `max-w-full` keeps the chip inside its cell. -->
+                         `max-w-full` keeps the chip inside its cell.
+
+                         Only a `source: 'git'` application has one. The rest show an em
+                         dash, because an empty cell reads as data this list failed to
+                         load rather than a repository that genuinely does not exist. -->
                     <Tag
+                      v-if="value"
                       severity="secondary"
                       size="medium"
                       icon="pi pi-github"
@@ -473,6 +459,12 @@
                     >
                       <span class="min-w-0 truncate">{{ value }}</span>
                     </Tag>
+                    <span
+                      v-else
+                      class="text-body-sm text-(--text-muted)"
+                      aria-label="No repository"
+                      >&mdash;</span
+                    >
                   </template>
 
                   <template #cell-id="{ value }">
@@ -490,17 +482,6 @@
                     <DomainCell :value="value" />
                   </template>
 
-                  <!-- Infrastructure is an enumerable environment, so it reads as a chip
-                       like Status does — and through the SAME severity map every
-                       deployment surface uses (src/lib/deployments.js), so Production
-                       cannot be `info` here and something else next to a deployment. -->
-                  <template #cell-infrastructure="{ value }">
-                    <Tag
-                      :label="value"
-                      :severity="environmentSeverity(value)"
-                      size="medium"
-                    />
-                  </template>
 
                   <template #cell-status="{ value }">
                     <Tag

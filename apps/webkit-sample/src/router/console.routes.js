@@ -284,6 +284,12 @@ export const consoleRoutes = [
   // sidebar's Settings level, so each one is a page with its own URL instead of a
   // `?tab=` on a single page. `/account` is the level's landing (General).
   { path: '/account', name: 'account', component: AccountSettings },
+  {
+    path: '/account/build-deployment',
+    name: 'account-build-deployment',
+    component: AccountSettings
+  },
+  { path: '/account/environments', name: 'account-environments', component: AccountSettings },
   { path: '/account/users', name: 'account-users', component: AccountSettings },
   { path: '/account/teams', name: 'account-teams', component: AccountSettings },
   { path: '/account/credentials', name: 'account-credentials', component: AccountSettings },

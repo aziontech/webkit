@@ -7,7 +7,8 @@
   //
   // The row contract (src/lib/deployments.js is the vocabulary):
   //   versionId · status · duration · current · environment
-  //   resourceType · resourceName · resourceId   — what was deployed
+  //   workloadId · workloadName                  — what was deployed
+  //   resourceType · resourceName · resourceId   — which of its resources (filter only)
   //   deployedAt (Date) · date (display string)
   //   author · authorEmail (the Authors selector's key) · authorAvatar
   //
@@ -43,17 +44,13 @@
   import { applyFilters } from '../../lib/behavior/filter-bar'
   import { useListRefresh } from '../../lib/behavior/list-state'
   import { DEPLOYMENT_COLUMNS } from '../../lib/data/deployment-columns'
-  import {
-    environmentSeverity,
-    resourceHref,
-    resourceMeta,
-    statusMeta
-  } from '../../lib/data/deployments'
+  import { environmentSeverity, statusMeta } from '../../lib/data/deployments'
   import AuthorCell from '../list/AuthorCell.vue'
   import FilterButton from '../list/FilterButton.vue'
   import FilterChips from '../list/FilterChips.vue'
   import IdCell from '../list/IdCell.vue'
   import LastModifiedCell from '../list/LastModifiedCell.vue'
+  import ResourceLink from '../resource/ResourceLink.vue'
 
   const props = defineProps({
     /** Deployment records, already narrowed by whatever the page itself applies. */
@@ -208,7 +205,10 @@
       <!-- The tag sits UNDER the id, not beside it: side by side it squeezes the
            id — the row's identity — into an ellipsis. -->
       <div class="flex min-w-0 items-start gap-(--spacing-xxs)">
-        <span class="truncate text-body-sm text-(--text-default)">{{ value }}</span>
+        <!-- `tabular-nums` for the same reason ../list/IdCell.vue uses it: the digits
+             share one advance width, so a column of version ids lines up character for
+             character instead of drifting a few px per row. -->
+        <span class="truncate tabular-nums text-body-sm text-(--text-default)">{{ value }}</span>
         <Tag
           v-if="row.current"
           label="Current"
@@ -246,52 +246,36 @@
       </div>
     </template>
 
-    <template #cell-resourceName="{ value, row }">
-      <div class="flex min-w-0 items-center">
-        <!-- The resource's own module page. `@click.stop` keeps the row click
-             (which opens the deployment drawer) from firing when the user means
-             to open the resource. -->
-        <router-link
-          v-if="resourceHref(row)"
-          :to="{ path: resourceHref(row), query: { email } }"
-          class="flex min-w-0 items-center gap-(--spacing-xxs) text-body-sm text-(--text-default) no-underline hover:underline"
-          @click.stop
-        >
-          <span class="truncate">{{ value }}</span>
-          <i
-            class="pi pi-arrow-up-right shrink-0 text-(--text-muted)"
-            aria-hidden="true"
-          />
-        </router-link>
-        <!-- Firewall and Custom Pages are nav-only in this sample, so those
-             resources have no page to link to. -->
-        <span
-          v-else
-          class="truncate text-body-sm text-(--text-default)"
-          >{{ value }}</span
-        >
+    <template #cell-workloadName="{ value, row }">
+      <!-- The band's widest cell, and the one that says WHAT was deployed: the
+           WORKLOAD. The glyph names the column the way a leading mark does — it is the
+           same on every row, so it identifies the field, not the value — and the name
+           beside it is the thing a reader recognises and clicks, through the console's
+           one cross-resource link shape (../resource/ResourceLink.vue), which carries
+           the 12px external mark and the tooltip naming where it goes, and stops the
+           row's own click. -->
+      <div class="flex min-w-0 items-center gap-(--spacing-xs)">
+        <i
+          class="ai ai-workloads shrink-0 text-(--text-default)"
+          aria-hidden="true"
+        />
+        <ResourceLink
+          :label="value"
+          :to="row.workloadId ? { path: `/workloads/${row.workloadId}`, query: { email } } : null"
+          module="Workloads"
+        />
       </div>
     </template>
 
-    <template #cell-resourceType="{ value }">
-      <!-- The product chip: its glyph plus its name. The label goes through the
-           default slot with `truncate` so a narrow column ellipsizes it instead
-           of clipping it against the Tag's own overflow-hidden. -->
-      <Tag
-        severity="secondary"
-        size="medium"
-        :icon="resourceMeta(value).icon"
-        class="max-w-full"
-      >
-        <span class="min-w-0 truncate">{{ resourceMeta(value).label }}</span>
-      </Tag>
-    </template>
-
     <template #cell-environment="{ value }">
+      <!-- An environment renders as a ROUNDED tag in one colour, everywhere it
+           appears (../../lib/data/deployments.js explains why the severity is a
+           constant). -->
       <Tag
         :label="value"
         :severity="environmentSeverity(value)"
         size="medium"
+        rounded
       />
     </template>
 

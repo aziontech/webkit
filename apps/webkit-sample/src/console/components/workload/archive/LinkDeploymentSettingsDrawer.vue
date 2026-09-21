@@ -1,9 +1,23 @@
 <script setup>
+  // ARCHIVED — superseded, and kept only as a record of a model this console no longer has.
+  // Nothing imports it.
+  //
+  // It binds a Deployment Settings bundle to an environment AND the resources that bundle
+  // carries (Application, Firewall, Custom Page) each at a chosen version. A setting no
+  // longer carries any of those: the RELEASE binds the resources, the SETTING says only how
+  // it routes, and the ENVIRONMENT says which setting it publishes with
+  // (../../../lib/data/deployment-strategies.js). The Create Workload section this opened
+  // from is gone too, and an environment's setting is now linked automatically by matching
+  // deployment policy rather than picked in a sub-drawer.
+  //
+  // What replaced it: ../WorkloadDeploymentSettingsSection.vue (per environment, on the
+  // workload) and ../../deployment/WorkloadBindings.vue (the inverse, all workloads).
+  //
+  // ── WHAT IT WAS ──
+  //
   // Link Deployment Settings — the sub-drawer opened from an environment row in the
-  // Environments section of Create Workload. It binds a Deployment Settings bundle
-  // to one environment, and the resources it carries (Application, Firewall, and a
-  // Custom Page) each at a chosen version. On save it emits the linked bundle back
-  // to the parent, which flips that environment row from "unlinked" to "linked".
+  // Environments section of Create Workload. On save it emitted the linked bundle back
+  // to the parent, which flipped that environment row from "unlinked" to "linked".
   //
   // Same discipline as every form drawer: one `submitting` flag locks the scope,
   // validation runs on submit only, and the drawer resets when it closes. ONE commit,

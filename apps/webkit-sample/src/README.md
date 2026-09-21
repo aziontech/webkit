@@ -55,7 +55,11 @@ console/
   lib/
     state/     module-level singletons that outlive the route (session, tenancy, theme
                preferences, the sample's own mode/preset switches)
-    data/      the pretend account — resources, plans, teams, templates, empty states
+    data/      the pretend account — every resource the console seeds (applications,
+               workloads, environments, deployment settings), plus plans, teams,
+               templates and empty states. A module that owns its seed's own store
+               (a sessionStorage key + CRUD) stays here with the seed; `state/` is for
+               singletons that belong to no one seed.
     behavior/  interaction helpers (entrance motion, height animation, drag reorder,
                dirty-tab tracking, filter state)
     format/    pure formatters and parsers (dates, dotenv, zone files, postgres types)
@@ -86,8 +90,9 @@ hub/
 
 ```
 shared/
-  lib/         cross-area logic and fixtures (theme, dates, applications, workloads,
-               deploys, provisioning, people)
+  lib/         cross-area logic only (theme, menu-tree, dates, people, the recorded
+               azion deploy runs and the agent onboarding the site and hub also render).
+               A domain fixture only the console reads lives in console/lib/data/.
   ui/
     layout/    the framed-grid page kit — see .claude/docs/CONTAINERS.md
     banners/   hero backdrops, chosen by name through BannerContainer

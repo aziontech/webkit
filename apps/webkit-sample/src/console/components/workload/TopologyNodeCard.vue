@@ -1,36 +1,28 @@
 <script setup>
   // TopologyNodeCard — one PROVISIONED resource in the workload's deployment
-  // topology (Workload / Application / Connector / Storage), and the two
-  // Application-level slots once they are bound.
+  // topology (Domains / Workload / Application / Connector / Storage), and the
+  // bindable slots once they are bound.
   //
-  // The card frame, the disclosure header (kind + status + name) and the open state
-  // all belong to TopologyNode, so this file owns only what the resource itself has
-  // to say: its fields, and the way out to its module page.
+  // The card frame, the disclosure header, the identity row and the open state all
+  // belong to TopologyNode, so this file owns only what the resource itself has to
+  // say: the name it is known by, the way out to its module page, and its fields.
   //
-  // That way out is a BODY row rather than the header's name, which is where it
-  // used to live: the header is now one full-width trigger button, and an anchor
-  // inside a button is invalid markup and unreachable by keyboard.
+  // THE NAME IS THE WAY OUT. It used to be plain text in the header with a separate
+  // "Open <kind>" link buried in the body; the name itself carries the route now, so
+  // the node has one identity rather than two, and ResourceLink puts the glyph and
+  // the "Open <name> in <kind>" tooltip on it that every cross-resource link in the
+  // console wears (../resource/ResourceLink.vue).
   import CopyButton from '@aziontech/webkit/copy-button'
 
+  import ResourceLink from '../resource/ResourceLink.vue'
   import TopologyNode from './TopologyNode.vue'
 
-  defineProps({
+  const props = defineProps({
     // A node from `resourceChain()` — { kind, icon, name, status, href, fields[] }.
     node: { type: Object, required: true },
     // Carried into the module link so the demo keeps the signed-in email.
     email: { type: String, default: '' }
   })
-
-  // NO BLUE ON A REFERENCE. The link is full ink with a muted underline that firms to full
-  // ink on hover — the same clothes every reference on this page wears (the workload card's
-  // hostname, its custom domain, its deployment). It was `--text-link`, which made a node's
-  // one way out the loudest thing in a card whose job is to name a resource calmly.
-  //
-  // EVERY node links out, so the link is unconditional. The chain's four provisioned
-  // resources go to their detail page; the firewall, the connector and the two bound
-  // slots go to the `/<module>/:id/settings` page their module list edits a row with —
-  // which is generated from the resource descriptor and seeds itself from the URL
-  // (console/pages/resources/ResourceSettings.vue), hence the `name` alongside `email`.
 
   // Forwarded straight to TopologyNode so the PAGE decides which nodes start open.
   const open = defineModel('open', { type: Boolean, default: false })
@@ -42,9 +34,21 @@
     Live: 'success',
     Active: 'success',
     Public: 'info',
-    Private: 'neutral'
+    Private: 'neutral',
+    Staged: 'warning',
+    'Not bound': 'neutral'
   }
   const nodeSeverity = (status) => NODE_SEVERITY[status] ?? 'neutral'
+
+  // EVERY node that names a resource links out: the chain's provisioned resources go
+  // to their detail page, the bound slots to the `/<module>/:id/settings` page their
+  // module list edits a row with — which seeds itself from the URL
+  // (console/pages/resources/ResourceSettings.vue), hence the `name` alongside
+  // `email`. A node with no page of its own (Domains) renders its name as text.
+  const route = () =>
+    props.node.href
+      ? { path: props.node.href, query: { name: props.node.name || undefined, email: props.email } }
+      : null
 </script>
 
 <template>
@@ -55,7 +59,30 @@
     :name="node.name"
     :status="node.status"
     :severity="nodeSeverity(node.status)"
+    :dashed="Boolean(node.dashed)"
   >
+    <template #identity>
+      <ResourceLink
+        :label="node.name || '—'"
+        :to="route()"
+        :module="node.kind"
+      />
+    </template>
+
+    <template
+      v-if="$slots.actions"
+      #actions
+    >
+      <slot name="actions" />
+    </template>
+
+    <p
+      v-if="node.message"
+      class="text-body-xs text-(--text-muted)"
+    >
+      {{ node.message }}
+    </p>
+
     <div
       v-for="field in node.fields"
       :key="field.label"
@@ -84,32 +111,6 @@
           :value="field.value"
           :aria-label="`Copy ${node.kind} ${field.label.toLowerCase()}`"
         />
-      </div>
-    </div>
-
-    <!-- The node's own controls, on one row under its fields: the way out to the
-         resource on the left, and whatever the page adds (unbinding a bound slot)
-         on the right. -->
-    <div
-      v-if="node.href || $slots.actions"
-      class="flex items-center gap-(--spacing-xs)"
-    >
-      <router-link
-        v-if="node.href"
-        :to="{ path: node.href, query: { name: node.name || undefined, email } }"
-        class="inline-flex min-w-0 items-center gap-(--spacing-xxs) text-label-sm text-(--text-default) underline decoration-(--text-muted) underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance hover:decoration-(--text-default) motion-reduce:transition-none"
-      >
-        <span class="truncate">Open {{ node.kind }}</span>
-        <i
-          class="pi pi-arrow-up-right shrink-0"
-          aria-hidden="true"
-        />
-      </router-link>
-      <div
-        v-if="$slots.actions"
-        class="ml-auto flex shrink-0 items-center"
-      >
-        <slot name="actions" />
       </div>
     </div>
   </TopologyNode>

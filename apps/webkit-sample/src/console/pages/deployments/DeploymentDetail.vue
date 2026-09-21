@@ -24,7 +24,7 @@
   // before the evidence, not after it. The failure's own explanation still lives
   // in the step that produced it, one screen down, where the log is.
   //
-  // The recorded runs come from src/lib/azion-deploys.js, whose steps are the real
+  // The recorded runs come from @shared/lib/azion-deploys.js, whose steps are the real
   // `azion deploy` pipeline and whose artifacts are this app's real ones
   // (azion.config.js + azion/azion.json) — the production deployment there is the
   // deploy that actually shipped this app.
@@ -42,9 +42,9 @@
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { deployPageRecord, triggerMeta } from '@shared/lib/azion-deploys'
+  import { triggerMeta } from '@shared/lib/azion-deploys'
   import { formatListDate } from '@shared/lib/dates'
-  import { workloadById } from '@shared/lib/workloads'
+  import { workloadById } from '../../lib/data/workloads'
   import { LOG_VIEWS } from '@shared/ui/deployment/deployment-steps.js'
   import DeploymentLogs from '@shared/ui/deployment/DeploymentLogs.vue'
   import { computed, ref } from 'vue'
@@ -55,10 +55,10 @@
   import {
     azionDefaultStrategy,
     bindingPolicyLabel,
-    strategies,
-    versionPolicyLabel
+    deploymentPolicyLabel,
+    strategies
   } from '../../lib/data/deployment-strategies'
-  import { resourceMeta, statusMeta } from '../../lib/data/deployments'
+  import { deployPageRecord, resourceMeta, statusMeta } from '../../lib/data/deployments'
   import { relativeTime } from '../../lib/format/relative-time'
 
   const route = useRoute()
@@ -68,7 +68,7 @@
   const userEmail = computed(() => route.query.email || 'myemail@azion.com')
 
   // The record the URL names — ANY deployment in the console, recorded run or seeded
-  // history row, resolved to one shape by src/lib/azion-deploys.js. `undefined` for
+  // history row, resolved to one shape by ../../lib/data/deployments.js. `undefined` for
   // an id nothing matches: a hand-typed or stale link, which the page has to answer
   // for rather than rendering a blank shell.
   // `workload` / `workloadName` ride the query because a workload this sample does
@@ -78,7 +78,9 @@
   const deploy = computed(() =>
     deployPageRecord(String(route.params.id ?? ''), {
       workloadId: String(route.query.workload ?? ''),
-      workloadName: String(route.query.workloadName ?? '')
+      workloadName: String(route.query.workloadName ?? ''),
+      applicationId: String(route.query.application ?? ''),
+      applicationName: String(route.query.applicationName ?? '')
     })
   )
 
@@ -206,7 +208,7 @@
   // here would be the same facts twice on one screen.
   const strategyFields = computed(() => [
     { label: 'Binding Policy', value: bindingPolicyLabel(strategy.value.bindingPolicy) },
-    { label: 'Version Policy', value: versionPolicyLabel(strategy.value.versionPolicy) }
+    { label: 'Version Policy', value: deploymentPolicyLabel(strategy.value.deploymentPolicy) }
   ])
 
   // The hostnames this deployment answers on. They belong to the WORKLOAD, not to
@@ -636,7 +638,7 @@
                   class="flex flex-col gap-(--spacing-xxs) sm:col-span-2 lg:col-span-3"
                 >
                   <!-- The hostnames this deployment answers on once it is current —
-                       the workload's own domains (@shared/lib/workloads). A deployment
+                       the workload's own domains (../../lib/data/workloads). A deployment
                        has none of its own: it publishes UNDER the workload's.
 
                        SAME CELL AS THE WORKLOADS LIST, not a second reading of the
@@ -712,8 +714,8 @@
                       </span>
                     </Accordion.Trigger>
 
-                    <!-- The strategy NAMES a record that lives in its own module
-                         (Deployments → Settings), so it is a way OUT of this screen and
+                    <!-- The strategy NAMES a record that lives in account settings
+                         (Settings → Build & Deployment), so it is a way OUT of this screen and
                          takes the console's cross-resource link shape: the name, then a
                          12px `pi-external-link`. It cannot sit inside the trigger — that
                          is a `<button>`, and an anchor nested in one is invalid markup —
@@ -725,12 +727,12 @@
                     >
                       <Tooltip
                         class="pointer-events-auto"
-                        :text="`Open ${strategy.name} in Deployment Settings`"
+                        :text="`Open ${strategy.name} in Build & Deployment settings`"
                       >
                         <router-link
                           :to="{
-                            path: '/deployments',
-                            query: { tab: 'settings', email: userEmail }
+                            path: '/account/build-deployment',
+                            query: { email: userEmail }
                           }"
                           class="group/link inline-flex min-w-0 items-center gap-(--spacing-xxs) text-body-sm text-(--text-default) no-underline"
                         >

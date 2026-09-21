@@ -19,6 +19,8 @@
   import CardBox from '@aziontech/webkit/card-box'
   import CopyButton from '@aziontech/webkit/copy-button'
   import Item from '@aziontech/webkit/item'
+
+  import GetStartedCli from '../../../components/application/GetStartedCli.vue'
   import Tag from '@aziontech/webkit/tag'
   import { computed } from 'vue'
   import { RouterLink } from 'vue-router'
@@ -45,7 +47,13 @@
     // WHAT TO DO ABOUT IT — not part of what happened. Empty means the post-deploy
     // three below; a flow that ends somewhere else hands up its own, and a step with a
     // `to` is a route inside the console rather than a documentation link.
-    nextSteps: { type: Array, default: () => [] }
+    nextSteps: { type: Array, default: () => [] },
+    // HOW CODE WILL REACH IT (../../../lib/data/applications.js). A `cli` application has
+    // no repository, so this screen is the first and best moment to hand over the commands
+    // that fill it — the reader is holding the terminal they will run them in.
+    source: { type: String, default: 'git' },
+    // The application the CLI card links against, for its `azion link` line.
+    applicationName: { type: String, default: '' }
   })
 
   // `manage` is the page's terminal action; `select` is a next step that DOES something
@@ -389,6 +397,16 @@
           </Item.List>
         </template>
       </CardBox>
+
+      <!-- THE HANDOFF, for an application with no repository. It is the answer to the
+           question this flow otherwise leaves the reader holding: the application exists,
+           and nothing has told them how to put code in it. The same card is mounted
+           permanently on the application's own page, because a success screen is lost on
+           the first reload and the question is not. -->
+      <GetStartedCli
+        v-if="source === 'cli'"
+        :name="applicationName"
+      />
 
       <!-- Manage opens the created workload — the chain's entry point — instead of
            dropping the reader back on a list to find the row they just made. It is the

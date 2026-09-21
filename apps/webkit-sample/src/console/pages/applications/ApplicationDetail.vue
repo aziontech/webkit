@@ -39,6 +39,9 @@
   import { computed, nextTick, ref } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
+  import { applicationById } from '../../lib/data/applications'
+  import { provisionedApplications } from '../../lib/data/provisioning'
+
   import UnsavedChangesGuard from '../../components/form/UnsavedChangesGuard.vue'
   import PageTabs from '../../components/page/PageTabs.vue'
   import AppLayout from '../../components/shell/AppLayout.vue'
@@ -49,17 +52,31 @@
   import DeviceGroups from './panels/DeviceGroups.vue'
   import FunctionsInstances from './panels/FunctionsInstances.vue'
   import MainSettings from './panels/MainSettings.vue'
+  import Overview from './panels/Overview.vue'
   import RulesEngine from './panels/RulesEngine.vue'
 
   const route = useRoute()
   const router = useRouter()
 
-  // A tiny stand-in "record" — in a real app this comes from the route id. Mirrors
-  // the reference repo gab-az/webkit-sample-vue so the Build tab is coherent.
-  const application = {
-    id: route.params.id || '1784552864',
-    name: String(route.query.name || 'webkit-sample-vue')
-  }
+  // The seeded record behind the route, falling back to the reference repo
+  // gab-az/webkit-sample-vue so a deep link with no match still renders a coherent page.
+  //
+  // It resolves the WHOLE record rather than synthesizing `{ id, name }`, because `source`
+  // decides what the Build tab can honestly show: an application reached by CLI has no
+  // repository, and a Build tab that opens with "Connected repository" over an empty value
+  // is the page claiming a connection that does not exist
+  // (../../lib/data/applications.js).
+  const application = computed(() => {
+    const id = String(route.params.id || '1784552864')
+    const seeded =
+      applicationById(id) ?? provisionedApplications.value.find((app) => app.id === id)
+    if (seeded) return seeded
+    return {
+      id,
+      name: String(route.query.name || 'webkit-sample-vue'),
+      source: 'git'
+    }
+  })
 
   // The resource's sub-pages. Each tab is a navigation destination, not a filter, and
   // names the view it mounts. `props` is per-tab on purpose: only the two tabs scoped
@@ -93,18 +110,24 @@
   // creates a Rule, Functions Instances creates a Functions Instance. The drawer that
   // opens carries the SAME words as the button that opened it (see each panel), so an
   // action never renames itself between its trigger and its form.
-  const tabs = [
+  const tabs = computed(() => [
+    {
+      value: 'overview',
+      label: 'Overview',
+      component: Overview,
+      props: { application: application.value }
+    },
     {
       value: 'main-settings',
       label: 'Main Settings',
       component: MainSettings,
-      props: { application }
+      props: { application: application.value }
     },
     {
       value: 'build',
       label: 'Build',
       component: Build,
-      props: { application }
+      props: { application: application.value }
     },
     {
       value: 'device-groups',
@@ -130,7 +153,7 @@
       component: RulesEngine,
       props: {}
     }
-  ]
+  ])
 
   // Active tab lives in the URL (`?tab=`) so it survives reload and is linkable.
   //
@@ -147,7 +170,7 @@
   // the route guard — `route-guard="false"` on their bars — so one navigation can never
   // raise two dialogs.
   const currentTab = computed(() =>
-    tabs.some((t) => t.value === route.query.tab) ? route.query.tab : 'main-settings'
+    tabs.value.some((t) => t.value === route.query.tab) ? route.query.tab : 'overview'
   )
 
   // The tab being left, so the guard can name and resolve THAT tab's commit rather than
@@ -178,13 +201,15 @@
   })
 
   // The tab entry (component + props) the shell mounts. Falls back to the first tab,
-  // so an unknown `?tab=` renders Main Settings rather than nothing.
+  // so an unknown `?tab=` renders Overview rather than nothing.
   // A tab switch replaces a whole screen, so it arrives like one.
   const scrollRef = ref(null)
   const enterRef = ref(null)
   useTabEnter(enterRef, activeTab, scrollRef)
 
-  const activeView = computed(() => tabs.find((t) => t.value === activeTab.value) ?? tabs[0])
+  const activeView = computed(
+    () => tabs.value.find((t) => t.value === activeTab.value) ?? tabs.value[0]
+  )
 </script>
 
 <template>

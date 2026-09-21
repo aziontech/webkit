@@ -7,15 +7,16 @@
 //
 // That question has exactly three answers, and they are the three flows here:
 //
-//   git       the reader already has code, in a repository
-//   scratch   the reader has no code yet and wants the application layer on its own
+//   git       the reader already has code, in a repository Azion will watch
+//   cli       the reader has code, but not in a repository Azion can watch — so the
+//             application is created empty and they push to it from their own terminal
 //   template  the reader has no code yet and wants a framework starter
 //
 // ── WHY THE FLOWS DECLARE THEIR OWN STEPS ──
 //
 // The flows are not the same length, and pretending they are costs the reader a step
 // with nothing in it. Git and template both need a SOURCE chosen — a repository, a
-// starter — before anything can be configured; from scratch IS its own source, so
+// starter — before anything can be configured; a local project IS its own source, so
 // there is nothing to choose and it goes straight to configuration. So each flow
 // carries `steps`, the rail renders THAT list, and a two-step flow reads as a
 // two-step flow instead of showing a third marker the reader can never visit.
@@ -50,7 +51,7 @@
 // the account that owns the code is connected in the step — there is no paste-a-URL
 // shortcut past it. A URL cannot grant the watch, and offering it as the primary path
 // promised an import that stopped at the first private repository. The reader who has
-// no repository to connect has the other two doors: a template, or from scratch.
+// no repository to connect has the other two doors: a template, or the CLI.
 
 /**
  * The flows, keyed by id. `steps` is the ordered rail for that flow; `icon` is the
@@ -71,13 +72,19 @@ export const APPLICATION_FLOWS = {
     ]
   },
 
-  scratch: {
-    id: 'scratch',
-    icon: 'pi pi-file',
-    title: 'Start from scratch',
+  // THE ANSWER FOR A READER WITH FILES AND NO REPOSITORY, which is the state most people
+  // are actually in when they first arrive. It used to be "Start from scratch", which
+  // created the application layer and then said "connect your code to it whenever it
+  // exists" — true, and useless, because it never said how. It is the same two steps; what
+  // changed is that it now names the tool that finishes the job, and its outcome hands over
+  // the commands (../../components/application/GetStartedCli.vue).
+  cli: {
+    id: 'cli',
+    icon: 'pi pi-desktop',
+    title: 'Sync with Azion CLI',
     description:
-      'Create the Azion application layer on its own: a name, Cache Settings, and a connector. No repository, no build. Connect your code to it whenever it exists.',
-    // TWO steps, on purpose: from scratch IS the source, so there is nothing to pick.
+      'Create the application now and push to it from your own terminal. Azion links the local project, builds it with your framework preset, and keeps azion.json in sync. No repository required.',
+    // TWO steps, on purpose: the local project IS the source, so there is nothing to pick.
     // And the second part CREATES rather than deploying — there is no code to ship, so
     // the label says what the press does and the outcome offers the deploy separately
     // (../../pages/applications/wizard/ScratchStep.vue).
@@ -136,8 +143,8 @@ export const TEMPLATE_TARGETS = {
  * counted yet" rather than "part one of a few".
  *
  * So the provisional shape is the MODAL one — three parts, which is what two of the three
- * flows actually have. Choosing from scratch then drops the total to two, and a total that
- * SHRINKS is the right direction to be wrong in: from scratch is the fast path, and
+ * flows actually have. Choosing the CLI then drops the total to two, and a total that
+ * SHRINKS is the right direction to be wrong in: the CLI is the fast path, and
  * learning it is one part shorter than expected is good news. Growing would be the
  * opposite.
  */
@@ -153,7 +160,7 @@ export const PROVISIONAL_STEPS = [
  */
 export const APPLICATION_METHODS = [
   APPLICATION_FLOWS.git,
-  APPLICATION_FLOWS.scratch,
+  APPLICATION_FLOWS.cli,
   APPLICATION_FLOWS.template
 ]
 
@@ -161,15 +168,15 @@ export const APPLICATION_METHODS = [
 export const getApplicationFlow = (id) => APPLICATION_FLOWS[id] ?? null
 
 /**
- * The from-scratch source, shaped like a template so the Configure step and the
- * provisioning call do not need to know which door the reader came through.
+ * The CLI source, shaped like a template so the Configure step and the provisioning call
+ * do not need to know which door the reader came through.
  */
 export const SCRATCH_SOURCE = {
-  kind: 'scratch',
-  title: 'From scratch',
-  description: 'The Azion application layer only. Connect it to your code later.',
+  kind: 'cli',
+  title: 'Local project',
+  description: 'The Azion application layer, ready for your first `azion deploy`.',
   framework: 'javascript',
-  icon: 'pi pi-file',
+  icon: 'pi pi-desktop',
   repoOwner: 'aziontech',
   // The starter the run clones for the log — it is the upstream repository's own path,
   // not the method's name, so it stays what it is called upstream.

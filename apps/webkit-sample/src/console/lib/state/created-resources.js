@@ -51,7 +51,7 @@ import { networkListRow } from '../data/network-lists'
 import { bucketRow } from '../data/object-storage'
 import { wafRuleRow } from '../data/waf-rules'
 
-const STORAGE_KEY = 'webkit-sample-created-resources'
+const STORAGE_KEY = 'webkit-sample:created-resources'
 
 const load = () => {
   try {

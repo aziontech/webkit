@@ -45,8 +45,9 @@
 // through the same card the application deploy uses, on the workload pipeline
 // (./workload-provisioning.js).
 
-import { APPLICATIONS } from '@shared/lib/applications'
-import { provisionedApplications } from '@shared/lib/provisioning'
+import { APPLICATIONS } from './applications'
+import { DEFAULT_ENVIRONMENTS } from './environments'
+import { provisionedApplications } from './provisioning'
 import { computed } from 'vue'
 
 import { presetLabel } from '../format/presets'
@@ -65,7 +66,7 @@ export const WORKLOAD_STEPS = [
 //
 // IT USED TO BE A PARALLEL FIXTURE, AND THAT WAS THE BUG. This file carried four names of
 // its own — `edge-shop`, `azion-docs-site`, `marketing-landing`, `internal-admin` — and not
-// one of them is in the Applications module's list (@shared/lib/applications.js). So the
+// one of them is in the Applications module's list (./applications.js). So the
 // create offered four applications the rest of the console had never heard of, while every
 // application the reader could actually see was unbindable. It is the same mistake
 // WORKLOAD_DEPLOYMENTS below is written to avoid, made one question earlier: an account has
@@ -116,18 +117,16 @@ export const WORKLOAD_APPLICATIONS = computed(() => [
 // hostname answers (a workload's Stage binding is served on its own `stage-` host — see
 // ../../pages/workloads/WorkloadDetail.vue → `domainsByEnvironment`), which is exactly the
 // difference two bare labels leave the reader to already know.
-export const WORKLOAD_ENVIRONMENTS = [
-  {
-    value: 'Production',
-    label: 'Production',
-    description: 'The live binding. Traffic on the workload’s domain is served from it.'
-  },
-  {
-    value: 'Stage',
-    label: 'Stage',
-    description: 'A rehearsal binding, answering on its own hostname rather than the live one.'
-  }
-]
+// The pair a new workload is created with, described by the records themselves
+// (./environments.js `starter`). Named here once, the create flow and the workload page
+// offered different sets the moment anybody edited an environment.
+export const WORKLOAD_ENVIRONMENTS = computed(() =>
+  DEFAULT_ENVIRONMENTS.value.map((environment) => ({
+    value: environment.name,
+    label: environment.name,
+    description: environment.description
+  }))
+)
 
 // THE DEPLOYMENTS THE FIRST RELEASE CAN LAND IN.
 //

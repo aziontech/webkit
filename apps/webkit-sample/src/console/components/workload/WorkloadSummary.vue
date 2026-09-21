@@ -40,7 +40,6 @@
   import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
-  import Chip from '@aziontech/webkit/chip'
   import CopyButton from '@aziontech/webkit/copy-button'
   import Dropdown from '@aziontech/webkit/dropdown'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
@@ -49,6 +48,7 @@
   import { computed } from 'vue'
 
   import DomainOverflowPopover from '../list/DomainOverflowPopover.vue'
+  import ResourceLink from '../resource/ResourceLink.vue'
 
   const props = defineProps({
     /** The record's workload — `{ id, name, domain, domains, domainCount, status, owner, ownerAvatar, modifiedAt }`. */
@@ -57,7 +57,8 @@
     customDomains: { type: Array, default: () => [] },
     /**
      * The environments this workload publishes into — `{ name, settingsId }[]`
-     * (../../lib/data/releases.js). One entry renders as a label, several as a Select.
+     * (../../lib/state/workload-environments.js). Each one is here because a DOMAIN on
+     * this workload answers there, which is why the picker's action adds a domain.
      */
     environments: { type: Array, default: () => [] }
   })
@@ -70,7 +71,7 @@
   // Visit is the card's own action, so the card only says it was pressed — the PAGE owns
   // what opening the workload does, exactly as it did while the button lived in the tab
   // bar. Nothing about "open this address" belongs to a summary component.
-  const emit = defineEmits(['visit', 'add-domain', 'create-environment'])
+  const emit = defineEmits(['visit', 'add-domain', 'add-environment'])
 
   // The hostname the workload is being READ on. The Environment Select re-points it per
   // environment, so the block takes the domain it is handed rather than reaching for
@@ -86,13 +87,20 @@
     () => environment.value || props.environments[0]?.name || 'Production'
   )
 
-  // The create row's sentinel value. It is an ACTION in a list of values, so it is told
+  // The action row's sentinel value. It is an ACTION in a list of values, so it is told
   // apart by identity rather than by position — a picker whose last row happens to mean
   // something else is one reorder away from a bug.
-  const CREATE = '__create__'
+  //
+  // WHAT IT ADDS IS AN ENVIRONMENT; WHAT IT ASKS FOR IS A DOMAIN. The row opened a Create
+  // Environment drawer that made an environment no domain answered on — not how one
+  // reaches a workload. An environment is an account record, and it arrives here because a
+  // DOMAIN on this workload answers in it (../../lib/state/workload-settings.js). So the
+  // row keeps the name of the act and the form behind it asks for the address, offering
+  // the account's environments and a quick-add for one that does not exist yet.
+  const ADD = '__add-environment__'
 
   const onSelect = (value) => {
-    if (value === CREATE) return emit('create-environment')
+    if (value === ADD) return emit('add-environment')
     environment.value = value
   }
 
@@ -173,18 +181,10 @@
              brighter than the glyphs above it and hover DIMMED it. Measured — 255,255,255
              at rest against 250,250,250 text. The muted ink is the one that sits under
              full ink in both themes. -->
-          <a
+          <ResourceLink
+            :label="domain"
             :href="`https://${domain}`"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="flex min-w-0 items-center gap-(--spacing-xxs) text-label-md text-(--text-default) underline decoration-(--text-muted) underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance hover:decoration-(--text-default) motion-reduce:transition-none"
-          >
-            <span class="truncate">{{ domain }}</span>
-            <i
-              class="pi pi-arrow-up-right shrink-0 text-[0.85em]"
-              aria-hidden="true"
-            />
-          </a>
+          />
           <DomainOverflowPopover
             v-if="aliasCount"
             :domains="domains"
@@ -203,6 +203,14 @@
            into the fact row where they are captioned like every other fact — which is what
            left this end reading as what it is.
 
+           AN OVERFLOW USED TO CLOSE THIS ROW — an ellipsis carrying Clone and Delete,
+           picked up from the Workloads list row. Delete lives in the Settings tab's Danger
+           Zone now, where every destructive act in this console is read with the sentence
+           that says what it costs; a menu that has to be opened to find out it holds a
+           delete is the wrong place for the one action a workload cannot take back. Clone
+           went with it rather than being given a home of its own: it is a list act, on the
+           row, where the reader is choosing WHICH workload.
+
            VISIT LIVES HERE, not in the page's tab bar. It opens the address this card is
            about, so it belongs beside the address rather than up in the row of page-level
            actions — which is now the one primary action a workload page has (Deploy),
@@ -214,7 +222,7 @@
             label="Visit"
             kind="outlined"
             size="medium"
-            icon="pi pi-arrow-up-right"
+            icon="pi pi-external-link"
             @click="emit('visit')"
           />
 
@@ -224,17 +232,28 @@
                the card has to say which, let the reader move it, and let them add one.
 
                A PICKER, NOT A SELECT, because the answer set is not closed: a Select
-               offers what exists, and this also offers to ADD one. That is a different
-               kind of row — an action, not a value — so it sits in its own group under a
-               rule instead of pretending to be another environment. It is also why a
-               workload with one environment still gets the control: there is always
+               offers what exists, and this also offers the act that ADDS one. That is a
+               different kind of row — an action, not a value — so it sits in its own group
+               under a rule instead of pretending to be another environment. It is also why
+               a workload with one environment still gets the control: there is always
                something to do in it.
+
+               ADDING ONE IS ADDING A DOMAIN. This row opened a Create Environment drawer
+               that asked for a name and a Deployment Setting — an environment nothing
+               answered on, and a link the platform makes itself. An environment is an
+               account record (../../lib/data/environments.js), and it reaches a workload
+               because a DOMAIN on it answers there. So the row keeps its name and opens
+               the form that does that (../workload/AddEnvironmentDrawer.vue): the address,
+               then the environment it answers in — an existing one, or a new one made in a
+               second drawer without leaving the form.
 
                `Dropdown.Trigger` is already the button (a `span` with `role="button"`),
                so what goes inside is a plain `span` wearing the closed-Select chrome — a
                real `<button>` there would be a control nested inside a control. Medium
                (32px), so it sits at the same height as Visit beside it. -->
-          <Tooltip text="Select an environment to see its deployment and settings, or add one">
+          <Tooltip
+            text="Select an environment to see its deployment and settings, or add another one"
+          >
             <Dropdown
               placement="bottom-end"
               @select="(event, value) => onSelect(value)"
@@ -266,10 +285,22 @@
               </Dropdown.Group>
 
               <Dropdown.Group>
+                <!-- A PLUS, not the environment glyph. The row is the ACT, and every
+                     other row in this menu is an environment the reader can select — the
+                     layers mark would have named the same thing they all are instead of
+                     the one thing this row does. The trigger keeps the layers glyph, which
+                     is where naming the subject belongs. -->
                 <Dropdown.Option
-                  :value="CREATE"
-                  label="Create Environment"
-                />
+                  :value="ADD"
+                  label="Add Environment"
+                >
+                  <template #left>
+                    <i
+                      class="pi pi-plus"
+                      aria-hidden="true"
+                    />
+                  </template>
+                </Dropdown.Option>
               </Dropdown.Group>
             </Dropdown>
           </Tooltip>
@@ -297,17 +328,35 @@
         class="grid grid-cols-2 gap-(--spacing-sm) border-t border-(--border-muted) p-(--spacing-md) sm:grid-cols-4"
       >
         <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-          <span class="text-label-sm text-(--text-muted)">Custom domains</span>
-          <!-- EMPTY IS A CONTROL, not an em dash. This is the one field on the card the
-             reader is expected to fill, and a dash said so without offering the way in —
-             the only door was a checklist row further down the page. `kind="dashed"` is
-             the Chip variant that exists for exactly this ("the control that adds one"),
-             so an unfilled slot reads as an invitation in the same visual language the
-             topology's unbound nodes use. It opens the same drawer the checklist does;
-             the page owns that, so the chip only says it was pressed.
-             Once filled, the cell is a FACT again and the names take it back — adding a
-             second still goes through the checklist row, which stays pressable when
-             done. The tooltip carries the full list when it outgrows the cell. -->
+          <!-- THE ADD SITS ON THE LABEL, not in the value row. It was a dashed Chip
+               reading "Add a custom domain", which took the whole value cell and only
+               appeared while the cell was empty — so the one field the reader is expected
+               to fill lost its way in the moment they filled it, and a second domain had
+               to be added from a checklist row further down the page.
+               A glyph beside the label is always there and says the same thing: this is
+               the field, and this is how you add one. The label carries the meaning, so
+               the glyph is `aria-hidden` and the button takes the name.
+               THE TARGET IS BIGGER THAN THE GLYPH: `size-6` with `p-1` gives a 24px hit
+               area around a 14px mark, and `-m-1` pulls the extra back out of the flow so
+               the label row keeps its own height. A 10x14 target is the size the icon
+               happens to be, which is not a reason for it to be the size of the button. -->
+          <span class="flex min-w-0 items-center gap-(--spacing-xxs)">
+            <span class="text-label-sm text-(--text-muted)">Custom domains</span>
+            <Tooltip text="Add a custom domain">
+              <button
+                type="button"
+                class="-m-1 inline-flex size-6 shrink-0 items-center justify-center rounded-(--shape-button) p-1 text-(--text-muted) transition-colors duration-150 ease-out hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+                aria-label="Add a custom domain"
+                @click="emit('add-domain')"
+              >
+                <i
+                  class="pi pi-plus-circle text-body-sm leading-none"
+                  aria-hidden="true"
+                />
+              </button>
+            </Tooltip>
+          </span>
+
           <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
             <!-- A BOUND DOMAIN IS SOMETHING YOU VISIT. It was plain text, which made the one
                field the reader had just gone and configured the only address on the card
@@ -315,45 +364,31 @@
                the same clothes as the hostname in the strip above — full ink with a quiet
                underline and the outbound arrow, never the blue `--text-link`, so the card
                reads at one voice. -->
-            <Tooltip
+            <ResourceLink
               v-if="primaryCustom"
-              :text="customNames.join('\n')"
-            >
-              <a
-                :href="`https://${primaryCustom}`"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="flex min-w-0 items-center gap-(--spacing-xxs) text-body-sm text-(--text-default) underline decoration-(--text-muted) underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance hover:decoration-(--text-default) motion-reduce:transition-none"
-              >
-                <span class="truncate">{{ primaryCustom }}</span>
-                <i
-                  class="pi pi-arrow-up-right shrink-0 text-[0.85em]"
-                  aria-hidden="true"
-                />
-              </a>
-            </Tooltip>
-            <!-- The rest, counted. Not a link: it names no single address. The tooltip on
-               the anchor beside it already lists every one of them. -->
-            <span
+              :label="primaryCustom"
+              :href="`https://${primaryCustom}`"
+            />
+            <!-- The rest, behind the console's own overflow badge — the same component
+               the alias strip above this row uses (../list/DomainOverflowPopover.vue).
+               It was a bare `+N` span with the full list hiding in the anchor's tooltip,
+               which is a different answer to the same question two rows apart: one you
+               click, one you hover, neither searchable. A workload can carry dozens of
+               these, and the popover is the thing that pages and filters them. -->
+            <DomainOverflowPopover
               v-if="extraCustomCount"
-              class="shrink-0 text-body-sm text-(--text-muted)"
+              :domains="customNames"
+              :count="extraCustomCount"
+            />
+            <!-- EMPTY READS AS EMPTY, in the disabled ink every other absent value on this
+               card uses. The invitation is the glyph on the label above; repeating it here
+               would put the same control on the row twice. -->
+            <span
+              v-if="!primaryCustom"
+              class="truncate text-body-sm text-(--text-disabled)"
             >
-              +{{ extraCustomCount }}
+              None
             </span>
-            <Chip
-              v-else
-              kind="dashed"
-              size="small"
-              clickable
-              class="max-w-full"
-              @click="emit('add-domain')"
-            >
-              <i
-                class="pi pi-plus shrink-0 text-[0.75em]"
-                aria-hidden="true"
-              />
-              <span class="truncate">Add a custom domain</span>
-            </Chip>
           </div>
         </div>
 

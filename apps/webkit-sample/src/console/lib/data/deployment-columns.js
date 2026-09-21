@@ -19,7 +19,7 @@ export const DEPLOYMENT_COLUMNS = [
   },
   // FITTED, not a share. The cell carries the id and its copy button
   // (../../components/list/IdCell.vue), and this is the most crowded list in the
-  // console — nine columns. One share left the longest id shape (`dep-1020655-1`)
+  // console — eight columns. One share left the longest id shape (`dep-1020655-1`)
   // 5px short and ended it in an ellipsis; a share big enough to fit it (`grow: 3`,
   // 208px) took 24px more than the id ever needs, and on this table that comes out of
   // the Version column, which is the row's identity. This was a hand-measured
@@ -27,8 +27,16 @@ export const DEPLOYMENT_COLUMNS = [
   // arrives at is the same one, and it stays right when the ids change shape.
   { accessorKey: 'id', header: 'ID', minWidth: FIT_COLUMN },
   { accessorKey: 'status', header: 'Status', enableSorting: true, minWidth: FIT_COLUMN },
-  { accessorKey: 'resourceName', header: 'Resource', enableSorting: true, grow: 2 },
-  { accessorKey: 'resourceType', header: 'Type', enableSorting: true, minWidth: TAG_COLUMN_WIDE },
+  // WHAT WAS DEPLOYED is the WORKLOAD, not the resource. A workload is the thing that
+  // binds an application, a firewall and a custom page and publishes them; a resource
+  // is something it holds. So the name a deployment row leads with — the one the
+  // reader recognises and the one that has a page worth opening — is the workload's.
+  //
+  // This column used to name the resource, alongside a second `Type` column chipping
+  // its kind. Both are gone: the row named a part instead of the whole, and it cost
+  // two columns and two chips per row to do it. Type survives as a FILTER field, and
+  // the resource itself is on the deployment's own page, where the detail belongs.
+  { accessorKey: 'workloadName', header: 'Workload', enableSorting: true, grow: 2 },
   {
     accessorKey: 'environment',
     header: 'Environment',

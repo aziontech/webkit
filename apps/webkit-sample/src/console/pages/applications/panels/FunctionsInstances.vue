@@ -98,6 +98,7 @@
   import HeadingAction from '../../../components/page/HeadingAction.vue'
   import PageHeading from '../../../components/page/PageHeading.vue'
   import Section from '../../../components/page/Section.vue'
+  import ResourceLink from '../../../components/resource/ResourceLink.vue'
   import { sleep } from '../../../lib/behavior/forms'
   import { useListFilters } from '../../../lib/behavior/list-state'
   import { FIT_COLUMN, TAG_COLUMN } from '../../../lib/behavior/table-columns'
@@ -712,18 +713,12 @@
                       role="img"
                     />
                   </Tooltip>
-                  <router-link
+                  <ResourceLink
                     v-if="row.functionExists"
+                    :label="row.edgeFunction"
                     :to="{ path: functionPath(row), query: { email } }"
-                    class="flex min-w-0 items-center gap-(--spacing-xxs) text-body-sm text-(--text-default) no-underline hover:underline"
-                    @click.stop
-                  >
-                    <span class="truncate">{{ row.edgeFunction }}</span>
-                    <i
-                      class="pi pi-arrow-up-right shrink-0 text-(--text-muted)"
-                      aria-hidden="true"
-                    />
-                  </router-link>
+                    module="Functions"
+                  />
                   <span
                     v-else
                     class="truncate text-body-sm text-(--text-muted)"

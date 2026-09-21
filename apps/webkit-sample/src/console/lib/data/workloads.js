@@ -1,6 +1,6 @@
 // The workloads the sample is seeded with.
 //
-// Extracted from components/Workloads.vue because a second module needs the same
+// Extracted from ../../pages/workloads/Workloads.vue because a second module needs the same
 // records: a deployment belongs to exactly one workload, so the deployment history
 // (./deployment-history.js) is keyed by these ids and reads these names. When the
 // seed lived inside the list page, the only way for another surface to name a
@@ -9,8 +9,8 @@
 // The list page still owns its own copy (`ref([...WORKLOADS])`): it deletes rows,
 // and a page mutating a shared module-level array would leak that into every other
 // surface reading it.
-import { daysAgo, formatListDate } from './dates'
-import { authorAt } from './people'
+import { daysAgo, formatListDate } from '@shared/lib/dates'
+import { authorAt } from '@shared/lib/people'
 
 /** How many workloads the sample seeds. */
 export const WORKLOAD_COUNT = 20

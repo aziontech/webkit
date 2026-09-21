@@ -20,8 +20,8 @@
 // one provisioned in this session — gets the same shape derived from its own id, the
 // way ./provisioning.js derives its demo chain.
 import { applicationAt } from './applications'
-import { formatListDate, hoursAgo } from './dates'
-import { authorAt, emailOf } from './people'
+import { formatListDate, hoursAgo } from '@shared/lib/dates'
+import { authorAt, emailOf } from '@shared/lib/people'
 import { workloadById, WORKLOADS } from './workloads'
 
 // What a workload's deployments targeted, newest first. A workload binds three
@@ -139,7 +139,7 @@ const byNewest = (a, b) => b.deployedAt - a.deployedAt
 /**
  * Every seeded deployment, newest first.
  *
- * The deployments that have a PAGE behind them (src/lib/azion-deploys.js — the real
+ * The deployments that have a PAGE behind them (@shared/lib/azion-deploys.js — the real
  * `azion deploy` runs, whose whole pipeline is recorded) are part of the same list:
  * they satisfy the same row contract, so no list can tell them apart. They are not
  * imported here — that module maps them itself and the Deployments module spreads
@@ -167,7 +167,7 @@ export const DEPLOYMENT_HISTORY = WORKLOADS.flatMap((workload, index) =>
  * Every deployment in this console is read on its own page (`/deployments/:id`), so
  * the row a list clicked has to be findable again from the URL alone. The version id
  * is what identifies it: it is the column the table shows, the string a support
- * thread quotes, and — for the recorded `azion deploy` runs in ./azion-deploys.js —
+ * thread quotes, and — for the recorded `azion deploy` runs in @shared/lib/azion-deploys.js —
  * the same value as the deployment's own id, so one lookup order covers both
  * families.
  *
@@ -187,4 +187,72 @@ export function deploymentRowsFor(workloadId, workloadName = 'Workload Name') {
   // stable set of statuses instead of always reading like the first workload.
   const index = Number(id.slice(-2)) || 0
   return historyFor(workload, index).sort(byNewest)
+}
+
+/** How many rows an application's activity list reads as a history rather than a stub. */
+const APPLICATION_HISTORY_LENGTH = 8
+
+/**
+ * One application's deployments, newest first — every deployment that shipped IT,
+ * whichever workload published it.
+ *
+ * The seed pairs each application to one or two workloads, so the rows already in
+ * `DEPLOYMENT_HISTORY` that target it are a true but very short history. The rest are
+ * derived from the application's own id, deterministically and strictly OLDER than
+ * every seeded row, so the current version stays the one the workload's own page and
+ * the Deployments module both report.
+ *
+ * Derived version ids live in their own band (1.5e9), clear of the workload-derived
+ * ones (1.2e9), and resolve on the deployment page through the `application` context
+ * the link carries — the same way a derived workload history resolves through
+ * `workloadId`.
+ *
+ * @param {string} applicationId The application's id (from the route).
+ * @param {string} [applicationName] Display name, for an application that is not seeded.
+ * @returns {Array<object>} Rows satisfying components/deployment/DeploymentsTable.vue's contract.
+ */
+export function applicationDeploymentRows(applicationId, applicationName = 'Application') {
+  const id = String(applicationId)
+  const seeded = DEPLOYMENT_HISTORY.filter(
+    (deployment) => deployment.resourceType === 'application' && deployment.resourceId === id
+  )
+  const name = seeded[0]?.resourceName || applicationName
+  const seed = Number(id.slice(-3)) || 0
+  const oldest = seeded.reduce(
+    (earliest, deployment) => Math.min(earliest, deployment.deployedAt.getTime()),
+    Date.now()
+  )
+
+  const derived = Array.from(
+    { length: Math.max(APPLICATION_HISTORY_LENGTH - seeded.length, 0) },
+    (_, slot) => {
+      const workload = WORKLOADS[(seed + slot) % WORKLOADS.length]
+      const status = STATUSES[slot % STATUSES.length][(seed + slot) % STATUSES[0].length]
+      const person = authorAt(seed + slot)
+      const deployedAt = new Date(oldest - (slot + 1) * (29 + (seed % 7)) * 3_600_000)
+
+      return {
+        id: `dep-app-${id}-${slot + 1}`,
+        versionId: String(1500000000 + (Number(id) % 9_000_000) + slot * 7),
+        workloadId: workload.id,
+        workloadName: workload.name,
+        current: false,
+        status,
+        duration: status === 'Ready' ? DURATIONS[(seed + slot) % DURATIONS.length] : '',
+        environment: (seed + slot) % 4 === 1 ? 'Stage' : 'Production',
+        deployedAt,
+        date: formatListDate(deployedAt),
+        resourceType: 'application',
+        resourceName: name,
+        resourceId: id,
+        author: person.name,
+        authorEmail: emailOf(person.name),
+        authorAvatar: person.avatar
+      }
+    }
+  )
+
+  return [...seeded, ...derived]
+    .sort(byNewest)
+    .map((row, index) => (row.current === (index === 0) ? row : { ...row, current: index === 0 }))
 }

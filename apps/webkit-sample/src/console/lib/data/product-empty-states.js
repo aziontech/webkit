@@ -306,7 +306,7 @@ export const productEmptyStates = [
       },
       {
         id: 'scratch',
-        title: 'From scratch',
+        title: 'Create an application',
         description: 'Configure the build, the runtime and the cache.',
         action: 'Create',
         icon: 'pi pi-file',

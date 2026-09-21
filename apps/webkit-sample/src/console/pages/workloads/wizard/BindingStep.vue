@@ -44,7 +44,7 @@
   import Section from '../../../components/page/Section.vue'
   import ResourcePicker from '../../../components/resource/ResourcePicker.vue'
   import { CERTIFICATE_OPTIONS, TLS_VERSION_OPTIONS } from '../../../lib/data/create-resources'
-  import { CUSTOM_PAGE_OPTIONS } from '../../../lib/data/deployment-strategies'
+  import { existingCustomPageOptions } from '../../../lib/data/custom-pages'
   import {
     WORKLOAD_DEPLOYMENTS,
     WORKLOAD_ENVIRONMENTS,
@@ -62,6 +62,10 @@
 
   // Stored value → visible label, for every Select here. Without it the trigger prints the
   // raw API value (`tls_1_2` instead of "TLS 1.2").
+  // The Custom Pages module's own rows — a binding is a REFERENCE to a record that
+  // exists, never a name invented here.
+  const customPageOptions = existingCustomPageOptions()
+
   const labelFor = (options) => (value) =>
     options.find((option) => option.value === value)?.label ?? ''
 
@@ -447,7 +451,7 @@
                   class="w-full"
                   placeholder="Not bound"
                   :disabled="disabled"
-                  :display-value="labelFor(CUSTOM_PAGE_OPTIONS)"
+                  :display-value="labelFor(customPageOptions)"
                 >
                   <Select.Trigger
                     :id="controlId"
@@ -455,7 +459,7 @@
                   />
                   <Select.Content>
                     <Select.Option
-                      v-for="option in CUSTOM_PAGE_OPTIONS"
+                      v-for="option in customPageOptions"
                       :key="option.value"
                       :value="option.value"
                     >

@@ -18,7 +18,7 @@
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { provisionedBuckets, removeDeployment } from '@shared/lib/provisioning'
+  import { provisionedBuckets, removeDeployment } from '../../lib/data/provisioning'
   import { computed, ref } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 

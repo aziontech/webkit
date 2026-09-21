@@ -11,8 +11,11 @@
   //    provisions — Workload → Application → Connector → Storage, src/lib/provisioning.js)
   //    and "Version History".
   //  - Deployments: the same history, unscoped by the Overview's framing.
-  //  - Settings: a General ItemGroup + a danger delete row, committed as ONE page from
-  //    the shared save bar (ui/SettingsSaveBar.vue) like every settings surface here.
+  //  - Settings: General (name + Active), Domains, Advanced Settings and a Danger Zone
+  //    holding the delete, committed as ONE page from the shared save bar
+  //    (ui/SettingsSaveBar.vue) like every settings surface here. The summary card used to
+  //    close its address strip with an overflow menu carrying Clone and Delete; both are
+  //    gone — delete is a Danger Zone row, and cloning is a LIST act.
   //
   // AN "ACTIVE DEPLOYMENT" BAND USED TO OPEN THE OVERVIEW — a fact grid (version id,
   // environment, status, deployed by/when) with an Environment Select on its heading row.
@@ -38,17 +41,21 @@
   import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
   import Flow from '@aziontech/webkit/flow'
+  import IconButton from '@aziontech/webkit/icon-button'
   import InputText from '@aziontech/webkit/input-text'
   import Item from '@aziontech/webkit/item'
+  import Switch from '@aziontech/webkit/switch'
+  import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
+  import Tooltip from '@aziontech/webkit/tooltip'
   import { consoleDeployRowsFor } from '@shared/lib/azion-deploys'
-  import { deploymentRowsFor } from '@shared/lib/deployment-history'
+  import { deploymentRowsFor } from '../../lib/data/deployment-history'
   import {
     demoDeployment,
     findDeploymentByWorkload,
     provisionedDeployRow,
     resourceChain
-  } from '@shared/lib/provisioning'
+  } from '../../lib/data/provisioning'
   import { computed, reactive, ref, watch } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
@@ -56,6 +63,8 @@
   import FieldRow from '../../components/form/FieldRow.vue'
   import SettingsSaveBar from '../../components/form/SettingsSaveBar.vue'
   import UnsavedChangesGuard from '../../components/form/UnsavedChangesGuard.vue'
+  import ConfirmDialog from '../../components/list/ConfirmDialog.vue'
+  import DeleteDialog from '../../components/list/DeleteDialog.vue'
   import ExportButton from '../../components/list/ExportButton.vue'
   import FilterButton from '../../components/list/FilterButton.vue'
   import FilterChips from '../../components/list/FilterChips.vue'
@@ -66,21 +75,36 @@
   import ProductionChecklist from '../../components/page/ProductionChecklist.vue'
   import Section from '../../components/page/Section.vue'
   import AppLayout from '../../components/shell/AppLayout.vue'
-  import AddDomainDrawer from '../../components/workload/AddDomainDrawer.vue'
+  import AddEnvironmentDrawer from '../../components/workload/AddEnvironmentDrawer.vue'
+  import DeployDrawer from '../../components/workload/DeployDrawer.vue'
   import DeploymentFooter from '../../components/workload/DeploymentFooter.vue'
-  import EnvironmentDrawer from '../../components/workload/EnvironmentDrawer.vue'
+  import TopologyBindControl from '../../components/workload/TopologyBindControl.vue'
   import TopologyBindNode from '../../components/workload/TopologyBindNode.vue'
   import TopologyNodeCard from '../../components/workload/TopologyNodeCard.vue'
+  import WorkloadDeploymentSettingsSection from '../../components/workload/WorkloadDeploymentSettingsSection.vue'
+  import WorkloadDomainsSection from '../../components/workload/WorkloadDomainsSection.vue'
+  import WorkloadMutualAuthSection from '../../components/workload/WorkloadMutualAuthSection.vue'
+  import WorkloadProtocolSection from '../../components/workload/WorkloadProtocolSection.vue'
   import WorkloadSummary from '../../components/workload/WorkloadSummary.vue'
   import { useListRefresh } from '../../lib/behavior/list-state'
   import { useTabEnter } from '../../lib/behavior/tab-enter'
   import { createResourcePath } from '../../lib/data/create-resources'
-  import { allCustomPages } from '../../lib/data/custom-pages'
   import { AZION_DEFAULT_ID } from '../../lib/data/deployment-strategies'
   import { deploymentFilterFields } from '../../lib/data/deployments'
-  import { existingFirewallOptions } from '../../lib/data/firewalls'
-  import { releaseSeedForWorkload, settingsById } from '../../lib/data/releases'
-  import { addEnvironment, environmentsFor } from '../../lib/state/workload-environments'
+  import { settingsById } from '../../lib/data/releases'
+  import {
+    BIND_TARGET_ORDER,
+    bindTargetFor,
+    bindTargetOptions,
+    removalMessage,
+    stagedMessage
+  } from '../../lib/data/topology-bind-targets'
+  import {
+    workloadMutualAuthDefaults,
+    workloadProtocolDefaults
+  } from '../../lib/data/workload-protocols'
+  import { connectEnvironment, environmentsFor } from '../../lib/state/workload-environments'
+  import { bindWorkloadSettings } from '../../lib/state/workload-settings'
 
   const route = useRoute()
   const router = useRouter()
@@ -127,95 +151,164 @@
   // and `domain` are what the chain reports now.
   const topology = computed(() => resourceChain(record.value))
 
-  // --- Application-level bindings -------------------------------------------
-  // A deployment binds an Application and, optionally, a Firewall and a Custom
-  // Page. Those two are provisioned by nothing, so they are absent from
-  // `resourceChain()` — but leaving them out of the diagram hides the decision.
-  // They render at the Application's own level (a Flow.Parallel column) as EMPTY
-  // nodes: the slot stays visible, with the CTA that fills it.
+  // THE FIRST NODE OF THE CHAIN. A request starts at a hostname, not at a workload, so
+  // that is where the diagram starts — the same node the platform's own topology opens
+  // on (console-kit's `DeploymentTopologySection`). The header names the address traffic
+  // actually arrives on (a custom domain once there is one, the generated hostname until
+  // then) and counts the rest; the body lists every one of them, copyable, and the full
+  // table stays on the Settings tab.
   //
-  // WHAT A SLOT OFFERS IS THE MODULE'S OWN LIST — the seeded firewalls
-  // (../../lib/data/firewalls.js) and custom pages (../../lib/data/custom-pages.js),
-  // not names invented here. That is what lets a bound slot LINK: `module` + the id
-  // the option carries is the `/<module>/:id/settings` page the module list edits that
-  // row with, so binding here and editing there name one resource. Invented options
-  // could only ever link to a resource that is in no list.
-  const BINDABLE = [
-    {
-      key: 'firewall',
-      kind: 'Firewall',
-      icon: 'ai ai-edge-firewall',
-      description: 'Not bound. Requests reach the application uninspected.',
-      ctaLabel: 'Bind Firewall',
-      module: 'firewall',
-      // The five most recently touched, which is the order `existingFirewallOptions()`
-      // sorts for and the count a create offers — fourteen of them in a ~230px node
-      // column is a picker, not a slot.
-      options: existingFirewallOptions()
-        .slice(0, 5)
-        .map((option) => ({ value: option.id, label: option.label }))
-    },
-    {
-      key: 'customPage',
-      kind: 'Custom Page',
-      icon: 'ai ai-custom-pages',
-      description: "Not bound — 4xx/5xx fall back to Azion's default page.",
-      ctaLabel: 'Bind Custom Page',
-      module: 'custom-pages',
-      options: allCustomPages().map((page) => ({ value: page.id, label: page.name }))
+  // It reads the SAVED list (`savedDomains`, below), not the Settings tab's form value:
+  // the Overview reports what was committed, the same split the `active` switch has.
+  const domainsNode = computed(() => {
+    const domains = [
+      { domain: workload.value.domain, generated: true },
+      ...savedDomains.value.map((entry) => ({ domain: entry.domain, generated: false }))
+    ]
+    const primary = domains.find((entry) => !entry.generated) ?? domains[0]
+
+    return {
+      key: 'domains',
+      kind: 'Domains',
+      icon: 'ai ai-domains',
+      name: primary.domain,
+      status: `${domains.length} ${domains.length === 1 ? 'domain' : 'domains'}`,
+      add: true,
+      fields: domains.map((entry) => ({
+        label: entry.generated ? 'Azion domain' : 'Custom domain',
+        value: entry.domain,
+        copy: true,
+        url: `https://${entry.domain}`
+      }))
     }
-  ]
-
-  // What each slot currently holds — `{ id, name }`, because the node shows the name
-  // and links by the id. `null` keeps the empty node on the canvas.
-  const bindings = reactive({ firewall: null, customPage: null })
-
-  // The Application level of the chain: the Application node itself, plus one
-  // node per bindable slot — a filled card once bound, the empty node until then.
-  //
-  // Every slot is `terminal`, bound or not. A binding is not a link in the chain: the
-  // workload's relationship to each slot is a platform default, so a connector reaches
-  // it, but nothing flows onward from a binding to the Connector. Binding one fills the
-  // card; it does not promote the slot into a step. Only the Application carries the
-  // chain forward out of this level.
-  const applicationLevel = computed(() => {
-    const application = topology.value.find((node) => node.key === 'application')
-    return [
-      application,
-      ...BINDABLE.map((slot) => {
-        const bound = bindings[slot.key]
-        if (!bound) return { ...slot, empty: true, terminal: true }
-        return {
-          key: slot.key,
-          kind: slot.kind,
-          icon: slot.icon,
-          name: bound.name,
-          status: 'Active',
-          // A FILLED SLOT IS A REAL RESOURCE, so it goes where its module reads it —
-          // the same `/<module>/:id/settings` page the module list's Edit opens. A
-          // bound slot with no way out was the one node of the chain that named
-          // something and then refused to show it.
-          href: `/${slot.module}/${bound.id}/settings`,
-          terminal: true,
-          fields: [
-            // ID first, like every provisioned node above: it is what the link resolves.
-            { label: 'ID', value: bound.id },
-            { label: 'Bound to', value: application?.name ?? '' }
-          ]
-        }
-      })
-    ].filter(Boolean)
   })
 
-  // The rest of the chain keeps its own single-node levels, so the diagram is one
-  // list of levels: Workload → [Application + bindings] → Connector → Storage.
-  const topologyLevels = computed(() =>
-    topology.value.map((node) =>
-      node.key === 'application'
-        ? { key: 'application', nodes: applicationLevel.value }
-        : { key: node.key, nodes: [node] }
-    )
+  // --- Application-level bindings -------------------------------------------
+  // One node per bindable slot, in whichever of its four states it is: live, staged to
+  // change, staged to be taken away, or open. `deployed` is what a deploy has published
+  // (absent = the chain's own node answers); `staged` is what has been picked but not
+  // deployed yet.
+  const deployed = reactive({})
+  const staged = reactive({})
+
+  const stagedCount = computed(() => Object.keys(staged).length)
+
+  const chainNode = (key) => topology.value.find((node) => node.key === key)
+
+  const deployedResource = (key) => {
+    if (key in deployed) return deployed[key]
+    const node = chainNode(key)
+    return node ? { id: node.reference, name: node.name, node } : null
+  }
+
+  const slotNode = (key) => {
+    const target = bindTargetFor(key)
+    const live = deployedResource(key)
+    const pick = staged[key]
+    const removing = Boolean(pick?.removed)
+    const resource = pick ? (removing ? null : pick) : live
+    const options = bindTargetOptions(key)
+
+    const message = removing
+      ? removalMessage(key)
+      : pick
+        ? stagedMessage(key)
+        : resource
+          ? ''
+          : target.unboundMessage
+
+    if (!resource) {
+      return {
+        key,
+        empty: true,
+        target,
+        removable: true,
+        options,
+        status: pick ? 'Staged' : 'Not bound',
+        severity: pick ? 'warning' : 'neutral',
+        message
+      }
+    }
+
+    const chain = live?.node
+
+    // WHAT THE READER MAY TAKE AWAY, and it depends on how this workload was made. A
+    // connector the CREATE provisioned is the application's origin — that flow chose it,
+    // and an application whose origin is gone routes nowhere — so it can be re-pointed
+    // but not emptied. A connector bound HERE is this page's own, and a pick that has
+    // not been deployed yet is always discardable.
+    const removable = key !== 'connector' || Boolean(pick) || !chain
+
+    return {
+      key,
+      target,
+      removable,
+      options,
+      kind: target.kind,
+      icon: target.icon,
+      name: resource.name,
+      status: pick ? 'Staged' : (chain?.status ?? 'Active'),
+      dashed: Boolean(pick),
+      boundId: resource.id,
+      message: message || (removable ? '' : target.keptMessage),
+      href: pick ? '' : (chain?.href ?? `/${target.module}/${resource.id}/settings`),
+      fields: pick
+        ? []
+        : (chain?.fields ?? [
+            { label: 'ID', value: resource.id },
+            { label: 'Bound to', value: chainNode('application')?.name ?? '' }
+          ])
+    }
+  }
+
+  const slots = computed(() =>
+    Object.fromEntries(BIND_TARGET_ORDER.map((key) => [key, slotNode(key)]))
   )
+
+  // The diagram, level by level, in the order a request travels it — the same chain the
+  // platform's own topology draws (console-kit's `DeploymentTopologySection`), level for
+  // level, so a reader moving between the two reads one diagram:
+  //
+  //   Domains → Workload → Firewall → [Application + Custom Page] → Cache → Connector →
+  //   Storage
+  //
+  // THE FIREWALL IS ITS OWN LEVEL, and it is NOT terminal: traffic reaches the
+  // application THROUGH it, so it is a step of the chain whether it holds a resource or
+  // is still an open slot.
+  //
+  // THE CUSTOM PAGE shares the application's column and IS terminal — a connector
+  // reaches it and nothing flows onward from it. A provisioned firewall goes through the
+  // SAME node as a bound one, so a create that asked for protection fills the slot
+  // instead of adding a second firewall beside it.
+  //
+  // Seven levels do not fit the content column at their 13.5rem floor, so the band
+  // scrolls sideways — the CardBox around it carries `overflow-x-auto` for exactly that,
+  // and the platform's own topology scrolls for the same reason.
+  const topologyLevels = computed(() => {
+    const chain = topology.value
+    const placed = new Set(['workload', 'firewall', 'application', 'connector'])
+    const rest = chain.filter((node) => !placed.has(node.key))
+    const policies = rest.filter((node) => node.key.startsWith('cache-policy-'))
+    const storage = rest.filter((node) => !node.key.startsWith('cache-policy-'))
+    const workloadNode = chain.find((node) => node.key === 'workload')
+    const applicationNode = chain.find((node) => node.key === 'application')
+
+    return [
+      workloadNode && { key: 'domains', nodes: [domainsNode.value] },
+      workloadNode && { key: 'workload', nodes: [workloadNode] },
+      { key: 'firewall', nodes: [slots.value.firewall] },
+      applicationNode && {
+        key: 'application',
+        nodes: [applicationNode, { ...slots.value.customPage, terminal: true }]
+      },
+      policies.length && { key: 'cache', nodes: policies },
+      { key: 'connector', nodes: [{ ...slots.value.connector, terminal: storage.length === 0 }] },
+      storage.length && {
+        key: 'storage',
+        nodes: storage.map((node) => ({ ...node, terminal: true }))
+      }
+    ].filter(Boolean)
+  })
 
   // --- Deployment settings --------------------------------------------------
   // WHAT THIS WORKLOAD DEPLOYS WITH. A Deployment setting IS the strategy a deployment
@@ -241,16 +334,6 @@
     if (list.some((environment) => environment.name === selectedEnvironment.value)) return
     selectedEnvironment.value = list[0]?.name ?? 'Production'
   })
-
-  const environmentDrawerOpen = ref(false)
-
-  // A create the reader cannot see the result of is a create that appears to have done
-  // nothing — so the new environment is SELECTED, and the card is already reporting it by
-  // the time the drawer closes.
-  const onEnvironmentCreated = (environment) => {
-    const created = addEnvironment(workloadId, environment)
-    selectedEnvironment.value = created.name
-  }
 
   const activeEnvironment = computed(
     () =>
@@ -292,17 +375,52 @@
   // Nothing is stored as "done": a step is done because the thing exists, so undoing the
   // work puts the step back, which a click-counter never would.
   //
-  // The custom domains this page adds are page-local, exactly like `bindings` above: the
+  // The custom domains this page adds are page-local, exactly like `staged` above: the
   // topology's bind slots do not survive a reload either, and one of the two persisting
   // while the other did not would be the confusing half-measure.
-  const customDomains = ref([])
+  //
+  // THIS IS THE SAVED LIST, not the edited one. The Settings tab holds the domains as a
+  // form value (`settings.domains`), so adding, editing and removing one are pending
+  // edits the page's save bar commits — like every other field on that tab. What the
+  // Overview reports is what was COMMITTED, the same split the `active` switch already
+  // has below: a checklist that ticked on a typed value would be reporting an edit as a
+  // fact.
+  const savedDomains = ref([])
   const addDomainOpen = ref(false)
+
+  // The row the drawer is EDITING, or `null` when it is adding. One drawer for both:
+  // editing a domain is adding one with the answers already in the fields
+  // (../../components/workload/AddEnvironmentDrawer.vue).
+  const editingDomain = ref(null)
+
+  // WHICH DOOR THE READER CAME THROUGH. One form adds a domain and the environment it
+  // answers in — they are one act — but it is entered from two places that name it
+  // differently: the card's environment picker asks for an environment, the Custom domains
+  // field and the checklist ask for a domain. The form is the same; only its title and its
+  // commit verb follow the entry, so neither reader is answered in someone else's words.
+  const addIntent = ref('domain')
+
+  const openAdd = (intent) => {
+    editingDomain.value = null
+    addIntent.value = intent
+    addDomainOpen.value = true
+  }
+
+  // The same drawer, opened on a row. The row is passed by VALUE — a live reference would
+  // let the form's own reset write through to the table behind it.
+  const editSettingsDomain = (id) => {
+    const entry = settings.domains.find((domain) => domain.id === id)
+    if (!entry) return
+    editingDomain.value = { ...entry }
+    addIntent.value = 'domain'
+    addDomainOpen.value = true
+  }
 
   // The firewall is done EITHER WAY it can be there: bound here on the topology, or
   // provisioned with the chain by a create that asked for protection
-  // (../applications/CreateApplication.vue). Reading only `bindings` would show the step
-  // as pending on a workload that has had a firewall since the day it was made.
-  const boundFirewall = computed(() => bindings.firewall?.name || record.value.firewall?.name || '')
+  // (../applications/CreateApplication.vue). Reading only what this page bound would show
+  // the step as pending on a workload that has had a firewall since the day it was made.
+  const boundFirewall = computed(() => deployedResource('firewall')?.name ?? '')
 
   // Each step reads on TWO surfaces, and carries what each of them needs
   // (../../components/page/ProductionChecklist.vue): the band on the page shows only the
@@ -319,10 +437,10 @@
       description:
         'Serve this workload on a domain of your own, with a free HTTPS certificate, instead of the generated Azion hostname.',
       actionLabel: 'Add Domain',
-      done: customDomains.value.length > 0,
+      done: savedDomains.value.length > 0,
       // The FACT, not the verdict: a reader coming back to a done step is checking WHICH
       // domain it ended up on.
-      doneNote: `Serving ${customDomains.value.map((entry) => entry.domain).join(', ')}.`
+      doneNote: `Serving ${savedDomains.value.map((entry) => entry.domain).join(', ')}.`
     },
     {
       id: 'firewall',
@@ -340,8 +458,8 @@
       title: 'Set custom error pages',
       description: "Answer 4xx and 5xx with your own page instead of Azion's default response.",
       actionLabel: 'Bind Custom Page',
-      done: Boolean(bindings.customPage),
-      doneNote: `Serving ${bindings.customPage?.name ?? ''}.`
+      done: Boolean(deployedResource('customPage')),
+      doneNote: `Serving ${deployedResource('customPage')?.name ?? ''}.`
     }
   ])
 
@@ -349,13 +467,13 @@
   // domain is already answerable on this page, so pressing one takes the reader to that
   // control and opens it rather than growing a parallel form beside it. The domain has no
   // control here, so it gets the drawer the create flow already uses for it
-  // (../../components/workload/AddDomainDrawer.vue) — one surface for adding a domain,
+  // (../../components/workload/AddEnvironmentDrawer.vue) — one surface for adding a domain,
   // not two that can disagree.
   const topologyRef = ref(null)
 
   const onChecklistAction = (step) => {
     if (step.id === 'domain') {
-      addDomainOpen.value = true
+      openAdd('domain')
       return
     }
     // The topology's own bind node for that slot, opened where it lives. A bound slot
@@ -367,45 +485,120 @@
     topologyRef.value?.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'center' })
   }
 
-  const addDomain = (domain) => {
-    customDomains.value = [...customDomains.value, domain]
-    toast.success(`${domain.domain} added to ${workload.value.name}.`, {
-      description: 'Point your DNS at the workload to finish the handover.'
-    })
+  // THE DRAWER STAGES; THE SAVE BAR COMMITS. A domain is a Settings field like the name
+  // and the protocols beside it, so the form's commit is the page's commit — one bar, one
+  // Save, one set of unsaved changes to discard. The drawer used to write straight into
+  // the list, which left the one part of that tab nothing could undo and nothing could
+  // see as pending.
+  //
+  // IT IS AN UPSERT, keyed on the row's own id: the drawer returns the id it was opened
+  // with, so an edit replaces IN PLACE (the row does not jump to the bottom of the table
+  // the reader was just reading) and an add appends.
+  //
+  // ADDING FROM THE OVERVIEW LANDS ON SETTINGS. The bar is gated to that tab, so a domain
+  // staged from the production checklist or the summary card would otherwise be pending
+  // with nothing on screen offering to save it. The page already does this after a deploy
+  // (`onDeployed` switches to Deployments) — the reader is taken to the surface where the
+  // thing they just did now lives.
+  const stageDomain = (entry) => {
+    const existing = settings.domains.some((domain) => domain.id === entry.id)
+    settings.domains = existing
+      ? settings.domains.map((domain) => (domain.id === entry.id ? entry : domain))
+      : [...settings.domains, entry]
+
+    editingDomain.value = null
+    const landed = activeTab.value === 'settings'
+    activeTab.value = 'settings'
+
+    toast.success(
+      existing ? `${entry.domain} updated.` : `${entry.domain} added to ${workload.value.name}.`,
+      {
+        description: landed
+          ? `It answers in ${entry.environment}. Save the workload's settings to apply it.`
+          : `It answers in ${entry.environment}. Review it under Settings and save to apply it.`
+      }
+    )
+  }
+
+  // --- Removing a domain ----------------------------------------------------
+  // A CONFIRMATION, NOT A TYPE-THE-NAME GUARD (../../components/list/ConfirmDialog.vue).
+  // The row is a pending edit until the bar commits, so the page's own Discard is already
+  // the undo; DeleteDialog's phrase guard is for destroying something stored, and using it
+  // here would be friction that teaches people to click through guards.
+  const removingDomainId = ref('')
+  const removeDomainOpen = ref(false)
+
+  const removingDomain = computed(() =>
+    settings.domains.find((domain) => domain.id === removingDomainId.value)
+  )
+
+  const removeSettingsDomain = (id) => {
+    removingDomainId.value = id
+    removeDomainOpen.value = true
+  }
+
+  const confirmRemoveDomain = () => {
+    settings.domains = settings.domains.filter((domain) => domain.id !== removingDomainId.value)
+    removingDomainId.value = ''
   }
 
   // The Dropdown emits the option's VALUE, which is the resource's id — the slot's own
   // options are what turn it back into the name the node shows.
+  //
+  // A pick is STAGED, not applied: nothing reaches traffic until a deploy carries it.
+  // Picking the resource that is already live drops the staged pick instead of staging a
+  // no-op.
   const bindResource = (slotKey, id) => {
-    const slot = BINDABLE.find((item) => item.key === slotKey)
-    const option = slot?.options.find((entry) => entry.value === id)
+    const option = bindTargetOptions(slotKey).find((entry) => String(entry.value) === String(id))
     if (!option) return
-    bindings[slotKey] = { id: option.value, name: option.label }
+
+    const live = deployedResource(slotKey)
+    if (live && String(live.id) === String(option.value)) {
+      delete staged[slotKey]
+      return
+    }
+
+    staged[slotKey] = { id: option.value, name: option.label }
     // The slot the user just filled opens, so the node shows what it now holds
     // instead of closing back into the chain the moment it stops being empty.
     openNodes[slotKey] = true
-    toast.success(`${option.label} bound to ${workload.value.name}`, {
-      description: `${slot.kind} now applies to this deployment.`
+    toast.info(`${option.label} staged on ${workload.value.name}`, {
+      description: stagedMessage(slotKey)
     })
   }
 
+  // Removing is two acts, told apart by what is under the node: over a staged pick it
+  // discards the pick, over a live resource it stages the removal.
   const unbindResource = (slotKey) => {
-    const slot = BINDABLE.find((item) => item.key === slotKey)
-    bindings[slotKey] = null
-    toast.info(`${slot?.kind ?? 'Resource'} unbound`)
+    const target = bindTargetFor(slotKey)
+    const pick = staged[slotKey]
+
+    if (!slots.value[slotKey]?.removable) return
+
+    if (pick && !pick.removed) {
+      delete staged[slotKey]
+      toast.info(`${target.kind} pick discarded.`)
+      return
+    }
+
+    if (!deployedResource(slotKey)) return
+
+    staged[slotKey] = { removed: true }
+    openNodes[slotKey] = true
+    toast.info(`${target.kind} staged for removal.`, { description: removalMessage(slotKey) })
   }
 
-  // A slot can also be filled with a resource that does not exist yet, and a firewall and
-  // a custom page are both first-level resources — so the create is the module's own create
-  // PAGE, not a drawer grown here (../../lib/behavior/surfaces.js). The workload travels in
-  // `?from=` with its name, so Cancel and a finished create both land back on this page
-  // rather than on a module list the reader was not in
+  // A slot can also be filled with a resource that does not exist yet, and a firewall, a
+  // custom page and a connector are all first-level resources — so the create is the
+  // module's own create PAGE, not a drawer grown here (../../lib/behavior/surfaces.js).
+  // The workload travels in `?from=` with its name, so Cancel and a finished create both
+  // land back on this page rather than on a module list the reader was not in
   // (../../lib/behavior/create-origin.js).
   const createBindable = (slotKey) => {
-    const slot = BINDABLE.find((item) => item.key === slotKey)
-    if (!slot) return
+    const target = bindTargetFor(slotKey)
+    if (!target) return
     router.push({
-      path: createResourcePath(slot.module),
+      path: createResourcePath(target.module),
       query: {
         email: route.query.email || undefined,
         from: route.path,
@@ -488,6 +681,12 @@
   const deployFields = computed(() => deploymentFilterFields(deployments.value))
   const deploySearch = ref('')
   const deployFilters = ref({})
+  // Every row on THIS page belongs to the workload the page is about, so the shared
+  // table's Workload column would repeat one value down the whole list. The module
+  // list is the surface that spans workloads and needs it; here it is hidden, through
+  // the same column-visibility model the Columns button drives — so it is switched
+  // off, not removed, and the two placements still render one table shape.
+  const deployColumns = ref({ workloadName: false })
 
   // What the controls row's Refresh button does, and the flag the deployment table
   // binds for its skeleton rows — one flag over both causes, a scope switch and a
@@ -531,26 +730,59 @@
     toast.info(`Promoting version ${row.versionId}.`)
   }
 
-  // --- Header actions ------------------------------------------------------
+  // --- Delete ---------------------------------------------------------------
+  // ARMED FROM THE SETTINGS TAB'S DANGER ZONE, and from nowhere else. It used to be a row
+  // in an overflow menu on the summary card, which is how the Workloads LIST offers it —
+  // right there, because a list is where a reader picks which workload. Inside the
+  // workload there is only one, and the act that cannot be taken back is read with the
+  // sentence that says what it costs rather than found by opening a menu.
+  //
+  // The row arms the shared confirmation rather than acting: a workload is the hostname
+  // traffic arrives on, and what goes with it is every deployment it has published.
+  const deleteOpen = ref(false)
+
+  const requestDelete = () => {
+    deleteOpen.value = true
+  }
+
+  const confirmDelete = () => {
+    toast.success(`${workload.value.name} deleted`)
+    router.push({ path: '/workloads', query: { email: userEmail.value } })
+  }
+
   // ── Deploy ────────────────────────────────────────────────────────────────
-  // Deploying opens the RELEASE COMPOSER (../ReleaseComposer.vue) PINNED to what this
-  // workload already deploys: its own Deployment settings, selected, and the application it
-  // is already serving, so nothing this page already knows is asked again. It is a page, not
-  // a drawer: what a release reaches (environments · workloads · domains) is reviewed before
-  // it is deployed, and that review has to be linkable and survive a reload, which is why
-  // the entry context rides the query string.
-  const newDeployment = () => {
-    const { settingsIds } = releaseSeedForWorkload(workloadId)
-    router.push({
-      path: '/deployments/releases/new',
-      query: {
-        email: userEmail.value,
-        workload: workload.value.name,
-        workloadId,
-        ...(settingsIds.length ? { deploymentIds: settingsIds.join(',') } : {}),
-        ...(settingsIds.length > 1 ? { pickTarget: 'true' } : {})
-      }
-    })
+  // Deploying opens a DRAWER over this page (../../components/workload/DeployDrawer.vue),
+  // the surface console-kit's own workload page uses. It used to route to the release
+  // composer (../deployments/ReleaseComposer.vue), which is still the composer for a
+  // release started from the Deployments module — a first-level act that earns a page.
+  // From inside a workload it is not: the thing being judged is the set of picks staged
+  // on the topology behind the panel, and a page throws that context away to re-ask what
+  // this one already answers. That is the console's own surface rule
+  // (../../lib/behavior/surfaces.js § in-resource).
+  //
+  // A deploy is what makes a binding real, so it is also what empties the staged set.
+  // It runs on the drawer's `deployed`, not on its open: a reader who backs out of the
+  // panel still has every pick waiting.
+  const applyStaged = () => {
+    for (const [key, pick] of Object.entries(staged)) {
+      deployed[key] = pick.removed ? null : { id: pick.id, name: pick.name }
+      delete staged[key]
+    }
+  }
+
+  const deployOpen = ref(false)
+
+  const liveBindings = computed(() =>
+    Object.fromEntries(BIND_TARGET_ORDER.map((key) => [key, deployedResource(key)]))
+  )
+
+  const openDeploy = () => {
+    deployOpen.value = true
+  }
+
+  const onDeployed = () => {
+    applyStaged()
+    activeTab.value = 'deployments'
   }
 
   // A tab switch replaces a whole screen, so it arrives like one.
@@ -561,17 +793,84 @@
   const visit = () => toast.info('Opening the workload in a new tab.')
 
   // --- Settings ------------------------------------------------------------
-  const settings = reactive({ name: workload.value.name })
+  // `active` — the API's own field, and the one the Workloads list reads as Live /
+  // Inactive. It is a SETTING, not an action: it is edited in the form and committed by
+  // the page's save bar with everything else, exactly as an application's Active is
+  // (../applications/panels/MainSettings.vue). Which is also why it is in General and not
+  // in the Danger Zone below — switching a workload off stops traffic, and it is
+  // reversible with the same switch; the Danger Zone is for what cannot be undone.
+  const settings = reactive({
+    name: workload.value.name,
+    active: workload.value.status !== 'Inactive',
+    // The custom domains, WITH the certificate each one is served with — the drawer asks
+    // for it now, so the row carries it (../../components/workload/AddEnvironmentDrawer.vue).
+    // It used to be a separate `certificates` map keyed by domain id, edited by a Select
+    // inside the table: one domain's answers held in two places, which is one place too
+    // many for them to agree.
+    domains: [...savedDomains.value],
+    deploymentSettings: {},
+    protocols: workloadProtocolDefaults(),
+    mtls: workloadMutualAuthDefaults()
+  })
+
   const savingSettings = ref(false)
+  // WHAT THE OVERVIEW REPORTS IS WHAT WAS SAVED, not what is typed. The Status fact on the
+  // summary card is the workload's state, so it follows the commit — a card that flipped
+  // to Inactive while the save bar still said "unsaved" would be reporting an edit as a
+  // fact.
+  const activeSaved = ref(settings.active)
+  const summaryWorkload = computed(() => ({
+    ...workload.value,
+    status: activeSaved.value ? 'Live' : 'Inactive'
+  }))
+
   const settingsBaseline = ref(JSON.stringify(settings))
   const settingsDirty = computed(() => JSON.stringify(settings) !== settingsBaseline.value)
+
+  // The generated hostname first — it is the address that exists before anything the
+  // reader does — then the edits pending on the form, so the table is what the tab holds.
+  const settingsDomains = computed(() => [
+    {
+      id: 'generated',
+      domain: workload.value.domain,
+      environment: workload.value.environment,
+      certificate: '',
+      generated: true
+    },
+    ...settings.domains.map((entry) => ({ ...entry, generated: false }))
+  ])
+
+  const manageDeploymentSettings = () =>
+    router.push({ path: '/account/build-deployment', query: { email: userEmail.value } })
+
   const saveSettings = async () => {
     if (savingSettings.value) return
     savingSettings.value = true
     try {
       await new Promise((resolve) => setTimeout(resolve, 800))
+      for (const [environment, settingsId] of Object.entries(settings.deploymentSettings)) {
+        bindWorkloadSettings(workloadId, environment, settingsId)
+      }
+
+      // A DOMAIN BRINGS ITS ENVIRONMENT WITH IT, and the commit is where that happens.
+      // The environment joins this workload's list (linked to the Deployment Settings its
+      // policy matches — that link is automatic, ../../lib/state/workload-settings.js) and
+      // the card SELECTS the last one, so the Overview is already reporting what the new
+      // domain publishes with by the time the bar clears.
+      //
+      // Connecting is idempotent, so re-saving a tab whose domains did not change is a
+      // no-op rather than a duplicate.
+      for (const domain of settings.domains) {
+        const environment = connectEnvironment(workloadId, domain.environment)
+        selectedEnvironment.value = environment.name
+      }
+      savedDomains.value = settings.domains.map((domain) => ({ ...domain }))
+
       settingsBaseline.value = JSON.stringify(settings)
-      toast.success('Workload settings saved.')
+      activeSaved.value = settings.active
+      toast.success(
+        settings.active ? 'Workload settings saved.' : 'Workload settings saved. It is now inactive.'
+      )
     } finally {
       savingSettings.value = false
     }
@@ -581,9 +880,6 @@
     Object.assign(settings, JSON.parse(settingsBaseline.value))
   }
 
-  const deleteWorkload = () => {
-    toast.warning('Delete workload is disabled in the demo.')
-  }
 </script>
 
 <template>
@@ -606,16 +902,22 @@
              ADDRESS, and the address is what that card is. What is left here is the one
              act that changes what the workload serves.
 
-             The label is the one every Deploy in the console carries, because it opens
-             the one screen every Deploy opens (../ReleaseComposer.vue). It read "New
+             The label is the one every Deploy in the console carries. It read "New
              Deployment" while a second, smaller deploy form existed to contrast with. -->
         <template #actions>
+          <!-- What the deploy would carry, on the control that resolves it. -->
+          <Tag
+            v-if="stagedCount"
+            severity="warning"
+            size="small"
+            :label="`${stagedCount} ${stagedCount === 1 ? 'change' : 'changes'}`"
+          />
           <Button
             label="Deploy"
             kind="primary"
             size="medium"
             icon="pi pi-cloud-upload"
-            @click="newDeployment"
+            @click="openDeploy"
           />
         </template>
       </PageTabs>
@@ -646,9 +948,16 @@
                    `activeDomain` so the address followed the Active Deployment band's
                    Environment Select; that band is gone, so there is one host again.
 
+                   IT GOES IN WITH THE SAVED `active`, not with the record's own status:
+                   the Settings tab owns that switch, and the Status fact here is what it
+                   committed.
+
                    Both of the card's actions are the PAGE's: `visit` opens the address,
                    `add-domain` opens the same drawer the checklist's own domain row opens
-                   — one surface for adding a domain, not two that can disagree.
+                   — one surface for adding a domain, not two that can disagree. The card's
+                   environment picker raises that same `add-domain`: connecting a domain is
+                   how an environment gets onto a workload, so the picker's action row and
+                   the Custom domains field are two ways into one form.
 
                    IT SITS IN THE COLUMN, not in a row beside the checklist. The two were
                    tried side by side at a common height, and the pairing cost more than the
@@ -658,12 +967,12 @@
                    own labels. Full width, each says its piece once. -->
               <WorkloadSummary
                 v-model:environment="selectedEnvironment"
-                :workload="workload"
-                :custom-domains="customDomains"
+                :workload="summaryWorkload"
+                :custom-domains="savedDomains"
                 :environments="environments"
                 @visit="visit"
-                @add-domain="addDomainOpen = true"
-                @create-environment="environmentDrawerOpen = true"
+                @add-domain="openAdd('domain')"
+                @add-environment="openAdd('environment')"
               >
                 <!-- WHAT IS RUNNING ON IT, as the card's footer rather than a card of its
                      own further down. A deployment is not a peer of the workload — it is
@@ -678,6 +987,7 @@
                 <template #footer>
                   <DeploymentFooter
                     :setting="workloadSetting"
+                    :workload-id="String(workload.id)"
                     :email="userEmail"
                   />
                 </template>
@@ -725,21 +1035,21 @@
                      wins over its default. -->
                 <CardBox
                   :padded="false"
-                  class="bg-(--bg-surface-raised)"
+                  class="overflow-x-auto bg-(--bg-surface-raised)"
                 >
                   <template #content>
-                    <!-- The chain a deploy provisions, left to right:
-                         Workload → Application → Connector → Storage, with the
-                         Application level also carrying its bindable resources
-                         (Firewall, Custom Page) stacked in the same column via
-                         Flow.Parallel. Every node is the same card and every card is a
-                         DISCLOSURE (ui/TopologyNode.vue): the header names the node
-                         (kind + status + the resource's own name) and the fields sit
-                         behind it, so the diagram reads as one system instead of bespoke
-                         boxes — an unbound slot is that same card, dashed, holding the
-                         CTA that fills it. Every node arrives CLOSED (`openNodes`), and a
-                         closed node still says what it is, which is what keeps the chain
-                         legible collapsed and the band short on arrival.
+                    <!-- The chain traffic travels, left to right: Domains → Workload →
+                         Firewall → [Application + Custom Page] → Connector → Storage
+                         (`topologyLevels`). Every node is the same card
+                         (ui/TopologyNode.vue): the header names the node and its status,
+                         the row under it names the resource and carries its controls,
+                         and only the FIELDS sit behind the disclosure — so the diagram
+                         reads as one system instead of bespoke boxes, and an unbound
+                         slot is that same card, dashed, with the bind control where
+                         every other node's controls are. Every node arrives CLOSED
+                         (`openNodes`), and a closed node still says what it is and what
+                         can be done to it, which is what keeps the chain legible
+                         collapsed and the band short on arrival.
                          `align="start"` tops the levels against each other, so opening
                          one node never nudges the others. Flow's own track is `w-fit`;
                          `[&>div]:w-full` stretches it to the card, and each level takes
@@ -755,18 +1065,12 @@
                         v-for="level in topologyLevels"
                         :key="level.key"
                         align="start"
-                        class="min-w-0 flex-1"
+                        class="min-w-[14rem] flex-1"
                       >
-                        <!-- `terminal` marks the two BINDING slots (Firewall, Custom
-                             Page). They are not links in the provisioned chain: the
-                             workload's relationship to each slot is a platform default,
-                             so a connector reaches them, but nothing flows onward from a
-                             binding to the Connector. Flow's `terminal` says exactly
-                             that — the node receives an incoming connector and
-                             originates none — so the chain runs Workload → Application →
-                             Connector → Storage while the bindings hang off it as
-                             leaves. It applies bound OR unbound: binding one fills the
-                             card, it does not turn the slot into a step. -->
+                        <!-- `terminal` marks a node that receives an incoming connector
+                             and originates none — the Custom Page, which nothing flows
+                             onward from, and the Connector when the chain provisioned
+                             nothing after it. -->
                         <Flow.Node
                           v-for="node in level.nodes"
                           :key="node.key"
@@ -774,17 +1078,17 @@
                           :terminal="Boolean(node.terminal)"
                           class="w-full"
                         >
-                          <!-- Empty node: the slot is open, so the card is the bind
-                             CTA. -->
+                          <!-- Empty node: the slot is open, so the card carries the
+                             bind control and nothing else. -->
                           <TopologyBindNode
                             v-if="node.empty"
                             v-model:open="openNodes[node.key]"
-                            :kind="node.kind"
-                            :icon="node.icon"
-                            :description="node.description"
-                            :cta-label="node.ctaLabel"
+                            :target="node.target"
                             :options="node.options"
-                            @bind="(event, value) => bindResource(node.key, value)"
+                            :status="node.status"
+                            :severity="node.severity"
+                            :message="node.message"
+                            @bind="bindResource(node.key, $event)"
                             @create="createBindable(node.key)"
                           />
                           <TopologyNodeCard
@@ -793,23 +1097,37 @@
                             :node="node"
                             :email="userEmail"
                           >
-                            <!-- Only the two bindable slots can be emptied again; the
-                               provisioned chain cannot. Unbinding sits in the node's
-                               BODY, not its header: the header is one full-width
-                               disclosure button, and a nested button is invalid — and a
-                               destructive control one stray click from firing is the
-                               last thing a collapsed row should carry. -->
+                            <!-- The node's controls, on its identity row beside the name
+                               — a bindable slot can be re-pointed and (unless the create
+                               provisioned it) emptied; the Domains node adds another
+                               address through the drawer the checklist and the Domains
+                               field already open. The provisioned chain carries neither. -->
                             <template
-                              v-if="node.key in bindings"
+                              v-if="node.target || node.add"
                               #actions
                             >
-                              <Button
-                                :label="`Unbind ${node.kind}`"
-                                kind="text"
-                                size="small"
-                                icon="pi pi-times"
-                                @click="unbindResource(node.key)"
+                              <TopologyBindControl
+                                v-if="node.target"
+                                :target="node.target"
+                                :options="node.options"
+                                :bound-id="node.boundId"
+                                :removable="node.removable"
+                                @bind="bindResource(node.key, $event)"
+                                @remove="unbindResource(node.key)"
+                                @create="createBindable(node.key)"
                               />
+                              <Tooltip
+                                v-else
+                                text="Add Domain"
+                              >
+                                <IconButton
+                                  icon="pi pi-plus"
+                                  kind="outlined"
+                                  size="small"
+                                  aria-label="Add Domain"
+                                  @click="openAdd('domain')"
+                                />
+                              </Tooltip>
                             </template>
                           </TopologyNodeCard>
                         </Flow.Node>
@@ -876,6 +1194,7 @@
                       ref="versionsTableRef"
                       v-model:search="deploySearch"
                       v-model:filters="deployFilters"
+                      v-model:column-visibility="deployColumns"
                       :deployments="deployments"
                       :fields="deployFields"
                       :email="userEmail"
@@ -950,6 +1269,7 @@
                       ref="deploymentsTableRef"
                       v-model:search="deploySearch"
                       v-model:filters="deployFilters"
+                      v-model:column-visibility="deployColumns"
                       :deployments="deployments"
                       :fields="deployFields"
                       :email="userEmail"
@@ -1001,7 +1321,7 @@
                   anchor
                   :divided="false"
                   title="General"
-                  hint="How this workload is identified across the console and in its deployments."
+                  hint="How this workload is identified across the console, and whether it answers at all."
                 >
                   <CardBox :padded="false">
                     <template #content>
@@ -1018,13 +1338,112 @@
                             :disabled="savingSettings"
                           />
                         </FieldRow>
+                        <!-- ACTIVE — the row an application's Main Settings carries too, in
+                             the same band and with the same control, because it is the same
+                             field. The description says what switching it off DOES: a
+                             workload is an address, so the thing that stops is traffic to
+                             it, and its domains stop answering with it. `kind="compact"`
+                             for the same reason every switch row in the console takes it —
+                             the control is 20px tall and does not need a form row's
+                             height. -->
+                        <FieldRow
+                          kind="compact"
+                          title="Active"
+                          description="When disabled, the workload stops answering and traffic to its domains is refused. Its deployments are kept."
+                        >
+                          <Switch
+                            v-model="settings.active"
+                            aria-label="Active"
+                            :disabled="savingSettings"
+                          />
+                        </FieldRow>
                       </Item.List>
                     </template>
                   </CardBox>
                 </Section>
 
+                <Section
+                  stacked
+                  anchor
+                  :divided="false"
+                  title="Domains"
+                  hint="The addresses this workload answers on, the environment each one answers in, and the certificate it is served with."
+                >
+                  <WorkloadDomainsSection
+                    :domains="settingsDomains"
+                    :disabled="savingSettings"
+                    @add="openAdd('domain')"
+                    @edit="editSettingsDomain"
+                    @remove="removeSettingsDomain"
+                  />
+                </Section>
+
+                <Section
+                  stacked
+                  anchor
+                  collapsible
+                  :divided="false"
+                  title="Advanced Settings"
+                  hint="Deployment Settings, protocols and mutual authentication. Most workloads never change these."
+                >
+                  <!-- The bands inside the disclosure are SECTIONS, the same component
+                       and the same anatomy as the ones outside it: title, Hint, flush
+                       card. A nested band that titled itself differently read as a
+                       fourth kind of heading on a page that already has three. -->
+                  <div class="flex min-w-0 flex-col">
+                    <Section
+                      stacked
+                      anchor
+                      :divided="false"
+                      title="Deployment Settings"
+                      hint="Which shared configuration each of this workload's environments publishes with. The link is automatic, by deployment policy."
+                    >
+                      <WorkloadDeploymentSettingsSection
+                        v-model="settings.deploymentSettings"
+                        :workload-id="workloadId"
+                        :environments="environments"
+                        :disabled="savingSettings"
+                        @manage="manageDeploymentSettings"
+                      />
+                    </Section>
+
+                    <Section
+                      stacked
+                      anchor
+                      :divided="false"
+                      title="Protocol Settings"
+                      hint="Which protocols and ports this workload answers on, and the TLS floor it accepts."
+                    >
+                      <WorkloadProtocolSection
+                        v-model="settings.protocols"
+                        :disabled="savingSettings"
+                      />
+                    </Section>
+
+                    <Section
+                      stacked
+                      anchor
+                      :divided="false"
+                      title="Mutual Authentication"
+                      hint="Require the client to present a certificate the workload can verify, as well as presenting its own."
+                    >
+                      <WorkloadMutualAuthSection
+                        v-model="settings.mtls"
+                        :use-https="settings.protocols.useHttps"
+                        :disabled="savingSettings"
+                      />
+                    </Section>
+                  </div>
+                </Section>
+
                 <!-- Danger Zone — titled like every band above it. What marks it as
-                     destructive is the `kind="danger"` Button, not a recoloured title. -->
+                     destructive is the `kind="danger"` Button, not a recoloured title.
+
+                     THIS IS WHERE DELETE LIVES. It was a row in the summary card's overflow
+                     menu, and it is the one act on this page that cannot be taken back —
+                     found by opening an ellipsis, with nothing beside it saying what goes
+                     with the workload. Here it is read as a sentence before it is a button,
+                     and it still arms the confirmation rather than acting. -->
                 <Section
                   stacked
                   anchor
@@ -1046,7 +1465,7 @@
                             kind="danger"
                             size="medium"
                             icon="pi pi-trash"
-                            @click="deleteWorkload"
+                            @click="requestDelete"
                           />
                         </FieldRow>
                       </Item.List>
@@ -1071,23 +1490,63 @@
       @discard="discardSettings"
     />
 
-    <!-- ADD A CUSTOM DOMAIN — the same drawer the create flow uses for it
-         (../../components/workload/AddDomainDrawer.vue), not a second form asking the
-         same question in different words. A drawer and not a page because adding a domain
-         happens INSIDE a resource that already exists. -->
-    <AddDomainDrawer
+    <!-- ADD AN ENVIRONMENT / ADD A DOMAIN — ONE form, because it is one act: an
+         environment reaches this workload when a domain answers in it
+         (../../components/workload/AddEnvironmentDrawer.vue). Three ways in — the card's
+         environment picker, its Custom domains field, the production checklist row — and
+         `intent` is only which of the two names the reader used on the way. A drawer and
+         not a page because it happens INSIDE a resource that already exists; the
+         environment that does not exist yet is made in a SECOND drawer over this one,
+         without losing what has been typed. -->
+    <AddEnvironmentDrawer
       v-model:open="addDomainOpen"
-      @save="addDomain"
+      :intent="addIntent"
+      :environments="environments"
+      :domain="editingDomain"
+      @save="stageDomain"
     />
 
-    <!-- CREATE ENVIRONMENT — opened from the summary card's environment picker. A drawer
-         and not a page for the same reason the domain one is: it happens INSIDE a resource
-         that already exists. `taken` is the picker's own list, so the create cannot mint a
-         second "Production". -->
-    <EnvironmentDrawer
-      v-model:open="environmentDrawerOpen"
-      :taken="environments.map((environment) => environment.name)"
-      @save="onEnvironmentCreated"
+    <!-- REMOVING A DOMAIN — a confirmation, because the row is gone from the table the
+         moment it is answered and the address is what traffic arrives on. It is not the
+         type-the-name guard: the removal is a pending edit until the save bar commits it,
+         so Discard is already the undo (../../components/list/ConfirmDialog.vue). -->
+    <ConfirmDialog
+      v-model:open="removeDomainOpen"
+      title="Remove domain"
+      :description="`${removingDomain?.domain ?? 'This domain'} stops answering for this workload once you save. Traffic already pointed at it gets no response.`"
+      confirm-label="Remove Domain"
+      @confirm="confirmRemoveDomain"
+    />
+
+    <!-- DEPLOY — the drawer console-kit opens from its own workload page
+         (../../components/workload/DeployDrawer.vue), not the release composer page.
+         Deploying is a step inside a resource that already exists, and what the reader
+         has to judge — the picks staged on the topology behind it — is on this page.
+         A page would throw that away to re-ask what this one already answers.
+
+         It carries the staged set as its first band, so what the release adds, changes
+         or takes away is read before it is sent, and `live` is what lets a pick over a
+         bound slot read as a change rather than as an addition. -->
+    <DeployDrawer
+      v-model:open="deployOpen"
+      :workload="workload"
+      :environments="environments"
+      :preselected-environment="selectedEnvironment"
+      :staged="staged"
+      :live="liveBindings"
+      @deployed="onDeployed"
+      @add-environment="openAdd('environment')"
+    />
+
+    <!-- DELETE, armed from the Settings tab's Danger Zone. The generic line would understate
+         it: a workload is the hostname traffic arrives on, so what goes with it is every
+         deployment it has ever published. -->
+    <DeleteDialog
+      v-model:open="deleteOpen"
+      kind="Workload"
+      :name="workload.name"
+      description="The selected workload will be deleted, along with every deployment it has published. Traffic to its domains stops. Check the"
+      @confirm="confirmDelete"
     />
 
     <!-- The bar carries the leave guard, and the bar is gated on the tab — so on Overview

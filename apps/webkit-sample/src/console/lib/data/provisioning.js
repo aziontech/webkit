@@ -19,8 +19,8 @@
 // their mock data so a just-deployed resource is immediately manageable.
 import { computed, ref } from 'vue'
 
-import { daysAgo, formatListDate } from './dates'
-import { authorAt, emailOf } from './people'
+import { daysAgo, formatListDate } from '@shared/lib/dates'
+import { authorAt, emailOf } from '@shared/lib/people'
 import { workloadById } from './workloads'
 
 // The framework the template declares (`framework` in templates.js) is not
@@ -57,7 +57,7 @@ const resourceId = () => String(1_000_000_000 + Math.floor(Math.random() * 900_0
  *  sample: the create's domain field shows it, the derivation appends it, the provisioning
  *  chain mints one with it and the workload's own page reads it back — four surfaces that
  *  cannot be allowed to name different hostnames for the same workload. Re-exported by
- *  console/lib/data/workload-provisioning.js, which is where the console reads it. */
+ *  ./workload-provisioning.js, which is where the console reads it. */
 export const AZION_DOMAIN_SUFFIX = '.azion.run'
 
 /** The random subdomain label an Azion workload domain gets on creation. */
@@ -180,7 +180,12 @@ export function provisionDeployment({
   firewallId = '',
   connector: connectorInput = null,
   cachePolicies: cachePoliciesInput = [],
-  publish = true
+  publish = true,
+  // How code reaches the application this chain creates (./applications.js). A template
+  // clone and a git import both leave a repository behind; an uploaded or dropped project
+  // does not, and saying `git` for one of those would put a repository on the row that
+  // nothing can push to.
+  source = 'git'
 } = {}) {
   const name = slugify(repoName || templateTitle)
   const createdAt = new Date()
@@ -226,10 +231,10 @@ export function provisionDeployment({
     // Bound rather than created — the chain's application row reads this the way the
     // firewall row reads `bound`, so neither claims work that never ran.
     bound: Boolean(applicationBound),
-    repository: `${scope}/${appName}`,
-    branch: 'main',
+    source,
+    repository: source === 'git' ? `${scope}/${appName}` : '',
+    branch: source === 'git' ? 'main' : '',
     domainName: domain,
-    infrastructure: 'Production',
     status: 'Active',
     modifiedAt: createdAt,
     lastModified,
@@ -283,9 +288,8 @@ export function provisionDeployment({
         status: 'Active',
         bound: Boolean(firewallBound),
         // The labels the create's Protection card settled on — the ones it switched on for
-        // a new firewall, the ones an existing one already has. The vocabulary lives on the
-        // console side (console/lib/data/firewalls.js), which owns it; this module stores
-        // what it is handed.
+        // a new firewall, the ones an existing one already has. The vocabulary lives in
+        // ./firewalls.js, which owns it; this module stores what it is handed.
         modules: firewallModules,
         modifiedAt: createdAt,
         lastModified
@@ -470,10 +474,10 @@ export function demoDeployment(workloadId, workloadName = 'Workload Name') {
       id: derivedId(`application-${id}`),
       name,
       preset: 'vue',
+      source: 'git',
       repository: `gab-az/${name}`,
       branch: 'main',
       domainName: domain,
-      infrastructure: 'Production',
       status: 'Active'
     },
     connector: {
@@ -515,7 +519,7 @@ export const findDeploymentByVersion = (versionId) =>
  *
  * One shape, read by both surfaces that show it — the workload's history
  * (components/WorkloadDetail.vue) and the deployment PAGE, which maps this row the
- * same way it maps a seeded one (src/lib/azion-deploys.js `deployPageRecord`). It
+ * same way it maps a seeded one (@shared/lib/azion-deploys.js `deployPageRecord`). It
  * used to be built inline on the workload page only, which is how the row and the
  * page could disagree about the very deployment they both named.
  *

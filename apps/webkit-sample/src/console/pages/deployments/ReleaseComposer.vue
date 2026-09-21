@@ -76,7 +76,6 @@
   import AppLayout from '../../components/shell/AppLayout.vue'
   import {
     applicationRecord,
-    BINDING_KEY,
     catalogFor,
     classifyDeploymentSettings,
     dependenciesOf,
@@ -161,16 +160,13 @@
     return candidateSettings.value.filter((settings) => settings.name.toLowerCase().includes(query))
   })
 
-  // Grouped by whether this release can land there at all (lib/releases.js). Empty groups
-  // never render: a heading over nothing is noise.
+  // Grouped by whether this release can land there at all (lib/releases.js) — which now
+  // means only "is the setting active". A setting no longer pins an application, so it no
+  // longer decides which releases may use it; what a release carries is the topology
+  // below, and the setting only says how it routes. Empty groups never render: a heading
+  // over nothing is noise.
   const dsGroups = computed(() => {
-    const { groups } = classifyDeploymentSettings({
-      settings: searchedSettings.value,
-      // The application the release is for: the scoped one, else whatever the topology
-      // composes. It decides which settings can take this release at all.
-      applicationName:
-        scopedType.value === 'application' ? scopedResourceId.value : state.application.resourceId
-    })
+    const { groups } = classifyDeploymentSettings({ settings: searchedSettings.value })
     return DS_GROUPS.filter((group) => groups[group.key].length).map((group) => ({
       ...group,
       items: groups[group.key]
@@ -198,10 +194,11 @@
   }
 
   // An inactive setting cannot apply a deployment, and nothing on this screen can change
-  // that: activating it belongs to the Settings tab that owns it, so the row links there.
+  // that: activating it belongs to Settings → Build & Deployment, which owns the
+  // strategies, so the row links there.
   const onGroupAction = (key) => {
     if (key !== 'inactive') return
-    router.push({ path: '/deployments', query: { email: userEmail.value, tab: 'settings' } })
+    router.push({ path: '/account/build-deployment', query: { email: userEmail.value } })
   }
 
   // ── The topology ───────────────────────────────────────────────────────────
@@ -232,24 +229,28 @@
 
   const seedTopology = () => {
     SINGLETON_TYPES.forEach((type) => {
-      const bound = seedSettings.value?.bindings[BINDING_KEY[type]] || ''
       const scoped = scopedType.value === type
 
       // Precedence: what the operator came to change, then what the workload already
-      // serves, then what the setting binds, and only then a fallback for the one resource
-      // a release cannot go out without.
-      let resourceId = bound
-      if (scoped) resourceId = scopedResourceId.value || bound
+      // serves, and only then a fallback for the one resource a release cannot go out
+      // without.
+      //
+      // The setting used to be consulted here too — it pinned an application, a firewall
+      // and a custom page, and those seeded this form. It no longer carries any, so what
+      // a release carries is decided HERE and nowhere else, which is the point of the
+      // split (../../lib/data/deployment-strategies.js).
+      let resourceId = ''
+      if (scoped) resourceId = scopedResourceId.value
       else if (type === 'application') {
-        resourceId = pinnedApplication.value || bound || catalogFor(type)[0]?.id || ''
+        resourceId = pinnedApplication.value || catalogFor(type)[0]?.id || ''
       }
 
       state[type].resourceId = resourceId
       state[type].versionId =
         scoped && incomingVersionId.value ? incomingVersionId.value : LATEST_READY
-      // A firewall or a custom page is included when the setting binds one (they are the
-      // strategy's two NULLABLE attributes), or when it is what the operator came to change.
-      state[type].enabled = type === 'application' ? true : scoped || Boolean(bound)
+      // A firewall or a custom page rides along only when it is what the operator came to
+      // change; an application always does, because a release cannot go out without one.
+      state[type].enabled = type === 'application' ? true : scoped
     })
   }
 

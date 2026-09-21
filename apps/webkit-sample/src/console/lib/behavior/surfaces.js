@@ -100,7 +100,7 @@ export const createSurfaces = [
     id: 'deployment-settings',
     label: 'Deployment settings',
     surface: 'Drawer',
-    inside: 'a workload'
+    inside: 'account settings'
   },
 
   // ── The exception ───────────────────────────────────────────────────────────

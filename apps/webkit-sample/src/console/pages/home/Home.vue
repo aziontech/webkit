@@ -200,7 +200,7 @@
   // each surface instead of in the data module they share.
 
   // The SAMPLE shows fewer of some types on purpose. The seed generates 20 workloads
-  // (one per row of a paginated module list — @shared/lib/workloads.js) and one domain
+  // (one per row of a paginated module list — ../../lib/data/workloads.js) and one domain
   // per workload, so at a flat cap every column in the band opened full and the band
   // read as five columns of exactly five, which is the one shape a real account never
   // has. Three workloads and four domains give the band the ragged bottom edge it has in

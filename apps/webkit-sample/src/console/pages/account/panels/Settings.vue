@@ -447,7 +447,7 @@
                         :label="provider.action"
                         kind="outlined"
                         size="medium"
-                        :icon="provider.connected ? undefined : 'pi pi-arrow-up-right'"
+                        :icon="provider.connected ? undefined : 'pi pi-external-link'"
                         @click="onProviderAction(provider)"
                       />
                     </Item.Actions>

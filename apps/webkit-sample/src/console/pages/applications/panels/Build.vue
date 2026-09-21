@@ -1,11 +1,15 @@
 <script setup>
   // Application → Build. The UI face of the repo's GitHub Actions deploy workflow
-  // (azion-deploy.yml): each row maps to a workflow step, and the "Latest deployment"
-  // section mirrors azion/azion.json — the platform state the Azion CLI commits back
-  // after every deploy. The Deploy action is the workflow_dispatch analog: it opens the
-  // release page, which is where a deploy is reviewed and run. Its BUTTON is IN THIS
-  // TAB'S HEADING, not on the page's tab row it used to ride: a tab is its own page, so
-  // its primary action belongs beside the heading that names it.
+  // (azion-deploy.yml): each row maps to a workflow step. The Deploy action is the
+  // workflow_dispatch analog: it opens the release page, which is where a deploy is
+  // reviewed and run. Its BUTTON is IN THIS TAB'S HEADING, not on the page's tab row it
+  // used to ride: a tab is its own page, so its primary action belongs beside the
+  // heading that names it.
+  //
+  // WHAT IT NO LONGER SHOWS: the azion.json mirror — the domain, the application id,
+  // the environment and the last deploy. Those are what the application IS, not how it
+  // builds, and they were three scrolls below the fold of a settings form. They open
+  // the Overview tab now (./Overview.vue), on the card that names the record.
   //
   // The editable configuration is split into topic groups, each a flush ItemGroup
   // owning its OWN footer Save that locks and dirties INDEPENDENTLY: `buildConfig`
@@ -27,17 +31,17 @@
   import Item from '@aziontech/webkit/item'
   import Select from '@aziontech/webkit/select'
   import Switch from '@aziontech/webkit/switch'
-  import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { latestConsoleDeployForApplication } from '@shared/lib/azion-deploys'
   import { computed, reactive, ref } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
+  import GetStartedCli from '../../../components/application/GetStartedCli.vue'
   import SettingsSaveBar from '../../../components/form/SettingsSaveBar.vue'
   import HeadingAction from '../../../components/page/HeadingAction.vue'
   import PageHeading from '../../../components/page/PageHeading.vue'
   import Section from '../../../components/page/Section.vue'
+  import ResourceLink from '../../../components/resource/ResourceLink.vue'
   import { saveGroup, useBaseline } from '../../../lib/behavior/forms'
   import { useTabDirty } from '../../../lib/behavior/tab-dirty'
   import { presetIcon, presetLabel } from '../../../lib/format/presets'
@@ -46,6 +50,11 @@
     // The application being built — `{ id, name }`.
     application: { type: Object, required: true }
   })
+
+  // An application with no repository is built and shipped from the reader's own terminal
+  // (../../../lib/data/applications.js). Every band on this tab that names a repository,
+  // a branch or a workflow is a band it does not have.
+  const isCli = computed(() => props.application?.source === 'cli')
 
   const route = useRoute()
   const router = useRouter()
@@ -58,7 +67,10 @@
 
   // ── Group 1 — Build configuration (preset + build/deploy commands + paths) ──
   const buildConfig = reactive({
-    preset: 'vue',
+    // Seeded from the record, not from the reference repo: the preset is what the Azion
+    // CLI builds this application with, and hard-coding `vue` made an HTML site's Build tab
+    // claim a framework it does not use (../../../lib/data/applications.js).
+    preset: props.application?.preset || 'vue',
     buildCommand: 'azion build',
     deployCommand: 'azion deploy --local',
     rootDirectory: '/',
@@ -125,34 +137,6 @@
   const buildCacheScopeLabel = (value) =>
     buildCacheScopeOptions.find((option) => option.value === value)?.label ?? ''
 
-  // ── Platform state — the mirror of azion/azion.json ───────────────────────
-  const azionState = reactive({
-    applicationId: props.application.id,
-    domainUrl: 'https://e7b4verynr.azion.run',
-    domainName: 'e7b4verynr.azion.run',
-    env: 'production',
-    prefix: '20260720130245'
-  })
-
-  // The most recent deployment of THIS application started in this session, if there is
-  // one. That is what closes the deploy → azion.json → UI loop now that the deploy itself
-  // happens on the release page: the run rotates the storage prefix on the record
-  // (src/lib/azion-deploys.js), and this section reads it back. With no session deploy it
-  // falls back to the prefix committed in azion.json.
-  const latestRecord = computed(() => latestConsoleDeployForApplication(props.application.id))
-
-  // prefix (YYYYMMDDHHMMSS) → a readable "last deploy" timestamp.
-  const lastDeploy = computed(() => {
-    const p = latestRecord.value?.edge.prefix ?? azionState.prefix
-    if (!/^\d{14}$/.test(p)) return p
-    const date = new Date(
-      `${p.slice(0, 4)}-${p.slice(4, 6)}-${p.slice(6, 8)}T${p.slice(8, 10)}:${p.slice(10, 12)}:${p.slice(12, 14)}`
-    )
-    return Number.isNaN(date.getTime())
-      ? p
-      : date.toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' })
-  })
-
   // ── Deploy ────────────────────────────────────────────────────────────────
   // The page's Deploy button opens the RELEASE PAGE (components/ReleaseComposer.vue),
   // the console's one deploy surface, SCOPED to this application: only its version
@@ -191,7 +175,11 @@
     >
       <PageHeading
         title="Build"
-        description="Connect your application to a Git repository for automatic builds and deployments."
+        :description="
+          isCli
+            ? 'This application has no repository. Link it from your terminal and deploy with the Azion CLI.'
+            : 'Connect your application to a Git repository for automatic builds and deployments.'
+        "
         size="small"
       >
         <template #actions>
@@ -205,9 +193,26 @@
       </PageHeading>
 
       <div class="mt-(--layout-section-gap) flex min-w-0 flex-col">
+        <!-- NO REPOSITORY, SO NO CONNECTION TO REPORT. An application reached by CLI is
+             built on the reader's own machine and pushed from there, so this is where the
+             commands live — permanently, and in the tab that already answers "how does
+             this ship?". It is the same card the create's success screen hands over; a
+             success screen is lost on the first reload and the question is not. -->
+        <Section
+          v-if="isCli"
+          stacked
+          anchor
+          :divided="false"
+          title="Get started"
+          hint="This application has no repository. These are the commands that link a local project to it and ship a build."
+        >
+          <GetStartedCli :name="application.name" />
+        </Section>
+
         <!-- Git repository — the connection (actions/checkout in the workflow).
          A connection, not editable config, so this ItemGroup has no Save. -->
         <Section
+          v-else
           stacked
           anchor
           :divided="false"
@@ -232,20 +237,13 @@
                           class="pi pi-github"
                           aria-hidden="true"
                         />
-                        <!-- Same interaction as the Domain link below: the value is
-                         the external link (hover underline + redirect arrow). -->
-                        <a
+                        <!-- Same shape as the Domain link below, and as every other
+                             name in the console that leaves the page
+                             (../../../components/resource/ResourceLink.vue). -->
+                        <ResourceLink
+                          :label="repository"
                           :href="`https://github.com/${repository}`"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          class="inline-flex items-center gap-(--spacing-xxs) whitespace-nowrap text-label-sm text-(--text-default) hover:underline"
-                        >
-                          <span>{{ repository }}</span>
-                          <i
-                            class="pi pi-arrow-up-right shrink-0 text-(--text-muted)"
-                            aria-hidden="true"
-                          />
-                        </a>
+                        />
                       </span>
                     </Item.Description>
                   </Item.Content>
@@ -600,82 +598,6 @@
           </CardBox>
         </Section>
 
-        <!-- Latest deployment — mirrors azion/azion.json (API ⇆ UI). Wrapped in a
-         section like every band above: without it the title sat a SECTION gap from
-         the card it names instead of the group gap, reading as detached. -->
-        <Section
-          stacked
-          anchor
-          :divided="false"
-          title="Latest deployment"
-          hint="The manifest of the most recent deployment, mirroring azion/azion.json field for field."
-        >
-          <CardBox :padded="false">
-            <template #content>
-              <Item.List>
-                <Item size="small">
-                  <Item.Content>
-                    <Item.Title>Domain</Item.Title>
-                    <Item.Description>The edge domain serving this application.</Item.Description>
-                  </Item.Content>
-                  <Item.Actions class="justify-end gap-(--spacing-xs)">
-                    <!-- Same view-details logic + external-redirect arrow. -->
-                    <a
-                      :href="azionState.domainUrl"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      class="inline-flex items-center gap-(--spacing-xxs) whitespace-nowrap text-label-sm text-(--text-default) hover:underline"
-                    >
-                      <span>{{ azionState.domainName }}</span>
-                      <i
-                        class="pi pi-arrow-up-right shrink-0 text-(--text-muted)"
-                        aria-hidden="true"
-                      />
-                    </a>
-                    <CopyButton
-                      kind="outlined"
-                      :value="azionState.domainUrl"
-                      aria-label="Copy domain URL"
-                    />
-                  </Item.Actions>
-                </Item>
-                <Item size="small">
-                  <Item.Content>
-                    <Item.Title>Application ID</Item.Title>
-                  </Item.Content>
-                  <Item.Actions class="justify-end gap-(--spacing-xs)">
-                    <span class="text-label-code-sm">{{ azionState.applicationId }}</span>
-                    <CopyButton
-                      kind="outlined"
-                      :value="azionState.applicationId"
-                      aria-label="Copy application ID"
-                    />
-                  </Item.Actions>
-                </Item>
-                <Item size="small">
-                  <Item.Content>
-                    <Item.Title>Environment</Item.Title>
-                  </Item.Content>
-                  <Item.Actions class="justify-end">
-                    <Tag
-                      :label="azionState.env"
-                      severity="secondary"
-                      size="medium"
-                    />
-                  </Item.Actions>
-                </Item>
-                <Item size="small">
-                  <Item.Content>
-                    <Item.Title>Last deploy</Item.Title>
-                  </Item.Content>
-                  <Item.Actions class="justify-end">
-                    <span class="text-(--text-muted)">{{ lastDeploy }}</span>
-                  </Item.Actions>
-                </Item>
-              </Item.List>
-            </template>
-          </CardBox>
-        </Section>
       </div>
     </div>
 

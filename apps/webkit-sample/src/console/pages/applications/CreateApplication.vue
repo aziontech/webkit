@@ -9,12 +9,12 @@
   // parts buys the reader nothing but clicks. An application is the exception. The
   // question that matters — WHERE DOES THE CODE COME FROM — changes which questions
   // follow it, and asking all of them at once means showing a repository field to
-  // somebody starting from scratch.
+  // somebody with no repository to import.
   //
   // So: three flows, each declaring its own parts (../../lib/data/application-flows.js).
   //
   //   Import from Git       method → repository → configure
-  //   Start from scratch    method → configure                  (it IS the source)
+  //   Sync with Azion CLI   method → configure                  (it IS the source)
   //   Start from a template method → template   → repository → configure
   //                         method → template   → configure     (an Azion template)
   //
@@ -55,7 +55,7 @@
   // and a create that stopped short would leave them on a list hunting for a Deploy
   // button. The verb is what makes it consent instead of a surprise.
   import { toast } from '@aziontech/webkit/toast'
-  import { provisionDeployment, publishDeployment, resourceChain } from '@shared/lib/provisioning'
+  import { provisionDeployment, publishDeployment, resourceChain } from '../../lib/data/provisioning'
   import { computed, reactive, ref, watch } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
@@ -292,12 +292,12 @@
     if (next && !isLastStep.value) stepIndex.value += 1
   }
 
-  // Choosing a method starts that flow at its part after `method`. From scratch IS its own
-  // source, so it sets one here and lands on Configure — the part it would otherwise
-  // reach by answering a question with one possible answer.
+  // Choosing a method starts that flow at its part after `method`. The local project IS
+  // its own source, so the CLI flow sets one here and lands on Configure — the part it
+  // would otherwise reach by answering a question with one possible answer.
   const chooseMethod = (id) => {
     flowId.value = id
-    if (id === 'scratch') setSource({ ...SCRATCH_SOURCE })
+    if (id === 'cli') setSource({ ...SCRATCH_SOURCE })
     else setSource(null)
     stepIndex.value = 1
   }
@@ -393,7 +393,7 @@
     // and NONE of the rest — there is no firewall card and no template settings on that
     // part, so a check for either would fail on something the reader was never shown
     // (../../lib/data/application-scratch.js → validateScratch).
-    if (flowId.value === 'scratch') {
+    if (flowId.value === 'cli') {
       validateScratch(form.scratch, errors)
       return Object.keys(errors).length === 0
     }
@@ -466,7 +466,7 @@
       // happen for an application with no code behind it, so playing it would be inventing
       // a deploy to fill the time. The two things this create did NOT do are exactly the
       // two next steps the outcome offers: give it a domain, and ship something to it.
-      if (flowId.value === 'scratch') {
+      if (flowId.value === 'cli') {
         finishCreate()
         return
       }
@@ -553,7 +553,7 @@
 
   // Which door this is. Read by the run's narration below and by the outcome's copy, both
   // of which differ for from scratch — it neither clones nor publishes on its commit.
-  const isScratch = computed(() => flowId.value === 'scratch')
+  const isScratch = computed(() => flowId.value === 'cli')
 
   // AND THE FROM-SCRATCH RUN IS A THIRD STORY AGAIN. It is not a deploy of code at all —
   // there is none — it is the workload being provisioned around an application that
@@ -640,7 +640,7 @@
   // that as its default; here the answer already exists, so it is handed over rather than
   // derived (../../../shared/lib/provisioning.js).
   const scratchResources = () => {
-    if (flowId.value !== 'scratch') return {}
+    if (flowId.value !== 'cli') return {}
     const name = form.name.trim()
     return {
       connector: scratchConnector(
@@ -705,7 +705,11 @@
       // just the application and whatever the two switches added to it. The outcome then
       // offers the two ways to deploy it, and either one publishes THIS record rather than
       // making a second application of the same name.
-      publish: flowId.value !== 'scratch',
+      publish: flowId.value !== 'cli',
+      // How code will reach this application. The CLI flow leaves no repository behind,
+      // so its row shows no repository and its page carries the commands that fill it
+      // (../../components/application/GetStartedCli.vue).
+      source: flowId.value === 'cli' ? 'cli' : 'git',
       repoName: application.name,
       // The account the code actually lives in, so the Application row's repository
       // reads `gab-az/my-app` and not the upstream that shipped the starter.
@@ -769,7 +773,7 @@
   // deploy that part deliberately does not run. It changes on the METHOD and not on the
   // step, so the sentence is settled before the reader reaches the questions.
   const pageDescription = computed(() =>
-    flowId.value === 'scratch'
+    flowId.value === 'cli'
       ? 'An application is the code Azion runs, and the configuration it runs with. Name it, choose how it caches and where it fetches from. The last step creates it, with nothing deployed yet.'
       : 'An application is the code Azion runs, and the configuration it runs with. Select where the code comes from, name it, and the last step deploys it along with the workload that publishes it.'
   )
@@ -901,7 +905,7 @@
   // business knowing that from scratch has no source part (so its source lives on the
   // method part, index 0).
   const onChangeAnswer = (answer) =>
-    goToStep(answer === 'repository' ? 2 : flowId.value === 'scratch' ? 0 : 1)
+    goToStep(answer === 'repository' ? 2 : flowId.value === 'cli' ? 0 : 1)
 
   // --- The part's own advance ----------------------------------------------
   // THE FIRST PART HAS NO BAR. Nothing to go back to and nothing to advance: the flow
@@ -923,7 +927,7 @@
     // says only what it does — and "Deploy this application" is offered afterwards, on the
     // outcome, as the separate act it is.
     if (isInstall.value) return `Add to ${target.value?.name ?? 'application'}`
-    return flowId.value === 'scratch' ? 'Create Application' : 'Create and deploy'
+    return flowId.value === 'cli' ? 'Create Application' : 'Create and deploy'
   })
 
   // AND IT IS GATED WHERE THERE IS NOTHING TO REPORT. Two kinds of part, two rules:
@@ -1025,7 +1029,7 @@
          default. No source summary above it either: with two parts the rail already says
          which door this is, and Back is one press away.  -->
     <ScratchStep
-      v-else-if="step === 'configure' && flowId === 'scratch'"
+      v-else-if="step === 'configure' && flowId === 'cli'"
       :disabled="submitting"
     />
 
@@ -1097,6 +1101,8 @@
         :lead="outcomeLead"
         :domain="provisioned?.workload?.domain ?? ''"
         :next-steps="isScratch ? scratchNextSteps : []"
+        :source="flowId === 'cli' ? 'cli' : 'git'"
+        :application-name="provisioned?.application?.name ?? form.name"
         @manage="manageWorkload"
         @select="onNextStep"
       />

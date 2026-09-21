@@ -66,7 +66,33 @@
     },
     // The commit's own verb. "Save" for most; "Add" / "Create" when the list behind
     // the drawer is what visibly changes.
-    saveLabel: { type: String, default: 'Save' }
+    saveLabel: { type: String, default: 'Save' },
+    // A HARD precondition the form cannot satisfy from inside itself — the body is an
+    // empty state offering the only way forward, so the commit has nothing to act on.
+    // NOT for validation: a missing required field is reported on submit, next to the
+    // field, which is what keeps the reader from hunting a disabled button for a reason.
+    saveDisabled: { type: Boolean, default: false },
+    // WHETHER ESCAPE AND THE OVERLAY STILL DISMISS THIS PANEL. On by default, because
+    // they are this drawer's only exits (there is no Cancel).
+    //
+    // Turn it OFF while a SECOND drawer is open over this one. Every open DrawerContent
+    // listens for Escape on `document`, so with two panels open one press closes BOTH —
+    // measured: a reader backing out of the child loses the parent form they had already
+    // filled in. Until the component only lets the topmost panel answer, the parent stands
+    // its exits down while it is not the one on top.
+    dismissible: { type: Boolean, default: true },
+    // THIS DRAWER IS THE SECOND IN A STACK — opened over another drawer, not over the page.
+    //
+    // A Drawer panel is z-1001 and its overlay z-1000, so a child's backdrop lands BELOW
+    // the parent's panel: measured, the parent stayed undimmed AND live — clicking its
+    // domain field while the child was open still typed into it. Two live forms, one
+    // behind the other. This lifts the pair a layer so the child's own backdrop covers the
+    // parent, which is what makes it inert and what makes the stack read.
+    //
+    // Set it on the CHILD, never the parent. Same workaround
+    // ../../pages/forms/NestedDrawer.vue spells out inline, in one place instead of at
+    // every nesting site — and it goes away when the Drawer stacks its own layers.
+    stacked: { type: Boolean, default: false }
   })
 
   const emit = defineEmits(['submit'])
@@ -76,11 +102,19 @@
   <Drawer
     v-model:open="open"
     :size="size"
+    :dismissible="dismissible"
     side="right"
   >
     <DrawerPortal>
-      <DrawerOverlay />
-      <DrawerContent>
+      <!-- THE LAYER ARRIVES AS A CLASS, not as a `data-stacked` + Tailwind variant, which
+           is what this wanted to be. `DrawerOverlay` and `DrawerContent` set
+           `inheritAttrs: false` and never spread `$attrs` — they read `attrs.class` and
+           drop everything else — so a data attribute passed here never reaches the DOM and
+           the variant silently matches nothing. Measured: the attribute was absent and the
+           panel stayed at z-1001. `class` is the one channel these two forward, so the
+           layer goes through it; `cn` tailwind-merges it over their own `z-`. -->
+      <DrawerOverlay :class="stacked ? 'z-1002' : ''" />
+      <DrawerContent :class="stacked ? 'z-1003' : ''">
         <form
           class="flex min-h-0 flex-1 flex-col"
           :aria-label="title"
@@ -126,6 +160,7 @@
               kind="primary"
               size="medium"
               :loading="submitting"
+              :disabled="saveDisabled"
               @click="emit('submit')"
             />
             <!-- Enter-to-submit: the visible Save is a click handler (not a native
