@@ -103,16 +103,22 @@ import '@aziontech/icons'
 
 ### Prerequisites
 
-- Node.js `>= 24` (see `engines` in the root `package.json`)
-- pnpm `11.x` — the root `packageManager` field pins the exact version; `corepack enable` picks it up automatically
-
-### Install dependencies
-
-From the repository root:
+- **Node.js `>= 24`** — the version lives in [`.nvmrc`](./.nvmrc) and is enforced by `engines` in the root `package.json`. With a version manager, `nvm use` (or `fnm use`) picks it up.
+- **pnpm `11.x`** — the root `packageManager` field pins the exact version. Enable Corepack once and it installs that version for you:
 
 ```bash
+corepack enable
+```
+
+### Clone and install
+
+```bash
+git clone https://github.com/aziontech/webkit.git
+cd webkit
 pnpm install
 ```
+
+Always install from the repository root: it links the workspace packages to each other and installs the Husky hooks (`commit-msg` and `pre-commit`) that guard every commit.
 
 ### Run the Storybook
 
@@ -136,6 +142,23 @@ pnpm storybook:validate-docs
 
 A static build (`pnpm storybook:build`) lands in `apps/storybook/dist`; preview it with `pnpm storybook:preview` at <http://localhost:6007>. The full guide — stack, project structure, writing stories, visual tests — is in the [Storybook app README](./apps/storybook/README.md).
 
+### Run the tests
+
+Components ship a co-located `*.test.ts` run by **Vitest in browser mode** (real Chromium, never jsdom). The first run needs the browser installed:
+
+```bash
+pnpm --filter @aziontech/webkit exec playwright install chromium
+pnpm webkit:test
+```
+
+Pixels are covered by a separate layer: `@storybook/test-runner` visits every story in the built Storybook and compares a screenshot against the committed baselines.
+
+```bash
+pnpm storybook:test:visual
+```
+
+Baselines are per-platform and only the Linux ones are committed, so never commit snapshots generated on macOS. The full testing contract — coverage, opting a story out, regenerating baselines — is in [CONTRIBUTING.md](./CONTRIBUTING.md#testing).
+
 ### Most used commands
 
 ```bash
@@ -147,6 +170,14 @@ pnpm storybook:preview      # Preview the static build
 # Icons
 pnpm icons:build            # Generate icon artifacts
 pnpm icons:validate         # Validate icon source
+pnpm icons:gallery:serve    # Icons Gallery dev server
+
+# Tests
+pnpm webkit:test            # Unit suite (headless Chromium)
+pnpm webkit:test:watch      # Unit suite in watch mode
+pnpm webkit:test:ui         # Vitest UI (headed browser)
+pnpm webkit:test:coverage   # v8 coverage report
+pnpm storybook:test:visual  # Visual regression against the baselines
 
 # Webkit quality gates
 pnpm webkit:lint            # ESLint (max-warnings 0)
@@ -158,6 +189,11 @@ pnpm webkit:format:check    # Prettier check
 # Aggregate
 pnpm governance             # Lint + type-check + format + audit
 ```
+
+### Troubleshooting
+
+- **Stale or half-installed dependencies** — `pnpm install:reset` deletes `pnpm-lock.yaml` and `node_modules/`, then reinstalls from scratch.
+- **pnpm aborts a script with a deps-verify error** (common when `node_modules` is symlinked, e.g. in a git worktree) — prefix the command with `PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN=false`.
 
 ## Development flow
 
