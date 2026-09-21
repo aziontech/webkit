@@ -1,3 +1,4 @@
+import { curve, duration } from '@aziontech/theme/animations'
 import {
   computed,
   type ComputedRef,
@@ -9,8 +10,6 @@ import {
   shallowRef,
   toValue
 } from 'vue'
-
-import { getSidebarRailTransition } from '../presets/transitions'
 
 const COLLAPSE_SNAP = 56
 
@@ -29,12 +28,6 @@ export interface UseSidebarRailOptions {
   minWidthToken: MaybeRefOrGetter<string>
   maxWidthToken: MaybeRefOrGetter<string>
   enabled: MaybeRefOrGetter<boolean>
-  /**
-   * Which edge of the layout the rail is anchored to. `end` mirrors the gesture:
-   * the rail grows when the pointer moves LEFT, and it leaves towards the right.
-   * Everything else about the rail is identical, which is the point — a trailing
-   * panel is the same component, not a second implementation of it.
-   */
   side?: MaybeRefOrGetter<'start' | 'end'>
 }
 
@@ -48,7 +41,6 @@ export interface UseSidebarRailReturn {
   valueMin: Readonly<Ref<number>>
   valueMax: Readonly<Ref<number>>
   railStyle: ComputedRef<Record<string, string | undefined>>
-  railTransition: ComputedRef<string | undefined>
   innerStyle: ComputedRef<Record<string, string | undefined>>
   startResize: (event: globalThis.PointerEvent) => void
   tapToExpand: () => void
@@ -67,6 +59,14 @@ const readTokenPx = (token: string, fallback: number): number => {
 const prefersReducedMotion = (): boolean => {
   if (typeof globalThis.matchMedia === 'undefined') return false
   return globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches
+}
+
+/** The steady-state enter/leave animation runs in CSS off the hidden checkbox's `:checked`
+ *  state (see sidebar.vue). Only the drag-driven preview sliver still needs a JS-computed
+ *  transition, because its width comes from a pointer gesture, not from that boolean. */
+const previewTransition = (): string => {
+  if (prefersReducedMotion()) return 'none'
+  return `width ${duration['moderate-02']} ${curve['expressive-entrance']}`
 }
 
 export function useSidebarRail(options: UseSidebarRailOptions): UseSidebarRailReturn {
@@ -188,27 +188,18 @@ export function useSidebarRail(options: UseSidebarRailOptions): UseSidebarRailRe
     previewWidth.value = readTokenPx(SIDEBAR_PREVIEW_WIDTH_TOKEN, previewWidth.value)
     if (width.value != null) width.value = clamp(width.value)
     measure()
+    railEl.value?.style.removeProperty('width')
   })
 
   onScopeDispose(endResize)
-
-  const transition = computed(() =>
-    getSidebarRailTransition({
-      phase: collapsed.value && !previewing.value ? 'leave' : 'enter',
-      animated: !resizing.value && !prefersReducedMotion()
-    })
-  )
 
   const railStyle = computed(() => {
     if (!toValue(options.enabled)) return {}
     if (peeking.value) return { width: `${peekWidth.value}px`, transition: 'none' }
     if (previewing.value) {
-      return { width: `${previewWidth.value}px`, transition: transition.value }
+      return { width: `${previewWidth.value}px`, transition: previewTransition() }
     }
-    return {
-      width: width.value == null ? undefined : collapsed.value ? '0px' : `${width.value}px`,
-      transition: transition.value
-    }
+    return {}
   })
 
   const presence = computed(() => {
@@ -217,15 +208,12 @@ export function useSidebarRail(options: UseSidebarRailOptions): UseSidebarRailRe
   })
 
   const innerStyle = computed(() => {
-    if (!toValue(options.enabled)) return {}
-    const innerWidth = peeking.value ? railMin.value : width.value
+    if (!toValue(options.enabled) || !peeking.value) return {}
     return {
-      width: innerWidth == null ? undefined : `${innerWidth}px`,
-      transform: collapsed.value
-        ? `translateX(${(presence.value - 1) * 100 * direction()}%)`
-        : undefined,
+      width: `${railMin.value}px`,
+      transform: `translateX(${(presence.value - 1) * 100}%)`,
       opacity: String(RAIL_MIN_OPACITY + (1 - RAIL_MIN_OPACITY) * presence.value),
-      transition: transition.value
+      transition: 'none'
     }
   })
 
@@ -239,7 +227,6 @@ export function useSidebarRail(options: UseSidebarRailOptions): UseSidebarRailRe
     valueMin: computed(() => 0),
     valueMax: computed(() => railMax.value),
     railStyle,
-    railTransition: transition,
     innerStyle,
     startResize,
     tapToExpand,

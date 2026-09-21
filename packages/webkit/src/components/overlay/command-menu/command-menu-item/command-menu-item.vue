@@ -112,12 +112,9 @@
     @keydown.space.prevent="!disabled && activate($event)"
     @mouseenter="!disabled && ctx.setActive(value)"
   >
-    <!--
-      Rendered only for an item that actually carries a prefix — an icon-less item
-      puts no empty box in the DOM and pays no indent. The box is a fixed `size-4`
-      (the glyph size a Menu row uses) so an oversized icon cannot widen the row
-      and pull its own label out of line with the iconed rows around it.
-    -->
+    <!-- Rendered only for an item with a prefix, so an icon-less item pays no indent. The
+         box is fixed to the Menu-row glyph size so an oversized icon cannot widen the row
+         and pull its label out of line with the rows around it. -->
     <span
       v-if="$slots['prefix']"
       :data-testid="`${testId}__prefix`"

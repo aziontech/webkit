@@ -105,11 +105,9 @@ const isWholeMonth = (start: Date, end: Date): boolean =>
   isDefaultEndTime(end)
 
 /**
- * Trigger label: a single date, a compact range (`Jun 9 – 26`, `Jun 9 – Jul 2`,
- * `Dec 30, 2026 – Jan 2, 2027`), or `''` when there is no selection. An endpoint
- * whose time differs from its default (00:00 start, 23:59 end) appends it as
- * `Jun 29, 1:00 – Jul 30, 22:59`; a range spanning exactly one whole calendar
- * month with default times collapses to `July 2026`.
+ * Trigger label: a single date, a compact range (`Jun 9 – 26`, `Dec 30, 2026 – Jan 2, 2027`),
+ * or `''` with no selection. An endpoint whose time differs from its default (00:00 start,
+ * 23:59 end) appends it; a whole-calendar-month range with default times collapses to `July 2026`.
  */
 export const formatValueLabel = (
   value: CalendarValue,

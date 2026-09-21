@@ -7,19 +7,11 @@ import * as stories from '../../../../../../apps/storybook/src/stories/component
 import { expectNoA11yViolations } from '../../../test/axe'
 import DocFrame from './doc-frame.vue'
 
-// .claude/rules/testing.md: Vitest browser mode (real Chromium) loads NO Tailwind, so the
-// frame's border, the badge fade and the FLIP travel emit nothing here — those belong to
-// the visual gate. What is real without CSS is what decides the component's semantics:
-// which element a source renders as (image vs player, decided by the extension), the
-// zoom trigger being a real button, the Teleported dialog with its role and label, focus
-// moving in and back out, and the testid family.
-//
-// The lightbox tests run under an emulated reduced-motion preference (a matchMedia
-// override — a media preference, not layout/focus/Teleport, which all stay real). Two
-// reasons: the close path unmounts on `transitionend`, which never fires in an unstyled
-// DOM because the transition class emits no CSS; and the component deliberately skips
-// the FLIP in JS for exactly this preference, so the path under test is a real user
-// path, not a test-only shortcut.
+// Browser mode loads no Tailwind — border/fade/FLIP belong to the visual gate; asserted
+// here: element choice per source, dialog semantics, focus, and the testid family.
+// Lightbox tests emulate reduced motion (matchMedia override only): the close path
+// unmounts on `transitionend`, which never fires in an unstyled DOM, and the component
+// skips the FLIP under this preference — so the tested path is a real user path.
 
 const { Default, Media } = composeStories(stories)
 

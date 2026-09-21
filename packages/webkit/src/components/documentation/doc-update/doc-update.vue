@@ -6,39 +6,9 @@
   import { slugify } from './slugify'
 
   /**
-   * One entry in a changelog: what shipped, when, and under which version.
-   *
-   * The anatomy is two columns — the entry's identity on the left (the date, the
-   * version under it, the tags under that), the release notes on the right — and
-   * a rule between them that runs the length of the entry. A changelog is read
-   * the way a timeline is read, scanning the left edge for a date and stopping
-   * where something looks relevant, so the label column is the only thing that
-   * has to be legible at scanning speed and the notes are ordinary prose.
-   *
-   * THE LABEL IS THE ANCHOR. Every entry is a URL someone links to — a support
-   * reply, a release tweet, an issue that says "fixed in the March release" — so
-   * the label is a link to its own id, derived from the label itself, carrying
-   * the same hover rule and chain glyph a heading carries. It is an `h2` for the
-   * same reason it is an anchor: an entry is a section of the page, and the
-   * outline should say so.
-   *
-   * THE LABEL COLUMN STICKS while its notes scroll past. An entry can be long,
-   * and a reader halfway down a set of release notes has no way back to which
-   * release they are in — the date pinned beside the prose is that answer, kept
-   * where they are already looking.
-   *
-   * THE RULE BRIDGES THE GAP BETWEEN CONSECUTIVE ENTRIES. Block rhythm puts
-   * 24px between blocks, which would cut the rule into one segment per entry and
-   * make a continuous timeline read as a dashed one — so an entry that FOLLOWS
-   * another extends its column up through that gap and pads the content back
-   * down. The first entry does not, which is what keeps the line from starting
-   * above the changelog.
-   *
-   * NO RSS. Mintlify's Update component also takes an `rss` prop, because
-   * Mintlify generates the feed. This layer renders pages and generates nothing,
-   * so the prop would be inert — an entry in the API that quietly does nothing
-   * is worse than an absence. Feed generation belongs to whatever builds the
-   * site.
+   * One changelog entry: a sticky identity column on the left, the notes on the
+   * right. There is deliberately no rss prop — this layer renders pages and
+   * generates nothing, so the prop would be inert, worse than an absence.
    */
   defineOptions({ name: 'DocUpdate', inheritAttrs: false })
 
@@ -84,9 +54,8 @@
     :aria-labelledby="`${anchorId}-label`"
     class="flex w-full scroll-mt-(--spacing-lg) flex-col gap-(--spacing-sm) md:flex-row md:gap-(--spacing-lg)"
   >
-    <!-- CHROME, NOT PROSE. The column is a label, a version and a row of tags —
-         none of it is the document's copy, so `DocProse` has to keep its hands
-         off the `h2` it would otherwise size at 32px and space by 40px. -->
+    <!-- Chrome, not prose: data-doc-chrome keeps DocProse from restyling the label
+         heading it would otherwise size and space as a section heading. -->
     <div
       data-doc-chrome
       class="flex shrink-0 flex-col items-start gap-(--spacing-xxs) md:sticky md:top-(--spacing-lg) md:w-40 md:self-start"
@@ -130,6 +99,9 @@
         />
       </div>
     </div>
+    <!-- An entry that follows another pulls its rule up through the 24px block gap
+         and pads the content back down, so the timeline reads as one continuous
+         line instead of a dashed one; the first entry does not. -->
     <div
       class="min-w-0 flex-1 md:border-l md:border-(--border-default) md:pl-(--spacing-lg) md:[[data-doc-update]+[data-doc-update]_&]:-mt-6 md:[[data-doc-update]+[data-doc-update]_&]:pt-6 [&>*:first-child]:pt-0!"
     >

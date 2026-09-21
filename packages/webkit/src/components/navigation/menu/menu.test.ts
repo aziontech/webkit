@@ -304,9 +304,6 @@ describe('Menu (composition, drill stack + data mode)', () => {
     await waitFor(() => expect(view.getByRole('link', { name: 'General' })).toBeTruthy())
   })
 
-  // A CONDENSED row splits the same way a drill row does, so its label is a reference too: the
-  // row can point at a landing page and still own children. A node with nothing to point at
-  // simply gives the consumer nothing to route to.
   // A link-less container has nowhere to go, so it never announces a navigation — the whole
   // row is the disclosure. This is the shape most containers have (the console's Settings, the
   // site's drawer nav): the parent is not a reference, so the parent opens the children.

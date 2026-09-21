@@ -1,15 +1,62 @@
-// Single source of truth for the construction-standard checks (.claude/rules/).
-// Consumed by THREE enforcement surfaces so they can never drift:
-//   - .claude/hooks/validate-authoring.mjs       → write-time gate (AI pipeline), baseline-diff
-//   - packages/webkit/scripts/check-authoring.mjs → design-system CI ratchet, frozen baseline
-//   - src/eslint-plugin/rules/authoring-standards.js → the CONSUMER lint (pre-commit + their CI)
-//
-// Each content check is a pure predicate on the WHOLE file content. `composable-js` is
-// path-based (a .js composable) and is reported by scanFile() directly.
+// Single source of truth for the construction-standard checks (.claude/rules/), shared by
+// the write-time hook (validate-authoring), the DS CI ratchet (check-authoring), and the
+// consumer lint (authoring-standards) — one definition, three surfaces. Each content check
+// is a pure predicate on the whole file; `composable-js` is path-based (scanFile).
 
 export const isVue = (rel) => rel.endsWith('.vue')
 export const isComposable = (rel) => /(^|\/)use-[^/]*\.(ts|js)$/.test(rel)
 export const isJsComposable = (rel) => /(^|\/)use-[^/]*\.js$/.test(rel)
+export const isSource = (rel) => /\.(vue|ts|js)$/.test(rel)
+
+// Comment discipline (comments.md). Line-based, parser-agnostic like every check here.
+// Directives (eslint/ts/prettier/vite) and one-line JSDoc (`/** … */` — mandated on every
+// public prop) are not prose. Blank lines neither extend nor break a block, so a long
+// commentary cannot evade the block limit by inserting spacing.
+export const COMMENT_BLOCK_MAX = 5
+export const COMMENT_PROSE_MIN_LINES = 15
+export const COMMENT_PROSE_MAX_RATIO = 0.2
+
+const DIRECTIVE_RE = /^(eslint-|@ts-|prettier-ignore|@vite-ignore|@vue-ignore|v8 ignore)/
+
+export function scanComments(text) {
+  let inBlock = false
+  let inHtml = false
+  let run = 0
+  let maxBlock = 0
+  let prose = 0
+  let nonBlank = 0
+  for (const raw of text.split('\n')) {
+    const line = raw.trim()
+    if (line !== '') nonBlank++
+    let comment = false
+    let oneLineJsdoc = false
+    if (inBlock) {
+      comment = true
+      if (line.includes('*/')) inBlock = false
+    } else if (inHtml) {
+      comment = true
+      if (line.includes('-->')) inHtml = false
+    } else if (line.startsWith('//')) {
+      comment = true
+    } else if (line.startsWith('/*')) {
+      comment = true
+      oneLineJsdoc = line.startsWith('/**') && line.endsWith('*/')
+      if (!line.includes('*/')) inBlock = true
+    } else if (line.startsWith('<!--')) {
+      comment = true
+      if (!line.includes('-->')) inHtml = true
+    }
+    if (!comment) {
+      if (line !== '') run = 0
+      continue
+    }
+    run++
+    if (run > maxBlock) maxBlock = run
+    const body = line.replace(/^(\/\/+|\/\*+|\*+\/?|<!--)\s*/, '')
+    if (!oneLineJsdoc && !DIRECTIVE_RE.test(body)) prose++
+  }
+  return { maxBlock, prose, nonBlank }
+}
 
 export const CONTENT_CHECKS = [
   {
@@ -64,6 +111,22 @@ export const CONTENT_CHECKS = [
     },
     message:
       '`@deprecated` with no replacement/removal version. Name the replacement and the removal version (e.g. "@deprecated since 4.2 — use `kind`. Removed in 5.0").'
+  },
+  {
+    id: 'verbose-comment-block',
+    applies: isSource,
+    violated: (t) => scanComments(t).maxBlock > COMMENT_BLOCK_MAX,
+    message: `Comment block longer than ${COMMENT_BLOCK_MAX} lines. A comment states only what the code cannot (a constraint, a non-obvious why) — objectively. Long rationale belongs in the spec or a .claude/rules doc, not in the source.`
+  },
+  {
+    id: 'comment-heavy-file',
+    applies: isSource,
+    violated: (t) => {
+      const { prose, nonBlank } = scanComments(t)
+      return prose >= COMMENT_PROSE_MIN_LINES && prose / nonBlank >= COMMENT_PROSE_MAX_RATIO
+    },
+    message:
+      'File is mostly commentary (≥20% prose comment lines; one-line JSDoc and directives excluded). Delete comments that restate the code; compress the rest to objective one-liners.'
   }
 ]
 
@@ -86,7 +149,9 @@ export const STANDARD_BY_CHECK = {
   'slot-without-defineslots': 'slots',
   'composable-return-reactive': 'composables',
   'composable-js': 'composables',
-  'deprecated-without-replacement': 'deprecation'
+  'deprecated-without-replacement': 'deprecation',
+  'verbose-comment-block': 'comments',
+  'comment-heavy-file': 'comments'
 }
 
 /** All violated check ids for a file's full content. Includes the path-based composable-js. */

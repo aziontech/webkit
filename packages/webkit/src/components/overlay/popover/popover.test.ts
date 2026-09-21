@@ -410,15 +410,17 @@ describe('Popover (compound / overlay)', () => {
    * when it does not, always preserving the alignment. A spacer positions the
    * trigger so each case is deterministic in the real viewport.
    */
-  const placedHost = (placement: string, spacerHeight = 0) =>
+  const placedHost = (placement: string, spacerHeight = 0, rows = 1, wrapperStyle = '') =>
     defineComponent({
       components: { Popover, PopoverTrigger, PopoverContent },
       template: `
-        <div>
+        <div style="${wrapperStyle}">
           <div style="height: ${spacerHeight}px"></div>
           <Popover placement="${placement}">
             <PopoverTrigger><button type="button">Open</button></PopoverTrigger>
-            <PopoverContent><p>Anchored content</p></PopoverContent>
+            <PopoverContent>
+              <p v-for="i in ${rows}" :key="i" style="height: 24px; margin: 0">Anchored content {{ i }}</p>
+            </PopoverContent>
           </Popover>
         </div>
       `
@@ -455,6 +457,53 @@ describe('Popover (compound / overlay)', () => {
     await fireEvent.click(byTestId('overlay-popover__trigger') as HTMLElement)
     await waitFor(() => expect(panel()).not.toBeNull())
     expect((panel() as HTMLElement).getAttribute('data-placement')).toBe('bottom-start')
+  })
+
+  // ---- Size-aware placement (ENG-47063) --------------------------------------------
+  it('caps a panel taller than the viewport to the free space and scrolls it internally', async () => {
+    // Trigger near the top; 60 x 24px rows cannot fit on either side.
+    render(placedHost('bottom-start', 0, 60, 'position:fixed;top:8px;left:8px'))
+
+    await fireEvent.click(byTestId('overlay-popover__trigger') as HTMLElement)
+    await waitFor(() => expect(panel()).not.toBeNull())
+    await nextTick()
+    await nextTick()
+
+    const p = panel() as HTMLElement
+    const pr = p.getBoundingClientRect()
+    const tr = (byTestId('overlay-popover__trigger') as HTMLElement).getBoundingClientRect()
+    expect(p.getAttribute('data-placement')).toBe('bottom-start')
+    expect(pr.top).toBeGreaterThanOrEqual(tr.bottom)
+    expect(pr.bottom).toBeLessThanOrEqual(window.innerHeight)
+    expect(p.style.maxHeight).not.toBe('')
+    expect(p.scrollHeight).toBeGreaterThan(p.clientHeight)
+  })
+
+  it('stays inside the nearest scrolling ancestor instead of the window', async () => {
+    // The trigger sits in a short scroll container; the panel must not extend past it.
+    render(
+      placedHost(
+        'bottom-start',
+        0,
+        30,
+        'position:fixed;top:40px;left:8px;width:400px;height:240px;overflow:auto'
+      )
+    )
+    const wrapper = (byTestId('overlay-popover') as HTMLElement).parentElement as HTMLElement
+    // Make the container actually scroll.
+    const filler = document.createElement('div')
+    filler.style.height = '1000px'
+    wrapper.appendChild(filler)
+
+    await fireEvent.click(byTestId('overlay-popover__trigger') as HTMLElement)
+    await waitFor(() => expect(panel()).not.toBeNull())
+    await nextTick()
+    await nextTick()
+
+    const pr = (panel() as HTMLElement).getBoundingClientRect()
+    const wr = wrapper.getBoundingClientRect()
+    expect(pr.bottom).toBeLessThanOrEqual(wr.top + wrapper.clientHeight + 1)
+    expect((panel() as HTMLElement).style.maxHeight).not.toBe('')
   })
 
   it('placement=auto resolves to one of the four corners at open time', async () => {

@@ -8,14 +8,9 @@ import Flow, { FlowAnchor, FlowNode, FlowParallel } from './index'
 
 const { Default, Parallel, Branches, AnchoredNode, Disabled } = composeStories(stories)
 
-// A realistic composed tree rendered through a wrapper SFC.
-//
-// Vue's *runtime* string-template compiler (used by inline `template:`) does not resolve
-// member-expression tags like `<Flow.Node>` — it lowercases them to a native `<flow.node>`.
-// So the tree is composed from the *same* component objects the compound exposes (the
-// `Flow.Node === FlowNode` identity is proven separately in the compound-API block) but
-// registered under flat PascalCase tags the runtime compiler resolves. The DOM produced is
-// identical to the SFC dot-notation form.
+// Vue's runtime string-template compiler cannot resolve member-expression tags
+// like Flow.Node, so trees register the same component objects under flat
+// PascalCase tags (the Flow.Node === FlowNode identity is asserted separately).
 const renderTree = (template: string) =>
   render({
     components: { Flow, FlowNode, FlowParallel, FlowAnchor },
@@ -25,8 +20,6 @@ const renderTree = (template: string) =>
 describe('Flow (composition compound)', () => {
   describe('compound API — Object.assign attachment (index.ts)', () => {
     it('attaches every public sub-component to the root for dot-notation', () => {
-      // index.ts: Object.assign(Flow, { Node, Parallel, Anchor }).
-      // The dot-notation members ARE the standalone sub-component exports.
       expect(Flow.Node).toBe(FlowNode)
       expect(Flow.Parallel).toBe(FlowParallel)
       expect(Flow.Anchor).toBe(FlowAnchor)
@@ -46,7 +39,6 @@ describe('Flow (composition compound)', () => {
       const root = getByTestId('data-flow')
       expect(root.tagName).toBe('DIV')
       expect(getByRole('list')).toBe(root)
-      // Inner measuring container carries data-align; default prop is 'start'.
       const inner = root.querySelector('[data-align]') as HTMLElement
       expect(inner.getAttribute('data-align')).toBe('start')
     })
@@ -75,7 +67,6 @@ describe('Flow (composition compound)', () => {
           </FlowParallel>
         </Flow>
       `)
-      // injection-key FlowContext.testId = root testId; sub-components append __node / __parallel / __anchor.
       // Derived ids are shared across instances, so there can be several node ids.
       expect(getAllByTestId('data-flow__node').length).toBeGreaterThan(0)
       expect(getAllByTestId('data-flow__parallel').length).toBe(1)
@@ -89,14 +80,12 @@ describe('Flow (composition compound)', () => {
           <FlowParallel><FlowNode>P</FlowNode></FlowParallel>
         </Flow>
       `)
-      // Context.testId is captured from the root's data-testid at provide time and inherited by the parts.
       expect(getByTestId('pipeline')).toBeTruthy()
       expect(getAllByTestId('pipeline__node').length).toBe(2)
       expect(getByTestId('pipeline__parallel')).toBeTruthy()
     })
 
     it('falls back to "data-flow" prefix when a sub-component has no Flow ancestor (inject default)', () => {
-      // inject(FlowInjectionKey) is undefined here; the `ctx?.testId ?? 'data-flow'` fallback applies.
       const { getByTestId } = render(FlowNode, { slots: { default: 'orphan' } })
       expect(getByTestId('data-flow__node')).toBeTruthy()
     })
@@ -108,20 +97,17 @@ describe('Flow (composition compound)', () => {
       const node = getByTestId('data-flow__node')
       expect(node.getAttribute('role')).toBe('listitem')
       expect(node.getAttribute('data-flow-kind')).toBe('node')
-      // Default (not unstyled) => data-styled present (empty string).
       expect(node.hasAttribute('data-styled')).toBe(true)
     })
 
     it('drops the styled box when unstyled', () => {
       const { getByTestId } = renderTree(`<Flow><FlowNode unstyled>N</FlowNode></Flow>`)
-      // unstyled => :data-styled="null" => attribute absent.
       expect(getByTestId('data-flow__node').hasAttribute('data-styled')).toBe(false)
     })
 
     it('marks a disabled node with the connector/aria data attributes', () => {
       const { getByTestId } = renderTree(`<Flow><FlowNode disabled>N</FlowNode></Flow>`)
       const node = getByTestId('data-flow__node')
-      // Template: :data-flow-disabled="disabled ? 'true' : null", :data-disabled, :aria-disabled.
       expect(node.getAttribute('data-flow-disabled')).toBe('true')
       expect(node.hasAttribute('data-disabled')).toBe(true)
       expect(node.getAttribute('aria-disabled')).toBe('true')
@@ -145,7 +131,6 @@ describe('Flow (composition compound)', () => {
       const node = getByTestId('data-flow__node')
       const ports = Array.from(node.querySelectorAll<HTMLElement>('[data-flow-port]'))
       expect(ports.map((p) => p.getAttribute('data-flow-port'))).toEqual(['end', 'start'])
-      // Decorative — the connector affordance carries no meaning for AT.
       expect(ports.every((p) => p.getAttribute('aria-hidden') === 'true')).toBe(true)
     })
 
@@ -166,22 +151,19 @@ describe('Flow (composition compound)', () => {
       `)
       const [, chain, leaf] = getAllByTestId('data-flow__node')
       expect(leaf.getAttribute('data-flow-terminal')).toBe('true')
-      // A terminal node receives a connector but originates none, so only the end port.
       expect(
         Array.from(leaf.querySelectorAll<HTMLElement>('[data-flow-port]')).map((p) =>
           p.getAttribute('data-flow-port')
         )
       ).toEqual(['end'])
-      // Its non-terminal sibling keeps both.
       expect(chain.querySelectorAll('[data-flow-port]').length).toBe(2)
       expect(chain.hasAttribute('data-flow-terminal')).toBe(false)
     })
   })
 
   describe('terminal branches — a leaf receives a connector but originates none', () => {
-    // Two parallel branches, one terminal. Source fans out to BOTH entries, but only
-    // the non-terminal branch carries the chain into the next child: 2 in + 1 out = 3.
-    // With no terminal branch the same tree draws 4 (2 in + 2 out).
+    // Source fans out to both branch entries but only the non-terminal branch
+    // chains onward: 2 in + 1 out = 3 paths; with no terminal branch, 4.
     const tree = (terminal: boolean) => `
       <Flow>
         <FlowNode>Source</FlowNode>
@@ -213,7 +195,7 @@ describe('Flow (composition compound)', () => {
     })
 
     it('draws nothing out of a terminal node that is a direct child', async () => {
-      // A terminal direct child ends the sequence: Source -> Terminal, and no Terminal -> Sink.
+      // Only Source -> Terminal is drawn; the sequence ends there, so 1 path.
       const { getByTestId } = renderTree(`
         <Flow>
           <FlowNode>Source</FlowNode>
@@ -241,7 +223,6 @@ describe('Flow (composition compound)', () => {
       const group = getByTestId('data-flow__parallel')
       expect(group.getAttribute('role')).toBe('group')
       expect(group.getAttribute('data-flow-kind')).toBe('parallel')
-      // align ?? 'start'
       expect(group.getAttribute('data-align')).toBe('start')
     })
 
@@ -277,7 +258,6 @@ describe('Flow (composition compound)', () => {
           </FlowNode>
         </Flow>
       `)
-      // props.type ?? 'both'
       expect(getByTestId('data-flow__anchor').getAttribute('data-flow-anchor')).toBe('both')
     })
 
@@ -322,21 +302,18 @@ describe('Flow (composition compound)', () => {
         </Flow>
       `)
       const root = getByTestId('data-flow')
-      // useFlowConnectors measures via getBoundingClientRect on mount + observers;
-      // in a real browser the two nodes have width, so >=1 path is produced.
+      // Connector layout is measured on mount via rAF + observers, so paths appear async.
       await waitFor(() => {
         expect(root.querySelectorAll('svg path').length).toBeGreaterThan(0)
       })
       const svg = root.querySelector('svg') as SVGElement
-      // The connector layer is decorative — hidden from the a11y tree.
       expect(svg.getAttribute('aria-hidden')).toBe('true')
     })
 
     it('renders no connector SVG when there is a single node (nothing to join)', async () => {
       const { getByTestId } = renderTree(`<Flow><FlowNode>Only</FlowNode></Flow>`)
       const root = getByTestId('data-flow')
-      // v-if="paths.length" — one child produces no pairs, so no <svg>.
-      // Give the RAF-scheduled measure a chance to run, then confirm it stays empty.
+      // Wait out the rAF-scheduled measure before asserting the svg stays absent.
       await new Promise((resolve) =>
         requestAnimationFrame(() => requestAnimationFrame(() => resolve(undefined)))
       )
@@ -349,7 +326,6 @@ describe('Flow (composition compound)', () => {
       const { getByText, getAllByTestId } = render(Default())
       expect(getByText('Source')).toBeTruthy()
       expect(getByText('Deliver')).toBeTruthy()
-      // Three FlowNode roots -> three derived node testids.
       expect(getAllByTestId('data-flow__node').length).toBe(3)
     })
 
@@ -362,7 +338,6 @@ describe('Flow (composition compound)', () => {
 
     it('renders the Branches story with leading and trailing parallel groups', () => {
       const { getAllByTestId } = render(Branches())
-      // Two Flow.Parallel groups in the template.
       expect(getAllByTestId('data-flow__parallel').length).toBe(2)
     })
 

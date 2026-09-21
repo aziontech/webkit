@@ -4,14 +4,9 @@
   import { useDocStepsContext } from '../doc-steps/composables/use-doc-steps-context'
 
   /**
-   * One numbered step: the circled index, the rail that continues to the next
-   * step, the step heading, and any content the author nests underneath.
-   *
-   * The number comes from the DocSteps context: the step
-   * registers itself during setup and reads its reactive index back, so an
-   * author writes a title and never a number, and reordering the page
-   * renumbers it. Rendered outside a DocSteps provider it throws, loudly,
-   * instead of rendering unnumbered.
+   * One numbered step. The number comes from the DocSteps context — the step
+   * registers itself in setup and reads its reactive index back, so reordering
+   * the page renumbers it. Outside a DocSteps provider it throws, loudly.
    */
   defineOptions({ name: 'DocStep', inheritAttrs: false })
 

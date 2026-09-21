@@ -39,12 +39,7 @@
     disabled: false
   })
 
-  /**
-   * Emitted by the LINK only, so it fires only where the row actually has a destination.
-   * Declared rather than left to `$attrs` fallthrough: in the split shape the root is a box
-   * holding two controls, and a fallthrough listener would sit on that box and fire for the
-   * arrow too — revealing the children would also trigger the consumer's navigation.
-   */
+  // Emitted by the LINK only; declared rather than left to `$attrs` fallthrough, which would fire for the arrow too.
   const emit = defineEmits<{
     click: [event: globalThis.MouseEvent]
   }>()
@@ -64,39 +59,13 @@
 
   const isInline = computed(() => props.kind === 'inline')
 
-  /**
-   * The one decision that shapes this component — and it changes the LABEL, never the arrow.
-   * The arrow is always a real `IconButton`: it is the affordance that says "this row owns
-   * children", and it looks the same on every row whether or not the row is a destination.
-   * What `href` decides is what the label beside it does, and therefore how much of the row
-   * reveals the children:
-   *
-   * - **It has an `href`** — the label is a LINK to that destination, and the arrow alone
-   *   reveals the children. Reaching them must not cost the reader the destination.
-   * - **It has none** — the label REVEALS the children too, so the whole row does. There is no
-   *   destination to protect, and leaving the 28px arrow as the only live target is 7% of the
-   *   row's area with the other 93% doing nothing: on a phone that reads as a broken menu.
-   *
-   * `href` is the signal rather than a boolean, because it is the same data every other row in
-   * this menu uses to say where it goes, and it makes the behaviour fall out of the tree in
-   * data-driven mode.
-   */
+  // With `href` set the label is a LINK and the arrow alone reveals the children; with none, the label reveals them too.
   const hasReference = computed(() => props.href.length > 0)
 
-  /**
-   * Only a DRILL row may carry a glyph, and the component enforces that rather than trusting
-   * the caller: an INLINE row heads the rows it expands beneath it, in their own column, so a
-   * glyph there competes with the rows it owns. A drill row has nothing beneath it — it
-   * replaces the menu — so it sits amongst the leaves it is listed with and takes an icon for
-   * the same reason they do.
-   */
+  // Only a DRILL row may carry a glyph — an inline row heads the rows it expands, in their own column.
   const showIcon = computed(() => Boolean(props.icon) && !isInline.value)
 
-  /**
-   * Names the arrow, since the glyph alone says nothing. An inline arrow names the state it
-   * moves to (it is a disclosure, and `aria-expanded` says where it is); a drill arrow opens a
-   * level, which is not a state of this row.
-   */
+  // Names the arrow: an inline arrow names the disclosure state, a drill arrow names the level it opens.
   const arrowAriaLabel = computed(() => {
     const name = props.label
     if (!isInline.value) return name ? `Open ${name} menu` : 'Open submenu'
@@ -110,9 +79,7 @@
   const ROW_CLASS =
     'relative flex h-8 w-full shrink-0 items-center gap-(--spacing-xxs) pr-(--spacing-xxs)'
 
-  // Reads as a MENU ROW, at the rows' own size and colour. Only a first-level group title is
-  // allowed to be smaller and muted; from there every row is 14px, a trigger included — a row
-  // that owns children is still a row.
+  // Reads as a MENU ROW at the rows' own size and colour — a group title alone is smaller and muted.
   const CONTROL_CLASS =
     'group relative flex h-8 shrink-0 items-center gap-(--spacing-xs) ' +
     'rounded-(--shape-elements) pr-(--spacing-xs) py-(--spacing-xxs) text-left ' +
@@ -124,38 +91,22 @@
     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--menu-ring-offset,var(--bg-canvas))] ' +
     'data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled) data-[disabled]:before:hidden data-[disabled]:after:hidden'
 
-  /**
-   * The arrow borrows the menu's ring offset instead of `IconButton`'s own (`offset-2` against
-   * `--bg-canvas`): `Sidebar` sets `--menu-ring-offset` to its own surface, and a 2px offset on
-   * a control this close to the rail edge collides with it. Both carry `!` on purpose — they
-   * conflict with utilities `IconButton` puts in the same class list, and a plain class would be
-   * resolved by stylesheet order rather than by which one was passed last.
-   */
+  // Borrows the menu's ring offset instead of IconButton's own; `!` overrides IconButton's own utilities.
   const ARROW_CLASS =
     'focus-visible:ring-offset-1! focus-visible:ring-offset-[var(--menu-ring-offset,var(--bg-canvas))]!'
 
-  /**
-   * A disabled arrow paints NO fill. `IconButton`'s disabled state is a filled `--bg-disabled`
-   * box, which is right for a standalone button and wrong here: it made the arrow the brightest
-   * thing on a row whose own label had dimmed to disabled ink, so the one row you cannot use
-   * drew more attention than its neighbours.
-   */
+  // A disabled arrow paints NO fill — IconButton's filled disabled box made it the brightest thing on a dead row.
   const ARROW_DISABLED_CLASS = 'bg-transparent!'
 
   const MOTION_CLASS =
     'transition-transform duration-fast-02 ease-productive-entrance ' +
     'motion-reduce:transition-none motion-reduce:transform-none'
 
-  /**
-   * The glyph colour goes through `iconClass` — onto the `i` itself — rather than the button's
-   * class: `IconButton`'s `transparent` kind sets `text-(--text-default)` on the root, and two
-   * colour utilities in one class list are settled by stylesheet order, not source order.
-   */
+  // Colour goes through `iconClass` on the `i` itself, not the button's class — two colour utilities on one list resolve by stylesheet order.
   const arrowIconClass = computed(() =>
     cn(
       MOTION_CLASS,
-      // Disabled ink, not muted: the glyph has to dim with the row's own label, or it reads as
-      // the one live thing on a dead row.
+      // Disabled ink, not muted — must dim with the row's own label.
       props.disabled ? 'text-(--text-disabled)' : 'text-(--text-muted)',
       isInline.value && sub.open.value && 'rotate-180'
     )
@@ -188,10 +139,7 @@
   /** The label control fills whatever the arrow leaves, in both shapes. */
   const labelClass = computed(() => cn(CONTROL_CLASS, 'min-w-0 flex-1', contentColumnClass.value))
 
-  /**
-   * The element focus returns to when this sub is left behind: whichever control revealed the
-   * children — the arrow when it is the only one that does, the label when it does too.
-   */
+  // Focus returns to whichever control revealed the children on leaving.
   const register = () => {
     const target = hasReference.value
       ? ((arrowEl.value?.$el as globalThis.HTMLElement | null) ?? null)
@@ -202,10 +150,7 @@
   onMounted(register)
   watch([() => props.kind, () => props.label, hasReference], register)
 
-  /**
-   * The link announces its activation and nothing else — it does not reveal the children, so a
-   * consumer can route to wherever the row points without the menu moving under the reader.
-   */
+  // The link announces its activation only — it never reveals the children.
   const activate = (event: globalThis.MouseEvent) => {
     if (props.disabled) return
     emit('click', event)
@@ -246,14 +191,7 @@
 </script>
 
 <template>
-  <!--
-    ONE anatomy for every row that owns children: a box holding a LABEL control and an ARROW.
-    The arrow is always a real `IconButton` — it is the affordance that says the row owns
-    children, and it should not change shape depending on whether the row also has a
-    destination. `href` decides what the LABEL does, which is what decides how much of the row
-    reveals the children. Nesting is not an option either way (neither an anchor nor a button
-    may contain a button), so the row itself is never the control.
-  -->
+  <!-- ONE anatomy: a box holding a LABEL control and an ARROW IconButton; href decides what the LABEL does, never the arrow's shape. -->
   <div
     v-bind="$attrs"
     :data-testid="testId"
@@ -262,10 +200,7 @@
     :data-disabled="disabled ? '' : undefined"
     :class="rowClass"
   >
-    <!--
-      A LINK when the row has its own destination, a BUTTON that reveals the children when it
-      does not — `<component :is>` on a data prop, per root-element.md, never an `as` string.
-    -->
+    <!-- A LINK when the row has a destination, a BUTTON otherwise — component :is on a data prop, never an as string. -->
     <component
       :is="hasReference ? 'a' : 'button'"
       ref="labelEl"
@@ -295,10 +230,8 @@
           aria-hidden="true"
         />
       </span>
-      <!--
-        The same label treatment as a `Menu.Item`: `.text-label-md`, colour inherited from the
-        control. `.text-label-sm` + `--text-muted` is reserved for a first-level group title.
-      -->
+      <!-- Same label treatment as a Menu.Item, colour inherited from the control; the smaller,
+           muted treatment is reserved for a first-level group title, never a trigger. -->
       <span
         class="min-w-0 flex-1 truncate text-left text-label-md"
         :data-testid="`${testId}__label`"
@@ -306,14 +239,7 @@
         <slot>{{ label }}</slot>
       </span>
     </component>
-    <!--
-      `aria-expanded` / `aria-controls` live on whichever control expands the children, and only
-      one of them ever carries them. When the label is a link the arrow is the disclosure, so it
-      owns them. When the label already reveals, the arrow is a REDUNDANT pointer affordance for
-      the same action: it leaves the tab order and the accessibility tree (`tabindex="-1"` +
-      `aria-hidden`) rather than announcing a second control for one thing. A drill arrow never
-      carries `aria-expanded` — it replaces the view rather than expanding one.
-    -->
+    <!-- aria-expanded/aria-controls live on whichever control expands the children; a redundant arrow leaves the tab order and a11y tree. -->
     <IconButton
       ref="arrowEl"
       :icon="arrowIcon"

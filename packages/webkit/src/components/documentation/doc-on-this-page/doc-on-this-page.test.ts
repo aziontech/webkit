@@ -6,15 +6,10 @@ import * as stories from '../../../../../../apps/storybook/src/stories/component
 import { expectNoA11yViolations } from '../../../test/axe'
 import DocOnThisPage from './doc-on-this-page.vue'
 
-// .claude/rules/testing.md: Vitest browser mode (real Chromium) loads NO Tailwind, so the
-// rail's indent, the marker's travel and the hover highlight emit nothing here. The rail
-// geometry is also deliberately NOT asserted: path lengths and dash offsets are measured
-// against a live SVG probe, and pinning those numbers would trap any refit of the curve
-// while proving nothing about behaviour. Both belong to the visual gate.
-//
-// What is real without CSS: which entries render, the list structure the axe `list` rule
-// needs, aria-current on the active entry, the landmark-per-group decision, and the event
-// payload order.
+// Browser mode loads no Tailwind. Rail geometry (path lengths, dash offsets) is also
+// deliberately unasserted: pinning live-SVG probe numbers would trap any curve refit
+// while proving nothing — both belong to the visual gate. Asserted here: entries,
+// list structure, aria-current, landmark-per-group, and event payload order.
 
 const { Default, Nesting } = composeStories(stories)
 

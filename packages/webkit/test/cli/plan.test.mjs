@@ -6,6 +6,7 @@ import { join } from 'node:path'
 
 import { planInit, CLAUDE_FRAGMENT_MARKER, MCP_SERVER_NAME } from '../../src/cli/plan.js'
 import { applyPlan } from '../../src/cli/apply.js'
+import { FRAGMENT_START } from '../../src/cli/bundle.js'
 
 const MAIN_TS =
   "import { createApp } from 'vue'\nimport App from './App.vue'\ncreateApp(App).mount('#app')\n"
@@ -346,13 +347,14 @@ test('planInit copies the .claude/rules/webkit-*.md bundle', () => {
   const dir = makeProject()
   try {
     const plan = planInit(dir, {})
-    const copies = plan.filter((a) => a.type === 'copy').map((a) => a.to)
+    const copies = plan.filter((a) => a.type === 'copy-stamped').map((a) => a.to)
     for (const rel of [
       '.claude/rules/webkit-imports.md',
       '.claude/rules/webkit-tokens.md',
       '.claude/rules/webkit-performance.md',
       '.claude/rules/webkit-prefer-over-custom.md',
       '.claude/rules/webkit-style-override.md',
+      '.claude/rules/webkit-comments.md',
       '.claude/rules/webkit-construction-standards.md',
       '.claude/rules/webkit-prop-vocabulary.md',
       '.claude/rules/webkit-styling.md',
@@ -418,14 +420,26 @@ test('planInit copies the .claude/rules/webkit-*.md bundle', () => {
   }
 })
 
-test('planInit appends the CLAUDE.md fragment guarded by a marker', () => {
+test('planInit fences the CLAUDE.md fragment instead of appending it once', () => {
   const dir = makeProject()
   try {
     const plan = planInit(dir, {})
-    const append = plan.find((a) => a.type === 'append' && a.path === 'CLAUDE.md')
-    assert.ok(append, 'expected CLAUDE.md append action')
-    assert.equal(append.marker, CLAUDE_FRAGMENT_MARKER)
-    assert.ok(append.content.includes(CLAUDE_FRAGMENT_MARKER))
+    const fenceAction = plan.find((a) => a.type === 'fence' && a.path === 'CLAUDE.md')
+    assert.ok(fenceAction, 'expected a CLAUDE.md fence action')
+    assert.equal(fenceAction.start, FRAGMENT_START)
+    assert.ok(fenceAction.content.length > 0, 'fence content must be the fragment body')
+    // The fragment body itself is not marker-wrapped by the plan — spliceFragment owns the
+    // wrapping — so the legacy marker string should not appear inside the plain content.
+    assert.ok(
+      !fenceAction.content.includes(CLAUDE_FRAGMENT_MARKER),
+      'fence content must be the raw fragment body, not pre-wrapped with a marker'
+    )
+    // No append action for CLAUDE.md anymore.
+    assert.equal(
+      plan.find((a) => a.type === 'append' && a.path === 'CLAUDE.md'),
+      undefined,
+      'CLAUDE.md must no longer be planned as an append-once action'
+    )
   } finally {
     rmSync(dir, { recursive: true, force: true })
   }
@@ -456,8 +470,8 @@ test('applyPlan writes the expected files and is idempotent on a second run', ()
     assert.ok(mcp1.mcpServers[MCP_SERVER_NAME])
 
     const claude1 = readFileSync(join(dir, 'CLAUDE.md'), 'utf8')
-    const markerCount1 = claude1.split(CLAUDE_FRAGMENT_MARKER).length - 1
-    assert.equal(markerCount1, 1)
+    const fenceCount1 = claude1.split(FRAGMENT_START).length - 1
+    assert.equal(fenceCount1, 1)
 
     // Second run — must not clobber or duplicate.
     applyPlan(dir, planInit(dir, {}))
@@ -467,15 +481,102 @@ test('applyPlan writes the expected files and is idempotent on a second run', ()
     assert.equal(Object.keys(mcp2.mcpServers).length, 1)
     assert.deepEqual(mcp2, mcp1, '.mcp.json changed on the second run')
 
-    // CLAUDE.md fragment appended exactly once (no duplication).
+    // CLAUDE.md fenced block present exactly once (no duplication), content unchanged.
     const claude2 = readFileSync(join(dir, 'CLAUDE.md'), 'utf8')
-    const markerCount2 = claude2.split(CLAUDE_FRAGMENT_MARKER).length - 1
-    assert.equal(markerCount2, 1, 'CLAUDE fragment duplicated on the second run')
+    const fenceCount2 = claude2.split(FRAGMENT_START).length - 1
+    assert.equal(fenceCount2, 1, 'CLAUDE fragment duplicated on the second run')
     assert.equal(claude2, claude1, 'CLAUDE.md changed on the second run')
 
     // Dependency versions unchanged (no re-pin).
     const pkg2 = JSON.parse(readFileSync(join(dir, 'package.json'), 'utf8'))
     assert.deepEqual(pkg2, pkg1, 'package.json changed on the second run')
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('applyPlan migrates a pre-existing legacy CLAUDE.md marker into a fenced block', () => {
+  const dir = makeProject()
+  try {
+    writeFileSync(
+      join(dir, 'CLAUDE.md'),
+      `# My project\n\n${CLAUDE_FRAGMENT_MARKER}\nOld fragment body.\n\n## Notes\nUser content.\n`
+    )
+
+    const results = applyPlan(dir, planInit(dir, {}))
+    const fenceResult = results.find(
+      (r) => r.action.type === 'fence' && r.action.path === 'CLAUDE.md'
+    )
+    assert.equal(
+      fenceResult.result,
+      'merged',
+      'a pre-existing file must report merged, not written'
+    )
+
+    const claude = readFileSync(join(dir, 'CLAUDE.md'), 'utf8')
+    assert.equal(claude.split(FRAGMENT_START).length - 1, 1, 'expected exactly one fenced block')
+    assert.ok(
+      !claude.includes(CLAUDE_FRAGMENT_MARKER),
+      'legacy marker must be gone after migration'
+    )
+    assert.ok(claude.startsWith('# My project'), 'user heading must be preserved')
+    assert.ok(
+      claude.includes('## Notes\nUser content.'),
+      'user content after the fragment must be preserved'
+    )
+    assert.ok(
+      !claude.includes('Old fragment body.'),
+      'the legacy body must be replaced with the current one'
+    )
+
+    // Idempotent: applying again either reports skipped, or plans no fence action at all
+    // (the fragment already classifies as `current`, so `planSync` omits the action) —
+    // either way the file must not be rewritten.
+    const results2 = applyPlan(dir, planInit(dir, {}))
+    const fenceResult2 = results2.find(
+      (r) => r.action.type === 'fence' && r.action.path === 'CLAUDE.md'
+    )
+    assert.equal(
+      fenceResult2?.result ?? 'skipped',
+      'skipped',
+      'a second run must not rewrite an already-fenced file'
+    )
+    assert.equal(readFileSync(join(dir, 'CLAUDE.md'), 'utf8'), claude, 'CLAUDE.md changed on rerun')
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('applyPlan repairs a CLAUDE.md with the legacy fragment duplicated at two positions', () => {
+  const dir = makeProject()
+  try {
+    // Mirrors the real docs-repo case: the legacy marker + fragment appended twice.
+    const legacyFragment = `${CLAUDE_FRAGMENT_MARKER}\n## @aziontech/webkit design system\nOld body.\n`
+    writeFileSync(
+      join(dir, 'CLAUDE.md'),
+      `# Proj\n\n${legacyFragment}\n${legacyFragment}\n## Other\nkeep me\n`
+    )
+
+    applyPlan(dir, planInit(dir, {}))
+
+    const claude = readFileSync(join(dir, 'CLAUDE.md'), 'utf8')
+    assert.equal(claude.split(CLAUDE_FRAGMENT_MARKER).length - 1, 0, 'no legacy marker must remain')
+    assert.equal(claude.split(FRAGMENT_START).length - 1, 1, 'exactly one fenced block must remain')
+    assert.ok(claude.includes('## Other\nkeep me'), 'trailing user content must survive the repair')
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('applyPlan writes CLAUDE.md fresh (fence result "written") when the file is absent', () => {
+  const dir = makeProject()
+  try {
+    assert.ok(!existsSync(join(dir, 'CLAUDE.md')))
+    const results = applyPlan(dir, planInit(dir, {}))
+    const fenceResult = results.find(
+      (r) => r.action.type === 'fence' && r.action.path === 'CLAUDE.md'
+    )
+    assert.equal(fenceResult.result, 'written')
   } finally {
     rmSync(dir, { recursive: true, force: true })
   }

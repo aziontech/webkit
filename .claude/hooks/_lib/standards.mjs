@@ -276,6 +276,18 @@ export const STANDARDS = [
     note: 'Every component ships a co-located <name>.test.ts — you cannot create or land a component without its test. enforce-test-exists blocks a component .vue write/edit whose <name>.test.ts is missing; check-tests fails CI when any component lacks a test (existence — never grandfathered); the sharded Vitest browser CI job (Playwright Chromium, Storybook story as fixture, axe-core on the tree) runs the suite; validate-references blocks a test with unresolved imports (incl. a mistaken @stories alias); package.json#files + pack:check keep tests out of the published tarball. Review confirms the behavioral surface is actually covered and that a behavior change updates the test (style-only changes need no test touch — deliberately no diff-freshness gate).'
   },
   {
+    id: 'comments',
+    kind: 'construction',
+    scope: 'general',
+    enforce: [
+      { surface: 'write-time', by: 'validate-authoring' },
+      { surface: 'ci', by: 'check-authoring' },
+      { surface: 'lint', by: 'authoring-standards' },
+      { surface: 'review', by: 'required-approval' }
+    ],
+    note: 'Comments are rare and objective: no block over 5 lines, no file over 20% prose comments (one-line JSDoc and directives excluded). verbose-comment-block + comment-heavy-file in the shared authoring-checks engine; semantic prolixity below the thresholds is held by review.'
+  },
+  {
     id: 'authoring-docs',
     kind: 'foundational',
     scope: 'webkit',

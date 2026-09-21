@@ -11,15 +11,9 @@
   })
 
   interface Props {
-    /**
-     * Scroll direction. `vertical` is the default for lists and sidebars;
-     * use `horizontal` for wide tables; `both` for two-axis overflow.
-     */
+    /** Scroll direction: `vertical` (lists, sidebars), `horizontal` (wide tables), `both` for two-axis overflow. */
     orientation?: ScrollAreaOrientation
-    /**
-     * Accessible name when the scroll region is not labelled by visible text.
-     * Omit when content provides sufficient context (e.g. inside a nav landmark).
-     */
+    /** Accessible name when the region is not labelled by visible text; omit when content provides context. */
     ariaLabel?: string
   }
 
@@ -47,13 +41,10 @@
     both: 'overflow-auto'
   }
 
-  // No `overscroll-contain` here. `overscroll-behavior: contain` stops scroll
-  // chaining on EVERY axis of a scroll container, including an axis the viewport
-  // cannot actually scroll — so a ScrollArea whose content does not overflow
-  // (a table with no maxHeight, a select with two options) swallowed the wheel
-  // and froze the page while the pointer was over it. Chaining is the platform
-  // default and the right behaviour for content embedded in a page; an overlay
-  // that must stop the page behind it owns that lock itself.
+  // No overscroll containment here: it stops scroll chaining on EVERY axis, even
+  // one the viewport cannot scroll, so a non-overflowing ScrollArea swallowed the
+  // wheel and froze the page under the pointer. Chaining is the platform default;
+  // an overlay that must lock the page behind it owns that lock itself.
   const rootClasses = computed(() =>
     cn(
       'relative min-h-0 min-w-0',

@@ -6,10 +6,9 @@ export const codeBlockIndicatorMotion = {
 } as const
 
 /**
- * Per-line entrance on a tab swap. The marketing stagger below is 300ms a line —
- * three seconds for a ten-line file — so a swap gets its own, much shorter step,
- * and the step count is capped: past `maxSteps` every remaining line shares the
- * last delay, so a 200-line file swaps in the same time a 12-line one does.
+ * Per-line entrance on a tab swap — a much shorter step than the 300ms
+ * marketing stagger, and capped: past `maxSteps` every remaining line shares
+ * the last delay, so a 200-line file swaps in the same time a 12-line one does.
  */
 export const codeBlockLineSwapMotion = {
   stagger: '24ms',

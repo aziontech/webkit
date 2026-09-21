@@ -29,10 +29,9 @@
   const orientation = computed(() => ctx?.orientation.value ?? 'horizontal')
 
   /**
-   * A separator's OWN orientation is the perpendicular of the axis it divides: the bar
-   * between two side-by-side panes is a vertical line. Getting this backwards is the
-   * classic `role="separator"` bug — it reads correctly to the eye and inverts the
-   * arrow keys a screen reader announces.
+   * A separator's own orientation is the perpendicular of the axis it divides —
+   * the bar between side-by-side panes is a vertical line. Getting it backwards
+   * reads fine to the eye but inverts the arrow keys a screen reader announces.
    */
   const ariaOrientation = computed(() =>
     orientation.value === 'horizontal' ? 'vertical' : 'horizontal'
@@ -45,13 +44,9 @@
   const resizing = ref(false)
 
   /**
-   * THE PANE THIS HANDLE MOVES, and the sign of the gesture — resolved from the DOM at
-   * the moment of the interaction rather than held as state.
-   *
-   * The rule is one sentence: move the SIZED pane adjacent to this handle, preferring the
-   * one before it. When that pane is BEFORE the handle, dragging toward the end grows it;
-   * when it is AFTER, dragging toward the end shrinks it. Everything else about the two
-   * cases is identical, which is why `sign` is the whole difference.
+   * The pane this handle moves and the gesture's sign, resolved from the DOM at
+   * interaction time: the sized pane adjacent to the handle, preferring the one
+   * before it. A pane before grows on a drag toward the end; one after shrinks.
    */
   const target = (): { pane: ResizablePanelPaneApi; sign: 1 | -1 } | null => {
     const el = handleRef.value

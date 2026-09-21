@@ -63,12 +63,7 @@
 
   const attrs = useAttrs()
 
-  /**
-   * The consumer's attributes reach the real root. `class` and `data-testid` are excluded
-   * because they are already applied explicitly below — `class` merged into `rootClasses`,
-   * `data-testid` through the fallback — and spreading them again would apply each twice.
-   * Same shape as `menu-item`.
-   */
+  // `class`/`data-testid` are excluded — already applied explicitly below, so spreading them again would double-apply.
   const forwardedAttrs = computed(() => {
     const rest = { ...attrs }
     delete rest.class

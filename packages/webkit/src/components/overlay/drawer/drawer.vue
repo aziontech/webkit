@@ -49,7 +49,7 @@
 
   const openProp = computed(() => openModel.value ?? props.open)
 
-  const isOpen = useControllable({
+  const isOpen = useControllable<boolean>({
     prop: openProp,
     defaultProp: props.defaultOpen,
     onChange: (value) => {

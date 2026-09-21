@@ -2,17 +2,9 @@ import type { VNode } from 'vue'
 import { Comment, Fragment, Text } from 'vue'
 
 /**
- * Flatten a slot's vnodes into the real child components, unwrapping the
- * fragments Vue creates for v-for / template blocks and dropping comment
- * placeholders left by v-if.
- *
- * Both authoring paths land here: hand-written Vue (a DocSteps parent wrapping
- * its DocStep children) and an MDX renderer building the same vnodes, so a
- * parent can always read its children's props to number them or build a tab
- * list.
- *
- * @param children - the result of calling a slot function.
- * @returns the meaningful child vnodes, in order.
+ * Flatten a slot's vnodes to the real children: unwraps v-for / template
+ * fragments and drops v-if comment placeholders. Hand-written Vue and the MDX
+ * renderer both land here, so a parent can always read its children's props.
  */
 export const flattenSlot = (children: readonly unknown[] = []): VNode[] => {
   const out: VNode[] = []

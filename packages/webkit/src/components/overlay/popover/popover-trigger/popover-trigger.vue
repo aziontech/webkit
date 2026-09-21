@@ -55,10 +55,8 @@
 
 <template>
   <!--
-    Passthrough wrapper: the consumer's focusable child (e.g. Button) owns focus and
-    keyboard activation — its native Enter/Space fires a click that bubbles here to
-    toggle. A keydown listener on this span would double-fire, so the a11y rule that
-    pairs @click with a key handler is intentionally disabled.
+    Passthrough wrapper: the focusable child owns focus and keyboard activation;
+    its native Enter/Space click bubbles here to toggle (see the onKeydown guard).
   -->
   <span
     :ref="(el) => registerTrigger(el as globalThis.HTMLElement | null)"

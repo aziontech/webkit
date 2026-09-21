@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, provide, useAttrs, useSlots } from 'vue'
+  import { computed, onMounted, provide, ref, useAttrs, useSlots } from 'vue'
 
   import { cn } from '../../../utils/cn'
   import IconButton from '../../actions/icon-button/icon-button.vue'
@@ -13,6 +13,7 @@
     inheritAttrs: false
   })
 
+  /** Which edge of the layout the rail is anchored to. */
   export type SidebarSide = 'start' | 'end'
 
   interface Props {
@@ -89,7 +90,6 @@
     valueMin,
     valueMax,
     railStyle,
-    railTransition,
     innerStyle,
     startResize,
     tapToExpand,
@@ -104,51 +104,69 @@
     side: () => props.side
   })
 
-  const atEnd = computed(() => props.side === 'end')
-
-  const edge = computed(() =>
-    atEnd.value
-      ? {
-          border: 'border-l border-(--border-muted) data-[collapsed]:border-l-0',
-          handle: 'left-0',
-          handleLine: 'left-0',
-          zone: 'right-0',
-          affordanceAnchor: 'right-full pr-(--spacing-xxs)',
-          affordanceOut: 'translateY(-50%) translateX(var(--size-10))',
-          collapseIcon: 'pi pi-angle-double-right',
-          expandIcon: 'pi pi-angle-double-left',
-          expandTooltip: 'left' as const
-        }
-      : {
-          border: 'border-r border-(--border-muted) data-[collapsed]:border-r-0',
-          handle: 'right-0',
-          handleLine: 'right-0',
-          zone: 'left-0',
-          affordanceAnchor: 'left-full pl-(--spacing-xxs)',
-          affordanceOut: 'translateY(-50%) translateX(calc(-1 * var(--size-10)))',
-          collapseIcon: 'pi pi-angle-double-left',
-          expandIcon: 'pi pi-angle-double-right',
-          expandTooltip: 'right' as const
-        }
-  )
-
-  const onArrowLeft = () => nudge(atEnd.value ? SIDEBAR_NUDGE_STEP : -SIDEBAR_NUDGE_STEP)
-  const onArrowRight = () => nudge(atEnd.value ? -SIDEBAR_NUDGE_STEP : SIDEBAR_NUDGE_STEP)
-
   defineExpose({ measure })
 
   const isOut = computed(() => collapsed.value && railEnabled.value)
+
+  const atEnd = computed(() => props.side === 'end')
+
+  const collapseIcon = computed(() =>
+    atEnd.value ? 'pi pi-angle-double-right' : 'pi pi-angle-double-left'
+  )
+  const expandIcon = computed(() =>
+    atEnd.value ? 'pi pi-angle-double-left' : 'pi pi-angle-double-right'
+  )
+  const expandTooltipPlacement = computed(() => (atEnd.value ? 'left' : 'right'))
+
+  const onArrowLeft = () => nudge(atEnd.value ? SIDEBAR_NUDGE_STEP : -SIDEBAR_NUDGE_STEP)
+  const onArrowRight = () => nudge(atEnd.value ? -SIDEBAR_NUDGE_STEP : SIDEBAR_NUDGE_STEP)
+  const onExpandArrowLeft = () => {
+    if (atEnd.value) nudge(SIDEBAR_NUDGE_STEP)
+  }
+  const onExpandArrowRight = () => {
+    if (!atEnd.value) nudge(SIDEBAR_NUDGE_STEP)
+  }
+
+  const hydrated = ref(false)
+
+  onMounted(() => {
+    hydrated.value = true
+  })
 
   const setRailEl = (el: unknown) => {
     railEl.value = (el as globalThis.HTMLElement | null) ?? null
   }
 
+  const cssVars = computed(() => {
+    if (!railEnabled.value) return {}
+    return {
+      '--sidebar-width': width.value == null ? undefined : `${width.value}px`,
+      '--sidebar-min-width': `var(${props.minWidthToken})`,
+      '--sidebar-max-width': `var(${props.maxWidthToken})`
+    }
+  })
+
+  const asideStyle = computed(() => ({ ...cssVars.value, ...railStyle.value }))
+
+  const RAIL_MOTION_CLASS =
+    'transition-[width] duration-moderate-02 ease-expressive-entrance has-checked:ease-expressive-exit data-[resizing]:transition-none motion-reduce:transition-none'
+
   const rootClass = computed(() =>
     cn(
       'flex h-full min-h-0 w-full min-w-0 flex-col',
-      'bg-(--bg-surface)',
-      edge.value.border,
-      railEnabled.value ? 'relative shrink-0 overflow-hidden' : undefined,
+      'border-(--border-muted) bg-(--bg-surface)',
+      'data-[side=start]:border-r data-[side=end]:border-l',
+      railEnabled.value
+        ? cn(
+            'relative shrink-0 overflow-hidden',
+            'data-[collapsed]:border-r-0 data-[collapsed]:border-l-0',
+            'has-checked:border-r-0 has-checked:border-l-0',
+            'w-(--sidebar-width) has-checked:w-0',
+            'min-w-(--sidebar-min-width) has-checked:min-w-0 max-w-(--sidebar-max-width)',
+            RAIL_MOTION_CLASS,
+            props.resizable ? 'resize-x data-[hydrated]:resize-none' : undefined
+          )
+        : undefined,
       attrs.class
     )
   )
@@ -158,44 +176,26 @@
 
   const HEADER_REGION_CLASS = 'w-full shrink-0 p-(--spacing-md)'
 
-  const INNER_CLASS = 'flex h-full min-h-0 w-full flex-col'
+  const INNER_MOTION_CLASS =
+    'transition-[translate,opacity] duration-moderate-02 ease-expressive-entrance has-checked:ease-expressive-exit data-[resizing]:transition-none motion-reduce:transition-none motion-reduce:translate-none'
 
-  const affordanceStyle = computed(() => ({
-    transform: previewing.value ? 'translateY(-50%)' : edge.value.affordanceOut,
-    opacity: previewing.value ? '1' : '0',
-    transition: railTransition.value
-  }))
+  const INNER_CLASS = cn(
+    'flex h-full min-h-0 w-full flex-col',
+    'w-(--sidebar-width) translate-x-0 opacity-100 has-checked:opacity-20',
+    'data-[side=start]:has-checked:-translate-x-full data-[side=end]:has-checked:translate-x-full',
+    INNER_MOTION_CLASS
+  )
 
-  /**
-   * A FIXED 56px BAND THAT CENTRES WHAT IS IN IT, which is two decisions working
-   * together. The height matches the header bar's, so a rail closed by a footer and
-   * a page closed by a bar share one horizontal; and because the height is fixed,
-   * the region is what has to do the centring — `flex` + `items-center` here, rather
-   * than trusting whatever the consumer drops in the slot to be exactly band-height.
-   * On the block box this was, `items-center` would have been inert.
-   *
-   * THE PADDING IS HORIZONTAL ONLY, and that is the fixed height's consequence, not
-   * a preference. `p-(--spacing-md)` leaves a 24px content box inside the 56px band,
-   * which the collapse trigger alone (`IconButton size="small"`, 28px) overflows.
-   * The band's height IS the vertical rhythm; a vertical padding would be a second,
-   * competing answer to the same question.
-   */
-  const FOOTER_REGION_CLASS =
-    'flex h-(--size-14) w-full shrink-0 items-center border-t border-(--border-default) px-(--spacing-md)'
+  const FOOTER_REGION_CLASS = 'w-full shrink-0 px-(--spacing-md) pb-(--spacing-md)'
 
-  /**
-   * The band FILLS the region (`min-w-0 flex-1`). Without that it is a
-   * shrink-to-fit flex item, so the footer content and the collapse trigger pack
-   * against the leading edge and the `flex-1` inside the slot has nothing to
-   * distribute — the controls end up beside the label instead of at the trailing
-   * edge of the rail (and `justify-end`, below, is inert on a shrink-to-fit box).
-   */
   const footerBandClass = computed(() =>
-    cn(
-      'flex min-w-0 flex-1 items-center',
-      props.collapsible ? 'gap-(--spacing-xs)' : undefined,
-      props.collapsible && !slots['footer'] ? 'justify-end' : undefined
-    )
+    props.collapsible
+      ? cn(
+          'flex items-center gap-(--spacing-xs)',
+          'border-t border-(--border-muted) pt-(--spacing-md)',
+          !slots['footer'] ? 'justify-end' : undefined
+        )
+      : undefined
   )
 
   const scrollClass = computed(() =>
@@ -212,20 +212,31 @@
     :ref="setRailEl"
     v-bind="$attrs"
     :class="rootClass"
-    :style="railStyle"
+    :style="asideStyle"
     :aria-label="ariaLabel"
     :data-testid="testId"
     :data-side="side"
     :data-collapsed="isOut ? '' : undefined"
     :data-resizing="resizing ? '' : undefined"
+    :data-hydrated="hydrated ? '' : undefined"
     :inert="isOut ? true : undefined"
     :aria-hidden="isOut ? 'true' : undefined"
   >
     <div
       :class="INNER_CLASS"
       :style="innerStyle"
+      :data-side="side"
       :data-testid="`${testId}__panel`"
     >
+      <input
+        v-if="railEnabled"
+        v-model="collapsed"
+        type="checkbox"
+        class="sr-only"
+        tabindex="-1"
+        aria-hidden="true"
+        :data-testid="`${testId}__collapse-input`"
+      />
       <div
         v-if="$slots['header']"
         :class="HEADER_REGION_CLASS"
@@ -253,7 +264,7 @@
         <div :class="footerBandClass">
           <div
             v-if="$slots['footer']"
-            class="min-w-0 flex-1"
+            :class="collapsible ? 'min-w-0 flex-1' : undefined"
           >
             <slot name="footer" />
           </div>
@@ -263,7 +274,7 @@
             placement="top"
           >
             <IconButton
-              :icon="edge.collapseIcon"
+              :icon="collapseIcon"
               :ariaLabel="collapseAriaLabel"
               kind="outlined"
               size="small"
@@ -286,21 +297,16 @@
       :aria-valuemax="valueMax"
       :data-resizing="resizing ? '' : undefined"
       :data-preview="previewing ? '' : undefined"
+      :data-side="side"
       :data-testid="`${testId}__handle`"
-      :class="[
-        'group absolute inset-y-0 z-10 w-(--spacing-xs) cursor-col-resize outline-none',
-        edge.handle
-      ]"
+      class="group absolute inset-y-0 z-10 w-(--spacing-xs) cursor-col-resize outline-none data-[side=start]:right-0 data-[side=end]:left-0"
       @pointerdown="startResize"
       @keydown.left.prevent="onArrowLeft"
       @keydown.right.prevent="onArrowRight"
       @dblclick="collapsed = true"
     >
       <span
-        :class="[
-          'pointer-events-none absolute inset-y-0 w-(--border-2) bg-(--accent) opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100 group-data-[preview]:opacity-100 group-data-[resizing]:opacity-100 motion-reduce:transition-none',
-          edge.handleLine
-        ]"
+        class="pointer-events-none absolute inset-y-0 w-(--border-2) bg-(--accent) opacity-0 transition-opacity group-data-[side=start]:right-0 group-data-[side=end]:left-0 group-hover:opacity-100 group-focus-visible:opacity-100 group-data-[preview]:opacity-100 group-data-[resizing]:opacity-100 motion-reduce:transition-none"
       />
     </div>
   </aside>
@@ -315,12 +321,9 @@
       v-if="collapsible && collapsed"
       :data-resizing="resizing ? '' : undefined"
       :data-preview="previewing ? '' : undefined"
+      :data-side="side"
       :data-testid="`${testId}__expand`"
-      :style="{ transition: railTransition }"
-      :class="[
-        'group absolute inset-y-0 z-20 w-(--size-6) data-[preview]:w-(--size-10)',
-        edge.zone
-      ]"
+      class="group absolute inset-y-0 z-20 w-(--size-6) hover:w-(--size-10) focus-within:w-(--size-10) transition-[width] duration-moderate-02 ease-expressive-exit hover:ease-expressive-entrance focus-within:ease-expressive-entrance motion-reduce:transition-none data-[side=start]:left-0 data-[side=end]:right-0"
       @pointerenter="startPreview"
       @pointerleave="endPreview"
       @focusin="startPreview"
@@ -338,23 +341,19 @@
         class="absolute inset-y-0 left-0 w-full cursor-col-resize outline-none"
         @pointerdown="startResize"
         @click="tapToExpand"
-        @keydown.left.prevent="onArrowLeft"
-        @keydown.right.prevent="onArrowRight"
+        @keydown.left.prevent="onExpandArrowLeft"
+        @keydown.right.prevent="onExpandArrowRight"
       />
 
       <div
-        :style="affordanceStyle"
-        :class="[
-          'pointer-events-none absolute top-1/2 group-data-[preview]:pointer-events-auto',
-          edge.affordanceAnchor
-        ]"
+        class="pointer-events-none absolute top-1/2 -translate-y-1/2 opacity-0 transition-[translate,opacity] duration-moderate-02 ease-expressive-exit group-data-[side=start]:left-full group-data-[side=start]:translate-x-[calc(-1_*_var(--size-10))] group-data-[side=start]:pl-(--spacing-xxs) group-data-[side=end]:right-full group-data-[side=end]:translate-x-[var(--size-10)] group-data-[side=end]:pr-(--spacing-xxs) group-hover:translate-x-0 group-hover:opacity-100 group-hover:pointer-events-auto group-hover:ease-expressive-entrance group-focus-within:translate-x-0 group-focus-within:opacity-100 group-focus-within:pointer-events-auto group-focus-within:ease-expressive-entrance motion-reduce:transition-none motion-reduce:translate-none"
       >
         <Tooltip
           :text="expandAriaLabel"
-          :placement="edge.expandTooltip"
+          :placement="expandTooltipPlacement"
         >
           <IconButton
-            :icon="edge.expandIcon"
+            :icon="expandIcon"
             :ariaLabel="expandAriaLabel"
             kind="outlined"
             size="medium"

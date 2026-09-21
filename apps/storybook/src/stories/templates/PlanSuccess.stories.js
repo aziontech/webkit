@@ -1,6 +1,25 @@
-import PlanSuccess from '@aziontech/webkit/plan-success'
+import Button from '@aziontech/webkit/button'
+import CardBox from '@aziontech/webkit/card-box'
+import GlobalHeader from '@aziontech/webkit/global-header'
+import Default from '@aziontech/webkit/svg/azion/default'
 
 import { toSfc } from '../_shared/story-source'
+
+const steps = [
+  {
+    title: 'Start by creating your first Deploy',
+    description: 'Deploy your workload and start delivering content through the Azion Network.'
+  },
+  {
+    title: 'Protect your Workload',
+    description: 'Enable security features to safeguard your workloads, users, and data.'
+  },
+  {
+    title: 'Observe your Metrics',
+    description:
+      'Track metrics, analyze traffic in real-time, and gain insights to optimize and protect your applications.'
+  }
+]
 
 const STEPS_CONST = `const steps = [
   {
@@ -17,12 +36,85 @@ const STEPS_CONST = `const steps = [
   }
 ]`
 
-const IMPORT = ["import PlanSuccess from '@aziontech/webkit/plan-success'", '', STEPS_CONST]
+const IMPORT = [
+  "import Button from '@aziontech/webkit/button'",
+  "import CardBox from '@aziontech/webkit/card-box'",
+  "import GlobalHeader from '@aziontech/webkit/global-header'",
+  "import Default from '@aziontech/webkit/svg/azion/default'",
+  '',
+  STEPS_CONST
+]
 
-/** @type {import('@storybook/vue3').Meta<typeof PlanSuccess>} */
+const PAGE_TEMPLATE = `<div class="flex min-h-full w-full flex-col bg-(--bg-canvas)">
+  <GlobalHeader>
+    <GlobalHeader.Left>
+      <GlobalHeader.Brand>
+        <Default aria-label="Azion" />
+      </GlobalHeader.Brand>
+    </GlobalHeader.Left>
+  </GlobalHeader>
+
+  <main class="flex flex-1 flex-col items-center justify-center px-(--spacing-xxl) py-(--spacing-xxl)">
+    <CardBox class="w-full max-w-[512px]" :padded="false">
+      <template #header>
+        <div class="flex w-full flex-col items-center gap-(--spacing-xs) px-(--spacing-xl) py-(--spacing-md) text-center">
+          <span class="inline-flex size-8 items-center justify-center">
+            <i class="pi pi-check text-heading-sm leading-none text-(--success)" aria-hidden="true" />
+          </span>
+          <div class="flex w-full max-w-[360px] flex-col gap-(--spacing-xxs) [word-break:break-word]">
+            <h1 class="text-heading-sm text-(--text-default)">Your Pro Plan is now Active</h1>
+            <p class="text-body-xs text-(--text-muted)">A receipt has been sent to your email for your records.</p>
+          </div>
+        </div>
+      </template>
+
+      <template #content>
+        <div class="flex w-full flex-col gap-(--spacing-md) px-(--spacing-xl) py-(--spacing-xl)">
+          <p class="w-full text-button-md text-(--text-muted) [word-break:break-word]">Next Steps</p>
+          <ol class="flex w-full list-none flex-col gap-(--spacing-md) p-0">
+            <li
+              v-for="(step, index) in steps"
+              :key="index"
+              class="flex w-full items-start justify-between gap-(--spacing-sm)"
+            >
+              <div
+                class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-button) bg-(--bg-hover) px-(--spacing-xs) text-button-md text-(--text-default)"
+                aria-hidden="true"
+              >
+                {{ index + 1 }}
+              </div>
+              <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-xxs) [word-break:break-word]">
+                <p class="text-body-sm text-(--text-default)">{{ step.title }}</p>
+                <p class="text-body-xs text-(--text-muted)">{{ step.description }}</p>
+              </div>
+            </li>
+          </ol>
+        </div>
+      </template>
+
+      <template #footer>
+        <Button label="Start deploying" kind="primary" size="medium" class="w-full" />
+      </template>
+    </CardBox>
+  </main>
+</div>`
+
+// Dot-notation sub-tags are registered by their exact name so Storybook's
+// runtime-compiled string template resolves them; a real SFC resolves them off
+// the imported compound root.
+const components = {
+  Button,
+  CardBox,
+  Default,
+  GlobalHeader,
+  'GlobalHeader.Left': GlobalHeader.Left,
+  'GlobalHeader.Brand': GlobalHeader.Brand
+}
+
+/** @type {import('@storybook/vue3').Meta<typeof CardBox>} */
 const meta = {
   title: 'Templates/PlanSuccess',
-  component: PlanSuccess,
+  component: CardBox,
   tags: ['autodocs'],
   parameters: {
     layout: 'fullscreen',
@@ -38,177 +130,29 @@ const meta = {
     docs: {
       description: {
         component:
-          'Full-page post-checkout success screen for the Azion Plans flow: optional global header, centered card with the activation message, numbered next steps, and a primary deploy CTA.'
+          'Full-page post-checkout success screen for the Azion Plans flow, composed from `GlobalHeader`, `CardBox` and `Button`: a global header with the brand, a centered card with the activation message, numbered next steps, and a primary deploy CTA.'
       },
       canvas: { sourceState: 'shown' }
     }
   },
-  argTypes: {
-    title: {
-      control: 'text',
-      description: 'Main success heading in the card header region.',
-      table: {
-        type: { summary: 'string' },
-        defaultValue: { summary: "'Your Pro Plan is now Active'" },
-        category: 'props'
-      }
-    },
-    description: {
-      control: 'text',
-      description: 'Supporting copy under the success heading.',
-      table: {
-        type: { summary: 'string' },
-        defaultValue: { summary: "'A receipt has been sent to your email for your records.'" },
-        category: 'props'
-      }
-    },
-    stepsLabel: {
-      control: 'text',
-      description: 'Section label above the numbered steps list.',
-      table: {
-        type: { summary: 'string' },
-        defaultValue: { summary: "'Next Steps'" },
-        category: 'props'
-      }
-    },
-    steps: {
-      control: 'object',
-      description: 'Ordered next-step entries (title + description per row).',
-      table: {
-        type: { summary: 'PlanSuccessStep[]', required: true },
-        category: 'props'
-      }
-    },
-    actionLabel: {
-      control: 'text',
-      description: 'Primary footer button label.',
-      table: {
-        type: { summary: 'string' },
-        defaultValue: { summary: "'Start deploying'" },
-        category: 'props'
-      }
-    },
-    showHeader: {
-      control: 'boolean',
-      description: 'When true, renders the top global header bar with the brand.',
-      table: {
-        type: { summary: 'boolean' },
-        defaultValue: { summary: 'true' },
-        category: 'props'
-      }
-    },
-    disabled: {
-      control: 'boolean',
-      description: 'Disables the primary action button.',
-      table: {
-        type: { summary: 'boolean' },
-        defaultValue: { summary: 'false' },
-        category: 'props'
-      }
-    },
-    onActionClick: {
-      action: 'action-click',
-      description: 'Fires when the primary footer button is activated.',
-      table: { type: { summary: 'MouseEvent' }, category: 'events' }
-    },
-    header: {
-      control: false,
-      description: 'Replaces the built-in global header bar.',
-      table: { type: { summary: 'VNode' }, category: 'slots' }
-    },
-    success: {
-      control: false,
-      description: 'Replaces the built-in success banner inside the card header.',
-      table: { type: { summary: 'VNode' }, category: 'slots' }
-    },
-    actions: {
-      control: false,
-      description: 'Replaces the built-in footer primary button.',
-      table: { type: { summary: 'VNode' }, category: 'slots' }
-    }
-  },
-  args: {
-    title: 'Your Pro Plan is now Active',
-    description: 'A receipt has been sent to your email for your records.',
-    stepsLabel: 'Next Steps',
-    actionLabel: 'Start deploying',
-    showHeader: true,
-    disabled: false
-  }
+  argTypes: {},
+  args: {}
 }
 
 export default meta
 
-const defaultSteps = [
-  {
-    title: 'Start by creating your first Deploy',
-    description: 'Deploy your workload and start delivering content through the Azion Network.'
-  },
-  {
-    title: 'Protect your Workload',
-    description: 'Enable security features to safeguard your workloads, users, and data.'
-  },
-  {
-    title: 'Observe your Metrics',
-    description:
-      'Track metrics, analyze traffic in real-time, and gain insights to optimize and protect your applications.'
-  }
-]
-
-const Template = (args) => ({
-  components: { PlanSuccess },
-  setup() {
-    return { args }
-  },
-  template: '<PlanSuccess v-bind="args" />'
-})
-
-const DEFAULT_MARKUP = `<PlanSuccess
-  title="Your Pro Plan is now Active"
-  description="A receipt has been sent to your email for your records."
-  steps-label="Next Steps"
-  :steps="steps"
-  action-label="Start deploying"
-/>`
-
-/** @type {import('@storybook/vue3').StoryObj<typeof PlanSuccess>} */
-export const Default = {
-  args: {
-    steps: defaultSteps
-  },
-  render: Template,
+/** @type {import('@storybook/vue3').StoryObj<typeof CardBox>} */
+export const DefaultPage = {
+  name: 'Default',
+  render: () => ({ components, setup: () => ({ steps }), template: PAGE_TEMPLATE }),
   parameters: {
+    controls: { disable: true },
     docs: {
+      controls: { disable: true },
       description: {
-        story: 'Default plan activation success screen matching the Azion Plans checkout flow.'
+        story: 'Plan activation success screen as shown at the end of the Azion Plans checkout flow.'
       },
-      source: { code: toSfc(IMPORT, DEFAULT_MARKUP) }
-    }
-  }
-}
-
-const DISABLED_MARKUP = `<PlanSuccess
-  title="Your Pro Plan is now Active"
-  description="A receipt has been sent to your email for your records."
-  steps-label="Next Steps"
-  :steps="steps"
-  action-label="Start deploying"
-  disabled
-/>`
-
-/** @type {import('@storybook/vue3').StoryObj<typeof PlanSuccess>} */
-export const Disabled = {
-  args: {
-    steps: defaultSteps,
-    disabled: true
-  },
-  render: Template,
-  parameters: {
-    docs: {
-      description: {
-        story: 'Success screen with the primary deploy action disabled.'
-      },
-      source: { code: toSfc(IMPORT, DISABLED_MARKUP) }
+      source: { code: toSfc(IMPORT, PAGE_TEMPLATE) }
     }
   }
 }

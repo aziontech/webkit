@@ -81,18 +81,11 @@
       /mac/i.test(navigator.platform || navigator.userAgent || '')
   )
 
-  /**
-   * The items roving navigation walks — filtered, and in DOM ORDER rather than in the
-   * order they registered. The two differ whenever a group mounts after the palette
-   * opened (a result list that appears once the reader types): it registers last but
-   * renders where the consumer put it, so a registration-ordered list would send
-   * `ArrowDown` and the initial highlight to a row further down the panel than the one
-   * the reader is looking at.
-   *
-   * `compareDocumentPosition` reads the live DOM, so hidden (`v-show`) rows and
-   * Teleported panels compare correctly. An item that has not mounted its element yet
-   * keeps its registration position.
-   */
+  /** The items roving navigation walks: filtered, in DOM order rather than registration order.
+   *  A group mounted after the palette opened registers last but renders where the consumer put
+   *  it, so a registration-ordered list would highlight a row further down than the one in view.
+   *  `compareDocumentPosition` reads the live DOM, so hidden rows and Teleported panels compare
+   *  correctly; an item whose element has not mounted keeps its registration position. */
   const navigableItems = computed(() => {
     const visible = items.value.filter((item) => item.isVisible.value && !item.disabled.value)
     return visible

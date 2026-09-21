@@ -37,10 +37,9 @@ export interface DropdownContext {
    */
   registerGroup: () => number
   /**
-   * Registers a global keyboard shortcut for an option's `command` hint.
-   * The root dropdown listens at the window level and invokes `activate`
-   * with the original event when the shortcut matches. Returns an
-   * unregister function callers must invoke on unmount.
+   * Registers a global shortcut for an option's `command` hint; the root listens at the
+   * window level and calls `activate` with the original event on match. Returns an
+   * unregister function the caller must invoke on unmount.
    */
   registerCommand: (
     command: string,

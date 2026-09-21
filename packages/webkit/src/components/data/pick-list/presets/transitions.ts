@@ -1,10 +1,8 @@
 import { curve, duration } from '@aziontech/theme/animations'
 
 /**
- * Pick-list item transfer motion — values read only from `animate.js`
- * (`duration`, `curve`). Applied via inline `transition` (Tailwind does not emit
- * dynamic `duration-[…]` classes), so items fade in/out on the Design System
- * curve + speed rather than ad-hoc Tailwind timing utilities.
+ * Item transfer motion, read from the theme animation tokens. Applied as an
+ * inline transition because Tailwind cannot emit dynamic duration utilities.
  */
 export const pickListItemMotion = {
   duration: duration['moderate-01'],

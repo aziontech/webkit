@@ -1,6 +1,6 @@
 {
   "name": "@aziontech/webkit",
-  "version": "4.4.0",
+  "version": "5.1.0",
   "description": "Reusable UI components and design system utilities for building Azion web interfaces.",
   "license": "MIT",
   "type": "module",
@@ -82,6 +82,7 @@
     "@vitest/browser-playwright": "^4.1.9",
     "@vitest/coverage-v8": "^4.1.9",
     "@vitest/ui": "^4.1.9",
+    "astro-eslint-parser": "^3.1.0",
     "axe-core": "^4.10.3",
     "eslint": "^9.39.3",
     "playwright": "^1.61.1",
@@ -341,11 +342,6 @@
     "./popover-description": "./src/components/overlay/popover/popover-description/popover-description.vue",
     "./popover-close": "./src/components/overlay/popover/popover-close/popover-close.vue",
     "./popover-footer": "./src/components/overlay/popover/popover-footer/popover-footer.vue",
-    "./deploy-success": "./src/components/templates/deploy-success/deploy-success.vue",
-    "./onboarding-form": "./src/components/templates/onboarding-form/onboarding-form.vue",
-    "./plan-success": "./src/components/templates/plan-success/plan-success.vue",
-    "./platform-shell": "./src/components/templates/platform-shell/platform-shell.vue",
-    "./sign-up-card": "./src/components/templates/sign-up-card/sign-up-card.vue",
     "./spinner": "./src/components/utils/spinner/spinner.vue",
     "./svg/error-403": "./src/svg/error-403/error-403.vue",
     "./svg/error-404": "./src/svg/error-404/error-404.vue",
@@ -361,7 +357,7 @@
     "./use-controllable": "./src/composables/use-controllable/index.js",
     "./use-focus-trap": "./src/composables/use-focus-trap/index.js",
     "./use-heading-nav": "./src/composables/use-heading-nav/index.ts",
-    "./use-placement": "./src/composables/use-placement/index.js",
+    "./use-placement": "./src/composables/use-placement/index.ts",
     "./vite": "./src/vite/index.js"
   }
 }
