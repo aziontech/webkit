@@ -62,19 +62,24 @@ If you are new (human or AI), open these in order — together they describe the
 
 ## Use in your app
 
-Install the packages you need — `@aziontech/webkit` depends on `@aziontech/theme` transitively, but importing the theme stylesheet is up to the consumer:
+The `webkit` CLI ships inside the `@aziontech/webkit` package — there is no separate CLI to install. One command adopts the design system in an existing project:
 
 ```bash
-pnpm add @aziontech/webkit @aziontech/theme @aziontech/icons
+npx @aziontech/webkit init
 ```
 
-Wire the theme styles once at your app entry, then import components by path:
+`init` reads the project before it writes anything, never clobbers a file, and is safe to re-run. It records `@aziontech/webkit`, `@aziontech/theme` and `@aziontech/icons` (plus the lint peers) in `package.json`, writes the ESLint, Stylelint and PostCSS configs, creates `src/webkit.css` as the single CSS entry, registers the webkit MCP server in `.mcp.json` so AI tools get the component catalog, adds a lint-on-commit hook, and prepends the entry imports to `src/main.*`. Preview the whole plan with `--dry-run`, and use `-y` for CI or scripted runs.
 
-```js
-// main.js|ts
-import '@aziontech/theme'
-import '@aziontech/icons'
+`init` records the dependencies but does not install them — run your package manager afterwards, then confirm the wiring:
+
+```bash
+pnpm install
+npx @aziontech/webkit doctor
 ```
+
+`doctor` writes nothing and exits non-zero on a broken setup, so it also works as a CI gate. To pull in a newer webkit's `.claude/` bundle and `CLAUDE.md` fragment later, run `npx @aziontech/webkit sync` (`--check` reports drift without writing). Full flag reference: [`packages/webkit/docs/toolkit/cli.md`](./packages/webkit/docs/toolkit/cli.md).
+
+Once the project is wired, import components by path:
 
 ```vue
 <script setup>
@@ -93,6 +98,28 @@ import '@aziontech/icons'
   <Button kind="outlined" label="Button" loading />
 </template>
 ```
+
+### Wiring it by hand
+
+If you would rather not run `init`, wire the runtime half by hand — the lint presets, the MCP server and the commit hook are not set up this way:
+
+```bash
+pnpm add @aziontech/webkit @aziontech/theme @aziontech/icons
+```
+
+```css
+/* src/webkit.css */
+@import '@aziontech/theme'; /* design tokens, Tailwind, fonts */
+@import '@aziontech/webkit/styles'; /* registers webkit's source with Tailwind */
+```
+
+```js
+// src/main.js|ts
+import './webkit.css'
+import '@aziontech/icons'
+```
+
+Do not skip `@aziontech/webkit/styles`: without it Tailwind never sees webkit's own source and the components render unstyled. `npx @aziontech/webkit doctor` reports that as a `FAIL`.
 
 **Peer requirements**
 
@@ -226,6 +253,7 @@ Local equivalents run via `pnpm storybook:dev` and `pnpm icons:gallery:serve`.
 - [Theme package guide](./packages/theme/README.md)
 - [Icons package guide](./packages/icons/README.md)
 - [Webkit package guide](./packages/webkit/README.md)
+- [webkit CLI reference](./packages/webkit/docs/toolkit/cli.md) — `init`, `doctor`, `report`, `canary`, `sync`
 - [Contributing guide](./CONTRIBUTING.md) — workflow, commit conventions, review checklist
 - [Contribution rules](./.claude/rules/) — dependencies, migration, styling, no-invention
 - [Component specs](./.specs/) — source of truth for every component API
