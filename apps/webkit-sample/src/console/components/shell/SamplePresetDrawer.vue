@@ -43,6 +43,7 @@
     restoreAgentOnboarding,
     useAgentOnboarding
   } from '@shared/lib/agent-onboarding'
+  import { useLegacyUi } from '@shared/lib/legacy-ui'
   import { computed } from 'vue'
 
   import { SAMPLE_MODES } from '../../lib/state/sample-mode'
@@ -80,6 +81,24 @@
     get: () => agentOnboardingVisible.value,
     set: (value) => (value ? restoreAgentOnboarding() : dismissAgentOnboarding())
   })
+
+  // PALETTE. The one knob here that is not about the account or the screens' contents
+  // but about the pixels: it swaps the 56 semantic colour tokens for the values the live
+  // console still paints with (@aziontech/theme 2.0.4, translated in ../../../legacy-ui.css)
+  // so the two palettes can be compared on the same screen rather than across two tabs.
+  //
+  // COLOUR ONLY, and the switch says so: type, spacing, shape and motion keep the current
+  // tokens. A reader who flips it and finds the layout unchanged has read the control
+  // correctly — the layout is not what is being compared.
+  const { legacyUi, setLegacyUi } = useLegacyUi()
+
+  const legacyPalette = computed({
+    get: () => legacyUi.value,
+    set: (value) => setLegacyUi(value)
+  })
+
+  const legacyPaletteDescription =
+    'Repaints every screen — console, site and docs — with the colours the current console ships: its surfaces, text, borders, links and feedback. Type, spacing and shape stay as they are, so what you are comparing is the palette.'
 
   // Says where it shows AND that the first access is not affected: the three doors on an
   // empty account are that screen's whole content, so they are not something a preset
@@ -119,6 +138,10 @@
     const url = new URL(globalThis.location.href)
     url.searchParams.set('state', selectedMode.value)
     url.searchParams.set('plan', selectedPlan.value)
+    // Only when it is ON. `?ui=legacy` is the exceptional reading, and a link that
+    // carried `ui=current` on every share would spend a query parameter saying nothing.
+    if (legacyPalette.value) url.searchParams.set('ui', 'legacy')
+    else url.searchParams.delete('ui')
     return url.toString()
   })
 
@@ -220,6 +243,19 @@
                 v-model="agentOnboarding"
                 label="Agent onboarding"
                 :description="agentOnboardingDescription"
+              />
+            </section>
+
+            <!-- PALETTE. Last, because it is the only knob that changes nothing about
+                 the account being reviewed — it changes what the review LOOKS like. It
+                 lands on the screen beside the panel like every other switch here, and
+                 on the panel itself: the drawer repaints under your hand. -->
+            <section class="flex min-w-0 flex-col gap-(--spacing-sm)">
+              <h3 class="m-0 text-label-md text-(--text-default)">Appearance</h3>
+              <FieldSwitchBlock
+                v-model="legacyPalette"
+                label="See as Legacy UI"
+                :description="legacyPaletteDescription"
               />
             </section>
           </div>

@@ -1,0 +1,164 @@
+/* THE LEGACY UI PALETTE — the console as it is painted today.
+ *
+ * Every value below is read from `@aziontech/theme@2.0.4`
+ * (`src/azion/_variables.scss` + `variables/_general.scss` + `variables/_button.scss`),
+ * the PrimeVue-era theme the live console still ships. That release predates the
+ * semantic colour layer, so there is nothing to import: the legacy palette exists only
+ * as PrimeVue variable names, and this file is the translation of those names into the
+ * 56 semantic tokens webkit actually paints with. Role is preserved and value is
+ * swapped — `--bg-surface` stays "the card's fill" and becomes the legacy card's fill.
+ *
+ * COLOUR ONLY. Type, spacing, shape and motion keep their current tokens, so a reader
+ * flipping the switch is comparing two palettes on one layout and not two design
+ * systems at once. The legacy 6px radius and its Sora-at-other-sizes ladder are
+ * deliberately not here.
+ *
+ * The 16-step `--surface-*` ramp is not overridden: nothing in webkit or in this app
+ * reads it (neither `var(--surface-400)` nor the `bg-surface-400` utility), and the
+ * legacy ramp is 11 steps against our 16 — a mapping that would have to be invented
+ * to repaint something no screen renders.
+ *
+ * Specificity, not order: `.ui-legacy` is carried alongside the theme's own
+ * `.azion.azion-light` / `.azion.azion-dark` on <html>, so each block here outranks
+ * the block it overrides whatever order the bundler emits them in.
+ */
+
+:root.ui-legacy.azion {
+  --primary: #f3652b;
+  --primary-mask: #ff6c4729;
+  --primary-selected: #ff6c4729;
+  --primary-contrast: #f4f4f4;
+
+  --secondary: #1e1e1e;
+  --secondary-mask: #3b3b3b16;
+  --secondary-selected: #303030;
+  --secondary-contrast: #f4f4f4;
+
+  --accent: #3265cb;
+  --accent-mask: #3265cb1f;
+  --accent-selected: #3265cb;
+  --accent-contrast: #ffffff;
+
+  --bg-canvas: #f9fafb;
+  --bg-surface: #ffffff;
+  --bg-surface-raised: #ffffff;
+  --bg-surface-overlay: #dedede;
+  --bg-mask: #1e1e1e0a;
+  --bg-placeholder: #eaeaea;
+  --bg-placeholder-highlight: #d6d6d6;
+  --bg-hover: #3b3b3b16;
+  --bg-active: #1e1e1e0a;
+  --bg-backdrop: #1e1e1e32;
+  --bg-selected: #f4f4f4;
+  --bg-contrast: #1e1e1e;
+  --bg-disabled: #eeeeee;
+
+  --border-default: #eeeeee;
+  --border-muted: #f4f4f4;
+  --border-strong: #1c1c1c;
+  --border-selected: #f3652b;
+
+  --text-default: #1c1c1c;
+  --text-muted: #666666;
+  --text-disabled: #979797;
+  --text-link: #3265cb;
+  --text-link-hover: #2851a4;
+  --text-contrast: #f4f4f4;
+
+  --ring-color: #f3642b9f;
+
+  --code-sintax-identifier: #1c1c1c;
+  --code-sintax-line-number: #979797;
+  --code-sintax-keyword: #3265cb;
+  --code-sintax-punctuation: #666666;
+  --code-sintax-comment: #979797;
+  --code-sintax-function: #f3652b;
+  --code-sintax-type: #c59707;
+  --code-sintax-string: #3265cb;
+
+  --success: #1982361f;
+  --success-border: #19823666;
+  --success-contrast: #198236;
+
+  --warning: #c5970733;
+  --warning-border: #c5970780;
+  --warning-contrast: #c59707;
+
+  --danger: #ef40401f;
+  --danger-border: #ef404066;
+  --danger-contrast: #ef4040;
+
+  --info: #3265cb1f;
+  --info-border: #3265cb66;
+  --info-contrast: #3265cb;
+}
+
+:root.ui-legacy.azion.azion-dark {
+  --primary: #f3652b;
+  --primary-mask: #ff6c4729;
+  --primary-selected: #ff6c4729;
+  --primary-contrast: #f4f4f4;
+
+  --secondary: #ffffff;
+  --secondary-mask: #f5f5f516;
+  --secondary-selected: #d9d9d9;
+  --secondary-contrast: #222222;
+
+  --accent: #93c5fd;
+  --accent-mask: #93c5fd1f;
+  --accent-selected: #93c5fd;
+  --accent-contrast: #1e1e1e;
+
+  --bg-canvas: #0a0a0a;
+  --bg-surface: #171717;
+  --bg-surface-raised: #1c1c1c;
+  --bg-surface-overlay: #404040;
+  --bg-mask: #f5f5f50d;
+  --bg-placeholder: #3131316d;
+  --bg-placeholder-highlight: #31313199;
+  --bg-hover: #f5f5f516;
+  --bg-active: #f5f5f50d;
+  --bg-backdrop: #1c1c1c80;
+  --bg-selected: #222222;
+  --bg-contrast: #f4f4f4;
+  --bg-disabled: #222222;
+
+  --border-default: #282828;
+  --border-muted: #222222;
+  --border-strong: #ededed;
+  --border-selected: #f3652b;
+
+  --text-default: #ededed;
+  --text-muted: #b5b5b5;
+  --text-disabled: #666666;
+  --text-link: #93c5fd;
+  --text-link-hover: #93c5fd;
+  --text-contrast: #1c1c1c;
+
+  --ring-color: #f3642b9f;
+
+  --code-sintax-identifier: #ededed;
+  --code-sintax-line-number: #666666;
+  --code-sintax-keyword: #93c5fd;
+  --code-sintax-punctuation: #b5b5b5;
+  --code-sintax-comment: #666666;
+  --code-sintax-function: #f3652b;
+  --code-sintax-type: #ffb64d;
+  --code-sintax-string: #93c5fd;
+
+  --success: #16a34a33;
+  --success-border: #39e47866;
+  --success-contrast: #39e478;
+
+  --warning: #ffb64d33;
+  --warning-border: #ffb64d80;
+  --warning-contrast: #ffb64d;
+
+  --danger: #f53d3d33;
+  --danger-border: #f53d3d66;
+  --danger-contrast: #f26464;
+
+  --info: #93c5fd1f;
+  --info-border: #93c5fd66;
+  --info-contrast: #93c5fd;
+}

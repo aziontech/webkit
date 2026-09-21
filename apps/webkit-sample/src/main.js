@@ -4,6 +4,10 @@
 // own location instead of being rebased into this app's tree.
 import '@aziontech/theme'
 import './style.css'
+// The legacy console's palette, applied only while <html> carries `ui-legacy`
+// (shared/lib/legacy-ui.js). Imported after the theme so the override it defines
+// sits beside the tokens it overrides.
+import './legacy-ui.css'
 
 import { createApp } from 'vue'
 

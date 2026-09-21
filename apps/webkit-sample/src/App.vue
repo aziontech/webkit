@@ -29,6 +29,11 @@
   // the scope you left). Wired here, once, because both halves outlive the page
   // that triggered them.
   import { installTenancyReload } from '@console/lib/state/tenancy-reload'
+  // Which palette the screens are painted in — the current tokens, or the ones the
+  // live console still ships (../shared/lib/legacy-ui.js). Installed here, beside the
+  // other two, because the repaint is on <html> and belongs to every route, not just
+  // the console: `?ui=legacy` has to land the same way on the site and the docs.
+  import { installLegacyUi } from '@shared/lib/legacy-ui'
   import { RouterView } from 'vue-router'
 
   import { router } from './router/index'
@@ -37,6 +42,7 @@
   installSessionExpiry(router)
   installSampleMode(router)
   installSamplePreset(router)
+  installLegacyUi(router)
 
   const { expiring } = useSession()
 </script>
