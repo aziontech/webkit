@@ -95,3 +95,9 @@ apps/storybook/.storybook/test-visual/__image_snapshots__/darwin/
 # and per-band captures of a source page and of ours). Read during a translation,
 # never a build input — the skill re-runs it on demand.
 site-translate/
+
+# product-design-translate scratch: surface inventories and screen/region/state captures
+# of a signed-in third-party product and of ours. These are someone else's authenticated
+# screens holding your own account data — a local corpus, never a committed asset. What
+# travels between runs is the skill's PATTERNS.md ledger, which IS committed.
+product-translate/

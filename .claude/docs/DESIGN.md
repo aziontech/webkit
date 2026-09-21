@@ -170,23 +170,26 @@ Example from Button — horizontal padding and inner gap:
 
 ### Layout containers (page sections)
 
-A page does **not** pick its own `max-w-*`. It carries one of the four **container types** the layout
-system ships (`semantic/layouts` in `@aziontech/theme`), and the type is chosen by what the page _is_:
+A page does **not** pick its own `max-w-*`. It carries one of the five **container types** the layout
+system ships (`semantic/layouts` in `@aziontech/theme`), and the type is chosen by what the page's
+_payload_ is. `.layout-column` is the default; the others are all narrower:
 
 | Class | Type | Measure token | Today | Use for |
 |---|---|---|---|---|
-| `.layout-column` | Data | `--layout-measure` | 1388px | Lists, detail dashboards |
+| `.layout-column` | Data | `--layout-measure` | 1620px | **The standard page container** — lists, home, overviews, detail dashboards |
 | `.layout-column-focused` | Focused | `--layout-measure-focused` | 1024px | Home, single-task multi-column pages |
 | `.layout-column-form` | Form | `--layout-measure-form` | 1024px | Settings, in-page edit forms |
 | `.layout-form-create` | Create | `--layout-measure-form-create` | 1192px | Dedicated create pages (also retunes `--layout-measure-control`) |
 | `.layout-column-content` | Content | `--layout-measure-content` | 876px | Prose columns — documentation, blog (capped by line length, not by payload) |
 
-The marketing site is measured by two more tokens, used as a plain `max-w-(--token)` rather than
-through a column class: `--layout-measure-site` (1388px) is the page's frame — the hero, every
+The marketing site is measured by two more tokens. `--layout-measure-site` (1388px) is the page's frame — the hero, every
 section, the docs home and the footer share it, which is the only reason the border-x running down
 the page is continuous — and `--layout-measure-site-header` (1620px) is the top bar's own column,
 one rung wider, since a bar's payload is chrome held apart at the two ends of the window rather than
-content read across it. `GlobalHeader kind="site"` is the one consumer of the header token.
+content read across it. `GlobalHeader kind="site"` is the one consumer of the header token. The page
+frame has its own column class, `.layout-column-site`, whose `min()` cap hands off from the measure to
+a window-less-boundary inset below it — so the frame stays inset on a phone, where a bare
+`max-w-(--layout-measure-site)` would land its rules on the window edges.
 
 Full-bleed is the **absence** of all five, never a `w-full`. The unit that picks a class is the **band**,
 not the file: a tab showing a table is measured as data even when the tab beside it is a form. Within one
@@ -646,7 +649,7 @@ The `validate-tokens.mjs` PreToolUse hook enforces these at write time. If a hoo
 - **Typography:** `font-family`, `font-proto-mono`, `font-sora`, `leading-*` (except `leading-none` on icons), `tracking-*`, `text-xs|sm|base|lg`, `text-(length:--text-*-font-size)` when a generated class exists.
 - **Spacing:** primitive `--spacing-1` … `--spacing-96`, legacy `spacing-elements-*`, arbitrary `p-4` / `gap-3` when a `spacings.data.js` token applies.
 - **Container:** Tailwind scale (`max-w-md`, `max-w-5xl`), arbitrary lengths (`max-w-[768px]`), legacy helpers (`.px-container`, `.py-container`, `.max-container-width`), and semantic layout tokens (`--container-px`, `--container-py`, `--container-max-width`). Use `max-w-(--container-<size>)` only (`3xs` … `7xl` from `primitives/shape/container.js`).
-- **Page layout:** a hand-rolled page cap (`max-w-*` on a page root) instead of one of the four container types, a `w-full` standing in for full-bleed, a third rhythm step beside `--layout-section-gap` / `--layout-group-gap`, and a literal length in `semantic/layouts.data.js` — every layout token is a `var()` reference to the spacing or container scale.
+- **Page layout:** a hand-rolled page cap (`max-w-*` on a page root) instead of one of the five container types, a `w-full` standing in for full-bleed, a third rhythm step beside `--layout-section-gap` / `--layout-group-gap`, and a literal length in `semantic/layouts.data.js` — every layout token is a `var()` reference to the spacing or container scale.
 - **Shape:** `rounded-md`, `rounded-lg`, any numeric radius.
 - **Shadow:** legacy `--card-shadow` (SCSS alias), bare Tailwind `shadow-md` without `var(--shadow-*)`, HEX/RGB in elevation.
 - **Animations:** see § Animations § Forbidden in animations.
