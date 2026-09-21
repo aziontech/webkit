@@ -117,6 +117,10 @@ test('planInit wires the Tailwind + PostCSS pipeline and a CSS entry', () => {
     // Critically, it must register webkit's source so component classes compile — via the
     // package-name import (the @source ships inside webkit), never a ../node_modules path.
     assert.match(cssEntry.content, /@import '@aziontech\/webkit\/styles'/)
+    // Font smoothing ships in the consumer's own file, inside `@layer base`, so it stays
+    // overridable by their unlayered rules and is visible where they can edit it.
+    assert.match(cssEntry.content, /@layer base \{[\s\S]*-webkit-font-smoothing: antialiased;/)
+    assert.match(cssEntry.content, /-moz-osx-font-smoothing: grayscale;/)
     assert.doesNotMatch(
       cssEntry.content,
       /node_modules/,
@@ -365,8 +369,9 @@ test('planInit copies the .claude/rules/webkit-*.md bundle', () => {
       '.claude/rules/webkit-testid.md',
       '.claude/rules/webkit-deprecation.md',
       '.claude/skills/webkit-usage/SKILL.md',
-      // UI-craft pack (18 skills: the redundancy/false-positive pass + webkit-tables +
-      // webkit-lists (the page around the table) + webkit-errors (where a failure goes) +
+      // UI-craft pack (19 skills: the redundancy/false-positive pass + webkit-tables +
+      // webkit-lists (the page around the table) + webkit-layout (the container system
+      // every page is built on) + webkit-errors (where a failure goes) +
       // webkit-create-surface (page vs drawer, and the anatomy both share) +
       // webkit-microcopy — Azion product copy rules, unlike the generic
       // content-microcopy dropped below).
@@ -379,6 +384,7 @@ test('planInit copies the .claude/rules/webkit-*.md bundle', () => {
       '.claude/skills/webkit-tables/SKILL.md',
       '.claude/skills/webkit-lists/SKILL.md',
       '.claude/skills/webkit-navigation/SKILL.md',
+      '.claude/skills/webkit-layout/SKILL.md',
       '.claude/skills/webkit-microcopy/SKILL.md',
       '.claude/skills/webkit-baseline-ui/SKILL.md',
       '.claude/skills/webkit-theming-dark-mode/SKILL.md',

@@ -105,6 +105,7 @@ const CLAUDE_BUNDLE = [
   'skills/webkit-tables/SKILL.md',
   'skills/webkit-lists/SKILL.md',
   'skills/webkit-navigation/SKILL.md',
+  'skills/webkit-layout/SKILL.md',
   'skills/webkit-microcopy/SKILL.md',
   'skills/webkit-baseline-ui/SKILL.md',
   'skills/webkit-theming-dark-mode/SKILL.md',
@@ -212,6 +213,15 @@ function styleEntryContent() {
 
 /* webkit is consumed as source — this registers it with Tailwind so its component classes compile. */
 @import '@aziontech/webkit/styles';
+
+/* Text rendering. The type ladder is drawn at these settings, so they are the design
+   system's default — and they live here, in your file, so you can change them. */
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
 `
 }
 
