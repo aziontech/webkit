@@ -4,7 +4,6 @@
   // overview content: a welcome header, a metrics strip, the Resources and Recent
   // Activity tables, and a right rail with Monthly Usage + Marketplace Trends.
   import CardBox from '@aziontech/webkit/card-box'
-  import CopyButton from '@aziontech/webkit/copy-button'
   import IconButton from '@aziontech/webkit/icon-button'
   import Link from '@aziontech/webkit/link'
   import Table from '@aziontech/webkit/table'
@@ -15,6 +14,7 @@
   import { computed } from 'vue'
   import { useRoute } from 'vue-router'
 
+  import DomainCell from '../../components/list/DomainCell.vue'
   import LastModifiedCell from '../../components/list/LastModifiedCell.vue'
   import AppLayout from '../../components/shell/AppLayout.vue'
   import { FIT_COLUMN, TAG_COLUMN, TAG_COLUMN_WIDE } from '../../lib/behavior/table-columns'
@@ -242,28 +242,11 @@
                 row-key="id"
               >
                 <template #cell-domain="{ value }">
-                  <!-- Domain link (truncates) + external-redirect arrow; copy button pinned to the cell's right edge so it aligns across rows. -->
-                  <div class="flex w-full min-w-0 items-center gap-(--spacing-xs)">
-                    <a
-                      :href="`https://${value}`"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      class="flex min-w-0 items-center gap-(--spacing-xxs) hover:underline"
-                      @click.stop
-                    >
-                      <span class="truncate">{{ value }}</span>
-                      <i
-                        class="pi pi-arrow-up-right shrink-0 text-(--text-muted)"
-                        aria-hidden="true"
-                      />
-                    </a>
-                    <CopyButton
-                      kind="outlined"
-                      :value="value"
-                      aria-label="Copy domain name"
-                      class="ml-auto shrink-0"
-                    />
-                  </div>
+                  <!-- The shared domain cell (../../components/list/DomainCell.vue): the
+                       link out, its 12px external mark and its tooltip, and the copy
+                       button pinned to the cell's right edge. This was a verbatim
+                       copy of that component until 2026-09-19. -->
+                  <DomainCell :value="value" />
                 </template>
                 <template #cell-status="{ value }">
                   <Tag

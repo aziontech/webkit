@@ -26,7 +26,6 @@
   // with one option.
   import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
-  import CopyButton from '@aziontech/webkit/copy-button'
   import Dropdown from '@aziontech/webkit/dropdown'
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -42,6 +41,7 @@
   import AuthorCell from '../../components/list/AuthorCell.vue'
   import ColumnsButton from '../../components/list/ColumnsButton.vue'
   import DeleteDialog from '../../components/list/DeleteDialog.vue'
+  import DomainCell from '../../components/list/DomainCell.vue'
   import ExportButton from '../../components/list/ExportButton.vue'
   import FilterButton from '../../components/list/FilterButton.vue'
   import FilterChips from '../../components/list/FilterChips.vue'
@@ -433,31 +433,12 @@
                     />
                   </template>
 
-                  <!-- Domain cell: link + external arrow, copy button pinned to the
-                       cell's right edge so it aligns across rows. -->
+                  <!-- The shared domain cell (../../components/list/DomainCell.vue): the
+                       link out, its 12px external mark and its tooltip, and the copy
+                       button pinned to the cell's right edge. This was a verbatim
+                       copy of that component until 2026-09-19. -->
                   <template #cell-domain="{ value }">
-                    <div class="flex w-full min-w-0 items-center gap-(--spacing-xs)">
-                      <a
-                        :href="`https://${value}`"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="flex min-w-0 items-center gap-(--spacing-xxs) hover:underline"
-                        @click.stop
-                      >
-                        <span class="truncate">{{ value }}</span>
-                        <i
-                          class="pi pi-arrow-up-right shrink-0 text-(--text-muted)"
-                          aria-hidden="true"
-                        />
-                      </a>
-                      <CopyButton
-                        kind="outlined"
-                        :value="value"
-                        aria-label="Copy domain name"
-                        class="ml-auto shrink-0"
-                        @click.stop
-                      />
-                    </div>
+                    <DomainCell :value="value" />
                   </template>
 
                   <template #cell-status="{ value }">

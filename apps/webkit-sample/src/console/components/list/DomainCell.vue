@@ -5,14 +5,20 @@
   // paste it somewhere else — and their placement is what makes a column of them
   // readable: the link TRUNCATES from the left edge, the copy button is pinned to the
   // cell's right edge (`ml-auto`), so the buttons line up down the column however
-  // long each name is. `@click.stop` keeps opening the site from also triggering the
-  // row's own click.
+  // long each name is.
+  //
+  // The link itself is the console's one cross-resource link shape
+  // (../resource/ResourceLink.vue): a 12px `pi-external-link` and a tooltip naming
+  // where it goes. It also stops the click, so opening the site never also triggers
+  // the row's own click.
   //
   // Extracted because the same cell renders in three places (the Applications list,
   // the Workloads list — which adds a "+N" overflow Popover of its own — and Overview,
   // which lists both), and a domain that copies in one and does not in another is the
   // kind of drift nobody reports.
   import CopyButton from '@aziontech/webkit/copy-button'
+
+  import ResourceLink from '../resource/ResourceLink.vue'
 
   defineProps({
     /** The hostname, without a scheme. */
@@ -22,19 +28,10 @@
 
 <template>
   <div class="flex w-full min-w-0 items-center gap-(--spacing-xs)">
-    <a
+    <ResourceLink
+      :label="value"
       :href="`https://${value}`"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="flex min-w-0 items-center gap-(--spacing-xxs) hover:underline"
-      @click.stop
-    >
-      <span class="truncate">{{ value }}</span>
-      <i
-        class="pi pi-arrow-up-right shrink-0 text-(--text-muted)"
-        aria-hidden="true"
-      />
-    </a>
+    />
     <CopyButton
       kind="outlined"
       :value="value"

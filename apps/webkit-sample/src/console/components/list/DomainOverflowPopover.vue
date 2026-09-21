@@ -159,8 +159,11 @@
            the page, and the panel re-anchors to its trigger on page scroll — so the
            popover slides out from under the pointer mid-scroll. -->
       <div class="max-h-(--container-xs) overflow-auto overscroll-contain p-(--spacing-xxs)">
-        <!-- Every alias opens, like the primary domain in the cell behind it —
-             same anchor, same arrow, same truncation. -->
+        <!-- Every alias opens, like the primary domain in the cell behind it, and
+             carries the same 12px `pi-external-link` mark. It keeps its OWN anchor
+             rather than composing ../resource/ResourceLink.vue: this is a menu row, so
+             the whole row — its padding and its hover surface — is the click target,
+             which an inline link inside it would not be. -->
         <a
           v-for="domain in visible"
           :key="domain"
@@ -172,7 +175,7 @@
         >
           <span class="truncate">{{ domain }}</span>
           <i
-            class="pi pi-arrow-up-right ml-auto shrink-0 text-(--text-muted)"
+            class="pi pi-external-link ml-auto shrink-0 text-body-xs leading-none"
             aria-hidden="true"
           />
         </a>
