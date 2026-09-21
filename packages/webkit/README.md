@@ -82,6 +82,8 @@ snippets that run as-is when pasted into your app.
 pnpm storybook:dev
 ```
 
+The published Storybook is at <https://webkit.azion.app/>. Local setup for contributors (prerequisites, running and building the Storybook) is in the [repository README](../../README.md#run-the-storybook).
+
 ### 5 · Stay on-pattern (the lint does the remembering)
 
 `init` enables the webkit ESLint preset, where **every rule is an `error`** — wrong

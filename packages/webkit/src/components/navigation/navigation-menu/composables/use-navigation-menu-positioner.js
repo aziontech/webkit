@@ -1,12 +1,8 @@
 import { useEventListener, useResizeObserver } from '@vueuse/core'
 import { computed, onBeforeUnmount, ref, toValue, unref, watch } from 'vue'
 
-const OPPOSITE_SIDE = {
-  top: 'bottom',
-  bottom: 'top',
-  left: 'right',
-  right: 'left'
-}
+import { computePlacement, getClippingBoundary } from '../../../../composables/use-placement'
+import { getFixedFrame } from '../../../../utils/containing-block'
 
 const ALIGN_VALUES = new Set(['start', 'center', 'end'])
 const SIDE_VALUES = new Set(['top', 'bottom', 'left', 'right'])
@@ -16,95 +12,11 @@ function readRect(el) {
   return el.getBoundingClientRect()
 }
 
-function computePlacement({
-  anchorRect,
-  floatingRect,
-  side,
-  align,
-  sideOffset,
-  alignOffset,
-  collisionPadding
-}) {
-  if (!anchorRect || !floatingRect) {
-    return { x: 0, y: 0, side, align }
-  }
-
-  const viewport = {
-    width: typeof window !== 'undefined' ? window.innerWidth : 0,
-    height: typeof window !== 'undefined' ? window.innerHeight : 0
-  }
-
-  const fits = (candidateSide) => {
-    switch (candidateSide) {
-      case 'bottom':
-        return (
-          anchorRect.bottom + sideOffset + floatingRect.height + collisionPadding <= viewport.height
-        )
-      case 'top':
-        return anchorRect.top - sideOffset - floatingRect.height - collisionPadding >= 0
-      case 'right':
-        return (
-          anchorRect.right + sideOffset + floatingRect.width + collisionPadding <= viewport.width
-        )
-      case 'left':
-        return anchorRect.left - sideOffset - floatingRect.width - collisionPadding >= 0
-      default:
-        return true
-    }
-  }
-
-  // Simple CSS-only flip: if the preferred side overflows, try the opposite side.
-  let resolvedSide = side
-  if (!fits(side) && fits(OPPOSITE_SIDE[side])) {
-    resolvedSide = OPPOSITE_SIDE[side]
-  }
-
-  let x = 0
-  let y = 0
-
-  if (resolvedSide === 'top' || resolvedSide === 'bottom') {
-    y =
-      resolvedSide === 'bottom'
-        ? anchorRect.bottom + sideOffset
-        : anchorRect.top - sideOffset - floatingRect.height
-
-    if (align === 'start') {
-      x = anchorRect.left + alignOffset
-    } else if (align === 'end') {
-      x = anchorRect.right - floatingRect.width - alignOffset
-    } else {
-      x = anchorRect.left + anchorRect.width / 2 - floatingRect.width / 2 + alignOffset
-    }
-
-    // Shift horizontally to keep inside the viewport.
-    const maxX = viewport.width - floatingRect.width - collisionPadding
-    if (x < collisionPadding) x = collisionPadding
-    if (x > maxX) x = Math.max(collisionPadding, maxX)
-  } else {
-    x =
-      resolvedSide === 'right'
-        ? anchorRect.right + sideOffset
-        : anchorRect.left - sideOffset - floatingRect.width
-
-    if (align === 'start') {
-      y = anchorRect.top + alignOffset
-    } else if (align === 'end') {
-      y = anchorRect.bottom - floatingRect.height - alignOffset
-    } else {
-      y = anchorRect.top + anchorRect.height / 2 - floatingRect.height / 2 + alignOffset
-    }
-
-    const maxY = viewport.height - floatingRect.height - collisionPadding
-    if (y < collisionPadding) y = collisionPadding
-    if (y > maxY) y = Math.max(collisionPadding, maxY)
-  }
-
-  return { x, y, side: resolvedSide, align }
-}
-
 /**
- * CSS/JS-only positioner — no external lib. Replaces the previous
- * `@floating-ui/vue` implementation, per `.claude/rules/dependencies.md`.
+ * Thin wrapper over the shared `computePlacement` geometry (flip, shift, size cap,
+ * scrolling-ancestor boundary) that keeps what is specific to the navigation menu: the
+ * settled popup size as the measured box, the arrow, rAF-coalesced updates, and a
+ * `placed` flag that suppresses the move transition on the first placement.
  *
  * @param {import('vue').MaybeRef<HTMLElement | null>} anchorRef
  * @param {import('vue').Ref<HTMLElement | null>} floatingRef
@@ -120,7 +32,16 @@ function computePlacement({
  * @param {import('vue').MaybeRefOrGetter<{ width: number; height: number } | null>} [targetSize]
  */
 export function useNavigationMenuPositioner(anchorRef, floatingRef, arrowRef, options, targetSize) {
-  const state = ref({ x: 0, y: 0, side: 'bottom', align: 'center' })
+  const state = ref({
+    x: 0,
+    y: 0,
+    side: 'bottom',
+    align: 'center',
+    width: 0,
+    height: 0,
+    maxWidth: null,
+    maxHeight: null
+  })
   const hasPlacement = ref(false)
   const placed = ref(false)
   const popupOrigin = ref('top left')
@@ -142,26 +63,42 @@ export function useNavigationMenuPositioner(anchorRef, floatingRef, arrowRef, op
     const floatingEl = unref(floatingRef)
     const anchorRect = readRect(anchorEl)
     const settledSize = targetSize ? toValue(targetSize) : null
-    const floatingRect = settledSize ?? readRect(floatingEl)
-    if (!anchorRect || !floatingRect) return
+    const naturalSize = settledSize ?? readRect(floatingEl)
+    if (!anchorRect || !naturalSize) return
     const { side, align, sideOffset, alignOffset, collisionPadding } = opts.value
-    const next = computePlacement({
-      anchorRect,
-      floatingRect,
-      side,
-      align,
-      sideOffset,
+    const viewport = { width: globalThis.innerWidth ?? 0, height: globalThis.innerHeight ?? 0 }
+
+    const result = computePlacement({
+      triggerRect: anchorRect,
+      panelSize: { width: naturalSize.width, height: naturalSize.height },
+      boundary: getClippingBoundary(anchorEl, viewport),
+      placement: align === 'center' ? side : `${side}-${align}`,
+      flip: true,
+      offset: sideOffset,
       alignOffset,
       collisionPadding
     })
-    state.value = next
+    const [resolvedSide, resolvedAlign = 'center'] = result.placement.split('-')
+
+    // The positioner is fixed inside the Portal target; express viewport coordinates in
+    // that frame so a transformed ancestor (Storybook's zoom) does not scale them twice.
+    const frame = getFixedFrame(floatingEl)
+    state.value = {
+      x: (result.left - frame.left) / frame.scaleX,
+      y: (result.top - frame.top) / frame.scaleY,
+      side: resolvedSide,
+      align: resolvedAlign,
+      width: result.width,
+      height: result.height,
+      maxWidth: result.maxWidth === null ? null : result.maxWidth / frame.scaleX,
+      maxHeight: result.maxHeight === null ? null : result.maxHeight / frame.scaleY
+    }
 
     const clamp = (value, max) => Math.min(Math.max(value, 0), Math.max(max, 0))
-
     popupOrigin.value =
-      next.side === 'top' || next.side === 'bottom'
-        ? `${clamp(anchorRect.left + anchorRect.width / 2 - next.x, floatingRect.width).toFixed(2)}px ${next.side === 'bottom' ? 'top' : 'bottom'}`
-        : `${next.side === 'right' ? 'left' : 'right'} ${clamp(anchorRect.top + anchorRect.height / 2 - next.y, floatingRect.height).toFixed(2)}px`
+      resolvedSide === 'top' || resolvedSide === 'bottom'
+        ? `${clamp(anchorRect.left + anchorRect.width / 2 - result.left, result.width).toFixed(2)}px ${resolvedSide === 'bottom' ? 'top' : 'bottom'}`
+        : `${resolvedSide === 'right' ? 'left' : 'right'} ${clamp(anchorRect.top + anchorRect.height / 2 - result.top, result.height).toFixed(2)}px`
 
     hasPlacement.value = true
   }
@@ -192,24 +129,15 @@ export function useNavigationMenuPositioner(anchorRef, floatingRef, arrowRef, op
         update()
         return
       }
-
       scheduleUpdate()
     },
-    {
-      flush: 'post',
-      immediate: true
-    }
+    { flush: 'post', immediate: true }
   )
 
   watch(hasPlacement, (value) => {
-    if (!value) {
-      return
-    }
-
+    if (!value) return
     nextFrame(() => {
-      if (hasPlacement.value) {
-        placed.value = true
-      }
+      if (hasPlacement.value) placed.value = true
     })
   })
 
@@ -246,39 +174,35 @@ export function useNavigationMenuPositioner(anchorRef, floatingRef, arrowRef, op
 
   const resolvedSide = computed(() => state.value.side)
   const resolvedAlign = computed(() => state.value.align)
+  /** Cap for the popup on each axis, in px, or `null` when its natural size fits. */
+  const availableWidth = computed(() => state.value.maxWidth)
+  const availableHeight = computed(() => state.value.maxHeight)
 
-  // Arrow positioning: align the arrow to the anchor center along the
-  // axis perpendicular to `resolvedSide`. Pure CSS would also work, but
-  // we keep the same shape as before so navigation-menu-arrow.vue is happy.
+  // The arrow sits on the anchor's centre along the axis perpendicular to the side,
+  // kept `arrowPadding` away from the popup's (possibly capped) edges.
   const arrowStyles = computed(() => {
-    const floatingEl = unref(floatingRef)
-    const anchorEl = unref(anchorRef)
+    const anchorRect = readRect(unref(anchorRef))
     const arrowEl = unref(arrowRef)
-    const settledSize = targetSize ? toValue(targetSize) : null
-    const floatingRect = settledSize ?? readRect(floatingEl)
-    const anchorRect = readRect(anchorEl)
-    if (!floatingRect || !anchorRect) return {}
+    if (!anchorRect || !hasPlacement.value) return {}
 
     const arrowSize = arrowEl ? arrowEl.offsetWidth || 8 : 8
     const padding = opts.value.arrowPadding
+    const { x, y, side, width, height } = state.value
 
-    if (resolvedSide.value === 'top' || resolvedSide.value === 'bottom') {
-      const anchorCenter = anchorRect.left + anchorRect.width / 2
-      const offsetX = anchorCenter - state.value.x - arrowSize / 2
-      const clamped = Math.min(Math.max(offsetX, padding), floatingRect.width - arrowSize - padding)
-      return { left: `${clamped}px` }
+    if (side === 'top' || side === 'bottom') {
+      const offsetX = anchorRect.left + anchorRect.width / 2 - x - arrowSize / 2
+      return { left: `${Math.min(Math.max(offsetX, padding), width - arrowSize - padding)}px` }
     }
-
-    const anchorCenter = anchorRect.top + anchorRect.height / 2
-    const offsetY = anchorCenter - state.value.y - arrowSize / 2
-    const clamped = Math.min(Math.max(offsetY, padding), floatingRect.height - arrowSize - padding)
-    return { top: `${clamped}px` }
+    const offsetY = anchorRect.top + anchorRect.height / 2 - y - arrowSize / 2
+    return { top: `${Math.min(Math.max(offsetY, padding), height - arrowSize - padding)}px` }
   })
 
   return {
     floatingStyles,
     resolvedSide,
     resolvedAlign,
+    availableWidth,
+    availableHeight,
     arrowStyles,
     placed,
     popupOrigin,

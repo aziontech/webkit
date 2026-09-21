@@ -17,7 +17,7 @@
   {
     "name": "calendar-root",
     "path": "src/components/inputs/calendar/calendar.vue",
-    "limit": "17 KB"
+    "limit": "18 KB"
   },
   {
     "name": "table-root",
@@ -52,7 +52,7 @@
   {
     "name": "chip",
     "path": "src/components/inputs/chip/chip.vue",
-    "limit": "5 KB"
+    "limit": "5.5 KB"
   },
   {
     "name": "footer-root",
@@ -107,12 +107,12 @@
   {
     "name": "doc-prompt",
     "path": "src/components/documentation/doc-prompt/doc-prompt.vue",
-    "limit": "9 KB"
+    "limit": "9.5 KB"
   },
   {
     "name": "doc-tooltip",
     "path": "src/components/documentation/doc-tooltip/doc-tooltip.vue",
-    "limit": "5 KB"
+    "limit": "5.5 KB"
   },
   {
     "name": "doc-pagination",
@@ -122,7 +122,7 @@
   {
     "name": "doc-page-header",
     "path": "src/components/documentation/doc-page-header/doc-page-header.vue",
-    "limit": "25 KB"
+    "limit": "25.5 KB"
   },
   {
     "name": "doc-on-this-page",

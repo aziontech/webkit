@@ -39,7 +39,7 @@
         :data-placement="ctx.placement.value"
         :data-width="ctx.width.value || null"
         :style="ctx.panelStyle.value"
-        class="flex min-w-(--container-3xs) max-w-(--container-xs) flex-col rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface-raised) shadow-(--shadow-sm) outline-none data-[width=small]:min-w-(--container-xs) data-[width=small]:max-w-(--container-xs) data-[width=medium]:min-w-(--container-sm) data-[width=medium]:max-w-(--container-sm) data-[width=large]:min-w-(--container-md) data-[width=large]:max-w-(--container-md)"
+        class="flex min-w-(--container-3xs) max-w-(--container-xs) flex-col overflow-y-auto rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface-raised) shadow-(--shadow-sm) outline-none data-[width=small]:min-w-(--container-xs) data-[width=small]:max-w-(--container-xs) data-[width=medium]:min-w-(--container-sm) data-[width=medium]:max-w-(--container-sm) data-[width=large]:min-w-(--container-md) data-[width=large]:max-w-(--container-md)"
       >
         <div
           :data-testid="`${ctx.testId}__body`"

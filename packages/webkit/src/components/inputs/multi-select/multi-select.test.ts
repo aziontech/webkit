@@ -139,6 +139,62 @@ describe('MultiSelect (composition / overlay)', () => {
     }
   })
 
+  // Size-aware placement (ENG-47063): a list taller than the viewport is capped to the
+  // free space below the trigger and scrolls inside the panel instead of clipping.
+  it('caps the listbox to the free space and scrolls it when it fits on neither side', async () => {
+    const Tall = defineComponent({
+      setup() {
+        const value = ref<unknown[]>([])
+        const open = ref(false)
+        return () =>
+          h('div', { style: 'position:fixed;top:8px;left:8px;right:8px' }, [
+            h(
+              MultiSelect,
+              {
+                modelValue: value.value,
+                'onUpdate:modelValue': (v: unknown[]) => {
+                  value.value = v
+                },
+                open: open.value,
+                'onUpdate:open': (o: boolean) => {
+                  open.value = o
+                }
+              },
+              {
+                default: () => [
+                  h(MultiSelectTrigger),
+                  h(MultiSelectContent, null, {
+                    default: () =>
+                      Array.from({ length: 200 }, (_, i) =>
+                        h(MultiSelectOption, { key: i, value: `o-${i}` }, () => `Option ${i}`)
+                      )
+                  })
+                ]
+              }
+            )
+          ])
+      }
+    })
+    const { getByTestId } = render(Tall)
+    cleanupTeleported()
+
+    const trigger = getByTestId('multi-select-trigger')
+    await fireEvent.click(trigger)
+    await nextTick()
+    await nextTick()
+
+    const panel = listbox() as HTMLElement
+    const panelRect = panel.getBoundingClientRect()
+    const triggerRect = trigger.getBoundingClientRect()
+    expect(panelRect.top).toBeGreaterThanOrEqual(triggerRect.bottom)
+    expect(panelRect.bottom).toBeLessThanOrEqual(window.innerHeight)
+    expect(panel.style.maxHeight).not.toBe('')
+    // No CSS in browser mode: the ScrollArea's own overflow utilities do not apply here,
+    // so assert that the capped panel holds more content than its box (what scrolls).
+    expect(panel.scrollHeight).toBeGreaterThan(panel.clientHeight)
+    cleanupTeleported()
+  })
+
   it('opens the teleported listbox from the trigger and closes on second click', async () => {
     const { getByTestId } = render(Harness, { props: { open: false } })
     cleanupTeleported()

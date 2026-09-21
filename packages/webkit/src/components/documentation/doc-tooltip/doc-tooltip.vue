@@ -225,7 +225,7 @@
         :data-placement="resolvedPlacement"
         :data-interactive="interactive || null"
         :style="panelStyle"
-        class="pointer-events-none flex max-w-(--container-2xs) flex-col rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-sm) shadow-(--shadow-sm) outline-none [transform-origin:var(--popup-origin,center)] data-[interactive]:pointer-events-auto"
+        class="pointer-events-none flex max-w-(--container-2xs) flex-col overflow-y-auto rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-sm) shadow-(--shadow-sm) outline-none [transform-origin:var(--popup-origin,center)] data-[interactive]:pointer-events-auto"
         @mouseenter="clearTimers"
         @mouseleave="scheduleClose"
         @focusout="onFocusOut"

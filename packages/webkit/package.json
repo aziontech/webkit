@@ -1,6 +1,6 @@
 {
   "name": "@aziontech/webkit",
-  "version": "5.0.0",
+  "version": "5.1.0",
   "description": "Reusable UI components and design system utilities for building Azion web interfaces.",
   "license": "MIT",
   "type": "module",
@@ -344,7 +344,7 @@
     "./use-controllable": "./src/composables/use-controllable/index.js",
     "./use-focus-trap": "./src/composables/use-focus-trap/index.js",
     "./use-heading-nav": "./src/composables/use-heading-nav/index.ts",
-    "./use-placement": "./src/composables/use-placement/index.js",
+    "./use-placement": "./src/composables/use-placement/index.ts",
     "./vite": "./src/vite/index.js"
   }
 }

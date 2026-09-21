@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, inject, nextTick, onBeforeUnmount, onMounted, ref, useAttrs, watch } from 'vue'
 
-  import { getFixedFrame } from '../../../../utils/containing-block'
+  import { usePlacement } from '../../../../composables/use-placement'
   import ScrollArea from '../../../layout/scroll-area/scroll-area.vue'
   import { selectContextKey } from '../injection-key'
 
@@ -21,31 +21,16 @@
 
   const root = ref<globalThis.HTMLDivElement | null>(null)
 
-  const position = ref({ top: 0, left: 0, width: 0 })
-
-  const updatePosition = () => {
-    const trigger = ctx.triggerRef.value
-    if (!trigger) return
-    const rect = trigger.getBoundingClientRect()
-    // The panel is fixed inside the Teleport target, which may sit under a
-    // transformed ancestor (Storybook's zoom scales the preview body). Express
-    // the trigger's viewport rect in that frame's space so it is not scaled twice.
-    const frame = getFixedFrame(root.value)
-    position.value = {
-      // The 4px gap is added after the conversion so it stays 4 layout pixels
-      // and scales with the frame, like the panel itself.
-      top: (rect.bottom - frame.top) / frame.scaleY + 4,
-      left: (rect.left - frame.left) / frame.scaleX,
-      width: rect.width / frame.scaleX
-    }
-  }
-
-  const positionStyle = computed(() => ({
-    top: `${position.value.top}px`,
-    left: `${position.value.left}px`,
-    width: `${position.value.width}px`,
-    '--popup-origin': 'top'
-  }))
+  // Anchored below the trigger, flipping above when there is no room and shrinking to
+  // the free space when neither side fits; the width follows the trigger.
+  const { panelStyle } = usePlacement({
+    triggerRef: ctx.triggerRef,
+    panelRef: root,
+    isOpen: ctx.open,
+    placement: 'bottom-start',
+    offset: 4,
+    matchTriggerWidth: true
+  })
 
   const onKeydown = (event: globalThis.KeyboardEvent) => {
     if (event.key === 'Escape') {
@@ -102,31 +87,21 @@
     async (next) => {
       if (next) {
         await nextTick()
-        updatePosition()
         document.addEventListener('pointerdown', onDocumentPointerDown, true)
-        window.addEventListener('resize', updatePosition)
-        window.addEventListener('scroll', updatePosition, true)
       } else {
         document.removeEventListener('pointerdown', onDocumentPointerDown, true)
-        window.removeEventListener('resize', updatePosition)
-        window.removeEventListener('scroll', updatePosition, true)
       }
     }
   )
 
   onMounted(() => {
     if (ctx.open.value) {
-      updatePosition()
       document.addEventListener('pointerdown', onDocumentPointerDown, true)
-      window.addEventListener('resize', updatePosition)
-      window.addEventListener('scroll', updatePosition, true)
     }
   })
 
   onBeforeUnmount(() => {
     document.removeEventListener('pointerdown', onDocumentPointerDown, true)
-    window.removeEventListener('resize', updatePosition)
-    window.removeEventListener('scroll', updatePosition, true)
   })
 </script>
 
@@ -147,7 +122,7 @@
         :data-state="ctx.open.value ? 'open' : 'closed'"
         :data-mode="ctx.multiple.value ? 'multiple' : 'single'"
         :class="attrs.class"
-        :style="positionStyle"
+        :style="panelStyle"
         class="fixed z-(--z-input-overlay) flex max-h-[20rem] flex-col overflow-hidden rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface-raised) shadow-(--shadow-xs)"
         @keydown="onKeydown"
       >

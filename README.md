@@ -3,8 +3,8 @@
 <p align="center">
   <a href="https://github.com/aziontech/webkit/actions/workflows/governance.yml?query=event%3Apull_request"><img src="https://github.com/aziontech/webkit/actions/workflows/governance.yml/badge.svg?event=pull_request" alt="Governance"></a>
   <a href="./LICENSE"><img src="https://img.shields.io/badge/license-MIT-yellow.svg" alt="License: MIT"></a>
-  <img src="https://img.shields.io/badge/node-%3E%3D22.18-brightgreen" alt="Node >=22.18">
-  <img src="https://img.shields.io/badge/pnpm-10.x-orange" alt="pnpm 10.x">
+  <img src="https://img.shields.io/badge/node-%3E%3D24-brightgreen" alt="Node >=24">
+  <img src="https://img.shields.io/badge/pnpm-11.x-orange" alt="pnpm 11.x">
   <img src="https://img.shields.io/badge/Vue-3.5%2B-42b883" alt="Vue 3.5+">
 </p>
 
@@ -103,8 +103,8 @@ import '@aziontech/icons'
 
 ### Prerequisites
 
-- Node.js `>= 22.18.0`
-- pnpm `10.x` (corepack recommended)
+- Node.js `>= 24` (see `engines` in the root `package.json`)
+- pnpm `11.x` — the root `packageManager` field pins the exact version; `corepack enable` picks it up automatically
 
 ### Install dependencies
 
@@ -113,6 +113,28 @@ From the repository root:
 ```bash
 pnpm install
 ```
+
+### Run the Storybook
+
+The Storybook in [`apps/storybook`](./apps/storybook) is the development playground: every component ships its stories there, with controls for every prop and a copy-paste-ready "Show code" snippet.
+
+```bash
+pnpm storybook:dev
+```
+
+This builds `@aziontech/icons` first (the stories need the icon font), then starts the dev server at <http://localhost:6006>. To skip the icons build on later runs, start it from the app directly:
+
+```bash
+pnpm --filter storybook dev
+```
+
+Stories live under `apps/storybook/src/stories/` — `foundations/` (tokens), `components/<category>/` (one folder per component), `templates/` (page-level compositions) and `utils/`. Every story must keep its "Show code" panel a runnable SFC; check the whole tree with:
+
+```bash
+pnpm storybook:validate-docs
+```
+
+A static build (`pnpm storybook:build`) lands in `apps/storybook/dist`; preview it with `pnpm storybook:preview` at <http://localhost:6007>. The full guide — stack, project structure, writing stories, visual tests — is in the [Storybook app README](./apps/storybook/README.md).
 
 ### Most used commands
 

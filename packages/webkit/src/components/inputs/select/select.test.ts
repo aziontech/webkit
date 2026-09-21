@@ -30,39 +30,52 @@ const Host = defineComponent({
     required: { type: Boolean, default: false },
     placeholder: { type: String, default: 'Select an option' },
     initial: { type: null, default: undefined },
-    startOpen: { type: Boolean, default: false }
+    startOpen: { type: Boolean, default: false },
+    /** Extra options appended to OPTIONS, to build a list taller than the viewport. */
+    extraOptions: { type: Number, default: 0 },
+    /** Inline style on a wrapper div, to pin the trigger somewhere in the viewport. */
+    wrapperStyle: { type: String, default: '' }
   },
   setup(props) {
     const value = ref(props.initial ?? (props.multiple ? [] : ''))
     const open = ref(props.startOpen)
+    const options = [
+      ...OPTIONS,
+      ...Array.from({ length: props.extraOptions }, (_, i) => ({
+        value: `extra-${i}`,
+        label: `Extra option ${i}`
+      }))
+    ]
     return () =>
-      h(
-        Select,
-        {
-          multiple: props.multiple,
-          disabled: props.disabled,
-          readonly: props.readonly,
-          invalid: props.invalid,
-          required: props.required,
-          placeholder: props.placeholder,
-          modelValue: value.value,
-          open: open.value,
-          'onUpdate:modelValue': (v: unknown) => {
-            value.value = v as never
+      h('div', { style: props.wrapperStyle }, [
+        h(
+          Select,
+          {
+            multiple: props.multiple,
+            disabled: props.disabled,
+            readonly: props.readonly,
+            invalid: props.invalid,
+            required: props.required,
+            placeholder: props.placeholder,
+            modelValue: value.value,
+            open: open.value,
+            'onUpdate:modelValue': (v: unknown) => {
+              value.value = v as never
+            },
+            'onUpdate:open': (v: boolean) => {
+              open.value = v
+            }
           },
-          'onUpdate:open': (v: boolean) => {
-            open.value = v
-          }
-        },
-        () => [
-          // aria-label gives the role=combobox trigger an accessible name so
-          // the composed tree is axe-clean (the component does not name it).
-          h(SelectTrigger, { 'aria-label': props.placeholder }),
-          h(SelectContent, null, () =>
-            OPTIONS.map((o) => h(SelectOption, { key: o.value, value: o.value }, () => o.label))
-          )
-        ]
-      )
+          () => [
+            // aria-label gives the role=combobox trigger an accessible name so
+            // the composed tree is axe-clean (the component does not name it).
+            h(SelectTrigger, { 'aria-label': props.placeholder }),
+            h(SelectContent, null, () =>
+              options.map((o) => h(SelectOption, { key: o.value, value: o.value }, () => o.label))
+            )
+          ]
+        )
+      ])
   }
 })
 
@@ -457,6 +470,50 @@ describe('Select (compound / overlay)', () => {
     const events = emitted()['update:open']
     expect(events).toBeTruthy()
     expect(events).toEqual([[true]])
+  })
+
+  // ---- Size-aware placement (ENG-47063) --------------------------------------
+  // Real layout: the trigger is pinned with inline styles (no CSS is loaded in
+  // browser mode) and the panel's rect is asserted against the live viewport.
+  it('flips the listbox above the trigger when there is no room below', async () => {
+    const { getByTestId } = render(Host, {
+      props: {
+        extraOptions: 9,
+        wrapperStyle: 'position:fixed;bottom:8px;left:8px;right:8px'
+      }
+    })
+    const trigger = getByTestId('select-trigger')
+    await fireEvent.click(trigger)
+    await nextTick()
+    await nextTick()
+
+    const panel = getContent() as HTMLElement
+    const panelRect = panel.getBoundingClientRect()
+    const triggerRect = trigger.getBoundingClientRect()
+    expect(panelRect.bottom).toBeLessThanOrEqual(triggerRect.top)
+    expect(panelRect.top).toBeGreaterThanOrEqual(0)
+    expect(Math.abs(panelRect.left - triggerRect.left)).toBeLessThanOrEqual(1)
+  })
+
+  it('caps the listbox to the free space and scrolls it when it fits on neither side', async () => {
+    const { getByTestId } = render(Host, {
+      props: { extraOptions: 200, wrapperStyle: 'position:fixed;top:8px;left:8px;right:8px' }
+    })
+    const trigger = getByTestId('select-trigger')
+    await fireEvent.click(trigger)
+    await nextTick()
+    await nextTick()
+
+    const panel = getContent() as HTMLElement
+    const panelRect = panel.getBoundingClientRect()
+    const triggerRect = trigger.getBoundingClientRect()
+    expect(panelRect.top).toBeGreaterThanOrEqual(triggerRect.bottom)
+    expect(panelRect.bottom).toBeLessThanOrEqual(window.innerHeight)
+    expect(panel.style.maxHeight).not.toBe('')
+
+    // No CSS in browser mode: the ScrollArea's own overflow utilities do not apply here,
+    // so assert that the capped panel holds more content than its box (what scrolls).
+    expect(panel.scrollHeight).toBeGreaterThan(panel.clientHeight)
   })
 
   // ---- Regression: panel anchoring under a transformed ancestor -------------

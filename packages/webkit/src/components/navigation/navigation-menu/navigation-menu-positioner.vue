@@ -75,6 +75,8 @@
     floatingStyles,
     resolvedSide,
     resolvedAlign,
+    availableWidth,
+    availableHeight,
     arrowStyles,
     placed,
     popupOrigin,
@@ -113,11 +115,17 @@
 
   const positionerHidden = computed(() => !root.menuPopupMounted.value)
 
+  // The popup reads these caps (`max-w` / `max-h`); the viewport scrolls only while
+  // `data-constrained` is set, so an unconstrained morph never flashes a scrollbar.
+  const constrained = computed(
+    () => availableWidth.value !== null || availableHeight.value !== null
+  )
+
   const positionerStyle = computed(() => ({
     ...floatingStyles.value,
     '--popup-origin': popupOrigin.value,
-    '--available-width': '100vw',
-    '--available-height': '100vh',
+    '--available-width': availableWidth.value === null ? '100vw' : `${availableWidth.value}px`,
+    '--available-height': availableHeight.value === null ? '100vh' : `${availableHeight.value}px`,
     ...(root.menuOpen.value ? {} : { pointerEvents: 'none' })
   }))
 
@@ -149,6 +157,7 @@
     "
     :data-side="resolvedSide"
     :data-align="resolvedAlign"
+    :data-constrained="constrained ? '' : undefined"
     @pointerenter="onPointerEnter"
   >
     <slot />
