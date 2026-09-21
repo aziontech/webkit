@@ -4,7 +4,12 @@ import { mkdirSync, mkdtempSync, rmSync, writeFileSync, readFileSync, existsSync
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 
-import { planInit, CLAUDE_FRAGMENT_MARKER, MCP_SERVER_NAME } from '../../src/cli/plan.js'
+import {
+  planInit,
+  CLAUDE_FRAGMENT_MARKER,
+  CI_WORKFLOW_PATH,
+  MCP_SERVER_NAME
+} from '../../src/cli/plan.js'
 import { applyPlan } from '../../src/cli/apply.js'
 import { FRAGMENT_START } from '../../src/cli/bundle.js'
 
@@ -632,6 +637,126 @@ test('applyPlan merges into an existing .mcp.json without dropping other servers
     assert.ok(mcp.mcpServers.other, 'existing server was dropped')
     assert.ok(mcp.mcpServers[MCP_SERVER_NAME], 'webkit server not added')
     assert.equal(Object.keys(mcp.mcpServers).length, 2)
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+// --- CI workflow ---------------------------------------------------------------------
+// init writes a CALLER of the published consumer gate, never a re-implementation of its
+// stages — the gate is owned by the design system so it can evolve in one place.
+
+test('planInit writes a CI workflow that calls the published consumer gate', () => {
+  const dir = makeProject()
+  try {
+    const ci = planInit(dir, {}).find((a) => a.type === 'write' && a.path === CI_WORKFLOW_PATH)
+    assert.ok(ci, `expected a ${CI_WORKFLOW_PATH} write action`)
+    assert.match(
+      ci.content,
+      /uses: aziontech\/webkit\/\.github\/workflows\/webkit-consumer-gate\.yml@/
+    )
+    assert.equal(ci.skipIfExists, true)
+    // The stages belong to the gate: the caller must not re-declare them.
+    assert.ok(!/npx eslint/.test(ci.content), 'the caller must not re-implement the lint steps')
+    assert.ok(
+      !/webkit doctor/.test(ci.content),
+      'the caller must not re-implement the wiring stage'
+    )
+    // The `paths:` trap: a filtered trigger + a required check can never merge.
+    assert.ok(!/^\s*paths:/m.test(ci.content), 'the caller trigger must stay unfiltered')
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('the CI workflow passes the package manager the lockfile actually names', () => {
+  for (const [lockfile, expected] of [
+    ['pnpm-lock.yaml', 'pnpm'],
+    ['yarn.lock', 'yarn'],
+    ['package-lock.json', 'npm'],
+    [null, 'pnpm']
+  ]) {
+    const dir = makeProject()
+    try {
+      if (lockfile) writeFileSync(join(dir, lockfile), '')
+      const ci = planInit(dir, {}).find((a) => a.type === 'write' && a.path === CI_WORKFLOW_PATH)
+      assert.match(
+        ci.content,
+        new RegExp(`package-manager: ${expected}`),
+        `wrong package manager for ${lockfile || 'no lockfile'}`
+      )
+    } finally {
+      rmSync(dir, { recursive: true, force: true })
+    }
+  }
+})
+
+test('the CI workflow pins a Node version only when the project has no .nvmrc', () => {
+  // The gate reads .nvmrc by default; without one, setup-node fails before any webkit
+  // check runs — so the caller must carry an explicit version.
+  const bare = makeProject()
+  try {
+    const ci = planInit(bare, {}).find((a) => a.type === 'write' && a.path === CI_WORKFLOW_PATH)
+    assert.match(ci.content, /node-version: '\d+'/)
+  } finally {
+    rmSync(bare, { recursive: true, force: true })
+  }
+
+  const withNvmrc = makeProject()
+  try {
+    writeFileSync(join(withNvmrc, '.nvmrc'), '22\n')
+    const ci = planInit(withNvmrc, {}).find(
+      (a) => a.type === 'write' && a.path === CI_WORKFLOW_PATH
+    )
+    assert.ok(!/node-version:/.test(ci.content), 'must defer to the gate default (.nvmrc)')
+  } finally {
+    rmSync(withNvmrc, { recursive: true, force: true })
+  }
+})
+
+test('planInit omits the CI workflow entirely when ci is false', () => {
+  const dir = makeProject()
+  try {
+    const plan = planInit(dir, { ci: false })
+    assert.ok(!plan.some((a) => a.path === CI_WORKFLOW_PATH), 'no CI action when the user opts out')
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('an existing CI workflow is advised about, never overwritten', () => {
+  const dir = makeProject()
+  try {
+    const target = join(dir, CI_WORKFLOW_PATH)
+    mkdirSync(join(dir, '.github/workflows'), { recursive: true })
+    const original = 'name: mine\n'
+    writeFileSync(target, original)
+    const plan = planInit(dir, {})
+    assert.ok(
+      !plan.some((a) => a.type === 'write' && a.path === CI_WORKFLOW_PATH),
+      'must not plan a write over an existing workflow'
+    )
+    assert.ok(
+      plan.some((a) => a.type === 'advise' && a.message.includes(CI_WORKFLOW_PATH)),
+      'expected advice naming the existing workflow'
+    )
+    applyPlan(dir, plan)
+    assert.equal(readFileSync(target, 'utf8'), original, 'the existing workflow was modified')
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('applying the plan twice leaves the CI workflow untouched', () => {
+  const dir = makeProject()
+  try {
+    applyPlan(dir, planInit(dir, {}))
+    const target = join(dir, CI_WORKFLOW_PATH)
+    assert.ok(existsSync(target), 'first run writes the workflow')
+    const first = readFileSync(target, 'utf8')
+    const results = applyPlan(dir, planInit(dir, {}))
+    assert.equal(readFileSync(target, 'utf8'), first, 'second run must not rewrite it')
+    assert.ok(!results.some((r) => r.result === 'error'), 'a second run must not error')
   } finally {
     rmSync(dir, { recursive: true, force: true })
   }

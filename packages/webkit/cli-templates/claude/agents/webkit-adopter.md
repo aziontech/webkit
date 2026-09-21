@@ -1,6 +1,6 @@
 ---
 name: webkit-adopter
-description: Runs and explains the @aziontech/webkit adoption flow — `npx @aziontech/webkit init`. Sets up deps, lint configs, pre-commit, the webkit MCP, and the Claude Code bundle in this project, idempotently.
+description: Runs and explains the @aziontech/webkit adoption flow — `npx @aziontech/webkit init`. Sets up deps, lint configs, pre-commit, CI, the webkit MCP, and the Claude Code bundle in this project, idempotently.
 scope: general
 ---
 
@@ -28,9 +28,10 @@ Options:
 3. Writes `.stylelintrc.json` (extending `@aziontech/webkit/stylelint-config`, with the `.vue` / `.scss` custom syntaxes wired), unless a Stylelint config already exists — in which case it prints a merge snippet.
 4. Merges the `webkit` server into `.mcp.json`.
 5. Adds a `prepare` script (`husky`) to `package.json` and writes `.husky/pre-commit` to lint on commit. Running the package-manager install runs `prepare`, which activates the hooks.
-6. Copies the Claude Code bundle (rules, the `webkit-usage` skill, agents) into `.claude/` — only files that are missing, never overwriting local edits.
-7. Appends a `@aziontech/webkit` fragment to `CLAUDE.md`, guarded by a marker so it is added once.
-8. If a `src/main.ts` / `src/main.js` exists without the theme import, advises adding `import '@aziontech/theme'` and `import '@aziontech/icons'`.
+6. Writes `.github/workflows/webkit.yml` — a caller of the reusable webkit consumer gate (wiring / canary / adoption / style), unless one already exists. On a TTY `init` asks first; on a repo owned by `aziontech` / `azioncorp` (read from the git remote) it does not ask, because the gate is not optional for what Azion ships. `--no-ci` skips it, `--org <name>` overrides the detection.
+7. Copies the Claude Code bundle (rules, the `webkit-usage` skill, agents) into `.claude/` — only files that are missing, never overwriting local edits.
+8. Appends a `@aziontech/webkit` fragment to `CLAUDE.md`, guarded by a marker so it is added once.
+9. If a `src/main.ts` / `src/main.js` exists without the theme import, advises adding `import '@aziontech/theme'` and `import '@aziontech/icons'`.
 
 ## Idempotency
 

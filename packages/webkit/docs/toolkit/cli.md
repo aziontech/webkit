@@ -12,7 +12,11 @@ It wires everything and then gets out of the way: after setup there are no extra
 
 The plan is computed by reading your project first, then applied without ever clobbering your files — each step either writes something absent, merges/appends behind a marker, patches once behind an idempotency check, or just advises.
 
-On a TTY (and without `--yes`), `init` first asks about the optional pieces — install the icon font? wire the entry imports automatically? — one Y/n question each. Piped/CI runs never prompt: they take the defaults (everything on) minus any `--no-*` flag.
+On a TTY (and without `--yes`), `init` first asks about the optional pieces — install the icon font? wire the entry imports automatically? add the CI workflow? — one Y/n question each. Piped/CI runs never prompt: they take the defaults (everything on) minus any `--no-*` flag.
+
+**The CI question is inferred on an Azion repo.** `init` reads the repo's owner from its git remotes (`.git/config` — no network, no subprocess, and it follows a worktree's `commondir` to the shared config) and, when that owner is **`aziontech`** or **`azioncorp`**, skips the question and writes the workflow: what Azion ships comes out of Azion's orgs, so the gate is not optional there. A fork counts — an internal owner on _any_ remote (a personal `origin` with an `aziontech` `upstream`) is still an Azion repo. Every other repo — community, POCs, personal accounts — keeps the question, which is what keeps webkit usable for exploratory work. `--org <name>` overrides the detection; `--ci` / `--no-ci` override both. When there is no remote at all, `package.json#repository` is the fallback.
+
+The detection is a **hint, not an authorization boundary** (anyone can point a remote at `aziontech`): it decides whether a question is asked, nothing more.
 
 1. **Dependencies** recorded in `package.json` — `@aziontech/webkit`, `@aziontech/theme`, `@aziontech/icons` (unless `--no-icons`), plus dev tooling peers (`eslint`, `stylelint`, `vue-eslint-parser`, `@typescript-eslint/parser`, `postcss-html`, `postcss-scss`, `husky`). The ESLint plugin, Stylelint config, and MCP server all ship inside `@aziontech/webkit` (subpaths + bins), so no separate toolkit packages are added. It does not run an install — do that with your package manager.
 2. **`eslint.config.mjs`** (flat, ESM) wiring the webkit preset — or a merge snippet if an ESLint config already exists.
@@ -20,9 +24,10 @@ On a TTY (and without `--yes`), `init` first asks about the optional pieces — 
 4. **`src/webkit.css`** — the one CSS entry: `@import '@aziontech/theme'` (tokens + Tailwind v4 + fonts) and `@import '@aziontech/webkit/styles'`, which registers webkit's source with Tailwind so its component classes compile. Both resolve by package name — no `../node_modules` path in your CSS (the `@source` ships inside the package and resolves relative to it, so hoisting/workspace layouts can't break it).
 5. **`.mcp.json`** — the `webkit` MCP server merged in (other servers untouched).
 6. **`prepare` script + `.husky/pre-commit`** — lint on commit. The install runs `prepare` (husky), which activates the hooks.
-7. **`.claude/` bundle** — every `rules/*.md`, `skills/*/SKILL.md` and `agents/*.md` template, derived from the templates directory itself (so a new template ships automatically instead of needing a hand-maintained list; anything outside that shape, such as a skill's `references/`, is not shipped, and a test fails if one appears so shipping it is a deliberate decision), copied via the same policy as `sync` (see below): on a fresh project every file is missing, so `init` copies all of them — each stamped with a provenance marker so a later `sync` can tell a pristine copy from one you have edited.
-8. **`CLAUDE.md` fragment** — kept in a fenced block (`<!-- @aziontech/webkit:start -->` … `<!-- @aziontech/webkit:end -->`) that is replaced in place on every `init` run, so template updates reach a project that already ran `init` once. A pre-fence legacy marker (`<!-- @aziontech/webkit -->`) from an older `init` is migrated into the fence automatically; a fragment duplicated at more than one position (however it got that way) is repaired down to a single fenced block.
-9. **Entry wiring** — `import './webkit.css'` and `import '@aziontech/icons'` prepended once to `src/main.*`; skipped when already imported, `--no-entry` prints the imports instead of editing the file.
+7. **`.github/workflows/webkit.yml`** — a thin **caller** of the reusable [consumer gate](./consumer-gate.md) this repo publishes, so the stages (wiring / canary / adoption / style) stay owned by the design system instead of being re-implemented in every consumer. `init` passes the `package-manager` your lockfile names, and pins `node-version` only when the project has no `.nvmrc` for the gate to read. The trigger is deliberately unfiltered (the `paths:` trap — see the gate doc), and the `uses:` ref is `@main`: **pin it to a SHA** once it lands, since `init` has no network to resolve one. Written only when absent — an existing workflow is never touched — and skipped entirely with `--no-ci`. Mark **`webkit-gate`** as the required check.
+8. **`.claude/` bundle** — every `rules/*.md`, `skills/*/SKILL.md` and `agents/*.md` template, derived from the templates directory itself (so a new template ships automatically instead of needing a hand-maintained list; anything outside that shape, such as a skill's `references/`, is not shipped, and a test fails if one appears so shipping it is a deliberate decision), copied via the same policy as `sync` (see below): on a fresh project every file is missing, so `init` copies all of them — each stamped with a provenance marker so a later `sync` can tell a pristine copy from one you have edited.
+9. **`CLAUDE.md` fragment** — kept in a fenced block (`<!-- @aziontech/webkit:start -->` … `<!-- @aziontech/webkit:end -->`) that is replaced in place on every `init` run, so template updates reach a project that already ran `init` once. A pre-fence legacy marker (`<!-- @aziontech/webkit -->`) from an older `init` is migrated into the fence automatically; a fragment duplicated at more than one position (however it got that way) is repaired down to a single fenced block.
+10. **Entry wiring** — `import './webkit.css'` and `import '@aziontech/icons'` prepended once to `src/main.*`; skipped when already imported, `--no-entry` prints the imports instead of editing the file.
 
 Feature-scoped setup is deliberately **not** part of `init`. A component that needs one-time app wiring (e.g. toast: `.use(ToastPlugin)` on `createApp()` — the plugin mounts the region automatically) declares it in its catalog entry's `setup` field, surfaced by the MCP's `get_component` / `get_best_practices` — so it is wired **just-in-time at first use**, by you or your AI, instead of preloading unused code for everyone. `doctor` backstops it mechanically (see below).
 
@@ -36,6 +41,9 @@ Feature-scoped setup is deliberately **not** part of `init`. A component that ne
 | `-y`, `--yes`   | Accept every default; never prompt (CI / scripted runs).        |
 | `--no-icons`    | Skip `@aziontech/icons` (the icon font) and its entry import.   |
 | `--no-entry`    | Do not edit `src/main.*`; print the imports to add instead.     |
+| `--ci`          | Add the CI workflow without asking.                             |
+| `--no-ci`       | Do not add the CI workflow.                                     |
+| `--org <name>`  | Treat the repo as owned by `<name>` (overrides the git remote). |
 
 Unknown flags are rejected (so a typo'd `--dryrun` never becomes a real write run).
 
@@ -140,7 +148,7 @@ Consumers are expected to keep their `.claude/` copies **committed**, and to run
 
 ## CI
 
-Enforcing `doctor`, `sync --check`, `canary`, and `report` in your own CI (instead of running them ad hoc) is a one-line `uses:` away — see [`docs/toolkit/consumer-gate.md`](./consumer-gate.md) for the reusable `workflow_call` gate this repo publishes.
+Enforcing `doctor`, `sync --check`, `canary`, and `report` in your own CI (instead of running them ad hoc) is a one-line `uses:` away — see [`docs/toolkit/consumer-gate.md`](./consumer-gate.md) for the reusable `workflow_call` gate this repo publishes. **`init` writes that caller for you** (step 7 above): it asks first, except on an Azion repo, where the answer is inferred.
 
 ## License
 

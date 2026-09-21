@@ -28,7 +28,7 @@ The MCP server it wires gives your AI the full component catalog (`list_componen
 npm install @aziontech/webkit @aziontech/theme @aziontech/icons
 ```
 
-Then wire the project (lint presets, MCP, pre-commit, agent docs) in one command:
+Then wire the project (lint presets, MCP, pre-commit, CI, agent docs) in one command:
 
 ```bash
 npx @aziontech/webkit init

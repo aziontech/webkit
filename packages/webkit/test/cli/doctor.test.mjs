@@ -165,3 +165,50 @@ test('doctor reports a malformed .mcp.json as a failure, not a crash', () => {
     rmSync(dir, { recursive: true, force: true })
   }
 })
+
+// --- CI workflow ---------------------------------------------------------------
+// OK wherever it exists; WARN only on an Azion repo that has none. A community repo
+// that declined CI at init is never nagged about it.
+
+function withRemote(dir, url) {
+  mkdirSync(join(dir, '.git'), { recursive: true })
+  writeFileSync(join(dir, '.git/config'), `[remote "origin"]\n\turl = ${url}\n`)
+}
+
+test('doctor reports the CI workflow once init has written it', () => {
+  const dir = makeProject()
+  try {
+    applyPlan(dir, planInit(dir, {}))
+    assert.equal(statusOf(planDoctor(dir), 'ci workflow'), 'ok')
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('doctor warns about a missing CI workflow on an Azion repo', () => {
+  const dir = makeProject()
+  try {
+    applyPlan(dir, planInit(dir, { ci: false }))
+    withRemote(dir, 'git@github.com:aziontech/console.git')
+    const report = planDoctor(dir)
+    assert.equal(statusOf(report, 'ci workflow'), 'warn')
+    assert.match(report.find((c) => c.check === 'ci workflow').detail, /Azion repo/)
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('doctor stays silent about CI on a non-Azion repo that opted out', () => {
+  const dir = makeProject()
+  try {
+    applyPlan(dir, planInit(dir, { ci: false }))
+    withRemote(dir, 'git@github.com:someone/poc.git')
+    assert.equal(
+      planDoctor(dir).some((c) => c.check === 'ci workflow'),
+      false,
+      'a community repo must not be nagged about CI it declined'
+    )
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})

@@ -68,6 +68,12 @@ toggling a stage's blocking input in `with:` never requires touching branch prot
 
 ## Usage
 
+**`npx @aziontech/webkit init` writes this caller for you** — at `.github/workflows/webkit.yml`,
+with `package-manager` taken from your lockfile and `node-version` pinned only when you have
+no `.nvmrc`. On a repo owned by **`aziontech`** or **`azioncorp`** it does not even ask (the
+gate is not optional for what Azion ships); every other repo gets a Y/n question, and `--no-ci`
+opts out. See [`cli.md`](./cli.md). Written by hand, the caller is:
+
 ```yaml
 jobs:
   webkit:
