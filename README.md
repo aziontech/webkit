@@ -99,28 +99,6 @@ Once the project is wired, import components by path:
 </template>
 ```
 
-### Wiring it by hand
-
-If you would rather not run `init`, wire the runtime half by hand — the lint presets, the MCP server and the commit hook are not set up this way:
-
-```bash
-pnpm add @aziontech/webkit @aziontech/theme @aziontech/icons
-```
-
-```css
-/* src/webkit.css */
-@import '@aziontech/theme'; /* design tokens, Tailwind, fonts */
-@import '@aziontech/webkit/styles'; /* registers webkit's source with Tailwind */
-```
-
-```js
-// src/main.js|ts
-import './webkit.css'
-import '@aziontech/icons'
-```
-
-Do not skip `@aziontech/webkit/styles`: without it Tailwind never sees webkit's own source and the components render unstyled. `npx @aziontech/webkit doctor` reports that as a `FAIL`.
-
 **Peer requirements**
 
 - Vue `^3.5.x`
