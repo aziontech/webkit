@@ -58,6 +58,7 @@ import RealTimeEvents from '@console/pages/observe/RealTimeEvents.vue'
 import RealTimeMetrics from '@console/pages/observe/RealTimeMetrics.vue'
 import RealTimePurge from '@console/pages/observe/RealTimePurge.vue'
 import CreateResource from '@console/pages/resources/CreateResource.vue'
+import Drop from '@console/pages/drop/Drop.vue'
 import CreationCenter from '@console/pages/resources/CreationCenter.vue'
 import ResourceSettings from '@console/pages/resources/ResourceSettings.vue'
 import Certificates from '@console/pages/secure/Certificates.vue'
@@ -238,6 +239,9 @@ export const consoleRoutes = [
   // between products is only what they are asked in (see ProductEmptyStates.vue).
   { path: '/empty-states', name: 'empty-states', component: ProductEmptyStates },
   { path: '/create', name: 'create', component: CreationCenter },
+  // One surface, one gesture — a drop is the only way in, and everything after it is the
+  // flow /create already hands a dropped project to (`/deploy?upload=…`).
+  { path: '/drop', name: 'drop', component: Drop },
   // The create page of every first-level resource that did not have one — Domains,
   // Functions, Connectors, Custom Pages, Firewall, WAF Rules, Certificate Manager,
   // Network Lists, Data Stream and Object Storage. Ten routes, generated from the one
