@@ -30,12 +30,22 @@ export default {
     const STYLE_SIGNAL =
       /[:;{}]|--|\[#|\b(?:bg|text|border|ring|outline|fill|stroke|divide|placeholder|caret|accent|from|via|to|shadow|decoration)-|\b(?:rgba?|hsla?|var|color|background)\b/
     const FULL_HEX = /#[0-9a-fA-F]{6}(?:[0-9a-fA-F]{2})?\b/
+    // A URL fragment can be a hex run without being a color: the first group of a UUID
+    // (`api.azion.com/#75d2b32f-fb8a-…`) is 8 hex digits and passes FULL_HEX. Blank out
+    // UUID-shaped runs and any `/#hex` fragment before the hex-color check sees the text;
+    // a real color never sits in either position.
+    const URL_HEX_FRAGMENT =
+      /#?[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\b|\/#[0-9a-fA-F]{3,8}\b/g
 
     function scan(node, text) {
       if (typeof text !== 'string' || !text) return
       for (const rule of rules) {
-        if (rule.id === 'hex-color' && !FULL_HEX.test(text) && !STYLE_SIGNAL.test(text)) continue
-        const m = text.match(rule.re)
+        let subject = text
+        if (rule.id === 'hex-color') {
+          subject = text.replace(URL_HEX_FRAGMENT, '')
+          if (!FULL_HEX.test(subject) && !STYLE_SIGNAL.test(subject)) continue
+        }
+        const m = subject.match(rule.re)
         if (m) {
           context.report({
             node,
