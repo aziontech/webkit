@@ -33,3 +33,37 @@ export function routeActivation(event) {
   event.preventDefault()
   return true
 }
+
+// A DESTINATION INSIDE A TAB ARRIVES BEFORE THE TAB DOES.
+//
+// "Manage Domains" on a summary card lands on the Settings tab, where Domains is the
+// third of four sections — so routing there alone leaves the reader at General, reading
+// the wrong thing. The section already carries an `id` (page/Section.vue renders one for
+// every `anchor` section), so the destination is reachable; what is not is the TIMING.
+// The panel holding it mounts after the route change, and on the application page it
+// mounts after an `out-in` transition has finished leaving, so a `nextTick` scroll finds
+// nothing. This waits for the element across frames instead of guessing how many.
+const FRAME_BUDGET = 60
+
+/**
+ * Scrolls an anchored section into view once it exists.
+ *
+ * @param {string} id the section's anchor id, as `page/Section.vue` derives it from the title
+ * @returns {Promise<boolean>} true once it was scrolled to, false if it never appeared
+ */
+export function focusSection(id) {
+  return new Promise((resolve) => {
+    let frames = 0
+    const look = () => {
+      const target = globalThis.document?.getElementById(id)
+      if (target) {
+        const reduced = globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+        target.scrollIntoView({ block: 'start', behavior: reduced ? 'auto' : 'smooth' })
+        return resolve(true)
+      }
+      if (++frames > FRAME_BUDGET) return resolve(false)
+      globalThis.requestAnimationFrame(look)
+    }
+    globalThis.requestAnimationFrame(look)
+  })
+}

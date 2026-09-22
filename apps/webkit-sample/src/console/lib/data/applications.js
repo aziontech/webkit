@@ -76,8 +76,11 @@ import { authorAt, emailOf } from '@shared/lib/people'
  * status a list shows is the newest deployment's (see the note above).
  *
  * `domainName` is the hostname Azion generates and always answers on; `customDomains` are
- * the reader's own addresses bound to it — `{ id, domain, certificate }[]`, `certificate:
- * ''` meaning the free platform one — and the first of them is where traffic arrives.
+ * the reader's own addresses bound to it — `{ id, domain, environment, certificate }[]`,
+ * `certificate: ''` meaning the free platform one — and the first of them is where traffic
+ * arrives. A domain names the ENVIRONMENT it answers in for the same reason a workload's
+ * does (./environments.js): an application is deployed through a workload, and it is the
+ * environment that decides which Deployment Settings can serve it.
  */
 export const APPLICATIONS = [
   // The real reference repo, down to its id, preset and domain (azion/azion.json).
@@ -114,8 +117,13 @@ export const APPLICATIONS = [
     branch: 'main',
     domainName: 'w2e3r4t5y6.azion.run',
     customDomains: [
-      { id: 'domain-edgeflow-www', domain: 'www.edgeflow.com', certificate: 'cert-8801' },
-      { id: 'domain-edgeflow-apex', domain: 'edgeflow.com', certificate: '' }
+      {
+        id: 'domain-edgeflow-www',
+        domain: 'www.edgeflow.com',
+        environment: 'Production',
+        certificate: 'cert-8801'
+      },
+      { id: 'domain-edgeflow-apex', domain: 'edgeflow.com', environment: 'Stage', certificate: '' }
     ],
     modifiedAt: daysAgo(4)
   },
@@ -128,7 +136,12 @@ export const APPLICATIONS = [
     branch: '',
     domainName: 'u7i8o9p0a1.azion.run',
     customDomains: [
-      { id: 'domain-edgeflow-docs', domain: 'docs.edgeflow.com', certificate: 'cert-8801' }
+      {
+        id: 'domain-edgeflow-docs',
+        domain: 'docs.edgeflow.com',
+        environment: 'Production',
+        certificate: 'cert-8801'
+      }
     ],
     modifiedAt: daysAgo(6)
   },
@@ -197,7 +210,14 @@ export const APPLICATIONS = [
     repository: 'shopco/ecommerce-v2',
     branch: 'develop',
     domainName: 'y6u7i8o9p0.azion.run',
-    customDomains: [{ id: 'domain-shopco-shop', domain: 'shop.shopco.com', certificate: '' }],
+    customDomains: [
+      {
+        id: 'domain-shopco-shop',
+        domain: 'shop.shopco.com',
+        environment: 'Production',
+        certificate: ''
+      }
+    ],
     modifiedAt: daysAgo(250)
   },
   {

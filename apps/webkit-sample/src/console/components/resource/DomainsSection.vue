@@ -8,7 +8,7 @@
   // across two surfaces: the address and the environment were answered in the drawer, and
   // how it is SERVED was answered here, in a control with no label, no hint, and no way to
   // say why one certificate is the right one. It is a field on the form now
-  // (./AddEnvironmentDrawer.vue), defaulted from the address, and this table reports it
+  // (./AddDomainDrawer.vue), defaulted from the address, and this table reports it
   // like every other fact in the row.
   //
   // So the row's controls are the two acts a list row owns — open it, or remove it — in
@@ -40,9 +40,9 @@
   const DOMAIN_COLUMN = { flex: '2 1 0' }
   const ENVIRONMENT_COLUMN = { flex: `0 0 ${TAG_COLUMN_WIDE}px` }
   const POLICY_COLUMN = { flex: `0 0 ${TAG_COLUMN}px` }
-  // The certificate is a NAME now rather than a Select, so it no longer needs the width a
-  // trigger did — but it is still the longest of the bounded columns, and a name that
-  // truncates to `edgeflow.com wild…` is the one fact here nobody can reconstruct.
+  // The certificate reports as a tag now rather than a Select, so it no longer needs the
+  // width a trigger did — but it is still the longest of the bounded columns, and a name
+  // that truncates to `edgeflow.com wild…` is the one fact here nobody can reconstruct.
   const CERTIFICATE_COLUMN = { flex: '0 0 200px' }
 
   const props = defineProps({
@@ -105,24 +105,33 @@
                 :style="DOMAIN_COLUMN"
                 >{{ entry.domain }}</Table.Cell
               >
-              <Table.Cell :style="ENVIRONMENT_COLUMN">{{ entry.environment }}</Table.Cell>
+              <Table.Cell :style="ENVIRONMENT_COLUMN">
+                <Tag
+                  v-if="entry.environment"
+                  severity="secondary"
+                  size="small"
+                  rounded
+                  icon="ai ai-layers"
+                  :label="entry.environment"
+                />
+              </Table.Cell>
               <Table.Cell :style="POLICY_COLUMN">
                 <Tag
                   v-if="entry.environment"
                   severity="secondary"
                   size="small"
+                  rounded
                   :label="policyLabel(entry.environment)"
                 />
               </Table.Cell>
-              <!-- The generated row's certificate is MUTED, the rest are not: it is the
-                   one value on this table nobody chose and nobody can change. -->
               <Table.Cell :style="CERTIFICATE_COLUMN">
-                <span
-                  class="min-w-0 truncate"
-                  :class="entry.generated ? 'text-(--text-muted)' : 'text-(--text-default)'"
-                >
-                  {{ certificateLabel(entry.certificate) }}
-                </span>
+                <Tag
+                  severity="secondary"
+                  size="small"
+                  rounded
+                  icon="pi pi-verified"
+                  :label="certificateLabel(entry.certificate)"
+                />
               </Table.Cell>
               <Table.Cell kind="action">
                 <Dropdown

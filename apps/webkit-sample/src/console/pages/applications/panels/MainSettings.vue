@@ -19,13 +19,20 @@
   import Item from '@aziontech/webkit/item'
   import Switch from '@aziontech/webkit/switch'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { reactive, ref } from 'vue'
+  import { computed, reactive, ref, watch } from 'vue'
+  import { useRoute, useRouter } from 'vue-router'
 
   import SettingsSaveBar from '../../../components/form/SettingsSaveBar.vue'
+  import ConfirmDialog from '../../../components/list/ConfirmDialog.vue'
   import PageHeading from '../../../components/page/PageHeading.vue'
   import Section from '../../../components/page/Section.vue'
+  import AddDomainDrawer from '../../../components/resource/AddDomainDrawer.vue'
+  import DomainsSection from '../../../components/resource/DomainsSection.vue'
+  import { focusSection } from '../../../lib/behavior/anchor-nav'
   import { saveGroup, useBaseline } from '../../../lib/behavior/forms'
   import { useTabDirty } from '../../../lib/behavior/tab-dirty'
+  import { applicationDeploymentRows } from '../../../lib/data/deployment-history'
+  import { domainsFor, saveDomains } from '../../../lib/state/application-domains'
 
   const props = defineProps({
     // The application being configured — `{ id, name }`.
@@ -47,6 +54,9 @@
     // (../../../lib/data/applications.js). Read rather than hard-coded, so the retired
     // application opens with the switch it actually has.
     active: props.application.active !== false,
+    // The reader's own addresses, edited here and committed with the rest of the page
+    // (../../../lib/state/application-domains.js).
+    domains: domainsFor(props.application.id, props.application).map((entry) => ({ ...entry })),
     modules: {
       application_accelerator: true,
       cache: true,
@@ -67,6 +77,7 @@
 
   const save = () =>
     saveGroup(saving, 'Settings saved.', () => {
+      saveDomains(props.application.id, settings.domains)
       commit()
       snapshot.value = JSON.parse(JSON.stringify(settings))
     })
@@ -86,6 +97,113 @@
     'main-settings',
     { dirty, saving },
     { label: 'Application settings changed.', save, discard }
+  )
+
+  // --- Domains --------------------------------------------------------------
+  // The drawer STAGES; the page's save bar COMMITS. A domain is a settings field like the
+  // name and the switch beside it, so its add, its edit and its removal are pending edits
+  // with one Save and one Discard — the same split the workload's domains have
+  // (../../workloads/WorkloadDetail.vue).
+  const route = useRoute()
+  const router = useRouter()
+
+  const domainOpen = ref(false)
+  const editingDomain = ref(null)
+  const removingDomainId = ref('')
+  const removeDomainOpen = ref(false)
+
+  // WHERE THIS APPLICATION ALREADY PUBLISHES. An application is deployed through a
+  // workload, so the environments it answers in are the ones its deployments landed in —
+  // read rather than stored, which is what lets the drawer say a domain is what brings a
+  // new one (../../../components/resource/AddDomainDrawer.vue).
+  const environments = computed(() => {
+    const names = new Set(
+      applicationDeploymentRows(props.application.id, props.application.name)
+        .map((row) => row.environment)
+        .filter(Boolean)
+    )
+    return [...names].map((name) => ({ name }))
+  })
+
+  // The generated hostname first: it is the domain the platform created with the
+  // application, it cannot be edited or removed, and the table says so by giving it no
+  // menu. Every address after it is one the reader bound, in the environment they chose.
+  const domainRows = computed(() => [
+    {
+      id: 'generated',
+      domain: props.application.domainName ?? '',
+      environment: environments.value[0]?.name ?? '',
+      certificate: '',
+      generated: true
+    },
+    ...settings.domains.map((entry) => ({ ...entry, generated: false }))
+  ])
+
+  const openDomain = () => {
+    editingDomain.value = null
+    domainOpen.value = true
+  }
+
+  // The row is passed by VALUE — a live reference would let the form's own reset write
+  // through to the table behind it.
+  const editDomain = (id) => {
+    const entry = settings.domains.find((domain) => domain.id === id)
+    if (!entry) return
+    editingDomain.value = { ...entry }
+    domainOpen.value = true
+  }
+
+  // An upsert keyed on the row's own id, so an edit replaces in place instead of
+  // appending a second copy below the one the reader was just reading.
+  const stageDomain = (entry) => {
+    const existing = settings.domains.some((domain) => domain.id === entry.id)
+    settings.domains = existing
+      ? settings.domains.map((domain) => (domain.id === entry.id ? entry : domain))
+      : [...settings.domains, entry]
+    editingDomain.value = null
+  }
+
+  const removingDomain = computed(() =>
+    settings.domains.find((domain) => domain.id === removingDomainId.value)
+  )
+
+  const removeDomain = (id) => {
+    removingDomainId.value = id
+    removeDomainOpen.value = true
+  }
+
+  const confirmRemoveDomain = () => {
+    settings.domains = settings.domains.filter((domain) => domain.id !== removingDomainId.value)
+    removingDomainId.value = ''
+  }
+
+  // The Overview's own control lands here with the drawer already open, and the flag is
+  // consumed so a reload of this tab does not reopen it (../Overview.vue).
+  watch(
+    () => route.query.add,
+    (value) => {
+      if (value !== 'domain') return
+      openDomain()
+      const query = { ...route.query }
+      delete query.add
+      router.replace({ query })
+    },
+    { immediate: true }
+  )
+
+  // The summary's "Manage Domains" lands here with nothing open — the section is what it
+  // asked for, so the page arrives scrolled to it. Consumed like the flag above, and for
+  // the same reason: a reload should land where a reload lands.
+  watch(
+    () => route.query.focus,
+    (value) => {
+      if (value !== 'domains') return
+      focusSection('domains')
+      const query = { ...route.query }
+      delete query.focus
+      router.replace({ query })
+    },
+    { immediate: true }
   )
 
   // The module catalog. `defaultModules` ship on every plan and are all
@@ -292,6 +410,25 @@
             </template>
           </CardBox>
         </Section>
+        <!-- LAST on the page: the addresses this application answers on. It is the
+             workload's domains band (../../workloads/WorkloadDetail.vue) — one drawer for
+             add and edit, a confirmation for the removal, and the page's own bar as the
+             commit. -->
+        <Section
+          stacked
+          anchor
+          :divided="false"
+          title="Domains"
+          hint="The addresses visitors reach this application at, the environment each one answers in, and the certificate it is served with."
+        >
+          <DomainsSection
+            :domains="domainRows"
+            :disabled="saving"
+            @add="openDomain"
+            @edit="editDomain"
+            @remove="removeDomain"
+          />
+        </Section>
       </fieldset>
     </div>
 
@@ -307,6 +444,27 @@
       hint="Saving publishes them on the next deployment."
       @save="save"
       @discard="discard"
+    />
+    <!-- ADD / EDIT A DOMAIN — the SAME form the workload uses, because it is the same act:
+         a domain puts an environment on the resource it lands on, and an application is
+         deployed through a workload (../../../components/resource/AddDomainDrawer.vue). -->
+    <AddDomainDrawer
+      v-model:open="domainOpen"
+      resource="application"
+      intent="domain"
+      :environments="environments"
+      :domain="editingDomain"
+      @save="stageDomain"
+    />
+
+    <!-- The removal is a pending edit until the bar commits it, so Discard is already
+         the undo — a confirmation, not the type-the-name guard. -->
+    <ConfirmDialog
+      v-model:open="removeDomainOpen"
+      title="Remove domain"
+      :description="`${removingDomain?.domain ?? 'This domain'} stops answering for this application once you save. Traffic already pointed at it gets no response.`"
+      confirm-label="Remove Domain"
+      @confirm="confirmRemoveDomain"
     />
   </form>
 </template>

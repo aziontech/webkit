@@ -42,9 +42,12 @@
   import CardBox from '@aziontech/webkit/card-box'
   import InputText from '@aziontech/webkit/input-text'
   import Item from '@aziontech/webkit/item'
+  import Message from '@aziontech/webkit/message'
+  import Select from '@aziontech/webkit/select'
   import Switch from '@aziontech/webkit/switch'
   import Tag from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import { computed, watch } from 'vue'
 
   import FirewallBinding from '../../../components/firewall/FirewallBinding.vue'
   import FieldStack from '../../../components/form/FieldStack.vue'
@@ -55,8 +58,15 @@
     DEFAULT_MODULES,
     SUBSCRIPTION_MODULES
   } from '../../../lib/data/application-modules'
+  import {
+    certificateForDomain,
+    domainCertificateLabel,
+    domainCertificateOptions
+  } from '../../../lib/data/certificates'
+  import { deploymentPolicyLabel, environmentNameOptions } from '../../../lib/data/environments'
   import { existingFirewallOptions } from '../../../lib/data/firewalls'
   import { AZION_COMMANDS } from '../../../lib/data/frameworks'
+  import { AZION_DOMAIN_SUFFIX } from '../../../lib/data/provisioning'
   import { useCreateForm } from './form-context'
 
   const props = defineProps({
@@ -69,6 +79,53 @@
 
   // The request body and the commit's validation messages, shared from the wizard.
   const { form, errors } = useCreateForm()
+
+  // --- The address -------------------------------------------------------
+  // Azion mints the free hostname for every application, so that one is STATED, not asked.
+  // What is asked is the reader's own address and the environment it answers in — the same
+  // three answers the Add Domain drawer collects
+  // (../../../components/resource/AddDomainDrawer.vue), so binding at create and binding
+  // later cannot become two different forms.
+  const environmentOptions = environmentNameOptions
+  const environmentLabel = (value) =>
+    environmentOptions.value.find((option) => option.value === value)?.label ?? ''
+
+  const certificateOptions = computed(() => domainCertificateOptions())
+
+  const host = computed(() => form.domainHost.trim().toLowerCase())
+
+  // The certificate follows the address while the reader has not answered it themselves:
+  // an account holding `*.edgeflow.com` has already decided what serves `api.edgeflow.com`.
+  let certificateTouched = false
+  watch(host, (next) => {
+    if (certificateTouched) return
+    form.domainCertificate = certificateForDomain(next)
+  })
+
+  const onCertificate = (value) => {
+    certificateTouched = true
+    form.domainCertificate = value
+  }
+
+  const certificateHint = computed(() => {
+    if (!form.domainCertificate) {
+      return 'Served by the free Azion certificate, issued and renewed by the platform.'
+    }
+    const name = domainCertificateLabel(form.domainCertificate)
+    return certificateTouched
+      ? `Served with ${name}.`
+      : `${name} already covers this address, so it is selected. Change it if another one should serve it.`
+  })
+
+  const chosenEnvironment = computed(() =>
+    environmentOptions.value.find((option) => option.value === form.domainEnvironment)
+  )
+
+  const environmentHint = computed(() =>
+    chosenEnvironment.value
+      ? `${chosenEnvironment.value.label} publishes with the Deployment Settings set to ${deploymentPolicyLabel(chosenEnvironment.value.deploymentPolicy)}.`
+      : 'Where this domain answers. An environment decides which Deployment Settings can serve it.'
+  )
 
   const COMMANDS = [
     {
@@ -184,6 +241,113 @@
               />
             </template>
           </FieldStack>
+        </div>
+      </template>
+    </CardBox>
+
+    <!-- THE ADDRESS. The free Azion hostname is created with every application, so this
+         card states it rather than asking for it; what it asks is the reader's OWN
+         address, and the environment it answers in. Optional — an application with no
+         custom domain still answers, and Settings is where the rest are bound
+         (../panels/MainSettings.vue). -->
+    <CardBox
+      class="mt-(--layout-section-gap)"
+      :padded="false"
+      title="Domain"
+    >
+      <template #content>
+        <div class="flex flex-col gap-(--spacing-lg) p-(--spacing-md)">
+          <Message
+            severity="info"
+            :label="`A free ${AZION_DOMAIN_SUFFIX.replace(/^\./, '')} domain is created with this application and always answers on it. Add one of your own to have visitors reach it at a name you own.`"
+          />
+
+          <FieldStack
+            label="Custom domain"
+            hint="The hostname that points at this application. Add its DNS record once the application exists — the deploy does not wait on it."
+            description="A full hostname, like www.example.com. Leave it empty to bind one later."
+          >
+            <template #default="{ controlId, describedBy }">
+              <InputText
+                :id="controlId"
+                v-model="form.domainHost"
+                size="large"
+                class="w-full"
+                placeholder="www.example.com"
+                autocomplete="off"
+                :disabled="disabled"
+                :aria-describedby="describedBy"
+              />
+            </template>
+          </FieldStack>
+
+          <!-- ASKED ONLY ONCE THERE IS AN ADDRESS. A domain answers in an environment, so
+               these two belong to the hostname above and mean nothing without it. -->
+          <template v-if="host">
+            <FieldStack
+              label="Environment"
+              required
+              :description="environmentHint"
+              :message="errors.domainEnvironment"
+              message-kind="required"
+            >
+              <template #default="{ controlId, describedBy }">
+                <Select
+                  v-model="form.domainEnvironment"
+                  size="large"
+                  class="w-full"
+                  placeholder="Select an environment"
+                  :disabled="disabled"
+                  :invalid="!!errors.domainEnvironment"
+                  :display-value="environmentLabel"
+                >
+                  <Select.Trigger
+                    :id="controlId"
+                    :aria-describedby="describedBy"
+                  />
+                  <Select.Content>
+                    <Select.Option
+                      v-for="option in environmentOptions"
+                      :key="option.value"
+                      :value="option.value"
+                    >
+                      {{ option.label }}
+                    </Select.Option>
+                  </Select.Content>
+                </Select>
+              </template>
+            </FieldStack>
+
+            <FieldStack
+              label="Certificate"
+              :description="certificateHint"
+            >
+              <template #default="{ controlId, describedBy }">
+                <Select
+                  :model-value="form.domainCertificate"
+                  size="large"
+                  class="w-full"
+                  :disabled="disabled"
+                  :display-value="domainCertificateLabel"
+                  @update:model-value="onCertificate"
+                >
+                  <Select.Trigger
+                    :id="controlId"
+                    :aria-describedby="describedBy"
+                  />
+                  <Select.Content>
+                    <Select.Option
+                      v-for="option in certificateOptions"
+                      :key="option.value"
+                      :value="option.value"
+                    >
+                      {{ option.label }}
+                    </Select.Option>
+                  </Select.Content>
+                </Select>
+              </template>
+            </FieldStack>
+          </template>
         </div>
       </template>
     </CardBox>

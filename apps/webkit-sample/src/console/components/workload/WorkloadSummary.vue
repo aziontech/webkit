@@ -42,7 +42,9 @@
   import CardBox from '@aziontech/webkit/card-box'
   import CopyButton from '@aziontech/webkit/copy-button'
   import Dropdown from '@aziontech/webkit/dropdown'
+  import IconButton from '@aziontech/webkit/icon-button'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
+  import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { formatShortDate } from '@shared/lib/dates'
   import { computed } from 'vue'
@@ -72,12 +74,34 @@
   // Visit is the card's own action, so the card only says it was pressed — the PAGE owns
   // what opening the workload does, exactly as it did while the button lived in the tab
   // bar. Nothing about "open this address" belongs to a summary component.
-  const emit = defineEmits(['visit', 'add-domain', 'add-environment'])
+  const emit = defineEmits(['visit', 'add-domain', 'add-environment', 'manage-domains', 'settings'])
 
   // The hostname the workload is being READ on. The Environment Select re-points it per
   // environment, so the block takes the domain it is handed rather than reaching for
   // `workload.domains[0]` — the two disagree the moment the reader picks Stage.
   const domain = computed(() => props.workload.domain ?? '')
+  const domainUrl = computed(() => (domain.value ? `https://${domain.value}` : ''))
+
+  // Copying is silent by nature, so it toasts — the same confirmation every other copy in
+  // this console gives. What travels is the URL, not the bare hostname: the reader's next
+  // move with it is a browser or a curl, and both want the scheme.
+  const copyUrl = async () => {
+    try {
+      await globalThis.navigator?.clipboard?.writeText(domainUrl.value)
+      toast.success('URL copied.')
+    } catch {
+      toast.error('Could not copy the URL.')
+    }
+  }
+
+  // The strip's overflow. Copying is the card's own act; the other two are the PAGE's
+  // destinations, exactly as Visit is — a summary does not know what tab its settings
+  // live on.
+  const onAction = (value) => {
+    if (value === 'copy-url') return copyUrl()
+    if (value === 'manage-domains') return emit('manage-domains')
+    if (value === 'settings') return emit('settings')
+  }
 
   // Every Azion hostname on the workload, primary first — what the "+N" popover lists.
   // A record minted by a create carries exactly one; a seeded row carries its aliases.
@@ -189,12 +213,6 @@
             :domains="domains"
             :count="aliasCount"
           />
-          <CopyButton
-            kind="outlined"
-            :value="domain"
-            aria-label="Copy workload domain"
-            class="shrink-0"
-          />
         </div>
 
         <!-- THE STRIP'S RIGHT END IS ACTIONS, and there is exactly one. The status and the
@@ -202,13 +220,19 @@
            into the fact row where they are captioned like every other fact — which is what
            left this end reading as what it is.
 
-           AN OVERFLOW USED TO CLOSE THIS ROW — an ellipsis carrying Clone and Delete,
-           picked up from the Workloads list row. Delete lives in the Settings tab's Danger
-           Zone now, where every destructive act in this console is read with the sentence
-           that says what it costs; a menu that has to be opened to find out it holds a
-           delete is the wrong place for the one action a workload cannot take back. Clone
-           went with it rather than being given a home of its own: it is a list act, on the
-           row, where the reader is choosing WHICH workload.
+           THE OVERFLOW CLOSES THE ROW, and what it holds is the address's own menu:
+           Copy URL, Manage Domains, Settings. Copying used to be a boxed CopyButton beside
+           the hostname — a permanent control for a once-in-a-while act, sitting between the
+           address and the "+N" that belongs to it. The other two are where a reader goes
+           NEXT from an address, and both were reachable only by finding the right tab.
+
+           IT DOES NOT HOLD CLONE OR DELETE, which it once did, picked up from the Workloads
+           list row. Delete lives in the Settings tab's Danger Zone, where every destructive
+           act in this console is read with the sentence that says what it costs; a menu that
+           has to be opened to find out it holds a delete is the wrong place for the one
+           action a workload cannot take back. Clone went with it rather than being given a
+           home of its own: it is a list act, on the row, where the reader is choosing WHICH
+           workload.
 
            VISIT LIVES HERE, not in the page's tab bar. It opens the address this card is
            about, so it belongs beside the address rather than up in the row of page-level
@@ -242,7 +266,7 @@
                answered on, and a link the platform makes itself. An environment is an
                account record (../../lib/data/environments.js), and it reaches a workload
                because a DOMAIN on it answers there. So the row keeps its name and opens
-               the form that does that (../workload/AddEnvironmentDrawer.vue): the address,
+               the form that does that (../resource/AddDomainDrawer.vue): the address,
                then the environment it answers in — an existing one, or a new one made in a
                second drawer without leaving the form.
 
@@ -303,6 +327,61 @@
               </Dropdown.Group>
             </Dropdown>
           </Tooltip>
+
+          <Dropdown
+            placement="bottom-end"
+            @select="(event, value) => onAction(value)"
+          >
+            <Dropdown.Trigger>
+              <Tooltip text="Workload actions">
+                <IconButton
+                  icon="pi pi-ellipsis-h"
+                  kind="outlined"
+                  size="medium"
+                  aria-label="Workload actions"
+                />
+              </Tooltip>
+            </Dropdown.Trigger>
+
+            <Dropdown.Group>
+              <Dropdown.Option
+                value="copy-url"
+                label="Copy URL"
+              >
+                <template #left>
+                  <i
+                    class="pi pi-copy"
+                    aria-hidden="true"
+                  />
+                </template>
+              </Dropdown.Option>
+            </Dropdown.Group>
+
+            <Dropdown.Group>
+              <Dropdown.Option
+                value="manage-domains"
+                label="Manage Domains"
+              >
+                <template #left>
+                  <i
+                    class="ai ai-domains"
+                    aria-hidden="true"
+                  />
+                </template>
+              </Dropdown.Option>
+              <Dropdown.Option
+                value="settings"
+                label="Settings"
+              >
+                <template #left>
+                  <i
+                    class="pi pi-cog"
+                    aria-hidden="true"
+                  />
+                </template>
+              </Dropdown.Option>
+            </Dropdown.Group>
+          </Dropdown>
         </div>
       </SummaryBand>
 

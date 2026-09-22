@@ -51,7 +51,7 @@
   defineProps({
     /**
      * This drawer is the SECOND in a stack — opened over another drawer rather than over
-     * the page (../workload/AddEnvironmentDrawer.vue), instead of standing on its own on
+     * the page (../resource/AddDomainDrawer.vue), instead of standing on its own on
      * the Environments page.
      *
      * One fact, two consequences, so it is one prop: it goes NARROW (`small`, 384px,

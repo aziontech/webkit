@@ -1,12 +1,12 @@
 <script setup>
   import { toast } from '@aziontech/webkit/toast'
-  import { computed, ref, watch } from 'vue'
+  import { computed } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
-  import AddDomainDrawer from '../../../components/application/AddDomainDrawer.vue'
   import ApplicationSummary from '../../../components/application/ApplicationSummary.vue'
   import GetStarted from '../../../components/application/GetStarted.vue'
   import { latestApplicationDeployment } from '../../../lib/data/deployment-history'
+  import { domainsFor } from '../../../lib/state/application-domains'
 
   const props = defineProps({
     /** The record this page is about (../../../lib/data/applications.js). */
@@ -29,29 +29,28 @@
   // and this is the page that says so — so the commands belong under the card that says it.
   const isCli = computed(() => !props.application.repository)
 
-  // Page-local, like the workload's own domains (../../workloads/WorkloadDetail.vue).
-  const customDomains = ref([...(props.application.customDomains ?? [])])
-  const addDomainOpen = ref(false)
-
-  watch(
-    () => props.application.id,
-    () => {
-      customDomains.value = [...(props.application.customDomains ?? [])]
-    }
-  )
-
-  const boundDomains = computed(() => customDomains.value.map((entry) => entry.domain))
-
-  const onDomainSaved = (entry) => {
-    customDomains.value = [...customDomains.value, entry]
-    toast.success(`${entry.domain} is bound to this application.`, {
-      description: 'Point its DNS at Azion and it answers as soon as the record propagates.'
-    })
-  }
+  // The SAVED list, from the store the Settings tab commits into — adding, editing and
+  // removing a domain are pending edits on that tab, and this card reports what was
+  // committed (../../../lib/state/application-domains.js).
+  const customDomains = computed(() => domainsFor(props.application.id, props.application))
 
   const visit = () => toast.info('Opening the application in a new tab.')
 
   const goToBuild = () => router.replace({ query: { ...route.query, tab: 'build' } })
+
+  // The domains live on Settings, where they can be edited and removed as well as added —
+  // so the card's control takes the reader there and opens the drawer, rather than growing
+  // a second surface that binds a domain the tab cannot then undo.
+  const addDomain = () =>
+    router.replace({ query: { ...route.query, tab: 'main-settings', add: 'domain' } })
+
+  // Same destination as the add, without the drawer: the Settings tab, landed on the
+  // Domains section rather than at the top of General. `focus` is consumed there, so a
+  // reload of that tab does not scroll the reader somewhere they did not ask for.
+  const manageDomains = () =>
+    router.replace({ query: { ...route.query, tab: 'main-settings', focus: 'domains' } })
+
+  const openSettings = () => router.replace({ query: { ...route.query, tab: 'main-settings' } })
 </script>
 
 <template>
@@ -66,7 +65,9 @@
         :email="userEmail"
         @visit="visit"
         @connect-repository="goToBuild"
-        @add-domain="addDomainOpen = true"
+        @add-domain="addDomain"
+        @manage-domains="manageDomains"
+        @settings="openSettings"
       />
 
       <GetStarted
@@ -74,12 +75,5 @@
         :name="application.name"
       />
     </section>
-
-    <AddDomainDrawer
-      v-model:open="addDomainOpen"
-      :generated-domain="application.domainName"
-      :bound-domains="boundDomains"
-      @save="onDomainSaved"
-    />
   </div>
 </template>

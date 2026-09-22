@@ -131,7 +131,7 @@
       class="flex flex-col gap-(--spacing-md) px-(--spacing-xs) md:flex-row md:items-start md:justify-between"
     >
       <div
-        v-if="title || description"
+        v-if="title || description || $slots.description"
         class="flex min-w-0 flex-col gap-(--spacing-xxs)"
       >
         <!-- Title + its anchor share a row, so the copy button reads as belonging
@@ -170,10 +170,10 @@
           </span>
         </div>
         <p
-          v-if="description"
+          v-if="description || $slots.description"
           class="text-pretty text-body-sm text-(--text-muted)"
         >
-          {{ description }}
+          <slot name="description">{{ description }}</slot>
         </p>
       </div>
       <!-- Wrapping + full width below `md`, so a `w-full` HeadingAction claims its own

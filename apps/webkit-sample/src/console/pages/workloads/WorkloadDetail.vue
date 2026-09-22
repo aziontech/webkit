@@ -50,13 +50,6 @@
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { consoleDeployRowsFor } from '@shared/lib/azion-deploys'
-  import { deploymentRowsFor } from '../../lib/data/deployment-history'
-  import {
-    demoDeployment,
-    findDeploymentByWorkload,
-    provisionedDeployRow,
-    resourceChain
-  } from '../../lib/data/provisioning'
   import { computed, reactive, ref, watch } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
@@ -75,23 +68,31 @@
   import PageTabs from '../../components/page/PageTabs.vue'
   import ProductionChecklist from '../../components/page/ProductionChecklist.vue'
   import Section from '../../components/page/Section.vue'
+  import AddDomainDrawer from '../../components/resource/AddDomainDrawer.vue'
+  import DomainsSection from '../../components/resource/DomainsSection.vue'
   import AppLayout from '../../components/shell/AppLayout.vue'
-  import AddEnvironmentDrawer from '../../components/workload/AddEnvironmentDrawer.vue'
   import DeployDrawer from '../../components/workload/DeployDrawer.vue'
   import DeploymentFooter from '../../components/workload/DeploymentFooter.vue'
   import TopologyBindControl from '../../components/workload/TopologyBindControl.vue'
   import TopologyBindNode from '../../components/workload/TopologyBindNode.vue'
   import TopologyNodeCard from '../../components/workload/TopologyNodeCard.vue'
   import WorkloadDeploymentSettingsSection from '../../components/workload/WorkloadDeploymentSettingsSection.vue'
-  import WorkloadDomainsSection from '../../components/workload/WorkloadDomainsSection.vue'
   import WorkloadMutualAuthSection from '../../components/workload/WorkloadMutualAuthSection.vue'
   import WorkloadProtocolSection from '../../components/workload/WorkloadProtocolSection.vue'
   import WorkloadSummary from '../../components/workload/WorkloadSummary.vue'
+  import { focusSection } from '../../lib/behavior/anchor-nav'
   import { useListRefresh } from '../../lib/behavior/list-state'
   import { useTabEnter } from '../../lib/behavior/tab-enter'
   import { createResourcePath } from '../../lib/data/create-resources'
+  import { deploymentRowsFor } from '../../lib/data/deployment-history'
   import { AZION_DEFAULT_ID } from '../../lib/data/deployment-strategies'
   import { deploymentFilterFields } from '../../lib/data/deployments'
+  import {
+    demoDeployment,
+    findDeploymentByWorkload,
+    provisionedDeployRow,
+    resourceChain
+  } from '../../lib/data/provisioning'
   import { settingsById } from '../../lib/data/releases'
   import {
     BIND_TARGET_ORDER,
@@ -141,6 +142,19 @@
       router.replace({ query: { ...route.query, tab: value } })
     }
   })
+
+  // THE SUMMARY'S OVERFLOW LANDS HERE. Both rows are the Settings tab; Manage Domains
+  // additionally lands on the section it names, rather than at the top of General. The
+  // Domains band renders in the same pass as the tab, so the scroll waits for the element
+  // instead of a fixed tick (../../lib/behavior/anchor-nav.js).
+  const openSettings = () => {
+    activeTab.value = 'settings'
+  }
+
+  const manageDomains = () => {
+    openSettings()
+    focusSection('domains')
+  }
 
   // --- Deployment topology --------------------------------------------------
   // The four provisioned resources, in creation order, as Flow nodes.
@@ -391,7 +405,7 @@
 
   // The row the drawer is EDITING, or `null` when it is adding. One drawer for both:
   // editing a domain is adding one with the answers already in the fields
-  // (../../components/workload/AddEnvironmentDrawer.vue).
+  // (../../components/resource/AddDomainDrawer.vue).
   const editingDomain = ref(null)
 
   // WHICH DOOR THE READER CAME THROUGH. One form adds a domain and the environment it
@@ -468,7 +482,7 @@
   // domain is already answerable on this page, so pressing one takes the reader to that
   // control and opens it rather than growing a parallel form beside it. The domain has no
   // control here, so it gets the drawer the create flow already uses for it
-  // (../../components/workload/AddEnvironmentDrawer.vue) — one surface for adding a domain,
+  // (../../components/resource/AddDomainDrawer.vue) — one surface for adding a domain,
   // not two that can disagree.
   const topologyRef = ref(null)
 
@@ -797,7 +811,7 @@
     name: workload.value.name,
     active: workload.value.status !== 'Inactive',
     // The custom domains, WITH the certificate each one is served with — the drawer asks
-    // for it now, so the row carries it (../../components/workload/AddEnvironmentDrawer.vue).
+    // for it now, so the row carries it (../../components/resource/AddDomainDrawer.vue).
     // It used to be a separate `certificates` map keyed by domain id, edited by a Select
     // inside the table: one domain's answers held in two places, which is one place too
     // many for them to agree.
@@ -863,7 +877,9 @@
       settingsBaseline.value = JSON.stringify(settings)
       activeSaved.value = settings.active
       toast.success(
-        settings.active ? 'Workload settings saved.' : 'Workload settings saved. It is now inactive.'
+        settings.active
+          ? 'Workload settings saved.'
+          : 'Workload settings saved. It is now inactive.'
       )
     } finally {
       savingSettings.value = false
@@ -873,7 +889,6 @@
   const discardSettings = () => {
     Object.assign(settings, JSON.parse(settingsBaseline.value))
   }
-
 </script>
 
 <template>
@@ -967,6 +982,8 @@
                 @visit="visit"
                 @add-domain="openAdd('domain')"
                 @add-environment="openAdd('environment')"
+                @manage-domains="manageDomains"
+                @settings="openSettings"
               >
                 <!-- WHAT IS RUNNING ON IT, as the card's footer rather than a card of its
                      own further down. A deployment is not a peer of the workload — it is
@@ -1293,7 +1310,7 @@
                   title="Domains"
                   hint="The addresses this workload answers on, the environment each one answers in, and the certificate it is served with."
                 >
-                  <WorkloadDomainsSection
+                  <DomainsSection
                     :domains="settingsDomains"
                     :disabled="savingSettings"
                     @add="openAdd('domain')"
@@ -1416,13 +1433,13 @@
 
     <!-- ADD AN ENVIRONMENT / ADD A DOMAIN — ONE form, because it is one act: an
          environment reaches this workload when a domain answers in it
-         (../../components/workload/AddEnvironmentDrawer.vue). Three ways in — the card's
+         (../../components/resource/AddDomainDrawer.vue). Three ways in — the card's
          environment picker, its Custom domains field, the production checklist row — and
          `intent` is only which of the two names the reader used on the way. A drawer and
          not a page because it happens INSIDE a resource that already exists; the
          environment that does not exist yet is made in a SECOND drawer over this one,
          without losing what has been typed. -->
-    <AddEnvironmentDrawer
+    <AddDomainDrawer
       v-model:open="addDomainOpen"
       :intent="addIntent"
       :environments="environments"

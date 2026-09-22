@@ -16,7 +16,7 @@
   // reader who reloads has lost the success screen and still has the same question.
   import CardBox from '@aziontech/webkit/card-box'
   import CodeBlock from '@aziontech/webkit/code-block'
-  import Select from '@aziontech/webkit/select'
+  import SegmentedButton from '@aziontech/webkit/segmented-button'
   import { computed, ref } from 'vue'
 
   import SectionHeading from '../page/SectionHeading.vue'
@@ -26,7 +26,7 @@
     name: { type: String, default: '' },
     /** The connected repository, when there is one. It decides which path opens first. */
     repository: { type: String, default: '' },
-    /** Where the Documentation link on the heading goes. */
+    /** Where the documentation link inside the description goes. */
     documentationHref: {
       type: String,
       default: 'https://www.azion.com/en/documentation/products/azion-cli/overview/'
@@ -41,7 +41,6 @@
   // A repository-backed application ships from its workflow, so that path opens; one
   // without a repository has only the terminal.
   const path = ref(props.repository ? 'actions' : 'cli')
-  const pathLabel = (value) => PATHS.find((option) => option.value === value)?.label ?? ''
 
   // Broken over two lines so the application's name is readable inside a step card
   // rather than scrolling out of it.
@@ -161,29 +160,24 @@
        viewport is the same in both. Below three columns' worth of CARD width the steps
        stack, so a command keeps the full width instead of scrolling inside a 300px box. -->
   <div class="@container flex min-w-0 flex-col gap-(--spacing-md)">
-    <SectionHeading
-      title="Get started"
-      description="Two ways to build and deploy this application. Pick one and follow the steps."
-      :documentation="documentationHref"
-    >
+    <SectionHeading title="Get started">
+      <template #description>
+        Two ways to build and deploy this application. Pick one and follow the steps, or read the
+        <a
+          :href="documentationHref"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="rounded-(--shape-button) text-(--text-link) underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-link-hover) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
+          >Azion CLI docs</a
+        >.
+      </template>
       <template #actions>
-        <Select
+        <SegmentedButton
           v-model="path"
+          :options="PATHS"
           size="large"
-          class="w-full md:w-(--container-3xs)"
-          :display-value="pathLabel"
-        >
-          <Select.Trigger aria-label="Deploy with" />
-          <Select.Content>
-            <Select.Option
-              v-for="option in PATHS"
-              :key="option.value"
-              :value="option.value"
-            >
-              {{ option.label }}
-            </Select.Option>
-          </Select.Content>
-        </Select>
+          aria-label="Deploy with"
+        />
       </template>
     </SectionHeading>
 

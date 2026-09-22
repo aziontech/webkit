@@ -55,7 +55,11 @@
   // and a create that stopped short would leave them on a list hunting for a Deploy
   // button. The verb is what makes it consent instead of a surprise.
   import { toast } from '@aziontech/webkit/toast'
-  import { provisionDeployment, publishDeployment, resourceChain } from '../../lib/data/provisioning'
+  import {
+    provisionDeployment,
+    publishDeployment,
+    resourceChain
+  } from '../../lib/data/provisioning'
   import { computed, reactive, ref, watch } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
@@ -189,6 +193,14 @@
     // saying yes asks which of the two ways (./wizard/ConfigureStep.vue →
     // ../../components/firewall/FirewallBinding.vue).
     protection: defaultFirewallProtection(),
+    // THE ADDRESS. Azion mints the free `.azion.run` hostname for every application, so
+    // there is nothing to ask about that one — what this holds is the reader's OWN
+    // address, optional, and the environment it answers in. Same three answers the Add
+    // Domain drawer collects (../../components/resource/AddDomainDrawer.vue), because a
+    // domain bound at create and a domain bound later are the same thing.
+    domainHost: '',
+    domainEnvironment: '',
+    domainCertificate: '',
     modules: defaultModuleState(),
     active: true,
     debug: false,
@@ -387,6 +399,12 @@
     }
 
     if (!form.name.trim()) errors.name = 'This field is required.'
+
+    // Only the branch the reader is ON. A custom domain is optional, but once an address
+    // is typed it has to say where it answers — an unbound domain serves nothing.
+    if (form.domainHost.trim() && !form.domainEnvironment) {
+      errors.domainEnvironment = 'Pick the environment this domain answers in.'
+    }
 
     // FROM SCRATCH ASKS DIFFERENT QUESTIONS, so it is checked against different ones: the
     // required fields of the cache template and the connector type currently on screen,
@@ -652,6 +670,30 @@
     }
   }
 
+  // The reader's own address as the application will store it, or nothing. One entry and
+  // not a list: a create binds at most one, and the Settings tab is where the rest are
+  // added (./panels/MainSettings.vue).
+  const customDomains = () => {
+    const host = form.domainHost.trim().toLowerCase()
+    if (!host) return []
+    return [
+      {
+        id: `domain-${Date.now()}`,
+        domain: host,
+        environment: form.domainEnvironment,
+        certificate: form.domainCertificate
+      }
+    ]
+  }
+
+  // THE ADDRESS THE OUTCOME REPORTS. A create that bound the reader's own hostname is at
+  // THAT address — reporting the generated one instead would disagree with the page the
+  // Manage button leads to. It is not live yet (the DNS record is the reader's to add), so
+  // `live` is false on that branch and the screen offers it to be copied, not opened.
+  const outcomeDomain = computed(
+    () => form.domainHost.trim().toLowerCase() || provisioned.value?.workload?.domain || ''
+  )
+
   const installedRule = ref(null)
 
   const integrationResources = () => {
@@ -728,7 +770,8 @@
       // ones this flow switched on for it.
       firewallModules: firewallIsBound(form.protection)
         ? firewallModuleLabelsByName(firewallBindingName(form.protection))
-        : enabledFirewallModules(form.protection.modules)
+        : enabledFirewallModules(form.protection.modules),
+      customDomains: customDomains()
     })
     // The create landed: nothing is pending any more, so the leave guard stands down
     // before this flow navigates on its own success.
@@ -1099,7 +1142,8 @@
         :scope="gitScope"
         :title="outcomeTitle"
         :lead="outcomeLead"
-        :domain="provisioned?.workload?.domain ?? ''"
+        :domain="outcomeDomain"
+        :live="!form.domainHost.trim()"
         :next-steps="isScratch ? scratchNextSteps : []"
         :source="flowId === 'cli' ? 'cli' : 'git'"
         :application-name="provisioned?.application?.name ?? form.name"

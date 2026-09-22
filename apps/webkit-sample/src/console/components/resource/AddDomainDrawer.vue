@@ -1,9 +1,17 @@
 <script setup>
-  // Add Environment — the one form that puts an environment on a workload, the one form
-  // that puts a domain on it, and the one form that EDITS a domain already on it. They are
-  // the same form because they are the same act, and an edit is that act re-opened on a
-  // row: a second drawer re-asking the same four questions in different words is how the
-  // two drift.
+  // Add Domain — the one form that puts a domain on a RESOURCE, the one form that puts the
+  // environment it answers in on that resource, and the one form that EDITS a domain
+  // already there. They are the same form because they are the same act, and an edit is
+  // that act re-opened on a row: a second drawer re-asking the same four questions in
+  // different words is how the two drift.
+  //
+  // ── ONE FORM FOR THE WORKLOAD AND FOR THE APPLICATION ──
+  //
+  // An application is deployed THROUGH a workload — they are bound and work together — so
+  // a domain on an application answers in an environment for exactly the reason a domain
+  // on a workload does. `resource` is the noun this form uses while it says so; nothing
+  // else about it differs, which is what keeps the two surfaces from drifting into two
+  // different accounts of the same act.
   //
   // ── WHY ONE FORM ──
   //
@@ -85,6 +93,16 @@
 
   const props = defineProps({
     /**
+     * Which resource this domain lands on — `workload` or `application`. It is the NOUN in
+     * this form's sentences, nothing more: the act, the fields and the commit are the same
+     * on both (an application is deployed through a workload).
+     */
+    resource: {
+      type: String,
+      default: 'workload',
+      validator: (value) => ['workload', 'application'].includes(value)
+    },
+    /**
      * Which door the reader came through — `environment` (the card's picker) or `domain`
      * (the Custom domains field, the production checklist). It changes the TITLE and the
      * commit's verb, nothing else: the form is one form, and this is what stops it
@@ -96,7 +114,7 @@
       validator: (value) => ['environment', 'domain'].includes(value)
     },
     /**
-     * The environments this workload already publishes into — `{ name }[]`
+     * The environments this resource already publishes into — `{ name }[]`
      * (../../lib/state/workload-environments.js). Not the answer set: it is what lets the
      * form say, while the reader is choosing, that the one they named is new here.
      */
@@ -128,10 +146,10 @@
   const description = computed(() =>
     editing.value
       ? 'Change where it answers, the address, or the certificate it is served with.'
-      : 'A domain is what puts an environment on this workload. Say where it answers, and name the address.'
+      : `A domain is what puts an environment on this ${props.resource}. Say where it answers, and name the address.`
   )
 
-  const kindOptions = [
+  const kindOptions = computed(() => [
     {
       value: 'free',
       label: 'Get a free Azion Domain',
@@ -140,9 +158,9 @@
     {
       value: 'own',
       label: 'Bring my own Domain',
-      description: 'Use your own DNS and point it to your Azion workload.'
+      description: `Use your own DNS and point it to your Azion ${props.resource}.`
     }
-  ]
+  ])
 
   const environmentOptions = environmentNameOptions
   const environmentLabel = (value) =>
@@ -205,6 +223,11 @@
 
   const certificateOptions = computed(() => domainCertificateOptions())
 
+  const freeDomainNote = computed(
+    () =>
+      `Your ${props.resource} is always accessible at an ${AZION_DOMAIN_SUFFIX.replace(/^\./, '')} subdomain based on its name. Custom domains allow visitors to reach your project at your own domain.`
+  )
+
   // THE DEFAULT PICK. It follows the address while the field is untouched, and a free
   // Azion domain is always the platform's own certificate — the field is not even asked
   // for on that branch, so leaving a picked one behind would commit an answer the reader
@@ -256,7 +279,7 @@
     if (!chosen.value) return 'Where this domain answers. Pick one, or create it from here.'
     const policy = deploymentPolicyLabel(chosen.value.deploymentPolicy)
     return joinsWorkload.value
-      ? `This workload doesn't publish into ${chosen.value.label} yet. Adding this domain connects it, served by the Deployment Settings set to ${policy}.`
+      ? `This ${props.resource} doesn't publish into ${chosen.value.label} yet. Adding this domain connects it, served by the Deployment Settings set to ${policy}.`
       : `${chosen.value.label} publishes with the Deployment Settings set to ${policy}.`
   })
 
@@ -499,7 +522,7 @@
 
         <Message
           severity="info"
-          :label="`Your workload is always accessible at an ${AZION_DOMAIN_SUFFIX.replace(/^\./, '')} subdomain based on the workload name. Custom domains allow visitors to reach your project at your own domain.`"
+          :label="freeDomainNote"
         />
       </div>
     </Section>

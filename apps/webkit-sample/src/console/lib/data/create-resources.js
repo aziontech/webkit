@@ -199,7 +199,7 @@ const CUSTOM_PAGE_CODES = [
 // and the environment record's whole point is that a domain names it
 // (../state/workload-settings.js). The list is the store now, and the same list the Add
 // Domain drawer offers from the workload side
-// (../../components/workload/AddEnvironmentDrawer.vue), so the two surfaces cannot
+// (../../components/resource/AddDomainDrawer.vue), so the two surfaces cannot
 // disagree.
 //
 // INFRASTRUCTURE_OPTIONS lived here and is gone. The workload create page asked which
@@ -252,7 +252,7 @@ export const createResources = [
   // therefore like a required field, but a domain and the workload that serves it are
   // bound in two directions, and the OTHER direction is the one that already exists in
   // the console: a workload adds its domains from its own Domains section
-  // (../../components/workload/AddEnvironmentDrawer.vue). Making it required here would
+  // (../../components/resource/AddDomainDrawer.vue). Making it required here would
   // mean a reader
   // who registers a name before deciding what serves it has to invent an answer, and an
   // invented binding is worse than an absent one — it points live traffic somewhere.
