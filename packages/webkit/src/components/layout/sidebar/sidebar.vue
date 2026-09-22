@@ -149,7 +149,7 @@
   const asideStyle = computed(() => ({ ...cssVars.value, ...railStyle.value }))
 
   const RAIL_MOTION_CLASS =
-    'transition-[width] duration-moderate-02 ease-expressive-entrance has-checked:ease-expressive-exit data-[resizing]:transition-none motion-reduce:transition-none'
+    'transition-[width,min-width] duration-moderate-02 ease-expressive-entrance has-checked:ease-productive-exit data-[resizing]:transition-none motion-reduce:transition-none'
 
   const rootClass = computed(() =>
     cn(
@@ -177,7 +177,7 @@
   const HEADER_REGION_CLASS = 'w-full shrink-0 p-(--spacing-md)'
 
   const INNER_MOTION_CLASS =
-    'transition-[translate,opacity] duration-moderate-02 ease-expressive-entrance has-checked:ease-expressive-exit data-[resizing]:transition-none motion-reduce:transition-none motion-reduce:translate-none'
+    'transition-[translate,opacity] duration-moderate-02 ease-expressive-entrance has-checked:ease-productive-exit data-[resizing]:transition-none motion-reduce:transition-none motion-reduce:translate-none'
 
   const INNER_CLASS = cn(
     'flex h-full min-h-0 w-full flex-col',
@@ -226,6 +226,7 @@
       :class="INNER_CLASS"
       :style="innerStyle"
       :data-side="side"
+      :data-resizing="resizing ? '' : undefined"
       :data-testid="`${testId}__panel`"
     >
       <input
@@ -299,7 +300,7 @@
       :data-preview="previewing ? '' : undefined"
       :data-side="side"
       :data-testid="`${testId}__handle`"
-      class="group absolute inset-y-0 z-10 w-(--spacing-xs) cursor-col-resize outline-none data-[side=start]:right-0 data-[side=end]:left-0"
+      class="group absolute inset-y-0 z-10 w-(--spacing-xs) cursor-col-resize touch-none outline-none data-[side=start]:right-0 data-[side=end]:left-0"
       @pointerdown="startResize"
       @keydown.left.prevent="onArrowLeft"
       @keydown.right.prevent="onArrowRight"
@@ -338,7 +339,7 @@
         :aria-valuenow="valueNow"
         :aria-valuemin="valueMin"
         :aria-valuemax="valueMax"
-        class="absolute inset-y-0 left-0 w-full cursor-col-resize outline-none"
+        class="absolute inset-y-0 left-0 w-full cursor-col-resize touch-none outline-none"
         @pointerdown="startResize"
         @click="tapToExpand"
         @keydown.left.prevent="onExpandArrowLeft"

@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3735-14866
   node_id: 3735:14866
-checksum: 8e29c7c0e576325ad526d741d5eb4f40151cebb8ead4d6af2f8f659cafbb47cf
+checksum: 2d4b46022eeb3a82171d1ee61a4c63a643beb02277489f5d5655b47066eaf14c
 created: 2026-05-22
-last_updated: 2026-09-21
+last_updated: 2026-09-22
 ---
 # Sidebar — Component Spec
 
@@ -359,9 +359,9 @@ restructuring this component does not take on.
 
 | Trigger | Animation / Transition | Mechanism | Reduced-motion fallback |
 |---|---|---|---|
-| rail expands | `width` 0 → sized, `translate` -100% → 0, `opacity` → 1 | root `has-checked:` off — base classes: `duration-moderate-02` · `ease-expressive-entrance` | `motion-reduce:transition-none motion-reduce:translate-none` |
-| rail collapses | `width` sized → 0, `translate` 0 → -100%, `opacity` → floor | root `has-checked:` on — `ease-expressive-exit` (same duration) | same |
-| drag in flight | none — width tracks the pointer frame for frame | `data-resizing` forces `transition-none` | — |
+| rail expands | `width` 0 → sized **and `min-width` 0 → the min token, on the same curve**, `translate` -100% → 0, `opacity` → 1 | root `has-checked:` off — base classes: `duration-moderate-02` · `ease-expressive-entrance` | `motion-reduce:transition-none motion-reduce:translate-none` |
+| rail collapses | `width` sized → 0 **and `min-width` → 0 with it**, `translate` 0 → -100%, `opacity` → floor | root `has-checked:` on — `ease-productive-exit` (same duration) | same |
+| drag in flight | none — width tracks the pointer frame for frame; the panel's `translate` + `opacity` track the **pull progress** (`next / min`), so the pull is legible below the minimum where the rail itself can no longer narrow | `data-resizing` forces `transition-none` on the root **and the panel**; the panel's `translate`/`opacity` come from an inline style for the length of the drag | — |
 | collapsed edge affordance appears | `opacity` 0 → 1 | Vue `<Transition>`, unchanged | `motion-reduce:transition-none` |
 | collapsed rail previews / retracts | `width` 0 ↔ `--size-10` (the panel does not move — the sliver is surface only) | JS-computed inline `transition` (`duration['moderate-02']` · `curve['expressive-entrance']`) while entering; CSS `has-checked:` exit curve takes over the instant the inline style is cleared on leave | `prefers-reduced-motion` short-circuit while entering; `motion-reduce:transition-none` on leave |
 | preview zone widens to the sliver | `width` `--size-6` ↔ `--size-10` | pure CSS `hover:` / `focus-within:` on the zone itself — no JS | `motion-reduce:transition-none` |
@@ -371,6 +371,32 @@ restructuring this component does not take on.
 An eased width would lag behind the cursor and read as a broken handle, so the transition is
 suppressed for the duration of a drag (`data-[resizing]:transition-none`) and handed back on
 release — whatever fraction the rail was pulled to then animates to fully in or fully out.
+
+`min-width` is transitioned alongside `width`. The root carries both `min-w-(--sidebar-min-width)`
+(the clamp a server-rendered rail lands in before any JS runs) and `has-checked:min-w-0`, so the
+floor flips between 0 and the min token on every collapse/expand. `min-width` is not an animatable
+default: left out of `transition-property`, it snaps, and the used width — `max(width, min-width)`
+— jumps the whole floor in a single frame on expand while `width` is still near 0. Both properties
+run the same duration and curve, so the used width interpolates end to end.
+
+While a drag is in flight the panel's `translate` and `opacity` are written inline, from the pull
+progress — the same gesture-driven exception the preview sliver takes. They must be written as
+**`translate`**, never `transform`: the resting values come from `translate-x-0` /
+`has-checked:-translate-x-full`, which in Tailwind v4 compile to the standalone `translate`
+property. `transform` is a *different* property, so an inline `transform` does not override the
+class — the two compose, and the panel ends up at `-100%` plus the pulled offset, entirely outside
+the rail. Writing the same property the class writes is what makes the inline value win.
+
+Between the minimum width and the collapse threshold the rail cannot narrow any further
+(`min-width` pins it), so without that pull feedback the gesture has ~56px of travel that renders
+nothing at all. The panel sliding and fading is the whole feedback in that band, and it is
+continuous across the threshold: the values at the moment `collapsed` flips are the ones the peek
+carries on from.
+
+The collapse takes `ease-productive-exit`, not `ease-expressive-exit`. `expressive-exit` is
+`cubic-bezier(0.95, 0.05, 0.8, 0.04)` — near-flat for most of its run and near-vertical at the end.
+That reads as intent on an opacity, but on a layout width it holds the rail still and then snaps it
+shut. The exit curve for the rail's own box is the productive one.
 
 ### Progressive enhancement — what still needs JavaScript, and what does not
 
