@@ -14,7 +14,7 @@
   import { computed, onBeforeUnmount, ref } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
-  import ProjectDropOverlay from '../../components/creation/ProjectDropOverlay.vue'
+  import ProjectDropZone from '../../components/creation/ProjectDropZone.vue'
   import ProjectInitializing from '../../components/creation/ProjectInitializing.vue'
   import CreationHeader from '../../components/page/CreationHeader.vue'
   import PageHeading from '../../components/page/PageHeading.vue'
@@ -64,8 +64,6 @@
 
 <template>
   <div class="flex h-dvh flex-col bg-(--bg-canvas)">
-    <ProjectDropOverlay :active="dragging" />
-
     <!-- The drop's own answer, over the page it was made on. -->
     <ProjectInitializing
       v-if="initializing"
@@ -85,9 +83,23 @@
          `scrollable`). Below `lg` the two columns stack, so the page scrolls normally — a
          clamped stack would squeeze both halves into unusable slivers. -->
     <main
-      class="animate-page-enter motion-reduce:animate-none flex min-w-0 flex-1 flex-col overflow-auto lg:min-h-0 lg:overflow-hidden"
+      class="animate-page-enter motion-reduce:animate-none relative flex min-w-0 flex-1 flex-col overflow-hidden lg:min-h-0"
     >
-      <!-- `.layout-boundary` — the same inset every other page carries, and it brings the
+      <!-- `<main>` here runs to the viewport edge — the page's boundary is on the
+           container inside it — so the zone is told where that boundary is. Without it
+           the dashed box is drawn hard against the window and its corners are clipped. -->
+      <ProjectDropZone
+        :active="dragging"
+        class="[--drop-zone-inset:var(--layout-boundary-inline)]"
+      />
+
+      <!-- The scroll lives on this box rather than on `<main>`, so the drop zone above
+           has a frame that does not move: an absolute child of a scroll container drifts
+           with the content, and a dashed boundary that slides off the top of the region
+           it is marking is worse than no boundary. Below `lg` this scrolls; from `lg` up
+           the page is height-bounded and only the template grid does. -->
+      <div class="flex min-h-0 flex-1 flex-col overflow-auto lg:overflow-hidden">
+        <!-- `.layout-boundary` — the same inset every other page carries, and it brings the
            bottom boundary with it, which matters below `lg` where this page scrolls. From
            `lg` up the layout is height-bounded and only the template grid scrolls, so the
            same bottom inset simply ends that scroll box one step above the edge.
@@ -95,33 +107,33 @@
            No `gap` on the stack: the band below owns its own top space via
            `.layout-section-start` (= --layout-boundary-start, the same step this container's
            boundary puts above the heading). -->
-      <div class="layout-boundary flex flex-col lg:min-h-0 lg:flex-1">
-        <PageHeading
-          size="large"
-          title="Build on the most reliable network on earth"
-        >
-          <template #description>
-            Start from a repository or use a framework template. You can also drag and drop your
-            project, or choose a
-            <button
-              type="button"
-              class="text-link cursor-pointer"
-              @click="pickFile"
-            >
-              file
-            </button>
-            or a
-            <button
-              type="button"
-              class="text-link cursor-pointer"
-              @click="pickFolder"
-            >
-              folder</button
-            >.
-          </template>
-        </PageHeading>
+        <div class="layout-boundary flex flex-col lg:min-h-0 lg:flex-1">
+          <PageHeading
+            size="large"
+            title="Build on the most reliable network on earth"
+          >
+            <template #description>
+              Start from a repository or use a framework template. You can also drag and drop your
+              project, or choose a
+              <button
+                type="button"
+                class="text-link cursor-pointer"
+                @click="pickFile"
+              >
+                file
+              </button>
+              or a
+              <button
+                type="button"
+                class="text-link cursor-pointer"
+                @click="pickFolder"
+              >
+                folder</button
+              >.
+            </template>
+          </PageHeading>
 
-        <!-- From `lg` up both columns terminate at the same y: the page is height-bounded
+          <!-- From `lg` up both columns terminate at the same y: the page is height-bounded
              there, so the importer stretches to the catalog's height instead of ending
              mid-page. Two boxes of the same width that stop on different lines read as one
              unfinished half, and the ragged edge would move every time the importer swapped
@@ -130,11 +142,12 @@
              Stacked, the `gap` is band rhythm and takes the boundary step like every other
              band top; from `lg` up it is the column gutter between the two halves, which
              wants the larger section step. -->
-        <div
-          class="layout-section-start flex flex-col gap-(--layout-boundary-start) lg:min-h-0 lg:flex-1 lg:flex-row lg:gap-(--layout-section-gap)"
-        >
-          <GitImporter />
-          <TemplateGallery />
+          <div
+            class="layout-section-start flex flex-col gap-(--layout-boundary-start) lg:min-h-0 lg:flex-1 lg:flex-row lg:gap-(--layout-section-gap)"
+          >
+            <GitImporter />
+            <TemplateGallery />
+          </div>
         </div>
       </div>
     </main>

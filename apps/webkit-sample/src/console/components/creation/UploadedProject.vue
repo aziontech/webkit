@@ -30,8 +30,8 @@
     /** Whether the walk stopped before the project did. */
     truncated: { type: Boolean, default: false },
     /**
-     * The `tech` the drop was detected as (see ../../lib/data/frameworks.js). Any value
-     * means the root is already decided, so the picker stands down.
+     * The build preset the project deploys as — the page's state, since the field that
+     * sets it sits in the page's own field row. Any value means the root is decided.
      */
     framework: { type: String, default: '' },
     disabled: { type: Boolean, default: false }
@@ -45,6 +45,12 @@
   // Nothing is built, so one of these files has to be the site's front door. The same
   // predicate gates the Deploy button on the page above (../../lib/behavior/project-upload.js),
   // so the picker cannot be drawn without being required, or required without being drawn.
+  //
+  // `framework` is the preset the reader currently has SELECTED in the row above, not the
+  // one the drop was read as, so answering that question withdraws this one: a reader who
+  // names a framework has said the site is built, and being asked which of their source
+  // files answers `GET /` right after is the form arguing with the answer it was just
+  // given.
   const picksRoot = computed(() => picksRootFile(props))
 
   const rootOptions = computed(() =>

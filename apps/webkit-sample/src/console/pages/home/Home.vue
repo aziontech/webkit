@@ -73,9 +73,11 @@
   import Tooltip from '@aziontech/webkit/tooltip'
   import { AGENT_SETUP_PROMPT, AGENT_TOOLS, useAgentOnboarding } from '@shared/lib/agent-onboarding'
   import AgentMark from '@shared/ui/brand/AgentMark.vue'
-  import { computed, onMounted, onUnmounted, ref } from 'vue'
+  import { computed, onBeforeUnmount, onMounted, onUnmounted, ref } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
+  import ProjectDropZone from '../../components/creation/ProjectDropZone.vue'
+  import ProjectInitializing from '../../components/creation/ProjectInitializing.vue'
   import FirstUsePromo from '../../components/home/FirstUsePromo.vue'
   import HomeWire from '../../components/home/HomeWire.vue'
   import IconFrame from '../../components/home/IconFrame.vue'
@@ -84,6 +86,8 @@
   import { allResources, recentResources } from '../../lib/data/home-resources'
   import { AGENT_PROMO } from '../../lib/data/product-empty-states'
   import { presetIcon, presetLabel } from '../../lib/format/presets'
+  import { useProjectUpload } from '../../lib/behavior/project-upload'
+  import { rememberDroppedProject } from '../../lib/state/dropped-project'
   import { useTenancyReload } from '../../lib/state/tenancy-reload'
 
   // Account-level usage. `value` + `unit` is the whole reading — a label, a number
@@ -380,6 +384,39 @@
     if (resource.path) router.push(resource.path)
   }
 
+  // ── DROPPING A PROJECT ONTO OVERVIEW ──
+  //
+  // The gesture is not the Creation Center's alone. Overview is where a reader who
+  // already has an account lands, and the folder they want live is on their desktop
+  // while they are looking at it — sending them through a page whose job is to offer
+  // ways to START is a detour around a shortcut they are already holding.
+  //
+  // It is the SAME handoff the Creation Center and /drop perform, for the same reasons:
+  // the name and the framework ride the URL so the deploy screen survives a reload; the
+  // files cannot be written down, so they go through the store and the deploy screen
+  // lists them from there.
+  const userEmail = computed(() => route.query.email || 'myemail@azion.com')
+
+  const initializing = ref(null)
+  let handoff = null
+
+  const HANDOFF_MS = 1600
+
+  const deployProject = ({ name, framework, files, truncated }) => {
+    initializing.value = { files, truncated }
+    handoff = setTimeout(() => {
+      rememberDroppedProject({ name, files, truncated })
+      router.push({
+        path: '/deploy',
+        query: { email: userEmail.value, upload: name, framework }
+      })
+    }, HANDOFF_MS)
+  }
+
+  onBeforeUnmount(() => clearTimeout(handoff))
+
+  const { dragging } = useProjectUpload(deployProject)
+
   // Deleting from Overview removes the SAME resource its module list owns, so it asks
   // the same way: the menu click arms the dialog, and the row goes only once its name
   // has been typed back.
@@ -471,8 +508,27 @@
          border-box too, so the boundary does not push a short page into a
          scroll of exactly its own padding. -->
   <div
-    class="layout-column layout-boundary flex min-h-full flex-col justify-center xl:h-full xl:min-h-0 xl:justify-start"
+    class="layout-column layout-boundary relative flex min-h-full flex-col justify-center xl:h-full xl:min-h-0 xl:justify-start"
   >
+    <!-- THE REGION IS THE WHOLE PAGE COLUMN, greeting included. It sat on `<main>`, which
+         left the one line addressed to the reader standing outside the box their project
+         was going into — a boundary drawn around part of a page reads as a distinction
+         between the part that takes a drop and the part that does not, and there is no
+         such distinction here. The inset is the page's own boundary, since this container
+         carries that padding and an absolute child is positioned against the padding BOX,
+         which does not inset it. -->
+    <ProjectDropZone
+      :active="dragging"
+      class="[--drop-zone-inset:var(--layout-boundary-inline)]"
+    />
+
+    <!-- The drop's own answer, over the page it was made on. -->
+    <ProjectInitializing
+      v-if="initializing"
+      :files="initializing.files"
+      :truncated="initializing.truncated"
+    />
+
     <!-- THE COLD ARRIVAL: the page's own wire, in the page's own column.
            Everything below is read rather than held — usage is metered per
            tenancy scope, the resource list is a query — so Overview opens as its

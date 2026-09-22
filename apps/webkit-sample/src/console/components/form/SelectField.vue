@@ -21,7 +21,10 @@
   const props = defineProps({
     // Text rendered inside the Label. When empty, the label row is omitted.
     label: { type: String, default: '' },
-    // Options rendered in the dropdown: `{ label, value }`.
+    // Options rendered in the dropdown: `{ label, value }`, optionally `{ icon,
+    // markClass }` — the FULL icon class (`ai-cor ai-vue`, `pi pi-code`), plus any
+    // filter that mark needs on dark. See lib/format/presets.js for why a bare glyph
+    // name is not enough.
     options: { type: Array, default: () => [] },
     // Placeholder shown on the trigger when nothing is selected.
     placeholder: { type: String, default: 'Select an option...' },
@@ -49,10 +52,20 @@
     return 'helper'
   })
 
+  const optionFor = (value) => props.options.find((option) => option.value === value)
+
   // Stored value → visible label. This is the whole reason the compound is composed
   // by hand rather than delegated to FieldSelect.
-  const displayValue = (value) =>
-    props.options.find((option) => option.value === value)?.label ?? ''
+  const displayValue = (value) => optionFor(value)?.label ?? ''
+
+  // The trigger wears the SELECTED option's mark, so a closed select says which one is
+  // chosen the same way the open list says which one each row is. `iconLeft` is a slot
+  // rather than a prop on the trigger, so it can carry the dark-theme filter class an
+  // `ai-cor` mark needs — one more reason the mark travels as a full class.
+  const selectedMark = computed(() => {
+    const option = optionFor(model.value)
+    return option?.icon ? { icon: option.icon, markClass: option.markClass ?? '' } : null
+  })
 </script>
 
 <template>
@@ -76,13 +89,34 @@
       <Select.Trigger
         :id="id"
         :aria-describedby="describedBy"
-      />
+      >
+        <template
+          v-if="selectedMark"
+          #iconLeft
+        >
+          <i
+            :class="[selectedMark.icon, selectedMark.markClass]"
+            class="shrink-0 text-[1rem] leading-none"
+            aria-hidden="true"
+          />
+        </template>
+      </Select.Trigger>
       <Select.Content>
         <Select.Option
           v-for="option in options"
           :key="String(option.value)"
           :value="option.value"
         >
+          <template
+            v-if="option.icon"
+            #left
+          >
+            <i
+              :class="[option.icon, option.markClass]"
+              class="shrink-0 text-[1rem] leading-none"
+              aria-hidden="true"
+            />
+          </template>
           {{ option.label }}
         </Select.Option>
       </Select.Content>

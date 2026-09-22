@@ -17,12 +17,13 @@
   import GitProviderConnect from '../../components/creation/GitProviderConnect.vue'
   import UploadedProject from '../../components/creation/UploadedProject.vue'
   import DeploymentFlow from '../../components/deployment/DeploymentFlow.vue'
+  import SelectField from '../../components/form/SelectField.vue'
   import UnsavedChangesGuard from '../../components/form/UnsavedChangesGuard.vue'
   import TemplatePreview from '../../components/marketplace/TemplatePreview.vue'
   import CreationHeader from '../../components/page/CreationHeader.vue'
   import { useBaseline } from '../../lib/behavior/forms'
   import { defaultRootFile, picksRootFile } from '../../lib/behavior/project-upload'
-  import { FRAMEWORKS, markFilterFor } from '../../lib/data/frameworks'
+  import { FRAMEWORKS, markFilterFor, presetOptions } from '../../lib/data/frameworks'
   import { getTemplate } from '../../lib/data/templates.js'
   import { droppedProjectFor } from '../../lib/state/dropped-project'
   import { gitAccounts, gitConnected } from '../../lib/state/git-provider'
@@ -51,7 +52,7 @@
         title: name,
         description: 'Deploy this project straight from your machine.',
         framework,
-        icon: framework ? '' : 'pi pi-folder',
+        icon: '',
         requiresRepository: false,
         defaultRepoName: name,
         settings: []
@@ -81,7 +82,17 @@
   // (../resources/creation/GitImporter.vue, which carries the stack across in `framework`).
   // A repository with no framework resolves to nothing and the card falls back to the
   // Azion mark, which is the honest answer — we do not know what it is built with.
+  //
+  // AN UPLOAD IS THE ONE CASE THE READER CAN CHANGE. Its mark follows the chosen preset
+  // rather than the detected one, so picking `Astro` in the panel below repaints the card
+  // at the top of the flow: the screen agrees with the field, and the correction is
+  // visibly a correction. With no preset it is a folder — the honest mark for a pile of
+  // files nothing has spoken for.
   const templateMark = computed(() => {
+    if (isUpload.value) {
+      const icon = FRAMEWORKS.find((entry) => entry.tech === preset.value)?.icon
+      return { icon: icon || 'pi pi-folder', markClass: markFilterFor(icon ?? '') }
+    }
     const framework = FRAMEWORKS.find((entry) => entry.tech === template.value.framework)
     const icon = template.value.icon || framework?.icon || ''
     return { icon, markClass: markFilterFor(icon) }
@@ -199,8 +210,32 @@
     isUpload.value ? droppedProjectFor(String(route.query.upload)) : null
   )
 
+  // THE PRESET THE PROJECT DEPLOYS AS — detected on the drop, then owned by the reader.
+  //
+  // It is page state rather than a read of the URL, because from here on it is an ANSWER
+  // and not a reading: the picker in the panel below writes to it, and the deploy, the
+  // preview's mark and the root-file question all follow what it now says. The query
+  // keeps the detection so a reload opens on the same reading; a correction is not worth
+  // a navigation.
+  const preset = ref(String(route.query.framework || ''))
+
+  // THE LINE UNDER THE PRESET FIELD HAS TO BE TRUE IN ALL THREE STATES, and they are
+  // genuinely three: a reading we are offering, a reading the reader replaced, and no
+  // reading at all. One sentence for all of them would have to be vague enough to cover
+  // the last — and "detected from your project" under an empty field is the form claiming
+  // work it did not do.
+  const detectedPreset = computed(() => String(route.query.framework || ''))
+
+  const presetHelper = computed(() => {
+    if (!preset.value)
+      return 'Nothing here named a framework. Pick one to build the project, or leave it to serve the files as they are.'
+    if (preset.value === detectedPreset.value)
+      return 'Detected from your project. Change it if we read it wrong.'
+    return 'Azion builds the project with this preset.'
+  })
+
   const picksRoot = computed(() =>
-    picksRootFile({ files: dropped.value?.files ?? [], framework: template.value.framework })
+    picksRootFile({ files: dropped.value?.files ?? [], framework: preset.value })
   )
 
   // Which dropped file answers `GET /`. Seeded with the drop's own best answer
@@ -236,6 +271,7 @@
   const initFromTemplate = (t) => {
     repoName.value = t.defaultRepoName
     rootFile.value = defaultRootFile(dropped.value?.files)
+    preset.value = t.framework
     Object.keys(settingsValues).forEach((k) => delete settingsValues[k])
     t.settings.forEach((s) => (settingsValues[s.name] = ''))
 
@@ -401,7 +437,7 @@
     provisioned.value = provisionDeployment({
       repoName: repoName.value,
       scope: usesGit.value ? scope.value : undefined,
-      framework: template.value.framework,
+      framework: isUpload.value ? preset.value : template.value.framework,
       isPublic: isPublic.value,
       templateTitle: template.value.title,
       // A cloned template leaves a repository behind; an uploaded or dropped project does
@@ -526,13 +562,18 @@
                       </p>
                     </div>
 
-                    <!-- Scope + repository name — a PAIR only when a repository is being
-                         created. With none, the scope has nothing to own and the
-                         visibility switch has nothing to hide, so the grid collapses to the
-                         one field that still means something: what to call this. -->
+                    <!-- THE ROW IS A PAIR, and which pair depends on where the project
+                         came from: `Scope + repository name` when one is being created,
+                         `Project name + build preset` for a drop. The two never coexist —
+                         an upload sets `requiresRepository: false`, so `usesGit` is false
+                         for exactly the case the preset is asked about.
+                         The preset sits BESIDE the name rather than down in the files
+                         panel because it is the same KIND of answer: two short facts about
+                         the project as a whole, given once, before anything about its
+                         contents. Under the listing it read as a property of the files. -->
                     <div
                       class="grid grid-cols-1 items-start gap-(--spacing-lg)"
-                      :class="usesGit ? 'sm:grid-cols-2' : ''"
+                      :class="usesGit || isUpload ? 'sm:grid-cols-2' : ''"
                     >
                       <div
                         v-if="usesGit"
@@ -604,6 +645,16 @@
                           </InputGroupAddon>
                         </InputGroup>
                       </div>
+
+                      <SelectField
+                        v-if="isUpload"
+                        v-model="preset"
+                        label="Build preset"
+                        placeholder="Select a preset"
+                        :helper-text="presetHelper"
+                        :options="presetOptions"
+                        :disabled="submitting"
+                      />
                     </div>
 
                     <!-- Template-specific settings -->
@@ -679,7 +730,7 @@
                       v-model="rootFile"
                       :files="dropped.files"
                       :truncated="dropped.truncated"
-                      :framework="template.framework"
+                      :framework="preset"
                       :disabled="submitting"
                     />
                     <p

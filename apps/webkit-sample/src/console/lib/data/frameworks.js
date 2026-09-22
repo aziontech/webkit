@@ -252,7 +252,7 @@ const CATALOG = [
     title: 'Static HTML Starter',
     label: 'HTML',
     description: 'Serve a folder of HTML, CSS and JavaScript with no build step.',
-    icon: 'pi pi-code',
+    icon: 'ai-cor ai-html',
     color: '#e34f26',
     useCases: ['marketing'],
     tag: 'Static',
@@ -399,6 +399,25 @@ export const deployTemplateRoute = (tech) => ({
   path: '/deploy',
   query: { template: templateSlugForTech(tech) }
 })
+
+/**
+ * Every build preset, as options for a Select — ordered most common first, each carrying
+ * its mark and whatever that mark needs on dark.
+ *
+ * NOT `technologyOptions` below, though the two are one `markClass` apart. That one is a
+ * FILTER axis: its job is to cut a catalog down, so an entry only earns a place there
+ * while a template wears it. This is a PICKER over what the builder accepts, and it has
+ * to offer all 25 whether or not a template exists for one — a reader whose drop is a
+ * Hugo site needs `hugo` in the list even on a day the gallery ships no Hugo template.
+ * They coincide today because the catalog happens to cover the whole preset set; a list
+ * that must stay complete and a list that must stay curated are still two lists.
+ */
+export const presetOptions = FRAMEWORKS.map(({ tech, label, icon, markClass }) => ({
+  value: tech,
+  label,
+  icon,
+  markClass
+}))
 
 /** The /create filter's Technology axis, derived so the list and the catalog agree. */
 export const technologyOptions = FRAMEWORKS.map(({ tech, label, icon }) => ({

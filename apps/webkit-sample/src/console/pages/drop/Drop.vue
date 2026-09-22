@@ -22,7 +22,6 @@
 
   import { DotGridBanner } from '@shared/ui/banners'
 
-  import ProjectDropOverlay from '../../components/creation/ProjectDropOverlay.vue'
   import ProjectInitializing from '../../components/creation/ProjectInitializing.vue'
   import CreationHeader from '../../components/page/CreationHeader.vue'
   import { useProjectUpload } from '../../lib/behavior/project-upload'
@@ -61,12 +60,6 @@
 
 <template>
   <div class="flex h-dvh flex-col bg-(--bg-canvas)">
-    <ProjectDropOverlay
-      :active="dragging"
-      title="Drop it anywhere on this page"
-      description="A project folder, or the files inside one. Azion reads what it is built with."
-    />
-
     <ProjectInitializing
       v-if="initializing"
       :files="initializing.files"

@@ -1,8 +1,28 @@
 import { onBeforeUnmount, onMounted, ref } from 'vue'
 
+// ── WHAT A DEPENDENCY NAMES: A BUILD PRESET ──
+//
+// The value on the right is a PRESET (../format/presets.js — the 25 the platform's
+// builder accepts), not a loose label, so the drop resolves to the same vocabulary the
+// application's Build tab and the preset picker speak. Anything else would hand the
+// deploy form a stack name it cannot build with.
+//
+// ORDER IS THE WHOLE ALGORITHM, most specific first, because a real manifest matches
+// several rows at once. An OpenNext project depends on `next`; a Nuxt project ships
+// `vue` and (transitively, sometimes directly) `nitropack`; every Next project depends
+// on `react`. First match wins, so the framework has to be listed above the library it
+// is built on — otherwise a Next.js app deploys as React and loses its server routes.
+//
+// `typescript` is LAST on purpose: it is the answer only when nothing else spoke. It
+// describes how the source is written, and every framework row above describes what the
+// source is, which is the thing a build preset selects.
 const MANIFEST_MARKERS = [
+  ['@opennextjs/azion', 'opennextjs'],
+  ['@opennextjs/aws', 'opennextjs'],
+  ['open-next', 'opennextjs'],
   ['next', 'next'],
   ['nuxt', 'nuxt'],
+  ['nitropack', 'nitro'],
   ['astro', 'astro'],
   ['@angular/core', 'angular'],
   ['gatsby', 'gatsby'],
@@ -12,10 +32,12 @@ const MANIFEST_MARKERS = [
   ['@builder.io/qwik', 'qwik'],
   ['@stencil/core', 'stencil'],
   ['@11ty/eleventy', 'eleventy'],
+  ['hexo', 'hexo'],
   ['svelte', 'svelte'],
   ['preact', 'preact'],
   ['vue', 'vue'],
-  ['react', 'react']
+  ['react', 'react'],
+  ['typescript', 'typescript']
 ]
 
 const FILE_MARKERS = [
@@ -72,7 +94,21 @@ export const detectFramework = async ({ files = [], manifest = null }) => {
   }
   const lowered = topLevel(files).map((file) => file.name.toLowerCase())
   const marker = FILE_MARKERS.find(([file]) => lowered.some((name) => name.startsWith(file)))
-  return marker?.[1] ?? ''
+  if (marker) return marker[1]
+
+  // A manifest nothing above recognized still says one thing for certain: this project is
+  // built, by npm, from JavaScript. `javascript` is the preset for exactly that. It is
+  // tried AFTER the file markers rather than instead of them so a Vite vanilla app —
+  // `package.json` beside an `index.html` — keeps resolving to `html`, which is the
+  // preset that serves a folder; `javascript` bundles a handler module and would be the
+  // wrong build for a page.
+  //
+  // The gain is not the guess, it is the FLOOR: a Node project used to resolve to `''`,
+  // which made `picksRootFile` ask the reader which file answers `GET /` — a question
+  // about a static folder, asked about a project that builds one. And the answer is not
+  // final either way: the deploy form's preset picker opens on this and the reader
+  // overrides it in one click.
+  return manifest ? 'javascript' : ''
 }
 
 // ── WHAT A DROP LEAVES FOR THE READER TO ANSWER ──

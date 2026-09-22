@@ -18,7 +18,7 @@
 // the map carries the full class and the caller binds it as-is: `ai-cor ai-*` for a
 // colored mark, `ai ai-*` for a font one.
 //
-// Six presets have no mark in @aziontech/icons yet — emscripten, html, nitro, rustwasm,
+// Five presets have no mark in @aziontech/icons yet — emscripten, nitro, rustwasm,
 // stencil, and opennextjs (which borrows Next's, since it IS Next.js). They carry a
 // neutral `pi` glyph rather than nothing; adding the real logos is a `/include-icons` run
 // on the icons package, and this map is the one place that then changes.
@@ -33,7 +33,7 @@ export const presetMeta = {
   emscripten: { label: 'Emscripten', icon: 'pi pi-microchip' },
   gatsby: { label: 'Gatsby', icon: 'ai ai-gatsby' },
   hexo: { label: 'Hexo', icon: 'ai ai-hexo' },
-  html: { label: 'HTML', icon: 'pi pi-code' },
+  html: { label: 'HTML', icon: 'ai-cor ai-html' },
   hugo: { label: 'Hugo', icon: 'ai ai-hugo' },
   javascript: { label: 'JavaScript', icon: 'ai-cor ai-js' },
   jekyll: { label: 'Jekyll', icon: 'ai ai-jekyll' },
