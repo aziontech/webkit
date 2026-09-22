@@ -30,19 +30,20 @@ export default {
     const STYLE_SIGNAL =
       /[:;{}]|--|\[#|\b(?:bg|text|border|ring|outline|fill|stroke|divide|placeholder|caret|accent|from|via|to|shadow|decoration)-|\b(?:rgba?|hsla?|var|color|background)\b/
     const FULL_HEX = /#[0-9a-fA-F]{6}(?:[0-9a-fA-F]{2})?\b/
-    // A URL fragment can be a hex run without being a color: the first group of a UUID
-    // (`api.azion.com/#75d2b32f-fb8a-…`) is 8 hex digits and passes FULL_HEX. Blank out
-    // UUID-shaped runs and any `/#hex` fragment before the hex-color check sees the text;
-    // a real color never sits in either position.
-    const URL_HEX_FRAGMENT =
-      /#?[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\b|\/#[0-9a-fA-F]{3,8}\b/g
+    // A hash glued to a URL character is a fragment, not a color: in
+    // https://api.azion.com/#75d2b32f-fb8a-… the first eight hex digits spell a valid
+    // #RRGGBBAA. A color literal opens the string or follows whitespace, a quote, [ ( , : =.
+    const URL_FRAGMENT = /(?<=[\w/.~%?&-])#[\w-]+/g
+    // A bare UUID (`75d2b32f-fb8a-47d8-…`) also opens with 8 hex digits; blank it out too
+    // so a `#` in front of it never reads as a color.
+    const UUID = /#?[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\b/g
 
     function scan(node, text) {
       if (typeof text !== 'string' || !text) return
       for (const rule of rules) {
         let subject = text
         if (rule.id === 'hex-color') {
-          subject = text.replace(URL_HEX_FRAGMENT, '')
+          subject = text.replace(URL_FRAGMENT, '').replace(UUID, '')
           if (!FULL_HEX.test(subject) && !STYLE_SIGNAL.test(subject)) continue
         }
         const m = subject.match(rule.re)

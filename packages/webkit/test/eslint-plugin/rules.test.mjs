@@ -156,14 +156,20 @@ test('no-hardcoded-color (script + template)', () => {
       "const anchor = '#dad'",
       "const route = '#face'",
       "const hash = '#bad'",
-      // a UUID fragment in a URL starts with 8 hex digits — an anchor, not a color
+      // a URL fragment is not a color, even when its first digits spell a valid #RRGGBBAA
       "const href = 'https://api.azion.com/#75d2b32f-fb8a-47d8-bbbd-32c2e8650ba4'",
-      "const id = '75d2b32f-fb8a-47d8-bbbd-32c2e8650ba4'",
+      "const href = 'https://example.com/docs#ff0000'",
+      "const href = '/reference?tab=api#ff0000ff'",
       // a full-length hex right after `/#` is a URL fragment
-      "const href = 'https://example.com/#deadbeef'"
+      "const href = 'https://example.com/#deadbeef'",
+      // a bare UUID starts with 8 hex digits — an id, not a color
+      "const id = '75d2b32f-fb8a-47d8-bbbd-32c2e8650ba4'"
     ],
     invalid: [
       { code: "const c = '#ff0000'", errors: [{ messageId: 'token' }] },
+      // the same digits ARE a color when they stand as a value, not as a URL fragment
+      { code: "const c = 'bg-[#75d2b32f]'", errors: [{ messageId: 'token' }] },
+      { code: "const c = 'red #ff0000'", errors: [{ messageId: 'token' }] },
       { code: "const c = 'text-gray-500'", errors: [{ messageId: 'token' }] },
       // short hex IS a color when the string looks like a style value
       { code: "const c = 'color:#fff'", errors: [{ messageId: 'token' }] },
@@ -179,6 +185,7 @@ test('no-hardcoded-color (script + template)', () => {
       { code: '<template><div class="text-body-sm">x</div></template>', filename: 'a.vue' },
       // anchor href that happens to be valid hex must not be flagged
       { code: '<template><a href="#dad">x</a></template>', filename: 'anchor.vue' },
+      // a URL fragment whose first eight hex digits spell a #RRGGBBAA must not be flagged
       {
         code: '<template><a href="https://api.azion.com/#75d2b32f-fb8a-47d8-bbbd-32c2e8650ba4">x</a></template>',
         filename: 'uuid-anchor.vue'
