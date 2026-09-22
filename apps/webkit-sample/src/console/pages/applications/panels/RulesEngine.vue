@@ -159,7 +159,7 @@
           name: 'Maintenance page',
           description: 'Serves the maintenance page while the header is set.',
           phase: 'request',
-          criteria: [{ id: 'c1', conditions: [condition('header', 'matches', 'x-maintenance')] }],
+          criteria: [{ id: 'c1', conditions: [condition('${http_x_maintenance}', 'exists')] }],
           // A behavior carries the ARGUMENT its type takes, keyed the way the
           // vocabulary declares it (../../../lib/data/rules-engine.js) — `target` for
           // a free-text value, `connectorId` / `cacheId` / `functionId` for a record
@@ -174,7 +174,7 @@
           name: 'Redirect www',
           description: 'Sends the www host to the apex domain.',
           phase: 'request',
-          criteria: [{ id: 'c2', conditions: [condition('host', 'is-equal', 'www.*')] }],
+          criteria: [{ id: 'c2', conditions: [condition('${host}', 'matches', 'www.*')] }],
           behaviors: [{ id: 'b2', type: 'redirect-301', target: 'https://edgeflow.com${uri}' }],
           status: 'Active',
           modifiedAt: daysAgo(12)
@@ -184,7 +184,7 @@
           name: 'API gateway',
           description: 'Sends API traffic to the gateway connector, through the auth handler.',
           phase: 'request',
-          criteria: [{ id: 'c3', conditions: [condition('path', 'matches', '/api/*')] }],
+          criteria: [{ id: 'c3', conditions: [condition('${uri}', 'matches', '/api/*')] }],
           behaviors: [
             { id: 'b3', type: 'set-connector', connectorId: '7710021' },
             { id: 'b3b', type: 'run-function', functionId: '4021884' }
@@ -197,7 +197,7 @@
           name: 'Docs rewrite',
           description: 'Rewrites the docs path and caches it as a static asset.',
           phase: 'request',
-          criteria: [{ id: 'c4', conditions: [condition('path', 'matches', '/docs/*')] }],
+          criteria: [{ id: 'c4', conditions: [condition('${uri}', 'matches', '/docs/*')] }],
           behaviors: [
             { id: 'b4', type: 'rewrite-request', target: '/documentation${uri}' },
             { id: 'b4b', type: 'set-cache-policy', cacheId: 'cs-static' }
@@ -210,7 +210,7 @@
           name: 'Add remote port header',
           description: 'Adds the client port to every request reaching the origin.',
           phase: 'request',
-          criteria: [{ id: 'c5', conditions: [condition('path', 'matches', '/*')] }],
+          criteria: [{ id: 'c5', conditions: [condition('${uri}', 'matches', '/*')] }],
           behaviors: [
             { id: 'b5', type: 'add-request-header', target: 'x-remote-port: ${remote_port}' }
           ],
@@ -224,7 +224,7 @@
           name: 'Cache bypass',
           description: 'Keeps API responses out of the cache.',
           phase: 'response',
-          criteria: [{ id: 'c6', conditions: [condition('path', 'matches', '/api')] }],
+          criteria: [{ id: 'c6', conditions: [condition('${uri}', 'matches', '/api')] }],
           // The response phase looks at an answer already fetched, so it cannot set a
           // cache policy — that is a request-phase behavior. What it can do is say the
           // response is not to be stored.
@@ -237,7 +237,7 @@
           name: 'Security headers',
           description: 'Adds the security header set to successful responses.',
           phase: 'response',
-          criteria: [{ id: 'c7', conditions: [condition('status', 'is-equal', '200')] }],
+          criteria: [{ id: 'c7', conditions: [condition('${status}', 'is-equal', '200')] }],
           behaviors: [
             {
               id: 'b7',
@@ -253,7 +253,7 @@
           name: 'Compress assets',
           description: 'Compresses script bundles on the way out.',
           phase: 'response',
-          criteria: [{ id: 'c8', conditions: [condition('path', 'matches', '*.js')] }],
+          criteria: [{ id: 'c8', conditions: [condition('${uri}', 'matches', '*.js')] }],
           behaviors: [{ id: 'b8', type: 'enable-gzip' }],
           status: 'Inactive',
           modifiedAt: daysAgo(47)

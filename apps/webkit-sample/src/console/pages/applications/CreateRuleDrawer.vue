@@ -30,6 +30,7 @@
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, reactive, ref, watch } from 'vue'
 
+  import ComboboxInput from '../../components/form/ComboboxInput.vue'
   import FieldStack from '../../components/form/FieldStack.vue'
   import ResourceDrawer from '../../components/form/ResourceDrawer.vue'
   import Section from '../../components/page/Section.vue'
@@ -71,10 +72,12 @@
   const behaviorArgument = (type) => props.vocabulary.behaviorArgument(type)
   const behaviorAllowedIn = (type, phase) => props.vocabulary.behaviorAllowedIn(type, phase)
   const behaviorOptions = (source, phase) => props.vocabulary.behaviorOptions(source, phase)
-  const behaviorArgumentNote = (source, phase) => props.vocabulary.behaviorArgumentNote(source, phase)
+  const behaviorArgumentNote = (source, phase) =>
+    props.vocabulary.behaviorArgumentNote(source, phase)
   const isTerminalBehavior = (type) => props.vocabulary.isTerminalBehavior(type)
   const behaviorLabel = (type) => props.vocabulary.behaviorLabel(type)
   const operatorArgument = (operator) => props.vocabulary.operatorArgument(operator)
+  const variablesFor = (phase) => props.vocabulary.variablesFor?.(phase) ?? []
 
   // Stable keys for repeater rows (order-independent).
   let nextId = 0
@@ -167,6 +170,13 @@
   const behaviorsForPhase = computed(() =>
     behaviorsFor(form.phase).map(({ value, label }) => ({ value, label }))
   )
+
+  // ── The variable is SUGGESTED, not selected ──
+  // The engine's variables are offered under the field (../../components/form/ComboboxInput.vue)
+  // and narrow as the reader types, but the field stays a text field: `${arg_}`, `${cookie_}`
+  // and `${http_}` are prefixes a rule completes with the name it reads, so the answer is
+  // routinely one the list cannot contain. Phase-aware, for the same reason the behaviors are.
+  const variablesForPhase = computed(() => variablesFor(form.phase))
 
   // ── The behavior picker is SEARCHED, not scanned ──
   // A phase offers around twenty-five behaviors, alphabetical, and the reader arrives
@@ -691,22 +701,17 @@
                         <div
                           class="grid grid-cols-1 items-start gap-(--spacing-xs) sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)_auto]"
                         >
-                          <InputText
+                          <ComboboxInput
                             v-model="cond.variable"
                             size="large"
-                            class="w-full font-code"
+                            class="font-code"
                             aria-label="Variable"
                             placeholder="${uri}"
+                            :options="variablesForPhase"
                             :disabled="submitting"
                             :required="submitted && !cond.variable.trim()"
-                          >
-                            <template #iconLeft>
-                              <i
-                                class="pi pi-search"
-                                aria-hidden="true"
-                              />
-                            </template>
-                          </InputText>
+                            empty-text="No variable matches — type the one you need."
+                          />
 
                           <Select
                             :model-value="cond.operator"
@@ -750,12 +755,11 @@
                             :disabled="submitting"
                             :placeholder="`Select a ${operatorArgument(cond.operator).label.toLowerCase()}`"
                             :display-value="
-                              (value) => optionLabelIn(operatorArgument(cond.operator).source, value)
+                              (value) =>
+                                optionLabelIn(operatorArgument(cond.operator).source, value)
                             "
                           >
-                            <Select.Trigger
-                              :aria-label="operatorArgument(cond.operator).label"
-                            />
+                            <Select.Trigger :aria-label="operatorArgument(cond.operator).label" />
                             <Select.Content>
                               <Select.Option
                                 v-for="option in optionsFor(operatorArgument(cond.operator).source)"

@@ -46,6 +46,67 @@ export const PHASES = [
 export const PHASE_HINT =
   'When the rule runs. Request rules act on what arrives at the edge; response rules act on what leaves it. The two are separate programs and never interleave.'
 
+// ── THE VARIABLES A CONDITION READS ──
+//
+// The set is OPEN, which is why the field suggests instead of selecting: `${arg_}`,
+// `${cookie_}` and `${http_}` are PREFIXES the reader completes (`${arg_token}`,
+// `${http_x_forwarded_for}`), and a closed list cannot express a name that has not
+// been typed yet.
+//
+// Per PHASE for the same reason the behaviors are: a request rule reads what arrived
+// at the edge, a response rule reads what came back from the connector.
+const VARIABLES = [
+  '${arg_}',
+  '${args}',
+  '${cookie_}',
+  '${device_group}',
+  '${domain}',
+  '${geoip_city}',
+  '${geoip_city_continent_code}',
+  '${geoip_city_country_code}',
+  '${geoip_city_country_name}',
+  '${geoip_continent_code}',
+  '${geoip_country_code}',
+  '${geoip_country_name}',
+  '${geoip_region}',
+  '${geoip_region_name}',
+  '${host}',
+  '${http_}',
+  '${remote_addr}',
+  '${remote_port}',
+  '${remote_user}',
+  '${request}',
+  '${request_body}',
+  '${request_method}',
+  '${request_uri}',
+  '${scheme}',
+  '${uri}'
+]
+
+const REQUEST_VARIABLES = ['${server_addr}', '${server_port}']
+
+const RESPONSE_VARIABLES = [
+  '${sent_http_name}',
+  '${status}',
+  '${tcpinfo_rtt}',
+  '${upstream_addr}',
+  '${upstream_cookie_}',
+  '${upstream_http_}',
+  '${upstream_status}'
+]
+
+/**
+ * The variables the phase offers, alphabetical — the shared set plus the ones only that
+ * phase can read. Suggestions, not a closed list: anything can be typed.
+ *
+ * @param {string} phase
+ * @returns {{value: string}[]}
+ */
+export const variablesFor = (phase) =>
+  [...VARIABLES, ...(phase === 'response' ? RESPONSE_VARIABLES : REQUEST_VARIABLES)]
+    .sort((a, b) => a.localeCompare(b))
+    .map((value) => ({ value }))
+
 /** The comparison operators a condition is written with. */
 export const OPERATORS = [
   { value: 'is-equal', label: 'is equal' },
@@ -265,4 +326,3 @@ export const behaviorArgumentNote = (source, phase) =>
   source === 'functions' && phase === 'response'
     ? 'Only functions with the Lua runtime run in the response phase.'
     : ''
-
