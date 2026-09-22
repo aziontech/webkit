@@ -497,7 +497,7 @@
           collapse-aria-label="Hide the tables panel"
           expand-aria-label="Show the tables panel"
           resize-aria-label="Resize the tables panel"
-          class="w-(--container-2xs)"
+          class="[--sidebar-width:var(--container-2xs)]"
         >
           <!-- The panel's fixed head: the title, what acts on the whole list, and the
                search that narrows it. In `#header` so it stays put while the list
@@ -976,7 +976,7 @@
           collapse-aria-label="Hide the query history"
           expand-aria-label="Show the query history"
           resize-aria-label="Resize the query history panel"
-          class="w-(--container-2xs)"
+          class="[--sidebar-width:var(--container-2xs)]"
         >
           <template #header>
             <div class="flex flex-col gap-(--spacing-sm) px-(--spacing-xs)">

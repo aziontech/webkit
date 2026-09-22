@@ -342,7 +342,7 @@
     <AppSidebar
       v-if="sidebar"
       ref="rail"
-      class="hidden h-full md:block"
+      class="hidden h-full md:flex"
       :user="userEmail"
       :active="activeItem"
       :collapsible="collapsible && !isMobile"

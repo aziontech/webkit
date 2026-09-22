@@ -836,7 +836,10 @@
     collapse-aria-label="Collapse sidebar"
     expand-aria-label="Expand sidebar"
     resize-aria-label="Resize sidebar"
-    :class="['h-full', fluid ? 'w-full' : 'w-(--container-2xs)']"
+    :class="[
+      'h-full',
+      fluid ? 'w-full' : collapsible ? '[--sidebar-width:var(--container-2xs)]' : 'w-(--container-2xs)'
+    ]"
   >
     <template #header>
       <!-- The rail's header region: the brand, then the account switcher when this copy

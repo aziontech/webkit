@@ -656,7 +656,7 @@
           collapse-aria-label="Hide the fields panel"
           expand-aria-label="Show the fields panel"
           resize-aria-label="Resize the fields panel"
-          class="w-(--container-2xs)"
+          class="[--sidebar-width:var(--container-2xs)]"
         >
           <template #header>
             <!-- The field sits on the LIST'S column, not on the region's. Every row

@@ -634,7 +634,7 @@
           resize-aria-label="Resize navigation"
           expand-aria-label="Expand navigation"
           collapse-aria-label="Collapse navigation"
-          class="h-full w-(--container-2xs)"
+          class="h-full [--sidebar-width:var(--container-2xs)]"
         >
           <!-- Theme at the bottom of the tree, the same place the nav sheet puts it below
                `lg`. `Sidebar` lays this region out as a ROW whose trailing edge belongs to
