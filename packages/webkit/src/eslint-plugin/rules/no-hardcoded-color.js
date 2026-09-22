@@ -34,13 +34,18 @@ export default {
     // https://api.azion.com/#75d2b32f-fb8a-… the first eight hex digits spell a valid
     // #RRGGBBAA. A color literal opens the string or follows whitespace, a quote, [ ( , : =.
     const URL_FRAGMENT = /(?<=[\w/.~%?&-])#[\w-]+/g
+    // A bare UUID (`75d2b32f-fb8a-47d8-…`) also opens with 8 hex digits; blank it out too
+    // so a `#` in front of it never reads as a color.
+    const UUID = /#?[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\b/g
 
     function scan(node, text) {
       if (typeof text !== 'string' || !text) return
       for (const rule of rules) {
-        const subject = rule.id === 'hex-color' ? text.replace(URL_FRAGMENT, '') : text
-        if (rule.id === 'hex-color' && !FULL_HEX.test(subject) && !STYLE_SIGNAL.test(subject))
-          continue
+        let subject = text
+        if (rule.id === 'hex-color') {
+          subject = text.replace(URL_FRAGMENT, '').replace(UUID, '')
+          if (!FULL_HEX.test(subject) && !STYLE_SIGNAL.test(subject)) continue
+        }
         const m = subject.match(rule.re)
         if (m) {
           context.report({
