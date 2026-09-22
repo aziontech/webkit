@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3735-14866
   node_id: 3735:14866
-checksum: 820bd02fec567b4fa5092e1bea9001ecf13f1dad9245cf1c9248f7c04815b1db
+checksum: 281de9e6373a624b804ff5642a5759a2a7d2b51ad5f8ba2183d6a3ef3ae44870
 created: 2026-05-22
-last_updated: 2026-09-08
+last_updated: 2026-09-22
 ---
 # Sidebar — Component Spec
 
@@ -333,8 +333,12 @@ and the host's own `class="w-[280px]"` governs exactly as before.
 
 Collapsing and expanding is **CSS-only, driven by a hidden native checkbox** — not by JavaScript
 computing an inline `transition` string. A `<input type="checkbox" class="sr-only">` mirrors
-`collapsed` (`v-model`), and the root's `has-checked:` variants carry the width/translate/opacity
-targets and the leave-phase easing. Because a native checkbox reflects `:checked` the instant it is
+`collapsed` (`v-model`), and the root's `has-[>div>input:checked]:` variants carry the
+width/translate/opacity targets and the leave-phase easing. The variant is **scoped to that one
+input by structure** — the root's own toggle is its `> div > input`, the panel's is its `> input`.
+A bare `has-checked:` is `:has(:checked)`, which matches *any* checked descendant, so a rail whose
+slot holds checkboxes (a fields picker, a filter list) collapses itself the moment a consumer
+checks one. Because a native checkbox reflects `:checked` the instant it is
 toggled — by a real click, by `Space`, or simply by the server-rendered `checked` attribute before
 Vue has hydrated — this animation runs correctly even before the component's JavaScript has loaded,
 which a JS-computed `transition` string never could. `sidebar/presets/transitions.ts` no longer
@@ -345,11 +349,11 @@ restructuring this component does not take on.
 
 | Trigger | Animation / Transition | Mechanism | Reduced-motion fallback |
 |---|---|---|---|
-| rail expands | `width` 0 → sized, `translate` -100% → 0, `opacity` → 1 | root `has-checked:` off — base classes: `duration-moderate-02` · `ease-expressive-entrance` | `motion-reduce:transition-none motion-reduce:translate-none` |
-| rail collapses | `width` sized → 0, `translate` 0 → -100%, `opacity` → floor | root `has-checked:` on — `ease-expressive-exit` (same duration) | same |
-| drag in flight | none — width tracks the pointer frame for frame | `data-resizing` forces `transition-none` | — |
+| rail expands | `width` 0 → sized **and `min-width` 0 → the min token, on the same curve**, `translate` -100% → 0, `opacity` → 1 | root `has-[>div>input:checked]:` off — base classes: `duration-moderate-02` · `ease-expressive-entrance` | `motion-reduce:transition-none motion-reduce:translate-none` |
+| rail collapses | `width` sized → 0 **and `min-width` → 0 with it**, `translate` 0 → -100%, `opacity` → floor | root `has-[>div>input:checked]:` on — `ease-productive-exit` (same duration) | same |
+| drag in flight | none — width tracks the pointer frame for frame; the panel's `translate` + `opacity` track the **pull progress** (`next / min`), so the pull is legible below the minimum where the rail itself can no longer narrow | `data-resizing` forces `transition-none` on the root **and the panel**; the panel's `translate`/`opacity` come from an inline style for the length of the drag | — |
 | collapsed edge affordance appears | `opacity` 0 → 1 | Vue `<Transition>`, unchanged | `motion-reduce:transition-none` |
-| collapsed rail previews / retracts | `width` 0 ↔ `--size-10` (the panel does not move — the sliver is surface only) | JS-computed inline `transition` (`duration['moderate-02']` · `curve['expressive-entrance']`) while entering; CSS `has-checked:` exit curve takes over the instant the inline style is cleared on leave | `prefers-reduced-motion` short-circuit while entering; `motion-reduce:transition-none` on leave |
+| collapsed rail previews / retracts | `width` 0 ↔ `--size-10` (the panel does not move — the sliver is surface only) | JS-computed inline `transition` (`duration['moderate-02']` · `curve['expressive-entrance']`) while entering; CSS `has-[>div>input:checked]:` exit curve takes over the instant the inline style is cleared on leave | `prefers-reduced-motion` short-circuit while entering; `motion-reduce:transition-none` on leave |
 | preview zone widens to the sliver | `width` `--size-6` ↔ `--size-10` | pure CSS `hover:` / `focus-within:` on the zone itself — no JS | `motion-reduce:transition-none` |
 | expand affordance rides the sliver in | `translate` `calc(-1 * --size-10)` ↔ 0, `opacity` 0 ↔ 1 | pure CSS `group-hover:` / `group-focus-within:` — no JS | `motion-reduce:transition-none motion-reduce:translate-none` |
 | rail trailing-edge line on hover / focus / drag / preview | `transition-opacity` | Tailwind default (see note) | `motion-reduce:transition-none` |
@@ -358,12 +362,55 @@ An eased width would lag behind the cursor and read as a broken handle, so the t
 suppressed for the duration of a drag (`data-[resizing]:transition-none`) and handed back on
 release — whatever fraction the rail was pulled to then animates to fully in or fully out.
 
+`min-width` is transitioned alongside `width`. The root carries both `min-w-(--sidebar-min-width)`
+(the clamp a server-rendered rail lands in before any JS runs) and `has-[>div>input:checked]:min-w-0`, so the
+floor flips between 0 and the min token on every collapse/expand. `min-width` is not an animatable
+default: left out of `transition-property`, it snaps, and the used width — `max(width, min-width)`
+— jumps the whole floor in a single frame on expand while `width` is still near 0. Both properties
+run the same duration and curve, so the used width interpolates end to end.
+
+**The gesture has three phases: resize, fade, remove.** Between `min-width` and `max-width` the
+rail resizes and nothing fades. Once the pull reaches the **minimum** and the user persists, the
+content begins to **fade** while the rail keeps following the pointer. Past the collapse threshold,
+release **removes** it; release before the threshold springs the rail back to the minimum at full
+opacity.
+
+**A drag tracks the pointer past the minimum width.** `min-width` is a resting constraint, not a
+gesture one: `data-[resizing]:min-w-0` releases it while a pointer is down, so the rail's edge
+follows the pointer for the whole gesture. Pinning it instead stops the rail under the pointer for
+the last `COLLAPSE_SNAP` px and then jumps the whole snap distance in one frame the instant
+`collapsed` flips — measured 256 → 196, in a gesture that is otherwise 4px per frame.
+
+**Above the minimum the panel is the rail, at the rail's width.** Below it the panel holds the
+minimum and is carried by the closing edge: it does not reflow further, because the minimum is the
+width the rail's labels were fitted to and narrowing past it truncates them (measured: `SQL
+Database` ellipsizes at 225px). It keeps `min-width` and takes an inline `translate` of
+`railWidth - minWidth`, holding its trailing edge flush with the rail's (measured gap: 0px at every
+sample). Leaving it at `translate: 0` pins the content in place while the rail's edge sweeps across
+it — the reading that the content sits on a layer *beneath* the rail rather than being carried by
+it. Sliding it by pull progress while the rail stands still is the same failure, louder.
+
+**`inert` / `aria-hidden` commit on release, not mid-gesture.** `collapsed` flips while the pointer
+is still down, so the collapsed *semantics* are gated on `!resizing`: a rail that is visible and
+tracking the pointer is never removed from the accessibility tree.
+
+An inline value that overrides one of these classes must be written as **`translate`**, never
+`transform`: the resting values come from `translate-x-0` / `has-[>input:checked]:-translate-x-full`,
+which in Tailwind v4 compile to the standalone `translate` property. `transform` is a *different*
+property, so an inline `transform` does not override the class — the two compose. Writing the same
+property the class writes is what makes the inline value win.
+
+The collapse takes `ease-productive-exit`, not `ease-expressive-exit`. `expressive-exit` is
+`cubic-bezier(0.95, 0.05, 0.8, 0.04)` — near-flat for most of its run and near-vertical at the end.
+That reads as intent on an opacity, but on a layout width it holds the rail still and then snaps it
+shut. The exit curve for the rail's own box is the productive one.
+
 ### Progressive enhancement — what still needs JavaScript, and what does not
 
 | Interaction | Works before hydration? | Why |
 |---|---|---|
 | Initial paint — correct width/collapsed state, no flash | Yes | The checkbox's `checked` attribute and the width/min/max custom properties are all in the server-rendered HTML; the CSS reacts with no script running |
-| Collapse / expand *motion* once triggered | Yes, as CSS | The animation itself (`has-checked:` width/translate/opacity, the enter/exit curve) is CSS, not a JS-computed `transition` string — it plays correctly whenever the checkbox's `:checked` changes, by any means |
+| Collapse / expand *motion* once triggered | Yes, as CSS | The animation itself (`has-[>div>input:checked]:` width/translate/opacity, the enter/exit curve) is CSS, not a JS-computed `transition` string — it plays correctly whenever the checkbox's `:checked` changes, by any means |
 | Collapsing / expanding *before hydration* | No | The visible trigger is the `IconButton`'s `@click`, which needs Vue's event binding; the hidden checkbox is intentionally `tabindex="-1"` + `aria-hidden`, so nothing pre-hydration can reach it either. Only the motion mechanism is CSS-only, not yet the trigger |
 | Trailing-edge accent line, hover/focus states already visible on the page | Yes | Plain `:hover`/`:focus-visible` on elements Vue did not need to attach — real from first paint |
 | Collapsed-rail hover/focus preview sliver | No | The zone that is hovered and the rail whose width grows are siblings (the rail must stay a sibling of the affordance — see "The collapsed rail previews itself" — so CSS has no cross-sibling hook without restructuring the DOM) |
