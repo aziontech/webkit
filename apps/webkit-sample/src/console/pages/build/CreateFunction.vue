@@ -41,27 +41,28 @@
   // The FIELDS and their guidance are the same ones ../lib/create-resources.js declares
   // for this resource, and the editor opens on the same starter — one API truth, two
   // renderings of it.
-  import Button from '@aziontech/webkit/button'
+  import CardBox from '@aziontech/webkit/card-box'
   import HelperText from '@aziontech/webkit/helper-text'
   import InputText from '@aziontech/webkit/input-text'
-  import Label from '@aziontech/webkit/label'
+  import Item from '@aziontech/webkit/item'
   import { toast } from '@aziontech/webkit/toast'
   import { computed, ref, useId, watch } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
-  import UnsavedChangesGuard from '../../components/form/UnsavedChangesGuard.vue'
   import FunctionCodeEditor from '../../components/function/FunctionCodeEditor.vue'
   import FunctionSettings from '../../components/function/FunctionSettings.vue'
-  import CreationHeader from '../../components/page/CreationHeader.vue'
-  import PageTabs from '../../components/page/PageTabs.vue'
-  import ApplicationBindingSummary from '../../components/resource/ApplicationBindingSummary.vue'
-  import ApplicationGate from '../../components/resource/ApplicationGate.vue'
-  import { hostOptions, HOSTS, resolveHostChoice } from '../../lib/behavior/application-binding'
+  import Section from '../../components/page/Section.vue'
+  import StepperCreatePage from '../../components/page/StepperCreatePage.vue'
+  import DependencyStep from '../../components/resource/DependencyStep.vue'
+  import ModuleStep from '../../components/resource/ModuleStep.vue'
+  import ReviewStep from '../../components/resource/ReviewStep.vue'
+  import { hostRecord, HOSTS, resolveHostChoice } from '../../lib/behavior/application-binding'
   import { CREATION_CENTER_PATH, useCreateOrigin } from '../../lib/behavior/create-origin'
   import { useBaseline } from '../../lib/behavior/forms'
   import { bindingFor } from '../../lib/data/create-bindings'
   import { FUNCTION_ARGS, FUNCTION_STARTER } from '../../lib/data/create-resources'
   import { addFunction, RUNTIMES } from '../../lib/data/functions'
+  import { hostHasModule, moduleRequirementFor } from '../../lib/data/resource-dependencies'
 
   const route = useRoute()
   const router = useRouter()
@@ -70,16 +71,15 @@
   // the same contract CreatePage and CreationHeader keep.
   const userEmail = computed(() => route.query.email || 'myemail@azion.com')
 
-  // TWO tabs, the same two the detail page has (./FunctionDetail.vue). Creating a
-  // function and correcting one are the same task on the same record, so the screen is
-  // the same screen: Code — one editor with a Code / Arguments switch over it — and
-  // Settings.
-  const TABS = [
-    { value: 'code', label: 'Code' },
-    { value: 'settings', label: 'Settings' }
-  ]
-
-  const tab = ref('code')
+  // THE STEPS, in the order the decisions are actually made: where the function runs (and
+  // the module that lets it), the code itself, the settings around it, then a review. The
+  // detail page keeps the same two surfaces as TABS (./FunctionDetail.vue) — correcting a
+  // function is not ordered, writing one is.
+  const DEPENDENCY_STEP = 'where-it-runs'
+  const MODULE_STEP = 'module'
+  const CODE_STEP = 'code'
+  const SETTINGS_STEP = 'settings'
+  const REVIEW_STEP = 'review'
   // Which document the shared editor is showing. Local here (the create page has no
   // record to link to yet); the detail page puts the same model in its URL.
   const editorDocument = ref('code')
@@ -131,7 +131,6 @@
   const argsError = ref('')
   const formError = ref('')
 
-  const titleId = useId()
   const nameId = useId()
   const nameMessageId = useId()
 
@@ -175,21 +174,13 @@
   const cancel = () => leave()
 
   // The first crumb is where Back goes: the origin — the module, or whatever `?from=` named —
-  // when this page was entered from it, the caller when one sent us. The caller's crumb is `#` rather than its real path —
-  // its full location (query and resume marker included) lives in `returnTo`, and `#`
-  // is the href `onCrumb` already reads as "the same intent as Back".
+  // when this page was entered from it, the caller when one sent us. The caller's crumb is `#`
+  // rather than its real path: its full location (query and resume marker included) lives in
+  // `returnTo`, and `#` is the href StepperCreatePage already reads as "the same intent as Back".
   const breadcrumb = computed(() => [
     { label: returnLabel.value, href: returnTo.value ? '#' : originPath.value },
     { label: 'Create Function' }
   ])
-
-  const onCrumb = (event, href) => {
-    if (!href || href === '#') {
-      cancel()
-      return
-    }
-    router.push({ path: href, query: { email: userEmail.value } })
-  }
 
   // ── WHERE THIS FUNCTION RUNS ──────────────────────────────────────────────
   //
@@ -205,27 +196,30 @@
   // environment after giving one.
   const applicationBindingSpec = bindingFor('functions')
   const hostSpec = HOSTS[applicationBindingSpec.host]
-  const hostChoices = computed(() => hostOptions(applicationBindingSpec.host))
 
   const canBindApplication = computed(
     () => !returnTo.value && executionEnvironment.value === 'application'
   )
 
-  const gateOpen = ref(Boolean(applicationBindingSpec) && !returnTo.value)
-
   const boundApplicationName = computed(() => applicationChoice.value?.name ?? '')
 
-  const onGateChoose = (choice) => {
-    applicationChoice.value = choice
-    gateOpen.value = false
-  }
+  // The matrix routes a function to its host THROUGH a function instance, and that is where
+  // `modules.functions` is required (../../lib/data/resource-dependencies.js). So the module
+  // question is the same one every other create asks, resolved through that hop.
+  const moduleRequirement = computed(() =>
+    canBindApplication.value ? moduleRequirementFor('functions', applicationBindingSpec.host) : null
+  )
 
-  // Past the question: the function is written now and bound later. The Settings tab says
-  // so, in the function's own terms, so the consequence is not hidden behind the skip.
-  const onGateSkip = () => {
-    applicationChoice.value = null
-    gateOpen.value = false
-  }
+  const moduleMissing = computed(() => {
+    if (!moduleRequirement.value || !applicationChoice.value) return false
+    const record =
+      applicationChoice.value.mode === 'existing'
+        ? hostRecord(applicationBindingSpec.host, boundApplicationName.value)
+        : {}
+    return !hostHasModule(record ?? {}, moduleRequirement.value)
+  })
+
+  const enableModule = ref(false)
 
   // An account with no application cannot answer the gate at all — so the way on is the
   // Creation Center, where an application is made.
@@ -235,6 +229,116 @@
   watch(executionEnvironment, (environment) => {
     if (environment !== 'application') applicationChoice.value = null
   })
+
+  // A caller that is already binding this function (an application's Function Instances
+  // drawer) has answered the host question for us, so its step is not asked again.
+  const asksHost = computed(() => Boolean(applicationBindingSpec) && !returnTo.value)
+
+  const stepDefs = computed(() => {
+    const list = []
+
+    if (asksHost.value) {
+      list.push({
+        value: DEPENDENCY_STEP,
+        title: 'Where it runs',
+        description: applicationBindingSpec.mechanism,
+        heading: false
+      })
+      if (moduleRequirement.value && moduleMissing.value) {
+        list.push({
+          value: MODULE_STEP,
+          title: moduleRequirement.value.label,
+          description: `Off on ${boundApplicationName.value}.`
+        })
+      }
+    }
+
+    list.push({
+      value: CODE_STEP,
+      title: 'Code',
+      description: 'The function body, and the arguments it is called with.',
+      bleed: true
+    })
+    list.push({
+      value: SETTINGS_STEP,
+      title: 'Settings',
+      description: 'What the function is called, where it runs, and whether it is active.'
+    })
+    list.push({
+      value: REVIEW_STEP,
+      title: 'Review',
+      description: 'What will be created, and what it can do the moment it exists.'
+    })
+
+    return list
+  })
+
+  const currentStep = ref('')
+  const unlocked = ref([])
+
+  watch(
+    stepDefs,
+    (list) => {
+      if (list.some((step) => step.value === currentStep.value)) return
+      currentStep.value = list[0]?.value ?? ''
+      unlocked.value = currentStep.value ? [currentStep.value] : []
+    },
+    { immediate: true }
+  )
+
+  const stepIndex = computed(() =>
+    Math.max(
+      0,
+      stepDefs.value.findIndex((step) => step.value === currentStep.value)
+    )
+  )
+
+  // Which step is carrying a message, so the rail can say so without the reader opening it.
+  const stepHasError = (value) => {
+    if (value === CODE_STEP) return Boolean(codeError.value || argsError.value || formError.value)
+    if (value === SETTINGS_STEP) return Boolean(nameError.value)
+    return false
+  }
+
+  const railSteps = computed(() =>
+    stepDefs.value.map((step, index) => ({
+      value: step.value,
+      title: step.title,
+      description: step.description,
+      heading: step.heading !== false,
+      bleed: Boolean(step.bleed),
+      state: stepHasError(step.value)
+        ? 'error'
+        : saving.value && step.value === REVIEW_STEP
+          ? 'loading'
+          : index < stepIndex.value
+            ? 'complete'
+            : 'upcoming',
+      disabled: !unlocked.value.includes(step.value)
+    }))
+  )
+
+  const goNext = () => {
+    const step = stepDefs.value[stepIndex.value]
+    if (!step) return
+    if (step.value === CODE_STEP && !validateCode()) return
+    if (step.value === SETTINGS_STEP && !validateSettings()) return
+    const next = stepDefs.value[stepIndex.value + 1]
+    if (!next) return
+    if (!unlocked.value.includes(next.value)) unlocked.value.push(next.value)
+    currentStep.value = next.value
+  }
+
+  const goBack = () => {
+    const previous = stepDefs.value[stepIndex.value - 1]
+    if (previous) currentStep.value = previous.value
+  }
+
+  // Answering the host question moves the reader on, the way the full-screen gate did.
+  const onHostAnswer = () => {
+    enableModule.value = false
+    goNext()
+  }
 
   /** `default_args` is posted as an object, so what is typed has to parse. */
   const parsedArgs = () => {
@@ -262,36 +366,39 @@
   }
 
   /**
-   * Points the reader at the field that is missing, on the tab that holds it. The name
-   * lives in the bar and is always on screen; the code and the arguments live behind
-   * tabs, so a failure there switches to the tab before marking it — a message on a tab
-   * nobody is looking at is a failed submit with no visible cause. Later tabs are
-   * switched to first, so the LEFTMOST failure is the one left on screen.
+   * The code step's own checks. A failure switches the editor to the document that holds
+   * it — a message on a document nobody is looking at is a failed submit with no visible
+   * cause — and the arguments are switched to LAST so the leftmost failure is what stays.
    */
-  const validate = () => {
-    nameError.value = name.value.trim() ? '' : 'This field is required.'
+  const validateCode = () => {
     codeError.value = code.value.trim() ? '' : 'This field is required.'
     argsError.value = parsedArgs() ? '' : 'Arguments must be a JSON object.'
     formError.value = parsedForm() === null ? 'The form schema must be a JSON object.' : ''
 
-    // The FORM first, so a page that fails on both lands the reader on the JSON that is
-    // the harder of the two to have got wrong — the arguments — rather than on the
-    // builder, which would leave the args message behind an unrelated switch.
-    if (formError.value) {
-      tab.value = 'code'
-      editorDocument.value = 'arguments'
-    }
-    if (argsError.value) {
-      tab.value = 'code'
-      editorDocument.value = 'arguments'
-    }
-    if (codeError.value) {
-      tab.value = 'code'
-      editorDocument.value = 'code'
-    }
-    if (nameError.value) globalThis.document.getElementById(nameId)?.focus()
+    if (formError.value || argsError.value) editorDocument.value = 'arguments'
+    if (codeError.value) editorDocument.value = 'code'
 
-    return !nameError.value && !codeError.value && !argsError.value && !formError.value
+    return !codeError.value && !argsError.value && !formError.value
+  }
+
+  /** The settings step's own check: the one field the endpoint requires. */
+  const validateSettings = () => {
+    nameError.value = name.value.trim() ? '' : 'This field is required.'
+    if (nameError.value) globalThis.document.getElementById(nameId)?.focus()
+    return !nameError.value
+  }
+
+  /**
+   * The whole form, at commit. A failed submit must point at a field already on screen, so
+   * the rail moves to the step that is carrying the message rather than leaving the reader
+   * on Review beside an error they cannot see.
+   */
+  const validate = () => {
+    const codeOk = validateCode()
+    const settingsOk = validateSettings()
+    if (!codeOk) currentStep.value = CODE_STEP
+    else if (!settingsOk) currentStep.value = SETTINGS_STEP
+    return codeOk && settingsOk
   }
 
   /**
@@ -299,6 +406,22 @@
    * endpoint's own snake_case, so the page shows the request it would actually send.
    */
   const post = (body) => new Promise((resolve) => globalThis.setTimeout(() => resolve(body), 900))
+
+  /** The function, as the rows Review prints — each value under the property it posts. */
+  const reviewAnswers = computed(() => [
+    { field: { id: 'name', label: 'Name', api: 'name' }, value: name.value },
+    { field: { id: 'runtime', label: 'Runtime', api: 'runtime' }, value: RUNTIME.label },
+    {
+      field: {
+        id: 'execution_environment',
+        label: 'Execution environment',
+        api: 'execution_environment'
+      },
+      value: executionEnvironment.value
+    },
+    { field: { id: 'default_args', label: 'Arguments', api: 'default_args' }, value: args.value },
+    { field: { id: 'active', label: 'Active', api: 'active' }, value: active.value }
+  ])
 
   const save = async () => {
     if (saving.value) return // re-entrancy lock
@@ -381,215 +504,139 @@
 </script>
 
 <template>
-  <!-- THE GATE IS THE FIRST SCREEN. Not a step INSIDE the editor page: it is the question
-       that decides where this create ends, and the editor is what comes after it
-       (../../components/resource/ApplicationGate.vue). The leave guard rides with it, so
-       backing out of the gate with a half-written function still asks. -->
-  <ApplicationGate
-    v-if="gateOpen"
-    :title="'Create Function'"
-    icon="ai ai-edge-functions"
-    :noun="hostSpec.noun"
-    :host-icon="hostSpec.icon"
-    :can-create="hostSpec.canCreate"
-    :empty-label="hostSpec.emptyLabel"
-    :options="hostChoices"
+  <StepperCreatePage
+    v-model="currentStep"
     :breadcrumb="breadcrumb"
     :back-label="`Back to ${returnLabel}`"
-    @choose="onGateChoose"
-    @skip="onGateSkip"
-    @empty-action="goToCreationCenter"
-    @back="cancel"
-    @navigate="onCrumb"
-  />
-
-  <div
-    v-else
-    class="flex h-dvh flex-col bg-(--bg-canvas)"
+    title="Create Function"
+    :steps="railSteps"
+    :submitting="saving"
+    :dirty="dirty"
+    save-label="Create function"
+    @cancel="cancel"
+    @back="goBack"
+    @next="goNext"
+    @submit="save"
   >
-    <UnsavedChangesGuard :dirty="dirty" />
-
-    <CreationHeader
-      :breadcrumb="breadcrumb"
-      :back-label="`Back to ${returnLabel}`"
-      @back="cancel"
-      @navigate="onCrumb"
+    <DependencyStep
+      v-if="currentStep === DEPENDENCY_STEP"
+      v-model:choice="applicationChoice"
+      v-model:enable-module="enableModule"
+      resource="functions"
+      title="Create Function"
+      icon="ai ai-edge-functions"
+      :binding="applicationBindingSpec"
+      :host="hostSpec"
+      unit="function"
+      :disabled="saving"
+      @answer="onHostAnswer"
+      @empty-action="goToCreationCenter"
     />
 
-    <main class="flex min-h-0 flex-1 flex-col">
-      <form
-        class="animate-page-enter motion-reduce:animate-none flex min-h-0 flex-1 flex-col"
-        :aria-labelledby="titleId"
-        novalidate
-        @submit.prevent="save"
+    <ModuleStep
+      v-else-if="currentStep === MODULE_STEP && moduleRequirement"
+      v-model="enableModule"
+      :requirement="moduleRequirement"
+      :host-name="boundApplicationName"
+      :host-noun="hostSpec.noun"
+      unit="function"
+      :disabled="saving"
+    />
+
+    <!-- THE EDITOR, shared with the detail page (../../components/function/FunctionCodeEditor.vue):
+         the same Code / Arguments switch, the same full-bleed editor. It is the one step that
+         takes the whole pane — a code editor held to the form measure spends its width on
+         padding. `v-show` rather than `v-if` because Monaco owns undo history, cursor and
+         folding state and unmounting throws all three away. -->
+    <div
+      v-show="currentStep === CODE_STEP"
+      class="flex min-h-0 flex-1 flex-col"
+    >
+      <FunctionCodeEditor
+        v-model:code="code"
+        v-model:args="args"
+        v-model:form="form"
+        v-model:document="editorDocument"
+        :language="RUNTIME.language"
+        :runtime-label="RUNTIME.label"
+        :file-name="name || 'function'"
+        :code-error="codeError"
+        :args-error="argsError"
+        :disabled="saving"
+        test-id="create-function"
+        @update:code-error="codeError = $event"
+        @update:args-error="argsError = $event"
+      />
+    </div>
+
+    <template v-if="currentStep === SETTINGS_STEP">
+      <!-- The NAME moved out of the commit bar and into the step that names the function.
+           On a stepped create there is a place for it: Settings is passed through, so the
+           field is answered in the band that describes it rather than pinned to the bar. -->
+      <Section
+        stacked
+        :divided="false"
+        title="Identification"
+        hint="The name the function is listed and selected by."
       >
-        <!-- The page's <h1>, and the only thing on this page that is NOT rendered: the
-             title is carried visually by the breadcrumb (every tabbed page in the console
-             works that way), and a heading block here would spend the top of the viewport
-             on a sentence to take it from the editor. Screen readers still get the page's
-             name, and the form is labelled by it. -->
-        <h1
-          :id="titleId"
-          class="sr-only"
-        >
-          Create function
-        </h1>
-
-        <!-- The second-level nav bar every module page uses. The three tabs are three
-             views of ONE create, so they are tabs, not steps: nothing here has to be
-             answered in order, and Save commits all three from any of them. -->
-        <PageTabs
-          v-model:value="tab"
-          :tabs="TABS"
+        <CardBox :padded="false">
+          <template #content>
+            <Item.List>
+              <Item>
+                <Item.Content>
+                  <Item.Title>Name</Item.Title>
+                  <Item.Description>name</Item.Description>
+                </Item.Content>
+                <Item.Actions>
+                  <div class="layout-field-control">
+                    <InputText
+                      :id="nameId"
+                      v-model="name"
+                      size="medium"
+                      placeholder="my-function"
+                      class="w-full"
+                      aria-label="Name"
+                      autocomplete="off"
+                      :required="!!nameError"
+                      :aria-describedby="nameError ? nameMessageId : undefined"
+                      :disabled="saving"
+                      @update:model-value="nameError = ''"
+                    />
+                  </div>
+                </Item.Actions>
+              </Item>
+            </Item.List>
+          </template>
+        </CardBox>
+        <HelperText
+          v-if="nameError"
+          :id="nameMessageId"
+          kind="required"
+          :label="nameError"
         />
+      </Section>
 
-        <!-- One flag locks every control while the request is in flight. The bar's own
-             name field sits outside this fieldset, so it takes `:disabled` directly. -->
-        <fieldset
-          class="m-0 flex min-h-0 min-w-0 flex-1 flex-col border-0 p-0"
-          :disabled="saving"
-        >
-          <legend class="sr-only">Create function</legend>
+      <!-- The bands shared with the detail page, so a function's settings cannot read one
+           way while it is being written and another once it exists. -->
+      <FunctionSettings
+        v-model:execution-environment="executionEnvironment"
+        v-model:active="active"
+        :runtime-label="RUNTIME.label"
+        :disabled="saving"
+      />
+    </template>
 
-          <!-- THE EDITOR, shared with the detail page (ui/FunctionCodeEditor.vue): the
-               same Code / Arguments switch, the same full-bleed editor. `v-show` rather
-               than `v-if` because Monaco owns undo history, cursor and folding state and
-               unmounting throws all three away. -->
-          <div
-            v-show="tab === 'code'"
-            class="flex min-h-0 flex-1 flex-col"
-          >
-            <FunctionCodeEditor
-              v-model:code="code"
-              v-model:args="args"
-              v-model:form="form"
-              v-model:document="editorDocument"
-              :language="RUNTIME.language"
-              :runtime-label="RUNTIME.label"
-              :file-name="name || 'function'"
-              :code-error="codeError"
-              :args-error="argsError"
-              :disabled="saving"
-              test-id="create-function"
-              @update:code-error="codeError = $event"
-              @update:args-error="argsError = $event"
-            />
-          </div>
-
-          <div
-            v-show="tab === 'settings'"
-            class="min-h-0 flex-1 overflow-auto"
-          >
-            <!-- The settings ARE a form, so they take the form measure and the same band
-                 rhythm every other create page uses — the tab beside the editor is not a
-                 second design, it is the console's create page with the code lifted out. -->
-            <div class="layout-column-form layout-boundary flex min-w-0 flex-col">
-              <!-- The three bands, shared with the detail page so a function's
-                   settings cannot read one way while it is being written and another
-                   once it exists (ui/FunctionSettings.vue). -->
-              <FunctionSettings
-                v-model:execution-environment="executionEnvironment"
-                v-model:active="active"
-                :runtime-label="RUNTIME.label"
-                :disabled="saving"
-              />
-
-              <ApplicationBindingSummary
-                v-if="canBindApplication"
-                :binding="applicationBindingSpec"
-                :host="hostSpec"
-                :application="boundApplicationName"
-                :disabled="saving"
-                @change="gateOpen = true"
-              />
-            </div>
-          </div>
-        </fieldset>
-
-        <!-- THE COMMIT BAR. `h-14` is the same height as the header above, so the page is
-             bracketed by two bands of equal height. It carries the NAME because the name is
-             the only field that has to be answered and the editor is where the reader
-             spends the whole task: asking for it on a tab would mean a Save that fails for
-             a reason on the other screen. -->
-        <!-- A SURFACE, not canvas. Painted `--bg-canvas` the bar was the same colour as
-             the page behind it, so the rule above it was the only thing separating them
-             and the Name field and the buttons read as floating on the page rather than
-             sitting on a bar. -->
-        <footer class="shrink-0 border-t border-(--border-default) bg-(--bg-surface)">
-          <!-- `min-h-14` rather than `h-14`: at the desktop widths this page is written
-               for, the row fits on one line and the bar IS 56px. Below that it wraps and
-               grows instead of pushing Save off the edge — a commit bar that overflows is
-               a commit you cannot reach. -->
-          <div
-            class="layout-boundary-inline flex min-h-14 flex-wrap items-center gap-(--spacing-sm) py-(--spacing-xxs)"
-          >
-            <div class="mr-auto flex min-w-0 flex-1 items-center gap-(--spacing-sm)">
-              <!-- No required marker: this page follows the console's validation model —
-                   nothing is judged while the reader is still typing, and the amber
-                   prompt on a failed submit is where "required" is said. -->
-              <Label
-                :for="nameId"
-                label="Name"
-                class="shrink-0"
-              />
-              <InputText
-                :id="nameId"
-                v-model="name"
-                size="medium"
-                placeholder="my-function"
-                class="w-full min-w-0 max-w-(--container-3xs)"
-                autocomplete="off"
-                :required="!!nameError"
-                :aria-describedby="nameError ? nameMessageId : undefined"
-                :disabled="saving"
-                @update:model-value="nameError = ''"
-              />
-              <!-- The message sits BESIDE the field, not under it: a bar of fixed height
-                   that grows on a failed submit moves the commit buttons out from under
-                   the pointer that just pressed one. -->
-              <HelperText
-                v-if="nameError"
-                :id="nameMessageId"
-                kind="required"
-                :label="nameError"
-                class="shrink-0"
-              />
-            </div>
-
-            <!-- The pair wraps as one unit: Cancel and Save never end up on different
-                 lines from each other. -->
-            <div class="flex shrink-0 items-center gap-(--spacing-sm)">
-              <Button
-                type="button"
-                label="Cancel"
-                kind="outlined"
-                size="medium"
-                :disabled="saving"
-                @click="cancel"
-              />
-              <!-- The webkit Button renders a native type="button" and does not forward a
-                   type, so submit is driven from its click; the sr-only submit below keeps
-                   Enter working. -->
-              <Button
-                label="Save"
-                kind="primary"
-                size="medium"
-                :loading="saving"
-                @click="save"
-              />
-            </div>
-          </div>
-        </footer>
-
-        <button
-          type="submit"
-          class="sr-only"
-          tabindex="-1"
-          aria-hidden="true"
-        >
-          Save
-        </button>
-      </form>
-    </main>
-  </div>
+    <ReviewStep
+      v-else-if="currentStep === REVIEW_STEP"
+      resource="functions"
+      unit="function"
+      :answers="reviewAnswers"
+      :binding="asksHost ? applicationBindingSpec : null"
+      :host="hostSpec"
+      :bound-to="canBindApplication ? boundApplicationName : ''"
+      :module-requirement="moduleRequirement"
+      :module-missing="moduleMissing"
+      :module-enabled="enableModule"
+    />
+  </StepperCreatePage>
 </template>

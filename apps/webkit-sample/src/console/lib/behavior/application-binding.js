@@ -11,7 +11,10 @@ import { APPLICATIONS } from '../data/applications'
 import { provisionDeployment, provisionedApplications } from '../data/provisioning'
 import { computed } from 'vue'
 
+import { CONNECTORS } from '../data/connectors'
 import { allFirewalls } from '../data/firewalls'
+import { createdRowsFor } from '../state/created-resources'
+import { allWorkloads } from '../state/workload-settings'
 
 /** Everything the account can bind to — what this session made, then the seeded list. */
 export const accountApplications = computed(() => [
@@ -80,8 +83,40 @@ export const HOSTS = {
     canCreate: false,
     emptyPath: '/firewall/new',
     emptyLabel: 'Create a firewall'
+  },
+  workload: {
+    noun: 'workload',
+    icon: 'ai ai-workloads',
+    canCreate: false,
+    emptyPath: '/workloads/new',
+    emptyLabel: 'Create a workload'
+  },
+  connector: {
+    noun: 'connector',
+    icon: 'ai ai-edge-connectors',
+    canCreate: false,
+    emptyPath: '/connectors/new',
+    emptyLabel: 'Create a connector'
   }
 }
+
+/** Every workload the account can bind to, as chooser rows. */
+export const workloadOptions = computed(() =>
+  allWorkloads.value.map((workload) => ({
+    value: workload.name,
+    label: workload.name,
+    description: workload.domain ?? ''
+  }))
+)
+
+/** Every connector the account can bind to, as chooser rows. */
+export const connectorOptions = computed(() =>
+  [...createdRowsFor('connectors'), ...CONNECTORS].map((connector) => ({
+    value: connector.name,
+    label: connector.name,
+    description: connector.address ?? connector.type ?? ''
+  }))
+)
 
 /** Every firewall the account can bind to, as chooser rows. */
 export const firewallOptions = computed(() =>
@@ -98,8 +133,37 @@ export const firewallOptions = computed(() =>
  * @param {string} kind `application` | `firewall`.
  * @returns {Array<{value: string, label: string, description: string}>}
  */
-export const hostOptions = (kind) =>
-  kind === 'firewall' ? firewallOptions.value : applicationOptions.value
+export const hostOptions = (kind) => {
+  if (kind === 'firewall') return firewallOptions.value
+  if (kind === 'workload') return workloadOptions.value
+  if (kind === 'connector') return connectorOptions.value
+  return applicationOptions.value
+}
+
+/**
+ * The host ROWS behind those options — the records themselves, so a caller that needs more
+ * than a label (which modules a host has on, say) reads the same list the chooser offers
+ * rather than a second one that can disagree with it.
+ *
+ * @param {string} kind `application` | `firewall`.
+ * @returns {Array<object>}
+ */
+export const hostRecords = (kind) => {
+  if (kind === 'firewall') return allFirewalls()
+  if (kind === 'workload') return allWorkloads.value
+  if (kind === 'connector') return [...createdRowsFor('connectors'), ...CONNECTORS]
+  return accountApplications.value
+}
+
+/**
+ * One host row, by the name a chooser answer carries.
+ *
+ * @param {string} kind `application` | `firewall`.
+ * @param {string} name
+ * @returns {object|null}
+ */
+export const hostRecord = (kind, name) =>
+  hostRecords(kind).find((item) => item.name === name) ?? null
 
 /**
  * The host a gate answer names, resolved at COMMIT time.
@@ -109,8 +173,8 @@ export const hostOptions = (kind) =>
  * @returns {{id: string, name: string, created: boolean}|null}
  */
 export const resolveHostChoice = (kind, choice) => {
-  if (kind !== 'firewall') return resolveApplicationChoice(choice)
+  if (kind === 'application' || !kind) return resolveApplicationChoice(choice)
   const wanted = String(choice?.name ?? '').trim()
-  const firewall = allFirewalls().find((item) => item.name === wanted)
-  return firewall ? { id: String(firewall.id), name: firewall.name, created: false } : null
+  const record = hostRecords(kind).find((item) => item.name === wanted)
+  return record ? { id: String(record.id), name: record.name, created: false } : null
 }

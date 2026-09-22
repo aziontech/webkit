@@ -11,9 +11,10 @@
   // taught a second habit for one task.
   //
   // WHAT IT ADDS, and only this:
-  //   THE PROGRESS. ./WizardProgress.vue above the bands — how far through the parts,
-  //     and what they are called. It replaces nothing; the create page simply had no
-  //     position to report.
+  //   THE RAIL. ./StepRail.vue down the left of the page — how far through the parts, and
+  //     what they are called. It is the same rail ./StepperCreatePage.vue carries, so the
+  //     two stepped shells in this console report position the same way. It replaced the
+  //     horizontal progress bar that used to pin above the bands.
   //   THE ADVANCE. The bar carries the flow's two directions and nothing else: Back at
   //     the left end, the commit at the right — Next until the last part, where it
   //     becomes the create's own verb. From the second part on it is always there,
@@ -47,7 +48,7 @@
   import UnsavedChangesGuard from '../form/UnsavedChangesGuard.vue'
   import CreationHeader from './CreationHeader.vue'
   import PageHeading from './PageHeading.vue'
-  import WizardProgress from './WizardProgress.vue'
+  import StepRail from './StepRail.vue'
 
   const props = defineProps({
     // Breadcrumb trail for the flow, e.g.
@@ -111,6 +112,31 @@
   const userEmail = computed(() => route.query.email || 'myemail@azion.com')
 
   const atStart = computed(() => props.currentStep <= 0)
+
+  // The rail speaks step VALUES; this page has always spoken indexes, and both flows that
+  // own a wizard pass indexes. So the translation lives here and neither of them changes.
+  //
+  // A part already answered is reachable — going back is safe, the wizard keeps every
+  // answer — and a part ahead is not, because reaching it is what the advance validates.
+  // That is exactly what the bar used to say by making answered parts buttons and the rest
+  // plain text.
+  const railSteps = computed(() =>
+    props.steps.map((step, index) => ({
+      value: String(step.id ?? index),
+      title: step.label ?? '',
+      description: step.description ?? '',
+      state: props.submitting && index === props.currentStep ? 'loading' : index < props.currentStep ? 'complete' : 'upcoming',
+      disabled: index > props.currentStep || props.submitting
+    }))
+  )
+
+  const currentValue = computed({
+    get: () => String(props.steps[props.currentStep]?.id ?? props.currentStep),
+    set: (value) => {
+      const index = railSteps.value.findIndex((step) => step.value === value)
+      if (index !== -1 && index !== props.currentStep) emit('go', index)
+    }
+  })
 
   // THE BAND ONLY EXISTS WHEN IT HOLDS SOMETHING. On the first part there is no Back
   // (nothing behind it) and, for a part whose own rows are the forward, no advance either
@@ -227,7 +253,19 @@
          flex child's default `min-height:auto` refuses to shrink below its content, so a
          single missing `min-h-0` moves the overflow to the page and the pinning is gone
          with no error anywhere. -->
-    <main class="animate-page-enter motion-reduce:animate-none flex min-h-0 flex-1 flex-col">
+    <div class="flex min-h-0 flex-1">
+      <!-- THE RAIL replaces the progress bar this page used to pin above the bands. It is
+           the same rail every other stepped create in the console carries (./StepRail.vue),
+           so a reader who has created one resource recognises the position of every other.
+           It retires on a terminal phase, where there is nothing left to answer. -->
+      <StepRail
+        v-if="!terminal && steps.length > 1"
+        v-model="currentValue"
+        :steps="railSteps"
+        :aria-label="title || 'Steps'"
+      />
+
+      <main class="animate-page-enter motion-reduce:animate-none flex min-h-0 min-w-0 flex-1 flex-col">
       <form
         class="flex min-h-0 flex-1 flex-col"
         :aria-labelledby="titleId"
@@ -279,36 +317,12 @@
               />
             </div>
 
-            <!-- THE POSITION STAYS. Of the two halves of the old head this is the one
-                 that answers a question the reader has at every scroll offset — how far
-                 through the flow am I, and what is this part called — so it pins to the
-                 top of the scrollport and the heading passes under it.
-                 `sticky` INSIDE the box, not a row above it, because the heading has to
-                 scroll past it: a row outside the scroller can only sit above everything
-                 that scrolls, which would have put the position on top of the title.
-                 Its background is the canvas and it is opaque, so content going under it
-                 is hidden rather than showing through — and `scroll-fade` already knows
-                 about pinned headers: it hit-tests the top edge, keeps whatever is pinned
-                 there at full strength, and starts the dissolve at its BOTTOM edge, so
-                 the band stays crisp while the form dissolves as it passes beneath.
-                 THE RULE UNDER IT IS FULL-BLEED — the border is on this full-width
-                 wrapper while its contents keep the form's measure, so the rule reads as
-                 the floor of the page's head rather than as the top edge of another card
-                 sized to the form. That is why the scroller's column is full width and
-                 each part applies `layout-column-form` itself. -->
-            <div
+            <p
               v-if="!terminal && steps.length > 1"
-              class="sticky top-0 z-10 border-b border-(--border-default) bg-(--bg-canvas)"
+              class="layout-column-form layout-boundary-inline pb-(--spacing-sm) text-label-sm text-(--text-muted) md:hidden"
             >
-              <div class="layout-column-form layout-boundary-inline py-(--spacing-md)">
-                <WizardProgress
-                  :steps="steps"
-                  :current-step="currentStep"
-                  :disabled="submitting"
-                  @go="emit('go', $event)"
-                />
-              </div>
-            </div>
+              Step {{ Math.min(currentStep + 1, steps.length) }} of {{ steps.length }}
+            </p>
 
             <!-- One flag locks every control while the commit is in flight. The fieldset
                  is the NATIVE safety net; each control still takes `:disabled` from the
@@ -440,6 +454,7 @@
           {{ nextLabel }}
         </button>
       </form>
-    </main>
+      </main>
+    </div>
   </div>
 </template>

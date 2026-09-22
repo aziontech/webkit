@@ -143,7 +143,7 @@ const BINDINGS = {
           conditions: [
             {
               join: null,
-              variable: '${remote_addr}',
+              variable: '${network}',
               operator: 'is-in-network-list',
               argument: record.id
             }
@@ -251,12 +251,16 @@ export const bindingRuleDraft = (resource, record) => {
   // A binding with neither has no rule to write: a firewall is not CALLED by anything, it
   // simply fronts the application it was created in.
   if (!binding.behavior) return null
+  // The request path, named the way the engine that will hold the rule names it: an
+  // application reads `${uri}`, a firewall reads `${request_uri}`. Same criterion, two
+  // vocabularies (./rules-engine.js, ./firewall-rules.js).
+  const path = binding.host === 'firewall' ? '${request_uri}' : '${uri}'
   return {
     name: binding.ruleName(record.name),
     description: binding.ruleDescription(record.name),
     phase: 'request',
     criteria: [
-      { conditions: [{ join: null, variable: '${uri}', operator: 'matches', argument: '/*' }] }
+      { conditions: [{ join: null, variable: path, operator: 'matches', argument: '/*' }] }
     ],
     behaviors: [{ type: binding.behavior, [binding.field]: record.id }],
     active: true

@@ -7,10 +7,11 @@
   // between resources — only the fields are, and those come from the Azion v4 API
   // (../lib/create-resources.js holds them and argues that sourcing).
   //
-  // A first-level create is a PAGE (see ui/CreatePage.vue and docs/surfaces.js for the
-  // rule), and this file spends none of its lines on that shell: CreatePage owns the
-  // chrome, the measure, the lock and the action bar, so what is left here is the one
-  // thing that actually differs per resource — which questions get asked, and when.
+  // A first-level create is a PAGE (see docs/surfaces.js for the rule), and this file
+  // spends none of its lines on that shell: ../../components/page/StepperCreatePage.vue
+  // owns the chrome, the step rail, the measure, the lock and the action bar, so what is
+  // left here is the one thing that actually differs per resource — which questions get
+  // asked, in what order, and what has to be answered before the next step opens.
   //
   // ── WHY THE FIELDS ARE DATA AND THE BANDS ARE MARKUP ──
   //
@@ -49,11 +50,12 @@
   import { useRoute, useRouter } from 'vue-router'
 
   import SpecFieldRow from '../../components/form/SpecFieldRow.vue'
-  import CreatePage from '../../components/page/CreatePage.vue'
   import Section from '../../components/page/Section.vue'
-  import ApplicationBindingSummary from '../../components/resource/ApplicationBindingSummary.vue'
-  import ApplicationGate from '../../components/resource/ApplicationGate.vue'
-  import { hostOptions, HOSTS, resolveHostChoice } from '../../lib/behavior/application-binding'
+  import StepperCreatePage from '../../components/page/StepperCreatePage.vue'
+  import DependencyStep from '../../components/resource/DependencyStep.vue'
+  import ModuleStep from '../../components/resource/ModuleStep.vue'
+  import ReviewStep from '../../components/resource/ReviewStep.vue'
+  import { hostRecord, HOSTS, resolveHostChoice } from '../../lib/behavior/application-binding'
   import { CREATION_CENTER_PATH, useCreateOrigin } from '../../lib/behavior/create-origin'
   import { useBaseline } from '../../lib/behavior/forms'
   import { bindingFor, bindingWritesRule } from '../../lib/data/create-bindings'
@@ -64,6 +66,11 @@
     resourceFields,
     resourceSettingsPath
   } from '../../lib/data/create-resources'
+  import {
+    hostHasModule,
+    matrixBindingFor,
+    moduleRequirementFor
+  } from '../../lib/data/resource-dependencies'
   import { addCreatedResource, storesCreated } from '../../lib/state/created-resources'
 
   const props = defineProps({
@@ -136,51 +143,39 @@
   // it — so its create page asks where it runs and ends on that rule, rather than handing
   // back a record that does nothing (../../lib/data/create-bindings.js holds which
   // resources are in that position, and what their rule is). A resource with no entry
-  // there renders no band and is created exactly as before.
-  const applicationBindingSpec = computed(() => bindingFor(props.resource))
+  // there is created exactly as before.
+  const applicationBindingSpec = computed(
+    () => bindingFor(props.resource) ?? matrixBindingFor(props.resource)
+  )
   const hostSpec = computed(() => HOSTS[applicationBindingSpec.value?.host] ?? HOSTS.application)
-  const hostChoices = computed(() => hostOptions(applicationBindingSpec.value?.host))
 
-  // The gate's answer: `{ mode, name }`, or null when the reader continued without an
-  // application. Resolved (and provisioned, on the new branch) at SUBMIT, not here.
   const applicationChoice = ref(null)
-  const gateOpen = ref(Boolean(applicationBindingSpec.value))
+  const enableModule = ref(false)
 
   const boundApplicationName = computed(() => applicationChoice.value?.name ?? '')
 
-  const onGateChoose = (choice) => {
-    applicationChoice.value = choice
-    gateOpen.value = false
-  }
+  const moduleRequirement = computed(() =>
+    applicationBindingSpec.value
+      ? moduleRequirementFor(props.resource, applicationBindingSpec.value.host)
+      : null
+  )
 
-  // Past the question: the resource is created now and bound later. The band at the top of
-  // the form says it is bound to nothing, and what that means for this resource.
-  const onGateSkip = () => {
-    applicationChoice.value = null
-    gateOpen.value = false
-  }
+  const moduleMissing = computed(() => {
+    if (!moduleRequirement.value || !applicationChoice.value) return false
+    const record =
+      applicationChoice.value.mode === 'existing'
+        ? hostRecord(applicationBindingSpec.value.host, applicationChoice.value.name)
+        : {}
+    return !hostHasModule(record ?? {}, moduleRequirement.value)
+  })
 
-  // An account with no host cannot answer the gate at all — so the way on is where that
-  // host is made: the Creation Center for an application, the firewall's own gated create
-  // for a firewall.
   const goToHostCreate = () =>
     router.push({
       path: hostSpec.value.emptyPath ?? CREATION_CENTER_PATH,
       query: { email: userEmail.value }
     })
 
-  // Switching between two create routes reuses this component, so the answer to a question
-  // the next resource may not even ask goes with the form it belonged to — and the next
-  // resource opens on its own gate, or on its form when it needs no host.
-  watch(
-    () => props.resource,
-    () => {
-      applicationChoice.value = null
-      gateOpen.value = Boolean(applicationBindingSpec.value)
-    }
-  )
-
-  // The leave guard's trigger (ui/UnsavedChangesGuard.vue, mounted by CreatePage): dirty
+  // The leave guard's trigger (mounted by StepperCreatePage): dirty
   // while the form diverges from the state it opened on. `commit` re-snapshots it, and is
   // called on the way OUT of a successful create — the page's own navigation must not be
   // stopped by the guard that exists to protect the input that create just consumed.
@@ -217,16 +212,129 @@
     )
   )
 
+  const DEPENDENCY_STEP = 'where-it-runs'
+  const MODULE_STEP = 'module'
+  const ADVANCED_STEP = 'advanced'
+  const REVIEW_STEP = 'review'
+
+  const stepDefs = computed(() => {
+    const list = []
+
+    if (applicationBindingSpec.value) {
+      list.push({
+        value: DEPENDENCY_STEP,
+        title: 'Where it runs',
+        description: moduleRequirement.value
+          ? `${applicationBindingSpec.value.mechanism} It needs ${moduleRequirement.value.label} on.`
+          : applicationBindingSpec.value.mechanism,
+        fields: [],
+        heading: false
+      })
+
+      if (moduleRequirement.value && moduleMissing.value) {
+        list.push({
+          value: MODULE_STEP,
+          title: moduleRequirement.value.label,
+          description: `Off on ${boundApplicationName.value}.`,
+          fields: []
+        })
+      }
+    }
+
+    for (const section of sections.value) {
+      list.push({
+        value: section.id,
+        title: section.title,
+        description: section.description ?? '',
+        fields: section.shown
+      })
+    }
+
+    if (advancedFields.value.length) {
+      list.push({
+        value: ADVANCED_STEP,
+        title: 'Advanced',
+        description:
+          "Optional settings that already carry the endpoint's own defaults. Submitting them untouched sends what the API would have applied anyway.",
+        fields: advancedFields.value
+      })
+    }
+
+    list.push({
+      value: REVIEW_STEP,
+      title: 'Review',
+      description: `What will be created, and what it can do the moment it exists.`,
+      fields: []
+    })
+
+    return list
+  })
+
+  const currentStep = ref('')
+  const unlocked = ref([])
+
+  watch(
+    stepDefs,
+    (list) => {
+      if (list.some((step) => step.value === currentStep.value)) return
+      currentStep.value = list[0]?.value ?? ''
+      unlocked.value = currentStep.value ? [currentStep.value] : []
+    },
+    { immediate: true }
+  )
+
+  const stepIndex = computed(() =>
+    Math.max(
+      0,
+      stepDefs.value.findIndex((step) => step.value === currentStep.value)
+    )
+  )
+
+  const currentDef = computed(() => stepDefs.value[stepIndex.value] ?? null)
+
+  const stepState = (step, index) => {
+    if (submitting.value && step.value === REVIEW_STEP) return 'loading'
+    if (step.fields.some((field) => errors[field.id])) return 'error'
+    if (index < stepIndex.value) return 'complete'
+    return 'upcoming'
+  }
+
+  const railSteps = computed(() =>
+    stepDefs.value.map((step, index) => ({
+      value: step.value,
+      title: step.title,
+      description: step.description,
+      heading: step.heading !== false,
+      state: stepState(step, index),
+      disabled: !unlocked.value.includes(step.value)
+    }))
+  )
+
+  const goNext = () => {
+    const step = currentDef.value
+    if (!step) return
+    if (step.fields.length && !validate(step.fields)) return
+    const next = stepDefs.value[stepIndex.value + 1]
+    if (!next) return
+    if (!unlocked.value.includes(next.value)) unlocked.value.push(next.value)
+    currentStep.value = next.value
+  }
+
+  const goBack = () => {
+    const previous = stepDefs.value[stepIndex.value - 1]
+    if (previous) currentStep.value = previous.value
+  }
+
   const isEmpty = (value) => value === '' || value === undefined || value === null
 
   // Validation runs on submit only, and each field gets at most one message: the first
   // rule it breaks, in the order a reader would hit them. `kind` is what separates the
   // amber prompt (you have not answered yet) from the red error (the answer cannot be
   // accepted) — the same split the /webkit-errors skill draws.
-  const validate = () => {
-    Object.keys(errors).forEach((key) => delete errors[key])
+  const validate = (fields = askedFields.value) => {
+    for (const field of fields) delete errors[field.id]
 
-    for (const field of askedFields.value) {
+    for (const field of fields) {
       const value = form[field.id]
       const text = typeof value === 'string' ? value.trim() : value
 
@@ -258,7 +366,7 @@
       }
     }
 
-    return Object.keys(errors).length === 0
+    return fields.every((field) => !errors[field.id])
   }
 
   // Typing into a field that is carrying a message clears it: the message was about the
@@ -327,9 +435,20 @@
     return query
   }
 
+  // A failed submit must always point at a field already on screen, so the rail moves to
+  // the first step that is carrying a message rather than leaving the reader on Review
+  // beside an error they cannot see.
+  const revealFirstError = () => {
+    const failing = stepDefs.value.find((step) => step.fields.some((field) => errors[field.id]))
+    if (failing) currentStep.value = failing.value
+  }
+
   const submit = async () => {
     if (submitting.value) return // re-entrancy lock
-    if (!validate()) return // feedback is now on the fields themselves
+    if (!validate()) {
+      revealFirstError()
+      return // feedback is now on the fields themselves
+    }
 
     submitting.value = true
     try {
@@ -353,18 +472,30 @@
       // finishes (../applications/panels/RulesEngine.vue reads the two markers).
       const host = resolveHostChoice(applicationBindingSpec.value?.host, applicationChoice.value)
 
-      if (host) {
+      if (host && applicationBindingSpec.value.destination) {
         const created = { id, name }
+        // THE MODULE THE REFERENCE NEEDS, switched on with the create the reader agreed to
+        // it in (../../lib/data/resource-dependencies.js reads the matrix that says which).
+        const moduleTurnedOn = enableModule.value && moduleMissing.value ? moduleRequirement.value : null
+        if (moduleTurnedOn) {
+          const record = hostRecord(applicationBindingSpec.value.host, host.name)
+          if (Array.isArray(record?.modules) && !record.modules.includes(moduleTurnedOn.key)) {
+            record.modules.push(moduleTurnedOn.key)
+          }
+        }
         // WHAT HAPPENS NEXT, and it is not the same sentence for all of them: three of
         // these land on a rule the reader still has to save, and a firewall lands on its
         // own empty engine because nothing calls a firewall.
         const writesRule = bindingWritesRule(props.resource)
+        const bound = host.created
+          ? `${host.name} was created for it. Save the rule to start using it.`
+          : writesRule
+            ? `Save the rule to start using it on ${host.name}.`
+            : `It runs in front of ${host.name}.`
         toast.success(`${name} created.`, {
-          description: host.created
-            ? `${host.name} was created for it. Save the rule to start using it.`
-            : writesRule
-              ? `Save the rule to start using it on ${host.name}.`
-              : `It runs in front of ${host.name}.`
+          description: moduleTurnedOn
+            ? `${moduleTurnedOn.label} was turned on for ${host.name}. ${bound}`
+            : bound
         })
         commit()
         const target = applicationBindingSpec.value.destination({ host, record: created })
@@ -409,96 +540,74 @@
 </script>
 
 <template>
-  <!-- THE GATE IS THE FIRST SCREEN for a resource the API leaves inert without a host
-       (../../lib/data/create-bindings.js) — the question that decides where this create
-       ends, asked before the form rather than under it. -->
-  <ApplicationGate
-    v-if="gateOpen && applicationBindingSpec"
-    :title="spec.title"
-    :icon="spec.icon"
-    :noun="hostSpec.noun"
-    :host-icon="hostSpec.icon"
-    :can-create="hostSpec.canCreate"
-    :empty-label="hostSpec.emptyLabel"
-    :options="hostChoices"
-    :breadcrumb="[{ label: originLabel, href: originPath }, { label: spec.title }]"
-    :back-label="`Back to ${originLabel}`"
-    @choose="onGateChoose"
-    @skip="onGateSkip"
-    @empty-action="goToHostCreate"
-    @back="cancel"
-  />
-
-  <CreatePage
-    v-else
+  <StepperCreatePage
+    v-model="currentStep"
     :breadcrumb="[{ label: originLabel, href: originPath }, { label: spec.title }]"
     :back-label="`Back to ${originLabel}`"
     :title="spec.title"
-    :description="spec.guidance"
-    :title-id="`${resource}-create-title`"
+    :steps="railSteps"
     :submitting="submitting"
     :dirty="dirty"
+    :save-label="`Create ${spec.unit}`"
     @cancel="cancel"
+    @back="goBack"
+    @next="goNext"
     @submit="submit"
   >
-    <ApplicationBindingSummary
-      v-if="applicationBindingSpec"
+    <DependencyStep
+      v-if="currentStep === DEPENDENCY_STEP && applicationBindingSpec"
+      v-model:choice="applicationChoice"
+      v-model:enable-module="enableModule"
+      :resource="resource"
+      :title="spec.title"
+      :icon="spec.icon"
       :binding="applicationBindingSpec"
       :host="hostSpec"
-      :application="boundApplicationName"
+      :unit="spec.unit"
       :disabled="submitting"
-      @change="gateOpen = true"
+      @answer="goNext"
+      @empty-action="goToHostCreate"
     />
 
-    <!-- One band per section the spec asks for right now, its guidance carried as the
-         Hint beside the title rather than as a paragraph the reader has to cross to
-         reach the controls. `divided` is off throughout: the cards already draw those
-         edges, and a rule above one would be a second line saying the same thing. -->
-    <Section
-      v-for="section in sections"
-      :key="section.id"
-      stacked
-      :divided="false"
-      :title="section.title"
-      :hint="section.description"
-    >
-      <CardBox :padded="false">
-        <template #content>
-          <Item.List>
-            <SpecFieldRow
-              v-for="field in section.shown"
-              :key="field.id"
-              v-model="form[field.id]"
-              :field="field"
-              :message="messageFor(field)"
-              :message-kind="messageKindFor(field)"
-              :disabled="submitting"
-              :name-prefix="resource"
-              @update:model-value="clear(field.id)"
-            />
-          </Item.List>
-        </template>
-      </CardBox>
-    </Section>
+    <ModuleStep
+      v-else-if="currentStep === MODULE_STEP && moduleRequirement"
+      v-model="enableModule"
+      :requirement="moduleRequirement"
+      :host-name="boundApplicationName"
+      :host-noun="hostSpec.noun"
+      :unit="spec.unit"
+      :disabled="submitting"
+    />
 
-    <!-- Last, and collapsed: everything the endpoint does not require and already
-         defaults. Section owns the trigger semantics (`aria-expanded`/`aria-controls`),
-         the height transition and `inert` while closed, so no hidden field is ever
-         tabbable. It carries no hint — the title and its gear already say what it is,
-         and a band nobody opens does not earn a sentence. -->
+    <ReviewStep
+      v-else-if="currentStep === REVIEW_STEP"
+      :resource="resource"
+      :unit="spec.unit"
+      :answers="askedFields.map((field) => ({ field, value: form[field.id] }))"
+      :binding="applicationBindingSpec"
+      :host="hostSpec"
+      :bound-to="boundApplicationName"
+      :module-requirement="moduleRequirement"
+      :module-missing="moduleMissing"
+      :module-enabled="enableModule"
+    />
+
+    <!-- One band per step, its guidance carried as the Hint beside the title rather than
+         as a paragraph the reader has to cross to reach the controls. `divided` is off:
+         the card already draws that edge, and a rule above one would be a second line
+         saying the same thing. -->
     <Section
-      v-if="advancedFields.length"
+      v-else-if="currentDef"
       stacked
-      collapsible
       :divided="false"
-      icon="pi pi-cog"
-      title="Advanced"
+      :title="currentDef.title"
+      :hint="currentDef.description"
     >
       <CardBox :padded="false">
         <template #content>
           <Item.List>
             <SpecFieldRow
-              v-for="field in advancedFields"
+              v-for="field in currentDef.fields"
               :key="field.id"
               v-model="form[field.id]"
               :field="field"
@@ -512,5 +621,5 @@
         </template>
       </CardBox>
     </Section>
-  </CreatePage>
+  </StepperCreatePage>
 </template>
