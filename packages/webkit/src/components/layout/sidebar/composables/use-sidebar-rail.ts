@@ -133,12 +133,15 @@ export function useSidebarRail(options: UseSidebarRailOptions): UseSidebarRailRe
       return
     }
 
-    width.value = clamp(next)
+    // Below the minimum the rail keeps tracking the pointer, so its edge and its content
+    // move as one. The minimum is a resting constraint, restored on release.
+    width.value = Math.max(0, Math.min(next, railMax.value))
   }
 
   const endResize = () => {
     if (!resizing.value) return
     resizing.value = false
+    if (!collapsed.value) width.value = clamp(width.value ?? railMin.value)
     peekWidth.value = 0
     pullProgress.value = 1
     if (capturedBy?.hasPointerCapture(capturedId)) capturedBy.releasePointerCapture(capturedId)
@@ -217,17 +220,19 @@ export function useSidebarRail(options: UseSidebarRailOptions): UseSidebarRailRe
     return {}
   })
 
-  const presence = computed(() => {
-    if (resizing.value) return pullProgress.value
-    return collapsed.value ? 0 : 1
-  })
+  const underMin = computed(() => resizing.value && pullProgress.value < 1)
 
+  // Above the minimum the panel is the rail, at the rail's width. Below it the panel holds
+  // the minimum — reflowing further truncates the labels the minimum exists to fit — and is
+  // carried by the closing edge, so its trailing edge stays flush with the rail's instead of
+  // the rail sweeping across content that stands still.
   const innerStyle = computed(() => {
     if (!toValue(options.enabled) || !resizing.value) return {}
+    if (!underMin.value) return { translate: '0%', opacity: '1', transition: 'none' }
     return {
-      width: peeking.value ? `${railMin.value}px` : undefined,
-      translate: `${(presence.value - 1) * 100}%`,
-      opacity: String(RAIL_MIN_OPACITY + (1 - RAIL_MIN_OPACITY) * presence.value),
+      width: `${railMin.value}px`,
+      translate: `${peekWidth.value - railMin.value}px`,
+      opacity: String(RAIL_MIN_OPACITY + (1 - RAIL_MIN_OPACITY) * pullProgress.value),
       transition: 'none'
     }
   })

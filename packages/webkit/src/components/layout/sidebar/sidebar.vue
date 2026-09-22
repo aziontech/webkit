@@ -99,7 +99,7 @@
 
   defineExpose({ measure })
 
-  const isOut = computed(() => collapsed.value && railEnabled.value)
+  const isOut = computed(() => collapsed.value && railEnabled.value && !resizing.value)
 
   const hydrated = ref(false)
 
@@ -123,7 +123,7 @@
   const asideStyle = computed(() => ({ ...cssVars.value, ...railStyle.value }))
 
   const RAIL_MOTION_CLASS =
-    'transition-[width,min-width] duration-moderate-02 ease-expressive-entrance has-checked:ease-productive-exit data-[resizing]:transition-none motion-reduce:transition-none'
+    'transition-[width,min-width] duration-moderate-02 ease-expressive-entrance has-[>div>input:checked]:ease-productive-exit data-[resizing]:transition-none motion-reduce:transition-none'
 
   const rootClass = computed(() =>
     cn(
@@ -132,9 +132,9 @@
       railEnabled.value
         ? cn(
             'relative shrink-0 overflow-hidden',
-            'data-[collapsed]:border-r-0 has-checked:border-r-0',
-            'w-(--sidebar-width) has-checked:w-0',
-            'min-w-(--sidebar-min-width) has-checked:min-w-0 max-w-(--sidebar-max-width)',
+            'data-[collapsed]:border-r-0 has-[>div>input:checked]:border-r-0',
+            'w-(--sidebar-width) has-[>div>input:checked]:w-0',
+            'min-w-(--sidebar-min-width) has-[>div>input:checked]:min-w-0 data-[resizing]:min-w-0 max-w-(--sidebar-max-width)',
             RAIL_MOTION_CLASS,
             props.resizable ? 'resize-x data-[hydrated]:resize-none' : undefined
           )
@@ -149,11 +149,11 @@
   const HEADER_REGION_CLASS = 'w-full shrink-0 p-(--spacing-md)'
 
   const INNER_MOTION_CLASS =
-    'transition-[translate,opacity] duration-moderate-02 ease-expressive-entrance has-checked:ease-productive-exit data-[resizing]:transition-none motion-reduce:transition-none motion-reduce:translate-none'
+    'transition-[translate,opacity] duration-moderate-02 ease-expressive-entrance has-[>input:checked]:ease-productive-exit data-[resizing]:transition-none motion-reduce:transition-none motion-reduce:translate-none'
 
   const INNER_CLASS = cn(
     'flex h-full min-h-0 w-full flex-col',
-    'w-(--sidebar-width) translate-x-0 has-checked:-translate-x-full opacity-100 has-checked:opacity-20',
+    'w-(--sidebar-width) translate-x-0 has-[>input:checked]:-translate-x-full opacity-100 has-[>input:checked]:opacity-20',
     INNER_MOTION_CLASS
   )
 
