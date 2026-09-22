@@ -1,5 +1,5 @@
 <script setup>
-  // Firewall → Main Settings. What the firewall IS: its name, the application it runs in
+  // Firewall → Settings. What the firewall IS: its name, the application it runs in
   // front of, and which modules are on.
   //
   // THE MODULES ARE THE SETTINGS. A firewall is a set of enabled modules plus the rules
@@ -35,10 +35,14 @@
   const seed = () => ({
     name: props.firewall.name,
     active: props.firewall.status !== 'Inactive',
+    debugRules: Boolean(props.firewall.debugRules),
+    // The record stores module KEYS (../../../lib/data/firewalls.js), so the switches are
+    // seeded from `field.key`. Matching on `field.title` compared a key to a label and
+    // opened every firewall with its modules off, whatever its row said.
     modules: Object.fromEntries(
       FIREWALL_MODULE_FIELDS.map((field) => [
         field.key,
-        field.locked || (props.firewall.modules ?? []).includes(field.title)
+        field.locked || (props.firewall.modules ?? []).includes(field.key)
       ])
     )
   })
@@ -74,8 +78,8 @@
 <template>
   <div class="layout-column-form layout-boundary flex min-w-0 flex-1 flex-col pb-0">
     <PageHeading
-      title="Main Settings"
-      description="What this firewall is, and which modules it runs with."
+      title="Settings"
+      description="Core configuration for this firewall."
       size="small"
       :documentation="HELP"
     />
@@ -152,6 +156,30 @@
                   v-else
                   v-model="form.modules[field.key]"
                   :aria-label="field.title"
+                />
+              </FieldRow>
+            </Item.List>
+          </template>
+        </CardBox>
+      </Section>
+
+      <Section
+        stacked
+        :divided="false"
+        title="Debug Rules"
+        hint="Query the logged executions with Data Stream, Real-Time Events, or the Real-Time Events GraphQL API."
+      >
+        <CardBox :padded="false">
+          <template #content>
+            <Item.List>
+              <FieldRow
+                kind="compact"
+                title="Active"
+                description="Logs which rules ran for a request, under the Straceback field in Data Stream and Real-Time Events."
+              >
+                <Switch
+                  v-model="form.debugRules"
+                  aria-label="Debug Rules"
                 />
               </FieldRow>
             </Item.List>

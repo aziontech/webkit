@@ -16,10 +16,7 @@
 import { createdRowsFor } from '../state/created-resources'
 import { functions } from './functions'
 import { NETWORK_LISTS } from './network-lists'
-import {
-  OPERATORS as SHARED_OPERATORS,
-  takesArgument as sharedTakesArgument
-} from './rules-engine'
+import { OPERATORS as SHARED_OPERATORS, takesArgument as sharedTakesArgument } from './rules-engine'
 import { WAF_RULES } from './waf-rules'
 
 // ── THE OPERATORS, PLUS THE TWO ONLY A FIREWALL HAS ──
@@ -59,6 +56,37 @@ export const operatorArgument = (operator) =>
   NETWORK_LIST_OPERATOR_VALUES.includes(operator)
     ? { kind: 'select', source: 'network-lists', label: 'Network list' }
     : { kind: 'text' }
+
+// ── THE VARIABLES A FIREWALL CONDITION READS ──
+//
+// Narrower than the application's (./rules-engine.js) and CLOSED: a firewall decides on
+// what arrives, so it reads the request line, a fixed set of headers, and the two facts
+// only it knows — which network the address belongs to, and how the client's certificate
+// verified. `${network}` is the one the network-list operators above compare.
+const VARIABLES = [
+  { value: '${client_certificate_validation}', label: 'Client Certificate Validation' },
+  { value: '${header_accept}', label: 'Header Accept' },
+  { value: '${header_accept_encoding}', label: 'Header Accept Encoding' },
+  { value: '${header_accept_language}', label: 'Header Accept Language' },
+  { value: '${header_cookie}', label: 'Header Cookie' },
+  { value: '${header_origin}', label: 'Header Origin' },
+  { value: '${header_referer}', label: 'Header Referer' },
+  { value: '${header_user_agent}', label: 'Header User Agent' },
+  { value: '${host}', label: 'Host' },
+  { value: '${network}', label: 'Network' },
+  { value: '${request_args}', label: 'Request Args' },
+  { value: '${request_method}', label: 'Request Method' },
+  { value: '${request_uri}', label: 'Request URI' },
+  { value: '${scheme}', label: 'Scheme' },
+  { value: '${ssl_verification_status}', label: 'SSL Verification Status' }
+]
+
+/**
+ * The variables a firewall condition offers. One phase, so the list does not vary.
+ *
+ * @returns {{value: string, label: string}[]}
+ */
+export const variablesFor = () => VARIABLES
 
 /**
  * One phase, declared as a list anyway, so the drawer renders both engines from the same

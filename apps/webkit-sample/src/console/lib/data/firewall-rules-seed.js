@@ -23,7 +23,7 @@ const SEED = [
     name: 'Inspect everything',
     description: 'Scores every request against the default rule set.',
     phase: 'request',
-    criteria: [{ id: 'fc1', conditions: [condition('${uri}', 'matches', '/*')] }],
+    criteria: [{ id: 'fc1', conditions: [condition('${request_uri}', 'matches', '/*')] }],
     behaviors: [{ id: 'fb1', type: 'set-waf-ruleset', wafId: 'waf-1' }],
     status: 'Active',
     modifiedAt: daysAgo(6)
@@ -33,7 +33,7 @@ const SEED = [
     name: 'Refuse admin from outside',
     description: 'Denies the admin path to anything that is not an office range.',
     phase: 'request',
-    criteria: [{ id: 'fc2', conditions: [condition('${uri}', 'starts-with', '/admin')] }],
+    criteria: [{ id: 'fc2', conditions: [condition('${request_uri}', 'starts-with', '/admin')] }],
     behaviors: [{ id: 'fb2', type: 'deny' }],
     status: 'Active',
     modifiedAt: daysAgo(19)
@@ -43,7 +43,7 @@ const SEED = [
     name: 'Rate limit the API',
     description: 'Caps a single client to 20 requests per second on the API.',
     phase: 'request',
-    criteria: [{ id: 'fc3', conditions: [condition('${uri}', 'starts-with', '/api')] }],
+    criteria: [{ id: 'fc3', conditions: [condition('${request_uri}', 'starts-with', '/api')] }],
     behaviors: [{ id: 'fb3', type: 'set-rate-limit', average: '20', burst: '40' }],
     status: 'Inactive',
     modifiedAt: daysAgo(41)

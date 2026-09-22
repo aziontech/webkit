@@ -1,13 +1,14 @@
 <script setup>
-  // Application → Functions Instances. Edge functions instantiated on this
-  // application.
+  // Functions Instances — the tab an APPLICATION and a FIREWALL both carry. One file,
+  // switched by `environment` (the API's own `execution_environment`), because the two
+  // lists differ only in which functions they may instance.
   //
   // An INTERNAL page on the DATA measure — see DeviceGroups.vue for the page shape
   // (one band: the controls row over the table it narrows, carrying the band step).
   //
   // AN INSTANCE IS A BINDING, NOT A RESOURCE OF ITS OWN. The function is written once in
   // the Functions module (../../components/Functions.vue) and instanced here with this
-  // application's own name and arguments — so this tab and that module read and write
+  // host's own name and arguments — so this tab and that module read and write
   // ONE library (../../lib/functions.js), never two lists that happen to use the same
   // words.
   //
@@ -105,10 +106,26 @@
   import { countInstance, functionById, functionOptionsFor } from '../../../lib/data/functions'
   import { productFirstUse } from '../../../lib/data/product-empty-states'
 
+  const props = defineProps({
+    /**
+     * Which execution environment this list instances — `application` or `firewall`.
+     * It is the API's own `execution_environment`, and it decides every difference
+     * between the two hosts: the functions offered, the seeded instances, the wording
+     * and where `Documentation` points.
+     */
+    environment: { type: String, default: 'application' }
+  })
+
   // Where `Documentation` goes. Taken from the registry rather than restated: these tabs are
-  // parts of an application, so the module's own doc URL is the right destination
-  // and lib/data/product-empty-states.js already holds it.
-  const HELP = productFirstUse('applications').learnMore.href
+  // parts of the resource that hosts them, so the module's own doc URL is the right
+  // destination and lib/data/product-empty-states.js already holds it.
+  const SUBJECT = {
+    application: { noun: 'application', product: 'applications' },
+    firewall: { noun: 'firewall', product: 'firewall' }
+  }
+
+  const subject = computed(() => SUBJECT[props.environment] ?? SUBJECT.application)
+  const HELP = computed(() => productFirstUse(subject.value.product).learnMore.href)
 
   // Monaco is megabytes of editor plus its language workers, and it is only ever
   // mounted inside this panel's drawer — so it loads when that drawer opens, not
@@ -158,8 +175,10 @@
     return { ...instance, author: person.name, authorAvatar: person.avatar }
   }
 
-  const instances = ref(
-    [
+  // The seed is the HOST's, not this file's: an instance binds a function written for one
+  // execution environment, so an application's list cannot open on a firewall function.
+  const SEED = {
+    application: [
       {
         id: 'fi-auth',
         name: 'auth-guard',
@@ -176,8 +195,28 @@
         active: false,
         modifiedAt: daysAgo(23)
       }
-    ].map(withAuthor)
-  )
+    ],
+    firewall: [
+      {
+        id: 'fi-bot',
+        name: 'bot-score',
+        functionId: '4021891',
+        args: '{ "blockAbove": 70 }',
+        active: true,
+        modifiedAt: daysAgo(4)
+      },
+      {
+        id: 'fi-logs',
+        name: 'waf-logs',
+        functionId: '4021888',
+        args: '{ "endpoint": "https://logs.example.com/ingest" }',
+        active: true,
+        modifiedAt: daysAgo(31)
+      }
+    ]
+  }
+
+  const instances = ref((SEED[props.environment] ?? SEED.application).map(withAuthor))
 
   // The rows the table renders: the instance, plus the bound function resolved from the
   // library. A function deleted in the Functions module leaves the binding behind, so
@@ -205,7 +244,7 @@
   // The functions this application can instance — the library's own, narrowed by
   // `execution_environment` (../../lib/functions.js). A function written on the create
   // page lands in that library, so this list picks it up with no wiring of its own.
-  const functionOptions = computed(() => functionOptionsFor('application'))
+  const functionOptions = computed(() => functionOptionsFor(props.environment))
   const functionLabel = (value) =>
     functionOptions.value.find((option) => option.value === value)?.label ?? ''
 
@@ -597,7 +636,7 @@
   <div class="layout-column layout-boundary flex min-w-0 flex-col">
     <PageHeading
       title="Functions Instances"
-      description="Edge functions instantiated on this application."
+      :description="`Edge functions instantiated on this ${subject.noun}.`"
       size="small"
       :documentation="HELP"
     >
@@ -769,7 +808,7 @@
         stacked
         :divided="false"
         title="General"
-        hint="Instantiates a function from the Functions module on this application; a rule in Rules Engine is what runs it. One function can be instantiated more than once with different arguments, so the name is what tells the two apart in the rules that call them."
+        :hint="`Instantiates a function from the Functions module on this ${subject.noun}; a rule in Rules Engine is what runs it. One function can be instantiated more than once with different arguments, so the name is what tells the two apart in the rules that call them.`"
       >
         <FieldStack
           label="Name"
@@ -783,7 +822,7 @@
               size="large"
               :disabled="submitting"
               class="w-full"
-              placeholder="My application function instance"
+              :placeholder="`My ${subject.noun} function instance`"
               :required="!!errors.name && !form.name.trim()"
               :invalid="!!errors.name && !!form.name.trim()"
               :aria-describedby="describedBy"
@@ -800,7 +839,7 @@
         stacked
         :divided="false"
         title="Function"
-        hint="Select an existing function and customize the arguments it runs with. Only functions written for the application environment are listed — a firewall function receives a different request object. If the one you need does not exist yet, the selector's footer opens the function editor and brings you back here with it selected."
+        :hint="`Select an existing function and customize the arguments it runs with. Only functions written for the ${subject.noun} environment are listed — the other environment receives a different request object. If the one you need does not exist yet, the selector's footer opens the function editor and brings you back here with it selected.`"
       >
         <FieldStack
           label="Edge Function"

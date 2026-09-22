@@ -119,11 +119,19 @@ export const firewallIsBound = (protection) =>
 export const enabledFirewallModules = (state) =>
   FIREWALL_MODULE_FIELDS.filter((field) => state?.[field.key]).map((field) => field.title)
 
-/** The seeded firewalls, in list order. */
+/**
+ * The seeded firewalls, in list order.
+ *
+ * `application` is the one a firewall runs in front of — the same field a firewall created
+ * inside an application create carries (../state/created-resources.js), and what the
+ * firewall's own page reports. The two sandboxes have none: a firewall that fronts nothing
+ * yet is a state that page has to render.
+ */
 export const FIREWALLS = [
   {
     id: '5540117',
     name: 'edgeflow-production',
+    application: 'edgeflow-site',
     modules: ['ddos', 'waf', 'network-shield', 'bot-manager'],
     rules: 14,
     environment: 'Production',
@@ -133,6 +141,7 @@ export const FIREWALLS = [
   {
     id: '5540118',
     name: 'edgeflow-staging',
+    application: 'edgeflow-site',
     modules: ['ddos', 'waf'],
     rules: 6,
     environment: 'Staging',
@@ -142,6 +151,7 @@ export const FIREWALLS = [
   {
     id: '5540119',
     name: 'api-hardening',
+    application: 'legacy-api',
     modules: ['ddos', 'waf', 'functions'],
     rules: 22,
     environment: 'Production',
@@ -151,6 +161,7 @@ export const FIREWALLS = [
   {
     id: '5540120',
     name: 'checkout-shield',
+    application: 'ecommerce-v2',
     modules: ['ddos', 'bot-manager'],
     rules: 9,
     environment: 'Production',
@@ -169,6 +180,7 @@ export const FIREWALLS = [
   {
     id: '5540122',
     name: 'marketing-site',
+    application: 'marketing-site',
     modules: ['ddos', 'waf', 'bot-manager'],
     rules: 4,
     environment: 'Production',
@@ -178,6 +190,7 @@ export const FIREWALLS = [
   {
     id: '5540123',
     name: 'payments-api',
+    application: 'ecommerce-v2',
     modules: ['ddos', 'waf', 'bot-manager', 'functions'],
     rules: 31,
     environment: 'Production',
@@ -187,6 +200,7 @@ export const FIREWALLS = [
   {
     id: '5540124',
     name: 'partner-gateway',
+    application: 'legacy-api',
     modules: ['ddos', 'waf', 'network-shield'],
     rules: 17,
     environment: 'Production',
@@ -196,6 +210,7 @@ export const FIREWALLS = [
   {
     id: '5540125',
     name: 'admin-allowlist',
+    application: 'status-page',
     modules: ['ddos', 'network-shield'],
     rules: 8,
     environment: 'Production',
@@ -205,6 +220,7 @@ export const FIREWALLS = [
   {
     id: '5540126',
     name: 'media-delivery',
+    application: 'blog-platform',
     modules: ['ddos', 'waf'],
     rules: 5,
     environment: 'Production',
@@ -214,6 +230,7 @@ export const FIREWALLS = [
   {
     id: '5540127',
     name: 'edgeflow-canary',
+    application: 'edgeflow-docs',
     modules: ['ddos', 'waf', 'functions'],
     rules: 12,
     environment: 'Staging',
@@ -223,6 +240,7 @@ export const FIREWALLS = [
   {
     id: '5540128',
     name: 'search-api-shield',
+    application: 'ecommerce-storefront',
     modules: ['ddos', 'waf', 'bot-manager'],
     rules: 19,
     environment: 'Production',
@@ -232,6 +250,7 @@ export const FIREWALLS = [
   {
     id: '5540129',
     name: 'legacy-storefront',
+    application: 'ecommerce-storefront',
     modules: ['ddos', 'waf'],
     rules: 26,
     environment: 'Production',
