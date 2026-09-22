@@ -367,11 +367,12 @@ test('planInit copies the .claude/rules/webkit-*.md bundle', () => {
       '.claude/rules/webkit-testid.md',
       '.claude/rules/webkit-deprecation.md',
       '.claude/skills/webkit-usage/SKILL.md',
-      // UI-craft pack (18 skills: the redundancy/false-positive pass + webkit-tables +
+      // UI-craft pack (19 skills: the redundancy/false-positive pass + webkit-tables +
       // webkit-lists (the index page around the table and its filter system) +
       // webkit-create-surface (page vs drawer, and the anatomy both share) +
-      // webkit-errors (where a failure goes) + webkit-microcopy (Azion product copy
-      // rules, unlike the generic content-microcopy dropped below)).
+      // webkit-errors (where a failure goes) + webkit-layout (the container system every
+      // page is built on) + webkit-microcopy (Azion product copy rules, unlike the
+      // generic content-microcopy dropped below)).
       '.claude/skills/webkit-ui-craft/SKILL.md',
       '.claude/skills/webkit-ux-heuristics/SKILL.md',
       '.claude/skills/webkit-ui-states/SKILL.md',
@@ -382,6 +383,7 @@ test('planInit copies the .claude/rules/webkit-*.md bundle', () => {
       '.claude/skills/webkit-tables/SKILL.md',
       '.claude/skills/webkit-lists/SKILL.md',
       '.claude/skills/webkit-navigation/SKILL.md',
+      '.claude/skills/webkit-layout/SKILL.md',
       '.claude/skills/webkit-baseline-ui/SKILL.md',
       '.claude/skills/webkit-theming-dark-mode/SKILL.md',
       '.claude/skills/webkit-data-viz/SKILL.md',
