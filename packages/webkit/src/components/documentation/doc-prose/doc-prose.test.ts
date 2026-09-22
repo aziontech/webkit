@@ -168,11 +168,7 @@ describe('DocProse', () => {
   })
 
   describe('the first-block reset stops at chrome', () => {
-    // The ladder is CSS and belongs to the visual gate; what is asserted here is the
-    // contract written into the class list. The reset that opens the page flush reaches
-    // through a renderer wrapper (Astro's astro-slot, a prose div) and zeroes the first
-    // block's margin at both levels — but only the padding of authored prose. A block
-    // component marked data-doc-chrome carries its own padding and keeps it.
+    // Pixels belong to the visual gate; this asserts the contract in the class list.
     const firstChildRules = (root: HTMLElement) =>
       root.className.split(/\s+/).filter((cls) => cls.startsWith('[&>*:first-child'))
 
