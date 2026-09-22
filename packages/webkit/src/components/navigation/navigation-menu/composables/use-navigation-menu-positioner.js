@@ -164,11 +164,14 @@ export function useNavigationMenuPositioner(anchorRef, floatingRef, arrowRef, op
     }
   })
 
+  // flex drops the slot's whitespace text nodes; as a block they open a ~16px line box
+  // that overhangs a panel flipped above its trigger. Inline so it holds without CSS.
   const floatingStyles = computed(() => ({
     position: 'fixed',
     top: '0',
     left: '0',
     transform: `translate3d(${Math.round(state.value.x)}px, ${Math.round(state.value.y)}px, 0)`,
+    display: 'flex',
     'min-width': 'max-content'
   }))
 
