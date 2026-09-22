@@ -1,7 +1,7 @@
 <script setup>
   // Deployment detail — the deploy PAGE at `/deployments/:id`, and the ONLY surface
   // a deployment is read on. Every list opens it: the Deployments module, a
-  // workload's Deployments tab, its Version History.
+  // workload's Deployments tab, an application's.
   //
   // It used to be two surfaces. A deployment whose pipeline this console recorded got
   // this page; every other row got a read-only drawer. That split cost more than it

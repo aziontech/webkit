@@ -39,6 +39,7 @@
   import Dropdown from '@aziontech/webkit/dropdown'
   import IconButton from '@aziontech/webkit/icon-button'
   import InputText from '@aziontech/webkit/input-text'
+  import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Table from '@aziontech/webkit/table'
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
@@ -65,8 +66,9 @@
   import AppLayout from '../../components/shell/AppLayout.vue'
   import { DATE_PRESETS, formatDateRange, matchDate } from '../../lib/behavior/filter-bar'
   import { useListFilters } from '../../lib/behavior/list-state'
-  import { FIT_COLUMN, TAG_COLUMN, TAG_COLUMN_WIDE } from '../../lib/behavior/table-columns'
-  import { environmentSeverity } from '../../lib/data/deployments'
+  import { FIT_COLUMN } from '../../lib/behavior/table-columns'
+  import { latestApplicationDeployment } from '../../lib/data/deployment-history'
+  import { statusMeta, statusOptions } from '../../lib/data/deployments'
   import { productFirstUse } from '../../lib/data/product-empty-states'
   import { presetIcon, presetLabel } from '../../lib/format/presets'
   import { useSampleMode } from '../../lib/state/sample-mode'
@@ -94,6 +96,29 @@
   // waiting to happen. This page holds its own copy because it deletes rows.
   const applications = ref([...APPLICATIONS])
 
+  // Every row is stamped with the status of the deployment that last shipped it. An
+  // application has no status of its own (../../lib/data/applications.js), and the column
+  // has to HOLD the value rather than render it from the row: the table sorts on it, the
+  // filter matches on it and Download CSV serialises it, so a status that existed only
+  // inside the cell template would sort, narrow and export as nothing.
+  const withDeploymentStatus = (application) => ({
+    ...application,
+    status: latestApplicationDeployment(application.id, application.name)?.status ?? ''
+  })
+
+  // The column sorts, filters and exports the value it HOLDS, so the primary address is
+  // stamped on the row rather than picked inside the cell.
+  const withDomains = (application) => {
+    const custom = (application.customDomains ?? []).map((entry) => entry.domain)
+    const domains = [...custom, application.domainName].filter(Boolean)
+    return {
+      ...application,
+      domainName: domains[0] ?? '',
+      domains,
+      domainCount: Math.max(domains.length - 1, 0)
+    }
+  }
+
   // Column model. `name` is the principal (emphasized) column; the trailing
   // `actions` column (kind: 'action') is auto-pinned to the right edge.
   const columns = [
@@ -104,7 +129,9 @@
     { accessorKey: 'id', header: 'ID', enableSorting: true, minWidth: FIT_COLUMN },
     // Domain is shown in full (no truncation) — give it the widest flexible share.
     { accessorKey: 'domainName', header: 'Domain Name', grow: 3 },
-    { accessorKey: 'status', header: 'Status', enableSorting: true, minWidth: TAG_COLUMN },
+    // Status is the newest DEPLOYMENT's — a StatusIndicator, sized like the one in the
+    // Deployments module rather than as a chip column (lib/behavior/table-columns.js).
+    { accessorKey: 'status', header: 'Status', enableSorting: true, minWidth: FIT_COLUMN },
     { accessorKey: 'author', header: 'Last Editor', enableSorting: true, minWidth: FIT_COLUMN },
     {
       accessorKey: 'lastModified',
@@ -132,6 +159,18 @@
     .sort(([a], [b]) => a.localeCompare(b))
     .map(([author, avatar]) => ({ value: author, label: author, avatar }))
 
+  // Status options come from the data too, for the same reason: the deployment vocabulary
+  // has five words (lib/data/deployments.js) and this account's applications last shipped
+  // in two of them, so offering the other three would put rows in the panel that can only
+  // ever narrow the list to nothing. The catalog's order is kept — the words read in the
+  // same sequence here as they do in the Deployments module.
+  const applicationStatuses = new Set(
+    applications.value.map((app) => withDeploymentStatus(app).status)
+  )
+  const statusFilterOptions = statusOptions.filter((option) =>
+    applicationStatuses.has(option.value)
+  )
+
   const filterFields = [
     {
       id: 'author',
@@ -141,13 +180,14 @@
       match: (app, values) => values.includes(app.author)
     },
     {
+      // The DEPLOYMENT vocabulary, straight from the module that owns it
+      // (lib/data/deployments.js) — the same five words the Deployments list filters by,
+      // because it is the same fact being narrowed: what state the last build of this
+      // application ended in.
       id: 'status',
       label: 'Status',
       kind: 'options',
-      options: [
-        { value: 'Active', label: 'Active' },
-        { value: 'Inactive', label: 'Inactive' }
-      ],
+      options: statusFilterOptions,
       match: (app, values) => values.includes(app.status)
     },
     {
@@ -169,11 +209,13 @@
   // second link of the chain a deploy creates (src/lib/provisioning.js). The
   // seeded rows below them belong to one scope, so they are projected through the
   // organization / account / workspace in force (src/lib/tenancy-scope.js); what
-  // this session provisioned is the operator's own and is never projected away.
-  const allApplications = computed(() => [
-    ...provisionedApplications.value,
-    ...tenancyRows(applications.value, 'applications')
-  ])
+  // this session provisioned is the operator's own and is never projected away. Both
+  // families are stamped with their deployment status on the way in.
+  const allApplications = computed(() =>
+    [...provisionedApplications.value, ...tenancyRows(applications.value, 'applications')]
+      .map(withDeploymentStatus)
+      .map(withDomains)
+  )
 
   // The applied state, the search value, the rows that survive the filters, and the
   // pagination they are paged into — all four from one place, so the page cannot
@@ -219,6 +261,14 @@
     router.push({
       path: `/applications/${row.id}`,
       query: { email: userEmail.value }
+    })
+
+  // An application with no repository is opened straight at the tab that connects one,
+  // so the cell's offer and the page it lands on are the same subject.
+  const connectGit = (row) =>
+    router.push({
+      path: `/applications/${row.id}`,
+      query: { email: userEmail.value, tab: 'build' }
     })
 
   // ── Deploy ────────────────────────────────────────────────────────────────
@@ -439,16 +489,18 @@
                     </div>
                   </template>
 
-                  <template #cell-repository="{ value }">
+                  <template #cell-repository="{ value, row }">
                     <!-- One rounded chip for the git repo. The label goes through the
                          default slot with `truncate` so a long repo shrinks with an
                          ellipsis instead of overflowing the Tag (whose justify-center +
                          overflow-hidden would otherwise clip the leading GitHub icon).
                          `max-w-full` keeps the chip inside its cell.
 
-                         Only a `source: 'git'` application has one. The rest show an em
-                         dash, because an empty cell reads as data this list failed to
-                         load rather than a repository that genuinely does not exist. -->
+                         Only a `source: 'git'` application has one. The rest carry the
+                         way OUT of that state rather than an em dash: the cell is the
+                         one place a reader scanning the list meets the absence, so it
+                         is where the offer to fix it belongs. `stop` because the row
+                         itself opens Main Settings. -->
                     <Tag
                       v-if="value"
                       severity="secondary"
@@ -459,12 +511,14 @@
                     >
                       <span class="min-w-0 truncate">{{ value }}</span>
                     </Tag>
-                    <span
+                    <button
                       v-else
-                      class="text-body-sm text-(--text-muted)"
-                      aria-label="No repository"
-                      >&mdash;</span
+                      type="button"
+                      class="inline-flex min-w-0 items-center rounded-(--shape-button) text-body-sm text-(--text-link) underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-link-hover) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
+                      @click.stop="connectGit(row)"
                     >
+                      <span class="truncate">Connect Git Repository</span>
+                    </button>
                   </template>
 
                   <template #cell-id="{ value }">
@@ -474,21 +528,33 @@
                     />
                   </template>
 
-                  <template #cell-domainName="{ value }">
+                  <template #cell-domainName="{ value, row }">
                     <!-- Domain link (truncates) + external-redirect arrow; copy button
                          pinned to the cell's right edge so it aligns across rows. Shared
                          with Overview's list, which shows these same rows
                          (./ui/DomainCell.vue). -->
-                    <DomainCell :value="value" />
+                    <DomainCell
+                      :value="value"
+                      :domains="row.domains"
+                      :count="row.domainCount"
+                    />
                   </template>
 
-
+                  <!-- The newest deployment's state, read and rendered exactly as the
+                       Deployments module renders it (components/deployment/DeploymentsTable.vue):
+                       one indicator, its own label, a spinner while a build is running. -->
                   <template #cell-status="{ value }">
-                    <Tag
+                    <StatusIndicator
+                      v-if="value"
+                      :severity="statusMeta(value).severity"
+                      :loading="statusMeta(value).loading"
                       :label="value"
-                      :severity="value === 'Active' ? 'success' : 'secondary'"
-                      size="medium"
                     />
+                    <span
+                      v-else
+                      class="text-body-sm text-(--text-disabled)"
+                      >Not deployed</span
+                    >
                   </template>
                   <!-- WHO and WHEN are two columns now, so each cell says one thing:
                        the face and the name here, the relative time next to it. -->

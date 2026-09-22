@@ -708,7 +708,7 @@
       publish: flowId.value !== 'cli',
       // How code will reach this application. The CLI flow leaves no repository behind,
       // so its row shows no repository and its page carries the commands that fill it
-      // (../../components/application/GetStartedCli.vue).
+      // (../../components/application/GetStarted.vue).
       source: flowId.value === 'cli' ? 'cli' : 'git',
       repoName: application.name,
       // The account the code actually lives in, so the Application row's repository

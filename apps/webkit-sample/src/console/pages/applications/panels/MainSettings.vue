@@ -1,6 +1,6 @@
 <script setup>
-  // Application → Main Settings. Core configuration for one application, shaped as
-  // TWO ItemGroups — General and Modules — committed as ONE page.
+  // Application → Settings (`?tab=main-settings`). Core configuration for one
+  // application, shaped as TWO ItemGroups — General and Modules — committed as ONE page.
   //
   // ONE SAVE FOR THE PAGE, from the shared bar (../../components/ui/SettingsSaveBar.vue),
   // which is the rule for every internal settings surface in the console: the bands
@@ -43,7 +43,10 @@
   // snapshot, which is also what decides whether the action bar exists at all.
   const settings = reactive({
     name: props.application.name,
-    active: true,
+    // The record's own switch, absent on every application that is on
+    // (../../../lib/data/applications.js). Read rather than hard-coded, so the retired
+    // application opens with the switch it actually has.
+    active: props.application.active !== false,
     modules: {
       application_accelerator: true,
       cache: true,
@@ -147,7 +150,7 @@
       class="layout-column-form layout-boundary-inline flex min-w-0 flex-col pb-(--layout-section-gap) pt-(--layout-section-gap)"
     >
       <PageHeading
-        title="Main Settings"
+        title="Settings"
         description="Core configuration for this application."
         size="small"
       />

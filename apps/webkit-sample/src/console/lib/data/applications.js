@@ -16,7 +16,7 @@
 //   git        a repository Azion watches. Every push to `branch` ships.
 //   cli        no repository. The reader pushes from their own terminal with
 //              `azion link` + `azion deploy`, and the application's page tells them how
-//              (../../components/application/GetStartedCli.vue). A project dropped on
+//              (../../components/application/GetStarted.vue). A project dropped on
 //              /drop lands here too: it has no repo, and the CLI is how it updates.
 //   platform   Azion built it. `hello-edge` is the starter the platform provisions —
 //              a Function that returns the page, an instance of it, and a rule that
@@ -24,8 +24,9 @@
 //              already works and can be read.
 //
 // IT IS NOT A COLUMN. `source` decides BEHAVIOUR — which repository a row shows (none, for
-// the two that have none), and whether the application's Build tab offers a repository
-// connection or the CLI commands. The list does not spend a column on it, because the
+// the two that have none), whether the application's Build tab offers a repository
+// connection or reports one, and whether its Overview carries the CLI commands at all.
+// The list does not spend a column on it, because the
 // Repository column already answers the only question a list can usefully ask: a repo, or
 // an em dash. A Source chip beside that said the same thing twice.
 //
@@ -37,6 +38,21 @@
 //
 // Seven frameworks appear TWICE, once git-backed and once CLI-only, because the pair is
 // the point: the same stack reached two ways.
+//
+// ── NO `status` FIELD, BY THE SAME REASONING ──
+//
+// An application has no status of its own. What every surface reports under "Status" is
+// the state of the DEPLOYMENT that last shipped it — Ready, Building, Queued, Error, Draft
+// (./deployments.js) — so the list column, its filter and the application's own summary
+// all read that record (`latestApplicationDeployment` in ./deployment-history.js) instead
+// of a flag stored here. The seed used to carry `status: Active | Inactive`, which named
+// the wrong fact twice over: it was the application's `active` SETTING wearing the word a
+// deployment owns, so a list of applications could say "Active" about one whose last build
+// had failed.
+//
+// `active` survives as what it actually is — the switch in Main Settings ("when disabled,
+// the application stops serving traffic"). It is absent on a row that is on, and only
+// `legacy-api` carries `active: false`.
 //
 // The list page still owns its own copy (`ref([...APPLICATIONS])`): it deletes rows, and a
 // page mutating a shared module-level array would leak that into every other surface
@@ -55,6 +71,13 @@ import { authorAt, emailOf } from '@shared/lib/people'
  * left empty rather than filled with a plausible-looking repo, because a CLI-linked
  * application genuinely has none and a row that invents one is a row that lies about the
  * only thing this list is trying to show.
+ *
+ * `active` is the Main Settings switch, absent when it is on. It is not a status: the
+ * status a list shows is the newest deployment's (see the note above).
+ *
+ * `domainName` is the hostname Azion generates and always answers on; `customDomains` are
+ * the reader's own addresses bound to it — `{ id, domain, certificate }[]`, `certificate:
+ * ''` meaning the free platform one — and the first of them is where traffic arrives.
  */
 export const APPLICATIONS = [
   // The real reference repo, down to its id, preset and domain (azion/azion.json).
@@ -66,7 +89,6 @@ export const APPLICATIONS = [
     repository: 'gab-az/webkit-sample-vue',
     branch: 'main',
     domainName: 'e7b4verynr.azion.run',
-    status: 'Active',
     modifiedAt: daysAgo(2)
   },
   // THE PLATFORM STARTER. Nobody authored this: a Function that returns the page, an
@@ -80,7 +102,6 @@ export const APPLICATIONS = [
     repository: '',
     branch: '',
     domainName: 'h3l1oedge42.azion.run',
-    status: 'Active',
     modifiedAt: daysAgo(1)
   },
   // The static pair — the same site, once watched and once pushed by hand.
@@ -92,7 +113,10 @@ export const APPLICATIONS = [
     repository: 'edgeflow/edgeflow-site',
     branch: 'main',
     domainName: 'w2e3r4t5y6.azion.run',
-    status: 'Active',
+    customDomains: [
+      { id: 'domain-edgeflow-www', domain: 'www.edgeflow.com', certificate: 'cert-8801' },
+      { id: 'domain-edgeflow-apex', domain: 'edgeflow.com', certificate: '' }
+    ],
     modifiedAt: daysAgo(4)
   },
   {
@@ -103,7 +127,9 @@ export const APPLICATIONS = [
     repository: '',
     branch: '',
     domainName: 'u7i8o9p0a1.azion.run',
-    status: 'Active',
+    customDomains: [
+      { id: 'domain-edgeflow-docs', domain: 'docs.edgeflow.com', certificate: 'cert-8801' }
+    ],
     modifiedAt: daysAgo(6)
   },
   // Next.js
@@ -115,7 +141,6 @@ export const APPLICATIONS = [
     repository: 'acme/analytics-pro',
     branch: 'main',
     domainName: 'q7w8e9r0t1.azion.run',
-    status: 'Active',
     modifiedAt: daysAgo(320)
   },
   {
@@ -126,7 +151,6 @@ export const APPLICATIONS = [
     repository: '',
     branch: '',
     domainName: 'z1x2c3v4b5.azion.run',
-    status: 'Active',
     modifiedAt: daysAgo(17)
   },
   // React
@@ -138,7 +162,6 @@ export const APPLICATIONS = [
     repository: 'acme/react-dashboard',
     branch: 'main',
     domainName: 'd9m8j2k4l5.azion.run',
-    status: 'Active',
     modifiedAt: daysAgo(375)
   },
   // Retired, and the one resource in the account with nothing deployable: its only
@@ -151,7 +174,7 @@ export const APPLICATIONS = [
     repository: '',
     branch: '',
     domainName: 'g6h7j8k9l0.azion.run',
-    status: 'Inactive',
+    active: false,
     modifiedAt: daysAgo(5)
   },
   // Vue — the CLI half of the pair the reference repo opens.
@@ -163,7 +186,6 @@ export const APPLICATIONS = [
     repository: '',
     branch: '',
     domainName: 'p9o8i7u6y5.azion.run',
-    status: 'Active',
     modifiedAt: daysAgo(47)
   },
   // Nuxt
@@ -175,7 +197,7 @@ export const APPLICATIONS = [
     repository: 'shopco/ecommerce-v2',
     branch: 'develop',
     domainName: 'y6u7i8o9p0.azion.run',
-    status: 'Active',
+    customDomains: [{ id: 'domain-shopco-shop', domain: 'shop.shopco.com', certificate: '' }],
     modifiedAt: daysAgo(250)
   },
   {
@@ -186,7 +208,6 @@ export const APPLICATIONS = [
     repository: '',
     branch: '',
     domainName: 'n4m5b6v7c8.azion.run',
-    status: 'Active',
     modifiedAt: daysAgo(33)
   },
   // Astro
@@ -198,7 +219,6 @@ export const APPLICATIONS = [
     repository: 'acme/marketing-site',
     branch: 'main',
     domainName: 'z9x8c7v6b5.azion.run',
-    status: 'Active',
     modifiedAt: daysAgo(141)
   },
   {
@@ -209,7 +229,6 @@ export const APPLICATIONS = [
     repository: '',
     branch: '',
     domainName: 'k1l2m3n4o5.azion.run',
-    status: 'Active',
     modifiedAt: daysAgo(63)
   },
   // Svelte
@@ -221,7 +240,6 @@ export const APPLICATIONS = [
     repository: 'acme/status-page',
     branch: 'main',
     domainName: 'm4n5b6v7c8.azion.run',
-    status: 'Active',
     modifiedAt: daysAgo(21)
   },
   {
@@ -232,7 +250,6 @@ export const APPLICATIONS = [
     repository: '',
     branch: '',
     domainName: 'a1s2d3f4g5.azion.run',
-    status: 'Active',
     modifiedAt: daysAgo(190)
   }
 ].map((app, index) => {
@@ -253,8 +270,7 @@ export const applicationById = (id) => APPLICATIONS.find((app) => app.id === Str
 
 /** The id of a seeded application by NAME, or `''`. Deployment settings bind by name, so
  *  this is what turns a binding into a link to the resource's own page. */
-export const applicationIdByName = (name) =>
-  APPLICATIONS.find((app) => app.name === name)?.id ?? ''
+export const applicationIdByName = (name) => APPLICATIONS.find((app) => app.name === name)?.id ?? ''
 
 /** The application at `index`, wrapping round — the round-robin every list uses. */
 export const applicationAt = (index) => APPLICATIONS[index % APPLICATIONS.length]

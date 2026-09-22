@@ -832,8 +832,8 @@
                  band is the page's payload — a full list with its own controls, its own
                  filters and its own pagination — and a muted `text-heading-xxs` label
                  titles a card, not that. It is the same treatment every band of this
-                 weight takes (../../workloads/WorkloadDetail.vue: Active Deployment,
-                 Version History). -->
+                 weight takes (../../workloads/WorkloadDetail.vue: Deployment
+                 topology). -->
             <div class="flex flex-col gap-(--layout-group-gap)">
               <PageHeading
                 title="Invoices"

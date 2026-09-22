@@ -76,12 +76,15 @@ export const WORKLOAD_STEPS = [
 // Reading the store also fixes what the reader NOTICED: the picker hides its search and its
 // paging until there are more rows than one page (components/resource/ResourcePicker.vue —
 // a search field over four rows is furniture), so a four-name fixture could never show
-// either. The account has twelve applications, nine of them bindable, which is what the
-// picker is built for.
+// either. The account has fifteen applications, fourteen of them bindable, which is what
+// the picker is built for.
 //
-// INACTIVE APPLICATIONS ARE DROPPED rather than offered disabled — the same rule the
+// AN APPLICATION SWITCHED OFF IS DROPPED rather than offered disabled — the same rule the
 // deployments below follow. This is a create: an application that cannot serve is not a
-// choice, and a row that can only be looked at is worse than no row.
+// choice, and a row that can only be looked at is worse than no row. `active` is the Main
+// Settings switch ("when disabled, the application stops serving traffic"), absent on
+// every row that is on — NOT a status, which for an application is the state of its last
+// deployment (./applications.js).
 //
 // A COMPUTED and not a constant, because the from-scratch application create ends by
 // offering "Deploy using a new workload" (../../pages/applications/CreateApplication.vue):
@@ -104,7 +107,7 @@ export const WORKLOAD_APPLICATIONS = computed(() => [
     label: application.name,
     description: 'Created in this session. Its latest version is ready to serve.'
   })),
-  ...APPLICATIONS.filter((application) => application.status === 'Active').map((application) => ({
+  ...APPLICATIONS.filter((application) => application.active !== false).map((application) => ({
     value: application.name,
     label: application.name,
     description: `${presetLabel(application.preset)} · ${application.repository}`

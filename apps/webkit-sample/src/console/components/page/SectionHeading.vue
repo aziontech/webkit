@@ -79,10 +79,10 @@
     documentationLabel: { type: String, default: 'Documentation' },
     // Title scale, matching the levels the console actually uses:
     // 'medium' — the standard section title over a flush CardBox (General,
-    //   Modules, Build configuration). The default.
+    //   Modules, Build configuration). The default, in the default ink.
     // 'small'  — a sub-group label INSIDE a band that a 'medium' heading already
-    //   titles (Subscription modules under Modules). Muted, so the nesting reads
-    //   as subordinate rather than as a second section.
+    //   titles (Subscription modules under Modules). Smaller and muted, so the
+    //   nesting reads as subordinate rather than as a second section.
     size: {
       type: String,
       default: 'medium',
@@ -140,16 +140,16 @@
              without it the heading stops flush against the bar and the section it
              names looks like it starts above the fold. -->
         <div class="flex min-w-0 items-center gap-(--spacing-xxs)">
-          <!-- `size` drives TYPOGRAPHY only; the colour is the same muted token at
-               every level. A section title is a label for the band below it, not a
-               signal about it — a destructive band is marked by its own controls
-               (a `kind="danger"` Button), not by recolouring the heading that
-               names it. -->
+          <!-- A section title is the heading of the band below it, so `medium` takes
+               the default ink; only `small` stays muted, because a sub-group inside a
+               band reads as subordinate to the title that already names it. Neither
+               level signals severity — a destructive band is marked by its own
+               controls (a `kind="danger"` Button), never by recolouring its heading. -->
           <h2
             v-if="title"
             :id="anchorId"
             :data-size="size"
-            class="scroll-mt-(--spacing-xl) text-balance text-(--text-muted) data-[size=medium]:text-heading-xxs data-[size=small]:text-label-md"
+            class="scroll-mt-(--spacing-xl) text-balance data-[size=medium]:text-heading-xs data-[size=medium]:text-(--text-default) data-[size=small]:text-label-md data-[size=small]:text-(--text-muted)"
           >
             {{ title }}
           </h2>

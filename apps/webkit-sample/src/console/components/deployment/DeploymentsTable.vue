@@ -1,9 +1,9 @@
 <script setup>
   // The deployment table — ONE table shape, reused by every surface that lists
-  // deployments: the Deployments module, a workload's Version History, and a
-  // workload's Deployments tab. Same columns, same cells, same controls, so a
-  // deployment reads identically wherever it appears instead of each screen
-  // re-deciding what a deployment row looks like.
+  // deployments: the Deployments module, a workload's Deployments tab and an
+  // application's. Same columns, same cells, same controls, so a deployment reads
+  // identically wherever it appears instead of each screen re-deciding what a
+  // deployment row looks like.
   //
   // The row contract (src/lib/deployments.js is the vocabulary):
   //   versionId · status · duration · current · environment
@@ -23,8 +23,8 @@
   // component is configured for:
   //
   //   `controls` (default) — search and bar render in the table's own `#toolbar`,
-  //     inside the card. This is what an internal level uses (a workload's Version
-  //     History / Deployments tab), where the table is one band among several.
+  //     inside the card. This is what an internal level uses, where the table is one
+  //     band among several.
   //   `:controls="false"` — no toolbar at all. A FIRST-LEVEL page hoists them into its
   //     ControlsHeader and filter row above the card (see ui/ControlsHeader.vue) and
   //     owns their state, binding it here through the two models below.

@@ -46,42 +46,6 @@
 // clips, which is what the real one does — it scrolls.
 export const APPLICATION_TABS = [
   {
-    value: 'main-settings',
-    label: 'Main Settings',
-    lead: 'Name the application, switch it on, and pick the modules it runs. One form, one save.',
-    heading: 'Main Settings',
-    form: [
-      {
-        title: 'General',
-        rows: [
-          { label: 'Name', value: 'webkit-sample-vue' },
-          { label: 'Active', on: true }
-        ]
-      },
-      // Two of the tab's module rows, for the same reason the third band carries one: the
-      // frame is a fixed height, and what the reader needs from this band is that modules
-      // are switches — not the whole inventory.
-      {
-        title: 'Modules',
-        rows: [
-          { label: 'Application Accelerator', on: true },
-          { label: 'Cache', on: true }
-        ]
-      },
-      // One row, not the two the tab lists: the frame is a fixed height and the third
-      // band is what runs past it. The console's page scrolls; a picture of it cannot.
-      {
-        title: 'Subscription modules',
-        rows: [{ label: 'Load Balancer', on: false }]
-      }
-    ],
-    second: {
-      kind: 'save-bar',
-      label: 'Application settings changed.',
-      hint: 'Saving publishes them on the next deployment.'
-    }
-  },
-  {
     value: 'build',
     label: 'Build',
     lead: 'Connect a repository, pick the framework preset, and deploy a branch. The build settings live with the application.',
@@ -280,6 +244,42 @@ export const APPLICATION_TABS = [
         },
         { title: 'Status', fields: [{ kind: 'switch', label: 'Active', on: true }] }
       ]
+    }
+  },
+  {
+    value: 'main-settings',
+    label: 'Settings',
+    lead: 'Name the application, switch it on, and pick the modules it runs. One form, one save.',
+    heading: 'Settings',
+    form: [
+      {
+        title: 'General',
+        rows: [
+          { label: 'Name', value: 'webkit-sample-vue' },
+          { label: 'Active', on: true }
+        ]
+      },
+      // Two of the tab's module rows, for the same reason the third band carries one: the
+      // frame is a fixed height, and what the reader needs from this band is that modules
+      // are switches — not the whole inventory.
+      {
+        title: 'Modules',
+        rows: [
+          { label: 'Application Accelerator', on: true },
+          { label: 'Cache', on: true }
+        ]
+      },
+      // One row, not the two the tab lists: the frame is a fixed height and the third
+      // band is what runs past it. The console's page scrolls; a picture of it cannot.
+      {
+        title: 'Subscription modules',
+        rows: [{ label: 'Load Balancer', on: false }]
+      }
+    ],
+    second: {
+      kind: 'save-bar',
+      label: 'Application settings changed.',
+      hint: 'Saving publishes them on the next deployment.'
     }
   }
 ]

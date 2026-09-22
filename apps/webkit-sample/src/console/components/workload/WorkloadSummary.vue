@@ -49,6 +49,7 @@
 
   import DomainOverflowPopover from '../list/DomainOverflowPopover.vue'
   import ResourceLink from '../resource/ResourceLink.vue'
+  import SummaryBand from '../resource/SummaryBand.vue'
 
   const props = defineProps({
     /** The record's workload — `{ id, name, domain, domains, domainCount, status, owner, ownerAvatar, modifiedAt }`. */
@@ -158,9 +159,7 @@
          900px the two halves on one row truncated it to `my-workload…`. The basis is what
          makes that happen — `flex-1 min-w-0` alone shrinks to zero and never triggers the
          wrap, so the left group declares a preferred 300px and the row breaks under it. -->
-      <div
-        class="flex flex-wrap items-center gap-x-(--spacing-md) gap-y-(--spacing-xs) p-(--spacing-md)"
-      >
+      <SummaryBand kind="subject">
         <div class="flex min-w-0 flex-1 basis-(--container-2xs) items-center gap-(--spacing-xs)">
           <!-- The glyph names the subject of the line; it is not part of what the link
              opens, so it sits outside the anchor — the same split the Workloads list
@@ -220,7 +219,7 @@
         <div class="ml-auto flex shrink-0 items-center gap-(--spacing-xs)">
           <Button
             label="Visit"
-            kind="outlined"
+            kind="secondary"
             size="medium"
             icon="pi pi-external-link"
             @click="emit('visit')"
@@ -305,7 +304,7 @@
             </Dropdown>
           </Tooltip>
         </div>
-      </div>
+      </SummaryBand>
 
       <!-- THE RECORD. Four facts, each a caption over a value.
 
@@ -324,8 +323,9 @@
 
          FOUR COLUMNS, FOUR CELLS at `sm`. Below that they fall into two, where a caption
          and its value still fit on one line each. -->
-      <div
-        class="grid grid-cols-2 gap-(--spacing-sm) border-t border-(--border-muted) p-(--spacing-md) sm:grid-cols-4"
+      <SummaryBand
+        kind="facts"
+        class="grid grid-cols-2 gap-(--spacing-sm) sm:grid-cols-4"
       >
         <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
           <!-- THE ADD SITS ON THE LABEL, not in the value row. It was a dashed Chip
@@ -439,7 +439,7 @@
             />
           </div>
         </div>
-      </div>
+      </SummaryBand>
 
       <!-- THE FOOTER — what is running on this workload right now (./DeploymentFooter.vue,
          passed in by the page).
@@ -450,12 +450,13 @@
          identical to `--bg-surface` in light, so it would have shown no fill at all, and
          in dark it steps the wrong way.) The recess is what says "this belongs to the card
          above it" rather than "this is a third thing". -->
-      <div
+      <SummaryBand
         v-if="$slots.footer"
-        class="border-t border-(--border-muted) bg-(--bg-canvas)"
+        kind="state"
+        :padded="false"
       >
         <slot name="footer" />
-      </div>
+      </SummaryBand>
     </template>
   </CardBox>
 </template>

@@ -32,10 +32,8 @@
   //
   // The heading is rendered here rather than through SectionHeading: that component
   // bakes in a `--spacing-xs` optical inset to line its title up with the padded
-  // rows of the flush CardBox beneath it, and paints the title muted because the
-  // card already separates the band. Neither holds without the card — here the
-  // title is the only thing naming the band, and it aligns with the page heading's
-  // own left edge.
+  // rows of the flush CardBox beneath it. That does not hold without the card —
+  // here the title aligns with the page heading's own left edge.
   import Hint from '@aziontech/webkit/hint'
   import { toast } from '@aziontech/webkit/toast'
   import { computed, onMounted, onScopeDispose, ref, useId, watch } from 'vue'

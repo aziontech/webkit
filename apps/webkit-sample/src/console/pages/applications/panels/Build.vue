@@ -1,21 +1,25 @@
 <script setup>
-  // Application → Build. The UI face of the repo's GitHub Actions deploy workflow
-  // (azion-deploy.yml): each row maps to a workflow step. The Deploy action is the
-  // workflow_dispatch analog: it opens the release page, which is where a deploy is
-  // reviewed and run. Its BUTTON is IN THIS TAB'S HEADING, not on the page's tab row it
-  // used to ride: a tab is its own page, so its primary action belongs beside the
-  // heading that names it.
+  // Application → Build. How code gets into this application, and with what.
+  //
+  // AZION HAS NO BUILD SERVICE, so this tab does not present one. A build is the Azion
+  // CLI running — in the reader's terminal, or in a workflow in their repository — and
+  // this tab holds only what the platform actually stores about that: the repository
+  // this application is connected to and the branch that ships, the azion.config preset
+  // and the commands the CLI runs, and the personal token the workflow authenticates
+  // with. The build-service inventions that used to sit here — a root directory, build
+  // watch paths, per-branch preview builds, a build cache with a scope and an
+  // invalidation policy — described a product we do not ship, and a demo that shows
+  // fields nobody can set is worse than one that shows fewer.
   //
   // WHAT IT NO LONGER SHOWS: the azion.json mirror — the domain, the application id,
-  // the environment and the last deploy. Those are what the application IS, not how it
-  // builds, and they were three scrolls below the fold of a settings form. They open
-  // the Overview tab now (./Overview.vue), on the card that names the record.
+  // the environment and the last deploy — and the "Get started" commands. Those are
+  // what the application IS and how code first reaches it, not how it builds, so both
+  // open the Overview tab now (./Overview.vue): the card that names the record, and,
+  // for an application with no repository, the steps under it.
   //
-  // The editable configuration is split into topic groups, each a flush ItemGroup
-  // owning its OWN footer Save that locks and dirties INDEPENDENTLY: `buildConfig`
-  // (preset + the CLI commands the workflow runs) and `branch` (the
-  // workflow_dispatch branch inputs). The repository connection and the deployment
-  // rows are informational/action-only, so they carry no group Save.
+  // The Deploy action opens the release page, where a deploy is reviewed and run. Its
+  // BUTTON is IN THIS TAB'S HEADING, not on the page's tab row it used to ride: a tab is
+  // its own page, so its primary action belongs beside the heading that names it.
   //
   // LAYOUT — this band picks its own measure, and it picks the FORM one
   // (`.layout-column-form`), matching Main Settings: every band here is a stacked row
@@ -29,14 +33,12 @@
   import InputGroup from '@aziontech/webkit/input-group'
   import InputText from '@aziontech/webkit/input-text'
   import Item from '@aziontech/webkit/item'
-  import Select from '@aziontech/webkit/select'
-  import Switch from '@aziontech/webkit/switch'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, reactive, ref } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
-  import GetStartedCli from '../../../components/application/GetStartedCli.vue'
+  import GitProviderConnect from '../../../components/creation/GitProviderConnect.vue'
   import SettingsSaveBar from '../../../components/form/SettingsSaveBar.vue'
   import HeadingAction from '../../../components/page/HeadingAction.vue'
   import PageHeading from '../../../components/page/PageHeading.vue'
@@ -54,7 +56,7 @@
   // An application with no repository is built and shipped from the reader's own terminal
   // (../../../lib/data/applications.js). Every band on this tab that names a repository,
   // a branch or a workflow is a band it does not have.
-  const isCli = computed(() => props.application?.source === 'cli')
+  const isCli = computed(() => !props.application?.repository)
 
   const route = useRoute()
   const router = useRouter()
@@ -72,15 +74,12 @@
     // claim a framework it does not use (../../../lib/data/applications.js).
     preset: props.application?.preset || 'vue',
     buildCommand: 'azion build',
-    deployCommand: 'azion deploy --local',
-    rootDirectory: '/',
-    watchPaths: '*'
+    deployCommand: 'azion deploy --local'
   })
 
-  // ── Group 2 — Branch control (the workflow_dispatch branch inputs) ─────────
+  // ── Group 2 — the branch the workflow deploys from ────────────────────────
   const branch = reactive({
-    productionBranch: 'main',
-    nonProdBuilds: true
+    productionBranch: 'main'
   })
 
   // ── ONE commit for the tab ─────────────────────────────────────────────────
@@ -120,22 +119,6 @@
 
   // Row affordances that don't mutate anything in this demo.
   const comingSoon = (what) => toast.info(what, { description: 'Not available in this demo.' })
-
-  // ── Deployment — API token + build cache ──────────────────────────────────
-  const buildCacheEnabled = ref(true)
-  // Build-cache options, revealed below the toggle when the cache is on. Applied
-  // live (the Deployment section has no group Save), like the appearance prefs
-  // elsewhere.
-  const buildCacheScopeOptions = [
-    { label: 'Per branch', value: 'branch' },
-    { label: 'Shared across branches', value: 'shared' }
-  ]
-  const buildCache = reactive({
-    scope: 'branch',
-    autoInvalidate: true
-  })
-  const buildCacheScopeLabel = (value) =>
-    buildCacheScopeOptions.find((option) => option.value === value)?.label ?? ''
 
   // ── Deploy ────────────────────────────────────────────────────────────────
   // The page's Deploy button opens the RELEASE PAGE (components/ReleaseComposer.vue),
@@ -177,8 +160,8 @@
         title="Build"
         :description="
           isCli
-            ? 'This application has no repository. Link it from your terminal and deploy with the Azion CLI.'
-            : 'Connect your application to a Git repository for automatic builds and deployments.'
+            ? 'This application has no repository. Connect one here, or keep deploying from your terminal.'
+            : 'How code reaches this application, and what the Azion CLI builds it with.'
         "
         size="small"
       >
@@ -193,20 +176,20 @@
       </PageHeading>
 
       <div class="mt-(--layout-section-gap) flex min-w-0 flex-col">
-        <!-- NO REPOSITORY, SO NO CONNECTION TO REPORT. An application reached by CLI is
-             built on the reader's own machine and pushed from there, so this is where the
-             commands live — permanently, and in the tab that already answers "how does
-             this ship?". It is the same card the create's success screen hands over; a
-             success screen is lost on the first reload and the question is not. -->
+        <!-- NO REPOSITORY, SO NO CONNECTION TO REPORT — the band offers the connection
+             instead of describing one. -->
         <Section
           v-if="isCli"
           stacked
           anchor
           :divided="false"
-          title="Get started"
-          hint="This application has no repository. These are the commands that link a local project to it and ship a build."
+          title="Git repository"
+          hint="Connect a provider to build this application from a repository. Until one is connected, new code reaches it from the CLI only."
         >
-          <GetStartedCli :name="application.name" />
+          <GitProviderConnect
+            title="Connect your repository"
+            description="Choose a Git provider, then pick the repository Azion builds this application from."
+          />
         </Section>
 
         <!-- Git repository — the connection (actions/checkout in the workflow).
@@ -217,7 +200,7 @@
           anchor
           :divided="false"
           title="Git repository"
-          hint="The repository Azion builds from — the checkout step of the workflow. A connection, not configuration, so there is nothing to save here."
+          hint="The repository Azion builds from — the checkout step of the workflow — and the branch a push deploys."
         >
           <CardBox :padded="false">
             <template #content>
@@ -256,6 +239,26 @@
                     />
                   </Item.Actions>
                 </Item>
+
+                <!-- The one thing about the connection that IS a setting: which branch
+                     the workflow deploys from. It rides the tab's single save bar. -->
+                <Item size="small">
+                  <Item.Content>
+                    <Item.Title>Production branch</Item.Title>
+                    <Item.Description>
+                      Pushes to this branch build and deploy this application.
+                    </Item.Description>
+                  </Item.Content>
+                  <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
+                    <InputText
+                      v-model="branch.productionBranch"
+                      size="large"
+                      :disabled="saving"
+                      class="w-full font-code"
+                      aria-label="Production branch"
+                    />
+                  </Item.Actions>
+                </Item>
               </Item.List>
             </template>
           </CardBox>
@@ -275,7 +278,7 @@
           <form
             aria-label="Build configuration"
             novalidate
-            @submit.prevent="saveBuildConfig"
+            @submit.prevent="save"
           >
             <CardBox :padded="false">
               <template #content>
@@ -354,40 +357,6 @@
                         />
                       </Item.Actions>
                     </Item>
-
-                    <Item size="small">
-                      <Item.Content>
-                        <Item.Title>Root directory</Item.Title>
-                        <Item.Description>The directory the build runs from.</Item.Description>
-                      </Item.Content>
-                      <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
-                        <InputText
-                          v-model="buildConfig.rootDirectory"
-                          size="large"
-                          :disabled="saving"
-                          class="w-full font-code"
-                          aria-label="Root directory"
-                        />
-                      </Item.Actions>
-                    </Item>
-
-                    <Item size="small">
-                      <Item.Content>
-                        <Item.Title>Build watch paths</Item.Title>
-                        <Item.Description
-                          >Only changes to these paths trigger a build.</Item.Description
-                        >
-                      </Item.Content>
-                      <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
-                        <InputText
-                          v-model="buildConfig.watchPaths"
-                          size="large"
-                          :disabled="saving"
-                          class="w-full font-code"
-                          aria-label="Build watch paths"
-                        />
-                      </Item.Actions>
-                    </Item>
                   </Item.List>
                 </fieldset>
               </template>
@@ -395,76 +364,13 @@
           </form>
         </Section>
 
-        <!-- Group 2 — Branch control. Its own ItemGroup, its own independent Save
-         (locks off the page's one `saving` flag, disabled until it is dirty). -->
-        <Section
-          stacked
-          anchor
-          :divided="false"
-          title="Branch control"
-          hint="Which branch is production, and whether pushes to other branches build at all."
-        >
-          <form
-            aria-label="Branch control"
-            novalidate
-            @submit.prevent="saveBranch"
-          >
-            <CardBox :padded="false">
-              <template #content>
-                <fieldset
-                  class="m-0 flex min-w-0 flex-col border-0 p-0"
-                  :disabled="saving"
-                >
-                  <legend class="sr-only">Branch control</legend>
-                  <Item.List>
-                    <Item size="small">
-                      <Item.Content>
-                        <Item.Title>Production branch</Item.Title>
-                        <Item.Description>
-                          Pushes to this branch deploy to production.
-                        </Item.Description>
-                      </Item.Content>
-                      <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
-                        <InputText
-                          v-model="branch.productionBranch"
-                          size="large"
-                          :disabled="saving"
-                          class="w-full font-code"
-                          aria-label="Production branch"
-                        />
-                      </Item.Actions>
-                    </Item>
-
-                    <Item size="small">
-                      <Item.Content>
-                        <Item.Title>Builds for non-production branches</Item.Title>
-                        <Item.Description>
-                          Build and preview pushes to branches other than production.
-                        </Item.Description>
-                      </Item.Content>
-                      <Item.Actions class="justify-end">
-                        <Switch
-                          v-model="branch.nonProdBuilds"
-                          aria-label="Builds for non-production branches"
-                          :disabled="saving"
-                        />
-                      </Item.Actions>
-                    </Item>
-                  </Item.List>
-                </fieldset>
-              </template>
-            </CardBox>
-          </form>
-        </Section>
-
-        <!-- Deployment — the API token + build cache affordances (single values /
-         toggles, so an ItemGroup rather than a table). -->
+        <!-- Deployment — the personal token the workflow authenticates with. -->
         <Section
           stacked
           anchor
           :divided="false"
           title="Deployment"
-          hint="The token the pipeline deploys with, and whether builds reuse a cache."
+          hint="The personal token the workflow authenticates with, kept as a repository secret."
         >
           <CardBox :padded="false">
             <template #content>
@@ -496,108 +402,10 @@
                     </InputGroup>
                   </Item.Actions>
                 </Item>
-
-                <!-- Build cache — a switch on the right (field-on-right pattern). When
-                 on, its options are revealed in the section below. -->
-                <Item size="small">
-                  <Item.Content>
-                    <Item.Title>Build cache</Item.Title>
-                    <Item.Description>
-                      Reuse cached build artifacts across deploys to speed up builds.
-                    </Item.Description>
-                  </Item.Content>
-                  <Item.Actions class="justify-end">
-                    <Switch
-                      v-model="buildCacheEnabled"
-                      aria-label="Build cache"
-                    />
-                  </Item.Actions>
-                </Item>
               </Item.List>
             </template>
           </CardBox>
         </Section>
-
-        <!-- Revealed only when the build cache is on: its options as a standard
-         ItemGroup section (same anatomy as every other section — a section title
-         over a flush CardBox whose body is an Item.List, one Item row per option,
-         control on the right). Applied live; the Deployment section carries no
-         group Save. -->
-        <Section
-          v-if="buildCacheEnabled"
-          stacked
-          anchor
-          :divided="false"
-          title="Build cache settings"
-          hint="How long build artifacts are reused before a clean build runs."
-        >
-          <CardBox :padded="false">
-            <template #content>
-              <Item.List>
-                <Item size="small">
-                  <Item.Content>
-                    <Item.Title>Cache scope</Item.Title>
-                    <Item.Description>
-                      Whether each branch keeps its own cache or all branches share one.
-                    </Item.Description>
-                  </Item.Content>
-                  <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
-                    <Select
-                      v-model="buildCache.scope"
-                      size="large"
-                      class="w-full"
-                      :display-value="buildCacheScopeLabel"
-                    >
-                      <Select.Trigger aria-label="Cache scope" />
-                      <Select.Content>
-                        <Select.Option
-                          v-for="option in buildCacheScopeOptions"
-                          :key="option.value"
-                          :value="option.value"
-                        >
-                          {{ option.label }}
-                        </Select.Option>
-                      </Select.Content>
-                    </Select>
-                  </Item.Actions>
-                </Item>
-                <Item size="small">
-                  <Item.Content>
-                    <Item.Title>Auto-invalidate on config change</Item.Title>
-                    <Item.Description>
-                      Discard the cache automatically when the build configuration changes.
-                    </Item.Description>
-                  </Item.Content>
-                  <Item.Actions class="justify-end">
-                    <Switch
-                      v-model="buildCache.autoInvalidate"
-                      aria-label="Auto-invalidate on config change"
-                    />
-                  </Item.Actions>
-                </Item>
-                <Item size="small">
-                  <Item.Content>
-                    <Item.Title>Clear cache</Item.Title>
-                    <Item.Description>
-                      Remove all cached build artifacts; the next deploy rebuilds from scratch.
-                    </Item.Description>
-                  </Item.Content>
-                  <Item.Actions class="justify-end">
-                    <Button
-                      type="button"
-                      label="Clear cache"
-                      kind="outlined"
-                      size="medium"
-                      icon="pi pi-refresh"
-                      @click="comingSoon('Clear build cache')"
-                    />
-                  </Item.Actions>
-                </Item>
-              </Item.List>
-            </template>
-          </CardBox>
-        </Section>
-
       </div>
     </div>
 

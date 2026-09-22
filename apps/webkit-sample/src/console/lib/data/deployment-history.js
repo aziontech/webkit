@@ -22,6 +22,7 @@
 import { applicationAt } from './applications'
 import { formatListDate, hoursAgo } from '@shared/lib/dates'
 import { authorAt, emailOf } from '@shared/lib/people'
+import { findDeploymentByApplication, provisionedDeployRow } from './provisioning'
 import { workloadById, WORKLOADS } from './workloads'
 
 // What a workload's deployments targeted, newest first. A workload binds three
@@ -190,17 +191,23 @@ export function deploymentRowsFor(workloadId, workloadName = 'Workload Name') {
 }
 
 /** How many rows an application's activity list reads as a history rather than a stub. */
-const APPLICATION_HISTORY_LENGTH = 8
+const APPLICATION_HISTORY_LENGTH = 4
 
 /**
  * One application's deployments, newest first — every deployment that shipped IT,
  * whichever workload published it.
  *
- * The seed pairs each application to one or two workloads, so the rows already in
- * `DEPLOYMENT_HISTORY` that target it are a true but very short history. The rest are
- * derived from the application's own id, deterministically and strictly OLDER than
- * every seeded row, so the current version stays the one the workload's own page and
- * the Deployments module both report.
+ * An application CREATED IN THIS SESSION is not padded at all: it has exactly the
+ * deployments it has made — the one its create published, or none when the create made
+ * the application and stopped (`publish: false` in ./provisioning.js). A minutes-old
+ * application with a year of invented history is the one thing this list must not show,
+ * and the row it would have led with was derived rather than the deploy that just ran.
+ *
+ * A SEEDED application is padded. The seed pairs each one to one or two workloads, so
+ * the rows already in `DEPLOYMENT_HISTORY` that target it are a true but very short
+ * history. The rest are derived from the application's own id, deterministically and
+ * strictly OLDER than every seeded row, so the current version stays the one the
+ * workload's own page and the Deployments module both report.
  *
  * Derived version ids live in their own band (1.5e9), clear of the workload-derived
  * ones (1.2e9), and resolve on the deployment page through the `application` context
@@ -213,6 +220,11 @@ const APPLICATION_HISTORY_LENGTH = 8
  */
 export function applicationDeploymentRows(applicationId, applicationName = 'Application') {
   const id = String(applicationId)
+  const provisioned = findDeploymentByApplication(id)
+  if (provisioned) {
+    return provisioned.versionId && provisioned.workload ? [provisionedDeployRow(provisioned)] : []
+  }
+
   const seeded = DEPLOYMENT_HISTORY.filter(
     (deployment) => deployment.resourceType === 'application' && deployment.resourceId === id
   )
@@ -256,3 +268,18 @@ export function applicationDeploymentRows(applicationId, applicationName = 'Appl
     .sort(byNewest)
     .map((row, index) => (row.current === (index === 0) ? row : { ...row, current: index === 0 }))
 }
+
+/**
+ * The newest deployment that shipped an application, or `null`.
+ *
+ * An application has no status of its own (./applications.js): what the module list, its
+ * filter and the application's own summary all report is the state of THIS record. They
+ * read it through one function so the row a reader clicks and the page it opens can never
+ * name two different states of the same application.
+ *
+ * @param {string} applicationId The application's id.
+ * @param {string} [applicationName] Display name, for an application that is not seeded.
+ * @returns {object|null} The newest row of `applicationDeploymentRows`.
+ */
+export const latestApplicationDeployment = (applicationId, applicationName) =>
+  applicationDeploymentRows(applicationId, applicationName)[0] ?? null

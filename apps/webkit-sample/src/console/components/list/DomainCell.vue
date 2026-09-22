@@ -19,10 +19,15 @@
   import CopyButton from '@aziontech/webkit/copy-button'
 
   import ResourceLink from '../resource/ResourceLink.vue'
+  import DomainOverflowPopover from './DomainOverflowPopover.vue'
 
   defineProps({
     /** The hostname, without a scheme. */
-    value: { type: String, default: '' }
+    value: { type: String, default: '' },
+    /** Every address on the record, primary first — what the "+N" popover lists. */
+    domains: { type: Array, default: () => [] },
+    /** The overflow count on the tag: everything after the primary. Zero hides it. */
+    count: { type: Number, default: 0 }
   })
 </script>
 
@@ -31,6 +36,11 @@
     <ResourceLink
       :label="value"
       :href="`https://${value}`"
+    />
+    <DomainOverflowPopover
+      v-if="count"
+      :domains="domains"
+      :count="count"
     />
     <CopyButton
       kind="outlined"

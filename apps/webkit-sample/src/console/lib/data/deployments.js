@@ -2,7 +2,7 @@
 // environments every deployment surface reads from.
 //
 // A deployment shows up in three places (the Deployments module, a workload's
-// Version History and its Deployments tab) plus the deployment page. Each of
+// Deployments tab and an application's) plus the deployment page. Each of
 // them used to re-declare its own STATUS_SEVERITY map and its own environment
 // list, so the same status could drift into a different severity per screen.
 // One module, one answer: a status, a resource type and an environment read
@@ -96,7 +96,7 @@ export const environmentSeverity = () => 'secondary'
 
 // ── The filter catalog every deployment surface shares ──────────────────────
 // A deployment table renders in three places (the Deployments module, a
-// workload's Version History, its Deployments tab), and each one is narrowed by
+// workload's Deployments tab, an application's), and each one is narrowed by
 // the same four columns. The catalog is built here rather than per page so a
 // status that gains a value, or an environment that gains a name, reaches every
 // surface at once — the same reason STATUS_SEVERITY lives in this file.

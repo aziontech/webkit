@@ -1,8 +1,8 @@
 <script setup>
   // Application detail — the resource-detail SHELL for a single application. Its
   // identity (name) is the breadcrumb; the header's bottom is a FLUID navigation tab
-  // bar (Main Settings / Build / Device Groups / …), and the active sub-page renders
-  // below it.
+  // bar (Overview / Build / Device Groups / … / Settings), and the active sub-page
+  // renders below it.
   //
   // This file owns only the shell: the breadcrumb, the tab bar, the page actions
   // that trail it, and which view is mounted. Each tab is a SELF-CONTAINED view
@@ -27,7 +27,7 @@
   //
   // It also owns its own LAYOUT. The tab bar here is second-level navigation, which
   // makes each tab a separate page in one route — so per layout.css the unit that
-  // picks a measure is the BAND, not the file: Main Settings is a stacked form on the
+  // picks a measure is the BAND, not the file: Settings is a stacked form on the
   // FORM measure (1192px), while Build and the list tabs carry tables and take the
   // DATA measure (1388px). AppLayout is therefore `:padded="false"` and each view
   // applies `.layout-boundary` itself, because the boundary has to sit inside the
@@ -49,6 +49,7 @@
   import { useTabEnter } from '../../lib/behavior/tab-enter'
   import Build from './panels/Build.vue'
   import CacheSettings from './panels/CacheSettings.vue'
+  import Deployments from './panels/Deployments.vue'
   import DeviceGroups from './panels/DeviceGroups.vue'
   import FunctionsInstances from './panels/FunctionsInstances.vue'
   import MainSettings from './panels/MainSettings.vue'
@@ -68,8 +69,7 @@
   // (../../lib/data/applications.js).
   const application = computed(() => {
     const id = String(route.params.id || '1784552864')
-    const seeded =
-      applicationById(id) ?? provisionedApplications.value.find((app) => app.id === id)
+    const seeded = applicationById(id) ?? provisionedApplications.value.find((app) => app.id === id)
     if (seeded) return seeded
     return {
       id,
@@ -118,15 +118,15 @@
       props: { application: application.value }
     },
     {
-      value: 'main-settings',
-      label: 'Main Settings',
-      component: MainSettings,
-      props: { application: application.value }
-    },
-    {
       value: 'build',
       label: 'Build',
       component: Build,
+      props: { application: application.value }
+    },
+    {
+      value: 'deployments',
+      label: 'Deployments',
+      component: Deployments,
       props: { application: application.value }
     },
     {
@@ -152,6 +152,16 @@
       label: 'Rules Engine',
       component: RulesEngine,
       props: {}
+    },
+    // LAST, and named for what it is. The application's own record is what a reader
+    // comes back to least — the tabs before it are the work — so it takes the end of
+    // the row, where every settings destination in the console sits. The `?tab=` key
+    // keeps its old spelling so links already in the wild still land here.
+    {
+      value: 'main-settings',
+      label: 'Settings',
+      component: MainSettings,
+      props: { application: application.value }
     }
   ])
 
@@ -159,7 +169,7 @@
   //
   // ── THE TAB SWITCH IS A BOUNDARY ──
   //
-  // Two of these tabs commit — Main Settings saves the application record, Rules Engine
+  // Two of these tabs commit — Settings saves the application record, Rules Engine
   // saves the order its rules run in — and their bars occupy the SAME strip at the
   // bottom of the page. So a tab switch made with work pending is the moment the reader
   // loses sight of it, and the Discard they meet on the next tab belongs to something

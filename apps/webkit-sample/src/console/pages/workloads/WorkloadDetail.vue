@@ -4,13 +4,14 @@
   // Deployments / Settings) drives the active sub-page, with the active tab held in
   // the URL (`?tab=`) so it survives reload and is linkable.
   //
-  //  - Overview: the workload's own summary block, then two bands with the same anatomy
-  //    — a PageHeading (`size="small"`, so the title keeps the heading-xs /
-  //    `--text-default` weight it had as a card header) over a flush CardBox, at the
-  //    group gap: "Deployment topology" (a Flow diagram of the resources a deploy
-  //    provisions — Workload → Application → Connector → Storage, src/lib/provisioning.js)
-  //    and "Version History".
-  //  - Deployments: the same history, unscoped by the Overview's framing.
+  //  - Overview: the workload's own summary block, then "Deployment topology" — a
+  //    PageHeading (`size="small"`, so the title keeps the heading-xs /
+  //    `--text-default` weight it had as a card header) over a flush CardBox at the
+  //    group gap, holding a Flow diagram of the resources a deploy provisions
+  //    (Workload → Application → Connector → Storage, src/lib/provisioning.js).
+  //  - Deployments: this workload's deployment history, the ONE place it is listed.
+  //    The Overview used to restate it as a "Version History" band; a deployment is
+  //    read on the tab named after it, on both this page and an application's.
   //  - Settings: General (name + Active), Domains, Advanced Settings and a Danger Zone
   //    holding the delete, committed as ONE page from the shared save bar
   //    (ui/SettingsSaveBar.vue) like every settings surface here. The summary card used to
@@ -19,15 +20,15 @@
   //
   // AN "ACTIVE DEPLOYMENT" BAND USED TO OPEN THE OVERVIEW — a fact grid (version id,
   // environment, status, deployed by/when) with an Environment Select on its heading row.
-  // It is gone: the version and its status are a row in Version History directly below,
-  // which is where a deployment is read, and the band restated the top of that table as a
+  // It is gone: the version and its status are a row in the Deployments tab, which is
+  // where a deployment is read, and the band restated the top of that table as a
   // second card. Its Environment Select went with it — the only thing it actually moved
   // was which host the page reported, and the workload has one address again.
   //
   // Every band's CONTROLS sit OUT of its card — inside a card header they read as the
   // card's chrome rather than as the thing that drives it:
   //
-  //   Version History / Deployments — narrowing, so it takes the row every list in the
+  //   Deployments — narrowing, so it takes the row every list in the
   //     console opens with (../../components/page/ControlsHeader.vue): the search, then
   //     the Filter button (list/FilterButton.vue) over the shared deployment catalog, hoisted out of the
   //     table's `#toolbar` under the heading — `:controls="false"`, and this page owns
@@ -674,10 +675,6 @@
   // that a date field would be a field nobody opens (the module list, which spans every
   // deployment ever made, asks for it).
   //
-  // ONE set of state for both tabs: the Overview's Version History and the Deployments
-  // tab list the same deployments, so narrowing them is one decision rather than two,
-  // and it carries when the user moves between the tabs. Only one of them is rendered
-  // at a time, so the two tables never fight over the models.
   const deployFields = computed(() => deploymentFilterFields(deployments.value))
   const deploySearch = ref('')
   const deployFilters = ref({})
@@ -693,11 +690,8 @@
   // manual refresh (../../lib/behavior/list-state.js).
   const { loading, refresh } = useListRefresh()
 
-  // The tables the two controls rows drive. Two refs rather than one shared name: the
-  // tabs are `v-if`/`v-else-if` branches, and a single ref would depend on Vue's
-  // mount/unmount order at the moment of the switch. Download CSV goes through the
-  // shared component, which forwards `exportCsv` to the DS table inside it.
-  const versionsTableRef = ref(null)
+  // The table the controls row drives. Download CSV goes through the shared component,
+  // which forwards `exportCsv` to the DS table inside it.
   const deploymentsTableRef = ref(null)
 
   // --- Opening a deployment -------------------------------------------------
@@ -1016,7 +1010,7 @@
                    that card, and the accordion trigger had to grow its own heading-xxs
                    title to name it, competing with the PageHeading above. As a band it is
                    named once, by the same component every other band uses, and it sits at
-                   the section gap as the peer of Version History. No
+                   the section gap as the peer of the bands around it. No
                    accordion: the bands around it do not fold, and a section that names
                    itself does not need a second control to reveal it. -->
               <div
@@ -1133,76 +1127,6 @@
                         </Flow.Node>
                       </Flow.Parallel>
                     </Flow>
-                  </template>
-                </CardBox>
-              </div>
-
-              <!-- Version History — the section this band's shape comes from: the
-                   title above the flush card, not inside it. -->
-              <div class="flex flex-col gap-(--layout-group-gap)">
-                <PageHeading
-                  title="Version History"
-                  size="small"
-                />
-                <!-- The table's own fields, hoisted out of its toolbar into the band's
-                     controls row. Same component, same panel, same badge — only the
-                     PLACE changes, and this page owns the state it drives. -->
-                <ControlsHeader>
-                  <FilterButton
-                    v-model="deployFilters"
-                    :fields="deployFields"
-                  />
-                  <InputText
-                    v-model="deploySearch"
-                    size="medium"
-                    placeholder="Search deployments"
-                    aria-label="Search deployments"
-                    class="min-w-36 grow basis-(--container-2xs)"
-                  >
-                    <template #iconLeft>
-                      <i
-                        class="pi pi-search"
-                        aria-hidden="true"
-                      />
-                    </template>
-                  </InputText>
-                  <template #actions>
-                    <!-- The two controls that act on the LISTING rather than narrow it.
-                         Download CSV reaches the table through the shared component
-                         that owns it (it forwards `exportCsv`), since the table itself
-                         is one level down. No Columns button on this level: the shared
-                         table's column set is the same everywhere and the page does not
-                         hoist a picker for it. -->
-                    <RefreshButton
-                      :loading="loading"
-                      @refresh="refresh"
-                    />
-                    <ExportButton
-                      :table="versionsTableRef"
-                      filename="deployments.csv"
-                    />
-                  </template>
-                </ControlsHeader>
-
-                <FilterChips
-                  v-model="deployFilters"
-                  :fields="deployFields"
-                />
-                <CardBox :padded="false">
-                  <template #content>
-                    <DeploymentsTable
-                      ref="versionsTableRef"
-                      v-model:search="deploySearch"
-                      v-model:filters="deployFilters"
-                      v-model:column-visibility="deployColumns"
-                      :deployments="deployments"
-                      :fields="deployFields"
-                      :email="userEmail"
-                      :controls="false"
-                      :loading="loading"
-                      @row-click="openDeployment"
-                      @action="onRowAction"
-                    />
                   </template>
                 </CardBox>
               </div>

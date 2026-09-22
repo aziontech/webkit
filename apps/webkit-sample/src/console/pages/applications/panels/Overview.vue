@@ -1,14 +1,12 @@
 <script setup>
-  import CardBox from '@aziontech/webkit/card-box'
   import { toast } from '@aziontech/webkit/toast'
-  import { computed } from 'vue'
+  import { computed, ref, watch } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
+  import AddDomainDrawer from '../../../components/application/AddDomainDrawer.vue'
   import ApplicationSummary from '../../../components/application/ApplicationSummary.vue'
-  import DeploymentsTable from '../../../components/deployment/DeploymentsTable.vue'
-  import HeadingAction from '../../../components/page/HeadingAction.vue'
-  import SectionHeading from '../../../components/page/SectionHeading.vue'
-  import { applicationDeploymentRows } from '../../../lib/data/deployment-history'
+  import GetStarted from '../../../components/application/GetStarted.vue'
+  import { latestApplicationDeployment } from '../../../lib/data/deployment-history'
 
   const props = defineProps({
     /** The record this page is about (../../../lib/data/applications.js). */
@@ -20,49 +18,40 @@
 
   const userEmail = computed(() => route.query.email || 'myemail@azion.com')
 
-  const deployments = computed(() =>
-    applicationDeploymentRows(props.application.id, props.application.name)
+  // The summary's STATUS comes from this row — through the same function the module list
+  // reads, so the row a reader clicked and the page it opened cannot name two states.
+  const latest = computed(() =>
+    latestApplicationDeployment(props.application.id, props.application.name)
   )
-  const latest = computed(() => deployments.value[0] ?? null)
 
-  const columnVisibility = { id: false, workloadName: true }
+  // An application built from a repository already has its answer to "how does code get
+  // in": every push to its branch ships. One without a repository has only the terminal,
+  // and this is the page that says so — so the commands belong under the card that says it.
+  const isCli = computed(() => !props.application.repository)
+
+  // Page-local, like the workload's own domains (../../workloads/WorkloadDetail.vue).
+  const customDomains = ref([...(props.application.customDomains ?? [])])
+  const addDomainOpen = ref(false)
+
+  watch(
+    () => props.application.id,
+    () => {
+      customDomains.value = [...(props.application.customDomains ?? [])]
+    }
+  )
+
+  const boundDomains = computed(() => customDomains.value.map((entry) => entry.domain))
+
+  const onDomainSaved = (entry) => {
+    customDomains.value = [...customDomains.value, entry]
+    toast.success(`${entry.domain} is bound to this application.`, {
+      description: 'Point its DNS at Azion and it answers as soon as the record propagates.'
+    })
+  }
 
   const visit = () => toast.info('Opening the application in a new tab.')
 
-  const goToBuild = () =>
-    router.replace({ query: { ...route.query, tab: 'build' } })
-
-  const deploy = () =>
-    router.push({
-      path: '/deployments/releases/new',
-      query: {
-        email: userEmail.value,
-        scopedType: 'application',
-        resourceId: props.application.name
-      }
-    })
-
-  const openDeployment = (event, row) =>
-    router.push({
-      path: `/deployments/${row.versionId}`,
-      query: {
-        email: userEmail.value,
-        application: props.application.id,
-        applicationName: props.application.name
-      }
-    })
-
-  const onRowAction = (event, value, row) => {
-    if (value === 'details') {
-      openDeployment(event, row)
-      return
-    }
-    if (value === 'redeploy') {
-      toast.info(`Redeploying version ${row.versionId}.`)
-      return
-    }
-    toast.info(`Promoting version ${row.versionId}.`)
-  }
+  const goToBuild = () => router.replace({ query: { ...route.query, tab: 'build' } })
 </script>
 
 <template>
@@ -72,42 +61,25 @@
     >
       <ApplicationSummary
         :application="application"
+        :custom-domains="customDomains"
         :deployment="latest"
         :email="userEmail"
         @visit="visit"
         @connect-repository="goToBuild"
+        @add-domain="addDomainOpen = true"
       />
 
-      <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-        <SectionHeading
-          anchor
-          title="Activity"
-          description="Every deployment that shipped this application, newest first."
-        >
-          <template #actions>
-            <HeadingAction
-              label="Deploy"
-              kind="primary"
-              icon="pi pi-cloud-upload"
-              @click="deploy"
-            />
-          </template>
-        </SectionHeading>
-
-        <CardBox :padded="false">
-          <template #content>
-            <DeploymentsTable
-              :deployments="deployments"
-              :column-visibility="columnVisibility"
-              :email="userEmail"
-              :controls="false"
-              :page-size="10"
-              @row-click="openDeployment"
-              @action="onRowAction"
-            />
-          </template>
-        </CardBox>
-      </section>
+      <GetStarted
+        v-if="isCli"
+        :name="application.name"
+      />
     </section>
+
+    <AddDomainDrawer
+      v-model:open="addDomainOpen"
+      :generated-domain="application.domainName"
+      :bound-domains="boundDomains"
+      @save="onDomainSaved"
+    />
   </div>
 </template>

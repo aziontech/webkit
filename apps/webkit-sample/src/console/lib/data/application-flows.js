@@ -77,7 +77,7 @@ export const APPLICATION_FLOWS = {
   // created the application layer and then said "connect your code to it whenever it
   // exists" — true, and useless, because it never said how. It is the same two steps; what
   // changed is that it now names the tool that finishes the job, and its outcome hands over
-  // the commands (../../components/application/GetStartedCli.vue).
+  // the commands (../../components/application/GetStarted.vue).
   cli: {
     id: 'cli',
     icon: 'pi pi-desktop',

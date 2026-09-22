@@ -20,7 +20,7 @@
   import CopyButton from '@aziontech/webkit/copy-button'
   import Item from '@aziontech/webkit/item'
 
-  import GetStartedCli from '../../../components/application/GetStartedCli.vue'
+  import GetStarted from '../../../components/application/GetStarted.vue'
   import Tag from '@aziontech/webkit/tag'
   import { computed } from 'vue'
   import { RouterLink } from 'vue-router'
@@ -400,10 +400,10 @@
 
       <!-- THE HANDOFF, for an application with no repository. It is the answer to the
            question this flow otherwise leaves the reader holding: the application exists,
-           and nothing has told them how to put code in it. The same card is mounted
-           permanently on the application's own page, because a success screen is lost on
+           and nothing has told them how to put code in it. The same block is mounted
+           permanently on the application's Build tab, because a success screen is lost on
            the first reload and the question is not. -->
-      <GetStartedCli
+      <GetStarted
         v-if="source === 'cli'"
         :name="applicationName"
       />

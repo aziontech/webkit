@@ -235,7 +235,8 @@ export function provisionDeployment({
     repository: source === 'git' ? `${scope}/${appName}` : '',
     branch: source === 'git' ? 'main' : '',
     domainName: domain,
-    status: 'Active',
+    // No `status`: an application has no status of its own, and the one a list shows is
+    // the state of the deployment that last shipped it (./applications.js).
     modifiedAt: createdAt,
     lastModified,
     author: author.name,
