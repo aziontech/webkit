@@ -441,8 +441,10 @@
       isPublic: isPublic.value,
       templateTitle: template.value.title,
       // A cloned template leaves a repository behind; an uploaded or dropped project does
-      // not, and the application it creates is updated from the reader's own terminal.
-      source: usesGit.value ? 'git' : 'cli'
+      // not, and the application it creates is updated from the reader's own terminal —
+      // or by dropping on it again, which is why a drop is named apart from the CLI
+      // (../../lib/data/applications.js).
+      source: usesGit.value ? 'git' : isUpload.value ? 'drop' : 'cli'
     })
     status.value = 'success'
   }

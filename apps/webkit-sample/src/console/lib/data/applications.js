@@ -10,14 +10,21 @@
 //
 // Every seeded application used to be git-backed, which made the list answer one question
 // ("which framework?") and hide the one a reader actually arrives with: I have no files
-// here yet — how does code get in? There are three answers, and the list carries all of
+// here yet — how does code get in? There are four answers, and the list carries all of
 // them so each has somewhere to be seen:
 //
 //   git        a repository Azion watches. Every push to `branch` ships.
 //   cli        no repository. The reader pushes from their own terminal with
 //              `azion link` + `azion deploy`, and the application's page tells them how
-//              (../../components/application/GetStarted.vue). A project dropped on
-//              /drop lands here too: it has no repo, and the CLI is how it updates.
+//              (../../components/application/GetStarted.vue).
+//   drop       a project handed over as FILES — dragged onto /drop, Overview or the
+//              Creation Center, or picked through the same control. It has no repository
+//              either, and it updates the same two ways `cli` does; what it carries that
+//              `cli` cannot is where it came from. An application with no repository has
+//              nothing to name under Source, so the one that arrived this way names the
+//              gesture that made it (../../components/application/ApplicationSummary.vue)
+//              — and its page keeps taking a drop, so the gesture that created it is also
+//              the one that updates it.
 //   platform   Azion built it. `hello-edge` is the starter the platform provisions —
 //              a Function that returns the page, an instance of it, and a rule that
 //              redirects — so a reader who asks for nothing still lands somewhere that
@@ -36,8 +43,10 @@
 // application does not live in an environment, a deployment of it lands in one
 // (./environments.js).
 //
-// Seven frameworks appear TWICE, once git-backed and once CLI-only, because the pair is
-// the point: the same stack reached two ways.
+// Seven frameworks appear TWICE, once git-backed and once with no repository, because the
+// pair is the point: the same stack reached two ways. Two of the second halves arrived as
+// a drop rather than through the CLI, so the surface that reports where an application
+// came from has something to report without the reader having to make one first.
 //
 // ── NO `status` FIELD, BY THE SAME REASONING ──
 //
@@ -107,7 +116,7 @@ export const APPLICATIONS = [
     domainName: 'h3l1oedge42.azion.run',
     modifiedAt: daysAgo(1)
   },
-  // The static pair — the same site, once watched and once pushed by hand.
+  // The static pair — the same site, once watched and once handed over as a folder.
   {
     id: '3344556677',
     name: 'edgeflow-site',
@@ -131,7 +140,7 @@ export const APPLICATIONS = [
     id: '8899001122',
     name: 'edgeflow-docs',
     preset: 'html',
-    source: 'cli',
+    source: 'drop',
     repository: '',
     branch: '',
     domainName: 'u7i8o9p0a1.azion.run',
@@ -245,7 +254,7 @@ export const APPLICATIONS = [
     id: '5566778899',
     name: 'blog-platform',
     preset: 'astro',
-    source: 'cli',
+    source: 'drop',
     repository: '',
     branch: '',
     domainName: 'k1l2m3n4o5.azion.run',

@@ -31,7 +31,7 @@
     deployment: { type: Object, default: null },
     /** Carried on the deployment link so the demo keeps the signed-in email. */
     email: { type: String, default: '' },
-    /** Where the footer's documentation control points for an application with no repository. */
+    /** Where the footer's documentation control points. */
     documentationHref: {
       type: String,
       default: 'https://www.azion.com/en/documentation/products/azion-cli/overview/'
@@ -60,6 +60,14 @@
   const extraCount = computed(() => Math.max(addresses.value.length - 1, 0))
   const repository = computed(() => props.application.repository || '')
   const branch = computed(() => props.application.branch || '')
+
+  // An application with no repository has nothing to NAME under Source — the cell carries
+  // the act that gives it one. One that arrived as a dropped folder has something after
+  // all: the gesture it came from (`source: 'drop'`, ../../lib/data/applications.js). It
+  // sits beside the connect control rather than instead of it, because the two answer
+  // different questions — where this came from, and where it could come from next — and
+  // the drop is still a live path: the page keeps taking one.
+  const startedByDrop = computed(() => props.application.source === 'drop' && !repository.value)
 
   const deploymentRoute = computed(() =>
     props.deployment
@@ -328,23 +336,34 @@
               </div>
               <div
                 v-if="branch"
-                class="flex min-w-0 items-center gap-(--spacing-xs)"
+                class="flex min-w-0 items-center gap-(--spacing-xxs)"
               >
                 <i
-                  class="pi pi-code shrink-0 text-(--text-muted)"
+                  class="ai ai-branch shrink-0 text-(--text-muted)"
                   aria-hidden="true"
                 />
                 <span class="truncate text-body-sm text-(--text-default)">{{ branch }}</span>
               </div>
             </template>
-            <button
-              v-else
-              type="button"
-              class="inline-flex min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-button) text-body-sm text-(--text-link) underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-link-hover) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
-              @click="emit('connect-repository')"
-            >
-              <span class="truncate">Connect Git Repository</span>
-            </button>
+            <template v-else>
+              <button
+                type="button"
+                class="inline-flex min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-button) text-body-sm text-(--text-link) underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-link-hover) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
+                @click="emit('connect-repository')"
+              >
+                <span class="truncate">Connect Git Repository</span>
+              </button>
+              <div
+                v-if="startedByDrop"
+                class="flex min-w-0 items-center gap-(--spacing-xxs)"
+              >
+                <i
+                  class="pi pi-cloud-upload shrink-0 text-(--text-muted)"
+                  aria-hidden="true"
+                />
+                <span class="truncate text-body-sm text-(--text-default)">Azion Drop</span>
+              </div>
+            </template>
           </div>
         </div>
 
@@ -363,23 +382,35 @@
         </div>
       </SummaryBand>
 
-      <SummaryBand
-        v-if="!repository"
-        key="no-repository"
-        kind="state"
-      >
+      <SummaryBand kind="state">
         <p
           class="min-w-0 flex-1 basis-(--container-2xs) text-pretty text-body-sm text-(--text-muted)"
         >
-          New code reaches this application from your terminal only. Connect Git, or run
-          <code class="font-(family-name:--font-code) text-body-sm text-(--text-default)"
-            >azion deploy</code
-          >
-          via the CLI.
+          <template v-if="repository">
+            Every push to
+            <code
+              v-if="branch"
+              class="font-(family-name:--font-code) text-body-sm text-(--text-default)"
+              >{{ branch }}</code
+            ><template v-else>the connected branch</template>
+            deploys this application to Production. To ship from your machine, drop your project
+            anywhere on this page or run
+            <code class="font-(family-name:--font-code) text-body-sm text-(--text-default)"
+              >azion deploy</code
+            >
+            via the CLI.
+          </template>
+          <template v-else>
+            To deploy to Production, drop your project anywhere on this page, connect Git, or run
+            <code class="font-(family-name:--font-code) text-body-sm text-(--text-default)"
+              >azion deploy</code
+            >
+            via the CLI.
+          </template>
         </p>
 
         <Button
-          class="ml-auto shrink-0"
+          class="w-full shrink-0 @lg/band:ml-auto @lg/band:w-auto"
           label="Documentation"
           kind="outlined"
           size="medium"

@@ -64,8 +64,8 @@
   const userEmail = computed(() => route.query.email || 'myemail@azion.com')
 
   // ── Git repository — the connection (actions/checkout in the workflow) ─────
-  const repository = ref('gab-az/webkit-sample-vue')
-  const apiTokenName = 'webkit-sample-vue build token'
+  const repository = ref(props.application?.repository || '')
+  const apiTokenName = `${props.application?.name || 'application'} build token`
 
   // ── Group 1 — Build configuration (preset + build/deploy commands + paths) ──
   const buildConfig = reactive({
@@ -77,9 +77,11 @@
     deployCommand: 'azion deploy --local'
   })
 
-  // ── Group 2 — the branch the workflow deploys from ────────────────────────
+  // ── Group 2 — the branches the workflow deploys from ──────────────────────
+  const productionBranch = props.application?.branch || 'main'
   const branch = reactive({
-    productionBranch: 'main'
+    productionBranch,
+    previewBranch: productionBranch === 'develop' ? 'staging' : 'develop'
   })
 
   // ── ONE commit for the tab ─────────────────────────────────────────────────
@@ -200,7 +202,7 @@
           anchor
           :divided="false"
           title="Git repository"
-          hint="The repository Azion builds from — the checkout step of the workflow — and the branch a push deploys."
+          hint="The repository Azion builds from — the checkout step of the workflow — and the branches a push deploys."
         >
           <CardBox :padded="false">
             <template #content>
@@ -246,7 +248,7 @@
                   <Item.Content>
                     <Item.Title>Production branch</Item.Title>
                     <Item.Description>
-                      Pushes to this branch build and deploy this application.
+                      Pushes to this branch build and deploy to Production.
                     </Item.Description>
                   </Item.Content>
                   <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
@@ -254,8 +256,27 @@
                       v-model="branch.productionBranch"
                       size="large"
                       :disabled="saving"
-                      class="w-full font-code"
+                      class="w-full font-(family-name:--font-code)"
                       aria-label="Production branch"
+                    />
+                  </Item.Actions>
+                </Item>
+
+                <Item size="small">
+                  <Item.Content>
+                    <Item.Title>Preview branch</Item.Title>
+                    <Item.Description>
+                      Pushes to this branch deploy a preview with its own URL. Production is
+                      untouched.
+                    </Item.Description>
+                  </Item.Content>
+                  <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
+                    <InputText
+                      v-model="branch.previewBranch"
+                      size="large"
+                      :disabled="saving"
+                      class="w-full font-(family-name:--font-code)"
+                      aria-label="Preview branch"
                     />
                   </Item.Actions>
                 </Item>
@@ -334,7 +355,7 @@
                           v-model="buildConfig.buildCommand"
                           size="large"
                           :disabled="saving"
-                          class="w-full font-code"
+                          class="w-full font-(family-name:--font-code)"
                           aria-label="Build command"
                         />
                       </Item.Actions>
@@ -352,7 +373,7 @@
                           v-model="buildConfig.deployCommand"
                           size="large"
                           :disabled="saving"
-                          class="w-full font-code"
+                          class="w-full font-(family-name:--font-code)"
                           aria-label="Deploy command"
                         />
                       </Item.Actions>

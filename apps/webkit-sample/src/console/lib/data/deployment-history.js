@@ -20,6 +20,7 @@
 // one provisioned in this session — gets the same shape derived from its own id, the
 // way ./provisioning.js derives its demo chain.
 import { applicationAt } from './applications'
+import { consoleDeployRowsForApplication } from '@shared/lib/azion-deploys'
 import { formatListDate, hoursAgo } from '@shared/lib/dates'
 import { authorAt, emailOf } from '@shared/lib/people'
 import { findDeploymentByApplication, provisionedDeployRow } from './provisioning'
@@ -194,6 +195,23 @@ export function deploymentRowsFor(workloadId, workloadName = 'Workload Name') {
 const APPLICATION_HISTORY_LENGTH = 4
 
 /**
+ * This session's deploys in front of an application's history.
+ *
+ * A started deploy earns the current flag only once it is Ready (`deployRow` decides
+ * that), so a build in progress is never reported as the version on air — and when one
+ * does earn it, the deployment that was serving loses it, because exactly one row in a
+ * list of deployments can be the current one.
+ */
+const withStarted = (started, history) => {
+  if (!started.length) return history
+  const superseded = started.some((row) => row.current)
+  return [
+    ...started,
+    ...history.map((row) => (superseded && row.current ? { ...row, current: false } : row))
+  ]
+}
+
+/**
  * One application's deployments, newest first — every deployment that shipped IT,
  * whichever workload published it.
  *
@@ -220,9 +238,16 @@ const APPLICATION_HISTORY_LENGTH = 4
  */
 export function applicationDeploymentRows(applicationId, applicationName = 'Application') {
   const id = String(applicationId)
+  // Deploys this session started against this application, ahead of everything below.
+  // They are the newest records there are, and they are the only ones that MOVE — the
+  // reader is watching one build — so a page that read past them would report the state
+  // before the act it just performed.
+  const started = consoleDeployRowsForApplication(id)
   const provisioned = findDeploymentByApplication(id)
   if (provisioned) {
-    return provisioned.versionId && provisioned.workload ? [provisionedDeployRow(provisioned)] : []
+    const published =
+      provisioned.versionId && provisioned.workload ? [provisionedDeployRow(provisioned)] : []
+    return withStarted(started, published)
   }
 
   const seeded = DEPLOYMENT_HISTORY.filter(
@@ -264,9 +289,11 @@ export function applicationDeploymentRows(applicationId, applicationName = 'Appl
     }
   )
 
-  return [...seeded, ...derived]
+  const history = [...seeded, ...derived]
     .sort(byNewest)
     .map((row, index) => (row.current === (index === 0) ? row : { ...row, current: index === 0 }))
+
+  return withStarted(started, history)
 }
 
 /**

@@ -40,13 +40,19 @@
   import { useRoute, useRouter } from 'vue-router'
 
   import { applicationById } from '../../lib/data/applications'
+  import { latestApplicationDeployment } from '../../lib/data/deployment-history'
   import { provisionedApplications } from '../../lib/data/provisioning'
+  import { workloadById } from '../../lib/data/workloads'
 
+  import ProjectDropZone from '../../components/creation/ProjectDropZone.vue'
+  import DropDeployDialog from '../../components/deployment/DropDeployDialog.vue'
   import UnsavedChangesGuard from '../../components/form/UnsavedChangesGuard.vue'
   import PageTabs from '../../components/page/PageTabs.vue'
   import AppLayout from '../../components/shell/AppLayout.vue'
+  import { useProjectUpload } from '../../lib/behavior/project-upload'
   import { isTabDirty, tabCommit } from '../../lib/behavior/tab-dirty'
   import { useTabEnter } from '../../lib/behavior/tab-enter'
+  import { startResourceDeployRun } from '../../lib/state/deploy-runs'
   import Build from './panels/Build.vue'
   import CacheSettings from './panels/CacheSettings.vue'
   import Deployments from './panels/Deployments.vue'
@@ -77,6 +83,53 @@
       source: 'git'
     }
   })
+
+  // ── DROPPING A PROJECT ONTO AN APPLICATION THAT ALREADY EXISTS ──
+  //
+  // The gesture that creates an application also updates one: the reader who got here by
+  // dragging a folder keeps that door, and the Overview card's footer says so.
+  //
+  // THE SHELL TAKES IT, NOT THE OVERVIEW PANEL. The drop is read off window listeners
+  // (../../lib/behavior/project-upload.js) and the panels are held in <KeepAlive>, which
+  // deactivates rather than unmounts — so a panel's listener would keep firing from under
+  // whichever tab the reader had moved on to.
+  //
+  // THE DROP DOES NOT DEPLOY. It opens a confirmation naming what lands where
+  // (../../components/deployment/DropDeployDialog.vue), because this drop replaces what is
+  // serving Production and a drag is the one gesture that can be made by accident.
+  //
+  // One environment, stated once: the drop zone, the dialog and the run all read it, so
+  // the page cannot promise Production and deploy somewhere else.
+  const DROP_ENVIRONMENT = 'Production'
+
+  const dropped = ref(null)
+  const dropOpen = ref(false)
+
+  const { dragging } = useProjectUpload((project) => {
+    dropped.value = project
+    dropOpen.value = true
+  })
+
+  const deployDropped = () => {
+    const app = application.value
+    const latest = latestApplicationDeployment(app.id, app.name)
+    // The workload that published it last is the one publishing it now; an application
+    // with no history has none to name and falls back to its own identity and address.
+    const seededWorkload = latest ? workloadById(latest.workloadId) : undefined
+    const workload = {
+      id: latest?.workloadId ?? app.id,
+      name: latest?.workloadName ?? app.name,
+      domain: seededWorkload?.domain ?? app.domainName ?? ''
+    }
+
+    startResourceDeployRun({
+      workload,
+      application: { id: app.id, name: app.name },
+      deploymentName: dropped.value?.name ?? app.name,
+      environment: DROP_ENVIRONMENT,
+      preset: app.preset || 'javascript'
+    })
+  }
 
   // The resource's sub-pages. Each tab is a navigation destination, not a filter, and
   // names the view it mounts. `props` is per-tab on purpose: only the two tabs scoped
@@ -238,35 +291,59 @@
         :tabs="tabs"
       />
 
-      <!-- Only this region scrolls. Each view brings its own `.layout-boundary`
-           and its own measure. -->
-      <section
-        ref="scrollRef"
-        class="min-h-0 flex-1 overflow-auto"
-      >
-        <!-- A STABLE wrapper, deliberately unkeyed: `useTabEnter` replays the page
-             entrance on it by restarting the class, because keying it would re-mount
-             the <KeepAlive> inside and throw away the in-progress work it exists to
-             keep (see lib/tab-enter.js). -->
-        <!-- `flex min-h-full flex-col`: a tab whose commit bar is `sticky bottom-0`
-             needs a column that REACHES the bottom of this scroll region, or sticky has
-             nothing to stick to and the bar ends up wherever the content happens to
-             stop. Measured on Rules Engine with five rules: the bar sat 243px above the
-             fold. A tab that does not opt in (no `flex-1` on its root) is unaffected —
-             it still sizes to its content. -->
-        <div
-          ref="enterRef"
-          class="flex min-h-full flex-col"
+      <!-- The region a dropped project lands in is the CONTENT, tabs excluded: the drop
+           deploys this application whichever tab is open, and a box drawn over the tab bar
+           would take away the one thing that says which page the reader is on. The wrapper
+           carries the positioning so the box is not a child of the scroller below it — an
+           absolute child of a scroll container drifts with the content. -->
+      <div class="relative flex min-h-0 flex-1 flex-col">
+        <ProjectDropZone
+          :active="dragging"
+          title="Drop your project to deploy it"
+          :description="`Azion builds it and ships it to ${application.name} in ${DROP_ENVIRONMENT}.`"
+          class="[--drop-zone-inset:var(--layout-boundary-inline)]"
+        />
+
+        <!-- Only this region scrolls. Each view brings its own `.layout-boundary`
+             and its own measure. -->
+        <section
+          ref="scrollRef"
+          class="min-h-0 flex-1 overflow-auto"
         >
-          <KeepAlive>
-            <component
-              :is="activeView.component"
-              v-bind="activeView.props"
-            />
-          </KeepAlive>
-        </div>
-      </section>
+          <!-- A STABLE wrapper, deliberately unkeyed: `useTabEnter` replays the page
+               entrance on it by restarting the class, because keying it would re-mount
+               the <KeepAlive> inside and throw away the in-progress work it exists to
+               keep (see lib/tab-enter.js). -->
+          <!-- `flex min-h-full flex-col`: a tab whose commit bar is `sticky bottom-0`
+               needs a column that REACHES the bottom of this scroll region, or sticky has
+               nothing to stick to and the bar ends up wherever the content happens to
+               stop. Measured on Rules Engine with five rules: the bar sat 243px above the
+               fold. A tab that does not opt in (no `flex-1` on its root) is unaffected —
+               it still sizes to its content. -->
+          <div
+            ref="enterRef"
+            class="flex min-h-full flex-col"
+          >
+            <KeepAlive>
+              <component
+                :is="activeView.component"
+                v-bind="activeView.props"
+              />
+            </KeepAlive>
+          </div>
+        </section>
+      </div>
     </main>
+
+    <!-- The drop's own answer, over the page it was made on. -->
+    <DropDeployDialog
+      v-model:open="dropOpen"
+      :application-name="application.name"
+      :environment="DROP_ENVIRONMENT"
+      :files="dropped?.files ?? []"
+      :truncated="dropped?.truncated ?? false"
+      @deploy="deployDropped"
+    />
 
     <!-- The TAB guard. `route-guard="false"`: the leaving tab's own bar already holds
          the route, and two guards on one navigation stack two dialogs. It is `savable`

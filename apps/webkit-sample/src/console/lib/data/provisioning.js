@@ -181,10 +181,10 @@ export function provisionDeployment({
   connector: connectorInput = null,
   cachePolicies: cachePoliciesInput = [],
   publish = true,
-  // How code reaches the application this chain creates (./applications.js). A template
-  // clone and a git import both leave a repository behind; an uploaded or dropped project
-  // does not, and saying `git` for one of those would put a repository on the row that
-  // nothing can push to.
+  // How code reaches the application this chain creates (./applications.js) — `git`,
+  // `cli` or `drop`. A template clone and a git import both leave a repository behind; an
+  // uploaded or dropped project does not, and saying `git` for one of those would put a
+  // repository on the row that nothing can push to.
   source = 'git',
   // The reader's own addresses, when the create asked for one —
   // `{ id, domain, environment, certificate }[]`. The generated Azion hostname is minted

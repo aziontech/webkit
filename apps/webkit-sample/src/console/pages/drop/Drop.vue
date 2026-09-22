@@ -12,10 +12,11 @@
   // Creation Center hands a drop to. What this page changes is only what the user asked it
   // to change: it can START only with a drop.
   //
-  // WHAT THE DROP PRODUCES: an application with no repository (`source: 'cli'`, see
+  // WHAT THE DROP PRODUCES: an application with no repository (`source: 'drop'`, see
   // ../../lib/data/applications.js). That is the honest answer — a dropped folder is not a
   // repository Azion can watch — and it is why the application's page then carries the CLI
-  // commands: drop to get live in a gesture, `azion link` to keep it moving.
+  // commands: drop to get live in a gesture, `azion link` to keep it moving. The page also
+  // keeps taking a drop, so the gesture that made it can also be the one that updates it.
   import Button from '@aziontech/webkit/button'
   import { DotGridBanner } from '@shared/ui/banners'
   import { computed } from 'vue'

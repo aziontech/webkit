@@ -926,6 +926,24 @@ export const consoleDeployRowsFor = (workloadId) =>
   sessionDeploys.value.filter((deploy) => deploy.workload.id === String(workloadId)).map(deployRow)
 
 /**
+ * The console-started deploys of one APPLICATION, as rows.
+ *
+ * The same filter one line up, read the other way round. A deploy can be started from
+ * the application rather than from the workload — the Release composer, and the drop an
+ * application's Overview takes (src/console/pages/applications/panels/Overview.vue) — and
+ * without this the record it creates was visible in the deployments module and on the
+ * workload, but not on the page the reader started it from: they dropped a project and
+ * the application went on reporting the status of the deployment before it.
+ *
+ * @param {string} applicationId
+ * @returns {Array<object>} Rows for ui/DeploymentsTable.vue, newest first.
+ */
+export const consoleDeployRowsForApplication = (applicationId) =>
+  sessionDeploys.value
+    .filter((deploy) => String(deploy.application.id) === String(applicationId))
+    .map(deployRow)
+
+/**
  * The newest console deploy of one application, or `undefined`.
  *
  * The RECORD rather than a row: what an application's Build tab reads off it is the
