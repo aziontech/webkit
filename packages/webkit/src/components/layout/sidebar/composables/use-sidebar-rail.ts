@@ -102,6 +102,8 @@ export function useSidebarRail(options: UseSidebarRailOptions): UseSidebarRailRe
   let startWidth = 0
   let restoreWidth = 0
   let dragMoved = false
+  let capturedBy: globalThis.HTMLElement | null = null
+  let capturedId = -1
 
   const measure = () => {
     if (width.value == null && railEl.value?.offsetWidth) {
@@ -131,18 +133,26 @@ export function useSidebarRail(options: UseSidebarRailOptions): UseSidebarRailRe
       return
     }
 
-    width.value = clamp(next)
+    // Below the minimum the rail keeps tracking the pointer, so its edge and its content
+    // move as one. The minimum is a resting constraint, restored on release.
+    width.value = Math.max(0, Math.min(next, railMax.value))
   }
 
   const endResize = () => {
     if (!resizing.value) return
     resizing.value = false
+    if (!collapsed.value) width.value = clamp(width.value ?? railMin.value)
     peekWidth.value = 0
     pullProgress.value = 1
+    if (capturedBy?.hasPointerCapture(capturedId)) capturedBy.releasePointerCapture(capturedId)
+    capturedBy = null
+    capturedId = -1
     globalThis.document.body.style.removeProperty('user-select')
     globalThis.document.body.style.removeProperty('cursor')
     globalThis.removeEventListener('pointermove', onPointerMove)
     globalThis.removeEventListener('pointerup', endResize)
+    globalThis.removeEventListener('pointercancel', endResize)
+    globalThis.removeEventListener('blur', endResize)
   }
 
   const tapToExpand = () => {
@@ -159,10 +169,21 @@ export function useSidebarRail(options: UseSidebarRailOptions): UseSidebarRailRe
     restoreWidth = width.value ?? railMin.value
     pullProgress.value = fromCollapsed ? 0 : 1
     peekWidth.value = 0
+    const target = event.currentTarget as globalThis.HTMLElement | null
+    try {
+      target?.setPointerCapture(event.pointerId)
+      capturedBy = target
+      capturedId = event.pointerId
+    } catch {
+      capturedBy = null
+      capturedId = -1
+    }
     globalThis.document.body.style.userSelect = 'none'
     globalThis.document.body.style.cursor = 'col-resize'
     globalThis.addEventListener('pointermove', onPointerMove)
     globalThis.addEventListener('pointerup', endResize)
+    globalThis.addEventListener('pointercancel', endResize)
+    globalThis.addEventListener('blur', endResize)
     event.preventDefault()
   }
 
@@ -199,17 +220,19 @@ export function useSidebarRail(options: UseSidebarRailOptions): UseSidebarRailRe
     return {}
   })
 
-  const presence = computed(() => {
-    if (resizing.value) return pullProgress.value
-    return collapsed.value ? 0 : 1
-  })
+  const underMin = computed(() => resizing.value && pullProgress.value < 1)
 
+  // Above the minimum the panel is the rail, at the rail's width. Below it the panel holds
+  // the minimum — reflowing further truncates the labels the minimum exists to fit — and is
+  // carried by the closing edge, so its trailing edge stays flush with the rail's instead of
+  // the rail sweeping across content that stands still.
   const innerStyle = computed(() => {
-    if (!toValue(options.enabled) || !peeking.value) return {}
+    if (!toValue(options.enabled) || !resizing.value) return {}
+    if (!underMin.value) return { translate: '0%', opacity: '1', transition: 'none' }
     return {
       width: `${railMin.value}px`,
-      transform: `translateX(${(presence.value - 1) * 100}%)`,
-      opacity: String(RAIL_MIN_OPACITY + (1 - RAIL_MIN_OPACITY) * presence.value),
+      translate: `${peekWidth.value - railMin.value}px`,
+      opacity: String(RAIL_MIN_OPACITY + (1 - RAIL_MIN_OPACITY) * pullProgress.value),
       transition: 'none'
     }
   })
