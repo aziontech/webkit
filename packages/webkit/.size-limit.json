@@ -133,5 +133,20 @@
     "name": "resizable-panel-root",
     "path": "src/components/layout/resizable-panel/resizable-panel.vue",
     "limit": "3 KB"
+  },
+  {
+    "name": "stepper",
+    "path": "src/components/navigation/stepper/index.ts",
+    "limit": "3 KB"
+  },
+  {
+    "name": "stepper-root",
+    "path": "src/components/navigation/stepper/stepper.vue",
+    "limit": "1 KB"
+  },
+  {
+    "name": "stepper-step",
+    "path": "src/components/navigation/stepper/stepper-step/stepper-step.vue",
+    "limit": "2.5 KB"
   }
 ]
