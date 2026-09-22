@@ -304,6 +304,30 @@ describe('NavigationMenu (composition + overlay + recursive)', () => {
       expect(positioner()).not.toHaveAttribute('data-constrained')
     })
 
+    // Regression guard for the flip above: the assertion there is about the POSITIONER's
+    // box, so it only holds while that box is the popup and nothing more. The slot leaves
+    // empty text nodes around the popup; in a block container they open an anonymous line
+    // box whose strut hangs ~16px below it. That overhang is invisible (the positioner
+    // paints nothing) but it is still a box — it reaches back over the trigger the flip
+    // just cleared, and it takes the pointer there. Asserted on its own, and without a
+    // viewport, so a regression reads as "the positioner grew" rather than as a flaky flip.
+    it('keeps the positioner box equal to the popup it carries, with no trailing line box', async () => {
+      const { getByRole } = renderTree(TALL_PANEL(6, 'position:fixed;left:8px;top:8px'))
+      await userEvent.click(getByRole('button', { name: /Solutions/ }))
+      const popup = await waitFor(() => body().getByTestId('navigation-menu__popup'), {
+        timeout: OPEN_TIMEOUT
+      })
+      await waitFor(
+        () => {
+          const p = positioner().getBoundingClientRect()
+          const q = popup.getBoundingClientRect()
+          expect(p.height).toBeCloseTo(q.height, 1)
+          expect(p.bottom).toBeCloseTo(q.bottom, 1)
+        },
+        { timeout: OPEN_TIMEOUT }
+      )
+    })
+
     it('caps the popup to the free space and marks the positioner constrained when nothing fits', async () => {
       const { getByRole } = renderTree(TALL_PANEL(80, 'position:fixed;left:8px;right:8px;top:8px'))
       const trigger = getByRole('button', { name: /Solutions/ })

@@ -164,11 +164,20 @@ export function useNavigationMenuPositioner(anchorRef, floatingRef, arrowRef, op
     }
   })
 
+  // `display: flex` is load-bearing, not cosmetic, and belongs here with `min-width`
+  // rather than in the class preset: both keep the positioner box equal to the popup it
+  // carries, and both must hold even where the stylesheet is not loaded (browser-mode
+  // tests). The slot leaves empty text nodes around the popup; in a BLOCK container those
+  // open an anonymous line box whose strut (~16px at the inherited font size) hangs below
+  // the popup. The positioner would then overhang the panel it was placed for — on a
+  // panel flipped above its trigger, enough to cover the trigger the flip just cleared.
+  // A flex container drops whitespace-only text nodes, so the box is exactly the popup.
   const floatingStyles = computed(() => ({
     position: 'fixed',
     top: '0',
     left: '0',
     transform: `translate3d(${Math.round(state.value.x)}px, ${Math.round(state.value.y)}px, 0)`,
+    display: 'flex',
     'min-width': 'max-content'
   }))
 
