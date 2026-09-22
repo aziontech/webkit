@@ -14,7 +14,7 @@ enforced_by: [webkit-styling, webkit-tokens, ui-verify, review]
 A page makes exactly three layout decisions: **how far its content sits from the app chrome**
 (boundary), **how wide the content column may get** (measure), and **how far things sit from each
 other** (rhythm). `@aziontech/theme` ships all three as `layout-*` utilities and tokens, so a page
-*names* its decisions instead of re-deriving them.
+_names_ its decisions instead of re-deriving them.
 
 This matters more than it sounds. A hand-rolled `mx-auto max-w-(--container-7xl)` is correct on the
 page you write it on and wrong on the next one, because nothing ties the two together: one page caps
@@ -71,12 +71,12 @@ another's.
   controls row over the table those controls narrow.
 
 **The page stack never carries a vertical `gap`.** It holds the heading and one element below it, and
-that element carries the step. A `gap` is right on the parent section (within it, every child *is* a
+that element carries the step. A `gap` is right on the parent section (within it, every child _is_ a
 section, so one rule spaces them all) and wrong on the page stack (the heading and the parent are
 different kinds of thing).
 
 **`layout-section-start` goes on exactly one element per page stack** — the parent section directly
-below the heading. Never on a section *inside* the parent: `gap` and `margin` both apply in a flex
+below the heading. Never on a section _inside_ the parent: `gap` and `margin` both apply in a flex
 column, so the two add up and that section lands at twice the step.
 
 It is safe to carry unconditionally. The utility zeroes its own margin when it happens to render
@@ -88,13 +88,13 @@ boundary step. `v-if` bands are absent from the DOM, so `:first-child` reads the
 A page does not pick its own `max-w-*`. It carries one of five column classes, chosen by **what the
 page's payload is**.
 
-| Class | Measure | Today | Payload |
-|---|---|---|---|
-| `layout-column` | `--layout-measure` | 1620px | **The standard page container.** Lists, home, product overviews, detail dashboards |
-| `layout-column-focused` | `--layout-measure-focused` | 1024px | One task, still multi-column — a deploy hero, a running log, a review column |
-| `layout-column-form` | `--layout-measure-form` | 1024px | Settings and in-page edit forms — a single stacked column of fields |
-| `layout-form-create` | `--layout-measure-form-create` | 1192px | Dedicated create pages (also retunes the control cap — see §7) |
-| `layout-column-content` | `--layout-measure-content` | 876px | Prose — documentation, blog |
+| Class                   | Measure                        | Today  | Payload                                                                            |
+| ----------------------- | ------------------------------ | ------ | ---------------------------------------------------------------------------------- |
+| `layout-column`         | `--layout-measure`             | 1620px | **The standard page container.** Lists, home, product overviews, detail dashboards |
+| `layout-column-focused` | `--layout-measure-focused`     | 1024px | One task, still multi-column — a deploy hero, a running log, a review column       |
+| `layout-column-form`    | `--layout-measure-form`        | 1024px | Settings and in-page edit forms — a single stacked column of fields                |
+| `layout-form-create`    | `--layout-measure-form-create` | 1192px | Dedicated create pages (also retunes the control cap — see §7)                     |
+| `layout-column-content` | `--layout-measure-content`     | 876px  | Prose — documentation, blog                                                        |
 
 `layout-column` is the default. Take a different one only when the payload is **narrower**, never
 wider.
@@ -108,15 +108,15 @@ Three things worth internalizing about the choice:
   the next line on the return sweep. That limit has nothing to do with how wide the payload is, which
   is why it is far tighter than every other measure and why it does **not** move when a rail collapses
   and frees up room.
-- **The cap is named for the payload, never for the section.** A documentation *article* takes the
-  content measure; the documentation *home* — a directory of cards, not read line by line — takes a
+- **The cap is named for the payload, never for the section.** A documentation _article_ takes the
+  content measure; the documentation _home_ — a directory of cards, not read line by line — takes a
   wider one. What picks the column is the payload, never the URL.
 
 **Full-bleed is the absence of all five**, never a `w-full`.
 
 **The band picks the class, not the file.** A tab showing a table is measured as data even when the
 tab beside it is a form. And within one band the class must be the same everywhere it has to align —
-the scrolling body *and* its sticky bar — or the footer's buttons drift right of the form they submit.
+the scrolling body _and_ its sticky bar — or the footer's buttons drift right of the form they submit.
 
 **Keep the measure identical across sibling states.** A page that changes width when the account
 gains its first resource reads as two different pages; give the empty state the same column as the
@@ -136,7 +136,7 @@ height, not a page boundary).
 
 Who carries it depends on the shell:
 
-- A **padded** page gets its boundary from the app shell, on the scroll box *outside* the capped
+- A **padded** page gets its boundary from the app shell, on the scroll box _outside_ the capped
   block, so the measure lands as content width.
 - A page that carries the boundary **itself** puts it on the same block as the measure.
 
@@ -158,8 +158,13 @@ This is automatic, and it is the reason a sticky bar works:
     </form>
   </main>
 
-  <footer class="layout-column-form layout-boundary-inline sticky bottom-0 flex justify-end gap-(--spacing-sm) py-(--spacing-md)">
-    <Button kind="text" label="Cancel" />
+  <footer
+    class="layout-column-form layout-boundary-inline sticky bottom-0 flex justify-end gap-(--spacing-sm) py-(--spacing-md)"
+  >
+    <Button
+      kind="text"
+      label="Cancel"
+    />
     <Button label="Save" />
   </footer>
 </template>
@@ -175,16 +180,16 @@ outside it — and the overflow lands as a silent clip at the bottom of a table.
 
 ## 4. Rhythm — two steps, and no third
 
-| Token | Today | Between |
-|---|---|---|
-| `--layout-section-gap` | `--spacing-xl` | the sections of a parent |
-| `--layout-group-gap` | `--spacing-md` | the parts inside one section |
+| Token                  | Today          | Between                      |
+| ---------------------- | -------------- | ---------------------------- |
+| `--layout-section-gap` | `--spacing-xl` | the sections of a parent     |
+| `--layout-group-gap`   | `--spacing-md` | the parts inside one section |
 
 That is the whole scale. A third step is how a page starts drifting from its siblings.
 
 The section step is deliberately one stop larger than the boundary step: the page opens tight under
 its heading, then separates its sections more firmly than the parts inside any one of them. The space
-*above* the first section belongs to the boundary and the space *between* sections belongs to the
+_above_ the first section belongs to the boundary and the space _between_ sections belongs to the
 parent, so either retunes without the other — and every page follows, because no page restates a step.
 
 **Prefer the `gap` form.** The band element is normally the wrapper, and `gap-(--layout-group-gap)` on
@@ -194,7 +199,7 @@ it names the group in the markup.
 are already direct siblings of the page stack, where adding a wrapper is the wrong answer.
 
 A common miss: a controls row and the table it narrows are **one band**, joined at the group step.
-The section step is the gap *above* the band, not inside it.
+The section step is the gap _above_ the band, not inside it.
 
 ## 5. Every value is a reference
 
@@ -202,7 +207,7 @@ Layout tokens are a **derived** group: each one is a `var()` reference to the sp
 scale. Never a literal length.
 
 That indirection is the point. The spacing scale is already fluid — `--spacing-lg` is 1rem, then
-1.5rem from `sm` — and `var()` is substituted at *use* time on the element, so a layout token follows
+1.5rem from `sm` — and `var()` is substituted at _use_ time on the element, so a layout token follows
 the breakpoint override without owning a breakpoint map of its own. A layout token with its own map
 would duplicate the spacing scale and let the two drift.
 
@@ -222,7 +227,7 @@ The marketing site has its own column, and it is a **frame** rather than a conte
 `layout-column-site` is inset from the window **at every width**, which is the whole reason it is a
 utility rather than a `max-w-()`. On a wide screen the inset is free: the measure is narrower than the
 window, the column centres, and its rules read as the page's vertical frame with canvas either side.
-Below the cap that stops doing anything — the column becomes the window — and the rules land *on* the
+Below the cap that stops doing anything — the column becomes the window — and the rules land _on_ the
 window edges, where a hairline is not a frame, it is a seam against the bezel.
 
 One `min()` covers the whole range with no breakpoint: the cap is whichever binds first, the measure
@@ -248,7 +253,11 @@ the actions hold the control on the right.
 ```vue
 <template>
   <div class="layout-field-control">
-    <Select v-model="region" :options="regions" class="w-full" />
+    <Select
+      v-model="region"
+      :options="regions"
+      class="w-full"
+    />
   </div>
 </template>
 ```
@@ -263,7 +272,7 @@ between.
 
 The default (256px) is deliberately tight, because a settings row reads as "name → current value" and
 a narrow value column keeps a scannable right edge down the whole card. **A create page inverts that
-priority** — the fields *are* the payload, several carry their own descriptions, and the user is
+priority** — the fields _are_ the payload, several carry their own descriptions, and the user is
 filling them in rather than scanning them — so `layout-form-create` retunes the cap to 472px for
 everything inside it. One token, retuned per band, instead of a width re-typed on every row.
 
