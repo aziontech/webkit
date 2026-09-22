@@ -173,17 +173,8 @@
         <!-- `level="3"`: it names a part of the card's footer, under the page's own
              section headings, so the document outline stays honest. -->
         <Accordion.Trigger :level="3">
-          <span class="flex min-h-12 flex-1 items-center gap-(--spacing-sm)">
+          <span class="flex min-h-12 items-center">
             <span class="text-label-md text-(--text-default)">Deployment Settings</span>
-            <!-- ONLY WHEN IT IS SHARED. A workload publishing with its own setting is the
-                 default state; tagging that would put a badge on every workload in the
-                 console and teach the reader to stop seeing it. -->
-            <Tag
-              v-if="shared"
-              :label="`Shared · ${reach}`"
-              severity="warning"
-              size="medium"
-            />
           </span>
         </Accordion.Trigger>
 
@@ -196,10 +187,24 @@
              It cannot sit INSIDE the trigger: that is a `<button>`, and an anchor
              nested in one is invalid markup the browser takes apart. Layered on top
              instead, with `pointer-events-none` on the layer and `auto` on the link,
-             so every other pixel of the row still hits the disclosure. -->
+             so every other pixel of the row still hits the disclosure. A layer cannot
+             make room for itself, so it is the WIDE case only: below `@lg` of the card
+             (`@container/band` on ../resource/SummaryBand.vue) it is an ordinary second
+             row under the trigger. -->
         <div
-          class="pointer-events-none absolute inset-y-0 right-0 flex max-w-[calc(100%-12rem)] items-center pr-(--spacing-md)"
+          class="flex flex-wrap items-center gap-x-(--spacing-sm) gap-y-(--spacing-xxs) px-(--spacing-md) pb-(--spacing-md) @lg/band:pointer-events-none @lg/band:absolute @lg/band:inset-y-0 @lg/band:right-0 @lg/band:max-w-[calc(100%-12rem)] @lg/band:justify-end @lg/band:px-0 @lg/band:pr-(--spacing-md) @lg/band:pb-0"
         >
+          <!-- ONLY WHEN IT IS SHARED. A workload publishing with its own setting is the
+               default state; tagging that would put a badge on every workload in the
+               console and teach the reader to stop seeing it. It qualifies the RECORD,
+               so it travels with the record's name. -->
+          <Tag
+            v-if="shared"
+            :label="`Shared · ${reach}`"
+            severity="warning"
+            size="medium"
+            class="shrink-0"
+          />
           <Tooltip
             class="pointer-events-auto"
             :text="`Open ${settingsLabel} in Build & Deployment settings`"

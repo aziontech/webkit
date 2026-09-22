@@ -701,7 +701,7 @@
                  the fields above it. -->
             <template #footer>
               <Accordion
-                class="-mx-(--spacing-md) -my-(--spacing-sm) w-[calc(100%+2*var(--spacing-md))] [--accordion-inset:var(--spacing-md)]"
+                class="@container/band -mx-(--spacing-md) -my-(--spacing-sm) w-[calc(100%+2*var(--spacing-md))] [--accordion-inset:var(--spacing-md)]"
                 type="single"
                 arrow-position="left"
                 collapsible
@@ -721,9 +721,13 @@
                          is a `<button>`, and an anchor nested in one is invalid markup —
                          so it is layered onto the row the same way the logs switch is,
                          with `pointer-events-none` on the layer and `auto` on the link,
-                         leaving the rest of the row a disclosure target. -->
+                         leaving the rest of the row a disclosure target. A layer cannot
+                         make room for itself, so it is the WIDE case only: below `@lg` of
+                         the card it is an ordinary second row under the trigger, the same
+                         way the workload card's footer does it
+                         (../../components/workload/DeploymentFooter.vue). -->
                     <div
-                      class="pointer-events-none absolute inset-y-0 right-0 flex max-w-[calc(100%-12rem)] items-center pr-(--spacing-md)"
+                      class="flex flex-wrap items-center gap-x-(--spacing-sm) gap-y-(--spacing-xxs) px-(--spacing-md) pb-(--spacing-md) @lg/band:pointer-events-none @lg/band:absolute @lg/band:inset-y-0 @lg/band:right-0 @lg/band:max-w-[calc(100%-12rem)] @lg/band:justify-end @lg/band:px-0 @lg/band:pr-(--spacing-md) @lg/band:pb-0"
                     >
                       <Tooltip
                         class="pointer-events-auto"
