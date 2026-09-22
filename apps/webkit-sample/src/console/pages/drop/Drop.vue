@@ -17,15 +17,13 @@
   // repository Azion can watch — and it is why the application's page then carries the CLI
   // commands: drop to get live in a gesture, `azion link` to keep it moving.
   import Button from '@aziontech/webkit/button'
-  import { computed, onBeforeUnmount, ref } from 'vue'
-  import { useRoute, useRouter } from 'vue-router'
-
   import { DotGridBanner } from '@shared/ui/banners'
+  import { computed } from 'vue'
+  import { useRoute, useRouter } from 'vue-router'
 
   import ProjectInitializing from '../../components/creation/ProjectInitializing.vue'
   import CreationHeader from '../../components/page/CreationHeader.vue'
-  import { useProjectUpload } from '../../lib/behavior/project-upload'
-  import { rememberDroppedProject } from '../../lib/state/dropped-project'
+  import { useProjectDrop } from '../../lib/behavior/project-upload'
 
   const route = useRoute()
   const router = useRouter()
@@ -34,28 +32,7 @@
 
   const goHome = () => router.push({ path: '/home', query: { email: userEmail.value } })
 
-  // The same handoff the Creation Center performs, for the same reasons: the name and the
-  // framework ride the URL so a reload still has them; the FILES cannot be written down, so
-  // they go through the store and the deploy screen lists them from there.
-  const initializing = ref(null)
-  let handoff = null
-
-  const HANDOFF_MS = 1600
-
-  const deployProject = ({ name, framework, files, truncated }) => {
-    initializing.value = { files, truncated }
-    handoff = setTimeout(() => {
-      rememberDroppedProject({ name, files, truncated })
-      router.push({
-        path: '/deploy',
-        query: { email: userEmail.value, upload: name, framework }
-      })
-    }, HANDOFF_MS)
-  }
-
-  onBeforeUnmount(() => clearTimeout(handoff))
-
-  const { dragging, pickFile, pickFolder } = useProjectUpload(deployProject)
+  const { dragging, initializing, pickFile, pickFolder } = useProjectDrop()
 </script>
 
 <template>

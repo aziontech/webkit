@@ -11,15 +11,14 @@
   // browsing the catalog needs have nothing to do with each other, and neither belongs in
   // this page's markup. The page owns the frame and the two columns; the panes own
   // themselves.
-  import { computed, onBeforeUnmount, ref } from 'vue'
+  import { computed } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
   import ProjectDropZone from '../../components/creation/ProjectDropZone.vue'
   import ProjectInitializing from '../../components/creation/ProjectInitializing.vue'
   import CreationHeader from '../../components/page/CreationHeader.vue'
   import PageHeading from '../../components/page/PageHeading.vue'
-  import { useProjectUpload } from '../../lib/behavior/project-upload'
-  import { rememberDroppedProject } from '../../lib/state/dropped-project'
+  import { useProjectDrop } from '../../lib/behavior/project-upload'
   import GitImporter from './creation/GitImporter.vue'
   import TemplateGallery from './creation/TemplateGallery.vue'
 
@@ -31,35 +30,7 @@
 
   const goHome = () => router.push({ path: '/home', query: { email: userEmail.value } })
 
-  // ── WHAT A DROP DOES, IN ORDER ──
-  //
-  // The project is acknowledged on THIS page before the flow moves off it
-  // (../../components/creation/ProjectInitializing.vue argues why), then it goes two ways
-  // at once: the name and the framework ride the URL, so the deploy screen survives a
-  // reload; the FILES cannot be written down, so they are handed over in the store
-  // (../../lib/state/dropped-project.js) and the deploy screen lists them there.
-  const initializing = ref(null)
-  let handoff = null
-
-  // Long enough to read the top of the listing and recognize the project — or fail to,
-  // which is the whole point of showing it — and short enough that a reader who already
-  // knows what they dropped is not kept from the form.
-  const HANDOFF_MS = 1600
-
-  const deployProject = ({ name, framework, files, truncated }) => {
-    initializing.value = { files, truncated }
-    handoff = setTimeout(() => {
-      rememberDroppedProject({ name, files, truncated })
-      router.push({
-        path: '/deploy',
-        query: { email: userEmail.value, upload: name, framework }
-      })
-    }, HANDOFF_MS)
-  }
-
-  onBeforeUnmount(() => clearTimeout(handoff))
-
-  const { dragging, pickFile, pickFolder } = useProjectUpload(deployProject)
+  const { dragging, initializing, pickFile, pickFolder } = useProjectDrop()
 </script>
 
 <template>

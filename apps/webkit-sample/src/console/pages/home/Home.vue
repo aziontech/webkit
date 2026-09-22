@@ -73,7 +73,7 @@
   import Tooltip from '@aziontech/webkit/tooltip'
   import { AGENT_SETUP_PROMPT, AGENT_TOOLS, useAgentOnboarding } from '@shared/lib/agent-onboarding'
   import AgentMark from '@shared/ui/brand/AgentMark.vue'
-  import { computed, onBeforeUnmount, onMounted, onUnmounted, ref } from 'vue'
+  import { computed, onMounted, onUnmounted, ref } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
   import ProjectDropZone from '../../components/creation/ProjectDropZone.vue'
@@ -82,12 +82,11 @@
   import HomeWire from '../../components/home/HomeWire.vue'
   import IconFrame from '../../components/home/IconFrame.vue'
   import DeleteDialog from '../../components/list/DeleteDialog.vue'
+  import { useProjectDrop } from '../../lib/behavior/project-upload'
   import { useGreeting } from '../../lib/data/greeting'
   import { allResources, recentResources } from '../../lib/data/home-resources'
   import { AGENT_PROMO } from '../../lib/data/product-empty-states'
   import { presetIcon, presetLabel } from '../../lib/format/presets'
-  import { useProjectUpload } from '../../lib/behavior/project-upload'
-  import { rememberDroppedProject } from '../../lib/state/dropped-project'
   import { useTenancyReload } from '../../lib/state/tenancy-reload'
 
   // Account-level usage. `value` + `unit` is the whole reading — a label, a number
@@ -390,32 +389,7 @@
   // already has an account lands, and the folder they want live is on their desktop
   // while they are looking at it — sending them through a page whose job is to offer
   // ways to START is a detour around a shortcut they are already holding.
-  //
-  // It is the SAME handoff the Creation Center and /drop perform, for the same reasons:
-  // the name and the framework ride the URL so the deploy screen survives a reload; the
-  // files cannot be written down, so they go through the store and the deploy screen
-  // lists them from there.
-  const userEmail = computed(() => route.query.email || 'myemail@azion.com')
-
-  const initializing = ref(null)
-  let handoff = null
-
-  const HANDOFF_MS = 1600
-
-  const deployProject = ({ name, framework, files, truncated }) => {
-    initializing.value = { files, truncated }
-    handoff = setTimeout(() => {
-      rememberDroppedProject({ name, files, truncated })
-      router.push({
-        path: '/deploy',
-        query: { email: userEmail.value, upload: name, framework }
-      })
-    }, HANDOFF_MS)
-  }
-
-  onBeforeUnmount(() => clearTimeout(handoff))
-
-  const { dragging } = useProjectUpload(deployProject)
+  const { dragging, initializing } = useProjectDrop()
 
   // Deleting from Overview removes the SAME resource its module list owns, so it asks
   // the same way: the menu click arms the dialog, and the row goes only once its name

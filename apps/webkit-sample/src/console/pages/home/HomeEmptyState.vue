@@ -67,8 +67,11 @@
   import { computed, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
+  import ProjectDropZone from '../../components/creation/ProjectDropZone.vue'
+  import ProjectInitializing from '../../components/creation/ProjectInitializing.vue'
   import FirstUseCard from '../../components/home/FirstUseCard.vue'
   import HomeFirstUseWire from '../../components/home/HomeFirstUseWire.vue'
+  import { useProjectDrop } from '../../lib/behavior/project-upload'
   import { createResourcePath } from '../../lib/data/create-resources'
   import { useGreeting } from '../../lib/data/greeting'
   import { firstUseDoors } from '../../lib/data/home-first-use'
@@ -275,6 +278,13 @@
     domain.value = ''
   }
 
+  // AN ACCOUNT THAT OWNS NOTHING IS THE ONE MOST LIKELY TO BE HOLDING A FOLDER. The
+  // populated half takes a drop for the reader whose project is already on their desktop;
+  // this half is that reader before they have deployed anything at all, so withholding the
+  // gesture here made it reachable only once it was no longer the fastest way to start.
+  // The three doors stay — a drop is a fourth way in, not a replacement for them.
+  const { dragging, initializing } = useProjectDrop()
+
   onUnmounted(() => {
     globalThis.clearTimeout(checkTimer)
     globalThis.clearTimeout(arrivalTimer)
@@ -302,7 +312,21 @@
          its cap by exactly the inset it now contains
          (`max-width: calc(measure + 2 * --layout-boundary-inline)`, packages/theme/src/
          tokens/semantic/layouts.data.js), so the content column is the full 1388px. -->
-  <main class="layout-column layout-boundary flex min-h-full flex-col">
+  <main class="layout-column layout-boundary relative flex min-h-full flex-col">
+    <!-- The region is the whole page column, on the page's own boundary — the same
+         placement and the same reasoning as the populated half (./Home.vue). -->
+    <ProjectDropZone
+      :active="dragging"
+      class="[--drop-zone-inset:var(--layout-boundary-inline)]"
+    />
+
+    <!-- The drop's own answer, over the page it was made on. -->
+    <ProjectInitializing
+      v-if="initializing"
+      :files="initializing.files"
+      :truncated="initializing.truncated"
+    />
+
     <!-- The page's own wire, in the page's own column — see the note on the
            arrival window above. -->
     <HomeFirstUseWire v-if="arriving" />
