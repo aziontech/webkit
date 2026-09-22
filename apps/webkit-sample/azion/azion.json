@@ -3,7 +3,7 @@
   "bucket": "webkit-sample",
   "preset": "vue",
   "env": "production",
-  "prefix": "20260922122434",
+  "prefix": "20260922161325",
   "rotate-prefix": true,
   "not-first-run": true,
   "function": {
