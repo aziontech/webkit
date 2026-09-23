@@ -35,11 +35,13 @@ import { animateExtras, keyframes } from '../tokens/primitives/animations/keyfra
 import { breakpoints } from '../tokens/primitives/breakpoints.js';
 import { compilePrimitivesVars } from './compile-primitives.js';
 import { compileThemeCss, compileThemeVars } from './compile-theme.js';
+import { container } from '../tokens/primitives/shape/container.js';
 import { containersData } from '../tokens/semantic/containers.data.js';
 import { layoutsData, layoutsUtilities } from '../tokens/semantic/layouts.data.js';
 import { spacingsData } from '../tokens/semantic/spacings.data.js';
 import { textsData } from '../tokens/semantic/texts.data.js';
 import { zIndicesData } from '../tokens/semantic/z-indices.data.js';
+import { assertMeasureCommentsMatch } from './measure-comment.mjs';
 import { assertNoZeroWithUnit } from './zero-unit.mjs';
 
 const BREAKPOINT_ORDER = ['sm', 'md', 'lg', 'xl', '2xl'];
@@ -270,6 +272,11 @@ const emitLayoutUtilities = () => emitUtilities(layoutsUtilities);
 const emitBaseLayer = () =>
   [
     '@layer base {',
+    '  html {',
+    '    -webkit-font-smoothing: antialiased;',
+    '    -moz-osx-font-smoothing: grayscale;',
+    '  }',
+    '',
     '  button:not(:disabled),',
     '  [role="button"]:not([aria-disabled="true"]),',
     '  summary {',
@@ -431,6 +438,11 @@ const importIdx = rawCss.indexOf(IMPORT_LINE);
 if (importIdx === -1) throw new Error('emitCssV4 output is missing the tailwind import line');
 const afterImport = importIdx + IMPORT_LINE.length;
 const css = `${rawCss.slice(0, afterImport)}\n\n${fontsCss}${rawCss.slice(afterImport)}`;
+assertMeasureCommentsMatch(
+  await readFile(resolve(__dirname, '../tokens/semantic/layouts.data.js'), 'utf8'),
+  container,
+  'tokens/semantic/layouts.data.js',
+);
 assertNoZeroWithUnit(css, 'globals.css');
 await writeFile(resolve(dir, 'globals.css'), css, 'utf8');
 await writeFile(resolve(dir, 'globals.scss'), css, 'utf8');

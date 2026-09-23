@@ -134,6 +134,15 @@ function styleEntryContent() {
 
 /* webkit is consumed as source — this registers it with Tailwind so its component classes compile. */
 @import '@aziontech/webkit/styles';
+
+/* Text rendering. The type ladder is drawn at these settings, so they are the design
+   system's default — and they live here, in your file, so you can change them. */
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
 `
 }
 
