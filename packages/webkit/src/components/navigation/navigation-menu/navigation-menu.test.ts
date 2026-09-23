@@ -304,6 +304,61 @@ describe('NavigationMenu (composition + overlay + recursive)', () => {
       expect(positioner()).not.toHaveAttribute('data-constrained')
     })
 
+    // A page-column pin passes the column inset on x; on y it would drop the panel off its
+    // trigger by that same amount, which is invisible until the inset exceeds the side offset.
+    const PINNED_PANEL = `
+      <div style="position:fixed;left:0;right:0;top:8px">
+        <NavigationMenu aria-label="Primary">
+          <NavigationMenuList :highlight="false">
+            <NavigationMenuItem value="solutions">
+              <NavigationMenuTrigger>Solutions</NavigationMenuTrigger>
+              <NavigationMenuContent>
+                <NavigationMenuList label="Rows">
+                  <NavigationMenuItem
+                    layout="entry"
+                    href="https://example.com/1"
+                    style="display:block;height:24px"
+                  >Row 1</NavigationMenuItem>
+                </NavigationMenuList>
+              </NavigationMenuContent>
+            </NavigationMenuItem>
+          </NavigationMenuList>
+          <NavigationMenuPortal>
+            <NavigationMenuPositioner
+              side="bottom"
+              align="start"
+              :side-offset="12"
+              :collision-padding="{ x: 200, y: 8 }"
+            >
+              <NavigationMenuPopup>
+                <NavigationMenuViewport />
+              </NavigationMenuPopup>
+            </NavigationMenuPositioner>
+          </NavigationMenuPortal>
+        </NavigationMenu>
+      </div>
+    `
+
+    it('insets a per-axis collision padding on that axis only, keeping the panel on its trigger', async () => {
+      const { getByRole } = renderTree(PINNED_PANEL)
+      const trigger = getByRole('button', { name: /Solutions/ })
+      await userEvent.click(trigger)
+      await waitFor(() => expect(positioner()).toHaveAttribute('data-side', 'bottom'), {
+        timeout: OPEN_TIMEOUT
+      })
+      await waitFor(
+        () => {
+          const panel = positioner().getBoundingClientRect()
+          const anchor = trigger.getBoundingClientRect()
+          // X: shifted in to the 200px inset. Y: still the trigger's edge + sideOffset,
+          // NOT pushed down to the X inset.
+          expect(panel.left).toBeGreaterThanOrEqual(200)
+          expect(Math.round(panel.top)).toBe(Math.round(anchor.bottom + 12))
+        },
+        { timeout: OPEN_TIMEOUT }
+      )
+    })
+
     it('caps the popup to the free space and marks the positioner constrained when nothing fits', async () => {
       const { getByRole } = renderTree(TALL_PANEL(80, 'position:fixed;left:8px;right:8px;top:8px'))
       const trigger = getByRole('button', { name: /Solutions/ })
