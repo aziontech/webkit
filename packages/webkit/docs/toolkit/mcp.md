@@ -21,22 +21,24 @@ Register it with your MCP client (`npx @aziontech/webkit init` does this for you
 }
 ```
 
-Requires Node ≥ 22. `@modelcontextprotocol/sdk` and `zod` are runtime dependencies, fetched automatically at `npx` time.
+Runs on Node 18+ (the floor of `@modelcontextprotocol/sdk`; use a maintained LTS). `@modelcontextprotocol/sdk` and `zod` are runtime dependencies, fetched automatically at `npx` time.
 
 ## Tools
 
-| Tool                 | Answer                                                                                                                                                                  |
-| -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `list_components`    | Every renderable component (compact cards), optionally filtered by category.                                                                                            |
-| `list_categories`    | The distinct categories in the installed catalog.                                                                                                                       |
-| `list_tokens`        | The positive token inventory (what to use instead of hardcoding): the token group index + typography classes, or a group's CSS custom properties when given a category. |
-| `get_component`      | Full API for one component: props, events, slots, sub-components, structure.                                                                                            |
-| `get_import`         | The tree-shakeable import to prefer, plus the compound (dot-notation) alternative when one exists.                                                                      |
-| `search_components`  | Components matching a substring.                                                                                                                                        |
-| `suggest_component`  | The best component for a free-text need, with alternatives.                                                                                                             |
-| `get_usage_example`  | A runnable `<script setup>` SFC using the tree-shakeable import and real props.                                                                                         |
-| `get_best_practices` | The usage guidance for a component (or the general do/avoid list): composition patterns, token rules, pitfalls.                                                         |
-| `validate_usage`     | Checks an import path (published? not internal?) and a class string (any token-rule violations?).                                                                       |
+| Tool                 | Answer                                                                                                                                                                                                                                                                                   |
+| -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `list_components`    | Every published component (compact cards with `status`, `deprecated`, `replacedBy`), optionally filtered by category.                                                                                                                                                                    |
+| `list_categories`    | The distinct categories in the installed catalog.                                                                                                                                                                                                                                        |
+| `list_tokens`        | The positive token inventory (what to use instead of hardcoding): the token group index + typography classes + the canonical prop/event `vocabulary`, or a group's CSS custom properties when given a category (`animations` / `motion` returns each `animate-*` class with its timing). |
+| `get_component`      | Full API for one component: props, events, slots, sub-components, structure, `deprecated` / `replacedBy`.                                                                                                                                                                                |
+| `get_import`         | The tree-shakeable import to prefer, plus the compound (dot-notation) alternative when one exists.                                                                                                                                                                                       |
+| `search_components`  | Components matching a substring; deprecated ones rank after every live match.                                                                                                                                                                                                            |
+| `suggest_component`  | The best component for a free-text need, with alternatives; never a deprecated one while a live one matches.                                                                                                                                                                             |
+| `get_usage_example`  | A runnable `<script setup>` SFC using the tree-shakeable import and real props.                                                                                                                                                                                                          |
+| `get_best_practices` | The usage guidance for one component (`name` is required): purpose, when to use / avoid, related components, best-practice notes.                                                                                                                                                        |
+| `validate_usage`     | Checks an import path (published? not internal?) and a class string (any token-rule violations?).                                                                                                                                                                                        |
+
+Every component the tools return is a published export. `status` is the component's spec lifecycle (`draft` → `approved` → `implemented`), not whether it can be imported. A component marked `deprecated` still works until its removal major, but new code should use `replacedBy` (see [`deprecation.md`](https://github.com/aziontech/webkit/blob/main/.claude/rules/deprecation.md)).
 
 ## How it fits the adoption toolkit
 

@@ -19,8 +19,10 @@ Using Claude Code, Cursor, or another AI coding tool? Paste this into your agent
 > then run `npx @aziontech/webkit init` to wire the lint, the MCP server, and the agent docs.
 
 The MCP server it wires gives your AI the full component catalog (`list_components`,
-`get_component`, `list_tokens`, `suggest_component`, `get_best_practices`,
+`list_categories`, `search_components`, `suggest_component`, `get_component`,
+`get_import`, `get_usage_example`, `get_best_practices`, `list_tokens`,
 `validate_usage`) — so it writes the right import, prop, and token on the first try.
+See [`docs/toolkit/mcp.md`](./docs/toolkit/mcp.md).
 
 ### 1 · Install
 
