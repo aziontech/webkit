@@ -41,6 +41,9 @@ jobs:
         if: steps.release.outputs.releases_created == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
+          # This job never checks out the repo, so `gh` cannot infer it from a
+          # git remote — name it explicitly.
+          GH_REPO: ${{ github.repository }}
           WEBKIT_RELEASED: ${{ steps.release.outputs['packages/webkit--release_created'] }}
           WEBKIT_TAG: ${{ steps.release.outputs['packages/webkit--tag_name'] }}
           THEME_RELEASED: ${{ steps.release.outputs['packages/theme--release_created'] }}
