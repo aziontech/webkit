@@ -13,6 +13,8 @@
 
   export type NavigationMenuSide = 'top' | 'right' | 'bottom' | 'left'
   export type NavigationMenuAlign = 'start' | 'center' | 'end'
+  /** Collision padding: one number for both axes, or an inset per axis. */
+  export type NavigationMenuCollisionPadding = number | { x: number; y: number }
 
   interface Props {
     /** Preferred placement relative to the active trigger. */
@@ -25,8 +27,8 @@
     alignOffset?: number
     /** Padding reserved for the arrow (px). */
     arrowPadding?: number
-    /** Collision padding (px). */
-    collisionPadding?: number
+    /** Distance kept from the boundary edges (px); an object insets each axis on its own. */
+    collisionPadding?: NavigationMenuCollisionPadding
     /** Sticky positioning while scrolling. */
     sticky?: boolean
     /** Disables tracking the active trigger as anchor. */

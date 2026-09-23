@@ -31,6 +31,9 @@ export interface Size {
   height: number
 }
 
+/** Distance kept from the boundary edges: both axes, or one inset per axis. */
+export type CollisionPadding = number | { x: number; y: number }
+
 export interface ComputePlacementInput {
   /** The anchor, in viewport pixels. */
   triggerRect: Rect
@@ -45,8 +48,8 @@ export interface ComputePlacementInput {
   flip: boolean
   /** Gap between trigger and panel along the main axis. */
   offset: number
-  /** Minimum distance kept from every boundary edge. */
-  collisionPadding: number
+  /** Minimum distance kept from the boundary edges, together or per axis. */
+  collisionPadding: CollisionPadding
   /** Shift along the alignment axis, in px (towards the end for `start`/`center`, towards the start for `end`). */
   alignOffset?: number
   /** Vertical sides only: the panel spans exactly the trigger, so it is never shifted or capped across. */
@@ -71,7 +74,7 @@ export interface UsePlacementOptions {
   isOpen: Ref<boolean>
   placement: MaybeRef<Placement | 'auto'>
   offset?: MaybeRef<number>
-  collisionPadding?: number
+  collisionPadding?: CollisionPadding
   flip?: boolean
   autoPlacements?: Placement[]
   zIndex?: number
@@ -129,13 +132,19 @@ function clamp(value: number, min: number, max: number): number {
   return Math.min(Math.max(value, min), Math.max(min, max))
 }
 
+function resolvePadding(padding: CollisionPadding): { x: number; y: number } {
+  if (typeof padding === 'number') return { x: padding, y: padding }
+  return { x: padding?.x ?? 0, y: padding?.y ?? 0 }
+}
+
 /**
  * Pure placement geometry: resolves the side (flip first), caps the panel to the free
  * space only when no side fits (shrink second), anchors it and shifts it back inside the
  * boundary. Everything is in viewport pixels; callers convert to their fixed frame.
  */
 export function computePlacement(input: ComputePlacementInput): ComputePlacementResult {
-  const { triggerRect: trigger, panelSize, boundary, offset, collisionPadding: padding } = input
+  const { triggerRect: trigger, panelSize, boundary, offset } = input
+  const padding = resolvePadding(input.collisionPadding)
   const alignOffset = input.alignOffset ?? 0
 
   const mainSize = (side: Side) => (isVertical(side) ? panelSize.height : panelSize.width)
@@ -143,13 +152,13 @@ export function computePlacement(input: ComputePlacementInput): ComputePlacement
   const available = (side: Side) => {
     switch (side) {
       case 'bottom':
-        return boundary.bottom - trigger.bottom - offset - padding
+        return boundary.bottom - trigger.bottom - offset - padding.y
       case 'top':
-        return trigger.top - boundary.top - offset - padding
+        return trigger.top - boundary.top - offset - padding.y
       case 'right':
-        return boundary.right - trigger.right - offset - padding
+        return boundary.right - trigger.right - offset - padding.x
       case 'left':
-        return trigger.left - boundary.left - offset - padding
+        return trigger.left - boundary.left - offset - padding.x
     }
   }
   const clearance = (placement: Placement) => {
@@ -185,7 +194,10 @@ export function computePlacement(input: ComputePlacementInput): ComputePlacement
   const locked = vertical && input.matchTriggerWidth === true
 
   const main = Math.min(mainSize(side), Math.max(0, available(side)))
-  const crossAvailable = Math.max(0, (vertical ? boundary.width : boundary.height) - 2 * padding)
+  const crossAvailable = Math.max(
+    0,
+    vertical ? boundary.width - 2 * padding.x : boundary.height - 2 * padding.y
+  )
   const cross = locked
     ? trigger.width
     : Math.min(vertical ? panelSize.width : panelSize.height, crossAvailable)
@@ -207,8 +219,8 @@ export function computePlacement(input: ComputePlacementInput): ComputePlacement
     else top = trigger.top + trigger.height / 2 - height / 2 + alignOffset
   }
 
-  if (!locked) left = clamp(left, boundary.left + padding, boundary.right - padding - width)
-  top = clamp(top, boundary.top + padding, boundary.bottom - padding - height)
+  if (!locked) left = clamp(left, boundary.left + padding.x, boundary.right - padding.x - width)
+  top = clamp(top, boundary.top + padding.y, boundary.bottom - padding.y - height)
 
   return {
     placement: resolved,
