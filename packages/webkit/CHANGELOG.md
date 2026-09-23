@@ -4,6 +4,28 @@
 
 - [Inputs] normalize z-index across all inputs (ENG-46735) ([#783](https://github.com/aziontech/webkit/issues/783)) ([25d201d](https://github.com/aziontech/webkit/commit/25d201d5ae0e6054b9189bc81c76b7d9fc8c5055))
 
+## [5.2.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@5.1.0...@aziontech/webkit@5.2.0) (2026-09-23)
+
+
+### Features
+
+* **theme:** tighten the type ladder, antialias text, and gate measure comments ([#982](https://github.com/aziontech/webkit/issues/982)) ([3de1f3b](https://github.com/aziontech/webkit/commit/3de1f3b3d666b632ef81fbe29d7def0a9adfa641))
+
+
+### Bug Fixes
+
+* **webkit:** [ENG-47063] inset a floating panel's collision padding per axis ([#988](https://github.com/aziontech/webkit/issues/988)) ([3b90fbf](https://github.com/aziontech/webkit/commit/3b90fbf47341f23a379e57a3180d9940d7f79e2e))
+* **webkit:** [ENG-47884] make the sidebar rail's drag follow the pointer and carry its content ([#985](https://github.com/aziontech/webkit/issues/985)) ([0be8ba9](https://github.com/aziontech/webkit/commit/0be8ba9d201264231544fc904b31b4c0b2465a7d))
+* **webkit:** [ENG-48120] keep a chrome block's padding when it opens the prose ([#981](https://github.com/aziontech/webkit/issues/981)) ([264428d](https://github.com/aziontech/webkit/commit/264428d1ba13e8830e6d48bb6ea5ff3ae947b07e))
+* **webkit:** render Message copy in a flow container so block content stays inside the box ([#979](https://github.com/aziontech/webkit/issues/979)) ([f867fa1](https://github.com/aziontech/webkit/commit/f867fa1672ac77c0bf536dc739aa214b636f58e1))
+* **webkit:** stop no-hardcoded-color flagging URL fragments as hex colors ([#980](https://github.com/aziontech/webkit/issues/980)) ([0386389](https://github.com/aziontech/webkit/commit/03863890470c7e8cd016a275da51ad49e658112f))
+* **webkit:** stop no-hardcoded-color flagging UUID and URL fragments as hex colors ([#978](https://github.com/aziontech/webkit/issues/978)) ([ec2b806](https://github.com/aziontech/webkit/commit/ec2b80636d7eb5bfd70a1fe246ae675fd6a238bd))
+
+
+### Documentation
+
+* **webkit:** ship the webkit-layout skill and refresh the consumer skill bundle ([#984](https://github.com/aziontech/webkit/issues/984)) ([261828c](https://github.com/aziontech/webkit/commit/261828cf93a59a92245b6fa4044c2b859f901587))
+
 ## [5.1.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@5.0.0...@aziontech/webkit@5.1.0) (2026-09-18)
 
 
