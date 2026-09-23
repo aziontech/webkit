@@ -6,6 +6,18 @@ import { getFixedFrame } from '../../../../utils/containing-block'
 
 const ALIGN_VALUES = new Set(['start', 'center', 'end'])
 const SIDE_VALUES = new Set(['top', 'bottom', 'left', 'right'])
+const DEFAULT_COLLISION_PADDING = 8
+
+function normalizeCollisionPadding(raw) {
+  if (typeof raw === 'number') return raw
+  if (raw && typeof raw === 'object') {
+    return {
+      x: typeof raw.x === 'number' ? raw.x : DEFAULT_COLLISION_PADDING,
+      y: typeof raw.y === 'number' ? raw.y : DEFAULT_COLLISION_PADDING
+    }
+  }
+  return DEFAULT_COLLISION_PADDING
+}
 
 function readRect(el) {
   if (!el || typeof el.getBoundingClientRect !== 'function') return null
@@ -27,7 +39,7 @@ function readRect(el) {
  *   sideOffset?: number
  *   alignOffset?: number
  *   arrowPadding?: number
- *   collisionPadding?: number
+ *   collisionPadding?: number | { x: number; y: number }
  * }>} options
  * @param {import('vue').MaybeRefOrGetter<{ width: number; height: number } | null>} [targetSize]
  */
@@ -54,7 +66,7 @@ export function useNavigationMenuPositioner(anchorRef, floatingRef, arrowRef, op
       sideOffset: typeof raw.sideOffset === 'number' ? raw.sideOffset : 8,
       alignOffset: typeof raw.alignOffset === 'number' ? raw.alignOffset : 0,
       arrowPadding: typeof raw.arrowPadding === 'number' ? raw.arrowPadding : 8,
-      collisionPadding: typeof raw.collisionPadding === 'number' ? raw.collisionPadding : 8
+      collisionPadding: normalizeCollisionPadding(raw.collisionPadding)
     }
   })
 

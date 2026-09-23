@@ -114,6 +114,42 @@ describe('computePlacement (pure geometry)', () => {
     expect(r.width).toBe(1000)
     expect(r.maxWidth).toBeNull()
   })
+
+  it('applies a per-axis collision padding to that axis only', () => {
+    // A sheet pinned to a page column: 300px of horizontal inset, 8px vertically.
+    const r = computePlacement(
+      base({
+        triggerRect: rect(320, 20, 120, 40),
+        panelSize: { width: 400, height: 200 },
+        collisionPadding: { x: 300, y: 8 }
+      })
+    )
+    // Horizontal: shifted back to the column's leading edge.
+    expect(r.left).toBe(300)
+    // Vertical: still anchored to the trigger, not pushed down by the horizontal inset.
+    expect(r.top).toBe(64)
+    expect(r.maxHeight).toBeNull()
+  })
+
+  it('caps the panel across the axis its own padding leaves, not the other one', () => {
+    const r = computePlacement(
+      base({
+        triggerRect: rect(320, 20, 120, 40),
+        panelSize: { width: 900, height: 200 },
+        collisionPadding: { x: 300, y: 8 }
+      })
+    )
+    expect(r.width).toBe(VIEWPORT.width - 2 * 300)
+    expect(r.maxWidth).toBe(VIEWPORT.width - 2 * 300)
+    expect(r.height).toBe(200)
+    expect(r.maxHeight).toBeNull()
+  })
+
+  it('a scalar collision padding still insets both axes', () => {
+    const r = computePlacement(base({ triggerRect: rect(0, 20, 120, 40), collisionPadding: 24 }))
+    expect(r.left).toBe(24)
+    expect(r.top).toBe(64)
+  })
 })
 
 describe('getClippingBoundary', () => {
