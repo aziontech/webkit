@@ -28,6 +28,15 @@ function subpathOf(catalog, importPath) {
   return s.startsWith(prefix) ? s.slice(prefix.length) : s
 }
 
+/**
+ * The deprecation fields every answer carries (see `.claude/rules/deprecation.md`):
+ * a deprecated part still works for its cycle, but AI-written code should reach for
+ * `replacedBy` instead.
+ */
+function deprecation(e) {
+  return { deprecated: e.deprecated === true, replacedBy: e.replacedBy ?? null }
+}
+
 /** A compact card for list/search results. */
 function componentCard(catalog, name) {
   const e = catalog.getEntry(name)
@@ -37,6 +46,7 @@ function componentCard(catalog, name) {
     category: e.category ?? null,
     structure: e.structure ?? null,
     status: e.status ?? null,
+    ...deprecation(e),
     import: e.import,
     treeShakeableImport: e.treeShakeableImport ?? e.import,
     binding: pascalCase(name)
@@ -158,6 +168,7 @@ export function getComponent(catalog, name) {
     category: e.category ?? null,
     structure: e.structure ?? null,
     status: e.status ?? null,
+    ...deprecation(e),
     import: e.import,
     treeShakeableImport: e.treeShakeableImport ?? e.import,
     compoundRoot: e.compoundRoot ?? false,
@@ -203,6 +214,7 @@ export function getBestPractices(catalog, name) {
     available: true,
     found: true,
     name: key,
+    ...deprecation(e),
     purpose: e.purpose ?? null,
     setup: e.setup ?? null,
     useWhen: e.useWhen ?? [],
@@ -311,10 +323,19 @@ function scoreMatch(name, entry, query) {
   return score
 }
 
+/** Sort comparator that keeps deprecated components behind every live one. */
+function liveFirst(catalog, a, b) {
+  return (
+    Number(catalog.getEntry(a)?.deprecated === true) -
+    Number(catalog.getEntry(b)?.deprecated === true)
+  )
+}
+
 /**
  * Fuzzy / substring search across component names + categories. Returns ranked
  * cards so a phrase like "dropdown" or "paginated table" resolves to a real
- * component instead of the AI reinventing one.
+ * component instead of the AI reinventing one. Deprecated components rank after
+ * every live match, whatever their score.
  */
 export function searchComponents(catalog, query) {
   if (!catalog.available) return NOT_AVAILABLE
@@ -326,7 +347,9 @@ export function searchComponents(catalog, query) {
       return { sub, score: scoreMatch(sub, e, q) }
     })
     .filter((r) => r.score > 0)
-    .sort((a, b) => b.score - a.score || a.sub.localeCompare(b.sub))
+    .sort(
+      (a, b) => liveFirst(catalog, a.sub, b.sub) || b.score - a.score || a.sub.localeCompare(b.sub)
+    )
     .slice(0, 10)
     .map((r) => ({ ...componentCard(catalog, r.sub), score: r.score }))
 
@@ -336,7 +359,9 @@ export function searchComponents(catalog, query) {
 /**
  * Given a plain-language need, suggest the single best-fitting component (plus a
  * couple of runners-up). Falls back to edit-distance suggestions when nothing
- * scores on the substring/word heuristic.
+ * scores on the substring/word heuristic. A deprecated component is never `best`
+ * while a live one matches; when it is the only match, the answer names its
+ * replacement.
  */
 export function suggestComponent(catalog, need) {
   if (!catalog.available) return NOT_AVAILABLE
@@ -350,13 +375,15 @@ export function suggestComponent(catalog, need) {
       need: q,
       found: true,
       best,
-      alternatives: rest.slice(0, 3)
+      alternatives: rest.slice(0, 3),
+      ...(best.deprecated ? { message: deprecatedMessage(best) } : {})
     }
   }
   // Nothing matched by words — offer typo-level suggestions over the raw phrase.
   const fuzzy = catalog
     .suggestSubpaths(q.toLowerCase().replace(/\s+/g, '-'))
     .filter((sub) => catalog.getEntry(sub)?.kind === 'component')
+    .sort((a, b) => liveFirst(catalog, a, b))
     .map((sub) => componentCard(catalog, sub))
   return {
     ok: true,
@@ -369,6 +396,12 @@ export function suggestComponent(catalog, need) {
       ? `No strong match for "${q}". Closest names by spelling:`
       : `No component matches "${q}". Try listComponents or searchComponents with a broader term.`
   }
+}
+
+function deprecatedMessage(card) {
+  return card.replacedBy
+    ? `"${card.name}" is deprecated — use "${card.replacedBy}" instead.`
+    : `"${card.name}" is deprecated.`
 }
 
 /** Pick a small set of illustrative props (required first, then leading scalars). */
