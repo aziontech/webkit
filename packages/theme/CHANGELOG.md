@@ -11,6 +11,13 @@
 
 * [Inputs] normalize z-index across all inputs (ENG-46735) ([#783](https://github.com/aziontech/webkit/issues/783)) ([25d201d](https://github.com/aziontech/webkit/commit/25d201d5ae0e6054b9189bc81c76b7d9fc8c5055))
 
+## [5.1.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@5.0.0...@aziontech/theme@5.1.0) (2026-09-23)
+
+
+### Features
+
+* **theme:** tighten the type ladder, antialias text, and gate measure comments ([#982](https://github.com/aziontech/webkit/issues/982)) ([3de1f3b](https://github.com/aziontech/webkit/commit/3de1f3b3d666b632ef81fbe29d7def0a9adfa641))
+
 ## [5.0.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@4.3.1...@aziontech/theme@5.0.0) (2026-09-09)
 
 
