@@ -1,3 +1,9 @@
+## [3.9.2](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.9.1...@aziontech/webkit@3.9.2) (2026-09-25)
+
+### Bug Fixes
+
+- **webkit:** publish v3 releases under the legacy-v3 npm dist-tag ([ce2a883](https://github.com/aziontech/webkit/commit/ce2a8838ac0bde72e46261463a5816ccc4fa31fa))
+
 ## [3.9.1](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.9.0...@aziontech/webkit@3.9.1) (2026-09-25)
 
 ### Bug Fixes
