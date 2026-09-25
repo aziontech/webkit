@@ -11324,6 +11324,186 @@
       "target": "./src/vite/index.js",
       "kind": "other",
       "treeShakeableImport": "@aziontech/webkit/vite"
+    },
+    "card-grid": {
+      "import": "@aziontech/webkit/card-grid",
+      "target": "./src/components/marketing/card-grid/index.ts",
+      "kind": "component",
+      "compoundRoot": true,
+      "treeShakeableImport": "@aziontech/webkit/card-grid-root",
+      "subcomponents": [
+        "@aziontech/webkit/card-grid-cell"
+      ],
+      "category": "marketing",
+      "structure": "composition",
+      "status": "approved",
+      "props": [
+        {
+          "name": "kind",
+          "type": "CardGridKind",
+          "default": "'gap'",
+          "required": "false",
+          "doc": "Register of the grid: gutters between self-contained cards, hairline rules drawn by the gaps, or framed cells that draw their own rules and marks."
+        },
+        {
+          "name": "columns",
+          "type": "CardGridColumns",
+          "default": "3",
+          "required": "false",
+          "doc": "How many columns the grid fans out to at the large breakpoint."
+        },
+        {
+          "name": "mobileColumns",
+          "type": "CardGridMobileColumns",
+          "default": "1",
+          "required": "false",
+          "doc": "How many columns the grid holds below the small breakpoint."
+        },
+        {
+          "name": "dividerColor",
+          "type": "CardGridDividerColor",
+          "default": "'default'",
+          "required": "false",
+          "doc": "Weight of the hairline rules in the `divider` register."
+        },
+        {
+          "name": "flush",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "In the `frame` register, the surrounding frame already draws the grid's outer rules: the grid drops its own top and left ones and lays its right and bottom ones onto the frame's, so a framed column keeps one hairline per edge."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The cells, in reading order. In the `frame` register they are `CardGrid.Cell` elements; in the `divider` register each cell fills its own background."
+        }
+      ],
+      "purpose": "The responsive cell grid of the page language, in three registers: spaced cards separated by real gutters, a hairline box grid whose internal rules are the gaps themselves, and a framed grid whose cells are real `frame-box` elements. The `frame` register is the one that composes: each `CardGrid.Cell` draws its own rules and corner marks and carries its own fill, so the grid needs no background trick and nests flush inside a column that already owns the outer edges.",
+      "useWhen": [
+        "For a row or block of equal cells that should fan out from one column on a phone to several on a wide screen.",
+        "With `kind` set to `frame` whenever the cells are real content — a `topic`, a claim, a figure — and should carry the page's frame language, corner marks included.",
+        "For the hairline cell grid a `section-module` body holds, with `kind` set to `divider`.",
+        "For a row of self-contained cards with gutters between them, with the default `gap`."
+      ],
+      "avoidWhen": [
+        "For a mosaic whose cells claim different numbers of columns and rows → use `bento-grid`, which is this grid with spans.",
+        "For a single framed box → use `frame-box`.",
+        "For one card with a header, content and footer → use `card-box`.",
+        "For the band that wraps the grid → use `section-module`.",
+        "For tabular data a reader scans row by row → use `table`."
+      ],
+      "related": [
+        "bento-grid` — the same framed grid with unequal cells; reach for it when one claim deserves more room than the rest.",
+        "topic` — the glyph, headline and sentence a `frame` cell usually holds.",
+        "section-module` — the band whose body holds this grid.",
+        "section-container` — the column whose vertical rules the `divider` and flush `frame` grids deliberately do not repeat.",
+        "frame-box` — the frame each `frame` cell is drawn with, and the framed box a `gap` cell may be built from.",
+        "card-box` — a padded card surface, the usual child of a `gap` grid."
+      ],
+      "bestPractices": [
+        "Prefer `frame` over `divider` for new work. The hairline register depends on every child filling its own background; the framed register draws real rules, so a cell that forgets its fill still reads correctly, and the corner marks come with it.",
+        "Give every child of a `divider` grid its own background fill, or the gap trick has nothing to show through and the whole band goes the colour of the rule.",
+        "Leave the perimeter to the container: the `divider` register draws no outer border, and a `frame` grid set to `flush` withholds its own top and left rules so a surrounding `frame-box` keeps one hairline per edge.",
+        "Let the grid draw the rules. Do not add borders inside a `frame` cell, or the shared edges double.",
+        "Give a cell `kind=\"none\"` and `:padded=\"false\"` when its own content paints the cell — a media layer, a brand fill, or a link that must be the whole tile.",
+        "Reach for `mobileColumns` of `2` only for short, glyph-led cells; a cell carrying a description reads better one-up on a phone."
+      ],
+      "styleSeam": true
+    },
+    "card-grid-root": {
+      "import": "@aziontech/webkit/card-grid-root",
+      "target": "./src/components/marketing/card-grid/card-grid.vue",
+      "kind": "root",
+      "rootOf": "card-grid",
+      "treeShakeableImport": "@aziontech/webkit/card-grid-root",
+      "category": "marketing",
+      "structure": "composition",
+      "status": "approved",
+      "props": [
+        {
+          "name": "kind",
+          "type": "CardGridKind",
+          "default": "'gap'",
+          "required": "false",
+          "doc": "Register of the grid: gutters between self-contained cards, hairline rules drawn by the gaps, or framed cells that draw their own rules and marks."
+        },
+        {
+          "name": "columns",
+          "type": "CardGridColumns",
+          "default": "3",
+          "required": "false",
+          "doc": "How many columns the grid fans out to at the large breakpoint."
+        },
+        {
+          "name": "mobileColumns",
+          "type": "CardGridMobileColumns",
+          "default": "1",
+          "required": "false",
+          "doc": "How many columns the grid holds below the small breakpoint."
+        },
+        {
+          "name": "dividerColor",
+          "type": "CardGridDividerColor",
+          "default": "'default'",
+          "required": "false",
+          "doc": "Weight of the hairline rules in the `divider` register."
+        },
+        {
+          "name": "flush",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "In the `frame` register, the surrounding frame already draws the grid's outer rules: the grid drops its own top and left ones and lays its right and bottom ones onto the frame's, so a framed column keeps one hairline per edge."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The cells, in reading order. In the `frame` register they are `CardGrid.Cell` elements; in the `divider` register each cell fills its own background."
+        }
+      ],
+      "purpose": "The responsive cell grid of the page language, in three registers: spaced cards separated by real gutters, a hairline box grid whose internal rules are the gaps themselves, and a framed grid whose cells are real `frame-box` elements. The `frame` register is the one that composes: each `CardGrid.Cell` draws its own rules and corner marks and carries its own fill, so the grid needs no background trick and nests flush inside a column that already owns the outer edges.",
+      "useWhen": [
+        "For a row or block of equal cells that should fan out from one column on a phone to several on a wide screen.",
+        "With `kind` set to `frame` whenever the cells are real content — a `topic`, a claim, a figure — and should carry the page's frame language, corner marks included.",
+        "For the hairline cell grid a `section-module` body holds, with `kind` set to `divider`.",
+        "For a row of self-contained cards with gutters between them, with the default `gap`."
+      ],
+      "avoidWhen": [
+        "For a mosaic whose cells claim different numbers of columns and rows → use `bento-grid`, which is this grid with spans.",
+        "For a single framed box → use `frame-box`.",
+        "For one card with a header, content and footer → use `card-box`.",
+        "For the band that wraps the grid → use `section-module`.",
+        "For tabular data a reader scans row by row → use `table`."
+      ],
+      "related": [
+        "bento-grid` — the same framed grid with unequal cells; reach for it when one claim deserves more room than the rest.",
+        "topic` — the glyph, headline and sentence a `frame` cell usually holds.",
+        "section-module` — the band whose body holds this grid.",
+        "section-container` — the column whose vertical rules the `divider` and flush `frame` grids deliberately do not repeat.",
+        "frame-box` — the frame each `frame` cell is drawn with, and the framed box a `gap` cell may be built from.",
+        "card-box` — a padded card surface, the usual child of a `gap` grid."
+      ],
+      "bestPractices": [
+        "Prefer `frame` over `divider` for new work. The hairline register depends on every child filling its own background; the framed register draws real rules, so a cell that forgets its fill still reads correctly, and the corner marks come with it.",
+        "Give every child of a `divider` grid its own background fill, or the gap trick has nothing to show through and the whole band goes the colour of the rule.",
+        "Leave the perimeter to the container: the `divider` register draws no outer border, and a `frame` grid set to `flush` withholds its own top and left rules so a surrounding `frame-box` keeps one hairline per edge.",
+        "Let the grid draw the rules. Do not add borders inside a `frame` cell, or the shared edges double.",
+        "Give a cell `kind=\"none\"` and `:padded=\"false\"` when its own content paints the cell — a media layer, a brand fill, or a link that must be the whole tile.",
+        "Reach for `mobileColumns` of `2` only for short, glyph-led cells; a cell carrying a description reads better one-up on a phone."
+      ],
+      "styleSeam": true
+    },
+    "card-grid-cell": {
+      "import": "@aziontech/webkit/card-grid-cell",
+      "target": "./src/components/marketing/card-grid/card-grid-cell/card-grid-cell.vue",
+      "kind": "subcomponent",
+      "parent": "card-grid",
+      "treeShakeableImport": "@aziontech/webkit/card-grid-cell"
     }
   }
 }
