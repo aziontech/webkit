@@ -44,11 +44,19 @@
       "--accent-selected",
       "--animate-blink",
       "--animate-bounce",
+      "--animate-brand-marquee",
       "--animate-content-enter",
       "--animate-fade-in",
       "--animate-fade-out",
+      "--animate-flow-connector-draw",
       "--animate-flow-dash",
+      "--animate-flow-node-enter",
+      "--animate-flow-packet",
+      "--animate-glow-pulse",
       "--animate-highlight-fade",
+      "--animate-illustration-chat-pop",
+      "--animate-illustration-chat-scroll",
+      "--animate-illustration-rim-sweep",
       "--animate-page-enter",
       "--animate-ping",
       "--animate-popup-scale-in",
@@ -63,6 +71,8 @@
       "--animate-slide-out-left",
       "--animate-slide-out-right",
       "--animate-spin",
+      "--animate-texture-wave-a",
+      "--animate-texture-wave-b",
       "--aspect-video",
       "--bg-active",
       "--bg-backdrop",
@@ -813,11 +823,19 @@
       "animate": [
         "--animate-blink",
         "--animate-bounce",
+        "--animate-brand-marquee",
         "--animate-content-enter",
         "--animate-fade-in",
         "--animate-fade-out",
+        "--animate-flow-connector-draw",
         "--animate-flow-dash",
+        "--animate-flow-node-enter",
+        "--animate-flow-packet",
+        "--animate-glow-pulse",
         "--animate-highlight-fade",
+        "--animate-illustration-chat-pop",
+        "--animate-illustration-chat-scroll",
+        "--animate-illustration-rim-sweep",
         "--animate-page-enter",
         "--animate-ping",
         "--animate-popup-scale-in",
@@ -831,7 +849,9 @@
         "--animate-slide-in-right",
         "--animate-slide-out-left",
         "--animate-slide-out-right",
-        "--animate-spin"
+        "--animate-spin",
+        "--animate-texture-wave-a",
+        "--animate-texture-wave-b"
       ],
       "aspect": [
         "--aspect-video"
@@ -1612,11 +1632,19 @@
     "animations": [
       "blink",
       "bounce",
+      "brand-marquee",
       "content-enter",
       "fade-in",
       "fade-out",
+      "flow-connector-draw",
       "flow-dash",
+      "flow-node-enter",
+      "flow-packet",
+      "glow-pulse",
       "highlight-fade",
+      "illustration-chat-pop",
+      "illustration-chat-scroll",
+      "illustration-rim-sweep",
       "page-enter",
       "ping",
       "popup-scale-in",
@@ -1630,7 +1658,9 @@
       "slide-in-right",
       "slide-out-left",
       "slide-out-right",
-      "spin"
+      "spin",
+      "texture-wave-a",
+      "texture-wave-b"
     ],
     "animationGuide": {
       "blink": {
@@ -1640,6 +1670,10 @@
       "bounce": {
         "value": "bounce 1s infinite",
         "useWhen": "Playful attention bounce (scroll-down hints); use sparingly."
+      },
+      "brand-marquee": {
+        "value": "brandMarquee 59s linear infinite",
+        "useWhen": "A strip of logos looping forever (client trust strips, framework strips). Apply to a track holding its row exactly twice, the duplicate aria-hidden, and set animation-duration ON THE ELEMENT from the mark count so every strip on a site moves at one speed rather than one duration — a var in this shorthand would resolve at :root and never see it. Pause it on hover and focus-within so a linked mark can be reached."
       },
       "content-enter": {
         "value": "contentEnter 240ms cubic-bezier(0.39, 0.57, 0.56, 1) var(--content-enter-delay, 0s) backwards",
@@ -1653,13 +1687,41 @@
         "value": "fadeOut 220ms ease-in-out",
         "useWhen": "Content or backdrop leaving in place (pair of fade-in)."
       },
+      "flow-connector-draw": {
+        "value": "flowConnectorDraw 240ms cubic-bezier(0.39, 0.57, 0.56, 1) backwards",
+        "useWhen": "The connector between two nodes of such a diagram being drawn. It animates a MASK path (pathLength=\"100\", stroke wider than what it reveals), not the connector itself, so the revealed stroke keeps its own marching dash; apply that mask to the group holding the connector and its packet. Stagger it with an animation-delay longhand on the mask path — half a step after the node it leaves, so the diagram assembles node, line, node, line."
+      },
       "flow-dash": {
         "value": "flowDash 700ms linear infinite",
         "useWhen": "Flowing connection along an SVG connector stroke in a node-based / network diagram. Set a stroke-dasharray whose cycle divides 24 (e.g. 4 4) so the loop is seamless."
       },
+      "flow-node-enter": {
+        "value": "flowNodeEnter 240ms cubic-bezier(0.39, 0.57, 0.56, 1) backwards",
+        "useWhen": "A node of such a diagram arriving. Stagger it by setting animation-delay on the node itself — [animation-delay:var(--flow-node-enter-delay,0s)] plus one --flow-node-enter-delay per node, one fast-01 step apart — never inside this shorthand, where a nested var() is substituted on :root and the per-node value is lost. It fades in while travelling one --spacing-md rightward, so a staggered diagram assembles along the direction its connectors carry. The movement is safe only because the diagram measures its nodes from layout offsets, which a transform does not move; a diagram that measured them from getBoundingClientRect would strand every line at the offset it was measured at."
+      },
+      "flow-packet": {
+        "value": "flowPacketTravel 2100ms cubic-bezier(0.4, 0, 0.2, 1) infinite, flowPacketTaper 2100ms linear infinite",
+        "useWhen": "A request crossing an SVG connector in such a diagram: a dash that travels the path and tapers at both ends, carrying about the first half of the cycle. The path MUST carry pathLength=\"100\" (camelCase) because the keyframe offsets are percentages, and MUST use butt line caps because the dash is zero-length at both extremes. Do not set stroke-dasharray or stroke-dashoffset in CSS alongside it; the keyframes own both."
+      },
+      "glow-pulse": {
+        "value": "glowPulse calc(700ms + 240ms) infinite",
+        "useWhen": "An ambient glow breathing behind the one element a view is about — the subject node of a diagram, marked without a hover to find it. Apply it to a LAYER that carries only the glow (an inset ::before with a box-shadow and nothing else), never to the element itself: the element usually already runs its own entrance, and a second animate-* utility replaces that shorthand rather than joining it. Pair it with motion-reduce:before:animate-none."
+      },
       "highlight-fade": {
         "value": "highlight 1100ms ease-in forwards",
         "useWhen": "Row/item briefly highlighted after an update (recently changed)."
+      },
+      "illustration-chat-pop": {
+        "value": "illustrationChatPop 9s cubic-bezier(0.17, 0.84, 0.44, 1) infinite",
+        "useWhen": "Each message landing at the bottom of that scroll. Same duration as illustration-chat-scroll, with a negative animation-delay per message (-6.75s / -4.5s / -2.25s / 0s for the four) so its 4% pop fires on the step boundary, with the message standing still and in view."
+      },
+      "illustration-chat-scroll": {
+        "value": "illustrationChatScroll 9s cubic-bezier(0.39, 0.57, 0.56, 1) infinite",
+        "useWhen": "A conversation advancing bottom-to-top inside an illustrated window, one message per step. Apply to a track exactly twice the height of its clipped viewport (h-[200%]) holding four EQUAL-height messages per screenful, repeated in the second half — each step is then one message and the loop lands on an identical frame, with no seam."
+      },
+      "illustration-rim-sweep": {
+        "value": "illustrationRimSweep 2100ms linear infinite",
+        "useWhen": "Rim light travelling around an illustration on hover. Apply through the .illustration-rim-sweep utility, which re-declares the ramp stack the angle drives; paused by default and set running from the hovered ancestor."
       },
       "page-enter": {
         "value": "pageEnter 240ms cubic-bezier(0.39, 0.57, 0.56, 1)",
@@ -1716,6 +1778,14 @@
       "spin": {
         "value": "spin 1s linear infinite",
         "useWhen": "Indeterminate circular spinners (loading icons)."
+      },
+      "texture-wave-a": {
+        "value": "textureWaveA 13s linear infinite",
+        "useWhen": "One of the two crossing bands of a pixelate texture, travelling left. Set --texture-wave-shift on the element to one period of its banding measured along X, and overhang the element by that much on the side it travels toward, or the field uncovers mid-cycle."
+      },
+      "texture-wave-b": {
+        "value": "textureWaveB 19s linear infinite",
+        "useWhen": "The counter-travelling band of that pair (pair of texture-wave-a; same --texture-wave-shift contract, opposite direction)."
       }
     }
   },
@@ -3180,6 +3250,57 @@
         }
       ],
       "purpose": "Typesets one monetary amount as three separately-styled parts — the currency symbol, the figure, and a trailing period or unit — so money reads the same everywhere in the product instead of being a formatted string each screen spells its own way. The suffix carries the code typeface (`text-label-code-*`), which keeps the unit visually subordinate to the figure and aligns the whole set with the way the system typesets metered values. The size ladder is the house one (`small` / `medium` / `large`) and each step is a different reading distance: `small` is an amount inside a table row or a list cell, `medium` an amount stated as a fact on a card, `large` the headline figure of a pricing card. `large` bottom-aligns the suffix against the figure rather than centring it, because a 56px numeral centred against a 14px unit reads as two unrelated pieces of text."
+    },
+    "illustration": {
+      "import": "@aziontech/webkit/illustration",
+      "target": "./src/components/content/illustration/illustration.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/illustration",
+      "category": "content",
+      "structure": "monolithic",
+      "status": "approved",
+      "props": [
+        {
+          "name": "name",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Name of an official scene in the illustration asset library."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "no",
+          "doc": "Accessible name; empty keeps the illustration decorative and hidden from assistive tech."
+        }
+      ],
+      "purpose": "Renders an **official product illustration** — one of the scenes drawn in the Assets library in Figma and exported as an SVG that ships with this package. `name` selects a scene from a closed registry; there is no way to assemble artwork out of markup, so a page can only render illustrations design has actually signed off, and a scene can never drift between the screens that use it.",
+      "useWhen": [
+        "An empty state, error page, onboarding step, or marketing tile needs a diagrammatic illustration of a product concept (a deploy, a request path, a connected service).",
+        "The same concept appears on more than one screen and must be the same drawing every time.",
+        "The artwork must scale to its container without rasterizing or re-exporting."
+      ],
+      "avoidWhen": [
+        "A single glyph is enough → use an icon from `@aziontech/icons` (`<i class=\"ai ai-…\">`).",
+        "The artwork is a brand mark (a client logo, a framework mark) → those are brand assets, not illustrations.",
+        "The whole component is \"no data here, with a title and an action\" → use `empty-state`, which already owns that layout and may embed an `Illustration`.",
+        "The graphic is a live data visualization → that is a chart, not an illustration.",
+        "The scene you need is not in the registry → it has to be drawn in Figma and exported first. Do not approximate it in markup."
+      ],
+      "related": [
+        "empty-state` — the surrounding layout (illustration + title + description + actions); reach for it first and put an `Illustration` inside it.",
+        "flow` — a real interactive node/edge diagram driven by data; `Illustration` is decorative and static by comparison.",
+        "skeleton` — the loading placeholder; an illustration is never a loading state.",
+        "svg/azion/*` — drawn brand marks, for artwork that is not part of the illustration library."
+      ],
+      "bestPractices": [
+        "Leave the illustration decorative (no `ariaLabel`) unless it carries information the surrounding copy does not. A decorative illustration is hidden from assistive tech, which keeps screen readers out of a graphic that adds nothing.",
+        "Size the illustration from the call site with a class. The root is `w-full` at the canvas aspect ratio, so a narrower column simply gets a smaller scene.",
+        "Pick the scene that draws the claim next to it, not the one whose filename matches the page title.",
+        "To add a scene, export the frame from the Figma assets library at 592×300, drop the `.svg` into `src/assets/illustrations/`, and register it. Never hand-draw one.",
+        "Leave `<Illustration />` unnamed where a scene is still being drawn: the placeholder frame reserves the space and reads as unfinished on the screen, which is louder than a gap nobody notices."
+      ]
     },
     "kbd": {
       "import": "@aziontech/webkit/kbd",
