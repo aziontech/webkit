@@ -315,18 +315,6 @@ module.exports = {
             "lineHeight": "var(--text-heading-sm-line-height)"
           }
         ],
-        "heading-xs": [
-          "var(--text-heading-xs-font-size)",
-          {
-            "lineHeight": "var(--text-heading-xs-line-height)"
-          }
-        ],
-        "heading-xxs": [
-          "var(--text-heading-xxs-font-size)",
-          {
-            "lineHeight": "var(--text-heading-xxs-line-height)"
-          }
-        ],
         "label-lg": [
           "var(--text-label-lg-font-size)",
           {
@@ -370,20 +358,6 @@ module.exports = {
           "var(--text-body-xs-font-size)",
           {
             "lineHeight": "var(--text-body-xs-line-height)"
-          }
-        ],
-        "tag-sm": [
-          "var(--text-tag-sm-font-size)",
-          {
-            "lineHeight": "var(--text-tag-sm-line-height)",
-            "fontWeight": "var(--text-tag-sm-font-weight)"
-          }
-        ],
-        "tag-md": [
-          "var(--text-tag-md-font-size)",
-          {
-            "lineHeight": "var(--text-tag-md-line-height)",
-            "fontWeight": "var(--text-tag-md-font-weight)"
           }
         ],
         "body-xxs": [

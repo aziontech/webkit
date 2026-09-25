@@ -47,7 +47,6 @@
     [
       "@semantic-release/exec",
       {
-        "prepareCmd": "vue-tsc --declaration --emitDeclarationOnly",
         "publishCmd": "npm publish --provenance --access public"
       }
     ],

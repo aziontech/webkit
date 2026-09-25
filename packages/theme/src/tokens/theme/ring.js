@@ -2,10 +2,10 @@ import { tokenRef } from '../../scripts/refs.js';
 
 export const ring = {
   light: {
-    'ring-color': tokenRef('theme.surfaces.surface-600'),
+    'ring-color': tokenRef('theme.surfaces.surface-950'),
   },
   dark: {
-    'ring-color': tokenRef('theme.surfaces.surface-700'),
+    'ring-color': tokenRef('theme.surfaces.surface-0'),
   },
 };
 

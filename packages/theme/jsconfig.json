@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "target": "es2020",
+    "module": "esnext",
+    "lib": ["esnext"],
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "allowJs": true,
+    "outDir": "./dist",
+    "rootDir": ".",
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["./*"],
+      "@primitives/*": ["primitives/*"],
+      "@semantic/*": ["semantic/*"],
+      "@build/*": ["scripts/*"]
+    },
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true
+  },
+  "include": ["**/*.js", "**/*.ts", "**/*.mjs", "**/*.json"],
+  "exclude": ["node_modules", "dist", "build"]
+}
