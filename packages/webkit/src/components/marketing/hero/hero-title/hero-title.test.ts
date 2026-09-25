@@ -2,13 +2,13 @@ import { composeStories } from '@storybook/vue3'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/content/hero-title/HeroTitle.stories'
-import { expectNoA11yViolations } from '../../../test/axe'
+import * as stories from '../../../../../../../apps/storybook/src/stories/components/marketing/hero-title/HeroTitle.stories'
+import { expectNoA11yViolations } from '../../../../test/axe'
 import HeroTitle from './hero-title.vue'
 
 const { Default, Highlight, Centered, WithActions } = composeStories(stories)
 
-const TESTID = 'content-hero-title'
+const TESTID = 'marketing-hero-title'
 
 const props = { title: 'Run it everywhere.' }
 
