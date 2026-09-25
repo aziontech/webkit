@@ -4,9 +4,9 @@ category: marketing
 structure: monolithic
 status: approved
 spec_version: 2
-checksum: 4a06b0d5f153161c880d0304505ba84312947c957b6c2c2cd4b3b4bebc08bae6
+checksum: a0c3c5d5be2a14dc6e3b8cd2c223d42244bed59586039343fcd9031869801f32
 created: 2026-09-22
-last_updated: 2026-09-23
+last_updated: 2026-09-25
 ---
 
 # Accordion Gallery — Component Spec
