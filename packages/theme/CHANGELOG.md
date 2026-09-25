@@ -1,3 +1,11 @@
+## [2.7.2](https://github.com/aziontech/webkit/compare/@aziontech/theme@2.7.1...@aziontech/theme@2.7.2) (2026-09-25)
+
+
+### Bug Fixes
+
+* **theme:** restore theme to @aziontech/theme@2.6.0 ([#1022](https://github.com/aziontech/webkit/issues/1022)) ([3882556](https://github.com/aziontech/webkit/commit/3882556539000cd660ad891700cf4fa5746141ae))
+* **webkit:** stop lazy dropdown with filter from requesting pages beyond count ([#1021](https://github.com/aziontech/webkit/issues/1021)) ([ee61705](https://github.com/aziontech/webkit/commit/ee6170542846065e6136b3db11304d874d083ffe))
+
 ## [2.7.1](https://github.com/aziontech/webkit/compare/@aziontech/theme@2.7.0...@aziontech/theme@2.7.1) (2026-09-25)
 
 
