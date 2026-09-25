@@ -1,3 +1,10 @@
+## [3.9.1](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.9.0...@aziontech/webkit@3.9.1) (2026-09-25)
+
+### Bug Fixes
+
+- **theme:** restore theme to @aziontech/theme@2.0.4 ([6f4dcf5](https://github.com/aziontech/webkit/commit/6f4dcf5c27c006911a4009f8742ad5c6300f846e))
+- **webkit:** restore webkit to @aziontech/webkit@3.0.6 ([1ca1846](https://github.com/aziontech/webkit/commit/1ca18462382786016192b18778b066626befc339))
+
 ## [3.9.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.8.0...@aziontech/webkit@3.9.0) (2026-06-18)
 
 ### Features
