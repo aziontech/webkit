@@ -11324,6 +11324,63 @@
       "target": "./src/vite/index.js",
       "kind": "other",
       "treeShakeableImport": "@aziontech/webkit/vite"
+    },
+    "texture-material": {
+      "import": "@aziontech/webkit/texture-material",
+      "target": "./src/components/marketing/texture-material/texture-material.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/texture-material",
+      "category": "marketing",
+      "structure": "monolithic",
+      "status": "approved",
+      "props": [
+        {
+          "name": "kind",
+          "type": "'dots' | 'grid' | 'lines' | 'dither' | 'pixelate' | 'none'",
+          "default": "'dots'",
+          "required": "false",
+          "doc": "Which texture to paint; `none` renders the layer with no texture at all."
+        },
+        {
+          "name": "size",
+          "type": "'small' | 'medium' | 'large'",
+          "default": "'medium'",
+          "required": "false",
+          "doc": "Pitch of the tiling — how far apart the cells sit."
+        },
+        {
+          "name": "fade",
+          "type": "'none' | 'top' | 'bottom' | 'edges' | 'vignette'",
+          "default": "'none'",
+          "required": "false",
+          "doc": "Fades the layer out along an axis so it meets content without a hard edge."
+        }
+      ],
+      "purpose": "The one decorative surface every band in the system is painted on: a full-bleed, non-interactive layer that tiles a texture behind whatever sits above it. It is a material, not a container — it takes no content and claims no space, so a band composes it into its own backdrop slot and keeps ownership of its layout.",
+      "useWhen": [
+        "In a band's `background` slot (`hero`), where the opening band needs the site's own lattice under its copy.",
+        "Behind a panel, dropzone or slide that would read as empty at a flat fill.",
+        "Anywhere a surface should look like a technical drawing ground without shipping an image."
+      ],
+      "avoidWhen": [
+        "To draw the rules between real content cells → use `frame-box`, whose rules are structural.",
+        "For the ruled divider between sections → use `section-gap`, which composes this layer's `lines` kind and owns that treatment.",
+        "For a meaningful image or diagram → use `illustration`.",
+        "As a wrapper around content. The layer is absolutely positioned and paints only itself; content is a sibling above it, inside the positioned ancestor."
+      ],
+      "related": [
+        "hero` — the band whose `background` slot this is composed into.",
+        "frame-box` — structural rules and corner marks, not decoration.",
+        "section-gap` — the hatched rhythm band between sections.",
+        "hero` — the marketing band that paints this texture behind its own copy."
+      ],
+      "bestPractices": [
+        "Give the layer a positioned ancestor (`relative`) that also clips it; it fills that box and nothing else.",
+        "Keep the texture behind copy, never over it. `dots` is the quiet default; `lines` is quieter still and reads as ruled paper; `dither` and `pixelate` are loud enough to need their ink dropped or their dense end steered away from the words.",
+        "Do not stack two layers at different pitches — that reads as a moiré, not as a texture.",
+        "Quiet a texture with `--texture-ink` rather than with `opacity`, so the ground keeps showing through at full strength.",
+        "Leave it out when the band already sits inside a `frame-box`; rules plus texture is usually one layer too many."
+      ]
     }
   }
 }
