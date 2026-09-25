@@ -1,3 +1,18 @@
+## [2.7.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@2.6.0...@aziontech/theme@2.7.0) (2026-09-25)
+
+
+### Features
+
+* add Label input primitive ([b6ae7ff](https://github.com/aziontech/webkit/commit/b6ae7ff67ff87ae7683b94cc365e044a219d1a6a))
+
+
+### Bug Fixes
+
+* adjust documenation ([c7850b0](https://github.com/aziontech/webkit/commit/c7850b08c9517c67a06bd27bfdb825aab9a64a2f))
+* **theme:** restore theme to @aziontech/theme@2.0.4 ([6f4dcf5](https://github.com/aziontech/webkit/commit/6f4dcf5c27c006911a4009f8742ad5c6300f846e))
+* unblock ci on stylelint, vue-tsc and audit ([cfd1f50](https://github.com/aziontech/webkit/commit/cfd1f503ece0a170306a6bc02a4f7189acea57d5))
+* **webkit:** restore webkit to @aziontech/webkit@3.0.6 ([1ca1846](https://github.com/aziontech/webkit/commit/1ca18462382786016192b18778b066626befc339))
+
 ## [2.6.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@2.5.0...@aziontech/theme@2.6.0) (2026-06-17)
 
 
