@@ -9930,6 +9930,162 @@
       "parent": "sidebar",
       "treeShakeableImport": "@aziontech/webkit/sidebar-footer"
     },
+    "column-navigation": {
+      "import": "@aziontech/webkit/column-navigation",
+      "target": "./src/components/marketing/column-navigation/index.ts",
+      "kind": "component",
+      "compoundRoot": true,
+      "treeShakeableImport": "@aziontech/webkit/column-navigation-root",
+      "subcomponents": [
+        "@aziontech/webkit/column-navigation-column",
+        "@aziontech/webkit/column-navigation-item"
+      ],
+      "category": "marketing",
+      "structure": "composition",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name for the navigation landmark; a page carrying more than one needs each of them named."
+        },
+        {
+          "name": "columns",
+          "type": "ColumnNavigationColumns",
+          "default": "4",
+          "required": "false",
+          "doc": "How many columns the directory fans out to at the large breakpoint."
+        },
+        {
+          "name": "mobileColumns",
+          "type": "ColumnNavigationMobileColumns",
+          "default": "1",
+          "required": "false",
+          "doc": "How many columns the directory holds below the small breakpoint."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The columns, composed as `ColumnNavigation.Column` elements in reading order."
+        }
+      ],
+      "purpose": "A directory of destinations laid out in columns on one set of shared hairlines: each column carries an overline heading over a rule, then its rows — a framed glyph, the destination's name, and one line of what it is. It is the page-level navigation band a marketing page closes a section with, so a reader who got that far can leave for anything the platform holds without going back to the bar.",
+      "useWhen": [
+        "As the \"everything on the platform\" band of a product, solutions or pricing page, under a `section-title` and inside the page's frame.",
+        "When a set of destinations is grouped and the group's name carries as much as the destinations under it.",
+        "When each destination needs a glyph and one line of what it is, not just a label.",
+        "When the same directory appears on several pages and has to read identically on every one."
+      ],
+      "avoidWhen": [
+        "For the header's mega-menu → use `navigation-menu`, which owns the trigger, the panel, and the open/closed state this block deliberately has none of.",
+        "For a set of claims rather than destinations → use `card-grid` with `feature-card`, or `bento-grid` when the claims are unequal.",
+        "For the site-wide link directory at the foot of the page → use `footer`, which already lays its columns out.",
+        "For a trail back up the current hierarchy → use `breadcrumb`.",
+        "For the headings of the page currently being read → use `doc-on-this-page`."
+      ],
+      "related": [
+        "card-grid` — the equal-cell grid whose `divider` register draws its rules the same way; reach for it when the cells are cards rather than columns of links.",
+        "bento-grid` — unequal cells on the same shared rules.",
+        "navigation-menu` — the same anatomy inside an overlay, with a trigger and a panel.",
+        "footer` — the other place a directory of links is laid out in columns.",
+        "section-module` / `frame-box` — the frame this block is normally dropped into."
+      ],
+      "bestPractices": [
+        "Name the block with `ariaLabel`. It is a `nav` landmark, and a page carrying more than one needs every one of them named.",
+        "Let the grid draw the rules: a column paints the page canvas and the 1px gaps between columns are the hairlines, so a border added inside a column doubles them.",
+        "Keep the column count and the number of groups in step — four groups in a three-column block wrap the fourth onto a row of its own, beside two tracks of bare canvas.",
+        "Give every row in a column a `description`, or give none of them one; a single row without its line reads as a mistake rather than as brevity.",
+        "Leave `href` empty for a destination that does not exist yet. The row still renders and still reads, and it does not answer the pointer or take focus.",
+        "Inside a framed page column, set the surrounding `frame-box` to `flush` so the column's rules stay one hairline each."
+      ]
+    },
+    "column-navigation-root": {
+      "import": "@aziontech/webkit/column-navigation-root",
+      "target": "./src/components/marketing/column-navigation/column-navigation.vue",
+      "kind": "root",
+      "rootOf": "column-navigation",
+      "treeShakeableImport": "@aziontech/webkit/column-navigation-root",
+      "category": "marketing",
+      "structure": "composition",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name for the navigation landmark; a page carrying more than one needs each of them named."
+        },
+        {
+          "name": "columns",
+          "type": "ColumnNavigationColumns",
+          "default": "4",
+          "required": "false",
+          "doc": "How many columns the directory fans out to at the large breakpoint."
+        },
+        {
+          "name": "mobileColumns",
+          "type": "ColumnNavigationMobileColumns",
+          "default": "1",
+          "required": "false",
+          "doc": "How many columns the directory holds below the small breakpoint."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The columns, composed as `ColumnNavigation.Column` elements in reading order."
+        }
+      ],
+      "purpose": "A directory of destinations laid out in columns on one set of shared hairlines: each column carries an overline heading over a rule, then its rows — a framed glyph, the destination's name, and one line of what it is. It is the page-level navigation band a marketing page closes a section with, so a reader who got that far can leave for anything the platform holds without going back to the bar.",
+      "useWhen": [
+        "As the \"everything on the platform\" band of a product, solutions or pricing page, under a `section-title` and inside the page's frame.",
+        "When a set of destinations is grouped and the group's name carries as much as the destinations under it.",
+        "When each destination needs a glyph and one line of what it is, not just a label.",
+        "When the same directory appears on several pages and has to read identically on every one."
+      ],
+      "avoidWhen": [
+        "For the header's mega-menu → use `navigation-menu`, which owns the trigger, the panel, and the open/closed state this block deliberately has none of.",
+        "For a set of claims rather than destinations → use `card-grid` with `feature-card`, or `bento-grid` when the claims are unequal.",
+        "For the site-wide link directory at the foot of the page → use `footer`, which already lays its columns out.",
+        "For a trail back up the current hierarchy → use `breadcrumb`.",
+        "For the headings of the page currently being read → use `doc-on-this-page`."
+      ],
+      "related": [
+        "card-grid` — the equal-cell grid whose `divider` register draws its rules the same way; reach for it when the cells are cards rather than columns of links.",
+        "bento-grid` — unequal cells on the same shared rules.",
+        "navigation-menu` — the same anatomy inside an overlay, with a trigger and a panel.",
+        "footer` — the other place a directory of links is laid out in columns.",
+        "section-module` / `frame-box` — the frame this block is normally dropped into."
+      ],
+      "bestPractices": [
+        "Name the block with `ariaLabel`. It is a `nav` landmark, and a page carrying more than one needs every one of them named.",
+        "Let the grid draw the rules: a column paints the page canvas and the 1px gaps between columns are the hairlines, so a border added inside a column doubles them.",
+        "Keep the column count and the number of groups in step — four groups in a three-column block wrap the fourth onto a row of its own, beside two tracks of bare canvas.",
+        "Give every row in a column a `description`, or give none of them one; a single row without its line reads as a mistake rather than as brevity.",
+        "Leave `href` empty for a destination that does not exist yet. The row still renders and still reads, and it does not answer the pointer or take focus.",
+        "Inside a framed page column, set the surrounding `frame-box` to `flush` so the column's rules stay one hairline each."
+      ]
+    },
+    "column-navigation-column": {
+      "import": "@aziontech/webkit/column-navigation-column",
+      "target": "./src/components/marketing/column-navigation/column-navigation-column/column-navigation-column.vue",
+      "kind": "subcomponent",
+      "parent": "column-navigation",
+      "treeShakeableImport": "@aziontech/webkit/column-navigation-column"
+    },
+    "column-navigation-item": {
+      "import": "@aziontech/webkit/column-navigation-item",
+      "target": "./src/components/marketing/column-navigation/column-navigation-item/column-navigation-item.vue",
+      "kind": "subcomponent",
+      "parent": "column-navigation",
+      "treeShakeableImport": "@aziontech/webkit/column-navigation-item"
+    },
     "breadcrumb": {
       "import": "@aziontech/webkit/breadcrumb",
       "target": "./src/components/navigation/breadcrumb/index.js",
