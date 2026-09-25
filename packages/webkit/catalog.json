@@ -2564,6 +2564,84 @@
       ],
       "purpose": "The Azion brand logo, rendered as an inline SVG lockup. A single `kind` prop selects the lockup: `default` (the AZION wordmark) for standard surfaces, `reduced` (the \"A\" glyph) for compact headers and tight spaces, and `extended` (the AZION wordmark with the \"move to the edge technologies®\" tagline) for marketing-oriented layouts. It consolidates the loose `@aziontech/webkit/svg/azion/*` assets — which remain individually importable — behind one component."
     },
+    "brand-carousel": {
+      "import": "@aziontech/webkit/brand-carousel",
+      "target": "./src/components/marketing/brand-carousel/brand-carousel.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/brand-carousel",
+      "category": "marketing",
+      "structure": "monolithic",
+      "status": "approved",
+      "props": [
+        {
+          "name": "kind",
+          "type": "'plain' | 'band'",
+          "default": "'plain'",
+          "required": "false",
+          "doc": "Whether the strip paints its own ground; `band` fills it with the page canvas so a textured hero cannot show through the marks, and the floor still reads continuous with the band above it."
+        },
+        {
+          "name": "marks",
+          "type": "string[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "Registry names of the marks rendered in the row, in order; an unregistered name renders as its own typographic wordmark so the row stays complete."
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Overline above the row, stating the claim the marks make."
+        },
+        {
+          "name": "size",
+          "type": "'small' | 'medium'",
+          "default": "'medium'",
+          "required": "false",
+          "doc": "Mark scale; `medium` is the marketing band and climbs 32/40/48 px by device class, `small` is a flat 24 px for a column."
+        },
+        {
+          "name": "duration",
+          "type": "number",
+          "default": "0",
+          "required": "false",
+          "doc": "Seconds for one full pass; left at `0` it is derived from the number of marks so every strip moves at one speed."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name for the row of marks, announced instead of an unnamed list."
+        }
+      ],
+      "purpose": "An endlessly looping row of brand marks — the trust strip that names the companies running on the platform, and the stack strip that names the frameworks and clouds a workload already uses. The marks come from the package's own registry and are drawn in one ink, so a strip reads as a list rather than as a dozen competing palettes.",
+      "useWhen": [
+        "Under a hero, to name the companies a product already serves (\"Trusted by mission-critical workloads\").",
+        "To state compatibility as a list of framework, cloud and tooling marks (\"Your Stack, Your Way\").",
+        "Whenever the set of marks is longer than the row that holds it and no single mark has to be read."
+      ],
+      "avoidWhen": [
+        "When every mark must be seen → use `logo-wall`, which wraps into a grid and never moves.",
+        "When the reader chooses how far to go through browsable content → use `carousel`, which is user-driven and never advances on its own.",
+        "For a mark a reader must act on, such as a partner directory → the strip is decorative motion, so put linked marks in a `logo-wall`.",
+        "For one mark in its own right (a header lockup, a client story card) → use `brand`."
+      ],
+      "related": [
+        "logo-wall` — the static, wrapping grid of consumer-supplied marks; reach for the strip only when the wall would be too long.",
+        "carousel` — the user-driven snap scroller; this one moves on its own and holds no essential content.",
+        "brand` — the Azion lockup, for the product's own mark rather than a third party's.",
+        "overline` — renders the `label` above the row."
+      ],
+      "bestPractices": [
+        "Name marks from the registry rather than passing artwork: the registry is what keeps one company's mark identical on every surface, and a name with no entry still renders as its own wordmark so a strip is never incomplete.",
+        "Let `duration` derive itself. The component holds speed constant rather than duration, so an eleven-mark strip and a thirty-mark strip advance at the same rate; pass a number only to slow one deliberately.",
+        "Keep `label` to the claim the row makes, not to a heading — the strip sits under a hero, and a second heading competes with the one above it.",
+        "Use `size=\"small\"` only where the strip is the quietest thing on the page, such as the floor of a sign-in column; `medium` is the marketing band and carries its own responsive ladder.",
+        "Never put a call to action, a price or anything else a reader needs inside a strip. It scrolls away, and under `prefers-reduced-motion` it becomes a wrapped grid instead."
+      ]
+    },
     "accordion": {
       "import": "@aziontech/webkit/accordion",
       "target": "./src/components/content/accordion/index.ts",
