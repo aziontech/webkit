@@ -4,9 +4,9 @@ category: documentation
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 7e90c3628d3dc025410ca84b8fb6168e19dc75fc420629af3584bd405d696d93
+checksum: f1d5312457c3fc6efe885b1eec38934f5f01fe9458b0adeb15219924c31b3232
 created: 2026-08-22
-last_updated: 2026-08-22
+last_updated: 2026-09-25
 ---
 
 # DocCard — Component Spec

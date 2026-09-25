@@ -4,9 +4,9 @@ category: documentation
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 94d518a2e5fa943e0eca8998f466f8c5cbb6360ca6fa95d35a2a7828c9e812de
+checksum: 796605c993f1cc0665f090cc5b78b4570d2c55b700593b3948c0823481390c69
 created: 2026-08-22
-last_updated: 2026-08-22
+last_updated: 2026-09-25
 ---
 
 # DocSteps — Component Spec
