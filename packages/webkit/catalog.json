@@ -9930,6 +9930,99 @@
       "parent": "sidebar",
       "treeShakeableImport": "@aziontech/webkit/sidebar-footer"
     },
+    "client-kpi-quote": {
+      "import": "@aziontech/webkit/client-kpi-quote",
+      "target": "./src/components/marketing/client-kpi-quote/client-kpi-quote.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/client-kpi-quote",
+      "category": "marketing",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "client",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Registry name of the client's brand mark, as `brand-carousel` names one; a name the registry does not carry falls back to the typographic wordmark."
+        },
+        {
+          "name": "clientName",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "The client's name in prose — the mark's accessible name, and the wordmark drawn when the registry has no artwork; falls back to the registry's own label for `client`."
+        },
+        {
+          "name": "kpi",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "The result itself — the figure or short phrase the claim leads with, set in the default ink."
+        },
+        {
+          "name": "text",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "The rest of the claim, set muted after the `kpi` and read as one sentence with it."
+        },
+        {
+          "name": "href",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "When set, the whole cell renders as an anchor link to this URL and takes hover and focus states; the `actions` slot is then not rendered, since a link cannot nest another."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name of a linked cell, replacing the claim read as the link text; use it to state the destination, since a cell that is its own link shows no link label."
+        }
+      ],
+      "slots": [
+        {
+          "name": "mark",
+          "scope": "—",
+          "notes": "The client's mark; replaces the registry artwork, for a page that owns the file."
+        },
+        {
+          "name": "actions",
+          "scope": "—",
+          "notes": "A trailing control under the claim, floored so a row of cells aligns on it. Not rendered when `href` makes the cell itself the link."
+        }
+      ],
+      "purpose": "One cell of customer proof: the client's mark, the result that client got, and the sentence stating it. It is how a marketing page signs a number — the figure leads the claim in the default ink, the rest of the line runs muted behind it, and the mark above says whose workload it came from.",
+      "useWhen": [
+        "To state one customer's measured result on a marketing page, signed with that customer's mark.",
+        "As the cell of a success-story or proof grid — one per client, inside a `card-grid`.",
+        "Wherever a figure needs an owner: the mark is the attribution a bare number cannot carry."
+      ],
+      "avoidWhen": [
+        "For the platform's own figures, with no client behind them → use `big-numbers`.",
+        "For something a customer said → use `quote`, which owns the blockquote and the attribution.",
+        "For a wall or a strip of customer marks with no claim attached → use `logo-wall` or `brand-carousel`.",
+        "For a product capability stated as a benefit → use `feature-card`."
+      ],
+      "related": [
+        "big-numbers` — the same proof band unsigned: the platform's figures rather than one client's.",
+        "quote` — a customer's words; this component is a customer's result.",
+        "brand-carousel` — the mark registry this component names; a strip states the client list, a cell states one client's outcome.",
+        "card-grid` — the hairline grid a row of these cells sits in; its `gap-px` seams are the rules between them."
+      ],
+      "bestPractices": [
+        "Lead with the result, not with the client: the mark already says who, so `kpi` is the first thing read.",
+        "Keep `kpi` to two or three words — a figure and its direction (`86% faster`, `4M+ threats`, `90% lower`).",
+        "Never invent a figure to fill the lead. A client whose published story states no number leads with its own words (`Automated security`) and the cell still reads as proof.",
+        "Write `text` as the continuation of `kpi`: the two are set in one paragraph and read as one sentence.",
+        "The cell draws no frame of its own — the rule and the corner marks belong to the `card-grid` or `frame-box` the page assembles it into.",
+        "Prefer `href` over a link in `actions`: the whole cell becomes the target, so a grid of stories is one click each and nothing has to be aimed at.",
+        "Give every linked cell an `ariaLabel` that names the destination (`Dafiti success story: 86% faster load times…`). Without a visible link label, the claim alone never says where the cell goes.",
+        "Reach for `actions` only on an unlinked cell — a cell that is its own link cannot nest a second one, and the slot is dropped."
+      ]
+    },
     "breadcrumb": {
       "import": "@aziontech/webkit/breadcrumb",
       "target": "./src/components/navigation/breadcrumb/index.js",
