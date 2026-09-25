@@ -9930,6 +9930,166 @@
       "parent": "sidebar",
       "treeShakeableImport": "@aziontech/webkit/sidebar-footer"
     },
+    "bento-grid": {
+      "import": "@aziontech/webkit/bento-grid",
+      "target": "./src/components/marketing/bento-grid/index.ts",
+      "kind": "component",
+      "compoundRoot": true,
+      "treeShakeableImport": "@aziontech/webkit/bento-grid-root",
+      "subcomponents": [
+        "@aziontech/webkit/bento-grid-cell"
+      ],
+      "category": "marketing",
+      "structure": "composition",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name for the grid, when the surrounding section does not already name it."
+        },
+        {
+          "name": "columns",
+          "type": "BentoGridColumns",
+          "default": "2",
+          "required": "false",
+          "doc": "How many columns the mosaic lays out from the medium breakpoint up."
+        },
+        {
+          "name": "mobileColumns",
+          "type": "BentoGridMobileColumns",
+          "default": "1",
+          "required": "false",
+          "doc": "How many columns the mosaic holds below the medium breakpoint, where every cell claims one of them."
+        },
+        {
+          "name": "flush",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "The surrounding frame already draws the grid's outer rules: the grid drops its own top and left ones and lays its right and bottom ones onto the frame's, so a framed column keeps one hairline per edge."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The grid's cells, composed as `BentoGrid.Cell` elements in reading order."
+        }
+      ],
+      "purpose": "A mosaic of unequal cells on one set of shared rules: each cell claims a number of columns and rows, and the rules between them are drawn once so the whole block reads as a single framed surface. It is the layout a marketing page uses when several claims deserve different amounts of room — the alternative to a row of identical tiles.",
+      "useWhen": [
+        "When a set of claims is genuinely unequal and one or two deserve more room than the rest.",
+        "As the framed body of a product or platform section, under a `section-title`.",
+        "For a logo wall, a client-story band, or any set where a few members carry a headline and the rest carry only a mark.",
+        "Whenever the cells hold composed content — copy, media, a control — rather than one repeated shape."
+      ],
+      "avoidWhen": [
+        "When every claim carries the same weight → use `feature-card` in a plain grid the page owns.",
+        "For a row of measured figures → use `big-numbers`, which already draws this grid for numbers.",
+        "For a single copy-and-media pairing → use `media-split`.",
+        "For a list of questions → use `faq`."
+      ],
+      "related": [
+        "card-grid` — the equal-cell grid with no spans, in the gap or divider register.",
+        "feature-card` — the equal-weight tile, laid out by the page rather than by a grid component.",
+        "big-numbers` — the same collapsed-rule grid, specialised for figures.",
+        "media-split` — the two-column band when there is one claim, not several.",
+        "frame-box` — the frame each cell is drawn with."
+      ],
+      "bestPractices": [
+        "Size the mosaic so the cells fill the rectangle: count the tracks (`columns` × rows) and check the spans add up, or the grid ends on a gap of bare canvas.",
+        "Keep cells in reading order — the grid auto-places in DOM order, so that order is what a screen reader and a keyboard follow, and it is what puts a cell in the track you meant.",
+        "Compose real elements inside a cell rather than passing a config array; the cell is a slot, and that is the point of it.",
+        "Let the grid draw the rules. Do not add borders inside a cell, or the shared edges double.",
+        "Give a cell `kind=\"none\"` + `padded=\"false\"` when its own content paints the cell — a media layer, a brand fill, or a link that must be the whole tile.",
+        "Inside a framed page column, set `flush` so the column's rules stay one hairline each."
+      ]
+    },
+    "bento-grid-root": {
+      "import": "@aziontech/webkit/bento-grid-root",
+      "target": "./src/components/marketing/bento-grid/bento-grid.vue",
+      "kind": "root",
+      "rootOf": "bento-grid",
+      "treeShakeableImport": "@aziontech/webkit/bento-grid-root",
+      "category": "marketing",
+      "structure": "composition",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name for the grid, when the surrounding section does not already name it."
+        },
+        {
+          "name": "columns",
+          "type": "BentoGridColumns",
+          "default": "2",
+          "required": "false",
+          "doc": "How many columns the mosaic lays out from the medium breakpoint up."
+        },
+        {
+          "name": "mobileColumns",
+          "type": "BentoGridMobileColumns",
+          "default": "1",
+          "required": "false",
+          "doc": "How many columns the mosaic holds below the medium breakpoint, where every cell claims one of them."
+        },
+        {
+          "name": "flush",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "The surrounding frame already draws the grid's outer rules: the grid drops its own top and left ones and lays its right and bottom ones onto the frame's, so a framed column keeps one hairline per edge."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The grid's cells, composed as `BentoGrid.Cell` elements in reading order."
+        }
+      ],
+      "purpose": "A mosaic of unequal cells on one set of shared rules: each cell claims a number of columns and rows, and the rules between them are drawn once so the whole block reads as a single framed surface. It is the layout a marketing page uses when several claims deserve different amounts of room — the alternative to a row of identical tiles.",
+      "useWhen": [
+        "When a set of claims is genuinely unequal and one or two deserve more room than the rest.",
+        "As the framed body of a product or platform section, under a `section-title`.",
+        "For a logo wall, a client-story band, or any set where a few members carry a headline and the rest carry only a mark.",
+        "Whenever the cells hold composed content — copy, media, a control — rather than one repeated shape."
+      ],
+      "avoidWhen": [
+        "When every claim carries the same weight → use `feature-card` in a plain grid the page owns.",
+        "For a row of measured figures → use `big-numbers`, which already draws this grid for numbers.",
+        "For a single copy-and-media pairing → use `media-split`.",
+        "For a list of questions → use `faq`."
+      ],
+      "related": [
+        "card-grid` — the equal-cell grid with no spans, in the gap or divider register.",
+        "feature-card` — the equal-weight tile, laid out by the page rather than by a grid component.",
+        "big-numbers` — the same collapsed-rule grid, specialised for figures.",
+        "media-split` — the two-column band when there is one claim, not several.",
+        "frame-box` — the frame each cell is drawn with."
+      ],
+      "bestPractices": [
+        "Size the mosaic so the cells fill the rectangle: count the tracks (`columns` × rows) and check the spans add up, or the grid ends on a gap of bare canvas.",
+        "Keep cells in reading order — the grid auto-places in DOM order, so that order is what a screen reader and a keyboard follow, and it is what puts a cell in the track you meant.",
+        "Compose real elements inside a cell rather than passing a config array; the cell is a slot, and that is the point of it.",
+        "Let the grid draw the rules. Do not add borders inside a cell, or the shared edges double.",
+        "Give a cell `kind=\"none\"` + `padded=\"false\"` when its own content paints the cell — a media layer, a brand fill, or a link that must be the whole tile.",
+        "Inside a framed page column, set `flush` so the column's rules stay one hairline each."
+      ]
+    },
+    "bento-grid-cell": {
+      "import": "@aziontech/webkit/bento-grid-cell",
+      "target": "./src/components/marketing/bento-grid/bento-grid-cell/bento-grid-cell.vue",
+      "kind": "subcomponent",
+      "parent": "bento-grid",
+      "treeShakeableImport": "@aziontech/webkit/bento-grid-cell"
+    },
     "breadcrumb": {
       "import": "@aziontech/webkit/breadcrumb",
       "target": "./src/components/navigation/breadcrumb/index.js",
