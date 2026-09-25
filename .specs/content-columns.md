@@ -4,9 +4,9 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 2
-checksum: 4164a7ac1a16b8ed89832e54017508c7a06e2153282c7fd2bc959adbb17d0640
+checksum: ad0e33278aa3adc108d03d744ddac337a3d96d14f159c93ebd69eac75f3f34f0
 created: 2026-09-22
-last_updated: 2026-09-23
+last_updated: 2026-09-25
 ---
 
 # Content Columns — Component Spec
