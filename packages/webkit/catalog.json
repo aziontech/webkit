@@ -9930,6 +9930,61 @@
       "parent": "sidebar",
       "treeShakeableImport": "@aziontech/webkit/sidebar-footer"
     },
+    "quote-carousel": {
+      "import": "@aziontech/webkit/quote-carousel",
+      "target": "./src/components/marketing/quote-carousel/quote-carousel.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/quote-carousel",
+      "category": "marketing",
+      "structure": "monolithic",
+      "status": "approved",
+      "props": [
+        {
+          "name": "items",
+          "type": "QuoteCarouselItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The testimonials rendered as cards, in order; each item is `{ text, name?, jobTitle?, photo?, mark? }` — the quotation, who said it, the rest of the attribution, their likeness and the registry name of the company's mark."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name for the scrollable row of testimonials, announced before its contents."
+        }
+      ],
+      "purpose": "A band of customer testimonials laid out as one scrollable row of flush cards. It is the wall form of `quote`: the same quotation, attribution and company mark, repeated across a track that snaps card by card and fades at both ends, so a page can carry more proof than the row is wide. The cards sit edge to edge with no gutter — each draws its own hairline and the next one's overlaps it, so the row reads as one ruled strip rather than a set of floating tiles. The fade at either end is what says the strip continues past the band's edge.",
+      "useWhen": [
+        "When a page has more testimonials than fit in one row and the reader chooses how far to go.",
+        "As the proof band under a section headline, where a grid of quotes would run down the page instead of across it.",
+        "When every quote carries equal weight — the track gives no card more room than its neighbours.",
+        "For a row of analyst recognitions, where the source is a firm rather than a person: leave `name` out and the mark leads the card alone."
+      ],
+      "avoidWhen": [
+        "For a single testimonial → use `quote` directly; a track of one has nothing to scroll.",
+        "For the one quotation a page features above the others → use `quote` in its `highlight` register.",
+        "For a row of company marks with no quotation → use `brand-carousel` (moving) or `logo-wall` (static).",
+        "For a set of quotes the reader must read → lay them out as a `card-grid`; anything past the first card in a track can be missed."
+      ],
+      "related": [
+        "quote` — the single testimonial this band repeats; the `inline` register is what each card draws.",
+        "carousel` — the scrollable track underneath, with the snap points, the step controls and the keyboard behaviour.",
+        "brand-carousel` — the same clients without their words, moving on their own.",
+        "logo-wall` — the static wall of marks, when a quotation is not the point.",
+        "section-title` — the headline composed above the band; this component carries no heading of its own."
+      ],
+      "bestPractices": [
+        "Keep each `text` to one or two sentences. Cards in a track are read at a glance, and a paragraph turns a scannable strip into a wall.",
+        "Give a person's quote a `name`. It is the attribution's lead and the source of the initials the card draws when there is no `photo`.",
+        "Leave `name` out when the source is an institution — an analyst firm, a publication. The card then draws no likeness, the mark leads it, and `jobTitle` carries the report or article the claim comes from. Name the firm in that line as well, because the mark is decorative and a screen reader never reaches it.",
+        "Name the company with `mark`, using a registry name rather than a URL, so the mark inherits the card's ink and reads on both themes. A name the registry does not carry is written as its own wordmark, which keeps the card complete while the artwork lands.",
+        "Always pass `ariaLabel`. A scroll region with no name tells a screen-reader user nothing about what they are about to move through.",
+        "Compose the headline above the band with `section-title`, unframed, so the band owns only the strip.",
+        "Keep the band full width. The row is designed to run past the reader's view — inset it and the fade loses the thing it is signalling.",
+        "The cards carry no gutter by design: the band sets `--carousel-gap` to zero on the track so each card's hairline meets its neighbour's, and every card pulls a pixel left so the two rules land as one."
+      ]
+    },
     "breadcrumb": {
       "import": "@aziontech/webkit/breadcrumb",
       "target": "./src/components/navigation/breadcrumb/index.js",
