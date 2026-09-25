@@ -11324,6 +11324,77 @@
       "target": "./src/vite/index.js",
       "kind": "other",
       "treeShakeableImport": "@aziontech/webkit/vite"
+    },
+    "topic": {
+      "import": "@aziontech/webkit/topic",
+      "target": "./src/components/marketing/topic/topic.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/topic",
+      "category": "marketing",
+      "structure": "monolithic",
+      "status": "approved",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "default": "—",
+          "required": "true",
+          "doc": "The claim, rendered as the topic's heading."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "One sentence explaining the claim; overridden by the default slot."
+        },
+        {
+          "name": "icon",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Icon class for the glyph above the copy."
+        },
+        {
+          "name": "headingLevel",
+          "type": "TopicHeadingLevel",
+          "default": "2",
+          "required": "false",
+          "doc": "Level of the heading element. Keep `2` when the band has no headline of its own; drop it to `3` when a `section-title` has already opened the section, so the document outline stays in order."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "Description body; replaces the `description` prop when provided."
+        }
+      ],
+      "purpose": "One claim stated in three parts: a glyph, a short headline, and a sentence that explains it. It is the repeated unit of a marketing claim grid — the content of a cell, not the cell itself, so it carries no surface, no padding and no rules of its own and reads the same dropped into a `card-grid` cell, a `bento-grid` cell, or a column the page lays out by hand.",
+      "useWhen": [
+        "For each cell of a \"what you get\" band: a row of equal claims under a section's headline.",
+        "Inside `CardGrid.Cell` or `BentoGrid.Cell`, where the grid owns the frame and the fill and the topic owns only the copy.",
+        "Whenever a claim is glyph-led and one sentence long, repeated three to six times across a band."
+      ],
+      "avoidWhen": [
+        "For a self-contained tile with its own border, radius and surface — or one that is a link → use `feature-card`.",
+        "For a claim that carries an eyebrow, a media region or an action → use `feature-card` or `media-split`.",
+        "For the headline that opens the whole section → use `section-title`.",
+        "For a measured figure with a unit → use `big-numbers`.",
+        "For a console list row with media and actions → use `item`."
+      ],
+      "related": [
+        "feature-card` — the same three parts drawn as a self-contained bordered tile, optionally a link; reach for it when the tile stands alone rather than in a ruled grid.",
+        "card-grid` — the equal-cell grid a topic is usually repeated in; its `frame` register gives each topic a real `frame-box` cell.",
+        "bento-grid` — the unequal-cell mosaic, when one claim deserves more room than the rest.",
+        "section-title` — the headline that opens the band a row of topics sits in."
+      ],
+      "bestPractices": [
+        "Let the cell own the surface. A topic paints no background and adds no padding, so put it inside `CardGrid.Cell` / `BentoGrid.Cell` (or a padded cell the page owns) rather than giving the topic a fill.",
+        "Keep `headingLevel` in step with the page outline: `2` when the band has no headline of its own and these are the first sub-headings under the `h1`, `3` when a `section-title` has already opened the section. The level is the outline; the size is fixed at `heading-xs`.",
+        "Keep the description to one sentence. The glyph carries the recognition, the headline carries the claim, and a second sentence turns a scannable grid into a wall of prose.",
+        "Drop `icon` for a band whose claims are not glyph-led rather than reaching for a decorative glyph that says nothing."
+      ]
     }
   }
 }

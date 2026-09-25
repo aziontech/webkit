@@ -346,6 +346,7 @@
     "./use-focus-trap": "./src/composables/use-focus-trap/index.js",
     "./use-heading-nav": "./src/composables/use-heading-nav/index.ts",
     "./use-placement": "./src/composables/use-placement/index.ts",
-    "./vite": "./src/vite/index.js"
+    "./vite": "./src/vite/index.js",
+    "./topic": "./src/components/marketing/topic/topic.vue"
   }
 }
