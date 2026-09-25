@@ -11324,6 +11324,69 @@
       "target": "./src/vite/index.js",
       "kind": "other",
       "treeShakeableImport": "@aziontech/webkit/vite"
+    },
+    "section-container": {
+      "import": "@aziontech/webkit/section-container",
+      "target": "./src/components/marketing/section-container/section-container.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/section-container",
+      "category": "marketing",
+      "structure": "monolithic",
+      "status": "approved",
+      "props": [
+        {
+          "name": "maxWidth",
+          "type": "SectionContainerWidth",
+          "default": "'7xl'",
+          "required": "false",
+          "doc": "Width the column is capped at; `site` is the marketing measure every band of that page frame shares."
+        },
+        {
+          "name": "bordered",
+          "type": "boolean",
+          "default": "true",
+          "required": "false",
+          "doc": "Draw the column's two vertical rules."
+        },
+        {
+          "name": "padded",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "Pad the column itself. Leave off for a stack of modules that own their padding."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The bands stacked inside the column, in reading order."
+        }
+      ],
+      "purpose": "The framed content column: a centered, width-capped block carrying only its two vertical rules, which every section below a hero stacks inside. It is the middle layer of the page language — the hero above it owns the page's top rule, the footer below it owns the bottom, and this column owns the sides — so a page's frame is drawn once, by three components, instead of by every band that happens to need an edge.",
+      "useWhen": [
+        "As the container for every band below a `hero`, on a marketing, hub or documentation page.",
+        "Whenever a stack of `section-module` bricks needs one continuous frame around it.",
+        "For a plain prose column that should sit on the page's own measure, with `padded`."
+      ],
+      "avoidWhen": [
+        "For the full-bleed band at the top of a page → use `hero`, which is the hero rule.",
+        "For one band inside the column → use `section-module`, the brick this container stacks.",
+        "For a hairline grid of cells → use `card-grid`, which draws its rules as gaps.",
+        "For a bordered box around arbitrary content → use `frame-box`."
+      ],
+      "related": [
+        "hero` — the full-bleed opening band above this column; its `border-b` is this column's top edge.",
+        "section-module` — the brick stacked inside this column.",
+        "card-grid` — the hairline cell grid a module's body holds.",
+        "frame-box` — the registration frame a module wraps its body in."
+      ],
+      "bestPractices": [
+        "Leave `padded` off for a stack of modules: each brick owns its own padding, and column padding would double it and pull the bricks off the frame.",
+        "Match `maxWidth` to the `hero` above it so the band's content and the column's content open on one vertical.",
+        "Turn `bordered` off only for a column nested inside another frame, where the outer frame already draws the sides."
+      ],
+      "styleSeam": true
     }
   }
 }
