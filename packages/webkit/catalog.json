@@ -11324,6 +11324,102 @@
       "target": "./src/vite/index.js",
       "kind": "other",
       "treeShakeableImport": "@aziontech/webkit/vite"
+    },
+    "media-tile": {
+      "import": "@aziontech/webkit/media-tile",
+      "target": "./src/components/marketing/media-tile/media-tile.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/media-tile",
+      "category": "marketing",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "kind",
+          "type": "MediaTileKind",
+          "default": "'frame'",
+          "required": "false",
+          "doc": "Register of the tile: `frame` draws the page's frame around the media alone, `plain` draws no rules and makes the tile itself the cell a `divider` grid separates."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "—",
+          "required": "true",
+          "doc": "The caption's run-in lead, naming what the panel above it shows."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "The sentence continuing the caption after the lead; overridden by the default slot."
+        },
+        {
+          "name": "src",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "URL of the tile's media image; ignored when the `media` slot is filled."
+        },
+        {
+          "name": "alt",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Alternative text describing what the image shows; empty keeps it decorative."
+        },
+        {
+          "name": "padded",
+          "type": "boolean",
+          "default": "true",
+          "required": "false",
+          "doc": "Inset the media — inside the frame in the `frame` register, from the cell's edges in `plain`. Turn it off for an asset that should run to the cell's edges; the caption keeps its own inset either way."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The caption body after the lead; replaces the `description` prop."
+        },
+        {
+          "name": "media",
+          "scope": "—",
+          "notes": "The scene the frame holds; replaces the `src` image."
+        }
+      ],
+      "purpose": "One cell of a media band: a scene above, and under it a run-in caption whose lead names what the scene shows and whose sentence continues on the same line, so a row of tiles reads as one paragraph of claims under one row of panels. It comes in two registers. `frame` draws the page's frame language around the media alone — never around the copy — which is what lets the captions sit on the page column with no rules between them. `plain` draws no rules at all: the tile is itself the cell, filled and inset, for a `card-grid` in its `divider` register where the grid's own hairlines separate the columns.",
+      "useWhen": [
+        "For a row of three or four scenes that each need one sentence of explanation, laid out by `card-grid` in its `gap` register (`frame`) or its `divider` register (`plain`).",
+        "When the claim is a label for the picture above it (`AI workloads.`, `Middleware.`) rather than a section heading in its own right.",
+        "When the media should carry the page's frame language — hairline rules and corner marks — and the copy should not (`frame`).",
+        "For a full-bleed band whose columns are separated by the grid's own hairlines, where a frame per cell would double every rule (`plain`)."
+      ],
+      "avoidWhen": [
+        "When the claim deserves a heading and a place in the document outline → use `topic`, which leads with a real `h2`/`h3`.",
+        "When the tile is a padded surface card with a glyph, an eyebrow and a link → use `feature-card`.",
+        "For one scene beside a block of copy across the full band → use `media-split`.",
+        "For a mosaic whose cells claim different numbers of columns → use `bento-grid`.",
+        "For the grid that lays the tiles out, or a framed cell that wraps media *and* copy together → use `card-grid`."
+      ],
+      "related": [
+        "card-grid` — the grid that lays a row of tiles out; use its `gap` register, whose gutters keep every tile's frame its own.",
+        "topic` — the heading-led claim, for a band whose items belong in the outline.",
+        "feature-card` — the padded surface card, for a claim that carries a glyph and a link.",
+        "media-split` — one scene beside one block of copy, across the whole band.",
+        "frame-box` — the frame this tile draws around its media.",
+        "illustration` — the scene the frame usually holds; unnamed, it renders the placeholder that reserves a tile's space."
+      ],
+      "bestPractices": [
+        "End the lead with a full stop. It runs into the sentence that follows it, so the stop is what separates them — the component adds no punctuation of its own.",
+        "Keep the lead to one or two words. It is a label for the panel above it, and a long lead swallows the first line of the sentence.",
+        "Give every tile in a band a caption of roughly the same length. The frames are equalised by the grid row; ragged captions are what make a band look uneven.",
+        "Reach for `padded` off when the media is an exported asset that already carries its own air, or when it should run to the cell's edges so a list or a table reads as continuing past them. A composed scene wants the inset.",
+        "Pair the register with the grid. `frame` belongs in `card-grid`'s `gap` register, whose gutters keep every frame its own; the `divider` register would rule the captions as well as the panels. `plain` belongs in the `divider` register, where the grid draws every rule and the tile fills its own background so the gap has something to show through.",
+        "Do not put a `frame` tile in a `divider` grid. The grid's hairline and the frame's rule then sit a padding apart, and the band reads as two competing grids.",
+        "Leave the media slot empty while a scene is still being drawn: the frame holds the tile's floor height, so the band keeps its rhythm instead of collapsing."
+      ]
     }
   }
 }
