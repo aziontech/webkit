@@ -47,7 +47,7 @@
     [
       "@semantic-release/exec",
       {
-        "publishCmd": "npm publish --provenance --access public"
+        "publishCmd": "npm publish --provenance --access public --tag legacy-v3"
       }
     ],
     [
