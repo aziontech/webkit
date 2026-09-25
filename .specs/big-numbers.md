@@ -4,9 +4,9 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 2
-checksum: 182e1ccce24783cf9dc3a9f87f5c8e04cd84332e55ca7c8a01ceed4f279abf40
+checksum: b06798c158c116494644e5df488eb7b731b450a6d9540047c70321d5c866a814
 created: 2026-09-22
-last_updated: 2026-09-23
+last_updated: 2026-09-25
 ---
 
 # Big Numbers — Component Spec
