@@ -9930,6 +9930,57 @@
       "parent": "sidebar",
       "treeShakeableImport": "@aziontech/webkit/sidebar-footer"
     },
+    "big-numbers": {
+      "import": "@aziontech/webkit/big-numbers",
+      "target": "./src/components/marketing/big-numbers/big-numbers.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/big-numbers",
+      "category": "marketing",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "items",
+          "type": "BigNumberItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The figures rendered as cells, in order; each item is `{ value, label, prefix?, suffix? }` where `value` is the figure, `label` its caption, and `prefix` / `suffix` the qualifier and unit set beside it."
+        },
+        {
+          "name": "size",
+          "type": "'small' | 'medium' | 'large'",
+          "default": "'medium'",
+          "required": "false",
+          "doc": "Size token; picks the big-number scale the figures are set at."
+        }
+      ],
+      "purpose": "A band of headline figures — throughput, uptime, points of presence — set in the display face at big-number scale, each in its own cell of a hairline `card-grid` with a short caption underneath. It is the proof band of a marketing page: the one place a page states its numbers, between a `section-title` and the section body.",
+      "useWhen": [
+        "To state a handful of measured facts (2–6) as the proof band of a marketing or landing page.",
+        "Whenever the figure itself is the message and the caption only names what was measured.",
+        "Under a `section-title`, as the opening evidence of a section."
+      ],
+      "avoidWhen": [
+        "For a single monetary amount → use `currency`, which owns the amount ladder and its symbol placement.",
+        "For a plan's headline price inside a pricing card → use `card-pricing`.",
+        "For tabular or comparable figures a reader will scan row by row → use `table`.",
+        "For a label-and-value pair at body scale inside a card or list → use `item`."
+      ],
+      "related": [
+        "section-title` — the framed section header this band usually sits under.",
+        "card-grid` — the hairline grid the cells sit in; its `gap-px` seams are the rules between them.",
+        "currency` — a monetary amount at three reading distances, with symbol handling.",
+        "card-pricing` — a plan card, where the headline figure is a price."
+      ],
+      "bestPractices": [
+        "The band draws no frame of its own: the rule and the corner marks belong to the `section-module` or `frame-box` that the page assembles it into, so a band placed in a framed column never lands a second hairline on the column's own.",
+        "Keep the band to 2–6 figures: it reads as a row, and past six the cells stop being scannable.",
+        "Put the unit in `suffix` and the qualifier in `prefix`, so the figure itself stays the largest, highest-contrast thing in the cell.",
+        "Keep `label` to a few words — it is set at overline scale and is a caption, not a sentence.",
+        "Round the figures. A band is a claim, not a readout; `99.99%` belongs here, `99.9873%` does not.",
+        "Leave `size` at `medium` unless the band is the page's hero statement (`large`) or sits inside a denser section (`small`)."
+      ]
+    },
     "breadcrumb": {
       "import": "@aziontech/webkit/breadcrumb",
       "target": "./src/components/navigation/breadcrumb/index.js",
