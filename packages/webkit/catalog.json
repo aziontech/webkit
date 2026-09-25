@@ -10594,6 +10594,118 @@
       ],
       "purpose": "Helps users move between views or sections. Migrated from the existing implementation at `packages/webkit/src/components/webkit/navigation/navigation-menu/`."
     },
+    "stepper": {
+      "import": "@aziontech/webkit/stepper",
+      "target": "./src/components/navigation/stepper/index.ts",
+      "kind": "component",
+      "compoundRoot": true,
+      "treeShakeableImport": "@aziontech/webkit/stepper-root",
+      "subcomponents": [
+        "@aziontech/webkit/stepper-step"
+      ],
+      "category": "navigation",
+      "structure": "composition",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "'Steps'",
+          "required": "false",
+          "doc": "Accessible name for the step rail."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The `Stepper.Step` children, in the order they are numbered."
+        }
+      ],
+      "purpose": "A vertical rail that names the steps of one task, says which step the reader is on, and carries the progress between them on the line that joins the dots. It is the left column of a multi-step surface — a create wizard, a guided setup — while the content of the current step fills the column beside it. It is **vertical only**, by design. The rail runs the full height of the surface so the connector between two dots is the thing that measures progress; a horizontal variant would be a different component with a different job (a compact progress ribbon), not a prop on this one.",
+      "useWhen": [
+        "A task is split into ordered steps and only one is on screen at a time (a create wizard, a guided setup).",
+        "The reader needs to see how many steps are left and go back to one they already answered.",
+        "A step can fail validation, or sit in flight, and the rail has to say so without leaving the step."
+      ],
+      "avoidWhen": [
+        "Numbered instructions inside a document, where every step is read at once → use `doc-steps` + `doc-step`.",
+        "Progress with no discrete, nameable steps (a percentage, an upload) → use `progress-bar`.",
+        "Switching between peer views that are not ordered and have no completion → use `tab-view`.",
+        "A provisioning log that reports what a server is doing, rather than what the reader must answer → use `flow`."
+      ],
+      "related": [
+        "doc-steps` — the same numbered-dot shape for prose; static, never current, never navigable.",
+        "tab-view` — peer views with no order and no completion.",
+        "progress-bar` — continuous progress with no named steps.",
+        "flow` — a machine's stages, reported rather than navigated."
+      ],
+      "bestPractices": [
+        "Give every step a title that names the decision (`Where it runs`), not the control (`Select`).",
+        "Keep steps reachable backwards and closed forwards: mark a step `disabled` until the one before it is answered.",
+        "Set `state=\"error\"` only after the reader tried to advance — a step is not wrong while it is unanswered.",
+        "One `Stepper` per surface. Two rails on one screen ask the reader which task they are in.",
+        "The rail is navigation, not the form. Put the fields in the content column, never inside a step's slot."
+      ]
+    },
+    "stepper-root": {
+      "import": "@aziontech/webkit/stepper-root",
+      "target": "./src/components/navigation/stepper/stepper.vue",
+      "kind": "root",
+      "rootOf": "stepper",
+      "treeShakeableImport": "@aziontech/webkit/stepper-root",
+      "category": "navigation",
+      "structure": "composition",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "'Steps'",
+          "required": "false",
+          "doc": "Accessible name for the step rail."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The `Stepper.Step` children, in the order they are numbered."
+        }
+      ],
+      "purpose": "A vertical rail that names the steps of one task, says which step the reader is on, and carries the progress between them on the line that joins the dots. It is the left column of a multi-step surface — a create wizard, a guided setup — while the content of the current step fills the column beside it. It is **vertical only**, by design. The rail runs the full height of the surface so the connector between two dots is the thing that measures progress; a horizontal variant would be a different component with a different job (a compact progress ribbon), not a prop on this one.",
+      "useWhen": [
+        "A task is split into ordered steps and only one is on screen at a time (a create wizard, a guided setup).",
+        "The reader needs to see how many steps are left and go back to one they already answered.",
+        "A step can fail validation, or sit in flight, and the rail has to say so without leaving the step."
+      ],
+      "avoidWhen": [
+        "Numbered instructions inside a document, where every step is read at once → use `doc-steps` + `doc-step`.",
+        "Progress with no discrete, nameable steps (a percentage, an upload) → use `progress-bar`.",
+        "Switching between peer views that are not ordered and have no completion → use `tab-view`.",
+        "A provisioning log that reports what a server is doing, rather than what the reader must answer → use `flow`."
+      ],
+      "related": [
+        "doc-steps` — the same numbered-dot shape for prose; static, never current, never navigable.",
+        "tab-view` — peer views with no order and no completion.",
+        "progress-bar` — continuous progress with no named steps.",
+        "flow` — a machine's stages, reported rather than navigated."
+      ],
+      "bestPractices": [
+        "Give every step a title that names the decision (`Where it runs`), not the control (`Select`).",
+        "Keep steps reachable backwards and closed forwards: mark a step `disabled` until the one before it is answered.",
+        "Set `state=\"error\"` only after the reader tried to advance — a step is not wrong while it is unanswered.",
+        "One `Stepper` per surface. Two rails on one screen ask the reader which task they are in.",
+        "The rail is navigation, not the form. Put the fields in the content column, never inside a step's slot."
+      ]
+    },
+    "stepper-step": {
+      "import": "@aziontech/webkit/stepper-step",
+      "target": "./src/components/navigation/stepper/stepper-step/stepper-step.vue",
+      "kind": "subcomponent",
+      "parent": "stepper",
+      "treeShakeableImport": "@aziontech/webkit/stepper-step"
+    },
     "tooltip": {
       "import": "@aziontech/webkit/tooltip",
       "target": "./src/components/overlay/tooltip/tooltip.vue",
