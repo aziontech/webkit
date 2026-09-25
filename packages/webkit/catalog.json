@@ -9930,6 +9930,77 @@
       "parent": "sidebar",
       "treeShakeableImport": "@aziontech/webkit/sidebar-footer"
     },
+    "content-columns": {
+      "import": "@aziontech/webkit/content-columns",
+      "target": "./src/components/marketing/content-columns/content-columns.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/content-columns",
+      "category": "marketing",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "items",
+          "type": "ContentColumnItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The columns, in reading order; each item is `{ title, description }`."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the band, rendered as its `h2` above the columns."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Supporting sentence under the headline."
+        },
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Short uppercase overline rendered above the headline."
+        },
+        {
+          "name": "columns",
+          "type": "2 | 3",
+          "default": "3",
+          "required": "false",
+          "doc": "How many columns the grid holds from the medium breakpoint up; below it the columns stack."
+        }
+      ],
+      "purpose": "A titled band whose body is two or three columns of short copy, drawn in one hairline `card-grid` so the columns read as a single surface. It is the plainest way to state a few parallel points under one section header.",
+      "useWhen": [
+        "For two or three parallel points that carry equal weight under one section heading.",
+        "When each point is a short title and a sentence — no icon, no media, no link.",
+        "As the body of a product or platform section that needs structure but not tiles."
+      ],
+      "avoidWhen": [
+        "When the points are unequal and one deserves the full width → use `bento-grid`.",
+        "When each point needs an icon, a link or its own surface → use `feature-card` in a grid the page owns.",
+        "For measured figures → use `big-numbers`.",
+        "For one point paired with a picture → use `media-split`."
+      ],
+      "related": [
+        "bento-grid` — the same collapsed-rule grid with unequal, slot-composed cells.",
+        "feature-card` — the richer unit when a point needs an icon or a destination.",
+        "section-title` — the header this band renders above its columns.",
+        "big-numbers` — the numeric sibling of this grid."
+      ],
+      "bestPractices": [
+        "The band draws no frame of its own: the rule and the corner marks belong to the `section-module` or `frame-box` that the page assembles it into, so a band placed in a framed column never lands a second hairline on the column's own.",
+        "Keep every column to a title and one or two sentences; the grid stretches to the tallest, so one long column pads the rest.",
+        "Use three columns for three peers and two for a contrast; four points want `bento-grid` or a card grid instead.",
+        "Write the column titles in parallel grammar — they are read across, not down.",
+        "Leave `title` out when the band sits directly under another header; two headings in a row is one too many."
+      ]
+    },
     "breadcrumb": {
       "import": "@aziontech/webkit/breadcrumb",
       "target": "./src/components/navigation/breadcrumb/index.js",
