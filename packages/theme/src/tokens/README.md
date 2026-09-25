@@ -310,6 +310,23 @@ Only useful if you can't precompile and import `globals.css` — production usag
 
 2. Rebuild. `build-tokens.mjs` emits the base var in `:root`, per-breakpoint `@media` overrides, **and** a matching `.gap-2xl { gap: var(--gap-2xl) }` utility.
 
+For typography bundles that need hover/focus without Tailwind utilities, add an optional `states` object (not flattened to CSS vars). Example — inline prose links in `texts.data.js`:
+
+```js
+'text-link': {
+  fontSize: 'inherit',
+  lineHeight: 'inherit',
+  color: 'var(--text-link)',
+  transition: 'color 150ms ease-out',
+  states: {
+    hover: { color: 'var(--text-link-hover)', textDecoration: 'underline' },
+    'focus-visible': { outline: '2px solid var(--ring-color)', outlineOffset: '2px' },
+  },
+},
+```
+
+Bundles with `fontSize: 'inherit'` are omitted from the Tailwind `fontSize` preset (avoids clashing with `textColor.link` → class `text-link`). Interaction styles are emitted under `@layer components` as `.text-link:hover`, etc.
+
 ---
 
 ## 🔗 Token references (`tokenRef`)

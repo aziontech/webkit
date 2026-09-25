@@ -15,7 +15,7 @@ export const background = {
     'bg-disabled': tokenRef('theme.surfaces.surface-200')
   },
   dark: {
-    'bg-canvas': tokenRef('theme.surfaces.surface-950'),
+    'bg-canvas': tokenRef('primitives.base.black'),
     'bg-surface': tokenRef('theme.surfaces.surface-950'),
     'bg-surface-raised': tokenRef('theme.surfaces.surface-900'),
     'bg-mask': tokenRef('primitives.alpha.white.50'),

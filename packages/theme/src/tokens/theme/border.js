@@ -2,7 +2,7 @@ import { tokenRef } from '../../scripts/refs.js';
 
 export const border = {
   light: {
-    'border-default': tokenRef('primitives.alpha.black.200'),
+    'border-default': tokenRef('primitives.alpha.black.100'),
     'border-muted': tokenRef('primitives.alpha.black.100'),
     'border-strong': tokenRef('primitives.base.black'),
     'border-selected': tokenRef('brand.primary.primary-500'),
