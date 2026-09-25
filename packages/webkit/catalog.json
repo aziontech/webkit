@@ -9930,6 +9930,82 @@
       "parent": "sidebar",
       "treeShakeableImport": "@aziontech/webkit/sidebar-footer"
     },
+    "feature-card": {
+      "import": "@aziontech/webkit/feature-card",
+      "target": "./src/components/marketing/feature-card/feature-card.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/feature-card",
+      "category": "marketing",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "default": "—",
+          "required": "true",
+          "doc": "Headline of the tile, rendered as its `h3`."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "One sentence explaining the headline; overridden by the default slot."
+        },
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Short uppercase overline rendered above the headline."
+        },
+        {
+          "name": "icon",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "PrimeIcons class for the glyph above the copy."
+        },
+        {
+          "name": "href",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "When set, the whole tile renders as an anchor link to this URL."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "Description body; replaces the `description` prop when provided."
+        }
+      ],
+      "purpose": "One feature stated as a tile: an optional icon and overline, a short headline, a sentence of explanation, and — when there is somewhere to go — the whole tile as a link. It is the repeated unit of a marketing feature grid, and it is the marketing counterpart of `card-box`, which is a console container with header, content and footer regions.",
+      "useWhen": [
+        "As the repeated unit of a feature, capability or product grid on a marketing page.",
+        "Whenever a short claim needs a name, a sentence and optionally a destination.",
+        "Hand-authored a few at a time in a grid the page owns, so the layout stays the page's decision."
+      ],
+      "avoidWhen": [
+        "For a console surface with header, content and footer regions → use `card-box`.",
+        "For a plan and its price → use `card-pricing`.",
+        "For a documentation link tile → use `doc-card`.",
+        "For a label-and-value row inside a list → use `item`."
+      ],
+      "related": [
+        "card-box` — the console card with slot regions; this is the marketing tile.",
+        "card-pricing` — the same tile shape carrying a plan and a price.",
+        "doc-card` — the documentation equivalent, inside `doc-card-group`."
+      ],
+      "bestPractices": [
+        "Keep `title` to a few words and `description` to one sentence. A tile is a promise, not the proof.",
+        "Give the whole tile an `href` rather than adding a link inside it — a single target is easier to hit and announces once.",
+        "Use `icon` or `eyebrow`, rarely both; two labels above a three-word headline is more furniture than signal.",
+        "Keep every tile in a grid to the same shape. One tile with a long description sets the height of the whole row."
+      ]
+    },
     "breadcrumb": {
       "import": "@aziontech/webkit/breadcrumb",
       "target": "./src/components/navigation/breadcrumb/index.js",
