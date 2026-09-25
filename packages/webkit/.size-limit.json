@@ -36,8 +36,8 @@
   },
   {
     "name": "section-title",
-    "path": "src/components/content/section-title/section-title.vue",
-    "limit": "4 KB"
+    "path": "src/components/marketing/section-title/section-title.vue",
+    "limit": "3 KB"
   },
   {
     "name": "hero-title",

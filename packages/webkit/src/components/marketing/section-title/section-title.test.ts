@@ -2,13 +2,13 @@ import { composeStories } from '@storybook/vue3'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/content/section-title/SectionTitle.stories'
+import * as stories from '../../../../../../apps/storybook/src/stories/components/marketing/section-title/SectionTitle.stories'
 import { expectNoA11yViolations } from '../../../test/axe'
 import SectionTitle from './section-title.vue'
 
 const { Default, Kinds, WithActions } = composeStories(stories)
 
-const TESTID = 'content-section-title'
+const TESTID = 'marketing-section-title'
 
 const props = { title: 'Everything runs at the edge' }
 
@@ -155,6 +155,43 @@ describe('SectionTitle', () => {
         'Start building',
         'Read the docs'
       ])
+    })
+  })
+
+  describe('framed', () => {
+    it('draws its own frame by default', () => {
+      const { getByTestId } = render(SectionTitle, { props: { title: 'Platform' } })
+      const root = getByTestId(TESTID)
+
+      expect(root).toHaveAttribute('data-framed')
+      // the frame resolves to FrameBox, which carries the resolved side list
+      expect(root).toHaveAttribute('data-borders')
+    })
+
+    it('renders as a plain block when framed is false', () => {
+      const { getByTestId } = render(SectionTitle, {
+        props: { title: 'Platform', framed: false }
+      })
+      const root = getByTestId(TESTID)
+
+      expect(root).not.toHaveAttribute('data-framed')
+      expect(root).not.toHaveAttribute('data-borders')
+      expect(root).not.toHaveAttribute('data-marks')
+    })
+
+    it('keeps its copy and its heading level unframed', () => {
+      const { getByRole, getByText } = render(SectionTitle, {
+        props: {
+          title: 'Platform',
+          eyebrow: 'Build',
+          description: 'One sentence.',
+          framed: false
+        }
+      })
+
+      expect(getByRole('heading', { level: 2, name: 'Platform' })).toBeInTheDocument()
+      expect(getByText('Build')).toBeInTheDocument()
+      expect(getByText('One sentence.')).toBeInTheDocument()
     })
   })
 })

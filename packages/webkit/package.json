@@ -132,7 +132,7 @@
     "./card-box": "./src/components/content/card-box/card-box.vue",
     "./card-pricing": "./src/components/content/card-pricing/card-pricing.vue",
     "./hero-title": "./src/components/content/hero-title/hero-title.vue",
-    "./section-title": "./src/components/content/section-title/section-title.vue",
+    "./section-title": "./src/components/marketing/section-title/section-title.vue",
     "./item": "./src/components/content/item/index.ts",
     "./item-root": "./src/components/content/item/item.vue",
     "./item-group": "./src/components/content/item/item-group.vue",

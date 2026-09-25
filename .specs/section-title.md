@@ -1,15 +1,15 @@
 ---
 name: section-title
-category: content
+category: marketing
 structure: monolithic
 status: approved
-spec_version: 2
-checksum: 3a4b15c27d3dda6af9bda55a10bb9e9db13df6865900f9ef805ae97589696e55
+spec_version: 3
+checksum: 5090beab7c8add1bbd4b5109b284e28671723fb8b34b80fa25a2c2d29c4452ee
 figma:
   url: https://www.figma.com/design/QEbHSTFDWfh4VHkBp6NWN3/Azion.com?node-id=7495-24338
   node_id: 7495:24338
 created: 2026-08-11
-last_updated: 2026-08-11
+last_updated: 2026-09-23
 ---
 
 # Section Title — Component Spec
@@ -26,18 +26,20 @@ The framed header row that opens a page section: an optional overline, the secti
 
 ## When NOT to use
 
-- For the page's leading band and its `h1` → use `hero-title` instead.
+- For the page's leading band and its `h1` → use `hero` instead.
 - For the top bar of an application shell → use `global-header` instead.
 - For a plain framed container with arbitrary content → use `frame-box` instead.
 
 ## Related
 
-- `hero-title` — the hero counterpart; renders the page's `h1` at hero scale.
+- `hero` — the opening band; its `Hero.Title` renders the page's `h1` at hero scale.
 - `frame-box` — the frame this component composes.
 - `section-gap` — the empty frame that sets the air before and after a section header; this component holds no vertical air of its own beyond its padding.
 - `overline` — the eyebrow treatment rendered above the headline.
 
 ## Best practices
+
+- Leave `framed` on when the header is a brick of its own in a page column; turn it off when a band composes the header inside a frame it already draws, so the rule and the padding are not drawn twice.
 
 - Keep one `section-title` per section, and let it own the section's `h2` so the page keeps one document outline.
 - Write the eyebrow as one or two words: it is set uppercase and prefixed with `//`, so a sentence in it reads as noise.
@@ -74,6 +76,7 @@ import Button from '@aziontech/webkit/button'
 | `description` | `string` | `''` | false | Supporting sentence under the headline; overridden by the default slot. |
 | `eyebrow` | `string` | `''` | false | Short uppercase overline rendered above the headline. |
 | `kind` | `'centered' \| 'left' \| 'horizontal'` | `'centered'` | false | Layout of the header: `centered` stacks and centers the copy, `left` stacks it at the start edge, `horizontal` sets the headline and its description in two columns. |
+| `framed` | `boolean` | `true` | false | Draw the header's own frame and padding. Turn it off when the header is composed inside a band that already owns both. |
 
 ## Events
 
@@ -90,6 +93,7 @@ import Button from '@aziontech/webkit/button'
 
 - Visual states: `default`
 - `data-kind` mirrors the `kind` prop: `centered` | `left` | `horizontal`
+- `data-framed` present when the header draws its own frame and padding
 
 ## Motion & Animations
 
@@ -120,7 +124,7 @@ _none_
 
 - Visible focus: not applicable to the header itself; controls composed into the `actions` slot keep their own `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` ring.
 - Keyboard map: none of its own — `Tab` reaches only the controls placed in the `actions` slot, in DOM order.
-- ARIA: the headline is a real `h2` (the page's `h1` belongs to `hero-title`), so no `role` or `aria-label` is added; the frame's rules and corner marks stay `aria-hidden="true"`. In `horizontal` the headline precedes its description in DOM order, so the reading order matches the visual one.
+- ARIA: the headline is a real `h2` (the page's `h1` belongs to `Hero.Title`), so no `role` or `aria-label` is added; the frame's rules and corner marks stay `aria-hidden="true"`. In `horizontal` the headline precedes its description in DOM order, so the reading order matches the visual one.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): headline on `var(--text-default)`, description on `var(--text-muted)`, both over the page canvas.
 - `motion-reduce:transition-none motion-reduce:transform-none` — not applicable, the component is static.
 - Touch target ≥40×40 px — the `actions` row stretches its children to full width below `sm`, so slotted buttons keep their own target size.
