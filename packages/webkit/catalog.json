@@ -9930,6 +9930,100 @@
       "parent": "sidebar",
       "treeShakeableImport": "@aziontech/webkit/sidebar-footer"
     },
+    "media-tabs": {
+      "import": "@aziontech/webkit/media-tabs",
+      "target": "./src/components/marketing/media-tabs/media-tabs.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/media-tabs",
+      "category": "marketing",
+      "structure": "monolithic",
+      "status": "approved",
+      "props": [
+        {
+          "name": "items",
+          "type": "MediaTabsItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The tabs, in order; each item is `{ title, description, src, alt }`."
+        },
+        {
+          "name": "selectOn",
+          "type": "'hover' | 'click'",
+          "default": "'hover'",
+          "required": "false",
+          "doc": "What moves the selection as the reader points at a row. A click always selects, on either setting."
+        },
+        {
+          "name": "autoPlay",
+          "type": "boolean",
+          "default": "true",
+          "required": "false",
+          "doc": "Advances to the next tab on a timer; pauses under pointer or focus, stops for good on a click, and never runs under reduced motion."
+        },
+        {
+          "name": "autoPlayInterval",
+          "type": "number",
+          "default": "5000",
+          "required": "false",
+          "doc": "Milliseconds each tab is held before the band advances."
+        },
+        {
+          "name": "showProgress",
+          "type": "boolean",
+          "default": "true",
+          "required": "false",
+          "doc": "Advances a hairline along the active row's bottom edge while the timer runs."
+        },
+        {
+          "name": "size",
+          "type": "'small' | 'medium' | 'large'",
+          "default": "'medium'",
+          "required": "false",
+          "doc": "Height each row is held to, as a multiple of the band's own padding step; copy longer than that grows its row, and the media column is always as tall as the stack."
+        }
+      ],
+      "events": [
+        {
+          "name": "tab-change",
+          "payload": "(event: Event, index: number)",
+          "notes": "The selection moved; `index` is the tab now shown. Fires on a reader's hover or click, not on an autoplay tick."
+        }
+      ],
+      "slots": [
+        {
+          "name": "media",
+          "scope": "{ item: MediaTabsItem, index: number, active: boolean }",
+          "notes": "The tab's media; replaces the image built from `item.src`."
+        }
+      ],
+      "purpose": "A band split in two: a stack of claims on one side, one piece of media on the other, and only the selected claim's media on screen. The selection moves on hover, on click, and on a timer, so the band reads on its own and still answers a reader who takes it over. Its height is its own — each row carries a height the component sets from `size`, and the media column is exactly as tall as the stack — so the band never inherits a height from the section it lands in.",
+      "useWhen": [
+        "For a run of peer claims that share one picture frame — three ways a platform is fast, four things a product does.",
+        "When each claim needs a sentence of its own, not a bullet: the copy is the content and the media illustrates it.",
+        "As a product-page band that rewards watching but does not require it."
+      ],
+      "avoidWhen": [
+        "For a numbered sequence where the order is the argument → use `accordion-gallery`, which is a walkthrough with a progress bar per step.",
+        "For one claim beside one picture → use `media-split`.",
+        "For questions and answers → use `faq`.",
+        "For switching a page's content between peer views the reader navigates → use `tab-view`, which is a real ARIA tab set."
+      ],
+      "related": [
+        "accordion-gallery` — the sequenced sibling: ordered steps with bullet points, each drawn in its own `frame-box`. This band's rows are full-bleed cells divided by hairlines, and its claims are peers.",
+        "media-split` — one claim, one picture, no selection.",
+        "illustration` — the official scene a tab's `media` slot usually holds.",
+        "frame-box` — the registration frame the page wraps the band in; the band draws only its own top and bottom rules and the seam between its columns.",
+        "section-title` — the heading above the band; this component carries no title of its own."
+      ],
+      "bestPractices": [
+        "Write the tabs as peers. A reader arrives mid-rotation, so no row may depend on the row above it.",
+        "Keep a tab's title to one line and its description to two. The row has a fixed height, and copy that overruns it pushes the media column taller than the design.",
+        "Give every tab a medium: the frame holds one at a time and cross-fades within it, so a tab with nothing to show reads as a broken rotation, not as a quiet one.",
+        "Use scenes of the same shape. The frame does not resize between tabs.",
+        "Leave `autoPlay` on for a band a reader is expected to watch. It pauses under the pointer, stops for good on a click, and never starts under reduced motion.",
+        "Pick `size` from the copy, not from the section: `medium` holds a title and two lines, `large` a title and four."
+      ]
+    },
     "breadcrumb": {
       "import": "@aziontech/webkit/breadcrumb",
       "target": "./src/components/navigation/breadcrumb/index.js",
