@@ -1,15 +1,15 @@
 ---
 name: section-gap
-category: layout
+category: marketing
 structure: monolithic
 status: approved
 spec_version: 3
-checksum: 3a29d07981a70d43fb124c6743d21c4bae6585baa1fedd8036cfd4249c16dfb7
+checksum: 949b27f1567156334e24f0125db00ffcb9bfc045436ecabc880799bcf0da6e89
 figma:
   url: https://www.figma.com/design/QEbHSTFDWfh4VHkBp6NWN3/Azion.com?node-id=8869-10008
   node_id: 8869:10008
 created: 2026-08-11
-last_updated: 2026-08-12
+last_updated: 2026-09-24
 ---
 
 # Section Gap — Component Spec
@@ -33,6 +33,7 @@ The empty registration frame that divides two page sections. On a page with no m
 ## Related
 
 - `frame-box` — the frame this component configures; reach for it directly when the gap needs content or different rules.
+- `texture-material` — the layer that paints the ruling, composed here at its `lines` kind.
 - `section-title` — the framed header that usually follows a gap; it owns no vertical air of its own beyond its padding, so the gaps around it are what set the page's rhythm.
 - `divider` — a hairline with no vertical air.
 
@@ -43,6 +44,7 @@ The empty registration frame that divides two page sections. On a page with no m
 - Keep one step per break — stacking two gaps to reach a bigger one draws an extra pair of rules.
 - Let it carry the shared rule: it renders `flush` and `marks="bottom"`, so its top rule and top ticks are subtracted and the section above supplies them instead of doubling them.
 - Reach for `hatch` here rather than on a section header: the gap is the one band with no copy of its own, so the texture gives the break identity without sitting behind a headline.
+- Leave the ruling unmasked. Each line is one solid ink edge to edge and its transparency is the ink's own, so the field reads as ruled page material rather than as a fill that fades out; a vignette on a band this short reads as a smear.
 - Do not wrap it in a padded container; the gap is the padding.
 
 ## Usage
@@ -62,7 +64,7 @@ import SectionGap from '@aziontech/webkit/section-gap'
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | How much vertical air the gap holds, as a multiple of `--spacing-xxl`: `small` is 1× (keeps two related bands close), `medium` 2× (the ordinary break), `large` 3× (opens a new part of the page). The token is responsive, so every step scales with the viewport. |
-| `hatch` | `boolean` | `false` | false | Draw the frame's linear hatch texture in the gap. |
+| `hatch` | `boolean` | `false` | false | Draw the gap's ruled line texture — fine vertical rules at a fixed pitch. |
 
 ## Events
 
@@ -76,7 +78,7 @@ import SectionGap from '@aziontech/webkit/section-gap'
 
 - Visual states: `default`
 - `data-size` mirrors the `size` prop: `small` | `medium` | `large`
-- `data-hatch` present when the hatch texture is drawn
+- `data-hatch` present when the hatch texture is drawn; the texture layer itself is addressable at `marketing-section-gap__hatch`
 
 ## Motion & Animations
 
@@ -88,7 +90,8 @@ _none_
 |---|---|
 | frame rule | `var(--border-default)` |
 | corner mark | `var(--border-default)` |
-| hatch line | `var(--border-default)` |
+| hatch line | `var(--text-default)` at 6%, via `texture-material`'s `lines` kind — mixed down so the step off the canvas is equal in both themes |
+| hatch pitch | 8 px (the `lines` kind at its `medium` step) |
 | height (small) | `var(--spacing-xxl)` — 1× |
 | height (medium) | `var(--spacing-xxl)` — 2× |
 | height (large) | `var(--spacing-xxl)` — 3× |

@@ -2,13 +2,13 @@ import { composeStories } from '@storybook/vue3'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/layout/section-gap/SectionGap.stories'
+import * as stories from '../../../../../../apps/storybook/src/stories/components/marketing/section-gap/SectionGap.stories'
 import { expectNoA11yViolations } from '../../../test/axe'
 import SectionGap from './section-gap.vue'
 
 const { Default, Hatch, Sizes } = composeStories(stories)
 
-const TESTID = 'layout-section-gap'
+const TESTID = 'marketing-section-gap'
 const FRAME_TESTID = 'layout-frame-box'
 
 describe('SectionGap', () => {
