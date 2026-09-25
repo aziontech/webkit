@@ -8,7 +8,7 @@ const IMPORT_WITH_BUTTON = [IMPORT, "import Button from '@aziontech/webkit/butto
 
 /** @type {import('@storybook/vue3').Meta<typeof HeroTitle>} */
 const meta = {
-  title: 'Components/Content/HeroTitle',
+  title: 'Components/Marketing/HeroTitle',
   component: HeroTitle,
   tags: ['autodocs'],
   parameters: {
@@ -176,7 +176,7 @@ export const WithActions = {
       controls: { disable: true },
       description: {
         story:
-          'The `actions` slot owns its own responsive layout: the CTAs stack full-width below `sm` — a hero button is the page’s primary target — and return to a content-width row above it.'
+          'The `actions` slot owns its own responsive layout, and measures its own container rather than the viewport: a content-width row from `20rem` up, wrapping when a pair is too long, and a full-width stack below it — a hero button is the page’s primary target on a 320 px screen.'
       },
       source: { code: toSfc(IMPORT_WITH_BUTTON, WITH_ACTIONS_TEMPLATE) }
     }

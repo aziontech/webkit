@@ -41,7 +41,7 @@
   },
   {
     "name": "hero-title",
-    "path": "src/components/content/hero-title/hero-title.vue",
+    "path": "src/components/marketing/hero/hero-title/hero-title.vue",
     "limit": "2.5 KB"
   },
   {
@@ -133,6 +133,18 @@
     "name": "resizable-panel-root",
     "path": "src/components/layout/resizable-panel/resizable-panel.vue",
     "limit": "3 KB"
+  },
+  {
+    "name": "hero",
+    "path": "src/components/marketing/hero/index.ts",
+    "limit": "4 KB",
+    "entryOnly": true
+  },
+  {
+    "name": "hero-root",
+    "path": "src/components/marketing/hero/hero.vue",
+    "limit": "3 KB",
+    "entryOnly": true
   },
   {
     "name": "illustration",
