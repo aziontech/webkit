@@ -9930,6 +9930,148 @@
       "parent": "sidebar",
       "treeShakeableImport": "@aziontech/webkit/sidebar-footer"
     },
+    "carousel": {
+      "import": "@aziontech/webkit/carousel",
+      "target": "./src/components/marketing/carousel/index.ts",
+      "kind": "component",
+      "compoundRoot": true,
+      "treeShakeableImport": "@aziontech/webkit/carousel-root",
+      "subcomponents": [
+        "@aziontech/webkit/carousel-item",
+        "@aziontech/webkit/carousel-previous",
+        "@aziontech/webkit/carousel-next"
+      ],
+      "category": "marketing",
+      "structure": "composition",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name for the scrollable track, announced before its contents."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The slides, composed as `Carousel.Item` elements in reading order."
+        },
+        {
+          "name": "controls",
+          "scope": "—",
+          "notes": "The step controls, composed as `Carousel.Previous` and `Carousel.Next`; rendered above the track."
+        }
+      ],
+      "purpose": "A horizontally scrollable track of slides with snap points and a pair of step controls. It is built on native scrolling and CSS scroll snap rather than a carousel runtime, so it is draggable, swipeable and keyboard-scrollable by default, and it never moves on its own.",
+      "useWhen": [
+        "When a set of cards, quotes, logos or figures is longer than the row it sits in and the reader chooses how far to go.",
+        "For a peek-and-swipe row on narrow screens where a grid would stack into a very long column.",
+        "Whenever the content is browsable rather than essential — a reader must never have to scroll a carousel to reach something they need."
+      ],
+      "avoidWhen": [
+        "For content the reader must see → lay it out as a grid; anything past the first slide can be missed.",
+        "For a vertical list → use `item` with `ItemGroup`.",
+        "For a framed grid of unequal cells → use `bento-grid`.",
+        "For a set of figures that fits the row → use `big-numbers` or `logo-wall`, which wrap instead of scrolling."
+      ],
+      "related": [
+        "bento-grid` — the framed grid, when everything should be visible at once.",
+        "logo-wall` — a wrapping grid of marks; reach for the carousel only when the wall is too long.",
+        "feature-card` — the usual slide content.",
+        "scroll-area` — the console's styled scroll container; this one owns snap points and step controls."
+      ],
+      "bestPractices": [
+        "Never put essential content in a carousel. A slide past the first is content a reader may never see.",
+        "Size the slides on `Carousel.Item` with your own width classes — the item is deliberately unsized so a page can show one slide on mobile and three on desktop.",
+        "Set `--carousel-gap` on the root to change the space between slides; left alone it is `var(--spacing-md)`. A band whose slides carry their own borders sets it to `0` so the borders meet instead of floating apart.",
+        "Keep a partial slide visible at the trailing edge on narrow screens; a peek is what tells a reader the track scrolls at all.",
+        "The track is dragged with the pointer as well as scrolled. A mouse gets a grab cursor and drags the row directly; touch and pen keep native scrolling and its momentum, which is already better than anything a handler would impose.",
+        "Always name the carousel with `ariaLabel`. \"Customer stories\" tells a screen-reader user what they are about to scroll through; an unnamed scroll region does not.",
+        "The track never advances on its own, and it must not be made to. Auto-advancing content needs a pause control under WCAG 2.2.2 and steals reading time from everyone."
+      ]
+    },
+    "carousel-root": {
+      "import": "@aziontech/webkit/carousel-root",
+      "target": "./src/components/marketing/carousel/carousel.vue",
+      "kind": "root",
+      "rootOf": "carousel",
+      "treeShakeableImport": "@aziontech/webkit/carousel-root",
+      "category": "marketing",
+      "structure": "composition",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name for the scrollable track, announced before its contents."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The slides, composed as `Carousel.Item` elements in reading order."
+        },
+        {
+          "name": "controls",
+          "scope": "—",
+          "notes": "The step controls, composed as `Carousel.Previous` and `Carousel.Next`; rendered above the track."
+        }
+      ],
+      "purpose": "A horizontally scrollable track of slides with snap points and a pair of step controls. It is built on native scrolling and CSS scroll snap rather than a carousel runtime, so it is draggable, swipeable and keyboard-scrollable by default, and it never moves on its own.",
+      "useWhen": [
+        "When a set of cards, quotes, logos or figures is longer than the row it sits in and the reader chooses how far to go.",
+        "For a peek-and-swipe row on narrow screens where a grid would stack into a very long column.",
+        "Whenever the content is browsable rather than essential — a reader must never have to scroll a carousel to reach something they need."
+      ],
+      "avoidWhen": [
+        "For content the reader must see → lay it out as a grid; anything past the first slide can be missed.",
+        "For a vertical list → use `item` with `ItemGroup`.",
+        "For a framed grid of unequal cells → use `bento-grid`.",
+        "For a set of figures that fits the row → use `big-numbers` or `logo-wall`, which wrap instead of scrolling."
+      ],
+      "related": [
+        "bento-grid` — the framed grid, when everything should be visible at once.",
+        "logo-wall` — a wrapping grid of marks; reach for the carousel only when the wall is too long.",
+        "feature-card` — the usual slide content.",
+        "scroll-area` — the console's styled scroll container; this one owns snap points and step controls."
+      ],
+      "bestPractices": [
+        "Never put essential content in a carousel. A slide past the first is content a reader may never see.",
+        "Size the slides on `Carousel.Item` with your own width classes — the item is deliberately unsized so a page can show one slide on mobile and three on desktop.",
+        "Set `--carousel-gap` on the root to change the space between slides; left alone it is `var(--spacing-md)`. A band whose slides carry their own borders sets it to `0` so the borders meet instead of floating apart.",
+        "Keep a partial slide visible at the trailing edge on narrow screens; a peek is what tells a reader the track scrolls at all.",
+        "The track is dragged with the pointer as well as scrolled. A mouse gets a grab cursor and drags the row directly; touch and pen keep native scrolling and its momentum, which is already better than anything a handler would impose.",
+        "Always name the carousel with `ariaLabel`. \"Customer stories\" tells a screen-reader user what they are about to scroll through; an unnamed scroll region does not.",
+        "The track never advances on its own, and it must not be made to. Auto-advancing content needs a pause control under WCAG 2.2.2 and steals reading time from everyone."
+      ]
+    },
+    "carousel-item": {
+      "import": "@aziontech/webkit/carousel-item",
+      "target": "./src/components/marketing/carousel/carousel-item/carousel-item.vue",
+      "kind": "subcomponent",
+      "parent": "carousel",
+      "treeShakeableImport": "@aziontech/webkit/carousel-item"
+    },
+    "carousel-previous": {
+      "import": "@aziontech/webkit/carousel-previous",
+      "target": "./src/components/marketing/carousel/carousel-previous/carousel-previous.vue",
+      "kind": "subcomponent",
+      "parent": "carousel",
+      "treeShakeableImport": "@aziontech/webkit/carousel-previous"
+    },
+    "carousel-next": {
+      "import": "@aziontech/webkit/carousel-next",
+      "target": "./src/components/marketing/carousel/carousel-next/carousel-next.vue",
+      "kind": "subcomponent",
+      "parent": "carousel",
+      "treeShakeableImport": "@aziontech/webkit/carousel-next"
+    },
     "breadcrumb": {
       "import": "@aziontech/webkit/breadcrumb",
       "target": "./src/components/navigation/breadcrumb/index.js",
