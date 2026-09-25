@@ -1,19 +1,17 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue';
-import { playgroundColorTokens } from '../data/colors.js';
-
-const tokens = Array.isArray(playgroundColorTokens) ? playgroundColorTokens : [];
+import { backgroundTokens, textTokens, borderTokens } from '../data/colors.js';
 
 const CATEGORIES = [
-  { key: 'theme', label: 'Theme', filter: (t) => t.category === 'theme' },
-  { key: 'background', label: 'Background', filter: (t) => t.category === 'background' },
-  { key: 'text', label: 'Text', filter: (t) => t.category === 'text' },
-  { key: 'border', label: 'Border', filter: (t) => t.category === 'border' },
+  { key: 'background', label: 'Background', tokens: backgroundTokens, prefix: 'bg' },
+  { key: 'text',       label: 'Text',       tokens: textTokens,       prefix: 'text' },
+  { key: 'border',     label: 'Border',     tokens: borderTokens,     prefix: 'border' },
 ];
 
-const selectedCategory = ref('theme');
-const selectedTokenName = ref('primary');
+const selectedCategory = ref('background');
+const selectedTokenName = ref(backgroundTokens[0].name);
 
+// Detect global theme from Storybook's theme addon (azion-light/azion-dark class)
 const isDark = ref(true);
 let observer = null;
 
@@ -24,41 +22,38 @@ function updateTheme() {
 
 onMounted(() => {
   updateTheme();
+  // Watch for class changes on document body or html element
   observer = new MutationObserver(updateTheme);
   observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
   observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
-
-  const first = tokens.find((t) => t.name === 'primary') ?? tokens[0];
-  if (first) selectedTokenName.value = first.name;
 });
 
 onUnmounted(() => {
   observer?.disconnect();
 });
 
-const activeTokens = computed(() => {
-  const cat = CATEGORIES.find((c) => c.key === selectedCategory.value);
-  return cat ? tokens.filter(cat.filter) : tokens;
-});
+const activeTokens = computed(() =>
+  CATEGORIES.find((c) => c.key === selectedCategory.value)?.tokens ?? []
+);
 
-const selectedToken = computed(
-  () => activeTokens.value.find((t) => t.name === selectedTokenName.value) ?? activeTokens.value[0]
+const selectedToken = computed(() =>
+  activeTokens.value.find((t) => t.name === selectedTokenName.value) ?? activeTokens.value[0]
 );
 
 const currentHex = computed(() =>
   isDark.value ? selectedToken.value?.darkHex : selectedToken.value?.lightHex
 );
 
-const modeLabel = computed(() => (isDark.value ? 'dark' : 'light'));
+const modeLabel = computed(() => isDark.value ? 'dark' : 'light');
 
 const previewStyle = computed(() => {
   const hex = currentHex.value;
   if (!hex) return {};
   const cat = selectedCategory.value;
-  if (cat === 'background' || cat === 'theme') return { backgroundColor: hex };
-  if (cat === 'text') return { color: hex };
-  if (cat === 'border') return { borderColor: hex, borderWidth: '2px', borderStyle: 'solid' };
-  return { backgroundColor: hex };
+  if (cat === 'background') return { backgroundColor: hex };
+  if (cat === 'text')       return { color: hex };
+  if (cat === 'border')     return { borderColor: hex, borderWidth: '2px', borderStyle: 'solid' };
+  return {};
 });
 
 const previewTextStyle = computed(() => {
@@ -79,6 +74,7 @@ function onCategoryChange() {
   selectedTokenName.value = activeTokens.value[0]?.name ?? '';
 }
 
+// Track copied state
 const copiedKey = ref(null);
 let copyTimeout = null;
 
@@ -98,6 +94,7 @@ function isCopied(key) {
 
 <template>
   <div class="flex flex-col gap-6">
+    <!-- Controls ─────────────────────────────────────────────────────────── -->
     <div class="flex gap-5 items-end flex-wrap">
       <div class="flex flex-col gap-1.5">
         <label class="text-[10px] font-semibold uppercase tracking-wider text-muted">Category</label>
@@ -109,15 +106,10 @@ function isCopied(key) {
               'px-3.5 py-1.5 text-xs font-medium cursor-pointer bg-transparent transition-all duration-100',
               selectedCategory === cat.key
                 ? 'bg-primary text-white font-semibold'
-                : 'text-muted border-r border-default last:border-r-0',
+                : 'text-muted border-r border-default last:border-r-0'
             ]"
-            @click="
-              selectedCategory = cat.key;
-              onCategoryChange();
-            "
-          >
-            {{ cat.label }}
-          </button>
+            @click="selectedCategory = cat.key; onCategoryChange()"
+          >{{ cat.label }}</button>
         </div>
       </div>
 
@@ -134,13 +126,17 @@ function isCopied(key) {
       </div>
     </div>
 
+    <!-- Preview ───────────────────────────────────────────────────────────── -->
     <div class="flex gap-5 items-start flex-wrap">
       <div
         class="flex-1 min-w-[220px] min-h-[160px] rounded-[10px] flex items-center justify-center transition-all duration-200"
         :class="selectedCategory !== 'border' ? 'border border-default' : ''"
         :style="previewStyle"
       >
-        <span class="font-code text-[15px] font-semibold" :style="previewTextStyle">
+        <span
+          class="font-code text-[15px] font-semibold"
+          :style="previewTextStyle"
+        >
           {{ selectedToken?.tailwindClass }}
         </span>
       </div>
@@ -153,7 +149,7 @@ function isCopied(key) {
             @click="copyToClipboard(selectedToken?.tailwindClass, 'tw')"
           >
             <code class="font-code text-[11px] border bg-white/10 border-white/15 text-code px-1.5 py-0.5 rounded">{{ selectedToken?.tailwindClass }}</code>
-            <i :class="['pi text-[11px] opacity-0 group-hover:!opacity-50', isCopied('tw') ? 'pi-check text-success' : 'pi-copy']" />
+            <i :class="['pi text-[11px] opacity-0 group-hover:!opacity-50', isCopied('css') ? 'pi-check text-success' : 'pi-copy']" />
           </button>
         </div>
 
@@ -172,7 +168,7 @@ function isCopied(key) {
           <span class="text-[10px] font-semibold uppercase tracking-wider text-muted">Resolved ({{ modeLabel }})</span>
           <span class="flex items-center gap-1.5 flex-wrap">
             <span
-              class="w-3.5 h-3.5 rounded flex-shrink-0 border border-default"
+              class="w-3.5 h-3.5 rounded flex-shrink-0 border border-gray-500/30"
               :style="{ background: currentHex ?? 'transparent' }"
             />
             <code class="font-code text-[11px] border bg-white/10 border-white/15 text-code px-1.5 py-0.5 rounded">{{ currentHex }}</code>
@@ -188,13 +184,13 @@ function isCopied(key) {
           <span class="text-[10px] font-semibold uppercase tracking-wider text-muted">Light → Dark</span>
           <span class="flex items-center gap-1.5 flex-wrap">
             <span
-              class="w-3.5 h-3.5 rounded flex-shrink-0 border border-default"
+              class="w-3.5 h-3.5 rounded flex-shrink-0 border border-gray-500/30"
               :style="{ background: selectedToken?.lightHex ?? 'transparent' }"
             />
             <code class="font-code text-[11px] border bg-white/10 border-white/15 text-code px-1.5 py-0.5 rounded">{{ selectedToken?.lightHex }}</code>
             <span class="opacity-40 text-[11px]">→</span>
             <span
-              class="w-3.5 h-3.5 rounded flex-shrink-0 border border-default"
+              class="w-3.5 h-3.5 rounded flex-shrink-0 border border-gray-500/30"
               :style="{ background: selectedToken?.darkHex ?? 'transparent' }"
             />
             <code class="font-code text-[11px] border bg-white/10 border-white/15 text-code px-1.5 py-0.5 rounded">{{ selectedToken?.darkHex }}</code>

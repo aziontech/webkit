@@ -1,4 +1,4 @@
-import Button from '@aziontech/webkit/button'
+import Button from '@aziontech/webkit/actions/button'
 
 /** @type {import('@storybook/vue3').Meta<typeof Button>} */
 const meta = {
@@ -33,11 +33,11 @@ const meta = {
     },
     kind: {
       control: 'select',
-      options: ['primary', 'secondary', 'outlined', 'text', 'danger'],
+      options: ['primary', 'secondary', 'outlined', 'text'],
       description: 'Visual variant.',
       table: {
         category: 'props',
-        type: { summary: "'primary' | 'secondary' | 'outlined' | 'text' | 'danger'" },
+        type: { summary: "'primary' | 'secondary' | 'outlined' | 'text'" },
         defaultValue: { summary: "'primary'" }
       }
     },
@@ -129,7 +129,6 @@ export const Types = {
         <Button kind="secondary" label="Button" />
         <Button kind="outlined" label="Button" />
         <Button kind="text" label="Button" />
-        <Button kind="danger" label="Button" />
       </div>
     `
   }),
@@ -174,7 +173,6 @@ export const Icon = {
         <Button kind="secondary" label="Button" icon="pi pi-arrow-right" />
         <Button kind="outlined" label="Button" icon="pi pi-arrow-right" />
         <Button kind="text" label="Button" icon="pi pi-arrow-right" />
-        <Button kind="danger" label="Button" icon="pi pi-trash" />
       </div>
     `
   }),

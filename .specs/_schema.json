@@ -24,7 +24,6 @@
       "type": "string",
       "enum": [
         "actions",
-        "code",
         "content",
         "data",
         "feedback",

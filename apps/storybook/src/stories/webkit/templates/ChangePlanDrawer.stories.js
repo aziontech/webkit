@@ -1,4 +1,4 @@
-import Button from '@aziontech/webkit/button'
+import Button from '@aziontech/webkit/actions/button'
 import CardPricing from '@aziontech/webkit/content/card-pricing'
 import Drawer from '@aziontech/webkit/overlay/drawer'
 import DrawerClose from '@aziontech/webkit/overlay/drawer-close'
@@ -9,7 +9,8 @@ import DrawerTitle from '@aziontech/webkit/overlay/drawer-title'
 import DrawerTrigger from '@aziontech/webkit/overlay/drawer-trigger'
 import PanelContent from '@aziontech/webkit/overlay/panel-content'
 import PanelHeader from '@aziontech/webkit/overlay/panel-header'
-import SegmentedButton from '@aziontech/webkit/segmented-button'
+import SegmentedButton from '@aziontech/webkit/actions/segmented-button'
+import { expect, userEvent, within } from '@storybook/test'
 import { ref } from 'vue'
 
 const billingDetailMonthly = 'Billed annually or $25/mo billed monthly.'
@@ -140,7 +141,7 @@ const changePlanTemplate = `
   </Drawer>
 `
 
-const Template = (args) => ({
+const renderChangePlanDrawer = (args) => ({
   components: {
     Drawer,
     DrawerTrigger,
@@ -178,6 +179,7 @@ export default {
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
+    actions: { argTypesRegex: '^on[A-Z].*' },
     a11y: {
       config: {
         rules: [{ id: 'color-contrast', enabled: true }]
@@ -186,44 +188,35 @@ export default {
     docs: {
       description: {
         component:
-          'Change Plan drawer template. Composes Webkit Drawer with CardPricing plans and a billing period toggle.'
+          'Change Plan drawer template from console.azion.com Figma (node 314:31891). Composes Webkit Drawer with CardPricing plans and a billing period toggle.'
       }
     }
   },
-  decorators: [
-    () => ({
-      template: '<div class="flex min-h-screen w-full items-center justify-center"><story /></div>'
-    })
-  ],
   argTypes: {
     defaultOpen: {
       control: 'boolean',
       description: 'Initial open state when uncontrolled',
-      table: { defaultValue: { summary: false }, category: 'props' }
+      table: { defaultValue: { summary: false } }
     },
     closeable: {
       control: 'boolean',
       description: 'When true, Escape and overlay click close the drawer',
-      table: { defaultValue: { summary: true }, category: 'props' }
+      table: { defaultValue: { summary: true } }
     },
     side: {
       control: 'select',
       options: ['left', 'right'],
       description: 'Edge the panel slides from',
-      table: { defaultValue: { summary: 'right' }, category: 'props' }
+      table: { defaultValue: { summary: 'right' } }
     },
     size: {
       control: 'select',
       options: ['small', 'medium', 'large'],
       description:
         'Panel max-width preset (`large` = 1024px). Drawer height is always 100% viewport.',
-      table: { defaultValue: { summary: 'large' }, category: 'props' }
+      table: { defaultValue: { summary: 'large' } }
     },
-    'onUpdate:open': {
-      action: 'update:open',
-      description: 'Emitted when open state changes',
-      table: { category: 'events' }
-    }
+    'update:open': { action: 'update:open' }
   },
   args: {
     defaultOpen: false,
@@ -234,5 +227,38 @@ export default {
 }
 
 export const Default = {
-  render: Template
+  render: renderChangePlanDrawer
 }
+
+export const Open = {
+  args: { defaultOpen: true },
+  render: renderChangePlanDrawer
+}
+
+export const Controlled = {
+  args: { defaultOpen: true },
+  render: renderChangePlanDrawer
+}
+
+export const LightDark = {
+  parameters: {
+    backgrounds: { default: 'light' }
+  },
+  args: { defaultOpen: true },
+  render: renderChangePlanDrawer
+}
+
+export const Accessibility = {
+  render: renderChangePlanDrawer,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const trigger = canvas.getByRole('button', { name: /change plan/i })
+    await userEvent.click(trigger)
+    const dialog = await within(document.body).findByRole('dialog')
+    await expect(dialog).toBeInTheDocument()
+    await expect(within(dialog).getByRole('heading', { name: /change plan/i })).toBeInTheDocument()
+    await userEvent.keyboard('{Escape}')
+  }
+}
+
+export const Playground = Default

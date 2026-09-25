@@ -2,7 +2,8 @@
   import { computed, inject, useAttrs } from 'vue'
 
   import { cn } from '../../../utils/cn'
-  import { DrawerInjectionKey, DrawerMotionInjectionKey } from './injection-key'
+  import { useDrawerMotionState } from './composables/use-drawer-motion-state'
+  import { DrawerInjectionKey } from './injection-key'
   import { drawerOverlayTransitionClasses, getDrawerTransitionStyle } from './presets/transitions'
 
   defineOptions({
@@ -12,8 +13,8 @@
 
   const attrs = useAttrs()
   const ctx = inject(DrawerInjectionKey)
-  const motionCtx = inject(DrawerMotionInjectionKey)
-  const motionState = computed(() => motionCtx?.motionState.value ?? 'closed')
+  const isOpen = computed(() => ctx?.isOpen.value ?? false)
+  const { motionState } = useDrawerMotionState(isOpen)
 
   const handleClick = () => {
     if (!ctx?.closeable) return

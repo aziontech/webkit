@@ -10,6 +10,7 @@
     watch
   } from 'vue'
 
+  import { cn } from '../../../utils/cn'
   import { resolveHostElement } from './composables/resolve-host-element.js'
   import {
     NAVIGATION_MENU_ITEM_KEY,
@@ -89,7 +90,7 @@
   })
 
   const controlClasses = computed(() =>
-    getNavigationMenuTriggerClasses(isLink.value, attrs.class as string | undefined)
+    cn(getNavigationMenuTriggerClasses(isLink.value), attrs.class as string | undefined)
   )
 
   const isActiveTrigger = computed(

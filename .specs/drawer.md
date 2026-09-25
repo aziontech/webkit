@@ -4,9 +4,9 @@ category: overlay
 structure: composition
 status: implemented
 spec_version: 1
-checksum: 380c8b7121907e3ac77be9b9ed690401b7bd0b22654667bee8ac6085948b5381
+checksum: f236ede5538b80ceac858f16528e77b92cd84a979dee3ab640435575e0f426ba
 created: 2026-05-22
-last_updated: 2026-05-29
+last_updated: 2026-05-22
 ---
 # Drawer — Component Spec
 
@@ -84,8 +84,6 @@ _none_
 ## Stories (Storybook)
 
 - Default
-- Sizes
-- ScrollContent — long `PanelContent` scrolls inside `ScrollArea`; header and footer stay in the panel flex layout (not sticky).
 
 ## Constraints — DO NOT
 

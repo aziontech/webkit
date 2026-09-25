@@ -1,4 +1,6 @@
-import Button from '@aziontech/webkit/button'
+import { ref } from 'vue'
+
+import Button from '@aziontech/webkit/actions/button'
 import Dialog from '@aziontech/webkit/overlay/dialog'
 import DialogClose from '@aziontech/webkit/overlay/dialog-close'
 import DialogContent from '@aziontech/webkit/overlay/dialog-content'
@@ -10,27 +12,10 @@ import DialogTrigger from '@aziontech/webkit/overlay/dialog-trigger'
 import PanelContent from '@aziontech/webkit/overlay/panel-content'
 import PanelFooter from '@aziontech/webkit/overlay/panel-footer'
 import PanelHeader from '@aziontech/webkit/overlay/panel-header'
-import { ref } from 'vue'
 
 const sizes = ['small', 'medium', 'large']
 
-const dialogStoryComponents = {
-  Dialog,
-  DialogTrigger,
-  DialogPortal,
-  DialogOverlay,
-  DialogContent,
-  DialogTitle,
-  DialogDescription,
-  DialogClose,
-  PanelHeader,
-  PanelContent,
-  PanelFooter,
-  Button
-}
-
-/** @type {import('@storybook/vue3').Meta<typeof Dialog>} */
-const meta = {
+export default {
   title: 'Webkit/Overlay/Dialog',
   component: Dialog,
   subcomponents: {
@@ -49,6 +34,7 @@ const meta = {
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
+    actions: { argTypesRegex: '^on[A-Z].*' },
     a11y: {
       config: {
         rules: [{ id: 'color-contrast', enabled: true }]
@@ -56,55 +42,8 @@ const meta = {
     },
     docs: {
       description: {
-        component: [
-          'Modal dialog built on the shared Panel shell. Supports overlay backdrop, closeable behavior, and theme motion tokens (panel scale + opacity fade, overlay fade).',
-          '',
-          '## Usage',
-          '',
-          '```vue',
-          '<script setup>',
-          "import { ref } from 'vue'",
-          "import Button from '@aziontech/webkit/button'",
-          "import Dialog from '@aziontech/webkit/overlay/dialog'",
-          "import DialogClose from '@aziontech/webkit/overlay/dialog-close'",
-          "import DialogContent from '@aziontech/webkit/overlay/dialog-content'",
-          "import DialogDescription from '@aziontech/webkit/overlay/dialog-description'",
-          "import DialogOverlay from '@aziontech/webkit/overlay/dialog-overlay'",
-          "import DialogPortal from '@aziontech/webkit/overlay/dialog-portal'",
-          "import DialogTitle from '@aziontech/webkit/overlay/dialog-title'",
-          "import DialogTrigger from '@aziontech/webkit/overlay/dialog-trigger'",
-          "import PanelContent from '@aziontech/webkit/overlay/panel-content'",
-          "import PanelFooter from '@aziontech/webkit/overlay/panel-footer'",
-          "import PanelHeader from '@aziontech/webkit/overlay/panel-header'",
-          '',
-          'const open = ref(false)',
-          '</script>',
-          '',
-          '<template>',
-          '  <Dialog v-model:open="open" closeable size="medium">',
-          '    <DialogTrigger>',
-          '      <Button label="Open dialog" kind="primary" />',
-          '    </DialogTrigger>',
-          '    <DialogPortal>',
-          '      <DialogOverlay />',
-          '      <DialogContent>',
-          '        <PanelHeader class="w-full">',
-          '          <DialogTitle>Dialog Title</DialogTitle>',
-          '          <DialogClose />',
-          '        </PanelHeader>',
-          '        <PanelContent>',
-          '          <DialogDescription>Modal content.</DialogDescription>',
-          '        </PanelContent>',
-          '        <PanelFooter class="flex-col md:flex-row md:justify-end">',
-          '          <Button class="w-full md:w-auto" label="Cancel" kind="outlined" @click="open = false" />',
-          '          <Button class="w-full md:w-auto" label="Save" kind="primary" />',
-          '        </PanelFooter>',
-          '      </DialogContent>',
-          '    </DialogPortal>',
-          '  </Dialog>',
-          '</template>',
-          '```'
-        ].join('\n')
+        component:
+          'Modal dialog built on the shared Panel shell. Figma Webkit Panel (node 482:935). Supports overlay backdrop, closeable behavior, and theme motion tokens (panel scale 0.98 → 1 + opacity fade, overlay fade).'
       }
     }
   },
@@ -144,43 +83,63 @@ const meta = {
   }
 }
 
-export default meta
-
-const dialogTemplate = `
+const alertDialogTemplate = `
   <Dialog v-bind="args" v-model:open="open">
     <DialogTrigger>
-      <Button label="Open dialog" kind="primary" />
+      <Button label="Open alert" kind="primary" />
     </DialogTrigger>
     <DialogPortal>
       <DialogOverlay />
       <DialogContent>
-        <PanelHeader class="w-full">
-          <DialogTitle>Dialog Title</DialogTitle>
-          <DialogClose />
-        </PanelHeader>
-        <PanelContent>
-          <DialogDescription>
-            Modal content. Uses the shared Panel header, body, and footer regions.
-          </DialogDescription>
+        <PanelContent class="p-0">
+          <div class="flex w-full flex-col">
+            <div
+              class="flex items-start gap-[var(--spacing-4)] px-[var(--spacing-6)] py-[var(--spacing-6)]"
+            >
+              <div class="flex min-w-0 flex-1 flex-col gap-[var(--spacing-2)]">
+                <DialogTitle>Cancel Scheduled Downgrade</DialogTitle>
+                <DialogDescription>
+                  Confirm to remove the scheduled downgrade. Your current plan will continue without changes.
+                </DialogDescription>
+              </div>
+              <DialogClose class="shrink-0" />
+            </div>
+            <div
+              class="flex flex-col gap-[var(--spacing-3)] border-t border-[length:var(--border-width-default)] border-[var(--border-muted)] px-[var(--spacing-6)] py-[var(--spacing-4)] md:flex-row md:justify-end"
+            >
+              <Button class="w-full md:w-auto" label="Cancel" size="medium" kind="outlined" @click="open = false" />
+              <Button class="w-full md:w-auto" kind="secondary" size="medium" label="Keep current plan" @click="open = false" />
+            </div>
+          </div>
         </PanelContent>
-        <PanelFooter class="flex-col md:flex-row md:justify-end">
-          <Button class="w-full md:w-auto" label="Cancel" kind="outlined" @click="open = false" />
-          <Button class="w-full md:w-auto" label="Save" kind="primary" />
-        </PanelFooter>
       </DialogContent>
     </DialogPortal>
   </Dialog>
 `
 
-/** @type {import('@storybook/vue3').StoryObj<typeof Dialog>} */
 export const Default = {
+  args: {
+    defaultOpen: false,
+    closeable: true,
+    size: 'small'
+  },
   render: (args) => ({
-    components: dialogStoryComponents,
+    components: {
+      Dialog,
+      DialogTrigger,
+      DialogPortal,
+      DialogOverlay,
+      DialogContent,
+      DialogTitle,
+      DialogDescription,
+      DialogClose,
+      PanelContent,
+      Button
+    },
     setup() {
       const open = ref(args.defaultOpen)
-
       return { args, open }
     },
-    template: dialogTemplate
+    template: alertDialogTemplate
   })
 }

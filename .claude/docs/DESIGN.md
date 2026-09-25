@@ -46,7 +46,6 @@ Reference: `packages/webkit/src/components/webkit/actions/button/button.vue`.
 | `text-label-sm` / `text-label-md` / `text-label-lg`                | Labels, compact UI text                  |
 | `text-overline-md` / `text-overline-sm` / `text-overline-xs`       | Overlines (uppercase, tracking baked in) |
 | `text-button-lg` / `text-button-md`                                | Button labels                            |
-| `text-link`                                                        | Inline `<a>` inside body/heading copy (inherits parent size; hover underline) |
 
 These classes are **mobile-first**: font sizes can change at `sm`, `md`, etc. Do not duplicate breakpoint logic in components.
 
@@ -69,18 +68,6 @@ Font family, line height, letter spacing, and responsive font size live in `text
 ```html
 <i class="shrink-0 text-[length:inherit] leading-none" />
 ```
-
-### Inline links vs navigation `Link`
-
-For anchors **inside** body or heading copy, use the `text-link` typography class on a plain `<a>` (inherits size from the parent `text-body-*` / `text-heading-*` class):
-
-```html
-<p class="text-body-md">
-  Read the <a href="/docs" class="text-link">documentation</a>.
-</p>
-```
-
-For **standalone** navigation links (icon, ghost hover surface, fixed height), use `@aziontech/webkit/navigation/link` — not `text-link` alone.
 
 ---
 

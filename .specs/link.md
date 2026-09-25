@@ -4,18 +4,15 @@ category: navigation
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 42815455514e846bb1b8f6825c1ab7a00e53d155ae890edd2ffd48898ed9aa0c
+checksum: 1de51434b1fd172a6c0de7cd7f1c86f291a0a264bf66629d28438e926e753665
 created: 2026-05-22
-last_updated: 2026-06-01
-figma:
-  url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3548-578
-  node_id: 3548:578
+last_updated: 2026-05-26
 ---
 # Link — Component Spec
 
 ## Purpose
 
-Helps users move between views or sections. Migrated from the existing implementation at `packages/webkit/src/components/navigation/link/`. Design source: [Webkit — Link](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3548-578) (`Size` × `State` variants; hover/active handled in CSS).
+Helps users move between views or sections. Migrated from the existing implementation at `packages/webkit/src/components/navigation/link/`.
 
 ## Props
 
@@ -79,7 +76,8 @@ Helps users move between views or sections. Migrated from the existing implement
 ## Stories (Storybook)
 
 - Default
-- Sizes
+- Medium (size)
+- Large (size)
 - Disabled
 
 ## Constraints — DO NOT

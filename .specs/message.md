@@ -4,100 +4,57 @@ category: feedback
 structure: monolithic
 status: implemented
 spec_version: 1
-figma:
-  url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=478-892
-  node_id: 478:892
-checksum: 369176139640a950359df9192158948fc7e62777ee0c88b2f8fba00a1a0b3ced
+checksum: ba56d1090963d422e4457107fa9d9de706c060de1767dd4b4efc8d9b4213dcd0
 created: 2026-05-22
-last_updated: 2026-05-29
+last_updated: 2026-05-22
 ---
 # Message — Component Spec
 
 ## Purpose
 
-Inline feedback banner that communicates status, alerts, or progress. Presents a severity-colored surface with icon, title, optional description, and an optional text action aligned to Figma Message (478:892).
-
-## Usage
-
-```vue
-<script setup>
-import Message from '@aziontech/webkit/feedback/message'
-</script>
-
-<template>
-  <Message
-    severity="info"
-    title="Info message"
-    description="A brief description of the message."
-    action-label="Label"
-  />
-</template>
-```
+Communicates status, alerts, or progress to the user. Migrated from the existing implementation at `packages/webkit/src/components/webkit/feedback/message/`.
 
 ## Props
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `severity` | `'info' | 'success' | 'warning' | 'danger' | 'error'` | `'info'` | no | Visual severity variant (maps Error to danger). |
-| `title` | `string` | `—` | yes | Primary message heading. |
-| `description` | `string` | `''` | no | Supporting body copy below the title. |
-| `icon` | `string` | `''` | no | PrimeIcons class override for the leading icon. |
-| `actionLabel` | `string` | `''` | no | Label for the built-in text action button; hidden when empty. |
-| `closable` | `boolean` | `false` | no | When true, shows a close control that dismisses the message. |
-| `life` | `number` | `0` | no | Duration in milliseconds before auto-dismiss; `0` disables auto-dismiss. |
+| `severity` | `'info' | 'success' | 'warning' | 'danger' | 'error'` | `'info'` | no | severity. |
+| `title` | `string` | `—` | yes | title. |
+| `description` | `string` | `''` | no | description. |
+| `icon` | `string` | `'undefined'` | no | PrimeIcons class for the leading/trailing icon. |
+| `actionLabel` | `string` | `''` | no | action Label. |
 
 ## Events
 
 | Event | Payload | Notes |
 |---|---|---|
-| `action` | `MouseEvent` | Emitted when the built-in action button is clicked. |
-| `close` | `void` | Emitted when the message is dismissed manually or after `life` expires. |
+| `action` | `unknown` | — |
 
 ## Slots
 
 | Slot | Scope | Notes |
 |---|---|---|
-| `action` | — | Custom action control; replaces the built-in Button when provided. |
-| `default` | — | Replaces the default icon + title + description layout. |
+| `action` | — | Named slot. |
+| `default` | — | Main content. |
 
 ## States
 
-- Visual states: default (per severity)
+- Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token | Reduced-motion fallback |
-|---|---|---|---|
-| dismiss | inline `opacity` transition | `duration['fast-02']` · `curve['productive-exit']` (animate.js) | `motion-reduce:transition-none` |
+_none_
 
 ## Tokens
 
 | Region | Token (DESIGN.md) |
 |---|---|
-| title typography | `.text-label-sm` |
-| description typography | `.text-body-xs` |
-| action typography | `.text-button-md` |
-| surface (info) | `var(--info)` |
-| surface (success) | `var(--success)` |
-| surface (warning) | `var(--warning)` |
-| surface (danger) | `var(--danger)` |
-| border (info) | `var(--info-border)` |
-| border (success) | `var(--success-border)` |
-| border (warning) | `var(--warning-border)` |
-| border (danger) | `var(--danger-border)` |
-| icon (info) | `var(--info-contrast)` |
-| icon (success) | `var(--success-contrast)` |
-| icon (warning) | `var(--warning-contrast)` |
-| icon (danger) | `var(--danger-contrast)` |
+| typography | .text-body-sm |
+| surface | `var(--bg-surface)` |
 | text | `var(--text-default)` |
-| muted text | `var(--text-muted)` |
-| spacing (padding) | `var(--spacing-sm)` |
-| spacing (gap) | `var(--spacing-xs)` |
-| spacing (title stack) | `var(--spacing-xxs)` |
-| shape | `var(--shape-button)` |
-| shadow | `var(--shadow-xs)` |
+| spacing | `var(--spacing-3)` |
+| shape | `var(--shape-elements)` |
 | ring | `var(--ring-color)` |
-| min height | `min-h-14` |
 
 ## Theme gaps
 
@@ -108,8 +65,8 @@ import Message from '@aziontech/webkit/feedback/message'
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-[var(--ring-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-canvas)]`
-- Keyboard map: `Tab` focuses the action and close controls when present; `Enter`/`Space` activates them; `Escape` dismisses when `closable` is true.
-- ARIA: root uses `role="alert"` for danger/warning severities and `role="status"` for info/success.
+- Keyboard map: `Tab` focuses; `Enter`/`Space` activates; `Escape` closes overlays where applicable.
+- ARIA: root uses appropriate roles (`button`, `dialog`, `status`, etc.) per sub-component.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.
@@ -117,9 +74,6 @@ import Message from '@aziontech/webkit/feedback/message'
 ## Stories (Storybook)
 
 - Default
-- Types
-- Closable
-- AutoDismiss
 
 ## Constraints — DO NOT
 

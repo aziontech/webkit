@@ -19,8 +19,8 @@
   const rootClasses = computed(() =>
     cn(
       'flex min-h-16 shrink-0 items-center gap-[var(--spacing-sm)]',
-      'border-0 border-t border-t-[length:var(--border-width-default)] border-t-[var(--border-muted)] bg-[var(--bg-surface)]',
-      'px-[var(--spacing-lg)] py-[var(--spacing-md)]',
+      'border-t border-[length:var(--border-width-default)] border-[var(--border-muted)] bg-[var(--bg-surface)]',
+      'px-[var(--spacing-xl)] py-[var(--spacing-md)]',
       attrs.class as string | undefined
     )
   )

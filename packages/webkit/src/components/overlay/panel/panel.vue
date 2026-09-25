@@ -29,8 +29,6 @@
 
   const attrs = useAttrs()
 
-  const isFluid = computed(() => attrs['data-fluid'] !== undefined && attrs['data-fluid'] !== false)
-
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'overlay-panel')
 
   provide(PanelInjectionKey, {
@@ -43,11 +41,7 @@
       'rounded-[var(--shape-card)] border border-[length:var(--border-width-default)]',
       'border-[var(--border-muted)]',
       'bg-[var(--bg-surface)] shadow-[var(--shadow-2xl)]',
-      isFluid.value
-        ? 'w-full max-w-none'
-        : props.sizeAtMd
-          ? dialogPanelSizeClasses[props.size]
-          : panelSizeClasses[props.size],
+      props.sizeAtMd ? dialogPanelSizeClasses[props.size] : panelSizeClasses[props.size],
       attrs.class as string | undefined
     )
   )

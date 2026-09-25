@@ -3,7 +3,6 @@
 
   import { cn } from '../../../utils/cn'
   import { DropdownMenuInjectionKey } from './injection-key'
-  import { computeDropdownMenuPosition, type DropdownMenuResolvedSide } from './position-panel'
   import { DROPDOWN_MENU_PANEL_TRANSITION } from './presets/animations'
   import { dropdownMenuContentClasses } from './presets/styles'
 
@@ -20,7 +19,6 @@
   const ctx = inject(DropdownMenuInjectionKey)
   const contentRef = ref<HTMLElement | null>(null)
   const panelStyle = ref<Record<string, string>>({})
-  const resolvedSide = ref<DropdownMenuResolvedSide>('bottom')
 
   const isOpen = computed(() => ctx?.isOpen.value ?? false)
   const panelId = computed(() => ctx?.menuId ?? undefined)
@@ -35,39 +33,20 @@
 
   const updatePanelPosition = () => {
     const trigger = ctx?.triggerRef.value
-    const panel = contentRef.value
 
-    if (!trigger || !panel) {
+    if (!trigger) {
       panelStyle.value = {}
       return
     }
 
-    const anchorRect = trigger.getBoundingClientRect()
-    const measuredRect = panel.getBoundingClientRect()
-    const floatingRect = {
-      ...measuredRect,
-      width: measuredRect.width || panel.offsetWidth,
-      height: measuredRect.height || panel.offsetHeight
-    }
+    const rect = trigger.getBoundingClientRect()
+    const sideOffset = ctx?.sideOffset ?? 4
+    const alignOffset = ctx?.alignOffset ?? 0
 
-    if (!floatingRect.width || !floatingRect.height) {
-      return
-    }
-
-    const position = computeDropdownMenuPosition({
-      anchorRect,
-      floatingRect,
-      preferredSide: ctx?.side ?? 'auto',
-      align: 'start',
-      sideOffset: ctx?.sideOffset ?? 4,
-      alignOffset: ctx?.alignOffset ?? 0
-    })
-
-    resolvedSide.value = position.resolvedSide
     panelStyle.value = {
       position: 'fixed',
-      top: `${position.top}px`,
-      left: `${position.left}px`,
+      top: `${rect.bottom + sideOffset}px`,
+      left: `${rect.left + alignOffset}px`,
       zIndex: '1100'
     }
   }
@@ -163,8 +142,6 @@
       window.addEventListener('scroll', updatePanelPosition, true)
       await nextTick()
       updatePanelPosition()
-      await nextTick()
-      updatePanelPosition()
       focusFirstMenuItem()
       return
     }
@@ -206,7 +183,6 @@
       aria-orientation="vertical"
       :class="panelClasses"
       :style="panelStyle"
-      :data-side="resolvedSide"
       :data-state="isOpen ? 'open' : 'closed'"
       :data-testid="`${ctx?.testId}__content`"
       tabindex="-1"
@@ -219,18 +195,6 @@
 <style scoped>
   .webkit-dropdown-menu-panel-motion {
     transform-origin: top center;
-  }
-
-  .webkit-dropdown-menu-panel-motion[data-side='top'] {
-    transform-origin: bottom center;
-  }
-
-  .webkit-dropdown-menu-panel-motion[data-side='left'] {
-    transform-origin: center right;
-  }
-
-  .webkit-dropdown-menu-panel-motion[data-side='right'] {
-    transform-origin: center left;
   }
 
   .webkit-dropdown-menu-panel-enter-active,

@@ -3,7 +3,6 @@
 
   import { useControllable } from '../../../composables/use-controllable'
   import { DropdownMenuInjectionKey } from './injection-key'
-  import type { DropdownMenuSide } from './position-panel'
 
   defineOptions({
     name: 'DropdownMenu',
@@ -24,8 +23,6 @@
       closeable?: boolean
       /** When true, selecting an item closes the menu. */
       closeOnSelect?: boolean
-      /** Preferred panel placement; `auto` picks the side with the most viewport space. */
-      side?: DropdownMenuSide
       /** Gap between trigger and panel (px). */
       sideOffset?: number
       /** Horizontal offset from trigger left edge (px). */
@@ -36,7 +33,6 @@
       defaultOpen: false,
       closeable: true,
       closeOnSelect: true,
-      side: 'auto',
       sideOffset: 4,
       alignOffset: 0
     }
@@ -81,7 +77,6 @@
     isOpen: computed(() => isOpen.value),
     closeable: props.closeable,
     closeOnSelect: props.closeOnSelect,
-    side: props.side,
     sideOffset: props.sideOffset,
     alignOffset: props.alignOffset,
     open: openMenu,

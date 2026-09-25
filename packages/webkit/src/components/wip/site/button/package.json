@@ -1,0 +1,11 @@
+{
+  "main": "./button.vue",
+  "module": "./button.vue",
+  "types": "./button.vue.d.ts",
+  "browser": {
+    "./sfc": "./button.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}

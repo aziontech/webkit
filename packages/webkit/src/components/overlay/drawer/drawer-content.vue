@@ -1,21 +1,17 @@
 <script setup lang="ts">
   import { useEventListener, useScrollLock } from '@vueuse/core'
-  import { computed, inject, nextTick, provide, ref, unref, useAttrs, watch } from 'vue'
+  import { computed, inject, nextTick, ref, useAttrs, watch } from 'vue'
 
   import { useFocusTrap } from '../../../composables/use-focus-trap'
   import { cn } from '../../../utils/cn'
-  import { useOverlayMobile } from '../composables/use-overlay-mobile'
   import Panel from '../panel/panel.vue'
   import {
     drawerPanelPositionClasses,
     drawerShellPositionClasses
   } from '../presets/mobile-position'
-  import {
-    DrawerInjectionKey,
-    DrawerMotionInjectionKey,
-    DrawerPanelScrollInjectionKey
-  } from './injection-key'
-  import { getDrawerShellSizeStyle } from './presets/sizes'
+  import { useDrawerMotionState } from './composables/use-drawer-motion-state'
+  import { DrawerInjectionKey } from './injection-key'
+  import { drawerSizeClasses } from './presets/sizes'
   import {
     drawerPanelStateClasses,
     drawerPanelTransitionClasses,
@@ -35,10 +31,7 @@
   const ctx = inject(DrawerInjectionKey)
   const contentRef = ref<HTMLElement | null>(null)
   const isOpen = computed(() => ctx?.isOpen.value ?? false)
-  const motionCtx = inject(DrawerMotionInjectionKey)
-  const motionState = computed(() => motionCtx?.motionState.value ?? 'closed')
-  const isMobileOverlay = useOverlayMobile()
-  const isDesktopDrawer = computed(() => !isMobileOverlay.value)
+  const { motionState } = useDrawerMotionState(isOpen)
 
   const isScrollLocked = useScrollLock(document.body)
 
@@ -66,9 +59,7 @@
 
   const isLeft = computed(() => ctx?.side === 'left')
   const sideKey = computed(() => (isLeft.value ? 'left' : 'right'))
-  const drawerSize = computed(() => unref(ctx?.size) ?? 'medium')
-
-  provide(DrawerPanelScrollInjectionKey, true)
+  const drawerSize = computed(() => ctx?.size ?? 'medium')
 
   const shellClasses = computed(() =>
     cn(
@@ -82,14 +73,12 @@
     )
   )
 
-  const shellStyle = computed(() => ({
-    ...getDrawerTransitionStyle(motionState.value, 'panel'),
-    ...getDrawerShellSizeStyle(drawerSize.value, isDesktopDrawer.value)
-  }))
+  const shellTransitionStyle = computed(() => getDrawerTransitionStyle(motionState.value, 'panel'))
 
   const panelClasses = computed(() =>
     cn(
-      'pointer-events-auto flex min-h-0 h-full flex-col',
+      'pointer-events-auto flex w-full flex-col',
+      drawerSizeClasses[drawerSize.value],
       drawerPanelPositionClasses,
       isLeft.value
         ? 'md:rounded-r-[var(--shape-card)] md:rounded-l-[var(--shape-flat)]'
@@ -102,7 +91,7 @@
   <div
     ref="contentRef"
     :class="shellClasses"
-    :style="shellStyle"
+    :style="shellTransitionStyle"
     role="dialog"
     :aria-modal="true"
     :aria-labelledby="ctx?.titleId"
@@ -112,7 +101,6 @@
     tabindex="-1"
   >
     <Panel
-      data-fluid
       :class="panelClasses"
       :data-testid="`${ctx?.testId}__panel-shell`"
     >

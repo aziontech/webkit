@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, ref, useAttrs } from 'vue'
 
+  import { cn } from '../../../utils/cn'
   import { provideNavigationMenuRoot } from './composables/use-navigation-menu-context.js'
   import { useNavigationMenuRootState } from './composables/use-navigation-menu-root.js'
   import { getNavigationMenuRootClasses } from './presets/styles'
@@ -75,7 +76,7 @@
   })
 
   const rootClasses = computed(() =>
-    getNavigationMenuRootClasses(attrs.class as string | undefined)
+    cn(getNavigationMenuRootClasses(), attrs.class as string | undefined)
   )
 </script>
 

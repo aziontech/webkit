@@ -1,0 +1,11 @@
+{
+  "main": "./button-cancel.vue",
+  "module": "./button-cancel.vue",
+  "types": "./button-cancel.vue.d.ts",
+  "browser": {
+    "./sfc": "./button-cancel.vue"
+  },
+  "sideEffects": [
+    "*.vue"
+  ]
+}

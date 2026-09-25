@@ -1005,7 +1005,7 @@ export type ButtonSize = 'small' | 'medium' | 'large'
 Consumer usage:
 
 ```ts
-import type { ButtonKind } from '@aziontech/webkit/button'
+import type { ButtonKind } from '@aziontech/webkit/actions/button'
 
 interface MyCardActionProps {
   kind: ButtonKind

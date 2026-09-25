@@ -4,7 +4,6 @@
 
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Vue 3](https://img.shields.io/badge/Vue-3.x-4FC08D?logo=vue.js)](https://vuejs.org/)
-[![Vite](https://img.shields.io/badge/Vite-6.x-646CFF?logo=vite)](https://vitejs.dev/)
 
 ---
 
@@ -29,19 +28,19 @@ The application is deployed on **Azion's Edge Platform** for low-latency global 
 
 | Layer | Technology | Purpose |
 |-------|------------|---------|
-| **Framework** | Vue 3 (Composition API, `<script setup>`) | Reactive UI components |
-| **Build** | Vite | Dev server, bundling, preview |
+| **Framework** | Vue 3 (Composition API) | Reactive UI components |
 | **Styling** | Tailwind CSS | Utility-first CSS framework |
-| **Icons** | `@aziontech/icons` | Icon font + catalog (workspace dependency) |
-| **Color Picker** | `vue3-colorpicker` | Color selection widget |
-| **Testing** | Vitest + jsdom | Unit testing |
+| **Icons** | @aziontech/icons | Icon font package (workspace dependency) |
+| **Color Picker** | vue3-colorpicker | Color selection widget |
+| **Build** | Vue CLI | Development server and bundling |
+| **Testing** | Jest + Vue Test Utils | Unit testing |
 | **Deployment** | Azion Edge Platform | Global edge deployment |
 
 ### Application Flow
 
 ```mermaid
 flowchart TD
-    A[User visits gallery] --> B[Import catalog from @aziontech/icons]
+    A[User visits gallery] --> B[Load icons.json]
     B --> C[Render icon grid]
     C --> D{User interaction}
     D -->|Search| E[Filter icons by name/keywords]
@@ -70,9 +69,9 @@ flowchart TB
         H[Size Slider] --> I[Update size state]
         J[Theme Toggle] --> K[Dark/Light mode]
     end
-    L["@aziontech/icons/catalog"] --> M[Icon metadata]
+    L[icons.json] --> M[Icon metadata]
     M --> App.vue
-    N["@aziontech/icons"] --> O[Icon fonts CSS]
+    N[@aziontech/icons] --> O[Icon fonts CSS]
     O --> App.vue
 ```
 
@@ -83,31 +82,32 @@ flowchart TB
 ```
 apps/icons-gallery/
 ├── public/
-│   └── favicon.ico          # Site favicon
+│   ├── favicon.ico          # Site favicon
+│   └── index.html           # HTML template
 ├── src/
 │   ├── components/
 │   │   ├── IconCard.vue     # Individual icon display card
 │   │   └── SearchBar.vue    # Search input with filtering
 │   ├── App.vue              # Main application component
+│   ├── icons.json           # Icon metadata (name, class, keywords)
 │   ├── main.css             # Global styles and Tailwind imports
 │   ├── main.js              # Application entry point
 │   └── theme.js             # Dark/light theme management
 ├── tests/
 │   └── unit/
-│       ├── __mocks__/
 │       ├── iconDownload.spec.js  # Download functionality tests
-│       └── jest.setup.js         # Vitest setup file (legacy filename)
-├── azion/
-│   ├── args.json            # Build arguments for Azion CLI
+│       └── jest.setup.js         # Jest configuration
+├── azion/                    # Azion deployment config
+│   ├── args.json            # Build arguments
 │   └── azion.json           # Edge application manifest
 ├── azion.config.cjs         # Azion project configuration
-├── index.html               # Vite HTML entry point
+├── babel.config.js          # Babel configuration
+├── jest.config.js           # Jest test configuration
 ├── jsconfig.json            # JavaScript/IDE configuration
 ├── package.json             # Dependencies and scripts
 ├── postcss.config.js        # PostCSS configuration
 ├── tailwind.config.js       # Tailwind CSS configuration
-├── vite.config.js           # Vite dev/build configuration
-└── vitest.config.js         # Vitest test configuration
+└── vue.config.js            # Vue CLI configuration
 ```
 
 ### Key Files Explained
@@ -117,12 +117,9 @@ apps/icons-gallery/
 | [`src/App.vue`](src/App.vue) | Main component containing icon grid, controls, and state management |
 | [`src/components/IconCard.vue`](src/components/IconCard.vue) | Renders individual icon with hover actions (copy code, copy image, download) |
 | [`src/components/SearchBar.vue`](src/components/SearchBar.vue) | Search input with real-time filtering |
+| [`src/icons.json`](src/icons.json) | Metadata for all icons including name, class, and searchable keywords |
 | [`src/theme.js`](src/theme.js) | Theme initialization and toggle functionality |
-| [`vite.config.js`](vite.config.js) | Vite dev server (port 3333) and build config |
-| [`vitest.config.js`](vitest.config.js) | Vitest config (jsdom environment, setup file) |
 | [`azion.config.cjs`](azion.config.cjs) | Edge deployment configuration with caching rules |
-
-Icon metadata is **not** stored locally — it is imported at runtime from `@aziontech/icons/catalog` (resolved to `packages/icons/dist/catalog.json`).
 
 ---
 
@@ -130,7 +127,7 @@ Icon metadata is **not** stored locally — it is imported at runtime from `@azi
 
 ### Prerequisites
 
-- Node.js 18+
+- Node.js 18+ 
 - pnpm (workspace package manager)
 
 ### Installation
@@ -140,29 +137,35 @@ This app is part of a pnpm monorepo. From the workspace root:
 ```bash
 # Install all workspace dependencies
 pnpm install
+
+# Or install only for this app
+cd apps/icons-gallery
+pnpm install
 ```
 
 ### Development Server
 
 ```bash
-# From the app directory
+# Start development server on port 3333
 pnpm serve
 
 # Or from workspace root
 pnpm --filter icons-gallery serve
 ```
 
-The app will be available at `http://localhost:3333` with HMR enabled (configured in `vite.config.js`).
+The app will be available at `http://localhost:3333` with hot module replacement enabled.
 
 ### Build for Production
 
 ```bash
-# Standard Vite build → ./dist
+# Build for Vue CLI output
 pnpm build
 
-# Build optimized for Azion Edge Platform
+# Build for Azion Edge deployment
 pnpm build:azion
 ```
+
+The production build outputs to `dist/` directory.
 
 ---
 
@@ -170,59 +173,41 @@ pnpm build:azion
 
 | Script | Description |
 |--------|-------------|
-| `pnpm serve` | Start Vite dev server with HMR on port 3333 |
-| `pnpm build` | Build production bundle via Vite |
+| `pnpm serve` | Start development server with HMR on port 3333 |
+| `pnpm build` | Build production bundle via Vue CLI |
 | `pnpm build:azion` | Build optimized for Azion Edge Platform |
+| `pnpm test:unit` | Run Jest unit tests |
+| `pnpm lint` | Run ESLint on source files |
+| `pnpm format` | Format code with Prettier |
 | `pnpm preview` | Preview production build with Vite |
-| `pnpm test:unit` | Run Vitest unit tests once |
-| `pnpm test:unit:watch` | Run Vitest in watch mode |
-| `pnpm lint` | Run ESLint with autofix |
-| `pnpm format` | Format `src/` with Prettier |
-| `pnpm publish` | Deploy to Azion Edge Platform (`azion deploy --local --debug`) |
+| `pnpm publish` | Deploy to Azion Edge Platform (local mode) |
 
 ---
 
 ## Configuration
 
-### Vite (`vite.config.js`)
+### Vue CLI (`vue.config.js`)
 
 ```javascript
-import vue from '@vitejs/plugin-vue'
-import { fileURLToPath, URL } from 'node:url'
-import { defineConfig } from 'vite'
-
-export default defineConfig({
-  plugins: [vue()],
-  resolve: {
-    alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) }
-  },
-  server: { port: 3333, open: true }
-})
-```
-
-### Vitest (`vitest.config.js`)
-
-```javascript
-import { defineConfig } from 'vitest/config'
-import vue from '@vitejs/plugin-vue'
-
-export default defineConfig({
-  plugins: [vue()],
-  test: {
-    environment: 'jsdom',
-    setupFiles: ['./tests/unit/jest.setup.js'],
-    include: ['tests/unit/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
-    globals: true
+module.exports = {
+  publicPath: '/',
+  devServer: {
+    port: 3333,           // Development server port
+    historyApiFallback: true,  // SPA routing support
+    hot: true,            // Hot module replacement
+    open: true            // Auto-open browser
   }
-})
+}
 ```
 
 ### Tailwind CSS (`tailwind.config.js`)
 
+Extends the root workspace Tailwind configuration:
+
 ```javascript
 module.exports = {
-  content: ['./index.html', './src/**/*.{vue,js,ts}']
-  // Theme extensions defined inline.
+  content: ['./src/**/*.{vue,js,ts}'],
+  // Uses workspace-level theme extensions
 }
 ```
 
@@ -239,9 +224,9 @@ Configures edge deployment with:
 
 ## Icon Showcase
 
-The gallery displays icons from two font families. Counts below match the current `@aziontech/icons/catalog` snapshot:
+The gallery displays icons from two font families:
 
-### Azionicons (`ai`) — 88 icons
+### Azionicons (`ai`) — 87 Icons
 
 Azion-specific product and platform icons organized by category:
 
@@ -289,7 +274,7 @@ Azion-specific product and platform icons organized by category:
 | Ask Azion | `ai ai-ask-azion` | AI assistant |
 | Marketplace | `ai ai-marketplace` | Marketplace services |
 
-### PrimeIcons (`pi`) — 314 icons
+### PrimeIcons (`pi`) — 315+ Icons
 
 General-purpose UI icons from the PrimeIcons library. Some commonly used icons:
 
@@ -333,20 +318,32 @@ General-purpose UI icons from the PrimeIcons library. Some commonly used icons:
 
 ## Adding New Icons
 
-The gallery has no local icon list — it consumes the catalog generated by `@aziontech/icons`. To make new icons show up:
+When new icons are added to `@aziontech/icons`, update the gallery:
 
-1. Add the icon to `packages/icons` (SVG sources + catalog entry as the package's build expects).
-2. Rebuild the icons package:
+1. **Rebuild the icons package**:
    ```bash
-   pnpm --filter @aziontech/icons build
+   cd packages/icons
+   pnpm build
    ```
-3. Restart the gallery dev server (`pnpm serve`) — the new icon appears automatically once `packages/icons/dist/catalog.json` is regenerated.
+
+2. **Update `src/icons.json`** with the new icon entry:
+   ```json
+   {
+     "icon": "ai ai-new-icon",
+     "keywords": "new, icon, keywords",
+     "name": "ai-new-icon"
+   }
+   ```
+
+3. **Verify** the icon displays correctly in the gallery.
 
 ---
 
 ## Deployment
 
 ### Azion Edge Platform
+
+The gallery is designed for deployment on Azion's Edge Platform:
 
 ```bash
 # Build for edge deployment
@@ -355,8 +352,6 @@ pnpm build:azion
 # Deploy (requires Azion CLI authentication)
 pnpm publish
 ```
-
-> The `publish` script in this app does **not** publish to npm — it calls `azion deploy --local --debug`. The name is preserved for legacy automation reasons.
 
 #### Deployment Architecture
 
@@ -381,21 +376,24 @@ The deployment configuration includes:
 
 ## Testing
 
+### Unit Tests
+
 ```bash
-# Run all unit tests once
+# Run all unit tests
 pnpm test:unit
 
-# Watch mode
-pnpm test:unit:watch
+# Run with coverage
+pnpm test:unit -- --coverage
 ```
 
-Tests live in `tests/unit/` and run on **Vitest** with the **jsdom** environment. The setup file is `tests/unit/jest.setup.js` (filename kept for git-history continuity after the Jest → Vitest migration).
+Tests are located in `tests/unit/` and use Jest with Vue Test Utils.
 
-### Current Coverage
+### Test Coverage
 
 | Module | Tests |
 |--------|-------|
-| Icon Download | PNG/SVG download helpers (`iconDownload.spec.js`) |
+| Icon Download | PNG/SVG download functionality |
+| Components | Vue component rendering |
 
 ---
 
@@ -428,7 +426,7 @@ Tests live in `tests/unit/` and run on **Vitest** with the **jsdom** environment
 
 | Package | Description |
 |---------|-------------|
-| [`@aziontech/icons`](../../packages/icons/README.md) | Icon font library (azionicons + primeicons) |
+| [@aziontech/icons](../../packages/icons/README.md) | Icon font library (azionicons + primeicons) |
 
 ---
 

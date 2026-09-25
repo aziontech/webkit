@@ -1,14 +1,21 @@
 import { ref, onMounted, onUnmounted } from 'vue';
-import { getActiveBreakpoint } from '../utils/from-tokens.js';
 
-/** @typedef {'_' | 'sm' | 'md' | 'lg' | 'xl' | '2xl'} BreakpointKey */
+const BREAKPOINTS = {
+  mobile: 640,
+  tablet: 1024,
+};
+
+function getBreakpoint(width) {
+  if (width < BREAKPOINTS.mobile) return 'mobile';
+  if (width < BREAKPOINTS.tablet) return 'tablet';
+  return 'desktop';
+}
 
 export function useViewport() {
-  /** @type {import('vue').Ref<BreakpointKey>} */
-  const breakpoint = ref('_');
+  const breakpoint = ref('desktop');
 
   function update() {
-    breakpoint.value = getActiveBreakpoint(window.innerWidth);
+    breakpoint.value = getBreakpoint(window.innerWidth);
   }
 
   onMounted(() => {

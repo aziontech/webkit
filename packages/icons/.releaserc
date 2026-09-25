@@ -12,18 +12,13 @@
           }
         },
         "parserOpts": {
-          "headerPattern": "^(\\[[\\w-]+\\]\\s+)?(\\w+)(?:\\(([\\w-]+)\\))?!?:\\s(.*)$",
-          "headerCorrespondence": ["ticket", "type", "scope", "subject"]
+          "headerPattern": "^(\\[\\w+-\\d+\\]\\s+)?(\\w+):\\s(.*)$",
+          "headerCorrespondence": ["ticket", "type", "subject"]
         },
         "releaseRules": [
           { "type": "feat", "release": "minor" },
           { "type": "fix", "release": "patch" },
-          { "type": "hotfix", "release": "patch" },
-          { "type": "chore", "release": "patch" },
-          { "type": "docs", "release": "patch" },
-          { "type": "style", "release": "patch" },
-          { "type": "refactor", "release": "patch" },
-          { "breaking": true, "release": "major" }
+          { "type": "hotfix", "release": "patch" }
         ]
       }
     ],
@@ -32,8 +27,8 @@
       {
         "preset": "conventionalcommits",
         "parserOpts": {
-          "headerPattern": "^(\\[[\\w-]+\\]\\s+)?(\\w+)(?:\\(([\\w-]+)\\))?!?:\\s(.*)$",
-          "headerCorrespondence": ["ticket", "type", "scope", "subject"]
+          "headerPattern": "^(\\[\\w+-\\d+\\]\\s+)?(\\w+):\\s(.*)$",
+          "headerCorrespondence": ["ticket", "type", "subject"]
         }
       }
     ],
