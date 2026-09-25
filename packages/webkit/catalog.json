@@ -2974,10 +2974,10 @@
     },
     "section-title": {
       "import": "@aziontech/webkit/section-title",
-      "target": "./src/components/content/section-title/section-title.vue",
+      "target": "./src/components/marketing/section-title/section-title.vue",
       "kind": "component",
       "treeShakeableImport": "@aziontech/webkit/section-title",
-      "category": "content",
+      "category": "marketing",
       "structure": "monolithic",
       "status": "approved",
       "props": [
@@ -3008,6 +3008,13 @@
           "default": "'centered'",
           "required": "false",
           "doc": "Layout of the header: `centered` stacks and centers the copy, `left` stacks it at the start edge, `horizontal` sets the headline and its description in two columns."
+        },
+        {
+          "name": "framed",
+          "type": "boolean",
+          "default": "true",
+          "required": "false",
+          "doc": "Draw the header's own frame and padding. Turn it off when the header is composed inside a band that already owns both."
         }
       ],
       "slots": [
@@ -3029,17 +3036,18 @@
         "For a wide band whose headline and supporting sentence should sit side by side rather than stacked — `kind=\"horizontal\"`."
       ],
       "avoidWhen": [
-        "For the page's leading band and its `h1` → use `hero-title` instead.",
+        "For the page's leading band and its `h1` → use `hero` instead.",
         "For the top bar of an application shell → use `global-header` instead.",
         "For a plain framed container with arbitrary content → use `frame-box` instead."
       ],
       "related": [
-        "hero-title` — the hero counterpart; renders the page's `h1` at hero scale.",
+        "hero` — the opening band; its `Hero.Title` renders the page's `h1` at hero scale.",
         "frame-box` — the frame this component composes.",
         "section-gap` — the empty frame that sets the air before and after a section header; this component holds no vertical air of its own beyond its padding.",
         "overline` — the eyebrow treatment rendered above the headline."
       ],
       "bestPractices": [
+        "Leave `framed` on when the header is a brick of its own in a page column; turn it off when a band composes the header inside a frame it already draws, so the rule and the padding are not drawn twice.",
         "Keep one `section-title` per section, and let it own the section's `h2` so the page keeps one document outline.",
         "Write the eyebrow as one or two words: it is set uppercase and prefixed with `//`, so a sentence in it reads as noise.",
         "Reach for `horizontal` when the description is long enough to earn its own column — on a narrow viewport it stacks back under the headline.",

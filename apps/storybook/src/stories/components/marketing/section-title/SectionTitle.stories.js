@@ -8,7 +8,7 @@ const IMPORT_WITH_BUTTON = [IMPORT, "import Button from '@aziontech/webkit/butto
 
 /** @type {import('@storybook/vue3').Meta<typeof SectionTitle>} */
 const meta = {
-  title: 'Components/Content/SectionTitle',
+  title: 'Components/Marketing/SectionTitle',
   component: SectionTitle,
   tags: ['autodocs'],
   parameters: {
@@ -172,4 +172,3 @@ export const WithActions = {
     }
   }
 }
-

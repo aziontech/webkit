@@ -21,12 +21,15 @@
     eyebrow?: string
     /** Layout of the header: `centered` stacks and centers the copy, `left` stacks it at the start edge, `horizontal` sets the headline and its description in two columns. */
     kind?: SectionTitleKind
+    /** Draw the header's own frame and padding. Turn it off when the header is composed inside a band that already owns both. */
+    framed?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
     description: '',
     eyebrow: '',
-    kind: 'centered'
+    kind: 'centered',
+    framed: true
   })
 
   const slots = defineSlots<{
@@ -37,11 +40,18 @@
   const attrs = useAttrs()
 
   const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'content-section-title'
+    () => (attrs['data-testid'] as string | undefined) ?? 'marketing-section-title'
   )
 
   const hasDescription = computed<boolean>(
     () => Boolean(slots.default) || props.description.length > 0
+  )
+
+  // Unframed, the header is a plain block: the band composing it owns the rule and the
+  // padding, so drawing either here would draw it twice.
+  const frame = computed(() => (props.framed ? FrameBox : 'div'))
+  const frameProps = computed(() =>
+    props.framed ? { flush: true, borders: 'y', marks: 'bottom' } : {}
   )
 </script>
 
@@ -50,17 +60,16 @@
        rule is what divides the title from the section body, so the row adds no outer margin
        and no second line. The header holds no vertical air of its own beyond this padding —
        the rhythm around it belongs to the SectionGap frames on either side. -->
-  <FrameBox
-    v-bind="$attrs"
-    flush
-    borders="y"
-    marks="bottom"
+  <component
+    :is="frame"
+    v-bind="{ ...$attrs, ...frameProps }"
     :data-testid="testId"
     :data-kind="kind"
+    :data-framed="props.framed || null"
     class="group"
   >
     <div
-      class="flex flex-col items-start gap-(--spacing-xl) px-(--spacing-xl) py-(--spacing-xxl) group-data-[kind=centered]:items-center"
+      class="flex flex-col items-start gap-(--spacing-xl) group-data-[framed]:px-(--spacing-xl) group-data-[framed]:py-(--spacing-xxl) group-data-[kind=centered]:items-center"
     >
       <!-- Horizontal: the overline leads, then the headline and its description share a
            three-column grid — headline in the first column, description in the third, the
@@ -127,5 +136,5 @@
         <slot name="actions" />
       </div>
     </div>
-  </FrameBox>
+  </component>
 </template>
