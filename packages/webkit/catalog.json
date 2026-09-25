@@ -2573,7 +2573,8 @@
       "subcomponents": [
         "@aziontech/webkit/accordion-item",
         "@aziontech/webkit/accordion-trigger",
-        "@aziontech/webkit/accordion-content"
+        "@aziontech/webkit/accordion-content",
+        "@aziontech/webkit/accordion-gallery"
       ],
       "category": "content",
       "structure": "composition",
@@ -9929,6 +9930,78 @@
       "kind": "subcomponent",
       "parent": "sidebar",
       "treeShakeableImport": "@aziontech/webkit/sidebar-footer"
+    },
+    "accordion-gallery": {
+      "import": "@aziontech/webkit/accordion-gallery",
+      "target": "./src/components/marketing/accordion-gallery/accordion-gallery.vue",
+      "kind": "subcomponent",
+      "parent": "accordion",
+      "treeShakeableImport": "@aziontech/webkit/accordion-gallery",
+      "category": "marketing",
+      "structure": "monolithic",
+      "status": "approved",
+      "props": [
+        {
+          "name": "items",
+          "type": "AccordionGalleryItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The steps, in order; each item is `{ title, points, backgroundImage }`."
+        },
+        {
+          "name": "autoPlay",
+          "type": "boolean",
+          "default": "true",
+          "required": "false",
+          "doc": "Advances to the next step on a timer; stops on interaction and never runs under reduced motion."
+        },
+        {
+          "name": "autoPlayInterval",
+          "type": "number",
+          "default": "5000",
+          "required": "false",
+          "doc": "Milliseconds each step is held before the gallery advances."
+        },
+        {
+          "name": "showProgress",
+          "type": "boolean",
+          "default": "true",
+          "required": "false",
+          "doc": "Draws the autoplay progress bar over the active step."
+        }
+      ],
+      "events": [
+        {
+          "name": "step-change",
+          "payload": "(event: Event, index: number)",
+          "notes": "The active step changed; `index` is the step now shown. Fires on a reader's selection, not on an autoplay tick."
+        }
+      ],
+      "purpose": "A two-column gallery: a stack of selectable steps on one side and the image for the selected step on the other, cross-fading as the selection moves. It advances on its own on a timer with a progress bar over the active step, and collapses below `lg` to one column where the selected step reveals its own image inline.",
+      "useWhen": [
+        "To walk a reader through a sequence of capabilities where each step has a picture.",
+        "When the steps are short — a title and a few bullet points — and the image carries the detail.",
+        "As a product-page section that rewards watching but does not require it."
+      ],
+      "avoidWhen": [
+        "For a set of peers with no order and no imagery → use `feature-card` in a grid.",
+        "For questions and answers → use `faq`.",
+        "For one claim beside one picture → use `media-split`.",
+        "For content a reader must see — a step past the first can be missed."
+      ],
+      "related": [
+        "progress-bar` — the autoplay indicator over the active step; composed, not redrawn.",
+        "frame-box` — the frame and corner marks EACH STEP is drawn with. This is the step's own card, not a frame around the band: the band itself draws none, so the rule around it belongs to whatever assembles the page.",
+        "media-split` — the single copy-and-media pairing, when there is no sequence.",
+        "carousel` — when the items are peers to browse rather than a sequence to follow."
+      ],
+      "bestPractices": [
+        "The gallery draws no frame around itself — only around each step. The band's own rule and corner marks belong to the `section-module` or `frame-box` the page assembles it into.",
+        "Keep `points` to three or four short lines. The step is a summary; the image is the argument.",
+        "Give every item a `backgroundImage` of the same shape — the image column holds one frame and cross-fades within it, so mismatched aspect ratios jump.",
+        "Leave `autoPlay` on for a section a reader is expected to watch, and off where they are expected to choose; it stops the moment they interact, and never runs under reduced motion.",
+        "Order the items. This is a sequence, and a reader who lands mid-way reads them top to bottom."
+      ]
     },
     "breadcrumb": {
       "import": "@aziontech/webkit/breadcrumb",
