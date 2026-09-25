@@ -132,7 +132,10 @@
       totalItems = data.value.length
     }
 
-    if (!notRequest.value && last >= totalItems) {
+    const numberOfPage = Math.ceil(totalCount.value / PAGE_SIZE)
+    const hasNextPage = page.value < numberOfPage
+
+    if (!notRequest.value && hasNextPage && !loading.value && last >= totalItems) {
       try {
         page.value += PAGE_INCREMENT
         await fetchData(page.value)
