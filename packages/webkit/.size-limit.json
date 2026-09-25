@@ -135,6 +135,12 @@
     "limit": "3 KB"
   },
   {
+    "name": "brand-carousel",
+    "path": "src/components/marketing/brand-carousel/brand-carousel.vue",
+    "limit": "4 KB",
+    "entryOnly": true
+  },
+  {
     "name": "illustration",
     "path": "src/components/content/illustration/illustration.vue",
     "limit": "2 KB",
