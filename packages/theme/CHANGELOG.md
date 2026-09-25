@@ -1,3 +1,11 @@
+## [2.7.1](https://github.com/aziontech/webkit/compare/@aziontech/theme@2.7.0...@aziontech/theme@2.7.1) (2026-09-25)
+
+
+### Bug Fixes
+
+* **theme:** publish v3 releases under the legacy-v3 npm dist-tag ([78e6c57](https://github.com/aziontech/webkit/commit/78e6c57b130548ea6e461b1d7a2a88a2827b321c))
+* **webkit:** publish v3 releases under the legacy-v3 npm dist-tag ([ce2a883](https://github.com/aziontech/webkit/commit/ce2a8838ac0bde72e46261463a5816ccc4fa31fa))
+
 ## [2.7.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@2.6.0...@aziontech/theme@2.7.0) (2026-09-25)
 
 
