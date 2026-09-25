@@ -9930,6 +9930,91 @@
       "parent": "sidebar",
       "treeShakeableImport": "@aziontech/webkit/sidebar-footer"
     },
+    "sticky-stack": {
+      "import": "@aziontech/webkit/sticky-stack",
+      "target": "./src/components/marketing/sticky-stack/sticky-stack.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sticky-stack",
+      "category": "marketing",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "items",
+          "type": "StickyStackItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The claims, in reading order; each item is a title, the sentence that opens with it, and the image shown while it is open."
+        },
+        {
+          "name": "size",
+          "type": "'small' | 'medium' | 'large'",
+          "default": "'medium'",
+          "required": "false",
+          "doc": "Height the open claim is held to, and so the height of the whole stack beside the media."
+        },
+        {
+          "name": "dwell",
+          "type": "number",
+          "default": "0.7",
+          "required": "false",
+          "doc": "Screen-heights of scrolling each claim holds while the band is pinned; the band's total scroll is one screen plus this much per claim."
+        },
+        {
+          "name": "showProgress",
+          "type": "boolean",
+          "default": "true",
+          "required": "false",
+          "doc": "Fills a hairline along the open claim's bottom edge as its share of the scroll is spent."
+        }
+      ],
+      "events": [
+        {
+          "name": "index-change",
+          "payload": "number",
+          "notes": "The open claim changed; the payload is the index now open. Fires on the scroll that moved it and on a reader selecting a claim."
+        }
+      ],
+      "slots": [
+        {
+          "name": "media",
+          "scope": "{ item: StickyStackItem, index: number, active: boolean }",
+          "notes": "The claim's medium; replaces the image built from the item's own source. Mounted fresh on every change, so an entrance animation inside it replays."
+        }
+      ],
+      "purpose": "A band that pins to the viewport and is read by scrolling through it: a stack of claims on one side, one piece of media on the other, and the scroll position — not a pointer — deciding which claim is open. Each claim expands in turn while the ones already read collapse and stack above it, so the column keeps one height and the reader always sees where they are in the run. The media beside it is replaced, not dimmed: the outgoing scene leaves and the incoming one mounts, so a scene that animates plays its entrance every time it is reached.",
+      "useWhen": [
+        "For a sequence of claims a reader should take in one at a time, each with a medium worth looking at — five ways a platform is used, each with the file you would actually write.",
+        "When the media is the payload and the copy is the caption: a code sample, a console shot, an official scene.",
+        "As the one band on a page that rewards scrolling slowly, placed where a reader has already committed to the page."
+      ],
+      "avoidWhen": [
+        "For peer claims a reader should be able to jump between at will → use `media-tabs`, which selects on hover, click and a timer without taking the scroll.",
+        "For one claim beside one picture → use `media-split`.",
+        "For an ordered walkthrough the reader steps through by hand → use `accordion-gallery`.",
+        "For questions and answers, or any run longer than about six items → use `faq`. A pinned band holds the page for its whole run, and a long run holds it too long.",
+        "On a page that is already a single short screen: there is no scroll to spend."
+      ],
+      "related": [
+        "media-tabs` — the pointer-driven sibling. Same two-column anatomy; the selection moves on hover, click and a timer, and the band does not pin.",
+        "accordion-gallery` — the sequenced sibling a reader drives by clicking, with a progress bar per step.",
+        "media-split` — one claim, one medium, no selection and no pin.",
+        "code-block` — the medium this band most often holds, one sample per claim.",
+        "illustration` — the official scene a claim's `media` slot otherwise holds.",
+        "section-title` — the heading above the band; this component carries no title of its own."
+      ],
+      "bestPractices": [
+        "Keep the run to three to six claims. The band holds the page for `dwell` of a screen per claim, and a reader who cannot see the end of it reads it as a page that will not let go.",
+        "Write each claim to stand alone. A reader can land mid-band from a deep link or a focus jump, so no claim may depend on the one above it.",
+        "Keep a title to one line. The collapsed rows set the column's height, and a title that wraps changes it for every claim at once.",
+        "Keep a description to two or three lines. Only the open claim shows one, and a long one pushes the stack past the pinned frame.",
+        "Give every claim a medium. The frame holds one at a time and mounts it fresh, so a claim with nothing to show reads as a band that broke rather than one that is quiet.",
+        "Use media of the same shape. The frame does not resize between claims, and a scene that changes the frame's height un-pins the band mid-read.",
+        "Set `--sticky-stack-top` to the height of any sticky header above the band, or the first claim opens underneath it. Set it on a wrapper around the band rather than on the band's own tag: custom properties inherit, and the band is not a style seam.",
+        "Leave `showProgress` on. It is the only thing telling a reader how much of the pin is left.",
+        "Raise `dwell` for claims that carry code a reader must actually read; lower it for scenes that are grasped at a glance."
+      ]
+    },
     "breadcrumb": {
       "import": "@aziontech/webkit/breadcrumb",
       "target": "./src/components/navigation/breadcrumb/index.js",
