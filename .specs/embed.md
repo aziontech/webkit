@@ -4,9 +4,9 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 2
-checksum: 5e488110994d16f3bcb8540eabead3c25ea7a6e74eed95365ad4b120bec926df
+checksum: e467147d32097e315ea2f8c5911369861fd77f2196b862fb6124cec108e8743f
 created: 2026-09-22
-last_updated: 2026-09-23
+last_updated: 2026-09-25
 ---
 
 # Embed — Component Spec
