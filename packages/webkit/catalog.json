@@ -9930,6 +9930,70 @@
       "parent": "sidebar",
       "treeShakeableImport": "@aziontech/webkit/sidebar-footer"
     },
+    "logo-wall": {
+      "import": "@aziontech/webkit/logo-wall",
+      "target": "./src/components/marketing/logo-wall/logo-wall.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/logo-wall",
+      "category": "marketing",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "items",
+          "type": "LogoItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The marks rendered in the grid, in order; each item is `{ src, alt, href? }` where `src` is the mark's URL, `alt` names the company, and `href` links the mark when there is somewhere to go."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name for the group of marks, announced instead of an unnamed list."
+        }
+      ],
+      "slots": [
+        {
+          "name": "aside",
+          "scope": "—",
+          "notes": "Content set beside the wall from `lg` up, such as one customer's `quote`; when it is empty the wall spans the full width."
+        },
+        {
+          "name": "mark",
+          "scope": "{ item: LogoItem; index: number }",
+          "notes": "One cell's mark, replacing the image built from the item — for a mark that owns its own theming (a per-theme asset swap, a silhouette filter). The slotted content carries its own alternative text."
+        }
+      ],
+      "purpose": "The customer-proof band of a marketing page: a responsive grid of company marks, optionally linked, under one accessible group name. It is deliberately a static grid rather than an auto-scrolling strip — moving content needs a pause control to meet WCAG 2.2.2, and a wall a reader can scan beats one they have to wait for. The marks rest at 60% opacity, so the wall reads as the evidence behind the page's own words rather than as twelve things competing with them; a linked mark comes up to full strength on hover and focus. Fill the `aside` slot and the band splits from `lg` up — the wall on the start edge, one of those customers speaking on the end edge — and the wall narrows from six columns to four to sit in half the width.",
+      "useWhen": [
+        "To show who already uses the product, as the proof band under a hero or section.",
+        "Wherever a set of partner, customer or certification marks is the message.",
+        "When the marks are recognisable enough that names are unnecessary.",
+        "To set one customer's statement beside the crowd that backs it, by filling `aside` with a `quote`."
+      ],
+      "avoidWhen": [
+        "For a measured claim rather than a set of names → use `big-numbers`.",
+        "For one customer's statement → use `quote`.",
+        "For a single brand mark, such as the product's own → use `brand`.",
+        "For a grid of described features rather than marks → use `feature-card`."
+      ],
+      "related": [
+        "quote` — one named customer's statement; the wall shows many without words.",
+        "big-numbers` — the numeric form of the same proof band.",
+        "brand` — the product's own mark, not a customer's."
+      ],
+      "bestPractices": [
+        "Supply marks that read on the page's own surface. The component applies no colour filter — only a uniform opacity — so a mark that only works on one theme will not work on both; ship a mark that does, rather than inverting it. When the marks come from a registry that already places them per theme, render them through the `mark` slot and keep `items` as the list they are drawn from.",
+        "Give every mark a real `alt` — the company name. The wall is a list of who uses the product, and that list should be readable without seeing it.",
+        "Set `ariaLabel` so the group announces its purpose (\"Customers using Azion\") instead of reading as an unnamed list.",
+        "Keep the marks to one visual weight. A wall mixing wordmarks and full lockups reads as inconsistent no matter how the grid is set.",
+        "Link a mark with `href` only when there is somewhere worth going, such as a case study.",
+        "Put one statement in `aside`, not a second grid. The band's argument is *many customers, one of them talking*; two things of equal weight leave a reader with neither.",
+        "Give the wall eight or twelve marks when `aside` is filled — it is four columns wide there — so the last row is full rather than ragged."
+      ]
+    },
     "breadcrumb": {
       "import": "@aziontech/webkit/breadcrumb",
       "target": "./src/components/navigation/breadcrumb/index.js",
