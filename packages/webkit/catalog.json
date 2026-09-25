@@ -11324,6 +11324,100 @@
       "target": "./src/vite/index.js",
       "kind": "other",
       "treeShakeableImport": "@aziontech/webkit/vite"
+    },
+    "section-module": {
+      "import": "@aziontech/webkit/section-module",
+      "target": "./src/components/marketing/section-module/section-module.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/section-module",
+      "category": "marketing",
+      "structure": "monolithic",
+      "status": "approved",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the module's header row, rendered as its `h2`."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Supporting sentence under the headline."
+        },
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Short uppercase overline rendered above the headline."
+        },
+        {
+          "name": "kind",
+          "type": "SectionModuleKind",
+          "default": "'left'",
+          "required": "false",
+          "doc": "Layout of the default header row."
+        },
+        {
+          "name": "divided",
+          "type": "boolean",
+          "default": "true",
+          "required": "false",
+          "doc": "Draw the top rule that divides this module from the one above it."
+        },
+        {
+          "name": "padded",
+          "type": "boolean",
+          "default": "true",
+          "required": "false",
+          "doc": "Pad the module's body. Leave off for an edge-to-edge grid that owns its cell padding."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The module's body."
+        },
+        {
+          "name": "header",
+          "scope": "—",
+          "notes": "Replaces the default header row entirely."
+        },
+        {
+          "name": "actions",
+          "scope": "—",
+          "notes": "Trailing controls inside the default header row."
+        }
+      ],
+      "purpose": "The brick of the page column: a section whose header row is divided from its body by a hairline and which is divided from the module above it by another. Stacked inside a `section-container`, a run of modules reads as one continuous frame, because each module draws only its own top rule and hands its sides to the column. It is where a band's header and a band's content are joined, so no page has to re-draw that join.",
+      "useWhen": [
+        "For every band stacked inside a `section-container`.",
+        "Whenever a band needs a header row divided from its content by a rule.",
+        "For a body-only band, by passing no title and no header slot."
+      ],
+      "avoidWhen": [
+        "For the full-bleed band at the top of a page → use `hero`.",
+        "For the column the modules stack inside → use `section-container`.",
+        "For the header alone, with no body → use `section-title`, which this module composes.",
+        "For a hairline grid of cells → use `card-grid` inside this module's body."
+      ],
+      "related": [
+        "section-container` — the framed column this module stacks inside.",
+        "section-title` — the header row this module renders by default.",
+        "card-grid` — the edge-to-edge cell grid a module's body commonly holds.",
+        "frame-box` — the registration frame a body wraps itself in."
+      ],
+      "bestPractices": [
+        "Pass `divided` as `false` on the first module in a column: its top edge is already the hero's bottom rule, and drawing its own would put two hairlines on one pixel.",
+        "Pass `padded` as `false` when the body is an edge-to-edge `card-grid`, so the grid's rules meet the frame with no gutter.",
+        "Use `title` and `eyebrow` for the ordinary header, and reach for the `header` slot only when the row needs markup the default header cannot express."
+      ],
+      "styleSeam": true
     }
   }
 }
