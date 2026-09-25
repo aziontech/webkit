@@ -1,3 +1,10 @@
+## [3.9.3](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.9.2...@aziontech/webkit@3.9.3) (2026-09-25)
+
+### Bug Fixes
+
+- **theme:** publish v3 releases under the legacy-v3 npm dist-tag ([78e6c57](https://github.com/aziontech/webkit/commit/78e6c57b130548ea6e461b1d7a2a88a2827b321c))
+- **webkit:** stop lazy dropdown with filter from requesting pages beyond count ([#1021](https://github.com/aziontech/webkit/issues/1021)) ([ee61705](https://github.com/aziontech/webkit/commit/ee6170542846065e6136b3db11304d874d083ffe))
+
 ## [3.9.2](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.9.1...@aziontech/webkit@3.9.2) (2026-09-25)
 
 ### Bug Fixes
