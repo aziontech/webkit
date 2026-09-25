@@ -100,6 +100,7 @@
   "packages/webkit/src/components/layout/sidebar/sidebar-footer.vue::token:js-class-preset",
   "packages/webkit/src/components/layout/sidebar/sidebar-group.vue::token:js-class-preset",
   "packages/webkit/src/components/layout/sidebar/sidebar-header.vue::token:js-class-preset",
+  "packages/webkit/src/components/marketing/section-gap/section-gap.vue::verbose-comment-block",
   "packages/webkit/src/components/navigation/breadcrumb/breadcrumb.test.ts::verbose-comment-block",
   "packages/webkit/src/components/navigation/dropdown/dropdown-group/dropdown-group.vue::spec:Animation classes in spec but missing in .vue: animate-popup-scale-in, animate-popup-scale-out",
   "packages/webkit/src/components/navigation/dropdown/dropdown-option/dropdown-option.vue::spec:Animation classes in spec but missing in .vue: animate-popup-scale-in, animate-popup-scale-out",

@@ -10,7 +10,7 @@ const IMPORT = [
 
 /** @type {import('@storybook/vue3').Meta<typeof SectionGap>} */
 const meta = {
-  title: 'Components/Layout/SectionGap',
+  title: 'Components/Marketing/SectionGap',
   component: SectionGap,
   tags: ['autodocs'],
   parameters: {

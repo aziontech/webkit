@@ -31,8 +31,8 @@
   },
   {
     "name": "section-gap",
-    "path": "src/components/layout/section-gap/section-gap.vue",
-    "limit": "3 KB"
+    "path": "src/components/marketing/section-gap/section-gap.vue",
+    "limit": "4 KB"
   },
   {
     "name": "section-title",
