@@ -3,7 +3,7 @@ name: Publish @aziontech/theme to NPM
 on:
   push:
     branches:
-      - main
+      - v3
     paths:
       - 'packages/theme/**'
 
@@ -24,7 +24,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          token: ${{ secrets.GIT_PKG }}
+          token: ${{ secrets.GIT_PKG || secrets.GITHUB_TOKEN }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -42,5 +42,5 @@ jobs:
         working-directory: packages/theme
         run: npx semantic-release
         env:
-          GITHUB_TOKEN: ${{ secrets.GIT_PKG }}
+          GITHUB_TOKEN: ${{ secrets.GIT_PKG || secrets.GITHUB_TOKEN }}
           NPM_CONFIG_PROVENANCE: true
