@@ -9930,6 +9930,69 @@
       "parent": "sidebar",
       "treeShakeableImport": "@aziontech/webkit/sidebar-footer"
     },
+    "faq": {
+      "import": "@aziontech/webkit/faq",
+      "target": "./src/components/marketing/faq/faq.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/faq",
+      "category": "marketing",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the band, rendered as its `h2` in the left column."
+        },
+        {
+          "name": "items",
+          "type": "FaqItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The questions and their answers, in order; each item is `{ value, question, answer }` where `value` is the item's stable key."
+        },
+        {
+          "name": "framed",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "Draw the band's own registration frame. Turn it off when the page already wraps the band in a frame."
+        }
+      ],
+      "slots": [
+        {
+          "name": "answer",
+          "scope": "{ item: FaqItem }",
+          "notes": "Replaces the rendered answer for every item, so an answer can carry a link or richer content."
+        }
+      ],
+      "purpose": "The frequently-asked-questions band of a marketing page: a two-column panel with the section's heading on the left and the answers as a disclosure list on the right. It is the page-level band, not the disclosure primitive — it composes `accordion`, which remains the right choice anywhere a bare expandable list is wanted. The band is drawn in the hairline register: the two columns and every row are separated by a one-pixel gap over a rule fill, so the seams are the grid's own gaps rather than borders on the cells. The rule under a row is held at the item's edge and drawn only while that item is open, which keeps exactly one rule per row in either state; the last row draws none, because it sits on the band's own floor. A single `--accordion-inset` hook, re-declared per breakpoint, puts the heading, every question and every answer on one content column.",
+      "useWhen": [
+        "As the FAQ band near the end of a marketing or pricing page.",
+        "Whenever a page must answer a known set of objections without sending the reader to docs.",
+        "When the answers are short enough to read in place rather than link out to."
+      ],
+      "avoidWhen": [
+        "For a bare expandable list anywhere else → use `accordion` directly.",
+        "For long-form reference content that belongs in documentation → use `doc-prose` and link to it.",
+        "For a single expandable aside inside a section → use `accordion` with one item."
+      ],
+      "related": [
+        "accordion` — the disclosure primitive this band renders its answers through.",
+        "section-title` — the header for a section whose body is not a question list.",
+        "frame-box` — the frame the band is drawn with, applied by whatever assembles the page; the band draws none of its own."
+      ],
+      "bestPractices": [
+        "framed` decides who draws the rule. On, the band draws its own registration frame. Off, the rule and the corner marks belong to the `section-module` or `frame-box` the page assembles it into, so a band placed in an already-framed column never lands a second hairline on the column's own.",
+        "Keep the band to the questions a reader actually asks before buying; a FAQ is objection handling, not a manual.",
+        "Write each `question` as the reader would ask it, in their words rather than the product's.",
+        "Keep answers to a couple of sentences and link out for the rest — use the `answer` slot when an answer needs a link or richer content.",
+        "Give every item a stable `value`. It is the accordion's open-state key, so a reordered or re-keyed list loses whatever the reader had open.",
+        "Leave the first item closed. An open answer on load pushes the rest of the list down and hides the range of questions."
+      ]
+    },
     "breadcrumb": {
       "import": "@aziontech/webkit/breadcrumb",
       "target": "./src/components/navigation/breadcrumb/index.js",
