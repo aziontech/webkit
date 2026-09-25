@@ -9930,6 +9930,69 @@
       "parent": "sidebar",
       "treeShakeableImport": "@aziontech/webkit/sidebar-footer"
     },
+    "pricing-plans": {
+      "import": "@aziontech/webkit/pricing-plans",
+      "target": "./src/components/marketing/pricing-plans/pricing-plans.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/pricing-plans",
+      "category": "marketing",
+      "structure": "monolithic",
+      "status": "approved",
+      "props": [
+        {
+          "name": "kind",
+          "type": "'gap' | 'divider'",
+          "default": "'gap'",
+          "required": "false",
+          "doc": "Register of the band: gutters between self-contained cards, or hairline rules drawn by the gaps. In `divider` each card fills its own background."
+        },
+        {
+          "name": "periods",
+          "type": "PricingPeriod[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "Billing periods offered above the row; each item is `{ label, value }`. The switch is omitted when fewer than two are given."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "'Billing period'",
+          "required": "false",
+          "doc": "Accessible name for the billing-period switch."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The plan cards, composed as `card-pricing` elements in reading order."
+        }
+      ],
+      "purpose": "The pricing band: an optional billing-period switch above a row of plan cards that share one height and one rhythm. It owns the switch and the row; the cards are `card-pricing`, composed by the page, and the selected period is a two-way value the page reads to decide what each card shows.",
+      "useWhen": [
+        "As the pricing section of a marketing or plans page, holding two to four plans.",
+        "Whenever the page offers more than one billing period and the cards must react together.",
+        "When the plan cards should share a row and a height rather than stack at every width."
+      ],
+      "avoidWhen": [
+        "For one plan with no alternatives → render a `card-pricing` directly; a switch over one option is furniture.",
+        "For a feature comparison matrix → use `table`, which is built to be scanned row by row.",
+        "For a general grid of tiles → use `feature-card`, or `bento-grid` when the cells are unequal."
+      ],
+      "related": [
+        "card-pricing` — the plan card this band lays out; the band composes it and never restyles it.",
+        "segmented-button` — the billing-period switch, configured rather than reimplemented.",
+        "currency` — the amount inside a plan card.",
+        "carousel` — wrap the band's cards when a page has more plans than fit a row."
+      ],
+      "bestPractices": [
+        "Give every card in the row `aligned` so their caveat bands line up; one unaligned card drags the whole row out of rhythm.",
+        "Keep `periods` to two. A switch with four billing options is a filter, and belongs in the cards.",
+        "Read the two-way period value and change what the cards show — the band switches the control, not the prices; only the page knows what an annual plan costs.",
+        "Leave `periods` empty when there is one billing model. The band then renders the row alone, with no dead control above it.",
+        "Match the register to the card: `gap` with `card-pricing kind=\"contained\"`, `divider` with `kind=\"transparent\"`. A contained card in the `divider` register draws a border a pixel from the seam that already separates it."
+      ]
+    },
     "breadcrumb": {
       "import": "@aziontech/webkit/breadcrumb",
       "target": "./src/components/navigation/breadcrumb/index.js",
