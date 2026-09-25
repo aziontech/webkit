@@ -117,7 +117,7 @@ For onboarding content, prioritize Storybook docs pages under `Foundations`.
 
 ## 11) Webkit Layer Components (mandatory for agents)
 
-**Scope:** any file under `packages/webkit/src/components/webkit/**` (categories `actions`, `content`, `data`, `feedback`, `inputs`, `layout`, `navigation`, `overlay`, `utils`).
+**Scope:** any file under `packages/webkit/src/components/webkit/**` (categories `actions`, `code`, `content`, `data`, `documentation`, `feedback`, `inputs`, `layout`, `marketing`, `navigation`, `overlay`, `templates`, `utils` — the registry is [`.claude/hooks/component-categories.mjs`](./hooks/component-categories.mjs)).
 
 ### 11.1) Sources of truth (read first)
 
