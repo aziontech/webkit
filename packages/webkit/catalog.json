@@ -9930,6 +9930,74 @@
       "parent": "sidebar",
       "treeShakeableImport": "@aziontech/webkit/sidebar-footer"
     },
+    "banner": {
+      "import": "@aziontech/webkit/banner",
+      "target": "./src/components/marketing/banner/banner.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/banner",
+      "category": "marketing",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "default": "—",
+          "required": "true",
+          "doc": "The announcement, rendered as the band's `h2` in the leading column."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Supporting note set on the raised trailing column; overridden by the `aside` slot."
+        },
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Short uppercase overline naming the programme, above the announcement."
+        }
+      ],
+      "slots": [
+        {
+          "name": "actions",
+          "scope": "—",
+          "notes": "The controls the band exists to offer, under the announcement."
+        },
+        {
+          "name": "aside",
+          "scope": "—",
+          "notes": "Trailing column content; replaces the `description` prop when provided."
+        }
+      ],
+      "purpose": "A split promotional band: the announcement and its actions in the wide leading column, a short supporting note on a raised surface in the narrow trailing one. It is the page's one loud interruption between sections — wider and more assertive than `call-to-action`, which is a single-column closing ask.",
+      "useWhen": [
+        "To announce a launch, programme or offer part-way down a marketing page.",
+        "Whenever an announcement needs both a primary action and a short piece of supporting context beside it.",
+        "Once per page. A second banner turns the first into furniture."
+      ],
+      "avoidWhen": [
+        "For the closing ask at the end of a page or section → use `call-to-action`, a single-column panel.",
+        "For the page's leading statement → use `hero`, whose `Hero.Title` owns the `h1`.",
+        "For a dismissible or status-bearing notice inside the product → use `message`.",
+        "For a feature tile in a grid → use `feature-card`."
+      ],
+      "related": [
+        "call-to-action` — the single-column closing ask; this is the wider mid-page announcement.",
+        "hero` — the page's leading band; its `Hero.Title` owns the page's statement and `h1`.",
+        "message` — the in-product notice, which can be dismissed and carries severity."
+      ],
+      "bestPractices": [
+        "The band draws no frame of its own: the rule and the corner marks belong to the `section-module` or `frame-box` that the page assembles it into, so a band placed in a framed column never lands a second hairline on the column's own.",
+        "Put the announcement in `title` and keep the trailing column to one supporting sentence — it is context, not a second pitch.",
+        "Lead with one primary action in the `actions` slot; the band's whole job is that one target.",
+        "Use `eyebrow` to name the programme the banner belongs to, so the band reads in context when a reader lands mid-page.",
+        "Keep the trailing note short enough not to set the band's height; it sits beside the announcement, not under it."
+      ]
+    },
     "breadcrumb": {
       "import": "@aziontech/webkit/breadcrumb",
       "target": "./src/components/navigation/breadcrumb/index.js",
