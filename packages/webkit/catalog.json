@@ -9930,6 +9930,61 @@
       "parent": "sidebar",
       "treeShakeableImport": "@aziontech/webkit/sidebar-footer"
     },
+    "embed": {
+      "import": "@aziontech/webkit/embed",
+      "target": "./src/components/marketing/embed/embed.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/embed",
+      "category": "marketing",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "src",
+          "type": "string",
+          "default": "—",
+          "required": "true",
+          "doc": "URL of the document to embed."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "—",
+          "required": "true",
+          "doc": "Accessible name for the embedded document, announced before its content."
+        },
+        {
+          "name": "ratio",
+          "type": "'video' | 'square' | 'wide'",
+          "default": "'video'",
+          "required": "false",
+          "doc": "Aspect ratio the frame holds while it scales."
+        }
+      ],
+      "purpose": "A responsive `iframe` for third-party content — a demo, a player, a status page, a form — that keeps its aspect ratio at every width and always carries the accessible name an `iframe` needs. It is the one place external content enters a page, so the attributes that are easy to forget are not optional.",
+      "useWhen": [
+        "To embed a video player, live demo, status page or third-party form in a marketing page.",
+        "Whenever content comes from another origin and must sit inside the page's own frame.",
+        "When the embedded thing has a natural aspect ratio the page should preserve while it scales."
+      ],
+      "avoidWhen": [
+        "For a screenshot or a clip hosted by us inside documentation → use `doc-frame`, which frames stills and clips and opens them full screen.",
+        "For an image → use a plain `img` inside `frame-box`; an `iframe` for a picture costs a document load.",
+        "For content we own and could render directly — an embed is a last resort, not a layout tool."
+      ],
+      "related": [
+        "doc-frame` — the documentation frame for stills and clips, not third-party documents.",
+        "frame-box` — the frame drawn around the embedded document by whatever assembles the page; the embed draws none of its own.",
+        "media-split` — when the embed is one half of a copy-and-media band."
+      ],
+      "bestPractices": [
+        "The band draws no frame of its own: the rule and the corner marks belong to the `section-module` or `frame-box` that the page assembles it into, so a band placed in a framed column never lands a second hairline on the column's own.",
+        "Always write a `title` that says what the embedded thing is. It is the frame's accessible name, and a screen-reader user meets it before the content.",
+        "Pick the `ratio` that matches the source. A `video` ratio around a square form leaves bands of empty frame.",
+        "Prefer `loading=\"lazy\"` behaviour for anything below the fold — it is the default here, and an embed is usually the heaviest thing on a marketing page.",
+        "Do not embed something essential. A blocked or failed third-party frame leaves a hole the page cannot fill."
+      ]
+    },
     "breadcrumb": {
       "import": "@aziontech/webkit/breadcrumb",
       "target": "./src/components/navigation/breadcrumb/index.js",
