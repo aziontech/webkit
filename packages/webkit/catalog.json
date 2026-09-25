@@ -9930,6 +9930,111 @@
       "parent": "sidebar",
       "treeShakeableImport": "@aziontech/webkit/sidebar-footer"
     },
+    "quote": {
+      "import": "@aziontech/webkit/quote",
+      "target": "./src/components/marketing/quote/quote.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/quote",
+      "category": "marketing",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "text",
+          "type": "string",
+          "default": "—",
+          "required": "true",
+          "doc": "The quotation itself, rendered as the `blockquote` body; overridden by the default slot."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Who said it — the attribution's lead, and the source of the initials fallback in `highlight`."
+        },
+        {
+          "name": "jobTitle",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Their role and company, as one line — the attribution's second part. Named `jobTitle`, not `role`, because `role` is the ARIA attribute and a prop of that name reads as one to both tooling and the consumer."
+        },
+        {
+          "name": "photo",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "URL of the person's likeness, drawn by `highlight`; without one that register shows their initials."
+        },
+        {
+          "name": "logo",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "URL of the company mark; ignored when the `mark` slot is filled."
+        },
+        {
+          "name": "logoAlt",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Alternative text for the mark; falls back to `jobTitle` when empty."
+        },
+        {
+          "name": "kind",
+          "type": "QuoteKind",
+          "default": "'inline'",
+          "required": "false",
+          "doc": "Register of the quote: `inline` is the quiet unit inside a larger band, `signed` the band-sized client sentence, `highlight` the featured one."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "Quotation body; replaces the `text` prop when provided."
+        },
+        {
+          "name": "mark",
+          "scope": "—",
+          "notes": "The company mark; replaces the image built from `logo`, for a mark that owns its own theming."
+        },
+        {
+          "name": "actions",
+          "scope": "—",
+          "notes": "A trailing control under the attribution, floored so a row of quotes aligns on it."
+        }
+      ],
+      "purpose": "A single customer testimonial: the quotation, who said it, and optionally the mark of the company they said it for. It is the smallest unit of social proof on a marketing page, and it is deliberately one quote — a wall of them is a layout built from several of these, not a prop on one. Three registers, one component. `inline` is the quiet unit that sits inside a cell of a larger band — the mark small above the words, the attribution one muted line under them. `signed` is the band-sized register a product page gives a client: the mark above, the quotation at heading weight, and the attribution split into the speaker's name in the accent beside their role. `highlight` is the featured register — the quotation set largest, the speaker carried by their likeness (or their initials), and the company mark floated on a textured plate. The register changes the weight and the arrangement, never the anatomy: every register is one `figure` holding one `blockquote` and one `figcaption`, so the quotation and its attribution stay paired at the depth HTML requires.",
+      "useWhen": [
+        "To carry one customer statement inside a marketing section.",
+        "Whenever a claim the page makes is better made by the customer who verified it.",
+        "As the repeated unit of a testimonial row or grid, one instance per quote — in `inline`, where every cell carries equal weight.",
+        "In `signed`, as a product page's own client sentence, usually beside that page's client marks.",
+        "In `highlight`, for the one quotation a page features above the others."
+      ],
+      "avoidWhen": [
+        "For a measured figure rather than a statement → use `big-numbers`.",
+        "For an inline aside or callout inside documentation → use `doc-callout`.",
+        "For a dismissible or status message → use `message`.",
+        "For a logo row with no quotation → compose the marks directly; a `quote` without `text` is not a logo wall."
+      ],
+      "related": [
+        "big-numbers` — the numeric form of the same proof band.",
+        "card-grid` — the uniform grid a row of peer quotes is laid out on; `bento-grid` when one quote is given more weight than its neighbours.",
+        "avatar` — the person's likeness, composed by the `highlight` register.",
+        "overline` — the speaker's name in the `signed` register's attribution."
+      ],
+      "bestPractices": [
+        "Keep `text` to one or two sentences. A testimonial that needs a paragraph is a case study, and belongs behind a link.",
+        "Give `name` the speaker and `job-title` their title and company. The registers set the two differently, so passing one joined string collapses that distinction.",
+        "Quote verbatim. Do not add quotation marks to `text` — every register opens on the component's own quotation glyph, sized to that register's measure, so a typed `\"` doubles it.",
+        "Give `logo` a company mark only. A person's likeness is `photo`, which only `highlight` draws.",
+        "Give `logo` a mark that carries its own contrast. It is drawn as-is — no filter, one URL, no per-theme swap — so a mark drawn in a single ink reads on one theme and disappears on the other. Use the `mark` slot instead when the mark is a component that owns its own theming.",
+        "Put a trailing control in `actions` rather than beside the quote. The band floors it, which is what keeps a row of quotes aligned on their controls whatever each quotation's length."
+      ]
+    },
     "breadcrumb": {
       "import": "@aziontech/webkit/breadcrumb",
       "target": "./src/components/navigation/breadcrumb/index.js",
