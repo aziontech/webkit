@@ -1,3 +1,5 @@
+import { ease } from './ease.js'
+
 export const curve = {
   'productive-entrance': 'cubic-bezier(0.39, 0.57, 0.56, 1)',
   'productive-exit': 'cubic-bezier(0.55, 0.09, 0.68, 0.53)',
@@ -27,7 +29,14 @@ export const animate = {
   'fade-out': 'fadeOut 220ms ease-in-out',
   'slide-down': 'slideDown 220ms ease-in-out',
   'highlight-fade': `highlight ${duration['slow-03']} ease-in forwards`,
+  // The two arrivals, and they are a pair — see the note above their keyframes.
+  // `page-enter` is the route transition; `content-enter` is content settling inside a
+  // page already on screen. Both take `moderate-02` + `productive-entrance`: the
+  // pairing the system already uses for a panel of content arriving, so a page and the
+  // components on it move as one system.
   'page-enter': `pageEnter ${duration['moderate-02']} ${curve['productive-entrance']}`,
+  // `backwards` so a staggered follower holds its offset through the delay instead of
+  // showing the landed state and then jumping back to its start.
   'content-enter': `contentEnter ${duration['moderate-02']} ${curve['productive-entrance']} var(--content-enter-delay, 0s) backwards`,
   'popup-scale-in': `popupScaleIn ${duration['moderate-01']} ${curve['productive-entrance']}`,
   'popup-scale-out': `popupScaleOut ${duration['fast-02']} ${curve['productive-exit']}`,
@@ -39,7 +48,57 @@ export const animate = {
   'progress-indeterminate-short': `progressIndeterminateShort ${duration['slow-04']} ${curve['expressive-entrance']} ${duration['slow-03']} infinite`,
   // `linear` (not a curve token) for the same reason as spin/shimmer: an endlessly
   // looping animation must not accelerate, or the seam between repeats is visible.
-  'flow-dash': `flowDash ${duration['slow-02']} linear infinite`
+  'flow-dash': `flowDash ${duration['slow-02']} linear infinite`,
+  // ONE token holding a two-animation list, because the packet's position and its length run
+  // on different timing functions off the same clock. Both legs must stay the same duration or
+  // the taper drifts out of phase with the travel and the dash tapers mid-path.
+  'flow-packet': `flowPacketTravel ${duration['slow-04']} ${ease['in-out']} infinite, flowPacketTaper ${duration['slow-04']} linear infinite`,
+  // No delay in the shorthand, deliberately: a `var()` nested inside a token declared
+  // here is substituted once, on `:root`, and the resolved value is what descendants
+  // inherit — so a per-element `--…-delay` written into this string can never reach the
+  // element. The stagger is an `animation-delay` LONGHAND on the node instead, which does
+  // resolve per element. `backwards` is here so a delayed node holds its invisible start
+  // through that delay instead of painting the landed state and blinking back out.
+  'flow-node-enter': `flowNodeEnter ${duration['moderate-02']} ${curve['productive-entrance']} backwards`,
+  // Half of a flow diagram's arrival beat: a node lands on the first half of
+  // `--flow-enter-step`, its outgoing connector draws on the second. No fill forwards — the
+  // mask path's resting state is already fully open, which is also what a reduced-motion
+  // `animate-none` leaves behind. `backwards` for the same reason as flow-node-enter.
+  'flow-connector-draw': `flowConnectorDraw ${duration['moderate-02']} ${curve['productive-entrance']} backwards`,
+  // An always-on glow breathing behind the one element a view is ABOUT. Asymmetric on
+  // purpose, and the asymmetry is the whole read: it blooms over `slow-02` and falls back over
+  // `moderate-02`, so each cycle arrives and settles instead of dimming on a metronome. The
+  // duration is those two tokens summed rather than a literal, so the cycle follows the scale;
+  // the split lives in the keyframe offsets, and each leg carries its own curve — something the
+  // shorthand cannot express, since one `animation-timing-function` would govern both.
+  'glow-pulse': `glowPulse calc(${duration['slow-02']} + ${duration['moderate-02']}) infinite`,
+  'illustration-rim-sweep': `illustrationRimSweep ${duration['slow-04']} linear infinite`,
+  // Off the duration scale for the same reason as the chat pair below: that scale budgets UI
+  // transitions and tops out at 2.1s, and these are ambient ground. 13s and 19s are both prime,
+  // so the two bands only return to the same relative phase every 247s — long enough that the
+  // field reads as weather rather than as a timer. `linear`, like every endless loop here.
+  'texture-wave-a': 'textureWaveA 13s linear infinite',
+  'texture-wave-b': 'textureWaveB 19s linear infinite',
+  // The ambient pair behind the illustrated chat window. `9s` is deliberately off the duration
+  // scale — like `spin`, `pulse`, `shimmer` and `blink` above, which are also literals: that
+  // scale tops out at 2.1s because it budgets UI transitions, and an ambient loop that runs
+  // forever in the corner of a page is not one. At 9s the transcript delivers a message every
+  // 2.25s, which reads as a conversation rather than as a ticker.
+  //
+  // Not `linear`, unlike every other endless loop here: this one is four discrete steps with
+  // holds between them, so there is no continuous motion to keep even — each slide is a small UI
+  // movement in its own right and takes the entrance curve.
+  //
+  // The two MUST share a duration — the pop is phase-locked to the scroll by a per-message
+  // negative delay, so a change to one is a change to both.
+  'illustration-chat-scroll': `illustrationChatScroll 9s ${curve['productive-entrance']} infinite`,
+  'illustration-chat-pop': `illustrationChatPop 9s ${curve['expressive-entrance']} infinite`,
+  // The duration here is only a DEFAULT: a strip's pass has to cover its own row, so the
+  // element overrides `animation-duration` from its mark count. It cannot be a var in this
+  // shorthand — Tailwind declares `--animate-*` on `:root`, so a `var()` inside it is
+  // substituted there and bakes in the fallback, whatever the element later sets. 59s is
+  // the eleven-mark case. `linear`, like every endless loop above; a curve would show at the seam.
+  'brand-marquee': 'brandMarquee 59s linear infinite'
 }
 
 export const useWhen = {
@@ -69,7 +128,27 @@ export const useWhen = {
   'progress-indeterminate': 'Indeterminate linear progress bar (primary sweep).',
   'progress-indeterminate-short': 'Indeterminate linear progress bar (secondary short sweep).',
   'flow-dash':
-    'Flowing connection along an SVG connector stroke in a node-based / network diagram. Set a stroke-dasharray whose cycle divides 24 (e.g. 4 4) so the loop is seamless.'
+    'Flowing connection along an SVG connector stroke in a node-based / network diagram. Set a stroke-dasharray whose cycle divides 24 (e.g. 4 4) so the loop is seamless.',
+  'flow-packet':
+    'A request crossing an SVG connector in such a diagram: a dash that travels the path and tapers at both ends, carrying about the first half of the cycle. The path MUST carry pathLength="100" (camelCase) because the keyframe offsets are percentages, and MUST use butt line caps because the dash is zero-length at both extremes. Do not set stroke-dasharray or stroke-dashoffset in CSS alongside it; the keyframes own both.',
+  'flow-node-enter':
+    'A node of such a diagram arriving. Stagger it by setting animation-delay on the node itself — [animation-delay:var(--flow-node-enter-delay,0s)] plus one --flow-node-enter-delay per node, one fast-01 step apart — never inside this shorthand, where a nested var() is substituted on :root and the per-node value is lost. It fades in while travelling one --spacing-md rightward, so a staggered diagram assembles along the direction its connectors carry. The movement is safe only because the diagram measures its nodes from layout offsets, which a transform does not move; a diagram that measured them from getBoundingClientRect would strand every line at the offset it was measured at.',
+  'flow-connector-draw':
+    'The connector between two nodes of such a diagram being drawn. It animates a MASK path (pathLength="100", stroke wider than what it reveals), not the connector itself, so the revealed stroke keeps its own marching dash; apply that mask to the group holding the connector and its packet. Stagger it with an animation-delay longhand on the mask path — half a step after the node it leaves, so the diagram assembles node, line, node, line.',
+  'glow-pulse':
+    'An ambient glow breathing behind the one element a view is about — the subject node of a diagram, marked without a hover to find it. Apply it to a LAYER that carries only the glow (an inset ::before with a box-shadow and nothing else), never to the element itself: the element usually already runs its own entrance, and a second animate-* utility replaces that shorthand rather than joining it. Pair it with motion-reduce:before:animate-none.',
+  'illustration-rim-sweep':
+    'Rim light travelling around an illustration on hover. Apply through the .illustration-rim-sweep utility, which re-declares the ramp stack the angle drives; paused by default and set running from the hovered ancestor.',
+  'texture-wave-a':
+    'One of the two crossing bands of a pixelate texture, travelling left. Set --texture-wave-shift on the element to one period of its banding measured along X, and overhang the element by that much on the side it travels toward, or the field uncovers mid-cycle.',
+  'texture-wave-b':
+    'The counter-travelling band of that pair (pair of texture-wave-a; same --texture-wave-shift contract, opposite direction).',
+  'illustration-chat-scroll':
+    'A conversation advancing bottom-to-top inside an illustrated window, one message per step. Apply to a track exactly twice the height of its clipped viewport (h-[200%]) holding four EQUAL-height messages per screenful, repeated in the second half — each step is then one message and the loop lands on an identical frame, with no seam.',
+  'brand-marquee':
+    'A strip of logos looping forever (client trust strips, framework strips). Apply to a track holding its row exactly twice, the duplicate aria-hidden, and set animation-duration ON THE ELEMENT from the mark count so every strip on a site moves at one speed rather than one duration — a var in this shorthand would resolve at :root and never see it. Pause it on hover and focus-within so a linked mark can be reached.',
+  'illustration-chat-pop':
+    'Each message landing at the bottom of that scroll. Same duration as illustration-chat-scroll, with a negative animation-delay per message (-6.75s / -4.5s / -2.25s / 0s for the four) so its 4% pop fires on the step boundary, with the message standing still and in view.'
 }
 
 export default { animate, curve, duration, useWhen }
