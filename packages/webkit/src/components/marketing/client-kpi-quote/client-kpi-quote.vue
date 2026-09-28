@@ -9,7 +9,7 @@
   })
 
   interface Props {
-    /** Registry name of the client's brand mark, as `brand-carousel` names one; a name the registry does not carry falls back to the typographic wordmark. */
+    /** Registry name of the client's brand mark, as `ticker` names one; a name the registry does not carry falls back to the typographic wordmark. */
     client?: string
     /** The client's name in prose — the mark's accessible name, and the wordmark drawn when the registry has no artwork; falls back to the registry's own label for `client`. */
     clientName?: string
@@ -86,7 +86,7 @@
           :is="art"
           v-if="art"
           :data-mark="client"
-          class="h-full w-auto max-w-32 object-contain"
+          class="h-full w-auto max-w-(--size-32) object-contain"
         />
       </slot>
       <!-- Registry artwork is aria-hidden, so the name is the caption's only text;

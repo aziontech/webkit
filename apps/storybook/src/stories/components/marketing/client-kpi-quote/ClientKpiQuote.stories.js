@@ -32,7 +32,7 @@ const meta = {
     client: {
       control: 'text',
       description:
-        'Registry name of the client’s brand mark, as `brand-carousel` names one; a name the registry does not carry falls back to the typographic wordmark.',
+        'Registry name of the client’s brand mark, as `ticker` names one; a name the registry does not carry falls back to the typographic wordmark.',
       table: {
         category: 'props',
         type: { summary: 'string' },
@@ -152,7 +152,7 @@ export const Default = {
     docs: {
       description: {
         story:
-          'One client, one result. The mark is named, not carried: `client` is a name from the same registry `brand-carousel` reads, so the page states who and the registry owns the artwork. Edit `kpi` and `text` in the Controls panel — they are set in one paragraph and read as one sentence, with the figure leading in the default ink.'
+          'One client, one result. The mark is named, not carried: `client` is a name from the same registry `ticker` reads, so the page states who and the registry owns the artwork. Edit `kpi` and `text` in the Controls panel — they are set in one paragraph and read as one sentence, with the figure leading in the default ink.'
       },
       source: { code: toSfc([IMPORT, IMPORT_MINI_BUTTON], DEFAULT_MARKUP) }
     }

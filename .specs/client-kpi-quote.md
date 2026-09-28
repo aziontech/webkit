@@ -4,9 +4,9 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 01e99f64d89e814e2890b8019a77165cc5a75595ae68341fa82dd2ee3de53207
+checksum: 0d15e79ecd5a8ad481763401b0b02e0528c85e61cd54c84aa7e5e6f7f7ecd13e
 created: 2026-09-24
-last_updated: 2026-09-24
+last_updated: 2026-09-26
 ---
 
 # Client KPI Quote — Component Spec
@@ -25,14 +25,14 @@ One cell of customer proof: the client's mark, the result that client got, and t
 
 - For the platform's own figures, with no client behind them → use `big-numbers`.
 - For something a customer said → use `quote`, which owns the blockquote and the attribution.
-- For a wall or a strip of customer marks with no claim attached → use `logo-wall` or `brand-carousel`.
-- For a product capability stated as a benefit → use `feature-card`.
+- For a wall or a strip of customer marks with no claim attached → use `logo-wall` or `ticker`.
+- For a product capability stated as a benefit → use `topic`.
 
 ## Related
 
 - `big-numbers` — the same proof band unsigned: the platform's figures rather than one client's.
 - `quote` — a customer's words; this component is a customer's result.
-- `brand-carousel` — the mark registry this component names; a strip states the client list, a cell states one client's outcome.
+- `ticker` — the mark registry this component names; a strip states the client list, a cell states one client's outcome.
 - `card-grid` — the hairline grid a row of these cells sits in; its `gap-px` seams are the rules between them.
 
 ## Best practices
@@ -69,7 +69,7 @@ import ClientKpiQuote from '@aziontech/webkit/client-kpi-quote'
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `client` | `string` | `''` | false | Registry name of the client's brand mark, as `brand-carousel` names one; a name the registry does not carry falls back to the typographic wordmark. |
+| `client` | `string` | `''` | false | Registry name of the client's brand mark, as `ticker` names one; a name the registry does not carry falls back to the typographic wordmark. |
 | `clientName` | `string` | `''` | false | The client's name in prose — the mark's accessible name, and the wordmark drawn when the registry has no artwork; falls back to the registry's own label for `client`. |
 | `kpi` | `string` | `''` | false | The result itself — the figure or short phrase the claim leads with, set in the default ink. |
 | `text` | `string` | `''` | false | The rest of the claim, set muted after the `kpi` and read as one sentence with it. |

@@ -9944,7 +9944,7 @@
           "type": "string",
           "default": "''",
           "required": "false",
-          "doc": "Registry name of the client's brand mark, as `brand-carousel` names one; a name the registry does not carry falls back to the typographic wordmark."
+          "doc": "Registry name of the client's brand mark, as `ticker` names one; a name the registry does not carry falls back to the typographic wordmark."
         },
         {
           "name": "clientName",
@@ -10003,13 +10003,13 @@
       "avoidWhen": [
         "For the platform's own figures, with no client behind them → use `big-numbers`.",
         "For something a customer said → use `quote`, which owns the blockquote and the attribution.",
-        "For a wall or a strip of customer marks with no claim attached → use `logo-wall` or `brand-carousel`.",
-        "For a product capability stated as a benefit → use `feature-card`."
+        "For a wall or a strip of customer marks with no claim attached → use `logo-wall` or `ticker`.",
+        "For a product capability stated as a benefit → use `topic`."
       ],
       "related": [
         "big-numbers` — the same proof band unsigned: the platform's figures rather than one client's.",
         "quote` — a customer's words; this component is a customer's result.",
-        "brand-carousel` — the mark registry this component names; a strip states the client list, a cell states one client's outcome.",
+        "ticker` — the mark registry this component names; a strip states the client list, a cell states one client's outcome.",
         "card-grid` — the hairline grid a row of these cells sits in; its `gap-px` seams are the rules between them."
       ],
       "bestPractices": [
