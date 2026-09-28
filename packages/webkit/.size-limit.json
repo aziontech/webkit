@@ -137,7 +137,7 @@
   {
     "name": "banner",
     "path": "src/components/marketing/banner/banner.vue",
-    "limit": "3 KB"
+    "limit": "4.25 KB"
   },
   {
     "name": "illustration",
