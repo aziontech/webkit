@@ -1,7 +1,7 @@
 import type { Component } from 'vue'
 
 /**
- * Every name `<BrandCarousel :marks>` accepts. A mark is an SFC drawn in `currentColor`, so
+ * Every name `<Ticker :marks>` accepts. A mark is an SFC drawn in `currentColor`, so
  * it needs no per-theme asset; loaders are dynamic imports, so a page carries only what it
  * names. An unregistered name is not an error — the carousel writes it as a wordmark.
  */
