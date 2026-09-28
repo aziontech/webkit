@@ -4,9 +4,9 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 34f39ec8364cfca7c339d193e6f0c5d89e84531db422ea77cf7e035ddc593885
+checksum: ea6cdfeb608a813d6166c49dee0b38a5efef4cc776ca9b7c67842bdc3ae3d50d
 created: 2026-09-25
-last_updated: 2026-09-25
+last_updated: 2026-09-26
 ---
 
 # Media Tile — Component Spec
@@ -25,7 +25,7 @@ One cell of a media band: a scene above, and under it a run-in caption whose lea
 ## When NOT to use
 
 - When the claim deserves a heading and a place in the document outline → use `topic`, which leads with a real `h2`/`h3`.
-- When the tile is a padded surface card with a glyph, an eyebrow and a link → use `feature-card`.
+- When the tile is a padded surface card with a glyph and a link → use `topic` in a `CardGrid.Cell`.
 - For one scene beside a block of copy across the full band → use `media-split`.
 - For a mosaic whose cells claim different numbers of columns → use `bento-grid`.
 - For the grid that lays the tiles out, or a framed cell that wraps media *and* copy together → use `card-grid`.
@@ -34,7 +34,6 @@ One cell of a media band: a scene above, and under it a run-in caption whose lea
 
 - `card-grid` — the grid that lays a row of tiles out; use its `gap` register, whose gutters keep every tile's frame its own.
 - `topic` — the heading-led claim, for a band whose items belong in the outline.
-- `feature-card` — the padded surface card, for a claim that carries a glyph and a link.
 - `media-split` — one scene beside one block of copy, across the whole band.
 - `frame-box` — the frame this tile draws around its media.
 - `illustration` — the scene the frame usually holds; unnamed, it renders the placeholder that reserves a tile's space.
