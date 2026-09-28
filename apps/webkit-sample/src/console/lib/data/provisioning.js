@@ -17,10 +17,10 @@
 // `provisionDeployment()` is called once, when the deployment finishes; the list views prepend
 // `provisionedWorkloads` / `provisionedApplications` / `provisionedBuckets` to
 // their mock data so a just-deployed resource is immediately manageable.
-import { computed, ref } from 'vue'
-
 import { daysAgo, formatListDate } from '@shared/lib/dates'
 import { authorAt, emailOf } from '@shared/lib/people'
+import { computed, ref } from 'vue'
+
 import { workloadById } from './workloads'
 
 // The framework the template declares (`framework` in templates.js) is not

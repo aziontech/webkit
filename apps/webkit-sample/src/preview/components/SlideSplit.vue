@@ -14,7 +14,7 @@
   // sits on — the two share `--bg-surface` — and the half read as a page of code rather than
   // as one artefact quoted beside the claim.
   import CodeBlock from '@aziontech/webkit/code-block'
-  import DotGridBanner from '@shared/ui/banners/DotGridBanner.vue'
+  import TextureMaterial from '@aziontech/webkit/texture-material'
 
   import SlideHeading from './SlideHeading.vue'
 
@@ -50,14 +50,14 @@
          hero lattice in the brand ink: the snippet is a card ON a ground, and the ground has
          to be visibly one — a bare surface at this size read as empty space the card had been
          dropped into. The dots are the marketing site's `dot-grid`, pitch and geometry
-         untouched, with only `--dot-grid-ink` swapped for `--primary`; at a 2px dot on a 48px
+         untouched, with only `--texture-ink` swapped for `--primary`; at a 2px dot on a 48px
          lattice the field is 0.17% ink, so full-strength orange scatters rather than glows and
          never competes with the code's own syntax colour. `min-h-0` is what keeps a long
          snippet scrolling inside the half instead of stretching the grid row past the frame. -->
     <div
       class="relative flex min-h-0 flex-col justify-center overflow-hidden bg-(--bg-surface) p-(--spacing-xxl)"
     >
-      <DotGridBanner class="[--dot-grid-ink:var(--primary)]" />
+      <TextureMaterial class="[--texture-ink:var(--primary)]" />
 
       <!-- The snippet's properties, stated as the artefact's own tags rather than as another
            bullet in the claim opposite: they are what the file IS, so they sit on the evidence

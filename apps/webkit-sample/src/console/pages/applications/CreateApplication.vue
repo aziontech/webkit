@@ -55,11 +55,6 @@
   // and a create that stopped short would leave them on a list hunting for a Deploy
   // button. The verb is what makes it consent instead of a surprise.
   import { toast } from '@aziontech/webkit/toast'
-  import {
-    provisionDeployment,
-    publishDeployment,
-    resourceChain
-  } from '../../lib/data/provisioning'
   import { computed, reactive, ref, watch } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
@@ -90,6 +85,11 @@
     firewallModuleLabelsByName
   } from '../../lib/data/firewalls'
   import { AZION_COMMANDS } from '../../lib/data/frameworks'
+  import {
+    provisionDeployment,
+    publishDeployment,
+    resourceChain
+  } from '../../lib/data/provisioning'
   import { installIntegration } from '../../lib/data/template-integrations'
   import { configuredTemplateSteps } from '../../lib/data/template-provisioning'
   import { getTemplate, templateSource } from '../../lib/data/templates.js'

@@ -73,11 +73,11 @@ const DOCS_IDS = {
   CardBox: 'components-content-cardbox--documentation',
   CardPricing: 'components-content-cardpricing--documentation',
   Currency: 'components-content-currency--documentation',
-  HeroTitle: 'components-content-herotitle--documentation',
+  HeroTitle: 'marketing-herotitle--documentation',
   Item: 'components-content-item--documentation',
   Kbd: 'components-content-kbd--documentation',
   Overline: 'components-content-overline--documentation',
-  SectionTitle: 'components-content-sectiontitle--documentation',
+  SectionTitle: 'marketing-sectiontitle--documentation',
   Tag: 'components-content-tag--documentation',
 
   // Feedback
@@ -95,7 +95,7 @@ const DOCS_IDS = {
   FrameBox: 'components-layout-framebox--documentation',
   GlobalHeader: 'components-layout-globalheader--documentation',
   ScrollArea: 'components-layout-scrollarea--documentation',
-  SectionGap: 'components-layout-sectiongap--documentation',
+  SectionGap: 'marketing-sectiongap--documentation',
   Sidebar: 'components-layout-sidebar--documentation',
 
   // Overlay

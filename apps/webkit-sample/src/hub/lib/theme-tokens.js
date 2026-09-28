@@ -190,7 +190,7 @@ export function buildThemeColorGroups() {
     })
   }
 
-  return groups.filter((g) => g.items.length > 0).map(({ match, ...g }) => g)
+  return groups.filter((g) => g.items.length > 0).map(({ match: _match, ...g }) => g)
 }
 
 export const themeColorGroups = buildThemeColorGroups()

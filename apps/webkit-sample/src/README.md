@@ -95,7 +95,7 @@ shared/
                A domain fixture only the console reads lives in console/lib/data/.
   ui/
     layout/    the framed-grid page kit — see .claude/docs/CONTAINERS.md
-    banners/   hero backdrops, chosen by name through BannerContainer
+    banners/   hero backdrops, chosen by name through Hero
     brand/     brand and client marks, claim pills, the carousel
     illustration/  the platform artwork the Site and the Hub both show
     deployment/    the deploy log view the console and the Site demo both render

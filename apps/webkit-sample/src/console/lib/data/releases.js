@@ -24,23 +24,23 @@
 //
 // A release therefore reads: for each resource a Deployment setting binds, which VERSION
 // of it goes out, plus the versions of everything those resources reference.
-import { APPLICATIONS } from './applications'
-import {
-  getVersionCapability,
-  RESOURCES,
-  resourceMeta,
-  VERSION_STATES
-} from './versioning'
 import { daysAgo, hoursAgo } from '@shared/lib/dates'
-import { DEPLOYMENT_HISTORY } from './deployment-history'
 import { authorAt } from '@shared/lib/people'
-import { findDeploymentByWorkload, provisionedApplications } from './provisioning'
 import { computed } from 'vue'
 
 import { boundWorkloads, reachLabel, settingsIdsForWorkload } from '../state/workload-settings'
+import { APPLICATIONS } from './applications'
 import { existingCustomPageOptions } from './custom-pages'
+import { DEPLOYMENT_HISTORY } from './deployment-history'
 import { strategies } from './deployment-strategies'
 import { existingFirewallOptions } from './firewalls'
+import { findDeploymentByWorkload, provisionedApplications } from './provisioning'
+import {
+  getVersionCapability,
+  resourceMeta,
+  RESOURCES,
+  VERSION_STATES
+} from './versioning'
 
 // ── Vocabulary ──────────────────────────────────────────────────────────────
 // `label` names the ENTITY (a heading, a card title, a Console page) and keeps its

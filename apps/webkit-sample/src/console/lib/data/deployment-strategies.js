@@ -33,16 +33,17 @@
 // not to a workspace.
 import { daysAgo, formatListDate } from '@shared/lib/dates'
 import { authorAt } from '@shared/lib/people'
+import { computed, ref } from 'vue'
+
 import {
   DEFAULT_DEPLOYMENT_POLICY,
   DEFAULT_ENVIRONMENT_NAMES,
   DEFAULT_ENVIRONMENTS,
-  deploymentPolicyLabel,
   DEPLOYMENT_POLICY_OPTIONS,
+  deploymentPolicyLabel,
   normalizeDeploymentPolicy
 } from './environments'
 import { WORKLOADS } from './workloads'
-import { computed, ref } from 'vue'
 
 // `default` is the only strategy type the API exposes today. It stays a declared
 // vocabulary (rather than a hard-coded string in a drawer) so the day a second
@@ -98,8 +99,8 @@ export const BINDING_POLICIES = [
 // re-exports them under the name its own consumers already import. One definition; a
 // setting and an environment can no longer disagree about what `versioned_urls` means.
 export {
-  DEPLOYMENT_POLICY_OPTIONS as DEPLOYMENT_POLICIES,
   DEFAULT_DEPLOYMENT_POLICY,
+  DEPLOYMENT_POLICY_OPTIONS as DEPLOYMENT_POLICIES,
   deploymentPolicyLabel,
   normalizeDeploymentPolicy
 }

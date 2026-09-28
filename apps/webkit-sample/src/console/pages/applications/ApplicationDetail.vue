@@ -39,11 +39,6 @@
   import { computed, nextTick, ref } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
-  import { applicationById } from '../../lib/data/applications'
-  import { latestApplicationDeployment } from '../../lib/data/deployment-history'
-  import { provisionedApplications } from '../../lib/data/provisioning'
-  import { workloadById } from '../../lib/data/workloads'
-
   import ProjectDropZone from '../../components/creation/ProjectDropZone.vue'
   import DropDeployDialog from '../../components/deployment/DropDeployDialog.vue'
   import UnsavedChangesGuard from '../../components/form/UnsavedChangesGuard.vue'
@@ -52,6 +47,10 @@
   import { useProjectUpload } from '../../lib/behavior/project-upload'
   import { isTabDirty, tabCommit } from '../../lib/behavior/tab-dirty'
   import { useTabEnter } from '../../lib/behavior/tab-enter'
+  import { applicationById } from '../../lib/data/applications'
+  import { latestApplicationDeployment } from '../../lib/data/deployment-history'
+  import { provisionedApplications } from '../../lib/data/provisioning'
+  import { workloadById } from '../../lib/data/workloads'
   import { startResourceDeployRun } from '../../lib/state/deploy-runs'
   import Build from './panels/Build.vue'
   import CacheSettings from './panels/CacheSettings.vue'

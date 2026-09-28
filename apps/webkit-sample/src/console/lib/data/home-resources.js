@@ -35,9 +35,8 @@
 // Never both. A line has one destination or none, and string-sniffing in the template
 // ("does it contain a dot?") is exactly the guess this pair exists to remove.
 import { APPLICATIONS } from './applications'
-import { WORKLOADS } from './workloads'
-
 import { FUNCTIONS, runtimeOf } from './functions'
+import { WORKLOADS } from './workloads'
 
 /**
  * The types the SUMMARY offers, in the order the segmented control lists them.

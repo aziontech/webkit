@@ -117,8 +117,8 @@
   // a black wordmark, two knockout tiles and a yellow-and-grey mesh, and only a flatten puts
   // those on one surface at one weight.
   import FrameBox from '@aziontech/webkit/frame-box'
+  import { CLIENTS } from '@shared/assets/clients/index.js'
   import ClientMark from '@shared/ui/brand/ClientMark.vue'
-  import { CLIENTS } from '@shared/ui/brand/clients/index.js'
   import { STANDARDS } from '@shared/ui/brand/standards.js'
   import { PRODUCT_STACK, TOOLS } from '@shared/ui/brand/tools.js'
   import { computed } from 'vue'

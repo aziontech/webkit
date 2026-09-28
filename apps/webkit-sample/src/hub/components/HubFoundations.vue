@@ -8,12 +8,12 @@
   import icons from '@aziontech/icons/catalog'
   import colorIcons from '@aziontech/icons/color-catalog'
   import { primitives } from '@aziontech/theme/colors'
+  import Hero from '@aziontech/webkit/hero'
+  import CardGrid from '@aziontech/webkit/card-grid'
   import CodeBlock from '@aziontech/webkit/code-block'
-  import BannerContainer from '@shared/ui/layout/BannerContainer.vue'
-  import CardGrid from '@shared/ui/layout/CardGrid.vue'
+  import SectionContainer from '@aziontech/webkit/section-container'
+  import SectionModule from '@aziontech/webkit/section-module'
   import PageHeader from '@shared/ui/layout/PageHeader.vue'
-  import SectionContainer from '@shared/ui/layout/SectionContainer.vue'
-  import SectionModule from '@shared/ui/layout/SectionModule.vue'
 
   import { themeColorGroups } from '../data/theme.js'
   import ColorPaletteSection from './foundations/ColorPaletteSection.vue'
@@ -168,7 +168,7 @@
         '<script setup>',
         "import Button from '@aziontech/webkit/button'",
         "import FieldText from '@aziontech/webkit/field-text'",
-        '<\/script>',
+        '<' + '/script>',
         '',
         '<template>',
         '  <FieldText name="email" label="Email" />',
@@ -206,7 +206,7 @@
 <template>
   <!-- ══ Getting Started: onboarding docs (install steps + Style Guide) ═══ -->
   <template v-if="section === 'getting-started'">
-    <BannerContainer max-width="7xl">
+    <Hero max-width="7xl">
       <PageHeader
         size="page"
         title="Get Started"
@@ -217,7 +217,7 @@
         Stylelint config, an MCP server that guides AI coding tools, and a CLI that wires it all in
         one command.
       </PageHeader>
-    </BannerContainer>
+    </Hero>
 
     <SectionContainer max-width="7xl">
       <SectionModule
@@ -268,7 +268,7 @@
       >
         <CardGrid
           :columns="3"
-          variant="divider"
+          kind="divider"
           divider-color="muted"
         >
           <div
@@ -287,7 +287,7 @@
   <!-- ══ Foundations: one token catalog page per sidebar item ══════════ -->
   <!-- ── All Tokens (Globals) ─────────────────────────────────────────── -->
   <template v-else-if="section === 'tokens'">
-    <BannerContainer max-width="7xl">
+    <Hero max-width="7xl">
       <PageHeader
         size="page"
         title="All Tokens (Globals)"
@@ -297,7 +297,7 @@
         semantic var(--*) tokens (or their Tailwind utilities) — never a raw value — so a single
         source drives both light and dark. Here's where each foundation lives.
       </PageHeader>
-    </BannerContainer>
+    </Hero>
 
     <SectionContainer max-width="7xl">
       <SectionModule
@@ -305,9 +305,7 @@
         title="Where each foundation lives"
         description="The source of every token family in @aziontech/theme."
       >
-        <div
-          class="overflow-hidden rounded-(--shape-elements) border border-(--border-default)"
-        >
+        <div class="overflow-hidden rounded-(--shape-elements) border border-(--border-default)">
           <table class="w-full border-collapse text-left">
             <thead>
               <tr class="bg-(--bg-surface)">
@@ -328,9 +326,7 @@
                 <td class="px-(--spacing-md) py-(--spacing-sm) text-body-sm text-default">
                   {{ row.page }}
                 </td>
-                <td
-                  class="px-(--spacing-md) py-(--spacing-sm) font-code text-code text-muted"
-                >
+                <td class="px-(--spacing-md) py-(--spacing-sm) font-code text-code text-muted">
                   {{ row.source }}
                 </td>
               </tr>
@@ -343,7 +339,7 @@
 
   <!-- ── Colors ───────────────────────────────────────────────────────── -->
   <template v-else-if="section === 'colors'">
-    <BannerContainer max-width="7xl">
+    <Hero max-width="7xl">
       <PageHeader
         size="page"
         title="Colors"
@@ -353,7 +349,7 @@
         copy its hex; use the semantic tokens in components and keep the primitive shades for
         reference.
       </PageHeader>
-    </BannerContainer>
+    </Hero>
 
     <SectionContainer max-width="7xl">
       <SectionModule
@@ -387,7 +383,7 @@
 
   <!-- ── Typography ───────────────────────────────────────────────────── -->
   <template v-else-if="section === 'typography'">
-    <BannerContainer max-width="7xl">
+    <Hero max-width="7xl">
       <PageHeader
         size="page"
         title="Typography"
@@ -396,7 +392,7 @@
         Semantic text styles generated from the theme text tokens. Each row applies the matching
         .text-* class — click a row to copy its class name.
       </PageHeader>
-    </BannerContainer>
+    </Hero>
 
     <SectionContainer max-width="7xl">
       <SectionModule
@@ -411,7 +407,7 @@
 
   <!-- ── Theme ────────────────────────────────────────────────────────── -->
   <template v-else-if="section === 'theme'">
-    <BannerContainer max-width="7xl">
+    <Hero max-width="7xl">
       <PageHeader
         size="page"
         title="Theme"
@@ -421,7 +417,7 @@
         the matching Tailwind utilities) so one theme drives both light and dark — use the header
         theme switcher to preview each token. Click a row to copy its CSS variable.
       </PageHeader>
-    </BannerContainer>
+    </Hero>
 
     <SectionContainer max-width="7xl">
       <SectionModule
@@ -442,7 +438,7 @@
 
   <!-- ── Icons ────────────────────────────────────────────────────────── -->
   <template v-else-if="section === 'icons'">
-    <BannerContainer max-width="7xl">
+    <Hero max-width="7xl">
       <PageHeader
         size="page"
         title="Icons"
@@ -451,7 +447,7 @@
         The Azion icon system combines custom product icons with the PrimeIcons library for
         general-purpose UI icons, distributed via @aziontech/icons.
       </PageHeader>
-    </BannerContainer>
+    </Hero>
 
     <SectionContainer max-width="7xl">
       <SectionModule

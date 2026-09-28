@@ -30,27 +30,8 @@
   import CardBox from '@aziontech/webkit/card-box'
   import Illustration from '@aziontech/webkit/illustration'
 
-  import AgentIllustration from './AgentIllustration.vue'
-  import DomainIllustration from './DomainIllustration.vue'
-  import FrameworkIllustration from './FrameworkIllustration.vue'
-
-  // Scenes composed in this app rather than named from the registry, keyed by the
-  // `composed:` sentinel a card passes as its `illustration`. One entry per scene, so
-  // the card stays the single place that decides how art is resolved and no call site
-  // has to know which of the two kinds it is holding.
-  //
-  // All three doors are composed now, each because the closest registry asset drew the
-  // wrong sentence — the reasons are in the scenes themselves. The registry still backs
-  // the returning Overview's other resources (`waf-rules` for Workloads).
-  const COMPOSED = {
-    'composed:domain': DomainIllustration,
-    'composed:frameworks': FrameworkIllustration,
-    'composed:agents': AgentIllustration
-  }
-
   defineProps({
-    // Either a registered webkit Illustration asset name (`build`, `waf-rules`, …) or a
-    // `composed:<name>` sentinel resolved through COMPOSED above.
+    // The name of an official scene in the webkit illustration library.
     illustration: { type: String, required: true },
     // What this way in gets you, as an action rather than a noun.
     title: { type: String, required: true },
@@ -79,19 +60,7 @@
         <div
           class="flex aspect-4/3 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
         >
-          <!-- A composed scene brings its own <Illustration> root (it needs one, to
-               provide size/active to its parts), so it is rendered directly. -->
-          <component
-            :is="COMPOSED[illustration]"
-            v-if="COMPOSED[illustration]"
-            :aria-label="illustrationLabel"
-          />
-          <!-- No `size`: a REGISTERED asset ignores it. Assets are authored against
-               the fixed 170×128 canvas and render at their designed scale, so `size`
-               only ever reaches a hand-composed scene. Passing it here would read as
-               a knob that does nothing. -->
           <Illustration
-            v-else
             :name="illustration"
             :aria-label="illustrationLabel"
           />

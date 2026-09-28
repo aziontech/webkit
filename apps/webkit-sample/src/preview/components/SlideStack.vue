@@ -39,7 +39,7 @@
   // one readable string an editor can rewrite, and the emphasis is stated beside it.
 
   import Overline from '@aziontech/webkit/overline'
-  import { CLIENTS } from '@shared/ui/brand/clients/index.js'
+  import { CLIENTS } from '@shared/assets/clients/index.js'
   import { PRODUCT_STACK, TOOLS } from '@shared/ui/brand/tools.js'
   import { computed } from 'vue'
 

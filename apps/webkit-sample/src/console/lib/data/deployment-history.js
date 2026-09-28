@@ -19,10 +19,11 @@
 // without one). A workload this sample does not seed — an id typed into the URL, or
 // one provisioned in this session — gets the same shape derived from its own id, the
 // way ./provisioning.js derives its demo chain.
-import { applicationAt } from './applications'
 import { consoleDeployRowsForApplication } from '@shared/lib/azion-deploys'
 import { formatListDate, hoursAgo } from '@shared/lib/dates'
 import { authorAt, emailOf } from '@shared/lib/people'
+
+import { applicationAt } from './applications'
 import { findDeploymentByApplication, provisionedDeployRow } from './provisioning'
 import { workloadById, WORKLOADS } from './workloads'
 

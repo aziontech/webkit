@@ -44,7 +44,6 @@
   import Tooltip from '@aziontech/webkit/tooltip'
   import { triggerMeta } from '@shared/lib/azion-deploys'
   import { formatListDate } from '@shared/lib/dates'
-  import { workloadById } from '../../lib/data/workloads'
   import { LOG_VIEWS } from '@shared/ui/deployment/deployment-steps.js'
   import DeploymentLogs from '@shared/ui/deployment/DeploymentLogs.vue'
   import { computed, ref } from 'vue'
@@ -59,6 +58,7 @@
     strategies
   } from '../../lib/data/deployment-strategies'
   import { deployPageRecord, resourceMeta, statusMeta } from '../../lib/data/deployments'
+  import { workloadById } from '../../lib/data/workloads'
   import { relativeTime } from '../../lib/format/relative-time'
 
   const route = useRoute()

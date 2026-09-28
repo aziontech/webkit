@@ -32,8 +32,6 @@
 // mean a deploy into it reaches both — and the person starting it is usually looking at
 // one. `boundEnvironments` is therefore the most important function here: it is the blast
 // radius, derived on every read, so it cannot go stale.
-import { provisionedWorkloads } from '../data/provisioning'
-import { WORKLOADS } from '../data/workloads'
 import { computed, ref, watch } from 'vue'
 
 import {
@@ -46,6 +44,8 @@ import {
   workloadSettingsId
 } from '../data/deployment-strategies'
 import { DEFAULT_ENVIRONMENTS, policyForEnvironment } from '../data/environments'
+import { provisionedWorkloads } from '../data/provisioning'
+import { WORKLOADS } from '../data/workloads'
 
 // THE ENVIRONMENTS A WORKLOAD PUBLISHES INTO, in order — the `starter` records of
 // ../data/environments.js, which is the one place the pair is declared. Both the NAMES

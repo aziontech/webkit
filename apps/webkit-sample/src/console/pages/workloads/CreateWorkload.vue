@@ -59,7 +59,6 @@
   import CardBox from '@aziontech/webkit/card-box'
   import Item from '@aziontech/webkit/item'
   import { toast } from '@aziontech/webkit/toast'
-  import { provisionDeployment, resourceChain } from '../../lib/data/provisioning'
   import { computed, reactive, ref } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
@@ -80,6 +79,7 @@
     deploymentPolicyLabel,
     strategyById
   } from '../../lib/data/deployment-strategies'
+  import { provisionDeployment, resourceChain } from '../../lib/data/provisioning'
   import {
     defaultResourceBinding,
     resourceBindingIsExisting,

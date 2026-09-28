@@ -26,8 +26,6 @@
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { provisionedWorkloads, removeDeployment } from '../../lib/data/provisioning'
-  import { WORKLOADS } from '../../lib/data/workloads'
   import { computed, ref } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
@@ -51,7 +49,9 @@
   import { useListFilters } from '../../lib/behavior/list-state'
   import { FIT_COLUMN, TAG_COLUMN } from '../../lib/behavior/table-columns'
   import { productFirstUse } from '../../lib/data/product-empty-states'
+  import { provisionedWorkloads, removeDeployment } from '../../lib/data/provisioning'
   import { releaseSeedForWorkload } from '../../lib/data/releases'
+  import { WORKLOADS } from '../../lib/data/workloads'
   import { useSampleMode } from '../../lib/state/sample-mode'
   import { tenancyRows } from '../../lib/state/tenancy-scope'
 

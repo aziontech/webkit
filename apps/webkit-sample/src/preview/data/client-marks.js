@@ -9,7 +9,7 @@
 //
 // ── WHY THESE ARE THE `light/` ASSETS ───────────────────────────────────────────────────────
 //
-// The shared client registry (`@shared/ui/brand/clients/index.js`) already encodes the two
+// The shared client registry (`@shared/assets/clients/index.js`) already encodes the two
 // routes a mark can take: `dark/…` is the WHITE artwork drawn for a dark background, `light/…`
 // is the FULL-COLOUR artwork for a light one. The wall sits on `--bg-contrast`, which on this
 // deck's dark theme is #FAFAFA — so every mark here is a `light/` asset, and every one of them
@@ -44,36 +44,36 @@
 // The two backers are the OTHER route — white artwork, because they sit on the slide's dark
 // half rather than on the wall. `qualcoom-logo.svg` is spelled that way in the repository; the
 // import is by the file's real name and the company's real name is in the data below.
-import monashees from '@shared/ui/brand/clients/dark/clients/monashees-logo.svg'
-import qualcomm from '@shared/ui/brand/clients/dark/clients/qualcoom-logo.svg'
-import agi from '@shared/ui/brand/clients/light/agi-logo.svg'
-import alpargatas from '@shared/ui/brand/clients/light/alpargatas-logo.svg'
-import arezzo from '@shared/ui/brand/clients/light/arezzo-logo.svg'
-import caixa from '@shared/ui/brand/clients/light/caixa-logo.svg'
-import cobasi from '@shared/ui/brand/clients/light/cobasi-logo.svg'
-import contabilizei from '@shared/ui/brand/clients/light/contabilizei-logo.svg'
-import csuDigital from '@shared/ui/brand/clients/light/csu-digital-logo.svg'
-import gfg from '@shared/ui/brand/clients/light/gfg-logo.svg'
-import grendene from '@shared/ui/brand/clients/light/grendene-logo.svg'
-import gruAirport from '@shared/ui/brand/clients/light/gru-airport-logo.svg'
-import ifood from '@shared/ui/brand/clients/light/ifood-logo.svg'
-import itau from '@shared/ui/brand/clients/light/itau-logo.svg'
-import locaweb from '@shared/ui/brand/clients/light/locaweb-logo.svg'
-import magalu from '@shared/ui/brand/clients/light/magalu-logo.svg'
-import marisa from '@shared/ui/brand/clients/light/marisa-logo.svg'
-import meliuz from '@shared/ui/brand/clients/light/meliuz-logo.svg'
-import neogrid from '@shared/ui/brand/clients/light/neogrid-logo.svg'
-import neon from '@shared/ui/brand/clients/light/neon-logo.svg'
-import netshoes from '@shared/ui/brand/clients/light/netshoes-logo.svg'
-import nzn from '@shared/ui/brand/clients/light/nzn-logo.svg'
-import panvel from '@shared/ui/brand/clients/light/panvel-logo.svg'
-import portobello from '@shared/ui/brand/clients/light/portobello-logo.svg'
-import primevideo from '@shared/ui/brand/clients/light/primevideo-logo.svg'
-import radware from '@shared/ui/brand/clients/light/radware-logo.svg'
-import rbs from '@shared/ui/brand/clients/light/rbs-logo.svg'
-import renner from '@shared/ui/brand/clients/light/renner-logo.svg'
-import stone from '@shared/ui/brand/clients/light/stone-logo.svg'
-import unicred from '@shared/ui/brand/clients/light/unicred-logo.svg'
+import monashees from '@shared/assets/clients/dark/clients/monashees-logo.svg'
+import qualcomm from '@shared/assets/clients/dark/clients/qualcoom-logo.svg'
+import agi from '@shared/assets/clients/light/agi-logo.svg'
+import alpargatas from '@shared/assets/clients/light/alpargatas-logo.svg'
+import arezzo from '@shared/assets/clients/light/arezzo-logo.svg'
+import caixa from '@shared/assets/clients/light/caixa-logo.svg'
+import cobasi from '@shared/assets/clients/light/cobasi-logo.svg'
+import contabilizei from '@shared/assets/clients/light/contabilizei-logo.svg'
+import csuDigital from '@shared/assets/clients/light/csu-digital-logo.svg'
+import gfg from '@shared/assets/clients/light/gfg-logo.svg'
+import grendene from '@shared/assets/clients/light/grendene-logo.svg'
+import gruAirport from '@shared/assets/clients/light/gru-airport-logo.svg'
+import ifood from '@shared/assets/clients/light/ifood-logo.svg'
+import itau from '@shared/assets/clients/light/itau-logo.svg'
+import locaweb from '@shared/assets/clients/light/locaweb-logo.svg'
+import magalu from '@shared/assets/clients/light/magalu-logo.svg'
+import marisa from '@shared/assets/clients/light/marisa-logo.svg'
+import meliuz from '@shared/assets/clients/light/meliuz-logo.svg'
+import neogrid from '@shared/assets/clients/light/neogrid-logo.svg'
+import neon from '@shared/assets/clients/light/neon-logo.svg'
+import netshoes from '@shared/assets/clients/light/netshoes-logo.svg'
+import nzn from '@shared/assets/clients/light/nzn-logo.svg'
+import panvel from '@shared/assets/clients/light/panvel-logo.svg'
+import portobello from '@shared/assets/clients/light/portobello-logo.svg'
+import primevideo from '@shared/assets/clients/light/primevideo-logo.svg'
+import radware from '@shared/assets/clients/light/radware-logo.svg'
+import rbs from '@shared/assets/clients/light/rbs-logo.svg'
+import renner from '@shared/assets/clients/light/renner-logo.svg'
+import stone from '@shared/assets/clients/light/stone-logo.svg'
+import unicred from '@shared/assets/clients/light/unicred-logo.svg'
 
 // The order is READING ORDER, not ranking. A logo wall invites the room to look for whoever it
 // knows, and the fastest way to make that a scan rather than a search is one rule anybody can

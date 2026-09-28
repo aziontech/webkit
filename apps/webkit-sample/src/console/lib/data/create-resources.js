@@ -1,5 +1,5 @@
-import { environmentNameOptions } from './environments'
 import { allWorkloads } from '../state/workload-settings'
+import { environmentNameOptions } from './environments'
 
 // Create flows, per first-level resource — the FIELDS, taken from the Azion API.
 //

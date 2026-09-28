@@ -45,10 +45,10 @@
   import Switch from '@aziontech/webkit/switch'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { APPLICATIONS } from '../../lib/data/applications'
   import { computed, nextTick, reactive, ref, useId, watch } from 'vue'
 
   import ResourceDrawer from '../../components/form/ResourceDrawer.vue'
+  import { APPLICATIONS } from '../../lib/data/applications'
   import { parseDotenv } from '../../lib/format/dotenv'
   import { presetIcon, presetLabel } from '../../lib/format/presets'
 

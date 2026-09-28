@@ -322,7 +322,7 @@ const CATALOG = [
 // document root, NOT Tailwind's stock `dark:` variant — that one follows
 // `prefers-color-scheme`, which says nothing about the theme this app was toggled to
 // (same reason, same class, as the client marks in
-// @shared/ui/brand/clients/index.js).
+// @shared/assets/clients/index.js).
 //
 // A COLORED logo would be ruined by this, which is why it is a list of two marks and
 // not a blanket rule: inverting the JavaScript badge turns a yellow tile blue.

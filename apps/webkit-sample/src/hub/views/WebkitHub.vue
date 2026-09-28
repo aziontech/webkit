@@ -15,13 +15,13 @@
   // route (/site/hub/changelog), which seeds `view`. That is what makes it a link
   // you hand to someone rather than a section of the library docs; it still
   // renders in this shell so a reader who arrives by link can walk into the Hub.
+  import Hero from '@aziontech/webkit/hero'
   import Button from '@aziontech/webkit/button'
+  import CardGrid from '@aziontech/webkit/card-grid'
+  import SectionContainer from '@aziontech/webkit/section-container'
+  import SectionModule from '@aziontech/webkit/section-module'
   import CopyPromptButton from '@shared/ui/CopyPromptButton.vue'
-  import BannerContainer from '@shared/ui/layout/BannerContainer.vue'
-  import CardGrid from '@shared/ui/layout/CardGrid.vue'
   import PageHeader from '@shared/ui/layout/PageHeader.vue'
-  import SectionContainer from '@shared/ui/layout/SectionContainer.vue'
-  import SectionModule from '@shared/ui/layout/SectionModule.vue'
   import SiteFooter from '@shared/ui/SiteFooter.vue'
   import { computed, nextTick, ref } from 'vue'
 
@@ -204,8 +204,8 @@
       <template v-if="active === 'home'">
         <!-- Fluid banner: full-bleed hero band whose border-b meets the framed
              column below it as one continuous border. -->
-        <BannerContainer
-          hero
+        <Hero
+          kind="screen"
           max-width="7xl"
         >
           <PageHeader
@@ -236,7 +236,7 @@
               </div>
             </template>
           </PageHeader>
-        </BannerContainer>
+        </Hero>
 
         <!-- ══ Bordered content column ═══════════════════════════════════════
              Vertical rules on both edges (border-x); its top edge is the hero's
@@ -263,7 +263,7 @@
                column's border-x and the bands above/below own the outer edges. -->
             <CardGrid
               :columns="4"
-              variant="divider"
+              kind="divider"
             >
               <button
                 v-for="section in hubSections"
@@ -307,7 +307,7 @@
                border-muted background; canvas-blended cells own their own p-xxl. -->
             <CardGrid
               :columns="3"
-              variant="divider"
+              kind="divider"
               divider-color="muted"
             >
               <div
@@ -332,14 +332,14 @@
 
       <!-- ── Componentes: one category's slice of the Component Grid ───────── -->
       <template v-if="isCategory">
-        <BannerContainer max-width="7xl">
+        <Hero max-width="7xl">
           <PageHeader
             size="page"
             margin-bottom=""
             :title="category.label"
             :description="category.description"
           />
-        </BannerContainer>
+        </Hero>
         <SectionContainer max-width="7xl">
           <SectionModule
             :divided="false"
@@ -361,9 +361,8 @@
       <!-- ── Foundations: one view per foundation (tokens/colors/type/theme/
            icons), driven by the sidebar's fanned-out "Foundations" group. ─── -->
       <HubFoundations
-        key="hub-foundations-2"
         v-else-if="isFoundation"
-        :key="active"
+        key="hub-foundations"
         :section="foundationSection"
       />
 

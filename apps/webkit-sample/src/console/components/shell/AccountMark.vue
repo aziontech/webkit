@@ -3,13 +3,13 @@
   //
   // An account IS a company, so its mark is that company's logo — the same asset the
   // site's trust strip and client-story cards paint, read from the one registry that
-  // owns them (../../../shared/ui/brand/clients/index.js). Nothing here duplicates
+  // owns them (../../../shared/assets/clients/index.js). Nothing here duplicates
   // that data: this component only decides how a client mark becomes a 24px square.
   //
   // THREE ROUTES, in this order, because the marks this repo owns are three kinds of
   // thing — and each route is decided by data, never by a name:
   //
-  //   1. A PURPOSE-DRAWN TILE (../../../shared/ui/brand/clients/symbols/) — a 24×24
+  //   1. A PURPOSE-DRAWN TILE (../../../shared/assets/clients/symbols/) — a 24×24
   //      file with the brand fill and the mark already composed inside it, in the
   //      colours the brand draws them. Nothing to place: it just fills the box. This is
   //      the preferred route and the one to add to, because it is the only one that
@@ -40,11 +40,11 @@
   // Relative, not the `@shared` alias the neighbours use: validate-references.mjs
   // resolves real paths and node_modules, not vite aliases, so the alias form is
   // blocked at write time here (see ../home/HomeWire.vue).
-  import { CLIENTS } from '../../../shared/ui/brand/clients/index.js'
+  import { CLIENTS } from '../../../shared/assets/clients/index.js'
   import {
     clientSymbolFor,
     normalizeClientName
-  } from '../../../shared/ui/brand/clients/symbols/index.js'
+  } from '../../../shared/assets/clients/symbols/index.js'
   import { accountInitials } from '../../lib/state/accounts.js'
 
   const props = defineProps({

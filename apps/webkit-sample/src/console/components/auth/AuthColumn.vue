@@ -23,14 +23,14 @@
   // ── AND NO CLIENT STRIP, FOR NOW ──
   //
   // The floor of the column carried the trust strip: the marketing hero's overline over
-  // the same BrandCarousel the site's Home, Functions and Pricing pages close with, in
+  // the same Ticker the site's Home, Functions and Pricing pages close with, in
   // its `small` step and one monochrome ink. It was the one piece of the old panel's job
   // kept here — proof, not a feature — and it is out for now, so what is on a signed-out
   // screen is the task and nothing else.
   //
   // Bringing it back is a `<footer>` at the end of this column (`shrink-0`, its own
   // `py-(--spacing-xl)`, `followStyle` for the rise) holding that overline and
-  // `<BrandCarousel :clients="CLIENTS" size="small" monochrome />`. Two things it has to
+  // `<Ticker :clients="CLIENTS" size="small" monochrome />`. Two things it has to
   // get right, both of which cost a cycle the first time: the caption is rendered in the
   // footer rather than passed as the carousel's own `label` — that one is the site hero's
   // treatment, accent-coloured with a blinking cursor, and it must not blink next to a

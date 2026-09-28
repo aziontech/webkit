@@ -45,13 +45,13 @@
 // through the same card the application deploy uses, on the workload pipeline
 // (./workload-provisioning.js).
 
-import { APPLICATIONS } from './applications'
-import { DEFAULT_ENVIRONMENTS } from './environments'
-import { provisionedApplications } from './provisioning'
 import { computed } from 'vue'
 
 import { presetLabel } from '../format/presets'
+import { APPLICATIONS } from './applications'
 import { strategies } from './deployment-strategies'
+import { DEFAULT_ENVIRONMENTS } from './environments'
+import { provisionedApplications } from './provisioning'
 import { domainForWorkload } from './workload-provisioning'
 
 /** The one flow's parts, in order. Shape matches ./application-flows.js so the shared

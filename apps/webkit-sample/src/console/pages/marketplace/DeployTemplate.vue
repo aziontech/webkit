@@ -10,7 +10,6 @@
   import Skeleton from '@aziontech/webkit/skeleton'
   import Switch from '@aziontech/webkit/switch'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { provisionDeployment, resourceChain } from '../../lib/data/provisioning'
   import { computed, onBeforeUnmount, reactive, ref, watch } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
@@ -24,6 +23,7 @@
   import { useBaseline } from '../../lib/behavior/forms'
   import { defaultRootFile, picksRootFile } from '../../lib/behavior/project-upload'
   import { FRAMEWORKS, markFilterFor, presetOptions } from '../../lib/data/frameworks'
+  import { provisionDeployment, resourceChain } from '../../lib/data/provisioning'
   import { getTemplate } from '../../lib/data/templates.js'
   import { droppedProjectFor } from '../../lib/state/dropped-project'
   import { gitAccounts, gitConnected } from '../../lib/state/git-provider'

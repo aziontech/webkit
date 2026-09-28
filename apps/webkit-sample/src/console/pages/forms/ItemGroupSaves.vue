@@ -17,16 +17,11 @@
   import Switch from '@aziontech/webkit/switch'
   import { toast } from '@aziontech/webkit/toast'
   import { computed, reactive, ref } from 'vue'
-  import { useRoute, useRouter } from 'vue-router'
 
   import UnsavedChangesGuard from '../../components/form/UnsavedChangesGuard.vue'
   import PageHeading from '../../components/page/PageHeading.vue'
   import AppLayout from '../../components/shell/AppLayout.vue'
   import { useBaseline } from '../../lib/behavior/forms'
-
-  const route = useRoute()
-  const router = useRouter()
-  const userEmail = computed(() => route.query.email || 'myemail@azion.com')
 
   const languages = [
     { label: 'English', value: 'en' },

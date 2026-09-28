@@ -15,12 +15,12 @@
   //
   // Long-form source of the same content: apps/webkit-sample/REPORT-ATUALIZACOES.md.
   // The numbering here mirrors that file so the two can be read side by side.
+  import Hero from '@aziontech/webkit/hero'
   import Link from '@aziontech/webkit/link'
+  import SectionContainer from '@aziontech/webkit/section-container'
+  import SectionModule from '@aziontech/webkit/section-module'
   import Tag from '@aziontech/webkit/tag'
-  import BannerContainer from '@shared/ui/layout/BannerContainer.vue'
   import PageHeader from '@shared/ui/layout/PageHeader.vue'
-  import SectionContainer from '@shared/ui/layout/SectionContainer.vue'
-  import SectionModule from '@shared/ui/layout/SectionModule.vue'
 
   // When this list was last revised. Deliberately NOT the deploy prefix: that
   // rotates on every publish, so a prefix printed here is stale the moment the
@@ -489,7 +489,7 @@
 </script>
 
 <template>
-  <BannerContainer max-width="7xl">
+  <Hero max-width="7xl">
     <PageHeader
       size="page"
       eyebrow="Console sample"
@@ -504,7 +504,7 @@
         />
       </template>
     </PageHeader>
-  </BannerContainer>
+  </Hero>
 
   <SectionContainer max-width="7xl">
     <SectionModule
@@ -571,9 +571,7 @@
 
         <!-- The screens. Relative paths, new tab: the reader keeps the changelog
              open while walking through what it describes. -->
-        <div
-          class="flex flex-wrap items-center gap-x-(--spacing-lg) gap-y-(--spacing-xs)"
-        >
+        <div class="flex flex-wrap items-center gap-x-(--spacing-lg) gap-y-(--spacing-xs)">
           <Link
             v-for="link in entry.links"
             :key="link.path"

@@ -18,18 +18,12 @@
 // title can only repeat the title; a scene can show the anatomy. The mapping is a
 // design choice, swappable in one line (`illustration`):
 //
-//   Applications → COMPOSED  `composed:frameworks` — the frameworks the reader already
-//                            builds with, arriving at a live site. `build` said "a thing
-//                            gets built", which the title already says.
-//   Domains      → COMPOSED  `composed:domain` — name → zone → site, with an HTTPS pill
-//                            over the seam. `path` draws release branches and clips its
-//                            outer pills.
-//   Agent        → COMPOSED  `composed:agents` — the editors the reader codes in,
-//                            pointed at a session that knows how to ship here.
-//                            `ai-inference` promised a chat, which is not the offer.
+//   Applications → `modern-frontends` — the frameworks the reader already builds with,
+//                  arriving at a live site.
+//   Domains      → `dns-protection` — a name resolving to the site behind it.
+//   Agent        → `ai-applications` — an agent pointed at a session that ships here.
 //
-// `build`, `deploy` and `ship` are the SAME scene distinguished only by their pill
-// (Build / Deploy / Ship), so never put two of them in one row — it reads as a
+// Never put two scenes that differ only in a label in one row — it reads as a
 // rendering bug rather than as two different things.
 //
 // ── THERE IS NO SECOND STATE HERE ──
@@ -49,7 +43,7 @@
 export const firstUseDoors = [
   {
     id: 'applications',
-    illustration: 'composed:frameworks',
+    illustration: 'modern-frontends',
     title: 'Ship something new',
     description:
       'Deploy a static site or a full-stack app, with compute, AI, storage and media on the same build.',
@@ -61,9 +55,7 @@ export const firstUseDoors = [
   },
   {
     id: 'domains',
-    // Not a registry name: the sentinel for the scene composed in
-    // ui/DomainIllustration.vue. Prefixed so it can never collide with a real asset.
-    illustration: 'composed:domain',
+    illustration: 'dns-protection',
     title: 'Add a domain',
     description:
       'Register a new one or bring your own. DNS, automatic HTTPS and DDoS protection come with it.',
@@ -88,7 +80,7 @@ export const firstUseDoors = [
     // action: there is no flow to route to, and a button that opened a page to then
     // offer a copy button would be a step with no decision in it.
     id: 'agent',
-    illustration: 'composed:agents',
+    illustration: 'ai-applications',
     title: 'Onboard your agent',
     description:
       'Give Claude, Cursor, Windsurf, Codex or OpenCode a prompt that sets your project up to deploy on Azion.',

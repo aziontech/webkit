@@ -34,7 +34,6 @@
   import InputText from '@aziontech/webkit/input-text'
   import { toast } from '@aziontech/webkit/toast'
   import { consoleDeployRows, deployRows } from '@shared/lib/azion-deploys'
-  import { DEPLOYMENT_HISTORY } from '../../lib/data/deployment-history'
   import { computed, ref } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
@@ -51,6 +50,7 @@
   import AppLayout from '../../components/shell/AppLayout.vue'
   import { useListFilters } from '../../lib/behavior/list-state'
   import { DEPLOYMENT_COLUMNS } from '../../lib/data/deployment-columns'
+  import { DEPLOYMENT_HISTORY } from '../../lib/data/deployment-history'
   import { deploymentFilterFields } from '../../lib/data/deployments'
   import { productFirstUse } from '../../lib/data/product-empty-states'
   import { useSampleMode } from '../../lib/state/sample-mode'

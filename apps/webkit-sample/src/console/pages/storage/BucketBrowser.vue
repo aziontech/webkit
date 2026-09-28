@@ -21,7 +21,7 @@
   import Tooltip from '@aziontech/webkit/tooltip'
   import { authorAt } from '@shared/lib/people'
   import { computed, ref } from 'vue'
-  import { useRoute, useRouter } from 'vue-router'
+  import { useRoute } from 'vue-router'
 
   import ColumnsButton from '../../components/list/ColumnsButton.vue'
   import DeleteDialog from '../../components/list/DeleteDialog.vue'
@@ -34,9 +34,6 @@
   import { glyphForExtension } from '../../lib/format/file-glyph'
 
   const route = useRoute()
-  const router = useRouter()
-
-  const userEmail = computed(() => route.query.email || 'myemail@azion.com')
 
   // Bucket identity from the route (id in the path, display name carried in the
   // query by the buckets list; falls back to the id).

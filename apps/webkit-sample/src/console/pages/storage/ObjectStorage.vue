@@ -18,7 +18,6 @@
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { provisionedBuckets, removeDeployment } from '../../lib/data/provisioning'
   import { computed, ref } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
@@ -42,6 +41,7 @@
   import { createResourcePath } from '../../lib/data/create-resources'
   import { BUCKETS } from '../../lib/data/object-storage'
   import { productFirstUse } from '../../lib/data/product-empty-states'
+  import { provisionedBuckets, removeDeployment } from '../../lib/data/provisioning'
   import { createdRowsFor, removeCreatedResource } from '../../lib/state/created-resources'
   import { useSampleMode } from '../../lib/state/sample-mode'
   import { tenancyRows } from '../../lib/state/tenancy-scope'

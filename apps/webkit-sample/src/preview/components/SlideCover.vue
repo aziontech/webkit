@@ -23,7 +23,7 @@
   // marks are, and it thickens away from the words.
   import Brand from '@aziontech/webkit/brand'
   import Overline from '@aziontech/webkit/overline'
-  import DitherBanner from '@shared/ui/banners/DitherBanner.vue'
+  import TextureMaterial from '@aziontech/webkit/texture-material'
 
   import { CONTENT, COVER, FRAME, FRAME_PADDING, span } from '../lib/deck-canvas.js'
 
@@ -158,13 +158,13 @@
     :style="markStyle(i)"
   />
 
-  <!-- The texture, in its own panel. DitherBanner fills its positioned ancestor, so the panel
+  <!-- The texture, in its own panel. The layer fills its positioned ancestor, so the panel
        is what sizes it; the ramp is turned to run away from the copy. -->
   <div
     class="absolute overflow-hidden"
     :style="panelStyle"
   >
-    <DitherBanner />
+    <TextureMaterial kind="dither" />
   </div>
 
   <!-- The copy block: overline, then the title, then one supporting line — the same anatomy and

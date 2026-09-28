@@ -7,12 +7,12 @@
 // create pages that ask it (../../pages/build/CreateFunction.vue and
 // ../../pages/resources/CreateResource.vue) share this, so the list they offer and the way
 // a new application is provisioned cannot drift into two versions of one act.
-import { APPLICATIONS } from '../data/applications'
-import { provisionDeployment, provisionedApplications } from '../data/provisioning'
 import { computed } from 'vue'
 
+import { APPLICATIONS } from '../data/applications'
 import { CONNECTORS } from '../data/connectors'
 import { allFirewalls } from '../data/firewalls'
+import { provisionDeployment, provisionedApplications } from '../data/provisioning'
 import { createdRowsFor } from '../state/created-resources'
 import { allWorkloads } from '../state/workload-settings'
 

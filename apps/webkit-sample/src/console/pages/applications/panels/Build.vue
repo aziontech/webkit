@@ -180,7 +180,7 @@
       <div class="mt-(--layout-section-gap) flex min-w-0 flex-col">
         <!-- NO REPOSITORY, SO NO CONNECTION TO REPORT — the band offers the connection
              instead of describing one. -->
-        <Section
+        <Section key="section-1"
           v-if="isCli"
           stacked
           anchor
@@ -196,7 +196,7 @@
 
         <!-- Git repository — the connection (actions/checkout in the workflow).
          A connection, not editable config, so this ItemGroup has no Save. -->
-        <Section
+        <Section key="section-2"
           v-else
           stacked
           anchor

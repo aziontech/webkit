@@ -30,6 +30,7 @@ import Variables from '@console/pages/build/Variables.vue'
 import DeploymentDetail from '@console/pages/deployments/DeploymentDetail.vue'
 import Deployments from '@console/pages/deployments/Deployments.vue'
 import ReleaseComposer from '@console/pages/deployments/ReleaseComposer.vue'
+import Drop from '@console/pages/drop/Drop.vue'
 import CreateZone from '@console/pages/edge-dns/CreateZone.vue'
 import EdgeDns from '@console/pages/edge-dns/EdgeDns.vue'
 import EdgeDnsZoneDetail from '@console/pages/edge-dns/EdgeDnsZoneDetail.vue'
@@ -50,6 +51,7 @@ import Dashboard from '@console/pages/home/Dashboard.vue'
 import Overview from '@console/pages/home/Overview.vue'
 import Playground from '@console/pages/lab/Playground.vue'
 import ProductEmptyStates from '@console/pages/lab/ProductEmptyStates.vue'
+import ProductPreview from '@console/pages/lab/ProductPreview.vue'
 import DeployTemplate from '@console/pages/marketplace/DeployTemplate.vue'
 import Marketplace from '@console/pages/marketplace/Marketplace.vue'
 import DataStream from '@console/pages/observe/DataStream.vue'
@@ -58,7 +60,6 @@ import RealTimeEvents from '@console/pages/observe/RealTimeEvents.vue'
 import RealTimeMetrics from '@console/pages/observe/RealTimeMetrics.vue'
 import RealTimePurge from '@console/pages/observe/RealTimePurge.vue'
 import CreateResource from '@console/pages/resources/CreateResource.vue'
-import Drop from '@console/pages/drop/Drop.vue'
 import CreationCenter from '@console/pages/resources/CreationCenter.vue'
 import ResourceSettings from '@console/pages/resources/ResourceSettings.vue'
 import Certificates from '@console/pages/secure/Certificates.vue'
@@ -298,6 +299,7 @@ export const consoleRoutes = [
   { path: '/resources', name: 'resources', component: ManageResources },
   { path: '/personal-tokens', name: 'personal-tokens', component: PersonalTokens },
   { path: '/playground', name: 'playground', component: Playground },
+  { path: '/product-preview', name: 'product-preview', component: ProductPreview },
   // Lazy for the same reason the Monaco routes above are: @vue-flow/core and its
   // stylesheet are a graph engine one lab screen uses and the other 60 never touch.
   {

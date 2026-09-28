@@ -8,17 +8,17 @@
   //   • Illustrations — the shipped @aziontech/webkit SVG illustrations.
   import icons from '@aziontech/icons/catalog'
   import colorIcons from '@aziontech/icons/color-catalog'
+  import Hero from '@aziontech/webkit/hero'
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
+  import CardGrid from '@aziontech/webkit/card-grid'
+  import SectionContainer from '@aziontech/webkit/section-container'
+  import SectionModule from '@aziontech/webkit/section-module'
   import Error403 from '@aziontech/webkit/svg/error-403'
   import Error404 from '@aziontech/webkit/svg/error-404'
   import IllustrationLayers from '@aziontech/webkit/svg/illustration-layers'
   import PlatformIllustrations from '@shared/ui/illustration/PlatformIllustrations.vue'
-  import BannerContainer from '@shared/ui/layout/BannerContainer.vue'
-  import CardGrid from '@shared/ui/layout/CardGrid.vue'
   import PageHeader from '@shared/ui/layout/PageHeader.vue'
-  import SectionContainer from '@shared/ui/layout/SectionContainer.vue'
-  import SectionModule from '@shared/ui/layout/SectionModule.vue'
 
   import IconGrid from './foundations/IconGrid.vue'
 
@@ -80,7 +80,7 @@
        column; the lockup showcase is one edge-to-edge module of stacked
        full-width bands, each on its own deep on-brand surface. -->
   <template v-if="section === 'brand'">
-    <BannerContainer max-width="7xl">
+    <Hero max-width="7xl">
       <PageHeader
         size="page"
         title="Brand"
@@ -99,7 +99,7 @@
           />
         </template>
       </PageHeader>
-    </BannerContainer>
+    </Hero>
 
     <SectionContainer max-width="7xl">
       <SectionModule
@@ -145,7 +145,7 @@
 
   <!-- ── Icons ────────────────────────────────────────────────────────── -->
   <template v-else-if="section === 'icons'">
-    <BannerContainer max-width="7xl">
+    <Hero max-width="7xl">
       <PageHeader
         size="page"
         title="Icons"
@@ -155,7 +155,7 @@
         via @aziontech/icons. Search by name, adjust the preview size, and click any icon to copy
         its class name.
       </PageHeader>
-    </BannerContainer>
+    </Hero>
 
     <SectionContainer max-width="7xl">
       <SectionModule
@@ -174,7 +174,7 @@
 
   <!-- ── Illustrations ────────────────────────────────────────────────── -->
   <template v-else>
-    <BannerContainer max-width="7xl">
+    <Hero max-width="7xl">
       <PageHeader
         size="page"
         title="Illustrations"
@@ -184,7 +184,7 @@
         and observe in one token-driven visual language, and the theme-aware SVGs @aziontech/webkit
         ships for empty, error and onboarding states.
       </PageHeader>
-    </BannerContainer>
+    </Hero>
 
     <SectionContainer max-width="7xl">
       <!-- Platform scenes — token-driven routing graphs. -->

@@ -925,7 +925,7 @@
               </div>
               <MiniButton
                 label="View Documentation"
-                icon="pi pi-arrow-right"
+                icon="pi pi-angle-right"
                 size="large"
                 href="#"
               />

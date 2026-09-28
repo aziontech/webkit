@@ -18,8 +18,8 @@ import {
   deploymentRowsFor
 } from './deployment-history'
 import { environments } from './environments'
-import { RESOURCES, resourceMeta, resourceTypeKey } from './versioning'
 import { findDeploymentByVersion, provisionedDeployRow } from './provisioning'
+import { resourceMeta, RESOURCES, resourceTypeKey } from './versioning'
 
 /** Deployment status → StatusIndicator severity + spinner state. */
 export const STATUS_SEVERITY = {
@@ -56,7 +56,7 @@ export const statusOptions = Object.keys(STATUS_SEVERITY).map((value) => ({
 // copy keyed `custom-page` while the release page kept a seven-entry one keyed
 // `custom_page`, so the same resource had two labels, two icons and two spellings
 // depending on which surface you opened.
-export { RESOURCES, resourceMeta, resourceTypeKey }
+export { resourceMeta, RESOURCES, resourceTypeKey }
 
 /** The resource types present in a set of rows, as filter options. */
 const resourceTypeOptions = (rows = []) =>

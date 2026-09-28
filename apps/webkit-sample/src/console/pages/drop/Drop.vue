@@ -18,7 +18,7 @@
   // commands: drop to get live in a gesture, `azion link` to keep it moving. The page also
   // keeps taking a drop, so the gesture that made it can also be the one that updates it.
   import Button from '@aziontech/webkit/button'
-  import { DotGridBanner } from '@shared/ui/banners'
+  import TextureMaterial from '@aziontech/webkit/texture-material'
   import { computed } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
@@ -60,15 +60,15 @@
              `dot-grid` rather than `pixelate`, whose opacity and mask ellipse are fitted
              per cell and degrade to a flat wash in a box this size.
 
-             `--dot-grid-ink` is the override the banner documents, at 10% instead of its
+             `--texture-ink` is the override the banner documents, at 10% instead of its
              default 22%: at full strength a dot lands in the middle of a word of the body
              copy. It has to be BRACKETED — the paren shorthand has no form for DECLARING a
              custom property and would emit nothing at all. -->
         <section
-          class="relative isolate flex flex-col items-center justify-center gap-(--spacing-lg) overflow-hidden rounded-(--shape-card) border-2 border-dashed border-(--border-default) px-(--spacing-lg) py-(--spacing-xxl) text-center transition-colors duration-150 ease-out [--dot-grid-ink:color-mix(in_srgb,var(--text-default)_10%,transparent)] motion-reduce:transition-none data-[dragging]:border-(--border-selected) data-[dragging]:bg-(--bg-surface)"
+          class="relative isolate flex flex-col items-center justify-center gap-(--spacing-lg) overflow-hidden rounded-(--shape-card) border-2 border-dashed border-(--border-default) px-(--spacing-lg) py-(--spacing-xxl) text-center transition-colors duration-150 ease-out [--texture-ink:color-mix(in_srgb,var(--text-default)_10%,transparent)] motion-reduce:transition-none data-[dragging]:border-(--border-selected) data-[dragging]:bg-(--bg-surface)"
           :data-dragging="dragging || null"
         >
-          <DotGridBanner />
+          <TextureMaterial />
 
           <span
             class="relative flex size-12 items-center justify-center rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface-raised)"

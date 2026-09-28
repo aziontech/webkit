@@ -29,7 +29,7 @@
   // column, so the sentence's first line starts on the same measure as every other line. A
   // glyph in flow would indent line one by its own width and the block would read as ragged on
   // the side that should be the straightest.
-  import DitherBanner from '@shared/ui/banners/DitherBanner.vue'
+  import TextureMaterial from '@aziontech/webkit/texture-material'
   import { computed, ref } from 'vue'
 
   import { span } from '../lib/deck-canvas.js'
@@ -71,9 +71,9 @@
     <!-- The ramp runs dark at the card and dense away from it, so the texture is at its
          quietest exactly where the words are. Its ink is dropped to a fifth of the deck's,
          because this is a ground standing in for a photograph, not a cover panel. -->
-    <DitherBanner
+    <TextureMaterial kind="dither"
       v-else
-      class="[--dither-direction:to_right] [--dither-ink:color-mix(in_srgb,var(--text-default)_20%,transparent)]"
+      class="[--texture-direction:to_right] [--texture-ink:color-mix(in_srgb,var(--text-default)_20%,transparent)]"
     />
 
     <!-- ── THE VEIL ─────────────────────────────────────────────────────────────────────

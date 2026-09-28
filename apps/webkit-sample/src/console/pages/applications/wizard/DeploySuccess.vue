@@ -19,11 +19,11 @@
   import CardBox from '@aziontech/webkit/card-box'
   import CopyButton from '@aziontech/webkit/copy-button'
   import Item from '@aziontech/webkit/item'
-
-  import GetStarted from '../../../components/application/GetStarted.vue'
   import Tag from '@aziontech/webkit/tag'
   import { computed } from 'vue'
   import { RouterLink } from 'vue-router'
+
+  import GetStarted from '../../../components/application/GetStarted.vue'
 
   const props = defineProps({
     // The chain the deploy provisioned: Workload → Application → Connector → Storage,
