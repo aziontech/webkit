@@ -1,4 +1,6 @@
 import { Meta, Source } from '@storybook/blocks'
+import { createApp, h, ref } from 'vue'
+import ButtonHighlight from '@aziontech/webkit/button-highlight'
 
 export const SETUP_PROMPT = `Set up the Azion design system (@aziontech/webkit) in this project.
 Follow the steps in order and do not skip the report.
@@ -74,6 +76,37 @@ Follow the steps in order and do not skip the report.
   }}
 />
 
+export const copyText = (text) => {
+  // Selection copy first: the docs iframe may lack clipboard-write permission.
+  const area = document.createElement('textarea')
+  area.value = text
+  document.body.appendChild(area)
+  area.select()
+  const copied = document.execCommand('copy')
+  area.remove()
+  return copied ? Promise.resolve() : navigator.clipboard.writeText(text)
+}
+
+export const mountCopyPrompt = (el) => {
+  // MDX renders in React, so the Vue ButtonHighlight is mounted into a host element.
+  if (!el || el.__vue_app__) return
+  const label = ref('Copy prompt')
+  createApp({
+    render: () =>
+      h(ButtonHighlight, {
+        label: label.value,
+        icon: 'pi pi-copy',
+        onClick: () =>
+          copyText(SETUP_PROMPT).then(() => {
+            label.value = 'Copied!'
+            setTimeout(() => (label.value = 'Copy prompt'), 2000)
+          })
+      })
+  }).mount(el)
+}
+
+export const CopySetupButton = () => <div ref={mountCopyPrompt} aria-live="polite" />
+
 # Get Started
 
 Azion's design system for Vue 3 — 100+ accessible, token-driven components, plus the
@@ -87,7 +120,17 @@ Using Claude Code, Cursor, or another AI coding tool? Copy this prompt into your
 runs the installer, finishes what `init` can't do on its own, verifies the wiring, and
 reports back:
 
+<CopySetupButton />
+
+The prompt hands your coding agent the installer, the lint, the MCP server, and a checklist to
+verify it all.
+
+<details>
+  <summary>View the prompt</summary>
+
 <Source code={SETUP_PROMPT} language="markdown" dark />
+
+</details>
 
 The MCP server it wires gives your AI the full component catalog — `list_components`,
 `get_component`, `list_tokens`, `suggest_component`, `get_best_practices`,
