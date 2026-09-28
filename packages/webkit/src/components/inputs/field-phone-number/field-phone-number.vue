@@ -78,7 +78,9 @@
 
   const displayValue = computed(() => applyMask(props.modelValue, selectedCountry.value.mask))
 
-  const effectivePlaceholder = computed(() => props.placeholder || selectedCountry.value.mask)
+  const effectivePlaceholder = computed(
+    () => props.placeholder || selectedCountry.value.mask.replace(/#/g, '9')
+  )
 
   const helperKind = computed<HelperTextKind>(() => {
     if (props.disabled) return 'disabled'
