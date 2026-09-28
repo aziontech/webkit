@@ -9944,31 +9944,45 @@
           "type": "LogoItem[]",
           "default": "[]",
           "required": "false",
-          "doc": "The marks rendered in the grid, in order; each item is `{ src, alt, href? }` where `src` is the mark's URL, `alt` names the company, and `href` links the mark when there is somewhere to go."
+          "doc": "The marks rendered in the grid, in order; each item is `{ src, alt, href?, shape? }` where `src` is the mark's URL, `alt` names the company, `href` links the cell to that customer's story, and `shape` sets a near-square mark taller than a wordmark."
         },
         {
           "name": "ariaLabel",
           "type": "string",
           "default": "''",
           "required": "false",
-          "doc": "Accessible name for the group of marks, announced instead of an unnamed list."
+          "doc": "Accessible name for the group of marks, announced instead of an unnamed region."
+        },
+        {
+          "name": "linkLabel",
+          "type": "string",
+          "default": "'Read story'",
+          "required": "false",
+          "doc": "Words revealed under a linked mark on hover and focus, and the lead of that link's accessible name."
+        }
+      ],
+      "events": [
+        {
+          "name": "item-click",
+          "payload": "(event: MouseEvent, item: LogoItem)",
+          "notes": "Fired when a linked cell is activated; `item` is the matched `items` entry. The anchor still navigates unless the handler calls `event.preventDefault()`, which is how a client-side router takes over."
         }
       ],
       "slots": [
         {
           "name": "aside",
           "scope": "—",
-          "notes": "Content set beside the wall from `lg` up, such as one customer's `quote`; when it is empty the wall spans the full width."
+          "notes": "Content set beside the wall from `lg` up, such as one customer's `quote`, on a `--bg-canvas` panel padded by `--spacing-xl`; its child stretches to fill the panel. When it is empty the wall spans the full width."
         },
         {
           "name": "mark",
           "scope": "{ item: LogoItem; index: number }",
-          "notes": "One cell's mark, replacing the image built from the item — for a mark that owns its own theming (a per-theme asset swap, a silhouette filter). The slotted content carries its own alternative text."
+          "notes": "One cell's mark, replacing the image built from the item — for a mark that owns its own theming (a per-theme asset swap, a silhouette filter). The slotted content carries its own alternative text and sits in a 28px-tall box; on a linked cell it lifts with the built image's motion."
         }
       ],
-      "purpose": "The customer-proof band of a marketing page: a responsive grid of company marks, optionally linked, under one accessible group name. It is deliberately a static grid rather than an auto-scrolling strip — moving content needs a pause control to meet WCAG 2.2.2, and a wall a reader can scan beats one they have to wait for. The marks rest at 60% opacity, so the wall reads as the evidence behind the page's own words rather than as twelve things competing with them; a linked mark comes up to full strength on hover and focus. Fill the `aside` slot and the band splits from `lg` up — the wall on the start edge, one of those customers speaking on the end edge — and the wall narrows from six columns to four to sit in half the width.",
+      "purpose": "The customer-proof band of a marketing page: a framed grid of square cells, one company mark to a cell, each one optionally linked to that customer's story, under one accessible group name. It is deliberately a static grid rather than an auto-scrolling strip — moving content needs a pause control to meet WCAG 2.2.2, and a wall a reader can scan beats one they have to wait for. The cells are `card-grid` frame cells, so the wall draws the same hairlines and registration marks as every other framed band on the page. A linked cell is the whole square: on hover and focus a wash rises behind it, the mark lifts, and a `Read story` label slides in under it, so the wall doubles as the way into the case studies. Fill the `aside` slot and the band splits from `lg` up — the wall on the start edge, one of those customers speaking on the end edge on a padded canvas panel — and the wall narrows from six columns to three to sit in half the width at the same cell size.",
       "useWhen": [
-        "To show who already uses the product, as the proof band under a hero or section.",
+        "To show who already uses the product, as the proof band under a hero or section, with each mark leading to that customer's success case.",
         "Wherever a set of partner, customer or certification marks is the message.",
         "When the marks are recognisable enough that names are unnecessary.",
         "To set one customer's statement beside the crowd that backs it, by filling `aside` with a `quote`."
@@ -9977,21 +9991,24 @@
         "For a measured claim rather than a set of names → use `big-numbers`.",
         "For one customer's statement → use `quote`.",
         "For a single brand mark, such as the product's own → use `brand`.",
-        "For a grid of described features rather than marks → use `feature-card`."
+        "For a grid of described features rather than marks → use `topic` in a `card-grid`.",
+        "For a moving strip of many small marks, such as a tool stack → use `ticker`."
       ],
       "related": [
+        "card-grid` — the frame register the wall is built on; its cells draw the rules and marks.",
         "quote` — one named customer's statement; the wall shows many without words.",
         "big-numbers` — the numeric form of the same proof band.",
         "brand` — the product's own mark, not a customer's."
       ],
       "bestPractices": [
-        "Supply marks that read on the page's own surface. The component applies no colour filter — only a uniform opacity — so a mark that only works on one theme will not work on both; ship a mark that does, rather than inverting it. When the marks come from a registry that already places them per theme, render them through the `mark` slot and keep `items` as the list they are drawn from.",
-        "Give every mark a real `alt` — the company name. The wall is a list of who uses the product, and that list should be readable without seeing it.",
-        "Set `ariaLabel` so the group announces its purpose (\"Customers using Azion\") instead of reading as an unnamed list.",
-        "Keep the marks to one visual weight. A wall mixing wordmarks and full lockups reads as inconsistent no matter how the grid is set.",
-        "Link a mark with `href` only when there is somewhere worth going, such as a case study.",
+        "Place the wall inside a `frame-box` (in a `section-module`, as every framed band is). The grid is `card-grid`'s `flush` frame: the surrounding frame draws the outer rules and the cells lay their right and bottom rules onto it.",
+        "Supply marks that read on the page's own surface. The component applies no colour filter, so a mark that only works on one theme will not work on both; brand-colour marks read on either. When the marks come from a registry that already places them per theme, render them through the `mark` slot and keep `items` as the list they are drawn from.",
+        "Set `shape: 'compact'` on a mark that is close to square (a roundel, a monogram) so it sits taller than the wordmarks beside it and all of them read at one visual weight.",
+        "Give every mark a real `alt` — the company name. A linked cell is announced as `linkLabel`, then that name (\"Read story, Magalu\").",
+        "Set `ariaLabel` so the group announces its purpose (\"Clients running on Azion\") instead of reading as an unnamed region.",
+        "Link a mark with `href` only when there is somewhere worth going, such as a case study; a wall of links to nowhere costs a reader a tab stop per cell. In an app with a client-side router, handle `item-click`: call `event.preventDefault()` and push `item.href`.",
         "Put one statement in `aside`, not a second grid. The band's argument is *many customers, one of them talking*; two things of equal weight leave a reader with neither.",
-        "Give the wall eight or twelve marks when `aside` is filled — it is four columns wide there — so the last row is full rather than ragged."
+        "Give the wall a multiple of three marks when `aside` is filled and a multiple of six when it is not, so the last row is full rather than ragged. Six beside a quote is the Web Apps band."
       ]
     },
     "breadcrumb": {

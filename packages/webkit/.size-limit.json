@@ -137,7 +137,7 @@
   {
     "name": "logo-wall",
     "path": "src/components/marketing/logo-wall/logo-wall.vue",
-    "limit": "1 KB"
+    "limit": "3.75 KB"
   },
   {
     "name": "illustration",

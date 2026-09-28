@@ -3,23 +3,23 @@ name: logo-wall
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 1
-checksum: 0000a7ede0732472f868b87a74e702a8ea87dbaee838fdc6a6971eb6c7b29f34
+spec_version: 2
+checksum: 404cd79cd5aff08c54fcecef08da53334c4f81cf22ea4518b49fc4c2846f8a41
 created: 2026-09-22
-last_updated: 2026-09-24
+last_updated: 2026-09-26
 ---
 
 # Logo Wall — Component Spec
 
 ## Purpose
 
-The customer-proof band of a marketing page: a responsive grid of company marks, optionally linked, under one accessible group name. It is deliberately a static grid rather than an auto-scrolling strip — moving content needs a pause control to meet WCAG 2.2.2, and a wall a reader can scan beats one they have to wait for.
+The customer-proof band of a marketing page: a framed grid of square cells, one company mark to a cell, each one optionally linked to that customer's story, under one accessible group name. It is deliberately a static grid rather than an auto-scrolling strip — moving content needs a pause control to meet WCAG 2.2.2, and a wall a reader can scan beats one they have to wait for.
 
-The marks rest at 60% opacity, so the wall reads as the evidence behind the page's own words rather than as twelve things competing with them; a linked mark comes up to full strength on hover and focus. Fill the `aside` slot and the band splits from `lg` up — the wall on the start edge, one of those customers speaking on the end edge — and the wall narrows from six columns to four to sit in half the width.
+The cells are `card-grid` frame cells, so the wall draws the same hairlines and registration marks as every other framed band on the page. A linked cell is the whole square: on hover and focus a wash rises behind it, the mark lifts, and a `Read story` label slides in under it, so the wall doubles as the way into the case studies. Fill the `aside` slot and the band splits from `lg` up — the wall on the start edge, one of those customers speaking on the end edge on a padded canvas panel — and the wall narrows from six columns to three to sit in half the width at the same cell size.
 
 ## When to use
 
-- To show who already uses the product, as the proof band under a hero or section.
+- To show who already uses the product, as the proof band under a hero or section, with each mark leading to that customer's success case.
 - Wherever a set of partner, customer or certification marks is the message.
 - When the marks are recognisable enough that names are unnecessary.
 - To set one customer's statement beside the crowd that backs it, by filling `aside` with a `quote`.
@@ -29,23 +29,26 @@ The marks rest at 60% opacity, so the wall reads as the evidence behind the page
 - For a measured claim rather than a set of names → use `big-numbers`.
 - For one customer's statement → use `quote`.
 - For a single brand mark, such as the product's own → use `brand`.
-- For a grid of described features rather than marks → use `feature-card`.
+- For a grid of described features rather than marks → use `topic` in a `card-grid`.
+- For a moving strip of many small marks, such as a tool stack → use `ticker`.
 
 ## Related
 
+- `card-grid` — the frame register the wall is built on; its cells draw the rules and marks.
 - `quote` — one named customer's statement; the wall shows many without words.
 - `big-numbers` — the numeric form of the same proof band.
 - `brand` — the product's own mark, not a customer's.
 
 ## Best practices
 
-- Supply marks that read on the page's own surface. The component applies no colour filter — only a uniform opacity — so a mark that only works on one theme will not work on both; ship a mark that does, rather than inverting it. When the marks come from a registry that already places them per theme, render them through the `mark` slot and keep `items` as the list they are drawn from.
-- Give every mark a real `alt` — the company name. The wall is a list of who uses the product, and that list should be readable without seeing it.
-- Set `ariaLabel` so the group announces its purpose ("Customers using Azion") instead of reading as an unnamed list.
-- Keep the marks to one visual weight. A wall mixing wordmarks and full lockups reads as inconsistent no matter how the grid is set.
-- Link a mark with `href` only when there is somewhere worth going, such as a case study.
+- Place the wall inside a `frame-box` (in a `section-module`, as every framed band is). The grid is `card-grid`'s `flush` frame: the surrounding frame draws the outer rules and the cells lay their right and bottom rules onto it.
+- Supply marks that read on the page's own surface. The component applies no colour filter, so a mark that only works on one theme will not work on both; brand-colour marks read on either. When the marks come from a registry that already places them per theme, render them through the `mark` slot and keep `items` as the list they are drawn from.
+- Set `shape: 'compact'` on a mark that is close to square (a roundel, a monogram) so it sits taller than the wordmarks beside it and all of them read at one visual weight.
+- Give every mark a real `alt` — the company name. A linked cell is announced as `linkLabel`, then that name ("Read story, Magalu").
+- Set `ariaLabel` so the group announces its purpose ("Clients running on Azion") instead of reading as an unnamed region.
+- Link a mark with `href` only when there is somewhere worth going, such as a case study; a wall of links to nowhere costs a reader a tab stop per cell. In an app with a client-side router, handle `item-click`: call `event.preventDefault()` and push `item.href`.
 - Put one statement in `aside`, not a second grid. The band's argument is *many customers, one of them talking*; two things of equal weight leave a reader with neither.
-- Give the wall eight or twelve marks when `aside` is filled — it is four columns wide there — so the last row is full rather than ragged.
+- Give the wall a multiple of three marks when `aside` is filled and a multiple of six when it is not, so the last row is full rather than ragged. Six beside a quote is the Web Apps band.
 
 ## Usage
 
@@ -57,19 +60,24 @@ import Quote from '@aziontech/webkit/quote'
 
 <template>
   <LogoWall
-    aria-label="Customers building on Azion"
+    aria-label="Clients running on Azion"
     :items="[
-      { src: '/logos/northwind.svg', alt: 'Northwind' },
-      { src: '/logos/contoso.svg', alt: 'Contoso', href: '/customers/contoso' },
-      { src: '/logos/fabrikam.svg', alt: 'Fabrikam' },
-      { src: '/logos/tailspin.svg', alt: 'Tailspin' }
+      { src: '/logos/magalu.svg', alt: 'Magalu', href: '/customers/magalu' },
+      { src: '/logos/ifood.svg', alt: 'iFood', href: '/customers/ifood', shape: 'compact' },
+      { src: '/logos/stone.svg', alt: 'Stone', href: '/customers/stone' },
+      { src: '/logos/netshoes.svg', alt: 'Netshoes', href: '/customers/netshoes' },
+      { src: '/logos/nzn.svg', alt: 'NZN', href: '/customers/nzn' },
+      { src: '/logos/itau.svg', alt: 'Itaú', href: '/customers/itau', shape: 'compact' }
     ]"
   >
     <template #aside>
       <Quote
-        logo="/logos/contoso.svg"
+        kind="signed"
+        logo="/logos/herospark.svg"
+        logo-alt="HeroSpark"
         text="Azion transformed our operations, reducing costs and improving performance."
-        source="Mateus Leonardi, CTO at Contoso"
+        name="Mateus Leonardi"
+        job-title="CTO at HeroSpark"
       />
     </template>
   </LogoWall>
@@ -80,41 +88,56 @@ import Quote from '@aziontech/webkit/quote'
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `items` | `LogoItem[]` | `[]` | false | The marks rendered in the grid, in order; each item is `{ src, alt, href? }` where `src` is the mark's URL, `alt` names the company, and `href` links the mark when there is somewhere to go. |
-| `ariaLabel` | `string` | `''` | false | Accessible name for the group of marks, announced instead of an unnamed list. |
+| `items` | `LogoItem[]` | `[]` | false | The marks rendered in the grid, in order; each item is `{ src, alt, href?, shape? }` where `src` is the mark's URL, `alt` names the company, `href` links the cell to that customer's story, and `shape` sets a near-square mark taller than a wordmark. |
+| `ariaLabel` | `string` | `''` | false | Accessible name for the group of marks, announced instead of an unnamed region. |
+| `linkLabel` | `string` | `'Read story'` | false | Words revealed under a linked mark on hover and focus, and the lead of that link's accessible name. |
+
+`LogoItem` is `{ src: string; alt: string; href?: string; shape?: LogoShape }`, and `LogoShape` is `'wide' | 'compact'` (`wide` when omitted). Both types are exported.
 
 ## Events
 
-| _none_ | — | — |
+| Event | Payload | Notes |
+|---|---|---|
+| `item-click` | `(event: MouseEvent, item: LogoItem)` | Fired when a linked cell is activated; `item` is the matched `items` entry. The anchor still navigates unless the handler calls `event.preventDefault()`, which is how a client-side router takes over. |
 
 ## Slots
 
 | Slot | Scope | Notes |
 |---|---|---|
-| `aside` | — | Content set beside the wall from `lg` up, such as one customer's `quote`; when it is empty the wall spans the full width. |
-| `mark` | `{ item: LogoItem; index: number }` | One cell's mark, replacing the image built from the item — for a mark that owns its own theming (a per-theme asset swap, a silhouette filter). The slotted content carries its own alternative text. |
+| `aside` | — | Content set beside the wall from `lg` up, such as one customer's `quote`, on a `--bg-canvas` panel padded by `--spacing-xl`; its child stretches to fill the panel. When it is empty the wall spans the full width. |
+| `mark` | `{ item: LogoItem; index: number }` | One cell's mark, replacing the image built from the item — for a mark that owns its own theming (a per-theme asset swap, a silhouette filter). The slotted content carries its own alternative text and sits in a 28px-tall box; on a linked cell it lifts with the built image's motion. |
 
 ## States
 
-- Visual states: every mark rests at 60% opacity; `hover` / `focus-visible` on a mark that carries an `href` is the only thing that lifts it to full
-- `data-aside` is present when the `aside` slot is filled, and is what splits the band into two columns from `lg` up and narrows the wall from six columns to four
-- A cell's mark is the `mark` slot's content when it is filled, and the image built from the item otherwise; either way it rests at the same 60% opacity and, with an `href`, lifts on `hover` / `focus-visible`
+- Visual states: an unlinked cell is static; a linked cell on `hover` / `focus-visible` raises a `--bg-hover` wash behind the whole square, lifts the mark by `--spacing-sm`, and fades the `linkLabel` in beneath it with a trailing arrow
+- `data-aside` is present when the `aside` slot is filled; from `lg` up it splits the band into two columns and narrows the wall from six columns to three, so a cell is the same size in both layouts
+- Columns: two below `sm`, three from `sm`, six from `lg` (three with `aside`)
+- `data-shape` on the built image is `wide` or `compact`; `compact` sets the mark 28px tall instead of 20px
+- A cell's mark is the `mark` slot's content when it is filled, and the image built from the item otherwise
 - Empty: when `items` is empty the wall renders no grid, so a page with no customers to name shows nothing rather than an empty frame — an `aside` given without items still renders, since a statement stands on its own
 
 ## Motion & Animations
 
 | Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
 |---|---|---|---|
-| hover on a linked mark | `transition-opacity duration-150 ease-out` | inline (matches catalog) | `motion-reduce:transition-none` |
+| hover / focus on a linked cell — the wash | `before:transition-opacity before:duration-moderate-01 before:ease-productive-entrance` | `duration-moderate-01` + `ease-productive-entrance` | `motion-reduce:before:transition-none` |
+| hover / focus on a linked cell — the mark lift | `transition-[translate] duration-moderate-01 ease-productive-entrance` | `duration-moderate-01` + `ease-productive-entrance` | `motion-reduce:transition-none` |
+| hover / focus on a linked cell — the label reveal | `transition-[opacity,translate] duration-moderate-01 ease-productive-entrance` | `duration-moderate-01` + `ease-productive-entrance` | `motion-reduce:transition-none` |
 
 ## Tokens
 
 | Region | Token (DESIGN.md) |
 |---|---|
-| spacing (grid gap) | `var(--spacing-xl)` |
-| spacing (wall ↔ aside gap) | `var(--spacing-xxl)` |
+| cell fill | `var(--bg-surface)` (via `card-grid` cell `surface`) |
+| cell rules + marks | `var(--border-default)` (via `card-grid` frame) |
+| hover wash | `var(--bg-hover)` |
+| mark lift | `var(--spacing-sm)` |
+| cell inline padding | `var(--spacing-md)` |
+| label | `text-overline-md`, `var(--text-default)` |
+| label ↔ mark gap | `var(--spacing-xs)` |
+| label ↔ arrow gap | `var(--spacing-xxs)` |
+| aside panel | `var(--bg-canvas)`, padded by `var(--spacing-xl)` |
 | ring | `var(--ring-color)` |
-| focus ring offset | `var(--bg-canvas)` |
 
 ## Theme gaps
 
@@ -124,18 +147,18 @@ import Quote from '@aziontech/webkit/quote'
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: a linked mark carries `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`; an unlinked mark is not focusable.
-- Keyboard map: `Tab` reaches each linked mark in DOM order; unlinked marks are skipped. No arrow-key model — this is a list, not a composite widget.
-- ARIA: the grid is a `<ul>` of `<li>` so the count is announced, named by `ariaLabel` when set; each mark's `alt` carries the company name, so the wall is readable without sight. A mark supplied through the `mark` slot owns that name itself — the component cannot add it.
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the marks are consumer-supplied images held at 60% opacity. WCAG 1.4.11 exempts logotypes from the contrast minimum, and the component adds no colour filter, so a mark must still carry its own legibility against `var(--bg-canvas)` at that strength. Anything in `aside` is ordinary content and is bound by the minimum in full.
-- `motion-reduce:transition-none` on the linked-mark hover transition. The band never auto-scrolls, so WCAG 2.2.2 (pause, stop, hide) does not apply.
-- Touch target ≥40×40 px — a linked mark's anchor spans its full grid cell.
+- Visible focus: a linked cell carries `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset`, inset so the ring stays inside the cell's rules; focus also lifts the mark and reveals the label, exactly as hover does. An unlinked cell is not focusable.
+- Keyboard map: `Tab` reaches each linked cell in DOM order; `Enter` follows it. Unlinked cells are skipped. No arrow-key model — this is a list, not a composite widget.
+- ARIA: the grid is `role="list"` of `role="listitem"` cells so the count is announced, inside a `section` named by `ariaLabel` when set. A linked cell's name is `"<linkLabel>, <alt>"`; the visible label is `aria-hidden` so it is not read twice. An unlinked cell's `alt` carries the company name. A mark supplied through the `mark` slot owns that name itself on an unlinked cell — the component cannot add it.
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the label is `--text-default` on `--bg-hover` over `--bg-surface`. The marks are consumer-supplied images; WCAG 1.4.11 exempts logotypes from the contrast minimum, and the component adds no colour filter, so a mark must carry its own legibility against `var(--bg-surface)`. Anything in `aside` is ordinary content and is bound by the minimum in full.
+- `motion-reduce:transition-none` / `motion-reduce:before:transition-none` on every hover transition. The band never auto-scrolls, so WCAG 2.2.2 (pause, stop, hide) does not apply.
+- Touch target ≥40×40 px — a linked cell's anchor is its whole square.
 
 ## Stories (Storybook)
 
-- Default
-- Linked — marks carrying an `href` (justified: the hover, focus ring and anchor semantics only exist on linked marks, and the default args have none)
-- WithAside — the wall paired with a `quote` on the end edge (justified: the two-column split and the four-column wall exist only when the `aside` slot is filled, and no arg can produce them)
+- Default — six linked marks beside a `quote`, the Web Apps band (justified: this is the composition the component exists for, and the `aside` split, the three-column wall and the canvas panel only exist when the slot is filled, which no arg can produce)
+- Wall — the same marks with no `aside`, six to a row (justified: the full-width six-column wall is the other layout the component has)
+- Unlinked — marks with no `href` (justified: the static cell, with no wash, lift, label or tab stop, only exists without an `href`, and every other story links its marks)
 
 ## Constraints — DO NOT
 

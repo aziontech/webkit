@@ -1,4 +1,4 @@
-import { render } from '@testing-library/vue'
+import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -9,7 +9,7 @@ const TESTID = 'marketing-logo-wall'
 const items = [
   { src: '/logos/northwind.svg', alt: 'Northwind' },
   { src: '/logos/contoso.svg', alt: 'Contoso', href: '/customers/contoso' },
-  { src: '/logos/fabrikam.svg', alt: 'Fabrikam' }
+  { src: '/logos/fabrikam.svg', alt: 'Fabrikam', shape: 'compact' as const }
 ]
 
 describe('LogoWall', () => {
@@ -30,9 +30,17 @@ describe('LogoWall', () => {
   })
 
   it('renders one list item per mark', () => {
-    const { container } = render(LogoWall, { props: { items } })
+    const { getByRole, getAllByRole } = render(LogoWall, { props: { items } })
 
-    expect(container.querySelectorAll('ul > li')).toHaveLength(items.length)
+    expect(getByRole('list')).toBeInTheDocument()
+    expect(getAllByRole('listitem')).toHaveLength(items.length)
+  })
+
+  it('sets a compact mark apart from the wide default through data-shape', () => {
+    const { getByAltText } = render(LogoWall, { props: { items } })
+
+    expect(getByAltText('Fabrikam')).toHaveAttribute('data-shape', 'compact')
+    expect(getByAltText('Northwind')).toHaveAttribute('data-shape', 'wide')
   })
 
   it('renders every mark as an image carrying its src and alt', () => {
@@ -53,11 +61,43 @@ describe('LogoWall', () => {
     expect(anchor).toHaveAttribute('href', '/customers/contoso')
   })
 
+  it('names a linked cell with the link label and the company', () => {
+    const { getByRole } = render(LogoWall, { props: { items } })
+
+    expect(getByRole('link', { name: 'Read story, Contoso' })).toHaveAttribute(
+      'href',
+      '/customers/contoso'
+    )
+  })
+
+  it('uses a consumer linkLabel for the revealed words and the link name', () => {
+    const { getByRole, getByText } = render(LogoWall, {
+      props: { items, linkLabel: 'Ver caso' }
+    })
+
+    expect(getByRole('link', { name: 'Ver caso, Contoso' })).toBeInTheDocument()
+    expect(getByText('Ver caso').closest('[aria-hidden="true"]')).not.toBeNull()
+  })
+
+  it('emits item-click with the event first and the matched item second', async () => {
+    const { getByRole, emitted } = render(LogoWall, { props: { items } })
+    const link = getByRole('link', { name: 'Read story, Contoso' })
+    link.addEventListener('click', (event) => event.preventDefault())
+
+    await fireEvent.click(link)
+
+    const calls = emitted('item-click') as [MouseEvent, (typeof items)[number]][]
+    expect(calls).toHaveLength(1)
+    expect(calls[0][0]).toBeInstanceOf(MouseEvent)
+    expect(calls[0][1]).toEqual(items[1])
+  })
+
   it('renders no anchor for a mark without an href', () => {
-    const { getByAltText, container } = render(LogoWall, { props: { items } })
+    const { getByAltText, getAllByText, container } = render(LogoWall, { props: { items } })
 
     expect(getByAltText('Northwind').closest('a')).toBeNull()
     expect(container.querySelectorAll('a')).toHaveLength(1)
+    expect(getAllByText('Read story')).toHaveLength(1)
   })
 
   it('names the group with ariaLabel', () => {
@@ -79,13 +119,13 @@ describe('LogoWall', () => {
     const { getByTestId, container } = render(LogoWall, { props: { items: [] } })
 
     expect(getByTestId(TESTID)).toBeInTheDocument()
-    expect(container.querySelector('ul')).toBeNull()
+    expect(container.querySelector('[role="list"]')).toBeNull()
   })
 
   it('renders no list when items is omitted', () => {
     const { container } = render(LogoWall)
 
-    expect(container.querySelector('ul')).toBeNull()
+    expect(container.querySelector('[role="list"]')).toBeNull()
   })
 
   it('forwards a consumer class onto the root', () => {
@@ -134,7 +174,7 @@ describe('LogoWall', () => {
     const root = getByTestId(TESTID)
     expect(root).toHaveAttribute('data-aside', 'true')
     expect(getByText('Azion transformed our operations.')).toBeInTheDocument()
-    expect(root.querySelector('ul')).not.toBeNull()
+    expect(root.querySelector('[role="list"]')).not.toBeNull()
   })
 
   it('renders the aside even when there are no marks to show', () => {
@@ -143,7 +183,7 @@ describe('LogoWall', () => {
       slots: { aside: '<blockquote>One customer still speaks.</blockquote>' }
     })
 
-    expect(getByTestId(TESTID).querySelector('ul')).toBeNull()
+    expect(getByTestId(TESTID).querySelector('[role="list"]')).toBeNull()
     expect(getByText('One customer still speaks.')).toBeInTheDocument()
   })
 
