@@ -4,16 +4,16 @@ category: marketing
 structure: monolithic
 status: approved
 spec_version: 1
-checksum: 350bf4594204a6693f2a84e0d70f5c80c454c5c70bbab01dec0d2926fbe2ec6b
+checksum: e5c2f4897eb9a1ec31376244d76ee97f426224dccec1724f32fa8a810dbfb4bf
 created: 2026-09-24
-last_updated: 2026-09-24
+last_updated: 2026-09-26
 ---
 
 # Topic — Component Spec
 
 ## Purpose
 
-One claim stated in three parts: a glyph, a short headline, and a sentence that explains it. It is the repeated unit of a marketing claim grid — the content of a cell, not the cell itself, so it carries no surface, no padding and no rules of its own and reads the same dropped into a `card-grid` cell, a `bento-grid` cell, or a column the page lays out by hand.
+One claim stated in three parts: a glyph, a short headline it shares a line with, and a sentence under them that explains it. It is the repeated unit of a marketing claim grid — the content of a cell, not the cell itself, so it carries no surface, no padding and no rules of its own and reads the same dropped into a `card-grid` cell, a `bento-grid` cell, or a column the page lays out by hand. Given an `href` the whole claim becomes the link, and its headline closes on a trailing arrow, so a band of claims needs no separate row of "learn more" controls.
 
 ## When to use
 
@@ -23,15 +23,14 @@ One claim stated in three parts: a glyph, a short headline, and a sentence that 
 
 ## When NOT to use
 
-- For a self-contained tile with its own border, radius and surface — or one that is a link → use `feature-card`.
-- For a claim that carries an eyebrow, a media region or an action → use `feature-card` or `media-split`.
+- For a tile with its own border and surface → keep the topic and put it in a `CardGrid.Cell`, which draws the frame and the fill.
+- For a claim that carries an eyebrow, a media region or a button → use `media-split`.
 - For the headline that opens the whole section → use `section-title`.
 - For a measured figure with a unit → use `big-numbers`.
 - For a console list row with media and actions → use `item`.
 
 ## Related
 
-- `feature-card` — the same three parts drawn as a self-contained bordered tile, optionally a link; reach for it when the tile stands alone rather than in a ruled grid.
 - `card-grid` — the equal-cell grid a topic is usually repeated in; its `frame` register gives each topic a real `frame-box` cell.
 - `bento-grid` — the unequal-cell mosaic, when one claim deserves more room than the rest.
 - `section-title` — the headline that opens the band a row of topics sits in.
@@ -42,6 +41,7 @@ One claim stated in three parts: a glyph, a short headline, and a sentence that 
 - Keep `headingLevel` in step with the page outline: `2` when the band has no headline of its own and these are the first sub-headings under the `h1`, `3` when a `section-title` has already opened the section. The level is the outline; the size is fixed at `heading-xs`.
 - Keep the description to one sentence. The glyph carries the recognition, the headline carries the claim, and a second sentence turns a scannable grid into a wall of prose.
 - Drop `icon` for a band whose claims are not glyph-led rather than reaching for a decorative glyph that says nothing.
+- Give the claim an `href` rather than composing a button under it. A grid of six claims that each close on their own "Learn more" reads as six calls to action instead of six claims, and the button is a second target for the destination the claim already points at.
 
 ## Usage
 
@@ -55,6 +55,7 @@ import Topic from '@aziontech/webkit/topic'
     icon="ai ai-edge-nodes"
     title="Consistent global speed"
     description="Serve content and run web apps across hundreds of locations with median latency under 30 ms. No infra to manage."
+    href="/products/edge-application"
   />
 </template>
 ```
@@ -65,7 +66,8 @@ import Topic from '@aziontech/webkit/topic'
 |---|---|---|---|---|
 | `title` | `string` | `—` | true | The claim, rendered as the topic's heading. |
 | `description` | `string` | `''` | false | One sentence explaining the claim; overridden by the default slot. |
-| `icon` | `string` | `''` | false | Icon class for the glyph above the copy. |
+| `icon` | `string` | `''` | false | Icon class for the glyph that leads the headline. |
+| `href` | `string` | `''` | false | When set, the whole claim renders as an anchor link to this URL and its headline closes on a trailing arrow. |
 | `headingLevel` | `TopicHeadingLevel` | `2` | false | Level of the heading element. Keep `2` when the band has no headline of its own; drop it to `3` when a `section-title` has already opened the section, so the document outline stays in order. |
 
 ## Events
@@ -80,14 +82,19 @@ import Topic from '@aziontech/webkit/topic'
 
 ## States
 
-- Visual states: `default`
+- Visual states: `default`, and `hover` / `focus-visible` when `href` is set
 - `data-icon` mirrors whether a glyph is rendered, so a band can style the glyph-less case
 - `data-described` mirrors whether a description is rendered, from either the prop or the slot
+- `data-linked` present when the claim carries an `href`
+- The root element switches between `<a>` and `<div>` on the `href` data prop, never on an `as` string — so the whole claim is the target, not a control composed under it
 - The heading element follows `headingLevel`; its size does not change with it
 
 ## Motion & Animations
 
-_none_
+| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
+|---|---|---|---|
+| hover / focus on a linked claim | `transition-colors duration-150 ease-out` | inline (matches catalog) | `motion-reduce:transition-none` |
+| hover on a linked claim (its arrow) | `transition-[translate] duration-moderate-02 ease-expressive-entrance` | `--duration-moderate-02`, `--ease-expressive-entrance` | `motion-reduce:transition-none` |
 
 ## Tokens
 
@@ -95,11 +102,16 @@ _none_
 |---|---|
 | typography (heading) | `.text-heading-xs` |
 | typography (description) | `.text-body-sm` |
-| typography (glyph size) | `.text-heading-sm` |
+| typography (glyph size) | `.text-heading-xs` — the glyph sits on the headline's line, so it takes the headline's size |
+| typography (trailing arrow) | `.text-body-xs` |
 | glyph | `var(--primary)` |
 | heading ink | `var(--text-default)` |
+| heading ink (linked, hover) | `var(--primary)` |
 | description ink | `var(--text-muted)` |
-| spacing (between parts) | `var(--spacing-md)` |
+| focus ring | `var(--ring-color)` on `var(--bg-canvas)` |
+| spacing (headline row to sentence) | `var(--spacing-sm)` |
+| spacing (glyph to headline) | `var(--spacing-xs)` |
+| spacing (headline to arrow) | `var(--spacing-xxs)` |
 
 ## Theme gaps
 
@@ -109,18 +121,19 @@ _none_
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: not applicable — the topic holds no interactive control of its own; a link composed into the description keeps its own `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` ring.
-- Keyboard map: none — the topic is static content; `Tab` passes through whatever the description slot contains.
-- ARIA: the glyph is decorative and carries `aria-hidden="true"`, so the accessible name of the topic is its heading text alone. `headingLevel` is what keeps the document outline in order (axe `heading-order`).
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): `var(--text-default)` for the heading, `var(--text-muted)` for the description, `var(--primary)` for the glyph — all against the fill the surrounding cell provides.
-- `motion-reduce:transition-none motion-reduce:transform-none` — not applicable, the component is static.
-- Touch target ≥40×40 px — not applicable, no interactive target of its own.
+- Visible focus: the linked root carries `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`. Without an `href` the topic holds no interactive control of its own.
+- Keyboard map: `Tab` reaches the linked claim and `Enter` follows it — the anchor's own behaviour, no handler of our own. Unlinked, the topic is static content and `Tab` passes through whatever the description slot contains.
+- ARIA: both glyphs are decorative and carry `aria-hidden="true"` — the leading icon and the trailing arrow — so the link's accessible name is the headline and the sentence, the copy a reader sees. `headingLevel` is what keeps the document outline in order (axe `heading-order`); the heading stays a heading inside the anchor.
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): `var(--text-default)` for the heading, `var(--text-muted)` for the description, `var(--primary)` for the glyph and for the hovered headline — all against the fill the surrounding cell provides.
+- `motion-reduce:transition-none` on both transitions a linked claim carries.
+- Touch target ≥40×40 px — the whole claim is the target, so it is the cell's own height; a topic is never smaller than its heading plus its sentence.
 
 ## Stories (Storybook)
 
 - Default
 - WithoutIcon — the glyph-less state (mutually-exclusive state of the `icon` prop)
-- InGrid — a row of topics inside a `card-grid` `frame` register (justified: the component is the content of a grid cell and carries no surface of its own, so a single topic on bare canvas does not show what it is for; this is the only story where the division of labour between grid, cell and topic is legible)
+- Linked — the `href` state, where the whole claim is the link and its headline closes on an arrow (mutually-exclusive state of the `href` prop)
+- InGrid — a row of topics inside a `card-grid` `divider` register (justified: the component is the content of a grid cell and carries no surface of its own, so a single topic on bare canvas does not show what it is for; this is the only story where the division of labour between grid, cell and topic is legible)
 
 ## Constraints — DO NOT
 

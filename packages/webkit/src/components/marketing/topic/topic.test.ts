@@ -80,6 +80,48 @@ describe('Topic', () => {
     expect(container.querySelector('i')).toBeNull()
   })
 
+  it('renders the whole claim as one link when href is set', () => {
+    const { getByTestId, getByRole } = render(Topic, {
+      props: { title: TITLE, description: DESCRIPTION, href: '/products/cache' }
+    })
+    const root = getByTestId(TESTID)
+
+    expect(root.tagName).toBe('A')
+    expect(root).toHaveAttribute('href', '/products/cache')
+    expect(root).toHaveAttribute('data-linked', 'true')
+    expect(getByRole('link')).toBe(root)
+    expect(getByRole('heading', { level: 2, name: TITLE })).toBeInTheDocument()
+  })
+
+  it('closes a linked headline on a decorative arrow', () => {
+    const { container } = render(Topic, { props: { title: TITLE, href: '/products/cache' } })
+    const arrow = container.querySelector('.pi-arrow-up-right')
+
+    expect(arrow).not.toBeNull()
+    expect(arrow).toHaveAttribute('aria-hidden', 'true')
+  })
+
+  it('renders a div, with no arrow and no data-linked, without an href', () => {
+    const { getByTestId, container, queryByRole } = render(Topic, { props: { title: TITLE } })
+
+    expect(getByTestId(TESTID).tagName).toBe('DIV')
+    expect(getByTestId(TESTID)).not.toHaveAttribute('data-linked')
+    expect(container.querySelector('.pi-arrow-up-right')).toBeNull()
+    expect(queryByRole('link')).toBeNull()
+  })
+
+  it('has no accessibility violations when linked', async () => {
+    const { container } = render(Topic, {
+      props: {
+        title: TITLE,
+        description: DESCRIPTION,
+        icon: 'ai ai-edge-nodes',
+        href: '/products/cache'
+      }
+    })
+    await expectNoA11yViolations(container)
+  })
+
   it('has no accessibility violations', async () => {
     const { container } = render(Topic, {
       props: { title: TITLE, description: DESCRIPTION, icon: 'ai ai-edge-nodes' }

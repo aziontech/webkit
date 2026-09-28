@@ -11353,7 +11353,14 @@
           "type": "string",
           "default": "''",
           "required": "false",
-          "doc": "Icon class for the glyph above the copy."
+          "doc": "Icon class for the glyph that leads the headline."
+        },
+        {
+          "name": "href",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "When set, the whole claim renders as an anchor link to this URL and its headline closes on a trailing arrow."
         },
         {
           "name": "headingLevel",
@@ -11370,21 +11377,20 @@
           "notes": "Description body; replaces the `description` prop when provided."
         }
       ],
-      "purpose": "One claim stated in three parts: a glyph, a short headline, and a sentence that explains it. It is the repeated unit of a marketing claim grid — the content of a cell, not the cell itself, so it carries no surface, no padding and no rules of its own and reads the same dropped into a `card-grid` cell, a `bento-grid` cell, or a column the page lays out by hand.",
+      "purpose": "One claim stated in three parts: a glyph, a short headline it shares a line with, and a sentence under them that explains it. It is the repeated unit of a marketing claim grid — the content of a cell, not the cell itself, so it carries no surface, no padding and no rules of its own and reads the same dropped into a `card-grid` cell, a `bento-grid` cell, or a column the page lays out by hand. Given an `href` the whole claim becomes the link, and its headline closes on a trailing arrow, so a band of claims needs no separate row of \"learn more\" controls.",
       "useWhen": [
         "For each cell of a \"what you get\" band: a row of equal claims under a section's headline.",
         "Inside `CardGrid.Cell` or `BentoGrid.Cell`, where the grid owns the frame and the fill and the topic owns only the copy.",
         "Whenever a claim is glyph-led and one sentence long, repeated three to six times across a band."
       ],
       "avoidWhen": [
-        "For a self-contained tile with its own border, radius and surface — or one that is a link → use `feature-card`.",
-        "For a claim that carries an eyebrow, a media region or an action → use `feature-card` or `media-split`.",
+        "For a tile with its own border and surface → keep the topic and put it in a `CardGrid.Cell`, which draws the frame and the fill.",
+        "For a claim that carries an eyebrow, a media region or a button → use `media-split`.",
         "For the headline that opens the whole section → use `section-title`.",
         "For a measured figure with a unit → use `big-numbers`.",
         "For a console list row with media and actions → use `item`."
       ],
       "related": [
-        "feature-card` — the same three parts drawn as a self-contained bordered tile, optionally a link; reach for it when the tile stands alone rather than in a ruled grid.",
         "card-grid` — the equal-cell grid a topic is usually repeated in; its `frame` register gives each topic a real `frame-box` cell.",
         "bento-grid` — the unequal-cell mosaic, when one claim deserves more room than the rest.",
         "section-title` — the headline that opens the band a row of topics sits in."
@@ -11393,7 +11399,8 @@
         "Let the cell own the surface. A topic paints no background and adds no padding, so put it inside `CardGrid.Cell` / `BentoGrid.Cell` (or a padded cell the page owns) rather than giving the topic a fill.",
         "Keep `headingLevel` in step with the page outline: `2` when the band has no headline of its own and these are the first sub-headings under the `h1`, `3` when a `section-title` has already opened the section. The level is the outline; the size is fixed at `heading-xs`.",
         "Keep the description to one sentence. The glyph carries the recognition, the headline carries the claim, and a second sentence turns a scannable grid into a wall of prose.",
-        "Drop `icon` for a band whose claims are not glyph-led rather than reaching for a decorative glyph that says nothing."
+        "Drop `icon` for a band whose claims are not glyph-led rather than reaching for a decorative glyph that says nothing.",
+        "Give the claim an `href` rather than composing a button under it. A grid of six claims that each close on their own \"Learn more\" reads as six calls to action instead of six claims, and the button is a second target for the destination the claim already points at."
       ]
     }
   }
