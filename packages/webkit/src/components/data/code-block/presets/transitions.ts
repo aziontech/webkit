@@ -6,7 +6,7 @@ export const codeBlockIndicatorMotion = {
 } as const
 
 /**
- * Per-line entrance on a tab swap — a much shorter step than the 300ms
+ * Per-line entrance on a tab swap — a shorter step than the 40ms
  * marketing stagger, and capped: past `maxSteps` every remaining line shares
  * the last delay, so a 200-line file swaps in the same time a 12-line one does.
  */
@@ -23,7 +23,7 @@ export const codeBlockHeightMotion = {
 
 /** Staggered line entrance for marketing / website use cases. */
 export const codeBlockLineEnterMotion = {
-  stagger: '300ms',
+  stagger: '40ms',
   offsetClass: '-translate-x-2',
   enter: { duration: duration['moderate-02'], curve: curve['productive-entrance'] }
 } as const
@@ -49,7 +49,7 @@ export const getCodeBlockLineTransitionStyle = (
     codeBlockLineEnterMotion.enter
 
   return {
-    transition: `transform ${transitionDuration} ${transitionTimingFunction}, opacity ${transitionDuration} ${transitionTimingFunction}`,
+    transition: `translate ${transitionDuration} ${transitionTimingFunction}, opacity ${transitionDuration} ${transitionTimingFunction}`,
     transitionDelay: `calc(${lineIndex} * ${codeBlockLineEnterMotion.stagger})`
   }
 }
@@ -62,7 +62,7 @@ export const getCodeBlockLineSwapTransitionStyle = (
   const step = Math.min(lineIndex, codeBlockLineSwapMotion.maxSteps)
 
   return {
-    transition: `transform ${transitionDuration} ${transitionTimingFunction}, opacity ${transitionDuration} ${transitionTimingFunction}`,
+    transition: `translate ${transitionDuration} ${transitionTimingFunction}, opacity ${transitionDuration} ${transitionTimingFunction}`,
     transitionDelay: `calc(${step} * ${codeBlockLineSwapMotion.stagger})`
   }
 }
