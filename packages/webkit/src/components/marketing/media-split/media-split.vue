@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, useAttrs } from 'vue'
+  import { computed, onMounted, onScopeDispose, ref, useAttrs } from 'vue'
 
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import Overline from '../../overline/overline.vue'
@@ -14,12 +14,18 @@
     inheritAttrs: false
   })
 
-  /** Which side of the band the media occupies from `lg` up. */
+  /** Which end of the band the media occupies. */
   export type MediaSplitKind = 'media-end' | 'media-start'
+  /** Axis the band splits on. */
+  export type MediaSplitOrientation = 'horizontal' | 'vertical'
   /** The cells' fill. */
   export type MediaSplitFill = 'canvas' | 'surface'
   /** Level of the band's headline element. */
   export type MediaSplitHeadingLevel = 2 | 3
+  /** Where the copy sits down its cell. */
+  export type MediaSplitAlign = 'top' | 'center'
+  /** Type scale of the copy. */
+  export type MediaSplitSize = 'medium' | 'large'
 
   interface Props {
     /** Headline of the band, rendered as its `h2`. */
@@ -32,12 +38,18 @@
     src?: string
     /** Alternative text describing what the image shows. */
     alt?: string
-    /** Which side the media sits on from `lg` up; `media-end` puts the copy first. */
+    /** Which end the media sits on: the closing cell from `lg` up, or the lower one when the band is vertical. `media-end` puts the copy first. */
     kind?: MediaSplitKind
-    /** The cells' fill. `canvas` lets the band sit in the page column; `surface` lifts it onto its own plate. */
+    /** Axis the band splits on. `horizontal` sets the cells side by side from `lg` up; `vertical` holds them stacked at every width. */
+    orientation?: MediaSplitOrientation
+    /** The copy cell's fill. `canvas` lets the band sit in the page column; `surface` lifts it onto its own plate. The media cell follows `mediaFill`. */
     fill?: MediaSplitFill
+    /** The media cell's fill. `surface` sets the asset on its own plate, one step off the page; `canvas` lets the whole band sit on the page. */
+    mediaFill?: MediaSplitFill
     /** Draw the band's own registration frame. Turn it off when the page already wraps the band in a frame. */
     framed?: boolean
+    /** Draw the seam between the copy and the media. Turn it off for a band whose two halves should read as one plate. */
+    divided?: boolean
     /** Level of the band's headline element. Drop it to 3 when the band is a sub-band of a section a section-title has already opened with its h2, so the document outline stays in order. */
     headingLevel?: MediaSplitHeadingLevel
     /** Texture the media half is grounded with; `none` leaves the cell bare. */
@@ -48,6 +60,12 @@
     textureFade?: TextureMaterialFade
     /** Inset the media from the cell's edges. An exported asset carries its own air and runs flush; a screenshot or a composed panel wants the inset. */
     mediaPadded?: boolean
+    /** URL the band links to. With it set the media cell is one link named by the band's title, a click anywhere else on the band follows it, and hovering the band reveals the chevron affordance and the hover state of its link actions. */
+    mediaHref?: string
+    /** Where the copy sits down its cell. `top` holds the copy at the cell's top and floors the actions so consecutive bands align on them; `center` gathers the copy and its actions into one block on the cell's vertical middle. */
+    align?: MediaSplitAlign
+    /** Type scale and air of the copy. `medium` sets the headline at heading-md for a band beside other content; `large` sets it at heading-xl with a larger description and pads the copy cell a step wider, for a band that carries only its headline and actions. */
+    size?: MediaSplitSize
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -56,13 +74,19 @@
     src: '',
     alt: '',
     kind: 'media-end',
+    orientation: 'horizontal',
     fill: 'canvas',
+    mediaFill: 'surface',
     framed: false,
+    divided: true,
     headingLevel: 2,
     texture: 'grid',
     textureSize: 'medium',
     textureFade: 'vignette',
-    mediaPadded: false
+    mediaPadded: false,
+    mediaHref: '',
+    align: 'top',
+    size: 'medium'
   })
 
   const slots = defineSlots<{
@@ -73,14 +97,16 @@
     /** The band's media; replaces the image built from `src`. */
     media?(): unknown
     /**
-     * Optional controls under the copy, floored so consecutive bands align on them. The
-     * band's action pattern is small buttons: `kind="secondary"` for the action itself, and
-     * `kind="outlined"` for a second one beside it.
+     * Optional controls under the copy, floored so consecutive bands align on them. Small
+     * buttons: `kind="secondary"` for the action, `kind="outlined"` for a second beside it,
+     * `icon="pi pi-chevron-right"` + `icon-position="trailing"` + `animated` when it leaves the page.
      */
     actions?(): unknown
   }>()
 
   const attrs = useAttrs()
+
+  const root = ref<globalThis.HTMLElement | null>(null)
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'marketing-media-split'
@@ -92,35 +118,62 @@
     () => Boolean(slots.default) || props.description.length > 0
   )
 
+  const isMediaLink = computed<boolean>(() => props.mediaHref.length > 0)
+
   const frame = computed(() => (props.framed ? FrameBox : 'div'))
   const frameProps = computed(() =>
-    props.framed ? { flush: true, borders: 'y', marks: 'bottom' } : {}
+    props.framed ? { flush: true, borders: 'y', marks: 'all' } : {}
   )
+
+  onMounted(() => root.value?.addEventListener('click', followBand))
+  onScopeDispose(() => root.value?.removeEventListener('click', followBand))
+
+  function followBand(event: MouseEvent) {
+    if (!isMediaLink.value || event.defaultPrevented) return
+    if ((event.target as globalThis.Element).closest('a, button, input, select, textarea, label'))
+      return
+    if (globalThis.getSelection()?.toString()) return
+    if (event.metaKey || event.ctrlKey) {
+      globalThis.open(props.mediaHref, '_blank', 'noopener')
+      return
+    }
+    globalThis.location.assign(props.mediaHref)
+  }
 </script>
 
 <template>
   <section
+    ref="root"
     v-bind="$attrs"
-    class="group/split"
+    class="group/split data-[media-href]:cursor-pointer"
     :data-testid="testId"
     :data-kind="kind"
+    :data-orientation="orientation"
     :data-fill="fill"
+    :data-media-fill="mediaFill"
+    :data-size="size"
     :data-media="hasMedia || null"
+    :data-divided="divided || null"
     :data-media-padded="mediaPadded || null"
+    :data-media-href="isMediaLink || null"
+    :data-align="align"
     :aria-label="title"
   >
     <component
       :is="frame"
       v-bind="frameProps"
+      class="h-full"
     >
       <!-- The seam is the grid's own gap over the rule fill, so neither cell draws a border
            and the hairline lands in the same place whichever side the media is on. -->
       <div
         :data-testid="`${testId}__cells`"
-        class="grid gap-px bg-(--border-default) group-data-[media]/split:lg:grid-cols-2"
+        :data-orientation="orientation"
+        class="grid h-full group-data-[divided]/split:gap-px group-data-[divided]/split:bg-(--border-default) group-data-[media]/split:data-[orientation=horizontal]:lg:grid-cols-2"
       >
         <div
-          class="flex flex-col justify-between gap-(--spacing-xxl) p-(--spacing-xl) group-data-[fill=canvas]/split:bg-(--bg-canvas) group-data-[fill=surface]/split:bg-(--bg-surface) group-data-[kind=media-start]/split:lg:order-last"
+          :data-orientation="orientation"
+          class="flex flex-col justify-between gap-(--spacing-xxl) p-(--spacing-xl) group-data-[size=large]/split:p-(--spacing-xxl) group-data-[fill=canvas]/split:bg-(--bg-canvas) group-data-[fill=surface]/split:bg-(--bg-surface) group-data-[kind=media-start]/split:lg:order-last group-data-[kind=media-start]/split:data-[orientation=vertical]:order-last group-data-[align=center]/split:justify-center"
         >
           <div class="flex flex-col gap-(--spacing-lg)">
             <Overline
@@ -132,14 +185,14 @@
 
             <component
               :is="`h${headingLevel}`"
-              class="m-0 text-balance text-heading-md text-(--text-default)"
+              class="m-0 text-balance text-(--text-default) group-data-[size=medium]/split:text-heading-md group-data-[size=large]/split:text-heading-xl"
             >
               {{ title }}
             </component>
 
             <p
               v-if="hasDescription"
-              class="m-0 text-pretty text-body-md text-(--text-muted)"
+              class="m-0 text-pretty text-(--text-muted) group-data-[size=medium]/split:text-body-md group-data-[size=large]/split:text-body-lg"
             >
               <slot>{{ description }}</slot>
             </p>
@@ -149,7 +202,7 @@
 
           <div
             v-if="slots.actions"
-            class="flex flex-wrap items-center gap-(--spacing-sm)"
+            class="flex flex-wrap items-center gap-(--spacing-sm) group-data-[media-href]/split:group-hover/split:[&>a]:before:opacity-100 group-data-[media-href]/split:group-active/split:[&>a]:after:opacity-100 group-data-[media-href]/split:group-hover/split:[&>a_[data-animated]]:translate-x-0.5"
           >
             <slot name="actions" />
           </div>
@@ -159,9 +212,13 @@
              texture fades out before the cell's edges, so the seam and the frame stay the only
              hard lines. A call site quiets it further with `--texture-ink`, inherited from this
              root; an asset takes no padding, so the ground reaches the media's own air. -->
-        <div
+        <component
+          :is="isMediaLink ? 'a' : 'div'"
           v-if="hasMedia"
-          class="relative flex min-w-0 items-center justify-center overflow-hidden group-data-[media-padded]/split:p-(--spacing-xl) group-data-[fill=canvas]/split:bg-(--bg-canvas) group-data-[fill=surface]/split:bg-(--bg-surface)"
+          :href="isMediaLink ? mediaHref : undefined"
+          :aria-label="isMediaLink ? title : undefined"
+          :data-testid="`${testId}__media`"
+          class="group/media relative flex min-w-0 items-center justify-center overflow-hidden group-data-[media-fill=surface]/split:bg-(--bg-surface) group-data-[media-fill=canvas]/split:bg-(--bg-canvas) group-data-[media-padded]/split:p-(--spacing-xl) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset"
         >
           <TextureMaterial
             :kind="texture"
@@ -182,7 +239,16 @@
               />
             </slot>
           </div>
-        </div>
+
+          <span
+            v-if="isMediaLink"
+            aria-hidden="true"
+            :data-testid="`${testId}__media-affordance`"
+            class="pointer-events-none absolute right-(--spacing-xl) bottom-(--spacing-xl) z-20 inline-flex h-7 min-w-7 translate-x-1 items-center justify-center rounded-(--shape-button) bg-(--secondary) px-(--spacing-xs) text-button-md text-(--secondary-contrast) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance group-hover/split:translate-x-0 group-hover/split:opacity-100 group-focus-visible/media:translate-x-0 group-focus-visible/media:opacity-100 motion-reduce:transition-none"
+          >
+            <i class="pi pi-chevron-right text-[length:inherit] leading-none" />
+          </span>
+        </component>
       </div>
     </component>
   </section>

@@ -88,11 +88,22 @@ const meta = {
       control: 'select',
       options: ['media-end', 'media-start'],
       description:
-        'Which side the media sits on from `lg` up; `media-end` puts the copy first. Below `lg` both render as one column, copy first.',
+        'Which end the media sits on — the closing cell from `lg` up, or the lower one when the band is vertical. `media-end` puts the copy first. A horizontal band below `lg` renders as one column, copy first, whichever `kind` it carries.',
       table: {
         category: 'props',
         type: { summary: "'media-end' | 'media-start'" },
         defaultValue: { summary: "'media-end'" }
+      }
+    },
+    orientation: {
+      control: 'inline-radio',
+      options: ['horizontal', 'vertical'],
+      description:
+        'Axis the band splits on. `horizontal` sets the cells side by side from `lg` up; `vertical` holds them stacked at every width, and `kind` then decides which cell is on top.',
+      table: {
+        category: 'props',
+        type: { summary: "'horizontal' | 'vertical'" },
+        defaultValue: { summary: "'horizontal'" }
       }
     },
     fill: {
@@ -114,6 +125,16 @@ const meta = {
         category: 'props',
         type: { summary: 'boolean' },
         defaultValue: { summary: 'false' }
+      }
+    },
+    divided: {
+      control: 'boolean',
+      description:
+        "Draw the seam between the copy and the media — the grid's own gap over a rule fill. Turn it off for a band whose two halves should read as one plate.",
+      table: {
+        category: 'props',
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'true' }
       }
     },
     headingLevel: {
@@ -170,6 +191,45 @@ const meta = {
         defaultValue: { summary: 'false' }
       }
     },
+    mediaHref: {
+      control: 'text',
+      description:
+        "URL the band links to. With it set the media cell is one link named by the band's `title`, a click anywhere else on the band follows it, and hovering the band reveals the chevron affordance and the hover state of its link actions.",
+      table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "''" } }
+    },
+    mediaFill: {
+      control: 'inline-radio',
+      options: ['surface', 'canvas'],
+      description:
+        "The media cell's fill. `surface` sets the asset on its own plate, one step off the page; `canvas` lets the whole band sit on the page.",
+      table: {
+        category: 'props',
+        type: { summary: "'canvas' | 'surface'" },
+        defaultValue: { summary: "'surface'" }
+      }
+    },
+    size: {
+      control: 'inline-radio',
+      options: ['medium', 'large'],
+      description:
+        'Type scale and air of the copy. `medium` sets the headline at heading-md for a band beside other content; `large` sets it at heading-xl with a larger description and pads the copy cell a step wider, for a band that carries only its headline and actions.',
+      table: {
+        category: 'props',
+        type: { summary: "'medium' | 'large'" },
+        defaultValue: { summary: "'medium'" }
+      }
+    },
+    align: {
+      control: 'inline-radio',
+      options: ['top', 'center'],
+      description:
+        "Where the copy sits down its cell. `top` holds the copy at the cell's top and floors the actions so consecutive bands align on them; `center` gathers the copy and its actions into one block on the cell's vertical middle.",
+      table: {
+        category: 'props',
+        type: { summary: "'top' | 'center'" },
+        defaultValue: { summary: "'top'" }
+      }
+    },
     default: {
       control: false,
       description: 'Description body; replaces the `description` prop when provided.',
@@ -189,7 +249,7 @@ const meta = {
     actions: {
       control: false,
       description:
-        'Optional controls under the copy, floored so consecutive bands align on them. The band\'s action pattern is small buttons: `kind="secondary"` for the action itself, and `kind="outlined"` for a second one beside it.',
+        'Optional controls under the copy, floored so consecutive bands align on them. The band\'s action pattern is small buttons: `kind="secondary"` for the action itself, and `kind="outlined"` for a second one beside it. A control that leaves the page for another one carries `icon="pi pi-chevron-right"` with `icon-position="trailing"`.',
       table: { category: 'slots' }
     }
   },
@@ -200,13 +260,19 @@ const meta = {
     src: '',
     alt: '',
     kind: 'media-end',
+    orientation: 'horizontal',
     fill: 'canvas',
     framed: false,
+    divided: true,
     headingLevel: 2,
     texture: 'grid',
     textureSize: 'medium',
     textureFade: 'vignette',
-    mediaPadded: false
+    mediaPadded: false,
+    mediaHref: '',
+    align: 'top',
+    mediaFill: 'surface',
+    size: 'medium'
   }
 }
 
@@ -280,6 +346,86 @@ export const Kinds = {
           'Both `kind` values, one band under the other, with the copy and the scene held identical so the only thing that moves is the side the media sits on: `media-end` first, then `media-start`. Down a real product page these alternate band after band, each carrying its own claim — the mirroring is what keeps consecutive bands from reading as one long column. The flip is an `md`-and-up affair: narrow the canvas and both collapse to the same single column with the copy first, so reading order follows the argument rather than the layout.'
       },
       source: { code: toSfc(IMPORT, KINDS_TEMPLATE) }
+    }
+  }
+}
+
+const ORIENTATIONS_TEMPLATE = `<div class="flex flex-col gap-(--spacing-xxl)">
+  <MediaSplit
+    orientation="horizontal"
+    eyebrow="${EYEBROW}"
+    title="Horizontal: two cells from lg up."
+    description="The band proper. It stacks below lg and splits above it, so a full-width page reads as a column of alternating halves."
+  >
+    <template #media>
+      <Illustration name="${SCENE}" />
+    </template>
+  </MediaSplit>
+  <div class="max-w-(--container-lg)">
+    <MediaSplit
+      orientation="vertical"
+      kind="media-start"
+      eyebrow="${EYEBROW}"
+      title="Vertical: stacked at every width."
+      description="The shape a band takes in a column too narrow to carry two halves. kind picks which cell is on top — media-start leads with the picture."
+    >
+      <template #media>
+        <Illustration name="${SCENE}" />
+      </template>
+    </MediaSplit>
+  </div>
+</div>`
+
+/** @type {import('@storybook/vue3').StoryObj<typeof MediaSplit>} */
+export const Orientations = {
+  render: () => ({ components: { Illustration, MediaSplit }, template: ORIENTATIONS_TEMPLATE }),
+  parameters: {
+    controls: { disable: true },
+    docs: {
+      description: {
+        story:
+          'Both axes: the horizontal band across the full canvas, then the vertical one held in a narrow column. `horizontal` is the band proper — one column below `lg`, two cells above it. `vertical` keeps the stacked form at every width, which is what a page aside or a grid cell wants, and `kind` changes meaning with it: `media-start` puts the media above the copy rather than to its left. The copy cell stays first in the DOM either way, so tab order and screen-reader order follow the argument rather than the picture.'
+      },
+      source: { code: toSfc(IMPORT, ORIENTATIONS_TEMPLATE) }
+    }
+  }
+}
+
+const UNDIVIDED_TEMPLATE = `<div class="flex flex-col gap-(--spacing-xxl)">
+  <MediaSplit
+    fill="surface"
+    eyebrow="${EYEBROW}"
+    title="With the seam."
+    description="The default: a one-pixel gap over a rule fill, so the two cells read as two."
+  >
+    <template #media>
+      <Illustration name="${SCENE}" />
+    </template>
+  </MediaSplit>
+  <MediaSplit
+    fill="surface"
+    :divided="false"
+    eyebrow="${EYEBROW}"
+    title="Without it."
+    description="The grid closes the gap and the halves meet on their own fill, so the band reads as one plate with a picture in it."
+  >
+    <template #media>
+      <Illustration name="${SCENE}" />
+    </template>
+  </MediaSplit>
+</div>`
+
+/** @type {import('@storybook/vue3').StoryObj<typeof MediaSplit>} */
+export const Undivided = {
+  render: () => ({ components: { Illustration, MediaSplit }, template: UNDIVIDED_TEMPLATE }),
+  parameters: {
+    controls: { disable: true },
+    docs: {
+      description: {
+        story:
+          "The same band with its seam and without it, both on a `surface` fill so the difference is the only thing that moves. The seam is not a border either cell draws — it is the grid's own gap over a rule fill, which is why it lands in the same place whichever side the media is on. `divided` off closes the gap: on `surface` that gives one plate with a picture in it, and on the `canvas` fill it gives two cells that merely touch."
+      },
+      source: { code: toSfc(IMPORT, UNDIVIDED_TEMPLATE) }
     }
   }
 }
@@ -360,6 +506,57 @@ const ACTIONS_IMPORT = [
   "import MediaSplit from '@aziontech/webkit/media-split'"
 ]
 
+const MEDIA_LINK_TEMPLATE = `<div class="flex flex-col gap-(--spacing-xxl)">
+  <MediaSplit
+    eyebrow="${EYEBROW}"
+    title="The media is inert."
+    description="Without mediaHref the picture is a picture: the cell has no link, no affordance and nothing to reach by keyboard."
+  >
+    <template #media>
+      <Illustration name="${SCENE}" />
+    </template>
+  </MediaSplit>
+  <MediaSplit
+    eyebrow="${EYEBROW}"
+    title="The band is the link."
+    description="With mediaHref a click anywhere on the band follows it. Hover the band and the chevron fades in while the action lights up; Tab reaches the media cell's own link."
+    media-href="/site/docs"
+  >
+    <template #media>
+      <Illustration name="${SCENE}" />
+    </template>
+    <template #actions>
+      <Button
+        label="Read the guide"
+        kind="outlined"
+        size="small"
+        icon="pi pi-chevron-right"
+        icon-position="trailing"
+        animated
+        href="/site/docs"
+      />
+    </template>
+  </MediaSplit>
+</div>`
+
+/** @type {import('@storybook/vue3').StoryObj<typeof MediaSplit>} */
+export const MediaLink = {
+  render: () => ({
+    components: { Button, Illustration, MediaSplit },
+    template: MEDIA_LINK_TEMPLATE
+  }),
+  parameters: {
+    controls: { disable: true },
+    docs: {
+      description: {
+        story:
+          "`mediaHref` turns the whole band into one target. The media cell is the anchor — one control, named by the band's `title` — and a click anywhere else on the band follows the same URL (`Cmd`/`Ctrl` opens a new tab; selecting text or clicking a control inside does not navigate). Hovering the band fades in the chevron at the media's closing corner and lights the hover state of every link in `actions`, so the band and its action read as one. The chevron is `aria-hidden` decoration, never a nested button, and it also answers to the cell's own `focus-visible`, so a keyboard sees what a pointer sees; under `prefers-reduced-motion` it appears without travelling."
+      },
+      source: { code: toSfc(ACTIONS_IMPORT, MEDIA_LINK_TEMPLATE) }
+    }
+  }
+}
+
 const ACTIONS_TEMPLATE = `<div class="flex flex-col gap-(--spacing-xxl)">
   <MediaSplit
     eyebrow="${EYEBROW}"
@@ -374,6 +571,9 @@ const ACTIONS_TEMPLATE = `<div class="flex flex-col gap-(--spacing-xxl)">
         label="Read the guide"
         kind="secondary"
         size="small"
+        icon="pi pi-chevron-right"
+        icon-position="trailing"
+        animated
         href="/site/docs"
       />
     </template>

@@ -137,7 +137,7 @@
   {
     "name": "media-split",
     "path": "src/components/marketing/media-split/media-split.vue",
-    "limit": "3 KB"
+    "limit": "5.75 KB"
   },
   {
     "name": "illustration",

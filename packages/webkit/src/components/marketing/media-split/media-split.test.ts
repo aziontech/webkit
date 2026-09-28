@@ -1,5 +1,6 @@
-import { render } from '@testing-library/vue'
-import { describe, expect, it } from 'vitest'
+import { fireEvent, render } from '@testing-library/vue'
+import { afterEach, describe, expect, it, vi } from 'vitest'
+import { h } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
 import MediaSplit from './media-split.vue'
@@ -161,6 +162,76 @@ describe('MediaSplit', () => {
     }
   )
 
+  it.each(['horizontal', 'vertical'] as const)(
+    'mirrors the %s orientation onto data-orientation',
+    (orientation) => {
+      const { getByTestId } = render(MediaSplit, { props: { title: TITLE, orientation } })
+
+      expect(getByTestId(TESTID).getAttribute('data-orientation')).toBe(orientation)
+    }
+  )
+
+  it('keeps both cells in a vertical band', () => {
+    const { container } = render(MediaSplit, {
+      props: { title: TITLE, src: SRC, alt: ALT, orientation: 'vertical' }
+    })
+
+    expect(columnsOf(container)).toHaveLength(2)
+  })
+
+  it('keeps the copy first in DOM for a vertical band that leads with its media', () => {
+    const { container, getByRole } = render(MediaSplit, {
+      props: {
+        title: TITLE,
+        description: DESCRIPTION,
+        src: SRC,
+        alt: ALT,
+        orientation: 'vertical',
+        kind: 'media-start'
+      }
+    })
+    const heading = getByRole('heading', { level: 2 })
+    const image = getByRole('img', { name: ALT })
+    const [copy, media] = columnsOf(container)
+
+    expect(copy.contains(heading)).toBe(true)
+    expect(media.contains(image)).toBe(true)
+    expect(heading.compareDocumentPosition(image) & FOLLOWING).toBe(FOLLOWING)
+  })
+
+  it('draws the seam unless the band asks for none', () => {
+    const divided = render(MediaSplit, { props: { title: TITLE, src: SRC, alt: ALT } })
+    expect(divided.getByTestId(TESTID).getAttribute('data-divided')).toBe('true')
+
+    const seamless = render(MediaSplit, {
+      props: { title: TITLE, src: SRC, alt: ALT, divided: false }
+    })
+    expect(seamless.getAllByTestId(TESTID)[1].getAttribute('data-divided')).toBeNull()
+  })
+
+  it('mirrors its media fill and type scale on the root', () => {
+    const plain = render(MediaSplit, { props: { title: TITLE, src: SRC, alt: ALT } })
+    expect(plain.getByTestId(TESTID).getAttribute('data-media-fill')).toBe('surface')
+    expect(plain.getByTestId(TESTID).getAttribute('data-size')).toBe('medium')
+
+    const large = render(MediaSplit, {
+      props: { title: TITLE, src: SRC, alt: ALT, mediaFill: 'canvas', size: 'large' }
+    })
+    const root = large.getAllByTestId(TESTID)[1]
+    expect(root.getAttribute('data-media-fill')).toBe('canvas')
+    expect(root.getAttribute('data-size')).toBe('large')
+  })
+
+  it('mirrors its copy alignment on the root, top by default', () => {
+    const flush = render(MediaSplit, { props: { title: TITLE, src: SRC, alt: ALT } })
+    expect(flush.getByTestId(TESTID).getAttribute('data-align')).toBe('top')
+
+    const centred = render(MediaSplit, {
+      props: { title: TITLE, src: SRC, alt: ALT, align: 'center' }
+    })
+    expect(centred.getAllByTestId(TESTID)[1].getAttribute('data-align')).toBe('center')
+  })
+
   it('grounds the media column on the texture the band paints', () => {
     const { container, getByTestId } = render(MediaSplit, {
       props: { title: TITLE, src: SRC, alt: ALT }
@@ -274,6 +345,118 @@ describe('MediaSplit', () => {
     })
 
     await expectNoA11yViolations(container)
+  })
+
+  it('has no a11y violations as a seamless vertical band', async () => {
+    const { container } = render(MediaSplit, {
+      props: {
+        title: TITLE,
+        description: DESCRIPTION,
+        eyebrow: EYEBROW,
+        src: SRC,
+        alt: ALT,
+        orientation: 'vertical',
+        kind: 'media-start',
+        divided: false
+      }
+    })
+
+    await expectNoA11yViolations(container)
+  })
+
+  it('leaves the media cell inert without mediaHref', () => {
+    const { getByTestId, queryByRole } = render(MediaSplit, {
+      props: { title: TITLE, src: SRC, alt: ALT }
+    })
+
+    const media = getByTestId(`${TESTID}__media`)
+    expect(media.tagName).toBe('DIV')
+    expect(queryByRole('link')).toBeNull()
+  })
+
+  it('turns the media cell into one link named by the band title', () => {
+    const { getByRole, getByTestId } = render(MediaSplit, {
+      props: { title: TITLE, src: SRC, alt: ALT, mediaHref: '/site/docs' }
+    })
+
+    const link = getByRole('link', { name: TITLE })
+    expect(link.tagName).toBe('A')
+    expect(link.getAttribute('href')).toBe('/site/docs')
+    expect(link).toBe(getByTestId(`${TESTID}__media`))
+    expect(getByTestId(TESTID).getAttribute('data-media-href')).toBe('true')
+  })
+
+  it('draws the chevron affordance as decoration inside that one link', () => {
+    const { getByTestId } = render(MediaSplit, {
+      props: { title: TITLE, src: SRC, alt: ALT, mediaHref: '/site/docs' }
+    })
+
+    const affordance = getByTestId(`${TESTID}__media-affordance`)
+    expect(affordance.getAttribute('aria-hidden')).toBe('true')
+    expect(affordance.closest('a')).toBe(getByTestId(`${TESTID}__media`))
+    expect(affordance.querySelector('button')).toBeNull()
+  })
+
+  it('has no a11y violations with a linked media cell', async () => {
+    const { container } = render(MediaSplit, {
+      props: { title: TITLE, description: DESCRIPTION, src: SRC, alt: ALT, mediaHref: '/site/docs' }
+    })
+
+    await expectNoA11yViolations(container)
+  })
+
+  describe('clickable band', () => {
+    afterEach(() => {
+      vi.restoreAllMocks()
+    })
+
+    function stubOpen() {
+      return vi.spyOn(globalThis, 'open').mockImplementation(() => null)
+    }
+
+    it('follows mediaHref from a click anywhere on the band', async () => {
+      const open = stubOpen()
+      const { getByRole } = render(MediaSplit, {
+        props: { title: TITLE, description: DESCRIPTION, src: SRC, alt: ALT, mediaHref: '/site/docs' }
+      })
+
+      await fireEvent.click(getByRole('heading', { level: 2 }), { metaKey: true })
+
+      expect(open).toHaveBeenCalledWith('/site/docs', '_blank', 'noopener')
+    })
+
+    it('leaves a link in the actions slot to its own destination', async () => {
+      const open = stubOpen()
+      const { getByRole } = render(MediaSplit, {
+        props: { title: TITLE, src: SRC, alt: ALT, mediaHref: '/site/docs' },
+        slots: { actions: () => h('a', { href: '/site/pricing' }, 'Pricing') }
+      })
+
+      await fireEvent.click(getByRole('link', { name: 'Pricing' }), { metaKey: true })
+
+      expect(open).not.toHaveBeenCalled()
+    })
+
+    it('stays inert without mediaHref', async () => {
+      const open = stubOpen()
+      const { getByRole } = render(MediaSplit, { props: { title: TITLE, src: SRC, alt: ALT } })
+
+      await fireEvent.click(getByRole('heading', { level: 2 }), { metaKey: true })
+
+      expect(open).not.toHaveBeenCalled()
+    })
+
+    it('yields to a consumer click listener that prevents the default', async () => {
+      const open = stubOpen()
+      const { getByRole } = render(MediaSplit, {
+        props: { title: TITLE, src: SRC, alt: ALT, mediaHref: '/site/docs' },
+        attrs: { onClick: (event: MouseEvent) => event.preventDefault() }
+      })
+
+      await fireEvent.click(getByRole('heading', { level: 2 }), { metaKey: true })
+
+      expect(open).not.toHaveBeenCalled()
+    })
   })
 
   it('opens the band with an h2 by default', () => {
