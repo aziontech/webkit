@@ -484,9 +484,7 @@ describe('CodeBlock', () => {
         'identifier'
       )
       expect(typeOf('  count = length(var.x) # one per domain', 'length')).toBe('function')
-      expect(typeOf('  count = length(var.x) # one per domain', '# one per domain')).toBe(
-        'comment'
-      )
+      expect(typeOf('  count = length(var.x) # one per domain', '# one per domain')).toBe('comment')
     })
 
     it('covers every hcl alias', () => {
