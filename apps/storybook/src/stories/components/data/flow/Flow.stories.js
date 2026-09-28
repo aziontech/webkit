@@ -1,4 +1,4 @@
-import Flow, { FlowAnchor, FlowNode, FlowParallel } from '@aziontech/webkit/flow'
+import Flow, { FlowAnchor, FlowNode, FlowNodeCard, FlowParallel } from '@aziontech/webkit/flow'
 
 import { toSfc } from '../../../_shared/story-source'
 
@@ -34,6 +34,90 @@ FlowNode.__docgenInfo = {
     }
   ],
   slots: [{ name: 'default', description: 'Node content.' }]
+}
+
+FlowNodeCard.__docgenInfo = {
+  displayName: 'FlowNodeCard',
+  props: [
+    {
+      name: 'eyebrow',
+      description: "The node's class in the diagram, rendered as the card's overline.",
+      type: { name: 'string' },
+      defaultValue: { value: "''" },
+      required: false
+    },
+    {
+      name: 'icon',
+      description: 'Icon name rendered beside the eyebrow.',
+      type: { name: 'string' },
+      defaultValue: { value: "''" },
+      required: false
+    },
+    {
+      name: 'title',
+      description: "The resource's own name, on the identity row; the title slot replaces it.",
+      type: { name: 'string' },
+      defaultValue: { value: "''" },
+      required: false
+    },
+    {
+      name: 'label',
+      description: 'State word rendered in the header tag; the status slot replaces it.',
+      type: { name: 'string' },
+      defaultValue: { value: "''" },
+      required: false
+    },
+    {
+      name: 'severity',
+      description: 'Severity the state word is painted with.',
+      type: {
+        name: "'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'danger' | 'accent' | 'contrast'"
+      },
+      defaultValue: { value: "'secondary'" },
+      required: false
+    },
+    {
+      name: 'collapsible',
+      description: 'Collapse the body behind the header, which becomes a disclosure trigger.',
+      type: { name: 'boolean' },
+      defaultValue: { value: 'false' },
+      required: false
+    },
+    {
+      name: 'dashed',
+      description: 'Draw the frame dashed — the register for a position that is still unfilled.',
+      type: { name: 'boolean' },
+      defaultValue: { value: 'false' },
+      required: false
+    },
+    {
+      name: 'disabled',
+      description: 'Marks the node disabled; adjacent connectors render at reduced opacity.',
+      type: { name: 'boolean' },
+      defaultValue: { value: 'false' },
+      required: false
+    },
+    {
+      name: 'terminal',
+      description: 'Ends its branch: the node receives an incoming connector but originates none.',
+      type: { name: 'boolean' },
+      defaultValue: { value: 'false' },
+      required: false
+    },
+    {
+      name: 'open',
+      description: 'Whether the body is disclosed. Uncontrolled until the consumer binds it.',
+      type: { name: 'boolean' },
+      defaultValue: { value: 'false' },
+      required: false
+    }
+  ],
+  slots: [
+    { name: 'default', description: "The node's fields, inside the body." },
+    { name: 'title', description: 'Replaces the name on the identity row.' },
+    { name: 'status', description: 'Replaces the state tag in the header row.' },
+    { name: 'actions', description: 'Controls on the identity row, trailing the name.' }
+  ]
 }
 
 FlowParallel.__docgenInfo = {
@@ -73,6 +157,7 @@ const components = {
   // resolves off the imported `Flow` binding, so consumer code needs only
   // `import Flow` — these extra registrations are a Storybook-runtime concern.
   'Flow.Node': FlowNode,
+  'Flow.NodeCard': FlowNodeCard,
   'Flow.Parallel': FlowParallel,
   'Flow.Anchor': FlowAnchor
 }
@@ -81,7 +166,7 @@ const components = {
 const meta = {
   title: 'Components/Data/Flow',
   component: Flow,
-  subcomponents: { FlowNode, FlowParallel, FlowAnchor },
+  subcomponents: { FlowNode, FlowNodeCard, FlowParallel, FlowAnchor },
   tags: ['autodocs'],
   parameters: {
     layout: 'padded',
@@ -291,6 +376,71 @@ export const Disabled = {
       controls: { disable: true },
       description: { story: 'A disabled node with reduced-opacity connectors.' },
       source: { code: toSfc(IMPORT, DISABLED_TEMPLATE) }
+    }
+  }
+}
+
+const NODE_CARDS_TEMPLATE = `<Flow align="start" class="[&>div]:w-full">
+  <Flow.Parallel class="min-w-[14rem] flex-1">
+    <Flow.NodeCard
+      collapsible
+      eyebrow="Workload"
+      icon="ai ai-workloads"
+      title="shop-prod"
+      label="Live"
+      severity="success"
+    >
+      <div class="flex flex-col gap-(--spacing-xxs)">
+        <span class="text-label-sm text-(--text-muted)">Domain</span>
+        <span class="truncate text-body-xs text-(--text-default)">shop.example.com</span>
+      </div>
+    </Flow.NodeCard>
+  </Flow.Parallel>
+  <Flow.Parallel class="min-w-[14rem] flex-1">
+    <Flow.NodeCard
+      collapsible
+      eyebrow="Application"
+      icon="ai ai-edge-application"
+      title="storefront"
+      label="Active"
+      severity="success"
+    >
+      <div class="flex flex-col gap-(--spacing-xxs)">
+        <span class="text-label-sm text-(--text-muted)">Runtime</span>
+        <span class="truncate text-body-xs text-(--text-default)">Azion Runtime</span>
+      </div>
+    </Flow.NodeCard>
+    <Flow.NodeCard
+      dashed
+      terminal
+      eyebrow="Firewall"
+      label="Not bound"
+      icon="ai ai-edge-firewall"
+    />
+  </Flow.Parallel>
+  <Flow.Parallel class="min-w-[14rem] flex-1">
+    <Flow.NodeCard
+      terminal
+      eyebrow="Object Storage"
+      icon="ai ai-edge-storage"
+      title="assets-prod"
+      label="Private"
+      severity="secondary"
+    />
+  </Flow.Parallel>
+</Flow>`
+
+/** @type {import('@storybook/vue3').StoryObj<typeof Flow>} */
+export const NodeCards = {
+  render: () => ({ components, template: NODE_CARDS_TEMPLATE }),
+  parameters: {
+    docs: {
+      controls: { disable: true },
+      description: {
+        story:
+          'A topology of card nodes: a collapsible card with fields, one dashed card for a position that is still unfilled, and one terminal leaf. The diagram assembles itself left to right — each level arrives, then the connectors leaving it draw — with nothing to wire per card.'
+      },
+      source: { code: toSfc(IMPORT, NODE_CARDS_TEMPLATE) }
     }
   }
 }

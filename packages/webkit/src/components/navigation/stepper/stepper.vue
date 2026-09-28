@@ -32,10 +32,8 @@
   const elements = new Map<symbol, HTMLElement>()
 
   /**
-   * Registration order is the order instances happened to mount, which stops matching the
-   * rail the moment a step is inserted between two that already exist — Vue reuses those
-   * instances, so they never re-register and their numbers go stale. Document order is the
-   * only order a reader can see, so that is the one the rail counts in.
+   * Counted in document order, not registration order: Vue reuses instances, so a step
+   * inserted between two existing ones never re-registers and their numbers go stale.
    */
   const ordered = computed(() =>
     [...steps.value].sort((a, b) => {

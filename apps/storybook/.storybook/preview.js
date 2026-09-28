@@ -93,6 +93,8 @@ export const parameters = {
         'Documentation',
         ['Overview', 'Authoring', 'Example Page'],
         'Templates',
+        'Marketing',
+        ['Overview'],
         'Site'
       ]
     }

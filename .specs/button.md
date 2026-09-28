@@ -4,10 +4,11 @@ category: actions
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 3cbfa4db22c67d61b7d022e6cada4ca3e77ec811aa9bd21e7d40ea6c7847074d
+checksum: 87127d1d244c485485066a664970df5fe28be552b60544da4b457570aa22334c
 created: 2026-05-22
-last_updated: 2026-05-29
+last_updated: 2026-09-26
 ---
+
 # Button — Component Spec
 
 ## Purpose
@@ -16,26 +17,30 @@ Interactive control for user actions. Migrated from the existing implementation 
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `label` | `string` | `—` | true | Visible label text. Use `IconButton` for icon-only controls. |
-| `kind` | `'primary' \| 'secondary' \| 'outlined' \| 'text' \| 'danger'` | `'primary'` | false | Visual variant. |
-| `size` | `'small' \| 'medium' \| 'large'` | `'large'` | false | Size token; affects height, padding, and typography. |
-| `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
-| `loading` | `boolean` | `false` | false | Shows loading state and disables activation. |
-| `icon` | `string` | `''` | false | PrimeIcons class for the leading/trailing icon. |
-| `href` | `string` | `''` | false | When set, renders as a link (`<a>`). |
-| `target` | `'_blank' \| '_self'` | `'_self'` | false | Link target when `href` is set. |
+| Prop           | Type                                                           | Default     | Required | JSDoc                                                                                                                                     |
+| -------------- | -------------------------------------------------------------- | ----------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `label`        | `string`                                                       | `—`         | true     | Visible label text. Use `IconButton` for icon-only controls.                                                                              |
+| `kind`         | `'primary' \| 'secondary' \| 'outlined' \| 'text' \| 'danger'` | `'primary'` | false    | Visual variant.                                                                                                                           |
+| `size`         | `'small' \| 'medium' \| 'large'`                               | `'large'`   | false    | Size token; affects height, padding, and typography.                                                                                      |
+| `disabled`     | `boolean`                                                      | `false`     | false    | Disables interaction and applies disabled tokens.                                                                                         |
+| `loading`      | `boolean`                                                      | `false`     | false    | Shows loading state and disables activation.                                                                                              |
+| `icon`         | `string`                                                       | `''`        | false    | PrimeIcons class for the icon drawn beside the label.                                                                                     |
+| `iconPosition` | `'leading' \| 'trailing'`                                      | `'leading'` | false    | Which side of the label the icon sits on. `leading` is a glyph that names the action; `trailing` is a glyph that points at where it goes. |
+| `animated`     | `boolean`                                                      | `false`     | false    | Nudges a trailing icon along its axis on hover. Off by default; marketing CTAs opt in.                                                    |
+| `href`         | `string`                                                       | `''`        | false    | When set, renders as a link (`<a>`).                                                                                                      |
+| `target`       | `'_blank' \| '_self'`                                          | `'_self'`   | false    | Link target when `href` is set.                                                                                                           |
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
-| `click` | `MouseEvent` | — |
+| Event   | Payload      | Notes |
+| ------- | ------------ | ----- |
+| `click` | `MouseEvent` | —     |
 
 ## Slots
 
-| _none_ | — | — |
+| Slot     | Scope | Notes                                                                                                                                                                  |
+| -------- | ----- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `prefix` | —     | A mark drawn before the label, ahead of a leading `icon`. It stays first when `iconPosition="trailing"`, so a brand mark and a trailing chevron can share one control. |
 
 ## States
 
@@ -44,26 +49,27 @@ Interactive control for user actions. Migrated from the existing implementation 
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token | Reduced-motion fallback |
-|---|---|---|---|
-| state change | `transition-colors duration-150 ease-out` | inline | `motion-reduce:transition-none` |
+| Trigger                                            | Animation / Transition                                                                                                           | Token                                                  | Reduced-motion fallback         |
+| -------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ | ------------------------------- |
+| state change                                       | `transition-colors duration-150 ease-out`                                                                                        | inline                                                 | `motion-reduce:transition-none` |
+| hover, with `iconPosition="trailing"` + `animated` | the glyph nudges along its own axis — `transition-[translate] duration-moderate-02 ease-expressive-entrance` + `translate-x-0.5` | `--duration-moderate-02`, `--ease-expressive-entrance` | `motion-reduce:transition-none` |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography | .text-button-lg |
-| surface | `var(--bg-surface)` |
-| text | `var(--text-default)` |
-| spacing | `var(--spacing-3)` |
-| shape | `var(--shape-elements)` |
-| ring | `var(--ring-color)` |
+| Region     | Token (DESIGN.md)       |
+| ---------- | ----------------------- |
+| typography | .text-button-lg         |
+| surface    | `var(--bg-surface)`     |
+| text       | `var(--text-default)`   |
+| spacing    | `var(--spacing-3)`      |
+| shape      | `var(--shape-elements)` |
+| ring       | `var(--ring-color)`     |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 

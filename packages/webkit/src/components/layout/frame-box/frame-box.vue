@@ -21,7 +21,7 @@
     borders?: FrameBoxSides
     /** Which corner registration squares to draw. Takes a keyword (`all`, `none`, `top`, `bottom`, `left`, `right`), one corner, or a list of corners. */
     marks?: FrameBoxMarks
-    /** Show the linear hatch texture behind the content, faded toward the edges. Reserved for `section-gap`, whose identity it is. */
+    /** Show the frame's own linear hatch texture behind the content, faded toward the edges. Prefer `texture-material`'s `lines` kind for a ruled ground; `section-gap` composes that instead. */
     hatch?: boolean
     /** Which sides a neighbouring frame already draws, so this one does not draw them again. `true` is shorthand for `top` (a vertical stack); use `left` for a horizontal row, or a list for a grid cell. */
     flush?: boolean | FrameBoxSides
@@ -84,6 +84,12 @@
     flushSides.value.size > 0 ? [...flushSides.value].join(' ') : null
   )
 
+  // A frame that paints no hatch of its own defers to a consumer-set `data-hatch`, so a
+  // component drawing the texture itself can still mark the state on this root.
+  const hatchAttr = computed(
+    () => props.hatch || (attrs['data-hatch'] as string | undefined) || null
+  )
+
   const hasCorner = (corner: FrameBoxCorner) => markCorners.value.has(corner)
 
   // Anchored to a corner and inset from both rules by its own margin, so the mark
@@ -100,7 +106,7 @@
     :data-testid="testId"
     :data-borders="bordersAttr"
     :data-marks="marksAttr"
-    :data-hatch="hatch || null"
+    :data-hatch="hatchAttr"
     :data-flush="flushAttr"
     class="relative border-(--border-default) data-[borders~=bottom]:border-b data-[borders~=left]:border-l data-[borders~=right]:border-r data-[borders~=top]:border-t"
   >

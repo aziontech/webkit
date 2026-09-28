@@ -7,9 +7,9 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/y38AUdg5uXuMeXofUkOxv6/Illustrations?node-id=129-2056
   node_id: 129:2056
-checksum: f9b00aaa1d27f16f6d41bb47cba3363e5eb00cccdd29c05625d4321e3f425b80
+checksum: b4680924c8955bfd5117936a76510cb6fefe4de2f3e2339aaa1579691ec5fc0d
 created: 2026-06-25
-last_updated: 2026-08-04
+last_updated: 2026-09-23
 ---
 
 # Flow — Component Spec
@@ -20,7 +20,7 @@ Flow renders a directed flow diagram: a horizontal sequence of steps (`flow-node
 
 ## Usage
 
-Composition mode — one import of the root; every part is reached via dot-notation (`<Flow.Node>`, `<Flow.Parallel>`, `<Flow.Anchor>`). The root binding must be PascalCase (`Flow`); `flow` lowercase would not resolve to the component.
+Composition mode — one import of the root; every part is reached via dot-notation (`<Flow.Node>`, `<Flow.NodeCard>`, `<Flow.Parallel>`, `<Flow.Anchor>`). The root binding must be PascalCase (`Flow`); `flow` lowercase would not resolve to the component.
 
 ```vue
 <script setup>
@@ -57,6 +57,7 @@ Each part is also a standalone import (`import FlowNode from '@aziontech/webkit/
 ## Sub-components
 
 - `flow-node/flow-node.vue` — A single step in the flow. Renders the default node box; `unstyled` drops the box so the `default` slot defines the node's appearance (a dot, a card, a tall node). `disabled` marks the step disabled, rendering adjacent connectors at reduced opacity (mirrored by `data-disabled`). `terminal` ends the node's branch: it still receives an incoming connector but originates none, so the chain continues through its siblings while the branch stops there — the shape a **leaf** needs (an attached resource that hangs off the chain rather than passing it on). A terminal node therefore renders no outgoing port. Content via the `default` slot.
+- `flow-node-card/flow-node-card.vue` — A node that is a **card** rather than a label: the register a topology needs, where a step is a provisioned resource that has a class, a name, a state and a set of fields. It is a node in its own right (it carries `data-flow-kind="node"`, so it goes straight into `flow` or `flow-parallel` without an `unstyled` wrapper) and it places its own connector attachment on its header row via an internal `flow-anchor`, so every line in a diagram of open and closed cards stays pinned to the same row instead of drifting to the middle of whichever card happens to be expanded. Anatomy, top to bottom: a header (the `icon` + `eyebrow` naming the node's class, and its state as a `tag` from `label` + `severity`), an identity row (the `title`, plus an `actions` slot for what can be done to the resource), and a body holding the `default` slot. With `collapsible` the header becomes a real disclosure trigger (`aria-expanded` + `aria-controls`) over a CSS-only `0fr → 1fr` grid collapse, and `v-model:open` drives it — so the page, not the card, decides which nodes arrive open. `dashed` is the register for a position that is still unfilled, `disabled` and `terminal` mean exactly what they mean on `flow-node`. Props: `eyebrow`, `icon`, `title`, `label`, `severity`, `collapsible`, `dashed`, `disabled`, `terminal`; model: `open`; slots: `default`, `title`, `status`, `actions`.
 - `flow-anchor/flow-anchor.vue` — Marks a connector-attachment point inside a node and wraps the content that the connector should touch. `type="end"` is the incoming endpoint, `type="start"` the outgoing origin; omitted marks both. Content via the `default` slot.
 - `flow-parallel/flow-parallel.vue` — Container whose direct `flow-node` children are laid out as parallel branches stacked vertically; the `flow` root draws the fan-out/fan-in junction connectors. `align` controls the horizontal alignment of the branches.
 
@@ -69,16 +70,18 @@ Each part is also a standalone import (`import FlowNode from '@aziontech/webkit/
   ├── injection-key.ts            (shared by every sub-component; one directory up from each sub-component)
   ├── flow-node/
   │   └── flow-node.vue
+  ├── flow-node-card/
+  │   └── flow-node-card.vue
   ├── flow-anchor/
   │   └── flow-anchor.vue
   └── flow-parallel/
       └── flow-parallel.vue
 
   The compound `./flow` entry (index.ts) attaches the sub-components for
-  dot-notation (`Flow.Node`, `Flow.Parallel`, `Flow.Anchor`) and re-exports them
+  dot-notation (`Flow.Node`, `Flow.NodeCard`, `Flow.Parallel`, `Flow.Anchor`) and re-exports them
   as named bindings from `@aziontech/webkit/flow`. The root is also published
   standalone (tree-shakeable) as `./flow-root`, and each sub-component as a flat
-  export (`./flow-node`, `./flow-parallel`, `./flow-anchor`). There is no
+  export (`./flow-node`, `./flow-node-card`, `./flow-parallel`, `./flow-anchor`). There is no
   per-component `package.json` — the root `packages/webkit/package.json#exports`
   points every public path directly at source. -->
 
@@ -110,6 +113,9 @@ Each part is also a standalone import (`import FlowNode from '@aziontech/webkit/
 - `data-flow-terminal` mirrors the `terminal` prop on `flow-node`. The composable drops that branch's exit, so no connector is drawn leaving it; the root additionally hides any outgoing port inside it (including one rendered by a nested `flow-anchor`)
 - `data-flow-leading` / `data-flow-trailing` are stamped by the connector composable on the first / last direct child of the diagram (both, when there is only one). The root hides the ports on those outer edges, because no connector reaches them. They are attributes rather than `:first-child` / `:last-child` rules because the connector `<svg>` is a sibling of the nodes in the same container
 - A consuming component that wraps a node in its own card must not clip it (`overflow-hidden`): the ports are positioned outside the anchor's box, so a clipping ancestor renders them invisible
+- `data-state="open|closed"` mirrors `flow-node-card`'s `open` model (on the card, its trigger and its body); `data-dashed` mirrors its `dashed` prop, `data-collapsible` its `collapsible` prop. A collapsed body is `inert`, so the clipped content is out of the tab order as well as out of sight
+- A `flow-node-card` must not be clipped by an ancestor (`overflow-hidden`) for the same reason as any other node: its ports are drawn outside its box. The card itself therefore rounds its own header instead of clipping, and only its collapsing body clips
+- `--flow-index` is stamped by the connector composable on each direct child (its place in the flow, inherited by the nodes of a `flow-parallel`); `--flow-enter-step` is declared on the diagram and is the arrival beat both the nodes and the connectors read
 - `data-faded` marks a connector path whose endpoint node is disabled (drives the reduced opacity)
 
 ## Motion & Animations
@@ -117,7 +123,18 @@ Each part is also a standalone import (`import FlowNode from '@aziontech/webkit/
 | Trigger | Animation / Transition | Token | Reduced-motion fallback |
 |---|---|---|---|
 | connector at rest (always, on every drawn connector) | `stroke-dasharray="4 4"` + `animate-flow-dash` — marching dashes along the stroke (`stroke-dashoffset` 24 → 0, 700ms linear infinite), so a connection reads as a live link rather than a static rule | `animate-flow-dash` (catalog) | `motion-reduce:animate-none` |
+| connector carrying a request (always, on every non-faded connector) | `animate-flow-packet` — a 2px dash that travels the path and tapers at both ends, crossing in the first 45% of a 2100ms cycle so a link is carrying something a little under half the time. The path carries `pathLength="100"` (the keyframe offsets are percentages) and `butt` caps (the dash is zero-length at both extremes, and a round cap paints that as a dot parked on the wire). Branches are staggered by an `animation-delay` longhand so parallel connectors do not pulse as one | `animate-flow-packet` (catalog) | `motion-reduce:animate-none` |
+| a node (`flow-node`, `flow-node-card`) mounting | `animate-flow-node-enter` — the node fades in over `moderate-02` while travelling one `--spacing-md` rightward, along the direction its connectors carry. Its `animation-delay` longhand reads `var(--flow-node-enter-delay, calc(var(--flow-index, 0) * var(--flow-enter-step, 0ms)))`: unconfigured, the node arrives on the beat of the column it sits in (the root stamps `--flow-index` on every direct child, and nodes inside a `flow-parallel` inherit the group's), and a consumer retimes one node with `--flow-node-enter-delay` or the whole diagram with `--flow-enter-step` | `animate-flow-node-enter` (catalog) | `motion-reduce:animate-none` |
+| a connector mounting | `animate-flow-connector-draw` — the connector is revealed by a mask that opens along its own path, so the line draws itself in the direction it carries. It draws half a step after the node it leaves (`animation-delay: calc(var(--flow-enter-step) * (step + 0.5))`), so the diagram assembles node, line, node, line instead of arriving as one slab. `--flow-enter-step` is `2 × moderate-02` on the root: one node beat, one connector beat | `animate-flow-connector-draw` (catalog) | `motion-reduce:animate-none` |
 | connector whose endpoint node is `disabled` | motion suppressed via `data-[faded]:animate-none` — the dashes stay, the flow stops, because a disabled step is not carrying anything | — | already static |
+
+> The stagger is a **longhand**, not part of the catalog shorthand. A `var()` nested inside an `--animate-*` token is substituted once, on `:root`, and descendants inherit the already-resolved string — so a per-node `--flow-node-enter-delay` written into the shorthand could never reach the node. Setting `animation-delay` on the card itself is what resolves per element.
+
+> The reveal is a **mask**, not a `stroke-dashoffset` on the connector itself: that property is already spoken for by the marching dash, and one element cannot run two different journeys along it. The mask path therefore carries `pathLength="100"` (the keyframe offsets are percentages) and a stroke wider than everything it reveals, and its mask region is `maskUnits="userSpaceOnUse"` — the default region is the bounding box of what is masked, and a straight connector's box is zero-height, which would mask the whole line away. Its resting state is fully open, which is what `motion-reduce:animate-none` leaves behind. Connectors that overlap (a fan-out's shared origin) always share a step, so no reveal uncovers a neighbour early.
+
+> `flow-node-enter` may **move** because `connectors.ts` measures every node from layout offsets (`offsetLeft` / `offsetWidth` summed up the `offsetParent` chain), not from `getBoundingClientRect`. A transform is paint, not layout, so it does not move those offsets: the lines are drawn where each node will land, and a node slides onto its connector instead of stranding it. That is the one thing to preserve if the measurement is ever revisited — a rect-based measure would pin every line to the box it was measured at, and the container's `ResizeObserver` never fires for a child that only transforms.
+
+> The packet is **one catalog token holding a two-animation list**: position and length run on different timing functions off the same clock, so travel eases (`in-out`) while the taper stays `linear` — easing the length too would read as the packet hesitating. Both legs must keep the same duration or the taper drifts out of phase and the dash tapers mid-path. The packet sets no `stroke-dasharray` / `stroke-dashoffset` in CSS; the keyframes own both. It is the same request the marketing map draws, so the two motions are deliberately one shape.
 
 > The dash cycle (8) divides the keyframe's travel (24), so the loop repeats seamlessly. A `stroke-dasharray` whose cycle does not divide 24 would visibly jump on each repeat. `linear` is deliberate: an endlessly looping animation must not accelerate, or the seam between repeats becomes visible (same reasoning as `spin` / `shimmer` in the catalog).
 
@@ -139,12 +156,19 @@ Each part is also a standalone import (`import FlowNode from '@aziontech/webkit/
 | spacing | `var(--spacing-md)`, `var(--spacing-sm)`, `var(--spacing-xl)` |
 | shape | `var(--shape-button)` |
 | ring | `var(--ring-color)` |
+| card surface | `var(--bg-surface)` |
+| card shape | `var(--shape-card)` |
+| card hover / focus border | `var(--border-strong)` |
+| card body divider | `var(--border-muted)` |
+| card eyebrow + status text | `var(--text-muted)` |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
 |---|---|---|
 | `flow-dash` animation | added to `primitives/animations/{keyframes,animate}.js` (`--animate-flow-dash`) | done (this change) — the catalog had no stroke-dash animation |
+| `flow-node-enter` animation | added to `primitives/animations/{keyframes,animate}.js` (`--animate-flow-node-enter`) | done (this change) — the catalog had no delayed, transform-free arrival |
+| `flow-connector-draw` animation | added to `primitives/animations/{keyframes,animate}.js` (`--animate-flow-connector-draw`) | done (this change) — the catalog had no path reveal |
 | raised node surface (`bg-surface-raised`) | `var(--bg-surface-raised)` | TODO: confirm `--bg-surface-raised` is the canonical raised token |
 
 ## Accessibility (WCAG 2.1 AA)
@@ -152,8 +176,9 @@ Each part is also a standalone import (`import FlowNode from '@aziontech/webkit/
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
 - Keyboard map: `Tab` moves focus through focusable nodes in document order; no arrow-key roving (the diagram is a static list/group).
 - ARIA: root `flow` is `role="list"`; each `flow-node` is `role="listitem"` with accessible text content; `flow-parallel` is `role="group"`; the connector SVG is decorative and carries `aria-hidden="true"`, as does every connector port (`data-flow-port`) — the ports are a visual attachment affordance and carry no meaning for AT. A `flow-anchor` wraps meaningful node content and is therefore not hidden.
+- `flow-node-card`: its header is a real `<button>` spanning the row when `collapsible`, carrying `aria-expanded` + `aria-controls` onto a `role="region"` body labelled by that trigger, so `Enter` / `Space` open and close it. Nothing interactive may live inside that trigger — which is why the resource's name and its controls are an identity row of their own rather than part of the header. The collapsed body is `inert`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state.
-- `motion-reduce:transition-none motion-reduce:transform-none` not required — the component is static (no motion).
+- Every motion-bearing class pairs with `motion-reduce:*` on the same class string: the connector's marching dash and its reveal, every node's arrival (`motion-reduce:animate-none`) and the card's border / chevron / collapse transitions (`motion-reduce:transition-none`). A suppressed reveal leaves its mask fully open, so a reduced-motion diagram is complete on the first frame rather than invisible.
 - Touch target ≥40×40 px where a node is interactive.
 
 ## Stories (Storybook)
@@ -165,6 +190,7 @@ Composite stories are justified below because Flow is a composition component wh
 - Branches — leading and trailing `flow-parallel` (fan-in then fan-out), proving connectors route correctly at the edges of the sequence.
 - CustomNodes — `unstyled` nodes whose slot content defines the appearance (a start dot, a tall node, a multi-row card with `flow-anchor` attachment points).
 - Disabled — a `flow-node` with the `disabled` prop, showing the reduced-opacity connectors.
+- NodeCards — a topology of `flow-node-card`s across two `flow-parallel` levels: a collapsible card with fields, one `dashed` unfilled position, and one `terminal` leaf, assembling on the diagram's own arrival beat (nothing staggered by hand).
 
 ## Constraints — DO NOT
 

@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=476-948
   node_id: 476:948
-checksum: d50487d21dfd33d2ce546fb53811e7a6d892d0e17431b0b5be3d1ce3bb4ad434
+checksum: bda6f5139c5172d6e60cfdb194730a6a5412de2b64d9acb3129bb3f346de83e0
 created: 2026-06-23
-last_updated: 2026-08-12
+last_updated: 2026-09-25
 ---
 
 # Chip — Component Spec
@@ -20,7 +20,7 @@ A Chip is a compact, pill-shaped token that labels a discrete value the user has
 
 `kind` covers the three jobs a chip does in a filter surface, so a consumer never restyles the component to get one of them:
 
-- **`filled`** — a value that IS applied. The shared surface and border plus `--shadow-sm`: the loudest of the three, because it is state.
+- **`filled`** — a value that IS applied. The selected fill (`--bg-selected`) over the shared border, plus `--shadow-sm`: the loudest of the three, because it is state. The fill is what carries it — `--shadow-sm` is a 10%-black drop that vanishes on a dark canvas, so elevation alone left `filled` and `outlined` pixel-identical there.
 - **`outlined`** — a value the user COULD apply. Same surface and border, no shadow: it recedes to an offer without becoming disabled, so a filter vocabulary can stay on screen instead of hiding inside a menu.
 - **`dashed`** — the control that CREATES a chip ("Add filter"). A dashed outline is the standing convention for "add another one of these", which is what separates the thing that makes filters from the things that are filters.
 
@@ -29,7 +29,7 @@ A Chip is a compact, pill-shaped token that labels a discrete value the user has
 ## When to use
 
 - Represent a selectable or removable token — active filters, multi-select values, entered keywords.
-- Represent a value that is *available* but not applied (`kind="outlined"`), so the set of things a view can be narrowed by stays visible.
+- Represent a value that is _available_ but not applied (`kind="outlined"`), so the set of things a view can be narrowed by stays visible.
 - Represent the "add another" affordance for such a set (`kind="dashed"`).
 - The element is interactive (clickable / dismissible).
 
@@ -55,41 +55,61 @@ A Chip is a compact, pill-shaped token that labels a discrete value the user has
 
 ```vue
 <script setup>
-import Chip from '@aziontech/webkit/chip'
+  import Chip from '@aziontech/webkit/chip'
 </script>
 
 <template>
   <!-- applied: state -->
-  <Chip label="Active" kind="filled" size="medium" clickable removable @click="onEdit" @remove="onRemove" />
+  <Chip
+    label="Active"
+    kind="filled"
+    size="medium"
+    clickable
+    removable
+    @click="onEdit"
+    @remove="onRemove"
+  />
   <!-- available: an offer -->
-  <Chip label="Status" kind="outlined" size="medium" clickable @click="onPick" />
+  <Chip
+    label="Status"
+    kind="outlined"
+    size="medium"
+    clickable
+    @click="onPick"
+  />
   <!-- the control that creates one -->
-  <Chip label="Add filter" kind="dashed" size="medium" clickable @click="onAdd" />
+  <Chip
+    label="Add filter"
+    kind="dashed"
+    size="medium"
+    clickable
+    @click="onAdd"
+  />
 </template>
 ```
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `label` | `string` | `''` | false | Fallback text when the default slot is empty. |
-| `kind` | `'filled' \| 'outlined' \| 'dashed'` | `'filled'` | false | Visual variant. Filled is an applied value, outlined an available one, dashed the control that adds one. |
-| `size` | `'small' \| 'medium'` | `'medium'` | false | Size token; `small` is a fixed 24px, `medium` a fixed 32px. |
-| `removable` | `boolean` | `false` | false | When true, renders a trailing remove button that emits `remove`. |
-| `clickable` | `boolean` | `false` | false | When true, the chip body becomes interactive (`role="button"`, focusable) and emits `click` on activation (click / Enter / Space). |
+| Prop        | Type                                 | Default    | Required | JSDoc                                                                                                                              |
+| ----------- | ------------------------------------ | ---------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `label`     | `string`                             | `''`       | false    | Fallback text when the default slot is empty.                                                                                      |
+| `kind`      | `'filled' \| 'outlined' \| 'dashed'` | `'filled'` | false    | Visual variant. Filled is an applied value, outlined an available one, dashed the control that adds one.                           |
+| `size`      | `'small' \| 'medium'`                | `'medium'` | false    | Size token; `small` is a fixed 24px, `medium` a fixed 32px.                                                                        |
+| `removable` | `boolean`                            | `false`    | false    | When true, renders a trailing remove button that emits `remove`.                                                                   |
+| `clickable` | `boolean`                            | `false`    | false    | When true, the chip body becomes interactive (`role="button"`, focusable) and emits `click` on activation (click / Enter / Space). |
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
-| `remove` | `(event: MouseEvent, label: string)` | Fires when `removable` is true and the remove button is activated (click / Enter / Space), **immediately** — the chip does not hide or unmount itself first, so the consumer decides whether the chip disappears, stays, or becomes an `outlined` offer. `label` is the chip's `label` prop, identifying which chip was removed. |
-| `click` | `(event: MouseEvent \| KeyboardEvent, label: string)` | Fires only when `clickable` is true and the chip body is activated — by pointer, or `Enter` / `Space` while the root is focused. `label` identifies which chip was clicked. The trailing remove button stops propagation, so activating it emits `remove` only, never `click`. |
+| Event    | Payload                                               | Notes                                                                                                                                                                                                                                                                                                                            |
+| -------- | ----------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `remove` | `(event: MouseEvent, label: string)`                  | Fires when `removable` is true and the remove button is activated (click / Enter / Space), **immediately** — the chip does not hide or unmount itself first, so the consumer decides whether the chip disappears, stays, or becomes an `outlined` offer. `label` is the chip's `label` prop, identifying which chip was removed. |
+| `click`  | `(event: MouseEvent \| KeyboardEvent, label: string)` | Fires only when `clickable` is true and the chip body is activated — by pointer, or `Enter` / `Space` while the root is focused. `label` identifies which chip was clicked. The trailing remove button stops propagation, so activating it emits `remove` only, never `click`.                                                   |
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | Chip content; falls back to `label` when empty. |
+| Slot      | Scope | Notes                                           |
+| --------- | ----- | ----------------------------------------------- |
+| `default` | —     | Chip content; falls back to `label` when empty. |
 
 ## States
 
@@ -100,45 +120,45 @@ import Chip from '@aziontech/webkit/chip'
 - `data-clickable` is present when the `clickable` prop is true
 - When `clickable`, the root is an interactive `role="button"` with `tabindex="0"`: it shows `cursor-pointer`, a `::before` ghost-layer darkening overlay (`--bg-hover`) on `hover` and `active`, a `--border-strong` border on `active` (the pressed state, per Figma), and a visible focus ring on `focus-visible`. When not clickable, the root stays a non-interactive container.
 - The remove button (when `removable`) is always independently focusable and shows its own focus ring on `focus-visible`. It carries a **`tooltip`** naming what it removes, shown on hover and on keyboard focus — in a row of chips four identical `×` controls sit side by side, and the field name is what tells them apart.
-- All three kinds share the same `--bg-surface` fill and `--border-default` border at rest, so a row of chips reads as one family; the kinds differ only in **elevation** (and, for `dashed`, the dash). When `clickable`, hover raises the border to `--border-strong` — the same rest→hover pair `input-text` and `select-trigger` use. That pair is what makes the outline read as interactive at all: `--border-default` is 8% black, the *same value* as `--border-muted` in the light theme, so a static border of either token is indistinguishable. `filled` adds `--shadow-sm`; `outlined` drops it, which is what makes an applied value louder than an available one without changing the surface or the outline it is drawn with. `dashed` is `outlined` with a dashed border.
-- **Fill is not the applied/available distinction.** It was, nominally — `filled` specified `--bg-surface-raised` and the other two were transparent — and it worked in neither theme: `--bg-surface-raised` resolves to the *same value* as `--bg-surface` in the light theme, so the contrast it was meant to carry existed only in dark, and the utility was authored with a stray space inside the paren shorthand, which terminates the Tailwind candidate so it compiled to no CSS at all. Every `filled` chip was transparent in both themes. One shared surface is what makes a chip read as a raised object against `--bg-canvas`; `--shadow-sm` then carries the state on its own, which is what it was already doing.
+- All three kinds share the same `--bg-surface` fill and `--border-default` border at rest, so a row of chips reads as one family; the kinds differ only in **elevation** (and, for `dashed`, the dash). When `clickable`, hover raises the border to `--border-strong` — the same rest→hover pair `input-text` and `select-trigger` use. That pair is what makes the outline read as interactive at all: `--border-default` is 8% black, the _same value_ as `--border-muted` in the light theme, so a static border of either token is indistinguishable. `filled` adds `--shadow-sm`; `outlined` drops it, which is what makes an applied value louder than an available one without changing the surface or the outline it is drawn with. `dashed` is `outlined` with a dashed border.
+- **Fill is not the applied/available distinction.** It was, nominally — `filled` specified `--bg-surface-raised` and the other two were transparent — and it worked in neither theme: `--bg-surface-raised` resolves to the _same value_ as `--bg-surface` in the light theme, so the contrast it was meant to carry existed only in dark, and the utility was authored with a stray space inside the paren shorthand, which terminates the Tailwind candidate so it compiled to no CSS at all. Every `filled` chip was transparent in both themes. One shared surface is what makes a chip read as a raised object against `--bg-canvas`; `--shadow-sm` then carries the state on its own, which is what it was already doing.
 - The remove control's glyph sits at `--text-muted` at rest and rises to `--text-default` on hover: at rest it is punctuation after a label, and on hover it is the thing being aimed at. It stays above the 3:1 non-text contrast minimum in both themes (3.95:1 light, 5.02:1 dark).
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| remove (chip dismiss) | **none — the chip does not animate its own removal.** It emits `remove` and leaves presence to the consumer; exit motion belongs to whatever owns the list. The chip sets **no inline `transition`**, so a consumer's own `transition-*` utilities on the root are never overridden (an inline style beats every class, which silently killed consumer-authored chip motion). | — | — |
-| kind / border colour change | `transition-[color,background-color,border-color,box-shadow] duration-fast-02 ease-productive-entrance` | DESIGN.md § Interactive states | `motion-reduce:transition-none` |
-| remove button hover/focus state change | `transition-colors duration-fast-02 ease-productive-entrance` | DESIGN.md § Interactive states | `motion-reduce:transition-none` |
-| remove tooltip open / close | **owned by `tooltip`** — the chip composes it and declares no motion of its own for it; the utilities, their tokens and the reduced-motion fallback are that component's contract, not this one's. | see `.specs/tooltip.md` | from `tooltip` |
-| clickable hover / active (chip body) | `::before` ghost-layer `opacity` overlay (`--bg-hover`) shown on `hover` and `active`, only when `clickable`; `active` also flips the border to `--border-strong` | `before:duration-fast-02 before:ease-productive-entrance` (DESIGN.md § Interactive states) | `motion-reduce:before:transition-none` |
+| Trigger                                | Animation / Transition                                                                                                                                                                                                                                                                                                                                                        | Token (see `.claude/docs/DESIGN.md` § Animations)                                          | Reduced-motion fallback                |
+| -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | -------------------------------------- |
+| remove (chip dismiss)                  | **none — the chip does not animate its own removal.** It emits `remove` and leaves presence to the consumer; exit motion belongs to whatever owns the list. The chip sets **no inline `transition`**, so a consumer's own `transition-*` utilities on the root are never overridden (an inline style beats every class, which silently killed consumer-authored chip motion). | —                                                                                          | —                                      |
+| kind / border colour change            | `transition-[color,background-color,border-color,box-shadow] duration-fast-02 ease-productive-entrance`                                                                                                                                                                                                                                                                       | DESIGN.md § Interactive states                                                             | `motion-reduce:transition-none`        |
+| remove button hover/focus state change | `transition-colors duration-fast-02 ease-productive-entrance`                                                                                                                                                                                                                                                                                                                 | DESIGN.md § Interactive states                                                             | `motion-reduce:transition-none`        |
+| remove tooltip open / close            | **owned by `tooltip`** — the chip composes it and declares no motion of its own for it; the utilities, their tokens and the reduced-motion fallback are that component's contract, not this one's.                                                                                                                                                                            | see `.specs/tooltip.md`                                                                    | from `tooltip`                         |
+| clickable hover / active (chip body)   | `::before` ghost-layer `opacity` overlay (`--bg-hover`) shown on `hover` and `active`, only when `clickable`; `active` also flips the border to `--border-strong`                                                                                                                                                                                                             | `before:duration-fast-02 before:ease-productive-entrance` (DESIGN.md § Interactive states) | `motion-reduce:before:transition-none` |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| surface (all kinds) | `var(--bg-surface)` |
-| border (all kinds, rest) | `var(--border-default)` |
-| border (clickable, hover) | `var(--border-strong)` |
-| shape | fully rounded (pill) |
-| elevation (`filled`) | `var(--shadow-sm)`; `outlined` / `dashed` carry none |
-| typography (both sizes) | `.text-label-sm` + `leading-none` |
-| text | `var(--text-default)` |
-| remove glyph (rest / hover) | `var(--text-muted)` / `var(--text-default)` |
-| spacing (medium padding) | `var(--spacing-sm)` / `var(--spacing-xs)` |
-| spacing (small padding) | `var(--spacing-xs)` / `var(--spacing-xxs)` |
-| spacing (label↔icon gap) | `var(--spacing-xxs)` |
-| ring | `var(--ring-color)` |
-| interactive overlay (clickable hover / active) | `var(--bg-hover)` (ghost layer) |
-| border (clickable active) | `var(--border-strong)` |
+| Region                                         | Token (DESIGN.md)                                    |
+| ---------------------------------------------- | ---------------------------------------------------- |
+| surface (all kinds)                            | `var(--bg-surface)`                                  |
+| border (all kinds, rest)                       | `var(--border-default)`                              |
+| border (clickable, hover)                      | `var(--border-strong)`                               |
+| shape                                          | fully rounded (pill)                                 |
+| elevation (`filled`)                           | `var(--shadow-sm)`; `outlined` / `dashed` carry none |
+| typography (both sizes)                        | `.text-label-sm` + `leading-none`                    |
+| text                                           | `var(--text-default)`                                |
+| remove glyph (rest / hover)                    | `var(--text-muted)` / `var(--text-default)`          |
+| spacing (medium padding)                       | `var(--spacing-sm)` / `var(--spacing-xs)`            |
+| spacing (small padding)                        | `var(--spacing-xs)` / `var(--spacing-xxs)`           |
+| spacing (label↔icon gap)                       | `var(--spacing-xxs)`                                 |
+| ring                                           | `var(--ring-color)`                                  |
+| interactive overlay (clickable hover / active) | `var(--bg-hover)` (ghost layer)                      |
+| border (clickable active)                      | `var(--border-strong)`                               |
 
 ## Theme gaps
 
-| Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
+| Figma variable                             | Temporary primitive                                                                                                                                                                                                                                                       | Follow-up                                                                                                                 |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
 | border width `var(--border-width-default)` | **1px, from the plain `border` utility.** `border-(length:--border-width-default)` emits no CSS at all in Tailwind v4 — verified against the built stylesheet — so the token cannot be applied through that syntax. It is used the same dead way in 10+ other components. | `TODO: repo-wide — replace the dead `border-(length:--border-width-default)` with a syntax that emits, or drop the token` |
-| label↔icon gap `6px` | `var(--spacing-xxs)` (4px) | `TODO: tokenizar gap de 6px se virar recorrente` |
+| label↔icon gap `6px`                       | `var(--spacing-xxs)` (4px)                                                                                                                                                                                                                                                | `TODO: tokenizar gap de 6px se virar recorrente`                                                                          |
 
 ## Accessibility (WCAG 2.1 AA)
 

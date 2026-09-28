@@ -78,7 +78,7 @@ const meta = {
       control: 'inline-radio',
       options: ['content', 'site'],
       description:
-        'Where the footer sits: `content` is the default — the bands run full bleed across whatever zone holds the footer, opening on the page boundary; `site` closes a framed marketing page instead, capping the bands at the site measure and drawing the frame that page carries: the side rules, the hatched gutters and the closing band.',
+        'Where the footer sits: `content` is the default — the bands run full bleed across whatever zone holds the footer, opening on the page boundary; `site` closes a framed marketing page instead, capping the bands at the site measure and drawing the frame that page carries: the side rules, the hatched gutters and the corner marks, closing on a full-bleed bottom rule.',
       table: {
         type: { summary: "'content' | 'site'" },
         defaultValue: { summary: "'content'" },
@@ -224,9 +224,9 @@ export const DefaultFooter = {
 // The site placement: the SAME bands, capped at the marketing measure and centred, with
 // the frame that page carries drawn around them — side rules down both edges, hatched
 // gutters flanking them from `2xl` (the first breakpoint past the measure, so a gutter
-// always has real width to grow into), and the hatched band closing the frame below. The
-// canvas here is narrower than that breakpoint, so the gutters stay out and what the story
-// shows is the cap and the rules; the closing band is visible at every width.
+// always has real width to grow into), and the column's own frame closing on a full-bleed
+// bottom rule. The canvas here is narrower than that breakpoint, so the gutters stay out and
+// what the story shows is the cap, the rules and the corner marks.
 const SITE_MARKUP = `<Footer kind="site" aria-label="Footer">
 ${FOOTER_CONTENT}
 </Footer>`
@@ -252,7 +252,7 @@ export const SitePlacement = {
     docs: {
       description: {
         story:
-          'The footer closing a framed marketing page: the bands capped at the site measure and centred, with the side rules, the hatched gutters and the closing band that finish the page frame. The hero band and the framed sections above resolve to that same measure, which is the only reason the rules running down the page are continuous.'
+          'The footer closing a framed marketing page: the bands capped at the site measure and centred, with the side rules, the hatched gutters and the framed column whose bottom rule finishes the page frame. The hero band and the framed sections above resolve to that same measure, which is the only reason the rules running down the page are continuous.'
       },
       source: { code: toSfc([...IMPORT, '', SETUP_SNIPPET], SITE_MARKUP) }
     }

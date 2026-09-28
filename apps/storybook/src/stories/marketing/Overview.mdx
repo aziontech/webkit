@@ -1,0 +1,71 @@
+import { Meta } from '@storybook/blocks'
+
+<Meta
+  title="Marketing/Overview"
+  parameters={{
+    options: { showPanel: false },
+    controls: { disable: true },
+    actions: { disable: true },
+    docs: {
+      description: {
+        component:
+          'The bands a marketing page is built from — the frame that draws the page, and the sections that fill it.'
+      }
+    }
+  }}
+/>
+
+# Marketing components
+
+A marketing page is a stack of bands inside one frame. The frame is drawn once, by three
+components, instead of by every band that happens to need a rule: the hero owns the page's
+top rule, the section column owns the sides, and the footer owns the bottom. Every band
+below the hero stacks inside that column and draws only the rules it adds.
+
+## The page frame
+
+The layers that draw the page and divide it into sections.
+
+- [Hero](?path=/docs/marketing-hero--documentation) — the opening band: full-bleed, copy centered in a capped column, owner of the page's first rule.
+- [HeroTitle](?path=/docs/marketing-herotitle--documentation) — the hero's copy block: overline, the page's `h1`, description and leading calls to action.
+- [SectionContainer](?path=/docs/marketing-sectioncontainer--documentation) — the framed content column every section below the hero stacks inside.
+- [SectionModule](?path=/docs/marketing-sectionmodule--documentation) — the brick of the column: a header row divided from its body by a hairline.
+- [SectionTitle](?path=/docs/marketing-sectiontitle--documentation) — the framed header row that opens a section: overline, `h2`, description and actions.
+- [SectionGap](?path=/docs/marketing-sectiongap--documentation) — the empty frame between two sections; on a page with no margins, it is the gap.
+- [BandStack](?path=/docs/marketing-bandstack--documentation) — a run of framed bands sharing hairlines, optionally pinning as the reader scrolls.
+- [TextureMaterial](?path=/docs/marketing-texturematerial--documentation) — the decorative surface a band is painted on; it takes no content and claims no space.
+
+## Content bands
+
+The sections that state what the product does.
+
+- [MediaSplit](?path=/docs/marketing-mediasplit--documentation) — one claim beside one picture of the claim, the workhorse of a product page.
+- [MediaTabs](?path=/docs/marketing-mediatabs--documentation) — a stack of claims with only the selected claim's media on screen.
+- [StickyStack](?path=/docs/marketing-stickystack--documentation) — a pinned band read by scrolling, where the scroll position opens each claim in turn.
+- [ContentColumns](?path=/docs/marketing-contentcolumns--documentation) — two or three columns of short copy under one section header.
+- [CardGrid](?path=/docs/marketing-cardgrid--documentation) — the responsive cell grid, in spaced, hairline and framed registers.
+- [BentoGrid](?path=/docs/marketing-bentogrid--documentation) — a mosaic of unequal cells for claims that deserve different amounts of room.
+- [MediaTile](?path=/docs/marketing-mediatile--documentation) — one cell of a media band: a scene with a run-in caption beneath it.
+- [Topic](?path=/docs/marketing-topic--documentation) — one claim as glyph, headline and sentence; the content of a cell, not the cell.
+- [ColumnNavigation](?path=/docs/marketing-columnnavigation--documentation) — a directory of destinations in columns, closing a section.
+- [Faq](?path=/docs/marketing-faq--documentation) — the question on one side, the answers as a disclosure list on the other.
+- [Embed](?path=/docs/marketing-embed--documentation) — a framed, responsive `iframe`, the one place external content enters a page.
+
+## Proof
+
+The bands that back a claim with numbers, names and customers.
+
+- [BigNumbers](?path=/docs/marketing-bignumbers--documentation) — headline figures at big-number scale, each with a short caption.
+- [ClientKpiQuote](?path=/docs/marketing-clientkpiquote--documentation) — one client's mark, the result they got, and the sentence stating it.
+- [Quote](?path=/docs/marketing-quote--documentation) — a single customer testimonial.
+- [QuoteCarousel](?path=/docs/marketing-quotecarousel--documentation) — a scrollable row of flush testimonial cards.
+- [Carousel](?path=/docs/marketing-carousel--documentation) — a scroll-snapped track of cards with step controls, built on native scrolling.
+- [LogoWall](?path=/docs/marketing-logowall--documentation) — a static grid of company marks.
+- [Ticker](?path=/docs/marketing-ticker--documentation) — a looping row of brand marks drawn in one ink.
+
+## Calls to action
+
+The bands that ask the reader to act.
+
+- [Banner](?path=/docs/marketing-banner--documentation) — the page's one loud interruption between sections.
+- [CallToAction](?path=/docs/marketing-calltoaction--documentation) — the closing ask of a page: headline, supporting sentence and actions.

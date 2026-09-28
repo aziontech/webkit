@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 480" fill="none">
+  <title>Decorative mesh of edge locations</title>
+  <path
+    d="M90 120 250 300M250 300 170 400M250 300 400 90M400 90 620 60M400 90 560 230M560 230 700 380M560 230 860 140M620 60 860 140M700 380 930 440M860 140 1000 300M1000 300 930 440M860 140 1080 170M1080 170 1150 80M1080 170 1290 250M1000 300 1290 250M1150 80 1290 250M1290 250 1390 400"
+    stroke="#757575"
+    stroke-width="1.5"
+    opacity="0.4"
+  />
+  <g fill="#757575" opacity="0.55">
+    <circle cx="90" cy="120" r="5" />
+    <circle cx="250" cy="300" r="7" />
+    <circle cx="400" cy="90" r="5" />
+    <circle cx="560" cy="230" r="7" />
+    <circle cx="620" cy="60" r="4" />
+    <circle cx="700" cy="380" r="5" />
+    <circle cx="860" cy="140" r="7" />
+    <circle cx="930" cy="440" r="4" />
+    <circle cx="1000" cy="300" r="5" />
+    <circle cx="1080" cy="170" r="5" />
+    <circle cx="1150" cy="80" r="4" />
+    <circle cx="1290" cy="250" r="7" />
+    <circle cx="1390" cy="400" r="5" />
+    <circle cx="170" cy="400" r="4" />
+  </g>
+</svg>

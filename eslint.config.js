@@ -135,5 +135,12 @@ export default [
         }
       }
     }
+  },
+  {
+    files: ['**/*.vue'],
+    processor: vue.processors['.vue'],
+    rules: {
+      'vue/comment-directive': 'error'
+    }
   }
 ]

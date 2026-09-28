@@ -101,11 +101,11 @@ export const illustrationsData = {
   // The smallest label in the system sits below the typography scale's floor.
   'illustration-label-small': { _: '0.5rem' },
 
-  // The canvas a registered asset composes on. Every asset in the library is authored
-  // against this one frame, so parts can be placed at exact coordinates and every
-  // illustration lines up with its neighbours in a grid.
-  'illustration-canvas-width': { _: '10.625rem' },
-  'illustration-canvas-height': { _: '8rem' }
+  // The canvas every official asset is drawn on. The library is exported from one
+  // 592x300 Figma frame, so a scene lines up with its neighbours in a grid and a call
+  // site can reserve the box before the SVG loads.
+  'illustration-canvas-width': { _: '37rem' },
+  'illustration-canvas-height': { _: '18.75rem' }
 }
 
 /**
