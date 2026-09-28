@@ -57,7 +57,7 @@
 
   const frame = computed(() => (props.framed ? FrameBox : 'div'))
   const frameProps = computed(() =>
-    props.framed ? { flush: true, borders: 'y', marks: 'bottom' } : {}
+    props.framed ? { flush: true, borders: 'y', marks: 'all' } : {}
   )
 </script>
 
@@ -71,6 +71,7 @@
     <component
       :is="frame"
       v-bind="frameProps"
+      class="h-full"
     >
       <div
         v-if="kind === 'split'"
@@ -125,7 +126,7 @@
 
       <div
         v-else-if="kind === 'lead'"
-        class="flex flex-col gap-(--spacing-xl) bg-(--bg-surface-raised) p-(--spacing-xl)"
+        class="flex h-full flex-col justify-center gap-(--spacing-xl) bg-(--bg-surface-raised) p-(--spacing-xl)"
       >
         <div class="flex w-full max-w-(--container-2xl) flex-col gap-(--spacing-lg)">
           <Overline
@@ -144,7 +145,7 @@
           </h2>
           <p
             v-if="hasDescription"
-            class="m-0 text-pretty text-heading-sm text-(--text-muted)"
+            class="m-0 max-w-(--container-lg) text-balance text-heading-sm text-(--text-muted)"
           >
             <slot>{{ description }}</slot>
           </p>
