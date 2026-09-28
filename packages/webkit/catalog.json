@@ -11332,7 +11332,7 @@
       "treeShakeableImport": "@aziontech/webkit/texture-material",
       "category": "marketing",
       "structure": "monolithic",
-      "status": "approved",
+      "status": "implemented",
       "props": [
         {
           "name": "kind",

@@ -2,11 +2,11 @@
 name: texture-material
 category: marketing
 structure: monolithic
-status: approved
+status: implemented
 spec_version: 1
-checksum: 62607952c1023d1d0260592efc0b00e6d78be2d26622474db20b3075f7ec410c
+checksum: ac3e951eb0d309621bbea5ef54f8c2c3ac439080ba573f5d94db97e38fb4f25d
 created: 2026-09-23
-last_updated: 2026-09-24
+last_updated: 2026-09-25
 ---
 
 # Texture Material — Component Spec
@@ -83,8 +83,8 @@ import TextureMaterial from '@aziontech/webkit/texture-material'
 - Visual states: `default`
 - `data-kind`, `data-size` and `data-fade` mirror their props and drive which texture paints, at what pitch, and how it fades out
 - `kind="none"` paints nothing, so a band can switch its texture off without unmounting the layer
-- `fade="none"` leaves the layer unmasked; every other value masks it so the ink reaches zero before the layer's own edge
-- Custom properties tune a texture in place, set from the consumer's class: `--texture-ink` (every kind), `--texture-fade-start` / `--texture-fade-end` (where the fade holds full ink and where it reaches zero), `--texture-from` / `--texture-to` / `--texture-direction` (the `dither` ramp's density span and axis), `--texture-pool-x` (where both `pixelate` light pools sit on the x axis), `--texture-pool-a` / `--texture-pool-b` (each pool's own `x y` position, so the two can sit on opposite edges; either falls back to `--texture-pool-x`)
+- `fade="none"` leaves the layer unmasked; every other value masks it so the ink reaches zero before the layer's own edge; `top` and `bottom` are a single fade — full ink at the leading edge, zero at `--texture-fade-end`. Setting `--texture-fade-lead: transparent` adds a second ramp in from zero at the leading edge, so the layer also clears whatever overlaps that edge; `hero` sets it on its backdrop because its opening band sits under the site header, and no other band needs it
+- Custom properties tune a texture in place, set from the consumer's class: `--texture-ink` (every kind), `--texture-fade-start` / `--texture-fade-end` (where the fade holds full ink and where it reaches zero), `--texture-fade-lead` (the ink at the leading edge of `top` / `bottom`; `black` by default, `transparent` for the double fade), `--texture-from` / `--texture-to` / `--texture-direction` (the `dither` ramp's density span and axis), `--texture-pool-x` (where both `pixelate` light pools sit on the x axis), `--texture-pool-a` / `--texture-pool-b` (each pool's own `x y` position, so the two can sit on opposite edges; either falls back to `--texture-pool-x`)
 
 ## Motion & Animations
 
