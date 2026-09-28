@@ -23,7 +23,6 @@ describe('SectionGap', () => {
     const { getByTestId } = render(SectionGap)
     const root = getByTestId(TESTID)
 
-    // flush="top" is subtracted from borders="y", so only the bottom rule is left.
     expect(root).toHaveAttribute('data-flush', 'top')
     expect(root).toHaveAttribute('data-borders', 'bottom')
     expect(root.getAttribute('data-marks')?.split(' ').sort()).toEqual([
