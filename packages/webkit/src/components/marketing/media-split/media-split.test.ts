@@ -16,8 +16,6 @@ const SRC = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICT
 
 const FOLLOWING = 4
 
-// The cells are addressed by the grid's own derived testid, so the helper does not move
-// when the band gains or loses its registration frame.
 function columnsOf(container: HTMLElement): globalThis.Element[] {
   const grid = container.querySelector(`[data-testid="${TESTID}__cells"]`)
   return grid ? [...grid.children] : []
@@ -51,7 +49,6 @@ describe('MediaSplit', () => {
     const root = getByTestId(TESTID)
 
     expect(root.tagName).toBe('SECTION')
-    // the band is a named landmark; the name comes from its title, not from a wired id
     expect(getByRole('region', { name: TITLE })).toBe(root)
     expect(getByRole('heading', { level: 2 })).toHaveTextContent(TITLE)
   })

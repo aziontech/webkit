@@ -164,8 +164,6 @@
       v-bind="frameProps"
       class="h-full"
     >
-      <!-- The seam is the grid's own gap over the rule fill, so neither cell draws a border
-           and the hairline lands in the same place whichever side the media is on. -->
       <div
         :data-testid="`${testId}__cells`"
         :data-orientation="orientation"
@@ -208,10 +206,6 @@
           </div>
         </div>
 
-        <!-- The ground under the media, painted by the band rather than by the call site: the
-             texture fades out before the cell's edges, so the seam and the frame stay the only
-             hard lines. A call site quiets it further with `--texture-ink`, inherited from this
-             root; an asset takes no padding, so the ground reaches the media's own air. -->
         <component
           :is="isMediaLink ? 'a' : 'div'"
           v-if="hasMedia"
