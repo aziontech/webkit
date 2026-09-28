@@ -2,12 +2,12 @@
 name: media-tabs
 category: marketing
 structure: monolithic
-status: approved
+status: implemented
 spec_version: 1
 figma:
   url: https://www.figma.com/design/QEbHSTFDWfh4VHkBp6NWN3/Azion.com?node-id=13138-296208
   node_id: 13138-296208
-checksum: fca4074145a200854e1f7bf43d5bd402836c9ee938958a45834937e30024f7e9
+checksum: 79c1926b690be1e2755185282b801051e7bbf5e8ebe4e1308c1da90ca8153a34
 created: 2026-09-24
 last_updated: 2026-09-24
 ---
@@ -26,14 +26,12 @@ A band split in two: a stack of claims on one side, one piece of media on the ot
 
 ## When NOT to use
 
-- For a numbered sequence where the order is the argument → use `accordion-gallery`, which is a walkthrough with a progress bar per step.
 - For one claim beside one picture → use `media-split`.
 - For questions and answers → use `faq`.
 - For switching a page's content between peer views the reader navigates → use `tab-view`, which is a real ARIA tab set.
 
 ## Related
 
-- `accordion-gallery` — the sequenced sibling: ordered steps with bullet points, each drawn in its own `frame-box`. This band's rows are full-bleed cells divided by hairlines, and its claims are peers.
 - `media-split` — one claim, one picture, no selection.
 - `illustration` — the official scene a tab's `media` slot usually holds.
 - `frame-box` — the registration frame the page wraps the band in; the band draws only its own top and bottom rules and the seam between its columns.

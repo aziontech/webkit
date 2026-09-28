@@ -197,7 +197,7 @@
 
           <div
             v-if="isActive(index)"
-            class="relative flex aspect-video w-full items-center justify-center overflow-hidden bg-(--bg-canvas) lg:hidden"
+            class="relative flex aspect-video min-h-[var(--media-tabs-media-min,0)] w-full items-center justify-center overflow-hidden bg-(--bg-canvas) lg:hidden"
           >
             <slot
               name="media"

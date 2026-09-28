@@ -9937,7 +9937,7 @@
       "treeShakeableImport": "@aziontech/webkit/media-tabs",
       "category": "marketing",
       "structure": "monolithic",
-      "status": "approved",
+      "status": "implemented",
       "props": [
         {
           "name": "items",
@@ -10003,13 +10003,11 @@
         "As a product-page band that rewards watching but does not require it."
       ],
       "avoidWhen": [
-        "For a numbered sequence where the order is the argument → use `accordion-gallery`, which is a walkthrough with a progress bar per step.",
         "For one claim beside one picture → use `media-split`.",
         "For questions and answers → use `faq`.",
         "For switching a page's content between peer views the reader navigates → use `tab-view`, which is a real ARIA tab set."
       ],
       "related": [
-        "accordion-gallery` — the sequenced sibling: ordered steps with bullet points, each drawn in its own `frame-box`. This band's rows are full-bleed cells divided by hairlines, and its claims are peers.",
         "media-split` — one claim, one picture, no selection.",
         "illustration` — the official scene a tab's `media` slot usually holds.",
         "frame-box` — the registration frame the page wraps the band in; the band draws only its own top and bottom rules and the seam between its columns.",
