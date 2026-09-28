@@ -66,9 +66,18 @@ function resolveAziontechWorkspace(specifier) {
   return existsSync(join(ROOT, 'packages', wsName, 'package.json'))
 }
 
-function resolveRelativeImport(specifier, fromFile) {
-  const baseDir = dirname(resolve(fromFile))
-  const target = resolve(baseDir, specifier)
+// Vite path aliases the workspace apps declare, mirroring their `resolve.alias` map. Without
+// them a legitimate `@site/views/Foo.vue` reads as an uninstalled scoped package and is blocked.
+// Keep in sync with apps/webkit-sample/vite.config.js.
+const VITE_ALIASES = {
+  '@shared': 'apps/webkit-sample/src/shared',
+  '@site': 'apps/webkit-sample/src/site',
+  '@hub': 'apps/webkit-sample/src/hub',
+  '@console': 'apps/webkit-sample/src/console',
+  '@preview': 'apps/webkit-sample/src/preview'
+}
+
+function resolveFileTarget(target) {
   const candidates = [
     target,
     `${target}.vue`,
@@ -93,6 +102,17 @@ function resolveRelativeImport(specifier, fromFile) {
       return false
     }
   })
+}
+
+function resolveRelativeImport(specifier, fromFile) {
+  return resolveFileTarget(resolve(dirname(resolve(fromFile)), specifier))
+}
+
+function resolveViteAlias(specifier) {
+  const [head, ...rest] = specifier.split('/')
+  const base = VITE_ALIASES[head]
+  if (!base) return false
+  return resolveFileTarget(join(ROOT, base, ...rest))
 }
 
 function resolveNodeModule(specifier) {
@@ -151,6 +171,9 @@ async function main() {
     } else if (spec.startsWith('.') || spec.startsWith('/')) {
       ok = resolveRelativeImport(spec, filePath)
       reason = 'relative path does not resolve to any file'
+    } else if (Object.hasOwn(VITE_ALIASES, spec.split('/')[0])) {
+      ok = resolveViteAlias(spec)
+      reason = 'vite alias does not resolve to any file'
     } else {
       ok = resolveNodeModule(spec)
       reason = 'package not installed in any node_modules'

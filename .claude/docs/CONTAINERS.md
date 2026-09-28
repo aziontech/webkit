@@ -45,10 +45,10 @@ Two consequences you have to actively remember:
 ## The three-layer skeleton
 
 ```vue
-<BannerContainer hero max-width="7xl">   <!-- 1. fluid hero band, full-bleed, owns border-b -->
+<Hero kind="screen" max-width="7xl">     <!-- 1. fluid hero band, full-bleed, owns border-b -->
   <template #background> … </template>
   <PageHeader size="hero" eyebrow="…" title="…" description="…" />
-</BannerContainer>
+</Hero>
 
 <SectionContainer max-width="7xl">        <!-- 2. framed column, owns border-x -->
   <SectionModule :divided="false" title="…">…</SectionModule>   <!-- 3. bricks -->
@@ -67,9 +67,9 @@ Live: [`WebkitHub.vue:200-363`](../../apps/webkit-sample/src/hub/views/WebkitHub
 
 ---
 
-## 1. The hero rule — `BannerContainer`
+## 1. The hero rule — `Hero`
 
-[`BannerContainer.vue`](../../apps/webkit-sample/src/shared/ui/layout/BannerContainer.vue)
+[`hero.vue`](../../packages/webkit/src/components/marketing/hero/hero.vue)
 
 A **full-bleed** band. Its bottom hairline runs the entire viewport width; the framed column hangs
 below it. That contrast — one edge-to-edge rule above a narrower framed column — is what makes the
@@ -85,7 +85,7 @@ frame read as *drawn on* the page rather than as a card sitting on it.
 </section>
 ```
 
-**`hero` fills exactly one screen.** It subtracts `--banner-offset` from `100dvh`, so a banner
+**`kind="screen"` fills exactly one screen.** It subtracts `--banner-offset` from `100dvh`, so a banner
 mounted under fixed chrome still measures one viewport. The page passes the chrome height in:
 
 ```html
@@ -304,7 +304,7 @@ Found while documenting; **not fixed** — each changes rendered output.
    frame, no crosshairs, no hatch**. One-line fix:
    `import FrameBox from './foundations/components/layout/FrameBox.vue'`.
 
-2. **`maxWidth` keys don't mean the same width in the two containers.** `BannerContainer`'s map is
+2. **`maxWidth` keys don't mean the same width in the two containers.** `Hero`'s map is
    shifted two steps down from `SectionContainer`'s — `max-width="7xl"` gives `--container-5xl`
    (1192px) in the banner but `--container-7xl` (1620px) in the column; `"6xl"` gives 1024px vs
    1388px. `SectionContainer`'s docstring says *"match the banner above it"*, which reads as "pass
