@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5467-1638
   node_id: 5467:1638
-checksum: 797eb1b1567a34b098a92e933f16ed0fe1f3a23a85aeb1c300cfcdbb09af4778
+checksum: aac77d0ee569fb38a714c57f5959802dd653b847979c1b0ae48b68e5d79f0607
 created: 2026-08-10
-last_updated: 2026-08-28
+last_updated: 2026-09-26
 ---
 # Footer — Component Spec
 
@@ -47,7 +47,7 @@ Content (links, labels, languages, status, brand, tagline) always comes from the
 
 - `global-header` — the top-of-page chrome counterpart; same shell philosophy (regions composed by the consumer).
 - `brand`, `icon-button`, `status-indicator`, `select` — the components consumers compose inside the bands; the footer reimplements none of them.
-- `frame-box` — the footer's own frame: the hatched gutters, the closing band and the signature box are `FrameBox` instances (`borders` / `marks` / `hatch`).
+- `frame-box` — the footer's own frame: the hatched gutters, the framed column and the signature box are `FrameBox` instances (`borders` / `marks` / `hatch`).
 
 ## Best practices
 
@@ -58,7 +58,7 @@ Content (links, labels, languages, status, brand, tagline) always comes from the
 - Keep each band close to the canonical content (up to ~7 social icons; one status indicator; one language select; one brand lockup; a one-line tagline). Every band grows past its `min-h-14` floor rather than clipping, so a longer status string or an extra icon wraps safely — but a much heavier cluster belongs in the columns, not in a band.
 - Give the `tagline` slot plain text, not a heading element: the footer already wraps it in the `.text-heading-xl` measure, and a real `h*` in a `contentinfo` landmark competes with the page's own outline.
 - Pick the placement from the page, not from the look: `site` on a page that is a framed marketing column (its hero, sections and this footer share one measure), `content` — the default — anywhere the footer closes an app or docs zone. A `site` footer under an unframed page draws a frame nothing above it continues.
-- Leave the gutters and the closing band alone — they are the `site` frame's own page material, and the placement decides them. A page that needs more air below the footer adds a `SectionGap`, and one that needs none is not this design.
+- Leave the gutters and the column frame alone — they are the `site` frame's own page material, and the placement decides them. A page that needs more air below the footer adds a `SectionGap`, and one that needs none is not this design.
 
 ## Usage
 
@@ -128,7 +128,7 @@ import FooterLink from '@aziontech/webkit/footer-link'
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
 | `ariaLabel` | `string` | `'Footer'` | false | Accessible name for the contentinfo landmark. |
-| `kind` | `'content' \| 'site'` | `'content'` | false | Where the footer sits: `content` is the default — the bands run full bleed across whatever zone holds the footer, opening on the page boundary; `site` closes a framed marketing page instead, capping the bands at the site measure and drawing the frame that page carries: the side rules, the hatched gutters and the closing band. |
+| `kind` | `'content' \| 'site'` | `'content'` | false | Where the footer sits: `content` is the default — the bands run full bleed across whatever zone holds the footer, opening on the page boundary; `site` closes a framed marketing page instead, capping the bands at the site measure and drawing the frame that page carries: the side rules, the hatched gutters and the corner marks, closing on a full-bleed bottom rule. |
 
 ## Events
 
@@ -152,7 +152,7 @@ import FooterLink from '@aziontech/webkit/footer-link'
 ## States
 
 - Visual states: `default` on the shell and columns; `default`, `hover`, `focus-visible`, `active`, `visited` on `footer-link`.
-- Placement: `data-kind="content" | "site"` on the root (from `kind`); the bands read it through `group-data-[kind=site]:` for the cap and the side rules, and the gutters and closing band render only in `site`.
+- Placement: `data-kind="content" | "site"` on the root (from `kind`); the bands read it through `group-data-[kind=site]:` for the cap and the bottom rule, the column `FrameBox` draws its side rules and corner marks only in `site`, and the gutters render only in `site`.
 - No `data-state`; the shell has no interactive states — slotted children own their own.
 
 ## Motion & Animations
@@ -185,8 +185,7 @@ import FooterLink from '@aziontech/webkit/footer-link'
 | signature inner padding | `var(--spacing-lg)` |
 | signature brand ↔ tagline gap | `var(--spacing-md)` stacked / `var(--spacing-lg)` from `md` |
 | tagline typography / color | `.text-heading-xl` / `var(--text-default)` |
-| gutter + closing band texture | `FrameBox hatch` (pitch `var(--spacing-lg)`, `var(--border-default)`) |
-| closing band height | `calc(var(--spacing-xxl) * 2)` |
+| gutter texture | `FrameBox hatch` (pitch `var(--spacing-lg)`, `var(--border-default)`) |
 | column title typography / color | `.text-label-sm` / `var(--text-muted)` |
 | link typography / color | `.text-label-sm` / `var(--text-default)` |
 | link hover color | `var(--text-muted)` |
@@ -198,14 +197,13 @@ import FooterLink from '@aziontech/webkit/footer-link'
 |---|---|---|
 | `--container-max-width` (1280px content measure) | `max-w-(--layout-measure-site)` (1388px) in the `site` placement | Closed. The footer no longer picks a rung to approximate the Figma number: it takes the marketing site's own measure, because the hero, the sections and this footer have to resolve to one width or the frame's side rules do not meet. The measure is the decision; 1280 was one band's reading of it |
 | Brand lockup at 44px (Default) / 16px (Mobile) | `Brand size="large"` (32px) at every width — `size` has no 44px step and is a prop, so it cannot be responsive | `TODO`: add a 44px step to `Brand`, or a responsive `size`. The consumer could pass two `Brand`s behind `hidden`/`md:block`, which the spec deliberately does not ask for |
-| closing band 200px (Default) / 120px (Mobile) | `calc(var(--spacing-xxl) * 2)` → 64px / 192px, the nearest single expression on the responsive step | `TODO`: no token pair matches both ends (the ratio is not constant); revisit if the design fixes one |
 | social icon pitch 6px (Default) / 4px (Mobile) | `var(--spacing-xxs)` (4px) | `TODO`: 2px under Figma at desktop; no semantic step sits between 4 and 8 |
 | tagline weight 400 (`--font-weight-normal`) | `.text-heading-xl`, which renders 300 since #876 lightened the heading scale | None — the theme is the authority on weight; the Figma variable predates that change |
 
 ## Accessibility (WCAG 2.1 AA)
 
 - Root renders as `<footer>` — the implicit `contentinfo` landmark — with `aria-label` from `ariaLabel`.
-- The two hatched gutters and the closing band carry `aria-hidden="true"`: they hold no content, so without it a screen reader announces three empty groups at the end of every page.
+- The two hatched gutters carry `aria-hidden="true"`: they hold no content, so without it a screen reader announces two empty groups at the end of every page.
 - Each `footer-column` renders a `<nav>` labelled via `aria-labelledby` pointing at its title (`useId`), so link groups are unique, navigable landmarks.
 - Keyboard map: none on the shell; `Tab` moves through links in DOM order; `Enter` activates.
 - Visible focus on links: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`.
@@ -216,7 +214,7 @@ import FooterLink from '@aziontech/webkit/footer-link'
 ## Stories (Storybook)
 
 - Default — the `content` placement: the bands full bleed, opening on the page boundary.
-- SitePlacement — the `site` placement: the same bands capped at the site measure, with the side rules, the hatched gutters and the closing band that finish a marketing page's frame.
+- SitePlacement — the `site` placement: the same bands capped at the site measure, with the side rules, the hatched gutters and the framed column whose bottom rule finishes a marketing page's frame.
 
 ## Constraints — DO NOT
 
