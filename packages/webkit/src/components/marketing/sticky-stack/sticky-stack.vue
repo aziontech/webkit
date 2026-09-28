@@ -155,15 +155,15 @@
       data-sticky-stack-anchor
       aria-hidden="true"
       :style="{ '--sticky-stack-slot': index }"
-      class="pointer-events-none absolute left-0 hidden w-px lg:block lg:top-[calc(100dvh*var(--sticky-stack-dwell)*var(--sticky-stack-slot))]"
+      class="pointer-events-none absolute left-0 hidden w-px lg:block lg:scroll-mt-[var(--sticky-stack-top,0)] lg:top-[calc(100dvh*var(--sticky-stack-dwell)*var(--sticky-stack-slot))]"
     />
 
     <div
       ref="frame"
-      class="lg:sticky lg:top-0 lg:h-dvh lg:overflow-hidden lg:pt-[var(--sticky-stack-top,0)]"
+      class="lg:sticky lg:top-[var(--sticky-stack-top,0)] lg:h-[calc(100dvh-var(--sticky-stack-top,0rem))] lg:overflow-hidden"
     >
-      <div class="grid grid-cols-1 lg:h-full lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-center">
-        <ol class="m-0 flex list-none flex-col p-0 lg:min-w-0">
+      <div class="grid grid-cols-1 lg:h-full lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+        <ol class="m-0 flex list-none flex-col p-0 lg:min-w-0 lg:self-start">
           <li
             v-for="(item, index) in items"
             :key="`${item.title}-${index}`"

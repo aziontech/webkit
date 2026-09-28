@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: ead7590ee79d019a4fb482b4a9ec9021190c7c19c782c924b19dac0d8dc7c7ad
+checksum: 158f737f988aebdba9af7a6a915dacd7cec2c03ba2010ae5e807a4a00d941e43
 created: 2026-09-25
 last_updated: 2026-09-25
 ---
@@ -25,14 +25,12 @@ A band that pins to the viewport and is read by scrolling through it: a stack of
 
 - For peer claims a reader should be able to jump between at will → use `media-tabs`, which selects on hover, click and a timer without taking the scroll.
 - For one claim beside one picture → use `media-split`.
-- For an ordered walkthrough the reader steps through by hand → use `accordion-gallery`.
 - For questions and answers, or any run longer than about six items → use `faq`. A pinned band holds the page for its whole run, and a long run holds it too long.
 - On a page that is already a single short screen: there is no scroll to spend.
 
 ## Related
 
 - `media-tabs` — the pointer-driven sibling. Same two-column anatomy; the selection moves on hover, click and a timer, and the band does not pin.
-- `accordion-gallery` — the sequenced sibling a reader drives by clicking, with a progress bar per step.
 - `media-split` — one claim, one medium, no selection and no pin.
 - `code-block` — the medium this band most often holds, one sample per claim.
 - `illustration` — the official scene a claim's `media` slot otherwise holds.
