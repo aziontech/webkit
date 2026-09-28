@@ -148,6 +148,8 @@
     v-bind="$attrs"
     :data-testid="testId"
     :data-scrollable="canScroll || null"
+    :data-can-scroll-prev="canScrollPrev || null"
+    :data-can-scroll-next="canScrollNext || null"
     aria-roledescription="carousel"
     :aria-label="ariaLabel || undefined"
   >
@@ -161,8 +163,10 @@
       ref="track"
       tabindex="0"
       :data-scrollable="canScroll || null"
+      :data-can-scroll-prev="canScrollPrev || null"
+      :data-can-scroll-next="canScrollNext || null"
       :data-dragging="dragging || null"
-      class="flex snap-x snap-mandatory gap-[var(--carousel-gap,var(--spacing-md))] overflow-x-auto scroll-smooth scrollbar-none [&::-webkit-scrollbar]:hidden data-[dragging]:cursor-grabbing data-[dragging]:snap-none data-[dragging]:scroll-auto data-[dragging]:select-none data-[scrollable]:not-data-[dragging]:cursor-grab focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:scroll-auto"
+      class="[--carousel-fade-end:0%] [--carousel-fade-start:0%] data-[can-scroll-next]:[--carousel-fade-end:12%] data-[can-scroll-prev]:[--carousel-fade-start:12%] data-[scrollable]:not-focus-visible:mask-[linear-gradient(to_right,transparent,black_var(--carousel-fade-start),black_calc(100%-var(--carousel-fade-end)),transparent)] flex snap-x snap-mandatory overflow-x-auto scroll-smooth scrollbar-none [&::-webkit-scrollbar]:hidden data-[dragging]:cursor-grabbing data-[dragging]:snap-none data-[dragging]:scroll-auto data-[dragging]:select-none data-[scrollable]:not-data-[dragging]:cursor-grab focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:scroll-auto"
     >
       <slot />
     </ul>

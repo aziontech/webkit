@@ -7,7 +7,7 @@
   })
 
   defineSlots<{
-    /** The slide's content, composed as real elements. */
+    /** The card's content, composed as real elements; it fills the card, so every card in the row matches the tallest. */
     default(): unknown
   }>()
 
@@ -22,7 +22,7 @@
   <li
     v-bind="$attrs"
     :data-testid="testId"
-    class="shrink-0 snap-start"
+    class="grid shrink-0 snap-start border border-(--border-default) bg-(--bg-surface) p-(--spacing-xl) not-last:-mr-px"
   >
     <slot />
   </li>

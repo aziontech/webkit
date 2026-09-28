@@ -9965,7 +9965,7 @@
           "notes": "The step controls, composed as `Carousel.Previous` and `Carousel.Next`; rendered above the track."
         }
       ],
-      "purpose": "A horizontally scrollable track of slides with snap points and a pair of step controls. It is built on native scrolling and CSS scroll snap rather than a carousel runtime, so it is draggable, swipeable and keyboard-scrollable by default, and it never moves on its own.",
+      "purpose": "A horizontally scrollable track of cards with snap points and a pair of step controls. It is built on native scrolling and CSS scroll snap rather than a carousel runtime, so it is draggable, swipeable and keyboard-scrollable by default, and it never moves on its own. The unit is Carousel, then a `Carousel.Item` card, then its content — usually a `quote`. The cards sit edge to edge with no gutter: each draws its own hairline and the next one overlaps it by a pixel, so the row reads as one ruled strip. The track fades at whichever end still has cards past it.",
       "useWhen": [
         "When a set of cards, quotes, logos or figures is longer than the row it sits in and the reader chooses how far to go.",
         "For a peek-and-swipe row on narrow screens where a grid would stack into a very long column.",
@@ -9980,13 +9980,14 @@
       "related": [
         "bento-grid` — the framed grid, when everything should be visible at once.",
         "logo-wall` — a wrapping grid of marks; reach for the carousel only when the wall is too long.",
-        "feature-card` — the usual slide content.",
+        "topic` — the usual slide content.",
         "scroll-area` — the console's styled scroll container; this one owns snap points and step controls."
       ],
       "bestPractices": [
         "Never put essential content in a carousel. A slide past the first is content a reader may never see.",
-        "Size the slides on `Carousel.Item` with your own width classes — the item is deliberately unsized so a page can show one slide on mobile and three on desktop.",
-        "Set `--carousel-gap` on the root to change the space between slides; left alone it is `var(--spacing-md)`. A band whose slides carry their own borders sets it to `0` so the borders meet instead of floating apart.",
+        "Size the cards on `Carousel.Item` with your own width classes — the item is deliberately unsized so a page can show one card on mobile and three on desktop.",
+        "Put content straight into `Carousel.Item`, not inside another framed box. The item is already the card (border, surface, padding), and a second frame inside it draws two rules.",
+        "The row has no gutter by design. Space between cards would break the ruled strip into floating tiles; a band that needs air between its items wants a grid, not this track.",
         "Keep a partial slide visible at the trailing edge on narrow screens; a peek is what tells a reader the track scrolls at all.",
         "The track is dragged with the pointer as well as scrolled. A mouse gets a grab cursor and drags the row directly; touch and pen keep native scrolling and its momentum, which is already better than anything a handler would impose.",
         "Always name the carousel with `ariaLabel`. \"Customer stories\" tells a screen-reader user what they are about to scroll through; an unnamed scroll region does not.",
@@ -10023,7 +10024,7 @@
           "notes": "The step controls, composed as `Carousel.Previous` and `Carousel.Next`; rendered above the track."
         }
       ],
-      "purpose": "A horizontally scrollable track of slides with snap points and a pair of step controls. It is built on native scrolling and CSS scroll snap rather than a carousel runtime, so it is draggable, swipeable and keyboard-scrollable by default, and it never moves on its own.",
+      "purpose": "A horizontally scrollable track of cards with snap points and a pair of step controls. It is built on native scrolling and CSS scroll snap rather than a carousel runtime, so it is draggable, swipeable and keyboard-scrollable by default, and it never moves on its own. The unit is Carousel, then a `Carousel.Item` card, then its content — usually a `quote`. The cards sit edge to edge with no gutter: each draws its own hairline and the next one overlaps it by a pixel, so the row reads as one ruled strip. The track fades at whichever end still has cards past it.",
       "useWhen": [
         "When a set of cards, quotes, logos or figures is longer than the row it sits in and the reader chooses how far to go.",
         "For a peek-and-swipe row on narrow screens where a grid would stack into a very long column.",
@@ -10038,13 +10039,14 @@
       "related": [
         "bento-grid` — the framed grid, when everything should be visible at once.",
         "logo-wall` — a wrapping grid of marks; reach for the carousel only when the wall is too long.",
-        "feature-card` — the usual slide content.",
+        "topic` — the usual slide content.",
         "scroll-area` — the console's styled scroll container; this one owns snap points and step controls."
       ],
       "bestPractices": [
         "Never put essential content in a carousel. A slide past the first is content a reader may never see.",
-        "Size the slides on `Carousel.Item` with your own width classes — the item is deliberately unsized so a page can show one slide on mobile and three on desktop.",
-        "Set `--carousel-gap` on the root to change the space between slides; left alone it is `var(--spacing-md)`. A band whose slides carry their own borders sets it to `0` so the borders meet instead of floating apart.",
+        "Size the cards on `Carousel.Item` with your own width classes — the item is deliberately unsized so a page can show one card on mobile and three on desktop.",
+        "Put content straight into `Carousel.Item`, not inside another framed box. The item is already the card (border, surface, padding), and a second frame inside it draws two rules.",
+        "The row has no gutter by design. Space between cards would break the ruled strip into floating tiles; a band that needs air between its items wants a grid, not this track.",
         "Keep a partial slide visible at the trailing edge on narrow screens; a peek is what tells a reader the track scrolls at all.",
         "The track is dragged with the pointer as well as scrolled. A mouse gets a grab cursor and drags the row directly; touch and pen keep native scrolling and its momentum, which is already better than anything a handler would impose.",
         "Always name the carousel with `ariaLabel`. \"Customer stories\" tells a screen-reader user what they are about to scroll through; an unnamed scroll region does not.",

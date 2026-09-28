@@ -2,16 +2,18 @@ import Carousel from '@aziontech/webkit/carousel'
 import CarouselItem from '@aziontech/webkit/carousel-item'
 import CarouselNext from '@aziontech/webkit/carousel-next'
 import CarouselPrevious from '@aziontech/webkit/carousel-previous'
+import Quote from '@aziontech/webkit/quote'
 
 import { toSfc } from '../../../_shared/story-source'
 
-const components = { Carousel, CarouselItem, CarouselNext, CarouselPrevious }
+const components = { Carousel, CarouselItem, CarouselNext, CarouselPrevious, Quote }
 
 const IMPORT = [
   "import Carousel from '@aziontech/webkit/carousel'",
   "import CarouselItem from '@aziontech/webkit/carousel-item'",
   "import CarouselNext from '@aziontech/webkit/carousel-next'",
-  "import CarouselPrevious from '@aziontech/webkit/carousel-previous'"
+  "import CarouselPrevious from '@aziontech/webkit/carousel-previous'",
+  "import Quote from '@aziontech/webkit/quote'"
 ]
 
 /** @type {import('@storybook/vue3').Meta<typeof Carousel>} */
@@ -30,7 +32,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'A horizontally scrollable track of slides with snap points and a pair of step controls. It is built on native scrolling and CSS scroll snap rather than a carousel runtime, so it is draggable, swipeable and keyboard-scrollable by default, and it never moves on its own. Size the slides yourself on `CarouselItem` — the slide is deliberately unsized so one page can show a single slide on mobile and three on desktop.'
+          'A horizontally scrollable track of cards with snap points and a pair of step controls. It is built on native scrolling and CSS scroll snap rather than a carousel runtime, so it is draggable, swipeable and keyboard-scrollable by default, and it never moves on its own. The unit is Carousel, then a `CarouselItem` card, then its content — usually a `Quote`. The cards sit edge to edge with no gutter, each hairline landing on the next, and the row fades at whichever end still has cards past it. Size the cards yourself on `CarouselItem`: they are deliberately unsized, so one page can show a single card on mobile and three on desktop.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -47,7 +49,7 @@ const meta = {
     },
     default: {
       control: false,
-      description: 'The slides, composed as `CarouselItem` elements in reading order.',
+      description: 'The cards, composed as `CarouselItem` elements in reading order.',
       table: { category: 'slots' }
     },
     controls: {
@@ -61,41 +63,51 @@ const meta = {
 
 export default meta
 
-const DEFAULT_TEMPLATE = `<Carousel aria-label="Customer stories">
+const TESTIMONIALS = [
+  {
+    text: 'With Azion, we scale proprietary AI models without managing infrastructure — inspecting millions of websites daily and automating the fastest threat takedown in the market.',
+    name: 'Fabio Ramos',
+    jobTitle: 'CEO, Axur'
+  },
+  {
+    text: 'Filing season triples our traffic in a week. Azion absorbs it without a capacity conversation, and we ship changes to the edge in minutes.',
+    name: 'Vitor Torres',
+    jobTitle: 'CEO, Contabilizei'
+  },
+  {
+    text: 'Magalu guarantees high availability for hundreds of global-scale applications, even during campaigns like Liquidação Fantástica and Black das Blacks.',
+    name: 'Allan Monteiro',
+    jobTitle: 'CISO & Head of Technology, Magalu'
+  },
+  {
+    text: 'One of the best CDN and WAF solutions I have ever used. Easy to implement and integrate, with the speed and low latency that make a real difference for our customers.',
+    name: 'Julian H',
+    jobTitle: 'IT OPS, SRE & SEC Manager, Dafiti'
+  },
+  {
+    text: 'We block more than four million threats in six months without a single rule running on our own servers, and the security team reads one dashboard instead of five.',
+    name: 'Renata Alves',
+    jobTitle: 'Head of Information Security, Netshoes'
+  }
+]
+
+const cards = (width) =>
+  TESTIMONIALS.map(
+    (item) => `  <CarouselItem class="${width}">
+    <Quote
+      text="${item.text}"
+      name="${item.name}"
+      job-title="${item.jobTitle}"
+    />
+  </CarouselItem>`
+  ).join('\n')
+
+const DEFAULT_TEMPLATE = `<Carousel aria-label="Customer testimonials">
   <template #controls>
     <CarouselPrevious />
     <CarouselNext />
   </template>
-  <CarouselItem class="w-72">
-    <div class="h-full rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-lg)">
-      <h3 class="m-0 text-heading-sm text-(--text-default)">Shipped in an afternoon</h3>
-      <p class="m-0 mt-(--spacing-sm) text-body-sm text-(--text-muted)">A checkout rewrite went live the same day it was merged, with no pipeline to assemble first.</p>
-    </div>
-  </CarouselItem>
-  <CarouselItem class="w-72">
-    <div class="h-full rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-lg)">
-      <h3 class="m-0 text-heading-sm text-(--text-default)">Black Friday without a war room</h3>
-      <p class="m-0 mt-(--spacing-sm) text-body-sm text-(--text-muted)">Peak traffic was absorbed where it arrived, so there was no region to size ahead of the sale.</p>
-    </div>
-  </CarouselItem>
-  <CarouselItem class="w-72">
-    <div class="h-full rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-lg)">
-      <h3 class="m-0 text-heading-sm text-(--text-default)">One console for the whole stack</h3>
-      <p class="m-0 mt-(--spacing-sm) text-body-sm text-(--text-muted)">Events, metrics and the application itself live in one place, with no second tool to wire up.</p>
-    </div>
-  </CarouselItem>
-  <CarouselItem class="w-72">
-    <div class="h-full rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-lg)">
-      <h3 class="m-0 text-heading-sm text-(--text-default)">Half the infrastructure bill</h3>
-      <p class="m-0 mt-(--spacing-sm) text-body-sm text-(--text-muted)">Billing follows requests and compute time, so an idle environment costs nothing to keep running.</p>
-    </div>
-  </CarouselItem>
-  <CarouselItem class="w-72">
-    <div class="h-full rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-lg)">
-      <h3 class="m-0 text-heading-sm text-(--text-default)">Migrated without a freeze</h3>
-      <p class="m-0 mt-(--spacing-sm) text-body-sm text-(--text-muted)">Traffic moved over a weekend, one route at a time, with the old origin still answering behind it.</p>
-    </div>
-  </CarouselItem>
+${cards('w-[85vw] max-w-120 sm:w-120')}
 </Carousel>`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Carousel>} */
@@ -106,66 +118,19 @@ export const Default = {
     docs: {
       description: {
         story:
-          'Five slides at a fixed `w-72`, wider together than the row that holds them, so the track scrolls and both controls are live. Drag the track, swipe it, or focus it and use the arrow keys — the step controls are one way in, not the only one. Each control disables itself at its end of the track, so a reader is never offered a step that does nothing.'
+          'Five quote cards at the width the home page uses, wider together than the row, so the track scrolls and both controls are live. The cards meet with no gutter and the row fades at the end that continues. Drag the track, swipe it, or focus it and use the arrow keys: the step controls are one way in, not the only one. Each control disables itself at its end of the track, so a reader is never offered a step that does nothing.'
       },
       source: { code: toSfc(IMPORT, DEFAULT_TEMPLATE) }
     }
   }
 }
 
-const PEEK_TEMPLATE = `<Carousel aria-label="Platform capabilities">
+const PEEK_TEMPLATE = `<Carousel aria-label="Customer testimonials">
   <template #controls>
     <CarouselPrevious />
     <CarouselNext />
   </template>
-  <CarouselItem class="w-56">
-    <div class="h-full rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-lg)">
-      <h3 class="m-0 text-heading-sm text-(--text-default)">Edge Application</h3>
-      <p class="m-0 mt-(--spacing-sm) text-body-sm text-(--text-muted)">Serve every request from the location closest to the user.</p>
-    </div>
-  </CarouselItem>
-  <CarouselItem class="w-56">
-    <div class="h-full rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-lg)">
-      <h3 class="m-0 text-heading-sm text-(--text-default)">Edge Functions</h3>
-      <p class="m-0 mt-(--spacing-sm) text-body-sm text-(--text-muted)">Run code on the request path without a server to keep alive.</p>
-    </div>
-  </CarouselItem>
-  <CarouselItem class="w-56">
-    <div class="h-full rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-lg)">
-      <h3 class="m-0 text-heading-sm text-(--text-default)">Edge SQL</h3>
-      <p class="m-0 mt-(--spacing-sm) text-body-sm text-(--text-muted)">Query a database that sits beside the application, not a region away.</p>
-    </div>
-  </CarouselItem>
-  <CarouselItem class="w-56">
-    <div class="h-full rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-lg)">
-      <h3 class="m-0 text-heading-sm text-(--text-default)">Edge Storage</h3>
-      <p class="m-0 mt-(--spacing-sm) text-body-sm text-(--text-muted)">Keep objects where they are read, with no bucket to replicate by hand.</p>
-    </div>
-  </CarouselItem>
-  <CarouselItem class="w-56">
-    <div class="h-full rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-lg)">
-      <h3 class="m-0 text-heading-sm text-(--text-default)">Web Application Firewall</h3>
-      <p class="m-0 mt-(--spacing-sm) text-body-sm text-(--text-muted)">Filter traffic before it reaches the application, on the same path.</p>
-    </div>
-  </CarouselItem>
-  <CarouselItem class="w-56">
-    <div class="h-full rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-lg)">
-      <h3 class="m-0 text-heading-sm text-(--text-default)">Real-Time Metrics</h3>
-      <p class="m-0 mt-(--spacing-sm) text-body-sm text-(--text-muted)">Watch requests, errors and latency as they happen, per application.</p>
-    </div>
-  </CarouselItem>
-  <CarouselItem class="w-56">
-    <div class="h-full rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-lg)">
-      <h3 class="m-0 text-heading-sm text-(--text-default)">Data Stream</h3>
-      <p class="m-0 mt-(--spacing-sm) text-body-sm text-(--text-muted)">Ship every event to the tool that already holds your logs.</p>
-    </div>
-  </CarouselItem>
-  <CarouselItem class="w-56">
-    <div class="h-full rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-lg)">
-      <h3 class="m-0 text-heading-sm text-(--text-default)">Bot Manager</h3>
-      <p class="m-0 mt-(--spacing-sm) text-body-sm text-(--text-muted)">Separate automated traffic from readers before either is served.</p>
-    </div>
-  </CarouselItem>
+${cards('w-72')}
 </Carousel>`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Carousel>} */
@@ -176,7 +141,7 @@ export const Peek = {
     docs: {
       description: {
         story:
-          'Narrower slides, and more of them, so one lands part-way across the trailing edge. That partial slide is the whole point: it is what tells a reader the track continues, before they have touched a control. Narrow the viewport and the peek stays — the slide width is fixed, so the row simply shows fewer of them.'
+          'Narrower cards, so one lands part-way across the trailing edge under the fade. That partial card is the whole point: it tells a reader the track continues before they have touched a control. Narrow the viewport and the peek stays. The card width is fixed, so the row simply shows fewer of them.'
       },
       source: { code: toSfc(IMPORT, PEEK_TEMPLATE) }
     }

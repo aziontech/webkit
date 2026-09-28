@@ -4,16 +4,18 @@ category: marketing
 structure: composition
 status: implemented
 spec_version: 1
-checksum: 4bd541c2a16d2e545f4e0873677428a221903790d571d3c64ccf191ed735dad1
+checksum: 04806fbfcf832773d171cfcfa4a367ca8c072b82d37a73d2775994f75b227096
 created: 2026-09-22
-last_updated: 2026-09-24
+last_updated: 2026-09-26
 ---
 
 # Carousel — Component Spec
 
 ## Purpose
 
-A horizontally scrollable track of slides with snap points and a pair of step controls. It is built on native scrolling and CSS scroll snap rather than a carousel runtime, so it is draggable, swipeable and keyboard-scrollable by default, and it never moves on its own.
+A horizontally scrollable track of cards with snap points and a pair of step controls. It is built on native scrolling and CSS scroll snap rather than a carousel runtime, so it is draggable, swipeable and keyboard-scrollable by default, and it never moves on its own.
+
+The unit is Carousel, then a `Carousel.Item` card, then its content — usually a `quote`. The cards sit edge to edge with no gutter: each draws its own hairline and the next one overlaps it by a pixel, so the row reads as one ruled strip. The track fades at whichever end still has cards past it.
 
 ## When to use
 
@@ -32,14 +34,15 @@ A horizontally scrollable track of slides with snap points and a pair of step co
 
 - `bento-grid` — the framed grid, when everything should be visible at once.
 - `logo-wall` — a wrapping grid of marks; reach for the carousel only when the wall is too long.
-- `feature-card` — the usual slide content.
+- `topic` — the usual slide content.
 - `scroll-area` — the console's styled scroll container; this one owns snap points and step controls.
 
 ## Best practices
 
 - Never put essential content in a carousel. A slide past the first is content a reader may never see.
-- Size the slides on `Carousel.Item` with your own width classes — the item is deliberately unsized so a page can show one slide on mobile and three on desktop.
-- Set `--carousel-gap` on the root to change the space between slides; left alone it is `var(--spacing-md)`. A band whose slides carry their own borders sets it to `0` so the borders meet instead of floating apart.
+- Size the cards on `Carousel.Item` with your own width classes — the item is deliberately unsized so a page can show one card on mobile and three on desktop.
+- Put content straight into `Carousel.Item`, not inside another framed box. The item is already the card (border, surface, padding), and a second frame inside it draws two rules.
+- The row has no gutter by design. Space between cards would break the ruled strip into floating tiles; a band that needs air between its items wants a grid, not this track.
 - Keep a partial slide visible at the trailing edge on narrow screens; a peek is what tells a reader the track scrolls at all.
 - The track is dragged with the pointer as well as scrolled. A mouse gets a grab cursor and drags the row directly; touch and pen keep native scrolling and its momentum, which is already better than anything a handler would impose.
 - Always name the carousel with `ariaLabel`. "Customer stories" tells a screen-reader user what they are about to scroll through; an unnamed scroll region does not.
@@ -67,7 +70,7 @@ import Carousel from '@aziontech/webkit/carousel'
 
 ## Sub-components
 
-- `carousel-item/carousel-item.vue` — one slide; a snap point in the track that does not shrink and takes its width from the consumer.
+- `carousel-item/carousel-item.vue` — one card; a bordered, padded surface that is a snap point in the track, does not shrink, stretches its content to the row's tallest card, and takes its width from the consumer.
 - `carousel-previous/carousel-previous.vue` — context-aware control that steps the track back; disables itself at the start.
 - `carousel-next/carousel-next.vue` — context-aware control that steps the track forward; disables itself at the end.
 
@@ -92,6 +95,8 @@ import Carousel from '@aziontech/webkit/carousel'
 
 - Visual states: `default`, plus `hover` / `focus-visible` / `disabled` on each step control
 - `data-scrollable` is present on the root while the track overflows its row; a track that fits renders no controls to press
+- `data-can-scroll-prev` / `data-can-scroll-next` are on the root and the track while the track has content past its start / end edge. The track fades only the edge that continues, over 12% of its own width, so the row at rest fades on the right alone
+- The fade stands down while the track has keyboard focus, so the focus ring it would otherwise mask is fully visible
 - The track carries `data-scrollable` too, which is what gives it the grab cursor; a track that fits shows the ordinary pointer, because there is nothing to drag
 - `data-dragging` is on the track for the length of a mouse drag: the cursor closes, snapping and smooth scrolling stand down so the row tracks the pointer exactly, and text selection is suppressed
 - A drag that travels more than a few pixels swallows the click it ends on, so releasing over a link inside a slide does not follow it
@@ -115,7 +120,9 @@ import Carousel from '@aziontech/webkit/carousel'
 | control glyph | `var(--text-muted)` |
 | control glyph (hover) | `var(--text-default)` |
 | control shape | `var(--shape-button)` |
-| spacing (slide gap) | `var(--spacing-md)`, as the fallback of `--carousel-gap` — a band that wants its slides flush sets that property to `0` on the root |
+| card surface | `var(--bg-surface)` |
+| card border | `var(--border-default)` |
+| card padding | `var(--spacing-xl)` |
 | spacing (controls gap) | `var(--spacing-sm)` |
 | spacing (controls to track) | `var(--spacing-lg)` |
 | ring | `var(--ring-color)` |
@@ -139,7 +146,7 @@ import Carousel from '@aziontech/webkit/carousel'
 ## Stories (Storybook)
 
 - Default
-- Peek — narrow slides that overflow the row so the track scrolls and both controls are live (justified: a carousel whose content fits shows no scrolling and no enabled control, so the default alone never exercises the component's purpose)
+- Peek — narrow quote cards that overflow the row so one lands under the trailing fade (justified: a carousel whose content fits shows no scrolling and no enabled control, so the default alone never exercises the component's purpose)
 
 ## Constraints — DO NOT
 
