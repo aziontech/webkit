@@ -4,9 +4,9 @@ category: marketing
 structure: composition
 status: implemented
 spec_version: 1
-checksum: 1d0d59e79ce0d8b1c4763bc108a6ab8de986da5a7f9dd12f0ac981626fc3c986
+checksum: 14ffbd484a721da54a9683bd7416afd9ba1cd847526daf29d1a52da9755c6bfd
 created: 2026-09-22
-last_updated: 2026-09-24
+last_updated: 2026-09-26
 ---
 
 # Bento Grid — Component Spec
@@ -24,7 +24,7 @@ A mosaic of unequal cells on one set of shared rules: each cell claims a number 
 
 ## When NOT to use
 
-- When every claim carries the same weight → use `feature-card` in a plain grid the page owns.
+- When every claim carries the same weight → use `card-grid`.
 - For a row of measured figures → use `big-numbers`, which already draws this grid for numbers.
 - For a single copy-and-media pairing → use `media-split`.
 - For a list of questions → use `faq`.
@@ -32,7 +32,6 @@ A mosaic of unequal cells on one set of shared rules: each cell claims a number 
 ## Related
 
 - `card-grid` — the equal-cell grid with no spans, in the gap or divider register.
-- `feature-card` — the equal-weight tile, laid out by the page rather than by a grid component.
 - `big-numbers` — the same collapsed-rule grid, specialised for figures.
 - `media-split` — the two-column band when there is one claim, not several.
 - `frame-box` — the frame each cell is drawn with.

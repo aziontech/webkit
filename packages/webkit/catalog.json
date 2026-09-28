@@ -9987,14 +9987,13 @@
         "Whenever the cells hold composed content — copy, media, a control — rather than one repeated shape."
       ],
       "avoidWhen": [
-        "When every claim carries the same weight → use `feature-card` in a plain grid the page owns.",
+        "When every claim carries the same weight → use `card-grid`.",
         "For a row of measured figures → use `big-numbers`, which already draws this grid for numbers.",
         "For a single copy-and-media pairing → use `media-split`.",
         "For a list of questions → use `faq`."
       ],
       "related": [
         "card-grid` — the equal-cell grid with no spans, in the gap or divider register.",
-        "feature-card` — the equal-weight tile, laid out by the page rather than by a grid component.",
         "big-numbers` — the same collapsed-rule grid, specialised for figures.",
         "media-split` — the two-column band when there is one claim, not several.",
         "frame-box` — the frame each cell is drawn with."
@@ -10062,14 +10061,13 @@
         "Whenever the cells hold composed content — copy, media, a control — rather than one repeated shape."
       ],
       "avoidWhen": [
-        "When every claim carries the same weight → use `feature-card` in a plain grid the page owns.",
+        "When every claim carries the same weight → use `card-grid`.",
         "For a row of measured figures → use `big-numbers`, which already draws this grid for numbers.",
         "For a single copy-and-media pairing → use `media-split`.",
         "For a list of questions → use `faq`."
       ],
       "related": [
         "card-grid` — the equal-cell grid with no spans, in the gap or divider register.",
-        "feature-card` — the equal-weight tile, laid out by the page rather than by a grid component.",
         "big-numbers` — the same collapsed-rule grid, specialised for figures.",
         "media-split` — the two-column band when there is one claim, not several.",
         "frame-box` — the frame each cell is drawn with."
