@@ -70,10 +70,10 @@
            of the page language draws around a placed element. It holds still under the
            pointer — the plate behind the row is what answers it. -->
       <span
-        class="flex shrink-0 items-center border border-dashed border-(--border-default) p-(--spacing-xxs)"
+        class="flex size-10 shrink-0 items-center border border-dashed border-(--border-default) p-(--spacing-xxs)"
         aria-hidden="true"
       >
-        <span class="flex size-[30px] items-center justify-center bg-(--bg-surface-raised)">
+        <span class="flex size-full items-center justify-center bg-(--bg-surface-raised)">
           <!-- The group condition goes INSIDE the bracket. Chaining two group variants
                (group-data-[linked]:group-hover:) compiles to two separate ancestors and
                only matches a row nested in a second group — silently never here. -->

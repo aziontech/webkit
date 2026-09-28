@@ -9982,7 +9982,7 @@
       ],
       "avoidWhen": [
         "For the header's mega-menu → use `navigation-menu`, which owns the trigger, the panel, and the open/closed state this block deliberately has none of.",
-        "For a set of claims rather than destinations → use `card-grid` with `feature-card`, or `bento-grid` when the claims are unequal.",
+        "For a set of claims rather than destinations → use `card-grid` with `topic`, or `bento-grid` when the claims are unequal.",
         "For the site-wide link directory at the foot of the page → use `footer`, which already lays its columns out.",
         "For a trail back up the current hierarchy → use `breadcrumb`.",
         "For the headings of the page currently being read → use `doc-on-this-page`."
@@ -10051,7 +10051,7 @@
       ],
       "avoidWhen": [
         "For the header's mega-menu → use `navigation-menu`, which owns the trigger, the panel, and the open/closed state this block deliberately has none of.",
-        "For a set of claims rather than destinations → use `card-grid` with `feature-card`, or `bento-grid` when the claims are unequal.",
+        "For a set of claims rather than destinations → use `card-grid` with `topic`, or `bento-grid` when the claims are unequal.",
         "For the site-wide link directory at the foot of the page → use `footer`, which already lays its columns out.",
         "For a trail back up the current hierarchy → use `breadcrumb`.",
         "For the headings of the page currently being read → use `doc-on-this-page`."

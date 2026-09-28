@@ -4,9 +4,9 @@ category: marketing
 structure: composition
 status: implemented
 spec_version: 1
-checksum: 58e5069a4993e9ec7774e331520b1b15f29751c89ed48ec0e4f3f4741e560ae5
+checksum: 67180ad6ef9ce7aa6490e94fb3b1b691df27d7ad23cb8daf77302475f0009793
 created: 2026-09-24
-last_updated: 2026-09-24
+last_updated: 2026-09-26
 ---
 
 # Column Navigation — Component Spec
@@ -25,7 +25,7 @@ A directory of destinations laid out in columns on one set of shared hairlines: 
 ## When NOT to use
 
 - For the header's mega-menu → use `navigation-menu`, which owns the trigger, the panel, and the open/closed state this block deliberately has none of.
-- For a set of claims rather than destinations → use `card-grid` with `feature-card`, or `bento-grid` when the claims are unequal.
+- For a set of claims rather than destinations → use `card-grid` with `topic`, or `bento-grid` when the claims are unequal.
 - For the site-wide link directory at the foot of the page → use `footer`, which already lays its columns out.
 - For a trail back up the current hierarchy → use `breadcrumb`.
 - For the headings of the page currently being read → use `doc-on-this-page`.
