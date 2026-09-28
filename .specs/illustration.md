@@ -7,9 +7,9 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/aerxJReCkLz3x3z29IERE9/Assets?node-id=1901-225133
   node_id: 1901:225133
-checksum: 872ca60184a95b9975f2864293d96393f729c2e6536b6e0560d5afa9ccf8c7b0
+checksum: 835fb37b0e5be3844e32ba5b7962aee1ce86ba8a40be2dea88ab85d72530bff6
 created: 2026-08-05
-last_updated: 2026-09-24
+last_updated: 2026-09-28
 ---
 
 # Illustration — Component Spec
@@ -91,7 +91,7 @@ drift between the screens that use it.
 ## States
 
 - Visual states: `default` — an illustration is decorative and has no `hover`, `focus-visible`, `disabled`, `loading`, or `active` state, and is never interactive.
-- Every scene is drawn on the one 592×300 canvas (`--illustration-canvas-width` × `--illustration-canvas-height`), so scenes line up with each other in a grid. The root declares that frame as its intrinsic `width`/`height`, which reserves the box before the SVG loads, and renders at its container's width at that aspect ratio. A call site that wants it smaller caps it with a class.
+- Every scene is drawn on the one 592×300 canvas, so scenes line up with each other in a grid. The root declares that frame as its intrinsic `width`/`height`, which reserves the box before the SVG loads, and renders at its container's width at that aspect ratio. A call site that wants it smaller caps it with a class.
 - A `name` that resolves to no scene — empty, or not in the registry — renders the **placeholder**: a tinted frame reading `PLACE DESIGN ASSET`, marked `data-placeholder`. An unregistered `name` also warns in development; neither case throws, and neither collapses the layout. The placeholder is always decorative, `ariaLabel` or not: it draws no scene, so announcing a description of the missing artwork would describe something that is not on the page.
 - While a registered scene's SVG is still resolving, the frame already on screen stays — the placeholder never flashes in front of a scene that is about to arrive.
 
@@ -108,9 +108,8 @@ drift between the screens that use it.
 | _none_ | — |
 
 The component declares no utility that resolves a token: the artwork's every value lives
-inside the exported SVG, and the canvas the library is drawn on
-(`--illustration-canvas-width` × `--illustration-canvas-height`) reaches the root as the
-intrinsic `width`/`height` the frame already carries.
+inside the exported SVG, and the 592×300 canvas the library is drawn on reaches the root
+as the intrinsic `width`/`height` the frame already carries.
 
 ## Theme gaps
 

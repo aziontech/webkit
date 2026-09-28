@@ -17,9 +17,12 @@ const ASSETS = [
   'distributed-apis',
   'dns-protection',
   'fastest-path-to-live-website',
+  'global-network',
   'implement-api-gateway-security',
+  'improve-application-performance-and-reliability',
   'infrastructure-as-code',
   'live-debugging',
+  'low-latency',
   'modern-frontends',
   'preview',
   'programmable-security',
@@ -28,11 +31,6 @@ const ASSETS = [
   'retail-application-modernization',
   'runtime',
   'saas-platforms'
-]
-
-const CANVAS_TOKENS = [
-  ['--illustration-canvas-width', '37rem — 592px, the frame every scene is drawn on'],
-  ['--illustration-canvas-height', '18.75rem — 300px, the same frame']
 ]
 
 export default {
@@ -60,7 +58,7 @@ export const Library = {
   render: () => ({
     components: { PageContainer, PageHeader, SectionHeader, Illustration },
     setup() {
-      return { ASSETS, CANVAS_TOKENS, LABEL_CLASS, CELL_CLASS, SECTION_CLASS }
+      return { ASSETS, LABEL_CLASS, CELL_CLASS, SECTION_CLASS }
     },
     template: /* html */ `
       <PageContainer>
@@ -99,28 +97,6 @@ export const Library = {
             title="Adding a scene"
             description="Draw it in the Assets file in Figma on the 592×300 frame, export the frame as SVG, drop it into packages/webkit/src/assets/illustrations/ under the frame's own name, and add one line to registry.ts. Never hand-draw one in markup — that is the drift this component exists to prevent."
           />
-        </section>
-
-        <section>
-          <SectionHeader title="Canvas" />
-          <div class="overflow-x-auto">
-            <table class="w-full border-collapse text-left">
-              <thead>
-                <tr class="border-b border-[var(--border-default)]">
-                  <th class="text-label-sm text-[var(--text-muted)] py-[var(--spacing-xs)] pr-[var(--spacing-lg)] font-normal">Token</th>
-                  <th class="text-label-sm text-[var(--text-muted)] py-[var(--spacing-xs)] font-normal">Value and use</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="[token, note] in CANVAS_TOKENS" :key="token" class="border-b border-[var(--border-muted)]">
-                  <td class="py-[var(--spacing-xs)] pr-[var(--spacing-lg)] align-top">
-                    <code class="font-code text-code text-[var(--text-default)]">{{ token }}</code>
-                  </td>
-                  <td class="text-body-sm text-[var(--text-muted)] py-[var(--spacing-xs)] align-top">{{ note }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
         </section>
       </PageContainer>
     `
