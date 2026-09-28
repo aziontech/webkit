@@ -24,8 +24,6 @@ describe('SectionTitle', () => {
     const { getByTestId } = render(SectionTitle, { props })
     const root = getByTestId(TESTID)
 
-    // flush="top" is subtracted from borders="y", so the header keeps only its bottom rule —
-    // the divider between the header and the section body.
     expect(root).toHaveAttribute('data-flush', 'top')
     expect(root).toHaveAttribute('data-borders', 'bottom')
   })
@@ -78,8 +76,6 @@ describe('SectionTitle', () => {
 
       expect(heading).toHaveTextContent('Everything runs at the edge')
       expect(paragraph).toHaveTextContent('One platform.')
-      // Node.DOCUMENT_POSITION_FOLLOWING === 4: the description follows the headline, so the
-      // reading order matches the visual one in every layout — including the two-column one.
       expect(heading.compareDocumentPosition(paragraph) & 4).toBe(4)
     }
   )
@@ -195,7 +191,6 @@ describe('SectionTitle', () => {
       const root = getByTestId(TESTID)
 
       expect(root).toHaveAttribute('data-framed')
-      // the frame resolves to FrameBox, which carries the resolved side list
       expect(root).toHaveAttribute('data-borders')
     })
 
