@@ -13,23 +13,16 @@ import Illustration from './illustration.vue'
 
 const { Default, Assets, Labeled, Placeholder } = composeStories(stories)
 
-// Queries are scoped to each render's own container: testing-library's `getByTestId`
-// searches the whole document, so two renders in one test would collide.
 const at = (view: ReturnType<typeof render>) => within(view.container)
 
-// The scene resolves through a dynamic import, so the root lands a tick after mount.
 const root = (view: ReturnType<typeof render>, testId = 'content-illustration') =>
   at(view).findByTestId(testId)
 
-/** The URL a registered scene resolves to, for comparing against a rendered `src`. */
 const urlOf = async (name: string) => (await resolveIllustrationAsset(name)!()).default
 
-/** The URL the fallback frame resolves to. */
 const placeholderUrl = async () => (await loadIllustrationPlaceholder()).default
 
 describe('Illustration', () => {
-  // ---- Render ----------------------------------------------------------------
-
   it('renders the story with the derived testid', async () => {
     expect(await root(render(Default()))).toBeTruthy()
   })
@@ -54,8 +47,6 @@ describe('Illustration', () => {
     expect(el.className).toContain('w-full')
   })
 
-  // ---- name ------------------------------------------------------------------
-
   it.each(illustrationAssetNames)('renders the registered scene %s', async (name) => {
     const view = render(Illustration, { props: { name } })
     const el = await root(view)
@@ -68,8 +59,6 @@ describe('Illustration', () => {
     expect(el.getAttribute('width')).toBe('592')
     expect(el.getAttribute('height')).toBe('300')
   })
-
-  // ---- Placeholder fallback --------------------------------------------------
 
   it('falls back to the placeholder when name is empty', async () => {
     const el = await root(render(Illustration))
@@ -129,8 +118,6 @@ describe('Illustration', () => {
     })
   })
 
-  // ---- ARIA ------------------------------------------------------------------
-
   it('is decorative without an ariaLabel', async () => {
     const el = await root(render(Illustration, { props: { name: 'runtime' } }))
     expect(el.getAttribute('alt')).toBe('')
@@ -142,8 +129,6 @@ describe('Illustration', () => {
     expect(el.getAttribute('alt')).toBe('An MCP server deployed behind the edge firewall')
     expect(el.getAttribute('aria-hidden')).toBeNull()
   })
-
-  // ---- a11y ------------------------------------------------------------------
 
   it('has no a11y violations when decorative', async () => {
     const view = render(Default())
