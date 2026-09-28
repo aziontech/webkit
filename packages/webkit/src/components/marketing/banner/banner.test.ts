@@ -39,7 +39,6 @@ describe('Banner', () => {
     const root = getByTestId(TESTID)
 
     expect(root.tagName).toBe('SECTION')
-    // the band is a named landmark; the name comes from its title, not from a wired id
     expect(getByRole('region', { name: TITLE })).toBe(root)
     expect(getByRole('heading', { level: 2 })).toHaveTextContent(TITLE)
   })
