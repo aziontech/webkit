@@ -458,4 +458,71 @@ describe('CodeBlock', () => {
       }
     })
   })
+
+  describe('hcl highlighting', () => {
+    const typeOf = (line: string, text: string, language = 'hcl') =>
+      highlightCodeLine(language, line).find((token) => token.text.trim() === text)?.type
+
+    it('reads a block header as keyword and labels', () => {
+      const line = 'resource "azion_application" "storefront" {'
+
+      expect(typeOf(line, 'resource')).toBe('keyword')
+      expect(typeOf(line, '"azion_application"')).toBe('string')
+      expect(typeOf(line, '{')).toBe('punctuation')
+    })
+
+    it('reads an attribute key, its value and a literal', () => {
+      expect(typeOf('  name = "storefront"', 'name')).toBe('function')
+      expect(typeOf('  name = "storefront"', '"storefront"')).toBe('string')
+      expect(typeOf('  edge_functions = true', 'true')).toBe('type')
+      expect(typeOf('  ttl = 3600', '3600')).toBe('type')
+    })
+
+    it('reads a nested block, a reference and a trailing comment', () => {
+      expect(typeOf('  application {', 'application')).toBe('keyword')
+      expect(typeOf('    id = azion_application.storefront.id', 'azion_application')).toBe(
+        'identifier'
+      )
+      expect(typeOf('  count = length(var.x) # one per domain', 'length')).toBe('function')
+      expect(typeOf('  count = length(var.x) # one per domain', '# one per domain')).toBe(
+        'comment'
+      )
+    })
+
+    it('covers every hcl alias', () => {
+      for (const lang of ['hcl', 'terraform', 'tf']) {
+        expect(typeOf('resource "a" "b" {', 'resource', lang)).toBe('keyword')
+      }
+    })
+  })
+
+  describe('graphql highlighting', () => {
+    const typeOf = (line: string, text: string, language = 'graphql') =>
+      highlightCodeLine(language, line).find((token) => token.text.trim() === text)?.type
+
+    it('reads an operation header: keyword, name, variables and types', () => {
+      const line = 'query RequestsByStatus($begin: DateTime!) {'
+
+      expect(typeOf(line, 'query')).toBe('keyword')
+      expect(typeOf(line, 'RequestsByStatus')).toBe('function')
+      expect(typeOf(line, '$begin')).toBe('type')
+      expect(typeOf(line, 'DateTime')).toBe('type')
+    })
+
+    it('reads a field with arguments as a call, and plain fields as identifiers', () => {
+      expect(typeOf('  httpMetrics(', 'httpMetrics')).toBe('function')
+      expect(typeOf('    requests: sum(field: requests)', 'sum')).toBe('function')
+      expect(typeOf('    limit: 100', 'limit')).toBe('identifier')
+      expect(typeOf('    limit: 100', '100')).toBe('type')
+      expect(typeOf('    status', 'status')).toBe('identifier')
+    })
+
+    it('reads a directive, a spread and a comment', () => {
+      expect(typeOf('    ...Metrics @include(if: true)', '@include')).toBe('keyword')
+      expect(typeOf('    ...Metrics @include(if: true)', '...')).toBe('punctuation')
+      expect(highlightCodeLine('gql', '# requests per status')).toEqual([
+        { text: '# requests per status', type: 'comment' }
+      ])
+    })
+  })
 })
