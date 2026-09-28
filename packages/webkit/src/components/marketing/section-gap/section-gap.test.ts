@@ -26,12 +26,13 @@ describe('SectionGap', () => {
     // flush="top" is subtracted from borders="y", so only the bottom rule is left.
     expect(root).toHaveAttribute('data-flush', 'top')
     expect(root).toHaveAttribute('data-borders', 'bottom')
-    // Only the bottom pair of ticks: the section above supplies the shared junction's marks.
     expect(root.getAttribute('data-marks')?.split(' ').sort()).toEqual([
       'bottom-left',
-      'bottom-right'
+      'bottom-right',
+      'top-left',
+      'top-right'
     ])
-    expect(root.querySelectorAll('span[aria-hidden="true"]')).toHaveLength(2)
+    expect(root.querySelectorAll('span[aria-hidden="true"]')).toHaveLength(4)
   })
 
   it('draws no hatch texture by default', () => {

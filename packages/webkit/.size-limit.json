@@ -32,7 +32,7 @@
   {
     "name": "section-gap",
     "path": "src/components/marketing/section-gap/section-gap.vue",
-    "limit": "4 KB"
+    "limit": "3.75 KB"
   },
   {
     "name": "section-title",

@@ -34,16 +34,15 @@
 <template>
   <!-- Steps are one, two and three times the theme's largest spacing step, so the gap adds
        no scale of its own and is responsive for free (32/64/96px on a phone, 96/192/288px
-       wide); the 1:2:3 ratio keeps the weights unmistakable. flush + borders/marks leave a
-       shared junction one rule and one mark per corner. The gap is where hatch belongs: the
-       one band with no copy, so the texture reads as the page's own material. The rules are
-       left unmasked — each one is one solid ink from edge to edge, and the transparency is
-       the ink's own, so the field never reads as a fill that fades. -->
+       wide); the 1:2:3 ratio keeps the weights unmistakable. The gap is where hatch belongs:
+       the one band with no copy, so the texture reads as the page's own material. The rules
+       are left unmasked — each one is one solid ink from edge to edge, and the transparency
+       is the ink's own, so the field never reads as a fill that fades. -->
   <FrameBox
     v-bind="$attrs"
     flush
     borders="y"
-    marks="bottom"
+    marks="all"
     :data-testid="testId"
     :data-size="size"
     :data-hatch="hatch || null"
