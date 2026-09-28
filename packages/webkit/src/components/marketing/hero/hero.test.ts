@@ -200,7 +200,7 @@ describe('Hero', () => {
 
   it('stands no brand strip on the floor by default', () => {
     const { queryByTestId } = render(Hero, { slots: { default: '<h1>Headline</h1>' } })
-    expect(queryByTestId('marketing-brand-carousel')).toBeNull()
+    expect(queryByTestId('marketing-ticker')).toBeNull()
   })
 
   it('stands the brand strip on the floor when carousel is set', async () => {
@@ -208,7 +208,7 @@ describe('Hero', () => {
       props: { carousel: true, carouselMarks: ['Itau', 'NZN'] },
       slots: { default: '<h1>Headline</h1>' }
     })
-    const strip = await findByTestId('marketing-brand-carousel')
+    const strip = await findByTestId('marketing-ticker')
 
     expect(getByTestId(TESTID)).toContainElement(strip)
     expect(strip.closest('[aria-hidden="true"]')).toBeNull()
@@ -220,7 +220,7 @@ describe('Hero', () => {
       props: { carousel: true, carouselMarks: ['NZN'], carouselLabel: 'Trusted in production' },
       slots: { default: '<h1>Headline</h1>' }
     })
-    const strip = await findByTestId('marketing-brand-carousel')
+    const strip = await findByTestId('marketing-ticker')
 
     expect(strip).toHaveTextContent('Trusted in production')
   })
@@ -230,7 +230,7 @@ describe('Hero', () => {
       props: { carousel: true, carouselMarks: ['NZN'] },
       slots: { bottom: '<div>field</div>', default: '<h1>Headline</h1>' }
     })
-    const strip = await findByTestId('marketing-brand-carousel')
+    const strip = await findByTestId('marketing-ticker')
 
     expect(strip.parentElement).toContainElement(getByText('field'))
   })
@@ -296,7 +296,7 @@ describe('Hero', () => {
       props: { carousel: true, carouselMarks: ['NZN', 'Itau'] },
       slots: { default: '<h1>Headline</h1>' }
     })
-    await findByTestId('marketing-brand-carousel')
+    await findByTestId('marketing-ticker')
     await expectNoA11yViolations(container)
   })
 

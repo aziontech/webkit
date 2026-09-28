@@ -24,7 +24,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The copy block of a hero band: an optional overline, the page’s `h1` (with an optional opening phrase painted in the brand accent), a description and a row of leading calls to action, at hero scale. It is the hero counterpart of `SectionTitle` and sits above a hero backdrop rather than drawing a frame of its own.'
+          'The copy block of a hero band: an optional overline closed by the blinking cursor, the page’s `h1` (with an optional opening phrase painted in the brand accent), a description and a row of leading calls to action, at hero scale. It is the hero counterpart of `SectionTitle` and sits above a hero backdrop rather than drawing a frame of its own.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -48,8 +48,18 @@ const meta = {
     },
     eyebrow: {
       control: 'text',
-      description: 'Short uppercase overline rendered above the headline.',
+      description: 'Short uppercase overline rendered above the headline, closed by the blinking cursor.',
       table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "''" } }
+    },
+    eyebrowPrefix: {
+      control: 'select',
+      options: ['', '//', '<>', '</>'],
+      description: 'Mark set before the eyebrow label; empty renders the label alone.',
+      table: {
+        category: 'props',
+        type: { summary: "'' | '//' | '<>' | '</>'" },
+        defaultValue: { summary: "''" }
+      }
     },
     centered: {
       control: 'boolean',
@@ -73,6 +83,7 @@ const meta = {
     highlight: '',
     description: 'Ship applications, security and observability from one platform.',
     eyebrow: 'Edge platform',
+    eyebrowPrefix: '',
     centered: false
   }
 }
@@ -134,6 +145,7 @@ export const Highlight = {
 const CENTERED_TEMPLATE = `<HeroTitle
   centered
   eyebrow="Edge platform"
+  eyebrow-prefix="//"
   highlight="Build anything."
   title="Run it everywhere."
   description="Ship applications, security and observability from one platform."
@@ -148,7 +160,7 @@ export const Centered = {
       controls: { disable: true },
       description: {
         story:
-          'The whole block centered — for a hero whose backdrop is symmetric or that leads with one statement.'
+          'The whole block centered — for a hero whose backdrop is symmetric or that leads with one statement. The eyebrow carries a `//` prefix, set with `eyebrow-prefix`.'
       },
       source: { code: toSfc(IMPORT, CENTERED_TEMPLATE) }
     }

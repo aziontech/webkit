@@ -8,6 +8,9 @@
     inheritAttrs: false
   })
 
+  /** Mark set before the eyebrow label. */
+  export type HeroTitleEyebrowPrefix = '' | '//' | '<>' | '</>'
+
   interface Props {
     /** Headline of the page, rendered as the page's `h1`. */
     title: string
@@ -17,6 +20,8 @@
     description?: string
     /** Short uppercase overline rendered above the headline. */
     eyebrow?: string
+    /** Mark set before the eyebrow label; empty renders the label alone. */
+    eyebrowPrefix?: HeroTitleEyebrowPrefix
     /** Center the whole block — copy, headline and actions — instead of aligning it to the start. */
     centered?: boolean
   }
@@ -25,6 +30,7 @@
     highlight: '',
     description: '',
     eyebrow: '',
+    eyebrowPrefix: '',
     centered: false
   })
 
@@ -47,7 +53,12 @@
     :data-centered="centered || null"
     class="group flex flex-col items-start gap-(--spacing-md) data-[centered]:items-center data-[centered]:text-center"
   >
-    <Overline v-if="eyebrow">{{ eyebrow }}</Overline>
+    <Overline
+      v-if="eyebrow"
+      :prefix="eyebrowPrefix"
+      show-cursor
+      >{{ eyebrow }}</Overline
+    >
     <h1 class="m-0 max-w-(--container-4xl) text-balance text-heading-2xl text-(--text-default)">
       <span
         v-if="highlight"
@@ -67,7 +78,7 @@
       class="@container mt-(--spacing-xs) w-full"
     >
       <div
-        class="flex flex-col items-stretch gap-(--spacing-sm) [&>*]:w-full @min-[20rem]:flex-row @min-[20rem]:flex-wrap @min-[20rem]:items-center @min-[20rem]:group-data-[centered]:justify-center @min-[20rem]:[&>*]:w-auto"
+        class="flex flex-col items-stretch gap-(--spacing-sm) [&>*]:w-full @xs:flex-row @xs:flex-wrap @xs:items-center @xs:group-data-[centered]:justify-center @xs:[&>*]:w-auto"
       >
         <slot name="actions" />
       </div>

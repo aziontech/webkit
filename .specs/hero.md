@@ -4,9 +4,9 @@ category: marketing
 structure: composition
 status: approved
 spec_version: 2
-checksum: 48937c972b92abedbf501e860f1e5abeb4390dddd3b4bf34b0179f2120073d96
+checksum: 5cb4833ed8b5b6c76e71bb1eb6aa3921c06bc435914c5084ece07488b857dce6
 created: 2026-09-22
-last_updated: 2026-09-24
+last_updated: 2026-09-26
 ---
 
 # Hero — Component Spec
@@ -120,7 +120,7 @@ The standalone imports stay available and are the tree-shaking path — `@aziont
 The root `Hero` owns the band — the full-bleed section, the capped column, the bottom rule, the backdrop and asset windows, and the one-screen height. `Hero.Title` owns the copy block placed in its default slot. There is no shared state between them: the band is a layout shell and the copy block is self-contained, so nothing is provided or injected and the consumer wires nothing. Member names mirror this component's anatomy; the band has no `data-state="open|closed"`, so it has no `Trigger` or `Content`.
 
 - `hero-title/hero-title.vue` — the page's leading statement: overline, `h1` with an optionally accented opening phrase, supporting paragraph and the actions row. Renders a `header`, so it carries the band's document outline.
-  - Props: `title` (`string`, required) — headline of the page, rendered as the page's `h1`; `highlight` (`string`, `''`) — opening phrase of the headline, painted in the brand accent, reading as one sentence with `title`; `description` (`string`, `''`) — supporting sentence under the headline, overridden by the default slot; `eyebrow` (`string`, `''`) — short uppercase overline rendered above the headline; `centered` (`boolean`, `false`) — centre the whole block instead of aligning it to the start.
+  - Props: `title` (`string`, required) — headline of the page, rendered as the page's `h1`; `highlight` (`string`, `''`) — opening phrase of the headline, painted in the brand accent, reading as one sentence with `title`; `description` (`string`, `''`) — supporting sentence under the headline, overridden by the default slot; `eyebrow` (`string`, `''`) — short uppercase overline rendered above the headline, always closed by the blinking cursor; `eyebrowPrefix` (`HeroTitleEyebrowPrefix` = `'' | '//' | '<>' | '</>'`, `''`) — mark set before the eyebrow label, empty renders the label alone; `centered` (`boolean`, `false`) — centre the whole block instead of aligning it to the start.
   - Events: _none_.
   - Slots: `default` — description body, replacing the `description` prop when provided; `actions` — the page's leading calls to action, stacked full-width below `20rem` and laid out in a row above it.
 
@@ -135,6 +135,7 @@ The root `Hero` owns the band — the full-bleed section, the capped column, the
 - `data-align` carries where the content column sits vertically in a `screen` band. The column takes the band's leftover height, so `center` is the centre of the space actually available — a `bottom` asset reserves its height and the copy centres above it, while a `top` asset overlays and claims none
 - The band is an `isolate` stacking context, so its layer order never leaks into the page. Layer tokens set that order: `--banner-z-background` (0), `--banner-z-top` / `--banner-z-bottom` (1), `--banner-z-content` (10)
 - Each asset window clips its slotted child, so an asset larger than the band shows only the part the window frames. Custom properties place it: `--banner-top-height` / `--banner-bottom-height` size the window, and `--banner-top-x` / `-y`, `--banner-bottom-x` / `-y`, `--banner-background-x` / `-y` move the asset inside it
+- The backdrop sets `--texture-fade-lead: transparent`, so a `top` / `bottom` fade on the `texture` layer — or on a `texture-material` in the `background` slot — ramps in from zero at its leading edge as well as fading out: the opening band sits under the site header, and the texture must clear it. Outside a hero the same fades stay single
 - `data-floor` present when `floorTexture` paints the floor window. The window then takes a fluid default height (`clamp(9rem, 30dvh, 34rem)`) so a `screen` band still measures one screen on a laptop and caps at the design's field where there is room; with no floor texture it stays `auto` and is sized by its slotted child. `--banner-bottom-height` overrides either, and `--banner-floor-ink` (0.6) sets how strongly the texture reads
 - The floor holds the `bottom` window and the `carousel` strip in one block, so a single ground covers both: `--banner-floor-bg` (transparent by default) paints it, which is how a design plinths the floor a shade off the band's own canvas
 - `carousel` loads the strip on demand, so a band without one pulls in neither the strip nor its mark registry

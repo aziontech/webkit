@@ -8,7 +8,7 @@
 
   // Loaded on demand: a band without a strip must not pay for the strip or its mark
   // registry, and `hero-root` is budgeted for the band alone.
-  const BrandCarousel = defineAsyncComponent(() => import('../brand-carousel/brand-carousel.vue'))
+  const Ticker = defineAsyncComponent(() => import('../ticker/ticker.vue'))
 
   defineOptions({
     name: 'Hero',
@@ -102,7 +102,7 @@
       class="pointer-events-none absolute inset-0 overflow-hidden [z-index:var(--banner-z-background,0)]"
     >
       <div
-        class="absolute inset-0 [translate:var(--banner-background-x,0)_var(--banner-background-y,0)]"
+        class="absolute inset-0 [--texture-fade-lead:transparent] [translate:var(--banner-background-x,0)_var(--banner-background-y,0)]"
       >
         <TextureMaterial
           v-if="texture !== 'none'"
@@ -170,7 +170,7 @@
         </div>
       </div>
 
-      <BrandCarousel
+      <Ticker
         v-if="carousel"
         :data-width="maxWidth"
         :marks="carouselMarks"

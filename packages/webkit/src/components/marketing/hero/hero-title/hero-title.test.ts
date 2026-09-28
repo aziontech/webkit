@@ -80,6 +80,35 @@ describe('HeroTitle', () => {
     expect(getByText('Edge platform')).toBeInTheDocument()
   })
 
+  it('closes the eyebrow with the blinking cursor', () => {
+    const { container } = render(HeroTitle, { props: { ...props, eyebrow: 'Edge platform' } })
+
+    expect(container.querySelectorAll('.animate-blink')).toHaveLength(1)
+  })
+
+  it('renders no cursor when there is no eyebrow', () => {
+    const { container } = render(HeroTitle, { props })
+
+    expect(container.querySelector('.animate-blink')).toBeNull()
+  })
+
+  it('renders the eyebrow label alone by default', () => {
+    const { getByText } = render(HeroTitle, { props: { ...props, eyebrow: 'Edge platform' } })
+
+    expect(getByText('Edge platform').parentElement?.textContent?.trim()).toBe('Edge platform')
+  })
+
+  it.each(['//', '<>', '</>'] as const)('sets the %s prefix before the eyebrow', (eyebrowPrefix) => {
+    const { getByText } = render(HeroTitle, {
+      props: { ...props, eyebrow: 'Edge platform', eyebrowPrefix }
+    })
+    const label = getByText('Edge platform')
+    const prefix = getByText(eyebrowPrefix)
+    const FOLLOWING = 4
+
+    expect(prefix.compareDocumentPosition(label) & FOLLOWING).toBe(FOLLOWING)
+  })
+
   it('renders no actions row when the slot is empty', () => {
     const { queryByRole } = render(HeroTitle, { props })
 
