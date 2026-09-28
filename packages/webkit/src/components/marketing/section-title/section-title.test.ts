@@ -6,7 +6,7 @@ import * as stories from '../../../../../../apps/storybook/src/stories/component
 import { expectNoA11yViolations } from '../../../test/axe'
 import SectionTitle from './section-title.vue'
 
-const { Default, Kinds, WithActions } = composeStories(stories)
+const { Default, Kinds, Sizes, WithActions } = composeStories(stories)
 
 const TESTID = 'marketing-section-title'
 
@@ -44,6 +44,27 @@ describe('SectionTitle', () => {
 
     expect(getByTestId(TESTID)).toHaveAttribute('data-kind', 'centered')
   })
+
+  it.each(['small', 'medium', 'large'] as const)('reflects size="%s" on data-size', (size) => {
+    const { getByTestId } = render(SectionTitle, { props: { ...props, size } })
+
+    expect(getByTestId(TESTID)).toHaveAttribute('data-size', size)
+  })
+
+  it('defaults to the medium size', () => {
+    const { getByTestId } = render(SectionTitle, { props })
+
+    expect(getByTestId(TESTID)).toHaveAttribute('data-size', 'medium')
+  })
+
+  it.each(['small', 'medium', 'large'] as const)(
+    'keeps the headline an h2 at size="%s"',
+    (size) => {
+      const { getByRole } = render(SectionTitle, { props: { ...props, size } })
+
+      expect(getByRole('heading', { level: 2 })).toHaveTextContent('Everything runs at the edge')
+    }
+  )
 
   it.each(['centered', 'left', 'horizontal'] as const)(
     'keeps the headline before its description in DOM order when kind="%s"',
@@ -145,6 +166,16 @@ describe('SectionTitle', () => {
         'centered',
         'left',
         'horizontal'
+      ])
+    })
+
+    it('renders the Sizes story with one header per step', () => {
+      const { getAllByTestId } = render(Sizes())
+
+      expect(getAllByTestId(TESTID).map((el) => el.getAttribute('data-size'))).toEqual([
+        'small',
+        'medium',
+        'large'
       ])
     })
 

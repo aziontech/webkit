@@ -11,6 +11,8 @@
 
   /** Layout of the header row. */
   export type SectionTitleKind = 'centered' | 'left' | 'horizontal'
+  /** Step of the headline on the heading scale. */
+  export type SectionTitleSize = 'small' | 'medium' | 'large'
 
   interface Props {
     /** Headline of the section, rendered as the section's `h2`. */
@@ -21,6 +23,8 @@
     eyebrow?: string
     /** Layout of the header: `centered` stacks and centers the copy, `left` stacks it at the start edge, `horizontal` sets the headline and its description in two columns. */
     kind?: SectionTitleKind
+    /** Step of the headline on the heading scale: `small` for a subsection inside a band, `medium` for an ordinary section opener, `large` for a band whose headline is the statement. */
+    size?: SectionTitleSize
     /** Draw the header's own frame and padding. Turn it off when the header is composed inside a band that already owns both. */
     framed?: boolean
   }
@@ -29,6 +33,7 @@
     description: '',
     eyebrow: '',
     kind: 'centered',
+    size: 'medium',
     framed: true
   })
 
@@ -51,7 +56,7 @@
   // padding, so drawing either here would draw it twice.
   const frame = computed(() => (props.framed ? FrameBox : 'div'))
   const frameProps = computed(() =>
-    props.framed ? { flush: true, borders: 'y', marks: 'bottom' } : {}
+    props.framed ? { flush: true, borders: 'y', marks: 'all' } : {}
   )
 </script>
 
@@ -65,6 +70,7 @@
     v-bind="{ ...$attrs, ...frameProps }"
     :data-testid="testId"
     :data-kind="kind"
+    :data-size="size"
     :data-framed="props.framed || null"
     class="group"
   >
@@ -86,7 +92,9 @@
           >{{ eyebrow }}</Overline
         >
         <div class="grid gap-(--spacing-xl) md:grid-cols-3">
-          <h2 class="m-0 text-balance text-heading-xl text-(--text-default)">
+          <h2
+            class="m-0 text-balance text-(--text-default) group-data-[size=small]:text-heading-lg group-data-[size=medium]:text-heading-xl group-data-[size=large]:text-heading-2xl"
+          >
             {{ title }}
           </h2>
           <p
@@ -113,7 +121,9 @@
           show-cursor
           >{{ eyebrow }}</Overline
         >
-        <h2 class="m-0 text-balance text-heading-xl text-(--text-default)">
+        <h2
+          class="m-0 text-balance text-(--text-default) group-data-[size=small]:text-heading-lg group-data-[size=medium]:text-heading-xl group-data-[size=large]:text-heading-2xl"
+        >
           {{ title }}
         </h2>
         <p

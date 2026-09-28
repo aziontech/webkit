@@ -56,6 +56,17 @@ const meta = {
         defaultValue: { summary: "'centered'" }
       }
     },
+    size: {
+      control: 'inline-radio',
+      options: ['small', 'medium', 'large'],
+      description:
+        'Step of the headline on the heading scale: `small` for a subsection inside a band, `medium` for an ordinary section opener, `large` for a band whose headline is the statement.',
+      table: {
+        category: 'props',
+        type: { summary: "'small' | 'medium' | 'large'" },
+        defaultValue: { summary: "'medium'" }
+      }
+    },
     default: {
       control: false,
       description: 'Description body; replaces the `description` prop when provided.',
@@ -71,7 +82,8 @@ const meta = {
     title: 'Everything runs at the edge',
     description: 'One platform for applications, security and observability.',
     eyebrow: 'Platform',
-    kind: 'centered'
+    kind: 'centered',
+    size: 'medium'
   }
 }
 
@@ -139,6 +151,46 @@ export const Kinds = {
           'The three layouts stacked. `centered` and `left` share one column and differ only in alignment; `horizontal` puts the headline and its description in a three-column grid, which is what makes a wide band read as one row instead of a tall stack.'
       },
       source: { code: toSfc(IMPORT, KINDS_TEMPLATE) }
+    }
+  }
+}
+
+const SIZES_TEMPLATE = `<div>
+  <SectionTitle
+    size="small"
+    kind="left"
+    eyebrow="Small"
+    title="A subsection inside a band"
+    description="The headline drops a step so it opens a part of a section without competing with the section's own header."
+  />
+  <SectionTitle
+    size="medium"
+    kind="left"
+    eyebrow="Medium"
+    title="An ordinary section opener"
+    description="The default step, and the one nearly every section header wants."
+  />
+  <SectionTitle
+    size="large"
+    kind="left"
+    eyebrow="Large"
+    title="The headline is the statement"
+    description="For a band that carries one claim and little else — the copy under it stays at reading size."
+  />
+</div>`
+
+/** @type {import('@storybook/vue3').StoryObj<typeof SectionTitle>} */
+export const Sizes = {
+  render: () => ({ components: { SectionTitle }, template: SIZES_TEMPLATE }),
+  parameters: {
+    controls: { disable: true },
+    docs: {
+      controls: { disable: true },
+      description: {
+        story:
+          'The three steps of the headline scale, stacked. `size` moves the headline between `text-heading-lg`, `text-heading-xl` and `text-heading-2xl` — the description stays at reading size in all three, and the heading stays an `h2`, so the page outline is unaffected by how loud a header is.'
+      },
+      source: { code: toSfc(IMPORT, SIZES_TEMPLATE) }
     }
   }
 }

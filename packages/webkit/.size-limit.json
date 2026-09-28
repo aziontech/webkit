@@ -37,7 +37,7 @@
   {
     "name": "section-title",
     "path": "src/components/marketing/section-title/section-title.vue",
-    "limit": "3 KB"
+    "limit": "3.5 KB"
   },
   {
     "name": "hero-title",

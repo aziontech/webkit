@@ -3010,6 +3010,13 @@
           "doc": "Layout of the header: `centered` stacks and centers the copy, `left` stacks it at the start edge, `horizontal` sets the headline and its description in two columns."
         },
         {
+          "name": "size",
+          "type": "'small' | 'medium' | 'large'",
+          "default": "'medium'",
+          "required": "false",
+          "doc": "Step of the headline on the heading scale: `small` for a subsection inside a band, `medium` for an ordinary section opener, `large` for a band whose headline is the statement."
+        },
+        {
           "name": "framed",
           "type": "boolean",
           "default": "true",
@@ -3048,7 +3055,8 @@
       ],
       "bestPractices": [
         "Leave `framed` on when the header is a brick of its own in a page column; turn it off when a band composes the header inside a frame it already draws, so the rule and the padding are not drawn twice.",
-        "Keep one `section-title` per section, and let it own the section's `h2` so the page keeps one document outline.",
+        "Keep one `section-title` per section, and let it own the section's `h2` so the page keeps one document outline. `size` changes the headline's step on the type scale, never its heading level — a page with a `large` and a `small` header still reads as two `h2`s.",
+        "Leave `size` at `medium` for an ordinary section opener. Reach for `large` only where the headline is the band's whole statement, and for `small` where the header opens a subsection inside a band that already has one.",
         "Write the eyebrow as one or two words: it is set uppercase and prefixed with `//`, so a sentence in it reads as noise.",
         "Reach for `horizontal` when the description is long enough to earn its own column — on a narrow viewport it stacks back under the headline.",
         "Put the section's CTAs in the `actions` slot rather than in the body; the slot already stacks them fluid below `sm` and aligns them with the chosen `kind` above it.",
