@@ -4,7 +4,7 @@ category: actions
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 87127d1d244c485485066a664970df5fe28be552b60544da4b457570aa22334c
+checksum: cefd8f6e3207b82e16edf5d5327b6a5f5a285634c505b7040c6974180545c5c5
 created: 2026-05-22
 last_updated: 2026-09-26
 ---
@@ -14,6 +14,27 @@ last_updated: 2026-09-26
 ## Purpose
 
 Interactive control for user actions. Migrated from the existing implementation at `packages/webkit/src/components/webkit/actions/button/`.
+
+## Usage
+
+```vue
+<script setup>
+import Button from '@aziontech/webkit/button'
+</script>
+
+<template>
+  <Button label="Save" />
+  <Button label="Deploy" kind="secondary" icon="pi pi-upload" />
+  <Button
+    label="Read the docs"
+    kind="outlined"
+    href="https://www.azion.com/en/documentation/"
+    icon="pi pi-chevron-right"
+    icon-position="trailing"
+    animated
+  />
+</template>
+```
 
 ## Props
 
