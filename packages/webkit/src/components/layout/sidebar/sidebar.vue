@@ -187,7 +187,7 @@
   )
 
   const FOOTER_REGION_CLASS =
-    'flex h-(--size-14) w-full shrink-0 items-center border-t border-(--border-default) px-(--spacing-md)'
+    'flex min-h-(--size-14) w-full shrink-0 items-center border-t border-(--border-default) px-(--spacing-md) py-(--spacing-xs)'
 
   const footerBandClass = computed(() =>
     cn(

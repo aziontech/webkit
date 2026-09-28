@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3735-14866
   node_id: 3735:14866
-checksum: 2eea8e0a08143604d794b36328f44fee302f7ebba21a7626e455a68f38495ec1
+checksum: 2577cfac168a84e252cf96ac02a44d0a67b066789e59db85b409d11c45f4f314
 created: 2026-05-22
 last_updated: 2026-09-28
 ---
@@ -141,15 +141,19 @@ The collapse trigger renders **at the bottom**, in the footer region, trailing w
 slot holds — so the profile block and the trigger read as one row, which is the arrangement a
 console rail wants. That is why the trigger belongs to the component and not to the footer content:
 it must survive whatever the consumer puts there, and it must go inert with the rail when the rail
-collapses. The footer region becomes a centred flex row when `collapsible` is set, and the slot
-content takes `min-w-0 flex-1`.
+collapses. The footer region is a centred flex row at least `--size-14` tall — the header bar's
+height, so a rail closed by a footer and a page closed by a bar share one horizontal — and the slot
+content takes `min-w-0 flex-1`, so the trigger sits at the rail's trailing edge. Taller footer
+content grows the region instead of overflowing it.
 
-The **band** — the separator and the space above it — then belongs to that row rather than to the
-footer content, which is what makes the line run the full width of the region *past* the trigger
-instead of stopping short of it, and what keeps the trigger on the content's line instead of half a
-padding above it. `SidebarFooter` drops its own `border-t` / top padding whenever it is inside a
-collapsible sidebar for that reason, and **any other footer content must not add its own top
-padding** either.
+The **separator belongs to the footer region**, not to the band and not to the footer content. That
+is what makes the line run edge-to-edge across the rail — past the trigger and past the region's own
+horizontal padding, flush to the rail's border — and what keeps the trigger on the content's line
+instead of half a padding above it. It uses `--border-default`, the separator token, not the fainter
+`--border-muted` the rail's outer edge uses, so it is legible against `--bg-surface` in both themes.
+It is therefore present **whether or not the rail is `collapsible`** and whatever the consumer puts
+in the slot: `SidebarFooter` carries no `border-t` / top padding of its own, and **any other footer
+content must not add either**.
 
 Both icon-only controls (the collapse trigger and the expand button) carry a **`Tooltip`** whose
 text is the same string as their accessible name, so a pointer user gets the label a screen reader
@@ -360,8 +364,8 @@ restructuring this component does not take on.
 
 | Trigger | Animation / Transition | Mechanism | Reduced-motion fallback |
 |---|---|---|---|
-| rail expands | `width` 0 → sized **and `min-width` 0 → the min token, on the same curve**, `translate` -100% → 0, `opacity` → 1 | root `has-[>div>input:checked]:` off — base classes: `duration-moderate-02` · `ease-expressive-entrance` | `motion-reduce:transition-none motion-reduce:translate-none` |
-| rail collapses | `width` sized → 0 **and `min-width` → 0 with it**, `translate` 0 → -100%, `opacity` → floor | root `has-[>div>input:checked]:` on — `ease-productive-exit` (same duration) | same |
+| rail expands | `width` 0 → sized **and `min-width` 0 → the min token, on the same curve**, `translate` -100% → 0 (+100% at `side: 'end'`), `opacity` → 1 | root `has-[>div>input:checked]:` off — base classes: `duration-moderate-02` · `ease-expressive-entrance` | `motion-reduce:transition-none motion-reduce:translate-none` |
+| rail collapses | `width` sized → 0 **and `min-width` → 0 with it**, `translate` 0 → -100% (+100% at `side: 'end'`), `opacity` → floor | root `has-[>div>input:checked]:` on — `ease-productive-exit` (same duration) | same |
 | drag in flight | none — width tracks the pointer frame for frame; the panel's `translate` + `opacity` track the **pull progress** (`next / min`), so the pull is legible below the minimum where the rail itself can no longer narrow | `data-resizing` forces `transition-none` on the root **and the panel**; the panel's `translate`/`opacity` come from an inline style for the length of the drag | — |
 | collapsed edge affordance appears | `opacity` 0 → 1 | Vue `<Transition>`, unchanged | `motion-reduce:transition-none` |
 | collapsed rail previews / retracts | `width` 0 ↔ `--size-10` (the panel does not move — the sliver is surface only) | JS-computed inline `transition` (`duration['moderate-02']` · `curve['expressive-entrance']`) while entering; CSS `has-[>div>input:checked]:` exit curve takes over the instant the inline style is cleared on leave | `prefers-reduced-motion` short-circuit while entering; `motion-reduce:transition-none` on leave |
@@ -399,7 +403,9 @@ Database` ellipsizes at 225px). It keeps `min-width` and takes an inline `transl
 `railWidth - minWidth`, holding its trailing edge flush with the rail's (measured gap: 0px at every
 sample). Leaving it at `translate: 0` pins the content in place while the rail's edge sweeps across
 it — the reading that the content sits on a layer *beneath* the rail rather than being carried by
-it. Sliding it by pull progress while the rail stands still is the same failure, louder.
+it. Sliding it by pull progress while the rail stands still is the same failure, louder. A
+`side: 'end'` rail needs no translate: its panel is already anchored at the rail's moving edge, and
+its overflow is clipped at the fixed one.
 
 **`inert` / `aria-hidden` commit on release, not mid-gesture.** `collapsed` flips while the pointer
 is still down, so the collapsed *semantics* are gated on `!resizing`: a rail that is visible and
@@ -442,6 +448,9 @@ fallback for the brief pre-hydration window, not a replacement for the handle's 
 | spacing | `var(--spacing-3)` |
 | shape | `var(--shape-elements)` |
 | ring | `var(--ring-color)` |
+| rail outer edge | `border-(--border-muted)` — `border-r` at `side: 'start'`, `border-l` at `side: 'end'` |
+| footer separator | `border-t border-(--border-default)` on the footer region, full-bleed across the rail |
+| footer region | `min-h-(--size-14)`, `px-(--spacing-md)`, `py-(--spacing-xs)` |
 | resize handle line | `var(--accent)`, `var(--border-2)` wide |
 | resize handle hit area | `var(--spacing-xs)` |
 | rail width bounds | `var(--container-3xs)` … `var(--container-sm)` (via `minWidthToken` / `maxWidthToken`) |
