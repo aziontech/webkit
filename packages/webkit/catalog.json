@@ -9983,7 +9983,7 @@
         "For the closing ask at the end of a page or section → use `call-to-action`, a single-column panel.",
         "For the page's leading statement → use `hero`, whose `Hero.Title` owns the `h1`.",
         "For a dismissible or status-bearing notice inside the product → use `message`.",
-        "For a feature tile in a grid → use `feature-card`."
+        "For a feature tile in a grid → use `topic` in a `card-grid`."
       ],
       "related": [
         "call-to-action` — the single-column closing ask; this is the wider mid-page announcement.",
