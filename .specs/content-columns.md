@@ -4,9 +4,9 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 2
-checksum: ad0e33278aa3adc108d03d744ddac337a3d96d14f159c93ebd69eac75f3f34f0
+checksum: d674e4f3cf780f09fcd9b1c370e5172249697cd6df5d0c45fb1a673a1c579d44
 created: 2026-09-22
-last_updated: 2026-09-25
+last_updated: 2026-09-26
 ---
 
 # Content Columns — Component Spec
@@ -24,14 +24,14 @@ A titled band whose body is two or three columns of short copy, drawn in one hai
 ## When NOT to use
 
 - When the points are unequal and one deserves the full width → use `bento-grid`.
-- When each point needs an icon, a link or its own surface → use `feature-card` in a grid the page owns.
+- When each point needs an icon, a link or its own surface → use `topic` in a `card-grid`.
 - For measured figures → use `big-numbers`.
 - For one point paired with a picture → use `media-split`.
 
 ## Related
 
 - `bento-grid` — the same collapsed-rule grid with unequal, slot-composed cells.
-- `feature-card` — the richer unit when a point needs an icon or a destination.
+- `topic` — the richer unit when a point needs an icon or a destination.
 - `section-title` — the header this band renders above its columns.
 - `big-numbers` — the numeric sibling of this grid.
 

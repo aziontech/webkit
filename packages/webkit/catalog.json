@@ -9983,13 +9983,13 @@
       ],
       "avoidWhen": [
         "When the points are unequal and one deserves the full width → use `bento-grid`.",
-        "When each point needs an icon, a link or its own surface → use `feature-card` in a grid the page owns.",
+        "When each point needs an icon, a link or its own surface → use `topic` in a `card-grid`.",
         "For measured figures → use `big-numbers`.",
         "For one point paired with a picture → use `media-split`."
       ],
       "related": [
         "bento-grid` — the same collapsed-rule grid with unequal, slot-composed cells.",
-        "feature-card` — the richer unit when a point needs an icon or a destination.",
+        "topic` — the richer unit when a point needs an icon or a destination.",
         "section-title` — the header this band renders above its columns.",
         "big-numbers` — the numeric sibling of this grid."
       ],
