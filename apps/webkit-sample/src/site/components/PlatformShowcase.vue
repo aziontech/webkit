@@ -9,11 +9,12 @@
   //
   // Layout follows CONTAINERS.md: the component is a single SectionModule — the host page's
   // SectionContainer owns the frame (`border-x`), this module owns its top rule (`border-t`) and
-  // its header's `border-b`, and the four panels are an edge-to-edge `CardGrid variant="divider"`
+  // its header's `border-b`, and the four panels are an edge-to-edge `CardGrid kind="divider"`
   // whose 1px gaps are the internal rules. No panel draws a border of its own, and none is rounded.
+  import CardGrid from '@aziontech/webkit/card-grid'
   import FrameBox from '@aziontech/webkit/frame-box'
+  import SectionModule from '@aziontech/webkit/section-module'
   import SectionTitle from '@aziontech/webkit/section-title'
-  import { CardGrid, SectionModule } from '@shared/ui/layout/index.js'
 
   // Panel 1 — commit nodes sitting on the `main` line (left %, on the mid rule).
   const commitNodes = [18, 26, 42, 60, 78]
@@ -111,7 +112,7 @@
     >
       <!-- The grid's 1px gaps ARE the internal rules; each panel fills its own background. -->
       <CardGrid
-        variant="divider"
+        kind="divider"
         divider-color="muted"
         :columns="4"
       >

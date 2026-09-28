@@ -454,7 +454,7 @@
        height:100dvh; overflow:hidden, so this docs shell is a full-height column
        with the top bar fixed and the sidebar + main sharing the remaining height. -->
   <div
-    class="docs-shell flex h-dvh flex-col overflow-hidden bg-(--bg-canvas) text-(--text-default)"
+    class="docs-shell flex h-dvh flex-col overflow-hidden bg-(--bg-canvas) text-(--text-default) selection:bg-(--primary-mask) selection:text-(--primary)"
   >
     <!-- ── Docs top bar ─────────────────────────────────────────────────────
          The DS bar (`GlobalHeader`), not a hand-rolled `<header>`: the height, the

@@ -8,7 +8,7 @@
    * start on ONE content column.
    *
    * The column paints its own canvas rather than drawing its own border: dropped
-   * into a `CardGrid variant="divider"`, the grid's 1px gaps are the hairlines, so
+   * into a `CardGrid kind="divider"`, the grid's 1px gaps are the hairlines, so
    * four adjacent columns produce three rules instead of six. Width is the grid's
    * business too — the Figma frame's fixed 320 is what one cell of the four-column
    * grid already measures at the container's max width.

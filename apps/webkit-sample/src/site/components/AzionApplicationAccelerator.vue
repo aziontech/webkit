@@ -7,8 +7,8 @@
   //
   // The source's 19 bands, in order, and what each becomes here:
   //
-  //   0  hero (eyebrow, h1, description, two actions)      BannerContainer hero + HeroTitle
-  //   1  30-mark tool marquee                              BrandCarousel, on the hero's floor
+  //   0  hero (eyebrow, h1, description, two actions)      Hero kind="screen" + Hero.Title
+  //   1  30-mark tool marquee                              Ticker, on the hero's floor
   //   2  spacer                                            SectionGap hatch
   //   3  three feature cells                               CardGrid divider, 3 columns
   //   4  spacer                                            SectionGap hatch
@@ -24,7 +24,7 @@
   //   14 spacer                                            SectionGap hatch
   //   15 Frequently Asked Questions                        the ruled Accordion band
   //   16 spacer                                            SectionGap hatch
-  //   17 closing CTA                                       SiteCta, every string a prop
+  //   17 closing CTA                                       CallToAction kind="split"
   //   18 spacer                                            the closing hatch frame
   //
   // WHERE OUR FORM DEPARTS FROM THE SOURCE, on purpose:
@@ -34,7 +34,7 @@
   //     stands on the hero's floor and the hero's own `border-b` is the rule that divides
   //     it from the column — the same single line, one owner. AzionHome and AzionFunctions
   //     both seat their strip this way, so the three pages read as one site.
-  //   • The hero's eyebrow is `// APPLICATION ACCELERATOR`. HeroTitle's overline anatomy
+  //   • The hero's eyebrow is `// APPLICATION ACCELERATOR`. Hero.Title's overline anatomy
   //     carries no `//` prefix (that belongs to SectionTitle and to the closing band), so
   //     the hero reads `APPLICATION ACCELERATOR`. The component wins over the source's
   //     bespoke span; the two bands that DO have the prefix get it from their own component.
@@ -42,50 +42,50 @@
   //     Button's `icon` is leading-only, and Link — the one control whose icon IS trailing —
   //     paints `--text-link`, the product UI's blue, which nothing else on this site uses. So
   //     these are `Button kind="text"`: the label alone, in the page's own ink. The arrow was
-  //     decoration on the source's control, and the label is the control either way.
+  //     decoration on the source's control, and the label is the control either way. Band 9 is
+  //     the exception: its cells carry no control at all — each claim is itself the link, so
+  //     the arrow lands on the headline where Topic draws it.
   //   • Bands 9 and 15 are horizontal scrollers with prev/next controls in the source. Six
   //     cards fit the page frame as two rows of three, and a row that cannot be over-scrolled
   //     needs no controls — nor a carousel library (.claude/rules/dependencies.md).
   //   • The source's art is two raster product collages. Ours is the design system's own:
-  //     band 5 selects the registered `optimize-application` scene (a site with its audit
-  //     scores on a raised tray — what that band's screenshot shows), and band 6 composes
-  //     Illustration parts into a cache-key scene. Their `alt` text therefore does not
-  //     survive the copy diff: it described art we replaced.
+  //     band 5 selects the registered `infrastructure-as-code` scene, band 6 the
+  //     `distributed-apis` one. Their `alt` text therefore does not survive the copy
+  //     diff: it described art we replaced.
   //
   // ASSET GAPS: none on the tool strip — all 30 marks the source names have a file in
-  // `shared/ui/brand/clients/`. On the client strip, Axur, Arezzo, Crefisa and Contabilizei
+  // `shared/assets/clients/`. On the client strip, Axur, Arezzo, Crefisa and Contabilizei
   // are not CLIENTS registry entries but their marks are in `clients/dark/clients/`, so they
   // are declared locally (see STORY_CLIENTS); NZN and Zoop have no mark in this repo at all
   // and render as ClientMark's typographic wordmark, so no name is quietly dropped.
-  import Accordion from '@aziontech/webkit/accordion'
+  import Ticker from '@aziontech/webkit/ticker'
   import Button from '@aziontech/webkit/button'
+  import CallToAction from '@aziontech/webkit/call-to-action'
+  import CardGrid from '@aziontech/webkit/card-grid'
   import CodeBlock from '@aziontech/webkit/code-block'
+  import Faq from '@aziontech/webkit/faq'
   import FrameBox from '@aziontech/webkit/frame-box'
-  import HeroTitle from '@aziontech/webkit/hero-title'
+  import Hero from '@aziontech/webkit/hero'
   import Illustration from '@aziontech/webkit/illustration'
-  import Overline from '@aziontech/webkit/overline'
+  import MediaSplit from '@aziontech/webkit/media-split'
+  import Quote from '@aziontech/webkit/quote'
+  import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
+  import SectionModule from '@aziontech/webkit/section-module'
   import SectionTitle from '@aziontech/webkit/section-title'
-  import BrandCarousel from '@shared/ui/brand/BrandCarousel.vue'
-  import ClientMark from '@shared/ui/brand/ClientMark.vue'
+  import Topic from '@aziontech/webkit/topic'
   // The four client marks that are not CLIENTS registry entries; Vite resolves each to an
   // asset URL, exactly as the registries do.
-  import arezzo from '@shared/ui/brand/clients/dark/clients/arezzo-logo.svg'
-  import axur from '@shared/ui/brand/clients/dark/clients/axur-logo.svg'
-  import contabilizei from '@shared/ui/brand/clients/dark/clients/contabilizei-logo.svg'
-  import crefisa from '@shared/ui/brand/clients/dark/clients/crefisa-logo.svg'
-  import { CLIENTS } from '@shared/ui/brand/clients/index.js'
-  import { PRODUCT_STACK } from '@shared/ui/brand/tools.js'
-  import {
-    BannerContainer,
-    CardGrid,
-    SectionContainer,
-    SectionModule
-  } from '@shared/ui/layout/index.js'
+  import arezzo from '@shared/assets/clients/dark/clients/arezzo-logo.svg'
+  import axur from '@shared/assets/clients/dark/clients/axur-logo.svg'
+  import contabilizei from '@shared/assets/clients/dark/clients/contabilizei-logo.svg'
+  import crefisa from '@shared/assets/clients/dark/clients/crefisa-logo.svg'
+  import { CLIENTS } from '@shared/assets/clients/index.js'
+  import ClientMark from '@shared/ui/brand/ClientMark.vue'
+  import { PRODUCT_STACK } from '@shared/ui/brand/strips.js'
   import { useRouter } from 'vue-router'
 
   import { NavColumn, NavItem } from '../ui/index.js'
-  import SiteCta from './SiteCta.vue'
 
   const router = useRouter()
   const goSignup = () => router.push('/signup')
@@ -176,49 +176,43 @@
   // ── Band 9 — six ways the module is used ──────────────────────────────────────
   const USE_CASES = [
     {
-      eyebrow: 'APIs',
+      icon: 'ai ai-azion-api',
       title: 'Accelerate REST and GraphQL APIs',
       description:
         'Cache API responses with query string and cookie-based segmentation for faster client applications.',
-      action: 'View example',
       href: '/site/home'
     },
     {
-      eyebrow: 'E-commerce',
+      icon: 'pi pi-shopping-cart',
       title: 'Optimize product catalogs',
       description:
         'Segment listings by category, region, and user preferences with cache key rules.',
-      action: 'View example',
       href: '/site/home'
     },
     {
-      eyebrow: 'SaaS',
+      icon: 'ai ai-layers',
       title: 'Personalize multi-tenant apps',
       description: 'Serve tenant-specific content with cookie-based cache variation rules.',
-      action: 'View docs',
       href: DOCS
     },
     {
-      eyebrow: 'Media',
+      icon: 'ai ai-live-ingest',
       title: 'Stream content faster',
       description:
         'Cache playlists and user preferences while serving browsing content efficiently.',
-      action: 'View docs',
       href: DOCS
     },
     {
-      eyebrow: 'Real-time',
+      icon: 'pi pi-bolt',
       title: 'Reduce API latency',
       description: 'Short TTLs for rapidly changing data endpoints and real-time applications.',
-      action: 'View docs',
       href: DOCS
     },
     {
-      eyebrow: 'Personalization',
+      icon: 'pi pi-user',
       title: 'Deliver personalized experiences',
       description:
         'Cache user-specific content with session-based cookie variation for tailored delivery.',
-      action: 'View docs',
       href: DOCS
     }
   ]
@@ -257,7 +251,7 @@
           icon: 'ai ai-edge-functions',
           title: 'Functions',
           description: 'Run serverless code closer to users',
-          href: '/site/functions'
+          href: '/site/products/functions'
         },
         {
           icon: 'ai ai-edge-orchestrator',
@@ -410,7 +404,7 @@
 
 <template>
   <!-- ══ Band 0 + 1 — the hero, and the stack standing on its floor ═════════════
-       BannerContainer owns the full-bleed band and the page's top rule. `--banner-offset`
+       Hero owns the full-bleed band and the page's top rule. `--banner-offset`
        is the sticky SiteNav's height (h-14 = 3.5rem), so the band still measures exactly one
        screen with the nav above it.
 
@@ -418,51 +412,52 @@
        `justify-between`: the claim sits in the middle of what is left, the strip stands on
        the floor. That is what puts the source's second band inside the first without either
        one losing its place in the running order. -->
-  <BannerContainer
-    hero
-    banner="dot-grid"
+  <Hero
+    texture="dots"
+    texture-fade="bottom"
+    kind="screen"
     max-width="site"
     class="[--banner-offset:3.5rem]"
   >
-    <div
-      class="flex min-h-[calc(100dvh-var(--banner-offset,0px)-var(--spacing-xl)*2)] flex-col justify-between gap-(--spacing-xxl)"
+    <Hero.Title
+      centered
+      eyebrow="Application Accelerator"
+      title="Accelerate dynamic APIs and apps"
+      description="Speed up web applications with protocol optimizations and advanced cache rules. Cache POST requests and use short TTLs for real-time data."
     >
-      <div class="flex flex-1 flex-col justify-center">
-        <HeroTitle
-          centered
-          eyebrow="Application Accelerator"
-          title="Accelerate dynamic APIs and apps"
-          description="Speed up web applications with protocol optimizations and advanced cache rules. Cache POST requests and use short TTLs for real-time data."
-        >
-          <!-- The stacking and the fluid width belong to HeroTitle's actions row, so the
+      <!-- The stacking and the fluid width belong to Hero.Title's actions row, so the
                controls go in bare. `text` is the source's second action: a label and an
                arrow, no fill — the kind, not a restyled button. -->
-          <template #actions>
-            <Button
-              label="Start free"
-              kind="secondary"
-              size="large"
-              @click="goSignup"
-            />
-            <Button
-              label="Docs"
-              kind="text"
-              size="large"
-              :href="DOCS"
-            />
-          </template>
-        </HeroTitle>
-      </div>
+      <template #actions>
+        <Button
+          label="Start free"
+          kind="secondary"
+          size="large"
+          @click="goSignup"
+        />
+        <Button
+          label="Docs"
+          kind="text"
+          size="large"
+          :href="DOCS"
+          icon="pi pi-chevron-right"
+          icon-position="trailing"
+          animated
+        />
+      </template>
+    </Hero.Title>
 
-      <!-- No label — the source's band is the marks alone. `monochrome` is the strip's own
+    <!-- No label — the source's band is the marks alone. `monochrome` is the strip's own
            rule: one ink, so thirty brand palettes in one row do not become the loudest
            thing on the page. -->
-      <BrandCarousel
-        monochrome
-        :clients="PRODUCT_STACK"
+    <template #bottom>
+      <Ticker
+        kind="band"
+        size="small"
+        :marks="PRODUCT_STACK"
       />
-    </div>
-  </BannerContainer>
+    </template>
+  </Hero>
 
   <!-- ══ The framed column ═════════════════════════════════════════════════════
        Every band below the hero is a brick inside one centered column. The column carries
@@ -489,7 +484,7 @@
         marks="bottom"
       >
         <CardGrid
-          variant="divider"
+          kind="divider"
           :columns="3"
         >
           <div
@@ -522,181 +517,112 @@
 
     <!-- ── Band 5 — copy beside the art ─────────────────────────────────────────
          The source's art is a raster collage of the product's own configuration screens
-         with a Lighthouse card over them. Ours is the registered `optimize-application`
-         scene: a site with its audit scores on a raised tray — the same picture, drawn from
-         the design system's parts rather than photographed from the product. -->
+         with a Lighthouse card over them. Ours is the registered `infrastructure-as-code`
+         scene: the provider declared once, the resources it raises standing beside it.
+         It carries no texture and no inset: the scene covers the cell, so it runs off
+         every edge instead of sitting letterboxed on a ground. `h-full!` is the only way
+         past the component's own `h-auto`. -->
     <SectionModule
       :divided="false"
       :padded="false"
     >
-      <FrameBox
-        flush
-        borders="y"
-        marks="bottom"
+      <MediaSplit
+        :media-href="DOCS"
+        framed
+        texture="none"
+        title="Optimize dynamic delivery"
+        description="Define acceleration rules for APIs, personalized content, and dynamic routes without changing your stack. Azion Web Platform helps improve performance, SEO, and reliability across distributed applications."
       >
-        <div class="grid lg:grid-cols-2">
-          <div class="flex flex-col justify-between gap-(--spacing-xxl) p-(--spacing-xl)">
-            <div class="flex flex-col gap-(--spacing-lg)">
-              <h2 class="m-0 text-balance text-heading-md text-(--text-default)">
-                Optimize dynamic delivery
-              </h2>
-              <p class="m-0 text-pretty text-body-md text-(--text-muted)">
-                Define acceleration rules for APIs, personalized content, and dynamic routes without
-                changing your stack. Azion Web Platform helps improve performance, SEO, and
-                reliability across distributed applications.
-              </p>
-
-              <!-- The four surfaces the rules can be written from. A two-column list, not
-                   four cards: it is an inventory inside a paragraph's argument, so it takes
-                   the paragraph's own measure. -->
-              <ul class="m-0 grid list-none grid-cols-2 gap-(--spacing-md) p-0">
-                <li
-                  v-for="surface in SURFACES"
-                  :key="surface.label"
-                  class="flex items-center gap-(--spacing-sm) text-body-md text-(--text-default)"
-                >
-                  <i
-                    :class="surface.icon"
-                    aria-hidden="true"
-                    class="text-(--primary)"
-                  />
-                  {{ surface.label }}
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <Button
-                label="Docs"
-                kind="text"
-                size="large"
-                :href="DOCS"
+        <template #content>
+          <ul class="m-0 grid list-none grid-cols-2 gap-(--spacing-md) p-0">
+            <li
+              v-for="surface in SURFACES"
+              :key="surface.label"
+              class="flex items-center gap-(--spacing-sm) text-body-md text-(--text-default)"
+            >
+              <i
+                :class="surface.icon"
+                aria-hidden="true"
+                class="text-(--primary)"
               />
-            </div>
-          </div>
-
-          <div
-            class="flex items-center justify-center border-t border-(--border-default) p-(--spacing-xl) lg:border-l lg:border-t-0"
-          >
-            <Illustration
-              name="optimize-application"
-              size="large"
-              aria-label="An application's audit scores, raised over the site they measure"
-            />
-          </div>
-        </div>
-      </FrameBox>
+              {{ surface.label }}
+            </li>
+          </ul>
+        </template>
+        <template #media>
+          <Illustration
+            name="infrastructure-as-code"
+            aria-label="An Azion provider declared in Terraform, raising the resources beside it"
+            class="h-full! w-full object-cover"
+          />
+        </template>
+        <template #actions>
+          <Button
+            label="Docs"
+            kind="secondary"
+            size="small"
+            :href="DOCS"
+            icon="pi pi-chevron-right"
+            icon-position="trailing"
+            animated
+          />
+        </template>
+      </MediaSplit>
     </SectionModule>
 
-    <!-- ── Band 6 — the art, then the copy ──────────────────────────────────────
+    <!-- ── Band 6 — the art, then the copy ──────────────────────────
          The source mirrors the band above it: art on the start edge, copy on the end edge.
          `flush` lands this frame's top rule on that frame's floor, so the two butt together
          exactly as they do on the source page.
 
-         The art is composed from Illustration parts rather than selected from the registry:
-         no registered scene draws a cache key. It is deliberately WORDLESS — a request
-         entering, three keys segmenting it, the cache behind them — because the band's own
-         copy already names the three keys, and art that repeats the list beside it is the
-         list twice. Below `lg` it is the grid's second row, so the copy leads on a phone. -->
+         The art is the official `distributed-apis` scene — one request fanning out across the
+         platform, the closest drawing the library carries to a key segmenting a request. Below
+         `lg` it is the grid's second row, so the copy leads on a phone. -->
     <SectionModule
       :divided="false"
       :padded="false"
     >
-      <FrameBox
-        flush
-        borders="y"
-        marks="bottom"
+      <MediaSplit
+        :media-href="DOCS"
+        framed
+        kind="media-start"
+        title="Advanced Cache Key for personalized content delivery"
+        description="Control how content is segmented in cache beyond the URL path. Configure cache variation rules based on query strings, cookies, and headers—enabling fine-grained control for personalized experiences."
       >
-        <div class="grid lg:grid-cols-2">
-          <div
-            class="order-last flex min-w-0 items-center justify-center overflow-hidden border-t border-(--border-default) p-(--spacing-xl) lg:order-first lg:border-r lg:border-t-0"
-          >
-            <!-- THE SCENE IS A FIXED 544px ROW AND THE CELL IS NOT. Illustration parts carry
-                 their own geometry, so this row does not reflow — at 375 it pushed the page
-                 234px sideways. It is SCALED rather than reflowed: `scale` does not change the
-                 layout box, so the cell also clips (`overflow-hidden` above), and the two
-                 together keep the drawing whole and the page's width honest. Reflowing it
-                 instead would break the left-to-right reading the connectors are drawing. -->
-            <Illustration
-              size="large"
-              aria-label="One request segmented into cache by query string, cookie and header"
-              class="shrink-0 scale-[0.62] sm:scale-90 lg:scale-100"
+        <template #content>
+          <ul class="m-0 grid list-none grid-cols-2 gap-(--spacing-md) p-0">
+            <li
+              v-for="feature in CACHE_KEY"
+              :key="feature.label"
+              class="flex items-center gap-(--spacing-sm) text-body-md text-(--text-default)"
             >
-              <div class="flex items-center gap-(--spacing-xs)">
-                <Illustration.Box icon="ai ai-edge-application" />
-                <Illustration.Connector
-                  kind="dashed"
-                  animated
-                />
-                <Illustration.Node />
-
-                <div class="flex flex-col gap-(--spacing-xs)">
-                  <Illustration.Box
-                    icon="ai ai-filter-alt"
-                    size="small"
-                  />
-                  <Illustration.Box
-                    icon="ai ai-variables"
-                    size="small"
-                    active
-                  />
-                  <Illustration.Box
-                    icon="ai ai-json"
-                    size="small"
-                  />
-                </div>
-
-                <Illustration.Node />
-                <Illustration.Connector
-                  kind="dashed"
-                  animated
-                />
-                <Illustration.Box
-                  icon="ai ai-tiered-cache"
-                  active
-                />
-              </div>
-            </Illustration>
-          </div>
-
-          <div class="flex flex-col justify-between gap-(--spacing-xxl) p-(--spacing-xl)">
-            <div class="flex flex-col gap-(--spacing-lg)">
-              <h2 class="m-0 text-balance text-heading-md text-(--text-default)">
-                Advanced Cache Key for personalized content delivery
-              </h2>
-              <p class="m-0 text-pretty text-body-md text-(--text-muted)">
-                Control how content is segmented in cache beyond the URL path. Configure cache
-                variation rules based on query strings, cookies, and headers—enabling fine-grained
-                control for personalized experiences.
-              </p>
-
-              <ul class="m-0 grid list-none grid-cols-2 gap-(--spacing-md) p-0">
-                <li
-                  v-for="feature in CACHE_KEY"
-                  :key="feature.label"
-                  class="flex items-center gap-(--spacing-sm) text-body-md text-(--text-default)"
-                >
-                  <i
-                    :class="feature.icon"
-                    aria-hidden="true"
-                    class="text-(--primary)"
-                  />
-                  {{ feature.label }}
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <Button
-                label="Learn more"
-                kind="text"
-                size="large"
-                :href="DOCS"
+              <i
+                :class="feature.icon"
+                aria-hidden="true"
+                class="text-(--primary)"
               />
-            </div>
-          </div>
-        </div>
-      </FrameBox>
+              {{ feature.label }}
+            </li>
+          </ul>
+        </template>
+        <template #media>
+          <Illustration
+            name="distributed-apis"
+            aria-label="One request segmented into cache by query string, cookie and header"
+          />
+        </template>
+        <template #actions>
+          <Button
+            label="Learn more"
+            kind="secondary"
+            size="small"
+            :href="DOCS"
+            icon="pi pi-chevron-right"
+            icon-position="trailing"
+            animated
+          />
+        </template>
+      </MediaSplit>
     </SectionModule>
 
     <!-- ── Band 7 — the argument beside the sample ──────────────────────────────
@@ -730,6 +656,9 @@
                 kind="text"
                 size="large"
                 :href="DOCS"
+                icon="pi pi-chevron-right"
+                icon-position="trailing"
+                animated
               />
             </div>
           </div>
@@ -786,29 +715,22 @@
         marks="bottom"
       >
         <CardGrid
-          variant="divider"
+          kind="divider"
           :columns="3"
         >
           <div
             v-for="useCase in USE_CASES"
             :key="useCase.title"
-            class="flex flex-col gap-(--spacing-md) bg-(--bg-canvas) p-(--spacing-xl)"
+            class="flex bg-(--bg-canvas)"
           >
-            <Overline>{{ useCase.eyebrow }}</Overline>
-            <h3 class="m-0 text-balance text-heading-xs text-(--text-default)">
-              {{ useCase.title }}
-            </h3>
-            <p class="m-0 flex-1 text-pretty text-body-sm text-(--text-muted)">
-              {{ useCase.description }}
-            </p>
-            <div>
-              <Button
-                :label="useCase.action"
-                kind="text"
-                size="medium"
-                :href="useCase.href"
-              />
-            </div>
+            <Topic
+              :icon="useCase.icon"
+              :title="useCase.title"
+              :description="useCase.description"
+              :href="useCase.href"
+              :heading-level="3"
+              class="w-full p-(--spacing-xl)"
+            />
           </div>
         </CardGrid>
       </FrameBox>
@@ -851,50 +773,36 @@
             </li>
           </ul>
 
-          <figure
-            class="m-0 flex flex-col gap-(--spacing-xl) border-t border-(--border-default) p-(--spacing-xl) lg:border-l lg:border-t-0"
+          <!-- The mark is the client SIGNING the quote, which the source names separately from
+               the `Zoop` cell in the grid beside it (`Zoop Logo` in its inventory) — not a
+               thirteenth logo in the strip. This repo holds no Zoop artwork, so ClientMark
+               writes the wordmark, which is exactly what the source renders. The quotation
+               keeps the source's straight ASCII quotes. -->
+          <Quote
+            kind="signed"
+            text='"Azion delivered the advanced protection and superior performance we needed, with fast implementation and immediate results."'
+            name="Ismael Aguilar"
+            job-title="Information Security Manager at Zoop"
+            class="border-t border-(--border-default) p-(--spacing-xl) lg:border-t-0 lg:border-l"
           >
-            <!-- No `text-pretty` here, unlike every paragraph on the page: on a four-line
-                 quotation Chromium's `pretty` shortens every line to even out the last one,
-                 which is a paragraph treatment. Greedy wrapping fills the measure. -->
-            <!-- The featured client's own mark, above the words. The source names it as a
-                 separate mark on every product page (`Zoop Logo` in the inventory, distinct
-                 from the `Zoop` cell in the grid) — it is the client SIGNING the quote, not
-                 a thirteenth logo in the strip. This repo holds no Zoop artwork, so
-                 ClientMark writes the wordmark, which is exactly what the source renders. -->
-            <ClientMark
-              :client="registered('Zoop')"
-              mark="h-8 w-auto max-w-40 object-contain"
-            />
-
-            <!-- The source sets the quotation in straight ASCII quotes, and a quotation
-                 mark is part of the line, not typesetting applied to it — so it is carried
-                 across as written rather than curled to match the Functions page's quote. -->
-            <blockquote class="m-0 max-w-(--container-2xl) text-heading-md text-(--text-default)">
-              "Azion delivered the advanced protection and superior performance we needed, with fast
-              implementation and immediate results."
-            </blockquote>
-
-            <!-- The signature: the name in the accent, the role beside it in the default
-                 ink, both in the overline's mono uppercase — the source's own pairing. -->
-            <figcaption
-              class="flex flex-col gap-(--spacing-xs) sm:flex-row sm:items-center sm:gap-(--spacing-xl)"
-            >
-              <Overline>Ismael Aguilar</Overline>
-              <span class="px-1 text-overline-md uppercase text-(--text-default)">
-                Information Security Manager at Zoop
-              </span>
-            </figcaption>
-
-            <div class="mt-auto">
+            <template #mark>
+              <ClientMark
+                :client="registered('Zoop')"
+                mark="h-8 w-auto max-w-40 object-contain"
+              />
+            </template>
+            <template #actions>
               <Button
                 label="Clients"
                 kind="text"
                 size="large"
                 href="/site/home"
+                icon="pi pi-chevron-right"
+                icon-position="trailing"
+                animated
               />
-            </div>
-          </figure>
+            </template>
+          </Quote>
         </div>
       </FrameBox>
     </SectionModule>
@@ -921,7 +829,7 @@
         marks="bottom"
       >
         <CardGrid
-          variant="divider"
+          kind="divider"
           :columns="4"
           :mobile-columns="2"
         >
@@ -947,68 +855,17 @@
     <SectionGap hatch />
 
     <!-- ── Band 15 — Frequently Asked Questions ─────────────────────────────────
-         The source's three-column split: the heading holds the first third, the questions
-         the other two. The seam between the cells and the rules between the questions are
-         the grid's `gap-px`, so neither cell draws a border — and each fills `--bg-canvas`,
-         or the whole band goes the colour of the gap.
-
-         `--accordion-inset` is the component's own hook for the horizontal step, declared
-         once on the grid so the heading, every trigger and every answer start on one
-         content column at whatever the token steps to per breakpoint. The rule is held at
-         the ITEM's edge rather than under the trigger, so an open item is one cell —
-         question plus its answer — and the stack keeps exactly one rule per row whatever is
-         open. The last row is the exception in both states: it sits on the band's floor,
-         which the FrameBox already draws. -->
+         `Faq` in its hairline register, framed so the band draws its own floor. -->
     <SectionModule
       id="faq"
       :divided="false"
       :padded="false"
     >
-      <FrameBox
-        flush
-        borders="y"
-        marks="bottom"
-      >
-        <div
-          class="grid gap-px bg-(--border-default) [--accordion-inset:var(--spacing-lg)] lg:grid-cols-3 lg:[--accordion-inset:var(--spacing-xl)]"
-        >
-          <div class="bg-(--bg-canvas) px-(--accordion-inset) py-(--spacing-md)">
-            <h2 class="m-0 mt-(--spacing-md) text-balance text-heading-lg text-(--text-default)">
-              Frequently Asked Questions
-            </h2>
-          </div>
-          <div class="bg-(--bg-canvas) lg:col-span-2">
-            <Accordion
-              type="single"
-              collapsible
-              size="large"
-            >
-              <Accordion.Item
-                v-for="(item, index) in FAQ"
-                :key="item.value"
-                :value="item.value"
-                :class="[
-                  'border-(--border-default) data-[state=open]:border-b',
-                  index === FAQ.length - 1 && 'border-b-0 data-[state=open]:border-b-0'
-                ]"
-              >
-                <Accordion.Trigger
-                  class="border-b-0! py-(--spacing-md) data-[state=open]:min-h-0 data-[state=open]:pb-0"
-                >
-                  <span class="text-body-md text-(--text-default)">{{ item.question }}</span>
-                </Accordion.Trigger>
-                <Accordion.Content>
-                  <p
-                    class="m-0 max-w-(--container-2xl) px-(--accordion-inset) pt-(--spacing-xs) pb-(--spacing-md) text-body-sm text-(--text-muted)"
-                  >
-                    {{ item.answer }}
-                  </p>
-                </Accordion.Content>
-              </Accordion.Item>
-            </Accordion>
-          </div>
-        </div>
-      </FrameBox>
+      <Faq
+        framed
+        title="Frequently Asked Questions"
+        :items="FAQ"
+      />
     </SectionModule>
 
     <!-- Band 16 — spacer. -->
@@ -1017,14 +874,41 @@
     <!-- ── Band 17 — the closing CTA ────────────────────────────────────────────
          The Site's own closing band, with this page's strings passed in. Its defaults are
          the homepage's copy, so every string the source states here is explicit. -->
-    <SiteCta
-      eyebrow="Build"
-      title="Build once."
-      title-muted="Run everywhere."
-      description="Get a faster path to launch, lower latency, and less infrastructure overhead."
-      primary-label="Start Free"
-      secondary-label="Talk to our team"
-    />
+    <SectionModule
+      id="contact"
+      :divided="false"
+      :padded="false"
+      class="scroll-mt-(--spacing-xxl)"
+    >
+      <CallToAction
+        framed
+        kind="split"
+        eyebrow="Build"
+        title="Build once."
+        title-muted="Run everywhere."
+        description="Get a faster path to launch, lower latency, and less infrastructure overhead."
+      >
+        <template #actions>
+          <Button
+            label="Start Free"
+            kind="secondary"
+            size="large"
+            @click="goSignup"
+          />
+        </template>
+        <template #aside>
+          <Button
+            label="Talk to our team"
+            kind="outlined"
+            size="large"
+            href="#"
+            icon="pi pi-chevron-right"
+            icon-position="trailing"
+            animated
+          />
+        </template>
+      </CallToAction>
+    </SectionModule>
 
     <!-- Band 18 — the spacer the source closes on, hatched. A bare FrameBox at SectionGap's
          own `medium` height drawing NO rules: the footer below opens with a full-bleed rule,

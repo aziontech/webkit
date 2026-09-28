@@ -1,66 +1,72 @@
 <script setup>
-  // Recognized as a Market Leader — azion.com/en bands 14 + 15.
-  //
-  // The analyst recognitions: a centred title band over one cell per award, each stating
-  // what was recognized and who said it. The source runs these as a three-up carousel
-  // with chevrons; here they are a four-up hairline grid, because all four fit the page
-  // frame at once and a row you cannot over-scroll needs no controls
-  // (.claude/rules/dependencies.md — a carousel is not a dependency we take on to show
-  // four cards).
-  //
-  // Each cell leads with the REPORT VENDOR'S MARK, the way the source does — the badge or
-  // wordmark of whoever made the call, then the call, then which report it came from.
-  // The mark is the fastest way to read a row of recognitions: the eye lands on who said
-  // it before reading what was said.
+  import forrester from '@aziontech/webkit/assets/logos/forrester.svg'
+  import forresterReversed from '@aziontech/webkit/assets/logos/forrester-reversed.svg'
+  import frost from '@aziontech/webkit/assets/logos/frost-and-sullivan.svg'
+  import frostReversed from '@aziontech/webkit/assets/logos/frost-and-sullivan-reversed.svg'
+  import g2 from '@aziontech/webkit/assets/logos/g2.svg'
+  import gartner from '@aziontech/webkit/assets/logos/gartner.svg'
+  import gartnerReversed from '@aziontech/webkit/assets/logos/gartner-reversed.svg'
+  import gigaom from '@aziontech/webkit/assets/logos/gigaom.svg'
+  import gigaomReversed from '@aziontech/webkit/assets/logos/gigaom-reversed.svg'
   import FrameBox from '@aziontech/webkit/frame-box'
+  import Quote from '@aziontech/webkit/quote'
+  import SectionModule from '@aziontech/webkit/section-module'
   import SectionTitle from '@aziontech/webkit/section-title'
-  // `fill="currentColor"`, which has no inherited colour inside an <img> and so resolves
-  // to black — inverted to white for this band.
-  import g2 from '@shared/ui/brand/clients/g2-logo.svg'
-  // THE FOLDER NAME IS NOT THE ARTWORK. `light/` here holds the WHITE lockups
-  // (`fill="#fff"`) and `dark/` the dark ones (`#1E1E1E`) — the folder records which
-  // theme the file was exported FOR, and the fills record what it draws. This band is on
-  // the site's dark canvas, so it takes the white pair for the two wordmarks. Same trap
-  // the Caixa mark carries in the client registry; classified by reading the fills.
-  import frostAndSullivan from '@shared/ui/brand/clients/light/frostandsullivan-logo.svg'
-  import gigaom from '@shared/ui/brand/clients/light/gigaom-logo.svg'
-  import { CardGrid, SectionModule } from '@shared/ui/layout/index.js'
+  import ClientMark from '@shared/ui/brand/ClientMark.vue'
 
-  // Mark, claim, then source, in the source page's order. `markClass` is per-vendor
-  // geometry, not decoration: G2 is a round badge and the other two are wide wordmarks,
-  // so one height for all three would set the badge tiny beside them. Each is sized to
-  // read at the same weight in its cell — the same reason the client strip passes its
-  // mark geometry from the call site.
-  const awards = [
+  const FIRMS = {
+    gigaom: { name: 'GigaOm', logo: gigaomReversed, logoLight: gigaom },
+    forrester: { name: 'Forrester', logo: forresterReversed, logoLight: forrester },
+    gartner: { name: 'Gartner', logo: gartnerReversed, logoLight: gartner },
+    frost: { name: 'Frost & Sullivan', logo: frostReversed, logoLight: frost },
+    g2: { name: 'G2', logo: g2, logoLight: g2 }
+  }
+
+  // Every claim below is sourced from the analyst-reports index in the Azion KB
+  // (analyst-reports/analyst-recognitions-by-year.md): firm, report, position and date
+  // as the index records them. Courtesy copies there are marked not-for-distribution,
+  // so nothing is quoted from a report body — only the position the index states.
+  const recognitions = [
     {
-      logo: g2,
-      markClass: 'h-8 w-8 invert',
-      claim:
-        'Recognized as a Leader in CDN, Web Security, and DDoS Protection, and a High Performer in Cloud Security, WAF, Bot Detection and Mitigation, SSL & TLS Certificate Tools, and API Security Tools.',
-      source: 'G2 Spring 2026 Reports'
+      text: 'Named a Leader and Fast Mover, and the only vendor whose platform meets every key criterion the report sets for a full-stack edge deployment.',
+      jobTitle: 'GigaOm Radar for Full-Stack Edge Deployments v3 — May 2026',
+      firm: FIRMS.gigaom
     },
     {
-      logo: g2,
-      markClass: 'h-8 w-8 invert',
-      claim:
-        'Recognized as a Leader in CDN and a High Performer in Web Security, DDoS Protection, WAF, Bot Detection and Mitigation, SSL & TLS Certificate Tools, and DNS Security Solution.',
-      source: 'G2 Winter 2026 Reports'
+      text: 'Evaluated as a Strong Performer among the edge development platforms that matter most.',
+      jobTitle: 'The Forrester Wave™: Edge Development Platforms, Q1 2026 — March 2026',
+      firm: FIRMS.forrester
     },
     {
-      logo: gigaom,
-      markClass: 'h-5 w-auto max-w-40 object-contain object-left',
-      claim:
-        'Named a Leader and the only edge platform built specifically for that purpose, whose capabilities meet all key criteria in the report.',
-      source: 'GigaOm Radar for Edge Platforms'
+      text: 'Covered as a vendor in the market guide that defines the edge distribution platform category, in two consecutive editions.',
+      jobTitle: 'Gartner Market Guide for Edge Distribution Platforms — November 2025',
+      firm: FIRMS.gartner
     },
     {
-      logo: frostAndSullivan,
-      markClass: 'h-8 w-auto max-w-40 object-contain object-left',
-      claim:
-        "Awarded in the Edge Serverless Computing category and recognized for consistently exceeding its customers' performance expectations.",
-      source: '2023 North American New Product Innovation Award'
+      text: 'Recognized as Latin America Company of the Year in the edge distribution platform industry, after being profiled among the Companies to Action on the Frost Radar™.',
+      jobTitle: 'Frost & Sullivan, 2026 Latin America Company of the Year — June 2026',
+      firm: FIRMS.frost
+    },
+    {
+      text: 'Positioned as a Challenger and Fast Mover, with the application and API security stack evaluated as one platform rather than a set of bolt-ons.',
+      jobTitle: 'GigaOm Radar for Application and API Security v5 — March 2026',
+      firm: FIRMS.gigaom
+    },
+    {
+      text: 'Recognized as a Leader in CDN, Web Security, and DDoS Protection, and a High Performer in Cloud Security, WAF, Bot Detection and Mitigation, SSL & TLS Certificate Tools, and API Security Tools.',
+      jobTitle: 'G2 Spring 2026 Reports',
+      firm: FIRMS.g2
+    },
+    {
+      text: 'Recognized as a Leader in CDN and a High Performer in Web Security, DDoS Protection, WAF, Bot Detection and Mitigation, SSL & TLS Certificate Tools, and DNS Security Solution.',
+      jobTitle: 'G2 Winter 2026 Reports',
+      firm: FIRMS.g2
     }
   ]
+
+  const SECONDS_PER_CARD = 12
+
+  const passDuration = `${recognitions.length * SECONDS_PER_CARD}s`
 </script>
 
 <template>
@@ -75,40 +81,52 @@
     <FrameBox
       flush
       borders="y"
-      marks="bottom"
+      marks="all"
     >
-      <CardGrid
-        variant="divider"
-        :columns="4"
-        :mobile-columns="1"
+      <div
+        role="region"
+        aria-label="Analyst recognitions"
+        tabindex="0"
+        class="group/loop overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset motion-reduce:overflow-x-auto"
       >
-        <!-- `justify-between` is what puts every source line on one baseline: the mark and
-             the claim hang from the cell's top edge and the attribution stands on its
-             floor, however long the claim above it runs. The mark sits in a fixed 32px
-             band for the same reason the client strip reserves one — a round badge and a
-             wide wordmark then start every claim on exactly one line. -->
         <div
-          v-for="award in awards"
-          :key="award.source"
-          class="flex min-w-0 flex-col justify-between gap-(--spacing-xl) bg-(--bg-canvas) p-(--spacing-xl)"
+          :style="{ animationDuration: passDuration }"
+          class="flex w-max animate-brand-marquee group-focus-within/loop:[animation-play-state:paused] group-hover/loop:[animation-play-state:paused] motion-reduce:animate-none"
         >
-          <div class="flex flex-col gap-(--spacing-lg)">
-            <div class="flex h-8 items-center">
-              <!-- Decorative: the attribution on the cell's floor names the vendor in
-                   type, so the mark repeating it would be read out twice. -->
-              <img
-                :src="award.logo"
-                alt=""
-                aria-hidden="true"
-                decoding="async"
-                :class="award.markClass"
-              />
-            </div>
-            <p class="m-0 text-pretty text-heading-sm text-(--text-default)">{{ award.claim }}</p>
-          </div>
-          <p class="m-0 text-pretty text-body-sm text-(--text-muted)">{{ award.source }}</p>
+          <ul
+            v-for="copy in 2"
+            :key="copy"
+            :data-duplicate="copy === 2 || null"
+            :aria-hidden="copy === 2 ? 'true' : undefined"
+            class="m-0 flex w-max shrink-0 list-none p-0 motion-reduce:data-[duplicate]:hidden"
+          >
+            <li
+              v-for="(recognition, index) in recognitions"
+              :key="`${copy}-${index}`"
+              class="flex w-[85vw] max-w-(--container-md) shrink-0 sm:w-(--container-md)"
+            >
+              <FrameBox
+                borders="right"
+                marks="all"
+                class="w-full bg-(--bg-surface)"
+              >
+                <Quote
+                  :text="recognition.text"
+                  :job-title="recognition.jobTitle"
+                  class="p-(--spacing-xl)"
+                >
+                  <template #mark>
+                    <ClientMark
+                      :client="recognition.firm"
+                      mark="h-8 w-auto"
+                    />
+                  </template>
+                </Quote>
+              </FrameBox>
+            </li>
+          </ul>
         </div>
-      </CardGrid>
+      </div>
     </FrameBox>
   </SectionModule>
 </template>

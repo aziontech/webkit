@@ -56,25 +56,31 @@
   const productGroups = [
     {
       label: 'Build',
-      href: '#build',
+      href: '/site/products#build',
       items: [
+        {
+          icon: 'ai ai-workloads',
+          label: 'Workloads',
+          description: 'Put an application on a hostname, everywhere',
+          href: '/site/products/workloads'
+        },
         {
           icon: 'ai ai-edge-functions',
           label: 'Functions',
           description: 'Run serverless code at the edge',
-          href: '/site/functions'
+          href: '/site/products/functions'
         },
         {
           icon: 'ai ai-tiered-cache',
           label: 'Cache',
           description: 'Speed up content delivery',
-          href: '/site/cache'
+          href: '/site/products/cache'
         },
         {
           icon: 'ai ai-edge-application',
           label: 'Application Accelerator',
           description: 'Optimize dynamic applications',
-          href: '/site/application-accelerator'
+          href: '/site/products/application-accelerator'
         },
         {
           icon: 'ai ai-edge-ai',
@@ -85,7 +91,7 @@
     },
     {
       label: 'Store',
-      href: '#store',
+      href: '/site/products#store',
       items: [
         {
           icon: 'ai ai-edge-sql',
@@ -102,7 +108,7 @@
     },
     {
       label: 'Protect',
-      href: '#protect',
+      href: '/site/products#protect',
       items: [
         { icon: 'ai ai-waf-rules', label: 'WAF', description: 'Web application firewall' },
         {
@@ -120,7 +126,7 @@
     },
     {
       label: 'Observe',
-      href: '#observe',
+      href: '/site/products#observe',
       items: [
         {
           icon: 'ai ai-data-stream',
@@ -144,47 +150,53 @@
   const solutionGroups = [
     {
       label: 'By Use Case',
-      href: '#use-cases',
+      href: '/site/solutions#use-cases',
       items: [
         {
-          icon: 'ai ai-edge-application',
-          label: 'Web Apps',
-          description: 'Fast, scalable web applications',
-          href: '/site/web-apps'
+          label: 'Build and Run Applications',
+          description: 'Ship and scale web apps and APIs',
+          href: '/site/solutions/web-apps'
         },
         {
-          icon: 'ai ai-ai-pillar',
-          label: 'AI',
-          description: 'Infrastructure for AI workloads'
+          label: 'Improve Application Performance and Reliability',
+          description: 'Faster, always-on delivery',
+          href: '/site/solutions#use-cases'
         },
         {
-          icon: 'ai ai-secure-pillar',
-          label: 'Application Security',
-          description: 'End-to-end security'
+          label: 'Build and Run AI Workloads',
+          description: 'Infrastructure for AI workloads',
+          href: '/site/solutions#use-cases'
+        },
+        {
+          label: 'Secure Applications and Networks',
+          description: 'End-to-end security',
+          href: '/site/solutions#use-cases'
+        },
+        {
+          label: 'Deliver Media and Streaming Content',
+          description: 'Low-latency video and live streams',
+          href: '/site/solutions#use-cases'
         }
       ]
     },
     {
       label: 'By Industry',
-      href: '#industries',
+      href: '/site/solutions#industries',
       items: [
         {
-          icon: 'ai ai-store',
           label: 'Financial Services',
           description: 'Performance and compliance',
-          href: '/site/financial-services'
+          href: '/site/solutions/financial-services'
         },
         {
-          icon: 'ai ai-build-pillar',
           label: 'Technology',
           description: 'Scale for digital products',
-          href: '/site/technology'
+          href: '/site/solutions/technology'
         },
         {
-          icon: 'ai ai-marketplace',
           label: 'Retail',
           description: 'Shopping experiences you can trust',
-          href: '/site/retail'
+          href: '/site/solutions/retail'
         }
       ]
     }
@@ -222,6 +234,12 @@
       href: '#content',
       items: [
         { icon: 'ai ai-medium', label: 'Blog', description: 'Technical articles and news' },
+        {
+          icon: 'pi pi-book',
+          label: 'Learning',
+          description: 'Fundamentals, subject by subject',
+          href: '/site/learning'
+        },
         {
           icon: 'ai ai-layers',
           label: 'Resource Hub',
@@ -380,7 +398,7 @@
        The surface stays full bleed — the fill and the hairline run to the window edges,
        because a bar is chrome — while the REGIONS are capped and centred. The cap is the
        bar's OWN measure (`--layout-measure-site-header`, 1620), one rung wider than the
-       page frame (`--layout-measure-site`, 1388) that BannerContainer, SectionContainer
+       page frame (`--layout-measure-site`, 1388) that Hero, SectionContainer
        and the footer share: a bar carries the brand at one end and the account actions at
        the other, so it wants the room a reading frame refuses. Below both caps the two are
        one inset — the boundary — so on a laptop and a phone the logo still opens on the
@@ -541,7 +559,10 @@
                     :description="item.description"
                     close-on-click
                   >
-                    <template #icon>
+                    <template
+                      v-if="item.icon"
+                      #icon
+                    >
                       <i
                         :class="item.icon"
                         aria-hidden="true"
@@ -571,10 +592,13 @@
                bar and the hero share, and between 1024 and ~1103 it did not fit at all.
 
                Telling the clamp that the "window edge" is the COLUMN edge fixes exactly that
-               panel and nothing else. `collisionPadding` is the inset read off the bar, and
+               panel and nothing else. `collisionPadding.x` is the inset read off the bar, and
                the clamp is `x ∈ [P, vw - W - P]`: a sheet as wide as the column (`W = vw - 2P`)
                has one legal x — P, the column's leading edge — while a narrow panel keeps the
                placement it always had and merely stops short of the column's edges.
+
+               It goes on `x` ONLY: as a scalar the inset applies to both axes, and above 1620
+               (where P grows with the window) it drops the panel P px off the bar — 128 at 1920.
 
                The alternative was to override the placement outright (`transform-none!` +
                `left-1/2!` + an explicit `top`), which pins the wide panel just as well and
@@ -585,7 +609,7 @@
             side="bottom"
             align="start"
             :side-offset="12"
-            :collision-padding="columnInset"
+            :collision-padding="{ x: columnInset, y: 8 }"
           >
             <!-- `kind="contrast"` is the DS's inverted panel: over this page — pinned dark,
                  `--bg-canvas` pure black — a backdrop cannot darken anything and a shadow is

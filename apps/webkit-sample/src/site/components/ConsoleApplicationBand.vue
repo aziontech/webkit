@@ -45,8 +45,8 @@
   import BoxGridSelection from '@aziontech/webkit/box-grid-selection'
   import FrameBox from '@aziontech/webkit/frame-box'
   import MiniButton from '@aziontech/webkit/mini-button'
+  import SectionModule from '@aziontech/webkit/section-module'
   import SectionTitle from '@aziontech/webkit/section-title'
-  import { SectionModule } from '@shared/ui/layout/index.js'
   import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
   import { useRouter } from 'vue-router'
 
@@ -207,7 +207,7 @@
             <MiniButton
               label="Open the Console"
               show-icon
-              icon="pi pi-arrow-right"
+              icon="pi pi-angle-right"
               @click="openConsole"
             />
           </div>

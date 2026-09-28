@@ -1,59 +1,181 @@
 <script setup>
-  // Complete Development Platform — azion.com/en bands 11 + 12.
-  //
-  // The source states these as two stacked sections: a centred title band, then a
-  // two-column band with the argument on the left and the project's own config file on
-  // the right. In this page language that pair IS one module — a `SectionModule` whose
-  // `#header` slot holds the title band and whose body holds the split — so the rule
-  // between them is the header's `border-b` and nothing draws it twice.
-  //
-  // THE SPLIT IS THE FUNCTIONS PAGE'S CODE BAND, not a second design for the same idea.
-  // That page already answers "argument beside the sample it is talking about" — the 4fr
-  // /5fr split, the block sitting on the pixelate field, the overhang cropped at the
-  // frame's floor by a scrim — and this band is the same thing about a different sample.
-  // The anatomy is carried over whole (see AzionFunctions, "From hello world to
-  // full-stack applications"); only the copy and the file are this page's.
-  //
-  // Source → ours:
-  //   • The title band's copy is the source's `h2`, with no eyebrow and no description,
-  //     because the source renders neither. `SectionTitle` supplies the boundary.
-  //   • The bullet list stays a real `<ul>`: it is a list on the source and reads as one.
-  //     It sits where the shared base puts its paragraph — the top group of a
-  //     `justify-between` column, with the action standing on the cell's floor.
-  //   • The right half is `CodeBlock` with the source's file name and its code verbatim.
-  //   • The `Learn more` action is a `MiniButton` on the source's own href.
+  import Button from '@aziontech/webkit/button'
   import CodeBlock from '@aziontech/webkit/code-block'
   import FrameBox from '@aziontech/webkit/frame-box'
-  import MiniButton from '@aziontech/webkit/mini-button'
+  import SectionModule from '@aziontech/webkit/section-module'
   import SectionTitle from '@aziontech/webkit/section-title'
-  import { PixelateBanner } from '@shared/ui/banners/index.js'
-  import { SectionModule } from '@shared/ui/layout/index.js'
+  import StickyStack from '@aziontech/webkit/sticky-stack'
+  import TextureMaterial from '@aziontech/webkit/texture-material'
+
+  const DOCS_HREF = 'https://www.azion.com/en/documentation/devtools/'
+  const STICKY_QUERY = '(min-width: 64rem)'
+  const CODE_CONTENT = '[data-testid="data-code-block__content"]'
+  const RELEASE_FALLBACK_MS = 600
+
+  const easedFrames = new WeakSet()
+  let outgoingContent = null
+
+  const prefersReducedMotion = () =>
+    window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false
+
+  const easeCodeHeight = (frame) => {
+    if (!frame || easedFrames.has(frame)) return
+    easedFrames.add(frame)
+    if (!window.matchMedia?.(STICKY_QUERY).matches) return
+
+    const content = frame.querySelector(CODE_CONTENT)
+    if (!content) return
+
+    const from = outgoingContent?.isConnected ? outgoingContent.getBoundingClientRect().height : 0
+    const animate = from > 0 && !prefersReducedMotion()
+    if (animate) content.style.height = `${from}px`
+
+    requestAnimationFrame(() => {
+      content.style.height = ''
+      const to = content.getBoundingClientRect().height
+      if (!to) return
+      outgoingContent = content
+      if (!animate || to === from) return
+
+      content.style.height = `${from}px`
+      void content.offsetHeight
+      setTimeout(() => {
+        if (content.style.height === `${to}px`) content.style.height = ''
+      }, RELEASE_FALLBACK_MS)
+      requestAnimationFrame(() => {
+        content.style.height = `${to}px`
+      })
+    })
+  }
 
   const capabilities = [
-    'Automated deployment via Git or CLI',
-    'Compatibility with modern web frameworks',
-    'APIs for automation and integration',
-    'Infrastructure as code with Terraform',
-    'Metrics and events via GraphQL API'
+    {
+      title: 'Automated deployment via Git or CLI',
+      description:
+        'Run one command from the project you already have, or connect the repository and let every push to the branch ship itself.'
+    },
+    {
+      title: 'Compatibility with modern web frameworks',
+      description:
+        'Next, Nuxt, Astro, Svelte and twenty more build through a preset the CLI detects, so the config file stays this short.'
+    },
+    {
+      title: 'APIs for automation and integration',
+      description:
+        'Everything the console does is a call you can make yourself, so a workload can be created by the pipeline that needed it.'
+    },
+    {
+      title: 'Infrastructure as code with Terraform',
+      description:
+        'Declare workloads, applications and domains in the provider and apply them under the same review as the rest of your estate.'
+    },
+    {
+      title: 'Metrics and events via GraphQL API',
+      description:
+        'Query the same numbers the console charts, from one endpoint, so a dashboard you already run can carry the platform too.'
+    }
   ]
 
-  // The source's file, byte for byte. One tab, because the source shows one.
-  const codeTabs = [
-    {
-      label: 'azion.config.js',
-      value: 'config',
-      language: 'javascript',
-      fileName: 'azion.config.js',
-      code: `import { defineConfig } from 'azion'
+  const samples = [
+    [
+      {
+        label: 'deploy.sh',
+        value: 'deploy',
+        language: 'bash',
+        fileName: 'deploy.sh',
+        fileIcon: 'ai ai-azion-cli',
+        code: `# Ship the project in front of you
+azion deploy
+
+# Or link the repo once, and every push to main deploys
+azion link --preset next
+git push origin main
+
+# Then roll back if it should not have gone out
+azion rollback --to previous`
+      }
+    ],
+    [
+      {
+        label: 'azion.config.js',
+        value: 'config',
+        language: 'javascript',
+        fileName: 'azion.config.js',
+        fileIcon: 'ai ai-azion text-(--primary)!',
+        code: `import { defineConfig } from 'azion'
 
 export default defineConfig({
   build: {
     entry: 'src/index.ts',
     worker: true,
-    preset: 'typescript'
-  }
+    preset: 'next'
+  },
+  functions: [
+    { name: 'storefront', path: '.edge/worker.js' }
+  ]
 })`
-    }
+      }
+    ],
+    [
+      {
+        label: 'create-workload.sh',
+        value: 'api',
+        language: 'bash',
+        fileName: 'create-workload.sh',
+        fileIcon: 'ai ai-azion-cli',
+        code: `# Create the workload the pipeline just built for
+curl -X POST https://api.azion.com/v4/workloads \\
+  -H "Authorization: Token $AZION_TOKEN" \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "name": "storefront",
+    "domains": ["storefront.example.com"]
+  }'`
+      }
+    ],
+    [
+      {
+        label: 'main.tf',
+        value: 'terraform',
+        language: 'hcl',
+        fileName: 'main.tf',
+        fileIcon: 'ai-cor ai-terraform',
+        code: `resource "azion_application" "storefront" {
+  name                    = "storefront"
+  edge_functions          = true
+  application_accelerator = true
+}
+
+resource "azion_workload" "storefront" {
+  name    = "storefront"
+  domains = ["storefront.example.com"]
+
+  application {
+    id = azion_application.storefront.id
+  }
+}`
+      }
+    ],
+    [
+      {
+        label: 'requests.graphql',
+        value: 'metrics',
+        language: 'graphql',
+        fileName: 'requests.graphql',
+        fileIcon: 'ai-cor ai-graphql',
+        code: `query RequestsByStatus($begin: DateTime!, $end: DateTime!) {
+  httpMetrics(
+    limit: 100
+    filter: { tsRange: { begin: $begin, end: $end } }
+    groupBy: [status]
+  ) {
+    status
+    requests: sum(field: requests)
+    p95: percentile(field: requestTime, percentile: 95)
+  }
+}`
+      }
+    ]
   ]
 </script>
 
@@ -63,90 +185,67 @@ export default defineConfig({
     :padded="false"
   >
     <template #header>
-      <SectionTitle title="Complete Development Platform" />
+      <SectionTitle
+        eyebrow="Ship It"
+        title="Everything You Need to Build and Deploy"
+        description="Deploy from Git or the CLI, automate with APIs and Terraform, and query every metric over GraphQL. One platform carries your web app from the first push to the traffic it serves."
+        size="large"
+      >
+        <template #actions>
+          <Button
+            class="lg:hidden"
+            label="Learn more"
+            kind="secondary"
+            size="small"
+            :href="DOCS_HREF"
+            icon="pi pi-chevron-right"
+            icon-position="trailing"
+            animated
+          />
+        </template>
+      </SectionTitle>
     </template>
 
-    <!-- The split. `flush` leaves the rule above to the header row, `borders="y"` hands
-         the vertical rules back to the column, and `marks="bottom"` ticks the one
-         junction nothing else draws: this band's floor. The rule BETWEEN the halves is
-         the right cell's own — one owner, one line. -->
     <FrameBox
       flush
       borders="y"
       marks="bottom"
+      class="[--sticky-stack-top:3.5rem]"
     >
-      <!-- 50/50 from the TABLET step up: the two halves carry the same weight here (the
-           argument is a list, not a paragraph, so it needs the width the sample does),
-           and at `md` the column is already wide enough for a five-line list beside a
-           nine-line file. Below it they stack and the sample follows the argument. -->
-      <div class="grid md:grid-cols-2">
-        <div class="flex flex-col justify-between gap-(--spacing-xxl) p-(--spacing-xl)">
-          <div class="flex flex-col gap-(--spacing-lg)">
-            <h2 class="m-0 text-balance text-heading-md text-(--text-default)">
-              From Local Dev to Mission Critical
-            </h2>
-            <ul class="m-0 flex list-disc flex-col gap-(--spacing-xs) pl-(--spacing-lg)">
-              <li
-                v-for="capability in capabilities"
-                :key="capability"
-                class="text-pretty text-body-md text-(--text-muted)"
-              >
-                {{ capability }}
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <MiniButton
-              label="Learn more"
-              show-icon
-              icon="pi pi-arrow-right"
-              href="https://www.azion.com/en/documentation/devtools/"
-            />
-          </div>
-        </div>
-
-        <!-- The sample, on the pixelate field. The cell is `overflow-hidden` for both
-             reasons at once: the backdrop is a full-bleed z-0 layer that needs a
-             positioned box to fill, and it is what crops the block's tail at the frame's
-             edge. -->
-        <div
-          class="relative min-w-0 overflow-hidden border-t border-(--border-default) bg-(--bg-surface) md:border-l md:border-t-0"
-        >
-          <!-- Held down and faded at the edges. At full strength the field is a hard
-               regular grid the whole width of the cell, which competes with the code's own
-               rows; this reads as one soft pool behind the block instead. The opacity and
-               the mask geometry are the shared base's — they are fitted to a cell this
-               size, and a smaller cell with the same numbers flattens into an even dot
-               wash under the copy. -->
-          <div
-            aria-hidden="true"
-            class="pointer-events-none absolute inset-0 opacity-60 mask-[radial-gradient(120%_100%_at_15%_50%,black_10%,transparent_85%)]"
-          >
-            <PixelateBanner />
-          </div>
-          <div class="relative z-10 max-h-[32rem] overflow-hidden p-(--spacing-xl) pb-0">
-            <!-- Wrapped so the elevation is cast by a shell of the block's own shape:
-                 CodeBlock rounds to --shape-elements and clips its overflow, so the shadow
-                 goes on a wrapper at the same radius instead of being clipped away.
-                 `animate-lines` is CodeBlock's own staggered line entrance, which ships
-                 with its motion-reduce fallback. -->
-            <div class="min-w-0 rounded-(--shape-elements) shadow-(--shadow-sm)">
+      <StickyStack :items="capabilities">
+        <template #media="{ index }">
+          <TextureMaterial
+            kind="grid"
+            size="small"
+            fade="top"
+            class="max-lg:hidden"
+          />
+          <div class="relative z-10 flex w-full min-w-0 flex-col items-start gap-(--spacing-md)">
+            <div
+              :ref="easeCodeHeight"
+              class="w-full min-w-0 rounded-(--shape-elements) shadow-(--shadow-sm)"
+            >
               <CodeBlock
-                :tabs="codeTabs"
+                :tabs="samples[index]"
                 show-line-numbers
                 animate-lines
-                copy-aria-label="Copy the Azion config sample"
+                :copy-aria-label="`Copy the ${samples[index][0].fileName} sample`"
+              />
+            </div>
+            <div class="max-lg:hidden">
+              <Button
+                label="Learn more"
+                kind="secondary"
+                size="small"
+                :href="DOCS_HREF"
+                icon="pi pi-chevron-right"
+                icon-position="trailing"
+                animated
               />
             </div>
           </div>
-          <!-- The cut, faded: the block ends at the frame's floor, not at a line the
-               reader is meant to read to. -->
-          <div
-            class="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-(--spacing-xxl) bg-linear-to-b from-transparent to-(--bg-surface)"
-          />
-        </div>
-      </div>
+        </template>
+      </StickyStack>
     </FrameBox>
   </SectionModule>
 </template>

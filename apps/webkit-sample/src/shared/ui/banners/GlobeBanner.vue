@@ -93,12 +93,11 @@
   // ── IT KEEPS THE SITE'S HERO TEXTURE UNDER IT ──
   //
   // Every Site hero carries `dot-grid` — azion.com's own hero lattice, and the thing that
-  // makes the site's pages read as one site (CONTAINERS.md § the hero rule). A banner is
-  // named, not composed, on the container, and `#background` would replace the prop rather
-  // than stack with it — so this banner draws the lattice itself and puts the disc on top of
-  // it. The reader gets the site's texture AND this page's subject, and the page still names
-  // exactly one backdrop.
-  import DotGridBanner from './DotGridBanner.vue'
+  // makes the site's pages read as one site (CONTAINERS.md § the hero rule). This banner
+  // draws that lattice itself and puts the disc on top of it, so a page composing it into
+  // one `#background` slot gets the site's texture AND this page's subject.
+  import TextureMaterial from '@aziontech/webkit/texture-material'
+
   import GlobeDisc from './GlobeDisc.vue'
 </script>
 
@@ -107,7 +106,7 @@
     aria-hidden="true"
     class="pointer-events-none absolute inset-0 z-0 overflow-hidden"
   >
-    <DotGridBanner />
+    <TextureMaterial />
 
     <!-- The column the frames on this page draw, mirrored: the same cap and no inset, so the
          disc is placed against the section rules' own vertical rather than 24px inside it.

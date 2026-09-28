@@ -83,9 +83,24 @@
   // scrim's own second stop — exactly as the backdrop slide filters its own.
   import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 
-  import { HERO_FRAMING, MAP_NODES, projectOnMap } from './map-framing.js'
+  import { MAP_NODES, NETWORK_FRAMING, projectOnMap } from './map-framing.js'
   import MapBanner from './MapBanner.vue'
   import MapMesh from './MapMesh.vue'
+
+  defineProps({
+    /**
+     * Which surface the network is the ground of.
+     *
+     * `hero` is a full-screen band under the sticky nav, and it is the one that needs the top
+     * ramp below. `band` is a brick inside the page's framed column: its top edge is already a
+     * hairline rule, so the ramp would fade the artwork away from an edge that is drawn.
+     */
+    kind: {
+      type: String,
+      default: 'hero',
+      validator: (value) => ['hero', 'band'].includes(value)
+    }
+  })
 
   /**
    * Where the copy scrim below still holds most of the canvas. A node west of this is painted
@@ -117,7 +132,7 @@
     const { width, height } = box.value
     if (!width || !height) return []
     return MAP_NODES.filter((node) => {
-      const point = projectOnMap({ framing: HERO_FRAMING, box: box.value, point: node })
+      const point = projectOnMap({ framing: NETWORK_FRAMING, box: box.value, point: node })
       return (
         point.x >= width * SCRIM_OPAQUE && point.x <= width && point.y >= 0 && point.y <= height
       )
@@ -131,16 +146,22 @@
     aria-hidden="true"
     class="pointer-events-none absolute inset-0 z-0 overflow-hidden"
   >
-    <!-- The artwork and the traffic, under one top ramp. -->
-    <div class="absolute inset-0 [mask-image:linear-gradient(to_bottom,transparent_0%,black_13%)]">
-      <MapBanner bleed />
+    <!-- The artwork and the traffic, under the hero's top ramp. -->
+    <div
+      :data-kind="kind"
+      class="absolute inset-0 data-[kind=hero]:[mask-image:linear-gradient(to_bottom,transparent_0%,black_13%)]"
+    >
+      <MapBanner
+        bleed
+        :framing="NETWORK_FRAMING"
+      />
 
       <!-- The requests. Rendered only once the band has been measured: with no box there is no
            projection, and a mesh drawn into a 0x0 viewBox is a stack of rays on one pixel. -->
       <MapMesh
         v-if="pool.length"
         :box="box"
-        :framing="HERO_FRAMING"
+        :framing="NETWORK_FRAMING"
         :pool="pool"
         :class="EDGE_MASK"
       />

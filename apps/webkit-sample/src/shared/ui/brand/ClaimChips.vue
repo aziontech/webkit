@@ -33,7 +33,7 @@
     <li
       v-for="claim in claims"
       :key="claim"
-      class="inline-flex h-8 items-center rounded-(--shape-elements) border border-[color-mix(in_srgb,var(--primary)_45%,var(--bg-surface))] bg-[color-mix(in_srgb,var(--primary)_16%,var(--bg-surface))] px-(--spacing-xs) text-label-md text-(--text-default)"
+      class="inline-flex min-h-8 items-center rounded-(--shape-elements) border border-[color-mix(in_srgb,var(--primary)_45%,var(--bg-surface))] bg-[color-mix(in_srgb,var(--primary)_16%,var(--bg-surface))] px-(--spacing-xs) py-(--spacing-xxs) text-label-md text-(--text-default)"
     >
       {{ claim }}
     </li>

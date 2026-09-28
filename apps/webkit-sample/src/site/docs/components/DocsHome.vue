@@ -103,12 +103,12 @@
   // should not have to read four jobs first to find the way in.
   import Button from '@aziontech/webkit/button'
   import FrameBox from '@aziontech/webkit/frame-box'
+  import TextureMaterial from '@aziontech/webkit/texture-material'
   import DocCard from '@aziontech/webkit-docs/doc-card'
   import DocCardGroup from '@aziontech/webkit-docs/doc-card-group'
   import DocHeading from '@aziontech/webkit-docs/doc-heading'
   import DocPagination from '@aziontech/webkit-docs/doc-pagination'
   import DocProse from '@aziontech/webkit-docs/doc-prose'
-  import { PixelateBanner } from '@shared/ui/banners/index.js'
   import CopyPromptButton from '@shared/ui/CopyPromptButton.vue'
   import PageHeader from '@shared/ui/layout/PageHeader.vue'
 
@@ -450,7 +450,7 @@
        over `mx-auto w-full`, with the boundary INSIDE the cap — rather than through a
        `layout-column-*` utility. Those widen their cap by the inset when the element
        also carries the boundary, so the measure lands as CONTENT width; a site band
-       does the opposite (`BannerContainer` / `SectionContainer`: the same
+       does the opposite (`Hero` / `SectionContainer`: the same
        `max-w-(--layout-measure-site)` with `px-(--layout-boundary-inline)` inside it),
        because there the measure is the width of the FRAME and the copy is inset from
        it. Taking the token means taking its geometry too — otherwise this page would
@@ -556,6 +556,9 @@
               size="large"
               href="/site/docs/first-deploy"
               class="shrink-0"
+              icon="pi pi-chevron-right"
+              icon-position="trailing"
+              animated
             />
             <CopyPromptButton
               label="Copy prompt"
@@ -642,7 +645,7 @@
              reads as the quieter half without a second border or a different fill.
 
              THE POOL IS PUT IN THE CELL'S OUTER CORNER and the mask fades it out
-             before it reaches the copy — `--pixelate-pool-x: 100%` drives the field's
+             before it reaches the copy — `--texture-pool-x: 100%` drives the field's
              two pools onto the right edge and the mask keeps only the lower one. That
              is a tighter mask than DeveloperSection's, and it has to be: there the
              field lies under a 600px-tall cell whose middle is covered by a code block,
@@ -742,9 +745,9 @@
           >
             <div
               aria-hidden="true"
-              class="pointer-events-none absolute inset-0 opacity-40 [--pixelate-pool-x:100%] mask-[radial-gradient(90%_140%_at_100%_100%,black_0%,transparent_60%)]"
+              class="pointer-events-none absolute inset-0 opacity-40 [--texture-pool-x:100%] mask-[radial-gradient(90%_140%_at_100%_100%,black_0%,transparent_60%)]"
             >
-              <PixelateBanner />
+              <TextureMaterial kind="pixelate" />
             </div>
 
             <div
@@ -756,6 +759,9 @@
                 kind="primary"
                 size="large"
                 href="/site/docs/agent-setup"
+                icon="pi pi-chevron-right"
+                icon-position="trailing"
+                animated
               />
             </div>
           </FrameBox>

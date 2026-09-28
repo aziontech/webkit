@@ -47,36 +47,45 @@ export const SLIDE_FRAMING = {
 // a mesh is registered to the map by NOTHING but a shared crop, so a second copy of these
 // four numbers is the exact failure the file above exists to prevent.
 //
-// `74 70 912 536` is a ~1.7x zoom on the transatlantic corridor. Its 1.70 ratio is the
-// marketing band's own, so a hero at that ratio fills with no letterboxing; `xMax` parks the
-// artwork against the outer edge on any band wider than that, which on a bleeding hero is the
-// side away from the copy. The zoom is what makes an individual node read as a node rather
-// than dissolve into the dot grid — the derivation for that is still in MapBanner, beside the
-// panel crop it was reasoned about with.
+// `15 175 860 536` is the ACCENT FIELD'S OWN WINDOW. Both longitudes are measured off the
+// artwork rather than chosen, and `xMax` parks the crop's east edge against the band's outer
+// edge — on a bleeding hero, the side away from the copy:
 //
-// ── IT WAS `150 115 760 447`, AND THE CROP IS THE ZOOM CONTROL ──
+//   x 15    the artwork's own western edge (the landmass bounding box under PAIR_FRAMING
+//           starts at 14.9), so the band opens on the first drawn cell and no empty Pacific
+//           is paid for on the side the copy column sits over.
+//   x 875   4 units past the easternmost accent square (871). Everything east of that is
+//           landmass with no network on it — see MAP_NODES, which says so about its own
+//           eastern end — so this is where the right rule stops standing on a map that has
+//           nothing left to say. It was 986, which put 125 units of silent Asia at the rule.
 //
-// The band is HEIGHT-constrained (the network band is 469px tall against 803.9px of artwork
-// column, ratio 1.717, over a 1.70 crop), so the crop's HEIGHT is what sets the scale and its
-// width only pans — the same relationship the panel derivation in MapBanner spells out, and
-// the opposite of what `xMax` suggests at a glance. Measured on that band at 1440:
+// ── THE CROP'S WIDTH IS THE ZOOM CONTROL, ON HALF THE BANDS ──
 //
-//   760x447   scale 1.047, a 5.21px cell. The top of the range MapBanner's own framings
-//             render at (3.03-5.33px), and the number that file records as reading "as tiles"
-//             rather than as a network on the crop it was first measured on.
-//   912x536   scale 0.873, a 4.35px cell. SHIPPED. The same 1.70 window opened 20% — near the
-//             4.10px the panel lands at on this viewport, in the middle of the range rather
-//             than at its ceiling.
+// This note used to say the band is HEIGHT-constrained and the width only pans. That is true
+// of two of the four bands that render this crop, and the opposite is true of the other two.
+// Measured at 1440 — artwork box, constrained axis, cell:
 //
-// It is opened about the crop's own CENTRE (530, 338.5), so the transatlantic corridor stays
-// the subject and every edge gains equally: x 74-986 puts the whole Americas in frame with the
-// Pacific running into the copy column's wash, and y 70-607 brings the Brazilian coast up off
-// the bottom rule, which is where a third of the accent field lives. The east edge moves from
-// 910 to 986 — past the accent field's own 861 — so there is more networkless landmass in the
-// east than before; that is the price of the wider window, and it is paid on the side the
-// hemisphere already reads as context.
+//   /site/home           804x761   WIDTH    4.65px
+//   /site/solutions/web-apps       804x604   WIDTH    4.65px
+//   /site/azion-heros   1386x844   HEIGHT   7.84px, 32px of slack west of the crop
+//   /site/products/our-network   1386x583   HEIGHT   5.42px, 451px of slack west of the crop
+//
+// So pulling the east edge in ZOOMS the two tall boxes and only pans the two wide ones, and
+// that is why `y` had to move with it. On a width-constrained band the visible latitude is the
+// box height over the scale, so trimming 986 -> 875 costs 36 units of south — which is the one
+// direction this crop could least afford, the Americas being what it is for. `y 175` pays that
+// back: the northernmost accent square (Helsinki, 211.6) sits 37 units inside the top rule, and
+// what the pan spends is the Canadian Arctic and Greenland, which carry no accent at all.
+//
+// Sampled on the home band with this crop, p99 over the Atlantic half (no copy in that region):
+// coastline 51, accent 240 — a 4.7x lead, against the 2.3x MapBanner keeps as the hero's floor.
 export const HERO_FRAMING = {
-  crop: [74, 70, 912, 536],
+  crop: [15, 175, 860, 536],
+  fit: 'xMaxYMid meet'
+}
+
+export const NETWORK_FRAMING = {
+  crop: [15, 415, 860, 1000],
   fit: 'xMaxYMid meet'
 }
 
@@ -174,7 +183,7 @@ export const MAP_PLACES = {
   'us-west': [174, 363]
 }
 
-// THE ARTWORK'S OWN PoP FIELD, in artwork units — the 78 squares MapBanner picks out of the
+// THE ARTWORK'S OWN PoP FIELD, in artwork units — the 172 squares MapBanner picks out of the
 // landmass in the brand accent. They are read straight out of that layer's paths (each entry
 // is a square's CENTRE: its `M x y` corner plus half of the 4.979-unit cell), so a mesh drawn
 // from them lands on the accent squares that are already painted rather than near them.
@@ -185,91 +194,183 @@ export const MAP_PLACES = {
 // both of its ends. This is a FIELD — the nodes are anonymous and interchangeable, which is
 // the whole point of drawing traffic across it.
 //
-// Sorted west to east, so the Americas run out first (x 164-572), then the Atlantic islands
-// and Europe (x 662-801), then West Africa and the Mediterranean (x 801-861). Anything east
-// of 861 is landmass with no accent on it — the field was rebalanced away from a Brazil-heavy
-// export and never extended past the Atlantic world, so a crop that pans much past 861 is
+// Sorted west to east, so the Americas run out first (x 154-573), then Europe and Africa (x 672-911).
+// Anything east of 911 is landmass with no accent on it, so a crop that pans much past it is
 // showing a map with no network on it. That is the constraint the vision slide's drift is
 // bounded by, not an accident of this list.
 export const MAP_NODES = [
-  [164, 363],
+  [154, 254],
+  [164, 274],
+  [174, 264],
+  [174, 294],
+  [174, 353],
   [174, 373],
-  [184, 313],
   [184, 393],
-  [204, 443],
-  [214, 343],
-  [214, 403],
-  [224, 303],
-  [224, 373],
-  [234, 433],
-  [253, 343],
-  [263, 413],
-  [263, 443],
-  [273, 383],
-  [273, 433],
-  [283, 313],
-  [283, 423],
-  [313, 353],
-  [323, 303],
-  [323, 393],
-  [333, 532],
-  [353, 323],
-  [353, 413],
+  [194, 274],
+  [194, 314],
+  [194, 353],
+  [194, 373],
+  [194, 403],
+  [214, 373],
+  [214, 393],
+  [234, 363],
+  [234, 383],
+  [254, 363],
+  [254, 443],
+  [254, 463],
+  [254, 483],
+  [264, 353],
+  [264, 403],
+  [264, 423],
+  [274, 443],
+  [274, 463],
+  [274, 483],
+  [284, 344],
+  [284, 403],
+  [294, 423],
+  [304, 324],
+  [304, 413],
+  [304, 503],
+  [314, 513],
+  [324, 324],
+  [324, 363],
+  [324, 403],
+  [334, 344],
+  [334, 523],
+  [344, 393],
+  [353, 324],
+  [353, 353],
+  [353, 373],
+  [353, 403],
+  [353, 423],
+  [353, 463],
+  [353, 543],
+  [353, 612],
   [363, 443],
+  [363, 642],
+  [373, 334],
   [373, 363],
-  [373, 492],
-  [373, 552],
-  [383, 393],
-  [383, 612],
-  [393, 313],
-  [393, 652],
-  [403, 353],
-  [403, 542],
+  [373, 483],
+  [373, 543],
+  [373, 563],
+  [373, 592],
+  [373, 612],
+  [383, 314],
+  [383, 383],
+  [383, 642],
+  [383, 662],
+  [393, 353],
+  [393, 483],
+  [393, 533],
+  [393, 563],
+  [393, 583],
+  [403, 324],
   [403, 682],
-  [413, 592],
-  [423, 333],
-  [423, 492],
-  [433, 562],
-  [443, 532],
-  [443, 602],
-  [443, 642],
-  [443, 682],
-  [472, 612],
-  [472, 692],
-  [482, 562],
-  [492, 771],
-  [502, 602],
-  [502, 652],
-  [512, 682],
-  [532, 642],
-  [552, 612],
-  [552, 672],
-  [572, 642],
-  [662, 174],
-  [682, 542],
-  [702, 283],
-  [711, 243],
-  [721, 363],
-  [731, 263],
-  [741, 283],
-  [751, 303],
-  [761, 204],
-  [771, 224],
-  [791, 293],
-  [791, 343],
-  [801, 174],
-  [801, 214],
-  [821, 194],
-  [821, 283],
-  [821, 313],
-  [831, 154],
+  [403, 802],
+  [413, 344],
+  [413, 483],
+  [413, 583],
+  [413, 662],
+  [413, 782],
+  [423, 304],
+  [423, 493],
+  [423, 682],
+  [433, 324],
+  [433, 543],
+  [433, 563],
+  [433, 792],
+  [443, 612],
+  [453, 543],
+  [453, 592],
+  [463, 612],
+  [463, 712],
+  [463, 742],
+  [463, 782],
+  [473, 732],
+  [473, 762],
+  [473, 792],
+  [473, 812],
+  [493, 752],
+  [493, 782],
+  [503, 712],
+  [503, 762],
+  [513, 752],
+  [523, 662],
+  [523, 682],
+  [523, 702],
+  [523, 722],
+  [543, 612],
+  [543, 642],
+  [543, 672],
+  [543, 692],
+  [543, 712],
+  [553, 662],
+  [563, 622],
+  [573, 642],
+  [672, 483],
+  [682, 503],
+  [692, 373],
+  [702, 363],
+  [702, 413],
+  [712, 274],
+  [712, 344],
+  [712, 433],
+  [722, 264],
+  [722, 383],
+  [732, 254],
+  [732, 294],
+  [732, 353],
+  [742, 284],
+  [742, 324],
+  [742, 363],
+  [742, 553],
+  [762, 304],
+  [762, 324],
+  [762, 403],
+  [762, 543],
+  [772, 284],
+  [782, 204],
+  [782, 224],
+  [782, 304],
+  [782, 413],
+  [792, 274],
+  [792, 294],
+  [792, 324],
+  [802, 204],
+  [802, 224],
+  [802, 244],
+  [802, 344],
+  [812, 274],
+  [812, 314],
+  [812, 363],
+  [812, 632],
+  [821, 204],
+  [821, 224],
+  [821, 284],
+  [821, 304],
+  [821, 612],
+  [831, 443],
   [841, 214],
-  [841, 253],
-  [851, 283],
-  [861, 164],
-  [861, 194],
-  [861, 234],
-  [861, 313]
+  [841, 244],
+  [841, 274],
+  [841, 304],
+  [841, 324],
+  [841, 423],
+  [841, 772],
+  [851, 353],
+  [851, 373],
+  [851, 752],
+  [861, 214],
+  [861, 264],
+  [861, 284],
+  [861, 304],
+  [861, 324],
+  [871, 234],
+  [871, 363],
+  [891, 722],
+  [901, 622],
+  [911, 602],
+  [911, 712]
 ]
 
 const ALIGN = { Min: 0, Mid: 0.5, Max: 1 }

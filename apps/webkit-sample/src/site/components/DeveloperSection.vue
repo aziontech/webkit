@@ -26,9 +26,9 @@
   import Button from '@aziontech/webkit/button'
   import CodeBlock from '@aziontech/webkit/code-block'
   import FrameBox from '@aziontech/webkit/frame-box'
+  import SectionModule from '@aziontech/webkit/section-module'
   import SectionTitle from '@aziontech/webkit/section-title'
-  import { PixelateBanner } from '@shared/ui/banners/index.js'
-  import { SectionModule } from '@shared/ui/layout/index.js'
+  import TextureMaterial from '@aziontech/webkit/texture-material'
 
   // The capabilities the design lists, each with its check glyph.
   const capabilities = [
@@ -107,6 +107,9 @@ azion deploy`
             kind="outlined"
             size="large"
             href="#"
+            icon="pi pi-chevron-right"
+            icon-position="trailing"
+            animated
           />
         </template>
       </SectionTitle>
@@ -134,15 +137,15 @@ azion deploy`
                the code's own rows.
 
                The two cells MIRROR each other: this one is lit from the leading edge
-               (`--pixelate-pool-x: 14%` moves the banner's pools with the mask), its
+               (`--texture-pool-x: 14%` moves the banner's pools with the mask), its
                pair from the trailing edge. So the light sits under each sample and the
                rule between them stays in the trough, instead of both pools crowding
                the same seam. -->
           <div
             aria-hidden="true"
-            class="pointer-events-none absolute inset-0 opacity-60 [--pixelate-pool-x:14%] mask-[radial-gradient(120%_100%_at_15%_45%,black_10%,transparent_85%)]"
+            class="pointer-events-none absolute inset-0 opacity-60 [--texture-pool-x:14%] mask-[radial-gradient(120%_100%_at_15%_45%,black_10%,transparent_85%)]"
           >
-            <PixelateBanner />
+            <TextureMaterial kind="pixelate" />
           </div>
 
           <!-- Wrapped so the elevation is cast by a shell of the block's own shape:
@@ -193,9 +196,9 @@ azion deploy`
                in the trough. -->
           <div
             aria-hidden="true"
-            class="pointer-events-none absolute inset-0 opacity-60 [--pixelate-pool-x:86%] mask-[radial-gradient(120%_100%_at_85%_45%,black_10%,transparent_85%)]"
+            class="pointer-events-none absolute inset-0 opacity-60 [--texture-pool-x:86%] mask-[radial-gradient(120%_100%_at_85%_45%,black_10%,transparent_85%)]"
           >
-            <PixelateBanner />
+            <TextureMaterial kind="pixelate" />
           </div>
 
           <div class="relative z-10 flex items-start py-(--spacing-lg)">

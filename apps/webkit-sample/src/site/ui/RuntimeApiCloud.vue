@@ -26,7 +26,7 @@
   // THREE READS, ALL FROM ONE PART
   //
   // The reference interaction paints its highlights in four different fills. The design
-  // system has one emphasis switch — `IllustrationPill`'s `active`, which lights the brand
+  // system has one emphasis switch — the pill's lit rim, which carries the brand
   // rim on the border and leaves the surface alone — so the tones collapse onto what the
   // part actually offers, and the third read comes from the label colour instead:
   //
@@ -42,7 +42,6 @@
   //
   // Both behaviours stop under `prefers-reduced-motion`: no interval, no scroll listener, and
   // the rows render at offset 0 — which is the designed composition, not a degraded one.
-  import IllustrationPill from '@aziontech/webkit/illustration-pill'
   import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 
   import { useScrollProgress } from '../composables/useScrollProgress.js'
@@ -306,25 +305,28 @@
       :style="rowStyle(rowIndex)"
       class="flex w-max shrink-0 items-center gap-(--spacing-xs) will-change-transform"
     >
-      <!-- `role="listitem"` rides IllustrationPill's attribute passthrough onto the pill's own
-           root, so the semantics need no wrapper around each pill — a wrapper would land
-           between the flex row and its items and take the gap with it. -->
-      <IllustrationPill
+      <!-- `role="listitem"` sits on the pill itself, so the semantics need no wrapper around
+           each one — a wrapper would land between the flex row and its items and take the
+           gap with it.
+
+           The pill is drawn here rather than by a component: the illustration library ships
+           finished scenes, not parts to assemble, so a chip that is page furniture belongs to
+           the page. The rim tokens are the design system's, so it still reads as one family. -->
+      <span
         v-for="entry in row"
         :key="entry.api.label"
         role="listitem"
-        size="medium"
-        :active="lit[entry.index]"
-        :label="entry.api.label"
-        :class="[
+        :data-active="lit[entry.index] || null"
+        class="inline-flex w-fit shrink-0 items-center whitespace-nowrap rounded-(--shape-elements) border-(length:--illustration-rim-width-hairline) border-solid border-transparent px-(--spacing-xs) py-(--spacing-xxs) text-overline-sm shadow-(--shadow-sm) [background-clip:var(--illustration-rim-boxes)] [background-image:var(--illustration-rim-layers)] [background-origin:var(--illustration-rim-boxes)] transition-[background-image,color] duration-500 ease-out data-[active]:[background-image:var(--illustration-rim-layers-active)] motion-reduce:transition-none"
+        :class="
           entry.api.azion
             ? 'text-(--primary)'
             : lit[entry.index]
               ? 'text-(--text-default)'
-              : 'text-(--text-muted)',
-          'transition-colors duration-500 ease-out motion-reduce:transition-none'
-        ]"
-      />
+              : 'text-(--text-muted)'
+        "
+        >{{ entry.api.label }}</span
+      >
     </div>
   </div>
 </template>

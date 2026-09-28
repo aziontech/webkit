@@ -11,13 +11,13 @@
   import Accordion from '@aziontech/webkit/accordion'
   import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
+  import CardGrid from '@aziontech/webkit/card-grid'
   import CodeBlock from '@aziontech/webkit/code-block'
+  import Hero from '@aziontech/webkit/hero'
+  import SectionContainer from '@aziontech/webkit/section-container'
+  import SectionModule from '@aziontech/webkit/section-module'
   import TabView from '@aziontech/webkit/tab-view'
   import CopyPromptButton from '@shared/ui/CopyPromptButton.vue'
-  import BannerContainer from '@shared/ui/layout/BannerContainer.vue'
-  import CardGrid from '@shared/ui/layout/CardGrid.vue'
-  import SectionContainer from '@shared/ui/layout/SectionContainer.vue'
-  import SectionModule from '@shared/ui/layout/SectionModule.vue'
   import { ref } from 'vue'
 
   const activePrimitive = ref('build')
@@ -250,11 +250,9 @@
 <template>
   <div>
     <!-- ── Hero: fluid banner spanning the full content width, bottom border ── -->
-    <BannerContainer max-width="6xl">
+    <Hero max-width="6xl">
       <div class="flex max-w-(--container-3xl) flex-col gap-(--spacing-md)">
-        <h1 class="text-heading-2xl text-(--text-default)">
-          Welcome to Azion Docs
-        </h1>
+        <h1 class="text-heading-2xl text-(--text-default)">Welcome to Azion Docs</h1>
         <p class="text-body-lg text-(--text-muted)">
           We make every application fast and reliable. Deploy your projects instantly on the most
           reliable global network, leverage enterprise-grade security, and scale from zero to peak
@@ -268,6 +266,9 @@
             kind="primary"
             size="large"
             href="#get-started"
+            icon="pi pi-chevron-right"
+            icon-position="trailing"
+            animated
           />
           <!-- Copy-prompt affordance, built on the same contrast-pill banner as the
                console Home page: one button that copies a ready-to-paste agent
@@ -279,7 +280,7 @@
           />
         </div>
       </div>
-    </BannerContainer>
+    </Hero>
 
     <!-- ══ Bordered content column ═══════════════════════════════════════════
          Vertical rules (border-x) on both edges; its top edge is the hero's
@@ -410,9 +411,7 @@
                       </h3>
                     </div>
 
-                    <p
-                      class="max-w-(--container-2xl) text-body-md text-(--text-muted)"
-                    >
+                    <p class="max-w-(--container-2xl) text-body-md text-(--text-muted)">
                       {{ primitive.description }}
                     </p>
 
@@ -431,6 +430,8 @@
                         kind="outlined"
                         size="medium"
                         icon="pi pi-chevron-right"
+                        icon-position="trailing"
+                        animated
                         href="#get-started"
                       />
                       <a
@@ -472,9 +473,7 @@
         title="Start Here: Kick Off Your Project with Ready-to-Use Templates"
         description="The fastest way to start using the Azion Web Platform. Deploy instantly from dozens of templates — e-commerce, blogs, APIs, full-stack SSR, and more; connect Sanity, Cosmic, ButterCMS, Turso, or your own RESTful CMS. CI/CD is auto-configured so you can focus on your code, not the pipeline."
       >
-        <p
-          class="m-0 mb-(--spacing-lg) max-w-(--container-3xl) text-body-md text-(--text-muted)"
-        >
+        <p class="m-0 mb-(--spacing-lg) max-w-(--container-3xl) text-body-md text-(--text-muted)">
           Here are a few of our most popular templates to get you started. For more information, you
           can visit our
           <a
@@ -499,9 +498,7 @@
               aria-hidden="true"
             />
             <span class="flex min-w-0 flex-col">
-              <span class="truncate text-label-lg text-(--text-default)">{{
-                template.name
-              }}</span>
+              <span class="truncate text-label-lg text-(--text-default)">{{ template.name }}</span>
               <span class="text-body-sm text-(--text-muted)">{{ template.tag }}</span>
             </span>
             <i
@@ -534,9 +531,7 @@
                 <h3 class="text-heading-xxs mb-(--spacing-sm) text-(--text-default)">
                   {{ tool.name }}
                 </h3>
-                <p
-                  class="text-body-xxs mb-(--spacing-sm) text-(--text-muted)"
-                >
+                <p class="text-body-xxs mb-(--spacing-sm) text-(--text-muted)">
                   {{ tool.description }}
                 </p>
               </div>

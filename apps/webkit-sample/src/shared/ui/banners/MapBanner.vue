@@ -1,13 +1,13 @@
 <script setup>
   // Banner backdrop: the pixel world map — a dotted landmass of ~5000 uniform
-  // squares with a 78-square PoP field picked out in the brand accent, exported
+  // squares with a 172-square PoP field picked out in the brand accent, exported
   // from Figma at 1594x936 (./Map.svg) and rendered cropped to the transatlantic
   // corridor (see the viewBox note in the template).
   //
   // The artwork is inline rather than an <img src="Map.svg">, because a CSS
   // custom property cannot reach inside an <img>: loaded as an asset both of
   // its colours would be frozen and the banner would need a second light/dark
-  // copy (the pattern ../clients/index.js is stuck with). Inlined, the two
+  // copy (the pattern .@shared/assets/clients/index.js is stuck with). Inlined, the two
   // source colours become tokens:
   //
   //   #1A1A1A (the landmass) -> no fill at all, so each square inherits
@@ -16,57 +16,12 @@
   //           overrides one class.
   //   #F3652B (the route)   -> --primary, the same brand accent in both themes.
   //
-  // ── WHERE THE ACCENT NODES ARE, AND WHY ──
+  // ── WHERE THE ACCENT NODES ARE ──
   //
-  // The 82 nodes the Figma export shipped were not a network, they were a map of
-  // where the company started: 61 of them sat in South America, 47 of those in a
-  // single solid slab down the Brazilian coast, against 15 in North America and
-  // exactly ONE in Europe. Rendered, that is not "the most reliable distributed
-  // network on the planet" — it is an orange smear over Brazil with some texture
-  // elsewhere, and it argues regional where the sentence above it argues global.
-  //
-  // The field is therefore REBALANCED, never thinned. Every square that stops being
-  // an accent goes BACK to the landmass layer, and every new accent is a square
-  // taken OUT of it — dropping one without returning it punches a hole in the dot
-  // grid, and the two sets never share a coordinate (see below). The Figma export
-  // also draws 132 cells TWICE, so a promotion has to move every path sharing that
-  // coordinate; move one and a grey square is left sitting under the orange one.
-  //
-  //   78 accents — 28 North America, 26 Latin America, 24 Europe.
-  //
-  // WHY THOSE THREE COUNTS ARE THE SAME NUMBER. The first pass at this over-corrected:
-  // it read the Brazilian slab as the whole problem and answered it by deleting
-  // Latin America down to 4 nodes, which swapped one regional map for another. What
-  // was wrong with the slab was never that it was in Brazil, it was that it was a
-  // SLAB — 47 squares packed edge to edge read as a fill, not as a network, and a
-  // fill is the one shape that cannot mean "distributed". So the region comes back at
-  // the weight of the other two, drawn the way North America is drawn.
-  //
-  // "Drawn the way North America is drawn" is a spacing rule, not a vibe. North
-  // America's 28 sit at a median 31 units apart, and every promotion here is placed
-  // by a greedy Poisson-disk pass with a hard 30-unit floor against every accent
-  // already on the map, so the new field measures:
-  //
-  //   North America  28   nearest-neighbour min 14, median 31   (untouched — the reference)
-  //   Latin America  26   min 31, median 31                     (8 Mexico / Central America, 18 South America)
-  //   Europe         24   min 22, median 28                     (was 30, min 10)
-  //
-  // Europe was de-clumped for the same reason and by the same rule: at min 10 its
-  // tightest pairs were touching cells, and this framing is ~20% wider than the one
-  // that was tuned against, so what was a pair there becomes a blob here. Six were
-  // demoted, densest-neighbour first, until nothing was closer than 20.
-  //
-  // Latin America is deliberately the LOOSEST of the three (median 31 with no pair
-  // under 31, against North America's median 31 with a tail down to 14). The map is
-  // a visual model of the network, not an inventory of it, and the region that was
-  // over-drawn once is the one to leave air in.
-  //
-  // Nothing runs below y 690: the frame's bottom fade is what ends the artwork, and
-  // an accent inside a fade is a node that reads as broken rather than as distant.
-  // The southern cone is grey landmass dissolving into the page floor, on purpose.
-  //
-  // If you re-export the artwork from Figma you get the original distribution back
-  // and this rebalance has to be redone.
+  // Each major capital or metro (17 US/Canada, 7 Mexico/Central America/Caribbean, 16 South
+  // America, 17 Europe, 9 Africa) carries a cluster of up to two satellites within two cells, so every
+  // zone reads as populated; South America stays at the US density and no two clusters touch.
+  // A Figma re-export restores the original field.
   //
   // All three framings below hold that field.
   //
@@ -141,9 +96,9 @@
      * Draw the accent PoP field. Pass false for THE ARTWORK WITH NO NETWORK ON IT — the
      * versus slide shows the same map twice and the only difference between the two is this.
      *
-     * The field is not hidden, it is DEMOTED: the 78 cells render in the landmass's own ink
+     * The field is not hidden, it is DEMOTED: the 172 cells render in the landmass's own ink
      * and opacity, unanimated, so the dot grid stays complete. Hiding them with a `v-if`
-     * punches 78 holes in the coastline (the two sets never share a coordinate, so a cell
+     * punches 172 holes in the coastline (the two sets never share a coordinate, so a cell
      * that stops being an accent has nothing under it) — the same failure the rebalance note
      * above warns about, at 3.5px where it reads as a ragged shore rather than as a network.
      */
@@ -163,7 +118,28 @@
      * wash still holds canvas over the copy column and is gone by 50% — over a bleeding map
      * that IS the fade, where over an inset one it was a wash over mostly nothing.
      */
-    bleed: { type: Boolean, default: false }
+    bleed: { type: Boolean, default: false },
+    /**
+     * Where the artwork parks in the vertical slack `meet` leaves over — `center` (the
+     * framing's own `YMid`) or `top` (`YMin`).
+     *
+     * It only bites where the band is TALLER than the crop's ratio, which flips the fit from
+     * height-constrained to width-constrained: the artwork then stops growing with the band
+     * and floats in the leftover. Centred, the leftover is split between the two edges, and
+     * the top half of it is the one place the artwork runs out (the crop opens 70 units into
+     * a 936-unit export, so there is map below it to bleed into and only Arctic above).
+     * `top` puts the whole leftover at the bottom, where there is artwork to fill it.
+     */
+    anchor: {
+      type: String,
+      default: 'center',
+      validator: (value) => ['center', 'top'].includes(value)
+    },
+    /**
+     * A hero crop that replaces HERO_FRAMING, for a band whose window onto the map differs
+     * from the other heroes. Anything drawn over the artwork must project through the same one.
+     */
+    framing: { type: Object, default: null }
   })
 
   const isPanel = computed(() => props.kind === 'panel')
@@ -242,7 +218,7 @@
           ? viewBoxOf(SLIDE_FRAMING)
           : isPanel.value
             ? '100 70 840 730'
-            : viewBoxOf(HERO_FRAMING)
+            : viewBoxOf(props.framing ?? HERO_FRAMING)
   )
   // On the panel it is the `xMid` half of this that is load bearing, not the `YMin`.
   // The crop is height-constrained (see above), so there is no vertical leftover for
@@ -256,7 +232,7 @@
   // right rule so that slack falls on the side the copy's wash covers anyway. (`xMax` is
   // also the hero's answer, for the neighbouring reason: there the map is the right-hand
   // half of a band and belongs against the outer edge.)
-  const fit = computed(() =>
+  const framingFit = computed(() =>
     isPair.value
       ? PAIR_FRAMING.fit
       : isGlobe.value
@@ -265,7 +241,11 @@
           ? 'xMidYMin meet'
           : isSlide.value
             ? SLIDE_FRAMING.fit
-            : HERO_FRAMING.fit
+            : (props.framing ?? HERO_FRAMING).fit
+  )
+
+  const fit = computed(() =>
+    props.anchor === 'top' ? framingFit.value.replace('YMid', 'YMin') : framingFit.value
   )
 
   // Where the artwork sits — the third thing both layers have to agree on, and the
@@ -476,7 +456,7 @@
   // legibility, where the 30% derivation above is aimed at a map with a headline on top of it.
   // At 50% the coastline lands at ~64/255, well clear of the ~25 dissolve point this file names,
   // and the accent field still leads it by 3.8x.
-  // ── 30% -> 45% ON THE HERO AND THE PANEL ──
+  // ── 30% -> 40% ON THE HERO AND THE PANEL ──
   //
   // The ladder above is unchanged and still describes the artwork; what moved is which rung
   // the marketing band stands on. 30% was derived for "a map with a headline on top of it",
@@ -486,28 +466,32 @@
   // wider crop this shipped with (see HERO_FRAMING):
   //
   //   30%   coastline 39 — the geography reading as a texture behind the band, not as a map.
-  //   40%   coastline 51.
-  //   45%   coastline 58, against an accent field peaking 186. SHIPPED.
+  //   40%   coastline 51, against an accent field peaking 186. SHIPPED.
+  //   45%   coastline 58 — legible, and one step louder than the band needs.
   //
-  // A 3.2x lead is still wider than the 2.3x this file keeps as the hero's floor and wider
+  // A 3.6x lead is still wider than the 2.3x this file keeps as the hero's floor and wider
   // than the globe's shipped 3x, so the network leads the ground by the margin the derivation
   // above asks for. Read the accent figures across a change of crop with care: the layer's own
   // paint is untouched (full `--primary`; `landmassInk` never reaches it), so what moves is the
   // CELL — at 4.35px fewer pixels land fully inside a square, and the sampler counts more of
   // its antialiased edge. Same band, same sampler, crop alone: 242 at a 5.21px cell, 219 at
-  // 4.35px, both at 30%. The 45% figure is 186 on that same 4.35px cell.
+  // 4.35px, both at 30%. The 186 figure is on that same 4.35px cell, and alpha never reaches
+  // it, so the whole 40/45 comparison above moves the ground alone. Re-sampled on the home
+  // band after HERO_FRAMING's east trim (a 4.65px cell): coastline 51, accent 240 — the same
+  // 40% ground, a 4.7x lead.
   //
   // Below `lg` the premise the 30% derivation was written for does still hold — the map sits
-  // nearly full-bleed behind the copy — and 45% was checked there rather than assumed: at
-  // 390x844 the headline and every chip stay legible over it, because the chips are opaque
-  // pills and the artwork is at a 1.79px cell (327.5px of column, width-constrained) — 41% of
-  // the desktop density, so the ground it brightens is a much finer one.
+  // nearly full-bleed behind the copy — and the louder 45% was checked there rather than
+  // assumed: at 390x844 the headline and every chip stayed legible over it, because the chips
+  // are opaque pills and the artwork is at a 1.79px cell (327.5px of column, width-constrained)
+  // — 41% of the desktop density, so the ground it brightens is a much finer one. 40% sits
+  // under a step already cleared, so it needs no second check.
   const landmassInk = computed(() =>
     isGlobe.value
       ? 'text-(--text-muted) opacity-60'
       : isPair.value
         ? 'text-(--text-muted) opacity-50'
-        : 'text-(--text-muted) opacity-45'
+        : 'text-(--text-muted) opacity-40'
   )
 
   const ROUTE_INK = 'fill-(--primary)'
@@ -680,18 +664,14 @@
       <path d="M131.938 171.766V176.745H136.916V171.766H131.938Z" />
       <path d="M131.938 161.807V166.786H136.916V161.807H131.938Z" />
       <path d="M141.895 241.469V246.447H146.873V241.469H141.895Z" />
-      <path d="M151.852 251.427V256.405H156.83V251.427H151.852Z" />
       <path d="M161.809 261.383V266.361H166.787V261.383H161.809Z" />
-      <path d="M161.809 271.342V276.32H166.787V271.342H161.809Z" />
       <path d="M161.809 281.298V286.276H166.787V281.298H161.809Z" />
-      <path d="M171.766 291.256V296.234H176.744V291.256H171.766Z" />
       <path d="M181.723 301.212V306.19H186.701V301.212H181.723Z" />
       <path d="M171.766 321.129V326.107H176.744V321.129H171.766Z" />
       <path d="M161.809 331.085V336.063H166.787V331.085H161.809Z" />
       <path d="M161.809 341.043V346.021H166.787V341.043H161.809Z" />
       <path d="M161.809 351V355.979H166.787V351H161.809Z" />
       <path d="M171.766 380.872V385.851H176.744V380.872H171.766Z" />
-      <path d="M191.68 400.787V405.766H196.658V400.787H191.68Z" />
       <path d="M201.637 400.787V405.766H206.615V400.787H201.637Z" />
       <path d="M211.594 410.743V415.722H216.572V410.743H211.594Z" />
       <path d="M221.555 420.701V425.68H226.533V420.701H221.555Z" />
@@ -700,9 +680,7 @@
       <path d="M231.512 450.574V455.553H236.49V450.574H231.512Z" />
       <path d="M241.469 460.531V465.51H246.447V460.531H241.469Z" />
       <path d="M241.469 470.49V475.469H246.447V470.49H241.469Z" />
-      <path d="M251.426 480.446V485.425H256.404V480.446H251.426Z" />
       <path d="M261.383 480.446V485.425H266.362V480.446H261.383Z" />
-      <path d="M271.34 480.446V485.425H276.319V480.446H271.34Z" />
       <path d="M261.383 490.405V495.384H266.362V490.405H261.383Z" />
       <path d="M271.34 490.405V495.384H276.319V490.405H271.34Z" />
       <path d="M281.297 490.405V495.384H286.276V490.405H281.297Z" />
@@ -711,34 +689,23 @@
       <path d="M311.172 490.405V495.384H316.151V490.405H311.172Z" />
       <path d="M311.172 500.361V505.34H316.151V500.361H311.172Z" />
       <path d="M321.125 510.319V515.298H326.104V510.319H321.125Z" />
-      <path d="M331.086 520.277V525.256H336.065V520.277H331.086Z" />
       <path d="M331.086 510.319V515.298H336.065V510.319H331.086Z" />
       <path d="M311.172 480.446V485.425H316.151V480.446H311.172Z" />
       <path d="M321.125 470.49V475.469H326.104V470.49H321.125Z" />
       <path d="M341.043 460.531V465.51H346.022V460.531H341.043Z" />
-      <path d="M351 460.531V465.51H355.979V460.531H351Z" />
       <path d="M360.957 460.531V465.51H365.936V460.531H360.957Z" />
       <path d="M370.914 470.49V475.469H375.893V470.49H370.914Z" />
       <path d="M380.875 470.49V475.469H385.854V470.49H380.875Z" />
-      <path d="M370.914 480.446V485.425H375.893V480.446H370.914Z" />
       <path d="M380.875 480.446V485.425H385.854V480.446H380.875Z" />
-      <path d="M390.828 480.446V485.425H395.807V480.446H390.828Z" />
       <path d="M400.789 480.446V485.425H405.768V480.446H400.789Z" />
-      <path d="M410.742 480.446V485.425H415.721V480.446H410.742Z" />
       <path d="M311.172 470.49V475.469H316.151V470.49H311.172Z" />
-      <path d="M301.211 500.361V505.34H306.19V500.361H301.211Z" />
-      <path d="M311.172 510.319V515.298H316.151V510.319H311.172Z" />
       <path d="M321.125 520.277V525.256H326.104V520.277H321.125Z" />
       <path d="M341.043 540.192V545.171H346.022V540.192H341.043Z" />
-      <path d="M351 540.192V545.171H355.979V540.192H351Z" />
-      <path d="M370.914 540.192V545.171H375.893V540.192H370.914Z" />
       <path d="M380.875 530.234V535.213H385.854V530.234H380.875Z" />
       <path d="M390.828 520.277V525.256H395.807V520.277H390.828Z" />
       <path d="M400.789 520.277V525.256H405.768V520.277H400.789Z" />
       <path d="M410.742 530.234V535.213H415.721V530.234H410.742Z" />
       <path d="M420.703 540.192V545.171H425.682V540.192H420.703Z" />
-      <path d="M430.66 540.192V545.171H435.639V540.192H430.66Z" />
-      <path d="M450.574 540.192V545.171H455.553V540.192H450.574Z" />
       <path d="M460.531 550.148V555.127H465.51V550.148H460.531Z" />
       <path d="M470.488 559.708V564.687H475.467V559.708H470.488Z" />
       <path d="M490.406 570.065V575.044H495.385V570.065H490.406Z" />
@@ -746,18 +713,15 @@
       <path d="M490.406 580.021V585H495.385V580.021H490.406Z" />
       <path d="M490.406 589.977V594.956H495.385V589.977H490.406Z" />
       <path d="M490.406 599.935V604.914H495.385V599.935H490.406Z" />
-      <path d="M550.148 659.679V664.658H555.127V659.679H550.148Z" />
       <path d="M669.641 510.321V515.3H674.619V510.321H669.641Z" />
       <path d="M669.641 500.363V505.342H674.619V500.363H669.641Z" />
       <path d="M669.641 490.405V495.384H674.619V490.405H669.641Z" />
-      <path d="M669.641 480.448V485.427H674.619V480.448H669.641Z" />
       <path d="M659.68 470.49V475.469H664.658V470.49H659.68Z" />
       <path d="M659.68 460.534V465.513H664.658V460.534H659.68Z" />
       <path d="M669.641 450.574V455.553H674.619V450.574H669.641Z" />
       <path d="M669.641 440.618V445.597H674.619V440.618H669.641Z" />
       <path d="M689.555 430.66V435.639H694.533V430.66H689.555Z" />
       <path d="M689.555 420.701V425.68H694.533V420.701H689.555Z" />
-      <path d="M699.512 410.745V415.724H704.49V410.745H699.512Z" />
       <path d="M699.512 400.787V405.766H704.49V400.787H699.512Z" />
       <path d="M709.469 400.787V405.766H714.447V400.787H709.469Z" />
       <path d="M709.469 390.831V395.81H714.447V390.831H709.469Z" />
@@ -797,7 +761,6 @@
       <path d="M719.426 550.15V555.129H724.405V550.15H719.426Z" />
       <path d="M729.383 550.15V555.129H734.362V550.15H729.383Z" />
       <path d="M739.34 560.107V565.086H744.319V560.107H739.34Z" />
-      <path d="M739.34 550.15V555.129H744.319V550.15H739.34Z" />
       <path d="M749.297 550.15V555.129H754.276V550.15H749.297Z" />
       <path d="M759.258 550.15V555.129H764.237V550.15H759.258Z" />
       <path d="M769.211 560.107V565.086H774.19V560.107H769.211Z" />
@@ -812,7 +775,6 @@
       <path d="M799.086 599.935V604.914H804.065V599.935H799.086Z" />
       <path d="M799.086 609.894V614.873H804.065V609.894H799.086Z" />
       <path d="M809.043 619.85V624.829H814.022V619.85H809.043Z" />
-      <path d="M809.043 629.808V634.787H814.022V629.808H809.043Z" />
       <path d="M809.043 639.767V644.746H814.022V639.767H809.043Z" />
       <path d="M819 639.767V644.746H823.979V639.767H819Z" />
       <path d="M819 649.723V654.702H823.979V649.723H819Z" />
@@ -851,7 +813,6 @@
       <path d="M669.641 470.49V475.469H674.619V470.49H669.641Z" />
       <path d="M679.594 480.448V485.427H684.572V480.448H679.594Z" />
       <path d="M679.594 490.405V495.384H684.572V490.405H679.594Z" />
-      <path d="M679.594 500.363V505.342H684.572V500.363H679.594Z" />
       <path d="M679.594 510.321V515.3H684.572V510.321H679.594Z" />
       <path d="M679.594 520.277V525.256H684.572V520.277H679.594Z" />
       <path d="M689.555 520.277V525.256H694.533V520.277H689.555Z" />
@@ -875,7 +836,6 @@
       <path d="M828.957 619.85V624.829H833.936V619.85H828.957Z" />
       <path d="M828.957 580.021V585H833.936V580.021H828.957Z" />
       <path d="M828.957 540.192V545.171H833.936V540.192H828.957Z" />
-      <path d="M759.258 540.192V545.171H764.237V540.192H759.258Z" />
       <path d="M789.125 540.192V545.171H794.104V540.192H789.125Z" />
       <path d="M719.426 540.192V545.171H724.404V540.192H719.426Z" />
       <path d="M769.211 540.192V545.171H774.19V540.192H769.211Z" />
@@ -915,7 +875,6 @@
       <path d="M719.426 450.574V455.553H724.404V450.574H719.426Z" />
       <path d="M769.211 450.574V455.553H774.19V450.574H769.211Z" />
       <path d="M699.512 450.574V455.553H704.49V450.574H699.512Z" />
-      <path d="M828.957 440.618V445.597H833.936V440.618H828.957Z" />
       <path d="M759.258 440.618V445.597H764.237V440.618H759.258Z" />
       <path d="M789.125 440.618V445.597H794.104V440.618H789.125Z" />
       <path d="M719.426 440.618V445.597H724.405V440.618H719.426Z" />
@@ -931,7 +890,6 @@
       <path d="M828.957 420.701V425.68H833.936V420.701H828.957Z" />
       <path d="M759.258 420.701V425.68H764.237V420.701H759.258Z" />
       <path d="M759.258 410.745V415.724H764.237V410.745H759.258Z" />
-      <path d="M759.258 400.787V405.766H764.237V400.787H759.258Z" />
       <path d="M759.258 390.831V395.81H764.237V390.831H759.258Z" />
       <path d="M789.125 420.701V425.68H794.104V420.701H789.125Z" />
       <path d="M789.125 410.745V415.724H794.104V410.745H789.125Z" />
@@ -1062,18 +1020,14 @@
       <path d="M799.086 430.66V435.639H804.065V430.66H799.086Z" />
       <path d="M729.383 430.66V435.639H734.362V430.66H729.383Z" />
       <path d="M779.172 430.66V435.639H784.151V430.66H779.172Z" />
-      <path d="M709.469 430.66V435.639H714.447V430.66H709.469Z" />
-      <path d="M838.914 420.701V425.68H843.893V420.701H838.914Z" />
       <path d="M799.086 420.701V425.68H804.065V420.701H799.086Z" />
       <path d="M799.086 410.745V415.724H804.065V410.745H799.086Z" />
       <path d="M729.383 420.701V425.68H734.362V420.701H729.383Z" />
       <path d="M779.172 420.701V425.68H784.151V420.701H779.172Z" />
-      <path d="M779.172 410.745V415.724H784.151V410.745H779.172Z" />
       <path d="M779.172 400.787V405.766H784.151V400.787H779.172Z" />
       <path d="M779.172 390.831V395.81H784.151V390.831H779.172Z" />
       <path d="M709.469 420.701V425.68H714.447V420.701H709.469Z" />
       <path d="M709.469 410.745V415.724H714.447V410.745H709.469Z" />
-      <path d="M848.875 749.299V754.278H853.854V749.299H848.875Z" />
       <path d="M848.875 709.47V714.449H853.854V709.47H848.875Z" />
       <path d="M848.875 669.637V674.616H853.854V669.637H848.875Z" />
       <path d="M848.875 629.808V634.787H853.854V629.808H848.875Z" />
@@ -1170,7 +1124,6 @@
       <path d="M819 580.021V585H823.979V580.021H819Z" />
       <path d="M819 589.979V594.958H823.979V589.979H819Z" />
       <path d="M819 599.935V604.914H823.979V599.935H819Z" />
-      <path d="M819 609.894V614.873H823.979V609.894H819Z" />
       <path d="M819 619.85V624.829H823.979V619.85H819Z" />
       <path d="M819 629.808V634.787H823.979V629.808H819Z" />
       <path d="M858.828 520.277V525.256H863.807V520.277H858.828Z" />
@@ -1319,7 +1272,6 @@
       <path d="M868.789 440.618V445.597H873.768V440.618H868.789Z" />
       <path d="M868.789 430.66V435.639H873.768V430.66H868.789Z" />
       <path d="M888.703 759.255V764.234H893.682V759.255H888.703Z" />
-      <path d="M888.703 719.426V724.405H893.682V719.426H888.703Z" />
       <path d="M898.66 719.426V724.405H903.639V719.426H898.66Z" />
       <path d="M888.703 679.596V684.575H893.682V679.596H888.703Z" />
       <path d="M898.66 679.596V684.575H903.639V679.596H898.66Z" />
@@ -1332,7 +1284,6 @@
       <path d="M918.574 639.767V644.746H923.553V639.767H918.574Z" />
       <path d="M888.703 599.935V604.914H893.682V599.935H888.703Z" />
       <path d="M898.66 599.935V604.914H903.639V599.935H898.66Z" />
-      <path d="M908.617 599.935V604.914H913.596V599.935H908.617Z" />
       <path d="M918.574 599.935V604.914H923.553V599.935H918.574Z" />
       <path d="M928.531 599.935V604.914H933.51V599.935H928.531Z" />
       <path d="M938.488 599.935V604.914H943.467V599.935H938.488Z" />
@@ -1371,7 +1322,6 @@
       <path d="M918.574 659.681V664.66H923.553V659.681H918.574Z" />
       <path d="M928.531 659.681V664.66H933.51V659.681H928.531Z" />
       <path d="M888.703 619.85V624.829H893.682V619.85H888.703Z" />
-      <path d="M898.66 619.85V624.829H903.639V619.85H898.66Z" />
       <path d="M908.617 619.85V624.829H913.596V619.85H908.617Z" />
       <path d="M918.574 619.85V624.829H923.553V619.85H918.574Z" />
       <path d="M888.703 580.021V585H893.682V580.021H888.703Z" />
@@ -1407,7 +1357,6 @@
       <path d="M888.703 460.534V465.513H893.682V460.534H888.703Z" />
       <path d="M888.703 450.574V455.553H893.682V450.574H888.703Z" />
       <path d="M888.703 440.618V445.597H893.682V440.618H888.703Z" />
-      <path d="M838.914 769.213V774.192H843.893V769.213H838.914Z" />
       <path d="M838.914 789.128V794.107H843.893V789.128H838.914Z" />
       <path d="M848.875 779.172V784.151H853.854V779.172H848.875Z" />
       <path d="M848.875 769.213V774.192H853.854V769.213H848.875Z" />
@@ -1417,7 +1366,6 @@
       <path d="M868.789 769.213V774.192H873.768V769.213H868.789Z" />
       <path d="M878.742 769.213V774.192H883.721V769.213H878.742Z" />
       <path d="M888.703 759.255V764.234H893.682V759.255H888.703Z" />
-      <path d="M888.703 719.426V724.405H893.682V719.426H888.703Z" />
       <path d="M898.66 719.426V724.405H903.639V719.426H898.66Z" />
       <path d="M888.703 679.596V684.575H893.682V679.596H888.703Z" />
       <path d="M898.66 679.596V684.575H903.639V679.596H898.66Z" />
@@ -1429,7 +1377,6 @@
       <path d="M918.574 639.767V644.746H923.553V639.767H918.574Z" />
       <path d="M888.703 599.935V604.914H893.682V599.935H888.703Z" />
       <path d="M898.66 599.935V604.914H903.639V599.935H898.66Z" />
-      <path d="M908.617 599.935V604.914H913.596V599.935H908.617Z" />
       <path d="M918.574 599.935V604.914H923.553V599.935H918.574Z" />
       <path d="M928.531 599.935V604.914H933.51V599.935H928.531Z" />
       <path d="M888.703 560.107V565.086H893.682V560.107H888.703Z" />
@@ -1490,7 +1437,6 @@
       <path d="M898.66 729.384V734.363H903.639V729.384H898.66Z" />
       <path d="M908.617 729.384V734.363H913.596V729.384H908.617Z" />
       <path d="M908.617 719.426V724.405H913.596V719.426H908.617Z" />
-      <path d="M908.617 709.47V714.449H913.596V709.47H908.617Z" />
       <path d="M908.617 699.511V704.49H913.596V699.511H908.617Z" />
       <path d="M918.574 689.552V694.531H923.553V689.552H918.574Z" />
       <path d="M928.531 679.596V684.575H933.51V679.596H928.531Z" />
@@ -2643,17 +2589,12 @@
       <path d="M779.172 191.681V196.66H784.151V191.681H779.172Z" />
       <path d="M769.211 201.639V206.618H774.19V201.639H769.211Z" />
       <path d="M769.211 211.596V216.575H774.19V211.596H769.211Z" />
-      <path d="M779.172 221.552V226.531H784.151V221.552H779.172Z" />
       <path d="M779.172 211.596V216.575H784.151V211.596H779.172Z" />
       <path d="M789.125 211.596V216.575H794.104V211.596H789.125Z" />
       <path d="M809.043 211.596V216.575H814.022V211.596H809.043Z" />
-      <path d="M799.086 221.552V226.531H804.065V221.552H799.086Z" />
-      <path d="M799.086 241.47V246.449H804.065V241.47H799.086Z" />
       <path d="M809.043 231.511V236.49H814.022V231.511H809.043Z" />
-      <path d="M819 221.552V226.531H823.979V221.552H819Z" />
       <path d="M819 211.596V216.575H823.979V211.596H819Z" />
       <path d="M809.043 201.639V206.618H814.022V201.639H809.043Z" />
-      <path d="M799.086 201.639V206.618H804.065V201.639H799.086Z" />
       <path d="M789.125 201.639V206.618H794.104V201.639H789.125Z" />
       <path d="M789.125 191.681V196.66H794.104V191.681H789.125Z" />
       <path d="M799.086 191.681V196.66H804.065V191.681H799.086Z" />
@@ -2674,11 +2615,9 @@
       <path d="M848.875 201.639V206.618H853.854V201.639H848.875Z" />
       <path d="M838.914 201.639V206.618H843.893V201.639H838.914Z" />
       <path d="M848.875 211.596V216.575H853.854V211.596H848.875Z" />
-      <path d="M858.828 211.596V216.575H863.807V211.596H858.828Z" />
       <path d="M868.789 221.552V226.531H873.768V221.552H868.789Z" />
       <path d="M878.742 231.511V236.49H883.721V231.511H878.742Z" />
       <path d="M878.742 221.552V226.531H883.721V221.552H878.742Z" />
-      <path d="M868.789 231.51V236.489H873.768V231.51H868.789Z" />
       <path d="M858.828 241.47V246.449H863.807V241.47H858.828Z" />
       <path d="M848.875 251.426V256.405H853.854V251.426H848.875Z" />
       <path d="M848.875 261.384V266.363H853.854V261.384H848.875Z" />
@@ -2687,7 +2626,6 @@
       <path d="M868.789 241.47V246.449H873.768V241.47H868.789Z" />
       <path d="M878.742 241.47V246.449H883.721V241.47H878.742Z" />
       <path d="M878.742 251.426V256.405H883.721V251.426H878.742Z" />
-      <path d="M838.914 241.47V246.449H843.893V241.47H838.914Z" />
       <path d="M838.914 261.384V266.363H843.893V261.384H838.914Z" />
       <path d="M828.957 271.341V276.32H833.936V271.341H828.957Z" />
       <path d="M878.742 271.341V276.32H883.721V271.341H878.742Z" />
@@ -2711,9 +2649,7 @@
       <path d="M918.574 231.511V236.49H923.553V231.511H918.574Z" />
       <path d="M918.574 221.552V226.531H923.553V221.552H918.574Z" />
       <path d="M918.574 211.596V216.575H923.553V211.596H918.574Z" />
-      <path d="M809.043 271.341V276.32H814.022V271.341H809.043Z" />
       <path d="M858.828 271.341V276.32H863.807V271.341H858.828Z" />
-      <path d="M858.828 261.384V266.363H863.807V261.384H858.828Z" />
       <path d="M908.617 271.341V276.32H913.596V271.341H908.617Z" />
       <path d="M908.617 261.384V266.363H913.596V261.384H908.617Z" />
       <path d="M908.617 251.426V256.405H913.596V251.426H908.617Z" />
@@ -2740,13 +2676,9 @@
       <path d="M858.828 291.255V296.234H863.807V291.255H858.828Z" />
       <path d="M908.617 291.255V296.234H913.596V291.255H908.617Z" />
       <path d="M809.043 281.299V286.278H814.022V281.299H809.043Z" />
-      <path d="M858.828 281.299V286.278H863.807V281.299H858.828Z" />
       <path d="M908.617 281.299V286.278H913.596V281.299H908.617Z" />
       <path d="M809.043 281.299V286.278H814.022V281.299H809.043Z" />
-      <path d="M858.828 281.299V286.278H863.807V281.299H858.828Z" />
       <path d="M908.617 281.299V286.278H913.596V281.299H908.617Z" />
-      <path d="M789.125 271.341V276.32H794.104V271.341H789.125Z" />
-      <path d="M838.914 271.341V276.32H843.893V271.341H838.914Z" />
       <path d="M888.703 271.341V276.32H893.682V271.341H888.703Z" />
       <path d="M888.703 261.384V266.363H893.682V261.384H888.703Z" />
       <path d="M888.703 251.426V256.405H893.682V251.426H888.703Z" />
@@ -2757,52 +2689,37 @@
       <path d="M888.703 291.255V296.234H893.682V291.255H888.703Z" />
       <path d="M789.125 311.172V316.151H794.104V311.172H789.125Z" />
       <path d="M789.125 301.213V306.192H794.104V301.213H789.125Z" />
-      <path d="M838.914 301.213V306.192H843.893V301.213H838.914Z" />
       <path d="M888.703 301.213V306.192H893.682V301.213H888.703Z" />
-      <path d="M789.125 321.128V326.107H794.104V321.128H789.125Z" />
       <path d="M779.172 271.341V276.32H784.151V271.341H779.172Z" />
       <path d="M779.172 281.299V286.278H784.151V281.299H779.172Z" />
       <path d="M779.172 291.255V296.234H784.151V291.255H779.172Z" />
       <path d="M779.172 311.172V316.151H784.151V311.172H779.172Z" />
-      <path d="M779.172 301.213V306.192H784.151V301.213H779.172Z" />
       <path d="M779.172 321.128V326.107H784.151V321.128H779.172Z" />
-      <path d="M769.211 281.299V286.278H774.19V281.299H769.211Z" />
       <path d="M769.211 291.255V296.234H774.19V291.255H769.211Z" />
       <path d="M759.258 291.255V296.234H764.237V291.255H759.258Z" />
       <path d="M769.211 301.213V306.192H774.19V301.213H769.211Z" />
-      <path d="M759.258 301.213V306.192H764.237V301.213H759.258Z" />
       <path d="M739.34 301.213V306.192H744.319V301.213H739.34Z" />
-      <path d="M729.383 291.255V296.234H734.362V291.255H729.383Z" />
       <path d="M729.383 281.299V286.278H734.362V281.299H729.383Z" />
       <path d="M739.34 271.341V276.32H744.319V271.341H739.34Z" />
       <path d="M729.383 271.341V276.32H734.362V271.341H729.383Z" />
-      <path d="M719.426 261.384V266.363H724.405V261.384H719.426Z" />
-      <path d="M729.383 251.426V256.405H734.362V251.426H729.383Z" />
       <path d="M719.426 241.47V246.449H724.405V241.47H719.426Z" />
       <path d="M699.512 271.341V276.32H704.49V271.341H699.512Z" />
-      <path d="M709.469 271.341V276.32H714.447V271.341H709.469Z" />
       <path d="M729.383 311.172V316.151H734.362V311.172H729.383Z" />
       <path d="M749.297 321.128V326.107H754.276V321.128H749.297Z" />
       <path d="M739.34 311.172V316.151H744.319V311.172H739.34Z" />
-      <path d="M739.34 321.128V326.107H744.319V321.128H739.34Z" />
       <path d="M739.34 331.086V336.065H744.319V331.086H739.34Z" />
       <path d="M729.383 341.043V346.021H734.362V341.043H729.383Z" />
       <path d="M729.383 331.086V336.065H734.362V331.086H729.383Z" />
       <path d="M719.426 341.043V346.021H724.404V341.043H719.426Z" />
-      <path d="M709.469 341.043V346.021H714.447V341.043H709.469Z" />
       <path d="M699.512 341.043V346.021H704.49V341.043H699.512Z" />
       <path d="M709.469 351V355.979H714.447V351H709.469Z" />
       <path d="M709.469 360.958V365.937H714.447V360.958H709.469Z" />
-      <path d="M699.512 360.958V365.937H704.49V360.958H699.512Z" />
-      <path d="M689.555 370.914V375.893H694.533V370.914H689.555Z" />
       <path d="M699.512 370.914V375.893H704.49V370.914H699.512Z" />
       <path d="M699.512 380.872V385.851H704.49V380.872H699.512Z" />
       <path d="M709.469 370.914V375.893H714.447V370.914H709.469Z" />
       <path d="M719.426 370.914V375.893H724.404V370.914H719.426Z" />
-      <path d="M719.426 380.872V385.851H724.404V380.872H719.426Z" />
       <path d="M729.383 370.914V375.893H734.362V370.914H729.383Z" />
       <path d="M739.34 370.914V375.893H744.319V370.914H739.34Z" />
-      <path d="M729.383 351V355.979H734.362V351H729.383Z" />
       <path d="M739.34 351V355.979H744.319V351H739.34Z" />
       <path d="M749.297 351V355.979H754.276V351H749.297Z" />
       <path d="M739.34 341.043V346.021H744.319V341.043H739.34Z" />
@@ -2812,31 +2729,24 @@
       <path d="M769.211 341.042V346.021H774.19V341.042H769.211Z" />
       <path d="M779.172 331.086V336.065H784.151V331.086H779.172Z" />
       <path d="M789.125 331.086V336.065H794.104V331.086H789.125Z" />
-      <path d="M799.086 341.043V346.021H804.065V341.043H799.086Z" />
       <path d="M799.086 351V355.979H804.065V351H799.086Z" />
       <path d="M809.043 351V355.979H814.022V351H809.043Z" />
-      <path d="M809.043 360.958V365.937H814.022V360.958H809.043Z" />
       <path d="M819 360.958V365.937H823.979V360.958H819Z" />
       <path d="M819 370.914V375.893H823.979V370.914H819Z" />
       <path d="M809.043 380.872V385.851H814.022V380.872H809.043Z" />
       <path d="M759.258 331.086V336.065H764.237V331.086H759.258Z" />
-      <path d="M759.258 321.128V326.107H764.237V321.128H759.258Z" />
       <path d="M769.211 321.128V326.107H774.19V321.128H769.211Z" />
       <path d="M759.258 311.172V316.151H764.237V311.172H759.258Z" />
       <path d="M769.211 311.172V316.151H774.19V311.172H769.211Z" />
       <path d="M749.297 311.172V316.151H754.276V311.172H749.297Z" />
       <path d="M729.383 360.958V365.937H734.362V360.958H729.383Z" />
-      <path d="M739.34 360.958V365.937H744.319V360.958H739.34Z" />
       <path d="M719.426 351V355.979H724.405V351H719.426Z" />
       <path d="M809.043 281.299V286.278H814.022V281.299H809.043Z" />
-      <path d="M858.828 281.299V286.278H863.807V281.299H858.828Z" />
       <path d="M908.617 281.299V286.278H913.596V281.299H908.617Z" />
       <path d="M809.043 291.255V296.234H814.022V291.255H809.043Z" />
       <path d="M858.828 291.255V296.234H863.807V291.255H858.828Z" />
       <path d="M908.617 291.255V296.234H913.596V291.255H908.617Z" />
-      <path d="M809.043 311.172V316.151H814.022V311.172H809.043Z" />
       <path d="M809.043 301.213V306.192H814.022V301.213H809.043Z" />
-      <path d="M858.828 301.213V306.192H863.807V301.213H858.828Z" />
       <path d="M908.617 301.213V306.192H913.596V301.213H908.617Z" />
       <path d="M809.043 321.128V326.107H814.022V321.128H809.043Z" />
       <path d="M819 331.086V336.065H823.979V331.086H819Z" />
@@ -2844,7 +2754,6 @@
       <path d="M828.957 331.086V336.065H833.936V331.086H828.957Z" />
       <path d="M828.957 321.128V326.107H833.936V321.128H828.957Z" />
       <path d="M819 321.128V326.107H823.979V321.128H819Z" />
-      <path d="M819 301.213V306.192H823.979V301.213H819Z" />
       <path d="M868.789 301.213V306.192H873.768V301.213H868.789Z" />
       <path d="M918.574 301.213V306.192H923.553V301.213H918.574Z" />
       <path d="M819 291.255V296.234H823.979V291.255H819Z" />
@@ -2878,14 +2787,11 @@
       <path d="M938.488 181.724V186.703H943.467V181.724H938.488Z" />
       <path d="M828.957 311.172V316.151H833.936V311.172H828.957Z" />
       <path d="M838.914 311.172V316.151H843.893V311.172H838.914Z" />
-      <path d="M838.914 321.128V326.107H843.893V321.128H838.914Z" />
       <path d="M838.914 331.086V336.065H843.893V331.086H838.914Z" />
       <path d="M848.875 331.086V336.065H853.854V331.086H848.875Z" />
       <path d="M848.875 321.128V326.107H853.854V321.128H848.875Z" />
       <path d="M848.875 311.172V316.151H853.854V311.172H848.875Z" />
-      <path d="M858.828 321.128V326.107H863.807V321.128H858.828Z" />
       <path d="M858.828 331.086V336.065H863.807V331.086H858.828Z" />
-      <path d="M868.789 331.086V336.065H873.768V331.086H868.789Z" />
       <path d="M868.789 321.128V326.107H873.768V321.128H868.789Z" />
       <path d="M868.789 311.172V316.151H873.768V311.172H868.789Z" />
       <path d="M878.742 311.172V316.151H883.721V311.172H878.742Z" />
@@ -2907,7 +2813,6 @@
       <path d="M888.703 351V355.979H893.682V351H888.703Z" />
       <path d="M878.742 351V355.979H883.721V351H878.742Z" />
       <path d="M878.742 360.958V365.937H883.721V360.958H878.742Z" />
-      <path d="M868.789 360.958V365.937H873.768V360.958H868.789Z" />
       <path d="M878.742 370.914V375.893H883.721V370.914H878.742Z" />
       <path d="M888.703 360.958V365.937H893.682V360.958H888.703Z" />
       <path d="M898.66 360.958V365.937H903.639V360.958H898.66Z" />
@@ -3650,8 +3555,6 @@
       <path d="M838.914 350.999V355.979H843.893V350.999H838.914Z" />
       <path d="M838.914 360.957V365.937H843.893V360.957H838.914Z" />
       <path d="M848.875 360.957V365.937H853.854V360.957H848.875Z" />
-      <path d="M848.875 370.914V375.893H853.854V370.914H848.875Z" />
-      <path d="M848.875 350.999V355.979H853.854V350.999H848.875Z" />
       <path d="M858.828 351V355.979H863.807V351H858.828Z" />
       <path d="M858.828 341.043V346.021H863.807V341.043H858.828Z" />
       <path d="M838.914 341.042V346.021H843.893V341.042H838.914Z" />
@@ -4088,7 +3991,6 @@
       <path d="M968.359 500.363V505.342H973.338V500.363H968.359Z" />
       <path d="M958.406 490.405V495.384H963.385V490.405H958.406Z" />
       <path d="M948.445 490.405V495.384H953.424V490.405H948.445Z" />
-      <path d="M490.406 779.171V784.149H495.385V779.171H490.406Z" />
       <path d="M480.445 789.129V794.107H485.424V789.129H480.445Z" />
       <path d="M400.789 789.129V794.107H405.768V789.129H400.789Z" />
       <path d="M410.742 819V823.979H415.721V819H410.742Z" />
@@ -4096,7 +3998,6 @@
       <path d="M410.742 848.872V853.851H415.721V848.872H410.742Z" />
       <path d="M410.742 828.956V833.935H415.721V828.956H410.742Z" />
       <path d="M410.742 789.129V794.107H415.721V789.129H410.742Z" />
-      <path d="M410.742 779.171V784.149H415.721V779.171H410.742Z" />
       <path d="M400.789 769.212V774.19H405.768V769.212H400.789Z" />
       <path d="M410.742 769.212V774.19H415.721V769.212H410.742Z" />
       <path d="M400.789 759.256V764.234H405.768V759.256H400.789Z" />
@@ -4124,23 +4025,18 @@
       <path d="M390.828 639.765V644.744H395.807V639.765H390.828Z" />
       <path d="M390.828 619.85V624.829H395.807V619.85H390.828Z" />
       <path d="M390.828 599.935V604.914H395.807V599.935H390.828Z" />
-      <path d="M390.828 580.021V585H395.807V580.021H390.828Z" />
       <path d="M390.828 669.637V674.616H395.807V669.637H390.828Z" />
       <path d="M390.828 629.806V634.785H395.807V629.806H390.828Z" />
       <path d="M390.828 609.892V614.871H395.807V609.892H390.828Z" />
       <path d="M390.828 589.977V594.956H395.807V589.977H390.828Z" />
       <path d="M390.828 570.065V575.044H395.807V570.065H390.828Z" />
-      <path d="M390.828 560.107V565.086H395.807V560.107H390.828Z" />
       <path d="M390.828 550.148V555.127H395.807V550.148H390.828Z" />
       <path d="M390.828 540.192V545.171H395.807V540.192H390.828Z" />
-      <path d="M390.828 530.234V535.213H395.807V530.234H390.828Z" />
       <path d="M400.789 550.148V555.127H405.768V550.148H400.789Z" />
       <path d="M400.789 530.234V535.213H405.768V530.234H400.789Z" />
       <path d="M410.742 550.148V555.127H415.721V550.148H410.742Z" />
       <path d="M410.742 540.192V545.171H415.721V540.192H410.742Z" />
       <path d="M380.875 679.595V684.573H385.854V679.595H380.875Z" />
-      <path d="M380.875 659.679V664.658H385.854V659.679H380.875Z" />
-      <path d="M380.875 639.765V644.744H385.854V639.765H380.875Z" />
       <path d="M380.875 619.85V624.829H385.854V619.85H380.875Z" />
       <path d="M380.875 669.638V674.616H385.854V669.638H380.875Z" />
       <path d="M380.875 649.723V654.702H385.854V649.723H380.875Z" />
@@ -4150,28 +4046,22 @@
       <path d="M370.914 619.85V624.829H375.893V619.85H370.914Z" />
       <path d="M360.957 619.85V624.829H365.936V619.85H360.957Z" />
       <path d="M360.957 609.892V614.871H365.936V609.892H360.957Z" />
-      <path d="M370.914 609.892V614.871H375.893V609.892H370.914Z" />
       <path d="M370.914 599.935V604.914H375.893V599.935H370.914Z" />
       <path d="M380.875 599.935V604.914H385.854V599.935H380.875Z" />
       <path d="M380.875 589.977V594.956H385.854V589.977H380.875Z" />
       <path d="M380.875 580.021V585H385.854V580.021H380.875Z" />
       <path d="M370.914 580.021V585H375.893V580.021H370.914Z" />
-      <path d="M370.914 589.977V594.956H375.893V589.977H370.914Z" />
       <path d="M360.957 599.935V604.914H365.936V599.935H360.957Z" />
       <path d="M380.875 629.806V634.785H385.854V629.806H380.875Z" />
       <path d="M370.914 669.638V674.616H375.893V669.638H370.914Z" />
       <path d="M370.914 659.679V664.658H375.893V659.679H370.914Z" />
-      <path d="M360.957 639.765V644.744H365.936V639.765H360.957Z" />
       <path d="M360.957 629.806V634.785H365.936V629.806H360.957Z" />
       <path d="M351 619.85V624.829H355.979V619.85H351Z" />
-      <path d="M351 609.892V614.871H355.979V609.892H351Z" />
       <path d="M351 599.935V604.914H355.979V599.935H351Z" />
       <path d="M360.957 589.977V594.956H365.936V589.977H360.957Z" />
       <path d="M360.957 580.021V585H365.936V580.021H360.957Z" />
       <path d="M370.914 570.065V575.044H375.893V570.065H370.914Z" />
-      <path d="M370.914 560.107V565.086H375.893V560.107H370.914Z" />
       <path d="M470.488 799.085V804.063H475.467V799.085H470.488Z" />
-      <path d="M470.488 809.043V814.021H475.467V809.043H470.488Z" />
       <path d="M460.531 819V823.979H465.51V819H460.531Z" />
       <path d="M450.574 828.956V833.935H455.553V828.956H450.574Z" />
       <path d="M450.574 819V823.979H455.553V819H450.574Z" />
@@ -4198,20 +4088,15 @@
       <path d="M450.574 649.723V654.702H455.553V649.723H450.574Z" />
       <path d="M450.574 629.806V634.785H455.553V629.806H450.574Z" />
       <path d="M450.574 609.892V614.871H455.553V609.892H450.574Z" />
-      <path d="M450.574 589.977V594.956H455.553V589.977H450.574Z" />
       <path d="M450.574 570.065V575.044H455.553V570.065H450.574Z" />
       <path d="M450.574 560.107V565.086H455.553V560.107H450.574Z" />
       <path d="M460.531 809.043V814.021H465.51V809.043H460.531Z" />
       <path d="M460.531 799.085V804.063H465.51V799.085H460.531Z" />
       <path d="M460.531 789.129V794.107H465.51V789.129H460.531Z" />
-      <path d="M470.488 789.129V794.107H475.467V789.129H470.488Z" />
-      <path d="M460.531 779.171V784.149H465.51V779.171H460.531Z" />
       <path d="M460.531 759.256V764.234H465.51V759.256H460.531Z" />
-      <path d="M460.531 739.342V744.32H465.51V739.342H460.531Z" />
       <path d="M460.531 719.427V724.405H465.51V719.427H460.531Z" />
       <path d="M460.531 699.509V704.487H465.51V699.509H460.531Z" />
       <path d="M470.488 779.171V784.149H475.467V779.171H470.488Z" />
-      <path d="M470.488 759.256V764.234H475.467V759.256H470.488Z" />
       <path d="M470.488 739.342V744.32H475.467V739.342H470.488Z" />
       <path d="M470.488 719.427V724.405H475.467V719.427H470.488Z" />
       <path d="M470.488 699.509V704.487H475.467V699.509H470.488Z" />
@@ -4220,11 +4105,9 @@
       <path d="M500.359 719.427V724.405H505.338V719.427H500.359Z" />
       <path d="M490.406 699.509V704.487H495.385V699.509H490.406Z" />
       <path d="M500.359 699.509V704.487H505.338V699.509H500.359Z" />
-      <path d="M520.277 699.509V704.487H525.256V699.509H520.277Z" />
       <path d="M460.531 769.212V774.19H465.51V769.212H460.531Z" />
       <path d="M460.531 749.298V754.276H465.51V749.298H460.531Z" />
       <path d="M460.531 729.383V734.361H465.51V729.383H460.531Z" />
-      <path d="M460.531 709.469V714.447H465.51V709.469H460.531Z" />
       <path d="M460.531 689.553V694.531H465.51V689.553H460.531Z" />
       <path d="M460.531 679.595V684.573H465.51V679.595H460.531Z" />
       <path d="M460.531 659.679V664.658H465.51V659.679H460.531Z" />
@@ -4235,13 +4118,11 @@
       <path d="M460.531 669.638V674.616H465.51V669.638H460.531Z" />
       <path d="M460.531 649.723V654.702H465.51V649.723H460.531Z" />
       <path d="M460.531 629.806V634.785H465.51V629.806H460.531Z" />
-      <path d="M460.531 609.892V614.871H465.51V609.892H460.531Z" />
       <path d="M460.531 589.977V594.956H465.51V589.977H460.531Z" />
       <path d="M460.531 570.065V575.044H465.51V570.065H460.531Z" />
       <path d="M460.531 560.107V565.086H465.51V560.107H460.531Z" />
       <path d="M470.488 769.212V774.19H475.467V769.212H470.488Z" />
       <path d="M470.488 749.298V754.276H475.467V749.298H470.488Z" />
-      <path d="M470.488 729.383V734.361H475.467V729.383H470.488Z" />
       <path d="M470.488 709.469V714.447H475.467V709.469H470.488Z" />
       <path d="M470.488 679.594V684.573H475.467V679.594H470.488Z" />
       <path d="M470.488 659.679V664.658H475.467V659.679H470.488Z" />
@@ -4297,8 +4178,6 @@
       <path d="M510.32 649.723V654.702H515.299V649.723H510.32Z" />
       <path d="M510.32 629.806V634.785H515.299V629.806H510.32Z" />
       <path d="M520.277 689.553V694.531H525.256V689.553H520.277Z" />
-      <path d="M520.277 679.595V684.573H525.256V679.595H520.277Z" />
-      <path d="M520.277 659.679V664.658H525.256V659.679H520.277Z" />
       <path d="M520.277 639.765V644.744H525.256V639.765H520.277Z" />
       <path d="M520.277 619.85V624.829H525.256V619.85H520.277Z" />
       <path d="M520.277 669.638V674.616H525.256V669.638H520.277Z" />
@@ -4311,8 +4190,6 @@
       <path d="M530.234 649.723V654.702H535.213V649.723H530.234Z" />
       <path d="M530.234 629.806V634.785H535.213V629.806H530.234Z" />
       <path d="M540.191 659.679V664.658H545.17V659.679H540.191Z" />
-      <path d="M540.191 639.765V644.744H545.17V639.765H540.191Z" />
-      <path d="M540.191 669.637V674.616H545.17V669.637H540.191Z" />
       <path d="M540.191 649.723V654.702H545.17V649.723H540.191Z" />
       <path d="M540.191 629.806V634.785H545.17V629.806H540.191Z" />
       <path d="M550.148 639.765V644.744H555.127V639.765H550.148Z" />
@@ -4339,7 +4216,6 @@
       <path d="M440.617 669.637V674.616H445.596V669.637H440.617Z" />
       <path d="M440.617 649.723V654.702H445.596V649.723H440.617Z" />
       <path d="M440.617 629.806V634.785H445.596V629.806H440.617Z" />
-      <path d="M440.617 609.892V614.871H445.596V609.892H440.617Z" />
       <path d="M440.617 589.977V594.956H445.596V589.977H440.617Z" />
       <path d="M440.617 570.065V575.044H445.596V570.065H440.617Z" />
       <path d="M440.617 560.107V565.086H445.596V560.107H440.617Z" />
@@ -4351,7 +4227,6 @@
       <path d="M430.66 819V823.979H435.639V819H430.66Z" />
       <path d="M430.66 809.043V814.021H435.639V809.043H430.66Z" />
       <path d="M430.66 799.085V804.063H435.639V799.085H430.66Z" />
-      <path d="M430.66 789.129V794.107H435.639V789.129H430.66Z" />
       <path d="M430.66 779.171V784.149H435.639V779.171H430.66Z" />
       <path d="M430.66 759.256V764.234H435.639V759.256H430.66Z" />
       <path d="M430.66 739.342V744.32H435.639V739.342H430.66Z" />
@@ -4407,7 +4282,6 @@
       <path d="M420.703 729.383V734.361H425.682V729.383H420.703Z" />
       <path d="M420.703 709.469V714.447H425.682V709.469H420.703Z" />
       <path d="M420.703 689.553V694.531H425.682V689.553H420.703Z" />
-      <path d="M420.703 679.595V684.573H425.682V679.595H420.703Z" />
       <path d="M420.703 659.679V664.658H425.682V659.679H420.703Z" />
       <path d="M420.703 639.765V644.744H425.682V639.765H420.703Z" />
       <path d="M420.703 619.85V624.829H425.682V619.85H420.703Z" />
@@ -4421,11 +4295,9 @@
       <path d="M420.703 560.107V565.086H425.682V560.107H420.703Z" />
       <path d="M410.742 689.553V694.531H415.721V689.553H410.742Z" />
       <path d="M410.742 679.595V684.573H415.721V679.595H410.742Z" />
-      <path d="M410.742 659.679V664.658H415.721V659.679H410.742Z" />
       <path d="M410.742 639.765V644.744H415.721V639.765H410.742Z" />
       <path d="M410.742 619.85V624.829H415.721V619.85H410.742Z" />
       <path d="M410.742 599.935V604.914H415.721V599.935H410.742Z" />
-      <path d="M410.742 580.021V585H415.721V580.021H410.742Z" />
       <path d="M410.742 669.638V674.616H415.721V669.638H410.742Z" />
       <path d="M410.742 649.723V654.702H415.721V649.723H410.742Z" />
       <path d="M410.742 629.806V634.785H415.721V629.806H410.742Z" />
@@ -4442,7 +4314,6 @@
       <path d="M400.789 819V823.979H405.768V819H400.789Z" />
       <path d="M400.789 809.043V814.021H405.768V809.043H400.789Z" />
       <path d="M410.742 809.043V814.021H415.721V809.043H410.742Z" />
-      <path d="M400.789 799.085V804.063H405.768V799.085H400.789Z" />
       <path d="M410.742 799.085V804.063H415.721V799.085H410.742Z" />
       <path d="M440.617 918.574V923.553H445.596V918.574H440.617Z" />
       <path d="M430.66 918.574V923.553H435.639V918.574H430.66Z" />
@@ -4456,13 +4327,9 @@
       <path d="M380.875 560.107V565.086H385.854V560.107H380.875Z" />
       <path d="M380.875 570.065V575.044H385.854V570.065H380.875Z" />
       <path d="M251.426 470.49V475.469H256.405V470.49H251.426Z" />
-      <path d="M251.426 460.531V465.51H256.405V460.531H251.426Z" />
       <path d="M261.383 460.531V465.51H266.362V460.531H261.383Z" />
       <path d="M271.34 450.574V455.553H276.319V450.574H271.34Z" />
-      <path d="M271.34 440.616V445.595H276.319V440.616H271.34Z" />
       <path d="M281.297 430.658V435.637H286.276V430.658H281.297Z" />
-      <path d="M291.258 420.701V425.68H296.237V420.701H291.258Z" />
-      <path d="M301.211 410.743V415.722H306.19V410.743H301.211Z" />
       <path d="M271.34 410.743V415.722H276.319V410.743H271.34Z" />
       <path d="M271.34 420.701V425.68H276.319V420.701H271.34Z" />
       <path d="M241.469 410.743V415.722H246.447V410.743H241.469Z" />
@@ -4477,7 +4344,6 @@
       <path d="M251.426 410.743V415.722H256.405V410.743H251.426Z" />
       <path d="M251.426 430.658V435.637H256.405V430.658H251.426Z" />
       <path d="M251.426 420.701V425.68H256.405V420.701H251.426Z" />
-      <path d="M251.426 440.616V445.595H256.404V440.616H251.426Z" />
       <path d="M251.426 450.574V455.553H256.404V450.574H251.426Z" />
       <path d="M231.512 410.743V415.722H236.49V410.743H231.512Z" />
       <path d="M231.512 420.701V425.68H236.49V420.701H231.512Z" />
@@ -4485,18 +4351,15 @@
       <path d="M321.125 410.743V415.722H326.104V410.743H321.125Z" />
       <path d="M291.258 410.743V415.722H296.237V410.743H291.258Z" />
       <path d="M261.383 430.658V435.637H266.362V430.658H261.383Z" />
-      <path d="M261.383 420.701V425.68H266.362V420.701H261.383Z" />
       <path d="M261.383 450.574V455.553H266.362V450.574H261.383Z" />
       <path d="M331.086 410.743V415.722H336.065V410.743H331.086Z" />
       <path d="M341.043 410.743V415.722H346.022V410.743H341.043Z" />
-      <path d="M351 420.701V425.68H355.979V420.701H351Z" />
       <path d="M360.957 430.658V435.637H365.936V430.658H360.957Z" />
       <path d="M351 430.658V435.637H355.979V430.658H351Z" />
       <path d="M360.957 400.787V405.766H365.936V400.787H360.957Z" />
       <path d="M370.914 390.829V395.808H375.893V390.829H370.914Z" />
       <path d="M351 390.829V395.808H355.979V390.829H351Z" />
       <path d="M331.086 390.829V395.808H336.065V390.829H331.086Z" />
-      <path d="M341.043 390.829V395.808H346.022V390.829H341.043Z" />
       <path d="M291.258 390.829V395.808H296.237V390.829H291.258Z" />
       <path d="M261.383 390.829V395.808H266.362V390.829H261.383Z" />
       <path d="M311.172 390.829V395.808H316.151V390.829H311.172Z" />
@@ -4507,17 +4370,12 @@
       <path d="M271.34 390.829V395.808H276.319V390.829H271.34Z" />
       <path d="M241.469 390.829V395.808H246.447V390.829H241.469Z" />
       <path d="M221.555 390.829V395.808H226.533V390.829H221.555Z" />
-      <path d="M211.594 390.829V395.808H216.572V390.829H211.594Z" />
       <path d="M201.637 390.829V395.808H206.615V390.829H201.637Z" />
       <path d="M191.68 390.829V395.808H196.658V390.829H191.68Z" />
-      <path d="M351 400.787V405.766H355.979V400.787H351Z" />
       <path d="M331.086 400.787V405.766H336.065V400.787H331.086Z" />
       <path d="M341.043 400.787V405.766H346.022V400.787H341.043Z" />
-      <path d="M321.125 400.787V405.766H326.104V400.787H321.125Z" />
       <path d="M291.258 400.787V405.766H296.237V400.787H291.258Z" />
-      <path d="M261.383 400.787V405.766H266.362V400.787H261.383Z" />
       <path d="M311.172 400.787V405.766H316.151V400.787H311.172Z" />
-      <path d="M281.297 400.787V405.766H286.276V400.787H281.297Z" />
       <path d="M251.426 400.787V405.766H256.405V400.787H251.426Z" />
       <path d="M231.512 400.787V405.766H236.49V400.787H231.512Z" />
       <path d="M301.211 400.787V405.766H306.19V400.787H301.211Z" />
@@ -4525,18 +4383,14 @@
       <path d="M241.469 400.787V405.766H246.447V400.787H241.469Z" />
       <path d="M221.555 400.787V405.766H226.533V400.787H221.555Z" />
       <path d="M360.957 390.829V395.808H365.936V390.829H360.957Z" />
-      <path d="M380.875 380.872V385.851H385.854V380.872H380.875Z" />
       <path d="M360.957 380.872V385.851H365.936V380.872H360.957Z" />
       <path d="M380.875 370.914V375.893H385.854V370.914H380.875Z" />
       <path d="M360.957 370.914V375.893H365.936V370.914H360.957Z" />
       <path d="M390.828 360.956V365.935H395.807V360.956H390.828Z" />
-      <path d="M410.742 341.043V346.021H415.721V341.043H410.742Z" />
       <path d="M410.742 331.085V336.063H415.721V331.085H410.742Z" />
-      <path d="M430.66 321.129V326.107H435.639V321.129H430.66Z" />
       <path d="M440.617 311.171V316.149H445.596V311.171H440.617Z" />
       <path d="M440.617 301.212V306.19H445.596V301.212H440.617Z" />
       <path d="M430.66 311.171V316.149H435.639V311.171H430.66Z" />
-      <path d="M420.703 301.212V306.19H425.682V301.212H420.703Z" />
       <path d="M420.703 291.256V296.234H425.682V291.256H420.703Z" />
       <path d="M430.66 281.298V286.276H435.639V281.298H430.66Z" />
       <path d="M440.617 281.298V286.276H445.596V281.298H440.617Z" />
@@ -4960,7 +4814,6 @@
       <path d="M400.789 301.212V306.19H405.768V301.212H400.789Z" />
       <path d="M400.789 311.171V316.149H405.768V311.171H400.789Z" />
       <path d="M400.789 331.085V336.063H405.768V331.085H400.789Z" />
-      <path d="M400.789 321.129V326.107H405.768V321.129H400.789Z" />
       <path d="M400.789 341.043V346.021H405.768V341.043H400.789Z" />
       <path d="M430.66 261.383V266.361H435.639V261.383H430.66Z" />
       <path d="M430.66 221.553V226.531H435.639V221.553H430.66Z" />
@@ -4991,7 +4844,6 @@
       <path d="M390.828 331.085V336.063H395.807V331.085H390.828Z" />
       <path d="M390.828 321.129V326.107H395.807V321.129H390.828Z" />
       <path d="M390.828 341.043V346.021H395.807V341.043H390.828Z" />
-      <path d="M390.828 351V355.979H395.807V351H390.828Z" />
       <path d="M380.875 281.298V286.276H385.854V281.298H380.875Z" />
       <path d="M360.957 281.298V286.276H365.936V281.298H360.957Z" />
       <path d="M360.957 261.383V266.361H365.936V261.383H360.957Z" />
@@ -5000,7 +4852,6 @@
       <path d="M360.957 271.342V276.32H365.936V271.342H360.957Z" />
       <path d="M380.875 301.212V306.19H385.854V301.212H380.875Z" />
       <path d="M360.957 301.212V306.19H365.936V301.212H360.957Z" />
-      <path d="M380.875 311.171V316.149H385.854V311.171H380.875Z" />
       <path d="M360.957 311.171V316.149H365.936V311.171H360.957Z" />
       <path d="M380.875 331.085V336.063H385.854V331.085H380.875Z" />
       <path d="M360.957 331.085V336.063H365.936V331.085H360.957Z" />
@@ -5050,7 +4901,6 @@
       <path d="M201.637 261.383V266.361H206.615V261.383H201.637Z" />
       <path d="M191.68 261.383V266.361H196.658V261.383H191.68Z" />
       <path d="M181.723 261.383V266.361H186.701V261.383H181.723Z" />
-      <path d="M171.766 261.383V266.361H176.744V261.383H171.766Z" />
       <path d="M370.914 291.256V296.234H375.893V291.256H370.914Z" />
       <path d="M351 291.256V296.234H355.979V291.256H351Z" />
       <path d="M331.086 291.256V296.234H336.065V291.256H331.086Z" />
@@ -5086,7 +4936,6 @@
       <path d="M221.555 271.342V276.32H226.533V271.342H221.555Z" />
       <path d="M211.594 271.342V276.32H216.572V271.342H211.594Z" />
       <path d="M201.637 271.342V276.32H206.615V271.342H201.637Z" />
-      <path d="M191.68 271.342V276.32H196.658V271.342H191.68Z" />
       <path d="M181.723 271.342V276.32H186.701V271.342H181.723Z" />
       <path d="M171.766 271.342V276.32H176.744V271.342H171.766Z" />
       <path d="M370.914 301.212V306.19H375.893V301.212H370.914Z" />
@@ -5121,8 +4970,6 @@
       <path d="M221.555 311.171V316.149H226.533V311.171H221.555Z" />
       <path d="M211.594 311.171V316.149H216.572V311.171H211.594Z" />
       <path d="M201.637 311.171V316.149H206.615V311.171H201.637Z" />
-      <path d="M191.68 311.171V316.149H196.658V311.171H191.68Z" />
-      <path d="M370.914 331.085V336.063H375.893V331.085H370.914Z" />
       <path d="M351 331.085V336.063H355.979V331.085H351Z" />
       <path d="M331.086 331.085V336.063H336.065V331.085H331.086Z" />
       <path d="M341.043 331.085V336.063H346.022V331.085H341.043Z" />
@@ -5145,14 +4992,12 @@
       <path d="M370.914 321.129V326.107H375.893V321.129H370.914Z" />
       <path d="M331.086 321.129V326.107H336.065V321.129H331.086Z" />
       <path d="M341.043 321.129V326.107H346.022V321.129H341.043Z" />
-      <path d="M321.125 321.129V326.107H326.104V321.129H321.125Z" />
       <path d="M291.258 321.129V326.107H296.237V321.129H291.258Z" />
       <path d="M261.383 321.129V326.107H266.362V321.129H261.383Z" />
       <path d="M311.172 321.129V326.107H316.151V321.129H311.172Z" />
       <path d="M281.297 321.129V326.107H286.276V321.129H281.297Z" />
       <path d="M251.426 321.129V326.107H256.405V321.129H251.426Z" />
       <path d="M231.512 321.129V326.107H236.49V321.129H231.512Z" />
-      <path d="M301.211 321.129V326.107H306.19V321.129H301.211Z" />
       <path d="M271.34 321.129V326.107H276.319V321.129H271.34Z" />
       <path d="M241.469 321.129V326.107H246.447V321.129H241.469Z" />
       <path d="M221.555 321.129V326.107H226.533V321.129H221.555Z" />
@@ -5162,13 +5007,11 @@
       <path d="M181.723 321.129V326.107H186.701V321.129H181.723Z" />
       <path d="M370.914 341.043V346.021H375.893V341.043H370.914Z" />
       <path d="M351 341.043V346.021H355.979V341.043H351Z" />
-      <path d="M331.086 341.043V346.021H336.065V341.043H331.086Z" />
       <path d="M341.043 341.043V346.021H346.022V341.043H341.043Z" />
       <path d="M321.125 341.043V346.021H326.104V341.043H321.125Z" />
       <path d="M291.258 341.043V346.021H296.237V341.043H291.258Z" />
       <path d="M261.383 341.043V346.021H266.362V341.043H261.383Z" />
       <path d="M311.172 341.043V346.021H316.151V341.043H311.172Z" />
-      <path d="M281.297 341.043V346.021H286.276V341.043H281.297Z" />
       <path d="M231.512 341.043V346.021H236.49V341.043H231.512Z" />
       <path d="M301.211 341.043V346.021H306.19V341.043H301.211Z" />
       <path d="M271.34 341.043V346.021H276.319V341.043H271.34Z" />
@@ -5179,12 +5022,10 @@
       <path d="M181.723 341.043V346.021H186.701V341.043H181.723Z" />
       <path d="M171.766 341.043V346.021H176.744V341.043H171.766Z" />
       <path d="M370.914 351V355.979H375.893V351H370.914Z" />
-      <path d="M351 351V355.979H355.979V351H351Z" />
       <path d="M331.086 351V355.979H336.065V351H331.086Z" />
       <path d="M341.043 351V355.979H346.022V351H341.043Z" />
       <path d="M321.125 351V355.979H326.104V351H321.125Z" />
       <path d="M291.258 351V355.979H296.237V351H291.258Z" />
-      <path d="M261.383 351V355.979H266.362V351H261.383Z" />
       <path d="M281.297 351V355.979H286.276V351H281.297Z" />
       <path d="M251.426 351V355.979H256.405V351H251.426Z" />
       <path d="M231.512 351V355.979H236.49V351H231.512Z" />
@@ -5194,19 +5035,14 @@
       <path d="M221.555 351V355.979H226.533V351H221.555Z" />
       <path d="M211.594 351V355.979H216.572V351H211.594Z" />
       <path d="M201.637 351V355.979H206.615V351H201.637Z" />
-      <path d="M191.68 351V355.979H196.658V351H191.68Z" />
       <path d="M181.723 351V355.979H186.701V351H181.723Z" />
-      <path d="M171.766 351V355.979H176.744V351H171.766Z" />
       <path d="M351 360.956V365.935H355.979V360.956H351Z" />
       <path d="M331.086 360.956V365.935H336.065V360.956H331.086Z" />
       <path d="M341.043 360.956V365.935H346.022V360.956H341.043Z" />
-      <path d="M321.125 360.956V365.935H326.104V360.956H321.125Z" />
       <path d="M291.258 360.956V365.935H296.237V360.956H291.258Z" />
       <path d="M261.383 360.956V365.935H266.362V360.956H261.383Z" />
       <path d="M311.172 360.956V365.935H316.151V360.956H311.172Z" />
       <path d="M281.297 360.956V365.935H286.276V360.956H281.297Z" />
-      <path d="M251.426 360.956V365.935H256.404V360.956H251.426Z" />
-      <path d="M231.512 360.956V365.935H236.49V360.956H231.512Z" />
       <path d="M301.211 360.956V365.935H306.19V360.956H301.211Z" />
       <path d="M271.34 360.956V365.935H276.319V360.956H271.34Z" />
       <path d="M241.469 360.956V365.935H246.447V360.956H241.469Z" />
@@ -5217,7 +5053,6 @@
       <path d="M181.723 360.956V365.935H186.701V360.956H181.723Z" />
       <path d="M171.766 360.956V365.935H176.744V360.956H171.766Z" />
       <path d="M370.914 370.914V375.893H375.893V370.914H370.914Z" />
-      <path d="M351 370.914V375.893H355.979V370.914H351Z" />
       <path d="M331.086 370.914V375.893H336.065V370.914H331.086Z" />
       <path d="M341.043 370.914V375.893H346.022V370.914H341.043Z" />
       <path d="M321.125 370.914V375.893H326.104V370.914H321.125Z" />
@@ -5230,9 +5065,7 @@
       <path d="M301.211 370.914V375.893H306.19V370.914H301.211Z" />
       <path d="M271.34 370.914V375.893H276.319V370.914H271.34Z" />
       <path d="M241.469 370.914V375.893H246.447V370.914H241.469Z" />
-      <path d="M211.594 370.914V375.893H216.572V370.914H211.594Z" />
       <path d="M201.637 370.914V375.893H206.615V370.914H201.637Z" />
-      <path d="M191.68 370.914V375.893H196.658V370.914H191.68Z" />
       <path d="M181.723 370.914V375.893H186.701V370.914H181.723Z" />
       <path d="M370.914 380.872V385.851H375.893V380.872H370.914Z" />
       <path d="M351 380.872V385.851H355.979V380.872H351Z" />
@@ -5244,7 +5077,6 @@
       <path d="M311.172 380.872V385.851H316.151V380.872H311.172Z" />
       <path d="M281.297 380.872V385.851H286.276V380.872H281.297Z" />
       <path d="M251.426 380.872V385.851H256.404V380.872H251.426Z" />
-      <path d="M231.512 380.872V385.851H236.49V380.872H231.512Z" />
       <path d="M301.211 380.872V385.851H306.19V380.872H301.211Z" />
       <path d="M241.469 380.872V385.851H246.447V380.872H241.469Z" />
       <path d="M221.555 380.872V385.851H226.533V380.872H221.555Z" />
@@ -5554,7 +5386,6 @@
       <path d="M450.574 321.129V326.107H455.553V321.129H450.574Z" />
       <path d="M440.617 331.085V336.063H445.596V331.085H440.617Z" />
       <path d="M261.383 470.49V475.469H266.362V470.49H261.383Z" />
-      <path d="M271.34 460.531V465.51H276.319V460.531H271.34Z" />
       <path d="M191.68 410.743V415.722H196.658V410.743H191.68Z" />
       <path d="M191.68 420.701V425.68H196.658V420.701H191.68Z" />
       <path d="M201.637 430.658V435.637H206.615V430.658H201.637Z" />
@@ -5568,15 +5399,12 @@
       <path d="M978.32 301.213V306.192H983.299V301.213H978.32Z" />
       <path d="M510.32 599.935V604.914H515.299V599.935H510.32Z" />
       <path d="M530.234 599.935V604.914H535.213V599.935H530.234Z" />
-      <path d="M560.105 619.85V624.829H565.084V619.85H560.105Z" />
       <path d="M560.105 649.723V654.702H565.084V649.723H560.105Z" />
       <path d="M550.148 689.553V694.531H555.127V689.553H550.148Z" />
       <path d="M530.234 719.427V724.405H535.213V719.427H530.234Z" />
-      <path d="M510.32 749.298V754.276H515.299V749.298H510.32Z" />
       <path d="M490.406 759.256V764.234H495.385V759.256H490.406Z" />
       <path d="M500.359 739.342V744.32H505.338V739.342H500.359Z" />
       <path d="M530.234 699.509V704.487H535.213V699.509H530.234Z" />
-      <path d="M490.406 749.298V754.276H495.385V749.298H490.406Z" />
       <path d="M510.32 729.383V734.361H515.299V729.383H510.32Z" />
       <path d="M520.277 709.467V714.445H525.256V709.467H520.277Z" />
       <path d="M510.32 609.892V614.871H515.299V609.892H510.32Z" />
@@ -5584,10 +5412,8 @@
       <path d="M540.191 619.85V624.829H545.17V619.85H540.191Z" />
       <path d="M560.105 629.806V634.785H565.084V629.806H560.105Z" />
       <path d="M520.277 599.935V604.914H525.256V599.935H520.277Z" />
-      <path d="M540.191 609.892V614.871H545.17V609.892H540.191Z" />
       <path d="M550.148 699.509V704.487H555.127V699.509H550.148Z" />
       <path d="M520.277 729.383V734.361H525.256V729.383H520.277Z" />
-      <path d="M500.359 759.256V764.234H505.338V759.256H500.359Z" />
       <path d="M480.445 739.342V744.32H485.424V739.342H480.445Z" />
       <path d="M490.406 719.427V724.405H495.385V719.427H490.406Z" />
       <path d="M480.445 699.509V704.487H485.424V699.509H480.445Z" />
@@ -5595,23 +5421,19 @@
       <path d="M490.406 709.469V714.447H495.385V709.469H490.406Z" />
       <path d="M530.234 709.467V714.445H535.213V709.467H530.234Z" />
       <path d="M520.277 609.892V614.871H525.256V609.892H520.277Z" />
-      <path d="M540.191 689.553V694.531H545.17V689.553H540.191Z" />
       <path d="M550.148 619.85V624.829H555.127V619.85H550.148Z" />
       <path d="M560.105 639.765V644.744H565.084V639.765H560.105Z" />
       <path d="M520.277 589.977V594.956H525.256V589.977H520.277Z" />
       <path d="M550.148 679.594V684.573H555.127V679.594H550.148Z" />
-      <path d="M540.191 709.469V714.447H545.17V709.469H540.191Z" />
       <path d="M510.32 739.342V744.32H515.299V739.342H510.32Z" />
       <path d="M480.445 759.256V764.234H485.424V759.256H480.445Z" />
       <path d="M510.32 719.427V724.405H515.299V719.427H510.32Z" />
       <path d="M510.32 699.509V704.487H515.299V699.509H510.32Z" />
       <path d="M500.359 729.383V734.361H505.338V729.383H500.359Z" />
-      <path d="M500.359 709.469V714.447H505.338V709.469H500.359Z" />
       <path d="M500.359 609.892V614.871H505.338V609.892H500.359Z" />
       <path d="M530.234 619.85V624.829H535.213V619.85H530.234Z" />
       <path d="M540.191 679.594V684.573H545.17V679.594H540.191Z" />
       <path d="M550.148 629.806V634.785H555.127V629.806H550.148Z" />
-      <path d="M520.277 719.427V724.405H525.256V719.427H520.277Z" />
       <path d="M420.703 580.021V585H425.682V580.021H420.703Z" />
       <path d="M570.062 629.806V634.785H575.041V629.806H570.062Z" />
       <path d="M490.406 739.342V744.32H495.385V739.342H490.406Z" />
@@ -5620,11 +5442,75 @@
       <path d="M540.191 699.509V704.487H545.17V699.509H540.191Z" />
       <path d="M410.742 749.298V754.276H415.721V749.298H410.742Z" />
       <path d="M809.043 221.552V226.531H814.022V221.552H809.043Z" />
-      <path d="M779.172 201.639V206.618H784.151V201.639H779.172Z" />
-      <path d="M819 201.639V206.618H823.979V201.639H819Z" />
       <path d="M719.426 251.426V256.405H724.405V251.426H719.426Z" />
       <path d="M669.641 181.723V186.702H674.619V181.723H669.641Z" />
       <path d="M799.086 231.511V236.49H804.065V231.511H799.086Z" />
+      <path d="M440.617 530.234V535.213H445.596V530.234H440.617Z" />
+      <path d="M271.34 380.872V385.851H276.319V380.872H271.34Z" />
+      <path d="M161.809 360.956V365.935H166.787V360.956H161.809Z" />
+      <path d="M380.875 609.892V614.871H385.854V609.892H380.875Z" />
+      <path d="M828.957 151.851V156.83H833.936V151.851H828.957Z" />
+      <path d="M211.594 341.043V346.021H216.572V341.043H211.594Z" />
+      <path d="M370.914 550.148V555.127H375.893V550.148H370.914Z" />
+      <path d="M221.555 301.212V306.19H226.533V301.212H221.555Z" />
+      <path d="M251.426 341.043V346.021H256.404V341.043H251.426Z" />
+      <path d="M400.789 540.192V545.171H405.768V540.192H400.789Z" />
+      <path d="M858.828 311.172V316.151H863.807V311.172H858.828Z" />
+      <path d="M281.297 420.701V425.68H286.276V420.701H281.297Z" />
+      <path d="M211.594 400.787V405.766H216.572V400.787H211.594Z" />
+      <path d="M440.617 599.935V604.914H445.596V599.935H440.617Z" />
+      <path d="M858.828 161.808V166.787H863.807V161.808H858.828Z" />
+      <path d="M659.68 171.766V176.745H664.658V171.766H659.68Z" />
+      <path d="M510.32 679.594V684.573H515.299V679.594H510.32Z" />
+      <path d="M380.875 390.829V395.808H385.854V390.829H380.875Z" />
+      <path d="M311.172 351V355.979H316.151V351H311.172Z" />
+      <path d="M490.406 769.213V774.192H495.385V769.213H490.406Z" />
+      <path d="M410.742 589.977V594.956H415.721V589.977H410.742Z" />
+      <path d="M321.125 390.829V395.808H326.104V390.829H321.125Z" />
+      <path d="M530.234 639.765V644.744H535.213V639.765H530.234Z" />
+      <path d="M420.703 331.085V336.063H425.682V331.085H420.703Z" />
+      <path d="M749.297 301.213V306.192H754.276V301.213H749.297Z" />
+      <path d="M848.875 281.299V286.278H853.854V281.299H848.875Z" />
+      <path d="M470.488 609.892V614.871H475.467V609.892H470.488Z" />
+      <path d="M709.469 241.47V246.449H714.447V241.47H709.469Z" />
+      <path d="M819 311.172V316.151H823.979V311.172H819Z" />
+      <path d="M500.359 649.723V654.702H505.338V649.723H500.359Z" />
+      <path d="M390.828 649.723V654.702H395.807V649.723H390.828Z" />
+      <path d="M231.512 430.658V435.637H236.49V430.658H231.512Z" />
+      <path d="M819 191.681V196.66H823.979V191.681H819Z" />
+      <path d="M390.828 311.171V316.149H395.807V311.171H390.828Z" />
+      <path d="M440.617 679.594V684.573H445.596V679.594H440.617Z" />
+      <path d="M799.086 171.767V176.746H804.065V171.767H799.086Z" />
+      <path d="M679.594 540.192V545.171H684.572V540.192H679.594Z" />
+      <path d="M769.211 221.552V226.531H774.19V221.552H769.211Z" />
+      <path d="M858.828 231.51V236.489H863.807V231.51H858.828Z" />
+      <path d="M470.488 689.553V694.531H475.467V689.553H470.488Z" />
+      <path d="M729.383 261.384V266.363H734.362V261.384H729.383Z" />
+      <path d="M789.125 341.043V346.021H794.104V341.043H789.125Z" />
+      <path d="M321.125 301.212V306.19H326.104V301.212H321.125Z" />
+      <path d="M550.148 609.892V614.871H555.127V609.892H550.148Z" />
+      <path d="M838.914 251.426V256.405H843.893V251.426H838.914Z" />
+      <path d="M759.258 201.639V206.618H764.237V201.639H759.258Z" />
+      <path d="M500.359 599.935V604.914H505.338V599.935H500.359Z" />
+      <path d="M261.383 410.743V415.722H266.362V410.743H261.383Z" />
+      <path d="M261.383 440.616V445.595H266.362V440.616H261.383Z" />
+      <path d="M351 410.743V415.722H355.979V410.743H351Z" />
+      <path d="M799.086 211.596V216.575H804.065V211.596H799.086Z" />
+      <path d="M719.426 360.958V365.937H724.405V360.958H719.426Z" />
+      <path d="M201.637 440.616V445.595H206.615V440.616H201.637Z" />
+      <path d="M550.148 669.637V674.616H555.127V669.637H550.148Z" />
+      <path d="M699.512 281.299V286.278H704.49V281.299H699.512Z" />
+      <path d="M370.914 490.405V495.384H375.893V490.405H370.914Z" />
+      <path d="M440.617 639.765V644.744H445.596V639.765H440.617Z" />
+      <path d="M271.34 430.658V435.637H276.319V430.658H271.34Z" />
+      <path d="M281.297 311.171V316.149H286.276V311.171H281.297Z" />
+      <path d="M480.445 560.107V565.086H485.424V560.107H480.445Z" />
+      <path d="M221.555 370.914V375.893H226.533V370.914H221.555Z" />
+      <path d="M181.723 311.171V316.149H186.701V311.171H181.723Z" />
+      <path d="M331.086 530.234V535.213H336.065V530.234H331.086Z" />
+      <path d="M400.789 351V355.979H405.768V351H400.789Z" />
+      <path d="M858.828 191.681V196.66H863.807V191.681H858.828Z" />
+      <path d="M868.789 331.086V336.065H873.768V331.086H868.789Z" />
     </svg>
     <!-- Scrims — HERO ONLY. Its copy really does sit ON the artwork: left-aligned
          text over a wide band needs something to sit on, so a left-to-right wash
@@ -5672,7 +5558,7 @@
         class="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_0%,transparent_46%,color-mix(in_srgb,var(--bg-canvas)_45%,transparent)_72%,color-mix(in_srgb,var(--bg-canvas)_85%,transparent)_88%,var(--bg-canvas)_100%)]"
       />
     </template>
-    <!-- The route, above the wash. 78 single-cell squares are far too sparse to
+    <!-- The route, above the wash. 172 single-cell squares are far too sparse to
          compete with a headline, so this layer costs the copy nothing while
          giving the band its one piece of colour.
 
@@ -5696,88 +5582,182 @@
       :class="[LAYER_BOX, routeMask, nodes ? ROUTE_INK : demotedInk]"
     >
       <g class="animate-pulse motion-reduce:animate-none [animation-delay:0ms]!">
-        <path d="M440.617 530.234V535.213H445.596V530.234H440.617Z" />
-        <path d="M430.66 560.107V565.086H435.639V560.107H430.66Z" />
-        <path d="M271.34 380.872V385.851H276.319V380.872H271.34Z" />
-        <path d="M161.809 360.956V365.935H166.787V360.956H161.809Z" />
-        <path d="M380.875 609.892V614.871H385.854V609.892H380.875Z" />
-        <path d="M828.957 151.851V156.83H833.936V151.851H828.957Z" />
-        <path d="M211.594 341.043V346.021H216.572V341.043H211.594Z" />
-        <path d="M370.914 550.148V555.127H375.893V550.148H370.914Z" />
-        <path d="M819 281.299V286.278H823.979V281.299H819Z" />
-        <path d="M181.723 390.829V395.808H186.701V390.829H181.723Z" />
-        <path d="M221.555 301.212V306.19H226.533V301.212H221.555Z" />
-        <path d="M370.914 360.956V365.935H375.893V360.956H370.914Z" />
-        <path d="M251.426 341.043V346.021H256.404V341.043H251.426Z" />
-        <path d="M570.062 639.765V644.744H575.041V639.765H570.062Z" />
-        <path d="M739.34 281.299V286.278H744.319V281.299H739.34Z" />
-        <path d="M400.789 540.192V545.171H405.768V540.192H400.789Z" />
-        <path d="M858.828 311.172V316.151H863.807V311.172H858.828Z" />
-        <path d="M281.297 420.701V425.68H286.276V420.701H281.297Z" />
-        <path d="M211.594 400.787V405.766H216.572V400.787H211.594Z" />
-        <path d="M440.617 599.935V604.914H445.596V599.935H440.617Z" />
-        <path d="M858.828 161.808V166.787H863.807V161.808H858.828Z" />
-        <path d="M659.68 171.766V176.745H664.658V171.766H659.68Z" />
-        <path d="M510.32 679.594V684.573H515.299V679.594H510.32Z" />
+        <path d="M390.828 351V355.979H395.807V351H390.828Z" />
+        <path d="M251.426 360.956V365.935H256.404V360.956H251.426Z" />
+        <path d="M271.34 440.616V445.595H276.319V440.616H271.34Z" />
+        <path d="M380.875 659.679V664.658H385.854V659.679H380.875Z" />
+        <path d="M420.703 679.595V684.573H425.682V679.595H420.703Z" />
+        <path d="M809.043 271.341V276.32H814.022V271.341H809.043Z" />
+        <path d="M848.875 370.914V375.893H853.854V370.914H848.875Z" />
+        <path d="M360.957 440.616V445.595H365.936V440.616H360.957Z" />
+        <path d="M161.809 271.342V276.32H166.787V271.342H161.809Z" />
+        <path d="M470.488 789.129V794.107H475.467V789.129H470.488Z" />
+        <path d="M460.531 609.892V614.871H465.51V609.892H460.531Z" />
+        <path d="M789.125 291.255V296.234H794.104V291.255H789.125Z" />
+        <path d="M799.086 221.552V226.531H804.065V221.552H799.086Z" />
+        <path d="M171.766 291.256V296.234H176.744V291.256H171.766Z" />
+        <path d="M370.914 331.085V336.063H375.893V331.085H370.914Z" />
+        <path d="M410.742 480.446V485.425H415.721V480.446H410.742Z" />
+        <path d="M370.914 589.977V594.956H375.893V589.977H370.914Z" />
+        <path d="M759.258 301.213V306.192H764.237V301.213H759.258Z" />
+        <path d="M838.914 271.341V276.32H843.893V271.341H838.914Z" />
+        <path d="M191.68 370.914V375.893H196.658V370.914H191.68Z" />
+        <path d="M261.383 400.787V405.766H266.362V400.787H261.383Z" />
+        <path d="M231.512 380.872V385.851H236.49V380.872H231.512Z" />
+        <path d="M380.875 311.171V316.149H385.854V311.171H380.875Z" />
+        <path d="M370.914 560.107V565.086H375.893V560.107H370.914Z" />
+        <path d="M500.359 709.469V714.447H505.338V709.469H500.359Z" />
+        <path d="M520.277 659.679V664.658H525.256V659.679H520.277Z" />
+        <path d="M540.191 609.892V614.871H545.17V609.892H540.191Z" />
+        <path d="M540.191 669.637V674.616H545.17V669.637H540.191Z" />
+        <path d="M739.34 360.958V365.937H744.319V360.958H739.34Z" />
+        <path d="M709.469 271.341V276.32H714.447V271.341H709.469Z" />
+        <path d="M838.914 321.128V326.107H843.893V321.128H838.914Z" />
+        <path d="M351 370.914V375.893H355.979V370.914H351Z" />
+        <path d="M191.68 351V355.979H196.658V351H191.68Z" />
+        <path d="M281.297 341.043V346.021H286.276V341.043H281.297Z" />
+        <path d="M151.852 251.427V256.405H156.83V251.427H151.852Z" />
+        <path d="M370.914 480.446V485.425H375.893V480.446H370.914Z" />
+        <path d="M430.66 789.129V794.107H435.639V789.129H430.66Z" />
+        <path d="M450.574 540.192V545.171H455.553V540.192H450.574Z" />
+        <path d="M470.488 759.256V764.234H475.467V759.256H470.488Z" />
+        <path d="M809.043 360.958V365.937H814.022V360.958H809.043Z" />
+        <path d="M819 201.639V206.618H823.979V201.639H819Z" />
         <path d="M838.914 211.596V216.575H843.893V211.596H838.914Z" />
-        <path d="M380.875 390.829V395.808H385.854V390.829H380.875Z" />
-        <path d="M311.172 351V355.979H316.151V351H311.172Z" />
+        <path d="M321.125 360.956V365.935H326.104V360.956H321.125Z" />
+        <path d="M321.125 400.787V405.766H326.104V400.787H321.125Z" />
+        <path d="M351 351V355.979H355.979V351H351Z" />
+        <path d="M420.703 490.405V495.384H425.682V490.405H420.703Z" />
+        <path d="M410.742 580.021V585H415.721V580.021H410.742Z" />
+        <path d="M510.32 749.298V754.276H515.299V749.298H510.32Z" />
+        <path d="M460.531 709.469V714.447H465.51V709.469H460.531Z" />
+        <path d="M719.426 380.872V385.851H724.404V380.872H719.426Z" />
+        <path d="M858.828 261.384V266.363H863.807V261.384H858.828Z" />
+        <path d="M858.828 301.213V306.192H863.807V301.213H858.828Z" />
+        <path d="M699.512 410.745V415.724H704.49V410.745H699.512Z" />
+        <path d="M779.172 410.745V415.724H784.151V410.745H779.172Z" />
+        <path d="M669.641 480.448V485.427H674.619V480.448H669.641Z" />
+        <path d="M739.34 550.15V555.129H744.319V550.15H739.34Z" />
+        <path d="M908.617 599.935V604.914H913.596V599.935H908.617Z" />
+        <path d="M908.617 709.47V714.449H913.596V709.47H908.617Z" />
       </g>
       <g class="animate-pulse motion-reduce:animate-none [animation-delay:360ms]!">
-        <path d="M490.406 769.213V774.192H495.385V769.213H490.406Z" />
-        <path d="M410.742 589.977V594.956H415.721V589.977H410.742Z" />
-        <path d="M321.125 390.829V395.808H326.104V390.829H321.125Z" />
-        <path d="M530.234 639.765V644.744H535.213V639.765H530.234Z" />
-        <path d="M420.703 331.085V336.063H425.682V331.085H420.703Z" />
-        <path d="M749.297 301.213V306.192H754.276V301.213H749.297Z" />
-        <path d="M848.875 281.299V286.278H853.854V281.299H848.875Z" />
-        <path d="M470.488 609.892V614.871H475.467V609.892H470.488Z" />
-        <path d="M789.125 291.255V296.234H794.104V291.255H789.125Z" />
-        <path d="M709.469 241.47V246.449H714.447V241.47H709.469Z" />
-        <path d="M819 311.172V316.151H823.979V311.172H819Z" />
-        <path d="M500.359 649.723V654.702H505.338V649.723H500.359Z" />
-        <path d="M390.828 649.723V654.702H395.807V649.723H390.828Z" />
-        <path d="M231.512 430.658V435.637H236.49V430.658H231.512Z" />
-        <path d="M819 191.681V196.66H823.979V191.681H819Z" />
-        <path d="M390.828 311.171V316.149H395.807V311.171H390.828Z" />
-        <path d="M440.617 679.594V684.573H445.596V679.594H440.617Z" />
-        <path d="M799.086 171.767V176.746H804.065V171.767H799.086Z" />
-        <path d="M679.594 540.192V545.171H684.572V540.192H679.594Z" />
-        <path d="M769.211 221.552V226.531H774.19V221.552H769.211Z" />
-        <path d="M858.828 231.51V236.489H863.807V231.51H858.828Z" />
-        <path d="M171.766 370.914V375.893H176.744V370.914H171.766Z" />
-        <path d="M470.488 689.553V694.531H475.467V689.553H470.488Z" />
-        <path d="M729.383 261.384V266.363H734.362V261.384H729.383Z" />
-        <path d="M789.125 341.043V346.021H794.104V341.043H789.125Z" />
-        <path d="M321.125 301.212V306.19H326.104V301.212H321.125Z" />
+        <path d="M181.723 390.829V395.808H186.701V390.829H181.723Z" />
+        <path d="M211.594 390.829V395.808H216.572V390.829H211.594Z" />
+        <path d="M370.914 540.192V545.171H375.893V540.192H370.914Z" />
+        <path d="M520.277 679.595V684.573H525.256V679.595H520.277Z" />
+        <path d="M550.148 659.679V664.658H555.127V659.679H550.148Z" />
+        <path d="M719.426 261.384V266.363H724.405V261.384H719.426Z" />
+        <path d="M370.914 360.956V365.935H375.893V360.956H370.914Z" />
+        <path d="M410.742 341.043V346.021H415.721V341.043H410.742Z" />
+        <path d="M311.172 510.319V515.298H316.151V510.319H311.172Z" />
+        <path d="M410.742 779.171V784.149H415.721V779.171H410.742Z" />
+        <path d="M490.406 779.171V784.149H495.385V779.171H490.406Z" />
+        <path d="M799.086 341.043V346.021H804.065V341.043H799.086Z" />
+        <path d="M858.828 211.596V216.575H863.807V211.596H858.828Z" />
+        <path d="M341.043 390.829V395.808H346.022V390.829H341.043Z" />
+        <path d="M271.34 480.446V485.425H276.319V480.446H271.34Z" />
+        <path d="M390.828 560.107V565.086H395.807V560.107H390.828Z" />
+        <path d="M500.359 759.256V764.234H505.338V759.256H500.359Z" />
+        <path d="M769.211 281.299V286.278H774.19V281.299H769.211Z" />
+        <path d="M799.086 241.47V246.449H804.065V241.47H799.086Z" />
+        <path d="M191.68 400.787V405.766H196.658V400.787H191.68Z" />
+        <path d="M261.383 351V355.979H266.362V351H261.383Z" />
+        <path d="M211.594 370.914V375.893H216.572V370.914H211.594Z" />
+        <path d="M251.426 460.531V465.51H256.405V460.531H251.426Z" />
+        <path d="M390.828 530.234V535.213H395.807V530.234H390.828Z" />
+        <path d="M360.957 639.765V644.744H365.936V639.765H360.957Z" />
+        <path d="M540.191 689.553V694.531H545.17V689.553H540.191Z" />
+        <path d="M400.789 679.594V684.573H405.768V679.594H400.789Z" />
+        <path d="M570.062 639.765V644.744H575.041V639.765H570.062Z" />
+        <path d="M789.125 271.341V276.32H794.104V271.341H789.125Z" />
+        <path d="M729.383 251.426V256.405H734.362V251.426H729.383Z" />
+        <path d="M848.875 350.999V355.979H853.854V350.999H848.875Z" />
+        <path d="M380.875 380.872V385.851H385.854V380.872H380.875Z" />
+        <path d="M351 420.701V425.68H355.979V420.701H351Z" />
+        <path d="M321.125 321.129V326.107H326.104V321.129H321.125Z" />
+        <path d="M331.086 520.277V525.256H336.065V520.277H331.086Z" />
+        <path d="M470.488 809.043V814.021H475.467V809.043H470.488Z" />
+        <path d="M400.789 799.085V804.063H405.768V799.085H400.789Z" />
+        <path d="M440.617 609.892V614.871H445.596V609.892H440.617Z" />
+        <path d="M729.383 291.255V296.234H734.362V291.255H729.383Z" />
+        <path d="M789.125 321.128V326.107H794.104V321.128H789.125Z" />
+        <path d="M799.086 201.639V206.618H804.065V201.639H799.086Z" />
+        <path d="M868.789 231.51V236.489H873.768V231.51H868.789Z" />
+        <path d="M191.68 311.171V316.149H196.658V311.171H191.68Z" />
+        <path d="M351 400.787V405.766H355.979V400.787H351Z" />
+        <path d="M271.34 460.531V465.51H276.319V460.531H271.34Z" />
+        <path d="M390.828 480.446V485.425H395.807V480.446H390.828Z" />
+        <path d="M351 609.892V614.871H355.979V609.892H351Z" />
+        <path d="M490.406 749.298V754.276H495.385V749.298H490.406Z" />
+        <path d="M739.34 321.128V326.107H744.319V321.128H739.34Z" />
+        <path d="M689.555 370.914V375.893H694.533V370.914H689.555Z" />
+        <path d="M779.172 221.552V226.531H784.151V221.552H779.172Z" />
+        <path d="M709.469 430.66V435.639H714.447V430.66H709.469Z" />
+        <path d="M838.914 420.701V425.68H843.893V420.701H838.914Z" />
+        <path d="M679.594 500.363V505.342H684.572V500.363H679.594Z" />
+        <path d="M819 609.894V614.873H823.979V609.894H819Z" />
+        <path d="M898.66 619.85V624.829H903.639V619.85H898.66Z" />
+        <path d="M838.914 769.213V774.192H843.893V769.213H838.914Z" />
       </g>
       <g class="animate-pulse motion-reduce:animate-none [animation-delay:720ms]!">
-        <path d="M550.148 609.892V614.871H555.127V609.892H550.148Z" />
-        <path d="M838.914 251.426V256.405H843.893V251.426H838.914Z" />
-        <path d="M759.258 201.639V206.618H764.237V201.639H759.258Z" />
-        <path d="M500.359 599.935V604.914H505.338V599.935H500.359Z" />
-        <path d="M261.383 410.743V415.722H266.362V410.743H261.383Z" />
-        <path d="M261.383 440.616V445.595H266.362V440.616H261.383Z" />
-        <path d="M351 410.743V415.722H355.979V410.743H351Z" />
-        <path d="M360.957 440.616V445.595H365.936V440.616H360.957Z" />
-        <path d="M799.086 211.596V216.575H804.065V211.596H799.086Z" />
-        <path d="M719.426 360.958V365.937H724.405V360.958H719.426Z" />
+        <path d="M281.297 400.787V405.766H286.276V400.787H281.297Z" />
+        <path d="M400.789 321.129V326.107H405.768V321.129H400.789Z" />
+        <path d="M520.277 719.427V724.405H525.256V719.427H520.277Z" />
+        <path d="M560.105 619.85V624.829H565.084V619.85H560.105Z" />
+        <path d="M729.383 351V355.979H734.362V351H729.383Z" />
+        <path d="M819 301.213V306.192H823.979V301.213H819Z" />
+        <path d="M171.766 370.914V375.893H176.744V370.914H171.766Z" />
+        <path d="M301.211 321.129V326.107H306.19V321.129H301.211Z" />
+        <path d="M351 460.531V465.51H355.979V460.531H351Z" />
+        <path d="M430.66 540.192V545.171H435.639V540.192H430.66Z" />
+        <path d="M739.34 281.299V286.278H744.319V281.299H739.34Z" />
+        <path d="M819 221.552V226.531H823.979V221.552H819Z" />
+        <path d="M331.086 341.043V346.021H336.065V341.043H331.086Z" />
+        <path d="M291.258 420.701V425.68H296.237V420.701H291.258Z" />
+        <path d="M351 540.192V545.171H355.979V540.192H351Z" />
+        <path d="M540.191 709.469V714.447H545.17V709.469H540.191Z" />
+        <path d="M470.488 729.383V734.361H475.467V729.383H470.488Z" />
+        <path d="M699.512 360.958V365.937H704.49V360.958H699.512Z" />
+        <path d="M838.914 301.213V306.192H843.893V301.213H838.914Z" />
+        <path d="M261.383 420.701V425.68H266.362V420.701H261.383Z" />
+        <path d="M231.512 360.956V365.935H236.49V360.956H231.512Z" />
+        <path d="M420.703 301.212V306.19H425.682V301.212H420.703Z" />
+        <path d="M251.426 440.616V445.595H256.404V440.616H251.426Z" />
+        <path d="M520.277 699.509V704.487H525.256V699.509H520.277Z" />
+        <path d="M380.875 639.765V644.744H385.854V639.765H380.875Z" />
+        <path d="M540.191 639.765V644.744H545.17V639.765H540.191Z" />
+        <path d="M410.742 659.679V664.658H415.721V659.679H410.742Z" />
+        <path d="M709.469 341.043V346.021H714.447V341.043H709.469Z" />
+        <path d="M819 281.299V286.278H823.979V281.299H819Z" />
+        <path d="M809.043 311.172V316.151H814.022V311.172H809.043Z" />
+        <path d="M868.789 360.958V365.937H873.768V360.958H868.789Z" />
+        <path d="M171.766 351V355.979H176.744V351H171.766Z" />
+        <path d="M430.66 321.129V326.107H435.639V321.129H430.66Z" />
+        <path d="M171.766 261.383V266.361H176.744V261.383H171.766Z" />
+        <path d="M301.211 500.361V505.34H306.19V500.361H301.211Z" />
+        <path d="M460.531 779.171V784.149H465.51V779.171H460.531Z" />
+        <path d="M430.66 560.107V565.086H435.639V560.107H430.66Z" />
+        <path d="M450.574 589.977V594.956H455.553V589.977H450.574Z" />
+        <path d="M779.172 301.213V306.192H784.151V301.213H779.172Z" />
+        <path d="M838.914 241.47V246.449H843.893V241.47H838.914Z" />
+        <path d="M779.172 201.639V206.618H784.151V201.639H779.172Z" />
         <path d="M351 321.129V326.107H355.979V321.129H351Z" />
-        <path d="M201.637 440.616V445.595H206.615V440.616H201.637Z" />
-        <path d="M550.148 669.637V674.616H555.127V669.637H550.148Z" />
-        <path d="M699.512 281.299V286.278H704.49V281.299H699.512Z" />
-        <path d="M420.703 490.405V495.384H425.682V490.405H420.703Z" />
-        <path d="M400.789 679.594V684.573H405.768V679.594H400.789Z" />
-        <path d="M370.914 490.405V495.384H375.893V490.405H370.914Z" />
-        <path d="M440.617 639.765V644.744H445.596V639.765H440.617Z" />
-        <path d="M271.34 430.658V435.637H276.319V430.658H271.34Z" />
-        <path d="M281.297 311.171V316.149H286.276V311.171H281.297Z" />
-        <path d="M480.445 560.107V565.086H485.424V560.107H480.445Z" />
-        <path d="M221.555 370.914V375.893H226.533V370.914H221.555Z" />
-        <path d="M181.723 311.171V316.149H186.701V311.171H181.723Z" />
-        <path d="M331.086 530.234V535.213H336.065V530.234H331.086Z" />
-        <path d="M400.789 351V355.979H405.768V351H400.789Z" />
-        <path d="M858.828 191.681V196.66H863.807V191.681H858.828Z" />
+        <path d="M191.68 271.342V276.32H196.658V271.342H191.68Z" />
+        <path d="M301.211 410.743V415.722H306.19V410.743H301.211Z" />
+        <path d="M251.426 480.446V485.425H256.404V480.446H251.426Z" />
+        <path d="M390.828 580.021V585H395.807V580.021H390.828Z" />
+        <path d="M370.914 609.892V614.871H375.893V609.892H370.914Z" />
+        <path d="M460.531 739.342V744.32H465.51V739.342H460.531Z" />
+        <path d="M759.258 321.128V326.107H764.237V321.128H759.258Z" />
+        <path d="M858.828 281.299V286.278H863.807V281.299H858.828Z" />
+        <path d="M858.828 321.128V326.107H863.807V321.128H858.828Z" />
+        <path d="M759.258 400.787V405.766H764.237V400.787H759.258Z" />
+        <path d="M828.957 440.618V445.597H833.936V440.618H828.957Z" />
+        <path d="M759.258 540.192V545.171H764.237V540.192H759.258Z" />
+        <path d="M809.043 629.808V634.787H814.022V629.808H809.043Z" />
+        <path d="M888.703 719.426V724.405H893.682V719.426H888.703Z" />
+        <path d="M848.875 749.299V754.278H853.854V749.299H848.875Z" />
       </g>
     </svg>
   </div>

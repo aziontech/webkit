@@ -6,8 +6,8 @@
   // for HOW it is drawn. Every line of copy below is the source's, verbatim; none of its
   // grid, spacing, borders, colours or radii came across.
   //
-  // A SOLUTION page by INDUSTRY, beside /site/financial-services — but on azion.com's LONG
-  // solution template (29 bands), the one /site/web-apps runs, not the 20-band template the
+  // A SOLUTION page by INDUSTRY, beside /site/solutions/financial-services — but on azion.com's LONG
+  // solution template (29 bands), the one /site/solutions/web-apps runs, not the 20-band template the
   // other two industry pages run. So its bricks come from AzionWebApps.vue (the marquee +
   // templates module, the tab set, the marks-beside-a-quote frame, the ruled FAQ) and its
   // register from AzionFinancialServices.vue / AzionTechnology.vue, the pages it sits next
@@ -15,17 +15,17 @@
   //
   // The source's 29 bands, in order, and what each becomes here:
   //
-  //   0  hero (eyebrow, h1, description, two actions)      BannerContainer hero + HeroTitle
-  //   1  11-mark client marquee                            BrandCarousel, on the hero's floor
+  //   0  hero (eyebrow, h1, description, two actions)      Hero kind="screen" + Hero.Title
+  //   1  11-mark client marquee                            Ticker, on the hero's floor
   //   2  spacer                                            SectionGap hatch
   //   3  six argument cells                                CardGrid divider, 3 columns
   //   4  spacer                                            SectionGap hatch
   //   5  "Compatible with Your Stack" title                SectionTitle in the module header
-  //   6  30-mark stack marquee                             BrandCarousel, PRODUCT_STACK
-  //   7  Quick Start with Templates — copy | art           FrameBox flush, lg:grid-cols-2
+  //   6  30-mark stack marquee                             Ticker, PRODUCT_STACK
+  //   7  Quick Start with Templates — copy | grid          FrameBox flush, lg:grid-cols-2
   //   8  spacer                                            SectionGap hatch
   //   9  "Everything You Need to Build and Deploy"         SectionTitle in the module header
-  //   10 four tabs over copy | art                         TabView + one Panel per tab
+  //   10 four tabs over copy | art                         MediaTabs, one row per tab
   //   11 spacer                                            SectionGap hatch
   //   12 art | copy — retail modernization                 FrameBox, lg:grid-cols-2
   //   13 spacer                                            SectionGap hatch
@@ -42,7 +42,7 @@
   //   24 spacer                                            SectionGap hatch
   //   25 Frequently Asked Questions                        the ruled Accordion band
   //   26 spacer                                            SectionGap hatch
-  //   27 closing CTA                                       SiteCta, every string a prop
+  //   27 closing CTA                                       CallToAction kind="split"
   //   28 spacer                                            the closing hatch frame
   //
   // Nothing is added and nothing is dropped: no extra band, string, list item, link label
@@ -57,7 +57,7 @@
   //     stands on the hero's floor and the hero's own `border-b` is the rule that divides it
   //     from the column — the same single line, one owner. Every other /site page seats its
   //     strip this way, so they read as one site.
-  //   • The hero's eyebrow is `// RETAIL`. HeroTitle's overline anatomy carries no `//`
+  //   • The hero's eyebrow is `// RETAIL`. Hero.Title's overline anatomy carries no `//`
   //     prefix (that belongs to SectionTitle and to the closing band), so the hero reads
   //     `RETAIL`. The bands that DO have the prefix get it from SectionTitle's own overline.
   //   • The source breaks the h1 across two lines (`Shopping experiences` / `that convert`).
@@ -72,22 +72,33 @@
   //     (axe `heading-order`). They are `h2` here; `text-heading-xs` is the size, and the
   //     level and the size are set separately.
   //   • Band 10 is a real tab set on the source — four controls switching one panel — so it
-  //     is `TabView`, the design system's own tabs, never a carousel
-  //     (.claude/rules/dependencies.md).
+  //     is `MediaTabs`, the design system's own tabbed media band, never a carousel
+  //     (.claude/rules/dependencies.md). Its rows ARE the controls, so the source's short
+  //     labels (`Preview`, `Runtime`, …) fold into the claims they opened.
   //   • Band 17 is a horizontal scroller with prev/next controls on the source. ELEVEN cards
   //     do not fit one row, so unlike the sibling pages this one cannot simply drop the
   //     controls: the cards become a four-row hairline grid instead. That trades the
   //     source's 342px band for a tall one, and it is the honest trade — this language has
   //     no carousel, and a sideways scroller inside a bordered column fights its own frame.
-  //   • The source's `Deploy now` / `Docs` / `Customers` / `View success story` controls
-  //     carry a trailing arrow. `MiniButton` is the one control in this system whose icon IS
-  //     trailing and whose ink is the page's own, so the arrow survives — the same choice
-  //     AzionFinancialServices and AzionTechnology make. Button's `icon` is leading-only,
-  //     and Link paints `--text-link`, the product UI's blue, which nothing else here uses.
+  //   • Band 17's cards are SIGNED, not labelled. The source tags every card with the same
+  //     `RETAIL` eyebrow and states the outcome as one sentence; here the client's own mark
+  //     takes that slot — it says which client, which the sector tag never did — and the
+  //     sentence is read the way `ClientKpiQuote` states one: the result leads (`86% faster`),
+  //     the rest of the source's own sentence follows it. NO FIGURE IS INVENTED — a story the
+  //     source titles without one leads with its own words (`Automated security`).
+  //   • The source's `Deploy now` / `Docs` / `Customers` controls carry a trailing chevron.
+  //     `MiniButton` is the one control in this system whose icon IS trailing and whose ink is
+  //     the page's own, so the chevron survives — the same choice AzionFinancialServices and
+  //     AzionTechnology make. Button's `icon` is leading-only, and Link paints `--text-link`,
+  //     the product UI's blue, which nothing else here uses.
+  //   • Band 17's cards carry NO `View success story` control. Eleven cells each repeating one
+  //     label is eleven tab stops to reach eleven destinations; the cell is the link instead,
+  //     so the target is the whole card and the grid is one stop per story. What the removed
+  //     label said out loud, `aria-label` now says to a screen reader — see `storyLabel`.
   //   • The source's `DNS` eyebrow in band 23 is a product NAME, not a fifth column: its
   //     four columns are Compute, AI, Data and Security, and DNS is the last product under
   //     Security — the same reading the three sibling pages take of the same component.
-  //   • Band 27's headline is one sentence in two tones; SiteCta expresses that as `title` +
+  //   • Band 27's headline is one sentence in two tones; CallToAction expresses that as `title` +
   //     `titleMuted`. The source's DOM reports the muted half a second time as a bare number
   //     node — an artifact of how it splits the line, not a string the page renders twice.
   //   • Band 3's six glyphs are ours. The source draws its own set; these are the same six
@@ -109,20 +120,28 @@
   //     differs by 0.001px on one x coordinate (an export-run rounding artifact). Same
   //     artwork — so this page imports the existing files rather than committing a second,
   //     visually identical 164KB copy of each.
-  //   • Band 7 is the one place this page's art beats its sibling's: AzionWebApps.vue
-  //     COMPOSES a skeleton template browser because its source only draws one, but the
-  //     `Varejo` set holds a real `Quick start with templates` frame, so this band draws the
-  //     design team's own scene. Its `alt` names what OUR art shows, so the source's own art
-  //     strings (`Search your apps`, and the three CLI verbs labelling its scene) do not
-  //     survive the copy diff: they described art we replaced. Ours states `azion init` /
-  //     `azion build` / `azion deploy` as drawn vector, not as page text.
+  //   • BAND 7'S MEDIA IS NOT ART. It is the deploy flow's own published catalog, drawn as
+  //     a scrolling `CardGrid kind="frame"` — one cell per template, each a real frame with
+  //     the console route behind it, the same band AzionWebApps.vue carries. The source's
+  //     own art strings (`Search your apps`, and the three CLI verbs labelling its scene) do
+  //     not survive the copy diff: they described art we replaced. Its list is
+  //     `@shared/lib/deploy-templates.js`: `@site` may not import `@console`, so that module
+  //     mirrors the catalog rather than importing it.
   //
   // ASSET GAPS, recorded rather than substituted:
-  //   • Marisa — band 14 names it and the source loads `dark/clients/marisa-logo.svg`, which
-  //     this repo has no copy of. ClientMark writes its typographic wordmark instead, so the
-  //     name is not quietly dropped from the twelve and no similar mark is substituted.
+  //   • Marisa — CLOSED. The source loads `dark/clients/marisa-logo.svg`, which this repo has
+  //     no copy of, but it does hold `light/marisa-logo.svg` — the same mark as dark-ink
+  //     artwork, which `monochrome` collapses to the one silhouette every mark here takes. So
+  //     bands 14 and 17 both draw it, rather than one drawing a wordmark beside the other.
   //   • NZN is a CLIENTS registry entry that carries no file, so it renders as that same
   //     wordmark — by the registry's design, not a gap opened here.
+  //   • Quero-Quero and B2W have no mark in the webkit brand registry and no file here
+  //     either, so their band-17 cells sign with the typographic wordmark ClientKpiQuote
+  //     falls back to. The name is stated; no similar mark is substituted.
+  //   • Pernambucanas, Marisa and Panvel are the reverse case — files this repo holds that
+  //     the registry does not carry — so those cells pass the asset through the component's
+  //     `mark` slot. (Band 14's Marisa cell reads the CLIENTS registry, which still has no
+  //     entry for it, so that one stays a wordmark.)
   //   • LGPD — CLOSED. The badge this page had no file for is now exported from the Figma
   //     `Assets` file (node 1907:30763) and committed beside the other four, so all five
   //     cells of band 20 draw the art the source draws — on the three sibling pages too.
@@ -132,23 +151,30 @@
   //   • `TanStack AI` has no mark in the icon library and Hono has only a monochrome one, so
   //     those two rows of band 7's list take `pi pi-code` — the neutral glyph the framework
   //     registry itself uses for a framework with no colour mark.
-  import Accordion from '@aziontech/webkit/accordion'
+  import Ticker from '@aziontech/webkit/ticker'
   import Button from '@aziontech/webkit/button'
+  import CallToAction from '@aziontech/webkit/call-to-action'
+  import CardGrid from '@aziontech/webkit/card-grid'
+  import ClientKpiQuote from '@aziontech/webkit/client-kpi-quote'
+  import Faq from '@aziontech/webkit/faq'
   import FrameBox from '@aziontech/webkit/frame-box'
-  import HeroTitle from '@aziontech/webkit/hero-title'
+  import Hero from '@aziontech/webkit/hero'
+  import Illustration from '@aziontech/webkit/illustration'
+  import MediaSplit from '@aziontech/webkit/media-split'
+  import MediaTabs from '@aziontech/webkit/media-tabs'
   import MiniButton from '@aziontech/webkit/mini-button'
-  import Overline from '@aziontech/webkit/overline'
+  import Quote from '@aziontech/webkit/quote'
+  import ScrollArea from '@aziontech/webkit/scroll-area'
+  import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
+  import SectionModule from '@aziontech/webkit/section-module'
   import SectionTitle from '@aziontech/webkit/section-title'
-  import TabView from '@aziontech/webkit/tab-view'
   import Tag from '@aziontech/webkit/tag'
-  import BrandCarousel from '@shared/ui/brand/BrandCarousel.vue'
-  import ClientMark from '@shared/ui/brand/ClientMark.vue'
-  // The two band-14 marks that are not CLIENTS registry entries; their artwork sits in
-  // `clients/dark/clients/`, so they are declared locally rather than added to a registry
-  // every other strip on the site reads. Vite resolves each to an asset URL.
-  import arezzo from '@shared/ui/brand/clients/dark/clients/arezzo-logo.svg'
-  import pernambucanas from '@shared/ui/brand/clients/dark/clients/pernambucanas-logo.svg'
+  // Marks this page names as files rather than as CLIENTS registry entries, so they are not
+  // added to a registry every other strip on the site reads. Vite resolves each to an asset
+  // URL. These two sit in `clients/dark/clients/`.
+  import arezzo from '@shared/assets/clients/dark/clients/arezzo-logo.svg'
+  import pernambucanas from '@shared/assets/clients/dark/clients/pernambucanas-logo.svg'
   // The four certification badges this repo holds. Vite resolves each to an asset URL,
   // exactly as the client registries do. NONE is filtered, and each for its own reason: the
   // three colour badges carry their own brand colours, and the LGPD mark is one flat
@@ -157,34 +183,47 @@
   // theme. Were this band ever placed on a THEMED surface, LGPD — and only LGPD — would
   // need the registry's `light` artwork route: #C1BFBF on a light `--bg-canvas` measures
   // 1.8:1 and effectively disappears.
-  import gdprBadge from '@shared/ui/brand/clients/GDPR-logo.svg'
-  import { CLIENTS } from '@shared/ui/brand/clients/index.js'
-  import lgpdBadge from '@shared/ui/brand/clients/LGPD-logo.svg'
-  import pciBadge from '@shared/ui/brand/clients/PCI-logo.svg'
-  import socBadge from '@shared/ui/brand/clients/SOC-logo.svg'
-  import { PRODUCT_STACK } from '@shared/ui/brand/tools.js'
-  import {
-    BannerContainer,
-    CardGrid,
-    SectionContainer,
-    SectionModule
-  } from '@shared/ui/layout/index.js'
-  import { ref } from 'vue'
+  import gdprBadge from '@shared/assets/clients/GDPR-logo.svg'
+  import { CLIENTS } from '@shared/assets/clients/index.js'
+  import lgpdBadge from '@shared/assets/clients/LGPD-logo.svg'
+  // Two more, as dark-ink artwork — which `monochrome` expects either way: it collapses any
+  // file to one silhouette and inverts it on dark. Marisa signs band 14 and a band-17 cell.
+  import marisa from '@shared/assets/clients/light/marisa-logo.svg'
+  import panvel from '@shared/assets/clients/light/panvel-logo.svg'
+  import pciBadge from '@shared/assets/clients/PCI-logo.svg'
+  import socBadge from '@shared/assets/clients/SOC-logo.svg'
+  import { DEPLOY_TEMPLATES } from '@shared/lib/deploy-templates.js'
+  import ClientMark from '@shared/ui/brand/ClientMark.vue'
+  import { CLIENT_STRIP_RADWARE, PRODUCT_STACK } from '@shared/ui/brand/strips.js'
   import { useRouter } from 'vue-router'
 
   // The art, from the Figma `Per page › Varejo` set. The four tab scenes are the files the
   // web-apps translation already committed — same frames, same artwork (see THE ART above).
-  import infrastructureAsCode from '../assets/illustrations/infrastructure-as-code.svg'
-  import liveDebugging from '../assets/illustrations/live-debugging.svg'
-  import preview from '../assets/illustrations/preview.svg'
-  import quickStartWithTemplates from '../assets/illustrations/quick-start-with-templates.svg'
-  import retailApplicationModernization from '../assets/illustrations/retail-application-modernization.svg'
-  import runtime from '../assets/illustrations/runtime.svg'
   import { NavColumn, NavItem } from '../ui/index.js'
-  import SiteCta from './SiteCta.vue'
 
   const router = useRouter()
   const goSignup = () => router.push('/signup')
+
+  // A template card closes on `Button`, whose root IS an `<a>`, so the card itself is a
+  // plain div — an anchor around it would nest two links on one destination. The button
+  // carries the resolved URL so middle-click and cmd-click still open a tab; a plain left
+  // click is routed instead of followed, so the app never reloads.
+  const templateHref = (to) => router.resolve(to).href
+  const openTemplate = (event, to) => {
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) {
+      return
+    }
+    event.preventDefault()
+    router.push(to)
+  }
+  const followTemplate = (event, to) => {
+    if (event.target.closest('a, button') || globalThis.getSelection()?.toString()) return
+    if (event.metaKey || event.ctrlKey) {
+      globalThis.open(templateHref(to), '_blank', 'noopener')
+      return
+    }
+    router.push(to)
+  }
 
   // The page's outbound destinations, stated once. Naming the one this page reuses twelve
   // times is what keeps the story links and the `Customers` control from drifting apart.
@@ -195,24 +234,6 @@
   // CLIENTS registry, so a mark this page draws and a mark the home page's trust strip draws
   // can never be two different files.
   const registered = (name) => CLIENTS.find((client) => client.name === name) ?? { name }
-
-  const TRUST_MARKS = [
-    registered('Global Fashion Group'),
-    registered('HeroSpark'),
-    // The source spells it Banco Itaú; Itaú is this repo's registry name for the same client.
-    registered('Itaú'),
-    // Registry entry with no file — ClientMark writes the wordmark. See ASSET GAPS above.
-    registered('NZN'),
-    registered('Netshoes'),
-    registered('Caixa'),
-    registered('Agibank'),
-    // The source's alt for this slot says `Prime Video`; the file it loads is Radware's.
-    registered('Radware'),
-    registered('América Móvil'),
-    // The source spells it Grupo Pão de Açucar; GPA is the registry's name for it.
-    registered('GPA'),
-    registered('Fourbank')
-  ]
 
   // ── Band 3 — the argument, in six cells ───────────────────────────────────────
   const PILLARS = [
@@ -254,63 +275,37 @@
     }
   ]
 
-  // ── Band 7 — the eight frameworks the templates list names ────────────────────
-  // The source's order, in its own two columns.
-  const TEMPLATE_FRAMEWORKS = [
-    { name: 'Next.js', icon: 'ai-cor ai-next' },
-    { name: 'React', icon: 'ai-cor ai-react' },
-    { name: 'Vue', icon: 'ai-cor ai-vue' },
-    { name: 'Astro', icon: 'ai-cor ai-astro' },
-    { name: 'Angular', icon: 'ai-cor ai-angular' },
-    { name: 'Nuxt', icon: 'ai-cor ai-nuxt' },
-    { name: 'Hono', icon: 'ai ai-hono' },
-    { name: 'TanStack AI', icon: 'pi pi-code' }
-  ]
-
-  // ── Band 10 — the four surfaces, one panel at a time ──────────────────────────
+  // ── Band 10 — the four surfaces, one claim at a time ──────────────────────────
   const SHIP_PANELS = [
     {
-      value: 'preview',
-      label: 'Preview',
       title: 'Automatic Preview Deployments',
-      illustration: preview,
+      illustration: 'preview',
       description:
         'Validate every change in preview environments before going live, so campaigns, content, and product updates ship with confidence.'
     },
     {
-      value: 'runtime',
-      label: 'Runtime',
       title: 'Cost-Efficient Infrastructure',
-      illustration: runtime,
+      illustration: 'runtime',
       description:
         'Run Functions on V8 isolates with zero cold starts and consistent performance during traffic spikes.'
     },
     {
-      value: 'infrastructure-as-code',
-      label: 'Infrastructure as Code',
       title: 'Manage Resources with Application Code',
-      illustration: infrastructureAsCode,
+      illustration: 'infrastructure-as-code',
       description:
         'Use Terraform and code-based configuration to keep workloads, cache, and security rules versioned and consistent across regions and brands.'
     },
     {
-      value: 'live-debugging',
-      label: 'Live Debugging',
       title: 'Observability Built-In for All Requests',
-      illustration: liveDebugging,
+      illustration: 'live-debugging',
       description:
         'Trace requests in production with Debug Rules, Real-Time Events, and stack traces to resolve issues fast during revenue-critical moments.'
     }
   ]
 
-  // The source opens on `Preview`, so this does too. Naming the value is what lets the panel
-  // frame below the list frame read the same value the list writes.
-  const shipTab = ref(SHIP_PANELS[0].value)
-
   // ── Band 14 — the twelve marks beside the quote ───────────────────────────────
-  // Nine resolve against the shared CLIENTS registry. Two are named by the source but are not
-  // registry entries — their artwork sits in `clients/dark/clients/` — and one (Marisa) has
-  // no file at all, so ClientMark writes its wordmark. See ASSET GAPS.
+  // Nine resolve against the shared CLIENTS registry. Three are named by the source but are
+  // not registry entries, so this page names their files directly.
   const STORY_CLIENTS = [
     registered('Global Fashion Group'),
     registered('Netshoes'),
@@ -322,8 +317,7 @@
     registered('Renner'),
     // The source spells it Grupo Pão de Açúcar; GPA is the registry's name for it.
     registered('GPA'),
-    // No file in this repo — ClientMark writes the wordmark. See ASSET GAPS.
-    { name: 'Marisa' },
+    { name: 'Marisa', logo: marisa, artwork: 'light' },
     registered('América Móvil'),
     registered('MadeiraMadeira'),
     registered('NZN'),
@@ -331,55 +325,93 @@
   ]
 
   // ── Band 17 — the eleven stories, and the source's own URLs ───────────────────
-  // Every card carries the same `Retail` eyebrow on the source.
+  // Each story is read as ClientKpiQuote states one: the mark says which client, `kpi` is the
+  // result that story is titled by, and `text` carries the rest of the source's own sentence.
+  // A story the source titles with no figure leads with its own words — no number is invented
+  // to fill the slot. `client` is a mark-registry name; `mark` is the local asset for the one
+  // client the registry has no entry for. See ASSET GAPS.
   const STORIES = [
     {
-      title:
-        'Magalu guarantees high availability for hundreds of global-scale applications with enhanced security perimeter',
+      client: 'magalu',
+      clientName: 'Magalu',
+      kpi: 'Hundreds of applications',
+      text: 'at global scale, kept highly available behind an enhanced security perimeter.',
       href: `${SUCCESS_CASES}magalu/`
     },
     {
-      title: 'Lojas Renner handles massive traffic spikes and saves 67% on data transfer costs',
+      client: 'renner',
+      clientName: 'Lojas Renner',
+      kpi: '67% saved',
+      text: 'on data transfer costs, through massive traffic spikes.',
       href: `${SUCCESS_CASES}renner/`
     },
     {
-      title: 'Dafiti achieves 86% faster load times and 45% cost reduction in data transfer',
+      client: 'dafiti',
+      clientName: 'Dafiti',
+      kpi: '86% faster',
+      text: 'load times, with a 45% cost reduction in data transfer.',
       href: `${SUCCESS_CASES}dafiti/dafiti-accelerates-its-e-commerce-by-86-and-saves-45-on-data-transfer-costs-using-azion-edge-application/`
     },
     {
-      title: 'MadeiraMadeira cuts cloud costs by 90% and speeds up product delivery at scale',
+      client: 'madeiramadeira',
+      clientName: 'MadeiraMadeira',
+      kpi: '90% lower',
+      text: 'cloud costs, and faster product delivery at scale.',
       href: `${SUCCESS_CASES}madeiramadeira/`
     },
     {
-      title: 'Pernambucanas accelerates its e-commerce platform and modernizes customer experience',
+      clientName: 'Pernambucanas',
+      mark: { name: 'Pernambucanas', logo: pernambucanas, artwork: 'light' },
+      kpi: 'Faster e-commerce',
+      text: 'on a platform that modernizes the customer experience.',
       href: `${SUCCESS_CASES}pernambucanas/pernambucanas-relies-on-azion-to-speed-up-its-e-commerce-platform-and-innovate-customer-experience-through-edge-applications/`
     },
     {
-      title: 'Netshoes blocks 4M+ threats in six months and protects every shopping journey',
+      client: 'netshoes',
+      clientName: 'Netshoes',
+      kpi: '4M+ threats',
+      text: 'blocked in six months, protecting every shopping journey.',
       href: `${SUCCESS_CASES}netshoes/`
     },
     {
-      title: 'GPA stops a targeted cyberattack, secures 100+ apps, and reduces costs by 30%',
+      client: 'gpa',
+      clientName: 'GPA',
+      kpi: '100+ applications',
+      text: 'secured through a targeted cyberattack, at 30% lower cost.',
       href: `${SUCCESS_CASES}gpa-solved-cyberattack/`
     },
     {
-      title: 'Quero-Quero strengthens API security and keeps its e-commerce highly available',
+      clientName: 'Quero-Quero',
+      kpi: 'Stronger API security',
+      text: 'keeping its e-commerce highly available.',
       href: `${SUCCESS_CASES}quero-quero/`
     },
     {
-      title:
-        'Marisa accelerates e-commerce and delivers 85% of traffic from distributed infrastructure',
+      clientName: 'Marisa',
+      mark: { name: 'Marisa', logo: marisa, artwork: 'light' },
+      kpi: '85% of traffic',
+      text: 'delivered from distributed infrastructure, on a faster storefront.',
       href: `${SUCCESS_CASES}marisa/`
     },
     {
-      title: 'B2W automates security across its e-commerce platforms with a programmable firewall',
+      clientName: 'B2W',
+      kpi: 'Automated security',
+      text: 'across its e-commerce platforms, on a programmable firewall.',
       href: `${SUCCESS_CASES}b2w/`
     },
     {
-      title: 'Panvel speeds up its e-commerce by 60% and keeps 100% availability under load',
+      clientName: 'Panvel',
+      mark: { name: 'Panvel', logo: panvel, artwork: 'light' },
+      kpi: '60% faster',
+      text: 'e-commerce, at 100% availability under load.',
       href: `${SUCCESS_CASES}panvel/`
     }
   ]
+
+  // Each cell is its own link, so nothing in it carries a link label. The accessible name has
+  // to say the destination and the claim both, and that it leaves the site.
+  const storyLabel = (story) =>
+    `${story.clientName} success story: ${story.kpi} ${story.text} (opens in a new tab)`
 
   // ── Band 20 — the five certifications ─────────────────────────────────────────
   // `label` is the source's own check pill; `alt` is the source's own alt text for the badge
@@ -407,7 +439,7 @@
           icon: 'ai ai-edge-functions',
           title: 'Functions',
           description: 'Run serverless code closer to users',
-          href: '/site/functions'
+          href: '/site/products/functions'
         },
         {
           icon: 'ai ai-edge-orchestrator',
@@ -463,7 +495,7 @@
           icon: 'ai ai-tiered-cache',
           title: 'Cache',
           description: 'Accelerate content delivery and reduce origin load',
-          href: '/site/cache'
+          href: '/site/products/cache'
         }
       ]
     },
@@ -569,53 +601,63 @@
 
 <template>
   <!-- ══ Band 0 + 1 — the hero, and the clients standing on its floor ═══════════
-       BannerContainer owns the full-bleed band and the page's top rule. `--banner-offset`
+       Hero owns the full-bleed band and the page's top rule. `--banner-offset`
        is the sticky SiteNav's height (h-14 = 3.5rem), so the band still measures exactly one
        screen with the nav above it. The wrapper declares that height and hands the leftover
        to the copy with `justify-between`: the claim sits in the middle of what is left, the
        strip stands on the floor. -->
-  <BannerContainer
-    hero
-    banner="dot-grid"
+  <Hero
+    texture="dots"
+    texture-fade="top"
+    kind="screen"
     max-width="site"
     class="[--banner-offset:3.5rem]"
   >
-    <div
-      class="flex min-h-[calc(100dvh-var(--banner-offset,0px)-var(--spacing-xl)*2)] flex-col justify-between gap-(--spacing-xxl)"
+    <Hero.Title
+      centered
+      eyebrow="Retail"
+      title="Shopping experiences that convert"
+      description="Deploy fast, secure storefronts on distributed infrastructure designed for high-stakes retail experiences. Handle peak events, prevent fraud, and lower cloud costs without overprovisioning."
     >
-      <div class="flex flex-1 flex-col justify-center">
-        <HeroTitle
-          centered
-          eyebrow="Retail"
-          title="Shopping experiences that convert"
-          description="Deploy fast, secure storefronts on distributed infrastructure designed for high-stakes retail experiences. Handle peak events, prevent fraud, and lower cloud costs without overprovisioning."
-        >
-          <template #actions>
-            <Button
-              label="Start Free"
-              kind="secondary"
-              size="large"
-              @click="goSignup"
-            />
-            <Button
-              label="Talk to a Specialist"
-              kind="outlined"
-              size="large"
-              href="#contact"
-            />
-          </template>
-        </HeroTitle>
-      </div>
+      <template #actions>
+        <Button
+          label="Start Free"
+          kind="secondary"
+          size="large"
+          @click="goSignup"
+        />
+        <Button
+          label="Talk to a Specialist"
+          kind="outlined"
+          size="large"
+          href="#contact"
+          icon="pi pi-chevron-right"
+          icon-position="trailing"
+          animated
+        />
+      </template>
+    </Hero.Title>
 
-      <!-- No label — the source's band is the marks alone. `monochrome` is the strip's own
+    <!-- No label — the source's band is the marks alone. `monochrome` is the strip's own
            rule: one ink, so eleven brand palettes in one row do not become the loudest thing
            on the page. -->
-      <BrandCarousel
-        monochrome
-        :clients="TRUST_MARKS"
+    <template #bottom>
+      <div
+        class="hidden animate-content-enter justify-center px-(--layout-boundary-inline) pb-(--spacing-xl) motion-reduce:animate-none [--content-enter-delay:120ms] lg:flex"
+      >
+        <Illustration
+          name="retail-application-modernization"
+          aria-label="A retail storefront modernized onto distributed infrastructure"
+          class="max-w-(--container-2xl)"
+        />
+      </div>
+      <Ticker
+        kind="band"
+        size="small"
+        :marks="CLIENT_STRIP_RADWARE"
       />
-    </div>
-  </BannerContainer>
+    </template>
+  </Hero>
 
   <!-- ══ The framed column ═════════════════════════════════════════════════════
        Every band below the hero is a brick inside one centered column. The column carries
@@ -642,7 +684,7 @@
         marks="bottom"
       >
         <CardGrid
-          variant="divider"
+          kind="divider"
           :columns="3"
         >
           <div
@@ -695,10 +737,7 @@
              same thirty marks in the same order the source states and every other product
              page's strip draws. -->
         <div class="py-(--spacing-xxl)">
-          <BrandCarousel
-            monochrome
-            :clients="PRODUCT_STACK"
-          />
+          <Ticker :marks="PRODUCT_STACK" />
         </div>
       </FrameBox>
 
@@ -707,94 +746,108 @@
         borders="y"
         marks="bottom"
       >
-        <div class="grid lg:grid-cols-2">
-          <div class="flex flex-col justify-between gap-(--spacing-xl) p-(--spacing-xl)">
-            <div class="flex flex-col gap-(--spacing-lg)">
-              <!-- `h3`: the module's own `h2` is the SectionTitle above it. -->
-              <h3 class="m-0 text-balance text-heading-md text-(--text-default)">
-                Quick Start with Templates
-              </h3>
-              <p class="m-0 max-w-(--container-2xl) text-pretty text-body-md text-(--text-muted)">
-                Launch storefronts faster with pre-built templates and starter kits for headless
-                commerce, marketing pages, and product catalogs. Deploy complete projects in seconds
-                with popular frameworks.
-              </p>
-
-              <!-- The eight the source names, in its order and its two columns. An inventory
-                   inside the paragraph's argument, so it takes the paragraph's own measure
-                   rather than becoming eight cards. -->
-              <ul class="m-0 grid list-none grid-cols-2 gap-(--spacing-md) p-0">
-                <li
-                  v-for="framework in TEMPLATE_FRAMEWORKS"
-                  :key="framework.name"
-                  class="flex items-center gap-(--spacing-sm) text-body-md text-(--text-default)"
+        <MediaSplit
+          :heading-level="3"
+          align="center"
+          size="large"
+          texture="none"
+          title="Quick Start with Templates"
+          description="Launch storefronts faster with pre-built templates and starter kits for headless commerce, marketing pages, and product catalogs. Deploy complete projects in seconds with popular frameworks."
+        >
+          <template #media>
+            <div class="relative min-h-[36rem] w-full self-stretch lg:min-h-[44rem]">
+              <ScrollArea
+                aria-label="Templates you can deploy"
+                class="absolute inset-0 mask-t-from-[calc(100%_-_2rem)] mask-b-from-[calc(100%_-_6rem)]"
+              >
+                <CardGrid
+                  flush
+                  kind="frame"
+                  :columns="2"
                 >
-                  <i
-                    :class="framework.icon"
-                    aria-hidden="true"
-                    class="text-heading-xxs"
-                  />
-                  {{ framework.name }}
-                </li>
-              </ul>
+                  <CardGrid.Cell
+                    v-for="template in DEPLOY_TEMPLATES"
+                    :key="template.slug"
+                    kind="none"
+                    :padded="false"
+                  >
+                    <!-- eslint-disable-next-line vuejs-accessibility/click-events-have-key-events -- the card's Deploy now link is the keyboard path to the same route -->
+                    <div
+                      class="group/template flex h-full min-w-0 cursor-pointer flex-col gap-(--spacing-md) bg-(--bg-surface) p-(--spacing-xl)"
+                      @click="followTemplate($event, template.to)"
+                    >
+                      <span
+                        class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
+                      >
+                        <i
+                          :class="[template.icon, template.markClass]"
+                          aria-hidden="true"
+                          class="text-[1.25rem] leading-none text-(--text-default)"
+                        />
+                      </span>
+                      <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                        <span class="text-body-md text-(--text-default)">{{ template.title }}</span>
+                        <span class="text-pretty text-body-sm text-(--text-muted)">
+                          {{ template.description }}
+                        </span>
+                      </div>
+                      <Button
+                        label="Deploy now"
+                        kind="outlined"
+                        size="medium"
+                        icon="pi pi-chevron-right"
+                        icon-position="trailing"
+                        animated
+                        :href="templateHref(template.to)"
+                        class="mt-auto self-start group-hover/template:before:opacity-100 group-active/template:after:opacity-100 group-hover/template:[&_[data-animated]]:translate-x-0.5"
+                        @click="openTemplate($event, template.to)"
+                      >
+                        <template #prefix>
+                          <i
+                            class="ai ai-azion text-(--primary)"
+                            aria-hidden="true"
+                          />
+                        </template>
+                      </Button>
+                    </div>
+                  </CardGrid.Cell>
+                </CardGrid>
+                <div
+                  aria-hidden="true"
+                  class="h-16"
+                />
+              </ScrollArea>
             </div>
-
-            <div>
-              <MiniButton
-                label="Deploy now"
-                icon="pi pi-arrow-right"
-                href="https://www.azion.com/en/documentation/products/guides/#azion-templates"
-                target="_blank"
-              />
-            </div>
-          </div>
-
-          <!-- The art cell takes NO padding and the scene is not capped. The export already
-               centres its subject in a 592x300 frame with its own air around it, so a padded
-               cell would pay for that margin twice and then cap the scene at 592px inside a
-               wider cell. Flush, `w-full` and the frame's own `aspect-[592/300]` let it
-               resize with the cell — it is vector, so it scales up as cleanly as down. -->
-          <div
-            class="flex items-center justify-center border-t border-(--border-default) lg:border-t-0 lg:border-l"
-          >
-            <img
-              :src="quickStartWithTemplates"
-              alt="A project scaffolded from a template, with the azion init, build and deploy steps beside it"
-              width="592"
-              height="300"
-              class="block aspect-[592/300] w-full"
+          </template>
+          <template #actions>
+            <Button
+              label="Deploy now"
+              kind="primary"
+              size="large"
+              href="https://www.azion.com/en/documentation/products/guides/#azion-templates"
+              target="_blank"
+              icon="pi pi-chevron-right"
+              icon-position="trailing"
+              animated
             />
-          </div>
-        </div>
+          </template>
+        </MediaSplit>
       </FrameBox>
     </SectionModule>
 
     <!-- Band 8 — spacer. -->
     <SectionGap hatch />
 
-    <!-- ── Bands 9 + 10 — four surfaces, one panel at a time ────────────────────
-         The source runs this band as four controls over one panel, so it is a real tab set:
-         `TabView`, the design system's own tabs. Not a carousel — four controls that switch
-         one panel are tabs, and a scroller library is forbidden anyway
-         (.claude/rules/dependencies.md).
+    <!-- ── Bands 9 + 10 — four surfaces, one claim at a time ───────────────────
+         The source runs this band as four controls over one panel. `MediaTabs` is that
+         band in this language: the four claims stack as rows on the start edge and the one
+         selected draws its scene on the end edge, so the control and the copy it selects
+         are the same element rather than a short label above a panel that repeats it.
+         The rotation is the source's own autoplay; it pauses under the pointer and stops
+         for good on a click.
 
-         TWO FRAMES, ONE TAB SET. The switch and the surface it switches are separate bands
-         of the page's own frame — the controls sit in a ruled row of their own and the panel
-         is the box under it. `TabView` still wraps both, because the list and the content
-         talk through its context; only the frame is split.
-
-         `items-stretch` IS LOAD-BEARING. TabView's root is `flex flex-col items-start`, so
-         every child shrink-wraps its content — the panel's FrameBox would hug its grid
-         instead of spanning the band. `cn` is tailwind-merge, so passing `items-stretch`
-         replaces the root's `items-start` rather than piling on.
-
-         CENTRED WITH `md:w-fit md:mx-auto`, NOT `justify-center`: TabView measures its
-         selected pill from `tab.left - list.left` and re-syncs on a ResizeObserver on the
-         LIST, so a full-width list never re-measures when the webfont lands and the pill
-         stays where the fallback face put it. A `w-fit` list resizes when the labels do,
-         which fires the observer; `mx-auto` is then what centres it. `md`, not
-         unconditional: the list is `overflow-x-auto` so the row scrolls on a phone, and a
-         `w-fit` box cannot scroll — it grows instead. -->
+         The band draws its own top and bottom rules and the seam between its columns, so
+         the frame around it carries the registration marks only. -->
     <SectionModule
       :divided="false"
       :padded="false"
@@ -806,65 +859,17 @@
         />
       </template>
 
-      <TabView
-        v-model:value="shipTab"
-        class="items-stretch"
+      <FrameBox
+        flush
+        borders="none"
+        marks="bottom"
       >
-        <FrameBox
-          flush
-          borders="y"
-          marks="none"
-        >
-          <TabView.List class="px-(--spacing-xl) py-(--spacing-md) md:mx-auto md:w-fit">
-            <TabView.Item
-              v-for="panel in SHIP_PANELS"
-              :key="panel.value"
-              :value="panel.value"
-              :label="panel.label"
-            />
-          </TabView.List>
-        </FrameBox>
-
-        <FrameBox
-          flush
-          borders="y"
-          marks="bottom"
-        >
-          <TabView.Content>
-            <TabView.Panel
-              v-for="panel in SHIP_PANELS"
-              :key="panel.value"
-              :value="panel.value"
-            >
-              <div class="grid lg:grid-cols-2">
-                <div class="flex flex-col justify-center gap-(--spacing-lg) p-(--spacing-xl)">
-                  <h3 class="m-0 text-balance text-heading-md text-(--text-default)">
-                    {{ panel.title }}
-                  </h3>
-                  <p
-                    class="m-0 max-w-(--container-2xl) text-pretty text-body-md text-(--text-muted)"
-                  >
-                    {{ panel.description }}
-                  </p>
-                </div>
-
-                <div
-                  class="flex items-center justify-center border-t border-(--border-default) lg:border-t-0 lg:border-l"
-                >
-                  <img
-                    :src="panel.illustration"
-                    alt=""
-                    aria-hidden="true"
-                    width="592"
-                    height="300"
-                    class="block aspect-[592/300] w-full"
-                  />
-                </div>
-              </div>
-            </TabView.Panel>
-          </TabView.Content>
-        </FrameBox>
-      </TabView>
+        <MediaTabs :items="SHIP_PANELS">
+          <template #media="{ index }">
+            <Illustration :name="SHIP_PANELS[index].illustration" />
+          </template>
+        </MediaTabs>
+      </FrameBox>
     </SectionModule>
 
     <!-- Band 11 — spacer. -->
@@ -884,37 +889,31 @@
         borders="y"
         marks="bottom"
       >
-        <div class="grid lg:grid-cols-2">
-          <div
-            class="order-last flex min-w-0 items-center justify-center border-t border-(--border-default) lg:order-first lg:border-t-0 lg:border-r"
-          >
-            <img
-              :src="retailApplicationModernization"
-              alt="A client's applications reaching the customer's systems through the Azion Web Platform"
-              width="592"
-              height="300"
-              class="block aspect-[592/300] w-full"
+        <MediaSplit
+          media-href="https://www.azion.com/en/documentation/architectures/edge-application/application-modernization/"
+          kind="media-start"
+          title="Accelerate retail application modernization with a distributed architecture"
+        >
+          <template #media>
+            <Illustration
+              name="retail-application-modernization"
+              aria-label="A client's applications reaching the customer's systems through the Azion Web Platform"
             />
-          </div>
+          </template>
 
-          <!-- `justify-center`, not `justify-between`: this half is a heading and its one
-               control, and pushed apart they read as two unrelated things at opposite ends
-               of a cell the art makes tall. -->
-          <div class="flex flex-col justify-center gap-(--spacing-xl) p-(--spacing-xl)">
-            <h2 class="m-0 text-balance text-heading-md text-(--text-default)">
-              Accelerate retail application modernization with a distributed architecture
-            </h2>
-
-            <div>
-              <MiniButton
-                label="Docs"
-                icon="pi pi-arrow-right"
-                href="https://www.azion.com/en/documentation/architectures/edge-application/application-modernization/"
-                target="_blank"
-              />
-            </div>
-          </div>
-        </div>
+          <template #actions>
+            <Button
+              label="Docs"
+              kind="secondary"
+              size="small"
+              href="https://www.azion.com/en/documentation/architectures/edge-application/application-modernization/"
+              target="_blank"
+              icon="pi pi-chevron-right"
+              icon-position="trailing"
+              animated
+            />
+          </template>
+        </MediaSplit>
       </FrameBox>
     </SectionModule>
 
@@ -956,47 +955,31 @@
             </li>
           </ul>
 
-          <figure
-            class="m-0 flex flex-col gap-(--spacing-xl) border-t border-(--border-default) p-(--spacing-xl) lg:border-t-0 lg:border-l"
+          <!-- Julian H is at Dafiti Group; the mark the source draws over the quotation is its
+               parent group's, named separately from the cell in the grid beside it. The
+               quotation keeps the source's straight ASCII quotes. -->
+          <Quote
+            kind="signed"
+            text='"One of the best CDN and WAF solutions I have ever used. Easy to implement and integrate, with the speed and low latency that make a real difference for our customers."'
+            name="Julian H"
+            job-title="IT OPS, SRE &amp; SEC Manager at Dafiti Group"
+            class="border-t border-(--border-default) p-(--spacing-xl) lg:border-t-0 lg:border-l"
           >
-            <!-- The client SIGNING the quote, above the words — the source names its mark
-                 separately from the cell in the grid beside it. Julian H is at Dafiti Group;
-                 the mark the source draws over the quotation is its parent group's. -->
-            <ClientMark
-              :client="registered('Global Fashion Group')"
-              mark="h-8 w-auto max-w-40 object-contain"
-            />
-
-            <!-- The source sets the quotation in straight ASCII quotes, and a quotation mark
-                 is part of the line, not typesetting applied to it — so it is carried across
-                 as written. No `text-pretty` on a four-line quotation: Chromium's `pretty`
-                 shortens every line to even out the last one, a paragraph treatment. -->
-            <blockquote class="m-0 max-w-(--container-2xl) text-heading-md text-(--text-default)">
-              "One of the best CDN and WAF solutions I have ever used. Easy to implement and
-              integrate, with the speed and low latency that make a real difference for our
-              customers."
-            </blockquote>
-
-            <!-- The signature: the name in the accent, the role beside it in the default ink,
-                 both in the overline's mono uppercase — the source's own pairing. -->
-            <figcaption
-              class="flex flex-col gap-(--spacing-xs) sm:flex-row sm:items-center sm:gap-(--spacing-xl)"
-            >
-              <Overline>Julian H</Overline>
-              <span class="px-1 text-overline-md uppercase text-(--text-default)">
-                IT OPS, SRE &amp; SEC Manager at Dafiti Group
-              </span>
-            </figcaption>
-
-            <div class="mt-auto">
+            <template #mark>
+              <ClientMark
+                :client="registered('Global Fashion Group')"
+                mark="h-8 w-auto max-w-40 object-contain"
+              />
+            </template>
+            <template #actions>
               <MiniButton
                 label="Customers"
-                icon="pi pi-arrow-right"
+                icon="pi pi-angle-right"
                 :href="SUCCESS_CASES"
                 target="_blank"
               />
-            </div>
-          </figure>
+            </template>
+          </Quote>
         </div>
       </FrameBox>
     </SectionModule>
@@ -1008,7 +991,10 @@
          The source scrolls eleven cards sideways behind prev/next controls. Eleven do not fit
          one row of this frame, so they become a four-row hairline grid — the seams are the
          grid's own `gap-px`, and nothing scrolls. The twelfth slot is filled so the last row
-         closes on the frame instead of leaving a border-coloured gap. -->
+         closes on the frame instead of leaving a border-coloured gap.
+         Every cell is its own link: `href` makes the card the anchor, so hover lifts the whole
+         surface and the focus ring is drawn INSET — an offset ring would be clipped by the
+         one-pixel seam of the next cell. -->
     <SectionModule
       :divided="false"
       :padded="false"
@@ -1026,27 +1012,33 @@
         marks="bottom"
       >
         <CardGrid
-          variant="divider"
+          kind="divider"
           :columns="3"
         >
-          <div
+          <ClientKpiQuote
             v-for="story in STORIES"
             :key="story.href"
-            class="flex flex-col gap-(--spacing-md) bg-(--bg-canvas) p-(--spacing-xl)"
+            :client="story.client"
+            :client-name="story.clientName"
+            :kpi="story.kpi"
+            :text="story.text"
+            :href="story.href"
+            :aria-label="storyLabel(story)"
+            target="_blank"
           >
-            <Overline>Retail</Overline>
-            <h3 class="m-0 flex-1 text-pretty text-heading-xs text-(--text-default)">
-              {{ story.title }}
-            </h3>
-            <div>
-              <MiniButton
-                label="View success story"
-                icon="pi pi-arrow-right"
-                :href="story.href"
-                target="_blank"
+            <!-- The one mark this repo holds as a file rather than as a registry entry;
+                 `monochrome` paints it in the same single ink the registry marks take. -->
+            <template
+              v-if="story.mark"
+              #mark
+            >
+              <ClientMark
+                :client="story.mark"
+                monochrome
+                mark="h-full w-auto max-w-32 object-contain"
               />
-            </div>
-          </div>
+            </template>
+          </ClientKpiQuote>
 
           <!-- The twelfth cell of an eleven-card grid: it fills the seam the last row would
                otherwise leave open, at every column count the grid takes. -->
@@ -1135,7 +1127,7 @@
         marks="bottom"
       >
         <CardGrid
-          variant="divider"
+          kind="divider"
           :columns="4"
           :mobile-columns="2"
         >
@@ -1161,69 +1153,29 @@
     <SectionGap hatch />
 
     <!-- ── Band 25 — Frequently Asked Questions ─────────────────────────────────
-         The source's split: the heading holds the first third, the questions the rest. The
-         seam between them and the rules between the questions are the grid's `gap-px`, so
-         neither cell draws a border — and each fills `--bg-canvas`, or the whole band goes
-         border-coloured. `--accordion-inset` is declared once on the grid and read by the
-         heading, every trigger and every answer, so all three open on one column. -->
+         `Faq` in its hairline register, framed so the band draws its own floor. -->
     <SectionModule
       id="faq"
       :divided="false"
       :padded="false"
     >
-      <FrameBox
-        flush
-        borders="y"
-        marks="bottom"
+      <Faq
+        framed
+        title="Frequently Asked Questions"
+        :items="FAQ"
       >
-        <div
-          class="grid gap-px bg-(--border-default) [--accordion-inset:var(--spacing-lg)] lg:grid-cols-3 lg:[--accordion-inset:var(--spacing-xl)]"
-        >
-          <div class="bg-(--bg-canvas) px-(--accordion-inset) py-(--spacing-md)">
-            <h2 class="m-0 mt-(--spacing-md) text-balance text-heading-lg text-(--text-default)">
-              Frequently Asked Questions
-            </h2>
-          </div>
-          <div class="bg-(--bg-canvas) lg:col-span-2">
-            <Accordion
-              type="single"
-              collapsible
-              size="large"
-            >
-              <Accordion.Item
-                v-for="(item, index) in FAQ"
-                :key="item.value"
-                :value="item.value"
-                :class="[
-                  'border-(--border-default) data-[state=open]:border-b',
-                  index === FAQ.length - 1 && 'border-b-0 data-[state=open]:border-b-0'
-                ]"
-              >
-                <Accordion.Trigger
-                  class="border-b-0! py-(--spacing-md) data-[state=open]:min-h-0 data-[state=open]:pb-0"
-                >
-                  <span class="text-body-md text-(--text-default)">{{ item.question }}</span>
-                </Accordion.Trigger>
-                <Accordion.Content>
-                  <p
-                    class="m-0 max-w-(--container-2xl) px-(--accordion-inset) pt-(--spacing-xs) pb-(--spacing-md) text-body-sm text-(--text-muted)"
-                  >
-                    {{ item.answer
-                    }}<a
-                      v-if="item.link"
-                      :href="item.link.href"
-                      target="_blank"
-                      rel="noopener"
-                      class="text-(--text-default) underline underline-offset-2 transition-colors hover:text-(--primary) motion-reduce:transition-none"
-                      >{{ item.link.label }}</a
-                    >{{ item.answerAfter }}
-                  </p>
-                </Accordion.Content>
-              </Accordion.Item>
-            </Accordion>
-          </div>
-        </div>
-      </FrameBox>
+        <template #answer="{ item }">
+          {{ item.answer
+          }}<a
+            v-if="item.link"
+            :href="item.link.href"
+            target="_blank"
+            rel="noopener"
+            class="text-(--text-default) underline underline-offset-2 transition-colors hover:text-(--primary) motion-reduce:transition-none"
+            >{{ item.link.label }}</a
+          >{{ item.answerAfter }}
+        </template>
+      </Faq>
     </SectionModule>
 
     <!-- Band 26 — spacer. -->
@@ -1232,14 +1184,41 @@
     <!-- ── Band 27 — the closing CTA ────────────────────────────────────────────
          The Site's own closing band, with this page's strings passed in. Its defaults are the
          homepage's copy, so every string the source states here is explicit. -->
-    <SiteCta
-      eyebrow="Build"
-      title="Build once."
-      title-muted="Run everywhere."
-      description="Get a faster path to launch, lower latency, and less infrastructure overhead."
-      primary-label="Start Free"
-      secondary-label="Talk to our team"
-    />
+    <SectionModule
+      id="contact"
+      :divided="false"
+      :padded="false"
+      class="scroll-mt-(--spacing-xxl)"
+    >
+      <CallToAction
+        framed
+        kind="split"
+        eyebrow="Build"
+        title="Build once."
+        title-muted="Run everywhere."
+        description="Get a faster path to launch, lower latency, and less infrastructure overhead."
+      >
+        <template #actions>
+          <Button
+            label="Start Free"
+            kind="secondary"
+            size="large"
+            @click="goSignup"
+          />
+        </template>
+        <template #aside>
+          <Button
+            label="Talk to our team"
+            kind="outlined"
+            size="large"
+            href="#"
+            icon="pi pi-chevron-right"
+            icon-position="trailing"
+            animated
+          />
+        </template>
+      </CallToAction>
+    </SectionModule>
 
     <!-- Band 28 — the spacer the source closes on, hatched. A bare FrameBox at SectionGap's
          own `medium` height drawing NO rules: the footer below opens with a full-bleed rule,

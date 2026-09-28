@@ -645,7 +645,7 @@ export const PRIMITIVE_GROUPS = [
         icon: 'ai ai-edge-functions',
         title: 'Functions',
         description: 'Run code globally, low latency',
-        href: '/site/functions'
+        href: '/site/products/functions'
       },
       { icon: 'pi pi-sitemap', title: 'Rules', description: 'Control traffic routing' },
       {

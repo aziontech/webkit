@@ -10,12 +10,13 @@
   // way as AzionCache.vue and AzionApplicationAccelerator.vue: same skeleton, same bricks,
   // the same closing band. Where the three differ, the source differs.
   //
-  //   0  hero (eyebrow, h1, description, two actions)      BannerContainer hero + HeroTitle
-  //   1  11-mark client marquee                            BrandCarousel, on the hero's floor
+  //   0  hero (eyebrow, h1, description, two actions)      Hero kind="screen" + Hero.Title
+  //   1  11-mark client marquee                            Ticker, on the hero's floor
   //   2  spacer                                            SectionGap hatch
   //   3  three argument cells                              CardGrid divider, 3 columns
   //   4  spacer                                            SectionGap hatch
   //   5  "The Infrastructure Behind Leading…"              SectionTitle in the module header
+  //   +  one client's sentence, beside eleven marks        Quote signed + a ClientMark grid
   //   6  three success-story cards                         CardGrid divider, 3 columns
   //   7  spacer                                            SectionGap hatch
   //   8  art | copy — the WAAP architecture                FrameBox, lg:grid-cols-2
@@ -28,7 +29,7 @@
   //   15 "Primitives that Scale with You"                  SectionTitle in the module header
   //   16 the platform, four columns                        CardGrid divider + NavColumn/NavItem
   //   17 spacer                                            SectionGap hatch
-  //   18 closing CTA                                       SiteCta, every string a prop
+  //   18 closing CTA                                       CallToAction kind="split"
   //   19 spacer                                            the closing hatch frame
   //
   // WHERE OUR FORM DEPARTS FROM THE SOURCE, on purpose:
@@ -37,7 +38,7 @@
   //   • The source runs the client strip as its own bordered band under the hero. Here it
   //     stands on the hero's floor and the hero's own `border-b` is the rule that divides it
   //     from the column — the same single line, one owner.
-  //   • The hero's eyebrow is `// FINANCIAL SERVICES`. HeroTitle's overline anatomy carries
+  //   • The hero's eyebrow is `// FINANCIAL SERVICES`. Hero.Title's overline anatomy carries
   //     no `//` prefix (that belongs to SectionTitle and to the closing band), so the hero
   //     reads `FINANCIAL SERVICES`. The three bands that DO have the prefix get it from
   //     SectionTitle's own overline.
@@ -52,10 +53,19 @@
   //   • Bands 6 and 10 are horizontal scrollers with prev/next controls in the source. Three
   //     cards fit the page frame as one row, and a row that cannot be over-scrolled needs no
   //     controls — nor a carousel library (.claude/rules/dependencies.md).
-  //   • The source's `Docs` / `View success story` / `Read article` controls carry a trailing
-  //     arrow. `MiniButton` is the one control in the system whose icon IS trailing and whose
-  //     ink is the page's own, so those are MiniButtons; Button's `icon` is leading-only and
-  //     Link paints `--text-link`, the product UI's blue, which nothing else on this site uses.
+  //   • Band 6's cards are SIGNED, not labelled. The source tags each card with a sector
+  //     eyebrow and states the outcome as one sentence; here the institution's own mark takes
+  //     that slot — it says which client, which the tag never did — and the sentence is read
+  //     the way `ClientKpiQuote` states one: the result leads, the rest of the source's own
+  //     sentence follows it. NO FIGURE IS INVENTED — a story the source titles without one
+  //     leads with its own words.
+  //   • The source's `Docs` / `Read article` controls carry a trailing chevron. `MiniButton` is
+  //     the one control in the system whose icon IS trailing and whose ink is the page's own,
+  //     so those are MiniButtons; Button's `icon` is leading-only and Link paints
+  //     `--text-link`, the product UI's blue, which nothing else on this site uses.
+  //   • The story cells carry no "View success story" control of their own. The cell IS the
+  //     link, so the target is the whole card and the grid is one tab stop per story; what the
+  //     removed label said out loud, `aria-label` now says to a screen reader (`storyLabel`).
   //   • Band 8's art is a raster WAAP diagram on the source. Ours is the design team's own
   //     drawing of the same path — the Figma `Per page › Finantial services › Protect
   //     financial applications` frame, exported at 592x300 and committed beside this page —
@@ -68,6 +78,12 @@
   //     sections' plates — and the inner plate (`#444444`) covers the entire 592x300 box, so
   //     the unedited export is a grey card with the scene on top of it. Dropping those five
   //     nodes leaves a transparent illustration that takes the cell's `--bg-canvas`.
+  //   • THE SOURCE CARRIES NO CLIENT QUOTE. Its sibling solution pages do — Retail's band 14
+  //     and Cache's band 10 each set one client's sentence beside a block of that sector's
+  //     marks — so the Success Stories module carries the same pair, between its title and its
+  //     cards. The quotation is Contabilizei's, already on AzionCache.vue, and Contabilizei is
+  //     one of the three institutions this page tells a story about. The marks beside it are
+  //     the registry's financial cohort, `monochrome` for the same reason the hero strip is.
   //
   // ASSET GAPS, recorded:
   //   • LGPD — CLOSED. The badge this page had no file for is now exported from the Figma
@@ -78,15 +94,29 @@
   //     mark here, under this repo's registry name for it.
   //   • NZN is a CLIENTS entry with no file, so ClientMark writes its typographic wordmark and
   //     no name is quietly dropped from the eleven.
+  //   • Crefisa has a file here but no entry in the webkit mark registry, so its band-6 cell
+  //     passes that asset through ClientKpiQuote's `mark` slot rather than naming a mark the
+  //     registry cannot resolve.
+  import Ticker from '@aziontech/webkit/ticker'
   import Button from '@aziontech/webkit/button'
+  import CallToAction from '@aziontech/webkit/call-to-action'
+  import CardGrid from '@aziontech/webkit/card-grid'
+  import ClientKpiQuote from '@aziontech/webkit/client-kpi-quote'
   import FrameBox from '@aziontech/webkit/frame-box'
-  import HeroTitle from '@aziontech/webkit/hero-title'
+  import Hero from '@aziontech/webkit/hero'
+  import Illustration from '@aziontech/webkit/illustration'
+  import MediaSplit from '@aziontech/webkit/media-split'
   import MiniButton from '@aziontech/webkit/mini-button'
   import Overline from '@aziontech/webkit/overline'
+  import Quote from '@aziontech/webkit/quote'
+  import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
+  import SectionModule from '@aziontech/webkit/section-module'
   import SectionTitle from '@aziontech/webkit/section-title'
   import Tag from '@aziontech/webkit/tag'
-  import BrandCarousel from '@shared/ui/brand/BrandCarousel.vue'
+  import bancoDeLaNacion from '@shared/assets/clients/banco-de-la-nacion-logo-vector.svg'
+  import contabilizei from '@shared/assets/clients/dark/clients/contabilizei-logo.svg'
+  import crefisa from '@shared/assets/clients/dark/clients/crefisa-logo.svg'
   // The four certification badges this repo holds. Vite resolves each to an asset URL,
   // exactly as the client registries do. NONE is filtered, and each for its own reason: the
   // three colour badges carry their own brand colours, and the LGPD mark is one flat
@@ -95,24 +125,22 @@
   // theme. Were this band ever placed on a THEMED surface, LGPD — and only LGPD — would
   // need the registry's `light` artwork route: #C1BFBF on a light `--bg-canvas` measures
   // 1.8:1 and effectively disappears.
-  import gdprBadge from '@shared/ui/brand/clients/GDPR-logo.svg'
-  import { CLIENTS } from '@shared/ui/brand/clients/index.js'
-  import lgpdBadge from '@shared/ui/brand/clients/LGPD-logo.svg'
-  import pciBadge from '@shared/ui/brand/clients/PCI-logo.svg'
-  import socBadge from '@shared/ui/brand/clients/SOC-logo.svg'
-  import {
-    BannerContainer,
-    CardGrid,
-    SectionContainer,
-    SectionModule
-  } from '@shared/ui/layout/index.js'
+  import gdprBadge from '@shared/assets/clients/GDPR-logo.svg'
+  import { CLIENTS } from '@shared/assets/clients/index.js'
+  import lgpdBadge from '@shared/assets/clients/LGPD-logo.svg'
+  import csuDigital from '@shared/assets/clients/light/csu-digital-logo.svg'
+  import meliuz from '@shared/assets/clients/light/meliuz-logo.svg'
+  import stone from '@shared/assets/clients/light/stone-logo.svg'
+  import unicred from '@shared/assets/clients/light/unicred-logo.svg'
+  import pciBadge from '@shared/assets/clients/PCI-logo.svg'
+  import socBadge from '@shared/assets/clients/SOC-logo.svg'
+  import ClientMark from '@shared/ui/brand/ClientMark.vue'
+  import { CLIENT_STRIP_RADWARE } from '@shared/ui/brand/strips.js'
   import { useRouter } from 'vue-router'
 
   // Band 8's art, from the Figma `Per page` asset set. Vite resolves it to a hashed asset
   // URL, exactly as the marks in the CLIENTS registry are resolved.
-  import protectFinancialApplications from '../assets/illustrations/protect-financial-applications.svg'
   import { NavColumn, NavItem } from '../ui/index.js'
-  import SiteCta from './SiteCta.vue'
 
   const router = useRouter()
   const goSignup = () => router.push('/signup')
@@ -120,30 +148,7 @@
   // The page's outbound destinations, stated once. The source points nine controls at seven
   // URLs; naming the two this page reuses is what keeps them from drifting apart.
   const DOCS = '/site/docs'
-
-  // ── Band 1 — the eleven marks the strip states ────────────────────────────────
-  // The source's marquee, in the source's order. Every name resolves against the shared
-  // CLIENTS registry, so a mark this page draws and a mark the home page's trust strip draws
-  // can never be two different files.
-  const registered = (name) => CLIENTS.find((client) => client.name === name) ?? { name }
-
-  const TRUST_MARKS = [
-    registered('Global Fashion Group'),
-    registered('HeroSpark'),
-    // The source spells it Banco Itaú; Itaú is this repo's registry name for the same client.
-    registered('Itaú'),
-    // Registry entry with no file — ClientMark writes the wordmark. See ASSET GAPS above.
-    registered('NZN'),
-    registered('Netshoes'),
-    registered('Caixa'),
-    registered('Agibank'),
-    // The source's alt for this slot says `Prime Video`; the file it loads is Radware's.
-    registered('Radware'),
-    registered('América Móvil'),
-    // The source spells it Grupo Pão de Açucar; GPA is the registry's name for it.
-    registered('GPA'),
-    registered('Fourbank')
-  ]
+  const SUCCESS_CASES = 'https://www.azion.com/en/success-case/'
 
   // ── Band 3 — the argument, in three cells ─────────────────────────────────────
   // The source draws a stack of rows, a shield and a check over the three cells. Ours are the
@@ -170,25 +175,56 @@
   ]
 
   // ── Band 6 — the three institutions, and the source's own URLs ────────────────
+  // Each story is read as ClientKpiQuote states one: the institution's own mark takes the slot
+  // the source fills with a sector eyebrow, `kpi` is the result its title is built on, and
+  // `text` carries the rest of that sentence. A story the source titles with no figure leads
+  // with its own words — no number is invented. `mark` is the local asset for a client the
+  // webkit mark registry does not carry.
   const STORIES = [
     {
-      eyebrow: 'Financial',
-      title:
-        'Crefisa uses Azion’s distributed infrastructure-native solutions to scale applications and APIs with higher performance and security',
-      href: 'https://www.azion.com/en/success-case/crefisa/'
+      clientName: 'Crefisa',
+      mark: { name: 'Crefisa', logo: crefisa, artwork: 'light' },
+      kpi: 'Higher performance and security',
+      text: 'across applications and APIs scaled on distributed infrastructure.',
+      href: `${SUCCESS_CASES}crefisa/`
     },
     {
-      eyebrow: 'Tech',
-      title:
-        'FourBank uses a programmable security layer on distributed infrastructure to mitigate DDoS attacks on applications and APIs',
-      href: 'https://www.azion.com/en/success-case/fourbank/'
+      client: 'fourbank',
+      clientName: 'FourBank',
+      kpi: 'DDoS mitigated',
+      text: 'on applications and APIs, behind a programmable security layer.',
+      href: `${SUCCESS_CASES}fourbank/`
     },
     {
-      eyebrow: 'Tech',
-      title:
-        'Contabilizei improves the performance of its accounting platform by 73% and reduces front-end costs by 96% by creating advanced cache rules with Azion',
-      href: 'https://www.azion.com/en/success-case/contabilizei/'
+      client: 'contabilizei',
+      clientName: 'Contabilizei',
+      kpi: '73% faster',
+      text: 'accounting platform, at 96% lower front-end cost, on advanced cache rules.',
+      href: `${SUCCESS_CASES}contabilizei/`
     }
+  ]
+
+  // Each cell is its own link, so nothing in it carries a link label. The accessible name has
+  // to say the destination and the claim both, and that it leaves the site.
+  const storyLabel = (story) =>
+    `${story.clientName} success story: ${story.kpi} ${story.text} (opens in a new tab)`
+
+  const registered = (name) => CLIENTS.find((client) => client.name === name) ?? { name }
+
+  const QUOTED_CLIENT = { name: 'Contabilizei', logo: contabilizei, artwork: 'light' }
+
+  const STORY_CLIENTS = [
+    registered('Caixa'),
+    registered('Agibank'),
+    { name: 'Stone', logo: stone, artwork: 'color' },
+    { name: 'Crefisa', logo: crefisa, artwork: 'light' },
+    registered('Fourbank'),
+    QUOTED_CLIENT,
+    { name: 'Unicred', logo: unicred, artwork: 'color' },
+    registered('Zoop'),
+    { name: 'Méliuz', logo: meliuz, artwork: 'color' },
+    { name: 'CSU Digital', logo: csuDigital, artwork: 'color' },
+    { name: 'Banco de la Nación', logo: bancoDeLaNacion, artwork: 'dark' }
   ]
 
   // ── Band 10 — the three things to read next ───────────────────────────────────
@@ -242,7 +278,7 @@
           icon: 'ai ai-edge-functions',
           title: 'Functions',
           description: 'Run serverless code closer to users',
-          href: '/site/functions'
+          href: '/site/products/functions'
         },
         {
           icon: 'ai ai-edge-orchestrator',
@@ -298,7 +334,7 @@
           icon: 'ai ai-tiered-cache',
           title: 'Cache',
           description: 'Accelerate content delivery and reduce origin load',
-          href: '/site/cache'
+          href: '/site/products/cache'
         }
       ]
     },
@@ -332,53 +368,54 @@
 
 <template>
   <!-- ══ Band 0 + 1 — the hero, and the clients standing on its floor ═══════════
-       BannerContainer owns the full-bleed band and the page's top rule. `--banner-offset`
+       Hero owns the full-bleed band and the page's top rule. `--banner-offset`
        is the sticky SiteNav's height (h-14 = 3.5rem), so the band still measures exactly one
        screen with the nav above it. The wrapper declares that height and hands the leftover
        to the copy with `justify-between`: the claim sits in the middle of what is left, the
        strip stands on the floor. -->
-  <BannerContainer
-    hero
-    banner="dot-grid"
+  <Hero
+    texture="dots"
+    texture-fade="bottom"
+    kind="screen"
     max-width="site"
     class="[--banner-offset:3.5rem]"
   >
-    <div
-      class="flex min-h-[calc(100dvh-var(--banner-offset,0px)-var(--spacing-xl)*2)] flex-col justify-between gap-(--spacing-xxl)"
+    <Hero.Title
+      centered
+      eyebrow="Financial Services"
+      title="Accelerate financial services with security and compliance"
+      description="High availability, low latency, and advanced security for financial applications and APIs on distributed infrastructure. Reduce cloud costs, reliance on legacy CDNs, and operational complexity with continuous compliance."
     >
-      <div class="flex flex-1 flex-col justify-center">
-        <HeroTitle
-          centered
-          eyebrow="Financial Services"
-          title="Accelerate financial services with security and compliance"
-          description="High availability, low latency, and advanced security for financial applications and APIs on distributed infrastructure. Reduce cloud costs, reliance on legacy CDNs, and operational complexity with continuous compliance."
-        >
-          <template #actions>
-            <Button
-              label="Start Free"
-              kind="secondary"
-              size="large"
-              @click="goSignup"
-            />
-            <Button
-              label="Talk to a Specialist"
-              kind="outlined"
-              size="large"
-              href="#contact"
-            />
-          </template>
-        </HeroTitle>
-      </div>
+      <template #actions>
+        <Button
+          label="Start Free"
+          kind="secondary"
+          size="large"
+          @click="goSignup"
+        />
+        <Button
+          label="Talk to a Specialist"
+          kind="outlined"
+          size="large"
+          href="#contact"
+          icon="pi pi-chevron-right"
+          icon-position="trailing"
+          animated
+        />
+      </template>
+    </Hero.Title>
 
-      <!-- No label — the source's band is the marks alone. `monochrome` is the strip's own
+    <!-- No label — the source's band is the marks alone. `monochrome` is the strip's own
            rule: one ink, so eleven brand palettes in one row do not become the loudest thing
            on the page. -->
-      <BrandCarousel
-        monochrome
-        :clients="TRUST_MARKS"
+    <template #bottom>
+      <Ticker
+        kind="band"
+        size="small"
+        :marks="CLIENT_STRIP_RADWARE"
       />
-    </div>
-  </BannerContainer>
+    </template>
+  </Hero>
 
   <!-- ══ The framed column ═════════════════════════════════════════════════════
        Every band below the hero is a brick inside one centered column. The column carries
@@ -405,7 +442,7 @@
         marks="bottom"
       >
         <CardGrid
-          variant="divider"
+          kind="divider"
           :columns="3"
         >
           <div
@@ -457,28 +494,81 @@
         borders="y"
         marks="bottom"
       >
-        <CardGrid
-          variant="divider"
-          :columns="3"
-        >
-          <div
-            v-for="story in STORIES"
-            :key="story.href"
-            class="flex flex-col gap-(--spacing-md) bg-(--bg-canvas) p-(--spacing-xl)"
+        <div class="grid lg:grid-cols-2">
+          <ul
+            class="m-0 grid list-none grid-cols-2 items-center gap-(--spacing-xl) p-(--spacing-xl) sm:grid-cols-4"
           >
-            <Overline>{{ story.eyebrow }}</Overline>
-            <h3 class="m-0 flex-1 text-pretty text-heading-xs text-(--text-default)">
-              {{ story.title }}
-            </h3>
-            <div>
+            <li
+              v-for="client in STORY_CLIENTS"
+              :key="client.name"
+              class="flex items-center justify-center"
+            >
+              <ClientMark
+                :client="client"
+                monochrome
+                mark="h-8 w-auto max-w-32 object-contain"
+              />
+            </li>
+          </ul>
+
+          <Quote
+            kind="signed"
+            text="&quot;I really like the depth of cache rules that I can apply at the edge. There are things that we would not be able to do using solutions from other vendors. In terms of performance, compliance to Contabilizei's rules and delivery standards, we are very satisfied with Azion's performance.&quot;"
+            name="Marcelo Pacheco"
+            job-title="DevOps Specialist at Contabilizei"
+            class="border-t border-(--border-default) p-(--spacing-xl) lg:border-t-0 lg:border-l"
+          >
+            <template #mark>
+              <ClientMark
+                :client="QUOTED_CLIENT"
+                mark="h-8 w-auto max-w-40 object-contain"
+              />
+            </template>
+            <template #actions>
               <MiniButton
-                label="View success story"
-                icon="pi pi-arrow-right"
-                :href="story.href"
+                label="Customers"
+                icon="pi pi-angle-right"
+                :href="SUCCESS_CASES"
                 target="_blank"
               />
-            </div>
-          </div>
+            </template>
+          </Quote>
+        </div>
+      </FrameBox>
+
+      <FrameBox
+        flush
+        borders="y"
+        marks="bottom"
+      >
+        <CardGrid
+          kind="divider"
+          :columns="3"
+        >
+          <ClientKpiQuote
+            v-for="story in STORIES"
+            :key="story.href"
+            :client="story.client"
+            :client-name="story.clientName"
+            :kpi="story.kpi"
+            :text="story.text"
+            :href="story.href"
+            :aria-label="storyLabel(story)"
+            target="_blank"
+          >
+            <!-- A mark this repo holds as a file rather than as a registry entry;
+                 `monochrome` paints it in the same single ink the registry marks take. -->
+            <template
+              v-if="story.mark"
+              #mark
+            >
+              <ClientMark
+                :client="story.mark"
+                monochrome
+                mark="h-full w-auto max-w-32 object-contain"
+              />
+            </template>
+          </ClientKpiQuote>
         </CardGrid>
       </FrameBox>
     </SectionModule>
@@ -510,38 +600,31 @@
         borders="y"
         marks="bottom"
       >
-        <div class="grid lg:grid-cols-2">
-          <div
-            class="order-last flex min-w-0 items-center justify-center border-t border-(--border-default) lg:order-first lg:border-r lg:border-t-0"
-          >
-            <img
-              :src="protectFinancialApplications"
-              alt="An application passing through the protection modules on its way to the payment origin"
-              width="592"
-              height="300"
-              class="block aspect-[592/300] w-full"
+        <MediaSplit
+          media-href="https://www.azion.com/en/documentation/architectures/edge-firewall/web-application-and-api-protection-waap/"
+          kind="media-start"
+          title="Protect financial applications with advanced security on distributed infrastructure"
+        >
+          <template #media>
+            <Illustration
+              name="protect-financial-applications"
+              aria-label="An application passing through the protection modules on its way to the payment origin"
             />
-          </div>
+          </template>
 
-          <!-- `justify-center`, not the `justify-between` the sibling pages use: their copy
-               halves carry a paragraph and a list that fill the cell, and this one is a
-               heading and its one control. Pushed apart they read as two unrelated things at
-               opposite ends of a cell the art makes tall. -->
-          <div class="flex flex-col justify-center gap-(--spacing-xl) p-(--spacing-xl)">
-            <h2 class="m-0 text-balance text-heading-md text-(--text-default)">
-              Protect financial applications with advanced security on distributed infrastructure
-            </h2>
-
-            <div>
-              <MiniButton
-                label="Docs"
-                icon="pi pi-arrow-right"
-                href="https://www.azion.com/en/documentation/architectures/edge-firewall/web-application-and-api-protection-waap/"
-                target="_blank"
-              />
-            </div>
-          </div>
-        </div>
+          <template #actions>
+            <Button
+              label="Docs"
+              kind="secondary"
+              size="small"
+              href="https://www.azion.com/en/documentation/architectures/edge-firewall/web-application-and-api-protection-waap/"
+              target="_blank"
+              icon="pi pi-chevron-right"
+              icon-position="trailing"
+              animated
+            />
+          </template>
+        </MediaSplit>
       </FrameBox>
     </SectionModule>
 
@@ -569,7 +652,7 @@
         marks="bottom"
       >
         <CardGrid
-          variant="divider"
+          kind="divider"
           :columns="3"
         >
           <div
@@ -587,7 +670,7 @@
             <div>
               <MiniButton
                 :label="resource.action"
-                icon="pi pi-arrow-right"
+                icon="pi pi-angle-right"
                 :href="resource.href"
               />
             </div>
@@ -682,7 +765,7 @@
         marks="bottom"
       >
         <CardGrid
-          variant="divider"
+          kind="divider"
           :columns="4"
           :mobile-columns="2"
         >
@@ -712,14 +795,41 @@
          every solution page on the same words as its product pages, so these match
          AzionCache's exactly — stated explicitly rather than left to the component's
          defaults, which are the homepage's. -->
-    <SiteCta
-      eyebrow="Build"
-      title="Build once."
-      title-muted="Run everywhere."
-      description="Get a faster path to launch, lower latency, and less infrastructure overhead."
-      primary-label="Start Free"
-      secondary-label="Talk to our team"
-    />
+    <SectionModule
+      id="contact"
+      :divided="false"
+      :padded="false"
+      class="scroll-mt-(--spacing-xxl)"
+    >
+      <CallToAction
+        framed
+        kind="split"
+        eyebrow="Build"
+        title="Build once."
+        title-muted="Run everywhere."
+        description="Get a faster path to launch, lower latency, and less infrastructure overhead."
+      >
+        <template #actions>
+          <Button
+            label="Start Free"
+            kind="secondary"
+            size="large"
+            @click="goSignup"
+          />
+        </template>
+        <template #aside>
+          <Button
+            label="Talk to our team"
+            kind="outlined"
+            size="large"
+            href="#"
+            icon="pi pi-chevron-right"
+            icon-position="trailing"
+            animated
+          />
+        </template>
+      </CallToAction>
+    </SectionModule>
 
     <!-- Band 19 — the spacer the source closes on, hatched. A bare FrameBox at SectionGap's
          own `medium` height drawing NO rules: the footer below opens with a full-bleed rule,

@@ -1,8 +1,12 @@
-// The banner registry — every hero backdrop the Site/Hub/Docs pages can choose
-// from, keyed by name. A page never imports a backdrop directly: it names one on
-// the container and the container resolves it here.
+// The banner registry — the page artwork a Site/Hub/Docs band can stand on. These
+// are pictures with structure (a world map, its network mesh, a globe), not
+// tileable surfaces: the surfaces are the design system's, and a band composes one
+// into its `#background` slot straight from the package.
 //
-//   <BannerContainer hero banner="map">…</BannerContainer>
+//   <Hero kind="screen">
+//     <template #background><TextureMaterial kind="dots" /></template>
+//     …
+//   </Hero>
 //
 // To add a banner (including a pasted HTML one):
 //
@@ -12,29 +16,23 @@
 //      `aria-hidden="true"`, a radial mask, and an opacity below 1 so the
 //      texture never competes with the copy. Swap any hex/rgb value for the
 //      matching theme token (`var(--bg-canvas)`, `var(--color-orange-500)`, …).
-//   2. Register it below under a short kebab key.
-//   3. Select it from any page with `banner="<key>"`.
+//   2. Register it below under a short kebab key and add it to the named
+//      exports, which is what a page imports.
 //
-// BANNER_NAMES is what BannerContainer validates the `banner` prop against, so a
-// typo fails loudly in dev instead of rendering an empty band.
-import DitherBanner from './DitherBanner.vue'
-import DotGridBanner from './DotGridBanner.vue'
+// BANNERS/BANNER_NAMES stay the keyed index of what exists, for anything that
+// has to offer the set rather than pick one from it.
 import GlobeBanner from './GlobeBanner.vue'
 import MapBanner from './MapBanner.vue'
 import NetworkBanner from './NetworkBanner.vue'
-import PixelateBanner from './PixelateBanner.vue'
 
 export const BANNERS = {
-  dither: DitherBanner,
-  'dot-grid': DotGridBanner,
   globe: GlobeBanner,
   map: MapBanner,
   // The same artwork, full bleed and carrying traffic — the map is the page's
   // ground rather than the illustration beside its copy. See NetworkBanner.
-  network: NetworkBanner,
-  pixelate: PixelateBanner
+  network: NetworkBanner
 }
 
 export const BANNER_NAMES = Object.keys(BANNERS)
 
-export { DitherBanner, DotGridBanner, GlobeBanner, MapBanner, NetworkBanner, PixelateBanner }
+export { GlobeBanner, MapBanner, NetworkBanner }

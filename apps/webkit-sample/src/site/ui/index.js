@@ -11,8 +11,8 @@
 //                 Codex, OpenCode), inline and theme-following
 //   AiAgentsScene the "agents on the platform" artwork — webkit Illustration
 //                 parts composed around those marks
-//   banners/      the hero backdrops, selected by name through BannerContainer's
-//                 `banner` prop (see ./banners/index.js to add one)
+//   banners/      the hero backdrops, composed into a band's `#background` slot
+//                 (see ./banners/index.js to add one)
 //   ClaimChips    the Network argument's soft-accent claim pills, over the one
 //                 shared claim list (NETWORK_CLAIMS, ./claims.js)
 //   clients/      the client marks for the trust strip, each tagged with the
@@ -21,6 +21,9 @@
 //   ConsoleApplicationScene
 //                 the console's Application detail page, drawn — the art half of the
 //                 Console band, playing one tab of it at a time
+//   ConsoleTraceScene
+//                 the console's Invocations screen, drawn — the art half of the
+//                 Observability band, playing its trace / logs / path documents
 //   FrameworkStackScene
 //                 "your app, shipped from the framework you already use" — webkit
 //                 Illustration parts around the icon library's coloured framework marks
@@ -43,14 +46,15 @@
 // follow are documented in .claude/docs/CONTAINERS.md.
 export { default as AiAgentsScene } from './AiAgentsScene.vue'
 export { default as ConsoleApplicationScene } from './ConsoleApplicationScene.vue'
+export { default as ConsoleTraceScene } from './ConsoleTraceScene.vue'
 export { default as FrameworkStackScene } from './FrameworkStackScene.vue'
 export { default as FunctionsHeroCanvas } from './FunctionsHeroCanvas.vue'
 export { default as NavColumn } from './NavColumn.vue'
 export { default as NavItem } from './NavItem.vue'
 export { default as RuntimeApiCloud } from './RuntimeApiCloud.vue'
+export { clientPhoto, CLIENTS } from '@shared/assets/clients/index.js'
 export { BANNER_NAMES, BANNERS } from '@shared/ui/banners/index.js'
 export { default as AgentMark } from '@shared/ui/brand/AgentMark.vue'
 export { default as ClaimChips } from '@shared/ui/brand/ClaimChips.vue'
 export { NETWORK_CLAIMS } from '@shared/ui/brand/claims.js'
 export { default as ClientMark } from '@shared/ui/brand/ClientMark.vue'
-export { CLIENTS } from '@shared/ui/brand/clients/index.js'

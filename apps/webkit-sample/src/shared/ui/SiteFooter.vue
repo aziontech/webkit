@@ -4,12 +4,12 @@
   // story documents: four link columns, then a row carrying the social icon
   // buttons at the left and the status indicator + language select at the right,
   // then the signature band with the brand mark beside its tagline, and finally
-  // the component's own closing band.
+  // the component's own framed column, whose bottom rule closes the page.
   //
   // The component owns all of that — the canvas shell, the 5xl measure, the 2→4
   // column grid at `md`, the framed gutters that carry the page frame out to the
-  // viewport edges from `xl`, the per-column dividers, and the closing band that
-  // finishes the frame at the bottom of the page. This file supplies only content.
+  // viewport edges from `xl`, the per-column dividers, and the full-bleed bottom rule
+  // that finishes the frame at the bottom of the page. This file supplies only content.
   //
   // The one site-specific thing left is the OPEN of that frame: a full-bleed rule
   // above the footer, built on the HERO's own logic. The hero is a full-bleed band
@@ -138,7 +138,7 @@
 <template>
   <div class="w-full border-t border-(--border-default)">
     <!-- `site` caps the bands at --layout-measure-site and draws the frame: the side
-         rules, the gutters and the closing band. The marketing page's hero band and every
+         rules, the gutters and the bottom rule. The marketing page's hero band and every
          SectionContainer above resolve to that same measure, which is the only reason the
          rules running down the page are continuous. `content` draws no frame and runs the
          bands full bleed across the zone that holds them — right for the docs shell, wrong

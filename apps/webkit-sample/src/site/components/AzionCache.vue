@@ -10,8 +10,8 @@
   // differs: Cache's second band ends on `Start Free` rather than a docs link, and its FAQ
   // runs twelve questions to the other's ten.
   //
-  //   0  hero (eyebrow, h1, description, two actions)      BannerContainer hero + HeroTitle
-  //   1  30-mark tool marquee                              BrandCarousel, on the hero's floor
+  //   0  hero (eyebrow, h1, description, two actions)      Hero kind="screen" + Hero.Title
+  //   1  30-mark tool marquee                              Ticker, on the hero's floor
   //   2  spacer                                            SectionGap hatch
   //   3  three feature cells                               CardGrid divider, 3 columns
   //   4  spacer                                            SectionGap hatch
@@ -27,7 +27,7 @@
   //   14 spacer                                            SectionGap hatch
   //   15 Frequently Asked Questions (12)                   the ruled Accordion band
   //   16 spacer                                            SectionGap hatch
-  //   17 closing CTA                                       SiteCta, every string a prop
+  //   17 closing CTA                                       CallToAction kind="split"
   //   18 spacer                                            the closing hatch frame
   //
   // WHERE OUR FORM DEPARTS FROM THE SOURCE, on purpose:
@@ -36,13 +36,15 @@
   //   • The source runs the tool strip as its own bordered band under the hero. Here it
   //     stands on the hero's floor and the hero's own `border-b` is the rule that divides it
   //     from the column — the same single line, one owner.
-  //   • The hero's eyebrow is `// CACHE`. HeroTitle's overline anatomy carries no `//`
+  //   • The hero's eyebrow is `// CACHE`. Hero.Title's overline anatomy carries no `//`
   //     prefix (that belongs to SectionTitle and to the closing band), so the hero reads
   //     `CACHE`. The two bands that DO have the prefix get it from their own component.
   //   • The source's "Docs" / "Learn more" / "View docs" controls carry a trailing arrow.
   //     Button's `icon` is leading-only, and Link — the one control whose icon IS trailing —
   //     paints `--text-link`, the product UI's blue, which nothing else on this site uses. So
-  //     these are `Button kind="text"`: the label alone, in the page's own ink.
+  //     these are `Button kind="text"`: the label alone, in the page's own ink. Band 9 is the
+  //     exception: its cells carry no control at all — each claim is itself the link, so the
+  //     arrow lands on the headline where Topic draws it.
   //   • Bands 9 and 15 are horizontal scrollers with prev/next controls in the source. Six
   //     cards fit the page frame as two rows of three, and a row that cannot be over-scrolled
   //     needs no controls — nor a carousel library (.claude/rules/dependencies.md).
@@ -58,35 +60,34 @@
   // registry entries but their marks are in `clients/dark/clients/`, so they are declared
   // locally (see STORY_CLIENTS); NZN has no mark in this repo at all and renders as
   // ClientMark's typographic wordmark, so no name is quietly dropped.
-  import Accordion from '@aziontech/webkit/accordion'
+  import Ticker from '@aziontech/webkit/ticker'
   import Button from '@aziontech/webkit/button'
+  import CallToAction from '@aziontech/webkit/call-to-action'
+  import CardGrid from '@aziontech/webkit/card-grid'
   import CodeBlock from '@aziontech/webkit/code-block'
+  import Faq from '@aziontech/webkit/faq'
   import FrameBox from '@aziontech/webkit/frame-box'
-  import HeroTitle from '@aziontech/webkit/hero-title'
+  import Hero from '@aziontech/webkit/hero'
   import Illustration from '@aziontech/webkit/illustration'
-  import Overline from '@aziontech/webkit/overline'
+  import MediaSplit from '@aziontech/webkit/media-split'
+  import Quote from '@aziontech/webkit/quote'
+  import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
+  import SectionModule from '@aziontech/webkit/section-module'
   import SectionTitle from '@aziontech/webkit/section-title'
-  import BrandCarousel from '@shared/ui/brand/BrandCarousel.vue'
-  import ClientMark from '@shared/ui/brand/ClientMark.vue'
+  import Topic from '@aziontech/webkit/topic'
   // The four client marks that are not CLIENTS registry entries; Vite resolves each to an
   // asset URL, exactly as the registries do.
-  import arezzo from '@shared/ui/brand/clients/dark/clients/arezzo-logo.svg'
-  import axur from '@shared/ui/brand/clients/dark/clients/axur-logo.svg'
-  import contabilizei from '@shared/ui/brand/clients/dark/clients/contabilizei-logo.svg'
-  import crefisa from '@shared/ui/brand/clients/dark/clients/crefisa-logo.svg'
-  import { CLIENTS } from '@shared/ui/brand/clients/index.js'
-  import { PRODUCT_STACK } from '@shared/ui/brand/tools.js'
-  import {
-    BannerContainer,
-    CardGrid,
-    SectionContainer,
-    SectionModule
-  } from '@shared/ui/layout/index.js'
+  import arezzo from '@shared/assets/clients/dark/clients/arezzo-logo.svg'
+  import axur from '@shared/assets/clients/dark/clients/axur-logo.svg'
+  import contabilizei from '@shared/assets/clients/dark/clients/contabilizei-logo.svg'
+  import crefisa from '@shared/assets/clients/dark/clients/crefisa-logo.svg'
+  import { CLIENTS } from '@shared/assets/clients/index.js'
+  import ClientMark from '@shared/ui/brand/ClientMark.vue'
+  import { PRODUCT_STACK } from '@shared/ui/brand/strips.js'
   import { useRouter } from 'vue-router'
 
   import { NavColumn, NavItem } from '../ui/index.js'
-  import SiteCta from './SiteCta.vue'
 
   const router = useRouter()
   const goSignup = () => router.push('/signup')
@@ -178,51 +179,45 @@
   // ── Band 9 — six ways the product is used ─────────────────────────────────────
   const USE_CASES = [
     {
-      eyebrow: 'E-commerce',
+      icon: 'pi pi-shopping-cart',
       title: 'Speed up checkout during flash sales',
       description:
         'Handle traffic spikes with intelligent caching that keeps checkout fast under load. E-commerce sites maintain conversion rates during peak events.',
-      action: 'Learn more',
       href: '/site/home'
     },
     {
-      eyebrow: 'Media',
+      icon: 'ai ai-live-ingest',
       title: 'Stream content without buffering',
       description:
         'Deliver video and large files efficiently with large file optimization. Media companies reduce playback interruptions and improve viewer experience.',
-      action: 'Learn more',
       href: '/site/home'
     },
     {
-      eyebrow: 'APIs',
+      icon: 'ai ai-azion-api',
       title: 'Accelerate API responses',
       description:
         'Cache API responses on a distributed architecture to reduce latency and origin load. SaaS applications deliver consistent performance for repeated queries.',
-      action: 'View docs',
       href: DOCS
     },
     {
-      eyebrow: 'Configuration',
+      icon: 'pi pi-sliders-h',
       title: 'Configure cache policies',
       description:
         'Set TTL, enable stale cache, and control cache keys for optimal performance. Fine-tune caching behavior for your specific content types.',
-      action: 'View docs',
       href: DOCS
     },
     {
-      eyebrow: 'Dynamic',
+      icon: 'pi pi-clock',
       title: 'Micro-cache dynamic content',
       description:
         'Use short TTLs to cache personalized content while maintaining freshness. Reduce origin load for semi-dynamic pages without sacrificing personalization.',
-      action: 'Learn more',
       href: '/site/home'
     },
     {
-      eyebrow: 'SaaS',
+      icon: 'ai ai-layers',
       title: 'Scale multi-tenant applications',
       description:
         'Reduce infrastructure costs with tiered cache for static assets. SaaS platforms serve shared assets efficiently across multiple tenants.',
-      action: 'View docs',
       href: DOCS
     }
   ]
@@ -267,7 +262,7 @@
           icon: 'ai ai-edge-functions',
           title: 'Functions',
           description: 'Run serverless code closer to users',
-          href: '/site/functions'
+          href: '/site/products/functions'
         },
         {
           icon: 'ai ai-edge-orchestrator',
@@ -323,7 +318,7 @@
           icon: 'ai ai-tiered-cache',
           title: 'Cache',
           description: 'Accelerate content delivery and reduce origin load',
-          href: '/site/cache'
+          href: '/site/products/cache'
         }
       ]
     },
@@ -433,53 +428,55 @@
 
 <template>
   <!-- ══ Band 0 + 1 — the hero, and the stack standing on its floor ═════════════
-       BannerContainer owns the full-bleed band and the page's top rule. `--banner-offset`
+       Hero owns the full-bleed band and the page's top rule. `--banner-offset`
        is the sticky SiteNav's height (h-14 = 3.5rem), so the band still measures exactly one
        screen with the nav above it. The wrapper declares that height and hands the leftover
        to the copy with `justify-between`: the claim sits in the middle of what is left, the
        strip stands on the floor. -->
-  <BannerContainer
-    hero
-    banner="dot-grid"
+  <Hero
+    texture="dots"
+    texture-fade="bottom"
+    kind="screen"
+    align="center"
     max-width="site"
     class="[--banner-offset:3.5rem]"
   >
-    <div
-      class="flex min-h-[calc(100dvh-var(--banner-offset,0px)-var(--spacing-xl)*2)] flex-col justify-between gap-(--spacing-xxl)"
+    <Hero.Title
+      centered
+      eyebrow="Cache"
+      title="Accelerate content delivery globally"
+      description="Serve cached content with fast response times. Reduce origin load and keep applications fast during traffic spikes."
     >
-      <div class="flex flex-1 flex-col justify-center">
-        <HeroTitle
-          centered
-          eyebrow="Cache"
-          title="Accelerate content delivery globally"
-          description="Serve cached content with fast response times. Reduce origin load and keep applications fast during traffic spikes."
-        >
-          <template #actions>
-            <Button
-              label="Start free"
-              kind="secondary"
-              size="large"
-              @click="goSignup"
-            />
-            <Button
-              label="Docs"
-              kind="text"
-              size="large"
-              :href="DOCS"
-            />
-          </template>
-        </HeroTitle>
-      </div>
+      <template #actions>
+        <Button
+          label="Start free"
+          kind="secondary"
+          size="large"
+          @click="goSignup"
+        />
+        <Button
+          label="Docs"
+          kind="text"
+          size="large"
+          :href="DOCS"
+          icon="pi pi-chevron-right"
+          icon-position="trailing"
+          animated
+        />
+      </template>
+    </Hero.Title>
 
-      <!-- No label — the source's band is the marks alone. `monochrome` is the strip's own
-           rule: one ink, so thirty brand palettes in one row do not become the loudest thing
-           on the page. -->
-      <BrandCarousel
-        monochrome
-        :clients="PRODUCT_STACK"
+    <!-- No label — the source's band is the marks alone. `monochrome` is the strip's own
+         rule: one ink, so thirty brand palettes in one row do not become the loudest thing
+         on the page. -->
+    <template #bottom>
+      <Ticker
+        kind="band"
+        size="small"
+        :marks="PRODUCT_STACK"
       />
-    </div>
-  </BannerContainer>
+    </template>
+  </Hero>
 
   <!-- ══ The framed column ═════════════════════════════════════════════════════
        Every band below the hero is a brick inside one centered column. The column carries
@@ -506,7 +503,7 @@
         marks="bottom"
       >
         <CardGrid
-          variant="divider"
+          kind="divider"
           :columns="3"
         >
           <div
@@ -551,77 +548,52 @@
       :divided="false"
       :padded="false"
     >
-      <FrameBox
-        flush
-        borders="y"
-        marks="bottom"
+      <MediaSplit
+        :media-href="DOCS"
+        framed
+        title="Configure smarter cache policies"
+        description="Set browser and edge TTLs, enable tiered cache, and keep content fresh with stale revalidation. Azion Web Platform helps improve hit ratio, lower latency, and reduce origin bandwidth."
       >
-        <div class="grid lg:grid-cols-2">
-          <div class="flex flex-col justify-between gap-(--spacing-xxl) p-(--spacing-xl)">
-            <div class="flex flex-col gap-(--spacing-lg)">
-              <h2 class="m-0 text-balance text-heading-md text-(--text-default)">
-                Configure smarter cache policies
-              </h2>
-              <p class="m-0 text-pretty text-body-md text-(--text-muted)">
-                Set browser and edge TTLs, enable tiered cache, and keep content fresh with stale
-                revalidation. Azion Web Platform helps improve hit ratio, lower latency, and reduce
-                origin bandwidth.
-              </p>
-
-              <!-- The four surfaces a policy can be written from. A two-column list, not four
-                   cards: it is an inventory inside a paragraph's argument, so it takes the
-                   paragraph's own measure. -->
-              <ul class="m-0 grid list-none grid-cols-2 gap-(--spacing-md) p-0">
-                <li
-                  v-for="surface in SURFACES"
-                  :key="surface.label"
-                  class="flex items-center gap-(--spacing-sm) text-body-md text-(--text-default)"
-                >
-                  <i
-                    :class="surface.icon"
-                    aria-hidden="true"
-                    class="text-(--primary)"
-                  />
-                  {{ surface.label }}
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <Button
-                label="Docs"
-                kind="text"
-                size="large"
-                :href="DOCS"
-              />
-            </div>
-          </div>
-
-          <div
-            class="flex min-w-0 items-center justify-center overflow-hidden border-t border-(--border-default) p-(--spacing-xl) lg:border-l lg:border-t-0"
-          >
-            <Illustration
-              size="large"
-              aria-label="A request served from cache, with the origin behind it"
-              class="shrink-0 scale-[0.62] sm:scale-90 lg:scale-100"
+        <!-- The four surfaces a policy can be written from. A two-column list, not four
+             cards: it is an inventory inside a paragraph's argument, so it takes the
+             paragraph's own measure. -->
+        <template #content>
+          <ul class="m-0 grid list-none grid-cols-2 gap-(--spacing-md) p-0">
+            <li
+              v-for="surface in SURFACES"
+              :key="surface.label"
+              class="flex items-center gap-(--spacing-sm) text-body-md text-(--text-default)"
             >
-              <div class="flex items-center gap-(--spacing-xs)">
-                <Illustration.Box icon="ai ai-edge-application" />
-                <Illustration.Connector
-                  kind="dashed"
-                  animated
-                />
-                <Illustration.Box
-                  icon="ai ai-tiered-cache"
-                  active
-                />
-                <Illustration.Connector kind="dashed" />
-                <Illustration.Box icon="pi pi-server" />
-              </div>
-            </Illustration>
-          </div>
-        </div>
-      </FrameBox>
+              <i
+                :class="surface.icon"
+                aria-hidden="true"
+                class="text-(--primary)"
+              />
+              {{ surface.label }}
+            </li>
+          </ul>
+        </template>
+
+        <template #media>
+          <Illustration
+            name="fastest-path-to-live-website"
+            aria-label="A request served from cache, with the origin behind it"
+            class="shrink-0 scale-[0.62] sm:scale-90 lg:scale-100"
+          />
+        </template>
+
+        <template #actions>
+          <Button
+            label="Docs"
+            kind="secondary"
+            size="small"
+            :href="DOCS"
+            icon="pi pi-chevron-right"
+            icon-position="trailing"
+            animated
+          />
+        </template>
+      </MediaSplit>
     </SectionModule>
 
     <!-- ── Band 6 — the art, then the copy ──────────────────────────────────────
@@ -637,91 +609,52 @@
       :divided="false"
       :padded="false"
     >
-      <FrameBox
-        flush
-        borders="y"
-        marks="bottom"
+      <MediaSplit
+        :media-href="SIGNUP"
+        framed
+        kind="media-start"
+        title="High-availability caching for critical traffic"
+        description="Use protocol optimizations, persistent connections, and stale cache to keep serving the latest cached responses during origin failures or revalidation, so websites and APIs stay fast."
       >
-        <div class="grid lg:grid-cols-2">
-          <div
-            class="order-last flex min-w-0 items-center justify-center overflow-hidden border-t border-(--border-default) p-(--spacing-xl) lg:order-first lg:border-r lg:border-t-0"
-          >
-            <Illustration
-              size="large"
-              aria-label="One request fanning into the cache layer's content types"
-              class="shrink-0 scale-[0.62] sm:scale-90 lg:scale-100"
+        <template #content>
+          <ul class="m-0 grid list-none grid-cols-2 gap-(--spacing-md) p-0">
+            <li
+              v-for="feature in AVAILABILITY"
+              :key="feature.label"
+              class="flex items-center gap-(--spacing-sm) text-body-md text-(--text-default)"
             >
-              <div class="flex items-center gap-(--spacing-xs)">
-                <Illustration.Box icon="ai ai-edge-application" />
-                <Illustration.Connector
-                  kind="dashed"
-                  animated
-                />
-                <Illustration.Box
-                  icon="ai ai-tiered-cache"
-                  active
-                />
-                <Illustration.Node />
-                <Illustration.Connector kind="dashed" />
-
-                <div class="flex flex-col gap-(--spacing-xs)">
-                  <Illustration.Box
-                    icon="ai ai-layers"
-                    size="small"
-                  />
-                  <Illustration.Box
-                    icon="pi pi-video"
-                    size="small"
-                  />
-                  <Illustration.Box
-                    icon="ai ai-json"
-                    size="small"
-                  />
-                </div>
-              </div>
-            </Illustration>
-          </div>
-
-          <div class="flex flex-col justify-between gap-(--spacing-xxl) p-(--spacing-xl)">
-            <div class="flex flex-col gap-(--spacing-lg)">
-              <h2 class="m-0 text-balance text-heading-md text-(--text-default)">
-                High-availability caching for critical traffic
-              </h2>
-              <p class="m-0 text-pretty text-body-md text-(--text-muted)">
-                Use protocol optimizations, persistent connections, and stale cache to keep serving
-                the latest cached responses during origin failures or revalidation, so websites and
-                APIs stay fast.
-              </p>
-
-              <ul class="m-0 grid list-none grid-cols-2 gap-(--spacing-md) p-0">
-                <li
-                  v-for="feature in AVAILABILITY"
-                  :key="feature.label"
-                  class="flex items-center gap-(--spacing-sm) text-body-md text-(--text-default)"
-                >
-                  <i
-                    :class="feature.icon"
-                    aria-hidden="true"
-                    class="text-(--primary)"
-                  />
-                  {{ feature.label }}
-                </li>
-              </ul>
-            </div>
-
-            <!-- The one band on the page whose control is the signup, not the docs — the
-                 source's own choice here. -->
-            <div>
-              <Button
-                label="Start Free"
-                kind="text"
-                size="large"
-                :href="SIGNUP"
+              <i
+                :class="feature.icon"
+                aria-hidden="true"
+                class="text-(--primary)"
               />
-            </div>
-          </div>
-        </div>
-      </FrameBox>
+              {{ feature.label }}
+            </li>
+          </ul>
+        </template>
+
+        <template #media>
+          <Illustration
+            name="distributed-apis"
+            aria-label="One request fanning into the cache layer's content types"
+            class="shrink-0 scale-[0.62] sm:scale-90 lg:scale-100"
+          />
+        </template>
+
+        <!-- The one band on the page whose control is the signup, not the docs — the
+             source's own choice here. -->
+        <template #actions>
+          <Button
+            label="Start Free"
+            kind="secondary"
+            size="small"
+            :href="SIGNUP"
+            icon="pi pi-chevron-right"
+            icon-position="trailing"
+            animated
+          />
+        </template>
+      </MediaSplit>
     </SectionModule>
 
     <!-- ── Band 7 — the argument beside the sample ──────────────────────────────
@@ -754,6 +687,9 @@
                 kind="text"
                 size="large"
                 :href="DOCS"
+                icon="pi pi-chevron-right"
+                icon-position="trailing"
+                animated
               />
             </div>
           </div>
@@ -809,29 +745,22 @@
         marks="bottom"
       >
         <CardGrid
-          variant="divider"
+          kind="divider"
           :columns="3"
         >
           <div
             v-for="useCase in USE_CASES"
             :key="useCase.title"
-            class="flex flex-col gap-(--spacing-md) bg-(--bg-canvas) p-(--spacing-xl)"
+            class="flex bg-(--bg-canvas)"
           >
-            <Overline>{{ useCase.eyebrow }}</Overline>
-            <h3 class="m-0 text-balance text-heading-xs text-(--text-default)">
-              {{ useCase.title }}
-            </h3>
-            <p class="m-0 flex-1 text-pretty text-body-sm text-(--text-muted)">
-              {{ useCase.description }}
-            </p>
-            <div>
-              <Button
-                :label="useCase.action"
-                kind="text"
-                size="medium"
-                :href="useCase.href"
-              />
-            </div>
+            <Topic
+              :icon="useCase.icon"
+              :title="useCase.title"
+              :description="useCase.description"
+              :href="useCase.href"
+              :heading-level="3"
+              class="w-full p-(--spacing-xl)"
+            />
           </div>
         </CardGrid>
       </FrameBox>
@@ -874,49 +803,34 @@
             </li>
           </ul>
 
-          <figure
-            class="m-0 flex flex-col gap-(--spacing-xl) border-t border-(--border-default) p-(--spacing-xl) lg:border-l lg:border-t-0"
+          <!-- The source sets the quotation in straight ASCII quotes, and a quotation mark is
+               part of the line, not typesetting applied to it — so it is carried across as
+               written rather than left to the component's own quoting. -->
+          <Quote
+            kind="signed"
+            text="&quot;I really like the depth of cache rules that I can apply at the edge. There are things that we would not be able to do using solutions from other vendors. In terms of performance, compliance to Contabilizei's rules and delivery standards, we are very satisfied with Azion's performance.&quot;"
+            name="Marcelo Pacheco"
+            job-title="DevOps Specialist at Contabilizei"
+            class="border-t border-(--border-default) p-(--spacing-xl) lg:border-t-0 lg:border-l"
           >
-            <!-- The client signing the quote, above the words. -->
-            <ClientMark
-              :client="QUOTED_CLIENT"
-              mark="h-8 w-auto max-w-40 object-contain"
-            />
-
-            <!-- The source sets the quotation in straight ASCII quotes, and a quotation mark
-                 is part of the line, not typesetting applied to it — so it is carried across
-                 as written.
-
-                 No `text-pretty` here, unlike every paragraph on the page: on a long
-                 quotation Chromium's `pretty` shortens every line to even out the last one,
-                 which is a paragraph treatment. Greedy wrapping fills the measure. -->
-            <blockquote class="m-0 max-w-(--container-2xl) text-heading-sm text-(--text-default)">
-              "I really like the depth of cache rules that I can apply at the edge. There are things
-              that we would not be able to do using solutions from other vendors. In terms of
-              performance, compliance to Contabilizei's rules and delivery standards, we are very
-              satisfied with Azion's performance."
-            </blockquote>
-
-            <!-- The signature: the name in the accent, the role beside it in the default ink,
-                 both in the overline's mono uppercase — the source's own pairing. -->
-            <figcaption
-              class="flex flex-col gap-(--spacing-xs) sm:flex-row sm:items-center sm:gap-(--spacing-xl)"
-            >
-              <Overline>Marcelo Pacheco</Overline>
-              <span class="px-1 text-overline-md uppercase text-(--text-default)">
-                DevOps Specialist at Contabilizei
-              </span>
-            </figcaption>
-
-            <div class="mt-auto">
+            <template #mark>
+              <ClientMark
+                :client="QUOTED_CLIENT"
+                mark="h-8 w-auto max-w-40 object-contain"
+              />
+            </template>
+            <template #actions>
               <Button
                 label="Clients"
                 kind="text"
                 size="large"
                 href="/site/home"
+                icon="pi pi-chevron-right"
+                icon-position="trailing"
+                animated
               />
-            </div>
-          </figure>
+            </template>
+          </Quote>
         </div>
       </FrameBox>
     </SectionModule>
@@ -943,7 +857,7 @@
         marks="bottom"
       >
         <CardGrid
-          variant="divider"
+          kind="divider"
           :columns="4"
           :mobile-columns="2"
         >
@@ -969,68 +883,17 @@
     <SectionGap hatch />
 
     <!-- ── Band 15 — Frequently Asked Questions ─────────────────────────────────
-         The source's three-column split: the heading holds the first third, the questions the
-         other two. The seam between the cells and the rules between the questions are the
-         grid's `gap-px`, so neither cell draws a border — and each fills `--bg-canvas`, or
-         the whole band goes the colour of the gap.
-
-         `--accordion-inset` is the component's own hook for the horizontal step, declared
-         once on the grid so the heading, every trigger and every answer start on one content
-         column at whatever the token steps to per breakpoint. The rule is held at the ITEM's
-         edge rather than under the trigger, so an open item is one cell — question plus its
-         answer — and the stack keeps exactly one rule per row whatever is open. The last row
-         is the exception in both states: it sits on the band's floor, which the FrameBox
-         already draws. -->
+         `Faq` in its hairline register, framed so the band draws its own floor. -->
     <SectionModule
       id="faq"
       :divided="false"
       :padded="false"
     >
-      <FrameBox
-        flush
-        borders="y"
-        marks="bottom"
-      >
-        <div
-          class="grid gap-px bg-(--border-default) [--accordion-inset:var(--spacing-lg)] lg:grid-cols-3 lg:[--accordion-inset:var(--spacing-xl)]"
-        >
-          <div class="bg-(--bg-canvas) px-(--accordion-inset) py-(--spacing-md)">
-            <h2 class="m-0 mt-(--spacing-md) text-balance text-heading-lg text-(--text-default)">
-              Frequently Asked Questions
-            </h2>
-          </div>
-          <div class="bg-(--bg-canvas) lg:col-span-2">
-            <Accordion
-              type="single"
-              collapsible
-              size="large"
-            >
-              <Accordion.Item
-                v-for="(item, index) in FAQ"
-                :key="item.value"
-                :value="item.value"
-                :class="[
-                  'border-(--border-default) data-[state=open]:border-b',
-                  index === FAQ.length - 1 && 'border-b-0 data-[state=open]:border-b-0'
-                ]"
-              >
-                <Accordion.Trigger
-                  class="border-b-0! py-(--spacing-md) data-[state=open]:min-h-0 data-[state=open]:pb-0"
-                >
-                  <span class="text-body-md text-(--text-default)">{{ item.question }}</span>
-                </Accordion.Trigger>
-                <Accordion.Content>
-                  <p
-                    class="m-0 max-w-(--container-2xl) px-(--accordion-inset) pt-(--spacing-xs) pb-(--spacing-md) text-body-sm text-(--text-muted)"
-                  >
-                    {{ item.answer }}
-                  </p>
-                </Accordion.Content>
-              </Accordion.Item>
-            </Accordion>
-          </div>
-        </div>
-      </FrameBox>
+      <Faq
+        framed
+        title="Frequently Asked Questions"
+        :items="FAQ"
+      />
     </SectionModule>
 
     <!-- Band 16 — spacer. -->
@@ -1041,14 +904,41 @@
          every product page on the same words, so these match the Application Accelerator
          page exactly — stated explicitly rather than left to the component's defaults, which
          are the homepage's. -->
-    <SiteCta
-      eyebrow="Build"
-      title="Build once."
-      title-muted="Run everywhere."
-      description="Get a faster path to launch, lower latency, and less infrastructure overhead."
-      primary-label="Start Free"
-      secondary-label="Talk to our team"
-    />
+    <SectionModule
+      id="contact"
+      :divided="false"
+      :padded="false"
+      class="scroll-mt-(--spacing-xxl)"
+    >
+      <CallToAction
+        framed
+        kind="split"
+        eyebrow="Build"
+        title="Build once."
+        title-muted="Run everywhere."
+        description="Get a faster path to launch, lower latency, and less infrastructure overhead."
+      >
+        <template #actions>
+          <Button
+            label="Start Free"
+            kind="secondary"
+            size="large"
+            @click="goSignup"
+          />
+        </template>
+        <template #aside>
+          <Button
+            label="Talk to our team"
+            kind="outlined"
+            size="large"
+            href="#"
+            icon="pi pi-chevron-right"
+            icon-position="trailing"
+            animated
+          />
+        </template>
+      </CallToAction>
+    </SectionModule>
 
     <!-- Band 18 — the spacer the source closes on, hatched. A bare FrameBox at SectionGap's
          own `medium` height drawing NO rules: the footer below opens with a full-bleed rule,
