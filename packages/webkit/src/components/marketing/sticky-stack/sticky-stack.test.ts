@@ -30,9 +30,6 @@ const ITEMS: StickyStackItem[] = [
   }
 ]
 
-// This env runs no Tailwind, so the `lg:` geometry the index maths reads emits nothing;
-// these rules stand in for it. The frame must be a FULL viewport tall, or the page cannot
-// scroll the whole pinned distance and the last claim is unreachable.
 const SPAN = 1 + ITEMS.length
 
 function pinGeometry(): () => void {
@@ -48,15 +45,12 @@ function pinGeometry(): () => void {
   return () => style.remove()
 }
 
-/** One claim's share of the pinned scroll, in px — the track is one screen per claim plus one. */
 function slice(): number {
   return globalThis.innerHeight
 }
 
 async function scrollTo(y: number): Promise<void> {
   globalThis.scrollTo(0, y)
-  // A scroll event lands on a later frame than the call, and the component then schedules
-  // its own rAF to measure — so one frame is not enough to observe the result.
   for (let i = 0; i < 3; i += 1) {
     await new Promise((resolve) => globalThis.requestAnimationFrame(() => resolve(null)))
   }
