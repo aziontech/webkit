@@ -1,4 +1,63 @@
-import { Meta } from '@storybook/blocks'
+import { Meta, Source } from '@storybook/blocks'
+
+export const SETUP_PROMPT = `Set up the Azion design system (@aziontech/webkit) in this project.
+Follow the steps in order and do not skip the report.
+
+1. Run the official installer
+
+   Preview the plan first, then apply it:
+
+   npx @aziontech/webkit init --dry-run
+   npx @aziontech/webkit init
+
+   init is idempotent and never overwrites an existing config: when one exists it prints a
+   merge snippet instead. It records the dependencies in package.json but does NOT install
+   them — run this project's package manager install afterwards (that also activates the
+   husky hook through the "prepare" script).
+
+   It wires: @aziontech/webkit, @aziontech/theme and @aziontech/icons; Tailwind v4 via
+   @tailwindcss/postcss (postcss.config.mjs); src/webkit.css imported from src/main.*;
+   the webkit ESLint preset + eslint-plugin-vuejs-accessibility (eslint.config.mjs);
+   the webkit Stylelint config; a husky pre-commit that runs both linters; the "webkit"
+   MCP server in .mcp.json; and the Claude Code bundle (.claude/ + a CLAUDE.md fragment).
+
+2. Apply what init could not
+
+   Every line init printed as advice is a manual step: merge the ESLint / Stylelint /
+   PostCSS snippets into the existing configs, chain husky into an existing "prepare"
+   script, and add the entry imports by hand if the entry is not src/main.*.
+   Requirements: Vue 3.5+ and Tailwind v4. If the project is on Tailwind v3, stop and
+   report instead of upgrading on your own.
+
+3. Checklist
+
+   - Dependencies installed (lockfile updated).
+   - The CSS entry is imported exactly once: @aziontech/theme + @aziontech/webkit/styles
+     (the @source that makes Tailwind compile the component classes).
+   - @aziontech/icons imported once at the entry, as a side effect.
+   - Dark mode: data-theme="dark" on the html element (light is the default).
+   - ESLint runs with the webkit preset and eslint-plugin-vuejs-accessibility.
+   - Stylelint runs with @aziontech/webkit/stylelint-config.
+   - The pre-commit hook runs the lint.
+   - The webkit MCP server is registered and answering.
+   - TypeScript resolves the component types (vue-tsc passes, if the project uses TS).
+
+4. Verify
+
+   - npx @aziontech/webkit doctor reports no fail.
+   - A test Button (import Button from '@aziontech/webkit/button') renders styled, not
+     as a bare native button.
+   - Toggling data-theme between light and dark changes the look without a reload.
+   - npx eslint . reports zero errors from the webkit plugin.
+   - Reload your tools so .mcp.json is picked up, then call suggest_component with a real
+     need (e.g. "a confirmation dialog"): it must return a component from the catalog.
+
+   Never disable a rule, loosen a config or skip a hook to make a check pass.
+
+5. Report
+
+   Three lists: what init solved on its own, what you fixed by hand (file + change), and
+   what is still pending (with the reason and the exact next step).`
 
 <Meta
   title="Get Started"
@@ -24,10 +83,11 @@ wires it all in one command.
 
 ## Quick start with AI
 
-Using Claude Code, Cursor, or another AI coding tool? Paste this into your agent:
+Using Claude Code, Cursor, or another AI coding tool? Copy this prompt into your agent — it
+runs the installer, finishes what `init` can't do on its own, verifies the wiring, and
+reports back:
 
-> Install `@aziontech/webkit`, `@aziontech/theme`, and `@aziontech/icons` in this project,
-> then run `npx @aziontech/webkit init` to wire the lint, the MCP server, and the agent docs.
+<Source code={SETUP_PROMPT} language="markdown" dark />
 
 The MCP server it wires gives your AI the full component catalog — `list_components`,
 `get_component`, `list_tokens`, `suggest_component`, `get_best_practices`,
