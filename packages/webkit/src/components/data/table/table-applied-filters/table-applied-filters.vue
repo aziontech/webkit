@@ -66,12 +66,9 @@
 </script>
 
 <template>
-  <!-- EXIT MOTION LIVES HERE, not in the Chip. `Chip` emits `remove` and stops; it does
-       not hide or unmount itself, because a chip that did could only ever serve the case
-       where removing it also destroys it. This band IS that case — dropping a filter
-       removes it from the table's state, so the chip really does go — which makes this
-       the right owner for the fade. Leaving chips are taken out of flow so the survivors
-       can slide into the gap instead of jumping. -->
+  <!-- Exit motion lives here, not in Chip: Chip emits `remove` and stays mounted, and
+       here dropping a filter really does destroy the chip. Leaving chips are taken out
+       of flow so the survivors slide into the gap instead of jumping. -->
   <TransitionGroup
     v-bind="$attrs"
     tag="div"

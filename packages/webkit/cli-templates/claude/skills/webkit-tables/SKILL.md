@@ -1,8 +1,8 @@
 ---
 name: webkit-tables
-description: Data tables on @aziontech/webkit — one data-driven <Table :data :columns row-key> with a column model (principal, grow, enableSorting, kind:'action', hideable) and a fixed toolbar (Filter · Search · RefreshButton · Export · ColumnSelector) + AppliedFilters, scrolling its body internally via the h-full/min-h-0 chain. Ships a fixed set of cell recipes so every table reads the same — principal name cell, Tag/status-severity cell, actions Dropdown cell, copy-value cell, "+N" overflow Popover, a Last Modified cell (Avatar + relative time in one column), and the canonical domain cell (link + external arrow, copy button pinned to the cell's right edge for common-width alignment). The tabular companion to /webkit-form and /webkit-ui-states.
+description: Data tables on @aziontech/webkit — one data-driven <Table :data :columns row-key> with a column model (principal, grow, enableSorting, kind:'action', hideable) and a fixed toolbar (Filter · Search · RefreshButton · Export · ColumnSelector) + AppliedFilters, scrolling its body internally via the h-full/min-h-0 chain. Ships a fixed set of cell recipes so every table reads the same — principal name cell, Tag/status-severity cell (one chip per row, a category chip one rounded severity), actions Dropdown cell, copy-value cell, "+N" overflow Popover, a Last Modified cell (Avatar + relative time in one column), the cross-resource link (the name, a 12px pi-external-link, and a tooltip naming the destination) and the domain cell built from it, with its copy button pinned to the cell's right edge for common-width alignment. The tabular companion to /webkit-form and /webkit-ui-states.
 status: active
-last_updated: 2026-07-21
+last_updated: 2026-09-19
 scope: general
 enforced_by: [webkit-prefer-over-custom, webkit-component-states, webkit-tokens, ui-verify]
 ---
@@ -167,9 +167,38 @@ recipes verbatim so a cell type looks identical across every table.
 `min-w-0` on the wrapper + `truncate` on the label so a long name ellipsizes instead of overflowing; the
 leading glyph is `shrink-0`.
 
+**Name the whole, not one of its parts.** The principal column carries the unit a reader owns,
+recognises and can open — the workload, the project, the account. It does **not** name an artifact
+that unit happens to contain, with a second column beside it chipping that artifact's kind: that
+spends two columns and two chips to say what the reader was not looking for. The contained thing
+belongs on the record's own page, and its kind stays available as a **filter field**.
+
+**A leading glyph that is the same on every row names the COLUMN; one that varies names the VALUE.**
+Both are legitimate and they do different jobs — a per-row product mark tells rows apart, a constant
+mark tells the reader what the column holds. What is never legitimate is a constant glyph you cannot
+explain: if it varies with nothing and identifies nothing, it is decoration in the row's most
+valuable space. A decorative glyph is `aria-hidden`; when it is the only thing carrying a fact (the
+row's kind, say), that fact also needs a visually-hidden label, or it exists for sighted readers
+only.
+
 ### Tag / chip cell + status-severity cell
 
 Use `Tag` for a chip; for status, map the value to a semantic `severity` — **never a raw color**.
+
+**One chip per row.** A row where three columns are chips has no emphasis left to spend on the one
+fact a reader scans the list for. Chip the thing that is genuinely a _status_ — what happened, what
+is live — and render every other enumerable value as a glyph plus plain text. If two chips both
+survive that test, check whether they are restating one fact.
+
+**A CATEGORY chip is one `rounded` tag in one severity.** A category says _which kind_, not _how it
+is going_ — an environment, a type, a tier. Branching its colour (`Production` blue, everything else
+grey) makes the tag carry a second meaning the reader has to learn, and it competes with the status
+colour that earned the row's attention. The tag's **name** is what distinguishes the values, so the
+severity is a constant. Keep that constant in **one shared helper** rather than per call site: the
+moment two lists map the same category themselves, they drift into two palettes.
+
+Reserve the branching severity for genuine status (`success` / `danger` / `warning`), where the
+colour _is_ the information.
 
 ```vue
 <template #cell-repository="{ value }">
@@ -193,30 +222,85 @@ Use `Tag` for a chip; for status, map the value to a semantic `severity` — **n
 </template>
 ```
 
-### Domain cell — link + arrow, copy button pinned to the cell's right edge
+### Cross-resource link — one name that leaves the screen
+
+A name that opens **something other than this row** — the workload a deployment belongs to, the
+function an instance runs, the site a domain serves — is the same component everywhere, in a table
+cell and in a detail panel alike. Three rules, and each is a real bug when skipped:
+
+1. **Every external mark says where it goes.** The glyph announces the name leaves; the **tooltip
+   names what it leaves for**, so the reader decides before the click instead of after. In-app reads
+   `Open <name> in <Module>`; off-app reads `Open <name> in a new tab`.
+2. **The mark is a fixed 12px `pi-external-link`** (`text-body-xs leading-none shrink-0`) — never
+   sized from the text around it. `text-[length:inherit]` inside a heading renders a heading-sized
+   arrow, and `text-[0.85em]` is the same 12px written as a number nobody can grep for.
+3. **No destination, no mark, no tooltip.** A glyph that leads nowhere is worse than no glyph, and a
+   tooltip promising a destination on a name that opens nothing is worse than silence. That leg
+   renders as plain truncating text.
+
+Build it **once** as a shared component and compose it; do not re-type the markup per call site. It
+drifts on every axis at once — glyph, icon size, underline-at-rest vs on-hover, and whether there is
+a tooltip at all.
+
+```vue
+<!-- the shared component's body -->
+<Tooltip :text="tooltipText" :disabled="!isLink" class="min-w-0 shrink!">
+  <component
+    :is="tag"
+    :to="tag === 'router-link' ? to : undefined"
+    :href="href || undefined"
+    :target="href ? '_blank' : undefined"
+    :rel="href ? 'noopener noreferrer' : undefined"
+    class="group/link inline-flex min-w-0 items-center gap-(--spacing-xxs) text-body-sm text-(--text-default) no-underline"
+    @click.stop
+  >
+    <span
+      class="truncate underline-offset-2"
+      :class="isLink ? 'group-hover/link:underline' : ''"
+      >{{ label }}</span
+    >
+    <span
+      v-if="href"
+      class="sr-only"
+      >{{ ' (opens in a new tab)' }}</span
+    >
+    <i
+      v-if="isLink"
+      class="pi pi-external-link shrink-0 text-body-xs leading-none"
+      aria-hidden="true"
+    />
+  </component>
+</Tooltip>
+```
+
+- **Underline on hover, not at rest.** A list is mostly links; underlining all of them at rest turns
+  the column into noise.
+- **`@click.stop`** so opening the link never also fires the row's `@row-click`.
+- **`sr-only` for the new-tab fact.** The tooltip is pointer- and focus-only, so the one thing a
+  screen reader cannot otherwise learn is said in text. Bind the string (`{{ ' (…)' }}`) to keep its
+  leading space — written as markup the formatter strips it and it runs into the name.
+- **`shrink!` is load-bearing, not decoration.** `Tooltip`'s trigger wrapper is a flat
+  `inline-flex w-fit shrink-0`, and a consumer class merges into it **by concatenation, not through
+  `cn`** — so a plain `shrink` and the component's own `shrink-0` set the same property at the same
+  specificity, and stylesheet order decides. Without the `!` the wrapper refuses to shrink in a flex
+  cell, the name never reaches its `truncate`, and **the cell overflows instead**. This is silent:
+  nothing errors, and at a wide viewport it looks correct. Measure it at a narrow one — assert zero
+  cells where `scrollWidth > clientWidth`.
+
+### Domain cell — the link above, copy button pinned to the cell's right edge
 
 **The rule that fixes misalignment:** the copy button never sits flush against the domain text (its
 x-position would then vary per row with the domain length). It is **pinned to the cell's right edge** with
-`ml-auto shrink-0`, the domain link **truncates** (`min-w-0` + inner `truncate`), and the cell fills its
-column (`w-full`) — so every copy button lines up vertically no matter how long the domain is.
+`ml-auto shrink-0`, the link **truncates**, and the cell fills its column (`w-full`) — so every copy
+button lines up vertically no matter how long the domain is.
 
 ```vue
 <template #cell-domainName="{ value }">
-  <!-- Domain link (truncates) + external-redirect arrow; copy button pinned right so it aligns across rows. -->
   <div class="flex w-full min-w-0 items-center gap-(--spacing-xs)">
-    <a
+    <ResourceLink
+      :label="value"
       :href="`https://${value}`"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="flex min-w-0 items-center gap-(--spacing-xxs) hover:underline"
-      @click.stop
-    >
-      <span class="truncate">{{ value }}</span>
-      <i
-        class="pi pi-arrow-up-right shrink-0 text-(--text-muted)"
-        aria-hidden="true"
-      />
-    </a>
+    />
     <CopyButton
       kind="outlined"
       :value="value"
@@ -226,6 +310,10 @@ column (`w-full`) — so every copy button lines up vertically no matter how lon
   </div>
 </template>
 ```
+
+Extract this whole cell as a component too, and use it on **every** list that shows a domain. Four
+lists having their own copy of it is how one of them ends up without the copy button — and the
+copies are indistinguishable until you diff them.
 
 Do **not**:
 
@@ -369,7 +457,11 @@ destructive actions in their own `Dropdown.Group`.
 - [ ] `grow: N` on long columns (repository, domain, timestamps); no fixed pixel widths.
 - [ ] Toolbar order: Filter · Search (`flex-1`) · Refresh · Export · ColumnSelector; `#filters` → `Table.AppliedFilters`.
 - [ ] Body scrolls internally: `min-h-0 flex-1` parent → `CardBox h-full` → `Table max-height="100%" class="h-full"` — the page doesn't scroll.
-- [ ] Domain cell = link + arrow + `CopyButton` with `ml-auto shrink-0`; link `min-w-0` + `truncate`; cell `w-full`. Copy buttons align across rows.
+- [ ] Principal column names the **whole** (the unit a reader owns and opens), not an artifact inside it with a second column chipping that artifact's kind.
+- [ ] Every name that leaves the screen uses the one shared cross-resource link: 12px `pi-external-link`, a tooltip naming the destination, underline on hover, and **no mark at all** when there is no destination.
+- [ ] Only **one** chip per row, and a category chip is one `rounded` tag in one severity from a shared helper — branching colour is reserved for real status.
+- [ ] Domain cell = the shared link + `CopyButton` with `ml-auto shrink-0`; cell `w-full`. Copy buttons align across rows.
+- [ ] Measured at a narrow viewport: **zero** cells where `scrollWidth > clientWidth` (catches a link wrapper that cannot shrink, which looks fine when wide).
 - [ ] Every copyable cell uses text-then-copy with the copy button pinned right (`ml-auto shrink-0`), never flush against the text.
 - [ ] "Last Modified" cell = `Avatar` + relative time in one column, name on the avatar tooltip; no raw absolute date and no separate "Last Modified By"/"Author" column beside it.
 - [ ] Overflow shown as a `+N` `Tag` opening a `Popover`, not a wrapped inline list.

@@ -16,10 +16,11 @@
   import {
     codeBlockEnterOffsetClasses,
     codeBlockLineEnterMotion,
+    type CodeBlockLineMotionMode,
     type CodeBlockSlideDirection,
     getCodeBlockIndicatorTransitionStyle,
-    getCodeBlockLineTransitionStyle,
-    getCodeBlockPanelTransitionStyle
+    getCodeBlockLineSwapTransitionStyle,
+    getCodeBlockLineTransitionStyle
   } from './presets/transitions'
   import { resolveFileIcon } from './utils/file-icon'
   import {
@@ -96,8 +97,9 @@
   const indicatorOffsetX = ref(0)
   const internalValue = ref('')
   const slideDirection = ref<CodeBlockSlideDirection>(null)
-  const panelMotionReady = ref(true)
   const linesMotionReady = ref(!props.animateLines)
+  const lineMotionMode = ref<CodeBlockLineMotionMode>(props.animateLines ? 'enter' : null)
+  const contentRef = ref<HTMLElement | null>(null)
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'data-code-block')
 
@@ -138,6 +140,11 @@
 
   const showTabHeader = computed(() => normalizedTabs.value.length > 1)
 
+  // On a single line the copy control centres on the row instead of pinning to the
+  // top inset: shell 44px, control 28px, so a 12px inset sits it 4px below the
+  // line's own centre (measured, and visible against one row of code).
+  const isSingleLine = computed(() => highlightedLines.value.length === 1)
+
   const showFileNameBar = computed(() => Boolean(activeTab.value?.fileName))
 
   const showDiffGutter = computed(() => (activeTab.value?.lineChanges?.length ?? 0) > 0)
@@ -166,8 +173,6 @@
     transform: `translate3d(${indicatorOffsetX.value}px, 0, 0)`
   }))
 
-  const panelTransitionStyle = computed(() => getCodeBlockPanelTransitionStyle())
-
   const panelEnterOffsetClass = computed(() => {
     if (slideDirection.value === 'right') {
       return codeBlockEnterOffsetClasses.right
@@ -180,27 +185,32 @@
     return codeBlockEnterOffsetClasses.none
   })
 
-  const panelMotionClasses = computed(() =>
-    cn(
-      'w-full transform motion-reduce:transform-none motion-reduce:opacity-100 motion-reduce:transition-none',
-      panelMotionReady.value
-        ? 'translate-x-0 opacity-100'
-        : cn(panelEnterOffsetClass.value, 'opacity-0')
-    )
+  // The swap animates line by line, not as one sliding block: each row enters from
+  // the direction of travel with a short per-line delay. `enter` is the marketing
+  // entrance (300ms a line); `swap` is the tab change (24ms a line, capped).
+  const lineEnterOffsetClass = computed(() =>
+    lineMotionMode.value === 'swap'
+      ? panelEnterOffsetClass.value
+      : codeBlockLineEnterMotion.offsetClass
   )
 
   const getLineMotionClasses = () =>
     cn(
-      props.animateLines &&
+      lineMotionMode.value &&
         'transform motion-reduce:transform-none motion-reduce:opacity-100 motion-reduce:transition-none',
-      props.animateLines &&
+      lineMotionMode.value &&
         (linesMotionReady.value
           ? 'translate-x-0 opacity-100'
-          : cn(codeBlockLineEnterMotion.offsetClass, 'opacity-0'))
+          : cn(lineEnterOffsetClass.value, 'opacity-0'))
     )
 
-  const getLineMotionStyle = (lineIndex: number) =>
-    props.animateLines ? getCodeBlockLineTransitionStyle(lineIndex) : undefined
+  const getLineMotionStyle = (lineIndex: number) => {
+    if (lineMotionMode.value === 'swap') {
+      return getCodeBlockLineSwapTransitionStyle(lineIndex)
+    }
+
+    return lineMotionMode.value === 'enter' ? getCodeBlockLineTransitionStyle(lineIndex) : undefined
+  }
 
   const resolveTabElement = (
     element: globalThis.Element | ComponentPublicInstance | null
@@ -242,27 +252,72 @@
     return nextIndex > currentIndex ? 'right' : 'left'
   }
 
-  const runPanelMotion = () => {
-    panelMotionReady.value = false
-    nextTick(() => {
-      globalThis.requestAnimationFrame(() => {
-        panelMotionReady.value = true
-      })
-    })
+  const prefersReducedMotion = () =>
+    typeof globalThis.matchMedia === 'function' &&
+    globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+  // Commit the pre-transition style before flipping to the ready state: a node
+  // inserted in the same rendering opportunity has no previous computed value to
+  // interpolate from, so a freshly created row would appear fully opaque. Reading a
+  // layout property commits the hidden state (and the outgoing shell height) as that
+  // previous value. Measured: 4 of 5 rows skipped the fade without this.
+  const flushStyles = () => {
+    void contentRef.value?.offsetHeight
   }
 
-  const runLinesMotion = () => {
-    if (!props.animateLines) {
+  const runLinesMotion = (mode: CodeBlockLineMotionMode) => {
+    lineMotionMode.value = mode
+
+    if (!mode) {
       linesMotionReady.value = true
       return
     }
 
     linesMotionReady.value = false
     nextTick(() => {
-      globalThis.requestAnimationFrame(() => {
-        linesMotionReady.value = true
-      })
+      flushStyles()
+      linesMotionReady.value = true
     })
+  }
+
+  // Height swap: pin the shell at its outgoing height, let the new panel size
+  // itself, then animate between the two — tabs rarely hold the same line count.
+  // Reading the natural height with the inline value cleared forces layout, but the
+  // old value is restored in the same task, so nothing paints at auto; transitionend
+  // drops the inline height so later reflows stay free to resize the shell.
+  const captureContentHeight = () => {
+    const el = contentRef.value
+
+    return el && !prefersReducedMotion() ? el.getBoundingClientRect().height : null
+  }
+
+  const runHeightMotion = (from: number | null) => {
+    const el = contentRef.value
+
+    if (!el || from === null) {
+      return
+    }
+
+    nextTick(() => {
+      el.style.height = ''
+      const to = el.getBoundingClientRect().height
+
+      if (Math.round(from) === Math.round(to)) {
+        return
+      }
+
+      el.style.height = `${from}px`
+      flushStyles()
+      el.style.height = `${to}px`
+    })
+  }
+
+  const onContentTransitionEnd = (event: globalThis.TransitionEvent) => {
+    const el = contentRef.value
+
+    if (el && event.propertyName === 'height' && event.target === el) {
+      el.style.height = ''
+    }
   }
 
   const setActiveTab = (nextValue: string) => {
@@ -274,9 +329,14 @@
     const nextIndex = normalizedTabs.value.findIndex((tab) => tab.value === nextValue)
 
     slideDirection.value = resolveSlideDirection(currentIndex, nextIndex)
+    // Read the outgoing height BEFORE the swap, but queue the animation AFTER it:
+    // `nextTick` registered before any reactive change resolves ahead of the
+    // render job it is meant to follow, so the "new" height it measured was still
+    // the old one — from === to, and the height jumped with no transition at all.
+    const heightFrom = captureContentHeight()
     activeValue.value = nextValue
-    runPanelMotion()
-    runLinesMotion()
+    runLinesMotion('swap')
+    runHeightMotion(heightFrom)
     scheduleIndicatorSync()
   }
 
@@ -372,14 +432,40 @@
   const scheduleIndicatorSync = () => {
     nextTick(() => {
       syncIndicator()
+      observeTabStrip()
     })
+  }
+
+  let resizeObserver: ResizeObserver | null = null
+
+  // Observe the strip AND every tab: the list is stretched to the header, so a tab
+  // that resizes on its own (a web font swapping in, a relabel) never changes the
+  // list's box and a list-only observer never fires — the pill indicator then keeps
+  // the stale width (measured 8px short of its tab after the Sora font swap).
+  const observeTabStrip = () => {
+    if (typeof ResizeObserver === 'undefined') {
+      return
+    }
+
+    resizeObserver?.disconnect()
+    resizeObserver = new ResizeObserver(() => {
+      syncIndicator()
+    })
+
+    if (tabListRef.value) {
+      resizeObserver.observe(tabListRef.value)
+    }
+
+    for (const element of tabRefs.value) {
+      if (element) {
+        resizeObserver.observe(element)
+      }
+    }
   }
 
   const handleCopy = (code: string) => {
     emit('copy', code)
   }
-
-  let resizeObserver: ResizeObserver | null = null
 
   onMounted(() => {
     if (!normalizedTabs.value.length) {
@@ -393,15 +479,10 @@
     scheduleIndicatorSync()
 
     if (props.animateLines) {
-      runLinesMotion()
+      runLinesMotion('enter')
     }
 
-    if (typeof ResizeObserver !== 'undefined' && tabListRef.value) {
-      resizeObserver = new ResizeObserver(() => {
-        syncIndicator()
-      })
-      resizeObserver.observe(tabListRef.value)
-    }
+    observeTabStrip()
   })
 
   onBeforeUnmount(() => {
@@ -435,12 +516,7 @@
   watch(
     () => props.animateLines,
     (enabled) => {
-      if (enabled) {
-        runLinesMotion()
-        return
-      }
-
-      linesMotionReady.value = true
+      runLinesMotion(enabled ? 'enter' : null)
     }
   )
 </script>
@@ -449,7 +525,7 @@
   <div
     :class="
       cn(
-        'flex w-full flex-col overflow-hidden rounded-(--shape-elements) bg-(--bg-surface) data-[border]:border data-[border]:border-(--border-default)',
+        'flex w-full @container flex-col overflow-hidden rounded-(--shape-elements) bg-(--bg-surface) data-[border]:border data-[border]:border-(--border-default)',
         attrs.class as string | undefined
       )
     "
@@ -458,18 +534,18 @@
   >
     <div
       v-if="showTabHeader"
-      class="relative shrink-0 border-b border-(--border-default) px-(--spacing-sm)"
+      class="relative shrink-0 border-b border-(--border-default) bg-(--bg-canvas) p-(--spacing-xxs)"
       :data-testid="`${testId}__header`"
     >
       <div
         ref="tabListRef"
         role="tablist"
-        class="relative flex items-end gap-(--spacing-xs)"
+        class="relative flex items-center gap-(--spacing-xxs)"
         :data-testid="`${testId}__tabs`"
       >
         <span
           v-show="indicatorVisible"
-          class="pointer-events-none absolute bottom-0 left-0 z-1 h-[2px] rounded-full bg-(--border-selected) motion-reduce:transition-none"
+          class="pointer-events-none absolute inset-y-0 left-0 z-1 rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) shadow-(--shadow-sm) motion-reduce:transition-none"
           :style="[indicatorTransitionStyle, indicatorTransformStyle]"
           :data-testid="`${testId}__indicator`"
           aria-hidden="true"
@@ -483,8 +559,8 @@
           :id="`${testId}-tab-${tab.value}`"
           :class="
             cn(
-              'relative z-2 inline-flex h-12 shrink-0 items-center justify-center px-(--spacing-xs) py-(--spacing-xs)',
-              'text-overline-sm uppercase transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none',
+              'relative z-2 inline-flex h-8 shrink-0 items-center justify-center rounded-(--shape-elements) px-(--spacing-sm)',
+              'text-label-sm transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none',
               'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)',
               tab.value === activeValue
                 ? 'text-(--text-default)'
@@ -527,11 +603,14 @@
     </div>
 
     <div
-      class="relative flex max-h-[320px] shrink-0 flex-col"
+      ref="contentRef"
+      class="relative flex max-h-[320px] shrink-0 flex-col overflow-hidden transition-[height] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
       :data-testid="`${testId}__content`"
+      @transitionend="onContentTransitionEnd"
     >
       <div
-        class="absolute right-(--spacing-sm) top-(--spacing-sm) z-2"
+        class="absolute right-(--spacing-sm) top-(--spacing-sm) z-2 data-[single-line]:top-1/2 data-[single-line]:-translate-y-1/2"
+        :data-single-line="isSingleLine || null"
         :data-testid="`${testId}__copy-anchor`"
       >
         <CopyButton
@@ -556,8 +635,7 @@
           :role="showTabHeader ? 'tabpanel' : undefined"
           :id="showTabHeader ? `${testId}-panel-${activeTab.value}` : undefined"
           :aria-labelledby="showTabHeader ? `${testId}-tab-${activeTab.value}` : undefined"
-          :class="cn(panelMotionClasses, 'min-w-full w-max')"
-          :style="panelTransitionStyle"
+          class="min-w-full w-max"
           :data-testid="`${testId}__panel`"
         >
           <div
@@ -598,7 +676,7 @@
                 {{ formatLineNumber(lineIndex + 1) }}
               </span>
               <code
-                class="text-label-code-sm relative z-1 shrink-0 whitespace-pre pr-(--spacing-xl)"
+                class="text-label-code-sm relative z-1 shrink-0 whitespace-pre pr-11"
                 :data-testid="`${testId}__line-content`"
               >
                 <span

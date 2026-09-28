@@ -1,8 +1,8 @@
 ---
 name: webkit-lists
-description: The list page — the one shape every resource index takes on @aziontech/webkit, and the filter system that narrows it. Fixes the page skeleton (shell → controls row → filter bar → card-wrapped Table), the split between search and filters (search runs through the table's own global filter; filters pre-narrow the data outside it), and the filter model itself — a field catalog the page declares plus a flat `{ fieldId: values[] }` applied state where fields intersect and the values inside one field union. Ships the chip-bar composition (one Popover walking fields then values, one chip per field, dimmed until it narrows something) so filtering looks and behaves the same on every index in the product, instead of one Select per column on one page and an operator builder on the next. Use when building or reviewing any resource index, list, or "all X" page. The page-level companion to /webkit-tables (which owns the Table and its cell recipes).
+description: The list page — the one shape every resource index takes on @aziontech/webkit, and the filter system that narrows it. Fixes the page skeleton (shell → page heading carrying the create action → controls row → filter bar → card-wrapped Table), the split between search and filters (search runs through the table's own global filter; filters pre-narrow the data outside it), and the filter model itself — a field catalog the page declares plus a flat `{ fieldId: values[] }` applied state where fields intersect and the values inside one field union. Ships the chip-bar composition (one Popover walking fields then values, one chip per field, dimmed until it narrows something) so filtering looks and behaves the same on every index in the product, instead of one Select per column on one page and an operator builder on the next. Use when building or reviewing any resource index, list, or "all X" page. The page-level companion to /webkit-tables (which owns the Table and its cell recipes).
 status: active
-last_updated: 2026-08-11
+last_updated: 2026-08-24
 scope: general
 enforced_by: [webkit-prefer-over-custom, webkit-component-states, webkit-styling, ui-verify, review]
 ---
@@ -47,7 +47,7 @@ in) · `/webkit-ui-states` (the empty and loading states a filtered list must re
 
 ## 1. The list page, one shape
 
-Three nested bands, and nothing else:
+A heading, then three nested bands, and nothing else:
 
 ```vue
 <template>
@@ -56,14 +56,38 @@ Three nested bands, and nothing else:
     :breadcrumb="[{ label: 'Applications' }]"
   >
     <main class="layout-column flex min-h-full flex-col">
-      <!-- the page's one child below the heading; spaces its sections -->
+      <!-- THE PAGE HEADING. At first level this is the only place the module's name
+           appears: the shell renders the breadcrumb from the SECOND crumb up, so the
+           single crumb above is passed and not drawn. The create action lives HERE,
+           and it is the page's one `large` control. -->
+      <PageHeading
+        size="medium"
+        title="Applications"
+        description="Build, deploy, and manage your applications."
+      >
+        <template #actions>
+          <Button
+            label="Create application"
+            kind="primary"
+            size="large"
+            icon="pi pi-plus"
+          />
+        </template>
+      </PageHeading>
+
+      <!-- the band below the heading; `layout-section-start` opens it at the boundary
+           step, and zeroes itself when the heading is absent (empty account) -->
       <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)">
         <!-- ONE band: the controls, the filters, and the rows they narrow -->
         <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
+          <!-- NARROWING ONLY, and all of it `medium`. The page's own action is in the
+               heading above; `#actions` here is for an action on the LISTING (a bulk
+               operation over the rows a filter selected), and is omitted when there is
+               none. -->
           <ControlsHeader>
             <InputText
               v-model="search"
-              size="large"
+              size="medium"
               placeholder="Search applications..."
               aria-label="Search applications"
               class="min-w-36 grow basis-(--container-2xs)"
@@ -74,14 +98,6 @@ Three nested bands, and nothing else:
                   aria-hidden="true"
               /></template>
             </InputText>
-            <template #actions>
-              <Button
-                label="New Application"
-                kind="primary"
-                size="large"
-                icon="pi pi-plus"
-              />
-            </template>
           </ControlsHeader>
 
           <FilterBar
@@ -114,10 +130,36 @@ Three nested bands, and nothing else:
 </template>
 ```
 
-**A first-level module index has no page heading.** The module name is already the breadcrumb crumb and
-the highlighted nav row; repeating it as an `<h1>` says the same word three times in 200px of screen. The
-controls row opens the page. (A _second_-level list — a tab inside a resource — does get a heading,
-because there the crumb names the resource, not the list.)
+**A first-level module index opens with a `PageHeading`, and the module's create action lives in it.**
+The crumb does not name the page any more: the shell draws the breadcrumb only from the **second** crumb
+up (`/webkit-navigation`), because at first level a lone crumb repeated the word the highlighted nav row
+was already showing. So the heading is the only place the module's name appears in the content — a page
+without one is named nowhere but the rail. Title, one line of what the module is, `size="medium"`, and the
+create button in `#actions`.
+
+**The size ladder is what makes the two rows read as two rows.** The heading's action is the page's only
+`large` (40px) control; **everything** on the controls row is `medium` (32px) — search, the filter anchor,
+any listing action beside them. That difference IS the hierarchy: what the page is _for_ reads first, what
+_narrows_ the list reads second. At 40px both rows competed and the create button stopped being the
+biggest thing on screen. Promote or demote a row **whole**: one 32px control beside a 40px one leaves a
+4px break top and bottom.
+
+**Where each action goes.** The page's create action is the heading's; `ControlsHeader #actions` is for an
+action on the **listing** — a bulk operation over the rows a filter selected — and renders nothing when
+there is none. Never move the create button onto the controls row: its place would then depend on how the
+list is filtered, or on whether the list has rows at all.
+
+**The label is not a per-page choice.** A list the sidebar routes to reads `Create <object>`, the object
+lowercase because it is an instance and not the module (`Create application`, `Create network list`); a
+list that is a **tab inside a resource** reads `Add <Product Module>` in that module's exact
+capitalization (`Add Cache Settings`). Never a bare noun, never `New` — see `/webkit-microcopy`.
+
+**Two states keep the heading out of the way.** An empty account leads with its first-use screen instead
+(`v-if="!accountEmpty"`), whose hero already names the module; and `layout-section-start` zeroes its own
+step when it lands first, so the band below needs no change when the heading is absent.
+
+(A _second_-level list — a tab inside a resource — carries a `size="small"` heading: there the crumb
+_does_ name the resource, so the heading only labels the list inside it.)
 
 **The controls, the filter bar and the table are ONE band**, joined by the group step
 (`--layout-group-gap`), not the section step. They are not three things stacked on a page; they are one
@@ -326,7 +368,9 @@ its columns and nothing else.
 
 - The controls row, the filter bar and the table are **one band** at the group step — never a section step
   between the search and the rows it filters.
-- A first-level module index has **no page heading**.
+- A first-level module index **opens with a `PageHeading`** (`size="medium"`) carrying the module's
+  create action — the breadcrumb starts at the second level, so nothing else names the page.
+- **The heading's action is the page's only `large` control; the whole controls row is `medium`.**
 - `CardBox :padded="false"` + `Table :border="false"` — never a padded card around a bordered table.
 - **Search runs inside the table** (`v-model:globalFilter`); **filters narrow `:data` outside it**. Never
   route a membership filter through an operator builder — `is one of` on every row is a control with one
@@ -355,6 +399,13 @@ Per gap:
   quoted: <Select v-model="statusFilter" :options="statusOptions" />
   rule:   filtering is one chip row behind one anchor, not one Select per column
   fix:    declare status in the field catalog and render the shared filter bar
+
+✗ ConnectorsList.vue:22
+  quoted: <ControlsHeader> … <template #actions><Button label="New Connector" size="large" /></template>
+  rule:   the create action is the PAGE's, so it belongs to the heading — the controls row
+          narrows the list and runs entirely at `medium`
+  fix:    add the size="medium" PageHeading (the crumb no longer names the page) and move the
+          button into its #actions as `Create connector`, large
 ```
 
 Close with `List sound` or `N gaps — fix before polish`.
@@ -370,8 +421,9 @@ Close with `List sound` or `N gaps — fix before polish`.
 
 ## Definition of Done
 
-- [ ] Page is shell → column → section → one band holding controls, filters and the card.
-- [ ] No page heading on a first-level module index.
+- [ ] Page is shell → column → heading → section → one band holding controls, filters and the card.
+- [ ] First-level index carries a `size="medium"` `PageHeading` with the create action in `#actions`.
+- [ ] Heading action `large`; every control on the controls row `medium`.
 - [ ] Search is in the controls row and bound to the table's global filter; filters narrow `:data`.
 - [ ] A field catalog exists, with a `match` per field and `kind` chosen deliberately.
 - [ ] Every enumerable column is a field; no free-text column is.

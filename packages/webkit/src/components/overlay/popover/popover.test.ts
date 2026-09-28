@@ -410,15 +410,17 @@ describe('Popover (compound / overlay)', () => {
    * when it does not, always preserving the alignment. A spacer positions the
    * trigger so each case is deterministic in the real viewport.
    */
-  const placedHost = (placement: string, spacerHeight = 0) =>
+  const placedHost = (placement: string, spacerHeight = 0, rows = 1, wrapperStyle = '') =>
     defineComponent({
       components: { Popover, PopoverTrigger, PopoverContent },
       template: `
-        <div>
+        <div style="${wrapperStyle}">
           <div style="height: ${spacerHeight}px"></div>
           <Popover placement="${placement}">
             <PopoverTrigger><button type="button">Open</button></PopoverTrigger>
-            <PopoverContent><p>Anchored content</p></PopoverContent>
+            <PopoverContent>
+              <p v-for="i in ${rows}" :key="i" style="height: 24px; margin: 0">Anchored content {{ i }}</p>
+            </PopoverContent>
           </Popover>
         </div>
       `
@@ -457,6 +459,53 @@ describe('Popover (compound / overlay)', () => {
     expect((panel() as HTMLElement).getAttribute('data-placement')).toBe('bottom-start')
   })
 
+  // ---- Size-aware placement (ENG-47063) --------------------------------------------
+  it('caps a panel taller than the viewport to the free space and scrolls it internally', async () => {
+    // Trigger near the top; 60 x 24px rows cannot fit on either side.
+    render(placedHost('bottom-start', 0, 60, 'position:fixed;top:8px;left:8px'))
+
+    await fireEvent.click(byTestId('overlay-popover__trigger') as HTMLElement)
+    await waitFor(() => expect(panel()).not.toBeNull())
+    await nextTick()
+    await nextTick()
+
+    const p = panel() as HTMLElement
+    const pr = p.getBoundingClientRect()
+    const tr = (byTestId('overlay-popover__trigger') as HTMLElement).getBoundingClientRect()
+    expect(p.getAttribute('data-placement')).toBe('bottom-start')
+    expect(pr.top).toBeGreaterThanOrEqual(tr.bottom)
+    expect(pr.bottom).toBeLessThanOrEqual(window.innerHeight)
+    expect(p.style.maxHeight).not.toBe('')
+    expect(p.scrollHeight).toBeGreaterThan(p.clientHeight)
+  })
+
+  it('stays inside the nearest scrolling ancestor instead of the window', async () => {
+    // The trigger sits in a short scroll container; the panel must not extend past it.
+    render(
+      placedHost(
+        'bottom-start',
+        0,
+        30,
+        'position:fixed;top:40px;left:8px;width:400px;height:240px;overflow:auto'
+      )
+    )
+    const wrapper = (byTestId('overlay-popover') as HTMLElement).parentElement as HTMLElement
+    // Make the container actually scroll.
+    const filler = document.createElement('div')
+    filler.style.height = '1000px'
+    wrapper.appendChild(filler)
+
+    await fireEvent.click(byTestId('overlay-popover__trigger') as HTMLElement)
+    await waitFor(() => expect(panel()).not.toBeNull())
+    await nextTick()
+    await nextTick()
+
+    const pr = (panel() as HTMLElement).getBoundingClientRect()
+    const wr = wrapper.getBoundingClientRect()
+    expect(pr.bottom).toBeLessThanOrEqual(wr.top + wrapper.clientHeight + 1)
+    expect((panel() as HTMLElement).style.maxHeight).not.toBe('')
+  })
+
   it('placement=auto resolves to one of the four corners at open time', async () => {
     const { getByTestId } = render(host({ placement: 'auto' }))
     expect(getByTestId('overlay-popover').getAttribute('data-placement')).toBe('auto')
@@ -469,6 +518,15 @@ describe('Popover (compound / overlay)', () => {
   })
 
   // ---- Scrolling a long panel ------------------------------------------------------
+  /**
+   * The "+N overflow" shape: a long list scrolling inside the panel. The panel is
+   * anchored to its trigger and re-anchors on page scroll — and that listener is
+   * registered in the CAPTURE phase (scroll does not bubble), so it also sees the
+   * panel's own scroll container. Re-anchoring on it read two bounding rects and
+   * rewrote the inline style on every scrolled frame, for a trigger that had not
+   * moved. Pinned both directions: inner scroll leaves the anchor alone, page
+   * scroll still moves it.
+   */
   const scrollableHost = () =>
     defineComponent({
       components: { Popover, PopoverTrigger, PopoverContent },
@@ -493,8 +551,9 @@ describe('Popover (compound / overlay)', () => {
     await fireEvent.click(trigger)
     await waitFor(() => expect(panel()).not.toBeNull())
 
-    // An inner scroll recomputes to identical coordinates, so `style.top` would pass
-    // either way; whether the trigger is measured at all is the observable difference.
+    // Re-anchoring is invisible on an inner scroll (the trigger has not moved, so the
+    // recomputed coordinates are identical) — asserting on `style.top` would pass in
+    // the broken state too. The observable difference is the measurement itself.
     const measure = vi.spyOn(trigger, 'getBoundingClientRect')
     // Opening anchors the panel over two ticks; let that settle before counting.
     await nextTick()

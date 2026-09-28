@@ -1,15 +1,8 @@
-// Version-locked catalog loader for the webkit MCP server.
-//
-// Resolves `@aziontech/webkit/catalog.json` from the CONSUMING project's node_modules
-// (so every tool answer — allowed imports, props/events/slots, token rules — always
-// matches the webkit version that project installed). Fail-open: if webkit (or its
-// catalog) is not resolvable, the catalog reports `available: false` and every query
-// degrades to a helpful "not available" answer instead of crashing the server.
-//
-// Test / monorepo-dogfood override: set WEBKIT_CATALOG_PATH to an explicit file.
-//
-// This mirrors the loader pattern in @aziontech/eslint-plugin-webkit so the two
-// tools always read the catalog the same way.
+// Version-locked catalog loader for the webkit MCP server. Resolves catalog.json from
+// the CONSUMING project's node_modules so every answer matches the installed webkit
+// version. Fail-open: an unresolvable catalog reports `available: false` and queries
+// degrade to "not available" instead of crashing. WEBKIT_CATALOG_PATH overrides the
+// resolution (tests / monorepo dogfood). Mirrors the eslint-plugin loader pattern.
 
 import { readFileSync } from 'node:fs'
 import { createRequire } from 'node:module'

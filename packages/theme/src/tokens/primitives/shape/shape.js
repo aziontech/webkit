@@ -1,5 +1,5 @@
-import { radius } from './radius.js'
 import { borderWidths } from '../border-widths.js'
+import { radius } from './radius.js'
 
 export const shape = {
   'shape-flat': radius.none,

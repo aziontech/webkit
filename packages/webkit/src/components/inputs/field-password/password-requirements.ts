@@ -1,14 +1,10 @@
 /**
- * One password rule. The rule carries its test, not its result: the field owns the
- * value, so it evaluates every rule against the current one and re-renders as the
- * user types. A pre-computed boolean would freeze the chips at whatever the consumer
- * passed, which is decoration rather than validation.
+ * One password rule. It carries its test, not its result: the field owns the value and
+ * re-evaluates every rule as the user types; a pre-computed boolean would freeze the
+ * chips at whatever the consumer passed.
  */
 export interface PasswordRequirement {
-  /**
-   * Stable identifier for the rule, independent of its localizable label. Every default
-   * rule carries one so a consumer removes or replaces it by key, never by the label.
-   */
+  /** Stable id, independent of the localizable label; a consumer removes or replaces a rule by key. */
   key?: string
   /** Text shown inside the chip. */
   label: string
@@ -17,9 +13,8 @@ export interface PasswordRequirement {
 }
 
 /**
- * The rule set a bare `requirements` prop enables, in the order the design shows it.
- * A consumer who needs a different set passes their own array instead; to start from
- * these and drop one, filter by `key`.
+ * The rule set a bare `requirements` prop enables, in design order. A consumer passes
+ * their own array for a different set; to start from these and drop one, filter by `key`.
  */
 export const DEFAULT_PASSWORD_REQUIREMENTS: PasswordRequirement[] = [
   { key: 'length', label: '8-128 characters', test: /^.{8,128}$/ },

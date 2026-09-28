@@ -25,13 +25,11 @@
     () => (attrs['data-testid'] as string | undefined) ?? `${ctx?.testId ?? 'data-flow'}__anchor`
   )
 
-  // Same port as flow-node, sitting outside the edge this anchor attaches to, so a connector
-  // reaching into an unstyled node lands on a port instead of a bare edge. Inherits the
-  // dashed treatment from the enclosing node's `group`.
-  //
-  // Unlike flow-node this uses a plain `left-0` / `right-0`: the anchor is an unbordered
-  // block, so its padding box and border box coincide and no pull-back is needed. Adding
-  // one here would push the port a pixel past the edge connectors.ts attaches to.
+  // Same port as flow-node, outside the edge this anchor attaches to, so a connector
+  // reaching an unstyled node lands on a port instead of a bare edge. Unlike flow-node
+  // there is no one-pixel border pull-back: the anchor is unbordered, so its padding
+  // and border boxes coincide and a pull-back would overshoot the exact edge
+  // connectors.ts attaches to.
   const PORT_CLASS =
     'pointer-events-none absolute top-1/2 size-2 -translate-y-1/2 rounded-(--radius-sm) border-solid border-[length:var(--border-width-default,1px)] border-(--border-muted) bg-(--accent) data-[flow-port=end]:left-0 data-[flow-port=end]:-translate-x-full data-[flow-port=start]:right-0 data-[flow-port=start]:translate-x-full group-data-[disabled]:border-dashed'
 

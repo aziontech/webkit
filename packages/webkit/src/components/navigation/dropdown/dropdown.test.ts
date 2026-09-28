@@ -376,7 +376,7 @@ describe('Dropdown (compound / overlay)', () => {
     expect(cls).toContain('overflow-y-auto')
   })
 
-  it('separates consecutive groups with a flush hairline (no vertical padding around the divider)', async () => {
+  it('separates consecutive groups with an edge-to-edge divider carrying the design rhythm', async () => {
     render(Host, { props: { open: true, grouped: true } })
     await waitForOpen(5)
 
@@ -389,13 +389,21 @@ describe('Dropdown (compound / overlay)', () => {
     expect(secondCls).toContain('[&:not([data-first])]:border-t')
     expect(secondCls).toContain('[&:not([data-first])]:border-(--border-default)')
 
-    expect(secondCls).not.toMatch(/(?:^|[\s:])mt-\[/)
-    expect(secondCls).not.toMatch(/(?:^|[\s:])pt-\[/)
-    expect(secondCls).not.toMatch(/\[&:not\(\[data-first\]\)\]:mt-/)
-    expect(secondCls).not.toMatch(/\[&:not\(\[data-first\]\)\]:pt-/)
+    // Figma 3775:16746 — spacing-sm above the hairline, spacing-xs below it.
+    expect(secondCls).toContain('[&:not([data-first])]:mt-(--spacing-sm)')
+    expect(secondCls).toContain('[&:not([data-first])]:pt-(--spacing-xs)')
 
+    // The rhythm rides the same data-first variant, so the classes are identical
+    // and only the attribute distinguishes the leading group.
     expect(firstCls).toBe(secondCls)
     expect(groups[0].hasAttribute('data-first')).toBe(true)
+
+    // Full bleed: the group root carries no horizontal padding of its own (the
+    // panel has none either), so the divider reaches the panel border. The rows'
+    // inset lives on the inner content wrapper instead.
+    expect(secondCls).not.toMatch(/(?:^|\s)px-/)
+    const content = groups[1].firstElementChild as HTMLElement
+    expect(content.className).toContain('px-(--spacing-xxs)')
   })
 
   // ---- Accessibility: axe on the open menu overlay --------------------------

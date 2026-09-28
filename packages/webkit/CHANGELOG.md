@@ -4,6 +4,87 @@
 
 - [Inputs] normalize z-index across all inputs (ENG-46735) ([#783](https://github.com/aziontech/webkit/issues/783)) ([25d201d](https://github.com/aziontech/webkit/commit/25d201d5ae0e6054b9189bc81c76b7d9fc8c5055))
 
+## [5.2.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@5.1.0...@aziontech/webkit@5.2.0) (2026-09-23)
+
+
+### Features
+
+* **theme:** tighten the type ladder, antialias text, and gate measure comments ([#982](https://github.com/aziontech/webkit/issues/982)) ([3de1f3b](https://github.com/aziontech/webkit/commit/3de1f3b3d666b632ef81fbe29d7def0a9adfa641))
+
+
+### Bug Fixes
+
+* **webkit:** [ENG-47063] inset a floating panel's collision padding per axis ([#988](https://github.com/aziontech/webkit/issues/988)) ([3b90fbf](https://github.com/aziontech/webkit/commit/3b90fbf47341f23a379e57a3180d9940d7f79e2e))
+* **webkit:** [ENG-47884] make the sidebar rail's drag follow the pointer and carry its content ([#985](https://github.com/aziontech/webkit/issues/985)) ([0be8ba9](https://github.com/aziontech/webkit/commit/0be8ba9d201264231544fc904b31b4c0b2465a7d))
+* **webkit:** [ENG-48120] keep a chrome block's padding when it opens the prose ([#981](https://github.com/aziontech/webkit/issues/981)) ([264428d](https://github.com/aziontech/webkit/commit/264428d1ba13e8830e6d48bb6ea5ff3ae947b07e))
+* **webkit:** render Message copy in a flow container so block content stays inside the box ([#979](https://github.com/aziontech/webkit/issues/979)) ([f867fa1](https://github.com/aziontech/webkit/commit/f867fa1672ac77c0bf536dc739aa214b636f58e1))
+* **webkit:** stop no-hardcoded-color flagging URL fragments as hex colors ([#980](https://github.com/aziontech/webkit/issues/980)) ([0386389](https://github.com/aziontech/webkit/commit/03863890470c7e8cd016a275da51ad49e658112f))
+* **webkit:** stop no-hardcoded-color flagging UUID and URL fragments as hex colors ([#978](https://github.com/aziontech/webkit/issues/978)) ([ec2b806](https://github.com/aziontech/webkit/commit/ec2b80636d7eb5bfd70a1fe246ae675fd6a238bd))
+
+
+### Documentation
+
+* **webkit:** ship the webkit-layout skill and refresh the consumer skill bundle ([#984](https://github.com/aziontech/webkit/issues/984)) ([261828c](https://github.com/aziontech/webkit/commit/261828cf93a59a92245b6fa4044c2b859f901587))
+
+## [5.1.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@5.0.0...@aziontech/webkit@5.1.0) (2026-09-18)
+
+
+### Features
+
+* **webkit:** [ENG-48075] drop templates exports; Templates stories become compositions ([#977](https://github.com/aziontech/webkit/issues/977)) ([661acf4](https://github.com/aziontech/webkit/commit/661acf4122e4f2b3feee3a3e850aa54c87c355d2))
+* **webkit:** add webkit report and webkit canary ([#967](https://github.com/aziontech/webkit/issues/967)) ([b22b124](https://github.com/aziontech/webkit/commit/b22b124bd32d56d2d464c2598c5ee0193593f442))
+* **webkit:** add webkit sync — provenance-stamped Claude bundle copies ([#970](https://github.com/aziontech/webkit/issues/970)) ([d0df1b3](https://github.com/aziontech/webkit/commit/d0df1b32d04cd40078639a018b6ce13f239a5b54))
+* **webkit:** derive the Claude bundle from cli-templates and fence the CLAUDE.md fragment ([#968](https://github.com/aziontech/webkit/issues/968)) ([444e357](https://github.com/aziontech/webkit/commit/444e357460e0bcd7ef4cbe56d0749333bf54ae3b))
+* **webkit:** lint .astro files with the ESLint presets ([#966](https://github.com/aziontech/webkit/issues/966)) ([79e92d0](https://github.com/aziontech/webkit/commit/79e92d0273de54b65fb95d28ef50e4ef4a35f27f))
+
+
+### Bug Fixes
+
+* **webkit:** [ENG-47063] flip, then shrink and scroll floating panels instead of clipping them ([#973](https://github.com/aziontech/webkit/issues/973)) ([d9b5fba](https://github.com/aziontech/webkit/commit/d9b5fba012ea73c79cea81a91f6112a57b40980c))
+* **webkit:** render the paginator page buttons as one segmented strip ([#975](https://github.com/aziontech/webkit/issues/975)) ([7a4a4b1](https://github.com/aziontech/webkit/commit/7a4a4b1bacc685fe0230e984450818eb6d462c0e))
+
+
+### Documentation
+
+* [ENG-48074] add Storybook getting started to README and align Node/pnpm versions ([#976](https://github.com/aziontech/webkit/issues/976)) ([b45b4cd](https://github.com/aziontech/webkit/commit/b45b4cd3474a7703201e6974105716f1c2f09902))
+
+## [5.0.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@4.4.0...@aziontech/webkit@5.0.0) (2026-09-09)
+
+
+### ⚠ BREAKING CHANGES
+
+* **theme:** the `description` prop is removed, and `suffix` now defaults to `/ mon` rather than `per month`.
+
+### Features
+
+* add no comment flow ([#951](https://github.com/aziontech/webkit/issues/951)) ([b7f0201](https://github.com/aziontech/webkit/commit/b7f020167b53cbea03c5d74edc63b6e7fdecbd22))
+* **theme:** add the amount type ladder ([#921](https://github.com/aziontech/webkit/issues/921)) ([5594670](https://github.com/aziontech/webkit/commit/55946702e23c0f96c5f3dcecb14ddeff8a6f00db))
+* **webkit:** give Menu rows an arrow control split by href, and make Back a button ([#952](https://github.com/aziontech/webkit/issues/952)) ([cad6c1c](https://github.com/aziontech/webkit/commit/cad6c1c64ea4758d8c1f1fa35b1782ec9c7f0176))
+* **webkit:** give SegmentedButton a size ladder and a fluid mode ([#933](https://github.com/aziontech/webkit/issues/933)) ([6a77749](https://github.com/aziontech/webkit/commit/6a777494ddf59cf422bb2d3812f39b88bd6afeee))
+* **webkit:** rework the NavigationMenu panel and fix its dead keyboard model ([#943](https://github.com/aziontech/webkit/issues/943)) ([f16cd2a](https://github.com/aziontech/webkit/commit/f16cd2ac3aeb6d4eb9429fc4ab7222b4bb34744f))
+
+
+### Bug Fixes
+
+* **webkit:** [ENG-47884] make sidebar collapse/expand animate in CSS, not JS ([#960](https://github.com/aziontech/webkit/issues/960)) ([5c4c055](https://github.com/aziontech/webkit/commit/5c4c05552fe9d8d48d624dc6eb974b94d2fa17a4))
+* **webkit:** name the phone field's country combobox and unclip its dial-code listbox ([#961](https://github.com/aziontech/webkit/issues/961)) ([844f27c](https://github.com/aziontech/webkit/commit/844f27cdf399b525a994e951388faf5917bfb301))
+* **webkit:** place overlay panels with translate so re-anchors can transition ([#932](https://github.com/aziontech/webkit/issues/932)) ([8e5ed03](https://github.com/aziontech/webkit/commit/8e5ed036e4eb463f59ed2ee49fe8dd375ff8f7bf))
+* **webkit:** rove the command palette in DOM order and drop its reserved prefix box ([#941](https://github.com/aziontech/webkit/issues/941)) ([529fac2](https://github.com/aziontech/webkit/commit/529fac2058640d39596a0deef7884025923e7d8a))
+* **webkit:** stop wrapped toast titles overlapping and pin the glyph to line one ([#900](https://github.com/aziontech/webkit/issues/900)) ([80568d2](https://github.com/aziontech/webkit/commit/80568d2bd282ee126a48f19d408da68172245ba9))
+
+## [4.4.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@4.3.0...@aziontech/webkit@4.4.0) (2026-08-10)
+
+
+### Features
+
+* **webkit:** add the Hint component, Label's hint prop, and quieter field-* helpers ([#873](https://github.com/aziontech/webkit/issues/873)) ([84ccc25](https://github.com/aziontech/webkit/commit/84ccc259eb44c5babca441ae291f23b997676877))
+
+
+### Bug Fixes
+
+* **webkit:** [ENG-47001] close the token-check guardrail gap and canonicalize v4 syntax ([#849](https://github.com/aziontech/webkit/issues/849)) ([ffd7102](https://github.com/aziontech/webkit/commit/ffd71020a72592fe667e1c33317db848d5d03275))
+* **webkit:** state Required as true/false across every spec props table ([#874](https://github.com/aziontech/webkit/issues/874)) ([173fc97](https://github.com/aziontech/webkit/commit/173fc97aee0a30fd905a821395c66c65f1fa3a6b))
+
 ## [4.3.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@4.2.1...@aziontech/webkit@4.3.0) (2026-08-07)
 
 

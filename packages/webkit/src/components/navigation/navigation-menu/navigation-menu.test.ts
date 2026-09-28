@@ -244,6 +244,196 @@ describe('NavigationMenu (composition + overlay + recursive)', () => {
     })
   })
 
+  // The keyboard model lives on the root (`onTriggerKeydown`) and reaches a button
+  // trigger through the trigger's own `@keydown`. It is asserted here because the
+  // forwarding is easy to break WITHOUT breaking anything else: an inline ternary
+  // handler compiles to a discarded expression, which leaves `Enter`/`Space` working
+  // (a native button turns those into a click) while `Escape` and the arrows go dead
+  // and nothing errors.
+  describe('size-aware placement (ENG-47063) — shared computePlacement geometry', () => {
+    // No CSS is loaded in browser mode, so the trigger is pinned with inline styles and
+    // the positioner's inline transform / CSS vars are what get asserted.
+    const positioner = () => body().getByTestId('navigation-menu__positioner')
+
+    const TALL_PANEL = (rows: number, wrapperStyle: string) => `
+      <div style="${wrapperStyle}">
+        <NavigationMenu aria-label="Primary">
+          <NavigationMenuList :highlight="false">
+            <NavigationMenuItem value="solutions">
+              <NavigationMenuTrigger>Solutions</NavigationMenuTrigger>
+              <NavigationMenuContent>
+                <NavigationMenuList label="Rows">
+                  <NavigationMenuItem
+                    v-for="i in ${rows}"
+                    :key="i"
+                    layout="entry"
+                    :href="'https://example.com/' + i"
+                    style="display:block;height:24px"
+                  >Row {{ i }}</NavigationMenuItem>
+                </NavigationMenuList>
+              </NavigationMenuContent>
+            </NavigationMenuItem>
+          </NavigationMenuList>
+          <NavigationMenuPortal>
+            <NavigationMenuPositioner side="bottom" align="start">
+              <NavigationMenuPopup>
+                <NavigationMenuViewport />
+              </NavigationMenuPopup>
+            </NavigationMenuPositioner>
+          </NavigationMenuPortal>
+        </NavigationMenu>
+      </div>
+    `
+
+    it('flips above the trigger when there is no room below', async () => {
+      const { getByRole } = renderTree(
+        TALL_PANEL(6, 'position:fixed;left:8px;right:8px;bottom:8px')
+      )
+      const trigger = getByRole('button', { name: /Solutions/ })
+      await userEvent.click(trigger)
+      await waitFor(() => expect(positioner()).toHaveAttribute('data-side', 'top'), {
+        timeout: OPEN_TIMEOUT
+      })
+      await waitFor(
+        () => {
+          const pr = positioner().getBoundingClientRect()
+          expect(pr.bottom).toBeLessThanOrEqual(trigger.getBoundingClientRect().top)
+        },
+        { timeout: OPEN_TIMEOUT }
+      )
+      expect(positioner()).not.toHaveAttribute('data-constrained')
+    })
+
+    // Viewport-independent guard for the flip above: a trailing line box reads as growth here.
+    it('keeps the positioner box equal to the popup it carries, with no trailing line box', async () => {
+      const { getByRole } = renderTree(TALL_PANEL(6, 'position:fixed;left:8px;top:8px'))
+      await userEvent.click(getByRole('button', { name: /Solutions/ }))
+      const popup = await waitFor(() => body().getByTestId('navigation-menu__popup'), {
+        timeout: OPEN_TIMEOUT
+      })
+      await waitFor(
+        () => {
+          const p = positioner().getBoundingClientRect()
+          const q = popup.getBoundingClientRect()
+          expect(p.height).toBeCloseTo(q.height, 1)
+          expect(p.bottom).toBeCloseTo(q.bottom, 1)
+        },
+        { timeout: OPEN_TIMEOUT }
+      )
+    })
+
+    // A page-column pin passes the column inset on x; on y it would drop the panel off its
+    // trigger by that same amount, which is invisible until the inset exceeds the side offset.
+    const PINNED_PANEL = `
+      <div style="position:fixed;left:0;right:0;top:8px">
+        <NavigationMenu aria-label="Primary">
+          <NavigationMenuList :highlight="false">
+            <NavigationMenuItem value="solutions">
+              <NavigationMenuTrigger>Solutions</NavigationMenuTrigger>
+              <NavigationMenuContent>
+                <NavigationMenuList label="Rows">
+                  <NavigationMenuItem
+                    layout="entry"
+                    href="https://example.com/1"
+                    style="display:block;height:24px"
+                  >Row 1</NavigationMenuItem>
+                </NavigationMenuList>
+              </NavigationMenuContent>
+            </NavigationMenuItem>
+          </NavigationMenuList>
+          <NavigationMenuPortal>
+            <NavigationMenuPositioner
+              side="bottom"
+              align="start"
+              :side-offset="12"
+              :collision-padding="{ x: 200, y: 8 }"
+            >
+              <NavigationMenuPopup>
+                <NavigationMenuViewport />
+              </NavigationMenuPopup>
+            </NavigationMenuPositioner>
+          </NavigationMenuPortal>
+        </NavigationMenu>
+      </div>
+    `
+
+    it('insets a per-axis collision padding on that axis only, keeping the panel on its trigger', async () => {
+      const { getByRole } = renderTree(PINNED_PANEL)
+      const trigger = getByRole('button', { name: /Solutions/ })
+      await userEvent.click(trigger)
+      await waitFor(() => expect(positioner()).toHaveAttribute('data-side', 'bottom'), {
+        timeout: OPEN_TIMEOUT
+      })
+      await waitFor(
+        () => {
+          const panel = positioner().getBoundingClientRect()
+          const anchor = trigger.getBoundingClientRect()
+          // X: shifted in to the 200px inset. Y: still the trigger's edge + sideOffset,
+          // NOT pushed down to the X inset.
+          expect(panel.left).toBeGreaterThanOrEqual(200)
+          expect(Math.round(panel.top)).toBe(Math.round(anchor.bottom + 12))
+        },
+        { timeout: OPEN_TIMEOUT }
+      )
+    })
+
+    it('caps the popup to the free space and marks the positioner constrained when nothing fits', async () => {
+      const { getByRole } = renderTree(TALL_PANEL(80, 'position:fixed;left:8px;right:8px;top:8px'))
+      const trigger = getByRole('button', { name: /Solutions/ })
+      await userEvent.click(trigger)
+      await waitFor(() => expect(positioner()).toHaveAttribute('data-constrained', ''), {
+        timeout: OPEN_TIMEOUT
+      })
+      const p = positioner()
+      expect(p).toHaveAttribute('data-side', 'bottom')
+      const available = Number.parseFloat(p.style.getPropertyValue('--available-height'))
+      const triggerRect = trigger.getBoundingClientRect()
+      // The cap ends collisionPadding (8px) above the viewport edge, below the trigger.
+      expect(available).toBeGreaterThan(0)
+      expect(triggerRect.bottom + 8 + available).toBeLessThanOrEqual(window.innerHeight - 8 + 1)
+    })
+  })
+
+  describe('keyboard model on a button trigger (root.onTriggerKeydown)', () => {
+    it('Escape closes the open panel', async () => {
+      const { getByRole, getByTestId } = renderTree(COMPOSED)
+
+      const trigger = getByRole('button', { name: /Solutions/ })
+      await userEvent.click(trigger)
+      await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'true'), {
+        timeout: OPEN_TIMEOUT
+      })
+
+      await fireEvent.keyDown(trigger, { key: 'Escape' })
+
+      await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'false'), {
+        timeout: OPEN_TIMEOUT
+      })
+      expect(getByTestId('navigation-menu')).not.toHaveAttribute('data-open')
+    })
+
+    it('ArrowRight roves to the next trigger and opens it', async () => {
+      const { getByRole } = renderTree(COMPOSED)
+
+      const solutions = getByRole('button', { name: /Solutions/ })
+      const products = getByRole('button', { name: /Products/ })
+
+      await userEvent.click(solutions)
+      await waitFor(() => expect(solutions).toHaveAttribute('aria-expanded', 'true'), {
+        timeout: OPEN_TIMEOUT
+      })
+
+      await fireEvent.keyDown(solutions, { key: 'ArrowRight' })
+
+      // Roving moves BOTH focus and the open value onto the next trigger.
+      await waitFor(() => expect(products).toHaveAttribute('aria-expanded', 'true'), {
+        timeout: OPEN_TIMEOUT
+      })
+      expect(document.activeElement).toBe(products)
+      expect(solutions).toHaveAttribute('aria-expanded', 'false')
+    })
+  })
+
   describe('events on real user actions (navigation-menu-root.vue emits)', () => {
     it('emits update:value with the item value when a submenu opens', async () => {
       const updateValues: Array<unknown> = []
@@ -393,7 +583,7 @@ describe('NavigationMenu (composition + overlay + recursive)', () => {
   })
 
   describe('recursive / nested composition (list -> item -> content -> list -> entry)', () => {
-    it('renders the nested panel list group with its overline heading and entry rows two levels deep', async () => {
+    it('renders the nested panel list group with its group heading and entry rows two levels deep', async () => {
       const { getByRole } = renderTree(COMPOSED)
       const trigger = getByRole('button', { name: /Solutions/ })
 

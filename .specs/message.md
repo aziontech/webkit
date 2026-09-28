@@ -64,7 +64,7 @@ import Message from '@aziontech/webkit/message'
 | Slot | Scope | Notes |
 |---|---|---|
 | `action` | — | Custom action control; replaces the built-in Button when provided. |
-| `default` | — | Message copy. Accepts inline content — plain text plus anchors, which the message region styles with the `.text-link` token. Falls back to `label` when empty. |
+| `default` | — | Message copy. Inline content — plain text plus anchors, which the message region styles with the `.text-link` token — or flow content such as paragraphs and a list. The copy region is a flow container (a `div`, not a `p`), so block markup arriving from a server render stays inside it instead of being closed out beside the copy. Falls back to `label` when empty. |
 
 ## States
 

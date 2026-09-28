@@ -239,7 +239,7 @@
           :aria-label="title"
           :data-testid="`${testId}__panel`"
           :style="panelStyle"
-          class="flex min-w-(--container-2xs) max-w-(--container-xs) flex-col gap-(--spacing-sm) rounded-(--shape-card) border border-solid border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface) p-(--spacing-sm) shadow-(--shadow-sm) outline-none [transform-origin:var(--popup-origin,top_left)]"
+          class="flex min-w-(--container-2xs) max-w-(--container-xs) flex-col gap-(--spacing-sm) overflow-y-auto rounded-(--shape-card) border border-solid border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface) p-(--spacing-sm) shadow-(--shadow-sm) outline-none [transform-origin:var(--popup-origin,top_left)]"
         >
           <p class="text-label-md text-(--text-default)">{{ title }}</p>
 

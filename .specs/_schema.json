@@ -27,6 +27,7 @@
         "code",
         "content",
         "data",
+        "documentation",
         "feedback",
         "inputs",
         "layout",

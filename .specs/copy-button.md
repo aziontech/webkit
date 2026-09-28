@@ -4,15 +4,15 @@ category: actions
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 3aca1bad70f318147fa29ef5fd87bebc8fead687ef297e912e1152572ab8df33
+checksum: 5530c5669e227017fe27ed86aaa44b617b69a6c41e197f26ac7679382dc530f6
 created: 2026-06-02
-last_updated: 2026-06-30
+last_updated: 2026-08-19
 ---
 # Copy Button — Component Spec
 
 ## Purpose
 
-Icon-only control that copies a string to the clipboard and briefly confirms success. Composes `IconButton` for visuals and interaction tokens.
+Icon-only control that copies a string to the clipboard and briefly confirms success. Composes `IconButton` for visuals and interaction tokens, and `Tooltip` for its name: an icon-only button is silent to a pointer user until hovered, so the glyph is always labelled on hover/focus. The tooltip text is the same string as the accessible name — `ariaLabel` while idle, `copiedLabel` for the two seconds after a write — so the confirmation is seen as well as announced. It is suppressed with `disabled`.
 
 ## Props
 
@@ -40,12 +40,14 @@ Icon-only control that copies a string to the clipboard and briefly confirms suc
 - Visual states: `default`, `copied`, `disabled`
 - `data-state` mirrors `default` or `copied`
 - `data-disabled` mirrors the `disabled` prop
+- The composed `Tooltip` carries its own `data-state` (`open` | `closed`) and is disabled with the button
 
 ## Motion & Animations
 
 | Trigger | Animation / Transition | Token | Reduced-motion fallback |
 |---|---|---|---|
 | state change | `transition-colors duration-150 ease-out` (via `IconButton`) | inline | `motion-reduce:transition-none` |
+| tooltip open / close | popup scale-in / scale-out, owned by the composed `Tooltip` (see `.specs/tooltip.md`) | `semantic/animations.js` | reduced-motion fallback handled by `Tooltip` |
 
 ## Tokens
 
@@ -57,6 +59,7 @@ Icon-only control that copies a string to the clipboard and briefly confirms suc
 | spacing | `var(--spacing-3)` |
 | shape | `var(--shape-elements)` |
 | ring | `var(--ring-color)` |
+| tooltip surface / text | `var(--bg-contrast)` / `var(--text-contrast)` (via `Tooltip`) |
 
 ## Theme gaps
 

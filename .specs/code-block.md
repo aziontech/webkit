@@ -7,9 +7,9 @@ spec_version: 4
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761
   node_id: 4567:33761
-checksum: f3c3b07afdbd690b060f9589f213d9fe36f862dfb376920792438fd662e94a1d
+checksum: 33783de4447df0be623ec01665ef61c9088fe149f8d345c25496f8cfe214d8d0
 created: 2026-05-28
-last_updated: 2026-08-04
+last_updated: 2026-08-19
 ---
 
 
@@ -19,7 +19,7 @@ last_updated: 2026-08-04
 
 Read-only code viewer for docs, API examples, and configuration previews. Supports four Figma-documented layouts that share one monolithic shell:
 
-1. **Language switcher** ([4567:33761](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761)) — tabbed snippets with an animated underline, optional filename bar, syntax highlighting, and copy.
+1. **Language switcher** ([4567:33761](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761)) — tabbed snippets with a sliding pill, optional filename bar, syntax highlighting, and copy.
 2. **Show filename** ([4567:30198](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-30198)) — single snippet with a raised filename bar (language icon + name), no tabs.
 3. **Diff** ([4567:29012](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-29012)) — per-line added/removed markers (`+`/`-`), semantic row backgrounds, and a 2 px leading bar; no tabs or filename bar.
 4. **Highlighted line** ([4567:31473](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-31473)) — one active line with info background and leading bar; no tabs or filename bar.
@@ -123,21 +123,24 @@ For multiple languages, add one tab per snippet (each with its own `code`). Use 
 
 | Region | Visible when |
 |---|---|
-| Tab header (`CodeBlockHeader`, 48 px tab height) | `tabs.length > 1` |
+| Tab header (`CodeBlockHeader`, 40 px strip: a 32 px tab over a 4 px inset) | `tabs.length > 1` |
 | Filename bar (`FileName`, 40 px) | active tab has `fileName` |
 | Diff gutter (`+`/`-` + 8 px spacer on unchanged lines) | active tab `lineChanges.length > 0` |
 | Line highlight (info background + 2 px leading bar) | active tab `highlightedLine` is set |
 
 When only one tab is provided and it has no `fileName`, the shell is code content + copy only (minimal block).
 
-Code content scrolls inside `@aziontech/webkit/layout/scroll-area` (`orientation="both"`, capped at a `320 px` max height so shorter snippets fit their content and taller ones scroll). Lines never wrap (`whitespace-pre`); on narrow viewports the scroll region grows horizontally so long lines stay on one row. The copy control (a `CopyButton`, `kind="outlined"` `size="small"`) is absolutely positioned on the non-scrolling content shell (`__content`) so it stays pinned top-right while lines scroll.
+Code content scrolls inside `@aziontech/webkit/layout/scroll-area` (`orientation="both"`, capped at a `320 px` max height so shorter snippets fit their content and taller ones scroll). Lines never wrap (`whitespace-pre`); on narrow viewports the scroll region grows horizontally so long lines stay on one row.
+
+**The shell is fluid: it takes the width its container gives it and never grows past it.** Long lines are a scroll, never a wider block — so the root is a size container (`@container`, i.e. inline-size containment) and its code width is invisible to the layout above it. Without that, the block's intrinsic width leaks upward: an `auto`-sized grid track or flex row (a one-column `grid` on mobile, a `md:grid-cols-2` panel below its breakpoint) sizes itself to the widest code line and the block overflows the viewport instead of scrolling — a consumer's `min-w-0` on the wrapper cannot fix it, because `min-width` is a floor on the intrinsic contribution, not a cap. The copy control (a `CopyButton`, `kind="outlined"` `size="small"`) is absolutely positioned on the non-scrolling content shell (`__content`) so it stays pinned top-right while lines scroll. **On a single-line block it centres on that row instead** (`data-single-line` on the anchor): the shell is 44 px, the control 28 px, so the `--spacing-sm` top inset would leave it 4 px below the line's own centre. Every line reserves the control's full footprint on its right (`pr-11` = 28 px control + its 12 px inset), so a long line always scrolls clear of it rather than under it.
 
 ## Motion & Animations
 
 | Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
 |---|---|---|---|
-| tab change (indicator) | sliding underline via `transform` / `width` transition | `duration-moderate-02` · `ease-productive-entrance` (DESIGN.md § Motion primitives) | `motion-reduce:transition-none` |
-| tab panel change | content slide + opacity | `duration-moderate-02` · `ease-productive-entrance` (DESIGN.md § Motion primitives) | `motion-reduce:transform-none motion-reduce:transition-none` |
+| tab change (indicator) | sliding pill via `transform` / `width` transition | `duration-moderate-02` · `ease-productive-entrance` (DESIGN.md § Motion primitives) | `motion-reduce:transition-none` |
+| tab panel change | content enters **line by line**: each row slides from the direction of travel + fades, `24ms` a line, the step capped at 12 lines | `duration-moderate-02` · `ease-productive-entrance` (DESIGN.md § Motion primitives) | `motion-reduce:transform-none motion-reduce:opacity-100 motion-reduce:transition-none` |
+| tab panel height | the shell animates between the two panels' heights (pin the old height, measure the new, transition `height`) | `duration-moderate-02` · `ease-productive-entrance` (DESIGN.md § Motion primitives) | skipped entirely under `prefers-reduced-motion` (height snaps) |
 | tab label hover | `transition-colors duration-fast-02 ease-productive-entrance` | `duration-fast-02` · `ease-productive-entrance` | `motion-reduce:transition-none` |
 | code line hover | `transition-opacity duration-fast-02 ease-productive-entrance` on row ghost layer (`--bg-hover`) | `duration-fast-02` · `ease-productive-entrance` (DESIGN.md § Interactive states) | `motion-reduce:transition-none` |
 | line entrance (`animateLines`) | per-line slide from `-8px` + opacity, staggered `300ms` | `duration-moderate-02` · `ease-productive-entrance` | `motion-reduce:transform-none motion-reduce:opacity-100 motion-reduce:transition-none` |
@@ -146,13 +149,14 @@ Code content scrolls inside `@aziontech/webkit/layout/scroll-area` (`orientation
 
 | Region | Token (DESIGN.md) |
 |---|---|
-| tab typography | `.text-overline-sm` |
+| tab typography | `.text-label-sm` |
 | filename typography | `.text-label-code-sm` |
 | code typography | `.text-label-code-sm` |
 | shell surface | `var(--bg-surface)` |
 | filename bar surface | `var(--bg-surface-raised)` |
 | border | `var(--border-default)` |
-| tab indicator | `var(--border-selected)` |
+| tab strip surface | `var(--bg-canvas)` |
+| tab indicator (pill) | `var(--bg-surface)` fill · `var(--border-default)` hairline · `var(--shadow-sm)` |
 | text default / muted | `var(--text-default)` / `var(--text-muted)` |
 | spacing | `var(--spacing-xxs)` / `var(--spacing-xs)` / `var(--spacing-sm)` / `var(--spacing-lg)` |
 | shape | `var(--shape-elements)` / `var(--shape-button)` |
@@ -176,7 +180,9 @@ Code content scrolls inside `@aziontech/webkit/layout/scroll-area` (`orientation
 
 ## Theme gaps
 
-| _none_ | — | — |
+| Gap | Shipped instead | Why |
+|---|---|---|
+| The Figma Language switcher frame ([4567:33761](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761)) draws the active tab as a 2 px underline on a `var(--bg-surface)` strip. | A sliding **pill**: the strip steps down to `var(--bg-canvas)` and the active tab carries `var(--bg-surface)` — the code surface itself — under a `var(--border-default)` hairline and `var(--shadow-sm)`, behind a sentence-case `.text-label-sm` label. | The pill ties the tab to the panel it opens (the active tab *is* the surface below it), which an underline on the same fill cannot say; and it is the anatomy the docs layer's reference reads as. The motion is unchanged — the same measured `transform` / `width` slide, only the indicator's shape and fill differ. Figma frame to be updated to match; raise with design before the next spec revision. |
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -197,6 +203,8 @@ Code content scrolls inside `@aziontech/webkit/layout/scroll-area` (`orientation
 - WithHighlightedLine — single tab with `highlightedLine={6}` (Figma: Highlighted).
 - WithAnimatedLines — single tab with `animateLines={true}` for staggered website entrance.
 - Shell — single tab with `language: 'bash'`; justified because the command tokeniser is a distinct rendered surface from the expression one (program, flags, operator hand-off, expansion, trailing comment) that no JavaScript sample exercises.
+- UnevenTabs — two tabs whose snippets have different line counts; the only geometry where the shell's height changes on a swap, so it is what exercises the height transition and the per-line entrance together.
+- SingleLine — one `bash` line, `showLineNumbers={false}`, no tabs and no filename bar: the minimal shell, and the one geometry where the copy control centres on its row instead of hanging from the top inset.
 - Borderless — Default sample with `border={false}`; the outer card border is dropped so the block sits flush inside a surface that already frames it.
 
 ## Constraints — DO NOT

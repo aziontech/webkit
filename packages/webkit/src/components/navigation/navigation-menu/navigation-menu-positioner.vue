@@ -13,6 +13,8 @@
 
   export type NavigationMenuSide = 'top' | 'right' | 'bottom' | 'left'
   export type NavigationMenuAlign = 'start' | 'center' | 'end'
+  /** Collision padding: one number for both axes, or an inset per axis. */
+  export type NavigationMenuCollisionPadding = number | { x: number; y: number }
 
   interface Props {
     /** Preferred placement relative to the active trigger. */
@@ -25,8 +27,8 @@
     alignOffset?: number
     /** Padding reserved for the arrow (px). */
     arrowPadding?: number
-    /** Collision padding (px). */
-    collisionPadding?: number
+    /** Distance kept from the boundary edges (px); an object insets each axis on its own. */
+    collisionPadding?: NavigationMenuCollisionPadding
     /** Sticky positioning while scrolling. */
     sticky?: boolean
     /** Disables tracking the active trigger as anchor. */
@@ -75,6 +77,8 @@
     floatingStyles,
     resolvedSide,
     resolvedAlign,
+    availableWidth,
+    availableHeight,
     arrowStyles,
     placed,
     popupOrigin,
@@ -113,11 +117,17 @@
 
   const positionerHidden = computed(() => !root.menuPopupMounted.value)
 
+  // The popup reads these caps (`max-w` / `max-h`); the viewport scrolls only while
+  // `data-constrained` is set, so an unconstrained morph never flashes a scrollbar.
+  const constrained = computed(
+    () => availableWidth.value !== null || availableHeight.value !== null
+  )
+
   const positionerStyle = computed(() => ({
     ...floatingStyles.value,
     '--popup-origin': popupOrigin.value,
-    '--available-width': '100vw',
-    '--available-height': '100vh',
+    '--available-width': availableWidth.value === null ? '100vw' : `${availableWidth.value}px`,
+    '--available-height': availableHeight.value === null ? '100vh' : `${availableHeight.value}px`,
     ...(root.menuOpen.value ? {} : { pointerEvents: 'none' })
   }))
 
@@ -149,6 +159,7 @@
     "
     :data-side="resolvedSide"
     :data-align="resolvedAlign"
+    :data-constrained="constrained ? '' : undefined"
     @pointerenter="onPointerEnter"
   >
     <slot />

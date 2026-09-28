@@ -9,16 +9,9 @@ import PaginationButton from './pagination-button/pagination-button.vue'
 import PaginatorInfo from './paginator-info/paginator-info.vue'
 import PaginatorPageSize from './paginator-page-size/paginator-page-size.vue'
 
-// `Default` and `Buttons` are string-template stories that use `<Paginator.Button>`
-// dot-notation while registering only `Paginator`; under the runtime template
-// compiler those tags stay unresolved custom elements, so only `DataDriven`
-// (which renders `<Paginator v-bind=.../>` root-only) is exercised here. See notes.
+// Default/Buttons are string-template stories whose Paginator.Button dot-notation
+// the runtime template compiler cannot resolve, so only DataDriven is exercised.
 const { DataDriven } = composeStories(stories)
-
-// The Paginator is a COMPOSITION component: `index.ts` attaches the three public
-// sub-components to the root via Object.assign, and shared state (the root
-// data-testid) flows through provide/inject (injection-key.ts -> PaginatorContext).
-// Every assertion below is grounded in the real .vue sources.
 
 describe('Paginator (composition)', () => {
   describe('compound API — dot-notation resolves to the sub-components', () => {
@@ -34,7 +27,6 @@ describe('Paginator (composition)', () => {
       const { getByTestId } = render(Paginator)
       const root = getByTestId('data-paginator')
       expect(root.tagName).toBe('NAV')
-      // ariaLabel default = 'Pagination'
       expect(root.getAttribute('aria-label')).toBe('Pagination')
     })
 
@@ -51,7 +43,6 @@ describe('Paginator (composition)', () => {
     })
 
     it('does not render its own info/controls when total is undefined', () => {
-      // Template: <PaginatorInfo v-if="dataDriven"> and <PaginatorPageSize v-if="dataDriven">
       const { queryByTestId } = render(Paginator)
       expect(queryByTestId('data-paginator__info')).toBeNull()
       expect(queryByTestId('data-paginator__page-size')).toBeNull()
@@ -60,7 +51,6 @@ describe('Paginator (composition)', () => {
 
   describe('provide/inject — sub-components derive their testid from the root context', () => {
     it('derives BEM-suffixed testids from the root data-testid when composed inside the root', () => {
-      // The root provides { testId } and each sub-component reads it via inject.
       const { getByTestId } = render(Paginator, {
         attrs: { 'data-testid': 'my-paginator' },
         slots: {
@@ -68,7 +58,6 @@ describe('Paginator (composition)', () => {
           default: `<button>page</button>`
         }
       })
-      // Root testid override propagates.
       expect(getByTestId('my-paginator').tagName).toBe('NAV')
     })
 
@@ -76,17 +65,13 @@ describe('Paginator (composition)', () => {
       const { getByTestId } = render(Paginator, {
         attrs: { 'data-testid': 'ctx-paginator' },
         slots: {
-          // Slot content is rendered in the root's setup scope, so inject resolves
-          // the PaginatorContext provided by the root.
           default: () => null
         }
       })
-      // Root present with the overridden id.
       expect(getByTestId('ctx-paginator')).toBeTruthy()
     })
 
     it('a standalone PaginatorInfo (no root) falls back to the default testid', () => {
-      // inject(..., null) -> `data-paginator__info` fallback.
       const { getByTestId } = render(PaginatorInfo, { slots: { default: 'hello' } })
       const el = getByTestId('data-paginator__info')
       expect(el.tagName).toBe('SPAN')
@@ -99,13 +84,10 @@ describe('Paginator (composition)', () => {
       const { getByTestId, getByRole, getAllByRole } = render(Paginator, {
         props: { total: 30, pageSize: 10, page: 1 }
       })
-      // Info text: "Showing 1 to 10 of 30 entries" (rangeStart..rangeEnd of total).
       const info = getByTestId('data-paginator__info')
       expect(info.textContent).toContain('Showing 1 to 10 of 30 entries')
 
-      // Page-size selector renders (data-driven).
       expect(getByTestId('data-paginator__page-size')).toBeTruthy()
-      // Its <select> exposes the "Rows per page" accessible name.
       expect(getByRole('combobox', { name: 'Rows per page' })).toBeTruthy()
 
       // pageCount = ceil(30/10) = 3 -> buttons: Previous, 1, 2, 3, Next = 5.
@@ -114,7 +96,6 @@ describe('Paginator (composition)', () => {
     })
 
     it('disables Previous on the first page and enables Next', () => {
-      // currentPage <= 1 -> Previous disabled; currentPage >= pageCount -> Next disabled.
       const { getByRole } = render(Paginator, { props: { total: 30, pageSize: 10, page: 1 } })
       const prev = getByRole('button', { name: /Previous/i })
       const next = getByRole('button', { name: /Next/i })
@@ -130,10 +111,8 @@ describe('Paginator (composition)', () => {
 
     it('marks the current page button with aria-current="page"', () => {
       const { getByRole } = render(Paginator, { props: { total: 30, pageSize: 10, page: 2 } })
-      // The "2" number button is the selected/current page.
       const current = getByRole('button', { name: '2' })
       expect(current.getAttribute('aria-current')).toBe('page')
-      // A non-current page must not carry aria-current.
       expect(getByRole('button', { name: '1' }).getAttribute('aria-current')).toBeNull()
     })
 
@@ -142,12 +121,10 @@ describe('Paginator (composition)', () => {
       const { getAllByRole, getByRole } = render(Paginator, {
         props: { total: 200, pageSize: 10, page: 1, siblingCount: 1 }
       })
-      // The "more" button carries data-kind="more" (source: :kind => 'more').
       const moreButtons = getAllByRole('button').filter(
         (b) => b.getAttribute('data-kind') === 'more'
       )
       expect(moreButtons.length).toBeGreaterThanOrEqual(1)
-      // The last edge page (20) is always rendered.
       expect(getByRole('button', { name: '20' })).toBeTruthy()
     })
   })
@@ -185,7 +162,6 @@ describe('Paginator (composition)', () => {
         props: { total: 30, pageSize: 10, page: 2 }
       })
       await fireEvent.click(getByRole('button', { name: '2' }))
-      // No emission because the clamped target equals the current page.
       expect(emitted()['update:page']).toBeUndefined()
     })
 
@@ -193,8 +169,6 @@ describe('Paginator (composition)', () => {
       const { getByRole, emitted } = render(Paginator, {
         props: { total: 30, pageSize: 10, page: 1 }
       })
-      // PaginationButton.handleClick returns early when disabled; and a disabled
-      // native button is inert. Either way, no emission.
       await fireEvent.click(getByRole('button', { name: /Previous/i }))
       expect(emitted()['update:page']).toBeUndefined()
     })
@@ -208,7 +182,6 @@ describe('Paginator (composition)', () => {
 
       expect(emitted()['update:pageSize']).toBeTruthy()
       expect(emitted()['update:pageSize'][0]).toEqual([25])
-      // currentPage (3) !== 1 -> the root resets to page 1.
       expect(emitted()['update:page'][0]).toEqual([1])
     })
 
@@ -220,15 +193,12 @@ describe('Paginator (composition)', () => {
       await fireEvent.update(select, '50')
 
       expect(emitted()['update:pageSize'][0]).toEqual([50])
-      // currentPage === 1 -> no page reset emitted.
       expect(emitted()['update:page']).toBeUndefined()
     })
   })
 
   describe('v-model round-trips (v-model:page / v-model:pageSize)', () => {
     it('emitted update:page reflects a click and can drive the bound page', async () => {
-      // Round-trip: render at page 1, click "2", feed the emitted value back as the prop,
-      // and assert the current-page marker moves to 2.
       const { getByRole, emitted, rerender } = render(Paginator, {
         props: { total: 30, pageSize: 10, page: 1 }
       })
@@ -278,7 +248,6 @@ describe('Paginator (composition)', () => {
     })
 
     it('kind="more" hides the default slot content', () => {
-      // Template: <slot v-if="kind !== 'more'" /> -> the "more" glyph shows, slot text does not.
       const { getByRole } = render(PaginationButton, {
         props: { kind: 'more' },
         slots: { default: 'SHOULD-NOT-SHOW' }
@@ -306,7 +275,6 @@ describe('Paginator (composition)', () => {
     })
 
     it('folds a modelValue that is not in the options into the option list (never blank)', () => {
-      // displayOptions: options does not include 3 -> [...options, 3].sort => [3, 10, 25, 50, 100].
       const { getByRole } = render(PaginatorPageSize, {
         props: { modelValue: 3, options: [10, 25, 50, 100] }
       })
@@ -329,14 +297,8 @@ describe('Paginator (composition)', () => {
   })
 
   describe('composed compound tree (dot-notation sub-components inside the root)', () => {
-    // Render the compound by hand so the sub-components resolve through the real
-    // SFC compiler (the string-template Default/Buttons stories register only
-    // `Paginator`, so `<Paginator.Button>` there stays an unresolved custom
-    // element — see notes; those two story fixtures are omitted for that reason).
-    // Prev/Next are icon-only: PaginationButton renders its default slot only for
-    // `kind="number"` (the chevron shows for previous/next), so their accessible
-    // name comes from `aria-label` — the same pattern the data-driven root uses
-    // (`aria-label="Previous page"` / `"Next page"`), flowed through v-bind="$attrs".
+    // Prev/Next render slot content only for kind=number, so their accessible
+    // name must come from aria-label (the data-driven root does the same).
     const Composed = {
       components: { Paginator, PaginationButton, PaginatorInfo, PaginatorPageSize },
       template: `
@@ -357,21 +319,16 @@ describe('Paginator (composition)', () => {
 
     it('renders Info in the info region, the buttons in the center, and PageSize in controls', () => {
       const { getByTestId, getByRole } = render(Composed)
-      // Info sub-component derives its testid from the injected root context.
       expect(getByTestId('data-paginator__info').textContent).toContain(
         'Showing 1 to 10 of 20 entries'
       )
-      // The authored "1" button is selected -> aria-current="page".
       expect(getByRole('button', { name: '1' }).getAttribute('aria-current')).toBe('page')
-      // Previous is disabled as authored.
       expect(getByRole('button', { name: /Previous/i }).hasAttribute('disabled')).toBe(true)
-      // PageSize selector rendered via #controls slot.
       expect(getByRole('combobox', { name: 'Rows per page' })).toBeTruthy()
     })
 
     it('the composed sub-components share the root testid context (__info + __page-size)', () => {
       const { getByTestId } = render(Composed)
-      // Both derive `${ctx.testId}__*` from the same provided context.
       expect(getByTestId('data-paginator__info')).toBeTruthy()
       expect(getByTestId('data-paginator__page-size')).toBeTruthy()
     })
@@ -380,7 +337,6 @@ describe('Paginator (composition)', () => {
   describe('composeStories (data-driven fixture runs in-test)', () => {
     it('DataDriven story wires v-model and renders the windowed controls (total 200)', () => {
       const { getByTestId, getByRole } = render(DataDriven)
-      // Data-driven info: total 200, pageSize 10, page 1 -> "Showing 1 to 10 of 200 entries".
       expect(getByTestId('data-paginator__info').textContent).toContain(
         'Showing 1 to 10 of 200 entries'
       )
@@ -391,9 +347,8 @@ describe('Paginator (composition)', () => {
 
   describe('a11y (axe against styled DOM)', () => {
     it('data-driven paginator (no overflow ellipsis) has no violations', async () => {
-      // total 30 / pageSize 10 = 3 pages -> no "more" button, so every control has
-      // an accessible name. (A config that renders the ellipsis button trips axe
-      // button-name; see notes.)
+      // 3 pages -> no "more" button; a windowed config trips axe button-name on the
+      // unnamed ellipsis button (known component gap).
       const { container } = render(Paginator, {
         props: { total: 30, pageSize: 10, page: 2, ariaLabel: 'Results pages' }
       })
@@ -401,9 +356,7 @@ describe('Paginator (composition)', () => {
     })
 
     it('the hand-composed compound tree has no violations', async () => {
-      // Icon-only prev/next must carry an `aria-label` (their slot text is not
-      // rendered — only `kind="number"` shows the slot); without it axe trips
-      // button-name. This mirrors the data-driven root's own aria-labels.
+      // Icon-only prev/next need aria-label or axe trips button-name.
       const Composed = {
         components: { Paginator, PaginationButton, PaginatorInfo, PaginatorPageSize },
         template: `

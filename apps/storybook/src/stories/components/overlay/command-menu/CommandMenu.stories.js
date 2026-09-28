@@ -268,8 +268,8 @@ export const Default = {
 // story renders the canvas AND builds the snippet, so the two cannot drift.
 // Three groups, only one separator — so the story shows both ways groups are
 // spaced (around a separator, and between two bare groups). Half the items carry
-// a `prefix` icon and half do not: the icon column is reserved for the whole
-// list, so every label starts on the same x either way.
+// a `prefix` icon and half do not: the box is rendered only by the rows that
+// supply a glyph, so an icon-less row carries no empty column.
 const GROUPED_TEMPLATE = `<Button label="Open grouped palette" kind="primary" @click="open = true" />
 
 <CommandMenu v-model:open="open" shortcut="">
@@ -314,7 +314,7 @@ export const Grouped = {
       controls: { disable: true },
       description: {
         story:
-          'Three labeled groups — the central grouping anatomy — showing both spacings: `--spacing-sm` above a `CommandMenuSeparator` and `--spacing-xs` below it, and `--spacing-sm` between two groups with no separator between them. Half the items carry a `prefix` icon and half do not; because one item in the list has a prefix, every item reserves the icon column, so all the labels start on the same x. Opens from a button; `shortcut=""` opts out of the global binding so only Default owns ⌘K on this page.'
+          'Three labeled groups — the central grouping anatomy — showing both spacings: `--spacing-sm` above a `CommandMenuSeparator` and `--spacing-xs` below it, and `--spacing-sm` between two groups with no separator between them. Half the items carry a `prefix` icon and half do not; the leading box is rendered only by the rows that supply a glyph, so an icon-less row puts no empty element in the DOM and carries no indent. Opens from a button; `shortcut=""` opts out of the global binding so only Default owns ⌘K on this page.'
       },
       source: {
         code: toSfc(

@@ -35,17 +35,15 @@ describe('CardPricing', () => {
     expect(getByTestId(`${ROOT}__title`)).toHaveTextContent('Pro')
   })
 
-  it('omits the description sub-element by default (empty string)', () => {
-    const { queryByTestId } = render(CardPricing, { props: {} })
-    // description default is '' -> v-if="description" is falsy
-    expect(queryByTestId(`${ROOT}__description`)).toBeNull()
-  })
-
-  it('renders the description sub-element when provided', () => {
-    const { getByTestId } = render(CardPricing, {
-      props: { description: 'Best for growing teams.' }
+  it("has no description band at all — the caveat is the card's only prose region", () => {
+    // The Figma component carries ONE prose region, below the amount. A second band
+    // above it duplicated the job, so it is gone: passing the old prop renders nothing
+    // and adds no element, in either composition.
+    const { queryByTestId } = render(CardPricing, {
+      props: { description: 'Best for growing teams.', aligned: true, slotPosition: 'middle' }
     })
-    expect(getByTestId(`${ROOT}__description`)).toHaveTextContent('Best for growing teams.')
+    expect(queryByTestId(`${ROOT}__description`)).toBeNull()
+    expect(queryByTestId(`${ROOT}__pricing-details`)).not.toBeNull()
   })
 
   it('hides the tag by default (showTag false)', () => {
@@ -187,6 +185,36 @@ describe('CardPricing', () => {
       slots: { default: '<ul><li>Feature one</li><li>Feature two</li></ul>' }
     })
     await expectNoA11yViolations(container)
+  })
+
+  it('does not render the caveat band when aligned is off and the copy is empty', () => {
+    const { queryByTestId } = render(CardPricing, { props: {} })
+    // pricingDetails '' -> no band, so a lone card is sized by what it actually says.
+    expect(queryByTestId(`${ROOT}__pricing-details`)).toBeNull()
+  })
+
+  it('renders the caveat band under aligned even with no copy to put in it', () => {
+    // This is the whole mechanism: a tier with no caveat still has to occupy the lines
+    // its siblings do, or the row does not line up. Without the empty band there is
+    // nothing for the reservation to apply to.
+    const { getByTestId } = render(CardPricing, { props: { aligned: true } })
+
+    expect(getByTestId(`${ROOT}__pricing-details`).textContent?.trim()).toBe('')
+    expect(getByTestId(ROOT).getAttribute('data-aligned')).toBe('true')
+  })
+
+  it('leaves data-aligned off by default, so the reservation is opt-in', () => {
+    const { getByTestId } = render(CardPricing, { props: {} })
+    expect(getByTestId(ROOT).getAttribute('data-aligned')).toBeNull()
+  })
+
+  it('keeps the pricing-details band empty when showPricingDetails is off', () => {
+    // The band is reserved (aligned) but the copy is suppressed — the row still lines
+    // up and the caveat is genuinely not stated.
+    const { getByTestId } = render(CardPricing, {
+      props: { aligned: true, pricingDetails: 'Billed annually.', showPricingDetails: false }
+    })
+    expect(getByTestId(`${ROOT}__pricing-details`).textContent?.trim()).toBe('')
   })
 
   it('renders the composed Default story fixture (bottom slot, contained surface)', () => {

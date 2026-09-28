@@ -45,18 +45,13 @@
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'input-chip')
 
-  // One string for the remove control's tooltip AND its accessible name, so what a
-  // pointer user is shown and what a screen-reader user hears cannot drift. Naming the
-  // subject matters most in a row of chips, where four identical "Remove" controls sit
-  // side by side: `label` is what tells them apart.
+  // One string for the remove control's tooltip AND its accessible name, so they cannot
+  // drift; in a row of chips, `label` is what tells identical Remove controls apart.
   const removeLabel = computed(() => (props.label ? `Remove ${props.label}` : 'Remove'))
 
-  // Presence is the CONSUMER's call: emit and stop. The previous build faded itself to
-  // opacity 0 and only then emitted, which made a chip that survives its own removal
-  // impossible — a filter bar where dropping a value leaves the field behind as an
-  // `outlined` offer kept an instance that was invisible forever. That fade also had to
-  // be an inline `style="transition: opacity …"`, and an inline style beats every class,
-  // so it silently discarded any `transition-*` a consumer put on the root.
+  // Presence is the consumer's call: emit and stop. A chip that fades itself out before
+  // emitting cannot survive its own removal, and the inline transition style that fade
+  // needs silently overrides any transition utility a consumer puts on the root.
   function onRemove(event: MouseEvent) {
     emit('remove', event, props.label)
   }
@@ -77,12 +72,9 @@
 
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault()
-      // Synthesise a REAL DOM click rather than emitting directly. A native <button>
-      // does this, and anything wrapping the chip relies on it: an overlay trigger
-      // (Popover.Trigger, Dropdown.Trigger) opens on the DOM click that bubbles out of
-      // its child, so a chip that only emitted a Vue event worked with the mouse and did
-      // nothing from the keyboard — which ruled the chip out as a trigger, including for
-      // the `dashed` "add one" affordance it is meant to serve. The dispatched click runs
+      // Synthesise a real DOM click, as a native button does: overlay triggers open on the
+      // DOM click that bubbles out of their child, so a chip that only emitted a Vue event
+      // worked with the mouse but did nothing from the keyboard. The dispatched click runs
       // `onClick`, so `click` is still emitted exactly once.
       ;(event.currentTarget as globalThis.HTMLElement).click()
     }
@@ -90,18 +82,10 @@
 </script>
 
 <template>
-  <!-- ALL THREE KINDS SHARE ONE FILL — `--bg-surface` — and differ only in ELEVATION
-       (`filled` carries `--shadow-sm`) and, for `dashed`, the dash. The fill used to be
-       the distinction: `filled` was `--bg-surface-raised` and the other two were
-       transparent. That never shipped as designed on two counts. The raised token is the
-       SAME value as `--bg-surface` in the light theme, so the applied/available contrast
-       it was meant to carry existed in dark only; and the background utility carried a
-       stray space before the closing paren, which terminates the Tailwind candidate, so
-       it compiled to nothing at all (verified against the v4 compiler) and every `filled`
-       chip was in fact transparent, in both themes, with only its shadow to tell it from
-       an `outlined` one. Giving every kind the real surface is what makes a chip read as a
-       raised object against `--bg-canvas` at all; the shadow then does the one job it was
-       always doing alone. -->
+  <!-- All three kinds share one surface fill and differ only in elevation (`filled`
+       carries the small shadow) and the dash: the raised-surface token equals the surface
+       token in the light theme, so a fill distinction cannot carry the applied/available
+       contrast. -->
   <span
     v-bind="$attrs"
     :data-testid="testId"
@@ -127,10 +111,8 @@
       >
         {{ label }}
       </span>
-      <!-- 24px at medium is the WCAG 2.5.8 minimum for a pointer target; the previous
-           14px glyph met neither that nor the visual weight of the boxes around it.
-           `small` keeps a 16px control — a justified deviation for a 24px token, where
-           the chip itself stays the visible affordance. -->
+      <!-- 24px at medium is the WCAG 2.5.8 minimum for a pointer target; `small` keeps a
+           16px control — a justified deviation where the chip itself stays the affordance. -->
       <Tooltip
         v-if="removable"
         :text="removeLabel"

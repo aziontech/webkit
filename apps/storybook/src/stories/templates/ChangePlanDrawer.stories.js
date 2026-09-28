@@ -57,7 +57,6 @@ const plansMarkup = `<div
   <CardPricing
     class="!w-full min-w-0 flex-1 max-w-none"
     plan-title="Hobby"
-    description="The perfect starting place"
     value="Free"
     :show-prefix="false"
     :show-suffix="false"
@@ -75,7 +74,6 @@ const plansMarkup = `<div
   <CardPricing
     class="!w-full min-w-0 flex-1 max-w-none"
     plan-title="Pro"
-    :description="billingDetailMonthly"
     value="20"
     prefix="$"
     suffix="per month"
@@ -95,7 +93,6 @@ const plansMarkup = `<div
   <CardPricing
     class="!w-full min-w-0 flex-1 max-w-none"
     plan-title="Enterprise"
-    description="Suporte avançado e serviços contínuos."
     value="Custom"
     :show-prefix="false"
     :show-suffix="false"
@@ -223,7 +220,6 @@ const changePlanTemplate = \`
             <CardPricing
               class="w-full! min-w-0 flex-1 max-w-none"
               plan-title="Hobby"
-              description="The perfect starting place"
               value="Free"
               :show-prefix="false"
               :show-suffix="false"
@@ -241,7 +237,6 @@ const changePlanTemplate = \`
             <CardPricing
               class="w-full! min-w-0 flex-1 max-w-none"
               plan-title="Pro"
-              :description="billingDetailMonthly"
               value="20"
               prefix="$"
               suffix="per month"
@@ -261,7 +256,6 @@ const changePlanTemplate = \`
             <CardPricing
               class="w-full! min-w-0 flex-1 max-w-none"
               plan-title="Enterprise"
-              description="Suporte avançado e serviços contínuos."
               value="Custom"
               :show-prefix="false"
               :show-suffix="false"

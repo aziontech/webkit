@@ -26,7 +26,7 @@
   <span
     v-bind="$attrs"
     :data-testid="testId"
-    class="truncate text-label-sm text-(--text-muted)"
+    class="truncate text-body-xs text-(--text-muted)"
   >
     <slot />
   </span>

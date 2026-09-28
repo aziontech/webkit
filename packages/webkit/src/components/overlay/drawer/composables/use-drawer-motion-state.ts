@@ -16,12 +16,10 @@ export function useDrawerMotionState(isOpen: Ref<boolean>) {
     motionState.value = 'closed'
     await nextTick()
 
-    // Double rAF: the first frame lands after Vue commits the `closed` DOM
-    // (transform: translate-x-full); the second fires after the browser has
-    // painted it, so flipping to `open` triggers a real transition instead
-    // of the browser collapsing mount + state-flip into one paint (the
-    // `<Teleport>` first-mount case where the initial computed style is
-    // never painted).
+    // Double rAF: frame one lands after Vue commits the closed DOM, frame two
+    // after the browser paints it — only then does flipping to open interpolate,
+    // instead of mount + state-flip collapsing into one paint (the Teleport
+    // first-mount case, where the initial computed style is never painted).
     globalThis.requestAnimationFrame(() => {
       globalThis.requestAnimationFrame(() => {
         if (isOpen.value) {

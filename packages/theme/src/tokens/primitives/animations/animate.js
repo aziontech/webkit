@@ -27,6 +27,8 @@ export const animate = {
   'fade-out': 'fadeOut 220ms ease-in-out',
   'slide-down': 'slideDown 220ms ease-in-out',
   'highlight-fade': `highlight ${duration['slow-03']} ease-in forwards`,
+  'page-enter': `pageEnter ${duration['moderate-02']} ${curve['productive-entrance']}`,
+  'content-enter': `contentEnter ${duration['moderate-02']} ${curve['productive-entrance']} var(--content-enter-delay, 0s) backwards`,
   'popup-scale-in': `popupScaleIn ${duration['moderate-01']} ${curve['productive-entrance']}`,
   'popup-scale-out': `popupScaleOut ${duration['fast-02']} ${curve['productive-exit']}`,
   'slide-in-left': `slideInLeft ${duration['moderate-02']} ${curve['productive-entrance']}`,
@@ -41,6 +43,10 @@ export const animate = {
 }
 
 export const useWhen = {
+  'page-enter':
+    'A page arriving on a route change — on the CONTENT ZONE only, never the shell. The chrome is the same before and after, and sliding it announces a reload that did not happen. Key it on the route path so a component serving several paths still replays it. Nothing inside the page may animate on mount at the same time: the two run in lockstep and read as one element travelling on a diagonal.',
+  'content-enter':
+    'Content settling INSIDE a page that is already on screen — a loading window resolving, a filtered list swapping, a step changing. Never on first paint of a page whose own entrance is already running (use it after that entrance, or after a wire). Stagger a follower with --content-enter-delay.',
   spin: 'Indeterminate circular spinners (loading icons).',
   ping: 'One-off attention ring radiating from a small element (notification dot).',
   pulse: 'Skeleton/placeholder opacity pulse while content loads.',

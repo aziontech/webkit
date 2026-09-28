@@ -98,12 +98,8 @@ describe('IconButton', () => {
   })
 
   describe('as a link (href set)', () => {
-    // Note: we assert the anchor's structural + a11y attributes and the
-    // disabled click-suppression (which calls preventDefault, so no navigation).
-    // We do NOT fire a click on an ACTIVE anchor: in the real browser that would
-    // trigger a live navigation and hang the runner. The `click` event itself is
-    // fully exercised on the <button> path above — the same handleClick handler
-    // drives both branches.
+    // Never click an active anchor here: real-browser navigation hangs the runner.
+    // The shared click handler is already exercised on the button path.
     it('renders an <a> carrying href/target when href is set', () => {
       const { getByTestId } = render(IconButton, {
         props: { icon: 'pi pi-external-link', ariaLabel: 'Open', href: '/somewhere' }

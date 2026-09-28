@@ -70,7 +70,7 @@
   const isOpenRef = computed(() => isOpen.value)
   const placementRef = computed(() => props.placement)
 
-  const { resolvedPlacement, panelStyle, updatePosition } = usePlacement({
+  const { resolvedPlacement, panelStyle, anchored, updatePosition } = usePlacement({
     triggerRef,
     panelRef,
     isOpen: isOpenRef,
@@ -171,9 +171,10 @@
         :data-testid="`${testId}__panel`"
         :data-state="isOpen ? 'open' : 'closed'"
         :data-placement="resolvedPlacementRef"
+        :data-anchored="anchored || null"
         :aria-hidden="!isOpen"
         :style="panelStyle"
-        class="pointer-events-none flex min-h-8 max-w-(--container-3xs) items-center justify-center overflow-clip break-words rounded-(--shape-elements) bg-(--bg-contrast) p-(--spacing-xs) text-center text-body-xs text-(--text-contrast) [transform-origin:var(--popup-origin,center)]"
+        class="pointer-events-none flex min-h-8 max-w-(--container-3xs) items-center justify-center overflow-clip break-words rounded-(--shape-elements) bg-(--bg-contrast) p-(--spacing-xs) text-center text-body-xs text-(--text-contrast) [transform-origin:var(--popup-origin,center)] data-[anchored]:transition-[translate] data-[anchored]:duration-fast-02 data-[anchored]:ease-productive-entrance motion-reduce:transition-none"
       >
         {{ text }}
       </div>

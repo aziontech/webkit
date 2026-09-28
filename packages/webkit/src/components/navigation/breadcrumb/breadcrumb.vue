@@ -149,11 +149,14 @@
               class="inline-flex items-center"
               :data-testid="`${testId}__segment-overflow`"
             >
-              <Dropdown :data-testid="`${testId}__overflow-menu`">
-                <!-- The Trigger is itself role="button"; the icon is decorative
-                     content. Nesting a real button here trips axe
-                     nested-interactive. Styled to match a transparent/small
-                     IconButton with the same tokens. -->
+              <!-- `select(event, value)` is emitted by the Dropdown root (options forward
+                   activation through the injected context) — bound on an option it never fires. -->
+              <Dropdown
+                :data-testid="`${testId}__overflow-menu`"
+                @select="onOverflowSelect"
+              >
+                <!-- The Trigger is already role="button"; nesting a real button here trips
+                     axe nested-interactive, so the icon stays decorative content. -->
                 <Dropdown.Trigger
                   aria-label="Show pages in between"
                   :data-testid="`${testId}__overflow-trigger`"
@@ -171,7 +174,6 @@
                     :value="item.href ?? '#'"
                     :label="item.label"
                     :data-testid="`${testId}__overflow-item-${index}`"
-                    @select="onOverflowSelect"
                   >
                     <template
                       v-if="item.showIcon && item.icon"

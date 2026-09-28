@@ -143,19 +143,23 @@ describe('FieldPhoneNumber', () => {
   })
 
   describe('dial-code select', () => {
-    it('marks the country Select with the aria-label from the template', () => {
+    it('names the country combobox itself, not the roleless wrapper', () => {
       const { getByTestId } = render(FieldPhoneNumber, { props: { label: 'Phone' } })
-      expect(getByTestId('input-field-phone-number__country').getAttribute('aria-label')).toBe(
-        'Country dial code'
-      )
+
+      expect(getByTestId('select-trigger').getAttribute('aria-label')).toBe('Country dial code')
+      expect(getByTestId('input-field-phone-number__country').getAttribute('aria-label')).toBeNull()
     })
 
-    // Component defect (field-phone-number.vue:146): the dial code is passed as
-    // SelectTrigger's default slot, but select-trigger.vue renders no default slot —
-    // the trigger shows the raw ISO code ("BR") instead of the dial code ("+55").
-    it.skip("shows the selected country's dial code in the trigger", () => {
+    it("shows the selected country's dial code in the trigger", () => {
       const { getByTestId } = render(FieldPhoneNumber, { props: { label: 'Phone' } })
       expect(getByTestId('select-trigger__value').textContent?.trim()).toBe('+55')
+    })
+
+    it("shows the picked country's dial code, not its ISO code", () => {
+      const { getByTestId } = render(FieldPhoneNumber, {
+        props: { label: 'Phone', country: 'US' }
+      })
+      expect(getByTestId('select-trigger__value').textContent?.trim()).toBe('+1')
     })
 
     it('opens the Teleported listbox with one option per country', async () => {
@@ -351,11 +355,7 @@ describe('FieldPhoneNumber', () => {
   })
 
   describe('a11y (axe)', () => {
-    // Component defect (field-phone-number.vue:143): aria-label="Country dial code"
-    // lands on the Select wrapper div, never on the role=combobox trigger — the
-    // trigger has no accessible name (axe button-name, critical; combobox does not
-    // take its name from content). Same root cause for both states below.
-    it.skip('has no violations in the default labelled + helper state', async () => {
+    it('has no violations in the default labelled + helper state', async () => {
       const { container } = render(FieldPhoneNumber, {
         props: {
           label: 'Phone',
@@ -366,7 +366,7 @@ describe('FieldPhoneNumber', () => {
       await expectNoA11yViolations(container)
     })
 
-    it.skip('has no violations in the disabled state', async () => {
+    it('has no violations in the disabled state', async () => {
       const { container } = render(FieldPhoneNumber, {
         props: { label: 'Phone', disabled: true, inputId: 'a11y-phone-disabled' }
       })

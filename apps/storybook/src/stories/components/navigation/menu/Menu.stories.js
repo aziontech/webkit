@@ -66,7 +66,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'A vertical, hierarchical navigation menu. It owns no shell and no layout of its own — it is injected into a host (usually Sidebar, but any scroll container works) and renders three structures through one compound: groups that separate rows under a static title, condensed rows that own children and expand in place behind an indent rail, and drill rows that replace the menu with a second-level menu. Every row is typed the same (`.text-label-md`); only a first-level group title is smaller and muted, so hierarchy is carried by the indent and the rail rather than by shrinking each level. An inline trigger heads the rows it expands beneath it and leaves the icon column to them; a drill trigger sits amongst the destinations it is listed with and takes an icon like they do. Inside a `Sidebar` — which already renders the `<nav>` landmark — pass `role="presentation"`, and the menu drops its own role and accessible name together. Every sub-component is attached to the root for dot-notation (`Menu.Group`, `Menu.Sub`, …) and is also importable on its own — the snippets below use the standalone imports.'
+          'A vertical, hierarchical navigation menu. It owns no shell and no layout of its own — it is injected into a host (usually Sidebar, but any scroll container works) and renders three structures through one compound: groups that separate rows under a static title, condensed rows that own children and expand in place behind an indent rail, and drill rows that replace the menu with a second-level menu. A row that owns children always carries a trailing transparent `IconButton` arrow, and reveals its children from its whole width — unless it carries an `href` of its own, in which case its label becomes a link and the arrow alone reveals, so reaching the children never costs the reader the destination. Every row is typed the same (`.text-label-md`); only a first-level group title is smaller and muted, so hierarchy is carried by the indent and the rail rather than by shrinking each level. An inline trigger heads the rows it expands beneath it and leaves the icon column to them; a drill trigger sits amongst the destinations it is listed with and takes an icon like they do. Inside a `Sidebar` — which already renders the `<nav>` landmark — pass `role="presentation"`, and the menu drops its own role and accessible name together. Every sub-component is attached to the root for dot-notation (`Menu.Group`, `Menu.Sub`, …) and is also importable on its own — the snippets below use the standalone imports.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -110,7 +110,7 @@ const meta = {
     onNavigate: {
       action: 'navigate',
       description:
-        'A leaf row — or a drill row, which is a destination as well as a level — was activated in data-driven mode; `node` is the activated tree node. An inline trigger emits nothing: toggling a disclosure is not a navigation.',
+        'A leaf row — or the LINK of a row that owns children AND carries an `href` — was activated in data-driven mode; `node` is the activated tree node. A container with no `href` emits nothing at all, because it has nowhere to go, and revealing children never emits: that is a move inside the menu, not a navigation.',
       table: { category: 'events', type: { summary: '(event: MouseEvent, node: MenuNode)' } }
     },
     'onUpdate:path': {
@@ -229,7 +229,7 @@ export const Types = {
       controls: { disable: true },
       description: {
         story:
-          'Both `SubTrigger` kinds side by side. `kind="inline"` renders a rotating `chevron-down`, expands its children in place, and carries `aria-expanded` + `aria-controls`. `kind="drill"` renders a static `chevron-right` and replaces the menu with the pushed level, so it carries no `aria-expanded` — nothing expands. One affordance per meaning: never mix the two on a row. The icon follows the same split: a drill row is read as one of the destinations it is listed among, so it takes a glyph on their column, while an inline row heads the rows it expands beneath it and leaves that column to them — `icon` is honoured for `kind="drill"` only, and an inline trigger handed one still renders none.'
+          'Both `SubTrigger` kinds side by side. Every row that owns children is a box holding a label control and a transparent `IconButton` arrow — the arrow is always there, because it is the affordance that says the row owns children. What `href` decides is what the LABEL does, and so how much of the row reveals them. WITHOUT one — the common case, and the two rows here — the label reveals the children too, so the whole row does; the arrow stays as a redundant pointer target (`tabindex="-1"`, `aria-hidden`), because leaving it as the ONLY live target is 28px, 7% of the row\'s area, which on a phone reads as a broken menu. WITH an `href` the label becomes a real `<a>` and the arrow alone reveals, so reaching the children does not cost the reader the destination. `aria-expanded` + `aria-controls` always sit on whichever control expands them, never on both. `kind="inline"` gives the arrow a rotating `chevron-down`; `kind="drill"` a static `chevron-right` that replaces the menu with the pushed level and carries no `aria-expanded` — nothing expands. `ArrowRight` / `ArrowLeft` work from the row either way. The icon rule is unchanged: `icon` is honoured for `kind="drill"` only, and an inline trigger handed one still renders none.'
       },
       source: {
         code: toSfc(
@@ -328,7 +328,7 @@ export const Drill = {
       controls: { disable: true },
       description: {
         story:
-          'The view stack, interactive. Activate the `chevron-right` row to push its level: the root slides out, the level slides in, focus moves to the Back row, and the level that is not current leaves both the accessibility tree and the tab order. The Back row is declared once at the root and renders nothing there, so it needs no `v-if`; its accessible name names the level it returns to. Popping (Back, ArrowLeft or Escape) restores focus to the trigger that pushed. The stack is readable as node ids through `v-model:path`.'
+          'The view stack, interactive. Activate the `chevron-right` row to push its level — the whole row, because this row carries no `href` of its own; give it one and the row splits into a link plus an arrow, and only the arrow pushes: the root slides out, the level slides in, focus moves to the Back button, and the level that is not current leaves both the accessibility tree and the tab order. Back is a compact button rather than another full-width row, so the one control that leaves the level does not read as one of the rows inside it, and its text names where it lands — a bare `Back` when that is the unnamed root, `Back to Settings` from a deeper level, or whatever `label` supplies. It is declared once at the root and renders nothing there, so it needs no `v-if`. Popping (Back, ArrowLeft or Escape) restores focus to the trigger that pushed. The stack is readable as node ids through `v-model:path`.'
       },
       source: {
         code: toSfc(
@@ -370,7 +370,7 @@ export const Disabled = {
       controls: { disable: true },
       description: {
         story:
-          'A disabled row and a disabled trigger alongside enabled ones. Both carry `aria-disabled`, drop their hover and active ghost layers, and are out of the tab order; the trigger neither toggles nor pushes, so its children stay collapsed.'
+          'A disabled row and a disabled trigger alongside enabled ones. Both carry `aria-disabled`, drop their hover and active ghost layers, and are out of the tab order; a disabled trigger suppresses every control of the row — it neither reveals nor announces — so its children stay collapsed. Its arrow paints no fill either: `IconButton`\'s filled disabled box would make the arrow the brightest thing on a row whose label had dimmed away. A disabled row that would otherwise be a link drops its `href` outright, since an anchor with no destination is not a link.'
       },
       source: {
         code: toSfc(

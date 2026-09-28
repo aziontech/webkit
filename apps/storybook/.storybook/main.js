@@ -4,6 +4,14 @@ import vue from '@vitejs/plugin-vue'
 /** @type {import('@storybook/vue3-vite').StorybookConfig} */
 const config = {
   stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
+  /*
+   * Story assets served at the origin root, so a story's `src` is the same string a
+   * consumer writes — `/docs/…`, not a bundler hash. Frames need it: DocFrame takes a
+   * URL, and its "Show code" snippet has to stay paste-and-run, which a hashed asset
+   * import would not be. Kept inside this app rather than pointed at webkit-sample's
+   * `public/`, so a story never breaks when the sample app reorganises.
+   */
+  staticDirs: ['../static'],
   addons: [
     '@storybook/addon-links',
     '@storybook/addon-essentials',

@@ -1,10 +1,8 @@
 import { curve, duration } from '@aziontech/theme/animations'
 
 /**
- * Toast stack motion — values read only from animate.js (`duration`, `curve`).
- * Applied via inline `transition` (Tailwind does not emit dynamic `duration-[…]`
- * classes), so the stack uses the Design System curves and speeds rather than
- * ad-hoc Tailwind timing utilities.
+ * Toast stack motion, read from the animate.js duration/curve primitives and
+ * applied via inline transition — Tailwind cannot emit dynamic timing classes.
  */
 
 export type ToastMotionPhase = 'enter' | 'exit'
@@ -14,11 +12,7 @@ export type ToastMotionToken = {
   curve: string
 }
 
-/**
- * Stack motion mapped to `duration` / `curve` primitives from animate.js.
- * `enter` settles a new card in (and drives the resting-stack reflow);
- * `exit` slides a dismissed card back off the anchored edge.
- */
+/** `enter` also drives the resting-stack reflow; `exit` slides off the anchored edge. */
 export const toastMotion: Record<ToastMotionPhase, ToastMotionToken> = {
   enter: { duration: duration['moderate-02'], curve: curve['productive-entrance'] },
   exit: { duration: duration['slow-01'], curve: curve['productive-exit'] }
@@ -32,11 +26,7 @@ export const getRegionTransitionStyle = (): { transition: string } => ({
   transition: `all ${toastMotion.enter.duration} ${toastMotion.enter.curve}`
 })
 
-/**
- * Inline transition for a toast card (transform / opacity / height). The exit
- * phase uses the exit curve + duration; enter and resting-stack reflow share
- * the entrance curve.
- */
+/** Inline transition for a toast card; enter and resting reflow share the entrance curve. */
 export const getToastTransitionStyle = (removing: boolean): { transition: string } => {
   const { duration: d, curve: c } = removing ? toastMotion.exit : toastMotion.enter
   return {

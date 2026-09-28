@@ -56,7 +56,7 @@
     :role="role"
     :data-testid="testId"
     :data-type="type"
-    class="group pointer-events-auto relative flex w-full items-center gap-(--spacing-sm) rounded-(--shape-elements) border-solid border-[length:var(--border-width-default,1px)] border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-sm) text-(--text-default) shadow-(--shadow-sm)"
+    class="group pointer-events-auto relative flex w-full items-start gap-(--spacing-sm) rounded-(--shape-elements) border-solid border-[length:var(--border-width-default,1px)] border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-sm) text-(--text-default) shadow-(--shadow-sm)"
   >
     <div class="flex min-w-0 flex-1 items-start gap-(--spacing-sm)">
       <Spinner

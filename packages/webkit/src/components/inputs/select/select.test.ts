@@ -30,39 +30,52 @@ const Host = defineComponent({
     required: { type: Boolean, default: false },
     placeholder: { type: String, default: 'Select an option' },
     initial: { type: null, default: undefined },
-    startOpen: { type: Boolean, default: false }
+    startOpen: { type: Boolean, default: false },
+    /** Extra options appended to OPTIONS, to build a list taller than the viewport. */
+    extraOptions: { type: Number, default: 0 },
+    /** Inline style on a wrapper div, to pin the trigger somewhere in the viewport. */
+    wrapperStyle: { type: String, default: '' }
   },
   setup(props) {
     const value = ref(props.initial ?? (props.multiple ? [] : ''))
     const open = ref(props.startOpen)
+    const options = [
+      ...OPTIONS,
+      ...Array.from({ length: props.extraOptions }, (_, i) => ({
+        value: `extra-${i}`,
+        label: `Extra option ${i}`
+      }))
+    ]
     return () =>
-      h(
-        Select,
-        {
-          multiple: props.multiple,
-          disabled: props.disabled,
-          readonly: props.readonly,
-          invalid: props.invalid,
-          required: props.required,
-          placeholder: props.placeholder,
-          modelValue: value.value,
-          open: open.value,
-          'onUpdate:modelValue': (v: unknown) => {
-            value.value = v as never
+      h('div', { style: props.wrapperStyle }, [
+        h(
+          Select,
+          {
+            multiple: props.multiple,
+            disabled: props.disabled,
+            readonly: props.readonly,
+            invalid: props.invalid,
+            required: props.required,
+            placeholder: props.placeholder,
+            modelValue: value.value,
+            open: open.value,
+            'onUpdate:modelValue': (v: unknown) => {
+              value.value = v as never
+            },
+            'onUpdate:open': (v: boolean) => {
+              open.value = v
+            }
           },
-          'onUpdate:open': (v: boolean) => {
-            open.value = v
-          }
-        },
-        () => [
-          // aria-label gives the role=combobox trigger an accessible name so
-          // the composed tree is axe-clean (the component does not name it).
-          h(SelectTrigger, { 'aria-label': props.placeholder }),
-          h(SelectContent, null, () =>
-            OPTIONS.map((o) => h(SelectOption, { key: o.value, value: o.value }, () => o.label))
-          )
-        ]
-      )
+          () => [
+            // aria-label gives the role=combobox trigger an accessible name so
+            // the composed tree is axe-clean (the component does not name it).
+            h(SelectTrigger, { 'aria-label': props.placeholder }),
+            h(SelectContent, null, () =>
+              options.map((o) => h(SelectOption, { key: o.value, value: o.value }, () => o.label))
+            )
+          ]
+        )
+      ])
   }
 })
 
@@ -459,6 +472,50 @@ describe('Select (compound / overlay)', () => {
     expect(events).toEqual([[true]])
   })
 
+  // ---- Size-aware placement (ENG-47063) --------------------------------------
+  // Real layout: the trigger is pinned with inline styles (no CSS is loaded in
+  // browser mode) and the panel's rect is asserted against the live viewport.
+  it('flips the listbox above the trigger when there is no room below', async () => {
+    const { getByTestId } = render(Host, {
+      props: {
+        extraOptions: 9,
+        wrapperStyle: 'position:fixed;bottom:8px;left:8px;right:8px'
+      }
+    })
+    const trigger = getByTestId('select-trigger')
+    await fireEvent.click(trigger)
+    await nextTick()
+    await nextTick()
+
+    const panel = getContent() as HTMLElement
+    const panelRect = panel.getBoundingClientRect()
+    const triggerRect = trigger.getBoundingClientRect()
+    expect(panelRect.bottom).toBeLessThanOrEqual(triggerRect.top)
+    expect(panelRect.top).toBeGreaterThanOrEqual(0)
+    expect(Math.abs(panelRect.left - triggerRect.left)).toBeLessThanOrEqual(1)
+  })
+
+  it('caps the listbox to the free space and scrolls it when it fits on neither side', async () => {
+    const { getByTestId } = render(Host, {
+      props: { extraOptions: 200, wrapperStyle: 'position:fixed;top:8px;left:8px;right:8px' }
+    })
+    const trigger = getByTestId('select-trigger')
+    await fireEvent.click(trigger)
+    await nextTick()
+    await nextTick()
+
+    const panel = getContent() as HTMLElement
+    const panelRect = panel.getBoundingClientRect()
+    const triggerRect = trigger.getBoundingClientRect()
+    expect(panelRect.top).toBeGreaterThanOrEqual(triggerRect.bottom)
+    expect(panelRect.bottom).toBeLessThanOrEqual(window.innerHeight)
+    expect(panel.style.maxHeight).not.toBe('')
+
+    // No CSS in browser mode: the ScrollArea's own overflow utilities do not apply here,
+    // so assert that the capped panel holds more content than its box (what scrolls).
+    expect(panel.scrollHeight).toBeGreaterThan(panel.clientHeight)
+  })
+
   // ---- Regression: panel anchoring under a transformed ancestor -------------
   // The panel is `position: fixed` inside its Teleport target (document.body).
   // A transform on an ancestor of that target makes it the panel's containing
@@ -493,6 +550,80 @@ describe('Select (compound / overlay)', () => {
       document.body.style.transform = previousTransform
       document.body.style.transformOrigin = previousOrigin
     }
+  })
+
+  // ---- one leading column + group rhythm ------------------------------------
+  // The reservation is CSS (`group-has-…`) and browser mode compiles no Tailwind,
+  // so `display` cannot be read here. Assert the mechanism instead: the marker is
+  // on exactly the options that have a glyph, the box is on every option, and the
+  // list carries the group that scopes the rule. Geometry is verified in the
+  // browser against the stories.
+  it('marks only options that have a leading glyph, but gives every option the box', async () => {
+    const WithIcons = defineComponent({
+      setup() {
+        const open = ref(true)
+        return () =>
+          h(Select, { open: open.value, placeholder: 'Pick' }, () => [
+            h(SelectTrigger, { 'aria-label': 'Pick' }),
+            h(SelectContent, null, () => [
+              h(SelectOption, { value: 'a', icon: 'pi pi-heart' }, () => 'With icon'),
+              h(SelectOption, { value: 'b' }, () => 'Without icon')
+            ])
+          ])
+      }
+    })
+
+    render(WithIcons)
+    await nextTick()
+
+    const boxes = Array.from(
+      document.body.querySelectorAll('[data-testid="select-option__leading"]')
+    ) as HTMLElement[]
+    expect(boxes).toHaveLength(2)
+
+    for (const box of boxes) {
+      expect(box.className).toContain('size-4')
+      expect(box.className).toContain('group-has-[[data-leading]]/options:flex')
+    }
+
+    // Only the iconed option is marked — that marker is what turns the column on.
+    expect(boxes[0].hasAttribute('data-leading')).toBe(true)
+    expect(boxes[1].hasAttribute('data-leading')).toBe(false)
+    expect(boxes[0].querySelector('i.pi-heart')).not.toBeNull()
+    expect(boxes[1].querySelector('i')).toBeNull()
+
+    // The rule is scoped by the list, so the group marker has to be there.
+    const list = document.body.querySelector('[data-testid="select-content__list"]')
+    expect(list?.className).toContain('group/options')
+  })
+
+  it('spaces every group but the first', async () => {
+    const Grouped = defineComponent({
+      setup() {
+        const open = ref(true)
+        return () =>
+          h(Select, { open: open.value, placeholder: 'Pick' }, () => [
+            h(SelectTrigger, { 'aria-label': 'Pick' }),
+            h(SelectContent, null, () => [
+              h(SelectGroup, { label: 'A' }, () => [h(SelectOption, { value: 'a' }, () => 'A1')]),
+              h(SelectGroup, { label: 'B' }, () => [h(SelectOption, { value: 'b' }, () => 'B1')])
+            ])
+          ])
+      }
+    })
+
+    render(Grouped)
+    await nextTick()
+
+    const groups = Array.from(document.body.querySelectorAll('[data-testid="select-group"]'))
+    expect(groups).toHaveLength(2)
+    // Sibling-scoped variant: the same class sits on both and the selector picks
+    // the non-first, so the leading group is never pushed off the panel's seam.
+    for (const group of groups) {
+      expect(group.className).toContain('[&:not(:first-child)]:mt-(--spacing-sm)')
+    }
+    expect(groups[0].previousElementSibling).toBeNull()
+    expect(groups[1].previousElementSibling).toBe(groups[0])
   })
 
   // ---- enum smoke floor -----------------------------------------------------

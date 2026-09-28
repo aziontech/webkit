@@ -65,8 +65,10 @@ Reference: `packages/webkit/src/components/webkit/actions/button/button.vue`.
 | `text-big-number-lg` / `text-big-number-md` / `text-big-number-sm` | Large numeric displays                   |
 | `text-heading-2xl` … `text-heading-sm`                             | Headings                                 |
 | `text-body-lg` … `text-body-xxs`                                   | Body copy                                |
+| `text-body-prose-md`                                               | Long-form prose — body copy at `--leading-relaxed` (1.625); the `text-body-*` set is `snug` (1.375) |
 | `text-label-sm` / `text-label-md` / `text-label-lg`                | Labels, compact UI text                  |
 | `text-label-code-sm` / `text-label-code-md` / `text-label-code-lg` | Monospace code labels (filename bar, code lines, line numbers) |
+| `text-body-code-sm`                                                | Monospace prose — a mono paragraph that WRAPS (the `label-code-*` set is `leading-none`, made for one-row-per-line code) |
 | `text-overline-md` / `text-overline-sm` / `text-overline-xs`       | Overlines (uppercase, tracking baked in) |
 | `text-button-lg` / `text-button-md`                                | Button labels                            |
 | `text-link`                                                        | Inline `<a>` inside body/heading copy (inherits parent size; hover underline) |
@@ -172,8 +174,16 @@ system ships (`semantic/layouts` in `@aziontech/theme`), and the type is chosen 
 | `.layout-column-focused` | Focused | `--layout-measure-focused` | 1024px | Home, single-task multi-column pages |
 | `.layout-column-form` | Form | `--layout-measure-form` | 1024px | Settings, in-page edit forms |
 | `.layout-form-create` | Create | `--layout-measure-form-create` | 1192px | Dedicated create pages (also retunes `--layout-measure-control`) |
+| `.layout-column-content` | Content | `--layout-measure-content` | 876px | Prose columns — documentation, blog (capped by line length, not by payload) |
 
-Full-bleed is the **absence** of all four, never a `w-full`. The unit that picks a class is the **band**,
+The marketing site is measured by two more tokens, used as a plain `max-w-(--token)` rather than
+through a column class: `--layout-measure-site` (1388px) is the page's frame — the hero, every
+section, the docs home and the footer share it, which is the only reason the border-x running down
+the page is continuous — and `--layout-measure-site-header` (1620px) is the top bar's own column,
+one rung wider, since a bar's payload is chrome held apart at the two ends of the window rather than
+content read across it. `GlobalHeader kind="site"` is the one consumer of the header token.
+
+Full-bleed is the **absence** of all five, never a `w-full`. The unit that picks a class is the **band**,
 not the file: a tab showing a table is measured as data even when the tab beside it is a form. Within one
 band the class is the same everywhere it must align — the scrolling body *and* its sticky action bar — or
 the footer's buttons drift right of the form they submit.

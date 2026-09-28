@@ -155,6 +155,42 @@ if (mainSrc.includes('ToastPlugin')) {
   fail('init must not wire the toast plugin — toast setup is just-in-time (catalog + doctor).')
 }
 
+// ── 4b. `sync` must see the just-copied bundle as fully current ─────────────
+const cliBin = join(app, 'node_modules/@aziontech/webkit/src/cli/cli.js')
+const runSync = (args) =>
+  execFileSync('node', [cliBin, 'sync', ...args], { cwd: app, encoding: 'utf8' })
+
+let syncOut = runSync(['--check'])
+if (!/drift: no/.test(syncOut)) {
+  fail(`sync --check reported drift right after init:\n${syncOut}`)
+}
+
+// Simulate a local edit, then confirm sync reports it (and only skips it) without
+// touching disk, and that --force restores the stamped template content.
+const ruleFile = join(app, '.claude/rules/webkit-imports.md')
+const pristine = readFileSync(ruleFile, 'utf8')
+writeFileSync(ruleFile, `${pristine}\n<!-- local note -->\n`)
+
+syncOut = runSync(['--check'])
+if (!/modified/.test(syncOut)) {
+  fail(`sync --check did not report the locally edited rule as "modified":\n${syncOut}`)
+}
+if (readFileSync(ruleFile, 'utf8') === pristine) {
+  fail('sync --check must not touch disk, but the edited rule reverted.')
+}
+
+runSync(['--force'])
+syncOut = runSync(['--check'])
+if (!/drift: no/.test(syncOut)) {
+  fail(`sync --check still reports drift after --force restored the file:\n${syncOut}`)
+}
+
+// doctor's "claude bundle" check must agree: OK once sync has nothing left to do.
+const doctorOut = execFileSync('node', [cliBin, 'doctor'], { cwd: app, encoding: 'utf8' })
+if (!/OK\s+claude bundle/.test(doctorOut)) {
+  fail(`doctor did not report the claude bundle as OK after sync --force:\n${doctorOut}`)
+}
+
 // ── 5. Build ────────────────────────────────────────────────────────────────
 run('pnpm', ['run', 'build'], app, { PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN: 'false' })
 

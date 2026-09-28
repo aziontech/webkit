@@ -1,19 +1,8 @@
-// Flags motion that bypasses the theme's animation catalog, in class & style strings, in
-// both <script> string literals and the SFC <template> (via vue-eslint-parser):
-//
-//   1. Arbitrary timing utilities — `duration-[180ms]`, `delay-[2s]`, `ease-[cubic-bezier(…)]`,
-//      `animate-[…]`: the values live in the theme tokens (`duration-*`, `ease-*`, `animate-*`).
-//   2. Literal timing in style strings — `transition: opacity 200ms`, `animation: spin 1.5s`,
-//      a raw `cubic-bezier(`, or a bare `transition: all`.
-//   3. An `animate-<name>` that does not exist in the installed catalog (typo or invented
-//      animation) — the valid names come from the webkit catalog (`tokens.animations`).
-//   4. A STATIC class attribute with motion (`animate-*` / `transition*`) and no
-//      `motion-reduce:` escape on the same class string. Only the static `class="…"` value is
-//      checked (it holds the full class list); bound fragments are skipped to avoid false
-//      positives when the escape lives in another fragment.
-//
-// Fail-open: no catalog → check 3 disables itself; the others are catalog-independent.
-// CSS/SCSS `<style>` blocks are owned by @aziontech/webkit/stylelint-config.
+// Flags motion that bypasses the theme's animation catalog, in class and style strings,
+// in both script literals and the SFC template: arbitrary timing utilities, literal
+// timing in style strings, animate names missing from the installed catalog, and a
+// static class attribute with motion but no reduced-motion escape (bound fragments are
+// skipped). Fail-open without a catalog; style blocks are owned by the stylelint config.
 
 import { loadCatalog } from '../catalog.js'
 import { ctxCwd, templateBodyVisitorFactory } from '../util.js'

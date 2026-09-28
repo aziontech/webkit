@@ -58,8 +58,12 @@
     )
   )
 
+  // One inset for the whole card: the header's horizontal padding matches the content
+  // and footer inset, so the title sits on the same vertical line as the first thing
+  // under it — and, in a flush card, as the rows of whatever fills it (ItemList,
+  // Accordion and LogView all use the same inset).
   const headerClasses =
-    'group flex min-h-14 shrink-0 items-center justify-between gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-sm) py-(--spacing-sm)'
+    'group flex min-h-14 shrink-0 items-center justify-between gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm)'
 
   const titleClasses = 'text-label-md text-(--text-default)'
 
@@ -71,6 +75,7 @@
 
 <template>
   <section
+    v-bind="$attrs"
     :class="rootClasses"
     :data-testid="testId"
   >

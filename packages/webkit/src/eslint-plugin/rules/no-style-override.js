@@ -1,17 +1,8 @@
-// Discourages consumers from re-styling a webkit component: flags `class` / `:class` /
-// `style` / `:style` set directly on a webkit component TAG in a template. The design
-// system owns each component's appearance; a consumer override defeats the tokens and
-// makes upgrades unpredictable. Consumers should compose inside slots (their OWN markup
-// is never flagged) or use a component built to be personalized.
-//
-// Escape hatch (a component is a legitimate "style seam"):
-//   - catalog entry.styleSeam === true  (opt-in via spec `style_seam: true`), or
-//   - the rule's `options.allow` lists the binding name or the kebab subpath, or
-//   - a per-call-site `// eslint-disable-next-line webkit/no-style-override`.
-//
-// Feasible with the existing infra: binding->tag mapping mirrors prefer-tree-shakeable-root;
-// template attribute inspection mirrors no-hardcoded-color's defineTemplateBodyVisitor.
-// Fail-open: no catalog -> no webkit bindings known -> no-op.
+// Flags class/style (static or bound) set directly on a webkit component tag: the DS
+// owns each component's appearance, and a consumer override defeats the tokens. The
+// consumer's own markup is never flagged. Escape hatches: catalog entry.styleSeam
+// (spec style_seam: true), the rule's options.allow (binding name or kebab subpath),
+// or a per-call-site eslint-disable. Fail-open: no catalog -> no bindings -> no-op.
 
 import { loadCatalog } from '../catalog.js'
 import { ctxCwd, templateBodyVisitorFactory } from '../util.js'

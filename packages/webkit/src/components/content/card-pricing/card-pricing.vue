@@ -1,4 +1,8 @@
 <script setup lang="ts">
+  // One tier of a pricing table. `slotPosition` decides the composition (`bottom`
+  // compact / `middle` full, action pinned to the bottom edge); `kind` only toggles
+  // the surface. See .specs/card-pricing.md for the full rationale (the overline
+  // plan name, the single caveat region, the `aligned` band's 3lh measurement).
   import { computed, useAttrs } from 'vue'
 
   import Button from '../../actions/button/button.vue'
@@ -10,11 +14,14 @@
     inheritAttrs: false
   })
 
+  /** Which composition the card is — see the block comment above. */
+  export type CardPricingSlotPosition = 'bottom' | 'middle'
+  /** Whether the card draws its own surface. */
+  export type CardPricingKind = 'contained' | 'transparent'
+
   interface CardPricingProps {
     /** plan Title. */
     planTitle?: string
-    /** description. */
-    description?: string
     /** pricing Details. */
     pricingDetails?: string
     /** show Pricing Details. */
@@ -23,10 +30,12 @@
     showTag?: boolean
     /** tag Label. */
     tagLabel?: string
+    /** Reserves the caveat's band so a row of cards aligns row-for-row. Set it on every card in the row. */
+    aligned?: boolean
     /** slot Position. */
-    slotPosition?: 'bottom' | 'middle'
+    slotPosition?: CardPricingSlotPosition
     /** card Style. */
-    kind?: 'contained' | 'transparent'
+    kind?: CardPricingKind
     /** value. */
     value?: string
     /** prefix. */
@@ -43,16 +52,16 @@
 
   const props = withDefaults(defineProps<CardPricingProps>(), {
     planTitle: 'Pro',
-    description: '',
     pricingDetails: '',
     showPricingDetails: true,
     showTag: false,
     tagLabel: 'Popular',
+    aligned: false,
     slotPosition: 'bottom',
     kind: 'contained',
     value: '20',
     prefix: '$',
-    suffix: 'per month',
+    suffix: '/ mon',
     showPrefix: true,
     showSuffix: true,
     actionLabel: 'Label'
@@ -67,53 +76,43 @@
 
   const testId = computed(() => attrs['data-testid'] ?? 'content-card-pricing')
 
-  const currencySize = computed(() => (props.slotPosition === 'middle' ? 'large' : 'small'))
-
   const isMiddle = computed(() => props.slotPosition === 'middle')
 
-  const isContained = computed(() => props.kind === 'contained')
+  // The headline figure grows with the composition: a fact on a compact card
+  // (`medium`), the card's own headline on the full one (`large`).
+  const currencySize = computed(() => (isMiddle.value ? 'large' : 'medium'))
 
-  const rootClasses = computed(() => [
-    'flex w-full flex-col items-start',
-    isMiddle.value ? 'min-h-[483px] justify-between' : 'gap-(--spacing-lg)',
-    isContained.value
-      ? 'bg-(--bg-surface) border-(length:--border-width-default) border-(--border-muted) rounded-(--shape-card) p-(--spacing-lg)'
-      : 'p-(--spacing-lg)',
-    attrs.class
-  ])
-
-  const headerContainerClasses = computed(() =>
-    isMiddle.value
-      ? 'flex w-full shrink-0 flex-col items-start gap-(--spacing-xs) max-w-[256px]'
-      : 'flex w-full shrink-0 flex-col items-start max-w-[256px] gap-(--spacing-xs)'
-  )
-
-  const actionsClasses = computed(() => [
-    'flex w-full gap-(--spacing-md) items-start shrink-0',
-    isMiddle.value ? 'pt-(--spacing-md)' : ''
-  ])
+  // `showPrefix` / `showSuffix` are the card's switches; Currency itself hides a part
+  // by receiving an empty string, so the booleans are resolved here rather than
+  // duplicated as a second pair of props on Currency.
+  const currencyPrefix = computed(() => (props.showPrefix ? props.prefix : ''))
+  const currencySuffix = computed(() => (props.showSuffix ? props.suffix : ''))
 </script>
 
 <template>
   <article
-    :class="rootClasses"
+    v-bind="$attrs"
     :data-testid="testId"
+    :data-slot-position="slotPosition"
+    :data-kind="kind"
+    :data-aligned="aligned || null"
+    class="group/card flex w-full flex-col items-start overflow-clip p-(--spacing-lg) data-[slot-position=bottom]:gap-(--spacing-lg) data-[slot-position=middle]:justify-between data-[kind=contained]:rounded-(--shape-card) data-[kind=contained]:border-(length:--border-width-default) data-[kind=contained]:border-(--border-default) data-[kind=contained]:bg-(--bg-surface)"
   >
+    <!-- The upper block. On `middle` it is the growing region (the slot inside it
+         takes the slack), which is what leaves the action pinned to the card's
+         bottom edge. On `bottom` it is content-sized. -->
     <div
-      :class="['flex w-full flex-col items-start shrink-0', isMiddle ? 'gap-(--spacing-lg)' : '']"
+      class="flex w-full flex-col items-start group-data-[slot-position=bottom]/card:shrink-0 group-data-[slot-position=middle]/card:min-h-px group-data-[slot-position=middle]/card:flex-1 group-data-[slot-position=middle]/card:gap-(--spacing-lg)"
     >
+      <!-- Name, amount and caveat sit in one column capped at `--container-xs` so
+           the caveat wraps on the price's measure, not the card's full width. -->
       <div
-        :class="headerContainerClasses"
+        class="flex w-full max-w-(--container-xs) shrink-0 flex-col items-start group-data-[slot-position=bottom]/card:gap-(--spacing-xs) group-data-[slot-position=middle]/card:gap-(--spacing-md)"
         :data-testid="`${testId}__header`"
       >
-        <div
-          :class="[
-            'h-6 flex shrink-0 items-center',
-            isMiddle ? 'w-full gap-(--spacing-sm)' : 'gap-(--spacing-xs)'
-          ]"
-        >
+        <div class="flex min-h-6 w-full shrink-0 items-center gap-(--spacing-xs)">
           <h3
-            class="text-heading-md text-(--text-default) [word-break:break-word]"
+            class="text-overline-md text-(--text-default) [word-break:break-word]"
             :data-testid="`${testId}__title`"
           >
             {{ planTitle }}
@@ -125,79 +124,51 @@
             :data-testid="`${testId}__tag`"
           />
         </div>
-        <p
-          v-if="description"
-          class="text-body-sm text-(--text-muted) h-9 [word-break:break-word]"
-          :data-testid="`${testId}__description`"
-        >
-          {{ description }}
-        </p>
-      </div>
 
-      <template v-if="isMiddle">
         <div
-          class="flex w-full flex-col gap-(--spacing-xxs) items-start h-16 shrink-0"
+          class="flex w-full shrink-0 flex-col items-start gap-(--spacing-xxs) group-data-[slot-position=bottom]/card:min-h-11 group-data-[slot-position=middle]/card:min-h-16"
           :data-testid="`${testId}__pricing`"
         >
           <Currency
             :size="currencySize"
             :value="value"
-            :prefix="prefix"
-            :suffix="suffix"
-            :show-prefix="showPrefix"
-            :show-suffix="showSuffix"
+            :prefix="currencyPrefix"
+            :suffix="currencySuffix"
             :data-testid="`${testId}__currency`"
           />
+          <!-- One step up the type scale on `middle`: it is the card's supporting
+               line, read at the same distance as the 56px figure above it. -->
           <p
-            v-if="showPricingDetails && pricingDetails"
-            class="text-body-xs text-(--text-muted) h-8 [word-break:break-word]"
+            v-if="(showPricingDetails && pricingDetails) || aligned"
+            class="text-(--text-muted) [word-break:break-word] group-data-[aligned]/card:min-h-[3lh] group-data-[slot-position=bottom]/card:text-body-sm group-data-[slot-position=middle]/card:text-body-md"
             :data-testid="`${testId}__pricing-details`"
           >
-            {{ pricingDetails }}
+            {{ showPricingDetails ? pricingDetails : '' }}
           </p>
         </div>
+      </div>
 
-        <div
-          class="min-h-[160px] w-full shrink-0"
-          :data-testid="`${testId}__slot`"
-        >
-          <slot />
-        </div>
-      </template>
-    </div>
-
-    <div
-      v-if="!isMiddle"
-      class="flex w-full flex-col gap-(--spacing-xxs) items-start h-16 shrink-0"
-      :data-testid="`${testId}__pricing`"
-    >
-      <Currency
-        :size="currencySize"
-        :value="value"
-        :prefix="prefix"
-        :suffix="suffix"
-        :show-prefix="showPrefix"
-        :show-suffix="showSuffix"
-        :data-testid="`${testId}__currency`"
-      />
-      <p
-        v-if="showPricingDetails && pricingDetails"
-        class="text-body-xs text-(--text-muted) h-8 [word-break:break-word]"
-        :data-testid="`${testId}__pricing-details`"
+      <!-- `middle` only: the slot is inside the growing block and takes its slack. -->
+      <div
+        v-if="isMiddle"
+        class="min-h-40 w-full flex-1"
+        :data-testid="`${testId}__slot`"
       >
-        {{ pricingDetails }}
-      </p>
+        <slot />
+      </div>
     </div>
 
+    <!-- `middle`: `justify-between` pins the action to the bottom edge; its top padding
+         is `--spacing-xl`, one step above the card's own, so it reads as the card's
+         conclusion rather than as attached to the slot above it. -->
     <div
-      v-if="!isMiddle"
-      :class="actionsClasses"
+      class="flex w-full shrink-0 items-start gap-(--spacing-md) group-data-[slot-position=middle]/card:pt-(--spacing-xl)"
       :data-testid="`${testId}__actions`"
     >
       <slot name="actions">
         <Button
           v-if="actionLabel"
-          kind="outlined"
+          :kind="isMiddle ? 'secondary' : 'outlined'"
           size="large"
           :label="actionLabel"
           class="w-full"
@@ -206,29 +177,13 @@
       </slot>
     </div>
 
+    <!-- `bottom` only: the slot follows the action, outside the upper block. -->
     <div
       v-if="!isMiddle"
-      class="min-h-[160px] w-full shrink-0"
+      class="min-h-40 w-full shrink-0"
       :data-testid="`${testId}__slot`"
     >
       <slot />
-    </div>
-
-    <div
-      v-if="isMiddle"
-      :class="actionsClasses"
-      :data-testid="`${testId}__actions`"
-    >
-      <slot name="actions">
-        <Button
-          v-if="actionLabel"
-          kind="outlined"
-          size="large"
-          :label="actionLabel"
-          class="w-full"
-          :data-testid="`${testId}__action`"
-        />
-      </slot>
     </div>
   </article>
 </template>

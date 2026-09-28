@@ -3,8 +3,8 @@
 <p align="center">
   <a href="https://github.com/aziontech/webkit/actions/workflows/governance.yml?query=event%3Apull_request"><img src="https://github.com/aziontech/webkit/actions/workflows/governance.yml/badge.svg?event=pull_request" alt="Governance"></a>
   <a href="./LICENSE"><img src="https://img.shields.io/badge/license-MIT-yellow.svg" alt="License: MIT"></a>
-  <img src="https://img.shields.io/badge/node-%3E%3D22.18-brightgreen" alt="Node >=22.18">
-  <img src="https://img.shields.io/badge/pnpm-10.x-orange" alt="pnpm 10.x">
+  <img src="https://img.shields.io/badge/node-%3E%3D24-brightgreen" alt="Node >=24">
+  <img src="https://img.shields.io/badge/pnpm-11.x-orange" alt="pnpm 11.x">
   <img src="https://img.shields.io/badge/Vue-3.5%2B-42b883" alt="Vue 3.5+">
 </p>
 
@@ -62,19 +62,24 @@ If you are new (human or AI), open these in order — together they describe the
 
 ## Use in your app
 
-Install the packages you need — `@aziontech/webkit` depends on `@aziontech/theme` transitively, but importing the theme stylesheet is up to the consumer:
+The `webkit` CLI ships inside the `@aziontech/webkit` package — there is no separate CLI to install. One command adopts the design system in an existing project:
 
 ```bash
-pnpm add @aziontech/webkit @aziontech/theme @aziontech/icons
+npx @aziontech/webkit init
 ```
 
-Wire the theme styles once at your app entry, then import components by path:
+`init` reads the project before it writes anything, never clobbers a file, and is safe to re-run. It records `@aziontech/webkit`, `@aziontech/theme` and `@aziontech/icons` (plus the lint peers) in `package.json`, writes the ESLint, Stylelint and PostCSS configs, creates `src/webkit.css` as the single CSS entry, registers the webkit MCP server in `.mcp.json` so AI tools get the component catalog, adds a lint-on-commit hook, and prepends the entry imports to `src/main.*`. Preview the whole plan with `--dry-run`, and use `-y` for CI or scripted runs.
 
-```js
-// main.js|ts
-import '@aziontech/theme'
-import '@aziontech/icons'
+`init` records the dependencies but does not install them — run your package manager afterwards, then confirm the wiring:
+
+```bash
+pnpm install
+npx @aziontech/webkit doctor
 ```
+
+`doctor` writes nothing and exits non-zero on a broken setup, so it also works as a CI gate. To pull in a newer webkit's `.claude/` bundle and `CLAUDE.md` fragment later, run `npx @aziontech/webkit sync` (`--check` reports drift without writing). Full flag reference: [`packages/webkit/docs/toolkit/cli.md`](./packages/webkit/docs/toolkit/cli.md).
+
+Once the project is wired, import components by path:
 
 ```vue
 <script setup>
@@ -103,16 +108,61 @@ import '@aziontech/icons'
 
 ### Prerequisites
 
-- Node.js `>= 22.18.0`
-- pnpm `10.x` (corepack recommended)
-
-### Install dependencies
-
-From the repository root:
+- **Node.js `>= 24`** — the version lives in [`.nvmrc`](./.nvmrc) and is enforced by `engines` in the root `package.json`. With a version manager, `nvm use` (or `fnm use`) picks it up.
+- **pnpm `11.x`** — the root `packageManager` field pins the exact version. Enable Corepack once and it installs that version for you:
 
 ```bash
+corepack enable
+```
+
+### Clone and install
+
+```bash
+git clone https://github.com/aziontech/webkit.git
+cd webkit
 pnpm install
 ```
+
+Always install from the repository root: it links the workspace packages to each other and installs the Husky hooks (`commit-msg` and `pre-commit`) that guard every commit.
+
+### Run the Storybook
+
+The Storybook in [`apps/storybook`](./apps/storybook) is the development playground: every component ships its stories there, with controls for every prop and a copy-paste-ready "Show code" snippet.
+
+```bash
+pnpm storybook:dev
+```
+
+This builds `@aziontech/icons` first (the stories need the icon font), then starts the dev server at <http://localhost:6006>. To skip the icons build on later runs, start it from the app directly:
+
+```bash
+pnpm --filter storybook dev
+```
+
+Stories live under `apps/storybook/src/stories/` — `foundations/` (tokens), `components/<category>/` (one folder per component), `templates/` (page-level compositions) and `utils/`. Every story must keep its "Show code" panel a runnable SFC; check the whole tree with:
+
+```bash
+pnpm storybook:validate-docs
+```
+
+A static build (`pnpm storybook:build`) lands in `apps/storybook/dist`; preview it with `pnpm storybook:preview` at <http://localhost:6007>. The full guide — stack, project structure, writing stories, visual tests — is in the [Storybook app README](./apps/storybook/README.md).
+
+### Run the tests
+
+Components ship a co-located `*.test.ts` run by **Vitest in browser mode** (real Chromium, never jsdom). The first run needs the browser installed:
+
+```bash
+pnpm --filter @aziontech/webkit exec playwright install chromium
+pnpm webkit:test
+```
+
+Pixels are covered by a separate layer: `@storybook/test-runner` visits every story in the built Storybook and compares a screenshot against the committed baselines.
+
+```bash
+pnpm storybook:test:visual
+```
+
+Baselines are per-platform and only the Linux ones are committed, so never commit snapshots generated on macOS. The full testing contract — coverage, opting a story out, regenerating baselines — is in [CONTRIBUTING.md](./CONTRIBUTING.md#testing).
 
 ### Most used commands
 
@@ -125,6 +175,14 @@ pnpm storybook:preview      # Preview the static build
 # Icons
 pnpm icons:build            # Generate icon artifacts
 pnpm icons:validate         # Validate icon source
+pnpm icons:gallery:serve    # Icons Gallery dev server
+
+# Tests
+pnpm webkit:test            # Unit suite (headless Chromium)
+pnpm webkit:test:watch      # Unit suite in watch mode
+pnpm webkit:test:ui         # Vitest UI (headed browser)
+pnpm webkit:test:coverage   # v8 coverage report
+pnpm storybook:test:visual  # Visual regression against the baselines
 
 # Webkit quality gates
 pnpm webkit:lint            # ESLint (max-warnings 0)
@@ -136,6 +194,11 @@ pnpm webkit:format:check    # Prettier check
 # Aggregate
 pnpm governance             # Lint + type-check + format + audit
 ```
+
+### Troubleshooting
+
+- **Stale or half-installed dependencies** — `pnpm install:reset` deletes `pnpm-lock.yaml` and `node_modules/`, then reinstalls from scratch.
+- **pnpm aborts a script with a deps-verify error** (common when `node_modules` is symlinked, e.g. in a git worktree) — prefix the command with `PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN=false`.
 
 ## Development flow
 
@@ -168,6 +231,7 @@ Local equivalents run via `pnpm storybook:dev` and `pnpm icons:gallery:serve`.
 - [Theme package guide](./packages/theme/README.md)
 - [Icons package guide](./packages/icons/README.md)
 - [Webkit package guide](./packages/webkit/README.md)
+- [webkit CLI reference](./packages/webkit/docs/toolkit/cli.md) — `init`, `doctor`, `report`, `canary`, `sync`
 - [Contributing guide](./CONTRIBUTING.md) — workflow, commit conventions, review checklist
 - [Contribution rules](./.claude/rules/) — dependencies, migration, styling, no-invention
 - [Component specs](./.specs/) — source of truth for every component API

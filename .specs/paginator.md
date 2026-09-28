@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=483-929
   node_id: 483:929
-checksum: 3ab3550f647fad7c754be0b6d516656e530451b734d29e99b36e5f057d2a9a48
+checksum: ef645d917b2d8e7473cedfbac7334eeb90033cf4904abdafb8cbe7211b078d5a
 created: 2026-06-16
-last_updated: 2026-06-27
+last_updated: 2026-09-15
 ---
 
 # Paginator — Component Spec
@@ -33,12 +33,12 @@ import Paginator from '@aziontech/webkit/paginator'
       <Paginator.Info>Showing 1 to 10 of 20 entries</Paginator.Info>
     </template>
 
-    <Paginator.Button kind="previous" disabled>Previous</Paginator.Button>
+    <Paginator.Button kind="previous" disabled />
     <Paginator.Button kind="number" selected>1</Paginator.Button>
     <Paginator.Button kind="number">2</Paginator.Button>
     <Paginator.Button kind="number">3</Paginator.Button>
     <Paginator.Button kind="more" />
-    <Paginator.Button kind="next">Next</Paginator.Button>
+    <Paginator.Button kind="next" />
 
     <template #controls>
       <Paginator.PageSize :model-value="10" :options="[10, 25, 50, 100]" />
@@ -81,9 +81,9 @@ const pageSize = ref(10)
      (PascalCase root required). No per-component package.json — the root packages/webkit/package.json#exports
      map points each public path directly at its source file. See `.claude/rules/compound-api.md`. -->
 
-- `pagination-button/pagination-button.vue` — a single pagination control, height 28px, `var(--shape-button)` radius. Props `kind?: 'previous' | 'next' | 'number' | 'more'`, `selected?: boolean` (current-page treatment), `disabled?: boolean`. Emits `click: [event: MouseEvent]`. `previous` renders `pi pi-chevron-left` + the default slot; `next` renders the default slot + `pi pi-chevron-right`; `more` renders `pi pi-ellipsis-h`; `number` renders the default slot. Hover/active use the DESIGN.md ghost-layer surfaces; `selected` uses `var(--bg-selected)` + border; `disabled` uses `var(--bg-disabled)` + `var(--text-disabled)`.
-- `paginator-info/paginator-info.vue` — muted page-info text container (default slot), `.text-label-sm` / `var(--text-muted)`.
-- `paginator-page-size/paginator-page-size.vue` — rows-per-page selector (native `<select>`), 64×32, `var(--bg-canvas)` frame over a `var(--bg-surface)` field with `var(--border-default)` border, value `.text-label-sm` muted, `pi pi-chevron-down`. Props `modelValue?: number`, `options?: number[]` (default `[10, 25, 50, 100]`). Emits `update:modelValue: [value: number]`. Placed in the Paginator `controls` slot.
+- `pagination-button/pagination-button.vue` — one segment of the numbers strip, 28px tall with a 28px minimum width and no horizontal padding; it carries no radius of its own except the outer corners at the two ends of the strip (`var(--shape-elements)`). Props `kind?: 'previous' | 'next' | 'number' | 'more'`, `selected?: boolean` (current-page treatment), `disabled?: boolean`. Emits `click: [event: MouseEvent]`. `previous` renders `pi pi-chevron-left`; `next` renders `pi pi-chevron-right`; `more` renders `pi pi-ellipsis-h`; only `number` renders the default slot — the three glyph kinds are icon-only and take their accessible name from `aria-label`. `number` and `more` carry `var(--bg-surface)`; `previous` and `next` have no surface of their own and read against the strip. Hover/active use the DESIGN.md ghost-layer surfaces and are mutually exclusive (pressing replaces the hover layer rather than stacking on it); `selected` uses `var(--bg-selected)` + border; `disabled` keeps the kind's own surface and mutes the foreground to `var(--text-disabled)`.
+- `paginator-info/paginator-info.vue` — muted page-info text container (default slot), `.text-body-xs` / `var(--text-muted)`.
+- `paginator-page-size/paginator-page-size.vue` — rows-per-page selector (native `<select>`), 64×28 (same height as the numbers strip), `var(--shape-elements)` radius, `var(--bg-canvas)` frame over a `var(--bg-surface)` field with `var(--border-default)` border, value `.text-label-sm` muted, `pi pi-chevron-down`. Props `modelValue?: number`, `options?: number[]` (default `[10, 25, 50, 100]`). Emits `update:modelValue: [value: number]`. Placed in the Paginator `controls` slot.
 
 <!-- Resulting layout:
 
@@ -130,7 +130,9 @@ const pageSize = ref(10)
 ## States
 
 - Visual states: `default`, `hover`, `active`, `focus-visible`, `selected`, `disabled`
-- `data-kind` on PaginationButton: `previous` | `next` | `number` | `more`.
+- The page buttons render as one **segmented strip**: a single container carrying the `var(--border-default)` border and the `var(--shape-elements)` radius, with the buttons butted against each other at zero gap. Only the two end buttons round their outer corners.
+- `data-kind` on PaginationButton: `previous` | `next` | `number` | `more`. `number` and `more` carry `var(--bg-surface)`; `previous` and `next` have no surface of their own.
+- `hover` and `active` are mutually exclusive: pressing a button drops the hover layer and shows the `var(--bg-active)` layer alone, so the pressed surface reads one step below hover.
 - `data-selected` on PaginationButton mirrors the current-page `selected` prop; `aria-current="page"` set when selected.
 - `data-disabled` on PaginationButton mirrors the `disabled` prop; `disabled` attribute and `aria-disabled` set.
 - Data-driven mode: `Previous` is disabled on the first page, `Next` on the last; the current page button is `selected` (`aria-current="page"`); the overflow ellipsis (`more`) is non-interactive.
@@ -146,20 +148,21 @@ const pageSize = ref(10)
 | Region | Token (DESIGN.md) |
 |---|---|
 | button label typography | `.text-button-lg` |
-| info / select typography | `.text-label-sm` |
-| surface (default button) | `var(--bg-surface)` |
+| info typography | `.text-body-xs` |
+| select typography | `.text-label-sm` |
+| surface (number / overflow button) | `var(--bg-surface)` |
 | surface (current page) | `var(--bg-selected)` |
 | surface (hover) | `var(--bg-hover)` |
 | surface (active) | `var(--bg-active)` |
-| surface (disabled) | `var(--bg-disabled)` |
 | text | `var(--text-default)` |
 | text muted (info / select) | `var(--text-muted)` |
 | text disabled | `var(--text-disabled)` |
-| border (current page) | `var(--border-default)` |
+| border (numbers strip / current page / select) | `var(--border-default)` |
 | border width | `var(--border-width-default)` |
-| gap (numbers group) | `var(--spacing-xxs)` |
-| gap / padding (button) | `var(--spacing-xs)` |
-| shape (button) | `var(--shape-button)` |
+| gap (inside the numbers strip) | `0` |
+| gap (strip to rows-per-page) | `var(--spacing-xs)` |
+| gap (button content) | `var(--spacing-xs)` |
+| shape (numbers strip / select) | `var(--shape-elements)` |
 | ring | `var(--ring-color)` |
 
 ## Theme gaps
@@ -175,7 +178,7 @@ const pageSize = ref(10)
 - ARIA: root `<nav>` with `aria-label` (the `ariaLabel` prop); current-page button sets `aria-current="page"`; disabled buttons set the `disabled` attribute and `aria-disabled`; icon glyphs are `aria-hidden`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
-- Touch target ≥40×40 px or a justified deviation (Figma button height is 28px; pad the hit area).
+- Touch target: each button is 28×28, a justified deviation from 44×44 — the design is a compact segmented strip sized to sit inside a table footer, and the buttons are butted with no gap, so there is no room to pad the hit area without breaking the strip.
 
 ## Stories (Storybook)
 

@@ -6,7 +6,10 @@ import { toSfc } from '../../../_shared/story-source'
 const IMPORT = "import CardPricing from '@aziontech/webkit/card-pricing'"
 const BUTTON_IMPORT = "import Button from '@aziontech/webkit/button'"
 
-const defaultDescription = 'Billed annually or $25/mo billed monthly.'
+// The card carries ONE prose region — the billing caveat under the price. A second band
+// above the amount used to exist and said much the same thing in the same treatment; the
+// Figma component has a single region, so the pitch now belongs to the slot.
+const defaultPricingDetails = 'Billed annually or $25/mo billed monthly.'
 
 /** @type {import('@storybook/vue3').Meta<typeof CardPricing>} */
 const meta = {
@@ -44,15 +47,6 @@ const meta = {
         defaultValue: { summary: "'Pro'" }
       }
     },
-    description: {
-      control: 'text',
-      description: 'Muted plan description copy below the title.',
-      table: {
-        category: 'props',
-        type: { summary: 'string' },
-        defaultValue: { summary: "''" }
-      }
-    },
     pricingDetails: {
       control: 'text',
       description: 'Secondary line shown below the currency amount.',
@@ -74,6 +68,16 @@ const meta = {
     showTag: {
       control: 'boolean',
       description: 'Whether the highlight tag is shown next to the title.',
+      table: {
+        category: 'props',
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' }
+      }
+    },
+    aligned: {
+      control: 'boolean',
+      description:
+        "Reserves each prose region's band so a row of cards aligns row-for-row. Set it on every card in the row.",
       table: {
         category: 'props',
         type: { summary: 'boolean' },
@@ -134,7 +138,7 @@ const meta = {
       table: {
         category: 'props',
         type: { summary: 'string' },
-        defaultValue: { summary: "'per month'" }
+        defaultValue: { summary: "'/ mon'" }
       }
     },
     showPrefix: {
@@ -177,16 +181,16 @@ const meta = {
   },
   args: {
     planTitle: 'Pro',
-    description: defaultDescription,
-    pricingDetails: defaultDescription,
+    pricingDetails: defaultPricingDetails,
     showPricingDetails: true,
     showTag: false,
     tagLabel: 'Popular',
+    aligned: false,
     slotPosition: 'bottom',
     kind: 'contained',
     value: '20',
     prefix: '$',
-    suffix: 'per month',
+    suffix: '/ mon',
     showPrefix: true,
     showSuffix: true,
     actionLabel: 'Label'
@@ -205,13 +209,12 @@ const Template = (args) => ({
 
 const DEFAULT_MARKUP = `<CardPricing
   plan-title="Pro"
-  description="Billed annually or $25/mo billed monthly."
   pricing-details="Billed annually or $25/mo billed monthly."
   slot-position="bottom"
   kind="contained"
   value="20"
   prefix="$"
-  suffix="per month"
+  suffix="/ mon"
   action-label="Label"
 />`
 
@@ -228,52 +231,96 @@ export const Default = {
   }
 }
 
-const VARIANTS_TEMPLATE = `<div class="flex flex-wrap gap-6">
+const VARIANTS_TEMPLATE = `<div class="grid grid-cols-[repeat(auto-fit,320px)] gap-6">
   <CardPricing
     slot-position="bottom"
     kind="contained"
     plan-title="Pro"
-    description="Billed annually or $25/mo billed monthly."
     pricing-details="Billed annually or $25/mo billed monthly."
     value="20"
     prefix="$"
-    suffix="per month"
+    suffix="/ mon"
     action-label="Label"
   />
   <CardPricing
     slot-position="bottom"
     kind="transparent"
     plan-title="Pro"
-    description="Billed annually or $25/mo billed monthly."
     pricing-details="Billed annually or $25/mo billed monthly."
     value="20"
     prefix="$"
-    suffix="per month"
+    suffix="/ mon"
     action-label="Label"
   />
   <CardPricing
     slot-position="middle"
     kind="contained"
     plan-title="Pro"
-    description="Billed annually or $25/mo billed monthly."
     pricing-details="Billed annually or $25/mo billed monthly."
     value="20"
     prefix="$"
-    suffix="per month"
+    suffix="/ mon"
     action-label="Label"
   />
   <CardPricing
     slot-position="middle"
     kind="transparent"
     plan-title="Pro"
-    description="Billed annually or $25/mo billed monthly."
     pricing-details="Billed annually or $25/mo billed monthly."
     value="20"
     prefix="$"
-    suffix="per month"
+    suffix="/ mon"
     action-label="Label"
   />
 </div>`
+
+const ALIGNED_TEMPLATE = `<div class="grid grid-cols-[repeat(auto-fit,320px)] gap-6">
+  <CardPricing
+    aligned
+    plan-title="Hobby"
+    pricing-details=""
+    value="Free"
+    prefix=""
+    suffix=""
+    action-label="Start free"
+  />
+  <CardPricing
+    aligned
+    show-tag
+    tag-label="Popular"
+    plan-title="Pro"
+    pricing-details="Billed annually, save 20%"
+    value="20"
+    prefix="$"
+    suffix="/ mon"
+    action-label="Continue with Pro"
+  />
+  <CardPricing
+    aligned
+    plan-title="Enterprise"
+    pricing-details="Tailored to your usage requirements and payment terms"
+    value="Custom"
+    prefix=""
+    suffix=""
+    action-label="Contact sales"
+  />
+</div>`
+
+/** @type {import('@storybook/vue3').StoryObj<typeof CardPricing>} */
+export const Aligned = {
+  render: () => ({ components: { CardPricing }, template: ALIGNED_TEMPLATE }),
+  parameters: {
+    controls: { disable: true },
+    docs: {
+      controls: { disable: true },
+      description: {
+        story:
+          'Three tiers whose copy is deliberately uneven: Hobby has no billing caveat, Pro has one line and Enterprise two. With `aligned` every region sits on the same line in all three cards, so the row reads as one comparison. Drop the prop and each card sizes to its own copy, staggering the feature lists and the buttons.'
+      },
+      source: { code: toSfc(IMPORT, ALIGNED_TEMPLATE) }
+    }
+  }
+}
 
 /** @type {import('@storybook/vue3').StoryObj<typeof CardPricing>} */
 export const Variants = {
@@ -292,13 +339,12 @@ export const Variants = {
 
 const WITH_TAG_MARKUP = `<CardPricing
   plan-title="Pro"
-  description="Billed annually or $25/mo billed monthly."
   pricing-details="Billed annually or $25/mo billed monthly."
   show-tag
   tag-label="Popular"
   value="20"
   prefix="$"
-  suffix="per month"
+  suffix="/ mon"
   action-label="Label"
 />`
 
@@ -318,7 +364,6 @@ export const WithTag = {
 
 const SLOTS_TEMPLATE = `<CardPricing
   plan-title="Pro"
-  description="Billed annually or $25/mo billed monthly."
   pricing-details="Billed annually or $25/mo billed monthly."
   slot-position="middle"
   kind="contained"
@@ -326,7 +371,7 @@ const SLOTS_TEMPLATE = `<CardPricing
   tag-label="Popular"
   value="20"
   prefix="$"
-  suffix="per month"
+  suffix="/ mon"
 >
   <ul class="m-0 flex list-none flex-col gap-2 p-0 text-body-sm text-(--text-default)">
     <li class="flex items-center gap-2">

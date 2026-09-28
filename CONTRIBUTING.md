@@ -14,7 +14,7 @@ Thanks for working on Webkit. This document covers how to propose changes that p
 ## Local setup
 
 ```bash
-# Node >= 22.18.0, pnpm 10.x (corepack will install the pinned version)
+# Node >= 24, pnpm 11.x (corepack will install the pinned version)
 pnpm install
 pnpm storybook:dev
 ```

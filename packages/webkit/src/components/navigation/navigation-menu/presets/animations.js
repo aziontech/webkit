@@ -22,7 +22,8 @@ export const navigationMenuTransitionClasses = {
     'w-[var(--popup-width,auto)] h-[var(--popup-height,auto)] [transform-origin:var(--popup-origin,top_left)] transition-[opacity,scale,width,height] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none data-[starting-style]:scale-95 data-[starting-style]:opacity-0 data-[starting-style]:transition-none data-[ending-style]:scale-95 data-[ending-style]:opacity-0 data-[ending-style]:transition-[opacity,scale]',
   content:
     'box-border transition-[opacity,translate] duration-moderate-01 ease-productive-entrance motion-reduce:transition-none data-[starting-style]:opacity-0 data-[starting-style]:transition-none data-[ending-style]:opacity-0 data-[starting-style]:data-[activation-direction=left]:-translate-x-6 data-[starting-style]:data-[activation-direction=right]:translate-x-6 data-[starting-style]:data-[activation-direction=up]:-translate-y-6 data-[starting-style]:data-[activation-direction=down]:translate-y-6 data-[ending-style]:data-[activation-direction=left]:translate-x-6 data-[ending-style]:data-[activation-direction=right]:-translate-x-6 data-[ending-style]:data-[activation-direction=up]:translate-y-6 data-[ending-style]:data-[activation-direction=down]:-translate-y-6',
-  viewport: 'relative h-full w-full overflow-hidden'
+  viewport:
+    'relative h-full w-full overflow-hidden group-data-[constrained]/positioner:overflow-y-auto'
 }
 
 export const PRESET_IDS = {

@@ -2,7 +2,7 @@
 name: webkit-baseline-ui
 description: Fast deslop pass for UI built on @aziontech/webkit — enforce components-only, tokens-only (typography/color/shape/spacing/shadow), correct typography hierarchy, and consistent spacing rhythm. Use for a quick cleanup or polish review.
 status: active
-last_updated: 2026-07-21
+last_updated: 2026-09-21
 scope: general
 enforced_by: [webkit-tokens, webkit-prefer-over-custom, webkit-styling]
 ---
@@ -116,43 +116,30 @@ This is the canonical section-title treatment. A section title written as
 - **SHOULD** drive variant styling from `data-*` attributes (a `data-[state=...]:` Tailwind variant),
   not from JS class-preset objects — so the switch reads in one place in the markup.
 
-### Width & containers — fluid-first shell, cap only reading width
+### Width & containers — the page names its container, fields cap their own
 
-This section is the **canonical container / max-width doctrine** for webkit apps — the umbrella
-`/webkit-ui-craft` skill defers here, so treat this as the authoritative and complete source.
+**Page-level containment is `/webkit-layout`'s** — the measure a page column takes, the boundary
+between content and app chrome, and the vertical rhythm between sections. Go there for any of it.
+Two rules from that system are worth repeating here because they are the ones a deslop pass catches:
 
-The default is **fluid**: content fills the space the shell gives it. A container
-(`max-w-(--container-*)`) is the exception, applied only where unbounded width hurts legibility or
-balance. Reach for it in this order.
+- **MUST** carry a **column class** (`layout-column`, `layout-column-form`, …) on a page, never a
+  hand-rolled `mx-auto max-w-(--container-*)`. Full-bleed is the **absence** of a column class, not
+  a `w-full`.
+- **MUST** keep the **app shell fluid** — the sidebar, the global header and the content zone's own
+  inset stretch with the viewport. These are chrome; a max-width on them only creates dead gutters.
+  The cap lives on the page's own column.
 
-- **MUST** keep the **app shell fluid-first** — never cap it with a container. The **sidebar**, the
-  **global header**, the **page heading**, and the **main content spacing** (the content zone's
-  `p-(--spacing-*)` inset) all stay full-width and stretch with the viewport. These are chrome; a
-  max-width on them only creates dead gutters.
-- **MUST** cap **reading / input width** with `max-w-(--container-2xs … xl)`: form fields, text
-  columns, focused auth/save cards, fixed side rails. Pick the tight end (`2xs … sm`) for compact
-  settings rows and the loose end (up to `xl`, 576px) for a control column that must fit a longer value.
-  A form input that spans a 2560px screen is a legibility bug, not a feature.
-- **MUST** give **focused create/edit flows** a centered page container — `mx-auto
-max-w-(--container-7xl)` on the flow's content wrapper — so the column sits centered instead of
-  drifting to the left edge on wide screens. This is the one place the _page section_ (not just a field)
-  is capped.
-- **SHOULD** center a **landing / browse / catalog page** — a page of stacked sections, card grids, and
-  tabs (e.g. a Home or Marketplace page) — in a `mx-auto w-full max-w-(--container-7xl)` container on
-  its root `main`, so the content sits centered instead of drifting to the left edge on wide screens; add
-  the page's top breathing room with `pt-(--spacing-*)`. Keep the width **identical across sibling
-  pages of the same kind** so moving between them never reflows the column. The shell around it (sidebar,
-  header, content-zone inset) stays fluid per the first bullet — the cap lives on the page's own `main`,
-  not the app layout content zone.
-- **MUST** cap a **wizard / multi-step deployment flow** tighter than a general create/edit page —
-  `mx-auto max-w-(--container-2xl)` (672px) on the flow's content wrapper. A wizard is a single
-  guided task with one thing to look at per step, so the step column stays narrow and centered; the `7xl`
-  cap above is for broader create/edit pages, not step-by-step wizards.
-- **SHOULD** keep **data-dense surfaces fluid** — tables, dashboards, log/grid views breathe to the full
-  content width; don't box them into a narrow container.
+**Inside a page, capping a control or a reading column is still a local decision:**
+
+- **MUST** cap **field / input width** with `max-w-(--container-2xs … xl)`. Pick the tight end
+  (`2xs … sm`) for compact settings rows and the loose end (up to `xl`, 576px) for a control column
+  that must fit a longer value. A form input spanning a 2560px screen is a legibility bug. In an
+  item-group field row use `layout-field-control` instead of a hand-set width — see `/webkit-layout`.
+- **SHOULD** keep **data-dense surfaces fluid** within their column — tables, dashboards, log and
+  grid views breathe to the full content width; don't box them into a narrower container.
 - **MUST** express every cap as `max-w-(--container-<size>)` — the `@aziontech/theme` container
-  tokens, `--container-3xs … --container-7xl`. **NEVER** a raw `max-w-5xl` / `max-w-[768px]`, and never a
-  legacy helper (`.max-container-width`, `--container-max-width`).
+  tokens, `--container-3xs … --container-7xl`. **NEVER** a raw `max-w-5xl` / `max-w-[768px]`, and
+  never a legacy helper (`.max-container-width`, `--container-max-width`).
 
 ### Control size rhythm — same size on a horizontal line
 
@@ -203,6 +190,6 @@ End with a one-line verdict: `clean` or `N violations across <sections>`.
 - [ ] Typography uses `text-*` tokens with correct hierarchy; spacing uses only `--spacing-*`.
 - [ ] Section titles use `text-heading-xxs text-(--text-default)` with a `px-(--spacing-xs)` optical inset (and `--spacing-sm` above the card) — not `text-overline-*`, which is reserved for menu/popover group labels.
 - [ ] `h-dvh` not `h-screen`; one accent per view; empty states have an action.
-- [ ] Shell (sidebar, global header, page heading, content-zone spacing) is fluid; only reading width, focused flows, and landing/browse pages are capped, always via `max-w-(--container-*)` — wizards/deployment flows at `max-w-(--container-2xl)`, broader create/edit and landing/browse pages centered at `7xl`.
+- [ ] Shell (sidebar, global header, content-zone spacing) is fluid; the page carries a column class from `/webkit-layout` rather than a hand-rolled cap; field and reading widths are capped via `max-w-(--container-*)`.
 - [ ] Buttons and fields on the same horizontal line share one `size` token and a common baseline.
 - [ ] (File mode) Every violation has a quoted line, a why, and a concrete fix.
