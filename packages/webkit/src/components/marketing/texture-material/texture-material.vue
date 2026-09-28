@@ -36,9 +36,6 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'marketing-texture-material'
   )
 
-  // The 4x4 Bayer matrix. A rank is the sub-lattice that appears at that step of the
-  // ramp, so dots LEAVE as the density drops instead of dimming — dispersed ranks are
-  // what keep the sparse end scattered rather than striped.
   const BAYER = [
     [0, 8, 2, 10],
     [12, 4, 14, 6],
