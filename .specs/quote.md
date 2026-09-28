@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: c4beb0d077e1f1303d5b190989ddd8d35990cf365e23ef18a3de2269327ec2b6
+checksum: 00dbf87c077cbf614edc909f4b9559cf40206463ee08738194c2a545a14bf1e2
 created: 2026-09-22
 last_updated: 2026-09-24
 ---
@@ -115,8 +115,7 @@ _none_
 | typography (attribution, `highlight`) | `.text-body-md` / `.text-body-sm` |
 | quotation text | `var(--text-default)` |
 | quotation glyph | `var(--text-muted)` |
-| attribution text (`inline`, `highlight` job title) | `var(--text-muted)` |
-| attribution text (`signed` job title) | `var(--text-default)` |
+| attribution text (job title, every register) | `var(--text-muted)` |
 | band rules | `var(--border-default)` |
 | spacing (stack, `inline`) | `var(--spacing-sm)` |
 | spacing (stack, `signed` / `highlight`) | `var(--spacing-xl)` |

@@ -44,8 +44,7 @@ const meta = {
     },
     name: {
       control: 'text',
-      description:
-        "Who said it — the attribution's lead, and the source of the initials fallback in `highlight`.",
+      description: "Who said it — the attribution's lead, and the source of the initials fallback in `highlight`.",
       table: {
         category: 'props',
         type: { summary: 'string' },

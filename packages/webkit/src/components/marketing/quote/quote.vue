@@ -78,7 +78,7 @@
         class="pointer-events-none absolute inset-0 [--texture-ink:color-mix(in_srgb,var(--text-default)_32%,transparent)] mask-[radial-gradient(closest-side,black_10%,transparent_100%)]"
       >
         <TextureMaterial
-          kind="grid"
+          kind="dots"
           size="small"
         />
       </div>
@@ -106,7 +106,7 @@
           :alt="logoAlt || jobTitle"
           loading="lazy"
           decoding="async"
-          class="w-fit object-contain group-data-[kind=inline]:h-8 group-data-[kind=signed]:h-8 group-data-[kind=signed]:max-w-40"
+          class="w-fit object-contain group-data-[kind=inline]:h-8 group-data-[kind=signed]:h-8 group-data-[kind=signed]:max-w-(--size-40)"
         />
       </slot>
     </div>
@@ -159,7 +159,7 @@
       class="flex flex-col gap-(--spacing-xs) sm:flex-row sm:items-center sm:gap-(--spacing-xl)"
     >
       <Overline>{{ name }}</Overline>
-      <span class="px-1 text-overline-md uppercase text-(--text-default)">{{ jobTitle }}</span>
+      <span class="px-(--spacing-xxs) text-overline-md uppercase text-(--text-muted)">{{ jobTitle }}</span>
     </figcaption>
 
     <figcaption
