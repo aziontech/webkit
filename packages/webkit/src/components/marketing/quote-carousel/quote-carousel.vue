@@ -76,12 +76,11 @@
     v-bind="$attrs"
     :data-testid="testId"
     :aria-label="ariaLabel"
-    class="[--carousel-gap:0] data-[scrollable]:mask-[linear-gradient(to_right,transparent,black_var(--spacing-lg),black_calc(100%-var(--spacing-lg)),transparent)]"
   >
     <CarouselItem
       v-for="card in cards"
       :key="card.key"
-      class="-mr-px w-[85vw] max-w-120 border border-(--border-default) bg-(--bg-surface) p-(--spacing-xl) sm:w-120"
+      class="w-[85vw] max-w-(--container-md) sm:w-(--container-md)"
     >
       <Quote
         :text="card.text"
@@ -105,7 +104,7 @@
               :is="card.art"
               v-if="card.art"
               :data-mark="card.mark"
-              class="h-8 w-auto max-w-48 text-(--text-default)"
+              class="h-8 w-auto max-w-(--size-48) text-(--text-default)"
             />
             <span
               v-else-if="card.label"

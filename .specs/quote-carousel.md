@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/QEbHSTFDWfh4VHkBp6NWN3/Azion.com?node-id=13136-296065
   node_id: 13136:296065
-checksum: cd7a6871ea63c29d033666af64f834d5e3b0f7af1c297b8e5ee1a12e463c583b
+checksum: d6339fe241d6212b2538e9d75d41138004b898d5615718df3a6c74374221c69e
 created: 2026-09-24
-last_updated: 2026-09-24
+last_updated: 2026-09-26
 ---
 
 # QuoteCarousel — Component Spec
@@ -31,14 +31,14 @@ The cards sit edge to edge with no gutter — each draws its own hairline and th
 
 - For a single testimonial → use `quote` directly; a track of one has nothing to scroll.
 - For the one quotation a page features above the others → use `quote` in its `highlight` register.
-- For a row of company marks with no quotation → use `brand-carousel` (moving) or `logo-wall` (static).
+- For a row of company marks with no quotation → use `ticker` (moving) or `logo-wall` (static).
 - For a set of quotes the reader must read → lay them out as a `card-grid`; anything past the first card in a track can be missed.
 
 ## Related
 
 - `quote` — the single testimonial this band repeats; the `inline` register is what each card draws.
 - `carousel` — the scrollable track underneath, with the snap points, the step controls and the keyboard behaviour.
-- `brand-carousel` — the same clients without their words, moving on their own.
+- `ticker` — the same clients without their words, moving on their own.
 - `logo-wall` — the static wall of marks, when a quotation is not the point.
 - `section-title` — the headline composed above the band; this component carries no heading of its own.
 
@@ -51,7 +51,7 @@ The cards sit edge to edge with no gutter — each draws its own hairline and th
 - Always pass `ariaLabel`. A scroll region with no name tells a screen-reader user nothing about what they are about to move through.
 - Compose the headline above the band with `section-title`, unframed, so the band owns only the strip.
 - Keep the band full width. The row is designed to run past the reader's view — inset it and the fade loses the thing it is signalling.
-- The cards carry no gutter by design: the band sets `--carousel-gap` to zero on the track so each card's hairline meets its neighbour's, and every card pulls a pixel left so the two rules land as one.
+- The band is pure composition — Carousel, then `Carousel.Item`, then `quote` — so its flush ruled cards and end fades come from `carousel` and read the same as any other carousel on the page. It adds only the card width and the header row of likeness and mark.
 
 ## Usage
 
@@ -108,7 +108,7 @@ const testimonials = [
 
 - Visual states: `default`, plus `focus-visible` on the track itself and `grab` / `grabbing` on the pointer while the row can be dragged
 - A card with neither `name` nor `photo` draws no likeness, and its company mark leads the header row alone
-- `data-scrollable` is present on the root while the track overflows its row, and it is what turns the end fades on; a band whose cards fit shows no fade and nothing to scroll. The fade is proportional (a percentage of the band's own width), so it reads the same on a phone and on a desktop
+- `data-scrollable` is present on the root while the track overflows its row; a band whose cards fit shows no fade and nothing to scroll. The end fades are `carousel`'s: each end fades only while there are cards past it, so the row at rest fades on the right alone
 - An empty `items` renders the named track with no cards in it, so a band that is waiting on its data keeps its place and announces nothing
 - The track is focusable and shows the focus ring, because a scrollable region must be reachable by keyboard
 
@@ -125,9 +125,7 @@ const testimonials = [
 
 | Region | Token (DESIGN.md) |
 |---|---|
-| card surface | `var(--bg-surface)` |
-| card border | `var(--border-default)` |
-| card padding | `var(--spacing-xl)` |
+| card surface, border, padding | inherited from `carousel`'s `Carousel.Item` |
 | card header gap (likeness to mark) | `var(--spacing-md)` |
 | mark ink | `var(--text-default)` |
 
