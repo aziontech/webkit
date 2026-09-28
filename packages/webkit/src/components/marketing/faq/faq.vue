@@ -53,7 +53,7 @@
 
   const frame = computed(() => (props.framed ? FrameBox : 'div'))
   const frameProps = computed(() =>
-    props.framed ? { flush: true, borders: 'y', marks: 'bottom' } : {}
+    props.framed ? { flush: true, borders: 'y', marks: 'all' } : {}
   )
 </script>
 
