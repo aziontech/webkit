@@ -14,7 +14,6 @@ const props = {
   text: 'load times, with a 45% cost reduction in data transfer.'
 }
 
-// The mark is a dynamic import, so artwork lands a microtask-and-a-tick after mount.
 const markFor = (container: Element, name: string) =>
   waitFor(() => {
     const art = container.querySelector(`svg[data-mark="${name}"]`)

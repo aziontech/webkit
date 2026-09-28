@@ -73,9 +73,6 @@
     :data-linked="isLink || null"
     class="relative m-0 flex h-full flex-col gap-(--spacing-md) bg-(--bg-canvas) p-(--spacing-xl) no-underline transition-colors duration-150 ease-out motion-reduce:transition-none data-[linked]:hover:bg-(--bg-mask) data-[linked]:focus-visible:z-10 data-[linked]:focus-visible:outline-none data-[linked]:focus-visible:ring-2 data-[linked]:focus-visible:ring-inset data-[linked]:focus-visible:ring-(--ring-color)"
   >
-    <!-- A fixed band, so every cell in a row starts its claim on one line whatever
-         aspect ratio the mark inside it has. `figcaption` is only legal inside a
-         `figure`, so it follows the root element. -->
     <component
       :is="isLink ? 'div' : 'figcaption'"
       v-if="hasSignature"
@@ -89,8 +86,6 @@
           class="h-full w-auto max-w-(--size-32) object-contain"
         />
       </slot>
-      <!-- Registry artwork is aria-hidden, so the name is the caption's only text;
-           with artwork it is read, not shown. -->
       <span
         v-if="label"
         :data-artwork="hasArtwork || null"
