@@ -22,6 +22,7 @@ import AzionDocs from '@site/docs/views/AzionDocs.vue'
 import AzionDocsAgentPage from '@site/docs/views/AzionDocsAgentPage.vue'
 import AzionDocsAgentSetup from '@site/docs/views/AzionDocsAgentSetup.vue'
 import AzionDocsPage from '@site/docs/views/AzionDocsPage.vue'
+import LandingAiInference from '@site/views/LandingAiInference.vue'
 import LandingApplicationAccelerator from '@site/views/LandingApplicationAccelerator.vue'
 import LandingAzion from '@site/views/LandingAzion.vue'
 import LandingAzionHeros from '@site/views/LandingAzionHeros.vue'
@@ -29,9 +30,12 @@ import LandingCache from '@site/views/LandingCache.vue'
 import LandingCareers from '@site/views/LandingCareers.vue'
 import LandingCareersHome from '@site/views/LandingCareersHome.vue'
 import LandingCareersJob from '@site/views/LandingCareersJob.vue'
+import LandingCompliance from '@site/views/LandingCompliance.vue'
+import LandingComplianceEmbed from '@site/views/LandingComplianceEmbed.vue'
 import LandingContact from '@site/views/LandingContact.vue'
 import LandingFinancialServices from '@site/views/LandingFinancialServices.vue'
 import LandingFunctions from '@site/views/LandingFunctions.vue'
+import LandingGdpr from '@site/views/LandingGdpr.vue'
 import LandingLearning from '@site/views/LandingLearning.vue'
 import LandingOurNetwork from '@site/views/LandingOurNetwork.vue'
 import LandingPartners from '@site/views/LandingPartners.vue'
@@ -51,6 +55,7 @@ const MOVED = {
   '/site/functions': '/site/products/functions',
   '/site/application-accelerator': '/site/products/application-accelerator',
   '/site/cache': '/site/products/cache',
+  '/site/ai-inference': '/site/products/ai-inference',
   '/site/workloads': '/site/products/workloads',
   '/site/our-network': '/site/products/our-network',
   '/site/financial-services': '/site/solutions/financial-services',
@@ -83,6 +88,13 @@ export const siteRoutes = [
   },
   // The Products mega-menu's Cache entry.
   { path: '/site/products/cache', name: 'site-cache', component: LandingCache },
+  // The Products mega-menu's AI Inference entry, a design prototype (Figma `Azion.com` node
+  // 13031:161116).
+  {
+    path: '/site/products/ai-inference',
+    name: 'site-ai-inference',
+    component: LandingAiInference
+  },
   // A product page whose hero is the product: the workload's own deployment topology, drawn
   // with the diagram the console renders, dissolved into the band by a dither ramp.
   { path: '/site/products/workloads', name: 'site-workloads', component: LandingWorkloads },
@@ -160,6 +172,21 @@ export const siteRoutes = [
   // component with the props a page would pass. Not an azion.com page — it is the Site's
   // own reference for choosing an opening, so the nav does not link it.
   { path: '/site/azion-heros', name: 'site-azion-heros', component: LandingAzionHeros },
+  // The compliance page in the same shell: the certifications and the privacy regulations,
+  // one module of cards under a shared responsibility-model intro. Reached by direct URL only,
+  // the same way Careers is — neither is a Products/Solutions mega-menu entry.
+  { path: '/site/compliance', name: 'site-compliance', component: LandingCompliance },
+  // The same page with NO SiteNav/SiteFooter — for embedding it on its own where a surrounding
+  // surface already provides navigation/closing (see LandingComplianceEmbed).
+  {
+    path: '/site/compliance/embed',
+    name: 'site-compliance-embed',
+    component: LandingComplianceEmbed
+  },
+  // The GDPR page in the same shell: a translation of resend.com/security/gdpr (see
+  // .claude/skills/site-design-translate), rebranded to Azion. Reached by direct URL only, the
+  // same way Compliance and Careers are — not a Products/Solutions mega-menu entry.
+  { path: '/site/gdpr', name: 'site-gdpr', component: LandingGdpr },
 
   // ══ Documentation ═════════════════════════════════════════════════════════════════
   { path: '/site/docs', name: 'site-docs', component: AzionDocs },
