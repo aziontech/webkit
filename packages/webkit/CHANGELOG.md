@@ -1,3 +1,10 @@
+## [3.9.4](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.9.3...@aziontech/webkit@3.9.4) (2026-09-30)
+
+### Bug Fixes
+
+- **theme:** restore theme to @aziontech/theme@2.6.0 ([#1022](https://github.com/aziontech/webkit/issues/1022)) ([3882556](https://github.com/aziontech/webkit/commit/3882556539000cd660ad891700cf4fa5746141ae))
+- **webkit:** link field-multi-select option labels to their checkbox input ([#1041](https://github.com/aziontech/webkit/issues/1041)) ([194bf55](https://github.com/aziontech/webkit/commit/194bf559b7484730a25773a26a6ab3379971d267))
+
 ## [3.9.3](https://github.com/aziontech/webkit/compare/@aziontech/webkit@3.9.2...@aziontech/webkit@3.9.3) (2026-09-25)
 
 ### Bug Fixes
