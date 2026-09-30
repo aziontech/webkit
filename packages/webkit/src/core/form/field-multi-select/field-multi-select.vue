@@ -113,7 +113,7 @@
       class="flex items-center gap-3"
     >
       <Checkbox
-        :id="`${props.name}_${option[props.optionValue]}`"
+        :inputId="`${props.name}_${option[props.optionValue]}`"
         :name="props.name"
         :value="option[props.optionValue]"
         v-model="inputValue"
