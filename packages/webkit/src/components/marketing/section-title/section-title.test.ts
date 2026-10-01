@@ -2,13 +2,13 @@ import { composeStories } from '@storybook/vue3'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/content/section-title/SectionTitle.stories'
+import * as stories from '../../../../../../apps/storybook/src/stories/components/marketing/section-title/SectionTitle.stories'
 import { expectNoA11yViolations } from '../../../test/axe'
 import SectionTitle from './section-title.vue'
 
-const { Default, Kinds, WithActions } = composeStories(stories)
+const { Default, Kinds, Sizes, WithActions } = composeStories(stories)
 
-const TESTID = 'content-section-title'
+const TESTID = 'marketing-section-title'
 
 const props = { title: 'Everything runs at the edge' }
 
@@ -24,8 +24,6 @@ describe('SectionTitle', () => {
     const { getByTestId } = render(SectionTitle, { props })
     const root = getByTestId(TESTID)
 
-    // flush="top" is subtracted from borders="y", so the header keeps only its bottom rule —
-    // the divider between the header and the section body.
     expect(root).toHaveAttribute('data-flush', 'top')
     expect(root).toHaveAttribute('data-borders', 'bottom')
   })
@@ -45,6 +43,27 @@ describe('SectionTitle', () => {
     expect(getByTestId(TESTID)).toHaveAttribute('data-kind', 'centered')
   })
 
+  it.each(['small', 'medium', 'large'] as const)('reflects size="%s" on data-size', (size) => {
+    const { getByTestId } = render(SectionTitle, { props: { ...props, size } })
+
+    expect(getByTestId(TESTID)).toHaveAttribute('data-size', size)
+  })
+
+  it('defaults to the medium size', () => {
+    const { getByTestId } = render(SectionTitle, { props })
+
+    expect(getByTestId(TESTID)).toHaveAttribute('data-size', 'medium')
+  })
+
+  it.each(['small', 'medium', 'large'] as const)(
+    'keeps the headline an h2 at size="%s"',
+    (size) => {
+      const { getByRole } = render(SectionTitle, { props: { ...props, size } })
+
+      expect(getByRole('heading', { level: 2 })).toHaveTextContent('Everything runs at the edge')
+    }
+  )
+
   it.each(['centered', 'left', 'horizontal'] as const)(
     'keeps the headline before its description in DOM order when kind="%s"',
     (kind) => {
@@ -57,8 +76,6 @@ describe('SectionTitle', () => {
 
       expect(heading).toHaveTextContent('Everything runs at the edge')
       expect(paragraph).toHaveTextContent('One platform.')
-      // Node.DOCUMENT_POSITION_FOLLOWING === 4: the description follows the headline, so the
-      // reading order matches the visual one in every layout — including the two-column one.
       expect(heading.compareDocumentPosition(paragraph) & 4).toBe(4)
     }
   )
@@ -148,6 +165,16 @@ describe('SectionTitle', () => {
       ])
     })
 
+    it('renders the Sizes story with one header per step', () => {
+      const { getAllByTestId } = render(Sizes())
+
+      expect(getAllByTestId(TESTID).map((el) => el.getAttribute('data-size'))).toEqual([
+        'small',
+        'medium',
+        'large'
+      ])
+    })
+
     it('renders the WithActions story with both CTAs', () => {
       const { getAllByRole } = render(WithActions())
 
@@ -155,6 +182,42 @@ describe('SectionTitle', () => {
         'Start building',
         'Read the docs'
       ])
+    })
+  })
+
+  describe('framed', () => {
+    it('draws its own frame by default', () => {
+      const { getByTestId } = render(SectionTitle, { props: { title: 'Platform' } })
+      const root = getByTestId(TESTID)
+
+      expect(root).toHaveAttribute('data-framed')
+      expect(root).toHaveAttribute('data-borders')
+    })
+
+    it('renders as a plain block when framed is false', () => {
+      const { getByTestId } = render(SectionTitle, {
+        props: { title: 'Platform', framed: false }
+      })
+      const root = getByTestId(TESTID)
+
+      expect(root).not.toHaveAttribute('data-framed')
+      expect(root).not.toHaveAttribute('data-borders')
+      expect(root).not.toHaveAttribute('data-marks')
+    })
+
+    it('keeps its copy and its heading level unframed', () => {
+      const { getByRole, getByText } = render(SectionTitle, {
+        props: {
+          title: 'Platform',
+          eyebrow: 'Build',
+          description: 'One sentence.',
+          framed: false
+        }
+      })
+
+      expect(getByRole('heading', { level: 2, name: 'Platform' })).toBeInTheDocument()
+      expect(getByText('Build')).toBeInTheDocument()
+      expect(getByText('One sentence.')).toBeInTheDocument()
     })
   })
 })
