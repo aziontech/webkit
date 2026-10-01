@@ -35,6 +35,18 @@ const LINKED_ITEMS = CLIENTS.map((client) => ({
 
 const UNLINKED_ITEMS = CLIENTS.map(markFor)
 
+const RECTANGLE_ITEMS = [
+  ...LINKED_ITEMS,
+  ...[
+    { key: 'renner', alt: 'Renner' },
+    { key: 'marisa', alt: 'Marisa' },
+    { key: 'zoop', alt: 'Zoop' }
+  ].map((client) => ({
+    ...markFor(client),
+    href: `https://www.azion.com/en/success-case/${client.key}/`
+  }))
+]
+
 const WALL_ITEMS = [...LINKED_ITEMS, ...LINKED_ITEMS]
 
 // The snippet has to be paste-and-run, so the marks are spelled out rather than mapped.
@@ -47,8 +59,9 @@ const itemsMarkup = (items) =>
     })
     .join(',\n')
 
-const wallMarkup = (items, inner = '') => {
-  const open = `  <LogoWall
+const wallMarkup = (items, inner = '', kind = '') => {
+  const kindAttr = kind ? `\n    kind="${kind}"` : ''
+  const open = `  <LogoWall${kindAttr}
     aria-label="${ARIA_LABEL}"
     :items="[
 ${itemsMarkup(items)}
@@ -89,6 +102,17 @@ const meta = {
     }
   },
   argTypes: {
+    kind: {
+      control: 'inline-radio',
+      options: ['square', 'rectangle'],
+      description:
+        "The cell's proportion; `rectangle` sets every cell at 3:2, keeps three columns below `sm`, and holds three columns beside `aside` from `lg`.",
+      table: {
+        category: 'props',
+        type: { summary: "'square' | 'rectangle'" },
+        defaultValue: { summary: "'square'" }
+      }
+    },
     items: {
       control: 'object',
       description:
@@ -129,6 +153,7 @@ const meta = {
     }
   },
   args: {
+    kind: 'square',
     items: LINKED_ITEMS,
     ariaLabel: ARIA_LABEL,
     linkLabel: 'Read story'
@@ -158,7 +183,7 @@ export const Default = {
     docs: {
       description: {
         story:
-          'The Web Apps band: six linked customer marks on the start edge, one of those customers speaking on the end edge. Each cell is a `card-grid` frame cell and a whole-square link to that customer’s success case — hover or `Tab` to one and a wash rises behind it, the mark lifts, and `Read story` slides in underneath. From `lg` up the band splits and the wall sits three to a row in half the width; below it the quote follows the wall. iFood and Itaú carry `shape: \'compact\'`, which sets a near-square mark taller so it reads at the same weight as the wordmarks. The wall assumes a surrounding `frame-box` draws its outer rules, which is why the snippet includes one.'
+          'The Web Apps band: six linked customer marks on the start edge, one of those customers speaking on the end edge. Each cell is a `card-grid` frame cell and a whole-square link to that customer’s success case — hover or `Tab` to one and a wash rises behind it, the mark lifts, and `Read story` slides in underneath. From `lg` up the band splits: the wall sits in half the width, two to a row until `xl` and three from it, and the quote is centred beside it in a panel that never sets the band’s height, so the cells stay perfect squares whatever the quotation’s length. Beside a quote the wall takes exactly six marks. iFood and Itaú carry `shape: \'compact\'`, which sets a near-square mark taller so it reads at the same weight as the wordmarks. The wall assumes a surrounding `frame-box` draws its outer rules, which is why the snippet includes one.'
       },
       source: { code: toSfc(ASIDE_IMPORTS, wallMarkup(LINKED_ITEMS, QUOTE_MARKUP)) }
     }
@@ -178,6 +203,30 @@ export const Wall = {
           'With nothing in `aside` the wall spans the full width, six to a row from `lg` — the same cell size as the three-column wall beside a quote, so the two layouts share one rhythm. Twelve marks fill two full rows; give the wall a multiple of six here so the last row is never ragged. Empty the `items` control and the band renders nothing rather than an empty frame.'
       },
       source: { code: toSfc(IMPORTS, wallMarkup(WALL_ITEMS)) }
+    }
+  }
+}
+
+/** @type {import('@storybook/vue3').StoryObj<typeof LogoWall>} */
+export const Rectangle = {
+  render: (args) => ({
+    components: { FrameBox, LogoWall, Quote },
+    setup() {
+      return { args }
+    },
+    template: `<FrameBox><LogoWall v-bind="args">\n${QUOTE_MARKUP}\n</LogoWall></FrameBox>`
+  }),
+  args: {
+    kind: 'rectangle',
+    items: RECTANGLE_ITEMS
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Nine customers beside one of them speaking. `kind: \'rectangle\'` sets every cell at 3:2, and beside `aside` the wall holds three columns from `lg`, so three rows of rectangles take exactly the height two rows of squares do — the band grows by three names without growing taller. Below `sm` the wall keeps three columns, so nine marks never leave a ragged row. Every mark links to its story, so hover or `Tab` reveals `Read story` under it.'
+      },
+      source: { code: toSfc(ASIDE_IMPORTS, wallMarkup(RECTANGLE_ITEMS, QUOTE_MARKUP, 'rectangle')) }
     }
   }
 }

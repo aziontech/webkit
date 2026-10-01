@@ -159,6 +159,18 @@ describe('LogoWall', () => {
     expect(getByAltText('Contoso mark').closest('a')).toHaveAttribute('href', '/customers/contoso')
   })
 
+  it('marks the wall square by default through data-kind', () => {
+    const { getByTestId } = render(LogoWall, { props: { items } })
+
+    expect(getByTestId(TESTID)).toHaveAttribute('data-kind', 'square')
+  })
+
+  it('marks a rectangle wall through data-kind', () => {
+    const { getByTestId } = render(LogoWall, { props: { items, kind: 'rectangle' } })
+
+    expect(getByTestId(TESTID)).toHaveAttribute('data-kind', 'rectangle')
+  })
+
   it('carries no data-aside when the aside slot is empty', () => {
     const { getByTestId } = render(LogoWall, { props: { items } })
 
