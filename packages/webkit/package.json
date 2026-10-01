@@ -392,6 +392,8 @@
     "./assets/heroes/combine-data-and-vector-search.svg": "./src/assets/heroes/combine-data-and-vector-search.svg",
     "./assets/heroes/ddos-protection.svg": "./src/assets/heroes/ddos-protection.svg",
     "./assets/heroes/quick-start-with-templates.svg": "./src/assets/heroes/quick-start-with-templates.svg",
+    "./assets/clients/CCPA-logo.svg": "./src/assets/clients/CCPA-logo.svg",
+    "./assets/clients/CPRA-logo.svg": "./src/assets/clients/CPRA-logo.svg",
     "./assets/clients/GDPR-logo.svg": "./src/assets/clients/GDPR-logo.svg",
     "./assets/clients/HDI-logo.svg": "./src/assets/clients/HDI-logo.svg",
     "./assets/clients/LGPD-logo.svg": "./src/assets/clients/LGPD-logo.svg",
