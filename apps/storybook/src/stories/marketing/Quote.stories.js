@@ -44,7 +44,7 @@ const meta = {
     },
     name: {
       control: 'text',
-      description: "Who said it — the attribution's lead, and the source of the initials fallback in `highlight`.",
+      description: "Who said it — the attribution's lead, set in the accent.",
       table: {
         category: 'props',
         type: { summary: 'string' },
@@ -61,6 +61,16 @@ const meta = {
         defaultValue: { summary: "''" }
       }
     },
+    highlights: {
+      control: 'object',
+      description:
+        'Phrases of `text` kept in the default ink while the rest of the quotation recedes to the muted one; each is matched verbatim, and an empty list leaves the whole quotation in the default ink. Ignored when the default slot is filled.',
+      table: {
+        category: 'props',
+        type: { summary: 'string[]' },
+        defaultValue: { summary: '[]' }
+      }
+    },
     kind: {
       control: 'inline-radio',
       options: ['inline', 'signed', 'highlight'],
@@ -75,7 +85,7 @@ const meta = {
     photo: {
       control: 'text',
       description:
-        "URL of the person's likeness, drawn by `highlight`; without one that register shows their initials.",
+        "URL of the person's likeness, drawn beside the attribution by `highlight`; without one the attribution stands alone.",
       table: {
         category: 'props',
         type: { summary: 'string' },
@@ -120,6 +130,7 @@ const meta = {
     jobTitle: JOB_TITLE,
     logo: LOGO,
     logoAlt: '',
+    highlights: [],
     kind: 'inline'
   }
 }
@@ -191,7 +202,7 @@ export const Types = {
     docs: {
       description: {
         story:
-          "The three registers, on one quotation. `inline` is the quiet unit that sits inside a cell of a larger band — small mark, the attribution one muted line. `signed` is the band-sized register a product page gives a client: the quotation at heading weight, the speaker's name in the accent beside their job title. `highlight` is the featured one: the quotation largest, the speaker carried by their likeness or initials, and the mark floated on a textured plate. Every register opens on the same quotation glyph, sized to its own measure, so `text` is quoted verbatim and never carries punctuation of its own."
+          "The three registers, on one quotation. `inline` is the quiet unit inside a cell of a larger band — the mark on a fixed band, the quotation at the smallest heading size, and no glyph. `signed` is the card a client sentence or an analyst report takes: the mark, the glyph, the quotation in body type. `highlight` is the featured one: the quotation largest, with the mark in its own column at the quotation's first line. Every register attributes the same way — the name in the accent over the role in the muted ink — and `text` is quoted verbatim, never carrying punctuation of its own."
       },
       source: { code: toSfc(IMPORT, TYPES_MARKUP) }
     }
@@ -217,6 +228,33 @@ export const WithoutLogo = {
           'The same quote with `logo` empty: no mark is rendered and the quotation moves up to lead the block. This is the shape to reach for when the surrounding section already names the customer, or when the quote sits in a grid whose cells would otherwise repeat the same mark.'
       },
       source: { code: toSfc(IMPORT, WITHOUT_LOGO_MARKUP) }
+    }
+  }
+}
+
+const HIGHLIGHTS = ['high availability', 'hundreds of global-scale applications']
+
+const HIGHLIGHTS_MARKUP = `<Quote
+  text="${TEXT}"
+  :highlights="['${HIGHLIGHTS[0]}', '${HIGHLIGHTS[1]}']"
+  name="${NAME}"
+  job-title="${JOB_TITLE}"
+  logo="${LOGO}"
+/>`
+
+/** @type {import('@storybook/vue3').StoryObj<typeof Quote>} */
+export const Highlights = {
+  render: Template,
+  args: {
+    highlights: HIGHLIGHTS
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The claim lifted out of the sentence: each phrase in `highlights` keeps the default ink and the rest of the quotation recedes to the muted one. Phrases are matched verbatim against `text`, so keep them to the figure and what it measured — a quotation that highlights most of itself highlights nothing.'
+      },
+      source: { code: toSfc(IMPORT, HIGHLIGHTS_MARKUP) }
     }
   }
 }
