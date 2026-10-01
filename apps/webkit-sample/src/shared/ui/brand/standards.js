@@ -21,12 +21,12 @@
 // one silhouette, and the two that carry a palette (IETF's yellow-and-grey mesh) only sit
 // beside the others honestly when every mark in the row is flattened to one ink. The deck's
 // `reasons` slide is the surface that does that.
-import ietf from '@shared/assets/clients/ietf.svg'
-import javascript from '@shared/assets/clients/javascript.svg'
-import onnx from '@shared/assets/clients/onnx.svg'
-import tc39 from '@shared/assets/clients/tc39.svg'
-import w3c from '@shared/assets/clients/w3c.svg'
-import webassembly from '@shared/assets/clients/webassembly.svg'
+import ietf from '@aziontech/webkit/assets/clients/ietf.svg'
+import javascript from '@aziontech/webkit/assets/clients/javascript.svg'
+import onnx from '@aziontech/webkit/assets/clients/onnx.svg'
+import tc39 from '@aziontech/webkit/assets/clients/tc39.svg'
+import w3c from '@aziontech/webkit/assets/clients/w3c.svg'
+import webassembly from '@aziontech/webkit/assets/clients/webassembly.svg'
 
 export const STANDARDS = [
   // static.ietf.org/logos/ietf.svg — the body's own lockup, three flat fills (#221e1f lettering,

@@ -3,7 +3,7 @@
   //
   // Every surface that paints a client mark — the hero trust strip, the client-story
   // cards, the benefit cells — needs the same two-route rule, so it lives here once
-  // (the rule itself is documented in @shared/assets/clients/index.js):
+  // (the rule itself is documented in packages/webkit/src/assets/clients/README.md):
   //
   //   • `logo` + `logoLight` — two real assets. Both are in the DOM and CSS reveals
   //     exactly one, so the light theme gets the mark's true brand colors instead of
@@ -25,17 +25,17 @@
   // `monochrome` overrides both routes and paints the mark as a single flat
   // silhouette — black on light, white on dark — for a surface that shows a LIST of
   // clients, where per-brand colour reads as noise rather than as accuracy. One
-  // asset, one filter, no per-client data; the reasoning is in @shared/assets/clients/index.js
+  // asset, one filter, no per-client data; the reasoning is in packages/webkit/src/assets/clients/README.md
   // next to the filter itself.
   //
   // `knockout` is that same one ink, PINNED to black on both themes, for a mark that
   // sits on a coloured fill rather than on the page's canvas. A filled surface does not
   // follow the theme, so an ink that does is legible on one theme and not the other; the
-  // measurement that decides which ink is in @shared/assets/clients/index.js beside the filter.
+  // measurement that decides which ink is in packages/webkit/src/assets/clients/README.md.
   //
   // Geometry belongs to the caller: pass it through `mark`, since a strip, a card and
   // a benefit cell each set the mark at a different height.
-  import { artworkFilter, KNOCKOUT_FILTER, MONOCHROME_FILTER } from '@shared/assets/clients/index.js'
+  import { artworkFilter, KNOCKOUT_FILTER, MONOCHROME_FILTER } from '@aziontech/webkit/assets/clients/registry'
 
   defineProps({
     // A CLIENTS entry: { name, logo?, logoLight?, artwork? }.

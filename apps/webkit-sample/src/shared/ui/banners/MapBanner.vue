@@ -7,7 +7,7 @@
   // The artwork is inline rather than an <img src="Map.svg">, because a CSS
   // custom property cannot reach inside an <img>: loaded as an asset both of
   // its colours would be frozen and the banner would need a second light/dark
-  // copy (the pattern .@shared/assets/clients/index.js is stuck with). Inlined, the two
+  // copy (the pattern .@aziontech/webkit/assets/clients/registry is stuck with). Inlined, the two
   // source colours become tokens:
   //
   //   #1A1A1A (the landmass) -> no fill at all, so each square inherits

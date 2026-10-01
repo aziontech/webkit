@@ -3,13 +3,13 @@
   //
   // An account IS a company, so its mark is that company's logo — the same asset the
   // site's trust strip and client-story cards paint, read from the one registry that
-  // owns them (../../../shared/assets/clients/index.js). Nothing here duplicates
+  // owns them (@aziontech/webkit/assets/clients/registry). Nothing here duplicates
   // that data: this component only decides how a client mark becomes a 24px square.
   //
   // THREE ROUTES, in this order, because the marks this repo owns are three kinds of
   // thing — and each route is decided by data, never by a name:
   //
-  //   1. A PURPOSE-DRAWN TILE (../../../shared/assets/clients/symbols/) — a 24×24
+  //   1. A PURPOSE-DRAWN TILE (@aziontech/webkit/assets/clients/symbols/) — a 24×24
   //      file with the brand fill and the mark already composed inside it, in the
   //      colours the brand draws them. Nothing to place: it just fills the box. This is
   //      the preferred route and the one to add to, because it is the only one that
@@ -34,17 +34,14 @@
   // the design system Avatar's initials. Substituting some other company's logo would
   // misrepresent a real brand, and a generic glyph on half the rows says nothing about
   // which account a row is — initials at least identify it.
-  import Avatar from '@aziontech/webkit/avatar'
-  import { computed } from 'vue'
-
-  // Relative, not the `@shared` alias the neighbours use: validate-references.mjs
-  // resolves real paths and node_modules, not vite aliases, so the alias form is
-  // blocked at write time here (see ../home/HomeWire.vue).
-  import { CLIENTS } from '../../../shared/assets/clients/index.js'
+  import { CLIENTS } from '@aziontech/webkit/assets/clients/registry'
   import {
     clientSymbolFor,
     normalizeClientName
-  } from '../../../shared/assets/clients/symbols/index.js'
+  } from '@aziontech/webkit/assets/clients/symbols/registry'
+  import Avatar from '@aziontech/webkit/avatar'
+  import { computed } from 'vue'
+
   import { accountInitials } from '../../lib/state/accounts.js'
 
   const props = defineProps({

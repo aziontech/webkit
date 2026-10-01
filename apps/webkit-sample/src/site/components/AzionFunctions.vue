@@ -3,7 +3,7 @@
   // the webkit marketing bundle — hero, two claims, the code sample, one client quotation,
   // the platform's primitives, the FAQ and the closing CTA. Copy is
   // azion.com/en/products/functions verbatim.
-  import Ticker from '@aziontech/webkit/ticker'
+  import contabilizeiTile from '@aziontech/webkit/assets/clients/contabilizei-symbol.png'
   import Button from '@aziontech/webkit/button'
   import CallToAction from '@aziontech/webkit/call-to-action'
   import CardGrid from '@aziontech/webkit/card-grid'
@@ -18,8 +18,8 @@
   import SectionGap from '@aziontech/webkit/section-gap'
   import SectionModule from '@aziontech/webkit/section-module'
   import SectionTitle from '@aziontech/webkit/section-title'
+  import Ticker from '@aziontech/webkit/ticker'
   import Topic from '@aziontech/webkit/topic'
-  import contabilizeiTile from '@shared/assets/clients/contabilizei-symbol.png'
   import { useRouter } from 'vue-router'
 
   import { PRODUCT_STACK } from '../../shared/ui/brand/strips.js'

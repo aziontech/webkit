@@ -38,8 +38,8 @@
   // The deck data carries the PHRASE (`emphasis`), not a pre-split headline: the sentence stays
   // one readable string an editor can rewrite, and the emphasis is stated beside it.
 
+  import { CLIENTS } from '@aziontech/webkit/assets/clients/registry'
   import Overline from '@aziontech/webkit/overline'
-  import { CLIENTS } from '@shared/assets/clients/index.js'
   import { PRODUCT_STACK, TOOLS } from '@shared/ui/brand/tools.js'
   import { computed } from 'vue'
 

@@ -41,7 +41,7 @@
   //
   // Vertically the field runs 12%-82%: the whole of it is inside the frame. Nothing the ROUTE
   // touches — the eastern seaboard, Brazil, the Atlantic between them — is veiled at all.
-  import { CLIENTS } from '@shared/assets/clients/index.js'
+  import { CLIENTS } from '@aziontech/webkit/assets/clients/registry'
   import { MAP_NODES, projectOnMap, SLIDE_FRAMING } from '@shared/ui/banners/map-framing.js'
   import MapBanner from '@shared/ui/banners/MapBanner.vue'
   import MapMesh from '@shared/ui/banners/MapMesh.vue'

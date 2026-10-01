@@ -20,21 +20,21 @@
 // All 35 are here for the same reason: the control is the source's, and a control that does
 // nothing would be the invention. The initial render is the source's twelve, in its order.
 
+import bancoDeLaNacion from '@aziontech/webkit/assets/clients/banco-de-la-nacion-logo-vector.svg'
+import axur from '@aziontech/webkit/assets/clients/dark/clients/axur-logo.svg'
+import contabilizei from '@aziontech/webkit/assets/clients/dark/clients/contabilizei-logo.svg'
+import crefisa from '@aziontech/webkit/assets/clients/dark/clients/crefisa-logo.svg'
+import pernambucanas from '@aziontech/webkit/assets/clients/dark/clients/pernambucanas-logo.svg'
+import vtex from '@aziontech/webkit/assets/clients/dark/former-clients/vtex-logo.svg'
+import marisa from '@aziontech/webkit/assets/clients/light/marisa-logo.svg'
+import panvel from '@aziontech/webkit/assets/clients/light/panvel-logo.svg'
+import { CLIENTS } from '@aziontech/webkit/assets/clients/registry'
 import frost from '@aziontech/webkit/assets/logos/frost-and-sullivan.svg'
 import frostReversed from '@aziontech/webkit/assets/logos/frost-and-sullivan-reversed.svg'
 import gartner from '@aziontech/webkit/assets/logos/gartner.svg'
 import gartnerReversed from '@aziontech/webkit/assets/logos/gartner-reversed.svg'
 import gigaom from '@aziontech/webkit/assets/logos/gigaom.svg'
 import gigaomReversed from '@aziontech/webkit/assets/logos/gigaom-reversed.svg'
-import bancoDeLaNacion from '@shared/assets/clients/banco-de-la-nacion-logo-vector.svg'
-import axur from '@shared/assets/clients/dark/clients/axur-logo.svg'
-import contabilizei from '@shared/assets/clients/dark/clients/contabilizei-logo.svg'
-import crefisa from '@shared/assets/clients/dark/clients/crefisa-logo.svg'
-import pernambucanas from '@shared/assets/clients/dark/clients/pernambucanas-logo.svg'
-import vtex from '@shared/assets/clients/dark/former-clients/vtex-logo.svg'
-import { CLIENTS } from '@shared/assets/clients/index.js'
-import marisa from '@shared/assets/clients/light/marisa-logo.svg'
-import panvel from '@shared/assets/clients/light/panvel-logo.svg'
 
 const byName = (name) => CLIENTS.find((client) => client.name === name)
 
@@ -243,7 +243,7 @@ export const SUCCESS_CASES = [
   },
   {
     key: 'case-mobiauto',
-    client: { name: 'Mobiauto' },
+    client: byName('Mobiauto'),
     industry: 'Tech',
     solutions: ['Build', 'Secure', 'Deploy'],
     products: ['Azion Application'],

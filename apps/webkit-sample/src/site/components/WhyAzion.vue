@@ -1,14 +1,14 @@
 <script setup>
+  import azionHighlight from '@aziontech/webkit/assets/illustrations/azion-highlight.svg'
+  import branches from '@aziontech/webkit/assets/illustrations/branches.svg'
+  import personalTokens from '@aziontech/webkit/assets/illustrations/personal-tokens.svg'
+  import usageChart from '@aziontech/webkit/assets/illustrations/usage-chart.svg'
   import CardGrid from '@aziontech/webkit/card-grid'
   import FrameBox from '@aziontech/webkit/frame-box'
   import MediaTile from '@aziontech/webkit/media-tile'
   import SectionGap from '@aziontech/webkit/section-gap'
   import SectionModule from '@aziontech/webkit/section-module'
   import SectionTitle from '@aziontech/webkit/section-title'
-  import azionHighlight from '@shared/assets/scenes/azion-highlight.svg'
-  import branches from '@shared/assets/scenes/branches.svg'
-  import personalTokens from '@shared/assets/scenes/personal-tokens.svg'
-  import usageChart from '@shared/assets/scenes/usage-chart.svg'
 
   import SolutionsStack from './SolutionsStack.vue'
 
