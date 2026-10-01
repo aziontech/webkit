@@ -9940,6 +9940,13 @@
       "status": "implemented",
       "props": [
         {
+          "name": "kind",
+          "type": "LogoWallKind",
+          "default": "'square'",
+          "required": "false",
+          "doc": "The cell's proportion; `rectangle` sets every cell at 3:2, keeps three columns below `sm`, and holds three columns beside `aside` from `lg`."
+        },
+        {
           "name": "items",
           "type": "LogoItem[]",
           "default": "[]",
@@ -9972,7 +9979,7 @@
         {
           "name": "aside",
           "scope": "—",
-          "notes": "Content set beside the wall from `lg` up, such as one customer's `quote`, on a `--bg-canvas` panel padded by `--spacing-xl`; its child stretches to fill the panel. When it is empty the wall spans the full width."
+          "notes": "Content set beside the wall from `lg` up, centred in a panel that never sets the band's height (keep it short enough to fit two rows of squares from `xl`), such as one customer's `quote`, on a `--bg-canvas` panel padded by `--spacing-xl`; its child fills the panel's width. When it is empty the wall spans the full width."
         },
         {
           "name": "mark",
@@ -9980,7 +9987,7 @@
           "notes": "One cell's mark, replacing the image built from the item — for a mark that owns its own theming (a per-theme asset swap, a silhouette filter). The slotted content carries its own alternative text and sits in a 28px-tall box; on a linked cell it lifts with the built image's motion."
         }
       ],
-      "purpose": "The customer-proof band of a marketing page: a framed grid of square cells, one company mark to a cell, each one optionally linked to that customer's story, under one accessible group name. It is deliberately a static grid rather than an auto-scrolling strip — moving content needs a pause control to meet WCAG 2.2.2, and a wall a reader can scan beats one they have to wait for. The cells are `card-grid` frame cells, so the wall draws the same hairlines and registration marks as every other framed band on the page. A linked cell is the whole square: on hover and focus a wash rises behind it, the mark lifts, and a `Read story` label slides in under it, so the wall doubles as the way into the case studies. Fill the `aside` slot and the band splits from `lg` up — the wall on the start edge, one of those customers speaking on the end edge on a padded canvas panel — and the wall narrows from six columns to three to sit in half the width at the same cell size.",
+      "purpose": "The customer-proof band of a marketing page: a framed grid of square cells, one company mark to a cell, each one optionally linked to that customer's story, under one accessible group name. It is deliberately a static grid rather than an auto-scrolling strip — moving content needs a pause control to meet WCAG 2.2.2, and a wall a reader can scan beats one they have to wait for. The cells are `card-grid` frame cells, so the wall draws the same hairlines and registration marks as every other framed band on the page. A linked cell is the whole square: on hover and focus a wash rises behind it, the mark lifts, and a `Read story` label slides in under it, so the wall doubles as the way into the case studies. Fill the `aside` slot and the band splits from `lg` up — the wall on the start edge, one of those customers speaking on the end edge on a padded canvas panel — and the wall narrows from six columns to three to sit in half the width at the same cell size. Every cell is a perfect square in every layout, and the wall alone sets the band's height: the `aside` panel is size-contained from `lg` up, so its content never stretches a row, and the statement sits centred in it. Between `lg` and `xl` the wall is two columns wide, so its three rows are tall enough for a client sentence; from `xl` it is three columns, two rows. Set `kind` to `rectangle` and every cell becomes a 3:2 rectangle instead: beside `aside` the wall holds three columns from `lg`, so nine rectangles take exactly the height six squares do, and below `sm` it keeps three columns so nine marks never leave a ragged row.",
       "useWhen": [
         "To show who already uses the product, as the proof band under a hero or section, with each mark leading to that customer's success case.",
         "Wherever a set of partner, customer or certification marks is the message.",
@@ -10008,7 +10015,8 @@
         "Set `ariaLabel` so the group announces its purpose (\"Clients running on Azion\") instead of reading as an unnamed region.",
         "Link a mark with `href` only when there is somewhere worth going, such as a case study; a wall of links to nowhere costs a reader a tab stop per cell. In an app with a client-side router, handle `item-click`: call `event.preventDefault()` and push `item.href`.",
         "Put one statement in `aside`, not a second grid. The band's argument is *many customers, one of them talking*; two things of equal weight leave a reader with neither.",
-        "Give the wall a multiple of three marks when `aside` is filled and a multiple of six when it is not, so the last row is full rather than ragged. Six beside a quote is the Web Apps band."
+        "Give the wall exactly six marks when `aside` is filled — two full rows of three squares beside the statement, and three rows of two between `lg` and `xl` — and a multiple of six when it is not, so the last row is never ragged.",
+        "Reach for `kind: 'rectangle'` when the band names nine customers beside `aside`: three rows of three 3:2 cells at the height of the six-square wall. Nine is the count the rectangle wall is drawn for; without `aside` it runs six to a row like the square wall."
       ]
     },
     "breadcrumb": {
