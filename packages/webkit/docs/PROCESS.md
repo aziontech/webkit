@@ -345,12 +345,17 @@ husky pre-commit, and a `.claude/` guidance bundle. Idempotent; `--dry-run` prev
    syntaxes wired.
 4. **`.mcp.json`** — the `webkit` MCP server merged in.
 5. **husky `pre-commit`** — lint on commit.
-6. **`.claude/` bundle** — the `general`-scope rules rewritten for consumers
+6. **`.github/workflows/webkit.yml`** — a caller of the reusable
+   [consumer gate](./toolkit/consumer-gate.md), so the same stages run on every PR.
+   `init` asks first, except on an Azion repo (`aziontech` / `azioncorp`, read from the
+   git remote), where the answer is inferred; community repos and POCs keep the question
+   (`--no-ci` / `--org <name>` override).
+7. **`.claude/` bundle** — the `general`-scope rules rewritten for consumers
    (`webkit-tokens`, `webkit-props`, `webkit-emits`, `webkit-styling`,
    `webkit-prefer-over-custom`, …), a `webkit-usage` skill, and reviewer/expert/adopter
    agents ([`cli-templates/claude/`](../cli-templates/claude/)).
-7. **`CLAUDE.md` fragment** — appended once behind a marker.
-8. **Theme wiring advice** — suggests the theme import at your entry file, never edits it.
+8. **`CLAUDE.md` fragment** — appended once behind a marker.
+9. **Theme wiring advice** — suggests the theme import at your entry file, never edits it.
 
 Flags: `--dry-run` (plan only) · `--strict` (default preset — everything `error`) ·
 `--recommended` (correctness `error`, performance `warn`). Unknown flags are rejected.

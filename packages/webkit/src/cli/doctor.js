@@ -7,8 +7,10 @@ import { createRequire } from 'node:module'
 import { dirname, join } from 'node:path'
 
 import { readJsonStrict } from './apply.js'
+import { detectOwner } from './org.js'
 import {
   ALL_DEPS,
+  CI_WORKFLOW_PATH,
   ENTRY_CANDIDATES,
   ESLINT_CONFIG_CANDIDATES,
   firstExisting,
@@ -200,6 +202,21 @@ export function planDoctor(projectDir) {
       ? '.husky/pre-commit lints on commit'
       : 'no .husky/pre-commit lint block — commits are not linted locally.'
   )
+
+  // 6b. CI workflow — the PR-time half of the gates. Reported as OK wherever it exists;
+  //     missing is a WARN only on an Azion repo, where the gate is expected. A community
+  //     repo or a POC that declined CI at init is not nagged about it on every run.
+  const owner = detectOwner(projectDir)
+  const hasCi = existsSync(join(projectDir, CI_WORKFLOW_PATH))
+  if (hasCi) {
+    add('ci workflow', 'ok', `${CI_WORKFLOW_PATH} runs the webkit consumer gate on every PR`)
+  } else if (owner?.internal) {
+    add(
+      'ci workflow',
+      'warn',
+      `no ${CI_WORKFLOW_PATH} — this is an Azion repo (${owner.owner}), where the gates are expected in CI too. Run \`npx @aziontech/webkit init --ci\`.`
+    )
+  }
 
   // 7. Design-system styles imported at the app entry (advisory; only when an entry exists).
   //    Looks for the generated src/webkit.css — importing it (not `@aziontech/theme` bare)

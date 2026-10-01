@@ -7,6 +7,7 @@
 import { applyPlan } from './apply.js'
 import { runCanary } from './canary.js'
 import { planDoctor } from './doctor.js'
+import { detectOwner, isInternalOrg } from './org.js'
 import { planInit } from './plan.js'
 import { FAIL_MODES, FORMATS, runReport } from './report.js'
 import { planSync } from './sync.js'
@@ -35,6 +36,9 @@ Options (init):
   -y, --yes       Accept every default; never prompt (CI / scripted runs).
   --no-icons      Skip @aziontech/icons (the icon font) and its entry import.
   --no-entry      Do not edit the app entry (src/main.*); print the imports instead.
+  --ci            Add the CI workflow without asking (calls the webkit consumer gate).
+  --no-ci         Do not add the CI workflow.
+  --org <name>    Treat the repo as owned by <name> (overrides git remote detection).
   -h, --help      Show this help.
 
 Options (report):
@@ -61,6 +65,8 @@ const KNOWN_FLAGS = new Set([
   '-y',
   '--no-icons',
   '--no-entry',
+  '--ci',
+  '--no-ci',
   '--check',
   '--force',
   '--json',
@@ -68,7 +74,7 @@ const KNOWN_FLAGS = new Set([
   '--help'
 ])
 // Flags that take a value as the next argv token (report only, so far).
-const VALUE_FLAGS = new Set(['--format', '--fail-on'])
+const VALUE_FLAGS = new Set(['--format', '--fail-on', '--org'])
 
 function parseArgs(argv) {
   const args = argv.slice(2)
@@ -102,6 +108,10 @@ function parseArgs(argv) {
     yes: flags.has('--yes') || flags.has('-y'),
     noIcons: flags.has('--no-icons'),
     noEntry: flags.has('--no-entry'),
+    // --no-ci wins over --ci, mirroring how --strict wins over --recommended.
+    ci: flags.has('--ci') && !flags.has('--no-ci'),
+    noCi: flags.has('--no-ci'),
+    org: values['--org'] ? values['--org'].trim() : null,
     help: flags.has('-h') || flags.has('--help'),
     format: values['--format'],
     failOn: values['--fail-on'],
@@ -114,12 +124,26 @@ function parseArgs(argv) {
 
 // Prompts only on a real TTY without --yes, so piped/CI runs never hang; a --no-*
 // flag also suppresses its question.
-async function resolveInitOptions(parsed) {
+async function resolveInitOptions(parsed, projectDir) {
   const opts = {
     recommended: parsed.recommended,
     icons: !parsed.noIcons,
-    wireEntry: !parsed.noEntry
+    wireEntry: !parsed.noEntry,
+    ci: !parsed.noCi
   }
+  // An Azion org answers the CI question for us; every other repo keeps it.
+  // `--org` overrides the detection, `--ci`/`--no-ci` override both.
+  const detected = parsed.org
+    ? { owner: parsed.org, source: '--org', internal: isInternalOrg(parsed.org) }
+    : detectOwner(projectDir)
+  const inferCi = Boolean(detected?.internal) && !parsed.noCi && !parsed.ci
+  if (inferCi) {
+    opts.ci = true
+    process.stdout.write(
+      `Azion repo detected (${detected.owner}, via ${detected.source}) — adding the CI workflow (--no-ci to skip).\n`
+    )
+  }
+
   // --dry-run implies --yes: a plan-only run prints the plan, it never prompts.
   const interactive = process.stdin.isTTY && process.stdout.isTTY && !parsed.yes && !parsed.dryRun
   if (!interactive) return opts
@@ -141,6 +165,13 @@ async function resolveInitOptions(parsed) {
     if (opts.wireEntry) {
       opts.wireEntry = await ask(
         'Add the style imports to your app entry (src/main.*) automatically?'
+      )
+    }
+    // Asked everywhere EXCEPT an Azion repo, where `inferCi` already answered it, and
+    // except when --ci / --no-ci made the choice explicit.
+    if (opts.ci && !inferCi && !parsed.ci) {
+      opts.ci = await ask(
+        'Add the CI workflow (.github/workflows/webkit.yml — calls the webkit consumer gate)?'
       )
     }
   } finally {
@@ -366,7 +397,7 @@ async function run(argv) {
     })
   }
 
-  const initOpts = await resolveInitOptions(parsed)
+  const initOpts = await resolveInitOptions(parsed, projectDir)
   const plan = planInit(projectDir, initOpts)
 
   process.stdout.write(
