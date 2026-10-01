@@ -180,7 +180,6 @@
     "./flow": "./src/components/data/flow/index.ts",
     "./flow-root": "./src/components/data/flow/flow.vue",
     "./flow-node": "./src/components/data/flow/flow-node/flow-node.vue",
-    "./flow-node-card": "./src/components/data/flow/flow-node-card/flow-node-card.vue",
     "./flow-parallel": "./src/components/data/flow/flow-parallel/flow-parallel.vue",
     "./flow-anchor": "./src/components/data/flow/flow-anchor/flow-anchor.vue",
     "./pick-list": "./src/components/data/pick-list/index.ts",

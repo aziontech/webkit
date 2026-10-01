@@ -285,11 +285,6 @@
     "limit": "2 KB"
   },
   {
-    "name": "flow-node-card",
-    "path": "src/components/data/flow/flow-node-card/flow-node-card.vue",
-    "limit": "14 KB"
-  },
-  {
     "name": "illustration",
     "path": "src/components/content/illustration/illustration.vue",
     "limit": "2 KB",

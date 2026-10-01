@@ -427,10 +427,6 @@
   --animate-progress-indeterminate: progressIndeterminate 2100ms cubic-bezier(0.39, 0.57, 0.56, 1) infinite;
   --animate-progress-indeterminate-short: progressIndeterminateShort 2100ms cubic-bezier(0.17, 0.84, 0.44, 1) 1100ms infinite;
   --animate-flow-dash: flowDash 700ms linear infinite;
-  --animate-flow-packet: flowPacketTravel 2100ms cubic-bezier(0.4, 0, 0.2, 1) infinite, flowPacketTaper 2100ms linear infinite;
-  --animate-flow-node-enter: flowNodeEnter 240ms cubic-bezier(0.39, 0.57, 0.56, 1) backwards;
-  --animate-flow-connector-draw: flowConnectorDraw 240ms cubic-bezier(0.39, 0.57, 0.56, 1) backwards;
-  --animate-glow-pulse: glowPulse calc(700ms + 240ms) infinite;
   --animate-illustration-rim-sweep: illustrationRimSweep 2100ms linear infinite;
   --animate-texture-wave-a: textureWaveA 13s linear infinite;
   --animate-texture-wave-b: textureWaveB 19s linear infinite;
@@ -698,10 +694,6 @@
   --animate-progress-indeterminate: progressIndeterminate 2100ms cubic-bezier(0.39, 0.57, 0.56, 1) infinite;
   --animate-progress-indeterminate-short: progressIndeterminateShort 2100ms cubic-bezier(0.17, 0.84, 0.44, 1) 1100ms infinite;
   --animate-flow-dash: flowDash 700ms linear infinite;
-  --animate-flow-packet: flowPacketTravel 2100ms cubic-bezier(0.4, 0, 0.2, 1) infinite, flowPacketTaper 2100ms linear infinite;
-  --animate-flow-node-enter: flowNodeEnter 240ms cubic-bezier(0.39, 0.57, 0.56, 1) backwards;
-  --animate-flow-connector-draw: flowConnectorDraw 240ms cubic-bezier(0.39, 0.57, 0.56, 1) backwards;
-  --animate-glow-pulse: glowPulse calc(700ms + 240ms) infinite;
   --animate-illustration-rim-sweep: illustrationRimSweep 2100ms linear infinite;
   --animate-texture-wave-a: textureWaveA 13s linear infinite;
   --animate-texture-wave-b: textureWaveB 19s linear infinite;
@@ -1200,34 +1192,6 @@
 @keyframes flowDash {
   0% { stroke-dashoffset: 24; }
   100% { stroke-dashoffset: 0; }
-}
-
-@keyframes flowPacketTravel {
-  0% { stroke-dashoffset: 0; }
-  45%, 100% { stroke-dashoffset: -100; }
-}
-
-@keyframes flowPacketTaper {
-  0% { stroke-dasharray: 0 200; }
-  11% { stroke-dasharray: 14 200; }
-  30% { stroke-dasharray: 14 200; }
-  45%, 100% { stroke-dasharray: 0 200; }
-}
-
-@keyframes flowNodeEnter {
-  0% { opacity: 0; translate: calc(var(--spacing-md) * -1) 0; }
-  100% { opacity: 1; translate: 0 0; }
-}
-
-@keyframes flowConnectorDraw {
-  0% { stroke-dasharray: 100 101; stroke-dashoffset: 100; }
-  100% { stroke-dasharray: 100 101; stroke-dashoffset: 0; }
-}
-
-@keyframes glowPulse {
-  0% { opacity: 0.4; animation-timing-function: cubic-bezier(0.39, 0.57, 0.56, 1); }
-  74.468% { opacity: 1; animation-timing-function: cubic-bezier(0.55, 0.09, 0.68, 0.53); }
-  100% { opacity: 0.4; }
 }
 
 @keyframes illustrationRimSweep {

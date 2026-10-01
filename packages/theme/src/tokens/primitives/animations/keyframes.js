@@ -11,8 +11,6 @@
  * can serialize them verbatim.
  */
 
-import { curve } from './animate.js'
-
 export const keyframes = {
   fadeIn: {
     '0%': 'opacity: 0',
@@ -113,57 +111,6 @@ export const keyframes = {
   flowDash: {
     '0%': 'stroke-dashoffset: 24',
     '100%': 'stroke-dashoffset: 0'
-  },
-  // A REQUEST crossing that connector, as a dash that travels the path and tapers at both
-  // ends. Split in two so position stays on one smooth curve while length runs a ramp of its
-  // own: travel eases, taper does not. Offsets are percentages, so every consumer path must
-  // carry pathLength="100" — the attribute is CAMELCASE and written kebab it is emitted
-  // verbatim, ignored, and the units fall back to USER units with nothing erroring.
-  flowPacketTravel: {
-    '0%': 'stroke-dashoffset: 0',
-    '45%, 100%': 'stroke-dashoffset: -100'
-  },
-  // Zero-length at both extremes, which is why a consumer draws this with butt caps: a round
-  // cap paints a zero-length dash as a dot parked on the wire.
-  flowPacketTaper: {
-    '0%': 'stroke-dasharray: 0 200',
-    '11%': 'stroke-dasharray: 14 200',
-    '30%': 'stroke-dasharray: 14 200',
-    '45%, 100%': 'stroke-dasharray: 0 200'
-  },
-  // A node of that diagram arriving: it travels one `--spacing-md` along the direction its
-  // connectors carry, so a staggered topology assembles the way it reads instead of fading
-  // in place. It moves on `translate`, which is paint — `connectors.ts` measures nodes from
-  // layout offsets, so the lines stay pinned to where each node lands while it is still
-  // travelling. Stagger with `--flow-node-enter-delay`.
-  flowNodeEnter: {
-    '0%': 'opacity: 0; translate: calc(var(--spacing-md) * -1) 0',
-    '100%': 'opacity: 1; translate: 0 0'
-  },
-  // The CONNECTOR of that diagram arriving: a mask that opens along the path, so the line
-  // draws itself in the direction it carries instead of appearing whole. It runs on a mask
-  // path, never on the connector — the stroke it reveals keeps its own marching dash while
-  // being revealed, which one stroke-dashoffset could not express twice. Offsets are
-  // percentages, so that mask path must carry pathLength="100" (camelCase); the gap is
-  // longer than the dash so the pattern never repeats back into view behind the head.
-  flowConnectorDraw: {
-    '0%': 'stroke-dasharray: 100 101; stroke-dashoffset: 100',
-    '100%': 'stroke-dasharray: 100 101; stroke-dashoffset: 0'
-  },
-  // The breath of `animate-glow-pulse`: OPACITY only, so the layer it runs on owns the glow
-  // and any element can be the subject without this keyframe knowing its shadow. It never
-  // reaches zero — a glow that goes out and comes back is a blink, not a breath.
-  //
-  // `74.468%` is not arbitrary: it is `slow-02` as a share of the `slow-02 + moderate-02`
-  // cycle the shorthand declares, which is what puts the long bloom and the short fall on
-  // the scale instead of on two invented numbers. Change either token and this offset moves
-  // with it. The curves are PER KEYFRAME because the two legs take different ones — a
-  // timing function declared on a keyframe governs the segment that STARTS there, so the
-  // entrance curve on `0%` drives the bloom and the exit curve on the peak drives the fall.
-  glowPulse: {
-    '0%': `opacity: 0.4; animation-timing-function: ${curve['productive-entrance']}`,
-    '74.468%': `opacity: 1; animation-timing-function: ${curve['productive-exit']}`,
-    '100%': 'opacity: 0.4'
   },
   // The rim light travelling around an illustration's edges. The ramp is lit at both
   // ends of its axis, so it repeats every HALF turn — 135° → 315° is one full visual

@@ -4,6 +4,7 @@
   import IconButton from '@aziontech/webkit/icon-button'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import FlowCard from '@shared/ui/flow/FlowCard.vue'
   import { functionRuns, RUN_FUNCTION, runById, runPath } from '@shared/ui/trace/run-trace.js'
   import RunLogs from '@shared/ui/trace/RunLogs.vue'
   import RunTrace from '@shared/ui/trace/RunTrace.vue'
@@ -92,7 +93,7 @@
                 align="start"
                 class="[&>div]:w-full"
               >
-                <Flow.NodeCard
+                <FlowCard
                   v-for="node in path"
                   :key="node.key"
                   :eyebrow="node.eyebrow"
@@ -128,7 +129,7 @@
                       {{ field.value }}
                     </span>
                   </div>
-                </Flow.NodeCard>
+                </FlowCard>
               </Flow>
             </template>
           </CardBox>

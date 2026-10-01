@@ -1,13 +1,11 @@
 import { useMutationObserver, useResizeObserver } from '@vueuse/core'
-import { computed, onMounted, type Ref, ref } from 'vue'
+import { onMounted, type Ref, ref } from 'vue'
 
 export interface FlowPath {
   /** SVG path `d` for the connector (straight when endpoints share a row, rounded elbow otherwise). */
   d: string
   /** Reduced opacity when either endpoint is a disabled node. */
   faded: boolean
-  /** Sequence position of the child this connector leaves, which drives its reveal delay. */
-  step: number
 }
 
 /** An attachment point on the left (incoming) or right (outgoing) edge of a node. */
@@ -17,7 +15,7 @@ interface Endpoint {
   disabled: boolean
 }
 
-/** Top-left origin of an element's border box, in the document's layout space. */
+/** Top-left origin of the measuring container, in viewport coordinates. */
 interface Origin {
   left: number
   top: number
@@ -56,36 +54,13 @@ const elbow = (fromX: number, fromY: number, toX: number, toY: number, busX: num
   ].join(' ')
 }
 
-/** Layout position of an element, summed up its offsetParent chain. Offsets are layout,
-    not paint, so a transform on the node or on any ancestor does not move them — which is
-    what lets a node arrive on a translate without stranding the connector measured while it
-    was still travelling. `clientLeft` adds back each offsetParent's border, which
-    `offsetLeft` measures from the inside of. */
-const layoutOrigin = (el: HTMLElement): Origin => {
-  let left = 0
-  let top = 0
-
-  for (let node: HTMLElement | null = el; node; node = node.offsetParent as HTMLElement | null) {
-    left += node.offsetLeft
-    top += node.offsetTop
-
-    const parent = node.offsetParent as HTMLElement | null
-    if (parent) {
-      left += parent.clientLeft
-      top += parent.clientTop
-    }
-  }
-
-  return { left, top }
-}
-
 /** Read an element's box in the container's coordinate space (scroll-invariant). */
 const measureRect = (el: HTMLElement, base: Origin) => {
-  const { left, top } = layoutOrigin(el)
+  const r = el.getBoundingClientRect()
   return {
-    left: left - base.left,
-    right: left + el.offsetWidth - base.left,
-    cy: top + el.offsetHeight / 2 - base.top
+    left: r.left - base.left,
+    right: r.right - base.left,
+    cy: (r.top + r.bottom) / 2 - base.top
   }
 }
 
@@ -146,23 +121,6 @@ const pairEndpoints = (exits: Endpoint[], entries: Endpoint[]): Array<[Endpoint,
   return Array.from({ length: count }, (_, i): [Endpoint, Endpoint] => [exits[i], entries[i]])
 }
 
-/** Stamp each direct child with its place in the sequence and return them in flow order.
-    The ends drive flow.vue's port-hiding rules — attributes, not first-child /
-    last-child, because the connector svg is a sibling of the nodes here — and
-    `--flow-index` drives each node's arrival delay. Nothing stamped here is in the
-    MutationObserver's attributeFilter, so stamping cannot re-enter measure(). */
-const stampSequence = (container: HTMLElement): HTMLElement[] => {
-  const elements = Array.from(container.querySelectorAll<HTMLElement>(':scope > [data-flow-kind]'))
-
-  elements.forEach((el, index) => {
-    el.toggleAttribute('data-flow-leading', index === 0)
-    el.toggleAttribute('data-flow-trailing', index === elements.length - 1)
-    el.style.setProperty('--flow-index', String(index))
-  })
-
-  return elements
-}
-
 /**
  * Measures a flow container's direct children and produces every connector in one SVG.
  * Connectors are drawn only BETWEEN consecutive children, so a leading parallel fans in
@@ -170,8 +128,7 @@ const stampSequence = (container: HTMLElement): HTMLElement[] => {
  */
 export const useFlowConnectors = (containerRef: Ref<HTMLElement | null>) => {
   const paths = ref<FlowPath[]>([])
-  const size = ref<{ width: number; height: number }>({ width: 0, height: 0 })
-  const viewBox = computed<string>(() => `0 0 ${size.value.width} ${size.value.height}`)
+  const viewBox = ref<string>('0 0 0 0')
 
   const measure = () => {
     const container = containerRef.value
@@ -179,8 +136,20 @@ export const useFlowConnectors = (containerRef: Ref<HTMLElement | null>) => {
       return
     }
 
-    const base = layoutOrigin(container)
-    const elements = stampSequence(container)
+    const base = container.getBoundingClientRect()
+    const elements = Array.from(
+      container.querySelectorAll<HTMLElement>(':scope > [data-flow-kind]')
+    )
+
+    // Stamp the sequence ends; flow.vue hides the ports that would attach to nothing
+    // off these attributes. Attributes, not first-child / last-child pseudo-classes:
+    // the connector svg is a sibling of the nodes in this container, so positional
+    // pseudo-classes would address the svg instead of the first node. Both sit outside
+    // the MutationObserver attributeFilter, so stamping cannot re-enter measure().
+    elements.forEach((el, index) => {
+      el.toggleAttribute('data-flow-leading', index === 0)
+      el.toggleAttribute('data-flow-trailing', index === elements.length - 1)
+    })
 
     const children = elements.map((el) => readChild(el, base))
 
@@ -200,23 +169,16 @@ export const useFlowConnectors = (containerRef: Ref<HTMLElement | null>) => {
       for (const [exit, entry] of pairEndpoints(from.exits, to.entries)) {
         out.push({
           d: elbow(exit.x, exit.y, entry.x, entry.y, busX),
-          faded: exit.disabled || entry.disabled,
-          step: i
+          faded: exit.disabled || entry.disabled
         })
       }
     }
 
-    size.value = { width: container.clientWidth, height: container.clientHeight }
+    viewBox.value = `0 0 ${container.clientWidth} ${container.clientHeight}`
     paths.value = out
   }
 
   onMounted(() => {
-    // Stamp the sequence synchronously, before the first paint: a node reads its arrival
-    // delay off --flow-index, and an index that only landed with the rAF measure would
-    // start every node on the same beat and then rewind them.
-    if (containerRef.value) {
-      stampSequence(containerRef.value)
-    }
     globalThis.requestAnimationFrame(measure)
   })
 
@@ -232,5 +194,5 @@ export const useFlowConnectors = (containerRef: Ref<HTMLElement | null>) => {
     }
   )
 
-  return { paths, size, viewBox }
+  return { paths, viewBox }
 }

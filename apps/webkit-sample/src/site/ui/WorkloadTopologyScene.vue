@@ -1,5 +1,6 @@
 <script setup>
   import Flow from '@aziontech/webkit/flow'
+  import FlowCard from '@shared/ui/flow/FlowCard.vue'
 
   const LEVELS = [
     {
@@ -63,8 +64,7 @@
     'border-(--primary)',
     "before:pointer-events-none before:absolute before:inset-0 before:content-['']",
     'before:rounded-[inherit]',
-    'before:shadow-[-22px_0_44px_-16px_var(--accent),22px_0_44px_-16px_var(--primary),0_0_20px_-8px_var(--primary)]',
-    'before:animate-glow-pulse motion-reduce:before:animate-none'
+    'before:shadow-[-22px_0_44px_-16px_var(--accent),22px_0_44px_-16px_var(--primary),0_0_20px_-8px_var(--primary)]'
   ].join(' ')
 
   const cardProps = (node) => ({
@@ -93,7 +93,7 @@
           align="start"
           class="min-w-[15rem] flex-1"
         >
-          <Flow.NodeCard
+          <FlowCard
             v-for="node in level.nodes"
             :key="node.key"
             v-bind="cardProps(node)"

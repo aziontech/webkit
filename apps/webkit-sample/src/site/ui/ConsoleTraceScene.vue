@@ -2,6 +2,7 @@
   import Flow from '@aziontech/webkit/flow'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import TabView from '@aziontech/webkit/tab-view'
+  import FlowCard from '@shared/ui/flow/FlowCard.vue'
   import { formatDuration, RUN_FUNCTION, runById, runPath } from '@shared/ui/trace/run-trace.js'
   import RunLogs from '@shared/ui/trace/RunLogs.vue'
   import RunTrace from '@shared/ui/trace/RunTrace.vue'
@@ -86,7 +87,7 @@
           align="start"
           class="[&>div]:w-full"
         >
-          <Flow.NodeCard
+          <FlowCard
             v-for="node in path"
             :key="node.key"
             :eyebrow="node.eyebrow"
@@ -105,7 +106,7 @@
               <span class="text-label-sm text-(--text-muted)">{{ field.label }}</span>
               <span class="truncate text-body-xs text-(--text-default)">{{ field.value }}</span>
             </div>
-          </Flow.NodeCard>
+          </FlowCard>
         </Flow>
       </div>
     </div>

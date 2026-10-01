@@ -48,11 +48,7 @@
       "--animate-content-enter",
       "--animate-fade-in",
       "--animate-fade-out",
-      "--animate-flow-connector-draw",
       "--animate-flow-dash",
-      "--animate-flow-node-enter",
-      "--animate-flow-packet",
-      "--animate-glow-pulse",
       "--animate-highlight-fade",
       "--animate-illustration-chat-pop",
       "--animate-illustration-chat-scroll",
@@ -848,11 +844,7 @@
         "--animate-content-enter",
         "--animate-fade-in",
         "--animate-fade-out",
-        "--animate-flow-connector-draw",
         "--animate-flow-dash",
-        "--animate-flow-node-enter",
-        "--animate-flow-packet",
-        "--animate-glow-pulse",
         "--animate-highlight-fade",
         "--animate-illustration-chat-pop",
         "--animate-illustration-chat-scroll",
@@ -1679,11 +1671,7 @@
       "content-enter",
       "fade-in",
       "fade-out",
-      "flow-connector-draw",
       "flow-dash",
-      "flow-node-enter",
-      "flow-packet",
-      "glow-pulse",
       "highlight-fade",
       "illustration-chat-pop",
       "illustration-chat-scroll",
@@ -1730,25 +1718,9 @@
         "value": "fadeOut 220ms ease-in-out",
         "useWhen": "Content or backdrop leaving in place (pair of fade-in)."
       },
-      "flow-connector-draw": {
-        "value": "flowConnectorDraw 240ms cubic-bezier(0.39, 0.57, 0.56, 1) backwards",
-        "useWhen": "The connector between two nodes of such a diagram being drawn. It animates a MASK path (pathLength=\"100\", stroke wider than what it reveals), not the connector itself, so the revealed stroke keeps its own marching dash; apply that mask to the group holding the connector and its packet. Stagger it with an animation-delay longhand on the mask path — half a step after the node it leaves, so the diagram assembles node, line, node, line."
-      },
       "flow-dash": {
         "value": "flowDash 700ms linear infinite",
         "useWhen": "Flowing connection along an SVG connector stroke in a node-based / network diagram. Set a stroke-dasharray whose cycle divides 24 (e.g. 4 4) so the loop is seamless."
-      },
-      "flow-node-enter": {
-        "value": "flowNodeEnter 240ms cubic-bezier(0.39, 0.57, 0.56, 1) backwards",
-        "useWhen": "A node of such a diagram arriving. Stagger it by setting animation-delay on the node itself — [animation-delay:var(--flow-node-enter-delay,0s)] plus one --flow-node-enter-delay per node, one fast-01 step apart — never inside this shorthand, where a nested var() is substituted on :root and the per-node value is lost. It fades in while travelling one --spacing-md rightward, so a staggered diagram assembles along the direction its connectors carry. The movement is safe only because the diagram measures its nodes from layout offsets, which a transform does not move; a diagram that measured them from getBoundingClientRect would strand every line at the offset it was measured at."
-      },
-      "flow-packet": {
-        "value": "flowPacketTravel 2100ms cubic-bezier(0.4, 0, 0.2, 1) infinite, flowPacketTaper 2100ms linear infinite",
-        "useWhen": "A request crossing an SVG connector in such a diagram: a dash that travels the path and tapers at both ends, carrying about the first half of the cycle. The path MUST carry pathLength=\"100\" (camelCase) because the keyframe offsets are percentages, and MUST use butt line caps because the dash is zero-length at both extremes. Do not set stroke-dasharray or stroke-dashoffset in CSS alongside it; the keyframes own both."
-      },
-      "glow-pulse": {
-        "value": "glowPulse calc(700ms + 240ms) infinite",
-        "useWhen": "An ambient glow breathing behind the one element a view is about — the subject node of a diagram, marked without a hover to find it. Apply it to a LAYER that carries only the glow (an inset ::before with a box-shadow and nothing else), never to the element itself: the element usually already runs its own entrance, and a second animate-* utility replaces that shorthand rather than joining it. Pair it with motion-reduce:before:animate-none."
       },
       "highlight-fade": {
         "value": "highlight 1100ms ease-in forwards",
@@ -4662,7 +4634,6 @@
       "treeShakeableImport": "@aziontech/webkit/flow-root",
       "subcomponents": [
         "@aziontech/webkit/flow-node",
-        "@aziontech/webkit/flow-node-card",
         "@aziontech/webkit/flow-parallel",
         "@aziontech/webkit/flow-anchor"
       ],
@@ -4720,13 +4691,6 @@
       "kind": "subcomponent",
       "parent": "flow",
       "treeShakeableImport": "@aziontech/webkit/flow-node"
-    },
-    "flow-node-card": {
-      "import": "@aziontech/webkit/flow-node-card",
-      "target": "./src/components/data/flow/flow-node-card/flow-node-card.vue",
-      "kind": "subcomponent",
-      "parent": "flow",
-      "treeShakeableImport": "@aziontech/webkit/flow-node-card"
     },
     "flow-parallel": {
       "import": "@aziontech/webkit/flow-parallel",
@@ -13790,6 +13754,18 @@
       "target": "./src/assets/heroes/quick-start-with-templates.svg",
       "kind": "asset",
       "treeShakeableImport": "@aziontech/webkit/assets/heroes/quick-start-with-templates.svg"
+    },
+    "assets/clients/CCPA-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/CCPA-logo.svg",
+      "target": "./src/assets/clients/CCPA-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/CCPA-logo.svg"
+    },
+    "assets/clients/CPRA-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/CPRA-logo.svg",
+      "target": "./src/assets/clients/CPRA-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/CPRA-logo.svg"
     },
     "assets/clients/GDPR-logo.svg": {
       "import": "@aziontech/webkit/assets/clients/GDPR-logo.svg",

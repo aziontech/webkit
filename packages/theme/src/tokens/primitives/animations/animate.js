@@ -1,5 +1,3 @@
-import { ease } from './ease.js'
-
 export const curve = {
   'productive-entrance': 'cubic-bezier(0.39, 0.57, 0.56, 1)',
   'productive-exit': 'cubic-bezier(0.55, 0.09, 0.68, 0.53)',
@@ -49,29 +47,6 @@ export const animate = {
   // `linear` (not a curve token) for the same reason as spin/shimmer: an endlessly
   // looping animation must not accelerate, or the seam between repeats is visible.
   'flow-dash': `flowDash ${duration['slow-02']} linear infinite`,
-  // ONE token holding a two-animation list, because the packet's position and its length run
-  // on different timing functions off the same clock. Both legs must stay the same duration or
-  // the taper drifts out of phase with the travel and the dash tapers mid-path.
-  'flow-packet': `flowPacketTravel ${duration['slow-04']} ${ease['in-out']} infinite, flowPacketTaper ${duration['slow-04']} linear infinite`,
-  // No delay in the shorthand, deliberately: a `var()` nested inside a token declared
-  // here is substituted once, on `:root`, and the resolved value is what descendants
-  // inherit — so a per-element `--…-delay` written into this string can never reach the
-  // element. The stagger is an `animation-delay` LONGHAND on the node instead, which does
-  // resolve per element. `backwards` is here so a delayed node holds its invisible start
-  // through that delay instead of painting the landed state and blinking back out.
-  'flow-node-enter': `flowNodeEnter ${duration['moderate-02']} ${curve['productive-entrance']} backwards`,
-  // Half of a flow diagram's arrival beat: a node lands on the first half of
-  // `--flow-enter-step`, its outgoing connector draws on the second. No fill forwards — the
-  // mask path's resting state is already fully open, which is also what a reduced-motion
-  // `animate-none` leaves behind. `backwards` for the same reason as flow-node-enter.
-  'flow-connector-draw': `flowConnectorDraw ${duration['moderate-02']} ${curve['productive-entrance']} backwards`,
-  // An always-on glow breathing behind the one element a view is ABOUT. Asymmetric on
-  // purpose, and the asymmetry is the whole read: it blooms over `slow-02` and falls back over
-  // `moderate-02`, so each cycle arrives and settles instead of dimming on a metronome. The
-  // duration is those two tokens summed rather than a literal, so the cycle follows the scale;
-  // the split lives in the keyframe offsets, and each leg carries its own curve — something the
-  // shorthand cannot express, since one `animation-timing-function` would govern both.
-  'glow-pulse': `glowPulse calc(${duration['slow-02']} + ${duration['moderate-02']}) infinite`,
   'illustration-rim-sweep': `illustrationRimSweep ${duration['slow-04']} linear infinite`,
   // Off the duration scale for the same reason as the chat pair below: that scale budgets UI
   // transitions and tops out at 2.1s, and these are ambient ground. 13s and 19s are both prime,
@@ -129,14 +104,6 @@ export const useWhen = {
   'progress-indeterminate-short': 'Indeterminate linear progress bar (secondary short sweep).',
   'flow-dash':
     'Flowing connection along an SVG connector stroke in a node-based / network diagram. Set a stroke-dasharray whose cycle divides 24 (e.g. 4 4) so the loop is seamless.',
-  'flow-packet':
-    'A request crossing an SVG connector in such a diagram: a dash that travels the path and tapers at both ends, carrying about the first half of the cycle. The path MUST carry pathLength="100" (camelCase) because the keyframe offsets are percentages, and MUST use butt line caps because the dash is zero-length at both extremes. Do not set stroke-dasharray or stroke-dashoffset in CSS alongside it; the keyframes own both.',
-  'flow-node-enter':
-    'A node of such a diagram arriving. Stagger it by setting animation-delay on the node itself — [animation-delay:var(--flow-node-enter-delay,0s)] plus one --flow-node-enter-delay per node, one fast-01 step apart — never inside this shorthand, where a nested var() is substituted on :root and the per-node value is lost. It fades in while travelling one --spacing-md rightward, so a staggered diagram assembles along the direction its connectors carry. The movement is safe only because the diagram measures its nodes from layout offsets, which a transform does not move; a diagram that measured them from getBoundingClientRect would strand every line at the offset it was measured at.',
-  'flow-connector-draw':
-    'The connector between two nodes of such a diagram being drawn. It animates a MASK path (pathLength="100", stroke wider than what it reveals), not the connector itself, so the revealed stroke keeps its own marching dash; apply that mask to the group holding the connector and its packet. Stagger it with an animation-delay longhand on the mask path — half a step after the node it leaves, so the diagram assembles node, line, node, line.',
-  'glow-pulse':
-    'An ambient glow breathing behind the one element a view is about — the subject node of a diagram, marked without a hover to find it. Apply it to a LAYER that carries only the glow (an inset ::before with a box-shadow and nothing else), never to the element itself: the element usually already runs its own entrance, and a second animate-* utility replaces that shorthand rather than joining it. Pair it with motion-reduce:before:animate-none.',
   'illustration-rim-sweep':
     'Rim light travelling around an illustration on hover. Apply through the .illustration-rim-sweep utility, which re-declares the ramp stack the angle drives; paused by default and set running from the hovered ancestor.',
   'texture-wave-a':

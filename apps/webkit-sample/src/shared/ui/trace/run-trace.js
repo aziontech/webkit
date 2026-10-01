@@ -160,7 +160,7 @@ export const RUN_FUNCTION = {
  * measured it, so selecting a node and selecting a waterfall row are one selection.
  *
  * @param {object} run An entry of `functionRuns`.
- * @returns {object[]} Nodes for `Flow.NodeCard`, in travel order.
+ * @returns {object[]} Nodes for `FlowCard`, in travel order.
  */
 export const runPath = (run) => {
   const span = (id) => run.spans.find((entry) => entry.id === id)

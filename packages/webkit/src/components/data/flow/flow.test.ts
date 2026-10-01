@@ -1,20 +1,19 @@
-import { userEvent } from '@storybook/test'
 import { composeStories } from '@storybook/vue3'
 import { render, waitFor } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
 import * as stories from '../../../../../../apps/storybook/src/stories/components/data/flow/Flow.stories'
 import { expectNoA11yViolations } from '../../../test/axe'
-import Flow, { FlowAnchor, FlowNode, FlowNodeCard, FlowParallel } from './index'
+import Flow, { FlowAnchor, FlowNode, FlowParallel } from './index'
 
-const { Default, Parallel, Branches, AnchoredNode, Disabled, NodeCards } = composeStories(stories)
+const { Default, Parallel, Branches, AnchoredNode, Disabled } = composeStories(stories)
 
 // Vue's runtime string-template compiler cannot resolve member-expression tags
 // like Flow.Node, so trees register the same component objects under flat
 // PascalCase tags (the Flow.Node === FlowNode identity is asserted separately).
 const renderTree = (template: string) =>
   render({
-    components: { Flow, FlowNode, FlowNodeCard, FlowParallel, FlowAnchor },
+    components: { Flow, FlowNode, FlowParallel, FlowAnchor },
     template
   })
 
@@ -22,7 +21,6 @@ describe('Flow (composition compound)', () => {
   describe('compound API — Object.assign attachment (index.ts)', () => {
     it('attaches every public sub-component to the root for dot-notation', () => {
       expect(Flow.Node).toBe(FlowNode)
-      expect(Flow.NodeCard).toBe(FlowNodeCard)
       expect(Flow.Parallel).toBe(FlowParallel)
       expect(Flow.Anchor).toBe(FlowAnchor)
     })
@@ -30,7 +28,6 @@ describe('Flow (composition compound)', () => {
     it('names the compound members from the anatomy (defineOptions.name)', () => {
       expect(Flow.name).toBe('Flow')
       expect(FlowNode.name).toBe('FlowNode')
-      expect(FlowNodeCard.name).toBe('FlowNodeCard')
       expect(FlowParallel.name).toBe('FlowParallel')
       expect(FlowAnchor.name).toBe('FlowAnchor')
     })
@@ -182,69 +179,18 @@ describe('Flow (composition compound)', () => {
       const { getByTestId } = renderTree(tree(true))
       const root = getByTestId('data-flow')
       await waitFor(() => {
-        expect(root.querySelectorAll('svg path[stroke-dasharray]').length).toBeGreaterThan(0)
+        expect(root.querySelectorAll('svg path').length).toBeGreaterThan(0)
       })
       await waitFor(() => {
-        expect(root.querySelectorAll('svg path[stroke-dasharray]').length).toBe(3)
+        expect(root.querySelectorAll('svg path').length).toBe(3)
       })
-    })
-
-    it('pairs every connector with a travelling request layer', async () => {
-      const { getByTestId } = renderTree(`
-        <Flow>
-          <FlowNode>Source</FlowNode>
-          <FlowNode>Deliver</FlowNode>
-        </Flow>
-      `)
-      const root = getByTestId('data-flow')
-      await waitFor(() => {
-        expect(root.querySelectorAll('svg path[stroke-dasharray]').length).toBe(1)
-      })
-      // Scoped past <defs>: the reveal mask draws each connector with a path of its own,
-      // which also carries pathLength, and only the painted layer is the packet.
-      const packets = root.querySelectorAll('svg > g > path[pathLength]')
-      expect(packets.length).toBe(1)
-      // pathLength must reach the DOM as the camelCase attribute: the keyframe offsets are
-      // percentages, and a kebab spelling is ignored so the dash units fall back to user units.
-      expect(packets[0].getAttribute('pathLength')).toBe('100')
-      expect(packets[0].getAttribute('stroke-linecap')).toBe('butt')
-      expect(packets[0].getAttribute('class')).toContain('animate-flow-packet')
-      expect(packets[0].getAttribute('class')).toContain('motion-reduce:animate-none')
-    })
-
-    it('reveals every connector through one mask that draws along the path', async () => {
-      const { getByTestId } = renderTree(`
-        <Flow>
-          <FlowNode>Source</FlowNode>
-          <FlowNode>Deliver</FlowNode>
-          <FlowNode>Store</FlowNode>
-        </Flow>
-      `)
-      const root = getByTestId('data-flow')
-      await waitFor(() => {
-        expect(root.querySelectorAll('svg path[stroke-dasharray]').length).toBe(2)
-      })
-      const mask = root.querySelector('svg defs mask') as SVGElement
-      // userSpaceOnUse is load-bearing: the default region is the bounding box of what is
-      // masked, and a straight connector's box is zero-height, which masks the line away.
-      expect(mask.getAttribute('maskUnits')).toBe('userSpaceOnUse')
-      const reveals = mask.querySelectorAll('path')
-      expect(reveals.length).toBe(2)
-      expect(reveals[0].getAttribute('class')).toContain('animate-flow-connector-draw')
-      expect(reveals[0].getAttribute('class')).toContain('motion-reduce:animate-none')
-      // Each connector draws half a step after the node it leaves, so the diagram
-      // assembles node, line, node, line instead of arriving as one slab.
-      expect(reveals[0].getAttribute('style')).toContain('0.5')
-      expect(reveals[1].getAttribute('style')).toContain('1.5')
-      const group = root.querySelector('svg > g') as SVGElement
-      expect(group.getAttribute('mask')).toBe(`url(#${mask.getAttribute('id')})`)
     })
 
     it('draws the outgoing connector when the same branch is not terminal', async () => {
       const { getByTestId } = renderTree(tree(false))
       const root = getByTestId('data-flow')
       await waitFor(() => {
-        expect(root.querySelectorAll('svg path[stroke-dasharray]').length).toBe(4)
+        expect(root.querySelectorAll('svg path').length).toBe(4)
       })
     })
 
@@ -259,7 +205,7 @@ describe('Flow (composition compound)', () => {
       `)
       const root = getByTestId('data-flow')
       await waitFor(() => {
-        expect(root.querySelectorAll('svg path[stroke-dasharray]').length).toBe(1)
+        expect(root.querySelectorAll('svg path').length).toBe(1)
       })
     })
   })
@@ -358,7 +304,7 @@ describe('Flow (composition compound)', () => {
       const root = getByTestId('data-flow')
       // Connector layout is measured on mount via rAF + observers, so paths appear async.
       await waitFor(() => {
-        expect(root.querySelectorAll('svg path[stroke-dasharray]').length).toBeGreaterThan(0)
+        expect(root.querySelectorAll('svg path').length).toBeGreaterThan(0)
       })
       const svg = root.querySelector('svg') as SVGElement
       expect(svg.getAttribute('aria-hidden')).toBe('true')
@@ -372,145 +318,6 @@ describe('Flow (composition compound)', () => {
         requestAnimationFrame(() => requestAnimationFrame(() => resolve(undefined)))
       )
       expect(root.querySelector('svg')).toBeNull()
-    })
-  })
-
-  describe('Flow.NodeCard — flow-node-card.vue anatomy, disclosure & a11y', () => {
-    it('is a node in its own right, with the derived testid and its own anchor', () => {
-      const { getByTestId } = renderTree(
-        `<Flow><FlowNodeCard eyebrow="Workload" title="shop-prod" /></Flow>`
-      )
-      const card = getByTestId('data-flow__node-card')
-      expect(card.getAttribute('role')).toBe('listitem')
-      expect(card.getAttribute('data-flow-kind')).toBe('node')
-      expect(card.querySelector('[data-flow-anchor="both"]')).toBeTruthy()
-    })
-
-    it('honours a consumer-supplied data-testid', () => {
-      const { getByTestId } = renderTree(
-        `<Flow><FlowNodeCard data-testid="my-card" title="shop-prod" /></Flow>`
-      )
-      expect(getByTestId('my-card').getAttribute('data-flow-kind')).toBe('node')
-    })
-
-    it('renders the eyebrow, the icon, the identity name and the state tag', () => {
-      const { getByText, getByTestId } = renderTree(
-        `<Flow><FlowNodeCard eyebrow="Workload" icon="ai ai-workloads" title="shop-prod" label="Live" severity="success" /></Flow>`
-      )
-      expect(getByText('Workload')).toBeTruthy()
-      expect(getByText('shop-prod')).toBeTruthy()
-      expect(getByText('Live')).toBeTruthy()
-      expect(getByTestId('data-flow__node-card').querySelector('i.ai-workloads')).toBeTruthy()
-    })
-
-    it('falls back to an em dash when the card names no resource', () => {
-      const { getByText } = renderTree(`<Flow><FlowNodeCard eyebrow="Firewall" /></Flow>`)
-      expect(getByText('—')).toBeTruthy()
-    })
-
-    it('renders no header button and no body when it is not collapsible', () => {
-      const { getByTestId, queryByRole } = renderTree(
-        `<Flow><FlowNodeCard eyebrow="Workload" title="shop-prod" /></Flow>`
-      )
-      expect(queryByRole('button')).toBeNull()
-      expect(getByTestId('data-flow__node-card').querySelector('[role="region"]')).toBeNull()
-    })
-
-    it('mirrors dashed, disabled and terminal onto the connector/aria attributes', () => {
-      const { getByTestId } = renderTree(
-        `<Flow><FlowNodeCard data-testid="c" dashed disabled terminal eyebrow="Firewall" /></Flow>`
-      )
-      const card = getByTestId('c')
-      expect(card.getAttribute('data-dashed')).toBe('true')
-      expect(card.getAttribute('data-disabled')).toBe('true')
-      expect(card.getAttribute('data-flow-disabled')).toBe('true')
-      expect(card.getAttribute('data-flow-terminal')).toBe('true')
-      expect(card.getAttribute('aria-disabled')).toBe('true')
-    })
-
-    it('opens and closes on the header trigger, driving aria-expanded and the body inert', async () => {
-      const { getByRole, getByTestId } = renderTree(`
-        <Flow>
-          <FlowNodeCard data-testid="c" collapsible eyebrow="Workload" title="shop-prod">
-            <span>shop.example.com</span>
-          </FlowNodeCard>
-        </Flow>
-      `)
-      const card = getByTestId('c')
-      const trigger = getByRole('button')
-      const body = card.querySelector('[role="region"]') as HTMLElement
-
-      expect(trigger.getAttribute('aria-expanded')).toBe('false')
-      expect(trigger.getAttribute('aria-controls')).toBe(body.id)
-      expect(body.hasAttribute('inert')).toBe(true)
-      expect(card.getAttribute('data-state')).toBe('closed')
-
-      await userEvent.click(trigger)
-      await waitFor(() => expect(trigger.getAttribute('aria-expanded')).toBe('true'))
-      expect(card.getAttribute('data-state')).toBe('open')
-      expect(body.hasAttribute('inert')).toBe(false)
-
-      await userEvent.click(trigger)
-      await waitFor(() => expect(trigger.getAttribute('aria-expanded')).toBe('false'))
-      expect(body.hasAttribute('inert')).toBe(true)
-    })
-
-    it('leaves a collapsible card with no fields without a disclosure to operate', () => {
-      const { queryByRole } = renderTree(
-        `<Flow><FlowNodeCard collapsible eyebrow="Firewall" label="Not bound" /></Flow>`
-      )
-      expect(queryByRole('button')).toBeNull()
-    })
-
-    it('reaches the trigger by keyboard and toggles on Enter', async () => {
-      const { getByRole } = renderTree(`
-        <Flow>
-          <FlowNodeCard collapsible eyebrow="Workload" title="shop-prod"><span>field</span></FlowNodeCard>
-        </Flow>
-      `)
-      const trigger = getByRole('button')
-      await userEvent.tab()
-      expect(document.activeElement).toBe(trigger)
-      await userEvent.keyboard('{Enter}')
-      await waitFor(() => expect(trigger.getAttribute('aria-expanded')).toBe('true'))
-    })
-
-    it('starts open when the consumer seeds the open model', () => {
-      const { getByRole } = render(FlowNodeCard, {
-        props: { collapsible: true, open: true, eyebrow: 'Workload' },
-        slots: { default: '<span>field</span>' }
-      })
-      expect(getByRole('button').getAttribute('aria-expanded')).toBe('true')
-    })
-
-    it('lets the title, status and actions slots replace what the props render', () => {
-      const { getByText, queryByText } = renderTree(`
-        <Flow>
-          <FlowNodeCard eyebrow="Workload" title="shop-prod" label="Live">
-            <template #title><a href="#shop">Open shop-prod</a></template>
-            <template #status><span>Rolling out</span></template>
-            <template #actions><button type="button">Rebind</button></template>
-          </FlowNodeCard>
-        </Flow>
-      `)
-      expect(getByText('Open shop-prod')).toBeTruthy()
-      expect(getByText('Rolling out')).toBeTruthy()
-      expect(getByText('Rebind')).toBeTruthy()
-      expect(queryByText('Live')).toBeNull()
-      expect(queryByText('shop-prod')).toBeNull()
-    })
-
-    it('draws a connector between two card nodes', async () => {
-      const { getByTestId } = renderTree(`
-        <Flow>
-          <FlowNodeCard eyebrow="Workload" title="shop-prod" />
-          <FlowNodeCard eyebrow="Application" title="storefront" />
-        </Flow>
-      `)
-      const root = getByTestId('data-flow')
-      await waitFor(() =>
-        expect(root.querySelectorAll('svg path[stroke-dasharray]').length).toBe(1)
-      )
     })
   })
 
@@ -541,13 +348,6 @@ describe('Flow (composition compound)', () => {
       expect(types).toEqual(['end', 'start'])
     })
 
-    it('renders the NodeCards story as a topology of card nodes', () => {
-      const { getAllByTestId, getByText } = render(NodeCards())
-      expect(getAllByTestId('data-flow__node-card').length).toBe(4)
-      expect(getByText('shop-prod')).toBeTruthy()
-      expect(getByText('Not bound')).toBeTruthy()
-    })
-
     it('renders the Disabled story with the middle node marked disabled', () => {
       const { getAllByTestId } = render(Disabled())
       const disabled = getAllByTestId('data-flow__node').filter(
@@ -565,21 +365,6 @@ describe('Flow (composition compound)', () => {
           <FlowNode>Source</FlowNode>
           <FlowNode>Transform</FlowNode>
           <FlowNode>Deliver</FlowNode>
-        </Flow>
-      `)
-      await expectNoA11yViolations(getByTestId('data-flow'))
-    })
-
-    it('has no violations for a topology of card nodes, open and closed', async () => {
-      const { getByTestId } = renderTree(`
-        <Flow>
-          <FlowNodeCard collapsible open eyebrow="Workload" title="shop-prod" label="Live" severity="success">
-            <span>shop.example.com</span>
-          </FlowNodeCard>
-          <FlowNodeCard collapsible eyebrow="Application" title="storefront" label="Active" severity="success">
-            <span>Azion Runtime</span>
-          </FlowNodeCard>
-          <FlowNodeCard dashed terminal eyebrow="Firewall" label="Not bound" />
         </Flow>
       `)
       await expectNoA11yViolations(getByTestId('data-flow'))
