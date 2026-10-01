@@ -140,6 +140,36 @@ describe('MediaTile', () => {
     expect(getByTestId(FRAME)).not.toHaveAttribute('data-padded')
   })
 
+  it('keeps slotted media at its own size by default', () => {
+    const { getByTestId } = render(MediaTile, { props: { title: TITLE, src: SRC, alt: ALT } })
+
+    expect(getByTestId(`${TESTID}__media`)).not.toHaveAttribute('data-fluid')
+  })
+
+  it('marks the media fluid when fluid is turned on', () => {
+    const { getByTestId } = render(MediaTile, {
+      props: { title: TITLE, src: SRC, alt: ALT, fluid: true }
+    })
+
+    expect(getByTestId(`${TESTID}__media`)).toHaveAttribute('data-fluid', 'true')
+  })
+
+  it('leaves the media unscaled by default', () => {
+    const { getByTestId } = render(MediaTile, { props: { title: TITLE, src: SRC, alt: ALT } })
+
+    expect(getByTestId(`${TESTID}__media`).style.scale).toBe('')
+  })
+
+  it('scales the media inside the frame without scaling the frame', () => {
+    const { getByTestId } = render(MediaTile, {
+      props: { title: TITLE, src: SRC, alt: ALT, mediaScale: 1.5 }
+    })
+
+    expect(getByTestId(`${TESTID}__media`).style.scale).toBe('1.5')
+    expect(getByTestId(FRAME).style.scale).toBe('')
+    expect(getByTestId(`${TESTID}__media`).querySelector('img')).toHaveAttribute('alt', ALT)
+  })
+
   it('derives the frame testid from a consumer-supplied one', () => {
     const { getByTestId } = render(MediaTile, {
       props: { title: TITLE },
