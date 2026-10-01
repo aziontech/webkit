@@ -10,8 +10,8 @@
   // global light/dark/system toggle, then restore the previous theme on leave so
   // the console pages keep the user's chosen mode.
   import SiteFooter from '@shared/ui/SiteFooter.vue'
-  import { onBeforeUnmount, onMounted } from 'vue'
 
+  import { useForceDarkTheme } from '../composables/useForceDarkTheme'
   import SiteNav from './SiteNav.vue'
 
   defineProps({
@@ -19,27 +19,7 @@
     navOverlay: { type: Boolean, default: false }
   })
 
-  let previous = null
-
-  onMounted(() => {
-    const root = document.documentElement
-    previous = {
-      dataTheme: root.getAttribute('data-theme'),
-      dark: root.classList.contains('azion-dark'),
-      light: root.classList.contains('azion-light')
-    }
-    root.setAttribute('data-theme', 'dark')
-    root.classList.add('azion', 'azion-dark')
-    root.classList.remove('azion-light')
-  })
-
-  onBeforeUnmount(() => {
-    if (!previous) return
-    const root = document.documentElement
-    if (previous.dataTheme) root.setAttribute('data-theme', previous.dataTheme)
-    root.classList.toggle('azion-dark', previous.dark)
-    root.classList.toggle('azion-light', previous.light)
-  })
+  useForceDarkTheme()
 </script>
 
 <template>
