@@ -103,8 +103,6 @@
 
   const hydrated = ref(false)
 
-  // Motion stays off until two frames after mount: a collapse or width a host restores in the
-  // mount tick is a state the reader already had, so it lands in place (see Motion in the spec).
   const settled = ref(false)
 
   onMounted(() => {
@@ -165,10 +163,6 @@
   const INNER_MOTION_CLASS =
     'transition-[translate,opacity] duration-moderate-02 ease-expressive-entrance has-[>input:checked]:ease-productive-exit data-[resizing]:transition-none not-data-[settled]:transition-none motion-reduce:transition-none motion-reduce:translate-none'
 
-  // The panel holds the rail's width so it slides out whole instead of reflowing, but
-  // `--sidebar-width` is the rail's BORDER box: less the aside's own `border-r` (1px), it is
-  // the box the panel sits in. At the full width it ran under the hairline, so every row and
-  // the scrollbar moved 1px right the moment the width was set, after the unsized first paint.
   const INNER_CLASS = cn(
     'flex h-full min-h-0 w-full flex-col',
     'w-[calc(var(--sidebar-width)-1px)] translate-x-0 has-[>input:checked]:-translate-x-full opacity-100 has-[>input:checked]:opacity-20',

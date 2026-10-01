@@ -226,10 +226,6 @@ describe('Menu (composition, drill stack + data mode)', () => {
     expect(view.queryByTestId('navigation-menu')).toBeNull()
   })
 
-  // A server-rendered menu must paint before hydration. Only the SSR compile shows this: it wraps
-  // any Transition that DECLARES `appear` — whatever its runtime value — in a `<template>`, whose
-  // content the browser never renders, so every group's rows were inert until the client took
-  // over. This suite compiles for the client, so the group's template is compiled for the server here.
   it('serves its groups as live markup, never inside an inert <template>', () => {
     const { descriptor } = parse(menuGroupSource, { filename: 'menu-group.vue' })
     const { code, errors } = compileTemplate({
@@ -664,9 +660,6 @@ describe('Menu (composition, drill stack + data mode)', () => {
     await waitFor(() => expect(globalThis.document.activeElement).toBe(arrow(view, 'Settings')))
   })
 
-  // A host that renders its own way back — a server-rendered page drawing its tree at the root,
-  // because a drill level renders through a Teleport only the client has — mounts the stack its
-  // tree sits on and leaves it through `pop()`, landing exactly where Back would.
   it('pop() leaves the current level the way Back does, for a host with its own way back', async () => {
     const path = ref(['settings'])
     const view = render(

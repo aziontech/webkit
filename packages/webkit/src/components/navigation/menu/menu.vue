@@ -297,7 +297,6 @@
   const groupTrees = computed<VNode[]>(() => props.groups.map(renderGroup))
 
   defineExpose({
-    /** Leaves the current level exactly as Menu.Back does — for a host that renders its own way back. */
     pop
   })
 </script>

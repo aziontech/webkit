@@ -79,9 +79,6 @@
     () => !isNested && ctx.enterOnMount.value && ctx.levels.value.length === 0
   )
 
-  // Bound as an object, never as `:appear`: the SSR compiler wraps any Transition that
-  // DECLARES `appear` — whatever its runtime value — in a `<template>`, so the served
-  // markup of every group was inert and the menu painted empty until hydration.
   const transitionAttrs = computed(() => (appear.value ? { appear: true } : {}))
 </script>
 
