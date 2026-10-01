@@ -664,6 +664,11 @@
       "--text-heading-2xl-letter-spacing",
       "--text-heading-2xl-line-height",
       "--text-heading-2xl-text-wrap-style",
+      "--text-heading-3xl-font-size",
+      "--text-heading-3xl-font-weight",
+      "--text-heading-3xl-letter-spacing",
+      "--text-heading-3xl-line-height",
+      "--text-heading-3xl-text-wrap-style",
       "--text-heading-lg-font-size",
       "--text-heading-lg-font-weight",
       "--text-heading-lg-letter-spacing",
@@ -809,6 +814,7 @@
       "text-button-lg",
       "text-button-md",
       "text-heading-2xl",
+      "text-heading-3xl",
       "text-heading-lg",
       "text-heading-md",
       "text-heading-sm",
@@ -1522,6 +1528,11 @@
         "--text-heading-2xl-letter-spacing",
         "--text-heading-2xl-line-height",
         "--text-heading-2xl-text-wrap-style",
+        "--text-heading-3xl-font-size",
+        "--text-heading-3xl-font-weight",
+        "--text-heading-3xl-letter-spacing",
+        "--text-heading-3xl-line-height",
+        "--text-heading-3xl-text-wrap-style",
         "--text-heading-lg-font-size",
         "--text-heading-lg-font-weight",
         "--text-heading-lg-letter-spacing",
@@ -10988,99 +10999,6 @@
       "parent": "carousel",
       "treeShakeableImport": "@aziontech/webkit/carousel-next"
     },
-    "client-kpi-quote": {
-      "import": "@aziontech/webkit/client-kpi-quote",
-      "target": "./src/components/marketing/client-kpi-quote/client-kpi-quote.vue",
-      "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/client-kpi-quote",
-      "category": "marketing",
-      "structure": "monolithic",
-      "status": "implemented",
-      "props": [
-        {
-          "name": "client",
-          "type": "string",
-          "default": "''",
-          "required": "false",
-          "doc": "Registry name of the client's brand mark, as `ticker` names one; a name the registry does not carry falls back to the typographic wordmark."
-        },
-        {
-          "name": "clientName",
-          "type": "string",
-          "default": "''",
-          "required": "false",
-          "doc": "The client's name in prose — the mark's accessible name, and the wordmark drawn when the registry has no artwork; falls back to the registry's own label for `client`."
-        },
-        {
-          "name": "kpi",
-          "type": "string",
-          "default": "''",
-          "required": "false",
-          "doc": "The result itself — the figure or short phrase the claim leads with, set in the default ink."
-        },
-        {
-          "name": "text",
-          "type": "string",
-          "default": "''",
-          "required": "false",
-          "doc": "The rest of the claim, set muted after the `kpi` and read as one sentence with it."
-        },
-        {
-          "name": "href",
-          "type": "string",
-          "default": "''",
-          "required": "false",
-          "doc": "When set, the whole cell renders as an anchor link to this URL and takes hover and focus states; the `actions` slot is then not rendered, since a link cannot nest another."
-        },
-        {
-          "name": "ariaLabel",
-          "type": "string",
-          "default": "''",
-          "required": "false",
-          "doc": "Accessible name of a linked cell, replacing the claim read as the link text; use it to state the destination, since a cell that is its own link shows no link label."
-        }
-      ],
-      "slots": [
-        {
-          "name": "mark",
-          "scope": "—",
-          "notes": "The client's mark; replaces the registry artwork, for a page that owns the file."
-        },
-        {
-          "name": "actions",
-          "scope": "—",
-          "notes": "A trailing control under the claim, floored so a row of cells aligns on it. Not rendered when `href` makes the cell itself the link."
-        }
-      ],
-      "purpose": "One cell of customer proof: the client's mark, the result that client got, and the sentence stating it. It is how a marketing page signs a number — the figure leads the claim in the default ink, the rest of the line runs muted behind it, and the mark above says whose workload it came from.",
-      "useWhen": [
-        "To state one customer's measured result on a marketing page, signed with that customer's mark.",
-        "As the cell of a success-story or proof grid — one per client, inside a `card-grid`.",
-        "Wherever a figure needs an owner: the mark is the attribution a bare number cannot carry."
-      ],
-      "avoidWhen": [
-        "For the platform's own figures, with no client behind them → use `big-numbers`.",
-        "For something a customer said → use `quote`, which owns the blockquote and the attribution.",
-        "For a wall or a strip of customer marks with no claim attached → use `logo-wall` or `ticker`.",
-        "For a product capability stated as a benefit → use `topic`."
-      ],
-      "related": [
-        "big-numbers` — the same proof band unsigned: the platform's figures rather than one client's.",
-        "quote` — a customer's words; this component is a customer's result.",
-        "ticker` — the mark registry this component names; a strip states the client list, a cell states one client's outcome.",
-        "card-grid` — the hairline grid a row of these cells sits in; its `gap-px` seams are the rules between them."
-      ],
-      "bestPractices": [
-        "Lead with the result, not with the client: the mark already says who, so `kpi` is the first thing read.",
-        "Keep `kpi` to two or three words — a figure and its direction (`86% faster`, `4M+ threats`, `90% lower`).",
-        "Never invent a figure to fill the lead. A client whose published story states no number leads with its own words (`Automated security`) and the cell still reads as proof.",
-        "Write `text` as the continuation of `kpi`: the two are set in one paragraph and read as one sentence.",
-        "The cell draws no frame of its own — the rule and the corner marks belong to the `card-grid` or `frame-box` the page assembles it into.",
-        "Prefer `href` over a link in `actions`: the whole cell becomes the target, so a grid of stories is one click each and nothing has to be aimed at.",
-        "Give every linked cell an `ariaLabel` that names the destination (`Dafiti success story: 86% faster load times…`). Without a visible link label, the claim alone never says where the cell goes.",
-        "Reach for `actions` only on an unlinked cell — a cell that is its own link cannot nest a second one, and the slot is dropped."
-      ]
-    },
     "faq": {
       "import": "@aziontech/webkit/faq",
       "target": "./src/components/marketing/faq/faq.vue",
@@ -11186,6 +11104,13 @@
           "doc": "Apply the band's own vertical rhythm. The inline inset is always applied."
         },
         {
+          "name": "size",
+          "type": "HeroSize",
+          "default": "'medium'",
+          "required": "false",
+          "doc": "Vertical rhythm the band applies when `padded`, equal above and below; `large` is the opening a page leads with."
+        },
+        {
           "name": "texture",
           "type": "TextureMaterialKind",
           "default": "'none'",
@@ -11212,6 +11137,27 @@
           "default": "'center'",
           "required": "false",
           "doc": "Where the content column sits vertically when the band fills a screen."
+        },
+        {
+          "name": "mediaAlign",
+          "type": "HeroMediaAlign",
+          "default": "'center'",
+          "required": "false",
+          "doc": "Where the `media` slot sits in its column: `center` balances it in the column, `end` sets its end edge on the container boundary, past the inline inset, from `md` up."
+        },
+        {
+          "name": "offset",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Height of the fixed chrome above the band, subtracted from the viewport when `kind` is `screen`; any CSS length."
+        },
+        {
+          "name": "bottomHeight",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Height of the window under the content, where the brand strip and the floor texture stand; any CSS length."
         },
         {
           "name": "carousel",
@@ -11244,7 +11190,7 @@
         {
           "name": "media",
           "scope": "—",
-          "notes": "Screenshot, diagram or form set beside the copy from `md` up. When filled, the content column becomes two columns and the copy keeps the leading one."
+          "notes": "Screenshot, diagram or form set beside the copy from `md` up. When filled, the content column becomes two equal halves from `md` up and the copy keeps the leading one; the `Hero.Title` `maxWidth` caps the copy inside its half."
         },
         {
           "name": "background",
@@ -11288,8 +11234,10 @@
         "Pass `kind=\"screen\"` for an opening band that should measure one screen, and declare the sticky bar's height as `--banner-offset` so the band still measures exactly one screen beneath it.",
         "Put the backdrop in the `background` slot rather than on the band's own class: the slot renders beneath the content layer and is already marked decorative.",
         "Turn `padded` off when the slotted content owns its block rhythm; the inline inset is not optional, because it is the page boundary the bar above the band also reads.",
+        "Set the band's air with `size`, never with a padded wrapper around the copy: `large` is the opening a page leads with, and the rhythm is the same above and below so the copy and the media sit on the band's vertical centre.",
         "Keep `highlight` to the opening phrase of the headline — it is the same sentence, only painted differently.",
         "Put the calls to action in `Hero.Title`'s `actions` slot; it stacks them full-width on narrow screens, which is what makes a hero button a comfortable thumb target.",
+        "Set `mediaAlign=\"end\"` when the media should close on the same vertical line as the frames below the band; leave it `center` when the media is a self-contained object that reads best balanced in its column.",
         "Reach for `floorTexture` rather than wiring a texture into the `bottom` slot by hand: the window is a fixed cell, so the band already carries the ink and the horizontal falloff fitted to it, and a hand-fitted copy of that drifts.",
         "Leave the `media` slot out entirely rather than filling it with decoration — a band with one column and a strong statement beats one with a stock image."
       ]
@@ -11333,6 +11281,13 @@
           "doc": "Apply the band's own vertical rhythm. The inline inset is always applied."
         },
         {
+          "name": "size",
+          "type": "HeroSize",
+          "default": "'medium'",
+          "required": "false",
+          "doc": "Vertical rhythm the band applies when `padded`, equal above and below; `large` is the opening a page leads with."
+        },
+        {
           "name": "texture",
           "type": "TextureMaterialKind",
           "default": "'none'",
@@ -11359,6 +11314,27 @@
           "default": "'center'",
           "required": "false",
           "doc": "Where the content column sits vertically when the band fills a screen."
+        },
+        {
+          "name": "mediaAlign",
+          "type": "HeroMediaAlign",
+          "default": "'center'",
+          "required": "false",
+          "doc": "Where the `media` slot sits in its column: `center` balances it in the column, `end` sets its end edge on the container boundary, past the inline inset, from `md` up."
+        },
+        {
+          "name": "offset",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Height of the fixed chrome above the band, subtracted from the viewport when `kind` is `screen`; any CSS length."
+        },
+        {
+          "name": "bottomHeight",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Height of the window under the content, where the brand strip and the floor texture stand; any CSS length."
         },
         {
           "name": "carousel",
@@ -11391,7 +11367,7 @@
         {
           "name": "media",
           "scope": "—",
-          "notes": "Screenshot, diagram or form set beside the copy from `md` up. When filled, the content column becomes two columns and the copy keeps the leading one."
+          "notes": "Screenshot, diagram or form set beside the copy from `md` up. When filled, the content column becomes two equal halves from `md` up and the copy keeps the leading one; the `Hero.Title` `maxWidth` caps the copy inside its half."
         },
         {
           "name": "background",
@@ -11435,8 +11411,10 @@
         "Pass `kind=\"screen\"` for an opening band that should measure one screen, and declare the sticky bar's height as `--banner-offset` so the band still measures exactly one screen beneath it.",
         "Put the backdrop in the `background` slot rather than on the band's own class: the slot renders beneath the content layer and is already marked decorative.",
         "Turn `padded` off when the slotted content owns its block rhythm; the inline inset is not optional, because it is the page boundary the bar above the band also reads.",
+        "Set the band's air with `size`, never with a padded wrapper around the copy: `large` is the opening a page leads with, and the rhythm is the same above and below so the copy and the media sit on the band's vertical centre.",
         "Keep `highlight` to the opening phrase of the headline — it is the same sentence, only painted differently.",
         "Put the calls to action in `Hero.Title`'s `actions` slot; it stacks them full-width on narrow screens, which is what makes a hero button a comfortable thumb target.",
+        "Set `mediaAlign=\"end\"` when the media should close on the same vertical line as the frames below the band; leave it `center` when the media is a self-contained object that reads best balanced in its column.",
         "Reach for `floorTexture` rather than wiring a texture into the `bottom` slot by hand: the window is a fixed cell, so the band already carries the ink and the horizontal falloff fitted to it, and a hand-fitted copy of that drifts.",
         "Leave the `media` slot out entirely rather than filling it with decoration — a band with one column and a strong statement beats one with a stock image."
       ]
@@ -11450,6 +11428,13 @@
       "structure": "monolithic",
       "status": "implemented",
       "props": [
+        {
+          "name": "kind",
+          "type": "LogoWallKind",
+          "default": "'square'",
+          "required": "false",
+          "doc": "The cell's proportion; `rectangle` sets every cell at 3:2, keeps three columns below `sm`, and holds three columns beside `aside` from `lg`."
+        },
         {
           "name": "items",
           "type": "LogoItem[]",
@@ -11483,7 +11468,7 @@
         {
           "name": "aside",
           "scope": "—",
-          "notes": "Content set beside the wall from `lg` up, such as one customer's `quote`, on a `--bg-canvas` panel padded by `--spacing-xl`; its child stretches to fill the panel. When it is empty the wall spans the full width."
+          "notes": "Content set beside the wall from `lg` up, centred in a panel that never sets the band's height (keep it short enough to fit two rows of squares from `xl`), such as one customer's `quote`, on a `--bg-canvas` panel padded by `--spacing-xl`; its child fills the panel's width. When it is empty the wall spans the full width."
         },
         {
           "name": "mark",
@@ -11491,7 +11476,7 @@
           "notes": "One cell's mark, replacing the image built from the item — for a mark that owns its own theming (a per-theme asset swap, a silhouette filter). The slotted content carries its own alternative text and sits in a 28px-tall box; on a linked cell it lifts with the built image's motion."
         }
       ],
-      "purpose": "The customer-proof band of a marketing page: a framed grid of square cells, one company mark to a cell, each one optionally linked to that customer's story, under one accessible group name. It is deliberately a static grid rather than an auto-scrolling strip — moving content needs a pause control to meet WCAG 2.2.2, and a wall a reader can scan beats one they have to wait for. The cells are `card-grid` frame cells, so the wall draws the same hairlines and registration marks as every other framed band on the page. A linked cell is the whole square: on hover and focus a wash rises behind it, the mark lifts, and a `Read story` label slides in under it, so the wall doubles as the way into the case studies. Fill the `aside` slot and the band splits from `lg` up — the wall on the start edge, one of those customers speaking on the end edge on a padded canvas panel — and the wall narrows from six columns to three to sit in half the width at the same cell size.",
+      "purpose": "The customer-proof band of a marketing page: a framed grid of square cells, one company mark to a cell, each one optionally linked to that customer's story, under one accessible group name. It is deliberately a static grid rather than an auto-scrolling strip — moving content needs a pause control to meet WCAG 2.2.2, and a wall a reader can scan beats one they have to wait for. The cells are `card-grid` frame cells, so the wall draws the same hairlines and registration marks as every other framed band on the page. A linked cell is the whole square: on hover and focus a wash rises behind it, the mark lifts, and a `Read story` label slides in under it, so the wall doubles as the way into the case studies. Fill the `aside` slot and the band splits from `lg` up — the wall on the start edge, one of those customers speaking on the end edge on a padded canvas panel — and the wall narrows from six columns to three to sit in half the width at the same cell size. Every cell is a perfect square in every layout, and the wall alone sets the band's height: the `aside` panel is size-contained from `lg` up, so its content never stretches a row, and the statement sits centred in it. Between `lg` and `xl` the wall is two columns wide, so its three rows are tall enough for a client sentence; from `xl` it is three columns, two rows. Set `kind` to `rectangle` and every cell becomes a 3:2 rectangle instead: beside `aside` the wall holds three columns from `lg`, so nine rectangles take exactly the height six squares do, and below `sm` it keeps three columns so nine marks never leave a ragged row.",
       "useWhen": [
         "To show who already uses the product, as the proof band under a hero or section, with each mark leading to that customer's success case.",
         "Wherever a set of partner, customer or certification marks is the message.",
@@ -11519,7 +11504,8 @@
         "Set `ariaLabel` so the group announces its purpose (\"Clients running on Azion\") instead of reading as an unnamed region.",
         "Link a mark with `href` only when there is somewhere worth going, such as a case study; a wall of links to nowhere costs a reader a tab stop per cell. In an app with a client-side router, handle `item-click`: call `event.preventDefault()` and push `item.href`.",
         "Put one statement in `aside`, not a second grid. The band's argument is *many customers, one of them talking*; two things of equal weight leave a reader with neither.",
-        "Give the wall a multiple of three marks when `aside` is filled and a multiple of six when it is not, so the last row is full rather than ragged. Six beside a quote is the Web Apps band."
+        "Give the wall exactly six marks when `aside` is filled — two full rows of three squares beside the statement, and three rows of two between `lg` and `xl` — and a multiple of six when it is not, so the last row is never ragged.",
+        "Reach for `kind: 'rectangle'` when the band names nine customers beside `aside`: three rows of three 3:2 cells at the height of the six-square wall. Nine is the count the rectangle wall is drawn for; without `aside` it runs six to a row like the square wall."
       ]
     },
     "media-split": {
@@ -11736,7 +11722,7 @@
           "type": "MediaTabsItem[]",
           "default": "[]",
           "required": "false",
-          "doc": "The tabs, in order; each item is `{ title, description, src, alt }`."
+          "doc": "The tabs, in order, at most three; each item is `{ title, description, src, alt }`. Items past the third are not rendered."
         },
         {
           "name": "selectOn",
@@ -11750,7 +11736,7 @@
           "type": "boolean",
           "default": "true",
           "required": "false",
-          "doc": "Advances to the next tab on a timer; pauses under pointer or focus, stops for good on a click, and never runs under reduced motion."
+          "doc": "Advances to the next tab on a timer; pauses under the pointer or keyboard focus, restarts its count on a click, and never runs under reduced motion."
         },
         {
           "name": "autoPlayInterval",
@@ -11772,6 +11758,27 @@
           "default": "'medium'",
           "required": "false",
           "doc": "Height each row is held to, as a multiple of the band's own padding step; copy longer than that grows its row, and the media column is always as tall as the stack."
+        },
+        {
+          "name": "texture",
+          "type": "TextureMaterialKind",
+          "default": "'none'",
+          "required": "false",
+          "doc": "Texture the media column is grounded with; `none` leaves it bare."
+        },
+        {
+          "name": "textureSize",
+          "type": "TextureMaterialSize",
+          "default": "'medium'",
+          "required": "false",
+          "doc": "Pitch of the ground's tiling — how far apart its cells sit."
+        },
+        {
+          "name": "textureFade",
+          "type": "TextureMaterialFade",
+          "default": "'vignette'",
+          "required": "false",
+          "doc": "How the ground fades out before the column's edges."
         }
       ],
       "events": [
@@ -11802,7 +11809,7 @@
       "related": [
         "media-split` — one claim, one picture, no selection.",
         "illustration` — the official scene a tab's `media` slot usually holds.",
-        "frame-box` — the registration frame the page wraps the band in; the band draws only its own top and bottom rules and the seam between its columns.",
+        "frame-box` — the registration frame the band is built from: every tab is its own frame and the media column is one more, each with all four corner marks. Every tab flushes its top rule and the media column its top and left rules, so the band draws no top rule of its own: the rule above it (a section title's, or the page frame's) is the only one, and a shared edge is one hairline.",
         "section-title` — the heading above the band; this component carries no title of its own."
       ],
       "bestPractices": [
@@ -11810,7 +11817,7 @@
         "Keep a tab's title to one line and its description to two. The row has a fixed height, and copy that overruns it pushes the media column taller than the design.",
         "Give every tab a medium: the frame holds one at a time and cross-fades within it, so a tab with nothing to show reads as a broken rotation, not as a quiet one.",
         "Use scenes of the same shape. The frame does not resize between tabs.",
-        "Leave `autoPlay` on for a band a reader is expected to watch. It pauses under the pointer, stops for good on a click, and never starts under reduced motion.",
+        "Leave `autoPlay` on for a band a reader is expected to watch. It pauses under the pointer or keyboard focus, restarts its count on a click (and keeps running under the pointer that clicked), and never starts under reduced motion.",
         "Pick `size` from the copy, not from the section: `medium` holds a title and two lines, `large` a title and four."
       ]
     },
@@ -11930,7 +11937,7 @@
           "type": "string",
           "default": "''",
           "required": "false",
-          "doc": "Who said it — the attribution's lead, and the source of the initials fallback in `highlight`."
+          "doc": "Who said it — the attribution's lead, set in the accent."
         },
         {
           "name": "jobTitle",
@@ -11944,7 +11951,7 @@
           "type": "string",
           "default": "''",
           "required": "false",
-          "doc": "URL of the person's likeness, drawn by `highlight`; without one that register shows their initials."
+          "doc": "URL of the person's likeness, drawn beside the attribution by `highlight`; without one the attribution stands alone."
         },
         {
           "name": "logo",
@@ -11959,6 +11966,13 @@
           "default": "''",
           "required": "false",
           "doc": "Alternative text for the mark; falls back to `jobTitle` when empty."
+        },
+        {
+          "name": "highlights",
+          "type": "string[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "Phrases of `text` kept in the default ink while the rest of the quotation recedes to the muted one; each is matched verbatim, and an empty list leaves the whole quotation in the default ink. Ignored when the default slot is filled."
         },
         {
           "name": "kind",
@@ -11985,7 +11999,7 @@
           "notes": "A trailing control under the attribution, floored so a row of quotes aligns on it."
         }
       ],
-      "purpose": "A single customer testimonial: the quotation, who said it, and optionally the mark of the company they said it for. It is the smallest unit of social proof on a marketing page, and it is deliberately one quote — a wall of them is a layout built from several of these, not a prop on one. Three registers, one component. `inline` is the quiet unit that sits inside a cell of a larger band — the mark small above the words, the attribution one muted line under them. `signed` is the band-sized register a product page gives a client: the mark above, the quotation at heading weight, and the attribution split into the speaker's name in the accent beside their role. `highlight` is the featured register — the quotation set largest, the speaker carried by their likeness (or their initials), and the company mark floated on a textured plate. The register changes the weight and the arrangement, never the anatomy: every register is one `figure` holding one `blockquote` and one `figcaption`, so the quotation and its attribution stay paired at the depth HTML requires.",
+      "purpose": "A single customer testimonial: the quotation, who said it, and optionally the mark of the company they said it for. It is the smallest unit of social proof on a marketing page, and it is deliberately one quote — a wall of them is a layout built from several of these, not a prop on one. Three registers, one component. `inline` is the quiet unit that sits inside a cell of a larger band — the mark on a fixed band above the words, the quotation at the smallest heading size, and no quotation glyph, so a row of them reads as a row of claims. `signed` is the card-sized register a client sentence or an analyst report takes: the mark above, the quotation glyph, the quotation in body type, and the attribution stacked as the speaker (or the report) in the accent over their role (or its date). `highlight` is the featured register — the quotation set largest beside the company mark, which is given its own column at the quotation's first line; the speaker's likeness is drawn beside the attribution only when a `photo` is given. Every register attributes the same way: the name in the accent and the role in the muted ink, both in overline type, one over the other. The register changes the weight and the arrangement, never the anatomy: every register is one `figure` holding one `blockquote` and one `figcaption`, so the quotation and its attribution stay paired at the depth HTML requires.",
       "useWhen": [
         "To carry one customer statement inside a marketing section.",
         "Whenever a claim the page makes is better made by the customer who verified it.",
@@ -12002,15 +12016,15 @@
       "related": [
         "big-numbers` — the numeric form of the same proof band.",
         "card-grid` — the uniform grid a row of peer quotes is laid out on; `bento-grid` when one quote is given more weight than its neighbours.",
-        "avatar` — the person's likeness, composed by the `highlight` register.",
-        "overline` — the speaker's name in the `signed` register's attribution."
+        "avatar` — the person's likeness, composed by the `highlight` register when a `photo` is given."
       ],
       "bestPractices": [
         "Keep `text` to one or two sentences. A testimonial that needs a paragraph is a case study, and belongs behind a link.",
-        "Give `name` the speaker and `job-title` their title and company. The registers set the two differently, so passing one joined string collapses that distinction.",
-        "Quote verbatim. Do not add quotation marks to `text` — every register opens on the component's own quotation glyph, sized to that register's measure, so a typed `\"` doubles it.",
+        "Give `name` the speaker and `job-title` their title and company — or, for an analyst report, the report and its date. The two lines are set in different inks, so passing one joined string collapses that distinction.",
+        "Quote verbatim. Do not add quotation marks to `text` — `signed` and `highlight` open on the component's own quotation glyph, sized to that register's measure, so a typed `\"` doubles it; `inline` carries no glyph, because its unit is a claim inside a larger band.",
         "Give `logo` a company mark only. A person's likeness is `photo`, which only `highlight` draws.",
         "Give `logo` a mark that carries its own contrast. It is drawn as-is — no filter, one URL, no per-theme swap — so a mark drawn in a single ink reads on one theme and disappears on the other. Use the `mark` slot instead when the mark is a component that owns its own theming.",
+        "Use `highlights` to lift the measured claim out of a quotation — the figure and what it measured (`86% faster load times`), not a whole clause. Every phrase must appear in `text` verbatim; the rest of the sentence recedes to the muted ink, so a quotation that highlights most of itself highlights nothing.",
         "Put a trailing control in `actions` rather than beside the quote. The band floors it, which is what keeps a row of quotes aligned on their controls whatever each quotation's length."
       ]
     },
@@ -12067,6 +12081,64 @@
         "Compose the headline above the band with `section-title`, unframed, so the band owns only the strip.",
         "Keep the band full width. The row is designed to run past the reader's view — inset it and the fade loses the thing it is signalling.",
         "The band is pure composition — Carousel, then `Carousel.Item`, then `quote` — so its flush ruled cards and end fades come from `carousel` and read the same as any other carousel on the page. It adds only the card width and the header row of likeness and mark."
+      ]
+    },
+    "quote-tabs": {
+      "import": "@aziontech/webkit/quote-tabs",
+      "target": "./src/components/marketing/quote-tabs/quote-tabs.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/quote-tabs",
+      "category": "marketing",
+      "structure": "monolithic",
+      "status": "approved",
+      "props": [
+        {
+          "name": "items",
+          "type": "QuoteTabsItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The clients, in wall order; each item is `{ logo?, mark?, clientName?, shape?, text, name?, jobTitle?, photo? }` — the URL of the client's colour logo, the registry name of its one-ink mark, its name in prose, how tall its mark sits on the card, the quotation, who said it, their role and their likeness."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name for the wall of client cards."
+        }
+      ],
+      "slots": [
+        {
+          "name": "actions",
+          "scope": "—",
+          "notes": "A trailing control under the featured quotation's attribution, such as a secondary `Button` to the success stories; rendered in `quote`'s own `actions` area, the same for every client."
+        }
+      ],
+      "purpose": "A testimonial band a reader browses by client: the selected client's quotation featured at the top in the client's own colours, and a wall of client cards below it that is the selector itself — clicking a card brings that client's quotation in. It is the band a page reaches for when several customers have one strong sentence each and only one of them should be read at a time. The band owns the selection and nothing else. The featured quotation is `quote` in its `highlight` register, and every card is the same framed cell `logo-wall` draws, so a quotation and a client card look the same here as everywhere else on the page. The quotation travels sideways in the direction of the choice — a card later in the wall brings its quotation in from the right, an earlier one from the left — so the reader feels the wall as a sequence.",
+      "useWhen": [
+        "To feature one client quotation at a time out of three to twelve peers, with every other client one click away on the wall below.",
+        "As a success-story band where the wall of customers and the quotation are the same content, not two lists."
+      ],
+      "avoidWhen": [
+        "For one quotation on its own → use `quote` with `kind=\"highlight\"`.",
+        "For several quotations read side by side or swiped through → use `quote-carousel`.",
+        "For a wall whose cards link to each customer's story → use `logo-wall`.",
+        "For a moving strip of marks with no links → use `ticker`.",
+        "For switching a page's content between views → use `tab-view`."
+      ],
+      "related": [
+        "quote` — the `highlight` register this band renders for the selected client.",
+        "logo-wall` — the same framed client cells, as links out rather than as a selector.",
+        "card-grid` — the framed grid the cards are laid out on.",
+        "frame-box` — the registration frame the quotation panel is drawn in, with the same corner marks as the cards below it; also what a page wraps the band in to close its outer edges.",
+        "quote-carousel` — the same testimonials as a row the reader scrolls through, every one visible."
+      ],
+      "bestPractices": [
+        "Give the wall a full row: six clients fill it from `lg` up and three from below `sm`, so six or twelve leave no empty cell.",
+        "Give every item a `logo` in the client's own colours; it is drawn as-is on its card and in the featured quotation, so pick artwork that carries its own contrast on both themes. Without one, `mark` names a one-ink mark from the brand registry instead.",
+        "Let `clientName` default to the registry's label for `mark`; set it when the item has only a `logo`, or a client the registry does not carry. It is the card's accessible name, so it is never optional in practice.",
+        "Keep each quotation to one or two sentences, verbatim, without typed quotation marks — `quote` draws its own glyph. The panel holds the tallest quotation's height for all of them, so one much longer quotation leaves the shorter ones floating in space.",
+        "Leave the selection to the reader. The band never advances on its own."
       ]
     },
     "sticky-stack": {
@@ -13701,6 +13773,1128 @@
       "kind": "asset",
       "treeShakeableImport": "@aziontech/webkit/assets/logos/gigaom-reversed.svg"
     },
+    "assets/heroes/combine-data-and-vector-search.svg": {
+      "import": "@aziontech/webkit/assets/heroes/combine-data-and-vector-search.svg",
+      "target": "./src/assets/heroes/combine-data-and-vector-search.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/heroes/combine-data-and-vector-search.svg"
+    },
+    "assets/heroes/ddos-protection.svg": {
+      "import": "@aziontech/webkit/assets/heroes/ddos-protection.svg",
+      "target": "./src/assets/heroes/ddos-protection.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/heroes/ddos-protection.svg"
+    },
+    "assets/heroes/quick-start-with-templates.svg": {
+      "import": "@aziontech/webkit/assets/heroes/quick-start-with-templates.svg",
+      "target": "./src/assets/heroes/quick-start-with-templates.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/heroes/quick-start-with-templates.svg"
+    },
+    "assets/clients/GDPR-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/GDPR-logo.svg",
+      "target": "./src/assets/clients/GDPR-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/GDPR-logo.svg"
+    },
+    "assets/clients/HDI-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/HDI-logo.svg",
+      "target": "./src/assets/clients/HDI-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/HDI-logo.svg"
+    },
+    "assets/clients/LGPD-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/LGPD-logo.svg",
+      "target": "./src/assets/clients/LGPD-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/LGPD-logo.svg"
+    },
+    "assets/clients/PCI-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/PCI-logo.svg",
+      "target": "./src/assets/clients/PCI-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/PCI-logo.svg"
+    },
+    "assets/clients/SOC-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/SOC-logo.svg",
+      "target": "./src/assets/clients/SOC-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/SOC-logo.svg"
+    },
+    "assets/clients/agibank-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/agibank-logo.svg",
+      "target": "./src/assets/clients/agibank-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/agibank-logo.svg"
+    },
+    "assets/clients/akamai.svg": {
+      "import": "@aziontech/webkit/assets/clients/akamai.svg",
+      "target": "./src/assets/clients/akamai.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/akamai.svg"
+    },
+    "assets/clients/alpargatas.svg": {
+      "import": "@aziontech/webkit/assets/clients/alpargatas.svg",
+      "target": "./src/assets/clients/alpargatas.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/alpargatas.svg"
+    },
+    "assets/clients/americamovil.svg": {
+      "import": "@aziontech/webkit/assets/clients/americamovil.svg",
+      "target": "./src/assets/clients/americamovil.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/americamovil.svg"
+    },
+    "assets/clients/angeloni.svg": {
+      "import": "@aziontech/webkit/assets/clients/angeloni.svg",
+      "target": "./src/assets/clients/angeloni.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/angeloni.svg"
+    },
+    "assets/clients/angular.svg": {
+      "import": "@aziontech/webkit/assets/clients/angular.svg",
+      "target": "./src/assets/clients/angular.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/angular.svg"
+    },
+    "assets/clients/anthropic.svg": {
+      "import": "@aziontech/webkit/assets/clients/anthropic.svg",
+      "target": "./src/assets/clients/anthropic.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/anthropic.svg"
+    },
+    "assets/clients/astro.svg": {
+      "import": "@aziontech/webkit/assets/clients/astro.svg",
+      "target": "./src/assets/clients/astro.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/astro.svg"
+    },
+    "assets/clients/aws.svg": {
+      "import": "@aziontech/webkit/assets/clients/aws.svg",
+      "target": "./src/assets/clients/aws.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/aws.svg"
+    },
+    "assets/clients/ayko.svg": {
+      "import": "@aziontech/webkit/assets/clients/ayko.svg",
+      "target": "./src/assets/clients/ayko.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/ayko.svg"
+    },
+    "assets/clients/azure.svg": {
+      "import": "@aziontech/webkit/assets/clients/azure.svg",
+      "target": "./src/assets/clients/azure.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/azure.svg"
+    },
+    "assets/clients/banco-de-la-nacion-logo-vector.svg": {
+      "import": "@aziontech/webkit/assets/clients/banco-de-la-nacion-logo-vector.svg",
+      "target": "./src/assets/clients/banco-de-la-nacion-logo-vector.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/banco-de-la-nacion-logo-vector.svg"
+    },
+    "assets/clients/cloudflare.svg": {
+      "import": "@aziontech/webkit/assets/clients/cloudflare.svg",
+      "target": "./src/assets/clients/cloudflare.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/cloudflare.svg"
+    },
+    "assets/clients/contabilizei-symbol.png": {
+      "import": "@aziontech/webkit/assets/clients/contabilizei-symbol.png",
+      "target": "./src/assets/clients/contabilizei-symbol.png",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/contabilizei-symbol.png"
+    },
+    "assets/clients/dark/Axur.png": {
+      "import": "@aziontech/webkit/assets/clients/dark/Axur.png",
+      "target": "./src/assets/clients/dark/Axur.png",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/Axur.png"
+    },
+    "assets/clients/dark/agibank-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/agibank-logo.svg",
+      "target": "./src/assets/clients/dark/agibank-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/agibank-logo.svg"
+    },
+    "assets/clients/dark/browserless-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/browserless-logo.svg",
+      "target": "./src/assets/clients/dark/browserless-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/browserless-logo.svg"
+    },
+    "assets/clients/dark/clients/agibank-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/clients/agibank-logo.svg",
+      "target": "./src/assets/clients/dark/clients/agibank-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/agibank-logo.svg"
+    },
+    "assets/clients/dark/clients/arezzo-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/clients/arezzo-logo.svg",
+      "target": "./src/assets/clients/dark/clients/arezzo-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/arezzo-logo.svg"
+    },
+    "assets/clients/dark/clients/axur-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/clients/axur-logo.svg",
+      "target": "./src/assets/clients/dark/clients/axur-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/axur-logo.svg"
+    },
+    "assets/clients/dark/clients/caixa-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/clients/caixa-logo.svg",
+      "target": "./src/assets/clients/dark/clients/caixa-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/caixa-logo.svg"
+    },
+    "assets/clients/dark/clients/cocacola-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/clients/cocacola-logo.svg",
+      "target": "./src/assets/clients/dark/clients/cocacola-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/cocacola-logo.svg"
+    },
+    "assets/clients/dark/clients/contabilizei-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/clients/contabilizei-logo.svg",
+      "target": "./src/assets/clients/dark/clients/contabilizei-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/contabilizei-logo.svg"
+    },
+    "assets/clients/dark/clients/crefisa-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/clients/crefisa-logo.svg",
+      "target": "./src/assets/clients/dark/clients/crefisa-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/crefisa-logo.svg"
+    },
+    "assets/clients/dark/clients/dafiti-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/clients/dafiti-logo.svg",
+      "target": "./src/assets/clients/dark/clients/dafiti-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/dafiti-logo.svg"
+    },
+    "assets/clients/dark/clients/datadome-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/clients/datadome-logo.svg",
+      "target": "./src/assets/clients/dark/clients/datadome-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/datadome-logo.svg"
+    },
+    "assets/clients/dark/clients/fauna-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/clients/fauna-logo.svg",
+      "target": "./src/assets/clients/dark/clients/fauna-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/fauna-logo.svg"
+    },
+    "assets/clients/dark/clients/fourbank-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/clients/fourbank-logo.svg",
+      "target": "./src/assets/clients/dark/clients/fourbank-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/fourbank-logo.svg"
+    },
+    "assets/clients/dark/clients/gfg-global-fashion-group.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/clients/gfg-global-fashion-group.svg",
+      "target": "./src/assets/clients/dark/clients/gfg-global-fashion-group.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/gfg-global-fashion-group.svg"
+    },
+    "assets/clients/dark/clients/gpa-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/clients/gpa-logo.svg",
+      "target": "./src/assets/clients/dark/clients/gpa-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/gpa-logo.svg"
+    },
+    "assets/clients/dark/clients/herospark.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/clients/herospark.svg",
+      "target": "./src/assets/clients/dark/clients/herospark.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/herospark.svg"
+    },
+    "assets/clients/dark/clients/itau-logo.webp": {
+      "import": "@aziontech/webkit/assets/clients/dark/clients/itau-logo.webp",
+      "target": "./src/assets/clients/dark/clients/itau-logo.webp",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/itau-logo.webp"
+    },
+    "assets/clients/dark/clients/magalu-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/clients/magalu-logo.svg",
+      "target": "./src/assets/clients/dark/clients/magalu-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/magalu-logo.svg"
+    },
+    "assets/clients/dark/clients/monashees-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/clients/monashees-logo.svg",
+      "target": "./src/assets/clients/dark/clients/monashees-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/monashees-logo.svg"
+    },
+    "assets/clients/dark/clients/netshoes-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/clients/netshoes-logo.svg",
+      "target": "./src/assets/clients/dark/clients/netshoes-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/netshoes-logo.svg"
+    },
+    "assets/clients/dark/clients/pernambucanas-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/clients/pernambucanas-logo.svg",
+      "target": "./src/assets/clients/dark/clients/pernambucanas-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/pernambucanas-logo.svg"
+    },
+    "assets/clients/dark/clients/primevideo-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/clients/primevideo-logo.svg",
+      "target": "./src/assets/clients/dark/clients/primevideo-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/primevideo-logo.svg"
+    },
+    "assets/clients/dark/clients/qualcoom-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/clients/qualcoom-logo.svg",
+      "target": "./src/assets/clients/dark/clients/qualcoom-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/qualcoom-logo.svg"
+    },
+    "assets/clients/dark/clients/radware-logo-1.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/clients/radware-logo-1.svg",
+      "target": "./src/assets/clients/dark/clients/radware-logo-1.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/radware-logo-1.svg"
+    },
+    "assets/clients/dark/clients/radware-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/clients/radware-logo.svg",
+      "target": "./src/assets/clients/dark/clients/radware-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/radware-logo.svg"
+    },
+    "assets/clients/dark/clients/renner-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/clients/renner-logo.svg",
+      "target": "./src/assets/clients/dark/clients/renner-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/renner-logo.svg"
+    },
+    "assets/clients/dark/clients/saffe-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/clients/saffe-logo.svg",
+      "target": "./src/assets/clients/dark/clients/saffe-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/saffe-logo.svg"
+    },
+    "assets/clients/dark/edge-sql-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/edge-sql-logo.svg",
+      "target": "./src/assets/clients/dark/edge-sql-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/edge-sql-logo.svg"
+    },
+    "assets/clients/dark/edge-storage-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/edge-storage-logo.svg",
+      "target": "./src/assets/clients/dark/edge-storage-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/edge-storage-logo.svg"
+    },
+    "assets/clients/dark/former-clients/hdi-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/former-clients/hdi-logo.svg",
+      "target": "./src/assets/clients/dark/former-clients/hdi-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/former-clients/hdi-logo.svg"
+    },
+    "assets/clients/dark/former-clients/samsung-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/former-clients/samsung-logo.svg",
+      "target": "./src/assets/clients/dark/former-clients/samsung-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/former-clients/samsung-logo.svg"
+    },
+    "assets/clients/dark/former-clients/telefonica-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/former-clients/telefonica-logo.svg",
+      "target": "./src/assets/clients/dark/former-clients/telefonica-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/former-clients/telefonica-logo.svg"
+    },
+    "assets/clients/dark/former-clients/vtex-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/former-clients/vtex-logo.svg",
+      "target": "./src/assets/clients/dark/former-clients/vtex-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/former-clients/vtex-logo.svg"
+    },
+    "assets/clients/dark/former-clients/walmart-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/former-clients/walmart-logo.svg",
+      "target": "./src/assets/clients/dark/former-clients/walmart-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/former-clients/walmart-logo.svg"
+    },
+    "assets/clients/dark/magalu-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/magalu-logo.svg",
+      "target": "./src/assets/clients/dark/magalu-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/magalu-logo.svg"
+    },
+    "assets/clients/dark/nzn-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/nzn-logo.svg",
+      "target": "./src/assets/clients/dark/nzn-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/nzn-logo.svg"
+    },
+    "assets/clients/dark/resend-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/resend-logo.svg",
+      "target": "./src/assets/clients/dark/resend-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/resend-logo.svg"
+    },
+    "assets/clients/dark/stripe-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/stripe-logo.svg",
+      "target": "./src/assets/clients/dark/stripe-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/stripe-logo.svg"
+    },
+    "assets/clients/datadog-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/datadog-logo.svg",
+      "target": "./src/assets/clients/datadog-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/datadog-logo.svg"
+    },
+    "assets/clients/docusaurus.svg": {
+      "import": "@aziontech/webkit/assets/clients/docusaurus.svg",
+      "target": "./src/assets/clients/docusaurus.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/docusaurus.svg"
+    },
+    "assets/clients/drizzle.svg": {
+      "import": "@aziontech/webkit/assets/clients/drizzle.svg",
+      "target": "./src/assets/clients/drizzle.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/drizzle.svg"
+    },
+    "assets/clients/elastic.svg": {
+      "import": "@aziontech/webkit/assets/clients/elastic.svg",
+      "target": "./src/assets/clients/elastic.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/elastic.svg"
+    },
+    "assets/clients/eleventy.svg": {
+      "import": "@aziontech/webkit/assets/clients/eleventy.svg",
+      "target": "./src/assets/clients/eleventy.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/eleventy.svg"
+    },
+    "assets/clients/equinix.svg": {
+      "import": "@aziontech/webkit/assets/clients/equinix.svg",
+      "target": "./src/assets/clients/equinix.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/equinix.svg"
+    },
+    "assets/clients/exame.svg": {
+      "import": "@aziontech/webkit/assets/clients/exame.svg",
+      "target": "./src/assets/clients/exame.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/exame.svg"
+    },
+    "assets/clients/fourbank-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/fourbank-logo.svg",
+      "target": "./src/assets/clients/fourbank-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/fourbank-logo.svg"
+    },
+    "assets/clients/gatsby.svg": {
+      "import": "@aziontech/webkit/assets/clients/gatsby.svg",
+      "target": "./src/assets/clients/gatsby.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/gatsby.svg"
+    },
+    "assets/clients/gcp.svg": {
+      "import": "@aziontech/webkit/assets/clients/gcp.svg",
+      "target": "./src/assets/clients/gcp.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/gcp.svg"
+    },
+    "assets/clients/github.svg": {
+      "import": "@aziontech/webkit/assets/clients/github.svg",
+      "target": "./src/assets/clients/github.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/github.svg"
+    },
+    "assets/clients/global-fashion-group.svg": {
+      "import": "@aziontech/webkit/assets/clients/global-fashion-group.svg",
+      "target": "./src/assets/clients/global-fashion-group.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/global-fashion-group.svg"
+    },
+    "assets/clients/grafana.svg": {
+      "import": "@aziontech/webkit/assets/clients/grafana.svg",
+      "target": "./src/assets/clients/grafana.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/grafana.svg"
+    },
+    "assets/clients/graphql.svg": {
+      "import": "@aziontech/webkit/assets/clients/graphql.svg",
+      "target": "./src/assets/clients/graphql.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/graphql.svg"
+    },
+    "assets/clients/groq.svg": {
+      "import": "@aziontech/webkit/assets/clients/groq.svg",
+      "target": "./src/assets/clients/groq.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/groq.svg"
+    },
+    "assets/clients/herospark-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/herospark-logo.svg",
+      "target": "./src/assets/clients/herospark-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/herospark-logo.svg"
+    },
+    "assets/clients/herospark-symbol.svg": {
+      "import": "@aziontech/webkit/assets/clients/herospark-symbol.svg",
+      "target": "./src/assets/clients/herospark-symbol.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/herospark-symbol.svg"
+    },
+    "assets/clients/hexo.svg": {
+      "import": "@aziontech/webkit/assets/clients/hexo.svg",
+      "target": "./src/assets/clients/hexo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/hexo.svg"
+    },
+    "assets/clients/hono.svg": {
+      "import": "@aziontech/webkit/assets/clients/hono.svg",
+      "target": "./src/assets/clients/hono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/hono.svg"
+    },
+    "assets/clients/hugo.svg": {
+      "import": "@aziontech/webkit/assets/clients/hugo.svg",
+      "target": "./src/assets/clients/hugo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/hugo.svg"
+    },
+    "assets/clients/ietf.svg": {
+      "import": "@aziontech/webkit/assets/clients/ietf.svg",
+      "target": "./src/assets/clients/ietf.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/ietf.svg"
+    },
+    "assets/clients/ifood-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/ifood-logo.svg",
+      "target": "./src/assets/clients/ifood-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/ifood-logo.svg"
+    },
+    "assets/clients/infoblox.svg": {
+      "import": "@aziontech/webkit/assets/clients/infoblox.svg",
+      "target": "./src/assets/clients/infoblox.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/infoblox.svg"
+    },
+    "assets/clients/jamstack.svg": {
+      "import": "@aziontech/webkit/assets/clients/jamstack.svg",
+      "target": "./src/assets/clients/jamstack.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/jamstack.svg"
+    },
+    "assets/clients/javascript.svg": {
+      "import": "@aziontech/webkit/assets/clients/javascript.svg",
+      "target": "./src/assets/clients/javascript.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/javascript.svg"
+    },
+    "assets/clients/jekyll.svg": {
+      "import": "@aziontech/webkit/assets/clients/jekyll.svg",
+      "target": "./src/assets/clients/jekyll.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/jekyll.svg"
+    },
+    "assets/clients/kafka.svg": {
+      "import": "@aziontech/webkit/assets/clients/kafka.svg",
+      "target": "./src/assets/clients/kafka.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/kafka.svg"
+    },
+    "assets/clients/light/agi-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/agi-logo.svg",
+      "target": "./src/assets/clients/light/agi-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/agi-logo.svg"
+    },
+    "assets/clients/light/agibank-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/agibank-logo.svg",
+      "target": "./src/assets/clients/light/agibank-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/agibank-logo.svg"
+    },
+    "assets/clients/light/alpargatas-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/alpargatas-logo.svg",
+      "target": "./src/assets/clients/light/alpargatas-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/alpargatas-logo.svg"
+    },
+    "assets/clients/light/arezzo-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/arezzo-logo.svg",
+      "target": "./src/assets/clients/light/arezzo-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/arezzo-logo.svg"
+    },
+    "assets/clients/light/browserless-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/browserless-logo.svg",
+      "target": "./src/assets/clients/light/browserless-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/browserless-logo.svg"
+    },
+    "assets/clients/light/caixa-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/caixa-logo.svg",
+      "target": "./src/assets/clients/light/caixa-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/caixa-logo.svg"
+    },
+    "assets/clients/light/cobasi-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/cobasi-logo.svg",
+      "target": "./src/assets/clients/light/cobasi-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/cobasi-logo.svg"
+    },
+    "assets/clients/light/contabilizei-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/contabilizei-logo.svg",
+      "target": "./src/assets/clients/light/contabilizei-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/contabilizei-logo.svg"
+    },
+    "assets/clients/light/csu-digital-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/csu-digital-logo.svg",
+      "target": "./src/assets/clients/light/csu-digital-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/csu-digital-logo.svg"
+    },
+    "assets/clients/light/edge-sql-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/edge-sql-logo.svg",
+      "target": "./src/assets/clients/light/edge-sql-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/edge-sql-logo.svg"
+    },
+    "assets/clients/light/edge-storage-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/edge-storage-logo.svg",
+      "target": "./src/assets/clients/light/edge-storage-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/edge-storage-logo.svg"
+    },
+    "assets/clients/light/gfg-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/gfg-logo.svg",
+      "target": "./src/assets/clients/light/gfg-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/gfg-logo.svg"
+    },
+    "assets/clients/light/grendene-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/grendene-logo.svg",
+      "target": "./src/assets/clients/light/grendene-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/grendene-logo.svg"
+    },
+    "assets/clients/light/gru-airport-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/gru-airport-logo.svg",
+      "target": "./src/assets/clients/light/gru-airport-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/gru-airport-logo.svg"
+    },
+    "assets/clients/light/herospark-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/herospark-logo.svg",
+      "target": "./src/assets/clients/light/herospark-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/herospark-logo.svg"
+    },
+    "assets/clients/light/ifood-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/ifood-logo.svg",
+      "target": "./src/assets/clients/light/ifood-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/ifood-logo.svg"
+    },
+    "assets/clients/light/itau-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/itau-logo.svg",
+      "target": "./src/assets/clients/light/itau-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/itau-logo.svg"
+    },
+    "assets/clients/light/locaweb-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/locaweb-logo.svg",
+      "target": "./src/assets/clients/light/locaweb-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/locaweb-logo.svg"
+    },
+    "assets/clients/light/magalu-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/magalu-logo.svg",
+      "target": "./src/assets/clients/light/magalu-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/magalu-logo.svg"
+    },
+    "assets/clients/light/marisa-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/marisa-logo.svg",
+      "target": "./src/assets/clients/light/marisa-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/marisa-logo.svg"
+    },
+    "assets/clients/light/meliuz-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/meliuz-logo.svg",
+      "target": "./src/assets/clients/light/meliuz-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/meliuz-logo.svg"
+    },
+    "assets/clients/light/neogrid-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/neogrid-logo.svg",
+      "target": "./src/assets/clients/light/neogrid-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/neogrid-logo.svg"
+    },
+    "assets/clients/light/neon-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/neon-logo.svg",
+      "target": "./src/assets/clients/light/neon-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/neon-logo.svg"
+    },
+    "assets/clients/light/netshoes-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/netshoes-logo.svg",
+      "target": "./src/assets/clients/light/netshoes-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/netshoes-logo.svg"
+    },
+    "assets/clients/light/mobiauto-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/mobiauto-logo.svg",
+      "target": "./src/assets/clients/light/mobiauto-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/mobiauto-logo.svg"
+    },
+    "assets/clients/light/nzn-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/nzn-logo.svg",
+      "target": "./src/assets/clients/light/nzn-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/nzn-logo.svg"
+    },
+    "assets/clients/light/panvel-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/panvel-logo.svg",
+      "target": "./src/assets/clients/light/panvel-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/panvel-logo.svg"
+    },
+    "assets/clients/light/portobello-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/portobello-logo.svg",
+      "target": "./src/assets/clients/light/portobello-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/portobello-logo.svg"
+    },
+    "assets/clients/light/primevideo-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/primevideo-logo.svg",
+      "target": "./src/assets/clients/light/primevideo-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/primevideo-logo.svg"
+    },
+    "assets/clients/light/radware-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/radware-logo.svg",
+      "target": "./src/assets/clients/light/radware-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/radware-logo.svg"
+    },
+    "assets/clients/light/rbs-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/rbs-logo.svg",
+      "target": "./src/assets/clients/light/rbs-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/rbs-logo.svg"
+    },
+    "assets/clients/light/renner-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/renner-logo.svg",
+      "target": "./src/assets/clients/light/renner-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/renner-logo.svg"
+    },
+    "assets/clients/light/resend-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/resend-logo.svg",
+      "target": "./src/assets/clients/light/resend-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/resend-logo.svg"
+    },
+    "assets/clients/light/stone-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/stone-logo.svg",
+      "target": "./src/assets/clients/light/stone-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/stone-logo.svg"
+    },
+    "assets/clients/light/stripe-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/stripe-logo.svg",
+      "target": "./src/assets/clients/light/stripe-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/stripe-logo.svg"
+    },
+    "assets/clients/light/unicred-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/unicred-logo.svg",
+      "target": "./src/assets/clients/light/unicred-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/unicred-logo.svg"
+    },
+    "assets/clients/madeira-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/madeira-logo.svg",
+      "target": "./src/assets/clients/madeira-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/madeira-logo.svg"
+    },
+    "assets/clients/madeira-symbol.svg": {
+      "import": "@aziontech/webkit/assets/clients/madeira-symbol.svg",
+      "target": "./src/assets/clients/madeira-symbol.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/madeira-symbol.svg"
+    },
+    "assets/clients/madeiramadeira.svg": {
+      "import": "@aziontech/webkit/assets/clients/madeiramadeira.svg",
+      "target": "./src/assets/clients/madeiramadeira.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/madeiramadeira.svg"
+    },
+    "assets/clients/magalu-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/magalu-logo.svg",
+      "target": "./src/assets/clients/magalu-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/magalu-logo.svg"
+    },
+    "assets/clients/magalu-symbol.png": {
+      "import": "@aziontech/webkit/assets/clients/magalu-symbol.png",
+      "target": "./src/assets/clients/magalu-symbol.png",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/magalu-symbol.png"
+    },
+    "assets/clients/mongodb.svg": {
+      "import": "@aziontech/webkit/assets/clients/mongodb.svg",
+      "target": "./src/assets/clients/mongodb.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/mongodb.svg"
+    },
+    "assets/clients/mysql.svg": {
+      "import": "@aziontech/webkit/assets/clients/mysql.svg",
+      "target": "./src/assets/clients/mysql.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/mysql.svg"
+    },
+    "assets/clients/netshoes-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/netshoes-logo.svg",
+      "target": "./src/assets/clients/netshoes-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/netshoes-logo.svg"
+    },
+    "assets/clients/nextjs.svg": {
+      "import": "@aziontech/webkit/assets/clients/nextjs.svg",
+      "target": "./src/assets/clients/nextjs.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/nextjs.svg"
+    },
+    "assets/clients/node.js.svg": {
+      "import": "@aziontech/webkit/assets/clients/node.js.svg",
+      "target": "./src/assets/clients/node.js.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/node.js.svg"
+    },
+    "assets/clients/nuxt.svg": {
+      "import": "@aziontech/webkit/assets/clients/nuxt.svg",
+      "target": "./src/assets/clients/nuxt.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/nuxt.svg"
+    },
+    "assets/clients/mobiauto-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/mobiauto-logo.svg",
+      "target": "./src/assets/clients/mobiauto-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/mobiauto-logo.svg"
+    },
+    "assets/clients/nzn-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/nzn-logo.svg",
+      "target": "./src/assets/clients/nzn-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/nzn-logo.svg"
+    },
+    "assets/clients/onnx.svg": {
+      "import": "@aziontech/webkit/assets/clients/onnx.svg",
+      "target": "./src/assets/clients/onnx.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/onnx.svg"
+    },
+    "assets/clients/openai.svg": {
+      "import": "@aziontech/webkit/assets/clients/openai.svg",
+      "target": "./src/assets/clients/openai.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/openai.svg"
+    },
+    "assets/clients/photos/gpa.jpg": {
+      "import": "@aziontech/webkit/assets/clients/photos/gpa.jpg",
+      "target": "./src/assets/clients/photos/gpa.jpg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/photos/gpa.jpg"
+    },
+    "assets/clients/photos/netshoes.jpg": {
+      "import": "@aziontech/webkit/assets/clients/photos/netshoes.jpg",
+      "target": "./src/assets/clients/photos/netshoes.jpg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/photos/netshoes.jpg"
+    },
+    "assets/clients/planetscale.svg": {
+      "import": "@aziontech/webkit/assets/clients/planetscale.svg",
+      "target": "./src/assets/clients/planetscale.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/planetscale.svg"
+    },
+    "assets/clients/postgresql.svg": {
+      "import": "@aziontech/webkit/assets/clients/postgresql.svg",
+      "target": "./src/assets/clients/postgresql.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/postgresql.svg"
+    },
+    "assets/clients/preact.svg": {
+      "import": "@aziontech/webkit/assets/clients/preact.svg",
+      "target": "./src/assets/clients/preact.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/preact.svg"
+    },
+    "assets/clients/prisma.svg": {
+      "import": "@aziontech/webkit/assets/clients/prisma.svg",
+      "target": "./src/assets/clients/prisma.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/prisma.svg"
+    },
+    "assets/clients/qwik.svg": {
+      "import": "@aziontech/webkit/assets/clients/qwik.svg",
+      "target": "./src/assets/clients/qwik.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/qwik.svg"
+    },
+    "assets/clients/react.svg": {
+      "import": "@aziontech/webkit/assets/clients/react.svg",
+      "target": "./src/assets/clients/react.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/react.svg"
+    },
+    "assets/clients/redis.svg": {
+      "import": "@aziontech/webkit/assets/clients/redis.svg",
+      "target": "./src/assets/clients/redis.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/redis.svg"
+    },
+    "assets/clients/remix.svg": {
+      "import": "@aziontech/webkit/assets/clients/remix.svg",
+      "target": "./src/assets/clients/remix.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/remix.svg"
+    },
+    "assets/clients/renner-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/renner-logo.svg",
+      "target": "./src/assets/clients/renner-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/renner-logo.svg"
+    },
+    "assets/clients/renner-symbol.svg": {
+      "import": "@aziontech/webkit/assets/clients/renner-symbol.svg",
+      "target": "./src/assets/clients/renner-symbol.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/renner-symbol.svg"
+    },
+    "assets/clients/serverless.svg": {
+      "import": "@aziontech/webkit/assets/clients/serverless.svg",
+      "target": "./src/assets/clients/serverless.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/serverless.svg"
+    },
+    "assets/clients/sqlite.svg": {
+      "import": "@aziontech/webkit/assets/clients/sqlite.svg",
+      "target": "./src/assets/clients/sqlite.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/sqlite.svg"
+    },
+    "assets/clients/supabase.svg": {
+      "import": "@aziontech/webkit/assets/clients/supabase.svg",
+      "target": "./src/assets/clients/supabase.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/supabase.svg"
+    },
+    "assets/clients/svelte.svg": {
+      "import": "@aziontech/webkit/assets/clients/svelte.svg",
+      "target": "./src/assets/clients/svelte.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/svelte.svg"
+    },
+    "assets/clients/symbols/caixa.svg": {
+      "import": "@aziontech/webkit/assets/clients/symbols/caixa.svg",
+      "target": "./src/assets/clients/symbols/caixa.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/symbols/caixa.svg"
+    },
+    "assets/clients/symbols/gpa.svg": {
+      "import": "@aziontech/webkit/assets/clients/symbols/gpa.svg",
+      "target": "./src/assets/clients/symbols/gpa.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/symbols/gpa.svg"
+    },
+    "assets/clients/symbols/ifood.svg": {
+      "import": "@aziontech/webkit/assets/clients/symbols/ifood.svg",
+      "target": "./src/assets/clients/symbols/ifood.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/symbols/ifood.svg"
+    },
+    "assets/clients/symbols/itau.svg": {
+      "import": "@aziontech/webkit/assets/clients/symbols/itau.svg",
+      "target": "./src/assets/clients/symbols/itau.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/symbols/itau.svg"
+    },
+    "assets/clients/symbols/tray.svg": {
+      "import": "@aziontech/webkit/assets/clients/symbols/tray.svg",
+      "target": "./src/assets/clients/symbols/tray.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/symbols/tray.svg"
+    },
+    "assets/clients/tc39.svg": {
+      "import": "@aziontech/webkit/assets/clients/tc39.svg",
+      "target": "./src/assets/clients/tc39.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/tc39.svg"
+    },
+    "assets/clients/terraform.svg": {
+      "import": "@aziontech/webkit/assets/clients/terraform.svg",
+      "target": "./src/assets/clients/terraform.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/terraform.svg"
+    },
+    "assets/clients/turso.svg": {
+      "import": "@aziontech/webkit/assets/clients/turso.svg",
+      "target": "./src/assets/clients/turso.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/turso.svg"
+    },
+    "assets/clients/upstash.svg": {
+      "import": "@aziontech/webkit/assets/clients/upstash.svg",
+      "target": "./src/assets/clients/upstash.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/upstash.svg"
+    },
+    "assets/clients/vite.svg": {
+      "import": "@aziontech/webkit/assets/clients/vite.svg",
+      "target": "./src/assets/clients/vite.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/vite.svg"
+    },
+    "assets/clients/vitepress.svg": {
+      "import": "@aziontech/webkit/assets/clients/vitepress.svg",
+      "target": "./src/assets/clients/vitepress.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/vitepress.svg"
+    },
+    "assets/clients/vue.svg": {
+      "import": "@aziontech/webkit/assets/clients/vue.svg",
+      "target": "./src/assets/clients/vue.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/vue.svg"
+    },
+    "assets/clients/vuepress.svg": {
+      "import": "@aziontech/webkit/assets/clients/vuepress.svg",
+      "target": "./src/assets/clients/vuepress.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/vuepress.svg"
+    },
+    "assets/clients/w3c.svg": {
+      "import": "@aziontech/webkit/assets/clients/w3c.svg",
+      "target": "./src/assets/clients/w3c.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/w3c.svg"
+    },
+    "assets/clients/webassembly.svg": {
+      "import": "@aziontech/webkit/assets/clients/webassembly.svg",
+      "target": "./src/assets/clients/webassembly.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/webassembly.svg"
+    },
+    "assets/clients/workers-cf.svg": {
+      "import": "@aziontech/webkit/assets/clients/workers-cf.svg",
+      "target": "./src/assets/clients/workers-cf.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/workers-cf.svg"
+    },
+    "assets/clients/zoop-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/zoop-logo.svg",
+      "target": "./src/assets/clients/zoop-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/zoop-logo.svg"
+    },
+    "assets/clients/registry": {
+      "import": "@aziontech/webkit/assets/clients/registry",
+      "target": "./src/assets/clients/registry.ts",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/registry"
+    },
+    "assets/clients/symbols/registry": {
+      "import": "@aziontech/webkit/assets/clients/symbols/registry",
+      "target": "./src/assets/clients/symbols/registry.ts",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/symbols/registry"
+    },
+    "assets/illustrations/azion-highlight.svg": {
+      "import": "@aziontech/webkit/assets/illustrations/azion-highlight.svg",
+      "target": "./src/assets/illustrations/azion-highlight.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/illustrations/azion-highlight.svg"
+    },
+    "assets/illustrations/branches.svg": {
+      "import": "@aziontech/webkit/assets/illustrations/branches.svg",
+      "target": "./src/assets/illustrations/branches.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/illustrations/branches.svg"
+    },
+    "assets/illustrations/personal-tokens.svg": {
+      "import": "@aziontech/webkit/assets/illustrations/personal-tokens.svg",
+      "target": "./src/assets/illustrations/personal-tokens.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/illustrations/personal-tokens.svg"
+    },
+    "assets/illustrations/usage-chart.svg": {
+      "import": "@aziontech/webkit/assets/illustrations/usage-chart.svg",
+      "target": "./src/assets/illustrations/usage-chart.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/illustrations/usage-chart.svg"
+    },
+    "assets/certifications/ccpa.svg": {
+      "import": "@aziontech/webkit/assets/certifications/ccpa.svg",
+      "target": "./src/assets/certifications/ccpa.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/certifications/ccpa.svg"
+    },
+    "assets/certifications/cpra.svg": {
+      "import": "@aziontech/webkit/assets/certifications/cpra.svg",
+      "target": "./src/assets/certifications/cpra.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/certifications/cpra.svg"
+    },
+    "assets/certifications/gdpr.svg": {
+      "import": "@aziontech/webkit/assets/certifications/gdpr.svg",
+      "target": "./src/assets/certifications/gdpr.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/certifications/gdpr.svg"
+    },
+    "assets/certifications/lgpd.svg": {
+      "import": "@aziontech/webkit/assets/certifications/lgpd.svg",
+      "target": "./src/assets/certifications/lgpd.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/certifications/lgpd.svg"
+    },
+    "assets/certifications/pci-dss.svg": {
+      "import": "@aziontech/webkit/assets/certifications/pci-dss.svg",
+      "target": "./src/assets/certifications/pci-dss.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/certifications/pci-dss.svg"
+    },
+    "assets/certifications/soc.svg": {
+      "import": "@aziontech/webkit/assets/certifications/soc.svg",
+      "target": "./src/assets/certifications/soc.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/certifications/soc.svg"
+    },
+    "assets/competitors/vercel.svg": {
+      "import": "@aziontech/webkit/assets/competitors/vercel.svg",
+      "target": "./src/assets/competitors/vercel.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/competitors/vercel.svg"
+    },
+    "assets/competitors/dark/vercel.svg": {
+      "import": "@aziontech/webkit/assets/competitors/dark/vercel.svg",
+      "target": "./src/assets/competitors/dark/vercel.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/competitors/dark/vercel.svg"
+    },
+    "assets/competitors/registry": {
+      "import": "@aziontech/webkit/assets/competitors/registry",
+      "target": "./src/assets/competitors/registry.ts",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/competitors/registry"
+    },
     "svg/illustration-layers": {
       "import": "@aziontech/webkit/svg/illustration-layers",
       "target": "./src/svg/illustration-layers/illustration-layers.vue",
@@ -14195,7 +15389,7 @@
         },
         {
           "name": "fade",
-          "type": "'none' | 'top' | 'bottom' | 'edges' | 'vignette'",
+          "type": "'none' | 'top' | 'bottom' | 'left' | 'right' | 'edges' | 'vignette'",
           "default": "'none'",
           "required": "false",
           "doc": "Fades the layer out along an axis so it meets content without a hard edge."
