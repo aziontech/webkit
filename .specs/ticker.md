@@ -2,7 +2,7 @@
 name: ticker
 category: marketing
 structure: monolithic
-status: implemented
+status: approved
 spec_version: 1
 checksum: bc74ab5b07259372e2d53ea3ff45896601d49aecfbb41b675ba5430abd0303a0
 created: 2026-09-23

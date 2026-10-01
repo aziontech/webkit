@@ -76,6 +76,18 @@ describe('Ticker', () => {
     }
   })
 
+  it('holds the loop until every mark has resolved, so the row starts complete', async () => {
+    const { container } = render(Ticker, { props: { marks: MARKS } })
+    const track = container.querySelector('.animate-brand-marquee')
+
+    expect(track).toHaveAttribute('data-loading')
+
+    await waitFor(() => expect(track).not.toHaveAttribute('data-loading'))
+    for (const name of MARKS) {
+      expect(container.querySelector(`svg[data-mark="${name}"]`)).not.toBeNull()
+    }
+  })
+
   it('falls back to the name itself when nothing is registered under it', async () => {
     const { container, getAllByText } = render(Ticker, {
       props: { marks: ['magalu', 'Contabilizei'] }
@@ -112,7 +124,7 @@ describe('Ticker', () => {
     const track = container.querySelector('.animate-brand-marquee')
 
     expect(track?.getAttribute('style')).toContain(
-      `animation-duration: ${Math.round(MARKS.length * 5.4)}s`
+      `animation-duration: ${Math.round(MARKS.length * 2)}s`
     )
   })
 

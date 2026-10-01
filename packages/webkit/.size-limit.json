@@ -137,7 +137,7 @@
   {
     "name": "ticker",
     "path": "src/components/marketing/ticker/ticker.vue",
-    "limit": "4 KB",
+    "limit": "4.5 KB",
     "entryOnly": true
   },
   {

@@ -1,5 +1,5 @@
-import TextureMaterial from '@aziontech/webkit/texture-material'
 import Ticker from '@aziontech/webkit/ticker'
+import TextureMaterial from '@aziontech/webkit/texture-material'
 
 import { toSfc } from '../../../_shared/story-source'
 

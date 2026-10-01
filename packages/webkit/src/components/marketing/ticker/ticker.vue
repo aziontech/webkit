@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { type Component, computed, defineAsyncComponent, useAttrs } from 'vue'
+  import { type Component, computed, markRaw, ref, shallowRef, useAttrs, watch } from 'vue'
 
   import { brandMarkLabel, resolveBrandMark } from '../../../svg/brands/registry'
   import Overline from '../../overline/overline.vue'
@@ -38,24 +38,58 @@
 
   const attrs = useAttrs()
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'marketing-ticker'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'marketing-ticker')
 
-  const SECONDS_PER_MARK = 5.4
+  const SECONDS_PER_MARK = 2
 
   const passDuration = computed(
     () => props.duration || Math.round(props.marks.length * SECONDS_PER_MARK) || 1
   )
 
-  const loaded = new Map<string, Component>()
+  const artwork = shallowRef(new Map<string, Component>())
+  const ready = ref(false)
 
   const resolved = computed(() =>
-    props.marks.map((name) => {
-      const loader = resolveBrandMark(name)
-      if (loader && !loaded.has(name)) loaded.set(name, defineAsyncComponent(loader))
-      return { name, label: brandMarkLabel(name), art: loader ? loaded.get(name) : null }
-    })
+    props.marks.map((name) => ({
+      name,
+      label: brandMarkLabel(name),
+      art: artwork.value.get(name) ?? null
+    }))
+  )
+
+  watch(
+    () => props.marks,
+    (names, _previous, onCleanup) => {
+      let cancelled = false
+      onCleanup(() => {
+        cancelled = true
+      })
+
+      const pending = names.flatMap((name) => {
+        const load = resolveBrandMark(name)
+        return load && !artwork.value.has(name) ? [{ name, load }] : []
+      })
+      if (!pending.length) {
+        ready.value = true
+        return
+      }
+
+      ready.value = false
+      Promise.allSettled(
+        pending.map(({ name, load }) =>
+          load().then((module) => [name, markRaw(module.default)] as const)
+        )
+      ).then((results) => {
+        if (cancelled) return
+        const next = new Map(artwork.value)
+        for (const result of results) {
+          if (result.status === 'fulfilled') next.set(...result.value)
+        }
+        artwork.value = next
+        ready.value = true
+      })
+    },
+    { immediate: true }
   )
 </script>
 
@@ -70,6 +104,7 @@
     <Overline
       v-if="label"
       show-cursor
+      class="[&>span:first-child]:text-(--text-muted)"
       >{{ label }}</Overline
     >
 
@@ -79,7 +114,8 @@
     >
       <div
         :style="{ animationDuration: `${passDuration}s` }"
-        class="flex w-max animate-brand-marquee group-focus-within/loop:[animation-play-state:paused] group-hover/loop:[animation-play-state:paused] motion-reduce:w-full motion-reduce:animate-none motion-reduce:flex-wrap motion-reduce:justify-center"
+        :data-loading="!ready || null"
+        class="flex w-max animate-brand-marquee data-[loading]:invisible data-[loading]:[animation-play-state:paused] group-focus-within/loop:[animation-play-state:paused] group-hover/loop:[animation-play-state:paused] motion-reduce:w-full motion-reduce:animate-none motion-reduce:flex-wrap motion-reduce:justify-center"
       >
         <ul
           v-for="copy in 2"

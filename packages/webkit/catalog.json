@@ -9937,7 +9937,7 @@
       "treeShakeableImport": "@aziontech/webkit/ticker",
       "category": "marketing",
       "structure": "monolithic",
-      "status": "implemented",
+      "status": "approved",
       "props": [
         {
           "name": "kind",
