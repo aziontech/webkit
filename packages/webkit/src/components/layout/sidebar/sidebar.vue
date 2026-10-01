@@ -14,21 +14,13 @@
   })
 
   interface Props {
-    /** Accessible name for the navigation landmark. */
     ariaLabel?: string
-    /** Adds the drag handle on the trailing edge; dragging past the minimum collapses the rail. */
     resizable?: boolean
-    /** Adds the collapse trigger at the bottom of the rail and the edge affordance that brings a collapsed rail back. */
     collapsible?: boolean
-    /** Theme container token the sized width is clamped up to, read off the document at runtime. */
     minWidthToken?: string
-    /** Theme container token the sized width is clamped down to, read off the document at runtime. */
     maxWidthToken?: string
-    /** Accessible name for the collapse trigger. */
     collapseAriaLabel?: string
-    /** Accessible name for the control and the grab bar that bring a collapsed rail back. */
     expandAriaLabel?: string
-    /** Accessible name for the drag handle separator. */
     resizeAriaLabel?: string
   }
 
@@ -48,10 +40,8 @@
     'update:width': [value: number | null]
   }>()
 
-  /** Whether the rail is out of the layout. */
   const collapsed = defineModel<boolean>('collapsed', { default: false })
 
-  /** Sized width in px; `null` until the rail measures itself on mount. */
   const width = defineModel<number | null>('width', { default: null })
 
   defineSlots<{

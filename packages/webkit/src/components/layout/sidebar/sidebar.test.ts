@@ -17,7 +17,6 @@ describe('Sidebar', () => {
       const root = getByTestId('layout-sidebar')
       expect(root.tagName).toBe('ASIDE')
 
-      // Derived region testids from the template: `${testId}__nav`, `${testId}__scroll`.
       const nav = getByTestId('layout-sidebar__nav')
       expect(nav.tagName).toBe('NAV')
       expect(getByTestId('layout-sidebar__scroll')).toBeTruthy()
@@ -25,19 +24,16 @@ describe('Sidebar', () => {
 
     it('exposes a navigation landmark', () => {
       const { getByRole } = render(Sidebar)
-      // <nav> is the only landmark role emitted by the template.
       expect(getByRole('navigation')).toBeTruthy()
     })
 
     it('does not render the header region when no header slot is provided', () => {
       const { queryByTestId } = render(Sidebar)
-      // Template: <div v-if="$slots['header']" ...__header>. No slot => absent.
       expect(queryByTestId('layout-sidebar__header')).toBeNull()
     })
 
     it('does not render the footer region when no footer slot is provided', () => {
       const { queryByTestId } = render(Sidebar)
-      // Template: <div v-if="$slots['footer']" ...__footer>. No slot => absent.
       expect(queryByTestId('layout-sidebar__footer')).toBeNull()
     })
   })
@@ -51,7 +47,6 @@ describe('Sidebar', () => {
     it('applies a custom ariaLabel to the root', () => {
       const { getByTestId, getByRole } = render(Sidebar, { props: { ariaLabel: 'Application' } })
       expect(getByTestId('layout-sidebar').getAttribute('aria-label')).toBe('Application')
-      // The <aside> root carries aria-label -> it is a complementary landmark named "Application".
       expect(getByRole('complementary', { name: 'Application' })).toBe(
         getByTestId('layout-sidebar')
       )
@@ -74,7 +69,6 @@ describe('Sidebar', () => {
       expect(getByTestId('my-sidebar__scroll')).toBeTruthy()
       expect(getByTestId('my-sidebar__footer')).toBeTruthy()
 
-      // The fallback testid must no longer be present once overridden.
       expect(queryByTestId('layout-sidebar')).toBeNull()
     })
   })
