@@ -20,10 +20,10 @@ overrides:
   # Minimal validated set (2026-07-25, last bumped 2026-09-09): each entry
   # guards a live advisory or a proven resolution hazard; the tree is
   # audit-clean without anything else.
-  brace-expansion: ">=5.0.9" # GHSA-rgw5-rvv9-x895 (DoS, CVE-2026-14257 mitigation bypass), patched 5.0.9 — supersedes GHSA-mh99-v99m-4gvg
+  brace-expansion: ">=5.0.12" # GHSA-rgw5-rvv9-x895 (CVE-2026-14257 mitigation bypass), GHSA-6j4f-fj2g-mc7p and GHSA-qhr7-859c-m2p7 (DoS via uncontrolled recursion), patched 5.0.12
   minimatch: ">=9.0.0" # keeps minimatch@3 chains out so the brace-expansion force stays within one API major
   uuid: ">=14.0.0" # GHSA-w5hq-g745-h8pq, patched 11.1.1; jest/storybook chains pin 8.x/9.x
-  fast-uri: ">=3.1.6 <4" # GHSA-jqff-g426-hqxp, GHSA-5jgf-p345-68v8, GHSA-f65p-4m7j-42xc, GHSA-fph4-wmhf-6fwf (host confusion/SSRF), patched 3.1.6; bounded to 3.x — ajv pins ^3
+  fast-uri: ">=3.1.8 <4" # GHSA-jqff-g426-hqxp, GHSA-5jgf-p345-68v8, GHSA-f65p-4m7j-42xc, GHSA-fph4-wmhf-6fwf (host confusion/SSRF), patched 3.1.8; bounded to 3.x — ajv pins ^3
   qs: ">=6.16.0 <7" # GHSA-4mjr-xmp4-gh2g (DoS via isBuffer) and GHSA-x5fp-wj9c-mxmx (array-limit bypass), patched 6.16.0; bounded to 6.x — express/union pin ^6
   "@xmldom/xmldom": ">=0.9.12 <0.10" # GHSA-6gmq-8vp8-gcm6 (XML fragment injection), patched 0.9.12; bounded — 0.x minors break API
   "@babel/core": ">=7.29.1 <8" # bounded: peer ranges (^7 || ^8.0.0-0) would jump to Babel 8
@@ -35,5 +35,8 @@ overrides:
   colord: ">=2.9.4 <3" # GHSA-2wm5-q62r-hmrv (slow rejection of oversized malformed color strings), patched 2.9.4; bounded — stylelint pins ^2.9.x, no 3.x published
   "joi@17": ">=17.13.6 <18" # GHSA-6w3j-5fw6-r9vr, GHSA-gg4h-3hg2-grpc (prototype pollution via rename()/custom messages), patched 17.13.6; bounded to 17.x — wait-on@7 (storybook's jest-playwright-preset chain) pins ^17
   "joi@18": ">=18.2.5 <19" # GHSA-6w3j-5fw6-r9vr, GHSA-gg4h-3hg2-grpc, patched 18.2.5; bounded to 18.x — wait-on@8 (storybook) pins ^18
+  axios: ">=1.20.0 <2" # eight 1.x advisories (ReDoS, prototype-pollution gadgets, HTTP/2 DNS bypass), patched 1.20.0; bounded to 1.x — icons-gallery pins ^1
+  undici: ">=7.29.1 <8" # GHSA-rfgv-xxqx-mfg5 (DoS), GHSA-w293-vg96-wgc3 (TLS validation bypass), patched 7.29.1; bounded to 7.x — @figma/code-connect pins ^7
+  ip-address: ">=10.7.1 <11" # patched 10.7.1 (Address6.isLinkLocal); bounded to 10.x — node-gyp chain via fantasticon
   vitest: ">=4.1.11 <5" # GHSA-82fw-gwwq-j7x9 (path traversal / arbitrary file read via @vitest/mocker redirect mock), patched 4.1.11; already inside the ^4.1.x devDependency range — lockfile was just stale
   "@vitest/mocker": ">=4.1.11 <5" # GHSA-82fw-gwwq-j7x9, same fix as vitest above; bounded to 4.x
