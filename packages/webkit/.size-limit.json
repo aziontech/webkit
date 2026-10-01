@@ -139,5 +139,11 @@
     "path": "src/components/content/illustration/illustration.vue",
     "limit": "2 KB",
     "entryOnly": true
+  },
+  {
+    "name": "quote-tabs",
+    "path": "src/components/marketing/quote-tabs/quote-tabs.vue",
+    "limit": "19 KB",
+    "entryOnly": true
   }
 ]

@@ -11387,6 +11387,64 @@
       "target": "./src/vite/index.js",
       "kind": "other",
       "treeShakeableImport": "@aziontech/webkit/vite"
+    },
+    "quote-tabs": {
+      "import": "@aziontech/webkit/quote-tabs",
+      "target": "./src/components/marketing/quote-tabs/quote-tabs.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/quote-tabs",
+      "category": "marketing",
+      "structure": "monolithic",
+      "status": "approved",
+      "props": [
+        {
+          "name": "items",
+          "type": "QuoteTabsItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The clients, in wall order; each item is `{ logo?, mark?, clientName?, shape?, text, name?, jobTitle?, photo? }` — the URL of the client's colour logo, the registry name of its one-ink mark, its name in prose, how tall its mark sits on the card, the quotation, who said it, their role and their likeness."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name for the wall of client cards."
+        }
+      ],
+      "slots": [
+        {
+          "name": "actions",
+          "scope": "—",
+          "notes": "A trailing control under the featured quotation's attribution, such as a secondary `Button` to the success stories; rendered in `quote`'s own `actions` area, the same for every client."
+        }
+      ],
+      "purpose": "A testimonial band a reader browses by client: the selected client's quotation featured at the top in the client's own colours, and a wall of client cards below it that is the selector itself — clicking a card brings that client's quotation in. It is the band a page reaches for when several customers have one strong sentence each and only one of them should be read at a time. The band owns the selection and nothing else. The featured quotation is `quote` in its `highlight` register, and every card is the same framed cell `logo-wall` draws, so a quotation and a client card look the same here as everywhere else on the page. The quotation travels sideways in the direction of the choice — a card later in the wall brings its quotation in from the right, an earlier one from the left — so the reader feels the wall as a sequence.",
+      "useWhen": [
+        "To feature one client quotation at a time out of three to twelve peers, with every other client one click away on the wall below.",
+        "As a success-story band where the wall of customers and the quotation are the same content, not two lists."
+      ],
+      "avoidWhen": [
+        "For one quotation on its own → use `quote` with `kind=\"highlight\"`.",
+        "For several quotations read side by side or swiped through → use `quote-carousel`.",
+        "For a wall whose cards link to each customer's story → use `logo-wall`.",
+        "For a moving strip of marks with no links → use `ticker`.",
+        "For switching a page's content between views → use `tab-view`."
+      ],
+      "related": [
+        "quote` — the `highlight` register this band renders for the selected client.",
+        "logo-wall` — the same framed client cells, as links out rather than as a selector.",
+        "card-grid` — the framed grid the cards are laid out on.",
+        "frame-box` — the registration frame the quotation panel is drawn in, with the same corner marks as the cards below it; also what a page wraps the band in to close its outer edges.",
+        "quote-carousel` — the same testimonials as a row the reader scrolls through, every one visible."
+      ],
+      "bestPractices": [
+        "Give the wall a full row: six clients fill it from `lg` up and three from below `sm`, so six or twelve leave no empty cell.",
+        "Give every item a `logo` in the client's own colours; it is drawn as-is on its card and in the featured quotation, so pick artwork that carries its own contrast on both themes. Without one, `mark` names a one-ink mark from the brand registry instead.",
+        "Let `clientName` default to the registry's label for `mark`; set it when the item has only a `logo`, or a client the registry does not carry. It is the card's accessible name, so it is never optional in practice.",
+        "Keep each quotation to one or two sentences, verbatim, without typed quotation marks — `quote` draws its own glyph. The panel holds the tallest quotation's height for all of them, so one much longer quotation leaves the shorter ones floating in space.",
+        "Leave the selection to the reader. The band never advances on its own."
+      ]
     }
   }
 }
