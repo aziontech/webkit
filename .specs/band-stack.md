@@ -5,17 +5,17 @@ structure: monolithic
 status: implemented
 spec_version: 1
 created: 2026-09-26
-last_updated: 2026-09-26
-checksum: 849b303b628b4104ccac10b54d80e9a4876f5ac61d916adb096ee801e8852485
+last_updated: 2026-10-01
+checksum: d973fd2e497002fa56c0a59f4c978042d4cfb26fed19331a933c854cceb4f764
 ---
 
 # Band Stack — Component Spec
 
 ## Purpose
 
-A run of framed bands that follow one another down the page, each one its own registration frame sharing a hairline with the next. With `sticky` on, each band pins under the site header a step lower than the band before it, so the run piles up as the reader scrolls and every band already read stays visible as a ledge above the one being read.
+A run of framed bands that follow one another down the page, each one drawn as two registration frames — its left half and its right half — sharing a hairline with the next. With `sticky` on, each band pins under the site header a step lower than the band before it, so the run piles up as the reader scrolls and every band already read stays visible as a ledge above the one being read.
 
-The component owns the frames, the shared hairlines and the pin offsets; the bands themselves are whatever the consumer composes into the default slot — each direct child becomes one band. It carries no copy, heading or media of its own.
+The component owns the band rules, the shared hairlines and the pin offsets, and by default every band is split into two frames: a `media-split` composed into the stack frames its copy cell and its media cell as two `frame-box`es, left and right, each with its four marks. The bands themselves are whatever the consumer composes into the default slot — each direct child becomes one band. It carries no copy, heading or media of its own.
 
 ## When to use
 
@@ -32,7 +32,7 @@ The component owns the frames, the shared hairlines and the pin offsets; the ban
 
 ## Related
 
-- `media-split` — the band this stack most often holds, typically at `size="large"`.
+- `media-split` — the band this stack holds, typically at `size="large"`. Inside the stack it frames its own two cells, so leave its `framed` off.
 - `sticky-stack` — the scroll-driven sibling: one pinned frame whose open claim follows the scroll, instead of bands that pile up.
 - `frame-box` — the frame each band is drawn in.
 - `section-gap` — the spacer usually above the stack; pass `flush` so the first band does not draw a second rule under it.
@@ -43,6 +43,7 @@ The component owns the frames, the shared hairlines and the pin offsets; the ban
 - Give every band the same height class (`media-split` `size="large"`, same `align`), so the ledges line up as the pile grows.
 - Pass `flush` when the element directly above the stack already draws a rule (a `section-gap`, another frame), so the first band does not draw a second one.
 - Give each band an opaque fill (`media-split` paints its own cells). A pinned band covers the one before it, and a transparent band shows the one underneath through it.
+- Compose `media-split`s as the bands. The two frames are the band's own cells, so a child that is not a `media-split` carries no marks unless it frames itself — wrap it in a `frame-box` with `borders="none"`.
 - Render the bands with `v-for` directly in the default slot; each direct child is one band, so a wrapper element around them collapses the run into a single band.
 
 ## Usage
@@ -97,7 +98,7 @@ The component owns the frames, the shared hairlines and the pin offsets; the ban
 - Visual states: `default`
 - `data-sticky` mirrors the `sticky` prop and is what pins the bands: from `lg` up each band is `position: sticky`, its `top` the site header's height plus one `var(--spacing-md)` step per band before it. Below `lg` the bands stack in normal flow with no pinning, because a pinned pile of full-width bands leaves a phone no room to read
 - `data-flush` mirrors the `flush` prop; the first band's frame then draws no top rule
-- Each band is a `frame-box` with its top and bottom rules and all four registration marks. Every band after the first pulls up one pixel so neighbouring rules overlap into a single hairline, while each band still owns its top rule — the rule a pinned band shows when it covers the one before it
+- Each band is a `frame-box` with its top and bottom rules and no marks of its own. The stack provides a context that tells a `media-split` band to frame its two cells, left and right, each with all four registration marks, so every band reads as two frames and both sides of its seam are ticked. Every band after the first pulls up one pixel so neighbouring rules overlap into a single hairline, while each band still owns its top rule — the rule a pinned band shows when it covers the one before it
 - The pin offset is owned by the component, not the page: the stack pins below the site header's `3.5rem` bar, and a page sets nothing to get it
 - Later bands paint over earlier ones in DOM order, so the pile grows downward with no `z-index` of its own
 
@@ -109,7 +110,7 @@ _none_ — pinning follows the scroll position; the component declares no transi
 
 | Region                        | Token (DESIGN.md)                                      |
 | ----------------------------- | ------------------------------------------------------ |
-| band rules and marks          | `var(--border-default)` (drawn by `frame-box`)          |
+| band rules and cell marks     | `var(--border-default)` (drawn by `frame-box`)          |
 | pin step between bands        | `var(--spacing-md)`                                    |
 | pin start (site header height) | `calc(var(--spacing) * 14)` — see Theme gaps           |
 
@@ -130,7 +131,7 @@ _none_ — pinning follows the scroll position; the component declares no transi
 
 ## Stories (Storybook)
 
-- Default — three `media-split` bands at `size="large"`, not pinned, so the frames and the shared hairlines are the only thing on show.
+- Default — three `media-split` bands at `size="large"`, not pinned, so the two frames of each band and the shared hairlines are the only thing on show.
 - Sticky — the same run with `sticky` and `flush` on. It sets `parameters.layout: 'fullscreen'`; a story cannot scroll itself, so the canvas shows the resting state and the reader scrolls the Docs page to see the pile form.
 
 ## Constraints — DO NOT
