@@ -9,10 +9,10 @@
   //  2+3 heading, five claims and four figures on map   one FrameBox, backdrop + Tag row
   //                                                      + BigNumbers on its floor
   //   4  "Stop managing regions and capacity by hand"    SectionTitle centered
-  //   5  art | copy — "Run closer to users"              FrameBox flush, lg:grid-cols-2
-  //   6  copy | art — "Keep delivery, logic, and data"   FrameBox flush, lg:grid-cols-2
-  //   7  art | copy — "Get better routes"                FrameBox flush, lg:grid-cols-2
-  //   8  copy | art — "Stop attack traffic earlier"      FrameBox flush, lg:grid-cols-2
+  //   5  art | copy — "Run closer to users"              BandStack band, MediaSplit
+  //   6  copy | art — "Keep delivery, logic, and data"   BandStack band, MediaSplit
+  //   7  art | copy — "Get better routes"                BandStack band, MediaSplit
+  //   8  copy | art — "Stop attack traffic earlier"      BandStack band, MediaSplit
   //   9  spacer                                          SectionGap hatch
   //   10 client marks + one quote                        FrameBox flush, ClientMark + Quote
   //   11 "Build, run, and protect applications…"         SectionTitle in the module header
@@ -46,6 +46,7 @@
   import contabilizei from '@aziontech/webkit/assets/clients/dark/clients/contabilizei-logo.svg'
   import crefisa from '@aziontech/webkit/assets/clients/dark/clients/crefisa-logo.svg'
   import { CLIENTS } from '@aziontech/webkit/assets/clients/registry'
+  import BandStack from '@aziontech/webkit/band-stack'
   import BigNumbers from '@aziontech/webkit/big-numbers'
   import Button from '@aziontech/webkit/button'
   import CallToAction from '@aziontech/webkit/call-to-action'
@@ -315,17 +316,13 @@
       title="Stop managing regions and capacity by hand"
     />
 
-    <!-- ── Band 5 — Run closer to users ──
-         MediaSplit draws no frame; this module's FrameBox is the band's rule. The scene carries a
-         viewBox, so it reflows to the cell the band gives it, on the band's own grid ground. -->
     <SectionModule
       :divided="false"
       :padded="false"
     >
-      <FrameBox
+      <BandStack
+        sticky
         flush
-        borders="y"
-        marks="bottom"
       >
         <MediaSplit
           kind="media-start"
@@ -339,21 +336,7 @@
             />
           </template>
         </MediaSplit>
-      </FrameBox>
-    </SectionModule>
 
-    <!-- ── Band 6 — Keep delivery, logic, and data in one place ──
-         MediaSplit draws no frame; this module's FrameBox is the band's rule. The scene carries a
-         viewBox, so it reflows to the cell the band gives it, on the band's own grid ground. -->
-    <SectionModule
-      :divided="false"
-      :padded="false"
-    >
-      <FrameBox
-        flush
-        borders="y"
-        marks="bottom"
-      >
         <MediaSplit
           kind="media-end"
           title="Keep delivery, logic, and data in one place"
@@ -366,21 +349,7 @@
             />
           </template>
         </MediaSplit>
-      </FrameBox>
-    </SectionModule>
 
-    <!-- ── Band 7 — Get better routes and more stable delivery ──
-         MediaSplit draws no frame; this module's FrameBox is the band's rule. The scene carries a
-         viewBox, so it reflows to the cell the band gives it, on the band's own grid ground. -->
-    <SectionModule
-      :divided="false"
-      :padded="false"
-    >
-      <FrameBox
-        flush
-        borders="y"
-        marks="bottom"
-      >
         <MediaSplit
           kind="media-start"
           title="Get better routes and more stable delivery"
@@ -393,21 +362,7 @@
             />
           </template>
         </MediaSplit>
-      </FrameBox>
-    </SectionModule>
 
-    <!-- ── Band 8 — Stop attack traffic earlier ──
-         MediaSplit draws no frame; this module's FrameBox is the band's rule. The scene carries a
-         viewBox, so it reflows to the cell the band gives it, on the band's own grid ground. -->
-    <SectionModule
-      :divided="false"
-      :padded="false"
-    >
-      <FrameBox
-        flush
-        borders="y"
-        marks="bottom"
-      >
         <MediaSplit
           kind="media-end"
           title="Stop attack traffic earlier"
@@ -420,7 +375,7 @@
             />
           </template>
         </MediaSplit>
-      </FrameBox>
+      </BandStack>
     </SectionModule>
 
     <!-- Band 9 — spacer. -->

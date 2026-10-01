@@ -63,17 +63,23 @@
       marks="all"
     >
       <CardGrid
-        kind="divider"
+        flush
+        kind="frame"
         :columns="4"
       >
-        <MediaTile
+        <CardGrid.Cell
           v-for="reason in REASONS"
           :key="reason.key"
-          kind="plain"
-          :src="reason.src"
-          :title="reason.title"
-          :description="reason.description"
-        />
+          kind="canvas"
+          :padded="false"
+        >
+          <MediaTile
+            kind="plain"
+            :src="reason.src"
+            :title="reason.title"
+            :description="reason.description"
+          />
+        </CardGrid.Cell>
       </CardGrid>
     </FrameBox>
 

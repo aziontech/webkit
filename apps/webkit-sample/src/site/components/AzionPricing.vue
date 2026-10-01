@@ -1,57 +1,4 @@
 <script setup>
-  // Landing-page example: the azion.com/pt-br/planos pricing page, recreated from
-  // @aziontech/webkit components and theme tokens. Rendered inside SiteLayout (website
-  // nav + footer, no console sidebar).
-  //
-  // Sections, top to bottom: the hero, the three tiers behind a monthly/annual toggle, then
-  // the feature matrix → platform primitives → FAQ → closing CTA.
-  //
-  // WHAT THIS PAGE DROPPED FROM THE SOURCE, stated because it was real copy: the trust
-  // strip, a band two thirds down titled "The Infrastructure Behind High-Performance
-  // Applications" over the eyebrow "Trusted by industry leaders". It is gone, marks and
-  // all — this page argues on price, and a marquee of logos between the hero and the tiers
-  // delays that argument without adding to it.
-  //
-  // THE ONE BAND WITH NO MARKETING PRIMITIVE BEHIND IT is the feature matrix
-  // (PricingComparison): a 100-row comparison table with a sticky plan header is a data
-  // surface, not a marketing band, and the system ships no component for it.
-  //
-  // Copy is the pt-BR page verbatim and lives in ../data/pricing.js, so this file is the
-  // page's LAYOUT and nothing else. See that module for the transcription rules.
-  //
-  // ── THE CARDS ARE `CardPricing`, IN ITS `middle` COMPOSITION ──
-  //
-  // `slotPosition="middle"` is the full-tier composition: the amount becomes the headline
-  // figure, the feature list takes the card's slack, and the action is pinned to the
-  // bottom edge — which is what puts three buttons on ONE line whatever each tier's list
-  // holds. `aligned` is the other half of reading three cards as one comparison: it
-  // reserves the caveat's two lines, so a tier whose sentence runs to one still starts its
-  // feature list on the same line as the others.
-  //
-  // `kind="transparent"` because these cards are cells in the hairline grid, not three
-  // surfaces floating on it, so each fills the page itself and the grid's `gap-px` draws
-  // the seams between them (CONTAINERS.md § the hairline box grid).
-  //
-  // The recommended tier is the ONE exception: it fills `--bg-surface` instead of
-  // `--bg-canvas`. Two cells of the same grid, one step apart on the surface scale — so
-  // the column reads as lifted out of the row without a border, a shadow or a scale that
-  // would break the grid's own hairlines. It is the same claim the 2px accent bar makes at
-  // the top of that column in the matrix below, carried by the surface here because a card
-  // has an interior to fill and a table column does not.
-  //
-  // ── THE FRAME, PER CONTAINERS.md ──
-  //
-  // The SectionContainer owns border-x; every brick owns its own border-t and its own
-  // padding, which is why the column is unpadded and no module draws a side border. A
-  // frame stacked under another is `flush`, so it simply does not draw the rule its
-  // neighbour already has.
-  //
-  // The hero is a Hero — a full-bleed band, so its floor is one rule running
-  // the whole width of the window, and the framed column starts under it. Same opening as
-  // Functions and Home; the three pages of the site draw their first horizontal one way.
-  // The headline still sits on the same content column as the plan names under it and
-  // every row label in the matrix below: the band reads `--layout-boundary-inline` and
-  // caps at `--layout-measure-site`, which is exactly what the column below it does.
   import Button from '@aziontech/webkit/button'
   import CallToAction from '@aziontech/webkit/call-to-action'
   import CardGrid from '@aziontech/webkit/card-grid'
@@ -60,6 +7,8 @@
   import Faq from '@aziontech/webkit/faq'
   import FrameBox from '@aziontech/webkit/frame-box'
   import Hero from '@aziontech/webkit/hero'
+  import Illustration from '@aziontech/webkit/illustration'
+  import MediaTile from '@aziontech/webkit/media-tile'
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
   import SectionModule from '@aziontech/webkit/section-module'
@@ -74,27 +23,21 @@
     FAQ,
     ON_DEMAND_LINK,
     PLANS,
+    PRICING_REASONS,
     PRIMITIVE_GROUPS
   } from '../data/pricing.js'
   import PricingComparison from './PricingComparison.vue'
 
   const router = useRouter()
 
-  // ColumnNavigation.Item renders a real anchor and reports the destination it was asked
-  // for. An internal one is routed rather than followed, so the app never reloads.
   const openDestination = (event, item) => {
     if (!item.href.startsWith('/')) return
     event.preventDefault()
     router.push(item.href)
   }
 
-  // The billing term drives both the amount and the line under it, so the cards read the
-  // period once here rather than each holding two prices.
   const period = ref('monthly')
 
-  // The card carries ONE prose region, under the price, so each tier resolves to one
-  // sentence for it: the billing caveat where the tier has one, and the tier's own
-  // positioning line where it does not (Hobby is free — "billed monthly" would be a lie).
   const cards = computed(() =>
     PLANS.map((plan) => {
       const price = plan.price[period.value]
@@ -102,8 +45,6 @@
     })
   )
 
-  // Every tier's action goes where the tier goes: signup for the two self-serve plans,
-  // the closing CTA band for the one that needs a conversation.
   const choose = (plan) => {
     if (plan.action.to.startsWith('#')) {
       document.querySelector(plan.action.to)?.scrollIntoView({ behavior: 'smooth' })
@@ -116,79 +57,17 @@
 </script>
 
 <template>
-  <!-- ══ The hero — a full-bleed band, closing on the page's first rule ═══════
-       THE HERO'S FLOOR RUNS TO THE WINDOW'S EDGE, the way Functions' and Home's do. It is
-       a Hero, so the band is the full width of the viewport and its `border-b` is the
-       page's first horizontal — one uninterrupted line, edge to edge, with the framed
-       column starting UNDER it.
-
-       The H1 still lands on the page's ONE content column: the band reads
-       `--layout-boundary-inline`, the same token every matrix row label opens at, and its
-       column caps at `--layout-measure-site`, the same measure SectionContainer takes
-       below — so the alignment holds by construction rather than by two numbers kept equal
-       by hand.
-
-       It is a `band`, not a `screen`, AND IT IS SIZED TO A BUDGET: the whole row of tiers —
-       plan name, price, caveat, feature list, button, and the card's own floor — has to
-       stand inside the first screen, because a price cut in half at the fold is the one
-       thing this page cannot afford. The hatched SectionGap under the row is NOT in that
-       budget; it is the junction to the matrix and belongs to the second screen. Header 56
-       + band + switch strip 89 + card 519.5 is the sum, so the band gets whatever is left
-       under the viewport — 231.8 of it at a 900-tall screen. Every number below is set
-       against that. -->
-  <Hero
-    max-width="site"
-    size="large"
-    texture="dots"
-    texture-fade="top"
-  >
+  <Hero max-width="site">
     <Hero.Title
-      max-width="lg"
       centered
+      max-width="2xl"
       eyebrow="Pricing"
-      class="max-w-(--container-md)!"
-      title="Plans for every stage of your application"
-      description="Every product and feature is available on every plan. Start free and scale as you grow."
+      title="Infrastructure without the waste"
+      description="Distributed by design, extremely fast, and built for the strictest compliance. No idle clusters, no capacity provisioned just in case. Scale from zero to mission-critical and pay only for what you use."
     />
   </Hero>
 
-  <!-- ══ The framed column ═════════════════════════════════════════════════ ─
-       THE COLUMN IS INSET FROM THE WINDOW, AT EVERY WIDTH. On a wide screen that inset is
-       free: `--layout-measure-site` (1388px) is narrower than the window, `mx-auto` centres the
-       column, and its `border-x` reads as the page's vertical frame with canvas either side.
-       Below the cap it stops doing anything — the column becomes the window — and the two
-       rules land ON the window edges, where a 1px hairline is not a frame, it is a seam
-       against the bezel. So the page frame that organises the whole desktop layout simply
-       ceased to exist on a phone.
-
-       ONE SYMMETRIC PADDING FIXES IT AT EVERY WIDTH, WITH NO BREAKPOINT. `mx-auto` centres
-       inside the PADDING box, so while `window - 2 × boundary ≥ --layout-measure-site` the column
-       is capped, not squeezed, and the padding shifts it by exactly nothing: at 1440 the
-       column sits at 124…1316 with the wrapper and 124…1316 without it. The padding only
-       starts to bite once the window is narrower than the cap — precisely where the cap has
-       stopped working — and from there the boundary IS the inset. One declaration covers the
-       whole range because the two mechanisms hand off to each other.
-
-       It is `--layout-boundary-inline`, the same token the nav and the hero pad by, so the
-       column's rules land on the vertical the page already opens on rather than on a number
-       chosen for this page.
-
-       THE HORIZONTALS STAY FULL-BLEED AND THAT IS THE POINT: the hero's `border-b` above and
-       the footer's `border-t` below run the whole window, and the column's two verticals run
-       between them, inset. That is exactly the desktop relationship — a full-width rule, a
-       narrower framed column hanging off it — carried down to the phone instead of collapsing
-       there. The header is untouched: it is chrome, and chrome is full-bleed. -->
   <SectionContainer max-width="site">
-    <!-- ── The term switch and the three tiers — ONE block ─────────────────
-         First brick in the column, so `:divided="false"` — its top edge is the hero band's
-         own full-bleed rule. The FrameBox hands the vertical rules back to the column
-         (`borders="y"`), drops the top rule it would otherwise draw against the hero's
-         (`flush`), and ticks the one junction nothing else draws (`marks="bottom"`).
-
-         The cards are `transparent`: in a hairline grid each cell fills its own background,
-         so the recommended tier takes `--bg-surface` and the other two `--bg-canvas` — one
-         step apart on the surface scale, which lifts that column out of the row without a
-         border, a shadow or a scale that would break the grid's seams. -->
     <SectionModule
       id="plans"
       :divided="false"
@@ -229,10 +108,6 @@
             action-label=""
             :data-testid="`pricing-card-${card.id}`"
           >
-            <!-- What the tier includes: the lead-in the real page states, then the list.
-                 The lead-in is a caption on the list, not a heading — it says how to read
-                 the lines under it ("everything available", "scale beyond the included
-                 limits"), which is a different claim per tier. -->
             <div class="flex flex-col gap-(--spacing-md)">
               <p class="m-0 text-body-sm text-(--text-muted)">{{ card.featuresTitle }}</p>
               <ul class="m-0 flex list-none flex-col gap-(--spacing-sm) p-0">
@@ -250,9 +125,6 @@
               </ul>
             </div>
 
-            <!-- One filled button in the row, and it is the brand fill: the recommended
-                 tier gets `primary`, the other two `outlined`. Three filled buttons side
-                 by side name no primary action at all. -->
             <template #actions>
               <Button
                 :label="card.action.label"
@@ -267,17 +139,47 @@
       </FrameBox>
     </SectionModule>
 
-    <!-- The tiers and the matrix are two readings of the same comparison, and they were
-         sharing one hairline — the cards' floor doubling as the matrix's ceiling, which
-         read as one 1500px-tall table. A hatched Spacer between them is the page's own
-         way of saying "same subject, new section": it registers the junction with its own
-         rules and ticks, and gives the sticky plan header a band to arrive over. -->
     <SectionGap hatch />
 
-    <!-- ── The feature matrix ─────────────────────────────────────────────
-         `:divided="false"`: the matrix's own sticky plan header carries the rule that
-         divides it from the cards band above. `:padded="false"` because every cell in it
-         owns its own inset. -->
+    <SectionModule
+      id="why-pricing"
+      :divided="false"
+      :padded="false"
+    >
+      <FrameBox
+        flush
+        borders="y"
+        marks="bottom"
+      >
+        <CardGrid
+          flush
+          kind="frame"
+          :columns="3"
+        >
+          <CardGrid.Cell
+            v-for="reason in PRICING_REASONS"
+            :key="reason.key"
+            kind="canvas"
+            :padded="false"
+          >
+            <MediaTile
+              kind="plain"
+              :title="reason.title"
+              :description="reason.description"
+              :media-scale="reason.scale"
+              fluid
+            >
+              <template #media>
+                <Illustration :name="reason.illustration" />
+              </template>
+            </MediaTile>
+          </CardGrid.Cell>
+        </CardGrid>
+      </FrameBox>
+    </SectionModule>
+
+    <SectionGap hatch />
+
     <SectionModule
       id="comparison"
       :divided="false"
@@ -293,11 +195,6 @@
 
     <SectionGap hatch />
 
-    <!-- ── Platform primitives ────────────────────────────────────────────
-         The same `ColumnNavigation` directory the homepage carries, in this page's pt-BR
-         wording. The component owns the four tracks, the `lg` inset that puts the column
-         heading and every product name on one content column, and the `gap-px` seams —
-         which is why no column carries a border of its own. -->
     <SectionModule
       :divided="false"
       :padded="false"
@@ -341,11 +238,6 @@
 
     <SectionGap hatch />
 
-    <!-- ── FAQ ────────────────────────────────────────────────────────────
-         Two cells at the design's split: the heading holds the left third and the
-         questions the right two. The seam between them and the rules between the
-         questions are the grid's `gap-px`, so neither cell draws a border — and each
-         fills `--bg-canvas`, or the whole band goes border-coloured. -->
     <SectionModule
       id="faq"
       :divided="false"
@@ -360,8 +252,6 @@
 
     <SectionGap hatch />
 
-    <!-- The closing band, shared with the homepage. It takes no props here: its own
-         defaults are this copy, so the two pages close identically. -->
     <SectionModule
       id="contact"
       :divided="false"

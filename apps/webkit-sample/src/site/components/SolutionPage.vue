@@ -10,7 +10,6 @@
   import Illustration from '@aziontech/webkit/illustration'
   import MediaSplit from '@aziontech/webkit/media-split'
   import NetworkMap from '@aziontech/webkit/network-map'
-  import Overline from '@aziontech/webkit/overline'
   import QuoteTabs from '@aziontech/webkit/quote-tabs'
   import ScrollArea from '@aziontech/webkit/scroll-area'
   import SectionContainer from '@aziontech/webkit/section-container'
@@ -21,16 +20,15 @@
   import Ticker from '@aziontech/webkit/ticker'
   import Topic from '@aziontech/webkit/topic'
   import { DEPLOY_TEMPLATES } from '@shared/lib/deploy-templates.js'
-  import { computed } from 'vue'
+  import { CLIENT_STRIP } from '@shared/ui/brand/strips.js'
   import { useRouter } from 'vue-router'
 
   import { CERTIFICATIONS } from '../data/certifications.js'
-  import { HERO_ART_CLASS, heroArt } from '../data/hero-art.js'
   import { PLATFORM_PRIMITIVES } from '../data/platform-primitives.js'
   import { NETWORK_TAGS, NETWORK_TOPICS } from '../data/solutions.js'
 
-  const props = defineProps({
-    /** The opening band: eyebrow, title, description, the art beside them (a registered Illustration name, or an asset src with its name in hero-art.js) and, optionally, the client marks the carousel runs; without marks the hero has no carousel. */
+  defineProps({
+    /** The opening band, centered on the dot field: eyebrow, title, description and the client marks the carousel runs; without marks the carousel runs the site's default strip. */
     hero: { type: Object, required: true },
     /** The capability cards the grid under the hero holds, each an icon, a title and a description. */
     capabilities: { type: Array, required: true },
@@ -48,9 +46,7 @@
     architecture: { type: Object, default: null },
     /** The client cards, the page's own quote first. Omitted, the page has no quote band. */
     quotes: { type: Array, default: null },
-    /** The success-story band: its eyebrow, its title and the story cards, each an eyebrow, a title, an action label and an href. */
-    stories: { type: Object, default: null },
-    /** The guides band: its title and the resource cards, each an eyebrow, a title, a description, an action label and an href. */
+    /** The guides band: its title, optionally an eyebrow (Go Deeper when omitted) and a description, beside a two-column grid of linked resource cards, each a title, a description and an href; four fill the grid. */
     resources: { type: Object, default: null },
     /** Show the compliance band with the certification badges. */
     compliance: { type: Boolean, default: false },
@@ -68,9 +64,6 @@
     cta: { type: Object, required: true }
   })
 
-  const hasCarousel = computed(() => Boolean(props.hero.carouselMarks?.length))
-  const cardBands = computed(() => [props.stories, props.resources].filter(Boolean))
-  const cardColumns = (items) => (items.length === 2 || items.length === 4 ? 2 : 3)
   const isExternal = (href) => /^https?:/.test(href)
 
   const router = useRouter()
@@ -82,8 +75,8 @@
     router.push(item.href)
   }
 
-  const templateHref = (to) => router.resolve(to).href
-  const openTemplate = (event, to) => {
+  const routeHref = (to) => router.resolve(to).href
+  const openRoute = (event, to) => {
     if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) {
       return
     }
@@ -93,27 +86,32 @@
   const followTemplate = (event, to) => {
     if (event.target.closest('a, button') || globalThis.getSelection()?.toString()) return
     if (event.metaKey || event.ctrlKey) {
-      globalThis.open(templateHref(to), '_blank', 'noopener')
+      globalThis.open(routeHref(to), '_blank', 'noopener')
       return
     }
     router.push(to)
   }
 
-  const SUCCESS_STORIES = 'https://www.azion.com/en/success-case/'
+  const SUCCESS_CASES = '/site/success-cases'
+  const GUIDES = 'https://www.azion.com/en/documentation/products/guides/'
   const DOCS = '/site/docs'
+  const COMPLIANCE = '/site/compliance'
 </script>
 
 <template>
   <Hero
-    max-width="5xl"
     kind="screen"
-    media-align="end"
-    :carousel="hasCarousel"
+    align="center"
+    max-width="site"
+    texture="dots"
+    texture-fade="top"
+    carousel
     carousel-label="Trusted by mission-critical workloads"
-    :carousel-marks="hero.carouselMarks ?? []"
+    :carousel-marks="hero.carouselMarks ?? CLIENT_STRIP"
     offset="3.5rem"
   >
     <Hero.Title
+      centered
       max-width="xl"
       :eyebrow="hero.eyebrow"
       eyebrow-prefix="//"
@@ -138,28 +136,6 @@
         />
       </template>
     </Hero.Title>
-
-    <template #media>
-      <img
-        v-if="hero.art.src"
-        :src="hero.art.src"
-        :alt="hero.art.alt"
-        :width="hero.art.width"
-        :height="hero.art.height"
-        :data-orientation="hero.art.height > hero.art.width ? 'portrait' : null"
-        decoding="async"
-        class="block h-auto w-full max-md:data-[orientation=portrait]:mx-auto max-md:data-[orientation=portrait]:w-1/2"
-        :class="HERO_ART_CLASS"
-        :style="heroArt(hero.art.name)"
-      />
-      <Illustration
-        v-else
-        :name="hero.art.name"
-        :aria-label="hero.art.alt"
-        :class="HERO_ART_CLASS"
-        :style="heroArt(hero.art.name)"
-      />
-    </template>
   </Hero>
 
   <SectionContainer max-width="site">
@@ -278,101 +254,94 @@
         :divided="false"
         :padded="false"
       >
-        <FrameBox
-          flush
-          borders="y"
-          marks="bottom"
+        <MediaSplit
+          framed
+          :heading-level="2"
+          align="center"
+          eyebrow="Your Stack, Your Way"
+          size="large"
+          texture="none"
+          title="Quick Start with Templates"
+          :description="templatesDescription"
         >
-          <MediaSplit
-            :heading-level="2"
-            align="center"
-            eyebrow="Your Stack, Your Way"
-            size="large"
-            texture="none"
-            title="Quick Start with Templates"
-            :description="templatesDescription"
-          >
-            <template #media>
-              <div class="relative min-h-[36rem] w-full self-stretch lg:min-h-[44rem]">
-                <ScrollArea
-                  aria-label="Templates you can deploy"
-                  class="absolute inset-0 mask-t-from-[calc(100%_-_2rem)] mask-b-from-[calc(100%_-_6rem)]"
+          <template #media>
+            <div class="relative min-h-[36rem] w-full self-stretch lg:min-h-[44rem]">
+              <ScrollArea
+                aria-label="Templates you can deploy"
+                class="absolute inset-0 mask-t-from-[calc(100%_-_2rem)] mask-b-from-[calc(100%_-_6rem)]"
+              >
+                <CardGrid
+                  flush
+                  kind="frame"
+                  :columns="2"
                 >
-                  <CardGrid
-                    flush
-                    kind="frame"
-                    :columns="2"
+                  <CardGrid.Cell
+                    v-for="template in DEPLOY_TEMPLATES"
+                    :key="template.slug"
+                    kind="none"
+                    :padded="false"
                   >
-                    <CardGrid.Cell
-                      v-for="template in DEPLOY_TEMPLATES"
-                      :key="template.slug"
-                      kind="none"
-                      :padded="false"
+                    <!-- eslint-disable-next-line vuejs-accessibility/click-events-have-key-events -- the Deploy now link inside is the keyboard path; the card click only widens the pointer target -->
+                    <div
+                      class="group/template flex h-full min-w-0 cursor-pointer flex-col gap-(--spacing-md) bg-(--bg-surface) p-(--spacing-xl)"
+                      @click="followTemplate($event, template.to)"
                     >
-                      <!-- eslint-disable-next-line vuejs-accessibility/click-events-have-key-events -- the Deploy now link inside is the keyboard path; the card click only widens the pointer target -->
-                      <div
-                        class="group/template flex h-full min-w-0 cursor-pointer flex-col gap-(--spacing-md) bg-(--bg-surface) p-(--spacing-xl)"
-                        @click="followTemplate($event, template.to)"
+                      <span
+                        class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
                       >
-                        <span
-                          class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
-                        >
-                          <i
-                            :class="[template.icon, template.markClass]"
-                            aria-hidden="true"
-                            class="text-[1.25rem] leading-none text-(--text-default)"
-                          />
+                        <i
+                          :class="[template.icon, template.markClass]"
+                          aria-hidden="true"
+                          class="text-[1.25rem] leading-none text-(--text-default)"
+                        />
+                      </span>
+                      <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                        <span class="text-body-md text-(--text-default)">{{ template.title }}</span>
+                        <span class="text-pretty text-body-sm text-(--text-muted)">
+                          {{ template.description }}
                         </span>
-                        <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                          <span class="text-body-md text-(--text-default)">{{
-                            template.title
-                          }}</span>
-                          <span class="text-pretty text-body-sm text-(--text-muted)">
-                            {{ template.description }}
-                          </span>
-                        </div>
-                        <Button
-                          label="Deploy now"
-                          kind="outlined"
-                          size="medium"
-                          icon="pi pi-chevron-right"
-                          icon-position="trailing"
-                          animated
-                          :href="templateHref(template.to)"
-                          class="mt-auto self-start group-hover/template:before:opacity-100 group-active/template:after:opacity-100 group-hover/template:[&_[data-animated]]:translate-x-0.5"
-                          @click="openTemplate($event, template.to)"
-                        >
-                          <template #prefix>
-                            <i
-                              class="ai ai-azion text-(--primary)"
-                              aria-hidden="true"
-                            />
-                          </template>
-                        </Button>
                       </div>
-                    </CardGrid.Cell>
-                  </CardGrid>
-                  <div
-                    aria-hidden="true"
-                    class="h-16"
-                  />
-                </ScrollArea>
-              </div>
-            </template>
-            <template #actions>
-              <Button
-                label="Deploy now"
-                kind="secondary"
-                size="large"
-                href="https://www.azion.com/en/documentation/products/guides/#azion-templates"
-                target="_blank"
-                icon="pi pi-chevron-right"
-                icon-position="trailing"
-                animated
-              />
-            </template>
-          </MediaSplit>
-        </FrameBox>
+                      <Button
+                        label="Deploy now"
+                        kind="outlined"
+                        size="medium"
+                        icon="pi pi-chevron-right"
+                        icon-position="trailing"
+                        animated
+                        :href="routeHref(template.to)"
+                        class="mt-auto self-start group-hover/template:before:opacity-100 group-active/template:after:opacity-100 group-hover/template:[&_[data-animated]]:translate-x-0.5"
+                        @click="openRoute($event, template.to)"
+                      >
+                        <template #prefix>
+                          <i
+                            class="ai ai-azion text-(--primary)"
+                            aria-hidden="true"
+                          />
+                        </template>
+                      </Button>
+                    </div>
+                  </CardGrid.Cell>
+                </CardGrid>
+                <div
+                  aria-hidden="true"
+                  class="h-16"
+                />
+              </ScrollArea>
+            </div>
+          </template>
+          <template #actions>
+            <Button
+              label="Deploy now"
+              kind="secondary"
+              size="large"
+              href="https://www.azion.com/en/documentation/products/guides/#azion-templates"
+              target="_blank"
+              icon="pi pi-chevron-right"
+              icon-position="trailing"
+              animated
+            />
+          </template>
+        </MediaSplit>
 
         <FrameBox
           flush
@@ -397,41 +366,36 @@
         :divided="false"
         :padded="false"
       >
-        <FrameBox
-          flush
-          borders="y"
-          marks="bottom"
+        <MediaSplit
+          framed
+          :media-href="architecture.href"
+          align="center"
+          size="large"
+          media-fill="canvas"
+          texture="pixelate"
+          texture-size="small"
+          texture-fade="top"
+          :title="architecture.title"
         >
-          <MediaSplit
-            :media-href="architecture.href"
-            align="center"
-            size="large"
-            media-fill="canvas"
-            texture="pixelate"
-            texture-size="small"
-            texture-fade="top"
-            :title="architecture.title"
-          >
-            <template #media>
-              <Illustration
-                :name="architecture.illustration"
-                :aria-label="architecture.alt"
-              />
-            </template>
-            <template #actions>
-              <Button
-                label="Docs"
-                kind="outlined"
-                size="medium"
-                :href="architecture.href"
-                target="_blank"
-                icon="pi pi-chevron-right"
-                icon-position="trailing"
-                animated
-              />
-            </template>
-          </MediaSplit>
-        </FrameBox>
+          <template #media>
+            <Illustration
+              :name="architecture.illustration"
+              :aria-label="architecture.alt"
+            />
+          </template>
+          <template #actions>
+            <Button
+              label="Docs"
+              kind="outlined"
+              size="medium"
+              :href="architecture.href"
+              target="_blank"
+              icon="pi pi-chevron-right"
+              icon-position="trailing"
+              animated
+            />
+          </template>
+        </MediaSplit>
       </SectionModule>
     </template>
 
@@ -442,13 +406,6 @@
         :divided="false"
         :padded="false"
       >
-        <template #header>
-          <SectionTitle
-            eyebrow="Trusted by Industry Leaders"
-            title="Battle-Tested by the World's Largest Banks and E-commerce Companies"
-          />
-        </template>
-
         <FrameBox
           flush
           borders="y"
@@ -463,11 +420,11 @@
                 label="See success stories"
                 kind="secondary"
                 size="large"
-                :href="SUCCESS_STORIES"
-                target="_blank"
+                :href="routeHref(SUCCESS_CASES)"
                 icon="pi pi-chevron-right"
                 icon-position="trailing"
                 animated
+                @click="openRoute($event, SUCCESS_CASES)"
               />
             </template>
           </QuoteTabs>
@@ -475,64 +432,61 @@
       </SectionModule>
     </template>
 
-    <template
-      v-for="band in cardBands"
-      :key="band.title"
-    >
+    <template v-if="resources">
       <SectionGap hatch />
 
       <SectionModule
         :divided="false"
         :padded="false"
       >
-        <template #header>
-          <SectionTitle
-            :eyebrow="band.eyebrow"
-            :title="band.title"
-          />
-        </template>
-
-        <FrameBox
-          flush
-          borders="y"
-          marks="bottom"
+        <MediaSplit
+          framed
+          :heading-level="2"
+          align="center"
+          size="large"
+          texture="none"
+          :eyebrow="resources.eyebrow ?? 'Go Deeper'"
+          :title="resources.title"
+          :description="resources.description"
         >
-          <CardGrid
-            flush
-            kind="frame"
-            :columns="cardColumns(band.items)"
-          >
-            <CardGrid.Cell
-              v-for="card in band.items"
-              :key="card.title"
-              kind="canvas"
+          <template #media>
+            <CardGrid
+              flush
+              kind="frame"
+              :columns="2"
+              class="w-full self-stretch"
             >
-              <div class="flex h-full flex-col gap-(--spacing-md)">
-                <Overline>{{ card.eyebrow }}</Overline>
-                <h3 class="m-0 text-balance text-heading-xs text-(--text-default)">
-                  {{ card.title }}
-                </h3>
-                <p
-                  v-if="card.description"
-                  class="m-0 text-pretty text-body-sm text-(--text-muted)"
-                >
-                  {{ card.description }}
-                </p>
-                <Button
-                  :label="card.action"
-                  kind="outlined"
-                  size="medium"
+              <CardGrid.Cell
+                v-for="card in resources.items"
+                :key="card.title"
+                kind="surface"
+                :padded="false"
+              >
+                <Topic
+                  :heading-level="3"
+                  :title="card.title"
+                  :description="card.description"
                   :href="card.href"
                   :target="isExternal(card.href) ? '_blank' : undefined"
-                  icon="pi pi-chevron-right"
-                  icon-position="trailing"
-                  animated
-                  class="mt-auto self-start"
+                  :rel="isExternal(card.href) ? 'noopener noreferrer' : undefined"
+                  class="h-full p-(--spacing-xl)"
                 />
-              </div>
-            </CardGrid.Cell>
-          </CardGrid>
-        </FrameBox>
+              </CardGrid.Cell>
+            </CardGrid>
+          </template>
+          <template #actions>
+            <Button
+              label="See all guides"
+              kind="secondary"
+              size="large"
+              :href="GUIDES"
+              target="_blank"
+              icon="pi pi-chevron-right"
+              icon-position="trailing"
+              animated
+            />
+          </template>
+        </MediaSplit>
       </SectionModule>
     </template>
 
@@ -591,6 +545,23 @@
                     {{ certification.label }}
                   </span>
                 </div>
+              </CardGrid.Cell>
+
+              <CardGrid.Cell
+                kind="surface"
+                :padded="false"
+                role="listitem"
+              >
+                <RouterLink
+                  :to="COMPLIANCE"
+                  class="group/more flex h-full items-center justify-center gap-(--spacing-xs) px-(--spacing-sm) py-(--spacing-xl) text-overline-md uppercase text-(--text-muted) transition-colors duration-moderate-02 ease-expressive-entrance hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:bg-(--bg-hover) focus-visible:text-(--text-default) focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset focus-visible:outline-none motion-reduce:transition-none"
+                >
+                  See more
+                  <i
+                    aria-hidden="true"
+                    class="pi pi-chevron-right shrink-0 text-[length:inherit] leading-none transition-[translate] duration-moderate-02 ease-expressive-entrance group-hover/more:translate-x-0.5 motion-reduce:transition-none"
+                  />
+                </RouterLink>
               </CardGrid.Cell>
             </CardGrid>
           </template>
@@ -658,7 +629,7 @@
             position="top-right"
             animated
             fade="left"
-            :opacity="0.2"
+            :opacity="0.3"
             density="medium"
             :scale="1.3"
             :offset-x="0.4"
@@ -675,7 +646,7 @@
                 position="bottom"
                 animated
                 fade="none"
-                :opacity="0.2"
+                :opacity="0.3"
                 density="medium"
                 :scale="2"
                 :offset-x="0.19"

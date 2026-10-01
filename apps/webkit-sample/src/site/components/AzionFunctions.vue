@@ -4,6 +4,7 @@
   // the platform's primitives, the FAQ and the closing CTA. Copy is
   // azion.com/en/products/functions verbatim.
   import contabilizeiTile from '@aziontech/webkit/assets/clients/contabilizei-symbol.png'
+  import BandStack from '@aziontech/webkit/band-stack'
   import Button from '@aziontech/webkit/button'
   import CallToAction from '@aziontech/webkit/call-to-action'
   import CardGrid from '@aziontech/webkit/card-grid'
@@ -319,108 +320,100 @@ export default app;`
       :divided="false"
       :padded="false"
     >
-      <MediaSplit
-        media-href="/site/docs"
-        framed
-        title="Build with familiar frameworks"
-        description="Write Functions in TypeScript or JavaScript and ship with the frameworks you already use."
+      <BandStack
+        sticky
+        flush
       >
-        <template #media>
-          <Illustration name="modern-frontends" />
-        </template>
+        <MediaSplit
+          media-href="/site/docs"
+          title="Build with familiar frameworks"
+          description="Write Functions in TypeScript or JavaScript and ship with the frameworks you already use."
+        >
+          <template #media>
+            <Illustration name="modern-frontends" />
+          </template>
 
-        <template #actions>
-          <Button
-            label="Read Azion Docs"
-            kind="secondary"
-            size="small"
-            icon="pi pi-book"
-            href="/site/docs"
-          />
-        </template>
-      </MediaSplit>
-    </SectionModule>
-
-    <SectionModule
-      :divided="false"
-      :padded="false"
-    >
-      <MediaSplit
-        media-href="/site/docs"
-        framed
-        kind="media-start"
-        title="Serverless runtime built for modern workloads"
-        description="Use Functions as a programmable layer between users, storefronts, APIs, and origins. Adapt requests in real time without changing your backend architecture."
-      >
-        <template #media>
-          <Illustration name="runtime" />
-        </template>
-
-        <template #actions>
-          <Button
-            label="Read Azion Docs"
-            kind="secondary"
-            size="small"
-            icon="pi pi-book"
-            href="/site/docs"
-          />
-        </template>
-      </MediaSplit>
-    </SectionModule>
-
-    <SectionModule
-      :divided="false"
-      :padded="false"
-    >
-      <!-- The one band whose media is a panel rather than a scene: the ground is the
-           tightest dot lattice, faded out upwards so it is densest where the sample runs
-           off the frame, and `media-padded` gives the panel the inset an export does not want. -->
-      <MediaSplit
-        media-href="/site/docs"
-        framed
-        texture="dots"
-        texture-size="small"
-        texture-fade="top"
-        media-padded
-        title="From hello world to full-stack applications"
-        description="Run application logic with the resources a full-stack product needs: relational data, low-latency state, object storage, and AI responses through Azion libraries."
-      >
-        <template #media>
-          <!-- The shell carries the elevation at the block's own radius: CodeBlock rounds to
-               --shape-elements and clips its overflow, so a shadow on the block itself is
-               clipped away. Its height plus the negative bottom margin run the panel past the
-               cell's padding onto the frame's bottom rule, which cuts the sample mid-line. -->
-          <div
-            class="-mb-(--spacing-xl) h-[20rem] w-full min-w-0 overflow-hidden rounded-t-(--shape-elements) shadow-(--shadow-sm)"
-          >
-            <CodeBlock
-              :tabs="codeTabs"
-              default-value="file-upload"
-              show-line-numbers
-              animate-lines
-              copy-aria-label="Copy the file upload sample"
+          <template #actions>
+            <Button
+              label="Read Azion Docs"
+              kind="secondary"
+              size="small"
+              icon="pi pi-book"
+              href="/site/docs"
             />
-          </div>
-        </template>
+          </template>
+        </MediaSplit>
 
-        <template #actions>
-          <Button
-            label="Read Azion Docs"
-            kind="secondary"
-            size="small"
-            icon="pi pi-book"
-            href="/site/docs"
-          />
-          <Button
-            label="See Github"
-            kind="outlined"
-            size="small"
-            icon="pi pi-github"
-            href="https://github.com/aziontech"
-            target="_blank"
-          />
-        </template>
-      </MediaSplit>
+        <MediaSplit
+          media-href="/site/docs"
+          kind="media-start"
+          title="Serverless runtime built for modern workloads"
+          description="Use Functions as a programmable layer between users, storefronts, APIs, and origins. Adapt requests in real time without changing your backend architecture."
+        >
+          <template #media>
+            <Illustration name="runtime" />
+          </template>
+
+          <template #actions>
+            <Button
+              label="Read Azion Docs"
+              kind="secondary"
+              size="small"
+              icon="pi pi-book"
+              href="/site/docs"
+            />
+          </template>
+        </MediaSplit>
+
+        <!-- The one band whose media is a panel rather than a scene: the ground is the
+             tightest dot lattice, faded out upwards so it is densest where the sample runs
+             off the frame, and `media-padded` gives the panel the inset an export does not want. -->
+        <MediaSplit
+          media-href="/site/docs"
+          texture="dots"
+          texture-size="small"
+          texture-fade="top"
+          media-padded
+          title="From hello world to full-stack applications"
+          description="Run application logic with the resources a full-stack product needs: relational data, low-latency state, object storage, and AI responses through Azion libraries."
+        >
+          <template #media>
+            <!-- The shell carries the elevation at the block's own radius: CodeBlock rounds to
+                 --shape-elements and clips its overflow, so a shadow on the block itself is
+                 clipped away. Its height plus the negative bottom margin run the panel past the
+                 cell's padding onto the frame's bottom rule, which cuts the sample mid-line. -->
+            <div
+              class="-mb-(--spacing-xl) h-[20rem] w-full min-w-0 overflow-hidden rounded-t-(--shape-elements) shadow-(--shadow-sm)"
+            >
+              <CodeBlock
+                :tabs="codeTabs"
+                default-value="file-upload"
+                show-line-numbers
+                animate-lines
+                copy-aria-label="Copy the file upload sample"
+              />
+            </div>
+          </template>
+
+          <template #actions>
+            <Button
+              label="Read Azion Docs"
+              kind="secondary"
+              size="small"
+              icon="pi pi-book"
+              href="/site/docs"
+            />
+            <Button
+              label="See Github"
+              kind="outlined"
+              size="small"
+              icon="pi pi-github"
+              href="https://github.com/aziontech"
+              target="_blank"
+            />
+          </template>
+        </MediaSplit>
+      </BandStack>
     </SectionModule>
 
     <SectionGap hatch />

@@ -12,8 +12,8 @@
   //   2  spacer                                            SectionGap hatch
   //   3  three feature cells                               CardGrid divider, 3 columns
   //   4  spacer                                            SectionGap hatch
-  //   5  copy | art — "Optimize dynamic delivery"          FrameBox, lg:grid-cols-2
-  //   6  art | copy — "Advanced Cache Key…"                FrameBox flush, lg:grid-cols-2
+  //   5  copy | art — "Optimize dynamic delivery"          BandStack band, MediaSplit
+  //   6  art | copy — "Advanced Cache Key…"                BandStack band, MediaSplit
   //   7  copy | code — "From basic caching…"               FrameBox flush + CodeBlock
   //   8  spacer                                            SectionGap hatch
   //   9  "See how to use" — six cards                      SectionTitle left + CardGrid, 3 cols
@@ -65,6 +65,7 @@
   import contabilizei from '@aziontech/webkit/assets/clients/dark/clients/contabilizei-logo.svg'
   import crefisa from '@aziontech/webkit/assets/clients/dark/clients/crefisa-logo.svg'
   import { CLIENTS } from '@aziontech/webkit/assets/clients/registry'
+  import BandStack from '@aziontech/webkit/band-stack'
   import Button from '@aziontech/webkit/button'
   import CallToAction from '@aziontech/webkit/call-to-action'
   import CardGrid from '@aziontech/webkit/card-grid'
@@ -515,114 +516,110 @@
     <!-- Band 4 — spacer. -->
     <SectionGap hatch />
 
-    <!-- ── Band 5 — copy beside the art ─────────────────────────────────────────
-         The source's art is a raster collage of the product's own configuration screens
-         with a Lighthouse card over them. Ours is the registered `infrastructure-as-code`
-         scene: the provider declared once, the resources it raises standing beside it.
-         It carries no texture and no inset: the scene covers the cell, so it runs off
-         every edge instead of sitting letterboxed on a ground. `h-full!` is the only way
-         past the component's own `h-auto`. -->
     <SectionModule
       :divided="false"
       :padded="false"
     >
-      <MediaSplit
-        :media-href="DOCS"
-        framed
-        texture="none"
-        title="Optimize dynamic delivery"
-        description="Define acceleration rules for APIs, personalized content, and dynamic routes without changing your stack. Azion Web Platform helps improve performance, SEO, and reliability across distributed applications."
+      <BandStack
+        sticky
+        flush
       >
-        <template #content>
-          <ul class="m-0 grid list-none grid-cols-2 gap-(--spacing-md) p-0">
-            <li
-              v-for="surface in SURFACES"
-              :key="surface.label"
-              class="flex items-center gap-(--spacing-sm) text-body-md text-(--text-default)"
-            >
-              <i
-                :class="surface.icon"
-                aria-hidden="true"
-                class="text-(--primary)"
-              />
-              {{ surface.label }}
-            </li>
-          </ul>
-        </template>
-        <template #media>
-          <Illustration
-            name="infrastructure-as-code"
-            aria-label="An Azion provider declared in Terraform, raising the resources beside it"
-            class="h-full! w-full object-cover"
-          />
-        </template>
-        <template #actions>
-          <Button
-            label="Docs"
-            kind="secondary"
-            size="small"
-            :href="DOCS"
-            icon="pi pi-chevron-right"
-            icon-position="trailing"
-            animated
-          />
-        </template>
-      </MediaSplit>
-    </SectionModule>
+        <!-- ── Band 5 — copy beside the art ─────────────────────────────────────────
+             The source's art is a raster collage of the product's own configuration screens
+             with a Lighthouse card over them. Ours is the registered `infrastructure-as-code`
+             scene: the provider declared once, the resources it raises standing beside it.
+             It carries no texture and no inset: the scene covers the cell, so it runs off
+             every edge instead of sitting letterboxed on a ground. `h-full!` is the only way
+             past the component's own `h-auto`. -->
+        <MediaSplit
+          :media-href="DOCS"
+          texture="none"
+          title="Optimize dynamic delivery"
+          description="Define acceleration rules for APIs, personalized content, and dynamic routes without changing your stack. Azion Web Platform helps improve performance, SEO, and reliability across distributed applications."
+        >
+          <template #content>
+            <ul class="m-0 grid list-none grid-cols-2 gap-(--spacing-md) p-0">
+              <li
+                v-for="surface in SURFACES"
+                :key="surface.label"
+                class="flex items-center gap-(--spacing-sm) text-body-md text-(--text-default)"
+              >
+                <i
+                  :class="surface.icon"
+                  aria-hidden="true"
+                  class="text-(--primary)"
+                />
+                {{ surface.label }}
+              </li>
+            </ul>
+          </template>
+          <template #media>
+            <Illustration
+              name="infrastructure-as-code"
+              aria-label="An Azion provider declared in Terraform, raising the resources beside it"
+              class="h-full! w-full object-cover"
+            />
+          </template>
+          <template #actions>
+            <Button
+              label="Docs"
+              kind="secondary"
+              size="small"
+              :href="DOCS"
+              icon="pi pi-chevron-right"
+              icon-position="trailing"
+              animated
+            />
+          </template>
+        </MediaSplit>
 
-    <!-- ── Band 6 — the art, then the copy ──────────────────────────
-         The source mirrors the band above it: art on the start edge, copy on the end edge.
-         `flush` lands this frame's top rule on that frame's floor, so the two butt together
-         exactly as they do on the source page.
+        <!-- ── Band 6 — the art, then the copy ──────────────────────────
+             The source mirrors the band above it: art on the start edge, copy on the end edge.
 
-         The art is the official `distributed-apis` scene — one request fanning out across the
-         platform, the closest drawing the library carries to a key segmenting a request. Below
-         `lg` it is the grid's second row, so the copy leads on a phone. -->
-    <SectionModule
-      :divided="false"
-      :padded="false"
-    >
-      <MediaSplit
-        :media-href="DOCS"
-        framed
-        kind="media-start"
-        title="Advanced Cache Key for personalized content delivery"
-        description="Control how content is segmented in cache beyond the URL path. Configure cache variation rules based on query strings, cookies, and headers—enabling fine-grained control for personalized experiences."
-      >
-        <template #content>
-          <ul class="m-0 grid list-none grid-cols-2 gap-(--spacing-md) p-0">
-            <li
-              v-for="feature in CACHE_KEY"
-              :key="feature.label"
-              class="flex items-center gap-(--spacing-sm) text-body-md text-(--text-default)"
-            >
-              <i
-                :class="feature.icon"
-                aria-hidden="true"
-                class="text-(--primary)"
-              />
-              {{ feature.label }}
-            </li>
-          </ul>
-        </template>
-        <template #media>
-          <Illustration
-            name="distributed-apis"
-            aria-label="One request segmented into cache by query string, cookie and header"
-          />
-        </template>
-        <template #actions>
-          <Button
-            label="Learn more"
-            kind="secondary"
-            size="small"
-            :href="DOCS"
-            icon="pi pi-chevron-right"
-            icon-position="trailing"
-            animated
-          />
-        </template>
-      </MediaSplit>
+             The art is the official `distributed-apis` scene — one request fanning out across the
+             platform, the closest drawing the library carries to a key segmenting a request. Below
+             `lg` it is the grid's second row, so the copy leads on a phone. -->
+        <MediaSplit
+          :media-href="DOCS"
+          kind="media-start"
+          title="Advanced Cache Key for personalized content delivery"
+          description="Control how content is segmented in cache beyond the URL path. Configure cache variation rules based on query strings, cookies, and headers—enabling fine-grained control for personalized experiences."
+        >
+          <template #content>
+            <ul class="m-0 grid list-none grid-cols-2 gap-(--spacing-md) p-0">
+              <li
+                v-for="feature in CACHE_KEY"
+                :key="feature.label"
+                class="flex items-center gap-(--spacing-sm) text-body-md text-(--text-default)"
+              >
+                <i
+                  :class="feature.icon"
+                  aria-hidden="true"
+                  class="text-(--primary)"
+                />
+                {{ feature.label }}
+              </li>
+            </ul>
+          </template>
+          <template #media>
+            <Illustration
+              name="distributed-apis"
+              aria-label="One request segmented into cache by query string, cookie and header"
+            />
+          </template>
+          <template #actions>
+            <Button
+              label="Learn more"
+              kind="secondary"
+              size="small"
+              :href="DOCS"
+              icon="pi pi-chevron-right"
+              icon-position="trailing"
+              animated
+            />
+          </template>
+        </MediaSplit>
+      </BandStack>
     </SectionModule>
 
     <!-- ── Band 7 — the argument beside the sample ──────────────────────────────

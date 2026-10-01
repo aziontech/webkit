@@ -1,5 +1,4 @@
 <script setup>
-  import combineDataAndVectorSearch from '@aziontech/webkit/assets/heroes/combine-data-and-vector-search.svg'
   import { AI_CLIENT_STRIP, AI_STACK } from '@shared/ui/brand/strips.js'
 
   import { quotesLedBy } from '../data/solutions.js'
@@ -10,13 +9,6 @@
     title: 'Build AI-powered applications on distributed architecture',
     description:
       'Run AI models for real-time text, image, and media generation. Build with AI Inference, Functions, and SQL Database on Azion.',
-    art: {
-      src: combineDataAndVectorSearch,
-      name: 'combine-data-and-vector-search',
-      alt: 'Vector embeddings flowing through AI Inference into an AI-powered application',
-      width: 370,
-      height: 186
-    },
     carouselMarks: AI_CLIENT_STRIP
   }
 

@@ -158,7 +158,7 @@
           position="top-right"
           animated
           fade="left"
-          :opacity="0.2"
+          :opacity="0.3"
           density="medium"
           :scale="1.3"
           :offset-x="0.4"
@@ -175,7 +175,7 @@
               position="bottom"
               animated
               fade="none"
-              :opacity="0.2"
+              :opacity="0.3"
               density="medium"
               :scale="2"
               :offset-x="0.19"
@@ -205,26 +205,31 @@
           </div>
 
           <CardGrid
-            kind="divider"
+            flush
+            kind="frame"
             :columns="4"
             class="border-t border-(--border-default)"
           >
-            <Quote
+            <CardGrid.Cell
               v-for="outcome in outcomes"
               :key="outcome.key"
-              :text="outcome.text"
-              :highlights="outcome.highlights"
-              class="h-full bg-(--bg-canvas) p-(--spacing-xl)"
+              kind="canvas"
             >
-              <template #mark>
-                <ClientMark
-                  :client="outcome.mark"
-                  :colored="outcome.ink === 'brand'"
-                  :monochrome="outcome.ink === 'white'"
-                  mark="h-full w-auto max-w-32 object-contain"
-                />
-              </template>
-            </Quote>
+              <Quote
+                :text="outcome.text"
+                :highlights="outcome.highlights"
+                class="h-full"
+              >
+                <template #mark>
+                  <ClientMark
+                    :client="outcome.mark"
+                    :colored="outcome.ink === 'brand'"
+                    :monochrome="outcome.ink === 'white'"
+                    mark="h-full w-auto max-w-32 object-contain"
+                  />
+                </template>
+              </Quote>
+            </CardGrid.Cell>
           </CardGrid>
         </div>
       </FrameBox>

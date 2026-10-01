@@ -90,7 +90,7 @@ export const PLANS = [
       { icon: 'ai ai-waf-rules', label: 'Broader security coverage' },
       { icon: 'pi pi-wallet', label: 'Configurable spend limit' }
     ],
-    action: { label: 'Start with Pro', kind: 'primary', to: '/signup' }
+    action: { label: 'Start with Pro', kind: 'secondary', to: '/signup' }
   },
   {
     id: 'enterprise',
@@ -120,6 +120,33 @@ export const PLANS = [
       { icon: 'ai ai-business-support', label: 'Advanced support available' }
     ],
     action: { label: 'Contact us', kind: 'outlined', to: '#contact' }
+  }
+]
+
+export const PRICING_REASONS = [
+  {
+    key: 'consumption',
+    illustration: 'no-idle-no-waste',
+    scale: 0.7,
+    title: 'No idle. No waste.',
+    description:
+      'Why pay for infrastructure doing nothing? Azion is built around actual consumption, so you pay for what your applications use — not infrastructure sitting idle waiting for demand.'
+  },
+  {
+    key: 'control',
+    illustration: 'stay-in-control',
+    scale: 1,
+    title: 'Stay in control.',
+    description:
+      'Scale without losing control of your bill. Track consumption, set spending limits, and keep costs predictable as your applications grow.'
+  },
+  {
+    key: 'support',
+    illustration: 'white-gloves-when-it-matters',
+    scale: 0.8,
+    title: 'White-glove when it matters.',
+    description:
+      'Self-service when you want it. Experts when you need them. Azion specialists and partners are there to help you build, migrate, optimize, and scale with confidence.'
   }
 ]
 

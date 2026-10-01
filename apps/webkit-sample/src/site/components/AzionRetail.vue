@@ -1,7 +1,7 @@
 <script setup>
-  import { PRODUCT_STACK } from '@shared/ui/brand/strips.js'
+  import { PRODUCT_STACK, RETAIL_CLIENT_STRIP } from '@shared/ui/brand/strips.js'
 
-  import { BUILD_CTA, quotesLedBy, successStory } from '../data/solutions.js'
+  import { BUILD_CTA, quotesLedBy } from '../data/solutions.js'
   import SolutionPage from './SolutionPage.vue'
 
   const HERO = {
@@ -9,10 +9,7 @@
     title: 'Shopping experiences that convert',
     description:
       'Deploy fast, secure storefronts on distributed infrastructure designed for high-stakes retail experiences. Handle peak events, prevent fraud, and lower cloud costs without overprovisioning.',
-    art: {
-      name: 'retail-application-modernization',
-      alt: 'A retail storefront modernized onto distributed infrastructure'
-    }
+    carouselMarks: RETAIL_CLIENT_STRIP
   }
 
   const CAPABILITIES = [
@@ -110,68 +107,6 @@
     "One of the best CDN and WAF solutions I've ever used. Easy to implement and integrate, with speed and low latency that make a real difference for our customers."
   )
 
-  const STORIES = {
-    eyebrow: 'Success Stories',
-    title: 'The Infrastructure Behind Leading E-Commerce Brands',
-    items: [
-      successStory(
-        'Retail',
-        'Magalu guarantees high availability for hundreds of global-scale applications with enhanced security perimeter',
-        'magalu/'
-      ),
-      successStory(
-        'Retail',
-        'Lojas Renner handles massive traffic spikes and saves 67% on data transfer costs',
-        'renner/'
-      ),
-      successStory(
-        'Retail',
-        'Dafiti achieves 86% faster load times and 45% cost reduction in data transfer',
-        'dafiti/dafiti-accelerates-its-e-commerce-by-86-and-saves-45-on-data-transfer-costs-using-azion-edge-application/'
-      ),
-      successStory(
-        'Retail',
-        'MadeiraMadeira cuts cloud costs by 90% and speeds up product delivery at scale',
-        'madeiramadeira/'
-      ),
-      successStory(
-        'Retail',
-        'Pernambucanas accelerates its e-commerce platform and modernizes customer experience',
-        'pernambucanas/pernambucanas-relies-on-azion-to-speed-up-its-e-commerce-platform-and-innovate-customer-experience-through-edge-applications/'
-      ),
-      successStory(
-        'Retail',
-        'Netshoes blocks 4M+ threats in six months and protects every shopping journey',
-        'netshoes/'
-      ),
-      successStory(
-        'Retail',
-        'GPA stops a targeted cyberattack, secures 100+ apps, and reduces costs by 30%',
-        'gpa-solved-cyberattack/'
-      ),
-      successStory(
-        'Retail',
-        'Quero-Quero strengthens API security and keeps its e-commerce highly available',
-        'quero-quero/'
-      ),
-      successStory(
-        'Retail',
-        'Marisa accelerates e-commerce and delivers 85% of traffic from distributed infrastructure',
-        'marisa/'
-      ),
-      successStory(
-        'Retail',
-        'B2W automates security across its e-commerce platforms with a programmable firewall',
-        'b2w/'
-      ),
-      successStory(
-        'Retail',
-        'Panvel speeds up its e-commerce by 60% and keeps 100% availability under load',
-        'panvel/'
-      )
-    ]
-  }
-
   const FAQ = [
     {
       value: 'q1',
@@ -250,7 +185,6 @@
     :templates-description="TEMPLATES_DESCRIPTION"
     :architecture="ARCHITECTURE"
     :quotes="QUOTES"
-    :stories="STORIES"
     compliance
     primitives-eyebrow="Built for Speed"
     primitives-title="Composable Primitives for Performance and Personalization"

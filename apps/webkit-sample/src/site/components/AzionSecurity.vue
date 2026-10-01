@@ -1,5 +1,4 @@
 <script setup>
-  import ddosProtection from '@aziontech/webkit/assets/heroes/ddos-protection.svg'
   import { PRODUCT_STACK, SECURITY_CLIENT_STRIP } from '@shared/ui/brand/strips.js'
 
   import { quotesLedBy } from '../data/solutions.js'
@@ -10,13 +9,6 @@
     title: 'Protect your applications and APIs at the speed of AI',
     description:
       'A unified, globally distributed security platform that stops DDoS attacks, exploits, malicious bots, fraud, and AI-driven threats before they reach your applications and APIs.',
-    art: {
-      src: ddosProtection,
-      name: 'ddos-protection',
-      alt: 'An attack stopped at Azion before it reaches the application',
-      width: 186,
-      height: 286
-    },
     carouselMarks: SECURITY_CLIENT_STRIP
   }
 

@@ -83,14 +83,11 @@ export const NETWORK_TAGS = [
   'PCI DSS and SOC 2/3 compliant'
 ]
 
-const SUCCESS_CASE = 'https://www.azion.com/en/success-case/'
-
-export const successStory = (eyebrow, title, path) => ({
-  eyebrow,
-  title,
-  action: 'View success story',
-  href: `${SUCCESS_CASE}${path}`
-})
+export const LEARNING_CENTER = {
+  title: 'Learning Center',
+  description: 'Practical knowledge to speed up, secure, and scale applications.',
+  href: '/site/learning'
+}
 
 export const BUILD_CTA = {
   eyebrow: 'Build',

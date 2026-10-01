@@ -129,6 +129,7 @@
   import Button from '@aziontech/webkit/button'
   import Hint from '@aziontech/webkit/hint'
   import Link from '@aziontech/webkit/link'
+  import Overline from '@aziontech/webkit/overline'
   import Select from '@aziontech/webkit/select'
   import Tag from '@aziontech/webkit/tag'
   import { computed, ref } from 'vue'
@@ -277,11 +278,12 @@
               sectionIndex > 0 && 'border-t'
             ]"
           >
-            <!-- No eyebrow. The page's `Overline` is the ORANGE opening line of a section
-                 (`--primary`, `font-medium`); thirty of them down one table read as thirty
-                 section openings competing with the single heading each band actually has,
-                 and the colour pulls the eye off the plan columns the reader came for. The
-                 title is the band's first line, so it carries no leading margin. -->
+            <Overline
+              v-if="section.eyebrow"
+              prefix="//"
+              class="mb-(--spacing-xs)"
+              >{{ section.eyebrow }}</Overline
+            >
             <span class="block text-heading-lg text-(--text-default)">
               {{ section.title }}
             </span>

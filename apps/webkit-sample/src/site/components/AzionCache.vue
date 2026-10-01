@@ -15,8 +15,8 @@
   //   2  spacer                                            SectionGap hatch
   //   3  three feature cells                               CardGrid divider, 3 columns
   //   4  spacer                                            SectionGap hatch
-  //   5  copy | art — "Configure smarter cache policies"   FrameBox, lg:grid-cols-2
-  //   6  art | copy — "High-availability caching…"         FrameBox flush, lg:grid-cols-2
+  //   5  copy | art — "Configure smarter cache policies"   BandStack band, MediaSplit
+  //   6  art | copy — "High-availability caching…"         BandStack band, MediaSplit
   //   7  copy | code — "Fine-tune cache policies…"         FrameBox flush + CodeBlock
   //   8  spacer                                            SectionGap hatch
   //   9  "Use cases" — six cards                           SectionTitle left + CardGrid, 3 cols
@@ -67,6 +67,7 @@
   import contabilizei from '@aziontech/webkit/assets/clients/dark/clients/contabilizei-logo.svg'
   import crefisa from '@aziontech/webkit/assets/clients/dark/clients/crefisa-logo.svg'
   import { CLIENTS } from '@aziontech/webkit/assets/clients/registry'
+  import BandStack from '@aziontech/webkit/band-stack'
   import Button from '@aziontech/webkit/button'
   import CallToAction from '@aziontech/webkit/call-to-action'
   import CardGrid from '@aziontech/webkit/card-grid'
@@ -534,127 +535,123 @@
     <!-- Band 4 — spacer. -->
     <SectionGap hatch />
 
-    <!-- ── Band 5 — copy beside the art ─────────────────────────────────────────
-         The source's art is a raster collage: a configuration card over a world map, with a
-         request → cache → origin path in its corner. That path IS the argument, so it is
-         what our art draws — three parts and the flow between them, composed from
-         Illustration parts on the design system's own canvas.
-
-         THE SCENE IS A FIXED-WIDTH ROW AND THE CELL IS NOT. Illustration parts carry their
-         own geometry, so the row does not reflow; it is SCALED rather than reflowed (`scale`
-         leaves the layout box alone, so the cell also clips) which keeps the drawing whole
-         and the page's width honest on a phone. -->
     <SectionModule
       :divided="false"
       :padded="false"
     >
-      <MediaSplit
-        :media-href="DOCS"
-        framed
-        title="Configure smarter cache policies"
-        description="Set browser and edge TTLs, enable tiered cache, and keep content fresh with stale revalidation. Azion Web Platform helps improve hit ratio, lower latency, and reduce origin bandwidth."
+      <BandStack
+        sticky
+        flush
       >
-        <!-- The four surfaces a policy can be written from. A two-column list, not four
-             cards: it is an inventory inside a paragraph's argument, so it takes the
-             paragraph's own measure. -->
-        <template #content>
-          <ul class="m-0 grid list-none grid-cols-2 gap-(--spacing-md) p-0">
-            <li
-              v-for="surface in SURFACES"
-              :key="surface.label"
-              class="flex items-center gap-(--spacing-sm) text-body-md text-(--text-default)"
-            >
-              <i
-                :class="surface.icon"
-                aria-hidden="true"
-                class="text-(--primary)"
-              />
-              {{ surface.label }}
-            </li>
-          </ul>
-        </template>
+        <!-- ── Band 5 — copy beside the art ─────────────────────────────────────────
+             The source's art is a raster collage: a configuration card over a world map, with a
+             request → cache → origin path in its corner. That path IS the argument, so it is
+             what our art draws — three parts and the flow between them, composed from
+             Illustration parts on the design system's own canvas.
 
-        <template #media>
-          <Illustration
-            name="fastest-path-to-live-website"
-            aria-label="A request served from cache, with the origin behind it"
-            class="shrink-0 scale-[0.62] sm:scale-90 lg:scale-100"
-          />
-        </template>
+             THE SCENE IS A FIXED-WIDTH ROW AND THE CELL IS NOT. Illustration parts carry their
+             own geometry, so the row does not reflow; it is SCALED rather than reflowed (`scale`
+             leaves the layout box alone, so the cell also clips) which keeps the drawing whole
+             and the page's width honest on a phone. -->
+        <MediaSplit
+          :media-href="DOCS"
+          title="Configure smarter cache policies"
+          description="Set browser and edge TTLs, enable tiered cache, and keep content fresh with stale revalidation. Azion Web Platform helps improve hit ratio, lower latency, and reduce origin bandwidth."
+        >
+          <!-- The four surfaces a policy can be written from. A two-column list, not four
+               cards: it is an inventory inside a paragraph's argument, so it takes the
+               paragraph's own measure. -->
+          <template #content>
+            <ul class="m-0 grid list-none grid-cols-2 gap-(--spacing-md) p-0">
+              <li
+                v-for="surface in SURFACES"
+                :key="surface.label"
+                class="flex items-center gap-(--spacing-sm) text-body-md text-(--text-default)"
+              >
+                <i
+                  :class="surface.icon"
+                  aria-hidden="true"
+                  class="text-(--primary)"
+                />
+                {{ surface.label }}
+              </li>
+            </ul>
+          </template>
 
-        <template #actions>
-          <Button
-            label="Docs"
-            kind="secondary"
-            size="small"
-            :href="DOCS"
-            icon="pi pi-chevron-right"
-            icon-position="trailing"
-            animated
-          />
-        </template>
-      </MediaSplit>
-    </SectionModule>
+          <template #media>
+            <Illustration
+              name="fastest-path-to-live-website"
+              aria-label="A request served from cache, with the origin behind it"
+              class="shrink-0 scale-[0.62] sm:scale-90 lg:scale-100"
+            />
+          </template>
 
-    <!-- ── Band 6 — the art, then the copy ──────────────────────────────────────
-         The source mirrors the band above it: art on the start edge, copy on the end edge.
-         `flush` lands this frame's top rule on that frame's floor, so the two butt together
-         exactly as they do on the source page.
+          <template #actions>
+            <Button
+              label="Docs"
+              kind="secondary"
+              size="small"
+              :href="DOCS"
+              icon="pi pi-chevron-right"
+              icon-position="trailing"
+              animated
+            />
+          </template>
+        </MediaSplit>
 
-         The source's diagram fans one request into a cache layer of content types. Ours is
-         that branch, drawn with Illustration's own trunk-and-tributary parts — a different
-         shape from the linear flow above it, because it is a different argument. Below `lg`
-         it is the grid's second row, so the copy leads on a phone. -->
-    <SectionModule
-      :divided="false"
-      :padded="false"
-    >
-      <MediaSplit
-        :media-href="SIGNUP"
-        framed
-        kind="media-start"
-        title="High-availability caching for critical traffic"
-        description="Use protocol optimizations, persistent connections, and stale cache to keep serving the latest cached responses during origin failures or revalidation, so websites and APIs stay fast."
-      >
-        <template #content>
-          <ul class="m-0 grid list-none grid-cols-2 gap-(--spacing-md) p-0">
-            <li
-              v-for="feature in AVAILABILITY"
-              :key="feature.label"
-              class="flex items-center gap-(--spacing-sm) text-body-md text-(--text-default)"
-            >
-              <i
-                :class="feature.icon"
-                aria-hidden="true"
-                class="text-(--primary)"
-              />
-              {{ feature.label }}
-            </li>
-          </ul>
-        </template>
+        <!-- ── Band 6 — the art, then the copy ──────────────────────────────────────
+             The source mirrors the band above it: art on the start edge, copy on the end edge.
 
-        <template #media>
-          <Illustration
-            name="distributed-apis"
-            aria-label="One request fanning into the cache layer's content types"
-            class="shrink-0 scale-[0.62] sm:scale-90 lg:scale-100"
-          />
-        </template>
+             The source's diagram fans one request into a cache layer of content types. Ours is
+             that branch, drawn with Illustration's own trunk-and-tributary parts — a different
+             shape from the linear flow above it, because it is a different argument. Below `lg`
+             it is the grid's second row, so the copy leads on a phone. -->
+        <MediaSplit
+          :media-href="SIGNUP"
+          kind="media-start"
+          title="High-availability caching for critical traffic"
+          description="Use protocol optimizations, persistent connections, and stale cache to keep serving the latest cached responses during origin failures or revalidation, so websites and APIs stay fast."
+        >
+          <template #content>
+            <ul class="m-0 grid list-none grid-cols-2 gap-(--spacing-md) p-0">
+              <li
+                v-for="feature in AVAILABILITY"
+                :key="feature.label"
+                class="flex items-center gap-(--spacing-sm) text-body-md text-(--text-default)"
+              >
+                <i
+                  :class="feature.icon"
+                  aria-hidden="true"
+                  class="text-(--primary)"
+                />
+                {{ feature.label }}
+              </li>
+            </ul>
+          </template>
 
-        <!-- The one band on the page whose control is the signup, not the docs — the
-             source's own choice here. -->
-        <template #actions>
-          <Button
-            label="Start Free"
-            kind="secondary"
-            size="small"
-            :href="SIGNUP"
-            icon="pi pi-chevron-right"
-            icon-position="trailing"
-            animated
-          />
-        </template>
-      </MediaSplit>
+          <template #media>
+            <Illustration
+              name="distributed-apis"
+              aria-label="One request fanning into the cache layer's content types"
+              class="shrink-0 scale-[0.62] sm:scale-90 lg:scale-100"
+            />
+          </template>
+
+          <!-- The one band on the page whose control is the signup, not the docs — the
+               source's own choice here. -->
+          <template #actions>
+            <Button
+              label="Start Free"
+              kind="secondary"
+              size="small"
+              :href="SIGNUP"
+              icon="pi pi-chevron-right"
+              icon-position="trailing"
+              animated
+            />
+          </template>
+        </MediaSplit>
+      </BandStack>
     </SectionModule>
 
     <!-- ── Band 7 — the argument beside the sample ──────────────────────────────

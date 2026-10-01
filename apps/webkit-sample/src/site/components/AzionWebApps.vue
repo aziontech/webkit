@@ -1,5 +1,4 @@
 <script setup>
-  import quickStartWithTemplates from '@aziontech/webkit/assets/heroes/quick-start-with-templates.svg'
   import { BUILD_CLIENT_STRIP, PRODUCT_STACK } from '@shared/ui/brand/strips.js'
 
   import { quotesLedBy } from '../data/solutions.js'
@@ -10,13 +9,6 @@
     title: 'Build lightning-fast websites and web apps and launch globally',
     description:
       'Deploy serverless web applications, APIs, and AI workloads from your git repository with built-in performance, security, and scalability.',
-    art: {
-      src: quickStartWithTemplates,
-      name: 'quick-start-with-templates',
-      alt: 'Astro, Vue and OpenAI templates starting from a terminal with azion init, azion build and azion deploy',
-      width: 360,
-      height: 165
-    },
     carouselMarks: BUILD_CLIENT_STRIP
   }
 

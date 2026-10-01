@@ -29,14 +29,27 @@
   import SectionModule from '@aziontech/webkit/section-module'
   import SectionTitle from '@aziontech/webkit/section-title'
   import { NetworkBanner } from '@shared/ui/banners/index.js'
-  import { CLIENT_STRIP } from '@shared/ui/brand/strips.js'
+  import { CLIENT_STRIP, RETAIL_CLIENT_STRIP } from '@shared/ui/brand/strips.js'
   import { useRouter } from 'vue-router'
 
   import FrameworkStackScene from '../ui/FrameworkStackScene.vue'
   import WorkloadTopologyScene from '../ui/WorkloadTopologyScene.vue'
+  import SolutionArtHero from './SolutionArtHero.vue'
 
   const router = useRouter()
   const goSignup = () => router.push('/signup')
+
+  const SOLUTION_ART_HERO = {
+    eyebrow: 'Application Performance and Reliability',
+    title: 'Make your applications fast and always reliable',
+    description:
+      "Serve websites, web apps, and APIs from Azion's globally distributed infrastructure, keep them online when an origin fails, and cut origin load and egress costs during your biggest traffic peaks.",
+    art: {
+      name: 'improve-application-performance-and-reliability',
+      alt: 'A website served through Azion, scoring 99 on performance'
+    },
+    carouselMarks: RETAIL_CLIENT_STRIP
+  }
 
   // Each specimen carries the copy of the page it ships on, so what is being compared is the
   // band and not the writing. The pages named here are where the shape is live today.
@@ -70,6 +83,12 @@
       title: 'Copy beside media',
       description:
         'From md up the content column splits in two and the copy keeps the leading one. A screenshot, a diagram or a form takes the other; below md they stack, copy first. Live on Contact, whose media column is the enquiry form.'
+    },
+    {
+      eyebrow: '#media · media-align · hero-art.js',
+      title: 'Copy beside art, bled to the edge',
+      description:
+        'The solution pages’ former opening, stored as SolutionArtHero for when the art returns. The illustration sets its end edge on the container boundary, and hero-art.js trims each canvas so the drawn part fills the column. Shown with the Performance page’s copy, art and client strip.'
     },
     {
       eyebrow: '#background',
@@ -311,15 +330,30 @@
       </Hero>
     </SectionModule>
 
-    <!-- ── 6. Artwork backdrop ────────────────────────────────────────────────
-         The last module in the column: its floor is the SiteFooter's `border-t`, so it
-         draws none of its own. -->
     <SectionModule :padded="false">
       <template #header>
         <SectionTitle
           :eyebrow="specimens[5].eyebrow"
           :title="specimens[5].title"
           :description="specimens[5].description"
+        />
+      </template>
+
+      <SolutionArtHero
+        :hero="SOLUTION_ART_HERO"
+        :bordered="false"
+      />
+    </SectionModule>
+
+    <!-- ── 6. Artwork backdrop ────────────────────────────────────────────────
+         The last module in the column: its floor is the SiteFooter's `border-t`, so it
+         draws none of its own. -->
+    <SectionModule :padded="false">
+      <template #header>
+        <SectionTitle
+          :eyebrow="specimens[6].eyebrow"
+          :title="specimens[6].title"
+          :description="specimens[6].description"
         />
       </template>
 

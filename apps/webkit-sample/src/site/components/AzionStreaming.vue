@@ -9,10 +9,6 @@
     title: 'Stream high-quality media and scale to millions',
     description:
       "Reach audiences worldwide through Azion's global infrastructure, with low latency, high availability, and lower streaming costs.",
-    art: {
-      name: 'low-latency',
-      alt: 'Azion serving audiences from data centers around the world'
-    },
     carouselMarks: RETAIL_CLIENT_STRIP
   }
 

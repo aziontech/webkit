@@ -74,6 +74,7 @@
     :carousel-marks="CLIENT_STRIP"
   >
     <Hero.Title
+      centered
       title="Learning Center"
       description="Practical knowledge to speed up, secure, and scale applications."
     >

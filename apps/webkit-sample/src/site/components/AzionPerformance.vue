@@ -9,10 +9,6 @@
     title: 'Make your applications fast and always reliable',
     description:
       "Serve websites, web apps, and APIs from Azion's globally distributed infrastructure, keep them online when an origin fails, and cut origin load and egress costs during your biggest traffic peaks.",
-    art: {
-      name: 'improve-application-performance-and-reliability',
-      alt: 'A website served through Azion, scoring 99 on performance'
-    },
     carouselMarks: RETAIL_CLIENT_STRIP
   }
 

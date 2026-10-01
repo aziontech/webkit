@@ -1,4 +1,5 @@
 <script setup>
+  import BandStack from '@aziontech/webkit/band-stack'
   import Button from '@aziontech/webkit/button'
   import CallToAction from '@aziontech/webkit/call-to-action'
   import CardGrid from '@aziontech/webkit/card-grid'
@@ -318,16 +319,11 @@ yarn azion deploy`,
     kind="screen"
     align="center"
     max-width="site"
+    texture="dots"
+    texture-size="small"
+    texture-fade="bottom"
     class="[--banner-offset:3.5rem] [--banner-top-height:46%]"
   >
-    <template #background>
-      <TextureMaterial
-        kind="dots"
-        size="small"
-        fade="bottom"
-      />
-    </template>
-
     <template #top>
       <WorkloadTopologyScene />
     </template>
@@ -394,37 +390,32 @@ yarn azion deploy`,
       :divided="false"
       :padded="false"
     >
-      <FrameBox
-        flush
-        borders="y"
-        marks="bottom"
+      <MediaSplit
+        framed
+        :media-href="DOCS"
+        eyebrow="Architecture"
+        title="Serverless from the ground up: isolates, not containers"
+        description="A workload does not reserve a container per deployment. Azion Runtime runs your code in an isolate — a sandbox measured in kilobytes rather than gigabytes — so one location holds thousands of them and starts another the moment a request arrives."
       >
-        <MediaSplit
-          :media-href="DOCS"
-          eyebrow="Architecture"
-          title="Serverless from the ground up: isolates, not containers"
-          description="A workload does not reserve a container per deployment. Azion Runtime runs your code in an isolate — a sandbox measured in kilobytes rather than gigabytes — so one location holds thousands of them and starts another the moment a request arrives."
-        >
-          <template #media>
-            <Illustration
-              name="runtime"
-              aria-label="One request reaching a workload, which starts an isolate per request"
-            />
-          </template>
+        <template #media>
+          <Illustration
+            name="runtime"
+            aria-label="One request reaching a workload, which starts an isolate per request"
+          />
+        </template>
 
-          <template #actions>
-            <Button
-              label="Read the architecture"
-              kind="secondary"
-              size="small"
-              :href="DOCS"
-              icon="pi pi-chevron-right"
-              icon-position="trailing"
-              animated
-            />
-          </template>
-        </MediaSplit>
-      </FrameBox>
+        <template #actions>
+          <Button
+            label="Read the architecture"
+            kind="secondary"
+            size="small"
+            :href="DOCS"
+            icon="pi pi-chevron-right"
+            icon-position="trailing"
+            animated
+          />
+        </template>
+      </MediaSplit>
     </SectionModule>
 
     <SectionGap hatch />
@@ -547,17 +538,17 @@ yarn azion deploy`,
       :divided="false"
       :padded="false"
     >
-      <FrameBox
+      <BandStack
+        sticky
         flush
-        borders="y"
-        marks="bottom"
       >
         <MediaSplit
+          media-padded
           title="Deploy with confidence, even on Fridays"
           description="Go from localhost to every location with one command. The CLI builds the application, creates the workload the first time, and updates it after that."
         >
           <template #media>
-            <div class="min-w-0 rounded-(--shape-elements) shadow-(--shadow-sm)">
+            <div class="w-full min-w-0 rounded-(--shape-elements) shadow-(--shadow-sm)">
               <CodeBlock
                 :tabs="DEPLOY_TABS"
                 default-value="npm"
@@ -566,41 +557,24 @@ yarn azion deploy`,
             </div>
           </template>
         </MediaSplit>
-      </FrameBox>
-    </SectionModule>
 
-    <SectionModule
-      :divided="false"
-      :padded="false"
-    >
-      <FrameBox
-        flush
-        borders="y"
-        marks="bottom"
-      >
-        <div
-          class="flex flex-col gap-(--spacing-xs) p-(--spacing-xl) lg:flex-row lg:items-baseline lg:gap-(--spacing-xl)"
+        <FrameBox
+          borders="none"
+          marks="all"
         >
-          <h2 class="m-0 shrink-0 text-balance text-heading-xs text-(--text-default)">
-            …or by clicking merge
-          </h2>
-          <p class="m-0 text-pretty text-body-md text-(--text-muted)">
-            Connect the repository once and a merge to your production branch builds the application
-            and promotes it to the workload, with the deployment recorded either way.
-          </p>
-        </div>
-      </FrameBox>
-    </SectionModule>
+          <div
+            class="flex flex-col gap-(--spacing-xs) bg-(--bg-canvas) p-(--spacing-xl) lg:flex-row lg:items-baseline lg:gap-(--spacing-xl)"
+          >
+            <h2 class="m-0 shrink-0 text-balance text-heading-xs text-(--text-default)">
+              …or by clicking merge
+            </h2>
+            <p class="m-0 text-pretty text-body-md text-(--text-muted)">
+              Connect the repository once and a merge to your production branch builds the
+              application and promotes it to the workload, with the deployment recorded either way.
+            </p>
+          </div>
+        </FrameBox>
 
-    <SectionModule
-      :divided="false"
-      :padded="false"
-    >
-      <FrameBox
-        flush
-        borders="y"
-        marks="bottom"
-      >
         <MediaSplit
           :media-href="DOCS"
           title="Go fast, or slow"
@@ -625,7 +599,7 @@ yarn azion deploy`,
             />
           </template>
         </MediaSplit>
-      </FrameBox>
+      </BandStack>
     </SectionModule>
 
     <SectionGap hatch />
