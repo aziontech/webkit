@@ -138,6 +138,25 @@ describe('Hero', () => {
     expect(getByTestId('marketing-texture-material')).toHaveAttribute('data-fade', 'bottom')
   })
 
+  it('paints the texture at the medium pitch by default', () => {
+    const { getByTestId } = render(Hero, {
+      props: { texture: 'dots' },
+      slots: { default: '<h1>Headline</h1>' }
+    })
+    expect(getByTestId('marketing-texture-material')).toHaveAttribute('data-size', 'medium')
+  })
+
+  it.each(['small', 'medium', 'large'] as const)(
+    'passes the %s texture size down to the layer it paints',
+    (textureSize) => {
+      const { getByTestId } = render(Hero, {
+        props: { texture: 'dots', textureSize },
+        slots: { default: '<h1>Headline</h1>' }
+      })
+      expect(getByTestId('marketing-texture-material')).toHaveAttribute('data-size', textureSize)
+    }
+  )
+
   it('renders no asset window when neither slot is filled', () => {
     const { getByTestId } = render(Hero, { slots: { default: '<h1>Headline</h1>' } })
     const root = getByTestId(TESTID)
@@ -207,6 +226,22 @@ describe('Hero', () => {
     expect(backdrop.closest('[data-floor]')).toBeNull()
     expect(floor).toHaveAttribute('data-kind', 'pixelate')
     expect(floor.closest('[data-floor]')).not.toBeNull()
+  })
+
+  it('sizes the backdrop texture and the floor texture independently', () => {
+    const { getAllByTestId } = render(Hero, {
+      props: {
+        texture: 'dots',
+        textureSize: 'small',
+        floorTexture: 'pixelate',
+        floorTextureSize: 'large'
+      },
+      slots: { default: '<h1>Headline</h1>' }
+    })
+    const [backdrop, floor] = getAllByTestId('marketing-texture-material')
+
+    expect(backdrop).toHaveAttribute('data-size', 'small')
+    expect(floor).toHaveAttribute('data-size', 'large')
   })
 
   it('lets the bottom slot share the window with the floor texture', () => {

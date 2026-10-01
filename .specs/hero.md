@@ -4,9 +4,9 @@ category: marketing
 structure: composition
 status: approved
 spec_version: 2
-checksum: a54326e6694debdff311cb711bcc02ac2e8074671c484dfaa24c3bae2bfd20bd
+checksum: a22234248b768807348910e62f1e7bfce8d35f82edb313bf94dba52c17d44d6d
 created: 2026-09-22
-last_updated: 2026-09-30
+last_updated: 2026-10-01
 ---
 
 # Hero — Component Spec
@@ -34,7 +34,7 @@ The opening band of a page: a full-bleed section spanning the whole viewport wid
 
 - `section-container` — the framed column below it; this band's `border-b` is that column's top edge.
 - `section-module` — the brick stacked inside that column.
-- `texture-material` — the backdrop the `texture` prop paints, and what the `background` slot usually holds.
+- `texture-material` — the backdrop the `texture` and `floorTexture` props paint, at the pitch `textureSize` and `floorTextureSize` set; reach for the `background` slot only when the layer needs more than kind, size and fade.
 - `media-split` — the same copy-beside-media shape at section scale, rendering an `h2`.
 - `banner` — the mid-page announcement band.
 
@@ -97,8 +97,10 @@ The standalone imports stay available and are the tree-shaking path — `@aziont
 | `padded` | `boolean` | `true` | false | Apply the band's own vertical rhythm. The inline inset is always applied. |
 | `size` | `HeroSize` | `'medium'` | false | Vertical rhythm the band applies when `padded`, equal above and below; `large` is the opening a page leads with. |
 | `texture` | `TextureMaterialKind` | `'none'` | false | Paint this texture behind the band's content; `none` leaves the backdrop to the `background` slot. |
+| `textureSize` | `TextureMaterialSize` | `'medium'` | false | Pitch of the tiling the `texture` prop paints — how far apart its cells sit. |
 | `textureFade` | `TextureMaterialFade` | `'none'` | false | Fade applied to the layer the `texture` prop paints. |
 | `floorTexture` | `TextureMaterialKind` | `'none'` | false | Paint this texture standing on the band's floor, filling the `bottom` window under the brand strip. |
+| `floorTextureSize` | `TextureMaterialSize` | `'medium'` | false | Pitch of the tiling the `floorTexture` prop paints — how far apart its cells sit. |
 | `align` | `HeroAlign` | `'center'` | false | Where the content column sits vertically when the band fills a screen. |
 | `mediaAlign` | `HeroMediaAlign` | `'center'` | false | Where the `media` slot sits in its column: `center` balances it in the column, `end` sets its end edge on the container boundary, past the inline inset, from `md` up. |
 | `offset` | `string` | `''` | false | Height of the fixed chrome above the band, subtracted from the viewport when `kind` is `screen`; any CSS length. |
@@ -165,7 +167,7 @@ _none_
 | floor texture ink | `var(--banner-floor-ink, 0.6)` |
 | band rule | `var(--border-default)` |
 | band inset | `var(--layout-boundary-inline)` |
-| band rhythm (`size` medium) | `var(--spacing-xl)` |
+| band rhythm (`size` medium) | `var(--spacing-xxl)` |
 | band rhythm (`size` large) | `calc(var(--spacing-xxl) * 2)` |
 | media column gap | `var(--spacing-xl)` from `md` up, `var(--spacing-xxl)` stacked |
 | media end bleed (`mediaAlign` end) | `var(--layout-boundary-inline)` |

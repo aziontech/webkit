@@ -3,7 +3,8 @@
 
   import TextureMaterial, {
     type TextureMaterialFade,
-    type TextureMaterialKind
+    type TextureMaterialKind,
+    type TextureMaterialSize
   } from '../texture-material/texture-material.vue'
 
   // Loaded on demand: a band without a strip must not pay for the strip or its mark
@@ -43,10 +44,14 @@
     size?: HeroSize
     /** Paint this texture behind the band's content; `none` leaves the backdrop to the `background` slot. */
     texture?: TextureMaterialKind
+    /** Pitch of the tiling the `texture` prop paints — how far apart its cells sit. */
+    textureSize?: TextureMaterialSize
     /** Fade applied to the layer the `texture` prop paints. */
     textureFade?: TextureMaterialFade
     /** Paint this texture standing on the band's floor, filling the `bottom` window under the brand strip. */
     floorTexture?: TextureMaterialKind
+    /** Pitch of the tiling the `floorTexture` prop paints — how far apart its cells sit. */
+    floorTextureSize?: TextureMaterialSize
     /** Where the content column sits vertically when the band fills a screen. */
     align?: HeroAlign
     /** Where the `media` slot sits in its column: `center` balances it in the column, `end` sets its end edge on the container boundary, past the inline inset, from `md` up. */
@@ -70,8 +75,10 @@
     padded: true,
     size: 'medium',
     texture: 'none',
+    textureSize: 'medium',
     textureFade: 'none',
     floorTexture: 'none',
+    floorTextureSize: 'medium',
     align: 'center',
     mediaAlign: 'center',
     offset: '',
@@ -131,6 +138,7 @@
         <TextureMaterial
           v-if="texture !== 'none'"
           :kind="texture"
+          :size="textureSize"
           :fade="textureFade"
         />
 
@@ -154,7 +162,7 @@
       :data-padded="props.padded || null"
       :data-size="size"
       :data-align="align"
-      class="relative mx-auto w-full px-(--layout-boundary-inline) [z-index:var(--banner-z-content,10)] data-[kind=screen]:flex data-[kind=screen]:flex-1 data-[kind=screen]:flex-col data-[kind=screen]:data-[align=top]:justify-start data-[kind=screen]:data-[align=center]:justify-center data-[kind=screen]:data-[align=bottom]:justify-end data-[width=3xl]:max-w-(--container-3xl) data-[width=4xl]:max-w-(--container-4xl) data-[width=5xl]:max-w-(--container-5xl) data-[width=6xl]:max-w-(--container-6xl) data-[width=7xl]:max-w-(--container-7xl) data-[width=site]:max-w-(--layout-measure-site) data-[width=full]:max-w-none data-[padded]:data-[size=medium]:py-(--spacing-xl) data-[padded]:data-[size=large]:py-[calc(var(--spacing-xxl)*2)]"
+      class="relative mx-auto w-full px-(--layout-boundary-inline) [z-index:var(--banner-z-content,10)] data-[kind=screen]:flex data-[kind=screen]:flex-1 data-[kind=screen]:flex-col data-[kind=screen]:data-[align=top]:justify-start data-[kind=screen]:data-[align=center]:justify-center data-[kind=screen]:data-[align=bottom]:justify-end data-[width=3xl]:max-w-(--container-3xl) data-[width=4xl]:max-w-(--container-4xl) data-[width=5xl]:max-w-(--container-5xl) data-[width=6xl]:max-w-(--container-6xl) data-[width=7xl]:max-w-(--container-7xl) data-[width=site]:max-w-(--layout-measure-site) data-[width=full]:max-w-none data-[padded]:data-[size=medium]:py-(--spacing-xxl) data-[padded]:data-[size=large]:py-[calc(var(--spacing-xxl)*2)]"
     >
       <div
         v-if="hasMedia"
@@ -187,6 +195,7 @@
         <TextureMaterial
           v-if="hasFloorTexture"
           :kind="floorTexture"
+          :size="floorTextureSize"
           class="[mask-image:linear-gradient(to_right,black_0%,color-mix(in_srgb,black_30%,transparent)_40%,color-mix(in_srgb,black_30%,transparent)_62%,black_100%)] [mask-mode:alpha] [opacity:var(--banner-floor-ink,0.6)]"
         />
 
