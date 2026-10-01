@@ -149,8 +149,8 @@
 
   const solutionGroups = [
     {
-      label: 'By Use Case',
-      href: '/site/solutions#use-cases',
+      label: 'By Need',
+      href: '/site/solutions#needs',
       items: [
         {
           label: 'Build and Run Applications',
@@ -160,27 +160,27 @@
         {
           label: 'Improve Application Performance and Reliability',
           description: 'Faster, always-on delivery',
-          href: '/site/solutions#use-cases'
+          href: '/site/solutions/performance'
         },
         {
           label: 'Build and Run AI Workloads',
           description: 'Infrastructure for AI workloads',
-          href: '/site/solutions#use-cases'
+          href: '/site/solutions/ai'
         },
         {
           label: 'Secure Applications and Networks',
           description: 'End-to-end security',
-          href: '/site/solutions#use-cases'
+          href: '/site/solutions/security'
         },
         {
           label: 'Deliver Media and Streaming Content',
           description: 'Low-latency video and live streams',
-          href: '/site/solutions#use-cases'
+          href: '/site/solutions/streaming'
         }
       ]
     },
     {
-      label: 'By Industry',
+      label: 'By Industries',
       href: '/site/solutions#industries',
       items: [
         {

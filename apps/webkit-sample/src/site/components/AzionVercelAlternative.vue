@@ -12,7 +12,7 @@
   //   2  "Why Azion" title + first three cells             SectionTitle in #header + CardGrid
   //   3  the second three cells                            the same grid's second row
   //   4  spacer                                            SectionGap hatch
-  //   5  twelve client marks + one quote                   LogoWall + Quote in its #aside
+  //   5  six client marks + one quote                      LogoWall + Quote in its #aside
   //   6  spacer                                            SectionGap hatch
   //   7  "Comparison" title + the capability matrix        SectionTitle in #header + a real table
   //   8  spacer                                            SectionGap hatch
@@ -72,8 +72,14 @@
   // mark under that name), and the first cell of the quote band's grid is `dzn-logo.svg`
   // carrying `alt="DNZ"` (NZN is this repo's name for that client, and what the file draws).
   // `Magazine Luiza` is `Magalu` here for the same reason — one client, our registry's name.
+  // The four marks the quote band names that are not CLIENTS registry entries; Vite resolves
+  // each to an asset URL, exactly as the registry does.
+  import arezzo from '@aziontech/webkit/assets/clients/dark/clients/arezzo-logo.svg'
+  import axur from '@aziontech/webkit/assets/clients/dark/clients/axur-logo.svg'
+  import contabilizei from '@aziontech/webkit/assets/clients/dark/clients/contabilizei-logo.svg'
+  import { CLIENTS } from '@aziontech/webkit/assets/clients/registry'
+  import { competitor } from '@aziontech/webkit/assets/competitors/registry'
   import Brand from '@aziontech/webkit/brand'
-  import Ticker from '@aziontech/webkit/ticker'
   import Button from '@aziontech/webkit/button'
   import CallToAction from '@aziontech/webkit/call-to-action'
   import CardGrid from '@aziontech/webkit/card-grid'
@@ -88,14 +94,7 @@
   import SectionGap from '@aziontech/webkit/section-gap'
   import SectionModule from '@aziontech/webkit/section-module'
   import SectionTitle from '@aziontech/webkit/section-title'
-  // The four marks the quote band names that are not CLIENTS registry entries; Vite resolves
-  // each to an asset URL, exactly as the registry does.
-  import arezzo from '@shared/assets/clients/dark/clients/arezzo-logo.svg'
-  import axur from '@shared/assets/clients/dark/clients/axur-logo.svg'
-  import contabilizei from '@shared/assets/clients/dark/clients/contabilizei-logo.svg'
-  import crefisa from '@shared/assets/clients/dark/clients/crefisa-logo.svg'
-  import { CLIENTS } from '@shared/assets/clients/index.js'
-  import { competitor } from '@shared/assets/competitors/index.js'
+  import Ticker from '@aziontech/webkit/ticker'
   import ClientMark from '@shared/ui/brand/ClientMark.vue'
   import { useRouter } from 'vue-router'
 
@@ -171,20 +170,14 @@
   ]
 
   // ── Band 5 — the marks, and one client's sentence ─────────────────────────────
-  // Twelve cells in the source's order; Radware appears twice, as it does on the source.
+  // The first six cells in the source's order.
   const STORY_CLIENTS = [
-    registered('NZN'),
+    { name: 'NZN', logo: registered('NZN').logo },
     { name: 'Axur', logo: axur, artwork: 'light' },
     registered('Radware'),
     { name: 'Arezzo', logo: arezzo, artwork: 'light' },
     { name: 'Contabilizei', logo: contabilizei, artwork: 'light' },
-    registered('Magalu'),
-    registered('Fourbank'),
-    registered('Radware'),
-    { name: 'Crefisa', logo: crefisa, artwork: 'light' },
-    registered('Netshoes'),
-    registered('Dafiti'),
-    registered('Global Fashion Group')
+    registered('Magalu')
   ]
 
   // The wall's `items` are the list it loops over; every cell's picture is drawn by the
@@ -432,14 +425,13 @@
     <SectionGap hatch />
 
     <!-- ── Band 5 — the marks, and one client's sentence ────────────────────────
-         The design system's own client wall: twelve marks on the start edge, one of those
+         The design system's own client wall: six marks on the start edge, one of those
          clients speaking on the end edge, which is exactly what LogoWall's `aside` draws. The
          marks are a static grid, not this site's marquee — the source lays them out as a block
          of twelve beside a quote, and a marquee in half a column shows two marks at a time.
 
-         The marks come from the CLIENTS registry, which places each one per theme (Dafiti's
-         file is `fill="currentColor"`, Netshoes' is purple), so they render through the wall's
-         `mark` slot as ClientMark rather than as the raw `src` LogoWall would otherwise build.
+         The marks come from the CLIENTS registry, which places each one per theme, so they
+         render through the wall's `mark` slot as ClientMark rather than as the raw `src` LogoWall would otherwise build.
          `items` stays the list they are drawn from, in the source's order. -->
     <SectionModule
       :divided="false"
@@ -458,7 +450,7 @@
           <template #mark="{ index }">
             <ClientMark
               :client="STORY_CLIENTS[index]"
-              monochrome
+              colored
               mark="h-8 w-auto max-w-full object-contain"
             />
           </template>
@@ -482,7 +474,7 @@
               </template>
               <template #actions>
                 <Button
-                  label="Clients"
+                  label="Customers"
                   kind="outlined"
                   size="large"
                   :href="CLIENT_STORIES"

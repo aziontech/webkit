@@ -22,6 +22,7 @@ import AzionDocs from '@site/docs/views/AzionDocs.vue'
 import AzionDocsAgentPage from '@site/docs/views/AzionDocsAgentPage.vue'
 import AzionDocsAgentSetup from '@site/docs/views/AzionDocsAgentSetup.vue'
 import AzionDocsPage from '@site/docs/views/AzionDocsPage.vue'
+import LandingAiWorkloads from '@site/views/LandingAiWorkloads.vue'
 import LandingApplicationAccelerator from '@site/views/LandingApplicationAccelerator.vue'
 import LandingAzion from '@site/views/LandingAzion.vue'
 import LandingAzionHeros from '@site/views/LandingAzionHeros.vue'
@@ -35,10 +36,13 @@ import LandingFunctions from '@site/views/LandingFunctions.vue'
 import LandingLearning from '@site/views/LandingLearning.vue'
 import LandingOurNetwork from '@site/views/LandingOurNetwork.vue'
 import LandingPartners from '@site/views/LandingPartners.vue'
+import LandingPerformance from '@site/views/LandingPerformance.vue'
 import LandingPricing from '@site/views/LandingPricing.vue'
 import LandingProducts from '@site/views/LandingProducts.vue'
 import LandingRetail from '@site/views/LandingRetail.vue'
+import LandingSecurity from '@site/views/LandingSecurity.vue'
 import LandingSolutions from '@site/views/LandingSolutions.vue'
+import LandingStreaming from '@site/views/LandingStreaming.vue'
 import LandingSuccessCases from '@site/views/LandingSuccessCases.vue'
 import LandingTechnology from '@site/views/LandingTechnology.vue'
 import LandingVercelAlternative from '@site/views/LandingVercelAlternative.vue'
@@ -91,24 +95,28 @@ export const siteRoutes = [
   { path: '/site/products/our-network', name: 'site-our-network', component: LandingOurNetwork },
 
   // ══ Solutions ═════════════════════════════════════════════════════════════════════
-  // The index, and one page per solution under it. A solution page argues an INDUSTRY, a
-  // USE CASE or an AUDIENCE, where a product page argues one product and /site/home argues
+  // The index, and one page per solution under it. A solution page argues a NEED or an
+  // INDUSTRY, where a product page argues one product and /site/home argues
   // the platform. The index says which is which and opens each of them; the Solutions
-  // mega-menu's two group headings point at its `#use-cases` and `#industries` anchors.
+  // mega-menu's two group headings point at its `#needs` and `#industries` anchors.
   { path: '/site/solutions', name: 'site-solutions', component: LandingSolutions },
-  // By INDUSTRY. The Solutions mega-menu's Financial Services entry points here.
+  // By INDUSTRIES. The Solutions mega-menu's Financial Services entry points here.
   {
     path: '/site/solutions/financial-services',
     name: 'site-financial-services',
     component: LandingFinancialServices
   },
-  // By USE CASE. The Solutions mega-menu's `By Use Case › Web Apps` entry points here.
+  // By NEED. The Solutions mega-menu's `By Need › Web Apps` entry points here.
   { path: '/site/solutions/web-apps', name: 'site-web-apps', component: LandingWebApps },
-  // By AUDIENCE: the reader is the team building the digital product, not the sector it
-  // serves. The Solutions mega-menu's `By Industry › Technology` entry points here.
+  { path: '/site/solutions/ai', name: 'site-ai-workloads', component: LandingAiWorkloads },
+  { path: '/site/solutions/performance', name: 'site-performance', component: LandingPerformance },
+  { path: '/site/solutions/security', name: 'site-security', component: LandingSecurity },
+  { path: '/site/solutions/streaming', name: 'site-streaming', component: LandingStreaming },
+  // By INDUSTRIES: the technology sector. The Solutions mega-menu's
+  // `By Industries › Technology` entry points here.
   { path: '/site/solutions/technology', name: 'site-technology', component: LandingTechnology },
-  // By INDUSTRY like Financial Services: the storefront argument. The Solutions mega-menu's
-  // `By Industry › Retail` entry points here.
+  // By INDUSTRIES like Financial Services: the storefront argument. The Solutions mega-menu's
+  // `By Industries › Retail` entry points here.
   { path: '/site/solutions/retail', name: 'site-retail', component: LandingRetail },
 
   // ══ Guides ════════════════════════════════════════════════════════════════════════

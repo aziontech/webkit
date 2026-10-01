@@ -347,7 +347,7 @@ yarn azion deploy`,
         />
         <Button
           label="Docs"
-          kind="text"
+          kind="outlined"
           size="large"
           :href="DOCS"
           icon="pi pi-chevron-right"
@@ -655,7 +655,7 @@ yarn azion deploy`,
           <template #actions>
             <Button
               label="View success story"
-              kind="text"
+              kind="outlined"
               size="large"
               href="https://www.azion.com/en/success-case/herospark-30-percent-performance-azion/"
               icon="pi pi-chevron-right"
@@ -682,7 +682,7 @@ yarn azion deploy`,
           <template #actions>
             <Button
               :label="ON_DEMAND_LINK.label"
-              kind="text"
+              kind="outlined"
               size="large"
               :href="ON_DEMAND_LINK.href"
               icon="pi pi-chevron-right"

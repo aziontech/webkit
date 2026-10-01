@@ -137,51 +137,19 @@
        under the viewport — 231.8 of it at a 900-tall screen. Every number below is set
        against that. -->
   <Hero
-    kind="band"
     max-width="site"
+    size="large"
     texture="dots"
-    texture-fade="bottom"
-    :padded="false"
+    texture-fade="top"
   >
-    <!-- THE BAND'S AIR IS ALL AT THE TOP, and that asymmetry is the whole trick. A 56px
-         headline sitting 48px under the nav reads as crammed against it; `--spacing-xxl`
-         (96px) above gives the texture room to register and the headline room to land.
-         The band opens and closes on `--spacing-xxl` — the top rung of the scale, and the
-         most the block axis can take (there is no rung above it). The wrapper exists only
-         to carry it: `padded` would apply the band's own `--spacing-xl`, one rung short.
-
-         THE TITLE BLOCK BREATHES ON ITS OWN MARGIN. `Hero.Title` sets `--spacing-md` (16px)
-         between every part of the block, which is right for a heading and tight for a 56px
-         one — headline and description read as glued. The description takes its own
-         `mt-(--spacing-md)`, which STACKS on the flex gap (a flex item's margin adds to it)
-         for 32px, so the pair reads as headline-then-support. It is a margin and not a
-         wider `gap` class because `Hero.Title` composes its own classes without `cn`, so a
-         second `gap-*` from here would win or lose on stylesheet order, not on intent.
-
-         ONE MEASURE, ON THE BLOCK, NOT TWO ON ITS PARTS. `--container-4xl` on the wrapper
-         is what both the headline and the description read, so the block has a single
-         measure instead of a per-element cap that has to be kept in step. The headline
-         folds to two lines at 56px there, which is the shape a hero headline wants.
-
-         The description runs on its OWN, much narrower measure — `--container-md` — so it
-         breaks to two lines under the headline instead of running the block's full width.
-         472px is the rung that breaks it on the SENTENCE, one per line; the wider rungs all
-         break mid-phrase (`2xl` leaves "you grow." as an 88px widow, `xl` splits "and /
-         scale", `lg` splits "Start / free", which is the page's own CTA). The paragraph is
-         764px set solid and the type token's wrap style wins over `text-pretty`, so the
-         break has to be chosen by measure rather than left to the browser to balance.
-
-         The page's opening statement, and the only thing on the band: the tiers are the
-         page's argument, so the hero states the offer and hands straight over to them. It
-         opens on the page's own boundary, the vertical every plan name and matrix row label
-         below it starts at. -->
-    <div class="max-w-(--container-4xl) py-(--spacing-xxl)">
-      <Hero.Title
-        title="Plans for every stage of your application"
-        description="Every product and feature is available on every plan. Start free and scale as you grow."
-        class="[&>p]:mt-(--spacing-md) [&>p]:max-w-(--container-md)"
-      />
-    </div>
+    <Hero.Title
+      max-width="lg"
+      centered
+      eyebrow="Pricing"
+      class="max-w-(--container-md)!"
+      title="Plans for every stage of your application"
+      description="Every product and feature is available on every plan. Start free and scale as you grow."
+    />
   </Hero>
 
   <!-- ══ The framed column ═════════════════════════════════════════════════ ─

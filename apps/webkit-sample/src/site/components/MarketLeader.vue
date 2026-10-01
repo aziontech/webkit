@@ -29,37 +29,44 @@
   const recognitions = [
     {
       text: 'Named a Leader and Fast Mover, and the only vendor whose platform meets every key criterion the report sets for a full-stack edge deployment.',
-      jobTitle: 'GigaOm Radar for Full-Stack Edge Deployments v3 — May 2026',
+      name: 'GigaOm Radar for Full-Stack Edge Deployments v3',
+      jobTitle: 'May 2026',
       firm: FIRMS.gigaom
     },
     {
       text: 'Evaluated as a Strong Performer among the edge development platforms that matter most.',
-      jobTitle: 'The Forrester Wave™: Edge Development Platforms, Q1 2026 — March 2026',
+      name: 'The Forrester Wave™: Edge Development Platforms',
+      jobTitle: 'March 2026',
       firm: FIRMS.forrester
     },
     {
       text: 'Covered as a vendor in the market guide that defines the edge distribution platform category, in two consecutive editions.',
-      jobTitle: 'Gartner Market Guide for Edge Distribution Platforms — November 2025',
+      name: 'Gartner Market Guide for Edge Distribution Platforms',
+      jobTitle: 'November 2025',
       firm: FIRMS.gartner
     },
     {
       text: 'Recognized as Latin America Company of the Year in the edge distribution platform industry, after being profiled among the Companies to Action on the Frost Radar™.',
-      jobTitle: 'Frost & Sullivan, 2026 Latin America Company of the Year — June 2026',
+      name: 'Frost & Sullivan Latin America Company of the Year',
+      jobTitle: 'June 2026',
       firm: FIRMS.frost
     },
     {
       text: 'Positioned as a Challenger and Fast Mover, with the application and API security stack evaluated as one platform rather than a set of bolt-ons.',
-      jobTitle: 'GigaOm Radar for Application and API Security v5 — March 2026',
+      name: 'GigaOm Radar for Application and API Security v5',
+      jobTitle: 'March 2026',
       firm: FIRMS.gigaom
     },
     {
       text: 'Recognized as a Leader in CDN, Web Security, and DDoS Protection, and a High Performer in Cloud Security, WAF, Bot Detection and Mitigation, SSL & TLS Certificate Tools, and API Security Tools.',
-      jobTitle: 'G2 Spring 2026 Reports',
+      name: 'G2 Reports',
+      jobTitle: 'March 2026',
       firm: FIRMS.g2
     },
     {
       text: 'Recognized as a Leader in CDN and a High Performer in Web Security, DDoS Protection, WAF, Bot Detection and Mitigation, SSL & TLS Certificate Tools, and DNS Security Solution.',
-      jobTitle: 'G2 Winter 2026 Reports',
+      name: 'G2 Reports',
+      jobTitle: 'December 2025',
       firm: FIRMS.g2
     }
   ]
@@ -111,14 +118,16 @@
                 class="w-full bg-(--bg-surface)"
               >
                 <Quote
+                  kind="signed"
                   :text="recognition.text"
+                  :name="recognition.name"
                   :job-title="recognition.jobTitle"
                   class="p-(--spacing-xl)"
                 >
                   <template #mark>
                     <ClientMark
                       :client="recognition.firm"
-                      mark="h-8 w-auto"
+                      mark="h-8 w-auto max-w-40 object-contain"
                     />
                   </template>
                 </Quote>

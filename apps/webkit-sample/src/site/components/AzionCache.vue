@@ -60,7 +60,13 @@
   // registry entries but their marks are in `clients/dark/clients/`, so they are declared
   // locally (see STORY_CLIENTS); NZN has no mark in this repo at all and renders as
   // ClientMark's typographic wordmark, so no name is quietly dropped.
-  import Ticker from '@aziontech/webkit/ticker'
+  // The four client marks that are not CLIENTS registry entries; Vite resolves each to an
+  // asset URL, exactly as the registries do.
+  import arezzo from '@aziontech/webkit/assets/clients/dark/clients/arezzo-logo.svg'
+  import axur from '@aziontech/webkit/assets/clients/dark/clients/axur-logo.svg'
+  import contabilizei from '@aziontech/webkit/assets/clients/dark/clients/contabilizei-logo.svg'
+  import crefisa from '@aziontech/webkit/assets/clients/dark/clients/crefisa-logo.svg'
+  import { CLIENTS } from '@aziontech/webkit/assets/clients/registry'
   import Button from '@aziontech/webkit/button'
   import CallToAction from '@aziontech/webkit/call-to-action'
   import CardGrid from '@aziontech/webkit/card-grid'
@@ -75,14 +81,8 @@
   import SectionGap from '@aziontech/webkit/section-gap'
   import SectionModule from '@aziontech/webkit/section-module'
   import SectionTitle from '@aziontech/webkit/section-title'
+  import Ticker from '@aziontech/webkit/ticker'
   import Topic from '@aziontech/webkit/topic'
-  // The four client marks that are not CLIENTS registry entries; Vite resolves each to an
-  // asset URL, exactly as the registries do.
-  import arezzo from '@shared/assets/clients/dark/clients/arezzo-logo.svg'
-  import axur from '@shared/assets/clients/dark/clients/axur-logo.svg'
-  import contabilizei from '@shared/assets/clients/dark/clients/contabilizei-logo.svg'
-  import crefisa from '@shared/assets/clients/dark/clients/crefisa-logo.svg'
-  import { CLIENTS } from '@shared/assets/clients/index.js'
   import ClientMark from '@shared/ui/brand/ClientMark.vue'
   import { PRODUCT_STACK } from '@shared/ui/brand/strips.js'
   import { useRouter } from 'vue-router'
@@ -456,7 +456,7 @@
         />
         <Button
           label="Docs"
-          kind="text"
+          kind="outlined"
           size="large"
           :href="DOCS"
           icon="pi pi-chevron-right"
@@ -821,8 +821,8 @@
             </template>
             <template #actions>
               <Button
-                label="Clients"
-                kind="text"
+                label="Customers"
+                kind="outlined"
                 size="large"
                 href="/site/home"
                 icon="pi pi-chevron-right"

@@ -116,3 +116,59 @@ export const PRODUCT_STACK = [
   'sqlite',
   'drizzle'
 ]
+
+export const AI_CLIENT_STRIP = [
+  'nzn',
+  'herospark',
+  'agibank',
+  'axur',
+  'radware',
+  'america-movil',
+  'magalu',
+  'fourbank',
+  'caixa',
+  'netshoes',
+  'dafiti',
+  'global-fashion-group'
+]
+
+export const AI_STACK = ['openai', 'anthropic', 'groq', 'aws', 'gcp', 'azure']
+
+export const RETAIL_CLIENT_STRIP = [
+  'global-fashion-group',
+  'netshoes',
+  'dafiti',
+  'magalu',
+  'renner',
+  'gpa',
+  'america-movil',
+  'madeiramadeira',
+  'nzn'
+]
+
+export const SECURITY_CLIENT_STRIP = [
+  'nzn',
+  'axur',
+  'radware',
+  'contabilizei',
+  'magalu',
+  'fourbank',
+  'america-movil',
+  'netshoes',
+  'dafiti',
+  'global-fashion-group',
+  'gpa'
+]
+
+export const BUILD_CLIENT_STRIP = [
+  'nzn',
+  'axur',
+  'radware',
+  'contabilizei',
+  'magalu',
+  'fourbank',
+  'herospark',
+  'netshoes',
+  'dafiti',
+  'global-fashion-group'
+]

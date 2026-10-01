@@ -257,7 +257,7 @@
         <template #actions>
           <Button
             label="Apply for this position"
-            kind="primary"
+            kind="secondary"
             size="large"
             href="#apply"
             icon="pi pi-chevron-right"

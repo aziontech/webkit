@@ -41,8 +41,12 @@
   // ASSET GAPS: none. All 11 hero marks are CLIENTS entries. On the quote band, Axur,
   // Arezzo, Contabilizei and Crefisa are not registry entries but their marks live in
   // `clients/dark/clients/`, so they are declared locally — as AzionCache.vue does.
+  import arezzo from '@aziontech/webkit/assets/clients/dark/clients/arezzo-logo.svg'
+  import axur from '@aziontech/webkit/assets/clients/dark/clients/axur-logo.svg'
+  import contabilizei from '@aziontech/webkit/assets/clients/dark/clients/contabilizei-logo.svg'
+  import crefisa from '@aziontech/webkit/assets/clients/dark/clients/crefisa-logo.svg'
+  import { CLIENTS } from '@aziontech/webkit/assets/clients/registry'
   import BigNumbers from '@aziontech/webkit/big-numbers'
-  import Ticker from '@aziontech/webkit/ticker'
   import Button from '@aziontech/webkit/button'
   import CallToAction from '@aziontech/webkit/call-to-action'
   import CardGrid from '@aziontech/webkit/card-grid'
@@ -56,11 +60,7 @@
   import SectionModule from '@aziontech/webkit/section-module'
   import SectionTitle from '@aziontech/webkit/section-title'
   import Tag from '@aziontech/webkit/tag'
-  import arezzo from '@shared/assets/clients/dark/clients/arezzo-logo.svg'
-  import axur from '@shared/assets/clients/dark/clients/axur-logo.svg'
-  import contabilizei from '@shared/assets/clients/dark/clients/contabilizei-logo.svg'
-  import crefisa from '@shared/assets/clients/dark/clients/crefisa-logo.svg'
-  import { CLIENTS } from '@shared/assets/clients/index.js'
+  import Ticker from '@aziontech/webkit/ticker'
   import { NetworkBanner } from '@shared/ui/banners/index.js'
   import ClientMark from '@shared/ui/brand/ClientMark.vue'
   import { CLIENT_STRIP } from '@shared/ui/brand/strips.js'
@@ -235,7 +235,7 @@
         />
         <Button
           label="Talk to a Specialist"
-          kind="text"
+          kind="outlined"
           size="large"
           :href="CONTACT"
           icon="pi pi-chevron-right"
@@ -466,8 +466,8 @@
             >
               <template #actions>
                 <Button
-                  label="Clients"
-                  kind="text"
+                  label="Customers"
+                  kind="outlined"
                   size="large"
                   :href="CLIENT_STORIES"
                   icon="pi pi-chevron-right"

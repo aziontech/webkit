@@ -8,7 +8,7 @@
 </script>
 
 <template>
-  <SiteLayout>
+  <SiteLayout nav-overlay>
     <AzionHome />
   </SiteLayout>
 </template>

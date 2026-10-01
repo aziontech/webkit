@@ -55,6 +55,7 @@
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionModule from '@aziontech/webkit/section-module'
   import TextureMaterial from '@aziontech/webkit/texture-material'
+  import { CLIENT_STRIP } from '@shared/ui/brand/strips.js'
   import { useRouter } from 'vue-router'
 
   import { LEARNING_SUBJECTS } from '../data/learning.js'
@@ -67,33 +68,33 @@
   <Hero
     kind="band"
     max-width="5xl"
-    :padded="true"
+    size="large"
+    carousel
+    carousel-label="Trusted by mission-critical workloads"
+    :carousel-marks="CLIENT_STRIP"
   >
-    <div class="py-(--spacing-xxl)">
-      <Hero.Title
-        title="Learning Center"
-        description="Practical knowledge to speed up, secure, and scale applications."
-        class="[&>p]:mt-(--spacing-md) [&>p]:max-w-(--container-md)"
-      >
-        <template #actions>
-          <Button
-            label="See articles"
-            kind="secondary"
-            size="large"
-            href="#subjects"
-          />
-          <Button
-            label="Talk to a Specialist"
-            kind="outlined"
-            size="large"
-            href="/site/contact"
-            icon="pi pi-chevron-right"
-            icon-position="trailing"
-            animated
-          />
-        </template>
-      </Hero.Title>
-    </div>
+    <Hero.Title
+      title="Learning Center"
+      description="Practical knowledge to speed up, secure, and scale applications."
+    >
+      <template #actions>
+        <Button
+          label="See articles"
+          kind="secondary"
+          size="large"
+          href="#subjects"
+        />
+        <Button
+          label="Talk to a Specialist"
+          kind="outlined"
+          size="large"
+          href="/site/contact"
+          icon="pi pi-chevron-right"
+          icon-position="trailing"
+          animated
+        />
+      </template>
+    </Hero.Title>
   </Hero>
 
   <!-- ══ The framed column ══════════════════════════════════════════════════════

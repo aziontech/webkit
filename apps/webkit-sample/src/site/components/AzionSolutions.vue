@@ -1,8 +1,8 @@
 <script setup>
   // The solutions index — the destination the Solutions mega-menu has been describing, and
   // the counterpart to AzionProducts.vue: where that page's argument is the platform's
-  // shape, this one's is the READER's. A solution page argues an industry, a use case or an
-  // audience; a product page argues one product. The index says which is which and opens
+  // shape, this one's is the READER's. A solution page argues a need or an
+  // industry; a product page argues one product. The index says which is which and opens
   // each of them.
   //
   // It is composed the same way its sibling is — entirely from the marketing bands, with
@@ -10,8 +10,8 @@
   // pages that happen to list things.
   //
   // THE TWO GROUP ANCHORS ARE PART OF THE NAV CONTRACT. The Solutions mega-menu's headings
-  // point at `#use-cases` and `#industries`, exactly as the Products menu's four headings
-  // point at PlatformProducts' group ids, so a reader who opened the panel on `By Industry`
+  // point at `#needs` and `#industries`, exactly as the Products menu's four headings
+  // point at PlatformProducts' group ids, so a reader who opened the panel on `By Industries`
   // lands on that group rather than on the top of the page.
   //
   // FORM is the page language of CONTAINERS.md: a full-bleed `Hero` owning the top rule,
@@ -29,15 +29,21 @@
   import FrameBox from '@aziontech/webkit/frame-box'
   import Hero from '@aziontech/webkit/hero'
   import Illustration from '@aziontech/webkit/illustration'
+  import LogoWall from '@aziontech/webkit/logo-wall'
+  import Quote from '@aziontech/webkit/quote'
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
   import SectionModule from '@aziontech/webkit/section-module'
   import SectionTitle from '@aziontech/webkit/section-title'
-  import { CLIENT_STRIP } from '@shared/ui/brand/strips.js'
+  import ClientMark from '@shared/ui/brand/ClientMark.vue'
   import { RouterLink, useRouter } from 'vue-router'
+
+  import { BANKS_AND_RETAIL_WALL } from '../data/proof-wall.js'
 
   const router = useRouter()
   const goSignup = () => router.push('/signup')
+
+  const ZOOP = BANKS_AND_RETAIL_WALL.find((item) => item.alt === 'Zoop')
 
   // A card opens either one of this sample's own pages or the live azion.com page for a
   // solution it does not ship. The first is a RouterLink (routed, no reload), the second a
@@ -74,8 +80,8 @@
     }
   ]
 
-  // The two groups the Solutions mega-menu declares, in its order: use case first, then
-  // industry. `href` is the solution's own page where this sample ships one, and the live
+  // The two groups the Solutions mega-menu declares, in its order: need first, then
+  // industries. `href` is the solution's own page where this sample ships one, and the live
   // azion.com page where it does not — the same convention AzionProducts.vue's index uses.
   const useCases = [
     {
@@ -89,13 +95,13 @@
       name: 'ai-applications',
       title: 'AI',
       description: 'Run inference and agents next to the data they answer from.',
-      href: 'https://www.azion.com/en/solutions#ai'
+      href: '/site/solutions/ai'
     },
     {
       name: 'implement-api-gateway-security',
       title: 'Application Security',
       description: 'Filter, rate-limit and authenticate at the edge, before the origin sees it.',
-      href: 'https://www.azion.com/en/solutions/application-security/'
+      href: '/site/solutions/security'
     }
   ]
 
@@ -127,7 +133,7 @@
   // back up — and the one place the two groups and the migration guides sit in one list.
   const directory = [
     {
-      label: 'By Use Case',
+      label: 'By Need',
       items: [
         {
           icon: 'ai ai-edge-application',
@@ -136,21 +142,33 @@
           href: '/site/solutions/web-apps'
         },
         {
+          icon: 'pi pi-bolt',
+          title: 'Performance',
+          description: 'Faster, always-on delivery',
+          href: '/site/solutions/performance'
+        },
+        {
           icon: 'ai ai-edge-ai',
           title: 'AI',
           description: 'Inference and agents at the edge',
-          href: 'https://www.azion.com/en/solutions#ai'
+          href: '/site/solutions/ai'
         },
         {
           icon: 'ai ai-waf-rules',
           title: 'Application Security',
           description: 'WAF, bot management and API protection',
-          href: 'https://www.azion.com/en/solutions/application-security/'
+          href: '/site/solutions/security'
+        },
+        {
+          icon: 'pi pi-video',
+          title: 'Streaming',
+          description: 'Low-latency video and live streams',
+          href: '/site/solutions/streaming'
         }
       ]
     },
     {
-      label: 'By Industry',
+      label: 'By Industries',
       items: [
         {
           icon: 'pi pi-building-columns',
@@ -211,20 +229,16 @@
 
 <template>
   <!-- ══ The hero ═══════════════════════════════════════════════════════════════
-       The site's default opening: centred copy on the dot field, and the brand strip
-       standing on the band's own floor under an overline naming what the marks are evidence
-       of. `--banner-offset` is the sticky SiteNav's height, so the band still measures
-       exactly one screen with the nav above it. -->
+       The site's default opening: centred copy on the dot field. `--banner-offset` is the
+       sticky SiteNav's height, so the band still measures exactly one screen with the nav
+       above it. -->
   <Hero
     kind="screen"
     align="center"
     max-width="site"
     texture="dots"
     texture-fade="bottom"
-    carousel
-    carousel-label="Running these solutions in production"
-    :carousel-marks="CLIENT_STRIP"
-    class="[--banner-offset:3.5rem]"
+    offset="3.5rem"
   >
     <Hero.Title
       centered
@@ -283,18 +297,18 @@
 
     <SectionGap hatch />
 
-    <!-- ── By use case ──────────────────────────────────────────────────────────
-         The group's own anchor: the Solutions mega-menu's `By Use Case` heading points
+    <!-- ── By need ──────────────────────────────────────────────────────────────
+         The group's own anchor: the Solutions mega-menu's `By Need` heading points
          here, so a reader who opened the panel on it lands on this group. -->
     <SectionModule
-      id="use-cases"
+      id="needs"
       :divided="false"
       :padded="false"
       class="scroll-mt-(--spacing-xxl)"
     >
       <template #header>
         <SectionTitle
-          eyebrow="By use case"
+          eyebrow="By need"
           title="What you are building"
           description="The argument is the workload — the same one whatever sector runs it."
         />
@@ -331,8 +345,8 @@
 
     <SectionGap hatch />
 
-    <!-- ── By industry ──────────────────────────────────────────────────────────
-         The Solutions mega-menu's `By Industry` heading points here. -->
+    <!-- ── By industries ────────────────────────────────────────────────────────
+         The Solutions mega-menu's `By Industries` heading points here. -->
     <SectionModule
       id="industries"
       :divided="false"
@@ -341,7 +355,7 @@
     >
       <template #header>
         <SectionTitle
-          eyebrow="By industry"
+          eyebrow="By industries"
           title="Where you build it"
           description="Same platform, stated in the terms the sector is audited on."
         />
@@ -369,6 +383,68 @@
           </div>
         </RouterLink>
       </CardGrid>
+    </SectionModule>
+
+    <SectionGap hatch />
+
+    <SectionModule
+      :divided="false"
+      :padded="false"
+    >
+      <template #header>
+        <SectionTitle
+          eyebrow="Trusted by Industry Leaders"
+          title="Battle-Tested by the World's Largest Banks and E-commerce Companies"
+        />
+      </template>
+
+      <FrameBox
+        flush
+        borders="y"
+        marks="all"
+      >
+        <LogoWall
+          kind="rectangle"
+          aria-label="Banks and e-commerce companies running on Azion"
+          :items="BANKS_AND_RETAIL_WALL"
+        >
+          <template #mark="{ item }">
+            <ClientMark
+              :client="item.client"
+              :colored="item.colored"
+              mark="h-5 w-auto max-w-full object-contain sm:max-w-24"
+            />
+          </template>
+          <template #aside>
+            <Quote
+              kind="signed"
+              text='"Azion delivered the advanced protection and superior performance we needed, with fast implementation and immediate results."'
+              name="Ismael Aguilar"
+              job-title="Information Security Manager at Zoop"
+            >
+              <template #mark>
+                <ClientMark
+                  :client="ZOOP.client"
+                  colored
+                  mark="h-8 w-auto max-w-40 object-contain"
+                />
+              </template>
+              <template #actions>
+                <Button
+                  label="View success story"
+                  kind="secondary"
+                  size="large"
+                  :href="ZOOP.href"
+                  target="_blank"
+                  icon="pi pi-chevron-right"
+                  icon-position="trailing"
+                  animated
+                />
+              </template>
+            </Quote>
+          </template>
+        </LogoWall>
+      </FrameBox>
     </SectionModule>
 
     <SectionGap hatch />
