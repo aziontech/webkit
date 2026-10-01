@@ -1,5 +1,14 @@
 <script setup lang="ts">
-  import { type Component, computed, markRaw, ref, shallowRef, useAttrs, watch } from 'vue'
+  import {
+    type Component,
+    computed,
+    markRaw,
+    onScopeDispose,
+    ref,
+    shallowRef,
+    useAttrs,
+    watch
+  } from 'vue'
 
   import { brandMarkLabel, resolveBrandMark } from '../../../svg/brands/registry'
   import Overline from '../../overline/overline.vue'
@@ -44,8 +53,13 @@
   // flat duration would run a thirty-mark strip three times faster than an eleven-mark one.
   const SECONDS_PER_MARK = 2
 
+  const loop = ref<globalThis.HTMLElement | null>(null)
+  const track = ref<globalThis.HTMLElement | null>(null)
+  const repeats = ref(1)
+  const copies = computed(() => repeats.value * 2)
+
   const passDuration = computed(
-    () => props.duration || Math.round(props.marks.length * SECONDS_PER_MARK) || 1
+    () => Math.round((props.duration || props.marks.length * SECONDS_PER_MARK) * repeats.value) || 1
   )
 
   const artwork = shallowRef(new Map<string, Component>())
@@ -93,6 +107,28 @@
     },
     { immediate: true }
   )
+
+  const firstRow = computed(
+    () => (track.value?.firstElementChild as globalThis.HTMLElement | null) ?? null
+  )
+
+  const measureRepeats = () => {
+    const strip = loop.value?.clientWidth ?? 0
+    const row = firstRow.value?.offsetWidth ?? 0
+    repeats.value = row > 0 ? Math.max(1, Math.ceil(strip / row)) : 1
+  }
+
+  let observer: globalThis.ResizeObserver | null = null
+
+  watch([loop, firstRow], (elements) => {
+    observer?.disconnect()
+    observer = new globalThis.ResizeObserver(measureRepeats)
+    for (const element of elements) {
+      if (element) observer.observe(element)
+    }
+  })
+
+  onScopeDispose(() => observer?.disconnect())
 </script>
 
 <template>
@@ -113,25 +149,27 @@
     <!-- The mask fades both ends so a mark enters and leaves instead of popping in. -->
     <div
       v-if="resolved.length"
+      ref="loop"
       class="group/loop relative w-full overflow-hidden mask-[linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]"
     >
       <!-- The pass is set here, on the animated element: Tailwind declares `--animate-*` on
            `:root`, so a duration var inside that shorthand resolves there and never sees it. -->
       <div
+        ref="track"
         :style="{ animationDuration: `${passDuration}s` }"
         :data-loading="!ready || null"
         class="flex w-max animate-brand-marquee data-[loading]:invisible data-[loading]:[animation-play-state:paused] group-focus-within/loop:[animation-play-state:paused] group-hover/loop:[animation-play-state:paused] motion-reduce:w-full motion-reduce:animate-none motion-reduce:flex-wrap motion-reduce:justify-center"
       >
-        <!-- The row twice: the loop travels exactly -50%, so the duplicate lands where the
-             first copy started and the seam never shows. The trailing padding is the seam's
-             only gap, since `gap` draws nothing between the two copies. -->
+        <!-- The row in two equal halves: the loop travels exactly -50%, so the second half
+             lands where the first started and the seam never shows. The trailing padding is
+             the seam's only gap, since `gap` draws nothing between the copies. -->
         <ul
-          v-for="copy in 2"
+          v-for="copy in copies"
           :key="copy"
           :data-size="size"
-          :data-duplicate="copy === 2 || null"
+          :data-duplicate="copy > 1 || null"
           :aria-label="copy === 1 && ariaLabel ? ariaLabel : undefined"
-          :aria-hidden="copy === 2 ? 'true' : undefined"
+          :aria-hidden="copy > 1 ? 'true' : undefined"
           class="m-0 flex w-max shrink-0 list-none items-center p-0 data-[size=medium]:gap-(--spacing-4) data-[size=medium]:pr-(--spacing-4) data-[size=small]:gap-(--spacing-10) data-[size=small]:pr-(--spacing-10) md:data-[size=medium]:gap-(--spacing-8) md:data-[size=medium]:pr-(--spacing-8) motion-reduce:w-full motion-reduce:flex-wrap motion-reduce:justify-center motion-reduce:gap-(--spacing-md) motion-reduce:data-[duplicate]:hidden"
         >
           <li
