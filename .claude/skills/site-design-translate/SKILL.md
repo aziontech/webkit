@@ -1,6 +1,6 @@
 ---
 name: site-design-translate
-description: Translate a live marketing page (azion.com or any URL) into the webkit-sample Site, block for block, with its copy carried over verbatim and its layout re-expressed in our own page language — BannerContainer hero, SectionContainer column, SectionGap, FrameBox. Use when asked to recreate, reshape, port, or "translate" a website page into /site.
+description: Translate a live marketing page (azion.com or any URL) into the webkit-sample Site, block for block, with its copy carried over verbatim and its layout re-expressed in our own page language — Hero band, SectionContainer column, SectionGap, FrameBox. Use when asked to recreate, reshape, port, or "translate" a website page into /site.
 scope: webkit
 enforced_by: [migration, styling, dependencies, accessibility, no-invention, review]
 ---
@@ -57,7 +57,7 @@ say it is blocked.
 | Marker in `blocks.md` | What it means |
 | --- | --- |
 | `EMPTY (spacer)` | A rhythm band with no content. Ours is `<SectionGap hatch />`. |
-| `viewport-tall` | A band about one screen tall. Candidate for `BannerContainer hero`. |
+| `viewport-tall` | A band about one screen tall. Candidate for `Hero kind="screen"`. |
 | `repeating track (marquee)` | The band duplicates its own row for a CSS loop. It is **one** block, and the marks are listed once. |
 | `N columns` | Measured from the cells' left edges, not from class names. |
 | `horizontal scroller` | The band scrolls sideways: a marquee, a carousel, or a snap row. |
@@ -71,8 +71,8 @@ mapping is fixed — it is not a menu of options:
 
 | Source band | Our block |
 | --- | --- |
-| Opening band: `h1` + description + actions | `BannerContainer hero max-width="site"` holding `HeroTitle`, actions in its `#actions` slot |
-| A logo strip / marquee of marks | `BrandCarousel` — its `label` is the source's eyebrow, its `clients` the ordered mark list |
+| Opening band: `h1` + description + actions | `Hero kind="screen" max-width="site"` holding `Hero.Title`, actions in its `#actions` slot |
+| A logo strip / marquee of marks | `Ticker` — its `label` is the source's eyebrow, its `clients` the ordered mark list |
 | A band that is only a heading (± eyebrow, ± description) | `SectionTitle` (`kind="centered"` unless the source sets the heading and its description in two columns, then `kind="horizontal"`) |
 | A grid of product / capability links | `CardGrid variant="divider"` of `NavColumn` + `NavItem` |
 | A copy-beside-art band | One `FrameBox` with a `lg:grid-cols-2` inside; the art is a registered banner or an `Illustration` asset |
@@ -86,7 +86,7 @@ mapping is fixed — it is not a menu of options:
 Then assemble in the three-layer skeleton, and **only** that skeleton:
 
 ```
-BannerContainer hero max-width="site"   ← the opening band, full-bleed, owns border-b
+Hero kind="screen" max-width="site"     ← the opening band, full-bleed, owns border-b
 SectionContainer max-width="site"       ← every band after it, owns border-x
   SectionModule / SectionGap / FrameBox ← the bricks
 SiteFooter                              ← owns border-t
