@@ -4,9 +4,9 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 7d2e693289a349a49efa73aee7b15d4c4d63a150cf079014a5ac8bfa51d06b8d
+checksum: 6659a37f98367622760050a08412ec533b774b9d226486a001a7a32c45594f1c
 created: 2026-09-22
-last_updated: 2026-09-30
+last_updated: 2026-10-01
 ---
 
 # Quote — Component Spec
@@ -103,6 +103,7 @@ import Quote from '@aziontech/webkit/quote'
 - Highlighted: when `highlights` matches at least one phrase of `text`, the `blockquote` carries `data-highlighted` and its text recedes to the muted ink; each matched phrase is a `data-highlight` span in the default ink. A phrase absent from `text` is skipped, and when none match the quotation renders unhighlighted
 - In `highlight`, the likeness is drawn only when `photo` is given; there is no initials fallback
 - In `highlight`, the mark takes its own column beside the quotation from `md` up, and leads the block above it below `md`
+- In `highlight`, a quote stretched taller than its content by the band holding it gives the slack to the quotation: the attribution and the `actions` area floor at the bottom, so quotations of different lengths share one line for both
 - `signed` and `highlight` lead with the quotation glyph; it is decorative and `aria-hidden`, so the `blockquote`'s accessible text stays the quotation alone. `inline` draws none
 
 ## Motion & Animations

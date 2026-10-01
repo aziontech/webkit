@@ -85,11 +85,11 @@
     v-bind="$attrs"
     :data-testid="testId"
     :data-kind="kind"
-    class="group m-0 flex flex-col data-[kind=inline]:gap-(--spacing-lg) data-[kind=signed]:gap-(--spacing-sm) data-[kind=highlight]:gap-(--spacing-xl) data-[kind=highlight]:md:flex-row data-[kind=highlight]:md:flex-wrap data-[kind=highlight]:md:items-start"
+    class="group m-0 flex flex-col data-[kind=inline]:gap-(--spacing-lg) data-[kind=signed]:gap-(--spacing-sm) data-[kind=highlight]:gap-(--spacing-xl) data-[kind=highlight]:md:grid data-[kind=highlight]:md:grid-cols-1 data-[kind=highlight]:md:grid-rows-1"
   >
     <div
       v-if="hasMark"
-      class="group-data-[kind=inline]:flex group-data-[kind=inline]:h-6 group-data-[kind=inline]:items-center group-data-[kind=signed]:pb-(--spacing-md) group-data-[kind=highlight]:md:order-last group-data-[kind=highlight]:md:w-72 group-data-[kind=highlight]:md:shrink-0 group-data-[kind=highlight]:md:pt-[calc(1.5rem+var(--spacing-md))]"
+      class="group-data-[kind=inline]:flex group-data-[kind=inline]:h-6 group-data-[kind=inline]:items-center group-data-[kind=signed]:pb-(--spacing-md) group-data-[kind=highlight]:md:col-start-2 group-data-[kind=highlight]:md:row-start-1 group-data-[kind=highlight]:md:w-72 group-data-[kind=highlight]:md:pt-[calc(1.5rem+var(--spacing-md))]"
     >
       <slot name="mark">
         <img
@@ -103,7 +103,7 @@
     </div>
 
     <div
-      class="flex min-w-0 flex-col group-data-[kind=inline]:gap-(--spacing-md) group-data-[kind=signed]:gap-(--spacing-sm) group-data-[kind=highlight]:flex-1 group-data-[kind=highlight]:gap-(--spacing-xl)"
+      class="flex min-w-0 flex-col group-data-[kind=inline]:gap-(--spacing-md) group-data-[kind=signed]:gap-(--spacing-sm) group-data-[kind=highlight]:flex-1 group-data-[kind=highlight]:gap-(--spacing-xl) group-data-[kind=highlight]:md:col-start-1 group-data-[kind=highlight]:md:row-start-1"
     >
       <div
         class="flex flex-col group-data-[kind=signed]:gap-(--spacing-xs) group-data-[kind=highlight]:gap-(--spacing-md)"
@@ -144,7 +144,7 @@
 
       <figcaption
         v-if="hasAttribution"
-        class="flex items-center gap-(--spacing-md)"
+        class="flex items-center gap-(--spacing-md) group-data-[kind=highlight]:mt-auto"
       >
         <span
           v-if="kind === 'highlight' && photo"
@@ -175,7 +175,7 @@
 
     <div
       v-if="slots.actions"
-      class="mt-auto pt-(--spacing-md) group-data-[kind=highlight]:md:order-last group-data-[kind=highlight]:md:basis-full"
+      class="mt-auto pt-(--spacing-md) group-data-[kind=highlight]:md:col-start-1 group-data-[kind=highlight]:md:row-start-2"
     >
       <slot name="actions" />
     </div>
