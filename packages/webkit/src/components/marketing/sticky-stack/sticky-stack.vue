@@ -2,6 +2,8 @@
   import { useEventListener } from '@vueuse/core'
   import { computed, onMounted, onScopeDispose, ref, useAttrs, watch } from 'vue'
 
+  import TextureMaterial from '../texture-material/texture-material.vue'
+
   defineOptions({
     name: 'StickyStack',
     inheritAttrs: false
@@ -155,21 +157,31 @@
       data-sticky-stack-anchor
       aria-hidden="true"
       :style="{ '--sticky-stack-slot': index }"
-      class="pointer-events-none absolute left-0 hidden w-px lg:block lg:scroll-mt-[var(--sticky-stack-top,0)] lg:top-[calc(100dvh*var(--sticky-stack-dwell)*var(--sticky-stack-slot))]"
+      class="pointer-events-none absolute left-0 hidden w-px lg:block lg:scroll-mt-[var(--sticky-stack-top,0)] lg:top-[calc(100dvh*var(--sticky-stack-dwell)*var(--sticky-stack-slot)+var(--sticky-stack-top,0rem))]"
     />
 
     <div
       ref="frame"
-      class="lg:sticky lg:top-[var(--sticky-stack-top,0)] lg:h-[calc(100dvh-var(--sticky-stack-top,0rem))] lg:overflow-hidden"
+      class="lg:sticky lg:top-[var(--sticky-stack-top,0)] lg:h-[calc(100dvh-var(--sticky-stack-top,0rem))] lg:flex lg:flex-col lg:overflow-hidden"
     >
-      <div class="grid grid-cols-1 lg:h-full lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
-        <ol class="m-0 flex list-none flex-col p-0 lg:min-w-0 lg:self-start">
+      <div
+        aria-hidden="true"
+        class="relative hidden lg:block lg:min-h-0 lg:flex-1"
+      >
+        <TextureMaterial kind="lines" />
+      </div>
+      <div
+        class="grid w-full grid-cols-1 lg:shrink-0 lg:h-[var(--sticky-stack-height,100%)] lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:border-y-[length:var(--sticky-stack-frame-border,0)] lg:border-solid lg:border-(--border-default)"
+      >
+        <ol
+          class="m-0 flex list-none flex-col p-0 lg:min-w-0 lg:[align-self:var(--sticky-stack-align,start)]"
+        >
           <li
             v-for="(item, index) in items"
             :key="`${item.title}-${index}`"
             :data-active="isActive(index) || null"
             :data-complete="index < activeIndex || null"
-            class="group relative border-b border-(--border-default) px-(--spacing-xl) py-(--spacing-lg) last:border-b-0 lg:flex lg:flex-col lg:justify-center lg:data-[active]:min-h-(--sticky-stack-open)"
+            class="group relative border-b border-(--border-default) px-(--spacing-xl) py-(--spacing-lg) last:border-b-0 lg:flex lg:grow-0 lg:flex-col lg:justify-center lg:transition-[flex-grow] lg:duration-moderate-01 lg:ease-productive-entrance lg:data-[active]:min-h-(--sticky-stack-open) lg:data-[active]:grow motion-reduce:transition-none"
           >
             <h3
               class="m-0 text-heading-md text-(--text-muted) transition-[color,opacity] duration-moderate-01 ease-out group-data-[active]:text-(--text-default) group-data-[complete]:opacity-55 motion-reduce:transition-none"
@@ -248,6 +260,13 @@
             </div>
           </Transition>
         </div>
+      </div>
+
+      <div
+        aria-hidden="true"
+        class="relative hidden lg:block lg:min-h-0 lg:flex-1"
+      >
+        <TextureMaterial kind="lines" />
       </div>
     </div>
   </div>
