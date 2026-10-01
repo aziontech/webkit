@@ -10131,7 +10131,7 @@
           "notes": "The bands. Each direct child — including every child a `v-for` renders — is wrapped in its own frame and becomes one band; comment nodes are skipped."
         }
       ],
-      "purpose": "A run of framed bands that follow one another down the page, each one its own registration frame sharing a hairline with the next. With `sticky` on, each band pins under the site header a step lower than the band before it, so the run piles up as the reader scrolls and every band already read stays visible as a ledge above the one being read. The component owns the frames, the shared hairlines and the pin offsets; the bands themselves are whatever the consumer composes into the default slot — each direct child becomes one band. It carries no copy, heading or media of its own.",
+      "purpose": "A run of framed bands that follow one another down the page, each one drawn as two registration frames — its left half and its right half — sharing a hairline with the next. With `sticky` on, each band pins under the site header a step lower than the band before it, so the run piles up as the reader scrolls and every band already read stays visible as a ledge above the one being read. The component owns the band rules, the shared hairlines and the pin offsets, and by default every band is split into two frames: a `media-split` composed into the stack frames its copy cell and its media cell as two `frame-box`es, left and right, each with its four marks. The bands themselves are whatever the consumer composes into the default slot — each direct child becomes one band. It carries no copy, heading or media of its own.",
       "useWhen": [
         "For a run of peer bands — three to six `media-split`s, one per solution or capability — that should read as one sequence.",
         "With `sticky`, when the run is the page's centrepiece and the reader should feel each band land on the last.",
@@ -10144,7 +10144,7 @@
         "For a grid of cards → use `card-grid`."
       ],
       "related": [
-        "media-split` — the band this stack most often holds, typically at `size=\"large\"`.",
+        "media-split` — the band this stack holds, typically at `size=\"large\"`. Inside the stack it frames its own two cells, so leave its `framed` off.",
         "sticky-stack` — the scroll-driven sibling: one pinned frame whose open claim follows the scroll, instead of bands that pile up.",
         "frame-box` — the frame each band is drawn in.",
         "section-gap` — the spacer usually above the stack; pass `flush` so the first band does not draw a second rule under it."
@@ -10154,6 +10154,7 @@
         "Give every band the same height class (`media-split` `size=\"large\"`, same `align`), so the ledges line up as the pile grows.",
         "Pass `flush` when the element directly above the stack already draws a rule (a `section-gap`, another frame), so the first band does not draw a second one.",
         "Give each band an opaque fill (`media-split` paints its own cells). A pinned band covers the one before it, and a transparent band shows the one underneath through it.",
+        "Compose `media-split`s as the bands. The two frames are the band's own cells, so a child that is not a `media-split` carries no marks unless it frames itself — wrap it in a `frame-box` with `borders=\"none\"`.",
         "Render the bands with `v-for` directly in the default slot; each direct child is one band, so a wrapper element around them collapses the run into a single band."
       ]
     },
@@ -11082,6 +11083,13 @@
           "doc": "Paint this texture behind the band's content; `none` leaves the backdrop to the `background` slot."
         },
         {
+          "name": "textureSize",
+          "type": "TextureMaterialSize",
+          "default": "'medium'",
+          "required": "false",
+          "doc": "Pitch of the tiling the `texture` prop paints — how far apart its cells sit."
+        },
+        {
           "name": "textureFade",
           "type": "TextureMaterialFade",
           "default": "'none'",
@@ -11094,6 +11102,13 @@
           "default": "'none'",
           "required": "false",
           "doc": "Paint this texture standing on the band's floor, filling the `bottom` window under the brand strip."
+        },
+        {
+          "name": "floorTextureSize",
+          "type": "TextureMaterialSize",
+          "default": "'medium'",
+          "required": "false",
+          "doc": "Pitch of the tiling the `floorTexture` prop paints — how far apart its cells sit."
         },
         {
           "name": "align",
@@ -11189,7 +11204,7 @@
       "related": [
         "section-container` — the framed column below it; this band's `border-b` is that column's top edge.",
         "section-module` — the brick stacked inside that column.",
-        "texture-material` — the backdrop the `texture` prop paints, and what the `background` slot usually holds.",
+        "texture-material` — the backdrop the `texture` and `floorTexture` props paint, at the pitch `textureSize` and `floorTextureSize` set; reach for the `background` slot only when the layer needs more than kind, size and fade.",
         "media-split` — the same copy-beside-media shape at section scale, rendering an `h2`.",
         "banner` — the mid-page announcement band."
       ],
@@ -11259,6 +11274,13 @@
           "doc": "Paint this texture behind the band's content; `none` leaves the backdrop to the `background` slot."
         },
         {
+          "name": "textureSize",
+          "type": "TextureMaterialSize",
+          "default": "'medium'",
+          "required": "false",
+          "doc": "Pitch of the tiling the `texture` prop paints — how far apart its cells sit."
+        },
+        {
           "name": "textureFade",
           "type": "TextureMaterialFade",
           "default": "'none'",
@@ -11271,6 +11293,13 @@
           "default": "'none'",
           "required": "false",
           "doc": "Paint this texture standing on the band's floor, filling the `bottom` window under the brand strip."
+        },
+        {
+          "name": "floorTextureSize",
+          "type": "TextureMaterialSize",
+          "default": "'medium'",
+          "required": "false",
+          "doc": "Pitch of the tiling the `floorTexture` prop paints — how far apart its cells sit."
         },
         {
           "name": "align",
@@ -11366,7 +11395,7 @@
       "related": [
         "section-container` — the framed column below it; this band's `border-b` is that column's top edge.",
         "section-module` — the brick stacked inside that column.",
-        "texture-material` — the backdrop the `texture` prop paints, and what the `background` slot usually holds.",
+        "texture-material` — the backdrop the `texture` and `floorTexture` props paint, at the pitch `textureSize` and `floorTextureSize` set; reach for the `background` slot only when the layer needs more than kind, size and fade.",
         "media-split` — the same copy-beside-media shape at section scale, rendering an `h2`.",
         "banner` — the mid-page announcement band."
       ],
@@ -11432,7 +11461,7 @@
         {
           "name": "aside",
           "scope": "—",
-          "notes": "Content set beside the wall from `lg` up, centred in a panel that never sets the band's height (keep it short enough to fit two rows of squares from `xl`), such as one customer's `quote`, on a `--bg-canvas` panel padded by `--spacing-xl`; its child fills the panel's width. When it is empty the wall spans the full width."
+          "notes": "Content set beside the wall from `lg` up, centred in a panel that never sets the band's height (keep it short enough to fit two rows of squares from `xl`), such as one customer's `quote`, on a `--bg-canvas` panel padded by `--spacing-xl` and framed with a registration mark in each corner; its child fills the panel's width. When it is empty the wall spans the full width."
         },
         {
           "name": "mark",
@@ -11440,7 +11469,7 @@
           "notes": "One cell's mark, replacing the image built from the item — for a mark that owns its own theming (a per-theme asset swap, a silhouette filter). The slotted content carries its own alternative text and sits in a 28px-tall box; on a linked cell it lifts with the built image's motion."
         }
       ],
-      "purpose": "The customer-proof band of a marketing page: a framed grid of square cells, one company mark to a cell, each one optionally linked to that customer's story, under one accessible group name. It is deliberately a static grid rather than an auto-scrolling strip — moving content needs a pause control to meet WCAG 2.2.2, and a wall a reader can scan beats one they have to wait for. The cells are `card-grid` frame cells, so the wall draws the same hairlines and registration marks as every other framed band on the page. A linked cell is the whole square: on hover and focus a wash rises behind it, the mark lifts, and a `Read story` label slides in under it, so the wall doubles as the way into the case studies. Fill the `aside` slot and the band splits from `lg` up — the wall on the start edge, one of those customers speaking on the end edge on a padded canvas panel — and the wall narrows from six columns to three to sit in half the width at the same cell size. Every cell is a perfect square in every layout, and the wall alone sets the band's height: the `aside` panel is size-contained from `lg` up, so its content never stretches a row, and the statement sits centred in it. Between `lg` and `xl` the wall is two columns wide, so its three rows are tall enough for a client sentence; from `xl` it is three columns, two rows. Set `kind` to `rectangle` and every cell becomes a 3:2 rectangle instead: beside `aside` the wall holds three columns from `lg`, so nine rectangles take exactly the height six squares do, and below `sm` it keeps three columns so nine marks never leave a ragged row.",
+      "purpose": "The customer-proof band of a marketing page: a framed grid of square cells, one company mark to a cell, each one optionally linked to that customer's story, under one accessible group name. It is deliberately a static grid rather than an auto-scrolling strip — moving content needs a pause control to meet WCAG 2.2.2, and a wall a reader can scan beats one they have to wait for. The cells are `card-grid` frame cells, so the wall draws the same hairlines and registration marks as every other framed band on the page. A linked cell is the whole square: on hover and focus a wash rises behind it, the mark lifts, and a `Read story` label slides in under it, so the wall doubles as the way into the case studies. Fill the `aside` slot and the band splits from `lg` up — the wall on the start edge, one of those customers speaking on the end edge on a padded canvas panel framed like the cells, a registration mark in each of its corners and one shared hairline at its seam with the wall — and the wall narrows from six columns to three to sit in half the width at the same cell size. Every cell is a perfect square in every layout, and the wall alone sets the band's height: the `aside` panel is size-contained from `lg` up, so its content never stretches a row, and the statement sits centred in it. Between `lg` and `xl` the wall is two columns wide, so its three rows are tall enough for a client sentence; from `xl` it is three columns, two rows. Set `kind` to `rectangle` and every cell becomes a 3:2 rectangle instead: beside `aside` the wall holds three columns from `lg`, so nine rectangles take exactly the height six squares do, and below `sm` it keeps three columns so nine marks never leave a ragged row.",
       "useWhen": [
         "To show who already uses the product, as the proof band under a hero or section, with each mark leading to that customer's success case.",
         "Wherever a set of partner, customer or certification marks is the message.",
@@ -11549,7 +11578,7 @@
           "type": "boolean",
           "default": "false",
           "required": "false",
-          "doc": "Draw the band's own registration frame. Turn it off when the page already wraps the band in a frame."
+          "doc": "Draw the band's own registration frame: its top and bottom rules, with the copy and the media framed as two cells, each with its four marks. Turn it off when the page already wraps the band in a frame."
         },
         {
           "name": "divided",
@@ -11657,10 +11686,12 @@
         "topic` — the smaller unit when a page needs several claims rather than one.",
         "illustration` — the media itself; a scene dropped in the `media` slot is what the band's ground is drawn for.",
         "texture-material` — the material the media half is grounded with; compose it yourself when a band needs a different one.",
-        "frame-box` — the frame the band is drawn with, applied by whatever assembles the page; the band draws none of its own."
+        "frame-box` — the frame the band is drawn with. With `framed` on, or inside a `band-stack`, each of the band's two cells is its own `frame-box`.",
+        "band-stack` — the run that stacks these bands; inside it every band frames its two cells, left and right, under the rules the stack draws."
       ],
       "bestPractices": [
-        "The band draws no frame of its own: the rule and the corner marks belong to the `section-module` or `frame-box` that the page assembles it into, so a band placed in a framed column never lands a second hairline on the column's own.",
+        "By default the band draws no frame of its own: the rule and the corner marks belong to the `section-module` or `frame-box` that the page assembles it into, so a band placed in a framed column never lands a second hairline on the column's own.",
+        "A run of bands goes in a `band-stack`, not in a frame per band: the stack draws each band's rules and the band frames its two cells. Leave `framed` off there, or the band draws a second set of rules over the stack's.",
         "Alternate `kind` down a page so consecutive bands mirror; two identical bands in a row read as one.",
         "Reach for `orientation=\"vertical\"` when the column is too narrow to carry two halves, not to vary the rhythm of a wide page — a vertical band across a full-width page reads as a card that lost its grid.",
         "Composed into a grid of cells, the band fills the cell it is given: the copy column floors its actions, so a row of vertical bands lines up on its buttons. Let the grid own the seams there — `divided` off, `framed` off.",
@@ -11835,6 +11866,20 @@
           "default": "true",
           "required": "false",
           "doc": "Inset the media — inside the frame in the `frame` register, from the cell's edges in `plain`. Turn it off for an asset that should run to the cell's edges; the caption keeps its own inset either way."
+        },
+        {
+          "name": "fluid",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "Stretch the media to the frame's full width with its aspect ratio locked, so it grows and shrinks with the tile; off, slotted media keeps its own size, centred."
+        },
+        {
+          "name": "mediaScale",
+          "type": "number",
+          "default": "1",
+          "required": "false",
+          "doc": "Scale of the media inside its frame, around its centre. The frame keeps its size and clips whatever grows past it, so a scene drawn small on its canvas can be fitted to the tile without changing the band's rhythm."
         }
       ],
       "slots": [
@@ -11877,6 +11922,8 @@
         "Reach for `padded` off when the media is an exported asset that already carries its own air, or when it should run to the cell's edges so a list or a table reads as continuing past them. A composed scene wants the inset.",
         "Pair the register with the grid. `frame` belongs in `card-grid`'s `gap` register, whose gutters keep every frame its own; the `divider` register would rule the captions as well as the panels. `plain` belongs in the `divider` register, where the grid draws every rule and the tile fills its own background so the gap has something to show through.",
         "Do not put a `frame` tile in a `divider` grid. The grid's hairline and the frame's rule then sit a padding apart, and the band reads as two competing grids.",
+        "Turn `fluid` on for a band whose scenes share one frame size, so every tile renders its scene at the same zoom whatever the column width. Scenes on different frames come out at different zooms under `fluid` — fix the frames, not the tiles.",
+        "Reach for `mediaScale` when a scene sits small or large on its canvas — a cluster of icon boxes drawn at its own size on the 592×300 frame reads as a speck in a tile. Set it per tile, so each scene in a band reaches the same visual height, and keep it at or under the value where the scene's widest edge meets the frame; anything past that is clipped.",
         "Leave the media slot empty while a scene is still being drawn: the frame holds the tile's floor height, so the band keeps its rhythm instead of collapsing."
       ]
     },
@@ -12069,6 +12116,27 @@
           "default": "''",
           "required": "false",
           "doc": "Accessible name for the wall of client cards."
+        },
+        {
+          "name": "autoPlay",
+          "type": "boolean",
+          "default": "true",
+          "required": "false",
+          "doc": "Advances to the next client on a timer; pauses under the pointer or keyboard focus, restarts its count on a selection, and never runs under reduced motion."
+        },
+        {
+          "name": "autoPlayInterval",
+          "type": "number",
+          "default": "5000",
+          "required": "false",
+          "doc": "Milliseconds each client is held before the band advances."
+        },
+        {
+          "name": "showProgress",
+          "type": "boolean",
+          "default": "true",
+          "required": "false",
+          "doc": "Advances a hairline along the quotation panel's bottom edge while the timer runs."
         }
       ],
       "slots": [
@@ -12078,7 +12146,7 @@
           "notes": "A trailing control under the featured quotation's attribution, such as a secondary `Button` to the success stories; rendered in `quote`'s own `actions` area, the same for every client."
         }
       ],
-      "purpose": "A testimonial band a reader browses by client: the selected client's quotation featured at the top in the client's own colours, and a wall of client cards below it that is the selector itself — clicking a card brings that client's quotation in. It is the band a page reaches for when several customers have one strong sentence each and only one of them should be read at a time. The band owns the selection and nothing else. The featured quotation is `quote` in its `highlight` register, and every card is the same framed cell `logo-wall` draws, so a quotation and a client card look the same here as everywhere else on the page. The quotation travels sideways in the direction of the choice — a card later in the wall brings its quotation in from the right, an earlier one from the left — so the reader feels the wall as a sequence.",
+      "purpose": "A testimonial band a reader browses by client: the selected client's quotation featured at the top in the client's own colours, and a wall of client cards below it that is the selector itself — clicking a card brings that client's quotation in. It is the band a page reaches for when several customers have one strong sentence each and only one of them should be read at a time. The band owns the selection and nothing else. The featured quotation is `quote` in its `highlight` register, and every card is the same framed cell `logo-wall` draws, so a quotation and a client card look the same here as everywhere else on the page. The quotation travels sideways in the direction of the choice — a card later in the wall brings its quotation in from the right, an earlier one from the left — so the reader feels the wall as a sequence. Left alone it moves through the clients on its own, the way `media-tabs` does: a hairline along the panel's bottom edge fills toward the next client, and the band holds still while the reader points at it or works it from the keyboard.",
       "useWhen": [
         "To feature one client quotation at a time out of three to twelve peers, with every other client one click away on the wall below.",
         "As a success-story band where the wall of customers and the quotation are the same content, not two lists."
@@ -12095,14 +12163,15 @@
         "logo-wall` — the same framed client cells, as links out rather than as a selector.",
         "card-grid` — the framed grid the cards are laid out on.",
         "frame-box` — the registration frame the quotation panel is drawn in, with the same corner marks as the cards below it; also what a page wraps the band in to close its outer edges.",
-        "quote-carousel` — the same testimonials as a row the reader scrolls through, every one visible."
+        "quote-carousel` — the same testimonials as a row the reader scrolls through, every one visible.",
+        "media-tabs` — the same timer and progress hairline, for claims paired with a medium."
       ],
       "bestPractices": [
         "Give the wall a full row: six clients fill it from `lg` up and three from below `sm`, so six or twelve leave no empty cell.",
         "Give every item a `logo` in the client's own colours; it is drawn as-is on its card and in the featured quotation, so pick artwork that carries its own contrast on both themes. Without one, `mark` names a one-ink mark from the brand registry instead.",
         "Let `clientName` default to the registry's label for `mark`; set it when the item has only a `logo`, or a client the registry does not carry. It is the card's accessible name, so it is never optional in practice.",
-        "Keep each quotation to one or two sentences, verbatim, without typed quotation marks — `quote` draws its own glyph. The panel holds the tallest quotation's height for all of them, so one much longer quotation leaves the shorter ones floating in space.",
-        "Leave the selection to the reader. The band never advances on its own."
+        "Keep each quotation to one or two sentences, verbatim, without typed quotation marks — `quote` draws its own glyph. The panel holds the tallest quotation's height for all of them and floors the attribution and the `actions` control, so one much longer quotation opens a wide gap under every shorter one.",
+        "Keep each quotation readable inside `autoPlayInterval`; raise the interval before shortening a verbatim quotation, and turn `autoPlay` off when the band sits beside other moving content."
       ]
     },
     "sticky-stack": {
