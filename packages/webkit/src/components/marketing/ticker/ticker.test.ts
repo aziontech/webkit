@@ -125,7 +125,7 @@ describe('Ticker', () => {
     const track = container.querySelector('.animate-brand-marquee')
 
     expect(track?.getAttribute('style')).toContain(
-      `animation-duration: ${Math.round(MARKS.length * 3.2)}s`
+      `animation-duration: ${Math.round(MARKS.length * 2)}s`
     )
   })
 
