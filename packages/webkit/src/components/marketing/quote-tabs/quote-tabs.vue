@@ -1,10 +1,13 @@
 <script setup lang="ts">
+  import { usePreferredReducedMotion } from '@vueuse/core'
   import {
     type Component,
     type ComponentPublicInstance,
     computed,
     defineAsyncComponent,
     nextTick,
+    onMounted,
+    onScopeDispose,
     ref,
     useAttrs,
     useId,
@@ -50,11 +53,20 @@
     items?: QuoteTabsItem[]
     /** Accessible name for the wall of client cards. */
     ariaLabel?: string
+    /** Advances to the next client on a timer; pauses under the pointer or keyboard focus, restarts its count on a selection, and never runs under reduced motion. */
+    autoPlay?: boolean
+    /** Milliseconds each client is held before the band advances. */
+    autoPlayInterval?: number
+    /** Advances a hairline along the quotation panel's bottom edge while the timer runs. */
+    showProgress?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
     items: () => [],
-    ariaLabel: ''
+    ariaLabel: '',
+    autoPlay: true,
+    autoPlayInterval: 5000,
+    showProgress: true
   })
 
   /** Index of the selected client, bound with v-model; left unbound the band keeps its own selection, starting on the first card. */
@@ -67,12 +79,19 @@
 
   const attrs = useAttrs()
   const baseId = useId()
+  const reducedMotion = usePreferredReducedMotion()
+
+  const PROGRESS_TICK_MS = 100
 
   const loaded = new Map<string, Component>()
   const tabElements: Array<globalThis.HTMLButtonElement | null> = []
   let pendingDirection: QuoteTabsDirection | null = null
+  let ticker: ReturnType<typeof globalThis.setInterval> | null = null
 
   const direction = ref<QuoteTabsDirection>('forward')
+  const elapsed = ref(0)
+  const pointerInside = ref(false)
+  const focusInside = ref(false)
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'marketing-quote-tabs'
@@ -103,10 +122,31 @@
     () => !current.value.logo && Boolean(current.value.art || current.value.label)
   )
 
+  const autoPlayEnabled = computed(
+    () => props.autoPlay && props.items.length > 1 && reducedMotion.value !== 'reduce'
+  )
+
+  const autoPlayRunning = computed(
+    () => autoPlayEnabled.value && !pointerInside.value && !focusInside.value
+  )
+
+  const progress = computed(() =>
+    Math.min(100, Math.max(0, (elapsed.value / props.autoPlayInterval) * 100))
+  )
+
   watch(selected, (next, previous) => {
     direction.value = pendingDirection ?? (next > previous ? 'forward' : 'back')
     pendingDirection = null
+    elapsed.value = 0
   })
+
+  watch(autoPlayRunning, (running) => (running ? start() : stop()))
+
+  onMounted(() => {
+    if (autoPlayRunning.value) start()
+  })
+
+  onScopeDispose(stop)
 
   function isActive(index: number): boolean {
     return selected.value === index
@@ -117,7 +157,48 @@
   }
 
   function select(index: number): void {
+    elapsed.value = 0
     model.value = index
+  }
+
+  function onTabClick(index: number): void {
+    pointerInside.value = false
+    select(index)
+  }
+
+  function stop(): void {
+    if (ticker === null) return
+    globalThis.clearInterval(ticker)
+    ticker = null
+  }
+
+  function start(): void {
+    stop()
+    ticker = globalThis.setInterval(tick, PROGRESS_TICK_MS)
+  }
+
+  function tick(): void {
+    elapsed.value += PROGRESS_TICK_MS
+    if (elapsed.value < props.autoPlayInterval) return
+    pendingDirection = 'forward'
+    select(selected.value >= props.items.length - 1 ? 0 : selected.value + 1)
+  }
+
+  function enterPointer(): void {
+    pointerInside.value = true
+  }
+
+  function leavePointer(): void {
+    pointerInside.value = false
+  }
+
+  function enterFocus(event: globalThis.FocusEvent): void {
+    const target = event.target as globalThis.Element
+    focusInside.value = target.matches(':focus-visible')
+  }
+
+  function leaveFocus(): void {
+    focusInside.value = false
   }
 
   function targetOf(key: string): number | null {
@@ -157,7 +238,12 @@
     v-if="clients.length"
     v-bind="$attrs"
     :data-testid="testId"
+    :data-autoplay="autoPlayRunning || null"
     class="flex flex-col"
+    @pointerenter="enterPointer"
+    @pointerleave="leavePointer"
+    @focusin="enterFocus"
+    @focusout="leaveFocus"
   >
     <FrameBox
       :id="panelId"
@@ -214,16 +300,17 @@
         </div>
 
         <Transition
-          enter-active-class="transition-[translate,opacity] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
+          mode="out-in"
+          enter-active-class="transition-[translate,opacity] duration-moderate-01 ease-productive-entrance motion-reduce:transition-none motion-reduce:duration-0"
           enter-from-class="opacity-0 group-data-[direction=forward]/panel:translate-x-(--spacing-xl) group-data-[direction=back]/panel:-translate-x-(--spacing-xl) motion-reduce:translate-x-0"
-          leave-active-class="pointer-events-none transition-[translate,opacity] duration-moderate-01 ease-productive-exit motion-reduce:transition-none"
+          leave-active-class="pointer-events-none transition-[translate,opacity] duration-moderate-01 ease-productive-exit motion-reduce:transition-none motion-reduce:duration-0"
           leave-to-class="opacity-0 group-data-[direction=forward]/panel:-translate-x-(--spacing-xl) group-data-[direction=back]/panel:translate-x-(--spacing-xl) motion-reduce:translate-x-0"
           @before-leave="hideLeaving"
         >
           <div
             :key="selected"
             :data-testid="`${testId}__quote`"
-            class="min-w-0"
+            class="grid min-w-0"
           >
             <Quote
               kind="highlight"
@@ -262,6 +349,14 @@
           </div>
         </Transition>
       </div>
+
+      <span
+        v-if="showProgress && autoPlayEnabled"
+        aria-hidden="true"
+        :data-testid="`${testId}__progress`"
+        :style="{ width: `${progress}%` }"
+        class="absolute bottom-0 left-0 h-px bg-(--primary) transition-[width] duration-fast-01 ease-linear motion-reduce:transition-none"
+      />
     </FrameBox>
 
     <CardGrid
@@ -293,7 +388,7 @@
           :aria-controls="panelId"
           :tabindex="isActive(index) ? 0 : -1"
           class="relative isolate flex aspect-3/2 w-full cursor-pointer items-center justify-center px-(--spacing-md) transition-colors duration-moderate-01 ease-out before:pointer-events-none before:absolute before:inset-0 before:-z-10 before:bg-(--bg-hover) before:opacity-0 before:transition-opacity before:duration-fast-02 before:ease-productive-entrance before:content-[''] hover:before:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) data-[active]:bg-(--bg-selected) data-[active]:before:hidden motion-reduce:transition-none motion-reduce:before:transition-none"
-          @click="select(index)"
+          @click="onTabClick(index)"
         >
           <img
             v-if="client.logo"
