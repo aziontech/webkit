@@ -1,4 +1,5 @@
 import Hero from '@aziontech/webkit/hero'
+import Illustration from '@aziontech/webkit/illustration'
 import SectionContainer from '@aziontech/webkit/section-container'
 import SectionModule from '@aziontech/webkit/section-module'
 import TextureMaterial from '@aziontech/webkit/texture-material'
@@ -18,6 +19,8 @@ const IMPORT_PAGE = [
   "import SectionModule from '@aziontech/webkit/section-module'"
 ]
 
+const IMPORT_BANNERS = [...IMPORT, "import Illustration from '@aziontech/webkit/illustration'"]
+
 // Compound sub-components registered under their dot-notation names so they
 // resolve in Storybook's runtime-compiled string template: Vue compiles
 // `<Hero.Title>` to `resolveComponent("Hero.Title")`, an exact-name lookup
@@ -27,6 +30,7 @@ const IMPORT_PAGE = [
 const components = {
   Hero,
   'Hero.Title': Hero.Title,
+  Illustration,
   SectionContainer,
   SectionModule,
   TextureMaterial
@@ -81,6 +85,17 @@ const meta = {
       description: 'Apply the band’s own vertical rhythm. The inline inset is always applied.',
       table: { category: 'props', type: { summary: 'boolean' }, defaultValue: { summary: 'true' } }
     },
+    size: {
+      control: 'inline-radio',
+      options: ['medium', 'large'],
+      description:
+        'Vertical rhythm the band applies when `padded`, equal above and below; `large` is the opening a page leads with.',
+      table: {
+        category: 'props',
+        type: { summary: "'medium' | 'large'" },
+        defaultValue: { summary: "'medium'" }
+      }
+    },
     texture: {
       control: 'inline-radio',
       options: ['none', 'dots', 'grid', 'dither', 'pixelate'],
@@ -94,11 +109,11 @@ const meta = {
     },
     textureFade: {
       control: 'inline-radio',
-      options: ['none', 'top', 'bottom', 'edges', 'vignette'],
+      options: ['none', 'top', 'bottom', 'left', 'right', 'edges', 'vignette'],
       description: 'Fade applied to the layer the `texture` prop paints.',
       table: {
         category: 'props',
-        type: { summary: "'none' | 'top' | 'bottom' | 'edges' | 'vignette'" },
+        type: { summary: "'none' | 'top' | 'bottom' | 'left' | 'right' | 'edges' | 'vignette'" },
         defaultValue: { summary: "'none'" }
       }
     },
@@ -120,6 +135,17 @@ const meta = {
       table: {
         category: 'props',
         type: { summary: "'top' | 'center' | 'bottom'" },
+        defaultValue: { summary: "'center'" }
+      }
+    },
+    mediaAlign: {
+      control: 'inline-radio',
+      options: ['center', 'end'],
+      description:
+        'Where the `media` slot sits in its column: `center` balances it in the column, `end` sets its end edge on the container boundary, past the inline inset, from `md` up.',
+      table: {
+        category: 'props',
+        type: { summary: "'center' | 'end'" },
         defaultValue: { summary: "'center'" }
       }
     },
@@ -156,10 +182,12 @@ const meta = {
     maxWidth: '7xl',
     bordered: true,
     padded: true,
+    size: 'medium',
     texture: 'none',
     textureFade: 'none',
     floorTexture: 'none',
     align: 'center',
+    mediaAlign: 'center',
     carousel: false,
     carouselMarks: [],
     carouselLabel: ''
@@ -486,6 +514,67 @@ export const Carousel = {
           'The band’s floor holds the `bottom` window and the brand strip in one block, so a single ground covers both — `--banner-floor-bg` plinths the floor a shade off the band’s own canvas. `floorTexture` fills that window without wiring a slot: the cell is fixed, so the band already carries the ink (`--banner-floor-ink`) and the horizontal falloff fitted to it, and `--texture-pool-a` / `-b` place the light inside it. `carousel` loads the strip on demand, so a band without one pulls in neither the strip nor its mark registry, and `carousel-label` names what the marks are evidence of.'
       },
       source: { code: toSfc(IMPORT, CAROUSEL_TEMPLATE) }
+    }
+  }
+}
+
+const BANNERS_TEMPLATE = `<div>
+  <Hero kind="screen" max-width="site">
+    <template #background>
+      <div class="flex h-full items-center justify-end">
+        <div class="w-full mask-l-from-50% md:w-3/5">
+          <Illustration name="global-network" />
+        </div>
+      </div>
+    </template>
+
+    <Hero.Title
+      eyebrow="#background"
+      title="The network behind the copy"
+      description="A scene in the art half of the band, behind the copy."
+    />
+  </Hero>
+
+  <Hero kind="screen" max-width="site" class="[--banner-top-height:44%]">
+    <template #top>
+      <div class="mx-auto w-full max-w-(--container-3xl) pt-(--spacing-xl) mask-b-from-45% mask-b-to-80%">
+        <Illustration name="low-latency" />
+      </div>
+    </template>
+
+    <Hero.Title
+      centered
+      eyebrow="#top"
+      title="Closer to every user"
+      description="A scene framed by the window on the band's top edge. The window clips it, so only the part it frames shows above the copy."
+    />
+  </Hero>
+
+  <Hero kind="screen" max-width="site">
+    <Hero.Title
+      eyebrow="#media"
+      title="Build on the framework you already use"
+      description="A scene beside the copy. From md up the column splits in two; below md the scene stacks under the copy."
+    />
+
+    <template #media>
+      <Illustration name="build-applications" />
+    </template>
+  </Hero>
+</div>`
+
+/** @type {import('@storybook/vue3').StoryObj<typeof Hero>} */
+export const Banners = {
+  render: () => ({ components, template: BANNERS_TEMPLATE }),
+  parameters: {
+    controls: { disable: true },
+    layout: 'fullscreen',
+    docs: {
+      description: {
+        story:
+          'The three places a banner asset can sit, each filled from the package’s own illustration library through `Illustration`. `#background` lays a scene behind the copy, `#top` frames one in the window on the band’s top edge, and `#media` sets one beside the copy. Every scene is decorative here, so none of them reaches the accessibility tree.'
+      },
+      source: { code: toSfc(IMPORT_BANNERS, BANNERS_TEMPLATE) }
     }
   }
 }
