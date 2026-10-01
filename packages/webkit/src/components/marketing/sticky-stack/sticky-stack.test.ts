@@ -45,6 +45,7 @@ function pinGeometry(): () => void {
   return () => style.remove()
 }
 
+/** One claim's share of the pinned scroll, in px — the track is one screen per claim plus one. */
 function slice(): number {
   return globalThis.innerHeight
 }

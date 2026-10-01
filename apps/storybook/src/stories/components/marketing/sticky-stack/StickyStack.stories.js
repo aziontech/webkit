@@ -180,7 +180,7 @@ export const Sizes = {
       controls: { disable: true },
       description: {
         story:
-          "Every `size` value, one band under the other with the same three claims on each, so the only thing that changes is the height the open claim is held to — three, four and five times the padding step. The collapsed claims are the same height at every size, which is what keeps each stack a constant height through its whole run: the open claim grows, the read ones shrink to their titles, and the column never reflows the media beside it. `size` is a floor rather than a ceiling — a description longer than the height it sets grows its claim instead of being clipped."
+          'Every `size` value, one band under the other with the same three claims on each, so the only thing that changes is the height the open claim is held to — three, four and five times the padding step. The collapsed claims are the same height at every size, which is what keeps each stack a constant height through its whole run: the open claim grows, the read ones shrink to their titles, and the column never reflows the media beside it. `size` is a floor rather than a ceiling — a description longer than the height it sets grows its claim instead of being clipped.'
       },
       source: { code: toSfc(SCRIPT, SIZES_TEMPLATE) }
     }
