@@ -9937,14 +9937,14 @@
       "treeShakeableImport": "@aziontech/webkit/media-tabs",
       "category": "marketing",
       "structure": "monolithic",
-      "status": "implemented",
+      "status": "approved",
       "props": [
         {
           "name": "items",
           "type": "MediaTabsItem[]",
           "default": "[]",
           "required": "false",
-          "doc": "The tabs, in order; each item is `{ title, description, src, alt }`."
+          "doc": "The tabs, in order, at most three; each item is `{ title, description, src, alt }`. Items past the third are not rendered."
         },
         {
           "name": "selectOn",
@@ -9958,7 +9958,7 @@
           "type": "boolean",
           "default": "true",
           "required": "false",
-          "doc": "Advances to the next tab on a timer; pauses under pointer or focus, stops for good on a click, and never runs under reduced motion."
+          "doc": "Advances to the next tab on a timer; pauses under the pointer or keyboard focus, restarts its count on a click, and never runs under reduced motion."
         },
         {
           "name": "autoPlayInterval",
@@ -9980,6 +9980,27 @@
           "default": "'medium'",
           "required": "false",
           "doc": "Height each row is held to, as a multiple of the band's own padding step; copy longer than that grows its row, and the media column is always as tall as the stack."
+        },
+        {
+          "name": "texture",
+          "type": "TextureMaterialKind",
+          "default": "'none'",
+          "required": "false",
+          "doc": "Texture the media column is grounded with; `none` leaves it bare."
+        },
+        {
+          "name": "textureSize",
+          "type": "TextureMaterialSize",
+          "default": "'medium'",
+          "required": "false",
+          "doc": "Pitch of the ground's tiling — how far apart its cells sit."
+        },
+        {
+          "name": "textureFade",
+          "type": "TextureMaterialFade",
+          "default": "'vignette'",
+          "required": "false",
+          "doc": "How the ground fades out before the column's edges."
         }
       ],
       "events": [
@@ -10010,7 +10031,7 @@
       "related": [
         "media-split` — one claim, one picture, no selection.",
         "illustration` — the official scene a tab's `media` slot usually holds.",
-        "frame-box` — the registration frame the page wraps the band in; the band draws only its own top and bottom rules and the seam between its columns.",
+        "frame-box` — the registration frame the band is built from: every tab is its own frame and the media column is one more, each with all four corner marks. Every tab flushes its top rule and the media column its top and left rules, so the band draws no top rule of its own: the rule above it (a section title's, or the page frame's) is the only one, and a shared edge is one hairline.",
         "section-title` — the heading above the band; this component carries no title of its own."
       ],
       "bestPractices": [
@@ -10018,7 +10039,7 @@
         "Keep a tab's title to one line and its description to two. The row has a fixed height, and copy that overruns it pushes the media column taller than the design.",
         "Give every tab a medium: the frame holds one at a time and cross-fades within it, so a tab with nothing to show reads as a broken rotation, not as a quiet one.",
         "Use scenes of the same shape. The frame does not resize between tabs.",
-        "Leave `autoPlay` on for a band a reader is expected to watch. It pauses under the pointer, stops for good on a click, and never starts under reduced motion.",
+        "Leave `autoPlay` on for a band a reader is expected to watch. It pauses under the pointer or keyboard focus, restarts its count on a click (and keeps running under the pointer that clicked), and never starts under reduced motion.",
         "Pick `size` from the copy, not from the section: `medium` holds a title and two lines, `large` a title and four."
       ]
     },

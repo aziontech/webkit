@@ -137,7 +137,7 @@
   {
     "name": "media-tabs",
     "path": "src/components/marketing/media-tabs/media-tabs.vue",
-    "limit": "4 KB"
+    "limit": "6.5 KB"
   },
   {
     "name": "illustration",
