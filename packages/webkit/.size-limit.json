@@ -135,6 +135,11 @@
     "limit": "3 KB"
   },
   {
+    "name": "column-navigation-root",
+    "path": "src/components/marketing/column-navigation/column-navigation.vue",
+    "limit": "1 KB"
+  },
+  {
     "name": "illustration",
     "path": "src/components/content/illustration/illustration.vue",
     "limit": "2 KB",
