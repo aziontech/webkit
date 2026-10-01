@@ -11225,114 +11225,1232 @@
     "assets/agents/claude.svg": {
       "import": "@aziontech/webkit/assets/agents/claude.svg",
       "target": "./src/assets/agents/claude.svg",
-      "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/assets/agents/claude.svg",
-      "category": null
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/agents/claude.svg"
     },
     "assets/agents/codex.svg": {
       "import": "@aziontech/webkit/assets/agents/codex.svg",
       "target": "./src/assets/agents/codex.svg",
-      "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/assets/agents/codex.svg",
-      "category": null
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/agents/codex.svg"
     },
     "assets/agents/copilot.svg": {
       "import": "@aziontech/webkit/assets/agents/copilot.svg",
       "target": "./src/assets/agents/copilot.svg",
-      "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/assets/agents/copilot.svg",
-      "category": null
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/agents/copilot.svg"
     },
     "assets/agents/cursor.svg": {
       "import": "@aziontech/webkit/assets/agents/cursor.svg",
       "target": "./src/assets/agents/cursor.svg",
-      "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/assets/agents/cursor.svg",
-      "category": null
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/agents/cursor.svg"
     },
     "assets/agents/gemini.svg": {
       "import": "@aziontech/webkit/assets/agents/gemini.svg",
       "target": "./src/assets/agents/gemini.svg",
-      "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/assets/agents/gemini.svg",
-      "category": null
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/agents/gemini.svg"
     },
     "assets/agents/opencode.svg": {
       "import": "@aziontech/webkit/assets/agents/opencode.svg",
       "target": "./src/assets/agents/opencode.svg",
-      "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/assets/agents/opencode.svg",
-      "category": null
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/agents/opencode.svg"
     },
     "assets/agents/windsurf.svg": {
       "import": "@aziontech/webkit/assets/agents/windsurf.svg",
       "target": "./src/assets/agents/windsurf.svg",
-      "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/assets/agents/windsurf.svg",
-      "category": null
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/agents/windsurf.svg"
     },
     "assets/logos/forrester.svg": {
       "import": "@aziontech/webkit/assets/logos/forrester.svg",
       "target": "./src/assets/logos/forrester.svg",
-      "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/assets/logos/forrester.svg",
-      "category": null
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/logos/forrester.svg"
     },
     "assets/logos/forrester-reversed.svg": {
       "import": "@aziontech/webkit/assets/logos/forrester-reversed.svg",
       "target": "./src/assets/logos/forrester-reversed.svg",
-      "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/assets/logos/forrester-reversed.svg",
-      "category": null
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/logos/forrester-reversed.svg"
     },
     "assets/logos/frost-and-sullivan.svg": {
       "import": "@aziontech/webkit/assets/logos/frost-and-sullivan.svg",
       "target": "./src/assets/logos/frost-and-sullivan.svg",
-      "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/assets/logos/frost-and-sullivan.svg",
-      "category": null
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/logos/frost-and-sullivan.svg"
     },
     "assets/logos/frost-and-sullivan-reversed.svg": {
       "import": "@aziontech/webkit/assets/logos/frost-and-sullivan-reversed.svg",
       "target": "./src/assets/logos/frost-and-sullivan-reversed.svg",
-      "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/assets/logos/frost-and-sullivan-reversed.svg",
-      "category": null
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/logos/frost-and-sullivan-reversed.svg"
     },
     "assets/logos/g2.svg": {
       "import": "@aziontech/webkit/assets/logos/g2.svg",
       "target": "./src/assets/logos/g2.svg",
-      "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/assets/logos/g2.svg",
-      "category": null
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/logos/g2.svg"
     },
     "assets/logos/gartner.svg": {
       "import": "@aziontech/webkit/assets/logos/gartner.svg",
       "target": "./src/assets/logos/gartner.svg",
-      "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/assets/logos/gartner.svg",
-      "category": null
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/logos/gartner.svg"
     },
     "assets/logos/gartner-reversed.svg": {
       "import": "@aziontech/webkit/assets/logos/gartner-reversed.svg",
       "target": "./src/assets/logos/gartner-reversed.svg",
-      "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/assets/logos/gartner-reversed.svg",
-      "category": null
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/logos/gartner-reversed.svg"
     },
     "assets/logos/gigaom.svg": {
       "import": "@aziontech/webkit/assets/logos/gigaom.svg",
       "target": "./src/assets/logos/gigaom.svg",
-      "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/assets/logos/gigaom.svg",
-      "category": null
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/logos/gigaom.svg"
     },
     "assets/logos/gigaom-reversed.svg": {
       "import": "@aziontech/webkit/assets/logos/gigaom-reversed.svg",
       "target": "./src/assets/logos/gigaom-reversed.svg",
-      "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/assets/logos/gigaom-reversed.svg",
-      "category": null
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/logos/gigaom-reversed.svg"
+    },
+    "assets/heroes/combine-data-and-vector-search.svg": {
+      "import": "@aziontech/webkit/assets/heroes/combine-data-and-vector-search.svg",
+      "target": "./src/assets/heroes/combine-data-and-vector-search.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/heroes/combine-data-and-vector-search.svg"
+    },
+    "assets/heroes/ddos-protection.svg": {
+      "import": "@aziontech/webkit/assets/heroes/ddos-protection.svg",
+      "target": "./src/assets/heroes/ddos-protection.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/heroes/ddos-protection.svg"
+    },
+    "assets/heroes/quick-start-with-templates.svg": {
+      "import": "@aziontech/webkit/assets/heroes/quick-start-with-templates.svg",
+      "target": "./src/assets/heroes/quick-start-with-templates.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/heroes/quick-start-with-templates.svg"
+    },
+    "assets/clients/CCPA-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/CCPA-logo.svg",
+      "target": "./src/assets/clients/CCPA-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/CCPA-logo.svg"
+    },
+    "assets/clients/CPRA-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/CPRA-logo.svg",
+      "target": "./src/assets/clients/CPRA-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/CPRA-logo.svg"
+    },
+    "assets/clients/GDPR-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/GDPR-logo.svg",
+      "target": "./src/assets/clients/GDPR-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/GDPR-logo.svg"
+    },
+    "assets/clients/HDI-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/HDI-logo.svg",
+      "target": "./src/assets/clients/HDI-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/HDI-logo.svg"
+    },
+    "assets/clients/LGPD-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/LGPD-logo.svg",
+      "target": "./src/assets/clients/LGPD-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/LGPD-logo.svg"
+    },
+    "assets/clients/PCI-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/PCI-logo.svg",
+      "target": "./src/assets/clients/PCI-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/PCI-logo.svg"
+    },
+    "assets/clients/SOC-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/SOC-logo.svg",
+      "target": "./src/assets/clients/SOC-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/SOC-logo.svg"
+    },
+    "assets/clients/agibank-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/agibank-logo.svg",
+      "target": "./src/assets/clients/agibank-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/agibank-logo.svg"
+    },
+    "assets/clients/akamai.svg": {
+      "import": "@aziontech/webkit/assets/clients/akamai.svg",
+      "target": "./src/assets/clients/akamai.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/akamai.svg"
+    },
+    "assets/clients/alpargatas.svg": {
+      "import": "@aziontech/webkit/assets/clients/alpargatas.svg",
+      "target": "./src/assets/clients/alpargatas.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/alpargatas.svg"
+    },
+    "assets/clients/americamovil.svg": {
+      "import": "@aziontech/webkit/assets/clients/americamovil.svg",
+      "target": "./src/assets/clients/americamovil.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/americamovil.svg"
+    },
+    "assets/clients/angeloni.svg": {
+      "import": "@aziontech/webkit/assets/clients/angeloni.svg",
+      "target": "./src/assets/clients/angeloni.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/angeloni.svg"
+    },
+    "assets/clients/angular.svg": {
+      "import": "@aziontech/webkit/assets/clients/angular.svg",
+      "target": "./src/assets/clients/angular.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/angular.svg"
+    },
+    "assets/clients/anthropic.svg": {
+      "import": "@aziontech/webkit/assets/clients/anthropic.svg",
+      "target": "./src/assets/clients/anthropic.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/anthropic.svg"
+    },
+    "assets/clients/astro.svg": {
+      "import": "@aziontech/webkit/assets/clients/astro.svg",
+      "target": "./src/assets/clients/astro.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/astro.svg"
+    },
+    "assets/clients/aws.svg": {
+      "import": "@aziontech/webkit/assets/clients/aws.svg",
+      "target": "./src/assets/clients/aws.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/aws.svg"
+    },
+    "assets/clients/ayko.svg": {
+      "import": "@aziontech/webkit/assets/clients/ayko.svg",
+      "target": "./src/assets/clients/ayko.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/ayko.svg"
+    },
+    "assets/clients/azure.svg": {
+      "import": "@aziontech/webkit/assets/clients/azure.svg",
+      "target": "./src/assets/clients/azure.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/azure.svg"
+    },
+    "assets/clients/banco-de-la-nacion-logo-vector.svg": {
+      "import": "@aziontech/webkit/assets/clients/banco-de-la-nacion-logo-vector.svg",
+      "target": "./src/assets/clients/banco-de-la-nacion-logo-vector.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/banco-de-la-nacion-logo-vector.svg"
+    },
+    "assets/clients/cloudflare.svg": {
+      "import": "@aziontech/webkit/assets/clients/cloudflare.svg",
+      "target": "./src/assets/clients/cloudflare.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/cloudflare.svg"
+    },
+    "assets/clients/contabilizei-symbol.png": {
+      "import": "@aziontech/webkit/assets/clients/contabilizei-symbol.png",
+      "target": "./src/assets/clients/contabilizei-symbol.png",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/contabilizei-symbol.png"
+    },
+    "assets/clients/dark/Axur.png": {
+      "import": "@aziontech/webkit/assets/clients/dark/Axur.png",
+      "target": "./src/assets/clients/dark/Axur.png",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/Axur.png"
+    },
+    "assets/clients/dark/agibank-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/agibank-logo.svg",
+      "target": "./src/assets/clients/dark/agibank-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/agibank-logo.svg"
+    },
+    "assets/clients/dark/browserless-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/browserless-logo.svg",
+      "target": "./src/assets/clients/dark/browserless-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/browserless-logo.svg"
+    },
+    "assets/clients/dark/clients/agibank-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/clients/agibank-logo.svg",
+      "target": "./src/assets/clients/dark/clients/agibank-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/agibank-logo.svg"
+    },
+    "assets/clients/dark/clients/arezzo-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/clients/arezzo-logo.svg",
+      "target": "./src/assets/clients/dark/clients/arezzo-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/arezzo-logo.svg"
+    },
+    "assets/clients/dark/clients/axur-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/clients/axur-logo.svg",
+      "target": "./src/assets/clients/dark/clients/axur-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/axur-logo.svg"
+    },
+    "assets/clients/dark/clients/caixa-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/clients/caixa-logo.svg",
+      "target": "./src/assets/clients/dark/clients/caixa-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/caixa-logo.svg"
+    },
+    "assets/clients/dark/clients/cocacola-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/clients/cocacola-logo.svg",
+      "target": "./src/assets/clients/dark/clients/cocacola-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/cocacola-logo.svg"
+    },
+    "assets/clients/dark/clients/contabilizei-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/clients/contabilizei-logo.svg",
+      "target": "./src/assets/clients/dark/clients/contabilizei-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/contabilizei-logo.svg"
+    },
+    "assets/clients/dark/clients/crefisa-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/clients/crefisa-logo.svg",
+      "target": "./src/assets/clients/dark/clients/crefisa-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/crefisa-logo.svg"
+    },
+    "assets/clients/dark/clients/dafiti-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/clients/dafiti-logo.svg",
+      "target": "./src/assets/clients/dark/clients/dafiti-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/dafiti-logo.svg"
+    },
+    "assets/clients/dark/clients/datadome-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/clients/datadome-logo.svg",
+      "target": "./src/assets/clients/dark/clients/datadome-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/datadome-logo.svg"
+    },
+    "assets/clients/dark/clients/fauna-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/clients/fauna-logo.svg",
+      "target": "./src/assets/clients/dark/clients/fauna-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/fauna-logo.svg"
+    },
+    "assets/clients/dark/clients/fourbank-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/clients/fourbank-logo.svg",
+      "target": "./src/assets/clients/dark/clients/fourbank-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/fourbank-logo.svg"
+    },
+    "assets/clients/dark/clients/gfg-global-fashion-group.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/clients/gfg-global-fashion-group.svg",
+      "target": "./src/assets/clients/dark/clients/gfg-global-fashion-group.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/gfg-global-fashion-group.svg"
+    },
+    "assets/clients/dark/clients/gpa-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/clients/gpa-logo.svg",
+      "target": "./src/assets/clients/dark/clients/gpa-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/gpa-logo.svg"
+    },
+    "assets/clients/dark/clients/herospark.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/clients/herospark.svg",
+      "target": "./src/assets/clients/dark/clients/herospark.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/herospark.svg"
+    },
+    "assets/clients/dark/clients/itau-logo.webp": {
+      "import": "@aziontech/webkit/assets/clients/dark/clients/itau-logo.webp",
+      "target": "./src/assets/clients/dark/clients/itau-logo.webp",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/itau-logo.webp"
+    },
+    "assets/clients/dark/clients/magalu-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/clients/magalu-logo.svg",
+      "target": "./src/assets/clients/dark/clients/magalu-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/magalu-logo.svg"
+    },
+    "assets/clients/dark/clients/monashees-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/clients/monashees-logo.svg",
+      "target": "./src/assets/clients/dark/clients/monashees-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/monashees-logo.svg"
+    },
+    "assets/clients/dark/clients/netshoes-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/clients/netshoes-logo.svg",
+      "target": "./src/assets/clients/dark/clients/netshoes-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/netshoes-logo.svg"
+    },
+    "assets/clients/dark/clients/pernambucanas-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/clients/pernambucanas-logo.svg",
+      "target": "./src/assets/clients/dark/clients/pernambucanas-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/pernambucanas-logo.svg"
+    },
+    "assets/clients/dark/clients/primevideo-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/clients/primevideo-logo.svg",
+      "target": "./src/assets/clients/dark/clients/primevideo-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/primevideo-logo.svg"
+    },
+    "assets/clients/dark/clients/qualcoom-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/clients/qualcoom-logo.svg",
+      "target": "./src/assets/clients/dark/clients/qualcoom-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/qualcoom-logo.svg"
+    },
+    "assets/clients/dark/clients/radware-logo-1.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/clients/radware-logo-1.svg",
+      "target": "./src/assets/clients/dark/clients/radware-logo-1.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/radware-logo-1.svg"
+    },
+    "assets/clients/dark/clients/radware-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/clients/radware-logo.svg",
+      "target": "./src/assets/clients/dark/clients/radware-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/radware-logo.svg"
+    },
+    "assets/clients/dark/clients/renner-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/clients/renner-logo.svg",
+      "target": "./src/assets/clients/dark/clients/renner-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/renner-logo.svg"
+    },
+    "assets/clients/dark/clients/saffe-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/clients/saffe-logo.svg",
+      "target": "./src/assets/clients/dark/clients/saffe-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/saffe-logo.svg"
+    },
+    "assets/clients/dark/edge-sql-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/edge-sql-logo.svg",
+      "target": "./src/assets/clients/dark/edge-sql-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/edge-sql-logo.svg"
+    },
+    "assets/clients/dark/edge-storage-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/edge-storage-logo.svg",
+      "target": "./src/assets/clients/dark/edge-storage-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/edge-storage-logo.svg"
+    },
+    "assets/clients/dark/former-clients/hdi-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/former-clients/hdi-logo.svg",
+      "target": "./src/assets/clients/dark/former-clients/hdi-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/former-clients/hdi-logo.svg"
+    },
+    "assets/clients/dark/former-clients/samsung-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/former-clients/samsung-logo.svg",
+      "target": "./src/assets/clients/dark/former-clients/samsung-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/former-clients/samsung-logo.svg"
+    },
+    "assets/clients/dark/former-clients/telefonica-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/former-clients/telefonica-logo.svg",
+      "target": "./src/assets/clients/dark/former-clients/telefonica-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/former-clients/telefonica-logo.svg"
+    },
+    "assets/clients/dark/former-clients/vtex-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/former-clients/vtex-logo.svg",
+      "target": "./src/assets/clients/dark/former-clients/vtex-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/former-clients/vtex-logo.svg"
+    },
+    "assets/clients/dark/former-clients/walmart-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/former-clients/walmart-logo.svg",
+      "target": "./src/assets/clients/dark/former-clients/walmart-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/former-clients/walmart-logo.svg"
+    },
+    "assets/clients/dark/magalu-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/magalu-logo.svg",
+      "target": "./src/assets/clients/dark/magalu-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/magalu-logo.svg"
+    },
+    "assets/clients/dark/nzn-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/nzn-logo.svg",
+      "target": "./src/assets/clients/dark/nzn-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/nzn-logo.svg"
+    },
+    "assets/clients/dark/resend-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/resend-logo.svg",
+      "target": "./src/assets/clients/dark/resend-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/resend-logo.svg"
+    },
+    "assets/clients/dark/stripe-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/dark/stripe-logo.svg",
+      "target": "./src/assets/clients/dark/stripe-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/stripe-logo.svg"
+    },
+    "assets/clients/datadog-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/datadog-logo.svg",
+      "target": "./src/assets/clients/datadog-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/datadog-logo.svg"
+    },
+    "assets/clients/docusaurus.svg": {
+      "import": "@aziontech/webkit/assets/clients/docusaurus.svg",
+      "target": "./src/assets/clients/docusaurus.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/docusaurus.svg"
+    },
+    "assets/clients/drizzle.svg": {
+      "import": "@aziontech/webkit/assets/clients/drizzle.svg",
+      "target": "./src/assets/clients/drizzle.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/drizzle.svg"
+    },
+    "assets/clients/elastic.svg": {
+      "import": "@aziontech/webkit/assets/clients/elastic.svg",
+      "target": "./src/assets/clients/elastic.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/elastic.svg"
+    },
+    "assets/clients/eleventy.svg": {
+      "import": "@aziontech/webkit/assets/clients/eleventy.svg",
+      "target": "./src/assets/clients/eleventy.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/eleventy.svg"
+    },
+    "assets/clients/equinix.svg": {
+      "import": "@aziontech/webkit/assets/clients/equinix.svg",
+      "target": "./src/assets/clients/equinix.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/equinix.svg"
+    },
+    "assets/clients/exame.svg": {
+      "import": "@aziontech/webkit/assets/clients/exame.svg",
+      "target": "./src/assets/clients/exame.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/exame.svg"
+    },
+    "assets/clients/fourbank-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/fourbank-logo.svg",
+      "target": "./src/assets/clients/fourbank-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/fourbank-logo.svg"
+    },
+    "assets/clients/gatsby.svg": {
+      "import": "@aziontech/webkit/assets/clients/gatsby.svg",
+      "target": "./src/assets/clients/gatsby.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/gatsby.svg"
+    },
+    "assets/clients/gcp.svg": {
+      "import": "@aziontech/webkit/assets/clients/gcp.svg",
+      "target": "./src/assets/clients/gcp.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/gcp.svg"
+    },
+    "assets/clients/github.svg": {
+      "import": "@aziontech/webkit/assets/clients/github.svg",
+      "target": "./src/assets/clients/github.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/github.svg"
+    },
+    "assets/clients/global-fashion-group.svg": {
+      "import": "@aziontech/webkit/assets/clients/global-fashion-group.svg",
+      "target": "./src/assets/clients/global-fashion-group.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/global-fashion-group.svg"
+    },
+    "assets/clients/grafana.svg": {
+      "import": "@aziontech/webkit/assets/clients/grafana.svg",
+      "target": "./src/assets/clients/grafana.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/grafana.svg"
+    },
+    "assets/clients/graphql.svg": {
+      "import": "@aziontech/webkit/assets/clients/graphql.svg",
+      "target": "./src/assets/clients/graphql.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/graphql.svg"
+    },
+    "assets/clients/groq.svg": {
+      "import": "@aziontech/webkit/assets/clients/groq.svg",
+      "target": "./src/assets/clients/groq.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/groq.svg"
+    },
+    "assets/clients/herospark-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/herospark-logo.svg",
+      "target": "./src/assets/clients/herospark-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/herospark-logo.svg"
+    },
+    "assets/clients/herospark-symbol.svg": {
+      "import": "@aziontech/webkit/assets/clients/herospark-symbol.svg",
+      "target": "./src/assets/clients/herospark-symbol.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/herospark-symbol.svg"
+    },
+    "assets/clients/hexo.svg": {
+      "import": "@aziontech/webkit/assets/clients/hexo.svg",
+      "target": "./src/assets/clients/hexo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/hexo.svg"
+    },
+    "assets/clients/hono.svg": {
+      "import": "@aziontech/webkit/assets/clients/hono.svg",
+      "target": "./src/assets/clients/hono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/hono.svg"
+    },
+    "assets/clients/hugo.svg": {
+      "import": "@aziontech/webkit/assets/clients/hugo.svg",
+      "target": "./src/assets/clients/hugo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/hugo.svg"
+    },
+    "assets/clients/ietf.svg": {
+      "import": "@aziontech/webkit/assets/clients/ietf.svg",
+      "target": "./src/assets/clients/ietf.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/ietf.svg"
+    },
+    "assets/clients/ifood-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/ifood-logo.svg",
+      "target": "./src/assets/clients/ifood-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/ifood-logo.svg"
+    },
+    "assets/clients/infoblox.svg": {
+      "import": "@aziontech/webkit/assets/clients/infoblox.svg",
+      "target": "./src/assets/clients/infoblox.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/infoblox.svg"
+    },
+    "assets/clients/jamstack.svg": {
+      "import": "@aziontech/webkit/assets/clients/jamstack.svg",
+      "target": "./src/assets/clients/jamstack.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/jamstack.svg"
+    },
+    "assets/clients/javascript.svg": {
+      "import": "@aziontech/webkit/assets/clients/javascript.svg",
+      "target": "./src/assets/clients/javascript.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/javascript.svg"
+    },
+    "assets/clients/jekyll.svg": {
+      "import": "@aziontech/webkit/assets/clients/jekyll.svg",
+      "target": "./src/assets/clients/jekyll.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/jekyll.svg"
+    },
+    "assets/clients/kafka.svg": {
+      "import": "@aziontech/webkit/assets/clients/kafka.svg",
+      "target": "./src/assets/clients/kafka.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/kafka.svg"
+    },
+    "assets/clients/light/agi-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/agi-logo.svg",
+      "target": "./src/assets/clients/light/agi-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/agi-logo.svg"
+    },
+    "assets/clients/light/agibank-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/agibank-logo.svg",
+      "target": "./src/assets/clients/light/agibank-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/agibank-logo.svg"
+    },
+    "assets/clients/light/alpargatas-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/alpargatas-logo.svg",
+      "target": "./src/assets/clients/light/alpargatas-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/alpargatas-logo.svg"
+    },
+    "assets/clients/light/arezzo-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/arezzo-logo.svg",
+      "target": "./src/assets/clients/light/arezzo-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/arezzo-logo.svg"
+    },
+    "assets/clients/light/browserless-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/browserless-logo.svg",
+      "target": "./src/assets/clients/light/browserless-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/browserless-logo.svg"
+    },
+    "assets/clients/light/caixa-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/caixa-logo.svg",
+      "target": "./src/assets/clients/light/caixa-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/caixa-logo.svg"
+    },
+    "assets/clients/light/cobasi-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/cobasi-logo.svg",
+      "target": "./src/assets/clients/light/cobasi-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/cobasi-logo.svg"
+    },
+    "assets/clients/light/contabilizei-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/contabilizei-logo.svg",
+      "target": "./src/assets/clients/light/contabilizei-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/contabilizei-logo.svg"
+    },
+    "assets/clients/light/csu-digital-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/csu-digital-logo.svg",
+      "target": "./src/assets/clients/light/csu-digital-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/csu-digital-logo.svg"
+    },
+    "assets/clients/light/edge-sql-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/edge-sql-logo.svg",
+      "target": "./src/assets/clients/light/edge-sql-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/edge-sql-logo.svg"
+    },
+    "assets/clients/light/edge-storage-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/edge-storage-logo.svg",
+      "target": "./src/assets/clients/light/edge-storage-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/edge-storage-logo.svg"
+    },
+    "assets/clients/light/gfg-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/gfg-logo.svg",
+      "target": "./src/assets/clients/light/gfg-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/gfg-logo.svg"
+    },
+    "assets/clients/light/grendene-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/grendene-logo.svg",
+      "target": "./src/assets/clients/light/grendene-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/grendene-logo.svg"
+    },
+    "assets/clients/light/gru-airport-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/gru-airport-logo.svg",
+      "target": "./src/assets/clients/light/gru-airport-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/gru-airport-logo.svg"
+    },
+    "assets/clients/light/herospark-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/herospark-logo.svg",
+      "target": "./src/assets/clients/light/herospark-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/herospark-logo.svg"
+    },
+    "assets/clients/light/ifood-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/ifood-logo.svg",
+      "target": "./src/assets/clients/light/ifood-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/ifood-logo.svg"
+    },
+    "assets/clients/light/itau-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/itau-logo.svg",
+      "target": "./src/assets/clients/light/itau-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/itau-logo.svg"
+    },
+    "assets/clients/light/locaweb-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/locaweb-logo.svg",
+      "target": "./src/assets/clients/light/locaweb-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/locaweb-logo.svg"
+    },
+    "assets/clients/light/magalu-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/magalu-logo.svg",
+      "target": "./src/assets/clients/light/magalu-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/magalu-logo.svg"
+    },
+    "assets/clients/light/marisa-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/marisa-logo.svg",
+      "target": "./src/assets/clients/light/marisa-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/marisa-logo.svg"
+    },
+    "assets/clients/light/meliuz-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/meliuz-logo.svg",
+      "target": "./src/assets/clients/light/meliuz-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/meliuz-logo.svg"
+    },
+    "assets/clients/light/neogrid-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/neogrid-logo.svg",
+      "target": "./src/assets/clients/light/neogrid-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/neogrid-logo.svg"
+    },
+    "assets/clients/light/neon-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/neon-logo.svg",
+      "target": "./src/assets/clients/light/neon-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/neon-logo.svg"
+    },
+    "assets/clients/light/netshoes-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/netshoes-logo.svg",
+      "target": "./src/assets/clients/light/netshoes-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/netshoes-logo.svg"
+    },
+    "assets/clients/light/mobiauto-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/mobiauto-logo.svg",
+      "target": "./src/assets/clients/light/mobiauto-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/mobiauto-logo.svg"
+    },
+    "assets/clients/light/nzn-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/nzn-logo.svg",
+      "target": "./src/assets/clients/light/nzn-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/nzn-logo.svg"
+    },
+    "assets/clients/light/panvel-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/panvel-logo.svg",
+      "target": "./src/assets/clients/light/panvel-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/panvel-logo.svg"
+    },
+    "assets/clients/light/portobello-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/portobello-logo.svg",
+      "target": "./src/assets/clients/light/portobello-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/portobello-logo.svg"
+    },
+    "assets/clients/light/primevideo-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/primevideo-logo.svg",
+      "target": "./src/assets/clients/light/primevideo-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/primevideo-logo.svg"
+    },
+    "assets/clients/light/radware-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/radware-logo.svg",
+      "target": "./src/assets/clients/light/radware-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/radware-logo.svg"
+    },
+    "assets/clients/light/rbs-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/rbs-logo.svg",
+      "target": "./src/assets/clients/light/rbs-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/rbs-logo.svg"
+    },
+    "assets/clients/light/renner-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/renner-logo.svg",
+      "target": "./src/assets/clients/light/renner-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/renner-logo.svg"
+    },
+    "assets/clients/light/resend-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/resend-logo.svg",
+      "target": "./src/assets/clients/light/resend-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/resend-logo.svg"
+    },
+    "assets/clients/light/stone-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/stone-logo.svg",
+      "target": "./src/assets/clients/light/stone-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/stone-logo.svg"
+    },
+    "assets/clients/light/stripe-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/stripe-logo.svg",
+      "target": "./src/assets/clients/light/stripe-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/stripe-logo.svg"
+    },
+    "assets/clients/light/unicred-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/light/unicred-logo.svg",
+      "target": "./src/assets/clients/light/unicred-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/unicred-logo.svg"
+    },
+    "assets/clients/madeira-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/madeira-logo.svg",
+      "target": "./src/assets/clients/madeira-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/madeira-logo.svg"
+    },
+    "assets/clients/madeira-symbol.svg": {
+      "import": "@aziontech/webkit/assets/clients/madeira-symbol.svg",
+      "target": "./src/assets/clients/madeira-symbol.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/madeira-symbol.svg"
+    },
+    "assets/clients/madeiramadeira.svg": {
+      "import": "@aziontech/webkit/assets/clients/madeiramadeira.svg",
+      "target": "./src/assets/clients/madeiramadeira.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/madeiramadeira.svg"
+    },
+    "assets/clients/magalu-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/magalu-logo.svg",
+      "target": "./src/assets/clients/magalu-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/magalu-logo.svg"
+    },
+    "assets/clients/magalu-symbol.png": {
+      "import": "@aziontech/webkit/assets/clients/magalu-symbol.png",
+      "target": "./src/assets/clients/magalu-symbol.png",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/magalu-symbol.png"
+    },
+    "assets/clients/mongodb.svg": {
+      "import": "@aziontech/webkit/assets/clients/mongodb.svg",
+      "target": "./src/assets/clients/mongodb.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/mongodb.svg"
+    },
+    "assets/clients/mysql.svg": {
+      "import": "@aziontech/webkit/assets/clients/mysql.svg",
+      "target": "./src/assets/clients/mysql.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/mysql.svg"
+    },
+    "assets/clients/netshoes-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/netshoes-logo.svg",
+      "target": "./src/assets/clients/netshoes-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/netshoes-logo.svg"
+    },
+    "assets/clients/nextjs.svg": {
+      "import": "@aziontech/webkit/assets/clients/nextjs.svg",
+      "target": "./src/assets/clients/nextjs.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/nextjs.svg"
+    },
+    "assets/clients/node.js.svg": {
+      "import": "@aziontech/webkit/assets/clients/node.js.svg",
+      "target": "./src/assets/clients/node.js.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/node.js.svg"
+    },
+    "assets/clients/nuxt.svg": {
+      "import": "@aziontech/webkit/assets/clients/nuxt.svg",
+      "target": "./src/assets/clients/nuxt.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/nuxt.svg"
+    },
+    "assets/clients/mobiauto-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/mobiauto-logo.svg",
+      "target": "./src/assets/clients/mobiauto-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/mobiauto-logo.svg"
+    },
+    "assets/clients/nzn-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/nzn-logo.svg",
+      "target": "./src/assets/clients/nzn-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/nzn-logo.svg"
+    },
+    "assets/clients/onnx.svg": {
+      "import": "@aziontech/webkit/assets/clients/onnx.svg",
+      "target": "./src/assets/clients/onnx.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/onnx.svg"
+    },
+    "assets/clients/openai.svg": {
+      "import": "@aziontech/webkit/assets/clients/openai.svg",
+      "target": "./src/assets/clients/openai.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/openai.svg"
+    },
+    "assets/clients/photos/gpa.jpg": {
+      "import": "@aziontech/webkit/assets/clients/photos/gpa.jpg",
+      "target": "./src/assets/clients/photos/gpa.jpg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/photos/gpa.jpg"
+    },
+    "assets/clients/photos/netshoes.jpg": {
+      "import": "@aziontech/webkit/assets/clients/photos/netshoes.jpg",
+      "target": "./src/assets/clients/photos/netshoes.jpg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/photos/netshoes.jpg"
+    },
+    "assets/clients/planetscale.svg": {
+      "import": "@aziontech/webkit/assets/clients/planetscale.svg",
+      "target": "./src/assets/clients/planetscale.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/planetscale.svg"
+    },
+    "assets/clients/postgresql.svg": {
+      "import": "@aziontech/webkit/assets/clients/postgresql.svg",
+      "target": "./src/assets/clients/postgresql.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/postgresql.svg"
+    },
+    "assets/clients/preact.svg": {
+      "import": "@aziontech/webkit/assets/clients/preact.svg",
+      "target": "./src/assets/clients/preact.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/preact.svg"
+    },
+    "assets/clients/prisma.svg": {
+      "import": "@aziontech/webkit/assets/clients/prisma.svg",
+      "target": "./src/assets/clients/prisma.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/prisma.svg"
+    },
+    "assets/clients/qwik.svg": {
+      "import": "@aziontech/webkit/assets/clients/qwik.svg",
+      "target": "./src/assets/clients/qwik.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/qwik.svg"
+    },
+    "assets/clients/react.svg": {
+      "import": "@aziontech/webkit/assets/clients/react.svg",
+      "target": "./src/assets/clients/react.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/react.svg"
+    },
+    "assets/clients/redis.svg": {
+      "import": "@aziontech/webkit/assets/clients/redis.svg",
+      "target": "./src/assets/clients/redis.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/redis.svg"
+    },
+    "assets/clients/remix.svg": {
+      "import": "@aziontech/webkit/assets/clients/remix.svg",
+      "target": "./src/assets/clients/remix.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/remix.svg"
+    },
+    "assets/clients/renner-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/renner-logo.svg",
+      "target": "./src/assets/clients/renner-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/renner-logo.svg"
+    },
+    "assets/clients/renner-symbol.svg": {
+      "import": "@aziontech/webkit/assets/clients/renner-symbol.svg",
+      "target": "./src/assets/clients/renner-symbol.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/renner-symbol.svg"
+    },
+    "assets/clients/serverless.svg": {
+      "import": "@aziontech/webkit/assets/clients/serverless.svg",
+      "target": "./src/assets/clients/serverless.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/serverless.svg"
+    },
+    "assets/clients/sqlite.svg": {
+      "import": "@aziontech/webkit/assets/clients/sqlite.svg",
+      "target": "./src/assets/clients/sqlite.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/sqlite.svg"
+    },
+    "assets/clients/supabase.svg": {
+      "import": "@aziontech/webkit/assets/clients/supabase.svg",
+      "target": "./src/assets/clients/supabase.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/supabase.svg"
+    },
+    "assets/clients/svelte.svg": {
+      "import": "@aziontech/webkit/assets/clients/svelte.svg",
+      "target": "./src/assets/clients/svelte.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/svelte.svg"
+    },
+    "assets/clients/symbols/caixa.svg": {
+      "import": "@aziontech/webkit/assets/clients/symbols/caixa.svg",
+      "target": "./src/assets/clients/symbols/caixa.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/symbols/caixa.svg"
+    },
+    "assets/clients/symbols/gpa.svg": {
+      "import": "@aziontech/webkit/assets/clients/symbols/gpa.svg",
+      "target": "./src/assets/clients/symbols/gpa.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/symbols/gpa.svg"
+    },
+    "assets/clients/symbols/ifood.svg": {
+      "import": "@aziontech/webkit/assets/clients/symbols/ifood.svg",
+      "target": "./src/assets/clients/symbols/ifood.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/symbols/ifood.svg"
+    },
+    "assets/clients/symbols/itau.svg": {
+      "import": "@aziontech/webkit/assets/clients/symbols/itau.svg",
+      "target": "./src/assets/clients/symbols/itau.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/symbols/itau.svg"
+    },
+    "assets/clients/symbols/tray.svg": {
+      "import": "@aziontech/webkit/assets/clients/symbols/tray.svg",
+      "target": "./src/assets/clients/symbols/tray.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/symbols/tray.svg"
+    },
+    "assets/clients/tc39.svg": {
+      "import": "@aziontech/webkit/assets/clients/tc39.svg",
+      "target": "./src/assets/clients/tc39.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/tc39.svg"
+    },
+    "assets/clients/terraform.svg": {
+      "import": "@aziontech/webkit/assets/clients/terraform.svg",
+      "target": "./src/assets/clients/terraform.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/terraform.svg"
+    },
+    "assets/clients/turso.svg": {
+      "import": "@aziontech/webkit/assets/clients/turso.svg",
+      "target": "./src/assets/clients/turso.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/turso.svg"
+    },
+    "assets/clients/upstash.svg": {
+      "import": "@aziontech/webkit/assets/clients/upstash.svg",
+      "target": "./src/assets/clients/upstash.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/upstash.svg"
+    },
+    "assets/clients/vite.svg": {
+      "import": "@aziontech/webkit/assets/clients/vite.svg",
+      "target": "./src/assets/clients/vite.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/vite.svg"
+    },
+    "assets/clients/vitepress.svg": {
+      "import": "@aziontech/webkit/assets/clients/vitepress.svg",
+      "target": "./src/assets/clients/vitepress.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/vitepress.svg"
+    },
+    "assets/clients/vue.svg": {
+      "import": "@aziontech/webkit/assets/clients/vue.svg",
+      "target": "./src/assets/clients/vue.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/vue.svg"
+    },
+    "assets/clients/vuepress.svg": {
+      "import": "@aziontech/webkit/assets/clients/vuepress.svg",
+      "target": "./src/assets/clients/vuepress.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/vuepress.svg"
+    },
+    "assets/clients/w3c.svg": {
+      "import": "@aziontech/webkit/assets/clients/w3c.svg",
+      "target": "./src/assets/clients/w3c.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/w3c.svg"
+    },
+    "assets/clients/webassembly.svg": {
+      "import": "@aziontech/webkit/assets/clients/webassembly.svg",
+      "target": "./src/assets/clients/webassembly.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/webassembly.svg"
+    },
+    "assets/clients/workers-cf.svg": {
+      "import": "@aziontech/webkit/assets/clients/workers-cf.svg",
+      "target": "./src/assets/clients/workers-cf.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/workers-cf.svg"
+    },
+    "assets/clients/zoop-logo.svg": {
+      "import": "@aziontech/webkit/assets/clients/zoop-logo.svg",
+      "target": "./src/assets/clients/zoop-logo.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/zoop-logo.svg"
+    },
+    "assets/clients/registry": {
+      "import": "@aziontech/webkit/assets/clients/registry",
+      "target": "./src/assets/clients/registry.ts",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/registry"
+    },
+    "assets/clients/symbols/registry": {
+      "import": "@aziontech/webkit/assets/clients/symbols/registry",
+      "target": "./src/assets/clients/symbols/registry.ts",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/clients/symbols/registry"
+    },
+    "assets/illustrations/azion-highlight.svg": {
+      "import": "@aziontech/webkit/assets/illustrations/azion-highlight.svg",
+      "target": "./src/assets/illustrations/azion-highlight.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/illustrations/azion-highlight.svg"
+    },
+    "assets/illustrations/branches.svg": {
+      "import": "@aziontech/webkit/assets/illustrations/branches.svg",
+      "target": "./src/assets/illustrations/branches.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/illustrations/branches.svg"
+    },
+    "assets/illustrations/personal-tokens.svg": {
+      "import": "@aziontech/webkit/assets/illustrations/personal-tokens.svg",
+      "target": "./src/assets/illustrations/personal-tokens.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/illustrations/personal-tokens.svg"
+    },
+    "assets/illustrations/usage-chart.svg": {
+      "import": "@aziontech/webkit/assets/illustrations/usage-chart.svg",
+      "target": "./src/assets/illustrations/usage-chart.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/illustrations/usage-chart.svg"
+    },
+    "assets/certifications/ccpa.svg": {
+      "import": "@aziontech/webkit/assets/certifications/ccpa.svg",
+      "target": "./src/assets/certifications/ccpa.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/certifications/ccpa.svg"
+    },
+    "assets/certifications/cpra.svg": {
+      "import": "@aziontech/webkit/assets/certifications/cpra.svg",
+      "target": "./src/assets/certifications/cpra.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/certifications/cpra.svg"
+    },
+    "assets/certifications/gdpr.svg": {
+      "import": "@aziontech/webkit/assets/certifications/gdpr.svg",
+      "target": "./src/assets/certifications/gdpr.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/certifications/gdpr.svg"
+    },
+    "assets/certifications/lgpd.svg": {
+      "import": "@aziontech/webkit/assets/certifications/lgpd.svg",
+      "target": "./src/assets/certifications/lgpd.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/certifications/lgpd.svg"
+    },
+    "assets/certifications/pci-dss.svg": {
+      "import": "@aziontech/webkit/assets/certifications/pci-dss.svg",
+      "target": "./src/assets/certifications/pci-dss.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/certifications/pci-dss.svg"
+    },
+    "assets/certifications/soc.svg": {
+      "import": "@aziontech/webkit/assets/certifications/soc.svg",
+      "target": "./src/assets/certifications/soc.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/certifications/soc.svg"
+    },
+    "assets/competitors/vercel.svg": {
+      "import": "@aziontech/webkit/assets/competitors/vercel.svg",
+      "target": "./src/assets/competitors/vercel.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/competitors/vercel.svg"
+    },
+    "assets/competitors/dark/vercel.svg": {
+      "import": "@aziontech/webkit/assets/competitors/dark/vercel.svg",
+      "target": "./src/assets/competitors/dark/vercel.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/competitors/dark/vercel.svg"
+    },
+    "assets/competitors/registry": {
+      "import": "@aziontech/webkit/assets/competitors/registry",
+      "target": "./src/assets/competitors/registry.ts",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/competitors/registry"
     },
     "svg/illustration-layers": {
       "import": "@aziontech/webkit/svg/illustration-layers",
