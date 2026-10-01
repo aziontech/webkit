@@ -9914,6 +9914,13 @@
           "doc": "Paint this texture behind the band's content; `none` leaves the backdrop to the `background` slot."
         },
         {
+          "name": "textureSize",
+          "type": "TextureMaterialSize",
+          "default": "'medium'",
+          "required": "false",
+          "doc": "Pitch of the tiling the `texture` prop paints — how far apart its cells sit."
+        },
+        {
           "name": "textureFade",
           "type": "TextureMaterialFade",
           "default": "'none'",
@@ -9926,6 +9933,13 @@
           "default": "'none'",
           "required": "false",
           "doc": "Paint this texture standing on the band's floor, filling the `bottom` window under the brand strip."
+        },
+        {
+          "name": "floorTextureSize",
+          "type": "TextureMaterialSize",
+          "default": "'medium'",
+          "required": "false",
+          "doc": "Pitch of the tiling the `floorTexture` prop paints — how far apart its cells sit."
         },
         {
           "name": "align",
@@ -10021,7 +10035,7 @@
       "related": [
         "section-container` — the framed column below it; this band's `border-b` is that column's top edge.",
         "section-module` — the brick stacked inside that column.",
-        "texture-material` — the backdrop the `texture` prop paints, and what the `background` slot usually holds.",
+        "texture-material` — the backdrop the `texture` and `floorTexture` props paint, at the pitch `textureSize` and `floorTextureSize` set; reach for the `background` slot only when the layer needs more than kind, size and fade.",
         "media-split` — the same copy-beside-media shape at section scale, rendering an `h2`.",
         "banner` — the mid-page announcement band."
       ],
@@ -10091,6 +10105,13 @@
           "doc": "Paint this texture behind the band's content; `none` leaves the backdrop to the `background` slot."
         },
         {
+          "name": "textureSize",
+          "type": "TextureMaterialSize",
+          "default": "'medium'",
+          "required": "false",
+          "doc": "Pitch of the tiling the `texture` prop paints — how far apart its cells sit."
+        },
+        {
           "name": "textureFade",
           "type": "TextureMaterialFade",
           "default": "'none'",
@@ -10103,6 +10124,13 @@
           "default": "'none'",
           "required": "false",
           "doc": "Paint this texture standing on the band's floor, filling the `bottom` window under the brand strip."
+        },
+        {
+          "name": "floorTextureSize",
+          "type": "TextureMaterialSize",
+          "default": "'medium'",
+          "required": "false",
+          "doc": "Pitch of the tiling the `floorTexture` prop paints — how far apart its cells sit."
         },
         {
           "name": "align",
@@ -10198,7 +10226,7 @@
       "related": [
         "section-container` — the framed column below it; this band's `border-b` is that column's top edge.",
         "section-module` — the brick stacked inside that column.",
-        "texture-material` — the backdrop the `texture` prop paints, and what the `background` slot usually holds.",
+        "texture-material` — the backdrop the `texture` and `floorTexture` props paint, at the pitch `textureSize` and `floorTextureSize` set; reach for the `background` slot only when the layer needs more than kind, size and fade.",
         "media-split` — the same copy-beside-media shape at section scale, rendering an `h2`.",
         "banner` — the mid-page announcement band."
       ],

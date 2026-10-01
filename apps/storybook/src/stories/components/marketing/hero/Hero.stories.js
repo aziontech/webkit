@@ -92,13 +92,23 @@ const meta = {
     },
     texture: {
       control: 'inline-radio',
-      options: ['none', 'dots', 'grid', 'dither', 'pixelate'],
+      options: ['none', 'dots', 'grid', 'lines', 'dither', 'pixelate'],
       description:
         'Paint this texture behind the band’s content; `none` leaves the backdrop to the `background` slot.',
       table: {
         category: 'props',
-        type: { summary: "'dots' | 'grid' | 'dither' | 'pixelate' | 'none'" },
+        type: { summary: "'dots' | 'grid' | 'lines' | 'dither' | 'pixelate' | 'none'" },
         defaultValue: { summary: "'none'" }
+      }
+    },
+    textureSize: {
+      control: 'inline-radio',
+      options: ['small', 'medium', 'large'],
+      description: 'Pitch of the tiling the `texture` prop paints — how far apart its cells sit.',
+      table: {
+        category: 'props',
+        type: { summary: "'small' | 'medium' | 'large'" },
+        defaultValue: { summary: "'medium'" }
       }
     },
     textureFade: {
@@ -113,13 +123,24 @@ const meta = {
     },
     floorTexture: {
       control: 'select',
-      options: ['none', 'dots', 'grid', 'dither', 'pixelate'],
+      options: ['none', 'dots', 'grid', 'lines', 'dither', 'pixelate'],
       description:
         "Paint this texture standing on the band's floor, filling the `bottom` window under the brand strip.",
       table: {
         category: 'props',
-        type: { summary: "'dots' | 'grid' | 'dither' | 'pixelate' | 'none'" },
+        type: { summary: "'dots' | 'grid' | 'lines' | 'dither' | 'pixelate' | 'none'" },
         defaultValue: { summary: "'none'" }
+      }
+    },
+    floorTextureSize: {
+      control: 'inline-radio',
+      options: ['small', 'medium', 'large'],
+      description:
+        'Pitch of the tiling the `floorTexture` prop paints — how far apart its cells sit.',
+      table: {
+        category: 'props',
+        type: { summary: "'small' | 'medium' | 'large'" },
+        defaultValue: { summary: "'medium'" }
       }
     },
     align: {
@@ -178,8 +199,10 @@ const meta = {
     padded: true,
     size: 'medium',
     texture: 'none',
+    textureSize: 'medium',
     textureFade: 'none',
     floorTexture: 'none',
+    floorTextureSize: 'medium',
     align: 'center',
     mediaAlign: 'center',
     carousel: false,
@@ -366,12 +389,11 @@ const ASSET_WINDOWS_TEMPLATE = `<Hero
   kind="screen"
   align="center"
   max-width="site"
+  texture="dots"
+  texture-size="small"
+  texture-fade="bottom"
   class="[--banner-top-height:42%] [--banner-bottom-height:22%]"
 >
-  <template #background>
-    <TextureMaterial kind="dots" size="small" fade="bottom" />
-  </template>
-
   <template #top>
     <div class="flex h-full items-start justify-center pt-(--spacing-xl)">
       <div class="rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) px-(--spacing-lg) py-(--spacing-md) text-body-sm text-(--text-muted)">
@@ -405,7 +427,7 @@ export const AssetWindows = {
         story:
           'The `top` and `bottom` slots are asset windows anchored to the band’s edges. Each one clips its child, so an asset larger than the band shows only the part the window frames — `--banner-top-height` sizes the window and `--banner-top-x` / `-y` move the asset inside it. The band is an `isolate` stacking context whose layer order is set by `--banner-z-background`, `--banner-z-top`, `--banner-z-bottom` and `--banner-z-content`.'
       },
-      source: { code: toSfc(IMPORT_WITH_PATTERN, ASSET_WINDOWS_TEMPLATE) }
+      source: { code: toSfc(IMPORT, ASSET_WINDOWS_TEMPLATE) }
     }
   }
 }

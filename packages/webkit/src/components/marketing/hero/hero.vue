@@ -3,7 +3,8 @@
 
   import TextureMaterial, {
     type TextureMaterialFade,
-    type TextureMaterialKind
+    type TextureMaterialKind,
+    type TextureMaterialSize
   } from '../texture-material/texture-material.vue'
 
   const Ticker = defineAsyncComponent(() => import('../ticker/ticker.vue'))
@@ -41,10 +42,14 @@
     size?: HeroSize
     /** Paint this texture behind the band's content; `none` leaves the backdrop to the `background` slot. */
     texture?: TextureMaterialKind
+    /** Pitch of the tiling the `texture` prop paints — how far apart its cells sit. */
+    textureSize?: TextureMaterialSize
     /** Fade applied to the layer the `texture` prop paints. */
     textureFade?: TextureMaterialFade
     /** Paint this texture standing on the band's floor, filling the `bottom` window under the brand strip. */
     floorTexture?: TextureMaterialKind
+    /** Pitch of the tiling the `floorTexture` prop paints — how far apart its cells sit. */
+    floorTextureSize?: TextureMaterialSize
     /** Where the content column sits vertically when the band fills a screen. */
     align?: HeroAlign
     /** Where the `media` slot sits in its column: `center` balances it in the column, `end` sets its end edge on the container boundary, past the inline inset, from `md` up. */
@@ -68,8 +73,10 @@
     padded: true,
     size: 'medium',
     texture: 'none',
+    textureSize: 'medium',
     textureFade: 'none',
     floorTexture: 'none',
+    floorTextureSize: 'medium',
     align: 'center',
     mediaAlign: 'center',
     offset: '',
@@ -129,6 +136,7 @@
         <TextureMaterial
           v-if="texture !== 'none'"
           :kind="texture"
+          :size="textureSize"
           :fade="textureFade"
         />
 
@@ -185,6 +193,7 @@
         <TextureMaterial
           v-if="hasFloorTexture"
           :kind="floorTexture"
+          :size="floorTextureSize"
           class="[mask-image:linear-gradient(to_right,black_0%,color-mix(in_srgb,black_30%,transparent)_40%,color-mix(in_srgb,black_30%,transparent)_62%,black_100%)] [mask-mode:alpha] [opacity:var(--banner-floor-ink,0.6)]"
         />
 
