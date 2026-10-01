@@ -1,8 +1,9 @@
 <script setup lang="ts">
-  import { computed, onMounted, onScopeDispose, ref, useAttrs } from 'vue'
+  import { computed, inject, onMounted, onScopeDispose, ref, useAttrs } from 'vue'
 
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import Overline from '../../overline/overline.vue'
+  import { BandStackInjectionKey } from '../band-stack/injection-key'
   import TextureMaterial, {
     type TextureMaterialFade,
     type TextureMaterialKind,
@@ -46,7 +47,7 @@
     fill?: MediaSplitFill
     /** The media cell's fill. `surface` sets the asset on its own plate, one step off the page; `canvas` lets the whole band sit on the page. */
     mediaFill?: MediaSplitFill
-    /** Draw the band's own registration frame. Turn it off when the page already wraps the band in a frame. */
+    /** Draw the band's own registration frame: its top and bottom rules, with the copy and the media framed as two cells, each with its four marks. Turn it off when the page already wraps the band in a frame. */
     framed?: boolean
     /** Draw the seam between the copy and the media. Turn it off for a band whose two halves should read as one plate. */
     divided?: boolean
@@ -105,6 +106,7 @@
   }>()
 
   const attrs = useAttrs()
+  const stack = inject(BandStackInjectionKey, null)
 
   const root = ref<globalThis.HTMLElement | null>(null)
 
@@ -122,7 +124,13 @@
 
   const frame = computed(() => (props.framed ? FrameBox : 'div'))
   const frameProps = computed(() =>
-    props.framed ? { flush: true, borders: 'y', marks: 'all' } : {}
+    props.framed ? { flush: true, borders: 'y', marks: 'none' } : {}
+  )
+
+  const framesCells = computed<boolean>(() => props.framed || Boolean(stack?.framesCells))
+  const cellFrame = computed(() => (framesCells.value ? FrameBox : 'div'))
+  const cellFrameProps = computed(() =>
+    framesCells.value ? { borders: 'none', marks: 'all' } : {}
   )
 
   onMounted(() => root.value?.addEventListener('click', followBand))
@@ -171,83 +179,97 @@
         :data-orientation="orientation"
         class="grid h-full group-data-[divided]/split:gap-px group-data-[divided]/split:bg-(--border-default) group-data-[media]/split:data-[orientation=horizontal]:lg:grid-cols-2"
       >
-        <div
+        <component
+          :is="cellFrame"
+          v-bind="cellFrameProps"
+          :data-testid="`${testId}__copy-cell`"
           :data-orientation="orientation"
-          class="flex flex-col justify-between gap-(--spacing-xxl) p-(--spacing-xl) group-data-[size=large]/split:p-(--spacing-xxl) group-data-[fill=canvas]/split:bg-(--bg-canvas) group-data-[fill=surface]/split:bg-(--bg-surface) group-data-[kind=media-start]/split:lg:order-last group-data-[kind=media-start]/split:data-[orientation=vertical]:order-last group-data-[align=center]/split:justify-center"
+          class="min-w-0 group-data-[kind=media-start]/split:lg:order-last group-data-[kind=media-start]/split:data-[orientation=vertical]:order-last"
         >
-          <div class="flex flex-col gap-(--spacing-lg)">
-            <Overline
-              v-if="eyebrow"
-              prefix="//"
-              show-cursor
-              >{{ eyebrow }}</Overline
-            >
-
-            <component
-              :is="`h${headingLevel}`"
-              class="m-0 text-balance text-(--text-default) group-data-[size=medium]/split:text-heading-md group-data-[size=large]/split:text-heading-xl"
-            >
-              {{ title }}
-            </component>
-
-            <p
-              v-if="hasDescription"
-              class="m-0 text-pretty text-(--text-muted) group-data-[size=medium]/split:text-body-md group-data-[size=large]/split:text-body-lg"
-            >
-              <slot>{{ description }}</slot>
-            </p>
-
-            <slot name="content" />
-          </div>
-
           <div
-            v-if="slots.actions"
-            class="flex flex-wrap items-center gap-(--spacing-sm) group-data-[media-href]/split:group-hover/split:[&>a]:before:opacity-100 group-data-[media-href]/split:group-active/split:[&>a]:after:opacity-100 group-data-[media-href]/split:group-hover/split:[&>a_[data-animated]]:translate-x-0.5"
+            class="flex h-full flex-col justify-between gap-(--spacing-xxl) p-(--spacing-xl) group-data-[size=large]/split:p-(--spacing-xxl) group-data-[fill=canvas]/split:bg-(--bg-canvas) group-data-[fill=surface]/split:bg-(--bg-surface) group-data-[align=center]/split:justify-center"
           >
-            <slot name="actions" />
+            <div class="flex flex-col gap-(--spacing-lg)">
+              <Overline
+                v-if="eyebrow"
+                prefix="//"
+                show-cursor
+                >{{ eyebrow }}</Overline
+              >
+
+              <component
+                :is="`h${headingLevel}`"
+                class="m-0 text-balance text-(--text-default) group-data-[size=medium]/split:text-heading-md group-data-[size=large]/split:text-heading-xl"
+              >
+                {{ title }}
+              </component>
+
+              <p
+                v-if="hasDescription"
+                class="m-0 text-pretty text-(--text-muted) group-data-[size=medium]/split:text-body-md group-data-[size=large]/split:text-body-lg"
+              >
+                <slot>{{ description }}</slot>
+              </p>
+
+              <slot name="content" />
+            </div>
+
+            <div
+              v-if="slots.actions"
+              class="flex flex-wrap items-center gap-(--spacing-sm) group-data-[media-href]/split:group-hover/split:[&>a]:before:opacity-100 group-data-[media-href]/split:group-active/split:[&>a]:after:opacity-100 group-data-[media-href]/split:group-hover/split:[&>a_[data-animated]]:translate-x-0.5"
+            >
+              <slot name="actions" />
+            </div>
           </div>
-        </div>
+        </component>
 
         <!-- The ground under the media, painted by the band rather than by the call site: the
              texture fades out before the cell's edges, so the seam and the frame stay the only
              hard lines. A call site quiets it further with `--texture-ink`, inherited from this
              root; an asset takes no padding, so the ground reaches the media's own air. -->
         <component
-          :is="isMediaLink ? 'a' : 'div'"
+          :is="cellFrame"
           v-if="hasMedia"
-          :href="isMediaLink ? mediaHref : undefined"
-          :aria-label="isMediaLink ? title : undefined"
-          :data-testid="`${testId}__media`"
-          class="group/media relative flex min-w-0 items-center justify-center overflow-hidden group-data-[media-fill=surface]/split:bg-(--bg-surface) group-data-[media-fill=canvas]/split:bg-(--bg-canvas) group-data-[media-padded]/split:p-(--spacing-xl) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset"
+          v-bind="cellFrameProps"
+          :data-testid="`${testId}__media-cell`"
+          class="min-w-0"
         >
-          <TextureMaterial
-            :kind="texture"
-            :size="textureSize"
-            :fade="textureFade"
-          />
-
-          <div class="relative z-10 flex w-full min-w-0 items-center justify-center self-stretch">
-            <slot name="media">
-              <img
-                v-if="src"
-                :src="src"
-                :alt="alt"
-                :aria-hidden="alt ? undefined : 'true'"
-                loading="lazy"
-                decoding="async"
-                class="h-full w-full object-cover"
-              />
-            </slot>
-          </div>
-
-          <span
-            v-if="isMediaLink"
-            aria-hidden="true"
-            :data-testid="`${testId}__media-affordance`"
-            class="pointer-events-none absolute right-(--spacing-xl) bottom-(--spacing-xl) z-20 inline-flex h-7 min-w-7 translate-x-1 items-center justify-center rounded-(--shape-button) bg-(--secondary) px-(--spacing-xs) text-button-md text-(--secondary-contrast) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance group-hover/split:translate-x-0 group-hover/split:opacity-100 group-focus-visible/media:translate-x-0 group-focus-visible/media:opacity-100 motion-reduce:transition-none"
+          <component
+            :is="isMediaLink ? 'a' : 'div'"
+            :href="isMediaLink ? mediaHref : undefined"
+            :aria-label="isMediaLink ? title : undefined"
+            :data-testid="`${testId}__media`"
+            class="group/media relative flex h-full min-w-0 items-center justify-center overflow-hidden group-data-[media-fill=surface]/split:bg-(--bg-surface) group-data-[media-fill=canvas]/split:bg-(--bg-canvas) group-data-[media-padded]/split:p-(--spacing-xl) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset"
           >
-            <i class="pi pi-chevron-right text-[length:inherit] leading-none" />
-          </span>
+            <TextureMaterial
+              :kind="texture"
+              :size="textureSize"
+              :fade="textureFade"
+            />
+
+            <div class="relative z-10 flex w-full min-w-0 items-center justify-center self-stretch">
+              <slot name="media">
+                <img
+                  v-if="src"
+                  :src="src"
+                  :alt="alt"
+                  :aria-hidden="alt ? undefined : 'true'"
+                  loading="lazy"
+                  decoding="async"
+                  class="h-full w-full object-cover"
+                />
+              </slot>
+            </div>
+
+            <span
+              v-if="isMediaLink"
+              aria-hidden="true"
+              :data-testid="`${testId}__media-affordance`"
+              class="pointer-events-none absolute right-(--spacing-xl) bottom-(--spacing-xl) z-20 inline-flex h-7 min-w-7 translate-x-1 items-center justify-center rounded-(--shape-button) bg-(--secondary) px-(--spacing-xs) text-button-md text-(--secondary-contrast) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance group-hover/split:translate-x-0 group-hover/split:opacity-100 group-focus-visible/media:translate-x-0 group-focus-visible/media:opacity-100 motion-reduce:transition-none"
+            >
+              <i class="pi pi-chevron-right text-[length:inherit] leading-none" />
+            </span>
+          </component>
         </component>
       </div>
     </component>
