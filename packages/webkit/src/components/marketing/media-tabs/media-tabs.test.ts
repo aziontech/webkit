@@ -219,7 +219,7 @@ describe('MediaTabs', () => {
     expect(activeTitles(container)).toEqual([ITEMS[0].title])
   })
 
-  it('stops autoplay for good once a reader clicks a tab', async () => {
+  it('keeps autoplay running after a click and restarts the count from the clicked tab', async () => {
     vi.useFakeTimers()
     const { container, getAllByRole, getByTestId } = render(MediaTabs, {
       props: { items: ITEMS, autoPlayInterval: INTERVAL }
@@ -227,12 +227,30 @@ describe('MediaTabs', () => {
 
     await fireEvent.click(getAllByRole('button')[1])
 
-    expect(getByTestId(TESTID).getAttribute('data-autoplay')).toBeNull()
+    expect(getByTestId(TESTID).getAttribute('data-autoplay')).not.toBeNull()
 
-    vi.advanceTimersByTime(INTERVAL * 3)
+    vi.advanceTimersByTime(INTERVAL)
     await nextTick()
 
-    expect(activeTitles(container)).toEqual([ITEMS[1].title])
+    expect(activeTitles(container)).toEqual([ITEMS[2].title])
+  })
+
+  it('keeps the progress moving after a click while the pointer stays on the band', async () => {
+    vi.useFakeTimers()
+    const { container, getAllByRole, getByTestId } = render(MediaTabs, {
+      props: { items: ITEMS, autoPlayInterval: INTERVAL }
+    })
+    const root = getByTestId(TESTID)
+    const hairline = () => container.querySelector('[data-progress]') as HTMLElement
+
+    await fireEvent.pointerEnter(root)
+    await fireEvent.click(getAllByRole('button')[1])
+    expect(root.getAttribute('data-autoplay')).not.toBeNull()
+
+    vi.advanceTimersByTime(INTERVAL / 2)
+    await nextTick()
+
+    expect(hairline().style.width).toBe('50%')
   })
 
   it('pauses autoplay while the pointer rests on the band, and resumes on leave', async () => {
@@ -251,7 +269,7 @@ describe('MediaTabs', () => {
 
   it('draws the autoplay hairline over the active row only', () => {
     const { container } = render(MediaTabs, { props: { items: ITEMS } })
-    const hairlines = container.querySelectorAll('li > span[aria-hidden="true"]')
+    const hairlines = container.querySelectorAll('[data-progress]')
 
     expect(hairlines).toHaveLength(1)
   })
@@ -261,7 +279,7 @@ describe('MediaTabs', () => {
       props: { items: ITEMS, showProgress: false }
     })
 
-    expect(container.querySelector('li > span[aria-hidden="true"]')).toBeNull()
+    expect(container.querySelector('[data-progress]')).toBeNull()
   })
 
   it('renders nothing when there are no items', () => {
@@ -313,5 +331,27 @@ describe('MediaTabs', () => {
     const { container } = render(MediaTabs, { props: { items: ITEMS } })
 
     await expectNoA11yViolations(container)
+  })
+
+  it('renders no more than three tabs', () => {
+    const items = [...ITEMS, { ...ITEMS[0], title: 'A fourth claim' }]
+    const { container } = render(MediaTabs, { props: { items, autoPlay: false } })
+    expect(rowsOf(container)).toHaveLength(3)
+    expect(container.textContent).not.toContain('A fourth claim')
+  })
+
+  it('grounds the media column on the texture it is given', () => {
+    const { container } = render(MediaTabs, {
+      props: { items: ITEMS, autoPlay: false, texture: 'grid', textureSize: 'small' }
+    })
+    const ground = container.querySelector('[data-testid="marketing-texture-material"]')
+    expect(ground?.getAttribute('data-kind')).toBe('grid')
+    expect(ground?.getAttribute('data-size')).toBe('small')
+  })
+
+  it('leaves the media column bare by default', () => {
+    const { container } = render(MediaTabs, { props: { items: ITEMS, autoPlay: false } })
+    const ground = container.querySelector('[data-testid="marketing-texture-material"]')
+    expect(ground?.getAttribute('data-kind')).toBe('none')
   })
 })
