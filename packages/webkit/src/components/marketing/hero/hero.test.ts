@@ -17,7 +17,13 @@ describe('Hero', () => {
     expect(root).toHaveAttribute('data-width', '7xl')
     expect(root).toHaveAttribute('data-bordered')
     expect(root).toHaveAttribute('data-padded')
+    expect(root).toHaveAttribute('data-size', 'medium')
     expect(root).not.toHaveAttribute('data-media')
+  })
+
+  it('carries the large rhythm on data-size when size is large', () => {
+    const { getByTestId } = render(Hero, { props: { size: 'large' } })
+    expect(getByTestId(TESTID)).toHaveAttribute('data-size', 'large')
   })
 
   it('lets a consumer-supplied data-testid win', () => {
@@ -38,6 +44,22 @@ describe('Hero', () => {
   it.each(['band', 'screen'] as const)('mirrors the %s kind onto data-kind', (kind) => {
     const { getByTestId } = render(Hero, { props: { kind } })
     expect(getByTestId(TESTID)).toHaveAttribute('data-kind', kind)
+  })
+
+  it('exposes offset and bottomHeight as custom properties on the root', () => {
+    const { getByTestId } = render(Hero, { props: { offset: '3.5rem', bottomHeight: '8rem' } })
+    const root = getByTestId(TESTID)
+
+    expect(root.style.getPropertyValue('--banner-offset')).toBe('3.5rem')
+    expect(root.style.getPropertyValue('--banner-bottom-height')).toBe('8rem')
+  })
+
+  it('sets no custom properties when offset and bottomHeight are empty', () => {
+    const { getByTestId } = render(Hero)
+    const root = getByTestId(TESTID)
+
+    expect(root.style.getPropertyValue('--banner-offset')).toBe('')
+    expect(root.style.getPropertyValue('--banner-bottom-height')).toBe('')
   })
 
   it('drops its bottom rule when bordered is false', () => {
@@ -232,7 +254,7 @@ describe('Hero', () => {
     })
     const strip = await findByTestId('marketing-ticker')
 
-    expect(strip.parentElement).toContainElement(getByText('field'))
+    expect(strip.parentElement?.parentElement).toContainElement(getByText('field'))
   })
 
   it('leaves the copy in a single column when no media is slotted', () => {
@@ -254,6 +276,29 @@ describe('Hero', () => {
 
     expect(getByTestId(TESTID)).toHaveAttribute('data-media')
     expect(heading.compareDocumentPosition(media) & FOLLOWING).toBe(FOLLOWING)
+  })
+
+  it('centres the media in its column by default and sets it on the end edge when mediaAlign is end', async () => {
+    const { getByTestId, getByText, rerender } = render(Hero, {
+      slots: { default: '<h1>Headline</h1>', media: '<figure>Diagram</figure>' }
+    })
+
+    expect(getByTestId(TESTID)).toHaveAttribute('data-media-align', 'center')
+    expect(getByText('Diagram').parentElement).toHaveAttribute('data-media-align', 'center')
+
+    await rerender({ mediaAlign: 'end' })
+
+    expect(getByTestId(TESTID)).toHaveAttribute('data-media-align', 'end')
+    expect(getByText('Diagram').parentElement).toHaveAttribute('data-media-align', 'end')
+  })
+
+  it('carries no media alignment when no media is slotted', () => {
+    const { getByTestId } = render(Hero, {
+      props: { mediaAlign: 'end' },
+      slots: { default: '<h1>Headline</h1>' }
+    })
+
+    expect(getByTestId(TESTID)).not.toHaveAttribute('data-media-align')
   })
 
   it('has no accessibility violations', async () => {

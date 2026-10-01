@@ -9900,6 +9900,13 @@
           "doc": "Apply the band's own vertical rhythm. The inline inset is always applied."
         },
         {
+          "name": "size",
+          "type": "HeroSize",
+          "default": "'medium'",
+          "required": "false",
+          "doc": "Vertical rhythm the band applies when `padded`, equal above and below; `large` is the opening a page leads with."
+        },
+        {
           "name": "texture",
           "type": "TextureMaterialKind",
           "default": "'none'",
@@ -9926,6 +9933,27 @@
           "default": "'center'",
           "required": "false",
           "doc": "Where the content column sits vertically when the band fills a screen."
+        },
+        {
+          "name": "mediaAlign",
+          "type": "HeroMediaAlign",
+          "default": "'center'",
+          "required": "false",
+          "doc": "Where the `media` slot sits in its column: `center` balances it in the column, `end` sets its end edge on the container boundary, past the inline inset, from `md` up."
+        },
+        {
+          "name": "offset",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Height of the fixed chrome above the band, subtracted from the viewport when `kind` is `screen`; any CSS length."
+        },
+        {
+          "name": "bottomHeight",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Height of the window under the content, where the brand strip and the floor texture stand; any CSS length."
         },
         {
           "name": "carousel",
@@ -9958,7 +9986,7 @@
         {
           "name": "media",
           "scope": "—",
-          "notes": "Screenshot, diagram or form set beside the copy from `md` up. When filled, the content column becomes two columns and the copy keeps the leading one."
+          "notes": "Screenshot, diagram or form set beside the copy from `md` up. When filled, the content column becomes two equal halves from `md` up and the copy keeps the leading one; the `Hero.Title` `maxWidth` caps the copy inside its half."
         },
         {
           "name": "background",
@@ -10002,8 +10030,10 @@
         "Pass `kind=\"screen\"` for an opening band that should measure one screen, and declare the sticky bar's height as `--banner-offset` so the band still measures exactly one screen beneath it.",
         "Put the backdrop in the `background` slot rather than on the band's own class: the slot renders beneath the content layer and is already marked decorative.",
         "Turn `padded` off when the slotted content owns its block rhythm; the inline inset is not optional, because it is the page boundary the bar above the band also reads.",
+        "Set the band's air with `size`, never with a padded wrapper around the copy: `large` is the opening a page leads with, and the rhythm is the same above and below so the copy and the media sit on the band's vertical centre.",
         "Keep `highlight` to the opening phrase of the headline — it is the same sentence, only painted differently.",
         "Put the calls to action in `Hero.Title`'s `actions` slot; it stacks them full-width on narrow screens, which is what makes a hero button a comfortable thumb target.",
+        "Set `mediaAlign=\"end\"` when the media should close on the same vertical line as the frames below the band; leave it `center` when the media is a self-contained object that reads best balanced in its column.",
         "Reach for `floorTexture` rather than wiring a texture into the `bottom` slot by hand: the window is a fixed cell, so the band already carries the ink and the horizontal falloff fitted to it, and a hand-fitted copy of that drifts.",
         "Leave the `media` slot out entirely rather than filling it with decoration — a band with one column and a strong statement beats one with a stock image."
       ]
@@ -10047,6 +10077,13 @@
           "doc": "Apply the band's own vertical rhythm. The inline inset is always applied."
         },
         {
+          "name": "size",
+          "type": "HeroSize",
+          "default": "'medium'",
+          "required": "false",
+          "doc": "Vertical rhythm the band applies when `padded`, equal above and below; `large` is the opening a page leads with."
+        },
+        {
           "name": "texture",
           "type": "TextureMaterialKind",
           "default": "'none'",
@@ -10073,6 +10110,27 @@
           "default": "'center'",
           "required": "false",
           "doc": "Where the content column sits vertically when the band fills a screen."
+        },
+        {
+          "name": "mediaAlign",
+          "type": "HeroMediaAlign",
+          "default": "'center'",
+          "required": "false",
+          "doc": "Where the `media` slot sits in its column: `center` balances it in the column, `end` sets its end edge on the container boundary, past the inline inset, from `md` up."
+        },
+        {
+          "name": "offset",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Height of the fixed chrome above the band, subtracted from the viewport when `kind` is `screen`; any CSS length."
+        },
+        {
+          "name": "bottomHeight",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Height of the window under the content, where the brand strip and the floor texture stand; any CSS length."
         },
         {
           "name": "carousel",
@@ -10105,7 +10163,7 @@
         {
           "name": "media",
           "scope": "—",
-          "notes": "Screenshot, diagram or form set beside the copy from `md` up. When filled, the content column becomes two columns and the copy keeps the leading one."
+          "notes": "Screenshot, diagram or form set beside the copy from `md` up. When filled, the content column becomes two equal halves from `md` up and the copy keeps the leading one; the `Hero.Title` `maxWidth` caps the copy inside its half."
         },
         {
           "name": "background",
@@ -10149,8 +10207,10 @@
         "Pass `kind=\"screen\"` for an opening band that should measure one screen, and declare the sticky bar's height as `--banner-offset` so the band still measures exactly one screen beneath it.",
         "Put the backdrop in the `background` slot rather than on the band's own class: the slot renders beneath the content layer and is already marked decorative.",
         "Turn `padded` off when the slotted content owns its block rhythm; the inline inset is not optional, because it is the page boundary the bar above the band also reads.",
+        "Set the band's air with `size`, never with a padded wrapper around the copy: `large` is the opening a page leads with, and the rhythm is the same above and below so the copy and the media sit on the band's vertical centre.",
         "Keep `highlight` to the opening phrase of the headline — it is the same sentence, only painted differently.",
         "Put the calls to action in `Hero.Title`'s `actions` slot; it stacks them full-width on narrow screens, which is what makes a hero button a comfortable thumb target.",
+        "Set `mediaAlign=\"end\"` when the media should close on the same vertical line as the frames below the band; leave it `center` when the media is a self-contained object that reads best balanced in its column.",
         "Reach for `floorTexture` rather than wiring a texture into the `bottom` slot by hand: the window is a fixed cell, so the band already carries the ink and the horizontal falloff fitted to it, and a hand-fitted copy of that drifts.",
         "Leave the `media` slot out entirely rather than filling it with decoration — a band with one column and a strong statement beats one with a stock image."
       ]

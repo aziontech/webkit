@@ -11,6 +11,12 @@
   /** Mark set before the eyebrow label. */
   export type HeroTitleEyebrowPrefix = '' | '//' | '<>' | '</>'
 
+  /** Headline scale. */
+  export type HeroTitleSize = 'medium' | 'large'
+
+  /** Width the copy block is capped at. */
+  export type HeroTitleWidth = 'lg' | 'xl' | '2xl' | '3xl' | '4xl'
+
   interface Props {
     /** Headline of the page, rendered as the page's `h1`. */
     title: string
@@ -24,6 +30,12 @@
     eyebrowPrefix?: HeroTitleEyebrowPrefix
     /** Center the whole block — copy, headline and actions — instead of aligning it to the start. */
     centered?: boolean
+    /** Headline scale; medium steps one rung below large. */
+    size?: HeroTitleSize
+    /** Width the copy block — headline, paragraph and actions — is capped at. */
+    maxWidth?: HeroTitleWidth
+    /** Keep the block pinned beneath the fixed chrome while the column beside it scrolls, from the large breakpoint up. */
+    sticky?: boolean
   }
 
   withDefaults(defineProps<Props>(), {
@@ -31,7 +43,10 @@
     description: '',
     eyebrow: '',
     eyebrowPrefix: '',
-    centered: false
+    centered: false,
+    size: 'large',
+    maxWidth: '4xl',
+    sticky: false
   })
 
   const slots = defineSlots<{
@@ -51,7 +66,9 @@
     v-bind="$attrs"
     :data-testid="testId"
     :data-centered="centered || null"
-    class="group flex flex-col items-start gap-(--spacing-md) data-[centered]:items-center data-[centered]:text-center"
+    :data-width="maxWidth"
+    :data-sticky="sticky || null"
+    class="group flex w-full max-w-(--container-4xl) flex-col items-start gap-(--spacing-md) data-[width=lg]:max-w-(--container-lg) data-[width=xl]:max-w-(--container-xl) data-[width=2xl]:max-w-(--container-2xl) data-[width=3xl]:max-w-(--container-3xl) lg:data-[sticky]:sticky lg:data-[sticky]:self-start lg:data-[sticky]:top-[calc(var(--banner-offset,0rem)+var(--spacing-xl))] data-[centered]:mx-auto data-[centered]:items-center data-[centered]:text-center"
   >
     <Overline
       v-if="eyebrow"
@@ -59,7 +76,10 @@
       show-cursor
       >{{ eyebrow }}</Overline
     >
-    <h1 class="m-0 max-w-(--container-4xl) text-balance text-heading-2xl text-(--text-default)">
+    <h1
+      :data-size="size"
+      class="m-0 text-balance text-(--text-default) data-[size=large]:text-heading-2xl data-[size=medium]:text-heading-xl"
+    >
       <span
         v-if="highlight"
         class="text-(--primary) [text-shadow:0_0_2rem_color-mix(in_srgb,var(--primary)_30%,transparent)]"
@@ -69,7 +89,7 @@
     </h1>
     <p
       v-if="description || slots.default"
-      class="m-0 max-w-(--container-2xl) text-pretty text-body-lg text-(--text-muted)"
+      class="mx-0 mb-0 text-pretty text-body-lg text-(--text-muted)"
     >
       <slot>{{ description }}</slot>
     </p>
