@@ -219,6 +219,28 @@ describe('Sidebar', () => {
       expect(getByTestId('layout-sidebar__collapse')).toBeTruthy()
     })
 
+    // A host restores its persisted collapse and width in its own onMounted. That is a state the
+    // reader already had, so the rail holds its motion off until it has painted once: settled
+    // is absent through the mount tick and lands on the root and the panel a few frames later.
+    it('settles only after mount, so a state restored in the mount tick lands in place', async () => {
+      const { getByTestId } = render(Sidebar, {
+        props: { collapsible: true, collapsed: true },
+        slots: { default: '<a href="/">Home</a>' }
+      })
+
+      const root = getByTestId('layout-sidebar')
+      const panel = getByTestId('layout-sidebar__panel')
+      expect(root.hasAttribute('data-settled')).toBe(false)
+      expect(panel.hasAttribute('data-settled')).toBe(false)
+
+      await waitFor(() => {
+        expect(root.hasAttribute('data-settled')).toBe(true)
+        expect(panel.hasAttribute('data-settled')).toBe(true)
+      })
+      // Settling changes nothing the reader can reach: the restored collapse still holds.
+      expect(root.getAttribute('data-collapsed')).toBe('')
+    })
+
     it('the trigger collapses the rail and takes it out of the tree and the tab order', async () => {
       const onUpdate = []
       const { getByTestId, emitted } = render(Sidebar, {
