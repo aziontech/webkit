@@ -189,6 +189,28 @@ describe('LogoWall', () => {
     expect(root.querySelector('[role="list"]')).not.toBeNull()
   })
 
+  it('frames the aside with a mark in every corner and a seam beside the wall', () => {
+    const { getByText } = render(LogoWall, {
+      props: { items },
+      slots: { aside: '<blockquote>Azion transformed our operations.</blockquote>' }
+    })
+
+    const panel = getByText('Azion transformed our operations.').closest('[data-marks]')
+    expect(panel).toHaveAttribute('data-marks', 'top-left top-right bottom-left bottom-right')
+    expect(panel).toHaveAttribute('data-seam', 'true')
+  })
+
+  it('draws no seam on an aside that stands alone', () => {
+    const { getByText } = render(LogoWall, {
+      props: { items: [] },
+      slots: { aside: '<blockquote>One customer still speaks.</blockquote>' }
+    })
+
+    const panel = getByText('One customer still speaks.').closest('[data-marks]')
+    expect(panel).toHaveAttribute('data-marks', 'top-left top-right bottom-left bottom-right')
+    expect(panel).not.toHaveAttribute('data-seam')
+  })
+
   it('renders the aside even when there are no marks to show', () => {
     const { getByTestId, getByText } = render(LogoWall, {
       props: { items: [] },
