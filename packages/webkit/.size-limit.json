@@ -170,15 +170,15 @@
     "limit": "15 KB"
   },
   {
-    "name": "client-kpi-quote",
-    "path": "src/components/marketing/client-kpi-quote/client-kpi-quote.vue",
-    "limit": "3 KB",
-    "entryOnly": true
-  },
-  {
     "name": "quote-carousel",
     "path": "src/components/marketing/quote-carousel/quote-carousel.vue",
     "limit": "20 KB",
+    "entryOnly": true
+  },
+  {
+    "name": "quote-tabs",
+    "path": "src/components/marketing/quote-tabs/quote-tabs.vue",
+    "limit": "19 KB",
     "entryOnly": true
   },
   {
