@@ -29,13 +29,16 @@ export const illustrationAssets = {
   'live-debugging': () => import('./live-debugging.svg'),
   'low-latency': () => import('./low-latency.svg'),
   'modern-frontends': () => import('./modern-frontends.svg'),
+  'no-idle-no-waste': () => import('./no-idle-no-waste.svg'),
   preview: () => import('./preview.svg'),
   'programmable-security': () => import('./programmable-security.svg'),
   'protect-financial-applications': () => import('./protect-financial-applications.svg'),
   'quick-start-with-templates': () => import('./quick-start-with-templates.svg'),
   'retail-application-modernization': () => import('./retail-application-modernization.svg'),
   runtime: () => import('./runtime.svg'),
-  'saas-platforms': () => import('./saas-platforms.svg')
+  'saas-platforms': () => import('./saas-platforms.svg'),
+  'stay-in-control': () => import('./stay-in-control.svg'),
+  'white-gloves-when-it-matters': () => import('./white-gloves-when-it-matters.svg')
 } satisfies Record<string, IllustrationAssetLoader>
 
 /** Every registered scene name. */
