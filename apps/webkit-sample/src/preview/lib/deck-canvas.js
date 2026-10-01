@@ -148,7 +148,8 @@ export const CANVAS_TOKENS = {
   '--spacing-xl': '3rem',
   '--spacing-lg': '1.5rem',
   // type — md step (>=768), the last step each of these declares
-  '--text-heading-2xl-font-size': '3.5rem',
+  '--text-heading-3xl-font-size': '3.5rem',
+  '--text-heading-2xl-font-size': '3rem',
   '--text-heading-xl-font-size': '2.25rem',
   '--text-heading-lg-font-size': '1.875rem',
   '--text-heading-md-font-size': '1.5rem',

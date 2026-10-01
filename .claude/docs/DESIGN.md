@@ -63,7 +63,8 @@ Reference: `packages/webkit/src/components/webkit/actions/button/button.vue`.
 | Class                                                              | Use for                                  |
 | ------------------------------------------------------------------ | ---------------------------------------- |
 | `text-big-number-lg` / `text-big-number-md` / `text-big-number-sm` | Large numeric displays                   |
-| `text-heading-2xl` … `text-heading-sm`                             | Headings                                 |
+| `text-heading-3xl` … `text-heading-sm`                             | Headings                                 |
+| `text-heading-xs` / `text-heading-xxs`                             | Small headings — a flat 16px / 14px, no responsive ladder (a card's title, a wordmark written in type) |
 | `text-body-lg` … `text-body-xxs`                                   | Body copy                                |
 | `text-body-prose-md`                                               | Long-form prose — body copy at `--leading-relaxed` (1.625); the `text-body-*` set is `snug` (1.375) |
 | `text-label-sm` / `text-label-md` / `text-label-lg`                | Labels, compact UI text                  |
