@@ -101,8 +101,8 @@ describe('NetworkMap', () => {
         0
       )
 
-    expect(count('world')).toBe(275)
-    expect(count('europe')).toBe(52)
+    expect(count('world')).toBe(309)
+    expect(count('europe')).toBe(48)
   })
 
   it('lights the main Brazilian capitals at the lowest density', () => {
