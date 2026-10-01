@@ -8,7 +8,7 @@ const TESTID = 'marketing-texture-material'
 
 const KINDS = ['dots', 'grid', 'dither', 'pixelate', 'none'] as const
 const SIZES = ['small', 'medium', 'large'] as const
-const FADES = ['none', 'top', 'bottom', 'edges', 'vignette'] as const
+const FADES = ['none', 'top', 'bottom', 'left', 'right', 'edges', 'vignette'] as const
 
 describe('TextureMaterial', () => {
   it('renders with the default testid and the default texture', () => {

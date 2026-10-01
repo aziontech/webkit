@@ -2,11 +2,11 @@
 name: texture-material
 category: marketing
 structure: monolithic
-status: implemented
+status: approved
 spec_version: 1
-checksum: ac3e951eb0d309621bbea5ef54f8c2c3ac439080ba573f5d94db97e38fb4f25d
+checksum: 5d469ab9af7373a32c19d1af8e41bdcdc82973e4b5da64ed73e8ddd69f1fa680
 created: 2026-09-23
-last_updated: 2026-09-25
+last_updated: 2026-09-29
 ---
 
 # Texture Material — Component Spec
@@ -68,7 +68,7 @@ import TextureMaterial from '@aziontech/webkit/texture-material'
 |---|---|---|---|---|
 | `kind` | `'dots' \| 'grid' \| 'lines' \| 'dither' \| 'pixelate' \| 'none'` | `'dots'` | false | Which texture to paint; `none` renders the layer with no texture at all. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Pitch of the tiling — how far apart the cells sit. |
-| `fade` | `'none' \| 'top' \| 'bottom' \| 'edges' \| 'vignette'` | `'none'` | false | Fades the layer out along an axis so it meets content without a hard edge. |
+| `fade` | `'none' \| 'top' \| 'bottom' \| 'left' \| 'right' \| 'edges' \| 'vignette'` | `'none'` | false | Fades the layer out along an axis so it meets content without a hard edge. |
 
 ## Events
 
@@ -83,7 +83,7 @@ import TextureMaterial from '@aziontech/webkit/texture-material'
 - Visual states: `default`
 - `data-kind`, `data-size` and `data-fade` mirror their props and drive which texture paints, at what pitch, and how it fades out
 - `kind="none"` paints nothing, so a band can switch its texture off without unmounting the layer
-- `fade="none"` leaves the layer unmasked; every other value masks it so the ink reaches zero before the layer's own edge; `top` and `bottom` are a single fade — full ink at the leading edge, zero at `--texture-fade-end`. Setting `--texture-fade-lead: transparent` adds a second ramp in from zero at the leading edge, so the layer also clears whatever overlaps that edge; `hero` sets it on its backdrop because its opening band sits under the site header, and no other band needs it
+- `fade="none"` leaves the layer unmasked; every other value masks it so the ink reaches zero before the layer's own edge; `top` and `bottom` are a single fade — full ink at the leading edge, zero at `--texture-fade-end`; `left` and `right` fade out toward the named edge in the same way, full ink at the opposite edge, which is how a band keeps its texture behind the media and clears it under the copy. Setting `--texture-fade-lead: transparent` adds a second ramp in from zero at the leading edge, so the layer also clears whatever overlaps that edge; `hero` sets it on its backdrop because its opening band sits under the site header, and no other band needs it
 - Custom properties tune a texture in place, set from the consumer's class: `--texture-ink` (every kind), `--texture-fade-start` / `--texture-fade-end` (where the fade holds full ink and where it reaches zero), `--texture-fade-lead` (the ink at the leading edge of `top` / `bottom`; `black` by default, `transparent` for the double fade), `--texture-from` / `--texture-to` / `--texture-direction` (the `dither` ramp's density span and axis), `--texture-pool-x` (where both `pixelate` light pools sit on the x axis), `--texture-pool-a` / `--texture-pool-b` (each pool's own `x y` position, so the two can sit on opposite edges; either falls back to `--texture-pool-x`)
 
 ## Motion & Animations

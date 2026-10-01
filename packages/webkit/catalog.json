@@ -11332,7 +11332,7 @@
       "treeShakeableImport": "@aziontech/webkit/texture-material",
       "category": "marketing",
       "structure": "monolithic",
-      "status": "implemented",
+      "status": "approved",
       "props": [
         {
           "name": "kind",
@@ -11350,7 +11350,7 @@
         },
         {
           "name": "fade",
-          "type": "'none' | 'top' | 'bottom' | 'edges' | 'vignette'",
+          "type": "'none' | 'top' | 'bottom' | 'left' | 'right' | 'edges' | 'vignette'",
           "default": "'none'",
           "required": "false",
           "doc": "Fades the layer out along an axis so it meets content without a hard edge."

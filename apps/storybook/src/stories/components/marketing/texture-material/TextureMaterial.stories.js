@@ -43,11 +43,11 @@ const meta = {
     },
     fade: {
       control: 'inline-radio',
-      options: ['none', 'top', 'bottom', 'edges', 'vignette'],
+      options: ['none', 'top', 'bottom', 'left', 'right', 'edges', 'vignette'],
       description: 'Fades the layer out along an axis so it meets content without a hard edge.',
       table: {
         category: 'props',
-        type: { summary: "'none' | 'top' | 'bottom' | 'edges' | 'vignette'" },
+        type: { summary: "'none' | 'top' | 'bottom' | 'left' | 'right' | 'edges' | 'vignette'" },
         defaultValue: { summary: "'none'" }
       }
     }
@@ -153,6 +153,12 @@ const FADES_TEMPLATE = `<div class="grid grid-cols-1 gap-(--spacing-md) sm:grid-
   </div>
   <div class="relative h-64 overflow-hidden bg-(--bg-canvas)">
     <TextureMaterial size="small" fade="top" />
+  </div>
+  <div class="relative h-64 overflow-hidden bg-(--bg-canvas)">
+    <TextureMaterial size="small" fade="left" />
+  </div>
+  <div class="relative h-64 overflow-hidden bg-(--bg-canvas)">
+    <TextureMaterial size="small" fade="right" />
   </div>
   <div class="relative h-64 overflow-hidden bg-(--bg-canvas)">
     <TextureMaterial size="small" fade="edges" />
