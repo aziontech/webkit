@@ -51,10 +51,16 @@ describe('Quote', () => {
 
   it('attributes the quotation with the speaker and role in the figcaption', () => {
     const { container } = render(Quote, { props })
+    const caption = container.querySelector('figcaption')
 
-    expect(container.querySelector('figcaption')).toHaveTextContent(
-      `${props.name} — ${props.jobTitle}`
-    )
+    expect(caption).toHaveTextContent(props.name)
+    expect(caption).toHaveTextContent(props.jobTitle)
+  })
+
+  it('renders no figcaption when there is no one to attribute', () => {
+    const { container } = render(Quote, { props: { text: props.text } })
+
+    expect(container.querySelector('figcaption')).toBeNull()
   })
 
   it('renders no mark when logo is empty', () => {
@@ -101,7 +107,7 @@ describe('Quote', () => {
     expect(caption).toHaveTextContent(props.jobTitle)
   })
 
-  it.each(['inline', 'signed', 'highlight'] as const)(
+  it.each(['signed', 'highlight'] as const)(
     'leads the %s register with the quotation mark and no typed quote character',
     (kind) => {
       const { getByTestId, container } = render(Quote, { props: { ...props, kind } })
@@ -113,10 +119,22 @@ describe('Quote', () => {
     }
   )
 
-  it('shows the speaker initials when the highlight register has no photo', () => {
-    const { getByText } = render(Quote, { props: { ...props, kind: 'highlight' } })
+  it('draws no quotation mark in the inline register', () => {
+    const { getByTestId } = render(Quote, { props })
 
-    expect(getByText('AM')).toBeInTheDocument()
+    expect(getByTestId(TESTID).querySelector('svg')).toBeNull()
+  })
+
+  it('draws the likeness in the highlight register only when a photo is given', () => {
+    const photo = '/people/allan.jpg'
+    const without = render(Quote, { props: { ...props, kind: 'highlight' } })
+
+    expect(without.container.querySelector('figcaption img')).toBeNull()
+    without.unmount()
+
+    const { container } = render(Quote, { props: { ...props, kind: 'highlight', photo } })
+
+    expect(container.querySelector('figcaption img')).toHaveAttribute('src', photo)
   })
 
   it('lets the mark slot replace the logo image', () => {
@@ -142,6 +160,44 @@ describe('Quote', () => {
     const { container } = render(Quote, { props })
 
     expect(container.querySelector('a')).toBeNull()
+  })
+
+  it('keeps the highlighted phrases in their own spans and mutes the rest', () => {
+    const highlights = ['high availability', 'global-scale applications']
+    const { container } = render(Quote, { props: { ...props, highlights } })
+    const quotation = container.querySelector('blockquote')
+    const phrases = [...container.querySelectorAll('blockquote [data-highlight]')].map(
+      (span) => span.textContent
+    )
+
+    expect(quotation).toHaveAttribute('data-highlighted')
+    expect(quotation).toHaveTextContent(props.text)
+    expect(phrases).toEqual(highlights)
+  })
+
+  it('renders the quotation unhighlighted when no phrase is found in the text', () => {
+    const { container } = render(Quote, { props: { ...props, highlights: ['not in the quote'] } })
+
+    expect(container.querySelector('blockquote')).not.toHaveAttribute('data-highlighted')
+    expect(container.querySelector('[data-highlight]')).toBeNull()
+  })
+
+  it('ignores highlights when the default slot replaces the text', () => {
+    const { container } = render(Quote, {
+      props: { ...props, highlights: ['high availability'] },
+      slots: { default: 'A quotation composed by the consumer.' }
+    })
+
+    expect(container.querySelector('blockquote')).not.toHaveAttribute('data-highlighted')
+    expect(container.querySelector('[data-highlight]')).toBeNull()
+  })
+
+  it('has no a11y violations with highlighted phrases', async () => {
+    const { container } = render(Quote, {
+      props: { ...props, highlights: ['high availability'] }
+    })
+
+    await expectNoA11yViolations(container)
   })
 
   it('has no a11y violations in the signed register', async () => {
