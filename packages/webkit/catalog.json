@@ -1889,7 +1889,21 @@
           "type": "string",
           "default": "''",
           "required": "false",
-          "doc": "PrimeIcons class for the leading/trailing icon."
+          "doc": "PrimeIcons class for the icon drawn beside the label."
+        },
+        {
+          "name": "iconPosition",
+          "type": "'leading' | 'trailing'",
+          "default": "'leading'",
+          "required": "false",
+          "doc": "Which side of the label the icon sits on. `leading` is a glyph that names the action; `trailing` is a glyph that points at where it goes."
+        },
+        {
+          "name": "animated",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "Nudges a trailing icon along its axis on hover. Off by default; marketing CTAs opt in."
         },
         {
           "name": "href",
@@ -1911,6 +1925,13 @@
           "name": "click",
           "payload": "MouseEvent",
           "notes": "—"
+        }
+      ],
+      "slots": [
+        {
+          "name": "prefix",
+          "scope": "—",
+          "notes": "A mark drawn before the label, ahead of a leading `icon`. It stays first when `iconPosition=\"trailing\"`, so a brand mark and a trailing chevron can share one control."
         }
       ],
       "purpose": "Interactive control for user actions. Migrated from the existing implementation at `packages/webkit/src/components/webkit/actions/button/`."

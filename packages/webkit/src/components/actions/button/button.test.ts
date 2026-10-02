@@ -73,9 +73,103 @@ describe('Button', () => {
     })
   })
 
+  describe('icon', () => {
+    it('leaves the position attribute off when there is no icon', () => {
+      const { getByRole } = render(Button, { props: { label: 'Save' } })
+      expect(getByRole('button').hasAttribute('data-icon-position')).toBe(false)
+    })
+
+    it('defaults an icon to the leading side', () => {
+      const { getByRole } = render(Button, {
+        props: { label: 'Save', icon: 'pi pi-check' }
+      })
+      expect(getByRole('button').getAttribute('data-icon-position')).toBe('leading')
+    })
+
+    it('puts the glyph after the label when iconPosition is trailing', () => {
+      const { getByRole } = render(Button, {
+        props: { label: 'Read the guide', icon: 'pi pi-chevron-right', iconPosition: 'trailing' }
+      })
+      const node = getByRole('button', { name: 'Read the guide' })
+      expect(node.getAttribute('data-icon-position')).toBe('trailing')
+      const glyph = node.querySelector('[data-icon-position=trailing]')
+      expect(glyph).toBeTruthy()
+      expect(glyph?.getAttribute('aria-hidden')).toBe('true')
+    })
+
+    it('keeps a trailing glyph still unless animated is set', () => {
+      const { getByRole } = render(Button, {
+        props: { label: 'Read the guide', icon: 'pi pi-chevron-right', iconPosition: 'trailing' }
+      })
+      expect(getByRole('button').querySelector('[data-animated]')).toBeNull()
+    })
+
+    it('marks a trailing glyph animated when animated is set', () => {
+      const { getByRole } = render(Button, {
+        props: {
+          label: 'Read the guide',
+          icon: 'pi pi-chevron-right',
+          iconPosition: 'trailing',
+          animated: true
+        }
+      })
+      expect(getByRole('button').querySelector('i[data-animated]')).toBeTruthy()
+    })
+
+    it('never animates a leading glyph', () => {
+      const { getByRole } = render(Button, {
+        props: { label: 'Save', icon: 'pi pi-check', animated: true }
+      })
+      expect(getByRole('button').querySelector('[data-animated]')).toBeNull()
+    })
+
+    it('draws the prefix slot first, ahead of a trailing glyph, without renaming the control', () => {
+      const { getByRole } = render(Button, {
+        props: {
+          label: 'Deploy now',
+          icon: 'pi pi-chevron-right',
+          iconPosition: 'trailing',
+          animated: true,
+          href: '/deploy'
+        },
+        slots: { prefix: '<i data-mark class="ai ai-azion" aria-hidden="true"></i>' }
+      })
+      const node = getByRole('link', { name: 'Deploy now' })
+      const mark = node.querySelector('[data-mark]')
+      const glyph = node.querySelector('i[data-icon-position=trailing]')
+      expect(mark).toBeTruthy()
+      expect(glyph).toBeTruthy()
+      expect(mark?.parentElement?.firstElementChild).toBe(mark)
+      expect(
+        mark!.compareDocumentPosition(glyph!) & globalThis.Node.DOCUMENT_POSITION_FOLLOWING
+      ).toBeTruthy()
+    })
+
+    it('replaces the glyph with the spinner while loading', () => {
+      const { getByRole, getByTestId } = render(Button, {
+        props: {
+          label: 'Save',
+          icon: 'pi pi-chevron-right',
+          iconPosition: 'trailing',
+          loading: true
+        }
+      })
+      expect(getByTestId('actions-button-loading')).toBeTruthy()
+      expect(getByRole('button').querySelector('i[data-icon-position]')).toBeNull()
+    })
+  })
+
   describe('a11y (axe against styled DOM)', () => {
     it('Default has no violations', async () => {
       const { container } = render(Button, { props: { label: 'Save' } })
+      await expectNoA11yViolations(container)
+    })
+
+    it('Prefix + trailing glyph has no violations', async () => {
+      const { container } = render(Button, {
+        props: { label: 'Deploy now', icon: 'pi pi-chevron-right', iconPosition: 'trailing' },
+        slots: { prefix: '<i class="ai ai-azion" aria-hidden="true"></i>' }
+      })
       await expectNoA11yViolations(container)
     })
 
