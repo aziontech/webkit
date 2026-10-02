@@ -4,6 +4,15 @@
 
 - [Inputs] normalize z-index across all inputs (ENG-46735) ([#783](https://github.com/aziontech/webkit/issues/783)) ([25d201d](https://github.com/aziontech/webkit/commit/25d201d5ae0e6054b9189bc81c76b7d9fc8c5055))
 
+## [5.3.1](https://github.com/aziontech/webkit/compare/@aziontech/webkit@5.3.0...@aziontech/webkit@5.3.1) (2026-10-02)
+
+
+### Bug Fixes
+
+* **theme:** [ENG-48341] add gray.275/gray.650 and re-step the light canvas, border and muted text ([#1051](https://github.com/aziontech/webkit/issues/1051)) ([e24b303](https://github.com/aziontech/webkit/commit/e24b303e7c01946d9e0da4ac856109acb85a1d76))
+* **webkit:** centre a toast's leading glyph on its first title line ([#1031](https://github.com/aziontech/webkit/issues/1031)) ([981aed9](https://github.com/aziontech/webkit/commit/981aed9afdf445b9b81381f41bfccebd116cb6d5))
+* **webkit:** keep a consumer-set data-hatch on the frame box root ([#1028](https://github.com/aziontech/webkit/issues/1028)) ([bc8bd47](https://github.com/aziontech/webkit/commit/bc8bd4778d7b94bf161d41ad3ce3022f27326b9e))
+
 ## [5.3.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@5.2.0...@aziontech/webkit@5.3.0) (2026-10-01)
 
 
