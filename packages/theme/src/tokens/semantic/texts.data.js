@@ -56,7 +56,7 @@ export const textsData = {
   // The three sizes `Currency` typesets a monetary amount at, one per reading
   // distance: `sm` inside a table row or list cell, `md` an amount stated as a fact on
   // a card, `lg` the headline figure of a pricing card. Each MIRRORS the heading/label
-  // token it used to borrow (`text-label-lg`, `text-heading-md`, `text-heading-2xl`) —
+  // token it used to borrow (`text-label-lg`, `text-heading-md`, `text-heading-3xl`) —
   // same size ramp, same leading, same weight — and adds the one thing that made
   // borrowing wrong: the amount's negative tracking.
   //
@@ -69,7 +69,7 @@ export const textsData = {
   // makes a single declaration correct at all three sizes and at every breakpoint of
   // `lg`'s responsive ramp.
   //
-  // Dedicated tokens rather than tracking added to the borrowed ones: `text-heading-2xl`
+  // Dedicated tokens rather than tracking added to the borrowed ones: `text-heading-3xl`
   // sets every hero headline in the system, and a hero is prose, not a numeral.
   'text-amount-lg': {
     textWrapStyle: 'balance',
@@ -91,10 +91,17 @@ export const textsData = {
     fontWeight: fontWeight.normal,
     letterSpacing: '-0.08em'
   },
-  'text-heading-2xl': {
+  'text-heading-3xl': {
     textWrapStyle: 'balance',
     fontSize: { _: fontSize['3xl'], sm: fontSize['5xl'], md: fontSize['6xl'] },
     lineHeight: leading.tight,
+    fontWeight: fontWeight.normal,
+    letterSpacing: tracking.tighter
+  },
+  'text-heading-2xl': {
+    textWrapStyle: 'balance',
+    fontSize: { _: fontSize['3xl'], sm: fontSize['4xl'], md: fontSize['5xl'] },
+    lineHeight: leading.none,
     fontWeight: fontWeight.normal,
     letterSpacing: tracking.tighter
   },
@@ -103,42 +110,42 @@ export const textsData = {
     fontSize: { _: fontSize.xl, sm: fontSize['3xl'], md: fontSize['4xl'] },
     lineHeight: leading.tight,
     fontWeight: fontWeight.normal,
-    letterSpacing: tracking.tighter
+    letterSpacing: tracking.normal
   },
   'text-heading-lg': {
     textWrapStyle: 'balance',
     fontSize: { _: fontSize.lg, md: fontSize['3xl'] },
     lineHeight: leading.tight,
     fontWeight: fontWeight.normal,
-    letterSpacing: tracking.tighter
+    letterSpacing: tracking.normal
   },
   'text-heading-md': {
     textWrapStyle: 'balance',
     fontSize: { _: fontSize.base, sm: fontSize.xl, md: fontSize['2xl'] },
     lineHeight: leading.tight,
     fontWeight: fontWeight.normal,
-    letterSpacing: tracking.tighter
+    letterSpacing: tracking.normal
   },
   'text-heading-sm': {
     textWrapStyle: 'balance',
     fontSize: { _: fontSize.sm, sm: fontSize.base, md: fontSize.lg },
     lineHeight: leading.snug,
     fontWeight: fontWeight.normal,
-    letterSpacing: tracking.tighter
+    letterSpacing: tracking.normal
   },
   'text-heading-xs': {
     textWrapStyle: 'balance',
     fontSize: fontSize.base,
     lineHeight: leading.snug,
     fontWeight: fontWeight.normal,
-    letterSpacing: tracking.tighter
+    letterSpacing: tracking.normal
   },
   'text-heading-xxs': {
     textWrapStyle: 'balance',
     fontSize: fontSize.sm,
     lineHeight: leading.snug,
     fontWeight: fontWeight.normal,
-    letterSpacing: tracking.tighter
+    letterSpacing: tracking.normal
   },
   'text-label-lg': {
     fontSize: fontSize.base,
