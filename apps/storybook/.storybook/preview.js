@@ -90,6 +90,10 @@ export const parameters = {
         'Foundations',
         ['Colors', 'Theme', 'Spacing', 'Typography', 'Icons'],
         'Components',
+        'Documentation',
+        ['Overview', 'Authoring', 'Example Page'],
+        'Templates',
+        'Marketing',
         'Site'
       ]
     }

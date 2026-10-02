@@ -133,5 +133,11 @@
     "name": "resizable-panel-root",
     "path": "src/components/layout/resizable-panel/resizable-panel.vue",
     "limit": "3 KB"
+  },
+  {
+    "name": "illustration",
+    "path": "src/components/content/illustration/illustration.vue",
+    "limit": "2 KB",
+    "entryOnly": true
   }
 ]
