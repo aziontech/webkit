@@ -7,9 +7,9 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/aerxJReCkLz3x3z29IERE9/Assets?node-id=1901-225133
   node_id: 1901:225133
-checksum: 835fb37b0e5be3844e32ba5b7962aee1ce86ba8a40be2dea88ab85d72530bff6
+checksum: ae77dc901424ee4927793d389e7c04241bd56a2f4df1abaabeca819db244978b
 created: 2026-08-05
-last_updated: 2026-09-28
+last_updated: 2026-10-01
 ---
 
 # Illustration — Component Spec
@@ -21,6 +21,11 @@ library in Figma and exported as an SVG that ships with this package. `name` sel
 scene from a closed registry; there is no way to assemble artwork out of markup, so a
 page can only render illustrations design has actually signed off, and a scene can never
 drift between the screens that use it.
+
+The library is drawn once, in dark mode. The scene is drawn into the page as inline SVG
+and every colour it carries is repainted from the `illustration` theme foundation of
+`@aziontech/theme` — `--illustration-*` roles that alias the global tokens — so the one
+export follows light and dark like the rest of the page.
 
 ## When to use
 
@@ -94,6 +99,8 @@ drift between the screens that use it.
 - Every scene is drawn on the one 592×300 canvas, so scenes line up with each other in a grid. The root declares that frame as its intrinsic `width`/`height`, which reserves the box before the SVG loads, and renders at its container's width at that aspect ratio. A call site that wants it smaller caps it with a class.
 - A `name` that resolves to no scene — empty, or not in the registry — renders the **placeholder**: a tinted frame reading `PLACE DESIGN ASSET`, marked `data-placeholder`. An unregistered `name` also warns in development; neither case throws, and neither collapses the layout. The placeholder is always decorative, `ariaLabel` or not: it draws no scene, so announcing a description of the missing artwork would describe something that is not on the page.
 - While a registered scene's SVG is still resolving, the frame already on screen stays — the placeholder never flashes in front of a scene that is about to arrive.
+- Theme: each colour of the export palette maps to one `--illustration-*` role (see § Tokens), resolved where the scene renders, so a scene inside a `[data-theme]` subtree follows that subtree. A translucent ground colour is a drop shadow and stays as drawn; colours that read the same in both themes (window controls, framework marks, the dot map) stay as drawn too. Masks, clip paths and filters are never repainted.
+- Every instance scopes the SVG's internal ids, so two scenes — or two copies of one — on the same page never resolve each other's gradients, masks or filters.
 
 ## Motion & Animations
 
@@ -107,21 +114,40 @@ drift between the screens that use it.
 |---|---|
 | _none_ | — |
 
-The component declares no utility that resolves a token: the artwork's every value lives
-inside the exported SVG, and the 592×300 canvas the library is drawn on reaches the root
-as the intrinsic `width`/`height` the frame already carries.
+The component declares no utility that resolves a token, and the 592×300 canvas the library
+is drawn on reaches the root as the intrinsic `width`/`height` the frame already carries.
+
+The scene's own paint resolves through the `illustration` theme foundation, keyed by the
+export palette in `src/assets/illustrations/palette.ts`. Each role aliases a global token:
+
+- `--illustration-ground` → `--bg-canvas` — window bodies and fades painted in the page colour.
+- `--illustration-surface` → `--bg-surface` — boxes, nodes, cards.
+- `--illustration-surface-raised` → `--bg-surface-raised` — stacked panels.
+- `--illustration-block` → `--bg-selected` — content blocks and guides.
+- `--illustration-line` → `--border-default` — outlines and connectors.
+- `--illustration-line-muted` → `--border-muted` — subtle columns and rules.
+- `--illustration-line-strong` → `--text-disabled` — strong strokes.
+- `--illustration-highlight` → `--border-strong` — rim light, glass, grid lines.
+- `--illustration-ink` → `--text-default` — glyphs and outlined labels.
+- `--illustration-ink-muted` → `--text-muted` — secondary labels.
+- `--illustration-primary` → `--primary` — brand marks, active rims, connectors.
+- `--illustration-accent` → `--accent` — accent marks.
+- `--illustration-code-punctuation` → `--code-sintax-punctuation`, `--illustration-code-keyword` → `--code-sintax-keyword` — code samples.
+- `--illustration-success` / `--illustration-warning` / `--illustration-danger` / `--illustration-info` → `--success-contrast` / `--warning-contrast` / `--danger-contrast` / `--info-contrast`, and `--illustration-success-surface` / `--illustration-warning-surface` / `--illustration-info-surface` → `--success` / `--warning` / `--info` — status badges.
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
 |---|---|---|
-| _none_ | — | The component declares no colour of its own; every fill is inside the exported SVG. |
+| `--bg-surface-overlay` / `--surface-700` (`#4D4D4D`) | `--illustration-line-strong` → `--text-disabled` | The export binds thin strokes to the overlay fill, whose light value (`#FAFAFA`) would erase them; the role follows the stroke's reading weight instead. |
+| `Global/textColor` (`#EDEDED`) | `--illustration-ink` | An off-token ink from an older library; folded into the ink role, which moves that path to `#FAFAFA` in dark. |
+| `--surface-600` (`#666666`) | stays as drawn | The dot map is bound to a fixed ramp step; it reads in both themes, so it has no role until design asks for one. |
 
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: _not applicable_ — an illustration is never focusable or interactive, so it declares no focus ring.
 - Keyboard map: _none_ — no interactive elements, nothing in the tab order.
-- ARIA: with no `ariaLabel` the root is an `<img>` with an empty `alt` and `aria-hidden="true"`, so assistive tech skips a purely decorative graphic; with an `ariaLabel` the root carries it as the image's `alt`.
+- ARIA: the root is an inline `<svg>`. With no `ariaLabel` it carries `aria-hidden="true"` and no role, so assistive tech skips a purely decorative graphic; with an `ariaLabel` it carries `role="img"` and the label as its `aria-label`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the component declares no text and no colour. An exported scene is decorative shape, not information — no meaning is conveyed by the artwork alone, so the copy beside it must carry the claim.
 - Touch target ≥40×40 px: _not applicable_ — nothing here is a target.
 
