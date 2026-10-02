@@ -25,7 +25,8 @@
 
   import { CERTIFICATIONS } from '../data/certifications.js'
   import { PLATFORM_PRIMITIVES } from '../data/platform-primitives.js'
-  import { NETWORK_TAGS, NETWORK_TOPICS } from '../data/solutions.js'
+  import { NETWORK_TOPICS } from '../data/solutions.js'
+  import { NETWORK_BAND, NETWORK_CLAIMS } from '../ui/index.js'
 
   defineProps({
     /** The opening band, centered on the dot field: eyebrow, title, description and the client marks the carousel runs; without marks the carousel runs the site's default strip. */
@@ -658,21 +659,28 @@
                 :framed="false"
                 kind="left"
                 size="medium"
-                title="Distributed infrastructure that stays up when others go down"
-                class="relative [&_h2]:max-w-[14em]"
+                :eyebrow="NETWORK_BAND.eyebrow"
+                :title="NETWORK_BAND.title"
+                class="relative [&_h2]:max-w-[22em]"
               />
 
-              <ul
-                class="relative m-0 flex max-w-(--container-md) list-none flex-wrap gap-(--spacing-xs) p-0"
-              >
-                <li
-                  v-for="claim in NETWORK_TAGS"
-                  :key="claim"
-                  class="inline-flex h-6 items-center rounded-(--shape-elements) border border-(--primary) bg-[color-mix(in_srgb,var(--primary)_10%,var(--bg-canvas))] px-(--spacing-xs) text-label-sm text-(--text-default)"
+              <div class="relative flex flex-col gap-(--spacing-md)">
+                <h3 class="m-0 text-heading-sm text-(--text-default)">
+                  {{ NETWORK_BAND.lead }}
+                </h3>
+
+                <ul
+                  class="m-0 flex list-none flex-wrap gap-(--spacing-xs) p-0"
                 >
-                  {{ claim }}
-                </li>
-              </ul>
+                  <li
+                    v-for="claim in NETWORK_CLAIMS"
+                    :key="claim"
+                    class="inline-flex h-6 items-center rounded-(--shape-elements) border border-(--primary) bg-[color-mix(in_srgb,var(--primary)_10%,var(--bg-canvas))] px-(--spacing-xs) text-label-sm text-(--text-default)"
+                  >
+                    {{ claim }}
+                  </li>
+                </ul>
+              </div>
             </div>
 
             <CardGrid

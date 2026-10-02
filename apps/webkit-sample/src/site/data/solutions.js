@@ -74,15 +74,6 @@ export const NETWORK_TOPICS = [
   }
 ]
 
-export const NETWORK_TAGS = [
-  '100+ data centers',
-  '100+ Tbps throughput',
-  'Instant scale, automatic routing & failover',
-  '30 ms median latency',
-  'Always-on DDoS protection',
-  'PCI DSS and SOC 2/3 compliant'
-]
-
 export const LEARNING_CENTER = {
   title: 'Learning Center',
   description: 'Practical knowledge to speed up, secure, and scale applications.',

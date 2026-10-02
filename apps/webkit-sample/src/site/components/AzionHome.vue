@@ -17,7 +17,7 @@
   import { useRouter } from 'vue-router'
 
   import { PLATFORM_PRIMITIVES } from '../data/platform-primitives.js'
-  import { ClientMark, CLIENTS, NETWORK_CLAIMS } from '../ui/index.js'
+  import { ClientMark, CLIENTS, NETWORK_BAND, NETWORK_CLAIMS } from '../ui/index.js'
   import ClientStories from './ClientStories.vue'
   import MarketLeader from './MarketLeader.vue'
   import WhyAzion from './WhyAzion.vue'
@@ -187,21 +187,28 @@
               :framed="false"
               kind="left"
               size="medium"
-              title="The most reliable infrastructure"
-              class="relative [&_h2]:max-w-[9em]"
+              :eyebrow="NETWORK_BAND.eyebrow"
+              :title="NETWORK_BAND.title"
+              class="relative [&_h2]:max-w-[22em]"
             />
 
-            <ul
-              class="relative m-0 flex max-w-(--container-md) list-none flex-wrap gap-(--spacing-xs) p-0"
-            >
-              <li
-                v-for="claim in NETWORK_CLAIMS"
-                :key="claim"
-                class="inline-flex h-6 items-center rounded-(--shape-elements) border border-(--primary) bg-[color-mix(in_srgb,var(--primary)_10%,var(--bg-canvas))] px-(--spacing-xs) text-label-sm text-(--text-default)"
+            <div class="relative flex flex-col gap-(--spacing-md)">
+              <h3 class="m-0 text-heading-sm text-(--text-default)">
+                {{ NETWORK_BAND.lead }}
+              </h3>
+
+              <ul
+                class="m-0 flex list-none flex-wrap gap-(--spacing-xs) p-0"
               >
-                {{ claim }}
-              </li>
-            </ul>
+                <li
+                  v-for="claim in NETWORK_CLAIMS"
+                  :key="claim"
+                  class="inline-flex h-6 items-center rounded-(--shape-elements) border border-(--primary) bg-[color-mix(in_srgb,var(--primary)_10%,var(--bg-canvas))] px-(--spacing-xs) text-label-sm text-(--text-default)"
+                >
+                  {{ claim }}
+                </li>
+              </ul>
+            </div>
           </div>
 
           <CardGrid

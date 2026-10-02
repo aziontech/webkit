@@ -107,7 +107,7 @@
   import { CLIENT_STRIP } from '@shared/ui/brand/strips.js'
   import { useRouter } from 'vue-router'
 
-  import { NavColumn, NavItem } from '../ui/index.js'
+  import { NavColumn, NavItem, NETWORK_BAND, NETWORK_CLAIMS } from '../ui/index.js'
 
   const router = useRouter()
   const goSignup = () => router.push('/signup')
@@ -296,15 +296,6 @@
   ]
 
   // ── Infrastructure — capability chips + the three-cell stat row ───────────────
-  const INFRA_CHIPS = [
-    '100+ data centers',
-    '100+ Tbps throughput',
-    'Instant scale, automatic routing & failover',
-    '30 ms median latency',
-    'Always-on DDoS protection',
-    'PCI DSS and SOC 2/3 compliant'
-  ]
-
   const INFRA_STATS = [
     {
       icon: 'pi pi-globe',
@@ -774,17 +765,27 @@
                heading and chips below stand on it with no extra wrapper mask. -->
           <NetworkBanner />
           <div class="relative z-10 flex flex-col gap-(--spacing-xxl) p-(--spacing-xxl)">
-            <h2 class="m-0 max-w-[34rem] text-balance text-heading-xl text-(--text-default)">
-              Distributed infrastructure that stays up when others go down
-            </h2>
-            <div class="flex flex-wrap gap-(--spacing-sm)">
-              <Badge
-                v-for="chip in INFRA_CHIPS"
-                :key="chip"
-                :label="chip"
-                severity="primary"
-                size="medium"
-              />
+            <SectionTitle
+              :framed="false"
+              kind="left"
+              size="medium"
+              :eyebrow="NETWORK_BAND.eyebrow"
+              :title="NETWORK_BAND.title"
+              class="[&_h2]:max-w-[22em]"
+            />
+            <div class="flex flex-col gap-(--spacing-md)">
+              <h3 class="m-0 text-heading-sm text-(--text-default)">
+                {{ NETWORK_BAND.lead }}
+              </h3>
+              <div class="flex flex-wrap gap-(--spacing-sm)">
+                <Badge
+                  v-for="chip in NETWORK_CLAIMS"
+                  :key="chip"
+                  :label="chip"
+                  severity="primary"
+                  size="medium"
+                />
+              </div>
             </div>
           </div>
         </div>

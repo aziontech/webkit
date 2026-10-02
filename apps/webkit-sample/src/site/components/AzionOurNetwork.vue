@@ -67,7 +67,7 @@
   import { CLIENT_STRIP } from '@shared/ui/brand/strips.js'
   import { useRouter } from 'vue-router'
 
-  import { NavColumn, NavItem } from '../ui/index.js'
+  import { NavColumn, NavItem, NETWORK_BAND, NETWORK_CLAIMS } from '../ui/index.js'
 
   const router = useRouter()
   const goSignup = () => router.push('/signup')
@@ -95,14 +95,6 @@
   ]
 
   const QUOTED_CLIENT = byName('GPA')
-
-  const RELIABILITY_CLAIMS = [
-    '100+ data centers',
-    '100+ Tbps throughput',
-    'High availability',
-    '30 ms median latency',
-    'PCI and SOC 2/3 compliant'
-  ]
 
   const FIGURES = [
     { value: '7', suffix: 'x', label: 'faster pages' },
@@ -275,28 +267,36 @@
 
         <div class="relative flex h-full flex-col">
           <div
-            class="flex min-h-[clamp(280px,38vh,460px)] flex-col justify-center gap-(--spacing-md) p-(--spacing-xxl)"
+            class="flex min-h-[clamp(280px,38vh,460px)] flex-col justify-center gap-(--spacing-xl) p-(--spacing-xxl)"
           >
             <SectionTitle
               :framed="false"
               kind="left"
-              title="The most reliable infrastructure"
+              :eyebrow="NETWORK_BAND.eyebrow"
+              :title="NETWORK_BAND.title"
+              class="[&_h2]:max-w-[22em]"
             />
 
-            <ul class="m-0 flex list-none flex-wrap gap-(--spacing-sm) p-0">
-              <li
-                v-for="claim in RELIABILITY_CLAIMS"
-                :key="claim"
-              >
-                <Tag severity="secondary">
-                  <span
-                    aria-hidden="true"
-                    class="size-1 shrink-0 bg-(--primary)"
-                  />
-                  {{ claim }}
-                </Tag>
-              </li>
-            </ul>
+            <div class="flex flex-col gap-(--spacing-md)">
+              <h3 class="m-0 text-heading-sm text-(--text-default)">
+                {{ NETWORK_BAND.lead }}
+              </h3>
+
+              <ul class="m-0 flex list-none flex-wrap gap-(--spacing-sm) p-0">
+                <li
+                  v-for="claim in NETWORK_CLAIMS"
+                  :key="claim"
+                >
+                  <Tag severity="secondary">
+                    <span
+                      aria-hidden="true"
+                      class="size-1 shrink-0 bg-(--primary)"
+                    />
+                    {{ claim }}
+                  </Tag>
+                </li>
+              </ul>
+            </div>
           </div>
 
           <BigNumbers

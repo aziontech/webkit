@@ -63,7 +63,7 @@
       max-width="2xl"
       eyebrow="Pricing"
       title="Infrastructure without the waste"
-      description="Distributed by design, extremely fast, and built for the strictest compliance. No idle clusters, no capacity provisioned just in case. Scale from zero to mission-critical and pay only for what you use."
+      description="Azion was built differently from the ground up — distributed by design, extremely fast, and ready for the strictest compliance. No idle clusters, no capacity provisioned just in case. Scale from zero to mission-critical instantly and pay only for what you use."
     />
   </Hero>
 
