@@ -4,6 +4,13 @@
 
 - [Inputs] normalize z-index across all inputs (ENG-46735) ([#783](https://github.com/aziontech/webkit/issues/783)) ([25d201d](https://github.com/aziontech/webkit/commit/25d201d5ae0e6054b9189bc81c76b7d9fc8c5055))
 
+## [5.3.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@5.2.0...@aziontech/webkit@5.3.0) (2026-10-01)
+
+
+### Features
+
+* **webkit:** [ENG-48323] make Menu and Sidebar SSR-safe and expose Menu pop() ([#1048](https://github.com/aziontech/webkit/issues/1048)) ([715735c](https://github.com/aziontech/webkit/commit/715735c59d7f211994ce1f80fab87e147a44b8ef))
+
 ## [5.2.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@5.1.0...@aziontech/webkit@5.2.0) (2026-09-23)
 
 
