@@ -183,7 +183,7 @@ const seedAccounts = [
 
   // The four customers this repo already owns a square brand mark for but had no
   // account to show it on: GPA and Itaú ship a purpose-drawn 24px tile
-  // (@aziontech/webkit/assets/clients/symbols/), Renner and HeroSpark a white symbol
+  // (@aziontech/webkit/assets/<brand>-symbol-color.svg), Renner and HeroSpark a white symbol
   // the site's own home page paints on their brand colour. Same minimal shape as LWSA
   // above — a real company, an id and a segment, and no invented metrics: the Manage
   // Resources table renders "—" for what a seed does not claim.

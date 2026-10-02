@@ -116,7 +116,7 @@
   // colour statements. It is also what makes the standards row placeable at all: its marks are
   // a black wordmark, two knockout tiles and a yellow-and-grey mesh, and only a flatten puts
   // those on one surface at one weight.
-  import { CLIENTS } from '@aziontech/webkit/assets/clients/registry'
+  import { CLIENTS } from '@aziontech/webkit/assets/client-registry'
   import FrameBox from '@aziontech/webkit/frame-box'
   import ClientMark from '@shared/ui/brand/ClientMark.vue'
   import { STANDARDS } from '@shared/ui/brand/standards.js'

@@ -54,17 +54,17 @@
   //     diff: it described art we replaced.
   //
   // ASSET GAPS: none on the tool strip — all 30 marks the source names have a file in
-  // `@aziontech/webkit/assets/clients/`. On the client strip, Axur, Arezzo, Crefisa and Contabilizei
-  // are not CLIENTS registry entries but their marks are in `clients/dark/clients/`, so they
+  // `@aziontech/webkit/assets/*`. On the client strip, Axur, Arezzo, Crefisa and Contabilizei
+  // are not CLIENTS registry entries but their marks are in `clients/dark/`, so they
   // are declared locally (see STORY_CLIENTS); NZN and Zoop have no mark in this repo at all
   // and render as ClientMark's typographic wordmark, so no name is quietly dropped.
   // The four client marks that are not CLIENTS registry entries; Vite resolves each to an
   // asset URL, exactly as the registries do.
-  import arezzo from '@aziontech/webkit/assets/clients/dark/clients/arezzo-logo.svg'
-  import axur from '@aziontech/webkit/assets/clients/dark/clients/axur-logo.svg'
-  import contabilizei from '@aziontech/webkit/assets/clients/dark/clients/contabilizei-logo.svg'
-  import crefisa from '@aziontech/webkit/assets/clients/dark/clients/crefisa-logo.svg'
-  import { CLIENTS } from '@aziontech/webkit/assets/clients/registry'
+  import arezzo from '@aziontech/webkit/assets/arezzo-extended-reversed.svg'
+  import axur from '@aziontech/webkit/assets/axur-extended-reversed.svg'
+  import contabilizei from '@aziontech/webkit/assets/contabilizei-extended-reversed.svg'
+  import crefisa from '@aziontech/webkit/assets/crefisa-extended-reversed.svg'
+  import { CLIENTS } from '@aziontech/webkit/assets/client-registry'
   import BandStack from '@aziontech/webkit/band-stack'
   import Button from '@aziontech/webkit/button'
   import CallToAction from '@aziontech/webkit/call-to-action'
@@ -221,7 +221,7 @@
   // ── Band 11 — the twelve marks beside the quote ───────────────────────────────
   // Eight resolve against the shared CLIENTS registry, so a mark this page draws and a mark
   // the trust strip draws can never be two different files. Four are named by the source but
-  // are not registry entries — their artwork sits in `clients/dark/clients/` — so they are
+  // are not registry entries — their artwork sits in `clients/dark/` — so they are
   // declared here rather than added to a registry every other strip on the site reads.
   const registered = (name) => CLIENTS.find((client) => client.name === name) ?? { name }
 

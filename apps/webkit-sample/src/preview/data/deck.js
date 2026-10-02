@@ -80,7 +80,7 @@ export const DECK = {
       // than "the marks it ships". Two filters, both real:
       //
       //   NO ASSET. The reference render used Docker and Kubernetes; neither exists in
-      //   `@aziontech/webkit/assets/clients`, and adding SVGs is an icon-library change, not a slide.
+      //   `@aziontech/webkit/assets/*`, and adding SVGs is an icon-library change, not a slide.
       //   NOT A SYMBOL. GitHub, Kafka and Equinix DO ship, as WORDMARKS — github.svg is a
       //   200x200 raster of the lettering, kafka.svg is 511x233, equinix.svg is 173x25. A
       //   56px tile holds a square mark; a wordmark in one renders as an illegible smudge

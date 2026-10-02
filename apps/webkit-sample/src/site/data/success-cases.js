@@ -20,21 +20,21 @@
 // All 35 are here for the same reason: the control is the source's, and a control that does
 // nothing would be the invention. The initial render is the source's twelve, in its order.
 
-import bancoDeLaNacion from '@aziontech/webkit/assets/clients/banco-de-la-nacion-logo-vector.svg'
-import axur from '@aziontech/webkit/assets/clients/dark/clients/axur-logo.svg'
-import contabilizei from '@aziontech/webkit/assets/clients/dark/clients/contabilizei-logo.svg'
-import crefisa from '@aziontech/webkit/assets/clients/dark/clients/crefisa-logo.svg'
-import pernambucanas from '@aziontech/webkit/assets/clients/dark/clients/pernambucanas-logo.svg'
-import vtex from '@aziontech/webkit/assets/clients/dark/former-clients/vtex-logo.svg'
-import marisa from '@aziontech/webkit/assets/clients/light/marisa-logo.svg'
-import panvel from '@aziontech/webkit/assets/clients/light/panvel-logo.svg'
-import { CLIENTS } from '@aziontech/webkit/assets/clients/registry'
-import frost from '@aziontech/webkit/assets/logos/frost-and-sullivan.svg'
-import frostReversed from '@aziontech/webkit/assets/logos/frost-and-sullivan-reversed.svg'
-import gartner from '@aziontech/webkit/assets/logos/gartner.svg'
-import gartnerReversed from '@aziontech/webkit/assets/logos/gartner-reversed.svg'
-import gigaom from '@aziontech/webkit/assets/logos/gigaom.svg'
-import gigaomReversed from '@aziontech/webkit/assets/logos/gigaom-reversed.svg'
+import bancoDeLaNacion from '@aziontech/webkit/assets/banco-de-la-nacion-extended-mono.svg'
+import axur from '@aziontech/webkit/assets/axur-extended-reversed.svg'
+import contabilizei from '@aziontech/webkit/assets/contabilizei-extended-reversed.svg'
+import crefisa from '@aziontech/webkit/assets/crefisa-extended-reversed.svg'
+import pernambucanas from '@aziontech/webkit/assets/pernambucanas-extended-mono.svg'
+import vtex from '@aziontech/webkit/assets/vtex-extended-reversed.svg'
+import marisa from '@aziontech/webkit/assets/marisa-extended-color.svg'
+import panvel from '@aziontech/webkit/assets/panvel-extended-color.svg'
+import { CLIENTS } from '@aziontech/webkit/assets/client-registry'
+import frost from '@aziontech/webkit/assets/frost-and-sullivan-extended-color.svg'
+import frostReversed from '@aziontech/webkit/assets/frost-and-sullivan-extended-reversed.svg'
+import gartner from '@aziontech/webkit/assets/gartner-extended-color.svg'
+import gartnerReversed from '@aziontech/webkit/assets/gartner-extended-reversed.svg'
+import gigaom from '@aziontech/webkit/assets/gigaom-extended-color.svg'
+import gigaomReversed from '@aziontech/webkit/assets/gigaom-extended-reversed.svg'
 
 const byName = (name) => CLIENTS.find((client) => client.name === name)
 

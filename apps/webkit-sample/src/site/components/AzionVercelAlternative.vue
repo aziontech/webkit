@@ -74,11 +74,11 @@
   // `Magazine Luiza` is `Magalu` here for the same reason — one client, our registry's name.
   // The four marks the quote band names that are not CLIENTS registry entries; Vite resolves
   // each to an asset URL, exactly as the registry does.
-  import arezzo from '@aziontech/webkit/assets/clients/dark/clients/arezzo-logo.svg'
-  import axur from '@aziontech/webkit/assets/clients/dark/clients/axur-logo.svg'
-  import contabilizei from '@aziontech/webkit/assets/clients/dark/clients/contabilizei-logo.svg'
-  import { CLIENTS } from '@aziontech/webkit/assets/clients/registry'
-  import { competitor } from '@aziontech/webkit/assets/competitors/registry'
+  import arezzo from '@aziontech/webkit/assets/arezzo-extended-reversed.svg'
+  import axur from '@aziontech/webkit/assets/axur-extended-reversed.svg'
+  import contabilizei from '@aziontech/webkit/assets/contabilizei-extended-reversed.svg'
+  import { CLIENTS } from '@aziontech/webkit/assets/client-registry'
+  import { competitor } from '@aziontech/webkit/assets/competitor-registry'
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
   import CallToAction from '@aziontech/webkit/call-to-action'

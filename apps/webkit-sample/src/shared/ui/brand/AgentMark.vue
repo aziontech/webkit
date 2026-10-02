@@ -1,7 +1,7 @@
 <script setup>
   // AgentMark — the brand mark of an AI coding agent, as an inline SVG.
   //
-  // Every mark is the design system's agent asset (`@aziontech/webkit/assets/agents/*`): the
+  // Every mark is the design system's agent asset (`@aziontech/webkit/assets/<agent>-symbol-*.svg`): the
   // vendor's published drawing with its fills on its own paths. Claude keeps its brand colour;
   // Cursor, Windsurf, Codex and OpenCode ride `currentColor`; Gemini and Copilot keep their
   // gradients. Each file is inlined `?raw` so those fills and `mono` keep working, and its ids
@@ -10,13 +10,13 @@
   // The root element is an `<svg>` with a `viewBox` and no intrinsic size, so one size
   // class from the caller sizes any mark and `[&>svg]` selectors (DocCard's icon region) match.
 
-  import claudeSvg from '@aziontech/webkit/assets/agents/claude.svg?raw'
-  import codexSvg from '@aziontech/webkit/assets/agents/codex.svg?raw'
-  import copilotSvg from '@aziontech/webkit/assets/agents/copilot.svg?raw'
-  import cursorSvg from '@aziontech/webkit/assets/agents/cursor.svg?raw'
-  import geminiSvg from '@aziontech/webkit/assets/agents/gemini.svg?raw'
-  import opencodeSvg from '@aziontech/webkit/assets/agents/opencode.svg?raw'
-  import windsurfSvg from '@aziontech/webkit/assets/agents/windsurf.svg?raw'
+  import claudeSvg from '@aziontech/webkit/assets/claude-symbol-color.svg?raw'
+  import codexSvg from '@aziontech/webkit/assets/codex-symbol-mono.svg?raw'
+  import copilotSvg from '@aziontech/webkit/assets/copilot-symbol-color.svg?raw'
+  import cursorSvg from '@aziontech/webkit/assets/cursor-symbol-mono.svg?raw'
+  import geminiSvg from '@aziontech/webkit/assets/gemini-symbol-color.svg?raw'
+  import opencodeSvg from '@aziontech/webkit/assets/opencode-symbol-mono.svg?raw'
+  import windsurfSvg from '@aziontech/webkit/assets/windsurf-symbol-mono.svg?raw'
   import { computed, useId } from 'vue'
 
   const props = defineProps({

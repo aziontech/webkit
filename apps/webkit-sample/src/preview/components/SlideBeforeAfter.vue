@@ -52,7 +52,7 @@
   // tangle and been told nobody in it chose badly, so quoting it back is a shorter argument
   // than drawing a new one. Only the right half is new, because only the right half is a claim
   // the deck has not made yet.
-  import { CLIENTS } from '@aziontech/webkit/assets/clients/registry'
+  import { CLIENTS } from '@aziontech/webkit/assets/client-registry'
   import { PRODUCT_STACK, TOOLS } from '@shared/ui/brand/tools.js'
   import { computed } from 'vue'
 

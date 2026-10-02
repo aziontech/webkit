@@ -1,8 +1,8 @@
 <script setup>
-  import azionHighlight from '@aziontech/webkit/assets/illustrations/azion-highlight.svg'
-  import branches from '@aziontech/webkit/assets/illustrations/branches.svg'
-  import personalTokens from '@aziontech/webkit/assets/illustrations/personal-tokens.svg'
-  import usageChart from '@aziontech/webkit/assets/illustrations/usage-chart.svg'
+  import azionHighlight from '@aziontech/webkit/assets/azion-highlight.svg'
+  import branches from '@aziontech/webkit/assets/branches.svg'
+  import personalTokens from '@aziontech/webkit/assets/personal-tokens.svg'
+  import usageChart from '@aziontech/webkit/assets/usage-chart.svg'
   import CardGrid from '@aziontech/webkit/card-grid'
   import FrameBox from '@aziontech/webkit/frame-box'
   import MediaTile from '@aziontech/webkit/media-tile'

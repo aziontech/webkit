@@ -1,5 +1,5 @@
 <script setup>
-  import rennerColor from '@aziontech/webkit/assets/clients/light/renner-logo.svg'
+  import rennerColor from '@aziontech/webkit/assets/renner-extended-color.svg'
   import Button from '@aziontech/webkit/button'
   import CallToAction from '@aziontech/webkit/call-to-action'
   import CardGrid from '@aziontech/webkit/card-grid'

@@ -9,7 +9,7 @@
 //
 // ── WHY THESE ARE THE `light/` ASSETS ───────────────────────────────────────────────────────
 //
-// The shared client registry (`@aziontech/webkit/assets/clients/registry`) already encodes the two
+// The shared client registry (`@aziontech/webkit/assets/client-registry`) already encodes the two
 // routes a mark can take: `dark/…` is the WHITE artwork drawn for a dark background, `light/…`
 // is the FULL-COLOUR artwork for a light one. The wall sits on `--bg-contrast`, which on this
 // deck's dark theme is #FAFAFA — so every mark here is a `light/` asset, and every one of them
@@ -26,7 +26,7 @@
 //
 // Every file is real vector artwork — no raster embed, no traced bitmap — sourced from the
 // brand's own site or from Wikimedia Commons, and each was rendered at this wall's own cell
-// size before being accepted. `stone-logo.svg` is StoneCo's own SVG with one change: the
+// size before being accepted. `stone-extended-color.svg` is StoneCo's own SVG with one change: the
 // vendor publishes it as flat `fill="white"` (it is drawn for a dark header), so the fill is
 // set to #00DA00 — Stone's green, MEASURED off the PNG the same site serves rather than picked
 // by eye. It is a colour correction to the brand's own value, not a colour decision of ours.
@@ -42,38 +42,37 @@
 // its own rows from the count.
 //
 // The two backers are the OTHER route — white artwork, because they sit on the slide's dark
-// half rather than on the wall. `qualcoom-logo.svg` is spelled that way in the repository; the
-// import is by the file's real name and the company's real name is in the data below.
-import monashees from '@aziontech/webkit/assets/clients/dark/clients/monashees-logo.svg'
-import qualcomm from '@aziontech/webkit/assets/clients/dark/clients/qualcoom-logo.svg'
-import agi from '@aziontech/webkit/assets/clients/light/agi-logo.svg'
-import alpargatas from '@aziontech/webkit/assets/clients/light/alpargatas-logo.svg'
-import arezzo from '@aziontech/webkit/assets/clients/light/arezzo-logo.svg'
-import caixa from '@aziontech/webkit/assets/clients/light/caixa-logo.svg'
-import cobasi from '@aziontech/webkit/assets/clients/light/cobasi-logo.svg'
-import contabilizei from '@aziontech/webkit/assets/clients/light/contabilizei-logo.svg'
-import csuDigital from '@aziontech/webkit/assets/clients/light/csu-digital-logo.svg'
-import gfg from '@aziontech/webkit/assets/clients/light/gfg-logo.svg'
-import grendene from '@aziontech/webkit/assets/clients/light/grendene-logo.svg'
-import gruAirport from '@aziontech/webkit/assets/clients/light/gru-airport-logo.svg'
-import ifood from '@aziontech/webkit/assets/clients/light/ifood-logo.svg'
-import itau from '@aziontech/webkit/assets/clients/light/itau-logo.svg'
-import locaweb from '@aziontech/webkit/assets/clients/light/locaweb-logo.svg'
-import magalu from '@aziontech/webkit/assets/clients/light/magalu-logo.svg'
-import marisa from '@aziontech/webkit/assets/clients/light/marisa-logo.svg'
-import meliuz from '@aziontech/webkit/assets/clients/light/meliuz-logo.svg'
-import neogrid from '@aziontech/webkit/assets/clients/light/neogrid-logo.svg'
-import neon from '@aziontech/webkit/assets/clients/light/neon-logo.svg'
-import netshoes from '@aziontech/webkit/assets/clients/light/netshoes-logo.svg'
-import nzn from '@aziontech/webkit/assets/clients/light/nzn-logo.svg'
-import panvel from '@aziontech/webkit/assets/clients/light/panvel-logo.svg'
-import portobello from '@aziontech/webkit/assets/clients/light/portobello-logo.svg'
-import primevideo from '@aziontech/webkit/assets/clients/light/primevideo-logo.svg'
-import radware from '@aziontech/webkit/assets/clients/light/radware-logo.svg'
-import rbs from '@aziontech/webkit/assets/clients/light/rbs-logo.svg'
-import renner from '@aziontech/webkit/assets/clients/light/renner-logo.svg'
-import stone from '@aziontech/webkit/assets/clients/light/stone-logo.svg'
-import unicred from '@aziontech/webkit/assets/clients/light/unicred-logo.svg'
+// half rather than on the wall.
+import monashees from '@aziontech/webkit/assets/monashees-extended-reversed.svg'
+import qualcomm from '@aziontech/webkit/assets/qualcomm-extended-reversed.svg'
+import agi from '@aziontech/webkit/assets/agi-extended-color.svg'
+import alpargatas from '@aziontech/webkit/assets/alpargatas-extended-color.svg'
+import arezzo from '@aziontech/webkit/assets/arezzo-extended-color.svg'
+import caixa from '@aziontech/webkit/assets/caixa-extended-color.svg'
+import cobasi from '@aziontech/webkit/assets/cobasi-extended-color.svg'
+import contabilizei from '@aziontech/webkit/assets/contabilizei-extended-color.svg'
+import csuDigital from '@aziontech/webkit/assets/csu-digital-extended-color.svg'
+import gfg from '@aziontech/webkit/assets/gfg-extended-mono.svg'
+import grendene from '@aziontech/webkit/assets/grendene-extended-color.svg'
+import gruAirport from '@aziontech/webkit/assets/gru-airport-extended-color.svg'
+import ifood from '@aziontech/webkit/assets/ifood-extended-color.svg'
+import itau from '@aziontech/webkit/assets/itau-extended-color.svg'
+import locaweb from '@aziontech/webkit/assets/locaweb-extended-color.svg'
+import magalu from '@aziontech/webkit/assets/magalu-extended-color.svg'
+import marisa from '@aziontech/webkit/assets/marisa-extended-color.svg'
+import meliuz from '@aziontech/webkit/assets/meliuz-extended-color.svg'
+import neogrid from '@aziontech/webkit/assets/neogrid-extended-color.svg'
+import neon from '@aziontech/webkit/assets/neon-extended-color.svg'
+import netshoes from '@aziontech/webkit/assets/netshoes-extended-color.svg'
+import nzn from '@aziontech/webkit/assets/nzn-extended-color.svg'
+import panvel from '@aziontech/webkit/assets/panvel-extended-color.svg'
+import portobello from '@aziontech/webkit/assets/portobello-extended-mono.svg'
+import primevideo from '@aziontech/webkit/assets/primevideo-extended-color.svg'
+import radware from '@aziontech/webkit/assets/radware-extended-color.svg'
+import rbs from '@aziontech/webkit/assets/rbs-extended-color.svg'
+import renner from '@aziontech/webkit/assets/renner-extended-color.svg'
+import stone from '@aziontech/webkit/assets/stone-extended-color.svg'
+import unicred from '@aziontech/webkit/assets/unicred-extended-color.svg'
 
 // The order is READING ORDER, not ranking. A logo wall invites the room to look for whoever it
 // knows, and the fastest way to make that a scan rather than a search is one rule anybody can

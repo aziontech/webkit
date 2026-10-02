@@ -1,5 +1,5 @@
 <script setup>
-  import quickStartWithTemplates from '@aziontech/webkit/assets/heroes/quick-start-with-templates.svg'
+  import quickStartWithTemplates from '@aziontech/webkit/assets/quick-start-with-templates.svg'
   import BandStack from '@aziontech/webkit/band-stack'
   import Button from '@aziontech/webkit/button'
   import Illustration from '@aziontech/webkit/illustration'

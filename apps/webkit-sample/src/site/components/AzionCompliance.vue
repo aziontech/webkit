@@ -41,7 +41,7 @@
   //     cell is now just a badge image and a certification pill. Five cells, not two: SOC 2
   //     Type 2 and SOC 3 Type 2 (sharing one badge image, same as the design's own `imgSlot`
   //     reuse), PCI DSS, LGPD, GDPR — all five badges are this site's own already-registered
-  //     marks (`SOC-logo.svg`, `PCI-logo.svg`, `LGPD-logo.svg`, `GDPR-logo.svg`, the same files
+  //     marks (`soc.svg`, `pci-dss.svg`, `lgpd.svg`, `gdpr.svg`, the same files
   //     AzionFinancialServices.vue's certifications band uses), not the design's own PNG/SVG
   //     exports.
   //   • THE PILL IS HAND-BUILT, NOT `Tag`. Its own component ("Badge Certification") pairs a
@@ -70,7 +70,7 @@
   //   • THE ROW GREW FROM FIVE BADGES TO SEVEN (node 13113:6593): CCPA and CPRA — California's
   //     Consumer Privacy Act and Privacy Rights Act — joined SOC 2/3, PCI, LGPD and GDPR. Neither
   //     mark existed in the shared brand registry yet, so both were downloaded from this node's
-  //     own Figma assets and added there (`CCPA-logo.svg`, `CPRA-logo.svg`) alongside the other
+  //     own Figma assets and added there (`ccpa.svg`, `cpra.svg`) alongside the other
   //     four. See data/compliance.js for the label/asset pairing and the CPRA text-casing note.
   //     Seven columns leave each cell narrower than five did, and the two longest labels ("SOC 2
   //     Type 2", "SOC 3 Type 2") wrapped onto a second line at that width, stretching the pill

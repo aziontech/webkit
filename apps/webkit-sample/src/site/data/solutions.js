@@ -1,6 +1,6 @@
-import herosparkColor from '@aziontech/webkit/assets/clients/light/herospark-logo.svg'
-import magaluColor from '@aziontech/webkit/assets/clients/light/magalu-logo.svg'
-import zoopColor from '@aziontech/webkit/assets/clients/zoop-logo.svg'
+import herosparkColor from '@aziontech/webkit/assets/herospark-extended-color.svg'
+import magaluColor from '@aziontech/webkit/assets/magalu-extended-color.svg'
+import zoopColor from '@aziontech/webkit/assets/zoop-extended-color.svg'
 
 const CLIENT_QUOTES = {
   axur: {

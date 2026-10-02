@@ -1,8 +1,8 @@
-import bancoDeLaNacion from '@aziontech/webkit/assets/clients/banco-de-la-nacion-logo-vector.svg'
-import crefisa from '@aziontech/webkit/assets/clients/dark/clients/crefisa-logo.svg'
-import marisa from '@aziontech/webkit/assets/clients/light/marisa-logo.svg'
-import renner from '@aziontech/webkit/assets/clients/light/renner-logo.svg'
-import { CLIENTS } from '@aziontech/webkit/assets/clients/registry'
+import bancoDeLaNacion from '@aziontech/webkit/assets/banco-de-la-nacion-extended-mono.svg'
+import crefisa from '@aziontech/webkit/assets/crefisa-extended-reversed.svg'
+import marisa from '@aziontech/webkit/assets/marisa-extended-color.svg'
+import renner from '@aziontech/webkit/assets/renner-extended-color.svg'
+import { CLIENTS } from '@aziontech/webkit/assets/client-registry'
 
 const SUCCESS_CASE = 'https://www.azion.com/en/success-case/'
 

@@ -1,18 +1,18 @@
 // THE CERTIFICATIONS ROW AND THE PRIVACY LINKS — copy and shape read off the Figma file
 // (`Azion.com`, node 13113:6593) via the `figma-design-to-code` MCP flow, which grew the row from
 // five badges to seven: CCPA and CPRA (California's two privacy statutes) joined SOC 2/3, PCI,
-// LGPD and GDPR. Their marks (`CCPA-logo.svg`, `CPRA-logo.svg`) didn't exist in the shared brand
+// LGPD and GDPR. Their marks (`ccpa.svg`, `cpra.svg`) didn't exist in the shared brand
 // registry, so they were downloaded from this node's own Figma assets and added there — the same
 // registry the other four badges already draw from. The Figma layer for CPRA's badge text is
 // literally "CpRA" (a source typo); the badge renders it uppercase either way, so the label here
 // is spelled out correctly as CPRA.
 
-import socBadge from '@aziontech/webkit/assets/clients/SOC-logo.svg'
-import pciBadge from '@aziontech/webkit/assets/clients/PCI-logo.svg'
-import lgpdBadge from '@aziontech/webkit/assets/clients/LGPD-logo.svg'
-import gdprBadge from '@aziontech/webkit/assets/clients/GDPR-logo.svg'
-import ccpaBadge from '@aziontech/webkit/assets/clients/CCPA-logo.svg'
-import cpraBadge from '@aziontech/webkit/assets/clients/CPRA-logo.svg'
+import socBadge from '@aziontech/webkit/assets/soc-symbol-color.svg'
+import pciBadge from '@aziontech/webkit/assets/pci-dss-symbol-color.svg'
+import lgpdBadge from '@aziontech/webkit/assets/lgpd-symbol-color.svg'
+import gdprBadge from '@aziontech/webkit/assets/gdpr-symbol-color.svg'
+import ccpaBadge from '@aziontech/webkit/assets/ccpa-symbol-color.svg'
+import cpraBadge from '@aziontech/webkit/assets/cpra-symbol-color.svg'
 
 const DOCS = 'https://www.azion.com/pt-br/documentacao'
 

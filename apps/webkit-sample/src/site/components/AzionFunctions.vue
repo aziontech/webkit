@@ -3,7 +3,7 @@
   // the webkit marketing bundle — hero, two claims, the code sample, one client quotation,
   // the platform's primitives, the FAQ and the closing CTA. Copy is
   // azion.com/en/products/functions verbatim.
-  import contabilizeiTile from '@aziontech/webkit/assets/clients/contabilizei-symbol.png'
+  import contabilizeiTile from '@aziontech/webkit/assets/contabilizei-symbol-color.png'
   import BandStack from '@aziontech/webkit/band-stack'
   import Button from '@aziontech/webkit/button'
   import CallToAction from '@aziontech/webkit/call-to-action'

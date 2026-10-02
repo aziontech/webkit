@@ -40,12 +40,12 @@
   //
   // ASSET GAPS: none. All 11 hero marks are CLIENTS entries. On the quote band, Axur,
   // Arezzo, Contabilizei and Crefisa are not registry entries but their marks live in
-  // `clients/dark/clients/`, so they are declared locally — as AzionCache.vue does.
-  import arezzo from '@aziontech/webkit/assets/clients/dark/clients/arezzo-logo.svg'
-  import axur from '@aziontech/webkit/assets/clients/dark/clients/axur-logo.svg'
-  import contabilizei from '@aziontech/webkit/assets/clients/dark/clients/contabilizei-logo.svg'
-  import crefisa from '@aziontech/webkit/assets/clients/dark/clients/crefisa-logo.svg'
-  import { CLIENTS } from '@aziontech/webkit/assets/clients/registry'
+  // `clients/dark/`, so they are declared locally — as AzionCache.vue does.
+  import arezzo from '@aziontech/webkit/assets/arezzo-extended-reversed.svg'
+  import axur from '@aziontech/webkit/assets/axur-extended-reversed.svg'
+  import contabilizei from '@aziontech/webkit/assets/contabilizei-extended-reversed.svg'
+  import crefisa from '@aziontech/webkit/assets/crefisa-extended-reversed.svg'
+  import { CLIENTS } from '@aziontech/webkit/assets/client-registry'
   import BandStack from '@aziontech/webkit/band-stack'
   import BigNumbers from '@aziontech/webkit/big-numbers'
   import Button from '@aziontech/webkit/button'
