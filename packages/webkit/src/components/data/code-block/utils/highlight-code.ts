@@ -267,6 +267,142 @@ const highlightShellLine = (line: string): CodeBlockHighlightToken[] => {
   return tokens.length ? tokens : [{ text: line || ' ', type: 'identifier' }]
 }
 
+const HCL_LITERALS = ['true', 'false', 'null'] as const
+
+const highlightHclLine = (line: string): CodeBlockHighlightToken[] => {
+  const tokens: CodeBlockHighlightToken[] = []
+  const hclRegex =
+    /#.*$|\/\/.*$|"(?:\\"|[^"])*"|-?\b\d+(?:\.\d+)?\b|[A-Za-z_][\w-]*|[{}[\]().,:=?<>!*/+-]|\s+|\S/g
+
+  let isFirstWord = true
+  let match: RegExpExecArray | null
+
+  while ((match = hclRegex.exec(line)) !== null) {
+    const chunk = match[0]
+    const rest = line.slice(match.index + chunk.length)
+
+    if (/^\s+$/.test(chunk)) {
+      pushToken(tokens, chunk, 'identifier')
+      continue
+    }
+
+    if (chunk.startsWith('#') || chunk.startsWith('//')) {
+      pushToken(tokens, chunk, 'comment')
+      continue
+    }
+
+    if (chunk.startsWith('"')) {
+      pushToken(tokens, chunk, 'string')
+      isFirstWord = false
+      continue
+    }
+
+    if (/^-?\d/.test(chunk)) {
+      pushToken(tokens, chunk, 'type')
+      isFirstWord = false
+      continue
+    }
+
+    if (!/^[A-Za-z_]/.test(chunk)) {
+      pushToken(tokens, chunk, 'punctuation')
+      isFirstWord = false
+      continue
+    }
+
+    if (HCL_LITERALS.includes(chunk as (typeof HCL_LITERALS)[number])) {
+      pushToken(tokens, chunk, 'type')
+    } else if (/^\s*\(/.test(rest)) {
+      pushToken(tokens, chunk, 'function')
+    } else if (isFirstWord && /^\s*=(?!=)/.test(rest)) {
+      pushToken(tokens, chunk, 'function')
+    } else if (isFirstWord && /^\s*(?:"|\{|[A-Za-z_])/.test(rest)) {
+      pushToken(tokens, chunk, 'keyword')
+    } else {
+      pushToken(tokens, chunk, 'identifier')
+    }
+
+    isFirstWord = false
+  }
+
+  return tokens.length ? tokens : [{ text: line || ' ', type: 'identifier' }]
+}
+
+const GRAPHQL_KEYWORDS = [
+  'query',
+  'mutation',
+  'subscription',
+  'fragment',
+  'type',
+  'input',
+  'enum',
+  'interface',
+  'union',
+  'scalar',
+  'schema',
+  'extend',
+  'directive',
+  'implements'
+] as const
+
+const GRAPHQL_OPERATIONS = ['query', 'mutation', 'subscription', 'fragment'] as const
+
+const GRAPHQL_LITERALS = ['true', 'false', 'null'] as const
+
+const highlightGraphqlLine = (line: string): CodeBlockHighlightToken[] => {
+  const tokens: CodeBlockHighlightToken[] = []
+  const graphqlRegex =
+    /#.*$|"(?:\\"|[^"])*"|\$[A-Za-z_]\w*|@[A-Za-z_]\w*|-?\b\d+(?:\.\d+)?\b|\.\.\.|[A-Za-z_]\w*|[{}[\]()!:=,|&]|\s+|\S/g
+
+  let isFirstWord = true
+  let previousWord = ''
+  let match: RegExpExecArray | null
+
+  while ((match = graphqlRegex.exec(line)) !== null) {
+    const chunk = match[0]
+    const rest = line.slice(match.index + chunk.length)
+
+    if (/^\s+$/.test(chunk)) {
+      pushToken(tokens, chunk, 'identifier')
+      continue
+    }
+
+    if (chunk.startsWith('#')) {
+      pushToken(tokens, chunk, 'comment')
+      continue
+    }
+
+    if (chunk.startsWith('"')) {
+      pushToken(tokens, chunk, 'string')
+    } else if (chunk.startsWith('$') || /^-?\d/.test(chunk)) {
+      pushToken(tokens, chunk, 'type')
+    } else if (chunk.startsWith('@')) {
+      pushToken(tokens, chunk, 'keyword')
+    } else if (!/^[A-Za-z_]/.test(chunk)) {
+      pushToken(tokens, chunk, 'punctuation')
+    } else if (
+      (isFirstWord && GRAPHQL_KEYWORDS.includes(chunk as (typeof GRAPHQL_KEYWORDS)[number])) ||
+      (chunk === 'on' && previousWord !== '')
+    ) {
+      pushToken(tokens, chunk, 'keyword')
+    } else if (GRAPHQL_OPERATIONS.includes(previousWord as (typeof GRAPHQL_OPERATIONS)[number])) {
+      pushToken(tokens, chunk, 'function')
+    } else if (GRAPHQL_LITERALS.includes(chunk as (typeof GRAPHQL_LITERALS)[number])) {
+      pushToken(tokens, chunk, 'type')
+    } else if (/^\s*\(/.test(rest)) {
+      pushToken(tokens, chunk, 'function')
+    } else if (/^[A-Z]/.test(chunk)) {
+      pushToken(tokens, chunk, 'type')
+    } else {
+      pushToken(tokens, chunk, 'identifier')
+    }
+
+    previousWord = /^[A-Za-z_]/.test(chunk) ? chunk : ''
+    isFirstWord = false
+  }
+
+  return tokens.length ? tokens : [{ text: line || ' ', type: 'identifier' }]
+}
+
 export const highlightCodeLine = (
   language: string | undefined,
   line: string
@@ -285,6 +421,14 @@ export const highlightCodeLine = (
     lang === 'console'
   ) {
     return highlightShellLine(line)
+  }
+
+  if (lang === 'hcl' || lang === 'terraform' || lang === 'tf') {
+    return highlightHclLine(line)
+  }
+
+  if (lang === 'graphql' || lang === 'gql') {
+    return highlightGraphqlLine(line)
   }
 
   // Prose in a code block (a markdown snippet, an agent prompt) is commentary, not code:
