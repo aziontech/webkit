@@ -477,6 +477,7 @@
     "./assets/primevideo-extended-reversed.svg": "./src/assets/logos/clients/primevideo-extended-reversed.svg",
     "./assets/prisma-symbol-reversed.svg": "./src/assets/logos/frameworks/prisma-symbol-reversed.svg",
     "./assets/qualcomm-extended-reversed.svg": "./src/assets/logos/clients/qualcomm-extended-reversed.svg",
+    "./assets/quick-start-with-templates.svg": "./src/assets/illustrations/quick-start-with-templates.svg",
     "./assets/qwik-symbol-mono.svg": "./src/assets/logos/frameworks/qwik-symbol-mono.svg",
     "./assets/radware-extended-color.svg": "./src/assets/logos/clients/radware-extended-color.svg",
     "./assets/radware-extended-reversed.svg": "./src/assets/logos/clients/radware-extended-reversed.svg",

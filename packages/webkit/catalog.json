@@ -12056,6 +12056,12 @@
       "kind": "asset",
       "treeShakeableImport": "@aziontech/webkit/assets/qualcomm-extended-reversed.svg"
     },
+    "assets/quick-start-with-templates.svg": {
+      "import": "@aziontech/webkit/assets/quick-start-with-templates.svg",
+      "target": "./src/assets/illustrations/quick-start-with-templates.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/quick-start-with-templates.svg"
+    },
     "assets/qwik-symbol-mono.svg": {
       "import": "@aziontech/webkit/assets/qwik-symbol-mono.svg",
       "target": "./src/assets/logos/frameworks/qwik-symbol-mono.svg",
