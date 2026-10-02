@@ -236,11 +236,13 @@
       "--color-gray-150",
       "--color-gray-200",
       "--color-gray-250",
+      "--color-gray-275",
       "--color-gray-300",
       "--color-gray-400",
       "--color-gray-50",
       "--color-gray-500",
       "--color-gray-600",
+      "--color-gray-650",
       "--color-gray-700",
       "--color-gray-750",
       "--color-gray-775",
@@ -397,9 +399,24 @@
       "--height-80",
       "--height-9",
       "--height-96",
+      "--illustration-accent",
+      "--illustration-block",
       "--illustration-canvas-height",
       "--illustration-canvas-width",
+      "--illustration-code-keyword",
+      "--illustration-code-punctuation",
+      "--illustration-danger",
+      "--illustration-ground",
+      "--illustration-highlight",
+      "--illustration-info",
+      "--illustration-info-surface",
+      "--illustration-ink",
+      "--illustration-ink-muted",
       "--illustration-label-small",
+      "--illustration-line",
+      "--illustration-line-muted",
+      "--illustration-line-strong",
+      "--illustration-primary",
       "--illustration-rim",
       "--illustration-rim-active",
       "--illustration-rim-angle",
@@ -412,6 +429,12 @@
       "--illustration-shape-medium",
       "--illustration-shape-node",
       "--illustration-shape-small",
+      "--illustration-success",
+      "--illustration-success-surface",
+      "--illustration-surface",
+      "--illustration-surface-raised",
+      "--illustration-warning",
+      "--illustration-warning-surface",
       "--info",
       "--info-border",
       "--info-contrast",
@@ -558,11 +581,13 @@
       "--surface-150",
       "--surface-200",
       "--surface-250",
+      "--surface-275",
       "--surface-300",
       "--surface-400",
       "--surface-50",
       "--surface-500",
       "--surface-600",
+      "--surface-650",
       "--surface-700",
       "--surface-750",
       "--surface-775",
@@ -1046,11 +1071,13 @@
         "--color-gray-150",
         "--color-gray-200",
         "--color-gray-250",
+        "--color-gray-275",
         "--color-gray-300",
         "--color-gray-400",
         "--color-gray-50",
         "--color-gray-500",
         "--color-gray-600",
+        "--color-gray-650",
         "--color-gray-700",
         "--color-gray-750",
         "--color-gray-775",
@@ -1221,9 +1248,24 @@
         "--height-96"
       ],
       "illustration": [
+        "--illustration-accent",
+        "--illustration-block",
         "--illustration-canvas-height",
         "--illustration-canvas-width",
+        "--illustration-code-keyword",
+        "--illustration-code-punctuation",
+        "--illustration-danger",
+        "--illustration-ground",
+        "--illustration-highlight",
+        "--illustration-info",
+        "--illustration-info-surface",
+        "--illustration-ink",
+        "--illustration-ink-muted",
         "--illustration-label-small",
+        "--illustration-line",
+        "--illustration-line-muted",
+        "--illustration-line-strong",
+        "--illustration-primary",
         "--illustration-rim",
         "--illustration-rim-active",
         "--illustration-rim-angle",
@@ -1235,7 +1277,13 @@
         "--illustration-shape-large",
         "--illustration-shape-medium",
         "--illustration-shape-node",
-        "--illustration-shape-small"
+        "--illustration-shape-small",
+        "--illustration-success",
+        "--illustration-success-surface",
+        "--illustration-surface",
+        "--illustration-surface-raised",
+        "--illustration-warning",
+        "--illustration-warning-surface"
       ],
       "info": [
         "--info",
@@ -1416,11 +1464,13 @@
         "--surface-150",
         "--surface-200",
         "--surface-250",
+        "--surface-275",
         "--surface-300",
         "--surface-400",
         "--surface-50",
         "--surface-500",
         "--surface-600",
+        "--surface-650",
         "--surface-700",
         "--surface-750",
         "--surface-775",
@@ -3333,7 +3383,7 @@
           "doc": "Accessible name; empty keeps the illustration decorative and hidden from assistive tech."
         }
       ],
-      "purpose": "Renders an **official product illustration** — one of the scenes drawn in the Assets library in Figma and exported as an SVG that ships with this package. `name` selects a scene from a closed registry; there is no way to assemble artwork out of markup, so a page can only render illustrations design has actually signed off, and a scene can never drift between the screens that use it.",
+      "purpose": "Renders an **official product illustration** — one of the scenes drawn in the Assets library in Figma and exported as an SVG that ships with this package. `name` selects a scene from a closed registry; there is no way to assemble artwork out of markup, so a page can only render illustrations design has actually signed off, and a scene can never drift between the screens that use it. The library is drawn once, in dark mode. The scene is drawn into the page as inline SVG and every colour it carries is repainted from the `illustration` theme foundation of `@aziontech/theme` — `--illustration-*` roles that alias the global tokens — so the one export follows light and dark like the rest of the page.",
       "useWhen": [
         "An empty state, error page, onboarding step, or marketing tile needs a diagrammatic illustration of a product concept (a deploy, a request path, a connected service).",
         "The same concept appears on more than one screen and must be the same drawing every time.",
@@ -13710,1235 +13760,1103 @@
       "kind": "svg",
       "treeShakeableImport": "@aziontech/webkit/svg/azion/min"
     },
-    "assets/agents/claude.svg": {
-      "import": "@aziontech/webkit/assets/agents/claude.svg",
-      "target": "./src/assets/agents/claude.svg",
+    "assets/agi-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/agi-extended-color.svg",
+      "target": "./src/assets/logos/clients/agi-extended-color.svg",
       "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/agents/claude.svg"
+      "treeShakeableImport": "@aziontech/webkit/assets/agi-extended-color.svg"
     },
-    "assets/agents/codex.svg": {
-      "import": "@aziontech/webkit/assets/agents/codex.svg",
-      "target": "./src/assets/agents/codex.svg",
+    "assets/agibank-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/agibank-extended-color.svg",
+      "target": "./src/assets/logos/clients/agibank-extended-color.svg",
       "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/agents/codex.svg"
+      "treeShakeableImport": "@aziontech/webkit/assets/agibank-extended-color.svg"
     },
-    "assets/agents/copilot.svg": {
-      "import": "@aziontech/webkit/assets/agents/copilot.svg",
-      "target": "./src/assets/agents/copilot.svg",
+    "assets/agibank-extended-mono.svg": {
+      "import": "@aziontech/webkit/assets/agibank-extended-mono.svg",
+      "target": "./src/assets/logos/clients/agibank-extended-mono.svg",
       "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/agents/copilot.svg"
+      "treeShakeableImport": "@aziontech/webkit/assets/agibank-extended-mono.svg"
     },
-    "assets/agents/cursor.svg": {
-      "import": "@aziontech/webkit/assets/agents/cursor.svg",
-      "target": "./src/assets/agents/cursor.svg",
+    "assets/agibank-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/agibank-extended-reversed.svg",
+      "target": "./src/assets/logos/clients/agibank-extended-reversed.svg",
       "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/agents/cursor.svg"
+      "treeShakeableImport": "@aziontech/webkit/assets/agibank-extended-reversed.svg"
     },
-    "assets/agents/gemini.svg": {
-      "import": "@aziontech/webkit/assets/agents/gemini.svg",
-      "target": "./src/assets/agents/gemini.svg",
+    "assets/akamai-symbol-color.svg": {
+      "import": "@aziontech/webkit/assets/akamai-symbol-color.svg",
+      "target": "./src/assets/logos/competitors/akamai-symbol-color.svg",
       "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/agents/gemini.svg"
+      "treeShakeableImport": "@aziontech/webkit/assets/akamai-symbol-color.svg"
     },
-    "assets/agents/opencode.svg": {
-      "import": "@aziontech/webkit/assets/agents/opencode.svg",
-      "target": "./src/assets/agents/opencode.svg",
+    "assets/alpargatas-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/alpargatas-extended-color.svg",
+      "target": "./src/assets/logos/clients/alpargatas-extended-color.svg",
       "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/agents/opencode.svg"
+      "treeShakeableImport": "@aziontech/webkit/assets/alpargatas-extended-color.svg"
     },
-    "assets/agents/windsurf.svg": {
-      "import": "@aziontech/webkit/assets/agents/windsurf.svg",
-      "target": "./src/assets/agents/windsurf.svg",
+    "assets/alpargatas-extended-mono.svg": {
+      "import": "@aziontech/webkit/assets/alpargatas-extended-mono.svg",
+      "target": "./src/assets/logos/clients/alpargatas-extended-mono.svg",
       "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/agents/windsurf.svg"
+      "treeShakeableImport": "@aziontech/webkit/assets/alpargatas-extended-mono.svg"
     },
-    "assets/logos/forrester.svg": {
-      "import": "@aziontech/webkit/assets/logos/forrester.svg",
-      "target": "./src/assets/logos/forrester.svg",
+    "assets/americamovil-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/americamovil-extended-color.svg",
+      "target": "./src/assets/logos/clients/americamovil-extended-color.svg",
       "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/logos/forrester.svg"
+      "treeShakeableImport": "@aziontech/webkit/assets/americamovil-extended-color.svg"
     },
-    "assets/logos/forrester-reversed.svg": {
-      "import": "@aziontech/webkit/assets/logos/forrester-reversed.svg",
-      "target": "./src/assets/logos/forrester-reversed.svg",
+    "assets/angeloni-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/angeloni-extended-color.svg",
+      "target": "./src/assets/logos/clients/angeloni-extended-color.svg",
       "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/logos/forrester-reversed.svg"
+      "treeShakeableImport": "@aziontech/webkit/assets/angeloni-extended-color.svg"
     },
-    "assets/logos/frost-and-sullivan.svg": {
-      "import": "@aziontech/webkit/assets/logos/frost-and-sullivan.svg",
-      "target": "./src/assets/logos/frost-and-sullivan.svg",
+    "assets/angular-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/angular-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/angular-symbol-mono.svg",
       "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/logos/frost-and-sullivan.svg"
+      "treeShakeableImport": "@aziontech/webkit/assets/angular-symbol-mono.svg"
     },
-    "assets/logos/frost-and-sullivan-reversed.svg": {
-      "import": "@aziontech/webkit/assets/logos/frost-and-sullivan-reversed.svg",
-      "target": "./src/assets/logos/frost-and-sullivan-reversed.svg",
+    "assets/anthropic-extended-mono.svg": {
+      "import": "@aziontech/webkit/assets/anthropic-extended-mono.svg",
+      "target": "./src/assets/logos/frameworks/anthropic-extended-mono.svg",
       "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/logos/frost-and-sullivan-reversed.svg"
+      "treeShakeableImport": "@aziontech/webkit/assets/anthropic-extended-mono.svg"
     },
-    "assets/logos/g2.svg": {
-      "import": "@aziontech/webkit/assets/logos/g2.svg",
-      "target": "./src/assets/logos/g2.svg",
+    "assets/arezzo-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/arezzo-extended-color.svg",
+      "target": "./src/assets/logos/clients/arezzo-extended-color.svg",
       "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/logos/g2.svg"
+      "treeShakeableImport": "@aziontech/webkit/assets/arezzo-extended-color.svg"
     },
-    "assets/logos/gartner.svg": {
-      "import": "@aziontech/webkit/assets/logos/gartner.svg",
-      "target": "./src/assets/logos/gartner.svg",
+    "assets/arezzo-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/arezzo-extended-reversed.svg",
+      "target": "./src/assets/logos/clients/arezzo-extended-reversed.svg",
       "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/logos/gartner.svg"
+      "treeShakeableImport": "@aziontech/webkit/assets/arezzo-extended-reversed.svg"
     },
-    "assets/logos/gartner-reversed.svg": {
-      "import": "@aziontech/webkit/assets/logos/gartner-reversed.svg",
-      "target": "./src/assets/logos/gartner-reversed.svg",
+    "assets/astro-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/astro-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/astro-symbol-mono.svg",
       "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/logos/gartner-reversed.svg"
+      "treeShakeableImport": "@aziontech/webkit/assets/astro-symbol-mono.svg"
     },
-    "assets/logos/gigaom.svg": {
-      "import": "@aziontech/webkit/assets/logos/gigaom.svg",
-      "target": "./src/assets/logos/gigaom.svg",
+    "assets/aws-extended-mono.svg": {
+      "import": "@aziontech/webkit/assets/aws-extended-mono.svg",
+      "target": "./src/assets/logos/frameworks/aws-extended-mono.svg",
       "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/logos/gigaom.svg"
+      "treeShakeableImport": "@aziontech/webkit/assets/aws-extended-mono.svg"
     },
-    "assets/logos/gigaom-reversed.svg": {
-      "import": "@aziontech/webkit/assets/logos/gigaom-reversed.svg",
-      "target": "./src/assets/logos/gigaom-reversed.svg",
+    "assets/axur-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/axur-extended-reversed.svg",
+      "target": "./src/assets/logos/clients/axur-extended-reversed.svg",
       "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/logos/gigaom-reversed.svg"
+      "treeShakeableImport": "@aziontech/webkit/assets/axur-extended-reversed.svg"
     },
-    "assets/heroes/combine-data-and-vector-search.svg": {
-      "import": "@aziontech/webkit/assets/heroes/combine-data-and-vector-search.svg",
-      "target": "./src/assets/heroes/combine-data-and-vector-search.svg",
+    "assets/ayko-extended-mono.svg": {
+      "import": "@aziontech/webkit/assets/ayko-extended-mono.svg",
+      "target": "./src/assets/logos/clients/ayko-extended-mono.svg",
       "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/heroes/combine-data-and-vector-search.svg"
+      "treeShakeableImport": "@aziontech/webkit/assets/ayko-extended-mono.svg"
     },
-    "assets/heroes/ddos-protection.svg": {
-      "import": "@aziontech/webkit/assets/heroes/ddos-protection.svg",
-      "target": "./src/assets/heroes/ddos-protection.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/heroes/ddos-protection.svg"
-    },
-    "assets/heroes/quick-start-with-templates.svg": {
-      "import": "@aziontech/webkit/assets/heroes/quick-start-with-templates.svg",
-      "target": "./src/assets/heroes/quick-start-with-templates.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/heroes/quick-start-with-templates.svg"
-    },
-    "assets/clients/CCPA-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/CCPA-logo.svg",
-      "target": "./src/assets/clients/CCPA-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/CCPA-logo.svg"
-    },
-    "assets/clients/CPRA-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/CPRA-logo.svg",
-      "target": "./src/assets/clients/CPRA-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/CPRA-logo.svg"
-    },
-    "assets/clients/GDPR-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/GDPR-logo.svg",
-      "target": "./src/assets/clients/GDPR-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/GDPR-logo.svg"
-    },
-    "assets/clients/HDI-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/HDI-logo.svg",
-      "target": "./src/assets/clients/HDI-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/HDI-logo.svg"
-    },
-    "assets/clients/LGPD-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/LGPD-logo.svg",
-      "target": "./src/assets/clients/LGPD-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/LGPD-logo.svg"
-    },
-    "assets/clients/PCI-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/PCI-logo.svg",
-      "target": "./src/assets/clients/PCI-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/PCI-logo.svg"
-    },
-    "assets/clients/SOC-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/SOC-logo.svg",
-      "target": "./src/assets/clients/SOC-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/SOC-logo.svg"
-    },
-    "assets/clients/agibank-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/agibank-logo.svg",
-      "target": "./src/assets/clients/agibank-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/agibank-logo.svg"
-    },
-    "assets/clients/akamai.svg": {
-      "import": "@aziontech/webkit/assets/clients/akamai.svg",
-      "target": "./src/assets/clients/akamai.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/akamai.svg"
-    },
-    "assets/clients/alpargatas.svg": {
-      "import": "@aziontech/webkit/assets/clients/alpargatas.svg",
-      "target": "./src/assets/clients/alpargatas.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/alpargatas.svg"
-    },
-    "assets/clients/americamovil.svg": {
-      "import": "@aziontech/webkit/assets/clients/americamovil.svg",
-      "target": "./src/assets/clients/americamovil.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/americamovil.svg"
-    },
-    "assets/clients/angeloni.svg": {
-      "import": "@aziontech/webkit/assets/clients/angeloni.svg",
-      "target": "./src/assets/clients/angeloni.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/angeloni.svg"
-    },
-    "assets/clients/angular.svg": {
-      "import": "@aziontech/webkit/assets/clients/angular.svg",
-      "target": "./src/assets/clients/angular.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/angular.svg"
-    },
-    "assets/clients/anthropic.svg": {
-      "import": "@aziontech/webkit/assets/clients/anthropic.svg",
-      "target": "./src/assets/clients/anthropic.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/anthropic.svg"
-    },
-    "assets/clients/astro.svg": {
-      "import": "@aziontech/webkit/assets/clients/astro.svg",
-      "target": "./src/assets/clients/astro.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/astro.svg"
-    },
-    "assets/clients/aws.svg": {
-      "import": "@aziontech/webkit/assets/clients/aws.svg",
-      "target": "./src/assets/clients/aws.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/aws.svg"
-    },
-    "assets/clients/ayko.svg": {
-      "import": "@aziontech/webkit/assets/clients/ayko.svg",
-      "target": "./src/assets/clients/ayko.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/ayko.svg"
-    },
-    "assets/clients/azure.svg": {
-      "import": "@aziontech/webkit/assets/clients/azure.svg",
-      "target": "./src/assets/clients/azure.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/azure.svg"
-    },
-    "assets/clients/banco-de-la-nacion-logo-vector.svg": {
-      "import": "@aziontech/webkit/assets/clients/banco-de-la-nacion-logo-vector.svg",
-      "target": "./src/assets/clients/banco-de-la-nacion-logo-vector.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/banco-de-la-nacion-logo-vector.svg"
-    },
-    "assets/clients/cloudflare.svg": {
-      "import": "@aziontech/webkit/assets/clients/cloudflare.svg",
-      "target": "./src/assets/clients/cloudflare.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/cloudflare.svg"
-    },
-    "assets/clients/contabilizei-symbol.png": {
-      "import": "@aziontech/webkit/assets/clients/contabilizei-symbol.png",
-      "target": "./src/assets/clients/contabilizei-symbol.png",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/contabilizei-symbol.png"
-    },
-    "assets/clients/dark/Axur.png": {
-      "import": "@aziontech/webkit/assets/clients/dark/Axur.png",
-      "target": "./src/assets/clients/dark/Axur.png",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/Axur.png"
-    },
-    "assets/clients/dark/agibank-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/dark/agibank-logo.svg",
-      "target": "./src/assets/clients/dark/agibank-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/agibank-logo.svg"
-    },
-    "assets/clients/dark/browserless-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/dark/browserless-logo.svg",
-      "target": "./src/assets/clients/dark/browserless-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/browserless-logo.svg"
-    },
-    "assets/clients/dark/clients/agibank-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/dark/clients/agibank-logo.svg",
-      "target": "./src/assets/clients/dark/clients/agibank-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/agibank-logo.svg"
-    },
-    "assets/clients/dark/clients/arezzo-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/dark/clients/arezzo-logo.svg",
-      "target": "./src/assets/clients/dark/clients/arezzo-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/arezzo-logo.svg"
-    },
-    "assets/clients/dark/clients/axur-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/dark/clients/axur-logo.svg",
-      "target": "./src/assets/clients/dark/clients/axur-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/axur-logo.svg"
-    },
-    "assets/clients/dark/clients/caixa-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/dark/clients/caixa-logo.svg",
-      "target": "./src/assets/clients/dark/clients/caixa-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/caixa-logo.svg"
-    },
-    "assets/clients/dark/clients/cocacola-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/dark/clients/cocacola-logo.svg",
-      "target": "./src/assets/clients/dark/clients/cocacola-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/cocacola-logo.svg"
-    },
-    "assets/clients/dark/clients/contabilizei-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/dark/clients/contabilizei-logo.svg",
-      "target": "./src/assets/clients/dark/clients/contabilizei-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/contabilizei-logo.svg"
-    },
-    "assets/clients/dark/clients/crefisa-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/dark/clients/crefisa-logo.svg",
-      "target": "./src/assets/clients/dark/clients/crefisa-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/crefisa-logo.svg"
-    },
-    "assets/clients/dark/clients/dafiti-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/dark/clients/dafiti-logo.svg",
-      "target": "./src/assets/clients/dark/clients/dafiti-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/dafiti-logo.svg"
-    },
-    "assets/clients/dark/clients/datadome-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/dark/clients/datadome-logo.svg",
-      "target": "./src/assets/clients/dark/clients/datadome-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/datadome-logo.svg"
-    },
-    "assets/clients/dark/clients/fauna-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/dark/clients/fauna-logo.svg",
-      "target": "./src/assets/clients/dark/clients/fauna-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/fauna-logo.svg"
-    },
-    "assets/clients/dark/clients/fourbank-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/dark/clients/fourbank-logo.svg",
-      "target": "./src/assets/clients/dark/clients/fourbank-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/fourbank-logo.svg"
-    },
-    "assets/clients/dark/clients/gfg-global-fashion-group.svg": {
-      "import": "@aziontech/webkit/assets/clients/dark/clients/gfg-global-fashion-group.svg",
-      "target": "./src/assets/clients/dark/clients/gfg-global-fashion-group.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/gfg-global-fashion-group.svg"
-    },
-    "assets/clients/dark/clients/gpa-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/dark/clients/gpa-logo.svg",
-      "target": "./src/assets/clients/dark/clients/gpa-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/gpa-logo.svg"
-    },
-    "assets/clients/dark/clients/herospark.svg": {
-      "import": "@aziontech/webkit/assets/clients/dark/clients/herospark.svg",
-      "target": "./src/assets/clients/dark/clients/herospark.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/herospark.svg"
-    },
-    "assets/clients/dark/clients/itau-logo.webp": {
-      "import": "@aziontech/webkit/assets/clients/dark/clients/itau-logo.webp",
-      "target": "./src/assets/clients/dark/clients/itau-logo.webp",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/itau-logo.webp"
-    },
-    "assets/clients/dark/clients/magalu-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/dark/clients/magalu-logo.svg",
-      "target": "./src/assets/clients/dark/clients/magalu-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/magalu-logo.svg"
-    },
-    "assets/clients/dark/clients/monashees-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/dark/clients/monashees-logo.svg",
-      "target": "./src/assets/clients/dark/clients/monashees-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/monashees-logo.svg"
-    },
-    "assets/clients/dark/clients/netshoes-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/dark/clients/netshoes-logo.svg",
-      "target": "./src/assets/clients/dark/clients/netshoes-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/netshoes-logo.svg"
-    },
-    "assets/clients/dark/clients/pernambucanas-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/dark/clients/pernambucanas-logo.svg",
-      "target": "./src/assets/clients/dark/clients/pernambucanas-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/pernambucanas-logo.svg"
-    },
-    "assets/clients/dark/clients/primevideo-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/dark/clients/primevideo-logo.svg",
-      "target": "./src/assets/clients/dark/clients/primevideo-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/primevideo-logo.svg"
-    },
-    "assets/clients/dark/clients/qualcoom-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/dark/clients/qualcoom-logo.svg",
-      "target": "./src/assets/clients/dark/clients/qualcoom-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/qualcoom-logo.svg"
-    },
-    "assets/clients/dark/clients/radware-logo-1.svg": {
-      "import": "@aziontech/webkit/assets/clients/dark/clients/radware-logo-1.svg",
-      "target": "./src/assets/clients/dark/clients/radware-logo-1.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/radware-logo-1.svg"
-    },
-    "assets/clients/dark/clients/radware-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/dark/clients/radware-logo.svg",
-      "target": "./src/assets/clients/dark/clients/radware-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/radware-logo.svg"
-    },
-    "assets/clients/dark/clients/renner-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/dark/clients/renner-logo.svg",
-      "target": "./src/assets/clients/dark/clients/renner-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/renner-logo.svg"
-    },
-    "assets/clients/dark/clients/saffe-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/dark/clients/saffe-logo.svg",
-      "target": "./src/assets/clients/dark/clients/saffe-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/clients/saffe-logo.svg"
-    },
-    "assets/clients/dark/edge-sql-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/dark/edge-sql-logo.svg",
-      "target": "./src/assets/clients/dark/edge-sql-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/edge-sql-logo.svg"
-    },
-    "assets/clients/dark/edge-storage-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/dark/edge-storage-logo.svg",
-      "target": "./src/assets/clients/dark/edge-storage-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/edge-storage-logo.svg"
-    },
-    "assets/clients/dark/former-clients/hdi-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/dark/former-clients/hdi-logo.svg",
-      "target": "./src/assets/clients/dark/former-clients/hdi-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/former-clients/hdi-logo.svg"
-    },
-    "assets/clients/dark/former-clients/samsung-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/dark/former-clients/samsung-logo.svg",
-      "target": "./src/assets/clients/dark/former-clients/samsung-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/former-clients/samsung-logo.svg"
-    },
-    "assets/clients/dark/former-clients/telefonica-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/dark/former-clients/telefonica-logo.svg",
-      "target": "./src/assets/clients/dark/former-clients/telefonica-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/former-clients/telefonica-logo.svg"
-    },
-    "assets/clients/dark/former-clients/vtex-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/dark/former-clients/vtex-logo.svg",
-      "target": "./src/assets/clients/dark/former-clients/vtex-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/former-clients/vtex-logo.svg"
-    },
-    "assets/clients/dark/former-clients/walmart-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/dark/former-clients/walmart-logo.svg",
-      "target": "./src/assets/clients/dark/former-clients/walmart-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/former-clients/walmart-logo.svg"
-    },
-    "assets/clients/dark/magalu-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/dark/magalu-logo.svg",
-      "target": "./src/assets/clients/dark/magalu-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/magalu-logo.svg"
-    },
-    "assets/clients/dark/nzn-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/dark/nzn-logo.svg",
-      "target": "./src/assets/clients/dark/nzn-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/nzn-logo.svg"
-    },
-    "assets/clients/dark/resend-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/dark/resend-logo.svg",
-      "target": "./src/assets/clients/dark/resend-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/resend-logo.svg"
-    },
-    "assets/clients/dark/stripe-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/dark/stripe-logo.svg",
-      "target": "./src/assets/clients/dark/stripe-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/dark/stripe-logo.svg"
-    },
-    "assets/clients/datadog-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/datadog-logo.svg",
-      "target": "./src/assets/clients/datadog-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/datadog-logo.svg"
-    },
-    "assets/clients/docusaurus.svg": {
-      "import": "@aziontech/webkit/assets/clients/docusaurus.svg",
-      "target": "./src/assets/clients/docusaurus.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/docusaurus.svg"
-    },
-    "assets/clients/drizzle.svg": {
-      "import": "@aziontech/webkit/assets/clients/drizzle.svg",
-      "target": "./src/assets/clients/drizzle.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/drizzle.svg"
-    },
-    "assets/clients/elastic.svg": {
-      "import": "@aziontech/webkit/assets/clients/elastic.svg",
-      "target": "./src/assets/clients/elastic.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/elastic.svg"
-    },
-    "assets/clients/eleventy.svg": {
-      "import": "@aziontech/webkit/assets/clients/eleventy.svg",
-      "target": "./src/assets/clients/eleventy.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/eleventy.svg"
-    },
-    "assets/clients/equinix.svg": {
-      "import": "@aziontech/webkit/assets/clients/equinix.svg",
-      "target": "./src/assets/clients/equinix.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/equinix.svg"
-    },
-    "assets/clients/exame.svg": {
-      "import": "@aziontech/webkit/assets/clients/exame.svg",
-      "target": "./src/assets/clients/exame.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/exame.svg"
-    },
-    "assets/clients/fourbank-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/fourbank-logo.svg",
-      "target": "./src/assets/clients/fourbank-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/fourbank-logo.svg"
-    },
-    "assets/clients/gatsby.svg": {
-      "import": "@aziontech/webkit/assets/clients/gatsby.svg",
-      "target": "./src/assets/clients/gatsby.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/gatsby.svg"
-    },
-    "assets/clients/gcp.svg": {
-      "import": "@aziontech/webkit/assets/clients/gcp.svg",
-      "target": "./src/assets/clients/gcp.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/gcp.svg"
-    },
-    "assets/clients/github.svg": {
-      "import": "@aziontech/webkit/assets/clients/github.svg",
-      "target": "./src/assets/clients/github.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/github.svg"
-    },
-    "assets/clients/global-fashion-group.svg": {
-      "import": "@aziontech/webkit/assets/clients/global-fashion-group.svg",
-      "target": "./src/assets/clients/global-fashion-group.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/global-fashion-group.svg"
-    },
-    "assets/clients/grafana.svg": {
-      "import": "@aziontech/webkit/assets/clients/grafana.svg",
-      "target": "./src/assets/clients/grafana.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/grafana.svg"
-    },
-    "assets/clients/graphql.svg": {
-      "import": "@aziontech/webkit/assets/clients/graphql.svg",
-      "target": "./src/assets/clients/graphql.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/graphql.svg"
-    },
-    "assets/clients/groq.svg": {
-      "import": "@aziontech/webkit/assets/clients/groq.svg",
-      "target": "./src/assets/clients/groq.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/groq.svg"
-    },
-    "assets/clients/herospark-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/herospark-logo.svg",
-      "target": "./src/assets/clients/herospark-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/herospark-logo.svg"
-    },
-    "assets/clients/herospark-symbol.svg": {
-      "import": "@aziontech/webkit/assets/clients/herospark-symbol.svg",
-      "target": "./src/assets/clients/herospark-symbol.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/herospark-symbol.svg"
-    },
-    "assets/clients/hexo.svg": {
-      "import": "@aziontech/webkit/assets/clients/hexo.svg",
-      "target": "./src/assets/clients/hexo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/hexo.svg"
-    },
-    "assets/clients/hono.svg": {
-      "import": "@aziontech/webkit/assets/clients/hono.svg",
-      "target": "./src/assets/clients/hono.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/hono.svg"
-    },
-    "assets/clients/hugo.svg": {
-      "import": "@aziontech/webkit/assets/clients/hugo.svg",
-      "target": "./src/assets/clients/hugo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/hugo.svg"
-    },
-    "assets/clients/ietf.svg": {
-      "import": "@aziontech/webkit/assets/clients/ietf.svg",
-      "target": "./src/assets/clients/ietf.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/ietf.svg"
-    },
-    "assets/clients/ifood-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/ifood-logo.svg",
-      "target": "./src/assets/clients/ifood-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/ifood-logo.svg"
-    },
-    "assets/clients/infoblox.svg": {
-      "import": "@aziontech/webkit/assets/clients/infoblox.svg",
-      "target": "./src/assets/clients/infoblox.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/infoblox.svg"
-    },
-    "assets/clients/jamstack.svg": {
-      "import": "@aziontech/webkit/assets/clients/jamstack.svg",
-      "target": "./src/assets/clients/jamstack.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/jamstack.svg"
-    },
-    "assets/clients/javascript.svg": {
-      "import": "@aziontech/webkit/assets/clients/javascript.svg",
-      "target": "./src/assets/clients/javascript.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/javascript.svg"
-    },
-    "assets/clients/jekyll.svg": {
-      "import": "@aziontech/webkit/assets/clients/jekyll.svg",
-      "target": "./src/assets/clients/jekyll.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/jekyll.svg"
-    },
-    "assets/clients/kafka.svg": {
-      "import": "@aziontech/webkit/assets/clients/kafka.svg",
-      "target": "./src/assets/clients/kafka.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/kafka.svg"
-    },
-    "assets/clients/light/agi-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/light/agi-logo.svg",
-      "target": "./src/assets/clients/light/agi-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/agi-logo.svg"
-    },
-    "assets/clients/light/agibank-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/light/agibank-logo.svg",
-      "target": "./src/assets/clients/light/agibank-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/agibank-logo.svg"
-    },
-    "assets/clients/light/alpargatas-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/light/alpargatas-logo.svg",
-      "target": "./src/assets/clients/light/alpargatas-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/alpargatas-logo.svg"
-    },
-    "assets/clients/light/arezzo-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/light/arezzo-logo.svg",
-      "target": "./src/assets/clients/light/arezzo-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/arezzo-logo.svg"
-    },
-    "assets/clients/light/browserless-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/light/browserless-logo.svg",
-      "target": "./src/assets/clients/light/browserless-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/browserless-logo.svg"
-    },
-    "assets/clients/light/caixa-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/light/caixa-logo.svg",
-      "target": "./src/assets/clients/light/caixa-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/caixa-logo.svg"
-    },
-    "assets/clients/light/cobasi-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/light/cobasi-logo.svg",
-      "target": "./src/assets/clients/light/cobasi-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/cobasi-logo.svg"
-    },
-    "assets/clients/light/contabilizei-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/light/contabilizei-logo.svg",
-      "target": "./src/assets/clients/light/contabilizei-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/contabilizei-logo.svg"
-    },
-    "assets/clients/light/csu-digital-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/light/csu-digital-logo.svg",
-      "target": "./src/assets/clients/light/csu-digital-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/csu-digital-logo.svg"
-    },
-    "assets/clients/light/edge-sql-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/light/edge-sql-logo.svg",
-      "target": "./src/assets/clients/light/edge-sql-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/edge-sql-logo.svg"
-    },
-    "assets/clients/light/edge-storage-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/light/edge-storage-logo.svg",
-      "target": "./src/assets/clients/light/edge-storage-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/edge-storage-logo.svg"
-    },
-    "assets/clients/light/gfg-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/light/gfg-logo.svg",
-      "target": "./src/assets/clients/light/gfg-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/gfg-logo.svg"
-    },
-    "assets/clients/light/grendene-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/light/grendene-logo.svg",
-      "target": "./src/assets/clients/light/grendene-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/grendene-logo.svg"
-    },
-    "assets/clients/light/gru-airport-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/light/gru-airport-logo.svg",
-      "target": "./src/assets/clients/light/gru-airport-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/gru-airport-logo.svg"
-    },
-    "assets/clients/light/herospark-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/light/herospark-logo.svg",
-      "target": "./src/assets/clients/light/herospark-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/herospark-logo.svg"
-    },
-    "assets/clients/light/ifood-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/light/ifood-logo.svg",
-      "target": "./src/assets/clients/light/ifood-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/ifood-logo.svg"
-    },
-    "assets/clients/light/itau-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/light/itau-logo.svg",
-      "target": "./src/assets/clients/light/itau-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/itau-logo.svg"
-    },
-    "assets/clients/light/locaweb-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/light/locaweb-logo.svg",
-      "target": "./src/assets/clients/light/locaweb-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/locaweb-logo.svg"
-    },
-    "assets/clients/light/magalu-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/light/magalu-logo.svg",
-      "target": "./src/assets/clients/light/magalu-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/magalu-logo.svg"
-    },
-    "assets/clients/light/marisa-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/light/marisa-logo.svg",
-      "target": "./src/assets/clients/light/marisa-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/marisa-logo.svg"
-    },
-    "assets/clients/light/meliuz-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/light/meliuz-logo.svg",
-      "target": "./src/assets/clients/light/meliuz-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/meliuz-logo.svg"
-    },
-    "assets/clients/light/neogrid-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/light/neogrid-logo.svg",
-      "target": "./src/assets/clients/light/neogrid-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/neogrid-logo.svg"
-    },
-    "assets/clients/light/neon-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/light/neon-logo.svg",
-      "target": "./src/assets/clients/light/neon-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/neon-logo.svg"
-    },
-    "assets/clients/light/netshoes-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/light/netshoes-logo.svg",
-      "target": "./src/assets/clients/light/netshoes-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/netshoes-logo.svg"
-    },
-    "assets/clients/light/mobiauto-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/light/mobiauto-logo.svg",
-      "target": "./src/assets/clients/light/mobiauto-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/mobiauto-logo.svg"
-    },
-    "assets/clients/light/nzn-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/light/nzn-logo.svg",
-      "target": "./src/assets/clients/light/nzn-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/nzn-logo.svg"
-    },
-    "assets/clients/light/panvel-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/light/panvel-logo.svg",
-      "target": "./src/assets/clients/light/panvel-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/panvel-logo.svg"
-    },
-    "assets/clients/light/portobello-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/light/portobello-logo.svg",
-      "target": "./src/assets/clients/light/portobello-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/portobello-logo.svg"
-    },
-    "assets/clients/light/primevideo-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/light/primevideo-logo.svg",
-      "target": "./src/assets/clients/light/primevideo-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/primevideo-logo.svg"
-    },
-    "assets/clients/light/radware-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/light/radware-logo.svg",
-      "target": "./src/assets/clients/light/radware-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/radware-logo.svg"
-    },
-    "assets/clients/light/rbs-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/light/rbs-logo.svg",
-      "target": "./src/assets/clients/light/rbs-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/rbs-logo.svg"
-    },
-    "assets/clients/light/renner-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/light/renner-logo.svg",
-      "target": "./src/assets/clients/light/renner-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/renner-logo.svg"
-    },
-    "assets/clients/light/resend-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/light/resend-logo.svg",
-      "target": "./src/assets/clients/light/resend-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/resend-logo.svg"
-    },
-    "assets/clients/light/stone-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/light/stone-logo.svg",
-      "target": "./src/assets/clients/light/stone-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/stone-logo.svg"
-    },
-    "assets/clients/light/stripe-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/light/stripe-logo.svg",
-      "target": "./src/assets/clients/light/stripe-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/stripe-logo.svg"
-    },
-    "assets/clients/light/unicred-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/light/unicred-logo.svg",
-      "target": "./src/assets/clients/light/unicred-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/light/unicred-logo.svg"
-    },
-    "assets/clients/madeira-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/madeira-logo.svg",
-      "target": "./src/assets/clients/madeira-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/madeira-logo.svg"
-    },
-    "assets/clients/madeira-symbol.svg": {
-      "import": "@aziontech/webkit/assets/clients/madeira-symbol.svg",
-      "target": "./src/assets/clients/madeira-symbol.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/madeira-symbol.svg"
-    },
-    "assets/clients/madeiramadeira.svg": {
-      "import": "@aziontech/webkit/assets/clients/madeiramadeira.svg",
-      "target": "./src/assets/clients/madeiramadeira.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/madeiramadeira.svg"
-    },
-    "assets/clients/magalu-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/magalu-logo.svg",
-      "target": "./src/assets/clients/magalu-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/magalu-logo.svg"
-    },
-    "assets/clients/magalu-symbol.png": {
-      "import": "@aziontech/webkit/assets/clients/magalu-symbol.png",
-      "target": "./src/assets/clients/magalu-symbol.png",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/magalu-symbol.png"
-    },
-    "assets/clients/mongodb.svg": {
-      "import": "@aziontech/webkit/assets/clients/mongodb.svg",
-      "target": "./src/assets/clients/mongodb.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/mongodb.svg"
-    },
-    "assets/clients/mysql.svg": {
-      "import": "@aziontech/webkit/assets/clients/mysql.svg",
-      "target": "./src/assets/clients/mysql.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/mysql.svg"
-    },
-    "assets/clients/netshoes-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/netshoes-logo.svg",
-      "target": "./src/assets/clients/netshoes-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/netshoes-logo.svg"
-    },
-    "assets/clients/nextjs.svg": {
-      "import": "@aziontech/webkit/assets/clients/nextjs.svg",
-      "target": "./src/assets/clients/nextjs.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/nextjs.svg"
-    },
-    "assets/clients/node.js.svg": {
-      "import": "@aziontech/webkit/assets/clients/node.js.svg",
-      "target": "./src/assets/clients/node.js.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/node.js.svg"
-    },
-    "assets/clients/nuxt.svg": {
-      "import": "@aziontech/webkit/assets/clients/nuxt.svg",
-      "target": "./src/assets/clients/nuxt.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/nuxt.svg"
-    },
-    "assets/clients/mobiauto-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/mobiauto-logo.svg",
-      "target": "./src/assets/clients/mobiauto-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/mobiauto-logo.svg"
-    },
-    "assets/clients/nzn-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/nzn-logo.svg",
-      "target": "./src/assets/clients/nzn-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/nzn-logo.svg"
-    },
-    "assets/clients/onnx.svg": {
-      "import": "@aziontech/webkit/assets/clients/onnx.svg",
-      "target": "./src/assets/clients/onnx.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/onnx.svg"
-    },
-    "assets/clients/openai.svg": {
-      "import": "@aziontech/webkit/assets/clients/openai.svg",
-      "target": "./src/assets/clients/openai.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/openai.svg"
-    },
-    "assets/clients/photos/gpa.jpg": {
-      "import": "@aziontech/webkit/assets/clients/photos/gpa.jpg",
-      "target": "./src/assets/clients/photos/gpa.jpg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/photos/gpa.jpg"
-    },
-    "assets/clients/photos/netshoes.jpg": {
-      "import": "@aziontech/webkit/assets/clients/photos/netshoes.jpg",
-      "target": "./src/assets/clients/photos/netshoes.jpg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/photos/netshoes.jpg"
-    },
-    "assets/clients/planetscale.svg": {
-      "import": "@aziontech/webkit/assets/clients/planetscale.svg",
-      "target": "./src/assets/clients/planetscale.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/planetscale.svg"
-    },
-    "assets/clients/postgresql.svg": {
-      "import": "@aziontech/webkit/assets/clients/postgresql.svg",
-      "target": "./src/assets/clients/postgresql.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/postgresql.svg"
-    },
-    "assets/clients/preact.svg": {
-      "import": "@aziontech/webkit/assets/clients/preact.svg",
-      "target": "./src/assets/clients/preact.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/preact.svg"
-    },
-    "assets/clients/prisma.svg": {
-      "import": "@aziontech/webkit/assets/clients/prisma.svg",
-      "target": "./src/assets/clients/prisma.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/prisma.svg"
-    },
-    "assets/clients/qwik.svg": {
-      "import": "@aziontech/webkit/assets/clients/qwik.svg",
-      "target": "./src/assets/clients/qwik.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/qwik.svg"
-    },
-    "assets/clients/react.svg": {
-      "import": "@aziontech/webkit/assets/clients/react.svg",
-      "target": "./src/assets/clients/react.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/react.svg"
-    },
-    "assets/clients/redis.svg": {
-      "import": "@aziontech/webkit/assets/clients/redis.svg",
-      "target": "./src/assets/clients/redis.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/redis.svg"
-    },
-    "assets/clients/remix.svg": {
-      "import": "@aziontech/webkit/assets/clients/remix.svg",
-      "target": "./src/assets/clients/remix.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/remix.svg"
-    },
-    "assets/clients/renner-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/renner-logo.svg",
-      "target": "./src/assets/clients/renner-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/renner-logo.svg"
-    },
-    "assets/clients/renner-symbol.svg": {
-      "import": "@aziontech/webkit/assets/clients/renner-symbol.svg",
-      "target": "./src/assets/clients/renner-symbol.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/renner-symbol.svg"
-    },
-    "assets/clients/serverless.svg": {
-      "import": "@aziontech/webkit/assets/clients/serverless.svg",
-      "target": "./src/assets/clients/serverless.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/serverless.svg"
-    },
-    "assets/clients/sqlite.svg": {
-      "import": "@aziontech/webkit/assets/clients/sqlite.svg",
-      "target": "./src/assets/clients/sqlite.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/sqlite.svg"
-    },
-    "assets/clients/supabase.svg": {
-      "import": "@aziontech/webkit/assets/clients/supabase.svg",
-      "target": "./src/assets/clients/supabase.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/supabase.svg"
-    },
-    "assets/clients/svelte.svg": {
-      "import": "@aziontech/webkit/assets/clients/svelte.svg",
-      "target": "./src/assets/clients/svelte.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/svelte.svg"
-    },
-    "assets/clients/symbols/caixa.svg": {
-      "import": "@aziontech/webkit/assets/clients/symbols/caixa.svg",
-      "target": "./src/assets/clients/symbols/caixa.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/symbols/caixa.svg"
-    },
-    "assets/clients/symbols/gpa.svg": {
-      "import": "@aziontech/webkit/assets/clients/symbols/gpa.svg",
-      "target": "./src/assets/clients/symbols/gpa.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/symbols/gpa.svg"
-    },
-    "assets/clients/symbols/ifood.svg": {
-      "import": "@aziontech/webkit/assets/clients/symbols/ifood.svg",
-      "target": "./src/assets/clients/symbols/ifood.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/symbols/ifood.svg"
-    },
-    "assets/clients/symbols/itau.svg": {
-      "import": "@aziontech/webkit/assets/clients/symbols/itau.svg",
-      "target": "./src/assets/clients/symbols/itau.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/symbols/itau.svg"
-    },
-    "assets/clients/symbols/tray.svg": {
-      "import": "@aziontech/webkit/assets/clients/symbols/tray.svg",
-      "target": "./src/assets/clients/symbols/tray.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/symbols/tray.svg"
-    },
-    "assets/clients/tc39.svg": {
-      "import": "@aziontech/webkit/assets/clients/tc39.svg",
-      "target": "./src/assets/clients/tc39.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/tc39.svg"
-    },
-    "assets/clients/terraform.svg": {
-      "import": "@aziontech/webkit/assets/clients/terraform.svg",
-      "target": "./src/assets/clients/terraform.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/terraform.svg"
-    },
-    "assets/clients/turso.svg": {
-      "import": "@aziontech/webkit/assets/clients/turso.svg",
-      "target": "./src/assets/clients/turso.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/turso.svg"
-    },
-    "assets/clients/upstash.svg": {
-      "import": "@aziontech/webkit/assets/clients/upstash.svg",
-      "target": "./src/assets/clients/upstash.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/upstash.svg"
-    },
-    "assets/clients/vite.svg": {
-      "import": "@aziontech/webkit/assets/clients/vite.svg",
-      "target": "./src/assets/clients/vite.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/vite.svg"
-    },
-    "assets/clients/vitepress.svg": {
-      "import": "@aziontech/webkit/assets/clients/vitepress.svg",
-      "target": "./src/assets/clients/vitepress.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/vitepress.svg"
-    },
-    "assets/clients/vue.svg": {
-      "import": "@aziontech/webkit/assets/clients/vue.svg",
-      "target": "./src/assets/clients/vue.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/vue.svg"
-    },
-    "assets/clients/vuepress.svg": {
-      "import": "@aziontech/webkit/assets/clients/vuepress.svg",
-      "target": "./src/assets/clients/vuepress.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/vuepress.svg"
-    },
-    "assets/clients/w3c.svg": {
-      "import": "@aziontech/webkit/assets/clients/w3c.svg",
-      "target": "./src/assets/clients/w3c.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/w3c.svg"
-    },
-    "assets/clients/webassembly.svg": {
-      "import": "@aziontech/webkit/assets/clients/webassembly.svg",
-      "target": "./src/assets/clients/webassembly.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/webassembly.svg"
-    },
-    "assets/clients/workers-cf.svg": {
-      "import": "@aziontech/webkit/assets/clients/workers-cf.svg",
-      "target": "./src/assets/clients/workers-cf.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/workers-cf.svg"
-    },
-    "assets/clients/zoop-logo.svg": {
-      "import": "@aziontech/webkit/assets/clients/zoop-logo.svg",
-      "target": "./src/assets/clients/zoop-logo.svg",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/zoop-logo.svg"
-    },
-    "assets/clients/registry": {
-      "import": "@aziontech/webkit/assets/clients/registry",
-      "target": "./src/assets/clients/registry.ts",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/registry"
-    },
-    "assets/clients/symbols/registry": {
-      "import": "@aziontech/webkit/assets/clients/symbols/registry",
-      "target": "./src/assets/clients/symbols/registry.ts",
-      "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/clients/symbols/registry"
-    },
-    "assets/illustrations/azion-highlight.svg": {
-      "import": "@aziontech/webkit/assets/illustrations/azion-highlight.svg",
+    "assets/azion-highlight.svg": {
+      "import": "@aziontech/webkit/assets/azion-highlight.svg",
       "target": "./src/assets/illustrations/azion-highlight.svg",
       "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/illustrations/azion-highlight.svg"
+      "treeShakeableImport": "@aziontech/webkit/assets/azion-highlight.svg"
     },
-    "assets/illustrations/branches.svg": {
-      "import": "@aziontech/webkit/assets/illustrations/branches.svg",
+    "assets/azure-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/azure-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/azure-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/azure-symbol-mono.svg"
+    },
+    "assets/banco-de-la-nacion-extended-mono.svg": {
+      "import": "@aziontech/webkit/assets/banco-de-la-nacion-extended-mono.svg",
+      "target": "./src/assets/logos/clients/banco-de-la-nacion-extended-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/banco-de-la-nacion-extended-mono.svg"
+    },
+    "assets/branches.svg": {
+      "import": "@aziontech/webkit/assets/branches.svg",
       "target": "./src/assets/illustrations/branches.svg",
       "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/illustrations/branches.svg"
+      "treeShakeableImport": "@aziontech/webkit/assets/branches.svg"
     },
-    "assets/illustrations/personal-tokens.svg": {
-      "import": "@aziontech/webkit/assets/illustrations/personal-tokens.svg",
+    "assets/browserless-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/browserless-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/browserless-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/browserless-symbol-mono.svg"
+    },
+    "assets/browserless-symbol-reversed.svg": {
+      "import": "@aziontech/webkit/assets/browserless-symbol-reversed.svg",
+      "target": "./src/assets/logos/frameworks/browserless-symbol-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/browserless-symbol-reversed.svg"
+    },
+    "assets/caixa-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/caixa-extended-color.svg",
+      "target": "./src/assets/logos/clients/caixa-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/caixa-extended-color.svg"
+    },
+    "assets/caixa-extended-mono.svg": {
+      "import": "@aziontech/webkit/assets/caixa-extended-mono.svg",
+      "target": "./src/assets/logos/clients/caixa-extended-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/caixa-extended-mono.svg"
+    },
+    "assets/caixa-symbol-color.svg": {
+      "import": "@aziontech/webkit/assets/caixa-symbol-color.svg",
+      "target": "./src/assets/logos/clients/caixa-symbol-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/caixa-symbol-color.svg"
+    },
+    "assets/ccpa-symbol-color.svg": {
+      "import": "@aziontech/webkit/assets/ccpa-symbol-color.svg",
+      "target": "./src/assets/logos/certifications/ccpa-symbol-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/ccpa-symbol-color.svg"
+    },
+    "assets/claude-symbol-color.svg": {
+      "import": "@aziontech/webkit/assets/claude-symbol-color.svg",
+      "target": "./src/assets/logos/agents/claude-symbol-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/claude-symbol-color.svg"
+    },
+    "assets/client-registry": {
+      "import": "@aziontech/webkit/assets/client-registry",
+      "target": "./src/assets/logos/clients/registry.ts",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/client-registry"
+    },
+    "assets/cloudflare-symbol-color.svg": {
+      "import": "@aziontech/webkit/assets/cloudflare-symbol-color.svg",
+      "target": "./src/assets/logos/competitors/cloudflare-symbol-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/cloudflare-symbol-color.svg"
+    },
+    "assets/cobasi-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/cobasi-extended-color.svg",
+      "target": "./src/assets/logos/clients/cobasi-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/cobasi-extended-color.svg"
+    },
+    "assets/cocacola-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/cocacola-extended-reversed.svg",
+      "target": "./src/assets/logos/clients/cocacola-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/cocacola-extended-reversed.svg"
+    },
+    "assets/codex-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/codex-symbol-mono.svg",
+      "target": "./src/assets/logos/agents/codex-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/codex-symbol-mono.svg"
+    },
+    "assets/combine-data-and-vector-search.svg": {
+      "import": "@aziontech/webkit/assets/combine-data-and-vector-search.svg",
+      "target": "./src/assets/illustrations/combine-data-and-vector-search.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/combine-data-and-vector-search.svg"
+    },
+    "assets/competitor-registry": {
+      "import": "@aziontech/webkit/assets/competitor-registry",
+      "target": "./src/assets/logos/competitors/registry.ts",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/competitor-registry"
+    },
+    "assets/contabilizei-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/contabilizei-extended-color.svg",
+      "target": "./src/assets/logos/clients/contabilizei-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/contabilizei-extended-color.svg"
+    },
+    "assets/contabilizei-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/contabilizei-extended-reversed.svg",
+      "target": "./src/assets/logos/clients/contabilizei-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/contabilizei-extended-reversed.svg"
+    },
+    "assets/contabilizei-symbol-color.png": {
+      "import": "@aziontech/webkit/assets/contabilizei-symbol-color.png",
+      "target": "./src/assets/logos/clients/contabilizei-symbol-color.png",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/contabilizei-symbol-color.png"
+    },
+    "assets/copilot-symbol-color.svg": {
+      "import": "@aziontech/webkit/assets/copilot-symbol-color.svg",
+      "target": "./src/assets/logos/agents/copilot-symbol-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/copilot-symbol-color.svg"
+    },
+    "assets/cpra-symbol-color.svg": {
+      "import": "@aziontech/webkit/assets/cpra-symbol-color.svg",
+      "target": "./src/assets/logos/certifications/cpra-symbol-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/cpra-symbol-color.svg"
+    },
+    "assets/crefisa-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/crefisa-extended-reversed.svg",
+      "target": "./src/assets/logos/clients/crefisa-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/crefisa-extended-reversed.svg"
+    },
+    "assets/csu-digital-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/csu-digital-extended-color.svg",
+      "target": "./src/assets/logos/clients/csu-digital-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/csu-digital-extended-color.svg"
+    },
+    "assets/cursor-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/cursor-symbol-mono.svg",
+      "target": "./src/assets/logos/agents/cursor-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/cursor-symbol-mono.svg"
+    },
+    "assets/dafiti-extended-mono.svg": {
+      "import": "@aziontech/webkit/assets/dafiti-extended-mono.svg",
+      "target": "./src/assets/logos/clients/dafiti-extended-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/dafiti-extended-mono.svg"
+    },
+    "assets/datadog-symbol-color.svg": {
+      "import": "@aziontech/webkit/assets/datadog-symbol-color.svg",
+      "target": "./src/assets/logos/frameworks/datadog-symbol-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/datadog-symbol-color.svg"
+    },
+    "assets/datadome-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/datadome-extended-reversed.svg",
+      "target": "./src/assets/logos/clients/datadome-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/datadome-extended-reversed.svg"
+    },
+    "assets/ddos-protection.svg": {
+      "import": "@aziontech/webkit/assets/ddos-protection.svg",
+      "target": "./src/assets/illustrations/ddos-protection.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/ddos-protection.svg"
+    },
+    "assets/docusaurus-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/docusaurus-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/docusaurus-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/docusaurus-symbol-mono.svg"
+    },
+    "assets/drizzle-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/drizzle-extended-color.svg",
+      "target": "./src/assets/logos/frameworks/drizzle-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/drizzle-extended-color.svg"
+    },
+    "assets/elastic-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/elastic-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/elastic-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/elastic-symbol-mono.svg"
+    },
+    "assets/eleventy-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/eleventy-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/eleventy-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/eleventy-symbol-mono.svg"
+    },
+    "assets/equinix-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/equinix-extended-color.svg",
+      "target": "./src/assets/logos/frameworks/equinix-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/equinix-extended-color.svg"
+    },
+    "assets/exame-extended-mono.svg": {
+      "import": "@aziontech/webkit/assets/exame-extended-mono.svg",
+      "target": "./src/assets/logos/clients/exame-extended-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/exame-extended-mono.svg"
+    },
+    "assets/fauna-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/fauna-extended-reversed.svg",
+      "target": "./src/assets/logos/clients/fauna-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/fauna-extended-reversed.svg"
+    },
+    "assets/forrester-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/forrester-extended-color.svg",
+      "target": "./src/assets/logos/analysts/forrester-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/forrester-extended-color.svg"
+    },
+    "assets/forrester-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/forrester-extended-reversed.svg",
+      "target": "./src/assets/logos/analysts/forrester-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/forrester-extended-reversed.svg"
+    },
+    "assets/fourbank-extended-mono.svg": {
+      "import": "@aziontech/webkit/assets/fourbank-extended-mono.svg",
+      "target": "./src/assets/logos/clients/fourbank-extended-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/fourbank-extended-mono.svg"
+    },
+    "assets/fourbank-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/fourbank-extended-reversed.svg",
+      "target": "./src/assets/logos/clients/fourbank-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/fourbank-extended-reversed.svg"
+    },
+    "assets/frost-and-sullivan-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/frost-and-sullivan-extended-color.svg",
+      "target": "./src/assets/logos/analysts/frost-and-sullivan-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/frost-and-sullivan-extended-color.svg"
+    },
+    "assets/frost-and-sullivan-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/frost-and-sullivan-extended-reversed.svg",
+      "target": "./src/assets/logos/analysts/frost-and-sullivan-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/frost-and-sullivan-extended-reversed.svg"
+    },
+    "assets/g2-symbol-color.svg": {
+      "import": "@aziontech/webkit/assets/g2-symbol-color.svg",
+      "target": "./src/assets/logos/analysts/g2-symbol-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/g2-symbol-color.svg"
+    },
+    "assets/gartner-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/gartner-extended-color.svg",
+      "target": "./src/assets/logos/analysts/gartner-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/gartner-extended-color.svg"
+    },
+    "assets/gartner-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/gartner-extended-reversed.svg",
+      "target": "./src/assets/logos/analysts/gartner-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/gartner-extended-reversed.svg"
+    },
+    "assets/gatsby-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/gatsby-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/gatsby-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/gatsby-symbol-mono.svg"
+    },
+    "assets/gcp-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/gcp-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/gcp-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/gcp-symbol-mono.svg"
+    },
+    "assets/gdpr-symbol-color.svg": {
+      "import": "@aziontech/webkit/assets/gdpr-symbol-color.svg",
+      "target": "./src/assets/logos/certifications/gdpr-symbol-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/gdpr-symbol-color.svg"
+    },
+    "assets/gemini-symbol-color.svg": {
+      "import": "@aziontech/webkit/assets/gemini-symbol-color.svg",
+      "target": "./src/assets/logos/agents/gemini-symbol-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/gemini-symbol-color.svg"
+    },
+    "assets/gfg-extended-mono.svg": {
+      "import": "@aziontech/webkit/assets/gfg-extended-mono.svg",
+      "target": "./src/assets/logos/clients/gfg-extended-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/gfg-extended-mono.svg"
+    },
+    "assets/gfg-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/gfg-extended-reversed.svg",
+      "target": "./src/assets/logos/clients/gfg-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/gfg-extended-reversed.svg"
+    },
+    "assets/gigaom-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/gigaom-extended-color.svg",
+      "target": "./src/assets/logos/analysts/gigaom-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/gigaom-extended-color.svg"
+    },
+    "assets/gigaom-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/gigaom-extended-reversed.svg",
+      "target": "./src/assets/logos/analysts/gigaom-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/gigaom-extended-reversed.svg"
+    },
+    "assets/github-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/github-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/github-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/github-symbol-mono.svg"
+    },
+    "assets/gpa-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/gpa-extended-reversed.svg",
+      "target": "./src/assets/logos/clients/gpa-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/gpa-extended-reversed.svg"
+    },
+    "assets/gpa-photo.jpg": {
+      "import": "@aziontech/webkit/assets/gpa-photo.jpg",
+      "target": "./src/assets/logos/clients/photos/gpa-photo.jpg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/gpa-photo.jpg"
+    },
+    "assets/gpa-symbol-color.svg": {
+      "import": "@aziontech/webkit/assets/gpa-symbol-color.svg",
+      "target": "./src/assets/logos/clients/gpa-symbol-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/gpa-symbol-color.svg"
+    },
+    "assets/grafana-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/grafana-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/grafana-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/grafana-symbol-mono.svg"
+    },
+    "assets/graphql-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/graphql-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/graphql-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/graphql-symbol-mono.svg"
+    },
+    "assets/grendene-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/grendene-extended-color.svg",
+      "target": "./src/assets/logos/clients/grendene-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/grendene-extended-color.svg"
+    },
+    "assets/groq-extended-mono.svg": {
+      "import": "@aziontech/webkit/assets/groq-extended-mono.svg",
+      "target": "./src/assets/logos/frameworks/groq-extended-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/groq-extended-mono.svg"
+    },
+    "assets/gru-airport-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/gru-airport-extended-color.svg",
+      "target": "./src/assets/logos/clients/gru-airport-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/gru-airport-extended-color.svg"
+    },
+    "assets/hdi-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/hdi-extended-color.svg",
+      "target": "./src/assets/logos/clients/hdi-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/hdi-extended-color.svg"
+    },
+    "assets/hdi-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/hdi-extended-reversed.svg",
+      "target": "./src/assets/logos/clients/former/hdi-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/hdi-extended-reversed.svg"
+    },
+    "assets/herospark-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/herospark-extended-color.svg",
+      "target": "./src/assets/logos/clients/herospark-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/herospark-extended-color.svg"
+    },
+    "assets/herospark-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/herospark-extended-reversed.svg",
+      "target": "./src/assets/logos/clients/herospark-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/herospark-extended-reversed.svg"
+    },
+    "assets/herospark-symbol-reversed.svg": {
+      "import": "@aziontech/webkit/assets/herospark-symbol-reversed.svg",
+      "target": "./src/assets/logos/clients/herospark-symbol-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/herospark-symbol-reversed.svg"
+    },
+    "assets/hexo-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/hexo-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/hexo-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/hexo-symbol-mono.svg"
+    },
+    "assets/hono-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/hono-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/hono-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/hono-symbol-mono.svg"
+    },
+    "assets/hugo-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/hugo-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/hugo-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/hugo-symbol-mono.svg"
+    },
+    "assets/ietf-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/ietf-extended-color.svg",
+      "target": "./src/assets/logos/standards/ietf-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/ietf-extended-color.svg"
+    },
+    "assets/ifood-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/ifood-extended-color.svg",
+      "target": "./src/assets/logos/clients/ifood-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/ifood-extended-color.svg"
+    },
+    "assets/ifood-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/ifood-extended-reversed.svg",
+      "target": "./src/assets/logos/clients/ifood-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/ifood-extended-reversed.svg"
+    },
+    "assets/ifood-symbol-color.svg": {
+      "import": "@aziontech/webkit/assets/ifood-symbol-color.svg",
+      "target": "./src/assets/logos/clients/ifood-symbol-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/ifood-symbol-color.svg"
+    },
+    "assets/infoblox-extended-mono.svg": {
+      "import": "@aziontech/webkit/assets/infoblox-extended-mono.svg",
+      "target": "./src/assets/logos/frameworks/infoblox-extended-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/infoblox-extended-mono.svg"
+    },
+    "assets/itau-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/itau-extended-color.svg",
+      "target": "./src/assets/logos/clients/itau-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/itau-extended-color.svg"
+    },
+    "assets/itau-extended-reversed.webp": {
+      "import": "@aziontech/webkit/assets/itau-extended-reversed.webp",
+      "target": "./src/assets/logos/clients/itau-extended-reversed.webp",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/itau-extended-reversed.webp"
+    },
+    "assets/itau-symbol-color.svg": {
+      "import": "@aziontech/webkit/assets/itau-symbol-color.svg",
+      "target": "./src/assets/logos/clients/itau-symbol-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/itau-symbol-color.svg"
+    },
+    "assets/jamstack-symbol-color.svg": {
+      "import": "@aziontech/webkit/assets/jamstack-symbol-color.svg",
+      "target": "./src/assets/logos/frameworks/jamstack-symbol-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/jamstack-symbol-color.svg"
+    },
+    "assets/javascript-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/javascript-symbol-mono.svg",
+      "target": "./src/assets/logos/standards/javascript-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/javascript-symbol-mono.svg"
+    },
+    "assets/jekyll-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/jekyll-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/jekyll-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/jekyll-symbol-mono.svg"
+    },
+    "assets/kafka-extended-mono.svg": {
+      "import": "@aziontech/webkit/assets/kafka-extended-mono.svg",
+      "target": "./src/assets/logos/frameworks/kafka-extended-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/kafka-extended-mono.svg"
+    },
+    "assets/lgpd-symbol-color.svg": {
+      "import": "@aziontech/webkit/assets/lgpd-symbol-color.svg",
+      "target": "./src/assets/logos/certifications/lgpd-symbol-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/lgpd-symbol-color.svg"
+    },
+    "assets/locaweb-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/locaweb-extended-color.svg",
+      "target": "./src/assets/logos/clients/locaweb-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/locaweb-extended-color.svg"
+    },
+    "assets/madeiramadeira-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/madeiramadeira-extended-reversed.svg",
+      "target": "./src/assets/logos/clients/madeiramadeira-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/madeiramadeira-extended-reversed.svg"
+    },
+    "assets/madeiramadeira-symbol-reversed.svg": {
+      "import": "@aziontech/webkit/assets/madeiramadeira-symbol-reversed.svg",
+      "target": "./src/assets/logos/clients/madeiramadeira-symbol-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/madeiramadeira-symbol-reversed.svg"
+    },
+    "assets/magalu-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/magalu-extended-color.svg",
+      "target": "./src/assets/logos/clients/magalu-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/magalu-extended-color.svg"
+    },
+    "assets/magalu-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/magalu-extended-reversed.svg",
+      "target": "./src/assets/logos/clients/magalu-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/magalu-extended-reversed.svg"
+    },
+    "assets/magalu-symbol-color.png": {
+      "import": "@aziontech/webkit/assets/magalu-symbol-color.png",
+      "target": "./src/assets/logos/clients/magalu-symbol-color.png",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/magalu-symbol-color.png"
+    },
+    "assets/marisa-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/marisa-extended-color.svg",
+      "target": "./src/assets/logos/clients/marisa-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/marisa-extended-color.svg"
+    },
+    "assets/meliuz-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/meliuz-extended-color.svg",
+      "target": "./src/assets/logos/clients/meliuz-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/meliuz-extended-color.svg"
+    },
+    "assets/mobiauto-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/mobiauto-extended-color.svg",
+      "target": "./src/assets/logos/clients/mobiauto-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/mobiauto-extended-color.svg"
+    },
+    "assets/mobiauto-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/mobiauto-extended-reversed.svg",
+      "target": "./src/assets/logos/clients/mobiauto-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/mobiauto-extended-reversed.svg"
+    },
+    "assets/monashees-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/monashees-extended-reversed.svg",
+      "target": "./src/assets/logos/clients/monashees-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/monashees-extended-reversed.svg"
+    },
+    "assets/mongodb-symbol-color.svg": {
+      "import": "@aziontech/webkit/assets/mongodb-symbol-color.svg",
+      "target": "./src/assets/logos/frameworks/mongodb-symbol-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/mongodb-symbol-color.svg"
+    },
+    "assets/mysql-symbol-reversed.svg": {
+      "import": "@aziontech/webkit/assets/mysql-symbol-reversed.svg",
+      "target": "./src/assets/logos/frameworks/mysql-symbol-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/mysql-symbol-reversed.svg"
+    },
+    "assets/neogrid-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/neogrid-extended-color.svg",
+      "target": "./src/assets/logos/clients/neogrid-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/neogrid-extended-color.svg"
+    },
+    "assets/neon-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/neon-extended-color.svg",
+      "target": "./src/assets/logos/clients/neon-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/neon-extended-color.svg"
+    },
+    "assets/netshoes-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/netshoes-extended-color.svg",
+      "target": "./src/assets/logos/clients/netshoes-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/netshoes-extended-color.svg"
+    },
+    "assets/netshoes-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/netshoes-extended-reversed.svg",
+      "target": "./src/assets/logos/clients/netshoes-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/netshoes-extended-reversed.svg"
+    },
+    "assets/netshoes-photo.jpg": {
+      "import": "@aziontech/webkit/assets/netshoes-photo.jpg",
+      "target": "./src/assets/logos/clients/photos/netshoes-photo.jpg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/netshoes-photo.jpg"
+    },
+    "assets/nextjs-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/nextjs-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/nextjs-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/nextjs-symbol-mono.svg"
+    },
+    "assets/nodejs-symbol-color.svg": {
+      "import": "@aziontech/webkit/assets/nodejs-symbol-color.svg",
+      "target": "./src/assets/logos/frameworks/nodejs-symbol-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/nodejs-symbol-color.svg"
+    },
+    "assets/nuxt-extended-mono.svg": {
+      "import": "@aziontech/webkit/assets/nuxt-extended-mono.svg",
+      "target": "./src/assets/logos/frameworks/nuxt-extended-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/nuxt-extended-mono.svg"
+    },
+    "assets/nzn-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/nzn-extended-color.svg",
+      "target": "./src/assets/logos/clients/nzn-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/nzn-extended-color.svg"
+    },
+    "assets/nzn-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/nzn-extended-reversed.svg",
+      "target": "./src/assets/logos/clients/nzn-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/nzn-extended-reversed.svg"
+    },
+    "assets/onnx-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/onnx-symbol-mono.svg",
+      "target": "./src/assets/logos/standards/onnx-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/onnx-symbol-mono.svg"
+    },
+    "assets/openai-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/openai-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/openai-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/openai-symbol-mono.svg"
+    },
+    "assets/opencode-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/opencode-symbol-mono.svg",
+      "target": "./src/assets/logos/agents/opencode-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/opencode-symbol-mono.svg"
+    },
+    "assets/panvel-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/panvel-extended-color.svg",
+      "target": "./src/assets/logos/clients/panvel-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/panvel-extended-color.svg"
+    },
+    "assets/pci-dss-symbol-color.svg": {
+      "import": "@aziontech/webkit/assets/pci-dss-symbol-color.svg",
+      "target": "./src/assets/logos/certifications/pci-dss-symbol-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/pci-dss-symbol-color.svg"
+    },
+    "assets/pernambucanas-extended-mono.svg": {
+      "import": "@aziontech/webkit/assets/pernambucanas-extended-mono.svg",
+      "target": "./src/assets/logos/clients/pernambucanas-extended-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/pernambucanas-extended-mono.svg"
+    },
+    "assets/personal-tokens.svg": {
+      "import": "@aziontech/webkit/assets/personal-tokens.svg",
       "target": "./src/assets/illustrations/personal-tokens.svg",
       "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/illustrations/personal-tokens.svg"
+      "treeShakeableImport": "@aziontech/webkit/assets/personal-tokens.svg"
     },
-    "assets/illustrations/usage-chart.svg": {
-      "import": "@aziontech/webkit/assets/illustrations/usage-chart.svg",
+    "assets/planetscale-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/planetscale-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/planetscale-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/planetscale-symbol-mono.svg"
+    },
+    "assets/portobello-extended-mono.svg": {
+      "import": "@aziontech/webkit/assets/portobello-extended-mono.svg",
+      "target": "./src/assets/logos/clients/portobello-extended-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/portobello-extended-mono.svg"
+    },
+    "assets/postgresql-symbol-color.svg": {
+      "import": "@aziontech/webkit/assets/postgresql-symbol-color.svg",
+      "target": "./src/assets/logos/frameworks/postgresql-symbol-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/postgresql-symbol-color.svg"
+    },
+    "assets/preact-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/preact-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/preact-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/preact-symbol-mono.svg"
+    },
+    "assets/primevideo-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/primevideo-extended-color.svg",
+      "target": "./src/assets/logos/clients/primevideo-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/primevideo-extended-color.svg"
+    },
+    "assets/primevideo-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/primevideo-extended-reversed.svg",
+      "target": "./src/assets/logos/clients/primevideo-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/primevideo-extended-reversed.svg"
+    },
+    "assets/prisma-symbol-reversed.svg": {
+      "import": "@aziontech/webkit/assets/prisma-symbol-reversed.svg",
+      "target": "./src/assets/logos/frameworks/prisma-symbol-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/prisma-symbol-reversed.svg"
+    },
+    "assets/qualcomm-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/qualcomm-extended-reversed.svg",
+      "target": "./src/assets/logos/clients/qualcomm-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/qualcomm-extended-reversed.svg"
+    },
+    "assets/quick-start-with-templates.svg": {
+      "import": "@aziontech/webkit/assets/quick-start-with-templates.svg",
+      "target": "./src/assets/illustrations/quick-start-with-templates.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/quick-start-with-templates.svg"
+    },
+    "assets/qwik-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/qwik-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/qwik-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/qwik-symbol-mono.svg"
+    },
+    "assets/radware-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/radware-extended-color.svg",
+      "target": "./src/assets/logos/clients/radware-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/radware-extended-color.svg"
+    },
+    "assets/radware-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/radware-extended-reversed.svg",
+      "target": "./src/assets/logos/clients/radware-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/radware-extended-reversed.svg"
+    },
+    "assets/rbs-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/rbs-extended-color.svg",
+      "target": "./src/assets/logos/clients/rbs-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/rbs-extended-color.svg"
+    },
+    "assets/react-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/react-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/react-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/react-symbol-mono.svg"
+    },
+    "assets/redis-symbol-color.svg": {
+      "import": "@aziontech/webkit/assets/redis-symbol-color.svg",
+      "target": "./src/assets/logos/frameworks/redis-symbol-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/redis-symbol-color.svg"
+    },
+    "assets/remix-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/remix-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/remix-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/remix-symbol-mono.svg"
+    },
+    "assets/renner-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/renner-extended-color.svg",
+      "target": "./src/assets/logos/clients/renner-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/renner-extended-color.svg"
+    },
+    "assets/renner-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/renner-extended-reversed.svg",
+      "target": "./src/assets/logos/clients/renner-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/renner-extended-reversed.svg"
+    },
+    "assets/renner-symbol-reversed.svg": {
+      "import": "@aziontech/webkit/assets/renner-symbol-reversed.svg",
+      "target": "./src/assets/logos/clients/renner-symbol-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/renner-symbol-reversed.svg"
+    },
+    "assets/resend-extended-mono.svg": {
+      "import": "@aziontech/webkit/assets/resend-extended-mono.svg",
+      "target": "./src/assets/logos/frameworks/resend-extended-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/resend-extended-mono.svg"
+    },
+    "assets/resend-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/resend-extended-reversed.svg",
+      "target": "./src/assets/logos/frameworks/resend-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/resend-extended-reversed.svg"
+    },
+    "assets/saffe-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/saffe-extended-reversed.svg",
+      "target": "./src/assets/logos/clients/saffe-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/saffe-extended-reversed.svg"
+    },
+    "assets/samsung-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/samsung-extended-reversed.svg",
+      "target": "./src/assets/logos/clients/former/samsung-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/samsung-extended-reversed.svg"
+    },
+    "assets/serverless-symbol-color.svg": {
+      "import": "@aziontech/webkit/assets/serverless-symbol-color.svg",
+      "target": "./src/assets/logos/frameworks/serverless-symbol-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/serverless-symbol-color.svg"
+    },
+    "assets/soc-symbol-color.svg": {
+      "import": "@aziontech/webkit/assets/soc-symbol-color.svg",
+      "target": "./src/assets/logos/certifications/soc-symbol-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/soc-symbol-color.svg"
+    },
+    "assets/sqlite-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/sqlite-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/sqlite-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/sqlite-symbol-mono.svg"
+    },
+    "assets/stone-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/stone-extended-color.svg",
+      "target": "./src/assets/logos/clients/stone-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/stone-extended-color.svg"
+    },
+    "assets/stripe-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/stripe-extended-color.svg",
+      "target": "./src/assets/logos/frameworks/stripe-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/stripe-extended-color.svg"
+    },
+    "assets/stripe-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/stripe-extended-reversed.svg",
+      "target": "./src/assets/logos/frameworks/stripe-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/stripe-extended-reversed.svg"
+    },
+    "assets/supabase-symbol-color.svg": {
+      "import": "@aziontech/webkit/assets/supabase-symbol-color.svg",
+      "target": "./src/assets/logos/frameworks/supabase-symbol-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/supabase-symbol-color.svg"
+    },
+    "assets/svelte-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/svelte-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/svelte-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/svelte-symbol-mono.svg"
+    },
+    "assets/tc39-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/tc39-symbol-mono.svg",
+      "target": "./src/assets/logos/standards/tc39-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/tc39-symbol-mono.svg"
+    },
+    "assets/telefonica-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/telefonica-extended-reversed.svg",
+      "target": "./src/assets/logos/clients/former/telefonica-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/telefonica-extended-reversed.svg"
+    },
+    "assets/terraform-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/terraform-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/terraform-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/terraform-symbol-mono.svg"
+    },
+    "assets/tray-symbol-color.svg": {
+      "import": "@aziontech/webkit/assets/tray-symbol-color.svg",
+      "target": "./src/assets/logos/clients/tray-symbol-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/tray-symbol-color.svg"
+    },
+    "assets/turso-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/turso-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/turso-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/turso-symbol-mono.svg"
+    },
+    "assets/unicred-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/unicred-extended-color.svg",
+      "target": "./src/assets/logos/clients/unicred-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/unicred-extended-color.svg"
+    },
+    "assets/upstash-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/upstash-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/upstash-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/upstash-symbol-mono.svg"
+    },
+    "assets/usage-chart.svg": {
+      "import": "@aziontech/webkit/assets/usage-chart.svg",
       "target": "./src/assets/illustrations/usage-chart.svg",
       "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/illustrations/usage-chart.svg"
+      "treeShakeableImport": "@aziontech/webkit/assets/usage-chart.svg"
     },
-    "assets/certifications/ccpa.svg": {
-      "import": "@aziontech/webkit/assets/certifications/ccpa.svg",
-      "target": "./src/assets/certifications/ccpa.svg",
+    "assets/vercel-extended-mono.svg": {
+      "import": "@aziontech/webkit/assets/vercel-extended-mono.svg",
+      "target": "./src/assets/logos/competitors/vercel-extended-mono.svg",
       "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/certifications/ccpa.svg"
+      "treeShakeableImport": "@aziontech/webkit/assets/vercel-extended-mono.svg"
     },
-    "assets/certifications/cpra.svg": {
-      "import": "@aziontech/webkit/assets/certifications/cpra.svg",
-      "target": "./src/assets/certifications/cpra.svg",
+    "assets/vercel-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/vercel-extended-reversed.svg",
+      "target": "./src/assets/logos/competitors/vercel-extended-reversed.svg",
       "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/certifications/cpra.svg"
+      "treeShakeableImport": "@aziontech/webkit/assets/vercel-extended-reversed.svg"
     },
-    "assets/certifications/gdpr.svg": {
-      "import": "@aziontech/webkit/assets/certifications/gdpr.svg",
-      "target": "./src/assets/certifications/gdpr.svg",
+    "assets/vite-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/vite-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/vite-symbol-mono.svg",
       "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/certifications/gdpr.svg"
+      "treeShakeableImport": "@aziontech/webkit/assets/vite-symbol-mono.svg"
     },
-    "assets/certifications/lgpd.svg": {
-      "import": "@aziontech/webkit/assets/certifications/lgpd.svg",
-      "target": "./src/assets/certifications/lgpd.svg",
+    "assets/vitepress-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/vitepress-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/vitepress-symbol-mono.svg",
       "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/certifications/lgpd.svg"
+      "treeShakeableImport": "@aziontech/webkit/assets/vitepress-symbol-mono.svg"
     },
-    "assets/certifications/pci-dss.svg": {
-      "import": "@aziontech/webkit/assets/certifications/pci-dss.svg",
-      "target": "./src/assets/certifications/pci-dss.svg",
+    "assets/vtex-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/vtex-extended-reversed.svg",
+      "target": "./src/assets/logos/clients/former/vtex-extended-reversed.svg",
       "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/certifications/pci-dss.svg"
+      "treeShakeableImport": "@aziontech/webkit/assets/vtex-extended-reversed.svg"
     },
-    "assets/certifications/soc.svg": {
-      "import": "@aziontech/webkit/assets/certifications/soc.svg",
-      "target": "./src/assets/certifications/soc.svg",
+    "assets/vue-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/vue-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/vue-symbol-mono.svg",
       "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/certifications/soc.svg"
+      "treeShakeableImport": "@aziontech/webkit/assets/vue-symbol-mono.svg"
     },
-    "assets/competitors/vercel.svg": {
-      "import": "@aziontech/webkit/assets/competitors/vercel.svg",
-      "target": "./src/assets/competitors/vercel.svg",
+    "assets/vuepress-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/vuepress-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/vuepress-symbol-mono.svg",
       "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/competitors/vercel.svg"
+      "treeShakeableImport": "@aziontech/webkit/assets/vuepress-symbol-mono.svg"
     },
-    "assets/competitors/dark/vercel.svg": {
-      "import": "@aziontech/webkit/assets/competitors/dark/vercel.svg",
-      "target": "./src/assets/competitors/dark/vercel.svg",
+    "assets/w3c-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/w3c-symbol-mono.svg",
+      "target": "./src/assets/logos/standards/w3c-symbol-mono.svg",
       "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/competitors/dark/vercel.svg"
+      "treeShakeableImport": "@aziontech/webkit/assets/w3c-symbol-mono.svg"
     },
-    "assets/competitors/registry": {
-      "import": "@aziontech/webkit/assets/competitors/registry",
-      "target": "./src/assets/competitors/registry.ts",
+    "assets/walmart-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/walmart-extended-reversed.svg",
+      "target": "./src/assets/logos/clients/former/walmart-extended-reversed.svg",
       "kind": "asset",
-      "treeShakeableImport": "@aziontech/webkit/assets/competitors/registry"
+      "treeShakeableImport": "@aziontech/webkit/assets/walmart-extended-reversed.svg"
+    },
+    "assets/webassembly-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/webassembly-symbol-mono.svg",
+      "target": "./src/assets/logos/standards/webassembly-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/webassembly-symbol-mono.svg"
+    },
+    "assets/windsurf-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/windsurf-symbol-mono.svg",
+      "target": "./src/assets/logos/agents/windsurf-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/windsurf-symbol-mono.svg"
+    },
+    "assets/workers-cf-symbol-color.svg": {
+      "import": "@aziontech/webkit/assets/workers-cf-symbol-color.svg",
+      "target": "./src/assets/logos/frameworks/workers-cf-symbol-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/workers-cf-symbol-color.svg"
+    },
+    "assets/zoop-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/zoop-extended-color.svg",
+      "target": "./src/assets/logos/clients/zoop-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/zoop-extended-color.svg"
     },
     "svg/illustration-layers": {
       "import": "@aziontech/webkit/svg/illustration-layers",
