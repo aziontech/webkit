@@ -1,6 +1,6 @@
 import type { Client } from '../clients/registry'
-import vercelDark from './dark/vercel.svg'
-import vercelLight from './vercel.svg'
+import vercelLight from './vercel-extended-mono.svg'
+import vercelDark from './vercel-extended-reversed.svg'
 
 export type Competitor = Pick<Client, 'name' | 'logo' | 'logoLight' | 'artwork'>
 
