@@ -1,3 +1,10 @@
+import azionHighlight from '@aziontech/webkit/assets/azion-highlight.svg'
+import branches from '@aziontech/webkit/assets/branches.svg'
+import combineDataAndVectorSearch from '@aziontech/webkit/assets/combine-data-and-vector-search.svg'
+import ddosProtection from '@aziontech/webkit/assets/ddos-protection.svg'
+import personalTokens from '@aziontech/webkit/assets/personal-tokens.svg'
+import quickStartWithTemplates from '@aziontech/webkit/assets/quick-start-with-templates.svg'
+import usageChart from '@aziontech/webkit/assets/usage-chart.svg'
 import Illustration from '@aziontech/webkit/illustration'
 
 import { toSfc } from '../../../_shared/story-source'
@@ -161,6 +168,42 @@ export const Labeled = {
           'With an `ariaLabel` the scene is announced instead of skipped — for the rare case where the artwork carries meaning the surrounding copy does not.'
       },
       source: { code: toSfc(IMPORT, LABELED_MARKUP) }
+    }
+  }
+}
+
+const FILES = [
+  ['azionHighlight', 'azion-highlight.svg', azionHighlight],
+  ['branches', 'branches.svg', branches],
+  ['combineDataAndVectorSearch', 'combine-data-and-vector-search.svg', combineDataAndVectorSearch],
+  ['ddosProtection', 'ddos-protection.svg', ddosProtection],
+  ['personalTokens', 'personal-tokens.svg', personalTokens],
+  ['quickStartWithTemplates', 'quick-start-with-templates.svg', quickStartWithTemplates],
+  ['usageChart', 'usage-chart.svg', usageChart]
+]
+
+const FILES_IMPORTS = FILES.map(
+  ([binding, file]) => `import ${binding} from '@aziontech/webkit/assets/${file}'`
+)
+
+const FILES_TEMPLATE = `<div class="grid grid-cols-2 items-center gap-(--spacing-lg)">
+${FILES.map(([binding]) => `  <img :src="${binding}" alt="" class="h-auto w-full" />`).join('\n')}
+</div>`
+
+export const Files = {
+  render: () => ({
+    setup: () => Object.fromEntries(FILES.map(([binding, , src]) => [binding, src])),
+    template: FILES_TEMPLATE
+  }),
+  parameters: {
+    controls: { disable: true },
+    docs: {
+      controls: { disable: true },
+      description: {
+        story:
+          'Drawings that are not registered scenes ship as files. Import one by its final name from `@aziontech/webkit/assets/` — the folder it lives in is not part of the path, so the file can move without breaking the import — and render it as an image.'
+      },
+      source: { code: toSfc(FILES_IMPORTS, FILES_TEMPLATE) }
     }
   }
 }
