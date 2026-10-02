@@ -89,7 +89,7 @@ const BOUNDARY_SHAPE = `<!-- A padded page gets the boundary from the app shell,
 <footer class="layout-column-form layout-boundary-inline sticky bottom-0">…</footer>`
 
 export default {
-  title: 'Foundations/Layout',
+  title: 'Foundations/Design Tokens/Layout',
   tags: ['autodocs'],
   parameters: {
     layout: 'fullscreen',

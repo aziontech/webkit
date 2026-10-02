@@ -1,3 +1,10 @@
+import azionHighlight from '@aziontech/webkit/assets/azion-highlight.svg'
+import branches from '@aziontech/webkit/assets/branches.svg'
+import combineDataAndVectorSearch from '@aziontech/webkit/assets/combine-data-and-vector-search.svg'
+import ddosProtection from '@aziontech/webkit/assets/ddos-protection.svg'
+import personalTokens from '@aziontech/webkit/assets/personal-tokens.svg'
+import quickStartWithTemplates from '@aziontech/webkit/assets/quick-start-with-templates.svg'
+import usageChart from '@aziontech/webkit/assets/usage-chart.svg'
 import Illustration from '@aziontech/webkit/illustration'
 
 import {
@@ -65,8 +72,18 @@ const COLOR_ROLES = [
   ['info-surface', '--info', 'Status badge fill']
 ]
 
+const FILES = [
+  ['azion-highlight.svg', azionHighlight],
+  ['branches.svg', branches],
+  ['combine-data-and-vector-search.svg', combineDataAndVectorSearch],
+  ['ddos-protection.svg', ddosProtection],
+  ['personal-tokens.svg', personalTokens],
+  ['quick-start-with-templates.svg', quickStartWithTemplates],
+  ['usage-chart.svg', usageChart]
+]
+
 export default {
-  title: 'Foundations/Illustration System',
+  title: 'Foundations/Assets/Illustrations',
   parameters: {
     options: { showPanel: false },
     controls: { disable: true },
@@ -90,11 +107,11 @@ export const Library = {
   render: () => ({
     components: { PageContainer, PageHeader, SectionHeader, Illustration },
     setup() {
-      return { ASSETS, CANVAS_TOKENS, COLOR_ROLES, LABEL_CLASS, CELL_CLASS, SECTION_CLASS }
+      return { ASSETS, FILES, CANVAS_TOKENS, COLOR_ROLES, LABEL_CLASS, CELL_CLASS, SECTION_CLASS }
     },
     template: /* html */ `
       <PageContainer>
-        <PageHeader title="Illustration System">
+        <PageHeader title="Illustrations">
           One drawing per concept, exported from Figma and shipped with the package. Render one
           with <code class="font-code text-code">&lt;Illustration name="…" /&gt;</code>; the names
           below are the only values the prop accepts.
@@ -109,6 +126,19 @@ export const Library = {
             <div v-for="asset in ASSETS" :key="asset" :class="CELL_CLASS">
               <code class="font-code text-code text-[var(--text-default)]">{{ asset }}</code>
               <Illustration :name="asset" />
+            </div>
+          </div>
+        </section>
+
+        <section :class="SECTION_CLASS">
+          <SectionHeader
+            title="Files"
+            description="Drawings that are not scenes — hero art, card visuals — ship as files on their own canvas. Import one by its file name from @aziontech/webkit/assets/, never by its folder, and render it as an image."
+          />
+          <div class="grid gap-(--spacing-xl) md:grid-cols-2">
+            <div v-for="[file, src] in FILES" :key="file" :class="CELL_CLASS">
+              <code class="font-code text-code text-(--text-default)">@aziontech/webkit/assets/{{ file }}</code>
+              <img :src="src" alt="" class="h-auto max-w-full" />
             </div>
           </div>
         </section>

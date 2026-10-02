@@ -106,7 +106,7 @@ const PANEL_RECIPE = `<Transition
 </Transition>`
 
 export default {
-  title: 'Foundations/Motion',
+  title: 'Foundations/Design Tokens/Motion',
   tags: ['autodocs'],
   parameters: {
     controls: { disable: true },
