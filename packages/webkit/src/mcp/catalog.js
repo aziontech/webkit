@@ -11,13 +11,7 @@ import { dirname, join } from 'node:path'
 // webkit publishes under a single name (`@aziontech/webkit`). The import PREFIX every
 // answer uses is read from the resolved catalog's own `package` field, so it always
 // matches the installed name.
-const CANDIDATE_PKGS = ['@aziontech/webkit']
-const DEFAULT_PKG = CANDIDATE_PKGS[0]
-
-/** True when `src` is a bare import of the webkit package name. */
-export function isWebkitBare(src) {
-  return typeof src === 'string' && CANDIDATE_PKGS.includes(src)
-}
+const DEFAULT_PKG = '@aziontech/webkit'
 
 let cache = null // { path, value }
 let warned = false
@@ -25,19 +19,16 @@ let warned = false
 function resolveCatalogPath(cwd) {
   if (process.env.WEBKIT_CATALOG_PATH) return process.env.WEBKIT_CATALOG_PATH
   const require = createRequire(join(cwd || process.cwd(), '__webkit_resolve__.js'))
-  for (const pkg of CANDIDATE_PKGS) {
-    try {
-      return require.resolve(`${pkg}/catalog.json`)
-    } catch {
-      /* try next candidate */
-    }
-    try {
-      return join(dirname(require.resolve(`${pkg}/package.json`)), 'catalog.json')
-    } catch {
-      /* try next candidate */
-    }
+  try {
+    return require.resolve(`${DEFAULT_PKG}/catalog.json`)
+  } catch {
+    /* not exported as a subpath — fall back to the package root */
   }
-  return null
+  try {
+    return join(dirname(require.resolve(`${DEFAULT_PKG}/package.json`)), 'catalog.json')
+  } catch {
+    return null
+  }
 }
 
 function warnOnce(message) {
