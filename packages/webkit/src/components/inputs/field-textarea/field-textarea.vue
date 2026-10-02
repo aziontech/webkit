@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs, useId } from 'vue'
 
+  import HelperText, { type HelperTextKind } from '../helper-text/helper-text.vue'
   import Label from '../label/label.vue'
   import Textarea from '../textarea/textarea.vue'
 
@@ -65,6 +66,13 @@
     get: () => props.modelValue,
     set: (next) => emit('update:modelValue', next ?? '')
   })
+
+  const helperKind = computed<HelperTextKind>(() => {
+    if (props.disabled) return 'disabled'
+    if (props.invalid) return 'invalid'
+    if (props.required) return 'required'
+    return 'helper'
+  })
 </script>
 
 <template>
@@ -98,22 +106,12 @@
       :aria-describedby="helperText ? helperId : undefined"
       :data-testid="`${testId}__control`"
     />
-    <small
+    <HelperText
       v-if="helperText"
       :id="helperId"
+      :label="helperText"
+      :kind="helperKind"
       :data-testid="`${testId}__helper`"
-      :data-disabled="disabled || null"
-      :data-invalid="invalid || null"
-      :data-required="required || null"
-      class="inline-flex items-center gap-(--spacing-xxs) w-fit text-body-xs text-(--text-muted) data-[required]:text-(--warning) data-[invalid]:text-(--danger) data-[disabled]:rounded-(--shape-button) data-[disabled]:border data-[disabled]:border-(--border-default) data-[disabled]:bg-(--bg-surface) data-[disabled]:px-(--spacing-xs) data-[disabled]:py-(--spacing-xxs) data-[disabled]:text-(--text-muted)"
-    >
-      <i
-        v-if="disabled"
-        aria-hidden="true"
-        class="pi pi-lock leading-none"
-        :data-testid="`${testId}__helper-icon`"
-      />
-      <span :data-testid="`${testId}__helper-text`">{{ helperText }}</span>
-    </small>
+    />
   </div>
 </template>
