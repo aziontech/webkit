@@ -7,7 +7,7 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/aerxJReCkLz3x3z29IERE9/Assets?node-id=1901-225133
   node_id: 1901:225133
-checksum: 835fb37b0e5be3844e32ba5b7962aee1ce86ba8a40be2dea88ab85d72530bff6
+checksum: 90020c7663121555466af7a94f88484ff5abc20374126f29b4550c7288771df3
 created: 2026-08-05
 last_updated: 2026-09-28
 ---
@@ -73,6 +73,20 @@ drift between the screens that use it.
 </template>
 ```
 
+A drawing that is not a registered scene — a hero crop, a card visual — ships as a file. Import it by
+its final name: the folder it lives in is not part of the path, so the file can move without
+breaking the import.
+
+```vue
+<script setup>
+  import ddosProtection from '@aziontech/webkit/assets/ddos-protection.svg'
+</script>
+
+<template>
+  <img :src="ddosProtection" alt="" />
+</template>
+```
+
 ## Props
 
 | Prop | Type | Default | Required | JSDoc |
@@ -131,6 +145,7 @@ as the intrinsic `width`/`height` the frame already carries.
 - Assets — composite story rendering every registered scene side-by-side. **Justified addition:** `name` is the whole public API and its valid values are a closed registry, so the story is the only place a consumer can see what `name` accepts. A Controls dropdown alone would not show them together.
 - Labeled — the accessible-name form (an args delta of `ariaLabel`).
 - Placeholder — the fallback frame, rendered by an unnamed `Illustration`. **Justified addition:** it is a rendered state of the component (see § States), not a variant, and it is the one thing in the component a consumer cannot reach from the `name` dropdown — every option in that list resolves to a scene.
+- Files — the illustration files outside the registry, each imported by its final name from `@aziontech/webkit/assets/`. **Justified addition:** these drawings are not values of `name`, so neither Controls nor `Assets` can show them, and the import path is the one thing a consumer has to know to use one.
 
 There is no `Types` or `Sizes` story: the root declares neither `kind` nor `size`. There are no `Loading` / `Disabled` stories: the component declares neither prop (see § States).
 
