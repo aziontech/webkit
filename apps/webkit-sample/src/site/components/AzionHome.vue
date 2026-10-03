@@ -1,4 +1,5 @@
 <script setup>
+  import madeiraReversed from '@aziontech/webkit/assets/madeiramadeira-extended-reversed.svg'
   import rennerColor from '@aziontech/webkit/assets/renner-extended-color.svg'
   import Button from '@aziontech/webkit/button'
   import CallToAction from '@aziontech/webkit/call-to-action'
@@ -17,7 +18,7 @@
   import { useRouter } from 'vue-router'
 
   import { PLATFORM_PRIMITIVES } from '../data/platform-primitives.js'
-  import { ClientMark, CLIENTS, NETWORK_BAND, NETWORK_CLAIMS } from '../ui/index.js'
+  import { ClientMark, CLIENTS } from '../ui/index.js'
   import ClientStories from './ClientStories.vue'
   import MarketLeader from './MarketLeader.vue'
   import WhyAzion from './WhyAzion.vue'
@@ -33,6 +34,18 @@
 
   const clientNamed = (name) => CLIENTS.find((client) => client.name === name)
 
+  const network = {
+    eyebrow: 'Region: Earth.',
+    title: 'One distributed infrastructure to build, secure and scale workloads anywhere.',
+    lead: 'Built around your users. Distributed around your data.',
+    claims: [
+      '100+ data centers',
+      '100+ Tbps network capacity',
+      '30 ms median latency',
+      '100% availability'
+    ]
+  }
+
   const outcomes = [
     {
       key: 'dafiti',
@@ -43,8 +56,8 @@
     },
     {
       key: 'madeiramadeira',
-      mark: clientNamed('MadeiraMadeira'),
-      ink: 'white',
+      mark: { name: 'MadeiraMadeira', logo: madeiraReversed },
+      ink: 'brand',
       text: '90% lower cloud costs, and faster product delivery at scale.',
       highlights: ['90% lower cloud costs']
     },
@@ -163,45 +176,45 @@
           :scale="1.3"
           :offset-x="0.4"
           :offset-y="-0.2"
-          class="max-md:hidden"
+          class="max-md:hidden md:max-lg:[--network-map-fade-start:70%] md:max-lg:[--network-map-fade-end:100%]"
         />
 
         <div class="relative flex h-full flex-col">
           <div
-            class="relative flex min-h-[clamp(340px,52vh,620px)] flex-col justify-start gap-(--spacing-xl) p-(--spacing-xxl) lg:justify-between"
+            class="relative flex min-h-[38rem] flex-col justify-between gap-(--spacing-xl) p-(--spacing-xxl) md:min-h-[clamp(36rem,60vh,40rem)] lg:min-h-[clamp(340px,52vh,620px)]"
           >
-            <NetworkMap
-              region="world"
-              position="bottom"
-              animated
-              fade="none"
-              :opacity="0.3"
-              density="medium"
-              :scale="2"
-              :offset-x="0.19"
-              :offset-y="0.085"
-              class="md:hidden"
-            />
-
             <SectionTitle
               :framed="false"
               kind="left"
-              size="medium"
-              :eyebrow="NETWORK_BAND.eyebrow"
-              :title="NETWORK_BAND.title"
-              class="relative [&_h2]:max-w-[22em]"
+              size="small"
+              :eyebrow="network.eyebrow"
+              :title="network.title"
+              class="relative [&_h2]:max-w-[16em]"
             />
 
-            <div class="relative flex flex-col gap-(--spacing-md)">
-              <h3 class="m-0 text-heading-sm text-(--text-default)">
-                {{ NETWORK_BAND.lead }}
-              </h3>
+            <div
+              class="relative -mx-(--spacing-xxl) min-h-48 flex-1 [mask-image:linear-gradient(to_bottom,transparent,black_10%,black_75%,transparent)] md:hidden"
+            >
+              <NetworkMap
+                region="world"
+                position="center"
+                animated
+                :opacity="0.3"
+                density="medium"
+                :scale="1.8"
+                :offset-x="0.24"
+                :offset-y="0.03"
+              />
+            </div>
 
-              <ul
-                class="m-0 flex list-none flex-wrap gap-(--spacing-xs) p-0"
-              >
+            <div class="relative flex flex-col gap-(--spacing-md)">
+              <p class="m-0 text-overline-sm text-(--text-muted)">
+                {{ network.lead }}
+              </p>
+
+              <ul class="m-0 flex list-none flex-wrap gap-(--spacing-xs) p-0">
                 <li
-                  v-for="claim in NETWORK_CLAIMS"
+                  v-for="claim in network.claims"
                   :key="claim"
                   class="inline-flex h-6 items-center rounded-(--shape-elements) border border-(--primary) bg-[color-mix(in_srgb,var(--primary)_10%,var(--bg-canvas))] px-(--spacing-xs) text-label-sm text-(--text-default)"
                 >

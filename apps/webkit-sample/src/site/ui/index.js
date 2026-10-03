@@ -13,8 +13,7 @@
 //                 parts composed around those marks
 //   banners/      the hero backdrops, composed into a band's `#background` slot
 //                 (see ./banners/index.js to add one)
-//   ClaimChips    the Network argument's soft-accent claim pills, over the one
-//                 shared claim list (NETWORK_CLAIMS, ./claims.js)
+//   ClaimChips    the Network argument's soft-accent claim pills
 //   clients/      the client marks for the trust strip, each tagged with the
 //                 artwork (color / light / dark) that drives its theme handling
 //   ClientMark    one client logo, placed correctly on both themes
@@ -56,5 +55,4 @@ export { clientPhoto, CLIENTS } from '@aziontech/webkit/assets/client-registry'
 export { BANNER_NAMES, BANNERS } from '@shared/ui/banners/index.js'
 export { default as AgentMark } from '@shared/ui/brand/AgentMark.vue'
 export { default as ClaimChips } from '@shared/ui/brand/ClaimChips.vue'
-export { NETWORK_BAND, NETWORK_CLAIMS } from '@shared/ui/brand/claims.js'
 export { default as ClientMark } from '@shared/ui/brand/ClientMark.vue'

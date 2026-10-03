@@ -188,7 +188,6 @@
     compliance
     primitives-eyebrow="Built for Speed"
     primitives-title="Composable Primitives for Performance and Personalization"
-    :network="false"
     :faq="FAQ"
     :cta="BUILD_CTA"
   />

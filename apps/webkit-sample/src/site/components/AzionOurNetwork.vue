@@ -67,13 +67,25 @@
   import { CLIENT_STRIP } from '@shared/ui/brand/strips.js'
   import { useRouter } from 'vue-router'
 
-  import { NavColumn, NavItem, NETWORK_BAND, NETWORK_CLAIMS } from '../ui/index.js'
+  import { NavColumn, NavItem } from '../ui/index.js'
 
   const router = useRouter()
   const goSignup = () => router.push('/signup')
 
   const CONTACT = '/site/contact'
   const CLIENT_STORIES = '/site/home'
+
+  const NETWORK_BAND = {
+    eyebrow: 'Region: Earth.',
+    title: 'One distributed infrastructure to build, secure and scale workloads anywhere.',
+    lead: 'Built around your users. Distributed around your data.',
+    claims: [
+      '100+ data centers',
+      '100+ Tbps network capacity',
+      '30 ms median latency',
+      '100% availability'
+    ]
+  }
 
   const byName = (name) => CLIENTS.find((client) => client.name === name)
 
@@ -272,19 +284,20 @@
             <SectionTitle
               :framed="false"
               kind="left"
+              size="small"
               :eyebrow="NETWORK_BAND.eyebrow"
               :title="NETWORK_BAND.title"
-              class="[&_h2]:max-w-[22em]"
+              class="[&_h2]:max-w-[16em]"
             />
 
             <div class="flex flex-col gap-(--spacing-md)">
-              <h3 class="m-0 text-heading-sm text-(--text-default)">
+              <p class="m-0 text-overline-sm text-(--text-muted)">
                 {{ NETWORK_BAND.lead }}
-              </h3>
+              </p>
 
               <ul class="m-0 flex list-none flex-wrap gap-(--spacing-sm) p-0">
                 <li
-                  v-for="claim in NETWORK_CLAIMS"
+                  v-for="claim in NETWORK_BAND.claims"
                   :key="claim"
                 >
                   <Tag severity="secondary">

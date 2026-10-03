@@ -94,6 +94,18 @@
     'Azion shielded us from sophisticated cyberattacks and empowered us to modernize our infrastructure, reduce costs, and deliver the best shopping experiences to millions of customers.'
   )
 
+  const NETWORK_BAND = {
+    eyebrow: 'Region: Earth.',
+    title: 'One distributed infrastructure to build, secure and scale workloads anywhere.',
+    lead: 'Built around your users. Distributed around your data.',
+    claims: [
+      '100+ data centers',
+      '100+ Tbps network capacity',
+      '30 ms median latency',
+      '100% availability'
+    ]
+  }
+
   const FAQ = [
     {
       value: 'q1',
@@ -155,6 +167,7 @@
     :stack="STACK"
     :quotes="QUOTES"
     primitives-title="All the Security Primitives You Need"
+    :network="NETWORK_BAND"
     :faq="FAQ"
     :cta="CTA"
   />

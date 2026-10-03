@@ -59,12 +59,9 @@
   // has an opinion about: the claim that fits what it is asking for (signing up is
   // sold on reach, signing in is not sold at all) and how much evidence to put under
   // it. Everything else — the map, the proportions — is the panel's and is the same
-  // wherever it appears. `tags` are the site Network band's own claim chips, from
-  // the same list it reads (`site/ui/claims.js`) and through the same component
-  // (`ClaimChips`), so the two surfaces cannot argue different numbers.
+  // wherever it appears.
   import MapBanner from '@shared/ui/banners/MapBanner.vue'
   import ClaimChips from '@shared/ui/brand/ClaimChips.vue'
-  import { NETWORK_CLAIMS } from '@shared/ui/brand/claims.js'
 
   defineProps({
     // The panel's headline.
@@ -78,7 +75,12 @@
     // user has already decided to be here.
     tags: {
       type: Array,
-      default: () => NETWORK_CLAIMS
+      default: () => [
+        '100+ data centers',
+        '100+ Tbps network capacity',
+        '30 ms median latency',
+        '100% availability'
+      ]
     }
   })
 </script>

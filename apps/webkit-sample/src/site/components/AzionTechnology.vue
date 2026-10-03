@@ -75,7 +75,6 @@
     :resources="RESOURCES"
     compliance
     primitives-title="Primitives that Scale with You"
-    :network="false"
     :cta="BUILD_CTA"
   />
 </template>

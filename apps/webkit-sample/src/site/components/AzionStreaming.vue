@@ -68,6 +68,18 @@
     "One of the best CDN and WAF solutions I've ever used. Easy to implement and integrate, with speed and low latency that make a real difference for our customers."
   )
 
+  const NETWORK_BAND = {
+    eyebrow: 'Region: Earth.',
+    title: 'One distributed infrastructure to build, secure and scale workloads anywhere.',
+    lead: 'Built around your users. Distributed around your data.',
+    claims: [
+      '100+ data centers',
+      '100+ Tbps network capacity',
+      '30 ms median latency',
+      '100% availability'
+    ]
+  }
+
   const FAQ = [
     {
       value: 'q1',
@@ -124,6 +136,7 @@
     :stack="STACK"
     :quotes="QUOTES"
     primitives-title="All the Platform Primitives You Need"
+    :network="NETWORK_BAND"
     :network-topics="NETWORK"
     :faq="FAQ"
     :cta="CTA"
