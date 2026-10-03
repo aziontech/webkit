@@ -4,48 +4,36 @@
     "hash": "43bca3da2779b9921117254110e77475468a19a56a4b4048a40a6bc2865c77bf"
    },
    {
-    "name": ".edge/storage/assets/CCPA-logo-DYeL3plt.svg",
-    "hash": "e177596fade15b4a52b817ff9f6ed6180c9b1d99eab149695c943f9dbc41c110"
+    "name": ".edge/storage/assets/CreateFunction-Da655RIl.js",
+    "hash": "b67b06c10da03c00a798257b6066968ed0296a3c1db458739cb799e86d087420"
    },
    {
-    "name": ".edge/storage/assets/CPRA-logo-BZ4uctza.svg",
-    "hash": "4fff27cfcd42b0a527ca674b2817e369d2da016baf4342b858ed59917a554ca7"
-   },
-   {
-    "name": ".edge/storage/assets/CreateFunction-BApIOp_6.js",
-    "hash": "f935eee86358564f2073ac2b5e3c31b2ed812b7b6b4fb043b2d443080d631d3f"
+    "name": ".edge/storage/assets/Diagrams-C7ehMnJi.js",
+    "hash": "2a691c14a0f6866ad520c546c77b68842ce0531d18d2962955020812dcc2e301"
    },
    {
     "name": ".edge/storage/assets/Diagrams-C7q6hgbF.css",
     "hash": "0ff128b9153d3813717a91fbd20ff35550313c2ec606c79315a510e58b65b05d"
    },
    {
-    "name": ".edge/storage/assets/Diagrams-DrGDF6be.js",
-    "hash": "9454aa1b4b359d9eed15aa1be4778a106f63b08710a6ac641b197092d7953a6b"
+    "name": ".edge/storage/assets/FunctionDetail-HfQ96RwG.js",
+    "hash": "450026721b8cb338a11134e23ffc374337d1000f8daeffae626bb9ae15eebe77"
    },
    {
-    "name": ".edge/storage/assets/FunctionDetail-P3n_QgoI.js",
-    "hash": "3fda83cdea3f971240f519ba69d64b976c8fc41b9c1343c345aa0e4dcbc0c712"
-   },
-   {
-    "name": ".edge/storage/assets/FunctionSettings-Ak2ROiu2.js",
-    "hash": "32e89dffb49a3498abfa11abdda25c6a47aeedc49161fef161cd1bdf0c3926b1"
-   },
-   {
-    "name": ".edge/storage/assets/GDPR-logo-BZLpmVgK.svg",
-    "hash": "1db2cecac07057fa441ced3937785e174b0fb6f25fa3f40873ec34b476021496"
+    "name": ".edge/storage/assets/FunctionSettings-BfW6f5Ah.js",
+    "hash": "4e9c068c3c92d299bd8e97faff0cac2b1a506f6506671311958cf9fb7eeddc2f"
    },
    {
     "name": ".edge/storage/assets/abap-DLDM7-KI.js",
     "hash": "40131757d79a53bbe806b8a7a2c4f7399f87a588f98f190c5b199ce35ed82807"
    },
    {
-    "name": ".edge/storage/assets/agi-logo-BJnmuoIM.svg",
+    "name": ".edge/storage/assets/agi-extended-color-BJnmuoIM.svg",
     "hash": "4f1cd3a19d57d235dc94effd5e2c161212692b6398b108b994527f8c1d8e66b4"
    },
    {
-    "name": ".edge/storage/assets/agibank-o9p7-HjH.js",
-    "hash": "b4759c5797962b837ab3bdd9e10fa19f494872604fd9668057a48b923c6f08b4"
+    "name": ".edge/storage/assets/agibank-B6uPvR3a.js",
+    "hash": "3c4adcbec59954a899ccd66f8b090af270500097e80be825a1422841ac4bb1c7"
    },
    {
     "name": ".edge/storage/assets/ai-applications-BZxIRZrv.svg",
@@ -56,32 +44,32 @@
     "hash": "0a46ec1d83cb5d15f0a756e8d3e75567f23d87c142f1c11a73d1af53801bd291"
    },
    {
-    "name": ".edge/storage/assets/alpargatas-logo-CPzFQJjv.svg",
+    "name": ".edge/storage/assets/alpargatas-extended-color-CPzFQJjv.svg",
     "hash": "44993ec773f2153ea605b3482cdfbb244661d0167f960e79c164f1aec6f1c70a"
    },
    {
-    "name": ".edge/storage/assets/america-movil-B2PSHA7a.js",
-    "hash": "2271d05a34eb70b4639fcd75eb2de1e2572969f760c28aa10ce8d36dd45c715f"
+    "name": ".edge/storage/assets/america-movil-B8D5K7HB.js",
+    "hash": "e91efc730f2be2a2a27cabf7dd9e59da09eef31ff01286c754f9cf798af33b99"
    },
    {
-    "name": ".edge/storage/assets/americamovil-DWQ7PDp_.svg",
+    "name": ".edge/storage/assets/americamovil-extended-color-DWQ7PDp_.svg",
     "hash": "e6afd542494717f97eadb7eaefa821d6f49289e2e6592617fb5aad4d1310eaa4"
    },
    {
-    "name": ".edge/storage/assets/angular-DgmvhYSR.js",
-    "hash": "0b19f7887dae67162c8f83ad128fda73d0da367cf10906d46b027b05ea03bb4c"
+    "name": ".edge/storage/assets/angular-V_tzCXok.js",
+    "hash": "de8dedae89658c061db071bf7a4dbd1353423ad10533316540a24b3b95bae881"
    },
    {
-    "name": ".edge/storage/assets/anthropic-BK5-ndqQ.js",
-    "hash": "8b20af244c7c311fef0d965991684a1002f4455499a8cc54c2e8f62ba1616bc5"
+    "name": ".edge/storage/assets/anthropic-EIdEfH9Z.js",
+    "hash": "a0add905878b74995e531dbecbf7b867db6d5be73d6aeed5d096e2a3a549cc7f"
    },
    {
     "name": ".edge/storage/assets/apex-DNDY2TF8.js",
     "hash": "b0158ef1c9203a411394601562c9b21c3079426354b753a1aac0c1485db4cebf"
    },
    {
-    "name": ".edge/storage/assets/astro-B4E4IVSQ.js",
-    "hash": "387c8f376b8b9121733873e3d8e709ad2de1f31ced0ef629b04e1ce9788a3b9f"
+    "name": ".edge/storage/assets/astro-B3stujP3.js",
+    "hash": "e2f3098d913cba2aba50e4b3f9d2813fa7026121136b5416adb8c153f0752c1f"
    },
    {
     "name": ".edge/storage/assets/automate-threat-mitigation-B_R_QUx0.js",
@@ -92,16 +80,16 @@
     "hash": "97fb44ed9cb456b7a4d8f565f2ce37d02b57f8f38476607f0a0e870e11dd2162"
    },
    {
-    "name": ".edge/storage/assets/aws-C5_YmngH.js",
-    "hash": "7537f124c519d02e34cc2bd15898274e9e229582f918cfda4b03a44b571a3e21"
+    "name": ".edge/storage/assets/aws-KgHo14cg.js",
+    "hash": "e5ecb2f3d143bb3235b5c0b922f559c3c0fe4832ef179a88d71120daec9b0e02"
    },
    {
-    "name": ".edge/storage/assets/axur-Bw2LVdDf.js",
-    "hash": "83acc5f1537c64ceea440444f42aa9f45c37b86e648ced63b5429d595bc0db33"
-   },
-   {
-    "name": ".edge/storage/assets/axur-logo-Cr32vhWT.svg",
+    "name": ".edge/storage/assets/axur-extended-reversed-Cr32vhWT.svg",
     "hash": "794b5e8edf8a1d85325be38830c3c03489a62d2540b168d682f6c464c6515fcb"
+   },
+   {
+    "name": ".edge/storage/assets/axur-xw-N8WKC.js",
+    "hash": "f51c41cdb6a0bab47e2f0a43e1befac541a6ff6e190b0a8be682f9f7fc511e2d"
    },
    {
     "name": ".edge/storage/assets/azcli-Y6nb8tq_.js",
@@ -124,11 +112,11 @@
     "hash": "fe559c7ca988e62164bb5ca6756c6a4d0a553298c37d0e2efc50889634f5b9b0"
    },
    {
-    "name": ".edge/storage/assets/azure-CtHC8spM.js",
-    "hash": "163f8c02b861c1f8476a8ed5195eeceaa513bc0fe06ae728efb183fe4d56ffe9"
+    "name": ".edge/storage/assets/azure-Ba7Rrap0.js",
+    "hash": "749432648a507c37545d0555868e37807b3c008ea37c009a9df1a4ecdd26ff8f"
    },
    {
-    "name": ".edge/storage/assets/banco-de-la-nacion-logo-vector-BFzAxDpH.svg",
+    "name": ".edge/storage/assets/banco-de-la-nacion-extended-mono-BFzAxDpH.svg",
     "hash": "b8a710ae4de2d3a13be2f40a6759f6929f019078d0b17c3ca1f31a760520ddd4"
    },
    {
@@ -152,15 +140,15 @@
     "hash": "be3c25627bdc0213b26dce47afd2afcd38dee56b6d8010e6b294715826578cd7"
    },
    {
-    "name": ".edge/storage/assets/caixa-DPj2EIIp.js",
-    "hash": "d07d3579bb74b4dfedd815074b9106961a66f7c3c6f3a5d6d196ac8510532b44"
+    "name": ".edge/storage/assets/caixa-BsfTU84X.js",
+    "hash": "095d66f7f4d536c5704e035dfd031a9235e700a85054caf7ee965be62ec8a977"
    },
    {
     "name": ".edge/storage/assets/cameligo-Bf6VGUru.js",
     "hash": "4409bd4c19c217e436c793fdc75efe99b3777ced72c4b0980e59bb0353bc652b"
    },
    {
-    "name": ".edge/storage/assets/ccpa-DE97aENp.svg",
+    "name": ".edge/storage/assets/ccpa-symbol-color-DE97aENp.svg",
     "hash": "6f18295c52b53e284830d613f4c5baea807d005c0a4937ce101e565b42e5b814"
    },
    {
@@ -168,15 +156,15 @@
     "hash": "0dd219a14c2f15a7d8057ae9a7ee3411dbe8d30f5f65b01c2e764f7423c80e66"
    },
    {
-    "name": ".edge/storage/assets/cobasi-logo-CWoCk7KZ.svg",
+    "name": ".edge/storage/assets/cobasi-extended-color-CWoCk7KZ.svg",
     "hash": "a43287318409fb8fccf9a7d31914ebff0dd98689c74ff9af4c7843816c0ccb5c"
    },
    {
-    "name": ".edge/storage/assets/coca-cola-DxPLm9dq.js",
-    "hash": "3ddd281cae7b9e0cfe41cf4972f7457c682b455117c730bc84faf54b33965627"
+    "name": ".edge/storage/assets/coca-cola-jD3hS2ef.js",
+    "hash": "e0469675c05e10aa879e72148591682798081b70d64b7ccde7ed205fb5fb6520"
    },
    {
-    "name": ".edge/storage/assets/cocacola-logo-pmX9QCzI.svg",
+    "name": ".edge/storage/assets/cocacola-extended-reversed-pmX9QCzI.svg",
     "hash": "b2e6eb486b0fc1255763bb75b6e44727997ae7fcf64fa26c01a8e1437b6b6dda"
    },
    {
@@ -188,19 +176,19 @@
     "hash": "106a3a26a72981a2322d9860b28cd7e6537ded3b7cb98976feb86b3cea95cef8"
    },
    {
-    "name": ".edge/storage/assets/contabilizei-XCPlgDuM.js",
-    "hash": "010d42a328652f03049be36e5826ce0ab1f1e5eb83a422291717e6d981caa503"
+    "name": ".edge/storage/assets/contabilizei-BN8z6kXO.js",
+    "hash": "ad5dd8c20ab97a0afeefa055af58c478cb9ea9a57e862f07d9cb10a705351794"
    },
    {
-    "name": ".edge/storage/assets/contabilizei-logo-BUDZQh1m.svg",
-    "hash": "57f190ca57313726611f737765f3dce51ee46b8f02746c48cca44e0311caa0dd"
-   },
-   {
-    "name": ".edge/storage/assets/contabilizei-logo-eOKWN9mV.svg",
+    "name": ".edge/storage/assets/contabilizei-extended-color-eOKWN9mV.svg",
     "hash": "c31254ed96f44dfee8f93cc2be87f080b33c9d7a3cee117c0f5b083d19e7f7e0"
    },
    {
-    "name": ".edge/storage/assets/contabilizei-symbol-QqgRMOzh.png",
+    "name": ".edge/storage/assets/contabilizei-extended-reversed-BUDZQh1m.svg",
+    "hash": "57f190ca57313726611f737765f3dce51ee46b8f02746c48cca44e0311caa0dd"
+   },
+   {
+    "name": ".edge/storage/assets/contabilizei-symbol-color-QqgRMOzh.png",
     "hash": "e9f8070e56d52656cc43cf1a4847ac6e0790cf40106804f88fa92125d95ecf92"
    },
    {
@@ -208,7 +196,11 @@
     "hash": "2c1afb37aaf5c69f7a69fcb6ad664fae21ec42024b2870473ddbbdcd2f8fa097"
    },
    {
-    "name": ".edge/storage/assets/crefisa-logo-CWjQtE-9.svg",
+    "name": ".edge/storage/assets/cpra-symbol-color-DxOefRQN.svg",
+    "hash": "c580c6ab0b4c2873ee9b33a4122b68183fa74ab2e13931507e2c439e6373087a"
+   },
+   {
+    "name": ".edge/storage/assets/crefisa-extended-reversed-CWjQtE-9.svg",
     "hash": "222c303e4a5b8ac6ba4bd9d180c9516b6d00bfee900fc5bfe7c659b0c10daaa5"
    },
    {
@@ -228,11 +220,11 @@
     "hash": "2b0dfe00af737873cfc0b0233ac59b60b758245b970f2e0ab426b1c58dfb99c5"
    },
    {
-    "name": ".edge/storage/assets/cssMode-3j8We8z0.js",
-    "hash": "14056d4f7c58d46918fe77415855df91e260713a209e48cfb6c0438d6ce07209"
+    "name": ".edge/storage/assets/cssMode-Dh-FInWq.js",
+    "hash": "705baf09e9f2822b31b47e0d95eb5173d4d69907a28ada6594119a0b457b7b3c"
    },
    {
-    "name": ".edge/storage/assets/csu-digital-logo-C9XglmZs.svg",
+    "name": ".edge/storage/assets/csu-digital-extended-color-C9XglmZs.svg",
     "hash": "1a4b10e3c7ff31c4a29f13da935fb09afe47708501f593e41958460e3930b1c8"
    },
    {
@@ -240,8 +232,8 @@
     "hash": "5018d8b490f4babd935592c8dbd457723c219e0468c7a663555dc843aa1e9a9a"
    },
    {
-    "name": ".edge/storage/assets/dafiti-C1GAlFU8.js",
-    "hash": "55c9c5b7d9c29753b08dd097f4dc5e04a9c87b4917ef88fb3a4bd43f5b8f20ea"
+    "name": ".edge/storage/assets/dafiti-q61lNpMb.js",
+    "hash": "508cacb2f53236b09564f19fad8bc6502b70adbf1bbf12ff639b4a7ff8100079"
    },
    {
     "name": ".edge/storage/assets/dart-BOtBlQCF.js",
@@ -276,16 +268,16 @@
     "hash": "08cdbcc91df91457ccbf55aefaa741ebb2bcb486f276e4f6af938d15787642eb"
    },
    {
-    "name": ".edge/storage/assets/docusaurus-Bnv1-Y-v.js",
-    "hash": "37025746079440192572ea7d79f9ec93601aa4c4452fae312ed6f0c25a50b376"
+    "name": ".edge/storage/assets/docusaurus-DVsW6QMe.js",
+    "hash": "fe7e6d7a29f02340155b240bc54e6d2b875c336a1da79740c3e6d6cd3a851e89"
    },
    {
-    "name": ".edge/storage/assets/docusaurus-D9AbRvJp.svg",
+    "name": ".edge/storage/assets/docusaurus-symbol-mono-D9AbRvJp.svg",
     "hash": "6c4dd5c85162d8622d75fccedb4ddd08f6a823380bb1dd7b2e96a5d6201f204a"
    },
    {
-    "name": ".edge/storage/assets/drizzle-BffojaCx.js",
-    "hash": "7a6d82b5525765e53352f00ba99b9bf5fed8b690ba40f961f160378b5e49c665"
+    "name": ".edge/storage/assets/drizzle-CAiNmwFj.js",
+    "hash": "22b2769df1f10498040701c8259d68edb50a73f53a66aa9967176fa886eb12ef"
    },
    {
     "name": ".edge/storage/assets/ecl-BEgZUVRK.js",
@@ -296,31 +288,31 @@
     "hash": "1f8a8ab693bd0451e0b06f03d1d711e701f054c6fdd867565de1661034b89e9d"
    },
    {
-    "name": ".edge/storage/assets/elastic-B21p9rMo.js",
-    "hash": "80fba046c1e92b3707aea69f210ca807d58fcfc1b151609f42ce8be816c4fb1f"
+    "name": ".edge/storage/assets/elastic-D_5cGgTf.js",
+    "hash": "8415ffccd180628693eba99b51ff8d827c4f3d88ab91c37a44b82ca754e454f9"
    },
    {
-    "name": ".edge/storage/assets/eleventy-DH5rEhRr.svg",
+    "name": ".edge/storage/assets/eleventy-rKE9qwvn.js",
+    "hash": "6701a7261422b22ae3ff0cb0d893f288a043e71da5735999ed110ea48b87d6d8"
+   },
+   {
+    "name": ".edge/storage/assets/eleventy-symbol-mono-DH5rEhRr.svg",
     "hash": "3b957c481c545d057347429b5ba33818feb5ce21c3c1cde5c9ce1bc3fb06e526"
-   },
-   {
-    "name": ".edge/storage/assets/eleventy-a6YGIoBH.js",
-    "hash": "b841768221aefb2444a148d415781c44524da6e62e88ce2656ff544b814d45c2"
    },
    {
     "name": ".edge/storage/assets/elixir-BkW5O-1t.js",
     "hash": "0c797976b778bea2f9fc03c91b8ed5c6b2e431cc77ffbb8934d12111d7d16713"
    },
    {
-    "name": ".edge/storage/assets/equinix-CNoRDtWW.js",
-    "hash": "7d626b6bb464e66a8588ce3a98b6937b42130d9aae50dde67d45a9de49f3cc7c"
+    "name": ".edge/storage/assets/equinix-J8fZsN_H.js",
+    "hash": "b2314783d26d1eb3644539b9129e6bb54499199a2ef60592bcb11d9dcb3fc6b9"
    },
    {
-    "name": ".edge/storage/assets/exame-C6FQgSaM.js",
-    "hash": "d2b90651a4daa40e8fd72222fce395d3e8b4feceff749bb6fe773f93e84bcd37"
+    "name": ".edge/storage/assets/exame-C5CMLIq2.js",
+    "hash": "f6c727e0357f4efcf19358107600a63bc53f066fb2c7282ca555117418ddbff0"
    },
    {
-    "name": ".edge/storage/assets/exame-Dxt2oFSl.svg",
+    "name": ".edge/storage/assets/exame-extended-mono-Dxt2oFSl.svg",
     "hash": "31a3cfb1992be128b4066ccc538382cb3c1b0407fde71a2fd1b9b08f5b6c64d8"
    },
    {
@@ -336,39 +328,39 @@
     "hash": "af3886462a2dbb4d9795503e6383d2be678197e9141b2683852a7921dc17b5b7"
    },
    {
-    "name": ".edge/storage/assets/forrester-DbpJRKOZ.svg",
+    "name": ".edge/storage/assets/forrester-BDr5kAHv.js",
+    "hash": "8c3299de3bc40ee9e1f9c1c5005d9188f3841bd0e027a56d43c0d61f20233fd0"
+   },
+   {
+    "name": ".edge/storage/assets/forrester-extended-color-DbpJRKOZ.svg",
     "hash": "d31f75844ca2ba1eac2c9ccb608c6117497aa8b73cbac7179fa38b5f124ee59e"
    },
    {
-    "name": ".edge/storage/assets/forrester-DuW6PI0W.js",
-    "hash": "16450fd1665782b37a58f0d419f91c833cbf24f414f2bea3d87238a9a06540b9"
-   },
-   {
-    "name": ".edge/storage/assets/forrester-reversed-DpKexdYh.svg",
+    "name": ".edge/storage/assets/forrester-extended-reversed-DpKexdYh.svg",
     "hash": "d20c5e6be4d4a42f685e3fc6ba55643a0b137166c51ac058fa50068714433d94"
    },
    {
-    "name": ".edge/storage/assets/fourbank-C2_L40nm.js",
-    "hash": "b5686619b2bf96697071361c19318e03c7b62904774328ce79ff57b7398cf808"
-   },
-   {
-    "name": ".edge/storage/assets/fourbank-logo-nehfTvNJ.svg",
+    "name": ".edge/storage/assets/fourbank-extended-reversed-nehfTvNJ.svg",
     "hash": "15d7d93d280204269109ec9f5544e5ede6a0cade67bc9f68008cdb3f59f67293"
    },
    {
-    "name": ".edge/storage/assets/freemarker2-B-hk46gS.js",
-    "hash": "a2352ec90d8325e2401f12bdee522fc756fdd1441f3faa01ca7aee2cfb90bf67"
+    "name": ".edge/storage/assets/fourbank-xcrzQbTp.js",
+    "hash": "06ed22daf4e2d8105bf92952da55cf072dd5e347c10460f64ee791ead58f15f4"
    },
    {
-    "name": ".edge/storage/assets/frost-and-sullivan-DY7xNCSj.svg",
+    "name": ".edge/storage/assets/freemarker2-Bj_c7Wjv.js",
+    "hash": "a48fcbb0656acba359224c033c722e68f13597e119219544702d789926860357"
+   },
+   {
+    "name": ".edge/storage/assets/frost-and-sullivan-Dfl9WqpZ.js",
+    "hash": "d6c489ea41f359d74b9093f70dae262faaed8cd3f52d4763adb26963acdbc990"
+   },
+   {
+    "name": ".edge/storage/assets/frost-and-sullivan-extended-color-DY7xNCSj.svg",
     "hash": "f89c2ba60c7c3c0125118a122253a2a4d9541c7af466a53fbb1f7e36e4339503"
    },
    {
-    "name": ".edge/storage/assets/frost-and-sullivan-D_xWMO_T.js",
-    "hash": "f088541a6a04ce4c97eefeadd47b53781951808acb01035a8f449d32556a3403"
-   },
-   {
-    "name": ".edge/storage/assets/frost-and-sullivan-reversed-VhI-rwUs.svg",
+    "name": ".edge/storage/assets/frost-and-sullivan-extended-reversed-VhI-rwUs.svg",
     "hash": "ff5ea2832f09f513bf67777ad347a62f24675ccab746e924b56d52ec45a41b35"
    },
    {
@@ -376,48 +368,48 @@
     "hash": "565180d384812570db91c746f066365edc2bee861ce7006179f759dbf166a936"
    },
    {
-    "name": ".edge/storage/assets/g2-DZG8FRWo.js",
-    "hash": "e1ef814dff0c42966fe49ed9c719d384a5e475e9bdbc087ef2b7a6ad468b86ad"
+    "name": ".edge/storage/assets/g2-ChazXD9W.js",
+    "hash": "e030d3236483ef7cb73576cd6924682df106f850ef5667aa3c0a3006966ff6aa"
    },
    {
-    "name": ".edge/storage/assets/gartner-BxhQ9nyE.js",
-    "hash": "eb09531d8a59484090772b761613c3a0f3b2724a77f6ae0cb02ca2063c615567"
+    "name": ".edge/storage/assets/gartner-2O1ga91K.js",
+    "hash": "d51ebad841f02d9af89cab5efb7b81a0d8feb5c85a8d7196a02f0b8e218d48ad"
    },
    {
-    "name": ".edge/storage/assets/gatsby-CMXVJCie.js",
-    "hash": "9413c64b9ea54415b4738ba232e2f49ed5064187d8c929ef6bb1e2537684898c"
+    "name": ".edge/storage/assets/gatsby-00jnicBZ.js",
+    "hash": "95987afcf53ef1028918a6440f8daf00f46edd46901a2a8decde9f9ff50d8d9c"
    },
    {
-    "name": ".edge/storage/assets/gcp-CDnyPu9U.js",
-    "hash": "8c68289d43ca16f2b207cbd9cf0037a2c547edd293889176f9bf4e167c1f1a16"
+    "name": ".edge/storage/assets/gcp-DKIK5xH3.js",
+    "hash": "be0c9bb7027ebd35815202e1cce9de2391bf6baf6e0b9bffee53fe5ecfeca8dc"
    },
    {
-    "name": ".edge/storage/assets/gdpr-DhVX8vFL.svg",
+    "name": ".edge/storage/assets/gdpr-symbol-color-DhVX8vFL.svg",
     "hash": "b94ab646452c8f7d0d35d058f296d802c183e3ce5bfc4d3900aca495e309f75f"
    },
    {
-    "name": ".edge/storage/assets/gfg-global-fashion-group-BdL4_W1p.svg",
-    "hash": "9e1291c1bbb47590828e7ad766046fa2aa25f38dfa4b8fbdce49ee6621c08c20"
-   },
-   {
-    "name": ".edge/storage/assets/gfg-logo-DEKnM25N.svg",
+    "name": ".edge/storage/assets/gfg-extended-mono-DEKnM25N.svg",
     "hash": "e6d162edb68f7508d2925075db7a376c8ec38738b56711660b6b9342b9686ebf"
    },
    {
-    "name": ".edge/storage/assets/gigaom-C-IGmGle.js",
-    "hash": "0e4b3af91779b8dd39e5f5f4b63177e9f23f94a8f705bf5ce16cd159e96fa7fd"
+    "name": ".edge/storage/assets/gfg-extended-reversed-BdL4_W1p.svg",
+    "hash": "9e1291c1bbb47590828e7ad766046fa2aa25f38dfa4b8fbdce49ee6621c08c20"
    },
    {
-    "name": ".edge/storage/assets/github-BRoCyIdh.js",
-    "hash": "fd9a1b546e454b8bea5749b73f0344754f5c5f648e54435c7789d1ecc44efd16"
+    "name": ".edge/storage/assets/gigaom-X_eCaG3R.js",
+    "hash": "3839e8b50c06573653b0b955597fffcf337865e5353ec3ca30ac35a8072707cb"
    },
    {
-    "name": ".edge/storage/assets/github-Ca4fpRmP.svg",
+    "name": ".edge/storage/assets/github-CDSaTazf.js",
+    "hash": "f99500c9d11d748d304d53c2bebd2a9dadbfa5110c6d90c6c27459cbee39252a"
+   },
+   {
+    "name": ".edge/storage/assets/github-symbol-mono-Ca4fpRmP.svg",
     "hash": "da87d7b9b06bf9f5b96f5a5ec3bbf96df5127811c0dfdda1246ff21a0edd28d5"
    },
    {
-    "name": ".edge/storage/assets/global-fashion-group-Bo_k_Yik.js",
-    "hash": "c0fa5607cd4c9fbf9cc3be335a815ffb3e8d72f0aeec7cf85cb4320521514729"
+    "name": ".edge/storage/assets/global-fashion-group-CR3P6Sj3.js",
+    "hash": "67e2167c532f24c65f077ce19016de06f79d5f27c8802d47b3c616ce0e6d5885"
    },
    {
     "name": ".edge/storage/assets/global-network-B8smzU08.svg",
@@ -432,79 +424,79 @@
     "hash": "809f6cadfaed5b25da067a84008e58f3457afecc7e3109a118659fd5a507d90f"
    },
    {
-    "name": ".edge/storage/assets/gpa-D8jHt84R.js",
-    "hash": "34b32589fe670166e062f3b4e608664cbef23a3b8544b9e4c03fbad3c772a4b7"
+    "name": ".edge/storage/assets/gpa-CUb1VJbL.js",
+    "hash": "b1a6b2e353f92b8b105dcffbd741c4004235c9d859f53409bb3067a10b701f54"
    },
    {
-    "name": ".edge/storage/assets/gpa-logo-ZsdREsrC.svg",
+    "name": ".edge/storage/assets/gpa-extended-reversed-ZsdREsrC.svg",
     "hash": "eeca1e8d9ed5f7d2cf8e39b9df3afa291c26d9e8b8205bcc52aa5bf67263c22a"
    },
    {
-    "name": ".edge/storage/assets/gpa-sJhPIehZ.jpg",
+    "name": ".edge/storage/assets/gpa-photo-sJhPIehZ.jpg",
     "hash": "174407a7c565880ba42c6d0800a34ffb17ea8bb60a83d06d1bd51564e00d1d52"
    },
    {
-    "name": ".edge/storage/assets/grafana-BDnhjEfA.js",
-    "hash": "5001f99d237657d33d0e748d716b45e518bd0ac9c5c2a47e1a1b6b73fb1899f1"
-   },
-   {
-    "name": ".edge/storage/assets/graphql-Bu8vaBFT.js",
-    "hash": "7334c3d291a8a8f127a9d5866735f0b1cc1d5e8c3abdbd773f2d6e52b40878ac"
+    "name": ".edge/storage/assets/grafana-Bnz2BTQu.js",
+    "hash": "815392324f1d980d688fa3760f1bc0b8d3ccac563ca5cb2d25e7548ed1dcbbb8"
    },
    {
     "name": ".edge/storage/assets/graphql-BxJiqAUM.js",
     "hash": "2d97898ecd77bf1d9a78f24c5ed6c6d1ccb8144f9c805db610d741dabd0b49aa"
    },
    {
-    "name": ".edge/storage/assets/grendene-logo-B82zmbjD.svg",
+    "name": ".edge/storage/assets/graphql-GdsGgQGj.js",
+    "hash": "6553d23f21aa026496c4c2b96b4d206da14b4f1a81c7d0274551236d00ab74f5"
+   },
+   {
+    "name": ".edge/storage/assets/grendene-extended-color-B82zmbjD.svg",
     "hash": "2e53c97f01554e24c662b09a977843215b01546f1418c76c67aef203bb46ad24"
    },
    {
-    "name": ".edge/storage/assets/groq-BagfEYzf.js",
-    "hash": "b75d86b99796bdf71e8d31b617bfc575b15cc8fb21c9efb79e1776efb3d60575"
+    "name": ".edge/storage/assets/groq-BGQTFk4s.js",
+    "hash": "7c5bf335e0981a6cf56a512fe83c76ea5d20913f736db0c6a217da248f289f47"
    },
    {
-    "name": ".edge/storage/assets/gru-airport-logo-BK8jDj7c.svg",
+    "name": ".edge/storage/assets/gru-airport-extended-color-BK8jDj7c.svg",
     "hash": "50d03fbc70e105ad5834e845d2b0460070f158866d9330ee9c743fe4accb9ce1"
    },
    {
-    "name": ".edge/storage/assets/handlebars-B-0yJGq5.js",
-    "hash": "60fcded3b469da5e74d4fa09d6f49782a1076c6baba9dfd1c03987bd9f36beaf"
+    "name": ".edge/storage/assets/handlebars-ikS-Fn8A.js",
+    "hash": "562418d5d0afc78ff2e9aad9ee1cf860df905f70d72e15cdb735f69ccedcb675"
    },
    {
     "name": ".edge/storage/assets/hcl-DtV1sZF8.js",
     "hash": "320b8dd7d0a90e47baa62b20b8f00090524fb985873a3f057681f1eaea16a05f"
    },
    {
-    "name": ".edge/storage/assets/herospark-B3Vcv-UX.js",
-    "hash": "7750434750e9925acf0ddfa14cf777729ce64622193a06fdab8903bb18f4a170"
+    "name": ".edge/storage/assets/herospark-Dv_qVx47.js",
+    "hash": "8b08e8fa65984fc7a2cf1a74ef5e365d4c15f8c69d75a876a15d491c5a17fbf8"
    },
    {
-    "name": ".edge/storage/assets/hexo-C6AmhCCy.js",
-    "hash": "5fd809fdbc650797b55c37b4c614a5d4a4c1d9fefef8cb455db3ca3de6723636"
+    "name": ".edge/storage/assets/hexo-DR7JohTv.js",
+    "hash": "00e970ebf882daecca51e5bce27567673ba06409b5c3a8c1f269edf93da02309"
    },
    {
-    "name": ".edge/storage/assets/hono-F95k9wRx.js",
-    "hash": "220ed5f736ce6f6043c0476a88c9f6aa23028b128fc11a07ebc8386ee533bc69"
+    "name": ".edge/storage/assets/hono-DK8o-oXs.js",
+    "hash": "ed52bc986c79d551a98e8ea19425b95156ab2c3f188e75455980fa4c46df4215"
    },
    {
-    "name": ".edge/storage/assets/html-B4LQWPFI.js",
-    "hash": "4157c9ce514afa6322e12162e1a7000962fc7e2a9780d39aae4725a1a785ebfc"
+    "name": ".edge/storage/assets/html-8oDRWy95.js",
+    "hash": "07b20dc565dfa414605eac7f173204194b340c23162252fbbb84d7843253aebc"
    },
    {
     "name": ".edge/storage/assets/html.worker-DhJ4VZMp.js",
     "hash": "d68967e3fdcb1e6a9e3222a1f7dbc249427313d41e118a94779afbeea1d4468f"
    },
    {
-    "name": ".edge/storage/assets/htmlMode-vLAe0AU5.js",
-    "hash": "acab5dea99acbde69c12750edbcaec246cda2c080f9f05423502a711431ff3f5"
+    "name": ".edge/storage/assets/htmlMode-DODqRCVd.js",
+    "hash": "694f787d40d898cfc9950b301b855b269c64ddb9e321f7e3104c8159b7e0e80d"
    },
    {
-    "name": ".edge/storage/assets/hugo-Cp28ceGC.js",
-    "hash": "2d4885c71ce5ce0e63031a1148d9381db133fca2c7e6e2d1f5a3ea38e87fc29e"
+    "name": ".edge/storage/assets/hugo-CwII6QkP.js",
+    "hash": "98736dcbec3040349906c3197688725b93caea6a9adf9b9f7882fe95eb7df1c6"
    },
    {
-    "name": ".edge/storage/assets/ietf-BC8x2FZv.svg",
+    "name": ".edge/storage/assets/ietf-extended-color-BC8x2FZv.svg",
     "hash": "4b730cda8b8bf23aa7bbb6f97aa3d463c4c2f7ad540a07f8f9fb5b19643758c2"
    },
    {
@@ -524,12 +516,12 @@
     "hash": "e7d204c577b60afde0878a880d85743111968e8f4cb769c898e04045654d896f"
    },
    {
-    "name": ".edge/storage/assets/index-CpJyTLq3.css",
-    "hash": "56252b5aac57a1b70c90e03f54ef00ac14f50395436db184432e902a7e126ede"
+    "name": ".edge/storage/assets/index-DKNDQrvv.js",
+    "hash": "8734e81f5876b3074ae6ea1dabeef9413290189abb19997e615a8ac01146ea7c"
    },
    {
-    "name": ".edge/storage/assets/index-rUBMkgrF.js",
-    "hash": "cf1e1dbd6cc5e9d30e1bce287f54f5a07d515573b5e42b220ec18e699c9e8ac3"
+    "name": ".edge/storage/assets/index-DnZQpjcZ.css",
+    "hash": "bb42077d42664f95996f705d1473189db19cc9aedf899f721c1ee4abcd1bfab8"
    },
    {
     "name": ".edge/storage/assets/infrastructure-as-code-B1xMPHAt.js",
@@ -544,31 +536,31 @@
     "hash": "4e0c4184a8caa5f267250b4af135bfc683adf17c84103c93b9a9b18e603d686b"
    },
    {
-    "name": ".edge/storage/assets/itau-C1cFmnY5.js",
-    "hash": "0e3088b2b21b5303291d02d9a370dc97b6f05a875f1d5559100e17eaa7e32aaa"
+    "name": ".edge/storage/assets/itau-BUD1G4fm.js",
+    "hash": "f1a99553a199fddd414b28aa0fc7fda7db1681f35b1c8cfa1258b9dbcea14bca"
    },
    {
-    "name": ".edge/storage/assets/itau-CN4DzANk.svg",
-    "hash": "971d08ed80b7cf832d6240af489ec0023c6cb28cf9cef4f2986980f3bbe3feef"
+    "name": ".edge/storage/assets/itau-extended-color-CqUW-yqp.svg",
+    "hash": "dddf647a478c59fbbbc3362a45138a630d1ba9765a7f9ff49e287473796505b6"
    },
    {
-    "name": ".edge/storage/assets/itau-logo-BV5EofDT.webp",
+    "name": ".edge/storage/assets/itau-extended-reversed-BV5EofDT.webp",
     "hash": "0fb00a532cc5a13996d70e221efb7e158157c7f202d62f9dc37ac1a0dda46eaf"
    },
    {
-    "name": ".edge/storage/assets/itau-logo-CqUW-yqp.svg",
-    "hash": "dddf647a478c59fbbbc3362a45138a630d1ba9765a7f9ff49e287473796505b6"
+    "name": ".edge/storage/assets/itau-symbol-color-CN4DzANk.svg",
+    "hash": "971d08ed80b7cf832d6240af489ec0023c6cb28cf9cef4f2986980f3bbe3feef"
    },
    {
     "name": ".edge/storage/assets/java-CXBNlu9o.js",
     "hash": "068b283644e8e824c93a9266b408c24b35dc42763c671b37e890f7b3221457c7"
    },
    {
-    "name": ".edge/storage/assets/jekyll-DgiX6fcp.js",
-    "hash": "1840d9291a1fe0dcac5f7cd00bd63a97e1e3a661d42e87cea495c7d4c6b09cd1"
+    "name": ".edge/storage/assets/jekyll-Cb5N5bWR.js",
+    "hash": "1fdc389d99325db09e2a6c77e06d769d45d05f36ac12ebb46bbde09a38e26bc3"
    },
    {
-    "name": ".edge/storage/assets/jekyll-DjcBKl-s.svg",
+    "name": ".edge/storage/assets/jekyll-symbol-mono-DjcBKl-s.svg",
     "hash": "ee227b92f33b2e9c1e626c5f73d039048011d5cfce765161bc592f70d5a9f412"
    },
    {
@@ -576,19 +568,19 @@
     "hash": "177b13c24bcca6fecd8741e31ffe1c6a17d324bad90c3341800961721080d7bf"
    },
    {
-    "name": ".edge/storage/assets/jsonMode-CVD01zUO.js",
-    "hash": "222e3359c1704444c48c9a48393abcada553fd76b1c650aced14caed34d8aa9c"
+    "name": ".edge/storage/assets/jsonMode-DK9kT1yV.js",
+    "hash": "f10e88c09c68a5295fcb96f5a3408d2ab4ea12a1691822800728cd95b025f044"
    },
    {
     "name": ".edge/storage/assets/julia-cl7-CwDS.js",
     "hash": "61fbb523b7b1477d099b2a1b2191882f11332aec5a3fbf4cfdf2ef30c9e4b87b"
    },
    {
-    "name": ".edge/storage/assets/kafka-Bry0kTuG.js",
-    "hash": "479b62bc71135ee12536adec4512bd299be4ed5e572f333fc1bb487ef7eeb06f"
+    "name": ".edge/storage/assets/kafka-BOLCm9HV.js",
+    "hash": "d4a06bbfb842c0419d0d1eb29c3c09b138ab8f594e206bec8b66a16be9704569"
    },
    {
-    "name": ".edge/storage/assets/kafka-D-OvTzI5.svg",
+    "name": ".edge/storage/assets/kafka-extended-mono-D-OvTzI5.svg",
     "hash": "4868c8b1f381f53bd7de62329d53d0b74f22cd513a8b379c414aaa045e4ab68f"
    },
    {
@@ -604,12 +596,12 @@
     "hash": "833e09ed6c4efbd0b750c44a324e7748075789556d701df8c1066a734761a4d2"
    },
    {
-    "name": ".edge/storage/assets/lgpd-CO7bhEU_.svg",
+    "name": ".edge/storage/assets/lgpd-symbol-color-CO7bhEU_.svg",
     "hash": "a5d0f97e69657abc58bf936e6adb5129c503e0df5eec1d5d46cb85b2142526d0"
    },
    {
-    "name": ".edge/storage/assets/liquid-BqkfznnK.js",
-    "hash": "2679709c06a4f467f6973e06f1a914cede99263ec0e562ae85957f6bf11310be"
+    "name": ".edge/storage/assets/liquid-cYrYFv4Q.js",
+    "hash": "ae121e8a758968d5b8d33f39e0336b1057e879dfd63140ea33b723cb4704a063"
    },
    {
     "name": ".edge/storage/assets/live-debugging-0bkA4r10.svg",
@@ -620,7 +612,7 @@
     "hash": "83a018c62ea085b8a86e1e18e03b8aaa3bb33ea02589f5a7f55aa2586566d029"
    },
    {
-    "name": ".edge/storage/assets/locaweb-logo-UIJ16Lxk.svg",
+    "name": ".edge/storage/assets/locaweb-extended-color-UIJ16Lxk.svg",
     "hash": "62f3df7bdf39d9e458d874b06751c11b1d8e65930ce00cada5df629b8ab7baa2"
    },
    {
@@ -632,8 +624,8 @@
     "hash": "be1f806847f8b61cd206438b3af4eb6d7c140b81841dfc9faf1b99d5b02fe659"
    },
    {
-    "name": ".edge/storage/assets/lspLanguageFeatures-BeYXwsvT.js",
-    "hash": "f11f186989fbc0209ecbf94e090d50d561bf9affb39f9aa1e59c6d33efd652b1"
+    "name": ".edge/storage/assets/lspLanguageFeatures-BmMUufVs.js",
+    "hash": "4464f71ea231169cc01424c2449bb613f10ad8d471b20f69bc45cc2e099a0313"
    },
    {
     "name": ".edge/storage/assets/lua-Cyyb5UIc.js",
@@ -644,23 +636,27 @@
     "hash": "64f0d4a80dd3509201e97ea0ccbe6cfe6e7d338b9aa4c919ea7a5e6e366f2417"
    },
    {
-    "name": ".edge/storage/assets/madeira-logo-CR7wTLqb.svg",
-    "hash": "696deb62af68a43d926fb12a7139aeab213b449694d1d39b3256efd03abb1ee1"
+    "name": ".edge/storage/assets/madeiramadeira-C3GOQt-5.js",
+    "hash": "8cb9320fd8ba831094f0333129af5fb105400cf790168c489399152aa095c4a0"
    },
    {
-    "name": ".edge/storage/assets/madeiramadeira-BZF1QB-g.js",
-    "hash": "f7669bfbdb8b41f80f2bb512b062a7a3453f85cfb4e030f534d1131514f68655"
+    "name": ".edge/storage/assets/madeiramadeira-extended-color-7zApmtZG.svg",
+    "hash": "1ff3c413e3989d7c7155fb340589b40db42deaa77efee1362e45e12333453d15"
    },
    {
-    "name": ".edge/storage/assets/magalu-CxiNiu-v.js",
-    "hash": "69d3b1641db965aa56f4488f33ef54724930112a907546997cfe9e5e4c27f339"
+    "name": ".edge/storage/assets/madeiramadeira-extended-reversed-Dy4H55d5.svg",
+    "hash": "ba345447967c6d015580f9183926ec03b368ba8f96be65cbc5811869018e4455"
    },
    {
-    "name": ".edge/storage/assets/magalu-symbol-Baq-hPju.png",
+    "name": ".edge/storage/assets/magalu-BQfLQwEM.js",
+    "hash": "81b7f26c0dd3d8b8abdfc3900510bc9d735db71719808a640275d0ed5461e7a1"
+   },
+   {
+    "name": ".edge/storage/assets/magalu-symbol-color-Baq-hPju.png",
     "hash": "6964f6ce7b96af238baf608cf9cc0238b6b0f4b25704d15b51a84b08f688ad06"
    },
    {
-    "name": ".edge/storage/assets/marisa-logo-nM83wKeY.svg",
+    "name": ".edge/storage/assets/marisa-extended-color-nM83wKeY.svg",
     "hash": "663529c3b9910e5362f8636e91a7a6a55c02336d1e13960414ae9f0456e63f81"
    },
    {
@@ -668,11 +664,11 @@
     "hash": "f22ad36fd7b2c5e0b0ab62c8496934cb476d7142e2d4cc258fb712137c8a9946"
    },
    {
-    "name": ".edge/storage/assets/mdx-BFOPD75G.js",
-    "hash": "924c7076c54ddf3316639bd071214ae7359e4ccdd67ba287b88581ff224d56bb"
+    "name": ".edge/storage/assets/mdx-OH3_bDT1.js",
+    "hash": "198f8a75432213d290aa13b3d062e699b3e2f6ae0d929f073b7f2bee236798e9"
    },
    {
-    "name": ".edge/storage/assets/meliuz-logo-BkaFtV5s.svg",
+    "name": ".edge/storage/assets/meliuz-extended-color-BkaFtV5s.svg",
     "hash": "cf7cf276d2003b6d48f8adb51ea58cebd26c777b82c7d92f488d7e46e80bd3e3"
    },
    {
@@ -688,19 +684,19 @@
     "hash": "62c5326e266a99771a0b8bbae087e0d28cede4d8a462fa3fac179c0270dcb460"
    },
    {
+    "name": ".edge/storage/assets/monaco-editor-BJ1NZ16G.js",
+    "hash": "9fc12ceabfcb9cd6c26300b67b18948d598d4a0fc7a2500c3fe3a3fdba436663"
+   },
+   {
     "name": ".edge/storage/assets/monaco-editor-CB2SckMT.css",
     "hash": "a6b24d2af5586778c5495ab84d56247ca1a5c64e30d3fb7fee1bf5ab85092510"
    },
    {
-    "name": ".edge/storage/assets/monaco-editor-DaGGT0ut.js",
-    "hash": "d082e199a4784e0181aa376d48ba0f9a46f6578ad29fdb2f4e708cf351eac035"
+    "name": ".edge/storage/assets/monaco-editor.vue_vue_type_script_setup_true_lang-DPwcPXc7.js",
+    "hash": "57e8c50ead9ce36f97cc692d67e62f0d42e3639db59849cdf5966cba2cb22c28"
    },
    {
-    "name": ".edge/storage/assets/monaco-editor.vue_vue_type_script_setup_true_lang-iQfzkS5A.js",
-    "hash": "23670875c72a5897498d495b2866200513f3287a000d4ed233bed097bef3a48e"
-   },
-   {
-    "name": ".edge/storage/assets/monashees-logo-CdUKYKzX.svg",
+    "name": ".edge/storage/assets/monashees-extended-reversed-CdUKYKzX.svg",
     "hash": "2596747c28c1eb12921d54677f7ff20409c30690ce30dee24aa027a0dd24f2cc"
    },
    {
@@ -712,20 +708,20 @@
     "hash": "db8e423a4739605de4ed73b1e795ab4a34e0548eebc940c6724af31190387ce7"
    },
    {
-    "name": ".edge/storage/assets/neogrid-logo-Bf_Vj9T1.svg",
+    "name": ".edge/storage/assets/neogrid-extended-color-Bf_Vj9T1.svg",
     "hash": "31a6eae33b66bab8420f0fb6e6bc982a5e736e7e60fd2eb32f7572205f0b4205"
    },
    {
-    "name": ".edge/storage/assets/netshoes-CyF0AIf4.jpg",
+    "name": ".edge/storage/assets/netshoes-Bjrgp4IC.js",
+    "hash": "3ef6c865cc252a7a01bb1751da0bd8357477540ef4aa3d0d101e5b63223f7de5"
+   },
+   {
+    "name": ".edge/storage/assets/netshoes-photo-CyF0AIf4.jpg",
     "hash": "3ed23f110efa999bd72a5d0fa17f224a023ee18e60792a037daeab9e4e397b40"
    },
    {
-    "name": ".edge/storage/assets/netshoes-kChqb0uG.js",
-    "hash": "224eb0fd742156f45229d47a8cfa292a51208ef03fe458ff763a21565a340032"
-   },
-   {
-    "name": ".edge/storage/assets/nextjs-cJFRDp8V.js",
-    "hash": "f05765960375ae799198e7739589c852777ba8717141d1c33bb54df30a77068c"
+    "name": ".edge/storage/assets/nextjs-BlZcMka0.js",
+    "hash": "1c62efd5f777ceda0e11f3f17b242342707d0afd18cea1d596dad4adba0f2e47"
    },
    {
     "name": ".edge/storage/assets/no-idle-no-waste-BSL3Q1TD.svg",
@@ -736,35 +732,35 @@
     "hash": "d821da27a6115ffe94957812da7e20a729db165a45110007d78e61bcf03aab05"
    },
    {
-    "name": ".edge/storage/assets/nodejs-dHLMe8i-.js",
-    "hash": "1e0b06df49c34b27f5bf9e63c20bb88ce79c538f1041650aa6434cb79ec00f82"
+    "name": ".edge/storage/assets/nodejs-DTFT-Jc3.js",
+    "hash": "175553584472f5aa24c729473a3139f8b9671b256f6db603c3a55fae99cc246d"
    },
    {
-    "name": ".edge/storage/assets/nuxt-Dkjvq14l.js",
-    "hash": "8fd2ec9d7a362d5e9ed0a80822489ccb9daeba776e06ba8fe19b0d05dff4965c"
+    "name": ".edge/storage/assets/nuxt-CPj8OWgX.js",
+    "hash": "21d4da76e22b7214a77741bf151dd5c21aaac2f44cf7c08064368416c09e326c"
    },
    {
-    "name": ".edge/storage/assets/nzn-BTRthjEV.js",
-    "hash": "073a6eb2903bab9368a59b8957582493a7c12e38de101ad8b9d0f1ab067e138c"
+    "name": ".edge/storage/assets/nzn-0hiTEw6q.js",
+    "hash": "cc62f10d6a975252405b86d46dbf4ee83baea63fb970b894a148f7c1f50dc3a5"
    },
    {
-    "name": ".edge/storage/assets/nzn-logo-CSe9NvuU.svg",
-    "hash": "ad0b478d9a6a7e602908b890ef1d3d5ea7c6addcbf944383d38999751c4c35b2"
-   },
-   {
-    "name": ".edge/storage/assets/nzn-logo-D2cOxlM5.svg",
+    "name": ".edge/storage/assets/nzn-extended-color-D2cOxlM5.svg",
     "hash": "d160f67562b2409167d0a561091fab2d5349f5a5893e0713afe5e85990a9f32b"
+   },
+   {
+    "name": ".edge/storage/assets/nzn-extended-reversed-CSe9NvuU.svg",
+    "hash": "ad0b478d9a6a7e602908b890ef1d3d5ea7c6addcbf944383d38999751c4c35b2"
    },
    {
     "name": ".edge/storage/assets/objective-c-BDtDVThU.js",
     "hash": "7ae25d077de6322e417a27e7b680f5a1ea424d7d6fbdaa6f6c77b208b0318b95"
    },
    {
-    "name": ".edge/storage/assets/openai-B6IfltuJ.js",
-    "hash": "aca27c009ecdf5c368c0b7577b2e244fbc857ab3146fbad71121a05ab2df4807"
+    "name": ".edge/storage/assets/openai-Bh2ZaJ8_.js",
+    "hash": "d775363f49e7ac8b26c780231774ee6a411b408313c741a0a05d1d73d4d9b2f4"
    },
    {
-    "name": ".edge/storage/assets/panvel-logo-BGBuJBiz.svg",
+    "name": ".edge/storage/assets/panvel-extended-color-BGBuJBiz.svg",
     "hash": "49acf2d43d4533cef09043003152d1ed2fe090bc49760eb93b45b849ddc16cef"
    },
    {
@@ -816,8 +812,8 @@
     "hash": "a3e2d221c8972e9ac6f8bd358f28aa880ebe389b3a82ab1c2a203bda45b87507"
    },
    {
-    "name": ".edge/storage/assets/preact-CIRlkuBz.js",
-    "hash": "b11df79e0693a560e2870c9b9dae9da220b89bbf85aed962ea63ebef16f35ee6"
+    "name": ".edge/storage/assets/preact-CbxUlKf9.js",
+    "hash": "731de1f907e1849f37b4e0df6f63988998f2a9ca83f79e4ffbe9f5e4d4cb3796"
    },
    {
     "name": ".edge/storage/assets/preview-B5nf9lDB.svg",
@@ -828,20 +824,20 @@
     "hash": "3a663a28b95d230a8e7738da13b3b78c6db2f6578d2b0badae9ceb6b6fd58391"
    },
    {
-    "name": ".edge/storage/assets/prime-video-DeYvu-D6.js",
-    "hash": "9bcf7b382452aa7359eb853fe8ba44038cd2d189abf72de4378e13a1a51a6be1"
+    "name": ".edge/storage/assets/prime-video-lkbRh9fH.js",
+    "hash": "299e7b9969ed3246cedecbfdfbdbfdb8303bb918b559b24b1175d6e72d318fc7"
    },
    {
     "name": ".edge/storage/assets/primeicons-CDmxJShj.woff2",
     "hash": "f55c37e35d02dbfa271b58ce448ae70970619ac89b9844715e4ec1b5625162fe"
    },
    {
-    "name": ".edge/storage/assets/primevideo-logo-D0X2OJpS.svg",
-    "hash": "5c6179a317f731ea483aab8f16a6dae35150ebed100c27fc3695404fe4dbbab4"
+    "name": ".edge/storage/assets/primevideo-extended-color-SNOKjV6-.svg",
+    "hash": "ed1a04594f8ae49f09bd2027d0385c752e51a83f50961bd2c1adc24602bb4e1b"
    },
    {
-    "name": ".edge/storage/assets/primevideo-logo-SNOKjV6-.svg",
-    "hash": "ed1a04594f8ae49f09bd2027d0385c752e51a83f50961bd2c1adc24602bb4e1b"
+    "name": ".edge/storage/assets/primevideo-extended-reversed-D0X2OJpS.svg",
+    "hash": "5c6179a317f731ea483aab8f16a6dae35150ebed100c27fc3695404fe4dbbab4"
    },
    {
     "name": ".edge/storage/assets/programmable-security-BviT4QGq.js",
@@ -868,59 +864,51 @@
     "hash": "20c8fb8eb1e1769f4d5bb26b9af44630ec6723f3e04fd3709f4dbe24ebf20c8d"
    },
    {
-    "name": ".edge/storage/assets/python-U5Mjl0ZY.js",
-    "hash": "98e6680b14e810927cbb80b42dfe8bdf89f2be002e3116fb693970bce8b8a532"
+    "name": ".edge/storage/assets/python-CaGnXau4.js",
+    "hash": "1fbfb6868951e5abd2bef66f45c135cdd7d1946cacd58dfb763c2bd1bebac4b2"
    },
    {
     "name": ".edge/storage/assets/qsharp-Bw9ernYp.js",
     "hash": "c60f58841bcbe28b743f63b666afbdeb1239b79e1539d8ccbda1ba409ba57a7b"
    },
    {
-    "name": ".edge/storage/assets/qualcoom-logo-CNP4xGUS.svg",
+    "name": ".edge/storage/assets/qualcomm-extended-reversed-CNP4xGUS.svg",
     "hash": "37ebe01700961cf1fec12006f898f5c7b77867182ba970fac43e9c802c4b9805"
-   },
-   {
-    "name": ".edge/storage/assets/quick-start-with-templates-2ClCbJEf.js",
-    "hash": "0444e950d2591c77db979eefe590c56a0a08e50e24fa28277615d2fdebf0df31"
    },
    {
     "name": ".edge/storage/assets/quick-start-with-templates-BQqOry3f.svg",
     "hash": "fcbe77bf79bd160b3852240321b2c0e9bf82199104bf1509c7b4ef2c567917b1"
    },
    {
-    "name": ".edge/storage/assets/quick-start-with-templates-rYhpb0ex.svg",
-    "hash": "9ed6f2cc7f8c564bcdf1fb03b903b5f550d1e2233302489b6207139cb26fb275"
-   },
-   {
-    "name": ".edge/storage/assets/qwik-CfPApfvE.js",
-    "hash": "4181efad10639d7f21e1305645f896894e93299a2486863572bfae31c699c278"
+    "name": ".edge/storage/assets/qwik-BE5SW2-2.js",
+    "hash": "678a2ab7121bb173324d63bf2500b66fdd54a87f45dc8ca0175903be1f5ef43c"
    },
    {
     "name": ".edge/storage/assets/r-j7ic8hl3.js",
     "hash": "e0db707253b6f89320eea9fc757532d8fc967c4bfac17d3ce8e69ff8468103dc"
    },
    {
-    "name": ".edge/storage/assets/radware-C2m-b718.js",
-    "hash": "bbcc78029546d886ac161c08085e09a9b054c79eef42b473a04f44ecbfc5c44e"
+    "name": ".edge/storage/assets/radware-DFb0zNhi.js",
+    "hash": "7d255349fdc902962e7f84461a1b61181d2de613413eb2556696e94f77a07be9"
    },
    {
-    "name": ".edge/storage/assets/radware-logo-DnOZ-eB_.svg",
+    "name": ".edge/storage/assets/radware-extended-reversed-DnOZ-eB_.svg",
     "hash": "b8e7e2e2e89645469c966973d98a54e40579e87df7ffaeb1685a0618d2e8f781"
    },
    {
-    "name": ".edge/storage/assets/razor-zphOKrvc.js",
-    "hash": "6e759915b2a7112d365d4673732a74e9f1fc6363cf22d7c2c4b6c69bddf0ba0d"
+    "name": ".edge/storage/assets/razor-D7OeOsUA.js",
+    "hash": "3470b74bf8b38b42eef0cf99714b83bb0d5fe7ace6f76c2cd0159d1c1ec2cc8b"
    },
    {
-    "name": ".edge/storage/assets/rbs-logo-DFNa597S.svg",
+    "name": ".edge/storage/assets/rbs-extended-color-DFNa597S.svg",
     "hash": "79ebd4aa41f45fdac13c3e50992bdc3d1f617f4a72afa793928f307d34ed85b6"
    },
    {
-    "name": ".edge/storage/assets/react-Bstwducp.js",
-    "hash": "da887475c6a3edaed65d3c0f214c4bb567234807f0bbfba76d10b29a76326301"
+    "name": ".edge/storage/assets/react-BG7q6M4P.js",
+    "hash": "96758a436698cf6c6570e00890d61836718de1169840bbe52eb632112b9ab275"
    },
    {
-    "name": ".edge/storage/assets/react-Csk0hWo_.svg",
+    "name": ".edge/storage/assets/react-symbol-mono-Csk0hWo_.svg",
     "hash": "d6db1a9012eeda58e7ec8e416c4bc0fb0c967263f040e57532883ebf372d21d7"
    },
    {
@@ -932,20 +920,16 @@
     "hash": "4aa2bac0ba1dd6921c83ad7543f93523bf3c7022e6820cbacb5ab3ffe38fc5da"
    },
    {
-    "name": ".edge/storage/assets/remix-DZIXMuyg.js",
-    "hash": "b82e7e818fcd08d4b5caf323058c4f530cef06e989cf5539e3ab67abdaede506"
+    "name": ".edge/storage/assets/remix-ClqoWTbS.js",
+    "hash": "c92d96b6c3fe1a56b6ced6bd98c48d876d779eb45b35b062be9c9a98cbf409f2"
    },
    {
-    "name": ".edge/storage/assets/renner-BGk0i5ZV.js",
-    "hash": "532f4dec9f91e6bc2f33d2c4a9dcc6fa0facb07fdf2a695647842a89a4ad9786"
+    "name": ".edge/storage/assets/renner-Cd7JjP5o.js",
+    "hash": "2bc3f56b17369ead6e2a6dc53c89973706c63258481e1b64504a1e26fdb1979b"
    },
    {
-    "name": ".edge/storage/assets/renner-logo-C7DQrL02.svg",
+    "name": ".edge/storage/assets/renner-extended-reversed-C7DQrL02.svg",
     "hash": "7b04b6cff714aeb8f2697dbb8ce2a09ef7a2175f9a41d8fd6bdf65ba89855770"
-   },
-   {
-    "name": ".edge/storage/assets/renner-logo-CvU_qC2w.svg",
-    "hash": "31cdbabf78675a53f81fdfe0b7e034ef049407c9fbc2414d10d033ab9438acb6"
    },
    {
     "name": ".edge/storage/assets/restructuredtext-CqXO7rUv.js",
@@ -1008,7 +992,7 @@
     "hash": "3d82ac76ee937936f00f8e98d80f3b28108786b0721e20a6a29bfa8b5f94848e"
    },
    {
-    "name": ".edge/storage/assets/soc-BjlJRHow.svg",
+    "name": ".edge/storage/assets/soc-symbol-color-BjlJRHow.svg",
     "hash": "183deffe3cd97dad7e8f08bb55c6e62c11cc51443cec8bee4bec4ff50b19112a"
    },
    {
@@ -1028,8 +1012,8 @@
     "hash": "0fc597efd31a8aeb53dbaf1c385ed21e2bb50cdaff85895fee78b215bdfa2ed0"
    },
    {
-    "name": ".edge/storage/assets/sqlite-DIynKIhP.js",
-    "hash": "d87829b8ac400b1a0d312efb8a5b86033b982f8bf7077ee54f5c440481342872"
+    "name": ".edge/storage/assets/sqlite-CcZdY1-2.js",
+    "hash": "18553473519f28afd2d35cccbda89aad7013e41e9d24f0f2ed19ee863d4acaf7"
    },
    {
     "name": ".edge/storage/assets/st-CHwy0fLd.js",
@@ -1056,20 +1040,20 @@
     "hash": "0cab632f1c1178f8e1ae552b7357fdd624df4f4367d64bae832bedcd179443f0"
    },
    {
-    "name": ".edge/storage/assets/terraform-D352Y0c_.js",
-    "hash": "27f0763159452ff7cb281d3243b880a273e3754b4a8cab6114a1982484c5c948"
+    "name": ".edge/storage/assets/terraform-eiQSwhCx.js",
+    "hash": "cca9feb96d699a9200038b99921c1bffb8aea875d9441ef5114f282a5e76329e"
    },
    {
-    "name": ".edge/storage/assets/ticker-DZr4L5Zs.js",
-    "hash": "47e6d6d0dd02f47cb0bfb44d4059b4122a8128096b3b9b85f3df756abb0318bf"
+    "name": ".edge/storage/assets/ticker-B9JhUDYl.js",
+    "hash": "208a3624fa5e176fc0ca8251d917a46d3b6aa8207e7fae29cdd133a0fffd553a"
    },
    {
     "name": ".edge/storage/assets/ts.worker-DTZAwq0V.js",
     "hash": "061267351f7f5aa65df4f991ecd66d131668e1312fd66973c97983431074ce28"
    },
    {
-    "name": ".edge/storage/assets/tsMode-CVwFVICc.js",
-    "hash": "191655a0d15d37fea59bfde65cca4891e798f9060c39c0518cf7da31b6f79fc7"
+    "name": ".edge/storage/assets/tsMode-oLmAeAL7.js",
+    "hash": "41eec9aaa617ff7982c87f893ddd443ecf3d78b629b11e96fe754f273c542d1e"
    },
    {
     "name": ".edge/storage/assets/twig-Csy3S7wG.js",
@@ -1088,16 +1072,16 @@
     "hash": "a5cbcbcef70a7e3e9d75e400823e4f136f7ac8c0ad2d803974fad04cee1f135c"
    },
    {
-    "name": ".edge/storage/assets/vite-B_7_jpcO.js",
-    "hash": "9bf6980d51d4d1ee6fba8c251e71f5ad9e5df99b0e99a09a120aae8b5c26bda5"
+    "name": ".edge/storage/assets/vite-DWaxYWak.js",
+    "hash": "5f8e35c7c0890b059a7003d3b30e55bba8bc2e9d8b31e2a9e5884a9b4c379aa0"
    },
    {
-    "name": ".edge/storage/assets/vitepress-10KVkMZ5.js",
-    "hash": "0985d7d7f0c6ab87c54d35eec8acb939e983418750b2bb212bed7e243e043ba3"
+    "name": ".edge/storage/assets/vitepress-D3OG6g9d.js",
+    "hash": "af0872e1082eb316c2a03e0983058eb8fb48d6a3c69254ed954638124d0c0a55"
    },
    {
-    "name": ".edge/storage/assets/vue-iKgBS12_.js",
-    "hash": "ac6f5c763f5cded7c05bb5eef49487635c80660e55e1376e3e3cd4c670ba0673"
+    "name": ".edge/storage/assets/vue-xqIyB20x.js",
+    "hash": "783919e0f637a41359fd7f407fb634b5d8a64d295dde65a1af71598185efc25a"
    },
    {
     "name": ".edge/storage/assets/wgsl-BTesnYfV.js",
@@ -1112,23 +1096,23 @@
     "hash": "514a9724416f9defdb5f55fc22408ae2775e7dffdaa5bbe6b394944427a99885"
    },
    {
-    "name": ".edge/storage/assets/workers-CG_d6gjb.js",
-    "hash": "8e0e7de6587c0997b15a992dff3cd00966c3f2cacda27f423dc5c751673f2892"
+    "name": ".edge/storage/assets/workers-C19o9OH5.js",
+    "hash": "fb682f1a66a2015d56ad86b1b6351b6b609da820d8bc70ed845cdf8b316d8b1a"
    },
    {
-    "name": ".edge/storage/assets/workers-cloudflare-BCTJ43A6.js",
-    "hash": "2b390dbff70b247c15fef6d53e5ec690ce30681a6dd864891f77dcb6d6d84731"
+    "name": ".edge/storage/assets/workers-cloudflare-BehC3b7w.js",
+    "hash": "8568540b209343d77e1d37143e9820484ea8477b6e7c417fdbb40663aa2b2bbe"
    },
    {
-    "name": ".edge/storage/assets/xml-DnJ2E7-F.js",
-    "hash": "eeb6a273eb24f7b9391d7aefb2c4e28286be82be6869727776d97279b9431568"
+    "name": ".edge/storage/assets/xml-ChXg0XEW.js",
+    "hash": "2c3f5b1de0259f98933b7629ca90b3b66bad042d552539b4403c2c4c5ad71823"
    },
    {
-    "name": ".edge/storage/assets/yaml-Bi-ugS-6.js",
-    "hash": "1df7953d96de5c307ab85378b6ff579193201d99f70ad81a16ac6bad61a10811"
+    "name": ".edge/storage/assets/yaml-ClxZAnCX.js",
+    "hash": "0648b55e3acb5b00b5cec09674f918d18d89c04a3f8c59017125ac6acb73c12f"
    },
    {
-    "name": ".edge/storage/assets/zoop-logo-Cc38FNsQ.svg",
+    "name": ".edge/storage/assets/zoop-extended-color-Cc38FNsQ.svg",
     "hash": "ac63b43aadbc0380d65c3a3ae67ebf106ecc0966c7a41921d39815ca302116ca"
    },
    {
@@ -1153,7 +1137,7 @@
    },
    {
     "name": ".edge/storage/index.html",
-    "hash": "65394a9e67a4655da5aa0261ee50f1b9d00dcd38cddc35b44241e8d5c7785fcc"
+    "hash": "02e568b1340aa755a71b2a62c442d4932a306e6aeaafcf20a754d18c7a89a468"
    },
    {
     "name": ".edge/storage/quotes/README.md",
