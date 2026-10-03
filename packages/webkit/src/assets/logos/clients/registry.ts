@@ -17,6 +17,7 @@ import ifood from './ifood-extended-reversed.svg'
 import ifoodSymbol from './ifood-symbol-color.svg'
 import itau from './itau-extended-reversed.webp'
 import itauSymbol from './itau-symbol-color.svg'
+import madeiraColor from './madeiramadeira-extended-color.svg'
 import madeira from './madeiramadeira-extended-reversed.svg'
 import madeiraSymbol from './madeiramadeira-symbol-reversed.svg'
 import magaluColor from './magalu-extended-color.svg'
@@ -98,7 +99,7 @@ export const CLIENTS: Client[] = [
   {
     name: 'MadeiraMadeira',
     logo: madeira,
-    artwork: 'light',
+    logoLight: madeiraColor,
     symbol: madeiraSymbol,
     brand: BRAND.madeira
   },
