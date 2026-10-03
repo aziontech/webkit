@@ -103,11 +103,11 @@ const DESKTOP_MAP = `<NetworkMap
   :scale="1.3"
   :offset-x="0.4"
   :offset-y="-0.2"
-  class="max-md:hidden"
+  class="max-md:hidden md:max-lg:[--network-map-fade-start:70%] md:max-lg:[--network-map-fade-end:100%]"
 />`
 
 const MOBILE_MAP = `<div
-  class="relative -mx-(--spacing-xxl) min-h-48 flex-1 [mask-image:linear-gradient(to_bottom,transparent,black_25%,black_75%,transparent)] md:hidden"
+  class="relative -mx-(--spacing-xxl) min-h-48 flex-1 [mask-image:linear-gradient(to_bottom,transparent,black_10%,black_75%,transparent)] md:hidden"
 >
   <NetworkMap
     region="world"
