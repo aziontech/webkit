@@ -24,6 +24,10 @@
     alt?: string
     /** Inset the media — inside the frame in the `frame` register, from the cell's edges in `plain`. Turn it off for an asset that should run to the cell's edges; the caption keeps its own inset either way. */
     padded?: boolean
+    /** Stretch the media to the frame's full width with its aspect ratio locked, so it grows and shrinks with the tile; off, slotted media keeps its own size, centred. */
+    fluid?: boolean
+    /** Scale of the media inside its frame, around its centre. The frame keeps its size and clips whatever grows past it, so a scene drawn small on its canvas can be fitted to the tile without changing the band's rhythm. */
+    mediaScale?: number
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -31,7 +35,9 @@
     description: '',
     src: '',
     alt: '',
-    padded: true
+    padded: true,
+    fluid: false,
+    mediaScale: 1
   })
 
   const slots = defineSlots<{
@@ -52,6 +58,10 @@
   const hasDescription = computed<boolean>(
     () => Boolean(slots.default) || props.description.length > 0
   )
+
+  const mediaStyle = computed(() =>
+    props.mediaScale === 1 ? undefined : { scale: String(props.mediaScale) }
+  )
 </script>
 
 <template>
@@ -71,7 +81,12 @@
       :data-padded="padded || null"
       class="overflow-hidden data-[kind=frame]:min-h-64 data-[kind=plain]:min-h-32 [--illustration-fill:var(--bg-canvas)] data-[kind=frame]:bg-(--bg-canvas) data-[kind=frame]:data-[padded]:p-(--spacing-xl) data-[kind=plain]:data-[padded]:px-(--spacing-lg) data-[kind=plain]:data-[padded]:pt-(--spacing-lg)"
     >
-      <div class="flex h-full w-full items-center justify-center">
+      <div
+        :data-testid="`${testId}__media`"
+        :data-fluid="fluid || null"
+        :style="mediaStyle"
+        class="flex h-full w-full items-center justify-center data-[fluid]:*:h-auto data-[fluid]:*:w-full"
+      >
         <slot name="media">
           <img
             v-if="src"

@@ -137,7 +137,7 @@
   {
     "name": "media-tile",
     "path": "src/components/marketing/media-tile/media-tile.vue",
-    "limit": "2.5 KB"
+    "limit": "2.75 KB"
   },
   {
     "name": "illustration",

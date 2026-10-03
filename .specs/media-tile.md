@@ -4,9 +4,9 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: ea6cdfeb608a813d6166c49dee0b38a5efef4cc776ca9b7c67842bdc3ae3d50d
+checksum: 27f887eab77158554e811bc9b2b368880b7e5a1d0901fb5bb998fde76f49d5e1
 created: 2026-09-25
-last_updated: 2026-09-26
+last_updated: 2026-10-01
 ---
 
 # Media Tile — Component Spec
@@ -46,6 +46,8 @@ One cell of a media band: a scene above, and under it a run-in caption whose lea
 - Reach for `padded` off when the media is an exported asset that already carries its own air, or when it should run to the cell's edges so a list or a table reads as continuing past them. A composed scene wants the inset.
 - Pair the register with the grid. `frame` belongs in `card-grid`'s `gap` register, whose gutters keep every frame its own; the `divider` register would rule the captions as well as the panels. `plain` belongs in the `divider` register, where the grid draws every rule and the tile fills its own background so the gap has something to show through.
 - Do not put a `frame` tile in a `divider` grid. The grid's hairline and the frame's rule then sit a padding apart, and the band reads as two competing grids.
+- Turn `fluid` on for a band whose scenes share one frame size, so every tile renders its scene at the same zoom whatever the column width. Scenes on different frames come out at different zooms under `fluid` — fix the frames, not the tiles.
+- Reach for `mediaScale` when a scene sits small or large on its canvas — a cluster of icon boxes drawn at its own size on the 592×300 frame reads as a speck in a tile. Set it per tile, so each scene in a band reaches the same visual height, and keep it at or under the value where the scene's widest edge meets the frame; anything past that is clipped.
 - Leave the media slot empty while a scene is still being drawn: the frame holds the tile's floor height, so the band keeps its rhythm instead of collapsing.
 
 ## Usage
@@ -93,6 +95,8 @@ import MediaTile from '@aziontech/webkit/media-tile'
 | `src` | `string` | `''` | false | URL of the tile's media image; ignored when the `media` slot is filled. |
 | `alt` | `string` | `''` | false | Alternative text describing what the image shows; empty keeps it decorative. |
 | `padded` | `boolean` | `true` | false | Inset the media — inside the frame in the `frame` register, from the cell's edges in `plain`. Turn it off for an asset that should run to the cell's edges; the caption keeps its own inset either way. |
+| `fluid` | `boolean` | `false` | false | Stretch the media to the frame's full width with its aspect ratio locked, so it grows and shrinks with the tile; off, slotted media keeps its own size, centred. |
+| `mediaScale` | `number` | `1` | false | Scale of the media inside its frame, around its centre. The frame keeps its size and clips whatever grows past it, so a scene drawn small on its canvas can be fitted to the tile without changing the band's rhythm. |
 
 ## Events
 
@@ -111,6 +115,8 @@ import MediaTile from '@aziontech/webkit/media-tile'
 - `data-kind` carries the register, and is what moves the inset from the frame to the tile
 - `data-media` mirrors whether the frame holds any media
 - `data-padded` mirrors the `padded` prop
+- `data-fluid` mirrors the `fluid` prop, and is what stretches the media to the frame's width
+- A `mediaScale` other than `1` scales the media around its centre without moving the frame or the caption; at `1` the media carries no scale at all
 - `data-described` mirrors whether the caption carries a body after its lead
 - Empty: a tile with no media still draws its frame at the tile's floor height, so a band whose scene is not drawn yet keeps its rhythm instead of collapsing
 

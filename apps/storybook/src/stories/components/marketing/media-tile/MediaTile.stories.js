@@ -94,6 +94,26 @@ const meta = {
         defaultValue: { summary: 'true' }
       }
     },
+    fluid: {
+      control: 'boolean',
+      description:
+        "Stretch the media to the frame's full width with its aspect ratio locked, so it grows and shrinks with the tile; off, slotted media keeps its own size, centred.",
+      table: {
+        category: 'props',
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' }
+      }
+    },
+    mediaScale: {
+      control: { type: 'number', min: 0.5, max: 4, step: 0.05 },
+      description:
+        "Scale of the media inside its frame, around its centre. The frame keeps its size and clips whatever grows past it, so a scene drawn small on its canvas can be fitted to the tile without changing the band's rhythm.",
+      table: {
+        category: 'props',
+        type: { summary: 'number' },
+        defaultValue: { summary: '1' }
+      }
+    },
     default: {
       control: false,
       description: 'The caption body after the lead; replaces the `description` prop.',
@@ -111,7 +131,9 @@ const meta = {
     description: DESCRIPTION,
     src: '',
     alt: '',
-    padded: true
+    padded: true,
+    fluid: false,
+    mediaScale: 1
   }
 }
 

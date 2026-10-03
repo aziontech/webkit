@@ -11375,6 +11375,20 @@
           "default": "true",
           "required": "false",
           "doc": "Inset the media — inside the frame in the `frame` register, from the cell's edges in `plain`. Turn it off for an asset that should run to the cell's edges; the caption keeps its own inset either way."
+        },
+        {
+          "name": "fluid",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "Stretch the media to the frame's full width with its aspect ratio locked, so it grows and shrinks with the tile; off, slotted media keeps its own size, centred."
+        },
+        {
+          "name": "mediaScale",
+          "type": "number",
+          "default": "1",
+          "required": "false",
+          "doc": "Scale of the media inside its frame, around its centre. The frame keeps its size and clips whatever grows past it, so a scene drawn small on its canvas can be fitted to the tile without changing the band's rhythm."
         }
       ],
       "slots": [
@@ -11417,6 +11431,8 @@
         "Reach for `padded` off when the media is an exported asset that already carries its own air, or when it should run to the cell's edges so a list or a table reads as continuing past them. A composed scene wants the inset.",
         "Pair the register with the grid. `frame` belongs in `card-grid`'s `gap` register, whose gutters keep every frame its own; the `divider` register would rule the captions as well as the panels. `plain` belongs in the `divider` register, where the grid draws every rule and the tile fills its own background so the gap has something to show through.",
         "Do not put a `frame` tile in a `divider` grid. The grid's hairline and the frame's rule then sit a padding apart, and the band reads as two competing grids.",
+        "Turn `fluid` on for a band whose scenes share one frame size, so every tile renders its scene at the same zoom whatever the column width. Scenes on different frames come out at different zooms under `fluid` — fix the frames, not the tiles.",
+        "Reach for `mediaScale` when a scene sits small or large on its canvas — a cluster of icon boxes drawn at its own size on the 592×300 frame reads as a speck in a tile. Set it per tile, so each scene in a band reaches the same visual height, and keep it at or under the value where the scene's widest edge meets the frame; anything past that is clipped.",
         "Leave the media slot empty while a scene is still being drawn: the frame holds the tile's floor height, so the band keeps its rhythm instead of collapsing."
       ]
     }
