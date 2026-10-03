@@ -1,8 +1,9 @@
 <script setup lang="ts">
   import type { VNode, VNodeArrayChildren } from 'vue'
-  import { Comment, computed, createTextVNode, Fragment, Text, useAttrs } from 'vue'
+  import { Comment, computed, createTextVNode, Fragment, provide, Text, useAttrs } from 'vue'
 
   import FrameBox from '../../layout/frame-box/frame-box.vue'
+  import { BandStackInjectionKey } from './injection-key'
 
   defineOptions({
     name: 'BandStack',
@@ -25,6 +26,8 @@
     /** The bands. Each direct child — including every child a `v-for` renders — is wrapped in its own frame and becomes one band; comment nodes are skipped. */
     default?(): unknown
   }>()
+
+  provide(BandStackInjectionKey, { framesCells: true })
 
   const attrs = useAttrs()
 
@@ -65,7 +68,7 @@
       v-for="(band, index) in bands()"
       :key="band.key ?? index"
       borders="y"
-      marks="all"
+      marks="none"
       :flush="flush && index === 0"
       :data-testid="`${testId}__band`"
       :style="{ '--band-stack-index': index }"

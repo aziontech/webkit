@@ -9961,7 +9961,7 @@
           "notes": "The bands. Each direct child — including every child a `v-for` renders — is wrapped in its own frame and becomes one band; comment nodes are skipped."
         }
       ],
-      "purpose": "A run of framed bands that follow one another down the page, each one its own registration frame sharing a hairline with the next. With `sticky` on, each band pins under the site header a step lower than the band before it, so the run piles up as the reader scrolls and every band already read stays visible as a ledge above the one being read. The component owns the frames, the shared hairlines and the pin offsets; the bands themselves are whatever the consumer composes into the default slot — each direct child becomes one band. It carries no copy, heading or media of its own.",
+      "purpose": "A run of framed bands that follow one another down the page, each one drawn as two registration frames — its left half and its right half — sharing a hairline with the next. With `sticky` on, each band pins under the site header a step lower than the band before it, so the run piles up as the reader scrolls and every band already read stays visible as a ledge above the one being read. The component owns the band rules, the shared hairlines and the pin offsets, and by default every band is split into two frames: a `media-split` composed into the stack frames its copy cell and its media cell as two `frame-box`es, left and right, each with its four marks. The bands themselves are whatever the consumer composes into the default slot — each direct child becomes one band. It carries no copy, heading or media of its own.",
       "useWhen": [
         "For a run of peer bands — three to six `media-split`s, one per solution or capability — that should read as one sequence.",
         "With `sticky`, when the run is the page's centrepiece and the reader should feel each band land on the last.",
@@ -9974,7 +9974,7 @@
         "For a grid of cards → use `card-grid`."
       ],
       "related": [
-        "media-split` — the band this stack most often holds, typically at `size=\"large\"`.",
+        "media-split` — the band this stack holds, typically at `size=\"large\"`. Inside the stack it frames its own two cells, so leave its `framed` off.",
         "sticky-stack` — the scroll-driven sibling: one pinned frame whose open claim follows the scroll, instead of bands that pile up.",
         "frame-box` — the frame each band is drawn in.",
         "section-gap` — the spacer usually above the stack; pass `flush` so the first band does not draw a second rule under it."
@@ -9984,6 +9984,7 @@
         "Give every band the same height class (`media-split` `size=\"large\"`, same `align`), so the ledges line up as the pile grows.",
         "Pass `flush` when the element directly above the stack already draws a rule (a `section-gap`, another frame), so the first band does not draw a second one.",
         "Give each band an opaque fill (`media-split` paints its own cells). A pinned band covers the one before it, and a transparent band shows the one underneath through it.",
+        "Compose `media-split`s as the bands. The two frames are the band's own cells, so a child that is not a `media-split` carries no marks unless it frames itself — wrap it in a `frame-box` with `borders=\"none\"`.",
         "Render the bands with `v-for` directly in the default slot; each direct child is one band, so a wrapper element around them collapses the run into a single band."
       ]
     },

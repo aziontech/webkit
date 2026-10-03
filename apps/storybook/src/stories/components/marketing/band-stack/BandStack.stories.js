@@ -57,7 +57,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'A run of framed bands that follow one another down the page, each one its own registration frame sharing a hairline with the next. With `sticky` on, each band pins under the site header a step lower than the band before it, so the run piles up as the reader scrolls and every band already read stays visible as a ledge above the one being read. The stack owns the frames, the shared hairlines and the pin offsets; each direct child of the default slot becomes one band, and the stack carries no copy, heading or media of its own.'
+          'A run of framed bands that follow one another down the page, each one drawn as two registration frames, its left half and its right half, sharing a hairline with the next. With `sticky` on, each band pins under the site header a step lower than the band before it, so the run piles up as the reader scrolls and every band already read stays visible as a ledge above the one being read. The stack owns the band rules, the shared hairlines and the pin offsets, and by default every band is split into two frames: a `MediaSplit` in the stack frames its copy cell and its media cell, each with its four marks. Each direct child of the default slot becomes one band, and the stack carries no copy, heading or media of its own.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -115,7 +115,7 @@ export const Default = {
     docs: {
       description: {
         story:
-          'Three `MediaSplit` bands at `size="large"`, not pinned, so the frames and the shared hairlines are the only thing on show. Every band after the first pulls up one pixel, so neighbouring rules overlap into a single hairline while each band keeps its own registration marks. Turn on `sticky` or `flush` in the Controls panel to see the pinned run or the first band without its top rule.'
+          'Three `MediaSplit` bands at `size="large"`, not pinned, so the frames and the shared hairlines are the only thing on show. Each band is two frames, left and right, with a registration mark in every corner of both halves. Every band after the first pulls up one pixel, so neighbouring rules overlap into a single hairline. Turn on `sticky` or `flush` in the Controls panel to see the pinned run or the first band without its top rule.'
       },
       source: { code: toSfc(IMPORT, DEFAULT_MARKUP) }
     }
