@@ -160,7 +160,7 @@
       :data-padded="props.padded || null"
       :data-size="size"
       :data-align="align"
-      class="relative mx-auto w-full px-(--layout-boundary-inline) [z-index:var(--banner-z-content,10)] data-[kind=screen]:flex data-[kind=screen]:flex-1 data-[kind=screen]:flex-col data-[kind=screen]:data-[align=top]:justify-start data-[kind=screen]:data-[align=center]:justify-center data-[kind=screen]:data-[align=bottom]:justify-end data-[width=3xl]:max-w-(--container-3xl) data-[width=4xl]:max-w-(--container-4xl) data-[width=5xl]:max-w-(--container-5xl) data-[width=6xl]:max-w-(--container-6xl) data-[width=7xl]:max-w-(--container-7xl) data-[width=site]:max-w-(--layout-measure-site) data-[width=full]:max-w-none data-[padded]:data-[size=medium]:py-(--spacing-xl) data-[padded]:data-[size=large]:py-[calc(var(--spacing-xxl)*2)]"
+      class="relative mx-auto w-full px-(--layout-boundary-inline) [z-index:var(--banner-z-content,10)] data-[kind=screen]:flex data-[kind=screen]:flex-1 data-[kind=screen]:flex-col data-[kind=screen]:data-[align=top]:justify-start data-[kind=screen]:data-[align=center]:justify-center data-[kind=screen]:data-[align=bottom]:justify-end data-[width=3xl]:max-w-(--container-3xl) data-[width=4xl]:max-w-(--container-4xl) data-[width=5xl]:max-w-(--container-5xl) data-[width=6xl]:max-w-(--container-6xl) data-[width=7xl]:max-w-(--container-7xl) data-[width=site]:max-w-(--layout-measure-site) data-[width=full]:max-w-none data-[padded]:data-[size=medium]:py-(--spacing-xxl) data-[padded]:data-[size=large]:py-[calc(var(--spacing-xxl)*2)]"
     >
       <div
         v-if="hasMedia"

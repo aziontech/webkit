@@ -4,7 +4,7 @@ category: marketing
 structure: composition
 status: approved
 spec_version: 2
-checksum: 41862accc011177fb76db57b38c8bf10d58da012cb61e2f81ed740763c29dd76
+checksum: a22234248b768807348910e62f1e7bfce8d35f82edb313bf94dba52c17d44d6d
 created: 2026-09-22
 last_updated: 2026-10-01
 ---
@@ -167,7 +167,7 @@ _none_
 | floor texture ink | `var(--banner-floor-ink, 0.6)` |
 | band rule | `var(--border-default)` |
 | band inset | `var(--layout-boundary-inline)` |
-| band rhythm (`size` medium) | `var(--spacing-xl)` |
+| band rhythm (`size` medium) | `var(--spacing-xxl)` |
 | band rhythm (`size` large) | `calc(var(--spacing-xxl) * 2)` |
 | media column gap | `var(--spacing-xl)` from `md` up, `var(--spacing-xxl)` stacked |
 | media end bleed (`mediaAlign` end) | `var(--layout-boundary-inline)` |
