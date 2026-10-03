@@ -10007,7 +10007,7 @@
           "type": "boolean",
           "default": "false",
           "required": "false",
-          "doc": "Draw the band's own registration frame. Turn it off when the page already wraps the band in a frame."
+          "doc": "Draw the band's own registration frame: its top and bottom rules, with the copy and the media framed as two cells, each with its four marks. Turn it off when the page already wraps the band in a frame."
         },
         {
           "name": "divided",
@@ -10115,10 +10115,12 @@
         "topic` — the smaller unit when a page needs several claims rather than one.",
         "illustration` — the media itself; a scene dropped in the `media` slot is what the band's ground is drawn for.",
         "texture-material` — the material the media half is grounded with; compose it yourself when a band needs a different one.",
-        "frame-box` — the frame the band is drawn with, applied by whatever assembles the page; the band draws none of its own."
+        "frame-box` — the frame the band is drawn with. With `framed` on, or inside a `band-stack`, each of the band's two cells is its own `frame-box`.",
+        "band-stack` — the run that stacks these bands; inside it every band frames its two cells, left and right, under the rules the stack draws."
       ],
       "bestPractices": [
-        "The band draws no frame of its own: the rule and the corner marks belong to the `section-module` or `frame-box` that the page assembles it into, so a band placed in a framed column never lands a second hairline on the column's own.",
+        "By default the band draws no frame of its own: the rule and the corner marks belong to the `section-module` or `frame-box` that the page assembles it into, so a band placed in a framed column never lands a second hairline on the column's own.",
+        "A run of bands goes in a `band-stack`, not in a frame per band: the stack draws each band's rules and the band frames its two cells. Leave `framed` off there, or the band draws a second set of rules over the stack's.",
         "Alternate `kind` down a page so consecutive bands mirror; two identical bands in a row read as one.",
         "Reach for `orientation=\"vertical\"` when the column is too narrow to carry two halves, not to vary the rhythm of a wide page — a vertical band across a full-width page reads as a card that lost its grid.",
         "Composed into a grid of cells, the band fills the cell it is given: the copy column floors its actions, so a row of vertical bands lines up on its buttons. Let the grid own the seams there — `divided` off, `framed` off.",

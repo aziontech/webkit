@@ -3,6 +3,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { h } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
+import BandStack from '../band-stack/band-stack.vue'
 import MediaSplit from './media-split.vue'
 
 const TESTID = 'marketing-media-split'
@@ -15,6 +16,9 @@ const ALT = 'A live log stream showing requests from twelve edge locations'
 const SRC = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=='
 
 const FOLLOWING = 4
+
+const EVERY_CORNER = 'top-left top-right bottom-left bottom-right'
+const CELLS = [`${TESTID}__copy-cell`, `${TESTID}__media-cell`]
 
 function columnsOf(container: HTMLElement): globalThis.Element[] {
   const grid = container.querySelector(`[data-testid="${TESTID}__cells"]`)
@@ -291,6 +295,71 @@ describe('MediaSplit', () => {
     expect(getByTestId('layout-frame-box')).toBeInTheDocument()
   })
 
+  it('leaves its cells unmarked by default', () => {
+    const { getByTestId } = render(MediaSplit, { props: { title: TITLE, src: SRC, alt: ALT } })
+
+    for (const cell of CELLS) expect(getByTestId(cell)).not.toHaveAttribute('data-marks')
+  })
+
+  it('frames the copy and the media as two cells, each with its four marks, when framed', () => {
+    const { getByTestId } = render(MediaSplit, {
+      props: { title: TITLE, src: SRC, alt: ALT, framed: true }
+    })
+
+    expect(getByTestId('layout-frame-box').getAttribute('data-borders')).toBe('bottom')
+    expect(getByTestId('layout-frame-box').getAttribute('data-marks')).toBe('none')
+    for (const cell of CELLS) {
+      expect(getByTestId(cell).getAttribute('data-marks')).toBe(EVERY_CORNER)
+      expect(getByTestId(cell).getAttribute('data-borders')).toBe('none')
+    }
+  })
+
+  it('frames one cell when a framed band has no media', () => {
+    const { getByTestId, queryByTestId } = render(MediaSplit, {
+      props: { title: TITLE, framed: true }
+    })
+
+    expect(getByTestId(`${TESTID}__copy-cell`).getAttribute('data-marks')).toBe(EVERY_CORNER)
+    expect(queryByTestId(`${TESTID}__media-cell`)).toBeNull()
+  })
+
+  it('frames its two cells inside a band stack without drawing rules of its own', () => {
+    const { getByTestId, queryByTestId } = render(BandStack, {
+      slots: { default: () => h(MediaSplit, { title: TITLE, src: SRC, alt: ALT }) }
+    })
+
+    expect(queryByTestId('layout-frame-box')).toBeNull()
+    for (const cell of CELLS) {
+      expect(getByTestId(cell).getAttribute('data-marks')).toBe(EVERY_CORNER)
+      expect(getByTestId(cell).getAttribute('data-borders')).toBe('none')
+    }
+  })
+
+  it('keeps the copy cell before the media cell in DOM order when the cells are framed', () => {
+    const { getByTestId } = render(MediaSplit, {
+      props: { title: TITLE, src: SRC, alt: ALT, framed: true, kind: 'media-start' }
+    })
+    const [copy, media] = CELLS.map((cell) => getByTestId(cell))
+
+    expect(copy.compareDocumentPosition(media) & FOLLOWING).toBe(FOLLOWING)
+    expect(copy.getAttribute('data-orientation')).toBe('horizontal')
+  })
+
+  it('has no a11y violations with its cells framed', async () => {
+    const { container } = render(MediaSplit, {
+      props: {
+        title: TITLE,
+        description: DESCRIPTION,
+        src: SRC,
+        alt: ALT,
+        framed: true,
+        mediaHref: '/site/docs'
+      }
+    })
+
+    await expectNoA11yViolations(container)
+  })
+
   it.each(['canvas', 'surface'] as const)('mirrors the %s fill onto data-fill', (fill) => {
     const { getByTestId } = render(MediaSplit, { props: { title: TITLE, fill } })
 
@@ -414,7 +483,13 @@ describe('MediaSplit', () => {
     it('follows mediaHref from a click anywhere on the band', async () => {
       const open = stubOpen()
       const { getByRole } = render(MediaSplit, {
-        props: { title: TITLE, description: DESCRIPTION, src: SRC, alt: ALT, mediaHref: '/site/docs' }
+        props: {
+          title: TITLE,
+          description: DESCRIPTION,
+          src: SRC,
+          alt: ALT,
+          mediaHref: '/site/docs'
+        }
       })
 
       await fireEvent.click(getByRole('heading', { level: 2 }), { metaKey: true })
