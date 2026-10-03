@@ -4,9 +4,9 @@ category: marketing
 structure: monolithic
 status: approved
 spec_version: 1
-checksum: bc74ab5b07259372e2d53ea3ff45896601d49aecfbb41b675ba5430abd0303a0
+checksum: bbd1646868aee1bf69ce86f3b81595ee8b491320cf9c4acfc3872253fd664e73
 created: 2026-09-23
-last_updated: 2026-09-23
+last_updated: 2026-10-01
 ---
 
 # Ticker — Component Spec
@@ -83,9 +83,10 @@ An endlessly looping row of brand marks — the trust strip that names the compa
 - Visual states: every mark rests at 70% opacity and lifts to full on `hover`
 - `data-size` mirrors the `size` prop and is what drives the mark height, the cell width and the row gap
 - `data-kind` mirrors the `kind` prop; `band` paints the page canvas and the strip's own vertical rhythm so nothing behind it shows through while the fill still matches the band it floors, `plain` leaves it transparent over whatever it sits on
-- `data-duplicate` marks the second, `aria-hidden` copy of the row — the one the loop translates into place, and the one hidden outright under reduced motion
+- `data-duplicate` marks every `aria-hidden` copy after the first — the copies the loop translates into place, and the ones hidden outright under reduced motion
+- Short rows: the row repeats until half the track is at least as wide as the strip, so a strip with few marks never shows an empty run; the pass lengthens with each repeat so the speed stays the same
 - Empty: when `marks` is empty the row renders nothing, so a page with no marks to name shows no empty band
-- Reduced motion: the track stops and wraps into a centred static grid, with the duplicate row removed, so every mark stays reachable
+- Reduced motion: the track stops and wraps into a centred static grid, with the duplicate rows removed, so every mark stays reachable
 
 ## Motion & Animations
 
@@ -115,7 +116,7 @@ An endlessly looping row of brand marks — the trust strip that names the compa
 
 - Visible focus: none of its own — no mark is a focusable target, so the strip adds no tab stop and needs no ring. The loop still pauses on `:focus-within`, so anything a consumer places over it stays still while it is reached.
 - Keyboard map: no arrow-key model and no tab stop — this is a list, not a composite widget.
-- ARIA: the row is a `<ul>` of `<li>` named by `ariaLabel` when set; the second copy carries `aria-hidden="true"` so a screen reader hears each mark once, and each mark is titled with its own name.
+- ARIA: the row is a `<ul>` of `<li>` named by `ariaLabel` when set; every copy after the first carries `aria-hidden="true"` so a screen reader hears each mark once, and each mark is titled with its own name.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): marks are drawn in `var(--text-default)` at 70%, which WCAG 1.4.11 exempts as a logotype; the typographic fallback is real text and clears the minimum in both themes at that strength.
 - `motion-reduce:animate-none` on the track and `motion-reduce:transition-none` on the mark hover. WCAG 2.2.2 applies — the loop is longer than five seconds, so it pauses on hover and on focus-within, and stops outright under `prefers-reduced-motion`.
 - Touch target ≥40×40 px: marks are not interactive targets; the whole strip is one decorative band.

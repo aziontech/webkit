@@ -135,6 +135,44 @@ describe('Ticker', () => {
     expect(track?.getAttribute('style')).toContain('animation-duration: 12s')
   })
 
+  it('repeats a short row until half the track covers the strip, at the same speed', async () => {
+    const layout = document.createElement('style')
+    layout.textContent = `
+      .animate-brand-marquee { overflow: hidden }
+      .animate-brand-marquee, .animate-brand-marquee > ul { display: flex; width: max-content; margin: 0; padding: 0 }
+      .animate-brand-marquee li { width: 100px; height: 24px; flex-shrink: 0; overflow: hidden }
+    `
+    document.head.append(layout)
+    const strip = document.body.appendChild(document.createElement('div'))
+    strip.style.width = '1000px'
+
+    const marks = ['itau', 'magalu']
+    const { container, unmount } = render(Ticker, { props: { marks }, container: strip })
+
+    try {
+      const track = container.querySelector('.animate-brand-marquee') as globalThis.HTMLElement
+
+      await waitFor(() => expect(track.children.length).toBeGreaterThan(2))
+
+      const rows = [...track.querySelectorAll('ul')]
+      const half = rows.length / 2
+      expect(Number.isInteger(half)).toBe(true)
+      expect(half * rows[0].offsetWidth).toBeGreaterThanOrEqual(1000)
+      expect(rows[0]).not.toHaveAttribute('aria-hidden')
+      for (const row of rows.slice(1)) {
+        expect(row).toHaveAttribute('aria-hidden', 'true')
+        expect(row).toHaveAttribute('data-duplicate')
+      }
+      expect(track.getAttribute('style')).toContain(
+        `animation-duration: ${marks.length * 2 * half}s`
+      )
+    } finally {
+      unmount()
+      layout.remove()
+      strip.remove()
+    }
+  })
+
   it('renders no row at all when there are no marks', () => {
     const { getByTestId, container } = render(Ticker, { props: { marks: [] } })
 
