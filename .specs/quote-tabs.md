@@ -4,12 +4,12 @@ category: marketing
 structure: monolithic
 status: approved
 spec_version: 1
-checksum: dc0a2d5d7d93402ca7a9c89a3dc2bccaf32b6692217bb2811839f8cd6dfaeeeb
+checksum: c637a814bbe9c49a87249efffa70c5439ef8fb38536111cea77a919361fc25a4
 figma:
   url: https://www.figma.com/design/aerxJReCkLz3x3z29IERE9/Assets?node-id=2240-47648
   node_id: 2240:47648
 created: 2026-09-30
-last_updated: 2026-09-30
+last_updated: 2026-10-01
 ---
 
 # Quote Tabs — Component Spec
@@ -18,7 +18,7 @@ last_updated: 2026-09-30
 
 A testimonial band a reader browses by client: the selected client's quotation featured at the top in the client's own colours, and a wall of client cards below it that is the selector itself — clicking a card brings that client's quotation in. It is the band a page reaches for when several customers have one strong sentence each and only one of them should be read at a time.
 
-The band owns the selection and nothing else. The featured quotation is `quote` in its `highlight` register, and every card is the same framed cell `logo-wall` draws, so a quotation and a client card look the same here as everywhere else on the page. The quotation travels sideways in the direction of the choice — a card later in the wall brings its quotation in from the right, an earlier one from the left — so the reader feels the wall as a sequence.
+The band owns the selection and nothing else. The featured quotation is `quote` in its `highlight` register, and every card is the same framed cell `logo-wall` draws, so a quotation and a client card look the same here as everywhere else on the page. The quotation travels sideways in the direction of the choice — a card later in the wall brings its quotation in from the right, an earlier one from the left — so the reader feels the wall as a sequence. Left alone it moves through the clients on its own, the way `media-tabs` does: a hairline along the panel's bottom edge fills toward the next client, and the band holds still while the reader points at it or works it from the keyboard.
 
 ## When to use
 
@@ -40,14 +40,15 @@ The band owns the selection and nothing else. The featured quotation is `quote` 
 - `card-grid` — the framed grid the cards are laid out on.
 - `frame-box` — the registration frame the quotation panel is drawn in, with the same corner marks as the cards below it; also what a page wraps the band in to close its outer edges.
 - `quote-carousel` — the same testimonials as a row the reader scrolls through, every one visible.
+- `media-tabs` — the same timer and progress hairline, for claims paired with a medium.
 
 ## Best practices
 
 - Give the wall a full row: six clients fill it from `lg` up and three from below `sm`, so six or twelve leave no empty cell.
 - Give every item a `logo` in the client's own colours; it is drawn as-is on its card and in the featured quotation, so pick artwork that carries its own contrast on both themes. Without one, `mark` names a one-ink mark from the brand registry instead.
 - Let `clientName` default to the registry's label for `mark`; set it when the item has only a `logo`, or a client the registry does not carry. It is the card's accessible name, so it is never optional in practice.
-- Keep each quotation to one or two sentences, verbatim, without typed quotation marks — `quote` draws its own glyph. The panel holds the tallest quotation's height for all of them, so one much longer quotation leaves the shorter ones floating in space.
-- Leave the selection to the reader. The band never advances on its own.
+- Keep each quotation to one or two sentences, verbatim, without typed quotation marks — `quote` draws its own glyph. The panel holds the tallest quotation's height for all of them and floors the attribution and the `actions` control, so one much longer quotation opens a wide gap under every shorter one.
+- Keep each quotation readable inside `autoPlayInterval`; raise the interval before shortening a verbatim quotation, and turn `autoPlay` off when the band sits beside other moving content.
 
 ## Usage
 
@@ -104,12 +105,15 @@ import QuoteTabs from '@aziontech/webkit/quote-tabs'
 |---|---|---|---|---|
 | `items` | `QuoteTabsItem[]` | `[]` | false | The clients, in wall order; each item is `{ logo?, mark?, clientName?, shape?, text, name?, jobTitle?, photo? }` — the URL of the client's colour logo, the registry name of its one-ink mark, its name in prose, how tall its mark sits on the card, the quotation, who said it, their role and their likeness. |
 | `ariaLabel` | `string` | `''` | false | Accessible name for the wall of client cards. |
+| `autoPlay` | `boolean` | `true` | false | Advances to the next client on a timer; pauses under the pointer or keyboard focus, restarts its count on a selection, and never runs under reduced motion. |
+| `autoPlayInterval` | `number` | `5000` | false | Milliseconds each client is held before the band advances. |
+| `showProgress` | `boolean` | `true` | false | Advances a hairline along the quotation panel's bottom edge while the timer runs. |
 
 ## v-model
 
 | Model | Type | Default | Emits | Notes |
 |---|---|---|---|---|
-| `v-model` | `number` | `0` | `update:modelValue` | Index of the selected client, two-way through `defineModel`; left unbound the band keeps its own selection, starting on the first card. A click or an arrow key writes the new index back. |
+| `v-model` | `number` | `0` | `update:modelValue` | Index of the selected client, two-way through `defineModel`; left unbound the band keeps its own selection, starting on the first card. A click, an arrow key or the timer writes the new index back. |
 
 ## Events
 
@@ -129,8 +133,12 @@ _No plain events — selection flows through `v-model`._
 - `data-active` marks the selected card; it sits on `--bg-selected` while the others rest on the plain surface
 - Hover paints `--bg-hover` as a `::before` ghost layer over a resting card; the selected card shows no ghost. A card reveals no link label — clicking it selects, it never navigates
 - The panel renders every item's `quote` with `kind="highlight"` in one shared grid cell; only the selected one is visible, and the others are transparent (`opacity-0`), `inert` and `aria-hidden`. The panel is therefore always as tall as the tallest quotation, so its height never changes between clients or during a change. They are hidden by opacity, never by `visibility: hidden`: a registry mark's SVG clip path is resolved by id from its first copy in the document, and a clip path inside a `visibility: hidden` subtree clips every copy of that mark to nothing
+- The visible quotation fills that held height, and `quote` gives the slack to the quotation itself, so the attribution and the `actions` control sit on the same line for every client and a change of client never moves them
 - `data-direction` on the panel is `forward` when the new card sits after the previous one in the wall and `back` when it sits before it; an arrow key that wraps keeps its own direction (`ArrowRight` from the last card to the first is `forward`, `ArrowLeft` from the first to the last is `back`). It decides which side the quotations travel to and from
-- During a change the leaving quotation travels out and the entering one travels in within that same cell, so the wall below never moves
+- `data-autoplay` marks the root while the timer runs. It runs when `autoPlay` is on, the band has more than one client and the reader has not asked for reduced motion; it pauses while the pointer rests on the band or keyboard focus (`:focus-visible`) is inside it, and resumes on leave
+- Every change of client restarts the count, whether the timer, a click, an arrow key or a bound `modelValue` made it; clicking the selected card restarts it too, and a click keeps the timer running with the pointer still on the band. The timer moves to the next card and wraps from the last to the first, travelling `forward`
+- While the timer runs and `showProgress` is on, a `--primary` hairline grows along the panel's bottom edge, across the panel's full width rather than the quotation's padded column, and reaches the right edge as the band advances; it is decorative and `aria-hidden`
+- During a change the leaving quotation travels out first and the entering one travels in once it has gone, both within that same cell, so two quotations never overlap and the wall below never moves
 - A client's mark resolves in order: its `logo`, drawn as-is in its own colours; else its registry `mark`, drawn in one ink; else its name, in heading type, on the card and in the panel alike
 - `shape` on a card's mark is `wide` (the default, 20px tall) or `compact` (28px), matching `logo-wall`
 - When the `actions` slot is filled, its content is rendered under the featured quotation's attribution through `quote`'s `actions` slot, and again in each stacked copy so the held height includes it; the stacked copies stay `inert` and `aria-hidden`, so the control is reachable once. When the slot is empty, no actions area is drawn
@@ -141,9 +149,10 @@ _No plain events — selection flows through `v-model`._
 
 | Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
 |---|---|---|---|
-| selection change — quotation entering | `transition-[translate,opacity] duration-moderate-02 ease-productive-entrance`, from one `--spacing-xl` to the right (`forward`) or left (`back`) at zero opacity | `moderate-02` (240ms) + `productive-entrance` | `motion-reduce:transition-none motion-reduce:translate-x-0` (swaps instantly) |
-| selection change — quotation leaving | `transition-[translate,opacity] duration-moderate-01 ease-productive-exit`, to one `--spacing-xl` to the left (`forward`) or right (`back`) at zero opacity | `moderate-01` (150ms) + `productive-exit` | `motion-reduce:transition-none motion-reduce:translate-x-0` (swaps instantly) |
+| selection change — quotation entering, after the leaving one has gone | `transition-[translate,opacity] duration-moderate-01 ease-productive-entrance`, from one `--spacing-xl` to the right (`forward`) or left (`back`) at zero opacity | `moderate-01` (150ms) + `productive-entrance` | `motion-reduce:transition-none motion-reduce:duration-0 motion-reduce:translate-x-0` (swaps instantly) |
+| selection change — quotation leaving | `transition-[translate,opacity] duration-moderate-01 ease-productive-exit`, to one `--spacing-xl` to the left (`forward`) or right (`back`) at zero opacity | `moderate-01` (150ms) + `productive-exit` | `motion-reduce:transition-none motion-reduce:duration-0 motion-reduce:translate-x-0` (swaps instantly) |
 | selection change (card) | `transition-colors duration-moderate-01 ease-out` | `moderate-01` (150ms) | `motion-reduce:transition-none` |
+| autoplay progress | `transition-[width] duration-fast-01 ease-linear` on the hairline, its width set from the elapsed share of `autoPlayInterval` | `fast-01` (70ms) + linear | `motion-reduce:transition-none` (and the timer never runs under reduced motion, so no hairline is drawn) |
 | hover (card) | `before:transition-opacity before:duration-fast-02 before:ease-productive-entrance` on the ghost layer | `fast-02` (110ms) + `productive-entrance` | `motion-reduce:before:transition-none` |
 
 ## Tokens
@@ -156,6 +165,7 @@ _No plain events — selection flows through `v-model`._
 | selected card surface | `var(--bg-selected)` |
 | hovered card surface (ghost layer) | `var(--bg-hover)` |
 | one-ink mark | `var(--text-default)` |
+| progress hairline | `var(--primary)` |
 | typography (mark fallback) | `.text-heading-xxs` |
 | spacing (card inset, x) | `var(--spacing-md)` |
 | spacing (panel inset, every side) | `var(--spacing-xl)` |
@@ -174,7 +184,8 @@ _No plain events — selection flows through `v-model`._
 - Keyboard map: `Tab` reaches the selected card only (roving tabindex); `ArrowRight` / `ArrowLeft` move to the next / previous card in wall order and select it, wrapping at either end; `Home` / `End` select the first / last card; `Shift+Tab` from the wall moves back to the panel.
 - ARIA: only the selected quotation is exposed; the others in the panel's cell are `inert` (so never focusable or reachable) and `aria-hidden` (so never announced). The wall is a `role="tablist"` named by `ariaLabel`; each card is a native `<button role="tab">` named by the client's name through `aria-label`, with `aria-selected` and `aria-controls` pointing at the panel; the card's artwork is decorative (`alt=""` or `aria-hidden`), since the name is its label. The panel is `role="tabpanel"` with `tabindex="0"` and `aria-labelledby` pointing at the selected card; its colour logo carries the client name as its alternative text, and a one-ink mark is `aria-hidden` with the quotation's attribution naming the company. Ids come from `useId()`. The leaving quotation stays `aria-hidden` while it travels out, so a screen reader reads one quotation.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): colour logos are logotypes, exempt under WCAG 1.4.11, and are drawn as the consumer supplies them; the name fallback is `var(--text-default)` on both card surfaces.
-- `motion-reduce:transition-none motion-reduce:translate-x-0` on the travelling quotation, `motion-reduce:transition-none` on the card surface and `motion-reduce:before:transition-none` on its ghost layer; the band never advances on its own.
+- `motion-reduce:transition-none motion-reduce:duration-0 motion-reduce:translate-x-0` on the travelling quotation (the zero duration is what lets the out-in swap finish at once instead of waiting out the leave), `motion-reduce:transition-none` on the card surface and `motion-reduce:before:transition-none` on its ghost layer; under reduced motion the band never advances on its own.
+- Pause (WCAG 2.2.2): the timer stops while the pointer rests on the band or keyboard focus is inside it, so a reader holds a quotation by pointing at it or reaching the band with `Tab`; `autoPlay` off removes the movement entirely. The panel is not a live region, so a change the timer makes is never announced over the reader.
 - Touch target ≥40×40 px: each card is a full 3:2 cell of the wall, well above 40px on every breakpoint.
 
 ## Stories (Storybook)

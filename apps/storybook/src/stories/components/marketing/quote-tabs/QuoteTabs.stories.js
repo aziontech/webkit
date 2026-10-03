@@ -150,6 +150,35 @@ const meta = {
         defaultValue: { summary: "''" }
       }
     },
+    autoPlay: {
+      control: 'boolean',
+      description:
+        'Advances to the next client on a timer; pauses under the pointer or keyboard focus, restarts its count on a selection, and never runs under reduced motion.',
+      table: {
+        category: 'props',
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'true' }
+      }
+    },
+    autoPlayInterval: {
+      control: { type: 'number', min: 1000, step: 500 },
+      description: 'Milliseconds each client is held before the band advances.',
+      table: {
+        category: 'props',
+        type: { summary: 'number' },
+        defaultValue: { summary: '5000' }
+      }
+    },
+    showProgress: {
+      control: 'boolean',
+      description:
+        "Advances a hairline along the quotation panel's bottom edge while the timer runs, so a reader can see why the band is about to move.",
+      table: {
+        category: 'props',
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'true' }
+      }
+    },
     'onUpdate:modelValue': {
       action: 'update:modelValue',
       description:
@@ -160,7 +189,10 @@ const meta = {
   args: {
     modelValue: 0,
     items: CLIENTS,
-    ariaLabel: ARIA
+    ariaLabel: ARIA,
+    autoPlay: true,
+    autoPlayInterval: 5000,
+    showProgress: true
   }
 }
 
@@ -208,7 +240,7 @@ export const Default = {
     docs: {
       description: {
         story:
-          'Six clients, one quotation on screen at a time. Click a card, or focus the wall and use the arrow keys — `Tab` reaches only the selected card, `ArrowRight` and `ArrowLeft` move and select, wrapping at either end, and `Home` / `End` jump to the first and last client. A card later in the wall brings its quotation in from the right and sends the old one out to the left; an earlier card reverses it. The selected card sits on `--bg-selected`. Fourbank passes a registry `mark` instead of a `logo`, so it is drawn in the theme’s one ink.'
+          'Six clients, one quotation on screen at a time. Left alone the band moves to the next client every five seconds, with an orange hairline filling along the panel’s bottom edge; pointing at the band or reaching it with `Tab` holds the quotation. Click a card, or focus the wall and use the arrow keys — `Tab` reaches only the selected card, `ArrowRight` and `ArrowLeft` move and select, wrapping at either end, and `Home` / `End` jump to the first and last client. A card later in the wall brings its quotation in from the right and sends the old one out to the left; an earlier card reverses it. The selected card sits on `--bg-selected`. Fourbank passes a registry `mark` instead of a `logo`, so it is drawn in the theme’s one ink.'
       },
       source: { code: toSfc(DEFAULT_IMPORTS, DEFAULT_MARKUP) }
     }

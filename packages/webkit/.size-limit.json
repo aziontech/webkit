@@ -143,7 +143,7 @@
   {
     "name": "quote-tabs",
     "path": "src/components/marketing/quote-tabs/quote-tabs.vue",
-    "limit": "19 KB",
+    "limit": "20.75 KB",
     "entryOnly": true
   }
 ]

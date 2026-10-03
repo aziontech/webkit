@@ -1,6 +1,6 @@
 import { fireEvent, render, waitFor } from '@testing-library/vue'
-import { describe, expect, it } from 'vitest'
-import { h } from 'vue'
+import { afterEach, describe, expect, it, vi } from 'vitest'
+import { h, nextTick } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
 import QuoteTabs, { type QuoteTabsItem } from './quote-tabs.vue'
@@ -41,6 +41,8 @@ const ITEMS: QuoteTabsItem[] = [
 ]
 
 const LIVE_TRANSITION = { stubs: { transition: false } }
+
+const INTERVAL = 5000
 
 function settle(): Promise<void> {
   return new Promise((resolve) => globalThis.setTimeout(resolve, 400))
@@ -96,6 +98,16 @@ async function press(container: Element, key: string, expected: number): Promise
   await fireEvent.keyDown(tabsOf(container)[selectedIndex(container)], { key })
   await waitFor(() => expect(globalThis.document.activeElement).toBe(tabsOf(container)[expected]))
 }
+
+function progressOf(container: Element): globalThis.HTMLElement | null {
+  return panelOf(container).querySelector<globalThis.HTMLElement>(
+    `[data-testid="${TESTID}__progress"]`
+  )
+}
+
+afterEach(() => {
+  vi.useRealTimers()
+})
 
 describe('QuoteTabs', () => {
   it('renders the band under the default testid', () => {
@@ -212,7 +224,7 @@ describe('QuoteTabs', () => {
     expect(panelOf(container)).toHaveAttribute('aria-labelledby', tabsOf(container)[2].id)
   })
 
-  it('hides the leaving quotation from assistive tech while it travels out', async () => {
+  it('hides the leaving quotation from assistive tech and brings the next one in after it', async () => {
     const { container } = render(QuoteTabs, {
       props: { items: ITEMS },
       global: LIVE_TRANSITION
@@ -226,9 +238,7 @@ describe('QuoteTabs', () => {
     const staying = layersOf(container).filter(
       (layer) => layer.getAttribute('aria-hidden') !== 'true'
     )
-    expect(staying.map((child) => child.querySelector('blockquote')?.textContent?.trim())).toEqual([
-      ITEMS[1].text
-    ])
+    expect(staying).toHaveLength(0)
     expect(leaving).toHaveLength(1)
     expect(leaving[0].querySelector('blockquote')?.textContent?.trim()).toBe(ITEMS[0].text)
 
@@ -399,6 +409,114 @@ describe('QuoteTabs', () => {
 
     expect(filledFigure?.children.length).toBe((bareFigure?.children.length ?? 0) + 1)
     expect(bare.querySelector('a')).toBeNull()
+  })
+
+  it('marks a running band with data-autoplay and draws a decorative hairline in the panel', () => {
+    const { container, getByTestId } = render(QuoteTabs, { props: { items: ITEMS } })
+
+    expect(getByTestId(TESTID).getAttribute('data-autoplay')).not.toBeNull()
+    expect(progressOf(container)).not.toBeNull()
+    expect(progressOf(container)).toHaveAttribute('aria-hidden', 'true')
+  })
+
+  it('advances to the next client once the interval elapses', async () => {
+    vi.useFakeTimers()
+    const { container, emitted } = render(QuoteTabs, {
+      props: { items: ITEMS, autoPlayInterval: INTERVAL }
+    })
+
+    vi.advanceTimersByTime(INTERVAL / 2)
+    await nextTick()
+
+    expect(selectedIndex(container)).toBe(0)
+    expect(progressOf(container)?.style.width).toBe('50%')
+
+    vi.advanceTimersByTime(INTERVAL / 2)
+    await nextTick()
+
+    expect(selectedIndex(container)).toBe(1)
+    expect(emitted()['update:modelValue']).toEqual([[1]])
+    expect(progressOf(container)?.style.width).toBe('0%')
+  })
+
+  it('wraps from the last client to the first, travelling forward', async () => {
+    vi.useFakeTimers()
+    const { container } = render(QuoteTabs, {
+      props: { items: ITEMS, autoPlayInterval: INTERVAL }
+    })
+
+    vi.advanceTimersByTime(INTERVAL * ITEMS.length)
+    await nextTick()
+
+    expect(selectedIndex(container)).toBe(0)
+    expect(panelOf(container)).toHaveAttribute('data-direction', 'forward')
+  })
+
+  it('never moves on its own and draws no hairline when autoPlay is off', async () => {
+    vi.useFakeTimers()
+    const { container, getByTestId } = render(QuoteTabs, {
+      props: { items: ITEMS, autoPlay: false, autoPlayInterval: INTERVAL }
+    })
+
+    expect(getByTestId(TESTID).getAttribute('data-autoplay')).toBeNull()
+    expect(progressOf(container)).toBeNull()
+
+    vi.advanceTimersByTime(INTERVAL * 3)
+    await nextTick()
+
+    expect(selectedIndex(container)).toBe(0)
+  })
+
+  it('draws no hairline when showProgress is off, while the band still advances', async () => {
+    vi.useFakeTimers()
+    const { container } = render(QuoteTabs, {
+      props: { items: ITEMS, showProgress: false, autoPlayInterval: INTERVAL }
+    })
+
+    expect(progressOf(container)).toBeNull()
+
+    vi.advanceTimersByTime(INTERVAL)
+    await nextTick()
+
+    expect(selectedIndex(container)).toBe(1)
+  })
+
+  it('pauses while the pointer rests on the band, and resumes on leave', async () => {
+    vi.useFakeTimers()
+    const { container, getByTestId } = render(QuoteTabs, {
+      props: { items: ITEMS, autoPlayInterval: INTERVAL }
+    })
+    const root = getByTestId(TESTID)
+
+    await fireEvent.pointerEnter(root)
+    expect(root.getAttribute('data-autoplay')).toBeNull()
+
+    vi.advanceTimersByTime(INTERVAL * 2)
+    await nextTick()
+    expect(selectedIndex(container)).toBe(0)
+
+    await fireEvent.pointerLeave(root)
+    expect(root.getAttribute('data-autoplay')).not.toBeNull()
+  })
+
+  it('restarts the count on a click and keeps running with the pointer on the band', async () => {
+    vi.useFakeTimers()
+    const { container, getByTestId } = render(QuoteTabs, {
+      props: { items: ITEMS, autoPlayInterval: INTERVAL }
+    })
+    const root = getByTestId(TESTID)
+
+    vi.advanceTimersByTime(INTERVAL / 2)
+    await fireEvent.pointerEnter(root)
+    await fireEvent.click(tabsOf(container)[2])
+
+    expect(root.getAttribute('data-autoplay')).not.toBeNull()
+    expect(progressOf(container)?.style.width).toBe('0%')
+
+    vi.advanceTimersByTime(INTERVAL)
+    await nextTick()
+
+    expect(selectedIndex(container)).toBe(3)
   })
 
   it('has no a11y violations', async () => {
