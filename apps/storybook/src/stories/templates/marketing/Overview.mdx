@@ -1,0 +1,86 @@
+import { Meta } from '@storybook/blocks'
+
+<Meta
+  title="Templates/Marketing/Overview"
+  parameters={{
+    options: { showPanel: false },
+    controls: { disable: true },
+    actions: { disable: true },
+    docs: {
+      description: {
+        component:
+          'The sections the marketing site is built from, registered as templates: each one a whole band, composed from the marketing components, ready to paste into a page.'
+      }
+    }
+  }}
+/>
+
+# Marketing templates
+
+The [Marketing components](?path=/docs/marketing-overview--documentation) are the primitives: a
+frame, a grid, a title, a quote. A template is one level up. It is a **whole section of a
+landing page**, already composed from those primitives the way the site composes it, with the
+site's own copy standing in for yours.
+
+Every template here was lifted from a page of the sample site (`/site`). Its description names
+the pages that render it, and its "Show code" panel is a single SFC that imports only
+`@aziontech/webkit` components and assets, so it runs as pasted.
+
+## How a page is assembled
+
+A landing page is one hero, then one framed column of sections, then a close.
+
+1. A **hero** opens the page, full-bleed, and draws the page's first rule.
+2. Every section below it stacks inside one `SectionContainer max-width="site"`, which draws the column's sides.
+3. Sections are separated by `<SectionGap hatch />`. The templates below the hero show one above and one below so you can see the band the way a page frames it; on a page, two neighbours share a single gap.
+4. The page ends with a call to action and a hatched closing frame that meets the footer's rule.
+
+## Social Proof
+
+The sections that back a claim with customers, analysts and certifications.
+
+- [ClientQuotes](?path=/docs/templates-marketing-social-proof-clientquotes--documentation) — client testimonials as tabs, one highlighted quote at a time with a progress hairline. The quote band to use.
+- [LogoWallQuote](?path=/docs/templates-marketing-social-proof-logowallquote--documentation) — a titled wall of client marks beside one signed quote.
+- [RecognitionMarquee](?path=/docs/templates-marketing-social-proof-recognitionmarquee--documentation) — analyst recognitions running as a marquee.
+- [ClientMosaic](?path=/docs/templates-marketing-social-proof-clientmosaic--documentation) — a bento mosaic of client tiles, two of them telling their story.
+- [ComplianceBadges](?path=/docs/templates-marketing-social-proof-compliancebadges--documentation) — the certifications the platform holds, as a badge grid.
+
+## Heroes
+
+The bands that open a page.
+
+- [Hero](?path=/docs/templates-marketing-heroes-hero--documentation) — the opening bands the site uses: centred with the client strip, a large title band, the animated pixel floor, copy beside art, and copy on top of the Workloads scene.
+- [HeroForm](?path=/docs/templates-marketing-heroes-heroform--documentation) — the lead-capture opening, where the form sits in the hero beside a sticky headline (Contact).
+
+## Content
+
+The sections that state what the product does, what it costs and where to go next, in copy, cells and links.
+
+- [CapabilityGrid](?path=/docs/templates-marketing-content-capabilitygrid--documentation) — three or six capabilities on a frame grid, right under a solution page's hero.
+- [UseCaseLinks](?path=/docs/templates-marketing-content-usecaselinks--documentation) — a grid of linked use cases, one topic per cell.
+- [PlatformDirectory](?path=/docs/templates-marketing-content-platformdirectory--documentation) — the platform's primitives as a directory of links in four columns.
+- [ResourceGrid](?path=/docs/templates-marketing-content-resourcegrid--documentation) — the "go deeper" band of linked guides.
+- [PricingPlans](?path=/docs/templates-marketing-content-pricingplans--documentation) — the plan cards with the billing-period toggle.
+- [ComparePlans](?path=/docs/templates-marketing-content-compareplans--documentation) — the feature matrix under the plan cards: every plan's allowance, product by product.
+- [ComparisonTable](?path=/docs/templates-marketing-content-comparisontable--documentation) — capability-by-capability comparison against an alternative.
+- [FaqSection](?path=/docs/templates-marketing-content-faqsection--documentation) — the page's questions, answered in place.
+- [ClosingCallToAction](?path=/docs/templates-marketing-content-closingcalltoaction--documentation) — the closing ask and the hatched frame that ends the column.
+
+## Network
+
+The sections that argue the distributed infrastructure itself.
+
+- [NetworkSection](?path=/docs/templates-marketing-network-networksection--documentation) — the distributed-infrastructure argument over the network map, with a floor of client outcomes, as on Home.
+- [StatsBand](?path=/docs/templates-marketing-network-statsband--documentation) — the network's headline figures at big-number scale: latency, availability, data centers.
+
+## Media
+
+The sections led by a picture of the claim: art, code, or media that changes with the claim.
+
+- [MediaSplitStack](?path=/docs/templates-marketing-media-mediasplitstack--documentation) — a sticky stack of text-and-art bands, the core of a product page.
+- [MediaSplitBand](?path=/docs/templates-marketing-media-mediasplitband--documentation) — one framed claim beside one picture, with one or two actions.
+- [FeatureTiles](?path=/docs/templates-marketing-media-featuretiles--documentation) — a row of media tiles, each a picture over a run-in caption.
+- [CodeSplit](?path=/docs/templates-marketing-media-codesplit--documentation) — copy beside a code sample: the Functions code split, and the Application Accelerator and Workloads variants.
+- [StickyScrollCode](?path=/docs/templates-marketing-media-stickyscrollcode--documentation) — capabilities pinned while the page scrolls, with the code for the open one on the right.
+- [FeatureTabs](?path=/docs/templates-marketing-media-featuretabs--documentation) — a self-advancing tab band, one feature at a time beside its media.
+- [TemplateGallery](?path=/docs/templates-marketing-media-templategallery--documentation) — a scrolling wall of deployable templates over the compatible-stack ticker.
