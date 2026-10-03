@@ -14372,11 +14372,23 @@
       "kind": "asset",
       "treeShakeableImport": "@aziontech/webkit/assets/locaweb-extended-color.svg"
     },
+    "assets/madeiramadeira-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/madeiramadeira-extended-color.svg",
+      "target": "./src/assets/logos/clients/madeiramadeira-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/madeiramadeira-extended-color.svg"
+    },
     "assets/madeiramadeira-extended-reversed.svg": {
       "import": "@aziontech/webkit/assets/madeiramadeira-extended-reversed.svg",
       "target": "./src/assets/logos/clients/madeiramadeira-extended-reversed.svg",
       "kind": "asset",
       "treeShakeableImport": "@aziontech/webkit/assets/madeiramadeira-extended-reversed.svg"
+    },
+    "assets/madeiramadeira-symbol-color.svg": {
+      "import": "@aziontech/webkit/assets/madeiramadeira-symbol-color.svg",
+      "target": "./src/assets/logos/clients/madeiramadeira-symbol-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/madeiramadeira-symbol-color.svg"
     },
     "assets/madeiramadeira-symbol-reversed.svg": {
       "import": "@aziontech/webkit/assets/madeiramadeira-symbol-reversed.svg",
