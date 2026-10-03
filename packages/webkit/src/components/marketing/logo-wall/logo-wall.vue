@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import FrameBox from '../../layout/frame-box/frame-box.vue'
   import CardGrid from '../card-grid/card-grid.vue'
   import CardGridCell from '../card-grid/card-grid-cell/card-grid-cell.vue'
 
@@ -51,7 +52,7 @@
   }>()
 
   const slots = defineSlots<{
-    /** Content set beside the wall from `lg` up, such as one customer's quotation, on a padded canvas panel. */
+    /** Content set beside the wall from `lg` up, such as one customer's quotation, on a padded canvas panel framed like the cells. */
     aside?(): unknown
     /** One cell's mark, replacing the image built from the item — for a mark that owns its own theming; it carries its own alternative text. */
     mark?(props: { item: LogoItem; index: number }): unknown
@@ -154,11 +155,16 @@
       </CardGridCell>
     </CardGrid>
 
-    <div
+    <FrameBox
       v-if="hasAside"
-      class="flex min-w-0 items-center bg-(--bg-canvas) p-(--spacing-xl) lg:contain-size *:flex-1"
+      borders="none"
+      marks="all"
+      :data-seam="hasItems || null"
+      class="min-w-0 bg-(--bg-canvas) lg:contain-size data-[seam]:max-lg:border-t data-[seam]:lg:border-l"
     >
-      <slot name="aside" />
-    </div>
+      <div class="flex h-full min-w-0 items-center p-(--spacing-xl) *:flex-1">
+        <slot name="aside" />
+      </div>
+    </FrameBox>
   </section>
 </template>
