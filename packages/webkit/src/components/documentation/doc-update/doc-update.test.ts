@@ -110,7 +110,9 @@ describe('DocUpdate', () => {
       const root = getByTestId('documentation-doc-update')
       expect(root.id).toBe('september-2-2026-terraform-provider')
       expect(root.getAttribute('aria-labelledby')).toBe('september-2-2026-terraform-provider-label')
-      expect(getByRole('heading', { level: 2 }).id).toBe('september-2-2026-terraform-provider-label')
+      expect(getByRole('heading', { level: 2 }).id).toBe(
+        'september-2-2026-terraform-provider-label'
+      )
       expect(getByRole('link', { name: 'Terraform Provider' }).getAttribute('href')).toBe(
         '#september-2-2026-terraform-provider'
       )
