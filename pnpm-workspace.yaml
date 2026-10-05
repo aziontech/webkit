@@ -40,3 +40,11 @@ overrides:
   ip-address: ">=10.7.1 <11" # patched 10.7.1 (Address6.isLinkLocal); bounded to 10.x — node-gyp chain via fantasticon
   vitest: ">=4.1.11 <5" # GHSA-82fw-gwwq-j7x9 (path traversal / arbitrary file read via @vitest/mocker redirect mock), patched 4.1.11; already inside the ^4.1.x devDependency range — lockfile was just stale
   "@vitest/mocker": ">=4.1.11 <5" # GHSA-82fw-gwwq-j7x9, same fix as vitest above; bounded to 4.x
+  http-cache-semantics: ">=4.3.0 <5" # GHSA-ch52-4w7c-c8xp (cross-user cached responses), fixed in 4.3.0; bounded to 4.x — make-fetch-happen (node-gyp via fantasticon) pins ^4
+
+auditConfig:
+  ignoreGhsas:
+    # braces <=3.0.3 stack exhaustion on deeply nested patterns (2026-10-05): no patched
+    # release exists (3.0.3 is latest). Dev tooling only — root, storybook, icons-gallery via
+    # chokidar/micromatch/fast-glob; @aziontech/webkit does not ship it. Drop once braces ships a fix.
+    - GHSA-vfj7-8cjw-p6xm
