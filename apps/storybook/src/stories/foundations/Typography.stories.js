@@ -2,7 +2,7 @@ import { PageContainer, PageHeader } from '../../foundations/components/layout/i
 import TypographyPreview from '../../foundations/components/TypographyPreview.vue'
 
 export default {
-  title: 'Foundations/Typography',
+  title: 'Foundations/Design Tokens/Typography',
   parameters: {
     options: { showPanel: false },
     controls: { disable: true },
