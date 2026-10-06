@@ -45,7 +45,11 @@
   // One parse feeds the rail; the body parses the same source for itself. Deriving the
   // outline from the page's own markdown is what makes it impossible for the rail to name a
   // section the page does not have, or to miss one an author just added.
-  const headings = computed(() => collectHeadings(parseMdx(source.value).nodes))
+  const parsed = computed(() => parseMdx(source.value))
+
+  const headings = computed(() => collectHeadings(parsed.value.nodes))
+
+  const showToc = computed(() => String(parsed.value.frontmatter.toc) !== 'false')
 
   const chrome = computed(() => docsPageChrome(route.path))
 
@@ -86,7 +90,10 @@
       />
     </div>
 
-    <template #toc>
+    <template
+      v-if="showToc"
+      #toc
+    >
       <!-- Outline, then the complementary groups, then — at the FOOT of the column — the
            offer. The rail serves the page before it asks for anything, so the one commercial
            block on the screen is both the last thing in the order and the furthest thing

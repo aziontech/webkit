@@ -1299,7 +1299,7 @@ export const docsNavSections = [
         id: 'changelog',
         label: 'Changelog',
         children: [
-          { id: 'changelog-2', label: 'Latest updates' },
+          { id: 'changelog-2', label: 'Latest updates', href: '/site/docs/release-notes' },
           { id: 'changelog-archive', label: 'Changelog previous years' }
         ]
       },

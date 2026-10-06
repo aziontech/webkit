@@ -337,7 +337,7 @@
       title: 'Release notes',
       description: 'What changed in Azion products, as it ships.',
       icon: 'pi pi-megaphone',
-      href: '#changelog'
+      href: '/site/docs/release-notes'
     },
     {
       title: 'Blog',
