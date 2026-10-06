@@ -147,6 +147,11 @@
     "entryOnly": true
   },
   {
+    "name": "sticky-stack",
+    "path": "src/components/marketing/sticky-stack/sticky-stack.vue",
+    "limit": "5.75 KB"
+  },
+  {
     "name": "texture-material",
     "path": "src/components/marketing/texture-material/texture-material.vue",
     "limit": "2 KB"

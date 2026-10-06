@@ -281,6 +281,7 @@
     "./sidebar-footer": "./src/components/layout/sidebar/sidebar-footer.vue",
     "./hero": "./src/components/marketing/hero/index.ts",
     "./hero-root": "./src/components/marketing/hero/hero.vue",
+    "./sticky-stack": "./src/components/marketing/sticky-stack/sticky-stack.vue",
     "./breadcrumb": "./src/components/navigation/breadcrumb/index.js",
     "./breadcrumb-item": "./src/components/navigation/breadcrumb-item/breadcrumb-item.vue",
     "./link": "./src/components/navigation/link/link.vue",
