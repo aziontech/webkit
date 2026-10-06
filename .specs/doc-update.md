@@ -4,16 +4,16 @@ category: documentation
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: ddf9b2e9cc329df833061be42a330e001de0ac625d5109413d6aacd98a812cea
+checksum: 6edb07607eadcb76e6083c5aade6855e7a2cace9c1bdc7d880d61a4812819639
 created: 2026-08-22
-last_updated: 2026-09-25
+last_updated: 2026-10-05
 ---
 
 # DocUpdate — Component Spec
 
 ## Purpose
 
-One entry in a changelog: what shipped, when, and under which version. The release's identity sits in a left column — the date, the version under it, the tags under that — the notes sit on the right, and a rule runs between them for the length of the entry and bridges the block gap to the next one, so a set of entries reads as one continuous timeline rather than a stack of boxes. The label is an `h2` and a link to its own id, because every entry is a URL somebody sends — the id is the label slugified, unless an explicit `anchor` overrides it.
+One entry in a changelog: what shipped, when, and under which version. The release's identity sits in a left column — the date, the version under it, the tags under that — the notes sit on the right, and a rule runs between them for the length of the entry and bridges the block gap to the next one, so a set of entries reads as one continuous timeline rather than a stack of boxes. The label is an `h2` and a link to its own id, because every entry is a URL somebody sends — the id is the label slugified, unless an explicit `anchor` overrides it. Given a `title`, the entry becomes a release: the label turns into a plain date beside a node on the rule, and the title takes the `h2`, the anchor and the tags, sized above every heading the notes carry.
 
 ## When to use
 
@@ -29,13 +29,14 @@ One entry in a changelog: what shipped, when, and under which version. The relea
 ## Related
 
 - `DocProse` — the contract around it: `data-doc-block` takes the block rung of the spacing ladder, and `data-doc-chrome` keeps prose rules off the label column.
-- `Tag` — renders the entry's tags row (`severity="secondary"`, small, rounded).
+- `Tag` — renders the entry's tags row (`severity="secondary"`): small and rounded in the label column, medium with the default shape under a `title`.
 - `use-heading-nav` — the composable the label anchor calls. A page that owns its scroll container provides a scroller-aware handler with `provideHeadingNav`; rendered outside a provider, the injected default is a no-op — never a throw — and the browser's native hash navigation takes over.
 
 ## Best practices
 
 - Put the date (or release name) in `label` and the version in `description` — the left edge is what a reader scans, so the label carries the identity.
-- Keep headings inside an entry one level below the label: the label is the entry's `h2`.
+- Give each release its own entry with a `title` when one date ships several things — one title per entry, the date repeated, rather than several product headings inside one entry.
+- Keep headings inside an entry one level below the heading: the label (or the `title`, when set) is the entry's `h2`.
 - Set `anchor` only when two entries share a label; otherwise let the id derive from the label so shared links match what readers see.
 
 ## Usage
@@ -64,6 +65,7 @@ One entry in a changelog: what shipped, when, and under which version. The relea
 | Prop          | Type       | Default | Required | JSDoc                                                                                              |
 | ------------- | ---------- | ------- | -------- | -------------------------------------------------------------------------------------------------- |
 | `label`       | `string`   | `''`    | false    | The entry's name — a date, a release name. Also its anchor.                                        |
+| `title`       | `string`   | `''`    | false    | The release's heading, shown above the notes. The label becomes the date beside it.                |
 | `description` | `string`   | `''`    | false    | Secondary line under the label; usually the version.                                               |
 | `tags`        | `string[]` | `[]`    | false    | Short labels categorising the entry: a product, an area, a kind of change.                         |
 | `anchor`      | `string`   | `''`    | false    | Anchor override; wins over the slug derived from the label. Set it when two entries share a label. |
@@ -81,10 +83,11 @@ One entry in a changelog: what shipped, when, and under which version. The relea
 ## States
 
 - Visual states: `default`, plus `hover` / `focus-visible` on the label anchor — the label underlines and the chain glyph fades in
-- Anchor derivation: an explicit `anchor` prop wins; otherwise the id is the `label` slugified (inline markup stripped, lowercased, kebab-cased). The `h2` takes the same id with a `-label` suffix, and the section's `aria-labelledby` points at it
+- Anchor derivation: an explicit `anchor` prop wins; otherwise the id is the `label` slugified (inline markup stripped, lowercased, kebab-cased), or the `label` and `title` slugified together when a `title` is set, so entries sharing a date stay distinct. The `h2` takes the same id with a `-label` suffix, and the section's `aria-labelledby` points at it
 - Heading navigation degrades gracefully: the anchor calls the handler a page provided via `provideHeadingNav`; outside a provider the injected default is a no-op — activation never throws, and native hash navigation handles the jump
 - `data-doc-block` + `data-doc-update` mark the entry for `DocProse` block rhythm and let an entry that follows another bridge the rule through the block gap; `data-doc-chrome` keeps prose rules off the label column
 - Below `md` the columns stack and the rule drops; from `md` up the label column sticks (`md:sticky`) while the notes scroll past
+- Titled (`title` set, `data-titled` on the root and notes column): the label renders as a date, not a heading, centred on the title's first line; a decorative node sits on the rule at the same line (`md` up); the title is the `h2` and self-link, the tags move under it, and consecutive titled entries are padded apart below the notes
 
 ## Motion & Animations
 
@@ -94,30 +97,34 @@ One entry in a changelog: what shipped, when, and under which version. The relea
 
 ## Tokens
 
-| Region                          | Token (DESIGN.md)                                                                      |
-| ------------------------------- | -------------------------------------------------------------------------------------- |
-| typography (label)              | `.text-heading-xs`                                                                     |
-| typography (description)        | `.text-body-xs`                                                                        |
-| typography (chain glyph)        | `.text-label-md`                                                                       |
-| text (label)                    | `var(--text-default)`                                                                  |
-| text (description, chain glyph) | `var(--text-muted)`                                                                    |
-| rule (between the columns)      | `var(--border-default)`                                                                |
-| underline (label hover)         | `var(--border-strong)`                                                                 |
-| ring (anchor focus)             | `var(--ring-color)`                                                                    |
-| shape (anchor focus outline)    | `var(--shape-flat)`                                                                    |
-| spacing                         | `var(--spacing-lg)` / `var(--spacing-sm)` / `var(--spacing-xs)` / `var(--spacing-xxs)` |
-| tags row                        | `Tag`'s own `severity="secondary"` tokens                                              |
+| Region                          | Token (DESIGN.md)                                                                                                                  |
+| ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| typography (label)              | `.text-heading-xs`                                                                                                                 |
+| typography (date, titled)       | `.text-heading-xxs`                                                                                                                |
+| typography (title)              | `.text-heading-xl` below `sm`, `.text-heading-md` from `sm`                                                                        |
+| typography (description)        | `.text-label-code-sm`                                                                                                              |
+| typography (chain glyph)        | `.text-label-md`                                                                                                                   |
+| text (label)                    | `var(--text-default)`                                                                                                              |
+| text (description, chain glyph) | `var(--text-muted)`                                                                                                                |
+| rule (between the columns)      | `var(--border-default)`                                                                                                            |
+| node (titled, on the rule)      | `var(--border-strong)` / `var(--bg-canvas)` / `var(--radius-sm)`                                                                   |
+| underline (label hover)         | `var(--border-strong)`                                                                                                             |
+| ring (anchor focus)             | `var(--ring-color)`                                                                                                                |
+| shape (anchor focus outline)    | `var(--shape-flat)`                                                                                                                |
+| spacing                         | `var(--spacing-xl)` / `var(--spacing-lg)` / `var(--spacing-md)` / `var(--spacing-sm)` / `var(--spacing-xs)` / `var(--spacing-xxs)` |
+| tags row                        | `Tag`'s own `severity="secondary"` tokens                                                                                          |
 
 ## Theme gaps
 
-| Figma variable | Temporary primitive | Follow-up |
-| -------------- | ------------------- | --------- |
-| _none_         | —                   | —         |
+| Figma variable     | Temporary primitive | Follow-up                                                                                                              |
+| ------------------ | ------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| node corner radius | `var(--radius-sm)`  | No `--shape-*` step fits a 12px marker: `--shape-elements` (6px) turns it into a circle. Propose a marker shape token. |
 
 ## Accessibility (WCAG 2.1 AA)
 
-- The label is a real `h2` inside a `section` whose `aria-labelledby` points at it, so every entry is a named region and joins the page outline and the "On this page" rail.
-- Keyboard map: `Tab` reaches the label anchor; `Enter` follows it — through the page's provided heading-nav handler, or native hash navigation without one. Nothing else in the entry's chrome is interactive.
+- The label is a real `h2` inside a `section` whose `aria-labelledby` points at it, so every entry is a named region and joins the page outline and the "On this page" rail. With a `title`, the title is that `h2` and the date is plain text, so the region is named by what shipped.
+- The titled node on the rule is decorative (`aria-hidden`).
+- Keyboard map: `Tab` reaches the heading anchor (the label, or the title when set); `Enter` follows it — through the page's provided heading-nav handler, or native hash navigation without one. Nothing else in the entry's chrome is interactive.
 - Visible focus: the anchor takes `focus-visible:outline-2 focus-visible:outline-offset-2` in the ring token.
 - The chain glyph is decorative (`aria-hidden`) and revealed on `focus-visible` as well as hover, so the self-link affordance is not pointer-only.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons).
@@ -127,6 +134,7 @@ One entry in a changelog: what shipped, when, and under which version. The relea
 
 - Default — a single entry inside `DocProse`: label, version, tags, notes.
 - Changelog — composite story with three consecutive entries, newest first. Justified in writing here because the rule that bridges the block gap only exists when one entry follows another — no single-entry story can show the timeline reading, or that the first entry's rule does not extend upward.
+- Releases — composite story with consecutive titled entries, two sharing a date. Justified in writing here because the titled layout (node on the rule, title over its tags, the padding between entries, the date-plus-title anchors) is a second reading of the component that neither untitled story shows.
 
 ## Constraints — DO NOT
 
