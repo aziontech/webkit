@@ -274,5 +274,10 @@
     "path": "src/components/marketing/quote-tabs/quote-tabs.vue",
     "limit": "20.75 KB",
     "entryOnly": true
+  },
+  {
+    "name": "network-map",
+    "path": "src/components/content/network-map/network-map.vue",
+    "limit": "6.5 KB"
   }
 ]

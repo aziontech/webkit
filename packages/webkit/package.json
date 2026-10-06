@@ -148,6 +148,7 @@
     "./currency": "./src/components/content/currency/currency.vue",
     "./illustration": "./src/components/content/illustration/illustration.vue",
     "./kbd": "./src/components/content/kbd/kbd.vue",
+    "./network-map": "./src/components/content/network-map/network-map.vue",
     "./log-view": "./src/components/code/log-view/log-view.vue",
     "./log-view-content": "./src/components/code/log-view/log-view-content.vue",
     "./log-view-footer": "./src/components/code/log-view/log-view-footer.vue",
