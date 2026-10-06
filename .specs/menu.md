@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5993-33335
   node_id: '5993:33335'
-checksum: 2158d19c763d437d59628991dcc3cfb23c709eccfa6e1a84d0515d2288752c40
+checksum: 8423e16d0f9e7f78e779848368bf14f0fcf9d181bbe6887df8aaaadd0b390dd1
 created: 2026-08-03
-last_updated: 2026-08-31
+last_updated: 2026-10-01
 ---
 
 # Menu — Component Spec
@@ -337,6 +337,12 @@ say) can persist the list and hand it back, which per-sub local state cannot sur
 |---|---|---|
 | `default` | — | The composed anatomy. Rendered **before** the `groups` tree, not instead of it — so a `Menu.Back` can accompany a data-driven menu, which is the one row `groups` cannot express (a drilled level would otherwise have no pointer route back). |
 
+## Exposed
+
+| Method | Notes |
+|---|---|
+| `pop()` | Leaves the current level exactly as `Menu.Back` does — the leave motion, the stack update through `update:path`, and focus returned to the trigger that owns the level. For a host that renders its own way back outside a level: a server-rendered page that draws its tree at the root (a drill level renders through a Teleport only the client has) and mounts the stack it sits on only when the reader leaves, then pops it. No-op at the root level. |
+
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `selected`, `disabled`
@@ -382,7 +388,7 @@ sub-components) to get this — see Related.
 | drill pop — level enters | `translate-x` -100% → 0 on `data-motion="pop"`, **fully opaque** — the arriving surface must cover what leaves behind it, so the enter phase transitions `translate` only | `duration['moderate-02']` · `curve['productive-entrance']` | `motion-reduce:transition-none motion-reduce:transform-none` |
 | drill pop — level leaves | `translate-x` 0 → 100% **and `opacity` 1 → 0** on `data-motion="pop"` | `duration['moderate-01']` · `curve['productive-exit']` | `motion-reduce:transition-none motion-reduce:transform-none` |
 | **level** restored from `v-model:path`, **with `enterOnMount`** (a level on the stack at first render) | same as *drill push — level enters*: `SubContent` withholds the level for one tick after its Teleport becomes renderable, so it arrives through the ordinary **enter** transition rather than `appear`; the root sets `data-motion="push"` on mount so the surfaces and timing match a real push | `duration['moderate-02']` · `curve['productive-entrance']` | `motion-safe:` on the from-class, so the reduced-motion render never gets the off-canvas frame |
-| **root** restored with `enterOnMount` (an *empty* stack at first render) | `translate-x` -100% → 0, opaque, played by the `<Transition :appear>` in `Group`; the root sets `data-motion="pop"` on mount. The rail arriving is an entrance too — coming back out of a level, the groups have no rendered off-canvas position to tween from, because the host remounted. `Group` **can** use `appear` (unlike `SubContent`) because it is not teleported: it renders in the component's own first render, which is exactly what `appear` covers | `duration['moderate-02']` · `curve['productive-entrance']` | `motion-safe:` on the from-class |
+| **root** restored with `enterOnMount` (an *empty* stack at first render) | `translate-x` -100% → 0, opaque, played by `appear` on the `<Transition>` in `Group`; the root sets `data-motion="pop"` on mount. The rail arriving is an entrance too — coming back out of a level, the groups have no rendered off-canvas position to tween from, because the host remounted. `Group` **can** use `appear` (unlike `SubContent`) because it is not teleported: it renders in the component's own first render, which is exactly what `appear` covers. It is bound through `v-bind` of an object that carries `appear` only while it applies, **never as a declared `:appear`**: the SSR compiler wraps any Transition that declares `appear` — whatever its runtime value — in a `<template>`, so the served markup of every group would be inert and a server-rendered menu would paint empty until hydration | `duration['moderate-02']` · `curve['productive-entrance']` | `motion-safe:` on the from-class |
 | either, restored **without** `enterOnMount` (the default) | none — the menu renders in place | — | — |
 
 **The direction is derived, not passed.** A menu that mounts inside a level was travelled *into*
