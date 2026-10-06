@@ -279,6 +279,7 @@
     "./sidebar-group": "./src/components/layout/sidebar/sidebar-group.vue",
     "./sidebar-header": "./src/components/layout/sidebar/sidebar-header.vue",
     "./sidebar-footer": "./src/components/layout/sidebar/sidebar-footer.vue",
+    "./ticker": "./src/components/marketing/ticker/ticker.vue",
     "./bento-grid": "./src/components/marketing/bento-grid/index.ts",
     "./bento-grid-root": "./src/components/marketing/bento-grid/bento-grid.vue",
     "./bento-grid-cell": "./src/components/marketing/bento-grid/bento-grid-cell/bento-grid-cell.vue",

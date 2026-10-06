@@ -135,6 +135,12 @@
     "limit": "3 KB"
   },
   {
+    "name": "ticker",
+    "path": "src/components/marketing/ticker/ticker.vue",
+    "limit": "4.5 KB",
+    "entryOnly": true
+  },
+  {
     "name": "card-grid-root",
     "path": "src/components/marketing/card-grid/card-grid.vue",
     "limit": "1.5 KB"
