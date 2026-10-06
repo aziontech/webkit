@@ -145,7 +145,10 @@
       :aria-hidden="!isOpen || undefined"
       class="grid min-w-0 grid-rows-[0fr] transition-[grid-template-rows] duration-moderate-02 ease-expressive-entrance data-open:grid-rows-[1fr] motion-reduce:transition-none"
     >
-      <div class="min-w-0 overflow-hidden">
+      <div
+        :data-collapsible="collapsible || null"
+        class="min-w-0 data-collapsible:overflow-hidden"
+      >
         <div
           :data-open="isOpen || null"
           class="flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none"
