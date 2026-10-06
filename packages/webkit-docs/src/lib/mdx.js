@@ -550,7 +550,10 @@ function dedupeHeadingIds(nodes, seen = new Map()) {
  * @param {object} node - a parsed `component` node named `Update`.
  * @returns {string} the slug, or an empty string when the entry has no label.
  */
-const updateAnchor = (node) => String(node.props?.anchor || slugify(node.props?.label ?? ''))
+const updateAnchor = (node) => {
+  const { anchor, label = '', title = '' } = node.props ?? {}
+  return String(anchor || slugify(title ? `${label} ${title}` : label))
+}
 
 /**
  * Walk the tree and collect every heading, so the page can build its
