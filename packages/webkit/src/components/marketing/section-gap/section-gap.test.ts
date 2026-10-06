@@ -2,13 +2,13 @@ import { composeStories } from '@storybook/vue3'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/layout/section-gap/SectionGap.stories'
+import * as stories from '../../../../../../apps/storybook/src/stories/components/marketing/section-gap/SectionGap.stories'
 import { expectNoA11yViolations } from '../../../test/axe'
 import SectionGap from './section-gap.vue'
 
 const { Default, Hatch, Sizes } = composeStories(stories)
 
-const TESTID = 'layout-section-gap'
+const TESTID = 'marketing-section-gap'
 const FRAME_TESTID = 'layout-frame-box'
 
 describe('SectionGap', () => {
@@ -23,15 +23,15 @@ describe('SectionGap', () => {
     const { getByTestId } = render(SectionGap)
     const root = getByTestId(TESTID)
 
-    // flush="top" is subtracted from borders="y", so only the bottom rule is left.
     expect(root).toHaveAttribute('data-flush', 'top')
     expect(root).toHaveAttribute('data-borders', 'bottom')
-    // Only the bottom pair of ticks: the section above supplies the shared junction's marks.
     expect(root.getAttribute('data-marks')?.split(' ').sort()).toEqual([
       'bottom-left',
-      'bottom-right'
+      'bottom-right',
+      'top-left',
+      'top-right'
     ])
-    expect(root.querySelectorAll('span[aria-hidden="true"]')).toHaveLength(2)
+    expect(root.querySelectorAll('span[aria-hidden="true"]')).toHaveLength(4)
   })
 
   it('draws no hatch texture by default', () => {
