@@ -43,7 +43,7 @@
     </span>
     <span
       v-if="showCursor"
-      class="w-1 h-5 shrink-0 relative bg-brand-accent-400 animate-blink"
+      class="w-1 h-5 shrink-0 relative bg-(--accent) animate-blink"
     />
   </div>
 </template>
