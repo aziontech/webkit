@@ -187,7 +187,7 @@
 
   // The swap animates line by line, not as one sliding block: each row enters from
   // the direction of travel with a short per-line delay. `enter` is the marketing
-  // entrance (300ms a line); `swap` is the tab change (24ms a line, capped).
+  // entrance (40ms a line); `swap` is the tab change (24ms a line, capped).
   const lineEnterOffsetClass = computed(() =>
     lineMotionMode.value === 'swap'
       ? panelEnterOffsetClass.value
