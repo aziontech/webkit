@@ -135,6 +135,11 @@
     "limit": "3 KB"
   },
   {
+    "name": "card-grid-root",
+    "path": "src/components/marketing/card-grid/card-grid.vue",
+    "limit": "1.5 KB"
+  },
+  {
     "name": "carousel-root",
     "path": "src/components/marketing/carousel/carousel.vue",
     "limit": "3 KB"
@@ -202,8 +207,7 @@
     "path": "src/components/marketing/embed/embed.vue",
     "limit": "3 KB"
   },
-  {
-  },
+  {},
   {
     "name": "faq",
     "path": "src/components/marketing/faq/faq.vue",
