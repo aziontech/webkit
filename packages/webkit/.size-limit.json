@@ -228,7 +228,6 @@
     "path": "src/components/marketing/embed/embed.vue",
     "limit": "3 KB"
   },
-  {},
   {
     "name": "faq",
     "path": "src/components/marketing/faq/faq.vue",
