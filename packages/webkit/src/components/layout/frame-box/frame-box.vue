@@ -84,8 +84,6 @@
     flushSides.value.size > 0 ? [...flushSides.value].join(' ') : null
   )
 
-  // A frame that paints no hatch of its own defers to a consumer-set `data-hatch`, so a
-  // component drawing the texture itself can still mark the state on this root.
   const hatchAttr = computed(
     () => props.hatch || (attrs['data-hatch'] as string | undefined) || null
   )
