@@ -62,7 +62,7 @@ const shadePaletteSections = shadeScaleKeys
   .filter(Boolean)
 
 export default {
-  title: 'Foundations/Design Tokens/Color',
+  title: 'Foundations/Colors',
   parameters: {
     options: { showPanel: false },
     controls: { disable: true },
@@ -95,7 +95,7 @@ export const Overview = {
     },
     template: /* html */ `
       <PageContainer>
-        <PageHeader title="Color">
+        <PageHeader title="Colors">
           Shared foundations layout using the same header + palette blocks.
           Click a swatch value to copy it. Use semantic tokens in components and keep primitive shades for reference.
         </PageHeader>
