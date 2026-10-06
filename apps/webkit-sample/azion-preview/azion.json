@@ -1,0 +1,63 @@
+{
+  "name": "webkit-sample-preview",
+  "bucket": "webkit-sample-preview",
+  "preset": "vue",
+  "env": "production",
+  "prefix": "preview",
+  "rotate-prefix": false,
+  "not-first-run": true,
+  "function": [],
+  "application": {
+    "id": 1791232171,
+    "name": "webkit-sample-preview"
+  },
+  "domain": {
+    "id": 0,
+    "name": "",
+    "domain_name": "",
+    "url": ""
+  },
+  "rt-purge": {
+    "purge_on_publish": true
+  },
+  "origin": null,
+  "rules-engine": {
+    "created": false,
+    "rules": [
+      {
+        "id": 745833,
+        "name": "Deliver Static Assets",
+        "phase": "request"
+      },
+      {
+        "id": 745834,
+        "name": "Rewrite SPA routes to index.html",
+        "phase": "request"
+      }
+    ]
+  },
+  "cache-settings": [
+    {
+      "id": 357729,
+      "name": "webkit-sample-preview"
+    }
+  ],
+  "workloads": {
+    "id": 1791293431,
+    "name": "webkit-sample-preview",
+    "domains": [],
+    "url": "https://0t6mxfhhxxw.map.azionedge.net",
+    "deployment_id": [
+      {
+        "id": 339326,
+        "name": "webkit-sample-preview"
+      }
+    ]
+  },
+  "connectors": [
+    {
+      "id": 154640,
+      "name": "webkit-sample-preview-storage"
+    }
+  ]
+}

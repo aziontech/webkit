@@ -10,7 +10,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "azion:dev": "azion dev",
-    "deploy": "azion deploy --auto --local"
+    "deploy": "azion deploy --auto --local",
+    "deploy:preview": "./scripts/deploy-preview.sh"
   },
   "dependencies": {
     "@aziontech/icons": "workspace:*",
