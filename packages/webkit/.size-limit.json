@@ -210,6 +210,11 @@
     "limit": "15 KB"
   },
   {
+    "name": "content-columns",
+    "path": "src/components/marketing/content-columns/content-columns.vue",
+    "limit": "4.75 KB"
+  },
+  {
     "name": "illustration",
     "path": "src/components/content/illustration/illustration.vue",
     "limit": "2 KB",

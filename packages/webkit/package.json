@@ -293,6 +293,7 @@
     "./media-tabs": "./src/components/marketing/media-tabs/media-tabs.vue",
     "./embed": "./src/components/marketing/embed/embed.vue",
     "./faq": "./src/components/marketing/faq/faq.vue",
+    "./content-columns": "./src/components/marketing/content-columns/content-columns.vue",
     "./breadcrumb": "./src/components/navigation/breadcrumb/index.js",
     "./breadcrumb-item": "./src/components/navigation/breadcrumb-item/breadcrumb-item.vue",
     "./link": "./src/components/navigation/link/link.vue",
