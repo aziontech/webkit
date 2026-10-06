@@ -19,6 +19,7 @@ import { danger } from '../tokens/theme/feedback/danger.js'
 import { info } from '../tokens/theme/feedback/info.js'
 import { success } from '../tokens/theme/feedback/success.js'
 import { warning } from '../tokens/theme/feedback/warning.js'
+import { illustration } from '../tokens/theme/illustration.js'
 import { primary } from '../tokens/theme/primary.js'
 import { ring } from '../tokens/theme/ring.js'
 import { secondary } from '../tokens/theme/secondary.js'
@@ -34,7 +35,22 @@ const getValueByPath = (obj, path) =>
     return undefined
   }, obj)
 
-const resolveRef = (ref, surfacesResolved) => {
+const semanticGroups = {
+  primary,
+  secondary,
+  accent,
+  background,
+  border,
+  text,
+  ring,
+  codeSintax,
+  success,
+  warning,
+  danger,
+  info
+}
+
+const resolveRef = (ref, surfacesResolved, semanticResolved = {}) => {
   if (ref.startsWith('primitives.')) {
     const v = getValueByPath(colorPrimitives, ref.slice('primitives.'.length))
     return typeof v === 'string' || typeof v === 'number' ? String(v) : null
@@ -55,14 +71,17 @@ const resolveRef = (ref, surfacesResolved) => {
     const key = ref.slice('theme.surfaces.'.length)
     return surfacesResolved[key] ?? null
   }
+  if (ref.startsWith('theme.')) {
+    return semanticResolved[ref.slice('theme.'.length)] ?? null
+  }
   return null
 }
 
-const resolveGroup = (group, surfacesResolved, variant, unresolved) => {
+const resolveGroup = (group, surfacesResolved, variant, unresolved, semanticResolved) => {
   const result = {}
   Object.entries(group).forEach(([key, value]) => {
     if (!isTokenRef(value)) return
-    const resolved = resolveRef(value.__ref, surfacesResolved)
+    const resolved = resolveRef(value.__ref, surfacesResolved, semanticResolved)
     if (resolved != null) result[`--${key}`] = String(resolved)
     else unresolved.push(`[${variant}] --${key} → ${value.__ref}`)
   })
@@ -84,21 +103,19 @@ const compileVariant = (variant, unresolved) => {
     vars[`--${k}`] = v
   })
 
-  const groups = [
-    primary[variant],
-    secondary[variant],
-    accent[variant],
-    background[variant],
-    border[variant],
-    text[variant],
-    ring[variant],
-    codeSintax[variant],
-    success[variant],
-    warning[variant],
-    danger[variant],
-    info[variant]
-  ]
-  groups.forEach((g) => Object.assign(vars, resolveGroup(g, surfacesResolved, variant, unresolved)))
+  const semanticResolved = {}
+  Object.entries(semanticGroups).forEach(([name, group]) => {
+    const resolved = resolveGroup(group[variant], surfacesResolved, variant, unresolved)
+    Object.assign(vars, resolved)
+    Object.entries(resolved).forEach(([key, value]) => {
+      semanticResolved[`${name}.${key.slice(2)}`] = value
+    })
+  })
+
+  Object.assign(
+    vars,
+    resolveGroup(illustration[variant], surfacesResolved, variant, unresolved, semanticResolved)
+  )
   return vars
 }
 

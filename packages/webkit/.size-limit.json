@@ -36,12 +36,12 @@
   },
   {
     "name": "section-title",
-    "path": "src/components/content/section-title/section-title.vue",
-    "limit": "4 KB"
+    "path": "src/components/marketing/section-title/section-title.vue",
+    "limit": "3.5 KB"
   },
   {
     "name": "hero-title",
-    "path": "src/components/content/hero-title/hero-title.vue",
+    "path": "src/components/marketing/hero/hero-title/hero-title.vue",
     "limit": "2.5 KB"
   },
   {
@@ -133,6 +133,43 @@
     "name": "resizable-panel-root",
     "path": "src/components/layout/resizable-panel/resizable-panel.vue",
     "limit": "3 KB"
+  },
+  {
+    "name": "hero",
+    "path": "src/components/marketing/hero/index.ts",
+    "limit": "4 KB",
+    "entryOnly": true
+  },
+  {
+    "name": "hero-root",
+    "path": "src/components/marketing/hero/hero.vue",
+    "limit": "3.25 KB",
+    "entryOnly": true
+  },
+  {
+    "name": "sticky-stack",
+    "path": "src/components/marketing/sticky-stack/sticky-stack.vue",
+    "limit": "5.75 KB"
+  },
+  {
+    "name": "texture-material",
+    "path": "src/components/marketing/texture-material/texture-material.vue",
+    "limit": "2 KB"
+  },
+  {
+    "name": "topic",
+    "path": "src/components/marketing/topic/topic.vue",
+    "limit": "1.5 KB"
+  },
+  {
+    "name": "section-module",
+    "path": "src/components/marketing/section-module/section-module.vue",
+    "limit": "4.25 KB"
+  },
+  {
+    "name": "section-container",
+    "path": "src/components/marketing/section-container/section-container.vue",
+    "limit": "1.5 KB"
   },
   {
     "name": "quote-carousel",
