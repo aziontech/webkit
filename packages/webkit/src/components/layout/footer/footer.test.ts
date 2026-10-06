@@ -159,16 +159,11 @@ describe('Footer', () => {
       expect(getByTestId('layout-footer__signature')).toBeTruthy()
     })
 
-    // The gutters and the closing band are page material with no content of their
-    // own, so they must not reach the a11y tree — a screen reader announcing three
-    // empty groups at the end of every page is the failure this pins. They exist only
-    // in the `site` placement, which is where this renders them.
-    it('keeps the hatched gutters and closing band out of the a11y tree', () => {
-      const { getAllByTestId, getByTestId } = renderComposedSite()
+    it('keeps the hatched gutters out of the a11y tree', () => {
+      const { getAllByTestId } = renderComposedSite()
       for (const gutter of getAllByTestId('layout-footer__gutter')) {
         expect(gutter.getAttribute('aria-hidden')).toBe('true')
       }
-      expect(getByTestId('layout-footer__closing').getAttribute('aria-hidden')).toBe('true')
     })
   })
 
@@ -187,16 +182,20 @@ describe('Footer', () => {
       expect(getByTestId('layout-footer').getAttribute('data-kind')).toBe('site')
     })
 
-    it('draws no frame in the content placement — no gutters, no closing band', () => {
-      const { queryAllByTestId, queryByTestId } = renderComposed()
+    it('draws no frame in the content placement — no gutters, no rules, no marks', () => {
+      const { queryAllByTestId, getByTestId } = renderComposed()
       expect(queryAllByTestId('layout-footer__gutter')).toHaveLength(0)
-      expect(queryByTestId('layout-footer__closing')).toBeNull()
+      const frame = getByTestId('layout-footer__frame')
+      expect(frame.getAttribute('data-borders')).toBe('none')
+      expect(frame.getAttribute('data-marks')).toBe('none')
     })
 
-    it('draws both gutters and the closing band in the site placement', () => {
+    it('frames the column in the site placement, with both gutters beside it', () => {
       const { getAllByTestId, getByTestId } = renderComposedSite()
       expect(getAllByTestId('layout-footer__gutter')).toHaveLength(2)
-      expect(getByTestId('layout-footer__closing')).toBeTruthy()
+      const frame = getByTestId('layout-footer__frame')
+      expect(frame.getAttribute('data-borders')).toBe('left right')
+      expect(frame.getAttribute('data-marks')).toBe('top-left top-right bottom-left bottom-right')
     })
 
     // Both trees are on the page at once, so every query is scoped to its own
