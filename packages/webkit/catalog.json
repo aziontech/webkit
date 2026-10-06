@@ -9871,6 +9871,742 @@
       "parent": "sidebar",
       "treeShakeableImport": "@aziontech/webkit/sidebar-footer"
     },
+    "media-split": {
+      "import": "@aziontech/webkit/media-split",
+      "target": "./src/components/marketing/media-split/media-split.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/media-split",
+      "category": "marketing",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "default": "—",
+          "required": "true",
+          "doc": "Headline of the band, rendered as its `h2`."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Supporting paragraph under the headline; overridden by the default slot."
+        },
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Short uppercase overline rendered above the headline."
+        },
+        {
+          "name": "src",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "URL of the band's image; ignored when the `media` slot is filled."
+        },
+        {
+          "name": "alt",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Alternative text describing what the image shows."
+        },
+        {
+          "name": "kind",
+          "type": "MediaSplitKind",
+          "default": "'media-end'",
+          "required": "false",
+          "doc": "Which end the media sits on: the closing cell from `lg` up, or the lower one when the band is vertical. `media-end` puts the copy first."
+        },
+        {
+          "name": "orientation",
+          "type": "MediaSplitOrientation",
+          "default": "'horizontal'",
+          "required": "false",
+          "doc": "Axis the band splits on. `horizontal` sets the cells side by side from `lg` up; `vertical` holds them stacked at every width."
+        },
+        {
+          "name": "fill",
+          "type": "MediaSplitFill",
+          "default": "'canvas'",
+          "required": "false",
+          "doc": "The copy cell's fill. `canvas` lets the band sit in the page column; `surface` lifts it onto its own plate. The media cell follows `mediaFill`."
+        },
+        {
+          "name": "mediaFill",
+          "type": "MediaSplitFill",
+          "default": "'surface'",
+          "required": "false",
+          "doc": "The media cell's fill. `surface` sets the asset on its own plate, one step off the page; `canvas` lets the whole band sit on the page."
+        },
+        {
+          "name": "framed",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "Draw the band's own registration frame: its top and bottom rules, with the copy and the media framed as two cells, each with its four marks. Turn it off when the page already wraps the band in a frame."
+        },
+        {
+          "name": "divided",
+          "type": "boolean",
+          "default": "true",
+          "required": "false",
+          "doc": "Draw the seam between the copy and the media. Turn it off for a band whose two halves should read as one plate."
+        },
+        {
+          "name": "headingLevel",
+          "type": "MediaSplitHeadingLevel",
+          "default": "2",
+          "required": "false",
+          "doc": "Level of the band's headline element. Drop it to `3` when the band is a sub-band of a section a `section-title` has already opened with its `h2`, so the document outline stays in order."
+        },
+        {
+          "name": "texture",
+          "type": "TextureMaterialKind",
+          "default": "'grid'",
+          "required": "false",
+          "doc": "Texture the media half is grounded with; `none` leaves the cell bare."
+        },
+        {
+          "name": "textureSize",
+          "type": "TextureMaterialSize",
+          "default": "'medium'",
+          "required": "false",
+          "doc": "Pitch of the ground's tiling — how far apart its cells sit."
+        },
+        {
+          "name": "textureFade",
+          "type": "TextureMaterialFade",
+          "default": "'vignette'",
+          "required": "false",
+          "doc": "How the ground fades out before the cell's edges."
+        },
+        {
+          "name": "mediaPadded",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "Inset the media from the cell's edges. An exported asset carries its own air and runs flush; a screenshot or a composed panel wants the inset."
+        },
+        {
+          "name": "mediaHref",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "URL the band links to. With it set the media cell is one link named by the band's `title`, a click anywhere else on the band follows it, and hovering the band reveals the chevron affordance and the hover state of its link actions."
+        },
+        {
+          "name": "align",
+          "type": "MediaSplitAlign",
+          "default": "'top'",
+          "required": "false",
+          "doc": "Where the copy sits down its cell. `top` holds the copy at the cell's top and floors the actions so consecutive bands align on them; `center` gathers the copy and its actions into one block on the cell's vertical middle."
+        },
+        {
+          "name": "size",
+          "type": "MediaSplitSize",
+          "default": "'medium'",
+          "required": "false",
+          "doc": "Type scale and air of the copy. `medium` sets the headline at heading-md for a band beside other content; `large` sets it at heading-xl with a larger description and pads the copy cell a step wider, for a band that carries only its headline and actions."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "Description body; replaces the `description` prop when provided."
+        },
+        {
+          "name": "content",
+          "scope": "—",
+          "notes": "Further copy-column content under the description — an inventory, a list of surfaces — inside the paragraph's own measure."
+        },
+        {
+          "name": "media",
+          "scope": "—",
+          "notes": "The band's media; replaces the image built from `src`."
+        },
+        {
+          "name": "actions",
+          "scope": "—",
+          "notes": "Optional controls under the copy, floored so consecutive bands align on them. Small buttons: `kind=\"secondary\"` for the action, `kind=\"outlined\"` for a second beside it, `icon=\"pi pi-chevron-right\"` + `icon-position=\"trailing\"` when it leaves the page."
+        }
+      ],
+      "purpose": "A two-column band pairing a block of copy with a piece of media — a screenshot, diagram or short video — each holding half the frame. It is the workhorse section of a product page: one claim, one picture of the claim, repeated down the page with the sides alternating. It is a **sub-section**, not a section header, and its typography says so: the headline is `heading-md` against `section-title`'s `heading-xl`, because these bands sit _inside_ a section that a `section-title` has already opened. A band that needs the larger weight is opening a section, and wants `section-title`. Typographic weight and heading level are separate choices. The band sets its headline at `heading-md`, or `heading-xl` when `size` is `large`; `headingLevel` decides whether that headline is an `h2` or an `h3`, so a band nested under a section that already has its own `h2` does not open a second one at the same level. The seam between the two cells is the grid's own one-pixel gap over a rule fill, so neither cell draws a border and the hairline lands in the same place whichever side the media is on — horizontal while the band is stacked, vertical once it splits. `divided` drops it for a band whose two halves should read as one plate. Whether the band ever splits is `orientation`'s call. `horizontal` is the band proper: stacked below `lg`, two cells from `lg` up. `vertical` holds the stacked form at every width, and `kind` then picks whether the media sits above the copy or below it rather than left or right — the shape a band takes in a column too narrow to carry two halves.",
+      "useWhen": [
+        "To pair one capability's explanation with a screenshot or diagram of it.",
+        "Down a product page, alternating `kind` so consecutive bands mirror each other.",
+        "With `framed` off inside a page column that already draws the frame, and on when the band stands alone.",
+        "With `heading-level=\"3\"` whenever a `section-title` has already opened the section the band sits in.",
+        "With `orientation=\"vertical\"` in a column too narrow for two halves — a page aside, a grid cell — where the band would otherwise squeeze both.",
+        "Whenever the media carries as much of the message as the copy does."
+      ],
+      "avoidWhen": [
+        "For copy with no media → use `section-title`, which is the header band.",
+        "For the closing ask → use `call-to-action`; for a mid-page announcement → use `banner`.",
+        "For several short claims side by side → use `topic` in a `card-grid`.",
+        "For a picture with no explanation → use `illustration` directly."
+      ],
+      "related": [
+        "section-title` — the copy-only section header.",
+        "topic` — the smaller unit when a page needs several claims rather than one.",
+        "illustration` — the media itself; a scene dropped in the `media` slot is what the band's ground is drawn for.",
+        "texture-material` — the material the media half is grounded with; compose it yourself when a band needs a different one.",
+        "frame-box` — the frame the band is drawn with. With `framed` on, or inside a `band-stack`, each of the band's two cells is its own `frame-box`.",
+        "band-stack` — the run that stacks these bands; inside it every band frames its two cells, left and right, under the rules the stack draws."
+      ],
+      "bestPractices": [
+        "By default the band draws no frame of its own: the rule and the corner marks belong to the `section-module` or `frame-box` that the page assembles it into, so a band placed in a framed column never lands a second hairline on the column's own.",
+        "A run of bands goes in a `band-stack`, not in a frame per band: the stack draws each band's rules and the band frames its two cells. Leave `framed` off there, or the band draws a second set of rules over the stack's.",
+        "Alternate `kind` down a page so consecutive bands mirror; two identical bands in a row read as one.",
+        "Reach for `orientation=\"vertical\"` when the column is too narrow to carry two halves, not to vary the rhythm of a wide page — a vertical band across a full-width page reads as a card that lost its grid.",
+        "Composed into a grid of cells, the band fills the cell it is given: the copy column floors its actions, so a row of vertical bands lines up on its buttons. Let the grid own the seams there — `divided` off, `framed` off.",
+        "Keep the seam unless the two halves are meant to read as one thing: `divided` off on a `surface` fill is a single plate with a picture in it, and on a `canvas` fill it is two cells that merely touch.",
+        "Keep the copy to a headline and a short paragraph — the media is the other half of the argument, not decoration beside a wall of text.",
+        "Give the media a real `alt` that says what it shows, not what it is. \"Deployment succeeded in 1.2s\" beats \"screenshot\".",
+        "Reach for an official `illustration` scene before a screenshot: it is vector, it follows the canvas the library is drawn on, and its transparent ground is what the band's lattice is there for. `src` is the plain-picture path — a raster covers the ground rather than sitting on it.",
+        "Use the `media` slot when the media is not a plain image — a video, a chart or a composed figure belongs there rather than in `src`.",
+        "Let the band's own ground carry a scene with a transparent canvas: an `illustration` needs nothing behind it. Quiet or kill the lattice from the call site with `--texture-ink`, which the layer inherits from the band's root; a media element that paints its own opaque backdrop covers it anyway."
+      ]
+    },
+    "ticker": {
+      "import": "@aziontech/webkit/ticker",
+      "target": "./src/components/marketing/ticker/ticker.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/ticker",
+      "category": "marketing",
+      "structure": "monolithic",
+      "status": "approved",
+      "props": [
+        {
+          "name": "kind",
+          "type": "'plain' | 'band'",
+          "default": "'plain'",
+          "required": "false",
+          "doc": "Whether the strip paints its own ground; `band` fills it with the page canvas so a textured hero cannot show through the marks, and the floor still reads continuous with the band above it."
+        },
+        {
+          "name": "marks",
+          "type": "string[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "Registry names of the marks rendered in the row, in order; an unregistered name renders as its own typographic wordmark so the row stays complete."
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Overline above the row, stating the claim the marks make."
+        },
+        {
+          "name": "size",
+          "type": "'small' | 'medium'",
+          "default": "'medium'",
+          "required": "false",
+          "doc": "Mark scale; `medium` is the marketing band and climbs 32/40/48 px by device class, `small` is a flat 24 px for a column."
+        },
+        {
+          "name": "duration",
+          "type": "number",
+          "default": "0",
+          "required": "false",
+          "doc": "Seconds for one full pass; left at `0` it is derived from the number of marks so every strip moves at one speed."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name for the row of marks, announced instead of an unnamed list."
+        }
+      ],
+      "purpose": "An endlessly looping row of brand marks — the trust strip that names the companies running on the platform, and the stack strip that names the frameworks and clouds a workload already uses. The marks come from the package's own registry and are drawn in one ink, so a strip reads as a list rather than as a dozen competing palettes.",
+      "useWhen": [
+        "Under a hero, to name the companies a product already serves (\"Trusted by mission-critical workloads\").",
+        "To state compatibility as a list of framework, cloud and tooling marks (\"Your Stack, Your Way\").",
+        "Whenever the set of marks is longer than the row that holds it and no single mark has to be read."
+      ],
+      "avoidWhen": [
+        "When every mark must be seen → use `logo-wall`, which wraps into a grid and never moves.",
+        "When the reader chooses how far to go through browsable content → use `carousel`, which is user-driven and never advances on its own.",
+        "For a mark a reader must act on, such as a partner directory → the strip is decorative motion, so put linked marks in a `logo-wall`.",
+        "For one mark in its own right (a header lockup, a client story card) → use `brand`."
+      ],
+      "related": [
+        "logo-wall` — the static, wrapping grid of consumer-supplied marks; reach for the strip only when the wall would be too long.",
+        "carousel` — the user-driven snap scroller; this one moves on its own and holds no essential content.",
+        "brand` — the Azion lockup, for the product's own mark rather than a third party's.",
+        "overline` — renders the `label` above the row."
+      ],
+      "bestPractices": [
+        "Name marks from the registry rather than passing artwork: the registry is what keeps one company's mark identical on every surface, and a name with no entry still renders as its own wordmark so a strip is never incomplete.",
+        "Let `duration` derive itself. The component holds speed constant rather than duration, so an eleven-mark strip and a thirty-mark strip advance at the same rate; pass a number only to slow one deliberately.",
+        "Keep `label` to the claim the row makes, not to a heading — the strip sits under a hero, and a second heading competes with the one above it.",
+        "Use `size=\"small\"` only where the strip is the quietest thing on the page, such as the floor of a sign-in column; `medium` is the marketing band and carries its own responsive ladder.",
+        "Never put a call to action, a price or anything else a reader needs inside a strip. It scrolls away, and under `prefers-reduced-motion` it becomes a wrapped grid instead."
+      ]
+    },
+    "bento-grid": {
+      "import": "@aziontech/webkit/bento-grid",
+      "target": "./src/components/marketing/bento-grid/index.ts",
+      "kind": "component",
+      "compoundRoot": true,
+      "treeShakeableImport": "@aziontech/webkit/bento-grid-root",
+      "subcomponents": [
+        "@aziontech/webkit/bento-grid-cell"
+      ],
+      "category": "marketing",
+      "structure": "composition",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name for the grid, when the surrounding section does not already name it."
+        },
+        {
+          "name": "columns",
+          "type": "BentoGridColumns",
+          "default": "2",
+          "required": "false",
+          "doc": "How many columns the mosaic lays out from the medium breakpoint up."
+        },
+        {
+          "name": "mobileColumns",
+          "type": "BentoGridMobileColumns",
+          "default": "1",
+          "required": "false",
+          "doc": "How many columns the mosaic holds below the medium breakpoint, where every cell claims one of them."
+        },
+        {
+          "name": "flush",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "The surrounding frame already draws the grid's outer rules: the grid drops its own top and left ones and lays its right and bottom ones onto the frame's, so a framed column keeps one hairline per edge."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The grid's cells, composed as `BentoGrid.Cell` elements in reading order."
+        }
+      ],
+      "purpose": "A mosaic of unequal cells on one set of shared rules: each cell claims a number of columns and rows, and the rules between them are drawn once so the whole block reads as a single framed surface. It is the layout a marketing page uses when several claims deserve different amounts of room — the alternative to a row of identical tiles.",
+      "useWhen": [
+        "When a set of claims is genuinely unequal and one or two deserve more room than the rest.",
+        "As the framed body of a product or platform section, under a `section-title`.",
+        "For a logo wall, a client-story band, or any set where a few members carry a headline and the rest carry only a mark.",
+        "Whenever the cells hold composed content — copy, media, a control — rather than one repeated shape."
+      ],
+      "avoidWhen": [
+        "When every claim carries the same weight → use `card-grid`.",
+        "For a row of measured figures → use `big-numbers`, which already draws this grid for numbers.",
+        "For a single copy-and-media pairing → use `media-split`.",
+        "For a list of questions → use `faq`."
+      ],
+      "related": [
+        "card-grid` — the equal-cell grid with no spans, in the gap or divider register.",
+        "big-numbers` — the same collapsed-rule grid, specialised for figures.",
+        "media-split` — the two-column band when there is one claim, not several.",
+        "frame-box` — the frame each cell is drawn with."
+      ],
+      "bestPractices": [
+        "Size the mosaic so the cells fill the rectangle: count the tracks (`columns` × rows) and check the spans add up, or the grid ends on a gap of bare canvas.",
+        "Keep cells in reading order — the grid auto-places in DOM order, so that order is what a screen reader and a keyboard follow, and it is what puts a cell in the track you meant.",
+        "Compose real elements inside a cell rather than passing a config array; the cell is a slot, and that is the point of it.",
+        "Let the grid draw the rules. Do not add borders inside a cell, or the shared edges double.",
+        "Give a cell `kind=\"none\"` + `padded=\"false\"` when its own content paints the cell — a media layer, a brand fill, or a link that must be the whole tile.",
+        "Inside a framed page column, set `flush` so the column's rules stay one hairline each."
+      ]
+    },
+    "bento-grid-root": {
+      "import": "@aziontech/webkit/bento-grid-root",
+      "target": "./src/components/marketing/bento-grid/bento-grid.vue",
+      "kind": "root",
+      "rootOf": "bento-grid",
+      "treeShakeableImport": "@aziontech/webkit/bento-grid-root",
+      "category": "marketing",
+      "structure": "composition",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name for the grid, when the surrounding section does not already name it."
+        },
+        {
+          "name": "columns",
+          "type": "BentoGridColumns",
+          "default": "2",
+          "required": "false",
+          "doc": "How many columns the mosaic lays out from the medium breakpoint up."
+        },
+        {
+          "name": "mobileColumns",
+          "type": "BentoGridMobileColumns",
+          "default": "1",
+          "required": "false",
+          "doc": "How many columns the mosaic holds below the medium breakpoint, where every cell claims one of them."
+        },
+        {
+          "name": "flush",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "The surrounding frame already draws the grid's outer rules: the grid drops its own top and left ones and lays its right and bottom ones onto the frame's, so a framed column keeps one hairline per edge."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The grid's cells, composed as `BentoGrid.Cell` elements in reading order."
+        }
+      ],
+      "purpose": "A mosaic of unequal cells on one set of shared rules: each cell claims a number of columns and rows, and the rules between them are drawn once so the whole block reads as a single framed surface. It is the layout a marketing page uses when several claims deserve different amounts of room — the alternative to a row of identical tiles.",
+      "useWhen": [
+        "When a set of claims is genuinely unequal and one or two deserve more room than the rest.",
+        "As the framed body of a product or platform section, under a `section-title`.",
+        "For a logo wall, a client-story band, or any set where a few members carry a headline and the rest carry only a mark.",
+        "Whenever the cells hold composed content — copy, media, a control — rather than one repeated shape."
+      ],
+      "avoidWhen": [
+        "When every claim carries the same weight → use `card-grid`.",
+        "For a row of measured figures → use `big-numbers`, which already draws this grid for numbers.",
+        "For a single copy-and-media pairing → use `media-split`.",
+        "For a list of questions → use `faq`."
+      ],
+      "related": [
+        "card-grid` — the equal-cell grid with no spans, in the gap or divider register.",
+        "big-numbers` — the same collapsed-rule grid, specialised for figures.",
+        "media-split` — the two-column band when there is one claim, not several.",
+        "frame-box` — the frame each cell is drawn with."
+      ],
+      "bestPractices": [
+        "Size the mosaic so the cells fill the rectangle: count the tracks (`columns` × rows) and check the spans add up, or the grid ends on a gap of bare canvas.",
+        "Keep cells in reading order — the grid auto-places in DOM order, so that order is what a screen reader and a keyboard follow, and it is what puts a cell in the track you meant.",
+        "Compose real elements inside a cell rather than passing a config array; the cell is a slot, and that is the point of it.",
+        "Let the grid draw the rules. Do not add borders inside a cell, or the shared edges double.",
+        "Give a cell `kind=\"none\"` + `padded=\"false\"` when its own content paints the cell — a media layer, a brand fill, or a link that must be the whole tile.",
+        "Inside a framed page column, set `flush` so the column's rules stay one hairline each."
+      ]
+    },
+    "bento-grid-cell": {
+      "import": "@aziontech/webkit/bento-grid-cell",
+      "target": "./src/components/marketing/bento-grid/bento-grid-cell/bento-grid-cell.vue",
+      "kind": "subcomponent",
+      "parent": "bento-grid",
+      "treeShakeableImport": "@aziontech/webkit/bento-grid-cell"
+    },
+    "call-to-action": {
+      "import": "@aziontech/webkit/call-to-action",
+      "target": "./src/components/marketing/call-to-action/call-to-action.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/call-to-action",
+      "category": "marketing",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "default": "—",
+          "required": "true",
+          "doc": "Headline of the band, rendered as its `h2`."
+        },
+        {
+          "name": "titleMuted",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Second line of the headline, set in muted ink; rendered as a second span of the same `h2`."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Supporting sentence — under the headline in `panel` and `lead`, in the aside cell in `split`; overridden by the default slot."
+        },
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Short uppercase overline rendered above the headline."
+        },
+        {
+          "name": "kind",
+          "type": "CallToActionKind",
+          "default": "'panel'",
+          "required": "false",
+          "doc": "Layout of the band: `panel` sets the copy and its controls on one surface, `split` divides it into a raised lead cell and an aside that each floor their own control, `lead` is that lead cell standing alone with every control in it."
+        },
+        {
+          "name": "framed",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "Draw the band's own registration frame. Turn it off when the page already wraps the band in a frame."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "Description body; replaces the `description` prop when provided."
+        },
+        {
+          "name": "actions",
+          "scope": "—",
+          "notes": "The controls the band exists to offer; in `split`, the lead cell's primary control."
+        },
+        {
+          "name": "aside",
+          "scope": "—",
+          "notes": "The aside cell's control in `split`; ignored in `panel` and `lead`, where every control belongs in `actions`."
+        }
+      ],
+      "purpose": "The closing ask of a marketing page: a headline, a supporting sentence and the actions that follow from them, set apart from the surrounding copy by its own surface. It is a panel, not a section header — `section-title` opens a section, `call-to-action` closes one. Three registers. `panel` sets the copy and its controls on one surface, as a row from `md` up. `split` divides the band in two at a 7fr/3fr ratio: a raised lead cell carrying the headline and the primary action, and an aside carrying the supporting line and the secondary one — each cell pushing its control to the band's floor, so the two actions share a baseline at any height. `split` is the register a product page closes on, where the ask has a primary and a secondary path and the headline turns on a second, muted line. `lead` is that lead cell standing alone: the same raised surface, the same two-tone headline, with the supporting line moved under it and every control in one row on the band's floor. It is the register for a close that has no second, quieter path to describe — the band states the ask once and offers its actions together, rather than dividing them across two cells of unequal weight.",
+      "useWhen": [
+        "At the end of a marketing page or section, to carry the reader into signup, docs or sales.",
+        "Whenever a page needs one visually separated block whose whole job is the action.",
+        "Between two sections, as a mid-page ask that should not read as a new section header.",
+        "In `split`, when the ask has two paths of unequal weight — a primary one to start and a secondary one to talk to someone.",
+        "In `lead`, when the band's actions are peers and belong in one row, so an aside cell would have nothing of its own to carry."
+      ],
+      "avoidWhen": [
+        "To open a section with a headline and optional actions → use `section-title`, which draws a header rule rather than a panel.",
+        "For the page's leading statement and primary CTAs → use `hero`, whose `Hero.Title` owns the `h1`.",
+        "For a dismissible or time-bound announcement → use `message`.",
+        "For a plan's call to action inside pricing → use `card-pricing`, which owns its own action row."
+      ],
+      "related": [
+        "section-title` — opens a section with a header rule; this closes one with a panel.",
+        "hero` — the page's leading band; its `Hero.Title` owns the statement and the `h1`.",
+        "frame-box` — the registration frame the band draws when `framed` is on, and the one the page supplies around it when off.",
+        "button` — the controls composed into the `actions` and `aside-actions` slots.",
+        "overline` — the `//`-prefixed eyebrow the band renders above the headline."
+      ],
+      "bestPractices": [
+        "framed` decides who draws the rule. On, the band draws its own registration frame — vertical rules handed back to the column, a tick at its floor. Off, the rule and the corner marks belong to the `section-module` or `frame-box` the page assembles it into, so a band placed in an already-framed column never lands a second hairline on the column's own.",
+        "Keep `title` to one line and one ask. A panel that poses two questions gets neither answered.",
+        "Put the controls in the `actions` slot; the panel lays them out as a row beside the copy from `md` up and stacks them full-width below it.",
+        "Lead with the primary action and keep secondary ones `outlined` or `text`, so the panel has one obvious target.",
+        "Use `eyebrow` only when the panel needs naming out of context; the headline usually carries the ask on its own.",
+        "In `split`, `title` states the claim and `title-muted` states its consequence — one sentence in two tones, not two headlines. The band renders them as two spans of a single `h2`, so a screen reader reads one heading.",
+        "In `split`, put the primary control in `actions` and the secondary one in `aside`; each cell floors its own control, which is what gives the two a shared baseline. `actions` stretches its child full-width below `md`; `aside` stretches its child at every width, so a control drawn to size to its own content goes in a wrapper there.",
+        "In `lead`, every control goes in `actions` — they lay out as one row from `md` up and stack full-width below it. The copy column is capped at `--container-2xl` so the headline keeps a readable measure however wide the band runs.",
+        "lead` sets the copy-to-actions gap at `--spacing-xl`, not the `--spacing-xxl` the other two use. In `split` that larger number is the *floor* of a stretched cell — what pushes the control onto the band's bottom edge — and in `panel` the controls sit beside the copy from `md` up. In `lead` nothing stretches and nothing sits beside, so `--spacing-xxl` stops reading as a floor and starts reading as a hole.",
+        "Leave `framed` on when the band stands in a section column of its own, and off when the page already wraps it in a `frame-box` — two frames draw two hairlines on the same edge."
+      ]
+    },
+    "big-numbers": {
+      "import": "@aziontech/webkit/big-numbers",
+      "target": "./src/components/marketing/big-numbers/big-numbers.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/big-numbers",
+      "category": "marketing",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "items",
+          "type": "BigNumberItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The figures rendered as cells, in order; each item is `{ value, label, prefix?, suffix? }` where `value` is the figure, `label` its caption, and `prefix` / `suffix` the qualifier and unit set beside it."
+        },
+        {
+          "name": "size",
+          "type": "'small' | 'medium' | 'large'",
+          "default": "'medium'",
+          "required": "false",
+          "doc": "Size token; picks the big-number scale the figures are set at."
+        }
+      ],
+      "purpose": "A band of headline figures — throughput, uptime, points of presence — set in the display face at big-number scale, each in its own cell of a hairline `card-grid` with a short caption underneath. It is the proof band of a marketing page: the one place a page states its numbers, between a `section-title` and the section body.",
+      "useWhen": [
+        "To state a handful of measured facts (2–6) as the proof band of a marketing or landing page.",
+        "Whenever the figure itself is the message and the caption only names what was measured.",
+        "Under a `section-title`, as the opening evidence of a section."
+      ],
+      "avoidWhen": [
+        "For a single monetary amount → use `currency`, which owns the amount ladder and its symbol placement.",
+        "For a plan's headline price inside a pricing card → use `card-pricing`.",
+        "For tabular or comparable figures a reader will scan row by row → use `table`.",
+        "For a label-and-value pair at body scale inside a card or list → use `item`."
+      ],
+      "related": [
+        "section-title` — the framed section header this band usually sits under.",
+        "card-grid` — the hairline grid the cells sit in; its `gap-px` seams are the rules between them.",
+        "currency` — a monetary amount at three reading distances, with symbol handling.",
+        "card-pricing` — a plan card, where the headline figure is a price."
+      ],
+      "bestPractices": [
+        "The band draws no frame of its own: the rule and the corner marks belong to the `section-module` or `frame-box` that the page assembles it into, so a band placed in a framed column never lands a second hairline on the column's own.",
+        "Keep the band to 2–6 figures: it reads as a row, and past six the cells stop being scannable.",
+        "Put the unit in `suffix` and the qualifier in `prefix`, so the figure itself stays the largest, highest-contrast thing in the cell.",
+        "Keep `label` to a few words — it is set at overline scale and is a caption, not a sentence.",
+        "Round the figures. A band is a claim, not a readout; `99.99%` belongs here, `99.9873%` does not.",
+        "Leave `size` at `medium` unless the band is the page's hero statement (`large`) or sits inside a denser section (`small`)."
+      ]
+    },
+    "carousel": {
+      "import": "@aziontech/webkit/carousel",
+      "target": "./src/components/marketing/carousel/index.ts",
+      "kind": "component",
+      "compoundRoot": true,
+      "treeShakeableImport": "@aziontech/webkit/carousel-root",
+      "subcomponents": [
+        "@aziontech/webkit/carousel-item",
+        "@aziontech/webkit/carousel-previous",
+        "@aziontech/webkit/carousel-next"
+      ],
+      "category": "marketing",
+      "structure": "composition",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name for the scrollable track, announced before its contents."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The slides, composed as `Carousel.Item` elements in reading order."
+        },
+        {
+          "name": "controls",
+          "scope": "—",
+          "notes": "The step controls, composed as `Carousel.Previous` and `Carousel.Next`; rendered above the track."
+        }
+      ],
+      "purpose": "A horizontally scrollable track of cards with snap points and a pair of step controls. It is built on native scrolling and CSS scroll snap rather than a carousel runtime, so it is draggable, swipeable and keyboard-scrollable by default, and it never moves on its own. The unit is Carousel, then a `Carousel.Item` card, then its content — usually a `quote`. The cards sit edge to edge with no gutter: each draws its own hairline and the next one overlaps it by a pixel, so the row reads as one ruled strip. The track fades at whichever end still has cards past it.",
+      "useWhen": [
+        "When a set of cards, quotes, logos or figures is longer than the row it sits in and the reader chooses how far to go.",
+        "For a peek-and-swipe row on narrow screens where a grid would stack into a very long column.",
+        "Whenever the content is browsable rather than essential — a reader must never have to scroll a carousel to reach something they need."
+      ],
+      "avoidWhen": [
+        "For content the reader must see → lay it out as a grid; anything past the first slide can be missed.",
+        "For a vertical list → use `item` with `ItemGroup`.",
+        "For a framed grid of unequal cells → use `bento-grid`.",
+        "For a set of figures that fits the row → use `big-numbers` or `logo-wall`, which wrap instead of scrolling."
+      ],
+      "related": [
+        "bento-grid` — the framed grid, when everything should be visible at once.",
+        "logo-wall` — a wrapping grid of marks; reach for the carousel only when the wall is too long.",
+        "topic` — the usual slide content.",
+        "scroll-area` — the console's styled scroll container; this one owns snap points and step controls."
+      ],
+      "bestPractices": [
+        "Never put essential content in a carousel. A slide past the first is content a reader may never see.",
+        "Size the cards on `Carousel.Item` with your own width classes — the item is deliberately unsized so a page can show one card on mobile and three on desktop.",
+        "Put content straight into `Carousel.Item`, not inside another framed box. The item is already the card (border, surface, padding), and a second frame inside it draws two rules.",
+        "The row has no gutter by design. Space between cards would break the ruled strip into floating tiles; a band that needs air between its items wants a grid, not this track.",
+        "Keep a partial slide visible at the trailing edge on narrow screens; a peek is what tells a reader the track scrolls at all.",
+        "The track is dragged with the pointer as well as scrolled. A mouse gets a grab cursor and drags the row directly; touch and pen keep native scrolling and its momentum, which is already better than anything a handler would impose.",
+        "Always name the carousel with `ariaLabel`. \"Customer stories\" tells a screen-reader user what they are about to scroll through; an unnamed scroll region does not.",
+        "The track never advances on its own, and it must not be made to. Auto-advancing content needs a pause control under WCAG 2.2.2 and steals reading time from everyone."
+      ]
+    },
+    "carousel-root": {
+      "import": "@aziontech/webkit/carousel-root",
+      "target": "./src/components/marketing/carousel/carousel.vue",
+      "kind": "root",
+      "rootOf": "carousel",
+      "treeShakeableImport": "@aziontech/webkit/carousel-root",
+      "category": "marketing",
+      "structure": "composition",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name for the scrollable track, announced before its contents."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The slides, composed as `Carousel.Item` elements in reading order."
+        },
+        {
+          "name": "controls",
+          "scope": "—",
+          "notes": "The step controls, composed as `Carousel.Previous` and `Carousel.Next`; rendered above the track."
+        }
+      ],
+      "purpose": "A horizontally scrollable track of cards with snap points and a pair of step controls. It is built on native scrolling and CSS scroll snap rather than a carousel runtime, so it is draggable, swipeable and keyboard-scrollable by default, and it never moves on its own. The unit is Carousel, then a `Carousel.Item` card, then its content — usually a `quote`. The cards sit edge to edge with no gutter: each draws its own hairline and the next one overlaps it by a pixel, so the row reads as one ruled strip. The track fades at whichever end still has cards past it.",
+      "useWhen": [
+        "When a set of cards, quotes, logos or figures is longer than the row it sits in and the reader chooses how far to go.",
+        "For a peek-and-swipe row on narrow screens where a grid would stack into a very long column.",
+        "Whenever the content is browsable rather than essential — a reader must never have to scroll a carousel to reach something they need."
+      ],
+      "avoidWhen": [
+        "For content the reader must see → lay it out as a grid; anything past the first slide can be missed.",
+        "For a vertical list → use `item` with `ItemGroup`.",
+        "For a framed grid of unequal cells → use `bento-grid`.",
+        "For a set of figures that fits the row → use `big-numbers` or `logo-wall`, which wrap instead of scrolling."
+      ],
+      "related": [
+        "bento-grid` — the framed grid, when everything should be visible at once.",
+        "logo-wall` — a wrapping grid of marks; reach for the carousel only when the wall is too long.",
+        "topic` — the usual slide content.",
+        "scroll-area` — the console's styled scroll container; this one owns snap points and step controls."
+      ],
+      "bestPractices": [
+        "Never put essential content in a carousel. A slide past the first is content a reader may never see.",
+        "Size the cards on `Carousel.Item` with your own width classes — the item is deliberately unsized so a page can show one card on mobile and three on desktop.",
+        "Put content straight into `Carousel.Item`, not inside another framed box. The item is already the card (border, surface, padding), and a second frame inside it draws two rules.",
+        "The row has no gutter by design. Space between cards would break the ruled strip into floating tiles; a band that needs air between its items wants a grid, not this track.",
+        "Keep a partial slide visible at the trailing edge on narrow screens; a peek is what tells a reader the track scrolls at all.",
+        "The track is dragged with the pointer as well as scrolled. A mouse gets a grab cursor and drags the row directly; touch and pen keep native scrolling and its momentum, which is already better than anything a handler would impose.",
+        "Always name the carousel with `ariaLabel`. \"Customer stories\" tells a screen-reader user what they are about to scroll through; an unnamed scroll region does not.",
+        "The track never advances on its own, and it must not be made to. Auto-advancing content needs a pause control under WCAG 2.2.2 and steals reading time from everyone."
+      ]
+    },
+    "carousel-item": {
+      "import": "@aziontech/webkit/carousel-item",
+      "target": "./src/components/marketing/carousel/carousel-item/carousel-item.vue",
+      "kind": "subcomponent",
+      "parent": "carousel",
+      "treeShakeableImport": "@aziontech/webkit/carousel-item"
+    },
+    "carousel-previous": {
+      "import": "@aziontech/webkit/carousel-previous",
+      "target": "./src/components/marketing/carousel/carousel-previous/carousel-previous.vue",
+      "kind": "subcomponent",
+      "parent": "carousel",
+      "treeShakeableImport": "@aziontech/webkit/carousel-previous"
+    },
+    "carousel-next": {
+      "import": "@aziontech/webkit/carousel-next",
+      "target": "./src/components/marketing/carousel/carousel-next/carousel-next.vue",
+      "kind": "subcomponent",
+      "parent": "carousel",
+      "treeShakeableImport": "@aziontech/webkit/carousel-next"
+    },
     "banner": {
       "import": "@aziontech/webkit/banner",
       "target": "./src/components/marketing/banner/banner.vue",
@@ -10803,6 +11539,77 @@
         "Keep answers to a couple of sentences and link out for the rest — use the `answer` slot when an answer needs a link or richer content.",
         "Give every item a stable `value`. It is the accordion's open-state key, so a reordered or re-keyed list loses whatever the reader had open.",
         "Leave the first item closed. An open answer on load pushes the rest of the list down and hides the range of questions."
+      ]
+    },
+    "content-columns": {
+      "import": "@aziontech/webkit/content-columns",
+      "target": "./src/components/marketing/content-columns/content-columns.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/content-columns",
+      "category": "marketing",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "items",
+          "type": "ContentColumnItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The columns, in reading order; each item is `{ title, description }`."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the band, rendered as its `h2` above the columns."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Supporting sentence under the headline."
+        },
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Short uppercase overline rendered above the headline."
+        },
+        {
+          "name": "columns",
+          "type": "2 | 3",
+          "default": "3",
+          "required": "false",
+          "doc": "How many columns the grid holds from the medium breakpoint up; below it the columns stack."
+        }
+      ],
+      "purpose": "A titled band whose body is two or three columns of short copy, drawn in one hairline `card-grid` so the columns read as a single surface. It is the plainest way to state a few parallel points under one section header.",
+      "useWhen": [
+        "For two or three parallel points that carry equal weight under one section heading.",
+        "When each point is a short title and a sentence — no icon, no media, no link.",
+        "As the body of a product or platform section that needs structure but not tiles."
+      ],
+      "avoidWhen": [
+        "When the points are unequal and one deserves the full width → use `bento-grid`.",
+        "When each point needs an icon, a link or its own surface → use `topic` in a `card-grid`.",
+        "For measured figures → use `big-numbers`.",
+        "For one point paired with a picture → use `media-split`."
+      ],
+      "related": [
+        "bento-grid` — the same collapsed-rule grid with unequal, slot-composed cells.",
+        "topic` — the richer unit when a point needs an icon or a destination.",
+        "section-title` — the header this band renders above its columns.",
+        "big-numbers` — the numeric sibling of this grid."
+      ],
+      "bestPractices": [
+        "The band draws no frame of its own: the rule and the corner marks belong to the `section-module` or `frame-box` that the page assembles it into, so a band placed in a framed column never lands a second hairline on the column's own.",
+        "Keep every column to a title and one or two sentences; the grid stretches to the tallest, so one long column pads the rest.",
+        "Use three columns for three peers and two for a contrast; four points want `bento-grid` or a card grid instead.",
+        "Write the column titles in parallel grammar — they are read across, not down.",
+        "Leave `title` out when the band sits directly under another header; two headings in a row is one too many."
       ]
     },
     "breadcrumb": {
@@ -13309,6 +14116,186 @@
       "target": "./src/vite/index.js",
       "kind": "other",
       "treeShakeableImport": "@aziontech/webkit/vite"
+    },
+    "card-grid": {
+      "import": "@aziontech/webkit/card-grid",
+      "target": "./src/components/marketing/card-grid/index.ts",
+      "kind": "component",
+      "compoundRoot": true,
+      "treeShakeableImport": "@aziontech/webkit/card-grid-root",
+      "subcomponents": [
+        "@aziontech/webkit/card-grid-cell"
+      ],
+      "category": "marketing",
+      "structure": "composition",
+      "status": "approved",
+      "props": [
+        {
+          "name": "kind",
+          "type": "CardGridKind",
+          "default": "'gap'",
+          "required": "false",
+          "doc": "Register of the grid: gutters between self-contained cards, hairline rules drawn by the gaps, or framed cells that draw their own rules and marks."
+        },
+        {
+          "name": "columns",
+          "type": "CardGridColumns",
+          "default": "3",
+          "required": "false",
+          "doc": "How many columns the grid fans out to at the large breakpoint."
+        },
+        {
+          "name": "mobileColumns",
+          "type": "CardGridMobileColumns",
+          "default": "1",
+          "required": "false",
+          "doc": "How many columns the grid holds below the small breakpoint."
+        },
+        {
+          "name": "dividerColor",
+          "type": "CardGridDividerColor",
+          "default": "'default'",
+          "required": "false",
+          "doc": "Weight of the hairline rules in the `divider` register."
+        },
+        {
+          "name": "flush",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "In the `frame` register, the surrounding frame already draws the grid's outer rules: the grid drops its own top and left ones and lays its right and bottom ones onto the frame's, so a framed column keeps one hairline per edge."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The cells, in reading order. In the `frame` register they are `CardGrid.Cell` elements; in the `divider` register each cell fills its own background."
+        }
+      ],
+      "purpose": "The responsive cell grid of the page language, in three registers: spaced cards separated by real gutters, a hairline box grid whose internal rules are the gaps themselves, and a framed grid whose cells are real `frame-box` elements. The `frame` register is the one that composes: each `CardGrid.Cell` draws its own rules and corner marks and carries its own fill, so the grid needs no background trick and nests flush inside a column that already owns the outer edges.",
+      "useWhen": [
+        "For a row or block of equal cells that should fan out from one column on a phone to several on a wide screen.",
+        "With `kind` set to `frame` whenever the cells are real content — a `topic`, a claim, a figure — and should carry the page's frame language, corner marks included.",
+        "For the hairline cell grid a `section-module` body holds, with `kind` set to `divider`.",
+        "For a row of self-contained cards with gutters between them, with the default `gap`."
+      ],
+      "avoidWhen": [
+        "For a mosaic whose cells claim different numbers of columns and rows → use `bento-grid`, which is this grid with spans.",
+        "For a single framed box → use `frame-box`.",
+        "For one card with a header, content and footer → use `card-box`.",
+        "For the band that wraps the grid → use `section-module`.",
+        "For tabular data a reader scans row by row → use `table`."
+      ],
+      "related": [
+        "bento-grid` — the same framed grid with unequal cells; reach for it when one claim deserves more room than the rest.",
+        "topic` — the glyph, headline and sentence a `frame` cell usually holds.",
+        "section-module` — the band whose body holds this grid.",
+        "section-container` — the column whose vertical rules the `divider` and flush `frame` grids deliberately do not repeat.",
+        "frame-box` — the frame each `frame` cell is drawn with, and the framed box a `gap` cell may be built from.",
+        "card-box` — a padded card surface, the usual child of a `gap` grid."
+      ],
+      "bestPractices": [
+        "Prefer `frame` over `divider` for new work. The hairline register depends on every child filling its own background; the framed register draws real rules, so a cell that forgets its fill still reads correctly, and the corner marks come with it.",
+        "Give every child of a `divider` grid its own background fill, or the gap trick has nothing to show through and the whole band goes the colour of the rule.",
+        "Leave the perimeter to the container: the `divider` register draws no outer border, and a `frame` grid set to `flush` withholds its own top and left rules so a surrounding `frame-box` keeps one hairline per edge.",
+        "Let the grid draw the rules. Do not add borders inside a `frame` cell, or the shared edges double.",
+        "Give a cell `kind=\"none\"` and `:padded=\"false\"` when its own content paints the cell — a media layer, a brand fill, or a link that must be the whole tile.",
+        "Reach for `mobileColumns` of `2` only for short, glyph-led cells; a cell carrying a description reads better one-up on a phone."
+      ],
+      "styleSeam": true
+    },
+    "card-grid-root": {
+      "import": "@aziontech/webkit/card-grid-root",
+      "target": "./src/components/marketing/card-grid/card-grid.vue",
+      "kind": "root",
+      "rootOf": "card-grid",
+      "treeShakeableImport": "@aziontech/webkit/card-grid-root",
+      "category": "marketing",
+      "structure": "composition",
+      "status": "approved",
+      "props": [
+        {
+          "name": "kind",
+          "type": "CardGridKind",
+          "default": "'gap'",
+          "required": "false",
+          "doc": "Register of the grid: gutters between self-contained cards, hairline rules drawn by the gaps, or framed cells that draw their own rules and marks."
+        },
+        {
+          "name": "columns",
+          "type": "CardGridColumns",
+          "default": "3",
+          "required": "false",
+          "doc": "How many columns the grid fans out to at the large breakpoint."
+        },
+        {
+          "name": "mobileColumns",
+          "type": "CardGridMobileColumns",
+          "default": "1",
+          "required": "false",
+          "doc": "How many columns the grid holds below the small breakpoint."
+        },
+        {
+          "name": "dividerColor",
+          "type": "CardGridDividerColor",
+          "default": "'default'",
+          "required": "false",
+          "doc": "Weight of the hairline rules in the `divider` register."
+        },
+        {
+          "name": "flush",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "In the `frame` register, the surrounding frame already draws the grid's outer rules: the grid drops its own top and left ones and lays its right and bottom ones onto the frame's, so a framed column keeps one hairline per edge."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The cells, in reading order. In the `frame` register they are `CardGrid.Cell` elements; in the `divider` register each cell fills its own background."
+        }
+      ],
+      "purpose": "The responsive cell grid of the page language, in three registers: spaced cards separated by real gutters, a hairline box grid whose internal rules are the gaps themselves, and a framed grid whose cells are real `frame-box` elements. The `frame` register is the one that composes: each `CardGrid.Cell` draws its own rules and corner marks and carries its own fill, so the grid needs no background trick and nests flush inside a column that already owns the outer edges.",
+      "useWhen": [
+        "For a row or block of equal cells that should fan out from one column on a phone to several on a wide screen.",
+        "With `kind` set to `frame` whenever the cells are real content — a `topic`, a claim, a figure — and should carry the page's frame language, corner marks included.",
+        "For the hairline cell grid a `section-module` body holds, with `kind` set to `divider`.",
+        "For a row of self-contained cards with gutters between them, with the default `gap`."
+      ],
+      "avoidWhen": [
+        "For a mosaic whose cells claim different numbers of columns and rows → use `bento-grid`, which is this grid with spans.",
+        "For a single framed box → use `frame-box`.",
+        "For one card with a header, content and footer → use `card-box`.",
+        "For the band that wraps the grid → use `section-module`.",
+        "For tabular data a reader scans row by row → use `table`."
+      ],
+      "related": [
+        "bento-grid` — the same framed grid with unequal cells; reach for it when one claim deserves more room than the rest.",
+        "topic` — the glyph, headline and sentence a `frame` cell usually holds.",
+        "section-module` — the band whose body holds this grid.",
+        "section-container` — the column whose vertical rules the `divider` and flush `frame` grids deliberately do not repeat.",
+        "frame-box` — the frame each `frame` cell is drawn with, and the framed box a `gap` cell may be built from.",
+        "card-box` — a padded card surface, the usual child of a `gap` grid."
+      ],
+      "bestPractices": [
+        "Prefer `frame` over `divider` for new work. The hairline register depends on every child filling its own background; the framed register draws real rules, so a cell that forgets its fill still reads correctly, and the corner marks come with it.",
+        "Give every child of a `divider` grid its own background fill, or the gap trick has nothing to show through and the whole band goes the colour of the rule.",
+        "Leave the perimeter to the container: the `divider` register draws no outer border, and a `frame` grid set to `flush` withholds its own top and left rules so a surrounding `frame-box` keeps one hairline per edge.",
+        "Let the grid draw the rules. Do not add borders inside a `frame` cell, or the shared edges double.",
+        "Give a cell `kind=\"none\"` and `:padded=\"false\"` when its own content paints the cell — a media layer, a brand fill, or a link that must be the whole tile.",
+        "Reach for `mobileColumns` of `2` only for short, glyph-led cells; a cell carrying a description reads better one-up on a phone."
+      ],
+      "styleSeam": true
+    },
+    "card-grid-cell": {
+      "import": "@aziontech/webkit/card-grid-cell",
+      "target": "./src/components/marketing/card-grid/card-grid-cell/card-grid-cell.vue",
+      "kind": "subcomponent",
+      "parent": "card-grid",
+      "treeShakeableImport": "@aziontech/webkit/card-grid-cell"
     },
     "texture-material": {
       "import": "@aziontech/webkit/texture-material",

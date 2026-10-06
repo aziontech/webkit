@@ -135,6 +135,27 @@
     "limit": "3 KB"
   },
   {
+    "name": "media-split",
+    "path": "src/components/marketing/media-split/media-split.vue",
+    "limit": "5.75 KB"
+  },
+  {
+    "name": "ticker",
+    "path": "src/components/marketing/ticker/ticker.vue",
+    "limit": "4.5 KB",
+    "entryOnly": true
+  },
+  {
+    "name": "card-grid-root",
+    "path": "src/components/marketing/card-grid/card-grid.vue",
+    "limit": "1.5 KB"
+  },
+  {
+    "name": "carousel-root",
+    "path": "src/components/marketing/carousel/carousel.vue",
+    "limit": "3 KB"
+  },
+  {
     "name": "banner",
     "path": "src/components/marketing/banner/banner.vue",
     "limit": "4.25 KB"
@@ -197,8 +218,7 @@
     "path": "src/components/marketing/embed/embed.vue",
     "limit": "3 KB"
   },
-  {
-  },
+  {},
   {
     "name": "faq",
     "path": "src/components/marketing/faq/faq.vue",
@@ -210,9 +230,29 @@
     "limit": "2.75 KB"
   },
   {
+    "name": "content-columns",
+    "path": "src/components/marketing/content-columns/content-columns.vue",
+    "limit": "4.75 KB"
+  },
+  {
     "name": "illustration",
     "path": "src/components/content/illustration/illustration.vue",
     "limit": "2 KB",
     "entryOnly": true
+  },
+  {
+    "name": "big-numbers",
+    "path": "src/components/marketing/big-numbers/big-numbers.vue",
+    "limit": "2.5 KB"
+  },
+  {
+    "name": "call-to-action",
+    "path": "src/components/marketing/call-to-action/call-to-action.vue",
+    "limit": "4.5 KB"
+  },
+  {
+    "name": "bento-grid-root",
+    "path": "src/components/marketing/bento-grid/bento-grid.vue",
+    "limit": "1 KB"
   }
 ]
