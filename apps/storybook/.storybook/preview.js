@@ -95,6 +95,30 @@ export const parameters = {
         ['Overview', 'Authoring', 'Example Page'],
         'Templates',
         ['Marketing', ['Overview', 'Social Proof', 'Heroes', 'Content', 'Network', 'Media']],
+        [
+          'Platform',
+          [
+            'Overview',
+            'Shell',
+            [
+              'PlatformShell',
+              'CreatePage',
+              'SummaryPage',
+              'CodeEditor',
+              'QueryEditor',
+              'EventsVisualizer'
+            ],
+            'Page',
+            'Lists',
+            'Forms',
+            'Overlays',
+            'Creation',
+            'States',
+            'Detail',
+            'Observe',
+            'Account'
+          ]
+        ],
         'Marketing',
         'Site'
       ]

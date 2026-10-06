@@ -1,0 +1,112 @@
+import { Meta } from '@storybook/blocks'
+
+<Meta
+  title="Templates/Platform/Overview"
+  parameters={{
+    options: { showPanel: false },
+    controls: { disable: true },
+    actions: { disable: true },
+    docs: {
+      description: {
+        component:
+          'The blocks the console is built from, registered as templates: each one a whole part of a product screen, composed from webkit components, ready to paste into an app.'
+      }
+    }
+  }}
+/>
+
+# Platform templates
+
+The [components](?path=/docs/components-actions-button--documentation) are the primitives: a
+button, a table, a drawer, a field. A template is one level up. It is a **whole block of a
+console screen**, already composed from those primitives the way the console composes it, with
+the console's own copy standing in for yours.
+
+Every template here is a block of a real console screen (`/home`, `/workloads` and the rest). Its
+description names the screens that render it, and its "Show code" panel is a single SFC that
+imports only `@aziontech/webkit` components, so it runs as pasted.
+
+## How a screen is assembled
+
+A console screen is one shell, one heading, then the blocks of its kind.
+
+1. The **shell** frames every screen. Signed in, it is a full-height navigation rail and a content zone whose header carries the breadcrumb, the global Create and the account; each page type (list, detail, summary, settings, code editor, query editor, create) then has its own frame inside it.
+2. A **page heading** names the screen and holds its primary action. Under a second-level tab bar each tab heads itself.
+3. A **list** screen stacks the controls row, the applied filters and the card-wrapped table. A **settings** screen stacks bands of rows and mounts the save bar once something is edited. Stacked fields anywhere are the `Field` components, never a hand-made label and control. A **create** flow leaves the shell for the focused creation header.
+4. **States** (first use, loading wires, drop zones) stand in for the block until there is data. **Overlays** confirm, delete and create inside a resource.
+
+## Shell
+
+Every page type the console has, as its frame: the chrome around it and the regions the page fills.
+
+- [PlatformShell](?path=/docs/templates-platform-shell-platformshell--documentation) — the signed-in frame: the resizable, collapsible navigation rail, in-content header with breadcrumb and Create, and the list and detail page layouts inside it.
+- [CreatePage](?path=/docs/templates-platform-shell-createpage--documentation) — the first-level create page: the focused creation header, the form column and the floating Cancel and Create bar.
+- [SummaryPage](?path=/docs/templates-platform-shell-summarypage--documentation) — a resource's Overview tab: the tab bar and the summary card with its subject, facts and state bands.
+- [CodeEditor](?path=/docs/templates-platform-shell-codeeditor--documentation) — a code resource page: the editor toolbar, one editor pane, or the editor and a preview split by a resizable panel.
+- [QueryEditor](?path=/docs/templates-platform-shell-queryeditor--documentation) — a data resource page: a resizable, collapsible side panel beside the query editor and its results, or beside the table browser.
+- [EventsVisualizer](?path=/docs/templates-platform-shell-eventsvisualizer--documentation) — the Real-Time Events page: the controls and filter chips, the resizable fields panel, the event volume chart, the events table and the event document a row opens.
+
+## Page
+
+- [PageHeading](?path=/docs/templates-platform-page-pageheading--documentation) — the title and description with the module's Documentation link and the primary action, at list, settings and large sizes.
+- [PageTabs](?path=/docs/templates-platform-page-pagetabs--documentation) — the full-bleed second-level navigation bar under a detail page's header.
+- [SectionHeading](?path=/docs/templates-platform-page-sectionheading--documentation) — a section's title and description with its docs link and actions, aligned to the card below it.
+- [Section](?path=/docs/templates-platform-page-section--documentation) — the settings band: a sticky title with a hint on the left, a card of rows on the right.
+
+## Lists
+
+- [ListControls](?path=/docs/templates-platform-lists-listcontrols--documentation) — the controls row: Filter with its count, search, refresh, export and columns, and the applied chips under it.
+- [ResourceTable](?path=/docs/templates-platform-lists-resourcetable--documentation) — the card-wrapped table with the id, name, tag, author, last-modified and row-actions cell recipes.
+- [ModuleList](?path=/docs/templates-platform-lists-modulelist--documentation) — the whole first-level list page, heading to table.
+
+## Forms
+
+- [FieldRow](?path=/docs/templates-platform-forms-fieldrow--documentation) — the settings row inside a card: title and description left, control right or stacked when wide.
+- [SettingsSaveBar](?path=/docs/templates-platform-forms-settingssavebar--documentation) — the bar that mounts when a settings page has unsaved changes.
+- [SettingsPage](?path=/docs/templates-platform-forms-settingspage--documentation) — the whole settings tab: small heading, bands of rows, save bar.
+- [ResourceDrawer](?path=/docs/templates-platform-forms-resourcedrawer--documentation) — the drawer that creates something inside a resource, its fields built from the Field components.
+- [CreateDomain](?path=/docs/templates-platform-forms-createdomain--documentation) — the pattern form: Add Domain, the drawer every other create form follows.
+- [Variable](?path=/docs/templates-platform-forms-variable--documentation) — variables as console-kit draws them: the list, the create form with its input group key and value rows, and the edit view.
+- [RulesEngine](?path=/docs/templates-platform-forms-rulesengine--documentation) — the richest form: a rule's criteria and behaviors, built row by row in a drawer.
+
+## Overlays
+
+- [DeleteDialog](?path=/docs/templates-platform-overlays-deletedialog--documentation) — the destructive confirmation that asks for the resource name.
+- [ConfirmDialog](?path=/docs/templates-platform-overlays-confirmdialog--documentation) — the plain confirmation, and the "Discard changes?" guard.
+
+## Creation
+
+- [CreationHeader](?path=/docs/templates-platform-creation-creationheader--documentation) — the focused-flow header: back, brand, breadcrumb, account.
+- [ReviewStep](?path=/docs/templates-platform-creation-reviewstep--documentation) — the last step's summary of fields and bindings.
+- [ResourcePicker](?path=/docs/templates-platform-creation-resourcepicker--documentation) — choose an existing related resource or name a new one.
+- [CreationProgress](?path=/docs/templates-platform-creation-creationprogress--documentation) — the provisioning card that walks through its steps.
+- [DeploySuccess](?path=/docs/templates-platform-creation-deploysuccess--documentation) — the terminal screen after a deploy: domain, resources, next steps, get started.
+
+## States
+
+- [ProductFirstUse](?path=/docs/templates-platform-states-productfirstuse--documentation) — a module's empty state with its ways to create and the promo cards.
+- [FirstAccess](?path=/docs/templates-platform-states-firstaccess--documentation) — the first-access home: prompt and starter cards.
+- [PageWires](?path=/docs/templates-platform-states-pagewires--documentation) — the skeleton wires a screen shows while it loads.
+- [ProjectIntake](?path=/docs/templates-platform-states-projectintake--documentation) — the drop zone and the initializing state of a project upload.
+
+## Detail
+
+- [ResourceSummary](?path=/docs/templates-platform-detail-resourcesummary--documentation) — the overview card of a resource: subject, facts, state.
+- [GetStarted](?path=/docs/templates-platform-detail-getstarted--documentation) — the CLI and CI steps to ship to a fresh resource.
+- [DomainsSection](?path=/docs/templates-platform-detail-domainssection--documentation) — the domains table inside a resource with its Add action.
+- [ProductionChecklist](?path=/docs/templates-platform-detail-productionchecklist--documentation) — the readiness checklist card and its drawer.
+- [FunctionEditor](?path=/docs/templates-platform-detail-functioneditor--documentation) — the function page: code pane, arguments and run summary.
+- [SqlDatabase](?path=/docs/templates-platform-detail-sqldatabase--documentation) — the database browser: tables rail, grid, query editor and templates drawer.
+
+## Observe
+
+- [MetricPanel](?path=/docs/templates-platform-observe-metricpanel--documentation) — a metric card with its sparkline, and the dashboard grid it sits in.
+
+## Account
+
+- [SignUpCard](?path=/docs/templates-platform-account-signupcard--documentation) — the signed-out pages: sign up, log in with its reset steps, check your inbox.
+- [OnboardingForm](?path=/docs/templates-platform-account-onboardingform--documentation) — the three onboarding steps beside the console wireframe that follows them.
+- [ChangePlanDrawer](?path=/docs/templates-platform-account-changeplandrawer--documentation) — the plan tiers in a drawer with the billing-period switch.
+- [PlanUpgradeDrawer](?path=/docs/templates-platform-account-planupgradedrawer--documentation) — the upgrade to Pro: features, charge, payment method and billing address.
+- [PaymentMethodCard](?path=/docs/templates-platform-account-paymentmethodcard--documentation) — the payment method on file, and its edit form.
+- AccountSettings — the account settings panels: [Settings](?path=/docs/templates-platform-account-accountsettings-settings--documentation), [Build & Deployment](?path=/docs/templates-platform-account-accountsettings-builddeployment--documentation), [Environments](?path=/docs/templates-platform-account-accountsettings-environments--documentation), [Users](?path=/docs/templates-platform-account-accountsettings-usersmanagement--documentation), [Teams & Permissions](?path=/docs/templates-platform-account-accountsettings-teamspermissions--documentation), [Credentials](?path=/docs/templates-platform-account-accountsettings-credentials--documentation), [Billing](?path=/docs/templates-platform-account-accountsettings-billing--documentation) and [Activity History](?path=/docs/templates-platform-account-accountsettings-activityhistory--documentation).
