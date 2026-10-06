@@ -10,6 +10,13 @@
 
 * bump fast-uri version from 4.1.0 to 4.1.1 ([#773](https://github.com/aziontech/webkit/issues/773)) ([2f43cbb](https://github.com/aziontech/webkit/commit/2f43cbb0e128fdc8fbea16b6ed04bcf63356b08f))
 
+## [4.2.0](https://github.com/aziontech/webkit/compare/@aziontech/icons@4.1.1...@aziontech/icons@4.2.0) (2026-10-06)
+
+
+### Features
+
+* **icons:** add html, branch, graphql and terraform marks ([#1024](https://github.com/aziontech/webkit/issues/1024)) ([a30ba6b](https://github.com/aziontech/webkit/commit/a30ba6b33082a86b7a48af096c52112cf9d5e22d))
+
 ## [4.1.1](https://github.com/aziontech/webkit/compare/@aziontech/icons@4.1.0...@aziontech/icons@4.1.1) (2026-08-28)
 
 
