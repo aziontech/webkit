@@ -229,5 +229,10 @@
     "name": "call-to-action",
     "path": "src/components/marketing/call-to-action/call-to-action.vue",
     "limit": "4.5 KB"
+  },
+  {
+    "name": "bento-grid-root",
+    "path": "src/components/marketing/bento-grid/bento-grid.vue",
+    "limit": "1 KB"
   }
 ]
