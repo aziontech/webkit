@@ -88,7 +88,7 @@ export const parameters = {
         'Get Started',
         'Style Guide',
         'Foundations',
-        ['Colors', 'Theme', 'Spacing', 'Typography', 'Icons'],
+        ['Design Tokens', ['Color', 'Theme', 'Typography', 'Layout', 'Motion'], 'Icons'],
         'Components',
         'Site'
       ]
