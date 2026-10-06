@@ -135,6 +135,16 @@
     "limit": "3 KB"
   },
   {
+    "name": "carousel-root",
+    "path": "src/components/marketing/carousel/carousel.vue",
+    "limit": "3 KB"
+  },
+  {
+    "name": "banner",
+    "path": "src/components/marketing/banner/banner.vue",
+    "limit": "4.25 KB"
+  },
+  {
     "name": "hero",
     "path": "src/components/marketing/hero/index.ts",
     "limit": "4 KB",
