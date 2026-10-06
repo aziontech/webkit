@@ -2,6 +2,7 @@ import { computed } from 'vue'
 
 import { APPLICATIONS } from '../data/applications'
 import { CONNECTORS } from '../data/connectors'
+import { allCustomPages } from '../data/custom-pages'
 import { allFirewalls } from '../data/firewalls'
 import { provisionDeployment, provisionedApplications } from '../data/provisioning'
 import { createdRowsFor } from '../state/created-resources'
@@ -65,6 +66,14 @@ export const HOSTS = {
     canCreate: false,
     emptyPath: '/connectors/new',
     emptyLabel: 'Create a connector'
+  },
+  'custom-page': {
+    noun: 'custom page',
+    label: 'Custom Page',
+    icon: 'ai ai-custom-pages',
+    canCreate: false,
+    emptyPath: '/custom-pages/new',
+    emptyLabel: 'Create a custom page'
   }
 }
 
@@ -84,6 +93,14 @@ export const connectorOptions = computed(() =>
   }))
 )
 
+export const customPageOptions = computed(() =>
+  allCustomPages().map((page) => ({
+    value: page.name,
+    label: page.name,
+    description: (page.statuses ?? []).join(', ')
+  }))
+)
+
 export const firewallOptions = computed(() =>
   allFirewalls().map((firewall) => ({
     value: firewall.name,
@@ -96,6 +113,7 @@ export const hostOptions = (kind) => {
   if (kind === 'firewall') return firewallOptions.value
   if (kind === 'workload') return workloadOptions.value
   if (kind === 'connector') return connectorOptions.value
+  if (kind === 'custom-page') return customPageOptions.value
   return applicationOptions.value
 }
 
@@ -103,6 +121,7 @@ export const hostRecords = (kind) => {
   if (kind === 'firewall') return allFirewalls()
   if (kind === 'workload') return allWorkloads.value
   if (kind === 'connector') return [...createdRowsFor('connectors'), ...CONNECTORS]
+  if (kind === 'custom-page') return allCustomPages()
   return accountApplications.value
 }
 

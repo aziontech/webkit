@@ -21,11 +21,7 @@
     resourceFields,
     resourceSettingsPath
   } from '../../lib/data/create-resources'
-  import {
-    hostHasModule,
-    matrixBindingFor,
-    moduleRequirementFor
-  } from '../../lib/data/resource-dependencies'
+  import { hostHasModule, moduleRequirementFor } from '../../lib/data/resource-dependencies'
   import { addCreatedResource, storesCreated } from '../../lib/state/created-resources'
 
   interface Props {
@@ -63,18 +59,21 @@
       Object.keys(errors).forEach((key) => delete errors[key])
       Object.keys(form).forEach((key) => delete form[key])
       Object.assign(form, seed)
+      hostKind.value = ''
+      applicationChoice.value = null
     }
   )
 
   const submitting = ref(false)
 
-  const applicationBindingSpec = computed(
-    () => bindingFor(props.resource) ?? matrixBindingFor(props.resource)
-  )
-  const hostSpec = computed(() => HOSTS[applicationBindingSpec.value?.host] ?? HOSTS.application)
-
+  const hostKind = ref('')
   const applicationChoice = ref(null)
   const enableModule = ref(false)
+
+  const applicationBindingSpec = computed(() =>
+    bindingFor(props.resource, applicationChoice.value?.kind ?? hostKind.value)
+  )
+  const hostSpec = computed(() => HOSTS[applicationBindingSpec.value?.host] ?? HOSTS.application)
 
   const boundApplicationName = computed(() => applicationChoice.value?.name ?? '')
 
@@ -93,9 +92,9 @@
     return !hostHasModule(record ?? {}, moduleRequirement.value)
   })
 
-  const goToHostCreate = () =>
+  const goToHostCreate = (kind) =>
     router.push({
-      path: hostSpec.value.emptyPath ?? CREATION_CENTER_PATH,
+      path: HOSTS[kind]?.emptyPath ?? hostSpec.value.emptyPath ?? CREATION_CENTER_PATH,
       query: { email: userEmail.value }
     })
 
@@ -141,10 +140,10 @@
     if (applicationBindingSpec.value) {
       list.push({
         value: DEPENDENCY_STEP,
-        title: 'Where it runs',
+        title: applicationBindingSpec.value.title,
         description: moduleRequirement.value
-          ? `${applicationBindingSpec.value.mechanism} It needs ${moduleRequirement.value.label} on.`
-          : applicationBindingSpec.value.mechanism,
+          ? `${applicationBindingSpec.value.description} It needs ${moduleRequirement.value.label} on.`
+          : applicationBindingSpec.value.description,
         fields: [],
         heading: false
       })
@@ -355,12 +354,14 @@
             record.modules.push(moduleTurnedOn.key)
           }
         }
-        const writesRule = bindingWritesRule(props.resource)
+        const writesRule = bindingWritesRule(props.resource, applicationBindingSpec.value.host)
         const bound = host.created
           ? `${host.name} was created for it. Save the rule to start using it.`
           : writesRule
             ? `Save the rule to start using it on ${host.name}.`
-            : `It runs in front of ${host.name}.`
+            : applicationBindingSpec.value.slot
+              ? `Deploy ${host.name} to start serving it.`
+              : `Save ${host.name} to start using it.`
         toast.success(`${name} created.`, {
           description: moduleTurnedOn
             ? `${moduleTurnedOn.label} was turned on for ${host.name}. ${bound}`
@@ -417,11 +418,11 @@
       v-if="currentStep === DEPENDENCY_STEP && applicationBindingSpec"
       v-model:choice="applicationChoice"
       v-model:enable-module="enableModule"
+      v-model:kind="hostKind"
       :resource="resource"
       :title="spec.title"
       :icon="spec.icon"
       :binding="applicationBindingSpec"
-      :host="hostSpec"
       :unit="spec.unit"
       :disabled="submitting"
       @answer="goNext"

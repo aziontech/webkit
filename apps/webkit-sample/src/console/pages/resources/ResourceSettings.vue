@@ -10,6 +10,7 @@
   import Section from '../../components/page/Section.vue'
   import AppLayout from '../../components/shell/AppLayout.vue'
   import { saveGroup, useBaseline } from '../../lib/behavior/forms'
+  import { bindingRecord, bindingSettingsSeed } from '../../lib/data/create-bindings'
   import {
     createFormSeed,
     createResource,
@@ -63,6 +64,14 @@
   const { dirty, commit } = useBaseline(form)
 
   const snapshot = ref(JSON.parse(JSON.stringify(form)))
+
+  const receiveHandoff = () => {
+    const resource = String(route.query.bind ?? '')
+    const record = bindingRecord(resource, String(route.query.record ?? ''))
+    const seed = bindingSettingsSeed(resource, record, props.resource)
+    if (seed) Object.assign(form, seed)
+  }
+  receiveHandoff()
 
   watch([() => props.resource, recordId], () => {
     const seed = seedForm()

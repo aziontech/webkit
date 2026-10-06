@@ -29,6 +29,8 @@
   })
 
   defineSlots<{
+    /** Sits between the heading and the search, for switching which kind of host is listed. */
+    kinds(): unknown
     row(props: { option: unknown }): unknown
     note(): unknown
   }>()
@@ -99,6 +101,14 @@
   watch(query, () => {
     if (creating.value) cancelCreating()
   })
+
+  watch(
+    () => props.noun,
+    () => {
+      query.value = ''
+      cancelCreating()
+    }
+  )
 </script>
 
 <template>
@@ -127,6 +137,8 @@
         Choose {{ article }} {{ noun }} to continue
       </p>
     </header>
+
+    <slot name="kinds" />
 
     <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
       <InputText

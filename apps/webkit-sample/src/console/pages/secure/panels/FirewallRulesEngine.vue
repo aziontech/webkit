@@ -130,7 +130,7 @@
     () => [route.query.bind, route.query.record],
     ([resource, id]) => {
       const record = bindingRecord(String(resource ?? ''), String(id ?? ''))
-      const draft = bindingRuleDraft(String(resource ?? ''), record)
+      const draft = bindingRuleDraft(String(resource ?? ''), record, 'firewall')
       if (!draft) return
       editingRule.value = null
       draftRule.value = draft

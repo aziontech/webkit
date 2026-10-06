@@ -5,8 +5,8 @@
   import { computed, ref, watch } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
-  import FunctionCodeEditor from '../../components/function/FunctionCodeEditor.vue'
   import SpecFieldRow from '../../components/form/SpecFieldRow.vue'
+  import FunctionCodeEditor from '../../components/function/FunctionCodeEditor.vue'
   import Section from '../../components/page/Section.vue'
   import StepperCreatePage from '../../components/page/StepperCreatePage.vue'
   import DependencyStep from '../../components/resource/DependencyStep.vue'
@@ -84,38 +84,53 @@
     { label: 'Create Function' }
   ])
 
-  const applicationBindingSpec = bindingFor('functions')
-  const hostSpec = HOSTS[applicationBindingSpec.host]
+  const hostKind = ref('')
+
+  const applicationBindingSpec = computed(() =>
+    bindingFor('functions', applicationChoice.value?.kind ?? hostKind.value)
+  )
+  const hostSpec = computed(() => HOSTS[applicationBindingSpec.value.host])
 
   const canBindApplication = computed(
-    () => !returnTo.value && executionEnvironment.value === 'application'
+    () => !returnTo.value && executionEnvironment.value === applicationBindingSpec.value.host
   )
 
   const boundApplicationName = computed(() => applicationChoice.value?.name ?? '')
 
   const moduleRequirement = computed(() =>
-    canBindApplication.value ? moduleRequirementFor('functions', applicationBindingSpec.host) : null
+    canBindApplication.value
+      ? moduleRequirementFor('functions', applicationBindingSpec.value.host)
+      : null
   )
 
   const moduleMissing = computed(() => {
     if (!moduleRequirement.value || !applicationChoice.value) return false
     const record =
       applicationChoice.value.mode === 'existing'
-        ? hostRecord(applicationBindingSpec.host, boundApplicationName.value)
+        ? hostRecord(applicationBindingSpec.value.host, boundApplicationName.value)
         : {}
     return !hostHasModule(record ?? {}, moduleRequirement.value)
   })
 
   const enableModule = ref(false)
 
-  const goToCreationCenter = () =>
-    router.push({ path: CREATION_CENTER_PATH, query: { email: userEmail.value } })
+  const goToHostCreate = (kind) =>
+    router.push({
+      path: HOSTS[kind]?.emptyPath ?? CREATION_CENTER_PATH,
+      query: { email: userEmail.value }
+    })
 
-  watch(executionEnvironment, (environment) => {
-    if (environment !== 'application') applicationChoice.value = null
+  watch(applicationChoice, (choice) => {
+    if (choice?.kind) executionEnvironment.value = choice.kind
   })
 
-  const asksHost = computed(() => Boolean(applicationBindingSpec) && !returnTo.value)
+  watch(executionEnvironment, (environment) => {
+    if (applicationChoice.value && environment !== applicationChoice.value.kind) {
+      applicationChoice.value = null
+    }
+  })
+
+  const asksHost = computed(() => Boolean(applicationBindingSpec.value) && !returnTo.value)
 
   const stepDefs = computed(() => {
     const list = []
@@ -123,8 +138,8 @@
     if (asksHost.value) {
       list.push({
         value: DEPENDENCY_STEP,
-        title: 'Where it runs',
-        description: applicationBindingSpec.mechanism,
+        title: applicationBindingSpec.value.title,
+        description: applicationBindingSpec.value.description,
         heading: false
       })
       if (moduleRequirement.value && moduleMissing.value) {
@@ -303,6 +318,18 @@
     }
   ]
 
+  const settingsFields = computed(() =>
+    SETTINGS_FIELDS.map((field) =>
+      field.id === 'executionEnvironment' && applicationChoice.value
+        ? {
+            ...field,
+            readonly: true,
+            helper: `Set by the ${hostSpec.value.noun} it runs on, ${applicationChoice.value.name}.`
+          }
+        : field
+    )
+  )
+
   const settingsModel = {
     name,
     runtime: ref(RUNTIME.label),
@@ -338,7 +365,7 @@
       })
 
       const application = canBindApplication.value
-        ? resolveHostChoice(applicationBindingSpec.host, applicationChoice.value)
+        ? resolveHostChoice(applicationBindingSpec.value.host, applicationChoice.value)
         : null
 
       if (application) {
@@ -348,7 +375,7 @@
             : `Save the rule to run it on ${application.name}.`
         })
         commit()
-        const target = applicationBindingSpec.destination({ host: application, record })
+        const target = applicationBindingSpec.value.destination({ host: application, record })
         router.push({ path: target.path, query: { email: userEmail.value, ...target.query } })
         return
       }
@@ -400,15 +427,15 @@
       v-if="currentStep === DEPENDENCY_STEP"
       v-model:choice="applicationChoice"
       v-model:enable-module="enableModule"
+      v-model:kind="hostKind"
       resource="functions"
       title="Create Function"
       icon="ai ai-edge-functions"
       :binding="applicationBindingSpec"
-      :host="hostSpec"
       unit="function"
       :disabled="saving"
       @answer="onHostAnswer"
-      @empty-action="goToCreationCenter"
+      @empty-action="goToHostCreate"
     />
 
     <ModuleStep
@@ -451,7 +478,7 @@
         <template #content>
           <Item.List>
             <SpecFieldRow
-              v-for="field in SETTINGS_FIELDS"
+              v-for="field in settingsFields"
               :key="field.id"
               v-model="settingsModel[field.id].value"
               :field="field"

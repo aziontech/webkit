@@ -1,3 +1,4 @@
+import { createdRowsFor } from '../state/created-resources'
 import { environmentNameOptions } from './environments'
 import { BUCKETS } from './object-storage'
 
@@ -96,6 +97,13 @@ const CUSTOM_PAGE_CODES = [
 const SAMPLE_CONNECTORS = [
   { value: 'origin-http', label: 'origin-http' },
   { value: 'assets-bucket', label: 'assets-bucket' }
+]
+
+const pageConnectorOptions = () => [
+  ...createdRowsFor('connectors')
+    .filter((connector) => connector.type !== 'live_ingest')
+    .map((connector) => ({ value: connector.name, label: connector.name })),
+  ...SAMPLE_CONNECTORS
 ]
 
 export const FUNCTION_STARTER = `async function handleRequest(request) {
@@ -1186,7 +1194,9 @@ export const createResources = [
             label: 'Connector',
             required: true,
             placeholder: 'Select a connector',
-            options: SAMPLE_CONNECTORS,
+            get options() {
+              return pageConnectorOptions()
+            },
             helper: 'Where the page content is fetched from. Live Ingest connectors are not listed.'
           },
           {

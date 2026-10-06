@@ -43,6 +43,7 @@
   import { focusSection } from '../../lib/behavior/anchor-nav'
   import { useListRefresh } from '../../lib/behavior/list-state'
   import { useTabEnter } from '../../lib/behavior/tab-enter'
+  import { bindingRecord, resourceForSlot } from '../../lib/data/create-bindings'
   import { createResourcePath } from '../../lib/data/create-resources'
   import { deploymentRowsFor } from '../../lib/data/deployment-history'
   import { AZION_DEFAULT_ID } from '../../lib/data/deployment-strategies'
@@ -486,6 +487,21 @@
   const openDeploy = () => {
     deployOpen.value = true
   }
+
+  const receiveHandoff = () => {
+    const slot = String(route.query.bind ?? '')
+    const resource = resourceForSlot(slot)
+    const record = resource ? bindingRecord(resource, String(route.query.record ?? '')) : null
+    if (!record) return
+    staged[slot] = { id: record.id, name: record.name }
+    openNodes[slot] = true
+    const query = { ...route.query }
+    delete query.bind
+    delete query.record
+    router.replace({ query })
+    deployOpen.value = true
+  }
+  receiveHandoff()
 
   const onDeployed = () => {
     applyStaged()

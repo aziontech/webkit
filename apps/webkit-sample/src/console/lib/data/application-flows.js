@@ -6,6 +6,7 @@ export const APPLICATION_FLOWS = {
     description:
       'Deploy from a repository you already have. Connect the Git account that owns it and select the repository to import.',
     steps: [
+      { id: 'where', label: 'Where it runs', description: 'Select or create a Workload.' },
       { id: 'method', label: 'Select a method' },
       { id: 'source', label: 'Select a repository' },
       { id: 'configure', label: 'Create and deploy' }
@@ -19,6 +20,7 @@ export const APPLICATION_FLOWS = {
     description:
       'Create the application now and push to it from your own terminal. Azion links the local project, builds it with your framework preset, and keeps azion.json in sync. No repository required.',
     steps: [
+      { id: 'where', label: 'Where it runs', description: 'Select or create a Workload.' },
       { id: 'method', label: 'Select a method' },
       { id: 'configure', label: 'Configure and create' }
     ]
@@ -31,6 +33,7 @@ export const APPLICATION_FLOWS = {
     description:
       'Clone a framework starter already wired to build and deploy on Azion. Next, Astro, Vue, Nuxt, and more.',
     steps: [
+      { id: 'where', label: 'Where it runs', description: 'Select or create a Workload.' },
       { id: 'method', label: 'Select a method' },
       { id: 'source', label: 'Select a template' },
       { id: 'repository', label: 'Connect a repository' },
@@ -57,6 +60,7 @@ export const TEMPLATE_TARGETS = {
 }
 
 export const PROVISIONAL_STEPS = [
+  { id: 'where', label: 'Where it runs', description: 'Select or create a Workload.' },
   { id: 'method', label: 'Select a method' },
   { id: 'source', label: 'Select a source' },
   { id: 'configure', label: 'Create and deploy' }

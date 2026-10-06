@@ -5,7 +5,12 @@
 
   import DeploymentFlow from '../../components/deployment/DeploymentFlow.vue'
   import WizardPage from '../../components/page/WizardPage.vue'
-  import { resolveApplicationChoice } from '../../lib/behavior/application-binding'
+  import DependencyStep from '../../components/resource/DependencyStep.vue'
+  import {
+    hostRecord,
+    HOSTS,
+    resolveApplicationChoice
+  } from '../../lib/behavior/application-binding'
   import { useCreateOrigin } from '../../lib/behavior/create-origin'
   import { useBaseline } from '../../lib/behavior/forms'
   import {
@@ -21,6 +26,7 @@
     validateScratch
   } from '../../lib/data/application-scratch'
   import { connectorMeta } from '../../lib/data/connectors'
+  import { bindingFor } from '../../lib/data/create-bindings'
   import {
     defaultFirewallProtection,
     enabledFirewallModules,
@@ -35,6 +41,7 @@
     publishDeployment,
     resourceChain
   } from '../../lib/data/provisioning'
+  import { releaseSeedForWorkload } from '../../lib/data/releases'
   import { installIntegration } from '../../lib/data/template-integrations'
   import { configuredTemplateSteps } from '../../lib/data/template-provisioning'
   import { getTemplate, templateSource } from '../../lib/data/templates.js'
@@ -64,6 +71,12 @@
 
   const target = ref(null)
 
+  const workloadBinding = bindingFor('applications')
+  const workloadChoice = ref(null)
+  const whereAnswered = ref(false)
+  const publishes = computed(() => workloadChoice.value?.mode === 'new')
+  const deploysToExisting = computed(() => workloadChoice.value?.mode === 'existing')
+
   const phase = ref('wizard')
   const flowId = ref('')
   const stepIndex = ref(0)
@@ -88,7 +101,8 @@
         part.id === 'configure' && isInstall.value ? { ...part, label: 'Review and add' } : part
       )
   })
-  const step = computed(() => steps.value[stepIndex.value]?.id ?? 'method')
+  const step = computed(() => steps.value[stepIndex.value]?.id ?? 'where')
+  const indexOf = (id) => Math.max(0, steps.value.findIndex((part) => part.id === id))
   const isLastStep = computed(() => stepIndex.value === steps.value.length - 1)
 
   const form = reactive({
@@ -120,7 +134,8 @@
     ...form,
     source: source.value,
     repository: repository.value,
-    target: target.value
+    target: target.value,
+    workloadChoice: workloadChoice.value
   }))
 
   const nameTouched = ref(false)
@@ -170,8 +185,24 @@
     flowId.value = id
     if (id === 'cli') setSource({ ...SCRATCH_SOURCE })
     else setSource(null)
-    stepIndex.value = 1
+    stepIndex.value = indexOf('method') + 1
   }
+
+  const firstOpenStep = () => {
+    if (!flowId.value) return indexOf('method')
+    if (flowId.value !== 'cli' && !source.value) return indexOf('source')
+    if (flowId.value === 'template' && source.value) return indexOf('source') + 1
+    return indexOf('configure')
+  }
+
+  const answerWhere = () => {
+    whereAnswered.value = true
+    clearErrors()
+    stepIndex.value = firstOpenStep()
+  }
+
+  const goToWorkloadCreate = () =>
+    router.push({ path: HOSTS.workload.emptyPath, query: { email: userEmail.value } })
 
   const seedFromQuery = () => {
     const method = route.query.method
@@ -183,9 +214,9 @@
       const template = getTemplate(String(slug))
       if (template.slug === String(slug)) {
         setSource(templateSource(template))
-        stepIndex.value = 2
       }
     }
+    stepIndex.value = 0
 
     commit()
   }
@@ -195,7 +226,7 @@
     if (stepIndex.value <= 0) return
     stepIndex.value -= 1
     clearErrors()
-    if (stepIndex.value === 0) flowId.value = ''
+    if (step.value === 'method') flowId.value = ''
     if (step.value === 'target') target.value = null
   }
 
@@ -203,7 +234,7 @@
     if (index >= stepIndex.value) return
     stepIndex.value = index
     clearErrors()
-    if (index === 0) flowId.value = ''
+    if (steps.value[index]?.id === 'method') flowId.value = ''
     if (steps.value[index]?.id === 'target') target.value = null
   }
 
@@ -280,6 +311,11 @@
   const advance = async () => {
     if (submitting.value) return
 
+    if (step.value === 'where') {
+      answerWhere()
+      return
+    }
+
     if (!isLastStep.value) {
       if (step.value === 'repository' && !validateRepository()) {
         revealInvalid()
@@ -304,7 +340,7 @@
         return
       }
 
-      if (flowId.value === 'cli') {
+      if (!publishes.value) {
         finishCreate()
         return
       }
@@ -374,7 +410,7 @@
   const deploySteps = computed(() => {
     if (isScratch.value)
       return workloadProvisioningSteps({
-        workload: form.name.trim() || 'my-application',
+        workload: publishes.value ? workloadChoice.value.name : form.name.trim() || 'my-application',
         application: form.name.trim() || 'my-application',
         applicationExisting: true,
         protected: form.protection.enabled,
@@ -502,9 +538,10 @@
     provisioned.value = provisionDeployment({
       ...scratchResources(),
       ...integrationResources(),
-      publish: flowId.value !== 'cli',
+      publish: publishes.value,
       source: flowId.value === 'cli' ? 'cli' : 'git',
-      repoName: application.name,
+      repoName: publishes.value ? workloadChoice.value.name : application.name,
+      applicationName: application.name,
       scope: gitScope.value || 'gab-az',
       isPublic: repository.value ? repository.value.visibility !== 'private' : true,
       framework: source.value?.framework ?? '',
@@ -519,7 +556,35 @@
       customDomains: customDomains()
     })
     commit()
+    if (deploysToExisting.value) {
+      deployToWorkload(provisioned.value.application)
+      return
+    }
     phase.value = 'success'
+  }
+
+  const deployToWorkload = (application) => {
+    const workload = hostRecord('workload', workloadChoice.value.name)
+    if (!workload) {
+      phase.value = 'success'
+      return
+    }
+    const { settingsIds } = releaseSeedForWorkload(workload.id)
+    toast.success(`${application.name} created.`, {
+      description: `Deploy it to ${workload.name} to start serving it.`
+    })
+    router.push({
+      path: '/deployments/releases/new',
+      query: {
+        email: userEmail.value,
+        workload: workload.name,
+        workloadId: workload.id,
+        scopedType: 'application',
+        resourceId: application.name,
+        ...(settingsIds.length ? { deploymentIds: settingsIds.join(',') } : {}),
+        ...(settingsIds.length > 1 ? { pickTarget: 'true' } : {})
+      }
+    })
   }
 
   const onDeployFailed = (failedStep) => {
@@ -532,20 +597,22 @@
   }
 
   const outcomeTitle = computed(() =>
-    isScratch.value && !published.value ? 'Application created' : 'Application deployed'
+    published.value ? 'Application deployed' : 'Application created'
   )
 
   const pageDescription = computed(() =>
     flowId.value === 'cli'
-      ? 'An application is the code Azion runs, and the configuration it runs with. Name it, choose how it caches and where it fetches from. The last step creates it, with nothing deployed yet.'
-      : 'An application is the code Azion runs, and the configuration it runs with. Select where the code comes from, name it, and the last step deploys it along with the workload that publishes it.'
+      ? 'An application is the code Azion runs, and the configuration it runs with. Name it, choose how it caches and where it fetches from. The last step creates it and deploys it to the workload you selected.'
+      : 'An application is the code Azion runs, and the configuration it runs with. Select where the code comes from and name it. The last step creates it and deploys it to the workload you selected.'
   )
 
   const outcomeLead = computed(() => {
-    if (!isScratch.value) return 'You deployed a new application.'
-    return published.value
+    if (!published.value) {
+      return 'The application layer is ready. Nothing serves it yet. Deploy it from Next steps.'
+    }
+    return isScratch.value
       ? 'It is live on the workload provisioned for it.'
-      : 'The application layer is ready. Nothing serves it yet. Deploy it from Next steps.'
+      : 'You deployed a new application.'
   })
 
   const published = computed(() => Boolean(provisioned.value?.workload))
@@ -622,13 +689,20 @@
     )
 
   const onChangeAnswer = (answer) =>
-    goToStep(answer === 'repository' ? 2 : flowId.value === 'cli' ? 0 : 1)
+    goToStep(
+      answer === 'repository'
+        ? indexOf('repository')
+        : flowId.value === 'cli'
+          ? indexOf('method')
+          : indexOf('source')
+    )
 
   const nextLabel = computed(() => {
     if (step.value === 'method') return ''
+    if (step.value === 'where') return whereAnswered.value ? 'Next' : ''
     if (!isLastStep.value) return 'Next'
     if (isInstall.value) return `Add to ${target.value?.name ?? 'application'}`
-    return flowId.value === 'cli' ? 'Create Application' : 'Create and deploy'
+    return publishes.value ? 'Create and deploy' : 'Create Application'
   })
 
   const nextDisabled = computed(
@@ -644,7 +718,7 @@
     title="Create Application"
     :description="pageDescription"
     title-id="create-application-title"
-    :heading="phase !== 'success'"
+    :heading="phase !== 'success' && step !== 'where'"
     :steps="steps"
     :current-step="stepIndex"
     :next-label="nextLabel"
@@ -657,8 +731,21 @@
     @go="goToStep"
     @cancel="cancel"
   >
+    <DependencyStep
+      v-if="step === 'where'"
+      v-model:choice="workloadChoice"
+      resource="applications"
+      title="Create Application"
+      icon="ai ai-edge-application"
+      :binding="workloadBinding"
+      unit="application"
+      :disabled="submitting"
+      @answer="answerWhere"
+      @empty-action="goToWorkloadCreate"
+    />
+
     <MethodStep
-      v-if="step === 'method'"
+      v-else-if="step === 'method'"
       @select="chooseMethod"
     />
 
@@ -759,7 +846,7 @@
         :lead="outcomeLead"
         :domain="outcomeDomain"
         :live="!form.domainHost.trim()"
-        :next-steps="isScratch ? scratchNextSteps : []"
+        :next-steps="isScratch || !published ? scratchNextSteps : []"
         :source="flowId === 'cli' ? 'cli' : 'git'"
         :application-name="provisioned?.application?.name ?? form.name"
         @manage="manageWorkload"
