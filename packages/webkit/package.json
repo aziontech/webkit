@@ -279,6 +279,7 @@
     "./sidebar-group": "./src/components/layout/sidebar/sidebar-group.vue",
     "./sidebar-header": "./src/components/layout/sidebar/sidebar-header.vue",
     "./sidebar-footer": "./src/components/layout/sidebar/sidebar-footer.vue",
+    "./call-to-action": "./src/components/marketing/call-to-action/call-to-action.vue",
     "./big-numbers": "./src/components/marketing/big-numbers/big-numbers.vue",
     "./carousel": "./src/components/marketing/carousel/index.ts",
     "./carousel-root": "./src/components/marketing/carousel/carousel.vue",

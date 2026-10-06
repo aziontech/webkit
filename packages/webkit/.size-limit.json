@@ -224,5 +224,10 @@
     "name": "big-numbers",
     "path": "src/components/marketing/big-numbers/big-numbers.vue",
     "limit": "2.5 KB"
+  },
+  {
+    "name": "call-to-action",
+    "path": "src/components/marketing/call-to-action/call-to-action.vue",
+    "limit": "4.5 KB"
   }
 ]
