@@ -219,5 +219,10 @@
     "path": "src/components/content/illustration/illustration.vue",
     "limit": "2 KB",
     "entryOnly": true
+  },
+  {
+    "name": "big-numbers",
+    "path": "src/components/marketing/big-numbers/big-numbers.vue",
+    "limit": "2.5 KB"
   }
 ]
