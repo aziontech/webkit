@@ -7242,7 +7242,7 @@
           "type": "string",
           "default": "''",
           "required": "false",
-          "doc": "Placeholder forwarded to the internal `<input>`. When empty, the placeholder falls back to the selected country's mask literal (e.g. `(11) 99999-9999`)."
+          "doc": "Placeholder forwarded to the internal `<input>`. When empty, the placeholder falls back to the selected country's mask with each `#` shown as `9` (e.g. `(99) 99999-9999`)."
         },
         {
           "name": "helperText",
