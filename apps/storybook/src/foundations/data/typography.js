@@ -10,6 +10,7 @@ export const typographyCatalog = [
   { className: 'text-big-number-lg', sample: 'Big number lg' },
   { className: 'text-big-number-md', sample: 'Big number md' },
   { className: 'text-big-number-sm', sample: 'Big number sm' },
+  { className: 'text-heading-3xl', sample: 'Heading 3xl' },
   { className: 'text-heading-2xl', sample: 'Heading 2xl' },
   { className: 'text-heading-xl', sample: 'Heading xl' },
   { className: 'text-heading-lg', sample: 'Heading lg' },
