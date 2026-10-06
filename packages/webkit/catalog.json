@@ -7640,6 +7640,20 @@
           "default": "false",
           "required": "false",
           "doc": "When true, the chip body becomes interactive (`role=\"button\"`, focusable) and emits `click` on activation (click / Enter / Space)."
+        },
+        {
+          "name": "selectable",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "When true, the chip becomes a toggle: activating it flips the `selected` model and emits `click`."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "Suppresses activation, toggling and removal."
         }
       ],
       "events": [
@@ -7651,7 +7665,7 @@
         {
           "name": "click",
           "payload": "(event: MouseEvent | KeyboardEvent, label: string)",
-          "notes": "Fires only when `clickable` is true and the chip body is activated — by pointer, or `Enter` / `Space` while the root is focused. `label` identifies which chip was clicked. The trailing remove button stops propagation, so activating it emits `remove` only, never `click`."
+          "notes": "Fires only when `clickable` or `selectable` is true, `disabled` is false, and the chip body is activated — by pointer, or `Enter` / `Space` while the root is focused. `label` identifies which chip was clicked. When `selectable`, the `selected` model is already flipped when `click` fires. The trailing remove button stops propagation, so activating it emits `remove` only, never `click`. `update:selected` comes from `v-model:selected` (see above)."
         }
       ],
       "slots": [
@@ -7661,11 +7675,12 @@
           "notes": "Chip content; falls back to `label` when empty."
         }
       ],
-      "purpose": "A Chip is a compact, pill-shaped token that labels a discrete value the user has applied — most often a filter on a data view. Unlike `tag` (a read-only status/category badge with severity color coding), a Chip carries no severity and exposes an optional trailing remove control: when `removable` is set, it renders a real `<button>` that emits `remove`, so the consumer can drop the value from a collection. This is the token consumed by the data table's `#filters` slot (`<Chip :label=\"f.label\" removable @remove=\"dropFilter(f)\" />`): each active filter becomes one removable Chip, and dismissing it removes that filter. Reach for a Chip when a value is user-applied and dismissible; reach for `tag` when it is a static status or category indicator. `kind` covers the three jobs a chip does in a filter surface, so a consumer never restyles the component to get one of them: - **`filled`** — a value that IS applied. The shared surface and border plus `--shadow-sm`: the loudest of the three, because it is state. - **`outlined`** — a value the user COULD apply. Same surface and border, no shadow: it recedes to an offer without becoming disabled, so a filter vocabulary can stay on screen instead of hiding inside a menu. - **`dashed`** — the control that CREATES a chip (\"Add filter\"). A dashed outline is the standing convention for \"add another one of these\", which is what separates the thing that makes filters from the things that are filters. **Presence is the consumer's, not the chip's.** `remove` fires the moment the control is activated; the chip does not animate itself away or unmount itself. A chip that hid itself on remove could only ever serve the one case where removing it also destroys it — a filter bar where a removed value stays on screen as an `outlined` offer was impossible, because the instance stayed invisible forever. Exit motion, if wanted, belongs to whatever owns the list (a `TransitionGroup` around the group).",
+      "purpose": "A Chip is a compact, pill-shaped token that labels a discrete value the user has applied — most often a filter on a data view. Unlike `tag` (a read-only status/category badge with severity color coding), a Chip carries no severity and exposes an optional trailing remove control: when `removable` is set, it renders a real `<button>` that emits `remove`, so the consumer can drop the value from a collection. This is the token consumed by the data table's `#filters` slot (`<Chip :label=\"f.label\" removable @remove=\"dropFilter(f)\" />`): each active filter becomes one removable Chip, and dismissing it removes that filter. Reach for a Chip when a value is user-applied and dismissible; reach for `tag` when it is a static status or category indicator. `kind` covers the three jobs a chip does in a filter surface, so a consumer never restyles the component to get one of them: - **`filled`** — a value that IS applied. The shared surface and border plus `--shadow-sm`: the loudest of the three, because it is state. - **`outlined`** — a value the user COULD apply. Same surface and border, no shadow: it recedes to an offer without becoming disabled, so a filter vocabulary can stay on screen instead of hiding inside a menu. - **`dashed`** — the control that CREATES a chip (\"Add filter\"). A dashed outline is the standing convention for \"add another one of these\", which is what separates the thing that makes filters from the things that are filters. **Selected is a mode, not a kind.** `selectable` turns the chip into a toggle: activating it flips the `selected` model (`v-model:selected`), and the state stays after the click until the chip is activated again. It is independent of `kind` — `filled` marks an applied filter and never means \"selected\", so a selectable chip of any kind paints its selected state the same way (`--bg-selected` fill, `--border-selected` outline) and announces it as `aria-pressed`. Reach for `selectable` when a set of chips is a row of toggles (quick filters, facets); keep `clickable` when activation opens or does something without holding a state. **Presence is the consumer's, not the chip's.** `remove` fires the moment the control is activated; the chip does not animate itself away or unmount itself. A chip that hid itself on remove could only ever serve the one case where removing it also destroys it — a filter bar where a removed value stays on screen as an `outlined` offer was impossible, because the instance stayed invisible forever. Exit motion, if wanted, belongs to whatever owns the list (a `TransitionGroup` around the group).",
       "useWhen": [
         "Represent a selectable or removable token — active filters, multi-select values, entered keywords.",
         "Represent a value that is *available* but not applied (`kind=\"outlined\"`), so the set of things a view can be narrowed by stays visible.",
         "Represent the \"add another\" affordance for such a set (`kind=\"dashed\"`).",
+        "Represent a row of toggles that each hold an on/off state (`selectable` + `v-model:selected`).",
         "The element is interactive (clickable / dismissible)."
       ],
       "avoidWhen": [
