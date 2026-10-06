@@ -9354,7 +9354,7 @@
           "type": "'content' | 'site'",
           "default": "'content'",
           "required": "false",
-          "doc": "Where the footer sits: `content` is the default — the bands run full bleed across whatever zone holds the footer, opening on the page boundary; `site` closes a framed marketing page instead, capping the bands at the site measure and drawing the frame that page carries: the side rules, the hatched gutters and the closing band."
+          "doc": "Where the footer sits: `content` is the default — the bands run full bleed across whatever zone holds the footer, opening on the page boundary; `site` closes a framed marketing page instead, capping the bands at the site measure and drawing the frame that page carries: the side rules, the hatched gutters and the corner marks, closing on a full-bleed bottom rule."
         }
       ],
       "slots": [
@@ -9411,7 +9411,7 @@
       "related": [
         "global-header` — the top-of-page chrome counterpart; same shell philosophy (regions composed by the consumer).",
         "brand`, `icon-button`, `status-indicator`, `select` — the components consumers compose inside the bands; the footer reimplements none of them.",
-        "frame-box` — the footer's own frame: the hatched gutters, the closing band and the signature box are `FrameBox` instances (`borders` / `marks` / `hatch`)."
+        "frame-box` — the footer's own frame: the hatched gutters, the framed column and the signature box are `FrameBox` instances (`borders` / `marks` / `hatch`)."
       ],
       "bestPractices": [
         "Compose every band from existing DS components (`Brand`, `IconButton kind=\"transparent\"`, `StatusIndicator`, `Select`); never rebuild them inside the slots.",
@@ -9421,7 +9421,7 @@
         "Keep each band close to the canonical content (up to ~7 social icons; one status indicator; one language select; one brand lockup; a one-line tagline). Every band grows past its `min-h-14` floor rather than clipping, so a longer status string or an extra icon wraps safely — but a much heavier cluster belongs in the columns, not in a band.",
         "Give the `tagline` slot plain text, not a heading element: the footer already wraps it in the `.text-heading-xl` measure, and a real `h*` in a `contentinfo` landmark competes with the page's own outline.",
         "Pick the placement from the page, not from the look: `site` on a page that is a framed marketing column (its hero, sections and this footer share one measure), `content` — the default — anywhere the footer closes an app or docs zone. A `site` footer under an unframed page draws a frame nothing above it continues.",
-        "Leave the gutters and the closing band alone — they are the `site` frame's own page material, and the placement decides them. A page that needs more air below the footer adds a `SectionGap`, and one that needs none is not this design."
+        "Leave the gutters and the column frame alone — they are the `site` frame's own page material, and the placement decides them. A page that needs more air below the footer adds a `SectionGap`, and one that needs none is not this design."
       ]
     },
     "footer-root": {
@@ -9446,7 +9446,7 @@
           "type": "'content' | 'site'",
           "default": "'content'",
           "required": "false",
-          "doc": "Where the footer sits: `content` is the default — the bands run full bleed across whatever zone holds the footer, opening on the page boundary; `site` closes a framed marketing page instead, capping the bands at the site measure and drawing the frame that page carries: the side rules, the hatched gutters and the closing band."
+          "doc": "Where the footer sits: `content` is the default — the bands run full bleed across whatever zone holds the footer, opening on the page boundary; `site` closes a framed marketing page instead, capping the bands at the site measure and drawing the frame that page carries: the side rules, the hatched gutters and the corner marks, closing on a full-bleed bottom rule."
         }
       ],
       "slots": [
@@ -9503,7 +9503,7 @@
       "related": [
         "global-header` — the top-of-page chrome counterpart; same shell philosophy (regions composed by the consumer).",
         "brand`, `icon-button`, `status-indicator`, `select` — the components consumers compose inside the bands; the footer reimplements none of them.",
-        "frame-box` — the footer's own frame: the hatched gutters, the closing band and the signature box are `FrameBox` instances (`borders` / `marks` / `hatch`)."
+        "frame-box` — the footer's own frame: the hatched gutters, the framed column and the signature box are `FrameBox` instances (`borders` / `marks` / `hatch`)."
       ],
       "bestPractices": [
         "Compose every band from existing DS components (`Brand`, `IconButton kind=\"transparent\"`, `StatusIndicator`, `Select`); never rebuild them inside the slots.",
@@ -9513,7 +9513,7 @@
         "Keep each band close to the canonical content (up to ~7 social icons; one status indicator; one language select; one brand lockup; a one-line tagline). Every band grows past its `min-h-14` floor rather than clipping, so a longer status string or an extra icon wraps safely — but a much heavier cluster belongs in the columns, not in a band.",
         "Give the `tagline` slot plain text, not a heading element: the footer already wraps it in the `.text-heading-xl` measure, and a real `h*` in a `contentinfo` landmark competes with the page's own outline.",
         "Pick the placement from the page, not from the look: `site` on a page that is a framed marketing column (its hero, sections and this footer share one measure), `content` — the default — anywhere the footer closes an app or docs zone. A `site` footer under an unframed page draws a frame nothing above it continues.",
-        "Leave the gutters and the closing band alone — they are the `site` frame's own page material, and the placement decides them. A page that needs more air below the footer adds a `SectionGap`, and one that needs none is not this design."
+        "Leave the gutters and the column frame alone — they are the `site` frame's own page material, and the placement decides them. A page that needs more air below the footer adds a `SectionGap`, and one that needs none is not this design."
       ]
     },
     "footer-column": {
