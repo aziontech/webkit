@@ -8,12 +8,12 @@ import { tokenRef } from '../../scripts/refs.js'
 // brighter line, so any stacked or abutting border doubled. An opaque step gives a rule one
 // identity wherever it is drawn, and makes overlap a no-op.
 //
-// The steps are ones added to fill the ramp's gaps (`gray.150` / `gray.250` / `gray.750` /
+// The steps are ones added to fill the ramp's gaps (`gray.150` / `gray.275` / `gray.750` /
 // `gray.775`), NOT the steps that bracket them — `surface-200` (light) and `surface-800` (dark)
 // are what `--bg-selected` and `--bg-disabled` already use, so a border drawn there is exactly
 // its own fill and vanishes. Every pairing a component can produce now clears zero:
-//   light default  surface-250  vs canvas 32 · surface 37 · selected/disabled 11
-//   light muted    surface-150  vs canvas 14 · surface 19 · selected/disabled 7
+//   light default  surface-275  vs canvas 36 · surface 46 · selected/disabled 20
+//   light muted    surface-150  vs canvas 9 · surface 19 · selected/disabled 7
 //   dark  default  surface-750  vs canvas 43 · surface 33 · raised 23 · selected 17
 //   dark  muted    surface-775  vs canvas 36 · surface 26 · raised 16 · selected 10
 //
@@ -24,7 +24,7 @@ import { tokenRef } from '../../scripts/refs.js'
 // cannot go proportionally as subtle: `--bg-surface-raised` sits at 20 and would swallow it.
 export const border = {
   light: {
-    'border-default': tokenRef('theme.surfaces.surface-250'),
+    'border-default': tokenRef('theme.surfaces.surface-275'),
     'border-muted': tokenRef('theme.surfaces.surface-150'),
     'border-strong': tokenRef('primitives.base.black'),
     'border-selected': tokenRef('brand.primary.primary-500')
