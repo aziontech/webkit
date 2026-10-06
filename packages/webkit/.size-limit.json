@@ -140,6 +140,11 @@
     "limit": "2.5 KB"
   },
   {
+    "name": "logo-wall",
+    "path": "src/components/marketing/logo-wall/logo-wall.vue",
+    "limit": "3.75 KB"
+  },
+  {
     "name": "media-split",
     "path": "src/components/marketing/media-split/media-split.vue",
     "limit": "5.75 KB"
@@ -259,5 +264,11 @@
     "name": "bento-grid-root",
     "path": "src/components/marketing/bento-grid/bento-grid.vue",
     "limit": "1 KB"
+  },
+  {
+    "name": "quote-tabs",
+    "path": "src/components/marketing/quote-tabs/quote-tabs.vue",
+    "limit": "20.75 KB",
+    "entryOnly": true
   }
 ]

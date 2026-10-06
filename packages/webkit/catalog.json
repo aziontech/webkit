@@ -9929,6 +9929,95 @@
         "Render the bands with `v-for` directly in the default slot; each direct child is one band, so a wrapper element around them collapses the run into a single band."
       ]
     },
+    "logo-wall": {
+      "import": "@aziontech/webkit/logo-wall",
+      "target": "./src/components/marketing/logo-wall/logo-wall.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/logo-wall",
+      "category": "marketing",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "kind",
+          "type": "LogoWallKind",
+          "default": "'square'",
+          "required": "false",
+          "doc": "The cell's proportion; `rectangle` sets every cell at 3:2, keeps three columns below `sm`, and holds three columns beside `aside` from `lg`."
+        },
+        {
+          "name": "items",
+          "type": "LogoItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The marks rendered in the grid, in order; each item is `{ src, alt, href?, shape? }` where `src` is the mark's URL, `alt` names the company, `href` links the cell to that customer's story, and `shape` sets a near-square mark taller than a wordmark."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name for the group of marks, announced instead of an unnamed region."
+        },
+        {
+          "name": "linkLabel",
+          "type": "string",
+          "default": "'Read story'",
+          "required": "false",
+          "doc": "Words revealed under a linked mark on hover and focus, and the lead of that link's accessible name."
+        }
+      ],
+      "events": [
+        {
+          "name": "item-click",
+          "payload": "(event: MouseEvent, item: LogoItem)",
+          "notes": "Fired when a linked cell is activated; `item` is the matched `items` entry. The anchor still navigates unless the handler calls `event.preventDefault()`, which is how a client-side router takes over."
+        }
+      ],
+      "slots": [
+        {
+          "name": "aside",
+          "scope": "—",
+          "notes": "Content set beside the wall from `lg` up, centred in a panel that never sets the band's height (keep it short enough to fit two rows of squares from `xl`), such as one customer's `quote`, on a `--bg-canvas` panel padded by `--spacing-xl` and framed with a registration mark in each corner; its child fills the panel's width. When it is empty the wall spans the full width."
+        },
+        {
+          "name": "mark",
+          "scope": "{ item: LogoItem; index: number }",
+          "notes": "One cell's mark, replacing the image built from the item — for a mark that owns its own theming (a per-theme asset swap, a silhouette filter). The slotted content carries its own alternative text and sits in a 28px-tall box; on a linked cell it lifts with the built image's motion."
+        }
+      ],
+      "purpose": "The customer-proof band of a marketing page: a framed grid of square cells, one company mark to a cell, each one optionally linked to that customer's story, under one accessible group name. It is deliberately a static grid rather than an auto-scrolling strip — moving content needs a pause control to meet WCAG 2.2.2, and a wall a reader can scan beats one they have to wait for. The cells are `card-grid` frame cells, so the wall draws the same hairlines and registration marks as every other framed band on the page. A linked cell is the whole square: on hover and focus a wash rises behind it, the mark lifts, and a `Read story` label slides in under it, so the wall doubles as the way into the case studies. Fill the `aside` slot and the band splits from `lg` up — the wall on the start edge, one of those customers speaking on the end edge on a padded canvas panel framed like the cells, a registration mark in each of its corners and one shared hairline at its seam with the wall — and the wall narrows from six columns to three to sit in half the width at the same cell size. Every cell is a perfect square in every layout, and the wall alone sets the band's height: the `aside` panel is size-contained from `lg` up, so its content never stretches a row, and the statement sits centred in it. Between `lg` and `xl` the wall is two columns wide, so its three rows are tall enough for a client sentence; from `xl` it is three columns, two rows. Set `kind` to `rectangle` and every cell becomes a 3:2 rectangle instead: beside `aside` the wall holds three columns from `lg`, so nine rectangles take exactly the height six squares do, and below `sm` it keeps three columns so nine marks never leave a ragged row.",
+      "useWhen": [
+        "To show who already uses the product, as the proof band under a hero or section, with each mark leading to that customer's success case.",
+        "Wherever a set of partner, customer or certification marks is the message.",
+        "When the marks are recognisable enough that names are unnecessary.",
+        "To set one customer's statement beside the crowd that backs it, by filling `aside` with a `quote`."
+      ],
+      "avoidWhen": [
+        "For a measured claim rather than a set of names → use `big-numbers`.",
+        "For one customer's statement → use `quote`.",
+        "For a single brand mark, such as the product's own → use `brand`.",
+        "For a grid of described features rather than marks → use `topic` in a `card-grid`.",
+        "For a moving strip of many small marks, such as a tool stack → use `ticker`."
+      ],
+      "related": [
+        "card-grid` — the frame register the wall is built on; its cells draw the rules and marks.",
+        "quote` — one named customer's statement; the wall shows many without words.",
+        "big-numbers` — the numeric form of the same proof band.",
+        "brand` — the product's own mark, not a customer's."
+      ],
+      "bestPractices": [
+        "Place the wall inside a `frame-box` (in a `section-module`, as every framed band is). The grid is `card-grid`'s `flush` frame: the surrounding frame draws the outer rules and the cells lay their right and bottom rules onto it.",
+        "Supply marks that read on the page's own surface. The component applies no colour filter, so a mark that only works on one theme will not work on both; brand-colour marks read on either. When the marks come from a registry that already places them per theme, render them through the `mark` slot and keep `items` as the list they are drawn from.",
+        "Set `shape: 'compact'` on a mark that is close to square (a roundel, a monogram) so it sits taller than the wordmarks beside it and all of them read at one visual weight.",
+        "Give every mark a real `alt` — the company name. A linked cell is announced as `linkLabel`, then that name (\"Read story, Magalu\").",
+        "Set `ariaLabel` so the group announces its purpose (\"Clients running on Azion\") instead of reading as an unnamed region.",
+        "Link a mark with `href` only when there is somewhere worth going, such as a case study; a wall of links to nowhere costs a reader a tab stop per cell. In an app with a client-side router, handle `item-click`: call `event.preventDefault()` and push `item.href`.",
+        "Put one statement in `aside`, not a second grid. The band's argument is *many customers, one of them talking*; two things of equal weight leave a reader with neither.",
+        "Give the wall exactly six marks when `aside` is filled — two full rows of three squares beside the statement, and three rows of two between `lg` and `xl` — and a multiple of six when it is not, so the last row is never ragged.",
+        "Reach for `kind: 'rectangle'` when the band names nine customers beside `aside`: three rows of three 3:2 cells at the height of the six-square wall. Nine is the count the rectangle wall is drawn for; without `aside` it runs six to a row like the square wall."
+      ]
+    },
     "media-split": {
       "import": "@aziontech/webkit/media-split",
       "target": "./src/components/marketing/media-split/media-split.vue",
@@ -14756,6 +14845,86 @@
         "Turn `fluid` on for a band whose scenes share one frame size, so every tile renders its scene at the same zoom whatever the column width. Scenes on different frames come out at different zooms under `fluid` — fix the frames, not the tiles.",
         "Reach for `mediaScale` when a scene sits small or large on its canvas — a cluster of icon boxes drawn at its own size on the 592×300 frame reads as a speck in a tile. Set it per tile, so each scene in a band reaches the same visual height, and keep it at or under the value where the scene's widest edge meets the frame; anything past that is clipped.",
         "Leave the media slot empty while a scene is still being drawn: the frame holds the tile's floor height, so the band keeps its rhythm instead of collapsing."
+      ]
+    },
+    "quote-tabs": {
+      "import": "@aziontech/webkit/quote-tabs",
+      "target": "./src/components/marketing/quote-tabs/quote-tabs.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/quote-tabs",
+      "category": "marketing",
+      "structure": "monolithic",
+      "status": "approved",
+      "props": [
+        {
+          "name": "items",
+          "type": "QuoteTabsItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The clients, in wall order; each item is `{ logo?, mark?, clientName?, shape?, text, name?, jobTitle?, photo? }` — the URL of the client's colour logo, the registry name of its one-ink mark, its name in prose, how tall its mark sits on the card, the quotation, who said it, their role and their likeness."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name for the wall of client cards."
+        },
+        {
+          "name": "autoPlay",
+          "type": "boolean",
+          "default": "true",
+          "required": "false",
+          "doc": "Advances to the next client on a timer; pauses under the pointer or keyboard focus, restarts its count on a selection, and never runs under reduced motion."
+        },
+        {
+          "name": "autoPlayInterval",
+          "type": "number",
+          "default": "5000",
+          "required": "false",
+          "doc": "Milliseconds each client is held before the band advances."
+        },
+        {
+          "name": "showProgress",
+          "type": "boolean",
+          "default": "true",
+          "required": "false",
+          "doc": "Advances a hairline along the quotation panel's bottom edge while the timer runs."
+        }
+      ],
+      "slots": [
+        {
+          "name": "actions",
+          "scope": "—",
+          "notes": "A trailing control under the featured quotation's attribution, such as a secondary `Button` to the success stories; rendered in `quote`'s own `actions` area, the same for every client."
+        }
+      ],
+      "purpose": "A testimonial band a reader browses by client: the selected client's quotation featured at the top in the client's own colours, and a wall of client cards below it that is the selector itself — clicking a card brings that client's quotation in. It is the band a page reaches for when several customers have one strong sentence each and only one of them should be read at a time. The band owns the selection and nothing else. The featured quotation is `quote` in its `highlight` register, and every card is the same framed cell `logo-wall` draws, so a quotation and a client card look the same here as everywhere else on the page. The quotation travels sideways in the direction of the choice — a card later in the wall brings its quotation in from the right, an earlier one from the left — so the reader feels the wall as a sequence. Left alone it moves through the clients on its own, the way `media-tabs` does: a hairline along the panel's bottom edge fills toward the next client, and the band holds still while the reader points at it or works it from the keyboard.",
+      "useWhen": [
+        "To feature one client quotation at a time out of three to twelve peers, with every other client one click away on the wall below.",
+        "As a success-story band where the wall of customers and the quotation are the same content, not two lists."
+      ],
+      "avoidWhen": [
+        "For one quotation on its own → use `quote` with `kind=\"highlight\"`.",
+        "For several quotations read side by side or swiped through → use `quote-carousel`.",
+        "For a wall whose cards link to each customer's story → use `logo-wall`.",
+        "For a moving strip of marks with no links → use `ticker`.",
+        "For switching a page's content between views → use `tab-view`."
+      ],
+      "related": [
+        "quote` — the `highlight` register this band renders for the selected client.",
+        "logo-wall` — the same framed client cells, as links out rather than as a selector.",
+        "card-grid` — the framed grid the cards are laid out on.",
+        "frame-box` — the registration frame the quotation panel is drawn in, with the same corner marks as the cards below it; also what a page wraps the band in to close its outer edges.",
+        "quote-carousel` — the same testimonials as a row the reader scrolls through, every one visible.",
+        "media-tabs` — the same timer and progress hairline, for claims paired with a medium."
+      ],
+      "bestPractices": [
+        "Give the wall a full row: six clients fill it from `lg` up and three from below `sm`, so six or twelve leave no empty cell.",
+        "Give every item a `logo` in the client's own colours; it is drawn as-is on its card and in the featured quotation, so pick artwork that carries its own contrast on both themes. Without one, `mark` names a one-ink mark from the brand registry instead.",
+        "Let `clientName` default to the registry's label for `mark`; set it when the item has only a `logo`, or a client the registry does not carry. It is the card's accessible name, so it is never optional in practice.",
+        "Keep each quotation to one or two sentences, verbatim, without typed quotation marks — `quote` draws its own glyph. The panel holds the tallest quotation's height for all of them and floors the attribution and the `actions` control, so one much longer quotation opens a wide gap under every shorter one.",
+        "Keep each quotation readable inside `autoPlayInterval`; raise the interval before shortening a verbatim quotation, and turn `autoPlay` off when the band sits beside other moving content."
       ]
     }
   }

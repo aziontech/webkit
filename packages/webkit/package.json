@@ -280,6 +280,7 @@
     "./sidebar-header": "./src/components/layout/sidebar/sidebar-header.vue",
     "./sidebar-footer": "./src/components/layout/sidebar/sidebar-footer.vue",
     "./band-stack": "./src/components/marketing/band-stack/band-stack.vue",
+    "./logo-wall": "./src/components/marketing/logo-wall/logo-wall.vue",
     "./media-split": "./src/components/marketing/media-split/media-split.vue",
     "./ticker": "./src/components/marketing/ticker/ticker.vue",
     "./bento-grid": "./src/components/marketing/bento-grid/index.ts",
@@ -562,6 +563,7 @@
     "./topic": "./src/components/marketing/topic/topic.vue",
     "./section-module": "./src/components/marketing/section-module/section-module.vue",
     "./section-container": "./src/components/marketing/section-container/section-container.vue",
-    "./media-tile": "./src/components/marketing/media-tile/media-tile.vue"
+    "./media-tile": "./src/components/marketing/media-tile/media-tile.vue",
+    "./quote-tabs": "./src/components/marketing/quote-tabs/quote-tabs.vue"
   }
 }
