@@ -1,6 +1,6 @@
 {
   "name": "@aziontech/webkit",
-  "version": "5.2.0",
+  "version": "5.3.0",
   "description": "Reusable UI components and design system utilities for building Azion web interfaces.",
   "license": "MIT",
   "type": "module",
@@ -47,7 +47,7 @@
   },
   "dependencies": {
     "@aziontech/theme": "^4.0.0",
-    "@modelcontextprotocol/sdk": "^1.0.0",
+    "@modelcontextprotocol/sdk": "^1.31.0",
     "@tanstack/vue-table": "^8.21.3",
     "@vueuse/core": "^10.11.1",
     "clsx": "^2.1.1",
@@ -147,6 +147,7 @@
     "./item-footer": "./src/components/content/item/item-footer.vue",
     "./currency": "./src/components/content/currency/currency.vue",
     "./kbd": "./src/components/content/kbd/kbd.vue",
+    "./network-map": "./src/components/content/network-map/network-map.vue",
     "./log-view": "./src/components/code/log-view/log-view.vue",
     "./log-view-content": "./src/components/code/log-view/log-view-content.vue",
     "./log-view-footer": "./src/components/code/log-view/log-view-footer.vue",

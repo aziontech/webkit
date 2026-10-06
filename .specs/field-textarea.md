@@ -7,9 +7,9 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=602-890
   node_id: 602:890
-checksum: 1995aea5abc57f81cc70442080af571cb6e2a3477310a863e72ef086cfaed353
+checksum: 00eae21becc3df4065ccef3a70c070753f92ddb032808096e021052764a2753d
 created: 2026-06-23
-last_updated: 2026-07-03
+last_updated: 2026-09-30
 ---
 
 # Field Textarea — Component Spec
@@ -85,16 +85,12 @@ const value = ref('')
 | Region | Token (DESIGN.md) |
 |---|---|
 | typography (label) | `.text-label-md` |
-| typography (helper) | `.text-body-xs` |
 | text (label) | `var(--text-default)` |
-| text (helper) | `var(--text-muted)` |
-| text (helper, disabled) | `var(--text-disabled)` |
-| text (helper, required) | `var(--warning)` |
-| text (helper, invalid) | `var(--danger)` |
 | spacing (row gap) | `var(--spacing-xs)` |
 | spacing (label gap) | `var(--spacing-xs)` |
-| spacing (helper gap) | `var(--spacing-xs)` |
 | shape | `var(--shape-elements)` |
+
+Helper typography and color are owned by `HelperText` and not redeclared here — the same contract as `field-text`. The field only resolves the helper's `kind`: `disabled` › `invalid` › `required` › `helper`.
 
 ## Theme gaps
 
