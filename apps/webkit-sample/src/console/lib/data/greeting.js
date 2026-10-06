@@ -26,6 +26,29 @@ export const nameFromEmail = (address) => {
   return first.charAt(0).toUpperCase() + first.slice(1).toLowerCase()
 }
 
+const ACCOUNT_OWNER_FULL_NAME = 'Gabriel Lisboa'
+const ACCOUNT_OWNER_EMAIL = 'gabriel.mendonca@azion.com'
+
+const isPlaceholderEmail = (address) => {
+  const local = String(address ?? '')
+    .split('@')[0]
+    .trim()
+  return !local || local.toLowerCase() === 'myemail'
+}
+
+export const emailOrOwner = (address) =>
+  isPlaceholderEmail(address) ? ACCOUNT_OWNER_EMAIL : String(address).trim()
+
+export const fullNameFromEmail = (address) => {
+  if (isPlaceholderEmail(address)) return ACCOUNT_OWNER_FULL_NAME
+  const parts = String(address)
+    .split('@')[0]
+    .split(/[._+-]/)
+    .filter((part) => part && !/^\d+$/.test(part))
+  if (!parts.length) return ACCOUNT_OWNER_FULL_NAME
+  return parts.map((part) => part.charAt(0).toUpperCase() + part.slice(1).toLowerCase()).join(' ')
+}
+
 export function useGreeting() {
   const label = ref(labelFor(new Date().getHours()))
 

@@ -10,14 +10,17 @@
   import { toast } from '@aziontech/webkit/toast'
   import { useTheme } from '@shared/lib/theme.js'
   import { reactive, ref } from 'vue'
+  import { useRoute } from 'vue-router'
 
   import FieldRow from '../../../components/form/FieldRow.vue'
   import SettingsSaveBar from '../../../components/form/SettingsSaveBar.vue'
   import PageHeading from '../../../components/page/PageHeading.vue'
   import Section from '../../../components/page/Section.vue'
   import { saveGroup, useBaseline } from '../../../lib/behavior/forms'
+  import { emailOrOwner, fullNameFromEmail } from '../../../lib/data/greeting'
   import { useFont } from '../../../lib/state/font.js'
 
+  const route = useRoute()
   const { font, fonts } = useFont()
   const { theme } = useTheme()
   const appearances = [
@@ -43,11 +46,11 @@
   ]
 
   const form = reactive({
-    accountName: 'Gabriel Lisboa',
+    accountName: fullNameFromEmail(route.query.email),
     clientId: '9757a',
     companyName: '',
     companyId: '',
-    billingEmails: 'gabriel.mendonca@azion.com',
+    billingEmails: emailOrOwner(route.query.email),
     postalCode: '00000-000',
     country: 'br',
     state: 'rs',
