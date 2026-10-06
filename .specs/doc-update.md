@@ -4,9 +4,9 @@ category: documentation
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 5afd0c4464485f77fa627321409959e167eab8fe05bbf17e1a75ad7d0c1a6b3b
+checksum: ddf9b2e9cc329df833061be42a330e001de0ac625d5109413d6aacd98a812cea
 created: 2026-08-22
-last_updated: 2026-08-22
+last_updated: 2026-09-25
 ---
 
 # DocUpdate — Component Spec
