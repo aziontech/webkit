@@ -284,6 +284,7 @@
     "./sticky-stack": "./src/components/marketing/sticky-stack/sticky-stack.vue",
     "./quote-carousel": "./src/components/marketing/quote-carousel/quote-carousel.vue",
     "./quote": "./src/components/marketing/quote/quote.vue",
+    "./media-tabs": "./src/components/marketing/media-tabs/media-tabs.vue",
     "./breadcrumb": "./src/components/navigation/breadcrumb/index.js",
     "./breadcrumb-item": "./src/components/navigation/breadcrumb-item/breadcrumb-item.vue",
     "./link": "./src/components/navigation/link/link.vue",

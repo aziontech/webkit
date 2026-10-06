@@ -183,6 +183,11 @@
     "limit": "15 KB"
   },
   {
+    "name": "media-tabs",
+    "path": "src/components/marketing/media-tabs/media-tabs.vue",
+    "limit": "6.5 KB"
+  },
+  {
     "name": "illustration",
     "path": "src/components/content/illustration/illustration.vue",
     "limit": "2 KB",
