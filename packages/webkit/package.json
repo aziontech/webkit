@@ -279,6 +279,7 @@
     "./sidebar-group": "./src/components/layout/sidebar/sidebar-group.vue",
     "./sidebar-header": "./src/components/layout/sidebar/sidebar-header.vue",
     "./sidebar-footer": "./src/components/layout/sidebar/sidebar-footer.vue",
+    "./banner": "./src/components/marketing/banner/banner.vue",
     "./hero": "./src/components/marketing/hero/index.ts",
     "./hero-root": "./src/components/marketing/hero/hero.vue",
     "./sticky-stack": "./src/components/marketing/sticky-stack/sticky-stack.vue",
