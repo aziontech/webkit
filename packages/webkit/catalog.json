@@ -48,15 +48,8 @@
       "--animate-content-enter",
       "--animate-fade-in",
       "--animate-fade-out",
-      "--animate-flow-connector-draw",
       "--animate-flow-dash",
-      "--animate-flow-node-enter",
-      "--animate-flow-packet",
-      "--animate-glow-pulse",
       "--animate-highlight-fade",
-      "--animate-illustration-chat-pop",
-      "--animate-illustration-chat-scroll",
-      "--animate-illustration-rim-sweep",
       "--animate-page-enter",
       "--animate-ping",
       "--animate-popup-scale-in",
@@ -401,6 +394,27 @@
       "--height-80",
       "--height-9",
       "--height-96",
+      "--illustration-accent",
+      "--illustration-block",
+      "--illustration-code-keyword",
+      "--illustration-code-punctuation",
+      "--illustration-danger",
+      "--illustration-ground",
+      "--illustration-highlight",
+      "--illustration-info",
+      "--illustration-info-surface",
+      "--illustration-ink",
+      "--illustration-ink-muted",
+      "--illustration-line",
+      "--illustration-line-muted",
+      "--illustration-line-strong",
+      "--illustration-primary",
+      "--illustration-success",
+      "--illustration-success-surface",
+      "--illustration-surface",
+      "--illustration-surface-raised",
+      "--illustration-warning",
+      "--illustration-warning-surface",
       "--info",
       "--info-border",
       "--info-contrast",
@@ -827,15 +841,8 @@
         "--animate-content-enter",
         "--animate-fade-in",
         "--animate-fade-out",
-        "--animate-flow-connector-draw",
         "--animate-flow-dash",
-        "--animate-flow-node-enter",
-        "--animate-flow-packet",
-        "--animate-glow-pulse",
         "--animate-highlight-fade",
-        "--animate-illustration-chat-pop",
-        "--animate-illustration-chat-scroll",
-        "--animate-illustration-rim-sweep",
         "--animate-page-enter",
         "--animate-ping",
         "--animate-popup-scale-in",
@@ -1206,6 +1213,29 @@
         "--height-80",
         "--height-9",
         "--height-96"
+      ],
+      "illustration": [
+        "--illustration-accent",
+        "--illustration-block",
+        "--illustration-code-keyword",
+        "--illustration-code-punctuation",
+        "--illustration-danger",
+        "--illustration-ground",
+        "--illustration-highlight",
+        "--illustration-info",
+        "--illustration-info-surface",
+        "--illustration-ink",
+        "--illustration-ink-muted",
+        "--illustration-line",
+        "--illustration-line-muted",
+        "--illustration-line-strong",
+        "--illustration-primary",
+        "--illustration-success",
+        "--illustration-success-surface",
+        "--illustration-surface",
+        "--illustration-surface-raised",
+        "--illustration-warning",
+        "--illustration-warning-surface"
       ],
       "info": [
         "--info",
@@ -1636,15 +1666,8 @@
       "content-enter",
       "fade-in",
       "fade-out",
-      "flow-connector-draw",
       "flow-dash",
-      "flow-node-enter",
-      "flow-packet",
-      "glow-pulse",
       "highlight-fade",
-      "illustration-chat-pop",
-      "illustration-chat-scroll",
-      "illustration-rim-sweep",
       "page-enter",
       "ping",
       "popup-scale-in",
@@ -1687,41 +1710,13 @@
         "value": "fadeOut 220ms ease-in-out",
         "useWhen": "Content or backdrop leaving in place (pair of fade-in)."
       },
-      "flow-connector-draw": {
-        "value": "flowConnectorDraw 240ms cubic-bezier(0.39, 0.57, 0.56, 1) backwards",
-        "useWhen": "The connector between two nodes of such a diagram being drawn. It animates a MASK path (pathLength=\"100\", stroke wider than what it reveals), not the connector itself, so the revealed stroke keeps its own marching dash; apply that mask to the group holding the connector and its packet. Stagger it with an animation-delay longhand on the mask path — half a step after the node it leaves, so the diagram assembles node, line, node, line."
-      },
       "flow-dash": {
         "value": "flowDash 700ms linear infinite",
         "useWhen": "Flowing connection along an SVG connector stroke in a node-based / network diagram. Set a stroke-dasharray whose cycle divides 24 (e.g. 4 4) so the loop is seamless."
       },
-      "flow-node-enter": {
-        "value": "flowNodeEnter 240ms cubic-bezier(0.39, 0.57, 0.56, 1) backwards",
-        "useWhen": "A node of such a diagram arriving. Stagger it by setting animation-delay on the node itself — [animation-delay:var(--flow-node-enter-delay,0s)] plus one --flow-node-enter-delay per node, one fast-01 step apart — never inside this shorthand, where a nested var() is substituted on :root and the per-node value is lost. It fades in while travelling one --spacing-md rightward, so a staggered diagram assembles along the direction its connectors carry. The movement is safe only because the diagram measures its nodes from layout offsets, which a transform does not move; a diagram that measured them from getBoundingClientRect would strand every line at the offset it was measured at."
-      },
-      "flow-packet": {
-        "value": "flowPacketTravel 2100ms cubic-bezier(0.4, 0, 0.2, 1) infinite, flowPacketTaper 2100ms linear infinite",
-        "useWhen": "A request crossing an SVG connector in such a diagram: a dash that travels the path and tapers at both ends, carrying about the first half of the cycle. The path MUST carry pathLength=\"100\" (camelCase) because the keyframe offsets are percentages, and MUST use butt line caps because the dash is zero-length at both extremes. Do not set stroke-dasharray or stroke-dashoffset in CSS alongside it; the keyframes own both."
-      },
-      "glow-pulse": {
-        "value": "glowPulse calc(700ms + 240ms) infinite",
-        "useWhen": "An ambient glow breathing behind the one element a view is about — the subject node of a diagram, marked without a hover to find it. Apply it to a LAYER that carries only the glow (an inset ::before with a box-shadow and nothing else), never to the element itself: the element usually already runs its own entrance, and a second animate-* utility replaces that shorthand rather than joining it. Pair it with motion-reduce:before:animate-none."
-      },
       "highlight-fade": {
         "value": "highlight 1100ms ease-in forwards",
         "useWhen": "Row/item briefly highlighted after an update (recently changed)."
-      },
-      "illustration-chat-pop": {
-        "value": "illustrationChatPop 9s cubic-bezier(0.17, 0.84, 0.44, 1) infinite",
-        "useWhen": "Each message landing at the bottom of that scroll. Same duration as illustration-chat-scroll, with a negative animation-delay per message (-6.75s / -4.5s / -2.25s / 0s for the four) so its 4% pop fires on the step boundary, with the message standing still and in view."
-      },
-      "illustration-chat-scroll": {
-        "value": "illustrationChatScroll 9s cubic-bezier(0.39, 0.57, 0.56, 1) infinite",
-        "useWhen": "A conversation advancing bottom-to-top inside an illustrated window, one message per step. Apply to a track exactly twice the height of its clipped viewport (h-[200%]) holding four EQUAL-height messages per screenful, repeated in the second half — each step is then one message and the loop lands on an identical frame, with no seam."
-      },
-      "illustration-rim-sweep": {
-        "value": "illustrationRimSweep 2100ms linear infinite",
-        "useWhen": "Rim light travelling around an illustration on hover. Apply through the .illustration-rim-sweep utility, which re-declares the ramp stack the angle drives; paused by default and set running from the hovered ancestor."
       },
       "page-enter": {
         "value": "pageEnter 240ms cubic-bezier(0.39, 0.57, 0.56, 1)",
@@ -2895,89 +2890,17 @@
     },
     "hero-title": {
       "import": "@aziontech/webkit/hero-title",
-      "target": "./src/components/content/hero-title/hero-title.vue",
-      "kind": "component",
-      "treeShakeableImport": "@aziontech/webkit/hero-title",
-      "category": "content",
-      "structure": "monolithic",
-      "status": "approved",
-      "props": [
-        {
-          "name": "title",
-          "type": "string",
-          "default": "—",
-          "required": "true",
-          "doc": "Headline of the page, rendered as the page's `h1`."
-        },
-        {
-          "name": "highlight",
-          "type": "string",
-          "default": "''",
-          "required": "false",
-          "doc": "Opening phrase of the headline, painted in the brand accent; reads as one sentence with `title`."
-        },
-        {
-          "name": "description",
-          "type": "string",
-          "default": "''",
-          "required": "false",
-          "doc": "Supporting sentence under the headline; overridden by the default slot."
-        },
-        {
-          "name": "eyebrow",
-          "type": "string",
-          "default": "''",
-          "required": "false",
-          "doc": "Short uppercase overline rendered above the headline."
-        },
-        {
-          "name": "centered",
-          "type": "boolean",
-          "default": "false",
-          "required": "false",
-          "doc": "Center the whole block — copy, headline and actions — instead of aligning it to the start."
-        }
-      ],
-      "slots": [
-        {
-          "name": "default",
-          "scope": "—",
-          "notes": "Description body; replaces the `description` prop when provided."
-        },
-        {
-          "name": "actions",
-          "scope": "—",
-          "notes": "Leading call-to-action row under the copy."
-        }
-      ],
-      "purpose": "The copy block of a hero band: an optional overline, the page's `h1` (with an optional opening phrase painted in the brand accent), a description and a row of leading calls to action, at hero scale. It is the hero counterpart of `section-title` and is meant to sit above a hero backdrop rather than to draw a frame of its own.",
-      "useWhen": [
-        "As the leading copy of a landing or marketing page, inside the hero band's container.",
-        "Whenever a page needs one accented statement, one supporting sentence and up to a couple of primary CTAs."
-      ],
-      "avoidWhen": [
-        "For a section header further down the page → use `section-title`, which renders an `h2` inside a frame.",
-        "For the top bar of an application shell → use `global-header` instead.",
-        "For a bordered, centered band with no `h1` → use `frame-box` instead."
-      ],
-      "related": [
-        "section-title` — the same anatomy at section scale, framed and centered, rendering an `h2`.",
-        "overline` — the eyebrow treatment above the headline.",
-        "frame-box` — the frame a hero band is usually built from."
-      ],
-      "bestPractices": [
-        "Use exactly one `hero-title` per page — it owns the `h1`, and a second one breaks the document outline.",
-        "Keep `highlight` to the opening phrase of the headline: it is part of the same sentence and the same accessible name, only painted differently.",
-        "Leave the block left-aligned (the default) when the backdrop is weighted to one side; `centered` is for a symmetric backdrop or a single statement.",
-        "Put the CTAs in the `actions` slot — it stacks them full-width below `sm`, which is what makes a hero button a comfortable thumb target."
-      ]
+      "target": "./src/components/marketing/hero/hero-title/hero-title.vue",
+      "kind": "subcomponent",
+      "parent": "hero",
+      "treeShakeableImport": "@aziontech/webkit/hero-title"
     },
     "section-title": {
       "import": "@aziontech/webkit/section-title",
-      "target": "./src/components/content/section-title/section-title.vue",
+      "target": "./src/components/marketing/section-title/section-title.vue",
       "kind": "component",
       "treeShakeableImport": "@aziontech/webkit/section-title",
-      "category": "content",
+      "category": "marketing",
       "structure": "monolithic",
       "status": "approved",
       "props": [
@@ -3008,6 +2931,20 @@
           "default": "'centered'",
           "required": "false",
           "doc": "Layout of the header: `centered` stacks and centers the copy, `left` stacks it at the start edge, `horizontal` sets the headline and its description in two columns."
+        },
+        {
+          "name": "size",
+          "type": "'small' | 'medium' | 'large'",
+          "default": "'medium'",
+          "required": "false",
+          "doc": "Step of the headline on the heading scale: `small` for a subsection inside a band, `medium` for an ordinary section opener, `large` for a band whose headline is the statement."
+        },
+        {
+          "name": "framed",
+          "type": "boolean",
+          "default": "true",
+          "required": "false",
+          "doc": "Draw the header's own frame and padding. Turn it off when the header is composed inside a band that already owns both."
         }
       ],
       "slots": [
@@ -3029,18 +2966,20 @@
         "For a wide band whose headline and supporting sentence should sit side by side rather than stacked — `kind=\"horizontal\"`."
       ],
       "avoidWhen": [
-        "For the page's leading band and its `h1` → use `hero-title` instead.",
+        "For the page's leading band and its `h1` → use `hero` instead.",
         "For the top bar of an application shell → use `global-header` instead.",
         "For a plain framed container with arbitrary content → use `frame-box` instead."
       ],
       "related": [
-        "hero-title` — the hero counterpart; renders the page's `h1` at hero scale.",
+        "hero` — the opening band; its `Hero.Title` renders the page's `h1` at hero scale.",
         "frame-box` — the frame this component composes.",
         "section-gap` — the empty frame that sets the air before and after a section header; this component holds no vertical air of its own beyond its padding.",
         "overline` — the eyebrow treatment rendered above the headline."
       ],
       "bestPractices": [
-        "Keep one `section-title` per section, and let it own the section's `h2` so the page keeps one document outline.",
+        "Leave `framed` on when the header is a brick of its own in a page column; turn it off when a band composes the header inside a frame it already draws, so the rule and the padding are not drawn twice.",
+        "Keep one `section-title` per section, and let it own the section's `h2` so the page keeps one document outline. `size` changes the headline's step on the type scale, never its heading level — a page with a `large` and a `small` header still reads as two `h2`s.",
+        "Leave `size` at `medium` for an ordinary section opener. Reach for `large` only where the headline is the band's whole statement, and for `small` where the header opens a subsection inside a band that already has one.",
         "Write the eyebrow as one or two words: it is set uppercase and prefixed with `//`, so a sentence in it reads as noise.",
         "Reach for `horizontal` when the description is long enough to earn its own column — on a narrow viewport it stacks back under the headline.",
         "Put the section's CTAs in the `actions` slot rather than in the body; the slot already stacks them fluid below `sm` and aligns them with the chosen `kind` above it.",
@@ -3275,7 +3214,7 @@
           "doc": "Accessible name; empty keeps the illustration decorative and hidden from assistive tech."
         }
       ],
-      "purpose": "Renders an **official product illustration** — one of the scenes drawn in the Assets library in Figma and exported as an SVG that ships with this package. `name` selects a scene from a closed registry; there is no way to assemble artwork out of markup, so a page can only render illustrations design has actually signed off, and a scene can never drift between the screens that use it.",
+      "purpose": "Renders an **official product illustration** — one of the scenes drawn in the Assets library in Figma and exported as an SVG that ships with this package. `name` selects a scene from a closed registry; there is no way to assemble artwork out of markup, so a page can only render illustrations design has actually signed off, and a scene can never drift between the screens that use it. The library is drawn once, in dark mode. The scene is drawn into the page as inline SVG and every colour it carries is repainted from the `illustration` theme foundation of `@aziontech/theme` — `--illustration-*` roles that alias the global tokens — so the one export follows light and dark like the rest of the page.",
       "useWhen": [
         "An empty state, error page, onboarding step, or marketing tile needs a diagrammatic illustration of a product concept (a deploy, a request path, a connected service).",
         "The same concept appears on more than one screen and must be the same drawing every time.",
@@ -9562,10 +9501,10 @@
     },
     "section-gap": {
       "import": "@aziontech/webkit/section-gap",
-      "target": "./src/components/layout/section-gap/section-gap.vue",
+      "target": "./src/components/marketing/section-gap/section-gap.vue",
       "kind": "component",
       "treeShakeableImport": "@aziontech/webkit/section-gap",
-      "category": "layout",
+      "category": "marketing",
       "structure": "monolithic",
       "status": "approved",
       "props": [
@@ -9581,7 +9520,7 @@
           "type": "boolean",
           "default": "false",
           "required": "false",
-          "doc": "Draw the frame's linear hatch texture in the gap."
+          "doc": "Draw the gap's ruled line texture — fine vertical rules at a fixed pitch."
         }
       ],
       "purpose": "The empty registration frame that divides two page sections. On a page with no margins between sections, this frame *is* the gap: it holds the vertical air, and its own two rules are what separate the sections it sits between — which is why it is a frame and not a spacer `div`. `size` picks how much air, on a three-step scale built from the theme's own spacing tokens.",
@@ -9597,6 +9536,7 @@
       ],
       "related": [
         "frame-box` — the frame this component configures; reach for it directly when the gap needs content or different rules.",
+        "texture-material` — the layer that paints the ruling, composed here at its `lines` kind.",
         "section-title` — the framed header that usually follows a gap; it owns no vertical air of its own beyond its padding, so the gaps around it are what set the page's rhythm.",
         "divider` — a hairline with no vertical air."
       ],
@@ -9604,8 +9544,9 @@
         "Pick the step by what the break means, not by how the page happens to look: `medium` is the ordinary break between sections, `large` opens a new part of the page, `small` keeps two related bands close.",
         "Do not override the height from the call site. The steps are multiples of `--spacing-xxl`, so they already scale with the viewport; a hand-set height freezes one break out of the page rhythm.",
         "Keep one step per break — stacking two gaps to reach a bigger one draws an extra pair of rules.",
-        "Let it carry the shared rule: it renders `flush` and `marks=\"bottom\"`, so its top rule and top ticks are subtracted and the section above supplies them instead of doubling them.",
+        "Let it carry the shared rule: it renders `flush`, so its top rule is subtracted and the section above supplies it instead of doubling it. It still ticks every corner (`marks=\"all\"`): the shared rule is given away, the registration mark is not.",
         "Reach for `hatch` here rather than on a section header: the gap is the one band with no copy of its own, so the texture gives the break identity without sitting behind a headline.",
+        "Leave the ruling unmasked. Each line is one solid ink edge to edge and its transparency is the ink's own, so the field reads as ruled page material rather than as a fill that fades out; a vignette on a band this short reads as a smear.",
         "Do not wrap it in a padded container; the gap is the padding."
       ]
     },
@@ -9929,6 +9870,1467 @@
       "kind": "subcomponent",
       "parent": "sidebar",
       "treeShakeableImport": "@aziontech/webkit/sidebar-footer"
+    },
+    "bento-grid": {
+      "import": "@aziontech/webkit/bento-grid",
+      "target": "./src/components/marketing/bento-grid/index.ts",
+      "kind": "component",
+      "compoundRoot": true,
+      "treeShakeableImport": "@aziontech/webkit/bento-grid-root",
+      "subcomponents": [
+        "@aziontech/webkit/bento-grid-cell"
+      ],
+      "category": "marketing",
+      "structure": "composition",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name for the grid, when the surrounding section does not already name it."
+        },
+        {
+          "name": "columns",
+          "type": "BentoGridColumns",
+          "default": "2",
+          "required": "false",
+          "doc": "How many columns the mosaic lays out from the medium breakpoint up."
+        },
+        {
+          "name": "mobileColumns",
+          "type": "BentoGridMobileColumns",
+          "default": "1",
+          "required": "false",
+          "doc": "How many columns the mosaic holds below the medium breakpoint, where every cell claims one of them."
+        },
+        {
+          "name": "flush",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "The surrounding frame already draws the grid's outer rules: the grid drops its own top and left ones and lays its right and bottom ones onto the frame's, so a framed column keeps one hairline per edge."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The grid's cells, composed as `BentoGrid.Cell` elements in reading order."
+        }
+      ],
+      "purpose": "A mosaic of unequal cells on one set of shared rules: each cell claims a number of columns and rows, and the rules between them are drawn once so the whole block reads as a single framed surface. It is the layout a marketing page uses when several claims deserve different amounts of room — the alternative to a row of identical tiles.",
+      "useWhen": [
+        "When a set of claims is genuinely unequal and one or two deserve more room than the rest.",
+        "As the framed body of a product or platform section, under a `section-title`.",
+        "For a logo wall, a client-story band, or any set where a few members carry a headline and the rest carry only a mark.",
+        "Whenever the cells hold composed content — copy, media, a control — rather than one repeated shape."
+      ],
+      "avoidWhen": [
+        "When every claim carries the same weight → use `card-grid`.",
+        "For a row of measured figures → use `big-numbers`, which already draws this grid for numbers.",
+        "For a single copy-and-media pairing → use `media-split`.",
+        "For a list of questions → use `faq`."
+      ],
+      "related": [
+        "card-grid` — the equal-cell grid with no spans, in the gap or divider register.",
+        "big-numbers` — the same collapsed-rule grid, specialised for figures.",
+        "media-split` — the two-column band when there is one claim, not several.",
+        "frame-box` — the frame each cell is drawn with."
+      ],
+      "bestPractices": [
+        "Size the mosaic so the cells fill the rectangle: count the tracks (`columns` × rows) and check the spans add up, or the grid ends on a gap of bare canvas.",
+        "Keep cells in reading order — the grid auto-places in DOM order, so that order is what a screen reader and a keyboard follow, and it is what puts a cell in the track you meant.",
+        "Compose real elements inside a cell rather than passing a config array; the cell is a slot, and that is the point of it.",
+        "Let the grid draw the rules. Do not add borders inside a cell, or the shared edges double.",
+        "Give a cell `kind=\"none\"` + `padded=\"false\"` when its own content paints the cell — a media layer, a brand fill, or a link that must be the whole tile.",
+        "Inside a framed page column, set `flush` so the column's rules stay one hairline each."
+      ]
+    },
+    "bento-grid-root": {
+      "import": "@aziontech/webkit/bento-grid-root",
+      "target": "./src/components/marketing/bento-grid/bento-grid.vue",
+      "kind": "root",
+      "rootOf": "bento-grid",
+      "treeShakeableImport": "@aziontech/webkit/bento-grid-root",
+      "category": "marketing",
+      "structure": "composition",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name for the grid, when the surrounding section does not already name it."
+        },
+        {
+          "name": "columns",
+          "type": "BentoGridColumns",
+          "default": "2",
+          "required": "false",
+          "doc": "How many columns the mosaic lays out from the medium breakpoint up."
+        },
+        {
+          "name": "mobileColumns",
+          "type": "BentoGridMobileColumns",
+          "default": "1",
+          "required": "false",
+          "doc": "How many columns the mosaic holds below the medium breakpoint, where every cell claims one of them."
+        },
+        {
+          "name": "flush",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "The surrounding frame already draws the grid's outer rules: the grid drops its own top and left ones and lays its right and bottom ones onto the frame's, so a framed column keeps one hairline per edge."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The grid's cells, composed as `BentoGrid.Cell` elements in reading order."
+        }
+      ],
+      "purpose": "A mosaic of unequal cells on one set of shared rules: each cell claims a number of columns and rows, and the rules between them are drawn once so the whole block reads as a single framed surface. It is the layout a marketing page uses when several claims deserve different amounts of room — the alternative to a row of identical tiles.",
+      "useWhen": [
+        "When a set of claims is genuinely unequal and one or two deserve more room than the rest.",
+        "As the framed body of a product or platform section, under a `section-title`.",
+        "For a logo wall, a client-story band, or any set where a few members carry a headline and the rest carry only a mark.",
+        "Whenever the cells hold composed content — copy, media, a control — rather than one repeated shape."
+      ],
+      "avoidWhen": [
+        "When every claim carries the same weight → use `card-grid`.",
+        "For a row of measured figures → use `big-numbers`, which already draws this grid for numbers.",
+        "For a single copy-and-media pairing → use `media-split`.",
+        "For a list of questions → use `faq`."
+      ],
+      "related": [
+        "card-grid` — the equal-cell grid with no spans, in the gap or divider register.",
+        "big-numbers` — the same collapsed-rule grid, specialised for figures.",
+        "media-split` — the two-column band when there is one claim, not several.",
+        "frame-box` — the frame each cell is drawn with."
+      ],
+      "bestPractices": [
+        "Size the mosaic so the cells fill the rectangle: count the tracks (`columns` × rows) and check the spans add up, or the grid ends on a gap of bare canvas.",
+        "Keep cells in reading order — the grid auto-places in DOM order, so that order is what a screen reader and a keyboard follow, and it is what puts a cell in the track you meant.",
+        "Compose real elements inside a cell rather than passing a config array; the cell is a slot, and that is the point of it.",
+        "Let the grid draw the rules. Do not add borders inside a cell, or the shared edges double.",
+        "Give a cell `kind=\"none\"` + `padded=\"false\"` when its own content paints the cell — a media layer, a brand fill, or a link that must be the whole tile.",
+        "Inside a framed page column, set `flush` so the column's rules stay one hairline each."
+      ]
+    },
+    "bento-grid-cell": {
+      "import": "@aziontech/webkit/bento-grid-cell",
+      "target": "./src/components/marketing/bento-grid/bento-grid-cell/bento-grid-cell.vue",
+      "kind": "subcomponent",
+      "parent": "bento-grid",
+      "treeShakeableImport": "@aziontech/webkit/bento-grid-cell"
+    },
+    "call-to-action": {
+      "import": "@aziontech/webkit/call-to-action",
+      "target": "./src/components/marketing/call-to-action/call-to-action.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/call-to-action",
+      "category": "marketing",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "default": "—",
+          "required": "true",
+          "doc": "Headline of the band, rendered as its `h2`."
+        },
+        {
+          "name": "titleMuted",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Second line of the headline, set in muted ink; rendered as a second span of the same `h2`."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Supporting sentence — under the headline in `panel` and `lead`, in the aside cell in `split`; overridden by the default slot."
+        },
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Short uppercase overline rendered above the headline."
+        },
+        {
+          "name": "kind",
+          "type": "CallToActionKind",
+          "default": "'panel'",
+          "required": "false",
+          "doc": "Layout of the band: `panel` sets the copy and its controls on one surface, `split` divides it into a raised lead cell and an aside that each floor their own control, `lead` is that lead cell standing alone with every control in it."
+        },
+        {
+          "name": "framed",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "Draw the band's own registration frame. Turn it off when the page already wraps the band in a frame."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "Description body; replaces the `description` prop when provided."
+        },
+        {
+          "name": "actions",
+          "scope": "—",
+          "notes": "The controls the band exists to offer; in `split`, the lead cell's primary control."
+        },
+        {
+          "name": "aside",
+          "scope": "—",
+          "notes": "The aside cell's control in `split`; ignored in `panel` and `lead`, where every control belongs in `actions`."
+        }
+      ],
+      "purpose": "The closing ask of a marketing page: a headline, a supporting sentence and the actions that follow from them, set apart from the surrounding copy by its own surface. It is a panel, not a section header — `section-title` opens a section, `call-to-action` closes one. Three registers. `panel` sets the copy and its controls on one surface, as a row from `md` up. `split` divides the band in two at a 7fr/3fr ratio: a raised lead cell carrying the headline and the primary action, and an aside carrying the supporting line and the secondary one — each cell pushing its control to the band's floor, so the two actions share a baseline at any height. `split` is the register a product page closes on, where the ask has a primary and a secondary path and the headline turns on a second, muted line. `lead` is that lead cell standing alone: the same raised surface, the same two-tone headline, with the supporting line moved under it and every control in one row on the band's floor. It is the register for a close that has no second, quieter path to describe — the band states the ask once and offers its actions together, rather than dividing them across two cells of unequal weight.",
+      "useWhen": [
+        "At the end of a marketing page or section, to carry the reader into signup, docs or sales.",
+        "Whenever a page needs one visually separated block whose whole job is the action.",
+        "Between two sections, as a mid-page ask that should not read as a new section header.",
+        "In `split`, when the ask has two paths of unequal weight — a primary one to start and a secondary one to talk to someone.",
+        "In `lead`, when the band's actions are peers and belong in one row, so an aside cell would have nothing of its own to carry."
+      ],
+      "avoidWhen": [
+        "To open a section with a headline and optional actions → use `section-title`, which draws a header rule rather than a panel.",
+        "For the page's leading statement and primary CTAs → use `hero`, whose `Hero.Title` owns the `h1`.",
+        "For a dismissible or time-bound announcement → use `message`.",
+        "For a plan's call to action inside pricing → use `card-pricing`, which owns its own action row."
+      ],
+      "related": [
+        "section-title` — opens a section with a header rule; this closes one with a panel.",
+        "hero` — the page's leading band; its `Hero.Title` owns the statement and the `h1`.",
+        "frame-box` — the registration frame the band draws when `framed` is on, and the one the page supplies around it when off.",
+        "button` — the controls composed into the `actions` and `aside-actions` slots.",
+        "overline` — the `//`-prefixed eyebrow the band renders above the headline."
+      ],
+      "bestPractices": [
+        "framed` decides who draws the rule. On, the band draws its own registration frame — vertical rules handed back to the column, a tick at its floor. Off, the rule and the corner marks belong to the `section-module` or `frame-box` the page assembles it into, so a band placed in an already-framed column never lands a second hairline on the column's own.",
+        "Keep `title` to one line and one ask. A panel that poses two questions gets neither answered.",
+        "Put the controls in the `actions` slot; the panel lays them out as a row beside the copy from `md` up and stacks them full-width below it.",
+        "Lead with the primary action and keep secondary ones `outlined` or `text`, so the panel has one obvious target.",
+        "Use `eyebrow` only when the panel needs naming out of context; the headline usually carries the ask on its own.",
+        "In `split`, `title` states the claim and `title-muted` states its consequence — one sentence in two tones, not two headlines. The band renders them as two spans of a single `h2`, so a screen reader reads one heading.",
+        "In `split`, put the primary control in `actions` and the secondary one in `aside`; each cell floors its own control, which is what gives the two a shared baseline. `actions` stretches its child full-width below `md`; `aside` stretches its child at every width, so a control drawn to size to its own content goes in a wrapper there.",
+        "In `lead`, every control goes in `actions` — they lay out as one row from `md` up and stack full-width below it. The copy column is capped at `--container-2xl` so the headline keeps a readable measure however wide the band runs.",
+        "lead` sets the copy-to-actions gap at `--spacing-xl`, not the `--spacing-xxl` the other two use. In `split` that larger number is the *floor* of a stretched cell — what pushes the control onto the band's bottom edge — and in `panel` the controls sit beside the copy from `md` up. In `lead` nothing stretches and nothing sits beside, so `--spacing-xxl` stops reading as a floor and starts reading as a hole.",
+        "Leave `framed` on when the band stands in a section column of its own, and off when the page already wraps it in a `frame-box` — two frames draw two hairlines on the same edge."
+      ]
+    },
+    "big-numbers": {
+      "import": "@aziontech/webkit/big-numbers",
+      "target": "./src/components/marketing/big-numbers/big-numbers.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/big-numbers",
+      "category": "marketing",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "items",
+          "type": "BigNumberItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The figures rendered as cells, in order; each item is `{ value, label, prefix?, suffix? }` where `value` is the figure, `label` its caption, and `prefix` / `suffix` the qualifier and unit set beside it."
+        },
+        {
+          "name": "size",
+          "type": "'small' | 'medium' | 'large'",
+          "default": "'medium'",
+          "required": "false",
+          "doc": "Size token; picks the big-number scale the figures are set at."
+        }
+      ],
+      "purpose": "A band of headline figures — throughput, uptime, points of presence — set in the display face at big-number scale, each in its own cell of a hairline `card-grid` with a short caption underneath. It is the proof band of a marketing page: the one place a page states its numbers, between a `section-title` and the section body.",
+      "useWhen": [
+        "To state a handful of measured facts (2–6) as the proof band of a marketing or landing page.",
+        "Whenever the figure itself is the message and the caption only names what was measured.",
+        "Under a `section-title`, as the opening evidence of a section."
+      ],
+      "avoidWhen": [
+        "For a single monetary amount → use `currency`, which owns the amount ladder and its symbol placement.",
+        "For a plan's headline price inside a pricing card → use `card-pricing`.",
+        "For tabular or comparable figures a reader will scan row by row → use `table`.",
+        "For a label-and-value pair at body scale inside a card or list → use `item`."
+      ],
+      "related": [
+        "section-title` — the framed section header this band usually sits under.",
+        "card-grid` — the hairline grid the cells sit in; its `gap-px` seams are the rules between them.",
+        "currency` — a monetary amount at three reading distances, with symbol handling.",
+        "card-pricing` — a plan card, where the headline figure is a price."
+      ],
+      "bestPractices": [
+        "The band draws no frame of its own: the rule and the corner marks belong to the `section-module` or `frame-box` that the page assembles it into, so a band placed in a framed column never lands a second hairline on the column's own.",
+        "Keep the band to 2–6 figures: it reads as a row, and past six the cells stop being scannable.",
+        "Put the unit in `suffix` and the qualifier in `prefix`, so the figure itself stays the largest, highest-contrast thing in the cell.",
+        "Keep `label` to a few words — it is set at overline scale and is a caption, not a sentence.",
+        "Round the figures. A band is a claim, not a readout; `99.99%` belongs here, `99.9873%` does not.",
+        "Leave `size` at `medium` unless the band is the page's hero statement (`large`) or sits inside a denser section (`small`)."
+      ]
+    },
+    "carousel": {
+      "import": "@aziontech/webkit/carousel",
+      "target": "./src/components/marketing/carousel/index.ts",
+      "kind": "component",
+      "compoundRoot": true,
+      "treeShakeableImport": "@aziontech/webkit/carousel-root",
+      "subcomponents": [
+        "@aziontech/webkit/carousel-item",
+        "@aziontech/webkit/carousel-previous",
+        "@aziontech/webkit/carousel-next"
+      ],
+      "category": "marketing",
+      "structure": "composition",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name for the scrollable track, announced before its contents."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The slides, composed as `Carousel.Item` elements in reading order."
+        },
+        {
+          "name": "controls",
+          "scope": "—",
+          "notes": "The step controls, composed as `Carousel.Previous` and `Carousel.Next`; rendered above the track."
+        }
+      ],
+      "purpose": "A horizontally scrollable track of cards with snap points and a pair of step controls. It is built on native scrolling and CSS scroll snap rather than a carousel runtime, so it is draggable, swipeable and keyboard-scrollable by default, and it never moves on its own. The unit is Carousel, then a `Carousel.Item` card, then its content — usually a `quote`. The cards sit edge to edge with no gutter: each draws its own hairline and the next one overlaps it by a pixel, so the row reads as one ruled strip. The track fades at whichever end still has cards past it.",
+      "useWhen": [
+        "When a set of cards, quotes, logos or figures is longer than the row it sits in and the reader chooses how far to go.",
+        "For a peek-and-swipe row on narrow screens where a grid would stack into a very long column.",
+        "Whenever the content is browsable rather than essential — a reader must never have to scroll a carousel to reach something they need."
+      ],
+      "avoidWhen": [
+        "For content the reader must see → lay it out as a grid; anything past the first slide can be missed.",
+        "For a vertical list → use `item` with `ItemGroup`.",
+        "For a framed grid of unequal cells → use `bento-grid`.",
+        "For a set of figures that fits the row → use `big-numbers` or `logo-wall`, which wrap instead of scrolling."
+      ],
+      "related": [
+        "bento-grid` — the framed grid, when everything should be visible at once.",
+        "logo-wall` — a wrapping grid of marks; reach for the carousel only when the wall is too long.",
+        "topic` — the usual slide content.",
+        "scroll-area` — the console's styled scroll container; this one owns snap points and step controls."
+      ],
+      "bestPractices": [
+        "Never put essential content in a carousel. A slide past the first is content a reader may never see.",
+        "Size the cards on `Carousel.Item` with your own width classes — the item is deliberately unsized so a page can show one card on mobile and three on desktop.",
+        "Put content straight into `Carousel.Item`, not inside another framed box. The item is already the card (border, surface, padding), and a second frame inside it draws two rules.",
+        "The row has no gutter by design. Space between cards would break the ruled strip into floating tiles; a band that needs air between its items wants a grid, not this track.",
+        "Keep a partial slide visible at the trailing edge on narrow screens; a peek is what tells a reader the track scrolls at all.",
+        "The track is dragged with the pointer as well as scrolled. A mouse gets a grab cursor and drags the row directly; touch and pen keep native scrolling and its momentum, which is already better than anything a handler would impose.",
+        "Always name the carousel with `ariaLabel`. \"Customer stories\" tells a screen-reader user what they are about to scroll through; an unnamed scroll region does not.",
+        "The track never advances on its own, and it must not be made to. Auto-advancing content needs a pause control under WCAG 2.2.2 and steals reading time from everyone."
+      ]
+    },
+    "carousel-root": {
+      "import": "@aziontech/webkit/carousel-root",
+      "target": "./src/components/marketing/carousel/carousel.vue",
+      "kind": "root",
+      "rootOf": "carousel",
+      "treeShakeableImport": "@aziontech/webkit/carousel-root",
+      "category": "marketing",
+      "structure": "composition",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name for the scrollable track, announced before its contents."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The slides, composed as `Carousel.Item` elements in reading order."
+        },
+        {
+          "name": "controls",
+          "scope": "—",
+          "notes": "The step controls, composed as `Carousel.Previous` and `Carousel.Next`; rendered above the track."
+        }
+      ],
+      "purpose": "A horizontally scrollable track of cards with snap points and a pair of step controls. It is built on native scrolling and CSS scroll snap rather than a carousel runtime, so it is draggable, swipeable and keyboard-scrollable by default, and it never moves on its own. The unit is Carousel, then a `Carousel.Item` card, then its content — usually a `quote`. The cards sit edge to edge with no gutter: each draws its own hairline and the next one overlaps it by a pixel, so the row reads as one ruled strip. The track fades at whichever end still has cards past it.",
+      "useWhen": [
+        "When a set of cards, quotes, logos or figures is longer than the row it sits in and the reader chooses how far to go.",
+        "For a peek-and-swipe row on narrow screens where a grid would stack into a very long column.",
+        "Whenever the content is browsable rather than essential — a reader must never have to scroll a carousel to reach something they need."
+      ],
+      "avoidWhen": [
+        "For content the reader must see → lay it out as a grid; anything past the first slide can be missed.",
+        "For a vertical list → use `item` with `ItemGroup`.",
+        "For a framed grid of unequal cells → use `bento-grid`.",
+        "For a set of figures that fits the row → use `big-numbers` or `logo-wall`, which wrap instead of scrolling."
+      ],
+      "related": [
+        "bento-grid` — the framed grid, when everything should be visible at once.",
+        "logo-wall` — a wrapping grid of marks; reach for the carousel only when the wall is too long.",
+        "topic` — the usual slide content.",
+        "scroll-area` — the console's styled scroll container; this one owns snap points and step controls."
+      ],
+      "bestPractices": [
+        "Never put essential content in a carousel. A slide past the first is content a reader may never see.",
+        "Size the cards on `Carousel.Item` with your own width classes — the item is deliberately unsized so a page can show one card on mobile and three on desktop.",
+        "Put content straight into `Carousel.Item`, not inside another framed box. The item is already the card (border, surface, padding), and a second frame inside it draws two rules.",
+        "The row has no gutter by design. Space between cards would break the ruled strip into floating tiles; a band that needs air between its items wants a grid, not this track.",
+        "Keep a partial slide visible at the trailing edge on narrow screens; a peek is what tells a reader the track scrolls at all.",
+        "The track is dragged with the pointer as well as scrolled. A mouse gets a grab cursor and drags the row directly; touch and pen keep native scrolling and its momentum, which is already better than anything a handler would impose.",
+        "Always name the carousel with `ariaLabel`. \"Customer stories\" tells a screen-reader user what they are about to scroll through; an unnamed scroll region does not.",
+        "The track never advances on its own, and it must not be made to. Auto-advancing content needs a pause control under WCAG 2.2.2 and steals reading time from everyone."
+      ]
+    },
+    "carousel-item": {
+      "import": "@aziontech/webkit/carousel-item",
+      "target": "./src/components/marketing/carousel/carousel-item/carousel-item.vue",
+      "kind": "subcomponent",
+      "parent": "carousel",
+      "treeShakeableImport": "@aziontech/webkit/carousel-item"
+    },
+    "carousel-previous": {
+      "import": "@aziontech/webkit/carousel-previous",
+      "target": "./src/components/marketing/carousel/carousel-previous/carousel-previous.vue",
+      "kind": "subcomponent",
+      "parent": "carousel",
+      "treeShakeableImport": "@aziontech/webkit/carousel-previous"
+    },
+    "carousel-next": {
+      "import": "@aziontech/webkit/carousel-next",
+      "target": "./src/components/marketing/carousel/carousel-next/carousel-next.vue",
+      "kind": "subcomponent",
+      "parent": "carousel",
+      "treeShakeableImport": "@aziontech/webkit/carousel-next"
+    },
+    "banner": {
+      "import": "@aziontech/webkit/banner",
+      "target": "./src/components/marketing/banner/banner.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/banner",
+      "category": "marketing",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "default": "—",
+          "required": "true",
+          "doc": "The announcement, rendered as the band's `h2` in the leading column."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Supporting note set on the raised trailing column; overridden by the `aside` slot."
+        },
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Short uppercase overline naming the programme, above the announcement."
+        }
+      ],
+      "slots": [
+        {
+          "name": "actions",
+          "scope": "—",
+          "notes": "The controls the band exists to offer, under the announcement."
+        },
+        {
+          "name": "aside",
+          "scope": "—",
+          "notes": "Trailing column content; replaces the `description` prop when provided."
+        }
+      ],
+      "purpose": "A split promotional band: the announcement and its actions in the wide leading column, a short supporting note on a raised surface in the narrow trailing one. It is the page's one loud interruption between sections — wider and more assertive than `call-to-action`, which is a single-column closing ask.",
+      "useWhen": [
+        "To announce a launch, programme or offer part-way down a marketing page.",
+        "Whenever an announcement needs both a primary action and a short piece of supporting context beside it.",
+        "Once per page. A second banner turns the first into furniture."
+      ],
+      "avoidWhen": [
+        "For the closing ask at the end of a page or section → use `call-to-action`, a single-column panel.",
+        "For the page's leading statement → use `hero`, whose `Hero.Title` owns the `h1`.",
+        "For a dismissible or status-bearing notice inside the product → use `message`.",
+        "For a feature tile in a grid → use `topic` in a `card-grid`."
+      ],
+      "related": [
+        "call-to-action` — the single-column closing ask; this is the wider mid-page announcement.",
+        "hero` — the page's leading band; its `Hero.Title` owns the page's statement and `h1`.",
+        "message` — the in-product notice, which can be dismissed and carries severity."
+      ],
+      "bestPractices": [
+        "The band draws no frame of its own: the rule and the corner marks belong to the `section-module` or `frame-box` that the page assembles it into, so a band placed in a framed column never lands a second hairline on the column's own.",
+        "Put the announcement in `title` and keep the trailing column to one supporting sentence — it is context, not a second pitch.",
+        "Lead with one primary action in the `actions` slot; the band's whole job is that one target.",
+        "Use `eyebrow` to name the programme the banner belongs to, so the band reads in context when a reader lands mid-page.",
+        "Keep the trailing note short enough not to set the band's height; it sits beside the announcement, not under it."
+      ]
+    },
+    "hero": {
+      "import": "@aziontech/webkit/hero",
+      "target": "./src/components/marketing/hero/index.ts",
+      "kind": "component",
+      "compoundRoot": true,
+      "treeShakeableImport": "@aziontech/webkit/hero-root",
+      "subcomponents": [
+        "@aziontech/webkit/hero-title"
+      ],
+      "category": "marketing",
+      "structure": "composition",
+      "status": "approved",
+      "props": [
+        {
+          "name": "kind",
+          "type": "HeroKind",
+          "default": "'band'",
+          "required": "false",
+          "doc": "Height of the band; `screen` fills one viewport minus `--banner-offset`."
+        },
+        {
+          "name": "maxWidth",
+          "type": "HeroWidth",
+          "default": "'7xl'",
+          "required": "false",
+          "doc": "Width the inner column is capped at; `site` is the marketing measure, `full` keeps only the inset."
+        },
+        {
+          "name": "bordered",
+          "type": "boolean",
+          "default": "true",
+          "required": "false",
+          "doc": "Draw the band's bottom rule, which is the top edge of whatever follows it."
+        },
+        {
+          "name": "padded",
+          "type": "boolean",
+          "default": "true",
+          "required": "false",
+          "doc": "Apply the band's own vertical rhythm. The inline inset is always applied."
+        },
+        {
+          "name": "size",
+          "type": "HeroSize",
+          "default": "'medium'",
+          "required": "false",
+          "doc": "Vertical rhythm the band applies when `padded`, equal above and below; `large` is the opening a page leads with."
+        },
+        {
+          "name": "texture",
+          "type": "TextureMaterialKind",
+          "default": "'none'",
+          "required": "false",
+          "doc": "Paint this texture behind the band's content; `none` leaves the backdrop to the `background` slot."
+        },
+        {
+          "name": "textureSize",
+          "type": "TextureMaterialSize",
+          "default": "'medium'",
+          "required": "false",
+          "doc": "Pitch of the tiling the `texture` prop paints — how far apart its cells sit."
+        },
+        {
+          "name": "textureFade",
+          "type": "TextureMaterialFade",
+          "default": "'none'",
+          "required": "false",
+          "doc": "Fade applied to the layer the `texture` prop paints."
+        },
+        {
+          "name": "floorTexture",
+          "type": "TextureMaterialKind",
+          "default": "'none'",
+          "required": "false",
+          "doc": "Paint this texture standing on the band's floor, filling the `bottom` window under the brand strip."
+        },
+        {
+          "name": "floorTextureSize",
+          "type": "TextureMaterialSize",
+          "default": "'medium'",
+          "required": "false",
+          "doc": "Pitch of the tiling the `floorTexture` prop paints — how far apart its cells sit."
+        },
+        {
+          "name": "align",
+          "type": "HeroAlign",
+          "default": "'center'",
+          "required": "false",
+          "doc": "Where the content column sits vertically when the band fills a screen."
+        },
+        {
+          "name": "mediaAlign",
+          "type": "HeroMediaAlign",
+          "default": "'center'",
+          "required": "false",
+          "doc": "Where the `media` slot sits in its column: `center` balances it in the column, `end` sets its end edge on the container boundary, past the inline inset, from `md` up."
+        },
+        {
+          "name": "offset",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Height of the fixed chrome above the band, subtracted from the viewport when `kind` is `screen`; any CSS length."
+        },
+        {
+          "name": "bottomHeight",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Height of the window under the content, where the brand strip and the floor texture stand; any CSS length."
+        },
+        {
+          "name": "carousel",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "Stand the brand strip on the band's floor, under the `bottom` window."
+        },
+        {
+          "name": "carouselMarks",
+          "type": "string[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "Registry names of the marks the strip shows, in order."
+        },
+        {
+          "name": "carouselLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Overline above the brand strip, stating the claim the marks make."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The band's copy, centered in the capped column above the backdrop; usually one `Hero.Title`."
+        },
+        {
+          "name": "media",
+          "scope": "—",
+          "notes": "Screenshot, diagram or form set beside the copy from `md` up. When filled, the content column becomes two equal halves from `md` up and the copy keeps the leading one; the `Hero.Title` `maxWidth` caps the copy inside its half."
+        },
+        {
+          "name": "background",
+          "scope": "—",
+          "notes": "Decorative backdrop rendered full-bleed beneath the content; marked `aria-hidden`."
+        },
+        {
+          "name": "top",
+          "scope": "—",
+          "notes": "Decorative asset window overlaying the band's top edge; clips its child, which may be larger than the window and offset inside it. It claims no space, so content still centres on the band."
+        },
+        {
+          "name": "bottom",
+          "scope": "—",
+          "notes": "Asset window standing on the band's floor; clips its child, which may be larger than the window and offset inside it. It is real content, so it **reserves its height** and `align` centres the copy in what is left. It shares the floor with the `carousel` strip, which stands under it. `floorTexture` fills this same window when the asset is one of the system's textures."
+        }
+      ],
+      "purpose": "The opening band of a page: a full-bleed section spanning the whole viewport width whose copy is centered in a capped column, optionally filling one screen and optionally carrying a decorative backdrop behind it. It is the top layer of the page language and the owner of the page's first rule — the bottom hairline every column below it hangs from. `Hero.Title` is the copy block it centers.",
+      "useWhen": [
+        "As the opening band of a marketing, hub or documentation page.",
+        "Whenever a band must span the window while its copy stays on the page's measure.",
+        "For any band that carries a decorative backdrop behind its content.",
+        "With `kind=\"screen\"` when the opening should measure exactly one viewport."
+      ],
+      "avoidWhen": [
+        "For the framed column of bands below the opening → use `section-container`.",
+        "For one band inside that column → use `section-module`.",
+        "For a section header further down the page → use `section-title`, which renders an `h2`.",
+        "For a mid-page announcement → use `banner`; for the closing ask → use `call-to-action`.",
+        "For a copy-and-media pairing that is not the page opening → use `media-split`."
+      ],
+      "related": [
+        "section-container` — the framed column below it; this band's `border-b` is that column's top edge.",
+        "section-module` — the brick stacked inside that column.",
+        "texture-material` — the backdrop the `texture` and `floorTexture` props paint, at the pitch `textureSize` and `floorTextureSize` set; reach for the `background` slot only when the layer needs more than kind, size and fade.",
+        "media-split` — the same copy-beside-media shape at section scale, rendering an `h2`.",
+        "banner` — the mid-page announcement band."
+      ],
+      "bestPractices": [
+        "One `Hero` per page. It owns the `h1` through `Hero.Title`, and a second breaks the document outline.",
+        "Pass `kind=\"screen\"` for an opening band that should measure one screen, and declare the sticky bar's height as `--banner-offset` so the band still measures exactly one screen beneath it.",
+        "Put the backdrop in the `background` slot rather than on the band's own class: the slot renders beneath the content layer and is already marked decorative.",
+        "Turn `padded` off when the slotted content owns its block rhythm; the inline inset is not optional, because it is the page boundary the bar above the band also reads.",
+        "Set the band's air with `size`, never with a padded wrapper around the copy: `large` is the opening a page leads with, and the rhythm is the same above and below so the copy and the media sit on the band's vertical centre.",
+        "Keep `highlight` to the opening phrase of the headline — it is the same sentence, only painted differently.",
+        "Put the calls to action in `Hero.Title`'s `actions` slot; it stacks them full-width on narrow screens, which is what makes a hero button a comfortable thumb target.",
+        "Set `mediaAlign=\"end\"` when the media should close on the same vertical line as the frames below the band; leave it `center` when the media is a self-contained object that reads best balanced in its column.",
+        "Reach for `floorTexture` rather than wiring a texture into the `bottom` slot by hand: the window is a fixed cell, so the band already carries the ink and the horizontal falloff fitted to it, and a hand-fitted copy of that drifts.",
+        "Leave the `media` slot out entirely rather than filling it with decoration — a band with one column and a strong statement beats one with a stock image."
+      ]
+    },
+    "hero-root": {
+      "import": "@aziontech/webkit/hero-root",
+      "target": "./src/components/marketing/hero/hero.vue",
+      "kind": "root",
+      "rootOf": "hero",
+      "treeShakeableImport": "@aziontech/webkit/hero-root",
+      "category": "marketing",
+      "structure": "composition",
+      "status": "approved",
+      "props": [
+        {
+          "name": "kind",
+          "type": "HeroKind",
+          "default": "'band'",
+          "required": "false",
+          "doc": "Height of the band; `screen` fills one viewport minus `--banner-offset`."
+        },
+        {
+          "name": "maxWidth",
+          "type": "HeroWidth",
+          "default": "'7xl'",
+          "required": "false",
+          "doc": "Width the inner column is capped at; `site` is the marketing measure, `full` keeps only the inset."
+        },
+        {
+          "name": "bordered",
+          "type": "boolean",
+          "default": "true",
+          "required": "false",
+          "doc": "Draw the band's bottom rule, which is the top edge of whatever follows it."
+        },
+        {
+          "name": "padded",
+          "type": "boolean",
+          "default": "true",
+          "required": "false",
+          "doc": "Apply the band's own vertical rhythm. The inline inset is always applied."
+        },
+        {
+          "name": "size",
+          "type": "HeroSize",
+          "default": "'medium'",
+          "required": "false",
+          "doc": "Vertical rhythm the band applies when `padded`, equal above and below; `large` is the opening a page leads with."
+        },
+        {
+          "name": "texture",
+          "type": "TextureMaterialKind",
+          "default": "'none'",
+          "required": "false",
+          "doc": "Paint this texture behind the band's content; `none` leaves the backdrop to the `background` slot."
+        },
+        {
+          "name": "textureSize",
+          "type": "TextureMaterialSize",
+          "default": "'medium'",
+          "required": "false",
+          "doc": "Pitch of the tiling the `texture` prop paints — how far apart its cells sit."
+        },
+        {
+          "name": "textureFade",
+          "type": "TextureMaterialFade",
+          "default": "'none'",
+          "required": "false",
+          "doc": "Fade applied to the layer the `texture` prop paints."
+        },
+        {
+          "name": "floorTexture",
+          "type": "TextureMaterialKind",
+          "default": "'none'",
+          "required": "false",
+          "doc": "Paint this texture standing on the band's floor, filling the `bottom` window under the brand strip."
+        },
+        {
+          "name": "floorTextureSize",
+          "type": "TextureMaterialSize",
+          "default": "'medium'",
+          "required": "false",
+          "doc": "Pitch of the tiling the `floorTexture` prop paints — how far apart its cells sit."
+        },
+        {
+          "name": "align",
+          "type": "HeroAlign",
+          "default": "'center'",
+          "required": "false",
+          "doc": "Where the content column sits vertically when the band fills a screen."
+        },
+        {
+          "name": "mediaAlign",
+          "type": "HeroMediaAlign",
+          "default": "'center'",
+          "required": "false",
+          "doc": "Where the `media` slot sits in its column: `center` balances it in the column, `end` sets its end edge on the container boundary, past the inline inset, from `md` up."
+        },
+        {
+          "name": "offset",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Height of the fixed chrome above the band, subtracted from the viewport when `kind` is `screen`; any CSS length."
+        },
+        {
+          "name": "bottomHeight",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Height of the window under the content, where the brand strip and the floor texture stand; any CSS length."
+        },
+        {
+          "name": "carousel",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "Stand the brand strip on the band's floor, under the `bottom` window."
+        },
+        {
+          "name": "carouselMarks",
+          "type": "string[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "Registry names of the marks the strip shows, in order."
+        },
+        {
+          "name": "carouselLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Overline above the brand strip, stating the claim the marks make."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The band's copy, centered in the capped column above the backdrop; usually one `Hero.Title`."
+        },
+        {
+          "name": "media",
+          "scope": "—",
+          "notes": "Screenshot, diagram or form set beside the copy from `md` up. When filled, the content column becomes two equal halves from `md` up and the copy keeps the leading one; the `Hero.Title` `maxWidth` caps the copy inside its half."
+        },
+        {
+          "name": "background",
+          "scope": "—",
+          "notes": "Decorative backdrop rendered full-bleed beneath the content; marked `aria-hidden`."
+        },
+        {
+          "name": "top",
+          "scope": "—",
+          "notes": "Decorative asset window overlaying the band's top edge; clips its child, which may be larger than the window and offset inside it. It claims no space, so content still centres on the band."
+        },
+        {
+          "name": "bottom",
+          "scope": "—",
+          "notes": "Asset window standing on the band's floor; clips its child, which may be larger than the window and offset inside it. It is real content, so it **reserves its height** and `align` centres the copy in what is left. It shares the floor with the `carousel` strip, which stands under it. `floorTexture` fills this same window when the asset is one of the system's textures."
+        }
+      ],
+      "purpose": "The opening band of a page: a full-bleed section spanning the whole viewport width whose copy is centered in a capped column, optionally filling one screen and optionally carrying a decorative backdrop behind it. It is the top layer of the page language and the owner of the page's first rule — the bottom hairline every column below it hangs from. `Hero.Title` is the copy block it centers.",
+      "useWhen": [
+        "As the opening band of a marketing, hub or documentation page.",
+        "Whenever a band must span the window while its copy stays on the page's measure.",
+        "For any band that carries a decorative backdrop behind its content.",
+        "With `kind=\"screen\"` when the opening should measure exactly one viewport."
+      ],
+      "avoidWhen": [
+        "For the framed column of bands below the opening → use `section-container`.",
+        "For one band inside that column → use `section-module`.",
+        "For a section header further down the page → use `section-title`, which renders an `h2`.",
+        "For a mid-page announcement → use `banner`; for the closing ask → use `call-to-action`.",
+        "For a copy-and-media pairing that is not the page opening → use `media-split`."
+      ],
+      "related": [
+        "section-container` — the framed column below it; this band's `border-b` is that column's top edge.",
+        "section-module` — the brick stacked inside that column.",
+        "texture-material` — the backdrop the `texture` and `floorTexture` props paint, at the pitch `textureSize` and `floorTextureSize` set; reach for the `background` slot only when the layer needs more than kind, size and fade.",
+        "media-split` — the same copy-beside-media shape at section scale, rendering an `h2`.",
+        "banner` — the mid-page announcement band."
+      ],
+      "bestPractices": [
+        "One `Hero` per page. It owns the `h1` through `Hero.Title`, and a second breaks the document outline.",
+        "Pass `kind=\"screen\"` for an opening band that should measure one screen, and declare the sticky bar's height as `--banner-offset` so the band still measures exactly one screen beneath it.",
+        "Put the backdrop in the `background` slot rather than on the band's own class: the slot renders beneath the content layer and is already marked decorative.",
+        "Turn `padded` off when the slotted content owns its block rhythm; the inline inset is not optional, because it is the page boundary the bar above the band also reads.",
+        "Set the band's air with `size`, never with a padded wrapper around the copy: `large` is the opening a page leads with, and the rhythm is the same above and below so the copy and the media sit on the band's vertical centre.",
+        "Keep `highlight` to the opening phrase of the headline — it is the same sentence, only painted differently.",
+        "Put the calls to action in `Hero.Title`'s `actions` slot; it stacks them full-width on narrow screens, which is what makes a hero button a comfortable thumb target.",
+        "Set `mediaAlign=\"end\"` when the media should close on the same vertical line as the frames below the band; leave it `center` when the media is a self-contained object that reads best balanced in its column.",
+        "Reach for `floorTexture` rather than wiring a texture into the `bottom` slot by hand: the window is a fixed cell, so the band already carries the ink and the horizontal falloff fitted to it, and a hand-fitted copy of that drifts.",
+        "Leave the `media` slot out entirely rather than filling it with decoration — a band with one column and a strong statement beats one with a stock image."
+      ]
+    },
+    "sticky-stack": {
+      "import": "@aziontech/webkit/sticky-stack",
+      "target": "./src/components/marketing/sticky-stack/sticky-stack.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/sticky-stack",
+      "category": "marketing",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "items",
+          "type": "StickyStackItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The claims, in reading order; each item is a title, the sentence that opens with it, and the image shown while it is open."
+        },
+        {
+          "name": "size",
+          "type": "'small' | 'medium' | 'large'",
+          "default": "'medium'",
+          "required": "false",
+          "doc": "Height the open claim is held to, and so the height of the whole stack beside the media."
+        },
+        {
+          "name": "dwell",
+          "type": "number",
+          "default": "0.7",
+          "required": "false",
+          "doc": "Screen-heights of scrolling each claim holds while the band is pinned; the band's total scroll is one screen plus this much per claim."
+        },
+        {
+          "name": "showProgress",
+          "type": "boolean",
+          "default": "true",
+          "required": "false",
+          "doc": "Fills a hairline along the open claim's bottom edge as its share of the scroll is spent."
+        }
+      ],
+      "events": [
+        {
+          "name": "index-change",
+          "payload": "number",
+          "notes": "The open claim changed; the payload is the index now open. Fires on the scroll that moved it and on a reader selecting a claim."
+        }
+      ],
+      "slots": [
+        {
+          "name": "media",
+          "scope": "{ item: StickyStackItem, index: number, active: boolean }",
+          "notes": "The claim's medium; replaces the image built from the item's own source. Mounted fresh on every change, so an entrance animation inside it replays."
+        }
+      ],
+      "purpose": "A band that pins to the viewport and is read by scrolling through it: a stack of claims on one side, one piece of media on the other, and the scroll position — not a pointer — deciding which claim is open. Each claim expands in turn while the ones already read collapse and stack above it, so the column keeps one height and the reader always sees where they are in the run. The media beside it is replaced, not dimmed: the outgoing scene leaves and the incoming one mounts, so a scene that animates plays its entrance every time it is reached.",
+      "useWhen": [
+        "For a sequence of claims a reader should take in one at a time, each with a medium worth looking at — five ways a platform is used, each with the file you would actually write.",
+        "When the media is the payload and the copy is the caption: a code sample, a console shot, an official scene.",
+        "As the one band on a page that rewards scrolling slowly, placed where a reader has already committed to the page."
+      ],
+      "avoidWhen": [
+        "For peer claims a reader should be able to jump between at will → use `media-tabs`, which selects on hover, click and a timer without taking the scroll.",
+        "For one claim beside one picture → use `media-split`.",
+        "For questions and answers, or any run longer than about six items → use `faq`. A pinned band holds the page for its whole run, and a long run holds it too long.",
+        "On a page that is already a single short screen: there is no scroll to spend."
+      ],
+      "related": [
+        "media-tabs` — the pointer-driven sibling. Same two-column anatomy; the selection moves on hover, click and a timer, and the band does not pin.",
+        "media-split` — one claim, one medium, no selection and no pin.",
+        "code-block` — the medium this band most often holds, one sample per claim.",
+        "illustration` — the official scene a claim's `media` slot otherwise holds.",
+        "section-title` — the heading above the band; this component carries no title of its own."
+      ],
+      "bestPractices": [
+        "Keep the run to three to six claims. The band holds the page for `dwell` of a screen per claim, and a reader who cannot see the end of it reads it as a page that will not let go.",
+        "Write each claim to stand alone. A reader can land mid-band from a deep link or a focus jump, so no claim may depend on the one above it.",
+        "Keep a title to one line. The collapsed rows set the column's height, and a title that wraps changes it for every claim at once.",
+        "Keep a description to two or three lines. Only the open claim shows one, and a long one pushes the stack past the pinned frame.",
+        "Give every claim a medium. The frame holds one at a time and mounts it fresh, so a claim with nothing to show reads as a band that broke rather than one that is quiet.",
+        "Use media of the same shape. The frame does not resize between claims, and a scene that changes the frame's height un-pins the band mid-read.",
+        "Set `--sticky-stack-top` to the height of any sticky header above the band, or the first claim opens underneath it. Set it on a wrapper around the band rather than on the band's own tag: custom properties inherit, and the band is not a style seam.",
+        "Leave `showProgress` on. It is the only thing telling a reader how much of the pin is left.",
+        "Raise `dwell` for claims that carry code a reader must actually read; lower it for scenes that are grasped at a glance."
+      ]
+    },
+    "quote-carousel": {
+      "import": "@aziontech/webkit/quote-carousel",
+      "target": "./src/components/marketing/quote-carousel/quote-carousel.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/quote-carousel",
+      "category": "marketing",
+      "structure": "monolithic",
+      "status": "approved",
+      "props": [
+        {
+          "name": "items",
+          "type": "QuoteCarouselItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The testimonials rendered as cards, in order; each item is `{ text, name?, jobTitle?, photo?, mark? }` — the quotation, who said it, the rest of the attribution, their likeness and the registry name of the company's mark."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name for the scrollable row of testimonials, announced before its contents."
+        }
+      ],
+      "purpose": "A band of customer testimonials laid out as one scrollable row of flush cards. It is the wall form of `quote`: the same quotation, attribution and company mark, repeated across a track that snaps card by card and fades at both ends, so a page can carry more proof than the row is wide. The cards sit edge to edge with no gutter — each draws its own hairline and the next one's overlaps it, so the row reads as one ruled strip rather than a set of floating tiles. The fade at either end is what says the strip continues past the band's edge.",
+      "useWhen": [
+        "When a page has more testimonials than fit in one row and the reader chooses how far to go.",
+        "As the proof band under a section headline, where a grid of quotes would run down the page instead of across it.",
+        "When every quote carries equal weight — the track gives no card more room than its neighbours.",
+        "For a row of analyst recognitions, where the source is a firm rather than a person: leave `name` out and the mark leads the card alone."
+      ],
+      "avoidWhen": [
+        "For a single testimonial → use `quote` directly; a track of one has nothing to scroll.",
+        "For the one quotation a page features above the others → use `quote` in its `highlight` register.",
+        "For a row of company marks with no quotation → use `ticker` (moving) or `logo-wall` (static).",
+        "For a set of quotes the reader must read → lay them out as a `card-grid`; anything past the first card in a track can be missed."
+      ],
+      "related": [
+        "quote` — the single testimonial this band repeats; the `inline` register is what each card draws.",
+        "carousel` — the scrollable track underneath, with the snap points, the step controls and the keyboard behaviour.",
+        "ticker` — the same clients without their words, moving on their own.",
+        "logo-wall` — the static wall of marks, when a quotation is not the point.",
+        "section-title` — the headline composed above the band; this component carries no heading of its own."
+      ],
+      "bestPractices": [
+        "Keep each `text` to one or two sentences. Cards in a track are read at a glance, and a paragraph turns a scannable strip into a wall.",
+        "Give a person's quote a `name`. It is the attribution's lead and the source of the initials the card draws when there is no `photo`.",
+        "Leave `name` out when the source is an institution — an analyst firm, a publication. The card then draws no likeness, the mark leads it, and `jobTitle` carries the report or article the claim comes from. Name the firm in that line as well, because the mark is decorative and a screen reader never reaches it.",
+        "Name the company with `mark`, using a registry name rather than a URL, so the mark inherits the card's ink and reads on both themes. A name the registry does not carry is written as its own wordmark, which keeps the card complete while the artwork lands.",
+        "Always pass `ariaLabel`. A scroll region with no name tells a screen-reader user nothing about what they are about to move through.",
+        "Compose the headline above the band with `section-title`, unframed, so the band owns only the strip.",
+        "Keep the band full width. The row is designed to run past the reader's view — inset it and the fade loses the thing it is signalling.",
+        "The band is pure composition — Carousel, then `Carousel.Item`, then `quote` — so its flush ruled cards and end fades come from `carousel` and read the same as any other carousel on the page. It adds only the card width and the header row of likeness and mark."
+      ]
+    },
+    "quote": {
+      "import": "@aziontech/webkit/quote",
+      "target": "./src/components/marketing/quote/quote.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/quote",
+      "category": "marketing",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "text",
+          "type": "string",
+          "default": "—",
+          "required": "true",
+          "doc": "The quotation itself, rendered as the `blockquote` body; overridden by the default slot."
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Who said it — the attribution's lead, set in the accent."
+        },
+        {
+          "name": "jobTitle",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Their role and company, as one line — the attribution's second part. Named `jobTitle`, not `role`, because `role` is the ARIA attribute and a prop of that name reads as one to both tooling and the consumer."
+        },
+        {
+          "name": "photo",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "URL of the person's likeness, drawn beside the attribution by `highlight`; without one the attribution stands alone."
+        },
+        {
+          "name": "logo",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "URL of the company mark; ignored when the `mark` slot is filled."
+        },
+        {
+          "name": "logoAlt",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Alternative text for the mark; falls back to `jobTitle` when empty."
+        },
+        {
+          "name": "highlights",
+          "type": "string[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "Phrases of `text` kept in the default ink while the rest of the quotation recedes to the muted one; each is matched verbatim, and an empty list leaves the whole quotation in the default ink. Ignored when the default slot is filled."
+        },
+        {
+          "name": "kind",
+          "type": "QuoteKind",
+          "default": "'inline'",
+          "required": "false",
+          "doc": "Register of the quote: `inline` is the quiet unit inside a larger band, `signed` the band-sized client sentence, `highlight` the featured one."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "Quotation body; replaces the `text` prop when provided."
+        },
+        {
+          "name": "mark",
+          "scope": "—",
+          "notes": "The company mark; replaces the image built from `logo`, for a mark that owns its own theming."
+        },
+        {
+          "name": "actions",
+          "scope": "—",
+          "notes": "A trailing control under the attribution, floored so a row of quotes aligns on it."
+        }
+      ],
+      "purpose": "A single customer testimonial: the quotation, who said it, and optionally the mark of the company they said it for. It is the smallest unit of social proof on a marketing page, and it is deliberately one quote — a wall of them is a layout built from several of these, not a prop on one. Three registers, one component. `inline` is the quiet unit that sits inside a cell of a larger band — the mark on a fixed band above the words, the quotation at the smallest heading size, and no quotation glyph, so a row of them reads as a row of claims. `signed` is the card-sized register a client sentence or an analyst report takes: the mark above, the quotation glyph, the quotation in body type, and the attribution stacked as the speaker (or the report) in the accent over their role (or its date). `highlight` is the featured register — the quotation set largest beside the company mark, which is given its own column at the quotation's first line; the speaker's likeness is drawn beside the attribution only when a `photo` is given. Every register attributes the same way: the name in the accent and the role in the muted ink, both in overline type, one over the other. The register changes the weight and the arrangement, never the anatomy: every register is one `figure` holding one `blockquote` and one `figcaption`, so the quotation and its attribution stay paired at the depth HTML requires.",
+      "useWhen": [
+        "To carry one customer statement inside a marketing section.",
+        "Whenever a claim the page makes is better made by the customer who verified it.",
+        "As the repeated unit of a testimonial row or grid, one instance per quote — in `inline`, where every cell carries equal weight.",
+        "In `signed`, as a product page's own client sentence, usually beside that page's client marks.",
+        "In `highlight`, for the one quotation a page features above the others."
+      ],
+      "avoidWhen": [
+        "For a measured figure rather than a statement → use `big-numbers`.",
+        "For an inline aside or callout inside documentation → use `doc-callout`.",
+        "For a dismissible or status message → use `message`.",
+        "For a logo row with no quotation → compose the marks directly; a `quote` without `text` is not a logo wall."
+      ],
+      "related": [
+        "big-numbers` — the numeric form of the same proof band.",
+        "card-grid` — the uniform grid a row of peer quotes is laid out on; `bento-grid` when one quote is given more weight than its neighbours.",
+        "avatar` — the person's likeness, composed by the `highlight` register when a `photo` is given."
+      ],
+      "bestPractices": [
+        "Keep `text` to one or two sentences. A testimonial that needs a paragraph is a case study, and belongs behind a link.",
+        "Give `name` the speaker and `job-title` their title and company — or, for an analyst report, the report and its date. The two lines are set in different inks, so passing one joined string collapses that distinction.",
+        "Quote verbatim. Do not add quotation marks to `text` — `signed` and `highlight` open on the component's own quotation glyph, sized to that register's measure, so a typed `\"` doubles it; `inline` carries no glyph, because its unit is a claim inside a larger band.",
+        "Give `logo` a company mark only. A person's likeness is `photo`, which only `highlight` draws.",
+        "Give `logo` a mark that carries its own contrast. It is drawn as-is — no filter, one URL, no per-theme swap — so a mark drawn in a single ink reads on one theme and disappears on the other. Use the `mark` slot instead when the mark is a component that owns its own theming.",
+        "Use `highlights` to lift the measured claim out of a quotation — the figure and what it measured (`86% faster load times`), not a whole clause. Every phrase must appear in `text` verbatim; the rest of the sentence recedes to the muted ink, so a quotation that highlights most of itself highlights nothing.",
+        "Put a trailing control in `actions` rather than beside the quote. The band floors it, which is what keeps a row of quotes aligned on their controls whatever each quotation's length."
+      ]
+    },
+    "media-tabs": {
+      "import": "@aziontech/webkit/media-tabs",
+      "target": "./src/components/marketing/media-tabs/media-tabs.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/media-tabs",
+      "category": "marketing",
+      "structure": "monolithic",
+      "status": "approved",
+      "props": [
+        {
+          "name": "items",
+          "type": "MediaTabsItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The tabs, in order, at most three; each item is `{ title, description, src, alt }`. Items past the third are not rendered."
+        },
+        {
+          "name": "selectOn",
+          "type": "'hover' | 'click'",
+          "default": "'hover'",
+          "required": "false",
+          "doc": "What moves the selection as the reader points at a row. A click always selects, on either setting."
+        },
+        {
+          "name": "autoPlay",
+          "type": "boolean",
+          "default": "true",
+          "required": "false",
+          "doc": "Advances to the next tab on a timer; pauses under the pointer or keyboard focus, restarts its count on a click, and never runs under reduced motion."
+        },
+        {
+          "name": "autoPlayInterval",
+          "type": "number",
+          "default": "5000",
+          "required": "false",
+          "doc": "Milliseconds each tab is held before the band advances."
+        },
+        {
+          "name": "showProgress",
+          "type": "boolean",
+          "default": "true",
+          "required": "false",
+          "doc": "Advances a hairline along the active row's bottom edge while the timer runs."
+        },
+        {
+          "name": "size",
+          "type": "'small' | 'medium' | 'large'",
+          "default": "'medium'",
+          "required": "false",
+          "doc": "Height each row is held to, as a multiple of the band's own padding step; copy longer than that grows its row, and the media column is always as tall as the stack."
+        },
+        {
+          "name": "texture",
+          "type": "TextureMaterialKind",
+          "default": "'none'",
+          "required": "false",
+          "doc": "Texture the media column is grounded with; `none` leaves it bare."
+        },
+        {
+          "name": "textureSize",
+          "type": "TextureMaterialSize",
+          "default": "'medium'",
+          "required": "false",
+          "doc": "Pitch of the ground's tiling — how far apart its cells sit."
+        },
+        {
+          "name": "textureFade",
+          "type": "TextureMaterialFade",
+          "default": "'vignette'",
+          "required": "false",
+          "doc": "How the ground fades out before the column's edges."
+        }
+      ],
+      "events": [
+        {
+          "name": "tab-change",
+          "payload": "(event: Event, index: number)",
+          "notes": "The selection moved; `index` is the tab now shown. Fires on a reader's hover or click, not on an autoplay tick."
+        }
+      ],
+      "slots": [
+        {
+          "name": "media",
+          "scope": "{ item: MediaTabsItem, index: number, active: boolean }",
+          "notes": "The tab's media; replaces the image built from `item.src`."
+        }
+      ],
+      "purpose": "A band split in two: a stack of claims on one side, one piece of media on the other, and only the selected claim's media on screen. The selection moves on hover, on click, and on a timer, so the band reads on its own and still answers a reader who takes it over. Its height is its own — each row carries a height the component sets from `size`, and the media column is exactly as tall as the stack — so the band never inherits a height from the section it lands in.",
+      "useWhen": [
+        "For a run of peer claims that share one picture frame — three ways a platform is fast, four things a product does.",
+        "When each claim needs a sentence of its own, not a bullet: the copy is the content and the media illustrates it.",
+        "As a product-page band that rewards watching but does not require it."
+      ],
+      "avoidWhen": [
+        "For one claim beside one picture → use `media-split`.",
+        "For questions and answers → use `faq`.",
+        "For switching a page's content between peer views the reader navigates → use `tab-view`, which is a real ARIA tab set."
+      ],
+      "related": [
+        "media-split` — one claim, one picture, no selection.",
+        "illustration` — the official scene a tab's `media` slot usually holds.",
+        "frame-box` — the registration frame the band is built from: every tab is its own frame and the media column is one more, each with all four corner marks. Every tab flushes its top rule and the media column its top and left rules, so the band draws no top rule of its own: the rule above it (a section title's, or the page frame's) is the only one, and a shared edge is one hairline.",
+        "section-title` — the heading above the band; this component carries no title of its own."
+      ],
+      "bestPractices": [
+        "Write the tabs as peers. A reader arrives mid-rotation, so no row may depend on the row above it.",
+        "Keep a tab's title to one line and its description to two. The row has a fixed height, and copy that overruns it pushes the media column taller than the design.",
+        "Give every tab a medium: the frame holds one at a time and cross-fades within it, so a tab with nothing to show reads as a broken rotation, not as a quiet one.",
+        "Use scenes of the same shape. The frame does not resize between tabs.",
+        "Leave `autoPlay` on for a band a reader is expected to watch. It pauses under the pointer or keyboard focus, restarts its count on a click (and keeps running under the pointer that clicked), and never starts under reduced motion.",
+        "Pick `size` from the copy, not from the section: `medium` holds a title and two lines, `large` a title and four."
+      ]
+    },
+    "embed": {
+      "import": "@aziontech/webkit/embed",
+      "target": "./src/components/marketing/embed/embed.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/embed",
+      "category": "marketing",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "src",
+          "type": "string",
+          "default": "—",
+          "required": "true",
+          "doc": "URL of the document to embed."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "—",
+          "required": "true",
+          "doc": "Accessible name for the embedded document, announced before its content."
+        },
+        {
+          "name": "ratio",
+          "type": "'video' | 'square' | 'wide'",
+          "default": "'video'",
+          "required": "false",
+          "doc": "Aspect ratio the frame holds while it scales."
+        }
+      ],
+      "purpose": "A responsive `iframe` for third-party content — a demo, a player, a status page, a form — that keeps its aspect ratio at every width and always carries the accessible name an `iframe` needs. It is the one place external content enters a page, so the attributes that are easy to forget are not optional.",
+      "useWhen": [
+        "To embed a video player, live demo, status page or third-party form in a marketing page.",
+        "Whenever content comes from another origin and must sit inside the page's own frame.",
+        "When the embedded thing has a natural aspect ratio the page should preserve while it scales."
+      ],
+      "avoidWhen": [
+        "For a screenshot or a clip hosted by us inside documentation → use `doc-frame`, which frames stills and clips and opens them full screen.",
+        "For an image → use a plain `img` inside `frame-box`; an `iframe` for a picture costs a document load.",
+        "For content we own and could render directly — an embed is a last resort, not a layout tool."
+      ],
+      "related": [
+        "doc-frame` — the documentation frame for stills and clips, not third-party documents.",
+        "frame-box` — the frame drawn around the embedded document by whatever assembles the page; the embed draws none of its own.",
+        "media-split` — when the embed is one half of a copy-and-media band."
+      ],
+      "bestPractices": [
+        "The band draws no frame of its own: the rule and the corner marks belong to the `section-module` or `frame-box` that the page assembles it into, so a band placed in a framed column never lands a second hairline on the column's own.",
+        "Always write a `title` that says what the embedded thing is. It is the frame's accessible name, and a screen-reader user meets it before the content.",
+        "Pick the `ratio` that matches the source. A `video` ratio around a square form leaves bands of empty frame.",
+        "Prefer `loading=\"lazy\"` behaviour for anything below the fold — it is the default here, and an embed is usually the heaviest thing on a marketing page.",
+        "Do not embed something essential. A blocked or failed third-party frame leaves a hole the page cannot fill."
+      ]
+    },
+    "faq": {
+      "import": "@aziontech/webkit/faq",
+      "target": "./src/components/marketing/faq/faq.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/faq",
+      "category": "marketing",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the band, rendered as its `h2` in the left column."
+        },
+        {
+          "name": "items",
+          "type": "FaqItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The questions and their answers, in order; each item is `{ value, question, answer }` where `value` is the item's stable key."
+        },
+        {
+          "name": "framed",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "Draw the band's own registration frame. Turn it off when the page already wraps the band in a frame."
+        }
+      ],
+      "slots": [
+        {
+          "name": "answer",
+          "scope": "{ item: FaqItem }",
+          "notes": "Replaces the rendered answer for every item, so an answer can carry a link or richer content."
+        }
+      ],
+      "purpose": "The frequently-asked-questions band of a marketing page: a two-column panel with the section's heading on the left and the answers as a disclosure list on the right. It is the page-level band, not the disclosure primitive — it composes `accordion`, which remains the right choice anywhere a bare expandable list is wanted. The band is drawn in the hairline register: the two columns and every row are separated by a one-pixel gap over a rule fill, so the seams are the grid's own gaps rather than borders on the cells. The rule under a row is held at the item's edge and drawn only while that item is open, which keeps exactly one rule per row in either state; the last row draws none, because it sits on the band's own floor. A single `--accordion-inset` hook, re-declared per breakpoint, puts the heading, every question and every answer on one content column.",
+      "useWhen": [
+        "As the FAQ band near the end of a marketing or pricing page.",
+        "Whenever a page must answer a known set of objections without sending the reader to docs.",
+        "When the answers are short enough to read in place rather than link out to."
+      ],
+      "avoidWhen": [
+        "For a bare expandable list anywhere else → use `accordion` directly.",
+        "For long-form reference content that belongs in documentation → use `doc-prose` and link to it.",
+        "For a single expandable aside inside a section → use `accordion` with one item."
+      ],
+      "related": [
+        "accordion` — the disclosure primitive this band renders its answers through.",
+        "section-title` — the header for a section whose body is not a question list.",
+        "frame-box` — the frame the band is drawn with, applied by whatever assembles the page; the band draws none of its own."
+      ],
+      "bestPractices": [
+        "framed` decides who draws the rule. On, the band draws its own registration frame. Off, the rule and the corner marks belong to the `section-module` or `frame-box` the page assembles it into, so a band placed in an already-framed column never lands a second hairline on the column's own.",
+        "Keep the band to the questions a reader actually asks before buying; a FAQ is objection handling, not a manual.",
+        "Write each `question` as the reader would ask it, in their words rather than the product's.",
+        "Keep answers to a couple of sentences and link out for the rest — use the `answer` slot when an answer needs a link or richer content.",
+        "Give every item a stable `value`. It is the accordion's open-state key, so a reordered or re-keyed list loses whatever the reader had open.",
+        "Leave the first item closed. An open answer on load pushes the rest of the list down and hides the range of questions."
+      ]
+    },
+    "content-columns": {
+      "import": "@aziontech/webkit/content-columns",
+      "target": "./src/components/marketing/content-columns/content-columns.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/content-columns",
+      "category": "marketing",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "items",
+          "type": "ContentColumnItem[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "The columns, in reading order; each item is `{ title, description }`."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the band, rendered as its `h2` above the columns."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Supporting sentence under the headline."
+        },
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Short uppercase overline rendered above the headline."
+        },
+        {
+          "name": "columns",
+          "type": "2 | 3",
+          "default": "3",
+          "required": "false",
+          "doc": "How many columns the grid holds from the medium breakpoint up; below it the columns stack."
+        }
+      ],
+      "purpose": "A titled band whose body is two or three columns of short copy, drawn in one hairline `card-grid` so the columns read as a single surface. It is the plainest way to state a few parallel points under one section header.",
+      "useWhen": [
+        "For two or three parallel points that carry equal weight under one section heading.",
+        "When each point is a short title and a sentence — no icon, no media, no link.",
+        "As the body of a product or platform section that needs structure but not tiles."
+      ],
+      "avoidWhen": [
+        "When the points are unequal and one deserves the full width → use `bento-grid`.",
+        "When each point needs an icon, a link or its own surface → use `topic` in a `card-grid`.",
+        "For measured figures → use `big-numbers`.",
+        "For one point paired with a picture → use `media-split`."
+      ],
+      "related": [
+        "bento-grid` — the same collapsed-rule grid with unequal, slot-composed cells.",
+        "topic` — the richer unit when a point needs an icon or a destination.",
+        "section-title` — the header this band renders above its columns.",
+        "big-numbers` — the numeric sibling of this grid."
+      ],
+      "bestPractices": [
+        "The band draws no frame of its own: the rule and the corner marks belong to the `section-module` or `frame-box` that the page assembles it into, so a band placed in a framed column never lands a second hairline on the column's own.",
+        "Keep every column to a title and one or two sentences; the grid stretches to the tallest, so one long column pads the rest.",
+        "Use three columns for three peers and two for a contrast; four points want `bento-grid` or a card grid instead.",
+        "Write the column titles in parallel grammar — they are read across, not down.",
+        "Leave `title` out when the band sits directly under another header; two headings in a row is one too many."
+      ]
     },
     "breadcrumb": {
       "import": "@aziontech/webkit/breadcrumb",
@@ -11271,6 +12673,1116 @@
       "kind": "svg",
       "treeShakeableImport": "@aziontech/webkit/svg/azion/min"
     },
+    "assets/agi-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/agi-extended-color.svg",
+      "target": "./src/assets/logos/clients/agi-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/agi-extended-color.svg"
+    },
+    "assets/agibank-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/agibank-extended-color.svg",
+      "target": "./src/assets/logos/clients/agibank-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/agibank-extended-color.svg"
+    },
+    "assets/agibank-extended-mono.svg": {
+      "import": "@aziontech/webkit/assets/agibank-extended-mono.svg",
+      "target": "./src/assets/logos/clients/agibank-extended-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/agibank-extended-mono.svg"
+    },
+    "assets/agibank-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/agibank-extended-reversed.svg",
+      "target": "./src/assets/logos/clients/agibank-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/agibank-extended-reversed.svg"
+    },
+    "assets/akamai-symbol-color.svg": {
+      "import": "@aziontech/webkit/assets/akamai-symbol-color.svg",
+      "target": "./src/assets/logos/competitors/akamai-symbol-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/akamai-symbol-color.svg"
+    },
+    "assets/alpargatas-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/alpargatas-extended-color.svg",
+      "target": "./src/assets/logos/clients/alpargatas-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/alpargatas-extended-color.svg"
+    },
+    "assets/alpargatas-extended-mono.svg": {
+      "import": "@aziontech/webkit/assets/alpargatas-extended-mono.svg",
+      "target": "./src/assets/logos/clients/alpargatas-extended-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/alpargatas-extended-mono.svg"
+    },
+    "assets/americamovil-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/americamovil-extended-color.svg",
+      "target": "./src/assets/logos/clients/americamovil-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/americamovil-extended-color.svg"
+    },
+    "assets/angeloni-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/angeloni-extended-color.svg",
+      "target": "./src/assets/logos/clients/angeloni-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/angeloni-extended-color.svg"
+    },
+    "assets/angular-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/angular-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/angular-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/angular-symbol-mono.svg"
+    },
+    "assets/anthropic-extended-mono.svg": {
+      "import": "@aziontech/webkit/assets/anthropic-extended-mono.svg",
+      "target": "./src/assets/logos/frameworks/anthropic-extended-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/anthropic-extended-mono.svg"
+    },
+    "assets/arezzo-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/arezzo-extended-color.svg",
+      "target": "./src/assets/logos/clients/arezzo-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/arezzo-extended-color.svg"
+    },
+    "assets/arezzo-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/arezzo-extended-reversed.svg",
+      "target": "./src/assets/logos/clients/arezzo-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/arezzo-extended-reversed.svg"
+    },
+    "assets/astro-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/astro-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/astro-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/astro-symbol-mono.svg"
+    },
+    "assets/aws-extended-mono.svg": {
+      "import": "@aziontech/webkit/assets/aws-extended-mono.svg",
+      "target": "./src/assets/logos/frameworks/aws-extended-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/aws-extended-mono.svg"
+    },
+    "assets/axur-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/axur-extended-reversed.svg",
+      "target": "./src/assets/logos/clients/axur-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/axur-extended-reversed.svg"
+    },
+    "assets/ayko-extended-mono.svg": {
+      "import": "@aziontech/webkit/assets/ayko-extended-mono.svg",
+      "target": "./src/assets/logos/clients/ayko-extended-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/ayko-extended-mono.svg"
+    },
+    "assets/azion-highlight.svg": {
+      "import": "@aziontech/webkit/assets/azion-highlight.svg",
+      "target": "./src/assets/illustrations/azion-highlight.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/azion-highlight.svg"
+    },
+    "assets/azure-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/azure-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/azure-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/azure-symbol-mono.svg"
+    },
+    "assets/banco-de-la-nacion-extended-mono.svg": {
+      "import": "@aziontech/webkit/assets/banco-de-la-nacion-extended-mono.svg",
+      "target": "./src/assets/logos/clients/banco-de-la-nacion-extended-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/banco-de-la-nacion-extended-mono.svg"
+    },
+    "assets/branches.svg": {
+      "import": "@aziontech/webkit/assets/branches.svg",
+      "target": "./src/assets/illustrations/branches.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/branches.svg"
+    },
+    "assets/browserless-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/browserless-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/browserless-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/browserless-symbol-mono.svg"
+    },
+    "assets/browserless-symbol-reversed.svg": {
+      "import": "@aziontech/webkit/assets/browserless-symbol-reversed.svg",
+      "target": "./src/assets/logos/frameworks/browserless-symbol-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/browserless-symbol-reversed.svg"
+    },
+    "assets/caixa-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/caixa-extended-color.svg",
+      "target": "./src/assets/logos/clients/caixa-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/caixa-extended-color.svg"
+    },
+    "assets/caixa-extended-mono.svg": {
+      "import": "@aziontech/webkit/assets/caixa-extended-mono.svg",
+      "target": "./src/assets/logos/clients/caixa-extended-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/caixa-extended-mono.svg"
+    },
+    "assets/caixa-symbol-color.svg": {
+      "import": "@aziontech/webkit/assets/caixa-symbol-color.svg",
+      "target": "./src/assets/logos/clients/caixa-symbol-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/caixa-symbol-color.svg"
+    },
+    "assets/ccpa-symbol-color.svg": {
+      "import": "@aziontech/webkit/assets/ccpa-symbol-color.svg",
+      "target": "./src/assets/logos/certifications/ccpa-symbol-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/ccpa-symbol-color.svg"
+    },
+    "assets/claude-symbol-color.svg": {
+      "import": "@aziontech/webkit/assets/claude-symbol-color.svg",
+      "target": "./src/assets/logos/agents/claude-symbol-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/claude-symbol-color.svg"
+    },
+    "assets/client-registry": {
+      "import": "@aziontech/webkit/assets/client-registry",
+      "target": "./src/assets/logos/clients/registry.ts",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/client-registry"
+    },
+    "assets/cloudflare-symbol-color.svg": {
+      "import": "@aziontech/webkit/assets/cloudflare-symbol-color.svg",
+      "target": "./src/assets/logos/competitors/cloudflare-symbol-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/cloudflare-symbol-color.svg"
+    },
+    "assets/cobasi-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/cobasi-extended-color.svg",
+      "target": "./src/assets/logos/clients/cobasi-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/cobasi-extended-color.svg"
+    },
+    "assets/cocacola-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/cocacola-extended-reversed.svg",
+      "target": "./src/assets/logos/clients/cocacola-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/cocacola-extended-reversed.svg"
+    },
+    "assets/codex-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/codex-symbol-mono.svg",
+      "target": "./src/assets/logos/agents/codex-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/codex-symbol-mono.svg"
+    },
+    "assets/combine-data-and-vector-search.svg": {
+      "import": "@aziontech/webkit/assets/combine-data-and-vector-search.svg",
+      "target": "./src/assets/illustrations/combine-data-and-vector-search.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/combine-data-and-vector-search.svg"
+    },
+    "assets/competitor-registry": {
+      "import": "@aziontech/webkit/assets/competitor-registry",
+      "target": "./src/assets/logos/competitors/registry.ts",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/competitor-registry"
+    },
+    "assets/contabilizei-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/contabilizei-extended-color.svg",
+      "target": "./src/assets/logos/clients/contabilizei-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/contabilizei-extended-color.svg"
+    },
+    "assets/contabilizei-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/contabilizei-extended-reversed.svg",
+      "target": "./src/assets/logos/clients/contabilizei-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/contabilizei-extended-reversed.svg"
+    },
+    "assets/contabilizei-symbol-color.png": {
+      "import": "@aziontech/webkit/assets/contabilizei-symbol-color.png",
+      "target": "./src/assets/logos/clients/contabilizei-symbol-color.png",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/contabilizei-symbol-color.png"
+    },
+    "assets/copilot-symbol-color.svg": {
+      "import": "@aziontech/webkit/assets/copilot-symbol-color.svg",
+      "target": "./src/assets/logos/agents/copilot-symbol-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/copilot-symbol-color.svg"
+    },
+    "assets/cpra-symbol-color.svg": {
+      "import": "@aziontech/webkit/assets/cpra-symbol-color.svg",
+      "target": "./src/assets/logos/certifications/cpra-symbol-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/cpra-symbol-color.svg"
+    },
+    "assets/crefisa-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/crefisa-extended-reversed.svg",
+      "target": "./src/assets/logos/clients/crefisa-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/crefisa-extended-reversed.svg"
+    },
+    "assets/csu-digital-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/csu-digital-extended-color.svg",
+      "target": "./src/assets/logos/clients/csu-digital-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/csu-digital-extended-color.svg"
+    },
+    "assets/cursor-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/cursor-symbol-mono.svg",
+      "target": "./src/assets/logos/agents/cursor-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/cursor-symbol-mono.svg"
+    },
+    "assets/dafiti-extended-mono.svg": {
+      "import": "@aziontech/webkit/assets/dafiti-extended-mono.svg",
+      "target": "./src/assets/logos/clients/dafiti-extended-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/dafiti-extended-mono.svg"
+    },
+    "assets/datadog-symbol-color.svg": {
+      "import": "@aziontech/webkit/assets/datadog-symbol-color.svg",
+      "target": "./src/assets/logos/frameworks/datadog-symbol-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/datadog-symbol-color.svg"
+    },
+    "assets/datadome-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/datadome-extended-reversed.svg",
+      "target": "./src/assets/logos/clients/datadome-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/datadome-extended-reversed.svg"
+    },
+    "assets/ddos-protection.svg": {
+      "import": "@aziontech/webkit/assets/ddos-protection.svg",
+      "target": "./src/assets/illustrations/ddos-protection.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/ddos-protection.svg"
+    },
+    "assets/docusaurus-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/docusaurus-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/docusaurus-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/docusaurus-symbol-mono.svg"
+    },
+    "assets/drizzle-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/drizzle-extended-color.svg",
+      "target": "./src/assets/logos/frameworks/drizzle-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/drizzle-extended-color.svg"
+    },
+    "assets/elastic-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/elastic-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/elastic-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/elastic-symbol-mono.svg"
+    },
+    "assets/eleventy-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/eleventy-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/eleventy-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/eleventy-symbol-mono.svg"
+    },
+    "assets/equinix-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/equinix-extended-color.svg",
+      "target": "./src/assets/logos/frameworks/equinix-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/equinix-extended-color.svg"
+    },
+    "assets/exame-extended-mono.svg": {
+      "import": "@aziontech/webkit/assets/exame-extended-mono.svg",
+      "target": "./src/assets/logos/clients/exame-extended-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/exame-extended-mono.svg"
+    },
+    "assets/fauna-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/fauna-extended-reversed.svg",
+      "target": "./src/assets/logos/clients/fauna-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/fauna-extended-reversed.svg"
+    },
+    "assets/forrester-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/forrester-extended-color.svg",
+      "target": "./src/assets/logos/analysts/forrester-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/forrester-extended-color.svg"
+    },
+    "assets/forrester-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/forrester-extended-reversed.svg",
+      "target": "./src/assets/logos/analysts/forrester-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/forrester-extended-reversed.svg"
+    },
+    "assets/fourbank-extended-mono.svg": {
+      "import": "@aziontech/webkit/assets/fourbank-extended-mono.svg",
+      "target": "./src/assets/logos/clients/fourbank-extended-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/fourbank-extended-mono.svg"
+    },
+    "assets/fourbank-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/fourbank-extended-reversed.svg",
+      "target": "./src/assets/logos/clients/fourbank-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/fourbank-extended-reversed.svg"
+    },
+    "assets/frost-and-sullivan-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/frost-and-sullivan-extended-color.svg",
+      "target": "./src/assets/logos/analysts/frost-and-sullivan-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/frost-and-sullivan-extended-color.svg"
+    },
+    "assets/frost-and-sullivan-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/frost-and-sullivan-extended-reversed.svg",
+      "target": "./src/assets/logos/analysts/frost-and-sullivan-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/frost-and-sullivan-extended-reversed.svg"
+    },
+    "assets/g2-symbol-color.svg": {
+      "import": "@aziontech/webkit/assets/g2-symbol-color.svg",
+      "target": "./src/assets/logos/analysts/g2-symbol-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/g2-symbol-color.svg"
+    },
+    "assets/gartner-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/gartner-extended-color.svg",
+      "target": "./src/assets/logos/analysts/gartner-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/gartner-extended-color.svg"
+    },
+    "assets/gartner-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/gartner-extended-reversed.svg",
+      "target": "./src/assets/logos/analysts/gartner-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/gartner-extended-reversed.svg"
+    },
+    "assets/gatsby-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/gatsby-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/gatsby-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/gatsby-symbol-mono.svg"
+    },
+    "assets/gcp-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/gcp-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/gcp-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/gcp-symbol-mono.svg"
+    },
+    "assets/gdpr-symbol-color.svg": {
+      "import": "@aziontech/webkit/assets/gdpr-symbol-color.svg",
+      "target": "./src/assets/logos/certifications/gdpr-symbol-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/gdpr-symbol-color.svg"
+    },
+    "assets/gemini-symbol-color.svg": {
+      "import": "@aziontech/webkit/assets/gemini-symbol-color.svg",
+      "target": "./src/assets/logos/agents/gemini-symbol-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/gemini-symbol-color.svg"
+    },
+    "assets/gfg-extended-mono.svg": {
+      "import": "@aziontech/webkit/assets/gfg-extended-mono.svg",
+      "target": "./src/assets/logos/clients/gfg-extended-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/gfg-extended-mono.svg"
+    },
+    "assets/gfg-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/gfg-extended-reversed.svg",
+      "target": "./src/assets/logos/clients/gfg-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/gfg-extended-reversed.svg"
+    },
+    "assets/gigaom-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/gigaom-extended-color.svg",
+      "target": "./src/assets/logos/analysts/gigaom-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/gigaom-extended-color.svg"
+    },
+    "assets/gigaom-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/gigaom-extended-reversed.svg",
+      "target": "./src/assets/logos/analysts/gigaom-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/gigaom-extended-reversed.svg"
+    },
+    "assets/github-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/github-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/github-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/github-symbol-mono.svg"
+    },
+    "assets/gpa-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/gpa-extended-reversed.svg",
+      "target": "./src/assets/logos/clients/gpa-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/gpa-extended-reversed.svg"
+    },
+    "assets/gpa-photo.jpg": {
+      "import": "@aziontech/webkit/assets/gpa-photo.jpg",
+      "target": "./src/assets/logos/clients/photos/gpa-photo.jpg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/gpa-photo.jpg"
+    },
+    "assets/gpa-symbol-color.svg": {
+      "import": "@aziontech/webkit/assets/gpa-symbol-color.svg",
+      "target": "./src/assets/logos/clients/gpa-symbol-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/gpa-symbol-color.svg"
+    },
+    "assets/grafana-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/grafana-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/grafana-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/grafana-symbol-mono.svg"
+    },
+    "assets/graphql-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/graphql-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/graphql-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/graphql-symbol-mono.svg"
+    },
+    "assets/grendene-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/grendene-extended-color.svg",
+      "target": "./src/assets/logos/clients/grendene-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/grendene-extended-color.svg"
+    },
+    "assets/groq-extended-mono.svg": {
+      "import": "@aziontech/webkit/assets/groq-extended-mono.svg",
+      "target": "./src/assets/logos/frameworks/groq-extended-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/groq-extended-mono.svg"
+    },
+    "assets/gru-airport-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/gru-airport-extended-color.svg",
+      "target": "./src/assets/logos/clients/gru-airport-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/gru-airport-extended-color.svg"
+    },
+    "assets/hdi-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/hdi-extended-color.svg",
+      "target": "./src/assets/logos/clients/hdi-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/hdi-extended-color.svg"
+    },
+    "assets/hdi-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/hdi-extended-reversed.svg",
+      "target": "./src/assets/logos/clients/former/hdi-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/hdi-extended-reversed.svg"
+    },
+    "assets/herospark-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/herospark-extended-color.svg",
+      "target": "./src/assets/logos/clients/herospark-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/herospark-extended-color.svg"
+    },
+    "assets/herospark-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/herospark-extended-reversed.svg",
+      "target": "./src/assets/logos/clients/herospark-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/herospark-extended-reversed.svg"
+    },
+    "assets/herospark-symbol-reversed.svg": {
+      "import": "@aziontech/webkit/assets/herospark-symbol-reversed.svg",
+      "target": "./src/assets/logos/clients/herospark-symbol-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/herospark-symbol-reversed.svg"
+    },
+    "assets/hexo-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/hexo-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/hexo-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/hexo-symbol-mono.svg"
+    },
+    "assets/hono-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/hono-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/hono-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/hono-symbol-mono.svg"
+    },
+    "assets/hugo-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/hugo-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/hugo-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/hugo-symbol-mono.svg"
+    },
+    "assets/ietf-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/ietf-extended-color.svg",
+      "target": "./src/assets/logos/standards/ietf-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/ietf-extended-color.svg"
+    },
+    "assets/ifood-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/ifood-extended-color.svg",
+      "target": "./src/assets/logos/clients/ifood-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/ifood-extended-color.svg"
+    },
+    "assets/ifood-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/ifood-extended-reversed.svg",
+      "target": "./src/assets/logos/clients/ifood-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/ifood-extended-reversed.svg"
+    },
+    "assets/ifood-symbol-color.svg": {
+      "import": "@aziontech/webkit/assets/ifood-symbol-color.svg",
+      "target": "./src/assets/logos/clients/ifood-symbol-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/ifood-symbol-color.svg"
+    },
+    "assets/infoblox-extended-mono.svg": {
+      "import": "@aziontech/webkit/assets/infoblox-extended-mono.svg",
+      "target": "./src/assets/logos/frameworks/infoblox-extended-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/infoblox-extended-mono.svg"
+    },
+    "assets/itau-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/itau-extended-color.svg",
+      "target": "./src/assets/logos/clients/itau-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/itau-extended-color.svg"
+    },
+    "assets/itau-extended-reversed.webp": {
+      "import": "@aziontech/webkit/assets/itau-extended-reversed.webp",
+      "target": "./src/assets/logos/clients/itau-extended-reversed.webp",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/itau-extended-reversed.webp"
+    },
+    "assets/itau-symbol-color.svg": {
+      "import": "@aziontech/webkit/assets/itau-symbol-color.svg",
+      "target": "./src/assets/logos/clients/itau-symbol-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/itau-symbol-color.svg"
+    },
+    "assets/jamstack-symbol-color.svg": {
+      "import": "@aziontech/webkit/assets/jamstack-symbol-color.svg",
+      "target": "./src/assets/logos/frameworks/jamstack-symbol-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/jamstack-symbol-color.svg"
+    },
+    "assets/javascript-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/javascript-symbol-mono.svg",
+      "target": "./src/assets/logos/standards/javascript-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/javascript-symbol-mono.svg"
+    },
+    "assets/jekyll-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/jekyll-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/jekyll-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/jekyll-symbol-mono.svg"
+    },
+    "assets/kafka-extended-mono.svg": {
+      "import": "@aziontech/webkit/assets/kafka-extended-mono.svg",
+      "target": "./src/assets/logos/frameworks/kafka-extended-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/kafka-extended-mono.svg"
+    },
+    "assets/lgpd-symbol-color.svg": {
+      "import": "@aziontech/webkit/assets/lgpd-symbol-color.svg",
+      "target": "./src/assets/logos/certifications/lgpd-symbol-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/lgpd-symbol-color.svg"
+    },
+    "assets/locaweb-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/locaweb-extended-color.svg",
+      "target": "./src/assets/logos/clients/locaweb-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/locaweb-extended-color.svg"
+    },
+    "assets/madeiramadeira-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/madeiramadeira-extended-color.svg",
+      "target": "./src/assets/logos/clients/madeiramadeira-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/madeiramadeira-extended-color.svg"
+    },
+    "assets/madeiramadeira-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/madeiramadeira-extended-reversed.svg",
+      "target": "./src/assets/logos/clients/madeiramadeira-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/madeiramadeira-extended-reversed.svg"
+    },
+    "assets/madeiramadeira-symbol-color.svg": {
+      "import": "@aziontech/webkit/assets/madeiramadeira-symbol-color.svg",
+      "target": "./src/assets/logos/clients/madeiramadeira-symbol-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/madeiramadeira-symbol-color.svg"
+    },
+    "assets/madeiramadeira-symbol-reversed.svg": {
+      "import": "@aziontech/webkit/assets/madeiramadeira-symbol-reversed.svg",
+      "target": "./src/assets/logos/clients/madeiramadeira-symbol-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/madeiramadeira-symbol-reversed.svg"
+    },
+    "assets/magalu-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/magalu-extended-color.svg",
+      "target": "./src/assets/logos/clients/magalu-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/magalu-extended-color.svg"
+    },
+    "assets/magalu-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/magalu-extended-reversed.svg",
+      "target": "./src/assets/logos/clients/magalu-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/magalu-extended-reversed.svg"
+    },
+    "assets/magalu-symbol-color.png": {
+      "import": "@aziontech/webkit/assets/magalu-symbol-color.png",
+      "target": "./src/assets/logos/clients/magalu-symbol-color.png",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/magalu-symbol-color.png"
+    },
+    "assets/marisa-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/marisa-extended-color.svg",
+      "target": "./src/assets/logos/clients/marisa-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/marisa-extended-color.svg"
+    },
+    "assets/meliuz-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/meliuz-extended-color.svg",
+      "target": "./src/assets/logos/clients/meliuz-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/meliuz-extended-color.svg"
+    },
+    "assets/mobiauto-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/mobiauto-extended-color.svg",
+      "target": "./src/assets/logos/clients/mobiauto-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/mobiauto-extended-color.svg"
+    },
+    "assets/mobiauto-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/mobiauto-extended-reversed.svg",
+      "target": "./src/assets/logos/clients/mobiauto-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/mobiauto-extended-reversed.svg"
+    },
+    "assets/monashees-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/monashees-extended-reversed.svg",
+      "target": "./src/assets/logos/clients/monashees-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/monashees-extended-reversed.svg"
+    },
+    "assets/mongodb-symbol-color.svg": {
+      "import": "@aziontech/webkit/assets/mongodb-symbol-color.svg",
+      "target": "./src/assets/logos/frameworks/mongodb-symbol-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/mongodb-symbol-color.svg"
+    },
+    "assets/mysql-symbol-reversed.svg": {
+      "import": "@aziontech/webkit/assets/mysql-symbol-reversed.svg",
+      "target": "./src/assets/logos/frameworks/mysql-symbol-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/mysql-symbol-reversed.svg"
+    },
+    "assets/neogrid-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/neogrid-extended-color.svg",
+      "target": "./src/assets/logos/clients/neogrid-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/neogrid-extended-color.svg"
+    },
+    "assets/neon-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/neon-extended-color.svg",
+      "target": "./src/assets/logos/clients/neon-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/neon-extended-color.svg"
+    },
+    "assets/netshoes-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/netshoes-extended-color.svg",
+      "target": "./src/assets/logos/clients/netshoes-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/netshoes-extended-color.svg"
+    },
+    "assets/netshoes-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/netshoes-extended-reversed.svg",
+      "target": "./src/assets/logos/clients/netshoes-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/netshoes-extended-reversed.svg"
+    },
+    "assets/netshoes-photo.jpg": {
+      "import": "@aziontech/webkit/assets/netshoes-photo.jpg",
+      "target": "./src/assets/logos/clients/photos/netshoes-photo.jpg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/netshoes-photo.jpg"
+    },
+    "assets/nextjs-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/nextjs-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/nextjs-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/nextjs-symbol-mono.svg"
+    },
+    "assets/nodejs-symbol-color.svg": {
+      "import": "@aziontech/webkit/assets/nodejs-symbol-color.svg",
+      "target": "./src/assets/logos/frameworks/nodejs-symbol-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/nodejs-symbol-color.svg"
+    },
+    "assets/nuxt-extended-mono.svg": {
+      "import": "@aziontech/webkit/assets/nuxt-extended-mono.svg",
+      "target": "./src/assets/logos/frameworks/nuxt-extended-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/nuxt-extended-mono.svg"
+    },
+    "assets/nzn-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/nzn-extended-color.svg",
+      "target": "./src/assets/logos/clients/nzn-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/nzn-extended-color.svg"
+    },
+    "assets/nzn-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/nzn-extended-reversed.svg",
+      "target": "./src/assets/logos/clients/nzn-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/nzn-extended-reversed.svg"
+    },
+    "assets/onnx-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/onnx-symbol-mono.svg",
+      "target": "./src/assets/logos/standards/onnx-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/onnx-symbol-mono.svg"
+    },
+    "assets/openai-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/openai-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/openai-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/openai-symbol-mono.svg"
+    },
+    "assets/opencode-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/opencode-symbol-mono.svg",
+      "target": "./src/assets/logos/agents/opencode-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/opencode-symbol-mono.svg"
+    },
+    "assets/panvel-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/panvel-extended-color.svg",
+      "target": "./src/assets/logos/clients/panvel-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/panvel-extended-color.svg"
+    },
+    "assets/pci-dss-symbol-color.svg": {
+      "import": "@aziontech/webkit/assets/pci-dss-symbol-color.svg",
+      "target": "./src/assets/logos/certifications/pci-dss-symbol-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/pci-dss-symbol-color.svg"
+    },
+    "assets/pernambucanas-extended-mono.svg": {
+      "import": "@aziontech/webkit/assets/pernambucanas-extended-mono.svg",
+      "target": "./src/assets/logos/clients/pernambucanas-extended-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/pernambucanas-extended-mono.svg"
+    },
+    "assets/personal-tokens.svg": {
+      "import": "@aziontech/webkit/assets/personal-tokens.svg",
+      "target": "./src/assets/illustrations/personal-tokens.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/personal-tokens.svg"
+    },
+    "assets/planetscale-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/planetscale-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/planetscale-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/planetscale-symbol-mono.svg"
+    },
+    "assets/portobello-extended-mono.svg": {
+      "import": "@aziontech/webkit/assets/portobello-extended-mono.svg",
+      "target": "./src/assets/logos/clients/portobello-extended-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/portobello-extended-mono.svg"
+    },
+    "assets/postgresql-symbol-color.svg": {
+      "import": "@aziontech/webkit/assets/postgresql-symbol-color.svg",
+      "target": "./src/assets/logos/frameworks/postgresql-symbol-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/postgresql-symbol-color.svg"
+    },
+    "assets/preact-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/preact-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/preact-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/preact-symbol-mono.svg"
+    },
+    "assets/primevideo-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/primevideo-extended-color.svg",
+      "target": "./src/assets/logos/clients/primevideo-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/primevideo-extended-color.svg"
+    },
+    "assets/primevideo-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/primevideo-extended-reversed.svg",
+      "target": "./src/assets/logos/clients/primevideo-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/primevideo-extended-reversed.svg"
+    },
+    "assets/prisma-symbol-reversed.svg": {
+      "import": "@aziontech/webkit/assets/prisma-symbol-reversed.svg",
+      "target": "./src/assets/logos/frameworks/prisma-symbol-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/prisma-symbol-reversed.svg"
+    },
+    "assets/qualcomm-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/qualcomm-extended-reversed.svg",
+      "target": "./src/assets/logos/clients/qualcomm-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/qualcomm-extended-reversed.svg"
+    },
+    "assets/quick-start-with-templates.svg": {
+      "import": "@aziontech/webkit/assets/quick-start-with-templates.svg",
+      "target": "./src/assets/illustrations/quick-start-with-templates.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/quick-start-with-templates.svg"
+    },
+    "assets/qwik-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/qwik-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/qwik-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/qwik-symbol-mono.svg"
+    },
+    "assets/radware-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/radware-extended-color.svg",
+      "target": "./src/assets/logos/clients/radware-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/radware-extended-color.svg"
+    },
+    "assets/radware-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/radware-extended-reversed.svg",
+      "target": "./src/assets/logos/clients/radware-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/radware-extended-reversed.svg"
+    },
+    "assets/rbs-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/rbs-extended-color.svg",
+      "target": "./src/assets/logos/clients/rbs-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/rbs-extended-color.svg"
+    },
+    "assets/react-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/react-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/react-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/react-symbol-mono.svg"
+    },
+    "assets/redis-symbol-color.svg": {
+      "import": "@aziontech/webkit/assets/redis-symbol-color.svg",
+      "target": "./src/assets/logos/frameworks/redis-symbol-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/redis-symbol-color.svg"
+    },
+    "assets/remix-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/remix-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/remix-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/remix-symbol-mono.svg"
+    },
+    "assets/renner-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/renner-extended-color.svg",
+      "target": "./src/assets/logos/clients/renner-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/renner-extended-color.svg"
+    },
+    "assets/renner-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/renner-extended-reversed.svg",
+      "target": "./src/assets/logos/clients/renner-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/renner-extended-reversed.svg"
+    },
+    "assets/renner-symbol-reversed.svg": {
+      "import": "@aziontech/webkit/assets/renner-symbol-reversed.svg",
+      "target": "./src/assets/logos/clients/renner-symbol-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/renner-symbol-reversed.svg"
+    },
+    "assets/resend-extended-mono.svg": {
+      "import": "@aziontech/webkit/assets/resend-extended-mono.svg",
+      "target": "./src/assets/logos/frameworks/resend-extended-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/resend-extended-mono.svg"
+    },
+    "assets/resend-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/resend-extended-reversed.svg",
+      "target": "./src/assets/logos/frameworks/resend-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/resend-extended-reversed.svg"
+    },
+    "assets/saffe-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/saffe-extended-reversed.svg",
+      "target": "./src/assets/logos/clients/saffe-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/saffe-extended-reversed.svg"
+    },
+    "assets/samsung-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/samsung-extended-reversed.svg",
+      "target": "./src/assets/logos/clients/former/samsung-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/samsung-extended-reversed.svg"
+    },
+    "assets/serverless-symbol-color.svg": {
+      "import": "@aziontech/webkit/assets/serverless-symbol-color.svg",
+      "target": "./src/assets/logos/frameworks/serverless-symbol-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/serverless-symbol-color.svg"
+    },
+    "assets/soc-symbol-color.svg": {
+      "import": "@aziontech/webkit/assets/soc-symbol-color.svg",
+      "target": "./src/assets/logos/certifications/soc-symbol-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/soc-symbol-color.svg"
+    },
+    "assets/sqlite-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/sqlite-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/sqlite-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/sqlite-symbol-mono.svg"
+    },
+    "assets/stone-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/stone-extended-color.svg",
+      "target": "./src/assets/logos/clients/stone-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/stone-extended-color.svg"
+    },
+    "assets/stripe-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/stripe-extended-color.svg",
+      "target": "./src/assets/logos/frameworks/stripe-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/stripe-extended-color.svg"
+    },
+    "assets/stripe-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/stripe-extended-reversed.svg",
+      "target": "./src/assets/logos/frameworks/stripe-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/stripe-extended-reversed.svg"
+    },
+    "assets/supabase-symbol-color.svg": {
+      "import": "@aziontech/webkit/assets/supabase-symbol-color.svg",
+      "target": "./src/assets/logos/frameworks/supabase-symbol-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/supabase-symbol-color.svg"
+    },
+    "assets/svelte-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/svelte-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/svelte-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/svelte-symbol-mono.svg"
+    },
+    "assets/tc39-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/tc39-symbol-mono.svg",
+      "target": "./src/assets/logos/standards/tc39-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/tc39-symbol-mono.svg"
+    },
+    "assets/telefonica-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/telefonica-extended-reversed.svg",
+      "target": "./src/assets/logos/clients/former/telefonica-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/telefonica-extended-reversed.svg"
+    },
+    "assets/terraform-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/terraform-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/terraform-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/terraform-symbol-mono.svg"
+    },
+    "assets/tray-symbol-color.svg": {
+      "import": "@aziontech/webkit/assets/tray-symbol-color.svg",
+      "target": "./src/assets/logos/clients/tray-symbol-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/tray-symbol-color.svg"
+    },
+    "assets/turso-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/turso-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/turso-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/turso-symbol-mono.svg"
+    },
+    "assets/unicred-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/unicred-extended-color.svg",
+      "target": "./src/assets/logos/clients/unicred-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/unicred-extended-color.svg"
+    },
+    "assets/upstash-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/upstash-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/upstash-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/upstash-symbol-mono.svg"
+    },
+    "assets/usage-chart.svg": {
+      "import": "@aziontech/webkit/assets/usage-chart.svg",
+      "target": "./src/assets/illustrations/usage-chart.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/usage-chart.svg"
+    },
+    "assets/vercel-extended-mono.svg": {
+      "import": "@aziontech/webkit/assets/vercel-extended-mono.svg",
+      "target": "./src/assets/logos/competitors/vercel-extended-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/vercel-extended-mono.svg"
+    },
+    "assets/vercel-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/vercel-extended-reversed.svg",
+      "target": "./src/assets/logos/competitors/vercel-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/vercel-extended-reversed.svg"
+    },
+    "assets/vite-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/vite-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/vite-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/vite-symbol-mono.svg"
+    },
+    "assets/vitepress-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/vitepress-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/vitepress-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/vitepress-symbol-mono.svg"
+    },
+    "assets/vtex-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/vtex-extended-reversed.svg",
+      "target": "./src/assets/logos/clients/former/vtex-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/vtex-extended-reversed.svg"
+    },
+    "assets/vue-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/vue-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/vue-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/vue-symbol-mono.svg"
+    },
+    "assets/vuepress-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/vuepress-symbol-mono.svg",
+      "target": "./src/assets/logos/frameworks/vuepress-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/vuepress-symbol-mono.svg"
+    },
+    "assets/w3c-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/w3c-symbol-mono.svg",
+      "target": "./src/assets/logos/standards/w3c-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/w3c-symbol-mono.svg"
+    },
+    "assets/walmart-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/walmart-extended-reversed.svg",
+      "target": "./src/assets/logos/clients/former/walmart-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/walmart-extended-reversed.svg"
+    },
+    "assets/webassembly-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/webassembly-symbol-mono.svg",
+      "target": "./src/assets/logos/standards/webassembly-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/webassembly-symbol-mono.svg"
+    },
+    "assets/windsurf-symbol-mono.svg": {
+      "import": "@aziontech/webkit/assets/windsurf-symbol-mono.svg",
+      "target": "./src/assets/logos/agents/windsurf-symbol-mono.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/windsurf-symbol-mono.svg"
+    },
+    "assets/workers-cf-symbol-color.svg": {
+      "import": "@aziontech/webkit/assets/workers-cf-symbol-color.svg",
+      "target": "./src/assets/logos/frameworks/workers-cf-symbol-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/workers-cf-symbol-color.svg"
+    },
+    "assets/zoop-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/zoop-extended-color.svg",
+      "target": "./src/assets/logos/clients/zoop-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/zoop-extended-color.svg"
+    },
     "svg/illustration-layers": {
       "import": "@aziontech/webkit/svg/illustration-layers",
       "target": "./src/svg/illustration-layers/illustration-layers.vue",
@@ -11504,6 +14016,298 @@
       "kind": "subcomponent",
       "parent": "card-grid",
       "treeShakeableImport": "@aziontech/webkit/card-grid-cell"
+    },
+    "texture-material": {
+      "import": "@aziontech/webkit/texture-material",
+      "target": "./src/components/marketing/texture-material/texture-material.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/texture-material",
+      "category": "marketing",
+      "structure": "monolithic",
+      "status": "approved",
+      "props": [
+        {
+          "name": "kind",
+          "type": "'dots' | 'grid' | 'lines' | 'dither' | 'pixelate' | 'none'",
+          "default": "'dots'",
+          "required": "false",
+          "doc": "Which texture to paint; `none` renders the layer with no texture at all."
+        },
+        {
+          "name": "size",
+          "type": "'small' | 'medium' | 'large'",
+          "default": "'medium'",
+          "required": "false",
+          "doc": "Pitch of the tiling — how far apart the cells sit."
+        },
+        {
+          "name": "fade",
+          "type": "'none' | 'top' | 'bottom' | 'left' | 'right' | 'edges' | 'vignette'",
+          "default": "'none'",
+          "required": "false",
+          "doc": "Fades the layer out along an axis so it meets content without a hard edge."
+        }
+      ],
+      "purpose": "The one decorative surface every band in the system is painted on: a full-bleed, non-interactive layer that tiles a texture behind whatever sits above it. It is a material, not a container — it takes no content and claims no space, so a band composes it into its own backdrop slot and keeps ownership of its layout.",
+      "useWhen": [
+        "In a band's `background` slot (`hero`), where the opening band needs the site's own lattice under its copy.",
+        "Behind a panel, dropzone or slide that would read as empty at a flat fill.",
+        "Anywhere a surface should look like a technical drawing ground without shipping an image."
+      ],
+      "avoidWhen": [
+        "To draw the rules between real content cells → use `frame-box`, whose rules are structural.",
+        "For the ruled divider between sections → use `section-gap`, which composes this layer's `lines` kind and owns that treatment.",
+        "For a meaningful image or diagram → use `illustration`.",
+        "As a wrapper around content. The layer is absolutely positioned and paints only itself; content is a sibling above it, inside the positioned ancestor."
+      ],
+      "related": [
+        "hero` — the band whose `background` slot this is composed into.",
+        "frame-box` — structural rules and corner marks, not decoration.",
+        "section-gap` — the hatched rhythm band between sections.",
+        "hero` — the marketing band that paints this texture behind its own copy."
+      ],
+      "bestPractices": [
+        "Give the layer a positioned ancestor (`relative`) that also clips it; it fills that box and nothing else.",
+        "Keep the texture behind copy, never over it. `dots` is the quiet default; `lines` is quieter still and reads as ruled paper; `dither` and `pixelate` are loud enough to need their ink dropped or their dense end steered away from the words.",
+        "Do not stack two layers at different pitches — that reads as a moiré, not as a texture.",
+        "Quiet a texture with `--texture-ink` rather than with `opacity`, so the ground keeps showing through at full strength.",
+        "Leave it out when the band already sits inside a `frame-box`; rules plus texture is usually one layer too many."
+      ]
+    },
+    "topic": {
+      "import": "@aziontech/webkit/topic",
+      "target": "./src/components/marketing/topic/topic.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/topic",
+      "category": "marketing",
+      "structure": "monolithic",
+      "status": "approved",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "default": "—",
+          "required": "true",
+          "doc": "The claim, rendered as the topic's heading."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "One sentence explaining the claim; overridden by the default slot."
+        },
+        {
+          "name": "icon",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Icon class for the glyph that leads the headline."
+        },
+        {
+          "name": "href",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "When set, the whole claim renders as an anchor link to this URL and its headline closes on a trailing arrow."
+        },
+        {
+          "name": "headingLevel",
+          "type": "TopicHeadingLevel",
+          "default": "2",
+          "required": "false",
+          "doc": "Level of the heading element. Keep `2` when the band has no headline of its own; drop it to `3` when a `section-title` has already opened the section, so the document outline stays in order."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "Description body; replaces the `description` prop when provided."
+        }
+      ],
+      "purpose": "One claim stated in three parts: a glyph, a short headline it shares a line with, and a sentence under them that explains it. It is the repeated unit of a marketing claim grid — the content of a cell, not the cell itself, so it carries no surface, no padding and no rules of its own and reads the same dropped into a `card-grid` cell, a `bento-grid` cell, or a column the page lays out by hand. Given an `href` the whole claim becomes the link, and its headline closes on a trailing arrow, so a band of claims needs no separate row of \"learn more\" controls.",
+      "useWhen": [
+        "For each cell of a \"what you get\" band: a row of equal claims under a section's headline.",
+        "Inside `CardGrid.Cell` or `BentoGrid.Cell`, where the grid owns the frame and the fill and the topic owns only the copy.",
+        "Whenever a claim is glyph-led and one sentence long, repeated three to six times across a band."
+      ],
+      "avoidWhen": [
+        "For a tile with its own border and surface → keep the topic and put it in a `CardGrid.Cell`, which draws the frame and the fill.",
+        "For a claim that carries an eyebrow, a media region or a button → use `media-split`.",
+        "For the headline that opens the whole section → use `section-title`.",
+        "For a measured figure with a unit → use `big-numbers`.",
+        "For a console list row with media and actions → use `item`."
+      ],
+      "related": [
+        "card-grid` — the equal-cell grid a topic is usually repeated in; its `frame` register gives each topic a real `frame-box` cell.",
+        "bento-grid` — the unequal-cell mosaic, when one claim deserves more room than the rest.",
+        "section-title` — the headline that opens the band a row of topics sits in."
+      ],
+      "bestPractices": [
+        "Let the cell own the surface. A topic paints no background and adds no padding, so put it inside `CardGrid.Cell` / `BentoGrid.Cell` (or a padded cell the page owns) rather than giving the topic a fill.",
+        "Keep `headingLevel` in step with the page outline: `2` when the band has no headline of its own and these are the first sub-headings under the `h1`, `3` when a `section-title` has already opened the section. The level is the outline; the size is fixed at `heading-xs`.",
+        "Keep the description to one sentence. The glyph carries the recognition, the headline carries the claim, and a second sentence turns a scannable grid into a wall of prose.",
+        "Drop `icon` for a band whose claims are not glyph-led rather than reaching for a decorative glyph that says nothing.",
+        "Give the claim an `href` rather than composing a button under it. A grid of six claims that each close on their own \"Learn more\" reads as six calls to action instead of six claims, and the button is a second target for the destination the claim already points at."
+      ]
+    },
+    "section-module": {
+      "import": "@aziontech/webkit/section-module",
+      "target": "./src/components/marketing/section-module/section-module.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/section-module",
+      "category": "marketing",
+      "structure": "monolithic",
+      "status": "approved",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Headline of the module's header row, rendered as its `h2`."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Supporting sentence under the headline."
+        },
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Short uppercase overline rendered above the headline."
+        },
+        {
+          "name": "kind",
+          "type": "SectionModuleKind",
+          "default": "'left'",
+          "required": "false",
+          "doc": "Layout of the default header row."
+        },
+        {
+          "name": "divided",
+          "type": "boolean",
+          "default": "true",
+          "required": "false",
+          "doc": "Draw the top rule that divides this module from the one above it."
+        },
+        {
+          "name": "padded",
+          "type": "boolean",
+          "default": "true",
+          "required": "false",
+          "doc": "Pad the module's body. Leave off for an edge-to-edge grid that owns its cell padding."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The module's body."
+        },
+        {
+          "name": "header",
+          "scope": "—",
+          "notes": "Replaces the default header row entirely."
+        },
+        {
+          "name": "actions",
+          "scope": "—",
+          "notes": "Trailing controls inside the default header row."
+        }
+      ],
+      "purpose": "The brick of the page column: a section whose header row is divided from its body by a hairline and which is divided from the module above it by another. Stacked inside a `section-container`, a run of modules reads as one continuous frame, because each module draws only its own top rule and hands its sides to the column. It is where a band's header and a band's content are joined, so no page has to re-draw that join.",
+      "useWhen": [
+        "For every band stacked inside a `section-container`.",
+        "Whenever a band needs a header row divided from its content by a rule.",
+        "For a body-only band, by passing no title and no header slot."
+      ],
+      "avoidWhen": [
+        "For the full-bleed band at the top of a page → use `hero`.",
+        "For the column the modules stack inside → use `section-container`.",
+        "For the header alone, with no body → use `section-title`, which this module composes.",
+        "For a hairline grid of cells → use `card-grid` inside this module's body."
+      ],
+      "related": [
+        "section-container` — the framed column this module stacks inside.",
+        "section-title` — the header row this module renders by default.",
+        "card-grid` — the edge-to-edge cell grid a module's body commonly holds.",
+        "frame-box` — the registration frame a body wraps itself in."
+      ],
+      "bestPractices": [
+        "Pass `divided` as `false` on the first module in a column: its top edge is already the hero's bottom rule, and drawing its own would put two hairlines on one pixel.",
+        "Pass `padded` as `false` when the body is an edge-to-edge `card-grid`, so the grid's rules meet the frame with no gutter.",
+        "Use `title` and `eyebrow` for the ordinary header, and reach for the `header` slot only when the row needs markup the default header cannot express."
+      ],
+      "styleSeam": true
+    },
+    "section-container": {
+      "import": "@aziontech/webkit/section-container",
+      "target": "./src/components/marketing/section-container/section-container.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/section-container",
+      "category": "marketing",
+      "structure": "monolithic",
+      "status": "approved",
+      "props": [
+        {
+          "name": "maxWidth",
+          "type": "SectionContainerWidth",
+          "default": "'7xl'",
+          "required": "false",
+          "doc": "Width the column is capped at; `site` is the marketing measure every band of that page frame shares."
+        },
+        {
+          "name": "bordered",
+          "type": "boolean",
+          "default": "true",
+          "required": "false",
+          "doc": "Draw the column's two vertical rules."
+        },
+        {
+          "name": "padded",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "Pad the column itself. Leave off for a stack of modules that own their padding."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The bands stacked inside the column, in reading order."
+        }
+      ],
+      "purpose": "The framed content column: a centered, width-capped block carrying only its two vertical rules, which every section below a hero stacks inside. It is the middle layer of the page language — the hero above it owns the page's top rule, the footer below it owns the bottom, and this column owns the sides — so a page's frame is drawn once, by three components, instead of by every band that happens to need an edge.",
+      "useWhen": [
+        "As the container for every band below a `hero`, on a marketing, hub or documentation page.",
+        "Whenever a stack of `section-module` bricks needs one continuous frame around it.",
+        "For a plain prose column that should sit on the page's own measure, with `padded`."
+      ],
+      "avoidWhen": [
+        "For the full-bleed band at the top of a page → use `hero`, which is the hero rule.",
+        "For one band inside the column → use `section-module`, the brick this container stacks.",
+        "For a hairline grid of cells → use `card-grid`, which draws its rules as gaps.",
+        "For a bordered box around arbitrary content → use `frame-box`."
+      ],
+      "related": [
+        "hero` — the full-bleed opening band above this column; its `border-b` is this column's top edge.",
+        "section-module` — the brick stacked inside this column.",
+        "card-grid` — the hairline cell grid a module's body holds.",
+        "frame-box` — the registration frame a module wraps its body in."
+      ],
+      "bestPractices": [
+        "Leave `padded` off for a stack of modules: each brick owns its own padding, and column padding would double it and pull the bricks off the frame.",
+        "Match `maxWidth` to the `hero` above it so the band's content and the column's content open on one vertical.",
+        "Turn `bordered` off only for a column nested inside another frame, where the outer frame already draws the sides."
+      ],
+      "styleSeam": true
     }
   }
 }
