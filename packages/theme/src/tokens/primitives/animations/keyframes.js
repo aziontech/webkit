@@ -88,6 +88,16 @@ export const keyframes = {
   flowDash: {
     '0%': 'stroke-dashoffset: 24',
     '100%': 'stroke-dashoffset: 0'
+  },
+  textureWaveA: {
+    to: 'transform: translate3d(calc(-1 * var(--texture-wave-shift)), 0, 0)'
+  },
+  textureWaveB: {
+    to: 'transform: translate3d(var(--texture-wave-shift), 0, 0)'
+  },
+  brandMarquee: {
+    '0%': 'transform: translateX(0)',
+    '100%': 'transform: translateX(-50%)'
   }
 }
 

@@ -39,7 +39,10 @@ export const animate = {
   'progress-indeterminate-short': `progressIndeterminateShort ${duration['slow-04']} ${curve['expressive-entrance']} ${duration['slow-03']} infinite`,
   // `linear` (not a curve token) for the same reason as spin/shimmer: an endlessly
   // looping animation must not accelerate, or the seam between repeats is visible.
-  'flow-dash': `flowDash ${duration['slow-02']} linear infinite`
+  'flow-dash': `flowDash ${duration['slow-02']} linear infinite`,
+  'texture-wave-a': 'textureWaveA 13s linear infinite',
+  'texture-wave-b': 'textureWaveB 19s linear infinite',
+  'brand-marquee': 'brandMarquee 59s linear infinite'
 }
 
 export const useWhen = {
@@ -69,7 +72,13 @@ export const useWhen = {
   'progress-indeterminate': 'Indeterminate linear progress bar (primary sweep).',
   'progress-indeterminate-short': 'Indeterminate linear progress bar (secondary short sweep).',
   'flow-dash':
-    'Flowing connection along an SVG connector stroke in a node-based / network diagram. Set a stroke-dasharray whose cycle divides 24 (e.g. 4 4) so the loop is seamless.'
+    'Flowing connection along an SVG connector stroke in a node-based / network diagram. Set a stroke-dasharray whose cycle divides 24 (e.g. 4 4) so the loop is seamless.',
+  'texture-wave-a':
+    'One of the two crossing bands of a pixelate texture, travelling left. Set --texture-wave-shift on the element to one period of its banding measured along X, and overhang the element by that much on the side it travels toward, or the field uncovers mid-cycle.',
+  'texture-wave-b':
+    'The counter-travelling band of that pair (pair of texture-wave-a; same --texture-wave-shift contract, opposite direction).',
+  'brand-marquee':
+    'A strip of logos looping forever (client trust strips, framework strips). Apply to a track holding its row exactly twice, the duplicate aria-hidden, and set animation-duration ON THE ELEMENT from the mark count so every strip on a site moves at one speed rather than one duration — a var in this shorthand would resolve at :root and never see it. Pause it on hover and focus-within so a linked mark can be reached.'
 }
 
 export default { animate, curve, duration, useWhen }

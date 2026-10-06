@@ -4,7 +4,7 @@ category: layout
 structure: monolithic
 status: approved
 spec_version: 1
-checksum: bb0dfc6f9f40685fddded1989d3b295d7133552ead19a7ce9e34bb19c49fb5bb
+checksum: 6ac18126148bbed9d94771242149d9e77c7670178decb2126126b07200a4b649
 style_seam: true
 created: 2026-08-11
 last_updated: 2026-09-28
@@ -40,7 +40,7 @@ The registration frame: a hairline box with a small square set inside each corne
 - Stack or abut frames with `flush` so a shared edge reads as one hairline instead of two. It subtracts the named sides from this frame's own set, so it works vertically (`flush`, i.e. `top`) and horizontally (`flush="left"`) with the same mechanic.
 - Use `borders` rather than overriding the border utilities from the call site: `y` for a full-bleed band that keeps only its top and bottom rules, `none` for a cell of a `gap-px` divider grid whose edges are already drawn by the grid's seams.
 - Keep `marks` on: the corner squares are the frame's identity, and they cost nothing when the rules are handed over to a grid. On a shared edge, pair `flush` with the opposite `marks` keyword (`flush` + `marks="bottom"`, `flush="left"` + `marks="right"`) so the junction carries one rule and one mark per corner.
-- Reach for `hatch` sparingly — one hatched frame per view reads as texture; several read as noise.
+- Reach for `hatch` sparingly — one hatched frame per view reads as texture; several read as noise. For a ruled ground, compose `texture-material` at its `lines` kind inside the frame instead: it is the system's texture layer, and its ink and pitch are tunable from the call site.
 
 ## Usage
 
@@ -62,7 +62,7 @@ import FrameBox from '@aziontech/webkit/frame-box'
 |---|---|---|---|---|
 | `borders` | `'all' \| 'none' \| 'x' \| 'y' \| Side \| Side[]` | `'all'` | false | Which of the frame's own rules to draw. Takes a keyword, one side, or a list of sides. |
 | `marks` | `'all' \| 'none' \| Edge \| Corner \| Corner[]` | `'all'` | false | Which corner registration squares to draw. Takes a keyword (`all`, `none`, `top`, `bottom`, `left`, `right`), one corner, or a list of corners. |
-| `hatch` | `boolean` | `false` | false | Show the linear hatch texture behind the content, faded toward the edges. Reserved for `section-gap`, whose identity it is. |
+| `hatch` | `boolean` | `false` | false | Show the frame's own linear hatch texture behind the content, faded toward the edges. Prefer `texture-material`'s `lines` kind for a ruled ground; `section-gap` composes that instead. |
 | `flush` | `boolean \| Side \| Side[]` | `false` | false | Which sides a neighbouring frame already draws, so this one does not draw them again. `true` is shorthand for `top`; use `left` for a horizontal row, or a list for a grid cell. |
 
 ## Events
