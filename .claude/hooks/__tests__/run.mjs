@@ -407,6 +407,22 @@ group('hook: validate-story-source.mjs', () => {
     assertEqual(r.code, 2)
     assertTrue(/import-binding-mismatch/.test(r.stderr), 'should flag binding/subpath mismatch')
   })
+  test('asset import keeps its camelCase binding (exit 0)', () => {
+    const r = runHook(
+      '.claude/hooks/validate-story-source.mjs',
+      story(
+        [
+          "import Illustration from '@aziontech/webkit/illustration'",
+          "import ddosProtection from '@aziontech/webkit/assets/ddos-protection.svg'",
+          "import { toSfc } from '../../_shared/story-source'",
+          "tags: ['autodocs']",
+          'const T = `<img :src="ddosProtection" alt="" />`',
+          'docs: { canvas: { sourceState: "shown" }, source: { code: toSfc(IMPORT, T) } }'
+        ].join('\n')
+      )
+    )
+    assertEqual(r.code, 0)
+  })
   test('hand-rolled transform blocks (exit 2)', () => {
     const r = runHook(
       '.claude/hooks/validate-story-source.mjs',
