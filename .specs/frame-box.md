@@ -4,10 +4,10 @@ category: layout
 structure: monolithic
 status: approved
 spec_version: 1
-checksum: 05c784a5f4f1bc876b5bbe5794d8946d7dc8e50b5842a37c64b0019d67ceed3a
+checksum: bb0dfc6f9f40685fddded1989d3b295d7133552ead19a7ce9e34bb19c49fb5bb
 style_seam: true
 created: 2026-08-11
-last_updated: 2026-08-12
+last_updated: 2026-09-28
 ---
 
 # Frame Box — Component Spec
@@ -80,7 +80,7 @@ import FrameBox from '@aziontech/webkit/frame-box'
 - Visual states: `default`
 - `data-borders` carries the RESOLVED, space-separated side list (`flush` already subtracted), or `none`
 - `data-marks` carries the RESOLVED, space-separated corner list, or `none`
-- `data-hatch` present when the hatch texture is drawn
+- `data-hatch` present when the hatch texture is drawn, or when a consumer sets it — a component that paints its own texture inside the frame keeps the attribute on this root
 - `data-flush` carries the space-separated list of sides a neighbour draws; absent when none do
 
 ## Motion & Animations

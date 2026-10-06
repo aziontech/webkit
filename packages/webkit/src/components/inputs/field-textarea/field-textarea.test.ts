@@ -55,7 +55,22 @@ describe('FieldTextarea', () => {
     const { getByTestId } = render(FieldTextarea, {
       props: { label: 'Message', helperText: 'Up to 500 characters.' }
     })
-    expect(getByTestId(`${ROOT}__helper-text`).textContent).toBe('Up to 500 characters.')
+    expect(getByTestId(`${ROOT}__helper__text`).textContent?.trim()).toBe('Up to 500 characters.')
+  })
+
+  describe('helper kind', () => {
+    it.each([
+      [{}, 'helper'],
+      [{ required: true }, 'required'],
+      [{ invalid: true }, 'invalid'],
+      [{ required: true, invalid: true }, 'invalid'],
+      [{ disabled: true, invalid: true, required: true }, 'disabled']
+    ])('maps %o to HelperText kind=%s', (state, kind) => {
+      const { getByTestId } = render(FieldTextarea, {
+        props: { label: 'Message', helperText: 'Helper', ...state }
+      })
+      expect(getByTestId(`${ROOT}__helper`)).toHaveAttribute('data-kind', kind)
+    })
   })
 
   describe('v-model / update:modelValue', () => {
@@ -194,8 +209,8 @@ describe('FieldTextarea', () => {
       const { getByTestId } = render(FieldTextarea, {
         props: { label: 'Message', disabled: true, helperText: 'This field is locked.' }
       })
-      expect(getByTestId(`${ROOT}__helper-icon`)).toBeTruthy()
-      expect(getByTestId(`${ROOT}__helper`).getAttribute('data-disabled')).toBe('true')
+      expect(getByTestId(`${ROOT}__helper__icon`)).toBeTruthy()
+      expect(getByTestId(`${ROOT}__helper`)).toHaveAttribute('data-kind', 'disabled')
     })
 
     it('does not set data-disabled by default', () => {
