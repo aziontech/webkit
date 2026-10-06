@@ -20,28 +20,29 @@
 // All 35 are here for the same reason: the control is the source's, and a control that does
 // nothing would be the invention. The initial render is the source's twelve, in its order.
 
-import axur from '@aziontech/webkit/assets/axur-extended-reversed.svg'
 import bancoDeLaNacion from '@aziontech/webkit/assets/banco-de-la-nacion-extended-mono.svg'
-import { CLIENTS } from '@aziontech/webkit/assets/client-registry'
+import axur from '@aziontech/webkit/assets/axur-extended-reversed.svg'
 import contabilizei from '@aziontech/webkit/assets/contabilizei-extended-reversed.svg'
 import crefisa from '@aziontech/webkit/assets/crefisa-extended-reversed.svg'
-import marisa from '@aziontech/webkit/assets/marisa-extended-color.svg'
-import panvel from '@aziontech/webkit/assets/panvel-extended-color.svg'
 import pernambucanas from '@aziontech/webkit/assets/pernambucanas-extended-mono.svg'
 import vtex from '@aziontech/webkit/assets/vtex-extended-reversed.svg'
+import marisa from '@aziontech/webkit/assets/marisa-extended-color.svg'
+import panvel from '@aziontech/webkit/assets/panvel-extended-color.svg'
+import { CLIENTS } from '@aziontech/webkit/assets/client-registry'
+import frost from '@aziontech/webkit/assets/frost-and-sullivan-extended-color.svg'
+import frostReversed from '@aziontech/webkit/assets/frost-and-sullivan-extended-reversed.svg'
+import gartner from '@aziontech/webkit/assets/gartner-extended-color.svg'
+import gartnerReversed from '@aziontech/webkit/assets/gartner-extended-reversed.svg'
+import gigaom from '@aziontech/webkit/assets/gigaom-extended-color.svg'
+import gigaomReversed from '@aziontech/webkit/assets/gigaom-extended-reversed.svg'
 
 const byName = (name) => CLIENTS.find((client) => client.name === name)
 
-/**
- * The three stories the source features above the library, in its order. `brand` paints the
- * card; glow equal to base is a flat fill, and `ink: 'dark'` sets the mark and text black
- * for a light fill. Axur's is read off Figma 13224:203120.
- */
+/** The three stories the source features above the library, in its order. */
 export const FEATURED_CASES = [
   {
     key: 'case-magalu',
     client: byName('Magalu'),
-    brand: { base: '#0e89ff', glow: '#0e89ff' },
     tag: 'Retail',
     description:
       "Explore how Magalu enhances cybersecurity with Azion's Firewall and WAF, improving threat intelligence and bot management in retail.",
@@ -50,7 +51,6 @@ export const FEATURED_CASES = [
   {
     key: 'case-dafiti',
     client: byName('Dafiti'),
-    brand: { base: '#ffffff', glow: '#ffffff', ink: 'dark' },
     tag: 'Retail',
     description:
       'Dafiti modernized its digital architecture to deliver faster, scalable, and resilient experiences for millions of consumers across Latin America.',
@@ -59,7 +59,6 @@ export const FEATURED_CASES = [
   {
     key: 'case-axur',
     client: { name: 'Axur', logo: axur, artwork: 'light' },
-    brand: { base: '#e65224', glow: '#ff5824' },
     tag: 'Tech',
     description:
       'Learn how moving AI inference from managed-infrastructure unlocked the fastest automatic takedown in the market.',
@@ -524,5 +523,34 @@ export const SUCCESS_CASES = [
     description:
       'High-traffic media experiences became faster and more reliable as Omelete scaled its entertainment platform to millions of users.',
     href: 'https://www.azion.com/en/success-case/omelete/'
+  }
+]
+
+/**
+ * The three analyst recognitions the source states, in its order. Each mark is the design
+ * system's logo asset pair: the brand-colour file for the light theme, the reversed one for
+ * the dark.
+ */
+export const ANALYST_RECOGNITIONS = [
+  {
+    key: 'gigaom',
+    client: { name: 'GigaOm', logo: gigaomReversed, logoLight: gigaom },
+    text: 'Azion was named a Leader and identified as the only purpose-built edge platform whose capabilities meet all of the key criteria outlined in the report.',
+    source: 'GigaOms Radar for Edge Platforms.',
+    href: 'https://www.azion.com/en/blog/azion-named-leader-fast-mover-gigaom-report/'
+  },
+  {
+    key: 'gartner',
+    client: { name: 'Gartner', logo: gartnerReversed, logoLight: gartner },
+    text: 'Gartner clients note that Azion excels at providing a consultative approach to orchestration and serverless edge application environments.',
+    source: 'Gartner Competitive Landscape for CDN and Edge Services.',
+    href: 'https://www.azion.com/en/blog/azion-celebrates-achievements-2023/'
+  },
+  {
+    key: 'frost-and-sullivan',
+    client: { name: 'Frost & Sullivan', logo: frostReversed, logoLight: frost },
+    text: "Frost & Sullivan pointed that Azion's serverless edge platform increases business agility by empowering developers to build and scale their applications.",
+    source: 'Frost & Sullivan Best Practices Award, North.',
+    href: 'https://www.azion.com/en/blog/azion-frost-sullivan-award/'
   }
 ]

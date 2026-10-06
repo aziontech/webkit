@@ -31,7 +31,6 @@
   import MiniButton from '@aziontech/webkit/mini-button'
   import SectionModule from '@aziontech/webkit/section-module'
   import TextureMaterial from '@aziontech/webkit/texture-material'
-  import { computed } from 'vue'
 
   import { ClientMark, clientPhoto, CLIENTS } from '../ui/index.js'
 
@@ -39,27 +38,18 @@
 
   // The card face, from the client's own colours: the flat brand fill, then the two
   // ellipses the design floats over it — top-left and bottom-centre.
-  const cardFace = (brand) => ({
+  const cardFace = (client) => ({
     background: [
-      `radial-gradient(354px 354px at -15% -15%, ${brand.glow}, transparent 70%)`,
-      `radial-gradient(354px 354px at 45% 115%, ${brand.glow}, transparent 70%)`,
-      brand.base
+      `radial-gradient(354px 354px at -15% -15%, ${client.brand.glow}, transparent 70%)`,
+      `radial-gradient(354px 354px at 45% 115%, ${client.brand.glow}, transparent 70%)`,
+      client.brand.base
     ].join(', ')
-  })
-
-  // A caller may pass its own cells; an entry may carry `client` and `brand` directly
-  // for a client the registry does not hold.
-  const props = defineProps({
-    stories: {
-      type: Array,
-      default: null
-    }
   })
 
   // The eight, in the source's order, with the source's URLs. DOM order is placement
   // order: the grid auto-places each cell in the next free track, so this list IS the
   // mosaic. `story` is present only on the two the source writes a headline for.
-  const STORIES = [
+  const stories = [
     {
       key: 'netshoes',
       name: 'Netshoes',
@@ -115,26 +105,22 @@
 
   // Resolved once, so the template reads as one loop over cells rather than a lookup per
   // cell. A story cell is painted in the client's brand only when the registry ships it.
-  const cells = computed(() =>
-    (props.stories ?? STORIES).map((entry) => {
-      const client = entry.client ?? byName(entry.name)
-      const brand = entry.brand ?? client?.brand
-      const branded = Boolean(entry.story && brand)
-      const fill = branded ? 'brand' : (entry.fill ?? 'canvas')
-      return {
-        ...entry,
-        span: entry.span ?? '1',
-        rows: entry.rows ?? '1',
-        fill,
-        filled: fill === 'primary' || fill === 'white',
-        lead: entry.span === '2',
-        client: client ?? { name: entry.name },
-        face: branded ? cardFace(brand) : null,
-        theme: branded ? (brand.ink === 'dark' ? 'light' : 'dark') : undefined,
-        photo: entry.story && !branded ? clientPhoto(client) : ''
-      }
-    })
-  )
+  const cells = stories.map((entry) => {
+    const client = byName(entry.name)
+    const branded = Boolean(entry.story && client?.brand)
+    const fill = branded ? 'brand' : (entry.fill ?? 'canvas')
+    return {
+      ...entry,
+      span: entry.span ?? '1',
+      rows: entry.rows ?? '1',
+      fill,
+      filled: fill === 'primary' || fill === 'white',
+      lead: entry.span === '2',
+      client: client ?? { name: entry.name },
+      face: branded ? cardFace(client) : null,
+      photo: entry.story ? clientPhoto(client) : ''
+    }
+  })
 </script>
 
 <template>
@@ -175,7 +161,6 @@
             :is="cell.story ? 'div' : 'a'"
             :href="cell.story ? undefined : cell.href"
             :data-fill="cell.fill"
-            :data-theme="cell.theme"
             class="relative flex h-full min-w-0 flex-col overflow-hidden p-(--spacing-xl) transition-colors duration-fast-02 ease-productive-entrance focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) motion-reduce:transition-none data-[fill=canvas]:bg-(--bg-canvas) data-[fill=canvas]:hover:bg-(--bg-surface-raised) data-[fill=primary]:bg-(--primary) data-[fill=primary]:hover:bg-(--color-orange-600) data-[fill=surface]:bg-(--bg-surface) data-[fill=white]:bg-(--color-base-white)"
             :class="
               cell.story ? 'justify-between gap-(--spacing-xl)' : 'items-center justify-center'
@@ -210,7 +195,7 @@
               :client="cell.client"
               :mark="markGeometry(cell)"
               :monochrome="cell.fill !== 'brand' && !cell.filled"
-              :knockout="cell.filled || cell.theme === 'light'"
+              :knockout="cell.filled"
             />
 
             <div
