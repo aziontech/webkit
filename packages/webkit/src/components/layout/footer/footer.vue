@@ -15,7 +15,7 @@
   interface Props {
     /** Accessible name for the contentinfo landmark. */
     ariaLabel?: string
-    /** Where the footer sits: `content` is the default — the bands run full bleed across whatever zone holds the footer, opening on the page boundary; `site` closes a framed marketing page instead, capping the bands at the site measure and drawing the frame that page carries: the side rules, the hatched gutters and the closing band. */
+    /** Where the footer sits: `content` is the default — the bands run full bleed across whatever zone holds the footer, opening on the page boundary; `site` closes a framed marketing page instead, capping the bands at the site measure and drawing the frame that page carries: the side rules, the hatched gutters and the corner marks, closing on a full-bleed bottom rule. */
     kind?: FooterKind
   }
 
@@ -67,7 +67,9 @@
          site measure token, insets by the page boundary below it, and draws the frame. The
          frame is site-only: full bleed, the rules would land on the zone's edges and the
          gutters collapse to zero width while still painting borders. -->
-    <div class="flex w-full items-stretch justify-center">
+    <div
+      class="flex w-full items-stretch justify-center group-data-[kind=site]:border-b group-data-[kind=site]:border-b-(length:--border-width-default) group-data-[kind=site]:border-b-(--border-default)"
+    >
       <!-- Centred because between the measure (1388) and the gutter breakpoint (1536) the row
            holds one capped child, which an unjustified flex row left-aligns by up to 148px. -->
       <!-- The gutters turn on at the first breakpoint past the measure: below it the column is
@@ -82,58 +84,63 @@
         :data-testid="`${testId}__gutter`"
         class="hidden flex-1 2xl:block"
       />
-      <div
-        class="grid w-full shrink-0 grid-cols-1 group-data-[kind=site]:layout-column-site group-data-[kind=site]:border-x group-data-[kind=site]:border-x-(length:--border-width-default) group-data-[kind=site]:border-x-(--border-default) md:grid-cols-2"
+      <FrameBox
+        :borders="kind === 'site' ? 'x' : 'none'"
+        :marks="kind === 'site' ? 'all' : 'none'"
+        :data-testid="`${testId}__frame`"
+        class="w-full shrink-0 group-data-[kind=site]:layout-column-site"
       >
-        <div
-          :data-testid="`${testId}__columns`"
-          class="order-1 grid w-full grid-cols-2 gap-y-(--spacing-lg) md:grid-cols-4 md:gap-y-0 md:col-span-2 md:row-start-1"
-        >
-          <slot />
-        </div>
-
-        <div
-          v-if="hasStatusBar"
-          :data-testid="`${testId}__status`"
-          class="order-2 flex min-w-0 flex-row-reverse items-center justify-between gap-(--spacing-lg) border-0 border-t border-t-(length:--border-width-default) border-t-(--border-default) px-(--spacing-lg) py-(--spacing-md) md:order-none md:col-start-2 md:row-start-2 md:min-h-14 md:flex-row md:justify-end md:py-0"
-        >
-          <slot name="status" />
-          <slot name="language" />
-        </div>
-
-        <FrameBox
-          v-if="hasSignature"
-          borders="top"
-          marks="all"
-          flush="x"
-          :data-testid="`${testId}__signature`"
-          class="order-3 w-full px-(--spacing-sm) py-(--spacing-xl) md:order-none md:col-span-2 md:row-start-3"
-        >
+        <div class="grid w-full grid-cols-1 md:grid-cols-2">
           <div
-            class="flex flex-col items-start gap-(--spacing-md) p-(--spacing-lg) md:flex-row md:items-center md:justify-between md:gap-(--spacing-lg)"
+            :data-testid="`${testId}__columns`"
+            class="order-1 grid w-full grid-cols-2 gap-y-(--spacing-lg) md:grid-cols-4 md:gap-y-0 md:col-span-2 md:row-start-1"
           >
-            <slot name="brand" />
-            <!-- The gap only matters between md and the width that fits the tagline on one line,
-                 where a wrapped tagline would otherwise run into the brand. -->
-            <!-- Rendered only when filled: an empty paragraph is still a flex item and spends the
-                 row's gap, pushing a lone brand off centre (measured 12px at 768 to 1023). -->
-            <p
-              v-if="slots.tagline"
-              class="text-heading-xl text-(--text-default) md:text-right"
-            >
-              <slot name="tagline" />
-            </p>
+            <slot />
           </div>
-        </FrameBox>
 
-        <div
-          v-if="slots.social"
-          :data-testid="`${testId}__social`"
-          class="order-4 flex min-w-0 flex-wrap items-center justify-center gap-(--spacing-xxs) border-0 border-t border-t-(length:--border-width-default) border-t-(--border-default) px-(--spacing-lg) py-(--spacing-md) md:order-none md:col-start-1 md:row-start-2 md:min-h-14 md:justify-start md:py-0"
-        >
-          <slot name="social" />
+          <div
+            v-if="hasStatusBar"
+            :data-testid="`${testId}__status`"
+            class="order-2 flex min-w-0 flex-row-reverse items-center justify-between gap-(--spacing-lg) border-0 border-t border-t-(length:--border-width-default) border-t-(--border-default) px-(--spacing-lg) py-(--spacing-md) md:order-none md:col-start-2 md:row-start-2 md:min-h-14 md:flex-row md:justify-end md:py-0"
+          >
+            <slot name="status" />
+            <slot name="language" />
+          </div>
+
+          <FrameBox
+            v-if="hasSignature"
+            borders="top"
+            marks="all"
+            flush="x"
+            :data-testid="`${testId}__signature`"
+            class="order-3 w-full px-(--spacing-sm) py-(--spacing-xl) md:order-none md:col-span-2 md:row-start-3"
+          >
+            <div
+              class="flex flex-col items-start gap-(--spacing-md) p-(--spacing-lg) md:flex-row md:items-center md:justify-between md:gap-(--spacing-lg)"
+            >
+              <slot name="brand" />
+              <!-- The gap only matters between md and the width that fits the tagline on one line,
+                 where a wrapped tagline would otherwise run into the brand. -->
+              <!-- Rendered only when filled: an empty paragraph is still a flex item and spends the
+                 row's gap, pushing a lone brand off centre (measured 12px at 768 to 1023). -->
+              <p
+                v-if="slots.tagline"
+                class="text-heading-xl text-(--text-default) md:text-right"
+              >
+                <slot name="tagline" />
+              </p>
+            </div>
+          </FrameBox>
+
+          <div
+            v-if="slots.social"
+            :data-testid="`${testId}__social`"
+            class="order-4 flex min-w-0 flex-wrap items-center justify-center gap-(--spacing-xxs) border-0 border-t border-t-(length:--border-width-default) border-t-(--border-default) px-(--spacing-lg) py-(--spacing-md) md:order-none md:col-start-1 md:row-start-2 md:min-h-14 md:justify-start md:py-0"
+          >
+            <slot name="social" />
+          </div>
         </div>
-      </div>
+      </FrameBox>
 
       <FrameBox
         v-if="kind === 'site'"
@@ -145,17 +152,5 @@
         class="hidden flex-1 2xl:block"
       />
     </div>
-
-    <!-- The frame's bottom edge, so it belongs to `site` with the gutters: it is hatched
-         page material finishing a frame, and a footer that draws no frame has none to
-         finish. -->
-    <FrameBox
-      v-if="kind === 'site'"
-      borders="all"
-      marks="bottom"
-      aria-hidden="true"
-      :data-testid="`${testId}__closing`"
-      class="h-[calc(var(--spacing-xxl)*2)] w-full"
-    />
   </footer>
 </template>
