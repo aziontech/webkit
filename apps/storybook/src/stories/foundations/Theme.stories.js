@@ -3,7 +3,7 @@ import { PageContainer, PageHeader } from '../../foundations/components/layout/i
 import { themeColorGroups } from '../../foundations/data/theme.js'
 
 export default {
-  title: 'Foundations/Theme',
+  title: 'Foundations/Design Tokens/Theme',
   parameters: {
     options: { showPanel: false },
     controls: { disable: true },
