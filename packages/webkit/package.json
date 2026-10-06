@@ -285,6 +285,7 @@
     "./quote-carousel": "./src/components/marketing/quote-carousel/quote-carousel.vue",
     "./quote": "./src/components/marketing/quote/quote.vue",
     "./media-tabs": "./src/components/marketing/media-tabs/media-tabs.vue",
+    "./embed": "./src/components/marketing/embed/embed.vue",
     "./breadcrumb": "./src/components/navigation/breadcrumb/index.js",
     "./breadcrumb-item": "./src/components/navigation/breadcrumb-item/breadcrumb-item.vue",
     "./link": "./src/components/navigation/link/link.vue",

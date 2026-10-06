@@ -188,6 +188,11 @@
     "limit": "6.5 KB"
   },
   {
+    "name": "embed",
+    "path": "src/components/marketing/embed/embed.vue",
+    "limit": "3 KB"
+  },
+  {
     "name": "illustration",
     "path": "src/components/content/illustration/illustration.vue",
     "limit": "2 KB",
