@@ -7,6 +7,7 @@ export const COMPONENT_CATEGORIES = [
   'feedback',
   'inputs',
   'layout',
+  'marketing',
   'navigation',
   'overlay',
   'templates',
