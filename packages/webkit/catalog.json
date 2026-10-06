@@ -9871,6 +9871,208 @@
       "parent": "sidebar",
       "treeShakeableImport": "@aziontech/webkit/sidebar-footer"
     },
+    "media-split": {
+      "import": "@aziontech/webkit/media-split",
+      "target": "./src/components/marketing/media-split/media-split.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/media-split",
+      "category": "marketing",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "default": "—",
+          "required": "true",
+          "doc": "Headline of the band, rendered as its `h2`."
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Supporting paragraph under the headline; overridden by the default slot."
+        },
+        {
+          "name": "eyebrow",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Short uppercase overline rendered above the headline."
+        },
+        {
+          "name": "src",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "URL of the band's image; ignored when the `media` slot is filled."
+        },
+        {
+          "name": "alt",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Alternative text describing what the image shows."
+        },
+        {
+          "name": "kind",
+          "type": "MediaSplitKind",
+          "default": "'media-end'",
+          "required": "false",
+          "doc": "Which end the media sits on: the closing cell from `lg` up, or the lower one when the band is vertical. `media-end` puts the copy first."
+        },
+        {
+          "name": "orientation",
+          "type": "MediaSplitOrientation",
+          "default": "'horizontal'",
+          "required": "false",
+          "doc": "Axis the band splits on. `horizontal` sets the cells side by side from `lg` up; `vertical` holds them stacked at every width."
+        },
+        {
+          "name": "fill",
+          "type": "MediaSplitFill",
+          "default": "'canvas'",
+          "required": "false",
+          "doc": "The copy cell's fill. `canvas` lets the band sit in the page column; `surface` lifts it onto its own plate. The media cell follows `mediaFill`."
+        },
+        {
+          "name": "mediaFill",
+          "type": "MediaSplitFill",
+          "default": "'surface'",
+          "required": "false",
+          "doc": "The media cell's fill. `surface` sets the asset on its own plate, one step off the page; `canvas` lets the whole band sit on the page."
+        },
+        {
+          "name": "framed",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "Draw the band's own registration frame: its top and bottom rules, with the copy and the media framed as two cells, each with its four marks. Turn it off when the page already wraps the band in a frame."
+        },
+        {
+          "name": "divided",
+          "type": "boolean",
+          "default": "true",
+          "required": "false",
+          "doc": "Draw the seam between the copy and the media. Turn it off for a band whose two halves should read as one plate."
+        },
+        {
+          "name": "headingLevel",
+          "type": "MediaSplitHeadingLevel",
+          "default": "2",
+          "required": "false",
+          "doc": "Level of the band's headline element. Drop it to `3` when the band is a sub-band of a section a `section-title` has already opened with its `h2`, so the document outline stays in order."
+        },
+        {
+          "name": "texture",
+          "type": "TextureMaterialKind",
+          "default": "'grid'",
+          "required": "false",
+          "doc": "Texture the media half is grounded with; `none` leaves the cell bare."
+        },
+        {
+          "name": "textureSize",
+          "type": "TextureMaterialSize",
+          "default": "'medium'",
+          "required": "false",
+          "doc": "Pitch of the ground's tiling — how far apart its cells sit."
+        },
+        {
+          "name": "textureFade",
+          "type": "TextureMaterialFade",
+          "default": "'vignette'",
+          "required": "false",
+          "doc": "How the ground fades out before the cell's edges."
+        },
+        {
+          "name": "mediaPadded",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "Inset the media from the cell's edges. An exported asset carries its own air and runs flush; a screenshot or a composed panel wants the inset."
+        },
+        {
+          "name": "mediaHref",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "URL the band links to. With it set the media cell is one link named by the band's `title`, a click anywhere else on the band follows it, and hovering the band reveals the chevron affordance and the hover state of its link actions."
+        },
+        {
+          "name": "align",
+          "type": "MediaSplitAlign",
+          "default": "'top'",
+          "required": "false",
+          "doc": "Where the copy sits down its cell. `top` holds the copy at the cell's top and floors the actions so consecutive bands align on them; `center` gathers the copy and its actions into one block on the cell's vertical middle."
+        },
+        {
+          "name": "size",
+          "type": "MediaSplitSize",
+          "default": "'medium'",
+          "required": "false",
+          "doc": "Type scale and air of the copy. `medium` sets the headline at heading-md for a band beside other content; `large` sets it at heading-xl with a larger description and pads the copy cell a step wider, for a band that carries only its headline and actions."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "Description body; replaces the `description` prop when provided."
+        },
+        {
+          "name": "content",
+          "scope": "—",
+          "notes": "Further copy-column content under the description — an inventory, a list of surfaces — inside the paragraph's own measure."
+        },
+        {
+          "name": "media",
+          "scope": "—",
+          "notes": "The band's media; replaces the image built from `src`."
+        },
+        {
+          "name": "actions",
+          "scope": "—",
+          "notes": "Optional controls under the copy, floored so consecutive bands align on them. Small buttons: `kind=\"secondary\"` for the action, `kind=\"outlined\"` for a second beside it, `icon=\"pi pi-chevron-right\"` + `icon-position=\"trailing\"` when it leaves the page."
+        }
+      ],
+      "purpose": "A two-column band pairing a block of copy with a piece of media — a screenshot, diagram or short video — each holding half the frame. It is the workhorse section of a product page: one claim, one picture of the claim, repeated down the page with the sides alternating. It is a **sub-section**, not a section header, and its typography says so: the headline is `heading-md` against `section-title`'s `heading-xl`, because these bands sit _inside_ a section that a `section-title` has already opened. A band that needs the larger weight is opening a section, and wants `section-title`. Typographic weight and heading level are separate choices. The band sets its headline at `heading-md`, or `heading-xl` when `size` is `large`; `headingLevel` decides whether that headline is an `h2` or an `h3`, so a band nested under a section that already has its own `h2` does not open a second one at the same level. The seam between the two cells is the grid's own one-pixel gap over a rule fill, so neither cell draws a border and the hairline lands in the same place whichever side the media is on — horizontal while the band is stacked, vertical once it splits. `divided` drops it for a band whose two halves should read as one plate. Whether the band ever splits is `orientation`'s call. `horizontal` is the band proper: stacked below `lg`, two cells from `lg` up. `vertical` holds the stacked form at every width, and `kind` then picks whether the media sits above the copy or below it rather than left or right — the shape a band takes in a column too narrow to carry two halves.",
+      "useWhen": [
+        "To pair one capability's explanation with a screenshot or diagram of it.",
+        "Down a product page, alternating `kind` so consecutive bands mirror each other.",
+        "With `framed` off inside a page column that already draws the frame, and on when the band stands alone.",
+        "With `heading-level=\"3\"` whenever a `section-title` has already opened the section the band sits in.",
+        "With `orientation=\"vertical\"` in a column too narrow for two halves — a page aside, a grid cell — where the band would otherwise squeeze both.",
+        "Whenever the media carries as much of the message as the copy does."
+      ],
+      "avoidWhen": [
+        "For copy with no media → use `section-title`, which is the header band.",
+        "For the closing ask → use `call-to-action`; for a mid-page announcement → use `banner`.",
+        "For several short claims side by side → use `topic` in a `card-grid`.",
+        "For a picture with no explanation → use `illustration` directly."
+      ],
+      "related": [
+        "section-title` — the copy-only section header.",
+        "topic` — the smaller unit when a page needs several claims rather than one.",
+        "illustration` — the media itself; a scene dropped in the `media` slot is what the band's ground is drawn for.",
+        "texture-material` — the material the media half is grounded with; compose it yourself when a band needs a different one.",
+        "frame-box` — the frame the band is drawn with. With `framed` on, or inside a `band-stack`, each of the band's two cells is its own `frame-box`.",
+        "band-stack` — the run that stacks these bands; inside it every band frames its two cells, left and right, under the rules the stack draws."
+      ],
+      "bestPractices": [
+        "By default the band draws no frame of its own: the rule and the corner marks belong to the `section-module` or `frame-box` that the page assembles it into, so a band placed in a framed column never lands a second hairline on the column's own.",
+        "A run of bands goes in a `band-stack`, not in a frame per band: the stack draws each band's rules and the band frames its two cells. Leave `framed` off there, or the band draws a second set of rules over the stack's.",
+        "Alternate `kind` down a page so consecutive bands mirror; two identical bands in a row read as one.",
+        "Reach for `orientation=\"vertical\"` when the column is too narrow to carry two halves, not to vary the rhythm of a wide page — a vertical band across a full-width page reads as a card that lost its grid.",
+        "Composed into a grid of cells, the band fills the cell it is given: the copy column floors its actions, so a row of vertical bands lines up on its buttons. Let the grid own the seams there — `divided` off, `framed` off.",
+        "Keep the seam unless the two halves are meant to read as one thing: `divided` off on a `surface` fill is a single plate with a picture in it, and on a `canvas` fill it is two cells that merely touch.",
+        "Keep the copy to a headline and a short paragraph — the media is the other half of the argument, not decoration beside a wall of text.",
+        "Give the media a real `alt` that says what it shows, not what it is. \"Deployment succeeded in 1.2s\" beats \"screenshot\".",
+        "Reach for an official `illustration` scene before a screenshot: it is vector, it follows the canvas the library is drawn on, and its transparent ground is what the band's lattice is there for. `src` is the plain-picture path — a raster covers the ground rather than sitting on it.",
+        "Use the `media` slot when the media is not a plain image — a video, a chart or a composed figure belongs there rather than in `src`.",
+        "Let the band's own ground carry a scene with a transparent canvas: an `illustration` needs nothing behind it. Quiet or kill the lattice from the call site with `--texture-ink`, which the layer inherits from the band's root; a media element that paints its own opaque backdrop covers it anyway."
+      ]
+    },
     "ticker": {
       "import": "@aziontech/webkit/ticker",
       "target": "./src/components/marketing/ticker/ticker.vue",
