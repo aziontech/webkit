@@ -1,27 +1,45 @@
 <script setup lang="ts">
-  import { curve, duration } from '@aziontech/theme/animations'
   import Button from '@aziontech/webkit/button'
-  import Divider from '@aziontech/webkit/divider'
+  import Checkbox from '@aziontech/webkit/checkbox'
   import HelperText from '@aziontech/webkit/helper-text'
   import IconButton from '@aziontech/webkit/icon-button'
-  import InputPassword from '@aziontech/webkit/input-password'
+  import InputGroupAddon from '@aziontech/webkit/input-group-addon'
+  import InputGroupRoot from '@aziontech/webkit/input-group-root'
   import InputText from '@aziontech/webkit/input-text'
-  import Label from '@aziontech/webkit/label'
-  import Select from '@aziontech/webkit/select'
+  import MultiSelect from '@aziontech/webkit/multi-select'
+  import SegmentedButton from '@aziontech/webkit/segmented-button'
   import Switch from '@aziontech/webkit/switch'
+  import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, nextTick, reactive, ref, useId, watch } from 'vue'
 
   import ResourceDrawer from '../../components/form/ResourceDrawer.vue'
+  import Section from '../../components/page/Section.vue'
+  import {
+    SECRET_HINT,
+    SECRET_MASK,
+    VIEW_OPTIONS,
+    createScopes,
+    parseEnvFile,
+    scopeDisplay,
+    scopeMissing,
+    scopePayload,
+    secretAriaLabel,
+    secretTooltip,
+    setScopeEnabled,
+    useVariablesEditor,
+    visibleScopeOptions
+  } from '../../lib/behavior/variables-editor'
   import { APPLICATIONS } from '../../lib/data/applications'
-  import { parseDotenv } from '../../lib/format/dotenv'
-  import { presetIcon, presetLabel } from '../../lib/format/presets'
+  import { environmentOptions } from '../../lib/data/environments'
+  import { FIREWALLS } from '../../lib/data/firewalls'
+  import { WORKLOADS } from '../../lib/data/workloads'
 
   const open = defineModel('open', { type: Boolean, default: false })
 
   interface Props {
-    existingKeys?: unknown[]
+    existingKeys?: string[]
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -29,228 +47,118 @@
   })
 
   const emit = defineEmits<{
-    created: [created: unknown]
+    created: [created: unknown[]]
   }>()
 
-  let nextId = 0
-  const uid = () => (nextId += 1)
+  const editor = useVariablesEditor({ existingKeys: () => props.existingKeys })
+  const {
+    entries,
+    view,
+    jsonText,
+    jsonError,
+    submitted,
+    noVariables,
+    isValid,
+    canAdd,
+    canRemove,
+    keyError,
+    valueError
+  } = editor
 
-  const newEntry = (key = '', value = '', note = '') => ({
-    id: uid(),
-    key,
-    value,
-    note,
-    flagged: false
+  const formId = useId()
+  const fieldId = (entry, part) => `${formId}-${part}-${entry.id}`
+  const messageId = (entry, part) => `${fieldId(entry, part)}-message`
+
+  const toOptions = (items) => items.map((item) => ({ value: item.id, label: item.name }))
+
+  const scopeOptions = () => ({
+    environment: environmentOptions.value,
+    deployment: toOptions(WORKLOADS),
+    application: toOptions(APPLICATIONS),
+    firewall: toOptions(FIREWALLS)
   })
 
-  const ENVIRONMENTS = [
-    { value: 'production', label: 'Production' },
-    { value: 'preview', label: 'Preview' },
-    { value: 'development', label: 'Development' }
-  ]
+  const scopes = reactive(createScopes(scopeOptions()))
 
-  const SENSITIVE_HINT =
-    'A sensitive value is stored encrypted and masked in the list. It can be replaced but never read back.'
+  const scopeError = (scope) => submitted.value && scopeMissing(scope)
+  const scopesValid = computed(() => scopes.every((scope) => !scopeMissing(scope)))
 
-  const blankForm = () => ({
-    entries: [newEntry()],
-    sensitive: true,
-    environments: ['production', 'preview'],
-    projects: []
-  })
-
-  const form = reactive(blankForm())
-  const submitted = ref(false)
   const submitting = ref(false)
 
-  const scope = useId()
-  const keyId = (entry) => `${scope}-key-${entry.id}`
-  const valueId = (entry) => `${scope}-value-${entry.id}`
-  const noteId = (entry) => `${scope}-note-${entry.id}`
-  const sensitiveId = `${scope}-sensitive`
-  const environmentsId = `${scope}-environments`
-  const projectsId = `${scope}-projects`
-
-  const KEY_PATTERN = /^[A-Za-z_][A-Za-z0-9_]*$/
-
-  const keyError = (entry, index) => {
-    const key = entry.key.trim()
-    if (!key) return { kind: 'required', message: 'Key is required.' }
-    if (!KEY_PATTERN.test(key))
-      return {
-        kind: 'invalid',
-        message: 'Use letters, numbers and underscore. It cannot start with a number.'
-      }
-    if (form.entries.some((other, position) => position < index && other.key.trim() === key))
-      return { kind: 'invalid', message: `“${key}” is repeated in this form.` }
-    if (props.existingKeys.includes(key))
-      return { kind: 'invalid', message: `“${key}” already exists in this list.` }
-    return null
-  }
-
-  const errors = computed(() =>
-    form.entries.map((entry, index) => ({
-      key: keyError(entry, index),
-      value: entry.value.trim() ? null : { kind: 'required', message: 'Value is required.' }
-    }))
-  )
-
-  const environmentsError = computed(() => form.environments.length === 0)
-
-  const isValid = computed(
-    () => !environmentsError.value && errors.value.every((entry) => !entry.key && !entry.value)
-  )
-
-  const morphStyle = {
-    '--tg-move-duration': duration['slow-01'],
-    '--tg-move-ease': curve['expressive-entrance'],
-    '--tg-enter-duration': duration['moderate-01'],
-    '--tg-enter-ease': curve['productive-entrance'],
-    '--tg-leave-duration': duration['slow-01'],
-    '--tg-leave-ease': curve['productive-exit']
-  }
-  const morphTransition = {
-    moveClass:
-      'transition-transform duration-(--tg-move-duration) ease-(--tg-move-ease) motion-reduce:transition-none',
-    enterActiveClass:
-      'transition-all duration-(--tg-enter-duration) ease-(--tg-enter-ease) motion-reduce:transition-none',
-    enterFromClass: '-translate-y-(--spacing-xxs) opacity-0',
-    leaveActiveClass:
-      'transition-opacity duration-(--tg-leave-duration) ease-(--tg-leave-ease) motion-reduce:transition-none',
-    leaveToClass: 'opacity-0'
-  }
+  const fieldClass =
+    'h-full min-w-0 flex-1 border-0 bg-transparent px-(--spacing-md) text-(--text-default) outline-none placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled)'
 
   const focusKey = async (entry) => {
     await nextTick()
-    document.getElementById(keyId(entry))?.focus()
+    document.getElementById(fieldId(entry, 'key'))?.focus()
   }
 
-  const addEntry = () => {
-    const entry = newEntry()
-    form.entries.push(entry)
-    focusKey(entry)
-  }
-
-  const removeEntry = (index) => {
-    if (form.entries.length <= 1) return
-    form.entries.splice(index, 1)
-  }
-
-  const expandInto = (index, pairs) => {
-    const [first, ...rest] = pairs
-    const target = form.entries[index]
-    target.key = first.key
-    target.value = first.value
-    form.entries.splice(index + 1, 0, ...rest.map((pair) => newEntry(pair.key, pair.value)))
-  }
+  const addEntry = () => focusKey(editor.addEntry())
 
   const onKeyPaste = (event, index) => {
-    const pairs = parseDotenv(event.clipboardData?.getData('text/plain') ?? '')
-    if (pairs.length === 0) return
-
-    event.preventDefault()
-    expandInto(index, pairs)
+    const count = editor.pasteIntoKey(event, index)
+    if (!count) return
     toast.success(
-      pairs.length === 1
-        ? `Read ${pairs[0].key} from the pasted .env.`
-        : `Read ${pairs.length} variables from the pasted .env.`
+      count === 1 ? 'Read 1 variable from the paste.' : `Read ${count} variables from the paste.`
     )
   }
 
-  const fileRef = ref(null)
-
-  const openImport = () => fileRef.value?.click()
+  const fileInput = ref(null)
 
   const onFilePicked = async (event) => {
     const [file] = event.target.files ?? []
     event.target.value = ''
     if (!file) return
 
-    const pairs = parseDotenv(await file.text())
-    if (pairs.length === 0) {
-      toast.error(`No variables found in “${file.name}”.`, {
-        description: 'Expected lines in the KEY=value form.'
-      })
+    const { parsed, invalidLines } = parseEnvFile(await file.text())
+    if (!parsed.length && invalidLines.length) {
+      toast.error('Unable to parse the selected file as .env format.')
       return
     }
 
-    const typed = form.entries.filter((entry) => entry.key.trim() || entry.value.trim())
-    form.entries = [...typed, ...pairs.map((pair) => newEntry(pair.key, pair.value))]
-    toast.success(
-      pairs.length === 1
-        ? `Imported ${pairs[0].key} from “${file.name}”.`
-        : `Imported ${pairs.length} variables from “${file.name}”.`
-    )
-  }
+    view.value = 'Form'
+    await nextTick()
+    editor.applyPairs(parsed)
 
-  const environmentsDisplay = (value) => {
-    const picked = ENVIRONMENTS.filter((option) => value?.includes(option.value))
-    if (picked.length === 0) return ''
-    if (picked.length === ENVIRONMENTS.length) return 'All Environments'
-    const labels = picked.map((option) => option.label)
-    if (labels.length === 1) return labels[0]
-    return `${labels.slice(0, -1).join(', ')} and ${labels.at(-1)}`
-  }
-
-  const projectOptions = APPLICATIONS.map((application) => ({
-    value: application.id,
-    label: application.name,
-    preset: application.preset
-  }))
-
-  const projectQuery = ref('')
-  const projectsOpen = ref(false)
-  watch(projectsOpen, (isOpen) => {
-    if (!isOpen) projectQuery.value = ''
-  })
-
-  const visibleProjects = computed(() => {
-    const query = projectQuery.value.trim().toLowerCase()
-    if (!query) return projectOptions
-    return projectOptions.filter((option) => option.label.toLowerCase().includes(query))
-  })
-
-  const projectsDisplay = (value) => {
-    const names = projectOptions
-      .filter((option) => value?.includes(option.value))
-      .map((option) => option.label)
-    if (names.length === 0) return ''
-    if (names.length <= 2) return names.join(', ')
-    return `${names.slice(0, 2).join(', ')} +${names.length - 2}`
+    if (invalidLines.length) {
+      toast.warning(`Some lines were ignored: ${invalidLines.join(', ')}.`)
+    }
   }
 
   watch(open, (isOpen) => {
     if (isOpen) return
-    Object.assign(form, blankForm())
-    submitted.value = false
+    editor.reset()
+    Object.assign(scopes, createScopes(scopeOptions()))
     submitting.value = false
-    projectsOpen.value = false
-    projectQuery.value = ''
   })
 
+  const createdToast = (created) => {
+    if (created.length === 1) return 'Variable created.'
+    return `${created.length} variables created.`
+  }
+
   const submit = async () => {
-    submitted.value = true
-    for (const entry of form.entries) entry.flagged = true
     if (submitting.value) return
-    if (!isValid.value) return
+    if (view.value === 'JSON') {
+      if (jsonError.value) return
+      view.value = 'Form'
+      await nextTick()
+    }
+    submitted.value = true
+    if (!isValid.value || !scopesValid.value) return
 
     submitting.value = true
     try {
       await new Promise((resolve) => setTimeout(resolve, 900))
-      const created = form.entries.map((entry) => ({
+      const scope = scopePayload(scopes)
+      const created = editor.filledEntries.value.map((entry) => ({
         key: entry.key.trim(),
         value: entry.value,
-        note: entry.note.trim(),
-        secret: form.sensitive,
-        environments: [...form.environments],
-        projects: [...form.projects]
+        secret: entry.secret,
+        scope
       }))
       emit('created', created)
-      toast.success(
-        created.length === 1
-          ? `Variable “${created[0].key}” created.`
-          : `${created.length} variables created.`
-      )
+      toast.success(createdToast(created))
       open.value = false
     } catch (error) {
       toast.error('Could not create the variables.', {
@@ -268,258 +176,288 @@
     v-model:open="open"
     size="medium"
     title="Create Variable"
+    description="Create one or more variables and define where they are available."
     save-label="Save"
     :submitting="submitting"
     @submit="submit"
   >
-    <div class="flex min-w-0 flex-col gap-(--layout-section-gap)">
-      <TransitionGroup
-        tag="div"
-        class="flex min-w-0 flex-col gap-(--layout-section-gap)"
-        v-bind="morphTransition"
-        :style="morphStyle"
-      >
-        <div
-          v-for="(entry, index) in form.entries"
-          :key="entry.id"
-          class="flex min-w-0 flex-col gap-(--spacing-md)"
-        >
-          <div class="flex w-full flex-col gap-(--spacing-xs)">
-            <div class="flex items-center justify-between gap-(--spacing-xs)">
-              <Label :for="keyId(entry)">Key</Label>
-              <Tooltip
-                v-if="form.entries.length > 1"
-                text="Remove variable"
-              >
-                <IconButton
-                  icon="pi pi-times"
-                  kind="outlined"
-                  size="small"
-                  aria-label="Remove variable"
-                  @click="removeEntry(index)"
-                />
-              </Tooltip>
-            </div>
-            <InputText
-              :id="keyId(entry)"
-              v-model="entry.key"
-              name="key"
-              size="large"
-              class="w-full"
-              autocomplete="off"
-              spellcheck="false"
-              :required="entry.flagged && errors[index].key?.kind === 'required'"
-              :invalid="entry.flagged && errors[index].key?.kind === 'invalid'"
-              :aria-describedby="
-                entry.flagged && errors[index].key ? `${keyId(entry)}-message` : undefined
-              "
-              @paste="onKeyPaste($event, index)"
-            />
-            <HelperText
-              v-if="entry.flagged && errors[index].key"
-              :id="`${keyId(entry)}-message`"
-              :kind="errors[index].key.kind"
-              :label="errors[index].key.message"
-            />
-          </div>
-
-          <div class="flex w-full flex-col gap-(--spacing-xs)">
-            <Label :for="valueId(entry)">Value</Label>
-            <InputPassword
-              :id="valueId(entry)"
-              v-model="entry.value"
-              name="value"
-              class="w-full"
-              autocomplete="off"
-              :required="entry.flagged && Boolean(errors[index].value)"
-              :aria-describedby="
-                entry.flagged && errors[index].value ? `${valueId(entry)}-message` : undefined
-              "
-            />
-            <HelperText
-              v-if="entry.flagged && errors[index].value"
-              :id="`${valueId(entry)}-message`"
-              kind="required"
-              :label="errors[index].value.message"
-            />
-          </div>
-
-          <div class="flex w-full flex-col gap-(--spacing-xs)">
-            <Label :for="noteId(entry)">Note (Optional)</Label>
-            <InputText
-              :id="noteId(entry)"
-              v-model="entry.note"
-              name="note"
-              size="large"
-              class="w-full"
-              placeholder="Where to rotate, or who to contact"
-            />
-          </div>
+    <Section
+      stacked
+      :divided="false"
+      title="Variables"
+      hint="Store values your Functions read at runtime. Add one row per variable, or import a .env file."
+    >
+      <div class="flex min-w-0 flex-col gap-(--spacing-sm)">
+        <div class="flex items-center gap-(--spacing-xs) self-end">
+          <Button
+            label="Upload"
+            icon="pi pi-upload"
+            kind="outlined"
+            size="medium"
+            @click="fileInput?.click()"
+          />
+          <input
+            ref="fileInput"
+            type="file"
+            accept=".env,.txt,text/plain"
+            class="sr-only"
+            tabindex="-1"
+            aria-hidden="true"
+            @change="onFilePicked"
+          />
+          <SegmentedButton
+            v-model="view"
+            :options="VIEW_OPTIONS"
+            aria-label="Variables view"
+            size="medium"
+          />
         </div>
-      </TransitionGroup>
 
-      <Button
-        class="self-start"
-        label="Add another"
-        kind="outlined"
-        size="medium"
-        icon="pi pi-plus"
-        @click="addEntry"
-      />
-
-      <div class="-mx-(--spacing-lg)">
-        <Divider />
-      </div>
-
-      <div class="flex items-center gap-(--spacing-sm)">
-        <Switch
-          :id="sensitiveId"
-          v-model="form.sensitive"
-        />
-        <Label
-          :for="sensitiveId"
-          :hint="SENSITIVE_HINT"
-          >Sensitive</Label
-        >
-      </div>
-
-      <div class="flex w-full flex-col gap-(--spacing-xs)">
-        <Label
-          :id="`${environmentsId}-label`"
-          :for="environmentsId"
-          >Environments</Label
-        >
-        <Select
-          v-model="form.environments"
-          multiple
-          size="large"
-          placeholder="Select environments"
-          :required="submitted && environmentsError"
-          :display-value="environmentsDisplay"
-        >
-          <Select.Trigger
-            :id="environmentsId"
-            class="pl-0"
-            :aria-labelledby="`${environmentsId}-label`"
-            :aria-describedby="
-              submitted && environmentsError ? `${environmentsId}-message` : undefined
-            "
-          >
-            <template #iconLeft>
-              <span
-                class="flex shrink-0 items-center self-stretch border-r border-(--border-default) bg-(color:--bg-canvas) px-(--spacing-md) text-(--text-muted)"
-                aria-hidden="true"
-              >
-                <i class="ai ai-layers" />
-              </span>
-            </template>
-          </Select.Trigger>
-          <Select.Content>
-            <Select.Option
-              v-for="option in ENVIRONMENTS"
-              :key="option.value"
-              :value="option.value"
+        <template v-if="view === 'Form'">
+          <div class="flex min-w-0 flex-col gap-(--spacing-sm)">
+            <div
+              v-for="(entry, index) in entries"
+              :key="entry.id"
+              class="flex min-w-0 flex-col gap-(--spacing-xs)"
             >
-              {{ option.label }}
-            </Select.Option>
-          </Select.Content>
-        </Select>
-        <HelperText
-          v-if="submitted && environmentsError"
-          :id="`${environmentsId}-message`"
-          kind="required"
-          label="Pick at least one environment."
-        />
-      </div>
-
-      <div class="flex w-full flex-col gap-(--spacing-xs)">
-        <Label
-          :id="`${projectsId}-label`"
-          :for="projectsId"
-          >Link to Projects (optional)</Label
-        >
-        <Select
-          v-model="form.projects"
-          v-model:open="projectsOpen"
-          multiple
-          size="large"
-          placeholder="Search projects"
-          :display-value="projectsDisplay"
-        >
-          <Select.Trigger
-            :id="projectsId"
-            :aria-labelledby="`${projectsId}-label`"
-          >
-            <template #iconLeft>
-              <i
-                class="pi pi-search shrink-0 text-(--text-muted)"
-                aria-hidden="true"
-              />
-            </template>
-          </Select.Trigger>
-          <Select.Content>
-            <template #search>
-              <InputText
-                v-model="projectQuery"
-                size="large"
-                class="w-full"
-                placeholder="Search projects"
-                aria-label="Search projects"
-                @keydown.stop
-              >
-                <template #iconLeft>
-                  <i
-                    class="pi pi-search"
-                    aria-hidden="true"
+              <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                <InputGroupRoot
+                  size="large"
+                  :required="keyError(entry)?.kind === 'required'"
+                  :invalid="keyError(entry)?.kind === 'invalid'"
+                >
+                  <InputGroupAddon>
+                    <label
+                      :for="fieldId(entry, 'key')"
+                      class="w-20"
+                      >Key</label
+                    >
+                  </InputGroupAddon>
+                  <input
+                    :id="fieldId(entry, 'key')"
+                    :value="entry.key"
+                    placeholder="MY_VARIABLE"
+                    autocomplete="off"
+                    spellcheck="false"
+                    :aria-invalid="!!keyError(entry) || undefined"
+                    :aria-describedby="keyError(entry) ? messageId(entry, 'key') : undefined"
+                    :class="fieldClass"
+                    class="text-label-code-sm"
+                    @input="editor.setKey(entry, $event.target.value)"
+                    @paste="onKeyPaste($event, index)"
                   />
-                </template>
-              </InputText>
-            </template>
-            <Select.Option
-              v-for="option in visibleProjects"
-              :key="option.value"
-              :value="option.value"
-            >
-              <template #left>
-                <i
-                  :class="presetIcon(option.preset)"
-                  class="shrink-0 text-body-lg"
-                  :title="presetLabel(option.preset)"
-                  aria-hidden="true"
-                />
-              </template>
-              {{ option.label }}
-            </Select.Option>
-            <p
-              v-if="!visibleProjects.length"
-              class="px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-muted)"
-            >
-              No project matches “{{ projectQuery }}”.
-            </p>
-          </Select.Content>
-        </Select>
-      </div>
-    </div>
+                  <Tooltip
+                    v-if="canRemove"
+                    text="Remove variable"
+                  >
+                    <IconButton
+                      icon="pi pi-trash"
+                      kind="outlined"
+                      size="large"
+                      aria-label="Remove variable"
+                      @click="editor.removeEntry(index)"
+                    />
+                  </Tooltip>
+                </InputGroupRoot>
 
-    <template #start>
-      <Button
-        label="Import"
-        kind="outlined"
-        size="medium"
-        icon="pi pi-upload"
-        :disabled="submitting"
-        @click="openImport"
-      />
-      <p class="min-w-0 text-body-sm text-(--text-muted)">or paste .env contents in Key input</p>
-      <input
-        ref="fileRef"
-        type="file"
-        accept=".env,.txt,text/plain"
-        class="sr-only"
-        tabindex="-1"
-        aria-hidden="true"
-        @change="onFilePicked"
-      />
-    </template>
+                <InputGroupRoot
+                  size="large"
+                  :required="!!valueError(entry)"
+                >
+                  <InputGroupAddon>
+                    <label
+                      :for="fieldId(entry, 'value')"
+                      class="w-20"
+                      >Value</label
+                    >
+                  </InputGroupAddon>
+                  <input
+                    :id="fieldId(entry, 'value')"
+                    v-model="entry.value"
+                    :type="entry.secret && !entry.visible ? 'password' : 'text'"
+                    :placeholder="entry.secret ? SECRET_MASK : 'my-variable-value'"
+                    autocomplete="off"
+                    spellcheck="false"
+                    :aria-invalid="!!valueError(entry) || undefined"
+                    :aria-describedby="valueError(entry) ? messageId(entry, 'value') : undefined"
+                    :class="fieldClass"
+                    class="text-label-sm"
+                  />
+                  <Tooltip
+                    v-if="entry.secret"
+                    :text="entry.visible ? 'Hide value' : 'Show value'"
+                  >
+                    <IconButton
+                      :icon="entry.visible ? 'pi pi-eye-slash' : 'pi pi-eye'"
+                      kind="outlined"
+                      size="large"
+                      :aria-label="entry.visible ? 'Hide value' : 'Show value'"
+                      :aria-pressed="entry.visible"
+                      @click="entry.visible = !entry.visible"
+                    />
+                  </Tooltip>
+                  <InputGroupAddon>
+                    <Tooltip :text="secretTooltip(entry)">
+                      <span class="flex items-center gap-(--spacing-xs)">
+                        <label :for="fieldId(entry, 'secret')">Secret</label>
+                        <Checkbox
+                          v-model="entry.secret"
+                          binary
+                          :input-id="fieldId(entry, 'secret')"
+                          :aria-label="secretAriaLabel(entry)"
+                        />
+                      </span>
+                    </Tooltip>
+                  </InputGroupAddon>
+                </InputGroupRoot>
+              </div>
+
+              <HelperText
+                v-if="keyError(entry)"
+                :id="messageId(entry, 'key')"
+                :kind="keyError(entry).kind"
+                :label="keyError(entry).message"
+              />
+              <HelperText
+                v-if="valueError(entry)"
+                :id="messageId(entry, 'value')"
+                :kind="valueError(entry).kind"
+                :label="valueError(entry).message"
+              />
+            </div>
+          </div>
+
+          <div>
+            <Button
+              label="Add variable"
+              icon="pi pi-plus"
+              kind="outlined"
+              size="medium"
+              :disabled="!canAdd"
+              @click="addEntry"
+            />
+          </div>
+
+          <HelperText
+            label="Paste JSON or .env contents into an empty key field to create one row per variable."
+          />
+        </template>
+
+        <template v-else>
+          <Textarea
+            v-model="jsonText"
+            aria-label="Variables JSON"
+            :invalid="!!jsonError"
+            :aria-describedby="jsonError ? `${formId}-json-message` : undefined"
+          />
+          <HelperText>
+            Use a JSON object format, for example:
+            <code class="text-label-code-sm">{"API_URL":"https://example.com"}</code>
+          </HelperText>
+          <HelperText
+            v-if="jsonError"
+            :id="`${formId}-json-message`"
+            kind="invalid"
+            :label="jsonError"
+          />
+        </template>
+
+        <HelperText :label="SECRET_HINT" />
+        <HelperText
+          v-if="submitted && noVariables"
+          kind="required"
+          label="Add at least one variable."
+        />
+      </div>
+    </Section>
+
+    <Section
+      stacked
+      :divided="false"
+      title="Scope"
+      hint="Global covers the entire account and turns off when you enable a specific scope. Each scope starts with every resource selected. Scope cannot be changed after the variable is created."
+    >
+      <div class="flex min-w-0 flex-col gap-(--spacing-sm)">
+        <div
+          v-for="scope in scopes"
+          :key="scope.type"
+          class="flex min-w-0 flex-col gap-(--spacing-xs)"
+        >
+          <InputGroupRoot
+            size="large"
+            :required="scopeError(scope)"
+          >
+            <InputGroupAddon>
+              <span class="w-20">{{ scope.label }}</span>
+            </InputGroupAddon>
+            <span
+              v-if="scope.type === 'global'"
+              class="flex h-full min-w-0 flex-1 items-center bg-(--bg-canvas) px-(--spacing-md) text-label-sm text-(--text-default)"
+            >
+              The entire account
+            </span>
+            <div
+              v-else
+              class="h-full min-w-0 flex-1"
+            >
+              <MultiSelect
+                v-model="scope.ids"
+                size="large"
+                :placeholder="scope.placeholder"
+                :display-value="scopeDisplay(scope)"
+                :disabled="!scope.enabled"
+                :required="scopeError(scope)"
+              >
+                <MultiSelect.Trigger
+                  :aria-label="scope.placeholder"
+                  :aria-describedby="
+                    scopeError(scope) ? `${formId}-scope-${scope.type}` : undefined
+                  "
+                />
+                <MultiSelect.Content>
+                  <template #search>
+                    <InputText
+                      v-model="scope.query"
+                      size="small"
+                      placeholder="Search"
+                      aria-label="Search"
+                      @keydown.stop
+                    >
+                      <template #iconLeft>
+                        <i
+                          class="pi pi-search"
+                          aria-hidden="true"
+                        />
+                      </template>
+                    </InputText>
+                  </template>
+                  <MultiSelect.Option
+                    v-for="option in visibleScopeOptions(scope)"
+                    :key="option.value"
+                    :value="option.value"
+                  >
+                    {{ option.label }}
+                  </MultiSelect.Option>
+                </MultiSelect.Content>
+              </MultiSelect>
+            </div>
+            <InputGroupAddon>
+              <Switch
+                :model-value="scope.enabled"
+                :disabled="scope.type === 'global'"
+                :aria-label="`Enable ${scope.label} scope`"
+                @update:model-value="(value) => setScopeEnabled(scopes, scope, value)"
+              />
+            </InputGroupAddon>
+          </InputGroupRoot>
+          <HelperText
+            v-if="scopeError(scope)"
+            :id="`${formId}-scope-${scope.type}`"
+            kind="required"
+            label="Select at least one resource for this scope."
+          />
+        </div>
+      </div>
+    </Section>
   </ResourceDrawer>
 </template>

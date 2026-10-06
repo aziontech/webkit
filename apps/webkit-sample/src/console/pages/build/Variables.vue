@@ -5,7 +5,6 @@
   import IconButton from '@aziontech/webkit/icon-button'
   import InputText from '@aziontech/webkit/input-text'
   import TableRoot from '@aziontech/webkit/table-root'
-  import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { formatListDate } from '@shared/lib/dates'
@@ -28,7 +27,8 @@
   import AppLayout from '../../components/shell/AppLayout.vue'
   import { DATE_PRESETS, formatDateRange, matchDate } from '../../lib/behavior/filter-bar'
   import { useListFilters } from '../../lib/behavior/list-state'
-  import { FIT_COLUMN, TAG_COLUMN } from '../../lib/behavior/table-columns'
+  import { FIT_COLUMN } from '../../lib/behavior/table-columns'
+  import { SECRET_MASK, scopeSummary } from '../../lib/behavior/variables-editor'
   import { productFirstUse } from '../../lib/data/product-empty-states'
   import { VARIABLES } from '../../lib/data/variables'
   import { useSampleMode } from '../../lib/state/sample-mode'
@@ -54,7 +54,7 @@
     { accessorKey: 'key', header: 'Key', enableSorting: true, principal: true, hideable: false },
     { accessorKey: 'id', header: 'ID', minWidth: FIT_COLUMN },
     { accessorKey: 'value', header: 'Value', grow: 2 },
-    { accessorKey: 'secret', header: 'Type', enableSorting: true, minWidth: TAG_COLUMN },
+    { accessorKey: 'scope', header: 'Scope', minWidth: FIT_COLUMN },
     { accessorKey: 'lastEditor', header: 'Last Editor', enableSorting: true, minWidth: FIT_COLUMN },
     {
       accessorKey: 'lastModified',
@@ -118,7 +118,7 @@
 
   const columnVisibility = ref({ id: false })
 
-  const displayValue = (row) => (row.secret ? '••••••••••••' : row.value)
+  const displayValue = (row) => (row.secret ? SECRET_MASK : row.value)
 
   const drawerOpen = ref(false)
   const existingKeys = computed(() => variables.value.map((variable) => variable.key))
@@ -307,12 +307,21 @@
                     <LastModifiedCell :date="value" />
                   </template>
 
-                  <template #cell-secret="{ value }">
-                    <Tag
-                      :label="value ? 'Secret' : 'Variable'"
-                      :severity="value ? 'warning' : 'secondary'"
-                      size="medium"
-                    />
+                  <template #cell-scope="{ value }">
+                    <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                      <span
+                        v-for="item in scopeSummary(value)"
+                        :key="item.label"
+                        class="truncate whitespace-nowrap"
+                      >
+                        {{ item.label }}
+                        <span
+                          v-if="item.detail"
+                          class="text-(--text-muted)"
+                          >{{ item.detail }}</span
+                        >
+                      </span>
+                    </div>
                   </template>
 
                   <template #cell-actions="{ row }">
