@@ -31,17 +31,17 @@
   },
   {
     "name": "section-gap",
-    "path": "src/components/layout/section-gap/section-gap.vue",
-    "limit": "3 KB"
+    "path": "src/components/marketing/section-gap/section-gap.vue",
+    "limit": "3.75 KB"
   },
   {
     "name": "section-title",
-    "path": "src/components/content/section-title/section-title.vue",
-    "limit": "4 KB"
+    "path": "src/components/marketing/section-title/section-title.vue",
+    "limit": "3.5 KB"
   },
   {
     "name": "hero-title",
-    "path": "src/components/content/hero-title/hero-title.vue",
+    "path": "src/components/marketing/hero/hero-title/hero-title.vue",
     "limit": "2.5 KB"
   },
   {
@@ -140,9 +140,124 @@
     "limit": "2.5 KB"
   },
   {
+    "name": "media-split",
+    "path": "src/components/marketing/media-split/media-split.vue",
+    "limit": "5.75 KB"
+  },
+  {
+    "name": "ticker",
+    "path": "src/components/marketing/ticker/ticker.vue",
+    "limit": "4.5 KB",
+    "entryOnly": true
+  },
+  {
+    "name": "card-grid-root",
+    "path": "src/components/marketing/card-grid/card-grid.vue",
+    "limit": "1.5 KB"
+  },
+  {
+    "name": "carousel-root",
+    "path": "src/components/marketing/carousel/carousel.vue",
+    "limit": "3 KB"
+  },
+  {
+    "name": "banner",
+    "path": "src/components/marketing/banner/banner.vue",
+    "limit": "4.25 KB"
+  },
+  {
+    "name": "hero",
+    "path": "src/components/marketing/hero/index.ts",
+    "limit": "4 KB",
+    "entryOnly": true
+  },
+  {
+    "name": "hero-root",
+    "path": "src/components/marketing/hero/hero.vue",
+    "limit": "3.25 KB",
+    "entryOnly": true
+  },
+  {
+    "name": "sticky-stack",
+    "path": "src/components/marketing/sticky-stack/sticky-stack.vue",
+    "limit": "5.75 KB"
+  },
+  {
+    "name": "texture-material",
+    "path": "src/components/marketing/texture-material/texture-material.vue",
+    "limit": "2 KB"
+  },
+  {
+    "name": "topic",
+    "path": "src/components/marketing/topic/topic.vue",
+    "limit": "1.5 KB"
+  },
+  {
+    "name": "section-module",
+    "path": "src/components/marketing/section-module/section-module.vue",
+    "limit": "4.25 KB"
+  },
+  {
+    "name": "section-container",
+    "path": "src/components/marketing/section-container/section-container.vue",
+    "limit": "1.5 KB"
+  },
+  {
+    "name": "quote-carousel",
+    "path": "src/components/marketing/quote-carousel/quote-carousel.vue",
+    "limit": "20 KB",
+    "entryOnly": true
+  },
+  {
+    "name": "quote",
+    "path": "src/components/marketing/quote/quote.vue",
+    "limit": "15 KB"
+  },
+  {
+    "name": "media-tabs",
+    "path": "src/components/marketing/media-tabs/media-tabs.vue",
+    "limit": "6.5 KB"
+  },
+  {
+    "name": "embed",
+    "path": "src/components/marketing/embed/embed.vue",
+    "limit": "3 KB"
+  },
+  {},
+  {
+    "name": "faq",
+    "path": "src/components/marketing/faq/faq.vue",
+    "limit": "15 KB"
+  },
+  {
+    "name": "media-tile",
+    "path": "src/components/marketing/media-tile/media-tile.vue",
+    "limit": "2.75 KB"
+  },
+  {
+    "name": "content-columns",
+    "path": "src/components/marketing/content-columns/content-columns.vue",
+    "limit": "4.75 KB"
+  },
+  {
     "name": "illustration",
     "path": "src/components/content/illustration/illustration.vue",
     "limit": "2 KB",
     "entryOnly": true
+  },
+  {
+    "name": "big-numbers",
+    "path": "src/components/marketing/big-numbers/big-numbers.vue",
+    "limit": "2.5 KB"
+  },
+  {
+    "name": "call-to-action",
+    "path": "src/components/marketing/call-to-action/call-to-action.vue",
+    "limit": "4.5 KB"
+  },
+  {
+    "name": "bento-grid-root",
+    "path": "src/components/marketing/bento-grid/bento-grid.vue",
+    "limit": "1 KB"
   }
 ]

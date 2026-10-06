@@ -1,13 +1,5 @@
-// Every value `<Illustration name="…">` accepts. Each entry is an official scene from the
-// Assets library in Figma, on that file's 592x300 canvas; the SVG is the source of truth.
-// Loaders are dynamic imports, so a bundle carries only the scenes its pages name.
-// To add one: export the frame at 592x300, drop the `.svg` here under the frame's own
-// name, and add a line below.
 export type IllustrationAssetLoader = () => Promise<{ default: string }>
 
-// Loaded like every scene, never imported statically: a static asset import is inlined
-// into the entry chunk, so every consumer would pay for a frame only an unfinished screen
-// shows. Out of `illustrationAssets` on purpose — a missing scene, not one a page picks.
 /** Loads the frame shown when `name` is empty or names no registered scene. */
 export const loadIllustrationPlaceholder: IllustrationAssetLoader = () =>
   import('./placeholder.svg')
@@ -21,9 +13,13 @@ export const illustrationAssets = {
   'distributed-apis': () => import('./distributed-apis.svg'),
   'dns-protection': () => import('./dns-protection.svg'),
   'fastest-path-to-live-website': () => import('./fastest-path-to-live-website.svg'),
+  'global-network': () => import('./global-network.svg'),
   'implement-api-gateway-security': () => import('./implement-api-gateway-security.svg'),
+  'improve-application-performance-and-reliability': () =>
+    import('./improve-application-performance-and-reliability.svg'),
   'infrastructure-as-code': () => import('./infrastructure-as-code.svg'),
   'live-debugging': () => import('./live-debugging.svg'),
+  'low-latency': () => import('./low-latency.svg'),
   'modern-frontends': () => import('./modern-frontends.svg'),
   preview: () => import('./preview.svg'),
   'programmable-security': () => import('./programmable-security.svg'),

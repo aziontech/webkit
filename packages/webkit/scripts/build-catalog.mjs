@@ -160,6 +160,7 @@ function kindFromTarget(target) {
   if (target.startsWith('./src/utils/')) return 'util'
   if (target.startsWith('./src/composables/')) return 'composable'
   if (target.startsWith('./src/svg/')) return 'svg'
+  if (target.startsWith('./src/assets/')) return 'asset'
   if (target.startsWith('./src/styles/')) return 'style'
   if (target.startsWith('./src/vite/')) return 'other'
   // Only a `.vue` root or an `index.ts` compound barrel is a renderable component;
@@ -333,7 +334,15 @@ function build() {
     } else if (subpath.includes('/')) {
       const seg = subpath.split('/')[0]
       entry.kind =
-        seg === 'svg' ? 'svg' : seg === 'utils' ? 'util' : seg === 'styles' ? 'style' : 'component'
+        seg === 'svg'
+          ? 'svg'
+          : seg === 'assets'
+            ? 'asset'
+            : seg === 'utils'
+              ? 'util'
+              : seg === 'styles'
+                ? 'style'
+                : 'component'
       entry.treeShakeableImport = importPath
     } else {
       entry.kind = kindFromTarget(target)
