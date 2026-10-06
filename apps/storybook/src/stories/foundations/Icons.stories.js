@@ -12,7 +12,7 @@ import {
 // ─── Meta ─────────────────────────────────────────────────────────────────────
 
 export default {
-  title: 'Foundations/Icons',
+  title: 'Foundations/Assets/Icons',
   parameters: {
     options: { showPanel: false },
     controls: { disable: true },
