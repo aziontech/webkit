@@ -1,30 +1,12 @@
-// The connectors the sample is seeded with — the Build → Connectors module.
-//
-// A CONNECTOR is where an application fetches from when the edge does not already
-// hold the answer: an HTTP origin, a storage bucket, or a live-ingest endpoint. The
-// TYPE is what the row is really about — it decides what the address means and what
-// the connector can be bound to — so it leads the columns and is the first field.
-//
-// `modifiedAt` is the real instant; `lastModified` is derived from it by one
-// formatter rather than hand-written per row.
 import { daysAgo, formatListDate } from '@shared/lib/dates'
 import { authorAt, emailOf } from '@shared/lib/people'
 
-// The `description` is the type in one line — what it fetches FROM. It exists because
-// choosing a type is choosing what the address MEANS, and a list of three product names
-// does not say that: a reader who has not met Object Storage cannot tell it apart from an
-// origin by its name alone. It rides here, next to the label, so the create that offers
-// the types as cards and any surface that later explains one read the same sentence.
-/** Connector type → the label, glyph and one-line meaning every surface reads. */
 export const CONNECTOR_TYPES = {
   http: {
     label: 'HTTP',
     icon: 'ai ai-edge-connectors',
     description: 'An origin server, reached by host name.'
   },
-  // "Object Storage" and not "Edge Storage": that is what the module is called
-  // everywhere else in this console (Store → Object Storage), and a connector type
-  // that names the same product a second way is a second vocabulary to learn.
   storage: {
     label: 'Object Storage',
     icon: 'ai ai-edge-storage',
@@ -37,18 +19,15 @@ export const CONNECTOR_TYPES = {
   }
 }
 
-/** `{ label, icon, description }` for a connector type, with a safe fallback. */
 export const connectorMeta = (type) =>
   CONNECTOR_TYPES[type] ?? { label: type, icon: 'ai ai-edge-connectors', description: '' }
 
-/** The type list a chooser offers, in the order the product presents them. */
 export const connectorTypeOptions = Object.entries(CONNECTOR_TYPES).map(([value, meta]) => ({
   value,
   label: meta.label,
   description: meta.description
 }))
 
-/** The seeded connectors, in list order. */
 export const CONNECTORS = [
   {
     id: '7710021',
@@ -108,18 +87,6 @@ export const CONNECTORS = [
   }
 ].map(connectorRow)
 
-/**
- * A connector as a LIST ROW — the record itself plus the fields its table displays.
- *
- * Exported because the seed is not the only source of rows any more: a connector created
- * in this session is stored as the answers the reader gave (../state/created-resources.js)
- * and has to arrive in the list as the SAME row, derived fields and all. Two projections
- * would be two lists that disagree about what a row is.
- *
- * @param {object} connector The base record.
- * @param {number} [index] Position in the seed — picks the round-robin author.
- * @returns {object} The row.
- */
 export function connectorRow(connector, index = 0) {
   const person = authorAt(index)
   return {
@@ -132,5 +99,4 @@ export function connectorRow(connector, index = 0) {
   }
 }
 
-/** A seeded connector by id, or `undefined`. */
 export const connectorById = (id) => CONNECTORS.find((connector) => connector.id === String(id))

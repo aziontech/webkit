@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import BoxGridSelection from '@aziontech/webkit/box-grid-selection'
   import Button from '@aziontech/webkit/button'
   import EmptyState from '@aziontech/webkit/empty-state'
@@ -24,27 +24,25 @@
 
   const open = defineModel('open', { type: Boolean, default: false })
 
-  const props = defineProps({
-    /** The workload being deployed — `{ id, name, domain }`. */
-    workload: { type: Object, required: true },
-    /**
-     * The environments this workload publishes into, each paired with the Deployment
-     * setting that serves it — `{ name, settingsId, deploymentPolicy }[]`
-     * (../../lib/state/workload-environments.js).
-     */
-    environments: { type: Array, default: () => [] },
-    /** Which environment to land on, by name. Falls back to the first one. */
-    preselectedEnvironment: { type: String, default: '' },
-    /**
-     * The topology picks waiting for a deploy, keyed by slot — `{ [slot]: { id, name } }`
-     * for a bind or a change, `{ removed: true }` for a staged removal.
-     */
-    staged: { type: Object, default: () => ({}) },
-    /** What each slot holds in traffic today, keyed the same way. Used to read a pick as a change. */
-    live: { type: Object, default: () => ({}) }
+  interface Props {
+    workload: Record<string, unknown>
+    environments?: unknown[]
+    preselectedEnvironment?: string
+    staged?: Record<string, unknown>
+    live?: Record<string, unknown>
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    environments: () => [],
+    preselectedEnvironment: '',
+    staged: () => ({}),
+    live: () => ({})
   })
 
-  const emit = defineEmits(['deployed', 'add-environment'])
+  const emit = defineEmits<{
+    deployed: [value: unknown]
+    'add-environment': []
+  }>()
 
   const RESOLVE_MS = 500
 

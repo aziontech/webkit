@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import CardBox from '@aziontech/webkit/card-box'
   import Item from '@aziontech/webkit/item'
   import Message from '@aziontech/webkit/message'
@@ -11,23 +11,23 @@
   import { settingsForPolicy } from '../../lib/state/workload-settings'
   import FieldRow from '../form/FieldRow.vue'
 
-  const props = defineProps({
-    /** The workload these environments belong to. A DEDICATED setting is offered only to
-     *  the workload it was created with, so the picker has to know which one is asking. */
-    workloadId: { type: String, default: '' },
-    /**
-     * The workload's environments, as `environmentsForWorkload` pairs them —
-     * `{ name, deploymentPolicy, settingsId, auto }`.
-     */
-    environments: { type: Array, default: () => [] },
-    /** Locks every control while the page's commit is in flight. */
-    disabled: { type: Boolean, default: false }
+  interface Props {
+    workloadId?: string
+    environments?: unknown[]
+    disabled?: boolean
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    workloadId: '',
+    environments: () => [],
+    disabled: false
   })
 
-  /** Environment name → the Deployment Setting it will publish with, once saved. */
   const model = defineModel({ type: Object, required: true })
 
-  const emit = defineEmits(['manage'])
+  const emit = defineEmits<{
+    manage: []
+  }>()
 
   const chosen = (environment) => model.value[environment.name] ?? environment.settingsId ?? ''
 

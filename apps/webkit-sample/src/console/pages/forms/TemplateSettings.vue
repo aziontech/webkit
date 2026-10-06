@@ -1,35 +1,4 @@
 <script setup>
-  // The Git / Template Settings configuration — the sample app's "Fields separated"
-  // form (the `/form` skill, Approach B). It doubles as the gallery of EVERY webkit
-  // field component rendered in this style: FieldText, FieldTextarea, FieldTextSwitch,
-  // FieldInputGroup, FieldPassword, FieldPhoneNumber, Select, MultiSelect, the radio
-  // family (FieldRadioBlock / FieldRadio), the checkbox family (FieldCheckboxBlock /
-  // FieldCheckbox) and the switch family (FieldSwitchBlock / FieldSwitch).
-  //
-  // The central idea never changes across all of them: every field is a standalone
-  // triad — Label + control + HelperText — with no CardBox and no Item.List. For a
-  // single control the accessible name is a <Label for>; for a GROUP (radio /
-  // checkbox / switch blocks) the name is a <fieldset>/<legend>, and a HelperText
-  // carries the group-level feedback.
-  //
-  // Validation has three distinct field states (in one sentence: required is
-  // communicated in the LABEL; the field's amber is feedback that appears ONLY
-  // after submit; and "empty" is a separate state from "invalid content"):
-  //   1. Empty (default)   — a required field shows the required tag on its LABEL
-  //                          only; the field itself stays neutral until a submit.
-  //   2. Empty after submit — the field turns amber (warning) to say "fill me". This
-  //                          feedback appears only after the first submit attempt.
-  //   3. Invalid content    — the field was filled but the value is wrong (a format
-  //                          error, not absence): the field turns red (invalid).
-  // To keep the label's required tag always visible while the amber border appears
-  // only post-submit, the Label is rendered here (always `required`) and the field
-  // wrapper is given NO `label`; its `:required` (amber) is bound to the post-submit
-  // empty state, and its `:invalid` (red) to a content error.
-  //
-  // Async submit follows the `/usability` skill: one `submitting` flag drives the
-  // Deploy button's `:loading` AND the fieldset's `:disabled` (lock the scope off
-  // one flag); the handler guards on it and releases in `finally`; a request-level
-  // failure surfaces via `toast.error` with a Retry action (never a field error).
   import Button from '@aziontech/webkit/button'
   import FieldCheckbox from '@aziontech/webkit/field-checkbox'
   import FieldCheckboxBlock from '@aziontech/webkit/field-checkbox-block'
@@ -59,11 +28,8 @@
   const route = useRoute()
   const router = useRouter()
 
-  // The email carried over from the login flow (falls back to a placeholder).
   const userEmail = computed(() => route.query.email || 'myemail@azion.com')
 
-  // --- Field option models -------------------------------------------------
-  // Git account scopes the user can deploy from (the connected GitHub accounts).
   const scopes = [
     { label: 'gab-az', value: 'gab-az' },
     { label: 'azion-tech', value: 'azion-tech' },
@@ -71,8 +37,6 @@
   ]
   const scopeLabel = (value) => scopes.find((option) => option.value === value)?.label ?? ''
 
-  // Deployment type — the RADIO BLOCK group (rich options with a description). It
-  // starts empty on purpose, to demonstrate the amber "required" group feedback.
   const deploymentTypes = [
     {
       value: 'static',
@@ -92,14 +56,12 @@
     }
   ]
 
-  // Runtime — the compact inline RADIO group (label only, laid out in a row).
   const runtimes = [
     { value: 'node18', label: 'Node.js 18' },
     { value: 'node20', label: 'Node.js 20 (LTS)' },
     { value: 'bun', label: 'Bun 1.x' }
   ]
 
-  // Edge regions — the MultiSelect (optional, many values).
   const regionOptions = [
     { label: 'US East', value: 'us-east' },
     { label: 'US West', value: 'us-west' },
@@ -112,73 +74,51 @@
       .map((value) => regionOptions.find((option) => option.value === value)?.label ?? value)
       .join(', ')
 
-  // --- Form state ----------------------------------------------------------
   const form = reactive({
-    // Import from Git
     scope: 'gab-az',
     repoName: 'nuxt-ecommerce',
     repoPrivate: true,
-    // Template Settings
     accessToken: '',
     revalidationSecret: '',
     storeDomain: '',
-    // Deployment
-    deploymentType: '', // radio block — starts empty (required)
-    runtime: 'node20', // radio inline — preselected
-    regions: ['us-east'], // multi-select — optional
-    // Build & Runtime
-    buildCommand: '', // input-group — required
-    deployKey: '', // password — required + min length
-    buildNotes: '', // textarea — optional
-    // Notifications & Alerts
-    alertPhone: '', // phone — required + min length
-    emailNotifications: true, // switch block
-    slackAlerts: false, // switch block
-    deployPreviews: true, // switch inline
-    // Edge features
-    edgeCaching: true, // checkbox block
-    http3: false, // checkbox block
-    waf: false, // checkbox block
-    // Confirmation
-    acceptDeploy: false // checkbox — required (must be checked)
+    deploymentType: '',
+    runtime: 'node20',
+    regions: ['us-east'],
+    buildCommand: '',
+    deployKey: '',
+    buildNotes: '',
+    alertPhone: '',
+    emailNotifications: true,
+    slackAlerts: false,
+    deployPreviews: true,
+    edgeCaching: true,
+    http3: false,
+    waf: false,
+    acceptDeploy: false
   })
 
-  // Flipped on the first submit attempt. Before it, every field is neutral (state
-  // 1); after it, the empty/invalid feedback below goes live and tracks edits.
   const submitted = ref(false)
 
-  // One flag locks the whole scope while the request is in flight.
   const submitting = ref(false)
 
-  // The leave guard's trigger (ui/UnsavedChangesGuard.vue): dirty while the form diverges
-  // from the state it opened on. `commit` re-snapshots it on the way OUT of a successful
-  // submit — this page's own navigation must not be stopped by the guard that exists to
-  // protect the input that submit just consumed.
   const { dirty, commit } = useBaseline(form)
 
-  // --- Field-level validity ------------------------------------------------
-  // "empty" (required, missing a value) vs "invalid" (filled, wrong format) are
-  // deliberately separate — they drive different colours (amber vs red).
   const scopeEmpty = computed(() => !form.scope)
   const repoEmpty = computed(() => !form.repoName.trim())
   const tokenEmpty = computed(() => !form.accessToken.trim())
-  // Store Domain is optional, but if filled it must be a URL — a content error.
   const domainInvalid = computed(
     () => form.storeDomain.trim() !== '' && !/^https?:\/\/.+\..+/.test(form.storeDomain.trim())
   )
   const deploymentTypeEmpty = computed(() => !form.deploymentType)
   const buildCommandEmpty = computed(() => !form.buildCommand.trim())
   const deployKeyEmpty = computed(() => !form.deployKey)
-  // Deploy Key is a secret: filled but shorter than 8 chars is invalid content.
   const deployKeyInvalid = computed(() => form.deployKey.length > 0 && form.deployKey.length < 8)
   const phoneEmpty = computed(() => !form.alertPhone.trim())
-  // A filled phone with fewer than 8 digits is invalid content (not absence).
   const phoneInvalid = computed(
     () => form.alertPhone.trim() !== '' && form.alertPhone.replace(/\D/g, '').length < 8
   )
   const acceptEmpty = computed(() => !form.acceptDeploy)
 
-  // Visible feedback = only after a submit attempt (states 2 and 3).
   const repoWarning = computed(() => submitted.value && repoEmpty.value)
   const tokenWarning = computed(() => submitted.value && tokenEmpty.value)
   const domainError = computed(() => submitted.value && domainInvalid.value)
@@ -206,10 +146,8 @@
   )
 
   const submit = async () => {
-    if (submitting.value) return // re-entrancy lock
+    if (submitting.value) return
 
-    // Reveal validation feedback on the fields themselves (amber/red), then stop
-    // if anything is wrong — no summary, no toast for field errors.
     submitted.value = true
     if (!isValid.value) return
 
@@ -217,16 +155,15 @@
     try {
       await new Promise((resolve) => setTimeout(resolve, 900))
       toast.success(`Deploying "${form.repoName}" from ${scopeLabel(form.scope)}.`)
-      commit() // the submit landed — the leave guard stands down
+      commit()
       router.push({ path: '/forms', query: { email: userEmail.value } })
     } catch (error) {
-      // Request-level failure → toast with a way to recover. Never silent.
       toast.error('Could not start the deployment.', {
         description: error?.message ?? 'Check your connection and try again.',
         action: { label: 'Retry', onClick: () => submit() }
       })
     } finally {
-      submitting.value = false // release on success AND failure
+      submitting.value = false
     }
   }
 </script>
@@ -245,9 +182,6 @@
       novalidate
       @submit.prevent="submit"
     >
-      <!-- Scrollable form body. No `gap`: every band below owns its own top space
-           via `.layout-section-start` (= --layout-boundary-start, the same step the
-           boundary puts above the first band). -->
       <div class="layout-column-form layout-boundary flex flex-1 flex-col">
         <PageHeading
           title-id="template-settings-title"
@@ -255,18 +189,13 @@
           description="Configure your Git repository to integrate your codebase and automate deployments directly from your version control system."
         />
 
-        <!-- One flag locks every control while the request is in flight. -->
         <fieldset
           class="layout-section-start mx-0 flex min-w-0 flex-col border-0 p-0"
           :disabled="submitting"
         >
           <legend class="sr-only">Template settings</legend>
 
-          <!-- Repository row — two Fields side by side (Approach B, separated). -->
           <div class="grid grid-cols-1 items-start gap-(--spacing-lg) sm:grid-cols-2">
-            <!-- Scope — composed Select field: the Label targets the TRIGGER.
-                 (Select has no amber state; Scope is preselected, so state 2 does
-                 not apply — the required tag on the label carries the intent.) -->
             <div class="flex w-full flex-col gap-(--spacing-xs)">
               <Label
                 for="tpl-scope"
@@ -300,9 +229,6 @@
               </Select>
             </div>
 
-            <!-- Private Repository Name — value + inline on/off Switch. The Label
-                 is rendered here (always required); the wrapper gets no `label`,
-                 so its amber `:required` only fires after an empty submit. -->
             <div class="flex w-full flex-col gap-(--spacing-xs)">
               <Label
                 for="tpl-repo-name"
@@ -321,12 +247,9 @@
             </div>
           </div>
 
-          <!-- Sub-section: Template Settings -->
           <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
             <h2 class="text-heading-xs text-(--text-default)">Template Settings</h2>
 
-            <!-- Required credential: label required always; amber only after an
-                 empty submit (state 2). -->
             <div class="flex w-full flex-col gap-(--spacing-xs)">
               <Label
                 for="tpl-access-token"
@@ -356,7 +279,6 @@
               </FieldText>
             </div>
 
-            <!-- Optional credential — no required tag, no feedback. -->
             <FieldText
               v-model="form.revalidationSecret"
               input-id="tpl-revalidation-secret"
@@ -375,8 +297,6 @@
               </template>
             </FieldText>
 
-            <!-- Optional but format-validated: filled with a bad URL → red
-                 (state 3, invalid content — distinct from empty). -->
             <FieldText
               v-model="form.storeDomain"
               input-id="tpl-store-domain"
@@ -407,13 +327,9 @@
             </FieldText>
           </section>
 
-          <!-- Sub-section: Deployment — the radio family + MultiSelect. -->
           <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
             <h2 class="text-heading-xs text-(--text-default)">Deployment</h2>
 
-            <!-- Deployment type — RADIO BLOCK group. A group's accessible name is
-                 a <fieldset>/<legend>; the visible caption reuses <Label required>.
-                 It starts empty, so the amber group HelperText appears on submit. -->
             <fieldset class="m-0 flex w-full flex-col gap-(--spacing-xs) border-0 p-0">
               <legend class="mb-(--spacing-xs) p-0">
                 <Label required>Deployment type</Label>
@@ -438,7 +354,6 @@
               />
             </fieldset>
 
-            <!-- Runtime — compact inline RADIO group (label only, in a row). -->
             <fieldset class="m-0 flex w-full flex-col gap-(--spacing-xs) border-0 p-0">
               <legend class="mb-(--spacing-xs) p-0">
                 <Label>Runtime</Label>
@@ -457,7 +372,6 @@
               </div>
             </fieldset>
 
-            <!-- Edge regions — MultiSelect (optional). Label targets the trigger. -->
             <div class="flex w-full flex-col gap-(--spacing-xs)">
               <Label for="tpl-regions">Edge regions</Label>
               <MultiSelect
@@ -482,12 +396,9 @@
             </div>
           </section>
 
-          <!-- Sub-section: Build & Runtime — input-group, password, textarea. -->
           <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
             <h2 class="text-heading-xs text-(--text-default)">Build &amp; Runtime</h2>
 
-            <!-- Build command — FieldInputGroup with a leading addon. Required:
-                 amber only after an empty submit. -->
             <div class="flex w-full flex-col gap-(--spacing-xs)">
               <Label
                 for="tpl-build-command"
@@ -513,8 +424,6 @@
               </FieldInputGroup>
             </div>
 
-            <!-- Deploy Key — FieldPassword (toggleable). Required (amber) when
-                 empty; invalid (red) when filled but shorter than 8 chars. -->
             <div class="flex w-full flex-col gap-(--spacing-xs)">
               <Label
                 for="tpl-deploy-key"
@@ -540,7 +449,6 @@
               />
             </div>
 
-            <!-- Build notes — FieldTextarea (optional, resizable). -->
             <FieldTextarea
               v-model="form.buildNotes"
               input-id="tpl-build-notes"
@@ -552,12 +460,9 @@
             />
           </section>
 
-          <!-- Sub-section: Notifications & Alerts — phone + switch family. -->
           <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
             <h2 class="text-heading-xs text-(--text-default)">Notifications &amp; Alerts</h2>
 
-            <!-- Alert phone — FieldPhoneNumber. Required (amber) when empty;
-                 invalid (red) when filled with too few digits. -->
             <div class="flex w-full flex-col gap-(--spacing-xs)">
               <Label
                 for="tpl-alert-phone"
@@ -581,7 +486,6 @@
               />
             </div>
 
-            <!-- Switch BLOCK group — bordered rows with label + description. -->
             <div class="flex flex-col gap-(--spacing-sm)">
               <FieldSwitchBlock
                 v-model="form.emailNotifications"
@@ -597,7 +501,6 @@
               />
             </div>
 
-            <!-- Inline SWITCH — compact single row. -->
             <FieldSwitch
               v-model="form.deployPreviews"
               label="Deploy previews"
@@ -606,7 +509,6 @@
             />
           </section>
 
-          <!-- Sub-section: Edge features — the checkbox BLOCK family. -->
           <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
             <h2 class="text-heading-xs text-(--text-default)">Edge features</h2>
 
@@ -632,9 +534,6 @@
             </div>
           </section>
 
-          <!-- Confirmation — a single inline FieldCheckbox that must be checked.
-               Required (amber tag on its label) only after submit; the group-level
-               HelperText spells out the requirement. -->
           <div class="layout-section-start flex flex-col gap-(--spacing-xs)">
             <FieldCheckbox
               v-model="form.acceptDeploy"
@@ -651,8 +550,6 @@
             />
           </div>
 
-          <!-- A single button to simulate the submit. The confirmation above gates
-               it, so the two are one action group, not two bands. -->
           <div class="layout-group-start flex justify-end">
             <Button
               label="Deploy"

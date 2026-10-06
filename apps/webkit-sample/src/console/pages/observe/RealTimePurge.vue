@@ -1,19 +1,4 @@
 <script setup>
-  // Real-Time Purge — the Azion Console "Real-Time Purge" module. The only page in
-  // the Observe area that is neither a list nor a dashboard: purging is an ACTION,
-  // taken once, on arguments you type. There is nothing to browse, so there is no
-  // table, no search and no filter bar — a controls row here would be an empty
-  // container.
-  //
-  // It is a create-flow shape rather than a settings shape: the FORM measure
-  // (`.layout-column-form`), one card of fields, and a sticky footer holding the one
-  // destructive action. That footer is where Purge lives rather than beside the
-  // fields, because the button is the point of the page and it must stay reachable
-  // while a long argument list scrolls.
-  //
-  // WHAT MAKES IT DIFFERENT FROM EVERY OTHER FORM HERE: the action is irreversible
-  // and account-wide, so it confirms before it runs (a Dialog naming what will be
-  // purged), and the destructive button is `severity="danger"`, not primary.
   import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
   import Dialog from '@aziontech/webkit/dialog'
@@ -26,9 +11,6 @@
   import PageHeading from '../../components/page/PageHeading.vue'
   import AppLayout from '../../components/shell/AppLayout.vue'
 
-  // The three things Azion can purge, and what each one takes. The HELP text is per
-  // type because the argument format changes with it — a URL list and a cache-key
-  // list look nothing alike, and a shared placeholder would be wrong for two of three.
   const PURGE_TYPES = [
     {
       value: 'url',
@@ -49,7 +31,7 @@
       label: 'Wildcard',
       description: 'Purge everything matching a pattern. One expression only.',
       placeholder: 'www.example.com/images/*',
-      hint: 'A single expression. A wildcard purge cannot be undone or narrowed after it runs.'
+      hint: 'A single expression that cannot be undone or narrowed after the purge runs.'
     }
   ]
 
@@ -60,8 +42,6 @@
 
   const selected = computed(() => PURGE_TYPES.find((entry) => entry.value === type.value))
 
-  // The lines that will actually be sent — blank lines and stray whitespace dropped,
-  // so the confirmation counts what the request counts rather than what was typed.
   const entries = computed(() =>
     args.value
       .split('\n')
@@ -71,8 +51,6 @@
 
   const canPurge = computed(() => entries.value.length > 0)
 
-  // The count is what the confirmation leads with: "Purge 14 URLs" is a decision;
-  // "Are you sure?" is not.
   const summary = computed(() => {
     const count = entries.value.length
     const noun = selected.value.label.toLowerCase()
@@ -98,8 +76,6 @@
     :breadcrumb="[{ label: 'Real-Time Purge' }]"
     :padded="false"
   >
-    <!-- The form measure, not the data one: this page is a single stacked column of
-         fields, and past ~1200px the extra width would land inside the controls. -->
     <div class="flex min-h-full min-w-0 flex-col">
       <div class="layout-column-form layout-boundary flex min-w-0 flex-1 flex-col">
         <PageHeading
@@ -133,9 +109,6 @@
                     </div>
                   </fieldset>
 
-                  <!-- Keyed on the type so switching it re-renders the field: the
-                       placeholder and the hint both change with the type, and a
-                       re-used node keeps the old ones until the next keystroke. -->
                   <FieldTextarea
                     :key="type"
                     v-model="args"
@@ -151,9 +124,6 @@
         </section>
       </div>
 
-      <!-- The sticky action bar. It carries the same column class and the inline half
-           of the boundary as the body above it, so its button sits on the same axis as
-           the fields it acts on rather than 24px inside them. -->
       <footer
         class="sticky bottom-0 z-10 border-t border-(--border-default) bg-(--bg-canvas) py-(--spacing-sm)"
       >
@@ -171,9 +141,6 @@
       </footer>
     </div>
 
-    <!-- Confirm before an irreversible, account-wide action. The dialog names WHAT
-         will be purged and HOW MUCH, so the decision is made on the numbers rather
-         than on a generic "are you sure". -->
     <Dialog
       v-model:open="confirming"
       title="Purge cached content?"

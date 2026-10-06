@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
   import CopyButton from '@aziontech/webkit/copy-button'
@@ -13,21 +13,25 @@
   import ResourceLink from '../resource/ResourceLink.vue'
   import SummaryBand from '../resource/SummaryBand.vue'
 
-  const props = defineProps({
-    /** The invocation being read — an entry of `functionRuns`. */
-    run: { type: Object, required: true },
-    /** The recent invocations the picker offers — `{ id, status, startedAt }[]`. */
-    runs: { type: Array, default: () => [] },
-    /** The function every run belongs to — `{ id, name, runtime, icon }`. */
-    fn: { type: Object, required: true },
-    /** Carried into the function link so the demo keeps the signed-in email. */
-    email: { type: String, default: '' }
+  interface Props {
+    run: Record<string, unknown>
+    runs?: unknown[]
+    fn: Record<string, unknown>
+    email?: string
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    runs: () => [],
+    email: ''
   })
 
-  /** The invocation the page is showing, by id. */
   const runId = defineModel('runId', { type: String, default: '' })
 
-  const emit = defineEmits(['replay', 'logs', 'settings'])
+  const emit = defineEmits<{
+    replay: []
+    logs: []
+    settings: []
+  }>()
 
   const SEVERITY = { Completed: 'success', Failed: 'danger', Running: 'warning' }
   const severity = computed(() => SEVERITY[props.run.status] ?? 'neutral')
@@ -63,7 +67,7 @@
         <div class="flex min-w-0 flex-1 basis-(--container-2xs) items-center gap-(--spacing-xs)">
           <i
             :class="fn.icon"
-            class="shrink-0 text-[1.15em] text-(--text-muted)"
+            class="shrink-0 text-body-lg text-(--text-muted)"
             aria-hidden="true"
           />
           <ResourceLink

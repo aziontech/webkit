@@ -1,36 +1,33 @@
-<script setup>
-  // Provisioning progress for a "create resource" flow — the block that replaces
-  // the form once it is submitted, modeled on the DeploymentFlow state machine.
-  // Steps complete one at a time (pending → active spinner → done check); when the
-  // last one settles the card emits `finished`, and the page toasts + navigates.
+<script setup lang="ts">
   import CardBox from '@aziontech/webkit/card-box'
   import Item from '@aziontech/webkit/item'
   import Spinner from '@aziontech/webkit/spinner'
   import Tag from '@aziontech/webkit/tag'
   import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 
-  const props = defineProps({
-    // Heading of the provisioning card.
-    title: { type: String, default: 'Creating application' },
-    // Ordered step labels; each completes in turn.
-    steps: {
-      type: Array,
-      default: () => [
-        'Validating configuration',
-        'Creating application',
-        'Applying delivery settings',
-        'Configuring origin',
-        'Setting cache expiration policies',
-        'Finalizing'
-      ]
-    },
-    // Milliseconds each step stays active before the next begins.
-    stepDuration: { type: Number, default: 650 }
+  interface Props {
+    title?: string
+    steps?: unknown[]
+    stepDuration?: number
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    title: 'Creating application',
+    steps: () => [
+      'Validating configuration',
+      'Creating application',
+      'Applying delivery settings',
+      'Configuring origin',
+      'Setting cache expiration policies',
+      'Finalizing'
+    ],
+    stepDuration: 650
   })
 
-  const emit = defineEmits(['finished'])
+  const emit = defineEmits<{
+    finished: []
+  }>()
 
-  // Index of the currently-active step; `done` flips true once all complete.
   const current = ref(0)
   const done = ref(false)
   const elapsed = ref(0)
@@ -57,7 +54,6 @@
       after(props.stepDuration, advance)
       return
     }
-    // Last step: let it finish, settle to "Completed", then hand off.
     after(props.stepDuration, () => {
       done.value = true
       if (tick) clearInterval(tick)
@@ -113,7 +109,7 @@
               />
               <i
                 v-else-if="stepState(index) === 'done'"
-                class="pi pi-check-circle text-[16px] leading-none text-(--success)"
+                class="pi pi-check-circle text-body-md leading-none text-(--success)"
                 aria-hidden="true"
               />
               <span

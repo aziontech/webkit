@@ -1,177 +1,32 @@
-<script setup>
-  // THE SAVE BAR. One bar per settings page, for the whole page — the single commit
-  // point every internal settings surface in the console uses.
-  //
-  // ── WHY ONE BAR AND NOT A SAVE PER BAND ──
-  //
-  // A settings page used to give each band its own footer Save, each with its own
-  // submitting flag and its own dirty check. Every one of them was correct in isolation
-  // and wrong together: the reader edits a field in one band and a switch in another, and
-  // has to notice which of the two footers belongs to which edit, then press both. Worse,
-  // half the page can be saved and half not — a settings screen with no single answer to
-  // "is what I see what is stored".
-  //
-  // The bands of a settings page describe ONE record, so they commit as one. The page
-  // keeps one `saving` flag, one baseline, one Save.
-  //
-  // ── WHY IT MOUNTS ON THE FIRST EDIT ──
-  //
-  // At rest there is nothing to commit and nothing to discard, so a bar sitting there
-  // permanently is a control that does nothing, occupying the bottom of every settings
-  // screen and covering the last row of content. It arrives on the first real edit
-  // (`dirty`) and leaves when the save lands — which is also the page's clearest signal
-  // that there ARE unsaved changes.
-  //
-  // Discard is not optional: a page-level commit owes a way back that is not undoing each
-  // field by hand.
-  //
-  // ── WHY IT FLOATS, AND IS NOT A FULL-WIDTH BAND ──
-  //
-  // It used to be a full-width band: the page's own column class (`layout-column-form`)
-  // plus the page's own inset, so the buttons landed on the same right edge as the
-  // content above them. That only works while every surface that raises the bar has the
-  // SAME measure — and they do not. An application's settings tab is the form measure, a
-  // detail page is the data measure, the account's settings is a third; the bar had to be
-  // told which, could not be, and so was hard right of one page's content and floating
-  // inside another's. One bar, three widths, none of them reliably correct.
-  //
-  // A floating bar has no measure to get wrong. It is sized by ITS OWN CONTENT, centred in
-  // whatever it is dropped into, and lifted off the bottom edge — so it belongs to the
-  // VIEWPORT rather than to the column, which is what it always actually was.
-  //
-  // That also retires the gradient. The old band had to fade, because a hard edge across
-  // the full width sliced the last row mid-glyph at the same y at every scroll position.
-  // A floating card has edges on all four sides by design: it reads as a thing laid OVER
-  // the page (`--bg-surface-raised` + a border + a shadow, the console's one raised
-  // plane), so the rows passing beside and under it are simply the page continuing.
-  //
-  // ── ONE PLACEMENT, `sticky bottom-0` ON A ZERO-HEIGHT STRIP, AND WHY IT NEEDS NO PROP ──
-  //
-  // The console mounts this bar in three structurally different places, and `sticky`
-  // is correct in all of them without being told which:
-  //
-  //   inside the page's own scroll region (an application's Main Settings, a zone's) —
-  //     the scroll region is the scrollport, so the bar pins to the bottom of the visible
-  //     area and the content scrolls under it.
-  //   as a sibling of a scroll region in a flex column (the account's settings, a
-  //     function's) — it has no scrolling ancestor of its own, so sticky resolves to
-  //     in-flow at the bottom of the column.
-  //   as a sibling of a full-height `main` inside the shell's scroll container (a
-  //     workload's Settings tab) — the bar's natural position is one bar-height BELOW the
-  //     fold, and sticky is what pulls it back onto the screen.
-  //
-  // That third case is why this used to take a `kind` prop and why the prop was wrong: it
-  // offered `shrink-0` for "the bar is a sibling, not inside the scroll region", which is
-  // true of both the second and the third case — and in the third one `shrink-0` left the
-  // bar sitting at y=900 in a 900px viewport, present in the DOM, mounted on the right
-  // edit, and never once visible. Measured, not eyeballed. One class that is right
-  // everywhere beats a prop whose two answers each cover half the cases.
-  //
-  // The strip is `h-0` and the card is absolutely positioned off its bottom edge, because
-  // in the second case — sticky with no scrolling ancestor — a strip with HEIGHT is laid
-  // out, not overlaid: it takes a band of the flex column and the content above it shrinks
-  // by exactly the bar's height (measured on a function's Arguments tab: the editor
-  // reflowed and the bar sat in its own reserved strip below the page). That contradicts
-  // the whole point of a floating card, and it made the bar look like two different
-  // components depending on which page raised it. At zero height it contributes no layout
-  // in ANY of the three cases, so it always FLOATS over the content, and `sticky` still
-  // does the one job left: keep that bottom edge on screen.
-  //
-  // ── WHY THE LEAVE GUARD LIVES HERE ──
-  //
-  // The bar is already the page's answer to "is there something uncommitted": it knows
-  // `dirty`, it knows `saving`, and it owns both ways out of that state. Every settings
-  // surface in the console mounts it with the same four bindings, so mounting the guard
-  // (ui/UnsavedChangesGuard.vue) from inside the bar gives all of them the friction with no
-  // call-site change — and makes it impossible for a settings page to mount the bar and
-  // forget the guard, which is the failure mode a per-page `onBeforeRouteLeave` ships on
-  // its first copy-paste.
-  //
-  // It passes `savable`: this page edits a record that already exists, so committing it is
-  // a legitimate one-click way to resolve a navigation. A create page's commit CREATES
-  // something, which is why the guard does not offer it there.
+<script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import { nextTick, onScopeDispose, ref, watch } from 'vue'
 
   import UnsavedChangesGuard from './UnsavedChangesGuard.vue'
 
-  defineProps({
-    /** True while the page has unsaved edits — what brings the bar in. */
-    dirty: { type: Boolean, default: false },
-    /** True while the commit is in flight: locks Discard, spins Save. */
-    saving: { type: Boolean, default: false },
-    /**
-     * What this bar commits, in the reader's words ("Rule order changed").
-     *
-     * Worth setting on any page where more than one surface can raise a bar in this
-     * same position — a tabbed detail page. Two identical bars that save two different
-     * things is how a Discard ends up applied to the wrong edit. It defaults to the
-     * generic sentence rather than to nothing: a bar that appears with two buttons and
-     * no words leaves the reader to infer both what changed and what pressing either
-     * one will do.
-     */
-    label: { type: String, default: 'You have unsaved changes.' },
-    /**
-     * What SAVING does, one clause, present tense ("Applies the new order to every
-     * request this application handles").
-     *
-     * The label says what CHANGED; this says what happens NEXT, which is the question a
-     * commit bar is actually asked. Optional — a page with nothing specific to promise
-     * leaves it off rather than padding the bar with a restatement of its own buttons.
-     */
-    hint: { type: String, default: '' },
-    /**
-     * Whether this bar also guards ROUTE leaves. Off when the page mounts its own guard
-     * for a different boundary (a tab switch) — two guards on one navigation stack two
-     * dialogs.
-     */
-    routeGuard: { type: Boolean, default: true }
+  interface Props {
+    dirty?: boolean
+    saving?: boolean
+    label?: string
+    hint?: string
+    routeGuard?: boolean
+  }
+
+  withDefaults(defineProps<Props>(), {
+    dirty: false,
+    saving: false,
+    label: 'You have unsaved changes.',
+    hint: '',
+    routeGuard: true
   })
 
-  const emit = defineEmits(['save', 'discard'])
+  const emit = defineEmits<{
+    save: []
+    discard: []
+  }>()
 
-  // ── WHAT THE BAR COVERS, AND GIVING IT BACK ───────────────────────────────
-  //
-  // A floating card over a scroll region takes something from it: the rows under the
-  // card cannot be scrolled out from under it, because the region's scroll ENDS at its
-  // own bottom edge and the bar is parked there. Measured on an application's Main
-  // Settings and on a function's Arguments tab — at MAXIMUM scroll the last row was
-  // still behind the card — so the last field of a settings page was unreachable for
-  // exactly as long as there were unsaved changes, which is whenever the reader is
-  // working. The bar has to hand that band back.
-  //
-  // IT GIVES BACK ITS OWN STRIP, not padding on somebody else's box. Padding the
-  // scrollport is the obvious move and it is wrong: the strip is `sticky bottom-0`
-  // INSIDE that port, so shrinking the port's content box lifts the CARD by the same
-  // amount instead of lowering the content — measured, the bar left the bottom edge,
-  // floated 90px up, and the last row was still under it.
-  //
-  // A strip with real height is the opposite. It is the last thing in the column, so
-  // either the page grows by the card's footprint (a content-sized column: the
-  // scrollport gains exactly that much scroll) or a scrolling sibling gives up that
-  // much height (a viewport-sized column: the region ends where the bar begins, and
-  // gains the same scroll). Both readings end with every row reachable and the card
-  // still pinned to the bottom edge. `shrink-0` is what makes the second one true —
-  // the card is absolutely positioned, so the strip has no content of its own and a
-  // flex column that is already full will otherwise shrink it straight back to zero.
-  //
-  // WHEN THE STRIP STAYS AT ZERO. In a column whose height is the viewport's and whose
-  // flexible child does NOT scroll (a function's editor), the height buys nothing: the
-  // editor just loses 90px to a bar that was never in its way. So the reserve is
-  // applied and then CHECKED against the only thing it is for — how much scroll is
-  // reachable around it. No gain, no reserve.
-  //
-  // AND WHERE NO SIBLING CAN REACH — a function's Arguments pane scrolls several
-  // levels below a sibling, not beside one. The footprint is also published as
-  // `--save-bar-inset` on the document root so such a pane can add it to its own
-  // padding (see ../function/FunctionArgsForm.vue). `0rem` when there is no bar.
-  //
-  // `offsetHeight`, not `getBoundingClientRect()`: the bar arrives under a `scale-95`
-  // enter transition and a bounding rect includes that transform, so the first
-  // measurement would be 5% short of the height the bar settles at.
   const strip = ref(null)
   const shell = ref(null)
-  /** The height the strip holds for the card. 0 = the strip contributes no layout. */
   const reserved = ref(0)
   let observer = null
 
@@ -187,11 +42,6 @@
     return overflow === 'auto' || overflow === 'scroll'
   }
 
-  /**
-   * How much scroll is reachable around the strip: its own scrollport, plus any
-   * sibling that scrolls. One number, measured the same way before and after, so the
-   * question the reserve has to answer ("did this buy anything?") has one answer.
-   */
   const reachableScroll = () => {
     const element = strip.value
     if (!element) return 0
@@ -211,16 +61,6 @@
     return total
   }
 
-  /**
-   * The gate has to see the page WITHOUT the reserve, and only when the footprint has
-   * actually changed.
-   *
-   * Both halves are load-bearing, and leaving either out looks like the reserve simply
-   * not working: the observer fires a second time (the reserve can change a scrollbar,
-   * which changes the card's width), that run measures a `before` that already
-   * CONTAINS the reserve, sees no further gain, and takes it back. So the reserve is
-   * cleared before the baseline is read, and an unchanged height does nothing at all.
-   */
   let measured = -1
 
   const measure = async (element) => {
@@ -239,8 +79,6 @@
     if (reachableScroll() <= before) reserved.value = 0
   }
 
-  // The ref goes null when the element is actually REMOVED, which is after the leave
-  // transition — so the space stays reserved for as long as the card is on screen.
   watch(shell, (element) => {
     observer?.disconnect()
     observer = null
@@ -257,53 +95,28 @@
 </script>
 
 <template>
-  <!-- The bar SCALES in, the way a toast does — it does not rise from the bottom edge.
-       A slide up from off-screen says the bar came from somewhere below the page; it did
-       not. It is a raised plane that appears over content already on screen the moment an
-       edit makes it real, which is the same arrival the console's toasts have, so it takes
-       the same shape: a small scale from `origin-bottom` (it is anchored to the bottom
-       edge, so that is the point it grows out of) plus opacity.
-       `transition-[scale,opacity]` names `scale` — NOT `transform` — because that is the
-       property Tailwind v4's `scale-*` utilities actually set, and naming the wrong one
-       animates nothing while still compiling. -->
   <Transition
-    enter-active-class="origin-bottom transition-[scale,opacity] duration-moderate-02 ease-expressive-entrance motion-reduce:transition-none"
-    enter-from-class="scale-95 opacity-0"
-    leave-active-class="origin-bottom transition-[scale,opacity] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
-    leave-to-class="scale-95 opacity-0"
+    enter-active-class="transition-[translate,opacity] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
+    enter-from-class="translate-y-2 opacity-0"
+    leave-active-class="transition-[translate,opacity] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
+    leave-to-class="translate-y-2 opacity-0"
   >
-    <!-- `pointer-events-none` on the strip, `auto` on the card: the strip spans the full
-         width so the card can be centred in it, and without this it would swallow clicks
-         on the rows either side of a bar that is only as wide as its own buttons. -->
     <footer
       v-if="dirty || saving"
       ref="strip"
-      class="pointer-events-none sticky bottom-0 z-10 h-0 shrink-0"
+      class="sticky bottom-0 z-10 h-0 shrink-0"
       :style="reserved ? { height: `${reserved}px` } : null"
     >
-      <!-- Anchored to the strip's bottom edge and growing UPWARD out of it (`absolute
-           bottom-0` on an auto-height box), which is what lets the strip itself be `h-0`
-           and still put the card above the fold rather than half off it. -->
       <div
         ref="shell"
-        class="absolute inset-x-0 bottom-0 flex justify-center px-(--spacing-md) pb-(--spacing-lg)"
+        class="absolute inset-x-0 bottom-0 border-t border-(--border-default) bg-(--bg-canvas) lg:h-14"
       >
         <div
-          class="pointer-events-auto flex max-w-[min(100%,var(--container-3xl))] items-center gap-(--spacing-xl) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised) py-(--spacing-sm) pr-(--spacing-sm) pl-(--spacing-lg) shadow-lg"
+          class="layout-boundary-inline flex min-w-0 flex-col gap-(--spacing-sm) py-(--spacing-sm) lg:h-full lg:flex-row lg:flex-wrap lg:items-center lg:justify-between lg:gap-x-(--spacing-xl) lg:py-0"
         >
-          <!-- THE FEEDBACK, on the left of the two buttons. It names WHAT is pending and
-             what saving will do, so two bars in the same position on two tabs are two
-             different sentences rather than one anonymous pair of buttons — and so the
-             reader is never asked to commit something the bar has not named.
-
-             The glyph is `aria-hidden`: it is a marker that this strip is telling them
-             something, and the sentence beside it already carries the meaning. Nothing
-             truncates — a commit bar that hides half of what it is about to do is worse
-             than a bar one line taller — so the text wraps and the buttons hold their
-             width (`shrink-0` on the group below). -->
           <div class="flex min-w-0 items-start gap-(--spacing-xs)">
             <i
-              class="pi pi-info-circle mt-[0.125rem] shrink-0 text-[0.875rem] text-(--text-muted)"
+              class="pi pi-info-circle mt-0.5 shrink-0 text-body-sm text-(--text-muted)"
               aria-hidden="true"
             />
             <p class="min-w-0 text-body-sm text-(--text-default)">
@@ -315,21 +128,21 @@
               >
             </p>
           </div>
-          <div class="flex shrink-0 items-center gap-(--spacing-sm)">
+          <div
+            class="flex flex-col-reverse gap-(--spacing-xs) lg:ml-auto lg:shrink-0 lg:flex-row lg:items-center lg:gap-(--spacing-sm)"
+          >
             <Button
               type="button"
               label="Discard"
               kind="outlined"
-              size="large"
+              size="medium"
               :disabled="saving"
               @click="emit('discard')"
             />
-            <!-- webkit Button renders a native type="button" and does not forward a `type`
-               prop, so the commit is driven from its click rather than from form submit. -->
             <Button
               label="Save"
               kind="primary"
-              size="large"
+              size="medium"
               :loading="saving"
               @click="emit('save')"
             />
@@ -339,8 +152,6 @@
     </footer>
   </Transition>
 
-  <!-- Sits OUTSIDE the bar's `v-if`: a Discard clears `dirty`, which takes the bar away
-       in the same tick the dialog still needs to finish its own leave animation. -->
   <UnsavedChangesGuard
     savable
     :route-guard="routeGuard"

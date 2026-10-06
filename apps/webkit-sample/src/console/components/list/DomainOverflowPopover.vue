@@ -1,18 +1,4 @@
-<script setup>
-  // The aliases behind a workload's primary domain: a "+N" tag that opens the full
-  // list, every line a link out to the domain.
-  //
-  // Its own component because the list owns STATE — the filter query, the paging
-  // window, and the reset of both on close — and a cell template rendered inside a
-  // `v-for` has nowhere to keep per-row state. Extracting it also means the Workloads
-  // cell reads as what it is (primary link · overflow · copy) instead of forty lines
-  // of panel.
-  //
-  // The list is deliberately NOT `flex flex-col`: a flex column under a max-height
-  // shrinks its items to fit, which collapsed 43 rows from 27px to 8px each, clipped
-  // every domain to a sliver of glyphs, and left `scrollHeight === clientHeight` so
-  // `overflow-auto` had nothing to scroll. Block layout lets the rows keep their
-  // height and the list actually overflow.
+<script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import InputText from '@aziontech/webkit/input-text'
   import Popover from '@aziontech/webkit/popover'
@@ -20,27 +6,22 @@
   import Tag from '@aziontech/webkit/tag'
   import { computed, onScopeDispose, ref, watch } from 'vue'
 
-  const props = defineProps({
-    /** Every domain on the workload, primary first. */
-    domains: { type: Array, default: () => [] },
-    /** The overflow count shown on the tag — everything after the primary. */
-    count: { type: Number, default: 0 }
+  interface Props {
+    domains?: unknown[]
+    count?: number
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    domains: () => [],
+    count: 0
   })
 
-  // Under this many, the eye beats the keyboard: a field would cost a row of height
-  // and save nobody a scroll. Above it, the list is longer than one panel.
   const SEARCH_THRESHOLD = 10
 
-  // One page of aliases. A workload can carry ~99 of them, and rendering all of them
-  // on open pays the full cost for a panel most readers scan the top of and close.
   const PAGE_SIZE = 10
 
-  // Long enough for the skeleton wire to read as the next page arriving rather than
-  // as a flicker. In the real console this is the request; here it stands in for one.
   const LOAD_LATENCY_MS = 420
 
-  // Deterministic widths, so the wire looks like a column of domain names instead of
-  // ten identical bars — and looks the same on every open.
   const WIRE_WIDTHS = ['92%', '74%', '86%', '68%', '90%', '78%', '84%', '70%', '88%', '76%']
 
   const open = ref(false)
@@ -62,12 +43,8 @@
 
   const remaining = computed(() => matches.value.length - visible.value.length)
 
-  // The last page is usually short — promising ten more when seven exist is a lie the
-  // reader catches one click later.
   const nextBatch = computed(() => Math.min(PAGE_SIZE, remaining.value))
 
-  // The header has to say what is RENDERED, not just what exists: a panel that reads
-  // "43 domains" over ten rows looks like a broken list, not a paged one.
   const summary = computed(() => {
     const total = props.domains.length
     if (remaining.value) {
@@ -93,9 +70,6 @@
     }, LOAD_LATENCY_MS)
   }
 
-  // A stale query behind a closed panel would make the next open look like a shorter
-  // list than the tag promises — and a stale window would make the second open start
-  // wherever the first one stopped.
   watch(open, (isOpen) => {
     if (isOpen) return
     query.value = ''
@@ -103,15 +77,11 @@
     cancelLoad()
   })
 
-  // Narrowing produces a different list, so it gets a fresh first page: keeping the
-  // old offset would show every match at once for a query that matches few.
   watch(query, () => {
     shown.value = PAGE_SIZE
     cancelLoad()
   })
 
-  // The panel can be torn down mid-load (row deleted, page left) — a timer that
-  // outlives it writes to a dead ref.
   onScopeDispose(cancelLoad)
 </script>
 
@@ -131,8 +101,6 @@
     </Popover.Trigger>
 
     <Popover.Content @click.stop>
-      <!-- Header and field stay OUT of the scroller, so neither scrolls away
-           after the first few of up to ~99 aliases. -->
       <div
         class="flex flex-col gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-sm) pb-(--spacing-xs) pt-(--spacing-sm)"
       >
@@ -155,15 +123,7 @@
         </InputText>
       </div>
 
-      <!-- `overscroll-contain`: without it, reaching either end chains the wheel to
-           the page, and the panel re-anchors to its trigger on page scroll — so the
-           popover slides out from under the pointer mid-scroll. -->
       <div class="max-h-(--container-xs) overflow-auto overscroll-contain p-(--spacing-xxs)">
-        <!-- Every alias opens, like the primary domain in the cell behind it, and
-             carries the same 12px `pi-external-link` mark. It keeps its OWN anchor
-             rather than composing ../resource/ResourceLink.vue: this is a menu row, so
-             the whole row — its padding and its hover surface — is the click target,
-             which an inline link inside it would not be. -->
         <a
           v-for="domain in visible"
           :key="domain"
@@ -180,14 +140,7 @@
           />
         </a>
 
-        <!-- The incoming page, wired: as many rows as are actually coming, in the
-             geometry of the rows above them, so the list grows in place instead of
-             jumping when they land. It sits at the end of the aliases while the footer
-             button below reports the same wait — the list shows WHAT is coming, the
-             button shows that it was asked for. -->
         <div v-if="loading">
-          <!-- `h-7` is the height a real row settles at (a 14px/1.375 line between two
-               `xxs` paddings), so the list does not jump when the links replace it. -->
           <div
             v-for="index in nextBatch"
             :key="index"
@@ -208,13 +161,6 @@
         </p>
       </div>
 
-      <!-- THE NEXT PAGE, asked for from the panel's FOOTER — not from a row at the end
-           of the list. A control that scrolls with the aliases reads as one more entry in
-           the list it is paging, and it scrolls out of reach the moment its page lands.
-           Fixed under the scroller it stays the one thing the panel offers, and it holds
-           its own busy state while the wire above stands in for the incoming rows — so
-           the press is answered in two places at once instead of removing the button the
-           reader just aimed at. -->
       <div
         v-if="remaining"
         class="border-t border-(--border-default) p-(--spacing-xxs)"
@@ -229,8 +175,6 @@
         />
       </div>
 
-      <!-- Announced, not just drawn: the wire is aria-hidden, so a screen reader is
-           otherwise told nothing between the click and the ten new links. -->
       <span
         class="sr-only"
         role="status"

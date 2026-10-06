@@ -1,17 +1,4 @@
-<script setup>
-  // Insert Row — adds a row to the selected SQL table, in a MEDIUM right Drawer.
-  //
-  // FIELDS ARE SEPARATED (./ui/FieldStack.vue, the Variables shape): one field per
-  // column, its `<Label for>` the column name in code type with the Postgres type beside
-  // it. Every value here is TYPED, and several of them are long — a URL, a JSON blob, a
-  // timestamp — so a 256px control pinned to the right of a description was the wrong
-  // half of the row to spend the width on.
-  //
-  // A primary-key integer column is auto-generated (disabled input, and the field says
-  // so); a column with a default is prefilled with it; everything else is optional and
-  // becomes NULL when left blank. Validation is minimal (values are coerced on insert);
-  // one `submitting` flag locks the scope; on success it emits the entered values and
-  // the parent builds + appends the row.
+<script setup lang="ts">
   import InputText from '@aziontech/webkit/input-text'
   import { toast } from '@aziontech/webkit/toast'
   import { reactive, ref, watch } from 'vue'
@@ -22,20 +9,23 @@
   import { isIntegerType } from '../../lib/format/postgres-types'
 
   const open = defineModel('open', { type: Boolean, default: false })
-  const props = defineProps({
-    // The table being inserted into: { name, columns: [{ name, type, primaryKey, defaultValue }] }.
-    table: { type: Object, default: null }
+  interface Props {
+    table?: Record<string, unknown>
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    table: null
   })
-  const emit = defineEmits(['created'])
+  const emit = defineEmits<{
+    created: [value: unknown]
+  }>()
 
   const columns = () => props.table?.columns ?? []
-  // A primary-key integer column is generated on insert (not typed by the user).
   const isAuto = (column) => column.primaryKey && isIntegerType(column.type)
 
   const form = reactive({})
   const submitting = ref(false)
 
-  // Seed the form each time the drawer opens: defaults prefilled, auto columns blank.
   watch(open, (isOpen) => {
     if (!isOpen) return
     for (const key of Object.keys(form)) delete form[key]
@@ -82,12 +72,9 @@
       stacked
       :divided="false"
       title="Values"
-      hint="One field per column, in the table's own order. A column the database fills in itself is shown but not editable, and an empty optional column is stored as NULL."
+      hint="One field per column, in the table's own order."
     >
       <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-        <!-- The LABEL is the column name, in code type, with its Postgres type beside it —
-             that pair IS the field's identity here, so it belongs in the label rather
-             than in a sentence next to it. -->
         <FieldStack
           v-for="column in columns()"
           :key="column.name"

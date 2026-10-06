@@ -1,66 +1,42 @@
-<script setup>
-  // THE ROW. One field inside a band's card — the unit every create page and every
-  // in-resource drawer is built from, so a form is a list of these and nothing else.
-  //
-  // In an ItemGroup the ROW IS THE LABEL: the Item.Title names the field and the
-  // Item.Description carries its guidance, so there is no `<Label for>` and the
-  // control takes an `aria-label` instead. That is the whole reason this shape is
-  // compact — the name, the guidance and the control share one line's worth of
-  // vertical space instead of three.
-  //
-  // `kind` is about WHAT THE CONTROL NEEDS, and it is the only decision this
-  // component asks of a caller:
-  //
-  //   compact — the control is small and fixed (a Switch, a MiniButton). It sits hard
-  //     right at its natural size. Wrapping it would only push it away from the edge.
-  //   field   — the control is a field the reader types or picks in (InputText,
-  //     Select, InputNumber). It fills a cell capped at `--container-3xs`, so every
-  //     field on the page ends at the same x and the card reads as a column of
-  //     controls rather than a ragged edge.
-  //   wide    — the control cannot work in 256px: a textarea, a code block, a radio
-  //     group, an editor. The row STACKS — name and guidance above, control at the
-  //     full measure below — instead of squeezing it. This is what keeps the
-  //     ItemGroup anatomy usable for long-form fields rather than forcing a page to
-  //     abandon it the first time it needs a textarea.
-  //
-  // The message under the control is part of the row, not the caller's job: `field`
-  // and `wide` reserve a column for it so a HelperText appearing on a failed submit
-  // pushes nothing sideways. `kind` is what separates the amber prompt (you have not
-  // answered yet) from the red error (the answer cannot be accepted) — required is
-  // NOT an error, and the two are never both on for one field.
+<script setup lang="ts">
   import HelperText from '@aziontech/webkit/helper-text'
   import Item from '@aziontech/webkit/item'
   import { computed, useId } from 'vue'
 
-  const props = defineProps({
-    // The field's name. This IS the label — the control gets it as `aria-label`.
-    title: { type: String, default: '' },
-    // Guidance under the name. Use the `description` slot when it needs markup (a
-    // link, an inline code span).
-    description: { type: String, default: '' },
-    // How much room the control needs — see the note above.
-    kind: {
-      type: String,
-      default: 'field',
-      validator: (value) => ['compact', 'field', 'wide'].includes(value)
-    },
-    // The message under the control. Empty = nothing rendered.
-    message: { type: String, default: '' },
-    // `required` (amber: not answered yet) or `invalid` (red: cannot be accepted) or
-    // `helper` (neutral guidance that belongs under the control rather than beside
-    // the name — a format example, a live count).
-    messageKind: {
-      type: String,
-      default: 'helper',
-      validator: (value) => ['helper', 'required', 'invalid'].includes(value)
-    }
+  interface Props {
+    title?: string
+    description?: string
+    kind?: 'compact' | 'field' | 'wide'
+    message?: string
+    messageKind?: 'helper' | 'required' | 'invalid'
+    level?: 0 | 1 | 2
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    title: '',
+    description: '',
+    kind: 'field',
+    message: '',
+    messageKind: 'helper',
+    level: 0
   })
 
-  // Handed back through the default slot so the caller can point the control's
-  // `aria-describedby` at the message it is actually showing.
+  defineSlots<{
+    description(): unknown
+    default(props: { 'message-id': unknown }): unknown
+  }>()
+
   const messageId = useId()
 
   const stacked = computed(() => props.kind === 'wide')
+
+  const NESTED_CLASS =
+    'data-[level]:before:absolute data-[level]:before:inset-y-0 data-[level]:before:w-px data-[level]:before:bg-(--border-default) data-[level=1]:pl-[calc(var(--spacing-md)*2)]! data-[level=1]:before:left-[calc(var(--spacing-md)+var(--spacing-xxs))] data-[level=2]:pl-[calc(var(--spacing-md)*3)]! data-[level=2]:before:left-[calc(var(--spacing-md)*2+var(--spacing-xxs))]'
+
+  const rootClass = computed(
+    () =>
+      `${stacked.value ? 'flex-col items-stretch gap-(--spacing-sm)' : 'items-start'} ${NESTED_CLASS}`
+  )
 
   const actionsClass = computed(() => {
     if (props.kind === 'compact') return 'justify-end'
@@ -72,7 +48,8 @@
 <template>
   <Item
     size="small"
-    :class="stacked ? 'flex-col items-stretch gap-(--spacing-sm)' : 'items-start'"
+    :data-level="level || null"
+    :class="rootClass"
   >
     <Item.Content>
       <Item.Title>{{ title }}</Item.Title>
@@ -82,8 +59,6 @@
     </Item.Content>
 
     <Item.Actions :class="actionsClass">
-      <!-- `compact` passes the control straight through: a Switch pinned right needs
-           no column around it, and one would only unpin it. -->
       <slot
         v-if="kind === 'compact'"
         :message-id="message ? messageId : undefined"

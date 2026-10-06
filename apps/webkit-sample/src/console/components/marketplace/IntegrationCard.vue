@@ -1,40 +1,30 @@
-<script setup>
-  // Integration catalog card. One component, two anatomies driven by `featured`:
-  //
-  //  • featured=false → compact, horizontal: vendor mark on the left, title +
-  //    "by {vendor}" and description on the right, with the type Tag pinned
-  //    top-right. This is the dense grid card.
-  //  • featured=true  → spotlight, vertical & centered: a larger vendor mark on
-  //    top, then the centered title / vendor / description, a faint accent glow,
-  //    and a raised surface. This is the "Featured" row at the top of the panel.
-  //
-  // Both are clickable (button semantics) and emit `select`.
+<script setup lang="ts">
   import CardBox from '@aziontech/webkit/card-box'
   import AzionLogoMin from '@aziontech/webkit/svg/azion/min'
   import Tag from '@aziontech/webkit/tag'
 
-  defineProps({
-    title: { type: String, required: true },
-    description: { type: String, default: '' },
-    // Who publishes it, rendered as "by {vendor}". PASS `''` TO OMIT THE BYLINE: a
-    // framework starter is not published by anybody in the sense this line means — the
-    // row IS the framework — and sixteen rows each saying "by Azion" is a column of the
-    // same three words down the band.
-    vendor: { type: String, default: 'Azion' },
-    // Optional brand icon class (`ai-cor ai-*`). When empty, falls back to the
-    // Azion Marketplace vendor mark.
-    icon: { type: String, default: '' },
-    // What the MARK needs to survive the dark theme — the Next.js logo is a black disc
-    // that reads as a hole in the tile until it is inverted. Comes from the catalog
-    // (../../lib/data/frameworks.js → `DARK_INK_MARKS`); empty for every other mark.
-    markClass: { type: String, default: '' },
-    // Short type label shown in the corner Tag (e.g. "Integration").
-    badge: { type: String, default: 'Integration' },
-    // Switches the card anatomy: spotlight (true) vs. dense grid card (false).
-    featured: { type: Boolean, default: false }
+  interface Props {
+    title: string
+    description?: string
+    vendor?: string
+    icon?: string
+    markClass?: string
+    badge?: string
+    featured?: boolean
+  }
+
+  withDefaults(defineProps<Props>(), {
+    description: '',
+    vendor: 'Azion',
+    icon: '',
+    markClass: '',
+    badge: 'Integration',
+    featured: false
   })
 
-  const emit = defineEmits(['select'])
+  const emit = defineEmits<{
+    select: [event: Event]
+  }>()
 
   const activate = (event) => emit('select', event)
 </script>
@@ -52,7 +42,6 @@
     @keydown.space.prevent="activate"
   >
     <template #content>
-      <!-- Featured accent glow, faded in on hover, behind the content. -->
       <span
         v-if="featured"
         aria-hidden="true"
@@ -60,14 +49,6 @@
         style="background: radial-gradient(120% 90% at 50% 0%, var(--primary), transparent 62%)"
       />
 
-      <!-- Corner type Tag — ABSOLUTE only in the spotlight, where the content is a
-           centered column with room above it. In the dense anatomy it is a real flex
-           item of the row instead (below), because an absolute corner tag reserves its
-           room with a right padding on the row: `pr-(--spacing-xl)` is 24px, and no tag
-           in this catalog is that narrow, so any title long enough to reach the corner
-           ran UNDER it (measured with "Functions Starter Kit" + a "JavaScript" tag —
-           the vendor line was half-covered). A tag in the flow cannot be overlapped by
-           anything. -->
       <Tag
         v-if="featured && badge"
         class="absolute right-(--spacing-md) top-(--spacing-md) z-10"
@@ -76,7 +57,6 @@
         :label="badge"
       />
 
-      <!-- ── Spotlight anatomy: centered column ── -->
       <div
         v-if="featured"
         class="relative z-[1] flex flex-col items-center gap-(--spacing-md) px-(--spacing-sm) py-(--spacing-lg) text-center"
@@ -87,7 +67,7 @@
           <i
             v-if="icon"
             :class="[icon, markClass]"
-            class="text-[1.25rem] leading-none text-(--text-default)"
+            class="text-body-lg leading-none text-(--text-default)"
             aria-hidden="true"
           />
           <AzionLogoMin
@@ -109,7 +89,6 @@
         </p>
       </div>
 
-      <!-- ── Dense anatomy: logo left, text right ── -->
       <div
         v-else
         class="flex items-start gap-(--spacing-md)"
@@ -120,7 +99,7 @@
           <i
             v-if="icon"
             :class="[icon, markClass]"
-            class="text-[1.25rem] leading-none text-(--text-default)"
+            class="text-body-lg leading-none text-(--text-default)"
             aria-hidden="true"
           />
           <AzionLogoMin
@@ -142,8 +121,6 @@
             {{ description }}
           </p>
         </div>
-        <!-- The type Tag, in the flow: `shrink-0` so it keeps its width and the text
-             column wraps against it instead of under it. -->
         <Tag
           v-if="badge"
           class="shrink-0"

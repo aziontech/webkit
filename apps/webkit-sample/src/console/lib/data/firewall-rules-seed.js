@@ -1,11 +1,3 @@
-// The rules a seeded firewall is holding — the fixtures the Firewall → Rules Engine tab
-// opens on (../../pages/secure/panels/FirewallRulesEngine.vue).
-//
-// Separate from ./firewall-rules.js for the same reason the application's seed is separate
-// from its vocabulary: that file says what a firewall rule CAN be, this one is a handful of
-// rules that exist. The shape is the record the drawer reads and writes — criteria as the
-// structured model, behaviors carrying the argument their type declares — so a seeded rule
-// and one written in the drawer are the same thing.
 import { daysAgo } from '@shared/lib/dates'
 import { authorAt } from '@shared/lib/people'
 
@@ -50,14 +42,6 @@ const SEED = [
   }
 ]
 
-/**
- * The rules one firewall holds. Every seeded firewall opens on the same three — they are
- * fixtures, not per-record data — decorated with the roster every other list reads, so a
- * rule written here and one seeded weeks ago carry the same Last Modified block.
- *
- * @param {string} firewallId The firewall whose rules these are.
- * @returns {object[]} A fresh copy, so one firewall's reorder cannot move another's rows.
- */
 export const firewallRulesFor = (firewallId) =>
   SEED.map((rule, index) => {
     const person = authorAt(index)

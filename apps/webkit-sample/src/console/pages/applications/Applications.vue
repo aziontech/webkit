@@ -1,46 +1,10 @@
 <script setup>
-  // Applications list — the Azion Console "Applications" module. The app shell
-  // (single sidebar + GlobalHeader with the module breadcrumb) comes from AppLayout;
-  // this page renders only its content: a PAGE HEADING (the module name, one line of
-  // what it is, and the create action) over a CONTROLS HEADER (search, then the filter
-  // bar) over a data-driven <Table> whose row actions open a Dropdown menu. As a
-  // first-level module list it carries no navigation tabs.
-  //
-  // The heading is back at page level: the breadcrumb says where you are, the heading
-  // says what the page is, and the module's action sits with it — one fixed place above
-  // the list, rather than inside the row that narrows it
-  // (../../components/page/PageHeading.vue, ../../components/page/ControlsHeader.vue).
-  //
-  // Narrowing is the FILTER BUTTON (list/FilterButton.vue), not a generic
-  // field/operator/value builder. The COLUMNS decide the fields: every enumerable
-  // column becomes one field (Author, Infrastructure, Status) and the date column
-  // becomes a field of relative periods plus a Custom month grid (Last Modified); the
-  // free-text columns
-  // (Name, Repository, ID, Domain) are covered by the search field instead of one field
-  // each. The catalog those fields live in is `filterFields` below — the page declares
-  // them, the bar renders and applies them (see lib/filter-bar.js).
-  //
-  // This replaced a FILTER POPOVER that held one Select per column behind a single
-  // badged IconButton. Collapsing them there fixed the right
-  // problem — four selectors plus the search plus the module's action truncated every
-  // one of them at a laptop width — but paid for it by putting the applied state
-  // inside a closed panel: the badge said "2 filters", never which two, and never on
-  // what values. An applied chip says all three in the row itself — the field, its
-  // value, and a × that undoes exactly that one cut — and the button beside them carries
-  // a badge for the glance. What is NOT applied stays in the panel, one click away,
-  // instead of spending a pill on advertising itself.
-  //
-  // The table's own filter state still could not host these (its `#filters` band only
-  // renders once a filter exists, and `author` is not a column at all — it renders
-  // inside the Last Modified cell), so the bar's state pre-filters `:data` and the
-  // table sees only the rows that survive. The search field narrows further, through
-  // the table's own global filter (`v-model:globalFilter`).
   import CardBox from '@aziontech/webkit/card-box'
   import Dropdown from '@aziontech/webkit/dropdown'
   import IconButton from '@aziontech/webkit/icon-button'
   import InputText from '@aziontech/webkit/input-text'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import Table from '@aziontech/webkit/table'
+  import TableRoot from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -74,40 +38,21 @@
   import { useSampleMode } from '../../lib/state/sample-mode'
   import { tenancyRows } from '../../lib/state/tenancy-scope'
 
-  // The sample's EMPTY version: this module before it owns anything. The same block
-  // the /empty-states gallery reviews, rendered in the module's own page
-  // (../lib/sample-mode.js, ./ui/ProductFirstUse.vue).
   const { accountEmpty } = useSampleMode()
   const firstUse = productFirstUse('applications')
 
   const route = useRoute()
   const router = useRouter()
 
-  // The email carried over from the login flow (falls back to a placeholder).
   const userEmail = computed(() => route.query.email || 'myemail@azion.com')
 
-  // The framework preset → glyph + label map lives in src/lib/presets.js, shared
-  // with an application's Build tab so the two can never disagree about a preset.
-
-  // The application records that back the table (data-driven mode). The seed lives in
-  // src/lib/applications.js because the deployment history names the resource each
-  // deployment targeted and LINKS to `/applications/:id`
-  // (src/lib/deployment-history.js) — an id kept in a second file is a dead link
-  // waiting to happen. This page holds its own copy because it deletes rows.
   const applications = ref([...APPLICATIONS])
 
-  // Every row is stamped with the status of the deployment that last shipped it. An
-  // application has no status of its own (../../lib/data/applications.js), and the column
-  // has to HOLD the value rather than render it from the row: the table sorts on it, the
-  // filter matches on it and Download CSV serialises it, so a status that existed only
-  // inside the cell template would sort, narrow and export as nothing.
   const withDeploymentStatus = (application) => ({
     ...application,
     status: latestApplicationDeployment(application.id, application.name)?.status ?? ''
   })
 
-  // The column sorts, filters and exports the value it HOLDS, so the primary address is
-  // stamped on the row rather than picked inside the cell.
   const withDomains = (application) => {
     const custom = (application.customDomains ?? []).map((entry) => entry.domain)
     const domains = [...custom, application.domainName].filter(Boolean)
@@ -119,18 +64,11 @@
     }
   }
 
-  // Column model. `name` is the principal (emphasized) column; the trailing
-  // `actions` column (kind: 'action') is auto-pinned to the right edge.
   const columns = [
     { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, hideable: false },
     { accessorKey: 'repository', header: 'Repository', grow: 2 },
-    // `grow: 2`: the id is a 10-digit token and the cell also carries the copy
-    // button, so one share truncated it to six digits and an ellipsis.
     { accessorKey: 'id', header: 'ID', enableSorting: true, minWidth: FIT_COLUMN },
-    // Domain is shown in full (no truncation) — give it the widest flexible share.
     { accessorKey: 'domainName', header: 'Domain Name', grow: 3 },
-    // Status is the newest DEPLOYMENT's — a StatusIndicator, sized like the one in the
-    // Deployments module rather than as a chip column (lib/behavior/table-columns.js).
     { accessorKey: 'status', header: 'Status', enableSorting: true, minWidth: FIT_COLUMN },
     { accessorKey: 'author', header: 'Last Editor', enableSorting: true, minWidth: FIT_COLUMN },
     {
@@ -142,28 +80,12 @@
     { id: 'actions', kind: 'action', hideable: false }
   ]
 
-  // ── The filter catalog ────────────────────────────────────────────────────
-  // One field per enumerable column, declared in the order the COLUMNS read — which is
-  // also the order the chips sit in: an applied chip takes its catalog position, so
-  // its neighbours change as filters come and go but the order never contradicts the
-  // panel's (list/FilterButton.vue explains what that buys). Each field owns its own
-  // `match`, because only the page knows how a row answers for it (`author` is not
-  // even a column — it renders inside the Last Modified cell).
-  //
-  // Author options come from the data itself, so the field can never offer a person
-  // who has nothing in the list. Each carries that person's photo, so the filter
-  // identifies them the way the Last Modified cell does — by face first, name second.
   const authorOptions = [
     ...new Map(applications.value.map((app) => [app.author, app.authorAvatar]))
   ]
     .sort(([a], [b]) => a.localeCompare(b))
     .map(([author, avatar]) => ({ value: author, label: author, avatar }))
 
-  // Status options come from the data too, for the same reason: the deployment vocabulary
-  // has five words (lib/data/deployments.js) and this account's applications last shipped
-  // in two of them, so offering the other three would put rows in the panel that can only
-  // ever narrow the list to nothing. The catalog's order is kept — the words read in the
-  // same sequence here as they do in the Deployments module.
   const applicationStatuses = new Set(
     applications.value.map((app) => withDeploymentStatus(app).status)
   )
@@ -180,10 +102,6 @@
       match: (app, values) => values.includes(app.author)
     },
     {
-      // The DEPLOYMENT vocabulary, straight from the module that owns it
-      // (lib/data/deployments.js) — the same five words the Deployments list filters by,
-      // because it is the same fact being narrowed: what state the last build of this
-      // application ended in.
       id: 'status',
       label: 'Status',
       kind: 'options',
@@ -191,41 +109,21 @@
       match: (app, values) => values.includes(app.status)
     },
     {
-      // `range`: two windows at once would contradict each other, so a pick
-      // replaces rather than accumulates (lib/filter-bar.js).
       id: 'modified',
       label: 'Last Modified',
       kind: 'range',
       options: DATE_PRESETS,
-      // A hand-picked range is not in `options`, so the panel cannot look up a label for
-      // it — this is what turns `{ start, end }` into "Jun 1 – Jun 17" instead of
-      // "[object Object]".
       formatValue: formatDateRange,
       match: (app, values) => matchDate(app.modifiedAt, values)
     }
   ]
 
-  // Applications provisioned by the deploy flow lead the list, newest first — the
-  // second link of the chain a deploy creates (src/lib/provisioning.js). The
-  // seeded rows below them belong to one scope, so they are projected through the
-  // organization / account / workspace in force (src/lib/tenancy-scope.js); what
-  // this session provisioned is the operator's own and is never projected away. Both
-  // families are stamped with their deployment status on the way in.
   const allApplications = computed(() =>
     [...provisionedApplications.value, ...tenancyRows(applications.value, 'applications')]
       .map(withDeploymentStatus)
       .map(withDomains)
   )
 
-  // The applied state, the search value, the rows that survive the filters, and the
-  // pagination they are paged into — all four from one place, so the page cannot
-  // forget the rewind that keeps a narrowed list off an empty page offset
-  // (src/lib/list-state.js). The chips say WHICH cuts are applied and the button's
-  // badge says only that some are — between them nothing about the filter is left
-  // inside a closed panel, which is what the old filter popover's bare count could
-  // never manage.
-  // `loading` is the tenancy reload window: switching organization, account or
-  // workspace skeletons the table while the new scope's applications arrive.
   const {
     filters,
     search,
@@ -235,65 +133,36 @@
     refresh
   } = useListFilters(filterFields, allApplications)
 
-  // The table the controls row drives. Download CSV calls the DS's own `exportCsv()`
-  // through it (../../components/list/ExportButton.vue), so the file honours the
-  // visible columns and the filtered rows instead of re-serialising them here.
   const tableRef = ref(null)
 
-  // Which columns are switched off, driven by the Columns button beside the filter
-  // (../../components/list/ColumnsButton.vue). Only a HIDDEN column is ever recorded, so this
-  // never has to be kept in step with the column model above.
-  //
-  // ID SHIPS OFF. It is the column an operator wants when they are quoting a resource
-  // into a support thread or an API call, and almost never while scanning the list —
-  // so it starts hidden and is one switch away. That is the whole point of the panel:
-  // a column can be available without being in the way by default.
   const columnVisibility = ref({ id: false })
 
-  // Entering the module and choosing "create" opens the dedicated create PAGE
-  // (a form route), not a modal — see CreateApplication.vue.
   const createApplication = () =>
     router.push({ path: '/applications/new', query: { email: userEmail.value } })
 
-  // Opening an application enters its resource-detail view (the PageTabs nav-bar
-  // pattern), landing on the Main Settings sub-page.
   const openApp = (event, row) =>
     router.push({
       path: `/applications/${row.id}`,
       query: { email: userEmail.value }
     })
 
-  // An application with no repository is opened straight at the tab that connects one,
-  // so the cell's offer and the page it lands on are the same subject.
   const connectGit = (row) =>
     router.push({
       path: `/applications/${row.id}`,
       query: { email: userEmail.value, tab: 'build' }
     })
 
-  // ── Deploy ────────────────────────────────────────────────────────────────
-  // Deploying an application opens the RELEASE COMPOSER (../ReleaseComposer.vue) SCOPED to
-  // this application: only its version changes, and every Deployment setting the release
-  // lands on keeps the firewall and the custom page it binds. That scope is the difference
-  // between this entry and the workload one — here the resource is settled and the target is
-  // the question; from a workload both are already answered.
-  //
-  // The whole scope rides the query string, so the review is linkable and survives a reload.
   const openDeploy = (row) => {
     router.push({
       path: '/deployments/releases/new',
       query: {
         email: userEmail.value,
         scopedType: 'application',
-        // A Deployment setting binds resources by NAME (`strategy.attributes`), so the
-        // release is scoped by name too — the same key on both sides, never translated.
         resourceId: row.name
       }
     })
   }
 
-  // Deleting an application is the one row action with no undo, so the menu click only
-  // ARMS it: the row is held here and the dialog asks for the name back before removing.
   const pendingDelete = ref(null)
   const deleteOpen = ref(false)
 
@@ -306,7 +175,6 @@
     pendingDelete.value = null
   }
 
-  // Row action menu — Dropdown emits (event, value); `delete` opens the confirmation.
   const onRowAction = (event, value, row) => {
     if (value === 'deploy') {
       openDeploy(row)
@@ -334,31 +202,10 @@
     active="applications"
     :breadcrumb="[{ label: 'Applications' }]"
   >
-    <!-- THE MEASURE FOLLOWS THE MODE. A populated list takes the STANDARD page
-         container (`layout-column`, --layout-measure / 1388px — the one width home, the
-         overviews and every other listing share): columns are the content, and taking
-         width away from them is taking data away. First use has no columns — it is a
-         lead and three rows, which at the full measure becomes a title floating over
-         rows far longer than they read well at. So the empty version takes the FOCUSED
-         measure (4xl / 1024px), the cap for a single-task screen.
-         The other listings follow this and cite it. /home deliberately does NOT: both
-         of its halves are one width, because there the empty screen BECOMES the
-         populated one under the reader (../home/HomeEmptyState.vue), while a module's
-         empty state and its list are two different pages. -->
     <main
       class="flex min-h-full flex-col"
       :class="accountEmpty ? 'layout-column-focused' : 'layout-column'"
     >
-      <!-- THE PAGE HEADING. A first-level resource page names itself: the module name
-           over one line saying what the module is, with the module's own action on the
-           right. The breadcrumb says WHERE you are; the heading says WHAT this page is,
-           and it gives that action one fixed home above the list instead of a control
-           that rides the row narrowing it.
-           `size="medium"` is the first-level list scale (components/page/PageHeading.vue):
-           the title names the collection, and the table under it is what the page is for.
-           The parent section below is no longer `:first-child`, so `.layout-section-start`
-           opens it at the boundary step — the list sits tight under the heading (theme
-           semantic/layouts § "THE PAGE SHAPE"). -->
       <PageHeading
         v-if="!accountEmpty"
         size="medium"
@@ -376,22 +223,6 @@
         </template>
       </PageHeading>
 
-      <!-- FIRST USE, IN HOME'S CONTAINER.
-           The same box the first access uses on /home (./HomeEmptyState.vue) and the
-           /empty-states gallery around it (../ProductEmptyStates.vue): centred in the
-           viewport rather than hanging from the top edge. This screen and that one are the
-           same KIND of screen — a short block answering "there is nothing here yet" — and a
-           short block pinned to the top with a void under it reads as content that failed
-           to load. The section step is gone with it: a centred box measures from the middle,
-           and a top margin would only pull it off centre.
-           CENTRED WITH AUTO MARGINS, not `min-h-full justify-center`. That pair looks
-           right and does nothing: `min-height: 100%` resolves against a parent whose own
-           height is `auto` (main is `min-h-full`, not `h-full`), so the box stayed at
-           content height and `justify-center` then centred the content inside itself — a
-           no-op. `my-auto` asks the flex parent to split its free space above and below
-           this one item, which is the definition of centred; and when the block is TALLER
-           than the viewport the auto margins collapse to 0 instead of clipping its top,
-           which is what `flex-1 justify-center` would have done. -->
       <div
         v-if="accountEmpty"
         class="my-auto flex w-full flex-col py-(--spacing-xl)"
@@ -403,22 +234,12 @@
         v-else
         class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)"
       >
-        <!-- ONE section: the controls row narrows the table under it, so the two
-             sit at --layout-group-gap. -->
         <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-          <!-- The CONTROLS row, under the heading: the narrowing, on a list the page can
-               already show — search then Filter on the left, nothing on the right,
-               because the module's action sits in the heading above. -->
           <ControlsHeader>
             <FilterButton
               v-model="filters"
               :fields="filterFields"
             />
-            <!-- Search drives the table's global filter from outside the card, so the
-                 field is a plain InputText (`Table.Search` is context-aware and only
-                 works inside `<Table>`). It absorbs the slack (`grow`) and the Filter
-                 button sits at its end, so the two controls that narrow this list read
-                 as one group. -->
             <InputText
               v-model="search"
               size="medium"
@@ -434,10 +255,6 @@
               </template>
             </InputText>
             <template #actions>
-              <!-- THE RIGHT GROUP: the three controls that act on the LISTING rather
-                   than narrow it — fetch it again, take it away as a file, choose which
-                   columns it shows. All glyphs, all `medium`, so the row shares one
-                   32px height with the field and the Filter button opposite. -->
               <RefreshButton
                 :loading="loading"
                 @refresh="refresh"
@@ -461,7 +278,7 @@
           <section class="flex min-h-0 flex-col">
             <CardBox :padded="false">
               <template #content>
-                <Table
+                <TableRoot
                   ref="tableRef"
                   v-model:pagination="pagination"
                   v-model:globalFilter="search"
@@ -480,27 +297,15 @@
                     <div class="flex min-w-0 items-center gap-(--spacing-xs)">
                       <i
                         :class="presetIcon(row.preset)"
-                        class="shrink-0 text-[1.15em]"
+                        class="shrink-0 text-body-lg"
                         :title="presetLabel(row.preset)"
                         aria-hidden="true"
                       />
-                      <!-- Principal column opens the detail view — underline on hover. -->
                       <span class="truncate cursor-pointer hover:underline">{{ value }}</span>
                     </div>
                   </template>
 
                   <template #cell-repository="{ value, row }">
-                    <!-- One rounded chip for the git repo. The label goes through the
-                         default slot with `truncate` so a long repo shrinks with an
-                         ellipsis instead of overflowing the Tag (whose justify-center +
-                         overflow-hidden would otherwise clip the leading GitHub icon).
-                         `max-w-full` keeps the chip inside its cell.
-
-                         Only a `source: 'git'` application has one. The rest carry the
-                         way OUT of that state rather than an em dash: the cell is the
-                         one place a reader scanning the list meets the absence, so it
-                         is where the offer to fix it belongs. `stop` because the row
-                         itself opens Main Settings. -->
                     <Tag
                       v-if="value"
                       severity="secondary"
@@ -529,10 +334,6 @@
                   </template>
 
                   <template #cell-domainName="{ value, row }">
-                    <!-- Domain link (truncates) + external-redirect arrow; copy button
-                         pinned to the cell's right edge so it aligns across rows. Shared
-                         with Overview's list, which shows these same rows
-                         (./ui/DomainCell.vue). -->
                     <DomainCell
                       :value="value"
                       :domains="row.domains"
@@ -540,9 +341,6 @@
                     />
                   </template>
 
-                  <!-- The newest deployment's state, read and rendered exactly as the
-                       Deployments module renders it (components/deployment/DeploymentsTable.vue):
-                       one indicator, its own label, a spinner while a build is running. -->
                   <template #cell-status="{ value }">
                     <StatusIndicator
                       v-if="value"
@@ -556,8 +354,6 @@
                       >Not deployed</span
                     >
                   </template>
-                  <!-- WHO and WHEN are two columns now, so each cell says one thing:
-                       the face and the name here, the relative time next to it. -->
                   <template #cell-author="{ row }">
                     <AuthorCell
                       :author="row.author"
@@ -586,11 +382,6 @@
                       </Dropdown.Trigger>
 
                       <Dropdown.Group>
-                        <!-- Deploy leads the menu: it is the one action here that changes
-                             what the edge is serving. It opens the release composer scoped
-                             to this application (../ReleaseComposer.vue), so only its
-                             version changes and the review of what that reaches happens
-                             before anything ships. -->
                         <Dropdown.Option
                           value="deploy"
                           label="Deploy"
@@ -652,7 +443,7 @@
                       </Dropdown.Group>
                     </Dropdown>
                   </template>
-                </Table>
+                </TableRoot>
               </template>
             </CardBox>
           </section>

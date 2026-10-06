@@ -1,18 +1,3 @@
-// Organizations store — the tenancy ABOVE the account tree.
-//
-// An organization owns the whole Brand → Reseller → Group → Client hierarchy
-// that accounts.js models: switching organization changes WHICH tree the
-// account switcher is browsing, the way switching account changes which tenant
-// every page reads. Module-level singleton (like accounts.js / sidebar.js /
-// theme.js) so the header switcher and anything downstream share one truth.
-//
-// Each org carries an `accent` — the colour family its generated mark is
-// painted in. It is the only place the console lets a tenant colour itself, and
-// it exists for one reason: an operator who lives in three organizations must
-// tell them apart in the header before reading a single character. The accent is
-// chosen when the org is created — at signup (components/Onboarding.vue) or in
-// the console's Create Organization flow — and the seeds below carry the choice
-// for the organizations the demo opens with.
 import { computed, ref } from 'vue'
 
 import { azionPlans } from '../data/plans.js'
@@ -21,20 +6,6 @@ import { presetPlanName } from './sample-preset.js'
 
 const { accountEmpty } = useSampleMode()
 
-// The accents an organization may wear.
-//
-// `colors` is a three-stop palette in theme tokens, handed to the marble
-// avatar: the generator picks which stop paints the field and which paints each
-// blob, from the org's name. The three stops are deliberately far apart in
-// LIGHTNESS (a pale step, a saturated mid, a deep one) — the blobs are heavily
-// blurred, so two neighbouring steps of one ramp dissolve into a plain gradient
-// and the marbling disappears. Two stops stay in the accent's own hue; the
-// third is its warm/cool neighbour, which is what gives the mark a second
-// colour to marble against. Tokens, not hex, so the art follows the theme.
-// One entry per primitive hue family the theme ships (plus gray, for an
-// organization that wants no colour at all). Seven is deliberate: enough that a
-// person operating three organizations can give each an unmistakable mark, few
-// enough to stay one glanceable row instead of a colour grid nobody reads.
 export const orgAccents = [
   {
     value: 'orange',
@@ -73,20 +44,9 @@ export const orgAccents = [
   }
 ]
 
-// Look up an accent by value; an unknown value falls back to the first one
-// rather than rendering an unpainted mark.
 export const accentOf = (value) =>
   orgAccents.find((accent) => accent.value === value) ?? orgAccents[0]
 
-// The organization's lifecycle statuses.
-//
-// Two things vary per status and both are recorded here, because the UI reads
-// them in two different places: `severity` paints the status tag, and `access`
-// is the sentence that says what the user can still reach — a suspended
-// organization keeps its services running but locks the console down to support
-// and payments, and a blocked one takes the services off the air too. Only
-// `active` is reachable from onboarding; the rest arrive from billing or from
-// an administrative action, so they are modelled and not offered.
 export const orgStatuses = [
   {
     value: 'active',
@@ -132,22 +92,9 @@ export const orgStatuses = [
   }
 ]
 
-// Look up a status descriptor; an unknown value reads as active rather than
-// rendering an unlabelled tag.
 export const statusOf = (value) =>
   orgStatuses.find((status) => status.value === value) ?? orgStatuses[0]
 
-// The generic `additional_data` model.
-//
-// An organization accumulates facts over time that are nobody's schema change:
-// company size today, industry tomorrow, whatever the next campaign needs. So
-// the model is key–value, with the ACCEPTED VALUES declared per key — a free
-// text bag would make two organizations answer "51-200" and "about 100" to the
-// same question and neither would ever be countable.
-//
-// Onboarding renders one field per entry below and stores the answers under
-// `additionalData` on the organization. Adding a key here adds it to the form;
-// nothing else changes.
 export const additionalDataKeys = [
   {
     key: 'company_size',
@@ -175,27 +122,9 @@ export const additionalDataKeys = [
   }
 ]
 
-// Every organization is created with one workspace, and this is its name. A
-// workspace groups the resources of one context (a team, an environment, a kind
-// of application); a brand-new organization has exactly one context, so it gets
-// one workspace instead of an empty state the user has to resolve before they
-// can deploy anything.
 export const DEFAULT_WORKSPACE_NAME = 'My Workspace'
 
-// Seeded organizations. `accounts` is how many tenants live under the org (the
-// count the switcher shows under the name) and `plan` is its contract tier —
-// both are the two facts that tell two same-named orgs apart in a list.
-// `status` is the lifecycle state from `orgStatuses`; the seeds are all active,
-// since a seeded suspension against a name states something that isn't ours to
-// state.
-// `plan` is a TIER NAME FROM ./plans.js — the same value the entrance stores when it
-// creates an organization (`createOrganization` is handed `planNameFor(form.plan)`).
-// The seeds used to say "Business", a tier the entrance does not offer and the
-// upgrade drawer cannot price, so an organization created at signup and one seeded
-// here described their contracts in two different vocabularies.
 const seedOrganizations = [
-  // Azion wears orange — the brand's own colour, so the org an operator lives
-  // in is the one mark that matches the product they are inside.
   {
     id: 'azion',
     name: 'Azion',
@@ -215,32 +144,11 @@ const seedOrganizations = [
   }
 ]
 
-// The organization the app opens in. Exported because it is also the top of the
-// scope that owns every seeded resource row (see lib/tenancy-scope.js): the app
-// boots into the full lists, and switching away projects them.
 export const FIRST_ORGANIZATION_ID = 'azion'
 
-// The roster the store actually holds. Everything below reads the PROJECTION.
 const allOrganizations = ref(seedOrganizations)
 const currentOrganizationId = ref(FIRST_ORGANIZATION_ID)
 
-// THE EMPTY VERSION HAS ONE ORGANIZATION (../lib/sample-mode.js).
-//
-// A brand-new account belongs to exactly one organization, holds exactly one
-// account and one workspace, and owns nothing in any module. Two of those three
-// are enforced in the sibling stores; the third is enforced once, for every
-// module, in ../lib/tenancy-scope.js.
-//
-// It is a projection rather than a second seed so nothing forks: the roster, the
-// create flow and the switcher are the same code in both versions, and flipping
-// the preset back restores the full list with the operator's own organizations
-// still in it. `accounts: 1` because the count is the org's own claim about how
-// many tenants live under it, and in this version that is the one you are in.
-// The tier is also projected, not just the count. An organization's plan is what was
-// chosen for it at the entrance — and in the EMPTY version the account being shown is
-// the one the sample preset describes (./lib/sample-preset.js), so its organization
-// carries that tier. Leaving the seeded "Enterprise" there would put an Enterprise tag
-// on the switcher of an account whose profile, upgrade CTA and billing all say Hobby.
 const organizations = computed(() => {
   if (!accountEmpty.value) return allOrganizations.value
   const [first] = allOrganizations.value
@@ -253,17 +161,12 @@ const currentOrganization = computed(
     organizations.value[0]
 )
 
-// Switch the active organization. Idempotent — re-picking the current org is a
-// no-op the caller can acknowledge instead of silently dismissing.
 const switchOrganization = (organization) => {
   const changed = organization.id !== currentOrganizationId.value
   currentOrganizationId.value = organization.id
   return changed
 }
 
-// A url-safe id from the organization's name, deduped against the roster: two
-// people may name their organization the same thing, and the id is what every
-// switch resolves against.
 const idFor = (name) => {
   const base =
     String(name ?? '')
@@ -278,22 +181,6 @@ const idFor = (name) => {
   return `${base}-${suffix}`
 }
 
-// Create an organization, and enter it.
-//
-// The single path both doors go through — signup's onboarding
-// (components/Onboarding.vue), which creates a user's FIRST organization from the
-// name they gave, and the console's Create Organization flow
-// (components/CreateOrganization.vue), which creates any further one. Organizations
-// a user did not create arrive by invitation, which is what makes switch-account
-// possible; those are not created here.
-//
-// One function rather than one per door, because three things are true of every
-// organization the moment it exists no matter where it came from, and they are set
-// here rather than trusted to the caller: the creator is its OWNER and its first
-// Organization User, its status is `active`, and it holds one workspace.
-//
-// Creating also ENTERS the new organization: nobody creates one to stay where they
-// were, and the caller would otherwise have to remember to switch.
 export const createOrganization = ({
   name,
   accent = orgAccents[0].value,
@@ -307,22 +194,12 @@ export const createOrganization = ({
     id,
     name: String(name ?? '').trim(),
     accent,
-    // The tier the organization starts on. Signup's onboarding asks for it (the
-    // Plan step) and passes the answer; the console's own Create Organization
-    // flow does not ask, so a further organization starts on the free tier —
-    // the only plan it is safe to put someone on without asking.
     plan,
-    // The organization is its own first tenant.
     accounts: 1,
     status: 'active',
-    // No Group: one is created only when there are workspaces to group.
     groups: [],
-    // Namespaced by the organization, so a workspace id can never be mistaken
-    // for the account-keyed seeds in workspaces.js.
     workspaces: [{ id: `${id}-primary`, name: String(workspace ?? '').trim(), workloads: 0 }],
     additionalData: { ...additionalData },
-    // The creator, who cannot be an invited user: an invitation can never carry
-    // ownership, so the Owner role only ever originates here.
     owner: { ...owner, role: 'owner', organizationUser: true }
   }
   allOrganizations.value = [organization, ...allOrganizations.value]
@@ -330,7 +207,6 @@ export const createOrganization = ({
   return organization
 }
 
-// One shared instance across every import (module-level singleton).
 export function useOrganizations() {
   return { organizations, currentOrganization, currentOrganizationId, switchOrganization }
 }

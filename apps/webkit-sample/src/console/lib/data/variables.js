@@ -1,23 +1,6 @@
-// The environment variables the sample is seeded with — the Build → Variables module.
-//
-// It lived inside the page as a local `ref` until global search needed it: the palette
-// indexes every resource the platform holds (./search-index.js), and a seed only the page
-// can see is a resource search cannot find. So the seed moved here, next to every other
-// module's, and the page keeps its own mutable copy of it (`ref([...VARIABLES])`) — the
-// same shape ./certificates.js, ./connectors.js and the rest already had.
-//
-// `modifiedAt` is the real instant — the Last Modified filter compares it — and
-// `lastModified` (the sortable / exportable display string) is derived from it by one
-// formatter instead of being hand-written per row (@shared/lib/dates.js explains why a
-// display string is never parsed back).
-//
-// A VARIABLE'S VALUE IS NOT SEARCHABLE. Two of these are secrets, and a palette that
-// matched on `value` would print `sk_live_…` into a result row the moment anyone typed a
-// fragment of it. ./search-index.js indexes the KEY and nothing else.
 import { daysAgo, formatListDate } from '@shared/lib/dates'
 import { authorAt } from '@shared/lib/people'
 
-/** The seeded variables, in list order. */
 export const VARIABLES = [
   {
     id: 'v-001',

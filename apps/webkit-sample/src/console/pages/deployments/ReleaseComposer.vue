@@ -1,53 +1,4 @@
 <script setup>
-  // Review and deploy — the release composer.
-  //
-  // ONE SCREEN, three questions, and they are asked in the order a reader can answer
-  // them:
-  //
-  //   WHAT goes out    the deployment topology: one version of the Application, and
-  //                    optionally a Firewall and a Custom Page, plus the dependencies
-  //                    those three reference. Dependencies are DETECTED from the chosen
-  //                    version, never re-asked.
-  //   WHERE it lands   the Deployment settings. Those are the STRATEGIES authored in
-  //                    ui/DeploymentSettingsDrawer.vue and listed by the Deployments
-  //                    module's Settings tab — one store (src/lib/deployment-strategies.js),
-  //                    projected by src/lib/releases.js. A setting is reusable, so this is a
-  //                    multi-select, and what it BINDS is what the release carries versions
-  //                    of.
-  //   WHO it reaches   the impact: every environment, Workload and domain the selected
-  //                    targets carry. This is what makes the deploy button honest, and
-  //                    it is why the screen is a review rather than a form.
-  //
-  // WHY IT IS A PAGE AND NOT A DRAWER. A release is the one action in the console whose
-  // blast radius is bigger than the thing being acted on: deploying one Workload can
-  // touch three environments and dozens of domains. That review does not fit a panel, it
-  // has to be linkable (a support thread quotes it), and it must survive a reload with
-  // its entry context intact — which is why every scenario below is carried in the URL.
-  //
-  // THREE WAYS IN, plus the module's own, resolved from the query string (first match
-  // wins). What separates them is how much is already settled:
-  //
-  //   from-workload    ?workload=…&deploymentIds=a,b[&pickTarget=true]
-  //                    The operator hit Deploy on a workload. NOTHING is asked that the
-  //                    workload already answers: its Deployment settings arrive selected
-  //                    and the Application is seeded from what that workload is already
-  //                    serving (src/lib/releases.js § releaseSeedForWorkload). One setting
-  //                    means no picker at all; two means both selected, deselect to skip.
-  //                    Landing ready to deploy is the point — the friction of re-picking a
-  //                    target the operator did not come to change is what this removes.
-  //   from-resource    ?scopedType=application&resourceId=…[&versionId=…]
-  //                    The operator hit Deploy on a resource. Only that resource's version
-  //                    changes; the other two are kept from the setting's own bindings and
-  //                    their cards are read-only. The picker offers the settings that can
-  //                    take it: bound to this application, or pinning none.
-  //   global           nothing — from the Deployments module. The operator selects the
-  //                    targets first, then composes.
-  //
-  // COPY follows the console microcopy standard, not the current console's strings: no em
-  // dash, no ampersand, no parentheses in labels, sentence case, and the settled renames
-  // (Deployment topology, not Composition. Include dependencies, not Additional
-  // dependencies. Review and deploy, not Build and activate). Nothing here names a layout
-  // position, because at 880px the two columns stack and "on the right" becomes false.
   import Badge from '@aziontech/webkit/badge'
   import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
@@ -107,7 +58,6 @@
 
   const userEmail = computed(() => route.query.email || 'myemail@azion.com')
 
-  // ── Entry context (all of it from the URL, so a reload lands in the same place) ──
   const idsFromQuery = computed(() => {
     const raw = route.query.deploymentIds
     if (!raw) return []
@@ -131,23 +81,13 @@
     return 'global'
   })
 
-  // The picker is not rendered when the entry context settled the target: one setting, and
-  // no invitation to change it. A picker holding one locked row asks a question that has no
-  // answer.
   const targetSettled = computed(
     () => idsFromQuery.value.length === 1 && !pickTarget.value && !scopedType.value
   )
 
-  // ── The targets ────────────────────────────────────────────────────────────
-  // Everything the entry context named starts SELECTED. A Workload bound to three
-  // environments is being deployed to three environments; making the operator re-select
-  // what they just asked for would be a form, not a review.
   const selectedIds = ref([...idsFromQuery.value])
   const dsSearch = ref('')
 
-  // Restricted to what the entry context named, when it named any: a workload publishes
-  // with its own settings, and offering the other nine would invite a deploy into an
-  // environment the operator never asked about.
   const candidateSettings = computed(() =>
     idsFromQuery.value.length
       ? deploymentSettings.value.filter((settings) => idsFromQuery.value.includes(settings.id))
@@ -160,11 +100,6 @@
     return candidateSettings.value.filter((settings) => settings.name.toLowerCase().includes(query))
   })
 
-  // Grouped by whether this release can land there at all (lib/releases.js) — which now
-  // means only "is the setting active". A setting no longer pins an application, so it no
-  // longer decides which releases may use it; what a release carries is the topology
-  // below, and the setting only says how it routes. Empty groups never render: a heading
-  // over nothing is noise.
   const dsGroups = computed(() => {
     const { groups } = classifyDeploymentSettings({ settings: searchedSettings.value })
     return DS_GROUPS.filter((group) => groups[group.key].length).map((group) => ({
@@ -193,30 +128,14 @@
     selectedIds.value = []
   }
 
-  // An inactive setting cannot apply a deployment, and nothing on this screen can change
-  // that: activating it belongs to Settings → Build & Deployment, which owns the
-  // strategies, so the row links there.
   const onGroupAction = (key) => {
     if (key !== 'inactive') return
     router.push({ path: '/account/build-deployment', query: { email: userEmail.value } })
   }
 
-  // ── The topology ───────────────────────────────────────────────────────────
-  // Seeded from what is ALREADY in place, because a release is an edit of what is live, not
-  // a blank form. Two sources, in order:
-  //
-  //   the Deployment setting's own bindings  the firewall and the custom page it binds, and
-  //                                          the application when it pins one
-  //   what the workload is serving           the application from its current deployment,
-  //                                          when the operator came from a workload
-  //
-  // Versions default to the tracking sentinel: the choice most releases want, and the one
-  // that stays correct as new versions land.
   const seedId = computed(() => selectedIds.value[0] || idsFromQuery.value[0] || '')
   const seedSettings = computed(() => (seedId.value ? settingsById(seedId.value) : undefined))
 
-  // The application the workload the operator came from is already serving. This is what
-  // makes the workload entry frictionless: nothing to pick, nothing to confirm.
   const pinnedApplication = computed(() =>
     workloadId.value ? servingApplication(workloadId.value) : ''
   )
@@ -231,14 +150,6 @@
     SINGLETON_TYPES.forEach((type) => {
       const scoped = scopedType.value === type
 
-      // Precedence: what the operator came to change, then what the workload already
-      // serves, and only then a fallback for the one resource a release cannot go out
-      // without.
-      //
-      // The setting used to be consulted here too — it pinned an application, a firewall
-      // and a custom page, and those seeded this form. It no longer carries any, so what
-      // a release carries is decided HERE and nowhere else, which is the point of the
-      // split (../../lib/data/deployment-strategies.js).
       let resourceId = ''
       if (scoped) resourceId = scopedResourceId.value
       else if (type === 'application') {
@@ -248,14 +159,10 @@
       state[type].resourceId = resourceId
       state[type].versionId =
         scoped && incomingVersionId.value ? incomingVersionId.value : LATEST_READY
-      // A firewall or a custom page rides along only when it is what the operator came to
-      // change; an application always does, because a release cannot go out without one.
       state[type].enabled = type === 'application' ? true : scoped
     })
   }
 
-  // Dependency rows per parent. Detected rows are locked; the Include block is the
-  // operator's own.
   const deps = reactive({
     application: { function: [], connector: [] },
     firewall: { function: [], network_list: [], waf: [] },
@@ -283,9 +190,6 @@
 
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
-  // Every run takes a token. Only the LATEST run for a parent may write its answer, so a
-  // superseded run (the operator changed the resource, or a retry overtook the first
-  // attempt) is dropped instead of leaving a stale error over fresh rows.
   const runToken = { application: 0, firewall: 0, custom_page: 0 }
 
   const detect = async (parentType) => {
@@ -309,8 +213,6 @@
     detection[parentType].attempts += 1
     detection[parentType].detecting = false
 
-    // One seeded resource fails its first detection, so the error state and its Retry are
-    // states this screen renders rather than states it hopes never happen.
     if (DETECTION_FAILS_ONCE.has(resourceId) && detection[parentType].attempts === 1) {
       detection[parentType].failed = true
       return
@@ -330,7 +232,6 @@
     detect(parentType)
   }
 
-  // Re-detect whenever what a card composes changes.
   SINGLETON_TYPES.forEach((type) => {
     watch(
       () => `${state[type].enabled ? '1' : '0'}:${state[type].resourceId}`,
@@ -345,10 +246,6 @@
     SINGLETON_TYPES.some((type) => state[type].enabled && detection[type].detecting)
   )
 
-  // ── Shared dependencies ────────────────────────────────────────────────────
-  // A Connector referenced by both the Application and a Custom Page is ONE deployed
-  // Connector: the platform cannot serve two versions of it in one release. So the row
-  // says it is shared, and setting its version sets it everywhere it appears.
   const DEPENDENCY_PARENTS = [...SINGLETON_TYPES, INCLUDED_PARENT]
 
   const parentLabel = (parentType) =>
@@ -374,7 +271,6 @@
     const row = deps[parentType][depType][index]
     if (!row) return
     row.versionId = versionId
-    // Propagate to every other parent referencing the same resource.
     DEPENDENCY_PARENTS.forEach((parent) => {
       if (parent === parentType) return
       ;(deps[parent][depType] ?? []).forEach((entry) => {
@@ -383,10 +279,6 @@
     })
   }
 
-  // ── Include dependencies ───────────────────────────────────────────────────
-  // What a Function reaches at runtime, which no detector can see. Only resources not
-  // already in the release are offered: a second row for the same Connector would be two
-  // version fields for one deployed thing.
   const usedIds = (depType) =>
     DEPENDENCY_PARENTS.flatMap((parent) =>
       (deps[parent][depType] ?? []).map((row) => row.resourceId)
@@ -405,8 +297,6 @@
     }))
   )
 
-  // What the block carries, on the card's header, so a card whose groups are collapsed still
-  // says how much is inside it.
   const includedCount = computed(() =>
     includedGroups.value.reduce((total, group) => total + group.rows.length, 0)
   )
@@ -443,20 +333,12 @@
     deps[INCLUDED_PARENT][depType].splice(index, 1)
   }
 
-  // ── The cards the tree renders ─────────────────────────────────────────────
-  // Every card renders, including the ones a scoped release does not change: seeing the
-  // whole package that will be deployed is the point of a review. What changes is whether
-  // a card is a DECISION (editable) or a FACT (read-only, kept from the active release).
   const cards = computed(() =>
     SINGLETON_TYPES.map((type) => {
       const readonly = Boolean(scopedType.value) && scopedType.value !== type
       const resourceId = state[type].resourceId
       const enabled = state[type].enabled && Boolean(resourceId)
 
-      // Why a card is empty, in its own words. "Not included in this release." is only true
-      // when the operator turned it off; a read-only card is empty because the setting binds
-      // nothing there, or because no setting has been selected to read that from yet. Three
-      // different facts, and one sentence for all three would be wrong in two of them.
       let note = ''
       if (!enabled) {
         if (!readonly) note = 'Not included in this release.'
@@ -494,21 +376,12 @@
     state[type].enabled = enabled
   }
 
-  // The build affordance for a resource with no Ready version. The prototype does not
-  // carry the build flows, so it names where the version is built instead of pretending
-  // to open it — silence would be worse than a sentence.
   const onBuild = (type, resourceId) => {
     toast.info(`${resourceName(type, resourceId)} has no Ready version.`, {
       description: `Build one in ${resourceLabel(type)} and come back to this release.`
     })
   }
 
-  // ── Impact ─────────────────────────────────────────────────────────────────
-  // One lookup, retryable. It gates nothing: a preview that failed is a reason to say so,
-  // never a reason to block a deploy.
-  // TREE reads the hierarchy, NODES reads the connections. Tree leads because the question
-  // a reader arrives with is "how far does this go", which a dense list answers in one
-  // glance; the diagram is for tracing one setting's chain.
   const IMPACT_VIEWS = [
     { value: 'tree', label: 'Tree' },
     { value: 'nodes', label: 'Nodes' }
@@ -522,9 +395,6 @@
     impactLoad.value = 'ready'
   }
 
-  // Setting → environment → workload → domains. The environment is the one the workload's
-  // CURRENT deployment serves in, so the tree reports where a release actually lands rather
-  // than a label invented for this screen.
   const impactTree = computed(() =>
     selectedIds.value
       .map((id) => settingsById(id))
@@ -561,9 +431,6 @@
     }
   })
 
-  // The radius in one sentence — the line a reader repeats back to themselves before they
-  // deploy. It lives in the Impact card's FOOTER: a card's footer is the region for a total,
-  // and the sentence is true of both views, so it belongs to neither.
   const countOf = (count, singular, plural) => `${count} ${count === 1 ? singular : plural}`
 
   const impactSummary = computed(
@@ -573,17 +440,6 @@
       `${countOf(impactTotals.value.settingsCount, 'Deployment setting', 'Deployment settings')}.`
   )
 
-  // Whether there IS a total yet. Two things hang off it, and both are needed:
-  //
-  //   the slot list  the footer is supplied through a DYNAMIC slot name, so in a state with
-  //                  nothing to total the slot is absent rather than empty. CardBox renders
-  //                  its footer region whenever the slot exists, so a `v-if` inside the slot
-  //                  would leave a bordered band with nothing in it.
-  //   the card key   CardBox reads `slots.footer` in a computed, and a component's slots
-  //                  object is not reactive — so a slot that appears after mount never
-  //                  re-triggers that computed and the region stays unrendered. Keying the
-  //                  card to this flag remounts it once when the impact resolves, which is
-  //                  the only moment the answer changes.
   const impactHasTotal = computed(() => impactState.value === 'ready')
   const impactFooterSlots = computed(() => (impactHasTotal.value ? ['footer'] : []))
 
@@ -592,9 +448,6 @@
     return impactLoad.value === 'loading' ? 'loading' : 'ready'
   })
 
-  // ── The deploy gate ────────────────────────────────────────────────────────
-  // Every version decision the release carries, in one list, so the gate and the messages
-  // read from the same source.
   const composedRows = computed(() => {
     const rows = []
     SINGLETON_TYPES.forEach((type) => {
@@ -629,8 +482,6 @@
       !withoutVersion.value.length
   )
 
-  // ONE blocker at a time, in the order the operator has to resolve them. Six competing
-  // messages is no message.
   const blocker = computed(() => {
     if (!selectedIds.value.length) {
       return 'Select at least one Deployment setting to deploy into.'
@@ -652,49 +503,25 @@
     return ''
   })
 
-  // ── Deploying ──────────────────────────────────────────────────────────────
-  // This page is the console's ONE deploy surface, so it is also where a DEPLOYMENT is
-  // opened. Deploying starts a real run (src/lib/deploy-runs.js) per workload each
-  // selected Deployment setting publishes to: the row is in the Deployments module from
-  // the first second, Building, `/deployments/:id` streams its pipeline, and the
-  // workload's own history carries it. A release that left nothing behind but a toast
-  // would be the only deploy in the console with no deployment.
-  //
-  // The runs also OUTLIVE this page, which is what lets a release into one Deployment
-  // setting leave for the list immediately — the deploys keep going, and the list shows
-  // them going. Several settings are watched here instead (./ui/DeployProgressDialog.vue),
-  // because each activates independently and one failing does not roll the others back;
-  // those runs are started with `notify: false`, since a toast per target would say what
-  // the dialog is already saying, once per row.
   const confirmOpen = ref(false)
   const starting = ref(false)
   const progressOpen = ref(false)
   const retriedIds = ref([])
 
-  // A WATCHED deploy settles faster than a backgrounded one: the dialog holds the screen
-  // until every target has an answer, and the full pipeline is only bearable when the
-  // operator has already moved on to something else.
   const WATCHED_TARGET_DURATION_MS = 9_000
 
   const selectedRecords = computed(() =>
     selectedIds.value.map((id) => settingsById(id)).filter(Boolean)
   )
 
-  // The seeded failure (src/lib/releases.js § DEPLOY_FAILS_ONCE): one target already has a
-  // deployment building, so it rejects the first attempt. It makes the failed row, its
-  // sentence and Retry failed real, and the retry succeeds.
   const failsFirstAttempt = (settings) =>
     DEPLOY_FAILS_ONCE.has(settings.id) && !retriedIds.value.includes(settings.id)
 
-  // The runs started for each target, held beside the setting they belong to. A setting no
-  // workload deploys with starts nothing — that is the dialog's `skipped` row, said out
-  // loud rather than passed off as a success.
   const targets = ref([])
 
   const runCountFor = (records) =>
     records.reduce((total, settings) => total + settings.workloads.length, 0)
 
-  // The application this release deploys, in the shape the deployment record names it.
   const deployedApplication = computed(() => applicationRecord(state.application.resourceId))
 
   const startTarget = (settings, { durationMs, notify }) => ({
@@ -727,8 +554,6 @@
     return ''
   }
 
-  // The dialog is a VIEW of the runs, not a second simulation of them: a row is deploying
-  // for exactly as long as its deployments are, and it fails when one of them does.
   const progressItems = computed(() =>
     targets.value.map((target) => {
       const status = statusOf(target)
@@ -749,32 +574,21 @@
   const retryFailed = () => {
     const failed = targets.value.filter((target) => statusOf(target) === 'failed')
     retriedIds.value = [...retriedIds.value, ...failed.map((target) => target.settings.id)]
-    // The SAME deployment recovers — the row the operator is watching goes back to
-    // Building rather than a second row appearing beside it.
     failed.forEach((target) => {
       target.runs.filter((run) => run.status === 'error').forEach((run) => redeployRun(run.id))
     })
   }
 
-  // ONE target is watched from the list, SEVERAL are watched here. The dialog exists
-  // because each Deployment setting activates independently and one failing does not roll
-  // the others back — with a single target there is one outcome, so holding the operator
-  // on this screen buys nothing the Deployments list does not already show live.
   const confirmDeploy = async () => {
     confirmOpen.value = false
     const records = selectedRecords.value
     const runCount = runCountFor(records)
-    // Nothing started is also an outcome the operator has to see, and the list cannot show
-    // it — there is no row to show. That case is reported here, as a skipped target.
     const watched = records.length > 1 || runCount === 0
 
     starting.value = true
     targets.value = records.map((settings) =>
       startTarget(settings, {
         durationMs: watched ? WATCHED_TARGET_DURATION_MS : RESOURCE_DEPLOY_DURATION_MS,
-        // A run reports itself only when it is the ONLY thing running: one deployment, one
-        // toast that becomes its own result. Beyond that the toasts would say the same
-        // sentence three times, so the summary below (or the dialog) carries it instead.
         notify: !watched && runCount === 1
       })
     )
@@ -785,8 +599,6 @@
       return
     }
 
-    // The deployments are already Building and outlive this page, so the review has
-    // nothing left to hold. The list is where they land.
     if (runCount > 1) {
       toast.info(`Deploying into ${records[0].name}.`, {
         description: `${runCount} deployments are building. They keep running if you leave.`
@@ -801,8 +613,6 @@
     router.push({ path: '/deployments', query: { email: userEmail.value } })
   }
 
-  // Closing the progress dialog lands on the module that lists what just happened, but
-  // only when every target succeeded: with a failure on screen, leaving would bury it.
   watch(progressOpen, (open) => {
     if (open) return
     const allDone = progressItems.value.every((item) => item.status === 'done')
@@ -811,12 +621,8 @@
     }
   })
 
-  // ── Copy that depends on the scenario ──────────────────────────────────────
   const seedName = computed(() => seedSettings.value?.name || '')
 
-  // What the entry context settled, said once, before the first control. The workload
-  // variant names what was pinned FOR the operator, because a screen that quietly answers
-  // things on your behalf has to say which things.
   const contextNotice = computed(() => {
     if (scenario.value === 'from-workload') {
       const target = workloadName.value || 'This workload'
@@ -854,13 +660,8 @@
     { label: 'Create Release' }
   ])
 
-  // Re-seeding follows the first target: the release being edited is the one serving
-  // THERE, so changing which target leads changes what is being edited.
   watch(seedId, () => seedTopology(), { immediate: true })
 
-  // Detection is NOT kicked off here: seeding the topology above already changes what each
-  // card composes, and the per-type watchers run on that. Starting a second round here
-  // raced the first, and the loser's error state outlived the winner's answer.
   onMounted(() => {
     loadImpact()
   })
@@ -872,18 +673,8 @@
     :padded="false"
     :breadcrumb="breadcrumb"
   >
-    <!-- The page owns its own vertical frame: the review scrolls, the action bar is
-         pinned by the flex column rather than by `sticky`, so nothing paints through it
-         mid-scroll. -->
     <main class="flex h-full min-h-0 flex-col">
       <section class="min-h-0 flex-1 overflow-auto">
-        <!-- FOCUSED measure (`.layout-column-focused`, --container-4xl), not the data one.
-             This is a focused flow: one task, composed then committed, and the reader's eye has
-             to travel between the release on one side and what it reaches on the other. At the
-             data measure (1388px) those two are a head-turn apart on a wide screen, which is
-             exactly what the measure doctrine caps a focused flow for. Every band inside it —
-             and the commit bar below — sits on the same measure, so the bar's buttons land on
-             the content's own right edge. -->
         <div class="layout-column-focused layout-boundary flex min-w-0 flex-col">
           <PageHeading
             title="Review and deploy"
@@ -891,15 +682,10 @@
             size="medium"
           />
 
-          <!-- TWO COLUMNS from `xl`, not `lg`: the split needs the focused measure at its
-               full width, and below 1280px the shell's rail leaves the left column too narrow
-               to hold a two-up field row. They stack below that, and the copy never names a
-               side, because at that width there are no sides. -->
           <section
             class="layout-section-start grid min-w-0 gap-(--layout-section-gap) xl:grid-cols-[minmax(0,1fr)_minmax(var(--container-xs),var(--container-sm))]"
           >
             <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-              <!-- WHAT goes out -->
               <CardBox>
                 <template #header>
                   <span class="flex min-w-0 items-center gap-(--spacing-xs)">
@@ -915,8 +701,6 @@
 
                 <template #content>
                   <div class="flex min-w-0 flex-col gap-(--spacing-md)">
-                    <!-- Why this release looks the way it does. It comes before the
-                         first control, never inside a label. -->
                     <Message
                       v-if="contextNotice"
                       severity="info"
@@ -924,9 +708,6 @@
                       :label="contextNotice"
                     />
 
-                    <!-- Detection failed: what broke, and the one action that fixes it.
-                         The deploy gate reads the same fact, so the button is disabled
-                         while this is on screen. -->
                     <Message
                       v-for="type in failedDetections"
                       :key="type"
@@ -950,15 +731,6 @@
                 </template>
               </CardBox>
 
-              <!-- WHAT THE DETECTOR CANNOT SEE — its own card, not a second half of the
-                   topology's. These rows are not part of the topology: nothing above resolved
-                   them, the operator is the one asserting they belong, and only they can be
-                   removed. A divider inside one card said "same thing, later"; a card of its
-                   own says what is true, which is "different thing".
-                   Named "Include dependencies" because they are required for the deploy to
-                   work; "additional" reads as optional, which is exactly wrong.
-                   `padded="false"` for the same reason the nested Dependencies card is: the
-                   accordion rows own their inset and their hover surface runs card-wide. -->
               <CardBox :padded="false">
                 <template #header>
                   <span class="flex min-w-0 items-center gap-(--spacing-xs)">
@@ -978,8 +750,6 @@
                 </template>
 
                 <template #content>
-                  <!-- Explain, then ask: what these rows are for comes before the control that
-                       adds one. Padded by hand, since the card is flush for the rows below. -->
                   <p
                     class="px-(--spacing-md) pt-(--spacing-sm) pb-(--spacing-xs) text-body-sm text-(--text-muted)"
                   >
@@ -1003,10 +773,6 @@
                 </template>
               </CardBox>
 
-              <!-- WHERE it lands. The whole card is gone when the entry context settled the
-                   target: a picker holding one locked row asks a question that has no answer,
-                   and the notice at the top of the topology already names where this release
-                   goes. -->
               <CardBox v-if="!targetSettled">
                 <template #header>
                   <span class="flex min-w-0 items-center gap-(--spacing-xs)">
@@ -1037,10 +803,6 @@
               </CardBox>
             </div>
 
-            <!-- WHO it reaches. Sticky while the release scrolls, because it is the thing the
-                 operator checks against every change they make. It pins at the page's own top
-                 inset (`--layout-boundary-start`) rather than at 0, so the pinned card keeps
-                 the air it had before it stuck instead of butting against the scroll edge. -->
             <div class="min-w-0 xl:sticky xl:top-(--layout-boundary-start) xl:self-start">
               <CardBox :key="impactHasTotal">
                 <template #header>
@@ -1052,14 +814,6 @@
                     <span class="truncate text-label-md text-(--text-default)">Impact</span>
                   </span>
 
-                  <!-- The view switch belongs to the card, not to the content it switches: in
-                       the header it stays visible and in one place whichever view is on. It is
-                       offered only once there is something to draw — a switch over an empty
-                       panel is two ways to see nothing.
-                       The negative block margin is load-bearing: the control is 38px, taller
-                       than the label row every other card header holds, so without it this one
-                       header would sit 7px taller than the other six. It gives back its own
-                       overflow so `min-h-14` decides the height here as it does everywhere. -->
                   <SegmentedButton
                     v-if="impactState === 'ready'"
                     v-model="impactView"
@@ -1078,10 +832,6 @@
                   />
                 </template>
 
-                <!-- The total, as the card's closing statement. A Message rather than a line
-                     of text: it is the one thing on this screen the operator is consenting
-                     to, and `info` is the surface that says "this is what this adds up to"
-                     without dressing it as a warning. -->
                 <template
                   v-for="name in impactFooterSlots"
                   :key="name"
@@ -1100,8 +850,6 @@
         </div>
       </section>
 
-      <!-- The commit bar. The blocker is stated next to the button that is blocked, so a
-           disabled control never leaves the reader guessing. -->
       <footer
         class="shrink-0 border-t-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface)"
       >
@@ -1149,8 +897,6 @@
       </footer>
     </main>
 
-    <!-- The confirmation repeats the verb and states the consequence in one sentence, so
-         the reader can act on the button alone. -->
     <Dialog
       v-model:open="confirmOpen"
       size="small"
@@ -1187,7 +933,6 @@
       </DialogPortal>
     </Dialog>
 
-    <!-- Several targets deploy independently, so the run is watched per target. -->
     <DeployProgressDialog
       v-model:open="progressOpen"
       :items="progressItems"

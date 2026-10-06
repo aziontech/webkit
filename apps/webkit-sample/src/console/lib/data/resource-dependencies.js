@@ -1,18 +1,6 @@
 import { DEFAULT_MODULES, defaultModuleState } from './application-modules'
 import { defaultFirewallModuleState, FIREWALL_MODULES } from './firewalls'
 
-/**
- * How a v6 account references one resource from another, transcribed from
- * RESOURCE-DEPENDENCY-MATRIX.md and validated against the edge-api and the console.
- *
- * `by` is the consumer, `via` the field or rule that carries the reference, `as` what is
- * actually written — `id` the base resource's id, `ver` a version pinned at release, `str`
- * a name. `requires` is the module the CONSUMER must have on for the reference to be read
- * at all; it is the matrix's "exige modules.*" column and the reason this file exists.
- *
- * Every reference writes the id of the BASE resource. A version is only ever pinned by the
- * release, from the parent version's dependencies.
- */
 export const RESOURCE_DEPENDENCY_MATRIX = {
   application: [
     { by: 'release', path: 'resources[]', as: 'ver', required: true },
@@ -148,13 +136,6 @@ export const RESOURCE_DEPENDENCY_MATRIX = {
   ]
 }
 
-/**
- * The module a reference needs, in the vocabulary of the host that carries it.
- *
- * The matrix names modules the way the API does (`modules.network_protection`). A firewall
- * in this console keys its own by a shorter id and an application keys its by the API's
- * snake_case, so the API name is translated once, here, rather than at each call site.
- */
 const MODULE_ALIASES = {
   firewall: {
     network_protection: 'network-shield',
@@ -167,13 +148,11 @@ const MODULE_ALIASES = {
   }
 }
 
-/** The label a host shows for one of its modules. */
 const moduleLabel = (host, key) => {
   if (host === 'firewall') return FIREWALL_MODULES[key] ?? key
   return DEFAULT_MODULES.find((module) => module.key === key)?.title ?? key
 }
 
-/** What a module does, as its own settings surface words it. */
 const moduleDescription = (host, key) => {
   if (host === 'application') {
     return DEFAULT_MODULES.find((module) => module.key === key)?.description ?? ''
@@ -181,14 +160,6 @@ const moduleDescription = (host, key) => {
   return ''
 }
 
-/**
- * What a resource still needs from its host before the reference can be read — the module
- * that has to be on, in the host's own vocabulary, or null when the reference needs none.
- *
- * @param {string} resource A `createResources` id.
- * @param {string} host `application` | `firewall`.
- * @returns {{host: string, key: string, api: string, label: string, description: string, via: string}|null}
- */
 export const moduleRequirementFor = (resource, host) => {
   const rows = RESOURCE_DEPENDENCY_MATRIX[resource] ?? []
   let entry = rows.find((row) => row.by === host && row.requires)
@@ -216,22 +187,9 @@ export const moduleRequirementFor = (resource, host) => {
   }
 }
 
-/** The module state a host carries when its own record does not say — the endpoint's defaults. */
 const defaultModulesFor = (host) =>
   host === 'firewall' ? defaultFirewallModuleState() : defaultModuleState()
 
-/**
- * Whether a host already has the module a resource needs.
- *
- * A firewall records its enabled modules as a list of ids and an application records its as
- * a map of the API's own flags, so both shapes are read here and no caller has to know
- * which one it is holding. A record that states neither is read as carrying the endpoint's
- * own defaults, which is what the platform would have applied to it.
- *
- * @param {object} record The host row (a firewall or an application).
- * @param {{key: string, host: string}|null} requirement What `moduleRequirementFor` returned.
- * @returns {boolean} True when there is nothing to turn on.
- */
 export const hostHasModule = (record, requirement) => {
   if (!requirement) return true
   if (!record) return false
@@ -242,28 +200,8 @@ export const hostHasModule = (record, requirement) => {
   return Boolean(defaultModulesFor(requirement.host)[requirement.key])
 }
 
-/**
- * Every consumer of a resource, as the lines a create page can show to say what the thing
- * it is about to make will be able to feed.
- *
- * @param {string} resource A `createResources` id.
- * @returns {Array<{by: string, via: string, as: string, requires?: string}>}
- */
 export const consumersOf = (resource) => RESOURCE_DEPENDENCY_MATRIX[resource] ?? []
 
-/**
- * THE HOST QUESTION FOR A RESOURCE `create-bindings.js` DOES NOT GATE.
- *
- * That file gates only the chains this console can FINISH — the ones whose binding surface
- * exists, so answering lands the reader on a rule they can save. The matrix knows about more
- * references than that, and every one of them is still the first thing worth asking: a
- * certificate presented by no workload and a bucket no connector reads are both records that
- * do nothing, which is exactly the gap the gate exists to close.
- *
- * So these carry the same SHAPE a gated binding has, minus `destination` and the rule fields.
- * Nothing lands on a binding surface; the create simply finishes the ordinary way, and the
- * question has still been asked before the form rather than after it.
- */
 const MATRIX_HOSTS = {
   domains: {
     host: 'workload',
@@ -302,11 +240,4 @@ const MATRIX_HOSTS = {
   }
 }
 
-/**
- * The host question for a resource the gated table does not cover, or null when the matrix
- * has nothing to ask about.
- *
- * @param {string} resource A `createResources` id.
- * @returns {{host: string, noun: string, endpoint: string, mechanism: string, unboundNote: string}|null}
- */
 export const matrixBindingFor = (resource) => MATRIX_HOSTS[resource] ?? null

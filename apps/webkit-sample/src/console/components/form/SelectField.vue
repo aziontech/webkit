@@ -1,40 +1,29 @@
-<script setup>
-  // A labelled Select — the `Field*` triad (Label ↔ control ↔ HelperText) around the
-  // Select COMPOUND rather than around webkit's `FieldSelect`.
-  //
-  // WHY NOT FieldSelect. `FieldSelect` renders the trigger through `Select` but does
-  // not forward `display-value`, so it can only show the raw `modelValue`. Every
-  // select in this console stores a CODE and shows a NAME — country `br` → "Brazil",
-  // theme `system` → "System" — so a pre-seeded FieldSelect renders "br" until the
-  // user opens it and picks the same option again. Until webkit forwards that prop,
-  // a labelled select has to compose the parts itself.
-  //
-  // The a11y wiring is the part that must not be hand-rolled twice, which is why this
-  // exists once instead of at five call sites: the `<label for>` points at
-  // `Select.Trigger`'s id (labelling the wrapper labels nothing — the trigger is the
-  // control), and the helper is tied to the trigger with `aria-describedby`.
+<script setup lang="ts">
   import HelperText from '@aziontech/webkit/helper-text'
   import Label from '@aziontech/webkit/label'
   import Select from '@aziontech/webkit/select'
   import { computed, useId } from 'vue'
 
-  const props = defineProps({
-    // Text rendered inside the Label. When empty, the label row is omitted.
-    label: { type: String, default: '' },
-    // Options rendered in the dropdown: `{ label, value }`, optionally `{ icon,
-    // markClass }` — the FULL icon class (`ai-cor ai-vue`, `pi pi-code`), plus any
-    // filter that mark needs on dark. See lib/format/presets.js for why a bare glyph
-    // name is not enough.
-    options: { type: Array, default: () => [] },
-    // Placeholder shown on the trigger when nothing is selected.
-    placeholder: { type: String, default: 'Select an option...' },
-    // Auxiliary line under the control. When empty, the helper row is omitted.
-    helperText: { type: String, default: '' },
-    // Trigger height: small=28px, medium=32px, large=40px.
-    size: { type: String, default: 'large' },
-    disabled: { type: Boolean, default: false },
-    required: { type: Boolean, default: false },
-    invalid: { type: Boolean, default: false }
+  interface Props {
+    label?: string
+    options?: unknown[]
+    placeholder?: string
+    helperText?: string
+    size?: string
+    disabled?: boolean
+    required?: boolean
+    invalid?: boolean
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    label: '',
+    options: () => [],
+    placeholder: 'Select an option...',
+    helperText: '',
+    size: 'large',
+    disabled: false,
+    required: false,
+    invalid: false
   })
 
   const model = defineModel({ type: [String, Number], default: '' })
@@ -43,8 +32,6 @@
   const helperId = computed(() => `${id}-helper`)
   const describedBy = computed(() => (props.helperText ? helperId.value : undefined))
 
-  // Same precedence webkit's Field* components use: a disabled field's helper is the
-  // padlock line, an invalid one is red, a required one amber, otherwise muted.
   const helperKind = computed(() => {
     if (props.disabled) return 'disabled'
     if (props.invalid) return 'invalid'
@@ -54,14 +41,8 @@
 
   const optionFor = (value) => props.options.find((option) => option.value === value)
 
-  // Stored value → visible label. This is the whole reason the compound is composed
-  // by hand rather than delegated to FieldSelect.
   const displayValue = (value) => optionFor(value)?.label ?? ''
 
-  // The trigger wears the SELECTED option's mark, so a closed select says which one is
-  // chosen the same way the open list says which one each row is. `iconLeft` is a slot
-  // rather than a prop on the trigger, so it can carry the dark-theme filter class an
-  // `ai-cor` mark needs — one more reason the mark travels as a full class.
   const selectedMark = computed(() => {
     const option = optionFor(model.value)
     return option?.icon ? { icon: option.icon, markClass: option.markClass ?? '' } : null
@@ -96,7 +77,7 @@
         >
           <i
             :class="[selectedMark.icon, selectedMark.markClass]"
-            class="shrink-0 text-[1rem] leading-none"
+            class="shrink-0 text-body-md leading-none"
             aria-hidden="true"
           />
         </template>
@@ -113,7 +94,7 @@
           >
             <i
               :class="[option.icon, option.markClass]"
-              class="shrink-0 text-[1rem] leading-none"
+              class="shrink-0 text-body-md leading-none"
               aria-hidden="true"
             />
           </template>

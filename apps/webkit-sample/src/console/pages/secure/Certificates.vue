@@ -1,27 +1,11 @@
 <script setup>
-  // Certificate Manager — the Azion Console "Certificate Manager" module. The app shell (single sidebar +
-  // GlobalHeader with the module breadcrumb) comes from AppLayout; this page renders
-  // only its content, in the shape every module list takes (the webkit-lists skill):
-  // a PAGE HEADING over a CONTROLS HEADER (search + Filter) over a data-driven <Table>
-  // in a flush CardBox. As a first-level module list it carries no navigation tabs; the
-  // heading names the module and holds its create action, and the controls row below it
-  // only narrows the list (../../components/page/PageHeading.vue).
-  //
-  // A certificate list is read by asking one question first: what is about to expire.
-  // So EXPIRY is a real field here rather than only a sortable column, and its
-  // windows look FORWARD (Expired, Within 30 days, …) — “changed in the last 7 days”
-  // is the wrong question to ask of an expiry date.
-  //
-  // Narrowing is the shared FILTER BUTTON (list/FilterButton.vue), beside the search in
-  // the controls row: the COLUMNS decide the fields, the button pre-filters `:data`, and
-  // the search narrows what is left through the table's own global filter.
   import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
   import Dropdown from '@aziontech/webkit/dropdown'
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
   import InputText from '@aziontech/webkit/input-text'
-  import Table from '@aziontech/webkit/table'
+  import TableRoot from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -56,29 +40,15 @@
   import { useSampleMode } from '../../lib/state/sample-mode'
   import { tenancyRows } from '../../lib/state/tenancy-scope'
 
-  // The sample's EMPTY version: this module before it owns anything. The same block the
-  // /empty-states gallery reviews, rendered in the module's own page
-  // (../lib/sample-mode.js, ./ui/ProductFirstUse.vue).
   const { accountEmpty } = useSampleMode()
   const firstUse = productFirstUse('certificates')
 
-  // This page holds its own copy of the seed because it deletes rows; mutating the
-  // shared array would leak that into every surface reading it.
-  // WHAT THIS SESSION MADE, THEN THE SEED. A resource created on the module's create
-  // page is stored as the answers the reader gave and derived back into a row by this
-  // module's own row builder (../../lib/state/created-resources.js), so it arrives here
-  // indistinguishable from a seeded one — newest first, which is where a reader looks
-  // for the thing they just made.
   const certificates = ref([...createdRowsFor('certificates'), ...CERTIFICATES])
 
-  // A certificate belongs to one place in the tenancy chain, so the seed is projected
-  // through the organization / account / workspace in force (src/lib/tenancy-scope.js).
   const scopedCertificates = computed(() => tenancyRows(certificates.value, 'certificates'))
 
   const columns = [
     { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, hideable: false },
-    // Two shares: the cell holds the id AND its copy button, and one share ended
-    // `cert-8801` in an ellipsis (../../components/list/IdCell.vue).
     { accessorKey: 'id', header: 'ID', grow: 2 },
     { accessorKey: 'typeLabel', header: 'Type', enableSorting: true, minWidth: FIT_COLUMN },
     { accessorKey: 'subject', header: 'Subject', grow: 2 },
@@ -95,11 +65,6 @@
     { id: 'actions', kind: 'action', hideable: false }
   ]
 
-  // ── The filter catalog ────────────────────────────────────────────────────
-  // Type, Issuer and Status are the enumerable columns, and Expiry is the forward
-  // window described above. It is `kind: 'range'` because the windows overlap by
-  // design — everything expiring within 30 days is also expiring within 90 — so
-  // holding two at once would say nothing the wider one does not.
   const filterFields = [
     {
       id: 'expiry',
@@ -137,9 +102,6 @@
     }
   ]
 
-  // Filter state, search value, surviving rows and their pagination — one place,
-  // including the rewind that keeps a narrowed list off a page offset it no longer
-  // has rows for (src/lib/list-state.js). `loading` is the tenancy reload window.
   const {
     filters,
     search,
@@ -149,25 +111,10 @@
     refresh
   } = useListFilters(filterFields, scopedCertificates, { pageSize: 8 })
 
-  // The table the controls row drives. Download CSV calls the DS's own `exportCsv()`
-  // through it (../../components/list/ExportButton.vue), so the file honours the
-  // visible columns and the filtered rows instead of re-serialising them here.
   const tableRef = ref(null)
 
-  // Which columns are switched off, driven by the Columns button beside the filter
-  // (../../components/list/ColumnsButton.vue). Only a HIDDEN column is ever recorded, so this
-  // never has to be kept in step with the column model above.
-  //
-  // ID SHIPS OFF. It is the column an operator wants when they are quoting a resource
-  // into a support thread or an API call, and almost never while scanning the list —
-  // so it starts hidden and is one switch away. That is the whole point of the panel:
-  // a column can be available without being in the way by default.
   const columnVisibility = ref({ id: false })
 
-  // Creating: the module's own create page. Its fields come from this resource's
-  // POST body in the Azion v4 API (../lib/create-resources.js), so the form asks for
-  // what the platform actually takes. The email rides along the way every route in this
-  // prototype carries it.
   const route = useRoute()
   const router = useRouter()
 
@@ -177,15 +124,12 @@
       query: { email: route.query.email || undefined }
     })
 
-  // Deleting is the one row action here with no undo, so the menu click only ARMS it:
-  // the row is held until the dialog has been given its name back.
   const pendingDelete = ref(null)
   const deleteOpen = ref(false)
 
   const confirmDelete = () => {
     const row = pendingDelete.value
     if (!row) return
-    // Out of the store as well, or the next mount seeds it back in.
     removeCreatedResource('certificates', row.id)
     certificates.value = certificates.value.filter((item) => item.id !== row.id)
     toast.success(`${row.name} deleted.`)
@@ -193,10 +137,6 @@
   }
 
   const onRowAction = (event, action, row) => {
-    // EDIT OPENS THE SETTINGS PAGE. It used to raise "edit is disabled in the demo", which
-    // left a reader able to create a certificates and unable to change one. The page is
-    // generated from the same fields as the create page (../lib/create-resources.js via
-    // ./ResourceSettings.vue), and the row hands over the name it already knows.
     if (action === 'edit') {
       router.push({
         path: resourceSettingsPath('certificates', row.id),
@@ -225,20 +165,6 @@
       class="flex min-h-full flex-col"
       :class="accountEmpty ? 'layout-column-focused' : 'layout-column'"
     >
-      <!-- THE PAGE HEADING. A first-level resource page names itself: the module name
-           over one line saying what the module is, with the module's own action on the
-           right. The breadcrumb says WHERE you are; the heading says WHAT this page is,
-           and it gives that action one fixed home above the list instead of a control
-           that rides the row narrowing it.
-           The action stays here over an EMPTY list as well: where a page's action sits is
-           a property of the page, not of how many rows it has. The empty state's own
-           button is the in-content door — a `secondary` inside the card — not this same
-           control moving.
-           `size="medium"` is the first-level list scale (components/page/PageHeading.vue):
-           the title names the collection, and the table under it is what the page is for.
-           The parent section below is no longer `:first-child`, so `.layout-section-start`
-           opens it at the boundary step — the list sits tight under the heading (theme
-           semantic/layouts § "THE PAGE SHAPE"). -->
       <PageHeading
         v-if="!accountEmpty"
         size="medium"
@@ -256,22 +182,6 @@
         </template>
       </PageHeading>
 
-      <!-- FIRST USE, IN HOME'S CONTAINER.
-           The same box the first access uses on /home (./HomeEmptyState.vue) and the
-           /empty-states gallery around it (../ProductEmptyStates.vue): centred in the
-           viewport rather than hanging from the top edge. This screen and that one are the
-           same KIND of screen — a short block answering "there is nothing here yet" — and a
-           short block pinned to the top with a void under it reads as content that failed
-           to load. The section step is gone with it: a centred box measures from the middle,
-           and a top margin would only pull it off centre.
-           CENTRED WITH AUTO MARGINS, not `min-h-full justify-center`. That pair looks
-           right and does nothing: `min-height: 100%` resolves against a parent whose own
-           height is `auto` (main is `min-h-full`, not `h-full`), so the box stayed at
-           content height and `justify-center` then centred the content inside itself — a
-           no-op. `my-auto` asks the flex parent to split its free space above and below
-           this one item, which is the definition of centred; and when the block is TALLER
-           than the viewport the auto margins collapse to 0 instead of clipping its top,
-           which is what `flex-1 justify-center` would have done. -->
       <div
         v-if="accountEmpty"
         class="my-auto flex w-full flex-col py-(--spacing-xl)"
@@ -283,7 +193,6 @@
         v-else
         class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)"
       >
-        <!-- ONE band: the controls, the filters and the rows they narrow. -->
         <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
           <ControlsHeader v-if="scopedCertificates.length">
             <FilterButton
@@ -305,10 +214,6 @@
               </template>
             </InputText>
             <template #actions>
-              <!-- THE RIGHT GROUP: the three controls that act on the LISTING rather
-                   than narrow it — fetch it again, take it away as a file, choose which
-                   columns it shows. All glyphs, all `medium`, so the row shares one
-                   32px height with the field and the Filter button opposite. -->
               <RefreshButton
                 :loading="loading"
                 @refresh="refresh"
@@ -330,8 +235,6 @@
             :fields="filterFields"
           />
 
-          <!-- Empty = one clear next action; otherwise the borderless Table in a
-               flush CardBox, framed edge-to-edge. -->
           <section
             v-if="!scopedCertificates.length"
             class="flex min-h-0 flex-1 items-center justify-center"
@@ -358,7 +261,7 @@
                         class="relative flex size-10 items-center justify-center rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface)"
                       >
                         <i
-                          class="ai ai-digital-certificates text-[1rem] leading-none text-(--text-default)"
+                          class="ai ai-digital-certificates text-body-md leading-none text-(--text-default)"
                           aria-hidden="true"
                         />
                       </span>
@@ -384,7 +287,7 @@
           >
             <CardBox :padded="false">
               <template #content>
-                <Table
+                <TableRoot
                   ref="tableRef"
                   v-model:pagination="pagination"
                   v-model:globalFilter="search"
@@ -405,11 +308,6 @@
                     />
                   </template>
 
-                  <!-- SUBJECT, ISSUER AND EXPIRY ARE PARSED OUT OF THE PEM by the
-                       platform, so a certificate uploaded in this session has none of
-                       them yet. Three blank cells read as a broken row; an em dash reads
-                       as the absence it is, which is what every other cell in this console
-                       does for a value its record does not claim. -->
                   <template #cell-subject="{ value }">
                     <span class="min-w-0 truncate">{{ value || '—' }}</span>
                   </template>
@@ -429,8 +327,6 @@
                       size="medium"
                     />
                   </template>
-                  <!-- WHO and WHEN are two columns now, so each cell says one thing:
-                       the face and the name here, the relative time next to it. -->
                   <template #cell-author="{ row }">
                     <AuthorCell
                       :author="row.author"
@@ -493,7 +389,7 @@
                       </Dropdown.Group>
                     </Dropdown>
                   </template>
-                </Table>
+                </TableRoot>
               </template>
             </CardBox>
           </section>

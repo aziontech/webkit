@@ -1,44 +1,4 @@
 <script setup>
-  // The page, WITHOUT its data — what the console shows for a beat when the
-  // session token expires under it (see ../../lib/session.js for the sequence).
-  //
-  // Why a wire and not a spinner or a modal: every value on the screen at that
-  // moment — the org in the header, the rows in the table, the name of the
-  // resource — arrived through a request the dead token authorised. None of it is
-  // backed by anything any more. A spinner on top would claim the page is still
-  // coming back, and a modal would claim the page underneath is still yours. The
-  // wire says the true thing: the shape of where you were is still there, the
-  // content is gone, and you are about to be signed out of it.
-  //
-  // It is a wire of the CURRENT route, not one generic loading screen, and it gets
-  // there two different ways:
-  //
-  //   - THE SHELL IS MEASURED, not guessed. The header's height and the rail's
-  //     width are read off the live DOM on mount (the page is still mounted
-  //     underneath at that point), so the wire inherits the reader's own console:
-  //     a rail they dragged wider, a rail they collapsed to icons, and below `md`
-  //     no rail at all — all correct from one measurement, instead of a copy of
-  //     AppLayout's breakpoints that would drift from it.
-  //   - THE CONTENT SHAPE comes from the route family, and each family is drawn as
-  //     that family really is in this app:
-  //       list   → controls row, borderless table in a flush card, pager. No page
-  //                heading: a first-level module list has none (the module name is
-  //                the header's crumb).
-  //       detail → the full-bleed tab bar that forms the bottom of the header,
-  //                then the open tab's cards inside their own boundary.
-  //       form   → the create flow: PageHeading, section-titled cards of two-column
-  //                field rows, sticky action bar.
-  //       home   → the narrow usage rail beside the resources card, centred.
-  //     Four shapes cover ~50 routes; the fallback is the list, which is what most
-  //     of the console is.
-  //
-  // Everything is `--bg-placeholder` through the DS Skeleton, the same fill the
-  // onboarding preview uses for the parts it does not own (see OnboardingWire.vue),
-  // and the same boundary / measure classes the real pages use (src/styles/
-  // layout.css) so the wire's column sits exactly where the content it replaces
-  // sat. Nothing here is a real control: the wire must never look like a screen you
-  // can use, and it deliberately eats pointer events, because the session behind it
-  // is already gone.
   import CardBox from '@aziontech/webkit/card-box'
   import Skeleton from '@aziontech/webkit/skeleton'
   import { computed, onMounted, ref } from 'vue'
@@ -48,32 +8,20 @@
 
   const route = useRoute()
 
-  // Fallbacks are only ever used if the shell is somehow not on screen when the
-  // wire mounts; in practice both are measured on the first frame.
   const HEADER_FALLBACK = 56
   const headerHeight = ref(HEADER_FALLBACK)
   const railWidth = ref(0)
 
-  // The rail is either absent or full-width — there is no narrow variant to wire.
-  // Measured in the real shell: expanded it is 300px, the drag clamps to 256 at the
-  // low end (`Sidebar`'s min container token), and COLLAPSED it is 0 — the rail
-  // stays mounted and animates its width to nothing (see AppLayout.vue), so the
-  // page genuinely has no rail on screen and neither does the wire.
   onMounted(() => {
     const header = document.querySelector('[data-testid="layout-global-header"]')
     if (header) headerHeight.value = Math.round(header.getBoundingClientRect().height)
 
-    // Two rails can be mounted at once — the fixed one and the copy inside the
-    // mobile nav Drawer — so take the one on the LEFT edge, and only if it is
-    // actually visible (below `md` the fixed rail is `display:none`, which reports
-    // a width of 0 and correctly wires a shell with no rail).
     const rail = [...document.querySelectorAll('[data-testid="layout-sidebar"]')]
       .map((node) => node.getBoundingClientRect())
       .find((rect) => rect.width > 0 && rect.left < 100)
     if (rail) railWidth.value = Math.round(rail.width)
   })
 
-  // Route → content shape. Ordered: the first pattern that matches wins.
   const FAMILIES = [
     [/^(home|dashboard)$/, 'home'],
     [/(-new|-edit)$|^(create|deploy|release-composer|forms-.*)$/, 'form'],
@@ -85,9 +33,6 @@
     return FAMILIES.find(([pattern]) => pattern.test(name))?.[1] ?? 'list'
   })
 
-  // The page column each family is capped at, matching the theme's layout tokens:
-  // home, the overviews, the detail dashboards and the lists all take the STANDARD page
-  // container (`--layout-measure`, 1388px); create flows take their own.
   const columnClass = computed(
     () =>
       ({
@@ -98,10 +43,6 @@
       })[family.value]
   )
 
-  // Nav rows read like the real rail — a first group with no overline, then product
-  // areas under one each — and the widths vary the way real labels do instead of
-  // stacking as identical blocks (same vocabulary as OnboardingWire). Four groups,
-  // because the real rail's items run the full height of the viewport.
   const NAV_GROUPS = [
     { id: 'top', labelled: false, items: ['40%', '52%', '58%', '56%'] },
     { id: 'build', labelled: true, items: ['62%', '46%', '48%', '54%', '66%'] },
@@ -109,30 +50,16 @@
     { id: 'secure', labelled: true, items: ['42%', '50%', '54%', '72%', '60%'] }
   ]
 
-  // A table row's cells, in the proportions the module lists actually use: a wide
-  // principal column, then values, then a short status. Eight rows — the page size
-  // every list in this app is paginated at.
   const TABLE_CELLS = ['18%', '15%', '9%', '17%', '11%', '8%']
   const TABLE_ROWS = 8
 
-  // Two sections of three field rows, which is the shape of every create page AND
-  // every resource tab here: a section title over a card whose rows are
-  // name-and-guidance on the left, the control on the right
-  // (`.layout-field-control`).
   const FORM_SECTIONS = 2
   const FORM_ROWS = ['58%', '44%', '66%']
 
-  // A resource page's tabs, at the widths real tab labels run to.
   const DETAIL_TABS = ['6rem', '3rem', '7.5rem', '8rem', '9rem', '6.5rem']
 </script>
 
 <template>
-  <!-- Above every overlay in the app (the DS tops out at 1100 for an input popup
-       over a panel): if the token dies while a Drawer or a Select is open, the wire
-       has to cover those too — they belong to the session that just ended.
-
-       `role="status"` + one sr-only line, because to a screen reader the skeletons
-       are nothing (each one is `aria-hidden`) and the announcement IS the event. -->
   <div
     role="status"
     aria-live="polite"
@@ -142,8 +69,6 @@
   >
     <span class="sr-only">Session expired. Signing you out.</span>
 
-    <!-- The header, at its measured height: the mark, the tenancy chain, the
-         breadcrumb, then the actions and the avatar on the right. -->
     <div
       class="flex shrink-0 items-center gap-(--spacing-xs) border-b-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface) px-(--spacing-md)"
       :style="{ height: `${headerHeight}px` }"
@@ -190,10 +115,6 @@
     </div>
 
     <div class="flex min-h-0 flex-1">
-      <!-- The rail, at exactly the width the reader has it: the search field, the
-           nav groups, and the signed-in user pinned to the bottom. Absent entirely
-           when the page had no rail on screen — a create flow, a collapsed rail, or
-           below `md`. -->
       <div
         v-if="railWidth > 0"
         class="flex shrink-0 flex-col gap-(--spacing-lg) overflow-hidden border-r-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface) p-(--spacing-sm)"
@@ -219,8 +140,6 @@
           />
         </div>
 
-        <!-- The rail's footer: the signed-in user, which is precisely what the
-             expired token stopped identifying. -->
         <div class="mt-auto flex items-center gap-(--spacing-xs)">
           <Skeleton
             width="1.5rem"
@@ -234,9 +153,6 @@
       </div>
 
       <div class="flex min-w-0 flex-1 flex-col">
-        <!-- DETAIL — the tab bar is the bottom of the header on a resource page:
-             full-bleed, with its own border across the whole content zone. So it
-             sits OUTSIDE the boundary, exactly as PageTabs does. -->
         <div
           v-if="family === 'detail'"
           class="layout-boundary-inline flex h-14 shrink-0 items-center gap-(--spacing-lg) border-b-(length:--border-width-default) border-(--border-muted)"
@@ -250,8 +166,6 @@
         </div>
 
         <div class="layout-boundary min-h-0 flex-1 overflow-hidden">
-          <!-- LIST — the controls row that narrows the table, then the table. One
-               band: the group step joins them, as on the real module lists. -->
           <div
             v-if="family === 'list'"
             :class="columnClass"
@@ -296,9 +210,6 @@
                     height="0.875rem"
                   />
                 </div>
-                <!-- The pager: the count on the left, the controls on the right.
-                     Without it the card stops where the reader knows a footer
-                     was. -->
                 <div
                   class="flex items-center justify-between gap-(--spacing-md) border-t-(length:--border-width-default) border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
                 >
@@ -319,13 +230,6 @@
             </CardBox>
           </div>
 
-          <!-- DETAIL body — the open tab's cards. -->
-          <!-- FORM and DETAIL share one body, because in this app they ARE the same
-               shape: a heading, then section-titled cards of two-column field rows
-               (name and guidance on the left, the control on the right). A create
-               page adds the sticky action bar below; a resource page adds the tab
-               bar above. Only the measure differs, and that comes from
-               `columnClass`. -->
           <div
             v-else-if="family === 'form' || family === 'detail'"
             :class="columnClass"
@@ -384,11 +288,6 @@
             </div>
           </div>
 
-          <!-- HOME — the narrow usage rail beside the resources card, centred in
-               the scroll area the way the real page centres itself. The shape
-               itself is ./HomeWire.vue, because Overview shows the same wire on a
-               cold arrival: two hosts, one shape, so a layout change to that page
-               cannot leave one of them drawing a page that no longer exists. -->
           <div
             v-else
             :class="columnClass"
@@ -398,7 +297,6 @@
           </div>
         </div>
 
-        <!-- The create/edit flows end in a sticky bar, so their wire does too. -->
         <div
           v-if="family === 'form'"
           class="layout-boundary-inline flex shrink-0 items-center justify-end gap-(--spacing-sm) border-t-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface) py-(--spacing-sm)"

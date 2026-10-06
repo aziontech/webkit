@@ -1,12 +1,4 @@
 <script setup>
-  // Marketplace — the Azion Console "Marketplace" landing, structured like the
-  // real product (azion.com/.../products/marketplace): two top-level offerings,
-  // TEMPLATES (pre-built starter projects) and INTEGRATIONS (functions that
-  // improve/compose an application). The centered TabView at the top switches
-  // between them. Templates shows a framework grid whose colored logo is
-  // grayscale until hover, with a soft brand-color glow. Integrations are grouped
-  // by execution context — Applications-based and Firewall-based. The app shell
-  // (sidebar + GlobalHeader breadcrumb) comes from AppLayout.
   import EmptyState from '@aziontech/webkit/empty-state'
   import InputText from '@aziontech/webkit/input-text'
   import TabView from '@aziontech/webkit/tab-view'
@@ -23,65 +15,26 @@
   import { applyFilters } from '../../lib/behavior/filter-bar'
   import { FRAMEWORKS } from '../../lib/data/frameworks'
 
-  // Where `Documentation` goes. The catalog's own docs, the URL the template and integration
-  // cards already link for "learn more" (lib/data/product-empty-states.js states it per
-  // product's `startFast`; the module itself has no registry entry of its own).
   const HELP = 'https://www.azion.com/en/documentation/products/marketplace/'
 
-  // ── ARRIVING ON A NAMED ENTRY (`?tab=` + `?q=`) ────────────────────────────
-  // A product's first use offers four Marketplace functions by name
-  // (../product-empty-states.js → `startFast`), and a row that names one thing has to
-  // land on THAT thing — arriving on the Templates grid with a search box the reader
-  // then has to retype the row's own title into would be the row not working.
-  //
-  // So the tab and the search term are readable from the URL: `?tab=integrations`
-  // selects the offering, `?q=Hello World` seeds that offering's own search. Read once
-  // on arrival and then owned by the controls — the reader can clear the field, and the
-  // query does not follow them around as they type (the same read-once treatment
-  // `?state=` gets in ../lib/sample-mode.js).
   const route = useRoute()
 
-  // The two top-level Marketplace offerings.
   const activeTab = ref(route.query.tab === 'integrations' ? 'integrations' : 'templates')
 
-  // Independent search per offering, seeded from `?q=` on the tab that was asked for.
   const initialQuery = typeof route.query.q === 'string' ? route.query.q : ''
   const templateQuery = ref(activeTab.value === 'templates' ? initialQuery : '')
   const integrationQuery = ref(activeTab.value === 'integrations' ? initialQuery : '')
 
-  // ── Templates: pre-built framework starters ──
-  // READ FROM THE ONE CATALOG (../../lib/data/frameworks.js), not typed again here. This
-  // list used to be its own copy of ten framework starters, which is two catalogs of the
-  // same thing: the create flow's template list grew to the platform's full preset set
-  // (the 25 `@aziontech/presets` exports) and this grid would still have been offering the
-  // same ten — three of which the platform has no preset for at all. `id`/`name` are what
-  // the card below binds, so the shape is mapped once here.
-  //
-  // `icon` is the brand mark — `ai-cor ai-*` for a colored logo, `ai ai-*` for a font
-  // glyph — grayscale until hover; `color` is the framework's brand hex for the soft hover
-  // glow, and the card falls back to `--primary` for a framework whose brand colour we do
-  // not carry.
   const templates = FRAMEWORKS.map((framework) => ({
     id: framework.tech,
     name: framework.title,
     description: framework.description,
     icon: framework.icon,
-    // What the mark needs on the dark theme — carried, not re-derived: the Next.js logo
-    // is a black disc, so on dark it is the canvas with a white wedge floating in it
-    // until it is inverted (../../lib/data/frameworks.js → `DARK_INK_MARKS`).
     markClass: framework.markClass,
     color: framework.color
   }))
 
-  // ── Integrations: functions that improve/compose an application. Azion's
-  // taxonomy splits them by execution context — Application Functions and Firewall
-  // Functions — and within each context by use case (the subcategories from the
-  // Marketplace integrations catalog). Each card uses a logo-left / text-right
-  // layout: the Azion Marketplace vendor mark, then the title with "by {vendor}"
-  // and the description. Vendors vary: Azion curates most, but partners publish
-  // the rest (Radware, Axur, Google, hCaptcha, Saffe, IPQualityScore, Upstash). ──
   const integrations = [
-    // ── Application Functions · Testing and validation ──
     {
       id: 'ab-tests',
       name: 'A/B Tests',
@@ -109,7 +62,6 @@
       context: 'applications',
       group: 'Testing and validation'
     },
-    // ── Application Functions · Content segmentation and personalization ──
     {
       id: 'content-targeting',
       name: 'Content Targeting',
@@ -127,7 +79,6 @@
       context: 'applications',
       group: 'Content segmentation and personalization'
     },
-    // ── Firewall Functions · Bot management ──
     {
       id: 'bot-manager-lite',
       name: 'Azion Bot Manager Lite',
@@ -145,7 +96,6 @@
       context: 'firewall',
       group: 'Bot management'
     },
-    // ── Firewall Functions · Security optimization and access control ──
     {
       id: 'axur-cardstream',
       name: 'Axur Cardstream',
@@ -278,7 +228,6 @@
       context: 'firewall',
       group: 'Security optimization and access control'
     },
-    // ── Firewall Functions · Workloads and payloads ──
     {
       id: 'limit-payload-size',
       name: 'Limit Payload Size',
@@ -331,22 +280,11 @@
     return templates.filter((t) => `${t.name} ${t.description}`.toLowerCase().includes(term))
   })
 
-  // Human labels for each execution context; also used as the card's corner Tag.
   const contextLabels = { applications: 'Application', firewall: 'Firewall' }
 
-  // The spotlight row at the top of the panel — a curated few, rendered in the
-  // featured card anatomy.
   const featuredIds = new Set(['ab-tests', 'bot-manager-lite', 'recaptcha'])
   const featuredIntegrations = integrations.filter((item) => featuredIds.has(item.id))
 
-  // ── Filters (multiple selection, no label, no checkbox) ──
-  // Each filter is a MultiSelect whose trigger reads "Publisher: All" until the
-  // user narrows it. Empty = no constraint on that axis.
-  // The filter catalog. A card grid narrows by the same membership rule a table does
-  // — is this integration's publisher one of these — so it takes the same bar
-  // (list/FilterButton.vue) rather than a row of Selects that had to be width-tuned per
-  // field. The grid keeps its own search: unlike a table it has no global filter of
-  // its own, so the term is matched here across name, vendor and description.
   const integrationFields = [
     {
       id: 'vendor',
@@ -378,7 +316,6 @@
 
   const integrationFilters = ref({})
 
-  // Search across name/vendor/description, then run the catalog over what is left.
   const filteredIntegrations = computed(() => {
     const term = integrationQuery.value.trim().toLowerCase()
     const matched = term
@@ -409,7 +346,6 @@
         :documentation="HELP"
       />
 
-      <!-- Top-level offerings: Templates | Integrations, centered. -->
       <TabView
         v-model:value="activeTab"
         class="layout-section-start"
@@ -426,7 +362,6 @@
         </TabView.List>
 
         <TabView.Content>
-          <!-- Templates: pre-built framework starters -->
           <TabView.Panel value="templates">
             <div class="flex flex-col gap-(--spacing-lg)">
               <InputText
@@ -469,10 +404,8 @@
             </div>
           </TabView.Panel>
 
-          <!-- Integrations: a featured spotlight row, then a filterable grid -->
           <TabView.Panel value="integrations">
             <div class="flex flex-col">
-              <!-- Featured row: the same card in its spotlight anatomy. -->
               <section class="flex flex-col gap-(--layout-group-gap)">
                 <p class="text-heading-xxs text-(--text-default)">Featured</p>
                 <div class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2 lg:grid-cols-3">
@@ -490,11 +423,6 @@
                 </div>
               </section>
 
-              <!-- The Filter button then the search on one row, with the applied chips
-                   on a row under them — the same shape every module list opens with.
-                   No Refresh or Download CSV beside them: this is a CATALOG of cards,
-                   not a table, so there is nothing to re-fetch here and nothing whose
-                   columns a CSV could honour. -->
               <div
                 class="layout-section-start flex flex-col gap-(--spacing-sm) md:flex-row md:items-center"
               >

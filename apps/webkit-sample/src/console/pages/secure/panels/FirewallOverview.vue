@@ -1,14 +1,15 @@
-<script setup>
+<script setup lang="ts">
   import { computed } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
   import FirewallSummary from '../../../components/firewall/FirewallSummary.vue'
   import { productFirstUse } from '../../../lib/data/product-empty-states'
 
-  defineProps({
-    /** The record this page is about (../../../lib/data/firewalls.js). */
-    firewall: { type: Object, required: true }
-  })
+  interface Props {
+    firewall: Record<string, unknown>
+  }
+
+  defineProps<Props>()
 
   const HELP = productFirstUse('firewall').learnMore.href
 

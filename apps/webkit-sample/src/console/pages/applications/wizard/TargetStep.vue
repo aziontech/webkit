@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
   import InputText from '@aziontech/webkit/input-text'
@@ -11,16 +11,21 @@
   import { TEMPLATE_TARGETS } from '../../../lib/data/application-flows'
   import { integrationFor } from '../../../lib/data/template-integrations'
 
-  const props = defineProps({
-    /** The integration template being installed — what the card names and previews. */
-    source: { type: Object, default: null },
-    /** The answer already given, so coming BACK to this part shows it. */
-    target: { type: Object, default: null },
-    /** The flow-wide lock while the commit is in flight. */
-    disabled: { type: Boolean, default: false }
+  interface Props {
+    source?: Record<string, unknown>
+    target?: Record<string, unknown>
+    disabled?: boolean
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    source: null,
+    target: null,
+    disabled: false
   })
 
-  const emit = defineEmits(['update:target'])
+  const emit = defineEmits<{
+    'update:target': [value: unknown]
+  }>()
 
   const VISIBLE = 4
 
@@ -191,7 +196,7 @@
                   class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
                 >
                   <i
-                    class="ai ai-edge-application text-[1rem] leading-none text-(--text-default)"
+                    class="ai ai-edge-application text-body-md leading-none text-(--text-default)"
                     aria-hidden="true"
                   />
                 </span>
@@ -231,7 +236,7 @@
                 >
                   <i
                     :class="TEMPLATE_TARGETS.new.icon"
-                    class="text-[1rem] leading-none text-(--text-default)"
+                    class="text-body-md leading-none text-(--text-default)"
                     aria-hidden="true"
                   />
                 </span>

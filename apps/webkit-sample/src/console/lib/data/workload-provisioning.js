@@ -1,43 +1,7 @@
-// THE WORKLOAD PROVISIONING PIPELINE — the steps the create wizard's final run streams
-// through ../../components/deployment/DeploymentFlow.vue.
-//
-// Same shape as the template-deploy model (../../../shared/ui/deployment/deployment-steps.js):
-// one entry per stage that can FAIL ON ITS OWN, each owning its slice of the log. That rule
-// is what makes the rows worth reading — an application that will not build and a release
-// with nothing to serve are different problems with different fixes, so they are different
-// rows. A row that bundled them could only report that "something in there" broke.
-//
-// ── THE ORDER IS THE CHAIN'S OWN ──
-//
-// Resources first, then the binding: the application, then the firewall, then the
-// environment they land in, the deployment the release is cut against, the release itself,
-// and only then the WORKLOAD — which is the thing that ties an address to all of it. This
-// used to run the other way round, registering the workload first and cutting the release
-// last, which narrated a public address existing several seconds before anything could
-// answer on it. It also meant a failure in the application — by far the likeliest one —
-// was reported after a workload and a domain had already been provisioned for it.
-//
-// ── EVERY RESOURCE ROW HAS TWO STORIES ──
-//
-// A create that MADE a resource and one that reused an existing one are different work with
-// different failures: a new application cannot collide with a version that is still
-// building, and an existing one cannot fail to be created. So each of the three resource
-// rows narrates the branch the reader actually took, rather than one row that covers both.
-//
-// `failLogs` is the step's WHOLE output when it is the one that fails — never an error
-// appended to the success log, which would leave a "successfully" line sitting above the
-// error that contradicts it.
-
 import { AZION_DOMAIN_SUFFIX } from './provisioning'
 
-// The suffix every Azion-provided workload domain carries. It lives in the shared
-// provisioning module because the CHAIN mints domains too (a template deploy is given one
-// rather than asked for it), and a console-side literal would let the wizard's preview and
-// the chain it provisions name different hostnames. Re-exported here because this is the
-// module the console's workload surfaces already read.
 export { AZION_DOMAIN_SUFFIX }
 
-/** The domain a workload name produces. One derivation, used by the wizard and the logs. */
 export const domainForWorkload = (name) => {
   const slug = String(name || '')
     .trim()
@@ -47,28 +11,6 @@ export const domainForWorkload = (name) => {
   return slug ? `${slug}${AZION_DOMAIN_SUFFIX}` : ''
 }
 
-/**
- * The pipeline for one workload create.
- *
- * It is BUILT, not a constant, because every row depends on what the reader answered: the
- * firewall row only exists when they asked for protection, and each resource row narrates
- * whether it was created or reused. A fixed model would have had to narrate a firewall bind
- * on a workload with no firewall — a log line claiming work that never ran, which is the one
- * thing a log must never do.
- *
- * @param {object} input
- * @param {string} input.workload      The workload's name.
- * @param {string} input.domain        The address it answers on.
- * @param {string} [input.application] The application the release serves.
- * @param {boolean} [input.applicationExisting] True when an application is REUSED.
- * @param {boolean} [input.protected]  Whether a firewall stands in front of the workload.
- * @param {string} [input.firewall]    Which firewall, when protected.
- * @param {boolean} [input.firewallBound] True when an EXISTING firewall is bound.
- * @param {string} [input.environment] The environment the binding lands on.
- * @param {string} [input.deployment]  The deployment the release is cut against.
- * @param {boolean} [input.deploymentExisting] True when a deployment is REUSED.
- * @returns {Array<object>} The step model for DeploymentFlow / DeploymentLogs.
- */
 export function workloadProvisioningSteps({
   workload = 'workload',
   domain = '',
@@ -85,8 +27,6 @@ export function workloadProvisioningSteps({
   const app = application || 'the application'
 
   const steps = [
-    // 1. THE APPLICATION. Reused, it only has to be checked for a version that can serve;
-    // created, it has to be built before anything downstream can bind it.
     applicationExisting
       ? {
           key: 'application',
@@ -129,8 +69,6 @@ export function workloadProvisioningSteps({
         }
   ]
 
-  // 2. THE FIREWALL — only when the reader asked for protection. A log that narrates a
-  // firewall bind on an unprotected workload is a log that lies.
   if (isProtected) {
     steps.push(
       firewallBound
@@ -172,9 +110,6 @@ export function workloadProvisioningSteps({
   }
 
   steps.push(
-    // 3. THE ENVIRONMENT. Resolved rather than created: it almost always exists, and the
-    // row is here because "almost always" is not always — an account without Production
-    // gets one, and gets told.
     {
       key: 'environment',
       title: 'Resolve environment',
@@ -192,7 +127,6 @@ export function workloadProvisioningSteps({
         ['13:47:45', '[ERROR] - # Provisioning aborted.']
       ]
     },
-    // 4. THE DEPLOYMENT the release is cut against.
     deploymentExisting
       ? {
           key: 'deployment',
@@ -228,8 +162,6 @@ export function workloadProvisioningSteps({
             ['13:47:48', '[ERROR] - # Provisioning aborted.']
           ]
         },
-    // 5. THE RELEASE — where the resources above are actually composed into something that
-    // can serve.
     {
       key: 'release',
       title: 'Deploy release',
@@ -248,9 +180,6 @@ export function workloadProvisioningSteps({
         ['13:47:52', '[ERROR] - # Provisioning aborted.']
       ]
     },
-    // 6. THE WORKLOAD — the address, and the certificate that serves it. Last, because it
-    // is the row that binds everything above to a public hostname; provisioning it first
-    // would announce an address that answers nothing.
     {
       key: 'workload',
       title: 'Create Workload',
@@ -269,8 +198,6 @@ export function workloadProvisioningSteps({
         ['13:47:55', '[ERROR] - # Provisioning aborted.']
       ]
     },
-    // 7. THE EDGE. Everything above exists in the API; this is the row that makes it true
-    // for traffic.
     {
       key: 'propagate',
       title: 'Propagate to the edge',

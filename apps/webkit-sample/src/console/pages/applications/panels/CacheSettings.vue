@@ -1,51 +1,11 @@
 <script setup>
-  // Application → Cache Settings. How content is cached at the edge and in browsers.
-  //
-  // An INTERNAL page on the DATA measure — see DeviceGroups.vue for the page shape
-  // (one band: the controls row over the table it narrows, carrying the band step).
-  //
-  // Creation is the console's second-level pattern: a Drawer of `Section` bands
-  // committed by ONE scoped save (ResourceDrawer owns that shell), with FIELDS
-  // SEPARATED — a real `<Label for>` over a full-width control (../../components/
-  // form/FieldStack.vue, the shape ../../build/AddVariableDrawer.vue set). The band's
-  // guidance is said once, in the `Section` hint, rather than under every row.
-  //
-  // ── THE DRAWER ASKS FOR THE WHOLE REQUEST BODY ──
-  //
-  // It used to ask for the name alone, on the reasoning that a cache setting is
-  // "created by name and tuned afterwards". That was wrong about the resource: the
-  // TTLs are not a refinement of a cache setting, they ARE the cache setting, and a
-  // name-only create commits an object that caches at whatever the API defaults to —
-  // then makes the reader find it in the list and open it again to say the one thing
-  // they opened the drawer to say. So the drawer now carries the full v4 body
-  // (../../lib/data/cache-settings.js documents it), split the way the endpoint
-  // splits:
-  //
-  //   General            `name`
-  //   Browser Cache      `browser_cache` — behavior, and the TTL when it overrides
-  //   Edge Cache         `modules.cache` — behavior + TTL, stale cache, large file
-  //                      optimization, tiered cache
-  //   Advanced cache key `modules.application_accelerator` — what makes two requests
-  //                      two objects. COLLAPSED and last: every field in it is
-  //                      optional, and none of it is honoured unless the Application
-  //                      Accelerator module is active on the application.
-  //
-  // A dependent field is rendered only while it applies — no Maximum TTL under
-  // "Honor origin cache headers", no allowlist under "Ignore all". The band eases its
-  // own height when that happens (Section owns the move), so answering a select never
-  // jumps the fields below it.
-  //
-  // The "Add Cache Settings" button is IN THIS HEADING, not on the page's tab row it
-  // used to ride. A tab is its own page, so its create action belongs where every
-  // second-level list puts it — beside the heading that names the list — and the label
-  // carries the product module's own name (see ../ApplicationDetail.vue § the tab set).
   import CardBox from '@aziontech/webkit/card-box'
   import FieldSwitchBlock from '@aziontech/webkit/field-switch-block'
   import InputNumber from '@aziontech/webkit/input-number'
   import InputText from '@aziontech/webkit/input-text'
   import MultiSelect from '@aziontech/webkit/multi-select'
   import Select from '@aziontech/webkit/select'
-  import Table from '@aziontech/webkit/table'
+  import TableRoot from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import { computed, reactive, ref, watch } from 'vue'
@@ -84,14 +44,8 @@
   import { deviceGroupOptions } from '../../../lib/data/device-groups'
   import { productFirstUse } from '../../../lib/data/product-empty-states'
 
-  // Where `Documentation` goes. Taken from the registry rather than restated: these tabs are
-  // parts of an application, so the module's own doc URL is the right destination
-  // and lib/data/product-empty-states.js already holds it.
   const HELP = productFirstUse('applications').learnMore.href
 
-  // Browser and edge cache are one column each: the behavior decides whether the TTL
-  // beside it is even in effect, so they are summarised together rather than split
-  // into a "behavior" and a "TTL" column where half the TTLs mean nothing.
   const columns = [
     { accessorKey: 'name', header: 'Name', principal: true, hideable: false, enableSorting: true },
     { accessorKey: 'id', header: 'ID', minWidth: FIT_COLUMN },
@@ -107,33 +61,16 @@
     }
   ]
 
-  // Free-text search, hoisted into the ControlsHeader above the card.
   const search = ref('')
 
-  // What the controls row's Refresh button does, and the flag the table binds for
-  // its skeleton rows — one flag over both causes, a scope switch and a manual
-  // refresh (../../../lib/behavior/list-state.js). This panel narrows by search alone,
-  // so it takes the refresh half on its own rather than through `useListFilters`.
   const { loading, refresh } = useListRefresh()
 
-  // The table the controls row drives — Download CSV calls its `exportCsv()`
-  // (../../../components/list/ExportButton.vue).
   const tableRef = ref(null)
 
-  // Which columns are switched off, driven by the Columns button beside the search
-  // (../../../components/list/ColumnsButton.vue). Only a HIDDEN column is ever recorded, so this
-  // never has to be kept in step with the column model above.
-  //
-  // ID SHIPS OFF. It is the column an operator wants when they are quoting a resource
-  // into a support thread or an API call, and almost never while scanning the list —
-  // so it starts hidden and is one switch away. That is the whole point of the panel:
-  // a column can be available without being in the way by default.
   const columnVisibility = ref({ id: false })
 
   const cacheSettings = useCacheSettings()
 
-  // The summaries are derived for the table rather than stored, so a setting edited
-  // anywhere cannot leave a stale label behind.
   const rows = computed(() =>
     cacheSettings.value.map((setting) => ({
       ...setting,
@@ -142,22 +79,9 @@
     }))
   )
 
-  // ── Create and edit ───────────────────────────────────────────────────────
-  // ONE drawer for both, the shape Rules Engine settled (../CreateRuleDrawer.vue):
-  // a cache setting's anatomy is the same whether it is being written or corrected,
-  // and a second read-only surface for it would be a third place the four bands have
-  // to be kept in step with. `editing` is what tells the drawer which it is.
-  //
-  // THE ROW IS THE WAY IN. The table summarises a setting in four cells; the setting
-  // ITSELF is the whole request body, so clicking the row opens that body in the form
-  // that writes it — the create-surface rule's answer for editing inside a resource
-  // (../../lib/surfaces.js). The summary columns are a way to FIND the setting, never
-  // a substitute for reading it.
   const createOpen = ref(false)
   const editing = ref(null)
 
-  // Defaults are the endpoint's own: honor the origin in the browser, override at the
-  // edge at 60s — the TTL floor for an application without Application Accelerator.
   const blankForm = () => ({
     name: '',
     browserBehavior: 'honor',
@@ -179,16 +103,6 @@
     deviceGroups: []
   })
 
-  /**
-   * A stored setting as the flat form the drawer edits — the inverse of what `submit`
-   * builds. Everything falls back to the blank form's value, because the seed records
-   * (and any setting created before a field existed) carry only part of the body: a
-   * missing Advanced band must open on its defaults, not on `undefined`.
-   *
-   * A TTL is only read back when the behavior that uses it is in effect. A setting
-   * that honors the origin stores `maxAge: 0`, and seeding the field with that would
-   * hand the reader a 0-second cache the moment they switched to Override.
-   */
   const ttlOf = (cache, fallback) =>
     cache?.behavior === 'override' ? (cache.maxAge ?? fallback) : fallback
 
@@ -234,9 +148,6 @@
     createOpen.value = true
   }
 
-  // Seeded from a COPY of the row, never the record itself: the fields write into
-  // `form` as they are typed, and pointing them at the stored object would rewrite the
-  // row behind the drawer while the reader is still deciding — including if they leave.
   const openSetting = (event, row) => {
     editing.value = row
     Object.assign(form, formFor(row))
@@ -244,11 +155,6 @@
     createOpen.value = true
   }
 
-  // Opened from the page's tab row (ApplicationDetail).
-
-  // Which dependent fields apply. Each one is the condition the API itself puts on
-  // the field: `max_age` is only read when the behavior overrides, `fields` only when
-  // the variation is a list.
   const browserOverrides = computed(() => form.browserBehavior === 'override')
   const edgeOverrides = computed(() => form.edgeBehavior === 'override')
   const queryStringListed = computed(() =>
@@ -257,8 +163,6 @@
   const cookiesListed = computed(() => ['allowlist', 'denylist'].includes(form.cookiesBehavior))
   const devicesListed = computed(() => form.devicesBehavior === 'allowlist')
 
-  // Read at open time, not at setup: a group created on the Device Groups tab has to
-  // be selectable here in the same session.
   const deviceGroups = computed(() => deviceGroupOptions())
 
   const behaviorLabel = (options) => (value) => optionLabel(options, value)
@@ -266,8 +170,6 @@
   const methodsLabel = (values) => optionsLabel(CACHEABLE_METHODS, values)
   const deviceGroupsLabel = (values) => optionsLabel(deviceGroups.value, values)
 
-  // Reset on close, so reopening never shows the last attempt's values or errors —
-  // and never opens the create with the last edit's record still behind it.
   watch(createOpen, (open) => {
     if (open) return
     editing.value = null
@@ -288,8 +190,6 @@
     try {
       await sleep(900)
       const name = form.name.trim()
-      // Built the way the endpoint reads it — a field that does not apply is not sent,
-      // so a setting that honors the origin never carries a TTL nobody set.
       const record = {
         name,
         browserCache: {
@@ -366,18 +266,9 @@
       </template>
     </PageHeading>
 
-    <!-- The page's parent section. It holds one section here — the controls row
-         over the table it narrows, at the GROUP step — and spaces whatever sits
-         inside it at --layout-section-gap. -->
     <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)">
       <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-        <!-- The band's CONTROLS: narrowing on the left, the band's own action on the
-             right, above the card — the same row every list in the console opens with. -->
         <ControlsHeader>
-          <!-- Search drives the table's global filter from outside the card, so the field is
-               a plain InputText (`Table.Search` is context-aware and only works inside
-               `<Table>`). One horizontal band: it grows into the row's slack and compresses
-               rather than wrapping (see ui/ControlsHeader.vue). -->
           <InputText
             v-model="search"
             size="medium"
@@ -393,11 +284,6 @@
             </template>
           </InputText>
           <template #actions>
-            <!-- THE RIGHT GROUP: the three controls that act on the LISTING rather
-                 than narrow it — fetch it again, take it away as a file, choose which
-                 columns it shows. All glyphs, all `medium`, so the row shares one
-                 32px height with the search field opposite. This panel narrows by
-                 search alone, so there is no Filter button leading the row. -->
             <RefreshButton
               :loading="loading"
               @refresh="refresh"
@@ -415,7 +301,7 @@
 
         <CardBox :padded="false">
           <template #content>
-            <Table
+            <TableRoot
               ref="tableRef"
               v-model:globalFilter="search"
               v-model:columnVisibility="columnVisibility"
@@ -427,8 +313,6 @@
               :loading="loading"
               @row-click="openSetting"
             >
-              <!-- The principal column reads as the way in it is — the row opens the
-                   setting in the same drawer that creates one. -->
               <template #cell-name="{ value }">
                 <span class="truncate cursor-pointer hover:underline">{{ value }}</span>
               </template>
@@ -440,12 +324,6 @@
                 />
               </template>
 
-              <!-- A second cache layer is on or it is not, so the cell is a state and
-                   not a value — and a state is a CHIP in both of its readings, the pair
-                   every console list shows (panels/FunctionsInstances.vue, secure/
-                   Firewall.vue): success when it is in play, secondary when it is not,
-                   never bare text. Rendering only the "on" half as a tag made the two
-                   rows read as different KINDS of cell instead of two values of one. -->
               <template #cell-tieredCache="{ row }">
                 <Tag
                   :label="row.tieredCache ? 'Enabled' : 'Disabled'"
@@ -454,11 +332,6 @@
                 />
               </template>
 
-              <!-- WHO changed the setting and WHEN, in one column: the modifier's avatar
-                   (name on its tooltip) over the relative time — the same cell every
-                   console list ends on (ui/LastModifiedCell.vue), which is why there is
-                   no separate author column. -->
-              <!-- WHO and WHEN are two columns now, so each cell says one thing. -->
               <template #cell-author="{ row }">
                 <AuthorCell
                   :author="row.author"
@@ -469,7 +342,7 @@
               <template #cell-lastModified="{ row }">
                 <LastModifiedCell :date="row.modifiedAt" />
               </template>
-            </Table>
+            </TableRoot>
           </template>
         </CardBox>
       </section>
@@ -485,10 +358,11 @@
         stacked
         :divided="false"
         title="General"
-        hint="Names the cache setting in the rules that reference it. A rule's Set Cache Policy behavior points at a cache setting by name, so this is what the reader picks from that list."
+        hint="Names the cache setting in the rules that reference it."
       >
         <FieldStack
           label="Name"
+          description="What a rule's Set Cache Policy behavior picks from its list."
           :message="errors.name"
           :message-kind="form.name.trim() ? 'invalid' : 'required'"
         >
@@ -513,10 +387,13 @@
         stacked
         :divided="false"
         title="Browser Cache"
-        hint="How long the visitor's own browser may reuse a response before asking again. Honoring the origin passes its Cache-Control through untouched; overriding replaces it with the TTL set here."
+        hint="How long the visitor's own browser may reuse a response before asking again."
       >
         <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-          <FieldStack label="Behavior">
+          <FieldStack
+            label="Behavior"
+            description="Honoring the origin passes its Cache-Control through untouched. Overriding replaces it with the TTL set here."
+          >
             <template #default="{ controlId }">
               <Select
                 v-model="form.browserBehavior"
@@ -542,7 +419,6 @@
             </template>
           </FieldStack>
 
-          <!-- Only an overriding behavior reads a TTL. -->
           <FieldStack
             v-if="browserOverrides"
             key="browser-max-age"
@@ -569,10 +445,13 @@
         stacked
         :divided="false"
         title="Edge Cache"
-        hint="How long Azion's edge may serve a stored response before revalidating with the origin. This is the layer that decides your cache hit rate, and 60 seconds is the floor unless Application Accelerator is active on the application."
+        hint="How long Azion's edge may serve a stored response before revalidating with the origin."
       >
         <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-          <FieldStack label="Behavior">
+          <FieldStack
+            label="Behavior"
+            description="The floor is 60 seconds unless Application Accelerator is active on the application."
+          >
             <template #default="{ controlId }">
               <Select
                 v-model="form.edgeBehavior"
@@ -618,9 +497,6 @@
             </template>
           </FieldStack>
 
-          <!-- The three switches of `modules.cache`. Each one is a card block rather
-               than a row of the form because each is a capability being turned on,
-               not a value being typed — and two of them reveal a field when they are. -->
           <FieldSwitchBlock
             v-model="form.staleCache"
             label="Stale cache"
@@ -694,20 +570,17 @@
         </div>
       </Section>
 
-      <!-- `modules.application_accelerator`. Every field is optional and none of it is
-           honoured while the module is off, which is exactly what the collapsed
-           Advanced band is for (see ResourceDrawer). -->
       <Section
         collapsible
         stacked
         :divided="false"
         title="Advanced cache key"
-        hint="Which parts of a request make two requests two different cached objects. Varying by more fields serves more precise content and stores more copies, so each option says what it costs. Requires the Application Accelerator module on this application."
+        hint="Which parts of a request make two requests two different cached objects."
       >
         <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
           <FieldStack
             label="Cache by HTTP method"
-            description="GET and HEAD are always cached. Selecting POST or OPTIONS puts the request body in the cache key."
+            description="Requires the Application Accelerator module on this application. GET and HEAD are always cached. Selecting POST or OPTIONS puts the request body in the cache key."
           >
             <template #default="{ controlId }">
               <MultiSelect

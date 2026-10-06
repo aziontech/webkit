@@ -1,20 +1,4 @@
-<script setup>
-  // THE OUTCOME — what shipped, what Azion built to serve it, and what to do next.
-  //
-  // This is not a step: the wizard's steps are questions, and by the time this renders
-  // there is nothing left to ask. It is the flow's terminal phase, so it drops the rail,
-  // the bar and the step card entirely and becomes the page.
-  //
-  // THREE BLOCKS, and the order is the reader's own order of interest:
-  //   the heading   — it worked, and where.
-  //   what shipped  — the chain that was provisioned to serve it. It used to be that
-  //                   list beside a still of the deployed page, two-up; the still was a
-  //                   stock thumbnail of a page nobody has loaded yet, so it showed the
-  //                   template's marketing shot rather than this deploy.
-  //   next steps    — not part of what happened; what to do about it.
-  //
-  // It came out of the old /deploy page, which was this flow's last step living at its
-  // own URL. Same content, now inside the flow that produced it.
+<script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
   import CopyButton from '@aziontech/webkit/copy-button'
@@ -25,44 +9,35 @@
 
   import GetStarted from '../../../components/application/GetStarted.vue'
 
-  const props = defineProps({
-    // The chain the deploy provisioned: Workload → Application → Connector → Storage,
-    // in creation order (../../../../shared/lib/provisioning.js → resourceChain).
-    resources: { type: Array, default: () => [] },
-    // Where it was deployed — the Git scope, or the workspace when there is no repo.
-    scope: { type: String, default: '' },
-    // THE ADDRESS THE DEPLOY PRODUCED — the hostname, without a scheme. It is the one
-    // thing on this page the reader came for, so it has its own block above the record
-    // rather than a line inside it. Empty for a create that published nothing.
-    domain: { type: String, default: '' },
-    // Whether that address ANSWERS yet. An Azion domain does the moment the run finishes;
-    // a hostname the reader brought answers when their DNS points at it, which is work
-    // this flow does not do — so it is shown to be copied, not opened.
-    live: { type: Boolean, default: true },
-    // WHAT HAPPENED, in the flow's own words. A deploy shipped code; a from-scratch
-    // create made the layer and shipped nothing, so a heading reading "Application
-    // deployed" over it would be the one claim on the screen that is false.
-    title: { type: String, default: 'Application deployed' },
-    lead: { type: String, default: 'You deployed a new application.' },
-    // WHAT TO DO ABOUT IT — not part of what happened. Empty means the post-deploy
-    // three below; a flow that ends somewhere else hands up its own, and a step with a
-    // `to` is a route inside the console rather than a documentation link.
-    nextSteps: { type: Array, default: () => [] },
-    // HOW CODE WILL REACH IT (../../../lib/data/applications.js). A `cli` application has
-    // no repository, so this screen is the first and best moment to hand over the commands
-    // that fill it — the reader is holding the terminal they will run them in.
-    source: { type: String, default: 'git' },
-    // The application the CLI card links against, for its `azion link` line.
-    applicationName: { type: String, default: '' }
+  interface Props {
+    resources?: unknown[]
+    scope?: string
+    domain?: string
+    live?: boolean
+    title?: string
+    lead?: string
+    nextSteps?: unknown[]
+    source?: string
+    applicationName?: string
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    resources: () => [],
+    scope: '',
+    domain: '',
+    live: true,
+    title: 'Application deployed',
+    lead: 'You deployed a new application.',
+    nextSteps: () => [],
+    source: 'git',
+    applicationName: ''
   })
 
-  // `manage` is the page's terminal action; `select` is a next step that DOES something
-  // on this page rather than going somewhere — running the deploy in place, for one.
-  defineEmits(['manage', 'select'])
+  defineEmits<{
+    manage: []
+    select: [step: unknown]
+  }>()
 
-  // The heading is a claim about the whole list, so it cannot say "created" when one of
-  // the rows was BOUND — a create that binds an existing firewall provisioned three
-  // resources and reused a fourth.
   const resourcesTitle = computed(() =>
     props.resources.some((resource) => resource.state === 'bound')
       ? 'Resources'
@@ -71,7 +46,6 @@
 
   const deployedUrl = computed(() => (props.domain ? `https://${props.domain}` : ''))
 
-  // Post-deploy next steps. Documentation links, so each row is a real navigable <a>.
   const DOCUMENTATION = 'https://www.azion.com/en/documentation/'
 
   const DEFAULT_NEXT_STEPS = [
@@ -93,24 +67,11 @@
     }
   ]
 
-  // The prop wins when it has anything in it. A default FACTORY cannot name this list —
-  // props are resolved before setup runs, so the constant is not in scope there — and
-  // resolving it here keeps the fallback one declaration instead of two.
   const steps = computed(() => (props.nextSteps.length ? props.nextSteps : DEFAULT_NEXT_STEPS))
 </script>
 
 <template>
   <div class="flex w-full flex-col gap-(--spacing-xl)">
-    <!-- The congratulation is the page's own heading, on the canvas — not a card
-         header. It announces the outcome; the cards below are the record of it.
-
-         IT ARRIVES, in two beats. The run this replaces held the same column for as long
-         as the deploy took, so the outcome swapping in on a single frame reads as the
-         deployment card mutating rather than as the flow reaching its end. So the two
-         blocks settle in: `animate-content-enter` (the catalog's arrival for content
-         landing inside a page ALREADY on screen — not `page-enter`, no route changed),
-         the heading first and the record one `fast-01` behind it. The stagger is what
-         makes it choreography — simultaneous arrival is just a fade. -->
     <header
       class="animate-content-enter motion-reduce:animate-none flex w-full flex-col gap-(--spacing-xxs)"
     >
@@ -128,13 +89,6 @@
       </p>
     </header>
 
-    <!-- THE RECORD, as two cards on the canvas — NOT two cards inside a third. The
-         outer box that used to hold them (and the Manage button in its footer) framed
-         content that was already framed: each list carries its own border, its own
-         header rule and its own dividers, so the wrapper spent a second border and two
-         paddings restating an edge that was already drawn, and narrowed both lists to
-         do it. What it did own — the arrival beat — is the only thing left of it: this
-         div carries the stagger and nothing visual. -->
     <div
       class="animate-content-enter motion-reduce:animate-none flex w-full flex-col gap-(--spacing-lg) [--content-enter-delay:var(--transition-duration-fast-01)]"
     >
@@ -145,7 +99,7 @@
               class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface)"
             >
               <i
-                class="pi pi-globe text-[0.875rem] leading-none text-(--text-default)"
+                class="pi pi-globe text-body-sm leading-none text-(--text-default)"
                 aria-hidden="true"
               />
             </span>
@@ -187,16 +141,6 @@
         </template>
       </CardBox>
 
-      <!-- WHAT WAS PROVISIONED. It used to share a box with a still of the deployed
-           page, two-up: the reader's own result beside the chain that serves it. The
-           still is gone — it was a stock thumbnail standing in for a page nobody has
-           loaded yet, so it illustrated the template's marketing shot rather than the
-           deploy, and it took half of the widest card on the screen to do it. The
-           record of what shipped is the list.
-
-           The title is the card's own `title` — the header the component draws is the
-           header this needs, inset on the same line as the rows beneath it, instead of
-           a hand-rolled <p> that sat 4px left of them. -->
       <CardBox
         :title="resourcesTitle"
         :padded="false"
@@ -214,7 +158,7 @@
                 >
                   <i
                     :class="resource.icon"
-                    class="text-[0.875rem] leading-none text-(--text-default)"
+                    class="text-body-sm leading-none text-(--text-default)"
                     aria-hidden="true"
                   />
                 </span>
@@ -226,9 +170,6 @@
                 </Item.Description>
               </Item.Content>
               <Item.Actions>
-                <!-- Per ROW, because not every row is the same claim: a create can
-                     BIND a firewall that already existed, and labelling it "Created"
-                     would credit this flow with work it did not do. -->
                 <Tag
                   :label="resource.state === 'bound' ? 'Bound' : 'Created'"
                   :severity="resource.state === 'bound' ? 'info' : 'success'"
@@ -246,25 +187,12 @@
       >
         <template #content>
           <Item.List>
-            <!-- as-child: the row shell (layout + hover ghost + focus ring) is
-                 merged onto the anchor, so each next step is one real navigable
-                 <a> instead of a <div> wrapping a link. -->
             <Item
               v-for="step in steps"
               :key="step.title"
               as-child
               size="small"
             >
-              <!-- A step that names a ROUTE is a RouterLink and a step that names a
-                   document is an anchor: they go to different kinds of place, and a next
-                   step inside this console must not open a new tab to get there. Two
-                   elements and not one `<component :is>`: `as-child` clones the single
-                   slot vnode, and a dynamic component resolved through it never reaches
-                   RouterLink's own render — the row came out as a bare `<a>` with no
-                   `href`, navigating nowhere. `v-if`/`v-else` still yields exactly one
-                   vnode, which is all `as-child` requires. -->
-              <!-- A step with neither a route nor a document is an ACT on this page: the
-                   in-place deploy. It is a real <button>, not an <a> to nowhere. -->
               <button
                 v-if="!step.to && !step.href && step.action"
                 type="button"
@@ -277,18 +205,12 @@
                   >
                     <i
                       :class="step.icon"
-                      class="text-[0.875rem] leading-none text-(--text-default)"
+                      class="text-body-sm leading-none text-(--text-default)"
                       aria-hidden="true"
                     />
                   </span>
                 </Item.Media>
                 <Item.Content>
-                  <!-- The mark rides IN the title, not in `Item.Actions`: it qualifies
-                       the label, and the row's right edge already belongs to the
-                       chevron. `Item.Title` is a flex row, so it needs no wrapper.
-                       `primary` and not a status severity — the tinted brand chip
-                       reads as an endorsement, where the solid `info`/`success` fills
-                       in the card above are claims about what a resource IS. -->
                   <Item.Title>
                     {{ step.title }}
                     <Tag
@@ -319,18 +241,12 @@
                   >
                     <i
                       :class="step.icon"
-                      class="text-[0.875rem] leading-none text-(--text-default)"
+                      class="text-body-sm leading-none text-(--text-default)"
                       aria-hidden="true"
                     />
                   </span>
                 </Item.Media>
                 <Item.Content>
-                  <!-- The mark rides IN the title, not in `Item.Actions`: it qualifies
-                       the label, and the row's right edge already belongs to the
-                       chevron. `Item.Title` is a flex row, so it needs no wrapper.
-                       `primary` and not a status severity — the tinted brand chip
-                       reads as an endorsement, where the solid `info`/`success` fills
-                       in the card above are claims about what a resource IS. -->
                   <Item.Title>
                     {{ step.title }}
                     <Tag
@@ -363,18 +279,12 @@
                   >
                     <i
                       :class="step.icon"
-                      class="text-[0.875rem] leading-none text-(--text-default)"
+                      class="text-body-sm leading-none text-(--text-default)"
                       aria-hidden="true"
                     />
                   </span>
                 </Item.Media>
                 <Item.Content>
-                  <!-- The mark rides IN the title, not in `Item.Actions`: it qualifies
-                       the label, and the row's right edge already belongs to the
-                       chevron. `Item.Title` is a flex row, so it needs no wrapper.
-                       `primary` and not a status severity — the tinted brand chip
-                       reads as an endorsement, where the solid `info`/`success` fills
-                       in the card above are claims about what a resource IS. -->
                   <Item.Title>
                     {{ step.title }}
                     <Tag
@@ -398,22 +308,11 @@
         </template>
       </CardBox>
 
-      <!-- THE HANDOFF, for an application with no repository. It is the answer to the
-           question this flow otherwise leaves the reader holding: the application exists,
-           and nothing has told them how to put code in it. The same block is mounted
-           permanently on the application's Build tab, because a success screen is lost on
-           the first reload and the question is not. -->
       <GetStarted
         v-if="source === 'cli'"
         :name="applicationName"
       />
 
-      <!-- Manage opens the created workload — the chain's entry point — instead of
-           dropping the reader back on a list to find the row they just made. It is the
-           PAGE's terminal action, so it stands on the canvas under the record rather
-           than in the footer of one of the two cards, neither of which it belongs to.
-           No glyph: the arrow read as "next", which is the one thing this button is
-           not — the flow is over, and this leaves it for the resource it made. -->
       <Button
         class="w-full"
         label="Manage"

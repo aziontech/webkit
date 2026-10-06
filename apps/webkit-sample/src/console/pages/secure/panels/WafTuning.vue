@@ -1,32 +1,8 @@
-<script setup>
-  // WAF Rule → Tuning. What this rule set actually matched in production, grouped by
-  // the rule that matched it.
-  //
-  // THE ONE READ-ONLY TAB. Main Settings and Allowed Rules edit the rule set; this one
-  // reports on it. Nothing here has a Save, and no row opens a form — the row's job is
-  // to be evidence, and the only thing you DO with evidence is act on it, which is what
-  // the create action at the top does (below).
-  //
-  // COUNTS LEAD, EVIDENCE FOLLOWS. The question this tab exists to answer is "which of
-  // my rules fire most, and is that traffic real?" — so Hits sorts descending by default
-  // and the three breadth columns (IPs, Countries, Paths) are counts, not lists. The
-  // lists themselves are in the Top 10 columns as overflow cells: a column holding ten
-  // IP addresses is a column nobody can read, and the top-10 IS the sample you look at
-  // before deciding whether a rule is catching an attack or a customer.
-  //
-  // CREATE FROM TUNING is the whole point of the tab and the reason it sits between the
-  // other two. A row here says "rule 1005 fired 18,432 times on /api/v1/search"; if that
-  // path is legitimate, the fix is an allowed rule scoped to exactly that — so selecting
-  // rows and pressing the button carries them to the Allowed Rules tab pre-filled,
-  // rather than making the reader retype a rule id and a path they are looking at.
-  //
-  // Selection therefore drives BOTH actions in the heading, and both are disabled with
-  // nothing selected: an export of "no rows" and an allowed rule for "no rule" are the
-  // same kind of nonsense, and a disabled control says why better than an empty result.
+<script setup lang="ts">
   import CardBox from '@aziontech/webkit/card-box'
   import EmptyState from '@aziontech/webkit/empty-state'
   import InputText from '@aziontech/webkit/input-text'
-  import Table from '@aziontech/webkit/table'
+  import TableRoot from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import { computed, ref } from 'vue'
@@ -41,36 +17,27 @@
   import { FIT_COLUMN } from '../../../lib/behavior/table-columns'
   import { wafTuningFor } from '../../../lib/data/waf-rules'
 
-  const props = defineProps({
-    /** The rule set whose matches are being reviewed. */
-    ruleSet: { type: Object, required: true },
-    /** Hands selected rows to the Allowed Rules tab — the "Add Allowed Rule" path. */
-    onCreateAllowed: { type: Function, default: null }
+  interface Props {
+    ruleSet: Record<string, unknown>
+    onCreateAllowed?: (...args: unknown[]) => unknown
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    onCreateAllowed: null
   })
 
   const rows = computed(() => wafTuningFor(props.ruleSet.id))
 
   const search = ref('')
 
-  // What the controls row's Refresh button does, and the flag the table binds for
-  // its skeleton rows — one flag over both causes, a scope switch and a manual
-  // refresh (../../../lib/behavior/list-state.js). This panel narrows by search alone,
-  // so it takes the refresh half on its own rather than through `useListFilters`.
   const { loading, refresh } = useListRefresh()
 
-  // The table the controls row drives — Download CSV calls its `exportCsv()`
-  // (../../../components/list/ExportButton.vue).
   const tableRef = ref(null)
   const columnVisibility = ref({})
 
-  // TanStack's shape: `{ [rowKey]: true }` for the checked rows, keyed by `row-key`
-  // (`ruleId` here). The tab works in ROWS, not ids, so it resolves them back once and
-  // both actions read that — an id on its own cannot pre-fill an allowed rule's path.
   const rowSelection = ref({})
   const selected = computed(() => rows.value.filter((row) => rowSelection.value[row.ruleId]))
 
-  // `ruleId` is the principal column and cannot be hidden: every other column on this
-  // row is a measurement OF that rule, so without it the row measures nothing.
   const columns = [
     {
       accessorKey: 'ruleId',
@@ -88,8 +55,6 @@
     { accessorKey: 'paths', header: 'Top 10 Paths', grow: 3 }
   ]
 
-  // Thousands separators, because the number is the column a reader scans and `18432`
-  // and `1843` are the same shape at a glance.
   const formatHits = (value) => new Intl.NumberFormat('en-US').format(value)
 
   const createAllowed = () => {
@@ -112,9 +77,6 @@
       size="small"
     >
       <template #actions>
-        <!-- Both act on the SELECTION, so both are inert until there is one. Export is
-             `outlined` and Create is `primary`: one takes the evidence away to read
-             elsewhere, the other changes the rule set. -->
         <HeadingAction
           label="Export to CSV"
           kind="outlined"
@@ -150,11 +112,6 @@
             </template>
           </InputText>
           <template #actions>
-            <!-- THE RIGHT GROUP: the three controls that act on the LISTING rather
-                 than narrow it — fetch it again, take it away as a file, choose which
-                 columns it shows. All glyphs, all `medium`, so the row shares one
-                 32px height with the search field opposite. This panel narrows by
-                 search alone, so there is no Filter button leading the row. -->
             <RefreshButton
               :loading="loading"
               @refresh="refresh"
@@ -172,17 +129,13 @@
 
         <CardBox :padded="false">
           <template #content>
-            <!-- A rule set that matched nothing is the GOOD outcome, so the empty state
-                 says that rather than offering a way to make rows appear — there is no
-                 action here that would, and a "Create" button under "no matches" would
-                 be an invitation to the wrong conclusion. -->
             <EmptyState
               v-if="!rows.length"
               icon="ai ai-waf"
               title="No matches yet"
               description="This rule set has not matched any request. Matches appear here as traffic arrives."
             />
-            <Table
+            <TableRoot
               v-else
               ref="tableRef"
               v-model:globalFilter="search"
@@ -200,8 +153,6 @@
                 <span class="tabular-nums">{{ formatHits(value) }}</span>
               </template>
 
-              <!-- The three breadth columns are counts of the lists beside them, so they
-                   read as numbers and align with Hits. -->
               <template #cell-ipCount="{ value }">
                 <span class="tabular-nums text-(--text-muted)">{{ value }}</span>
               </template>
@@ -212,8 +163,6 @@
                 <span class="tabular-nums text-(--text-muted)">{{ value }}</span>
               </template>
 
-              <!-- The top-10s: the first two named, the rest counted. A cell that lists
-                   every value is a cell that sets the row's height by its longest list. -->
               <template #cell-ips="{ value }">
                 <span class="flex min-w-0 items-center gap-(--spacing-xxs)">
                   <span class="truncate font-mono text-body-sm">{{
@@ -248,7 +197,7 @@
                   />
                 </span>
               </template>
-            </Table>
+            </TableRoot>
           </template>
         </CardBox>
       </section>

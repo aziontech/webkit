@@ -1,41 +1,23 @@
-<script setup>
-  // EmptyNode — a Vue Flow node for an Application-level resource that has NOT
-  // been bound yet (Edge Firewall, Custom Page). It is the canvas equivalent of
-  // an empty state: instead of hiding the slot, the graph keeps the position
-  // visible as a dashed placeholder and offers the CTA that fills it.
-  //
-  // Registered on the canvas as `type: 'empty'` and rendered through Vue Flow's
-  // `#node-empty` slot, so the `bind` event reaches the page in the parent
-  // scope. Everything is drawn with @aziontech/theme tokens (dashed border,
-  // muted surface) so it tracks light/dark like the rest of the graph.
+<script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import { Handle, Position } from '@vue-flow/core'
 
-  defineProps({
-    /** Vue Flow node id — echoed back on `bind` so the page knows what to fill. */
-    id: {
-      type: String,
-      required: true
-    },
-    /**
-     * Node payload: `title`, `description`, `icon` (PrimeIcons class),
-     * `ctaLabel`, and the `source` / `target` handle flags.
-     */
-    data: {
-      type: Object,
-      required: true
-    }
-  })
+  interface Props {
+    id: string
+    data: Record<string, unknown>
+  }
 
-  const emit = defineEmits(['bind'])
+  defineProps<Props>()
+
+  const emit = defineEmits<{
+    bind: []
+  }>()
 </script>
 
 <template>
   <div
-    class="flex w-[210px] flex-col gap-(--spacing-xs) rounded-(--shape-elements) border border-dashed border-(--border-strong) bg-(--bg-surface) p-(--spacing-sm) text-left transition-colors duration-150 ease-out hover:border-(--primary) motion-reduce:transition-none"
+    class="flex w-(--size-52) flex-col gap-(--spacing-xs) rounded-(--shape-elements) border border-dashed border-(--border-strong) bg-(--bg-surface) p-(--spacing-sm) text-left transition-colors duration-150 ease-out hover:border-(--primary) motion-reduce:transition-none"
   >
-    <!-- Handles keep the placeholder wired into the flow, but are not
-         connectable: there is nothing to connect until the slot is filled. -->
     <Handle
       v-if="data.target"
       type="target"
@@ -49,7 +31,7 @@
       >
         <i
           :class="data.icon"
-          class="text-[10px]"
+          class="text-body-xs"
           aria-hidden="true"
         />
       </span>
@@ -58,7 +40,6 @@
 
     <p class="text-body-xs text-(--text-muted)">{{ data.description }}</p>
 
-    <!-- `nodrag` lets the pointer reach the button instead of starting a node drag. -->
     <Button
       class="nodrag w-full"
       type="button"

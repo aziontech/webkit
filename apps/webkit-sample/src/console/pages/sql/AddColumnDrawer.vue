@@ -1,17 +1,4 @@
-<script setup>
-  // Add column — appends a column to an existing SQL table, in a MEDIUM right Drawer.
-  //
-  // TWO BANDS, TWO SHAPES, and the shape is the point. The three things the reader TYPES
-  // OR PICKS — name, type, default — are separated fields (./ui/FieldStack.vue, the
-  // Variables shape): a real `<Label for>` over a full-width control. The two things
-  // they TOGGLE stay an ItemGroup, control pinned right with its consequence beside it,
-  // because a switch is read rather than filled in. Putting all five in one column of
-  // 256px right-aligned controls made the type picker — the widest thing on the form —
-  // the narrowest, and gave the name a label the reader could not click.
-  //
-  // The Type field reuses the shared, searchable Postgres type picker
-  // (src/lib/postgres-types.js). Validation runs on submit only; one `submitting` flag
-  // locks the scope; on success it emits the built column and the parent appends it.
+<script setup lang="ts">
   import CardBox from '@aziontech/webkit/card-box'
   import InputText from '@aziontech/webkit/input-text'
   import Item from '@aziontech/webkit/item'
@@ -26,11 +13,16 @@
   import { filterTypes, glyphOf, typeLabel } from '../../lib/format/postgres-types'
 
   const open = defineModel('open', { type: Boolean, default: false })
-  defineProps({
-    // The table the column is added to; shown in the drawer's description.
-    tableName: { type: String, default: '' }
+  interface Props {
+    tableName?: string
+  }
+
+  withDefaults(defineProps<Props>(), {
+    tableName: ''
   })
-  const emit = defineEmits(['created'])
+  const emit = defineEmits<{
+    created: [value: unknown]
+  }>()
 
   let nextId = 0
   const uid = () => (nextId += 1)
@@ -48,7 +40,6 @@
 
   const nameError = computed(() => submitted.value && !form.name.trim())
 
-  // Searchable Postgres type picker.
   const typeQuery = ref('')
   const filteredTypes = computed(() => filterTypes(typeQuery.value))
 
@@ -98,12 +89,11 @@
     :submitting="submitting"
     @submit="submit"
   >
-    <!-- The three TYPED fields, separated: label over a full-width control. -->
     <Section
       stacked
       :divided="false"
       title="Column"
-      hint="A column is added to the end of the table. The name and the type are what every query against it will use; the default applies to rows that do not supply a value."
+      hint="A column is added to the end of the table."
     >
       <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
         <FieldStack
@@ -198,7 +188,7 @@
 
         <FieldStack
           label="Default value"
-          description="Leave empty for NULL, or use an expression like now()."
+          description="Applies to rows that do not supply a value. Leave empty for NULL, or use an expression like now()."
         >
           <template #default="{ controlId }">
             <InputText
@@ -214,11 +204,6 @@
       </div>
     </Section>
 
-    <!-- The two CONSTRAINTS stay an ItemGroup. A switch is not a field the reader types
-         into — it is a setting they read the current state of — so the compact row, with
-         the control pinned right and its consequence beside it, is the correct shape.
-         Mixing the two on one form is deliberate: the shape says which kind of thing it
-         is. -->
     <Section
       stacked
       :divided="false"

@@ -1,14 +1,4 @@
 <script setup>
-  // Form type: ITEMGROUP WITH INDEPENDENT SAVES (the `/form` skill, "Form types") —
-  // the OTHER approach to partitioned saves. Where "CardBox with independent saves"
-  // composes Select/Label fields in each card, this uses the Account Settings surface
-  // (Approach A: Item rows in a flush CardBox + Item.List dividers, titled by an
-  // section titles), but instead of ONE page-level save each topic group owns its OWN Save
-  // in the card footer. Each group locks INDEPENDENTLY off its own `submitting` flag
-  // (the /usability loading pattern, scoped to the saved block): that group's fields
-  // and its right-side controls disable and its Save shows loading, while the other
-  // groups stay live. The save reports via toast. In an ItemGroup the Item.Title is the
-  // field label; every Item is size="small".
   import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
   import InputText from '@aziontech/webkit/input-text'
@@ -30,24 +20,19 @@
   ]
   const languageLabel = (value) => languages.find((option) => option.value === value)?.label ?? ''
 
-  // --- Group 1: General ---------------------------------------------------
   const general = reactive({ fullName: 'Gabriel Lisboa', language: 'en' })
   const savingGeneral = ref(false)
   const generalBaseline = useBaseline(general)
 
-  // --- Group 2: Notifications ---------------------------------------------
   const notifications = reactive({ productUpdates: true, securityAlerts: true })
   const savingNotifications = ref(false)
   const notificationsBaseline = useBaseline(notifications)
 
-  // Each group commits independently through the same one-flag lock.
   const saveGroup = async (flag, message, commit) => {
-    if (flag.value) return // per-group re-entrancy lock
+    if (flag.value) return
     flag.value = true
     try {
       await new Promise((resolve) => setTimeout(resolve, 900))
-      // Only THIS band's baseline moves: the other one is still pending, and the leave
-      // guard below has to keep saying so.
       commit()
       toast.success(message)
     } catch (error) {
@@ -59,9 +44,6 @@
     }
   }
 
-  // The leave guard reads the PAGE, not a band: this screen commits in parts, so the
-  // reader can leave with one band saved and the other still pending — and that pending
-  // one is exactly what the guard exists to stop them from walking away from.
   const dirty = computed(() => generalBaseline.dirty.value || notificationsBaseline.dirty.value)
 
   const saveGeneral = () =>
@@ -80,16 +62,12 @@
   >
     <UnsavedChangesGuard :dirty="dirty" />
 
-    <!-- No `gap` on the stack: every band below owns its own top space via
-         `.layout-section-start` (= --layout-boundary-start, the same step
-         `.layout-boundary` puts above the heading). -->
     <main class="flex w-full flex-col">
       <PageHeading
         title="Preferences"
         description="The same partitioned-save idea as CardBox, on the ItemGroup surface: Item rows in a flush card, each topic group owning its own save, so changes commit in parts."
       />
 
-      <!-- Group 1 — General (section title, its own footer save). -->
       <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
         <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">General</p>
         <CardBox :padded="false">
@@ -162,7 +140,6 @@
         </CardBox>
       </section>
 
-      <!-- Group 2 — Notifications (section title, its own footer save). -->
       <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
         <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
           Notifications

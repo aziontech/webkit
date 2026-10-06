@@ -1,30 +1,20 @@
-<script setup>
-  // One dashboard panel: a title, the window it covers, and a sparkline of the series.
-  //
-  // The chart is an inline SVG rather than a charting dependency, for the reason the
-  // whole system avoids runtime libraries: a sparkline is a polyline over a scaled
-  // series, and owning those twenty lines costs less than a library that ships its own
-  // colors, its own tooltip and its own idea of a theme.
-  //
-  // Everything visual comes from tokens, so the panel is correct in both themes with
-  // no per-theme branch: the line is --primary, the fill is the same color at low
-  // alpha through `currentColor`, and the frame is the card's own surface and border.
+<script setup lang="ts">
   import CardBox from '@aziontech/webkit/card-box'
   import { computed } from 'vue'
 
-  const props = defineProps({
-    /** Panel title — what the series measures. */
-    title: { type: String, required: true },
-    /** The unit the numbers carry, shown beside the latest value. */
-    unit: { type: String, default: '' },
-    /** The window the series covers, e.g. "Last 24 hours". */
-    period: { type: String, default: '' },
-    /** The series itself, oldest first. */
-    series: { type: Array, default: () => [] }
+  interface Props {
+    title: string
+    unit?: string
+    period?: string
+    series?: unknown[]
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    unit: '',
+    period: '',
+    series: () => []
   })
 
-  // The viewBox is fixed and the series is scaled into it, so a panel of 24 points
-  // and a panel of 200 render at the same stroke weight.
   const WIDTH = 100
   const HEIGHT = 32
 
@@ -33,8 +23,6 @@
     if (!values.length) return { min: 0, max: 1 }
     const min = Math.min(...values)
     const max = Math.max(...values)
-    // A flat series would divide by zero and collapse to the top edge; give it a
-    // band so it draws as the straight line it is, centred.
     return max === min ? { min: min - 1, max: max + 1 } : { min, max }
   })
 
@@ -49,7 +37,6 @@
       .join(' ')
   })
 
-  // Closing the polyline down to the baseline turns the same points into the fill.
   const area = computed(() =>
     points.value ? `0,${HEIGHT} ${points.value} ${WIDTH},${HEIGHT}` : ''
   )
@@ -79,8 +66,6 @@
           >
         </p>
 
-        <!-- aria-hidden with a text summary above it: the numbers are already in the
-             DOM as text, so the drawing adds nothing a screen reader needs. -->
         <svg
           :viewBox="`0 0 ${WIDTH} ${HEIGHT}`"
           preserveAspectRatio="none"

@@ -1,23 +1,22 @@
-<script setup>
+<script setup lang="ts">
   import Avatar from '@aziontech/webkit/avatar'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed } from 'vue'
 
   import { relativeTime } from '../../lib/format/relative-time'
 
-  // Reusable "Last Modified" cell: the modifier's avatar + a relative timestamp
-  // ("3 days ago"). The name lives on the avatar's tooltip, so a separate author
-  // column is unnecessary. See .agents/skills/tables/SKILL.md.
-  const props = defineProps({
-    /** Person who made the change — a name ("Maria Silva") or email ("maria.silva@azion.com"). */
-    author: { type: String, default: '' },
-    /** Optional avatar photo URL. Falls back to the author's initials when unset or the image fails to load. */
-    avatarSrc: { type: String, default: '' },
-    /** Absolute timestamp of the change (Date or any string `new Date()` parses). */
-    date: { type: [String, Date], default: '' }
+  interface Props {
+    author?: string
+    avatarSrc?: string
+    date?: string | Date
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    author: '',
+    avatarSrc: '',
+    date: ''
   })
 
-  // Emails and dotted handles → a readable name ("maria.silva@azion.com" → "Maria Silva").
   const displayName = computed(() => {
     const raw = props.author.trim()
     if (!raw) return ''

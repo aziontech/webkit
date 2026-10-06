@@ -1,18 +1,4 @@
-<script setup>
-  // A field that SUGGESTS without closing the set: the reader types, the catalog
-  // narrows under the cursor, and anything typed stands whether it is offered or not.
-  //
-  // This is the shape an open vocabulary needs. A Rules Engine variable is the case that
-  // forces it — `${arg_}`, `${cookie_}` and `${http_}` are prefixes the reader completes,
-  // so a Select could only ever offer the stem of a name and never the name. A plain text
-  // field is the other half of the same failure: it asks for a vocabulary it does not
-  // show.
-  //
-  // The panel is teleported and anchored (webkit's `use-placement`), not absolutely
-  // positioned in the field's own box, because this field lives inside a Drawer: an
-  // in-flow panel would be clipped by the drawer's scroll container and painted under its
-  // surface. Anchored at `--z-input-overlay` it behaves exactly as `Select.Content` does
-  // in the same row.
+<script setup lang="ts">
   import InputText from '@aziontech/webkit/input-text'
   import ScrollArea from '@aziontech/webkit/scroll-area'
   import { usePlacement } from '@aziontech/webkit/use-placement'
@@ -20,23 +6,26 @@
 
   defineOptions({ name: 'ComboboxInput', inheritAttrs: false })
 
-  const props = defineProps({
-    /** Suggestions offered under the field: `{ value, label? }`. `label` is the human name. */
-    options: { type: Array, default: () => [] },
-    /** Placeholder shown while the field is empty. */
-    placeholder: { type: String, default: '' },
-    /** Accessible name for the field. */
-    ariaLabel: { type: String, default: '' },
-    /** Field height: small=28px, medium=32px, large=40px. */
-    size: { type: String, default: 'large' },
-    /** Disables the field and prevents the panel from opening. */
-    disabled: { type: Boolean, default: false },
-    /** Marks the field as required (amber border). */
-    required: { type: Boolean, default: false },
-    /** Marks the field as invalid (red border). */
-    invalid: { type: Boolean, default: false },
-    /** Line shown in place of the list when nothing matches. */
-    emptyText: { type: String, default: 'No match' }
+  interface Props {
+    options?: unknown[]
+    placeholder?: string
+    ariaLabel?: string
+    size?: string
+    disabled?: boolean
+    required?: boolean
+    invalid?: boolean
+    emptyText?: string
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    options: () => [],
+    placeholder: '',
+    ariaLabel: '',
+    size: 'large',
+    disabled: false,
+    required: false,
+    invalid: false,
+    emptyText: 'No match'
   })
 
   const model = defineModel({ type: String, default: '' })
@@ -60,16 +49,8 @@
     offset: 4
   })
 
-  // The field's width is the panel's FLOOR, not its measure. A suggestion that carries a
-  // human name beside the value needs more room than the column the field sits in, and a
-  // list that truncates both halves stops distinguishing the rows it is offering — three
-  // `${header_accept…}` reading identically is a list that cannot be picked from.
   const panelSizing = computed(() => [panelStyle.value, { minWidth: `${anchorWidth.value}px` }])
 
-  // FOCUS OFFERS EVERYTHING; TYPING NARROWS. A field opened on a value it already holds is
-  // a reader looking for a different one, and the value they hold is routinely one the list
-  // cannot contain (`${http_x_maintenance}` completes `${http_}`) — filtering by it would
-  // answer that with an empty panel. The query only applies once they type into it.
   const matches = computed(() => {
     const query = typing.value ? model.value.trim().toLowerCase() : ''
     if (!query) return props.options
@@ -86,7 +67,6 @@
     open.value && activeIndex.value >= 0 ? optionId(activeIndex.value) : undefined
   )
 
-  // A field with nothing to suggest never renders a panel, so it never claims one.
   const expanded = computed(() => open.value && props.options.length > 0)
 
   const setOpen = (next) => {
@@ -114,9 +94,6 @@
     scrollActiveIntoView()
   }
 
-  // A prefix suggestion is a stem, not an answer: picking `${arg_}` leaves the caret
-  // inside the braces so the reader keeps typing the name instead of hunting for the
-  // position the value is missing.
   const select = (option) => {
     model.value = option.value
     typing.value = false
@@ -153,8 +130,6 @@
       select(matches.value[activeIndex.value])
       return
     }
-    // Escape belongs to the open panel first. Left to bubble it would close the Drawer
-    // this field is written in, losing the rule to dismiss a list.
     if (event.key === 'Escape' && open.value) {
       event.preventDefault()
       event.stopPropagation()
@@ -222,7 +197,7 @@
           ref="panel"
           role="listbox"
           :style="panelSizing"
-          class="fixed z-(--z-input-overlay) flex max-h-[20rem] flex-col overflow-hidden rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface-raised) shadow-(--shadow-xs)"
+          class="fixed z-(--z-input-overlay) flex max-h-(--size-80) flex-col overflow-hidden rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface-raised) shadow-(--shadow-xs)"
         >
           <ScrollArea
             class="flex max-h-60 flex-col items-stretch px-(--spacing-xxs) py-(--spacing-xs)"

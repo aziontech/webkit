@@ -1,36 +1,4 @@
 <script setup>
-  // Edge DNS — create zone flow. A focused creation shell (the /navigation skill):
-  // the console sidebar is dropped so the single task owns the screen, and the
-  // only chrome is one CreationHeader (back + brand + breadcrumb + account
-  // avatar). The module create for a resource with a start and an end lands on a
-  // dedicated PAGE (route /edge-dns/new), not a modal, so it is linkable and
-  // back-button-safe.
-  //
-  // Layout is section cards (the /form Fields-separated approach composed inside a
-  // CardBox two-column grid): each section puts its title + guidance on the left
-  // and the field(s) on the right. General (Name) and Domain Name are required;
-  // DNSSEC and Status are switches (the detailed DNSSEC key values are surfaced in
-  // the zone's Main Settings once it exists). Validation runs on submit only —
-  // empty required fields reveal the amber `required` state (a prompt, NOT the red
-  // `invalid` error). One `submitting` flag locks the whole scope (fieldset
-  // :disabled + every control :disabled + Save :loading, the /usability Pattern 1
-  // lock); request-level failures surface via toast.
-  //
-  // ── IMPORT A ZONE FILE — VARIABLES' PATTERN, NOT A SECOND ONE ──
-  //
-  // Bringing a zone over from another provider is the same task Variables solves for a
-  // `.env`, so it is the same affordance, element for element (see
-  // ./AddVariableDrawer.vue): an outlined **Import** on the LEFT of the action bar with
-  // the "or paste …" hint beside it, a visually-hidden `<input type="file">` it clicks,
-  // one shared parser (../lib/zone-file.js, the sibling of ../lib/dotenv.js), and the
-  // same two entry points — the picked file, and pasting the file's contents into the
-  // field the records are about (Domain Name here, the Key input there).
-  //
-  // Why the left of the bar and not a section of its own: import is an alternative to
-  // FILLING this form, not a step inside it. It sits opposite Save, where Variables put
-  // it, so a reader who has met one module's bulk import recognises the other's without
-  // looking for it. The parsed records then appear as a section — a file that silently
-  // filled two fields would be asking the reader to trust a parse they cannot see.
   import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -52,7 +20,6 @@
   const route = useRoute()
   const router = useRouter()
 
-  // The email carried over from the login flow (falls back to a placeholder).
   const userEmail = computed(() => route.query.email || 'myemail@azion.com')
 
   const form = reactive({
@@ -68,24 +35,13 @@
     domainKind: 'required'
   })
 
-  // One flag locks the whole scope while the create request is in flight.
   const submitting = ref(false)
 
-  // The leave guard's trigger (ui/UnsavedChangesGuard.vue, mounted by CreatePage): dirty
-  // while the form diverges from the state it opened on. `commit` re-snapshots it, and is
-  // called on the way OUT of a successful create — the page's own navigation must not be
-  // stopped by the guard that exists to protect the input that create just consumed.
   const { dirty, commit } = useBaseline(form)
 
-  // The endpoint's own constraints on POST /workspace/dns/zones: the name is at most
-  // 50 characters, and the domain has to be a real domain — the API states the
-  // pattern, so the form states it too instead of waiting for a 400.
   const NAME_MAX = 50
   const DOMAIN_PATTERN = /^(?=.{4,253}$)((?!-)[a-zA-Z0-9-]{0,62}[a-zA-Z0-9]\.)+[a-zA-Z]{2,63}$/
 
-  // Validation runs on submit only. An empty message means valid; a populated one
-  // drives the field's HelperText — amber `required` when the field is simply not
-  // filled in yet, red `invalid` when what is in it cannot be accepted.
   const validate = () => {
     const name = form.name.trim()
     if (!name) {
@@ -112,13 +68,6 @@
     return !errors.name && !errors.domain
   }
 
-  // ── Bulk input: Import and paste ───────────────────────────────────────────
-  // Both run the same parse (../lib/zone-file.js), exactly as the two `.env` paths in
-  // ./AddVariableDrawer.vue run the same `parseDotenv`.
-  //
-  // The records are held here and shown as their own section: they are what the file
-  // said, and the reader has to be able to see (and drop) them before Save. A file that
-  // only filled Domain Name would be asking them to trust a parse with no evidence.
   const records = ref([])
   const importedFrom = ref('')
 
@@ -126,12 +75,6 @@
 
   const openImport = () => fileRef.value?.click()
 
-  /**
-   * Fill the form from a parsed zone file. The origin answers BOTH fields — a zone's
-   * name is free text and the file's own origin is the best name it will ever have — but
-   * only where the reader has not already typed something, because an import is an offer
-   * and not a correction.
-   */
   const applyParsed = (parsed, source) => {
     if (parsed.origin) {
       if (!form.domain.trim()) {
@@ -157,7 +100,6 @@
 
   const onFilePicked = async (event) => {
     const [file] = event.target.files ?? []
-    // Clear the input so picking the same file twice still fires `change`.
     event.target.value = ''
     if (!file) return
 
@@ -172,9 +114,6 @@
     applyParsed(parsed, `“${file.name}”`)
   }
 
-  // Pasting a zone file into Domain Name reads the whole file instead of dropping it
-  // into the field as one long line — the same trade the Key input makes for a `.env`.
-  // Nothing parsed → an ordinary domain was pasted; let the browser handle it.
   const onDomainPaste = (event) => {
     const parsed = parseZoneFile(event.clipboardData?.getData('text/plain') ?? '')
     if (parsed.records.length === 0) return
@@ -197,15 +136,13 @@
     )
   }
 
-  // Where this page goes back to: Edge DNS, or the Creation Center when the reader picked
-  // `Zone` out of its rail (../../lib/behavior/create-origin.js).
   const { path: originPath, label: originLabel } = useCreateOrigin('/edge-dns', 'Edge DNS')
 
   const cancel = () => router.push({ path: originPath.value, query: { email: userEmail.value } })
 
   const submit = async () => {
-    if (submitting.value) return // re-entrancy lock
-    if (!validate()) return // feedback is now on the fields themselves
+    if (submitting.value) return
+    if (!validate()) return
 
     submitting.value = true
     try {
@@ -213,17 +150,12 @@
       const name = form.name.trim()
       const domain = form.domain.trim()
       const id = String(Math.floor(1000 + Math.random() * 9000))
-      // The count is stated because the reader chose it: an import they could see and
-      // prune is the one thing on this form whose result they cannot check afterwards
-      // (the zone's Records tab is seeded state in this prototype, not a store).
       toast.success(`Zone "${name}" created.`, {
         description: records.value.length
           ? `${records.value.length} imported record${records.value.length === 1 ? '' : 's'} created with the zone.`
           : undefined
       })
-      commit() // the create landed — the leave guard stands down
-      // Land on the new zone's detail view, carrying its name + domain so the
-      // header and Records drawer read them without a round-trip.
+      commit()
       router.push({
         path: `/edge-dns/${id}`,
         query: { email: userEmail.value, name, domain }
@@ -234,7 +166,7 @@
         action: { label: 'Retry', onClick: () => submit() }
       })
     } finally {
-      submitting.value = false // release on success AND failure
+      submitting.value = false
     }
   }
 </script>
@@ -311,14 +243,12 @@
       </CardBox>
     </Section>
 
-    <!-- Only after an import. An empty "Records" band on a form that does not ask for
-         records would read as a section that failed to load. -->
     <Section
       v-if="records.length"
       stacked
       :divided="false"
       title="Records"
-      :hint="`Read from ${importedFrom} and created with the zone. The SOA and the nameservers are Azion's and are not imported.`"
+      :hint="`Read from ${importedFrom} and created with the zone, except the SOA and the nameservers, which stay Azion's.`"
     >
       <template #aside>
         <Button
@@ -366,8 +296,6 @@
       </CardBox>
     </Section>
 
-    <!-- DNSSEC and `active` are both optional to the endpoint and both already carry
-         its defaults, so they sit behind the disclosure together. -->
     <Section
       stacked
       collapsible
@@ -406,10 +334,6 @@
       </CardBox>
     </Section>
 
-    <!-- The bulk path, opposite Save — the Variables drawer's footer, element for
-         element. The file input is visually hidden and out of the tab order: the
-         Button is the control, and a second focus stop on a native file field would
-         be a second way to do one thing. -->
     <template #start>
       <Button
         type="button"

@@ -1,17 +1,8 @@
-// The firewalls the sample is seeded with — the Secure → Firewall module.
-//
-// A FIREWALL is a set of enabled MODULES (DDoS Protection, WAF, Network Shield, Bot
-// Manager, Functions) plus the rules that run inside it. What people narrow by
-// is which modules a firewall actually has on, so `modules` is a list per row — a
-// COLUMN, not a field, for the same reason a custom page's statuses are: "has any of
-// these" is a different question from the membership every other field asks. The
-// enumerable columns are Status and Environment.
 import { daysAgo, formatListDate } from '@shared/lib/dates'
 import { authorAt, emailOf } from '@shared/lib/people'
 
 import { createdRowsFor } from '../state/created-resources'
 
-/** Firewall module → the label every surface shows for it. */
 export const FIREWALL_MODULES = {
   ddos: 'DDoS Protection',
   waf: 'WAF',
@@ -20,17 +11,8 @@ export const FIREWALL_MODULES = {
   functions: 'Functions'
 }
 
-/** The label for a firewall module id, falling back to the id itself. */
 export const firewallModuleLabel = (id) => FIREWALL_MODULES[id] ?? id
 
-/**
- * The modules as SETTINGS — the shape a form needs: what each one does, and whether it
- * is a decision at all. Titles come from FIREWALL_MODULES above, so a module's name
- * exists once and the list column and the settings rows can never disagree.
- *
- * `locked` is DDoS Protection: it is not a switch anywhere on the platform, so it is
- * shown as on with the reason on hover rather than as a control that refuses to move.
- */
 export const FIREWALL_MODULE_FIELDS = [
   {
     key: 'ddos',
@@ -60,11 +42,6 @@ export const FIREWALL_MODULE_FIELDS = [
   }
 ]
 
-/**
- * What a firewall created alongside an application starts with: the protection nobody
- * would decline. The other three cost either a network list, a subscription, or a
- * function to exist first, so they start off and are switched on deliberately.
- */
 export const defaultFirewallModuleState = () => ({
   ddos: true,
   waf: true,
@@ -73,37 +50,15 @@ export const defaultFirewallModuleState = () => ({
   functions: false
 })
 
-/**
- * THE PROTECTION ANSWER, as one object — the shape both creates hold and pass around.
- *
- * A firewall is a RESOURCE, and there are only three things a create can do about one:
- * go without, bind one that already exists, or make a new one. That is `enabled` plus a
- * `mode`, and it is deliberately ONE object rather than four loose fields: the flows that
- * hold it (the application create and the workload create) then read the same keys, and
- * the projection back out — which firewall is bound, by name — has a single definition
- * below instead of one per flow.
- *
- * OFF by default. The two branches inside it are only reachable once the reader says yes,
- * so `mode` starts on the cheaper of the two: binding a firewall that already exists costs
- * nothing, creating one spends a resource.
- */
 export const defaultFirewallProtection = (overrides = {}) => ({
   enabled: false,
   mode: 'existing',
-  // Which existing firewall, when `mode` is `existing`. The name, not the id — it is what
-  // every surface that binds a firewall shows.
   firewall: '',
-  // The new firewall's name, when `mode` is `new`.
   name: '',
   modules: defaultFirewallModuleState(),
   ...overrides
 })
 
-/**
- * The firewall a protection answer names, or `''` when there is none. One derivation, so
- * the wizard's summary, its provisioning log and the created chain can never disagree
- * about which firewall the reader picked.
- */
 export const firewallBindingName = (protection) => {
   if (!protection?.enabled) return ''
   return protection.mode === 'new'
@@ -111,22 +66,12 @@ export const firewallBindingName = (protection) => {
     : String(protection.firewall ?? '')
 }
 
-/** Whether a protection answer BINDS an existing firewall rather than creating one. */
 export const firewallIsBound = (protection) =>
   Boolean(protection?.enabled) && protection.mode !== 'new'
 
-/** The enabled modules of a settings map, as the labels every surface shows. */
 export const enabledFirewallModules = (state) =>
   FIREWALL_MODULE_FIELDS.filter((field) => state?.[field.key]).map((field) => field.title)
 
-/**
- * The seeded firewalls, in list order.
- *
- * `application` is the one a firewall runs in front of — the same field a firewall created
- * inside an application create carries (../state/created-resources.js), and what the
- * firewall's own page reports. The two sandboxes have none: a firewall that fronts nothing
- * yet is a state that page has to render.
- */
 export const FIREWALLS = [
   {
     id: '5540117',
@@ -268,18 +213,6 @@ export const FIREWALLS = [
   }
 ].map(firewallRow)
 
-/**
- * A firewall as a LIST ROW — the record itself plus the fields its table displays.
- *
- * Exported because the seed is not the only source of rows any more: a firewall created
- * in this session is stored as the answers the reader gave (../state/created-resources.js)
- * and has to arrive in the list as the SAME row, derived fields and all. Two projections
- * would be two lists that disagree about what a row is.
- *
- * @param {object} firewall The base record.
- * @param {number} [index] Position in the seed — picks the round-robin author.
- * @returns {object} The row.
- */
 export function firewallRow(firewall, index = 0) {
   const person = authorAt(index)
   return {
@@ -292,31 +225,11 @@ export function firewallRow(firewall, index = 0) {
   }
 }
 
-/**
- * EVERY firewall there is — the ones created in this session, then the seed.
- *
- * The seed stopped being the whole answer the day the create page started storing what it
- * made (../state/created-resources.js). Everything below reads this rather than `FIREWALLS`
- * so a firewall a reader just created can be bound, linked and named exactly like a seeded
- * one; `FIREWALLS` stays the seed, and the module list adds its own created rows the same
- * way.
- */
 export const allFirewalls = () => [...createdRowsFor('firewall'), ...FIREWALLS]
 
-/** A firewall by id, or `undefined`. */
 export const firewallById = (id) => allFirewalls().find((firewall) => firewall.id === String(id))
 
-/**
- * The seeded firewalls as SELECTABLE ROWS — what a create offers under "use an existing
- * firewall". The description is the difference a reader needs to choose between them,
- * which a bare name does not give: how many rules it runs and what it inspects.
- */
 export const existingFirewallOptions = () =>
-  // MOST RECENTLY TOUCHED FIRST. A create shows only the first few, so their order is
-  // what decides whether the reader finds theirs without searching — and insertion order
-  // decides nothing. Activity is the proxy this data actually has: the firewall someone
-  // changed this week is the one they are about to bind, and a rule count says how big a
-  // firewall is, not how current it is.
   allFirewalls()
     .sort((a, b) => b.modifiedAt - a.modifiedAt)
     .map((firewall) => ({
@@ -326,9 +239,7 @@ export const existingFirewallOptions = () =>
       description: `${firewall.rules} ${firewall.rules === 1 ? 'rule' : 'rules'} · ${firewall.moduleLabels.join(', ')}`
     }))
 
-/** The id of a firewall by NAME, or `''`. */
 export const firewallIdByName = (name) => allFirewalls().find((f) => f.name === name)?.id ?? ''
 
-/** The module LABELS a firewall already has on, by name. Empty when unknown. */
 export const firewallModuleLabelsByName = (name) =>
   allFirewalls().find((f) => f.name === name)?.moduleLabels ?? []

@@ -1,24 +1,4 @@
-<script setup>
-  // THE DOMAINS THIS WORKLOAD ANSWERS ON — the Settings tab's own list, and the only
-  // surface that shows all of them at once.
-  //
-  // ── IT REPORTS; THE FORM DECIDES ──
-  //
-  // The certificate used to be a Select in every row, which split one domain's answers
-  // across two surfaces: the address and the environment were answered in the drawer, and
-  // how it is SERVED was answered here, in a control with no label, no hint, and no way to
-  // say why one certificate is the right one. It is a field on the form now
-  // (./AddDomainDrawer.vue), defaulted from the address, and this table reports it
-  // like every other fact in the row.
-  //
-  // So the row's controls are the two acts a list row owns — open it, or remove it — in
-  // the row-actions menu every table in this console carries. A menu and not two icon
-  // buttons because the action cell is 40px wide by contract (one control), and because
-  // the reader already knows where a row's actions live.
-  //
-  // THE GENERATED ROW HAS NEITHER. It is the hostname the platform minted for this
-  // workload: it cannot be renamed, moved, or removed, so it carries no menu rather than a
-  // menu of disabled rows.
+<script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
   import Dropdown from '@aziontech/webkit/dropdown'
@@ -32,31 +12,26 @@
   import { domainCertificateLabel } from '../../lib/data/certificates'
   import { deploymentPolicyLabel, policyForEnvironment } from '../../lib/data/environments'
 
-  // Composition-mode columns size themselves, and every row is its own flex container —
-  // so the header and the body have to carry the SAME style or the two drift apart
-  // (../../lib/behavior/table-columns.js). The three bounded columns take a fixed basis
-  // built from the shared ladder; the domain is the one open-ended column, so it is the
-  // only one on a share and the only one that truncates.
   const DOMAIN_COLUMN = { flex: '2 1 0' }
   const ENVIRONMENT_COLUMN = { flex: `0 0 ${TAG_COLUMN_WIDE}px` }
   const POLICY_COLUMN = { flex: `0 0 ${TAG_COLUMN}px` }
-  // The certificate reports as a tag now rather than a Select, so it no longer needs the
-  // width a trigger did — but it is still the longest of the bounded columns, and a name
-  // that truncates to `edgeflow.com wild…` is the one fact here nobody can reconstruct.
   const CERTIFICATE_COLUMN = { flex: '0 0 200px' }
 
-  const props = defineProps({
-    /**
-     * The domains this workload answers on — `{ id, domain, environment, certificate,
-     * generated }`. A generated row is the hostname the platform minted: it is served by
-     * the free Azion certificate and cannot be edited or removed.
-     */
-    domains: { type: Array, default: () => [] },
-    /** Locks every control while the page's commit is in flight. */
-    disabled: { type: Boolean, default: false }
+  interface Props {
+    domains?: unknown[]
+    disabled?: boolean
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    domains: () => [],
+    disabled: false
   })
 
-  const emit = defineEmits(['add', 'edit', 'remove'])
+  const emit = defineEmits<{
+    add: []
+    edit: [id: unknown]
+    remove: [id: unknown]
+  }>()
 
   const certificateLabel = (id) => domainCertificateLabel(id)
 
@@ -67,9 +42,6 @@
     () => `${props.domains.length} ${props.domains.length === 1 ? 'domain' : 'domains'}`
   )
 
-  // The Dropdown emits `(event, value)` — the console's activation shape. The row travels
-  // with the handler rather than through a selected-row ref, so two menus can never
-  // disagree about which row is armed.
   const onRowAction = (value, entry) => {
     if (value === 'edit') emit('edit', entry.id)
     if (value === 'delete') emit('remove', entry.id)
@@ -109,7 +81,7 @@
                 <Tag
                   v-if="entry.environment"
                   severity="secondary"
-                  size="small"
+                  size="medium"
                   rounded
                   icon="ai ai-layers"
                   :label="entry.environment"
@@ -119,7 +91,7 @@
                 <Tag
                   v-if="entry.environment"
                   severity="secondary"
-                  size="small"
+                  size="medium"
                   rounded
                   :label="policyLabel(entry.environment)"
                 />
@@ -127,7 +99,7 @@
               <Table.Cell :style="CERTIFICATE_COLUMN">
                 <Tag
                   severity="secondary"
-                  size="small"
+                  size="medium"
                   rounded
                   icon="pi pi-verified"
                   :label="certificateLabel(entry.certificate)"

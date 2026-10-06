@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
@@ -16,24 +16,21 @@
   import ResourceLink from '../resource/ResourceLink.vue'
   import SummaryBand from '../resource/SummaryBand.vue'
 
-  const props = defineProps({
-    /** The record this page is about — `{ id, name, status, modules, rules, environment, application }`. */
-    firewall: { type: Object, required: true },
-    /** Carried on the application link so the demo keeps the signed-in email. */
-    email: { type: String, default: '' },
-    /** Where the footer's documentation control points. */
-    documentationHref: {
-      type: String,
-      default: 'https://www.azion.com/en/documentation/products/secure/edge-firewall/'
-    }
+  interface Props {
+    firewall: Record<string, unknown>
+    email?: string
+    documentationHref?: string
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    email: '',
+    documentationHref: 'https://www.azion.com/en/documentation/products/secure/edge-firewall/'
   })
 
-  const emit = defineEmits([
-    /** The reader asked for the rules this firewall runs. */
-    'rules',
-    /** The reader asked for the firewall's own record. */
-    'settings'
-  ])
+  const emit = defineEmits<{
+    rules: []
+    settings: []
+  }>()
 
   const application = computed(() => props.firewall.application || '')
   const applicationId = computed(() => applicationIdByName(application.value))
@@ -88,7 +85,7 @@
       <SummaryBand kind="subject">
         <div class="flex min-w-0 flex-1 basis-(--container-2xs) items-center gap-(--spacing-xs)">
           <i
-            class="ai ai-edge-application shrink-0 text-[1.15em] text-(--text-muted)"
+            class="ai ai-edge-application shrink-0 text-body-lg text-(--text-muted)"
             aria-hidden="true"
           />
           <ResourceLink

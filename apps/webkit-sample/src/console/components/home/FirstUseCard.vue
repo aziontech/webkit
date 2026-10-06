@@ -1,62 +1,27 @@
-<script setup>
-  // FirstUseCard — one way into a product, with the art carrying the explanation.
-  //
-  // The earlier shape put a 16px glyph beside the title (ProductEmptyStates.vue, from
-  // the Figma frame). A glyph at that size can only repeat what the title already
-  // says, so this card drops it and gives the top of the card to a real
-  // illustration: the webkit Illustration scene for that product, on its own stage.
-  // The art is the only thing on a first-access screen that can show what the
-  // product DOES before the reader owns one.
-  //
-  // ── THE STAGE ──
-  //
-  // A panel at 4/3, not a shrink-wrap around the art: the three cards in a row have to
-  // agree on where their titles start, and an illustration that sized itself would put
-  // each title at a different y. A RATIO rather than a fixed height so the stage scales
-  // with the card (299×224 in the row, 322×242 standing alone) instead of being a fixed
-  // band whose air changes at every breakpoint.
-  //
-  // A solid hairline, not a dashed one. Dashed reads as a DROP TARGET (the reference
-  // this shape came from uses it on a card you can drag a folder onto), and none of
-  // these cards accept a drop.
-  //
-  // ── THE ACTION IS A SLOT ──
-  //
-  // Because it is not always a button: one of the three core resources starts with a
-  // domain the reader types, so that card's action is an input. A `buttonLabel` prop
-  // would have forced a second prop for the input, then a third for which one to
-  // render — the anatomy is a slot (.claude/rules/compound-api.md § elements vs
-  // props, which the sample follows even though it is not the DS itself).
+<script setup lang="ts">
   import CardBox from '@aziontech/webkit/card-box'
   import Illustration from '@aziontech/webkit/illustration'
 
-  defineProps({
-    // The name of an official scene in the webkit illustration library.
-    illustration: { type: String, required: true },
-    // What this way in gets you, as an action rather than a noun.
-    title: { type: String, required: true },
-    // One or two lines: what it is, and what comes included.
-    description: { type: String, required: true },
-    // Accessible name for the art. Empty keeps it decorative, which is the default
-    // and the right answer whenever the title already says what the picture shows.
-    illustrationLabel: { type: String, default: '' }
+  interface Props {
+    illustration: string
+    title: string
+    description: string
+    illustrationLabel?: string
+  }
+
+  withDefaults(defineProps<Props>(), {
+    illustrationLabel: ''
   })
+
+  defineSlots<{
+    action(): unknown
+  }>()
 </script>
 
 <template>
-  <!-- No `h-full` on the root: a grid item already stretches to its track, so the row
-       gets equal heights for free, while a card standing ALONE in a column keeps its
-       content height. With `h-full` the standalone card inherited the whole section's
-       height and `flex-1` opened a hole between the description and the action. -->
   <CardBox :padded="false">
     <template #content>
       <div class="flex h-full flex-col p-(--spacing-sm)">
-        <!-- The stage, at 4/3. A RATIO rather than a fixed height: the stage then
-             scales with the card instead of being a 160px band whose air changes with
-             every breakpoint, and three cards in a row still agree on where their
-             titles start because they are the same width. `overflow-hidden` because a
-             scene is drawn on a fixed 170×128 canvas and the narrowest card is
-             narrower than that. -->
         <div
           class="flex aspect-4/3 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
         >
@@ -66,8 +31,6 @@
           />
         </div>
 
-        <!-- `flex-1` on the text so the actions land on one line across the row
-             without pinning the copy to a pixel height. -->
         <div
           class="flex flex-1 flex-col gap-(--spacing-md) px-(--spacing-sm) pb-(--spacing-sm) pt-(--spacing-md)"
         >

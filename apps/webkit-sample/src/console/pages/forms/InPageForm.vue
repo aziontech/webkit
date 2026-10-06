@@ -1,26 +1,4 @@
 <script setup>
-  // Form type: IN PAGE create (the `/form` skill, "Form types"). The module create for
-  // a long form lands on a dedicated PAGE (route /forms/in-page here), not a modal, so
-  // it is linkable and back-button-safe. The sidebar is dropped — a CreationHeader is
-  // the only chrome — so the form is the sole focus. This is a self-contained clone of
-  // the Applications create flow, wired back to the /forms hub.
-  //
-  // Layout is Cards + ItemGroups (the `/form` skill, Approach A): a single centered
-  // column of sections, each an section title over a flush CardBox whose body is an
-  // Item.List. Every field is a small Item row (`size="small"`) — in an ItemGroup the
-  // Item.Title IS the label (name in Item.Title, guidance in Item.Description) on the
-  // left via Item.Content, the control on the right via Item.Actions. Richer controls
-  // that don't fit a one-line row — the radio groups — stay as full-width blocks.
-  //
-  // Accessibility (the `/form` skill):
-  //   - the Item.Title names each field; the control carries an aria-label so it has
-  //     an accessible name (no <Label for> — that's reserved for Fields-separated);
-  //   - validation runs on submit only; with no Label the feedback is a HelperText
-  //     under the control. These fields are required-only, so the state is amber
-  //     `required` (required is NOT an error — never the red `invalid`), rendered on
-  //     submit and cleared as the user edits. No error-summary;
-  //   - one `submitting` flag locks the whole scope (outer <fieldset :disabled> +
-  //     Save :loading); request/API errors surface via toast.
   import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
   import FieldRadioBlock from '@aziontech/webkit/field-radio-block'
@@ -41,10 +19,8 @@
   const route = useRoute()
   const router = useRouter()
 
-  // The email carried over from the login flow (falls back to a placeholder).
   const userEmail = computed(() => route.query.email || 'myemail@azion.com')
 
-  // --- Field option models -------------------------------------------------
   const protocolUsageOptions = [
     {
       value: 'http',
@@ -97,13 +73,11 @@
     }
   ]
 
-  // Trigger label for the port multi-selects (maps stored values → labels).
   const portsLabel = (list) => (values) =>
     (values ?? [])
       .map((value) => list.find((option) => option.value === value)?.label ?? value)
       .join(', ')
 
-  // --- Form state ----------------------------------------------------------
   const form = reactive({
     name: '',
     protocolUsage: 'http',
@@ -119,10 +93,8 @@
     debugRules: false
   })
 
-  // HTTPS ports only apply when the app serves HTTPS.
   const httpsEnabled = computed(() => form.protocolUsage !== 'http')
 
-  // Per-field error messages. Empty string = valid.
   const errors = reactive({
     name: '',
     httpPorts: '',
@@ -130,19 +102,10 @@
     hostHeader: ''
   })
 
-  // One flag locks the whole scope while the request is in flight.
   const submitting = ref(false)
 
-  // The leave guard's trigger (ui/UnsavedChangesGuard.vue): dirty while the form diverges
-  // from the state it opened on. `commit` re-snapshots it on the way OUT of a successful
-  // submit — this page's own navigation must not be stopped by the guard that exists to
-  // protect the input that submit just consumed.
   const { dirty, commit } = useBaseline(form)
 
-  // --- Validation ----------------------------------------------------------
-  // Runs on submit only. A non-empty error flag drives the field's `required`
-  // indicator and `:invalid` state — the feedback IS the field, rendered as a
-  // result of the submit and cleared as the user edits.
   const validate = () => {
     errors.name = form.name.trim() ? '' : 'This field is required.'
     errors.httpPorts = form.httpPorts.length ? '' : 'Select at least one HTTP port.'
@@ -154,27 +117,23 @@
   const cancel = () => router.push({ path: '/forms', query: { email: userEmail.value } })
 
   const submit = async () => {
-    if (submitting.value) return // re-entrancy lock
+    if (submitting.value) return
 
-    // Validation feedback is now on the fields themselves (required + :invalid).
     if (!validate()) return
 
-    // Lock the scope off one flag (usability Pattern 1): Save shows :loading and
-    // every field is :disabled while the create request is in flight.
     submitting.value = true
     try {
       await new Promise((resolve) => setTimeout(resolve, 900))
       toast.success(`Application "${form.name}" created.`)
-      commit() // the submit landed — the leave guard stands down
+      commit()
       router.push({ path: '/forms', query: { email: userEmail.value } })
     } catch (error) {
-      // Request-level failure → toast with a way to recover. Never silent.
       toast.error('Could not create the application.', {
         description: error?.message ?? 'Check your connection and try again.',
         action: { label: 'Retry', onClick: () => submit() }
       })
     } finally {
-      submitting.value = false // release on success AND failure
+      submitting.value = false
     }
   }
 </script>
@@ -196,18 +155,13 @@
         novalidate
         @submit.prevent="submit"
       >
-        <!-- Scrollable form body. No `gap`: every band below owns its own top space
-           via `.layout-section-start` (= --layout-boundary-start, the same step the
-           boundary puts above the first band). -->
         <div class="layout-column-form layout-boundary flex flex-1 flex-col">
-          <!-- One flag locks every control while the request is in flight. -->
           <fieldset
             class="mx-0 flex min-w-0 flex-col border-0 p-0"
             :disabled="submitting"
           >
             <legend class="sr-only">Create application</legend>
 
-            <!-- Section: General -->
             <section class="flex flex-col gap-(--layout-group-gap)">
               <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">General</p>
               <CardBox :padded="false">
@@ -221,7 +175,6 @@
                         </Item.Description>
                       </Item.Content>
                       <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
-                        <!-- Empty-required → amber `required` HelperText (not red). -->
                         <div class="flex w-full flex-col gap-(--spacing-xs)">
                           <InputText
                             v-model="form.name"
@@ -247,7 +200,6 @@
               </CardBox>
             </section>
 
-            <!-- Section: Delivery Settings -->
             <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
               <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
                 Delivery Settings
@@ -353,7 +305,6 @@
               </CardBox>
             </section>
 
-            <!-- Section: Origins -->
             <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
               <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">Origins</p>
               <CardBox :padded="false">
@@ -463,7 +414,6 @@
               </CardBox>
             </section>
 
-            <!-- Section: Cache Expiration Policies -->
             <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
               <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
                 Cache Expiration Policies
@@ -555,7 +505,6 @@
               </CardBox>
             </section>
 
-            <!-- Section: Debug Rules -->
             <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
               <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">Debug Rules</p>
               <CardBox :padded="false">
@@ -584,8 +533,6 @@
           </fieldset>
         </div>
 
-        <!-- Sticky action bar. Save is the native submit (Enter works); the
-           scope stays locked while the request is in flight. -->
         <footer
           class="sticky bottom-0 border-t-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface)"
         >
@@ -600,9 +547,6 @@
               :disabled="submitting"
               @click="cancel"
             />
-            <!-- webkit Button renders a native type="button" and does not forward
-               a type prop, so it can't submit the form implicitly — drive submit
-               from its click event instead. -->
             <Button
               label="Save"
               kind="primary"

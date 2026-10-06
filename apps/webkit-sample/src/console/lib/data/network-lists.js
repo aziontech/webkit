@@ -1,30 +1,19 @@
-// The network lists the sample is seeded with — the Secure → Network Lists module.
-//
-// A NETWORK LIST is a named set of network identifiers a firewall rule matches
-// against. Its TYPE decides what the entries even are — IP/CIDR ranges, autonomous
-// system numbers, or ISO country codes — so it is the column that leads and the
-// field that matters: "show me the country lists" is the question this module is
-// browsed with.
 import { daysAgo, formatListDate } from '@shared/lib/dates'
 import { authorAt, emailOf } from '@shared/lib/people'
 
-/** Network list type → the label every surface shows. */
 export const NETWORK_LIST_TYPES = {
   'ip-cidr': 'IP/CIDR',
   asn: 'ASN',
   countries: 'Countries'
 }
 
-/** The label for a network list type id, falling back to the id itself. */
 export const networkListTypeLabel = (id) => NETWORK_LIST_TYPES[id] ?? id
 
-/** The type list a filter field offers. */
 export const networkListTypeOptions = Object.entries(NETWORK_LIST_TYPES).map(([value, label]) => ({
   value,
   label
 }))
 
-/** The seeded network lists, in list order. */
 export const NETWORK_LISTS = [
   {
     id: 'nl-3301',
@@ -84,18 +73,6 @@ export const NETWORK_LISTS = [
   }
 ].map(networkListRow)
 
-/**
- * A network list as a LIST ROW — the record itself plus the fields its table displays.
- *
- * Exported because the seed is not the only source of rows any more: a network list created
- * in this session is stored as the answers the reader gave (../state/created-resources.js)
- * and has to arrive in the list as the SAME row, derived fields and all. Two projections
- * would be two lists that disagree about what a row is.
- *
- * @param {object} list The base record.
- * @param {number} [index] Position in the seed — picks the round-robin author.
- * @returns {object} The row.
- */
 export function networkListRow(list, index = 0) {
   const person = authorAt(index)
   return {
@@ -108,5 +85,4 @@ export function networkListRow(list, index = 0) {
   }
 }
 
-/** A seeded network list by id, or `undefined`. */
 export const networkListById = (id) => NETWORK_LISTS.find((list) => list.id === String(id))

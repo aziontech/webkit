@@ -1,36 +1,21 @@
-<script setup>
-  // An organization's mark: generated marble art, seeded by the org's name and
-  // coloured by the accent it was created with.
-  //
-  // Why generated art and not initials: an org is a place you live in, and two
-  // orgs whose names start with the same two letters produce the same initials
-  // — the very case the mark exists to disambiguate. The marble is derived from
-  // the WHOLE name, so no two orgs land on the same picture, and it is stable
-  // (same name → same art, every reload, every device) without anyone uploading
-  // a logo.
-  //
-  // It is inline SVG rather than the design system's Avatar because the palette
-  // is theme tokens: `var(--color-*)` resolves against the page, and an
-  // <img src="data:image/svg+xml,…"> is a separate document that cannot see
-  // them — the art would freeze at whatever the theme was when it was encoded.
-  // Colours therefore ride on `style`, not on a `fill` attribute (presentation
-  // attributes don't take `var()`).
+<script setup lang="ts">
   import { computed, useId } from 'vue'
 
   import { MARBLE_SIZE, marbleElements, marbleTransform } from '../../lib/behavior/marble.js'
   import { accentOf } from '../../lib/state/organizations.js'
 
-  const props = defineProps({
-    // Organization name — the seed for the art.
-    name: { type: String, default: '' },
-    // Accent the org was created with: 'blue' | 'orange' | 'yellow'.
-    accent: { type: String, default: 'blue' },
-    // Size token, matching the design system Avatar's scale.
-    size: { type: String, default: 'small' }
+  interface Props {
+    name?: string
+    accent?: string
+    size?: string
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    name: '',
+    accent: 'blue',
+    size: 'small'
   })
 
-  // Unique per instance: several avatars share one page, and a duplicated
-  // filter id would make them all reference the first one's blur.
   const uid = useId()
   const filterId = `marble-blur-${uid}`
 
@@ -38,13 +23,6 @@
   const elements = computed(() => marbleElements(props.name, colors.value.length))
   const fillOf = (index) => ({ fill: colors.value[elements.value[index].colorIndex] })
 
-  // The scale is named for where the mark is used, not for the Avatar's own steps.
-  //
-  // `medium` is 24 — the DS Avatar's `small` — and it is the mark the tenancy
-  // switcher wears in both places it appears: the header pill and the panel rows,
-  // beside the account's and workspace's own 24px marks (./TenancySwitcher.vue).
-  // `small` (20) is the compact mark for a form that previews an org inline, and
-  // `large` (48) the org at rest in the create flow and onboarding.
   const sizeClasses = {
     small: 'size-(--size-5)',
     medium: 'size-(--size-6)',
@@ -70,7 +48,6 @@
       xmlns="http://www.w3.org/2000/svg"
     >
       <g>
-        <!-- The field the blobs float over. -->
         <rect
           :width="MARBLE_SIZE"
           :height="MARBLE_SIZE"
@@ -82,7 +59,6 @@
           :style="fillOf(1)"
           d="M32.414 59.35L50.376 70.5H72.5v-71H33.728L26.5 13.381l19.057 27.08L32.414 59.35z"
         />
-        <!-- Overlay blending is what turns two flat shapes into depth. -->
         <path
           :filter="`url(#${filterId})`"
           :transform="marbleTransform(elements[2])"

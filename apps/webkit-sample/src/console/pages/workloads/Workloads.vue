@@ -1,28 +1,10 @@
 <script setup>
-  // Workloads list — the Azion Console "Workloads" module. The app shell (sidebar +
-  // GlobalHeader breadcrumb) comes from AppLayout; this page renders a PAGE HEADING
-  // (title + description + the "Create Workload" create) over a CONTROLS HEADER (search,
-  // then the Filter button) over a data-driven <Table> whose rows open the workload detail
-  // view. As a first-level module list it carries no navigation tabs; the heading names
-  // the module and the controls row only narrows the list
-  // (../../components/page/PageHeading.vue, ../../components/page/ControlsHeader.vue).
-  //
-  // Narrowing is the FILTER BUTTON (list/FilterButton.vue) — the one shape every
-  // module list uses, described in the webkit-lists skill. The COLUMNS decide the
-  // fields: every enumerable column becomes one field (Author, Status) and the date
-  // column becomes relative periods plus a Custom month grid (Last Modified); the
-  // free-text columns (Name, Domains) are covered by the search field instead of one
-  // field each. The catalog they live in is `filterFields` below.
-  //
-  // The bar pre-filters `:data`; the search field narrows what is left, through the
-  // table's own global filter. See Applications.vue for why the table's own filter
-  // state cannot host these.
   import CardBox from '@aziontech/webkit/card-box'
   import CopyButton from '@aziontech/webkit/copy-button'
   import Dropdown from '@aziontech/webkit/dropdown'
   import IconButton from '@aziontech/webkit/icon-button'
   import InputText from '@aziontech/webkit/input-text'
-  import Table from '@aziontech/webkit/table'
+  import TableRoot from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -55,9 +37,6 @@
   import { useSampleMode } from '../../lib/state/sample-mode'
   import { tenancyRows } from '../../lib/state/tenancy-scope'
 
-  // The sample's EMPTY version: this module before it owns anything. The same block
-  // the /empty-states gallery reviews, rendered in the module's own page
-  // (../lib/sample-mode.js, ./ui/ProductFirstUse.vue).
   const { accountEmpty } = useSampleMode()
   const firstUse = productFirstUse('workloads')
 
@@ -66,11 +45,6 @@
 
   const userEmail = computed(() => route.query.email || 'myemail@azion.com')
 
-  // The workload records that back the table (data-driven mode). The seed lives in
-  // src/lib/workloads.js because the deployment history is keyed by these ids and
-  // reads these names (src/lib/deployment-history.js); this page holds its own copy
-  // because it deletes rows, and mutating the shared array would leak that into every
-  // surface reading it.
   const workloads = ref([...WORKLOADS])
 
   const columns = [
@@ -88,15 +62,6 @@
     { id: 'actions', kind: 'action', hideable: false }
   ]
 
-  // ── The filter catalog ────────────────────────────────────────────────────
-  // One field per enumerable column, in the order the COLUMNS read — which is also
-  // the order the chips sit in, permanently. Each field owns its own `match`,
-  // because only the page knows how a row answers for it: the person here is
-  // `owner`, and the column that shows them is "Last Modified".
-  //
-  // Authors come from the data, so the field can never offer someone with no rows
-  // in the list. Each carries that person's photo, so the filter identifies them
-  // the way the Last Modified cell does — by face first, name second.
   const authorOptions = [
     ...new Map(workloads.value.map((workload) => [workload.owner, workload.ownerAvatar]))
   ]
@@ -122,8 +87,6 @@
       match: (workload, values) => values.includes(workload.status)
     },
     {
-      // `range`: two windows at once would contradict each other, so a pick
-      // replaces rather than accumulates (lib/filter-bar.js).
       id: 'modified',
       label: 'Last Modified',
       kind: 'range',
@@ -133,21 +96,11 @@
     }
   ]
 
-  // Workloads provisioned by the deploy flow lead the list, newest first, so a
-  // just-deployed workload is the first thing on the page (src/lib/provisioning.js).
-  // The seeded rows below them belong to one scope, so they are projected through
-  // the organization / account / workspace in force (src/lib/tenancy-scope.js);
-  // what this session provisioned is the operator's own and is never projected
-  // away.
   const allWorkloads = computed(() => [
     ...provisionedWorkloads.value,
     ...tenancyRows(workloads.value, 'workloads')
   ])
 
-  // Filter state, search value, surviving rows and their pagination — all four from
-  // one place, including the rewind that keeps a narrowed list off a page offset it
-  // no longer has rows for (src/lib/list-state.js). `loading` is the tenancy reload
-  // window: switching scope skeletons the table while the new rows arrive.
   const {
     filters,
     search,
@@ -157,49 +110,19 @@
     refresh
   } = useListFilters(filterFields, allWorkloads, { pageSize: 10 })
 
-  // The table the controls row drives. Download CSV calls the DS's own `exportCsv()`
-  // through it (../../components/list/ExportButton.vue), so the file honours the
-  // visible columns and the filtered rows instead of re-serialising them here.
   const tableRef = ref(null)
 
-  // Which columns are switched off, driven by the Columns button beside the filter
-  // (../../components/list/ColumnsButton.vue). Only a HIDDEN column is ever recorded, so this
-  // never has to be kept in step with the column model above.
-  //
-  // ID SHIPS OFF. It is the column an operator wants when they are quoting a resource
-  // into a support thread or an API call, and almost never while scanning the list —
-  // so it starts hidden and is one switch away. That is the whole point of the panel:
-  // a column can be available without being in the way by default.
   const columnVisibility = ref({ id: false })
 
   const createWorkload = () =>
     router.push({ path: '/workloads/new', query: { email: userEmail.value } })
 
-  // The name rides along in the query so the detail view can title itself (and
-  // derive its resource chain) without a workload endpoint to read from.
   const openWorkload = (event, row) =>
     router.push({
       path: `/workloads/${row.id}`,
       query: { email: userEmail.value, name: row.name }
     })
 
-  // ── Deploy ────────────────────────────────────────────────────────────────
-  // Deploying a workload opens the RELEASE COMPOSER (../ReleaseComposer.vue), not a drawer.
-  // A workload publishes with a Deployment setting per environment, so deploying it is a
-  // multi-target action whose blast radius (environments · workloads · domains) has to be
-  // reviewed before it happens — a review that does not fit in a panel, and that has to be
-  // linkable and reloadable.
-  //
-  // NOTHING THE WORKLOAD ALREADY ANSWERS IS ASKED. The composer opens PINNED to what this
-  // workload already deploys: its own Deployment settings, selected, and the application it
-  // is already serving. Landing on a screen that asks you to re-pick the target you just
-  // clicked from is the friction this removes.
-  //
-  // The whole context rides the query string, so a reload lands in the same scenario:
-  //
-  //   several settings  ?deploymentIds=a,b&pickTarget=true — both selected, deselect to skip
-  //   one setting       ?deploymentIds=a                   — settled, no picker
-  //   none yet          no ids                             — the operator selects the target
   const openDeploy = (row) => {
     const { settingsIds } = releaseSeedForWorkload(row.id)
     router.push({
@@ -214,8 +137,6 @@
     })
   }
 
-  // Deleting a workload takes its domains offline, so it does not happen on the menu
-  // click: the row is held here and the confirmation dialog asks for its name back.
   const pendingDelete = ref(null)
   const deleteOpen = ref(false)
 
@@ -253,22 +174,10 @@
     active="workloads"
     :breadcrumb="[{ label: 'Workloads' }]"
   >
-    <!-- The measure follows the mode: the fluid data measure for the list, Overview's
-         focused one for first use. The argument is in Applications.vue. -->
     <main
       class="flex min-h-full flex-col"
       :class="accountEmpty ? 'layout-column-focused' : 'layout-column'"
     >
-      <!-- THE PAGE HEADING. A first-level resource page names itself: the module name
-           over one line saying what the module is, with the module's own action on the
-           right. The breadcrumb says WHERE you are; the heading says WHAT this page is,
-           and it gives that action one fixed home above the list instead of a control
-           that rides the row narrowing it.
-           `size="medium"` is the first-level list scale (components/page/PageHeading.vue):
-           the title names the collection, and the table under it is what the page is for.
-           The parent section below is no longer `:first-child`, so `.layout-section-start`
-           opens it at the boundary step — the list sits tight under the heading (theme
-           semantic/layouts § "THE PAGE SHAPE"). -->
       <PageHeading
         v-if="!accountEmpty"
         size="medium"
@@ -286,22 +195,6 @@
         </template>
       </PageHeading>
 
-      <!-- FIRST USE, IN HOME'S CONTAINER.
-           The same box the first access uses on /home (./HomeEmptyState.vue) and the
-           /empty-states gallery around it (../ProductEmptyStates.vue): centred in the
-           viewport rather than hanging from the top edge. This screen and that one are the
-           same KIND of screen — a short block answering "there is nothing here yet" — and a
-           short block pinned to the top with a void under it reads as content that failed
-           to load. The section step is gone with it: a centred box measures from the middle,
-           and a top margin would only pull it off centre.
-           CENTRED WITH AUTO MARGINS, not `min-h-full justify-center`. That pair looks
-           right and does nothing: `min-height: 100%` resolves against a parent whose own
-           height is `auto` (main is `min-h-full`, not `h-full`), so the box stayed at
-           content height and `justify-center` then centred the content inside itself — a
-           no-op. `my-auto` asks the flex parent to split its free space above and below
-           this one item, which is the definition of centred; and when the block is TALLER
-           than the viewport the auto margins collapse to 0 instead of clipping its top,
-           which is what `flex-1 justify-center` would have done. -->
       <div
         v-if="accountEmpty"
         class="my-auto flex w-full flex-col py-(--spacing-xl)"
@@ -313,21 +206,12 @@
         v-else
         class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)"
       >
-        <!-- ONE section: the controls row narrows the table under it, so the two
-             sit at --layout-group-gap. -->
         <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-          <!-- The CONTROLS row, under the heading: the narrowing, on a list the page can
-               already show — search on the left, nothing on the right, because the
-               module's action sits in the heading above. -->
           <ControlsHeader>
             <FilterButton
               v-model="filters"
               :fields="filterFields"
             />
-            <!-- Search drives the table's global filter from outside the card, so the
-                 field is a plain InputText (`Table.Search` is context-aware and only
-                 works inside `<Table>`). It keeps the whole row: the filters moved to
-                 their own row below, so nothing here competes for the slack. -->
             <InputText
               v-model="search"
               size="medium"
@@ -343,10 +227,6 @@
               </template>
             </InputText>
             <template #actions>
-              <!-- THE RIGHT GROUP: the three controls that act on the LISTING rather
-                   than narrow it — fetch it again, take it away as a file, choose which
-                   columns it shows. All glyphs, all `medium`, so the row shares one
-                   32px height with the field and the Filter button opposite. -->
               <RefreshButton
                 :loading="loading"
                 @refresh="refresh"
@@ -370,7 +250,7 @@
           <section class="flex min-h-0 flex-col">
             <CardBox :padded="false">
               <template #content>
-                <Table
+                <TableRoot
                   ref="tableRef"
                   v-model:pagination="pagination"
                   v-model:globalFilter="search"
@@ -386,12 +266,9 @@
                   @row-click="openWorkload"
                 >
                   <template #cell-name="{ value }">
-                    <!-- The module's own glyph leads its principal column, the way every
-                         other module list does (Applications, EdgeDns, SqlDatabase): the
-                         row says WHAT it is before it says which one. -->
                     <div class="flex min-w-0 items-center gap-(--spacing-xs)">
                       <i
-                        class="ai ai-workloads shrink-0 text-[1.15em] text-(--text-muted)"
+                        class="ai ai-workloads shrink-0 text-body-lg text-(--text-muted)"
                         aria-hidden="true"
                       />
                       <span class="truncate cursor-pointer hover:underline">{{ value }}</span>
@@ -406,14 +283,9 @@
                   </template>
 
                   <template #cell-domain="{ row, value }">
-                    <!-- Domain glyph, primary domain link (truncates) + arrow, then the
-                         "+N" overflow Popover (./ui/DomainOverflowPopover.vue); copy
-                         button pinned to the cell's right edge so it aligns across rows.
-                         The glyph sits OUTSIDE the anchor — it names the column's subject,
-                         it is not part of what the link opens. -->
                     <div class="flex w-full min-w-0 items-center gap-(--spacing-xs)">
                       <i
-                        class="ai ai-domains shrink-0 text-[1.15em] text-(--text-muted)"
+                        class="ai ai-domains shrink-0 text-body-lg text-(--text-muted)"
                         aria-hidden="true"
                       />
                       <ResourceLink
@@ -441,8 +313,6 @@
                       size="medium"
                     />
                   </template>
-                  <!-- WHO and WHEN are two columns now, so each cell says one thing:
-                       the face and the name here, the relative time next to it. -->
                   <template #cell-owner="{ row }">
                     <AuthorCell
                       :author="row.owner"
@@ -471,9 +341,6 @@
                       </Dropdown.Trigger>
 
                       <Dropdown.Group>
-                        <!-- Deploy leads: it is the one action here that changes what
-                             this workload serves, and it is the same interaction every
-                             resource offers — the workload arrives already chosen. -->
                         <Dropdown.Option
                           value="deploy"
                           label="Deploy"
@@ -524,7 +391,7 @@
                       </Dropdown.Group>
                     </Dropdown>
                   </template>
-                </Table>
+                </TableRoot>
               </template>
             </CardBox>
           </section>

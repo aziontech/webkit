@@ -1,18 +1,4 @@
 <script setup>
-  // Create / Edit Team — a focused PAGE (routes /teams/new and /teams/:id) for a
-  // team and its permission set. Same route serves both: with an :id it hydrates
-  // from the shared teams.js store (edit); without, it starts empty (create).
-  //
-  // Layout follows the console's focused create flow (sidebar hidden, sticky
-  // footer): a two-column "General" CardBox (name / description / status), then a
-  // full-width "Permissions" CardBox holding the Vercel-style selector — each
-  // product area is a table section whose rows are resources and whose right-hand
-  // columns are View / Edit checkboxes. A resource that only carries a single
-  // action (e.g. Real-Time Purge) shows one checkbox in the column its label
-  // implies. A group header row select-all (tri-state) toggles the whole area.
-  //
-  // Usability: one `submitting` flag locks the scope while the (simulated) save
-  // runs; Name is required and the permission set must be non-empty.
   import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
   import Checkbox from '@aziontech/webkit/checkbox'
@@ -40,19 +26,14 @@
   const router = useRouter()
 
   const userEmail = computed(() => route.query.email || 'myemail@azion.com')
-  // The Teams & Permissions list is its own page under Settings; the focused
-  // create/edit flow returns there.
   const goToList = () =>
     router.push({
       path: '/account/teams',
       query: { email: userEmail.value }
     })
 
-  // A crumb href may carry its own query (e.g. /deployments?tab=strategies); split it
-  // out and merge so the target is preserved alongside the email.
   const { getTeam, createTeam, updateTeam, removeTeam } = useTeams()
 
-  // Edit when the route carries an :id and the team exists; otherwise create.
   const editing = getTeam(route.params.id)
   if (route.params.id && !editing) goToList()
 
@@ -62,22 +43,13 @@
     active: editing ? editing.status === 'Active' : true
   })
 
-  // Selected permission ids — array so each Checkbox toggles membership directly.
   const selected = ref(editing ? [...editing.permissions] : [])
 
   const errors = reactive({ name: '', permissions: '' })
   const submitting = ref(false)
 
-  // The leave guard's trigger (ui/UnsavedChangesGuard.vue, mounted by CreatePage): dirty
-  // while the form diverges from the state it opened on. `commit` re-snapshots it, and is
-  // called on the way OUT of a successful create — the page's own navigation must not be
-  // stopped by the guard that exists to protect the input that create just consumed.
   const { dirty, commit } = useBaseline(form)
 
-  // --- Permission selector helpers ----------------------------------------
-  // The permission that belongs in a resource's View / Edit column (or null when
-  // the resource has no such capability). For a single-action resource the one
-  // permission is routed to the column its label implies.
   const columnPermission = (resource, column) => {
     const permissions = resourcePermissions(resource)
     if (resource.single) {
@@ -93,7 +65,6 @@
       resourcePermissions(resource).map((permission) => permission.id)
     )
 
-  // Tri-state of a group's select-all: fully / partially / not selected.
   const groupChecked = (group) => {
     const ids = groupPermissionIds(group)
     return ids.every((id) => selected.value.includes(id))
@@ -122,7 +93,6 @@
     selected.value = []
   }
 
-  // --- Search filter -------------------------------------------------------
   const filterText = ref('')
 
   const matches = (resource, group) => {
@@ -146,7 +116,6 @@
   const selectedCount = computed(() => selected.value.length)
   const totalCount = allPermissionIds.length
 
-  // --- Submit --------------------------------------------------------------
   const validate = () => {
     errors.name = form.name.trim() ? '' : 'This field is required.'
     errors.permissions = selected.value.length ? '' : 'Select at least one permission.'
@@ -170,9 +139,6 @@
         updateTeam(editing.id, payload)
         toast.success(`Team "${payload.name}" updated.`)
       } else {
-        // The toast CARRIES THE RESOURCE: submit lands the reader back on the list, so
-        // the action is the way into the team they just made — the same page this one is,
-        // opened on that record.
         const team = createTeam(payload)
         toast.success(`Team "${payload.name}" created.`, {
           action: {
@@ -182,7 +148,7 @@
           }
         })
       }
-      commit() // the commit landed — the leave guard stands down
+      commit()
       goToList()
     } catch (error) {
       toast.error('Could not save the team.', {
@@ -194,13 +160,11 @@
     }
   }
 
-  // Delete is available only when editing an existing team; it removes the team
-  // from the store and returns to the list.
   const deleteTeam = () => {
     if (!editing || submitting.value) return
     removeTeam(editing.id)
     toast.success(`Team "${editing.name}" deleted.`)
-    commit() // the team is gone — nothing left to protect
+    commit()
     goToList()
   }
 
@@ -228,14 +192,14 @@
       stacked
       :divided="false"
       title="General"
-      hint="The name is the only field required. It is what the account list shows beside every member of this team."
+      hint="The name is the only field required."
     >
       <CardBox :padded="false">
         <template #content>
           <Item.List>
             <FieldRow
               title="Name"
-              description="Usually the role or the area the team is responsible for."
+              description="Usually the role or the area the team is responsible for. The account list shows it beside every member of this team."
               :message="errors.name"
               message-kind="required"
             >
@@ -272,13 +236,11 @@
       </CardBox>
     </Section>
 
-    <!-- The point of the form, so it is open and it is not in a 256px cell: the
-         matrix needs the whole measure. -->
     <Section
       stacked
       :divided="false"
       title="Permissions"
-      :hint="`What this team can see and change. ${selectedCount} of ${totalCount} selected.`"
+      :hint="`What this team can see and change, with ${selectedCount} of ${totalCount} selected.`"
     >
       <CardBox>
         <template #content>
@@ -328,8 +290,6 @@
                 :key="group.label"
                 class="border-b-(length:--border-width-default) border-(--border-muted) last:border-b-0"
               >
-                <!-- Group header: select-all + name on the left, column
-               headers on the right. -->
                 <div
                   class="flex items-center gap-(--spacing-sm) bg-(--bg-surface-raised) px-(--spacing-md) py-(--spacing-sm)"
                 >
@@ -343,9 +303,6 @@
                   <span class="flex-1 text-label-md text-(--text-default)">
                     {{ group.label }}
                   </span>
-                  <!-- Column headers of the permission matrix: the same
-                 `text-label-sm` + --text-muted a webkit table head cell
-                 uses, so this grid's head reads like every other table's. -->
                   <span class="w-16 text-center text-label-sm text-(--text-muted)">
                     View
                   </span>
@@ -354,7 +311,6 @@
                   </span>
                 </div>
 
-                <!-- Resource rows -->
                 <div
                   v-for="resource in group.resources"
                   :key="resource.key"
@@ -397,8 +353,6 @@
       </CardBox>
     </Section>
 
-    <!-- `active` is optional and defaults on: an inactive team keeps its permissions
-         but cannot be assigned, which is rarely what someone creating one wants. -->
     <Section
       stacked
       collapsible
@@ -425,9 +379,6 @@
       </CardBox>
     </Section>
 
-    <!-- Delete lives opposite the commit, never beside it: it is the one action on
-         this page that cannot be undone, and a danger button adjacent to Save is a
-         misclick away from destroying the thing being edited. -->
     <template #start>
       <Button
         v-if="editing"

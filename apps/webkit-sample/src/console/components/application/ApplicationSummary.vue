@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
@@ -17,39 +17,28 @@
   import ResourceLink from '../resource/ResourceLink.vue'
   import SummaryBand from '../resource/SummaryBand.vue'
 
-  const props = defineProps({
-    /** The record this page is about — `{ id, name, preset, source, repository, branch, domainName }`. */
-    application: { type: Object, required: true },
-    /**
-     * The reader's own addresses bound to this application —
-     * `{ id, domain, environment, certificate }[]`. The first one is what traffic arrives
-     * on; the generated Azion hostname answers too.
-     */
-    customDomains: { type: Array, default: () => [] },
-    /** The newest deployment that shipped it, or `null` while it has none. It carries the
-     *  STATUS this card reports: an application has no status of its own. */
-    deployment: { type: Object, default: null },
-    /** Carried on the deployment link so the demo keeps the signed-in email. */
-    email: { type: String, default: '' },
-    /** Where the footer's documentation control points. */
-    documentationHref: {
-      type: String,
-      default: 'https://www.azion.com/en/documentation/products/azion-cli/overview/'
-    }
+  interface Props {
+    application: Record<string, unknown>
+    customDomains?: unknown[]
+    deployment?: Record<string, unknown>
+    email?: string
+    documentationHref?: string
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    customDomains: () => [],
+    deployment: null,
+    email: '',
+    documentationHref: 'https://www.azion.com/en/documentation/products/azion-cli/overview/'
   })
 
-  const emit = defineEmits([
-    /** The reader opened the live address. */
-    'visit',
-    /** The reader asked to connect a repository to an application that has none. */
-    'connect-repository',
-    /** The reader asked to bind one of their own domains to this application. */
-    'add-domain',
-    /** The reader asked for the addresses this application answers on. */
-    'manage-domains',
-    /** The reader asked for the application's own record. */
-    'settings'
-  ])
+  const emit = defineEmits<{
+    visit: []
+    'connect-repository': []
+    'add-domain': []
+    'manage-domains': []
+    settings: []
+  }>()
 
   const customNames = computed(() => props.customDomains.map((entry) => entry.domain))
   const addresses = computed(() =>
@@ -61,12 +50,6 @@
   const repository = computed(() => props.application.repository || '')
   const branch = computed(() => props.application.branch || '')
 
-  // An application with no repository has nothing to NAME under Source — the cell carries
-  // the act that gives it one. One that arrived as a dropped folder has something after
-  // all: the gesture it came from (`source: 'drop'`, ../../lib/data/applications.js). It
-  // sits beside the connect control rather than instead of it, because the two answer
-  // different questions — where this came from, and where it could come from next — and
-  // the drop is still a live path: the page keeps taking one.
   const startedByDrop = computed(() => props.application.source === 'drop' && !repository.value)
 
   const deploymentRoute = computed(() =>
@@ -82,9 +65,6 @@
       : null
   )
 
-  // Copying is silent by nature, so it toasts — the same confirmation every other copy in
-  // this console gives. What travels is the URL, not the bare hostname: the reader's next
-  // move with it is a browser or a curl, and both want the scheme.
   const copyUrl = async () => {
     try {
       await globalThis.navigator?.clipboard?.writeText(domainUrl.value)
@@ -94,9 +74,6 @@
     }
   }
 
-  // The strip's overflow. Copying is the card's own act; the other two are the PAGE's
-  // destinations, exactly as Visit is — a summary does not know what tab its settings
-  // live on.
   const onAction = (value) => {
     if (value === 'copy-url') return copyUrl()
     if (value === 'manage-domains') return emit('manage-domains')
@@ -113,7 +90,7 @@
       <SummaryBand kind="subject">
         <div class="flex min-w-0 flex-1 basis-(--container-2xs) items-center gap-(--spacing-xs)">
           <i
-            class="ai ai-domains shrink-0 text-[1.15em] text-(--text-muted)"
+            class="ai ai-domains shrink-0 text-body-lg text-(--text-muted)"
             aria-hidden="true"
           />
           <ResourceLink
@@ -129,11 +106,6 @@
           </span>
         </div>
 
-        <!-- THE STRIP'S RIGHT END IS ACTIONS. Visit opens the address beside it; the
-             overflow holds what a reader does NEXT from an address — copy it, manage the
-             domains that answer on it, open the application's own record. Copying was a
-             boxed CopyButton wedged between the hostname and its "+N": a permanent control
-             for a once-in-a-while act, in the one place the address needed room. -->
         <div class="ml-auto flex shrink-0 items-center gap-(--spacing-xs)">
           <Button
             v-if="domain"
@@ -160,8 +132,6 @@
               </Tooltip>
             </Dropdown.Trigger>
 
-            <!-- Copy URL is absent while the application has no address: a menu row that
-                 copies an empty string is worse than one that is not offered. -->
             <Dropdown.Group v-if="domain">
               <Dropdown.Option
                 value="copy-url"
@@ -270,9 +240,6 @@
           </div>
         </div>
 
-        <!-- The state of the deployment that last shipped this application — the one
-             status an application has, and the same value its row carries in the module
-             list (../../pages/applications/Applications.vue). -->
         <div class="flex min-w-0 flex-col gap-(--spacing-xxs) lg:col-span-2">
           <span class="text-label-sm text-(--text-muted)">Status</span>
           <div class="flex min-h-7 min-w-0 items-center">
@@ -316,10 +283,6 @@
           </div>
         </div>
 
-        <!-- A git application names its repository and the branch Azion watches. One
-             without a repository has no source to name, so the cell carries the act that
-             gives it one — the same control, wording and treatment the module list's
-             Repository cell uses (../../pages/applications/Applications.vue). -->
         <div class="flex min-w-0 flex-col gap-(--spacing-xxs) lg:col-span-2">
           <span class="text-label-sm text-(--text-muted)">Source</span>
           <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-sm)">
@@ -372,7 +335,7 @@
           <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
             <i
               :class="presetIcon(application.preset)"
-              class="shrink-0 text-[1.15em]"
+              class="shrink-0 text-body-lg"
               aria-hidden="true"
             />
             <span class="truncate text-body-sm text-(--text-default)">

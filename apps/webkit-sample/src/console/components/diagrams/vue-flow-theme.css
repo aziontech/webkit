@@ -1,21 +1,4 @@
-/* Vue Flow, re-skinned with @aziontech/theme tokens.
- *
- * Vue Flow ships two stylesheets: `style.css` (required layout/positioning) and
- * `theme-default.css` (its stock light-mode colors, hardcoded hex). We import
- * only `style.css` in the page and drive ALL color/shape from webkit tokens
- * here, so the canvas tracks the active theme (light/dark) like every other
- * screen. Everything is scoped under `.wk-vue-flow` so the override never leaks
- * to the rest of the app.
- *
- * Token surface used:
- *   --vf-node-bg / --vf-node-text / --vf-node-color  → node fill / text / accent
- *   --vf-connection-path                             → edge + connection stroke
- *   --vf-handle                                       → connection handle dot
- * mapped from --bg-surface* / --text-* / --border-* / --primary / severity tokens.
- */
-
 .wk-vue-flow {
-  /* Vue Flow's own variables, re-pointed at design tokens. */
   --vf-node-bg: var(--bg-surface-raised);
   --vf-node-text: var(--text-default);
   --vf-node-color: var(--border-strong);
@@ -23,7 +6,6 @@
   --vf-handle: var(--primary);
   --vf-box-shadow: var(--primary);
 
-  /* A themed dot-grid canvas (the Background addon is a separate package). */
   background-color: var(--bg-canvas);
   background-image: radial-gradient(var(--border-muted) 1px, transparent 1px);
   background-size: 22px 22px;
@@ -32,7 +14,6 @@
   border-radius: var(--shape-card);
 }
 
-/* ── Nodes ───────────────────────────────────────────────────────────────── */
 .wk-vue-flow .vue-flow__node-default,
 .wk-vue-flow .vue-flow__node-input,
 .wk-vue-flow .vue-flow__node-output {
@@ -52,7 +33,6 @@
     border-color 150ms ease-out;
 }
 
-/* Hover / selected / focus all read from the same tokenized accent. */
 .wk-vue-flow .vue-flow__node-default.selectable:hover,
 .wk-vue-flow .vue-flow__node-input.selectable:hover,
 .wk-vue-flow .vue-flow__node-output.selectable:hover {
@@ -73,7 +53,6 @@
   box-shadow: 0 0 0 2px var(--ring-color);
 }
 
-/* ── Handles (connection dots) ───────────────────────────────────────────── */
 .wk-vue-flow .vue-flow__handle {
   width: 8px;
   height: 8px;
@@ -81,7 +60,6 @@
   border: var(--border-width-default) solid var(--bg-surface);
 }
 
-/* ── Edges ───────────────────────────────────────────────────────────────── */
 .wk-vue-flow .vue-flow__edge-path,
 .wk-vue-flow .vue-flow__connection-path {
   stroke: var(--vf-connection-path);
@@ -99,7 +77,6 @@
   stroke: var(--primary);
 }
 
-/* Edge labels: pill on a surface background, tokenized text. */
 .wk-vue-flow .vue-flow__edge-textbg {
   fill: var(--bg-surface);
 }
@@ -110,7 +87,6 @@
   font-size: var(--text-body-xs-font-size);
 }
 
-/* ── Marquee selection ───────────────────────────────────────────────────── */
 .wk-vue-flow .vue-flow__nodesselection-rect,
 .wk-vue-flow .vue-flow__selection {
   background: var(--primary-mask);

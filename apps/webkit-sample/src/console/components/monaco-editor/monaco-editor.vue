@@ -1,7 +1,4 @@
 <script setup lang="ts">
-  // 1. imports
-  // Side-effect module: points the loader at the locally installed Monaco and wires the
-  // language workers. Imported here so it travels with the component, never the entry.
   import './monaco-setup'
 
   import HelperText from '@aziontech/webkit/helper-text'
@@ -19,75 +16,31 @@
     monacoSpacing
   } from './azion-monaco-theme'
 
-  // 2. defineOptions
   defineOptions({ name: 'MonacoEditor', inheritAttrs: false })
 
-  // 3. types
-  /** Grammar used for syntax highlighting and language services. */
   type MonacoEditorLanguage =
-    | 'javascript'
-    | 'typescript'
-    // The endpoint's other function runtime (`azion_lua`). Monaco ships the Monarch
-    // grammar; there is no language server for it, so it highlights and does not lint.
-    | 'lua'
-    | 'json'
-    | 'css'
-    | 'html'
-    | 'markdown'
-    | 'plaintext'
+    'javascript' | 'typescript' | 'lua' | 'json' | 'css' | 'html' | 'markdown' | 'plaintext'
 
   interface Props {
-    /** Visible field label. When empty, the label row is omitted. */
     label?: string
-    /** Grammar used for syntax highlighting and language services. */
     language?: MonacoEditorLanguage
-    /** Model path. Monaco keys its per-file model and view state off this. */
     path?: string
-    /**
-     * A JSON Schema to complete, document and validate this document against, for
-     * `language: 'json'`. What turns a blank JSON pane into one that teaches its own shape:
-     * completion for the keyword the cursor is in, hover text explaining it, and a marker on
-     * a value whose shape does not fit.
-     *
-     * Requires `path` — the schema is registered against this model's own uri, so two JSON
-     * editors on one page keep their own schema instead of the last mounted one winning.
-     */
     jsonSchema?: object
-    /** Blocks editing and applies disabled tokens. */
     disabled?: boolean
-    /** Content stays visible and selectable, but is not editable. */
     readonly?: boolean
-    /** Swaps the editor for a Skeleton while the document is being fetched. */
     loading?: boolean
-    /** Applies the invalid border and switches the helper to `kind="invalid"`. */
     invalid?: boolean
-    /** Auxiliary text below the editor; carries the message when `invalid`. */
     helperText?: string
-    /** Renders the line-number gutter. */
     gutter?: boolean
-    /** Pads line numbers to two digits (`01`), as the code-block spec renders them. */
     padLineNumbers?: boolean
-    /** Code type scale: `--text-label-code-sm | md | lg`. */
     size?: 'small' | 'medium' | 'large'
-    /** Renders the minimap on the right edge. */
     minimap?: boolean
-    /** Accessible name. Falls back to `label`, then to a generic name. */
     ariaLabel?: string
-    /** Editor height. Any CSS length; the editor scrolls internally beyond it. */
     height?: string
-    /** Grow to fill a flex parent instead of using `height`. For full-bleed layouts. */
     fill?: boolean
-    /**
-     * Drops the FIELD CHROME: no border, no radius, no ring offset. For a layout where
-     * the editor is not a control on a page but the surface itself, and the region
-     * around it already draws the edges (the Functions Code tab). A rounded, bordered
-     * box floating inside a panel reads as an input the reader is expected to fill in,
-     * and it puts a second frame a few pixels inside the panel's own.
-     */
     flush?: boolean
   }
 
-  // 4. props
   const props = withDefaults(defineProps<Props>(), {
     label: '',
     language: 'javascript',
@@ -108,29 +61,20 @@
     flush: false
   })
 
-  // 5. emits
   const emit = defineEmits<{
-    /** Monaco reported diagnostics for the current model. */
     validate: [markers: Monaco.editor.IMarker[]]
   }>()
 
-  // 6. models
   const model = defineModel<string>({ default: '' })
 
-  // 8. inject / composables
   const attrs = useAttrs()
   const labelId = useId()
   const helperId = useId()
-  // The RESOLVED theme, not the mode: under `system` the mode ref never changes when
-  // the OS preference flips, and Monaco would keep painting the old palette.
   const { resolvedTheme } = useTheme()
 
-  // 9. local state — shallowRef: the editor and the Monaco namespace are large
-  // non-reactive objects, deep tracking them would be wasted work.
   const editor = shallowRef<Monaco.editor.IStandaloneCodeEditor | null>(null)
   const monaco = shallowRef<typeof Monaco | null>(null)
 
-  // 10. computed
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'monaco-editor')
 
   const effectiveHelperText = computed(() => {
@@ -149,12 +93,9 @@
 
   const options = computed<Monaco.editor.IStandaloneEditorConstructionOptions>(() => ({
     readOnly: props.readonly || props.disabled,
-    // Without this the hidden textarea still takes edits from assistive tech.
     domReadOnly: props.readonly || props.disabled,
     lineNumbers: lineNumberRenderer(),
     minimap: { enabled: props.minimap },
-    // Monaco renders into an absolutely positioned canvas: it cannot infer a resize from
-    // a flex parent, so it must measure on its own.
     automaticLayout: true,
     scrollBeyondLastLine: false,
     fontFamily: monacoFontFamily(),
@@ -163,44 +104,21 @@
     padding: { top: monacoSpacing('--spacing-xs'), bottom: monacoSpacing('--spacing-xs') },
     renderLineHighlight: 'all',
     smoothScrolling: false,
-    // Monaco's editable surface is an off-screen textarea it owns; the only way to name
-    // it is this option, so the visible label's text is mirrored into it.
     ariaLabel: accessibleName.value,
     tabIndex: props.disabled ? -1 : 0
   }))
 
-  // 12. functions
-  /**
-   * Monaco takes either the `'on' | 'off'` keyword or a formatter; the padded form is a
-   * formatter, so both cases resolve here.
-   */
   function lineNumberRenderer(): Monaco.editor.IEditorOptions['lineNumbers'] {
     if (!props.gutter) return 'off'
     if (!props.padLineNumbers) return 'on'
     return (line: number) => String(line).padStart(2, '0')
   }
 
-  /**
-   * Point Monaco's JSON language service at `jsonSchema`, for THIS model only.
-   *
-   * `jsonDefaults` is one global registry per page, so the entry is keyed by the model's own
-   * uri and MERGED into whatever is already registered. Replacing the list instead would make
-   * mounting a second JSON editor silently drop the first one's schema.
-   *
-   * `fileMatch` is the model uri, which the language service suffix-matches, so the schema
-   * applies to this document and no other. A mismatch is reported as a WARNING, never an
-   * error: the surfaces reading these documents accept more than the schema describes, and a
-   * red marker on a construct that works would teach the reader to ignore the markers.
-   */
   function syncJsonSchema() {
     const api = monaco.value
     const uri = editor.value?.getModel()?.uri.toString()
     if (!api || !uri || props.language !== 'json' || !props.jsonSchema) return
 
-    // `api.json`, NOT `api.languages.json`: Monaco 0.56 moved the language service defaults
-    // out of the `languages` namespace onto the package root (`esm/vs/index.js` exports the
-    // json register module as `json`). The old path is `undefined`, so reaching through it
-    // throws on mount instead of quietly skipping registration.
     const json = api.json.jsonDefaults
     const schemaUri = `azion://schemas/${encodeURIComponent(uri)}`
     const others = (json.diagnosticsOptions.schemas ?? []).filter(
@@ -211,17 +129,11 @@
       ...json.diagnosticsOptions,
       validate: true,
       schemaValidation: 'warning',
-      // The schema is passed in, so nothing here is fetched: a `$ref` to a remote uri must
-      // not become a network request under the app's CSP.
       enableSchemaRequest: false,
       schemas: [...others, { uri: schemaUri, fileMatch: [uri], schema: props.jsonSchema }]
     })
   }
 
-  /**
-   * Monaco keeps `data-theme` out of its world — it paints from a JS theme object, so the
-   * tokens have to be re-read and the theme redefined on every mode change.
-   */
   function syncTheme() {
     if (!monaco.value) return
     applyAzionMonacoTheme(monaco.value, resolvedTheme.value === 'dark' ? 'vs-dark' : 'vs')
@@ -233,10 +145,6 @@
     syncTheme()
     syncJsonSchema()
 
-    // Monaco swallows Tab to indent, which traps keyboard users inside the editor
-    // (WCAG 2.1.2). Tab-focus mode makes Tab move focus instead; it is off by default,
-    // so this single trigger turns it on. Users who want a literal tab still have
-    // Ctrl+M to toggle it back — Monaco's own documented escape hatch.
     instance.trigger('monaco-editor.vue', 'editor.action.toggleTabFocusMode', null)
   }
 
@@ -244,10 +152,7 @@
     emit('validate', markers)
   }
 
-  // 11. watchers / lifecycle
   watch(resolvedTheme, syncTheme)
-  // The path change is what swaps the model, so the schema has to be re-pointed at the new
-  // one; Monaco reads the registry per document, so re-registering is all it takes.
   watch([() => props.jsonSchema, () => props.path], syncJsonSchema)
 
   onBeforeUnmount(() => {
@@ -255,11 +160,8 @@
     monaco.value = null
   })
 
-  // 13. defineExpose — functions only.
   defineExpose({
-    /** Move focus into the editor. */
     focus: () => editor.value?.focus(),
-    /** Reformat the document with Monaco's formatter for the current language. */
     format: () => editor.value?.getAction('editor.action.formatDocument')?.run()
   })
 </script>
@@ -276,10 +178,6 @@
     :data-flush="flush || null"
     class="flex w-full flex-col gap-(--spacing-xs) data-fill:min-h-0 data-fill:flex-1 data-flush:gap-0"
   >
-    <!-- A <span>, not webkit's `Label`: that renders a native <label>, and Monaco's
-         editable surface is an off-screen textarea inside a widget tree that a `for`
-         cannot address meaningfully. The association is made with `aria-labelledby` on
-         the editor instead, and the design system's label typography applied here. -->
     <span
       v-if="label"
       :id="labelId"
@@ -288,8 +186,6 @@
       >{{ label }}</span
     >
 
-    <!-- Loading swaps the editor out rather than overlaying it, and Skeleton reserves the
-         same height so nothing shifts when the real document arrives. -->
     <div
       v-if="loading"
       :data-fill="fill || null"
@@ -303,9 +199,6 @@
       />
     </div>
 
-    <!-- The wrapper owns the chrome — border, radius, focus ring, state styling — so it
-         stays utility-driven and `data-*` switched. Monaco only paints what it renders
-         itself, from the theme built out of the same tokens. -->
     <div
       v-else
       :style="fill ? undefined : { '--monaco-editor-height': height }"
@@ -326,8 +219,6 @@
         @mount="onMount"
         @validate="onValidate"
       >
-        <!-- Monaco itself is fetched and booted asynchronously; this is its own load
-             phase, distinct from the `loading` prop above. -->
         <template #default>
           <Skeleton
             kind="shape"
@@ -348,8 +239,6 @@
       </VueMonacoEditor>
     </div>
 
-    <!-- In `flush` mode the editor runs edge to edge, so its message has to bring its
-         own inset or it would sit against the panel's border. -->
     <HelperText
       v-if="effectiveHelperText"
       :id="helperId"

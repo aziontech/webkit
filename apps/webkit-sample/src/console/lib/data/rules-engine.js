@@ -1,35 +1,8 @@
-// Rules Engine — the VOCABULARY of a rule: the comparison operators, the behaviors
-// each phase offers, and what each behavior asks for.
-//
-// A rule is `if <criteria> then <behaviors>`, and both halves are CONDITIONAL forms:
-//
-//   AN OPERATOR DECIDES WHETHER THERE IS AN ARGUMENT. `exists` / `does not exist`
-//     test for presence, so the value input is not disabled for them — it is not
-//     rendered. An input that can be typed into but is never read is worse than no
-//     input: it accepts an answer and silently drops it.
-//   A BEHAVIOR DECIDES WHAT IT IS GIVEN, and there is no single answer. `Deliver`
-//     takes nothing. `Redirect (301)` takes a location. `Set cache policy` takes one
-//     of THIS application's cache settings. `Capture match groups` takes three
-//     values. Rendering one generic "value" box for all of them would ask for a
-//     function id as free text and offer a text box to a behavior that reads none.
-//
-// So each behavior carries its own `argument` descriptor and the form renders that,
-// which is what keeps the drawer from growing a chain of `v-if`s per behavior name.
-//
-// The lists are PER PHASE because the phases are different programs: a request rule
-// can set the cache policy or pick the connector to fetch from; a response rule is
-// looking at something already fetched and can only shape what leaves. A behavior
-// absent from a phase is not disabled there, it is not offered.
 import { createdRowsFor } from '../state/created-resources'
 import { useCacheSettings } from './cache-settings'
 import { CONNECTORS } from './connectors'
 import { functions } from './functions'
 
-/**
- * The two programs a rule can belong to, in the order they run. Declared here rather than
- * in the drawer so both engines are described the same way — the firewall's vocabulary
- * carries a single-phase version of this list (./firewall-rules.js).
- */
 export const PHASES = [
   {
     value: 'request',
@@ -46,15 +19,6 @@ export const PHASES = [
 export const PHASE_HINT =
   'When the rule runs. Request rules act on what arrives at the edge; response rules act on what leaves it. The two are separate programs and never interleave.'
 
-// ── THE VARIABLES A CONDITION READS ──
-//
-// The set is OPEN, which is why the field suggests instead of selecting: `${arg_}`,
-// `${cookie_}` and `${http_}` are PREFIXES the reader completes (`${arg_token}`,
-// `${http_x_forwarded_for}`), and a closed list cannot express a name that has not
-// been typed yet.
-//
-// Per PHASE for the same reason the behaviors are: a request rule reads what arrived
-// at the edge, a response rule reads what came back from the connector.
 const VARIABLES = [
   '${arg_}',
   '${args}',
@@ -95,19 +59,11 @@ const RESPONSE_VARIABLES = [
   '${upstream_status}'
 ]
 
-/**
- * The variables the phase offers, alphabetical — the shared set plus the ones only that
- * phase can read. Suggestions, not a closed list: anything can be typed.
- *
- * @param {string} phase
- * @returns {{value: string}[]}
- */
 export const variablesFor = (phase) =>
   [...VARIABLES, ...(phase === 'response' ? RESPONSE_VARIABLES : REQUEST_VARIABLES)]
     .sort((a, b) => a.localeCompare(b))
     .map((value) => ({ value }))
 
-/** The comparison operators a condition is written with. */
 export const OPERATORS = [
   { value: 'is-equal', label: 'is equal' },
   { value: 'is-not-equal', label: 'is not equal' },
@@ -121,40 +77,10 @@ export const OPERATORS = [
 
 export const operatorLabel = (value) => OPERATORS.find((o) => o.value === value)?.label ?? ''
 
-/**
- * Whether the operator compares against a value the reader supplies.
- *
- * `exists` / `does not exist` are the two that do not: they ask whether the variable
- * is present at all, so the argument input is dropped from the row entirely.
- */
 export const takesArgument = (operator) => operator !== 'exists' && operator !== 'does-not-exist'
 
-/**
- * What an operator COMPARES AGAINST — the counterpart of `behaviorArgument` for the other
- * half of a rule. Free text everywhere in this engine: a request's variables are compared
- * to values the reader writes. The firewall's engine has one that is not
- * (./firewall-rules.js — a network list is a record, so it is picked, not typed).
- *
- * @param {string} operator
- * @returns {{kind: string}} `{ kind: 'text' }`, or a `select` with the store to list.
- */
 export const operatorArgument = () => ({ kind: 'text' })
 
-// ── The behavior catalog ──────────────────────────────────────────────────────
-//
-// `argument` is what the behavior is given, and one of four shapes:
-//
-//   null              — the behavior reads nothing (Deliver, Deny, Enable Gzip).
-//   { kind: 'text' }  — one free-text value, with the placeholder that says its
-//                       FORMAT (`header-name: value`), which is the only thing
-//                       standing between the reader and a rejected save.
-//   { kind: 'select' }— one record of this application, listed from the store that
-//                       owns it (`source`), never re-typed here.
-//   { kind: 'group' } — more than one value (Capture Match Groups takes three).
-//
-// `field` is the key the value is stored under on the behavior, so a rule's record
-// carries `{ type: 'redirect-301', target: '…' }` — the shape a request body wants,
-// not a positional array the reader of the record has to decode.
 const text = (field, placeholder, label) => ({ kind: 'text', field, placeholder, label })
 
 const CATALOG = [
@@ -272,36 +198,18 @@ const CATALOG = [
 
 const BY_VALUE = Object.fromEntries(CATALOG.map((behavior) => [behavior.value, behavior]))
 
-/** The behavior's display name — what a list, a log line or a diff calls it. */
 export const behaviorLabel = (value) => BY_VALUE[value]?.label ?? ''
 
-/** What the behavior is given, or `null` when it reads nothing. */
 export const behaviorArgument = (value) => BY_VALUE[value]?.argument ?? null
 
-/** The behaviors a phase offers, alphabetical — the order the product lists them in. */
 export const behaviorsFor = (phase) => CATALOG.filter((behavior) => behavior.phases.includes(phase))
 
 export const behaviorAllowedIn = (value, phase) => Boolean(BY_VALUE[value]?.phases.includes(phase))
 
-/**
- * The behaviors that END the rule: nothing after them can run, so they are the last
- * one a rule can hold and `Add behavior` is spent once one is selected. The rule that
- * let a behavior be added under `Deny` would be writing a line that never executes.
- */
 const TERMINAL = ['deliver', 'deny', 'no-content', 'redirect-301', 'redirect-302']
 
 export const isTerminalBehavior = (value) => TERMINAL.includes(value)
 
-/**
- * The records a `select`-kind argument offers, read live from the store that owns
- * them — so a cache policy created in the Cache Settings tab is selectable here
- * without a reload, and one deleted there stops being offered.
- *
- * `run-function` is narrowed by PHASE, not only by execution environment: the
- * response phase runs on a request that has already been answered, where only the
- * Lua runtime is available. Offering a JS function there would be offering a save
- * the API rejects.
- */
 export const behaviorOptions = (source, phase) => {
   if (source === 'cache-settings') {
     return useCacheSettings().value.map((setting) => ({ value: setting.id, label: setting.name }))
@@ -321,7 +229,6 @@ export const behaviorOptions = (source, phase) => {
   return []
 }
 
-/** The one note a `select` argument carries under it, or `''`. */
 export const behaviorArgumentNote = (source, phase) =>
   source === 'functions' && phase === 'response'
     ? 'Only functions with the Lua runtime run in the response phase.'

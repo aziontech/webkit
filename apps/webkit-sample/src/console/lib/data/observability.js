@@ -1,14 +1,3 @@
-// The observability fixtures — what the two Observe DASHBOARDS show.
-//
-// Real-Time Metrics and Edge Pulse are the two pages in the console that are not
-// lists: there is no row to open, no create action, nothing to select. They answer
-// "how is it going" with a metric strip and a series per panel, over a window.
-//
-// The WINDOW is the one control they share with every list, and deliberately so: it
-// is the same filter bar, holding one `kind: 'range'` field, so picking a period is
-// the same gesture as picking a status anywhere else in the product.
-
-/** The windows the two dashboards offer. One at a time — they are spans, not a set. */
 export const METRIC_PERIODS = [
   { value: '1h', label: 'Last hour' },
   { value: '24h', label: 'Last 24 hours' },
@@ -16,16 +5,11 @@ export const METRIC_PERIODS = [
   { value: '30d', label: 'Last 30 days' }
 ]
 
-/** The window a dashboard opens on, before anything is picked. */
 export const DEFAULT_PERIOD = '24h'
 
-/** The label for a period value, for the panel subtitles. */
 export const periodLabel = (value) =>
   METRIC_PERIODS.find((period) => period.value === value)?.label ?? 'Last 24 hours'
 
-// A deterministic pseudo-random series, so a panel looks like real telemetry and
-// looks the SAME on every render — a chart that reshuffles on each keystroke reads
-// as broken. FNV-1a over the seed, advanced per point.
 const seriesFor = (seed, points, min, max) => {
   let h = 0x811c9dc5
   for (const char of seed) {
@@ -41,22 +25,12 @@ const seriesFor = (seed, points, min, max) => {
   })
 }
 
-/**
- * One dashboard panel: its title, the unit its numbers carry, and the series.
- *
- * @param {string} title
- * @param {string} unit
- * @param {string} period The window id — part of the seed, so changing it reshapes
- *   the series the way a real re-query would.
- * @param {[number, number]} range
- */
 export const panel = (title, unit, period, [min, max]) => ({
   title,
   unit,
   series: seriesFor(`${title}:${period}`, 24, min, max)
 })
 
-/** The metric strip + panels of Real-Time Metrics, for one window. */
 export const metricsFor = (period) => ({
   strip: [
     { label: 'Requests', value: '48.2', unit: 'M', hint: 'Requests handled at the edge.' },
@@ -77,7 +51,6 @@ export const metricsFor = (period) => ({
   ]
 })
 
-/** The metric strip + panels of Edge Pulse, for one window. */
 export const pulseFor = (period) => ({
   strip: [
     {

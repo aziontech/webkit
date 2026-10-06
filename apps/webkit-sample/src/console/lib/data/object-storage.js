@@ -1,21 +1,6 @@
-// The buckets the sample is seeded with — the Store → Object Storage module.
-//
-// Extracted from the page for the same reason ./variables.js was: global search indexes
-// every resource the platform holds (./search-index.js), and a seed that lives inside a
-// page component is invisible to it. The page keeps its own mutable copy
-// (`ref([...BUCKETS])`) and still leads the list with what this session's deploy
-// provisioned (./provisioning.js) — that half is session state, not seed.
-//
-// Object counts and sizes are mock figures; the file navigator inside a bucket
-// (../../pages/storage/BucketBrowser.vue) owns the actual object tree.
-//
-// `modifiedAt` is the real instant — the Last Modified field compares it — and
-// `lastModified` (the sortable display string) is derived from it by one formatter
-// rather than hand-written per row (@shared/lib/dates.js).
 import { daysAgo, formatListDate } from '@shared/lib/dates'
 import { authorAt } from '@shared/lib/people'
 
-/** The seeded buckets, in list order. */
 export const BUCKETS = [
   {
     id: 'webkit-storybook-dev',
@@ -43,18 +28,6 @@ export const BUCKETS = [
   }
 ].map(bucketRow)
 
-/**
- * A bucket as a LIST ROW — the record itself plus the fields its table displays.
- *
- * Exported because the seed is not the only source of rows any more: a bucket created
- * in this session is stored as the answers the reader gave (../state/created-resources.js)
- * and has to arrive in the list as the SAME row, derived fields and all. Two projections
- * would be two lists that disagree about what a row is.
- *
- * @param {object} bucket The base record.
- * @param {number} [index] Position in the seed — picks the round-robin author.
- * @returns {object} The row.
- */
 export function bucketRow(bucket, index = 0) {
   const person = authorAt(index)
   return {

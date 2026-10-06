@@ -1,19 +1,4 @@
 <script setup>
-  // SQL Database — create flow. A focused creation shell (the /navigation skill):
-  // the console sidebar is dropped so the single task owns the screen, and the
-  // only chrome is one CreationHeader (back + brand + breadcrumb + account
-  // avatar). The module create for a resource with a start and an end lands on a
-  // dedicated PAGE (route /sql-database/new), not a modal, so it is linkable and
-  // back-button-safe.
-  //
-  // The form is a single "General" section: the section title + guidance on the
-  // left, the Name field (a Fields-separated triad — Label + control + helper) on
-  // the right, inside one bordered CardBox. Validation runs on submit only; the
-  // Name is required, so an empty submit reveals the amber `required` state (a
-  // prompt to fill, NOT the red `invalid` — required is not an error). One
-  // `submitting` flag locks the whole scope (fieldset :disabled + every control
-  // :disabled + Save :loading, the /usability Pattern 1 lock); request-level
-  // failures surface via toast, never silently.
   import CardBox from '@aziontech/webkit/card-box'
   import InputText from '@aziontech/webkit/input-text'
   import Item from '@aziontech/webkit/item'
@@ -31,30 +16,17 @@
   const route = useRoute()
   const router = useRouter()
 
-  // The email carried over from the login flow (falls back to a placeholder).
   const userEmail = computed(() => route.query.email || 'myemail@azion.com')
 
   const form = reactive({ name: '', active: true })
   const errors = reactive({ name: '', nameKind: 'required' })
 
-  // One flag locks the whole scope while the create request is in flight.
   const submitting = ref(false)
 
-  // The leave guard's trigger (ui/UnsavedChangesGuard.vue, mounted by CreatePage): dirty
-  // while the form diverges from the state it opened on. `commit` re-snapshots it, and is
-  // called on the way OUT of a successful create — the page's own navigation must not be
-  // stopped by the guard that exists to protect the input that create just consumed.
   const { dirty, commit } = useBaseline(form)
 
-  // The API's own constraint on the name: `^[A-Za-z0-9-]{6,50}$` on
-  // POST /workspace/sql/databases. It is stated here rather than left to the server
-  // because the name is also the database's address, and a 400 arriving a second
-  // after Save is a worse way to learn about a space in it.
   const NAME_PATTERN = /^[A-Za-z0-9-]{6,50}$/
 
-  // Validation runs on submit only. An empty message means valid; a populated one
-  // drives the field's HelperText — amber `required` when the field is simply not
-  // filled in yet, red `invalid` when what is in it cannot be accepted.
   const validate = () => {
     const name = form.name.trim()
     if (!name) {
@@ -69,15 +41,13 @@
     return !errors.name
   }
 
-  // Where this page goes back to: SQL Database, or the Creation Center when the reader picked
-  // `Database` out of its rail (../../lib/behavior/create-origin.js).
   const { path: originPath, label: originLabel } = useCreateOrigin('/sql-database', 'SQL Database')
 
   const cancel = () => router.push({ path: originPath.value, query: { email: userEmail.value } })
 
   const submit = async () => {
-    if (submitting.value) return // re-entrancy lock
-    if (!validate()) return // feedback is now on the field itself
+    if (submitting.value) return
+    if (!validate()) return
 
     submitting.value = true
     try {
@@ -85,9 +55,7 @@
       const name = form.name.trim()
       const id = `db-${Date.now().toString(36)}`
       toast.success(`Database "${name}" created.`)
-      commit() // the create landed — the leave guard stands down
-      // Land on the new database's detail view, carrying its name so the header
-      // reads it without a round-trip.
+      commit()
       router.push({
         path: `/sql-database/${id}`,
         query: { email: userEmail.value, name }
@@ -98,7 +66,7 @@
         action: { label: 'Retry', onClick: () => submit() }
       })
     } finally {
-      submitting.value = false // release on success AND failure
+      submitting.value = false
     }
   }
 </script>
@@ -119,14 +87,14 @@
       stacked
       :divided="false"
       title="General"
-      hint="The only field this endpoint requires. Between 6 and 50 characters: letters, numbers and hyphens."
+      hint="The only field this endpoint requires."
     >
       <CardBox :padded="false">
         <template #content>
           <Item.List>
             <FieldRow
               title="Name"
-              description="Identifies the database wherever it is queried from. It cannot be changed later."
+              description="Identifies the database wherever it is queried from. It cannot be changed later. Between 6 and 50 characters: letters, numbers and hyphens."
               :message="errors.name"
               :message-kind="errors.nameKind || 'required'"
             >
@@ -151,9 +119,6 @@
       </CardBox>
     </Section>
 
-    <!-- `active` is optional to the endpoint and already defaults to true, so it sits
-         behind the disclosure: a database can be created switched off and turned on
-         once its schema is in place, but almost nobody does. -->
     <Section
       stacked
       collapsible

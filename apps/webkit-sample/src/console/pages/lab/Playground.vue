@@ -1,12 +1,4 @@
 <script setup>
-  // Playground — a test surface for appearance settings. An ItemGroup settings
-  // form (the Account Settings pattern: an section title over a flush CardBox
-  // whose body is an Item.List) where the user picks the primary FONT FAMILY and
-  // the SYSTEM APPEARANCE (theme). Both apply LIVE — this is a preview harness,
-  // not a persisted form, so there is no Save; each Select drives its singleton
-  // (src/font.js, src/theme.js) directly and the choice is remembered across
-  // reloads. A preview panel below shows the current type scale and a few
-  // components so the font/theme swap is immediately visible.
   import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
   import InputText from '@aziontech/webkit/input-text'
@@ -23,7 +15,6 @@
   const { font, fonts } = useFont()
   const { theme } = useTheme()
 
-  // System appearance options — mirror the theme singleton's modes.
   const appearances = [
     { label: 'System', value: 'system' },
     { label: 'Light', value: 'light' },
@@ -49,7 +40,6 @@
         description="Test surface for appearance settings. Choose the primary font family and the system appearance — both apply live and are remembered across reloads. Only the sans face is swapped; the type scale, code, overlines, and icons keep their own faces."
       />
 
-      <!-- Section: Appearance — an section title over a flush CardBox. -->
       <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
         <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">Appearance</p>
         <CardBox :padded="false">
@@ -122,8 +112,6 @@
         </CardBox>
       </section>
 
-      <!-- Section: Preview — shows the active font/theme across the type scale
-           and a few components so the swap is immediately visible. -->
       <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
         <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
           Preview · {{ fontLabel }}

@@ -1,10 +1,4 @@
-<script setup>
-  // SQL Quick Templates — a right Drawer of ready-to-run query snippets the Editor
-  // opens from its "Templates" button. Choosing a card emits its SQL back to the
-  // editor and closes; the search filters the grid by title and description. The
-  // Drawer composes the webkit Drawer + Panel regions (it traps focus and restores
-  // it to the trigger on close), and the tiles are token-styled buttons — the same
-  // hand-rolled affordance the sidebar's team switcher uses.
+<script setup lang="ts">
   import Drawer from '@aziontech/webkit/drawer'
   import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
@@ -16,15 +10,12 @@
   import PanelHeader from '@aziontech/webkit/panel-header'
   import { computed, ref, watch } from 'vue'
 
-  // Two-way open state, so the parent drives it with v-model:open.
   const open = defineModel('open', { type: Boolean, default: false })
 
-  // `select` carries the chosen template's SQL; the parent loads it into the editor.
-  const emit = defineEmits(['select'])
+  const emit = defineEmits<{
+    select: [sql: unknown]
+  }>()
 
-  // The template catalog — each a real, runnable snippet. Relational templates
-  // operate on a `users` table; the vector templates mirror Edge SQL's native
-  // vector support (a `products` table with an embedding column).
   const templates = [
     {
       id: 'create-table',
@@ -128,7 +119,6 @@ LIMIT 3;`
     )
   })
 
-  // Reset the search each time the drawer opens so it never lands pre-filtered.
   watch(open, (value) => {
     if (value) query.value = ''
   })

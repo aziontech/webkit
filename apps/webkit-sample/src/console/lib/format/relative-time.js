@@ -1,11 +1,3 @@
-/**
- * Format an absolute timestamp as a short, human relative string:
- * "just now", "2 min ago", "3 hours ago", "5 days ago", "2 weeks ago",
- * "3 months ago", "1 year ago". Returns "" for empty or unparseable input.
- *
- * @param {string | Date} input Absolute timestamp (Date or any string `new Date()` parses).
- * @returns {string}
- */
 export function relativeTime(input) {
   if (!input) return ''
   const then = input instanceof Date ? input : new Date(input)

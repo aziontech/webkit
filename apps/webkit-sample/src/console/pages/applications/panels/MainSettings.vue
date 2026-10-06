@@ -1,19 +1,4 @@
-<script setup>
-  // Application → Settings (`?tab=main-settings`). Core configuration for one
-  // application, shaped as TWO ItemGroups — General and Modules — committed as ONE page.
-  //
-  // ONE SAVE FOR THE PAGE, from the shared bar (../../components/ui/SettingsSaveBar.vue),
-  // which is the rule for every internal settings surface in the console: the bands
-  // describe one record, so they commit together, and the page keeps one `saving` flag and
-  // one baseline. `useBaseline` snapshots the saved state and reports dirty only while the
-  // live values diverge from it, which is what brings the bar in on the first real edit
-  // and takes it away when the save lands.
-  //
-  // LAYOUT — the same pattern as Create Application: a Section (title + a `Hint` glyph,
-  // never a paragraph) over a flush CardBox whose body is an Item.List, on the form
-  // measure. A create page and the settings page it becomes are then the same object seen
-  // twice — same bands, same rows, same order — so nothing has to be relearned after the
-  // first save.
+<script setup lang="ts">
   import CardBox from '@aziontech/webkit/card-box'
   import InputText from '@aziontech/webkit/input-text'
   import Item from '@aziontech/webkit/item'
@@ -34,28 +19,15 @@
   import { applicationDeploymentRows } from '../../../lib/data/deployment-history'
   import { domainsFor, saveDomains } from '../../../lib/state/application-domains'
 
-  const props = defineProps({
-    // The application being configured — `{ id, name }`.
-    application: { type: Object, required: true }
-  })
+  interface Props {
+    application: Record<string, unknown>
+  }
 
-  // ONE SAVE FOR THE PAGE. The two bands used to own independent saves in their
-  // own card footers. That is right for a page whose groups are separate records;
-  // here they are one application, and a per-band Save asked the reader to notice
-  // which footer belonged to the switch they just flipped — and to press it twice
-  // when they changed something in each.
-  //
-  // So the page has ONE editable object, one baseline, one Save. `useBaseline`
-  // reports dirty only while the live values diverge from the last committed
-  // snapshot, which is also what decides whether the action bar exists at all.
+  const props = defineProps<Props>()
+
   const settings = reactive({
     name: props.application.name,
-    // The record's own switch, absent on every application that is on
-    // (../../../lib/data/applications.js). Read rather than hard-coded, so the retired
-    // application opens with the switch it actually has.
     active: props.application.active !== false,
-    // The reader's own addresses, edited here and committed with the rest of the page
-    // (../../../lib/state/application-domains.js).
     domains: domainsFor(props.application.id, props.application).map((entry) => ({ ...entry })),
     modules: {
       application_accelerator: true,
@@ -71,8 +43,6 @@
   const saving = ref(false)
   const { dirty, commit } = useBaseline(settings)
 
-  // `useBaseline` reports dirtiness but does not hand the snapshot back, so the
-  // page keeps its own copy — that copy is what Discard restores.
   const snapshot = ref(JSON.parse(JSON.stringify(settings)))
 
   const save = () =>
@@ -82,28 +52,16 @@
       snapshot.value = JSON.parse(JSON.stringify(settings))
     })
 
-  // Discard returns every field to the last saved state in one step — the way out
-  // of an edit the user changed their mind about, which a page-level bar owes them:
-  // without it the only way back is to undo each field by hand and hope the bar
-  // disappears.
   const discard = () => {
     Object.assign(settings, JSON.parse(JSON.stringify(snapshot.value)))
   }
 
-  // The shell marks this tab and asks before letting the reader leave it: the bar below
-  // sits in the same place as the Rules Engine tab's, and neither tab can see the
-  // other's pending work (../../lib/tab-dirty.js).
   useTabDirty(
     'main-settings',
     { dirty, saving },
     { label: 'Application settings changed.', save, discard }
   )
 
-  // --- Domains --------------------------------------------------------------
-  // The drawer STAGES; the page's save bar COMMITS. A domain is a settings field like the
-  // name and the switch beside it, so its add, its edit and its removal are pending edits
-  // with one Save and one Discard — the same split the workload's domains have
-  // (../../workloads/WorkloadDetail.vue).
   const route = useRoute()
   const router = useRouter()
 
@@ -112,10 +70,6 @@
   const removingDomainId = ref('')
   const removeDomainOpen = ref(false)
 
-  // WHERE THIS APPLICATION ALREADY PUBLISHES. An application is deployed through a
-  // workload, so the environments it answers in are the ones its deployments landed in —
-  // read rather than stored, which is what lets the drawer say a domain is what brings a
-  // new one (../../../components/resource/AddDomainDrawer.vue).
   const environments = computed(() => {
     const names = new Set(
       applicationDeploymentRows(props.application.id, props.application.name)
@@ -125,9 +79,6 @@
     return [...names].map((name) => ({ name }))
   })
 
-  // The generated hostname first: it is the domain the platform created with the
-  // application, it cannot be edited or removed, and the table says so by giving it no
-  // menu. Every address after it is one the reader bound, in the environment they chose.
   const domainRows = computed(() => [
     {
       id: 'generated',
@@ -144,8 +95,6 @@
     domainOpen.value = true
   }
 
-  // The row is passed by VALUE — a live reference would let the form's own reset write
-  // through to the table behind it.
   const editDomain = (id) => {
     const entry = settings.domains.find((domain) => domain.id === id)
     if (!entry) return
@@ -153,8 +102,6 @@
     domainOpen.value = true
   }
 
-  // An upsert keyed on the row's own id, so an edit replaces in place instead of
-  // appending a second copy below the one the reader was just reading.
   const stageDomain = (entry) => {
     const existing = settings.domains.some((domain) => domain.id === entry.id)
     settings.domains = existing
@@ -177,8 +124,6 @@
     removingDomainId.value = ''
   }
 
-  // The Overview's own control lands here with the drawer already open, and the flag is
-  // consumed so a reload of this tab does not reopen it (../Overview.vue).
   watch(
     () => route.query.add,
     (value) => {
@@ -191,9 +136,6 @@
     { immediate: true }
   )
 
-  // The summary's "Manage Domains" lands here with nothing open — the section is what it
-  // asked for, so the page arrives scrolled to it. Consumed like the flag above, and for
-  // the same reason: a reload should land where a reload lands.
   watch(
     () => route.query.focus,
     (value) => {
@@ -206,11 +148,6 @@
     { immediate: true }
   )
 
-  // The module catalog. `defaultModules` ship on every plan and are all
-  // user-toggleable — including Cache, which is enabled by default in every account
-  // but can be turned off here. `subscriptionModules` are paid add-ons closed by a
-  // "Contact sales" CTA. Toggle state lives in the `modules` object above, so the
-  // group's dirty tracking and independent Save keep working unchanged.
   const defaultModules = [
     {
       key: 'application_accelerator',
@@ -256,8 +193,6 @@
 </script>
 
 <template>
-  <!-- ONE form for the page: every band edits the same application record, so one
-       submit commits all of it. -->
   <form
     class="flex min-h-full flex-col"
     aria-label="Main settings"
@@ -273,7 +208,6 @@
         size="small"
       />
 
-      <!-- One flag locks every control while the request is in flight. -->
       <fieldset
         class="mx-0 mt-(--layout-section-gap) flex min-w-0 flex-col border-0 p-0"
         :disabled="saving"
@@ -332,7 +266,7 @@
           anchor
           :divided="false"
           title="Modules"
-          hint="The capabilities this application runs with. Every default module can be toggled here, including Cache."
+          hint="The capabilities this application runs with, each of which can be toggled here."
         >
           <CardBox :padded="false">
             <template #content>
@@ -359,13 +293,12 @@
           </CardBox>
         </Section>
 
-        <!-- Locked capabilities with a sales path: no form, nothing to save. -->
         <Section
           stacked
           anchor
           :divided="false"
           title="Subscription modules"
-          hint="Paid add-ons. They cannot be switched on from this page — activating one starts with a conversation with sales."
+          hint="Paid add-ons that are activated with sales, not from this page."
         >
           <CardBox :padded="false">
             <template #content>
@@ -379,9 +312,6 @@
                     <Item.Title>{{ mod.title }}</Item.Title>
                     <Item.Description>
                       {{ mod.description }}
-                      <!-- The way forward lives on the ROW: a Tooltip panel is
-                           `pointer-events-none`, so a link inside one could never be
-                           clicked or tabbed to. -->
                       <a
                         :href="CONTACT_SALES"
                         target="_blank"
@@ -390,7 +320,7 @@
                       >
                         Contact sales
                         <i
-                          class="pi pi-external-link shrink-0 text-[0.9em] leading-none"
+                          class="pi pi-external-link shrink-0 text-body-sm leading-none"
                           aria-hidden="true"
                         />
                       </a>
@@ -410,10 +340,6 @@
             </template>
           </CardBox>
         </Section>
-        <!-- LAST on the page: the addresses this application answers on. It is the
-             workload's domains band (../../workloads/WorkloadDetail.vue) — one drawer for
-             add and edit, a confirmation for the removal, and the page's own bar as the
-             commit. -->
         <Section
           stacked
           anchor
@@ -432,10 +358,6 @@
       </fieldset>
     </div>
 
-    <!-- ONE bar for the page, from the one component every settings surface in the
-         console uses (../../components/ui/SettingsSaveBar.vue). It owns the placement,
-         the entrance and the Discard/Save pair; this page only says whether there is
-         anything to commit. -->
     <SettingsSaveBar
       :dirty="dirty"
       :saving="saving"
@@ -445,9 +367,6 @@
       @save="save"
       @discard="discard"
     />
-    <!-- ADD / EDIT A DOMAIN — the SAME form the workload uses, because it is the same act:
-         a domain puts an environment on the resource it lands on, and an application is
-         deployed through a workload (../../../components/resource/AddDomainDrawer.vue). -->
     <AddDomainDrawer
       v-model:open="domainOpen"
       resource="application"
@@ -457,8 +376,6 @@
       @save="stageDomain"
     />
 
-    <!-- The removal is a pending edit until the bar commits it, so Discard is already
-         the undo — a confirmation, not the type-the-name guard. -->
     <ConfirmDialog
       v-model:open="removeDomainOpen"
       title="Remove domain"

@@ -1,18 +1,10 @@
 <script setup>
-  // Settings → Credentials. The API tokens used to authenticate against this account.
-  //
-  // LAYOUT — a LIST band on the DATA measure (`.layout-column`). The page stack has
-  // no vertical gap: it holds the heading plus ONE band below it — the controls row
-  // over the table it narrows — which carries the band step and stacks its two parts
-  // at the group step (see src/styles/layout.css). It owns its
-  // own scroll region because the shell hands each tab a plain flex column (see
-  // AccountSettings.vue).
   import CardBox from '@aziontech/webkit/card-box'
   import CopyButton from '@aziontech/webkit/copy-button'
   import Dropdown from '@aziontech/webkit/dropdown'
   import IconButton from '@aziontech/webkit/icon-button'
   import InputText from '@aziontech/webkit/input-text'
-  import Table from '@aziontech/webkit/table'
+  import TableRoot from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -29,11 +21,6 @@
   import { useListFilters } from '../../../lib/behavior/list-state'
   import { FIT_COLUMN, TAG_COLUMN } from '../../../lib/behavior/table-columns'
 
-  // Where `Documentation` on the page heading goes. The docs ROOT, not a deep link: the
-  // account-side topics have no entry in lib/data/product-empty-states.js (that
-  // registry covers the first-level product modules), and pointing at a path we have
-  // not verified is worse than pointing at the index. Replace with the topic's own URL
-  // when there is one.
   const HELP = 'https://www.azion.com/en/documentation/'
 
   const credentials = ref([
@@ -71,9 +58,6 @@
     }
   ])
 
-  // ── The filter catalog ────────────────────────────────────────────────────
-  // Status is the one enumerable column — Name and Token are free text, and
-  // Created / Last Used are display strings with no instant behind them to compare.
   const filterFields = [
     {
       id: 'status',
@@ -96,9 +80,6 @@
     refresh
   } = useListFilters(filterFields, credentials, { pageSize: 10 })
 
-  // The table the controls row drives. Download CSV calls the DS's own `exportCsv()`
-  // through it (../../../components/list/ExportButton.vue), so the file honours the
-  // visible columns and the filtered rows instead of re-serialising them here.
   const tableRef = ref(null)
 
   const credentialColumns = [
@@ -110,15 +91,8 @@
     { id: 'actions', kind: 'action', hideable: false }
   ]
 
-  // Which columns are switched off, driven by the Columns button on the controls
-  // row (../../../components/list/ColumnsButton.vue). Only a HIDDEN column is ever
-  // recorded, so this never has to be kept in step with the column model above.
   const columnVisibility = ref({})
 
-  // The same map, with the same keys and the same severities, that every other table in
-  // the console uses for a credential's life (../PersonalTokens.vue). It was a ternary —
-  // Active or else danger — which read the same today, when Revoked is the only other
-  // status, and would have painted the first Pending or Inactive credential red.
   const credentialStatusSeverity = (status) =>
     ({ Active: 'success', Expired: 'danger', Revoked: 'danger' })[status] ?? 'secondary'
 
@@ -142,11 +116,6 @@
 <template>
   <div class="min-h-0 flex-1 overflow-auto">
     <section class="layout-column layout-boundary flex min-w-0 flex-col">
-      <!-- The page's action is on the HEADING, not in the controls row below it: the
-           controls narrow the list, the heading acts on the module (../../components/
-           page/ControlsHeader.vue states the same rule). It sat in that row, which left
-           a 32px primary under the 40px Documentation beside it — the page's own action
-           reading as the smaller of the two. -->
       <PageHeading
         title="Credentials"
         description="Manage the API tokens used to authenticate against this account."
@@ -162,22 +131,13 @@
         </template>
       </PageHeading>
 
-      <!-- The page's parent section. It holds one section here — the controls row
-           over the table it narrows, at the GROUP step — and spaces whatever sits
-           inside it at --layout-section-gap. -->
       <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)">
         <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-          <!-- The band's CONTROLS: narrowing on the left, the band's own action on the
-               right, above the card — the same row every list in the console opens with. -->
           <ControlsHeader>
             <FilterButton
               v-model="filters"
               :fields="filterFields"
             />
-            <!-- Search drives the table's global filter from outside the card, so the field is
-                 a plain InputText (`Table.Search` is context-aware and only works inside
-                 `<Table>`). One horizontal band: it grows into the row's slack and compresses
-                 rather than wrapping (see ui/ControlsHeader.vue). -->
             <InputText
               v-model="search"
               size="medium"
@@ -194,10 +154,6 @@
             </InputText>
 
             <template #actions>
-              <!-- THE RIGHT GROUP: the three controls that act on the LISTING rather
-                   than narrow it — fetch it again, take it away as a file, choose which
-                   columns it shows. All glyphs, all `medium`, so the row shares one
-                   32px height with the field and the Filter button opposite. -->
               <RefreshButton
                 :loading="loading"
                 @refresh="refresh"
@@ -220,7 +176,7 @@
 
           <CardBox :padded="false">
             <template #content>
-              <Table
+              <TableRoot
                 ref="tableRef"
                 v-model:pagination="pagination"
                 v-model:globalFilter="search"
@@ -234,9 +190,6 @@
                 :border="false"
                 :loading="loading"
               >
-                <!-- A token is data, not code: it keeps the cell's own type and
-                     --text-default, so a row reads at one weight across its columns
-                     (Applications.vue's list is the reference). -->
                 <template #cell-token="{ value }">
                   <div class="flex min-w-0 items-center gap-(--spacing-xs)">
                     <span class="min-w-0 truncate">{{ value }}</span>
@@ -292,7 +245,7 @@
                     </Dropdown.Group>
                   </Dropdown>
                 </template>
-              </Table>
+              </TableRoot>
             </template>
           </CardBox>
         </section>

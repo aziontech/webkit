@@ -1,44 +1,4 @@
-<script setup>
-  // ResourceSettings — THE settings page every first-level resource gets, generated from the
-  // same descriptor as its create page.
-  //
-  // ── WHY IT EXISTS ──
-  //
-  // Ten modules could create a resource and none of them could change one: the row menu's
-  // Edit action raised a toast saying the demo stopped there. So a reader could make a
-  // function, a connector, a certificate — and then had nowhere to go. This page is the
-  // other side of that menu item.
-  //
-  // ── WHY IT IS ONE PAGE AND NOT TEN ──
-  //
-  // The same argument as the create page (../lib/create-resources.js § WHY ONE DESCRIPTOR):
-  // what differs between resources is which fields the API takes, not the shape of the
-  // screen. So the SHAPE lives here once — console shell, bands, submit-time validation,
-  // scope lock, one save bar — and the fields come from the descriptor. A create page and
-  // the settings page it becomes are then the same object seen twice: same bands, same
-  // rows, same order, same guidance. Nothing has to be relearned after the first save.
-  //
-  // The rows themselves are ui/SpecFieldRow.vue, the one component that turns a field
-  // descriptor into a control — shared with the create page, so a control cannot gain an
-  // attribute on one page and lack it on the other.
-  //
-  // ── WHAT DIFFERS FROM CREATE ──
-  //
-  //   The shell — a create flow is a focused page with its own header (ui/CreatePage.vue);
-  //     editing an existing resource happens INSIDE the console, so this is the persistent
-  //     shell with the module breadcrumb and the sidebar still on screen.
-  //   The commit — Cancel/Save becomes ONE save bar (ui/SettingsSaveBar.vue) that mounts on
-  //     the first real edit and offers Discard, which is the console's settings model
-  //     everywhere else (an application's Main Settings, a workload's, the account's).
-  //   The values — a create page opens on the API's defaults. This one opens on the stored
-  //     record when there is one: a resource created in this session is kept as the answers
-  //     the reader gave (../../lib/state/created-resources.js), so its settings page opens
-  //     on exactly what they typed, `code` fields included, and Save writes back to it. A
-  //     SEEDED record has no such form — the fixtures are rows, not answers — so it still
-  //     falls back to what the row hands over in the query string (`?name=`) and then to the
-  //     API defaults. That seeding is deliberately generic — any field id is a valid query
-  //     key — so a list that later carries more of a row can pass it without touching this
-  //     file.
+<script setup lang="ts">
   import CardBox from '@aziontech/webkit/card-box'
   import Item from '@aziontech/webkit/item'
   import { computed, reactive, ref, watch } from 'vue'
@@ -59,17 +19,16 @@
   } from '../../lib/data/create-resources'
   import { createdFormFor, updateCreatedResource } from '../../lib/state/created-resources'
 
-  const props = defineProps({
-    /** Which resource this page configures — the `id` of a `createResources` entry. */
-    resource: { type: String, required: true }
-  })
+  interface Props {
+    resource: string
+  }
+
+  const props = defineProps<Props>()
 
   const route = useRoute()
 
   const spec = computed(() => createResource(props.resource))
 
-  // The record being edited. Its identity is what the URL carries: the id in the path and
-  // the name the row passed — which is also the key the created-resources store is read by.
   const recordId = computed(() => String(route.params.id ?? ''))
   const recordName = computed(() =>
     String(
@@ -79,16 +38,9 @@
     )
   )
 
-  // Stored values first, API defaults behind them. Only string controls are read from the
-  // query, and a select only when the value is one of its own options — the same rule the
-  // create page applies to its own seeding, for the same reason (a select holding a value
-  // that is in no list prints a raw string in its trigger).
   const seedForm = () => {
     const seed = createFormSeed(spec.value)
 
-    // A record this session created is the whole answer — it holds every field, including
-    // the `code` ones a URL cannot carry — so it wins outright and the query seeding below
-    // is skipped rather than allowed to overwrite it with a subset.
     const stored = createdFormFor(props.resource, recordId.value)
     if (stored) return { ...seed, ...stored }
 
@@ -100,8 +52,6 @@
       } else if (!['text', 'textarea', 'code', 'list'].includes(field.kind)) continue
       seed[field.id] = value
     }
-    // `name` is the one field every list can hand over, and it arrives as `?name=` rather
-    // than under the field's own id because that is what identifies the row.
     if (seed.name !== undefined && route.query.name) seed.name = String(route.query.name)
     return seed
   }
@@ -109,18 +59,11 @@
   const form = reactive(seedForm())
   const errors = reactive({})
 
-  // ONE flag, ONE baseline, ONE bar for the page — the console's settings model. `dirty` is
-  // what mounts the bar, so it appears on the first real edit and leaves when the save lands
-  // or the reader puts the value back.
   const saving = ref(false)
   const { dirty, commit } = useBaseline(form)
 
-  // What Discard restores: the last SAVED state, kept as a JSON snapshot so restoring cannot
-  // alias the live object and re-dirty it.
   const snapshot = ref(JSON.parse(JSON.stringify(form)))
 
-  // One route mounts this page for every resource, so navigating between two of them would
-  // otherwise keep the previous resource's answers.
   watch([() => props.resource, recordId], () => {
     const seed = seedForm()
     Object.keys(errors).forEach((key) => delete errors[key])
@@ -130,8 +73,6 @@
     snapshot.value = JSON.parse(JSON.stringify(form))
   })
 
-  // Only the sections and fields this resource is asking for right now — a field guarded by
-  // `visible(form)` is neither shown, validated, nor posted.
   const askedSections = computed(() =>
     spec.value.sections
       .filter((section) => isVisible(section, form))
@@ -144,9 +85,6 @@
 
   const sections = computed(() => askedSections.value.filter((section) => !section.advanced))
 
-  // Everything `advanced`, flattened into ONE collapsed band at the end — same as the create
-  // page, and for the same reason: a settings page should show at rest what the reader came
-  // to change, not every property the endpoint accepts.
   const advancedFields = computed(() =>
     askedSections.value.filter((section) => section.advanced).flatMap((section) => section.shown)
   )
@@ -159,9 +97,6 @@
 
   const isEmpty = (value) => value === '' || value === undefined || value === null
 
-  // Validation runs on submit only, and each field gets at most one message: the first rule
-  // it breaks, in the order a reader would hit them. `kind` separates the amber prompt (you
-  // have not answered yet) from the red error (the answer cannot be accepted).
   const validate = () => {
     Object.keys(errors).forEach((key) => delete errors[key])
 
@@ -200,8 +135,6 @@
     return Object.keys(errors).length === 0
   }
 
-  // Typing into a field that is carrying a message clears it: the message was about the
-  // value at submit time, and the reader has since answered it.
   const clear = (id) => {
     if (errors[id]) delete errors[id]
   }
@@ -212,9 +145,6 @@
   const save = () => {
     if (!validate()) return
     saveGroup(saving, `${form.name || recordName.value} saved.`, () => {
-      // Back into the store, so the edit survives leaving the page — a rename shows up in
-      // the module list as the row's new name, not as the name it was created with. A
-      // seeded record is not in the store and is left as the fixture it is.
       updateCreatedResource(props.resource, recordId.value, form)
       commit()
       snapshot.value = JSON.parse(JSON.stringify(form))
@@ -226,8 +156,6 @@
     Object.keys(errors).forEach((key) => delete errors[key])
   }
 
-  // The breadcrumb is what names the location, so the page carries no title repeating the
-  // record's name — the last crumb IS that name.
   const breadcrumb = computed(() => [
     { label: spec.value.label, href: spec.value.listPath },
     { label: recordName.value }
@@ -240,18 +168,12 @@
     :padded="false"
     :breadcrumb="breadcrumb"
   >
-    <!-- ONE form for the page: every band edits the same record, so one submit commits all
-         of it. `min-h-full` so the bar lands at the bottom of the screen on a short page
-         rather than floating just under the last card. -->
     <form
       class="flex min-h-full min-w-0 flex-col"
       :aria-label="`${spec.unit} settings`"
       novalidate
       @submit.prevent="save"
     >
-      <!-- The FORM measure: this page is a stacked column of label-plus-control rows, so
-           past ~1200px the extra width would only leave each label a head-turn from the
-           field it names. -->
       <div class="layout-column-form layout-boundary flex min-w-0 flex-1 flex-col">
         <PageHeading
           title="Settings"
@@ -259,8 +181,6 @@
           size="small"
         />
 
-        <!-- Section owns the band step, so the fieldset only stacks them. One flag locks
-             every control on the page while the commit is in flight. -->
         <fieldset
           class="layout-section-start mx-0 flex min-w-0 flex-col border-0 p-0"
           :disabled="saving"
@@ -273,31 +193,32 @@
             stacked
             anchor
             :divided="false"
-            :title="section.title"
-            :hint="section.description"
+            :title="section.within ? '' : section.title"
+            :hint="section.within ? '' : section.description"
           >
             <CardBox :padded="false">
               <template #content>
                 <Item.List>
-                  <SpecFieldRow
-                    v-for="field in section.shown"
-                    :key="field.id"
-                    v-model="form[field.id]"
-                    :field="field"
-                    :message="messageFor(field)"
-                    :message-kind="messageKindFor(field)"
-                    :disabled="saving"
-                    :name-prefix="props.resource"
-                    @update:model-value="clear(field.id)"
-                  />
+                  <TransitionGroup
+                    enter-active-class="animate-content-enter motion-reduce:animate-none"
+                  >
+                    <SpecFieldRow
+                      v-for="field in section.shown"
+                      :key="field.id"
+                      v-model="form[field.id]"
+                      :field="field"
+                      :message="messageFor(field)"
+                      :message-kind="messageKindFor(field)"
+                      :disabled="saving"
+                      :name-prefix="props.resource"
+                      @update:model-value="clear(field.id)"
+                    />
+                  </TransitionGroup>
                 </Item.List>
               </template>
             </CardBox>
           </Section>
 
-          <!-- Last, and collapsed: everything the endpoint does not require and already
-               defaults. Section owns the trigger semantics and `inert` while closed, so no
-               hidden field is ever tabbable. -->
           <Section
             v-if="advancedFields.length"
             stacked
@@ -309,17 +230,21 @@
             <CardBox :padded="false">
               <template #content>
                 <Item.List>
-                  <SpecFieldRow
-                    v-for="field in advancedFields"
-                    :key="field.id"
-                    v-model="form[field.id]"
-                    :field="field"
-                    :message="messageFor(field)"
-                    :message-kind="messageKindFor(field)"
-                    :disabled="saving"
-                    :name-prefix="props.resource"
-                    @update:model-value="clear(field.id)"
-                  />
+                  <TransitionGroup
+                    enter-active-class="animate-content-enter motion-reduce:animate-none"
+                  >
+                    <SpecFieldRow
+                      v-for="field in advancedFields"
+                      :key="field.id"
+                      v-model="form[field.id]"
+                      :field="field"
+                      :message="messageFor(field)"
+                      :message-kind="messageKindFor(field)"
+                      :disabled="saving"
+                      :name-prefix="props.resource"
+                      @update:model-value="clear(field.id)"
+                    />
+                  </TransitionGroup>
                 </Item.List>
               </template>
             </CardBox>

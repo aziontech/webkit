@@ -1,15 +1,4 @@
 <script setup>
-  // Object Storage — bucket file navigator. The console app shell (sidebar +
-  // GlobalHeader with the module breadcrumb "Object Storage › <bucket>") comes
-  // from AppLayout; following the resource-detail convention (SqlDatabaseDetail),
-  // this page carries NO PageHeading — the bucket name lives in the header
-  // breadcrumb, so the content is just the CardBox whose Table lists the objects
-  // in the current folder.
-  //
-  // Navigation is path-only (no folder tree): a <Breadcrumb> inside the toolbar
-  // is the sole "where am I" surface. Descending is a folder row-click (or the
-  // synthetic ".." row that steps up one level); a crumb click jumps straight to
-  // that ancestor. Files aren't navigable — clicking one is a demo download.
   import Breadcrumb from '@aziontech/webkit/breadcrumb'
   import CardBox from '@aziontech/webkit/card-box'
   import Dropdown from '@aziontech/webkit/dropdown'
@@ -35,14 +24,9 @@
 
   const route = useRoute()
 
-  // Bucket identity from the route (id in the path, display name carried in the
-  // query by the buckets list; falls back to the id).
   const bucketId = computed(() => route.params.bucket)
   const bucketName = computed(() => route.query.name || bucketId.value)
 
-  // ── Mock object tree ────────────────────────────────────────────────────────
-  // A folder is `{ children }`; a file is `{ size, lastModified, ext }`. The
-  // navigator resolves the current folder's entries from `folderPath` below.
   const file = (size, ext) => ({ size, ext, lastModified: 'Jun 22, 2026, 07:21:21 PM' })
 
   const STORYBOOK_BUILD = {
@@ -61,8 +45,6 @@
     'project.json': file('1.01 KB', 'json')
   }
 
-  // Per-bucket root. `webkit-storybook-dev` mirrors the reference bucket; any other
-  // bucket gets a small representative tree so the navigator always has content.
   const BUCKET_TREES = {
     'webkit-storybook-dev': {
       '20260622162046/': { children: STORYBOOK_BUILD },
@@ -90,10 +72,8 @@
 
   const tree = computed(() => BUCKET_TREES[bucketId.value] ?? FALLBACK_TREE)
 
-  // Current folder as an array of segment names (relative to the bucket root).
   const folderPath = ref([])
 
-  // Resolve the node map for the current folder.
   const currentFolder = computed(() => {
     let node = tree.value
     for (const segment of folderPath.value) {
@@ -105,23 +85,14 @@
 
   const isFolder = (entry) => Boolean(entry && entry.children)
 
-  // File-type glyph. Folders/parent are handled in the cell template. The map is shared
-  // with the project drop's listing (../../lib/format/file-glyph.js) so the same
-  // extension does not get two different marks in two listings.
   const fileIcon = (ext) => glyphForExtension(ext)
 
-  // Rows for the Table: a synthetic ".." parent when nested, then folders, then
-  // files — folders first, each block alphabetical (console convention).
   const rows = computed(() => {
     const entries = Object.entries(currentFolder.value)
-    // Folders carry no modifier/timestamp — the Last Modified cell stays empty
-    // (the tables skill forbids a raw date, and there is no author for a prefix).
     const folders = entries
       .filter(([, entry]) => isFolder(entry))
       .sort(([a], [b]) => a.localeCompare(b))
       .map(([name]) => ({ id: name, name, kind: 'folder', size: '-', lastModified: '' }))
-    // Files get a round-robin author from the shared roster so the Last Modified
-    // cell shows an avatar (name on tooltip) + relative time.
     const files = entries
       .filter(([, entry]) => !isFolder(entry))
       .sort(([a], [b]) => a.localeCompare(b))
@@ -165,24 +136,12 @@
     { id: 'actions', kind: 'action', hideable: false }
   ]
 
-  // Which columns are switched off, driven by the Columns button beside the search
-  // (../../components/list/ColumnsButton.vue). Only a HIDDEN column is ever recorded.
-  //
-  // The control is INSIDE the toolbar here, not on a page controls row, because this
-  // table's search is too: a file browser's chrome belongs to the folder it is showing
-  // (the breadcrumb under it is the same argument), so the whole band travels with the
-  // card. Everything else about it is identical — same glyph, same panel, same row.
   const columnVisibility = ref({})
 
-  // What the toolbar's Refresh does, and the flag the table binds for its skeleton
-  // rows — one flag over both causes, a scope switch and a manual refresh
-  // (../../lib/behavior/list-state.js).
   const { loading, refresh } = useListRefresh()
 
-  // The table the toolbar's Download CSV drives, through its `exportCsv()`.
   const tableRef = ref(null)
 
-  // ── Navigation ────────────────────────────────────────────────────────────
   const enterFolder = (name) => {
     folderPath.value = [...folderPath.value, name]
   }
@@ -203,23 +162,17 @@
     toast.info(`Downloading ${row.name}`, { description: row.size })
   }
 
-  // Folder-path breadcrumb: the bucket root, then each folder segment. `href`
-  // carries the target depth so a crumb click truncates the path to that ancestor.
   const pathCrumbs = computed(() => [
     { label: bucketName.value, href: '0' },
     ...folderPath.value.map((segment, index) => ({ label: segment, href: String(index + 1) }))
   ])
 
   const onCrumb = (event, href) => {
-    // The crumbs are real <a> elements whose href carries the target depth, not a
-    // route — stop the native navigation and truncate the path to that ancestor.
     event.preventDefault()
     const depth = Number(href)
     if (Number.isFinite(depth)) folderPath.value = folderPath.value.slice(0, depth)
   }
 
-  // An object in a bucket has no version history behind it here, so deleting one is
-  // final: the menu click arms the dialog and the name has to be typed back.
   const pendingDelete = ref(null)
   const deleteOpen = ref(false)
 
@@ -247,10 +200,6 @@
     toast.info(`${row.name}`, { description: `Object in ${bucketName.value}` })
   }
 
-  // "Add to files" is a SplitButton: the primary command uploads a file (the
-  // common action); the attached menu offers both "Upload file" and
-  // "Add folder". Actions are keyed by `value` so the primary click and the
-  // menu rows route through one dispatcher.
   const addToFilesActions = [
     { label: 'Upload file', value: 'upload', icon: 'pi pi-upload' },
     { label: 'Add folder', value: 'folder', icon: 'pi pi-folder-plus' }
@@ -264,9 +213,7 @@
     toast.info('Upload a file', { description: `Upload into ${bucketName.value}` })
   }
 
-  // Primary segment click → the default (upload) action.
   const onAddPrimary = () => runAddAction('upload')
-  // Menu row click → route by the selected action's value.
   const onAddAction = (event, item) => runAddAction(item.value)
 </script>
 
@@ -292,14 +239,10 @@
               @row-click="onRowClick"
             >
               <template #toolbar>
-                <!-- Toolbar, matching the console: the bucket name is the first
-                     element at the top of the table header; then search + table
-                     controls; then the folder-path breadcrumb (the only
-                     "where am I" surface) + "Add to files". -->
                 <div class="flex w-full flex-col gap-(--spacing-sm)">
                   <div class="flex min-w-0 items-center gap-(--spacing-xs)">
                     <i
-                      class="ai ai-edge-storage shrink-0 text-[1.15em] text-(--text-muted)"
+                      class="ai ai-edge-storage shrink-0 text-body-lg text-(--text-muted)"
                       aria-hidden="true"
                     />
                     <span class="min-w-0 truncate text-heading-xxs text-(--text-default)">
@@ -313,14 +256,6 @@
                       placeholder="Search in folder"
                       class="flex-1"
                     />
-                    <!-- The three that act on the LISTING rather than narrow it — the
-                         same right group every module list carries, in the same order.
-                         The shared pair rather than the DS's context-aware
-                         `Table.RefreshButton` / `Table.Export`: those two are fixed at
-                         `medium`, and this toolbar runs at `large`, so a 32px control
-                         beside a 40px field leaves a 4px break top and bottom.
-                         `large` to match the field they share the row with — the toolbar
-                         runs a size above the page controls rows elsewhere. -->
                     <RefreshButton
                       size="large"
                       :loading="loading"
@@ -362,18 +297,18 @@
                 <div class="flex min-w-0 items-center gap-(--spacing-xs)">
                   <i
                     v-if="row.kind === 'parent'"
-                    class="pi pi-folder-open shrink-0 text-[1.15em] text-(--text-muted)"
+                    class="pi pi-folder-open shrink-0 text-body-lg text-(--text-muted)"
                     aria-hidden="true"
                   />
                   <i
                     v-else-if="row.kind === 'folder'"
-                    class="pi pi-folder shrink-0 text-[1.15em] text-(--text-link)"
+                    class="pi pi-folder shrink-0 text-body-lg text-(--text-link)"
                     aria-hidden="true"
                   />
                   <i
                     v-else
                     :class="fileIcon(row.ext)"
-                    class="shrink-0 text-[1.15em] text-(--text-muted)"
+                    class="shrink-0 text-body-lg text-(--text-muted)"
                     aria-hidden="true"
                   />
                   <span
@@ -456,7 +391,6 @@
                 </Dropdown>
               </template>
 
-              <!-- An empty folder reads as a blank grid otherwise. -->
               <template #empty>
                 <EmptyState
                   size="medium"
@@ -481,8 +415,6 @@
         </CardBox>
       </section>
 
-      <!-- An object has no "settings or instances" behind it — what it has is every URL
-           already serving it, which is the thing worth naming. -->
       <DeleteDialog
         v-model:open="deleteOpen"
         kind="Object"

@@ -1,33 +1,4 @@
 <script setup>
-  // Form type: NESTED DRAWER (the `/form` skill, "Form types"). A drawer create
-  // whose Select points at a RELATED resource that may not exist yet. Rather than
-  // sending the user away to create it — and losing everything they've typed — a
-  // "Create …" quick-add in the Select's footer opens a SECOND, smaller drawer
-  // stacked over the first. The child creates the resource, appends it to the
-  // Select's options, selects it back into the parent, and closes; the parent form
-  // is exactly as the user left it.
-  //
-  // WHEN THIS IS THE RIGHT ANSWER — and when it is not. The child drawer is for a
-  // related resource that is genuinely small: everything it needs fits the drawer, so
-  // creating it there is the whole create, not a reduced copy of one. A FIRST-LEVEL
-  // resource is not that: it creates on its own page (../lib/surfaces.js), and a
-  // Select pointing at one sends the reader to that page and brings them back with
-  // their form intact — which is what the real Functions Instance → Edge Function flow
-  // does (../views/applications/FunctionsInstances.vue). The fields below are a generic
-  // stand-in, kept small on purpose so the pattern is the subject.
-  //
-  // Three decisions make it safe:
-  // 1. INDEPENDENT SCOPES — parent and child are separate <form>s, each with its own
-  //    `submitting` flag, <fieldset :disabled>, and Save :loading (the /usability
-  //    Pattern 1 lock, per drawer). Neither save locks the other.
-  // 2. CONTROLLED SELECT + SENTINEL — the parent Select is controlled (:model-value,
-  //    not v-model) so picking the quick-add never commits a real value; a sentinel
-  //    option in the #footer slot opens the child instead.
-  // 3. EXPLICIT STACKING — a Drawer panel is z-[1001] and Select.Content teleports to
-  //    <body> at z-50, so each layer opts its overlay/content/popups above the one
-  //    beneath it (child overlay z-[1002] / content z-[1003] / nested Select z-[1004];
-  //    the parent's Select z-[1002]). TEMPORARY workaround for a webkit bug where an
-  //    overlay popup renders behind a Drawer — remove once webkit stacks them above.
   import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
   import Drawer from '@aziontech/webkit/drawer'
@@ -50,11 +21,9 @@
   import PageHeading from '../../components/page/PageHeading.vue'
   import AppLayout from '../../components/shell/AppLayout.vue'
 
-  // Stable ids for the demo, without Date.now() churn in templates.
   let nextId = 0
   const uid = () => (nextId += 1)
 
-  // The related resource the parent Select picks from. The child drawer appends here.
   const functions = ref([
     { value: 'fn-auth', label: 'auth-handler' },
     { value: 'fn-img', label: 'image-optimizer' }
@@ -67,27 +36,20 @@
   ]
   const runtimeLabel = (value) => runtimes.find((r) => r.value === value)?.label ?? ''
 
-  // The list the PARENT drawer creates into (kept in memory for the demo).
   const instances = ref([{ id: 'fi-1', name: 'auth-guard', functionId: 'fn-auth' }])
 
-  // ── PARENT large drawer — Add Functions Instance ──
   const parentOpen = ref(false)
   const form = reactive({ name: '', functionId: '' })
   const errors = reactive({ name: '', functionId: '' })
   const submitting = ref(false)
 
-  // Sentinel value for the "Create Function" quick-add. The parent Select is
-  // CONTROLLED (:model-value), so selecting the sentinel never commits — it opens
-  // the child drawer and leaves the real selection untouched.
   const CREATE_FUNCTION = '__create-function__'
-  // Controls the parent Select's dropdown so the quick-add can close it before the
-  // child drawer opens over the top.
   const functionSelectOpen = ref(false)
 
   const onFunctionModel = (value) => {
     if (value === CREATE_FUNCTION) {
-      functionSelectOpen.value = false // close the dropdown …
-      childOpen.value = true //           … then open the child over the parent
+      functionSelectOpen.value = false
+      childOpen.value = true
       return
     }
     form.functionId = value
@@ -101,7 +63,6 @@
     parentOpen.value = false
   }
 
-  // Reset the parent scope whenever it closes (cancel, overlay, Escape, success).
   watch(parentOpen, (open) => {
     if (open) return
     form.name = ''
@@ -117,7 +78,7 @@
   }
 
   const submitParent = async () => {
-    if (submitting.value) return // re-entrancy lock, on the PARENT's flag
+    if (submitting.value) return
     if (!validateParent()) return
 
     submitting.value = true
@@ -128,18 +89,17 @@
         ...instances.value
       ]
       toast.success(`Functions Instance "${form.name.trim()}" created.`)
-      parentOpen.value = false // watch() resets the form
+      parentOpen.value = false
     } catch (error) {
       toast.error('Could not create the functions instance.', {
         description: error?.message ?? 'Check your connection and try again.',
         action: { label: 'Retry', onClick: () => submitParent() }
       })
     } finally {
-      submitting.value = false // release on success AND failure
+      submitting.value = false
     }
   }
 
-  // ── CHILD medium drawer — Create Function (its own, SEPARATE scope) ──
   const childOpen = ref(false)
   const childForm = reactive({ name: '', runtime: '' })
   const childErrors = reactive({ name: '', runtime: '' })
@@ -164,7 +124,7 @@
   }
 
   const submitChild = async () => {
-    if (childSubmitting.value) return // re-entrancy lock, on the CHILD's flag
+    if (childSubmitting.value) return
     if (!validateChild()) return
 
     childSubmitting.value = true
@@ -172,7 +132,7 @@
       await new Promise((resolve) => setTimeout(resolve, 700))
       const value = `fn-${uid()}`
       functions.value = [{ value, label: childForm.name.trim() }, ...functions.value]
-      form.functionId = value // select the new resource back into the parent
+      form.functionId = value
       errors.functionId = ''
       toast.success(`Function "${childForm.name.trim()}" created.`)
       childOpen.value = false
@@ -182,7 +142,7 @@
         action: { label: 'Retry', onClick: () => submitChild() }
       })
     } finally {
-      childSubmitting.value = false // release on success AND failure
+      childSubmitting.value = false
     }
   }
 </script>
@@ -192,9 +152,6 @@
     active="forms"
     :breadcrumb="[{ label: 'Forms', href: '/forms' }, { label: 'Nested drawer' }]"
   >
-    <!-- No `gap` on the stack: the band below owns its own top space via
-         `.layout-section-start` (= --layout-boundary-start, the same step
-         `.layout-boundary` puts above the heading). -->
     <main class="flex h-full flex-col">
       <PageHeading
         title="Functions Instances"
@@ -210,7 +167,6 @@
         </template>
       </PageHeading>
 
-      <!-- The list the parent drawer creates into -->
       <ul class="layout-section-start flex flex-col gap-(--spacing-xs)">
         <li
           v-for="instance in instances"
@@ -225,7 +181,6 @@
       </ul>
     </main>
 
-    <!-- PARENT — LARGE create drawer; one scoped save on `submitting` -->
     <Drawer
       v-model:open="parentOpen"
       size="large"
@@ -258,7 +213,6 @@
               >
                 <legend class="sr-only">Create functions instance</legend>
 
-                <!-- Section: General -->
                 <section class="flex flex-col gap-(--layout-group-gap)">
                   <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">General</p>
                   <CardBox :padded="false">
@@ -302,7 +256,6 @@
                   </CardBox>
                 </section>
 
-                <!-- Section: Function — the nested-create case -->
                 <section class="flex flex-col gap-(--layout-group-gap)">
                   <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">Function</p>
                   <CardBox :padded="false">
@@ -320,9 +273,6 @@
                           </Item.Content>
                           <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">
                             <div class="flex w-full flex-col gap-(--spacing-xs)">
-                              <!-- CONTROLLED (:model-value) so the sentinel never
-                                   commits; @update:model-value routes the sentinel to
-                                   the child drawer and otherwise assigns the value. -->
                               <Select
                                 :model-value="form.functionId"
                                 v-model:open="functionSelectOpen"
@@ -341,7 +291,6 @@
                                     errors.functionId ? 'instance-function-error' : undefined
                                   "
                                 />
-                                <!-- z-[1002]: above the parent Drawer panel (z-[1001]). -->
                                 <Select.Content class="z-[1002]!">
                                   <Select.Option
                                     v-for="fn in functions"
@@ -350,8 +299,6 @@
                                   >
                                     {{ fn.label }}
                                   </Select.Option>
-                                  <!-- Quick-add: a normal option in the footer slot
-                                       carrying the sentinel value. -->
                                   <template #footer>
                                     <Select.Option
                                       :value="CREATE_FUNCTION"
@@ -411,9 +358,6 @@
       </DrawerPortal>
     </Drawer>
 
-    <!-- CHILD — MEDIUM nested drawer; its own scope on `childSubmitting`. On save it
-         appends the new function to the parent Select and selects it back. Stacks
-         above the parent (overlay z-[1002], content z-[1003]). -->
     <Drawer
       v-model:open="childOpen"
       size="medium"
@@ -510,7 +454,6 @@
                                     childErrors.runtime ? 'fn-runtime-error' : undefined
                                   "
                                 />
-                                <!-- z-[1004]: above the nested drawer's content (z-[1003]). -->
                                 <Select.Content class="z-[1004]!">
                                   <Select.Option
                                     v-for="option in runtimes"

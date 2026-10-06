@@ -1,40 +1,4 @@
 <script setup>
-  // The signup entry — the first step of the signup flow (route /signup), rendered
-  // into the centred column its PARENT route owns (see SignupFlow.vue and
-  // AuthColumn.vue). This component is the card and what sits on the canvas under
-  // it; the chrome, the column, the client strip and the entrance belong to the flow
-  // around it, which is what lets the step change without the page re-arriving.
-  //
-  // The CardBox is the form's own edge. The column around it is the PAGE, not a box
-  // drawn for this form — it is the full site measure, a screen away on either side —
-  // so without a surface of its own the fields would float loose in the middle of
-  // it.
-  //
-  // Form order follows the design: the email path first (fields, then the primary
-  // action), the divider, then the providers. The divider means what it says here
-  // — everything above it is one way in, everything below it is another.
-  //
-  // The form is Fields-separated (the `/form` skill, Approach B): stacked
-  // Label + field-* triads. Work Email and Password are validated on submit
-  // only — empty is the amber `required` prompt, a malformed value is the red
-  // `invalid` state, and the message rides the field as its own HelperText
-  // (never a toast, never a summary block). Password is the one field that is a
-  // whole DS component rather than a triad: FieldPassword owns the input, the
-  // helper line and the requirements row that SCORES the value as it is typed,
-  // chip by chip, against the same array validate() gates the submit on — so a
-  // present-but-weak value is `invalid` while an empty one is `required`, and
-  // neither can ever contradict what the chips are showing.
-  //
-  // Two paths leave this screen, and one lock covers both (the `/usability`
-  // Pattern 1): the email form advances to email verification, and a social
-  // provider — which authenticates AND vouches for the address — skips that step
-  // and goes straight to onboarding. `locked` is the union of the two flags, so
-  // whichever path is in flight shows :loading on its own control and disables
-  // every other one; both are guarded against re-entrancy and released in
-  // `finally`. Request-level failures surface via toast with a Retry action.
-  //
-  // Either way the flow ends in the same place: Onboarding, where the user's
-  // organization is created (signup → [verify →] onboarding → the console).
   import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
   import Divider from '@aziontech/webkit/divider'
@@ -51,22 +15,11 @@
   const router = useRouter()
 
   const form = reactive({ email: '', password: '' })
-  // "" = valid; populated only by validate() on submit.
   const errors = reactive({ email: '', password: '' })
-  // One flag locks the scope while the account is created.
   const submitting = ref(false)
-  // Which social provider's handshake is in flight ('' = none). Separate from
-  // `submitting` so only the button that was pressed shows :loading — but the
-  // SCOPE lock is the union of both (`locked`), so no second path can start while
-  // either is running.
   const provider = ref('')
   const locked = computed(() => submitting.value || provider.value !== '')
 
-  // Social providers are gated on a readiness probe — the OAuth endpoints this
-  // screen would ping before offering them — exactly as on Sign In. Until it
-  // resolves the two buttons are Skeletons in their own shape, so a click can never
-  // reach a provider that is not wired up yet (a Skeleton for something coming IN,
-  // never a spinner on a control the user could still press).
   const providersReady = ref(false)
   const probeProviders = () => new Promise((resolve) => setTimeout(resolve, 1100))
 
@@ -75,23 +28,12 @@
     providersReady.value = true
   })
 
-  // While the scope is locked, every helper line is withheld — both fields carry the
-  // disabled treatment and the pressed control carries :loading, and that is the whole
-  // message. Nothing asks the user to fix a field they cannot type in, and no padlock
-  // line appears on either: FieldPassword renders a helper only for the copy it is
-  // given, so an empty one stays silent through the lock too.
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-  // One rule set, two consumers: FieldPassword's requirements row scores it chip by
-  // chip as the user types, and validate() gates the submit on the same array. It is
-  // imported from the DS rather than restated here — the field's built-in
-  // `requirements` set IS this array, so the score and the error cannot disagree.
   const passwordMeetsRequirements = (value) =>
     DEFAULT_PASSWORD_REQUIREMENTS.every((rule) =>
       typeof rule.test === 'function' ? rule.test(value) : rule.test.test(value)
     )
 
-  // Validate on submit only. Emptiness is the discriminator between the amber
-  // `required` prompt and the red `invalid` message.
   const validate = () => {
     errors.email = !form.email.trim()
       ? 'This field is required.'
@@ -106,23 +48,17 @@
     return !errors.email && !errors.password
   }
 
-  // Mock account creation. Reject models a request-level failure (network / 5xx).
   const createAccount = () => new Promise((resolve) => setTimeout(resolve, 900))
 
-  // Social sign-up. The provider authenticates AND vouches for the address, so
-  // this path skips the email-verification step and lands on onboarding — the same
-  // screen the verification link lands on.
   const authorizeProvider = () => new Promise((resolve) => setTimeout(resolve, 900))
 
   const continueWith = async (id) => {
-    if (locked.value) return // re-entrancy + cross-path lock
+    if (locked.value) return
     provider.value = id
     try {
       await authorizeProvider()
       router.push({
         name: 'signup-onboarding',
-        // Whatever the user had already typed carries over; otherwise Onboarding
-        // falls back to its own placeholder, as it does for a direct visit.
         query: form.email.trim() ? { email: form.email.trim() } : {}
       })
     } catch (error) {
@@ -131,13 +67,13 @@
         action: { label: 'Retry', onClick: () => continueWith(id) }
       })
     } finally {
-      provider.value = '' // release on success AND failure
+      provider.value = ''
     }
   }
 
   const signUp = async () => {
-    if (locked.value) return // re-entrancy + cross-path lock
-    if (!validate()) return // errors now drive :required / :invalid inline
+    if (locked.value) return
+    if (!validate()) return
     submitting.value = true
     try {
       await createAccount()
@@ -151,7 +87,7 @@
         action: { label: 'Retry', onClick: () => signUp() }
       })
     } finally {
-      submitting.value = false // release on success AND failure
+      submitting.value = false
     }
   }
 
@@ -159,25 +95,18 @@
 </script>
 
 <template>
-  <!-- One root element, because the flow cross-fades this component inside a
-       <Transition> and a fragment cannot be animated. It carries the column layout
-       for its own two pieces — the card and the way out under it — while the
-       centring and the column's rhythm come from AuthColumn. -->
   <div class="flex w-full flex-col items-center gap-(--spacing-md)">
     <CardBox
       class="w-full max-w-(--container-sm)"
       :padded="false"
     >
       <template #content>
-        <!-- The card's own padding, rather than CardBox's `padded`, which
-                 is a tighter step than this composition wants. -->
         <form
           class="flex flex-col gap-(--spacing-lg) p-(--spacing-lg)"
           aria-label="Sign up for a free account"
           novalidate
           @submit.prevent="signUp"
         >
-          <!-- Hidden native submit so Enter submits (webkit Button is type=button). -->
           <button
             type="submit"
             class="sr-only"
@@ -194,12 +123,6 @@
           >
             <legend class="sr-only">Account credentials</legend>
 
-            <!-- Both fields go :disabled with the scope; only their HELPER
-                     lines are withheld while locked, so nothing describes a
-                     field the user cannot act on — and neither field grows a
-                     padlock line in its place. -->
-
-            <!-- Work Email -->
             <div class="flex flex-col gap-(--spacing-xs)">
               <Label
                 for="signup-email"
@@ -229,16 +152,6 @@
               />
             </div>
 
-            <!-- Password. Everything from the input down belongs to
-                     FieldPassword: the visibility toggle, the helper line, and the
-                     requirements row that scores the value against the DS rule set
-                     as it is typed. The row replaces the old "At least 8
-                     characters…" helper sentence — it says the same thing and keeps
-                     saying it, per rule instead of in prose.
-                     The field NAME stays a standalone Label so "* (Required)" reads
-                     at rest: the field's own `required` is webkit's amber
-                     failed-check state (border + helper tone), which must fire on a
-                     failed submit and not before. -->
             <div class="flex flex-col gap-(--spacing-xs)">
               <Label
                 for="signup-password"
@@ -271,18 +184,8 @@
             @click="signUp"
           />
 
-          <!-- The divider separates the two ways in: the email path above
-                   it, the providers below. -->
           <Divider label="or" />
 
-          <!-- Social providers. Each carries its OWN :loading (only the
-                   pressed one spins) while `locked` disables every other path
-                   in the card, including the email form above.
-
-                   Until the readiness probe lands they are Skeletons in the exact
-                   geometry of the large Buttons they stand in for (h-10 / 2.5rem),
-                   so the swap is a pure cross-fade with no height to travel and the
-                   card never jumps under the cursor. Same treatment as Sign In. -->
           <div class="relative">
             <Transition
               enter-from-class="opacity-0"
@@ -336,22 +239,6 @@
       </template>
     </CardBox>
 
-    <!-- Below the card, on the canvas. The card is the form — the fields, the
-             actions, and nothing else; everything that is ABOUT signing up rather
-             than part of it lives out here, which is where the way out already sat
-             and where the consent line joined it.
-
-             Two lines, in that order: the way out first, the legal sentence last.
-             The account link is navigation someone may actually be looking for; the
-             consent sentence is the quietest thing on the screen and belongs at the
-             floor of it.
-
-             Both are `text-body-xs`. At 14px they were a step ABOVE the 12px labels
-             naming the fields inside the card, which is the hierarchy upside down —
-             the labels are what the reader is here to act on. 12px is the floor of
-             the scale, so they land level with the labels rather than under them, and
-             the muted ink carries the rest of the demotion. Sign In's footer is the
-             same two lines with the same treatment. -->
     <div
       class="flex w-full max-w-(--container-sm) flex-col items-center gap-(--spacing-sm)"
     >
@@ -365,22 +252,6 @@
         >
       </div>
 
-      <!-- The consent line, in the FIRST person. It used to read "By signing up,
-               you agree to…", which is the form telling the reader what they have
-               agreed to; "I agree" is the reader saying it, and a consent sentence
-               only works in the voice of the person consenting.
-
-               "By continuing" rather than "By signing up" because this screen has
-               three ways out — the email form and either provider button — and the
-               sentence has to cover all of them. It is also the same string Sign In
-               carries, so one sentence covers both doors into the product.
-
-               Sentence case per the microcopy standard: `Azion` capitalized, the
-               document names not. The two document names stay LINKS (the link
-               treatment, blue) — unlike the recovery link on Sign In, which went
-               grey. A link inside a sentence has the sentence to explain it and needs
-               the colour to be findable at all; a link standing alone under a field
-               is already the only thing on its line. -->
       <p class="text-center text-body-xs text-(--text-muted)">
         By continuing, I agree to Azion's
         <a

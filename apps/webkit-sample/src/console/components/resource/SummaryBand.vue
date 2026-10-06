@@ -1,28 +1,17 @@
-<script setup>
-  // THE OVERVIEW BLOCK — one card, stacked bands, three heights.
-  //
-  // Every resource page opens on the same object: a card that says what the record IS.
-  // Applications and Workloads had each grown their own copy of it, and the two had
-  // drifted on the only thing a reader notices across pages — the height of the strips.
-  // This component owns that geometry so a third resource inherits it instead of
-  // re-deciding it.
-  //
-  //   subject   56px   the address the record answers on + its actions (medium, 32px)
-  //   facts     auto   captioned values; the consumer brings the grid
-  //   state     48px   a recessed strip about the record's current state
-  //
-  // The three are stacked inside one `CardBox :padded="false"`: each band's own top
-  // border is the rule between it and the one above, so the card stays ONE object at
-  // three grains rather than three cards.
-  //
-  // A band that holds a control with its own insets (an Accordion) passes
-  // `:padded="false"` and keeps the recess, the rule and the floor without the inset.
-  defineProps({
-    /** Which band this is — `subject` (56px), `facts` (auto) or `state` (48px). */
-    kind: { type: String, default: 'facts' },
-    /** Off when the band's own child owns its insets (an Accordion, a table). */
-    padded: { type: Boolean, default: true }
+<script setup lang="ts">
+  interface Props {
+    kind?: string
+    padded?: boolean
+  }
+
+  withDefaults(defineProps<Props>(), {
+    kind: 'facts',
+    padded: true
   })
+
+  defineSlots<{
+    default(): unknown
+  }>()
 </script>
 
 <template>

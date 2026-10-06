@@ -1,21 +1,3 @@
-// WHERE A CREATE LIVES — the console's surface rule, written down once and read by
-// the Forms hub so it cannot drift from what the app actually does.
-//
-// The question "page, drawer, or dialog?" used to get asked per module and answered
-// differently every time: one module shipped a create page, the next a modal for the
-// same shape of task, a third an inline row. That teaches the reader three habits for
-// one action, and it costs more than looks — a modal cannot be linked or reloaded, a
-// page thrown over a list destroys the context the reader was working in, and a dialog
-// holding a nine-field form traps them in a box they cannot resize.
-//
-// So the surface is a PROPERTY OF WHAT IS BEING CREATED, not a choice a module makes.
-//
-// The full standard, including the anatomy and the commit model, ships to consuming
-// projects as the `/webkit-create-surface` skill
-// (packages/webkit/cli-templates/claude/skills/webkit-create-surface/). This file is
-// the console's own instance of it: the three clauses, and the routes that obey them.
-
-/** The rule, in the order the clauses are applied. */
 export const surfaceRules = [
   {
     id: 'first-level',
@@ -40,15 +22,6 @@ export const surfaceRules = [
   }
 ]
 
-// THE ONE EXCEPTION, and the test that licenses another. A variable is a KEY=value
-// pair, the flow is a repeater over one triad, and it is routinely used to paste a
-// whole .env at once — a dedicated page for that would be a page whose entire content
-// is one repeated row.
-//
-// Both halves of the test have to hold: the resource is a single small tuple, AND
-// creating it is normally done in bulk. "It only has three fields" is not enough — a
-// certificate has three fields and still creates on a page, because one certificate is
-// one deliberate act.
 export const firstLevelDrawerExceptions = [
   {
     id: 'variables',
@@ -58,12 +31,7 @@ export const firstLevelDrawerExceptions = [
   }
 ]
 
-// Every create surface in the console, and the rule clause it answers to. Kept here
-// rather than derived from the router because the router knows a path exists, not
-// which of the three clauses put it there — and it is the CLAUSE that has to stay
-// true as modules are added.
 export const createSurfaces = [
-  // ── Pages: first-level resources ────────────────────────────────────────────
   { id: 'applications', label: 'Application', surface: 'Page', path: '/applications/new' },
   { id: 'workloads', label: 'Workload', surface: 'Page', path: '/workloads/new' },
   { id: 'organizations', label: 'Organization', surface: 'Page', path: '/organizations/new' },
@@ -81,7 +49,6 @@ export const createSurfaces = [
   { id: 'data-stream', label: 'Data stream', surface: 'Page', path: '/data-stream/new' },
   { id: 'object-storage', label: 'Bucket', surface: 'Page', path: '/object-storage/new' },
 
-  // ── Drawers: created inside a resource ──────────────────────────────────────
   { id: 'record', label: 'DNS record', surface: 'Drawer', inside: 'a zone' },
   { id: 'rule', label: 'Create rule', surface: 'Drawer', inside: 'an application' },
   { id: 'table', label: 'Table', surface: 'Drawer', inside: 'a SQL database' },
@@ -103,11 +70,9 @@ export const createSurfaces = [
     inside: 'account settings'
   },
 
-  // ── The exception ───────────────────────────────────────────────────────────
   { id: 'variable', label: 'Variable', surface: 'Drawer', path: '/variables', exception: true }
 ]
 
-/** How many creates answer to each clause — the hub prints these beside the rule. */
 export const surfaceCounts = () => ({
   Page: createSurfaces.filter((entry) => entry.surface === 'Page').length,
   Drawer: createSurfaces.filter((entry) => entry.surface === 'Drawer' && !entry.exception).length,

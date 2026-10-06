@@ -1,7 +1,3 @@
-// App-wide sidebar state: whether the rail is collapsed, and how wide it is when
-// it isn't. A module-level singleton (like theme.js / font.js) so both survive
-// route changes (the user keeps their choice when navigating between modules)
-// and reloads (via localStorage).
 import { ref, watch } from 'vue'
 
 const STORAGE_KEY = 'webkit-sample-sidebar-collapsed'
@@ -13,20 +9,12 @@ const readStoredCollapsed = () => {
   return localStorage.getItem(STORAGE_KEY) === 'true'
 }
 
-// `null` means "not sized yet" — the shell seeds it from the rail's natural
-// width on first mount, after which the drag handle owns it. Stored in px: the
-// value is the outcome of a pointer gesture, so px is its native unit; the
-// bounds it is clamped to are the ones that come from tokens.
 const readStoredWidth = () => {
   if (typeof localStorage === 'undefined') return null
   const stored = Number(localStorage.getItem(WIDTH_KEY))
   return Number.isFinite(stored) && stored > 0 ? stored : null
 }
 
-// Which nav categories the user has opened. Every page renders its own AppLayout, so the
-// sidebar remounts on navigation — held in the component this would reset, and opening one
-// category would appear to close the others. The user owns this; the active route only ever
-// ADDS to it (see AppSidebar), so feedback never costs someone their own choice.
 const readStoredExpanded = () => {
   if (typeof localStorage === 'undefined') return []
   try {
@@ -39,69 +27,24 @@ const readStoredExpanded = () => {
 
 const expanded = ref(readStoredExpanded())
 
-// Which drill level the rail is showing, as Menu's stack of ancestor ids. This has to outlive
-// the component for the same reason `expanded` does — every page renders its own AppLayout, so
-// the rail remounts on navigation — and here it is load-bearing rather than merely nice:
-// activating a drill row also routes to that level's landing page, so held in the component the
-// level would collapse on the very navigation that opened it.
-//
-// Deliberately NOT persisted, unlike the three above: a pushed level is where you are looking
-// right now, not a preference, so a fresh load starts at the root.
 const navPath = ref([])
 
-// Whether the navigation the rail is being rebuilt for TRAVELLED between levels — into the
-// Settings level, or back out to the root rail — as opposed to moving between rows of the level
-// the reader was already in. Both remount the rail with the same restored stack, so `Menu` cannot
-// tell them apart; this is the answer it needs for `enter-on-mount`.
-//
-// Derived from the PAGE, not from the control that was clicked, so every route into a level
-// animates alike: the rail's own Settings row, the header's account menu, the ⌘K palette, a
-// breadcrumb, a pasted link. Keyed on which control it was, only the rail's row would.
 const navEntering = ref(false)
 
-// How far the rail's navigation was scrolled. Same reason as `navPath`: every page renders its
-// own AppLayout, so the rail REMOUNTS on navigation and its scroll container comes back at the
-// top. The rows a reader has to scroll to reach are the ones that suffer — choosing Real-Time
-// Purge from the Observe area scrolled the rail back to Overview and left the row that was just
-// chosen off screen, so the list had to be re-scrolled to make a second choice near it.
-//
-// Session-only, like `navPath` and unlike the width and the collapsed flag: an offset is where
-// the reader is looking right now, not a preference, so a fresh load starts at the top.
 const navScroll = ref(0)
 
-/** Records the rail's scroll offset so the next mount can restore it. */
 export function setNavScroll(value) {
   navScroll.value = Math.max(0, value)
 }
 
-// Which page last reported, the level THAT page was in, and whether the rail has rendered at all.
 let lastLevelFor = null
 let shownLevel = null
 let levelSeeded = false
 
-/**
- * Reports the level the page being rendered belongs to, and derives whether arriving there is an
- * entrance. Call it with the id of the row the page marks active.
- *
- * The comparison is page-against-page (`shownLevel`), deliberately NOT against `navPath`.
- * Activating the rail's own drill row pushes the level *before* it navigates, so by the time the
- * remount reports, `navPath` already holds the new level — measured against it, the one entrance
- * the reader is most likely to use would be the only one that never animates.
- *
- * Two guards earn their place:
- * - **First render is never an entrance.** A cold load or a deep link arrives already inside the
- *   level; it did not travel there, so the menu should be settled, not sliding.
- * - **One decision per page.** Two rails are mounted (the desktop one and the mobile drawer), and
- *   both report the same page. Without keying on `activeId` the second report would clear the
- *   flag the first just set.
- */
 export function reportNavLevel(activeId, levels) {
   const level = levels.join('/')
   if (activeId !== lastLevelFor) {
     navEntering.value = levelSeeded && level !== shownLevel
-    // A level change swaps the whole list, so the offset held for the level being left says
-    // nothing about the one arriving. Restoring it there would drop the reader mid-list in a
-    // menu they have never scrolled.
     if (level !== shownLevel) navScroll.value = 0
     lastLevelFor = activeId
     shownLevel = level
@@ -110,20 +53,6 @@ export function reportNavLevel(activeId, levels) {
   if (level !== navPath.value.join('/')) navPath.value = levels
 }
 
-/**
- * Takes the stack back from `Menu` (the `path` model), and records the level it moved to as SEEN.
- *
- * NEITHER DIRECTION NAVIGATES. Activating the `Settings` row pushes the level and `Menu.Back` pops
- * it; both play their motion in the mounted rail and leave the reader looking at the column they
- * moved to. So the next navigation must not replay an entrance for a rail already on screen.
- *
- * The push used to be left out, on the theory that the navigation following it was the arrival
- * that should animate — but the push does not navigate, so the reader got the slide twice: once
- * on `Settings`, once again on the first settings page they opened (measured as two
- * `data-motion=push` cycles, 300ms apart, on the docs rail's twin of this bug). What still
- * animates is a level change the RAIL did not make — a pasted URL, the palette, the account menu,
- * a link on a page — none of which comes through here.
- */
 export function setNavPath(levels) {
   navPath.value = levels
   shownLevel = levels.join('/')

@@ -1,81 +1,8 @@
-<script setup>
-  // Functions Instances — the tab an APPLICATION and a FIREWALL both carry. One file,
-  // switched by `environment` (the API's own `execution_environment`), because the two
-  // lists differ only in which functions they may instance.
-  //
-  // An INTERNAL page on the DATA measure — see DeviceGroups.vue for the page shape
-  // (one band: the controls row over the table it narrows, carrying the band step).
-  //
-  // AN INSTANCE IS A BINDING, NOT A RESOURCE OF ITS OWN. The function is written once in
-  // the Functions module (../../components/Functions.vue) and instanced here with this
-  // host's own name and arguments — so this tab and that module read and write
-  // ONE library (../../lib/functions.js), never two lists that happen to use the same
-  // words.
-  //
-  // THE CREATE FORM IS THE ENDPOINT'S BODY, field for field:
-  //
-  //   POST /v4/workspace/applications/{application_id}/functions
-  //   { name, function, args, active, azion_form }
-  //
-  //   `name`      the instance's name on this application — the one required text field;
-  //   `function`  the function's id, from the selector below;
-  //   `args`      the instance's arguments, as JSON. Selecting a function SEEDS them from
-  //               its `default_args`, which is what the console does: the function
-  //               declares the arguments it reads, and the instance is that function with
-  //               this application's values for them;
-  //   `active`    posted as `true`. The console hard-codes it on create rather than
-  //               asking, so this form does not ask either — but the LIST shows it, as a
-  //               Status column: a rule can call an instance that is switched off, and
-  //               "nothing happens" needs an answer the reader can see;
-  //   `azion_form` the Form Builder's JSON Schema (a schema renders a form which writes
-  //               the args). The sample does not build the Form Builder — the same stance
-  //               ../../lib/create-resources.js takes for the function itself — so the
-  //               args are written as JSON, which is what the endpoint receives either way.
-  //
-  // That relationship is visible in both directions:
-  //
-  //   this way   → the Function column links to the function's own page, and the
-  //                selector offers the functions the module actually holds — narrowed
-  //                to `execution_environment: application`, because a firewall function
-  //                receives a different request object and cannot be instanced here;
-  //   that way   → creating an instance counts up the function's Instances column and
-  //                takes it out of Draft, and a function written from the selector's
-  //                quick-add is in the module's list before the reader is back here.
-  //
-  // ── "CREATE FUNCTION" IS THE CREATE FUNCTION PAGE ──
-  //
-  // The Function field is a Select for a RELATED resource, so its footer carries a
-  // "Create Function" quick-add. That quick-add does NOT open a small drawer asking for a
-  // name and a runtime: a function is a FIRST-LEVEL RESOURCE, and the console's surface
-  // rule (../../lib/surfaces.js) says a first-level resource creates on its own page. A
-  // reduced copy of that page in a drawer would be a second, lesser Create Function —
-  // one that cannot write the code, which is the resource itself.
-  //
-  // So the quick-add LEAVES for `/functions/new` — the real editor page
-  // (../../components/CreateFunction.vue) — and comes back. What the reader had already
-  // typed here is kept across the hop in sessionStorage, so the round trip costs them
-  // nothing:
-  //
-  //   leaving  → the in-progress instance is stashed, and the create page is given a
-  //              `returnTo` pointing back at this tab (with `resume=function-instance`);
-  //   back     → this view reopens the drawer, restores the name, and — when the create
-  //              page returns a `created` id — selects that new function.
-  //
-  // Cancelling on the create page returns the same way, with the typed name intact and
-  // nothing selected: leaving to create something is not a reason to lose the form.
-  //
-  // The drawer's field shape is the console's — separated fields, a real `<Label for>`
-  // over a full-width control (../../components/ui/FieldStack.vue, the shape
-  // ../../components/AddVariableDrawer.vue set), with the band's guidance said once in
-  // its `Section` hint.
-  //
-  // The "Add Functions Instance" button is IN THIS HEADING, not on the page's tab row
-  // it used to ride. A tab is its own page, so its create action belongs where every
-  // second-level list puts it — beside the heading that names the list.
+<script setup lang="ts">
   import CardBox from '@aziontech/webkit/card-box'
   import InputText from '@aziontech/webkit/input-text'
   import Select from '@aziontech/webkit/select'
-  import Table from '@aziontech/webkit/table'
+  import TableRoot from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -106,19 +33,14 @@
   import { countInstance, functionById, functionOptionsFor } from '../../../lib/data/functions'
   import { productFirstUse } from '../../../lib/data/product-empty-states'
 
-  const props = defineProps({
-    /**
-     * Which execution environment this list instances — `application` or `firewall`.
-     * It is the API's own `execution_environment`, and it decides every difference
-     * between the two hosts: the functions offered, the seeded instances, the wording
-     * and where `Documentation` points.
-     */
-    environment: { type: String, default: 'application' }
+  interface Props {
+    environment?: string
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    environment: 'application'
   })
 
-  // Where `Documentation` goes. Taken from the registry rather than restated: these tabs are
-  // parts of the resource that hosts them, so the module's own doc URL is the right
-  // destination and lib/data/product-empty-states.js already holds it.
   const SUBJECT = {
     application: { noun: 'application', product: 'applications' },
     firewall: { noun: 'firewall', product: 'firewall' }
@@ -127,24 +49,10 @@
   const subject = computed(() => SUBJECT[props.environment] ?? SUBJECT.application)
   const HELP = computed(() => productFirstUse(subject.value.product).learnMore.href)
 
-  // Monaco is megabytes of editor plus its language workers, and it is only ever
-  // mounted inside this panel's drawer — so it loads when that drawer opens, not
-  // when the application page does. Statically importing it here put the whole
-  // editor back into the entry chunk that ../../build/CreateFunction.vue and
-  // FunctionDetail.vue are lazy specifically to keep it out of.
   const MonacoEditor = defineAsyncComponent(
     () => import('../../../components/monaco-editor/monaco-editor.vue')
   )
 
-  // The Function column LEADS WITH THE BOUND FUNCTION'S RUNTIME GLYPH (the JavaScript
-  // mark, the code glyph for Lua) — the language is the first thing a reader wants of a
-  // function and it costs no column to say it, the way the module's own list does. The
-  // glyph comes from the one RUNTIMES map (../../lib/functions.js), so it cannot
-  // disagree with what the editor highlights.
-  //
-  // Status and Last Modified are the two columns every console list ends on: `active`
-  // is the API's own flag on the binding (a rule can call an inactive instance and
-  // nothing runs), and Last Modified says who touched it and when.
   const columns = [
     { accessorKey: 'name', header: 'Name', principal: true, hideable: false, enableSorting: true },
     { accessorKey: 'id', header: 'ID', minWidth: FIT_COLUMN },
@@ -160,23 +68,11 @@
     }
   ]
 
-  // Free-text search, hoisted into the ControlsHeader above the card.
-
-  // An instance stores the function's ID, never its name: the name is the library's to
-  // change, and a row holding a copy of it would be the one place in the console still
-  // showing the old one. `active` and `modifiedAt` ARE the instance's own — the binding
-  // is what is switched on and what was edited, not the code behind it.
-  //
-  // The author is STORED on the record, not derived from the row's position: a create
-  // prepends, and an index-derived face would hand every existing row a new person the
-  // moment one is added.
   const withAuthor = (instance, index = 0) => {
     const person = authorAt(index)
     return { ...instance, author: person.name, authorAvatar: person.avatar }
   }
 
-  // The seed is the HOST's, not this file's: an instance binds a function written for one
-  // execution environment, so an application's list cannot open on a firewall function.
   const SEED = {
     application: [
       {
@@ -218,14 +114,6 @@
 
   const instances = ref((SEED[props.environment] ?? SEED.application).map(withAuthor))
 
-  // The rows the table renders: the instance, plus the bound function resolved from the
-  // library. A function deleted in the Functions module leaves the binding behind, so
-  // the cell says so rather than rendering an empty column — and it has no runtime to
-  // lead with either, which is why the glyph is conditional in the cell below.
-  //
-  // `status` and `lastModified` are DERIVED here rather than stored beside `active` and
-  // `modifiedAt`: the label and the sortable date string can then never drift from the
-  // two values that actually hold the state.
   const rows = computed(() =>
     instances.value.map((instance) => {
       const fn = functionById(instance.functionId)
@@ -241,18 +129,10 @@
     })
   )
 
-  // The functions this application can instance — the library's own, narrowed by
-  // `execution_environment` (../../lib/functions.js). A function written on the create
-  // page lands in that library, so this list picks it up with no wiring of its own.
   const functionOptions = computed(() => functionOptionsFor(props.environment))
   const functionLabel = (value) =>
     functionOptions.value.find((option) => option.value === value)?.label ?? ''
 
-  // The arguments editor opens on an empty object, and is SEEDED from the function the
-  // moment one is picked — the function's `default_args` are the arguments it documents
-  // itself as reading, so they are the honest starting point for an instance of it. The
-  // reader edits them from there; this only ever replaces what the previous selection
-  // seeded, never something they typed against the function now chosen.
   const EMPTY_ARGS = '{}'
 
   const seedArgs = (functionId) => {
@@ -262,12 +142,6 @@
     errors.args = ''
   }
 
-  /**
-   * Stored arguments as the editor shows them. The record keeps what was POSTED —
-   * `JSON.stringify` with no spacing — and a one-line object is not something anyone
-   * edits, so it is re-indented on the way in. Unparseable text is handed back
-   * verbatim rather than swallowed: the reader has to see what is there to fix it.
-   */
   const prettyArgs = (args) => {
     try {
       return JSON.stringify(JSON.parse(args ?? EMPTY_ARGS), null, 2)
@@ -276,45 +150,22 @@
     }
   }
 
-  // ── LARGE drawer — the Functions Instance itself, created AND edited ──────
-  // ONE drawer for both, the shape Rules Engine settled (../CreateRuleDrawer.vue):
-  // an instance's anatomy — the name, the function it binds, the arguments it runs
-  // with — is the same whether it is being written or corrected, and a second
-  // read-only surface for it would be another place the arguments editor has to be
-  // kept in step with. `editing` is what tells the drawer which it is.
-  //
-  // THE ROW IS THE WAY IN. The Arguments column shows a fragment of a JSON object;
-  // the instance ITSELF is that object plus the binding around it, so clicking the
-  // row opens the whole thing in the form that writes it — the create-surface rule's
-  // answer for editing inside a resource (../../lib/surfaces.js).
   const createOpen = ref(false)
   const editing = ref(null)
-  // One field per property of the request body the endpoint takes (see the header).
-  // THE SELECTED FUNCTION'S FORM. `azion_form` belongs to the FUNCTION; the instance
-  // only answers it. Empty (or absent) means this function declares no form, and the
-  // arguments stay what they have always been here — JSON the reader writes.
   const argsSchema = computed(() => {
     const fn = functionById(form.functionId)
     return fn?.form ? JSON.stringify(fn.form, null, 2) : ''
   })
   const hasArgsForm = computed(() => argsSchema.value.trim().length > 0)
-  // The rendered form, so the submit can ask it whether its required fields were answered.
   const argsFields = ref(null)
 
   const form = reactive({ name: '', functionId: '', args: EMPTY_ARGS })
   const errors = reactive({ name: '', functionId: '', args: '' })
-  // Whether a save has been ATTEMPTED — the rendered form's required fields stay quiet
-  // until then, the same rule every other form in the console follows.
   const submitted = ref(false)
   const submitting = ref(false)
 
-  // Controls the Function Select's dropdown so the quick-add (its footer slot) can
-  // close it before the page leaves for the create page.
   const functionSelectOpen = ref(false)
 
-  // Sentinel value for the "Create Function" option in the Select footer. The Select
-  // is controlled (`:model-value`), so picking it never commits — the page leaves for
-  // the create page instead and the real selection is left untouched.
   const CREATE_FUNCTION = '__create-function__'
   const onFunctionModel = (value) => {
     if (value === CREATE_FUNCTION) {
@@ -331,13 +182,6 @@
     createOpen.value = true
   }
 
-  // Seeded from a COPY of the row, never the record itself: the fields write into
-  // `form` as they are typed, and pointing them at the stored object would rewrite the
-  // row behind the drawer while the reader is still deciding — including if they leave.
-  //
-  // The arguments open as they were SAVED, pretty-printed, and are NOT re-seeded from
-  // the function's `default_args`: those are the honest starting point for a NEW
-  // instance, and the worst possible thing to do to an existing one's values.
   const openInstance = (event, row) => {
     editing.value = row
     form.name = row.name
@@ -350,10 +194,6 @@
     createOpen.value = true
   }
 
-  // Opened from the page's tab row (ApplicationDetail).
-
-  // Reset on close, so reopening never shows the last attempt's values or errors —
-  // and never opens the create with the last edit's record still behind it.
   watch(createOpen, (open) => {
     if (open) return
     editing.value = null
@@ -366,12 +206,9 @@
     errors.args = ''
   })
 
-  /** `args` is posted as an object, so what is typed has to parse to one. */
   const parsedArgs = () => {
     try {
       const value = JSON.parse(form.args)
-      // `[1,2]` and `"x"` are valid JSON and invalid arguments: the endpoint takes an
-      // object, and an array would be posted as one silently.
       if (value === null || Array.isArray(value) || typeof value !== 'object') return null
       return value
     } catch {
@@ -384,11 +221,6 @@
     errors.functionId = form.functionId ? '' : 'Select a function.'
     submitted.value = true
     errors.args = parsedArgs() ? '' : 'Arguments must be a JSON object.'
-    // THE RENDERED FORM'S OWN REQUIRED FIELDS. They are the function's declaration, not
-    // this page's, so the page cannot enumerate them — it asks the surface that rendered
-    // them. No message is set here: each unanswered field says so where it sits, which
-    // is where the reader has to go anyway. An error line up here would be a second
-    // voice pointing at the first.
     const unanswered = hasArgsForm.value ? (argsFields.value?.unanswered?.length ?? 0) : 0
     return !errors.name && !errors.functionId && !errors.args && unanswered === 0
   }
@@ -402,18 +234,10 @@
       await sleep(900)
       const name = form.name.trim()
 
-      // Stands in for `POST /v4/workspace/applications/{id}/functions` (and `PATCH`
-      // on the same path for an edit). The row keeps what that body carries — plus
-      // the modification this side owns, so the Last Modified column answers for it
-      // immediately instead of leaving a blank cell.
       const modifiedAt = new Date()
       const previous = editing.value
 
       if (previous) {
-        // An edit REWRITES the row in place: an edit is not a create, so it keeps its
-        // id and its position rather than jumping to the top of the list the reader
-        // opened it from. `active` is the binding's own state and is not asked for in
-        // this form, so it is carried across rather than reset to the create's `true`.
         instances.value = instances.value.map((instance) =>
           instance.id === previous.id
             ? withAuthor({
@@ -426,11 +250,6 @@
             : instance
         )
 
-        // REBINDING MOVES THE COUNT. The Instances column in the Functions module is
-        // the number of applications instancing that function, so pointing this
-        // instance at a different one has to take it off the old function as well as
-        // put it on the new — otherwise the module's list keeps counting a binding
-        // that no longer exists.
         if (previous.functionId !== form.functionId) {
           countInstance(previous.functionId, -1)
           countInstance(form.functionId)
@@ -443,8 +262,6 @@
             id: `fi-${modifiedAt.getTime()}`,
             name,
             functionId: form.functionId,
-            // `active` is posted as `true` and never asked for, so a new instance
-            // lands Active.
             args: JSON.stringify(parsedArgs()),
             active: true,
             modifiedAt
@@ -452,7 +269,6 @@
           ...instances.value
         ]
 
-        // The other half of the relationship: the module's Instances column is this count.
         countInstance(form.functionId)
 
         toast.success(`Functions Instance "${name}" created.`)
@@ -474,10 +290,6 @@
     }
   }
 
-  // ── The filter catalog ────────────────────────────────────────────────────
-  // Function and Status are the enumerable columns — which function an instance runs,
-  // and whether it runs at all, are what people narrow by. Name and Arguments are free
-  // text, covered by the search.
   const filterFields = [
     {
       id: 'edgeFunction',
@@ -502,8 +314,6 @@
     }
   ]
 
-  // No pagination model: this table lists every row, so there is no page offset a
-  // narrowed set could strand.
   const {
     filters,
     search,
@@ -512,39 +322,16 @@
     refresh
   } = useListFilters(filterFields, rows)
 
-  // The table the controls row drives. Download CSV calls the DS's own `exportCsv()`
-  // through it (../../../components/list/ExportButton.vue), so the file honours the
-  // visible columns and the filtered rows instead of re-serialising them here.
   const tableRef = ref(null)
 
-  // Which columns are switched off, driven by the Columns button beside the filter
-  // (../../../components/list/ColumnsButton.vue). Only a HIDDEN column is ever recorded, so this
-  // never has to be kept in step with the column model above.
-  //
-  // ID SHIPS OFF. It is the column an operator wants when they are quoting a resource
-  // into a support thread or an API call, and almost never while scanning the list —
-  // so it starts hidden and is one switch away. That is the whole point of the panel:
-  // a column can be available without being in the way by default.
   const columnVisibility = ref({ id: false })
 
-  // OPENING THE BOUND FUNCTION. The instance is this application's binding; the code is
-  // the Functions module's record, so the Function column leaves for that module's own
-  // page rather than reproducing a second, lesser view of it here. A `router-link` with
-  // the truncate + arrow shape every cross-module cell in the console uses
-  // (../../components/ui/DeploymentsTable.vue, ./ui/DomainCell.vue). The email rides
-  // along the way every route in this prototype carries it.
   const route = useRoute()
   const router = useRouter()
 
   const email = computed(() => route.query.email || undefined)
   const functionPath = (row) => `/functions/${row.functionId}`
 
-  // ── LEAVING TO CREATE A FUNCTION, AND COMING BACK ─────────────────────────
-  //
-  // A function creates on its own page (../../lib/surfaces.js), so the quick-add is a
-  // round trip rather than a nested drawer. The in-progress instance is stashed under a
-  // key of THIS tab's path, so two applications' drawers cannot restore each other's
-  // work, and the create page is told where to come back to.
   const DRAFT_KEY = 'webkit-sample:function-instance-draft'
   const RESUME = 'function-instance'
 
@@ -561,10 +348,7 @@
   const clearDraft = () => {
     try {
       globalThis.sessionStorage?.removeItem(DRAFT_KEY)
-    } catch {
-      // An unavailable sessionStorage must not break the flow — the round trip still
-      // works, it just arrives back with an empty form.
-    }
+    } catch {}
   }
 
   const goCreateFunction = () => {
@@ -574,21 +358,14 @@
         DRAFT_KEY,
         JSON.stringify({
           path: route.path,
-          // WHICH instance was open, so a hop taken mid-EDIT comes back to that edit
-          // rather than to a create carrying the edited values — which would fork the
-          // row into a second one on save.
           editingId: editing.value?.id ?? '',
           name: form.name,
           functionId: form.functionId,
           args: form.args
         })
       )
-    } catch {
-      // Same as above: the hop is worth making even when the draft cannot be kept.
-    }
+    } catch {}
 
-    // `returnTo` carries the resume marker, so BOTH outcomes of the create page — saved
-    // or cancelled — land back on this tab with the drawer reopened.
     const returnTo = router.resolve({
       path: route.path,
       query: { ...route.query, resume: RESUME }
@@ -600,8 +377,6 @@
     })
   }
 
-  // Coming back. The create page pushes `resume` (always) and `created` (on save), so
-  // the drawer reopens exactly as it was left, with the new function already selected.
   onMounted(() => {
     if (route.query.resume !== RESUME) return clearDraft()
 
@@ -617,14 +392,10 @@
     errors.name = ''
     errors.functionId = ''
     errors.args = ''
-    // A function created on the way back seeds its own arguments, exactly as picking one
-    // from the list would — the reader chose it, they just chose it by writing it.
     if (createdId) seedArgs(createdId)
     createOpen.value = true
 
     clearDraft()
-    // The resume markers are a way BACK into the drawer, not part of the route — the
-    // same reason `?state=` does not stay in the address bar (../../lib/sample-mode.js).
     const query = { ...route.query }
     delete query.resume
     delete query.created
@@ -650,22 +421,13 @@
       </template>
     </PageHeading>
 
-    <!-- The page's parent section. It holds one section here — the controls row
-         over the table it narrows, at the GROUP step — and spaces whatever sits
-         inside it at --layout-section-gap. -->
     <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)">
       <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-        <!-- The band's CONTROLS: narrowing on the left, the band's own action on the
-             right, above the card — the same row every list in the console opens with. -->
         <ControlsHeader>
           <FilterButton
             v-model="filters"
             :fields="filterFields"
           />
-          <!-- Search drives the table's global filter from outside the card, so the field is
-               a plain InputText (`Table.Search` is context-aware and only works inside
-               `<Table>`). One horizontal band: it grows into the row's slack and compresses
-               rather than wrapping (see ui/ControlsHeader.vue). -->
           <InputText
             v-model="search"
             size="medium"
@@ -681,10 +443,6 @@
             </template>
           </InputText>
           <template #actions>
-            <!-- THE RIGHT GROUP: the three controls that act on the LISTING rather
-                 than narrow it — fetch it again, take it away as a file, choose which
-                 columns it shows. All glyphs, all `medium`, so the row shares one
-                 32px height with the field and the Filter button opposite. -->
             <RefreshButton
               :loading="loading"
               @refresh="refresh"
@@ -707,7 +465,7 @@
 
         <CardBox :padded="false">
           <template #content>
-            <Table
+            <TableRoot
               ref="tableRef"
               v-model:globalFilter="search"
               v-model:columnVisibility="columnVisibility"
@@ -719,8 +477,6 @@
               :loading="loading"
               @row-click="openInstance"
             >
-              <!-- The principal column reads as the way in it is — the row opens the
-                   instance in the same drawer that creates one. -->
               <template #cell-name="{ value }">
                 <span class="truncate cursor-pointer hover:underline">{{ value }}</span>
               </template>
@@ -732,14 +488,6 @@
                 />
               </template>
 
-              <!-- The binding, rendered as what it is: a pointer at a record another
-                   module owns — the console's cross-module cell (truncating name +
-                   arrow), not a standalone Link component. A function that has since
-                   been deleted has nothing to point at, so its cell is plain text.
-                   The RUNTIME GLYPH leads it, and sits OUTSIDE the anchor: it names the
-                   language of what the link opens, it is not part of the link. Its
-                   tooltip is the runtime's name, so the mark is never the only way to
-                   know which language this is. -->
               <template #cell-edgeFunction="{ row }">
                 <div class="flex min-w-0 items-center gap-(--spacing-xs)">
                   <Tooltip
@@ -747,7 +495,7 @@
                     :text="row.runtime"
                   >
                     <i
-                      :class="[row.runtimeIcon, 'shrink-0 text-[1.15em]']"
+                      :class="[row.runtimeIcon, 'shrink-0 text-body-lg']"
                       :aria-label="row.runtime"
                       role="img"
                     />
@@ -766,8 +514,6 @@
                 </div>
               </template>
 
-              <!-- Status is a chip, Active/Inactive, the same pair every console list
-                   reads (Applications.vue) — never bare text in a cell. -->
               <template #cell-status="{ value }">
                 <Tag
                   :label="value"
@@ -776,12 +522,6 @@
                 />
               </template>
 
-              <!-- WHO changed the binding and WHEN, in one column: the modifier's avatar
-                   (name on its tooltip) over the relative time — the same cell every
-                   console list ends on (ui/LastModifiedCell.vue), which is why there is
-                   no separate author column. -->
-              <!-- WHO and WHEN are two columns now, so each cell says one thing:
-                   the face and the name here, the relative time next to it. -->
               <template #cell-author="{ row }">
                 <AuthorCell
                   :author="row.author"
@@ -792,7 +532,7 @@
               <template #cell-lastModified="{ row }">
                 <LastModifiedCell :date="row.modifiedAt" />
               </template>
-            </Table>
+            </TableRoot>
           </template>
         </CardBox>
       </section>
@@ -808,10 +548,11 @@
         stacked
         :divided="false"
         title="General"
-        :hint="`Instantiates a function from the Functions module on this ${subject.noun}; a rule in Rules Engine is what runs it. One function can be instantiated more than once with different arguments, so the name is what tells the two apart in the rules that call them.`"
+        :hint="`Instantiates a function from the Functions module on this ${subject.noun}, run by a rule in Rules Engine.`"
       >
         <FieldStack
           label="Name"
+          description="One function can be instantiated more than once with different arguments, so the name is what tells them apart in the rules that call them."
           :message="errors.name"
           :message-kind="form.name.trim() ? 'invalid' : 'required'"
         >
@@ -832,17 +573,15 @@
         </FieldStack>
       </Section>
 
-      <!-- The related-resource case: a Select over the Functions module's library, with
-           a "Create Function" quick-add in its footer that leaves for that module's
-           create page and comes back. -->
       <Section
         stacked
         :divided="false"
         title="Function"
-        :hint="`Select an existing function and customize the arguments it runs with. Only functions written for the ${subject.noun} environment are listed — the other environment receives a different request object. If the one you need does not exist yet, the selector's footer opens the function editor and brings you back here with it selected.`"
+        hint="Select an existing function and customize the arguments it runs with."
       >
         <FieldStack
           label="Edge Function"
+          :description="`Only functions written for the ${subject.noun} environment are listed. If the one you need does not exist yet, the selector's footer opens the function editor and brings you back here with it selected.`"
           :message="errors.functionId"
           message-kind="required"
         >
@@ -863,10 +602,6 @@
                 aria-label="Edge Function"
                 :aria-describedby="describedBy"
               />
-              <!-- TEMPORARY WORKAROUND (webkit bug): Select.Content teleports to
-                   <body> at z-50, so inside the Drawer panel (z-[1001]) it renders
-                   behind and is invisible. Remove once webkit stacks overlay popups
-                   above Drawer. -->
               <Select.Content class="z-[1002]!">
                 <Select.Option
                   v-for="fn in functionOptions"
@@ -875,9 +610,6 @@
                 >
                   {{ fn.label }}
                 </Select.Option>
-                <!-- Quick-add lives in the Select's bottom (footer) slot as a normal
-                     option; picking it stashes this form and opens the function
-                     editor instead of committing a value. -->
                 <template #footer>
                   <Select.Option
                     :value="CREATE_FUNCTION"
@@ -892,21 +624,6 @@
           </template>
         </FieldStack>
 
-        <!-- ARGUMENTS — `args`, the third property of the request body. JSON the reader
-             writes, not a value they pick, so it is the same editor the function's own
-             page writes its `default_args` in (../../components/monaco-editor), seeded
-             from those defaults when a function is selected. Monaco's JSON worker
-             underlines a syntax error as it is typed; the "must be an object" check runs
-             on submit, with the rest of the form.
-
-             NOT in a FieldStack: that renders a real `<label for>`, and Monaco's input is
-             a hidden textarea a label cannot point at — which is exactly why the editor
-             carries its own label and helper row. -->
-        <!-- WHEN THE FUNCTION DECLARES A FORM, the instance ANSWERS it rather than
-             writing JSON: the fields, their guidance and their validation are the
-             function's own (../../../components/function/FunctionArgsFields.vue), and
-             the JSON beside them is a read-only preview of what will be posted.
-             A function with no form falls back to the editor below — unchanged. -->
         <FunctionArgsFields
           v-if="hasArgsForm"
           ref="argsFields"

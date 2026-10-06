@@ -1,17 +1,4 @@
 <script setup>
-  // Diagrams — a node-graph canvas built on @vue-flow/core, re-skinned with
-  // @aziontech/theme tokens (see ../lib/vue-flow-theme.css). It renders an Azion
-  // edge-request architecture around a single Application: a client request
-  // reaching the application, which fans out to functions / cache and on to the
-  // origins. Vue Flow's stock `theme-default.css` is intentionally NOT imported
-  // — only its layout `style.css` — so every color/shape comes from design
-  // tokens and the graph tracks the active light/dark theme like the console.
-  //
-  // Application-level bindings (Edge Firewall, Custom Page) are optional, so the
-  // graph shows them as EMPTY nodes: a dashed placeholder that keeps the slot
-  // visible on the canvas and carries the CTA that fills it (see
-  // ./diagrams/nodes/EmptyNode.vue). Binding one swaps the placeholder for a
-  // real node and solidifies its edges.
   import '@vue-flow/core/dist/style.css'
   import '../../components/diagrams/vue-flow-theme.css'
 
@@ -25,17 +12,12 @@
   import PageHeading from '../../components/page/PageHeading.vue'
   import AppLayout from '../../components/shell/AppLayout.vue'
 
-  // A left-to-right flow: nodes emit from their right edge and receive on their
-  // left, so handles line up horizontally. Per-node accent is driven purely by a
-  // token via the `--vf-node-color` custom property the theme CSS consumes.
   const flow = (color) => ({
     sourcePosition: Position.Right,
     targetPosition: Position.Left,
     style: { '--vf-node-color': `var(${color})` }
   })
 
-  // The two Application-level slots the graph can fill. `empty` is what the
-  // placeholder renders; `bound` is the node it becomes once the CTA is used.
   const BINDABLE = {
     firewall: {
       empty: {
@@ -63,8 +45,6 @@
     }
   }
 
-  // Which Application-level slots are filled. Drives the empty/bound node shape
-  // and whether the edges touching them read as provisional (dashed) or real.
   const bound = ref({ firewall: false, 'custom-page': false })
 
   const createNodes = () => [
@@ -125,9 +105,6 @@
 
   const nodes = ref(createNodes())
 
-  // Edges derive from `bound`: while a slot is empty its edges are dashed and
-  // muted, so the canvas reads as "this path is not wired yet". Only node
-  // positions need to survive a drag, so deriving edges here is safe.
   const pending = { strokeDasharray: '5 5' }
 
   const edges = computed(() => [
@@ -159,12 +136,8 @@
     { id: 'e-cache-storage', source: 'cache', target: 'storage', label: 'miss' }
   ])
 
-  // The canvas controls (zoom / fit) reuse the webkit IconButton so they match
-  // the rest of the console; they drive the Vue Flow instance rendered below.
   const { fitView, updateNode, zoomIn, zoomOut } = useVueFlow()
 
-  // Filling a slot: the placeholder becomes an ordinary node with the resource's
-  // accent. `updateNode` patches the live node so a dragged layout is preserved.
   const bindResource = (id) => {
     const resource = BINDABLE[id]
     if (!resource || bound.value[id]) return
@@ -177,7 +150,6 @@
     })
   }
 
-  // Puts every slot back to empty so the placeholder state stays demo-able.
   const resetDiagram = () => {
     bound.value = { firewall: false, 'custom-page': false }
     nodes.value = createNodes()
@@ -206,8 +178,6 @@
         </template>
       </PageHeading>
 
-      <!-- The graph canvas. `wk-vue-flow` scopes the tokenized override; the
-           relative wrapper anchors the floating control cluster. -->
       <div class="relative min-h-0 flex-1">
         <VueFlow
           :nodes="nodes"
@@ -217,9 +187,6 @@
           :min-zoom="0.4"
           :max-zoom="2"
         >
-          <!-- `type: 'empty'` nodes render the dashed placeholder + bind CTA.
-               The slot content lives in this scope, so the node's `bind` event
-               is handled here, on the page that owns the graph state. -->
           <template #node-empty="nodeProps">
             <EmptyNode
               :id="nodeProps.id"
@@ -229,7 +196,6 @@
           </template>
         </VueFlow>
 
-        <!-- Floating, themed canvas controls — webkit IconButtons over the graph. -->
         <div
           class="absolute bottom-(--spacing-md) left-(--spacing-md) flex flex-col gap-(--spacing-xxs) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-overlay) p-(--spacing-xxs) shadow-sm"
         >
@@ -269,8 +235,6 @@
               @click="() => fitView()"
             />
           </Tooltip>
-          <!-- Unbinds both Application-level slots, so the empty-node state can
-               be replayed without a reload. -->
           <Tooltip
             text="Reset bindings"
             placement="right"

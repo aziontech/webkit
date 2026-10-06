@@ -1,24 +1,4 @@
 <script setup>
-  // Settings → Account Settings. The account's identity, company details, address,
-  // login preferences, connected source-control providers, appearance, and the
-  // destructive Danger Zone.
-  //
-  // SAVE SCOPE — ONE save for the whole page, and the bar that commits it does not
-  // exist until something has been edited. That is the console's settings model (an
-  // application's Main Settings is the same shape): these fields are one account
-  // record submitted together, so a per-band Save would ask which part of one record
-  // the reader meant, and a bar pinned from the first paint would advertise work
-  // nobody has started.
-  //
-  // LAYOUT — the bands are the create pattern exactly: a Section (title + Hint) over
-  // a flush CardBox whose body is an Item.List of FieldRows. So the page that creates
-  // a thing and the page that edits it are the same anatomy, and the reader learns
-  // one. This tab owns its own scroll region AND its own footer, which is why the
-  // shell hands it a plain flex column rather than a scroll box: a footer pinned by
-  // the shell would need this form's flags back out of the component.
-  //
-  // Appearance is the one section OUTSIDE the save scope: font and theme drive
-  // module-level singletons persisted to localStorage, so they apply live on change.
   import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
   import InputText from '@aziontech/webkit/input-text'
@@ -38,8 +18,6 @@
   import { saveGroup, useBaseline } from '../../../lib/behavior/forms'
   import { useFont } from '../../../lib/state/font.js'
 
-  // Appearance preferences apply LIVE (they drive module-level singletons and are
-  // persisted to localStorage), so they sit outside the `submitting` save scope.
   const { font, fonts } = useFont()
   const { theme } = useTheme()
   const appearances = [
@@ -48,7 +26,6 @@
     { label: 'Dark', value: 'dark' }
   ]
 
-  // --- Field option models -------------------------------------------------
   const countries = [
     { label: 'Brazil', value: 'br' },
     { label: 'United States', value: 'us' },
@@ -65,7 +42,6 @@
     { label: 'Rio de Janeiro', value: 'rio' }
   ]
 
-  // --- Form state ----------------------------------------------------------
   const form = reactive({
     accountName: 'Gabriel Lisboa',
     clientId: '9757a',
@@ -82,26 +58,16 @@
     enforceMfa: false
   })
 
-  // The three address selects are one row shape repeated, so they are data: three
-  // hand-written blocks differing only in their option list is three places to fix
-  // the next time the row changes.
   const places = [
     { key: 'country', label: 'Country', options: countries },
     { key: 'state', label: 'State/Region', options: states },
     { key: 'city', label: 'City', options: cities }
   ]
 
-  // One flag locks the whole scope while the request is in flight: Save shows
-  // :loading and the outer <fieldset> is :disabled off it.
   const saving = ref(false)
 
-  // `dirty` is what MOUNTS the bar: it compares the live form against the baseline
-  // committed by the last successful save, so the bar appears on the first edit and
-  // leaves again when the reader puts the value back.
   const { dirty, commit } = useBaseline(form)
 
-  // What Discard restores. Kept as a JSON snapshot rather than a reactive copy so
-  // restoring cannot alias the live object and re-dirty it.
   const snapshot = ref(JSON.parse(JSON.stringify(form)))
 
   const save = () =>
@@ -114,8 +80,6 @@
     Object.assign(form, JSON.parse(JSON.stringify(snapshot.value)))
   }
 
-  // Source control providers. GitHub is connected; GitLab and Bitbucket can be
-  // linked. GitHub has no colored glyph, so it uses the monochrome PrimeIcon.
   const sourceControls = [
     {
       key: 'github',
@@ -163,8 +127,6 @@
     novalidate
     @submit.prevent="save"
   >
-    <!-- Body: the only region that scrolls, between the tab bar above and the bar
-         that appears below once something is edited. -->
     <div class="min-h-0 flex-1 overflow-auto">
       <div
         class="layout-column-form layout-boundary-inline flex min-w-0 flex-col pb-(--layout-section-gap) pt-(--layout-section-gap)"
@@ -174,7 +136,6 @@
           description="Manage your account's identity, company details, address, and login preferences."
         />
 
-        <!-- Section owns the band step, so the fieldset only stacks them. -->
         <fieldset
           class="mx-0 mt-(--layout-section-gap) flex min-w-0 flex-col border-0 p-0"
           :disabled="saving"
@@ -226,7 +187,7 @@
             anchor
             :divided="false"
             title="Company information"
-            hint="The company that owns the account. These details appear on every invoice."
+            hint="The company that owns the account, as it appears on every invoice."
           >
             <CardBox :padded="false">
               <template #content>
@@ -280,7 +241,7 @@
             anchor
             :divided="false"
             title="Address information"
-            hint="Where the account owner is registered. Used on invoices and for tax purposes."
+            hint="Where the account owner is registered, for invoices and tax purposes."
           >
             <CardBox :padded="false">
               <template #content>
@@ -378,10 +339,6 @@
                       :disabled="saving"
                     />
                   </FieldRow>
-                  <!-- A row whose control is an ACTION, not a value: it opens its own
-                       surface and commits there, so it is untouched by this page's
-                       Save. Same row anatomy as the two above, so the band keeps one
-                       straight edge. -->
                   <FieldRow
                     kind="compact"
                     title="Authenticator devices"
@@ -404,7 +361,7 @@
             anchor
             :divided="false"
             title="Source control"
-            hint="The Git providers this account can read repositories from when it builds an application. Connecting one commits immediately at the provider, so these rows are not part of Save."
+            hint="The Git providers this account builds applications from, connected at the provider and outside Save."
           >
             <CardBox :padded="false">
               <template #content>
@@ -415,15 +372,13 @@
                     size="small"
                   >
                     <Item.Media>
-                      <!-- Git-provider icon frame: 32px square, surface-raised fill,
-                           muted hairline border, 20px glyph. -->
                       <span
                         class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-elements) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised)"
                       >
                         <i
                           :class="[
                             provider.icon,
-                            'text-[18px] leading-none text-(--text-default)'
+                            'text-body-lg leading-none text-(--text-default)'
                           ]"
                           aria-hidden="true"
                         />
@@ -457,15 +412,12 @@
             </CardBox>
           </Section>
 
-          <!-- Appearance — live preferences (font + theme), OUTSIDE the save scope:
-               they drive the app singletons and persist on change. The hint is where
-               that exception is stated, so nobody looks for them under Save. -->
           <Section
             stacked
             anchor
             :divided="false"
             title="Appearance"
-            hint="Preferences for this browser. They apply the moment you change them and are not part of Save."
+            hint="Preferences for this browser, applied the moment you change them and not part of Save."
           >
             <CardBox :padded="false">
               <template #content>
@@ -527,15 +479,12 @@
             </CardBox>
           </Section>
 
-          <!-- Danger Zone — titled like every other band above it. What marks it as
-               destructive is the `kind="danger"` Button inside, not a recoloured
-               heading. -->
           <Section
             stacked
             anchor
             :divided="false"
             title="Danger Zone"
-            hint="Irreversible. Read the row before you click it."
+            hint="Actions that cannot be undone."
           >
             <CardBox :padded="false">
               <template #content>
@@ -562,16 +511,6 @@
       </div>
     </div>
 
-    <!-- The bar exists only once something has been edited, and it SLIDES UP when it
-         appears — the same commit model as an application's Main Settings, so every
-         settings page in the console behaves identically. Mounted with `v-if`, not
-         hidden with opacity: a settings page opens read-mostly, and a Save bar pinned
-         from the first paint is a permanent call to action for work nobody started,
-         costing 56px to say there is nothing to do. Discard comes with it, because a
-         page-level commit owes a way out that is not undoing each field by hand. -->
-    <!-- The bar has no scrolling ancestor here — this tab owns its own scroll box and the
-         footer is that box's sibling — so `sticky` resolves to in-flow and the flex column
-         holds it at the bottom. -->
     <SettingsSaveBar
       :dirty="dirty"
       :saving="saving"

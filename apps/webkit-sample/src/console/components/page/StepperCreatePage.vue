@@ -1,37 +1,47 @@
-<script setup>
+<script setup lang="ts">
   import Button from '@aziontech/webkit/button'
-  import { computed } from 'vue'
+  import { computed, ref, watch } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
+
+  import { useTabEnter } from '../../lib/behavior/tab-enter'
 
   import UnsavedChangesGuard from '../form/UnsavedChangesGuard.vue'
   import CreationHeader from './CreationHeader.vue'
   import PageHeading from './PageHeading.vue'
   import StepRail from './StepRail.vue'
 
-  const props = defineProps({
-    /** Breadcrumb trail for the flow, e.g. `[{ label: 'Firewall', href: '/firewall' }, { label: 'Create Network List' }]`. */
-    breadcrumb: { type: Array, default: () => [] },
-    /** Accessible label for the header's back button. */
-    backLabel: { type: String, default: 'Back' },
-    /** The flow's own name, carried by the rail's accessible label. */
-    title: { type: String, default: '' },
-    /**
-     * The ordered steps. Each is `{ value, title, description, state, disabled }`, plus two
-     * optional flags: `heading: false` when the step renders its own header, and
-     * `bleed: true` when it takes the whole pane instead of the form measure.
-     */
-    steps: { type: Array, default: () => [] },
-    /** The owner's in-flight flag: locks the fieldset and spins the commit. */
-    submitting: { type: Boolean, default: false },
-    /** True while the form holds input the reader has not committed. */
-    dirty: { type: Boolean, default: false },
-    /** The commit's own verb, shown on the last step. */
-    saveLabel: { type: String, default: 'Create' }
+  interface Props {
+    breadcrumb?: unknown[]
+    backLabel?: string
+    title?: string
+    steps?: unknown[]
+    submitting?: boolean
+    dirty?: boolean
+    saveLabel?: string
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    breadcrumb: () => [],
+    backLabel: 'Back',
+    title: '',
+    steps: () => [],
+    submitting: false,
+    dirty: false,
+    saveLabel: 'Create'
   })
 
-  const emit = defineEmits(['submit', 'cancel', 'back', 'next'])
+  defineSlots<{
+    default(props: { step: unknown }): unknown
+    docs(): unknown
+  }>()
 
-  /** The step the reader is on; two-way so the rail can move it. */
+  const emit = defineEmits<{
+    submit: []
+    cancel: []
+    back: []
+    next: []
+  }>()
+
   const current = defineModel({ type: String, default: '' })
 
   const route = useRoute()
@@ -43,6 +53,15 @@
   const step = computed(() => props.steps[index.value] ?? null)
   const isFirst = computed(() => index.value <= 0)
   const isLast = computed(() => index.value === props.steps.length - 1)
+
+  const mainRef = ref(null)
+  const direction = ref(null)
+
+  watch(index, (next, previous) => {
+    direction.value = next < previous ? 'back' : 'forward'
+  })
+
+  useTabEnter(mainRef, current, mainRef)
 
   const onCrumb = (event, href) => {
     if (!href || href === '#') {
@@ -77,22 +96,17 @@
 
       <div class="flex min-w-0 flex-1 flex-col">
         <main
+          ref="mainRef"
           :data-bleed="step?.bleed || null"
-          class="group/main animate-page-enter motion-reduce:animate-none min-h-0 flex-1 overflow-auto data-bleed:flex data-bleed:flex-col data-bleed:overflow-hidden"
+          :data-direction="direction"
+          class="group/main data-[direction=forward]:[--page-enter-distance:calc(var(--layout-boundary-inline)*-1)] animate-page-enter motion-reduce:animate-none min-h-0 flex-1 overflow-auto data-bleed:flex data-bleed:flex-col data-bleed:overflow-hidden"
         >
-          <!-- A bleeding step hands its own height down: the form stops being content-sized
-               (`min-h-full`, which lets `flex-1` children collapse to nothing) and becomes a
-               flex child that fills the pane, so an editor inside it has a height to fill. -->
           <form
             class="flex min-h-full flex-col group-data-[bleed]/main:min-h-0 group-data-[bleed]/main:flex-1"
             :aria-label="step?.title || title"
             novalidate
             @submit.prevent="commit"
           >
-            <!-- A BLEEDING STEP owns the whole pane. A code editor squeezed into the form
-                 measure, with a rail already beside it, is an editor spending its width on
-                 padding — so the column class and the boundary come off and the step fills
-                 what is left of the viewport. It brings its own chrome, so no heading. -->
             <div
               v-if="step?.bleed"
               class="flex min-h-0 flex-1 flex-col"

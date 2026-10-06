@@ -1,23 +1,4 @@
-<script setup>
-  // The dependencies of one composed resource — the Functions, Connectors, Network
-  // Lists and WAF rules that an Application, a Firewall or a Custom Page references.
-  //
-  // They are DETECTED, not asked: the operator chose an Application version, and these
-  // came with it. That is what makes a detected row locked — the resource is a fact of
-  // that version, so only its VERSION is a choice. The one exception is the "Include
-  // dependencies" block, where the operator adds what a Function reaches at runtime and
-  // no detector can see; those rows are theirs, so they can be removed.
-  //
-  // ONE GROUP PER TYPE, as an Accordion: a release with two Functions and three
-  // Connectors is six version decisions, and a flat list of six buries which parent
-  // each belongs to. The group header states the count while collapsed, so a reader who
-  // never opens it still knows what the release carries (a collapsed row that hides its
-  // own value is a trap, not a simplification).
-  //
-  // SHARED dependencies (a Connector referenced by both the Application and a Custom
-  // Page) carry ONE version across the whole release: two versions of one Connector in
-  // one release is not a thing the platform can serve. The row states that it is shared;
-  // the reason it matters is said once, above the rows, rather than repeated per row.
+<script setup lang="ts">
   import Accordion from '@aziontech/webkit/accordion'
   import Badge from '@aziontech/webkit/badge'
   import Button from '@aziontech/webkit/button'
@@ -38,30 +19,30 @@
   } from '../../lib/data/releases'
   import ResourceVersionField from './ResourceVersionField.vue'
 
-  const props = defineProps({
-    // One entry per dependency type this parent can own:
-    // `{ type, rows: [{ resourceId, versionId, locked, sharedWith: [] }], addOptions: [] }`
-    groups: { type: Array, default: () => [] },
-    // Detection is in flight for the parent resource.
-    detecting: { type: Boolean, default: false },
-    // What is being detected, named. Falls back to the generic sentence.
-    detectingLabel: { type: String, default: 'Detecting dependencies…' },
-    // Whether rows can be added and removed by hand (the Include dependencies block).
-    allowAdd: { type: Boolean, default: false },
-    // The whole block is inert while the release deploys.
-    disabled: { type: Boolean, default: false }
+  interface Props {
+    groups?: unknown[]
+    detecting?: boolean
+    detectingLabel?: string
+    allowAdd?: boolean
+    disabled?: boolean
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    groups: () => [],
+    detecting: false,
+    detectingLabel: 'Detecting dependencies…',
+    allowAdd: false,
+    disabled: false
   })
 
-  const emit = defineEmits(['update-version', 'set-resource', 'add', 'remove', 'build'])
+  const emit = defineEmits<{
+    'update-version': []
+    'set-resource': []
+    add: []
+    remove: []
+    build: []
+  }>()
 
-  // Which groups are open. DETECTED dependencies start CLOSED: they are what the platform
-  // resolved from the version the operator chose, and a release with three parents holding a
-  // dozen of them opens as a wall of version fields nobody reads. Each group header states
-  // its type and its count, which is what a reader needs to decide whether to open it — a
-  // collapsed row that hides its own value would be a trap, one that states it is a summary.
-  //
-  // The Include block is the exception and opens: the only thing inside it is the action that
-  // fills it, and an Add button behind a collapsed row is an action nobody finds.
   const openGroups = ref([])
   watch(
     () => `${props.allowAdd}:${props.groups.map((group) => group.type).join('|')}`,
@@ -75,13 +56,6 @@
 </script>
 
 <template>
-  <!-- THE FRAME IS THE HOST'S. This renders the groups and nothing around them, because the
-       same content sits in two different cards: a nested "Dependencies" card inside a
-       resource's card (./ReleaseTopologyTree.vue) and its own top-level "Include
-       dependencies" card (../ReleaseComposer.vue). Each host owns its card, its title and its
-       count — a `framed` prop here would be one component rendering two different chromes. -->
-  <!-- Detection is a state of the whole block: until it answers, the groups below are not yet
-       the truth about this version. -->
   <div
     v-if="detecting"
     class="flex items-center gap-(--spacing-xs) px-(--spacing-md) py-(--spacing-sm)"
@@ -109,11 +83,6 @@
           <span class="truncate text-label-md text-(--text-default)">
             {{ resourceLabel(group.type) }}
           </span>
-          <!-- A BADGE, not a tag: this is a COUNT on a label, which is what a badge is for
-               (a tag states a state). `medium` (24px) still rides the 32px row without setting
-               the row's height, and `warning` is the one severity this screen gives a count —
-               the number is what the operator has to review, so it is the thing that catches
-               the eye. -->
           <Badge
             :label="String(group.rows.length)"
             severity="warning"
@@ -123,19 +92,9 @@
       </Accordion.Trigger>
 
       <Accordion.Content>
-        <!-- The webkit Accordion pads its TRIGGER (`px-(--spacing-md)`, so the row's
-                 hover surface still spans the full width) and deliberately leaves its PANEL
-                 flush, because only the consumer knows what goes in there. So the panel's
-                 inset is ours to set, and it is the trigger's own: the rows inside line up
-                 with the group label above them instead of starting at the card's border.
-                 One spacing step above (the trigger's bottom border already separates the
-                 two, so the panel only needs air) and a full step below, so the last row does
-                 not sit on the next group's border. -->
         <div
           class="flex min-w-0 flex-col gap-(--spacing-sm) px-(--spacing-md) pt-(--spacing-sm) pb-(--spacing-md)"
         >
-          <!-- The shared caveat, said once for the group instead of on every row it
-                 applies to. -->
           <Message
             v-if="sharedIn(group).length"
             severity="info"
@@ -155,8 +114,6 @@
             :key="`${group.type}-${row.resourceId || index}`"
             class="flex min-w-0 flex-col gap-(--spacing-xs) rounded-(--shape-elements) border border-(length:--border-width-default) border-(--border-muted) p-(--spacing-sm)"
           >
-            <!-- The row's own header exists only when it has something to say: that
-                   the dependency is shared, or that the operator can remove it. -->
             <div
               v-if="row.sharedWith?.length || allowAdd"
               class="flex min-w-0 items-center justify-between gap-(--spacing-xs)"
@@ -202,8 +159,6 @@
             />
           </div>
 
-          <!-- Adding is picking WHICH one, so the choice happens in the menu rather
-                 than in an empty row the operator then has to fill in. -->
           <Dropdown
             v-if="allowAdd && group.addOptions?.length"
             placement="bottom-start"
@@ -229,8 +184,6 @@
             </Dropdown.Group>
           </Dropdown>
 
-          <!-- Nothing left to add: the reason, instead of a disabled button. A dead
-                 control with no sentence beside it reads as a bug. -->
           <p
             v-else-if="allowAdd"
             class="text-body-sm text-(--text-muted)"

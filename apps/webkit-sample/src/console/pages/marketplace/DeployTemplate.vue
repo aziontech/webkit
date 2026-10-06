@@ -3,7 +3,8 @@
   import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
   import HelperText from '@aziontech/webkit/helper-text'
-  import InputGroup, { InputGroupAddon } from '@aziontech/webkit/input-group'
+  import InputGroupAddon from '@aziontech/webkit/input-group-addon'
+  import InputGroupRoot from '@aziontech/webkit/input-group-root'
   import InputText from '@aziontech/webkit/input-text'
   import Label from '@aziontech/webkit/label'
   import Select from '@aziontech/webkit/select'
@@ -32,14 +33,8 @@
   const route = useRoute()
   const router = useRouter()
 
-  // Carry the signed-in user across the flow (falls back to a placeholder).
   const userEmail = computed(() => route.query.email || 'myemail@azion.com')
 
-  // A deploy starts from one of three sources: a catalog template (?template=slug), an
-  // existing Git repository (?repo=name&owner=account), or a project the reader handed us
-  // from their own machine (?upload=name). The last two synthesize a template-shaped
-  // source (no template-specific settings) so the rest of the flow — preview, form,
-  // deployment, success — is identical.
   const isRepoImport = computed(() => Boolean(route.query.repo))
   const isUpload = computed(() => Boolean(route.query.upload))
 
@@ -75,19 +70,6 @@
     return getTemplate(route.query.template)
   })
 
-  // THE MARK OF THE THING BEING DEPLOYED — the template's own glyph when it authors one
-  // (the Azion templates do, since no framework stands behind them), otherwise the logo of
-  // the framework it scaffolds. Either way it is the mark the reader just clicked: the
-  // catalog card for a template, the repository row for an import
-  // (../resources/creation/GitImporter.vue, which carries the stack across in `framework`).
-  // A repository with no framework resolves to nothing and the card falls back to the
-  // Azion mark, which is the honest answer — we do not know what it is built with.
-  //
-  // AN UPLOAD IS THE ONE CASE THE READER CAN CHANGE. Its mark follows the chosen preset
-  // rather than the detected one, so picking `Astro` in the panel below repaints the card
-  // at the top of the flow: the screen agrees with the field, and the correction is
-  // visibly a correction. With no preset it is a folder — the honest mark for a pile of
-  // files nothing has spoken for.
   const templateMark = computed(() => {
     if (isUpload.value) {
       const icon = FRAMEWORKS.find((entry) => entry.tech === preset.value)?.icon
@@ -101,16 +83,12 @@
   const goToCreationCenter = () =>
     router.push({ path: '/create', query: { email: userEmail.value } })
 
-  // "Manage" opens the workload the deploy just created — the entry point of the
-  // provisioned chain (see onDeployFinished).
   const manageWorkload = () =>
     router.push({
       path: `/workloads/${provisioned.value?.workload.id ?? ''}`,
       query: { email: userEmail.value, name: provisioned.value?.workload.name }
     })
 
-  // Breadcrumb trail: clickable root back to the Creation Center, then the
-  // current template as the active (last) crumb.
   const breadcrumbSource = computed(() => {
     if (isUpload.value) return 'Upload a Project'
     return isRepoImport.value ? 'Import from Git' : 'Start from a Template'
@@ -122,44 +100,16 @@
   ])
   const onBreadcrumbNavigate = () => goToCreationCenter()
 
-  // ── DOES THIS DEPLOY GO THROUGH A REPOSITORY? ──
-  //
-  // Three answers, and only one of them is the reader's:
-  //
-  //   `none`      an AZION TEMPLATE has no project to copy — its settings ARE the template
-  //               (../../lib/data/templates.js → `requiresRepository`). Asking it to
-  //               authorize a provider would be asking for a clone that never happens, and
-  //               the application wizard has always known this
-  //               (../applications/CreateApplication.vue); this page did not, so Azion
-  //               Proxy opened on a connect wall and a preview reading "Cloning from
-  //               Github".
-  //   `required`  a REPOSITORY IMPORT is a repository. There is nothing to deploy without
-  //               it, so the provider is the source, not a preference.
-  //   `optional`  a FRAMEWORK STARTER, which is the case this whole choice exists for.
-  //               Cloning it into the reader's account is the better deploy — Azion watches
-  //               it and ships every push — but it is not what makes the code deployable.
-  //               A reader who does not want Azion holding a GitHub token, or who is trying
-  //               the platform before they commit an account to it, deploys the code once
-  //               and connects later. Binding a provider is a capability, not a toll.
   const repositoryMode = computed(() => {
     if (template.value.requiresRepository === false) return 'none'
     if (isRepoImport.value) return 'required'
     return 'optional'
   })
 
-  // The reader took the `optional` fork the other way. Reset whenever another template is
-  // opened in place — the choice was about the template they were looking at.
   const skipGit = ref(false)
 
   const usesGit = computed(() => repositoryMode.value !== 'none' && !skipGit.value)
 
-  // Git scope: the account or organization the repository will be created under. The
-  // roster is the ACCOUNT's linked Git accounts (../../lib/state/git-provider.js), which is
-  // also what the Creation Center's importer lists. It used to be three names hard-coded
-  // here, so this page offered a choice of accounts to a reader who had connected none.
-  //
-  // A repo import arrives with its owner on the URL (that is the account it was listed
-  // from); a template deploy starts on the first linked account.
   const scope = ref(String(route.query.owner || ''))
 
   watch(
@@ -172,21 +122,14 @@
     { immediate: true }
   )
 
-  // Repository visibility. Public is the default ("lock out"); flipping the
-  // switch off makes the repository private ("lock in").
   const isPublic = ref(true)
 
-  // ONE FIELD, TWO JOBS. It names the thing being deployed; when a repository is created
-  // it is also that repository's name, and the visibility toggle beside it applies. With
-  // no repository there is nothing to make public or private, so the field is just the
-  // project's name.
   const repoLabel = computed(() => {
     if (!usesGit.value) return 'Project Name'
     return isPublic.value ? 'Public Repository Name' : 'Private Repository Name'
   })
   const repoPlaceholder = computed(() => (usesGit.value ? 'my-repository' : 'my-project'))
 
-  // What the form says it is about to do, which is a different act in each mode.
   const formIntro = computed(() => {
     if (repositoryMode.value === 'none') {
       return isUpload.value
@@ -199,31 +142,12 @@
     return 'Azion deploys from this repository and ships every push automatically.'
   })
 
-  // ── THE PROJECT THE READER DROPPED ──
-  //
-  // The name and the framework came across on the URL; the FILES came across in the store,
-  // because a `File` has no query-string form (../../lib/state/dropped-project.js says why).
-  // A reload therefore keeps the form and loses the listing, which is the honest outcome —
-  // the browser no longer holds the files, so the screen falls back to what a template
-  // deploy shows and the reader can drop the project again to get the listing back.
   const dropped = computed(() =>
     isUpload.value ? droppedProjectFor(String(route.query.upload)) : null
   )
 
-  // THE PRESET THE PROJECT DEPLOYS AS — detected on the drop, then owned by the reader.
-  //
-  // It is page state rather than a read of the URL, because from here on it is an ANSWER
-  // and not a reading: the picker in the panel below writes to it, and the deploy, the
-  // preview's mark and the root-file question all follow what it now says. The query
-  // keeps the detection so a reload opens on the same reading; a correction is not worth
-  // a navigation.
   const preset = ref(String(route.query.framework || ''))
 
-  // THE LINE UNDER THE PRESET FIELD HAS TO BE TRUE IN ALL THREE STATES, and they are
-  // genuinely three: a reading we are offering, a reading the reader replaced, and no
-  // reading at all. One sentence for all of them would have to be vague enough to cover
-  // the last — and "detected from your project" under an empty field is the form claiming
-  // work it did not do.
   const detectedPreset = computed(() => String(route.query.framework || ''))
 
   const presetHelper = computed(() => {
@@ -238,9 +162,6 @@
     picksRootFile({ files: dropped.value?.files ?? [], framework: preset.value })
   )
 
-  // Which dropped file answers `GET /`. Seeded with the drop's own best answer
-  // (`index.html` when there is one) and re-seeded whenever another project is opened in
-  // place, so the previous drop's root never carries into the next one's form.
   const rootFile = ref(defaultRootFile(dropped.value?.files))
 
   const settingsTitle = computed(() => {
@@ -253,19 +174,12 @@
       : 'This template has no additional settings.'
   )
 
-  // Repo name + template-specific setting values are seeded from the template
-  // and reset whenever a different template is opened in place.
   const repoName = ref('')
   const settingsValues = reactive({})
 
-  // Entering a template (or switching to another one in place) briefly "fetches"
-  // its per-template settings schema — while it loads we swap the fields for
-  // Skeleton placeholders so the layout never jumps.
   const settingsLoading = ref(false)
   let settingsTimer = null
 
-  // Number of Skeleton rows to reserve while the settings load; at least two so
-  // the placeholder reads as a form even for templates with no extra fields.
   const skeletonFieldCount = computed(() => Math.max(template.value.settings.length, 2))
 
   const initFromTemplate = (t) => {
@@ -275,9 +189,6 @@
     Object.keys(settingsValues).forEach((k) => delete settingsValues[k])
     t.settings.forEach((s) => (settingsValues[s.name] = ''))
 
-    // Only a TEMPLATE has a settings schema to go and get. An upload's fields are the
-    // files already sitting in memory, so running the placeholder here would reserve
-    // space for a fetch that never happens and delay a listing we can draw immediately.
     if (settingsTimer) clearTimeout(settingsTimer)
     if (isUpload.value) {
       settingsLoading.value = false
@@ -290,10 +201,6 @@
   }
   initFromTemplate(template.value)
 
-  // The leave guard's trigger (ui/UnsavedChangesGuard.vue). The baseline is taken AFTER the
-  // first seed, so the values the template itself supplies are the starting point and not
-  // an edit — and it is re-taken whenever another template is opened in place, or switching
-  // templates would read as unsaved work the reader never typed.
   const { dirty, commit } = useBaseline(() => ({
     repoName: repoName.value,
     rootFile: rootFile.value,
@@ -308,9 +215,6 @@
     }
   )
 
-  // Deploy is enabled once the repo name, the site's root, and every required setting are
-  // filled. The root counts as required exactly when it is asked for — a static drop has
-  // nothing else that can answer `GET /`, and a framework drop is never asked.
   const canDeploy = computed(() => {
     if (!repoName.value.trim()) return false
     if (picksRoot.value && !rootFile.value) return false
@@ -319,35 +223,17 @@
       .every((s) => (settingsValues[s.name] || '').trim())
   })
 
-  // Flow status: form -> deploying -> success. The deployment card runs its own
-  // internal states and emits `finished`, which advances us to the success view.
   const status = ref('form')
 
-  // WHAT THE FLOW SHOWS, which is not always where the reader has got to. `status` is
-  // their progress; connecting a Git provider is a PRECONDITION of the first phase, and
-  // the account either meets it or does not.
-  //
-  // A template's code is cloned into a repository of the reader's own, so the form cannot
-  // ask for a repository name and a scope before there is an account for the repository to
-  // live in. A reader who came through the Creation Center's importer connected there, and
-  // this page opens straight on the form. A reader who came off a TEMPLATE card never
-  // passed through it: they used to land on a Scope Select offering three accounts nobody
-  // had linked, and a Deploy button that would have created a repository nowhere. Now they
-  // get the same connect card the importer shows, then the same flow.
   const phase = computed(() =>
     status.value === 'form' && usesGit.value && !gitConnected.value ? 'connect' : status.value
   )
 
-  // Why the connection is being asked for, in the terms of the thing being deployed.
   const connectDescription = computed(
     () =>
       `Azion clones ${template.value.title} into a repository in your account, then deploys from it on every push.`
   )
 
-  // WHAT THE RUN SAYS IT IS DOING while the logs spin up. The card's default story is a
-  // GitHub clone (../../components/deployment/DeploymentFlow.vue), which is right whenever
-  // one happens; a deploy with no repository is one subject and no destination, so it
-  // describes itself and leaves the second chip undrawn.
   const deploySplash = computed(() =>
     usesGit.value
       ? null
@@ -358,7 +244,6 @@
         }
   )
 
-  // Brief loading state on the Deploy button before the deployment view opens.
   const submitting = ref(false)
   let submitTimer = null
 
@@ -376,11 +261,6 @@
     if (settingsTimer) clearTimeout(settingsTimer)
   })
 
-  // Phase cross-fade motion. Timing comes from the theme's motion primitives
-  // (animate.js): moderate-in / fast-out durations + productive entrance/exit
-  // curves. Only timing goes inline — transform + opacity live in the Transition
-  // classes (design.md Drawer pattern); a reduced-motion important class disables
-  // it. Set imperatively per direction so out-in picks the right curve.
   const timing = (d, c) => `opacity ${d} ${c}, transform ${d} ${c}`
   const onBeforeEnter = (el) => {
     el.style.transition = timing(duration['moderate-02'], curve['productive-entrance'])
@@ -389,21 +269,7 @@
     el.style.transition = timing(duration['fast-02'], curve['productive-exit'])
   }
 
-  // --- The deploy phase's scroll anchor -------------------------------------
-  // Starting a deploy parks the deployment card at the top of the scroll box. The
-  // template preview above it and the card together are taller than the viewport,
-  // so without this the flow starts running below the fold and the user has to hunt
-  // for it — scrolling back and forth between the preview and the steps to watch
-  // their own deploy. The preview has done its job by then; the steps are the page.
-  //
-  // Same shape as ErrorValidation's recovery anchor: measured against the SCROLL
-  // CONTAINER (so it is right however far the page is already scrolled) and parked
-  // one --spacing-lg below the top edge, which `scrollIntoView` cannot express.
-  // Driven from the phase Transition's `enter` hook rather than a `watch`, because
-  // `mode="out-in"` mounts the new phase only after the old one has left — at
-  // `enter` the element is in the DOM and already at its final layout, so the scroll
-  // and the fade run together instead of the page jumping after it settles.
-  const ANCHOR_OFFSET = 24 // --spacing-lg of breathing room above the card
+  const ANCHOR_OFFSET = 24
   const flowScroll = ref(null)
 
   const prefersReducedMotion = () =>
@@ -424,10 +290,6 @@
     })
   }
 
-  // A finished deploy provisions the resource chain — Workload → Application →
-  // Connector → Storage (src/lib/provisioning.js) — so the created resources are
-  // immediately real for the rest of the console: they show up in the Workloads /
-  // Applications / Object Storage lists, and "Manage" opens the new workload.
   const provisioned = ref(null)
   const createdResources = computed(() =>
     provisioned.value ? resourceChain(provisioned.value) : []
@@ -440,10 +302,6 @@
       framework: isUpload.value ? preset.value : template.value.framework,
       isPublic: isPublic.value,
       templateTitle: template.value.title,
-      // A cloned template leaves a repository behind; an uploaded or dropped project does
-      // not, and the application it creates is updated from the reader's own terminal —
-      // or by dropping on it again, which is why a drop is named apart from the CLI
-      // (../../lib/data/applications.js).
       source: usesGit.value ? 'git' : isUpload.value ? 'drop' : 'cli'
     })
     status.value = 'success'
@@ -454,7 +312,6 @@
   <div class="flex h-dvh flex-col overflow-hidden bg-(--bg-canvas)">
     <UnsavedChangesGuard :dirty="dirty && phase === 'form'" />
 
-    <!-- Single creation header: back + brand + breadcrumb (hidden on success). -->
     <CreationHeader
       :show-back="phase !== 'success'"
       :breadcrumb="phase !== 'success' ? breadcrumbItems : []"
@@ -463,27 +320,13 @@
       @navigate="onBreadcrumbNavigate"
     />
 
-    <!-- Centered single-column flow. Phases cross-fade with a translate-y
-         offset using the theme easing tokens. -->
     <main
       ref="flowScroll"
       class="animate-page-enter motion-reduce:animate-none relative min-w-0 flex-1 overflow-auto"
     >
-      <!-- One measure for the whole flow: the FOCUSED column (`.layout-column-focused`
-           — 1024px), which is what a single-task page takes everywhere else in the
-           console, and what the Congratulations card is measured for.
-
-           It used to widen on success (752px → 1024px) so the success card's two-up
-           box had room to split. But the split is driven by the `lg:` viewport
-           variant, not by the column, so it lands either way — and the swap fired at
-           the exact moment the flow finished, re-laying the page out under the card
-           that was fading in. A phase change is not a reason for the page to change
-           width. -->
       <div
         class="layout-column-focused relative flex flex-col items-center gap-(--spacing-xl) px-(--spacing-md) py-(--spacing-xxl)"
       >
-        <!-- Preview strip for the form/deploy phases. On success it gives way
-             to the in-card preview shown on the Congratulations card. -->
         <Transition
           @before-enter="onBeforeEnter"
           @before-leave="onBeforeLeave"
@@ -515,20 +358,12 @@
             :key="phase"
             class="flex w-full flex-col items-center gap-(--spacing-xl) motion-reduce:transition-none! motion-reduce:transform-none!"
           >
-            <!-- No Git provider connected: the flow's first step is connecting one, on
-                 the same card the Creation Center's importer shows. The template preview
-                 above stays put, so the reader can still see what they picked while being
-                 asked for the one thing the deploy cannot be done without. -->
             <template v-if="phase === 'connect'">
               <GitProviderConnect
                 class="w-full"
                 title="Connect a Git provider"
                 :description="connectDescription"
               >
-                <!-- THE OTHER WAY THROUGH. Connecting buys push-to-deploy; it does not buy
-                     the deploy itself, so refusing it cannot be the end of the flow. Text
-                     kind, not a second solid button: the two are not equal offers — one is
-                     what we recommend, the other is what we allow. -->
                 <template
                   v-if="repositoryMode === 'optional'"
                   #alternative
@@ -542,7 +377,6 @@
                 </template>
               </GitProviderConnect>
 
-              <!-- The way out of the step, same control the form phase carries. -->
               <Button
                 label="Browse Templates"
                 kind="outlined"
@@ -551,9 +385,7 @@
               />
             </template>
 
-            <!-- Configure repository + template settings -->
             <template v-else-if="phase === 'form'">
-              <!-- Configuration card -->
               <CardBox class="w-full">
                 <template #content>
                   <div class="flex flex-col gap-(--spacing-lg)">
@@ -564,15 +396,6 @@
                       </p>
                     </div>
 
-                    <!-- THE ROW IS A PAIR, and which pair depends on where the project
-                         came from: `Scope + repository name` when one is being created,
-                         `Project name + build preset` for a drop. The two never coexist —
-                         an upload sets `requiresRepository: false`, so `usesGit` is false
-                         for exactly the case the preset is asked about.
-                         The preset sits BESIDE the name rather than down in the files
-                         panel because it is the same KIND of answer: two short facts about
-                         the project as a whole, given once, before anything about its
-                         contents. Under the listing it read as a property of the files. -->
                     <div
                       class="grid grid-cols-1 items-start gap-(--spacing-lg)"
                       :class="usesGit || isUpload ? 'sm:grid-cols-2' : ''"
@@ -614,12 +437,7 @@
                           required
                           for="repoName"
                         />
-                        <!-- Repo name joined with the visibility toggle in a
-                             single InputGroup: the input is the leading control
-                             and the trailing addon carries the privacy Switch
-                             (lock / lock-open). The group's `size` matches the
-                             InputText's so both land on the same 40px height. -->
-                        <InputGroup
+                        <InputGroupRoot
                           size="large"
                           :disabled="submitting"
                         >
@@ -645,7 +463,7 @@
                               />
                             </Tooltip>
                           </InputGroupAddon>
-                        </InputGroup>
+                        </InputGroupRoot>
                       </div>
 
                       <SelectField
@@ -659,11 +477,7 @@
                       />
                     </div>
 
-                    <!-- Template-specific settings -->
                     <h3 class="text-heading-xxs text-(--text-default)">{{ settingsTitle }}</h3>
-                    <!-- While the template's settings schema loads, reserve the
-                         layout with Skeleton placeholders (label + field +
-                         helper text) so nothing jumps when it resolves. -->
                     <div
                       v-if="settingsLoading"
                       class="flex flex-col gap-(--spacing-lg)"
@@ -697,11 +511,6 @@
                         :key="field.name"
                         class="flex flex-col gap-(--spacing-xs)"
                       >
-                        <!-- Field triad: the Label's required tag is persistent
-                             (bound to the schema, not to submit); guidance is a
-                             HelperText, not a bare <small>. Deploy is gated on
-                             canDeploy (error prevention), so there is no red
-                             required-error state to surface here. -->
                         <Label
                           :label="field.label"
                           :required="field.required"
@@ -722,11 +531,6 @@
                         />
                       </div>
                     </div>
-                    <!-- An UPLOAD's settings are its files: what arrived, and which one
-                         answers `GET /`. This is the branch a dropped project lands in —
-                         `template.settings` is empty for one by construction, so without
-                         it the reader named a project over a blank panel. It falls through
-                         to the line below when the listing did not survive a reload. -->
                     <UploadedProject
                       v-else-if="dropped"
                       v-model="rootFile"
@@ -757,7 +561,6 @@
                 </template>
               </CardBox>
 
-              <!-- Browse other templates -->
               <Button
                 label="Browse Templates"
                 kind="outlined"
@@ -766,7 +569,6 @@
               />
             </template>
 
-            <!-- Deploy in progress: only the Deployment card renders here -->
             <template v-else-if="phase === 'deploying'">
               <DeploymentFlow
                 :repo-owner="template.repoOwner"
@@ -777,8 +579,6 @@
               />
             </template>
 
-            <!-- Success: the same outcome record every other create in the console ends
-                 on (../applications/wizard/DeploySuccess.vue). -->
             <template v-else>
               <DeploySuccess
                 title="Congratulations!"

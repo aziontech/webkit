@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import CardBox from '@aziontech/webkit/card-box'
   import InputText from '@aziontech/webkit/input-text'
   import { toast } from '@aziontech/webkit/toast'
@@ -18,10 +18,11 @@
   import { deploymentFilterFields } from '../../../lib/data/deployments'
   import { productFirstUse } from '../../../lib/data/product-empty-states'
 
-  const props = defineProps({
-    /** The record this page is about (../../../lib/data/applications.js). */
-    application: { type: Object, required: true }
-  })
+  interface Props {
+    application: Record<string, unknown>
+  }
+
+  const props = defineProps<Props>()
 
   const HELP = productFirstUse('deployments').learnMore.href
 
@@ -87,7 +88,7 @@
       <template #actions>
         <HeadingAction
           label="Deploy"
-          kind="primary"
+          kind="outlined"
           icon="pi pi-cloud-upload"
           @click="deploy"
         />
