@@ -147,6 +147,11 @@
     "entryOnly": true
   },
   {
+    "name": "texture-material",
+    "path": "src/components/marketing/texture-material/texture-material.vue",
+    "limit": "2 KB"
+  },
+  {
     "name": "illustration",
     "path": "src/components/content/illustration/illustration.vue",
     "limit": "2 KB",
