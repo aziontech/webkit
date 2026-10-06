@@ -258,7 +258,7 @@ const meta = {
     animateLines: {
       control: 'boolean',
       description:
-        'Staggered line entrance for website layouts: each line slides from -8px with opacity 0 → 1, 40ms apart.',
+        'Staggered line entrance for website layouts: each line slides from -8px with opacity 0 → 1, 300ms apart.',
       table: {
         category: 'props',
         type: { summary: 'boolean' },

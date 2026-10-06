@@ -175,9 +175,6 @@ importers:
       '@aziontech/webkit':
         specifier: workspace:*
         version: link:../../packages/webkit
-      '@aziontech/webkit-docs':
-        specifier: workspace:*
-        version: link:../../packages/webkit-docs
       '@storybook/manager-api':
         specifier: ^8.6.14
         version: 8.6.14(storybook@8.6.18(prettier@3.9.6))

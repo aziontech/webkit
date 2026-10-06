@@ -68,25 +68,8 @@ const meta = {
     },
     icon: {
       control: 'text',
-      description: 'PrimeIcons class for the icon drawn beside the label.',
+      description: 'PrimeIcons class for the leading/trailing icon.',
       table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "''" } }
-    },
-    iconPosition: {
-      control: 'select',
-      options: ['leading', 'trailing'],
-      description:
-        'Which side of the label the icon sits on. A leading glyph names the action; a trailing one points at where it goes.',
-      table: {
-        category: 'props',
-        type: { summary: "'leading' | 'trailing'" },
-        defaultValue: { summary: "'leading'" }
-      }
-    },
-    animated: {
-      control: 'boolean',
-      description:
-        'Nudges a trailing icon along its axis on hover. Off by default; marketing CTAs opt in.',
-      table: { category: 'props', type: { summary: 'boolean' }, defaultValue: { summary: 'false' } }
     },
     href: {
       control: 'text',
@@ -116,8 +99,6 @@ const meta = {
     disabled: false,
     loading: false,
     icon: '',
-    iconPosition: 'leading',
-    animated: false,
     href: '',
     target: '_self'
   }
@@ -184,31 +165,12 @@ export const Sizes = {
   }
 }
 
-const ICON_TEMPLATE = `<div class="flex flex-col gap-4">
-  <div class="flex flex-wrap items-center gap-4">
-    <Button kind="primary" label="Button" icon="pi pi-arrow-right" />
-    <Button kind="secondary" label="Button" icon="pi pi-arrow-right" />
-    <Button kind="outlined" label="Button" icon="pi pi-arrow-right" />
-    <Button kind="text" label="Button" icon="pi pi-arrow-right" />
-    <Button kind="danger" label="Button" icon="pi pi-trash" />
-  </div>
-  <div class="flex flex-wrap items-center gap-4">
-    <Button kind="primary" label="Read the guide" icon="pi pi-chevron-right" icon-position="trailing" />
-    <Button kind="secondary" label="Read the guide" icon="pi pi-chevron-right" icon-position="trailing" />
-    <Button kind="outlined" label="Read the guide" icon="pi pi-chevron-right" icon-position="trailing" />
-    <Button kind="text" label="Read the guide" icon="pi pi-chevron-right" icon-position="trailing" />
-  </div>
-  <div class="flex flex-wrap items-center gap-4">
-    <Button kind="primary" label="Read the guide" icon="pi pi-chevron-right" icon-position="trailing" animated />
-    <Button kind="secondary" label="Read the guide" icon="pi pi-chevron-right" icon-position="trailing" animated />
-    <Button kind="outlined" label="Read the guide" icon="pi pi-chevron-right" icon-position="trailing" animated />
-    <Button kind="text" label="Read the guide" icon="pi pi-chevron-right" icon-position="trailing" animated />
-  </div>
-  <div class="flex flex-wrap items-center gap-4">
-    <Button kind="outlined" size="medium" label="Deploy now" icon="pi pi-chevron-right" icon-position="trailing" animated #prefix>
-      <i class="ai ai-azion text-(--primary)" aria-hidden="true" />
-    </Button>
-  </div>
+const ICON_TEMPLATE = `<div class="flex flex-wrap items-center gap-4">
+  <Button kind="primary" label="Button" icon="pi pi-arrow-right" />
+  <Button kind="secondary" label="Button" icon="pi pi-arrow-right" />
+  <Button kind="outlined" label="Button" icon="pi pi-arrow-right" />
+  <Button kind="text" label="Button" icon="pi pi-arrow-right" />
+  <Button kind="danger" label="Button" icon="pi pi-trash" />
 </div>`
 
 /** @type {import('@storybook/vue3').StoryObj<typeof Button>} */
@@ -219,7 +181,7 @@ export const Icon = {
       controls: { disable: true },
       description: {
         story:
-          'Icon + label via the `icon` prop (PrimeIcons class) paired with `label`. `icon-position` picks the side: leading names the action, trailing points at where it goes. Add `animated` (third row) to nudge a trailing glyph along its axis on hover — off by default so product UI stays still; marketing CTAs opt in. The `prefix` slot (last row) draws a mark before the label that stays first when the icon trails, so a brand mark and a chevron can share one control. `label` is required — for icon-only controls use `IconButton`.'
+          'Icon + label via the `icon` prop (PrimeIcons class) paired with `label`. `label` is required — for icon-only controls use `IconButton`.'
       },
       source: { code: toSfc(IMPORT, ICON_TEMPLATE) }
     }
