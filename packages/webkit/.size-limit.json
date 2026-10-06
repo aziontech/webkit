@@ -193,6 +193,13 @@
     "limit": "3 KB"
   },
   {
+  },
+  {
+    "name": "faq",
+    "path": "src/components/marketing/faq/faq.vue",
+    "limit": "15 KB"
+  },
+  {
     "name": "illustration",
     "path": "src/components/content/illustration/illustration.vue",
     "limit": "2 KB",
