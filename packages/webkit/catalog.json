@@ -3271,6 +3271,104 @@
         "Place surrounding punctuation outside the element, not inside the keycap."
       ]
     },
+    "network-map": {
+      "import": "@aziontech/webkit/network-map",
+      "target": "./src/components/content/network-map/network-map.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/network-map",
+      "category": "content",
+      "structure": "monolithic",
+      "status": "implemented",
+      "props": [
+        {
+          "name": "region",
+          "type": "'world' | 'atlantic' | 'americas' | 'north-america' | 'south-america' | 'europe' | 'africa' | 'asia' | 'oceania'",
+          "default": "'world'",
+          "required": "false",
+          "doc": "Which part of the world has its PoPs lit; the map always frames the whole world."
+        },
+        {
+          "name": "density",
+          "type": "'none' | 'low' | 'medium' | 'high'",
+          "default": "'medium'",
+          "required": "false",
+          "doc": "How many PoPs are lit, from `none` to `high`."
+        },
+        {
+          "name": "animated",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "Pulses the PoPs in three staggered waves; static when false."
+        },
+        {
+          "name": "opacity",
+          "type": "number",
+          "default": "0.4",
+          "required": "false",
+          "doc": "Opacity of the landmass dots, from 0 to 1; the PoPs stay at full strength."
+        },
+        {
+          "name": "position",
+          "type": "'center' | 'top' | 'bottom' | 'left' | 'right' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'",
+          "default": "'center'",
+          "required": "false",
+          "doc": "Where the map parks in the space the box leaves over."
+        },
+        {
+          "name": "scale",
+          "type": "number",
+          "default": "0.85",
+          "required": "false",
+          "doc": "Size of the map relative to the box; 1 fits it, below 1 shrinks it toward its position, above 1 enlarges it."
+        },
+        {
+          "name": "offsetX",
+          "type": "number",
+          "default": "0",
+          "required": "false",
+          "doc": "Horizontal shift as a fraction of the map width; negative moves it left, positive right, past the box edge if large enough."
+        },
+        {
+          "name": "offsetY",
+          "type": "number",
+          "default": "0",
+          "required": "false",
+          "doc": "Vertical shift as a fraction of the map height; negative moves it up, positive down, past the box edge if large enough."
+        },
+        {
+          "name": "fade",
+          "type": "'none' | 'top' | 'bottom' | 'left' | 'right' | 'edges' | 'vignette'",
+          "default": "'none'",
+          "required": "false",
+          "doc": "Fades the map out along an axis so it meets content without a hard edge."
+        }
+      ],
+      "purpose": "A decorative, full-bleed layer that paints the dotted world map with Azion's PoPs lit in the brand accent. It is a material — it takes no content and claims no space — but unlike a static illustration it is tuned by the consumer (region, PoP density, landmass opacity, static or animated) to sit behind a band's copy.",
+      "useWhen": [
+        "As the backdrop of a band whose subject is the network (reach, data centers, latency, resilience), composed as a sibling under the band's copy inside a positioned, clipping ancestor.",
+        "When a band is about one part of the network, so only that region's PoPs should light (`region`) while the whole world stays drawn.",
+        "When the same artwork has to read with more or fewer PoPs lit, or with none at all (`density=\"none\"`), from one component instead of separate exports."
+      ],
+      "avoidWhen": [
+        "For a real node/edge diagram driven by data → use `flow`.",
+        "As a wrapper around content. The layer is absolutely positioned and paints only itself; content is a sibling above it."
+      ],
+      "related": [
+        "frame-box` — the ruled box a network band usually sits in; it supplies the positioned, clipping ancestor."
+      ],
+      "bestPractices": [
+        "Give the layer a positioned ancestor (`relative overflow-hidden`); it fills that box and nothing else.",
+        "Never offset or resize the layer with utilities (`left-*`, `w-*`, `inset-*`). It always fills its positioned ancestor, and `position` + `fade` place the map inside that box — so a fade measures from the band's own edges. An offset box moves the fade's edges off the band's and makes the two placements fight.",
+        "To make the map smaller or larger inside its box, set `scale` instead of resizing the layer. The map shrinks toward its `position` corner, so there is no hard edge and the fade keeps measuring from the band's edges.",
+        "Keep `opacity` low (the default `0.4`) when copy sits over the landmass; the PoPs keep full strength so the network still reads.",
+        "For copy on one side of a band, park the map on the other side with `position` and fade it toward the copy (`position=\"right\"` + `fade=\"left\"`); the default stops need no consumer class.",
+        "Tune where a fade holds and ends with `--network-map-fade-start` / `--network-map-fade-end` only when the default stops do not fit, instead of adding masks.",
+        "Leave `animated` off by default; turn it on for the one band per page whose subject is the network.",
+        "To nudge the map or let it run off the band, set `offsetX` / `offsetY` (for example `:offset-x=\"0.15\"` to bleed right, `:offset-y=\"-0.1\"` to bleed up) instead of offsetting the layer.",
+        "asia` and `oceania` hold no PoPs — the artwork carries no accent field there — so either region lights none and the map reads as landmass alone."
+      ]
+    },
     "log-view": {
       "import": "@aziontech/webkit/log-view",
       "target": "./src/components/code/log-view/log-view.vue",
@@ -7640,6 +7738,20 @@
           "default": "false",
           "required": "false",
           "doc": "When true, the chip body becomes interactive (`role=\"button\"`, focusable) and emits `click` on activation (click / Enter / Space)."
+        },
+        {
+          "name": "selectable",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "When true, the chip becomes a toggle: activating it flips the `selected` model and emits `click`."
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "Suppresses activation, toggling and removal."
         }
       ],
       "events": [
@@ -7651,7 +7763,7 @@
         {
           "name": "click",
           "payload": "(event: MouseEvent | KeyboardEvent, label: string)",
-          "notes": "Fires only when `clickable` is true and the chip body is activated — by pointer, or `Enter` / `Space` while the root is focused. `label` identifies which chip was clicked. The trailing remove button stops propagation, so activating it emits `remove` only, never `click`."
+          "notes": "Fires only when `clickable` or `selectable` is true, `disabled` is false, and the chip body is activated — by pointer, or `Enter` / `Space` while the root is focused. `label` identifies which chip was clicked. When `selectable`, the `selected` model is already flipped when `click` fires. The trailing remove button stops propagation, so activating it emits `remove` only, never `click`. `update:selected` comes from `v-model:selected` (see above)."
         }
       ],
       "slots": [
@@ -7661,11 +7773,12 @@
           "notes": "Chip content; falls back to `label` when empty."
         }
       ],
-      "purpose": "A Chip is a compact, pill-shaped token that labels a discrete value the user has applied — most often a filter on a data view. Unlike `tag` (a read-only status/category badge with severity color coding), a Chip carries no severity and exposes an optional trailing remove control: when `removable` is set, it renders a real `<button>` that emits `remove`, so the consumer can drop the value from a collection. This is the token consumed by the data table's `#filters` slot (`<Chip :label=\"f.label\" removable @remove=\"dropFilter(f)\" />`): each active filter becomes one removable Chip, and dismissing it removes that filter. Reach for a Chip when a value is user-applied and dismissible; reach for `tag` when it is a static status or category indicator. `kind` covers the three jobs a chip does in a filter surface, so a consumer never restyles the component to get one of them: - **`filled`** — a value that IS applied. The shared surface and border plus `--shadow-sm`: the loudest of the three, because it is state. - **`outlined`** — a value the user COULD apply. Same surface and border, no shadow: it recedes to an offer without becoming disabled, so a filter vocabulary can stay on screen instead of hiding inside a menu. - **`dashed`** — the control that CREATES a chip (\"Add filter\"). A dashed outline is the standing convention for \"add another one of these\", which is what separates the thing that makes filters from the things that are filters. **Presence is the consumer's, not the chip's.** `remove` fires the moment the control is activated; the chip does not animate itself away or unmount itself. A chip that hid itself on remove could only ever serve the one case where removing it also destroys it — a filter bar where a removed value stays on screen as an `outlined` offer was impossible, because the instance stayed invisible forever. Exit motion, if wanted, belongs to whatever owns the list (a `TransitionGroup` around the group).",
+      "purpose": "A Chip is a compact, pill-shaped token that labels a discrete value the user has applied — most often a filter on a data view. Unlike `tag` (a read-only status/category badge with severity color coding), a Chip carries no severity and exposes an optional trailing remove control: when `removable` is set, it renders a real `<button>` that emits `remove`, so the consumer can drop the value from a collection. This is the token consumed by the data table's `#filters` slot (`<Chip :label=\"f.label\" removable @remove=\"dropFilter(f)\" />`): each active filter becomes one removable Chip, and dismissing it removes that filter. Reach for a Chip when a value is user-applied and dismissible; reach for `tag` when it is a static status or category indicator. `kind` covers the three jobs a chip does in a filter surface, so a consumer never restyles the component to get one of them: - **`filled`** — a value that IS applied. The shared surface and border plus `--shadow-sm`: the loudest of the three, because it is state. - **`outlined`** — a value the user COULD apply. Same surface and border, no shadow: it recedes to an offer without becoming disabled, so a filter vocabulary can stay on screen instead of hiding inside a menu. - **`dashed`** — the control that CREATES a chip (\"Add filter\"). A dashed outline is the standing convention for \"add another one of these\", which is what separates the thing that makes filters from the things that are filters. **Selected is a mode, not a kind.** `selectable` turns the chip into a toggle: activating it flips the `selected` model (`v-model:selected`), and the state stays after the click until the chip is activated again. It is independent of `kind` — `filled` marks an applied filter and never means \"selected\", so a selectable chip of any kind paints its selected state the same way (`--bg-selected` fill, `--border-selected` outline) and announces it as `aria-pressed`. Reach for `selectable` when a set of chips is a row of toggles (quick filters, facets); keep `clickable` when activation opens or does something without holding a state. **Presence is the consumer's, not the chip's.** `remove` fires the moment the control is activated; the chip does not animate itself away or unmount itself. A chip that hid itself on remove could only ever serve the one case where removing it also destroys it — a filter bar where a removed value stays on screen as an `outlined` offer was impossible, because the instance stayed invisible forever. Exit motion, if wanted, belongs to whatever owns the list (a `TransitionGroup` around the group).",
       "useWhen": [
         "Represent a selectable or removable token — active filters, multi-select values, entered keywords.",
         "Represent a value that is *available* but not applied (`kind=\"outlined\"`), so the set of things a view can be narrowed by stays visible.",
         "Represent the \"add another\" affordance for such a set (`kind=\"dashed\"`).",
+        "Represent a row of toggles that each hold an on/off state (`selectable` + `v-model:selected`).",
         "The element is interactive (clickable / dismissible)."
       ],
       "avoidWhen": [
