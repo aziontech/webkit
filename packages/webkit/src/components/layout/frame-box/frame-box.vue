@@ -84,6 +84,10 @@
     flushSides.value.size > 0 ? [...flushSides.value].join(' ') : null
   )
 
+  const hatchAttr = computed(
+    () => props.hatch || (attrs['data-hatch'] as string | undefined) || null
+  )
+
   const hasCorner = (corner: FrameBoxCorner) => markCorners.value.has(corner)
 
   // Anchored to a corner and inset from both rules by its own margin, so the mark
@@ -100,7 +104,7 @@
     :data-testid="testId"
     :data-borders="bordersAttr"
     :data-marks="marksAttr"
-    :data-hatch="hatch || null"
+    :data-hatch="hatchAttr"
     :data-flush="flushAttr"
     class="relative border-(--border-default) data-[borders~=bottom]:border-b data-[borders~=left]:border-l data-[borders~=right]:border-r data-[borders~=top]:border-t"
   >
