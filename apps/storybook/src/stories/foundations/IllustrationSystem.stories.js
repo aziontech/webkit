@@ -40,6 +40,30 @@ const ASSETS = [
   'saas-platforms'
 ]
 
+const COLOR_ROLES = [
+  ['ground', '--bg-canvas', 'Window bodies and fades painted in the page colour'],
+  ['surface', '--bg-surface', 'Boxes, nodes, cards'],
+  ['surface-raised', '--bg-surface-raised', 'Stacked panels'],
+  ['block', '--bg-selected', 'Content blocks and guides'],
+  ['line', '--border-default', 'Outlines and connectors'],
+  ['line-muted', '--border-muted', 'Subtle columns and rules'],
+  ['line-strong', '--text-disabled', 'Strong strokes'],
+  ['highlight', '--border-strong', 'Rim light, glass, grid lines — drawn translucent'],
+  ['ink', '--text-default', 'Glyphs and outlined labels'],
+  ['ink-muted', '--text-muted', 'Secondary labels'],
+  ['primary', '--primary', 'Brand marks, active rims, connectors'],
+  ['accent', '--accent', 'Accent marks'],
+  ['code-punctuation', '--code-sintax-punctuation', 'Code samples'],
+  ['code-keyword', '--code-sintax-keyword', 'Code samples'],
+  ['success', '--success-contrast', 'Status ink'],
+  ['success-surface', '--success', 'Status badge fill'],
+  ['danger', '--danger-contrast', 'Status ink'],
+  ['warning', '--warning-contrast', 'Status ink'],
+  ['warning-surface', '--warning', 'Status badge fill'],
+  ['info', '--info-contrast', 'Status ink'],
+  ['info-surface', '--info', 'Status badge fill']
+]
+
 const FILES = [
   ['azion-highlight.svg', azionHighlight],
   ['branches.svg', branches],
@@ -75,7 +99,7 @@ export const Library = {
   render: () => ({
     components: { PageContainer, PageHeader, SectionHeader, Illustration },
     setup() {
-      return { ASSETS, FILES, LABEL_CLASS, CELL_CLASS, SECTION_CLASS }
+      return { ASSETS, COLOR_ROLES, FILES, LABEL_CLASS, CELL_CLASS, SECTION_CLASS }
     },
     template: /* html */ `
       <PageContainer>
@@ -125,8 +149,45 @@ export const Library = {
         <section :class="SECTION_CLASS">
           <SectionHeader
             title="Adding a scene"
-            description="Draw it in the Assets file in Figma on the 592×300 frame, export the frame as SVG, drop it into packages/webkit/src/assets/illustrations/ under the frame's own name, and add one line to registry.ts. Never hand-draw one in markup — that is the drift this component exists to prevent."
+            description="Draw it in the Assets file in Figma on the 592×300 frame, export the frame as SVG, drop it into packages/webkit/src/assets/illustrations/ under the frame's own name, and add one line to registry.ts. Never hand-draw one in markup — that is the drift this component exists to prevent. A colour the export palette in palette.ts does not list fails the suite until it is given a role or marked as drawn."
           />
+        </section>
+
+        <section :class="SECTION_CLASS">
+          <SectionHeader
+            title="Colour"
+            description="The library is drawn once, in dark mode. Every colour a scene carries is repainted from an --illustration-* role of the theme, and each role aliases a global token — so one export follows light and dark, inside whatever [data-theme] subtree it renders. Colours that read the same in both themes (window controls, framework marks, the dot map, shadows) stay as drawn."
+          />
+          <div class="overflow-x-auto">
+            <table class="w-full border-collapse text-left">
+              <thead>
+                <tr class="border-b border-(--border-default)">
+                  <th class="text-label-sm text-(--text-muted) py-(--spacing-xs) pr-(--spacing-lg) font-normal">Role</th>
+                  <th class="text-label-sm text-(--text-muted) py-(--spacing-xs) pr-(--spacing-lg) font-normal">Aliases</th>
+                  <th class="text-label-sm text-(--text-muted) py-(--spacing-xs) pr-(--spacing-lg) font-normal">Light · Dark</th>
+                  <th class="text-label-sm text-(--text-muted) py-(--spacing-xs) font-normal">Use</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="[role, alias, use] in COLOR_ROLES" :key="role" class="border-b border-(--border-muted)">
+                  <td class="py-(--spacing-xs) pr-(--spacing-lg) align-top">
+                    <code class="font-code text-code text-(--text-default)">--illustration-{{ role }}</code>
+                  </td>
+                  <td class="py-(--spacing-xs) pr-(--spacing-lg) align-top">
+                    <code class="font-code text-code text-(--text-muted)">{{ alias }}</code>
+                  </td>
+                  <td class="py-(--spacing-xs) pr-(--spacing-lg) align-top">
+                    <div class="flex gap-(--spacing-xxs)">
+                      <span v-for="mode in ['light', 'dark']" :key="mode" :data-theme="mode" class="rounded-(--shape-elements) border border-(--border-default) bg-(--bg-canvas) p-(--spacing-xxs)">
+                        <span class="block size-6 rounded-(--shape-elements)" :style="{ background: 'var(--illustration-' + role + ')' }" />
+                      </span>
+                    </div>
+                  </td>
+                  <td class="text-body-sm text-(--text-muted) py-(--spacing-xs) align-top">{{ use }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </section>
       </PageContainer>
     `
