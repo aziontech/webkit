@@ -2,13 +2,13 @@ import { composeStories } from '@storybook/vue3'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/content/hero-title/HeroTitle.stories'
-import { expectNoA11yViolations } from '../../../test/axe'
+import * as stories from '../../../../../../../apps/storybook/src/stories/components/marketing/hero-title/HeroTitle.stories'
+import { expectNoA11yViolations } from '../../../../test/axe'
 import HeroTitle from './hero-title.vue'
 
 const { Default, Highlight, Centered, WithActions } = composeStories(stories)
 
-const TESTID = 'content-hero-title'
+const TESTID = 'marketing-hero-title'
 
 const props = { title: 'Run it everywhere.' }
 
@@ -38,10 +38,43 @@ describe('HeroTitle', () => {
     )
   })
 
+  it('marks the root sticky only when the sticky prop is set', () => {
+    const off = render(HeroTitle, { props })
+    expect(off.getByTestId(TESTID)).not.toHaveAttribute('data-sticky')
+    off.unmount()
+
+    const on = render(HeroTitle, { props: { ...props, sticky: true } })
+    expect(on.getByTestId(TESTID)).toHaveAttribute('data-sticky', 'true')
+  })
+
   it('marks the root centered when the centered prop is set', () => {
     const { getByTestId } = render(HeroTitle, { props: { ...props, centered: true } })
 
     expect(getByTestId(TESTID)).toHaveAttribute('data-centered', 'true')
+  })
+
+  it('sets the headline size to large by default', () => {
+    const { container } = render(HeroTitle, { props })
+
+    expect(container.querySelector('h1')).toHaveAttribute('data-size', 'large')
+  })
+
+  it('sets the headline size to the given size', () => {
+    const { container } = render(HeroTitle, { props: { ...props, size: 'medium' } })
+
+    expect(container.querySelector('h1')).toHaveAttribute('data-size', 'medium')
+  })
+
+  it('caps the block at 4xl by default', () => {
+    const { getByTestId } = render(HeroTitle, { props })
+
+    expect(getByTestId(TESTID)).toHaveAttribute('data-width', '4xl')
+  })
+
+  it('caps the block at the given maxWidth', () => {
+    const { getByTestId } = render(HeroTitle, { props: { ...props, maxWidth: 'lg' } })
+
+    expect(getByTestId(TESTID)).toHaveAttribute('data-width', 'lg')
   })
 
   it('renders no description paragraph when neither the prop nor the slot is set', () => {
@@ -79,6 +112,38 @@ describe('HeroTitle', () => {
 
     expect(getByText('Edge platform')).toBeInTheDocument()
   })
+
+  it('closes the eyebrow with the blinking cursor', () => {
+    const { container } = render(HeroTitle, { props: { ...props, eyebrow: 'Edge platform' } })
+
+    expect(container.querySelectorAll('.animate-blink')).toHaveLength(1)
+  })
+
+  it('renders no cursor when there is no eyebrow', () => {
+    const { container } = render(HeroTitle, { props })
+
+    expect(container.querySelector('.animate-blink')).toBeNull()
+  })
+
+  it('renders the eyebrow label alone by default', () => {
+    const { getByText } = render(HeroTitle, { props: { ...props, eyebrow: 'Edge platform' } })
+
+    expect(getByText('Edge platform').parentElement?.textContent?.trim()).toBe('Edge platform')
+  })
+
+  it.each(['//', '<>', '</>'] as const)(
+    'sets the %s prefix before the eyebrow',
+    (eyebrowPrefix) => {
+      const { getByText } = render(HeroTitle, {
+        props: { ...props, eyebrow: 'Edge platform', eyebrowPrefix }
+      })
+      const label = getByText('Edge platform')
+      const prefix = getByText(eyebrowPrefix)
+      const FOLLOWING = 4
+
+      expect(prefix.compareDocumentPosition(label) & FOLLOWING).toBe(FOLLOWING)
+    }
+  )
 
   it('renders no actions row when the slot is empty', () => {
     const { queryByRole } = render(HeroTitle, { props })
