@@ -1,6 +1,6 @@
 {
   "package": "@aziontech/webkit",
-  "webkitVersion": "5.2.0",
+  "webkitVersion": "5.3.0",
   "deniedPrefixes": [
     "@aziontech/webkit/src/"
   ],
@@ -230,11 +230,13 @@
       "--color-gray-150",
       "--color-gray-200",
       "--color-gray-250",
+      "--color-gray-275",
       "--color-gray-300",
       "--color-gray-400",
       "--color-gray-50",
       "--color-gray-500",
       "--color-gray-600",
+      "--color-gray-650",
       "--color-gray-700",
       "--color-gray-750",
       "--color-gray-775",
@@ -537,11 +539,13 @@
       "--surface-150",
       "--surface-200",
       "--surface-250",
+      "--surface-275",
       "--surface-300",
       "--surface-400",
       "--surface-50",
       "--surface-500",
       "--surface-600",
+      "--surface-650",
       "--surface-700",
       "--surface-750",
       "--surface-775",
@@ -639,6 +643,11 @@
       "--text-heading-2xl-letter-spacing",
       "--text-heading-2xl-line-height",
       "--text-heading-2xl-text-wrap-style",
+      "--text-heading-3xl-font-size",
+      "--text-heading-3xl-font-weight",
+      "--text-heading-3xl-letter-spacing",
+      "--text-heading-3xl-line-height",
+      "--text-heading-3xl-text-wrap-style",
       "--text-heading-lg-font-size",
       "--text-heading-lg-font-weight",
       "--text-heading-lg-letter-spacing",
@@ -784,6 +793,7 @@
       "text-button-lg",
       "text-button-md",
       "text-heading-2xl",
+      "text-heading-3xl",
       "text-heading-lg",
       "text-heading-md",
       "text-heading-sm",
@@ -1013,11 +1023,13 @@
         "--color-gray-150",
         "--color-gray-200",
         "--color-gray-250",
+        "--color-gray-275",
         "--color-gray-300",
         "--color-gray-400",
         "--color-gray-50",
         "--color-gray-500",
         "--color-gray-600",
+        "--color-gray-650",
         "--color-gray-700",
         "--color-gray-750",
         "--color-gray-775",
@@ -1366,11 +1378,13 @@
         "--surface-150",
         "--surface-200",
         "--surface-250",
+        "--surface-275",
         "--surface-300",
         "--surface-400",
         "--surface-50",
         "--surface-500",
         "--surface-600",
+        "--surface-650",
         "--surface-700",
         "--surface-750",
         "--surface-775",
@@ -1470,6 +1484,11 @@
         "--text-heading-2xl-letter-spacing",
         "--text-heading-2xl-line-height",
         "--text-heading-2xl-text-wrap-style",
+        "--text-heading-3xl-font-size",
+        "--text-heading-3xl-font-weight",
+        "--text-heading-3xl-letter-spacing",
+        "--text-heading-3xl-line-height",
+        "--text-heading-3xl-text-wrap-style",
         "--text-heading-lg-font-size",
         "--text-heading-lg-font-weight",
         "--text-heading-lg-letter-spacing",
@@ -5439,6 +5458,13 @@
           "doc": "The entry's name — a date, a release name. Also its anchor."
         },
         {
+          "name": "title",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "The release's heading, shown above the notes. The label becomes the date beside it."
+        },
+        {
           "name": "description",
           "type": "string",
           "default": "''",
@@ -5467,7 +5493,7 @@
           "notes": "The release notes: prose, lists, code, or any documentation component."
         }
       ],
-      "purpose": "One entry in a changelog: what shipped, when, and under which version. The release's identity sits in a left column — the date, the version under it, the tags under that — the notes sit on the right, and a rule runs between them for the length of the entry and bridges the block gap to the next one, so a set of entries reads as one continuous timeline rather than a stack of boxes. The label is an `h2` and a link to its own id, because every entry is a URL somebody sends — the id is the label slugified, unless an explicit `anchor` overrides it.",
+      "purpose": "One entry in a changelog: what shipped, when, and under which version. The release's identity sits in a left column — the date, the version under it, the tags under that — the notes sit on the right, and a rule runs between them for the length of the entry and bridges the block gap to the next one, so a set of entries reads as one continuous timeline rather than a stack of boxes. The label is an `h2` and a link to its own id, because every entry is a URL somebody sends — the id is the label slugified, unless an explicit `anchor` overrides it. Given a `title`, the entry becomes a release: the label turns into a plain date beside a node on the rule, and the title takes the `h2`, the anchor and the tags, sized above every heading the notes carry.",
       "useWhen": [
         "A changelog or release-notes page: one `DocUpdate` per release, newest first, inside `DocProse`.",
         "Any dated series a reader scans by its left edge — announcements, incident retrospectives, versioned API changes."
@@ -5479,12 +5505,13 @@
       ],
       "related": [
         "DocProse` — the contract around it: `data-doc-block` takes the block rung of the spacing ladder, and `data-doc-chrome` keeps prose rules off the label column.",
-        "Tag` — renders the entry's tags row (`severity=\"secondary\"`, small, rounded).",
+        "Tag` — renders the entry's tags row (`severity=\"secondary\"`): small and rounded in the label column, medium with the default shape under a `title`.",
         "use-heading-nav` — the composable the label anchor calls. A page that owns its scroll container provides a scroller-aware handler with `provideHeadingNav`; rendered outside a provider, the injected default is a no-op — never a throw — and the browser's native hash navigation takes over."
       ],
       "bestPractices": [
         "Put the date (or release name) in `label` and the version in `description` — the left edge is what a reader scans, so the label carries the identity.",
-        "Keep headings inside an entry one level below the label: the label is the entry's `h2`.",
+        "Give each release its own entry with a `title` when one date ships several things — one title per entry, the date repeated, rather than several product headings inside one entry.",
+        "Keep headings inside an entry one level below the heading: the label (or the `title`, when set) is the entry's `h2`.",
         "Set `anchor` only when two entries share a label; otherwise let the id derive from the label so shared links match what readers see."
       ]
     },

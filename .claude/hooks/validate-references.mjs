@@ -66,9 +66,15 @@ function resolveAziontechWorkspace(specifier) {
   return existsSync(join(ROOT, 'packages', wsName, 'package.json'))
 }
 
-function resolveRelativeImport(specifier, fromFile) {
-  const baseDir = dirname(resolve(fromFile))
-  const target = resolve(baseDir, specifier)
+const VITE_ALIASES = {
+  '@shared': 'apps/webkit-sample/src/shared',
+  '@site': 'apps/webkit-sample/src/site',
+  '@hub': 'apps/webkit-sample/src/hub',
+  '@console': 'apps/webkit-sample/src/console',
+  '@preview': 'apps/webkit-sample/src/preview'
+}
+
+function resolveFileTarget(target) {
   const candidates = [
     target,
     `${target}.vue`,
@@ -95,6 +101,17 @@ function resolveRelativeImport(specifier, fromFile) {
   })
 }
 
+function resolveRelativeImport(specifier, fromFile) {
+  return resolveFileTarget(resolve(dirname(resolve(fromFile)), specifier))
+}
+
+function resolveViteAlias(specifier) {
+  const [head, ...rest] = specifier.split('/')
+  const base = VITE_ALIASES[head]
+  if (!base) return false
+  return resolveFileTarget(join(ROOT, base, ...rest))
+}
+
 function resolveNodeModule(specifier) {
   const parts = specifier.split('/')
   const pkgName = specifier.startsWith('@') ? `${parts[0]}/${parts[1]}` : parts[0]
@@ -104,7 +121,8 @@ function resolveNodeModule(specifier) {
     'packages/theme/node_modules',
     'packages/icons/node_modules',
     'apps/storybook/node_modules',
-    'apps/icons-gallery/node_modules'
+    'apps/icons-gallery/node_modules',
+    'apps/webkit-sample/node_modules'
   ]
   return dirs.some((d) => existsSync(join(ROOT, d, pkgName)))
 }
@@ -139,7 +157,7 @@ async function main() {
     let ok = false
     let reason = ''
 
-    if (spec.startsWith('@aziontech/webkit')) {
+    if (spec === '@aziontech/webkit' || spec.startsWith('@aziontech/webkit/')) {
       ok = resolveAziontechWebkit(spec)
       reason = 'no matching entry in packages/webkit/package.json#exports'
     } else if (spec.startsWith('@aziontech/')) {
@@ -148,6 +166,9 @@ async function main() {
     } else if (spec.startsWith('.') || spec.startsWith('/')) {
       ok = resolveRelativeImport(spec, filePath)
       reason = 'relative path does not resolve to any file'
+    } else if (Object.hasOwn(VITE_ALIASES, spec.split('/')[0])) {
+      ok = resolveViteAlias(spec)
+      reason = 'vite alias does not resolve to any file'
     } else {
       ok = resolveNodeModule(spec)
       reason = 'package not installed in any node_modules'
