@@ -133,5 +133,10 @@
     "name": "resizable-panel-root",
     "path": "src/components/layout/resizable-panel/resizable-panel.vue",
     "limit": "3 KB"
+  },
+  {
+    "name": "network-map",
+    "path": "src/components/content/network-map/network-map.vue",
+    "limit": "6.5 KB"
   }
 ]
