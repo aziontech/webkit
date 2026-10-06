@@ -259,5 +259,11 @@
     "name": "bento-grid-root",
     "path": "src/components/marketing/bento-grid/bento-grid.vue",
     "limit": "1 KB"
+  },
+  {
+    "name": "quote-tabs",
+    "path": "src/components/marketing/quote-tabs/quote-tabs.vue",
+    "limit": "20.75 KB",
+    "entryOnly": true
   }
 ]
