@@ -515,9 +515,6 @@
                 <h1 class="text-heading-sm text-(--text-default)">
                   Sign up for a free account
                 </h1>
-                <p class="text-body-sm text-(--text-muted)">
-                  US$ 300 credit to use over 12 months, no credit card is required.
-                </p>
               </header>
 
               <Transition
