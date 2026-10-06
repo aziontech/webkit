@@ -6,6 +6,7 @@
   export type ButtonKind = 'primary' | 'secondary' | 'outlined' | 'text' | 'danger'
   export type ButtonSize = 'small' | 'medium' | 'large'
   export type ButtonTarget = '_blank' | '_self'
+  export type ButtonIconPosition = 'leading' | 'trailing'
 
   defineOptions({
     name: 'Button',
@@ -23,8 +24,12 @@
     disabled?: boolean
     /** Shows loading state and disables activation. */
     loading?: boolean
-    /** PrimeIcons class for the leading icon. */
+    /** PrimeIcons class for the icon drawn beside the label. */
     icon?: string
+    /** Which side of the label the icon sits on. A leading glyph names the action; a trailing one points at where it goes. */
+    iconPosition?: ButtonIconPosition
+    /** Nudges a trailing icon along its axis on hover. Off by default; marketing CTAs opt in. */
+    animated?: boolean
     /** When set, renders as an anchor link. */
     href?: string
     /** Link target when `href` is set. */
@@ -37,12 +42,19 @@
     disabled: false,
     loading: false,
     icon: '',
+    iconPosition: 'leading',
+    animated: false,
     href: '',
     target: '_self'
   })
 
   const emit = defineEmits<{
     click: [event: MouseEvent]
+  }>()
+
+  defineSlots<{
+    /** A mark drawn before the label, ahead of a leading icon; it stays first when the icon trails. */
+    prefix?(): unknown
   }>()
 
   const attrs = useAttrs()
@@ -66,7 +78,7 @@
   ]
 
   const sharedClasses = [
-    'relative inline-flex items-center justify-center whitespace-nowrap',
+    'group/button relative inline-flex items-center justify-center whitespace-nowrap',
     'rounded-(--shape-button)',
     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)',
     'focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)',
@@ -140,19 +152,24 @@
     :aria-busy="loading || undefined"
     :tabindex="isInactive ? -1 : undefined"
     :data-disabled="disabled ? '' : undefined"
+    :data-icon-position="icon ? iconPosition : undefined"
     :data-testid="testId"
     @click="handleClick"
   >
     <span class="relative z-1 inline-flex items-center gap-(--spacing-xs)">
+      <slot name="prefix" />
       <Spinner
         v-if="loading"
         :class="spinnerSizeClasses[size]"
+        class="group-data-[icon-position=trailing]/button:order-last"
         :data-testid="loadingTestId"
       />
       <i
         v-else-if="icon"
         :class="icon"
-        class="shrink-0 text-[length:inherit] leading-none"
+        :data-icon-position="iconPosition"
+        :data-animated="animated && iconPosition === 'trailing' ? '' : undefined"
+        class="shrink-0 text-[length:inherit] leading-none transition-[translate] duration-moderate-02 ease-expressive-entrance group-hover/button:data-animated:translate-x-0.5 group-data-[icon-position=trailing]/button:order-last motion-reduce:transition-none"
         aria-hidden="true"
       />
       {{ label }}
@@ -166,20 +183,25 @@
     :aria-disabled="isInactive || undefined"
     :aria-busy="loading || undefined"
     :data-disabled="disabled ? '' : undefined"
+    :data-icon-position="icon ? iconPosition : undefined"
     :class="rootClasses"
     :data-testid="testId"
     @click="handleClick"
   >
     <span class="relative z-1 inline-flex items-center gap-(--spacing-xs)">
+      <slot name="prefix" />
       <Spinner
         v-if="loading"
         :class="spinnerSizeClasses[size]"
+        class="group-data-[icon-position=trailing]/button:order-last"
         :data-testid="loadingTestId"
       />
       <i
         v-else-if="icon"
         :class="icon"
-        class="shrink-0 text-[length:inherit] leading-none"
+        :data-icon-position="iconPosition"
+        :data-animated="animated && iconPosition === 'trailing' ? '' : undefined"
+        class="shrink-0 text-[length:inherit] leading-none transition-[translate] duration-moderate-02 ease-expressive-entrance group-hover/button:data-animated:translate-x-0.5 group-data-[icon-position=trailing]/button:order-last motion-reduce:transition-none"
         aria-hidden="true"
       />
       {{ label }}
