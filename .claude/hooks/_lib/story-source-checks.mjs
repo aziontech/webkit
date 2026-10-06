@@ -41,7 +41,7 @@ function importBindingMismatches(content) {
   while ((m = re.exec(content))) {
     const binding = m[1]
     const subpath = m[2]
-    if (subpath.startsWith('utils/') || subpath.startsWith('styles/')) continue // non-component helpers
+    if (/^(utils|styles|assets)\//.test(subpath)) continue // non-component helpers and asset files
     const expected = toPascal(subpath.split('/').pop())
     if (binding !== expected) out.push({ binding, subpath, expected })
   }
