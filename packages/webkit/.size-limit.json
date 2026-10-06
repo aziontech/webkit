@@ -135,6 +135,11 @@
     "limit": "3 KB"
   },
   {
+    "name": "band-stack",
+    "path": "src/components/marketing/band-stack/band-stack.vue",
+    "limit": "2.5 KB"
+  },
+  {
     "name": "logo-wall",
     "path": "src/components/marketing/logo-wall/logo-wall.vue",
     "limit": "3.75 KB"

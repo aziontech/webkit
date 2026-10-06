@@ -279,6 +279,7 @@
     "./sidebar-group": "./src/components/layout/sidebar/sidebar-group.vue",
     "./sidebar-header": "./src/components/layout/sidebar/sidebar-header.vue",
     "./sidebar-footer": "./src/components/layout/sidebar/sidebar-footer.vue",
+    "./band-stack": "./src/components/marketing/band-stack/band-stack.vue",
     "./logo-wall": "./src/components/marketing/logo-wall/logo-wall.vue",
     "./media-split": "./src/components/marketing/media-split/media-split.vue",
     "./ticker": "./src/components/marketing/ticker/ticker.vue",
