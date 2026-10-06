@@ -63,7 +63,7 @@ describe('FieldPhoneNumber', () => {
 
     it("falls back to the selected country's mask as placeholder (BR default)", () => {
       const { getByRole } = render(FieldPhoneNumber, { props: { label: 'Phone' } })
-      expect(getByRole('textbox').getAttribute('placeholder')).toBe('(##) #####-####')
+      expect(getByRole('textbox').getAttribute('placeholder')).toBe('(99) 99999-9999')
     })
 
     it('prefers an explicit placeholder over the mask', () => {
@@ -78,7 +78,9 @@ describe('FieldPhoneNumber', () => {
         props: { label: 'Phone', country: 'ZZ' }
       })
       // defaultCountries[0] is BR — its mask becomes the placeholder.
-      expect(getByRole('textbox').getAttribute('placeholder')).toBe(defaultCountries[0].mask)
+      expect(getByRole('textbox').getAttribute('placeholder')).toBe(
+        defaultCountries[0].mask.replace(/#/g, '9')
+      )
     })
 
     it('honors a consumer-provided countries list', () => {
@@ -89,7 +91,7 @@ describe('FieldPhoneNumber', () => {
           countries: [{ code: 'XX', dialCode: '+99', mask: '###-###', label: 'Testland' }]
         }
       })
-      expect(getByRole('textbox').getAttribute('placeholder')).toBe('###-###')
+      expect(getByRole('textbox').getAttribute('placeholder')).toBe('999-999')
     })
   })
 
@@ -199,7 +201,7 @@ describe('FieldPhoneNumber', () => {
       await fireEvent.click(getByTestId('select-trigger'))
       await fireEvent.click(getOptions()[1]) // US
 
-      expect(getByRole('textbox').getAttribute('placeholder')).toBe('(###) ###-####')
+      expect(getByRole('textbox').getAttribute('placeholder')).toBe('(999) 999-9999')
     })
 
     it('disables the trigger and keeps the dropdown closed when disabled', async () => {
@@ -380,7 +382,7 @@ describe('FieldPhoneNumber', () => {
 
       expect(getByTestId('input-field-phone-number')).toBeTruthy()
       expect(getByTestId('select-trigger').getAttribute('role')).toBe('combobox')
-      expect(getByRole('textbox').getAttribute('placeholder')).toBe('(##) #####-####')
+      expect(getByRole('textbox').getAttribute('placeholder')).toBe('(99) 99999-9999')
     })
 
     it('round-trips typing through the Default story v-model into the masked value', async () => {
