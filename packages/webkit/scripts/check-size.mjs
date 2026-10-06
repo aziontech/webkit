@@ -30,7 +30,7 @@ function limitToBytes(limit) {
   return Math.round(parseFloat(m[1]) * mult)
 }
 
-async function gzippedSize(entryPath) {
+async function gzippedSize(entryPath, { entryOnly = false } = {}) {
   const result = await build({
     root: PKG,
     configFile: false,
@@ -46,12 +46,13 @@ async function gzippedSize(entryPath) {
     }
   })
   const outputs = (Array.isArray(result) ? result : [result]).flatMap((r) => r.output)
+  const counted = entryOnly ? outputs.filter((o) => o.isEntry) : outputs
   let bytes = 0
-  for (const o of outputs) {
+  for (const o of counted) {
     const content = o.type === 'chunk' ? o.code : o.source
     bytes += gzipSync(Buffer.from(content)).length
   }
-  return bytes
+  return { bytes, split: outputs.length - counted.length }
 }
 
 const kb = (n) => `${(n / 1024).toFixed(2)} KB`
@@ -59,11 +60,12 @@ const failures = []
 
 for (const e of entries) {
   const limit = limitToBytes(e.limit)
-  const size = await gzippedSize(e.path)
+  const { bytes: size, split } = await gzippedSize(e.path, { entryOnly: e.entryOnly })
   const over = size > limit
   if (over) failures.push(e.name)
+  const note = e.entryOnly ? `  · initial chunk only, ${split} async chunk(s) excluded` : ''
   console.log(
-    `${over ? '✖' : '✓'} ${e.name.padEnd(14)} ${kb(size).padStart(10)}  (budget ${e.limit})${over ? '  OVER' : ''}`
+    `${over ? '✖' : '✓'} ${e.name.padEnd(18)} ${kb(size).padStart(10)}  (budget ${e.limit})${over ? '  OVER' : ''}${note}`
   )
 }
 
