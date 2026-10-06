@@ -534,6 +534,7 @@
     "./use-heading-nav": "./src/composables/use-heading-nav/index.ts",
     "./use-placement": "./src/composables/use-placement/index.ts",
     "./vite": "./src/vite/index.js",
-    "./texture-material": "./src/components/marketing/texture-material/texture-material.vue"
+    "./texture-material": "./src/components/marketing/texture-material/texture-material.vue",
+    "./topic": "./src/components/marketing/topic/topic.vue"
   }
 }
