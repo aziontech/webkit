@@ -45,7 +45,9 @@
 
   const streams = ref([...createdRowsFor('data-stream'), ...DATA_STREAMS])
 
-  const scopedStreams = computed(() => tenancyRows(streams.value, 'data-stream'))
+  const scopedStreams = computed(() => tenancyRows(streams.value, 'data-stream', DATA_STREAMS))
+
+  const showFirstUse = computed(() => accountEmpty.value && scopedStreams.value.length === 0)
 
   const columns = [
     { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, hideable: false },
@@ -160,10 +162,10 @@
   >
     <main
       class="flex min-h-full flex-col"
-      :class="accountEmpty ? 'layout-column-focused' : 'layout-column'"
+      :class="showFirstUse ? 'layout-column-focused' : 'layout-column'"
     >
       <PageHeading
-        v-if="!accountEmpty"
+        v-if="!showFirstUse"
         size="medium"
         title="Data Stream"
         description="Ship edge events to your own observability or storage platform."
@@ -180,7 +182,7 @@
       </PageHeading>
 
       <div
-        v-if="accountEmpty"
+        v-if="showFirstUse"
         class="my-auto flex w-full flex-col py-(--spacing-xl)"
       >
         <ProductFirstUse :product="firstUse" />

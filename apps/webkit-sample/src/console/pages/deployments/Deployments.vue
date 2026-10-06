@@ -41,6 +41,8 @@
     [...consoleDeployRows(), ...tenancyRows(seededDeployments.value, 'deployments')].sort(byNewest)
   )
 
+  const showFirstUse = computed(() => accountEmpty.value && allDeployments.value.length === 0)
+
   const deployFields = computed(() =>
     deploymentFilterFields(allDeployments.value, { deployed: true })
   )
@@ -90,10 +92,10 @@
   >
     <main
       class="flex min-h-full flex-col"
-      :class="accountEmpty ? 'layout-column-focused' : 'layout-column'"
+      :class="showFirstUse ? 'layout-column-focused' : 'layout-column'"
     >
       <PageHeading
-        v-if="!accountEmpty"
+        v-if="!showFirstUse"
         size="medium"
         title="Deployments"
         description="Track every deployment your workloads have published, across all of your resources."
@@ -110,7 +112,7 @@
       </PageHeading>
 
       <div
-        v-if="accountEmpty"
+        v-if="showFirstUse"
         class="my-auto flex w-full flex-col py-(--spacing-xl)"
       >
         <ProductFirstUse :product="firstUse" />

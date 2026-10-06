@@ -30,7 +30,7 @@
   import { useListFilters } from '../../lib/behavior/list-state'
   import { FIT_COLUMN, TAG_COLUMN } from '../../lib/behavior/table-columns'
   import { createResourcePath } from '../../lib/data/create-resources'
-  import { functions, removeFunction, RUNTIMES } from '../../lib/data/functions'
+  import { FUNCTIONS, functions, removeFunction, RUNTIMES } from '../../lib/data/functions'
   import { productFirstUse } from '../../lib/data/product-empty-states'
   import { useSampleMode } from '../../lib/state/sample-mode'
   import { tenancyRows } from '../../lib/state/tenancy-scope'
@@ -38,7 +38,9 @@
   const { accountEmpty } = useSampleMode()
   const firstUse = productFirstUse('functions')
 
-  const scopedFunctions = computed(() => tenancyRows(functions.value, 'functions'))
+  const scopedFunctions = computed(() => tenancyRows(functions.value, 'functions', FUNCTIONS))
+
+  const showFirstUse = computed(() => accountEmpty.value && scopedFunctions.value.length === 0)
 
   const columns = [
     { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, hideable: false },
@@ -151,10 +153,10 @@
   >
     <main
       class="flex min-h-full flex-col"
-      :class="accountEmpty ? 'layout-column-focused' : 'layout-column'"
+      :class="showFirstUse ? 'layout-column-focused' : 'layout-column'"
     >
       <PageHeading
-        v-if="!accountEmpty"
+        v-if="!showFirstUse"
         size="medium"
         title="Functions"
         description="Write functions that run your code at the edge, then instance them on an application."
@@ -171,7 +173,7 @@
       </PageHeading>
 
       <div
-        v-if="accountEmpty"
+        v-if="showFirstUse"
         class="my-auto flex w-full flex-col py-(--spacing-xl)"
       >
         <ProductFirstUse :product="firstUse" />

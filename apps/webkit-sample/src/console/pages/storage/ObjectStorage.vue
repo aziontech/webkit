@@ -49,8 +49,10 @@
 
   const allBuckets = computed(() => [
     ...provisionedBuckets.value,
-    ...tenancyRows(buckets.value, 'object-storage')
+    ...tenancyRows(buckets.value, 'object-storage', BUCKETS)
   ])
+
+  const showFirstUse = computed(() => accountEmpty.value && allBuckets.value.length === 0)
 
   const filterFields = [
     {
@@ -155,10 +157,10 @@
   >
     <main
       class="flex min-h-full flex-col"
-      :class="accountEmpty ? 'layout-column-focused' : 'layout-column'"
+      :class="showFirstUse ? 'layout-column-focused' : 'layout-column'"
     >
       <PageHeading
-        v-if="!accountEmpty"
+        v-if="!showFirstUse"
         size="medium"
         title="Object Storage"
         description="Store and serve static objects at the edge — buckets, folders, and files accessed by Applications, Functions, and APIs."
@@ -175,7 +177,7 @@
       </PageHeading>
 
       <div
-        v-if="accountEmpty"
+        v-if="showFirstUse"
         class="my-auto flex w-full flex-col py-(--spacing-xl)"
       >
         <ProductFirstUse :product="firstUse" />

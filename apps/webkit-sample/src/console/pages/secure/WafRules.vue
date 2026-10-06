@@ -42,7 +42,9 @@
 
   const ruleSets = ref([...createdRowsFor('waf-rules'), ...WAF_RULES])
 
-  const scopedRuleSets = computed(() => tenancyRows(ruleSets.value, 'waf-rules'))
+  const scopedRuleSets = computed(() => tenancyRows(ruleSets.value, 'waf-rules', WAF_RULES))
+
+  const showFirstUse = computed(() => accountEmpty.value && scopedRuleSets.value.length === 0)
 
   const columns = [
     { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, hideable: false },
@@ -166,10 +168,10 @@
   >
     <main
       class="flex min-h-full flex-col"
-      :class="accountEmpty ? 'layout-column-focused' : 'layout-column'"
+      :class="showFirstUse ? 'layout-column-focused' : 'layout-column'"
     >
       <PageHeading
-        v-if="!accountEmpty"
+        v-if="!showFirstUse"
         size="medium"
         title="WAF Rules"
         description="Manage the rule sets that inspect traffic for injection, scripting, and file-inclusion attempts."
@@ -186,7 +188,7 @@
       </PageHeading>
 
       <div
-        v-if="accountEmpty"
+        v-if="showFirstUse"
         class="my-auto flex w-full flex-col py-(--spacing-xl)"
       >
         <ProductFirstUse :product="firstUse" />

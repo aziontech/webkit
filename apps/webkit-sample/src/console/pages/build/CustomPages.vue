@@ -42,7 +42,9 @@
 
   const pages = ref([...createdRowsFor('custom-pages'), ...CUSTOM_PAGES])
 
-  const scopedPages = computed(() => tenancyRows(pages.value, 'custom-pages'))
+  const scopedPages = computed(() => tenancyRows(pages.value, 'custom-pages', CUSTOM_PAGES))
+
+  const showFirstUse = computed(() => accountEmpty.value && scopedPages.value.length === 0)
 
   const columns = [
     { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, hideable: false },
@@ -152,10 +154,10 @@
   >
     <main
       class="flex min-h-full flex-col"
-      :class="accountEmpty ? 'layout-column-focused' : 'layout-column'"
+      :class="showFirstUse ? 'layout-column-focused' : 'layout-column'"
     >
       <PageHeading
-        v-if="!accountEmpty"
+        v-if="!showFirstUse"
         size="medium"
         title="Custom Pages"
         description="Manage the pages served for an error or a maintenance window."
@@ -172,7 +174,7 @@
       </PageHeading>
 
       <div
-        v-if="accountEmpty"
+        v-if="showFirstUse"
         class="my-auto flex w-full flex-col py-(--spacing-xl)"
       >
         <ProductFirstUse :product="firstUse" />

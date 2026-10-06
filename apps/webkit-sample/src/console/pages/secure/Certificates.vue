@@ -45,7 +45,9 @@
 
   const certificates = ref([...createdRowsFor('certificates'), ...CERTIFICATES])
 
-  const scopedCertificates = computed(() => tenancyRows(certificates.value, 'certificates'))
+  const scopedCertificates = computed(() => tenancyRows(certificates.value, 'certificates', CERTIFICATES))
+
+  const showFirstUse = computed(() => accountEmpty.value && scopedCertificates.value.length === 0)
 
   const columns = [
     { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, hideable: false },
@@ -163,10 +165,10 @@
   >
     <main
       class="flex min-h-full flex-col"
-      :class="accountEmpty ? 'layout-column-focused' : 'layout-column'"
+      :class="showFirstUse ? 'layout-column-focused' : 'layout-column'"
     >
       <PageHeading
-        v-if="!accountEmpty"
+        v-if="!showFirstUse"
         size="medium"
         title="Certificate Manager"
         description="Manage the TLS certificates that serve your domains."
@@ -183,7 +185,7 @@
       </PageHeading>
 
       <div
-        v-if="accountEmpty"
+        v-if="showFirstUse"
         class="my-auto flex w-full flex-col py-(--spacing-xl)"
       >
         <ProductFirstUse :product="firstUse" />

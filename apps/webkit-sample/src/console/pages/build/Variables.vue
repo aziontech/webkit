@@ -46,7 +46,9 @@
 
   const variables = ref([...VARIABLES])
 
-  const scopedVariables = computed(() => tenancyRows(variables.value, 'variables'))
+  const scopedVariables = computed(() => tenancyRows(variables.value, 'variables', VARIABLES))
+
+  const showFirstUse = computed(() => accountEmpty.value && scopedVariables.value.length === 0)
 
   const columns = [
     { accessorKey: 'key', header: 'Key', enableSorting: true, principal: true, hideable: false },
@@ -182,10 +184,10 @@
   >
     <main
       class="flex min-h-full flex-col"
-      :class="accountEmpty ? 'layout-column-focused' : 'layout-column'"
+      :class="showFirstUse ? 'layout-column-focused' : 'layout-column'"
     >
       <PageHeading
-        v-if="!accountEmpty"
+        v-if="!showFirstUse"
         size="medium"
         title="Variables"
         description="Configure variable names, values, and settings for use across Azion's products."
@@ -202,7 +204,7 @@
       </PageHeading>
 
       <div
-        v-if="accountEmpty"
+        v-if="showFirstUse"
         class="my-auto flex w-full flex-col py-(--spacing-xl)"
       >
         <ProductFirstUse :product="firstUse" />

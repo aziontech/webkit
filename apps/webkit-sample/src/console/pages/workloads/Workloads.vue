@@ -101,6 +101,8 @@
     ...tenancyRows(workloads.value, 'workloads')
   ])
 
+  const showFirstUse = computed(() => accountEmpty.value && allWorkloads.value.length === 0)
+
   const {
     filters,
     search,
@@ -176,10 +178,10 @@
   >
     <main
       class="flex min-h-full flex-col"
-      :class="accountEmpty ? 'layout-column-focused' : 'layout-column'"
+      :class="showFirstUse ? 'layout-column-focused' : 'layout-column'"
     >
       <PageHeading
-        v-if="!accountEmpty"
+        v-if="!showFirstUse"
         size="medium"
         title="Workloads"
         description="View and manage your workloads."
@@ -196,7 +198,7 @@
       </PageHeading>
 
       <div
-        v-if="accountEmpty"
+        v-if="showFirstUse"
         class="my-auto flex w-full flex-col py-(--spacing-xl)"
       >
         <ProductFirstUse :product="firstUse" />

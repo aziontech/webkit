@@ -41,7 +41,9 @@
 
   const lists = ref([...createdRowsFor('network-lists'), ...NETWORK_LISTS])
 
-  const scopedLists = computed(() => tenancyRows(lists.value, 'network-lists'))
+  const scopedLists = computed(() => tenancyRows(lists.value, 'network-lists', NETWORK_LISTS))
+
+  const showFirstUse = computed(() => accountEmpty.value && scopedLists.value.length === 0)
 
   const columns = [
     { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, hideable: false },
@@ -148,10 +150,10 @@
   >
     <main
       class="flex min-h-full flex-col"
-      :class="accountEmpty ? 'layout-column-focused' : 'layout-column'"
+      :class="showFirstUse ? 'layout-column-focused' : 'layout-column'"
     >
       <PageHeading
-        v-if="!accountEmpty"
+        v-if="!showFirstUse"
         size="medium"
         title="Network Lists"
         description="Allow or deny traffic by IP range, autonomous system, or country."
@@ -168,7 +170,7 @@
       </PageHeading>
 
       <div
-        v-if="accountEmpty"
+        v-if="showFirstUse"
         class="my-auto flex w-full flex-col py-(--spacing-xl)"
       >
         <ProductFirstUse :product="firstUse" />

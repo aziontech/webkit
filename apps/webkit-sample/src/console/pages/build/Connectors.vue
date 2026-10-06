@@ -41,7 +41,9 @@
 
   const connectors = ref([...createdRowsFor('connectors'), ...CONNECTORS])
 
-  const scopedConnectors = computed(() => tenancyRows(connectors.value, 'connectors'))
+  const scopedConnectors = computed(() => tenancyRows(connectors.value, 'connectors', CONNECTORS))
+
+  const showFirstUse = computed(() => accountEmpty.value && scopedConnectors.value.length === 0)
 
   const columns = [
     { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, hideable: false },
@@ -148,10 +150,10 @@
   >
     <main
       class="flex min-h-full flex-col"
-      :class="accountEmpty ? 'layout-column-focused' : 'layout-column'"
+      :class="showFirstUse ? 'layout-column-focused' : 'layout-column'"
     >
       <PageHeading
-        v-if="!accountEmpty"
+        v-if="!showFirstUse"
         size="medium"
         title="Connectors"
         description="Manage where your applications fetch from on a cache miss."
@@ -168,7 +170,7 @@
       </PageHeading>
 
       <div
-        v-if="accountEmpty"
+        v-if="showFirstUse"
         class="my-auto flex w-full flex-col py-(--spacing-xl)"
       >
         <ProductFirstUse :product="firstUse" />

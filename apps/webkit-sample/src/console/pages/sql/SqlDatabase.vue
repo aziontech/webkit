@@ -46,6 +46,8 @@
 
   const scopedDatabases = computed(() => tenancyRows(databases.value, 'sql-database'))
 
+  const showFirstUse = computed(() => accountEmpty.value && scopedDatabases.value.length === 0)
+
   const filterFields = [
     {
       id: 'status',
@@ -136,10 +138,10 @@
   >
     <main
       class="flex min-h-full flex-col"
-      :class="accountEmpty ? 'layout-column-focused' : 'layout-column'"
+      :class="showFirstUse ? 'layout-column-focused' : 'layout-column'"
     >
       <PageHeading
-        v-if="!accountEmpty"
+        v-if="!showFirstUse"
         size="medium"
         title="SQL Database"
         description="Create and manage SQL Database instances accessed by Applications, Functions, and APIs."
@@ -156,7 +158,7 @@
       </PageHeading>
 
       <div
-        v-if="accountEmpty"
+        v-if="showFirstUse"
         class="my-auto flex w-full flex-col py-(--spacing-xl)"
       >
         <ProductFirstUse :product="firstUse" />

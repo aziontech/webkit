@@ -124,6 +124,8 @@
       .map(withDomains)
   )
 
+  const showFirstUse = computed(() => accountEmpty.value && allApplications.value.length === 0)
+
   const {
     filters,
     search,
@@ -204,10 +206,10 @@
   >
     <main
       class="flex min-h-full flex-col"
-      :class="accountEmpty ? 'layout-column-focused' : 'layout-column'"
+      :class="showFirstUse ? 'layout-column-focused' : 'layout-column'"
     >
       <PageHeading
-        v-if="!accountEmpty"
+        v-if="!showFirstUse"
         size="medium"
         title="Applications"
         description="Build, deploy, and manage your applications."
@@ -224,7 +226,7 @@
       </PageHeading>
 
       <div
-        v-if="accountEmpty"
+        v-if="showFirstUse"
         class="my-auto flex w-full flex-col py-(--spacing-xl)"
       >
         <ProductFirstUse :product="firstUse" />

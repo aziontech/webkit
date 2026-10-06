@@ -31,8 +31,8 @@ const atBootScope = () =>
   currentAccountId.value === BOOT_ACCOUNT_ID &&
   currentWorkspace.value?.id === workspaces.value[0]?.id
 
-export function tenancyRows(rows, scope) {
-  if (!seededIds.has(scope)) seededIds.set(scope, new Set(rows.map(idOf)))
+export function tenancyRows(rows, scope, seed = rows) {
+  if (!seededIds.has(scope)) seededIds.set(scope, new Set(seed.map(idOf)))
   const seeded = seededIds.get(scope)
 
   if (accountEmpty.value) return rows.filter((row, index) => !seeded.has(idOf(row, index)))

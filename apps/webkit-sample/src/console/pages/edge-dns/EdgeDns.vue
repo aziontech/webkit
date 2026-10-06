@@ -47,6 +47,8 @@
 
   const scopedZones = computed(() => tenancyRows(zones.value, 'edge-dns'))
 
+  const showFirstUse = computed(() => accountEmpty.value && scopedZones.value.length === 0)
+
   const columns = [
     { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, hideable: false },
     { accessorKey: 'id', header: 'ID', enableSorting: true, minWidth: FIT_COLUMN },
@@ -160,10 +162,10 @@
   >
     <main
       class="flex min-h-full flex-col"
-      :class="accountEmpty ? 'layout-column-focused' : 'layout-column'"
+      :class="showFirstUse ? 'layout-column-focused' : 'layout-column'"
     >
       <PageHeading
-        v-if="!accountEmpty"
+        v-if="!showFirstUse"
         size="medium"
         title="Edge DNS"
         description="Host authoritative DNS zones and serve authoritative DNS responses used to resolve domain names."
@@ -186,7 +188,7 @@
       </PageHeading>
 
       <div
-        v-if="accountEmpty"
+        v-if="showFirstUse"
         class="my-auto flex w-full flex-col py-(--spacing-xl)"
       >
         <ProductFirstUse :product="firstUse" />
