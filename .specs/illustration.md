@@ -7,7 +7,7 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/aerxJReCkLz3x3z29IERE9/Assets?node-id=1901-225133
   node_id: 1901:225133
-checksum: ae77dc901424ee4927793d389e7c04241bd56a2f4df1abaabeca819db244978b
+checksum: 3c1f3eb46cfa62eddb90df3ca363e66a554f1e1db0fd75cd5c61856c6c702aed
 created: 2026-08-05
 last_updated: 2026-10-01
 ---
@@ -75,6 +75,20 @@ export follows light and dark like the rest of the page.
 
   <!-- No name: the placeholder frame, for a scene design has not drawn yet. -->
   <Illustration />
+</template>
+```
+
+A drawing that is not a registered scene — a hero crop, a card visual — ships as a file. Import it by
+its final name: the folder it lives in is not part of the path, so the file can move without
+breaking the import.
+
+```vue
+<script setup>
+  import ddosProtection from '@aziontech/webkit/assets/ddos-protection.svg'
+</script>
+
+<template>
+  <img :src="ddosProtection" alt="" />
 </template>
 ```
 
@@ -157,6 +171,7 @@ export palette in `src/assets/illustrations/palette.ts`. Each role aliases a glo
 - Assets — composite story rendering every registered scene side-by-side. **Justified addition:** `name` is the whole public API and its valid values are a closed registry, so the story is the only place a consumer can see what `name` accepts. A Controls dropdown alone would not show them together.
 - Labeled — the accessible-name form (an args delta of `ariaLabel`).
 - Placeholder — the fallback frame, rendered by an unnamed `Illustration`. **Justified addition:** it is a rendered state of the component (see § States), not a variant, and it is the one thing in the component a consumer cannot reach from the `name` dropdown — every option in that list resolves to a scene.
+- Files — the illustration files outside the registry, each imported by its final name from `@aziontech/webkit/assets/`. **Justified addition:** these drawings are not values of `name`, so neither Controls nor `Assets` can show them, and the import path is the one thing a consumer has to know to use one.
 
 There is no `Types` or `Sizes` story: the root declares neither `kind` nor `size`. There are no `Loading` / `Disabled` stories: the component declares neither prop (see § States).
 
