@@ -3541,7 +3541,7 @@
           "type": "boolean",
           "default": "false",
           "required": "false",
-          "doc": "Staggered line entrance for website layouts: each line slides from `-8px` with opacity `0 → 1`, `300ms` apart."
+          "doc": "Staggered line entrance for website layouts: each line slides from `-8px` with opacity `0 → 1`, `40ms` apart."
         },
         {
           "name": "border",

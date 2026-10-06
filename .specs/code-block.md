@@ -7,7 +7,7 @@ spec_version: 4
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761
   node_id: 4567:33761
-checksum: 3ee27c0984846881063acf818c8780945be6c501db1a4efd724c315c6c9594fa
+checksum: 94b69530eefe6777d33ae20ae53a568cb83f552dd0f238d1221fd54ddf446e53
 created: 2026-05-28
 last_updated: 2026-09-28
 ---
@@ -78,7 +78,7 @@ For multiple languages, add one tab per snippet (each with its own `code`). Use 
 | `defaultValue` | `string` | `undefined` | false | Initial active tab when uncontrolled. |
 | `showLineNumbers` | `boolean` | `true` | false | Shows a fixed-width gutter with zero-padded line numbers before each code line. |
 | `copyAriaLabel` | `string` | `'Copy code'` | false | Accessible name for the copy control (forwarded to CopyButton's aria-label). |
-| `animateLines` | `boolean` | `false` | false | Staggered line entrance for website layouts: each line slides from `-8px` with opacity `0 → 1`, `300ms` apart. |
+| `animateLines` | `boolean` | `false` | false | Staggered line entrance for website layouts: each line slides from `-8px` with opacity `0 → 1`, `40ms` apart. |
 | `border` | `boolean` | `true` | false | Draw the outer card border around the block. On by default; set `:border="false"` to render the block flush when it sits inside a surface that already frames it. Internal dividers (tab header, filename bar) are unaffected. |
 
 ## Type shapes
@@ -145,7 +145,7 @@ Code content scrolls inside `@aziontech/webkit/layout/scroll-area` (`orientation
 | tab panel height | the shell animates between the two panels' heights (pin the old height, measure the new, transition `height`) | `duration-moderate-02` · `ease-productive-entrance` (DESIGN.md § Motion primitives) | skipped entirely under `prefers-reduced-motion` (height snaps) |
 | tab label hover | `transition-colors duration-fast-02 ease-productive-entrance` | `duration-fast-02` · `ease-productive-entrance` | `motion-reduce:transition-none` |
 | code line hover | `transition-opacity duration-fast-02 ease-productive-entrance` on row ghost layer (`--bg-hover`) | `duration-fast-02` · `ease-productive-entrance` (DESIGN.md § Interactive states) | `motion-reduce:transition-none` |
-| line entrance (`animateLines`) | per-line slide from `-8px` + opacity, staggered `300ms` | `duration-moderate-02` · `ease-productive-entrance` | `motion-reduce:transform-none motion-reduce:opacity-100 motion-reduce:transition-none` |
+| line entrance (`animateLines`) | per-line slide from `-8px` + opacity, staggered `40ms` | `duration-moderate-02` · `ease-productive-entrance` | `motion-reduce:transform-none motion-reduce:opacity-100 motion-reduce:transition-none` |
 
 ## Tokens
 

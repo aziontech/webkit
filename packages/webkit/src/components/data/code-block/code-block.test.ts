@@ -359,6 +359,29 @@ describe('CodeBlock', () => {
     })
   })
 
+  describe('line entrance', () => {
+    it('transitions the translate property the offset utility sets', () => {
+      const { getAllByTestId } = render(CodeBlock, {
+        props: { tabs: singleTab, animateLines: true }
+      })
+
+      for (const line of getAllByTestId('data-code-block__line')) {
+        const properties = line.style.transitionProperty.split(',').map((name) => name.trim())
+
+        expect(properties).toContain('translate')
+        expect(properties).not.toContain('transform')
+      }
+    })
+
+    it('leaves lines without an entrance transition when animateLines is off', () => {
+      const { getAllByTestId } = render(CodeBlock, { props: { tabs: singleTab } })
+
+      for (const line of getAllByTestId('data-code-block__line')) {
+        expect(line.style.transitionProperty).toBe('')
+      }
+    })
+  })
+
   describe('a11y (axe against styled DOM)', () => {
     it('single-tab layout has no violations', async () => {
       const { container } = render(CodeBlock, {
