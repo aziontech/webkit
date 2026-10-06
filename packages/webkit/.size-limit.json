@@ -225,6 +225,11 @@
     "limit": "15 KB"
   },
   {
+    "name": "media-tile",
+    "path": "src/components/marketing/media-tile/media-tile.vue",
+    "limit": "2.75 KB"
+  },
+  {
     "name": "content-columns",
     "path": "src/components/marketing/content-columns/content-columns.vue",
     "limit": "4.75 KB"
