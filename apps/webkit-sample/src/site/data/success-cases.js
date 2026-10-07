@@ -23,6 +23,7 @@
 import axur from '@aziontech/webkit/assets/axur-extended-reversed.svg'
 import bancoDeLaNacion from '@aziontech/webkit/assets/banco-de-la-nacion-extended-mono.svg'
 import { CLIENTS } from '@aziontech/webkit/assets/client-registry'
+import contabilizeiColor from '@aziontech/webkit/assets/contabilizei-extended-color.svg'
 import contabilizei from '@aziontech/webkit/assets/contabilizei-extended-reversed.svg'
 import crefisa from '@aziontech/webkit/assets/crefisa-extended-reversed.svg'
 import marisa from '@aziontech/webkit/assets/marisa-extended-color.svg'
@@ -222,7 +223,7 @@ export const SUCCESS_CASES = [
   },
   {
     key: 'case-panvel',
-    client: { name: 'Panvel', logo: panvel, artwork: 'dark' },
+    client: { name: 'Panvel', logo: panvel, artwork: 'color' },
     industry: 'Retail',
     solutions: ['Build', 'Deploy'],
     products: ['Applications'],
@@ -233,7 +234,7 @@ export const SUCCESS_CASES = [
   },
   {
     key: 'case-contabilizei',
-    client: { name: 'Contabilizei', logo: contabilizei, artwork: 'light' },
+    client: { name: 'Contabilizei', logo: contabilizei, logoLight: contabilizeiColor },
     industry: 'Tech',
     solutions: ['Build', 'Secure', 'Deploy'],
     products: ['Applications', 'Functions'],
@@ -277,7 +278,7 @@ export const SUCCESS_CASES = [
   },
   {
     key: 'case-marisa',
-    client: { name: 'Marisa', logo: marisa, artwork: 'light' },
+    client: { name: 'Marisa', logo: marisa, artwork: 'color' },
     industry: 'Retail',
     solutions: ['Build', 'Deploy'],
     products: ['Application Accelerator', 'Cache', 'Image Processor'],

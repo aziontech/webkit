@@ -42,6 +42,7 @@ import LandingOurNetwork from '@site/views/LandingOurNetwork.vue'
 import LandingPartners from '@site/views/LandingPartners.vue'
 import LandingPerformance from '@site/views/LandingPerformance.vue'
 import LandingPricing from '@site/views/LandingPricing.vue'
+import LandingProduct from '@site/views/LandingProduct.vue'
 import LandingProducts from '@site/views/LandingProducts.vue'
 import LandingRetail from '@site/views/LandingRetail.vue'
 import LandingSecurity from '@site/views/LandingSecurity.vue'
@@ -105,6 +106,13 @@ export const siteRoutes = [
   // The one composed entirely from the MARKETING components rather than hand-built bricks —
   // the Products mega-menu's Our Network entry.
   { path: '/site/products/our-network', name: 'site-our-network', component: LandingOurNetwork },
+  // Every other Products mega-menu entry: one data-driven page per product (data/products.js).
+  {
+    path: '/site/products/:product(sql-database|object-storage|kv-store|waf|network-shield|edge-dns|load-balancer|data-stream|real-time-metrics|edge-pulse)',
+    name: 'site-product',
+    component: LandingProduct,
+    props: true
+  },
 
   // ══ Solutions ═════════════════════════════════════════════════════════════════════
   // The index, and one page per solution under it. A solution page argues a NEED or an

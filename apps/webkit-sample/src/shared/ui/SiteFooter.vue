@@ -21,8 +21,8 @@
   // 5xl rule was not. The band above must simply not draw a bottom rule; the
   // closing spacer on the landings is a borderless FrameBox for exactly that reason.
   //
-  // Every column link is a `#` anchor for the demo; the social buttons point at the
-  // real profiles, as the story does.
+  // A column link is a `#` anchor for the demo unless it is written as `{ label, href }`
+  // because the sample has the page; the social buttons point at the real profiles.
   import Brand from '@aziontech/webkit/brand'
   import Footer from '@aziontech/webkit/footer'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -67,7 +67,7 @@
     },
     {
       label: 'Company',
-      links: ['About', 'Customers', 'Partners', 'Careers', 'Blog', 'Contact']
+      links: ['About', 'Customers', 'Partners', { label: 'Careers', href: '/site/careers' }, 'Blog', 'Contact']
     }
   ]
 
@@ -157,10 +157,10 @@
       >
         <Footer.Link
           v-for="link in column.links"
-          :key="link"
-          href="#"
+          :key="link.label ?? link"
+          :href="link.href ?? '#'"
         >
-          {{ link }}
+          {{ link.label ?? link }}
         </Footer.Link>
       </Footer.Column>
 

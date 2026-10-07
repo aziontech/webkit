@@ -68,6 +68,24 @@ export const CAREERS_LABELS = {
   readMore: 'Read more'
 }
 
+/**
+ * The desktop toolbar's own strings. The postings carry no posting date, so `Newest posted`
+ * keeps the source's listing order rather than sorting on a date this file does not have.
+ */
+export const CAREERS_TOOLBAR = {
+  search: 'Search by title, team, or location',
+  searchShort: 'Search positions',
+  searchLabel: 'Search positions',
+  allAreas: 'All departments',
+  areasLabel: 'Department',
+  locationLabel: 'Location',
+  sortLabel: 'Sort positions',
+  sorts: [
+    { value: 'newest', label: 'Newest posted' },
+    { value: 'title', label: 'Title (A–Z)' }
+  ]
+}
+
 /** What the source says when a filter pair matches nothing. Verbatim, including the action. */
 export const CAREERS_EMPTY = {
   title: 'Nothing here yet',

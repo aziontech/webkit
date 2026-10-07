@@ -218,7 +218,7 @@
     kind="band"
     max-width="site"
     texture="dots"
-    texture-fade="bottom"
+    texture-fade="top"
     class="[--banner-offset:3.5rem]"
   >
     <!-- No `items-*`: a flex column stretches its children, so every row opens on the
@@ -231,23 +231,6 @@
         :items="trail"
         @navigate="goToTrail"
       />
-
-      <!-- The meta line, as the four facets it already states. One glyph each, so the row reads
-           as a set of attributes rather than a sentence broken by pipes. -->
-      <ul class="flex flex-wrap items-center gap-x-(--spacing-lg) gap-y-(--spacing-xs)">
-        <li
-          v-for="facet in facets"
-          :key="facet.label"
-          class="inline-flex items-center gap-(--spacing-xs) text-body-sm text-(--text-default)"
-        >
-          <i
-            :class="facet.icon"
-            class="shrink-0 text-[0.875rem] leading-none text-(--text-muted)"
-            aria-hidden="true"
-          />
-          {{ facet.label }}
-        </li>
-      </ul>
 
       <!-- The action Vercel's header does not carry, in the slot this language keeps a hero's
            actions in — which is also what makes it full width on a phone and inline from 20rem
@@ -331,7 +314,7 @@
                 <li
                   v-for="facet in facets"
                   :key="facet.label"
-                  class="flex items-start gap-(--spacing-xs) text-body-sm text-(--text-default)"
+                  class="flex items-start gap-(--spacing-xs) text-body-sm text-(--text-muted)"
                 >
                   <i
                     :class="facet.icon"
@@ -345,7 +328,7 @@
               <!-- The same fragment link the band carries, full width in its own column. -->
               <Button
                 label="Apply for this position"
-                kind="primary"
+                kind="secondary"
                 size="large"
                 href="#apply"
                 class="w-full"
@@ -384,7 +367,7 @@
                 >
                   <p
                     v-if="block.kind === 'text'"
-                    class="m-0 text-pretty text-body-md text-(--text-default)"
+                    class="m-0 text-pretty text-body-md text-(--text-muted)"
                   >
                     {{ block.text }}
                   </p>
@@ -395,7 +378,7 @@
                     <li
                       v-for="item in block.items"
                       :key="item"
-                      class="text-pretty text-body-md text-(--text-default)"
+                      class="text-pretty text-body-md text-(--text-muted)"
                     >
                       {{ item }}
                     </li>

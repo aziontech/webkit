@@ -47,9 +47,10 @@
   import PanelHeader from '@aziontech/webkit/panel-header'
   import ScrollArea from '@aziontech/webkit/scroll-area'
   import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
-  import { useRouter } from 'vue-router'
+  import { useRoute, useRouter } from 'vue-router'
 
   const router = useRouter()
+  const route = useRoute()
 
   // Product pillars mirror azion.com's Products mega-menu. Each entry carries the
   // `ai-*` product glyph, a label, and a one-line description for the panel.
@@ -85,7 +86,8 @@
         {
           icon: 'ai ai-edge-ai',
           label: 'AI Inference',
-          description: 'Run AI models close to the user'
+          description: 'Run AI models close to the user',
+          href: '/site/products/ai-inference'
         }
       ]
     },
@@ -96,31 +98,50 @@
         {
           icon: 'ai ai-edge-sql',
           label: 'SQL Database',
-          description: 'A distributed SQL database'
+          description: 'A distributed SQL database',
+          href: '/site/products/sql-database'
         },
         {
           icon: 'ai ai-edge-storage',
           label: 'Object Storage',
-          description: 'Store and serve objects at the edge'
+          description: 'Store and serve objects at the edge',
+          href: '/site/products/object-storage'
         },
-        { icon: 'ai ai-edge-kv', label: 'KV Store', description: 'Low-latency key-value store' }
+        {
+          icon: 'ai ai-edge-kv',
+          label: 'KV Store',
+          description: 'Low-latency key-value store',
+          href: '/site/products/kv-store'
+        }
       ]
     },
     {
       label: 'Protect',
       href: '/site/products#protect',
       items: [
-        { icon: 'ai ai-waf-rules', label: 'WAF', description: 'Web application firewall' },
+        {
+          icon: 'ai ai-waf-rules',
+          label: 'WAF',
+          description: 'Web application firewall',
+          href: '/site/products/waf'
+        },
         {
           icon: 'ai ai-network-lists',
           label: 'Network Shield',
-          description: 'Network and DDoS protection'
+          description: 'Network and DDoS protection',
+          href: '/site/products/network-shield'
         },
-        { icon: 'ai ai-edge-dns', label: 'Edge DNS', description: 'Distributed authoritative DNS' },
+        {
+          icon: 'ai ai-edge-dns',
+          label: 'Edge DNS',
+          description: 'Distributed authoritative DNS',
+          href: '/site/products/edge-dns'
+        },
         {
           icon: 'ai ai-load-balancer',
           label: 'Load Balancer',
-          description: 'Global load balancing'
+          description: 'Global load balancing',
+          href: '/site/products/load-balancer'
         }
       ]
     },
@@ -131,17 +152,20 @@
         {
           icon: 'ai ai-data-stream',
           label: 'Data Stream',
-          description: 'Real-time event streaming'
+          description: 'Real-time event streaming',
+          href: '/site/products/data-stream'
         },
         {
           icon: 'ai ai-real-time-metrics',
           label: 'Real-Time Metrics',
-          description: 'Live platform metrics'
+          description: 'Live platform metrics',
+          href: '/site/products/real-time-metrics'
         },
         {
           icon: 'ai ai-edge-pulse',
           label: 'Edge Pulse',
-          description: 'Real user experience monitoring'
+          description: 'Real user experience monitoring',
+          href: '/site/products/edge-pulse'
         }
       ]
     }
@@ -272,10 +296,16 @@
   // The plain link triggers — the two bar entries that open no panel. Listed here so
   // the bar and the sheet render the same set from one place.
   const plainLinks = [
-    { value: 'customers', label: 'Customers', href: '#customers' },
+    { value: 'customers', label: 'Customers', href: '/site/success-cases' },
     { value: 'pricing', label: 'Pricing', href: '/site/pricing' }
   ]
 
+  // In-app routes go through the router: a bare anchor would reload the whole app.
+  const goTo = (event, href) => {
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0) return
+    event.preventDefault()
+    router.push(href)
+  }
   const goLogin = () => router.push('/login')
   // The bar's own controls route rather than link: a bare `href="/site/contact"` on an
   // anchor would reload the app, the same reason the sheet's rows push through onNavigate.
@@ -579,7 +609,12 @@
             v-for="link in plainLinks"
             :key="link.value"
           >
-            <NavigationMenu.Trigger :href="link.href">{{ link.label }}</NavigationMenu.Trigger>
+            <NavigationMenu.Trigger
+              :href="link.href"
+              :active="route.path === link.href"
+              @click="goTo($event, link.href)"
+              >{{ link.label }}</NavigationMenu.Trigger
+            >
           </NavigationMenu.Item>
         </NavigationMenu.List>
 

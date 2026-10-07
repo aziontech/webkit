@@ -73,28 +73,13 @@
   //     texture under it the headline is the only thing in the band — which is the point: the
   //     page's content starts at the rule below it.
   //
-  //   • THE RAIL IS THE SOURCE'S OWN STICKY COLUMN. It was briefly a strip across the top of
-  //     the band — the shape this site gives a control that governs the band under it (the
-  //     pricing page's billing switch) — which is right for one switch and wrong for a facet
-  //     beside 23 rows: a reader four screens down the list has to climb back to the top to
-  //     narrow it. The source states the answer in its own markup, `md:grid-cols-[240px,_1fr]`
-  //     with the rail sticky, so the column is back and it sticks under the bar. Its width is
-  //     `--container-3xs` (256px), the nearest rung of our own ladder to the source's 240.
-  //     The vertical between the two columns runs the band's whole height — the rail's own
-  //     `border-r` under the heading row, the spacer frame's above it, one continuous rule
-  //     because they stack; below `lg` the grid is one column and it becomes the rail's
-  //     `border-b`. The two field labels are set in the overline face in `--text-muted`, not
-  //     in the accent `Overline` paints: the rail names facets, and a label in the brand
-  //     colour reads as the selected one before a chip has been touched.
+  //   • ON DESKTOP THE FILTERS ARE A TOOLBAR across the list column: a search field and three
+  //     selects (department, location, sort) on one row under the heading, so the list keeps the
+  //     column's full width. Below `lg` the mobile row below takes over.
   //
-  //   • THE FILTERS ARE CHIPS, NOT SELECTS. Same two fields, same option lists, same labels —
-  //     a different control. A select hides five of its six options behind an overlay, which
-  //     costs a click to learn what the page can even be narrowed to, and puts a teleported
-  //     panel inside a sticky column. Chips print every option at once, so the rail states the
-  //     facets AND the current selection in one read, and the source's own `All areas` /
-  //     `All locations` options are the reset — no control here that the contract does not
-  //     name. Selection is `aria-pressed` plus the language's own selected pair, the brand
-  //     edge over the selected fill.
+  //   • BELOW `lg` THE FILTERS ARE THE CONSOLE'S FILTER BUTTON beside the search, with a chip
+  //     per applied field on the row under it — the same control the success-case library
+  //     uses there. Same two fields, same selection; a chip's × is the `All` reset.
   //
   //   • THE LIST NAMES ITS OWN SELECTION, ON THE LIST'S OWN VERTICAL. The source prints five
   //     area labels and no heading over them, so a narrowed list arrives with nothing saying
@@ -137,15 +122,18 @@
   // No brand strip either — this page is not selling to the reader, it is listing roles, and the
   // marks are a proof device the postings do not need.
   import Button from '@aziontech/webkit/button'
-  import Chip from '@aziontech/webkit/chip'
   import EmptyState from '@aziontech/webkit/empty-state'
   import FrameBox from '@aziontech/webkit/frame-box'
   import Hero from '@aziontech/webkit/hero'
+  import InputText from '@aziontech/webkit/input-text'
   import Item from '@aziontech/webkit/item'
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionModule from '@aziontech/webkit/section-module'
   import SectionTitle from '@aziontech/webkit/section-title'
-  import { computed, reactive, useId } from 'vue'
+  import Select from '@aziontech/webkit/select'
+  import FilterButton from '@shared/ui/filter/FilterButton.vue'
+  import FilterChips from '@shared/ui/filter/FilterChips.vue'
+  import { computed, reactive } from 'vue'
   import { useRoute } from 'vue-router'
 
   import {
@@ -153,8 +141,8 @@
     CAREERS_AREAS,
     CAREERS_EMPTY,
     CAREERS_JOBS,
-    CAREERS_LABELS,
     CAREERS_LOCATIONS,
+    CAREERS_TOOLBAR,
     jobId,
     jobLocations
   } from '../data/careers.js'
@@ -164,7 +152,9 @@
   const requestedArea = CAREERS_AREAS.find((option) => option.value === route.query.area)
   const selection = reactive({
     area: requestedArea?.value ?? CAREERS_ALL,
-    location: CAREERS_ALL
+    location: CAREERS_ALL,
+    query: '',
+    sort: 'newest'
   })
 
   /**
@@ -173,19 +163,51 @@
    * a label, an option or a selected state silently stops matching its neighbour.
    */
   const FILTERS = [
-    { key: 'area', label: CAREERS_LABELS.areas, options: CAREERS_AREAS },
-    { key: 'location', label: CAREERS_LABELS.location, options: CAREERS_LOCATIONS }
+    { key: 'area', label: CAREERS_TOOLBAR.areasLabel, options: CAREERS_AREAS },
+    { key: 'location', label: CAREERS_TOOLBAR.locationLabel, options: CAREERS_LOCATIONS }
   ]
 
-  const railId = useId()
+  // The same selection, in the console filter's shape: one value per field (`range`), and
+  // no field at all while it rests at `All`. One array instance keys the button/chips channel.
+  const fields = FILTERS.map((filter) => ({
+    id: filter.key,
+    label: filter.label,
+    kind: 'range',
+    options: filter.options.filter((option) => option.value !== CAREERS_ALL)
+  }))
+  const applied = computed({
+    get: () =>
+      Object.fromEntries(
+        FILTERS.filter((filter) => selection[filter.key] !== CAREERS_ALL).map((filter) => [
+          filter.key,
+          [selection[filter.key]]
+        ])
+      ),
+    set: (state) => {
+      FILTERS.forEach((filter) => {
+        selection[filter.key] = state[filter.key]?.[0] ?? CAREERS_ALL
+      })
+    }
+  })
 
-  const matches = computed(() =>
-    CAREERS_JOBS.filter(
+  const labelOf = (options, value) => options.find((option) => option.value === value)?.label ?? ''
+  const areaLabel = (value) =>
+    value === CAREERS_ALL ? CAREERS_TOOLBAR.allAreas : labelOf(CAREERS_AREAS, value)
+  const locationLabel = (value) => labelOf(CAREERS_LOCATIONS, value)
+  const sortLabel = (value) => labelOf(CAREERS_TOOLBAR.sorts, value)
+
+  const matches = computed(() => {
+    const query = selection.query.trim().toLowerCase()
+    const found = CAREERS_JOBS.filter(
       (job) =>
         (selection.area === CAREERS_ALL || job.area === selection.area) &&
-        (selection.location === CAREERS_ALL || jobLocations(job).includes(selection.location))
+        (selection.location === CAREERS_ALL || jobLocations(job).includes(selection.location)) &&
+        (!query || `${job.title} ${job.meta}`.toLowerCase().includes(query))
     )
-  )
+    return selection.sort === 'title'
+      ? [...found].sort((a, b) => a.title.localeCompare(b.title))
+      : found
+  })
 
   /**
    * The matching postings under their area headings, in the FILTER's order rather than the
@@ -212,6 +234,7 @@
   function showAllPositions() {
     selection.area = CAREERS_ALL
     selection.location = CAREERS_ALL
+    selection.query = ''
   }
 </script>
 
@@ -264,14 +287,8 @@
              Below `lg` the grid is one column, both spacers go, and the order reads
              heading → filters → list. -->
         <div
-          class="grid [--careers-inset:calc(var(--spacing-xl)+1px)] [--careers-lead:calc(var(--spacing-xl)+1px)] [--careers-label-row:calc(var(--spacing-md)*2+var(--text-overline-md-font-size)*var(--text-overline-md-line-height)+1px)] lg:grid-cols-[var(--container-3xs)_1fr]"
+          class="grid [--careers-inset:calc(var(--spacing-xl)+1px)]"
         >
-          <FrameBox
-            borders="right"
-            marks="none"
-            class="hidden lg:block"
-          />
-
           <SectionTitle
             kind="left"
             :framed="false"
@@ -279,56 +296,116 @@
             class="border-b border-(--border-default) px-(--careers-inset) py-(--spacing-xxl)"
           />
 
-          <!-- ── The rail ───────────────────────────────────────────────────────
-               The cell stretches to the row's full height, which is what lets its
-               `border-r` draw the whole vertical; the sticky box inside is what actually
-               follows the reader. `top-14` is the bar's own height, so the first label
-               lands one inset under it, and the spacer above stays in flow so the column
-               only starts on the first posting while it is unstuck. -->
-          <aside class="border-b border-(--border-default) lg:border-r lg:border-b-0">
-            <FrameBox
-              v-if="grouped && groups.length > 0"
-              borders="none"
-              marks="none"
-              class="hidden h-(--careers-label-row) lg:block"
-            />
-
-            <div
-              class="flex flex-col gap-(--spacing-xl) p-(--spacing-lg) lg:sticky lg:top-14 lg:px-(--spacing-xl) lg:pt-(--careers-lead) lg:pb-(--spacing-xl)"
-            >
-              <div
-                v-for="filter in FILTERS"
-                :key="filter.key"
-                role="group"
-                :aria-labelledby="`${railId}-${filter.key}`"
-                class="flex min-w-0 flex-col gap-(--spacing-sm)"
+          <!-- ── The toolbar (lg and up) ─────────────────────────────────────────
+               Search takes four parts of the row, each select one, so the three chevrons
+               line up. Every control is `large`, the toolbar's one height. -->
+          <div
+            role="search"
+            class="hidden grid-cols-[minmax(0,4fr)_repeat(3,minmax(0,1fr))] items-center gap-(--spacing-md) border-b border-(--border-default) px-(--careers-inset) py-(--spacing-lg) lg:grid"
+          >
+            <div class="min-w-0">
+              <InputText
+                v-model="selection.query"
+                size="large"
+                type="text"
+                :placeholder="CAREERS_TOOLBAR.search"
+                :aria-label="CAREERS_TOOLBAR.searchLabel"
               >
-                <p
-                  :id="`${railId}-${filter.key}`"
-                  class="m-0 text-overline-md uppercase text-(--text-muted)"
-                >
-                  {{ filter.label }}
-                </p>
+                <template #iconLeft>
+                  <i class="pi pi-search text-(--text-muted)" />
+                </template>
+              </InputText>
+            </div>
 
-                <!-- A chip per option, wrapped. `kind` is the whole selected state:
-                     the component's own vocabulary is `filled` for a value that IS
-                     applied and `outlined` for one the user COULD apply, which is this
-                     rail exactly. `aria-pressed` carries the same fact to a screen
-                     reader. No class of ours on a chip. -->
-                <div class="flex flex-wrap gap-(--spacing-xs)">
-                  <Chip
-                    v-for="option in filter.options"
+            <div class="min-w-0">
+              <Select
+                v-model="selection.area"
+                size="large"
+                :display-value="areaLabel"
+              >
+                <Select.Trigger :aria-label="CAREERS_TOOLBAR.areasLabel" />
+                <Select.Content>
+                  <Select.Option
+                    v-for="option in CAREERS_AREAS"
                     :key="option.value"
-                    clickable
-                    :label="option.label"
-                    :kind="selection[filter.key] === option.value ? 'filled' : 'outlined'"
-                    :aria-pressed="selection[filter.key] === option.value"
-                    @click="selection[filter.key] = option.value"
-                  />
-                </div>
+                    :value="option.value"
+                  >
+                    {{ areaLabel(option.value) }}
+                  </Select.Option>
+                </Select.Content>
+              </Select>
+            </div>
+
+            <div class="min-w-0">
+              <Select
+                v-model="selection.location"
+                size="large"
+                :display-value="locationLabel"
+              >
+                <Select.Trigger :aria-label="CAREERS_TOOLBAR.locationLabel" />
+                <Select.Content>
+                  <Select.Option
+                    v-for="option in CAREERS_LOCATIONS"
+                    :key="option.value"
+                    :value="option.value"
+                  >
+                    {{ option.label }}
+                  </Select.Option>
+                </Select.Content>
+              </Select>
+            </div>
+
+            <div class="min-w-0">
+              <Select
+                v-model="selection.sort"
+                size="large"
+                :display-value="sortLabel"
+              >
+                <Select.Trigger :aria-label="CAREERS_TOOLBAR.sortLabel" />
+                <Select.Content>
+                  <Select.Option
+                    v-for="option in CAREERS_TOOLBAR.sorts"
+                    :key="option.value"
+                    :value="option.value"
+                  >
+                    {{ option.label }}
+                  </Select.Option>
+                </Select.Content>
+              </Select>
+            </div>
+          </div>
+
+          <!-- ── Filter + search (below lg) ────────────────────────────────────── -->
+          <div
+            role="search"
+            class="flex flex-col gap-(--spacing-sm) border-b border-(--border-default) px-(--careers-inset) py-(--spacing-lg) lg:hidden"
+          >
+            <div class="flex items-center gap-(--spacing-sm)">
+              <FilterButton
+                v-model="applied"
+                :fields="fields"
+                size="large"
+              />
+              <div class="min-w-0 flex-1">
+                <InputText
+                  v-model="selection.query"
+                  size="large"
+                  type="text"
+                  :placeholder="CAREERS_TOOLBAR.searchShort"
+                  :aria-label="CAREERS_TOOLBAR.searchLabel"
+                >
+                  <template #iconLeft>
+                    <i class="pi pi-search text-(--text-muted)" />
+                  </template>
+                </InputText>
               </div>
             </div>
-          </aside>
+
+            <FilterChips
+              v-model="applied"
+              :fields="fields"
+            />
+          </div>
 
           <!-- ── The list ───────────────────────────────────────────────────────
                `min-w-0` so the cards can shrink inside the track instead of pushing it
@@ -391,7 +468,7 @@
                     :key="job.href"
                     class="relative px-(--spacing-xl)! py-(--spacing-xl)! hover:bg-(--bg-hover)"
                   >
-                    <Item.Content>
+                    <Item.Content class="gap-(--spacing-xs)">
                       <Item.Title>
                         <RouterLink
                           :to="`/site/careers/${jobId(job)}`"
@@ -400,7 +477,10 @@
                           {{ job.title }}
                         </RouterLink>
                       </Item.Title>
-                      <Item.Description>{{ job.meta }}</Item.Description>
+                      <!-- Unclamped: on a phone the meta line wraps in full rather than ellipsizing. -->
+                      <Item.Description class="line-clamp-none! text-pretty">
+                        {{ job.meta }}
+                      </Item.Description>
                     </Item.Content>
                     <Item.Actions>
                       <Button

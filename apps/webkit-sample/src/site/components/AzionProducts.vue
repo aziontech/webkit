@@ -101,7 +101,7 @@
           icon: 'ai ai-edge-ai',
           title: 'AI Inference',
           description: 'Run AI models closer to users',
-          href: 'https://www.azion.com/en/products/ai-inference/'
+          href: '/site/products/ai-inference'
         },
         {
           icon: 'ai ai-gateway',
@@ -118,13 +118,13 @@
           icon: 'ai ai-edge-storage',
           title: 'Object Storage',
           description: 'Scalable, durable storage for unstructured data',
-          href: 'https://www.azion.com/en/products/object-storage/'
+          href: '/site/products/object-storage'
         },
         {
           icon: 'ai ai-edge-sql',
           title: 'SQL Database',
           description: 'Query relational data at the edge',
-          href: 'https://www.azion.com/en/products/sql-database/'
+          href: '/site/products/sql-database'
         }
       ]
     },
@@ -135,7 +135,7 @@
           icon: 'ai ai-waf-rules',
           title: 'WAF',
           description: 'Filter malicious requests before the origin',
-          href: 'https://www.azion.com/en/products/web-application-firewall/'
+          href: '/site/products/waf'
         },
         {
           icon: 'pi pi-android',
@@ -147,7 +147,7 @@
           icon: 'ai ai-edge-dns',
           title: 'DNS',
           description: 'Reliably host authoritative DNS zones worldwide',
-          href: 'https://www.azion.com/en/products/edge-dns/'
+          href: '/site/products/edge-dns'
         }
       ]
     }

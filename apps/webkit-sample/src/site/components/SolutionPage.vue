@@ -3,6 +3,7 @@
   import Button from '@aziontech/webkit/button'
   import CallToAction from '@aziontech/webkit/call-to-action'
   import CardGrid from '@aziontech/webkit/card-grid'
+  import CodeBlock from '@aziontech/webkit/code-block'
   import ColumnNavigation from '@aziontech/webkit/column-navigation'
   import Faq from '@aziontech/webkit/faq'
   import FrameBox from '@aziontech/webkit/frame-box'
@@ -33,6 +34,8 @@
     /** The capability cards the grid under the hero holds, each an icon, a title and a description. */
     capabilities: { type: Array, required: true },
     /** The use-case band: its eyebrow, its title and the stacked bands under it, each with an optional eyebrow; a band with an href links there with its own action label, one without links to the docs. Omitted, the page has no use-case band. */
+    /** The code band: its eyebrow, title, description, the CodeBlock tabs it shows and the docs page it links to. Omitted, the page has no code band. */
+    code: { type: Object, default: null },
     useCases: { type: Object, default: null },
     /** The ticker under the templates band: its label and the marks it runs. Omitted, the page has no templates band. */
     stack: { type: Object, default: null },
@@ -168,6 +171,58 @@
         </CardGrid>
       </FrameBox>
     </SectionModule>
+
+    <template v-if="code">
+      <SectionGap hatch />
+
+      <SectionModule
+        :divided="false"
+        :padded="false"
+      >
+        <MediaSplit
+          framed
+          :heading-level="2"
+          align="center"
+          size="large"
+          texture="none"
+          :eyebrow="code.eyebrow ?? 'How It Works'"
+          :title="code.title"
+          :description="code.description"
+        >
+          <template #media>
+            <div
+              class="w-full min-w-0 overflow-hidden rounded-(--shape-elements) shadow-(--shadow-sm)"
+            >
+              <CodeBlock
+                :tabs="code.tabs"
+                :default-value="code.tabs[0].value"
+                show-line-numbers
+                :copy-aria-label="`Copy the ${code.tabs[0].label} sample`"
+              />
+            </div>
+          </template>
+          <template #actions>
+            <Button
+              label="Read Azion Docs"
+              kind="outlined"
+              size="medium"
+              :href="code.href ?? DOCS"
+              :target="isExternal(code.href ?? DOCS) ? '_blank' : undefined"
+              icon="pi pi-chevron-right"
+              icon-position="trailing"
+              animated
+            >
+              <template #prefix>
+                <i
+                  class="pi pi-book shrink-0 leading-none"
+                  aria-hidden="true"
+                />
+              </template>
+            </Button>
+          </template>
+        </MediaSplit>
+      </SectionModule>
+    </template>
 
     <template v-if="useCases">
       <SectionGap hatch />

@@ -4,16 +4,18 @@
   import EmptyState from '@aziontech/webkit/empty-state'
   import FrameBox from '@aziontech/webkit/frame-box'
   import Hero from '@aziontech/webkit/hero'
+  import InputText from '@aziontech/webkit/input-text'
   import LogoWall from '@aziontech/webkit/logo-wall'
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
   import SectionModule from '@aziontech/webkit/section-module'
   import SectionTitle from '@aziontech/webkit/section-title'
   import Select from '@aziontech/webkit/select'
-  import Tag from '@aziontech/webkit/tag'
   import ClientMark from '@shared/ui/brand/ClientMark.vue'
   import { CLIENT_STRIP } from '@shared/ui/brand/strips.js'
-  import { computed, ref, watch } from 'vue'
+  import FilterButton from '@shared/ui/filter/FilterButton.vue'
+  import FilterChips from '@shared/ui/filter/FilterChips.vue'
+  import { computed, reactive, ref, watch } from 'vue'
   import { useRouter } from 'vue-router'
 
   import { FEATURED_CASES, SUCCESS_CASES } from '../data/success-cases.js'
@@ -23,51 +25,97 @@
   const goSignup = () => router.push('/signup')
 
   const LABEL = {
-    all: 'All',
     industry: 'Industry',
-    products: 'Products',
-    solutions: 'Solutions',
-    filteredBy: 'Filtered by',
+    solution: 'Solution',
+    product: 'Product',
+    search: 'Search by company or story',
+    searchShort: 'Search stories',
+    searchLabel: 'Search success stories',
     loadMore: 'Load more',
-    notFound: 'No results found for these applied filters.'
+    notFound: 'No results found for these applied filters.',
+    reset: 'View all success stories'
   }
 
   const PAGE_SIZE = 12
 
-  const options = (values) => [
-    { label: LABEL.all, value: '' },
+  // Their dark-surface files are already coloured lockups; their colour files set the
+  // wordmark in black, which vanishes on this canvas.
+  const DARK_LOCKUP = new Set(['MadeiraMadeira', 'Mobiauto', 'NZN'])
+
+  // The careers listing's filter model: one value per field, `ALL` as the reset.
+  const ALL = 'All'
+
+  const optionsOf = (allLabel, values) => [
+    { label: allLabel, value: ALL },
     ...[...new Set(values)].sort((a, b) => a.localeCompare(b)).map((v) => ({ label: v, value: v }))
   ]
 
-  const industryOptions = computed(() => options(SUCCESS_CASES.map((story) => story.industry)))
-  const solutionOptions = computed(() => options(SUCCESS_CASES.flatMap((story) => story.solutions)))
-  const productOptions = computed(() => options(SUCCESS_CASES.flatMap((story) => story.products)))
+  const FILTERS = [
+    {
+      key: 'industry',
+      label: LABEL.industry,
+      options: optionsOf('All industries', SUCCESS_CASES.map((story) => story.industry))
+    },
+    {
+      key: 'solution',
+      label: LABEL.solution,
+      options: optionsOf('All solutions', SUCCESS_CASES.flatMap((story) => story.solutions))
+    },
+    {
+      key: 'product',
+      label: LABEL.product,
+      options: optionsOf('All products', SUCCESS_CASES.flatMap((story) => story.products))
+    }
+  ]
 
-  const industry = ref('')
-  const solution = ref('')
-  const product = ref('')
+  const selection = reactive({ industry: ALL, solution: ALL, product: ALL, query: '' })
+  const labelOf = (options, value) => options.find((option) => option.value === value)?.label ?? ''
+
+  // Below `lg` the same selection drives the console's Filter button and its chips. `range`
+  // holds one value per field, as the desktop selects do; a chip's × is the `ALL` reset.
+  // One array instance: FilterButton and FilterChips key their shared channel off it.
+  const fields = FILTERS.map((filter) => ({
+    id: filter.key,
+    label: filter.label,
+    kind: 'range',
+    options: filter.options.filter((option) => option.value !== ALL)
+  }))
+  const applied = computed({
+    get: () =>
+      Object.fromEntries(
+        FILTERS.filter((filter) => selection[filter.key] !== ALL).map((filter) => [
+          filter.key,
+          [selection[filter.key]]
+        ])
+      ),
+    set: (state) => {
+      FILTERS.forEach((filter) => {
+        selection[filter.key] = state[filter.key]?.[0] ?? ALL
+      })
+    }
+  })
   const shown = ref(PAGE_SIZE)
 
-  const filtered = computed(() =>
-    SUCCESS_CASES.filter(
+  const filtered = computed(() => {
+    const query = selection.query.trim().toLowerCase()
+    return SUCCESS_CASES.filter(
       (story) =>
-        (industry.value === '' || story.industry === industry.value) &&
-        (solution.value === '' || story.solutions.includes(solution.value)) &&
-        (product.value === '' || story.products.includes(product.value))
+        (selection.industry === ALL || story.industry === selection.industry) &&
+        (selection.solution === ALL || story.solutions.includes(selection.solution)) &&
+        (selection.product === ALL || story.products.includes(selection.product)) &&
+        (!query || `${story.client.name} ${story.description}`.toLowerCase().includes(query))
     )
-  )
-
+  })
   const visible = computed(() => filtered.value.slice(0, shown.value))
   const hasMore = computed(() => shown.value < filtered.value.length)
 
-  const applied = computed(() => {
-    const picked = [industry.value, solution.value, product.value].filter(Boolean)
-    return picked.length > 0 ? picked : [LABEL.all]
-  })
-
-  watch([industry, solution, product], () => {
+  watch(selection, () => {
     shown.value = PAGE_SIZE
   })
+
+  function showAllStories() {
+    Object.assign(selection, { industry: ALL, solution: ALL, product: ALL, query: '' })
+  }
 
   // Each featured story is one framed column: its logo tile in the client's brand face,
   // then the story's description below it.
@@ -143,14 +191,16 @@
             borders="none"
             marks="all"
           >
-            <div class="flex h-full flex-col gap-px bg-(--border-default)">
+            <!-- The whole column is the hover target: hovering the description plays the
+                 tile's own lift, wash and "Read story" reveal, not only hovering the tile. -->
+            <div class="group/card flex h-full flex-col gap-px bg-(--border-default)">
               <!-- One mark per wall, so the wall holds one column and paints its own face. -->
               <LogoWall
                 kind="rectangle"
                 :aria-label="column.item.alt"
                 :items="[column.item]"
                 :style="column.face"
-                class="[&_[role=list]]:grid-cols-1! [&_a]:[background:var(--wall-face)] [&_a]:[--text-default:var(--wall-ink)]"
+                class="[&_[role=list]]:grid-cols-1! [&_a]:[background:var(--wall-face)] [&_a]:[--text-default:var(--wall-ink)] group-hover/card:[&_a]:before:opacity-100 group-hover/card:[&_a>span:first-child]:-translate-y-(--spacing-sm) group-hover/card:[&_a>span:last-child]:translate-y-0 group-hover/card:[&_a>span:last-child]:opacity-100"
               >
                 <template #mark="{ item }">
                   <ClientMark
@@ -162,11 +212,18 @@
                 </template>
               </LogoWall>
 
-              <div class="flex-1 bg-(--bg-canvas) p-(--spacing-lg)">
+              <!-- A pointer target only: the tile above is the one focusable link and carries
+                   the accessible name, so this copy is not announced or tabbed twice. -->
+              <a
+                :href="column.item.href"
+                tabindex="-1"
+                aria-hidden="true"
+                class="relative isolate flex-1 bg-(--bg-canvas) p-(--spacing-lg) before:pointer-events-none before:absolute before:inset-0 before:-z-10 before:bg-(--bg-hover) before:opacity-0 before:transition-opacity before:duration-moderate-01 before:ease-productive-entrance group-hover/card:before:opacity-100 motion-reduce:before:transition-none"
+              >
                 <p class="m-0 text-balance text-heading-sm text-(--text-default)">
                   {{ column.description }}
                 </p>
-              </div>
+              </a>
             </div>
           </FrameBox>
         </div>
@@ -177,8 +234,10 @@
 
     <!-- The hero's "See cases" fragment link lands here, under the sticky bar. -->
     <SectionModule
+      id="cases"
       :divided="false"
       :padded="false"
+      class="scroll-mt-(--spacing-xxl)"
     >
       <template #header>
         <SectionTitle
@@ -187,62 +246,44 @@
         />
       </template>
 
+      <!-- From `lg` up, the careers listing's toolbar: search + one select per field. Below
+           it, the console's Filter button beside the search, its chips on the row under. -->
       <FrameBox
         flush
         borders="y"
       >
         <div
-          class="flex flex-col gap-(--spacing-lg) p-(--spacing-xl)"
-          role="group"
-          aria-label="Filter the success-case library"
+          role="search"
+          class="hidden grid-cols-[minmax(0,4fr)_repeat(3,minmax(0,1fr))] items-center gap-(--spacing-md) px-(--spacing-xl) py-(--spacing-lg) lg:grid"
         >
-          <div class="flex flex-wrap gap-(--spacing-md)">
-            <Select
-              v-model="industry"
-              :placeholder="LABEL.industry"
-              size="medium"
-              class="w-full sm:w-56"
+          <div class="min-w-0">
+            <InputText
+              v-model="selection.query"
+              size="large"
+              type="text"
+              :placeholder="LABEL.search"
+              :aria-label="LABEL.searchLabel"
             >
-              <Select.Trigger :aria-label="LABEL.industry" />
-              <Select.Content>
-                <Select.Option
-                  v-for="option in industryOptions"
-                  :key="option.value"
-                  :value="option.value"
-                >
-                  {{ option.label }}
-                </Select.Option>
-              </Select.Content>
-            </Select>
+              <template #iconLeft>
+                <i class="pi pi-search text-(--text-muted)" />
+              </template>
+            </InputText>
+          </div>
 
+          <div
+            v-for="filter in FILTERS"
+            :key="filter.key"
+            class="min-w-0"
+          >
             <Select
-              v-model="solution"
-              :placeholder="LABEL.solutions"
-              size="medium"
-              class="w-full sm:w-56"
+              v-model="selection[filter.key]"
+              size="large"
+              :display-value="(value) => labelOf(filter.options, value)"
             >
-              <Select.Trigger :aria-label="LABEL.solutions" />
+              <Select.Trigger :aria-label="filter.label" />
               <Select.Content>
                 <Select.Option
-                  v-for="option in solutionOptions"
-                  :key="option.value"
-                  :value="option.value"
-                >
-                  {{ option.label }}
-                </Select.Option>
-              </Select.Content>
-            </Select>
-
-            <Select
-              v-model="product"
-              :placeholder="LABEL.products"
-              size="medium"
-              class="w-full sm:w-56"
-            >
-              <Select.Trigger :aria-label="LABEL.products" />
-              <Select.Content>
-                <Select.Option
-                  v-for="option in productOptions"
+                  v-for="option in filter.options"
                   :key="option.value"
                   :value="option.value"
                 >
@@ -251,20 +292,37 @@
               </Select.Content>
             </Select>
           </div>
+        </div>
 
-          <p
-            aria-live="polite"
-            class="m-0 flex flex-wrap items-center gap-(--spacing-xs) text-body-sm text-(--text-muted)"
-          >
-            {{ LABEL.filteredBy }}:
-            <Tag
-              v-for="value in applied"
-              :key="value"
-              severity="secondary"
-              size="small"
-              >{{ value }}</Tag
-            >
-          </p>
+        <div
+          role="search"
+          class="flex flex-col gap-(--spacing-sm) px-(--spacing-xl) py-(--spacing-lg) lg:hidden"
+        >
+          <div class="flex items-center gap-(--spacing-sm)">
+            <FilterButton
+              v-model="applied"
+              :fields="fields"
+              size="large"
+            />
+            <div class="min-w-0 flex-1">
+              <InputText
+                v-model="selection.query"
+                size="large"
+                type="text"
+                :placeholder="LABEL.searchShort"
+                :aria-label="LABEL.searchLabel"
+              >
+                <template #iconLeft>
+                  <i class="pi pi-search text-(--text-muted)" />
+                </template>
+              </InputText>
+            </div>
+          </div>
+
+          <FilterChips
+            v-model="applied"
+            :fields="fields"
+          />
         </div>
       </FrameBox>
 
@@ -287,13 +345,13 @@
               target="_blank"
               rel="noopener"
               :aria-label="`Read story: ${story.client.name} (opens in a new tab)`"
-              class="group/row grid grid-cols-1 items-center gap-(--spacing-sm) px-(--spacing-xl) py-(--spacing-lg) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-surface-raised) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) motion-reduce:transition-none lg:grid-cols-[3fr_6fr_4fr_3fr] lg:gap-(--spacing-lg)"
+              class="group/row grid grid-cols-1 items-center gap-(--spacing-lg) px-(--spacing-xl) py-(--spacing-lg) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-surface-raised) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) motion-reduce:transition-none lg:grid-cols-[3fr_6fr_4fr_3fr]"
             >
               <span class="flex h-6 items-center">
                 <ClientMark
                   :client="story.client"
-                  monochrome
-                  mark="h-full w-auto max-w-32 object-contain object-left opacity-70"
+                  :colored="!DARK_LOCKUP.has(story.client.name)"
+                  mark="h-full w-auto max-w-32 object-contain object-left"
                 />
               </span>
 
@@ -301,18 +359,18 @@
                 {{ story.description }}
               </span>
 
-              <span
-                class="hidden text-label-code-sm uppercase text-(--text-muted) lg:block lg:text-center"
-              >
+              <span class="hidden text-overline-sm text-(--text-muted) lg:block lg:text-center">
                 {{ story.industry }}
               </span>
 
               <span
                 aria-hidden="true"
-                class="flex items-center gap-(--spacing-xxs) text-label-code-sm uppercase text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance group-hover/row:text-(--text-default) motion-reduce:transition-none lg:justify-self-end"
+                class="flex items-center gap-(--spacing-xxs) text-overline-sm text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance group-hover/row:text-(--text-default) motion-reduce:transition-none lg:justify-self-end"
               >
                 Read story
-                <i class="pi pi-arrow-right text-[length:inherit] leading-none" />
+                <i
+                  class="pi pi-arrow-up-right text-[length:inherit] leading-none transition-[translate] duration-moderate-02 ease-expressive-entrance group-hover/row:-translate-y-0.5 group-hover/row:translate-x-0.5 motion-reduce:transition-none"
+                />
               </span>
             </a>
           </li>
@@ -323,7 +381,16 @@
           :title="LABEL.notFound"
           icon="pi pi-search"
           class="p-(--spacing-xxl)"
-        />
+        >
+          <template #actions>
+            <Button
+              :label="LABEL.reset"
+              kind="secondary"
+              size="large"
+              @click="showAllStories"
+            />
+          </template>
+        </EmptyState>
       </FrameBox>
 
       <FrameBox
