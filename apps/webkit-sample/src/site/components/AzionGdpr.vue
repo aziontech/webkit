@@ -32,11 +32,12 @@
   import Accordion from '@aziontech/webkit/accordion'
   import Button from '@aziontech/webkit/button'
   import FrameBox from '@aziontech/webkit/frame-box'
-  import HeroTitle from '@aziontech/webkit/hero-title'
-  import SectionGap from '@aziontech/webkit/section-gap'
   import Hero from '@aziontech/webkit/hero'
+  import HeroTitle from '@aziontech/webkit/hero-title'
   import SectionContainer from '@aziontech/webkit/section-container'
+  import SectionGap from '@aziontech/webkit/section-gap'
   import SectionModule from '@aziontech/webkit/section-module'
+  import TextureMaterial from '@aziontech/webkit/texture-material'
 
   import { ASK_AI_LINKS, GDPR_FAQ } from '../data/gdpr.js'
 
@@ -177,14 +178,13 @@
       </FrameBox>
     </SectionModule>
 
-    <!-- The closing spacer, borderless: the footer below opens with its own full-bleed rule,
-         and a bordered spacer here would land a second hairline on that pixel (see
-         AzionCompliance.vue's own closing spacer). -->
     <FrameBox
       borders="none"
-      marks="none"
-      hatch
+      marks="all"
+      data-hatch="true"
       class="h-[calc(var(--spacing-xxl)*2)]"
-    />
+    >
+      <TextureMaterial kind="lines" />
+    </FrameBox>
   </SectionContainer>
 </template>

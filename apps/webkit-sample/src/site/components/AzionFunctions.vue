@@ -19,6 +19,7 @@
   import SectionGap from '@aziontech/webkit/section-gap'
   import SectionModule from '@aziontech/webkit/section-module'
   import SectionTitle from '@aziontech/webkit/section-title'
+  import TextureMaterial from '@aziontech/webkit/texture-material'
   import Ticker from '@aziontech/webkit/ticker'
   import Topic from '@aziontech/webkit/topic'
   import { useRouter } from 'vue-router'
@@ -535,13 +536,13 @@ export default app;`
       </CallToAction>
     </SectionModule>
 
-    <!-- The closing Spacer draws NO rules: the footer below opens with a full-bleed rule,
-         and SectionGap's fixed borders="y" would land a second hairline on that pixel. -->
     <FrameBox
       borders="none"
-      marks="none"
-      hatch
+      marks="all"
+      data-hatch="true"
       class="h-[calc(var(--spacing-xxl)*2)]"
-    />
+    >
+      <TextureMaterial kind="lines" />
+    </FrameBox>
   </SectionContainer>
 </template>

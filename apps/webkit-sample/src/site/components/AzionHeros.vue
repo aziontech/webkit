@@ -24,10 +24,12 @@
   // window lands on the copy. The labels between the bands are what make the column
   // scannable instead.
   import Button from '@aziontech/webkit/button'
+  import FrameBox from '@aziontech/webkit/frame-box'
   import Hero from '@aziontech/webkit/hero'
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionModule from '@aziontech/webkit/section-module'
   import SectionTitle from '@aziontech/webkit/section-title'
+  import TextureMaterial from '@aziontech/webkit/texture-material'
   import { NetworkBanner } from '@shared/ui/banners/index.js'
   import { CLIENT_STRIP, RETAIL_CLIENT_STRIP } from '@shared/ui/brand/strips.js'
   import { useRouter } from 'vue-router'
@@ -375,5 +377,14 @@
         />
       </Hero>
     </SectionModule>
+
+    <FrameBox
+      borders="none"
+      marks="all"
+      data-hatch="true"
+      class="h-[calc(var(--spacing-xxl)*2)]"
+    >
+      <TextureMaterial kind="lines" />
+    </FrameBox>
   </SectionContainer>
 </template>

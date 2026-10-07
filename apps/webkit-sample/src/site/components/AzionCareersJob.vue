@@ -81,6 +81,7 @@
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionModule from '@aziontech/webkit/section-module'
   import SectionTitle from '@aziontech/webkit/section-title'
+  import TextureMaterial from '@aziontech/webkit/texture-material'
   import { computed, reactive, ref, useId } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
@@ -589,13 +590,13 @@
       </FrameBox>
     </SectionModule>
 
-    <!-- The rhythm the page closes on, hatched, drawing no rules: the footer below opens with a
-         full-bleed rule of its own. -->
     <FrameBox
       borders="none"
-      marks="none"
-      hatch
+      marks="all"
+      data-hatch="true"
       class="h-[calc(var(--spacing-xxl)*2)]"
-    />
+    >
+      <TextureMaterial kind="lines" />
+    </FrameBox>
   </SectionContainer>
 </template>

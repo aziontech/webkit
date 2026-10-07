@@ -534,15 +534,14 @@
       </CallToAction>
     </SectionModule>
 
-    <!-- Band 8 — the spacer the source closes on, hatched, and half the height of the other
-         three. A bare FrameBox drawing NO rules: the footer below opens with a full-bleed
-         rule, and SectionGap's fixed `borders="y"` would land a second hairline on it. -->
     <FrameBox
       borders="none"
-      marks="none"
-      hatch
-      class="h-(--spacing-xxl)"
-    />
+      marks="all"
+      data-hatch="true"
+      class="h-[calc(var(--spacing-xxl)*2)]"
+    >
+      <TextureMaterial kind="lines" />
+    </FrameBox>
   </SectionContainer>
   <!-- ══ End framed column ══════════════════════════════════════════════════════ -->
 </template>

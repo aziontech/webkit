@@ -96,14 +96,15 @@
   //   • THE HERO, THE INTRO, AND THE "NO CLOSING CTA" / "sidebar rail not rendered" CALLS FROM
   //     THE PREVIOUS REVISION ALL STILL HOLD — the design keeps them unchanged. See git history
   //     on this file for that reasoning if needed.
+  import Button from '@aziontech/webkit/button'
   import FrameBox from '@aziontech/webkit/frame-box'
+  import Hero from '@aziontech/webkit/hero'
   import HeroTitle from '@aziontech/webkit/hero-title'
   import Overline from '@aziontech/webkit/overline'
+  import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
   import SectionTitle from '@aziontech/webkit/section-title'
-  import Button from '@aziontech/webkit/button'
-  import Hero from '@aziontech/webkit/hero'
-  import SectionContainer from '@aziontech/webkit/section-container'
+  import TextureMaterial from '@aziontech/webkit/texture-material'
 
   import { COMPLIANCE_CERTIFICATIONS, COMPLIANCE_PRIVACY_LINKS } from '../data/compliance.js'
 </script>
@@ -335,14 +336,13 @@
       </div>
     </FrameBox>
 
-    <!-- The closing spacer, borderless: the footer below opens with its own full-bleed rule,
-         and a bordered spacer here would land a second hairline on that pixel (see every
-         other landing page's own closing spacer, e.g. AzionTechnology.vue). -->
     <FrameBox
       borders="none"
-      marks="none"
-      hatch
+      marks="all"
+      data-hatch="true"
       class="h-[calc(var(--spacing-xxl)*2)]"
-    />
+    >
+      <TextureMaterial kind="lines" />
+    </FrameBox>
   </SectionContainer>
 </template>

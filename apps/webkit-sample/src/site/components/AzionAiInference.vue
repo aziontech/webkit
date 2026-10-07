@@ -94,15 +94,16 @@
   import Badge from '@aziontech/webkit/badge'
   import Button from '@aziontech/webkit/button'
   import CallToAction from '@aziontech/webkit/call-to-action'
+  import CardGrid from '@aziontech/webkit/card-grid'
   import FrameBox from '@aziontech/webkit/frame-box'
+  import Hero from '@aziontech/webkit/hero'
   import HeroTitle from '@aziontech/webkit/hero-title'
   import IconButton from '@aziontech/webkit/icon-button'
-  import SectionGap from '@aziontech/webkit/section-gap'
-  import SectionTitle from '@aziontech/webkit/section-title'
-  import CardGrid from '@aziontech/webkit/card-grid'
-  import Hero from '@aziontech/webkit/hero'
   import SectionContainer from '@aziontech/webkit/section-container'
+  import SectionGap from '@aziontech/webkit/section-gap'
   import SectionModule from '@aziontech/webkit/section-module'
+  import SectionTitle from '@aziontech/webkit/section-title'
+  import TextureMaterial from '@aziontech/webkit/texture-material'
   import { NetworkBanner } from '@shared/ui/banners/index.js'
   import { CLIENT_STRIP } from '@shared/ui/brand/strips.js'
   import { useRouter } from 'vue-router'
@@ -927,10 +928,12 @@
 
     <FrameBox
       borders="none"
-      marks="none"
-      hatch
+      marks="all"
+      data-hatch="true"
       class="h-[calc(var(--spacing-xxl)*2)]"
-    />
+    >
+      <TextureMaterial kind="lines" />
+    </FrameBox>
   </SectionContainer>
   <!-- ══ End framed column ═════════════════════════════════════════════════════ -->
 </template>

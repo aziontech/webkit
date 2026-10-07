@@ -14,6 +14,7 @@
   import SectionModule from '@aziontech/webkit/section-module'
   import SectionTitle from '@aziontech/webkit/section-title'
   import SegmentedButton from '@aziontech/webkit/segmented-button'
+  import TextureMaterial from '@aziontech/webkit/texture-material'
   import { computed, ref } from 'vue'
   import { useRouter } from 'vue-router'
 
@@ -287,5 +288,14 @@
         </template>
       </CallToAction>
     </SectionModule>
+
+    <FrameBox
+      borders="none"
+      marks="all"
+      data-hatch="true"
+      class="h-[calc(var(--spacing-xxl)*2)]"
+    >
+      <TextureMaterial kind="lines" />
+    </FrameBox>
   </SectionContainer>
 </template>

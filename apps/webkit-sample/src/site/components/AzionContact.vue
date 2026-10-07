@@ -5,10 +5,12 @@
   import FieldSelect from '@aziontech/webkit/field-select'
   import FieldText from '@aziontech/webkit/field-text'
   import FieldTextarea from '@aziontech/webkit/field-textarea'
+  import FrameBox from '@aziontech/webkit/frame-box'
   import Hero from '@aziontech/webkit/hero'
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
   import SectionModule from '@aziontech/webkit/section-module'
+  import TextureMaterial from '@aziontech/webkit/texture-material'
   import { toast } from '@aziontech/webkit/toast'
   import { reactive, ref } from 'vue'
   import { useRouter } from 'vue-router'
@@ -299,6 +301,13 @@
       </CallToAction>
     </SectionModule>
 
-    <SectionGap hatch />
+    <FrameBox
+      borders="none"
+      marks="all"
+      data-hatch="true"
+      class="h-[calc(var(--spacing-xxl)*2)]"
+    >
+      <TextureMaterial kind="lines" />
+    </FrameBox>
   </SectionContainer>
 </template>

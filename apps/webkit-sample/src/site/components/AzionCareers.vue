@@ -145,6 +145,7 @@
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionModule from '@aziontech/webkit/section-module'
   import SectionTitle from '@aziontech/webkit/section-title'
+  import TextureMaterial from '@aziontech/webkit/texture-material'
   import { computed, reactive, useId } from 'vue'
   import { useRoute } from 'vue-router'
 
@@ -419,14 +420,13 @@
       </FrameBox>
     </SectionModule>
 
-    <!-- The rhythm the page closes on, hatched. A bare FrameBox at SectionGap's own `medium`
-         height drawing NO rules: the footer below opens with a full-bleed rule, and SectionGap's
-         fixed `borders="y"` would land a second hairline on that pixel. -->
     <FrameBox
       borders="none"
-      marks="none"
-      hatch
+      marks="all"
+      data-hatch="true"
       class="h-[calc(var(--spacing-xxl)*2)]"
-    />
+    >
+      <TextureMaterial kind="lines" />
+    </FrameBox>
   </SectionContainer>
 </template>

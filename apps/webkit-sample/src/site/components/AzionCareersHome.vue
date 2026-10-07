@@ -8,6 +8,7 @@
   import SectionGap from '@aziontech/webkit/section-gap'
   import SectionModule from '@aziontech/webkit/section-module'
   import SectionTitle from '@aziontech/webkit/section-title'
+  import TextureMaterial from '@aziontech/webkit/texture-material'
 
   import {
     CAREERS_HOME_HERO,
@@ -196,9 +197,11 @@
 
     <FrameBox
       borders="none"
-      marks="none"
-      hatch
-      class="h-(--spacing-xxl)"
-    />
+      marks="all"
+      data-hatch="true"
+      class="h-[calc(var(--spacing-xxl)*2)]"
+    >
+      <TextureMaterial kind="lines" />
+    </FrameBox>
   </SectionContainer>
 </template>
