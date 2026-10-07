@@ -51,7 +51,7 @@
   // before they think to look for the chips at all.
   //
   // It counts FIELDS, not values — three authors is one cut on Author (see
-  // `filterCount` in ../../lib/behavior/filter-bar.js) — so the number always matches
+  // `filterCount` in @shared/lib/filter-bar.js) — so the number always matches
   // the number of chips beside it. A count of values would disagree with them on sight.
   //
   // ONE ANCHOR. The panel always opens under the Filter button, whether it was a chip
@@ -81,18 +81,18 @@
   import Popover from '@aziontech/webkit/popover'
   import { computed, nextTick, ref, watch } from 'vue'
 
-  import { useAnimatedHeight } from '../../lib/behavior/animate-height.js'
+  import { useAnimatedHeight } from '../../lib/animate-height.js'
   import {
     clearField,
     filterCount,
     isApplied,
     summarizeText,
     toggleValue
-  } from '../../lib/behavior/filter-bar'
-  import { openChannel } from '../../lib/behavior/filter-open.js'
+  } from '../../lib/filter-bar'
+  import { openChannel } from '../../lib/filter-open.js'
 
   const props = defineProps({
-    /** The page's field catalog — see lib/behavior/filter-bar.js for the shape. */
+    /** The page's field catalog — see @shared/lib/filter-bar.js for the shape. */
     fields: { type: Array, required: true },
     /** Applied state: `{ [fieldId]: values[] }`. An empty entry is not a filter. */
     modelValue: { type: Object, default: () => ({}) },
@@ -116,7 +116,7 @@
 
   // HOW MANY FIELDS are narrowing the list — the number in the badge. Fields, never
   // values: three authors is one cut on Author, and reading `3` for that would claim
-  // three columns are narrowed when only one is (../../lib/behavior/filter-bar.js).
+  // three columns are narrowed when only one is (@shared/lib/filter-bar.js).
   const appliedCount = computed(() => filterCount(props.modelValue))
 
   const open = ref(false)
@@ -145,7 +145,7 @@
   })
 
   // The panel's height eases between the natural heights of the two levels
-  // (lib/behavior/animate-height.js). Level changes are routed through `toLevel` so the
+  // (@shared/lib/animate-height.js). Level changes are routed through `toLevel` so the
   // measure -> pin -> ease -> release cycle wraps every one of them.
   const { region, height: regionHeight, animateHeight } = useAnimatedHeight()
   const toLevel = (dir, mutate) => {
@@ -298,7 +298,7 @@
   }
   // A CHIP ASKING FOR ITS FIELD. The chips are a sibling component, so they cannot call
   // `enter` directly; they raise a request on the channel keyed by the field catalog both
-  // halves were given (../../lib/behavior/filter-open.js) and this watcher answers it.
+  // halves were given (@shared/lib/filter-open.js) and this watcher answers it.
   // Keyed off the request's token rather than the field id, so asking twice for the same
   // field is two openings and not one.
   const openRequest = openChannel(props.fields)

@@ -4,7 +4,7 @@
   //     [ Module name                                     + New Thing ]  PageHeading
   //     [ what the module is, in one line                             ]
   //     [ ⚟ Filter  search ................    ↻   ⭳   ▤ ]  this row
-  //     [ the applied chips (../list/FilterChips.vue), when any       ]
+  //     [ the applied chips (@shared/ui/filter/FilterChips.vue), when any       ]
   //     [ table                                                       ]
   //
   // TWO GROUPS, AND THE SPLIT IS WHAT EACH CONTROL ACTS ON. The default slot holds the

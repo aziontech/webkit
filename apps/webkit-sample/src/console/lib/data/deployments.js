@@ -11,7 +11,7 @@
 import { deployById, stepsOf } from '@shared/lib/azion-deploys'
 import { computed } from 'vue'
 
-import { DATE_PRESETS, formatDateRange, matchDate } from '../behavior/filter-bar'
+import { DATE_PRESETS, formatDateRange, matchDate } from '@shared/lib/filter-bar'
 import {
   applicationDeploymentRows,
   deploymentByVersion,

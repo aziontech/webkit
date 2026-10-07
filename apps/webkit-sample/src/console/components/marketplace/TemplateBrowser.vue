@@ -30,10 +30,10 @@
   import ScrollArea from '@aziontech/webkit/scroll-area'
   import { computed, ref } from 'vue'
 
-  import { applyFilters } from '../../lib/behavior/filter-bar'
+  import { applyFilters } from '@shared/lib/filter-bar'
   import { useScrollFade } from '../../lib/behavior/scroll-fade'
-  import FilterButton from '../list/FilterButton.vue'
-  import FilterChips from '../list/FilterChips.vue'
+  import FilterButton from '@shared/ui/filter/FilterButton.vue'
+  import FilterChips from '@shared/ui/filter/FilterChips.vue'
   import IntegrationCard from './IntegrationCard.vue'
   import TemplateCard from './TemplateCard.vue'
 
@@ -76,8 +76,8 @@
   // ── THE FILTER ───────────────────────────────────────────────────────────────
   //
   // THE SAME CONTROL EVERY LIST IN THE CONSOLE NARROWS WITH — the Filter button and
-  // its chips (../list/FilterButton.vue, ../list/FilterChips.vue), over the field
-  // catalog in ../../lib/behavior/filter-bar.js.
+  // its chips (@shared/ui/filter/FilterButton.vue, @shared/ui/filter/FilterChips.vue), over the field
+  // catalog in @shared/lib/filter-bar.js.
   //
   // What it replaces was this module's own invention: one Dropdown whose first row was
   // a SegmentedButton switching the option list underneath between Use Cases and
@@ -160,7 +160,7 @@
     :class="{ 'lg:min-h-0': scrollable }"
   >
     <!-- Section title beside its one control, then the applied cuts on the row under
-         it — the console's filter shape (../list/FilterButton.vue). The button is a
+         it — the console's filter shape (@shared/ui/filter/FilterButton.vue). The button is a
          control of fixed width so it shares the title's row; a chip's width is DATA, so
          the chips take a row of their own and that row does not exist until something is
          applied. -->

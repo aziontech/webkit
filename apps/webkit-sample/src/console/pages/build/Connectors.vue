@@ -11,7 +11,7 @@
   // hold the answer: an HTTP origin, a storage bucket, or a live-ingest endpoint. The
   // TYPE decides what the address means, so it leads the columns and the fields.
   //
-  // Narrowing is the shared FILTER BUTTON (list/FilterButton.vue), beside the search in
+  // Narrowing is the shared FILTER BUTTON (@shared/ui/filter/FilterButton.vue), beside the search in
   // the controls row: the COLUMNS decide the fields, the button pre-filters `:data`, and
   // the search narrows what is left through the table's own global filter.
   import Button from '@aziontech/webkit/button'
@@ -32,8 +32,8 @@
   import ColumnsButton from '../../components/list/ColumnsButton.vue'
   import DeleteDialog from '../../components/list/DeleteDialog.vue'
   import ExportButton from '../../components/list/ExportButton.vue'
-  import FilterButton from '../../components/list/FilterButton.vue'
-  import FilterChips from '../../components/list/FilterChips.vue'
+  import FilterButton from '@shared/ui/filter/FilterButton.vue'
+  import FilterChips from '@shared/ui/filter/FilterChips.vue'
   import IdCell from '../../components/list/IdCell.vue'
   import LastModifiedCell from '../../components/list/LastModifiedCell.vue'
   import RefreshButton from '../../components/list/RefreshButton.vue'
@@ -41,7 +41,7 @@
   import HeadingAction from '../../components/page/HeadingAction.vue'
   import PageHeading from '../../components/page/PageHeading.vue'
   import AppLayout from '../../components/shell/AppLayout.vue'
-  import { DATE_PRESETS, formatDateRange, matchDate } from '../../lib/behavior/filter-bar'
+  import { DATE_PRESETS, formatDateRange, matchDate } from '@shared/lib/filter-bar'
   import { useListFilters } from '../../lib/behavior/list-state'
   import { FIT_COLUMN, TAG_COLUMN } from '../../lib/behavior/table-columns'
   import { connectorMeta, CONNECTORS, connectorTypeOptions } from '../../lib/data/connectors'

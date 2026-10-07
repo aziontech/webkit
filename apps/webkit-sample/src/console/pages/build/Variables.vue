@@ -7,7 +7,7 @@
   // the records, the narrowing, and appending whatever the drawer created.
   //
   // Narrowing follows the module-list pattern (the webkit-lists skill): a FILTER
-  // BUTTON (list/FilterButton.vue) beside the search. The COLUMNS decide
+  // BUTTON (@shared/ui/filter/FilterButton.vue) beside the search. The COLUMNS decide
   // the fields — every enumerable column becomes one field (Author, Type) and the
   // date column becomes relative periods plus a Custom month grid (Last Modified),
   // while the free-text columns (Key, Value) are covered by the search field instead
@@ -37,8 +37,8 @@
   import ColumnsButton from '../../components/list/ColumnsButton.vue'
   import DeleteDialog from '../../components/list/DeleteDialog.vue'
   import ExportButton from '../../components/list/ExportButton.vue'
-  import FilterButton from '../../components/list/FilterButton.vue'
-  import FilterChips from '../../components/list/FilterChips.vue'
+  import FilterButton from '@shared/ui/filter/FilterButton.vue'
+  import FilterChips from '@shared/ui/filter/FilterChips.vue'
   import IdCell from '../../components/list/IdCell.vue'
   import LastModifiedCell from '../../components/list/LastModifiedCell.vue'
   import RefreshButton from '../../components/list/RefreshButton.vue'
@@ -46,7 +46,7 @@
   import HeadingAction from '../../components/page/HeadingAction.vue'
   import PageHeading from '../../components/page/PageHeading.vue'
   import AppLayout from '../../components/shell/AppLayout.vue'
-  import { DATE_PRESETS, formatDateRange, matchDate } from '../../lib/behavior/filter-bar'
+  import { DATE_PRESETS, formatDateRange, matchDate } from '@shared/lib/filter-bar'
   import { useListFilters } from '../../lib/behavior/list-state'
   import { FIT_COLUMN, TAG_COLUMN } from '../../lib/behavior/table-columns'
   import { productFirstUse } from '../../lib/data/product-empty-states'

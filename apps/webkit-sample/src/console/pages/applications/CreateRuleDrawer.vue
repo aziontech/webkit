@@ -34,7 +34,7 @@
   import FieldStack from '../../components/form/FieldStack.vue'
   import ResourceDrawer from '../../components/form/ResourceDrawer.vue'
   import Section from '../../components/page/Section.vue'
-  import { useAnimatedHeight } from '../../lib/behavior/animate-height.js'
+  import { useAnimatedHeight } from '@shared/lib/animate-height.js'
   import { MORPH_COLLAPSE } from '../../lib/behavior/list-morph'
   import * as applicationRules from '../../lib/data/rules-engine'
 

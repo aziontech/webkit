@@ -11,7 +11,7 @@
   // the list, rather than inside the row that narrows it
   // (../../components/page/PageHeading.vue, ../../components/page/ControlsHeader.vue).
   //
-  // Narrowing is the FILTER BUTTON (list/FilterButton.vue), not a generic
+  // Narrowing is the FILTER BUTTON (@shared/ui/filter/FilterButton.vue), not a generic
   // field/operator/value builder. The COLUMNS decide the fields: every enumerable
   // column becomes one field (Author, Infrastructure, Status) and the date column
   // becomes a field of relative periods plus a Custom month grid (Last Modified); the
@@ -53,8 +53,8 @@
   import DeleteDialog from '../../components/list/DeleteDialog.vue'
   import DomainCell from '../../components/list/DomainCell.vue'
   import ExportButton from '../../components/list/ExportButton.vue'
-  import FilterButton from '../../components/list/FilterButton.vue'
-  import FilterChips from '../../components/list/FilterChips.vue'
+  import FilterButton from '@shared/ui/filter/FilterButton.vue'
+  import FilterChips from '@shared/ui/filter/FilterChips.vue'
   import IdCell from '../../components/list/IdCell.vue'
   import LastModifiedCell from '../../components/list/LastModifiedCell.vue'
   import RefreshButton from '../../components/list/RefreshButton.vue'
@@ -62,7 +62,7 @@
   import HeadingAction from '../../components/page/HeadingAction.vue'
   import PageHeading from '../../components/page/PageHeading.vue'
   import AppLayout from '../../components/shell/AppLayout.vue'
-  import { DATE_PRESETS, formatDateRange, matchDate } from '../../lib/behavior/filter-bar'
+  import { DATE_PRESETS, formatDateRange, matchDate } from '@shared/lib/filter-bar'
   import { useListFilters } from '../../lib/behavior/list-state'
   import { FIT_COLUMN } from '../../lib/behavior/table-columns'
   import { APPLICATIONS } from '../../lib/data/applications'
@@ -146,7 +146,7 @@
   // One field per enumerable column, declared in the order the COLUMNS read — which is
   // also the order the chips sit in: an applied chip takes its catalog position, so
   // its neighbours change as filters come and go but the order never contradicts the
-  // panel's (list/FilterButton.vue explains what that buys). Each field owns its own
+  // panel's (@shared/ui/filter/FilterButton.vue explains what that buys). Each field owns its own
   // `match`, because only the page knows how a row answers for it (`author` is not
   // even a column — it renders inside the Last Modified cell).
   //

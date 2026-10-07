@@ -16,12 +16,12 @@
 
   import ColumnsButton from '../../../components/list/ColumnsButton.vue'
   import ExportButton from '../../../components/list/ExportButton.vue'
-  import FilterButton from '../../../components/list/FilterButton.vue'
-  import FilterChips from '../../../components/list/FilterChips.vue'
+  import FilterButton from '@shared/ui/filter/FilterButton.vue'
+  import FilterChips from '@shared/ui/filter/FilterChips.vue'
   import RefreshButton from '../../../components/list/RefreshButton.vue'
   import ControlsHeader from '../../../components/page/ControlsHeader.vue'
   import PageHeading from '../../../components/page/PageHeading.vue'
-  import { DATE_PRESETS, formatDateRange, matchDate } from '../../../lib/behavior/filter-bar'
+  import { DATE_PRESETS, formatDateRange, matchDate } from '@shared/lib/filter-bar'
   import { useListFilters } from '../../../lib/behavior/list-state'
   import { FIT_COLUMN, TAG_COLUMN_WIDE } from '../../../lib/behavior/table-columns'
 

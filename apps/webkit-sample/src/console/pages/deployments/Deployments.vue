@@ -20,7 +20,7 @@
   // action on this page creates a DEPLOY: the release composer (./ReleaseComposer.vue),
   // the same page every resource opens, the console's one deploy surface.
   //
-  // Narrowing is the FILTER BUTTON (list/FilterButton.vue) beside the search — the one
+  // Narrowing is the FILTER BUTTON (@shared/ui/filter/FilterButton.vue) beside the search — the one
   // shape every module list uses (the webkit-lists skill), never a
   // field/operator/value builder. The COLUMNS decide the fields; they pre-filter
   // `:data`, and the table sees only the rows that survive.
@@ -41,8 +41,8 @@
   import ProductFirstUse from '../../components/home/ProductFirstUse.vue'
   import ColumnsButton from '../../components/list/ColumnsButton.vue'
   import ExportButton from '../../components/list/ExportButton.vue'
-  import FilterButton from '../../components/list/FilterButton.vue'
-  import FilterChips from '../../components/list/FilterChips.vue'
+  import FilterButton from '@shared/ui/filter/FilterButton.vue'
+  import FilterChips from '@shared/ui/filter/FilterChips.vue'
   import RefreshButton from '../../components/list/RefreshButton.vue'
   import ControlsHeader from '../../components/page/ControlsHeader.vue'
   import HeadingAction from '../../components/page/HeadingAction.vue'

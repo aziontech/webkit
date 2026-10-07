@@ -78,7 +78,7 @@
   import OnboardingPlanStep from '../../components/onboarding/OnboardingPlanStep.vue'
   import OnboardingProfileStep from '../../components/onboarding/OnboardingProfileStep.vue'
   import OnboardingWire from '../../components/onboarding/OnboardingWire.vue'
-  import { useAnimatedHeight } from '../../lib/behavior/animate-height.js'
+  import { useAnimatedHeight } from '@shared/lib/animate-height.js'
   import { useAuthEntrance } from '../../lib/behavior/auth-entrance'
   import { provideOnboardingForm } from '../../lib/behavior/onboarding-form.js'
   import { onboardingSteps, profileDataKeys } from '../../lib/data/onboarding.js'

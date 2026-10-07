@@ -30,7 +30,7 @@
   //
   //   Deployments — narrowing, so it takes the row every list in the
   //     console opens with (../../components/page/ControlsHeader.vue): the search, then
-  //     the Filter button (list/FilterButton.vue) over the shared deployment catalog, hoisted out of the
+  //     the Filter button (@shared/ui/filter/FilterButton.vue) over the shared deployment catalog, hoisted out of the
   //     table's `#toolbar` under the heading — `:controls="false"`, and this page owns
   //     the state and binds it back in as models. Same catalog as the module list, so
   //     only the place changes and the two can never drift.
@@ -60,8 +60,8 @@
   import ConfirmDialog from '../../components/list/ConfirmDialog.vue'
   import DeleteDialog from '../../components/list/DeleteDialog.vue'
   import ExportButton from '../../components/list/ExportButton.vue'
-  import FilterButton from '../../components/list/FilterButton.vue'
-  import FilterChips from '../../components/list/FilterChips.vue'
+  import FilterButton from '@shared/ui/filter/FilterButton.vue'
+  import FilterChips from '@shared/ui/filter/FilterChips.vue'
   import RefreshButton from '../../components/list/RefreshButton.vue'
   import ControlsHeader from '../../components/page/ControlsHeader.vue'
   import PageHeading from '../../components/page/PageHeading.vue'

@@ -57,8 +57,8 @@
   import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
   import ExportButton from '../../components/list/ExportButton.vue'
-  import FilterButton from '../../components/list/FilterButton.vue'
-  import FilterChips from '../../components/list/FilterChips.vue'
+  import FilterButton from '@shared/ui/filter/FilterButton.vue'
+  import FilterChips from '@shared/ui/filter/FilterChips.vue'
   import RefreshButton from '../../components/list/RefreshButton.vue'
   import EventDocument from '../../components/observability/EventDocument.vue'
   import EventFieldRow from '../../components/observability/EventFieldRow.vue'

@@ -67,7 +67,7 @@
   // `v-model:columnVisibility` instead of through inject.
   //
   // ONE FLAT LEVEL, unlike the filter panel. A column list has no drill-down: every
-  // entry is a leaf with a binary state, so the level stack that ./FilterButton.vue
+  // entry is a leaf with a binary state, so the level stack that @shared/ui/filter/FilterButton.vue
   // needs would be machinery around nothing. The anatomy still matches it exactly —
   // header, scrolling list, footer, and the same content column — because the two
   // panels open from the same row and a reader should not have to relearn one.
@@ -93,7 +93,7 @@
 
   const emit = defineEmits(['update:modelValue'])
 
-  // THE CONTENT COLUMN is `--spacing-md` (16px), the same as ./FilterButton.vue: the
+  // THE CONTENT COLUMN is `--spacing-md` (16px), the same as @shared/ui/filter/FilterButton.vue: the
   // list pads by `--spacing-xxs` (4px) and a row by `--spacing-sm` (12px), so a row's
   // leading control starts at 16px — and the header pads by `--spacing-md` directly so
   // its title lands on that identical x. Two panels open from one row; their contents
@@ -206,7 +206,7 @@
     <Popover.Content>
       <div class="flex flex-col">
         <!-- The header names the panel rather than the control, the same way
-             ./FilterButton.vue's field says "Filter by…": by the time this is on
+             @shared/ui/filter/FilterButton.vue's field says "Filter by…": by the time this is on
              screen the reader knows which button they pressed. -->
         <div class="border-b border-(--border-default) px-(--spacing-md) py-(--spacing-xs)">
           <p class="text-label-md text-(--text-default)">Columns</p>
@@ -256,7 +256,7 @@
 
         <!-- Offered only once there is something to undo, so the panel opens with a
              single job (pick columns) instead of an action that would do nothing.
-             Mirrors the "Clear <field>" footer on ./FilterButton.vue's deeper levels. -->
+             Mirrors the "Clear <field>" footer on @shared/ui/filter/FilterButton.vue's deeper levels. -->
         <div
           v-if="hiddenCount"
           class="border-t border-(--border-default) p-(--spacing-xxs)"

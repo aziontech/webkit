@@ -22,13 +22,13 @@
   // Both halves read the same `v-model` and the same `fields`, so neither owns the
   // other's state. Clicking a chip to edit it still opens the button's panel: that goes
   // through the one channel they share, keyed by the field catalog itself
-  // (../../lib/behavior/filter-open.js), so no page has to wire the two together.
+  // (@shared/lib/filter-open.js), so no page has to wire the two together.
   import Avatar from '@aziontech/webkit/avatar'
   import Chip from '@aziontech/webkit/chip'
   import { computed } from 'vue'
 
-  import { appliedFields, clearField, pickedAvatars, summarize } from '../../lib/behavior/filter-bar'
-  import { requestOpen } from '../../lib/behavior/filter-open.js'
+  import { appliedFields, clearField, pickedAvatars, summarize } from '../../lib/filter-bar'
+  import { requestOpen } from '../../lib/filter-open.js'
 
   const props = defineProps({
     /** The page's field catalog — the SAME array the button gets; it keys the channel. */

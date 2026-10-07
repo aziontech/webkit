@@ -14,13 +14,13 @@
   import { computed, ref } from 'vue'
   import { useRoute } from 'vue-router'
 
-  import FilterButton from '../../components/list/FilterButton.vue'
-  import FilterChips from '../../components/list/FilterChips.vue'
+  import FilterButton from '@shared/ui/filter/FilterButton.vue'
+  import FilterChips from '@shared/ui/filter/FilterChips.vue'
   import IntegrationCard from '../../components/marketplace/IntegrationCard.vue'
   import TemplateCard from '../../components/marketplace/TemplateCard.vue'
   import PageHeading from '../../components/page/PageHeading.vue'
   import AppLayout from '../../components/shell/AppLayout.vue'
-  import { applyFilters } from '../../lib/behavior/filter-bar'
+  import { applyFilters } from '@shared/lib/filter-bar'
   import { FRAMEWORKS } from '../../lib/data/frameworks'
 
   // Where `Documentation` goes. The catalog's own docs, the URL the template and integration
@@ -344,7 +344,7 @@
   // user narrows it. Empty = no constraint on that axis.
   // The filter catalog. A card grid narrows by the same membership rule a table does
   // — is this integration's publisher one of these — so it takes the same bar
-  // (list/FilterButton.vue) rather than a row of Selects that had to be width-tuned per
+  // (@shared/ui/filter/FilterButton.vue) rather than a row of Selects that had to be width-tuned per
   // field. The grid keeps its own search: unlike a table it has no global filter of
   // its own, so the term is matched here across name, vendor and description.
   const integrationFields = [

@@ -17,10 +17,10 @@
   import Tag from '@aziontech/webkit/tag'
   import { computed, ref } from 'vue'
 
-  import FilterButton from '../../../components/list/FilterButton.vue'
-  import FilterChips from '../../../components/list/FilterChips.vue'
+  import FilterButton from '@shared/ui/filter/FilterButton.vue'
+  import FilterChips from '@shared/ui/filter/FilterChips.vue'
   import SuccessMark from '../../../components/page/SuccessMark.vue'
-  import { applyFilters } from '../../../lib/behavior/filter-bar'
+  import { applyFilters } from '@shared/lib/filter-bar'
   import { useScrollFade } from '../../../lib/behavior/scroll-fade'
   import { FRAMEWORKS, templateSlugForTech, useCaseOptions } from '../../../lib/data/frameworks'
   import {

@@ -15,12 +15,12 @@
 // here rather than passed in — it is a module-level flag, and every list binds it.
 //
 // What stays with the page: the field catalog (only the page knows how a row
-// answers for each field) and the columns. See list/FilterButton.vue for the control that
+// answers for each field) and the columns. See @shared/ui/filter/FilterButton.vue for the control that
 // drives `filters`, and lib/filter-bar.js for the model underneath it.
 import { computed, onScopeDispose, ref, toValue, watch } from 'vue'
 
 import { useTenancyReload } from '../state/tenancy-reload'
-import { applyFilters } from './filter-bar'
+import { applyFilters } from '@shared/lib/filter-bar'
 
 // How long a manual refresh holds the loading flag open. The sample's rows are already
 // in memory, so there is nothing to wait for — what the window buys is that the control

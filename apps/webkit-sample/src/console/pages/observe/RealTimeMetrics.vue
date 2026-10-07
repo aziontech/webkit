@@ -8,7 +8,7 @@
   // same delivery from the browser's side.
   //
   // That window is the one control it shares with every list in the console, and
-  // deliberately the same one: the Filter button (list/FilterButton.vue) holding a single
+  // deliberately the same one: the Filter button (@shared/ui/filter/FilterButton.vue) holding a single
   // `kind: 'range'` field, so picking a period here is the same gesture as picking a
   // status anywhere else. It narrows nothing locally — the fixture reshapes per
   // period instead (src/lib/observability.js) — so it is bound directly rather
@@ -17,8 +17,8 @@
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, ref } from 'vue'
 
-  import FilterButton from '../../components/list/FilterButton.vue'
-  import FilterChips from '../../components/list/FilterChips.vue'
+  import FilterButton from '@shared/ui/filter/FilterButton.vue'
+  import FilterChips from '@shared/ui/filter/FilterChips.vue'
   import MetricPanel from '../../components/observability/MetricPanel.vue'
   import PageHeading from '../../components/page/PageHeading.vue'
   import AppLayout from '../../components/shell/AppLayout.vue'

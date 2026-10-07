@@ -12,7 +12,7 @@
   // windows look FORWARD (Expired, Within 30 days, …) — “changed in the last 7 days”
   // is the wrong question to ask of an expiry date.
   //
-  // Narrowing is the shared FILTER BUTTON (list/FilterButton.vue), beside the search in
+  // Narrowing is the shared FILTER BUTTON (@shared/ui/filter/FilterButton.vue), beside the search in
   // the controls row: the COLUMNS decide the fields, the button pre-filters `:data`, and
   // the search narrows what is left through the table's own global filter.
   import Button from '@aziontech/webkit/button'
@@ -33,8 +33,8 @@
   import ColumnsButton from '../../components/list/ColumnsButton.vue'
   import DeleteDialog from '../../components/list/DeleteDialog.vue'
   import ExportButton from '../../components/list/ExportButton.vue'
-  import FilterButton from '../../components/list/FilterButton.vue'
-  import FilterChips from '../../components/list/FilterChips.vue'
+  import FilterButton from '@shared/ui/filter/FilterButton.vue'
+  import FilterChips from '@shared/ui/filter/FilterChips.vue'
   import IdCell from '../../components/list/IdCell.vue'
   import LastModifiedCell from '../../components/list/LastModifiedCell.vue'
   import RefreshButton from '../../components/list/RefreshButton.vue'

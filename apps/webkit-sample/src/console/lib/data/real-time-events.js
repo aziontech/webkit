@@ -18,7 +18,7 @@
 // `at` is the real instant; `time` is the display string derived from it.
 import { withinRange } from '@shared/lib/dates'
 
-import { DATE_CUSTOM } from '../behavior/filter-bar'
+import { DATE_CUSTOM } from '@shared/lib/filter-bar'
 import { FIT_COLUMN, TAG_COLUMN } from '../behavior/table-columns'
 
 /** Minutes ago, for a log whose rows are minutes apart rather than days. */

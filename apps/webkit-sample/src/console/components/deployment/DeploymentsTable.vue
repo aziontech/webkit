@@ -12,7 +12,7 @@
   //   deployedAt (Date) · date (display string)
   //   author · authorEmail (the Authors selector's key) · authorAvatar
   //
-  // Narrowing is the FILTER BUTTON (list/FilterButton.vue) over the shared catalog in
+  // Narrowing is the FILTER BUTTON (@shared/ui/filter/FilterButton.vue) over the shared catalog in
   // src/lib/deployments.js — Status, Type, Environment and Author, what every
   // deployment surface narrows by, plus the Deployed window the module list adds. The
   // free-text search stays in the open, narrowing further through the table's global
@@ -41,13 +41,13 @@
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, ref, watch } from 'vue'
 
-  import { applyFilters } from '../../lib/behavior/filter-bar'
+  import { applyFilters } from '@shared/lib/filter-bar'
   import { useListRefresh } from '../../lib/behavior/list-state'
   import { DEPLOYMENT_COLUMNS } from '../../lib/data/deployment-columns'
   import { environmentSeverity, statusMeta } from '../../lib/data/deployments'
   import AuthorCell from '../list/AuthorCell.vue'
-  import FilterButton from '../list/FilterButton.vue'
-  import FilterChips from '../list/FilterChips.vue'
+  import FilterButton from '@shared/ui/filter/FilterButton.vue'
+  import FilterChips from '@shared/ui/filter/FilterChips.vue'
   import IdCell from '../list/IdCell.vue'
   import LastModifiedCell from '../list/LastModifiedCell.vue'
   import ResourceLink from '../resource/ResourceLink.vue'
@@ -157,7 +157,7 @@
     <!-- The same controls the page can hoist, rendered here for an internal level, in
          the same shape the page pattern uses: the Filter button then the search on one
          row, the two listing actions at its right end, and the applied chips on a row
-         under them (../list/FilterChips.vue, which renders nothing until something is
+         under them (@shared/ui/filter/FilterChips.vue, which renders nothing until something is
          applied).
          Refresh and Download CSV are the DS's OWN sub-components here, not the
          consumer-side pair the pages use: inside the table they can `inject` its
