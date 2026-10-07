@@ -1,4 +1,6 @@
 import type { Client } from '../clients/registry'
+import awsLight from '../frameworks/aws-extended-color.svg'
+import awsDark from '../frameworks/aws-extended-reversed.svg'
 import akamaiLight from './akamai-extended-color.svg'
 import akamaiDark from './akamai-extended-reversed.svg'
 import akamaiSymbol from './akamai-symbol-color.svg'
@@ -15,7 +17,13 @@ export type Competitor = Pick<Client, 'name' | 'logo' | 'logoLight' | 'artwork' 
 
 export const COMPETITORS: Competitor[] = [
   { name: 'Akamai', logo: akamaiDark, logoLight: akamaiLight, symbol: akamaiSymbol },
-  { name: 'Cloudflare', logo: cloudflareDark, logoLight: cloudflareLight, symbol: cloudflareSymbol },
+  { name: 'AWS', logo: awsDark, logoLight: awsLight },
+  {
+    name: 'Cloudflare',
+    logo: cloudflareDark,
+    logoLight: cloudflareLight,
+    symbol: cloudflareSymbol
+  },
   { name: 'Fastly', logo: fastlyDark, logoLight: fastlyLight, symbol: fastlySymbol },
   { name: 'Vercel', logo: vercelDark, logoLight: vercelLight }
 ]

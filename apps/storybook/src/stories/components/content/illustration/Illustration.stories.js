@@ -17,6 +17,7 @@ const ASSETS = [
   'ai-applications',
   'automate-threat-mitigation',
   'azion-to-akamai',
+  'azion-to-aws',
   'azion-to-cloudflare',
   'azion-to-fastly',
   'azion-to-vercel',

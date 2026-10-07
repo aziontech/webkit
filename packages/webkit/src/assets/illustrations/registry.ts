@@ -8,6 +8,7 @@ export const illustrationAssets = {
   'ai-applications': () => import('./ai-applications.svg'),
   'automate-threat-mitigation': () => import('./automate-threat-mitigation.svg'),
   'azion-to-akamai': () => import('./azion-to-akamai.svg'),
+  'azion-to-aws': () => import('./azion-to-aws.svg'),
   'azion-to-cloudflare': () => import('./azion-to-cloudflare.svg'),
   'azion-to-fastly': () => import('./azion-to-fastly.svg'),
   'azion-to-vercel': () => import('./azion-to-vercel.svg'),
