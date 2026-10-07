@@ -65,6 +65,12 @@ const SPECIALIST_PAGE = {
   href: '/contact',
   trailing: true
 }
+const CONTACT = {
+  label: 'Contact Us',
+  kind: 'outlined',
+  href: '/contact',
+  trailing: true
+}
 const SPECIALIST_PLAIN = { label: 'Talk to a Specialist', kind: 'outlined' }
 const SEE_ARTICLES = { label: 'See articles', kind: 'secondary', href: '#subjects' }
 const DOCS = { label: 'Docs', kind: 'outlined', href: '/docs', trailing: true }
@@ -206,6 +212,28 @@ ${indent(actions([SEE_ARTICLES, SPECIALIST_PAGE]), 2)}
   </Hero.Title>
 </Hero>`
 
+const CENTERED_BAND_TEMPLATE = `<Hero
+  kind="band"
+  size="large"
+  max-width="site"
+  texture="dots"
+  texture-fade="top"
+  carousel
+  carousel-label="Trusted by mission-critical workloads"
+  :carousel-marks="${marks(CLIENT_STRIP, 1)}"
+>
+  <Hero.Title
+    centered
+    max-width="2xl"
+    eyebrow="Support"
+    eyebrow-prefix="//"
+    title="Technical support for every stage of your growth"
+    description="Designed to help you move independently. Backed by specialists when you need them."
+  >
+${indent(actions([START_FREE, CONTACT]), 2)}
+  </Hero.Title>
+</Hero>`
+
 const PIXEL_FLOOR_TEMPLATE = `<Hero
   kind="screen"
   floor-texture="pixelate"
@@ -298,7 +326,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The opening band of a marketing page: the page’s h1 and its actions, full-bleed above the framed column, with the backdrop, strip or art that frames them. Each story is the hero one family of sample pages opens with. The home page and every solution page (Retail, Web Apps, AI Workloads, Security, Performance, Streaming, Financial Services, Technology) open on the centered band with the client strip on its floor. Learning opens on a large title band, AI Inference on the pixelate field, the Workloads copy sits on top of its topology, and the copy-beside-art band is the solution pages’ former opening. Built from `Hero`, `Hero.Title`, `Button`, `Illustration` and, for the Workloads scene, `Flow` and `Tag`.'
+          'The opening band of a marketing page: the page’s h1 and its actions, full-bleed above the framed column, with the backdrop, strip or art that frames them. Each story is the hero one family of sample pages opens with. The home page and every solution page (Retail, Web Apps, AI Workloads, Security, Performance, Streaming, Financial Services, Technology) open on the centered band with the client strip on its floor. Learning opens on a large title band, Support on the same band centred under an eyebrow with the dot field behind it, AI Inference on the pixelate field, the Workloads copy sits on top of its topology, and the copy-beside-art band is the solution pages’ former opening. Built from `Hero`, `Hero.Title`, `Button`, `Illustration` and, for the Workloads scene, `Flow` and `Tag`.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -329,6 +357,19 @@ export const TitleBand = {
           'The Learning Center hero: a padded band rather than a screen, at `size="large"` so it opens with twice the band’s usual rhythm above and below, the title, a one-line description and two actions centered, and the client strip on its floor. Use it where the page is a list or a catalogue and a full viewport of title would push the first entry below the fold.'
       },
       source: { code: toSfc([BUTTON_IMPORT, HERO_IMPORT], TITLE_BAND_TEMPLATE) }
+    }
+  }
+}
+
+export const CenteredBand = {
+  render: () => ({ components, template: CENTERED_BAND_TEMPLATE }),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The Support page’s hero: the large title band, framed at the site width, with the dot field fading in from the top behind an eyebrowed headline, two actions, and the client strip with its overline on the floor, all centred. It is the screen hero’s composition at band height, for a page whose first section should land above the fold.'
+      },
+      source: { code: toSfc([BUTTON_IMPORT, HERO_IMPORT], CENTERED_BAND_TEMPLATE) }
     }
   }
 }
