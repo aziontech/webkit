@@ -8,7 +8,7 @@ Two registers share one container system:
 - **The framed grid.** The Site, Hub and Docs register: a full-bleed hero band, then one centred
   column framed by vertical rules, holding bands divided by hairlines, textured gaps and ticked
   corners. Nothing floats, nothing is rounded, and **no line is ever drawn twice**. The reference
-  is the Site — [`site/components/`](../../apps/webkit-sample/src/site/components/).
+  is the Site — its sections in [`site/ui/sections/`](../../apps/webkit-sample/src/site/ui/sections/).
 
 Both read the same tokens: the layout group in
 [`semantic/layouts.data.js`](../../packages/theme/src/tokens/semantic/layouts.data.js) (boundary,
@@ -55,46 +55,67 @@ SiteLayout ───────────────────────
 Read it as an ownership map. The `═` rules are each drawn **once**, always by the box **above**
 them. The `║` rules belong to the column alone. The `▪` marks are the corner squares (§ 6).
 
-### The files a page is
+### A page is a list of sections
+
+A Site page is **data**, not markup. It is an ordered list of sections, and
+[`SitePage`](../../apps/webkit-sample/src/site/ui/SitePage.vue) renders it. Every section is one
+Storybook marketing template (`Templates/Marketing/*`) ported to the sample, so the page reads
+like the catalog: a hero, then the column's bands, then the close.
 
 | File | Holds |
 | --- | --- |
-| `site/views/Landing<Name>.vue` | The routed view: `SiteLayout` around one content component, nothing else |
-| `site/components/Azion<Name>.vue` | The page itself: `Hero` + `SectionContainer` + bands |
-| `site/components/<Band>.vue` | Any band reused on more than one page (`WhyAzion`, `MarketLeader`, `ClientStories`) |
-| `site/data/<name>.js` | Lists the page iterates over: cards, stats, quotes, links |
+| `site/data/pages/<page>.js` | The page: `export const <PAGE>_PAGE = [{ section: '<Name>', …props }]` |
+| `site/views/Landing<Name>.vue` | The routed view: `SiteLayout` around `SitePage`, nothing else |
+| `site/ui/sections/<Name>.vue` | One section per marketing template; registered in `sections/index.ts` |
+| `site/data/<name>.js` | Data more than one page shares (quotes, client strips, the Earth network band) |
 | `router/site.routes.js` | `{ path: '/site/<slug>', name: 'site-<slug>', component: Landing<Name> }` |
 
+```js
+// site/data/pages/support.js
+export const SUPPORT_PAGE = [
+  { section: 'Heroes', kind: 'centered-band', eyebrow: 'Support', title: '…', actions: [ … ], carouselMarks: SUPPORT_MARKS },
+  { section: 'CapabilityGrid', items: SUPPORT_REASONS },
+  { section: 'CompareSupportTiers' },
+  { section: 'ClientQuotes', quotes: quotesLedBy('contabilizei') },
+  { section: 'FaqSection', items: SUPPORT_FAQ },
+  { section: 'ClosingCallToAction', eyebrow: 'Get Started', title: '…', actions: [ … ], aside: { … } }
+]
+```
+
 ```vue
-<!-- site/views/LandingCache.vue -->
+<!-- site/views/LandingSupport.vue -->
 <script setup>
-  import AzionCache from '../components/AzionCache.vue'
   import SiteLayout from '../components/SiteLayout.vue'
+  import { SUPPORT_PAGE } from '../data/pages/support.js'
+  import SitePage from '../ui/SitePage.vue'
 </script>
 
 <template>
   <SiteLayout>
-    <AzionCache />
+    <SitePage :sections="SUPPORT_PAGE" />
   </SiteLayout>
 </template>
 ```
 
-`SiteLayout` supplies the nav, the `<main>`, the footer, the scroll region and the forced dark
-theme. A page never renders its own nav or footer.
+What `SitePage` owns, so no page writes it again:
 
-Import every primitive from its flat public path, using a PascalCase binding:
+- `Heroes` and `HeroForm` entries render above the column, full-bleed. Everything else renders
+  inside the one `SectionContainer max-width="site"`.
+- A hatched `SectionGap` goes before every column section. The one exception is
+  `ClosingCallToAction` with `kind: 'frame'` (the close with no ask), which follows its band directly.
+- `ClosingCallToAction` draws the closing texture band, so a page always ends on it.
 
-```js
-import Button from '@aziontech/webkit/button'
-import CardGrid from '@aziontech/webkit/card-grid'
-import FrameBox from '@aziontech/webkit/frame-box'
-import Hero from '@aziontech/webkit/hero'
-import SectionContainer from '@aziontech/webkit/section-container'
-import SectionGap from '@aziontech/webkit/section-gap'
-import SectionModule from '@aziontech/webkit/section-module'
-import SectionTitle from '@aziontech/webkit/section-title'
-import TextureMaterial from '@aziontech/webkit/texture-material'
-```
+Every prop is data: copy, lists, and actions as `{ label, href, kind?, trailing?, external? }`
+(`SiteAction`). Links to `/site/...` routes go through the router (`useSiteLink`); hashes and
+external URLs stay native. A section's `kind` is one of its template's stories.
+
+The pages that are apps rather than landing pages stay hand-built: the careers listing and job
+post, the success-case library, and the hero gallery (`AzionHeros`).
+
+### Inside a section — the primitives
+
+Steps 1–5 are what the sections and `SitePage` already render. Read them when you write or
+review a section, not when you build a page.
 
 ### Step 1 — the hero
 
@@ -239,81 +260,33 @@ Each recipe is a `SectionModule :divided="false" :padded="false"` with one of th
 | Sticky run of bands | `BandStack sticky` |
 | Closing CTA | `CallToAction framed kind="split"` (it draws its own frame, so don't wrap it), with `id="contact"` on the module |
 
-A band used on more than one page becomes its own component in `site/components/`, with the
-`SectionModule` as its root. The page then places it between two `SectionGap`s like any other
-band.
+A section's root is its `SectionModule` (a hero section's root is its `Hero`). It never renders
+`SectionContainer` or `SectionGap`: those belong to `SitePage`.
 
-### The whole page
+### Adding a band no section covers
 
-```vue
-<script setup>
-  import Button from '@aziontech/webkit/button'
-  import CallToAction from '@aziontech/webkit/call-to-action'
-  import CardGrid from '@aziontech/webkit/card-grid'
-  import FrameBox from '@aziontech/webkit/frame-box'
-  import Hero from '@aziontech/webkit/hero'
-  import SectionContainer from '@aziontech/webkit/section-container'
-  import SectionGap from '@aziontech/webkit/section-gap'
-  import SectionModule from '@aziontech/webkit/section-module'
-  import SectionTitle from '@aziontech/webkit/section-title'
-  import TextureMaterial from '@aziontech/webkit/texture-material'
+A page never carries a hand-built band. When the band you need has no section:
 
-  import { FEATURES } from '../data/cache.js'
-</script>
-
-<template>
-  <Hero kind="screen" max-width="site" texture="dots" texture-fade="bottom" offset="3.5rem">
-    <Hero.Title centered eyebrow="Cache" title="Accelerate content delivery globally" description="…">
-      <template #actions>
-        <Button label="Start Free" kind="secondary" size="large" />
-      </template>
-    </Hero.Title>
-  </Hero>
-
-  <SectionContainer max-width="site">
-    <SectionModule :divided="false" :padded="false">
-      <template #header>
-        <SectionTitle title="Why teams cache on Azion" />
-      </template>
-      <FrameBox flush borders="y" marks="all">
-        <CardGrid flush kind="frame" :columns="3">
-          <CardGrid.Cell v-for="feature in FEATURES" :key="feature.key" kind="canvas">
-            <h3 class="text-heading-xs text-(--text-default)">{{ feature.title }}</h3>
-            <p class="text-body-sm text-(--text-muted)">{{ feature.description }}</p>
-          </CardGrid.Cell>
-        </CardGrid>
-      </FrameBox>
-    </SectionModule>
-
-    <SectionGap hatch />
-
-    <SectionModule id="contact" :divided="false" :padded="false" class="scroll-mt-(--spacing-xxl)">
-      <CallToAction framed kind="split" title="Build, run, and protect applications." description="…">
-        <template #actions>
-          <Button label="Start Free" kind="secondary" size="large" />
-        </template>
-      </CallToAction>
-    </SectionModule>
-
-    <FrameBox borders="none" marks="all" data-hatch="true" class="h-[calc(var(--spacing-xxl)*2)]">
-      <TextureMaterial kind="lines" />
-    </FrameBox>
-  </SectionContainer>
-</template>
-```
-
-`../data/cache.js` is the page's own data file. You create it alongside the page: it exports
-`FEATURES` as `{ key, title, description }` entries.
+1. **Check the catalog.** Most "new" bands are an existing template with different data, or a
+   story (a `kind`) the template already has. Folding a one-off into the nearest section beats a
+   new one.
+2. **Write the template first.** `apps/storybook/src/stories/templates/marketing/<Name>.stories.js`,
+   following [`storybook-source.md`](../rules/storybook-source.md): one story per markup variant, the
+   copy from the page that needs it, and the description naming the pages that render it. List it in
+   that folder's `Overview.mdx`.
+3. **Port it to a section.** `site/ui/sections/<Name>.vue`: the template's markup without its column
+   wrapper, `lang="ts"` with a named `interface Props`, every string and list a prop, one `kind` per
+   story, buttons through `SectionAction`, links through `useSiteLink`. Register it in
+   `sections/index.ts`.
+4. **Use it from the page's data.** Nothing else changes.
 
 ### Done when
 
-- One `Hero` and one `SectionContainer`, both `max-width="site"`. The page has one `h1`.
-- Every `SectionModule` has `:divided="false"`, and a `SectionGap hatch` sits between every pair
-  of them.
-- In the rendered DOM, no band's `data-borders` contains `top`, `left` or `right`.
-- The band after each gap has `marks="bottom"`. Every other framed band or cell has `marks="all"`.
-- The column ends on the texture band, and no page-level `border-*` touches the footer.
-- Every string and list comes from props or `site/data/`, and no band hard-codes a colour or length.
+- The view is `SiteLayout` around `SitePage`, and the page is one `site/data/pages/<page>.js` list.
+- Every entry names a registered section; no band is written by hand in a view or a page file.
+- Every string and list comes from the page data or a shared `site/data/` module, and data two pages
+  share lives once.
+- The page has one `h1`, from its hero section.
 - At 375, 768, 1440 and 1920px the hero copy and the first band start on the same vertical line,
   and the `║` rules never sit on the window edge.
 

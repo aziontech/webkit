@@ -1,6 +1,6 @@
 ---
 name: site-design-translate
-description: Translate a live marketing page (azion.com or any URL) into the webkit-sample Site, block for block, with its copy carried over verbatim and its layout re-expressed in our own page language — Hero band, SectionContainer column, SectionGap, FrameBox. Use when asked to recreate, reshape, port, or "translate" a website page into /site.
+description: Translate a live marketing page (azion.com or any URL) into the webkit-sample Site, block for block, with its copy carried over verbatim and its layout re-expressed in our own page language — the site's marketing sections, assembled as page data. Use when asked to recreate, reshape, port, or "translate" a website page into /site.
 scope: webkit
 enforced_by: [migration, styling, dependencies, accessibility, no-invention, review]
 ---
@@ -15,7 +15,7 @@ Two halves, and they are not negotiable in either direction:
 | Half | Rule |
 | --- | --- |
 | **Content** | Verbatim. Every headline, eyebrow, paragraph, list item, link label, stat, and mark that the source page renders appears on ours; nothing else does. No paraphrase, no tightening, no "improved" copy, no invented eyebrow, no dropped band. |
-| **Form** | Ours. The source's grid, spacing, borders, colours, radii, and any positioning or animation library are **not** carried over. Every band is rebuilt out of the primitives in [`CONTAINERS.md`](../../docs/CONTAINERS.md) on theme tokens. |
+| **Form** | Ours. The source's grid, spacing, borders, colours, radii, and any positioning or animation library are **not** carried over. Every band becomes one of the site's sections (one per Storybook marketing template), and the page is a list of them — [`CONTAINERS.md`](../../docs/CONTAINERS.md) § A page is a list of sections. |
 
 This is [`migration.md`](../../rules/migration.md) applied to a whole page: **never inherit,
 always rewrite.** The source is the specification for *what*; our language is the specification
@@ -64,33 +64,50 @@ say it is blocked.
 
 ---
 
-## Step 2 — map each band to a primitive
+## Step 2 — map each band to a section
 
-Go band by band, in order. For each one, name the primitive **before** writing markup. The
-mapping is fixed — it is not a menu of options:
+Go band by band, in order. For each one, name the section **before** writing anything. The
+sections are the Storybook marketing templates (`Templates/Marketing/*`), ported to
+`site/ui/sections/`. The mapping is fixed — it is not a menu of options:
 
-| Source band | Our block |
+| Source band | Our section |
 | --- | --- |
-| Opening band: `h1` + description + actions | `Hero kind="screen" max-width="site"` holding `Hero.Title`, actions in its `#actions` slot |
-| A logo strip / marquee of marks | `Ticker` — its `label` is the source's eyebrow, its `clients` the ordered mark list |
-| A band that is only a heading (± eyebrow, ± description) | `SectionTitle` (`kind="centered"` unless the source sets the heading and its description in two columns, then `kind="horizontal"`) |
-| A grid of product / capability links | `CardGrid variant="divider"` of `NavColumn` + `NavItem` |
-| A copy-beside-art band | One `FrameBox` with a `lg:grid-cols-2` inside; the art is a registered banner or an `Illustration` asset |
-| Client marks beside a testimonial (a proof band) | `QuoteTabs` in a `FrameBox flush borders="y" marks="all"`, `:items="quotesLedBy('<client>')"` (site `data/solutions.js`) led by the source's quoted client, CTA in `#actions`. Never `LogoWall` + a `Quote` in its `#aside` |
-| A row of stats (big numeral + unit + label) | A `gap-px` grid of `FrameBox borders="none" marks="none"` cells |
-| A 2-up or 4-up card grid | `CardGrid variant="divider"` with one framed cell per card |
-| A two-column split (copy \| code) | One `FrameBox` with a `md:grid-cols-2`; the code half is `CodeBlock` |
-| A mosaic / gallery of tiles | A `gap-px` hairline grid; a tile's own fill comes from data, never from a literal |
-| An empty rhythm band | `SectionGap hatch` |
-| The closing CTA | The Site's own CTA band, with every string passed as a prop |
+| Opening band: `h1` + description + actions | `Heroes`, the `kind` that matches its shape (`centered-carousel`, `title-band`, `centered-band`, `pixel-floor`, `copy-beside-art`, `copy-on-top-art`, `product-ticker`); `HeroForm` when the opening holds a form |
+| A logo strip / marquee of marks under the opening | The hero's `carouselMarks` + `carouselLabel` (clients) or `tickerMarks` (a product stack) |
+| A band that is only a heading (± eyebrow, ± description) | The heading of the section it introduces; it is never a section on its own |
+| Three to six capabilities (glyph, title, sentence) | `CapabilityGrid` |
+| Three guarantees or reasons in columns under one headline | `GuaranteeColumns` |
+| A grid of product / primitive links in columns | `PlatformDirectory` |
+| A grid of linked topics | `UseCaseLinks`; with an illustration per card, `IllustratedCards` |
+| A copy-beside-art band | `MediaSplitBand`; a sticky run of them, `MediaSplitStack` |
+| A row of tiles (picture over caption) | `FeatureTiles` |
+| Tabs, one feature at a time | `FeatureTabs` |
+| Copy beside code | `CodeSplit`; capabilities pinned beside their code, `StickyScrollCode` |
+| Client testimonials | `ClientQuotes` with `quotesLedBy('<client>')` (site `data/solutions.js`) led by the source's quoted client; one quote alone, `QuoteBand`; marks beside one quote, `LogoWallQuote` |
+| Analyst recognitions, client tiles, certifications | `RecognitionMarquee`, `ClientMosaic`, `ComplianceBadges` |
+| A row of stats (big numeral + unit + label) | `StatsBand` |
+| The network argument over the map | `NetworkSection` |
+| Plans, plan matrix, tier matrix, competitor table | `PricingPlans`, `ComparePlans`, `CompareSupportTiers`, `ComparisonTable` |
+| Deployable templates over a stack ticker | `TemplateGallery` |
+| Linked guides | `ResourceGrid` |
+| A text band with actions and no media | `IntroBand` |
+| A carousel of cards | `CardCarousel` |
+| Questions and answers | `FaqSection` (rich answers through `body`) |
+| An empty rhythm band | Nothing — `SitePage` puts a hatched gap between every two sections |
+| The closing CTA | `ClosingCallToAction` (`split`, `panel`, or `frame` when the page ends with no ask) |
 
-Then assemble in the three-layer skeleton, and **only** that skeleton:
+A band that fits none of them is not built by hand: add its Storybook template and its section
+first ([`CONTAINERS.md`](../../docs/CONTAINERS.md) § Adding a band no section covers), then use it.
 
-```
-Hero kind="screen" max-width="site"     ← the opening band, full-bleed, owns border-b
-SectionContainer max-width="site"       ← every band after it, owns border-x
-  SectionModule / SectionGap / FrameBox ← the bricks
-SiteFooter                              ← owns border-t
+The page is then one list, and **only** that list:
+
+```js
+// site/data/pages/<page>.js
+export const <PAGE>_PAGE = [
+  { section: 'Heroes', kind: '…', … },   // the opening band, full-bleed
+  { section: '…', … },                   // every band after it, in the source's order
+  { section: 'ClosingCallToAction', … }  // the close
+]
 ```
 
 ### Where the two halves collide, form wins
@@ -106,7 +123,7 @@ What never bends is the **copy**, the **set** of blocks, and their **order**.
 
 ### The one-frame principle is not optional
 
-Every edge is drawn once, by one owner ([`CONTAINERS.md`](../../docs/CONTAINERS.md) § the
+The sections already obey it; it matters when you write a new one. Every edge is drawn once, by one owner ([`CONTAINERS.md`](../../docs/CONTAINERS.md) § the
 one-frame principle). Translating a page is where this breaks, because the source draws its own
 borders on every band and copying that shape gives you two hairlines on one pixel:
 
@@ -126,8 +143,7 @@ A mark the source renders and we do not have is a **recorded gap**, never an inv
 
 1. Resolve every mark name against the app's own client / brand registry.
 2. A name with an asset goes in, in the source's order.
-3. A name with **no** asset is omitted, and the omission is stated in a comment on the block and
-   in your final report. Do not substitute a similar logo, do not draw a wordmark from the name,
+3. A name with **no** asset is omitted, and the omission is stated in your final report. Do not substitute a similar logo, do not draw a wordmark from the name,
    and do not download a third party's asset into the repo as part of this task.
 4. A tile that carries a client's own brand colour reads it from that registry (a brand's colour
    is a fact about the client, like its logo file) — never as a literal in the page.
@@ -136,23 +152,21 @@ A mark the source renders and we do not have is a **recorded gap**, never an inv
 
 ## Step 4 — compose the page
 
-Write the Vue. The constraints that apply are the repo's, in full — [`styling.md`](../../rules/styling.md)
-(inline utilities on the root, variants on `data-*`, **no** JS class presets, **no** `<style>`
-block), [`dependencies.md`](../../rules/dependencies.md) (**no** carousel, positioning, or
-animation library — a marquee is a CSS translate of a doubled track),
+Write the page data, `site/data/pages/<page>.js`, and a view that is `SiteLayout` around
+`SitePage` — nothing else. Every string goes in as a section prop, in the source's words; an
+action is `{ label, href, kind?, trailing?, external? }`. Data another page already holds (a
+client strip, a quote, the Earth network band) is imported, never copied.
+
+If you had to write a new section, its constraints are the repo's, in full —
+[`styling.md`](../../rules/styling.md), [`dependencies.md`](../../rules/dependencies.md) (**no**
+carousel, positioning, or animation library — a marquee is a CSS translate of a doubled track),
 [`accessibility.md`](../../rules/accessibility.md) (one `h1` per page, headings in order, every
-motion-bearing class paired with `motion-reduce:`), and tokens only — no hex, no Tailwind palette
-colour, no raw length where a token exists.
+motion-bearing class paired with `motion-reduce:`), and tokens only.
 
-Two things specific to this translation:
-
-- **Repeating copy is data.** A band of N cells is a `const` array in `<script setup>` and one
-  `v-for`; it is never N hand-written blocks. The array is where a reviewer diffs our copy
-  against `blocks.md`.
-- **State what the source claimed and we changed.** When a decision departs from the source
-  (a band promoted to a full-viewport hero, an omitted mark, a two-tone headline expressed as
-  two spans), say so in a comment at that block. The next reader must not have to re-derive it
-  from the live site.
+**State what the source claimed and we changed.** When a decision departs from the source (a
+band folded into the nearest section, an omitted mark, a two-tone headline expressed as a muted
+title), say so in your final report. The next reader must not have to re-derive it from the live
+site.
 
 ---
 
@@ -205,6 +219,7 @@ captures show whether a band reads as the same block.
 - Do not install or import a carousel / positioning / animation library to reproduce a behaviour.
 - Do not substitute or fabricate a brand asset we do not have — omit it and report the gap.
 - Do not draw an edge a neighbouring frame already draws.
+- Do not write a band by hand in a view or a page file — every band is a section.
 - Do not claim the translation is complete without running the Step 5 diff and reading its output.
 
 ## Report when you are done
