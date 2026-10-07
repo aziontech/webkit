@@ -11,6 +11,19 @@
 
 * [Inputs] normalize z-index across all inputs (ENG-46735) ([#783](https://github.com/aziontech/webkit/issues/783)) ([25d201d](https://github.com/aziontech/webkit/commit/25d201d5ae0e6054b9189bc81c76b7d9fc8c5055))
 
+## [5.2.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@5.1.0...@aziontech/theme@5.2.0) (2026-10-06)
+
+
+### Features
+
+* **theme:** add a text-heading-3xl rung above the heading ladder ([#1045](https://github.com/aziontech/webkit/issues/1045)) ([00798a5](https://github.com/aziontech/webkit/commit/00798a5781259e37181cc47cef02141015060e80))
+* **webkit:** add the marketing component category ([#1034](https://github.com/aziontech/webkit/issues/1034)) ([17b75f7](https://github.com/aziontech/webkit/commit/17b75f7c2348c0fc7b183cfed4057089375af8e3))
+
+
+### Bug Fixes
+
+* **theme:** [ENG-48341] add gray.275/gray.650 and re-step the light canvas, border and muted text ([#1051](https://github.com/aziontech/webkit/issues/1051)) ([e24b303](https://github.com/aziontech/webkit/commit/e24b303e7c01946d9e0da4ac856109acb85a1d76))
+
 ## [5.1.0](https://github.com/aziontech/webkit/compare/@aziontech/theme@5.0.0...@aziontech/theme@5.1.0) (2026-09-23)
 
 
