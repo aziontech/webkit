@@ -13555,11 +13555,23 @@
       "kind": "asset",
       "treeShakeableImport": "@aziontech/webkit/assets/astro-symbol-mono.svg"
     },
+    "assets/aws-extended-color.svg": {
+      "import": "@aziontech/webkit/assets/aws-extended-color.svg",
+      "target": "./src/assets/logos/frameworks/aws-extended-color.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/aws-extended-color.svg"
+    },
     "assets/aws-extended-mono.svg": {
       "import": "@aziontech/webkit/assets/aws-extended-mono.svg",
       "target": "./src/assets/logos/frameworks/aws-extended-mono.svg",
       "kind": "asset",
       "treeShakeableImport": "@aziontech/webkit/assets/aws-extended-mono.svg"
+    },
+    "assets/aws-extended-reversed.svg": {
+      "import": "@aziontech/webkit/assets/aws-extended-reversed.svg",
+      "target": "./src/assets/logos/frameworks/aws-extended-reversed.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/aws-extended-reversed.svg"
     },
     "assets/axur-extended-color.svg": {
       "import": "@aziontech/webkit/assets/axur-extended-color.svg",
