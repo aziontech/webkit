@@ -427,7 +427,7 @@
                 <Item.List>
                   <FieldRow
                     title="Font family"
-                    description="The primary sans typeface across the console. Non-default faces load from Google Fonts."
+                    description="The primary sans typeface across the console."
                   >
                     <Select
                       v-model="font"

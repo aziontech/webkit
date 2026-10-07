@@ -125,7 +125,7 @@ body {
    theme in main.js). Code (Roboto Mono), overlines & big numbers (Proto Mono),
    and icon glyphs (`.pi` / `.ai`, pinned above) keep their own faces. */
 :root {
-  --app-font: 'Sora', sans-serif;
+  --app-font: 'Rubik', sans-serif;
 }
 html {
   font-family: var(--app-font);

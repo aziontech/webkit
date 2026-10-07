@@ -1,20 +1,20 @@
 import { ref, watch } from 'vue'
 
-const STORAGE_KEY = 'webkit-sample-font'
+const STORAGE_KEY = 'webkit-sample-font-face'
 
 export const FONTS = [
-  { value: 'sora', label: 'Sora (Default)', stack: "'Sora', sans-serif" },
+  {
+    value: 'rubik',
+    label: 'Rubik (Default)',
+    stack: "'Rubik', sans-serif",
+    href: 'https://fonts.googleapis.com/css2?family=Rubik:wght@300..900&display=swap'
+  },
+  { value: 'sora', label: 'Sora', stack: "'Sora', sans-serif" },
   {
     value: 'inter',
     label: 'Inter',
     stack: "'Inter', sans-serif",
     href: 'https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap'
-  },
-  {
-    value: 'rubik',
-    label: 'Rubik',
-    stack: "'Rubik', sans-serif",
-    href: 'https://fonts.googleapis.com/css2?family=Rubik:wght@300..900&display=swap'
   },
   {
     value: 'ibm-plex-sans',
@@ -54,7 +54,7 @@ export const FONTS = [
   }
 ]
 
-const DEFAULT_FONT = 'sora'
+const DEFAULT_FONT = 'rubik'
 const VALUES = FONTS.map((f) => f.value)
 
 const readStoredFont = () => {
@@ -88,9 +88,9 @@ watch(
   font,
   (value) => {
     applyFont(value)
-    if (typeof localStorage !== 'undefined') {
-      localStorage.setItem(STORAGE_KEY, value)
-    }
+    if (typeof localStorage === 'undefined') return
+    if (value === DEFAULT_FONT) localStorage.removeItem(STORAGE_KEY)
+    else localStorage.setItem(STORAGE_KEY, value)
   },
   { immediate: true }
 )

@@ -49,8 +49,7 @@
                 <Item.Content>
                   <Item.Title>Font family</Item.Title>
                   <Item.Description>
-                    The primary sans typeface used across the console. Non-default faces load on
-                    demand from Google Fonts.
+                    The primary sans typeface used across the console.
                   </Item.Description>
                 </Item.Content>
                 <Item.Actions class="justify-end flex-1 max-w-(--container-3xs)">

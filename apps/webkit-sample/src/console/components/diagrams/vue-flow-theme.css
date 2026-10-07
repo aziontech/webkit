@@ -24,7 +24,7 @@
   border-color: var(--vf-node-color);
   background-color: var(--vf-node-bg);
   color: var(--vf-node-text);
-  font-family: var(--app-font, 'Sora', sans-serif);
+  font-family: var(--app-font, 'Rubik', sans-serif);
   font-size: var(--text-body-sm-font-size);
   line-height: var(--text-body-sm-line-height);
   box-shadow: var(--shadow-sm, 0 1px 2px rgba(0, 0, 0, 0.06));
@@ -83,7 +83,7 @@
 
 .wk-vue-flow .vue-flow__edge-text {
   fill: var(--text-muted);
-  font-family: var(--app-font, 'Sora', sans-serif);
+  font-family: var(--app-font, 'Rubik', sans-serif);
   font-size: var(--text-body-xs-font-size);
 }
 
