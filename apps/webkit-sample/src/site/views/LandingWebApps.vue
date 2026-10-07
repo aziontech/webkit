@@ -1,13 +1,11 @@
 <script setup>
-  // Routed solution-page example: the azion.com Web Apps page recreation, rendered inside
-  // the segregated marketing shell (website nav + footer, no console sidebar) — the same
-  // pairing every other landing example uses.
-  import AzionWebApps from '../components/AzionWebApps.vue'
   import SiteLayout from '../components/SiteLayout.vue'
+  import { WEB_APPS_PAGE } from '../data/pages/web-apps.js'
+  import SitePage from '../ui/SitePage.vue'
 </script>
 
 <template>
   <SiteLayout>
-    <AzionWebApps />
+    <SitePage :sections="WEB_APPS_PAGE" />
   </SiteLayout>
 </template>

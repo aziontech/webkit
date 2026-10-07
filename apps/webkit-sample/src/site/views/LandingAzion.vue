@@ -1,14 +1,11 @@
 <script setup>
-  // Routed landing-page example: the azion.com/pt-br homepage recreation rendered
-  // inside the segregated marketing shell (website nav + footer, no console
-  // sidebar). Add further examples by pairing SiteLayout with a new content
-  // component the same way.
-  import AzionHome from '../components/AzionHome.vue'
   import SiteLayout from '../components/SiteLayout.vue'
+  import { HOME_PAGE } from '../data/pages/home.js'
+  import SitePage from '../ui/SitePage.vue'
 </script>
 
 <template>
   <SiteLayout nav-overlay>
-    <AzionHome />
+    <SitePage :sections="HOME_PAGE" />
   </SiteLayout>
 </template>

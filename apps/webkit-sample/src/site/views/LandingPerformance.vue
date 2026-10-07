@@ -1,10 +1,11 @@
 <script setup>
-  import AzionPerformance from '../components/AzionPerformance.vue'
   import SiteLayout from '../components/SiteLayout.vue'
+  import { PERFORMANCE_PAGE } from '../data/pages/performance.js'
+  import SitePage from '../ui/SitePage.vue'
 </script>
 
 <template>
   <SiteLayout>
-    <AzionPerformance />
+    <SitePage :sections="PERFORMANCE_PAGE" />
   </SiteLayout>
 </template>

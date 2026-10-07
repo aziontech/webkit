@@ -1,7 +1,8 @@
 export const SUPPORT_HERO = {
   eyebrow: 'Support',
   title: 'Technical support for every stage of your growth',
-  description: 'Designed to help you move independently. Backed by specialists when you need them.'
+  description: 'Designed to help you move independently. Backed by specialists when you need them.',
+  carouselLabel: 'Trusted by mission-critical workloads'
 }
 
 export const SUPPORT_MARKS = [

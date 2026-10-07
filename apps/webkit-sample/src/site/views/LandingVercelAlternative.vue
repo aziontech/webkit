@@ -1,13 +1,11 @@
 <script setup>
-  // Routed landing-page example: the azion.com Vercel Alternative Guide recreation,
-  // rendered inside the segregated marketing shell (website nav + footer, no console
-  // sidebar) — the same pairing every other /site page uses.
-  import AzionVercelAlternative from '../components/AzionVercelAlternative.vue'
   import SiteLayout from '../components/SiteLayout.vue'
+  import { VERCEL_ALTERNATIVE_PAGE } from '../data/pages/vercel-alternative.js'
+  import SitePage from '../ui/SitePage.vue'
 </script>
 
 <template>
   <SiteLayout>
-    <AzionVercelAlternative />
+    <SitePage :sections="VERCEL_ALTERNATIVE_PAGE" />
   </SiteLayout>
 </template>

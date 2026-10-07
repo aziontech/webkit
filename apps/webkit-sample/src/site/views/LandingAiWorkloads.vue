@@ -1,10 +1,11 @@
 <script setup>
-  import AzionAiWorkloads from '../components/AzionAiWorkloads.vue'
   import SiteLayout from '../components/SiteLayout.vue'
+  import { AI_WORKLOADS_PAGE } from '../data/pages/ai-workloads.js'
+  import SitePage from '../ui/SitePage.vue'
 </script>
 
 <template>
   <SiteLayout>
-    <AzionAiWorkloads />
+    <SitePage :sections="AI_WORKLOADS_PAGE" />
   </SiteLayout>
 </template>

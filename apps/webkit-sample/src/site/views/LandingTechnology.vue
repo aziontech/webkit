@@ -1,13 +1,11 @@
 <script setup>
-  // Routed solution-page example: the azion.com Technology page recreation, rendered inside
-  // the segregated marketing shell (website nav + footer, no console sidebar) — the same
-  // pairing LandingFinancialServices and LandingWebApps use for the other two solution pages.
-  import AzionTechnology from '../components/AzionTechnology.vue'
   import SiteLayout from '../components/SiteLayout.vue'
+  import { TECHNOLOGY_PAGE } from '../data/pages/technology.js'
+  import SitePage from '../ui/SitePage.vue'
 </script>
 
 <template>
   <SiteLayout>
-    <AzionTechnology />
+    <SitePage :sections="TECHNOLOGY_PAGE" />
   </SiteLayout>
 </template>

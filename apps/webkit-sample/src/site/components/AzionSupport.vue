@@ -54,6 +54,7 @@
     texture="dots"
     texture-fade="top"
     carousel
+    :carousel-label="SUPPORT_HERO.carouselLabel"
     :carousel-marks="SUPPORT_MARKS"
   >
     <Hero.Title

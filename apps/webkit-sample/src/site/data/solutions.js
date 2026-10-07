@@ -86,3 +86,26 @@ export const BUILD_CTA = {
   titleMuted: 'Run everywhere.',
   description: 'Get a faster path to launch, lower latency, and less infrastructure overhead.'
 }
+
+export const NETWORK_OUTCOMES = [
+  {
+    client: 'Dafiti',
+    text: '86% faster load times, with a 45% cost reduction in data transfer.',
+    highlights: ['86% faster load times', '45% cost reduction']
+  },
+  {
+    client: 'MadeiraMadeira',
+    text: '90% lower cloud costs, and faster product delivery at scale.',
+    highlights: ['90% lower cloud costs']
+  },
+  {
+    client: 'Renner',
+    text: '67% saved on data transfer costs, through massive traffic spikes.',
+    highlights: ['67% saved']
+  },
+  {
+    client: 'Fourbank',
+    text: 'DDoS mitigated on applications and APIs, behind a programmable security layer.',
+    highlights: ['DDoS mitigated']
+  }
+]
