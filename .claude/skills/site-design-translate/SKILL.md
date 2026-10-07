@@ -72,26 +72,23 @@ sections are the Storybook marketing templates (`Templates/Marketing/*`), ported
 
 | Source band | Our section |
 | --- | --- |
-| Opening band: `h1` + description + actions | `Heroes`, the `kind` that matches its shape (`centered-carousel`, `title-band`, `centered-band`, `pixel-floor`, `copy-beside-art`, `copy-on-top-art`, `product-ticker`); `HeroForm` when the opening holds a form |
-| A logo strip / marquee of marks under the opening | The hero's `carouselMarks` + `carouselLabel` (clients) or `tickerMarks` (a product stack) |
+| Opening band: `h1` + description + actions | `Heroes`, the `kind` that matches its shape (`centered-carousel`, `title-band`, `centered-band`, `pixel-floor`, `copy-beside-art`, `copy-on-top-art`); `HeroForm` when the opening holds a form |
+| A logo strip / marquee of marks under the opening | The hero's `carouselMarks` + `carouselLabel` |
 | A band that is only a heading (± eyebrow, ± description) | The heading of the section it introduces; it is never a section on its own |
-| Three to six capabilities (glyph, title, sentence) | `CapabilityGrid` |
-| Three guarantees or reasons in columns under one headline | `GuaranteeColumns` |
+| Three to six capabilities, guarantees or reasons (± glyph, title, sentence) | `CapabilityGrid` |
 | A grid of product / primitive links in columns | `PlatformDirectory` |
-| A grid of linked topics | `UseCaseLinks`; with an illustration per card, `IllustratedCards` |
-| A copy-beside-art band | `MediaSplitBand`; a sticky run of them, `MediaSplitStack` |
+| A grid of linked topics | `ResourceGrid`; with an illustration per card, `FeatureTiles` `illustrated` |
+| A copy-beside-art band | `MediaSplitBand` (one action links the band, two leave it unlinked); a sticky run of them, `MediaSplitStack` |
 | A row of tiles (picture over caption) | `FeatureTiles` |
 | Tabs, one feature at a time | `FeatureTabs` |
 | Copy beside code | `CodeSplit`; capabilities pinned beside their code, `StickyScrollCode` |
 | Client testimonials | `ClientQuotes` with `quotesLedBy('<client>')` (site `data/solutions.js`) led by the source's quoted client; one quote alone, `QuoteBand`; marks beside one quote, `LogoWallQuote` |
 | Analyst recognitions, client tiles, certifications | `RecognitionMarquee`, `ClientMosaic`, `ComplianceBadges` |
 | A row of stats (big numeral + unit + label) | `StatsBand` |
-| The network argument over the map | `NetworkSection` |
+| The network argument over the map | `NetworkSection`, `kind` by its floor: `quotes`, `benefits` or `stats` |
 | Plans, plan matrix, tier matrix, competitor table | `PricingPlans`, `ComparePlans`, `CompareSupportTiers`, `ComparisonTable` |
 | Deployable templates over a stack ticker | `TemplateGallery` |
 | Linked guides | `ResourceGrid` |
-| A text band with actions and no media | `IntroBand` |
-| A carousel of cards | `CardCarousel` |
 | Questions and answers | `FaqSection` (rich answers through `body`) |
 | An empty rhythm band | Nothing — `SitePage` puts a hatched gap between every two sections |
 | The closing CTA | `ClosingCallToAction` (`split`, `panel`, or `frame` when the page ends with no ask) |
