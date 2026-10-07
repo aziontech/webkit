@@ -10,6 +10,7 @@ import fourbank from './fourbank-extended-reversed.svg'
 import gfg from './gfg-extended-reversed.svg'
 import gpa from './gpa-extended-reversed.svg'
 import gpaSymbol from './gpa-symbol-color.svg'
+import herosparkColor from './herospark-extended-color.svg'
 import herospark from './herospark-extended-reversed.svg'
 import herosparkSymbol from './herospark-symbol-reversed.svg'
 import ifoodColor from './ifood-extended-color.svg'
@@ -32,6 +33,7 @@ import gpaPhoto from './photos/gpa-photo.jpg'
 import netshoesPhoto from './photos/netshoes-photo.jpg'
 import primevideo from './primevideo-extended-reversed.svg'
 import radware from './radware-extended-reversed.svg'
+import rennerColor from './renner-extended-color.svg'
 import renner from './renner-extended-reversed.svg'
 import rennerSymbol from './renner-symbol-reversed.svg'
 import traySymbol from './tray-symbol-color.svg'
@@ -84,7 +86,7 @@ export const CLIENTS: Client[] = [
   {
     name: 'HeroSpark',
     logo: herospark,
-    artwork: 'light',
+    logoLight: herosparkColor,
     symbol: herosparkSymbol,
     brand: BRAND.herospark
   },
@@ -106,7 +108,7 @@ export const CLIENTS: Client[] = [
   {
     name: 'Renner',
     logo: renner,
-    artwork: 'light',
+    logoLight: rennerColor,
     symbol: rennerSymbol,
     brand: BRAND.renner
   },
