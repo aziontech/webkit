@@ -33,20 +33,6 @@
 const t = (text) => ({ text })
 const l = (text, href, external = false) => ({ text, href, external })
 
-/** The "Ask AI to explain" utility band. Same 4 tools, query text points at this page instead
- *  of Resend's. Generic `pi-sparkles` glyph on all four — none of the four tools has a mark in
- *  the shared brand registry, so no brand logo is substituted (see migration.md). */
-const ASK_AI_URL = 'https://www.azion.com/en/gdpr'
-const askAiQuery = (text) => encodeURIComponent(text)
-const ASK_AI_SUMMARY = "Summarize in plain language the key security practices described in Azion's GDPR at " + ASK_AI_URL
-
-export const ASK_AI_LINKS = [
-  { label: 'ChatGPT', href: `https://chatgpt.com/?q=${askAiQuery(ASK_AI_SUMMARY)}` },
-  { label: 'Claude', href: `https://claude.ai/new?q=${askAiQuery(ASK_AI_SUMMARY)}` },
-  { label: 'Gemini', href: `https://www.google.com/search?udm=50&aep=11&q=${askAiQuery(ASK_AI_SUMMARY)}` },
-  { label: 'Perplexity', href: `https://www.perplexity.ai/search?q=${askAiQuery(ASK_AI_SUMMARY)}` }
-]
-
 /** The 16 question/answer sections, source order preserved. `body` is a list of `p` and `ul`
  *  blocks, in the order the source renders them; both carry `segments` arrays (`ul.items` is an
  *  array of per-`li` segment arrays) so a single template can render every inline link. */

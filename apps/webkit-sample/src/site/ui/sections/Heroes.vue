@@ -3,11 +3,8 @@
   import HeroTitle from '@aziontech/webkit/hero-title'
   import type { HeroTitleEyebrowPrefix } from '@aziontech/webkit/hero-title'
   import Illustration from '@aziontech/webkit/illustration'
-  import Ticker from '@aziontech/webkit/ticker'
   import { computed } from 'vue'
   import type { Component } from 'vue'
-
-  import { PRODUCT_STACK } from '@shared/ui/brand/strips.js'
 
   import { heroArt } from '../../data/hero-art.js'
   import SectionAction from './SectionAction.vue'
@@ -22,7 +19,6 @@
     | 'pixel-floor'
     | 'copy-beside-art'
     | 'copy-on-top-art'
-    | 'product-ticker'
 
   export type HeroesScenePlacement = 'bottom' | 'top'
 
@@ -65,10 +61,6 @@
     carouselMarks?: string[]
     /** Overline above the client strip. */
     carouselLabel?: string
-    /** Product marks a ticker runs on the floor instead of the client strip; product-ticker defaults to the product stack. */
-    tickerMarks?: string[]
-    /** Overline above the ticker. */
-    tickerLabel?: string
     /** Art beside the copy, for copy-beside-art. */
     art?: HeroesArt | null
     /** Sample scene drawn in the band's top or bottom window. */
@@ -87,8 +79,6 @@
     actions: () => [],
     carouselMarks: () => [],
     carouselLabel: 'Trusted by mission-critical workloads',
-    tickerMarks: () => [],
-    tickerLabel: '',
     art: null,
     scene: null,
     scenePlacement: 'bottom'
@@ -127,14 +117,6 @@
       textureSize: 'small',
       textureFade: 'top',
       offset: '3.5rem'
-    },
-    'product-ticker': {
-      kind: 'screen',
-      align: 'center',
-      maxWidth: 'site',
-      texture: 'dots',
-      textureFade: 'bottom',
-      offset: '3.5rem'
     }
   } as const
 
@@ -144,20 +126,13 @@
     'centered-band': { centered: true, maxWidth: '2xl' },
     'pixel-floor': {},
     'copy-beside-art': { maxWidth: 'xl' },
-    'copy-on-top-art': { centered: true },
-    'product-ticker': { centered: true }
+    'copy-on-top-art': { centered: true }
   } as const
 
   const frame = computed(() => FRAMES[props.kind])
   const titleFrame = computed(() => TITLES[props.kind])
 
-  const floorMarks = computed(() =>
-    props.tickerMarks.length === 0 && props.kind === 'product-ticker'
-      ? PRODUCT_STACK
-      : props.tickerMarks
-  )
-  const hasTicker = computed(() => floorMarks.value.length > 0)
-  const hasCarousel = computed(() => !hasTicker.value && props.carouselMarks.length > 0)
+  const hasCarousel = computed(() => props.carouselMarks.length > 0)
   const sceneOnTop = computed(() => Boolean(props.scene) && props.scenePlacement === 'top')
   const sceneOnBottom = computed(() => Boolean(props.scene) && props.scenePlacement === 'bottom')
   const hasArt = computed(() => props.kind === 'copy-beside-art' && Boolean(props.art))
@@ -238,13 +213,10 @@
       </template>
 
       <template
-        v-if="sceneOnBottom || hasTicker"
+        v-if="sceneOnBottom && scene"
         #bottom
       >
-        <div
-          v-if="sceneOnBottom && scene"
-          class="@container"
-        >
+        <div class="@container">
           <div
             class="flex animate-content-enter justify-center pb-(--spacing-xxl) motion-reduce:animate-none [--content-enter-delay:120ms] @max-2xl:[mask-image:linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]"
           >
@@ -254,13 +226,6 @@
             />
           </div>
         </div>
-        <Ticker
-          v-if="hasTicker"
-          kind="band"
-          size="small"
-          :marks="floorMarks"
-          :label="tickerLabel"
-        />
       </template>
     </Hero>
   </div>

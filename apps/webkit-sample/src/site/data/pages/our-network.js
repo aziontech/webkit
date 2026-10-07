@@ -65,7 +65,7 @@ const NETWORK_BANDS = [
 export const OUR_NETWORK_PAGE = [
   {
     section: 'Heroes',
-    kind: 'product-ticker',
+    kind: 'centered-carousel',
     eyebrow: 'Infrastructure',
     title: 'A global network built for fast applications',
     description:
@@ -74,10 +74,9 @@ export const OUR_NETWORK_PAGE = [
       { label: 'Start free', href: '/signup', kind: 'secondary' },
       { label: 'Talk to a Specialist', href: '/site/contact', kind: 'outlined', trailing: true }
     ],
-    tickerMarks: CLIENT_STRIP
+    carouselMarks: CLIENT_STRIP
   },
-  { section: 'NetworkSection', ...EARTH_NETWORK },
-  { section: 'StatsBand', items: NETWORK_FIGURES },
+  { section: 'NetworkSection', ...EARTH_NETWORK, kind: 'stats', stats: NETWORK_FIGURES },
   {
     section: 'MediaSplitStack',
     kind: 'alternating',

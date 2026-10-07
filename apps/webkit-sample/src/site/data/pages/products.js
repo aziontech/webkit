@@ -214,22 +214,15 @@ export const PRODUCTS_PAGE = [
     carouselLabel: 'Running in production on these products',
     carouselMarks: CLIENT_STRIP
   },
-  {
-    section: 'GuaranteeColumns',
-    eyebrow: 'The platform',
-    title: 'Products, not infrastructure',
-    description:
-      'Each one is a capability with an API, a console surface and a line on the same bill.',
-    items: PRODUCT_GUARANTEES
-  },
+  { section: 'CapabilityGrid', items: PRODUCT_GUARANTEES },
   { section: 'StatsBand', items: PRODUCT_REACH },
   ...PRODUCT_GROUPS.map((group) => ({
-    section: 'IllustratedCards',
-    kind: 'grouped',
+    section: 'FeatureTiles',
+    kind: 'illustrated',
     anchor: group.key,
     title: group.title,
     description: group.description,
-    items: group.items
+    tiles: group.items
   })),
   {
     section: 'PlatformDirectory',

@@ -2,17 +2,14 @@
   import Illustration from '@aziontech/webkit/illustration'
   import MediaSplit from '@aziontech/webkit/media-split'
   import SectionModule from '@aziontech/webkit/section-module'
-  import { computed } from 'vue'
   import type { Component } from 'vue'
+  import { computed } from 'vue'
 
   import { useSiteLink } from '../../composables/use-site-link'
   import SectionAction from './SectionAction.vue'
   import type { SiteAction } from './types'
 
   defineOptions({ name: 'MediaSplitBand' })
-
-  /** architecture: a large centered title over a canvas-filled diagram; guide: title and description beside the art; two-actions: two buttons, so the band itself links nowhere. */
-  export type MediaSplitBandKind = 'architecture' | 'guide' | 'two-actions'
 
   interface SiteScene {
     /** The scene component the page supplies. */
@@ -33,8 +30,6 @@
   }
 
   interface Props {
-    /** Layout of the band. */
-    kind?: MediaSplitBandKind
     /** Id of the band, for in-page links. */
     anchor?: string
     /** Overline above the title. */
@@ -51,12 +46,11 @@
     image?: SiteImage | null
     /** Scene component shown as the media, in place of an illustration. */
     scene?: SiteScene | null
-    /** Medium buttons under the copy; with one, the whole band links to its destination. */
+    /** One or two medium buttons under the copy; with one, the whole band links to it and hovering the band activates it. */
     actions?: SiteAction[]
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    kind: 'guide',
     anchor: '',
     eyebrow: '',
     description: '',
@@ -69,9 +63,17 @@
 
   const { follow } = useSiteLink()
 
-  const bandHref = computed(() =>
-    props.kind === 'two-actions' ? '' : (props.actions[0]?.href ?? '')
-  )
+  const bandHref = computed(() => (props.actions.length === 1 ? props.actions[0].href : ''))
+
+  const buttons = computed<SiteAction[]>(() => {
+    const [first, second] = props.actions
+    if (!first) return []
+    if (!second) return [{ ...first, kind: 'outlined', size: 'medium', trailing: true }]
+    return [
+      { ...first, kind: 'secondary', size: 'medium' },
+      { ...second, kind: 'outlined', size: 'medium' }
+    ]
+  })
 
   const followBand = (event: MouseEvent) => {
     if (event.defaultPrevented || !bandHref.value) return
@@ -91,9 +93,9 @@
     <MediaSplit
       framed
       :media-href="bandHref"
-      :align="kind === 'architecture' ? 'center' : 'top'"
-      :size="kind === 'architecture' ? 'large' : 'medium'"
-      :media-fill="kind === 'architecture' ? 'canvas' : 'surface'"
+      align="top"
+      size="medium"
+      media-fill="surface"
       texture="pixelate"
       texture-size="small"
       texture-fade="top"
@@ -124,13 +126,13 @@
         />
       </template>
       <template
-        v-if="actions.length"
+        v-if="buttons.length"
         #actions
       >
         <SectionAction
-          v-for="action in actions"
+          v-for="action in buttons"
           :key="action.label"
-          :action="{ kind: 'outlined', size: 'medium', ...action }"
+          :action="action"
         />
       </template>
     </MediaSplit>

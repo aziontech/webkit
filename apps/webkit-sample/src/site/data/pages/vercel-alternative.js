@@ -185,21 +185,12 @@ export const VERCEL_ALTERNATIVE_PAGE = [
   },
   {
     section: 'MediaSplitBand',
-    kind: 'guide',
     title: 'Move application delivery without disrupting releases',
     description:
       'Translate Vercel projects into Azion equivalents while keeping validation workflows predictable. Rebuild CDN behavior, redirects, rewrites, image optimization, Functions, AI integrations, storage, security rules, DNS, certificates, and observability before shifting production domains.',
     illustration: 'build-applications',
     illustrationLabel: 'Framework projects mapped through the platform to what each one serves',
-    actions: [
-      {
-        label: 'See the guide',
-        href: '/site/docs',
-        kind: 'outlined',
-        size: 'medium',
-        trailing: true
-      }
-    ]
+    actions: [{ label: 'See the guide', href: '/site/docs' }]
   },
   { section: 'FaqSection', items: FAQ },
   {

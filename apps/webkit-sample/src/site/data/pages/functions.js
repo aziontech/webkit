@@ -246,7 +246,7 @@ const READ_DOCS = {
 export const FUNCTIONS_PAGE = [
   {
     section: 'Heroes',
-    kind: 'product-ticker',
+    kind: 'copy-on-top-art',
     eyebrow: 'Functions',
     title: 'Instant serverless functions for modern applications',
     description: 'Build and scale AI-powered applications on a globally integrated platform.',

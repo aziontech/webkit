@@ -111,11 +111,7 @@ export const AI_INFERENCE_PAGE = [
     carouselMarks: CLIENT_STRIP
   },
   { section: 'CapabilityGrid', items: FEATURES },
-  {
-    section: 'UseCaseLinks',
-    title: 'The Platform for Your AI Workloads',
-    items: PLATFORM_CARDS.map((card) => ({ ...card, href: DOCS }))
-  },
+  { section: 'CapabilityGrid', items: PLATFORM_CARDS },
   {
     section: 'TemplateGallery',
     eyebrow: '',
@@ -128,15 +124,13 @@ export const AI_INFERENCE_PAGE = [
   },
   {
     section: 'MediaSplitBand',
-    kind: 'two-actions',
     title: 'Operate AI With Speed, Reliability, and Cost Control',
     description: operateDescription,
     scene: { component: markRaw(NetworkBanner), props: { kind: 'band' } }
   },
   { section: 'ClientQuotes', quotes: quotesLedBy('axur') },
   { section: 'PlatformDirectory', title: 'All the AI Primitives You Need' },
-  { section: 'NetworkSection', ...EARTH_NETWORK },
-  { section: 'CapabilityGrid', items: NETWORK_TOPICS },
+  { section: 'NetworkSection', ...EARTH_NETWORK, kind: 'benefits', benefits: NETWORK_TOPICS },
   { section: 'FaqSection', items: AI_FAQ },
   {
     section: 'ClosingCallToAction',

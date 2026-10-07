@@ -66,11 +66,10 @@ export function solutionPage(data) {
     },
     architecture && {
       section: 'MediaSplitBand',
-      kind: 'architecture',
       title: architecture.title,
       illustration: architecture.illustration,
       illustrationLabel: architecture.alt,
-      actions: [{ label: 'Docs', href: architecture.href, trailing: true, external: true }]
+      actions: [{ label: 'Docs', href: architecture.href, external: true }]
     },
     quotes && { section: 'ClientQuotes', quotes },
     resources && {

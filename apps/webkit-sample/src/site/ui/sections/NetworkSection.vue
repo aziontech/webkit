@@ -1,5 +1,7 @@
 <script setup lang="ts">
   import { CLIENTS } from '@aziontech/webkit/assets/client-registry'
+  import type { BigNumberItem } from '@aziontech/webkit/big-numbers'
+  import BigNumbers from '@aziontech/webkit/big-numbers'
   import CardGridCell from '@aziontech/webkit/card-grid-cell'
   import CardGrid from '@aziontech/webkit/card-grid-root'
   import FrameBox from '@aziontech/webkit/frame-box'
@@ -7,10 +9,16 @@
   import Quote from '@aziontech/webkit/quote'
   import SectionModule from '@aziontech/webkit/section-module'
   import SectionTitle from '@aziontech/webkit/section-title'
+  import Topic from '@aziontech/webkit/topic'
   import ClientMark from '@shared/ui/brand/ClientMark.vue'
   import { computed } from 'vue'
 
+  import type { SiteTopic } from './types'
+
   defineOptions({ name: 'NetworkSection' })
+
+  /** quotes: client outcomes signed by their logos; benefits: three network benefits; stats: four figures. */
+  export type NetworkSectionKind = 'quotes' | 'benefits' | 'stats'
 
   export interface NetworkOutcome {
     /** Client registry name whose logo signs the outcome. */
@@ -24,6 +32,8 @@
   }
 
   interface Props {
+    /** What stands on the band's floor. */
+    kind?: NetworkSectionKind
     /** In-page anchor for the band. */
     anchor?: string
     /** Overline above the title. */
@@ -34,16 +44,23 @@
     lead?: string
     /** Infrastructure claims, one chip each. */
     claims?: string[]
-    /** Client outcomes on the band's floor, four to a row. */
+    /** Client outcomes on the quotes floor, four to a row. */
     outcomes?: NetworkOutcome[]
+    /** Benefits on the benefits floor, three to a row. */
+    benefits?: SiteTopic[]
+    /** Figures on the stats floor, each a value with its caption. */
+    stats?: BigNumberItem[]
   }
 
   const props = withDefaults(defineProps<Props>(), {
+    kind: 'quotes',
     anchor: '',
     eyebrow: '',
     lead: '',
     claims: () => [],
-    outcomes: () => []
+    outcomes: () => [],
+    benefits: () => [],
+    stats: () => []
   })
 
   const floor = computed(() =>
@@ -135,7 +152,8 @@
         </div>
 
         <CardGrid
-          v-if="floor.length"
+          v-if="kind === 'quotes' && floor.length"
+          key="quotes"
           flush
           kind="frame"
           :columns="4"
@@ -163,6 +181,34 @@
             </Quote>
           </CardGridCell>
         </CardGrid>
+
+        <CardGrid
+          v-else-if="kind === 'benefits' && benefits.length"
+          key="benefits"
+          flush
+          kind="frame"
+          :columns="3"
+          class="border-t border-(--border-default)"
+        >
+          <CardGridCell
+            v-for="benefit in benefits"
+            :key="benefit.title"
+            kind="canvas"
+          >
+            <Topic
+              :heading-level="3"
+              :icon="benefit.icon ?? ''"
+              :title="benefit.title"
+              :description="benefit.description"
+            />
+          </CardGridCell>
+        </CardGrid>
+
+        <BigNumbers
+          v-else-if="kind === 'stats' && stats.length"
+          :items="stats"
+          class="border-t border-(--border-default)"
+        />
       </div>
     </FrameBox>
   </SectionModule>

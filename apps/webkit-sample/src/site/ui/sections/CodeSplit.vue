@@ -12,8 +12,8 @@
 
   defineOptions({ name: 'CodeSplit' })
 
-  /** default: a framed media split with the code run off its floor; accelerator: copy beside the code on a surface panel; recipes: a section title over the code beside a recipe list. */
-  export type CodeSplitKind = 'default' | 'accelerator' | 'recipes'
+  /** default: a framed media split with the code run off its floor; recipes: a section title over the code beside a recipe list. */
+  export type CodeSplitKind = 'default' | 'recipes'
 
   interface Props {
     /** Layout of the band. */
@@ -30,7 +30,7 @@
     defaultFile?: string
     /** Accessible name of the copy control. */
     copyAriaLabel?: string
-    /** Actions under the copy, in the default and accelerator layouts. */
+    /** Actions under the copy, in the default layout. */
     actions?: SiteAction[]
     /** Recipes listed beside the code, in the recipes layout. */
     recipes?: SiteTopic[]
@@ -88,57 +88,6 @@
         />
       </template>
     </MediaSplit>
-  </SectionModule>
-
-  <SectionModule
-    v-else-if="kind === 'accelerator'"
-    :id="anchor || undefined"
-    :divided="false"
-    :padded="false"
-  >
-    <FrameBox
-      flush
-      borders="y"
-      marks="bottom"
-    >
-      <div class="grid lg:grid-cols-[4fr_5fr]">
-        <div class="flex flex-col justify-between gap-(--spacing-xxl) p-(--spacing-xl)">
-          <div class="flex flex-col gap-(--spacing-lg)">
-            <h2 class="m-0 text-balance text-heading-md text-(--text-default)">
-              {{ title }}
-            </h2>
-            <p
-              v-if="description"
-              class="m-0 text-pretty text-body-md text-(--text-muted)"
-            >
-              {{ description }}
-            </p>
-          </div>
-
-          <div v-if="actions.length">
-            <SectionAction
-              v-for="action in actions"
-              :key="action.label"
-              :action="{ kind: 'text', size: 'large', trailing: true, ...action }"
-            />
-          </div>
-        </div>
-
-        <div
-          class="min-w-0 border-t border-(--border-default) bg-(--bg-surface) p-(--spacing-xl) lg:border-l lg:border-t-0"
-        >
-          <div class="min-w-0 rounded-(--shape-elements) shadow-(--shadow-sm)">
-            <CodeBlock
-              :tabs="files"
-              :default-value="defaultFile || undefined"
-              show-line-numbers
-              animate-lines
-              :copy-aria-label="copyAriaLabel"
-            />
-          </div>
-        </div>
-      </div>
-    </FrameBox>
   </SectionModule>
 
   <SectionModule

@@ -1,7 +1,6 @@
 import type { Component } from 'vue'
 
 import CapabilityGrid from './CapabilityGrid.vue'
-import CardCarousel from './CardCarousel.vue'
 import ClientMosaic from './ClientMosaic.vue'
 import ClientQuotes from './ClientQuotes.vue'
 import ClosingCallToAction from './ClosingCallToAction.vue'
@@ -13,11 +12,8 @@ import ComplianceBadges from './ComplianceBadges.vue'
 import FaqSection from './FaqSection.vue'
 import FeatureTabs from './FeatureTabs.vue'
 import FeatureTiles from './FeatureTiles.vue'
-import GuaranteeColumns from './GuaranteeColumns.vue'
-import HeroForm from './HeroForm.vue'
 import Heroes from './Heroes.vue'
-import IllustratedCards from './IllustratedCards.vue'
-import IntroBand from './IntroBand.vue'
+import HeroForm from './HeroForm.vue'
 import LogoWallQuote from './LogoWallQuote.vue'
 import MediaSplitBand from './MediaSplitBand.vue'
 import MediaSplitStack from './MediaSplitStack.vue'
@@ -30,11 +26,9 @@ import ResourceGrid from './ResourceGrid.vue'
 import StatsBand from './StatsBand.vue'
 import StickyScrollCode from './StickyScrollCode.vue'
 import TemplateGallery from './TemplateGallery.vue'
-import UseCaseLinks from './UseCaseLinks.vue'
 
 export const SECTIONS: Record<string, Component> = {
   CapabilityGrid,
-  CardCarousel,
   ClientMosaic,
   ClientQuotes,
   ClosingCallToAction,
@@ -46,11 +40,8 @@ export const SECTIONS: Record<string, Component> = {
   FaqSection,
   FeatureTabs,
   FeatureTiles,
-  GuaranteeColumns,
   HeroForm,
   Heroes,
-  IllustratedCards,
-  IntroBand,
   LogoWallQuote,
   MediaSplitBand,
   MediaSplitStack,
@@ -62,8 +53,7 @@ export const SECTIONS: Record<string, Component> = {
   ResourceGrid,
   StatsBand,
   StickyScrollCode,
-  TemplateGallery,
-  UseCaseLinks
+  TemplateGallery
 }
 
 export const HERO_SECTIONS = new Set(['Heroes', 'HeroForm'])

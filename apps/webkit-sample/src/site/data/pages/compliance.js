@@ -13,20 +13,12 @@ export const COMPLIANCE_PAGE = [
         href: 'https://www.azion.com/pt-br/contato/',
         kind: 'secondary',
         external: true
-      }
-    ]
-  },
-  {
-    section: 'IntroBand',
-    kind: 'intro',
-    eyebrow: 'Expertise em conformidade',
-    title:
-      'Estamos comprometidos em garantir que nossos clientes e parceiros globais possam atender a diversos requisitos de conformidade',
-    actions: [
+      },
       {
         label: 'Ver Matriz de Responsabilidade',
         href: 'https://www.azion.com/pt-br/documentacao/responsabilidade-compartilhada/',
-        kind: 'secondary',
+        kind: 'outlined',
+        trailing: true,
         external: true
       }
     ]

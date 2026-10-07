@@ -21,26 +21,22 @@ export const CAREERS_HOME_PAGE = [
     items: CAREERS_VALUES.map((value) => ({ title: value, description: '' }))
   },
   {
-    section: 'CardCarousel',
-    kind: 'steps',
-    title: CAREERS_JOURNEY.title,
-    description: CAREERS_JOURNEY.description,
-    cards: CAREERS_JOURNEY.steps
+    section: 'CapabilityGrid',
+    items: CAREERS_JOURNEY.steps.map((step) => ({
+      title: step.title,
+      description: step.description
+    }))
   },
   {
-    section: 'CardCarousel',
-    kind: 'areas',
+    section: 'ResourceGrid',
+    eyebrow: '',
     title: CAREERS_ROLES.title,
-    cards: CAREERS_ROLES.areas.map((role) => ({
+    items: CAREERS_ROLES.areas.map((role) => ({
       title: role.area,
       description: role.description,
-      action: {
-        label: CAREERS_ROLES.action,
-        href: jobsFor(role.area),
-        kind: 'outlined',
-        trailing: true
-      }
-    }))
+      href: jobsFor(role.area)
+    })),
+    actions: []
   },
   {
     section: 'ClosingCallToAction',

@@ -184,7 +184,7 @@ const ZOOP = registeredClient('Zoop')
 export const APPLICATION_ACCELERATOR_PAGE = [
   {
     section: 'Heroes',
-    kind: 'product-ticker',
+    kind: 'centered-carousel',
     eyebrow: 'Application Accelerator',
     title: 'Accelerate dynamic APIs and apps',
     description:
@@ -206,7 +206,7 @@ export const APPLICATION_ACCELERATOR_PAGE = [
         illustration: 'infrastructure-as-code',
         illustrationLabel:
           'An Azion provider declared in Terraform, raising the resources beside it',
-        actions: [{ label: 'Docs', href: PRODUCT_DOCS, kind: 'secondary', trailing: true }]
+        actions: [{ label: 'Docs', href: PRODUCT_DOCS }]
       },
       {
         title: 'Advanced Cache Key for personalized content delivery',
@@ -217,13 +217,13 @@ export const APPLICATION_ACCELERATOR_PAGE = [
         href: PRODUCT_DOCS,
         illustration: 'distributed-apis',
         illustrationLabel: 'One request segmented into cache by query string, cookie and header',
-        actions: [{ label: 'Learn more', href: PRODUCT_DOCS, kind: 'secondary', trailing: true }]
+        actions: [{ label: 'Learn more', href: PRODUCT_DOCS }]
       }
     ]
   },
   {
     section: 'CodeSplit',
-    kind: 'accelerator',
+    kind: 'default',
     title: 'From basic caching to advanced acceleration',
     description:
       'Application Accelerator extends Cache with protocol optimizations and advanced cache rules for dynamic content.',
@@ -232,7 +232,7 @@ export const APPLICATION_ACCELERATOR_PAGE = [
     copyAriaLabel: 'Copy the cache settings sample',
     actions: [{ label: 'Learn More', href: PRODUCT_DOCS }]
   },
-  { section: 'UseCaseLinks', title: 'See how to use', items: USE_CASES },
+  { section: 'CapabilityGrid', items: USE_CASES },
   {
     section: 'LogoWallQuote',
     items: withWallClient(ZOOP),

@@ -177,30 +177,24 @@ export const SOLUTIONS_PAGE = [
       { label: 'Talk to our team', href: '/site/contact', kind: 'outlined', trailing: true }
     ]
   },
+  { section: 'CapabilityGrid', items: SOLUTION_GUARANTEES },
   {
-    section: 'GuaranteeColumns',
-    eyebrow: 'What a solution is',
-    title: 'Not a different stack',
-    description: "Every page below is the same platform, pointed at one reader's problem.",
-    items: SOLUTION_GUARANTEES
-  },
-  {
-    section: 'IllustratedCards',
-    kind: 'linked',
+    section: 'FeatureTiles',
+    kind: 'illustrated',
     anchor: 'needs',
     eyebrow: 'By need',
     title: 'What you are building',
     description: 'The argument is the workload — the same one whatever sector runs it.',
-    items: SOLUTION_NEEDS
+    tiles: SOLUTION_NEEDS
   },
   {
-    section: 'IllustratedCards',
-    kind: 'linked',
+    section: 'FeatureTiles',
+    kind: 'illustrated',
     anchor: 'industries',
     eyebrow: 'By industries',
     title: 'Where you build it',
     description: 'Same platform, stated in the terms the sector is audited on.',
-    items: SOLUTION_INDUSTRIES
+    tiles: SOLUTION_INDUSTRIES
   },
   {
     section: 'LogoWallQuote',

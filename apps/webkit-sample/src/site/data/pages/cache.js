@@ -197,7 +197,7 @@ const FAQ = [
 export const CACHE_PAGE = [
   {
     section: 'Heroes',
-    kind: 'product-ticker',
+    kind: 'centered-carousel',
     eyebrow: 'Cache',
     title: 'Accelerate content delivery globally',
     description:
@@ -218,7 +218,7 @@ export const CACHE_PAGE = [
         href: PRODUCT_DOCS,
         illustration: 'fastest-path-to-live-website',
         illustrationLabel: 'A request served from cache, with the origin behind it',
-        actions: [{ label: 'Docs', href: PRODUCT_DOCS, kind: 'secondary', trailing: true }]
+        actions: [{ label: 'Docs', href: PRODUCT_DOCS }]
       },
       {
         title: 'High-availability caching for critical traffic',
@@ -229,13 +229,13 @@ export const CACHE_PAGE = [
         href: '/signup',
         illustration: 'distributed-apis',
         illustrationLabel: "One request fanning into the cache layer's content types",
-        actions: [{ label: 'Start Free', href: '/signup', kind: 'secondary', trailing: true }]
+        actions: [{ label: 'Start Free', href: '/signup' }]
       }
     ]
   },
   {
     section: 'CodeSplit',
-    kind: 'accelerator',
+    kind: 'default',
     title: 'Fine-tune cache policies for your content',
     description: 'Configure caching policies that match your content strategy.',
     files: CODE_FILES,
@@ -243,7 +243,7 @@ export const CACHE_PAGE = [
     copyAriaLabel: 'Copy the cache settings sample',
     actions: [{ label: 'Learn More', href: PRODUCT_DOCS }]
   },
-  { section: 'UseCaseLinks', title: 'Use cases', items: USE_CASES },
+  { section: 'CapabilityGrid', items: USE_CASES },
   {
     section: 'LogoWallQuote',
     items: CACHE_FAMILY_WALL,

@@ -50,13 +50,10 @@ export const alternativeGuidePage = (guide: AlternativeGuide): PageSection[] => 
   },
   {
     section: 'MediaSplitBand',
-    kind: 'guide',
     title: guide.mapping.title,
     description: guide.mapping.description,
     illustration: 'build-applications',
-    actions: [
-      { label: 'Ver o guia', href: '/site/docs', kind: 'outlined', size: 'medium', trailing: true }
-    ]
+    actions: [{ label: 'Ver o guia', href: '/site/docs' }]
   },
   { section: 'FaqSection', title: 'Perguntas Frequentes', items: guide.faq },
   {

@@ -302,16 +302,15 @@ export const WORKLOADS_PAGE = [
   { section: 'CapabilityGrid', items: BENEFITS },
   {
     section: 'MediaSplitBand',
-    kind: 'two-actions',
     eyebrow: 'Architecture',
     title: 'Serverless from the ground up: isolates, not containers',
     description:
       'A workload does not reserve a container per deployment. Azion Runtime runs your code in an isolate — a sandbox measured in kilobytes rather than gigabytes — so one location holds thousands of them and starts another the moment a request arrives.',
     illustration: 'runtime',
     illustrationLabel: 'One request reaching a workload, which starts an isolate per request',
-    actions: [{ label: 'Read the architecture', href: DOCS, kind: 'secondary', trailing: true }]
+    actions: [{ label: 'Read the architecture', href: DOCS }]
   },
-  { section: 'UseCaseLinks', title: 'You can use workloads to:', items: USE_CASES },
+  { section: 'CapabilityGrid', items: USE_CASES },
   {
     section: 'CodeSplit',
     kind: 'recipes',
@@ -345,7 +344,7 @@ export const WORKLOADS_PAGE = [
         illustration: 'preview',
         illustrationLabel:
           'Traffic split between the deployment that is live and the one being rolled out',
-        actions: [{ label: 'Deployment strategies', href: DOCS, trailing: true }]
+        actions: [{ label: 'Deployment strategies', href: DOCS }]
       }
     ]
   },

@@ -40,7 +40,7 @@
     title: string
     /** One or two sentences under the title. */
     description: string
-    /** Destination of the whole band; empty leaves the band unlinked. */
+    /** Destination of the whole band; defaults to its action's. */
     href?: string
     /** Registered illustration shown as the media. */
     illustration?: string
@@ -50,7 +50,7 @@
     image?: SiteImage | null
     /** Scene component shown as the media, in place of an illustration. */
     scene?: SiteScene | null
-    /** Medium buttons under the copy. */
+    /** The band's one outlined button, lit with the band on hover. */
     actions?: SiteAction[]
   }
 
@@ -75,6 +75,15 @@
   })
 
   const { follow } = useSiteLink()
+
+  const bandHref = (band: StackBand) => band.href || band.actions?.[0]?.href || ''
+
+  const bandAction = (action: SiteAction): SiteAction => ({
+    ...action,
+    kind: 'outlined',
+    size: 'medium',
+    trailing: true
+  })
 
   const followBand = (event: MouseEvent, href: string) => {
     if (event.defaultPrevented || !href) return
@@ -119,11 +128,11 @@
         texture="pixelate"
         texture-size="small"
         texture-fade="top"
-        :media-href="band.href ?? ''"
+        :media-href="bandHref(band)"
         :eyebrow="band.eyebrow ?? ''"
         :title="band.title"
         :description="band.description"
-        @click="followBand($event, band.href ?? '')"
+        @click="followBand($event, bandHref(band))"
       >
         <template #media>
           <component
@@ -154,11 +163,7 @@
           v-if="band.actions?.length"
           #actions
         >
-          <SectionAction
-            v-for="action in band.actions"
-            :key="action.label"
-            :action="{ kind: 'outlined', size: 'medium', ...action }"
-          />
+          <SectionAction :action="bandAction(band.actions[0])" />
         </template>
       </MediaSplit>
     </BandStack>
