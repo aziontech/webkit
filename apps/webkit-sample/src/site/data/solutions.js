@@ -109,3 +109,16 @@ export const NETWORK_OUTCOMES = [
     highlights: ['DDoS mitigated']
   }
 ]
+
+export const EARTH_NETWORK = {
+  eyebrow: 'Region: Earth.',
+  title: 'One distributed infrastructure to build, secure and scale workloads anywhere.',
+  lead: 'Built around your users. Distributed around your data.',
+  claims: [
+    '100+ data centers',
+    '100+ Tbps network capacity',
+    '30 ms median latency',
+    '100% availability'
+  ],
+  outcomes: NETWORK_OUTCOMES
+}

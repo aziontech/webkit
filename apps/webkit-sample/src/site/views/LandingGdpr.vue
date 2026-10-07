@@ -1,13 +1,11 @@
 <script setup>
-  // Routed page: the resend.com/security/gdpr translation, rendered inside the segregated
-  // marketing shell (website nav + footer, no console sidebar) — the same pairing every other
-  // landing example uses.
-  import AzionGdpr from '../components/AzionGdpr.vue'
   import SiteLayout from '../components/SiteLayout.vue'
+  import { GDPR_PAGE } from '../data/pages/gdpr.js'
+  import SitePage from '../ui/SitePage.vue'
 </script>
 
 <template>
   <SiteLayout>
-    <AzionGdpr />
+    <SitePage :sections="GDPR_PAGE" />
   </SiteLayout>
 </template>

@@ -1,13 +1,11 @@
 <script setup>
-  // Routed learning-page example: the Learning Center recreation, rendered inside the
-  // segregated marketing shell (website nav + footer, no console sidebar) — the same pairing
-  // every other landing example uses.
-  import AzionLearning from '../components/AzionLearning.vue'
   import SiteLayout from '../components/SiteLayout.vue'
+  import { LEARNING_PAGE } from '../data/pages/learning.js'
+  import SitePage from '../ui/SitePage.vue'
 </script>
 
 <template>
   <SiteLayout>
-    <AzionLearning />
+    <SitePage :sections="LEARNING_PAGE" />
   </SiteLayout>
 </template>

@@ -1,13 +1,11 @@
 <script setup>
-  // Routed products-page example: the platform catalogue, rendered inside the segregated
-  // marketing shell (website nav + footer, no console sidebar) — the same pairing every
-  // other landing example uses.
-  import AzionProducts from '../components/AzionProducts.vue'
   import SiteLayout from '../components/SiteLayout.vue'
+  import { PRODUCTS_PAGE } from '../data/pages/products.js'
+  import SitePage from '../ui/SitePage.vue'
 </script>
 
 <template>
   <SiteLayout>
-    <AzionProducts />
+    <SitePage :sections="PRODUCTS_PAGE" />
   </SiteLayout>
 </template>

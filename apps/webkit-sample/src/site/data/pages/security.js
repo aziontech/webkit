@@ -1,6 +1,6 @@
 import { PRODUCT_STACK, SECURITY_CLIENT_STRIP } from '@shared/ui/brand/strips.js'
 
-import { quotesLedBy } from '../solutions.js'
+import { EARTH_NETWORK, quotesLedBy } from '../solutions.js'
 import { solutionPage } from './solution.js'
 
 const HERO = {
@@ -93,18 +93,6 @@ const QUOTES = quotesLedBy(
   'Azion shielded us from sophisticated cyberattacks and empowered us to modernize our infrastructure, reduce costs, and deliver the best shopping experiences to millions of customers.'
 )
 
-const NETWORK_BAND = {
-  eyebrow: 'Region: Earth.',
-  title: 'One distributed infrastructure to build, secure and scale workloads anywhere.',
-  lead: 'Built around your users. Distributed around your data.',
-  claims: [
-    '100+ data centers',
-    '100+ Tbps network capacity',
-    '30 ms median latency',
-    '100% availability'
-  ]
-}
-
 const FAQ = [
   {
     value: 'q1',
@@ -164,7 +152,7 @@ export const SECURITY_PAGE = solutionPage({
   stack: STACK,
   quotes: QUOTES,
   primitivesTitle: 'All the Security Primitives You Need',
-  network: NETWORK_BAND,
+  network: EARTH_NETWORK,
   faq: FAQ,
   cta: CTA
 })

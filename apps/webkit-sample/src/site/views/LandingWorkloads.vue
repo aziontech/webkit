@@ -1,10 +1,11 @@
 <script setup>
-  import AzionWorkloads from '../components/AzionWorkloads.vue'
   import SiteLayout from '../components/SiteLayout.vue'
+  import { WORKLOADS_PAGE } from '../data/pages/workloads.js'
+  import SitePage from '../ui/SitePage.vue'
 </script>
 
 <template>
   <SiteLayout>
-    <AzionWorkloads />
+    <SitePage :sections="WORKLOADS_PAGE" />
   </SiteLayout>
 </template>

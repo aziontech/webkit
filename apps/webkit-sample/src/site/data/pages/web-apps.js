@@ -1,6 +1,6 @@
 import { BUILD_CLIENT_STRIP, PRODUCT_STACK } from '@shared/ui/brand/strips.js'
 
-import { quotesLedBy } from '../solutions.js'
+import { EARTH_NETWORK, quotesLedBy } from '../solutions.js'
 import { solutionPage } from './solution.js'
 
 const HERO = {
@@ -89,18 +89,6 @@ const USE_CASES = {
 
 const STACK = { label: 'Compatible with Your Stack', marks: PRODUCT_STACK }
 
-const NETWORK_BAND = {
-  eyebrow: 'Region: Earth.',
-  title: 'One distributed infrastructure to build, secure and scale workloads anywhere.',
-  lead: 'Built around your users. Distributed around your data.',
-  claims: [
-    '100+ data centers',
-    '100+ Tbps network capacity',
-    '30 ms median latency',
-    '100% availability'
-  ]
-}
-
 const FAQ = [
   {
     value: 'q1',
@@ -184,7 +172,7 @@ export const WEB_APPS_PAGE = solutionPage({
   stack: STACK,
   quotes: quotesLedBy('herospark'),
   primitivesTitle: 'All the Development Primitives You Need',
-  network: NETWORK_BAND,
+  network: EARTH_NETWORK,
   faq: FAQ,
   cta: CTA
 })

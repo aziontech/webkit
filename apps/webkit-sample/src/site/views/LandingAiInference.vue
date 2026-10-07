@@ -1,13 +1,11 @@
 <script setup>
-  // Routed product-page example: the AI Inference page prototype, rendered inside the
-  // segregated marketing shell (website nav + footer, no console sidebar) — the same
-  // pairing LandingFunctions/LandingCache use for the other product pages.
-  import AzionAiInference from '../components/AzionAiInference.vue'
   import SiteLayout from '../components/SiteLayout.vue'
+  import { AI_INFERENCE_PAGE } from '../data/pages/ai-inference.js'
+  import SitePage from '../ui/SitePage.vue'
 </script>
 
 <template>
   <SiteLayout>
-    <AzionAiInference />
+    <SitePage :sections="AI_INFERENCE_PAGE" />
   </SiteLayout>
 </template>

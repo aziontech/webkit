@@ -1,13 +1,11 @@
 <script setup>
-  // Routed product-page example: the azion.com Functions page recreation, rendered inside
-  // the segregated marketing shell (website nav + footer, no console sidebar) — the same
-  // pairing LandingAzion uses for the homepage.
-  import AzionFunctions from '../components/AzionFunctions.vue'
   import SiteLayout from '../components/SiteLayout.vue'
+  import { FUNCTIONS_PAGE } from '../data/pages/functions.js'
+  import SitePage from '../ui/SitePage.vue'
 </script>
 
 <template>
   <SiteLayout>
-    <AzionFunctions />
+    <SitePage :sections="FUNCTIONS_PAGE" />
   </SiteLayout>
 </template>

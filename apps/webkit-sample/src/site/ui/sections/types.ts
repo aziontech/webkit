@@ -46,6 +46,11 @@ export interface SiteFaqItem {
   link?: SiteLink
   /** The answer text after the link. */
   answerAfter?: string
+  /** A rich answer of paragraphs and bullet lists, each made of text and link segments; replaces answer, link and answerAfter. */
+  body?: Array<
+    | { type: 'p'; segments: Array<{ text: string; href?: string; external?: boolean }> }
+    | { type: 'ul'; items: Array<Array<{ text: string; href?: string; external?: boolean }>> }
+  >
 }
 
 export interface PageSection {

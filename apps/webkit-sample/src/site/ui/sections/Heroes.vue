@@ -7,6 +7,8 @@
   import { computed } from 'vue'
   import type { Component } from 'vue'
 
+  import { PRODUCT_STACK } from '@shared/ui/brand/strips.js'
+
   import { heroArt } from '../../data/hero-art.js'
   import SectionAction from './SectionAction.vue'
   import type { SiteAction } from './types'
@@ -20,6 +22,7 @@
     | 'pixel-floor'
     | 'copy-beside-art'
     | 'copy-on-top-art'
+    | 'product-ticker'
 
   export type HeroesScenePlacement = 'bottom' | 'top'
 
@@ -62,7 +65,7 @@
     carouselMarks?: string[]
     /** Overline above the client strip. */
     carouselLabel?: string
-    /** Product marks a ticker runs on the floor instead of the client strip. */
+    /** Product marks a ticker runs on the floor instead of the client strip; product-ticker defaults to the product stack. */
     tickerMarks?: string[]
     /** Overline above the ticker. */
     tickerLabel?: string
@@ -124,6 +127,14 @@
       textureSize: 'small',
       textureFade: 'top',
       offset: '3.5rem'
+    },
+    'product-ticker': {
+      kind: 'screen',
+      align: 'center',
+      maxWidth: 'site',
+      texture: 'dots',
+      textureFade: 'bottom',
+      offset: '3.5rem'
     }
   } as const
 
@@ -133,13 +144,19 @@
     'centered-band': { centered: true, maxWidth: '2xl' },
     'pixel-floor': {},
     'copy-beside-art': { maxWidth: 'xl' },
-    'copy-on-top-art': { centered: true }
+    'copy-on-top-art': { centered: true },
+    'product-ticker': { centered: true }
   } as const
 
   const frame = computed(() => FRAMES[props.kind])
   const titleFrame = computed(() => TITLES[props.kind])
 
-  const hasTicker = computed(() => props.tickerMarks.length > 0)
+  const floorMarks = computed(() =>
+    props.tickerMarks.length === 0 && props.kind === 'product-ticker'
+      ? PRODUCT_STACK
+      : props.tickerMarks
+  )
+  const hasTicker = computed(() => floorMarks.value.length > 0)
   const hasCarousel = computed(() => !hasTicker.value && props.carouselMarks.length > 0)
   const sceneOnTop = computed(() => Boolean(props.scene) && props.scenePlacement === 'top')
   const sceneOnBottom = computed(() => Boolean(props.scene) && props.scenePlacement === 'bottom')
@@ -241,7 +258,7 @@
           v-if="hasTicker"
           kind="band"
           size="small"
-          :marks="tickerMarks"
+          :marks="floorMarks"
           :label="tickerLabel"
         />
       </template>

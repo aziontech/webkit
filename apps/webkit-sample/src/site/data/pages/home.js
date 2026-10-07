@@ -15,20 +15,7 @@ import quickStartWithTemplates from '@aziontech/webkit/assets/quick-start-with-t
 import usageChart from '@aziontech/webkit/assets/usage-chart.svg'
 import { CLIENT_STRIP } from '@shared/ui/brand/strips.js'
 
-import { NETWORK_OUTCOMES } from '../solutions.js'
-
-export const HOME_NETWORK = {
-  eyebrow: 'Region: Earth.',
-  title: 'One distributed infrastructure to build, secure and scale workloads anywhere.',
-  lead: 'Built around your users. Distributed around your data.',
-  claims: [
-    '100+ data centers',
-    '100+ Tbps network capacity',
-    '30 ms median latency',
-    '100% availability'
-  ],
-  outcomes: NETWORK_OUTCOMES
-}
+import { EARTH_NETWORK } from '../solutions.js'
 
 export const HOME_REASONS = [
   {
@@ -216,7 +203,7 @@ export const HOME_PAGE = [
     title: 'Serverless AI-Native Primitives for Autonomous Workloads',
     ariaLabel: 'Platform primitives'
   },
-  { section: 'NetworkSection', ...HOME_NETWORK },
+  { section: 'NetworkSection', ...EARTH_NETWORK },
   {
     section: 'FeatureTiles',
     kind: 'artwork',
