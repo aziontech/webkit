@@ -3,7 +3,7 @@ import { composeStories } from '@storybook/vue3'
 import { fireEvent, render, waitFor } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/inputs/theme-switcher/ThemeSwitcher.stories'
+import * as stories from '../../../../../../apps/storybook/src/stories/components/primitives/inputs/theme-switcher/ThemeSwitcher.stories'
 import { expectNoA11yViolations } from '../../../test/axe'
 import ThemeSwitcher from './theme-switcher.vue'
 

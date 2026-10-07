@@ -3,7 +3,7 @@ import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { defineComponent, h, nextTick, ref } from 'vue'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/inputs/chip/Chip.stories'
+import * as stories from '../../../../../../apps/storybook/src/stories/components/primitives/inputs/chip/Chip.stories'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Chip from './chip.vue'
 

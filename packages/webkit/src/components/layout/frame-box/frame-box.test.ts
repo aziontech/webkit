@@ -2,7 +2,7 @@ import { composeStories } from '@storybook/vue3'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/layout/frame-box/FrameBox.stories'
+import * as stories from '../../../../../../apps/storybook/src/stories/components/primitives/layout/frame-box/FrameBox.stories'
 import { expectNoA11yViolations } from '../../../test/axe'
 import FrameBox from './frame-box.vue'
 

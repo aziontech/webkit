@@ -4,7 +4,7 @@ import { fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { beforeEach, describe, expect, it } from 'vitest'
 import { nextTick } from 'vue'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/inputs/calendar/Calendar.stories'
+import * as stories from '../../../../../../apps/storybook/src/stories/components/primitives/inputs/calendar/Calendar.stories'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Calendar from './calendar.vue'
 

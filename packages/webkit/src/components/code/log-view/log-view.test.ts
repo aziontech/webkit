@@ -3,7 +3,7 @@ import { fireEvent, render, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, h, ref } from 'vue'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/code/log-view/LogView.stories'
+import * as stories from '../../../../../../apps/storybook/src/stories/components/primitives/code/log-view/LogView.stories'
 import { expectNoA11yViolations } from '../../../test/axe'
 import type { LogViewLine } from './injection-key'
 import LogView from './log-view.vue'

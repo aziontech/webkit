@@ -3,7 +3,7 @@ import { fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { describe, expect, it, vi } from 'vitest'
 import { defineComponent, ref } from 'vue'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/content/accordion/Accordion.stories'
+import * as stories from '../../../../../../apps/storybook/src/stories/components/primitives/content/accordion/Accordion.stories'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Accordion, { AccordionContent, AccordionItem, AccordionTrigger } from './index'
 

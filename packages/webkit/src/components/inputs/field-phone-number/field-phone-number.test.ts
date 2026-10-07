@@ -3,7 +3,7 @@ import { composeStories } from '@storybook/vue3'
 import { fireEvent, render } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/inputs/field-phone-number/FieldPhoneNumber.stories'
+import * as stories from '../../../../../../apps/storybook/src/stories/components/primitives/inputs/field-phone-number/FieldPhoneNumber.stories'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { defaultCountries } from './countries'
 import FieldPhoneNumber from './field-phone-number.vue'

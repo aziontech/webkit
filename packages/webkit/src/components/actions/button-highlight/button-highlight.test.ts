@@ -2,7 +2,7 @@ import { composeStories } from '@storybook/vue3'
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/actions/button-highlight/ButtonHighlight.stories'
+import * as stories from '../../../../../../apps/storybook/src/stories/components/primitives/actions/button-highlight/ButtonHighlight.stories'
 import { expectNoA11yViolations } from '../../../test/axe'
 import ButtonHighlight from './button-highlight.vue'
 

@@ -2,7 +2,7 @@ import { composeStories } from '@storybook/vue3'
 import { fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/code/code-block/CodeBlock.stories'
+import * as stories from '../../../../../../apps/storybook/src/stories/components/primitives/code/code-block/CodeBlock.stories'
 import { expectNoA11yViolations } from '../../../test/axe'
 import CodeBlock from './code-block.vue'
 import { highlightCodeLine } from './utils/highlight-code'
