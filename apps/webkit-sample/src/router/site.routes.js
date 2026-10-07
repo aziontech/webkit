@@ -55,6 +55,7 @@ import LandingSecurity from '@site/views/LandingSecurity.vue'
 import LandingSolutions from '@site/views/LandingSolutions.vue'
 import LandingStreaming from '@site/views/LandingStreaming.vue'
 import LandingSuccessCases from '@site/views/LandingSuccessCases.vue'
+import LandingSupport from '@site/views/LandingSupport.vue'
 import LandingTechnology from '@site/views/LandingTechnology.vue'
 import LandingVercelAlternative from '@site/views/LandingVercelAlternative.vue'
 import LandingWebApps from '@site/views/LandingWebApps.vue'
@@ -179,6 +180,7 @@ export const siteRoutes = [
   // The pricing page in the same shell: the three tiers, the full feature matrix, and the
   // FAQ. The website nav's `Pricing` entry points here.
   { path: '/site/pricing', name: 'site-pricing', component: LandingPricing },
+  { path: '/site/support', name: 'site-support', component: LandingSupport },
   { path: '/site/careers', name: 'site-careers', component: LandingCareersHome },
   // The careers listing in the same shell: a page whose content is a live ATS query rather
   // than an argument, so what it demonstrates is the frame doing the work — a hero with the

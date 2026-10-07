@@ -150,6 +150,14 @@
     link: {
       type: Object,
       default: null
+    },
+    caption: {
+      type: String,
+      default: 'Feature and included-usage comparison across the Hobby, Pro and Enterprise plans.'
+    },
+    columnLabel: {
+      type: String,
+      default: 'Features'
     }
   })
 
@@ -189,7 +197,9 @@
       data-testid="pricing-comparison"
     >
       <caption class="sr-only">
-        Feature and included-usage comparison across the Hobby, Pro and Enterprise plans.
+        {{
+          caption
+        }}
       </caption>
 
       <!-- The plan header. Each cell is individually sticky (a `<thead>` cannot be, and a
@@ -201,7 +211,9 @@
             scope="col"
             class="sticky top-14 z-20 border-b border-(--border-default) bg-(--bg-canvas) p-(--spacing-lg) align-top font-normal"
           >
-            <span class="text-overline-md text-(--text-muted) max-lg:sr-only">Features</span>
+            <span class="text-overline-md text-(--text-muted) max-lg:sr-only">{{
+              columnLabel
+            }}</span>
             <!-- The narrow-layout plan picker lives with the header it re-labels, so the
                  control and the column it drives are never apart on screen. It stays in
                  THIS cell, which is present at every width: parked in the plan column it
@@ -231,7 +243,7 @@
             :key="plan.id"
             scope="col"
             :class="[
-              'sticky top-14 z-20 border-b border-l border-(--border-default) bg-(--bg-canvas) p-(--spacing-lg) align-top font-normal',
+              'sticky top-14 z-20 h-px border-b border-l border-(--border-default) bg-(--bg-canvas) p-(--spacing-lg) align-top font-normal',
               columnClass(plan)
             ]"
           >
@@ -243,10 +255,15 @@
               class="pointer-events-none absolute inset-x-0 top-0 h-0.5 bg-(--border-selected)"
               aria-hidden="true"
             />
-            <div class="flex h-full flex-col items-start gap-(--spacing-sm)">
-              <span class="text-heading-md text-(--text-default) max-lg:sr-only">{{
-                plan.name
-              }}</span>
+            <div class="flex h-full flex-col items-start justify-between gap-(--spacing-sm)">
+              <div class="flex flex-col gap-(--spacing-sm) max-lg:sr-only">
+                <span class="text-heading-md text-(--text-default)">{{ plan.name }}</span>
+                <span
+                  v-if="plan.description"
+                  class="text-body-sm text-(--text-muted)"
+                  >{{ plan.description }}</span
+                >
+              </div>
               <!-- Each column's CTA takes the tier's OWN kind, so `Start with Pro` is the
                    same button here as it is on the card above — one label cannot be the
                    brand fill in one place and a light fill in another on the same page. -->
@@ -272,7 +289,7 @@
         <tr>
           <th
             scope="colgroup"
-            colspan="4"
+            :colspan="plans.length + 1"
             :class="[
               'border-b border-(--border-default) p-(--spacing-lg) pt-(--spacing-xl) text-left font-normal',
               sectionIndex > 0 && 'border-t'
@@ -288,6 +305,7 @@
               {{ section.title }}
             </span>
             <span
+              v-if="section.description"
               class="mt-(--spacing-xs) block max-w-md text-body-sm text-(--text-muted) md:text-body-md"
             >
               {{ section.description }}
@@ -304,7 +322,10 @@
           v-for="(row, rowIndex) in section.rows"
           :key="`${section.title}-${rowIndex}-${row.label}`"
           :data-closing="
-            !link && sectionIndex === sections.length - 1 && rowIndex === section.rows.length - 1
+            !link &&
+            !section.link &&
+            sectionIndex === sections.length - 1 &&
+            rowIndex === section.rows.length - 1
               ? true
               : null
           "
@@ -406,6 +427,24 @@
             </span>
           </td>
         </tr>
+
+        <tr v-if="section.link">
+          <td
+            :colspan="plans.length + 1"
+            :class="[
+              'border-t border-(--border-default) px-(--spacing-lg) py-(--spacing-md)',
+              !link && sectionIndex === sections.length - 1 && 'border-b'
+            ]"
+          >
+            <Link
+              :label="section.link.label"
+              :href="section.link.href"
+              target="_blank"
+              icon="pi pi-arrow-right"
+              size="medium"
+            />
+          </td>
+        </tr>
       </tbody>
 
       <!-- ONE closing row for the whole table: the hand-off to the per-unit rates. It was
@@ -417,7 +456,7 @@
       <tfoot v-if="link">
         <tr>
           <td
-            colspan="4"
+            :colspan="plans.length + 1"
             class="border-y border-(--border-default) px-(--spacing-lg) py-(--spacing-md)"
           >
             <Link
