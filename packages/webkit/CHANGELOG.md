@@ -4,6 +4,38 @@
 
 - [Inputs] normalize z-index across all inputs (ENG-46735) ([#783](https://github.com/aziontech/webkit/issues/783)) ([25d201d](https://github.com/aziontech/webkit/commit/25d201d5ae0e6054b9189bc81c76b7d9fc8c5055))
 
+## [5.4.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@5.3.0...@aziontech/webkit@5.4.0) (2026-10-06)
+
+
+### Features
+
+* **theme:** add a text-heading-3xl rung above the heading ladder ([#1045](https://github.com/aziontech/webkit/issues/1045)) ([00798a5](https://github.com/aziontech/webkit/commit/00798a5781259e37181cc47cef02141015060e80))
+* **webkit:** add a title to DocUpdate for release-style entries ([#1056](https://github.com/aziontech/webkit/issues/1056)) ([b42158c](https://github.com/aziontech/webkit/commit/b42158cdee065eff68f582bb9bde02bd746e11cd))
+* **webkit:** add NetworkMap, a decorative dotted world map with lit PoPs ([#1033](https://github.com/aziontech/webkit/issues/1033)) ([9d94010](https://github.com/aziontech/webkit/commit/9d94010fa137d6b25a8f6fd4fc502da060ec476d))
+* **webkit:** add the marketing component category ([#1034](https://github.com/aziontech/webkit/issues/1034)) ([17b75f7](https://github.com/aziontech/webkit/commit/17b75f7c2348c0fc7b183cfed4057089375af8e3))
+* **webkit:** frame the site footer's column and close it on a full-bleed rule ([#1029](https://github.com/aziontech/webkit/issues/1029)) ([b12b255](https://github.com/aziontech/webkit/commit/b12b2556e03b09aa1b18232cfcfe9d3224e03558))
+* **webkit:** highlight hcl/terraform and graphql snippets in code-block ([#1026](https://github.com/aziontech/webkit/issues/1026)) ([5c47566](https://github.com/aziontech/webkit/commit/5c475663dc0bc2c107714aba096b341e7041d2d7))
+* **webkit:** let a chip toggle a selected state in a selectable mode ([#1038](https://github.com/aziontech/webkit/issues/1038)) ([d7f5ead](https://github.com/aziontech/webkit/commit/d7f5ead9be886e640cf8158095d7a184d88562da))
+* **webkit:** let Button place its icon after the label and take a prefix mark ([#1025](https://github.com/aziontech/webkit/issues/1025)) ([31c085f](https://github.com/aziontech/webkit/commit/31c085fc6fe8dedd5ca0905ba3ad9800ab1f4665))
+
+
+### Bug Fixes
+
+* **theme:** [ENG-48341] add gray.275/gray.650 and re-step the light canvas, border and muted text ([#1051](https://github.com/aziontech/webkit/issues/1051)) ([e24b303](https://github.com/aziontech/webkit/commit/e24b303e7c01946d9e0da4ac856109acb85a1d76))
+* **webkit:** animate code-block line entrance on the translate property ([#1027](https://github.com/aziontech/webkit/issues/1027)) ([b98fa13](https://github.com/aziontech/webkit/commit/b98fa13db7635e51c88bfeeeb84c815f83d20688))
+* **webkit:** centre a toast's leading glyph on its first title line ([#1031](https://github.com/aziontech/webkit/issues/1031)) ([981aed9](https://github.com/aziontech/webkit/commit/981aed9afdf445b9b81381f41bfccebd116cb6d5))
+* **webkit:** clear the 10 open pnpm audit advisories ([#1058](https://github.com/aziontech/webkit/issues/1058)) ([d135b94](https://github.com/aziontech/webkit/commit/d135b9473ef106141c13767ba74288543e997135))
+* **webkit:** keep a consumer-set data-hatch on the frame box root ([#1028](https://github.com/aziontech/webkit/issues/1028)) ([bc8bd47](https://github.com/aziontech/webkit/commit/bc8bd4778d7b94bf161d41ad3ce3022f27326b9e))
+* **webkit:** paint the overline cursor with the accent token ([#1044](https://github.com/aziontech/webkit/issues/1044)) ([16590a5](https://github.com/aziontech/webkit/commit/16590a504f6af24829b4957288cc1103fe557f7d))
+* **webkit:** render field-textarea's helper text through HelperText ([#1043](https://github.com/aziontech/webkit/issues/1043)) ([d8d7fba](https://github.com/aziontech/webkit/commit/d8d7fbaa2f67bcab8e714cf6b364e4fe441b16a1))
+* **webkit:** set log-view text in the monospace code label ([#1030](https://github.com/aziontech/webkit/issues/1030)) ([5fb0cad](https://github.com/aziontech/webkit/commit/5fb0cadfd508fb7fd29a702e09743ffce73be8f0))
+* **webkit:** show digit placeholders in the phone field's default placeholder ([#1032](https://github.com/aziontech/webkit/issues/1032)) ([b96707c](https://github.com/aziontech/webkit/commit/b96707cc4829c7fa7dbcf997f5a128bcfc6fcdf8))
+
+
+### Documentation
+
+* **webkit:** update PROCESS.md CI jobs, base branch and standard counts ([#1023](https://github.com/aziontech/webkit/issues/1023)) ([d0840a5](https://github.com/aziontech/webkit/commit/d0840a5091f86d2c45a442ac5691011d8a43f4e8))
+
 ## [5.3.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@5.2.0...@aziontech/webkit@5.3.0) (2026-10-01)
 
 
