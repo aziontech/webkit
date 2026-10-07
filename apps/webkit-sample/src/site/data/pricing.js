@@ -662,8 +662,8 @@ export const FAQ = [
 ]
 
 // The platform primitives, grouped by capability — the same set the homepage's band
-// carries, in the pt-BR wording this page uses. One NavColumn per group, one NavItem per
-// primitive; `href` points at the sample's own page where it has one.
+// carries, in the pt-BR wording this page uses; `href` points at the sample's own page
+// where it has one.
 export const PRIMITIVE_GROUPS = [
   {
     label: 'Compute',
