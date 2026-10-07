@@ -18,6 +18,12 @@ const IMPORTS = [
   "import TextureMaterial from '@aziontech/webkit/texture-material'"
 ]
 
+const FRAME_IMPORTS = [
+  "import FrameBox from '@aziontech/webkit/frame-box'",
+  "import SectionContainer from '@aziontech/webkit/section-container'",
+  "import TextureMaterial from '@aziontech/webkit/texture-material'"
+]
+
 const components = {
   Button,
   CallToAction,
@@ -99,6 +105,17 @@ const PANEL_TEMPLATE = closingColumn(`<SectionModule :divided="false" :padded="f
   <TextureMaterial kind="lines" />
 </FrameBox>`)
 
+const FRAME_TEMPLATE = `<SectionContainer max-width="site">
+  <FrameBox
+    borders="none"
+    marks="all"
+    data-hatch="true"
+    class="h-[calc(var(--spacing-xxl)*2)]"
+  >
+    <TextureMaterial kind="lines" />
+  </FrameBox>
+</SectionContainer>`
+
 const meta = {
   title: 'Templates/Marketing/Content/ClosingCallToAction',
   tags: ['autodocs'],
@@ -109,7 +126,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The close of every landing page: one last ask after a hatched gap, then a closing spacer that draws no rules of its own, because the site footer under it opens with a full-bleed rule. Almost every page ends with the split form, among them Home, Products, Pricing, Success Cases, the Vercel Alternative page and every solution page, and only its copy varies per page (Build / Build once. / Run everywhere. on Retail, Web Apps, AI Workloads, Financial Services, Technology and Success Cases; Secure / Protected by default. / Always on. on Security and the Vercel Alternative page; Performance / Fast everywhere. / Always reliable. on Performance). Careers ends with the single-action panel and a closing frame half that height. Built from `SectionContainer`, `SectionGap`, `SectionModule`, `CallToAction`, `Button` and `FrameBox`, with `TextureMaterial` ruling each closing frame.'
+          'The close of every landing page: one last ask after a hatched gap, then a closing spacer that draws no rules of its own, because the site footer under it opens with a full-bleed rule. Almost every page ends with the split form, among them Home, Products, Pricing, Success Cases, the Vercel Alternative page and every solution page, and only its copy varies per page (Build / Build once. / Run everywhere. on Retail, Web Apps, AI Workloads, Financial Services, Technology and Success Cases; Secure / Protected by default. / Always on. on Security and the Vercel Alternative page; Performance / Fast everywhere. / Always reliable. on Performance). Careers ends with the single-action panel and a closing frame half that height. Partners, Learning, Compliance and GDPR ask nothing at the end: their last band runs straight into the closing frame alone, with no hatched gap above it. Built from `SectionContainer`, `SectionGap`, `SectionModule`, `CallToAction`, `Button` and `FrameBox`, with `TextureMaterial` ruling each closing frame.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -140,6 +157,19 @@ export const Panel = {
           'The Careers page’s close: a panel `CallToAction` with a single action to the job listing, then the small closing frame, one `--spacing-xxl` tall: the same corner marks and lines texture as the split close, at the height of a small `SectionGap`. It draws no rules, because the footer under it opens with its own.'
       },
       source: { code: toSfc(IMPORTS, PANEL_TEMPLATE) }
+    }
+  }
+}
+
+export const Frame = {
+  render: () => ({ components, template: FRAME_TEMPLATE }),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The close of a page that ends without an ask, as Partners, Learning, Compliance and GDPR do: no `CallToAction` and no hatched gap, only the double-height closing frame, set directly under the column’s last band. Its corner marks and lines texture match the split close’s frame, and it draws no rules, because the footer under it opens with its own.'
+      },
+      source: { code: toSfc(FRAME_IMPORTS, FRAME_TEMPLATE) }
     }
   }
 }

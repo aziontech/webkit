@@ -3,6 +3,7 @@ import Flow from '@aziontech/webkit/flow'
 import Hero from '@aziontech/webkit/hero'
 import Illustration from '@aziontech/webkit/illustration'
 import Tag from '@aziontech/webkit/tag'
+import Ticker from '@aziontech/webkit/ticker'
 
 import { each, indent } from '../../_shared/markup'
 import { toSfc } from '../../_shared/story-source'
@@ -12,6 +13,7 @@ const FLOW_IMPORT = "import Flow from '@aziontech/webkit/flow'"
 const HERO_IMPORT = "import Hero from '@aziontech/webkit/hero'"
 const ILLUSTRATION_IMPORT = "import Illustration from '@aziontech/webkit/illustration'"
 const TAG_IMPORT = "import Tag from '@aziontech/webkit/tag'"
+const TICKER_IMPORT = "import Ticker from '@aziontech/webkit/ticker'"
 
 const components = {
   Button,
@@ -22,7 +24,8 @@ const components = {
   Hero,
   'Hero.Title': Hero.Title,
   Illustration,
-  Tag
+  Tag,
+  Ticker
 }
 
 const CLIENT_STRIP = [
@@ -49,6 +52,39 @@ const RETAIL_CLIENT_STRIP = [
   'america-movil',
   'madeiramadeira',
   'nzn'
+]
+
+const PRODUCT_STACK = [
+  'nextjs',
+  'astro',
+  'react',
+  'vue',
+  'angular',
+  'nuxt',
+  'gatsby',
+  'hugo',
+  'preact',
+  'remix',
+  'qwik',
+  'vite',
+  'vitepress',
+  'docusaurus',
+  'eleventy',
+  'hexo',
+  'jekyll',
+  'hono',
+  'nodejs',
+  'aws',
+  'gcp',
+  'azure',
+  'workers-cloudflare',
+  'terraform',
+  'github',
+  'openai',
+  'anthropic',
+  'groq',
+  'sqlite',
+  'drizzle'
 ]
 
 const START_FREE = { label: 'Start Free', kind: 'secondary', href: '/signup' }
@@ -316,6 +352,32 @@ ${each(WORKLOAD_LEVELS, workloadLevel, 5)}
   </template>
 </Hero>`
 
+const PRODUCT_TICKER_TEMPLATE = `<Hero
+  kind="screen"
+  align="center"
+  max-width="site"
+  texture="dots"
+  texture-fade="bottom"
+  offset="3.5rem"
+>
+  <Hero.Title
+    centered
+    eyebrow="Cache"
+    title="Accelerate content delivery globally"
+    description="Serve cached content with fast response times. Reduce origin load and keep applications fast during traffic spikes."
+  >
+${indent(actions([START_FREE_LOWER, DOCS]), 2)}
+  </Hero.Title>
+
+  <template #bottom>
+    <Ticker
+      kind="band"
+      size="small"
+      :marks="${marks(PRODUCT_STACK, 3)}"
+    />
+  </template>
+</Hero>`
+
 const meta = {
   title: 'Templates/Marketing/Heroes/Hero',
   tags: ['autodocs'],
@@ -326,7 +388,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The opening band of a marketing page: the page’s h1 and its actions, full-bleed above the framed column, with the backdrop, strip or art that frames them. Each story is the hero one family of sample pages opens with. The home page and every solution page (Retail, Web Apps, AI Workloads, Security, Performance, Streaming, Financial Services, Technology) open on the centered band with the client strip on its floor. Learning opens on a large title band, Support on the same band centred under an eyebrow with the dot field behind it, AI Inference on the pixelate field, the Workloads copy sits on top of its topology, and the copy-beside-art band is the solution pages’ former opening. Built from `Hero`, `Hero.Title`, `Button`, `Illustration` and, for the Workloads scene, `Flow` and `Tag`.'
+          'The opening band of a marketing page: the page’s h1 and its actions, full-bleed above the framed column, with the backdrop, strip or art that frames them. Each story is the hero one family of sample pages opens with. The home page and every solution page (Retail, Web Apps, AI Workloads, Security, Performance, Streaming, Financial Services, Technology) open on the centered band with the client strip on its floor. The product pages (Cache, Application Accelerator, Functions) open on the same screen under an eyebrow, the dot field fading out toward the floor, with a ticker of the product stack where the client strip would stand. Learning opens on a large title band, Support on the same band centred under an eyebrow with the dot field behind it, AI Inference on the pixelate field, the Workloads copy sits on top of its topology, and the copy-beside-art band is the solution pages’ former opening. Built from `Hero`, `Hero.Title`, `Button`, `Illustration`, `Ticker` for the product stack and, for the Workloads scene, `Flow` and `Tag`.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -413,6 +475,19 @@ export const CopyOnTopArt = {
       source: {
         code: toSfc([BUTTON_IMPORT, FLOW_IMPORT, HERO_IMPORT, TAG_IMPORT], COPY_ON_TOP_ART_TEMPLATE)
       }
+    }
+  }
+}
+
+export const ProductTicker = {
+  render: () => ({ components, template: PRODUCT_TICKER_TEMPLATE }),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The Cache page’s hero, the opening every product page runs: one screen tall under the sticky nav, the product name as the eyebrow over a centered headline and two actions, and the dot field fading out toward the floor. Where the home page stands its client strip, a product page runs a `Ticker` of the thirty frameworks, clouds and tools a workload is already built with, unlabelled. Application Accelerator and Functions open the same way with their own copy.'
+      },
+      source: { code: toSfc([BUTTON_IMPORT, HERO_IMPORT, TICKER_IMPORT], PRODUCT_TICKER_TEMPLATE) }
     }
   }
 }
