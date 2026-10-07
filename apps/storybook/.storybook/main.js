@@ -3,7 +3,11 @@ import vue from '@vitejs/plugin-vue'
 
 /** @type {import('@storybook/vue3-vite').StorybookConfig} */
 const config = {
-  stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
+  stories: [
+    '../src/stories/{_shared,components,foundations,utils}/**/*.mdx',
+    '../src/stories/{_shared,components,foundations,utils}/**/*.stories.@(js|jsx|mjs|ts|tsx)',
+    '../src/stories/*.mdx'
+  ],
   /*
    * Story assets served at the origin root, so a story's `src` is the same string a
    * consumer writes — `/docs/…`, not a bundler hash. Frames need it: DocFrame takes a
