@@ -76,6 +76,7 @@ mapping is fixed — it is not a menu of options:
 | A band that is only a heading (± eyebrow, ± description) | `SectionTitle` (`kind="centered"` unless the source sets the heading and its description in two columns, then `kind="horizontal"`) |
 | A grid of product / capability links | `CardGrid variant="divider"` of `NavColumn` + `NavItem` |
 | A copy-beside-art band | One `FrameBox` with a `lg:grid-cols-2` inside; the art is a registered banner or an `Illustration` asset |
+| Client marks beside a testimonial (a proof band) | `QuoteTabs` in a `FrameBox flush borders="y" marks="all"`, `:items="quotesLedBy('<client>')"` (site `data/solutions.js`) led by the source's quoted client, CTA in `#actions`. Never `LogoWall` + a `Quote` in its `#aside` |
 | A row of stats (big numeral + unit + label) | A `gap-px` grid of `FrameBox borders="none" marks="none"` cells |
 | A 2-up or 4-up card grid | `CardGrid variant="divider"` with one framed cell per card |
 | A two-column split (copy \| code) | One `FrameBox` with a `md:grid-cols-2`; the code half is `CodeBlock` |
