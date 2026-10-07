@@ -16,6 +16,9 @@ const IMPORT = "import Illustration from '@aziontech/webkit/illustration'"
 const ASSETS = [
   'ai-applications',
   'automate-threat-mitigation',
+  'azion-to-akamai',
+  'azion-to-cloudflare',
+  'azion-to-fastly',
   'azion-to-vercel',
   'build-applications',
   'deploy-secure-mcp-server',
@@ -29,13 +32,16 @@ const ASSETS = [
   'live-debugging',
   'low-latency',
   'modern-frontends',
+  'no-idle-no-waste',
   'preview',
   'programmable-security',
   'protect-financial-applications',
   'quick-start-with-templates',
   'retail-application-modernization',
   'runtime',
-  'saas-platforms'
+  'saas-platforms',
+  'stay-in-control',
+  'white-gloves-when-it-matters'
 ]
 
 /** @type {import('@storybook/vue3').Meta<typeof Illustration>} */
