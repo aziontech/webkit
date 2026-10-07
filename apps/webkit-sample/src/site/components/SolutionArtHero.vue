@@ -8,9 +8,11 @@
   import { HERO_ART_CLASS, heroArt } from '../data/hero-art.js'
 
   const props = defineProps({
-    /** The opening band: eyebrow, title, description, the art beside them (a registered Illustration name, or an asset src with its width and height; either way its name must have bounds in hero-art.js) and, optionally, the client marks the carousel runs; without marks the hero has no carousel. */
+    /** The opening band: eyebrow, title, description, the art beside them (a registered Illustration name, or an asset src with its width and height; either way its name must have bounds in hero-art.js) and, optionally, the client marks the carousel runs with the overline over them; without marks the hero has no carousel. */
     hero: { type: Object, required: true }
   })
+
+  defineSlots()
 
   const hasCarousel = computed(() => Boolean(props.hero.carouselMarks?.length))
 
@@ -24,7 +26,7 @@
     kind="screen"
     media-align="end"
     :carousel="hasCarousel"
-    carousel-label="Trusted by mission-critical workloads"
+    :carousel-label="hero.carouselLabel ?? 'Trusted by mission-critical workloads'"
     :carousel-marks="hero.carouselMarks ?? []"
     offset="3.5rem"
   >
@@ -36,21 +38,23 @@
       :description="hero.description"
     >
       <template #actions>
-        <Button
-          label="Start Free"
-          kind="secondary"
-          size="large"
-          @click="goSignup"
-        />
-        <Button
-          label="Talk to a Specialist"
-          kind="outlined"
-          size="large"
-          href="#contact"
-          icon="pi pi-chevron-right"
-          icon-position="trailing"
-          animated
-        />
+        <slot name="actions">
+          <Button
+            label="Start Free"
+            kind="secondary"
+            size="large"
+            @click="goSignup"
+          />
+          <Button
+            label="Talk to a Specialist"
+            kind="outlined"
+            size="large"
+            href="#contact"
+            icon="pi pi-chevron-right"
+            icon-position="trailing"
+            animated
+          />
+        </slot>
       </template>
     </Hero.Title>
 

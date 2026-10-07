@@ -7,12 +7,12 @@
   //
   // The source's 15 bands, in order, and what each becomes here:
   //
-  //   0  hero (eyebrow, h1, description, one action, art)  Hero kind="screen" + Hero.Title + #media
-  //   1  labelled 11-mark marquee                          Ticker, on the hero's floor
+  //   0  hero (eyebrow, h1, description, one action, art)  SolutionArtHero, copy beside art
+  //   1  labelled 11-mark marquee                          the hero's carousel, on its floor
   //   2  "Why Azion" title + first three cells             SectionTitle in #header + CardGrid
   //   3  the second three cells                            the same grid's second row
   //   4  spacer                                            SectionGap hatch
-  //   5  six client marks + one quote                      LogoWall + Quote in its #aside
+  //   5  six client marks + one quote                      QuoteTabs, the client quotes band
   //   6  spacer                                            SectionGap hatch
   //   7  "Comparison" title + the capability matrix        SectionTitle in #header + a real table
   //   8  spacer                                            SectionGap hatch
@@ -53,8 +53,8 @@
   //     platform to what each one serves, which is what that band's copy enumerates. Their
   //     `alt` text therefore does not survive the copy diff: it described art we replaced.
   //   • Band 9's source paragraph runs its link's label on as a sentence ("…production
-  //     domains. Complete technical guide"). We split it: the paragraph is prose and the label
-  //     is a real control. Both strings are present.
+  //     domains. Complete technical guide"). Here the paragraph is prose and the link is a
+  //     real control labelled `See the guide`, the outlined action every media split carries.
   //   • The closing band's eyebrow is `// SECURE` in the source. CallToAction's overline
   //     anatomy draws the `//` itself, so the string passed is `Secure`.
   //   • Every "read more" control on the source carries a trailing arrow, and so does every
@@ -72,31 +72,28 @@
   // mark under that name), and the first cell of the quote band's grid is `dzn-logo.svg`
   // carrying `alt="DNZ"` (NZN is this repo's name for that client, and what the file draws).
   // `Magazine Luiza` is `Magalu` here for the same reason — one client, our registry's name.
-  // The four marks the quote band names that are not CLIENTS registry entries; Vite resolves
-  // each to an asset URL, exactly as the registry does.
-  import arezzo from '@aziontech/webkit/assets/arezzo-extended-reversed.svg'
-  import axur from '@aziontech/webkit/assets/axur-extended-reversed.svg'
-  import contabilizei from '@aziontech/webkit/assets/contabilizei-extended-reversed.svg'
-  import { CLIENTS } from '@aziontech/webkit/assets/client-registry'
   import { competitor } from '@aziontech/webkit/assets/competitor-registry'
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
   import CallToAction from '@aziontech/webkit/call-to-action'
-  import CardGrid from '@aziontech/webkit/card-grid'
+  import CardGrid from '@aziontech/webkit/card-grid-root'
+  import CardGridCell from '@aziontech/webkit/card-grid-cell'
   import Faq from '@aziontech/webkit/faq'
   import FrameBox from '@aziontech/webkit/frame-box'
-  import Hero from '@aziontech/webkit/hero'
   import Illustration from '@aziontech/webkit/illustration'
-  import LogoWall from '@aziontech/webkit/logo-wall'
   import MediaSplit from '@aziontech/webkit/media-split'
-  import Quote from '@aziontech/webkit/quote'
+  import QuoteTabs from '@aziontech/webkit/quote-tabs'
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
   import SectionModule from '@aziontech/webkit/section-module'
   import SectionTitle from '@aziontech/webkit/section-title'
-  import Ticker from '@aziontech/webkit/ticker'
+  import TextureMaterial from '@aziontech/webkit/texture-material'
+  import Topic from '@aziontech/webkit/topic'
   import ClientMark from '@shared/ui/brand/ClientMark.vue'
   import { useRouter } from 'vue-router'
+
+  import { quotesLedBy } from '../data/solutions.js'
+  import SolutionArtHero from './SolutionArtHero.vue'
 
   const router = useRouter()
   const goSignup = () => router.push('/signup')
@@ -105,9 +102,7 @@
   // technical guide, and the client stories the quote band links out to.
   const CONTACT = '/site/contact'
   const GUIDE = '/site/docs'
-  const CLIENT_STORIES = '/site/home'
-
-  const registered = (name) => CLIENTS.find((client) => client.name === name) ?? { name }
+  const CLIENT_STORIES = '/site/success-cases'
 
   // ── Band 1 — who already runs on the platform ─────────────────────────────────
   // The source's marquee, in the source's order. `Prime Video` is the name its eighth mark
@@ -125,6 +120,18 @@
     'gpa',
     'fourbank'
   ]
+
+  const HERO = {
+    eyebrow: 'Alternative Guide',
+    title: 'Vercel Alternative Guide: Moving to Azion',
+    description:
+      'Map Vercel projects, preview deployments, Functions, Blob, Edge Config, Firewall, and Web Analytics to Azion. Keep your Git-based build and preview workflow, run functions without cold starts, and move one project at a time before you switch the domain.',
+    art: {
+      name: 'azion-to-vercel',
+      alt: 'The Azion mark and the Vercel mark, one laid over the other'
+    },
+    carouselMarks: TRUST_MARKS
+  }
 
   // ── Bands 2 + 3 — why teams move, in six cells ────────────────────────────────
   // The source draws a dollar, a code bracket, a globe, a shield, a bolt and a sync arrow
@@ -169,26 +176,7 @@
     }
   ]
 
-  // ── Band 5 — the marks, and one client's sentence ─────────────────────────────
-  // The first six cells in the source's order.
-  const STORY_CLIENTS = [
-    { name: 'NZN', logo: registered('NZN').logo },
-    { name: 'Axur', logo: axur, artwork: 'light' },
-    registered('Radware'),
-    { name: 'Arezzo', logo: arezzo, artwork: 'light' },
-    { name: 'Contabilizei', logo: contabilizei, artwork: 'light' },
-    registered('Magalu')
-  ]
-
-  // The wall's `items` are the list it loops over; every cell's picture is drawn by the
-  // `mark` slot from the entry at the same index, so `src` is the fallback that never
-  // renders and `alt` is what keys the cell.
-  const STORY_MARKS = STORY_CLIENTS.map((client) => ({
-    src: client.logo ?? client.logoLight ?? '',
-    alt: client.name
-  }))
-
-  const CONTABILIZEI = { name: 'Contabilizei', logo: contabilizei, artwork: 'light' }
+  const QUOTES = quotesLedBy('contabilizei')
 
   // ── Band 7 — the capability matrix ────────────────────────────────────────────
   // Twenty-three rows, each platform's level as the source states it. The three levels are
@@ -306,67 +294,7 @@
 </script>
 
 <template>
-  <!-- ══ Bands 0 + 1 — the hero, and the marks standing on its floor ════════════
-       Hero owns the full-bleed band and the page's top rule. `--banner-offset` is the
-       sticky SiteNav's height (h-14 = 3.5rem), so the band still measures exactly one
-       screen with the nav above it. The copy keeps the leading column and the art takes
-       the second, which is the source's own split. -->
-  <Hero
-    texture="grid"
-    texture-fade="top"
-    kind="screen"
-    max-width="site"
-    class="[--banner-offset:3.5rem]"
-  >
-    <Hero.Title
-      eyebrow="Alternative Guide"
-      title="Vercel Alternative Guide: Moving to Azion"
-      description="Map Vercel projects, preview deployments, Functions, Blob, Edge Config, Firewall, and Web Analytics to Azion. Keep your Git-based build and preview workflow, run functions without cold starts, and move one project at a time before you switch the domain."
-    >
-      <template #actions>
-        <Button
-          label="Talk to a Specialist"
-          kind="secondary"
-          size="large"
-          :href="CONTACT"
-          icon="pi pi-chevron-right"
-          icon-position="trailing"
-          animated
-        />
-      </template>
-    </Hero.Title>
-
-    <!-- The source frames its hero art in a bordered panel; ours stands on the band itself,
-         because the hero's own rule is the only frame this band gets.
-
-         The scene is drawn small on its canvas, and off-centre on it — 209x183 of ink inside
-         592x300, 35% of the width, its centre 30.5 to the left of the canvas's. So at the
-         column's own size it reads as a thumbnail beside a heading three lines tall, and it
-         lands left of the column it sits in. `scale` grows it without touching the layout
-         box, so the paint runs past that box and nothing here clips it — the hero band's own
-         `overflow-hidden` is the only edge it meets, which is what keeps the tiles' shadows
-         whole. The translate is the asset's own offset, stated as a fraction of the box
-         (30.5/592) rather than as a fitted pixel count, and multiplied by the same scale, so
-         one formula holds at all three steps. Measured at 375 / 768 / 1024 / 1440: ink centre
-         equals cell centre exactly, against 56px left of it before. -->
-    <template #media>
-      <Illustration
-        name="azion-to-vercel"
-        aria-label="The Azion mark and the Vercel mark, one laid over the other"
-        class="[--art-scale:1.35] w-full translate-x-[calc(5.152%*var(--art-scale))] scale-(--art-scale) sm:[--art-scale:1.55] lg:[--art-scale:1.75]"
-      />
-    </template>
-
-    <template #bottom>
-      <Ticker
-        kind="band"
-        size="small"
-        label="Trusted by mission-critical workloads"
-        aria-label="Companies running on Azion"
-        :marks="TRUST_MARKS"
-      />
-    </template>
-  </Hero>
+  <SolutionArtHero :hero="HERO" />
 
   <!-- ══ The framed column ═════════════════════════════════════════════════════
        Every band below the hero is a brick inside one centered column. The column carries
@@ -377,9 +305,8 @@
   <SectionContainer max-width="site">
     <!-- ── Bands 2 + 3 — why teams move, in six cells ───────────────────────────
          The heading is the module's own `#header`, so the rule under it is that header's
-         `border-b` rather than two bands' edges meeting. The six cells are one hairline
-         grid: the rules between them are the grid's `gap-px`, so each cell draws no border
-         and fills `--bg-canvas` (or the whole band goes the colour of the gap). -->
+         `border-b` rather than two bands' edges meeting. Each of the six cells is a framed
+         CardGridCell, so every cell draws its own rules and corner marks. -->
     <SectionModule
       :divided="false"
       :padded="false"
@@ -397,26 +324,22 @@
         marks="bottom"
       >
         <CardGrid
-          kind="divider"
+          flush
+          kind="frame"
           :columns="3"
         >
-          <div
+          <CardGridCell
             v-for="reason in REASONS"
             :key="reason.title"
-            class="flex flex-col gap-(--spacing-md) bg-(--bg-canvas) p-(--spacing-xl)"
+            kind="canvas"
           >
-            <i
-              :class="reason.icon"
-              aria-hidden="true"
-              class="text-heading-sm text-(--primary)"
+            <Topic
+              :heading-level="3"
+              :icon="reason.icon"
+              :title="reason.title"
+              :description="reason.description"
             />
-            <h3 class="m-0 text-balance text-heading-xs text-(--text-default)">
-              {{ reason.title }}
-            </h3>
-            <p class="m-0 text-pretty text-body-sm text-(--text-muted)">
-              {{ reason.description }}
-            </p>
-          </div>
+          </CardGridCell>
         </CardGrid>
       </FrameBox>
     </SectionModule>
@@ -424,15 +347,6 @@
     <!-- Band 4 — spacer. -->
     <SectionGap hatch />
 
-    <!-- ── Band 5 — the marks, and one client's sentence ────────────────────────
-         The design system's own client wall: six marks on the start edge, one of those
-         clients speaking on the end edge, which is exactly what LogoWall's `aside` draws. The
-         marks are a static grid, not this site's marquee — the source lays them out as a block
-         of twelve beside a quote, and a marquee in half a column shows two marks at a time.
-
-         The marks come from the CLIENTS registry, which places each one per theme, so they
-         render through the wall's `mark` slot as ClientMark rather than as the raw `src` LogoWall would otherwise build.
-         `items` stays the list they are drawn from, in the source's order. -->
     <SectionModule
       :divided="false"
       :padded="false"
@@ -440,52 +354,24 @@
       <FrameBox
         flush
         borders="y"
-        marks="bottom"
+        marks="all"
       >
-        <LogoWall
-          aria-label="Clients running on Azion"
-          :items="STORY_MARKS"
-          class="p-(--spacing-xl)"
+        <QuoteTabs
+          aria-label="Client stories"
+          :items="QUOTES"
         >
-          <template #mark="{ index }">
-            <ClientMark
-              :client="STORY_CLIENTS[index]"
-              colored
-              mark="h-8 w-auto max-w-full object-contain"
+          <template #actions>
+            <Button
+              label="See success stories"
+              kind="secondary"
+              size="large"
+              :href="CLIENT_STORIES"
+              icon="pi pi-chevron-right"
+              icon-position="trailing"
+              animated
             />
           </template>
-
-          <!-- The mark is the client SIGNING the quote, which the source names separately
-               from the `Contabilizei` cell in the grid beside it (`Contabilizei Logo` in its
-               inventory) — not a thirteenth logo in the strip. The quotation keeps the
-               source's straight ASCII quotes. -->
-          <template #aside>
-            <Quote
-              kind="signed"
-              text='"With Azion, Contabilizei improved request delivery at the Edge, reduced infrastructure costs, and gained fast access to support whenever needed."'
-              name="Fabrício Santos"
-              job-title="DevSecOps Manager at Contabilizei"
-            >
-              <template #mark>
-                <ClientMark
-                  :client="CONTABILIZEI"
-                  mark="h-8 w-auto max-w-40 object-contain"
-                />
-              </template>
-              <template #actions>
-                <Button
-                  label="Customers"
-                  kind="outlined"
-                  size="large"
-                  :href="CLIENT_STORIES"
-                  icon="pi pi-chevron-right"
-                  icon-position="trailing"
-                  animated
-                />
-              </template>
-            </Quote>
-          </template>
-        </LogoWall>
+        </QuoteTabs>
       </FrameBox>
     </SectionModule>
 
@@ -548,7 +434,9 @@
         />
       </template>
 
-      <table class="w-full table-auto border-separate border-spacing-0 text-left lg:table-fixed">
+      <table
+        class="w-full table-auto border-separate border-spacing-0 border-b border-(--border-default) text-left lg:table-fixed"
+      >
         <caption class="sr-only">
           Capability-by-capability comparison of Azion and Vercel.
         </caption>
@@ -630,8 +518,7 @@
 
     <!-- ── Band 9 — the argument beside the mapping ─────────────────────────────
          The source runs its link's label on as the last sentence of the paragraph; here the
-         paragraph is prose and the label is a real control, so both strings are present and
-         the control is one. -->
+         paragraph is prose and the link is a real control. -->
     <SectionModule
       :divided="false"
       :padded="false"
@@ -639,6 +526,12 @@
       <MediaSplit
         framed
         :media-href="GUIDE"
+        align="center"
+        size="large"
+        media-fill="canvas"
+        texture="pixelate"
+        texture-size="small"
+        texture-fade="top"
         title="Move application delivery without disrupting releases"
         description="Translate Vercel projects into Azion equivalents while keeping validation workflows predictable. Rebuild CDN behavior, redirects, rewrites, image optimization, Functions, AI integrations, storage, security rules, DNS, certificates, and observability before shifting production domains."
       >
@@ -650,9 +543,9 @@
         </template>
         <template #actions>
           <Button
-            label="Complete technical guide"
-            kind="secondary"
-            size="small"
+            label="See the guide"
+            kind="outlined"
+            size="medium"
             :href="GUIDE"
             icon="pi pi-chevron-right"
             icon-position="trailing"
@@ -721,16 +614,14 @@
       </CallToAction>
     </SectionModule>
 
-    <!-- Band 14 — the half-height spacer the source closes on, hatched. A bare FrameBox
-         drawing NO rules: the footer below opens with a full-bleed rule, and SectionGap's
-         fixed `borders="y"` would land a second hairline on that pixel. The source's closing
-         spacer is half the height of the five above it, so this one is `--spacing-xxl`. -->
     <FrameBox
       borders="none"
-      marks="none"
-      hatch
-      class="h-(--spacing-xxl)"
-    />
+      marks="all"
+      data-hatch="true"
+      class="h-[calc(var(--spacing-xxl)*2)]"
+    >
+      <TextureMaterial kind="lines" />
+    </FrameBox>
   </SectionContainer>
   <!-- ══ End framed column ═════════════════════════════════════════════════════ -->
 </template>

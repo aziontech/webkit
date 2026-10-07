@@ -18,6 +18,13 @@
 
 import { agentBySlug } from '@site/docs/lib/docs-agent-setup.js'
 import { hasDocsPage } from '@site/docs/lib/docs-pages.js'
+import {
+  AKAMAI_GUIDE,
+  AWS_GUIDE,
+  CLOUDFLARE_GUIDE,
+  FASTLY_GUIDE
+} from '@site/data/alternative-guides'
+import LandingAlternativeGuide from '@site/views/LandingAlternativeGuide.vue'
 import AzionDocs from '@site/docs/views/AzionDocs.vue'
 import AzionDocsAgentPage from '@site/docs/views/AzionDocsAgentPage.vue'
 import AzionDocsAgentSetup from '@site/docs/views/AzionDocsAgentSetup.vue'
@@ -142,6 +149,30 @@ export const siteRoutes = [
     path: '/site/guides/vercel-alternative',
     name: 'site-vercel-alternative-guide',
     component: LandingVercelAlternative
+  },
+  {
+    path: '/site/guides/akamai-alternative',
+    name: 'site-akamai-alternative-guide',
+    component: LandingAlternativeGuide,
+    props: { guide: AKAMAI_GUIDE }
+  },
+  {
+    path: '/site/guides/aws-alternative',
+    name: 'site-aws-alternative-guide',
+    component: LandingAlternativeGuide,
+    props: { guide: AWS_GUIDE }
+  },
+  {
+    path: '/site/guides/cloudflare-alternative',
+    name: 'site-cloudflare-alternative-guide',
+    component: LandingAlternativeGuide,
+    props: { guide: CLOUDFLARE_GUIDE }
+  },
+  {
+    path: '/site/guides/fastly-alternative',
+    name: 'site-fastly-alternative-guide',
+    component: LandingAlternativeGuide,
+    props: { guide: FASTLY_GUIDE }
   },
 
   // ══ The rest of the site ══════════════════════════════════════════════════════════
