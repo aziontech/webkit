@@ -24,37 +24,6 @@ const components = {
   TextureMaterial
 }
 
-const CACHE_SETTINGS = `{
-  "cache_settings": {
-    "name": "api-cache",
-    "browser_cache_settings": {
-      "ttl": 60
-    },
-    "cdn_cache_settings": {
-      "ttl": 30
-    },
-    "cache_key": {
-      "query_string": "whitelist",
-      "query_string_fields": ["user_id", "category"],
-      "cookie": "whitelist",
-      "cookie_names": ["session_id", "region"]
-    },
-    "methods": ["GET", "POST", "OPTIONS"],
-    "stale_cache": true
-  }
-}`
-
-const CACHE_TABS = [
-  {
-    label: 'cache-settings.json',
-    value: 'cache-settings',
-    language: 'json',
-    code: CACHE_SETTINGS,
-    fileName: 'cache-settings.json',
-    fileIcon: 'ai ai-json'
-  }
-]
-
 const AZION_CONFIG = `export default {
   build: { preset: 'vue' },
   rules: {
@@ -154,16 +123,6 @@ const FULL_STACK_IMPORTS = [
   declareTabs('codeTabs', FUNCTION_SAMPLE_TABS)
 ]
 
-const ACCELERATOR_IMPORTS = [
-  "import Button from '@aziontech/webkit/button'",
-  "import CodeBlock from '@aziontech/webkit/code-block'",
-  "import FrameBox from '@aziontech/webkit/frame-box'",
-  ...COLUMN_IMPORTS,
-  "import SectionModule from '@aziontech/webkit/section-module'",
-  '',
-  declareTabs('codeTabs', CACHE_TABS)
-]
-
 const RECIPES_IMPORTS = [
   "import CodeBlock from '@aziontech/webkit/code-block'",
   "import FrameBox from '@aziontech/webkit/frame-box'",
@@ -218,50 +177,6 @@ const FULL_STACK_TEMPLATE = inColumn(`<SectionModule :divided="false" :padded="f
       />
     </template>
   </MediaSplit>
-</SectionModule>`)
-
-const ACCELERATOR_TEMPLATE = inColumn(`<SectionModule :divided="false" :padded="false">
-  <FrameBox flush borders="y" marks="bottom">
-    <div class="grid lg:grid-cols-[4fr_5fr]">
-      <div class="flex flex-col justify-between gap-(--spacing-xxl) p-(--spacing-xl)">
-        <div class="flex flex-col gap-(--spacing-lg)">
-          <h2 class="m-0 text-balance text-heading-md text-(--text-default)">
-            From basic caching to advanced acceleration
-          </h2>
-          <p class="m-0 text-pretty text-body-md text-(--text-muted)">
-            Application Accelerator extends Cache with protocol optimizations and advanced cache
-            rules for dynamic content.
-          </p>
-        </div>
-
-        <div>
-          <Button
-            label="Learn More"
-            kind="text"
-            size="large"
-            href="/docs"
-            icon="pi pi-chevron-right"
-            icon-position="trailing"
-            animated
-          />
-        </div>
-      </div>
-
-      <div
-        class="min-w-0 border-t border-(--border-default) bg-(--bg-surface) p-(--spacing-xl) lg:border-l lg:border-t-0"
-      >
-        <div class="min-w-0 rounded-(--shape-elements) shadow-(--shadow-sm)">
-          <CodeBlock
-            :tabs="codeTabs"
-            default-value="cache-settings"
-            show-line-numbers
-            animate-lines
-            copy-aria-label="Copy the cache settings sample"
-          />
-        </div>
-      </div>
-    </div>
-  </FrameBox>
 </SectionModule>`)
 
 const RECIPES_TEMPLATE = inColumn(`<SectionModule :divided="false" :padded="false">
@@ -324,7 +239,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'A claim set beside the code that makes it true: copy in one cell, a `CodeBlock` laid on the other, split on one frame. Product pages use it where the argument is configuration or a handler a developer can read (Functions, Application Accelerator, Workloads). Built from `SectionModule`, a `framed` `MediaSplit` or a `FrameBox`, and `CodeBlock`, with buttons or a recipe list on the copy side. The `CodeBlock` sits in a wrapper at its own radius, so the wrapper casts the shadow the block would clip. The tabs are declared in the script so the code strings stay verbatim.'
+          'A claim set beside the code that makes it true: copy in one cell, a `CodeBlock` laid on the other, split on one frame. Product pages use it where the argument is configuration or a handler a developer can read (Functions, Cache, Application Accelerator, Workloads). Built from `SectionModule`, a `framed` `MediaSplit` or a `FrameBox`, and `CodeBlock`, with buttons or a recipe list on the copy side. The `CodeBlock` sits in a wrapper at its own radius, so the wrapper casts the shadow the block would clip. The tabs are declared in the script so the code strings stay verbatim.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -346,23 +261,6 @@ export const Default = {
           'The code split, from the Functions page: a framed `MediaSplit` whose media is a two-tab `CodeBlock`, inset by `media-padded` on the shared small, top-faded pixelate field and run off the frame’s bottom rule so the sample is cut mid-line. It closes on two medium actions, Docs as the secondary button and See GitHub as the outlined one. With two destinations the band sets no `media-href`: it is not a link itself and hovering it lights neither button, so the reader picks one.'
       },
       source: { code: toSfc(FULL_STACK_IMPORTS, FULL_STACK_TEMPLATE) }
-    }
-  }
-}
-
-export const Accelerator = {
-  render: () => ({
-    components,
-    setup: () => ({ codeTabs: CACHE_TABS }),
-    template: ACCELERATOR_TEMPLATE
-  }),
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'From the Application Accelerator page: a heading, a sentence and a text `Button` on the start cell, and a one-file `CodeBlock` on a surface panel on the end cell. With one tab, the block draws a filename bar and no tab strip.'
-      },
-      source: { code: toSfc(ACCELERATOR_IMPORTS, ACCELERATOR_TEMPLATE) }
     }
   }
 }
