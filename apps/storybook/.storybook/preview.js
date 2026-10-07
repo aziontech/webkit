@@ -14,6 +14,7 @@ function applyThemeClass(name) {
 
   docElement.classList.remove('azion', 'azion-light', 'azion-dark')
   docElement.classList.add(...(THEME_CLASSES[name] || THEME_CLASSES.dark))
+  docElement.dataset.theme = THEME_CLASSES[name] ? name : 'dark'
 }
 
 applyThemeClass('dark')
@@ -88,8 +89,18 @@ export const parameters = {
         'Get Started',
         'Style Guide',
         'Foundations',
-        ['Colors', 'Theme', 'Spacing', 'Typography', 'Icons'],
+        [
+          'Design Tokens',
+          ['Color', 'Theme', 'Typography', 'Layout', 'Motion'],
+          'Assets',
+          ['Illustrations', 'Logos', 'Icons']
+        ],
         'Components',
+        'Documentation',
+        ['Overview', 'Authoring', 'Example Page'],
+        'Templates',
+        ['Marketing', ['Overview', 'Social Proof', 'Heroes', 'Content', 'Network', 'Media']],
+        'Marketing',
         'Site'
       ]
     }
