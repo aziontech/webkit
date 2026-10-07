@@ -65,6 +65,11 @@
           href: '/site/products/workloads'
         },
         {
+          icon: 'ai ai-edge-application',
+          label: 'Applications',
+          description: 'Deliver and configure web applications'
+        },
+        {
           icon: 'ai ai-edge-functions',
           label: 'Functions',
           description: 'Run serverless code at the edge',
@@ -77,15 +82,26 @@
           href: '/site/products/cache'
         },
         {
-          icon: 'ai ai-edge-application',
+          icon: 'ai ai-edge-services',
           label: 'Application Accelerator',
           description: 'Optimize dynamic applications',
           href: '/site/products/application-accelerator'
         },
         {
+          icon: 'ai ai-layers',
+          label: 'Image Processor',
+          description: 'Resize and convert images on the fly'
+        },
+        {
           icon: 'ai ai-edge-ai',
           label: 'AI Inference',
-          description: 'Run AI models close to the user'
+          description: 'Run AI models close to the user',
+          href: '/site/products/ai-inference'
+        },
+        {
+          icon: 'ai ai-edge-orchestrator',
+          label: 'Orchestrator',
+          description: 'Provision and manage edge nodes'
         }
       ]
     },
@@ -112,9 +128,24 @@
       items: [
         { icon: 'ai ai-waf-rules', label: 'WAF', description: 'Web application firewall' },
         {
+          icon: 'ai ai-edge-firewall',
+          label: 'Firewall',
+          description: 'Filter traffic before it reaches you'
+        },
+        {
+          icon: 'ai ai-origin-shield',
+          label: 'DDoS Protection',
+          description: 'Absorb volumetric attacks'
+        },
+        {
+          icon: 'ai ai-secure-pillar',
+          label: 'Bot Manager',
+          description: 'Detect and block malicious bots'
+        },
+        {
           icon: 'ai ai-network-lists',
           label: 'Network Shield',
-          description: 'Network and DDoS protection'
+          description: 'Control access by network'
         },
         { icon: 'ai ai-edge-dns', label: 'Edge DNS', description: 'Distributed authoritative DNS' },
         {
@@ -134,6 +165,11 @@
           description: 'Real-time event streaming'
         },
         {
+          icon: 'ai ai-real-time-events',
+          label: 'Real-Time Events',
+          description: 'Query raw request logs'
+        },
+        {
           icon: 'ai ai-real-time-metrics',
           label: 'Real-Time Metrics',
           description: 'Live platform metrics'
@@ -144,8 +180,28 @@
           description: 'Real user experience monitoring'
         }
       ]
+    },
+    {
+      label: 'Platform',
+      href: '/site/products#platform',
+      stacked: true,
+      items: [
+        {
+          icon: 'ai ai-edge-nodes',
+          label: 'Our Network',
+          description: 'The global edge network',
+          href: '/site/products/our-network'
+        }
+      ]
     }
   ]
+
+  const panelColumns = (groups) =>
+    groups.reduce((columns, group) => {
+      if (group.stacked && columns.length) columns[columns.length - 1].push(group)
+      else columns.push([group])
+      return columns
+    }, [])
 
   const solutionGroups = [
     {
@@ -253,7 +309,13 @@
         {
           icon: 'ai ai-business-support',
           label: 'Support',
-          description: 'Help center and support plans'
+          description: 'Expert help when you need it',
+          href: '/site/support'
+        },
+        {
+          icon: 'ai ai-professional-services',
+          label: 'Professional Services',
+          description: 'Guidance to move faster with confidence'
         }
       ]
     }
@@ -545,32 +607,38 @@
                 <!-- The heading carries the section's own page: a reader who came for
                      "everything under Store" should not have to pick one of its products to
                      get there. The DS renders it as a link and closes the panel on the way. -->
-                <NavigationMenu.List
-                  v-for="group in menu.groups"
-                  :key="group.label"
-                  :label="group.label"
-                  :href="group.href"
+                <div
+                  v-for="column in panelColumns(menu.groups)"
+                  :key="column[0].label"
+                  class="flex flex-col gap-y-(--spacing-md)"
                 >
-                  <NavigationMenu.Item
-                    v-for="item in group.items"
-                    :key="item.label"
-                    layout="entry"
-                    :href="item.href || '#'"
-                    :description="item.description"
-                    close-on-click
+                  <NavigationMenu.List
+                    v-for="group in column"
+                    :key="group.label"
+                    :label="group.label"
+                    :href="group.href"
                   >
-                    <template
-                      v-if="item.icon"
-                      #icon
+                    <NavigationMenu.Item
+                      v-for="item in group.items"
+                      :key="item.label"
+                      layout="entry"
+                      :href="item.href || '#'"
+                      :description="item.description"
+                      close-on-click
                     >
-                      <i
-                        :class="item.icon"
-                        aria-hidden="true"
-                      />
-                    </template>
-                    {{ item.label }}
-                  </NavigationMenu.Item>
-                </NavigationMenu.List>
+                      <template
+                        v-if="item.icon"
+                        #icon
+                      >
+                        <i
+                          :class="item.icon"
+                          aria-hidden="true"
+                        />
+                      </template>
+                      {{ item.label }}
+                    </NavigationMenu.Item>
+                  </NavigationMenu.List>
+                </div>
               </div>
             </NavigationMenu.Content>
           </NavigationMenu.Item>
