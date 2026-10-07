@@ -125,7 +125,7 @@
           </span>
           <span
             aria-hidden="true"
-            class="pointer-events-none absolute inset-x-0 top-1/2 mt-(--spacing-xs) flex translate-y-1 items-center justify-center gap-(--spacing-xxs) whitespace-nowrap text-overline-md uppercase text-(--text-default) opacity-0 transition-[opacity,translate] duration-moderate-01 ease-productive-entrance group-hover/logo:translate-y-0 group-hover/logo:opacity-100 group-focus-visible/logo:translate-y-0 group-focus-visible/logo:opacity-100 motion-reduce:transition-none"
+            class="pointer-events-none absolute inset-x-0 top-1/2 mt-(--spacing-sm) flex translate-y-1 items-center justify-center gap-(--spacing-xxs) whitespace-nowrap text-overline-sm uppercase text-(--text-default) opacity-0 transition-[opacity,translate] duration-moderate-01 ease-productive-entrance group-hover/logo:translate-y-0 group-hover/logo:opacity-100 group-focus-visible/logo:translate-y-0 group-focus-visible/logo:opacity-100 motion-reduce:transition-none"
           >
             {{ linkLabel }}
             <i class="pi pi-arrow-up-right leading-none" />

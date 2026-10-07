@@ -3,7 +3,7 @@ import { composeStories } from '@storybook/vue3'
 import { fireEvent, render, waitFor } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/layout/sidebar/Sidebar.stories'
+import * as stories from '../../../../../../apps/storybook/src/stories/components/primitives/layout/sidebar/Sidebar.stories'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Sidebar from './sidebar.vue'
 

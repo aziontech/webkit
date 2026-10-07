@@ -3,7 +3,7 @@ import { cleanup, fireEvent, render, waitFor } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, nextTick } from 'vue'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/overlay/popover/Popover.stories'
+import * as stories from '../../../../../../apps/storybook/src/stories/components/primitives/overlay/popover/Popover.stories'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Popover, {
   PopoverClose,

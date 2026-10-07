@@ -2,7 +2,7 @@ import { composeStories } from '@storybook/vue3'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/content/card-box/CardBox.stories'
+import * as stories from '../../../../../../apps/storybook/src/stories/components/primitives/content/card-box/CardBox.stories'
 import { expectNoA11yViolations } from '../../../test/axe'
 import CardBox from './card-box.vue'
 

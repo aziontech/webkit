@@ -158,7 +158,7 @@ Stories are written using the Component Story Format (CSF). Here's an example:
 import Button from '@aziontech/webkit/button'
 
 export default {
-  title: 'Components/Actions/Button',
+  title: 'Components/Primitives/Actions/Button',
   component: Button,
   tags: ['autodocs'],
   argTypes: {
@@ -180,7 +180,7 @@ export const Default = {
 
 ## Adding New Stories
 
-1. Create a new file under the matching category in `src/stories/` — typically `src/stories/components/<category>/<component>/ComponentName.stories.js`.
+1. Create a new file under the matching category in `src/stories/` — typically `src/stories/components/primitives/<category>/<component>/ComponentName.stories.js`.
 2. Name the file following the pattern: `ComponentName.stories.js`.
 3. Import the component from `@aziontech/webkit/<component>`.
 4. Define the default export with a `title` matching the sidebar taxonomy (`Components/<Category>/<Name>`), the `component`, and `argTypes`.

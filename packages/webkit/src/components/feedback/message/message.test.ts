@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest'
 import { createSSRApp, h } from 'vue'
 import { renderToString } from 'vue/server-renderer'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/feedback/message/Message.stories'
+import * as stories from '../../../../../../apps/storybook/src/stories/components/primitives/feedback/message/Message.stories'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Message from './message.vue'
 

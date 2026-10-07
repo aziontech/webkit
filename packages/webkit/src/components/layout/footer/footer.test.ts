@@ -2,7 +2,7 @@ import { composeStories } from '@storybook/vue3'
 import { render, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/layout/footer/Footer.stories'
+import * as stories from '../../../../../../apps/storybook/src/stories/components/primitives/layout/footer/Footer.stories'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Footer from './index'
 

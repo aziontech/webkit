@@ -3,7 +3,7 @@ import { render, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { createApp, defineComponent, nextTick } from 'vue'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/feedback/toast/Toast.stories'
+import * as stories from '../../../../../../apps/storybook/src/stories/components/primitives/feedback/toast/Toast.stories'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Toast, { toast, Toaster, ToastPlugin, useToast, useToastStore } from './index'
 import ToastAction from './toast-action/toast-action.vue'

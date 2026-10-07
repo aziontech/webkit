@@ -2,7 +2,7 @@ import { composeStories } from '@storybook/vue3'
 import { render, waitFor, within } from '@testing-library/vue'
 import { describe, expect, it, vi } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/content/illustration/Illustration.stories'
+import * as stories from '../../../../../../apps/storybook/src/stories/components/primitives/content/illustration/Illustration.stories'
 import {
   illustrationPalette,
   normalizeIllustrationColor

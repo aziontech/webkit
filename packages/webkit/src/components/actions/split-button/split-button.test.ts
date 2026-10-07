@@ -3,7 +3,7 @@ import { cleanup, fireEvent, render, waitFor } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent } from 'vue'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/actions/split-button/SplitButton.stories'
+import * as stories from '../../../../../../apps/storybook/src/stories/components/primitives/actions/split-button/SplitButton.stories'
 import { expectNoA11yViolations } from '../../../test/axe'
 import type { SplitButtonItem } from './split-button.vue'
 import SplitButton from './split-button.vue'

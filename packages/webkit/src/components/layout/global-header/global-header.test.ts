@@ -2,7 +2,7 @@ import { composeStories } from '@storybook/vue3'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/layout/global-header/GlobalHeader.stories'
+import * as stories from '../../../../../../apps/storybook/src/stories/components/primitives/layout/global-header/GlobalHeader.stories'
 import { expectNoA11yViolations } from '../../../test/axe'
 import GlobalHeader from './index.js'
 

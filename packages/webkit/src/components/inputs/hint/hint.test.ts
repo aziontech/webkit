@@ -3,7 +3,7 @@ import { fireEvent, render } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 import { defineComponent, nextTick, ref } from 'vue'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/inputs/hint/Hint.stories'
+import * as stories from '../../../../../../apps/storybook/src/stories/components/primitives/inputs/hint/Hint.stories'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Hint from './hint.vue'
 

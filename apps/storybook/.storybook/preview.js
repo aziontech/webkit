@@ -96,6 +96,7 @@ export const parameters = {
           ['Illustrations', 'Logos', 'Icons']
         ],
         'Components',
+        ['Primitives', 'Marketing', 'Documentation'],
         'Documentation',
         ['Overview', 'Authoring', 'Example Page'],
         'Templates',

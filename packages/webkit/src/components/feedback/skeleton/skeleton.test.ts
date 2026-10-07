@@ -2,7 +2,7 @@ import { composeStories } from '@storybook/vue3'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/feedback/skeleton/Skeleton.stories'
+import * as stories from '../../../../../../apps/storybook/src/stories/components/primitives/feedback/skeleton/Skeleton.stories'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Skeleton from './skeleton.vue'
 

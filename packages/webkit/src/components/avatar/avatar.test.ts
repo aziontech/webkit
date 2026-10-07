@@ -2,7 +2,7 @@ import { composeStories } from '@storybook/vue3'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../apps/storybook/src/stories/components/content/avatar/Avatar.stories'
+import * as stories from '../../../../../apps/storybook/src/stories/components/primitives/content/avatar/Avatar.stories'
 import { expectNoA11yViolations } from '../../test/axe'
 import Avatar from './avatar.vue'
 

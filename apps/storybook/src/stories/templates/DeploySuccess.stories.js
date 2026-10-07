@@ -10,7 +10,7 @@ import Default from '@aziontech/webkit/svg/azion/default'
 import Tag from '@aziontech/webkit/tag'
 
 import { toSfc } from '../_shared/story-source.js'
-import { completeDeployLog } from '../components/code/log-view/complete-deploy-log.js'
+import { completeDeployLog } from '../components/primitives/code/log-view/complete-deploy-log.js'
 
 const steps = [
   {
