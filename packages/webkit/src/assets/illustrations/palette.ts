@@ -56,7 +56,11 @@ export const illustrationPalette: Record<string, IllustrationRole | null> = {
   '#FF3E00': null,
   '#FE601F': null,
   '#4040B2': null,
-  '#5C4EE5': null
+  '#5C4EE5': null,
+  '#0098CC': null,
+  '#F88100': null,
+  '#FDAD33': null,
+  '#FE292C': null
 }
 
 const NAMED_COLORS: Record<string, string> = { white: '#FFFFFF', black: '#000000' }
