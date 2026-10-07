@@ -35,6 +35,7 @@
   import SectionGap from '@aziontech/webkit/section-gap'
   import SectionModule from '@aziontech/webkit/section-module'
   import SectionTitle from '@aziontech/webkit/section-title'
+  import TextureMaterial from '@aziontech/webkit/texture-material'
   import ClientMark from '@shared/ui/brand/ClientMark.vue'
   import { RouterLink, useRouter } from 'vue-router'
 
@@ -411,7 +412,6 @@
           <template #mark="{ item }">
             <ClientMark
               :client="item.client"
-              :colored="item.colored"
               mark="h-5 w-auto max-w-full object-contain sm:max-w-24"
             />
           </template>
@@ -425,7 +425,6 @@
               <template #mark>
                 <ClientMark
                   :client="ZOOP.client"
-                  colored
                   mark="h-8 w-auto max-w-40 object-contain"
                 />
               </template>
@@ -530,5 +529,14 @@
         </template>
       </CallToAction>
     </SectionModule>
+
+    <FrameBox
+      borders="none"
+      marks="all"
+      data-hatch="true"
+      class="h-[calc(var(--spacing-xxl)*2)]"
+    >
+      <TextureMaterial kind="lines" />
+    </FrameBox>
   </SectionContainer>
 </template>

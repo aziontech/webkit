@@ -41,11 +41,8 @@
   // ASSET GAPS: none. All 11 hero marks are CLIENTS entries. On the quote band, Axur,
   // Arezzo, Contabilizei and Crefisa are not registry entries but their marks live in
   // `clients/dark/`, so they are declared locally — as AzionCache.vue does.
-  import arezzo from '@aziontech/webkit/assets/arezzo-extended-reversed.svg'
-  import axur from '@aziontech/webkit/assets/axur-extended-reversed.svg'
-  import contabilizei from '@aziontech/webkit/assets/contabilizei-extended-reversed.svg'
-  import crefisa from '@aziontech/webkit/assets/crefisa-extended-reversed.svg'
   import { CLIENTS } from '@aziontech/webkit/assets/client-registry'
+  import crefisa from '@aziontech/webkit/assets/crefisa-extended-reversed.svg'
   import BandStack from '@aziontech/webkit/band-stack'
   import BigNumbers from '@aziontech/webkit/big-numbers'
   import Button from '@aziontech/webkit/button'
@@ -61,12 +58,14 @@
   import SectionModule from '@aziontech/webkit/section-module'
   import SectionTitle from '@aziontech/webkit/section-title'
   import Tag from '@aziontech/webkit/tag'
+  import TextureMaterial from '@aziontech/webkit/texture-material'
   import Ticker from '@aziontech/webkit/ticker'
   import { NetworkBanner } from '@shared/ui/banners/index.js'
   import ClientMark from '@shared/ui/brand/ClientMark.vue'
   import { CLIENT_STRIP } from '@shared/ui/brand/strips.js'
   import { useRouter } from 'vue-router'
 
+  import { AREZZO, AXUR, CONTABILIZEI } from '../data/clients.js'
   import { NavColumn, NavItem } from '../ui/index.js'
 
   const router = useRouter()
@@ -93,10 +92,10 @@
   // ClientMark filters them by theme exactly as it filters a registered one.
   const STORY_CLIENTS = [
     byName('NZN'),
-    { name: 'Axur', logo: axur, artwork: 'light' },
+    AXUR,
     byName('Radware'),
-    { name: 'Arezzo', logo: arezzo, artwork: 'light' },
-    { name: 'Contabilizei', logo: contabilizei, artwork: 'light' },
+    AREZZO,
+    CONTABILIZEI,
     byName('Magalu'),
     byName('Fourbank'),
     { name: 'Crefisa', logo: crefisa, artwork: 'light' },
@@ -429,9 +428,13 @@
               text="Azion shielded us from sophisticated cyberattacks and empowered us to modernize our infrastructure, reduce costs, and deliver the best shopping experiences to millions of customers across Latin America."
               name="Allan Monteiro"
               job-title="CISO &amp; Head of Technology"
-              :logo="QUOTED_CLIENT.logo"
-              logo-alt="GPA"
             >
+              <template #mark>
+                <ClientMark
+                  :client="QUOTED_CLIENT"
+                  mark="h-full w-auto max-w-40 object-contain"
+                />
+              </template>
               <template #actions>
                 <Button
                   label="Customers"
@@ -533,13 +536,13 @@
       </CallToAction>
     </SectionModule>
 
-    <!-- Band 15 — the spacer the source closes on, hatched. A bare FrameBox drawing NO
-         rules: the footer below opens with a full-bleed rule of its own. -->
     <FrameBox
       borders="none"
-      marks="none"
-      hatch
+      marks="all"
+      data-hatch="true"
       class="h-[calc(var(--spacing-xxl)*2)]"
-    />
+    >
+      <TextureMaterial kind="lines" />
+    </FrameBox>
   </SectionContainer>
 </template>

@@ -20,14 +20,6 @@
 // All 35 are here for the same reason: the control is the source's, and a control that does
 // nothing would be the invention. The initial render is the source's twelve, in its order.
 
-import bancoDeLaNacion from '@aziontech/webkit/assets/banco-de-la-nacion-extended-mono.svg'
-import axur from '@aziontech/webkit/assets/axur-extended-reversed.svg'
-import contabilizei from '@aziontech/webkit/assets/contabilizei-extended-reversed.svg'
-import crefisa from '@aziontech/webkit/assets/crefisa-extended-reversed.svg'
-import pernambucanas from '@aziontech/webkit/assets/pernambucanas-extended-mono.svg'
-import vtex from '@aziontech/webkit/assets/vtex-extended-reversed.svg'
-import marisa from '@aziontech/webkit/assets/marisa-extended-color.svg'
-import panvel from '@aziontech/webkit/assets/panvel-extended-color.svg'
 import { CLIENTS } from '@aziontech/webkit/assets/client-registry'
 import frost from '@aziontech/webkit/assets/frost-and-sullivan-extended-color.svg'
 import frostReversed from '@aziontech/webkit/assets/frost-and-sullivan-extended-reversed.svg'
@@ -35,6 +27,27 @@ import gartner from '@aziontech/webkit/assets/gartner-extended-color.svg'
 import gartnerReversed from '@aziontech/webkit/assets/gartner-extended-reversed.svg'
 import gigaom from '@aziontech/webkit/assets/gigaom-extended-color.svg'
 import gigaomReversed from '@aziontech/webkit/assets/gigaom-extended-reversed.svg'
+
+import {
+  AXUR,
+  B2W,
+  BANCO_DE_LA_NACION,
+  CONTABILIZEI,
+  CREFISA,
+  DIGIPLUS,
+  FAM,
+  GETNINJAS,
+  IBERO,
+  MARISA,
+  OMELETE,
+  PANVEL,
+  PERNAMBUCANAS,
+  QUERO_QUERO,
+  TODO_CARTOES,
+  UNICESUMAR,
+  UNINTER,
+  VTEX
+} from './clients.js'
 
 const byName = (name) => CLIENTS.find((client) => client.name === name)
 
@@ -58,7 +71,7 @@ export const FEATURED_CASES = [
   },
   {
     key: 'case-axur',
-    client: { name: 'Axur', logo: axur, artwork: 'light' },
+    client: AXUR,
     tag: 'Tech',
     description:
       'Learn how moving AI inference from managed-infrastructure unlocked the fastest automatic takedown in the market.',
@@ -74,7 +87,7 @@ export const FEATURED_CASES = [
 export const SUCCESS_CASES = [
   {
     key: 'case-banco-de-la-nacion',
-    client: { name: 'Banco de la Nación', logo: bancoDeLaNacion, artwork: 'dark' },
+    client: BANCO_DE_LA_NACION,
     industry: 'Government Financial Services',
     solutions: [],
     products: [
@@ -159,7 +172,7 @@ export const SUCCESS_CASES = [
   },
   {
     key: 'case-axur',
-    client: { name: 'Axur', logo: axur, artwork: 'light' },
+    client: AXUR,
     industry: 'Tech',
     solutions: ['Build', 'Secure'],
     products: ['AI Inference'],
@@ -170,7 +183,7 @@ export const SUCCESS_CASES = [
   },
   {
     key: 'case-ibero',
-    client: { name: 'Ibero' },
+    client: IBERO,
     industry: 'Education',
     solutions: ['Build', 'Secure'],
     products: ['Edge DNS', 'Firewall', 'Applications'],
@@ -210,7 +223,7 @@ export const SUCCESS_CASES = [
   },
   {
     key: 'case-todo',
-    client: { name: 'Todo Cartões' },
+    client: TODO_CARTOES,
     industry: 'Tech',
     solutions: [],
     products: ['Firewall'],
@@ -221,7 +234,7 @@ export const SUCCESS_CASES = [
   },
   {
     key: 'case-panvel',
-    client: { name: 'Panvel', logo: panvel, artwork: 'dark' },
+    client: PANVEL,
     industry: 'Retail',
     solutions: ['Build', 'Deploy'],
     products: ['Applications'],
@@ -232,7 +245,7 @@ export const SUCCESS_CASES = [
   },
   {
     key: 'case-contabilizei',
-    client: { name: 'Contabilizei', logo: contabilizei, artwork: 'light' },
+    client: CONTABILIZEI,
     industry: 'Tech',
     solutions: ['Build', 'Secure', 'Deploy'],
     products: ['Applications', 'Functions'],
@@ -254,7 +267,7 @@ export const SUCCESS_CASES = [
   },
   {
     key: 'case-quero-quero',
-    client: { name: 'Quero-Quero' },
+    client: QUERO_QUERO,
     industry: 'Retail',
     solutions: ['Build', 'Secure', 'Observe'],
     products: ['Firewall'],
@@ -265,7 +278,7 @@ export const SUCCESS_CASES = [
   },
   {
     key: 'case-digimais',
-    client: { name: 'Digi+' },
+    client: DIGIPLUS,
     industry: 'Financial',
     solutions: ['Secure'],
     products: ['Firewall'],
@@ -276,7 +289,7 @@ export const SUCCESS_CASES = [
   },
   {
     key: 'case-marisa',
-    client: { name: 'Marisa', logo: marisa, artwork: 'light' },
+    client: MARISA,
     industry: 'Retail',
     solutions: ['Build', 'Deploy'],
     products: ['Application Accelerator', 'Cache', 'Image Processor'],
@@ -287,7 +300,7 @@ export const SUCCESS_CASES = [
   },
   {
     key: 'case-fam',
-    client: { name: 'FAM' },
+    client: FAM,
     industry: 'Education',
     solutions: ['Secure'],
     products: ['Web Application Firewall'],
@@ -298,7 +311,7 @@ export const SUCCESS_CASES = [
   },
   {
     key: 'case-crefisa',
-    client: { name: 'Crefisa', logo: crefisa, artwork: 'light' },
+    client: CREFISA,
     industry: 'Financial',
     solutions: ['Build', 'Secure'],
     products: ['Firewall'],
@@ -309,7 +322,7 @@ export const SUCCESS_CASES = [
   },
   {
     key: 'case-pernambucanas-performance',
-    client: { name: 'Pernambucanas', logo: pernambucanas, artwork: 'dark' },
+    client: PERNAMBUCANAS,
     industry: 'Retail',
     solutions: ['Build', 'Secure', 'Observe'],
     products: ['Applications'],
@@ -320,7 +333,7 @@ export const SUCCESS_CASES = [
   },
   {
     key: 'case-pernambucanas-security',
-    client: { name: 'Pernambucanas', logo: pernambucanas, artwork: 'dark' },
+    client: PERNAMBUCANAS,
     industry: 'Retail',
     solutions: ['Build', 'Deploy'],
     products: ['Edge Firewall', 'Data Stream'],
@@ -342,7 +355,7 @@ export const SUCCESS_CASES = [
   },
   {
     key: 'case-b2w',
-    client: { name: 'B2W' },
+    client: B2W,
     industry: 'Retail',
     solutions: ['Build', 'Secure', 'Observe'],
     products: ['Firewall', 'Data Stream'],
@@ -438,7 +451,7 @@ export const SUCCESS_CASES = [
   },
   {
     key: 'case-vtex',
-    client: { name: 'VTEX', logo: vtex, artwork: 'light' },
+    client: VTEX,
     industry: 'Tech',
     solutions: ['Build'],
     products: ['Application'],
@@ -449,7 +462,7 @@ export const SUCCESS_CASES = [
   },
   {
     key: 'case-getninjas',
-    client: { name: 'GetNinjas' },
+    client: GETNINJAS,
     industry: 'Tech',
     solutions: ['Build', 'Secure', 'Deploy', 'Observe'],
     products: ['Applications', 'Firewall', 'Data Stream', 'Functions'],
@@ -482,7 +495,7 @@ export const SUCCESS_CASES = [
   },
   {
     key: 'case-uninter',
-    client: { name: 'Uninter' },
+    client: UNINTER,
     industry: 'Education',
     solutions: ['Deploy'],
     products: ['Applications'],
@@ -493,7 +506,7 @@ export const SUCCESS_CASES = [
   },
   {
     key: 'case-unicesumar',
-    client: { name: 'UniCesumar' },
+    client: UNICESUMAR,
     industry: 'Education',
     solutions: ['Build', 'Secure', 'Deploy'],
     products: ['Applications', 'Firewall', 'Functions'],
@@ -515,7 +528,7 @@ export const SUCCESS_CASES = [
   },
   {
     key: 'case-omelete',
-    client: { name: 'Omelete' },
+    client: OMELETE,
     industry: 'Media',
     solutions: ['Build', 'Secure', 'Deploy'],
     products: ['Applications'],

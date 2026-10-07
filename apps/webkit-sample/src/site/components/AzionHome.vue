@@ -1,6 +1,4 @@
 <script setup>
-  import madeiraReversed from '@aziontech/webkit/assets/madeiramadeira-extended-reversed.svg'
-  import rennerColor from '@aziontech/webkit/assets/renner-extended-color.svg'
   import Button from '@aziontech/webkit/button'
   import CallToAction from '@aziontech/webkit/call-to-action'
   import CardGrid from '@aziontech/webkit/card-grid'
@@ -50,28 +48,24 @@
     {
       key: 'dafiti',
       mark: clientNamed('Dafiti'),
-      ink: 'white',
       text: '86% faster load times, with a 45% cost reduction in data transfer.',
       highlights: ['86% faster load times', '45% cost reduction']
     },
     {
       key: 'madeiramadeira',
-      mark: { name: 'MadeiraMadeira', logo: madeiraReversed },
-      ink: 'brand',
+      mark: clientNamed('MadeiraMadeira'),
       text: '90% lower cloud costs, and faster product delivery at scale.',
       highlights: ['90% lower cloud costs']
     },
     {
       key: 'renner',
-      mark: { name: 'Renner', logoLight: rennerColor },
-      ink: 'brand',
+      mark: clientNamed('Renner'),
       text: '67% saved on data transfer costs, through massive traffic spikes.',
       highlights: ['67% saved']
     },
     {
       key: 'fourbank',
       mark: clientNamed('Fourbank'),
-      ink: 'white',
       text: 'DDoS mitigated on applications and APIs, behind a programmable security layer.',
       highlights: ['DDoS mitigated']
     }
@@ -243,8 +237,6 @@
                 <template #mark>
                   <ClientMark
                     :client="outcome.mark"
-                    :colored="outcome.ink === 'brand'"
-                    :monochrome="outcome.ink === 'white'"
                     mark="h-full w-auto max-w-32 object-contain"
                   />
                 </template>

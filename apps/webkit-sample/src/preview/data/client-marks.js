@@ -43,8 +43,6 @@
 //
 // The two backers are the OTHER route — white artwork, because they sit on the slide's dark
 // half rather than on the wall.
-import monashees from '@aziontech/webkit/assets/monashees-extended-reversed.svg'
-import qualcomm from '@aziontech/webkit/assets/qualcomm-extended-reversed.svg'
 import agi from '@aziontech/webkit/assets/agi-extended-color.svg'
 import alpargatas from '@aziontech/webkit/assets/alpargatas-extended-color.svg'
 import arezzo from '@aziontech/webkit/assets/arezzo-extended-color.svg'
@@ -61,18 +59,20 @@ import locaweb from '@aziontech/webkit/assets/locaweb-extended-color.svg'
 import magalu from '@aziontech/webkit/assets/magalu-extended-color.svg'
 import marisa from '@aziontech/webkit/assets/marisa-extended-color.svg'
 import meliuz from '@aziontech/webkit/assets/meliuz-extended-color.svg'
+import monashees from '@aziontech/webkit/assets/monashees-extended-reversed.svg'
 import neogrid from '@aziontech/webkit/assets/neogrid-extended-color.svg'
-import neon from '@aziontech/webkit/assets/neon-extended-color.svg'
+import neon from '@aziontech/webkit/assets/neon-extended-mono.svg'
 import netshoes from '@aziontech/webkit/assets/netshoes-extended-color.svg'
 import nzn from '@aziontech/webkit/assets/nzn-extended-color.svg'
 import panvel from '@aziontech/webkit/assets/panvel-extended-color.svg'
 import portobello from '@aziontech/webkit/assets/portobello-extended-mono.svg'
-import primevideo from '@aziontech/webkit/assets/primevideo-extended-color.svg'
+import primevideo from '@aziontech/webkit/assets/primevideo-extended-mono.svg'
+import qualcomm from '@aziontech/webkit/assets/qualcomm-extended-reversed.svg'
 import radware from '@aziontech/webkit/assets/radware-extended-color.svg'
-import rbs from '@aziontech/webkit/assets/rbs-extended-color.svg'
+import rbs from '@aziontech/webkit/assets/rbs-extended-mono.svg'
 import renner from '@aziontech/webkit/assets/renner-extended-color.svg'
 import stone from '@aziontech/webkit/assets/stone-extended-color.svg'
-import unicred from '@aziontech/webkit/assets/unicred-extended-color.svg'
+import unicred from '@aziontech/webkit/assets/unicred-extended-mono.svg'
 
 // The order is READING ORDER, not ranking. A logo wall invites the room to look for whoever it
 // knows, and the fastest way to make that a scan rather than a search is one rule anybody can

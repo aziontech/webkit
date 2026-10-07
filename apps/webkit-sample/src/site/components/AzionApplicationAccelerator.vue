@@ -60,11 +60,8 @@
   // and render as ClientMark's typographic wordmark, so no name is quietly dropped.
   // The four client marks that are not CLIENTS registry entries; Vite resolves each to an
   // asset URL, exactly as the registries do.
-  import arezzo from '@aziontech/webkit/assets/arezzo-extended-reversed.svg'
-  import axur from '@aziontech/webkit/assets/axur-extended-reversed.svg'
-  import contabilizei from '@aziontech/webkit/assets/contabilizei-extended-reversed.svg'
-  import crefisa from '@aziontech/webkit/assets/crefisa-extended-reversed.svg'
   import { CLIENTS } from '@aziontech/webkit/assets/client-registry'
+  import crefisa from '@aziontech/webkit/assets/crefisa-extended-reversed.svg'
   import BandStack from '@aziontech/webkit/band-stack'
   import Button from '@aziontech/webkit/button'
   import CallToAction from '@aziontech/webkit/call-to-action'
@@ -80,12 +77,14 @@
   import SectionGap from '@aziontech/webkit/section-gap'
   import SectionModule from '@aziontech/webkit/section-module'
   import SectionTitle from '@aziontech/webkit/section-title'
+  import TextureMaterial from '@aziontech/webkit/texture-material'
   import Ticker from '@aziontech/webkit/ticker'
   import Topic from '@aziontech/webkit/topic'
   import ClientMark from '@shared/ui/brand/ClientMark.vue'
   import { PRODUCT_STACK } from '@shared/ui/brand/strips.js'
   import { useRouter } from 'vue-router'
 
+  import { AREZZO, AXUR, CONTABILIZEI } from '../data/clients.js'
   import { NavColumn, NavItem } from '../ui/index.js'
 
   const router = useRouter()
@@ -229,10 +228,10 @@
     // The source spells it DNZ; NZN is this repo's name for the same client, and the
     // registry entry carries no file, so ClientMark writes the wordmark.
     registered('NZN'),
-    { name: 'Axur', logo: axur, artwork: 'light' },
+    AXUR,
     registered('Radware'),
-    { name: 'Arezzo', logo: arezzo, artwork: 'light' },
-    { name: 'Contabilizei', logo: contabilizei, artwork: 'light' },
+    AREZZO,
+    CONTABILIZEI,
     // The source spells it Magazine Luiza; Magalu is the registry's name for it.
     registered('Magalu'),
     registered('Fourbank'),
@@ -907,15 +906,14 @@
       </CallToAction>
     </SectionModule>
 
-    <!-- Band 18 — the spacer the source closes on, hatched. A bare FrameBox at SectionGap's
-         own `medium` height drawing NO rules: the footer below opens with a full-bleed rule,
-         and SectionGap's fixed `borders="y"` would land a second hairline on that pixel. -->
     <FrameBox
       borders="none"
-      marks="none"
-      hatch
+      marks="all"
+      data-hatch="true"
       class="h-[calc(var(--spacing-xxl)*2)]"
-    />
+    >
+      <TextureMaterial kind="lines" />
+    </FrameBox>
   </SectionContainer>
   <!-- ══ End framed column ═════════════════════════════════════════════════════ -->
 </template>

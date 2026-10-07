@@ -16,12 +16,6 @@
   // used: it follows `prefers-color-scheme`, which says nothing about the app's chosen
   // theme, so a manual toggle would leave these marks inverted the wrong way.
   //
-  // `colored` opts out of the swap and pins the brand-colour file on BOTH themes —
-  // for a surface that wants the mark as the brand draws it rather than as a flat
-  // silhouette. It only changes marks that ship a colour asset; a client whose only
-  // file is white artwork still gets the per-theme filter, since there is no colour
-  // version to show.
-  //
   // `monochrome` overrides both routes and paints the mark as a single flat
   // silhouette — black on light, white on dark — for a surface that shows a LIST of
   // clients, where per-brand colour reads as noise rather than as accuracy. One
@@ -48,11 +42,6 @@
       type: String,
       default: 'h-10 w-auto max-w-52 object-contain'
     },
-    // Show the brand-colour asset on both themes instead of swapping by theme.
-    colored: {
-      type: Boolean,
-      default: false
-    },
     // Paint every mark in one ink (a flat silhouette) instead of its own colours.
     monochrome: {
       type: Boolean,
@@ -76,15 +65,6 @@
     :alt="client.name"
     decoding="async"
     :class="[mark, knockout ? KNOCKOUT_FILTER : MONOCHROME_FILTER]"
-  />
-
-  <!-- Colour-pinned: the brand file, unfiltered, on either theme. -->
-  <img
-    v-else-if="colored && client.logoLight"
-    :src="client.logoLight"
-    :alt="client.name"
-    decoding="async"
-    :class="mark"
   />
 
   <!-- Two-asset mark: both rendered, CSS shows one per theme. -->
