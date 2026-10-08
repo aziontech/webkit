@@ -120,9 +120,15 @@ ${indent(SEE_ALL('\n  class="w-full"'), 2)}
 const TABLE = `<Table class="max-sm:hidden!">
   <Table.Header>
     <Table.Row>
-      <Table.HeadCell :grow="2" class="pl-(--spacing-xl)!">Role</Table.HeadCell>
-      <Table.HeadCell :grow="2">Team and location</Table.HeadCell>
-      <Table.HeadCell align="end" class="pr-(--spacing-xl)!">Work type</Table.HeadCell>
+      <Table.HeadCell :grow="2" class="pl-(--spacing-xl)!">
+        <span class="text-overline-md text-(--text-muted)">Role</span>
+      </Table.HeadCell>
+      <Table.HeadCell :grow="2">
+        <span class="text-overline-md text-(--text-muted)">Team and location</span>
+      </Table.HeadCell>
+      <Table.HeadCell align="end" class="pr-(--spacing-xl)!">
+        <span class="text-overline-md text-(--text-muted)">Work type</span>
+      </Table.HeadCell>
     </Table.Row>
   </Table.Header>
 
@@ -175,7 +181,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'A titled preview of a longer listing: a few linked rows in columns, and one outlined button into the full list. Each row is one link, named by its first column; the whole row is clickable with the pointer, and the title link is the keyboard and screen-reader path. Below `sm` the columns cannot fit, so the same rows become a list of items whose titles wrap, with the second column as the description and the button going full width. Careers uses it for its latest roles. Built from `SectionModule`, `SectionTitle`, `FrameBox`, `Table` and, on phones, `Item`.'
+          'A titled preview of a longer listing: a few linked rows in columns, and one outlined button into the full list. The column headers are set in the overline face, as on the pricing matrix and the jobs list. Each row is one link, named by its first column; the whole row is clickable with the pointer, and the title link is the keyboard and screen-reader path. Below `sm` the columns cannot fit, so the same rows become a list of items whose titles wrap, with the second column as the description and the button going full width. Careers uses it for its latest roles. Built from `SectionModule`, `SectionTitle`, `FrameBox`, `Table` and, on phones, `Item`.'
       },
       canvas: { sourceState: 'shown' }
     }
