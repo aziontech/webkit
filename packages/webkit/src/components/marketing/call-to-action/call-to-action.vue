@@ -87,7 +87,7 @@
               show-cursor
               >{{ eyebrow }}</Overline
             >
-            <h2 class="m-0 text-balance text-heading-xl">
+            <h2 class="m-0 max-w-(--container-xl) text-balance text-heading-xl">
               <span class="block text-(--text-default)">{{ title }}</span>
               <span
                 v-if="titleMuted"
