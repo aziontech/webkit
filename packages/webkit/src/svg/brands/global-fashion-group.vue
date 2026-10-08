@@ -5,7 +5,7 @@
 <template>
   <svg
     v-bind="$attrs"
-    viewBox="0 0 110 40"
+    viewBox="13.1 7.56 82.92 24"
     fill="currentColor"
     aria-hidden="true"
     focusable="false"

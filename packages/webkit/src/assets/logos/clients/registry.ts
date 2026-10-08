@@ -1,38 +1,43 @@
 import agibankColor from './agibank-extended-color.svg'
 import agibank from './agibank-extended-reversed.svg'
 import americamovil from './americamovil-extended-color.svg'
-import caixa from './caixa-extended-mono.svg'
+import caixa from './caixa-extended-color.svg'
 import caixaSymbol from './caixa-symbol-color.svg'
-import cocacola from './cocacola-extended-reversed.svg'
-import dafiti from './dafiti-extended-mono.svg'
-import exame from './exame-extended-mono.svg'
+import cocacola from './cocacola-extended-color.svg'
+import dafitiMono from './dafiti-extended-mono.svg'
+import dafiti from './dafiti-extended-reversed.svg'
+import exame from './exame-extended-color.svg'
+import fourbankColor from './fourbank-extended-color.svg'
 import fourbank from './fourbank-extended-reversed.svg'
+import gfgMono from './gfg-extended-mono.svg'
 import gfg from './gfg-extended-reversed.svg'
+import gpaColor from './gpa-extended-color.svg'
 import gpa from './gpa-extended-reversed.svg'
 import gpaSymbol from './gpa-symbol-color.svg'
-import herospark from './herospark-extended-reversed.svg'
+import herospark from './herospark-extended-color.svg'
 import herosparkSymbol from './herospark-symbol-reversed.svg'
-import ifoodColor from './ifood-extended-color.svg'
-import ifood from './ifood-extended-reversed.svg'
+import ifood from './ifood-extended-color.svg'
 import ifoodSymbol from './ifood-symbol-color.svg'
 import itau from './itau-extended-reversed.webp'
 import itauSymbol from './itau-symbol-color.svg'
 import madeiraColor from './madeiramadeira-extended-color.svg'
 import madeira from './madeiramadeira-extended-reversed.svg'
 import madeiraSymbol from './madeiramadeira-symbol-reversed.svg'
-import magaluColor from './magalu-extended-color.svg'
-import magalu from './magalu-extended-reversed.svg'
+import magalu from './magalu-extended-color.svg'
 import magaluSymbol from './magalu-symbol-color.png'
-import mobiautoColor from './mobiauto-extended-color.svg'
+import mobiautoMono from './mobiauto-extended-mono.svg'
 import mobiauto from './mobiauto-extended-reversed.svg'
-import netshoes from './netshoes-extended-color.svg'
+import netshoesColor from './netshoes-extended-color.svg'
+import netshoes from './netshoes-extended-reversed.svg'
 import nznColor from './nzn-extended-color.svg'
 import nzn from './nzn-extended-reversed.svg'
 import gpaPhoto from './photos/gpa-photo.jpg'
 import netshoesPhoto from './photos/netshoes-photo.jpg'
+import primevideoMono from './primevideo-extended-mono.svg'
 import primevideo from './primevideo-extended-reversed.svg'
+import radwareColor from './radware-extended-color.svg'
 import radware from './radware-extended-reversed.svg'
-import renner from './renner-extended-reversed.svg'
+import renner from './renner-extended-color.svg'
 import rennerSymbol from './renner-symbol-reversed.svg'
 import traySymbol from './tray-symbol-color.svg'
 import zoop from './zoop-extended-color.svg'
@@ -75,16 +80,16 @@ const BRAND = {
 
 export const CLIENTS: Client[] = [
   { name: 'Agibank', logo: agibank, logoLight: agibankColor },
-  { name: 'iFood', logo: ifood, logoLight: ifoodColor },
-  { name: 'Radware', logo: radware, artwork: 'light' },
+  { name: 'iFood', logo: ifood, artwork: 'color' },
+  { name: 'Radware', logo: radware, logoLight: radwareColor },
   { name: 'América Móvil', logo: americamovil, artwork: 'color' },
-  { name: 'GPA', logo: gpa, artwork: 'light' },
-  { name: 'Fourbank', logo: fourbank, artwork: 'light' },
-  { name: 'Global Fashion Group', logo: gfg, artwork: 'light' },
+  { name: 'GPA', logo: gpa, logoLight: gpaColor },
+  { name: 'Fourbank', logo: fourbank, logoLight: fourbankColor },
+  { name: 'Global Fashion Group', logo: gfg, logoLight: gfgMono },
   {
     name: 'HeroSpark',
     logo: herospark,
-    artwork: 'light',
+    artwork: 'color',
     symbol: herosparkSymbol,
     brand: BRAND.herospark
   },
@@ -92,7 +97,7 @@ export const CLIENTS: Client[] = [
   {
     name: 'Magalu',
     logo: magalu,
-    logoLight: magaluColor,
+    artwork: 'color',
     symbol: magaluSymbol,
     brand: BRAND.magalu
   },
@@ -106,17 +111,17 @@ export const CLIENTS: Client[] = [
   {
     name: 'Renner',
     logo: renner,
-    artwork: 'light',
+    artwork: 'color',
     symbol: rennerSymbol,
     brand: BRAND.renner
   },
-  { name: 'Netshoes', logo: netshoes, artwork: 'color' },
-  { name: 'Coca-Cola', logo: cocacola, artwork: 'light' },
-  { name: 'Prime Video', logo: primevideo, artwork: 'light' },
-  { name: 'Dafiti', logo: dafiti, artwork: 'dark' },
-  { name: 'Caixa', logo: caixa, artwork: 'dark' },
-  { name: 'Exame', logo: exame, artwork: 'dark' },
-  { name: 'Mobiauto', logo: mobiauto, logoLight: mobiautoColor },
+  { name: 'Netshoes', logo: netshoes, logoLight: netshoesColor },
+  { name: 'Coca-Cola', logo: cocacola, artwork: 'color' },
+  { name: 'Prime Video', logo: primevideo, logoLight: primevideoMono },
+  { name: 'Dafiti', logo: dafiti, logoLight: dafitiMono },
+  { name: 'Caixa', logo: caixa, artwork: 'color' },
+  { name: 'Exame', logo: exame, artwork: 'color' },
+  { name: 'Mobiauto', logo: mobiauto, logoLight: mobiautoMono },
   { name: 'NZN', logo: nzn, logoLight: nznColor },
   { name: 'Zoop', logo: zoop, artwork: 'color' }
 ]
