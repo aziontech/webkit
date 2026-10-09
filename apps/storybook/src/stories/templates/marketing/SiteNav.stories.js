@@ -383,8 +383,10 @@ const TEMPLATE = `<GlobalHeader ref="bar" kind="site" aria-label="Azion" class="
   </GlobalHeader.Middle>
 
   <GlobalHeader.Right>
-    <div class="hidden items-center gap-(--spacing-xs) xl:flex">
+    <div class="hidden xl:flex">
       <Button label="Contact" kind="text" size="medium" href="#" />
+    </div>
+    <div class="hidden shrink-0 min-[24rem]:flex">
       <Button label="Login" kind="secondary" size="medium" href="#" />
     </div>
     <Button label="Start for Free" kind="primary" size="medium" class="shrink-0" href="#" />
@@ -413,8 +415,9 @@ const TEMPLATE = `<GlobalHeader ref="bar" kind="site" aria-label="Azion" class="
         </Menu>
       </ScrollArea>
 
-      <PanelFooter class="w-full px-(--spacing-md)">
-        <Button label="Login" kind="secondary" size="medium" class="w-full" href="#" />
+      <PanelFooter class="w-full flex-col items-stretch px-(--spacing-md)">
+        <Button label="Login" kind="outlined" size="medium" class="w-full" href="#" />
+        <Button label="Start for Free" kind="primary" size="medium" class="w-full" href="#" />
       </PanelFooter>
     </DrawerContent>
   </DrawerPortal>
@@ -463,7 +466,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The bar above every marketing page: the Azion mark, the four mega-menus (Solutions, Products, Developers, Resources) and two plain links (Customers, Pricing), then the account actions, the `Start for Free` call to action and a search trigger. `GlobalHeader kind="site"` keeps the surface full bleed and caps the regions at the bar’s own measure, one rung wider than the page frame under it. From `xl` the menus sit in the bar; below it the bar keeps only the menu button, the mark, the call to action and the search trigger, and the same menus open in a `Drawer` where each mega-menu is a drill level behind a Back row. Built from `GlobalHeader`, `NavigationMenu`, `Brand`, `Button`, `IconButton`, `Drawer`, `Menu` and `ScrollArea`.'
+          'The bar above every marketing page: the Azion mark, the four mega-menus (Solutions, Products, Developers, Resources) and two plain links (Customers, Pricing), then the account actions, the `Start for Free` call to action and a search trigger. `GlobalHeader kind="site"` keeps the surface full bleed and caps the regions at the bar’s own measure, one rung wider than the page frame under it. From `xl` the menus sit in the bar; below it the bar keeps the menu button, the mark, `Login`, the call to action and the search trigger (`Login` steps out under 384px, where it would crowd the mark), and the same menus open in a `Drawer` where each mega-menu is a drill level behind a Back row, with `Login` and `Start for Free` stacked full width at its foot. Built from `GlobalHeader`, `NavigationMenu`, `Brand`, `Button`, `IconButton`, `Drawer`, `Menu` and `ScrollArea`.'
       },
       canvas: { sourceState: 'shown' }
     }
