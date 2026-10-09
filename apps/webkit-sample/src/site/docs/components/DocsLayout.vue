@@ -82,21 +82,22 @@
   import ScrollArea from '@aziontech/webkit/scroll-area'
   import Sidebar from '@aziontech/webkit/sidebar'
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
-  import { menuLeaves } from '@shared/lib/menu-tree.js'
   import { useTheme } from '@shared/lib/theme.js'
   import HeaderSearch from '@shared/ui/HeaderSearch.vue'
-  import SiteFooter from '@shared/ui/SiteFooter.vue'
   import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
   import {
     DOCS_HOME_ID,
     docsIdByRoute,
+    docsLeaves,
     docsNavGroups,
     docsNavSections,
     docsParentsOf
   } from '../lib/docs-nav.js'
   import { recordDocsLevel, reportDocsLevel, useDocsSidebar } from '../lib/docs-sidebar.js'
+  import { SITE_FOOTER } from '../../data/site-shell'
+  import SiteFooter from '../../ui/sections/SiteFooter.vue'
 
   const router = useRouter()
   const route = useRoute()
@@ -260,7 +261,7 @@
    * drill row resolves to `About Functions` — its level's landing row — which is what makes
    * opening the level and arriving somewhere one action instead of two.
    */
-  const landingOf = (node) => (node.groups || node.children ? menuLeaves([node])[0] : node)
+  const landingOf = (node) => (node.groups || node.children ? docsLeaves([node])[0] : node)
 
   // Only rows that HAVE a destination reach here. That is every leaf page, plus the ONE
   // container that is also a destination: the `Functions` drill row carries the product's
@@ -275,6 +276,7 @@
   // the sheet over the page it just opened is right; the ARROW reveals the level and emits
   // nothing, so the sheet stays open on the menu that push put in it.
   const onNavigate = (event, node) => {
+    if (!isInApp(node)) return
     const target = landingOf(node)
     active.value = target.id
     // The page it opened is behind the overlay, so the sheet has done its job.
@@ -354,12 +356,20 @@
     if (open) navOpen.value = false
   })
 
+  const isInApp = (item) => !item.href || item.href.startsWith('/')
   const paletteGroups = computed(() =>
-    docsNavSections.map((section) => ({
-      key: section.label,
-      heading: section.label,
-      items: menuLeaves(section.items)
-    }))
+    docsNavSections.flatMap((section) => {
+      const loose = section.items.filter((item) => item.kind !== 'drill')
+      const products = section.items.filter((item) => item.kind === 'drill')
+      return [
+        { key: section.label, heading: section.label, items: docsLeaves(loose).filter(isInApp) },
+        ...products.map((product) => ({
+          key: product.id,
+          heading: product.label,
+          items: docsLeaves([product]).filter(isInApp)
+        }))
+      ].filter((group) => group.items.length > 0)
+    })
   )
   const paletteItems = computed(() => paletteGroups.value.flatMap((group) => group.items))
 
@@ -732,14 +742,17 @@
                end of none of them — and the end of the article is the only place a footer
                means anything.
 
-               It is the SAME footer the marketing site closes with (@shared/ui/SiteFooter),
+               It is the SAME footer the marketing site closes with (site/ui/sections/SiteFooter),
                in the other placement: `content`, so the bands run full bleed across this
                zone and open on the page boundary, exactly as the docs top bar above does.
                `site` would cap them at the marketing measure and draw the side rules, the
                gutters and the closing band — a page frame the docs shell does not have and
                nothing above here continues. Same links, same social row, same status: one
                file, and the placement is the only difference. -->
-          <SiteFooter kind="content" />
+          <SiteFooter
+            v-bind="SITE_FOOTER"
+            kind="content"
+          />
         </ScrollArea>
       </main>
 
@@ -911,13 +924,26 @@
                a label hanging 12px to its left. `--text-default` for the same reason: it
                is a control the reader acts on, like the rows above it, not a muted section
                header. -->
-          <PanelFooter
-            class="w-full justify-between px-(--spacing-md) text-label-md text-(--text-default) lg:hidden"
-          >
-            <span class="pl-(--spacing-sm)">Theme</span>
-            <ThemeSwitcher
-              v-model:value="theme"
-              aria-label="Theme"
+          <PanelFooter class="w-full flex-col items-stretch px-(--spacing-md) lg:hidden">
+            <div class="flex items-center justify-between text-label-md text-(--text-default)">
+              <span class="pl-(--spacing-sm)">Theme</span>
+              <ThemeSwitcher
+                v-model:value="theme"
+                aria-label="Theme"
+              />
+            </div>
+            <Button
+              label="Log In"
+              kind="outlined"
+              size="medium"
+              class="w-full"
+              @click="goConsole"
+            />
+            <Button
+              label="Free Account"
+              size="medium"
+              class="w-full"
+              @click="goSignup"
             />
           </PanelFooter>
         </DrawerContent>

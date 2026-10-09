@@ -17,7 +17,7 @@
 import { splitFrontmatter } from '@aziontech/webkit-docs/mdx'
 import { menuLeaves, menuPath } from '@shared/lib/menu-tree.js'
 
-import { docsNavSections } from './docs-nav.js'
+import { docsLeaves, docsNavSections } from './docs-nav.js'
 
 /**
  * Every `.mdx` under `content/`, as slug → raw source.
@@ -41,7 +41,7 @@ export const docsPageSource = (slug) => SOURCES[slug] ?? ''
 
 /** Every row of the rail in column order, tagged with the segment it sits in. */
 const ROWS = docsNavSections.flatMap((section) =>
-  menuLeaves(section.items).map((row) => ({ ...row, section: section.label }))
+  docsLeaves(section.items).map((row) => ({ ...row, section: section.label }))
 )
 
 /**

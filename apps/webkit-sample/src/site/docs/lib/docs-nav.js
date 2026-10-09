@@ -1,1070 +1,1914 @@
-// The Azion documentation navigation, transcribed from the live docs sidebar: the
-// same eight sections, the same collapsible groups, the same rows, in the same
-// order.
-//
-// Shape: each entry is a docs SECTION — `{ label, items }`, which is `Menu`'s
-// `MenuGroupNode` verbatim: a SEGMENT, a title over its rows. Within `items`, a node
-// with `children` renders as an inline sub-menu — the CONDENSED row the docs use for
-// product groups (`Migrate`, `Modules`, `Guides`, `Reference`), which expands in place
-// behind a chevron and a rail, nesting four more levels deep inside its segment.
-//
-// THE SECTIONS ARE SEGMENTED, NOT DRILLED. The eight used to be drill LEVELS: the rail's
-// root was the eight pillars and choosing one replaced the whole rail with that pillar's
-// own menu behind a Back row. They are segment headers again — one column, eight labels,
-// the condensed rows doing the folding — which is the shape the live docs sidebar has
-// (azion.com/en/documentation/: `Start`, `Build`, `Store`, `Secure`, `Observe`,
-// `Resources`, `Manage`, `Updates and Policies` as headers over their rows). A level that
-// replaces the rail hides seven pillars to show one; a segment that titles its rows hides
-// nothing, and the condensed row is what keeps the column short enough for that to work.
-//
-// ONE ROW IS A DRILL, and it is `Functions` (search `kind: 'drill'` below) — a product
-// promoted out of `Applications › Modules` to sit BESIDE `Applications` in the `Build`
-// segment, where it owns a whole menu rather than a fifth level of indent. Not a second
-// opinion about the sections: a segment titles rows without hiding any, and this one row
-// is where a level that replaces the column earns what it costs. It is also the working
-// example of the pattern in this prototype: `DocsLayout` wires the stack (`v-model:path`)
-// and the `Menu.Back` row that returns from it, and everything else stays condensed.
-//
-// Most rows carry no `href`: the prototype is self-contained, so activating one moves
-// the selection rather than leaving the app. Ids derive from the docs path each row
-// points at, which is what keeps them unique and stable across 275 links.
-//
-// The rows whose page ACTUALLY EXISTS in the sample do carry one, so the tree is how a
-// reader reaches them — a page nobody can navigate to is a URL, not a page. `href` (not
-// a router `to`) because a documentation row is a link: it must be middle-clickable,
-// ⌘-clickable and copyable like every other link in the docs. `DocsLayout` intercepts
-// the plain left click and routes it in-app, so the SPA stays an SPA and the modified
-// click stays the browser's.
 import { menuLeaves, menuPath } from '@shared/lib/menu-tree.js'
-
-import { agentHref, AGENTS } from './docs-agent-setup.js'
-
-/**
- * The Agent Setup segment's rows, GENERATED from the same list the pages render.
- *
- * The section is a container with an overview row and one row per tool — the shape every
- * product group in this tree already has (`Applications` over `About Applications` and its
- * modules). Typed out, these eight rows would be a second copy of `AGENTS` free to drift
- * from the seven the index actually offers, and it would drift in the two places nobody
- * checks: the rail's ordering, and the previous/next pair `docs-pages.js` derives from it.
- */
-const agentSetupRows = [
-  { id: 'agent-setup-overview', label: 'About Agent Setup', href: '/site/docs/agent-setup' },
-  ...AGENTS.map((agent) => ({
-    id: `agent-setup-${agent.slug}`,
-    label: agent.name,
-    href: agentHref(agent)
-  }))
-]
 
 export const docsNavSections = [
   {
-    // `Getting Started` titles the SEGMENT and `Overview` is the page inside it — the docs
-    // home. It used to be the other way round: the segment was `Start` and its first row
-    // was called `Getting Started`, which is the home, so the rail said "Getting Started"
-    // about a page that is a directory of the whole site and had no word left for the
-    // section. The live docs make the same split (a `Start` header over `Agent Setup`,
-    // `First deploy`, …), and it is what keeps the home one thing and the getting-started
-    // route another.
     label: 'Getting Started',
     items: [
-      { id: 'overview', label: 'Overview', href: '/site/docs' },
-      { id: 'agent-setup', label: 'Agent Setup', children: agentSetupRows },
-      { id: 'get-started-first-deploy', label: 'First deploy', href: '/site/docs/first-deploy' },
       {
-        id: 'migrate',
-        label: 'Migrate',
-        children: [
-          { id: 'get-started-migrate', label: 'About migration' },
-          { id: 'get-started-migrate-akamai', label: 'Migrate from Akamai to Azion' },
-          { id: 'get-started-migrate-aws', label: 'Migrate from AWS to Azion' },
-          { id: 'get-started-migrate-cloudflare', label: 'Migrate from Cloudflare to Azion' },
-          { id: 'get-started-migrate-fastly', label: 'Migrate from Fastly to Azion' },
-          { id: 'get-started-migrate-vercel', label: 'Migrate from Vercel to Azion' }
-        ]
-      },
-      { id: 'get-started-production-checklist', label: 'Go live' }
-    ]
-  },
-  {
-    label: 'Build',
-    items: [
-      { id: 'build-overview', label: 'About Build' },
-      {
-        id: 'ai-inference',
-        label: 'AI Inference',
-        children: [
-          { id: 'build-ai-inference', label: 'About AI Inference' },
-          {
-            id: 'reference',
-            label: 'Reference',
-            children: [{ id: 'build-ai-inference-reference-models', label: 'Models' }]
-          }
-        ]
+        id: 'overview',
+        label: 'Overview',
+        href: '/site/docs'
       },
       {
-        id: 'applications',
-        label: 'Applications',
-        children: [
-          {
-            id: 'build-applications',
-            label: 'About Applications',
-            href: '/site/docs/applications'
-          },
-          { id: 'get-started-journeys-launch', label: 'Build an application' },
-          {
-            id: 'modules',
-            label: 'Modules',
-            children: [
-              {
-                id: 'build-applications-application-accelerator',
-                label: 'Application Accelerator'
-              },
-              {
-                id: 'cache',
-                label: 'Cache',
-                children: [
-                  {
-                    id: 'build-applications-cache',
-                    label: 'About Cache',
-                    href: '/site/docs/cache'
-                  },
-                  {
-                    id: 'guides',
-                    label: 'Guides',
-                    children: [
-                      {
-                        id: 'build-applications-cache-guides-advanced-cache-key',
-                        label: 'How to configure Advanced Cache Key for Applications'
-                      },
-                      {
-                        id: 'build-applications-cache-guides-cache-settings',
-                        label: 'How to configure cache policies for Applications'
-                      },
-                      {
-                        id: 'build-applications-cache-guides-check-page-cache-time',
-                        label: 'Verify Cache Indicators with ModHeader'
-                      },
-                      {
-                        id: 'build-applications-cache-guides-enforce-hls-cache',
-                        label: 'How to enforce HLS cache for live streaming delivery'
-                      },
-                      {
-                        id: 'build-applications-cache-guides-tune-cache-settings',
-                        label: 'How to tune your cache settings'
-                      }
-                    ]
-                  },
-                  {
-                    id: 'reference-2',
-                    label: 'Reference',
-                    children: [
-                      {
-                        id: 'build-applications-reference-cache-settings',
-                        label: 'Cache Settings'
-                      },
-                      {
-                        id: 'build-applications-reference-real-time-purge',
-                        label: 'Real-Time Purge'
-                      }
-                    ]
-                  },
-                  { id: 'build-applications-cache-tiered-cache', label: 'Tiered Cache' }
-                ]
-              },
-              {
-                id: 'image-processor',
-                label: 'Image Processor',
-                children: [
-                  { id: 'build-applications-image-processor', label: 'About Image Processor' },
-                  { id: 'build-applications-image-processor-first-steps', label: 'First steps' },
-                  {
-                    id: 'guides-3',
-                    label: 'Guides',
-                    children: [
-                      {
-                        id: 'build-applications-image-processor-guides-process-images',
-                        label: 'How to optimize image processing at the edge'
-                      }
-                    ]
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            id: 'guides-4',
-            label: 'Guides',
-            children: [
-              {
-                id: 'build-applications-guides-configure-main-settings',
-                label: 'How to configure main settings'
-              },
-              {
-                id: 'build-applications-guides-create-device-groups',
-                label: 'How to create device groups'
-              },
-              {
-                id: 'build-applications-guides-debug-rules',
-                label: 'How to debug rules created with Rules Engine'
-              },
-              {
-                id: 'build-applications-guides-gzip-compression',
-                label: 'How to enable gzip compression for Applications'
-              },
-              {
-                id: 'build-applications-guides-how-to-generate-a-lets-encrypt-cer',
-                label: "Generate a Let's Encrypt Cert for Your Domain"
-              },
-              {
-                id: 'build-applications-guides-stage-applications-through-hosts-f',
-                label: 'How to stage an application through the hosts file'
-              },
-              {
-                id: 'build-applications-guides-work-with-origins',
-                label: 'How to define a new origin for your application'
-              },
-              {
-                id: 'build-applications-guides-work-with-rules-engine',
-                label: 'Automate Behaviors with Rules Engine'
-              }
-            ]
-          },
-          {
-            id: 'reference-3',
-            label: 'Reference',
-            children: [
-              { id: 'build-applications-reference-device-groups', label: 'Device Groups' },
-              { id: 'build-applications-reference-domains', label: 'Domains' },
-              {
-                id: 'build-applications-reference-domains-mtls',
-                label: 'Support for mTLS for Build'
-              },
-              {
-                id: 'build-applications-reference-main-settings',
-                label: 'Applications Main Settings'
-              },
-              { id: 'build-applications-reference-origins', label: 'Origins' },
-              {
-                id: 'build-applications-reference-rules-engine',
-                label: 'Rules Engine for Applications'
-              }
-            ]
-          }
-        ]
-      },
-      // THE ONE DRILL ROW IN THE TREE. Every other container here is CONDENSED — it
-      // opens its rows in place behind a chevron and the indent rail — and this one
-      // REPLACES the column with the Functions menu behind a Back row.
-      //
-      // It sits BESIDE `Applications`, not inside its `Modules` list. Functions is its
-      // own product, so listing it as a module of Applications put a peer one level under
-      // the row it is a peer of — and made `Build › Applications › Modules › Functions ›
-      // Guides` a fifth level of indent to reach a guide, past the three
-      // `.specs/menu.md` allows ("past that the indent eats the rail's readable width;
-      // restructure with a drill row instead"). Promoted to the segment it is one row from
-      // the top, and its eleven pages are then exactly what a drill is for: a peer row
-      // that unfolded eleven rows in place would bury the segment's other products under
-      // one of them, so the level takes the whole column and hands it back on Back.
-      //
-      // `groups`, not `children`: a drilled level is a MENU, described by the same shape
-      // the root takes — so `Guides` becomes a section title inside it instead of one more
-      // row to unfold. Nothing condenses in here. A second level is already a narrowed
-      // context, so asking for another decision to reach a guide is exactly the cost the
-      // drill was taken to remove.
-      //
-      // No icon, unlike the console's `Settings` drill: a drill row carries one because it
-      // reads as one of the destinations it is listed among, and in this tree none of them
-      // have one.
-      {
-        id: 'functions',
-        label: 'Functions',
+        id: 'fundamentals',
+        label: 'Fundamentals',
         kind: 'drill',
-        // THE ROW IS A DESTINATION AS WELL AS A LEVEL, and the `href` is what says so. It
-        // points at the product's own overview — the page the level opens on — so hitting
-        // `Functions` opens the page AND the sub in one action: the arrival is inside the
-        // level, so the rail drills to it on its own (see `railStateFor` in DocsLayout).
-        //
-        // `MenuSubTrigger` splits the row on this prop and that split is the point: the
-        // LABEL is a link to the overview, the arrow beside it reveals the level without
-        // leaving the page. A reader who wants the product gets it in one hit; one who is
-        // only looking for a guide inside it does not have to load the overview first.
-        href: '/site/docs/functions',
+        href: '/site/docs/fundamentals',
         groups: [
           {
-            // Titled with the product's own name, because this block is what the level
-            // OPENS on: a reader who activated `Functions` lands here, and the Back row
-            // above says where Back goes, not where they are. Without the title the
-            // level's own three pages read as loose rows under an arrow, and `Guides`
-            // below reads as the only named thing on screen instead of one section of
-            // two. `About Functions` is still the landing row inside it.
-            label: 'Functions',
+            label: 'Fundamentals',
             items: [
               {
-                id: 'build-applications-functions',
-                label: 'About Functions',
-                href: '/site/docs/functions'
+                id: 'fundamentals-overview',
+                label: 'Overview',
+                href: '/site/docs/fundamentals'
               },
               {
-                id: 'build-applications-reference-functions-instances',
-                label: 'Functions Instances'
-              },
-              { id: 'runtime-overview', label: 'Azion Runtime' }
-            ]
-          },
-          {
-            label: 'Guides',
-            items: [
-              { id: 'get-started-frameworks-javascript', label: 'How to build functions' },
-              {
-                id: 'build-functions-guides-altcha',
-                label: 'How to Use the ALTCHA Function'
+                id: 'fundamentals-how-it-works',
+                label: 'How Azion works'
               },
               {
-                id: 'build-functions-guides-api-builder',
-                label: 'How to build an API with Functions and ChatGPT'
-              },
-              {
-                id: 'build-functions-guides-browserless-functions',
-                label: 'How to build a browserless application with Functions'
-              },
-              {
-                id: 'build-functions-guides-debugging-functions-graphql',
-                label: 'How to debug functions using GraphQL API'
-              },
-              {
-                id: 'build-functions-guides-firewall',
-                label: 'Create and Configure a Function on Firewall'
-              },
-              {
-                id: 'build-functions-guides-paywall-function-jwt',
-                label: 'How to set up a paywall with Azion JWT solution'
-              },
-              {
-                id: 'build-functions-guides-serverless-functions',
-                label: 'How to run serverless functions on Azion'
-              }
-            ]
-          }
-        ]
-      },
-      {
-        id: 'develop-with-azion',
-        label: 'Develop with Azion',
-        children: [
-          { id: 'get-started-frameworks-cli', label: 'Develop with Azion CLI' },
-          { id: 'get-started-frameworks-code-editor', label: 'Functions Code Editor Overview' },
-          {
-            id: 'get-started-frameworks-environment-variables',
-            label: 'Build with Environment Variables'
-          },
-          { id: 'get-started-frameworks-go', label: 'Build with Azion Go SDK' },
-          { id: 'get-started-frameworks-local-dev', label: 'Local development' },
-          { id: 'get-started-frameworks-runtime-apis', label: 'Build with Azion Runtime' },
-          {
-            id: 'get-started-frameworks-terraform-provider',
-            label: 'Build with Azion Terraform Provider'
-          }
-        ]
-      }
-    ]
-  },
-  {
-    label: 'Store',
-    items: [
-      { id: 'store-overview', label: 'About Store', href: '/site/docs/store' },
-      {
-        id: 'kv-store',
-        label: 'KV Store',
-        children: [
-          { id: 'store-kv-store', label: 'About KV Store' },
-          {
-            id: 'guides-5',
-            label: 'Guides',
-            children: [
-              {
-                id: 'store-kv-store-guides-manage-with-functions',
-                label: 'How to manage KV Store with Functions'
-              },
-              {
-                id: 'store-kv-store-guides-redis-compatibility',
-                label: 'How to use KV Store with Redis-compatible SDK'
-              }
-            ]
-          }
-        ]
-      },
-      {
-        id: 'object-storage',
-        label: 'Object Storage',
-        children: [
-          { id: 'store-object-storage', label: 'About Object Storage' },
-          {
-            id: 'guides-6',
-            label: 'Guides',
-            children: [
-              {
-                id: 'store-object-storage-guides-create-bucket',
-                label: 'How to create an Object Storage bucket'
-              },
-              {
-                id: 'store-object-storage-guides-delete-buckets',
-                label: 'How to delete an Object Storage bucket'
-              },
-              {
-                id: 'store-object-storage-guides-delete-object',
-                label: 'How to delete an object from an Object Storage bucket'
-              },
-              {
-                id: 'store-object-storage-guides-list-buckets',
-                label: 'How to list Object Storage buckets'
-              },
-              {
-                id: 'store-object-storage-guides-s3-protocol-for-object-storage',
-                label: 'Set up S3 credentials for Object Storage'
-              },
-              {
-                id: 'store-object-storage-guides-use-bucket-as-origin',
-                label: 'Use an Object Storage Bucket as Origin'
-              }
-            ]
-          }
-        ]
-      },
-      {
-        id: 'sql-database',
-        label: 'SQL Database',
-        children: [
-          { id: 'store-sql-database', label: 'About SQL Database' },
-          {
-            id: 'guides-7',
-            label: 'Guides',
-            children: [
-              {
-                id: 'store-sql-database-guides-create-database',
-                label: 'How to create an SQL Database database'
-              },
-              {
-                id: 'store-sql-database-guides-create-tables-sql-database',
-                label: 'How to create and query data on SQL Database'
-              },
-              {
-                id: 'store-sql-database-guides-import-data-sql-database',
-                label: 'How to import data to SQL Database'
-              },
-              {
-                id: 'store-sql-database-guides-install-edge-sql-shell',
-                label: 'How to install SQL Database Shell'
-              },
-              {
-                id: 'store-sql-database-guides-list-databases',
-                label: 'How to list SQL Database databases'
-              },
-              {
-                id: 'store-sql-database-guides-sql-database-shell-commands',
-                label: 'How to use SQL Database Shell commands'
-              },
-              {
-                id: 'store-sql-database-guides-sql-database-vector-search',
-                label: 'How to implement SQL Database Vector Search'
-              }
-            ]
-          },
-          {
-            id: 'reference-4',
-            label: 'Reference',
-            children: [
-              {
-                id: 'store-sql-database-reference-vector-search',
-                label: 'SQL Database Vector Search'
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  },
-  {
-    label: 'Secure',
-    items: [
-      { id: 'secure-overview', label: 'About Secure', href: '/site/docs/secure' },
-      {
-        id: 'secure-an-application',
-        label: 'Secure an application',
-        children: [
-          { id: 'get-started-journeys-protect', label: 'About this journey' },
-          { id: 'get-started-journeys-protect-dns', label: 'Secure DNS' },
-          { id: 'get-started-journeys-protect-infrastructure', label: 'Secure an infrastructure' }
-        ]
-      },
-      {
-        id: 'firewall',
-        label: 'Firewall',
-        children: [
-          { id: 'secure-firewall', label: 'About Firewall' },
-          {
-            id: 'modules-2',
-            label: 'Modules',
-            children: [
-              {
-                id: 'ddos-protection',
-                label: 'DDoS Protection',
+                id: 'fundamentals-get-started',
+                label: 'Get started',
                 children: [
-                  { id: 'secure-ddos-protection', label: 'About DDoS Protection' },
                   {
-                    id: 'reference-5',
-                    label: 'Reference',
-                    children: [
-                      {
-                        id: 'secure-ddos-protection-reference-ddos-mitigation',
-                        label: 'DDoS Mitigation'
-                      }
-                    ]
+                    id: 'fundamentals-creating-account',
+                    label: 'Create an account'
+                  },
+                  {
+                    id: 'fundamentals-first-deploy',
+                    label: 'First deploy',
+                    href: '/site/docs/first-deploy'
+                  },
+                  {
+                    id: 'fundamentals-migrate-to-azion',
+                    label: 'Migrate to Azion'
                   }
                 ]
               },
               {
-                id: 'network-shield',
-                label: 'Network Shield',
+                id: 'fundamentals-management',
+                label: 'Management',
                 children: [
-                  { id: 'secure-network-shield', label: 'About Network Shield' },
                   {
-                    id: 'guides-8',
-                    label: 'Guides',
+                    id: 'fundamentals-accounts-teams-and-users',
+                    label: 'Accounts, teams, and users'
+                  },
+                  {
+                    id: 'fundamentals-management-accounts',
+                    label: 'Accounts',
                     children: [
                       {
-                        id: 'secure-firewall-guides-block-tor-networks',
-                        label: 'How to block Tor exit node IP addresses'
+                        id: 'fundamentals-account-settings',
+                        label: 'Account Settings'
                       },
                       {
-                        id: 'secure-network-shield-guides-blocklists-ip-addresses-edge',
-                        label: 'Create IP, ASN and Geo Blocklists'
+                        id: 'fundamentals-accounts',
+                        label: 'Accounts'
+                      },
+                      {
+                        id: 'fundamentals-activity-history',
+                        label: 'Activity History'
+                      },
+                      {
+                        id: 'fundamentals-your-settings',
+                        label: 'Your Settings'
                       }
                     ]
                   },
                   {
-                    id: 'reference-6',
-                    label: 'Reference',
+                    id: 'fundamentals-management-members-and-permissions',
+                    label: 'Members and permissions',
                     children: [
                       {
-                        id: 'secure-firewall-reference-network-shield-network-lists',
-                        label: 'Network Lists'
+                        id: 'fundamentals-teams-permissions',
+                        label: 'Teams Permissions'
+                      },
+                      {
+                        id: 'fundamentals-users-management',
+                        label: 'Users Management'
                       }
                     ]
                   }
                 ]
               },
               {
-                id: 'waf',
-                label: 'WAF',
+                id: 'fundamentals-billing',
+                label: 'Billing',
                 children: [
-                  { id: 'secure-waf', label: 'About WAF' },
                   {
-                    id: 'guides-9',
-                    label: 'Guides',
+                    id: 'fundamentals-billing-and-subscriptions',
+                    label: 'Billing'
+                  },
+                  {
+                    id: 'fundamentals-pricing',
+                    label: 'Pricing'
+                  }
+                ]
+              },
+              {
+                id: 'fundamentals-security',
+                label: 'Security',
+                children: [
+                  {
+                    id: 'fundamentals-multi-factor-authentication',
+                    label: 'Multi-Factor Authentication'
+                  },
+                  {
+                    id: 'fundamentals-single-sign-on',
+                    label: 'Single Sign-On'
+                  },
+                  {
+                    id: 'fundamentals-social-login',
+                    label: 'Social Login'
+                  },
+                  {
+                    id: 'fundamentals-personal-tokens',
+                    label: 'Personal Tokens'
+                  },
+                  {
+                    id: 'fundamentals-account-lockout-policy',
+                    label: 'Account Lockout Policy'
+                  },
+                  {
+                    id: 'fundamentals-user-session-timeout',
+                    label: 'User Session Timeout'
+                  },
+                  {
+                    id: 'fundamentals-security-compliance',
+                    label: 'Compliance',
                     children: [
                       {
-                        id: 'secure-waf-guides-configure-waf-allowed-rules',
-                        label: 'How to configure a WAF Custom Allowed Rule'
+                        id: 'fundamentals-pci-dss-certification',
+                        label: 'PCI Compliance'
                       },
                       {
-                        id: 'secure-firewall-guides-create-waf-rule-set',
-                        label: 'How to create a WAF rule set'
+                        id: 'fundamentals-soc',
+                        label: 'SOC Compliance'
                       },
                       {
-                        id: 'secure-waf-guides-how-to-check-your-waf-mode',
-                        label: 'How to check your WAF mode'
+                        id: 'fundamentals-shared-responsibility',
+                        label: 'Shared Responsibility Model'
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                id: 'fundamentals-performance',
+                label: 'Performance',
+                children: [
+                  {
+                    id: 'fundamentals-test-speed',
+                    label: 'Test speed'
+                  },
+                  {
+                    id: 'fundamentals-minimize-downtime',
+                    label: 'Minimize downtime'
+                  },
+                  {
+                    id: 'fundamentals-maintenance-mode',
+                    label: 'Maintenance mode'
+                  }
+                ]
+              },
+              {
+                id: 'fundamentals-reference',
+                label: 'Reference',
+                children: [
+                  {
+                    id: 'fundamentals-http-status-codes',
+                    label: 'HTTP status codes'
+                  },
+                  {
+                    id: 'fundamentals-api-v4-migration',
+                    label: 'API v4 Migration'
+                  }
+                ]
+              },
+              {
+                id: 'fundamentals-agent-resources',
+                label: 'Agent resources',
+                children: [
+                  {
+                    id: 'fundamentals-agent-resources-agent-setup',
+                    label: 'Agent Setup',
+                    ref: true,
+                    href: '/site/docs/agent-setup'
+                  },
+                  {
+                    id: 'fundamentals-llms-txt',
+                    label: 'llms.txt'
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'agent-setup',
+        label: 'Agent Setup',
+        kind: 'drill',
+        href: '/site/docs/agent-setup',
+        groups: [
+          {
+            label: 'Agent Setup',
+            items: [
+              {
+                id: 'agent-setup-overview',
+                label: 'About Agent Setup',
+                href: '/site/docs/agent-setup'
+              },
+              {
+                id: 'agent-setup-claude-code',
+                label: 'Claude Code',
+                href: '/site/docs/agent-setup/claude-code'
+              },
+              {
+                id: 'agent-setup-cursor',
+                label: 'Cursor',
+                href: '/site/docs/agent-setup/cursor'
+              },
+              {
+                id: 'agent-setup-github-copilot',
+                label: 'GitHub Copilot',
+                href: '/site/docs/agent-setup/github-copilot'
+              },
+              {
+                id: 'agent-setup-windsurf',
+                label: 'Windsurf',
+                href: '/site/docs/agent-setup/windsurf'
+              },
+              {
+                id: 'agent-setup-codex',
+                label: 'Codex',
+                href: '/site/docs/agent-setup/codex'
+              },
+              {
+                id: 'agent-setup-gemini-cli',
+                label: 'Gemini CLI',
+                href: '/site/docs/agent-setup/gemini-cli'
+              },
+              {
+                id: 'agent-setup-opencode',
+                label: 'OpenCode',
+                href: '/site/docs/agent-setup/opencode'
+              },
+              {
+                id: 'agent-setup-claude-desktop',
+                label: 'Claude Desktop'
+              },
+              {
+                id: 'agent-setup-warp',
+                label: 'Warp'
+              },
+              {
+                id: 'agent-setup-kiro',
+                label: 'Kiro'
+              }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'use-cases',
+        label: 'Use Cases',
+        kind: 'drill',
+        href: '/site/docs/use-cases',
+        groups: [
+          {
+            label: 'Guides',
+            items: [
+              {
+                id: 'guides',
+                label: 'Overview',
+                href: '/site/docs/use-cases'
+              },
+              {
+                id: 'use-cases-build-and-run-applications',
+                label: 'Build and run applications',
+                children: [
+                  {
+                    id: 'use-cases-build-and-run-applications-getting-started',
+                    label: 'Getting started',
+                    children: [
+                      {
+                        id: 'guides-application-development-getting-started-work-with-rules-engine',
+                        label: 'Create an application rule'
                       },
                       {
-                        id: 'secure-waf-guides-how-to-find-waf-score',
-                        label: 'How to find the score of WAF blocked requests'
+                        id: 'guides-application-development-getting-started-generate-rules-engine-rules-with-mcp',
+                        label: 'Create Rules Engine rules with the MCP server'
                       },
                       {
-                        id: 'secure-waf-guides-mitigate-cve-2025-29927-nextjs',
-                        label: 'Mitigating CVE-2025-29927: Next.js Middleware Authorization Bypass'
+                        id: 'guides-application-development-getting-started-build-an-application',
+                        label: 'Enable Products on an application'
                       },
                       {
-                        id: 'secure-waf-guides-waf-rules-for-specific-cookie',
-                        label: 'Configure WAF Rules for a Specific Cookie'
+                        id: 'guides-application-development-getting-started-configure-ports',
+                        label: 'Configure HTTP and HTTPS ports'
+                      },
+                      {
+                        id: 'guides-application-development-getting-started-rules-engine',
+                        label: 'Create request and response rules'
+                      },
+                      {
+                        id: 'guides-application-development-getting-started-cross-origin-resource-sharing-cors',
+                        label: 'Enable CORS on an application'
+                      },
+                      {
+                        id: 'guides-application-development-getting-started-crossdomain-error-in-jw-player',
+                        label: 'Troubleshoot crossdomain errors in JW Player'
+                      },
+                      {
+                        id: 'guides-application-development-getting-started-hosting-edge-website',
+                        label: 'Serve a status page from a function'
+                      },
+                      {
+                        id: 'guides-application-development-getting-started-clone-applications',
+                        label: 'Clone an application'
+                      },
+                      {
+                        id: 'guides-application-development-getting-started-configure-main-settings',
+                        label: 'How to configure main settings'
+                      },
+                      {
+                        id: 'guides-application-development-getting-started-create-azion-custom-domain',
+                        label: 'Create an Azion custom domain'
+                      },
+                      {
+                        id: 'guides-application-development-getting-started-create-device-groups',
+                        label: 'Create device groups'
+                      },
+                      {
+                        id: 'guides-application-development-getting-started-customizing-error-response-page',
+                        label: 'Customize an error page'
+                      },
+                      {
+                        id: 'guides-application-development-getting-started-debug-rules',
+                        label: 'Debug rules created with Rules Engine'
+                      },
+                      {
+                        id: 'guides-application-development-getting-started-work-with-origins',
+                        label: 'Connect an application to an origin'
+                      },
+                      {
+                        id: 'guides-application-development-getting-started-sign-origin-requests-with-hmac',
+                        label: 'Sign origin requests with HMAC'
+                      },
+                      {
+                        id: 'guides-application-development-getting-started-set-the-host-header-and-path-prefix',
+                        label: 'Set the Host header and path'
+                      },
+                      {
+                        id: 'guides-application-development-getting-started-delete-applications',
+                        label: 'Delete an application'
+                      },
+                      {
+                        id: 'guides-application-development-getting-started-cors-errors',
+                        label: 'Troubleshoot CORS policy errors'
+                      },
+                      {
+                        id: 'guides-application-development-getting-started-instantiate-functions',
+                        label: 'Instantiate a function on an application'
+                      },
+                      {
+                        id: 'guides-application-development-getting-started-mitigating-a-vulnerability-httpoxy',
+                        label: 'Mitigate the HTTPoxy vulnerability'
+                      },
+                      {
+                        id: 'guides-application-development-getting-started-set-error-pages',
+                        label: 'How to set error pages'
+                      },
+                      {
+                        id: 'guides-application-development-getting-started-stage-applications-through-hosts-file',
+                        label: 'Test an application through the hosts file'
                       }
                     ]
                   },
                   {
-                    id: 'reference-7',
-                    label: 'Reference',
+                    id: 'use-cases-build-and-run-applications-frameworks',
+                    label: 'Frameworks',
                     children: [
-                      { id: 'secure-waf-reference-custom-allowed-rules', label: 'WAF Exceptions' },
-                      { id: 'secure-waf-reference-rules-set', label: 'WAF Rule Sets' }
+                      {
+                        id: 'guides-application-development-frameworks-htmx-boilerplate',
+                        label: 'Deploy & Test HTMX on the Edge'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-webpage-to-pdf-resume',
+                        label: 'Deploy a Resume with Webpage to PDF'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-butter-templates-collection',
+                        label: 'Deploy a Web App with ButterCMS Templates'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-clean-astro-sanity',
+                        label: 'Deploy a Web App with Clean Astro + Sanity'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-vuepress-templates-collection',
+                        label: 'Deploy a Web App with VuePress Templates'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-astro-ecommerce-collection',
+                        label: 'Deploy an E-commerce with Astro Templates'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-book-store-react',
+                        label: 'Deploy an E-commerce with Book Store React'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-eleventy-ecommerce-collection',
+                        label: 'Deploy an E-commerce with Eleventy Templates'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-gatsby-ecommerce-theme',
+                        label: 'Deploy an E-commerce with Gatsby Theme'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-hugo-ecommerce-collection',
+                        label: 'Deploy an E-commerce with Hugo Templates'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-jekyll-ecommerce-collection',
+                        label: 'Deploy an E-commerce with Jekyll Templates'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-next-js-ecommerce-collection',
+                        label: 'Deploy an E-commerce with Next.js Templates'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-devscard',
+                        label: 'Deploy an Online Resume with DevsCard'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-cosmic-simple-astro-blog',
+                        label: 'Deploy Apps with Cosmic Simple Astro Blog'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-cosmic-simple-next-blog',
+                        label: 'Deploy Apps with Cosmic Simple Next.js Blog'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-cosmic-agency-website',
+                        label: 'Deploy Apps with CosmicJS Agency Website'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-nextjs-static-boilerplate',
+                        label: 'Deploy Apps with Next.js Static Boilerplate'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-preact-javascript-boilerplate',
+                        label: 'Deploy Apps with Preact JavaScript Boilerplate'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-preact-typescript-boilerplate',
+                        label: 'Deploy Apps with Preact TypeScript Boilerplate'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-angular-boilerplate',
+                        label: 'Deploy Apps with the Angular Boilerplate'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-sqldatabase-starter-kit',
+                        label: 'Deploy the SQL Database Starter Kit'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-gatsby-boilerplate',
+                        label: 'Deploy Apps with the Gatsby Boilerplate'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-qwik-minimal',
+                        label: 'Deploy Apps with the Qwik Minimal Template'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-stencil-boilerplate',
+                        label: 'Deploy Apps with the Stencil Boilerplate'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-vue-vite-boilerplate',
+                        label: 'Deploy Apps with the Vue3/Vite Boilerplate'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-neon-database-with-drizzle',
+                        label: 'Deploy Neon Database Kit with Drizzle ORM'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-dynamic-and-static-file-optimization-template',
+                        label: 'Deploy the File Optimization Template'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-upstash-rate-limiting',
+                        label: 'Deploy the Upstash Rate Limit Template'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-tidb-with-drizzle',
+                        label: 'Deploy TiDB Starter Kit with Drizzle ORM'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-turso-with-drizzle',
+                        label: 'Deploy Turso Starter Kit with Drizzle ORM'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-wordpress-edgeaccelerator',
+                        label: 'Enhance WordPress with EdgeAccelerator'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-get-started',
+                        label: 'Get Started With OpenNext'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-bot-manager-lite-and-tor-block-starter-kit',
+                        label: 'Block bots and Tor exit nodes with a template'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-angular',
+                        label: 'Build with Angular'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-astro',
+                        label: 'Build with Astro'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-docusaurus',
+                        label: 'Build with Docusaurus'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-eleventy',
+                        label: 'Build with Eleventy'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-gatsby',
+                        label: 'Build with Gatsby'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-hexo',
+                        label: 'Build with Hexo'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-hono',
+                        label: 'Build with Hono'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-hugo',
+                        label: 'Build with Hugo'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-jekyll',
+                        label: 'Build with Jekyll'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-next',
+                        label: 'Build with Next.js'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-nextal',
+                        label: 'Build with Nextal'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-react',
+                        label: 'Build with React'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-svelte',
+                        label: 'Build with Svelte'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-vite',
+                        label: 'Build with VitePress'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-vue',
+                        label: 'Build with Vue'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-data-stream-custom-template',
+                        label: 'Create a custom template'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-gatsby-blog-starter-kit',
+                        label: 'How to deploy a blog based on Gatsby using a template'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-astro-blog-starter-kit',
+                        label: 'How to deploy an Astro blog using a template'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-astro-boilerplate',
+                        label: 'Deploy the Astro Boilerplate'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-hexo-boilerplate',
+                        label: 'Deploy the Hexo Boilerplate'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-qwik-boilerplate',
+                        label: 'Deploy the Qwik Boilerplate'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-react-boilerplate',
+                        label: 'Deploy the React Boilerplate'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-vue-boilerplate',
+                        label: 'Deploy the Vue Boilerplate'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-ai-inference-starter-kit',
+                        label: 'Deploy the AI Inference Starter Kit template'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-edge-application-proxy-template',
+                        label: 'Deploy the Applications Proxy template'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-azion-starter-kit',
+                        label: 'How to deploy the Azion Starter Kit'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-docusaurus-javascript-boilerplate',
+                        label: 'How to deploy the Docusaurus JavaScript Boilerplate'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-docusaurus-typescript-boilerplate',
+                        label: 'How to deploy the Docusaurus TypeScript Boilerplate'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-function-starter-kit',
+                        label: 'Deploy the Function Starter Kit template'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-hugo-boilerplate',
+                        label: 'How to deploy the Hugo Boilerplate'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-image-optimization-template',
+                        label: 'Deploy the Image Optimization template'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-jekyll-boilerplate',
+                        label: 'How to deploy the Jekyll Boilerplate'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-langgraph-ai-agent-boilerplate',
+                        label: 'How to deploy the LangGraph AI Agent Boilerplate'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-mongodb-atlas',
+                        label: 'How to deploy the MongoDB Atlas Boilerplate'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-nuxt-static-boilerplate',
+                        label: 'How to deploy the Nuxt 3 Static Boilerplate'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-nuxt-content',
+                        label: 'How to deploy the Nuxt Content template'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-nuxt-notes',
+                        label: 'How to deploy the Nuxt Notes template'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-static-cache-template',
+                        label: 'Deploy the Static Cache template'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-vitepress-javascript-boilerplate',
+                        label: 'How to deploy the VitePress JavaScript Boilerplate'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-vitepress-typescript-boilerplate',
+                        label: 'How to deploy the VitePress TypeScript Boilerplate'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-vuepress-boilerplate',
+                        label: 'How to deploy the VuePress Boilerplate'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-bot-manager-lite-starter-kit',
+                        label: 'Test Bot Manager Lite with the Starter Kit'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-upstash-geolocation-edgedeploy',
+                        label: 'How to use Upstash GeoLocation through Azion'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-troubleshooting',
+                        label: 'Troubleshoot an OpenNext application'
+                      },
+                      {
+                        id: 'guides-application-development-frameworks-qstash-function-scheduler',
+                        label: 'Use the QStash Function Scheduler'
+                      }
+                    ]
+                  },
+                  {
+                    id: 'use-cases-build-and-run-applications-functions-and-runtime',
+                    label: 'Functions and runtime',
+                    children: [
+                      {
+                        id: 'guides-application-development-functions-and-runtime-restful-tasks-api-functions',
+                        label: 'Build a RESTful tasks API'
+                      },
+                      {
+                        id: 'guides-application-development-functions-and-runtime-firewall',
+                        label: 'Run a function on a firewall'
+                      },
+                      {
+                        id: 'guides-application-development-functions-and-runtime-webassembly-on-azion-platform',
+                        label: 'Create a function with WebAssembly'
+                      },
+                      {
+                        id: 'guides-application-development-functions-and-runtime-first-steps',
+                        label: 'Write and test a function'
+                      },
+                      {
+                        id: 'guides-application-development-functions-and-runtime-browserless-functions',
+                        label: 'Build a screenshot API with Functions and Browserless'
+                      },
+                      {
+                        id: 'guides-application-development-functions-and-runtime-api-builder',
+                        label: 'Build an API function with ChatGPT'
+                      },
+                      {
+                        id: 'guides-application-development-functions-and-runtime-debugging-functions-graphql',
+                        label: 'Query function logs with GraphQL API'
+                      },
+                      {
+                        id: 'guides-application-development-functions-and-runtime-stripe-webhooks-functions',
+                        label: 'Build a Stripe webhook handler with Functions'
+                      },
+                      {
+                        id: 'guides-application-development-functions-and-runtime-resend-email-functions',
+                        label: 'Send transactional email with Resend and Functions'
+                      },
+                      {
+                        id: 'guides-application-development-functions-and-runtime-serverless-functions',
+                        label: 'Run a function on an application'
+                      },
+                      {
+                        id: 'guides-application-development-functions-and-runtime-paywall-function-jwt',
+                        label: 'Set up a paywall with the JWT function'
+                      },
+                      {
+                        id: 'guides-application-development-functions-and-runtime-test-origin-with-functions',
+                        label: 'Mirror production traffic to a test origin with Functions'
+                      },
+                      {
+                        id: 'guides-application-development-functions-and-runtime-altcha',
+                        label: 'Protect a route with an ALTCHA challenge'
+                      },
+                      {
+                        id: 'guides-application-development-functions-and-runtime-file-upload-functions',
+                        label: 'Implement file upload with Functions'
+                      },
+                      {
+                        id: 'guides-application-development-functions-and-runtime-migrate-handler-patterns',
+                        label: 'Migrate handler patterns in Functions'
+                      },
+                      {
+                        id: 'guides-application-development-functions-and-runtime-deploy-function-with-cli',
+                        label: 'Deploy a function with Azion CLI'
+                      },
+                      {
+                        id: 'guides-application-development-functions-and-runtime-use-polyfills',
+                        label: 'Use Node.js APIs through polyfills'
+                      },
+                      {
+                        id: 'guides-application-development-functions-and-runtime-cache-a-function-response-with-the-cache-api',
+                        label: "Cache a function's response with the Cache API"
+                      },
+                      {
+                        id: 'guides-application-development-functions-and-runtime-run-a-function-on-one-path-and-roll-it-back',
+                        label: 'Run a function on one path, and roll it back'
+                      }
+                    ]
+                  },
+                  {
+                    id: 'use-cases-build-and-run-applications-data',
+                    label: 'Data',
+                    children: [
+                      {
+                        id: 'guides-application-development-data-create-and-modify-bucket',
+                        label: 'Create a bucket'
+                      },
+                      {
+                        id: 'guides-application-development-data-create-tables-sql-database',
+                        label: 'Create tables and query data'
+                      },
+                      {
+                        id: 'guides-application-development-data-sql-database-vector-search',
+                        label: 'Build a semantic search with vector embeddings'
+                      },
+                      {
+                        id: 'guides-application-development-data-import-data-sql-database',
+                        label: 'Import data with the EdgeSQL Shell'
+                      },
+                      {
+                        id: 'guides-application-development-data-install-edge-sql-shell',
+                        label: 'Install the EdgeSQL Shell'
+                      },
+                      {
+                        id: 'guides-application-development-data-manage-sql-database',
+                        label: 'Create and manage databases'
+                      },
+                      {
+                        id: 'guides-application-development-data-manage-with-functions',
+                        label: 'Manage key-value data from a function'
+                      },
+                      {
+                        id: 'guides-application-development-data-redis-compatibility',
+                        label: 'Use KV Store with a Redis-compatible client'
+                      },
+                      {
+                        id: 'guides-application-development-data-auth-layer-object-storage-functions',
+                        label: 'Authenticate requests with Functions'
+                      },
+                      {
+                        id: 'guides-application-development-data-retrieve-data-with-functions',
+                        label: 'Query a database from a function'
+                      },
+                      {
+                        id: 'guides-application-development-data-upload-and-download-objects-from-bucket',
+                        label: 'Upload and download objects'
+                      },
+                      {
+                        id: 'guides-application-development-data-use-bucket-as-origin',
+                        label: 'Use a bucket as an application origin'
+                      },
+                      {
+                        id: 'guides-application-development-data-use-s3-compatible-tools-with-object-storage',
+                        label: 'Use S3-compatible tools with Object Storage'
+                      },
+                      {
+                        id: 'guides-application-development-data-write-sql-database-rows-from-a-function',
+                        label: 'Write rows to SQL Database from a function'
+                      },
+                      {
+                        id: 'guides-application-development-data-deduplicate-webhook-deliveries-with-kv-store',
+                        label: 'Deduplicate webhook deliveries with KV Store'
+                      }
+                    ]
+                  },
+                  {
+                    id: 'use-cases-build-and-run-applications-integrations',
+                    label: 'Integrations',
+                    children: [
+                      {
+                        id: 'guides-application-development-integrations-bot-manager-lite-integration-kit',
+                        label: 'Add Bot Manager Lite to a Firewall'
+                      },
+                      {
+                        id: 'guides-application-development-integrations-install-an-integration',
+                        label: 'Install an integration'
+                      },
+                      {
+                        id: 'guides-application-development-integrations-update-an-integration',
+                        label: 'Update an integration'
+                      },
+                      {
+                        id: 'guides-application-development-integrations-ab-testing-marketplace',
+                        label: 'Install the A/B Testing integration'
+                      },
+                      {
+                        id: 'guides-application-development-integrations-add-request-id-header',
+                        label: 'Install the Add Request ID integration'
+                      },
+                      {
+                        id: 'guides-application-development-integrations-axur-cardstream',
+                        label: 'Install the Cardstream integration'
+                      },
+                      {
+                        id: 'guides-application-development-integrations-bot-manager-lite',
+                        label: 'Install Bot Manager Lite'
+                      },
+                      {
+                        id: 'guides-application-development-integrations-content-targeting-integration',
+                        label: 'Install the Content Targeting integration'
+                      },
+                      {
+                        id: 'guides-application-development-integrations-datadome-bot-protection',
+                        label: 'Install the DataDome Bot Protection integration'
+                      },
+                      {
+                        id: 'guides-application-development-integrations-hello-world',
+                        label: 'Install the Hello World integration'
+                      },
+                      {
+                        id: 'guides-application-development-integrations-ip-address-reputation',
+                        label: 'Install the IP Address Reputation integration'
+                      },
+                      {
+                        id: 'guides-application-development-integrations-limit-payload-size',
+                        label: 'Install the Limit Payload Size integration'
+                      },
+                      {
+                        id: 'guides-application-development-integrations-massive-redirect-integration',
+                        label: 'Install the Massive Redirect integration'
+                      },
+                      {
+                        id: 'guides-application-development-integrations-radware-bot-manager',
+                        label: 'Install the Radware Bot Manager integration'
+                      },
+                      {
+                        id: 'guides-application-development-integrations-scheduled-blocking',
+                        label: 'Install the Scheduled Blocking integration'
+                      },
+                      {
+                        id: 'guides-application-development-integrations-axur-leakstream',
+                        label: 'Install the Leakstream integration'
+                      },
+                      {
+                        id: 'guides-application-development-integrations-hcaptcha',
+                        label: 'Install the hCaptcha integration'
+                      },
+                      {
+                        id: 'guides-application-development-integrations-ipqs-phone-validation',
+                        label: 'Install the Phone Validation integration'
+                      },
+                      {
+                        id: 'guides-application-development-integrations-ipqs-url-validation',
+                        label: 'Install the URL Validation integration'
+                      },
+                      {
+                        id: 'guides-application-development-integrations-javascript-tag-js-tag',
+                        label: 'Embed the JavaScript tag'
+                      },
+                      {
+                        id: 'guides-application-development-integrations-jwt',
+                        label: 'Install the JWT integration'
+                      },
+                      {
+                        id: 'guides-application-development-integrations-recaptcha',
+                        label: 'Install the reCAPTCHA integration'
+                      },
+                      {
+                        id: 'guides-application-development-integrations-secure-token',
+                        label: 'Install the Secure Token integration'
+                      },
+                      {
+                        id: 'guides-application-development-integrations-upstash-rate-limiting-integration',
+                        label: 'Install the Upstash Rate Limiting integration'
+                      },
+                      {
+                        id: 'guides-application-development-integrations-waiting-room',
+                        label: 'Install the Upstash Waiting Room integration'
+                      },
+                      {
+                        id: 'guides-application-development-integrations-signed-cookies',
+                        label: 'Install the Signed Cookies integration'
+                      },
+                      {
+                        id: 'guides-application-development-integrations-process-request-data-into-headers',
+                        label: 'Install the Process Request Data Into Headers integration'
+                      },
+                      {
+                        id: 'guides-application-development-integrations-request-variation-controller',
+                        label: 'Install the Request Variation Controller integration'
+                      },
+                      {
+                        id: 'guides-application-development-integrations-send-event-to-endpoint',
+                        label: 'Install the Send Event to Endpoint integration'
+                      },
+                      {
+                        id: 'guides-application-development-integrations-send-messages-to-a-queue',
+                        label: 'Install the Send messages to a queue integration'
+                      },
+                      {
+                        id: 'guides-application-development-integrations-method-and-route-validator',
+                        label: 'Install the Method and Route Validator integration'
+                      },
+                      {
+                        id: 'guides-application-development-integrations-publish-a-message-to-upstash-qstash-from-a-function',
+                        label: 'Publish a message to Upstash QStash from a function'
+                      }
+                    ]
+                  },
+                  {
+                    id: 'use-cases-build-and-run-applications-automation',
+                    label: 'Automation',
+                    children: [
+                      {
+                        id: 'guides-application-development-automation-edge-services-first-steps',
+                        label: 'Creating an Edge Service'
+                      },
+                      {
+                        id: 'guides-application-development-automation-edge-node-first-steps',
+                        label: 'Edge Node first steps'
+                      },
+                      {
+                        id: 'guides-application-development-automation-authorize-an-edge-node',
+                        label: 'How to authorize an edge node'
+                      },
+                      {
+                        id: 'guides-application-development-automation-bind-service-node',
+                        label: 'How to bind an edge service to an edge node'
+                      },
+                      {
+                        id: 'guides-application-development-automation-create-edge-service',
+                        label: 'How to create an edge service'
+                      },
+                      {
+                        id: 'guides-application-development-automation-install-orchestrator-agent',
+                        label: 'How to install Orchestrator Agent'
+                      },
+                      {
+                        id: 'guides-application-development-automation-azion-github-app',
+                        label: 'Manage the Azion GitHub App'
+                      },
+                      {
+                        id: 'guides-application-development-automation-provision-files',
+                        label: 'How to provision files'
+                      },
+                      {
+                        id: 'guides-application-development-automation-run-mcp-server',
+                        label: 'Run an MCP server on Azion'
+                      },
+                      {
+                        id: 'guides-application-development-automation-deploy-static-site-with-mcp',
+                        label: 'Deploy a static site with the MCP server'
+                      },
+                      {
+                        id: 'guides-application-development-automation-search-azion-docs-with-mcp',
+                        label: 'Search Azion docs with the MCP server'
+                      },
+                      {
+                        id: 'guides-application-development-automation-troubleshoot-deployments-with-mcp',
+                        label: 'Troubleshoot a deployment with the MCP server'
+                      },
+                      {
+                        id: 'guides-application-development-automation-run-scripts',
+                        label: 'How to run scripts on edge nodes'
+                      },
+                      {
+                        id: 'guides-application-development-automation-unbind-service',
+                        label: 'How to unbind an edge service'
+                      },
+                      {
+                        id: 'guides-application-development-automation-uninstall-agent',
+                        label: 'How to uninstall Orchestrator Agent'
+                      },
+                      {
+                        id: 'guides-application-development-automation-watch-logs',
+                        label: 'Watch Orchestrator logs'
+                      },
+                      {
+                        id: 'guides-application-development-automation-work-with-variables',
+                        label: 'How to work with variables'
+                      },
+                      {
+                        id: 'guides-application-development-automation-import-an-existing-project-from-github',
+                        label: 'Import a project from GitHub'
+                      },
+                      {
+                        id: 'guides-application-development-automation-route-an-api-path-to-a-backend',
+                        label: 'Route an API path to a backend from azion.config'
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                id: 'use-cases-improve-application-performance-and-reliability',
+                label: 'Improve application performance and reliability',
+                children: [
+                  {
+                    id: 'use-cases-improve-application-performance-and-reliability-cache-and-purge',
+                    label: 'Cache and purge',
+                    children: [
+                      {
+                        id: 'guides-application-performance-cache-and-purge-advanced-cache-key',
+                        label: 'Configure Advanced Cache Key for an application'
+                      },
+                      {
+                        id: 'guides-application-performance-cache-and-purge-cache-settings',
+                        label: 'Configure cache policies for an application'
+                      },
+                      {
+                        id: 'guides-application-performance-cache-and-purge-cache-post-and-options-responses',
+                        label: 'Cache POST and OPTIONS responses'
+                      },
+                      {
+                        id: 'guides-application-performance-cache-and-purge-tune-cache-settings',
+                        label: 'Create a cache setting'
+                      },
+                      {
+                        id: 'guides-application-performance-cache-and-purge-check-page-cache-time',
+                        label: 'Check the cache status of a response'
+                      },
+                      {
+                        id: 'guides-application-performance-cache-and-purge-purge-cached-content',
+                        label: 'Purge cached content'
+                      },
+                      {
+                        id: 'guides-application-performance-cache-and-purge-purge-on-publish',
+                        label: 'Purge pages when the origin publishes a change'
+                      },
+                      {
+                        id: 'guides-application-performance-cache-and-purge-test-cache-with-mcp',
+                        label: 'Test cache behavior with the MCP server'
+                      }
+                    ]
+                  },
+                  {
+                    id: 'use-cases-improve-application-performance-and-reliability-delivery-optimization',
+                    label: 'Delivery optimization',
+                    children: [
+                      {
+                        id: 'guides-application-performance-delivery-optimization-gzip-compression',
+                        label: 'Compress application responses with gzip'
+                      },
+                      {
+                        id: 'guides-application-performance-delivery-optimization-process-images',
+                        label: 'Configure Image Processor on an application'
+                      }
+                    ]
+                  },
+                  {
+                    id: 'use-cases-improve-application-performance-and-reliability-availability',
+                    label: 'Availability',
+                    children: [
+                      {
+                        id: 'guides-application-performance-availability-multiple-origins',
+                        label: 'Balance traffic across multiple origins'
+                      },
+                      {
+                        id: 'guides-application-performance-availability-add-a-backup-origin-to-a-connector',
+                        label: 'Add a backup origin to a connector'
+                      },
+                      {
+                        id: 'guides-application-performance-availability-shift-traffic-between-two-origins-by-weight',
+                        label: 'Shift traffic between two origins by weight'
+                      },
+                      {
+                        id: 'guides-application-performance-availability-show-your-own-page-when-no-origin-answers',
+                        label: 'Show your own page when no origin answers'
+                      },
+                      {
+                        id: 'guides-application-performance-availability-route-requests-by-country-or-continent',
+                        label: 'Route requests by country or continent'
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                id: 'use-cases-build-and-run-ai-workloads',
+                label: 'Build and run AI workloads',
+                children: [
+                  {
+                    id: 'use-cases-build-and-run-ai-workloads-inference',
+                    label: 'Inference',
+                    children: [
+                      {
+                        id: 'guides-ai-inference-scan-uploads-with-ai-inference',
+                        label: 'Scan file uploads with an AI Inference firewall function'
+                      },
+                      {
+                        id: 'guides-ai-inference-call-a-model-on-ai-inference-from-a-function',
+                        label: 'Call a model on AI Inference from a function'
+                      }
+                    ]
+                  },
+                  {
+                    id: 'use-cases-build-and-run-ai-workloads-agents-and-rag',
+                    label: 'Agents and RAG',
+                    children: [
+                      {
+                        id: 'guides-ai-agents-and-rag-embed-documents-into-a-vector-table',
+                        label: 'Embed documents into a vector table with AI Inference'
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                id: 'use-cases-secure-applications-and-networks',
+                label: 'Secure applications and networks',
+                children: [
+                  {
+                    id: 'use-cases-secure-applications-and-networks-firewall-and-waf',
+                    label: 'Firewall and WAF',
+                    children: [
+                      {
+                        id: 'guides-application-security-firewall-and-waf-waf-rules-for-specific-cookie',
+                        label: 'Apply a WAF rule set to a specific cookie'
+                      },
+                      {
+                        id: 'guides-application-security-firewall-and-waf-work-with-rules-engine',
+                        label: 'Create a firewall rule'
+                      },
+                      {
+                        id: 'guides-application-security-firewall-and-waf-how-to-check-your-waf-mode',
+                        label: 'Check or change the WAF mode'
+                      },
+                      {
+                        id: 'guides-application-security-firewall-and-waf-configure-waf-allowed-rules',
+                        label: 'Create a WAF exception'
+                      },
+                      {
+                        id: 'guides-application-security-firewall-and-waf-firewall-configure-main-settings',
+                        label: "Set a firewall's main settings"
+                      },
+                      {
+                        id: 'guides-application-security-firewall-and-waf-create-waf-rule-set',
+                        label: 'Create and apply a WAF rule set'
+                      },
+                      {
+                        id: 'guides-application-security-firewall-and-waf-how-to-find-waf-score',
+                        label: 'Find the WAF score of a blocked request'
+                      },
+                      {
+                        id: 'guides-application-security-firewall-and-waf-instantiate-functions',
+                        label: 'Instantiate a function on a firewall'
+                      },
+                      {
+                        id: 'guides-application-security-firewall-and-waf-tune-waf',
+                        label: 'Tune a WAF rule set'
+                      },
+                      {
+                        id: 'guides-application-security-firewall-and-waf-integrate-siems',
+                        label: 'Stream WAF events to a SIEM'
+                      },
+                      {
+                        id: 'guides-application-security-firewall-and-waf-how-to-update-your-firewall',
+                        label: 'Move deprecated rule sets to a firewall'
+                      },
+                      {
+                        id: 'guides-application-security-firewall-and-waf-mitigate-cve-2025-29927-nextjs',
+                        label: 'Mitigate CVE-2025-29927 in Next.js'
+                      },
+                      {
+                        id: 'guides-application-security-firewall-and-waf-firewall-protect-your-domain',
+                        label: 'Bind a firewall to a workload'
+                      },
+                      {
+                        id: 'guides-application-security-firewall-and-waf-rule-set-medium',
+                        label: 'Create a rule set at medium sensitivity'
+                      },
+                      {
+                        id: 'guides-application-security-firewall-and-waf-apply-rule-set',
+                        label: 'Apply a rule set to every request'
+                      },
+                      {
+                        id: 'guides-application-security-firewall-and-waf-switch-to-blocking',
+                        label: 'Switch a rule set to blocking'
+                      },
+                      {
+                        id: 'guides-application-security-firewall-and-waf-exempt-query-parameter',
+                        label: 'Exempt one query string parameter'
+                      },
+                      {
+                        id: 'guides-application-security-firewall-and-waf-exempt-request-header',
+                        label: 'Exempt one request header'
+                      },
+                      {
+                        id: 'guides-application-security-firewall-and-waf-raise-one-threat-family',
+                        label: 'Raise the sensitivity of one threat family'
+                      },
+                      {
+                        id: 'guides-application-security-firewall-and-waf-read-block-score',
+                        label: 'Read the score of a blocked request'
+                      },
+                      {
+                        id: 'guides-application-security-firewall-and-waf-config-file-binding',
+                        label: 'Bind a rule set in azion.config.js'
+                      },
+                      {
+                        id: 'guides-application-security-firewall-and-waf-apply-waf-and-rate-limit-to-one-path',
+                        label: 'Apply WAF and a rate limit to one path'
+                      }
+                    ]
+                  },
+                  {
+                    id: 'use-cases-secure-applications-and-networks-bots-and-network',
+                    label: 'Bots and network',
+                    children: [
+                      {
+                        id: 'guides-application-security-bots-and-network-blocklists-ip-addresses-edge',
+                        label: 'Block requests by IP, ASN, or country'
+                      },
+                      {
+                        id: 'guides-application-security-bots-and-network-block-tor-networks',
+                        label: 'Block Tor exit nodes'
+                      },
+                      {
+                        id: 'guides-application-security-bots-and-network-manage-bots',
+                        label: 'Manage bots with Bot Manager'
+                      },
+                      {
+                        id: 'guides-application-security-bots-and-network-monitor-and-calibrate-bot-manager',
+                        label: 'Monitor and calibrate Bot Manager'
+                      },
+                      {
+                        id: 'guides-application-security-bots-and-network-observation-mode',
+                        label: 'Run Bot Manager in observation mode'
+                      },
+                      {
+                        id: 'guides-application-security-bots-and-network-refuse-above-threshold',
+                        label: 'Refuse requests above the threshold'
+                      },
+                      {
+                        id: 'guides-application-security-bots-and-network-run-on-every-request',
+                        label: 'Run Bot Manager on every request'
+                      },
+                      {
+                        id: 'guides-application-security-bots-and-network-read-the-report-log',
+                        label: 'Read the report log for one instance'
+                      },
+                      {
+                        id: 'guides-application-security-bots-and-network-deny-countries',
+                        label: 'Deny requests from a list of countries'
+                      },
+                      {
+                        id: 'guides-application-security-bots-and-network-deny-asn',
+                        label: 'Deny requests from one autonomous system'
+                      },
+                      {
+                        id: 'guides-application-security-bots-and-network-guard-one-path',
+                        label: 'Guard one path with a network list'
+                      },
+                      {
+                        id: 'guides-application-security-bots-and-network-allowlist',
+                        label: 'Allow only the addresses in a list'
+                      },
+                      {
+                        id: 'guides-application-security-bots-and-network-rate-limit-list',
+                        label: 'Rate-limit the addresses in a list'
+                      },
+                      {
+                        id: 'guides-application-security-bots-and-network-temporary-block',
+                        label: 'Block addresses until a date'
+                      },
+                      {
+                        id: 'guides-application-security-bots-and-network-restrict-an-origin-to-azion-with-origin-ip-acl',
+                        label: 'Restrict an origin to Azion with Origin IP ACL'
+                      },
+                      {
+                        id: 'guides-application-security-bots-and-network-run-bot-manager-on-selected-paths',
+                        label: 'Run Bot Manager on selected paths'
+                      },
+                      {
+                        id: 'guides-application-security-bots-and-network-update-network-list-from-automation',
+                        label: 'Update a network list from an automation'
+                      }
+                    ]
+                  },
+                  {
+                    id: 'use-cases-secure-applications-and-networks-tls-and-certificates',
+                    label: 'TLS and certificates',
+                    children: [
+                      {
+                        id: 'guides-application-security-tls-and-certificates-digital-certificates',
+                        label: 'Upload a digital certificate'
+                      },
+                      {
+                        id: 'guides-application-security-tls-and-certificates-lets-encrypt-record',
+                        label: "Add the Let's Encrypt TXT record"
+                      },
+                      {
+                        id: 'guides-application-security-tls-and-certificates-associate-an-mtls-certificate',
+                        label: 'Configure mTLS on a workload'
+                      },
+                      {
+                        id: 'guides-application-security-tls-and-certificates-ciphers',
+                        label: 'Set the TLS cipher suite'
+                      },
+                      {
+                        id: 'guides-application-security-tls-and-certificates-how-to-generate-a-lets-encrypt-certificate',
+                        label: "Request a Let's Encrypt certificate"
+                      },
+                      {
+                        id: 'guides-application-security-tls-and-certificates-how-to-generate-a-lets-encrypt-certificate-via-api',
+                        label: 'Request a certificate with the API'
+                      },
+                      {
+                        id: 'guides-application-security-tls-and-certificates-post-quantum-cryptography',
+                        label: 'Verify post-quantum key exchange'
+                      },
+                      {
+                        id: 'guides-application-security-tls-and-certificates-redirect-http-to-https',
+                        label: 'Redirect HTTP to HTTPS'
+                      }
+                    ]
+                  },
+                  {
+                    id: 'use-cases-secure-applications-and-networks-dns',
+                    label: 'DNS',
+                    children: [
+                      {
+                        id: 'guides-application-security-dns-edge-dns-configure-main-settings',
+                        label: 'Create, edit, or delete a zone'
+                      },
+                      {
+                        id: 'guides-application-security-dns-add-records',
+                        label: 'Add, edit, or delete a record'
+                      },
+                      {
+                        id: 'guides-application-security-dns-access-root-domain',
+                        label: 'Point an apex domain with ANAME'
+                      },
+                      {
+                        id: 'guides-application-security-dns-load-balance-dns',
+                        label: 'Weight records to balance traffic'
+                      },
+                      {
+                        id: 'guides-application-security-dns-activate-dnssec',
+                        label: 'Turn on DNSSEC for a zone'
+                      },
+                      {
+                        id: 'guides-application-security-dns-cname-subdomain',
+                        label: 'Point a subdomain with a CNAME record'
+                      },
+                      {
+                        id: 'guides-application-security-dns-mx-records',
+                        label: 'Receive mail with MX records'
+                      },
+                      {
+                        id: 'guides-application-security-dns-txt-verification',
+                        label: 'Verify a domain with a TXT record'
+                      },
+                      {
+                        id: 'guides-application-security-dns-caa-record',
+                        label: 'Restrict issuers with a CAA record'
+                      },
+                      {
+                        id: 'guides-application-security-dns-wildcard-record',
+                        label: 'Match subdomains with a wildcard record'
+                      },
+                      {
+                        id: 'guides-application-security-dns-run-the-dig-command',
+                        label: 'Query a zone with dig'
+                      },
+                      {
+                        id: 'guides-application-security-dns-run-the-traceroute-command',
+                        label: 'Trace the route to a host'
+                      }
+                    ]
+                  },
+                  {
+                    id: 'use-cases-secure-applications-and-networks-access-and-compliance',
+                    label: 'Access and compliance',
+                    children: [
+                      {
+                        id: 'guides-application-security-access-and-compliance-microsoft-entra-automated-user-provisioning',
+                        label: 'Provision Microsoft Entra users with SCIM'
+                      },
+                      {
+                        id: 'guides-application-security-access-and-compliance-account-lockout-policy-logs',
+                        label: 'Check Account Lockout Policy logs'
+                      },
+                      {
+                        id: 'guides-application-security-access-and-compliance-configure-account-lockout-policy',
+                        label: 'Configure Account Lockout Policy'
+                      },
+                      {
+                        id: 'guides-application-security-access-and-compliance-configure-user-session-timeout',
+                        label: 'Configure User Session Timeout'
+                      },
+                      {
+                        id: 'guides-application-security-access-and-compliance-conditional-access-by-ip-address',
+                        label: 'Manage conditional access by IP address'
+                      },
+                      {
+                        id: 'guides-application-security-access-and-compliance-unlock-account-lockout-policy',
+                        label: 'Unlock a user from Account Lockout Policy'
+                      },
+                      {
+                        id: 'guides-application-security-access-and-compliance-sso-google-saml',
+                        label: 'Configure Google SAML for SSO'
+                      },
+                      {
+                        id: 'guides-application-security-access-and-compliance-sso-microsoft-entra-saml',
+                        label: 'Configure Microsoft Entra SAML for SSO'
+                      },
+                      {
+                        id: 'guides-application-security-access-and-compliance-sso-okta-saml',
+                        label: 'Configure Okta SAML for SSO'
+                      },
+                      {
+                        id: 'guides-application-security-access-and-compliance-verify-account-migration',
+                        label: "Verify your account's API version"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                id: 'use-cases-deliver-media-and-streaming-content',
+                label: 'Deliver media and streaming content',
+                children: [
+                  {
+                    id: 'use-cases-deliver-media-and-streaming-content-streaming',
+                    label: 'Streaming',
+                    children: [
+                      {
+                        id: 'guides-media-and-streaming-streaming-enforce-hls-cache',
+                        label: 'Enforce HLS cache for live streaming'
+                      },
+                      {
+                        id: 'guides-media-and-streaming-streaming-static-cache-videoteca-template',
+                        label: 'Static Cache + Videoteca Player template'
+                      },
+                      {
+                        id: 'guides-media-and-streaming-streaming-videofront-player',
+                        label: 'Install the Videoteca Player integration'
+                      },
+                      {
+                        id: 'guides-media-and-streaming-streaming-deliver-a-live-stream-from-live-ingest',
+                        label: 'Deliver a live stream from Live Ingest'
+                      },
+                      {
+                        id: 'guides-media-and-streaming-streaming-cache-an-on-demand-hls-library-by-file-extension',
+                        label: 'Cache an on-demand HLS library by file extension'
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                id: 'use-cases-platform',
+                label: 'Platform',
+                children: [
+                  {
+                    id: 'use-cases-platform-migration',
+                    label: 'Migration',
+                    children: [
+                      {
+                        id: 'guides-migration-configure-a-domain',
+                        label: 'Add a custom domain to a workload'
+                      },
+                      {
+                        id: 'guides-migration-migrate-ns-to-azion',
+                        label: 'Migrate nameservers to Azion'
+                      },
+                      {
+                        id: 'guides-migration-point-domain-to-azion',
+                        label: 'Point a domain to a workload'
+                      },
+                      {
+                        id: 'guides-migration-akamai-migration-guide',
+                        label: 'Migrate from Akamai to Azion'
+                      },
+                      {
+                        id: 'guides-migration-aws-migration-guide',
+                        label: 'Migrate from AWS to Azion'
+                      },
+                      {
+                        id: 'guides-migration-cloudflare-migration-guide',
+                        label: 'Migrate from Cloudflare to Azion'
+                      },
+                      {
+                        id: 'guides-migration-fastly-migration-guide',
+                        label: 'Migrate from Fastly to Azion'
+                      },
+                      {
+                        id: 'guides-migration-vercel-migration-guide',
+                        label: 'Migrate from Vercel to Azion'
+                      },
+                      {
+                        id: 'use-cases-platform-migration-migrate-from-provider-v1-x-to-v2-0',
+                        label: 'Migrate from provider v1.x to v2.0',
+                        ref: true
+                      }
+                    ]
+                  },
+                  {
+                    id: 'use-cases-platform-account-and-billing',
+                    label: 'Account and billing',
+                    children: [
+                      {
+                        id: 'guides-account-and-billing-getting-to-know-azion-console',
+                        label: 'About Azion Console'
+                      },
+                      {
+                        id: 'guides-account-and-billing-activity-history',
+                        label: 'How to access Activity History'
+                      },
+                      {
+                        id: 'guides-account-and-billing-how-to-access-azion-console',
+                        label: 'Access Azion Console'
+                      },
+                      {
+                        id: 'guides-account-and-billing-billing-and-subscriptions',
+                        label: 'Manage billing and payment methods'
+                      },
+                      {
+                        id: 'guides-account-and-billing-account-settings',
+                        label: 'Configure account settings'
+                      },
+                      {
+                        id: 'guides-account-and-billing-delete-account',
+                        label: 'Delete your account'
+                      },
+                      {
+                        id: 'guides-account-and-billing-multi-factor-authentication',
+                        label: 'Enable multi-factor authentication'
+                      },
+                      {
+                        id: 'guides-account-and-billing-personal-tokens',
+                        label: 'Manage personal tokens'
+                      },
+                      {
+                        id: 'guides-account-and-billing-teams-permissions',
+                        label: 'Manage teams and permissions'
+                      },
+                      {
+                        id: 'guides-account-and-billing-users-management',
+                        label: 'Manage users'
+                      },
+                      {
+                        id: 'guides-account-and-billing-create-button',
+                        label: 'Use the + Create button'
+                      },
+                      {
+                        id: 'guides-account-and-billing-sso',
+                        label: 'Configure an identity provider for SSO'
+                      }
+                    ]
+                  },
+                  {
+                    id: 'use-cases-platform-observability',
+                    label: 'Observability',
+                    children: [
+                      {
+                        id: 'guides-observability-azion-plugin-grafana-custom-dash',
+                        label: 'Build a custom Grafana dashboard'
+                      },
+                      {
+                        id: 'guides-observability-azion-plugin-grafana-customize-log-table',
+                        label: 'Customize a Grafana log table'
+                      },
+                      {
+                        id: 'guides-observability-query-workload-events',
+                        label: 'Query HTTP request events'
+                      },
+                      {
+                        id: 'guides-observability-query-function-console-events',
+                        label: 'Query function console logs'
+                      },
+                      {
+                        id: 'guides-observability-export-events-csv',
+                        label: 'Export query results to CSV'
+                      },
+                      {
+                        id: 'guides-observability-add-filters-events',
+                        label: 'Filter events'
+                      },
+                      {
+                        id: 'guides-observability-add-filters-metrics',
+                        label: 'Filter a dashboard'
+                      },
+                      {
+                        id: 'guides-observability-analyze-metrics',
+                        label: "Export a chart's data and query"
+                      },
+                      {
+                        id: 'guides-observability-break-down-requests-by-status-code',
+                        label: 'Break down requests by status code'
+                      },
+                      {
+                        id: 'guides-observability-measure-cache-offload',
+                        label: 'Measure cache offload for a domain'
+                      },
+                      {
+                        id: 'guides-observability-find-top-waf-threat-sources',
+                        label: 'Find the top sources of WAF threats'
+                      },
+                      {
+                        id: 'guides-observability-data-stream-associate-workloads',
+                        label: 'Associate workloads with a stream'
+                      },
+                      {
+                        id: 'guides-observability-configure-sampling',
+                        label: 'Configure sampling on a stream'
+                      },
+                      {
+                        id: 'guides-observability-debugging-functions-data-stream',
+                        label: 'Debug functions with Data Stream'
+                      },
+                      {
+                        id: 'guides-observability-query-top-attacks-with-graphql',
+                        label: 'Find the top attacks with GraphQL'
+                      },
+                      {
+                        id: 'guides-observability-generate-graphql-queries-with-mcp',
+                        label: 'Generate GraphQL queries with the MCP server'
+                      },
+                      {
+                        id: 'guides-observability-integrate-grafana',
+                        label: 'Install the Azion plugin for Grafana'
+                      },
+                      {
+                        id: 'guides-observability-graphql-aggregated-data',
+                        label: 'Query aggregated data with GraphQL'
+                      },
+                      {
+                        id: 'guides-observability-query-bot-manager-data-with-graphql',
+                        label: 'Query Bot Manager data with GraphQL'
+                      },
+                      {
+                        id: 'guides-observability-query-connected-users-data-with-graphql',
+                        label: 'Query Live Ingest connected users'
+                      },
+                      {
+                        id: 'guides-observability-query-graphql-postman',
+                        label: 'Run GraphQL queries in Postman'
+                      },
+                      {
+                        id: 'guides-observability-graphql-metadata',
+                        label: 'Query GraphQL schema metadata'
+                      },
+                      {
+                        id: 'guides-observability-query-applications-usage-data-with-graphql',
+                        label: 'Query usage data from Applications'
+                      },
+                      {
+                        id: 'guides-observability-query-data-stream-usage-data-with-graphql',
+                        label: 'Query Data Stream usage data'
+                      },
+                      {
+                        id: 'guides-observability-query-functions-usage-data-with-graphql',
+                        label: 'Query usage data from Functions'
+                      },
+                      {
+                        id: 'guides-observability-query-image-processor-usage-data-with-graphql',
+                        label: 'Query usage data from Image Processor'
+                      },
+                      {
+                        id: 'guides-observability-query-tiered-cache-usage-data-with-graphql',
+                        label: 'Query usage data from Tiered Cache'
+                      },
+                      {
+                        id: 'guides-observability-graphql-top-x-query',
+                        label: 'Find the top values with GraphQL'
+                      },
+                      {
+                        id: 'guides-observability-data-stream-set-payload',
+                        label: 'Customize the HTTP POST payload'
+                      },
+                      {
+                        id: 'guides-observability-delete-data-stream',
+                        label: 'Edit, stop, or delete a stream'
+                      },
+                      {
+                        id: 'guides-observability-understand-logs',
+                        label: 'Read an event record'
+                      },
+                      {
+                        id: 'guides-observability-endpoint-amazon-s3',
+                        label: 'Send logs to Amazon S3'
+                      },
+                      {
+                        id: 'guides-observability-endpoint-datadog',
+                        label: 'Send logs to Datadog'
+                      },
+                      {
+                        id: 'guides-observability-best-practices-grafana',
+                        label: 'Build a Grafana query against Azion data'
+                      },
+                      {
+                        id: 'guides-observability-endpoint-splunk',
+                        label: 'Send logs to Splunk'
+                      },
+                      {
+                        id: 'guides-observability-query-top-ips-attack-traffic-with-graphql',
+                        label: 'Find the IPs behind attack traffic'
+                      },
+                      {
+                        id: 'guides-observability-investigate-requests-graphql-api',
+                        label: 'Investigate a request with the GraphQL API'
+                      },
+                      {
+                        id: 'guides-observability-query-httpbreakdownmetrics-data-with-graphql',
+                        label: 'Query the httpBreakdownMetrics dataset'
+                      },
+                      {
+                        id: 'guides-observability-query-bot-manager-breakdown-data-with-graphql',
+                        label: 'Query the top URLs bots reach with GraphQL'
+                      },
+                      {
+                        id: 'guides-observability-endpoint-amazon-kinesis',
+                        label: 'Send logs to AWS Kinesis Data Firehose'
+                      },
+                      {
+                        id: 'guides-observability-endpoint-azure-blob',
+                        label: 'Send logs to Azure Blob Storage'
+                      },
+                      {
+                        id: 'guides-observability-endpoint-azure-monitor',
+                        label: 'Send logs to Azure Monitor'
+                      },
+                      {
+                        id: 'guides-observability-endpoint-elasticsearch',
+                        label: 'Send logs to Elasticsearch'
+                      },
+                      {
+                        id: 'guides-observability-endpoint-google-bigquery',
+                        label: 'Send logs to Google BigQuery'
+                      },
+                      {
+                        id: 'guides-observability-connector-azion-object-storage',
+                        label: 'Send logs to Object Storage'
+                      },
+                      {
+                        id: 'guides-observability-connector-standard-https-post',
+                        label: 'Send logs to an HTTP endpoint'
+                      },
+                      {
+                        id: 'guides-observability-endpoint-apache-kafka',
+                        label: 'Send logs to Apache Kafka'
+                      },
+                      {
+                        id: 'guides-observability-endpoint-ibm-qradar',
+                        label: 'Send logs to IBM QRadar'
+                      },
+                      {
+                        id: 'guides-observability-azion-plugin-grafana-pre-built-dash',
+                        label: 'Import the pre-built Grafana dashboard'
+                      },
+                      {
+                        id: 'guides-observability-data-transferred-dash',
+                        label: 'Import the Data Transferred dashboard'
+                      },
+                      {
+                        id: 'guides-observability-metrics-dash',
+                        label: 'Import the Real-Time Metrics dashboard'
+                      },
+                      {
+                        id: 'guides-observability-stream-request-and-waf-records-to-siem',
+                        label: 'Stream request and WAF records to a SIEM'
+                      },
+                      {
+                        id: 'guides-observability-query-edge-pulse-measurements-with-graphql',
+                        label: 'Query Edge Pulse measurements with GraphQL'
+                      },
+                      {
+                        id: 'guides-observability-add-the-edge-pulse-tag-to-your-pages',
+                        label: 'Add the Edge Pulse tag to your pages'
+                      }
                     ]
                   }
                 ]
               }
             ]
-          },
-          {
-            id: 'guides-10',
-            label: 'Guides',
-            children: [
-              {
-                id: 'secure-firewall-guides-firewall-configure-main-settings',
-                label: 'How to configure Firewall main settings'
-              },
-              {
-                id: 'secure-firewall-guides-work-with-rules-engine',
-                label: 'Create Firewall Rules with Rules Engine'
-              }
-            ]
-          },
-          {
-            id: 'reference-8',
-            label: 'Reference',
-            children: [
-              { id: 'secure-firewall-reference-functions', label: 'Functions for Firewall' },
-              {
-                id: 'secure-firewall-reference-functions-instances',
-                label: 'Functions Instances for Firewall'
-              },
-              { id: 'secure-firewall-reference-rules-engine', label: 'Rules Engine for Firewall' }
-            ]
           }
         ]
       },
       {
-        id: 'edge-dns',
-        label: 'Edge DNS',
-        children: [
-          { id: 'secure-edge-dns', label: 'About Edge DNS' },
+        id: 'support',
+        label: 'Support',
+        kind: 'drill',
+        href: '/site/docs/support',
+        groups: [
           {
-            id: 'guides-11',
-            label: 'Guides',
-            children: [
+            label: 'Support',
+            items: [
               {
-                id: 'secure-firewall-guides-edge-dns-configure-main-settings',
-                label: 'How to configure Edge DNS main settings'
-              },
-              { id: 'secure-firewall-guides-add-records', label: 'How to add records' },
-              {
-                id: 'secure-edge-dns-guides-run-the-dig-command',
-                label: 'How to look up DNS servers with Dig command'
+                id: 'support-overview',
+                label: 'Support guidelines',
+                href: '/site/docs/support'
               },
               {
-                id: 'secure-edge-dns-guides-run-the-traceroute-command',
-                label: 'Diagnose Issues with the Traceroute Command'
-              }
-            ]
-          },
-          {
-            id: 'reference-9',
-            label: 'Reference',
-            children: [
-              {
-                id: 'secure-edge-dns-reference-dnssec-compatibility',
-                label: 'DNSSEC Compatibility'
-              }
-            ]
-          }
-        ]
-      },
-      {
-        id: 'workloads',
-        label: 'Workloads',
-        children: [
-          { id: 'secure-workloads', label: 'About Workloads' },
-          {
-            id: 'guides-12',
-            label: 'Guides',
-            children: [
-              {
-                id: 'secure-workloads-guides-configure-a-domain',
-                label: 'How to configure a domain'
+                id: 'support-open-tickets',
+                label: 'Open a support ticket'
               },
               {
-                id: 'secure-workloads-guides-create-a-digital-certificate',
-                label: 'How to create a digital certificate'
+                id: 'support-status-and-maintenance',
+                label: 'Azion status and maintenance'
               },
               {
-                id: 'secure-workloads-guides-create-azion-custom-domain',
-                label: 'How to Create an Azion Custom Domain'
-              },
-              {
-                id: 'secure-workloads-guides-migrate-ns-to-azion',
-                label: 'How to migrate nameservers to Azion'
-              },
-              {
-                id: 'secure-workloads-guides-point-domain-to-azion',
-                label: 'How to point a domain to Azion'
-              }
-            ]
-          }
-        ]
-      },
-      {
-        id: 'certificate-manager',
-        label: 'Certificate Manager',
-        children: [
-          { id: 'secure-certificate-manager', label: 'About Certificate Manager' },
-          {
-            id: 'guides-13',
-            label: 'Guides',
-            children: [
-              {
-                id: 'secure-firewall-guides-certificate-manager',
-                label: 'Acquire and Register a Digital Certificate'
-              },
-              { id: 'secure-certificate-manager-guides-mtls', label: 'How to configure mTLS' }
-            ]
-          },
-          {
-            id: 'reference-10',
-            label: 'Reference',
-            children: [
-              {
-                id: 'secure-certificate-manager-reference-mtls',
-                label: 'Support for mTLS for Secure'
-              }
-            ]
-          }
-        ]
-      },
-      {
-        id: 'connectors',
-        label: 'Connectors',
-        children: [
-          { id: 'secure-connectors', label: 'About Connectors' },
-          {
-            id: 'reference-11',
-            label: 'Reference',
-            children: [
-              { id: 'secure-connectors-reference-load-balancer', label: 'Load Balancer' },
-              { id: 'secure-connectors-reference-origin-shield', label: 'Origin Shield' }
-            ]
-          }
-        ]
-      },
-      { id: 'secure-custom-pages', label: 'Custom Pages' },
-      {
-        id: 'bot-manager',
-        label: 'Bot Manager',
-        children: [
-          { id: 'secure-bot-manager', label: 'About Bot Manager' },
-          {
-            id: 'guides-14',
-            label: 'Guides',
-            children: [{ id: 'secure-firewall-guides-manage-bots', label: 'How to manage bots' }]
-          },
-          {
-            id: 'reference-12',
-            label: 'Reference',
-            children: [{ id: 'secure-bot-manager-reference-lite', label: 'Azion Bot Manager Lite' }]
-          }
-        ]
-      }
-    ]
-  },
-  {
-    label: 'Observe',
-    items: [
-      { id: 'observe-overview', label: 'About Observe', href: '/site/docs/observe' },
-      {
-        id: 'data-stream',
-        label: 'Data Stream',
-        children: [
-          { id: 'observe-data-stream', label: 'About Data Stream' },
-          { id: 'observe-data-stream-quickstart', label: 'Data Stream quickstart' },
-          {
-            id: 'guides-15',
-            label: 'Guides',
-            children: [
-              {
-                id: 'observe-data-stream-guides-add-filters-metrics',
-                label: 'How to add filters on Real-Time Metrics'
-              },
-              {
-                id: 'observe-data-stream-guides-analyze-metrics',
-                label: 'How to analyze metrics on Real-Time Metrics'
-              },
-              {
-                id: 'observe-data-stream-guides-configure-sampling',
-                label: 'How to configure sampling on Data Stream'
-              },
-              {
-                id: 'observe-data-stream-guides-data-stream-associate-domains',
-                label: 'How to associate domains on Data Stream'
-              },
-              {
-                id: 'observe-data-stream-guides-data-stream-select-variables',
-                label: 'How to select variables on Data Stream'
-              },
-              {
-                id: 'observe-data-stream-guides-endpoint-amazon-s3',
-                label: 'How to use Amazon S3 to receive data from Data Stream'
-              },
-              {
-                id: 'observe-data-stream-guides-understand-logs',
-                label: 'How to understand Real-Time Events logs'
-              },
-              {
-                id: 'observe-data-stream-guides-use-data-stream',
-                label: 'How to configure Data Stream main settings'
-              }
-            ]
-          }
-        ]
-      },
-      {
-        id: 'edge-pulse',
-        label: 'Edge Pulse',
-        children: [
-          { id: 'observe-edge-pulse', label: 'About Edge Pulse' },
-          { id: 'observe-edge-pulse-quickstart', label: 'Edge Pulse first steps' }
-        ]
-      },
-      {
-        id: 'real-time-events',
-        label: 'Real Time Events',
-        children: [
-          { id: 'observe-real-time-events', label: 'About Real Time Events' },
-          { id: 'observe-real-time-events-quickstart', label: 'Real-Time Events first steps' }
-        ]
-      },
-      {
-        id: 'real-time-metrics',
-        label: 'Real Time Metrics',
-        children: [
-          { id: 'observe-real-time-metrics', label: 'About Real Time Metrics' },
-          { id: 'observe-real-time-metrics-quickstart', label: 'Real-Time Metrics first steps' },
-          {
-            id: 'guides-16',
-            label: 'Guides',
-            children: [
-              {
-                id: 'observe-real-time-metrics-guides-azion-plugin-grafana-custom',
-                label: 'Customize a Grafana Dashboard with Azion Plugin'
-              },
-              {
-                id: 'observe-real-time-metrics-guides-azion-plugin-grafana-custom-2',
-                label: 'Customize a Log Table with Azion Plugin'
-              },
-              {
-                id: 'observe-real-time-metrics-guides-azion-plugin-grafana-pre-bu',
-                label: 'Use a Pre-Built Grafana Dashboard with Azion'
-              },
-              {
-                id: 'observe-real-time-metrics-guides-best-practices-grafana',
-                label: 'How to use Grafana with best practices'
-              },
-              {
-                id: 'observe-real-time-metrics-guides-data-transferred-dash',
-                label: 'Data Transferred dashboard on Grafana JSON example'
-              },
-              {
-                id: 'observe-real-time-metrics-guides-integrate-grafana',
-                label: 'How to integrate Azion with Grafana'
-              },
-              {
-                id: 'observe-real-time-metrics-guides-metrics-dash',
-                label: 'Real-Time Metrics GraphQL Dashboard for Grafana'
-              },
-              {
-                id: 'observe-real-time-metrics-guides-use-real-time-metrics',
-                label: 'How to use Real-Time Metrics'
-              }
-            ]
-          },
-          {
-            id: 'reference-13',
-            label: 'Reference',
-            children: [
-              {
-                id: 'observe-real-time-metrics-reference-historical-real-time-met',
-                label: 'Historical Real-Time Metrics'
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  },
-  {
-    label: 'Resources',
-    items: [
-      { id: 'guides-17', label: 'Guides' },
-      {
-        id: 'architectures',
-        label: 'Architectures',
-        children: [
-          { id: 'architectures-2', label: 'About Architectures' },
-          {
-            id: 'api-gateways',
-            label: 'API Gateways',
-            children: [
-              {
-                id: 'architectures-api-gateways-implement-api-gateways-security',
-                label: 'Secure Your API Gateway with a Perimeter'
-              }
-            ]
-          },
-          {
-            id: 'applications-2',
-            label: 'Applications',
-            children: [
-              {
-                id: 'architectures-applications-application-acceleration',
-                label: 'Accelerate Applications and APIs with Edge Computing'
-              },
-              {
-                id: 'architectures-applications-application-modernization',
-                label: 'Accelerate Application Modernization at the Edge'
-              },
-              {
-                id: 'architectures-applications-content-delivery',
-                label: 'Boost Content Delivery Speed at the Edge'
-              },
-              {
-                id: 'architectures-applications-edge-enhanced-applications',
-                label: 'Enhance Applications with Edge Computing'
-              },
-              {
-                id: 'architectures-applications-edge-native-applications',
-                label: 'Develop edge-native applications with Azion'
-              },
-              {
-                id: 'architectures-applications-image-processing',
-                label: 'Optimize and process images with Azion Web Platform'
-              },
-              {
-                id: 'architectures-applications-microservices-applications',
-                label: 'Build Microservices Apps with Functions'
-              },
-              {
-                id: 'architectures-applications-serverless-applications',
-                label: 'Implement Serverless Architecture with Azion'
-              }
-            ]
-          },
-          {
-            id: 'artificial-intelligence',
-            label: 'Artificial Intelligence',
-            children: [
-              {
-                id: 'architectures-artificial-intelligence-ai-agent-copilot-assis',
-                label: 'Build a Copilot Assistant with a ReAct AI Agent'
-              },
-              {
-                id: 'architectures-artificial-intelligence-ai-agent-third-party-l',
-                label: 'AI Agents Configuration for Third Party LLM Providers'
-              },
-              {
-                id: 'architectures-artificial-intelligence-ai-inference-architect',
-                label: 'Implement AI Inference in your applications'
-              },
-              {
-                id: 'architectures-artificial-intelligence-autonomous-security-ai',
-                label: 'AI Inference for Threat Protection in Uploads'
-              }
-            ]
-          },
-          {
-            id: 'bot-management',
-            label: 'Bot Management',
-            children: [
-              {
-                id: 'architectures-bot-management-protect-your-applications-with-',
-                label: 'Protect Your Apps with Bot Management'
-              }
-            ]
-          },
-          {
-            id: 'by-solution',
-            label: 'By solution',
-            children: [
-              {
-                id: 'architectures-by-solution-application-and-infrastructure-aut',
-                label: 'Application and Infrastructure Automation'
-              },
-              {
-                id: 'architectures-by-solution-application-and-network-security',
-                label: 'Application and Network Security'
-              },
-              {
-                id: 'architectures-by-solution-application-development',
-                label: 'Application Development'
-              },
-              {
-                id: 'architectures-by-solution-artificial-intelligence',
-                label: 'Artificial Intelligence (AI)'
-              },
-              {
-                id: 'architectures-by-solution-service-performance-and-reliabilit',
-                label: 'Service Performance and Reliability'
-              }
-            ]
-          },
-          {
-            id: 'deploy',
-            label: 'Deploy',
-            children: [
-              {
-                id: 'architectures-deploy-application-delivery',
-                label: 'Streamline App Delivery with Orchestrator'
-              },
-              {
-                id: 'architectures-deploy-infrastructure-orchestration',
-                label: 'Automate Infrastructure with Azion Orchestrator'
-              }
-            ]
-          },
-          {
-            id: 'firewall-2',
-            label: 'Firewall',
-            children: [
-              {
-                id: 'architectures-firewall-online-fraud-prevention',
-                label: 'Reinforce Online Fraud Prevention'
-              },
-              {
-                id: 'architectures-firewall-web-application-and-api-protection-wa',
-                label: 'Enhance Cybersecurity with Azion WAAP'
-              }
-            ]
-          },
-          {
-            id: 'jamstack',
-            label: 'Jamstack',
-            children: [
-              {
-                id: 'architectures-jamstack-deploy-jamstack-applications',
-                label: 'Deploy Jamstack Websites at the Edge'
-              }
-            ]
-          },
-          {
-            id: 'live-streaming-delivery',
-            label: 'Live Streaming Delivery',
-            children: [
-              {
-                id: 'architectures-live-streaming-delivery-live-streaming-deliver',
-                label: 'Optimize Video Delivery with Live Streaming'
-              }
-            ]
-          },
-          {
-            id: 'security-automation',
-            label: 'Security Automation',
-            children: [
-              {
-                id: 'architectures-security-automation-security-automation-with-e',
-                label: 'Protect Your Business with Security Automation'
-              }
-            ]
-          },
-          {
-            id: 'security-modernization',
-            label: 'Security Modernization',
-            children: [
-              {
-                id: 'architectures-security-modernization-security-modernization-',
-                label: 'Accelerate security modernization with edge computing'
+                id: 'support-troubleshooting',
+                label: 'Troubleshooting',
+                children: [
+                  {
+                    id: 'support-gather-information',
+                    label: 'Gather information for Azion Support'
+                  },
+                  {
+                    id: 'support-diagnostic-headers',
+                    label: 'Diagnostic response headers'
+                  },
+                  {
+                    id: 'support-basic-troubleshooting',
+                    label: 'Basic troubleshooting'
+                  },
+                  {
+                    id: 'support-account-access',
+                    label: 'Azion Console sign-in'
+                  },
+                  {
+                    id: 'support-original-ip-header',
+                    label: 'Send the client IP to the origin'
+                  },
+                  {
+                    id: 'support-retrieve-azion-ip-ranges',
+                    label: "Allow Azion's IP ranges at your origin"
+                  }
+                ]
               }
             ]
           }
@@ -1073,44 +1917,76 @@ export const docsNavSections = [
       {
         id: 'marketplace',
         label: 'Marketplace',
-        children: [
+        kind: 'drill',
+        href: '/site/docs/marketplace',
+        groups: [
           {
-            id: 'guides-18',
-            label: 'Guides',
-            children: [
+            label: 'Marketplace',
+            items: [
               {
-                id: 'marketplace-guides-install-an-integration',
-                label: 'How to install an integration'
+                id: 'marketplace-overview',
+                label: 'Overview',
+                href: '/site/docs/marketplace'
               },
               {
-                id: 'marketplace-guides-update-an-integration',
-                label: 'How to update an integration'
-              }
-            ]
-          },
-          {
-            id: 'reference-14',
-            label: 'Reference',
-            children: [
-              { id: 'marketplace-reference-first-steps', label: 'Azion Marketplace first steps' },
-              { id: 'marketplace-reference-integrations', label: 'Azion Integrations' },
-              {
-                id: 'marketplace-reference-isv-signup',
-                label: 'Become an ISV on Azion Marketplace'
-              },
-              { id: 'marketplace-reference-marketplace', label: 'Azion Marketplace' },
-              {
-                id: 'marketplace-reference-marketplace-seller-guide',
-                label: 'Marketplace Seller Guide'
+                id: 'marketplace-first-steps',
+                label: 'Quickstart'
               },
               {
-                id: 'marketplace-reference-permissions-marketplace',
-                label: "Azion Marketplace's permissions"
+                id: 'marketplace-how-it-works',
+                label: 'How it works'
               },
-              { id: 'marketplace-reference-templates', label: 'Azion Templates' },
               {
-                id: 'marketplace-reference-templates-and-integrations-overview',
-                label: 'Templates and Integrations'
+                id: 'marketplace-guides',
+                label: 'Guides and tutorials'
+              },
+              {
+                id: 'marketplace-reference',
+                label: 'Reference',
+                children: [
+                  {
+                    id: 'marketplace-integrations',
+                    label: 'Integrations'
+                  },
+                  {
+                    id: 'marketplace-templates',
+                    label: 'Templates'
+                  },
+                  {
+                    id: 'marketplace-permissions-marketplace',
+                    label: 'Permissions'
+                  }
+                ]
+              },
+              {
+                id: 'marketplace-sell-on-marketplace',
+                label: 'Sell on Marketplace',
+                children: [
+                  {
+                    id: 'marketplace-marketplace-seller-guide',
+                    label: 'Seller requirements and fees'
+                  },
+                  {
+                    id: 'marketplace-isv-signup',
+                    label: 'Become a seller'
+                  }
+                ]
+              },
+              {
+                id: 'marketplace-glossary',
+                label: 'Glossary'
+              },
+              {
+                id: 'marketplace-management',
+                label: 'Management',
+                children: [
+                  {
+                    id: 'marketplace-management-changelog',
+                    label: 'Changelog',
+                    ref: true,
+                    href: '/site/docs/release-notes'
+                  }
+                ]
               }
             ]
           }
@@ -1119,338 +1995,1866 @@ export const docsNavSections = [
     ]
   },
   {
-    label: 'Manage',
+    label: 'Platform resources',
     items: [
       {
-        id: 'platform',
-        label: 'Platform',
-        children: [
+        id: 'workloads',
+        label: 'Workloads',
+        kind: 'drill',
+        href: '/site/docs/workloads',
+        groups: [
           {
-            id: 'platform-overview',
-            label: 'About the Platform',
-            href: '/site/docs/platform-overview'
-          },
-          {
-            id: 'compliance',
-            label: 'Compliance',
-            children: [
+            label: 'Workloads',
+            items: [
               {
-                id: 'platform-compliance-governance-risk-compliance',
-                label: 'Strengthen Governance, Risk and Compliance'
-              },
-              { id: 'platform-compliance-pci-dss-certification', label: 'PCI Compliance' },
-              { id: 'platform-compliance-soc', label: 'SOC Compliance' }
-            ]
-          },
-          { id: 'platform-network-program', label: 'Azion Network Program' },
-          { id: 'platform-pricing', label: 'Pricing' },
-          { id: 'platform-shared-responsibility', label: 'Shared Responsibility Model' }
-        ]
-      },
-      {
-        id: 'accounts',
-        label: 'Accounts',
-        children: [
-          { id: 'account', label: 'About Accounts' },
-          {
-            id: 'guides-19',
-            label: 'Guides',
-            children: [
-              {
-                id: 'account-guides-account-lockout-policy-logs',
-                label: 'How to check Account Lockout Policy logs'
+                id: 'workloads-overview',
+                label: 'Overview',
+                href: '/site/docs/workloads'
               },
               {
-                id: 'account-guides-configure-account-lockout-policy',
-                label: 'How to configure Account Lockout Policy'
+                id: 'workloads-quickstart',
+                label: 'Quickstart'
               },
               {
-                id: 'account-guides-configure-user-session-timeout',
-                label: 'How to configure User Session Timeout'
+                id: 'workloads-how-it-works',
+                label: 'How it works'
               },
               {
-                id: 'account-guides-how-to-access-azion-console',
-                label: 'How to access Azion Console'
+                id: 'workloads-certificate-manager',
+                label: 'Certificate Manager',
+                children: [
+                  {
+                    id: 'workloads-certificate-manager-quickstart',
+                    label: 'Quickstart'
+                  },
+                  {
+                    id: 'workloads-certificate-manager-reference',
+                    label: 'Reference',
+                    children: [
+                      {
+                        id: 'workloads-certificate-manager-issuance-and-renewal',
+                        label: 'Issuance and renewal'
+                      },
+                      {
+                        id: 'workloads-certificate-manager-certificates',
+                        label: 'Certificates'
+                      }
+                    ]
+                  }
+                ]
               },
               {
-                id: 'account-guides-microsoft-entra-automated-user-provisioning',
-                label: 'Enable Microsoft Entra User Provisioning (SCIM)'
+                id: 'workloads-custom-pages',
+                label: 'Custom Pages',
+                children: [
+                  {
+                    id: 'workloads-custom-pages-quickstart',
+                    label: 'Quickstart'
+                  },
+                  {
+                    id: 'workloads-custom-pages-reference',
+                    label: 'Reference',
+                    children: [
+                      {
+                        id: 'workloads-custom-pages-settings',
+                        label: 'Settings'
+                      },
+                      {
+                        id: 'workloads-custom-pages-error-responses',
+                        label: 'Error Responses'
+                      }
+                    ]
+                  }
+                ]
               },
-              { id: 'account-guides-personal-tokens', label: 'How to manage a personal token' },
               {
-                id: 'account-guides-sso-microsoft-entra-saml',
-                label: 'Use Microsoft Entra SAML as an IdP'
+                id: 'workloads-ddos-protection',
+                label: 'DDoS Protection',
+                children: [
+                  {
+                    id: 'workloads-ddos-protection-reference',
+                    label: 'Reference',
+                    children: [
+                      {
+                        id: 'workloads-ddos-protection-ddos-mitigation',
+                        label: 'Attack mitigation'
+                      }
+                    ]
+                  }
+                ]
               },
               {
-                id: 'account-guides-verify-account-migration',
-                label: 'Verify Your Account Migration to API v4'
+                id: 'workloads-guides',
+                label: 'Guides and tutorials'
+              },
+              {
+                id: 'workloads-reference',
+                label: 'Reference',
+                children: [
+                  {
+                    id: 'workloads-settings',
+                    label: 'Settings'
+                  },
+                  {
+                    id: 'workloads-mtls',
+                    label: 'mTLS'
+                  },
+                  {
+                    id: 'workloads-domains',
+                    label: 'Domains'
+                  }
+                ]
+              },
+              {
+                id: 'workloads-limits',
+                label: 'Limits'
+              },
+              {
+                id: 'workloads-best-practices',
+                label: 'Best practices'
+              },
+              {
+                id: 'workloads-troubleshooting',
+                label: 'Troubleshooting'
+              },
+              {
+                id: 'workloads-glossary',
+                label: 'Glossary'
+              },
+              {
+                id: 'workloads-management',
+                label: 'Management',
+                children: [
+                  {
+                    id: 'workloads-management-pricing',
+                    label: 'Pricing',
+                    ref: true
+                  },
+                  {
+                    id: 'workloads-management-changelog',
+                    label: 'Changelog',
+                    ref: true,
+                    href: '/site/docs/release-notes'
+                  }
+                ]
               }
-            ]
-          },
-          {
-            id: 'reference-15',
-            label: 'Reference',
-            children: [
-              { id: 'account-reference-account-lockout-policy', label: 'Account Lockout Policy' },
-              { id: 'account-reference-activity-history', label: 'Activity History' },
-              { id: 'account-reference-billing-and-subscriptions', label: 'Billing' },
-              {
-                id: 'account-reference-creating-account',
-                label: 'How to create an account on Azion'
-              },
-              {
-                id: 'account-reference-multi-factor-authentication',
-                label: 'Multi-Factor Authentication'
-              },
-              { id: 'account-reference-personal-tokens', label: 'Personal Tokens' },
-              { id: 'account-reference-teams-permissions', label: 'Teams Permissions' },
-              { id: 'account-reference-user-session-timeout', label: 'User Session Timeout' }
             ]
           }
         ]
       },
-      { id: 'deploy-overview', label: 'Deploy' },
       {
-        id: 'orchestrator',
-        label: 'Orchestrator',
-        children: [
-          { id: 'deploy-orchestrator', label: 'About Orchestrator' },
+        id: 'applications',
+        label: 'Applications',
+        kind: 'drill',
+        href: '/site/docs/applications',
+        groups: [
           {
-            id: 'guides-20',
-            label: 'Guides',
-            children: [
+            label: 'Applications',
+            items: [
               {
-                id: 'deploy-orchestrator-guides-authorize-an-edge-node',
-                label: 'How to authorize an edge node'
+                id: 'applications-overview',
+                label: 'Overview',
+                href: '/site/docs/applications'
               },
               {
-                id: 'deploy-orchestrator-guides-bind-service-node',
-                label: 'How to bind an edge service to an edge node'
+                id: 'applications-quickstart',
+                label: 'Quickstart'
               },
               {
-                id: 'deploy-orchestrator-guides-create-edge-service',
-                label: 'How to create an edge service'
+                id: 'applications-how-it-works',
+                label: 'How it works'
               },
               {
-                id: 'deploy-orchestrator-guides-edge-node-first-steps',
-                label: 'Edge Node first steps'
+                id: 'applications-cache',
+                label: 'Cache',
+                children: [
+                  {
+                    id: 'applications-cache-quickstart',
+                    label: 'Quickstart'
+                  },
+                  {
+                    id: 'applications-cache-reference',
+                    label: 'Reference',
+                    children: [
+                      {
+                        id: 'applications-cache-expiration-and-freshness',
+                        label: 'Expiration and freshness'
+                      },
+                      {
+                        id: 'applications-cache-cache-settings',
+                        label: 'Settings'
+                      },
+                      {
+                        id: 'applications-cache-cache-keys',
+                        label: 'Cache keys'
+                      },
+                      {
+                        id: 'applications-cache-real-time-purge',
+                        label: 'Real-Time Purge'
+                      },
+                      {
+                        id: 'applications-cache-tiered-cache',
+                        label: 'Tiered Cache'
+                      },
+                      {
+                        id: 'applications-cache-reference-runtime-api',
+                        label: 'Runtime API',
+                        ref: true
+                      }
+                    ]
+                  }
+                ]
               },
               {
-                id: 'deploy-orchestrator-guides-edge-services-first-steps',
-                label: 'Creating an Edge Service'
+                id: 'applications-application-accelerator',
+                label: 'Application Accelerator',
+                children: [
+                  {
+                    id: 'applications-application-accelerator-quickstart',
+                    label: 'Quickstart'
+                  },
+                  {
+                    id: 'applications-application-accelerator-reference',
+                    label: 'Reference',
+                    children: [
+                      {
+                        id: 'applications-application-accelerator-cache-variation',
+                        label: 'Cache variation'
+                      },
+                      {
+                        id: 'applications-application-accelerator-settings',
+                        label: 'Settings'
+                      }
+                    ]
+                  }
+                ]
               },
               {
-                id: 'deploy-orchestrator-guides-install-orchestrator-agent',
-                label: 'How to install Orchestrator Agent'
+                id: 'applications-image-processor',
+                label: 'Image Processor',
+                children: [
+                  {
+                    id: 'applications-image-processor-quickstart',
+                    label: 'Quickstart'
+                  },
+                  {
+                    id: 'applications-image-processor-reference',
+                    label: 'Reference',
+                    children: [
+                      {
+                        id: 'applications-image-processor-image-delivery',
+                        label: 'Image delivery'
+                      },
+                      {
+                        id: 'applications-image-processor-url-parameters',
+                        label: 'URL parameters'
+                      },
+                      {
+                        id: 'applications-image-processor-settings',
+                        label: 'Settings'
+                      }
+                    ]
+                  }
+                ]
               },
               {
-                id: 'deploy-orchestrator-guides-watch-logs',
-                label: 'How to watch Orchestrator logs'
+                id: 'applications-guides',
+                label: 'Guides and tutorials'
               },
               {
-                id: 'deploy-orchestrator-guides-work-with-variables',
-                label: 'How to work with variables'
+                id: 'applications-reference',
+                label: 'Reference',
+                children: [
+                  {
+                    id: 'applications-v3',
+                    label: 'Applications | v3'
+                  },
+                  {
+                    id: 'applications-main-settings',
+                    label: 'Main Settings'
+                  },
+                  {
+                    id: 'applications-device-groups',
+                    label: 'Device Groups'
+                  },
+                  {
+                    id: 'applications-main-settings-v3',
+                    label: 'Main Settings | v3'
+                  },
+                  {
+                    id: 'applications-rules-engine',
+                    label: 'Rules Engine for Applications'
+                  },
+                  {
+                    id: 'applications-websocket',
+                    label: 'WebSocket Proxy'
+                  },
+                  {
+                    id: 'applications-functions-instances',
+                    label: 'Function instances'
+                  },
+                  {
+                    id: 'applications-reference-functions',
+                    label: 'Functions',
+                    ref: true,
+                    href: '/site/docs/functions'
+                  }
+                ]
+              },
+              {
+                id: 'applications-limits',
+                label: 'Limits'
+              },
+              {
+                id: 'applications-best-practices',
+                label: 'Best practices'
+              },
+              {
+                id: 'applications-troubleshooting',
+                label: 'Troubleshooting'
+              },
+              {
+                id: 'applications-glossary',
+                label: 'Glossary'
+              },
+              {
+                id: 'applications-management',
+                label: 'Management',
+                children: [
+                  {
+                    id: 'applications-management-pricing',
+                    label: 'Pricing',
+                    ref: true
+                  },
+                  {
+                    id: 'applications-management-changelog',
+                    label: 'Changelog',
+                    ref: true,
+                    href: '/site/docs/release-notes'
+                  }
+                ]
               }
-            ]
-          },
-          {
-            id: 'reference-16',
-            label: 'Reference',
-            children: [
-              { id: 'deploy-orchestrator-reference-edge-node', label: 'Azion Edge Node' },
-              { id: 'deploy-orchestrator-reference-edge-services', label: 'Azion Edge Services' }
             ]
           }
         ]
       },
+      {
+        id: 'firewall',
+        label: 'Firewall',
+        kind: 'drill',
+        href: '/site/docs/firewall',
+        groups: [
+          {
+            label: 'Firewall',
+            items: [
+              {
+                id: 'firewall-overview',
+                label: 'Overview',
+                href: '/site/docs/firewall'
+              },
+              {
+                id: 'firewall-quickstart',
+                label: 'Quickstart'
+              },
+              {
+                id: 'firewall-how-it-works',
+                label: 'How it works'
+              },
+              {
+                id: 'firewall-waf',
+                label: 'WAF',
+                children: [
+                  {
+                    id: 'firewall-waf-quickstart',
+                    label: 'Quickstart'
+                  },
+                  {
+                    id: 'firewall-waf-reference',
+                    label: 'Reference',
+                    children: [
+                      {
+                        id: 'firewall-waf-scoring-and-modes',
+                        label: 'Scoring and modes'
+                      },
+                      {
+                        id: 'firewall-waf-rules-set',
+                        label: 'Rule sets'
+                      },
+                      {
+                        id: 'firewall-waf-custom-allowed-rules',
+                        label: 'Exceptions'
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                id: 'firewall-network-shield',
+                label: 'Network Shield',
+                children: [
+                  {
+                    id: 'firewall-network-shield-quickstart',
+                    label: 'Quickstart'
+                  },
+                  {
+                    id: 'firewall-network-shield-reference',
+                    label: 'Reference',
+                    children: [
+                      {
+                        id: 'firewall-network-shield-list-matching',
+                        label: 'List matching'
+                      },
+                      {
+                        id: 'firewall-network-shield-network-lists',
+                        label: 'Network Lists'
+                      },
+                      {
+                        id: 'firewall-network-shield-reference-runtime-api',
+                        label: 'Runtime API',
+                        ref: true
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                id: 'firewall-bot-manager',
+                label: 'Bot Manager',
+                children: [
+                  {
+                    id: 'firewall-bot-manager-quickstart',
+                    label: 'Quickstart'
+                  },
+                  {
+                    id: 'firewall-bot-manager-reference',
+                    label: 'Reference',
+                    children: [
+                      {
+                        id: 'firewall-bot-manager-bot-scoring',
+                        label: 'Bot scoring'
+                      },
+                      {
+                        id: 'firewall-bot-manager-arguments',
+                        label: 'Arguments'
+                      },
+                      {
+                        id: 'firewall-bot-manager-logs',
+                        label: 'Logs'
+                      },
+                      {
+                        id: 'firewall-bot-manager-bot-manager-lite',
+                        label: 'Bot Manager Lite'
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                id: 'firewall-guides',
+                label: 'Guides and tutorials'
+              },
+              {
+                id: 'firewall-reference',
+                label: 'Reference',
+                children: [
+                  {
+                    id: 'firewall-functions',
+                    label: 'Functions for Firewall'
+                  },
+                  {
+                    id: 'firewall-functions-instances',
+                    label: 'Function instances for Firewall'
+                  },
+                  {
+                    id: 'firewall-rules-engine',
+                    label: 'Rules Engine for Firewall'
+                  },
+                  {
+                    id: 'firewall-reference-functions',
+                    label: 'Functions',
+                    ref: true,
+                    href: '/site/docs/functions'
+                  }
+                ]
+              },
+              {
+                id: 'firewall-limits',
+                label: 'Limits'
+              },
+              {
+                id: 'firewall-best-practices',
+                label: 'Best practices'
+              },
+              {
+                id: 'firewall-troubleshooting',
+                label: 'Troubleshooting'
+              },
+              {
+                id: 'firewall-glossary',
+                label: 'Glossary'
+              },
+              {
+                id: 'firewall-management',
+                label: 'Management',
+                children: [
+                  {
+                    id: 'firewall-management-pricing',
+                    label: 'Pricing',
+                    ref: true
+                  },
+                  {
+                    id: 'firewall-management-changelog',
+                    label: 'Changelog',
+                    ref: true,
+                    href: '/site/docs/release-notes'
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'functions',
+        label: 'Functions',
+        kind: 'drill',
+        href: '/site/docs/functions',
+        groups: [
+          {
+            label: 'Functions',
+            items: [
+              {
+                id: 'functions-overview',
+                label: 'Overview',
+                href: '/site/docs/functions'
+              },
+              {
+                id: 'functions-quickstart',
+                label: 'Quickstart'
+              },
+              {
+                id: 'functions-how-it-works',
+                label: 'How it works'
+              },
+              {
+                id: 'functions-features-and-capabilities',
+                label: 'Features and capabilities',
+                children: [
+                  {
+                    id: 'functions-local-development',
+                    label: 'Local development'
+                  },
+                  {
+                    id: 'functions-preview-deployment',
+                    label: 'Preview deployment'
+                  },
+                  {
+                    id: 'functions-code-editor',
+                    label: 'Code editor'
+                  },
+                  {
+                    id: 'functions-ai-integration',
+                    label: 'ChatGPT integration'
+                  }
+                ]
+              },
+              {
+                id: 'functions-guides',
+                label: 'Guides and tutorials'
+              },
+              {
+                id: 'functions-examples',
+                label: 'Examples',
+                children: [
+                  {
+                    id: 'functions-javascript-examples',
+                    label: 'JavaScript examples'
+                  },
+                  {
+                    id: 'functions-ab-testing',
+                    label: 'A/B testing'
+                  },
+                  {
+                    id: 'functions-adding-response-header',
+                    label: 'Add a response header'
+                  },
+                  {
+                    id: 'functions-deny-request',
+                    label: 'Deny a request by country'
+                  },
+                  {
+                    id: 'functions-cookie-value',
+                    label: 'Extract a cookie value'
+                  },
+                  {
+                    id: 'functions-general-firewall-example',
+                    label: 'Functions on a firewall'
+                  },
+                  {
+                    id: 'functions-hello-world',
+                    label: 'Hello world'
+                  },
+                  {
+                    id: 'functions-process-request-body',
+                    label: 'Process a request body'
+                  },
+                  {
+                    id: 'functions-redirect-requests',
+                    label: 'Redirect all requests to one URL'
+                  },
+                  {
+                    id: 'functions-respond-site',
+                    label: 'Respond with another site'
+                  },
+                  {
+                    id: 'functions-rest-apis',
+                    label: 'REST APIs'
+                  },
+                  {
+                    id: 'functions-return-html',
+                    label: 'Return HTML'
+                  },
+                  {
+                    id: 'functions-return-json',
+                    label: 'Return JSON'
+                  },
+                  {
+                    id: 'functions-using-args',
+                    label: 'Using args'
+                  }
+                ]
+              },
+              {
+                id: 'functions-reference',
+                label: 'Reference',
+                children: [
+                  {
+                    id: 'functions-environment-variables',
+                    label: 'Environment variables'
+                  },
+                  {
+                    id: 'functions-reference-function-instances',
+                    label: 'Function instances',
+                    ref: true
+                  }
+                ]
+              },
+              {
+                id: 'functions-limits',
+                label: 'Limits'
+              },
+              {
+                id: 'functions-best-practices',
+                label: 'Best practices'
+              },
+              {
+                id: 'functions-troubleshooting',
+                label: 'Troubleshooting'
+              },
+              {
+                id: 'functions-glossary',
+                label: 'Glossary'
+              },
+              {
+                id: 'functions-management',
+                label: 'Management',
+                children: [
+                  {
+                    id: 'functions-management-pricing',
+                    label: 'Pricing',
+                    ref: true
+                  },
+                  {
+                    id: 'functions-management-changelog',
+                    label: 'Changelog',
+                    ref: true,
+                    href: '/site/docs/release-notes'
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'connectors',
+        label: 'Connectors',
+        kind: 'drill',
+        href: '/site/docs/connectors',
+        groups: [
+          {
+            label: 'Connectors',
+            items: [
+              {
+                id: 'connectors-overview',
+                label: 'Overview',
+                href: '/site/docs/connectors'
+              },
+              {
+                id: 'connectors-quickstart',
+                label: 'Quickstart'
+              },
+              {
+                id: 'connectors-how-it-works',
+                label: 'How it works'
+              },
+              {
+                id: 'connectors-load-balancer',
+                label: 'Load Balancer',
+                children: [
+                  {
+                    id: 'connectors-load-balancer-quickstart',
+                    label: 'Quickstart'
+                  },
+                  {
+                    id: 'connectors-load-balancer-reference',
+                    label: 'Reference',
+                    children: [
+                      {
+                        id: 'connectors-load-balancer-balancing-methods',
+                        label: 'Balancing methods'
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                id: 'connectors-origin-shield',
+                label: 'Origin Shield',
+                children: [
+                  {
+                    id: 'connectors-origin-shield-reference',
+                    label: 'Reference',
+                    children: [
+                      {
+                        id: 'connectors-origin-shield-origin-ip-acl-and-hmac',
+                        label: 'Origin IP ACL and HMAC'
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                id: 'connectors-live-ingest',
+                label: 'Live Ingest',
+                children: [
+                  {
+                    id: 'connectors-live-ingest-reference',
+                    label: 'Reference',
+                    children: [
+                      {
+                        id: 'connectors-live-ingest-ingestion-and-delivery',
+                        label: 'Ingestion and delivery'
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                id: 'connectors-guides',
+                label: 'Guides and tutorials'
+              },
+              {
+                id: 'connectors-reference',
+                label: 'Reference',
+                children: [
+                  {
+                    id: 'connectors-settings',
+                    label: 'Settings'
+                  },
+                  {
+                    id: 'connectors-sni-check',
+                    label: 'SNI Check'
+                  },
+                  {
+                    id: 'connectors-origins',
+                    label: 'Origins'
+                  }
+                ]
+              },
+              {
+                id: 'connectors-limits',
+                label: 'Limits'
+              },
+              {
+                id: 'connectors-best-practices',
+                label: 'Best practices'
+              },
+              {
+                id: 'connectors-troubleshooting',
+                label: 'Troubleshooting'
+              },
+              {
+                id: 'connectors-glossary',
+                label: 'Glossary'
+              },
+              {
+                id: 'connectors-management',
+                label: 'Management',
+                children: [
+                  {
+                    id: 'connectors-management-pricing',
+                    label: 'Pricing',
+                    ref: true
+                  },
+                  {
+                    id: 'connectors-management-changelog',
+                    label: 'Changelog',
+                    ref: true,
+                    href: '/site/docs/release-notes'
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'ai-inference',
+        label: 'AI Inference',
+        kind: 'drill',
+        href: '/site/docs/ai-inference',
+        groups: [
+          {
+            label: 'AI Inference',
+            items: [
+              {
+                id: 'ai-inference-overview',
+                label: 'Overview',
+                href: '/site/docs/ai-inference'
+              },
+              {
+                id: 'ai-inference-quickstart',
+                label: 'Quickstart'
+              },
+              {
+                id: 'ai-inference-how-it-works',
+                label: 'How it works'
+              },
+              {
+                id: 'ai-inference-lora-fine-tune',
+                label: 'LoRA Fine-Tune'
+              },
+              {
+                id: 'ai-inference-guides',
+                label: 'Guides and tutorials'
+              },
+              {
+                id: 'ai-inference-reference',
+                label: 'Reference',
+                children: [
+                  {
+                    id: 'ai-inference-model-invocation',
+                    label: 'Model invocation'
+                  },
+                  {
+                    id: 'ai-inference-reference-runtime-api',
+                    label: 'Runtime API',
+                    ref: true
+                  },
+                  {
+                    id: 'ai-inference-models',
+                    label: 'AI models'
+                  },
+                  {
+                    id: 'ai-inference-baai-bge-reranker-v2-m3',
+                    label: 'BAAI/bge-reranker-v2-m3'
+                  },
+                  {
+                    id: 'ai-inference-gpt-oss-20b',
+                    label: 'GPT-OSS 20B'
+                  },
+                  {
+                    id: 'ai-inference-internvl3',
+                    label: 'InternVL3'
+                  },
+                  {
+                    id: 'ai-inference-mistral-3-small',
+                    label: 'Mistral 3 Small (24B AWQ)'
+                  },
+                  {
+                    id: 'ai-inference-nanonets-ocr-s',
+                    label: 'Nanonets-OCR-s'
+                  },
+                  {
+                    id: 'ai-inference-qwen-2-5-vl-3b',
+                    label: 'Qwen2.5 VL AWQ 3B'
+                  },
+                  {
+                    id: 'ai-inference-qwen-2-5-vl-7b',
+                    label: 'Qwen2.5 VL AWQ 7B'
+                  },
+                  {
+                    id: 'ai-inference-qwen3-30ba3b',
+                    label: 'Qwen3 30B A3B Instruct 2507 FP8'
+                  },
+                  {
+                    id: 'ai-inference-qwen3-embedding-4b',
+                    label: 'Qwen3 Embedding 4B'
+                  }
+                ]
+              },
+              {
+                id: 'ai-inference-limits',
+                label: 'Limits'
+              },
+              {
+                id: 'ai-inference-best-practices',
+                label: 'Best practices'
+              },
+              {
+                id: 'ai-inference-glossary',
+                label: 'Glossary'
+              },
+              {
+                id: 'ai-inference-management',
+                label: 'Management',
+                children: [
+                  {
+                    id: 'ai-inference-management-pricing',
+                    label: 'Pricing',
+                    ref: true
+                  },
+                  {
+                    id: 'ai-inference-management-changelog',
+                    label: 'Changelog',
+                    ref: true,
+                    href: '/site/docs/release-notes'
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'real-time-metrics',
+        label: 'Real-Time Metrics',
+        kind: 'drill',
+        href: '/site/docs/real-time-metrics',
+        groups: [
+          {
+            label: 'Real-Time Metrics',
+            items: [
+              {
+                id: 'real-time-metrics-overview',
+                label: 'Overview',
+                href: '/site/docs/real-time-metrics'
+              },
+              {
+                id: 'real-time-metrics-quickstart',
+                label: 'Quickstart'
+              },
+              {
+                id: 'real-time-metrics-how-it-works',
+                label: 'How it works'
+              },
+              {
+                id: 'real-time-metrics-guides',
+                label: 'Guides and tutorials'
+              },
+              {
+                id: 'real-time-metrics-reference',
+                label: 'Reference',
+                children: [
+                  {
+                    id: 'real-time-metrics-filters-and-time-range',
+                    label: 'Filters and time range'
+                  },
+                  {
+                    id: 'real-time-metrics-build-dashboards',
+                    label: 'Build dashboards'
+                  },
+                  {
+                    id: 'real-time-metrics-secure-dashboards',
+                    label: 'Secure dashboards'
+                  },
+                  {
+                    id: 'real-time-metrics-observe-dashboards',
+                    label: 'Observe dashboards'
+                  },
+                  {
+                    id: 'real-time-metrics-siem-azion',
+                    label: 'SIEM Azion'
+                  }
+                ]
+              },
+              {
+                id: 'real-time-metrics-limits',
+                label: 'Limits'
+              },
+              {
+                id: 'real-time-metrics-best-practices',
+                label: 'Best practices'
+              },
+              {
+                id: 'real-time-metrics-troubleshooting',
+                label: 'Troubleshooting'
+              },
+              {
+                id: 'real-time-metrics-glossary',
+                label: 'Glossary'
+              },
+              {
+                id: 'real-time-metrics-management',
+                label: 'Management',
+                children: [
+                  {
+                    id: 'real-time-metrics-management-pricing',
+                    label: 'Pricing',
+                    ref: true
+                  },
+                  {
+                    id: 'real-time-metrics-management-changelog',
+                    label: 'Changelog',
+                    ref: true,
+                    href: '/site/docs/release-notes'
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'real-time-events',
+        label: 'Real-Time Events',
+        kind: 'drill',
+        href: '/site/docs/real-time-events',
+        groups: [
+          {
+            label: 'Real-Time Events',
+            items: [
+              {
+                id: 'real-time-events-overview',
+                label: 'Overview',
+                href: '/site/docs/real-time-events'
+              },
+              {
+                id: 'real-time-events-quickstart',
+                label: 'Quickstart'
+              },
+              {
+                id: 'real-time-events-how-it-works',
+                label: 'How it works'
+              },
+              {
+                id: 'real-time-events-guides',
+                label: 'Guides and tutorials'
+              },
+              {
+                id: 'real-time-events-reference',
+                label: 'Reference',
+                children: [
+                  {
+                    id: 'real-time-events-data-sources',
+                    label: 'Data sources'
+                  },
+                  {
+                    id: 'real-time-events-reference-graphql-api-fields',
+                    label: 'GraphQL API fields',
+                    ref: true
+                  }
+                ]
+              },
+              {
+                id: 'real-time-events-limits',
+                label: 'Limits'
+              },
+              {
+                id: 'real-time-events-best-practices',
+                label: 'Best practices'
+              },
+              {
+                id: 'real-time-events-troubleshooting',
+                label: 'Troubleshooting'
+              },
+              {
+                id: 'real-time-events-glossary',
+                label: 'Glossary'
+              },
+              {
+                id: 'real-time-events-management',
+                label: 'Management',
+                children: [
+                  {
+                    id: 'real-time-events-management-pricing',
+                    label: 'Pricing',
+                    ref: true
+                  },
+                  {
+                    id: 'real-time-events-management-changelog',
+                    label: 'Changelog',
+                    ref: true,
+                    href: '/site/docs/release-notes'
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'data-stream',
+        label: 'Data Stream',
+        kind: 'drill',
+        href: '/site/docs/data-stream',
+        groups: [
+          {
+            label: 'Data Stream',
+            items: [
+              {
+                id: 'data-stream-overview',
+                label: 'Overview',
+                href: '/site/docs/data-stream'
+              },
+              {
+                id: 'data-stream-quickstart',
+                label: 'Quickstart'
+              },
+              {
+                id: 'data-stream-how-it-works',
+                label: 'How it works'
+              },
+              {
+                id: 'data-stream-guides',
+                label: 'Guides and tutorials'
+              },
+              {
+                id: 'data-stream-reference',
+                label: 'Reference',
+                children: [
+                  {
+                    id: 'data-stream-stream-settings',
+                    label: 'Stream settings'
+                  },
+                  {
+                    id: 'data-stream-data-sources-and-variables',
+                    label: 'Data sources and variables'
+                  },
+                  {
+                    id: 'data-stream-templates-and-payload',
+                    label: 'Templates and payload'
+                  },
+                  {
+                    id: 'data-stream-endpoints',
+                    label: 'Endpoints'
+                  }
+                ]
+              },
+              {
+                id: 'data-stream-limits',
+                label: 'Limits'
+              },
+              {
+                id: 'data-stream-best-practices',
+                label: 'Best practices'
+              },
+              {
+                id: 'data-stream-troubleshooting',
+                label: 'Troubleshooting'
+              },
+              {
+                id: 'data-stream-glossary',
+                label: 'Glossary'
+              },
+              {
+                id: 'data-stream-management',
+                label: 'Management',
+                children: [
+                  {
+                    id: 'data-stream-management-pricing',
+                    label: 'Pricing',
+                    ref: true
+                  },
+                  {
+                    id: 'data-stream-management-changelog',
+                    label: 'Changelog',
+                    ref: true,
+                    href: '/site/docs/release-notes'
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'edge-pulse',
+        label: 'Edge Pulse',
+        kind: 'drill',
+        href: '/site/docs/edge-pulse',
+        groups: [
+          {
+            label: 'Edge Pulse',
+            items: [
+              {
+                id: 'edge-pulse-overview',
+                label: 'Overview',
+                href: '/site/docs/edge-pulse'
+              },
+              {
+                id: 'edge-pulse-quickstart',
+                label: 'Quickstart'
+              },
+              {
+                id: 'edge-pulse-how-it-works',
+                label: 'How it works'
+              },
+              {
+                id: 'edge-pulse-reference',
+                label: 'Reference',
+                children: [
+                  {
+                    id: 'edge-pulse-javascript-tag',
+                    label: 'JavaScript tag'
+                  },
+                  {
+                    id: 'edge-pulse-reference-graphql-api-fields',
+                    label: 'GraphQL API fields',
+                    ref: true
+                  }
+                ]
+              },
+              {
+                id: 'edge-pulse-glossary',
+                label: 'Glossary'
+              },
+              {
+                id: 'edge-pulse-management',
+                label: 'Management',
+                children: [
+                  {
+                    id: 'edge-pulse-management-pricing',
+                    label: 'Pricing',
+                    ref: true
+                  },
+                  {
+                    id: 'edge-pulse-management-changelog',
+                    label: 'Changelog',
+                    ref: true,
+                    href: '/site/docs/release-notes'
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'edge-dns',
+        label: 'Edge DNS',
+        kind: 'drill',
+        href: '/site/docs/edge-dns',
+        groups: [
+          {
+            label: 'Edge DNS',
+            items: [
+              {
+                id: 'edge-dns-overview',
+                label: 'Overview',
+                href: '/site/docs/edge-dns'
+              },
+              {
+                id: 'edge-dns-quickstart',
+                label: 'Quickstart'
+              },
+              {
+                id: 'edge-dns-how-it-works',
+                label: 'How it works'
+              },
+              {
+                id: 'edge-dns-guides',
+                label: 'Guides and tutorials'
+              },
+              {
+                id: 'edge-dns-reference',
+                label: 'Reference',
+                children: [
+                  {
+                    id: 'edge-dns-zones-and-records',
+                    label: 'Zones and records'
+                  },
+                  {
+                    id: 'edge-dns-record-types',
+                    label: 'Record types'
+                  },
+                  {
+                    id: 'edge-dns-dnssec',
+                    label: 'DNSSEC'
+                  }
+                ]
+              },
+              {
+                id: 'edge-dns-limits',
+                label: 'Limits'
+              },
+              {
+                id: 'edge-dns-best-practices',
+                label: 'Best practices'
+              },
+              {
+                id: 'edge-dns-troubleshooting',
+                label: 'Troubleshooting'
+              },
+              {
+                id: 'edge-dns-glossary',
+                label: 'Glossary'
+              },
+              {
+                id: 'edge-dns-management',
+                label: 'Management',
+                children: [
+                  {
+                    id: 'edge-dns-management-pricing',
+                    label: 'Pricing',
+                    ref: true
+                  },
+                  {
+                    id: 'edge-dns-management-changelog',
+                    label: 'Changelog',
+                    ref: true,
+                    href: '/site/docs/release-notes'
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'object-storage',
+        label: 'Object Storage',
+        kind: 'drill',
+        href: '/site/docs/object-storage',
+        groups: [
+          {
+            label: 'Object Storage',
+            items: [
+              {
+                id: 'object-storage-overview',
+                label: 'Overview',
+                href: '/site/docs/object-storage'
+              },
+              {
+                id: 'object-storage-quickstart',
+                label: 'Quickstart'
+              },
+              {
+                id: 'object-storage-how-it-works',
+                label: 'How it works'
+              },
+              {
+                id: 'object-storage-guides',
+                label: 'Guides and tutorials'
+              },
+              {
+                id: 'object-storage-reference',
+                label: 'Reference',
+                children: [
+                  {
+                    id: 'object-storage-buckets-and-objects',
+                    label: 'Buckets and objects'
+                  },
+                  {
+                    id: 'object-storage-s3-compatibility',
+                    label: 'S3 compatibility'
+                  },
+                  {
+                    id: 'object-storage-reference-runtime-api',
+                    label: 'Runtime API',
+                    ref: true
+                  }
+                ]
+              },
+              {
+                id: 'object-storage-limits',
+                label: 'Limits'
+              },
+              {
+                id: 'object-storage-best-practices',
+                label: 'Best practices'
+              },
+              {
+                id: 'object-storage-troubleshooting',
+                label: 'Troubleshooting'
+              },
+              {
+                id: 'object-storage-glossary',
+                label: 'Glossary'
+              },
+              {
+                id: 'object-storage-management',
+                label: 'Management',
+                children: [
+                  {
+                    id: 'object-storage-management-pricing',
+                    label: 'Pricing',
+                    ref: true
+                  },
+                  {
+                    id: 'object-storage-management-changelog',
+                    label: 'Changelog',
+                    ref: true,
+                    href: '/site/docs/release-notes'
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'sql-database',
+        label: 'SQL Database',
+        kind: 'drill',
+        href: '/site/docs/sql-database',
+        groups: [
+          {
+            label: 'SQL Database',
+            items: [
+              {
+                id: 'sql-database-overview',
+                label: 'Overview',
+                href: '/site/docs/sql-database'
+              },
+              {
+                id: 'sql-database-quickstart',
+                label: 'Quickstart'
+              },
+              {
+                id: 'sql-database-how-it-works',
+                label: 'How it works'
+              },
+              {
+                id: 'sql-database-guides',
+                label: 'Guides and tutorials'
+              },
+              {
+                id: 'sql-database-reference',
+                label: 'Reference',
+                children: [
+                  {
+                    id: 'sql-database-databases-and-queries',
+                    label: 'Databases and queries'
+                  },
+                  {
+                    id: 'sql-database-vector-search',
+                    label: 'Vector search'
+                  },
+                  {
+                    id: 'sql-database-edgesql-shell',
+                    label: 'EdgeSQL Shell'
+                  },
+                  {
+                    id: 'sql-database-reference-runtime-api',
+                    label: 'Runtime API',
+                    ref: true
+                  }
+                ]
+              },
+              {
+                id: 'sql-database-limits',
+                label: 'Limits'
+              },
+              {
+                id: 'sql-database-best-practices',
+                label: 'Best practices'
+              },
+              {
+                id: 'sql-database-troubleshooting',
+                label: 'Troubleshooting'
+              },
+              {
+                id: 'sql-database-glossary',
+                label: 'Glossary'
+              },
+              {
+                id: 'sql-database-management',
+                label: 'Management',
+                children: [
+                  {
+                    id: 'sql-database-management-pricing',
+                    label: 'Pricing',
+                    ref: true
+                  },
+                  {
+                    id: 'sql-database-management-changelog',
+                    label: 'Changelog',
+                    ref: true,
+                    href: '/site/docs/release-notes'
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'kv-store',
+        label: 'KV Store',
+        kind: 'drill',
+        href: '/site/docs/kv-store',
+        groups: [
+          {
+            label: 'KV Store',
+            items: [
+              {
+                id: 'kv-store-overview',
+                label: 'Overview',
+                href: '/site/docs/kv-store'
+              },
+              {
+                id: 'kv-store-quickstart',
+                label: 'Quickstart'
+              },
+              {
+                id: 'kv-store-how-it-works',
+                label: 'How it works'
+              },
+              {
+                id: 'kv-store-guides',
+                label: 'Guides and tutorials'
+              },
+              {
+                id: 'kv-store-reference',
+                label: 'Reference',
+                children: [
+                  {
+                    id: 'kv-store-namespaces',
+                    label: 'Namespaces'
+                  },
+                  {
+                    id: 'kv-store-reference-runtime-api',
+                    label: 'Runtime API',
+                    ref: true
+                  }
+                ]
+              },
+              {
+                id: 'kv-store-limits',
+                label: 'Limits'
+              },
+              {
+                id: 'kv-store-best-practices',
+                label: 'Best practices'
+              },
+              {
+                id: 'kv-store-troubleshooting',
+                label: 'Troubleshooting'
+              },
+              {
+                id: 'kv-store-glossary',
+                label: 'Glossary'
+              },
+              {
+                id: 'kv-store-management',
+                label: 'Management',
+                children: [
+                  {
+                    id: 'kv-store-management-pricing',
+                    label: 'Pricing',
+                    ref: true
+                  },
+                  {
+                    id: 'kv-store-management-changelog',
+                    label: 'Changelog',
+                    ref: true,
+                    href: '/site/docs/release-notes'
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    label: 'Management',
+    items: [
       {
         id: 'services',
-        label: 'Services',
-        children: [
-          { id: 'services-best-practices-review', label: 'Best Practices Review' },
-          { id: 'services-business-events-support', label: 'Business Events Support' },
-          { id: 'services-instructor-led-training', label: 'Instructor-Led Training' },
-          { id: 'services-integration-services', label: 'Integration Services' },
-          { id: 'services-managed-configurations', label: 'Managed Configurations' },
-          { id: 'services-security-response-team', label: 'Security Response Team' },
-          { id: 'services-slack-channel', label: 'Slack Channel' },
+        label: 'Professional Services',
+        kind: 'drill',
+        href: '/site/docs/services',
+        groups: [
           {
-            id: 'support',
-            label: 'Support',
-            children: [
-              { id: 'services-support', label: 'About Support' },
-              { id: 'services-support-guides-open-ticket', label: 'How to open a Support Ticket' },
-              { id: 'services-support-get-help', label: 'Get help' },
+            label: 'Professional Services',
+            items: [
               {
-                id: 'services-support-http-error-status-codes',
-                label: 'Azion HTTP Error Status Codes'
+                id: 'services-overview',
+                label: 'Overview',
+                href: '/site/docs/services'
+              },
+              {
+                id: 'services-best-practices-review',
+                label: 'Best Practices Review'
+              },
+              {
+                id: 'services-business-events-support',
+                label: 'Business Events Support'
+              },
+              {
+                id: 'services-instructor-led-training',
+                label: 'Instructor-Led Training'
+              },
+              {
+                id: 'services-integration-services',
+                label: 'Integration Services'
+              },
+              {
+                id: 'services-managed-configurations',
+                label: 'Managed Configurations'
+              },
+              {
+                id: 'services-security-response-team',
+                label: 'Security Response Team'
+              },
+              {
+                id: 'services-slack-channel',
+                label: 'Slack Channel'
+              },
+              {
+                id: 'services-technical-account-manager',
+                label: 'Technical Account Manager'
               }
-            ]
-          },
-          { id: 'services-technical-account-manager', label: 'Technical Account Manager' }
-        ]
-      }
-    ]
-  },
-  {
-    label: 'Updates and Policies',
-    items: [
-      {
-        id: 'changelog',
-        label: 'Changelog',
-        children: [
-          { id: 'changelog-2', label: 'Latest updates', href: '/site/docs/release-notes' },
-          { id: 'changelog-archive', label: 'Changelog previous years' }
-        ]
-      },
-      {
-        id: 'agreements-policies',
-        label: 'Agreements and Policies',
-        children: [
-          { id: 'agreements', label: 'All agreements' },
-          { id: 'agreements-acceptable-use-policy', label: 'Acceptable Use Policy' },
-          {
-            id: 'agreements-azion-affiliate-program-terms',
-            label: 'Azion Affiliate Program Terms'
-          },
-          {
-            id: 'agreements-azion-incentive-credits-terms-and-conditions',
-            label: 'Terms and Conditions of Azion Incentive Credits'
-          },
-          {
-            id: 'agreements-azion-plans-terms-and-conditions',
-            label: 'Terms and Conditions of Azion Plans'
-          },
-          {
-            id: 'customer-agreement',
-            label: 'Customer Agreement',
-            children: [{ id: 'agreements-customer-agreement', label: 'Current version' }]
-          },
-          { id: 'agreements-faq-azion-customers', label: 'Data Privacy FAQ – Customers' },
-          { id: 'agreements-faq-end-users', label: 'Data Privacy FAQ – End Users' },
-          { id: 'agreements-faqs', label: 'Data Privacy FAQs' },
-          {
-            id: 'marketplace-2',
-            label: 'Marketplace',
-            children: [
-              {
-                id: 'agreements-marketplace-marketplace-agreement',
-                label: 'Azion Marketplace Agreement'
-              }
-            ]
-          },
-          { id: 'agreements-privacy-policy', label: 'Privacy Policy' },
-          {
-            id: 'agreements-savings-plan-terms-and-conditions',
-            label: 'Savings Plan Terms and Conditions'
-          },
-          {
-            id: 'agreements-savings-plan-terms-and-conditions-10-july-2025',
-            label: 'Savings Plan Terms and Conditions - July 10, 2025'
-          },
-          {
-            id: 'sla',
-            label: 'SLA',
-            children: [{ id: 'agreements-sla', label: 'Current version' }]
-          },
-          {
-            id: 'agreements-terms-and-conditions-of-reserved-capacity',
-            label: 'Terms and Conditions of Reserved Capacity'
-          },
-          {
-            id: 'terms-of-service',
-            label: 'Terms of Service',
-            children: [
-              { id: 'agreements-tos', label: 'Current version' },
-              {
-                id: 'agreements-tos-10-november-2016',
-                label: 'Terms of Service - November 10, 2016'
-              },
-              {
-                id: 'agreements-tos-10-november-2020',
-                label: 'Terms of Service - November 10, 2020'
-              },
-              { id: 'agreements-tos-15-march-2024', label: 'Terms of Service - March 15, 2024' },
-              { id: 'agreements-tos-15-may-2019', label: 'Terms of Service - May 15, 2019' },
-              {
-                id: 'agreements-tos-18-september-2023',
-                label: 'Terms of Service - September 18, 2023'
-              },
-              {
-                id: 'agreements-tos-21-february-2024',
-                label: 'Terms of Service - February 21, 2024'
-              },
-              {
-                id: 'agreements-tos-23-september-2022',
-                label: 'Terms of Service - September 23, 2022'
-              },
-              { id: 'agreements-tos-24-may-2024', label: 'Terms of Service - May 24, 2024' },
-              {
-                id: 'agreements-tos-25-october-2017',
-                label: 'Terms of Service - 25 de Outubro de 2017'
-              },
-              { id: 'agreements-tos-29-august-2024', label: 'Terms of Service - August 29, 2024' },
-              { id: 'agreements-tos-29-august-2025', label: 'Terms of Service - August 29, 2025' },
-              { id: 'agreements-tos-3-march-2023', label: 'Terms of Service - March 3, 2023' },
-              { id: 'agreements-tos-30-march-2023', label: 'Terms of Service - March 30, 2023' },
-              {
-                id: 'agreements-tos-8-november-2024',
-                label: 'Terms of Service - November 8, 2024'
-              },
-              { id: 'agreements-tos-9-july-2025', label: 'Terms of Service - July 9, 2025' }
             ]
           }
         ]
       },
-      { id: 'status-azion-com', label: 'System Status' }
+      {
+        id: 'agreements',
+        label: 'Agreements and Policies',
+        kind: 'drill',
+        href: '/site/docs/agreements',
+        groups: [
+          {
+            label: 'Agreements and Policies',
+            items: [
+              {
+                id: 'agreements-overview',
+                label: 'Overview',
+                href: '/site/docs/agreements'
+              },
+              {
+                id: 'agreements-tos',
+                label: 'Terms of Service'
+              },
+              {
+                id: 'agreements-customer-agreement',
+                label: 'Customer Agreement'
+              },
+              {
+                id: 'agreements-sla',
+                label: 'Service Level Agreement'
+              },
+              {
+                id: 'agreements-privacy-policy',
+                label: 'Privacy Policy'
+              },
+              {
+                id: 'agreements-acceptable-use-policy',
+                label: 'Acceptable Use Policy'
+              },
+              {
+                id: 'agreements-azion-plans-terms-and-conditions',
+                label: 'Terms and Conditions of Azion Plans'
+              },
+              {
+                id: 'agreements-savings-plan-terms-and-conditions',
+                label: 'Savings Plan Terms and Conditions'
+              },
+              {
+                id: 'agreements-terms-and-conditions-of-reserved-capacity',
+                label: 'Terms and Conditions of Reserved Capacity'
+              },
+              {
+                id: 'agreements-azion-incentive-credits-terms-and-conditions',
+                label: 'Terms and Conditions of Azion Incentive Credits'
+              },
+              {
+                id: 'agreements-marketplace-agreement',
+                label: 'Azion Marketplace Agreement'
+              },
+              {
+                id: 'agreements-azion-affiliate-program-terms',
+                label: 'Azion Affiliate Program Terms'
+              },
+              {
+                id: 'agreements-faqs',
+                label: 'Data Privacy FAQs'
+              },
+              {
+                id: 'agreements-faq-azion-customers',
+                label: 'Data Privacy FAQ – Customers'
+              },
+              {
+                id: 'agreements-faq-end-users',
+                label: 'Data Privacy FAQ – End Users'
+              }
+            ]
+          },
+          {
+            label: 'Previous versions',
+            items: [
+              {
+                id: 'agreements-terms-of-service',
+                label: 'Terms of Service',
+                children: [
+                  {
+                    id: 'agreements-tos-12-may-2026',
+                    label: 'Terms of Service - May 12, 2026'
+                  },
+                  {
+                    id: 'agreements-tos-29-august-2025',
+                    label: 'Terms of Service - August 29, 2025'
+                  },
+                  {
+                    id: 'agreements-tos-21-august-2025',
+                    label: 'Terms of Service - August 21, 2025'
+                  },
+                  {
+                    id: 'agreements-tos-9-july-2025',
+                    label: 'Terms of Service - July 9, 2025'
+                  },
+                  {
+                    id: 'agreements-tos-8-november-2024',
+                    label: 'Terms of Service - November 8, 2024'
+                  },
+                  {
+                    id: 'agreements-tos-29-august-2024',
+                    label: 'Terms of Service - August 29, 2024'
+                  },
+                  {
+                    id: 'agreements-tos-24-may-2024',
+                    label: 'Terms of Service - May 24, 2024'
+                  },
+                  {
+                    id: 'agreements-tos-15-march-2024',
+                    label: 'Terms of Service - March 15, 2024'
+                  },
+                  {
+                    id: 'agreements-tos-21-february-2024',
+                    label: 'Terms of Service - February 21, 2024'
+                  },
+                  {
+                    id: 'agreements-tos-18-september-2023',
+                    label: 'Terms of Service - September 18, 2023'
+                  },
+                  {
+                    id: 'agreements-tos-30-march-2023',
+                    label: 'Terms of Service - March 30, 2023'
+                  },
+                  {
+                    id: 'agreements-tos-3-march-2023',
+                    label: 'Terms of Service - March 3, 2023'
+                  },
+                  {
+                    id: 'agreements-tos-23-september-2022',
+                    label: 'Terms of Service - September 23, 2022'
+                  },
+                  {
+                    id: 'agreements-tos-10-november-2020',
+                    label: 'Terms of Service - November 10, 2020'
+                  },
+                  {
+                    id: 'agreements-tos-18-august-2020',
+                    label: 'Terms of Service - August 18, 2020'
+                  },
+                  {
+                    id: 'agreements-tos-15-may-2019',
+                    label: 'Terms of Service - May 15, 2019'
+                  },
+                  {
+                    id: 'agreements-tos-25-october-2017',
+                    label: 'Terms of Service - 25 de Outubro de 2017'
+                  },
+                  {
+                    id: 'agreements-tos-10-november-2016',
+                    label: 'Terms of Service - November 10, 2016'
+                  }
+                ]
+              },
+              {
+                id: 'agreements-customer-agreement-2',
+                label: 'Customer Agreement',
+                children: [
+                  {
+                    id: 'agreements-customer-agreement-28-july-2016',
+                    label: 'Customer Agreement'
+                  }
+                ]
+              },
+              {
+                id: 'agreements-service-level-agreement',
+                label: 'Service Level Agreement',
+                children: [
+                  {
+                    id: 'agreements-sla-25-may-2016',
+                    label: 'Service Level Agreement'
+                  }
+                ]
+              },
+              {
+                id: 'agreements-savings-plan-terms-and-conditions-2',
+                label: 'Savings Plan Terms and Conditions',
+                children: [
+                  {
+                    id: 'agreements-savings-plan-terms-and-conditions-10-july-2025',
+                    label: 'Savings Plan Terms and Conditions - July 10, 2025'
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'release-notes',
+        label: 'Changelog',
+        kind: 'drill',
+        href: '/site/docs/release-notes',
+        groups: [
+          {
+            label: 'Changelog',
+            items: [
+              {
+                id: 'release-notes-overview',
+                label: 'Overview',
+                href: '/site/docs/release-notes'
+              },
+              {
+                id: 'changelog-previous-year',
+                label: 'Changelog previous years'
+              }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'status',
+        label: 'Status',
+        href: 'https://status.azion.com/',
+        target: '_blank'
+      }
     ]
   }
 ]
 
-/** The row the docs home renders as current. */
 export const DOCS_HOME_ID = 'overview'
 
-/**
- * The rail, as `Menu` takes it: the eight sections ARE the eight groups.
- *
- * There is nothing to map — a section is already `{ label, items }`, which is exactly
- * `MenuGroupNode` — so this is an alias rather than a projection, and the two can never
- * disagree about what the rail contains. It stays a separate export because that is the
- * name the shell binds to (`:groups`), and because the projection was real while the
- * sections were drill levels.
- *
- * No glyphs on the group labels. The live docs put one on each (a bolt on `Start`, the
- * pillar marks on `Build` / `Store` / `Secure` / `Observe`), but `Menu.Group`'s label is
- * a title, not a row: it has no icon column to sit in, and adding one would need the
- * label to grow an anatomy it deliberately does not have. The eight labels are unambiguous
- * on their own.
- */
 export const docsNavGroups = docsNavSections
 
-/**
- * Every row that has a real page, as `href` → row id.
- *
- * The rail's selection follows the ROUTE, not only the click that caused it: arriving at
- * a page by the palette, by a link in the prose, or by pasting the URL must all light the
- * same row and open the levels above it. Built from the tree itself so the two can never
- * disagree about which row a page is.
- */
+/** Every destination row, without the rows that only point at another product's tree. */
+export const docsLeaves = (nodes) => menuLeaves(nodes).filter((node) => !node.ref)
+
 export const docsIdByRoute = new Map(
-  menuLeaves(docsNavSections.flatMap((section) => section.items))
+  docsLeaves(docsNavSections.flatMap((section) => section.items))
     .filter((item) => item.href)
     .map((item) => [item.href, item.id])
 )
 
-/**
- * Every container on the way down to a page, so a jump can open them.
- *
- * Segments never fold, so they never appear here — an ancestor chain is containers only.
- * It is not one model, though: a condensed ancestor belongs to `expanded` and a DRILL
- * ancestor (`Functions`) belongs to the stack, so the consumer splits this list by kind
- * rather than handing it to one model (see `DocsLayout`'s `drillIds`). Returned as one
- * list because it is one fact — the path down — and only the shell knows which of the two
- * models each step feeds.
- */
 export const docsParentsOf = (id) =>
   menuPath(
     docsNavSections.flatMap((section) => section.items),
