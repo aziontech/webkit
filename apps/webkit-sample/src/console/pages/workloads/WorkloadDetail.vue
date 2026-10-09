@@ -5,6 +5,7 @@
   import IconButton from '@aziontech/webkit/icon-button'
   import InputText from '@aziontech/webkit/input-text'
   import Item from '@aziontech/webkit/item'
+  import Message from '@aziontech/webkit/message'
   import Switch from '@aziontech/webkit/switch'
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
@@ -44,6 +45,7 @@
   import { useListRefresh } from '../../lib/behavior/list-state'
   import { useTabEnter } from '../../lib/behavior/tab-enter'
   import { bindingRecord, resourceForSlot } from '../../lib/data/create-bindings'
+  import { applicationById } from '../../lib/data/applications'
   import { createResourcePath } from '../../lib/data/create-resources'
   import { deploymentRowsFor } from '../../lib/data/deployment-history'
   import { AZION_DEFAULT_ID } from '../../lib/data/deployment-strategies'
@@ -66,6 +68,11 @@
     workloadMutualAuthDefaults,
     workloadProtocolDefaults
   } from '../../lib/data/workload-protocols'
+  import {
+    deployInFlight,
+    deployStepTitle,
+    liveConsoleDeploy
+  } from '../../lib/state/workload-deploys'
   import { connectEnvironment, environmentsFor } from '../../lib/state/workload-environments'
   import { bindWorkloadSettings } from '../../lib/state/workload-settings'
 
@@ -104,7 +111,72 @@
     focusSection('domains')
   }
 
-  const topology = computed(() => resourceChain(record.value))
+  const inFlight = computed(() => deployInFlight(workloadId))
+
+  const liveDeploy = computed(() => liveConsoleDeploy(workloadId))
+
+  const deployStep = computed(() => (inFlight.value ? deployStepTitle(inFlight.value) : ''))
+
+  const withApplication = (node, application) => {
+    if (!application || application.name === node.name) return node
+    const app = applicationById(application.id)
+    return {
+      ...node,
+      name: application.name,
+      href: `/applications/${application.id}`,
+      reference: application.id,
+      fields: [
+        { label: 'ID', value: application.id },
+        { label: 'Repository', value: app?.repository ?? '' },
+        { label: 'Branch', value: app?.branch ?? '' }
+      ]
+    }
+  }
+
+  const servedApplication = (node) => withApplication(node, liveDeploy.value?.application)
+
+  const applicationNode = (node) => {
+    const served = servedApplication(node)
+    const incoming = inFlight.value?.application
+    if (!incoming) return served
+    if (incoming.name === served.name) return { ...served, status: 'Deploying' }
+    return {
+      ...withApplication(served, incoming),
+      status: 'Deploying',
+      dashed: true,
+      message: `Replaces ${served.name} once the deploy finishes.`
+    }
+  }
+
+  const topology = computed(() =>
+    resourceChain(record.value).map((node) =>
+      node.key === 'application' ? applicationNode(node) : node
+    )
+  )
+
+  const replacedApplication = computed(() => {
+    const incoming = inFlight.value?.application?.name
+    const served = servedApplication(
+      resourceChain(record.value).find((node) => node.key === 'application') ?? { name: '' }
+    ).name
+    return incoming && served && incoming !== served ? served : ''
+  })
+
+  const deployBanner = computed(() => {
+    const run = inFlight.value
+    if (!run) return ''
+    const version = run.version?.name ? ` ${run.version.name}` : ''
+    const lead = `Deploying ${run.application.name}${version} to ${run.environment} · ${deployStep.value}.`
+    return replacedApplication.value
+      ? `${lead} It replaces ${replacedApplication.value} on this workload once it finishes.`
+      : lead
+  })
+
+  const openInFlight = () =>
+    router.push({
+      path: `/deployments/${inFlight.value.id}`,
+      query: { email: userEmail.value, workload: workloadId, workloadName: workload.value.name }
+    })
 
   const domainsNode = computed(() => {
     const domains = [
@@ -612,6 +684,7 @@
             kind="outlined"
             size="medium"
             icon="pi pi-cloud-upload"
+            :loading="Boolean(inFlight)"
             @click="openDeploy"
           />
         </template>
@@ -627,9 +700,19 @@
             class="layout-column layout-boundary flex min-w-0 flex-col"
           >
             <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)">
+              <Message
+                v-if="deployBanner"
+                severity="info"
+                :label="deployBanner"
+                action-label="View Deployment"
+                aria-live="polite"
+                @action="openInFlight"
+              />
+
               <WorkloadSummary
                 v-model:environment="selectedEnvironment"
                 :workload="summaryWorkload"
+                :deploy-step="deployStep"
                 :custom-domains="savedDomains"
                 :environments="environments"
                 @visit="visit"

@@ -19,11 +19,14 @@
     workload: Record<string, unknown>
     customDomains?: unknown[]
     environments?: unknown[]
+    /** Pipeline step of a deploy running on this workload; empty when none is. */
+    deployStep?: string
   }
 
   const props = withDefaults(defineProps<Props>(), {
     customDomains: () => [],
-    environments: () => []
+    environments: () => [],
+    deployStep: ''
   })
 
   defineSlots<{
@@ -272,6 +275,13 @@
           <span class="text-label-sm text-(--text-muted)">Status</span>
           <div class="flex min-h-7 min-w-0 items-center">
             <StatusIndicator
+              v-if="deployStep"
+              severity="info"
+              loading
+              :label="`Deploying · ${deployStep}`"
+            />
+            <StatusIndicator
+              v-else
               :severity="live ? 'success' : 'neutral'"
               :label="live ? 'Live' : 'Inactive'"
             />

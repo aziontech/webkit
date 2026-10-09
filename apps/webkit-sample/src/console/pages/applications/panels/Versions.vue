@@ -5,6 +5,7 @@
   import InputText from '@aziontech/webkit/input-text'
   import Table from '@aziontech/webkit/table'
   import Tag from '@aziontech/webkit/tag'
+  import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, ref, watch } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
@@ -14,13 +15,17 @@
   import LastModifiedCell from '../../../components/list/LastModifiedCell.vue'
   import RefreshButton from '../../../components/list/RefreshButton.vue'
   import ControlsHeader from '../../../components/page/ControlsHeader.vue'
+  import HeadingAction from '../../../components/page/HeadingAction.vue'
   import PageHeading from '../../../components/page/PageHeading.vue'
   import { applyFilters } from '../../../lib/behavior/filter-bar'
   import { useListRefresh } from '../../../lib/behavior/list-state'
   import { FIT_COLUMN, TAG_COLUMN } from '../../../lib/behavior/table-columns'
   import {
+    applicationVersion,
     applicationVersions,
-    latestBuiltVersionId
+    createDraftFrom,
+    latestBuiltVersionId,
+    versionComment
   } from '../../../lib/data/releases'
   import {
     isActionAvailable,
@@ -90,6 +95,29 @@
   const deployVersion = (row) =>
     router.replace({ query: { ...route.query, deploy: '1', version: row.id } })
 
+  const CREATE_MS = 900
+  const creating = ref(false)
+
+  const newVersion = async () => {
+    if (creating.value) return
+    creating.value = true
+    const appName = String(props.application.name)
+    const source = applicationVersion(appName, latestId.value) ?? versions.value[0] ?? null
+    await new Promise((resolve) => setTimeout(resolve, CREATE_MS))
+    const draft = createDraftFrom(appName, source?.id)
+    await router.push({
+      path: `/applications/${props.application.id}/versions/${draft.id}`,
+      query: route.query
+    })
+    creating.value = false
+    toast.success('Created new version.', {
+      description: source
+        ? `${draft.name} is a draft copied from ${source.name}. Edit it, then build or deploy.`
+        : `${draft.name} is an empty draft. Configure it, then build or deploy.`,
+      closable: true
+    })
+  }
+
   const onAction = (event, value, row) => {
     if (value === 'deploy') {
       deployVersion(row)
@@ -105,7 +133,15 @@
       title="Versions"
       description="Each version is an isolated snapshot of this application's configuration. Open one to view it, or deploy a Ready version."
       size="small"
-    />
+    >
+      <template #actions>
+        <HeadingAction
+          label="New Version"
+          :loading="creating"
+          @click="newVersion"
+        />
+      </template>
+    </PageHeading>
 
     <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-group-gap)">
       <ControlsHeader>
@@ -156,16 +192,26 @@
             @row-click="openVersion"
           >
             <template #cell-name="{ value, row }">
-              <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-                <span class="truncate tabular-nums text-body-sm text-(--text-default)">
-                  {{ value }}
+              <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                <span class="flex min-w-0 items-center gap-(--spacing-xs)">
+                  <span
+                    class="truncate font-(family-name:--font-code) text-body-sm text-(--text-default)"
+                  >
+                    {{ value }}
+                  </span>
+                  <Tag
+                    v-if="row.id === latestId"
+                    label="Latest"
+                    severity="info"
+                    size="small"
+                  />
                 </span>
-                <Tag
-                  v-if="row.id === latestId"
-                  label="Latest"
-                  severity="info"
-                  size="small"
-                />
+                <span
+                  v-if="versionComment(row)"
+                  class="truncate text-body-xs text-(--text-muted)"
+                >
+                  {{ versionComment(row) }}
+                </span>
               </div>
             </template>
 

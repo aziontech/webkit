@@ -16,6 +16,7 @@
   import VersionHistoryPanel from '../../components/application/VersionHistoryPanel.vue'
   import VersionWire from '../../components/application/VersionWire.vue'
   import ApplicationDeployDrawer from '../../components/deployment/ApplicationDeployDrawer.vue'
+  import ApplicationEnvironmentDeployDrawer from '../../components/deployment/ApplicationEnvironmentDeployDrawer.vue'
   import UnsavedChangesGuard from '../../components/form/UnsavedChangesGuard.vue'
   import PageTabs from '../../components/page/PageTabs.vue'
   import AppLayout from '../../components/shell/AppLayout.vue'
@@ -25,6 +26,7 @@
   import { VERSION_CHANGE_KEY, VERSION_COMMIT_KEY } from '../../lib/behavior/version-commit'
   import { applicationById } from '../../lib/data/applications'
   import { provisionedApplications } from '../../lib/data/provisioning'
+  import { deployFlow } from '../../lib/state/sample-preset'
   import {
     applicationVersion,
     applicationVersions,
@@ -734,7 +736,8 @@
       </EmptyState>
     </main>
 
-    <ApplicationDeployDrawer
+    <component
+      :is="deployFlow === 'workload' ? ApplicationDeployDrawer : ApplicationEnvironmentDeployDrawer"
       v-if="version"
       v-model:open="deployOpen"
       :application="application"

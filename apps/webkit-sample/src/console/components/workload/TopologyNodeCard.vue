@@ -25,6 +25,7 @@
     Public: 'info',
     Private: 'neutral',
     Staged: 'warning',
+    Deploying: 'info',
     'Not bound': 'neutral'
   }
   const nodeSeverity = (status) => NODE_SEVERITY[status] ?? 'neutral'

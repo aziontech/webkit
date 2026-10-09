@@ -4,6 +4,7 @@
 
   import ProjectDropZone from '../../components/creation/ProjectDropZone.vue'
   import ApplicationDeployDrawer from '../../components/deployment/ApplicationDeployDrawer.vue'
+  import ApplicationEnvironmentDeployDrawer from '../../components/deployment/ApplicationEnvironmentDeployDrawer.vue'
   import UnsavedChangesGuard from '../../components/form/UnsavedChangesGuard.vue'
   import PageTabs from '../../components/page/PageTabs.vue'
   import AppLayout from '../../components/shell/AppLayout.vue'
@@ -14,6 +15,7 @@
   import { provisionedApplications } from '../../lib/data/provisioning'
   import { applicationVersions } from '../../lib/data/releases'
   import { VERSION_STATES } from '../../lib/data/versioning'
+  import { deployFlow } from '../../lib/state/sample-preset'
   import Build from './panels/Build.vue'
   import Deployments from './panels/Deployments.vue'
   import Overview from './panels/Overview.vue'
@@ -68,6 +70,7 @@
   const dropped = ref(null)
   const deployOpen = ref(false)
   const preferredWorkload = ref(null)
+  const preferredEnvironment = ref('')
   const pinnedVersionId = ref('')
 
   const { dragging } = useProjectUpload((project) => {
@@ -84,10 +87,18 @@
     () => route.query.deploy,
     (deploy) => {
       if (deploy !== '1') return
-      const { deploy: _deploy, workloadId, workloadName, version, ...rest } = route.query
+      const {
+        deploy: _deploy,
+        workloadId,
+        workloadName,
+        environment,
+        version,
+        ...rest
+      } = route.query
       preferredWorkload.value = workloadId
         ? { id: String(workloadId), name: String(workloadName || workloadId) }
         : null
+      preferredEnvironment.value = environment ? String(environment) : ''
       pinnedVersionId.value = version ? String(version) : ''
       dropped.value = null
       router.replace({ query: rest })
@@ -196,11 +207,13 @@
       </div>
     </main>
 
-    <ApplicationDeployDrawer
+    <component
+      :is="deployFlow === 'workload' ? ApplicationDeployDrawer : ApplicationEnvironmentDeployDrawer"
       v-model:open="deployOpen"
       :application="application"
       :source="deploySource"
       :preferred-workload="preferredWorkload"
+      :preferred-environment="preferredEnvironment"
       :pinned-version-id="pinnedVersionId"
     />
 

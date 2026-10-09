@@ -2,6 +2,7 @@ import { daysAgo, formatListDate } from '@shared/lib/dates'
 import { authorAt } from '@shared/lib/people'
 import { computed, ref } from 'vue'
 
+import { SCENARIO_SETTINGS } from './scenarios'
 import {
   DEFAULT_DEPLOYMENT_POLICY,
   DEFAULT_ENVIRONMENT_NAMES,
@@ -160,7 +161,8 @@ const SEEDED = [
     bindingPolicy: 'FLEXIBLE',
     deploymentPolicy: 'versioned_urls',
     days: 183
-  }
+  },
+  ...SCENARIO_SETTINGS
 ]
 
 export const environmentSuffix = (environmentName) => {
@@ -173,32 +175,30 @@ export const workloadSettingsId = (workloadId, environmentName) =>
   `ws-${workloadId}${environmentSuffix(environmentName)}`
 
 const workloadOwned = WORKLOADS.flatMap((workload, index) =>
-  DEFAULT_ENVIRONMENTS.value.map(
-    (environment) => {
-      const person = authorAt(index)
-      const updatedAt = daysAgo(index * 9 + 4)
-      return {
-        id: workloadSettingsId(workload.id, environment.name),
-        name: `${workload.name}${environmentSuffix(environment.name)}`,
-        description: `Created with the ${workload.name} workload for ${environment.name}.`,
-        type: 'default',
-        bindingPolicy: index % 5 === 2 ? 'FLEXIBLE' : DEFAULT_BINDING_POLICY,
-        deploymentPolicy: environment.deploymentPolicy,
-        strategyDefaults: strategyDefaultsWith({
-          canary: index % 3 === 0,
-          skew: index % 4 === 1
-        }),
-        status: 'Active',
-        system: false,
-        ownerWorkloadId: workload.id,
-        shared: false,
-        updatedAt,
-        lastModified: formatListDate(updatedAt),
-        author: person.name,
-        authorAvatar: person.avatar
-      }
+  (workload.environments ? [] : DEFAULT_ENVIRONMENTS.value).map((environment) => {
+    const person = authorAt(index)
+    const updatedAt = daysAgo(index * 9 + 4)
+    return {
+      id: workloadSettingsId(workload.id, environment.name),
+      name: `${workload.name}${environmentSuffix(environment.name)}`,
+      description: `Created with the ${workload.name} workload for ${environment.name}.`,
+      type: 'default',
+      bindingPolicy: index % 5 === 2 ? 'FLEXIBLE' : DEFAULT_BINDING_POLICY,
+      deploymentPolicy: environment.deploymentPolicy,
+      strategyDefaults: strategyDefaultsWith({
+        canary: index % 3 === 0,
+        skew: index % 4 === 1
+      }),
+      status: 'Active',
+      system: false,
+      ownerWorkloadId: workload.id,
+      shared: false,
+      updatedAt,
+      lastModified: formatListDate(updatedAt),
+      author: person.name,
+      authorAvatar: person.avatar
     }
-  )
+  })
 )
 
 const seeded = ref([

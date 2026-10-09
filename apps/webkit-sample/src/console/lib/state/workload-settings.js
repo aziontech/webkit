@@ -11,7 +11,7 @@ import {
 } from '../data/deployment-strategies'
 import { DEFAULT_ENVIRONMENTS, policyForEnvironment } from '../data/environments'
 import { provisionedWorkloads } from '../data/provisioning'
-import { WORKLOADS } from '../data/workloads'
+import { workloadById, WORKLOADS } from '../data/workloads'
 
 export const ENVIRONMENT_ORDER = computed(() =>
   DEFAULT_ENVIRONMENTS.value.map((environment) => ({ name: environment.name }))
@@ -22,6 +22,8 @@ const environmentPolicy = (name) => policyForEnvironment(name) ?? DEFAULT_DEPLOY
 const ownSettingsId = workloadSettingsId
 
 const SHARED_BY_INDEX = { 0: 's1', 4: 's1', 8: 's1', 1: 's2', 6: 's2' }
+
+const SHARED_VERSIONED_BY_INDEX = { 4: 's5', 5: 's5' }
 
 const BINDINGS_KEY = 'webkit-sample:workload-settings'
 
@@ -47,8 +49,11 @@ const persist = () => {
 export const environmentsForWorkload = (workloadId) => {
   const key = String(workloadId)
   const overlay = bindings.value[key] ?? {}
+  const declared = workloadById(key)?.environments
   const names = [
-    ...ENVIRONMENT_ORDER.value.map((environment) => environment.name),
+    ...(declared
+      ? Object.keys(declared)
+      : ENVIRONMENT_ORDER.value.map((environment) => environment.name)),
     ...Object.keys(overlay)
   ]
 
@@ -60,6 +65,13 @@ export const linkEnvironment = (workloadId, name) => {
   const policy = environmentPolicy(name)
   const chosen = (bindings.value[key] ?? {})[name]
   if (chosen) return { name, deploymentPolicy: policy, settingsId: chosen, auto: false }
+  const declared = workloadById(key)?.environments
+  if (declared) {
+    const settingsId = declared[name]?.settingsId
+    return settingsId
+      ? { name, deploymentPolicy: policy, settingsId, auto: false }
+      : { name, deploymentPolicy: policy, settingsId: AZION_DEFAULT_ID, auto: true }
+  }
   const index = WORKLOADS.findIndex((workload) => workload.id === key)
   return {
     name,
@@ -75,7 +87,12 @@ const reachableBy = (strategy, workloadId) =>
   String(strategy.ownerWorkloadId) === String(workloadId)
 
 const autoLink = (workloadId, index, policy, environmentName) => {
-  const shared = environmentName === 'Production' ? SHARED_BY_INDEX[index] : ''
+  const shared =
+    environmentName === 'Production'
+      ? SHARED_BY_INDEX[index]
+      : policy === 'versioned_urls'
+        ? SHARED_VERSIONED_BY_INDEX[index]
+        : ''
   const preferred = [shared, ownSettingsId(workloadId, environmentName)].filter(Boolean)
   const compatible = strategies.value.filter(
     (strategy) =>
@@ -105,6 +122,13 @@ export const boundWorkloads = (settingsId) =>
   )
 
 export const isShared = (settingsId) => boundWorkloads(settingsId).length > 1
+
+export const workloadsOnSettings = (settingsId, environment) =>
+  allWorkloads.value.filter((workload) =>
+    environmentsForWorkload(workload.id).some(
+      (linked) => linked.name === environment && linked.settingsId === String(settingsId)
+    )
+  )
 
 export function bindWorkloadSettings(workloadId, environment, settingsId) {
   const key = String(workloadId)

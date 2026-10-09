@@ -2,6 +2,8 @@ import { daysAgo, formatListDate } from '@shared/lib/dates'
 import { authorAt } from '@shared/lib/people'
 import { computed, ref } from 'vue'
 
+import { SCENARIO_ENVIRONMENTS } from './scenarios'
+
 export const DEPLOYMENT_POLICY_OPTIONS = [
   {
     value: 'single_version',
@@ -111,25 +113,16 @@ const SEEDED = [
     days: 2
   },
   {
-    id: 'env-stage',
-    name: 'Stage',
-    description: 'A rehearsal. Each version keeps its own URL, so a build can be read before it is live.',
+    id: 'env-preview',
+    name: 'Preview',
+    description: 'Every other branch. Each version keeps its own URL, so a build can be read before it is live.',
     deploymentPolicy: 'versioned_urls',
     robotsPolicy: 'noindex',
-    branchTracking: { enabled: true, mode: 'branch_starts_with', branchMatch: 'release/' },
+    branchTracking: { enabled: false, mode: 'branch_is', branchMatch: 'main' },
     starter: true,
     days: 9
   },
-  {
-    id: 'env-preview',
-    name: 'Preview',
-    description: 'Branch previews, reachable only from the office network.',
-    deploymentPolicy: 'versioned_urls',
-    robotsPolicy: 'noindex',
-    protection: { ipAllowlist: { enabled: true, cidrs: ['203.0.113.0/24'] } },
-    branchTracking: { enabled: false, mode: 'branch_is', branchMatch: 'main' },
-    days: 24
-  }
+  ...SCENARIO_ENVIRONMENTS
 ]
 
 const buildEnvironment = (input, index) => {

@@ -15,13 +15,13 @@
   import AuthorCell from '../../components/list/AuthorCell.vue'
   import ColumnsButton from '../../components/list/ColumnsButton.vue'
   import DeleteDialog from '../../components/list/DeleteDialog.vue'
-  import DomainCell from '../../components/list/DomainCell.vue'
   import ExportButton from '../../components/list/ExportButton.vue'
   import FilterButton from '../../components/list/FilterButton.vue'
   import FilterChips from '../../components/list/FilterChips.vue'
   import IdCell from '../../components/list/IdCell.vue'
   import LastModifiedCell from '../../components/list/LastModifiedCell.vue'
   import RefreshButton from '../../components/list/RefreshButton.vue'
+  import WorkloadCell from '../../components/list/WorkloadCell.vue'
   import ControlsHeader from '../../components/page/ControlsHeader.vue'
   import HeadingAction from '../../components/page/HeadingAction.vue'
   import PageHeading from '../../components/page/PageHeading.vue'
@@ -30,7 +30,7 @@
   import { useListFilters } from '../../lib/behavior/list-state'
   import { FIT_COLUMN } from '../../lib/behavior/table-columns'
   import { APPLICATIONS } from '../../lib/data/applications'
-  import { latestApplicationDeployment } from '../../lib/data/deployment-history'
+  import { applicationDeploymentRows } from '../../lib/data/deployment-history'
   import { statusMeta, statusOptions } from '../../lib/data/deployments'
   import { productFirstUse } from '../../lib/data/product-empty-states'
   import { provisionedApplications, removeDeployment } from '../../lib/data/provisioning'
@@ -48,27 +48,33 @@
 
   const applications = ref([...APPLICATIONS])
 
-  const withDeploymentStatus = (application) => ({
-    ...application,
-    status: latestApplicationDeployment(application.id, application.name)?.status ?? ''
-  })
+  const boundWorkloads = (rows) => [
+    ...new Map(
+      rows
+        .filter((row) => row.workloadId)
+        .map((row) => [
+          String(row.workloadId),
+          { id: String(row.workloadId), name: row.workloadName }
+        ])
+    ).values()
+  ]
 
-  const withDomains = (application) => {
-    const custom = (application.customDomains ?? []).map((entry) => entry.domain)
-    const domains = [...custom, application.domainName].filter(Boolean)
+  const withDeploymentStatus = (application) => {
+    const rows = applicationDeploymentRows(application.id, application.name)
+    const workloads = boundWorkloads(rows)
     return {
       ...application,
-      domainName: domains[0] ?? '',
-      domains,
-      domainCount: Math.max(domains.length - 1, 0)
+      status: rows[0]?.status ?? '',
+      workloads,
+      workloadNames: workloads.map((workload) => workload.name).join(', ')
     }
   }
 
   const columns = [
     { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, hideable: false },
     { accessorKey: 'repository', header: 'Repository', grow: 2 },
+    { accessorKey: 'workloadNames', header: 'Workloads', grow: 2 },
     { accessorKey: 'id', header: 'ID', enableSorting: true, minWidth: FIT_COLUMN },
-    { accessorKey: 'domainName', header: 'Domain Name', grow: 3 },
     { accessorKey: 'status', header: 'Status', enableSorting: true, minWidth: FIT_COLUMN },
     { accessorKey: 'author', header: 'Last Editor', enableSorting: true, minWidth: FIT_COLUMN },
     {
@@ -119,9 +125,9 @@
   ]
 
   const allApplications = computed(() =>
-    [...provisionedApplications.value, ...tenancyRows(applications.value, 'applications')]
-      .map(withDeploymentStatus)
-      .map(withDomains)
+    [...provisionedApplications.value, ...tenancyRows(applications.value, 'applications')].map(
+      withDeploymentStatus
+    )
   )
 
   const showFirstUse = computed(() => accountEmpty.value && allApplications.value.length === 0)
@@ -323,18 +329,14 @@
                     </button>
                   </template>
 
+                  <template #cell-workloadNames="{ row }">
+                    <WorkloadCell :workloads="row.workloads" />
+                  </template>
+
                   <template #cell-id="{ value }">
                     <IdCell
                       :value="value"
                       resource="application"
-                    />
-                  </template>
-
-                  <template #cell-domainName="{ value, row }">
-                    <DomainCell
-                      :value="value"
-                      :domains="row.domains"
-                      :count="row.domainCount"
                     />
                   </template>
 

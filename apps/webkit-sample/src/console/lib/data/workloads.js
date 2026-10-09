@@ -1,9 +1,11 @@
 import { daysAgo, formatListDate } from '@shared/lib/dates'
 import { authorAt } from '@shared/lib/people'
 
+import { SCENARIO_WORKLOADS } from './scenarios'
+
 export const WORKLOAD_COUNT = 20
 
-export const WORKLOADS = Array.from({ length: WORKLOAD_COUNT }, (_, i) => {
+const GENERATED = Array.from({ length: WORKLOAD_COUNT }, (_, i) => {
   const n = i + 1
   const extraCount = (n * 7) % 99
   const domains = [
@@ -26,5 +28,28 @@ export const WORKLOADS = Array.from({ length: WORKLOAD_COUNT }, (_, i) => {
     ownerAvatar: authorAt(i).avatar
   }
 })
+
+const scenarioWorkload = (workload, index) => {
+  const domains = Object.values(workload.environments).flatMap((entry) => entry.domains)
+  const modified = daysAgo(workload.days)
+  const owner = authorAt(index)
+  return {
+    id: workload.id,
+    name: workload.name,
+    domain: domains[0],
+    domains,
+    domainCount: domains.length - 1,
+    status: 'Live',
+    modifiedAt: modified,
+    createdAt: daysAgo(workload.days + 30),
+    lastModified: formatListDate(modified),
+    owner: owner.name,
+    ownerAvatar: owner.avatar,
+    applicationId: workload.applicationId,
+    environments: workload.environments
+  }
+}
+
+export const WORKLOADS = [...GENERATED, ...SCENARIO_WORKLOADS.map(scenarioWorkload)]
 
 export const workloadById = (id) => WORKLOADS.find((workload) => workload.id === String(id))

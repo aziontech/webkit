@@ -15,7 +15,7 @@
     applicationVersion,
     buildApplicationVersion,
     markVersionDeployed,
-    nextApplicationVersionName,
+    newVersionId,
     recordApplicationBuild,
     versionChoices
   } from '../../lib/data/releases'
@@ -31,6 +31,7 @@
     application: Record<string, unknown>
     source?: string
     preferredWorkload?: { id: string; name: string } | null
+    preferredEnvironment?: string
     pinnedVersionId?: string
     buildVersionId?: string
   }
@@ -38,6 +39,7 @@
   const props = withDefaults(defineProps<Props>(), {
     source: '',
     preferredWorkload: null,
+    preferredEnvironment: '',
     pinnedVersionId: '',
     buildVersionId: ''
   })
@@ -128,6 +130,13 @@
       boundWorkloads.value.find((entry) => entry.id === workloadId.value) ?? lastUsed.value ?? null
   )
 
+  const isLastUsed = computed(
+    () =>
+      workloadMode.value === 'existing' &&
+      Boolean(lastUsed.value?.environment) &&
+      existingWorkload.value?.id === lastUsed.value.id
+  )
+
   const newWorkload = computed(() => ({
     id: '',
     name: appName.value,
@@ -206,7 +215,8 @@
       existingId ||
       recordApplicationBuild(
         appName.value,
-        props.source ? `Built from ${props.source}` : 'New build'
+        props.source ? `Built from ${props.source}` : 'New build',
+        pendingName.value || undefined
       ).id
     builtId.value = builtVersionId
     versionId.value = builtVersionId
@@ -227,7 +237,7 @@
       })
       return
     }
-    pendingName.value = nextApplicationVersionName(appName.value)
+    pendingName.value = newVersionId(appName.value)
     buildTimer = setTimeout(() => finishBuild(), BUILD_MS)
   }
 
@@ -239,7 +249,11 @@
     const remembered = environmentOptions.value.find(
       (entry) => entry.name === lastUsed.value?.environment
     )
-    environment.value = remembered?.name ?? environmentOptions.value[0]?.name ?? ''
+    const preferred = environmentOptions.value.find(
+      (entry) => entry.name === props.preferredEnvironment
+    )
+    environment.value =
+      preferred?.name ?? remembered?.name ?? environmentOptions.value[0]?.name ?? ''
     versionId.value = ''
   }
 
@@ -397,7 +411,16 @@
                 </span>
               </Item.Media>
               <Item.Content>
-                <Item.Title class="truncate">{{ workload.name }}</Item.Title>
+                <span class="flex min-w-0 items-center gap-(--spacing-xs)">
+                  <Item.Title class="truncate">{{ workload.name }}</Item.Title>
+                  <Tag
+                    v-if="isLastUsed"
+                    label="Last used"
+                    severity="info"
+                    size="small"
+                    class="shrink-0"
+                  />
+                </span>
                 <Item.Description v-if="workload.domain">{{ workload.domain }}</Item.Description>
               </Item.Content>
               <Item.Actions v-if="workloadMode === 'existing'">

@@ -3,9 +3,16 @@ import { authorAt } from '@shared/lib/people'
 import { computed, reactive } from 'vue'
 
 import { createdRowsFor } from '../state/created-resources'
-import { boundWorkloads, reachLabel, settingsIdsForWorkload } from '../state/workload-settings'
+import { liveConsoleDeploy } from '../state/workload-deploys'
+import {
+  boundWorkloads,
+  environmentsForWorkload,
+  reachLabel,
+  settingsIdsForWorkload
+} from '../state/workload-settings'
 import { APPLICATIONS } from './applications'
-import { CONNECTORS, connectorMeta } from './connectors'
+import { scenarioVersionsFor } from './scenarios'
+import { connectorMeta, CONNECTORS } from './connectors'
 import { existingCustomPageOptions } from './custom-pages'
 import { DEPLOYMENT_HISTORY } from './deployment-history'
 import { strategies } from './deployment-strategies'
@@ -103,19 +110,16 @@ export const DETECTION_FAILS_ONCE = new Set(['analytics-pro'])
 
 const versionCache = reactive(new Map())
 
-const branchOf = (name) => {
-  const record = [...APPLICATIONS, ...provisionedApplications.value].find(
-    (application) => application.name === name
-  )
-  if (!record) return 'main'
-  return record.branch || (record.source === 'cli' ? 'cli' : 'main')
-}
-
-const versionName = (name, sequence) => `${branchOf(name)}@${String(sequence).padStart(4, '0')}`
-
 const hasDraft = (name) => HAS_DRAFT.has(name) || hash(name) % 3 === 0
 
-const versionId = (step) => `A${(step * 7919).toString(36).toUpperCase().slice(0, 6)}`
+const ID_FLOOR = 36 ** 6
+
+const ID_SPAN = 36 ** 7 - ID_FLOOR
+
+const versionId = (step) =>
+  `A${(ID_FLOOR + ((step * 2_654_435_761) % ID_SPAN)).toString(36).toUpperCase()}`
+
+export const newVersionId = (name) => versionId(hash(name) + (Date.now() % 100_003))
 
 const stateFor = (name, index, count) => {
   if (index === 0 && hasDraft(name)) return VERSION_STATES.DRAFT
@@ -125,13 +129,27 @@ const stateFor = (name, index, count) => {
   return built === count - 1 && count > 2 ? VERSION_STATES.ARCHIVED : VERSION_STATES.READY
 }
 
+const scenarioVersions = (name) =>
+  scenarioVersionsFor(name).map((entry) => ({
+    id: entry.id,
+    name: entry.id,
+    comment: entry.comment,
+    state: entry.state,
+    isCurrent: entry.state === VERSION_STATES.ACTIVE,
+    createdAt: entry.createdAt,
+    author: authorAt(entry.authorIndex).name,
+    authorAvatar: authorAt(entry.authorIndex).avatar
+  }))
+
 const buildVersions = (name) => {
+  if (scenarioVersionsFor(name).length) return scenarioVersions(name)
   const seed = hash(name)
   if (NO_READY_VERSION.has(name)) {
+    const id = versionId(seed)
     return [
       {
-        id: versionId(seed),
-        name: versionName(name, 400 + (seed % 90)),
+        id,
+        name: id,
         comment: 'Remove rule "Legacy redirects"',
         state: VERSION_STATES.DRAFT,
         isCurrent: false,
@@ -143,16 +161,16 @@ const buildVersions = (name) => {
   }
 
   const count = 3 + (seed % 12) + (hasDraft(name) || BUILD_FAILED.has(name) ? 1 : 0)
-  const first = 400 + (seed % 90)
   let hours = 3 + (seed % 20)
   return Array.from({ length: count }, (_, index) => {
     const step = seed + index * 977
     const state = stateFor(name, index, count)
     const createdAt = hours < 48 ? hoursAgo(hours) : daysAgo(Math.round(hours / 24))
     hours += 6 + (step % 40)
+    const id = versionId(step)
     return {
-      id: versionId(step),
-      name: versionName(name, first + count - index),
+      id,
+      name: id,
       comment: COMMENTS[(step + index) % COMMENTS.length],
       state,
       isCurrent: state === VERSION_STATES.ACTIVE,
@@ -179,18 +197,12 @@ export const latestBuiltVersionId = (name) =>
     [VERSION_STATES.READY, VERSION_STATES.ACTIVE].includes(entry.state)
   )?.id ?? null
 
-const topSequence = (name) =>
-  Math.max(0, ...versionsOf(name).map((entry) => Number(entry.name.split('@')[1]) || 0))
-
-export const nextApplicationVersionName = (name) => versionName(name, topSequence(name) + 1)
-
-export const recordApplicationBuild = (name, comment = '') => {
+export const recordApplicationBuild = (name, comment = '', id = newVersionId(name)) => {
   const versions = versionsOf(name)
-  const top = topSequence(name)
   const person = authorAt(0)
   const version = {
-    id: versionId(hash(name) + (Date.now() % 100_003)),
-    name: versionName(name, top + 1),
+    id,
+    name: id,
     comment,
     state: VERSION_STATES.READY,
     isCurrent: false,
@@ -207,9 +219,10 @@ export const createDraftFrom = (name, sourceId) => {
   const versions = versionsOf(name)
   const source = versions.find((entry) => entry.id === String(sourceId))
   const person = authorAt(0)
+  const id = newVersionId(name)
   const draft = {
-    id: versionId(hash(name) + (Date.now() % 100_003)),
-    name: versionName(name, topSequence(name) + 1),
+    id,
+    name: id,
     comment: '',
     changes: [],
     state: VERSION_STATES.DRAFT,
@@ -413,10 +426,43 @@ export const currentDeploymentFor = (workloadId, environment = '') =>
   )
 
 export const servingApplication = (workloadId) => {
+  const live = liveConsoleDeploy(workloadId)
+  if (live) return live.application.name
   const current = currentDeploymentFor(workloadId)
   if (current?.resourceType === 'application' && current.resourceName) return current.resourceName
   return findDeploymentByWorkload(workloadId)?.application?.name ?? ''
 }
+
+const applicationIn = (workloadId, environment) => {
+  const live = liveConsoleDeploy(workloadId, environment)
+  if (live) return live.application.name
+  return (
+    DEPLOYMENT_HISTORY.find(
+      (deployment) =>
+        deployment.workloadId === String(workloadId) &&
+        deployment.environment === environment &&
+        deployment.resourceType === 'application'
+    )?.resourceName ?? ''
+  )
+}
+
+export const environmentBindings = (workloadId) => {
+  const serving = servingApplication(workloadId)
+  return environmentsForWorkload(workloadId).map((linked) => {
+    const settings = strategies.value.find((strategy) => strategy.id === linked.settingsId)
+    return {
+      name: linked.name,
+      settingsName: settings?.name ?? '',
+      bindingPolicy: settings?.bindingPolicy ?? 'STRICT',
+      application: applicationIn(workloadId, linked.name) || serving
+    }
+  })
+}
+
+export const environmentLocked = (binding, applicationName) =>
+  binding.bindingPolicy === 'STRICT' &&
+  Boolean(binding.application) &&
+  binding.application !== applicationName
 
 export const deploymentSettings = computed(() =>
   strategies.value.map((strategy) => {
@@ -427,7 +473,15 @@ export const deploymentSettings = computed(() =>
       environment: currentDeploymentFor(workload.id)?.environment || 'Production'
     }))
 
-    const environmentNames = [...new Set(workloads.map((workload) => workload.environment))]
+    const environmentNames = [
+      ...new Set(
+        workloadsForSettings(strategy.id).flatMap((workload) =>
+          environmentsForWorkload(workload.id)
+            .filter((linked) => linked.settingsId === strategy.id)
+            .map((linked) => linked.name)
+        )
+      )
+    ]
 
     return {
       id: strategy.id,

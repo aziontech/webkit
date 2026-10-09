@@ -26,7 +26,7 @@
     <ResourceBinding
       v-model="form.application"
       title="Application"
-      hint="What this workload serves on each environment, so one workload can serve different applications on Production and Stage."
+      hint="What this workload serves on each environment, so one workload can serve different applications on Production and Preview."
       :options="WORKLOAD_APPLICATIONS"
       icon="ai ai-edge-application"
       noun="application"

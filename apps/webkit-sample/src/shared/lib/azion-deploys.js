@@ -918,6 +918,9 @@ export const deployRows = () => DEPLOYMENTS.map(deployRow)
  */
 export const consoleDeployRows = () => sessionDeploys.value.map(deployRow)
 
+export const consoleDeploysFor = (workloadId) =>
+  sessionDeploys.value.filter((deploy) => deploy.workload.id === String(workloadId))
+
 /**
  * The console-started deploys of one workload, as rows.
  *

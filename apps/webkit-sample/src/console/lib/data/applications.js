@@ -1,7 +1,9 @@
 import { daysAgo, formatListDate } from '@shared/lib/dates'
 import { authorAt, emailOf } from '@shared/lib/people'
 
-export const APPLICATIONS = [
+import { SCENARIO_APPLICATIONS } from './scenarios'
+
+const LISTED = [
   {
     id: '1784552864',
     name: 'webkit-sample-vue',
@@ -19,7 +21,7 @@ export const APPLICATIONS = [
     source: 'platform',
     repository: '',
     branch: '',
-    domainName: 'h3l1oedge42.azion.run',
+    domainName: '',
     modifiedAt: daysAgo(1)
   },
   {
@@ -37,7 +39,7 @@ export const APPLICATIONS = [
         environment: 'Production',
         certificate: 'cert-8801'
       },
-      { id: 'domain-edgeflow-apex', domain: 'edgeflow.com', environment: 'Stage', certificate: '' }
+      { id: 'domain-edgeflow-apex', domain: 'edgeflow.com', environment: 'Preview', certificate: '' }
     ],
     modifiedAt: daysAgo(4)
   },
@@ -178,7 +180,9 @@ export const APPLICATIONS = [
     domainName: 'a1s2d3f4g5.azion.run',
     modifiedAt: daysAgo(190)
   }
-].map((app, index) => {
+]
+
+const withAuthor = (app, index) => {
   const person = authorAt(index)
   return {
     ...app,
@@ -187,7 +191,14 @@ export const APPLICATIONS = [
     authorAvatar: person.avatar,
     lastModified: formatListDate(app.modifiedAt)
   }
-})
+}
+
+export const APPLICATIONS = [
+  ...SCENARIO_APPLICATIONS.map((application, index) =>
+    withAuthor(application, LISTED.length + index)
+  ),
+  ...LISTED.map(withAuthor)
+]
 
 export const applicationById = (id) => APPLICATIONS.find((app) => app.id === String(id))
 

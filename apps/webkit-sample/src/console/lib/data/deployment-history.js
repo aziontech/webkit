@@ -2,7 +2,13 @@ import { consoleDeployRowsForApplication } from '@shared/lib/azion-deploys'
 import { formatListDate, hoursAgo } from '@shared/lib/dates'
 import { authorAt, emailOf } from '@shared/lib/people'
 
-import { applicationAt } from './applications'
+import { applicationById, APPLICATIONS } from './applications'
+import {
+  isScenarioApplication,
+  SCENARIO_DEPLOYMENTS,
+  scenarioApplicationById,
+  scenarioVersionsFor
+} from './scenarios'
 import { findDeploymentByApplication, provisionedDeployRow } from './provisioning'
 import { workloadById, WORKLOADS } from './workloads'
 
@@ -32,8 +38,28 @@ const resourceFor = (target, application) => {
 
 export const ENVIRONMENT_SPREAD = 3
 
+export const DEDICATED_WORKLOAD_INDEX = { 1784552864: 0 }
+
+export const UNBOUND_APPLICATIONS = new Set(['2041778390'])
+
+const DEDICATED_BY_WORKLOAD_INDEX = Object.fromEntries(
+  Object.entries(DEDICATED_WORKLOAD_INDEX).map(([id, index]) => [index, applicationById(id)])
+)
+
+const SHARED_POOL = APPLICATIONS.filter(
+  (application) =>
+    !UNBOUND_APPLICATIONS.has(application.id) &&
+    !(application.id in DEDICATED_WORKLOAD_INDEX) &&
+    !isScenarioApplication(application.id)
+)
+
+const GENERIC_WORKLOADS = WORKLOADS.filter((workload) => !workload.environments)
+
+const servedApplicationAt = (index) =>
+  DEDICATED_BY_WORKLOAD_INDEX[index] ?? SHARED_POOL[index % SHARED_POOL.length]
+
 export function historyFor(workload, index) {
-  const application = applicationAt(index)
+  const application = servedApplicationAt(index)
   const twoEnvironments = index % ENVIRONMENT_SPREAD === 0
 
   return TARGETS.map((target, slot) => {
@@ -50,7 +76,7 @@ export function historyFor(workload, index) {
       current: slot === 0,
       status,
       duration: status === 'Ready' ? DURATIONS[(index + slot) % DURATIONS.length] : '',
-      environment: twoEnvironments && slot === 1 ? 'Stage' : 'Production',
+      environment: twoEnvironments && slot === 1 ? 'Preview' : 'Production',
       deployedAt,
       date: formatListDate(deployedAt),
       ...resource,
@@ -63,8 +89,43 @@ export function historyFor(workload, index) {
 
 const byNewest = (a, b) => b.deployedAt - a.deployedAt
 
+const scenarioHistoryFor = (workload) =>
+  SCENARIO_DEPLOYMENTS.filter(
+    (deployment) => deployment.applicationId === workload.applicationId
+  ).flatMap(({ applicationId, versionId, settingsId, hours }, slot) =>
+    Object.entries(workload.environments)
+      .filter(([, entry]) => entry.settingsId === settingsId)
+      .map(([environment]) => {
+        const application = scenarioApplicationById(applicationId)
+        const version = scenarioVersionsFor(application.name).find(
+          (entry) => entry.id === versionId
+        )
+        const person = authorAt(version?.authorIndex ?? slot)
+        const deployedAt = hoursAgo(hours)
+        return {
+          id: `dep-${workload.id}-${versionId}-${environment.toLowerCase()}`,
+          versionId,
+          settingsId,
+          workloadId: workload.id,
+          workloadName: workload.name,
+          current: true,
+          status: 'Ready',
+          duration: DURATIONS[slot % DURATIONS.length],
+          environment,
+          deployedAt,
+          date: formatListDate(deployedAt),
+          resourceType: 'application',
+          resourceName: application.name,
+          resourceId: application.id,
+          author: person.name,
+          authorEmail: emailOf(person.name),
+          authorAvatar: person.avatar
+        }
+      })
+  )
+
 export const DEPLOYMENT_HISTORY = WORKLOADS.flatMap((workload, index) =>
-  historyFor(workload, index)
+  workload.environments ? scenarioHistoryFor(workload) : historyFor(workload, index)
 ).sort(byNewest)
 
 export const deploymentByVersion = (versionId) =>
@@ -101,9 +162,18 @@ export function applicationDeploymentRows(applicationId, applicationName = 'Appl
     return withStarted(started, published)
   }
 
+  if (UNBOUND_APPLICATIONS.has(id)) return withStarted(started, [])
+
+  if (isScenarioApplication(id))
+    return withStarted(
+      started,
+      DEPLOYMENT_HISTORY.filter((deployment) => deployment.resourceId === id)
+    )
+
   const seeded = DEPLOYMENT_HISTORY.filter(
     (deployment) => deployment.resourceType === 'application' && deployment.resourceId === id
   )
+  const dedicated = DEDICATED_WORKLOAD_INDEX[id]
   const name = seeded[0]?.resourceName || applicationName
   const seed = Number(id.slice(-3)) || 0
   const oldest = seeded.reduce(
@@ -114,7 +184,7 @@ export function applicationDeploymentRows(applicationId, applicationName = 'Appl
   const derived = Array.from(
     { length: Math.max(APPLICATION_HISTORY_LENGTH - seeded.length, 0) },
     (_, slot) => {
-      const workload = WORKLOADS[(seed + slot) % WORKLOADS.length]
+      const workload = GENERIC_WORKLOADS[dedicated ?? (seed + slot) % GENERIC_WORKLOADS.length]
       const status = STATUSES[slot % STATUSES.length][(seed + slot) % STATUSES[0].length]
       const person = authorAt(seed + slot)
       const deployedAt = new Date(oldest - (slot + 1) * (29 + (seed % 7)) * 3_600_000)
@@ -127,7 +197,7 @@ export function applicationDeploymentRows(applicationId, applicationName = 'Appl
         current: false,
         status,
         duration: status === 'Ready' ? DURATIONS[(seed + slot) % DURATIONS.length] : '',
-        environment: (seed + slot) % 4 === 1 ? 'Stage' : 'Production',
+        environment: (seed + slot) % 4 === 1 ? 'Preview' : 'Production',
         deployedAt,
         date: formatListDate(deployedAt),
         resourceType: 'application',

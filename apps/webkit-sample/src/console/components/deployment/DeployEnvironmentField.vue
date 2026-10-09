@@ -7,6 +7,7 @@
     description?: string
     tag?: string
     tagSeverity?: string
+    disabled?: boolean
   }
 
   interface Props {
@@ -41,7 +42,7 @@
         :value="entry.name"
         :label="entry.name"
         :description="entry.description"
-        :disabled="disabled"
+        :disabled="disabled || entry.disabled"
       />
       <Tag
         v-if="entry.tag"

@@ -2,6 +2,7 @@ import { daysAgo, formatListDate } from '@shared/lib/dates'
 import { authorAt, emailOf } from '@shared/lib/people'
 import { computed, ref } from 'vue'
 
+import { scenarioApplicationForWorkload } from './scenarios'
 import { workloadById } from './workloads'
 
 const PRESET_ALIASES = {
@@ -295,16 +296,18 @@ export function demoDeployment(workloadId, workloadName = 'Workload Name') {
       owner: seeded?.owner || author.name,
       ownerAvatar: seeded?.ownerAvatar || author.avatar
     },
-    application: {
-      id: derivedId(`application-${id}`),
-      name,
-      preset: 'vue',
-      source: 'git',
-      repository: `gab-az/${name}`,
-      branch: 'main',
-      domainName: domain,
-      status: 'Active'
-    },
+    application: seeded?.environments
+      ? { ...scenarioApplicationForWorkload(id), domainName: domain, status: 'Active' }
+      : {
+          id: derivedId(`application-${id}`),
+          name,
+          preset: 'vue',
+          source: 'git',
+          repository: `gab-az/${name}`,
+          branch: 'main',
+          domainName: domain,
+          status: 'Active'
+        },
     connector: {
       id: derivedId(`connector-${id}`),
       name: `${name}-storage`,
