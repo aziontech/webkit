@@ -128,6 +128,7 @@
   import InputText from '@aziontech/webkit/input-text'
   import Item from '@aziontech/webkit/item'
   import SectionContainer from '@aziontech/webkit/section-container'
+  import SectionGap from '@aziontech/webkit/section-gap'
   import SectionModule from '@aziontech/webkit/section-module'
   import SectionTitle from '@aziontech/webkit/section-title'
   import Select from '@aziontech/webkit/select'
@@ -446,9 +447,10 @@
                 :key="group.area"
                 :class="index > 0 ? 'border-t border-(--border-default)' : ''"
               >
+                <!-- Pinned under the nav for as long as its own section is on screen. -->
                 <div
                   v-if="grouped"
-                  class="border-b border-(--border-default) px-(--careers-inset) py-(--spacing-md)"
+                  class="sticky top-14 z-20 border-b border-(--border-default) bg-(--bg-canvas) px-(--careers-inset) py-(--spacing-md)"
                 >
                   <h3 class="m-0 text-overline-md uppercase text-(--text-muted)">
                     {{ group.area }}
@@ -478,7 +480,7 @@
                         </RouterLink>
                       </Item.Title>
                       <!-- Unclamped: on a phone the meta line wraps in full rather than ellipsizing. -->
-                      <Item.Description class="line-clamp-none! text-pretty">
+                      <Item.Description class="line-clamp-none! text-overline-sm! text-pretty">
                         {{ job.meta }}
                       </Item.Description>
                     </Item.Content>
@@ -499,14 +501,6 @@
       </FrameBox>
     </SectionModule>
 
-    <!-- The rhythm the page closes on, hatched. A bare FrameBox at SectionGap's own `medium`
-         height drawing NO rules: the footer below opens with a full-bleed rule, and SectionGap's
-         fixed `borders="y"` would land a second hairline on that pixel. -->
-    <FrameBox
-      borders="none"
-      marks="none"
-      hatch
-      class="h-[calc(var(--spacing-xxl)*2)]"
-    />
+    <SectionGap hatch />
   </SectionContainer>
 </template>

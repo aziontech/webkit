@@ -9,7 +9,6 @@
   import SectionModule from '@aziontech/webkit/section-module'
   import SectionTitle from '@aziontech/webkit/section-title'
   import Table from '@aziontech/webkit/table'
-  import TextureMaterial from '@aziontech/webkit/texture-material'
   import { useRouter } from 'vue-router'
 
   import { CAREERS_JOBS, jobFacets, jobId } from '../data/careers.js'
@@ -41,12 +40,11 @@
     kind="band"
     max-width="5xl"
     size="large"
-    texture="dots"
-    texture-fade="top"
     class="[--banner-offset:3.5rem]"
   >
     <Hero.Title
       centered
+      :eyebrow="CAREERS_HOME_HERO.eyebrow"
       :title="CAREERS_HOME_HERO.title"
       :description="CAREERS_HOME_HERO.description"
     >
@@ -66,56 +64,53 @@
       :divided="false"
       :padded="false"
     >
+      <template #header>
+        <SectionTitle
+          kind="horizontal"
+          :title="CAREERS_WORK.title"
+          :description="CAREERS_WORK.description"
+        />
+      </template>
+
       <FrameBox
         flush
         borders="y"
         marks="bottom"
       >
-        <div class="flex flex-col gap-(--spacing-xxl) py-(--spacing-xxl)">
-          <div class="grid gap-(--spacing-xl) px-(--spacing-xl) md:grid-cols-3">
-            <h2 class="m-0 text-balance text-heading-2xl text-(--text-default)">
-              {{ CAREERS_WORK.title }}
-            </h2>
-            <p class="m-0 text-pretty text-heading-sm text-(--text-muted) md:col-span-2">
-              {{ CAREERS_WORK.description }}
-            </p>
-          </div>
-
-          <!-- The track holds the row twice and travels -50%, so the second copy lands where the
+        <!-- The track holds the row twice and travels -50%, so the second copy lands where the
                first started. Hover or focus pauses it; reduced motion turns it into a scroll row. -->
+        <div
+          class="group/loop overflow-hidden motion-reduce:overflow-x-auto"
+          role="region"
+          aria-label="Azion offices"
+        >
           <div
-            class="group/loop overflow-hidden motion-reduce:overflow-x-auto"
-            role="region"
-            aria-label="Azion offices"
+            :style="{ animationDuration: '60s' }"
+            class="flex w-max animate-brand-marquee group-hover/loop:[animation-play-state:paused] motion-reduce:animate-none"
           >
-            <div
-              :style="{ animationDuration: '90s' }"
-              class="flex w-max animate-brand-marquee group-hover/loop:[animation-play-state:paused] motion-reduce:animate-none"
+            <ul
+              v-for="copy in 2"
+              :key="copy"
+              :aria-hidden="copy > 1 ? 'true' : undefined"
+              class="m-0 flex shrink-0 list-none items-end gap-(--spacing-md) p-0 pr-(--spacing-md) motion-reduce:data-[duplicate]:hidden"
+              :data-duplicate="copy > 1 || null"
             >
-              <ul
-                v-for="copy in 2"
-                :key="copy"
-                :aria-hidden="copy > 1 ? 'true' : undefined"
-                class="m-0 flex shrink-0 list-none gap-(--spacing-md) p-0 pr-(--spacing-md) motion-reduce:data-[duplicate]:hidden"
-                :data-duplicate="copy > 1 || null"
+              <li
+                v-for="photo in CAREERS_PHOTOS"
+                :key="`${copy}-${photo.src}`"
+                class="h-80 shrink-0 overflow-hidden sm:h-112"
+                :style="{ aspectRatio: `${photo.width} / ${photo.height}` }"
               >
-                <li
-                  v-for="photo in CAREERS_PHOTOS"
-                  :key="`${copy}-${photo.src}`"
-                  class="h-80 shrink-0 overflow-hidden sm:h-112"
-                  :style="{ aspectRatio: `${photo.width} / ${photo.height}` }"
-                >
-                  <img
-                    :src="photo.src"
-                    :alt="copy > 1 ? '' : photo.alt"
-                    :width="photo.width"
-                    :height="photo.height"
-                    draggable="false"
-                    class="size-full object-cover"
-                  />
-                </li>
-              </ul>
-            </div>
+                <img
+                  :src="photo.src"
+                  :alt="copy > 1 ? '' : photo.alt"
+                  :width="photo.width"
+                  :height="photo.height"
+                  draggable="false"
+                  class="size-full object-cover"
+                />
+              </li>
+            </ul>
           </div>
         </div>
       </FrameBox>
@@ -159,7 +154,7 @@
                     {{ role.title }}
                   </RouterLink>
                 </Item.Title>
-                <Item.Description class="line-clamp-none! text-pretty">
+                <Item.Description class="line-clamp-none! text-overline-sm! text-pretty">
                   {{ role.team }}
                 </Item.Description>
               </Item.Content>
@@ -184,19 +179,19 @@
             <Table.Row>
               <Table.HeadCell
                 :grow="2"
-                class="pl-(--spacing-xl)!"
+                class="pl-(--spacing-xl)! text-overline-md! uppercase"
               >
                 {{ CAREERS_ROLES.columns.role }}
               </Table.HeadCell>
               <Table.HeadCell
                 :grow="2"
-                class="max-sm:hidden!"
+                class="text-overline-md! uppercase"
               >
                 {{ CAREERS_ROLES.columns.team }}
               </Table.HeadCell>
               <Table.HeadCell
                 align="end"
-                class="pr-(--spacing-xl)!"
+                class="pr-(--spacing-xl)! text-overline-md! uppercase"
               >
                 {{ CAREERS_ROLES.columns.type }}
               </Table.HeadCell>
@@ -208,7 +203,7 @@
             <Table.Row
               v-for="role in latestRoles"
               :key="role.id"
-              class="cursor-pointer hover:[--table-row-bg:var(--bg-canvas)]"
+              class="cursor-pointer hover:[--table-row-bg:var(--bg-hover)]!"
               @click="openRole(role.id)"
             >
               <Table.Cell
@@ -226,13 +221,17 @@
               </Table.Cell>
               <Table.Cell
                 :grow="2"
-                class="py-(--spacing-lg)! text-(--text-muted)"
+                class="py-(--spacing-lg)! text-overline-sm! text-(--text-muted)"
               >
-                {{ role.team }}
+                <span
+                  class="min-w-0 truncate"
+                  :title="role.team"
+                  >{{ role.team }}</span
+                >
               </Table.Cell>
               <Table.Cell
                 align="end"
-                class="py-(--spacing-lg)! pr-(--spacing-xl)! text-(--text-muted)"
+                class="py-(--spacing-lg)! pr-(--spacing-xl)! text-overline-sm! text-(--text-muted)"
               >
                 {{ role.type }}
               </Table.Cell>
@@ -266,6 +265,7 @@
     >
       <CallToAction
         framed
+        kind="split"
         :title="CAREERS_JOIN.title"
         :description="CAREERS_JOIN.description"
       >
@@ -275,22 +275,11 @@
             kind="secondary"
             size="large"
             :href="CAREERS_JOBS_PATH"
-            icon="pi pi-chevron-right"
-            icon-position="trailing"
-            animated
           />
         </template>
       </CallToAction>
     </SectionModule>
 
-    <!-- SectionGap's height, corners and hatch, minus its rules: the footer opens on its own. -->
-    <FrameBox
-      borders="none"
-      marks="all"
-      data-hatch="true"
-      class="h-[calc(var(--spacing-xxl)*2)]"
-    >
-      <TextureMaterial kind="lines" />
-    </FrameBox>
+    <SectionGap hatch />
   </SectionContainer>
 </template>

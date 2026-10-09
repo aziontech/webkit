@@ -1,4 +1,5 @@
 export const CAREERS_HOME_HERO = {
+  eyebrow: 'Careers',
   title: "Let's build together",
   description:
     'Azion is driven by innovation, reliability, and the ability to make transparent, forward-looking decisions and execute them with agility. Our success depends on the success of our customers.',

@@ -35,14 +35,9 @@
   //     the role is a toll. `kind="band"` gives the title its own register and hands the body the
   //     rest of the screen.
   //
-  //   • THE HEADER CARRIES AN APPLY ACTION, which Vercel's does not. Its form sits 4,000px below
-  //     the fold and the only way to it is the scrollbar. Ours anchors to the form and the scroll
-  //     is smooth (the shell's scroller owns that — see SiteLayout — with the reduced-motion
-  //     escape the accessibility rule requires).
-  //
-  //   • AND SO DOES A RAIL, which is the same action again, sticky, beside the description. A
-  //     header action solves the first screen; a posting runs four to six of them, so past the
-  //     first the button is as far away as it was on the source. The rail is the site's own
+  //   • THE APPLY ACTION LIVES IN A RAIL, sticky beside the description, not in the header. A
+  //     posting runs four to six screens, so a header action would be as far away as the form
+  //     past the first one. The rail is the site's own
   //     answer — the careers listing already parks a sticky column beside a long scroll — turned
   //     around: the rail sits on the RIGHT and owns the `border-l` between it and the reading
   //     column. It ENDS where the form begins, because a sticky `Apply` beside the form it points
@@ -66,31 +61,36 @@
   //
   //   • THE FORM SUBMITS TO NOTHING. There is no ATS behind this app, so the submit runs the real
   //     locked-scope shape (validate on submit, one flag disabling every control, the primary
-  //     showing `loading`) and then reports the result where the reader is looking — a `Message`
-  //     in the section's own place, since this shell mounts no toaster.
+  //     showing `loading`) and then confirms it in a `Dialog`: the outcome of a submission is a
+  //     moment the reader should acknowledge, so it is modal, and closing it clears the form.
   import Breadcrumb from '@aziontech/webkit/breadcrumb'
   import Button from '@aziontech/webkit/button'
+  import Dialog from '@aziontech/webkit/dialog'
+  import DialogClose from '@aziontech/webkit/dialog-close'
+  import DialogContent from '@aziontech/webkit/dialog-content'
+  import DialogDescription from '@aziontech/webkit/dialog-description'
+  import DialogOverlay from '@aziontech/webkit/dialog-overlay'
+  import DialogPortal from '@aziontech/webkit/dialog-portal'
+  import DialogTitle from '@aziontech/webkit/dialog-title'
   import FieldPhoneNumber from '@aziontech/webkit/field-phone-number'
   import FieldText from '@aziontech/webkit/field-text'
   import FrameBox from '@aziontech/webkit/frame-box'
   import HelperText from '@aziontech/webkit/helper-text'
   import Hero from '@aziontech/webkit/hero'
   import Label from '@aziontech/webkit/label'
-  import Message from '@aziontech/webkit/message'
   import Overline from '@aziontech/webkit/overline'
+  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelFooter from '@aziontech/webkit/panel-footer'
+  import PanelHeader from '@aziontech/webkit/panel-header'
   import SectionContainer from '@aziontech/webkit/section-container'
+  import SectionGap from '@aziontech/webkit/section-gap'
   import SectionModule from '@aziontech/webkit/section-module'
   import SectionTitle from '@aziontech/webkit/section-title'
-  import { computed, reactive, ref, useId } from 'vue'
+  import { computed, reactive, ref, useId, watch } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
   import { CAREERS_JOBS, jobFacets, jobId } from '../data/careers.js'
-  import {
-    CAREERS_JOB_CLOSING,
-    CAREERS_JOB_FORM,
-    CAREERS_JOB_SECTIONS,
-    CAREERS_JOB_SENT
-  } from '../data/careers-job.js'
+  import { CAREERS_JOB_FORM, CAREERS_JOB_SECTIONS, CAREERS_JOB_SENT } from '../data/careers-job.js'
 
   const route = useRoute()
   const router = useRouter()
@@ -192,6 +192,18 @@
     }
   }
 
+  // Closing the confirmation (Done, ×, Esc or the overlay) leaves an empty form behind.
+  watch(sent, (open) => {
+    if (open) return
+    for (const key of Object.keys(values)) values[key] = ''
+    for (const key of Object.keys(errors)) errors[key] = ''
+  })
+
+  function seePositions() {
+    sent.value = false
+    router.push('/site/careers/jobs')
+  }
+
   function goToTrail(event, href) {
     event.preventDefault()
     router.push(href)
@@ -232,23 +244,7 @@
         @navigate="goToTrail"
       />
 
-      <!-- The action Vercel's header does not carry, in the slot this language keeps a hero's
-           actions in — which is also what makes it full width on a phone and inline from 20rem
-           up. A plain fragment link, so the shell's own `scroll-smooth` does the gliding and a
-           middle-click still opens the page at the form. -->
-      <Hero.Title :title="job.title">
-        <template #actions>
-          <Button
-            label="Apply for this position"
-            kind="secondary"
-            size="large"
-            href="#apply"
-            icon="pi pi-chevron-right"
-            icon-position="trailing"
-            animated
-          />
-        </template>
-      </Hero.Title>
+      <Hero.Title :title="job.title" />
     </div>
   </Hero>
 
@@ -423,21 +419,11 @@
         marks="bottom"
       >
         <div class="max-w-(--layout-measure-form) px-(--spacing-xl) py-(--spacing-xxl)">
-          <!-- What the reader gets instead of a toast: this shell mounts no toaster, so the
-               result is reported in the place the form was, which is where they are looking. -->
-          <Message
-            v-if="sent"
-            severity="success"
-            size="medium"
-            :label="`${CAREERS_JOB_SENT.title} ${CAREERS_JOB_SENT.description}`"
-          />
-
           <!-- `novalidate` because the validation is ours; the native bubble is unstyleable and
                fires per field. One flag locks the scope: the fieldset is the native lock, and
                every control takes the same flag so the webkit inputs show their disabled state
                rather than merely refusing input. -->
           <form
-            v-else
             novalidate
             class="flex flex-col gap-(--spacing-xl)"
             @submit.prevent="submit"
@@ -540,45 +526,43 @@
       </FrameBox>
     </SectionModule>
 
-    <!-- ── The band the source closes on ────────────────────────────────────────
-         Its own copy, its own way out, routed to this app's listing rather than azion.com's. -->
-    <SectionModule
-      :divided="false"
-      :padded="false"
+    <!-- The submission's confirmation: modal, with the way back to the listing beside Done. -->
+    <Dialog
+      v-model:open="sent"
+      size="small"
     >
-      <FrameBox
-        flush
-        borders="y"
-        marks="bottom"
-      >
-        <div
-          class="flex max-w-(--layout-measure-content) flex-col gap-(--spacing-lg) px-(--spacing-xl) py-(--spacing-xxl)"
-        >
-          <SectionTitle
-            :framed="false"
-            kind="left"
-            :title="CAREERS_JOB_CLOSING.title"
-            :description="CAREERS_JOB_CLOSING.description"
-          />
-          <div class="flex">
+      <DialogPortal>
+        <DialogOverlay />
+        <DialogContent>
+          <PanelHeader class="w-full">
+            <DialogTitle>{{ CAREERS_JOB_SENT.title }}</DialogTitle>
+            <DialogClose />
+          </PanelHeader>
+          <PanelContent>
+            <DialogDescription class="m-0 text-body-sm text-(--text-muted)">
+              {{ CAREERS_JOB_SENT.description }}
+            </DialogDescription>
+          </PanelContent>
+          <PanelFooter class="flex-col md:flex-row md:justify-end">
             <Button
-              :label="CAREERS_JOB_CLOSING.action"
-              kind="secondary"
-              size="large"
-              @click="router.push('/site/careers/jobs')"
+              class="w-full md:w-auto"
+              label="See open positions"
+              kind="outlined"
+              size="medium"
+              @click="seePositions"
             />
-          </div>
-        </div>
-      </FrameBox>
-    </SectionModule>
+            <Button
+              class="w-full md:w-auto"
+              label="Done"
+              kind="primary"
+              size="medium"
+              @click="sent = false"
+            />
+          </PanelFooter>
+        </DialogContent>
+      </DialogPortal>
+    </Dialog>
 
-    <!-- The rhythm the page closes on, hatched, drawing no rules: the footer below opens with a
-         full-bleed rule of its own. -->
-    <FrameBox
-      borders="none"
-      marks="none"
-      hatch
-      class="h-[calc(var(--spacing-xxl)*2)]"
-    />
+    <SectionGap hatch />
   </SectionContainer>
 </template>

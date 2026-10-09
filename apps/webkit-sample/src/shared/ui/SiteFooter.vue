@@ -67,7 +67,7 @@
     },
     {
       label: 'Company',
-      links: ['About', 'Customers', 'Partners', { label: 'Careers', href: '/site/careers' }, 'Blog', 'Contact']
+      links: ['About', 'Customers', 'Partners', { label: 'Careers', href: '/site/careers' }, { label: 'Blog', href: '/site/blog' }, 'Contact']
     }
   ]
 

@@ -1,6 +1,5 @@
 <script setup>
   import Button from '@aziontech/webkit/button'
-  import CallToAction from '@aziontech/webkit/call-to-action'
   import EmptyState from '@aziontech/webkit/empty-state'
   import FrameBox from '@aziontech/webkit/frame-box'
   import Hero from '@aziontech/webkit/hero'
@@ -16,13 +15,13 @@
   import FilterButton from '@shared/ui/filter/FilterButton.vue'
   import FilterChips from '@shared/ui/filter/FilterChips.vue'
   import { computed, reactive, ref, watch } from 'vue'
-  import { useRouter } from 'vue-router'
+  import { useRoute } from 'vue-router'
 
+  import { successCaseLink } from '../data/success-case-articles.js'
   import { FEATURED_CASES, SUCCESS_CASES } from '../data/success-cases.js'
   import MarketLeader from './MarketLeader.vue'
+  import SuccessCaseClosingCta from './SuccessCaseClosingCta.vue'
 
-  const router = useRouter()
-  const goSignup = () => router.push('/signup')
 
   const LABEL = {
     industry: 'Industry',
@@ -68,7 +67,12 @@
     }
   ]
 
-  const selection = reactive({ industry: ALL, solution: ALL, product: ALL, query: '' })
+  // An article's industry crumb links here as `?industry=<name>`: open on that industry.
+  const route = useRoute()
+  const requested = FILTERS[0].options.some((option) => option.value === route.query.industry)
+    ? route.query.industry
+    : ALL
+  const selection = reactive({ industry: requested, solution: ALL, product: ALL, query: '' })
   const labelOf = (options, value) => options.find((option) => option.value === value)?.label ?? ''
 
   // Below `lg` the same selection drives the console's Filter button and its chips. `range`
@@ -125,7 +129,7 @@
     item: {
       src: story.client.logo,
       alt: story.client.name,
-      href: story.href,
+      href: successCaseLink(story).href,
       client: story.client,
       ink: story.brand.ink
     },
@@ -341,10 +345,10 @@
             :key="story.key"
           >
             <a
-              :href="story.href"
-              target="_blank"
-              rel="noopener"
-              :aria-label="`Read story: ${story.client.name} (opens in a new tab)`"
+              :href="successCaseLink(story).href"
+              :target="successCaseLink(story).external ? '_blank' : undefined"
+              :rel="successCaseLink(story).external ? 'noopener' : undefined"
+              :aria-label="`Read story: ${story.client.name}${successCaseLink(story).external ? ' (opens in a new tab)' : ''}`"
               class="group/row grid grid-cols-1 items-center gap-(--spacing-lg) px-(--spacing-xl) py-(--spacing-lg) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-surface-raised) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) motion-reduce:transition-none lg:grid-cols-[3fr_6fr_4fr_3fr]"
             >
               <span class="flex h-6 items-center">
@@ -420,34 +424,7 @@
       :divided="false"
       :padded="false"
     >
-      <CallToAction
-        framed
-        kind="split"
-        eyebrow="Build"
-        title="Build once."
-        title-muted="Run everywhere."
-        description="Get a faster path to launch, lower latency, and less infrastructure overhead."
-      >
-        <template #actions>
-          <Button
-            label="Start Free"
-            kind="secondary"
-            size="large"
-            @click="goSignup"
-          />
-        </template>
-        <template #aside>
-          <Button
-            label="Talk to our team"
-            kind="outlined"
-            size="large"
-            href="/site/contact"
-            icon="pi pi-chevron-right"
-            icon-position="trailing"
-            animated
-          />
-        </template>
-      </CallToAction>
+      <SuccessCaseClosingCta />
     </SectionModule>
 
     <SectionGap hatch />

@@ -21,14 +21,24 @@
 // nothing would be the invention. The initial render is the source's twelve, in its order.
 
 import axur from '@aziontech/webkit/assets/axur-extended-reversed.svg'
+import b2w from '@aziontech/webkit/assets/b2w-extended-mono.svg'
 import bancoDeLaNacion from '@aziontech/webkit/assets/banco-de-la-nacion-extended-mono.svg'
 import { CLIENTS } from '@aziontech/webkit/assets/client-registry'
 import contabilizeiColor from '@aziontech/webkit/assets/contabilizei-extended-color.svg'
 import contabilizei from '@aziontech/webkit/assets/contabilizei-extended-reversed.svg'
 import crefisa from '@aziontech/webkit/assets/crefisa-extended-reversed.svg'
+import digimais from '@aziontech/webkit/assets/digimais-extended-mono.svg'
+import fam from '@aziontech/webkit/assets/fam-extended-mono.svg'
+import getninjas from '@aziontech/webkit/assets/getninjas-extended-mono.svg'
+import ibero from '@aziontech/webkit/assets/ibero-extended-mono.svg'
 import marisa from '@aziontech/webkit/assets/marisa-extended-color.svg'
+import omelete from '@aziontech/webkit/assets/omelete-extended-mono.svg'
 import panvel from '@aziontech/webkit/assets/panvel-extended-color.svg'
 import pernambucanas from '@aziontech/webkit/assets/pernambucanas-extended-mono.svg'
+import queroQuero from '@aziontech/webkit/assets/quero-quero-extended-mono.svg'
+import todoCartoes from '@aziontech/webkit/assets/todo-cartoes-extended-mono.svg'
+import unicesumar from '@aziontech/webkit/assets/unicesumar-extended-mono.svg'
+import uninter from '@aziontech/webkit/assets/uninter-extended-mono.svg'
 import vtex from '@aziontech/webkit/assets/vtex-extended-reversed.svg'
 
 const byName = (name) => CLIENTS.find((client) => client.name === name)
@@ -172,7 +182,7 @@ export const SUCCESS_CASES = [
   },
   {
     key: 'case-ibero',
-    client: { name: 'Ibero' },
+    client: { name: 'Ibero', logo: ibero, artwork: 'dark' },
     industry: 'Education',
     solutions: ['Build', 'Secure'],
     products: ['Edge DNS', 'Firewall', 'Applications'],
@@ -212,7 +222,7 @@ export const SUCCESS_CASES = [
   },
   {
     key: 'case-todo',
-    client: { name: 'Todo Cartões' },
+    client: { name: 'Todo Cartões', logo: todoCartoes, artwork: 'dark' },
     industry: 'Tech',
     solutions: [],
     products: ['Firewall'],
@@ -256,7 +266,7 @@ export const SUCCESS_CASES = [
   },
   {
     key: 'case-quero-quero',
-    client: { name: 'Quero-Quero' },
+    client: { name: 'Quero-Quero', logo: queroQuero, artwork: 'dark' },
     industry: 'Retail',
     solutions: ['Build', 'Secure', 'Observe'],
     products: ['Firewall'],
@@ -267,7 +277,7 @@ export const SUCCESS_CASES = [
   },
   {
     key: 'case-digimais',
-    client: { name: 'Digi+' },
+    client: { name: 'Digi+', logo: digimais, artwork: 'dark' },
     industry: 'Financial',
     solutions: ['Secure'],
     products: ['Firewall'],
@@ -289,7 +299,7 @@ export const SUCCESS_CASES = [
   },
   {
     key: 'case-fam',
-    client: { name: 'FAM' },
+    client: { name: 'FAM', logo: fam, artwork: 'dark' },
     industry: 'Education',
     solutions: ['Secure'],
     products: ['Web Application Firewall'],
@@ -344,7 +354,7 @@ export const SUCCESS_CASES = [
   },
   {
     key: 'case-b2w',
-    client: { name: 'B2W' },
+    client: { name: 'B2W', logo: b2w, artwork: 'dark' },
     industry: 'Retail',
     solutions: ['Build', 'Secure', 'Observe'],
     products: ['Firewall', 'Data Stream'],
@@ -451,7 +461,7 @@ export const SUCCESS_CASES = [
   },
   {
     key: 'case-getninjas',
-    client: { name: 'GetNinjas' },
+    client: { name: 'GetNinjas', logo: getninjas, artwork: 'dark' },
     industry: 'Tech',
     solutions: ['Build', 'Secure', 'Deploy', 'Observe'],
     products: ['Applications', 'Firewall', 'Data Stream', 'Functions'],
@@ -484,7 +494,7 @@ export const SUCCESS_CASES = [
   },
   {
     key: 'case-uninter',
-    client: { name: 'Uninter' },
+    client: { name: 'Uninter', logo: uninter, artwork: 'dark' },
     industry: 'Education',
     solutions: ['Deploy'],
     products: ['Applications'],
@@ -495,7 +505,7 @@ export const SUCCESS_CASES = [
   },
   {
     key: 'case-unicesumar',
-    client: { name: 'UniCesumar' },
+    client: { name: 'UniCesumar', logo: unicesumar, artwork: 'dark' },
     industry: 'Education',
     solutions: ['Build', 'Secure', 'Deploy'],
     products: ['Applications', 'Firewall', 'Functions'],
@@ -517,7 +527,7 @@ export const SUCCESS_CASES = [
   },
   {
     key: 'case-omelete',
-    client: { name: 'Omelete' },
+    client: { name: 'Omelete', logo: omelete, artwork: 'dark' },
     industry: 'Media',
     solutions: ['Build', 'Secure', 'Deploy'],
     products: ['Applications'],

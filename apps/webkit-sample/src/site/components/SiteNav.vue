@@ -257,7 +257,12 @@
       label: 'Content',
       href: '#content',
       items: [
-        { icon: 'ai ai-medium', label: 'Blog', description: 'Technical articles and news' },
+        {
+          icon: 'ai ai-medium',
+          label: 'Blog',
+          description: 'Technical articles and news',
+          href: '/site/blog'
+        },
         {
           icon: 'pi pi-book',
           label: 'Learning',
