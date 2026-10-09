@@ -132,7 +132,7 @@ ${each(
   GROUPS,
   (group, index) => `<section${index > 0 ? ' class="border-t border-(--border-default)"' : ''}>
   <h3
-    class="m-0 border-b border-(--border-default) px-(--spacing-xl) py-(--spacing-md) text-overline-md text-(--text-muted)"
+    class="sticky top-14 z-20 m-0 border-b border-(--border-default) bg-(--bg-canvas) px-(--spacing-xl) py-(--spacing-md) text-overline-md text-(--text-muted)"
   >
     ${group.name}
   </h3>
@@ -149,7 +149,7 @@ ${each(
         ${row.role}
       </a>
     </Item.Title>
-    <Item.Description class="line-clamp-none! text-pretty">
+    <Item.Description class="line-clamp-none! text-overline-sm! text-pretty">
       ${row.team}
     </Item.Description>
   </Item.Content>
@@ -180,22 +180,22 @@ const TABLE = `<Table class="max-sm:hidden!">
 ${each(
   GROUPS,
   (group, index) => `<Table.Body>
-  <Table.Row class="bg-(--bg-surface)${index > 0 ? ' border-t border-(--border-default)' : ''}">
+  <Table.Row class="sticky top-14 z-20 bg-(--bg-surface)${index > 0 ? ' border-t border-(--border-default)' : ''}">
     <Table.Cell :grow="3" class="pl-(--spacing-xl)!">
       <h3 class="m-0 text-overline-md text-(--text-default)">${group.name}</h3>
     </Table.Cell>
   </Table.Row>
 ${each(
   group.rows,
-  (row) => `<Table.Row class="cursor-pointer hover:[--table-row-bg:var(--bg-canvas)]">
+  (row) => `<Table.Row class="cursor-pointer hover:[--table-row-bg:var(--bg-hover)]!">
   <Table.Cell :grow="2" principal class="py-(--spacing-lg)! pl-(--spacing-xl)!">
-    <a href="${row.href}" class="text-label-lg text-(--text-default)">${row.role}</a>
+    <a href="${row.href}" class="min-w-0 whitespace-normal text-pretty text-label-lg text-(--text-default)">${row.role}</a>
   </Table.Cell>
-  <Table.Cell :grow="2" class="py-(--spacing-lg)! text-(--text-muted)">
-    ${row.team}
+  <Table.Cell :grow="2" class="py-(--spacing-lg)! text-overline-sm! text-(--text-muted)">
+    <span class="min-w-0 truncate" title="${row.team}">${row.team}</span>
   </Table.Cell>
-  <Table.Cell align="end" class="py-(--spacing-lg)! pr-(--spacing-xl)! text-(--text-muted)">
-    ${row.type}
+  <Table.Cell align="end" class="py-(--spacing-lg)! pr-(--spacing-xl)! text-overline-sm! text-(--text-muted)">
+    <span class="min-w-0 truncate" title="${row.type}">${row.type}</span>
   </Table.Cell>
 </Table.Row>`,
   1
@@ -232,7 +232,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The full listing a ListingTable previews, with the controls to narrow it: a search field and one select per facet and for the order on one row, then every row under its group. It shares ListingTable’s anatomy — overline column headers, one link per row named by its first column, and a list of items below `sm` — and adds a group row in the overline face over each group’s rows, with a rule between groups. Below `lg` the controls stack. Careers uses it for its jobs list, grouped by department and narrowed by department and location. Built from `SectionModule`, `SectionTitle`, `FrameBox`, `InputText`, `Select`, `Table` and, on phones, `Item`.'
+          'The full listing a ListingTable previews, with the controls to narrow it: a search field and one select per facet and for the order on one row, then every row under its group. It shares ListingTable’s anatomy — overline column headers, one link per row named by its first column, and a list of items below `sm` — and adds a group row in the overline face over each group’s rows, with a rule between groups. Below `lg` the controls stack. Careers uses it for its jobs list, grouped by department and narrowed by department and location; the Success Cases library uses it for every story, grouped by industry and narrowed by industry, solution and product. Group rows stay pinned under the site nav while their rows scroll, and every column after the first is set in the small overline face. Built from `SectionModule`, `SectionTitle`, `FrameBox`, `InputText`, `Select`, `Table` and, on phones, `Item`.'
       },
       canvas: { sourceState: 'shown' }
     }

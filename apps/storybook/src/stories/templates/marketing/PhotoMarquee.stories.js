@@ -2,6 +2,7 @@ import FrameBox from '@aziontech/webkit/frame-box'
 import SectionContainer from '@aziontech/webkit/section-container'
 import SectionGap from '@aziontech/webkit/section-gap'
 import SectionModule from '@aziontech/webkit/section-module'
+import SectionTitle from '@aziontech/webkit/section-title'
 
 import { COLUMN_IMPORTS, each, inColumn, indent } from '../../_shared/markup'
 import { toSfc } from '../../_shared/story-source'
@@ -9,14 +10,16 @@ import { toSfc } from '../../_shared/story-source'
 const IMPORTS = [
   "import FrameBox from '@aziontech/webkit/frame-box'",
   ...COLUMN_IMPORTS,
-  "import SectionModule from '@aziontech/webkit/section-module'"
+  "import SectionModule from '@aziontech/webkit/section-module'",
+  "import SectionTitle from '@aziontech/webkit/section-title'"
 ]
 
 const components = {
   FrameBox,
   SectionContainer,
   SectionGap,
-  SectionModule
+  SectionModule,
+  SectionTitle
 }
 
 const WORK = {
@@ -80,35 +83,32 @@ const slide = (photo, duplicate) => `<li
 </li>`
 
 const row = (duplicate) => `<ul
-  ${duplicate ? 'aria-hidden="true"\n  data-duplicate\n  ' : ''}class="m-0 flex shrink-0 list-none gap-(--spacing-md) p-0 pr-(--spacing-md) motion-reduce:data-[duplicate]:hidden"
+  ${duplicate ? 'aria-hidden="true"\n  data-duplicate\n  ' : ''}class="m-0 flex shrink-0 list-none items-end gap-(--spacing-md) p-0 pr-(--spacing-md) motion-reduce:data-[duplicate]:hidden"
 >
 ${each(PHOTOS, (photo) => slide(photo, duplicate), 1)}
 </ul>`
 
 const TEMPLATE = inColumn(`<SectionModule :divided="false" :padded="false">
-  <FrameBox flush borders="y" marks="bottom">
-    <div class="flex flex-col gap-(--spacing-xxl) py-(--spacing-xxl)">
-      <div class="grid gap-(--spacing-xl) px-(--spacing-xl) md:grid-cols-3">
-        <h2 class="m-0 text-balance text-heading-2xl text-(--text-default)">
-          ${WORK.title}
-        </h2>
-        <p class="m-0 text-pretty text-heading-sm text-(--text-muted) md:col-span-2">
-          ${WORK.description}
-        </p>
-      </div>
+  <template #header>
+    <SectionTitle
+      kind="horizontal"
+      title="${WORK.title}"
+      description="${WORK.description}"
+    />
+  </template>
 
+  <FrameBox flush borders="y" marks="bottom">
+    <div
+      class="group/loop overflow-hidden motion-reduce:overflow-x-auto"
+      role="region"
+      aria-label="Azion offices"
+    >
       <div
-        class="group/loop overflow-hidden motion-reduce:overflow-x-auto"
-        role="region"
-        aria-label="Azion offices"
+        style="animation-duration: 60s"
+        class="flex w-max animate-brand-marquee group-hover/loop:[animation-play-state:paused] motion-reduce:animate-none"
       >
-        <div
-          style="animation-duration: 90s"
-          class="flex w-max animate-brand-marquee group-hover/loop:[animation-play-state:paused] motion-reduce:animate-none"
-        >
-${indent(row(false), 5)}
-${indent(row(true), 5)}
-        </div>
+${indent(row(false), 4)}
+${indent(row(true), 4)}
       </div>
     </div>
   </FrameBox>
@@ -124,7 +124,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'A headline and its paragraph side by side, over a row of photos that loops across the band. Each slide keeps its photo’s own aspect ratio at one shared height, so portrait and landscape shots sit in one strip. The row is drawn twice and travels half its width, so the second copy lands where the first started; hovering pauses it, and under reduced motion it stops and becomes a plain horizontal scroll with the repeated row hidden. Careers uses it for its offices. Built from `SectionModule` and `FrameBox`, with the theme’s `animate-brand-marquee` utility.'
+          'A `SectionTitle` header, its headline and paragraph side by side, over a row of photos that loops across the band. Each slide keeps its photo’s own aspect ratio at one shared height, so portrait and landscape shots sit in one strip. The row is drawn twice and travels half its width, so the second copy lands where the first started; hovering pauses it, and under reduced motion it stops and becomes a plain horizontal scroll with the repeated row hidden. Careers uses it for its offices. Built from `SectionModule`, `SectionTitle` and `FrameBox`, with the theme’s `animate-brand-marquee` utility.'
       },
       canvas: { sourceState: 'shown' }
     }
@@ -139,7 +139,7 @@ export const Offices = {
     docs: {
       description: {
         story:
-          'The Careers page’s “Work at Azion” band: six office photos, three portrait and three landscape, looping in 90 seconds.'
+          'The Careers page’s “Work at Azion” band: six office photos, three portrait and three landscape, looping in 60 seconds.'
       },
       source: { code: toSfc(IMPORTS, TEMPLATE) }
     }

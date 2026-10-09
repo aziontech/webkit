@@ -104,7 +104,7 @@ ${each(
         ${role.role}
       </a>
     </Item.Title>
-    <Item.Description class="line-clamp-none! text-pretty">
+    <Item.Description class="line-clamp-none! text-overline-sm! text-pretty">
       ${role.team}
     </Item.Description>
   </Item.Content>
@@ -135,15 +135,15 @@ const TABLE = `<Table class="max-sm:hidden!">
   <Table.Body>
 ${each(
   ROLES,
-  (role) => `<Table.Row class="cursor-pointer hover:[--table-row-bg:var(--bg-canvas)]">
+  (role) => `<Table.Row class="cursor-pointer hover:[--table-row-bg:var(--bg-hover)]!">
   <Table.Cell :grow="2" principal class="py-(--spacing-lg)! pl-(--spacing-xl)!">
-    <a href="${role.href}" class="text-label-lg text-(--text-default)">${role.role}</a>
+    <a href="${role.href}" class="min-w-0 whitespace-normal text-pretty text-label-lg text-(--text-default)">${role.role}</a>
   </Table.Cell>
-  <Table.Cell :grow="2" class="py-(--spacing-lg)! text-(--text-muted)">
-    ${role.team}
+  <Table.Cell :grow="2" class="py-(--spacing-lg)! text-overline-sm! text-(--text-muted)">
+    <span class="min-w-0 truncate" title="${role.team}">${role.team}</span>
   </Table.Cell>
-  <Table.Cell align="end" class="py-(--spacing-lg)! pr-(--spacing-xl)! text-(--text-muted)">
-    ${role.type}
+  <Table.Cell align="end" class="py-(--spacing-lg)! pr-(--spacing-xl)! text-overline-sm! text-(--text-muted)">
+    <span class="min-w-0 truncate" title="${role.type}">${role.type}</span>
   </Table.Cell>
 </Table.Row>`,
   2
@@ -181,7 +181,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'A titled preview of a longer listing: a few linked rows in columns, and one outlined button into the full list. The column headers are set in the overline face, as on the pricing matrix and the jobs list. Each row is one link, named by its first column; the whole row is clickable with the pointer, and the title link is the keyboard and screen-reader path. Below `sm` the columns cannot fit, so the same rows become a list of items whose titles wrap, with the second column as the description and the button going full width. Careers uses it for its latest roles. Built from `SectionModule`, `SectionTitle`, `FrameBox`, `Table` and, on phones, `Item`.'
+          'A titled preview of a longer listing: a few linked rows in columns, and one outlined button into the full list. The column headers are set in the overline face, as on the pricing matrix and the jobs list, and every value after the first column in the small overline face. Each row is one link, named by its first column; the whole row is clickable with the pointer, and the title link is the keyboard and screen-reader path. Below `sm` the columns cannot fit, so the same rows become a list of items whose titles wrap, with the second column as the description and the button going full width. Careers uses it for its latest roles. Built from `SectionModule`, `SectionTitle`, `FrameBox`, `Table` and, on phones, `Item`.'
       },
       canvas: { sourceState: 'shown' }
     }
