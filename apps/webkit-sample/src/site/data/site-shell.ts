@@ -187,7 +187,7 @@ const RESOURCES: SiteNavMenu = {
         label: 'Content',
         href: '#content',
         items: [
-          { label: 'Blog', description: 'Technical articles and news' },
+          { label: 'Blog', description: 'Technical articles and news', href: '/site/blog' },
           {
             label: 'Learning',
             description: 'Fundamentals, subject by subject',
@@ -221,7 +221,7 @@ export const SITE_NAV: {
   home: '/site',
   menus: [SOLUTIONS, PRODUCTS, DEVELOPERS, RESOURCES],
   links: [
-    { label: 'Customers', href: '#customers' },
+    { label: 'Customers', href: '/site/success-cases' },
     { label: 'Pricing', href: '/site/pricing' }
   ],
   contact: { label: 'Contact', href: '/site/contact' },
@@ -271,11 +271,11 @@ const COLUMNS: SiteFooterColumn[] = [
     title: 'Company',
     links: links([
       'About',
-      'Customers',
-      'Partners',
+      { label: 'Customers', href: '/site/success-cases' },
+      { label: 'Partners', href: '/site/partners' },
       { label: 'Careers', href: '/site/careers' },
-      'Blog',
-      'Contact'
+      { label: 'Blog', href: '/site/blog' },
+      { label: 'Contact', href: '/site/contact' }
     ])
   }
 ]

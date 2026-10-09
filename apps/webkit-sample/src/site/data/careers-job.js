@@ -214,13 +214,6 @@ export const CAREERS_JOB_FORM = {
   ]
 }
 
-/** What the source says under the form, and the one way out of the page it offers. */
-export const CAREERS_JOB_CLOSING = {
-  title: 'Not a match?',
-  description: 'Keep looking for other positions. Why not in different areas too?',
-  action: 'See all jobs'
-}
-
 /** What the reader is told once the application is in. Ours: the source posts to its own ATS. */
 export const CAREERS_JOB_SENT = {
   title: 'Application sent.',

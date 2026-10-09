@@ -338,7 +338,7 @@
             class="data-ruled:border-t data-ruled:border-(--border-default)"
           >
             <h3
-              class="m-0 border-b border-(--border-default) px-(--spacing-xl) py-(--spacing-md) text-overline-md text-(--text-muted)"
+              class="sticky top-14 z-20 m-0 border-b border-(--border-default) bg-(--bg-canvas) px-(--spacing-xl) py-(--spacing-md) text-overline-md text-(--text-muted)"
             >
               {{ entry.group }}
             </h3>
@@ -360,7 +360,7 @@
                   </ItemTitle>
                   <ItemDescription
                     v-if="detailKey"
-                    class="line-clamp-none! text-pretty"
+                    class="line-clamp-none! text-overline-sm! text-pretty"
                   >
                     {{ row.values[detailKey] }}
                   </ItemDescription>
@@ -392,7 +392,7 @@
           >
             <TableRow
               :data-ruled="index > 0 || null"
-              class="bg-(--bg-surface) data-ruled:border-t data-ruled:border-(--border-default)"
+              class="sticky top-14 z-20 bg-(--bg-surface) data-ruled:border-t data-ruled:border-(--border-default)"
             >
               <TableCell
                 :grow="3"
@@ -406,7 +406,7 @@
             <TableRow
               v-for="row in entry.rows"
               :key="row.href"
-              class="cursor-pointer hover:[--table-row-bg:var(--bg-canvas)]"
+              class="cursor-pointer hover:[--table-row-bg:var(--bg-hover)]!"
               @click="follow($event, row.href)"
             >
               <TableCell
@@ -415,20 +415,24 @@
                 :grow="column.grow ?? 1"
                 :align="column.align ?? 'start'"
                 :principal="index === 0"
+                :data-meta="index > 0 || null"
                 :data-edge="index === 0 ? 'start' : index === columns.length - 1 ? 'end' : null"
-                class="py-(--spacing-lg)! text-(--text-muted) data-[edge=end]:pr-(--spacing-xl)! data-[edge=start]:pl-(--spacing-xl)!"
+                class="py-(--spacing-lg)! text-(--text-muted) data-[meta]:text-overline-sm! data-[edge=end]:pr-(--spacing-xl)! data-[edge=start]:pl-(--spacing-xl)!"
               >
                 <a
                   v-if="index === 0"
                   :href="row.href"
-                  class="text-label-lg text-(--text-default)"
+                  class="min-w-0 whitespace-normal text-pretty text-label-lg text-(--text-default)"
                   @click.stop="follow($event, row.href)"
                 >
                   {{ row.values[column.key] }}
                 </a>
-                <template v-else>
-                  {{ row.values[column.key] }}
-                </template>
+                <span
+                  v-else
+                  class="min-w-0 truncate"
+                  :title="row.values[column.key]"
+                  >{{ row.values[column.key] }}</span
+                >
               </TableCell>
             </TableRow>
           </TableBody>

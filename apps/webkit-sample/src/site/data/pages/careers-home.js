@@ -24,6 +24,7 @@ export const CAREERS_HOME_PAGE = [
   {
     section: 'Heroes',
     kind: 'centered-band',
+    eyebrow: CAREERS_HOME_HERO.eyebrow,
     title: CAREERS_HOME_HERO.title,
     description: CAREERS_HOME_HERO.description,
     actions: [{ label: CAREERS_HOME_HERO.action, href: '#latest-roles', kind: 'secondary' }]
@@ -33,7 +34,8 @@ export const CAREERS_HOME_PAGE = [
     title: CAREERS_WORK.title,
     description: CAREERS_WORK.description,
     photos: CAREERS_PHOTOS,
-    ariaLabel: 'Azion offices'
+    ariaLabel: 'Azion offices',
+    duration: 60
   },
   {
     section: 'ListingTable',
@@ -49,11 +51,9 @@ export const CAREERS_HOME_PAGE = [
   },
   {
     section: 'ClosingCallToAction',
-    kind: 'panel',
+    kind: 'split',
     title: CAREERS_JOIN.title,
     description: CAREERS_JOIN.description,
-    actions: [
-      { label: CAREERS_JOIN.action, href: CAREERS_JOBS_PATH, kind: 'secondary', trailing: true }
-    ]
+    actions: [{ label: CAREERS_JOIN.action, href: CAREERS_JOBS_PATH, kind: 'secondary' }]
   }
 ]

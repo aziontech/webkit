@@ -1,5 +1,9 @@
 import type { Component } from 'vue'
 
+import ArticleBody from './ArticleBody.vue'
+import ArticleCards from './ArticleCards.vue'
+import ArticleHighlight from './ArticleHighlight.vue'
+import ArticleIndex from './ArticleIndex.vue'
 import CapabilityGrid from './CapabilityGrid.vue'
 import ClientMosaic from './ClientMosaic.vue'
 import ClientQuotes from './ClientQuotes.vue'
@@ -32,6 +36,10 @@ import SubjectLibrary from './SubjectLibrary.vue'
 import TemplateGallery from './TemplateGallery.vue'
 
 export const SECTIONS: Record<string, Component> = {
+  ArticleBody,
+  ArticleCards,
+  ArticleHighlight,
+  ArticleIndex,
   CapabilityGrid,
   ClientMosaic,
   ClientQuotes,
@@ -64,6 +72,6 @@ export const SECTIONS: Record<string, Component> = {
   TemplateGallery
 }
 
-export const HERO_SECTIONS = new Set(['Heroes', 'HeroForm'])
+export const HERO_SECTIONS = new Set(['ArticleBody', 'Heroes', 'HeroForm'])
 
 export type { PageSection, SiteAction, SiteFaqItem, SiteLink, SiteTopic } from './types'

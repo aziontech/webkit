@@ -17,6 +17,8 @@
 // its own navigation): see ./hub.routes.js.
 
 import { agentBySlug } from '@site/docs/lib/docs-agent-setup.js'
+import { blogArticle } from '@site/data/blog-articles.js'
+import { successCaseArticle } from '@site/data/success-case-articles.js'
 import { hasDocsPage } from '@site/docs/lib/docs-pages.js'
 import {
   AKAMAI_GUIDE,
@@ -34,6 +36,8 @@ import LandingAiWorkloads from '@site/views/LandingAiWorkloads.vue'
 import LandingApplicationAccelerator from '@site/views/LandingApplicationAccelerator.vue'
 import LandingAzion from '@site/views/LandingAzion.vue'
 import LandingAzionHeros from '@site/views/LandingAzionHeros.vue'
+import LandingBlog from '@site/views/LandingBlog.vue'
+import LandingBlogPost from '@site/views/LandingBlogPost.vue'
 import LandingCache from '@site/views/LandingCache.vue'
 import LandingCareers from '@site/views/LandingCareers.vue'
 import LandingCareersHome from '@site/views/LandingCareersHome.vue'
@@ -54,6 +58,7 @@ import LandingRetail from '@site/views/LandingRetail.vue'
 import LandingSecurity from '@site/views/LandingSecurity.vue'
 import LandingSolutions from '@site/views/LandingSolutions.vue'
 import LandingStreaming from '@site/views/LandingStreaming.vue'
+import LandingSuccessCasePost from '@site/views/LandingSuccessCasePost.vue'
 import LandingSuccessCases from '@site/views/LandingSuccessCases.vue'
 import LandingSupport from '@site/views/LandingSupport.vue'
 import LandingTechnology from '@site/views/LandingTechnology.vue'
@@ -209,6 +214,22 @@ export const siteRoutes = [
   // because azion.com's does not either: its Resources menu lists Blog, Resource Hub,
   // Partners and Marketplace, and reaches the library only from the footer.
   { path: '/site/success-cases', name: 'site-success-cases', component: LandingSuccessCases },
+  {
+    path: '/site/success-cases/:slug',
+    name: 'site-success-case-post',
+    component: LandingSuccessCasePost,
+    props: true,
+    beforeEnter: (to) =>
+      successCaseArticle(String(to.params.slug)) ? true : '/site/success-cases'
+  },
+  { path: '/site/blog', name: 'site-blog', component: LandingBlog },
+  {
+    path: '/site/blog/:slug',
+    name: 'site-blog-post',
+    component: LandingBlogPost,
+    props: true,
+    beforeEnter: (to) => (blogArticle(String(to.params.slug)) ? true : '/site/blog')
+  },
   // The hero catalogue: every opening band the Site ships, in one column, rendered by the
   // component with the props a page would pass. Not an azion.com page — it is the Site's
   // own reference for choosing an opening, so the nav does not link it.
