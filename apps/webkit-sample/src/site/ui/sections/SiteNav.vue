@@ -33,7 +33,7 @@
     contact: SiteLink
     /** The sign-in action: on the bar, and in the sheet's footer. */
     login: SiteLink
-    /** The call to action, the one action the bar keeps at every width. */
+    /** The call to action: on the bar at every width, and in the sheet's footer. */
     cta: SiteLink
   }
 
@@ -90,6 +90,11 @@
   const onNavigate = (event: globalThis.MouseEvent, node: MenuNode) => {
     if (node.groups) return
     follow(event, node.href ?? '')
+    navOpen.value = false
+  }
+
+  const onAction = (event: globalThis.MouseEvent, href: string) => {
+    follow(event, href)
     navOpen.value = false
   }
 
@@ -244,7 +249,7 @@
     </GlobalHeader.Middle>
 
     <GlobalHeader.Right>
-      <div class="hidden items-center gap-(--spacing-xs) xl:flex">
+      <div class="hidden xl:flex">
         <Button
           :label="contact.label"
           kind="text"
@@ -252,6 +257,8 @@
           :href="contact.href"
           @click="follow($event, contact.href)"
         />
+      </div>
+      <div class="hidden shrink-0 min-[24rem]:flex">
         <Button
           :label="login.label"
           kind="secondary"
@@ -303,14 +310,22 @@
           </Menu>
         </ScrollArea>
 
-        <PanelFooter class="w-full px-(--spacing-md)">
+        <PanelFooter class="w-full flex-col items-stretch px-(--spacing-md)">
           <Button
             :label="login.label"
-            kind="secondary"
+            kind="outlined"
             size="medium"
             class="w-full"
             :href="login.href"
-            @click="follow($event, login.href)"
+            @click="onAction($event, login.href)"
+          />
+          <Button
+            :label="cta.label"
+            kind="primary"
+            size="medium"
+            class="w-full"
+            :href="cta.href"
+            @click="onAction($event, cta.href)"
           />
         </PanelFooter>
       </DrawerContent>

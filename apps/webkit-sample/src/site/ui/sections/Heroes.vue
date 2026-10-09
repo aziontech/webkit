@@ -106,17 +106,16 @@
       floorTextureSize: 'small',
       maxWidth: 'full',
       bordered: false,
-      offset: '3.5rem'
+      bottomHeight: 'clamp(9rem, 24dvh, 34rem)'
     },
-    'copy-beside-art': { maxWidth: '5xl', kind: 'screen', mediaAlign: 'end', offset: '3.5rem' },
+    'copy-beside-art': { maxWidth: '5xl', kind: 'screen', mediaAlign: 'end' },
     'copy-on-top-art': {
       kind: 'screen',
       align: 'center',
       maxWidth: 'site',
       texture: 'dots',
       textureSize: 'small',
-      textureFade: 'top',
-      offset: '3.5rem'
+      textureFade: 'top'
     }
   } as const
 
@@ -129,10 +128,14 @@
     'copy-on-top-art': { centered: true }
   } as const
 
-  const frame = computed(() => FRAMES[props.kind])
-  const titleFrame = computed(() => TITLES[props.kind])
-
   const hasCarousel = computed(() => props.carouselMarks.length > 0)
+
+  const frame = computed(() =>
+    props.kind === 'centered-carousel' && !hasCarousel.value
+      ? FRAMES['centered-band']
+      : FRAMES[props.kind]
+  )
+  const titleFrame = computed(() => TITLES[props.kind])
   const sceneOnTop = computed(() => Boolean(props.scene) && props.scenePlacement === 'top')
   const sceneOnBottom = computed(() => Boolean(props.scene) && props.scenePlacement === 'bottom')
   const hasArt = computed(() => props.kind === 'copy-beside-art' && Boolean(props.art))
@@ -181,7 +184,7 @@
         #media
       >
         <div
-          class="w-full md:w-(--hero-art-width) md:max-w-none md:shrink-0 md:-me-(--hero-art-bleed)"
+          class="w-full md:-mt-(--hero-art-trim-top) md:-mb-(--hero-art-trim-bottom) md:w-(--hero-art-width) md:max-w-none md:shrink-0 md:-me-(--hero-art-bleed)"
           :style="artStyle"
         >
           <img

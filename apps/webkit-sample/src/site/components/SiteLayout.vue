@@ -56,7 +56,7 @@
   </div>
   <div
     v-else
-    class="flex h-dvh flex-col overflow-y-auto scroll-smooth bg-(--bg-canvas) text-(--text-default) selection:bg-(--primary-mask) selection:text-(--primary) motion-reduce:scroll-auto"
+    class="flex h-dvh flex-col overflow-y-auto scroll-smooth [--banner-offset:3.5rem] bg-(--bg-canvas) text-(--text-default) selection:bg-(--primary-mask) selection:text-(--primary) motion-reduce:scroll-auto"
   >
     <SiteNav v-bind="SITE_NAV" />
     <main class="flex-1">

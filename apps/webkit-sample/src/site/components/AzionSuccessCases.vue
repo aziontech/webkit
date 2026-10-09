@@ -30,10 +30,6 @@
   // it takes SectionGap's own `small` step.
   //
   // WHERE OUR FORM DEPARTS FROM THE SOURCE, on purpose:
-  //   • The source's hero is 324px — a title band. Ours is `hero`, one viewport, because
-  //     that is this language's hero rule and what makes the /site pages read as one site.
-  //     The copy is unchanged: the source states no eyebrow and no description here, so
-  //     neither is invented to fill the band.
   //   • Band 1 is a PrimeVue carousel on the source — three slides, three page dots. This
   //     language has no carousel (.claude/rules/dependencies.md), and three cards fit one
   //     row, so they are a hairline grid and the dots go away with the mechanism.
@@ -152,12 +148,11 @@
        sticky SiteNav's height (h-14 = 3.5rem), so the band still measures exactly one
        screen with the nav above it. -->
   <Hero
-    kind="screen"
-    align="center"
+    kind="band"
+    size="large"
     max-width="site"
     texture="dots"
-    texture-fade="bottom"
-    class="[--banner-offset:3.5rem]"
+    texture-fade="top"
   >
     <Hero.Title
       centered

@@ -1,9 +1,9 @@
 const ART_BOUNDS_ON_CANVAS = {
-  'azion-to-akamai': { canvas: 592, start: 161, end: 370, share: 0.6 },
-  'azion-to-aws': { canvas: 592, start: 161, end: 370, share: 0.6 },
-  'azion-to-cloudflare': { canvas: 592, start: 161, end: 370, share: 0.6 },
-  'azion-to-fastly': { canvas: 592, start: 161, end: 370, share: 0.6 },
-  'azion-to-vercel': { canvas: 592, start: 161, end: 370, share: 0.6 },
+  'azion-to-akamai': { canvas: 592, start: 161, end: 370, share: 0.6, top: 48, bottom: 252, rows: 300 },
+  'azion-to-aws': { canvas: 592, start: 161, end: 370, share: 0.6, top: 48, bottom: 252, rows: 300 },
+  'azion-to-cloudflare': { canvas: 592, start: 161, end: 370, share: 0.6, top: 48, bottom: 252, rows: 300 },
+  'azion-to-fastly': { canvas: 592, start: 161, end: 370, share: 0.6, top: 48, bottom: 252, rows: 300 },
+  'azion-to-vercel': { canvas: 592, start: 161, end: 370, share: 0.6, top: 48, bottom: 252, rows: 300 },
   'retail-application-modernization': { canvas: 592, start: 51, end: 542 },
   'protect-financial-applications': { canvas: 592, start: 58, end: 506 },
   'implement-api-gateway-security': { canvas: 592, start: 0, end: 592 },
@@ -21,11 +21,22 @@ export const HERO_ART_CLASS =
   'md:w-(--hero-art-width) md:max-w-none md:shrink-0 md:-me-(--hero-art-bleed)'
 
 export function heroArt(name) {
-  const { canvas, start, end, share = ART_SHARE_OF_MEDIA_COLUMN } = ART_BOUNDS_ON_CANVAS[name]
+  const {
+    canvas,
+    start,
+    end,
+    share = ART_SHARE_OF_MEDIA_COLUMN,
+    top = 0,
+    bottom = 0,
+    rows = 0
+  } = ART_BOUNDS_ON_CANVAS[name]
   const width = (share * canvas) / (end - start)
   const bleed = (width * (canvas - end)) / canvas
+  const percent = (value) => `${(value * 100).toFixed(2)}%`
   return {
-    '--hero-art-width': `${(width * 100).toFixed(2)}%`,
-    '--hero-art-bleed': `${(bleed * 100).toFixed(2)}%`
+    '--hero-art-width': percent(width),
+    '--hero-art-bleed': percent(bleed),
+    '--hero-art-trim-top': percent((width * top) / canvas),
+    '--hero-art-trim-bottom': percent(rows ? (width * (rows - bottom)) / canvas : 0)
   }
 }
