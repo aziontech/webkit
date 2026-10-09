@@ -39,8 +39,10 @@
     padded: true
   })
 
-  defineSlots<{
+  const slots = defineSlots<{
     default(): unknown
+    /** Replaces the last breadcrumb segment with a custom control. */
+    crumb?(): unknown
   }>()
 
   const route = useRoute()
@@ -93,6 +95,7 @@
   }
 
   const showBreadcrumb = computed(() => props.breadcrumb.length >= 2)
+  const leadingCrumbs = computed(() => props.breadcrumb.slice(0, -1))
 
   const onBrand = (event) => {
     if (!routeActivation(event)) return
@@ -215,10 +218,29 @@
 
           <Breadcrumb
             v-if="showBreadcrumb"
-            :items="breadcrumb"
+            :items="slots.crumb ? [] : breadcrumb"
             class="-ml-(--spacing-xs) hidden w-auto min-w-0 shrink md:flex"
             @navigate="onCrumb"
-          />
+          >
+            <Breadcrumb.List>
+              <template
+                v-for="(item, index) in leadingCrumbs"
+                :key="`${item.label}-${index}`"
+              >
+                <li class="inline-flex items-center">
+                  <Breadcrumb.Item
+                    :label="item.label"
+                    :href="item.href"
+                    @click="(event, crumb) => onCrumb(event, crumb.href)"
+                  />
+                </li>
+                <Breadcrumb.Separator />
+              </template>
+              <li class="inline-flex min-w-0 items-center">
+                <slot name="crumb" />
+              </li>
+            </Breadcrumb.List>
+          </Breadcrumb>
         </GlobalHeader.Left>
         <GlobalHeader.Middle />
         <GlobalHeader.Right>

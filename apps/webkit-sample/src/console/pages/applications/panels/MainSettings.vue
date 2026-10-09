@@ -4,20 +4,14 @@
   import Item from '@aziontech/webkit/item'
   import Switch from '@aziontech/webkit/switch'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { computed, reactive, ref, watch } from 'vue'
-  import { useRoute, useRouter } from 'vue-router'
+  import { reactive, ref } from 'vue'
 
   import SettingsSaveBar from '../../../components/form/SettingsSaveBar.vue'
-  import ConfirmDialog from '../../../components/list/ConfirmDialog.vue'
   import PageHeading from '../../../components/page/PageHeading.vue'
   import Section from '../../../components/page/Section.vue'
-  import AddDomainDrawer from '../../../components/resource/AddDomainDrawer.vue'
-  import DomainsSection from '../../../components/resource/DomainsSection.vue'
-  import { focusSection } from '../../../lib/behavior/anchor-nav'
   import { saveGroup, useBaseline } from '../../../lib/behavior/forms'
   import { useTabDirty } from '../../../lib/behavior/tab-dirty'
-  import { applicationDeploymentRows } from '../../../lib/data/deployment-history'
-  import { domainsFor, saveDomains } from '../../../lib/state/application-domains'
+  import { useVersionChange } from '../../../lib/behavior/version-commit'
 
   interface Props {
     application: Record<string, unknown>
@@ -28,7 +22,6 @@
   const settings = reactive({
     name: props.application.name,
     active: props.application.active !== false,
-    domains: domainsFor(props.application.id, props.application).map((entry) => ({ ...entry })),
     modules: {
       application_accelerator: true,
       cache: true,
@@ -45,10 +38,12 @@
 
   const snapshot = ref(JSON.parse(JSON.stringify(settings)))
 
+  const noteChange = useVersionChange()
+
   const save = () =>
     saveGroup(saving, 'Settings saved.', () => {
-      saveDomains(props.application.id, settings.domains)
       commit()
+      noteChange('Update application settings')
       snapshot.value = JSON.parse(JSON.stringify(settings))
     })
 
@@ -60,92 +55,6 @@
     'main-settings',
     { dirty, saving },
     { label: 'Application settings changed.', save, discard }
-  )
-
-  const route = useRoute()
-  const router = useRouter()
-
-  const domainOpen = ref(false)
-  const editingDomain = ref(null)
-  const removingDomainId = ref('')
-  const removeDomainOpen = ref(false)
-
-  const environments = computed(() => {
-    const names = new Set(
-      applicationDeploymentRows(props.application.id, props.application.name)
-        .map((row) => row.environment)
-        .filter(Boolean)
-    )
-    return [...names].map((name) => ({ name }))
-  })
-
-  const domainRows = computed(() => [
-    {
-      id: 'generated',
-      domain: props.application.domainName ?? '',
-      environment: environments.value[0]?.name ?? '',
-      certificate: '',
-      generated: true
-    },
-    ...settings.domains.map((entry) => ({ ...entry, generated: false }))
-  ])
-
-  const openDomain = () => {
-    editingDomain.value = null
-    domainOpen.value = true
-  }
-
-  const editDomain = (id) => {
-    const entry = settings.domains.find((domain) => domain.id === id)
-    if (!entry) return
-    editingDomain.value = { ...entry }
-    domainOpen.value = true
-  }
-
-  const stageDomain = (entry) => {
-    const existing = settings.domains.some((domain) => domain.id === entry.id)
-    settings.domains = existing
-      ? settings.domains.map((domain) => (domain.id === entry.id ? entry : domain))
-      : [...settings.domains, entry]
-    editingDomain.value = null
-  }
-
-  const removingDomain = computed(() =>
-    settings.domains.find((domain) => domain.id === removingDomainId.value)
-  )
-
-  const removeDomain = (id) => {
-    removingDomainId.value = id
-    removeDomainOpen.value = true
-  }
-
-  const confirmRemoveDomain = () => {
-    settings.domains = settings.domains.filter((domain) => domain.id !== removingDomainId.value)
-    removingDomainId.value = ''
-  }
-
-  watch(
-    () => route.query.add,
-    (value) => {
-      if (value !== 'domain') return
-      openDomain()
-      const query = { ...route.query }
-      delete query.add
-      router.replace({ query })
-    },
-    { immediate: true }
-  )
-
-  watch(
-    () => route.query.focus,
-    (value) => {
-      if (value !== 'domains') return
-      focusSection('domains')
-      const query = { ...route.query }
-      delete query.focus
-      router.replace({ query })
-    },
-    { immediate: true }
   )
 
   const defaultModules = [
@@ -340,21 +249,6 @@
             </template>
           </CardBox>
         </Section>
-        <Section
-          stacked
-          anchor
-          :divided="false"
-          title="Domains"
-          hint="The addresses visitors reach this application at, the environment each one answers in, and the certificate it is served with."
-        >
-          <DomainsSection
-            :domains="domainRows"
-            :disabled="saving"
-            @add="openDomain"
-            @edit="editDomain"
-            @remove="removeDomain"
-          />
-        </Section>
       </fieldset>
     </div>
 
@@ -366,22 +260,6 @@
       hint="Saving publishes them on the next deployment."
       @save="save"
       @discard="discard"
-    />
-    <AddDomainDrawer
-      v-model:open="domainOpen"
-      resource="application"
-      intent="domain"
-      :environments="environments"
-      :domain="editingDomain"
-      @save="stageDomain"
-    />
-
-    <ConfirmDialog
-      v-model:open="removeDomainOpen"
-      title="Remove domain"
-      :description="`${removingDomain?.domain ?? 'This domain'} stops answering for this application once you save. Traffic already pointed at it gets no response.`"
-      confirm-label="Remove Domain"
-      @confirm="confirmRemoveDomain"
     />
   </form>
 </template>

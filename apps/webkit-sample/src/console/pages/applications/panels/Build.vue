@@ -31,8 +31,6 @@
   const route = useRoute()
   const router = useRouter()
 
-  const userEmail = computed(() => route.query.email || 'myemail@azion.com')
-
   const repository = ref(props.application?.repository || '')
   const apiTokenName = `${props.application?.name || 'application'} build token`
 
@@ -75,16 +73,7 @@
 
   const comingSoon = (what) => toast.info(what, { description: 'Not available in this demo.' })
 
-  const deploy = () => {
-    router.push({
-      path: '/deployments/releases/new',
-      query: {
-        email: userEmail.value,
-        scopedType: 'application',
-        resourceId: props.application.name
-      }
-    })
-  }
+  const deploy = () => router.replace({ query: { ...route.query, deploy: '1' } })
 
   useTabDirty('build', { dirty, saving }, { label: 'Build configuration changed.', save, discard })
 </script>

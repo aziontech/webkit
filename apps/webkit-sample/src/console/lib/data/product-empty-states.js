@@ -203,14 +203,6 @@ export const productEmptyStates = [
         route: { path: '/create' }
       },
       {
-        id: 'release',
-        title: 'Compose a release',
-        description: 'Pick the workloads and resources to promote in one deploy.',
-        action: 'Create Release',
-        icon: 'pi pi-cloud-upload',
-        route: { path: '/deployments/releases/new' }
-      },
-      {
         id: 'cli',
         title: 'Via CLI',
         description: 'Run azion deploy and watch the run appear here.',

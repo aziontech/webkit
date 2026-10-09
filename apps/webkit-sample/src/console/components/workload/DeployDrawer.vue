@@ -1,14 +1,20 @@
 <script setup lang="ts">
-  import BoxGridSelection from '@aziontech/webkit/box-grid-selection'
   import Button from '@aziontech/webkit/button'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Message from '@aziontech/webkit/message'
   import Skeleton from '@aziontech/webkit/skeleton'
-  import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
+  import { consoleDeployRowsFor } from '@shared/lib/azion-deploys'
   import { computed, ref, watch } from 'vue'
 
-  import { deploymentPolicyLabel } from '../../lib/data/deployment-strategies'
+  import { deploymentRowsFor } from '../../lib/data/deployment-history'
+  import { environmentByName } from '../../lib/data/environments'
+  import {
+    deployResource,
+    pinnedVersions,
+    removedResource,
+    withDependencies
+  } from '../../lib/data/deploy-resources'
   import {
     applicationRecord,
     DEPLOY_FAILS_ONCE,
@@ -18,7 +24,8 @@
   } from '../../lib/data/releases'
   import { BIND_TARGET_ORDER, bindTargetFor } from '../../lib/data/topology-bind-targets'
   import { RESOURCE_DEPLOY_DURATION_MS, startResourceDeployRun } from '../../lib/state/deploy-runs'
-  import FieldStack from '../form/FieldStack.vue'
+  import DeployEnvironmentField from '../deployment/DeployEnvironmentField.vue'
+  import DeployResources from '../deployment/DeployResources.vue'
   import ResourceDrawer from '../form/ResourceDrawer.vue'
   import Section from '../page/Section.vue'
 
@@ -46,19 +53,22 @@
 
   const RESOLVE_MS = 500
 
+  const SLOT_TYPES = { firewall: 'firewall', customPage: 'custom_page', connector: 'connector' }
+
+  const HINTS = {
+    resources:
+      'Everything this workload serves, at the version this deployment publishes, with the version of every dependency they reference.',
+    environment:
+      'Where the deployment goes live. Each environment publishes with its own Deployment Settings.'
+  }
+
   const resolving = ref(false)
   const loadError = ref('')
   const deploying = ref(false)
   const retried = ref(false)
   const selected = ref('')
-
-  const environmentItems = computed(() =>
-    props.environments.map((environment) => ({
-      value: environment.name,
-      label: environment.name,
-      ariaLabel: `${environment.name}, ${deploymentPolicyLabel(environment.deploymentPolicy)}`
-    }))
-  )
+  const dependencyPicks = ref({})
+  const resourcePicks = ref({})
 
   const settingFor = (name) =>
     settingsById(props.environments.find((entry) => entry.name === name)?.settingsId) ?? null
@@ -71,41 +81,52 @@
       .map((entry) => entry.name)
   )
 
-  const changes = computed(() =>
-    BIND_TARGET_ORDER.filter((slot) => props.staged[slot]).map((slot) => {
-      const target = bindTargetFor(slot)
-      const pick = props.staged[slot]
-      const current = props.live[slot] ?? null
+  const applicationName = computed(
+    () => props.live.application?.name || servingApplication(props.workload.id)
+  )
 
-      if (pick.removed) {
-        return {
-          slot,
-          kind: target.kind,
-          icon: target.icon,
-          verb: 'Removed',
-          severity: 'danger',
-          detail: current?.name ? `${current.name} stops serving this workload.` : ''
-        }
-      }
+  const kindOf = (entry) =>
+    entry?.node?.fields?.find((field) => field.label === 'Type')?.value ?? ''
 
-      return current
-        ? {
-            slot,
-            kind: target.kind,
-            icon: target.icon,
-            verb: 'Changed',
-            severity: 'warning',
-            detail: `${current.name} to ${pick.name}.`
-          }
-        : {
-            slot,
-            kind: target.kind,
-            icon: target.icon,
-            verb: 'Added',
-            severity: 'success',
-            detail: `${pick.name} starts serving this workload.`
-          }
+  const slotResource = (slot) => {
+    const target = bindTargetFor(slot)
+    const type = SLOT_TYPES[slot]
+    const pick = props.staged[slot] ?? null
+    const current = props.live[slot] ?? null
+    if (!pick && !current) return null
+
+    if (pick?.removed) {
+      return removedResource({ key: slot, type, name: current?.name ?? '', icon: target.icon })
+    }
+
+    const change = !pick
+      ? null
+      : current
+        ? { label: 'Changed', severity: 'warning' }
+        : { label: 'Added', severity: 'success' }
+
+    return deployResource({
+      key: slot,
+      type,
+      name: pick?.name ?? current.name,
+      kind: pick ? '' : kindOf(current),
+      change
     })
+  }
+
+  const resources = computed(() => [
+    ...(applicationName.value
+      ? [deployResource({ key: 'application', type: 'application', name: applicationName.value })]
+      : []),
+    ...BIND_TARGET_ORDER.map(slotResource).filter(Boolean)
+  ])
+
+  const changes = computed(() => resources.value.filter((resource) => resource.change))
+
+  const groups = computed(() => withDependencies(resources.value, resourcePicks.value))
+
+  const pinned = computed(() =>
+    pinnedVersions(groups.value, resourcePicks.value, dependencyPicks.value)
   )
 
   const changeCount = computed(() => changes.value.length)
@@ -117,10 +138,21 @@
 
   const hasEnvironment = computed(() => props.environments.length > 0)
 
-  const environmentSettled = computed(() => props.environments.length === 1)
+  const lastEnvironment = computed(
+    () =>
+      [
+        ...consoleDeployRowsFor(props.workload.id),
+        ...deploymentRowsFor(props.workload.id, props.workload.name)
+      ][0]?.environment ?? ''
+  )
 
-  const policyOf = (name) =>
-    deploymentPolicyLabel(props.environments.find((entry) => entry.name === name)?.deploymentPolicy)
+  const environmentChoices = computed(() =>
+    props.environments.map((entry) => ({
+      name: entry.name,
+      description: environmentByName(entry.name)?.description ?? '',
+      tag: entry.name === lastEnvironment.value ? 'Last used' : ''
+    }))
+  )
 
   const resolve = async () => {
     resolving.value = true
@@ -140,13 +172,19 @@
     }
   }
 
-  watch(open, (isOpen) => {
-    if (!isOpen) {
-      deploying.value = false
-      return
-    }
-    resolve()
-  })
+  watch(
+    open,
+    (isOpen) => {
+      if (!isOpen) {
+        deploying.value = false
+        return
+      }
+      dependencyPicks.value = {}
+      resourcePicks.value = {}
+      resolve()
+    },
+    { immediate: true }
+  )
 
   const deploy = async () => {
     if (deploying.value || !selected.value) return
@@ -161,7 +199,6 @@
 
       const application = applicationRecord(servingApplication(props.workload.id))
       const environment = selected.value
-      const count = changeCount.value
 
       startResourceDeployRun({
         workload: {
@@ -171,17 +208,14 @@
         },
         application,
         strategy: setting ? { id: setting.id, name: setting.name } : null,
+        version:
+          pinned.value.resources.find((entry) => entry.type === 'application')?.version ?? null,
+        resources: pinned.value.resources.filter((entry) => entry.type !== 'application'),
+        dependencies: pinned.value.dependencies,
         deploymentName: `${application.name || props.workload.name}-release`,
         environment,
         preset: application.preset,
-        durationMs: RESOURCE_DEPLOY_DURATION_MS,
-        notify: false
-      })
-
-      toast.success(`Deploying ${props.workload.name} into ${environment}.`, {
-        description: count
-          ? `${count} ${count === 1 ? 'change is' : 'changes are'} going live. The deployment keeps building if you leave.`
-          : 'The deployment keeps building if you leave.'
+        durationMs: RESOURCE_DEPLOY_DURATION_MS
       })
 
       emit('deployed', { environment })
@@ -224,25 +258,21 @@
       <Section
         stacked
         :divided="false"
-        title="Changes to deploy"
-        hint="What this release carries that is not live yet."
+        title="Resources"
+        :hint="HINTS.resources"
       >
-        <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
-          <Skeleton
-            v-for="row in 2"
-            :key="row"
-            kind="shape"
-            width="100%"
-            height="56px"
-          />
-        </div>
+        <Skeleton
+          kind="shape"
+          width="100%"
+          height="160px"
+        />
       </Section>
 
       <Section
         stacked
         :divided="false"
         title="Environment"
-        hint="Where the release lands, and the Deployment Settings that serve it."
+        :hint="HINTS.environment"
       >
         <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
           <Skeleton
@@ -307,112 +337,37 @@
       <Section
         stacked
         :divided="false"
-        title="Changes to deploy"
-        hint="What this release carries that is not live yet."
+        title="Resources"
+        :hint="HINTS.resources"
       >
-        <div
-          v-if="changeCount"
-          class="flex min-w-0 flex-col gap-(--spacing-xs)"
-        >
-          <div
-            v-for="change in changes"
-            :key="change.slot"
-            class="flex min-w-0 items-start gap-(--spacing-sm) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-sm)"
-          >
-            <i
-              :class="change.icon"
-              class="mt-(--spacing-xxs) shrink-0 text-body-sm text-(--text-muted)"
-              aria-hidden="true"
-            />
-            <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-xxs)">
-              <span class="text-body-sm text-(--text-default)">{{ change.kind }}</span>
-              <span class="text-body-xs text-(--text-muted)">{{ change.detail }}</span>
-            </div>
-            <Tag
-              :label="change.verb"
-              :severity="change.severity"
-              size="small"
-              class="shrink-0"
-            />
-          </div>
-        </div>
-
-        <p
-          v-else
-          class="text-body-sm text-(--text-muted)"
-        >
-          Nothing is staged on the topology, so this republishes what {{ workload.name }} already
-          serves.
-        </p>
+        <DeployResources
+          v-model:resource-picks="resourcePicks"
+          v-model:dependency-picks="dependencyPicks"
+          :resources="groups"
+          :disabled="deploying"
+          :empty-label="`Nothing is bound to ${workload.name} yet.`"
+        />
       </Section>
 
       <Section
         stacked
         :divided="false"
-        :title="environmentSettled ? 'Where it lands' : 'Environment'"
-        hint="Where the release lands, and the Deployment Settings that serve it."
+        title="Environment"
+        :hint="HINTS.environment"
       >
-        <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-          <div
-            v-if="environmentSettled"
-            class="flex min-w-0 items-start justify-between gap-(--spacing-sm) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-sm)"
-          >
-            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-              <span class="text-body-sm text-(--text-default)">{{ selected }}</span>
-              <span class="truncate text-body-xs text-(--text-muted)">
-                Publishes with {{ selectedSetting?.name ?? 'Azion Default' }}.
-              </span>
-            </div>
-            <Tag
-              :label="policyOf(selected)"
-              severity="info"
-              size="small"
-              class="shrink-0"
-            />
-          </div>
+        <DeployEnvironmentField
+          v-model="selected"
+          name="workload-deploy-environment"
+          :options="environmentChoices"
+          :disabled="deploying"
+        />
 
-          <FieldStack
-            v-else
-            group
-            label="Environment"
-            required
-            description="Each environment publishes with its own Deployment Settings. The release goes live on the one selected."
-          >
-            <template #default="{ labelId }">
-              <BoxGridSelection
-                v-model="selected"
-                :items="environmentItems"
-                :disabled="deploying"
-                class="flex-col"
-                :aria-labelledby="labelId"
-              >
-                <template #default="{ item }">
-                  <div class="flex w-full min-w-0 items-start justify-between gap-(--spacing-sm)">
-                    <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                      <span class="text-body-sm text-(--text-default)">{{ item.label }}</span>
-                      <span class="truncate text-body-xs text-(--text-muted)">
-                        {{ settingFor(item.value)?.name ?? 'Azion Default' }}
-                      </span>
-                    </div>
-                    <Tag
-                      :label="policyOf(item.value)"
-                      severity="info"
-                      size="small"
-                      class="shrink-0"
-                    />
-                  </div>
-                </template>
-              </BoxGridSelection>
-            </template>
-          </FieldStack>
-
-          <Message
-            v-if="selectedSetting?.shared && otherWorkloads.length"
-            severity="warning"
-            size="small"
-            :label="`Deploying with ${selectedSetting.name} also publishes to ${otherWorkloads.join(', ')}.`"
-          />
-        </div>
+        <Message
+          v-if="selectedSetting?.shared && otherWorkloads.length"
+          severity="warning"
+          size="small"
+          :label="`Deploying with ${selectedSetting.name} also publishes to ${otherWorkloads.join(', ')}.`"
+        />
       </Section>
     </template>
   </ResourceDrawer>

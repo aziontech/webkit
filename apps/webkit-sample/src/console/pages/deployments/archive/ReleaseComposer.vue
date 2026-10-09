@@ -18,13 +18,13 @@
   import { computed, onMounted, reactive, ref, watch } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
-  import DeploymentSettingsPicker from '../../components/deployment/DeploymentSettingsPicker.vue'
-  import DeployProgressDialog from '../../components/deployment/DeployProgressDialog.vue'
-  import ImpactPanel from '../../components/deployment/ImpactPanel.vue'
-  import ReleaseDependenciesSection from '../../components/deployment/ReleaseDependenciesSection.vue'
-  import ReleaseTopologyTree from '../../components/deployment/ReleaseTopologyTree.vue'
-  import PageHeading from '../../components/page/PageHeading.vue'
-  import AppLayout from '../../components/shell/AppLayout.vue'
+  import DeploymentSettingsPicker from '../../../components/deployment/DeploymentSettingsPicker.vue'
+  import DeployProgressDialog from '../../../components/deployment/DeployProgressDialog.vue'
+  import ImpactPanel from '../../../components/deployment/ImpactPanel.vue'
+  import ReleaseDependenciesSection from '../../../components/deployment/ReleaseDependenciesSection.vue'
+  import ReleaseTopologyTree from '../../../components/deployment/ReleaseTopologyTree.vue'
+  import PageHeading from '../../../components/page/PageHeading.vue'
+  import AppLayout from '../../../components/shell/AppLayout.vue'
   import {
     applicationRecord,
     catalogFor,
@@ -46,12 +46,12 @@
     servingApplication,
     settingsById,
     SINGLETON_TYPES
-  } from '../../lib/data/releases'
+  } from '../../../lib/data/releases'
   import {
     redeployRun,
     RESOURCE_DEPLOY_DURATION_MS,
     startResourceDeployRun
-  } from '../../lib/state/deploy-runs'
+  } from '../../../lib/state/deploy-runs'
 
   const route = useRoute()
   const router = useRouter()

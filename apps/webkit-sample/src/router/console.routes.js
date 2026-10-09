@@ -1,9 +1,9 @@
 // The console's routes — every signed-in product screen, plus the signed-out auth
 // screens that lead into it. The bulk of the app.
 //
-// Order matters in two places, both marked below: `/deployments/releases/new`
-// is declared before `/deployments/:id`, and the generated create/settings routes
-// come from one list so a route and its form cannot drift apart.
+// Order matters in two places, both marked below: the archived release composer's
+// URL is redirected before `/deployments/:id`, and the generated create/settings
+// routes come from one list so a route and its form cannot drift apart.
 
 import {
   createResourcePath,
@@ -17,6 +17,7 @@ import ManageResources from '@console/pages/account/ManageResources.vue'
 import PersonalTokens from '@console/pages/account/PersonalTokens.vue'
 import ApplicationDetail from '@console/pages/applications/ApplicationDetail.vue'
 import Applications from '@console/pages/applications/Applications.vue'
+import ApplicationVersion from '@console/pages/applications/ApplicationVersion.vue'
 import CreateApplication from '@console/pages/applications/CreateApplication.vue'
 import CheckInbox from '@console/pages/auth/CheckInbox.vue'
 import LoginScreen from '@console/pages/auth/LoginScreen.vue'
@@ -29,7 +30,6 @@ import Functions from '@console/pages/build/Functions.vue'
 import Variables from '@console/pages/build/Variables.vue'
 import DeploymentDetail from '@console/pages/deployments/DeploymentDetail.vue'
 import Deployments from '@console/pages/deployments/Deployments.vue'
-import ReleaseComposer from '@console/pages/deployments/ReleaseComposer.vue'
 import Drop from '@console/pages/drop/Drop.vue'
 import CreateZone from '@console/pages/edge-dns/CreateZone.vue'
 import EdgeDns from '@console/pages/edge-dns/EdgeDns.vue'
@@ -128,17 +128,7 @@ export const consoleRoutes = [
   { path: '/marketplace', name: 'marketplace', component: Marketplace },
   { path: '/workloads', name: 'workloads', component: Workloads },
   { path: '/deployments', name: 'deployments', component: Deployments },
-  // Review and deploy — the release composer. A page rather than a drawer because a
-  // release's blast radius is bigger than the thing being deployed: the review has to be
-  // linkable, reloadable, and wide enough to hold the release beside what it reaches. Its
-  // whole entry context rides the query string (`deploymentIds`, `pickTarget`,
-  // `scopedType`, `resourceId`, `versionId`) so a reload lands in the same scenario. It is
-  // declared BEFORE `/deployments/:id` so `releases` is never read as a deployment id.
-  {
-    path: '/deployments/releases/new',
-    name: 'release-composer',
-    component: ReleaseComposer
-  },
+  { path: '/deployments/releases/new', redirect: '/deployments' },
   // The deploy page for a container deployment. A URL, not a drawer: a container
   // deployment's runtime and its six-step lifecycle are what a support thread
   // links to and what a user reloads.
@@ -147,6 +137,11 @@ export const consoleRoutes = [
   { path: '/workloads/:id', name: 'workload-detail', component: WorkloadDetail },
   { path: '/applications/new', name: 'applications-new', component: CreateApplication },
   { path: '/applications/:id', name: 'application-detail', component: ApplicationDetail },
+  {
+    path: '/applications/:id/versions/:versionId',
+    name: 'application-version',
+    component: ApplicationVersion
+  },
   { path: '/variables', name: 'variables', component: Variables },
   // Build
   { path: '/functions', name: 'functions', component: Functions },

@@ -47,13 +47,21 @@
   )
 
   const resource = computed(() => resourceMeta(deploy.value?.resource?.type))
-  const resourceLink = computed(() =>
-    resource.value.path && deploy.value?.resource?.id
-      ? {
-          path: `${resource.value.path}/${deploy.value.resource.id}`,
-          query: { email: userEmail.value }
-        }
-      : null
+  const deployedVersion = computed(() => deploy.value?.resource?.version ?? null)
+
+  const resourceLink = computed(() => {
+    if (!resource.value.path || !deploy.value?.resource?.id) return null
+    const base = `${resource.value.path}/${deploy.value.resource.id}`
+    return {
+      path: deployedVersion.value ? `${base}/versions/${deployedVersion.value.id}` : base,
+      query: { email: userEmail.value }
+    }
+  })
+
+  const resourceTooltip = computed(() =>
+    deployedVersion.value
+      ? `Open this ${resource.value.label} version`
+      : `Open ${deploy.value?.resource?.name} in ${resource.value.label}`
   )
 
   const trigger = computed(() => (deploy.value?.trigger ? triggerMeta(deploy.value.trigger) : null))
@@ -375,7 +383,7 @@
                 <div class="flex flex-col gap-(--spacing-xxs)">
                   <span class="text-label-sm text-(--text-muted)">{{ resource.label }}</span>
                   <Tooltip
-                    :text="`Open ${deploy.resource.name} in ${resource.label}`"
+                    :text="resourceTooltip"
                     :disabled="!resourceLink"
                   >
                     <component
@@ -388,6 +396,12 @@
                         :class="resourceLink ? 'group-hover/link:underline' : ''"
                       >
                         {{ deploy.resource.name }}
+                      </span>
+                      <span
+                        v-if="deployedVersion"
+                        class="shrink-0 text-label-code-sm text-(--text-muted)"
+                      >
+                        {{ deployedVersion.name }}
                       </span>
                       <i
                         v-if="resourceLink"

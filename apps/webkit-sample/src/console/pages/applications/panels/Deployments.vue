@@ -44,15 +44,7 @@
 
   const tableRef = ref(null)
 
-  const deploy = () =>
-    router.push({
-      path: '/deployments/releases/new',
-      query: {
-        email: userEmail.value,
-        scopedType: 'application',
-        resourceId: props.application.name
-      }
-    })
+  const deploy = () => router.replace({ query: { ...route.query, deploy: '1' } })
 
   const openDeployment = (event, row) =>
     router.push({

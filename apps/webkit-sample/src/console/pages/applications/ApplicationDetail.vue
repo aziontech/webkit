@@ -1,9 +1,9 @@
 <script setup>
-  import { computed, nextTick, ref } from 'vue'
+  import { computed, nextTick, ref, watch } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
   import ProjectDropZone from '../../components/creation/ProjectDropZone.vue'
-  import DropDeployDialog from '../../components/deployment/DropDeployDialog.vue'
+  import ApplicationDeployDrawer from '../../components/deployment/ApplicationDeployDrawer.vue'
   import UnsavedChangesGuard from '../../components/form/UnsavedChangesGuard.vue'
   import PageTabs from '../../components/page/PageTabs.vue'
   import AppLayout from '../../components/shell/AppLayout.vue'
@@ -11,18 +11,13 @@
   import { isTabDirty, tabCommit } from '../../lib/behavior/tab-dirty'
   import { useTabEnter } from '../../lib/behavior/tab-enter'
   import { applicationById } from '../../lib/data/applications'
-  import { latestApplicationDeployment } from '../../lib/data/deployment-history'
   import { provisionedApplications } from '../../lib/data/provisioning'
-  import { workloadById } from '../../lib/data/workloads'
-  import { startResourceDeployRun } from '../../lib/state/deploy-runs'
+  import { applicationVersions } from '../../lib/data/releases'
+  import { VERSION_STATES } from '../../lib/data/versioning'
   import Build from './panels/Build.vue'
-  import CacheSettings from './panels/CacheSettings.vue'
   import Deployments from './panels/Deployments.vue'
-  import DeviceGroups from './panels/DeviceGroups.vue'
-  import FunctionsInstances from './panels/FunctionsInstances.vue'
-  import MainSettings from './panels/MainSettings.vue'
   import Overview from './panels/Overview.vue'
-  import RulesEngine from './panels/RulesEngine.vue'
+  import Versions from './panels/Versions.vue'
 
   const route = useRoute()
   const router = useRouter()
@@ -38,40 +33,80 @@
     }
   })
 
-  const DROP_ENVIRONMENT = 'Production'
+  const VERSION_TABS = [
+    'main-settings',
+    'source',
+    'device-groups',
+    'cache-settings',
+    'functions-instances',
+    'rules-engine'
+  ]
+
+  const workingVersionId = () => {
+    const versions = applicationVersions(String(application.value.name))
+    return (
+      versions.find((entry) => entry.state === VERSION_STATES.DRAFT)?.id ??
+      versions.find((entry) => entry.state === VERSION_STATES.ACTIVE)?.id ??
+      versions[0]?.id
+    )
+  }
+
+  watch(
+    () => route.query.tab,
+    (tab) => {
+      if (!VERSION_TABS.includes(String(tab))) return
+      const versionId = workingVersionId()
+      if (!versionId) return
+      router.replace({
+        path: `/applications/${application.value.id}/versions/${versionId}`,
+        query: route.query
+      })
+    },
+    { immediate: true }
+  )
 
   const dropped = ref(null)
-  const dropOpen = ref(false)
+  const deployOpen = ref(false)
+  const preferredWorkload = ref(null)
+  const pinnedVersionId = ref('')
 
   const { dragging } = useProjectUpload((project) => {
     dropped.value = project
-    dropOpen.value = true
+    pinnedVersionId.value = ''
+    deployOpen.value = true
   })
 
-  const deployDropped = () => {
-    const app = application.value
-    const latest = latestApplicationDeployment(app.id, app.name)
-    const seededWorkload = latest ? workloadById(latest.workloadId) : undefined
-    const workload = {
-      id: latest?.workloadId ?? app.id,
-      name: latest?.workloadName ?? app.name,
-      domain: seededWorkload?.domain ?? app.domainName ?? ''
-    }
+  const deploySource = computed(() =>
+    dropped.value ? dropped.value.name || 'dropped files' : String(application.value.branch || '')
+  )
 
-    startResourceDeployRun({
-      workload,
-      application: { id: app.id, name: app.name },
-      deploymentName: dropped.value?.name ?? app.name,
-      environment: DROP_ENVIRONMENT,
-      preset: app.preset || 'javascript'
-    })
-  }
+  watch(
+    () => route.query.deploy,
+    (deploy) => {
+      if (deploy !== '1') return
+      const { deploy: _deploy, workloadId, workloadName, version, ...rest } = route.query
+      preferredWorkload.value = workloadId
+        ? { id: String(workloadId), name: String(workloadName || workloadId) }
+        : null
+      pinnedVersionId.value = version ? String(version) : ''
+      dropped.value = null
+      router.replace({ query: rest })
+      deployOpen.value = true
+    },
+    { immediate: true }
+  )
 
   const tabs = computed(() => [
     {
       value: 'overview',
       label: 'Overview',
       component: Overview,
+      props: { application: application.value }
+    },
+    {
+      value: 'versions',
+      label: 'Versions',
+      component: Versions,
       props: { application: application.value }
     },
     {
@@ -84,36 +119,6 @@
       value: 'deployments',
       label: 'Deployments',
       component: Deployments,
-      props: { application: application.value }
-    },
-    {
-      value: 'device-groups',
-      label: 'Device Groups',
-      component: DeviceGroups,
-      props: {}
-    },
-    {
-      value: 'cache-settings',
-      label: 'Cache Settings',
-      component: CacheSettings,
-      props: {}
-    },
-    {
-      value: 'functions-instances',
-      label: 'Functions Instances',
-      component: FunctionsInstances,
-      props: {}
-    },
-    {
-      value: 'rules-engine',
-      label: 'Rules Engine',
-      component: RulesEngine,
-      props: {}
-    },
-    {
-      value: 'main-settings',
-      label: 'Settings',
-      component: MainSettings,
       props: { application: application.value }
     }
   ])
@@ -131,6 +136,7 @@
   const activeTab = computed({
     get: () => currentTab.value,
     set: async (value) => {
+      if (!value) return
       const from = currentTab.value
       if (value === from || !isTabDirty(from)) return goToTab(value)
 
@@ -167,7 +173,7 @@
         <ProjectDropZone
           :active="dragging"
           title="Drop your project to deploy it"
-          :description="`Azion builds it and ships it to ${application.name} in ${DROP_ENVIRONMENT}.`"
+          :description="`Azion builds a new version of ${application.name}, then you choose where it goes live.`"
           class="[--drop-zone-inset:var(--layout-boundary-inline)]"
         />
 
@@ -190,13 +196,12 @@
       </div>
     </main>
 
-    <DropDeployDialog
-      v-model:open="dropOpen"
-      :application-name="application.name"
-      :environment="DROP_ENVIRONMENT"
-      :files="dropped?.files ?? []"
-      :truncated="dropped?.truncated ?? false"
-      @deploy="deployDropped"
+    <ApplicationDeployDrawer
+      v-model:open="deployOpen"
+      :application="application"
+      :source="deploySource"
+      :preferred-workload="preferredWorkload"
+      :pinned-version-id="pinnedVersionId"
     />
 
     <UnsavedChangesGuard

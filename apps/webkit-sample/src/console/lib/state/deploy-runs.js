@@ -208,11 +208,17 @@ export function startResourceDeployRun({
   preset = 'vue',
   outcome = 'success',
   durationMs = RESOURCE_DEPLOY_DURATION_MS,
-  notify = true
+  notify = true,
+  version = null,
+  resources = [],
+  dependencies = []
 } = {}) {
   const record = startConsoleDeploy({
     workload,
     application,
+    version,
+    resources,
+    dependencies,
     environment,
     preset,
     current,
@@ -249,7 +255,8 @@ export function startResourceDeployRun({
   if (notify)
     toast.loading(titleFor(run), {
       id: run.toastId,
-      description: describeRunning(run)
+      description: describeRunning(run),
+      closable: true
     })
 
   schedule(run)

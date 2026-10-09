@@ -481,7 +481,9 @@
   const deployOpen = ref(false)
 
   const liveBindings = computed(() =>
-    Object.fromEntries(BIND_TARGET_ORDER.map((key) => [key, deployedResource(key)]))
+    Object.fromEntries(
+      ['application', ...BIND_TARGET_ORDER].map((key) => [key, deployedResource(key)])
+    )
   )
 
   const openDeploy = () => {
@@ -502,6 +504,15 @@
     deployOpen.value = true
   }
   receiveHandoff()
+
+  const receiveDeploy = () => {
+    if (route.query.deploy !== '1') return
+    const query = { ...route.query }
+    delete query.deploy
+    router.replace({ query })
+    deployOpen.value = true
+  }
+  receiveDeploy()
 
   const onDeployed = () => {
     applyStaged()

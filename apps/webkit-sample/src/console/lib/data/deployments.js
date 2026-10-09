@@ -110,7 +110,8 @@ export const deployPageRecord = (
       resource: {
         type: 'application',
         name: recorded.application.name,
-        id: recorded.application.id
+        id: recorded.application.id,
+        version: recorded.version ?? null
       },
       steps: stepsOf(recorded)
     }

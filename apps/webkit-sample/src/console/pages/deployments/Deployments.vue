@@ -14,7 +14,6 @@
   import FilterChips from '../../components/list/FilterChips.vue'
   import RefreshButton from '../../components/list/RefreshButton.vue'
   import ControlsHeader from '../../components/page/ControlsHeader.vue'
-  import HeadingAction from '../../components/page/HeadingAction.vue'
   import PageHeading from '../../components/page/PageHeading.vue'
   import AppLayout from '../../components/shell/AppLayout.vue'
   import { useListFilters } from '../../lib/behavior/list-state'
@@ -58,10 +57,6 @@
 
   const columnVisibility = ref({ id: false })
 
-  const newRelease = () => {
-    router.push({ path: '/deployments/releases/new', query: { email: userEmail.value } })
-  }
-
   const openDeployment = (event, row) =>
     router.push({
       path: `/deployments/${row.versionId}`,
@@ -100,16 +95,7 @@
         title="Deployments"
         description="Track every deployment your workloads have published, across all of your resources."
         :documentation="firstUse.learnMore.href"
-      >
-        <template #actions>
-          <HeadingAction
-            label="Create Release"
-            kind="outlined"
-            icon="pi pi-cloud-upload"
-            @click="newRelease"
-          />
-        </template>
-      </PageHeading>
+      />
 
       <div
         v-if="showFirstUse"

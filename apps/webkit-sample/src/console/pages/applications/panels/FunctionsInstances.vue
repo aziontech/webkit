@@ -30,6 +30,7 @@
   import { sleep } from '../../../lib/behavior/forms'
   import { useListFilters } from '../../../lib/behavior/list-state'
   import { FIT_COLUMN, TAG_COLUMN } from '../../../lib/behavior/table-columns'
+  import { useVersionChange } from '../../../lib/behavior/version-commit'
   import { countInstance, functionById, functionOptionsFor } from '../../../lib/data/functions'
   import { productFirstUse } from '../../../lib/data/product-empty-states'
 
@@ -151,6 +152,8 @@
   }
 
   const createOpen = ref(false)
+
+  const noteChange = useVersionChange()
   const editing = ref(null)
   const argsSchema = computed(() => {
     const fn = functionById(form.functionId)
@@ -255,6 +258,7 @@
           countInstance(form.functionId)
         }
 
+        noteChange(`Update function instance "${name}"`)
         toast.success(`Functions Instance "${name}" saved.`)
       } else {
         instances.value = [
@@ -271,6 +275,7 @@
 
         countInstance(form.functionId)
 
+        noteChange(`Add function instance "${name}"`)
         toast.success(`Functions Instance "${name}" created.`)
       }
 

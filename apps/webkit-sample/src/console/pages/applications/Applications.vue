@@ -154,16 +154,11 @@
       query: { email: userEmail.value, tab: 'build' }
     })
 
-  const openDeploy = (row) => {
+  const openDeploy = (row) =>
     router.push({
-      path: '/deployments/releases/new',
-      query: {
-        email: userEmail.value,
-        scopedType: 'application',
-        resourceId: row.name
-      }
+      path: `/applications/${row.id}`,
+      query: { email: userEmail.value, deploy: '1' }
     })
-  }
 
   const pendingDelete = ref(null)
   const deleteOpen = ref(false)

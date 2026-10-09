@@ -41,7 +41,6 @@
     publishDeployment,
     resourceChain
   } from '../../lib/data/provisioning'
-  import { releaseSeedForWorkload } from '../../lib/data/releases'
   import { installIntegration } from '../../lib/data/template-integrations'
   import { configuredTemplateSteps } from '../../lib/data/template-provisioning'
   import { getTemplate, templateSource } from '../../lib/data/templates.js'
@@ -569,20 +568,16 @@
       phase.value = 'success'
       return
     }
-    const { settingsIds } = releaseSeedForWorkload(workload.id)
     toast.success(`${application.name} created.`, {
       description: `Deploy it to ${workload.name} to start serving it.`
     })
     router.push({
-      path: '/deployments/releases/new',
+      path: `/applications/${application.id}`,
       query: {
         email: userEmail.value,
-        workload: workload.name,
+        deploy: '1',
         workloadId: workload.id,
-        scopedType: 'application',
-        resourceId: application.name,
-        ...(settingsIds.length ? { deploymentIds: settingsIds.join(',') } : {}),
-        ...(settingsIds.length > 1 ? { pickTarget: 'true' } : {})
+        workloadName: workload.name
       }
     })
   }

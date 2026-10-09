@@ -22,6 +22,7 @@
   import { DRAG_ROW_CLASS, useDragReorder } from '../../../lib/behavior/drag-reorder'
   import { MORPH_TRANSITION } from '../../../lib/behavior/list-morph'
   import { useTabDirty } from '../../../lib/behavior/tab-dirty'
+  import { useVersionChange } from '../../../lib/behavior/version-commit'
   import { bindingRecord, bindingRuleDraft } from '../../../lib/data/create-bindings'
   import { productFirstUse } from '../../../lib/data/product-empty-states'
   import CreateRuleDrawer from '../CreateRuleDrawer.vue'
@@ -203,6 +204,8 @@
   const dirty = computed(() => orderOf(rules.value) !== savedOrder.value)
   const saving = ref(false)
 
+  const noteChange = useVersionChange()
+
   const saveOrder = async () => {
     if (saving.value) return
     saving.value = true
@@ -210,6 +213,7 @@
       await new Promise((resolve) => setTimeout(resolve, 700))
       savedOrder.value = orderOf(rules.value)
       savedRows = { request: [...rules.value.request], response: [...rules.value.response] }
+      noteChange('Reorder Rules Engine rules')
       toast.success('Rule order saved.')
     } catch (error) {
       toast.error('Could not save the rule order.', {
@@ -349,6 +353,7 @@
     savedOrder.value = orderOf(rules.value)
     savedRows = { request: [...rules.value.request], response: [...rules.value.response] }
     revealPhase(rule.phase)
+    noteChange(`Add rule "${rule.name}"`)
   }
 
   const onUpdated = (saved) => {

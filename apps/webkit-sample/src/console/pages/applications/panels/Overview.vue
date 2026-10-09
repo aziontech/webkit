@@ -6,7 +6,6 @@
   import ApplicationSummary from '../../../components/application/ApplicationSummary.vue'
   import GetStarted from '../../../components/application/GetStarted.vue'
   import { latestApplicationDeployment } from '../../../lib/data/deployment-history'
-  import { domainsFor } from '../../../lib/state/application-domains'
 
   interface Props {
     application: Record<string, unknown>
@@ -25,17 +24,9 @@
 
   const isCli = computed(() => !props.application.repository)
 
-  const customDomains = computed(() => domainsFor(props.application.id, props.application))
-
   const visit = () => toast.info('Opening the application in a new tab.')
 
   const goToBuild = () => router.replace({ query: { ...route.query, tab: 'build' } })
-
-  const addDomain = () =>
-    router.replace({ query: { ...route.query, tab: 'main-settings', add: 'domain' } })
-
-  const manageDomains = () =>
-    router.replace({ query: { ...route.query, tab: 'main-settings', focus: 'domains' } })
 
   const openSettings = () => router.replace({ query: { ...route.query, tab: 'main-settings' } })
 </script>
@@ -47,13 +38,10 @@
     >
       <ApplicationSummary
         :application="application"
-        :custom-domains="customDomains"
         :deployment="latest"
         :email="userEmail"
         @visit="visit"
         @connect-repository="goToBuild"
-        @add-domain="addDomain"
-        @manage-domains="manageDomains"
         @settings="openSettings"
       />
 

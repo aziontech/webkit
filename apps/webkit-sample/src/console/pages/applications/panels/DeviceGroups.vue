@@ -21,6 +21,7 @@
   import { sleep } from '../../../lib/behavior/forms'
   import { useListRefresh } from '../../../lib/behavior/list-state'
   import { FIT_COLUMN } from '../../../lib/behavior/table-columns'
+  import { useVersionChange } from '../../../lib/behavior/version-commit'
   import {
     addDeviceGroup,
     DEVICE_GROUP_NAME_PATTERN,
@@ -56,6 +57,8 @@
   const deviceGroups = useDeviceGroups()
 
   const createOpen = ref(false)
+
+  const noteChange = useVersionChange()
   const editing = ref(null)
   const form = reactive({ name: '', userAgent: '' })
   const errors = reactive({ name: '', userAgent: '' })
@@ -104,9 +107,11 @@
       const record = { name: form.name.trim(), userAgent: form.userAgent.trim() }
       if (editing.value) {
         updateDeviceGroup(editing.value.id, record)
+        noteChange(`Update device group "${record.name}"`)
         toast.success(`Device Group "${record.name}" saved.`)
       } else {
         addDeviceGroup(record)
+        noteChange(`Add device group "${record.name}"`)
         toast.success(`Device Group "${record.name}" created.`)
       }
       createOpen.value = false

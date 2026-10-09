@@ -1,7 +1,8 @@
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
-  import { nextTick, onScopeDispose, ref, watch } from 'vue'
+  import { inject, nextTick, onScopeDispose, ref, watch } from 'vue'
 
+  import { VERSION_COMMIT_KEY } from '../../lib/behavior/version-commit'
   import UnsavedChangesGuard from './UnsavedChangesGuard.vue'
 
   interface Props {
@@ -25,6 +26,8 @@
     discard: []
   }>()
 
+  const ownedByVersion = inject(VERSION_COMMIT_KEY, false)
+
   const strip = ref(null)
   const shell = ref(null)
   const reserved = ref(0)
@@ -33,8 +36,13 @@
   const publish = (height) => {
     const root = globalThis.document?.documentElement
     if (!root) return
-    if (height) root.style.setProperty('--save-bar-inset', `${height}px`)
-    else root.style.removeProperty('--save-bar-inset')
+    if (height) {
+      root.style.setProperty('--save-bar-inset', `${height}px`)
+      root.style.setProperty('--toast-offset-bottom', `${height}px`)
+    } else {
+      root.style.removeProperty('--save-bar-inset')
+      root.style.removeProperty('--toast-offset-bottom')
+    }
   }
 
   const overflows = (node) => {
@@ -102,7 +110,7 @@
     leave-to-class="translate-y-2 opacity-0"
   >
     <footer
-      v-if="dirty || saving"
+      v-if="!ownedByVersion && (dirty || saving)"
       ref="strip"
       class="sticky bottom-0 z-10 h-0 shrink-0"
       :style="reserved ? { height: `${reserved}px` } : null"

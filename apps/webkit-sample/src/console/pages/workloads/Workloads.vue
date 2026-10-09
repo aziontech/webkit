@@ -32,7 +32,6 @@
   import { FIT_COLUMN, TAG_COLUMN } from '../../lib/behavior/table-columns'
   import { productFirstUse } from '../../lib/data/product-empty-states'
   import { provisionedWorkloads, removeDeployment } from '../../lib/data/provisioning'
-  import { releaseSeedForWorkload } from '../../lib/data/releases'
   import { WORKLOADS } from '../../lib/data/workloads'
   import { useSampleMode } from '../../lib/state/sample-mode'
   import { tenancyRows } from '../../lib/state/tenancy-scope'
@@ -125,19 +124,11 @@
       query: { email: userEmail.value, name: row.name }
     })
 
-  const openDeploy = (row) => {
-    const { settingsIds } = releaseSeedForWorkload(row.id)
+  const openDeploy = (row) =>
     router.push({
-      path: '/deployments/releases/new',
-      query: {
-        email: userEmail.value,
-        workload: row.name,
-        workloadId: row.id,
-        ...(settingsIds.length ? { deploymentIds: settingsIds.join(',') } : {}),
-        ...(settingsIds.length > 1 ? { pickTarget: 'true' } : {})
-      }
+      path: `/workloads/${row.id}`,
+      query: { email: userEmail.value, name: row.name, deploy: '1' }
     })
-  }
 
   const pendingDelete = ref(null)
   const deleteOpen = ref(false)

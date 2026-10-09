@@ -1,26 +1,29 @@
 import { daysAgo, hoursAgo } from '@shared/lib/dates'
 import { authorAt } from '@shared/lib/people'
-import { computed } from 'vue'
+import { computed, reactive } from 'vue'
 
+import { createdRowsFor } from '../state/created-resources'
 import { boundWorkloads, reachLabel, settingsIdsForWorkload } from '../state/workload-settings'
 import { APPLICATIONS } from './applications'
+import { CONNECTORS, connectorMeta } from './connectors'
 import { existingCustomPageOptions } from './custom-pages'
 import { DEPLOYMENT_HISTORY } from './deployment-history'
 import { strategies } from './deployment-strategies'
 import { existingFirewallOptions } from './firewalls'
 import { findDeploymentByWorkload, provisionedApplications } from './provisioning'
-import {
-  getVersionCapability,
-  resourceMeta,
-  RESOURCES,
-  VERSION_STATES
-} from './versioning'
+import { getVersionCapability, resourceMeta, RESOURCES, VERSION_STATES } from './versioning'
 
 export const resourceLabel = (type) => resourceMeta(type).label
 
 export const resourceNoun = (type) => resourceMeta(type).one
 
 export const resourceNounPlural = (type) => resourceMeta(type).many
+
+export const resourceTypeLabel = (type) =>
+  resourceMeta(type)
+    .one.split(' ')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ')
 
 export const resourceIcon = (type) => resourceMeta(type).icon || 'pi pi-box'
 
@@ -78,16 +81,16 @@ const hash = (value) => {
 }
 
 const COMMENTS = [
-  'feat: cart drawer',
-  'fix: hydration on PDP',
-  'chore: bump runtime',
-  'perf: avif first',
-  'fix: retry budget',
-  'rules: block scrapers',
-  'copy: 503 rewrite',
-  'feat: signed urls',
-  'sync: threat feed',
-  'refactor: drop legacy shim'
+  'Add function instance "image-resize"',
+  'Cache static assets for 30 days',
+  'Add rule "Redirect /blog to docs"',
+  'Add device group "Mobile"',
+  'Bypass cache for /api/*',
+  'Update function instance "ab-test" arguments',
+  'Add rule "Security headers"',
+  'Enable Image Processor',
+  'Reorder Rules Engine rules',
+  'Remove rule "Legacy load balancer"'
 ]
 
 export const NO_READY_VERSION = new Set(['legacy-api'])
@@ -98,14 +101,26 @@ const HAS_DRAFT = new Set(['marketing-site'])
 
 export const DETECTION_FAILS_ONCE = new Set(['analytics-pro'])
 
-const versionCache = new Map()
+const versionCache = reactive(new Map())
+
+const branchOf = (name) => {
+  const record = [...APPLICATIONS, ...provisionedApplications.value].find(
+    (application) => application.name === name
+  )
+  if (!record) return 'main'
+  return record.branch || (record.source === 'cli' ? 'cli' : 'main')
+}
+
+const versionName = (name, sequence) => `${branchOf(name)}@${String(sequence).padStart(4, '0')}`
+
+const hasDraft = (name) => HAS_DRAFT.has(name) || hash(name) % 3 === 0
 
 const versionId = (step) => `A${(step * 7919).toString(36).toUpperCase().slice(0, 6)}`
 
 const stateFor = (name, index, count) => {
-  if (index === 0 && HAS_DRAFT.has(name)) return VERSION_STATES.DRAFT
+  if (index === 0 && hasDraft(name)) return VERSION_STATES.DRAFT
   if (index === 0 && BUILD_FAILED.has(name)) return VERSION_STATES.ERROR
-  const built = HAS_DRAFT.has(name) || BUILD_FAILED.has(name) ? index - 1 : index
+  const built = hasDraft(name) || BUILD_FAILED.has(name) ? index - 1 : index
   if (built === 0) return VERSION_STATES.ACTIVE
   return built === count - 1 && count > 2 ? VERSION_STATES.ARCHIVED : VERSION_STATES.READY
 }
@@ -116,27 +131,34 @@ const buildVersions = (name) => {
     return [
       {
         id: versionId(seed),
-        comment: 'refactor: drop legacy shim',
+        name: versionName(name, 400 + (seed % 90)),
+        comment: 'Remove rule "Legacy redirects"',
         state: VERSION_STATES.DRAFT,
         isCurrent: false,
         createdAt: daysAgo(9 + (seed % 40)),
-        author: authorAt(seed).name
+        author: authorAt(seed).name,
+        authorAvatar: authorAt(seed).avatar
       }
     ]
   }
 
-  const count = 1 + (seed % 3) + (HAS_DRAFT.has(name) || BUILD_FAILED.has(name) ? 1 : 0)
+  const count = 3 + (seed % 12) + (hasDraft(name) || BUILD_FAILED.has(name) ? 1 : 0)
+  const first = 400 + (seed % 90)
+  let hours = 3 + (seed % 20)
   return Array.from({ length: count }, (_, index) => {
     const step = seed + index * 977
-    const hours = 3 + (step % 300)
     const state = stateFor(name, index, count)
+    const createdAt = hours < 48 ? hoursAgo(hours) : daysAgo(Math.round(hours / 24))
+    hours += 6 + (step % 40)
     return {
       id: versionId(step),
+      name: versionName(name, first + count - index),
       comment: COMMENTS[(step + index) % COMMENTS.length],
       state,
       isCurrent: state === VERSION_STATES.ACTIVE,
-      createdAt: hours < 48 ? hoursAgo(hours) : daysAgo(Math.round(hours / 24)),
-      author: authorAt(step).name
+      createdAt,
+      author: authorAt(step).name,
+      authorAvatar: authorAt(step).avatar
     }
   })
 }
@@ -147,6 +169,135 @@ const versionsOf = (name) => {
   return versionCache.get(name)
 }
 
+export const applicationVersions = (name) => versionsOf(name)
+
+export const applicationVersion = (name, id) =>
+  versionsOf(name).find((entry) => entry.id === String(id)) ?? null
+
+export const latestBuiltVersionId = (name) =>
+  versionsOf(name).find((entry) =>
+    [VERSION_STATES.READY, VERSION_STATES.ACTIVE].includes(entry.state)
+  )?.id ?? null
+
+const topSequence = (name) =>
+  Math.max(0, ...versionsOf(name).map((entry) => Number(entry.name.split('@')[1]) || 0))
+
+export const nextApplicationVersionName = (name) => versionName(name, topSequence(name) + 1)
+
+export const recordApplicationBuild = (name, comment = '') => {
+  const versions = versionsOf(name)
+  const top = topSequence(name)
+  const person = authorAt(0)
+  const version = {
+    id: versionId(hash(name) + (Date.now() % 100_003)),
+    name: versionName(name, top + 1),
+    comment,
+    state: VERSION_STATES.READY,
+    isCurrent: false,
+    createdAt: new Date(),
+    author: person.name,
+    authorAvatar: person.avatar
+  }
+  const draftIndex = versions.findIndex((entry) => entry.state === VERSION_STATES.DRAFT)
+  versions.splice(draftIndex === 0 ? 1 : 0, 0, version)
+  return version
+}
+
+export const createDraftFrom = (name, sourceId) => {
+  const versions = versionsOf(name)
+  const source = versions.find((entry) => entry.id === String(sourceId))
+  const person = authorAt(0)
+  const draft = {
+    id: versionId(hash(name) + (Date.now() % 100_003)),
+    name: versionName(name, topSequence(name) + 1),
+    comment: '',
+    changes: [],
+    state: VERSION_STATES.DRAFT,
+    isCurrent: false,
+    sourceVersionId: source?.id ?? '',
+    createdAt: new Date(),
+    author: person.name,
+    authorAvatar: person.avatar
+  }
+  versions.unshift(draft)
+  return draft
+}
+
+export const NO_COMMENT = 'No description'
+
+const lowerFirst = (text) => text.charAt(0).toLowerCase() + text.slice(1)
+
+export const suggestVersionComment = (changes = []) => {
+  if (!changes.length) return ''
+  if (changes.length === 1) return changes[0]
+  if (changes.length === 2) return `${changes[0]} and ${lowerFirst(changes[1])}`
+  return `${changes[0]} and ${changes.length - 1} more changes`
+}
+
+export const versionComment = (version) =>
+  version?.comment || suggestVersionComment(version?.changes)
+
+export const setVersionComment = (version, text) => {
+  if (version) version.comment = text
+}
+
+export const noteVersionChange = (name, id, text) => {
+  const version = versionsOf(name).find((entry) => entry.id === String(id))
+  if (!version || !text) return
+  version.changes = [...(version.changes ?? []).filter((entry) => entry !== text), text]
+  const person = authorAt(0)
+  const log = version.history ?? []
+  version.history = [
+    {
+      id: `${version.id}-${log.length + 1}`,
+      text,
+      at: new Date(),
+      author: person.name,
+      authorAvatar: person.avatar
+    },
+    ...log
+  ]
+}
+
+export const earlierVersions = (name, id) => {
+  const versions = versionsOf(name)
+  const index = versions.findIndex((entry) => entry.id === String(id))
+  return versions.slice(index + 1).filter((entry) => entry.state !== VERSION_STATES.DRAFT)
+}
+
+const buildRuns = new Map()
+
+export const buildApplicationVersion = (name, id, durationMs = 6000) => {
+  const key = `${name}:${id}`
+  if (buildRuns.has(key)) return buildRuns.get(key)
+  const version = versionsOf(name).find((entry) => entry.id === String(id))
+  if (!version) return Promise.resolve(null)
+  version.comment = versionComment(version)
+  version.state = VERSION_STATES.BUILDING
+  const run = new Promise((settle) => {
+    setTimeout(() => {
+      version.state = VERSION_STATES.READY
+      version.createdAt = new Date()
+      buildRuns.delete(key)
+      settle(version)
+    }, durationMs)
+  })
+  buildRuns.set(key, run)
+  return run
+}
+
+export const markVersionDeployed = (name, id) => {
+  versionsOf(name).forEach((entry) => {
+    if (entry.id === String(id)) {
+      entry.state = VERSION_STATES.ACTIVE
+      entry.isCurrent = true
+    } else if (entry.state === VERSION_STATES.ACTIVE) {
+      entry.state = VERSION_STATES.READY
+      entry.isCurrent = false
+    }
+  })
+}
+
 export const versionOptions = (type, id) => {
   const states = DEPENDENCY_TYPES.includes(type)
     ? [VERSION_STATES.READY]
@@ -155,9 +306,11 @@ export const versionOptions = (type, id) => {
     .filter((entry) => states.includes(entry.state))
     .map((entry) => ({
       value: entry.id,
-      label: entry.comment || entry.id,
+      name: entry.name,
+      label: entry.comment || NO_COMMENT,
       createdAt: entry.createdAt,
       author: entry.author,
+      authorAvatar: entry.authorAvatar,
       isCurrent: entry.isCurrent
     }))
 }
@@ -169,10 +322,56 @@ export const resolveLatestVersion = (type, id) => {
   return options.find((option) => option.isCurrent)?.value ?? options[0]?.value ?? null
 }
 
+const timeOf = (date) => new Date(date ?? 0).getTime() || 0
+
+export const versionChoices = (type, id) =>
+  versionOptions(type, id)
+    .map((option) => ({
+      id: option.value,
+      name: option.name,
+      comment: option.label,
+      author: option.author,
+      authorAvatar: option.authorAvatar,
+      createdAt: option.createdAt,
+      active: option.isCurrent
+    }))
+    .sort((a, b) => timeOf(b.createdAt) - timeOf(a.createdAt))
+
+export const chosenVersion = (versions, id) =>
+  versions.find((entry) => entry.id === id) ?? versions[0] ?? null
+
+const OBJECT_STORAGE = 'Object Storage'
+
+export const isObjectStorage = (type, name, kind = '') => {
+  if (type !== 'connector') return false
+  if (kind === OBJECT_STORAGE) return true
+  return [...createdRowsFor('connectors'), ...CONNECTORS].some(
+    (connector) =>
+      connector.name === name &&
+      (connector.type === 'storage' || connector.typeLabel === OBJECT_STORAGE)
+  )
+}
+
+export const deployTarget = (type, name, kind = '') =>
+  isObjectStorage(type, name, kind)
+    ? {
+        label: OBJECT_STORAGE,
+        icon: connectorMeta('storage').icon,
+        versions: [],
+        note: 'Not versioned'
+      }
+    : {
+        label: resourceTypeLabel(type),
+        icon: resourceIcon(type),
+        versions: versionChoices(type, name),
+        note: ''
+      }
+
 const graphCache = new Map()
 
-const buildGraph = (name) => {
+const buildGraph = (name, version) => {
   const seed = hash(name)
+  const drift = version ? hash(version) % 3 : 0
   const pick = (type, offset, count) => {
     const pool = DEPENDENCY_CATALOG[type]
     return Array.from(
@@ -181,21 +380,22 @@ const buildGraph = (name) => {
     )
   }
   return {
-    function: pick('function', 0, 1 + (seed % 2)),
-    connector: pick('connector', 3, 1 + ((seed >> 2) % 2)),
+    function: pick('function', drift, 1 + ((seed + drift) % 2)),
+    connector: pick('connector', 3 + drift, 1 + ((seed >> 2) % 2)),
     network_list: pick('network_list', 5, 1 + (seed % 2)),
     waf: pick('waf', 7, 1)
   }
 }
 
-const graphOf = (name) => {
+const graphOf = (name, version = '') => {
   if (!name) return { function: [], connector: [], network_list: [], waf: [] }
-  if (!graphCache.has(name)) graphCache.set(name, buildGraph(name))
-  return graphCache.get(name)
+  const key = `${name}@${version}`
+  if (!graphCache.has(key)) graphCache.set(key, buildGraph(name, version))
+  return graphCache.get(key)
 }
 
-export const dependenciesOf = (parentType, resourceId) => {
-  const graph = graphOf(resourceId)
+export const dependenciesOf = (parentType, resourceId, versionId = '') => {
+  const graph = graphOf(resourceId, versionId)
   return Object.fromEntries(
     (OWNED_DEPENDENCIES[parentType] ?? []).map((type) => [type, [...(graph[type] ?? [])]])
   )

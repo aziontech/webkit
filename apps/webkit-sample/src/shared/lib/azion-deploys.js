@@ -721,6 +721,9 @@ export function startConsoleDeploy({
   current = true,
   deploymentName = '',
   strategyName = '',
+  version = null,
+  resources = [],
+  dependencies = [],
   author
 } = {}) {
   const createdAt = new Date()
@@ -745,6 +748,9 @@ export function startConsoleDeploy({
     strategyName,
     workload: { id: workload.id, name: workload.name, domain: workload.domain, deployment: '' },
     application: { id: application.id, name: application.name },
+    version: version ? { id: version.id, name: version.name } : null,
+    resources: resources.map((entry) => ({ ...entry })),
+    dependencies: dependencies.map((entry) => ({ ...entry })),
     edge: { ...EDGE, preset, bucket, prefix: storagePrefix(createdAt) },
     // Empty on purpose: a step that has not finished has no duration to report,
     // and every step is unfinished here.

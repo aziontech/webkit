@@ -25,6 +25,7 @@
   import { sleep } from '../../../lib/behavior/forms'
   import { useListRefresh } from '../../../lib/behavior/list-state'
   import { FIT_COLUMN, TAG_COLUMN_WIDE } from '../../../lib/behavior/table-columns'
+  import { useVersionChange } from '../../../lib/behavior/version-commit'
   import {
     addCacheSetting,
     BROWSER_CACHE_BEHAVIORS,
@@ -80,6 +81,8 @@
   )
 
   const createOpen = ref(false)
+
+  const noteChange = useVersionChange()
   const editing = ref(null)
 
   const blankForm = () => ({
@@ -226,9 +229,11 @@
 
       if (editing.value) {
         updateCacheSetting(editing.value.id, record)
+        noteChange(`Update cache settings "${name}"`)
         toast.success(`Cache Settings "${name}" saved.`)
       } else {
         addCacheSetting(record)
+        noteChange(`Add cache settings "${name}"`)
         toast.success(`Cache Settings "${name}" created.`)
       }
       createOpen.value = false

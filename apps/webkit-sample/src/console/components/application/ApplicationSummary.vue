@@ -13,20 +13,17 @@
   import { statusMeta } from '../../lib/data/deployments'
   import { presetIcon, presetLabel } from '../../lib/format/presets'
   import { relativeTime } from '../../lib/format/relative-time'
-  import DomainOverflowPopover from '../list/DomainOverflowPopover.vue'
   import ResourceLink from '../resource/ResourceLink.vue'
   import SummaryBand from '../resource/SummaryBand.vue'
 
   interface Props {
     application: Record<string, unknown>
-    customDomains?: unknown[]
     deployment?: Record<string, unknown>
     email?: string
     documentationHref?: string
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    customDomains: () => [],
     deployment: null,
     email: '',
     documentationHref: 'https://www.azion.com/en/documentation/products/azion-cli/overview/'
@@ -35,18 +32,11 @@
   const emit = defineEmits<{
     visit: []
     'connect-repository': []
-    'add-domain': []
-    'manage-domains': []
     settings: []
   }>()
 
-  const customNames = computed(() => props.customDomains.map((entry) => entry.domain))
-  const addresses = computed(() =>
-    [...customNames.value, props.application.domainName].filter(Boolean)
-  )
-  const domain = computed(() => addresses.value[0] ?? '')
+  const domain = computed(() => props.application.domainName ?? '')
   const domainUrl = computed(() => (domain.value ? `https://${domain.value}` : ''))
-  const extraCount = computed(() => Math.max(addresses.value.length - 1, 0))
   const repository = computed(() => props.application.repository || '')
   const branch = computed(() => props.application.branch || '')
 
@@ -76,7 +66,6 @@
 
   const onAction = (value) => {
     if (value === 'copy-url') return copyUrl()
-    if (value === 'manage-domains') return emit('manage-domains')
     if (value === 'settings') return emit('settings')
   }
 
@@ -148,17 +137,6 @@
 
             <Dropdown.Group>
               <Dropdown.Option
-                value="manage-domains"
-                label="Manage Domains"
-              >
-                <template #left>
-                  <i
-                    class="ai ai-domains"
-                    aria-hidden="true"
-                  />
-                </template>
-              </Dropdown.Option>
-              <Dropdown.Option
                 value="settings"
                 label="Settings"
               >
@@ -204,32 +182,12 @@
         </div>
 
         <div class="flex min-w-0 flex-col gap-(--spacing-xxs) lg:col-span-2">
-          <div class="flex min-w-0 items-center gap-(--spacing-xxs)">
-            <span class="text-label-sm text-(--text-muted)">Domains</span>
-            <Tooltip text="Add a custom domain">
-              <button
-                type="button"
-                class="-m-1 inline-flex size-6 shrink-0 items-center justify-center rounded-(--shape-button) p-1 text-(--text-muted) transition-colors duration-150 ease-out hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
-                aria-label="Add a custom domain"
-                @click="emit('add-domain')"
-              >
-                <i
-                  class="pi pi-plus-circle text-body-sm leading-none"
-                  aria-hidden="true"
-                />
-              </button>
-            </Tooltip>
-          </div>
+          <span class="text-label-sm text-(--text-muted)">Domains</span>
           <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
             <ResourceLink
               v-if="domain"
               :label="domain"
               :href="domainUrl"
-            />
-            <DomainOverflowPopover
-              v-if="extraCount"
-              :domains="addresses"
-              :count="extraCount"
             />
             <span
               v-if="!domain"

@@ -191,3 +191,61 @@ export const resourceTypeOptions = Object.entries(RESOURCES).map(([value, meta])
   value,
   label: meta.label
 }))
+
+const STATE_META = {
+  draft: { label: 'Draft', severity: 'warning', icon: 'pi pi-file-edit' },
+  queued: { label: 'Queued', severity: 'info', icon: '' },
+  building: { label: 'Building', severity: 'info', icon: '' },
+  ready: { label: 'Ready', severity: 'success', icon: '' },
+  active: { label: 'Deployed', severity: 'primary', icon: '' },
+  archived: { label: 'Archived', severity: 'secondary', icon: '' },
+  canceled: { label: 'Canceled', severity: 'secondary', icon: '' },
+  error: { label: 'Failed', severity: 'danger', icon: '' }
+}
+
+export const versionStateMeta = (state) =>
+  STATE_META[state] ?? { label: String(state ?? ''), severity: 'secondary', icon: '' }
+
+export const versionStateOptions = Object.entries(STATE_META).map(([value, meta]) => ({
+  value,
+  label: meta.label
+}))
+
+const VIEW_COPY = {
+  draft: {
+    icon: 'pi pi-file-edit',
+    title: 'Draft',
+    description: 'This version is open for editing. Deploy it when ready.'
+  },
+  queued: { icon: '', title: 'Queued to build', description: '' },
+  building: { icon: '', title: 'Building…', description: '' },
+  ready: {
+    icon: 'pi pi-check',
+    title: 'Viewing a Ready version',
+    description:
+      'This version is read-only. Create a new version to make changes, or deploy it to go live.'
+  },
+  active: {
+    icon: '',
+    title: 'Viewing a Deployed version',
+    description:
+      'This version has been deployed and is read-only. Create a new version to make changes.'
+  },
+  archived: {
+    icon: 'pi pi-inbox',
+    title: 'Viewing an Archived version',
+    description: 'This version is archived and read-only.'
+  },
+  canceled: {
+    icon: 'pi pi-ban',
+    title: 'Build canceled',
+    description: 'This version was not built. Edit it and build again.'
+  },
+  error: {
+    icon: 'pi pi-exclamation-triangle',
+    title: 'Build failed',
+    description: 'This version failed to build. Edit it and build again.'
+  }
+}
+
+export const versionViewCopy = (state) => VIEW_COPY[state] ?? VIEW_COPY.draft

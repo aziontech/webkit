@@ -18,6 +18,11 @@
     return run?.status === 'error' ? run : null
   }
 
+  const runningRun = (entry) => {
+    const run = runByToastId(entry.id)
+    return run?.status === 'running' && run.kind === 'resource' ? run : null
+  }
+
   const successRun = (entry) => {
     const run = runByToastId(entry.id)
     return run?.status === 'success' ? run : null
@@ -63,6 +68,33 @@
             @click="
               () => {
                 go('/deployments')
+                dismiss()
+              }
+            "
+          />
+        </div>
+        <template #trailing>
+          <ToastClose @click="dismiss" />
+        </template>
+      </ToastItem>
+
+      <ToastItem
+        key="toast-item-running"
+        v-else-if="runningRun(entry)"
+        :type="entry.type"
+      >
+        <ToastTitle>{{ entry.message }}</ToastTitle>
+        <ToastDescription v-if="entry.description">
+          {{ entry.description }}
+        </ToastDescription>
+        <div class="flex items-center pt-(--spacing-xxs)">
+          <Button
+            label="Track deployment"
+            kind="outlined"
+            size="small"
+            @click="
+              () => {
+                openDeployment(runningRun(entry))
                 dismiss()
               }
             "
