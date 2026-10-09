@@ -89,6 +89,9 @@ sections are the Storybook marketing templates (`Templates/Marketing/*`), ported
 | Plans, plan matrix, tier matrix, competitor table | `PricingPlans`, `ComparePlans`, `CompareSupportTiers`, `ComparisonTable` |
 | Deployable templates over a stack ticker | `TemplateGallery` |
 | Linked guides | `ResourceGrid` |
+| A table or list of linked rows previewing a longer listing | `ListingTable` |
+| The full listing, searchable and filterable, rows under groups | `ListingBrowser` |
+| A headline over a looping row of photos | `PhotoMarquee` |
 | Questions and answers | `FaqSection` (rich answers through `body`) |
 | An empty rhythm band | Nothing — `SitePage` puts a hatched gap between every two sections |
 | The closing CTA | `ClosingCallToAction` (`split`, `panel`, or `frame` when the page ends with no ask) |
