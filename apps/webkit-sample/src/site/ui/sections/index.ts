@@ -14,10 +14,13 @@ import FeatureTabs from './FeatureTabs.vue'
 import FeatureTiles from './FeatureTiles.vue'
 import Heroes from './Heroes.vue'
 import HeroForm from './HeroForm.vue'
+import ListingBrowser from './ListingBrowser.vue'
+import ListingTable from './ListingTable.vue'
 import LogoWallQuote from './LogoWallQuote.vue'
 import MediaSplitBand from './MediaSplitBand.vue'
 import MediaSplitStack from './MediaSplitStack.vue'
 import NetworkSection from './NetworkSection.vue'
+import PhotoMarquee from './PhotoMarquee.vue'
 import PlatformDirectory from './PlatformDirectory.vue'
 import PricingPlans from './PricingPlans.vue'
 import QuoteBand from './QuoteBand.vue'
@@ -25,6 +28,7 @@ import RecognitionMarquee from './RecognitionMarquee.vue'
 import ResourceGrid from './ResourceGrid.vue'
 import StatsBand from './StatsBand.vue'
 import StickyScrollCode from './StickyScrollCode.vue'
+import SubjectLibrary from './SubjectLibrary.vue'
 import TemplateGallery from './TemplateGallery.vue'
 
 export const SECTIONS: Record<string, Component> = {
@@ -42,10 +46,13 @@ export const SECTIONS: Record<string, Component> = {
   FeatureTiles,
   HeroForm,
   Heroes,
+  ListingBrowser,
+  ListingTable,
   LogoWallQuote,
   MediaSplitBand,
   MediaSplitStack,
   NetworkSection,
+  PhotoMarquee,
   PlatformDirectory,
   PricingPlans,
   QuoteBand,
@@ -53,6 +60,7 @@ export const SECTIONS: Record<string, Component> = {
   ResourceGrid,
   StatsBand,
   StickyScrollCode,
+  SubjectLibrary,
   TemplateGallery
 }
 

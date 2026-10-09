@@ -9,10 +9,10 @@
   // shell is mounted we pin the document root to the dark theme regardless of the
   // global light/dark/system toggle, then restore the previous theme on leave so
   // the console pages keep the user's chosen mode.
-  import SiteFooter from '@shared/ui/SiteFooter.vue'
-
+  import { SITE_FOOTER, SITE_NAV } from '../data/site-shell'
   import { useForceDarkTheme } from '../composables/useForceDarkTheme'
-  import SiteNav from './SiteNav.vue'
+  import SiteFooter from '../ui/sections/SiteFooter.vue'
+  import SiteNav from '../ui/sections/SiteNav.vue'
 
   defineProps({
     /** Float the nav over the page's first band instead of stacking it above. */
@@ -45,20 +45,23 @@
     v-if="navOverlay"
     class="grid h-dvh grid-cols-1 grid-rows-[1fr_auto] overflow-y-auto [&>header]:col-start-1 [&>header]:row-span-2 [&>header]:row-start-1 [&>header]:self-start scroll-smooth bg-(--bg-canvas) text-(--text-default) selection:bg-(--primary-mask) selection:text-(--primary) motion-reduce:scroll-auto"
   >
-    <SiteNav />
+    <SiteNav v-bind="SITE_NAV" />
     <main class="col-start-1 row-start-1 min-w-0">
       <slot />
     </main>
-    <SiteFooter class="col-start-1 row-start-2" />
+    <SiteFooter
+      v-bind="SITE_FOOTER"
+      class="col-start-1 row-start-2"
+    />
   </div>
   <div
     v-else
     class="flex h-dvh flex-col overflow-y-auto scroll-smooth bg-(--bg-canvas) text-(--text-default) selection:bg-(--primary-mask) selection:text-(--primary) motion-reduce:scroll-auto"
   >
-    <SiteNav />
+    <SiteNav v-bind="SITE_NAV" />
     <main class="flex-1">
       <slot />
     </main>
-    <SiteFooter />
+    <SiteFooter v-bind="SITE_FOOTER" />
   </div>
 </template>

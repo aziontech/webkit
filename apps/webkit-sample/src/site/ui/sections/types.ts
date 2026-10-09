@@ -53,6 +53,49 @@ export interface SiteFaqItem {
   >
 }
 
+export interface SiteNavEntry {
+  /** Visible label. */
+  label: string
+  /** One line of what the destination is. */
+  description: string
+  /** Destination; omitted entries link to `#`. */
+  href?: string
+}
+
+export interface SiteNavGroup {
+  /** Group heading. */
+  label: string
+  /** Destination of the heading. */
+  href?: string
+  /** The group's entries. */
+  items: SiteNavEntry[]
+}
+
+export interface SiteNavMenu {
+  /** Stable key of the menu. */
+  value: string
+  /** Trigger label. */
+  label: string
+  /** The panel's tracks, each a column of one or more groups. */
+  columns: SiteNavGroup[][]
+}
+
+export interface SiteFooterColumn {
+  /** Column heading. */
+  title: string
+  /** The column's links. */
+  links: SiteLink[]
+}
+
+export interface SiteSocial {
+  /** Glyph, as an icon class. */
+  icon: string
+  /** Accessible name of the link. */
+  label: string
+  /** Profile URL. */
+  href: string
+}
+
 export interface PageSection {
   /** Registered section name, one per marketing template. */
   section: string

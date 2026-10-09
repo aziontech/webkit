@@ -1,42 +1,51 @@
+import { CAREERS_JOBS, jobFacets, jobId } from '../careers.js'
 import {
   CAREERS_HOME_HERO,
   CAREERS_JOBS_PATH,
   CAREERS_JOIN,
-  CAREERS_JOURNEY,
+  CAREERS_PHOTOS,
   CAREERS_ROLES,
-  CAREERS_VALUES
+  CAREERS_WORK
 } from '../careers-home.js'
 
-const jobsFor = (area) => `${CAREERS_JOBS_PATH}?area=${encodeURIComponent(area)}`
+const LATEST_ROLES = CAREERS_JOBS.slice(0, CAREERS_ROLES.previewCount).map((job) => {
+  const [team, location, arrangement, contract] = jobFacets(job)
+  return {
+    href: `/site/careers/${jobId(job)}`,
+    values: {
+      role: job.title,
+      team: `${team} · ${location}`,
+      type: `${arrangement} · ${contract}`
+    }
+  }
+})
 
 export const CAREERS_HOME_PAGE = [
   {
     section: 'Heroes',
     kind: 'centered-band',
     title: CAREERS_HOME_HERO.title,
-    description: CAREERS_HOME_HERO.description
+    description: CAREERS_HOME_HERO.description,
+    actions: [{ label: CAREERS_HOME_HERO.action, href: '#latest-roles', kind: 'secondary' }]
   },
   {
-    section: 'CapabilityGrid',
-    items: CAREERS_VALUES.map((value) => ({ title: value, description: '' }))
+    section: 'PhotoMarquee',
+    title: CAREERS_WORK.title,
+    description: CAREERS_WORK.description,
+    photos: CAREERS_PHOTOS,
+    ariaLabel: 'Azion offices'
   },
   {
-    section: 'CapabilityGrid',
-    items: CAREERS_JOURNEY.steps.map((step) => ({
-      title: step.title,
-      description: step.description
-    }))
-  },
-  {
-    section: 'ResourceGrid',
-    eyebrow: '',
+    section: 'ListingTable',
+    anchor: 'latest-roles',
     title: CAREERS_ROLES.title,
-    items: CAREERS_ROLES.areas.map((role) => ({
-      title: role.area,
-      description: role.description,
-      href: jobsFor(role.area)
-    })),
-    actions: []
+    columns: [
+      { key: 'role', label: CAREERS_ROLES.columns.role, grow: 2 },
+      { key: 'team', label: CAREERS_ROLES.columns.team, grow: 2 },
+      { key: 'type', label: CAREERS_ROLES.columns.type, align: 'end' }
+    ],
+    rows: LATEST_ROLES,
+    action: { label: CAREERS_ROLES.action(CAREERS_JOBS.length), href: CAREERS_JOBS_PATH }
   },
   {
     section: 'ClosingCallToAction',
