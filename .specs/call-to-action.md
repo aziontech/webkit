@@ -4,9 +4,9 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 2
-checksum: 892eb76761001e7d71bff6abdf9e2b449aa9d09b56c3199c38249df41fd90cc8
+checksum: 89e475edce8fe9a50e31713385b32f615a3ef1bbc7c2a3147db90f8aacc34f34
 created: 2026-09-22
-last_updated: 2026-09-24
+last_updated: 2026-10-09
 ---
 
 # Call To Action — Component Spec
@@ -41,6 +41,7 @@ Three registers. `panel` sets the copy and its controls on one surface, as a row
 - `frame-box` — the registration frame the band draws when `framed` is on, and the one the page supplies around it when off.
 - `button` — the controls composed into the `actions` and `aside-actions` slots.
 - `overline` — the `//`-prefixed eyebrow the band renders above the headline.
+- `texture-material` — the dot field the `split` aside paints on its floor when it carries no control.
 
 ## Best practices
 
@@ -51,6 +52,7 @@ Three registers. `panel` sets the copy and its controls on one surface, as a row
 - Use `eyebrow` only when the panel needs naming out of context; the headline usually carries the ask on its own.
 - In `split`, `title` states the claim and `title-muted` states its consequence — one sentence in two tones, not two headlines. The band renders them as two spans of a single `h2`, so a screen reader reads one heading.
 - In `split`, put the primary control in `actions` and the secondary one in `aside`; each cell floors its own control, which is what gives the two a shared baseline. `actions` stretches its child full-width below `md`; `aside` stretches its child at every width, so a control drawn to size to its own content goes in a wrapper there.
+- In `split`, an aside with no `aside` control is not left as an empty floor: it paints a `dots` texture faded toward the top, so the field stands where the control would and stays clear of the supporting line. Fill `aside` and the texture goes — a control and a texture never share the cell.
 - In `lead`, every control goes in `actions` — they lay out as one row from `md` up and stack full-width below it. The copy column is capped at `--container-2xl` so the headline keeps a readable measure however wide the band runs.
 - `lead` sets the copy-to-actions gap at `--spacing-xl`, not the `--spacing-xxl` the other two use. In `split` that larger number is the *floor* of a stretched cell — what pushes the control onto the band's bottom edge — and in `panel` the controls sit beside the copy from `md` up. In `lead` nothing stretches and nothing sits beside, so `--spacing-xxl` stops reading as a floor and starts reading as a hole.
 - Leave `framed` on when the band stands in a section column of its own, and off when the page already wraps it in a `frame-box` — two frames draw two hairlines on the same edge.
@@ -189,6 +191,7 @@ _none_
 | panel surface (`panel`) | `var(--bg-surface)` |
 | lead cell surface (`split`, `lead`) | `var(--bg-surface-raised)` |
 | panel rules and marks | `var(--border-default)` |
+| aside texture (`split`, no `aside`) | `texture-material` `kind="dots"` `fade="top"` |
 | spacing (panel padding, `panel`) | `var(--spacing-xxl)` |
 | spacing (cell padding, `split`, `lead`) | `var(--spacing-xl)` |
 | copy measure (`lead`) | `var(--container-2xl)` |

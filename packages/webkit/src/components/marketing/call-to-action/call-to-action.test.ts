@@ -178,6 +178,32 @@ describe('CallToAction', () => {
     expect(getByRole('button', { name: 'Talk to our team' })).toBeInTheDocument()
   })
 
+  it('paints the dot field in the split aside when it carries no control', () => {
+    const { getByTestId } = render(CallToAction, {
+      props: { title: TITLE, kind: 'split', description: DESCRIPTION }
+    })
+
+    const texture = getByTestId(`${TESTID}__aside-texture`)
+    expect(texture).toHaveAttribute('data-kind', 'dots')
+    expect(texture).toHaveAttribute('data-fade', 'top')
+    expect(texture).toHaveAttribute('aria-hidden', 'true')
+  })
+
+  it('drops the dot field when the split aside carries a control', () => {
+    const { queryByTestId } = render(CallToAction, {
+      props: { title: TITLE, kind: 'split' },
+      slots: { aside: '<button type="button">Talk to our team</button>' }
+    })
+
+    expect(queryByTestId(`${TESTID}__aside-texture`)).toBeNull()
+  })
+
+  it('paints no dot field outside the split register', () => {
+    const { queryByTestId } = render(CallToAction, { props: { title: TITLE, kind: 'lead' } })
+
+    expect(queryByTestId(`${TESTID}__aside-texture`)).toBeNull()
+  })
+
   it('renders no aside paragraph when the split register carries no description', () => {
     const { container } = render(CallToAction, { props: { title: TITLE, kind: 'split' } })
 

@@ -4,6 +4,7 @@
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import Overline from '../../overline/overline.vue'
   import SectionTitle from '../section-title/section-title.vue'
+  import TextureMaterial from '../texture-material/texture-material.vue'
 
   defineOptions({
     name: 'CallToAction',
@@ -106,18 +107,25 @@
         </div>
 
         <div
-          class="flex flex-col justify-between gap-(--spacing-xxl) border-t border-(--border-default) p-(--spacing-xl) lg:border-t-0 lg:border-l"
+          class="relative flex flex-col justify-between gap-(--spacing-xxl) border-t border-(--border-default) p-(--spacing-xl) lg:border-t-0 lg:border-l"
         >
+          <!-- With no control to floor, the aside's floor carries the dot field instead. -->
+          <TextureMaterial
+            v-if="!slots.aside"
+            kind="dots"
+            fade="top"
+            :data-testid="`${testId}__aside-texture`"
+          />
           <p
             v-if="hasDescription"
-            class="m-0 text-pretty text-heading-sm text-(--text-default)"
+            class="relative m-0 text-pretty text-heading-sm text-(--text-default)"
           >
             <slot>{{ description }}</slot>
           </p>
 
           <div
             v-if="slots.aside"
-            class="[&>*]:w-full"
+            class="relative [&>*]:w-full"
           >
             <slot name="aside" />
           </div>
