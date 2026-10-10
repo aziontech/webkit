@@ -142,7 +142,6 @@
         texture-fade="bottom"
         max-width="full"
         :bordered="false"
-        class="[--banner-offset:3.5rem]"
       >
         <Hero.Title
           centered
@@ -187,7 +186,7 @@
         :bordered="false"
         carousel
         :carousel-marks="CLIENT_STRIP"
-        class="[--banner-offset:3.5rem] [--banner-floor-bg:var(--bg-surface)]"
+        class="[--banner-floor-bg:var(--bg-surface)]"
       >
         <Hero.Title
           centered
@@ -231,7 +230,7 @@
         :bordered="false"
         carousel
         :carousel-marks="CLIENT_STRIP"
-        class="[--banner-offset:3.5rem] [--banner-floor-bg:var(--bg-surface)] [--texture-pool-a:95%_64%] [--texture-pool-b:-2%_38%]"
+        class="[--banner-floor-bg:var(--bg-surface)] [--texture-pool-a:95%_64%] [--texture-pool-b:-2%_38%]"
       >
         <Hero.Title
           title="Build and deploy AI agents and applications in seconds"
@@ -274,7 +273,7 @@
         texture-fade="bottom"
         max-width="full"
         :bordered="false"
-        class="[--banner-offset:3.5rem] [--banner-top-height:46%]"
+        class="[--banner-top-height:46%]"
       >
         <template #top>
           <WorkloadTopologyScene />
@@ -309,7 +308,6 @@
         texture-fade="bottom"
         max-width="full"
         :bordered="false"
-        class="[--banner-offset:3.5rem]"
       >
         <Hero.Title
           eyebrow="Web apps"
@@ -363,7 +361,6 @@
         kind="screen"
         max-width="full"
         :bordered="false"
-        class="[--banner-offset:3.5rem]"
       >
         <template #background>
           <NetworkBanner />

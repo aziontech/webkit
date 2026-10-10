@@ -209,7 +209,6 @@
     :carousel="hasCarousel"
     :carousel-label="carouselLabel"
     :carousel-marks="carouselMarks"
-    offset="3.5rem"
     bottom-height="clamp(7rem,16dvh,14rem)"
   >
     <div class="grid grid-cols-1 gap-(--spacing-xxl) py-(--spacing-lg) lg:grid-cols-2">

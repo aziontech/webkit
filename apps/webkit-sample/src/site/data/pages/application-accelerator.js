@@ -184,7 +184,7 @@ const ZOOP = registeredClient('Zoop')
 export const APPLICATION_ACCELERATOR_PAGE = [
   {
     section: 'Heroes',
-    kind: 'centered-carousel',
+    kind: 'centered-band',
     eyebrow: 'Application Accelerator',
     title: 'Accelerate dynamic APIs and apps',
     description:

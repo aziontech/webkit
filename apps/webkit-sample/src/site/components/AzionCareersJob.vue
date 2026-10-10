@@ -213,9 +213,7 @@
 <template>
   <!-- ══ The header band ════════════════════════════════════════════════════════
        A BAND, not a screen: the reader came for the posting, so the headline takes its own
-       register and hands the rest of the viewport to the body. `--banner-offset` is the sticky
-       SiteNav's height, which the band's inline inset reads the same way every other page's
-       hero does.
+       register and hands the rest of the viewport to the body.
 
        THE COLUMN IS START-ALIGNED, and that is the one place this page parts with the site's
        other heroes. A centred hero is right for a page whose headline IS its statement; a
@@ -231,7 +229,6 @@
     max-width="site"
     texture="dots"
     texture-fade="top"
-    class="[--banner-offset:3.5rem]"
   >
     <!-- No `items-*`: a flex column stretches its children, so every row opens on the
          container's start edge and the actions row can still go full width on a phone. -->

@@ -166,7 +166,7 @@ const SOLUTION_DIRECTORY = [
 export const SOLUTIONS_PAGE = [
   {
     section: 'Heroes',
-    kind: 'centered-carousel',
+    kind: 'centered-band',
     eyebrow: 'Solutions',
     highlight: 'The platform,',
     title: 'argued for your case',

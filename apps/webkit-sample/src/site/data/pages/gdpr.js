@@ -3,7 +3,7 @@ import { GDPR_FAQ } from '../gdpr.js'
 export const GDPR_PAGE = [
   {
     section: 'Heroes',
-    kind: 'centered-carousel',
+    kind: 'centered-band',
     title: 'GDPR',
     description: 'Azion is GDPR compliant. We have made it a priority to protect your data.'
   },

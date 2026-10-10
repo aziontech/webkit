@@ -28,7 +28,6 @@
     :carousel="hasCarousel"
     :carousel-label="hero.carouselLabel ?? 'Trusted by mission-critical workloads'"
     :carousel-marks="hero.carouselMarks ?? []"
-    offset="3.5rem"
   >
     <Hero.Title
       max-width="xl"

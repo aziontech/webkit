@@ -3,7 +3,7 @@ import { COMPLIANCE_CERTIFICATIONS, COMPLIANCE_PRIVACY_LINKS } from '../complian
 export const COMPLIANCE_PAGE = [
   {
     section: 'Heroes',
-    kind: 'centered-carousel',
+    kind: 'centered-band',
     title: 'Certificações e conformidade da Azion',
     description:
       'A Azion adere a rigorosos padrões de segurança, disponibilidade e privacidade para que os clientes possam adotar nossos serviços com confiança.',

@@ -130,11 +130,7 @@
 
   const hasCarousel = computed(() => props.carouselMarks.length > 0)
 
-  const frame = computed(() =>
-    props.kind === 'centered-carousel' && !hasCarousel.value
-      ? FRAMES['centered-band']
-      : FRAMES[props.kind]
-  )
+  const frame = computed(() => FRAMES[props.kind])
   const titleFrame = computed(() => TITLES[props.kind])
   const sceneOnTop = computed(() => Boolean(props.scene) && props.scenePlacement === 'top')
   const sceneOnBottom = computed(() => Boolean(props.scene) && props.scenePlacement === 'bottom')

@@ -197,7 +197,7 @@ const FAQ = [
 export const CACHE_PAGE = [
   {
     section: 'Heroes',
-    kind: 'centered-carousel',
+    kind: 'centered-band',
     eyebrow: 'Cache',
     title: 'Accelerate content delivery globally',
     description:
