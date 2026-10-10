@@ -243,7 +243,7 @@ const PIXEL_FLOOR_TEMPLATE = `<Hero
   carousel
   carousel-label="Trusted by mission-critical workloads"
   :carousel-marks="${marks(CLIENT_STRIP, 1)}"
-  class="[--banner-offset:3.5rem] [--banner-floor-bg:var(--bg-surface)] [--texture-pool-a:95%_64%] [--texture-pool-b:-2%_38%]"
+  class="[--banner-floor-bg:var(--bg-surface)] [--texture-pool-a:95%_64%] [--texture-pool-b:-2%_38%]"
 >
   <Hero.Title
     title="Build and deploy AI agents and applications in seconds"
@@ -260,7 +260,6 @@ const COPY_BESIDE_ART_TEMPLATE = `<Hero
   carousel
   carousel-label="Trusted by mission-critical workloads"
   :carousel-marks="${marks(RETAIL_CLIENT_STRIP, 1)}"
-  offset="3.5rem"
 >
   <Hero.Title
     max-width="xl"
@@ -289,7 +288,6 @@ const COPY_ON_TOP_ART_TEMPLATE = `<Hero
   texture="dots"
   texture-size="small"
   texture-fade="top"
-  class="[--banner-offset:3.5rem]"
 >
   <Hero.Title
     centered
@@ -326,7 +324,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The opening band of a marketing page: the page’s h1 and its actions, full-bleed above the framed column, with the backdrop, strip or art that frames them. Each story is the hero one family of sample pages opens with. The home page and every solution page (Retail, Web Apps, AI Workloads, Security, Performance, Streaming, Financial Services, Technology) open on the centered band with the client strip on its floor. The product pages (Cache, Application Accelerator, Our Network) open on the same centered band under an eyebrow. Learning opens on a large title band, Support on the same band centred under an eyebrow with the dot field behind it, AI Inference on the pixelate field, the Workloads copy sits on top of its topology, and the copy-beside-art band is the solution pages’ former opening. Built from `Hero`, `Hero.Title`, `Button`, `Illustration` and, for the Workloads scene, `Flow` and `Tag`.'
+          'The opening band of a marketing page: the page’s h1 and its actions, full-bleed above the framed column, with the backdrop, strip or art that frames them. Each story is the hero one family of sample pages opens with. Every hero that is not a band fills one screen, and only a hero with something standing on its floor is one. The home page, every solution page (Retail, Web Apps, AI Workloads, Security, Performance, Streaming, Financial Services, Technology), Products, Our Network and Success Cases open on the centered screen hero with the client strip on its floor. The pages with no strip (Solutions, Cache, Application Accelerator, Compliance, GDPR) open on the centered band, as do Support, Blog and Careers. Learning opens on a large title band, AI Inference on the pixelate field, the Workloads copy sits on top of its topology, and the copy-beside-art band is the solution pages’ former opening. The screen stories fill the canvas because nothing sits above them; on the site the shell declares `--banner-offset` for the sticky nav once, and every screen hero under it subtracts it. Built from `Hero`, `Hero.Title`, `Button`, `Illustration` and, for the Workloads scene, `Flow` and `Tag`.'
       },
       canvas: { sourceState: 'shown' }
     }
