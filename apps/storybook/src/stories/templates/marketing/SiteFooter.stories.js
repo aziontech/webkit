@@ -3,8 +3,9 @@ import Footer from '@aziontech/webkit/footer'
 import IconButton from '@aziontech/webkit/icon-button'
 import Select from '@aziontech/webkit/select'
 import StatusIndicator from '@aziontech/webkit/status-indicator'
-import { onBeforeUnmount, ref } from 'vue'
+import { ref } from 'vue'
 
+import { LG_PROBE_IMPORT, LG_PROBE_SETUP, useSiteFooter } from '../../_shared/site-footer'
 import { toSfc } from '../../_shared/story-source'
 
 const COLUMNS = [
@@ -54,8 +55,6 @@ const SOCIALS = [
 
 const LANGUAGES = ['EN', 'PT-BR', 'ES']
 
-const WIDE_QUERY = '(min-width: 1024px)'
-
 const quoted = (text) => `'${text.replaceAll("'", "\\'")}'`
 
 const literal = (value, depth = 0) => {
@@ -81,7 +80,7 @@ const IMPORTS = [
   "import IconButton from '@aziontech/webkit/icon-button'",
   "import Select from '@aziontech/webkit/select'",
   "import StatusIndicator from '@aziontech/webkit/status-indicator'",
-  "import { onBeforeUnmount, ref } from 'vue'",
+  LG_PROBE_IMPORT,
   '',
   `const columns = ${literal(COLUMNS)}`,
   '',
@@ -90,13 +89,7 @@ const IMPORTS = [
   `const languages = ${literal(LANGUAGES)}`,
   "const language = ref('EN')",
   '',
-  `const wideQuery = window.matchMedia(${quoted(WIDE_QUERY)})`,
-  'const brandLeadsSocialRow = ref(wideQuery.matches)',
-  'const onWideChange = (event) => {',
-  '  brandLeadsSocialRow.value = event.matches',
-  '}',
-  "wideQuery.addEventListener('change', onWideChange)",
-  "onBeforeUnmount(() => wideQuery.removeEventListener('change', onWideChange))"
+  ...LG_PROBE_SETUP
 ]
 
 const BRAND_LINK_CLASS =
@@ -121,6 +114,7 @@ const TEMPLATE = `<div class="w-full border-t border-(--border-default)">
         v-for="social in socials"
         :key="social.label"
         kind="transparent"
+        size="small"
         :icon="social.icon"
         :aria-label="social.label"
         :href="social.href"
@@ -197,14 +191,7 @@ export const Default = {
   render: () => ({
     components,
     setup() {
-      const wideQuery = globalThis.matchMedia(WIDE_QUERY)
-      const brandLeadsSocialRow = ref(wideQuery.matches)
-      const onWideChange = (event) => {
-        brandLeadsSocialRow.value = event.matches
-      }
-      wideQuery.addEventListener('change', onWideChange)
-      onBeforeUnmount(() => wideQuery.removeEventListener('change', onWideChange))
-
+      const { brandLeadsSocialRow } = useSiteFooter()
       return {
         columns: COLUMNS,
         socials: SOCIALS,

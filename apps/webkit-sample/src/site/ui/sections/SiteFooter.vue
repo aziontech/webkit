@@ -4,6 +4,7 @@
   import IconButton from '@aziontech/webkit/icon-button'
   import Select from '@aziontech/webkit/select'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
+  import { minWidthQuery } from '@shared/lib/breakpoints.js'
   import { onBeforeUnmount, ref } from 'vue'
 
   import { useSiteLink } from '../../composables/use-site-link'
@@ -40,7 +41,7 @@
 
   const language = ref(props.languages[0] ?? '')
 
-  const wideQuery = globalThis.matchMedia?.('(min-width: 1024px)')
+  const wideQuery = minWidthQuery('lg')
   const brandLeadsSocialRow = ref(wideQuery?.matches ?? true)
   const onWideQueryChange = (event: globalThis.MediaQueryListEvent) => {
     brandLeadsSocialRow.value = event.matches
@@ -89,6 +90,7 @@
           v-for="social in socials"
           :key="social.label"
           kind="transparent"
+          size="small"
           :icon="social.icon"
           :aria-label="social.label"
           :href="social.href"
