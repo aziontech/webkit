@@ -17,7 +17,7 @@ minimumReleaseAgeExclude:
   - '@aziontech/theme@4.0.0'
 
 overrides:
-  # Minimal validated set (2026-07-25, last bumped 2026-09-09): each entry
+  # Minimal validated set (2026-07-25, last bumped 2026-10-13): each entry
   # guards a live advisory or a proven resolution hazard; the tree is
   # audit-clean without anything else.
   brace-expansion: ">=5.0.12" # GHSA-rgw5-rvv9-x895 (CVE-2026-14257 mitigation bypass), GHSA-6j4f-fj2g-mc7p and GHSA-qhr7-859c-m2p7 (DoS via uncontrolled recursion), patched 5.0.12
@@ -46,6 +46,7 @@ overrides:
   vue: ">=3.5.42 <4" # GHSA-g2v6-rqmx-r4w6 (@vue/server-renderer XSS via missing CR), patched 3.5.42; already inside the ^3.5.x devDependency range — lockfile was just stale
   "joi@17": ">=17.13.8 <18" # GHSA-wr44-6hxh-3jwq (prototype replacement via messages compilation), patched 17.13.8; supersedes the 17.13.6 floor
   "joi@18": ">=18.2.9 <19" # GHSA-wr44-6hxh-3jwq, patched 18.2.9; supersedes the 18.2.5 floor
+  handlebars: ">=4.7.10 <5" # GHSA-8r5x-fm3f-whwj and GHSA-p8wg-vrv2-v86f (JS injection via AST type confusion / own-property bypass), GHSA-xw65-4hp5-5hc7 (unsafe inline embedding of precompiled templates), patched 4.7.10; bounded to 4.x — fantasticon (icons) pins ^4
 
 auditConfig:
   ignoreGhsas:
