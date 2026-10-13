@@ -1,17 +1,200 @@
 import contabilizeiTile from '@aziontech/webkit/assets/contabilizei-symbol-color.png'
 import { markRaw } from 'vue'
 
-import { TRACE_TABS } from '../console-trace.js'
+import FunctionsStartScene from '../../ui/FunctionsStartScene.vue'
+import FunctionsTerminalScene from '../../ui/FunctionsTerminalScene.vue'
+import { START_TABS } from '../functions-start.js'
 import {
   PRODUCT_CLOSING,
   PRODUCT_DIRECTORY,
   PRODUCT_DOCS,
   PRODUCT_HERO_ACTIONS
 } from '../product-pages.js'
-import ConsoleTraceScene from '../../ui/ConsoleTraceScene.vue'
-import RuntimeApiCloud from '../../ui/RuntimeApiCloud.vue'
 
 const IMPORT = 'import'
+
+const FRAMEWORK_MARKS = [
+  'nextjs',
+  'react',
+  'vue',
+  'nuxt',
+  'astro',
+  'angular',
+  'hono',
+  'qwik',
+  'preact',
+  'gatsby',
+  'docusaurus',
+  'vitepress',
+  'hugo',
+  'eleventy',
+  'hexo',
+  'jekyll'
+]
+
+const FIGURES = [
+  { value: '100', suffix: '+', label: 'Data centers' },
+  { value: '0', label: 'Cold starts' },
+  { value: '512', suffix: 'MB', label: 'Memory per isolate' },
+  { value: '3', suffix: 'M', label: 'Free requests a month' }
+]
+
+const KV_SAMPLE = `export default {
+  async fetch(request) {
+    const kv = await Azion.KV.open('sessions')
+    const id = new URL(request.url).searchParams.get('id')
+
+    const session = await kv.get(id, 'json')
+    if (!session) return new Response(null, { status: 404 })
+
+    await kv.put(id, session, { expirationTtl: 3600 })
+    return Response.json(session)
+  }
+}`
+
+const SQL_SAMPLE = `export default {
+  async fetch(request) {
+    const db = await Azion.Sql.Database.open('catalog')
+    const url = new URL(request.url)
+    const id = Number(url.searchParams.get('id'))
+
+    const rows = await db.query(
+      'select name, price from products where id = ?',
+      [id]
+    )
+    const row = rows.next()
+    if (!row) return new Response(null, { status: 404 })
+
+    return Response.json({ name: row.getString(0) })
+  }
+}`
+
+const STORAGE_SAMPLE = `${IMPORT} { createObject } from 'azion/storage'
+
+export default {
+  async fetch(request) {
+    const file = (await request.formData()).get('file')
+    const { data, error } = await createObject({
+      bucket: 'uploads',
+      key: file.name,
+      content: await file.arrayBuffer()
+    })
+    if (error) return Response.json(error, { status: 502 })
+    return Response.json({ key: data.key }, { status: 201 })
+  }
+}`
+
+const AI_SAMPLE = `export default {
+  async fetch(request) {
+    const { question } = await request.json()
+    const model = 'Qwen/Qwen3-30B-A3B-Instruct-2507-FP8'
+
+    const answer = await Azion.AI.run(model, {
+      messages: [{ role: 'user', content: question }]
+    })
+
+    const text = answer?.choices?.[0]?.message?.content
+    return Response.json({ answer: text })
+  }
+}`
+
+const FIREWALL_SAMPLE = `export default {
+  firewall: async (request, env, ctx) => {
+    const token = request.headers.get('authorization')
+
+    // Refused before the request reaches an application
+    if (!token?.startsWith('Bearer ')) ctx.deny()
+  }
+}`
+
+const INTEGRATIONS = [
+  {
+    icon: 'ai ai-edge-kv',
+    title: 'KV Store',
+    description:
+      'Open a namespace with Azion.KV and read or write sessions, flags and counters, with an optional TTL on every key.'
+  },
+  {
+    icon: 'ai ai-edge-sql',
+    title: 'SQL Database',
+    description:
+      'Query a distributed SQL database from the handler with Azion.Sql, using positional or named parameters.'
+  },
+  {
+    icon: 'ai ai-edge-storage',
+    title: 'Object Storage',
+    description:
+      'Write uploads to a bucket and serve them back from the same function, with the azion/storage library.'
+  },
+  {
+    icon: 'ai ai-edge-ai',
+    title: 'AI Inference',
+    description:
+      'Call a model with Azion.AI.run and return its answer in the same response, with no API key to manage.'
+  },
+  {
+    icon: 'ai ai-edge-firewall',
+    title: 'Firewall',
+    description:
+      'Run the same code inside Firewall and refuse a request with ctx.deny() before it reaches an application.'
+  }
+]
+
+const sample = (value, label, code) => ({
+  label,
+  value,
+  language: 'javascript',
+  code,
+  fileName: `${value}.js`,
+  fileIcon: 'ai ai-edge-functions'
+})
+
+const INTEGRATION_SAMPLES = [
+  sample('kv-store', 'KV Store', KV_SAMPLE),
+  sample('sql-database', 'SQL Database', SQL_SAMPLE),
+  sample('object-storage', 'Object Storage', STORAGE_SAMPLE),
+  sample('ai-inference', 'AI Inference', AI_SAMPLE),
+  sample('firewall', 'Firewall', FIREWALL_SAMPLE)
+]
+
+const CAPABILITIES = [
+  {
+    icon: 'ai ai-edge-application',
+    title: 'Application or Firewall',
+    description:
+      'Run on the requests an application serves, or inside Firewall, where a request can still be refused.'
+  },
+  {
+    icon: 'pi pi-arrow-right-arrow-left',
+    title: 'Request and response phase',
+    description:
+      'Rewrite a request before it reaches the origin, or change a response before it reaches the user.'
+  },
+  {
+    icon: 'pi pi-sliders-h',
+    title: 'Arguments per instance',
+    description:
+      'One function, many instances. Each passes its own JSON arguments, so the code stays the same everywhere it runs.'
+  },
+  {
+    icon: 'pi pi-lock',
+    title: 'Variables and secrets',
+    description:
+      'Read configuration with Azion.env.get(). Keys that name a token, a key or a secret are stored as secrets.'
+  },
+  {
+    icon: 'pi pi-globe',
+    title: 'Web standards and Node.js',
+    description:
+      'fetch, Streams and Web Crypto in a V8 isolate, plus 68 Node.js modules for the code you already have.'
+  },
+  {
+    icon: 'pi pi-code',
+    title: 'WebAssembly',
+    description:
+      'Compile Rust or C to WebAssembly with the Rustwasm and Emscripten presets, and call it from the same handler.'
+  }
+]
 
 const FILE_UPLOAD = `${IMPORT} type { AzionBucketObject, AzionStorageResponse } from "azion/storage";
 ${IMPORT} { createObject } from "azion/storage";
@@ -76,25 +259,6 @@ app.post("/welcome", async (c) => {
 });
 
 export default app;`
-
-const CODE_FILES = [
-  {
-    label: 'File upload',
-    value: 'file-upload',
-    language: 'typescript',
-    code: FILE_UPLOAD,
-    fileName: 'github.com/aziontech/azion-samples',
-    fileIcon: 'pi pi-github'
-  },
-  {
-    label: 'Send transactional emails',
-    value: 'transactional-email',
-    language: 'typescript',
-    code: TRANSACTIONAL_EMAIL,
-    fileName: 'github.com/aziontech/azion-samples',
-    fileIcon: 'pi pi-github'
-  }
-]
 
 const PLATFORM_GROUPS = [
   {
@@ -173,141 +337,187 @@ const PLATFORM_GROUPS = [
   }
 ]
 
+const RATE_LIMIT = `export default {
+  async fetch(request) {
+    const kv = await Azion.KV.open('rate-limits')
+    const ip = request.headers.get('x-forwarded-for') ?? ''
+    const key = \`\${ip}:\${Math.floor(Date.now() / 60000)}\`
+
+    const count = Number((await kv.get(key)) ?? 0)
+    if (count >= 100) return new Response(null, { status: 429 })
+
+    await kv.put(key, String(count + 1), { expirationTtl: 120 })
+    return fetch(request)
+  }
+}`
+
+const RECIPE_FILES = [
+  {
+    label: 'Transactional email',
+    value: 'transactional-email',
+    language: 'typescript',
+    code: TRANSACTIONAL_EMAIL,
+    fileName: 'github.com/aziontech/azion-samples',
+    fileIcon: 'pi pi-github'
+  },
+  {
+    label: 'File upload',
+    value: 'file-upload',
+    language: 'typescript',
+    code: FILE_UPLOAD,
+    fileName: 'github.com/aziontech/azion-samples',
+    fileIcon: 'pi pi-github'
+  },
+  {
+    label: 'Rate limit',
+    value: 'rate-limit',
+    language: 'javascript',
+    code: RATE_LIMIT,
+    fileName: 'rate-limit.js',
+    fileIcon: 'ai ai-edge-functions'
+  }
+]
+
+const RECIPES = [
+  {
+    title: 'Send transactional emails',
+    description:
+      'Call your email provider from a function, with the API key kept in the environment and out of the bundle.'
+  },
+  {
+    title: 'Accept file uploads',
+    description:
+      'Parse a multipart form, write the file to Object Storage, and answer with its key.'
+  },
+  {
+    title: 'Rate-limit an API',
+    description:
+      'Count requests per client in KV Store and answer 429 before the request reaches your origin.'
+  }
+]
+
 const FAQ = [
   {
     value: 'what-is',
     question: 'What are Functions?',
     answer:
-      'Azion Functions is a serverless platform for running code on distributed infrastructure with up to 5 minutes of CPU time per execution. Key features include: zero cold starts, 20MB bundle size, TypeScript/JavaScript support, WebAssembly runtime, and native framework support for Next.js, React, Vue, and Astro. Deploy API handlers, authentication, data pipelines, and browser automation without managing servers.'
-  },
-  {
-    value: 'vs-workers',
-    question: 'How does Functions compare to Cloudflare Workers?',
-    answer:
-      'Both platforms offer serverless compute with zero cold starts. The key difference is CPU time: Azion Functions supports extended execution, while Cloudflare Workers is optimized for lightweight request handlers. This makes Azion suitable for longer-running workloads like data transformation and browser automation. Cloudflare offers broader global distribution and multi-language support (Python, Rust, etc.). Choose Azion for compute-intensive jobs; choose Cloudflare for maximum global distribution.'
+      'Azion Functions runs JavaScript and TypeScript in the request flow of an application or a firewall, across 100+ data centers, with no cold starts. A Rules Engine rule calls the function, and it answers with a Response. There is no server to provision or scale.'
   },
   {
     value: 'languages',
     question: 'Which languages and frameworks are supported?',
     answer:
-      'Functions supports TypeScript and JavaScript natively, plus WebAssembly for compiled extensions. Frameworks with native CLI support include Next.js, Vue, React, Angular, Gatsby, and Astro. The runtime provides web-standard APIs, extended Node.js APIs, and WebAssembly support.'
+      'JavaScript and TypeScript, plus WebAssembly through the WebAssembly API. The runtime follows web standards such as fetch, Streams and Web Crypto, and can import 68 Node.js modules. azion init ships 25 presets, including Next.js, Nuxt, React, Vue, Astro, Angular, Svelte, Qwik and Hono.'
   },
   {
     value: 'cold-starts',
     question: 'Are there cold starts?',
     answer:
-      'No. Functions are designed for consistent first-request performance with zero cold starts on the Azion Web Platform. Initial requests perform as fast as subsequent requests—critical for user-facing APIs and authentication flows.'
-  },
-  {
-    value: 'cpu-time',
-    question: 'What can I do with 5 minutes of CPU time?',
-    answer:
-      "Extended CPU time enables workloads that traditional serverless platforms can't handle: browser automation with Puppeteer, complex data transformation pipelines, image and video processing, AI inference jobs, and multi-step API orchestration. You don't need to architect around execution limits or set up external orchestration services."
+      'No. Each function runs in a V8 isolate, so the first request performs like every request after it. That matters most for user-facing APIs, authentication and inference.'
   },
   {
     value: 'limits',
     question: 'What are the execution limits?',
     answer:
-      'Functions support up to 5 minutes of CPU time per execution and bundle sizes up to 20 MB. These limits are designed for production workloads requiring extended processing time.'
+      'Each invocation gets 2 seconds of CPU time and up to 5 minutes of wall-clock time, so waiting on I/O does not count against the CPU budget. An isolate has 512 MB of memory, and code can be up to 6 MB from the Console or 20 MB through the API.'
   },
   {
-    value: 'deploy',
-    question: 'How do I deploy Functions?',
+    value: 'application-or-firewall',
+    question: 'Should a function run on an application or a firewall?',
     answer:
-      'Deploy from Git repositories with continuous deployment or use the Azion CLI (`azion init`, `azion build`, `azion deploy`). Functions integrate with Applications and Firewall via Rules Engine for request-time execution.'
-  },
-  {
-    value: 'observability',
-    question: 'How do I monitor and debug Functions?',
-    answer:
-      'Functions include built-in observability with metrics, logs, and per-request execution traces. You can troubleshoot issues directly in the console or stream data to external tools via Data Stream.'
+      'On an application, a function runs in the request or response phase, after routing, to rewrite requests or build responses. On a firewall, it runs before the request reaches an application, and it can refuse the request with ctx.deny().'
   },
   {
     value: 'data-access',
     question: 'Can Functions access databases and storage?',
     answer:
-      'Yes. Functions can connect to SQL Database, KV Store, and Object Storage using native APIs in the runtime. This enables building complete applications with data persistence on a single platform.'
+      'Yes, through runtime globals that need no keys: Azion.KV for KV Store, Azion.Sql for SQL Database and Azion.AI for AI Inference, plus the azion/storage library for Object Storage. A SQL Database connection opened from a function is read-only; writes go through the Azion API.'
+  },
+  {
+    value: 'deploy',
+    question: 'How do I deploy Functions?',
+    answer:
+      'From the terminal, azion init scaffolds a project, azion dev serves it on localhost:3333, and azion deploy puts it on a live domain. In the Console, create the function, instance it on an application, and add a rule that runs it. A coding agent can do the same through the Azion MCP servers.'
+  },
+  {
+    value: 'variables',
+    question: 'How do environment variables and secrets work?',
+    answer:
+      'Create them with azion create variables or in the Console, and read them with Azion.env.get(). Keys that name a token, a key, a secret or auth are stored as secrets by default. A change takes effect on the next deploy.'
+  },
+  {
+    value: 'observability',
+    question: 'How do I monitor and debug Functions?',
+    answer:
+      'Every console.log lands in Real-Time Events, in the Functions Console tab, with its level and request id. Stream the same events out with Data Stream, or follow them live with azion logs cells --tail.'
+  },
+  {
+    value: 'pricing',
+    question: 'How are Functions priced?',
+    answer:
+      'By requests and compute time. Hobby is free, with 3M function requests and 8 hours of compute time a month. Pro is $25 a month, with 10M requests and 10 hours. Enterprise plans are custom.'
   },
   {
     value: 'migrate',
     question: 'How do I migrate from Cloudflare Workers?',
     answer:
-      "Both platforms use JavaScript/TypeScript, so code migration is straightforward for most functions. Export your Worker code, initialize an Azion Function, adapt runtime APIs, and deploy. If using Cloudflare KV/R2/D1, migrate data to Azion SQL Database, KV Store, or Object Storage. Lightweight request handlers can work on both platforms; longer-running functions benefit from Azion's extended execution time."
+      'Both run JavaScript in V8 isolates behind a fetch handler, so most handlers move with small changes. Keep the handler, swap the platform bindings for KV Store, SQL Database and Object Storage, and deploy with azion deploy.'
   }
 ]
 
 const READ_DOCS = {
-  label: 'Read Azion Docs',
+  label: 'Read the docs',
   href: PRODUCT_DOCS,
-  kind: 'secondary',
+  kind: 'outlined',
   icon: 'pi pi-book'
 }
 
 export const FUNCTIONS_PAGE = [
   {
     section: 'Heroes',
-    kind: 'copy-on-top-art',
+    kind: 'centered-carousel',
     eyebrow: 'Functions',
-    title: 'Instant serverless functions for modern applications',
-    description: 'Build and scale AI-powered applications on a globally integrated platform.',
-    actions: PRODUCT_HERO_ACTIONS,
-    scene: { component: markRaw(RuntimeApiCloud) }
-  },
-  {
-    section: 'MediaSplitStack',
-    kind: 'solutions',
-    bands: [
-      {
-        title: 'Build with familiar frameworks',
-        description:
-          'Write Functions in TypeScript or JavaScript and ship with the frameworks you already use.',
-        href: PRODUCT_DOCS,
-        illustration: 'modern-frontends',
-        actions: [READ_DOCS]
-      },
-      {
-        title: 'Serverless runtime built for modern workloads',
-        description:
-          'Use Functions as a programmable layer between users, storefronts, APIs, and origins. Adapt requests in real time without changing your backend architecture.',
-        href: PRODUCT_DOCS,
-        illustration: 'runtime',
-        actions: [READ_DOCS]
-      }
-    ]
-  },
-  {
-    section: 'CodeSplit',
-    kind: 'default',
-    title: 'From hello world to full-stack applications',
+    title: 'Run your code in every request',
     description:
-      'Run application logic with the resources a full-stack product needs: relational data, low-latency state, object storage, and AI responses through Azion libraries.',
-    files: CODE_FILES,
-    defaultFile: 'file-upload',
-    copyAriaLabel: 'Copy the file upload sample',
-    actions: [
-      READ_DOCS,
-      {
-        label: 'See Github',
-        href: 'https://github.com/aziontech',
-        kind: 'outlined',
-        icon: 'pi pi-github',
-        external: true
-      }
-    ]
+      'Serverless JavaScript and TypeScript for APIs, auth and AI, running across 100+ data centers with no cold starts.',
+    actions: PRODUCT_HERO_ACTIONS,
+    carouselLabel: 'Built for your framework',
+    carouselMarks: FRAMEWORK_MARKS
   },
+  { section: 'StatsBand', items: FIGURES },
   {
     section: 'FeatureTabs',
-    eyebrow: 'Observability',
-    title: 'Inspect every run end-to-end',
+    anchor: 'get-started',
+    eyebrow: 'Get started',
+    title: 'Start where you already work',
     description:
-      'Every invocation of a function is traced on the platform itself — spans, logs and the path the request took. Nothing to configure, no storage to attach. Pick a document to open it.',
-    tabs: TRACE_TABS.map((entry) => ({
-      value: entry.value,
-      title: entry.label,
-      description: entry.description
-    })),
-    scene: { component: markRaw(ConsoleTraceScene) },
-    action: { label: 'Open an invocation', href: '/product-preview' }
+      'The same function, three ways to ship it. Hand it to a coding agent, build it in the Console, or deploy it from the terminal.',
+    tabs: START_TABS,
+    scene: { component: markRaw(FunctionsStartScene) },
+    interval: 14000,
+    action: { label: 'Create your first function', href: PRODUCT_DOCS }
+  },
+  {
+    section: 'StickyScrollCode',
+    eyebrow: 'Platform',
+    title: 'Integrates with the Azion Web Platform',
+    description:
+      'Read data, call models and refuse requests from the same function, with no keys to wire between products.',
+    items: INTEGRATIONS,
+    samples: INTEGRATION_SAMPLES,
+    action: { label: 'Explore the runtime APIs', href: PRODUCT_DOCS }
+  },
+  { section: 'CapabilityGrid', items: CAPABILITIES },
+  {
+    section: 'CodeSplit',
+    kind: 'recipes',
+    title: 'From hello world to production APIs',
+    description:
+      'Starting points for the work a function does most: talking to APIs, storing files, and protecting origins.',
+    files: RECIPE_FILES,
+    defaultFile: 'transactional-email',
+    copyAriaLabel: 'Copy the function sample',
+    recipes: RECIPES
   },
   {
     section: 'QuoteBand',
@@ -320,5 +530,20 @@ export const FUNCTIONS_PAGE = [
   },
   { ...PRODUCT_DIRECTORY, groups: PLATFORM_GROUPS },
   { section: 'FaqSection', items: FAQ },
+  {
+    section: 'MediaSplitBand',
+    eyebrow: 'Azion CLI',
+    title: 'Deploy your first function in two commands',
+    description:
+      'Link a project, deploy it, and curl the domain the CLI hands back. Builds run on your machine with --local, or on Azion.',
+    scene: {
+      component: markRaw(FunctionsTerminalScene),
+      props: { script: 'deploy', texture: false }
+    },
+    actions: [
+      { label: 'Start free', href: '/signup' },
+      { ...READ_DOCS, label: 'Install the CLI' }
+    ]
+  },
   PRODUCT_CLOSING
 ]

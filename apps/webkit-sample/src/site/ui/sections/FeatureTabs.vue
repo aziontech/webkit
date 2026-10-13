@@ -39,7 +39,7 @@
     description?: string
     /** Up to three tabs, advanced on a timer. */
     tabs: FeatureTabsTab[]
-    /** Scene drawn as every tab's media, given the active tab's value as its `tab` prop. */
+    /** Scene drawn as every tab's media, given its tab's value as `tab` and whether that tab is open as `active`. */
     scene?: SiteScene | null
     /** Milliseconds each tab holds before the next one opens. */
     interval?: number
@@ -90,12 +90,13 @@
           size="small"
           :auto-play-interval="interval"
         >
-          <template #media="{ index }">
+          <template #media="{ index, active }">
             <component
               :is="scene.component"
               v-if="scene"
               v-bind="scene.props ?? {}"
               :tab="tabs[index]?.value"
+              :active="active"
               class="size-full"
             />
             <div
