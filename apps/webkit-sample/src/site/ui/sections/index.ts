@@ -72,6 +72,6 @@ export const SECTIONS: Record<string, Component> = {
   TemplateGallery
 }
 
-export const HERO_SECTIONS = new Set(['ArticleBody', 'Heroes', 'HeroForm'])
+export const HERO_SECTIONS = new Set(['ArticleBody', 'Heroes', 'HeroForm', 'PricingPlans'])
 
 export type { PageSection, SiteAction, SiteFaqItem, SiteLink, SiteTopic } from './types'

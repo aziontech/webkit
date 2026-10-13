@@ -2,7 +2,7 @@
   import CardGrid from '@aziontech/webkit/card-grid-root'
   import CardPricing from '@aziontech/webkit/card-pricing'
   import FrameBox from '@aziontech/webkit/frame-box'
-  import SectionModule from '@aziontech/webkit/section-module'
+  import Hero from '@aziontech/webkit/hero-root'
   import SegmentedButton from '@aziontech/webkit/segmented-button'
   import { computed, ref } from 'vue'
 
@@ -94,14 +94,16 @@
 </script>
 
 <template>
-  <SectionModule
+  <Hero
     id="plans"
-    :divided="false"
+    kind="band"
+    max-width="full"
     :padded="false"
   >
     <FrameBox
       flush
-      borders="y"
+      class="mx-auto max-w-(--layout-measure-site)"
+      borders="x"
       marks="bottom"
     >
       <div class="flex justify-center border-b border-(--border-default) p-(--spacing-md)">
@@ -164,5 +166,5 @@
         </div>
       </CardGrid>
     </FrameBox>
-  </SectionModule>
+  </Hero>
 </template>
