@@ -22,6 +22,7 @@
   import TableRow from '@aziontech/webkit/table-row'
   import FilterButton from '@console/components/list/FilterButton.vue'
   import FilterChips from '@console/components/list/FilterChips.vue'
+  import ClientMark from '@shared/ui/brand/ClientMark.vue'
   import { computed, reactive } from 'vue'
   import { useRoute } from 'vue-router'
 
@@ -66,6 +67,8 @@
     group: string
     /** The facet values the row carries, keyed by facet. */
     facets: Record<string, string[]>
+    /** The client behind the row, whose mark leads the first column. */
+    client?: Record<string, unknown>
   }
 
   export interface ListingSearch {
@@ -349,6 +352,15 @@
                 class="relative px-(--spacing-xl)! py-(--spacing-lg)! hover:bg-(--bg-hover)"
               >
                 <ItemContent class="gap-(--spacing-xs)">
+                  <span
+                    v-if="row.client"
+                    class="flex h-5 items-center"
+                  >
+                    <ClientMark
+                      :client="row.client"
+                      mark="h-full w-auto max-w-28 object-contain object-left"
+                    />
+                  </span>
                   <ItemTitle>
                     <a
                       :href="row.href"
@@ -419,14 +431,27 @@
                 :data-edge="index === 0 ? 'start' : index === columns.length - 1 ? 'end' : null"
                 class="py-(--spacing-lg)! text-(--text-muted) data-[meta]:text-overline-sm! data-[edge=end]:pr-(--spacing-xl)! data-[edge=start]:pl-(--spacing-xl)!"
               >
-                <a
+                <div
                   v-if="index === 0"
-                  :href="row.href"
-                  class="min-w-0 whitespace-normal text-pretty text-label-lg text-(--text-default)"
-                  @click.stop="follow($event, row.href)"
+                  class="flex min-w-0 items-center gap-(--spacing-lg)"
                 >
-                  {{ row.values[column.key] }}
-                </a>
+                  <span
+                    v-if="row.client"
+                    class="flex h-5 w-28 shrink-0 items-center"
+                  >
+                    <ClientMark
+                      :client="row.client"
+                      mark="h-full w-auto max-w-full object-contain object-left"
+                    />
+                  </span>
+                  <a
+                    :href="row.href"
+                    class="min-w-0 whitespace-normal text-pretty text-label-lg text-(--text-default)"
+                    @click.stop="follow($event, row.href)"
+                  >
+                    {{ row.values[column.key] }}
+                  </a>
+                </div>
                 <span
                   v-else
                   class="min-w-0 truncate"

@@ -56,6 +56,7 @@ export const FEATURED_CASES = [
   {
     key: 'case-magalu',
     client: byName('Magalu'),
+    brand: { base: '#0e89ff', glow: '#0e89ff' },
     tag: 'Retail',
     description:
       "Explore how Magalu enhances cybersecurity with Azion's Firewall and WAF, improving threat intelligence and bot management in retail.",
@@ -64,6 +65,7 @@ export const FEATURED_CASES = [
   {
     key: 'case-dafiti',
     client: byName('Dafiti'),
+    brand: { base: '#ffffff', glow: '#ffffff', ink: 'dark' },
     tag: 'Retail',
     description:
       'Dafiti modernized its digital architecture to deliver faster, scalable, and resilient experiences for millions of consumers across Latin America.',
@@ -72,6 +74,7 @@ export const FEATURED_CASES = [
   {
     key: 'case-axur',
     client: AXUR,
+    brand: { base: '#e65224', glow: '#ff5824' },
     tag: 'Tech',
     description:
       'Learn how moving AI inference from managed-infrastructure unlocked the fastest automatic takedown in the market.',

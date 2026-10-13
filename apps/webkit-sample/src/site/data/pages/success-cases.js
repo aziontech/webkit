@@ -1,4 +1,3 @@
-import { clientPhoto } from '@aziontech/webkit/assets/client-registry'
 import { CLIENT_STRIP } from '@shared/ui/brand/strips.js'
 
 import { successCaseArticle, successCaseLink, successCaseSlug } from '../success-case-articles.js'
@@ -19,21 +18,18 @@ const productsOf = (products) =>
 
 const INDUSTRIES = unique(SUCCESS_CASES.map((story) => story.industry))
 
-const FEATURED_CELLS = FEATURED_CASES.map((story, index) => {
-  const photo = clientPhoto(story.client)
-  return {
-    name: story.client.name,
-    logo: story.client.logo ?? story.client.logoLight ?? '',
-    href: successCaseLink(story).href,
-    story: story.description,
-    span: index === 0 ? '2' : '1',
-    fill: 'surface',
-    ...(photo ? { photo } : {})
-  }
-})
+const FEATURED_CELLS = FEATURED_CASES.map((story) => ({
+  name: story.client.name,
+  logo: story.client.logo ?? story.client.logoLight ?? '',
+  client: story.client,
+  brand: story.brand,
+  href: successCaseLink(story).href,
+  story: story.description
+}))
 
 const STORY_ROWS = SUCCESS_CASES.map((story) => ({
   href: successCaseLink(story).href,
+  client: story.client,
   group: story.industry,
   values: {
     story: successCaseArticle(successCaseSlug(story))?.title ?? story.client.name,
@@ -71,6 +67,7 @@ export const SUCCESS_CASES_PAGE = [
   },
   {
     section: 'ClientMosaic',
+    kind: 'columns',
     cells: FEATURED_CELLS,
     ariaLabel: 'Featured success stories',
     storyLabel: 'Read story'
