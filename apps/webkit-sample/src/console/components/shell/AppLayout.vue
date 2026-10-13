@@ -11,6 +11,7 @@
   import GlobalHeader from '@aziontech/webkit/global-header'
   import IconButton from '@aziontech/webkit/icon-button'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import { minWidthQuery } from '@shared/lib/breakpoints.js'
   import HeaderSearch from '@shared/ui/HeaderSearch.vue'
   import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
@@ -58,20 +59,19 @@
     }
   )
 
-  const MOBILE_QUERY = '(max-width: 767px)'
   const isMobile = ref(false)
   const navOpen = ref(false)
   const rail = ref(null)
   let mobileMql = null
   const onMobileChange = (event) => {
-    isMobile.value = event.matches
-    if (!event.matches) nextTick(() => rail.value?.measure())
+    isMobile.value = !event.matches
+    if (event.matches) nextTick(() => rail.value?.measure())
   }
 
   onMounted(() => {
-    mobileMql = window.matchMedia?.(MOBILE_QUERY)
+    mobileMql = minWidthQuery('md')
     if (mobileMql) {
-      isMobile.value = mobileMql.matches
+      isMobile.value = !mobileMql.matches
       mobileMql.addEventListener('change', onMobileChange)
     }
   })

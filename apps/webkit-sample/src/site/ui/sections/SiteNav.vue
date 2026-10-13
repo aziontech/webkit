@@ -15,6 +15,7 @@
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import ScrollArea from '@aziontech/webkit/scroll-area'
+  import { minWidthQuery } from '@shared/lib/breakpoints.js'
   import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
   import { useSiteLink } from '../../composables/use-site-link'
@@ -98,7 +99,7 @@
     navOpen.value = false
   }
 
-  const barQuery = globalThis.matchMedia?.('(min-width: 1280px)')
+  const barQuery = minWidthQuery('xl')
   const onBarQueryChange = (event: globalThis.MediaQueryListEvent) => {
     if (event.matches) navOpen.value = false
   }
@@ -249,6 +250,13 @@
     </GlobalHeader.Middle>
 
     <GlobalHeader.Right>
+      <IconButton
+        icon="pi pi-search"
+        kind="outlined"
+        size="medium"
+        aria-label="Search"
+        class="shrink-0"
+      />
       <div class="hidden xl:flex">
         <Button
           :label="contact.label"
@@ -258,15 +266,13 @@
           @click="follow($event, contact.href)"
         />
       </div>
-      <div class="hidden shrink-0 min-[24rem]:flex">
-        <Button
-          :label="login.label"
-          kind="secondary"
-          size="medium"
-          :href="login.href"
-          @click="follow($event, login.href)"
-        />
-      </div>
+      <Button
+        :label="login.label"
+        kind="secondary"
+        size="medium"
+        :href="login.href"
+        @click="follow($event, login.href)"
+      />
       <Button
         :label="cta.label"
         kind="primary"
@@ -274,13 +280,6 @@
         class="shrink-0"
         :href="cta.href"
         @click="follow($event, cta.href)"
-      />
-      <IconButton
-        icon="pi pi-search"
-        kind="outlined"
-        size="medium"
-        aria-label="Search"
-        class="shrink-0"
       />
     </GlobalHeader.Right>
   </GlobalHeader>

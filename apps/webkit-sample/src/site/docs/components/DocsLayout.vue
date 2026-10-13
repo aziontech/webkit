@@ -82,6 +82,7 @@
   import ScrollArea from '@aziontech/webkit/scroll-area'
   import Sidebar from '@aziontech/webkit/sidebar'
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
+  import { minWidthQuery } from '@shared/lib/breakpoints.js'
   import { useTheme } from '@shared/lib/theme.js'
   import HeaderSearch from '@shared/ui/HeaderSearch.vue'
   import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
@@ -377,7 +378,7 @@
   // switches on). The palette's navigation command needs it, so it toggles the rail
   // on a laptop and opens the sheet below one instead of naming a region that is not
   // rendered.
-  const railQuery = globalThis.matchMedia?.('(min-width: 1024px)')
+  const railQuery = minWidthQuery('lg')
   const hasRail = ref(railQuery?.matches ?? true)
   const onRailQueryChange = (event) => {
     hasRail.value = event.matches
@@ -533,7 +534,7 @@
             <!-- The wordmark already says Azion; on a 390px bar the badge is the one
                  piece of the identity that can go. -->
             <span
-              class="hidden rounded-(--shape-elements) border border-(--border-muted) px-(--spacing-xxs) py-px text-overline-sm uppercase tracking-widest text-(--text-muted) sm:inline-block"
+              class="hidden rounded-(--shape-elements) border border-(--border-muted) px-(--spacing-xxs) text-overline-sm text-(--text-muted) sm:inline-block"
             >
               Docs
             </span>
