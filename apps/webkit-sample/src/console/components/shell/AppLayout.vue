@@ -80,10 +80,10 @@
   })
 
   const onNavigate = (event, item) => {
+    if (!routeActivation(event)) return
     activeItem.value = item.id
-    if (item.path && item.path !== route.path) {
-      router.push({ path: item.path, query: { email: userEmail.value, ...item.query } })
-    }
+    if (!item.path) return
+    router.push({ path: item.path, query: { email: userEmail.value, ...item.query } })
   }
 
   const closeNav = () => {

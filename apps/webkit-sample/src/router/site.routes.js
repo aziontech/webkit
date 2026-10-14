@@ -16,24 +16,25 @@
 // The Hub lives under the same `/site` prefix but is its own area (its own shell,
 // its own navigation): see ./hub.routes.js.
 
-import { agentBySlug } from '@site/docs/lib/docs-agent-setup.js'
-import { blogArticle } from '@site/data/blog-articles.js'
-import { successCaseArticle } from '@site/data/success-case-articles.js'
-import { hasDocsPage } from '@site/docs/lib/docs-pages.js'
 import {
   AKAMAI_GUIDE,
   AWS_GUIDE,
   CLOUDFLARE_GUIDE,
   FASTLY_GUIDE
 } from '@site/data/alternative-guides'
-import LandingAlternativeGuide from '@site/views/LandingAlternativeGuide.vue'
+import { blogArticle } from '@site/data/blog-articles.js'
+import { successCaseArticle } from '@site/data/success-case-articles.js'
+import { agentBySlug } from '@site/docs/lib/docs-agent-setup.js'
+import { hasDocsPage } from '@site/docs/lib/docs-pages.js'
 import AzionDocs from '@site/docs/views/AzionDocs.vue'
 import AzionDocsAgentPage from '@site/docs/views/AzionDocsAgentPage.vue'
 import AzionDocsAgentSetup from '@site/docs/views/AzionDocsAgentSetup.vue'
 import AzionDocsPage from '@site/docs/views/AzionDocsPage.vue'
 import LandingAiInference from '@site/views/LandingAiInference.vue'
 import LandingAiWorkloads from '@site/views/LandingAiWorkloads.vue'
+import LandingAlternativeGuide from '@site/views/LandingAlternativeGuide.vue'
 import LandingApplicationAccelerator from '@site/views/LandingApplicationAccelerator.vue'
+import LandingApplications from '@site/views/LandingApplications.vue'
 import LandingAzion from '@site/views/LandingAzion.vue'
 import LandingAzionHeros from '@site/views/LandingAzionHeros.vue'
 import LandingBlog from '@site/views/LandingBlog.vue'
@@ -49,6 +50,7 @@ import LandingFinancialServices from '@site/views/LandingFinancialServices.vue'
 import LandingFunctions from '@site/views/LandingFunctions.vue'
 import LandingGdpr from '@site/views/LandingGdpr.vue'
 import LandingLearning from '@site/views/LandingLearning.vue'
+import LandingObjectStorage from '@site/views/LandingObjectStorage.vue'
 import LandingOurNetwork from '@site/views/LandingOurNetwork.vue'
 import LandingPartners from '@site/views/LandingPartners.vue'
 import LandingPerformance from '@site/views/LandingPerformance.vue'
@@ -115,6 +117,18 @@ export const siteRoutes = [
   // A product page whose hero is the product: the workload's own deployment topology, drawn
   // with the diagram the console renders, dissolved into the band by a dither ramp.
   { path: '/site/products/workloads', name: 'site-workloads', component: LandingWorkloads },
+  // The Products mega-menu's Applications entry: the delivery logic a workload serves.
+  {
+    path: '/site/products/applications',
+    name: 'site-applications',
+    component: LandingApplications
+  },
+  // The Products mega-menu's Object Storage entry.
+  {
+    path: '/site/products/object-storage',
+    name: 'site-object-storage',
+    component: LandingObjectStorage
+  },
   // The one composed entirely from the MARKETING components rather than hand-built bricks —
   // the Products mega-menu's Our Network entry.
   { path: '/site/products/our-network', name: 'site-our-network', component: LandingOurNetwork },

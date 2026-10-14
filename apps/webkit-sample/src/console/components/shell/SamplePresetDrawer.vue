@@ -23,15 +23,26 @@
   import { computed } from 'vue'
 
   import { SAMPLE_MODES } from '../../lib/state/sample-mode'
-  import { DEPLOY_FLOWS, SAMPLE_PLANS, useSamplePreset } from '../../lib/state/sample-preset'
+  import {
+    DEPLOY_FLOWS,
+    NAV_MODELS,
+    SAMPLE_PLANS,
+    useSamplePreset
+  } from '../../lib/state/sample-preset'
 
   const open = defineModel('open', { type: Boolean, default: false })
 
-  const { plan, setPlan, mode, setMode, deployFlow, setDeployFlow } = useSamplePreset()
+  const { plan, setPlan, mode, setMode, deployFlow, setDeployFlow, navModel, setNavModel } =
+    useSamplePreset()
 
   const selectedDeployFlow = computed({
     get: () => deployFlow.value,
     set: (value) => setDeployFlow(value)
+  })
+
+  const selectedNavModel = computed({
+    get: () => navModel.value,
+    set: (value) => setNavModel(value)
   })
 
   const selectedPlan = computed({
@@ -83,6 +94,7 @@
     url.searchParams.set('state', selectedMode.value)
     url.searchParams.set('plan', selectedPlan.value)
     url.searchParams.set('deploy-flow', selectedDeployFlow.value)
+    url.searchParams.set('nav', selectedNavModel.value)
     if (legacyPalette.value) url.searchParams.set('ui', 'legacy')
     else url.searchParams.delete('ui')
     return url.toString()
@@ -153,6 +165,16 @@
                 :items="modeOptions"
                 class="flex-col"
                 aria-label="Account contents"
+              />
+            </section>
+
+            <section class="flex min-w-0 flex-col gap-(--spacing-sm)">
+              <h3 class="m-0 text-label-md text-(--text-default)">Navigation</h3>
+              <BoxGridSelection
+                v-model="selectedNavModel"
+                :items="NAV_MODELS"
+                class="flex-col"
+                aria-label="Navigation"
               />
             </section>
 

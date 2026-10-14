@@ -10,6 +10,71 @@ export const DEFAULT_PERIOD = '24h'
 export const periodLabel = (value) =>
   METRIC_PERIODS.find((period) => period.value === value)?.label ?? 'Last 24 hours'
 
+export const METRIC_DASHBOARD_GROUPS = [
+  {
+    label: 'Build',
+    dashboards: [
+      {
+        id: 'applications',
+        label: 'Applications',
+        description: 'Requests, cache and errors across your applications.'
+      },
+      {
+        id: 'tiered-cache',
+        label: 'Tiered Cache',
+        description: 'Hits, misses and origin offload from the cache tiers.'
+      },
+      {
+        id: 'functions',
+        label: 'Functions',
+        description: 'Invocations, errors and duration of your functions.'
+      },
+      {
+        id: 'image-processor',
+        label: 'Image Processor',
+        description: 'Images processed and transformations served.'
+      }
+    ]
+  },
+  {
+    label: 'Secure',
+    dashboards: [
+      {
+        id: 'waf',
+        label: 'WAF',
+        description: 'Rule matches and threats held by the WAF.'
+      },
+      {
+        id: 'firewall',
+        label: 'Firewall',
+        description: 'Requests allowed, denied and rate limited by your firewalls.'
+      },
+      {
+        id: 'dns',
+        label: 'DNS',
+        description: 'Queries answered by your hosted zones.'
+      },
+      {
+        id: 'bot-manager',
+        label: 'Bot Manager',
+        description: 'Bot traffic classified and actions taken.'
+      }
+    ]
+  },
+  {
+    label: 'Observe',
+    dashboards: [
+      {
+        id: 'data-stream',
+        label: 'Data Stream',
+        description: 'Events collected and delivered to your endpoints.'
+      }
+    ]
+  }
+]
+
+export const METRIC_DASHBOARDS = METRIC_DASHBOARD_GROUPS.flatMap((group) => group.dashboards)
+
 const seriesFor = (seed, points, min, max) => {
   let h = 0x811c9dc5
   for (const char of seed) {

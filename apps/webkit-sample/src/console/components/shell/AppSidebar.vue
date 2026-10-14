@@ -15,6 +15,7 @@
   import { useTheme } from '@shared/lib/theme.js'
   import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
+  import { navTreeFor } from '../../lib/data/nav-tree'
   import { platformResources, searchPlatform } from '../../lib/data/search-index'
   import { SAMPLE_MODES } from '../../lib/state/sample-mode.js'
   import { nextPlanUp, useSamplePreset } from '../../lib/state/sample-preset.js'
@@ -61,189 +62,15 @@
     create: [event: Event]
   }>()
 
-  const NAV_TREE = [
-    {
-      items: [
-        { id: 'overview', label: 'Overview', icon: 'ai ai-home', path: '/home' },
-        { id: 'workloads', label: 'Workloads', icon: 'ai ai-workloads', path: '/workloads' },
-        {
-          id: 'deployments',
-          label: 'Deployments',
-          icon: 'ai ai-deploy-pillar',
-          path: '/deployments'
-        }
-      ]
-    },
-    {
-      label: 'Build',
-      items: [
-        {
-          id: 'applications',
-          label: 'Applications',
-          icon: 'ai ai-edge-application',
-          path: '/applications'
-        },
-        {
-          id: 'functions',
-          label: 'Functions',
-          icon: 'ai ai-edge-functions',
-          path: '/functions'
-        },
-        { id: 'variables', label: 'Variables', icon: 'ai ai-variables', path: '/variables' },
-        {
-          id: 'connectors',
-          label: 'Connectors',
-          icon: 'ai ai-edge-connectors',
-          path: '/connectors'
-        },
-        {
-          id: 'custom-pages',
-          label: 'Custom Pages',
-          icon: 'ai ai-custom-pages',
-          path: '/custom-pages'
-        }
-      ]
-    },
-    {
-      label: 'Secure',
-      items: [
-        {
-          id: 'firewall',
-          label: 'Firewall',
-          icon: 'ai ai-edge-firewall',
-          path: '/firewall'
-        },
-        { id: 'edge-dns', label: 'Edge DNS', icon: 'ai ai-edge-dns', path: '/edge-dns' },
-        { id: 'waf-rules', label: 'WAF Rules', icon: 'ai ai-waf-rules', path: '/waf-rules' },
-        {
-          id: 'certificate-manager',
-          label: 'Certificate Manager',
-          icon: 'ai ai-digital-certificates',
-          path: '/certificates'
-        },
-        {
-          id: 'network-lists',
-          label: 'Network Lists',
-          icon: 'ai ai-network-lists',
-          path: '/network-lists'
-        }
-      ]
-    },
-    {
-      label: 'Store',
-      items: [
-        {
-          id: 'object-storage',
-          label: 'Object Storage',
-          icon: 'ai ai-edge-storage',
-          path: '/object-storage'
-        },
-        {
-          id: 'sql-database',
-          label: 'SQL Database',
-          icon: 'ai ai-edge-sql',
-          path: '/sql-database',
-          tagValue: 'Preview'
-        }
-      ]
-    },
-    {
-      label: 'Observe',
-      items: [
-        {
-          id: 'data-stream',
-          label: 'Data Stream',
-          icon: 'ai ai-data-stream',
-          path: '/data-stream'
-        },
-        { id: 'edge-pulse', label: 'Edge Pulse', icon: 'ai ai-edge-pulse', path: '/edge-pulse' },
-        {
-          id: 'real-time-metrics',
-          label: 'Real-Time Metrics',
-          icon: 'ai ai-real-time-metrics',
-          path: '/real-time-metrics'
-        },
-        {
-          id: 'real-time-events',
-          label: 'Real-Time Events',
-          icon: 'ai ai-real-time-events',
-          path: '/real-time-events'
-        },
-        {
-          id: 'real-time-purge',
-          label: 'Real-Time Purge',
-          icon: 'ai ai-real-time-purge',
-          path: '/real-time-purge'
-        }
-      ]
-    },
-    {
-      label: 'More',
-      items: [
-        {
-          id: 'marketplace',
-          label: 'Marketplace',
-          icon: 'ai ai-marketplace',
-          path: '/marketplace'
-        },
-        {
-          id: 'settings',
-          label: 'Settings',
-          icon: 'pi pi-cog',
-          kind: 'drill',
-          groups: [
-            {
-              label: 'Settings',
-              items: [
-                { id: 'settings-general', label: 'General', path: '/account' },
-                {
-                  id: 'settings-build-deployment',
-                  label: 'Build & Deployment',
-                  path: '/account/build-deployment'
-                },
-                {
-                  id: 'settings-environments',
-                  label: 'Environments',
-                  path: '/account/environments'
-                },
-                { id: 'settings-users', label: 'Users management', path: '/account/users' },
-                { id: 'settings-teams', label: 'Teams and permissions', path: '/account/teams' }
-              ]
-            },
-            {
-              label: 'Access',
-              items: [
-                { id: 'settings-tokens', label: 'Personal Tokens', path: '/personal-tokens' },
-                {
-                  id: 'settings-credentials',
-                  label: 'Credentials',
-                  path: '/account/credentials'
-                },
-                { id: 'settings-security-mfa', label: 'Multi-factor auth' },
-                { id: 'settings-security-sessions', label: 'Active sessions' },
-                { id: 'settings-activity', label: 'Activity History', path: '/account/activity' }
-              ]
-            },
-            {
-              label: 'Billing',
-              items: [
-                { id: 'settings-billing', label: 'Billing and plan', path: '/account/billing' },
-                { id: 'settings-invoices', label: 'Invoices' }
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  ]
-
   const { collapsed, railWidth, expanded, navPath, navEntering, navScroll } = useSidebar()
 
   const { theme } = useTheme()
 
   const userName = computed(() => props.name || props.user.split('@')[0])
 
-  const navGroups = computed(() => NAV_TREE)
+  const { planInfo, mode: sampleMode, navModel } = useSamplePreset()
+
+  const navGroups = computed(() => navTreeFor(navModel.value))
 
   const sidebarRef = ref(null)
 
@@ -321,8 +148,8 @@
   })
 
   watch(
-    () => props.active,
-    (id) => {
+    [() => props.active, navGroups],
+    ([id]) => {
       const ancestors = id
         ? navGroups.value.flatMap((group) => menuPath(group.items, id) ?? [])
         : []
@@ -488,7 +315,6 @@
 
   const accountMenuOpen = ref(false)
 
-  const { planInfo, mode: sampleMode } = useSamplePreset()
 
   const presetSummary = computed(() => {
     const version = SAMPLE_MODES.find((option) => option.value === sampleMode.value)

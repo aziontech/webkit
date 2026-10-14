@@ -2,6 +2,7 @@
   import CardBox from '@aziontech/webkit/card-box'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, ref } from 'vue'
+  import { useRoute } from 'vue-router'
 
   import FilterButton from '../../components/list/FilterButton.vue'
   import FilterChips from '../../components/list/FilterChips.vue'
@@ -10,10 +11,38 @@
   import AppLayout from '../../components/shell/AppLayout.vue'
   import {
     DEFAULT_PERIOD,
+    METRIC_DASHBOARDS,
     METRIC_PERIODS,
     metricsFor,
     periodLabel
   } from '../../lib/data/observability'
+
+  const route = useRoute()
+
+  const dashboard = computed(
+    () => METRIC_DASHBOARDS.find((entry) => entry.id === route.query.dashboard) ?? null
+  )
+
+  const activeId = computed(() =>
+    dashboard.value ? `rtm-${dashboard.value.id}` : 'real-time-metrics'
+  )
+
+  const heading = computed(() => dashboard.value?.label ?? 'Real-Time Metrics')
+
+  const description = computed(
+    () =>
+      dashboard.value?.description ??
+      'Traffic as the edge served it — requests, data transferred and errors, for the selected period.'
+  )
+
+  const crumbs = computed(() =>
+    dashboard.value
+      ? [
+          { label: 'Real-Time Metrics', href: '/real-time-metrics' },
+          { label: dashboard.value.label }
+        ]
+      : [{ label: 'Real-Time Metrics' }]
+  )
 
   const filters = ref({ period: [DEFAULT_PERIOD] })
 
@@ -34,14 +63,14 @@
 
 <template>
   <AppLayout
-    active="real-time-metrics"
-    :breadcrumb="[{ label: 'Real-Time Metrics' }]"
+    :active="activeId"
+    :breadcrumb="crumbs"
   >
     <main class="layout-column flex min-h-full flex-col">
       <PageHeading
         size="medium"
-        title="Real-Time Metrics"
-        description="Traffic as the edge served it — requests, data transferred and errors, for the selected period."
+        :title="heading"
+        :description="description"
       />
 
       <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)">

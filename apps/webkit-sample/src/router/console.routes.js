@@ -61,6 +61,7 @@ import RealTimeMetrics from '@console/pages/observe/RealTimeMetrics.vue'
 import RealTimePurge from '@console/pages/observe/RealTimePurge.vue'
 import CreateResource from '@console/pages/resources/CreateResource.vue'
 import CreationCenter from '@console/pages/resources/CreationCenter.vue'
+import ModuleOverview from '@console/pages/resources/ModuleOverview.vue'
 import ResourceSettings from '@console/pages/resources/ResourceSettings.vue'
 import Certificates from '@console/pages/secure/Certificates.vue'
 import Firewall from '@console/pages/secure/Firewall.vue'
@@ -124,6 +125,12 @@ export const consoleRoutes = [
   // other module create.
   { path: '/organizations/new', name: 'organizations-new', component: CreateOrganization },
   { path: '/dashboard', name: 'dashboard', component: Dashboard },
+  ...['workloads', 'applications', 'functions', 'firewall', 'object-storage'].map((module) => ({
+    path: `/${module}/overview`,
+    name: `${module}-overview`,
+    component: ModuleOverview,
+    props: { module }
+  })),
   { path: '/applications', name: 'applications', component: Applications },
   { path: '/marketplace', name: 'marketplace', component: Marketplace },
   { path: '/workloads', name: 'workloads', component: Workloads },
