@@ -195,6 +195,16 @@ ${indent(actions([START_FREE, SPECIALIST]), 2)}
   </Hero.Title>
 </Hero>`
 
+const CENTERED_CAROUSEL_LONG_TEMPLATE = CENTERED_CAROUSEL_TEMPLATE.replace(
+  'max-width="xl"',
+  'max-width="3xl"'
+)
+  .replace('highlight="Invisible Infrastructure"', 'eyebrow="Functions"')
+  .replace(
+    'title="for the Speed of AI"',
+    'title="Funções serverless instantâneas para aplicações modernas"'
+  )
+
 const TITLE_BAND_TEMPLATE = `<Hero
   kind="band"
   max-width="5xl"
@@ -342,6 +352,19 @@ export const CenteredCarousel = {
           'The home page’s hero: one screen tall, a dot field fading in from the top, the highlighted headline centered, and the eleven-client strip with its overline standing on the floor. The solution pages run the same band with their own copy and client list.'
       },
       source: { code: toSfc([BUTTON_IMPORT, HERO_IMPORT], CENTERED_CAROUSEL_TEMPLATE) }
+    }
+  }
+}
+
+export const CenteredCarouselLongTitle = {
+  render: () => ({ components, template: CENTERED_CAROUSEL_LONG_TEMPLATE }),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The same screen hero for a headline too long for the default column. The title column widens from `xl` to `3xl`, so a headline that would break into three lines breaks into two. Short headlines keep the default column.'
+      },
+      source: { code: toSfc([BUTTON_IMPORT, HERO_IMPORT], CENTERED_CAROUSEL_LONG_TEMPLATE) }
     }
   }
 }
