@@ -105,7 +105,6 @@ const CONTACT_TEMPLATE = `<Hero
   carousel
   carousel-label="The teams our specialists work with"
   :carousel-marks="[${CLIENT_STRIP.map((mark) => `'${mark}'`).join(', ')}]"
-  offset="3.5rem"
   bottom-height="clamp(7rem,16dvh,14rem)"
 >
   <div class="grid grid-cols-1 gap-(--spacing-xxl) py-(--spacing-lg) lg:grid-cols-2">
