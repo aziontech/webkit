@@ -383,14 +383,12 @@ const TEMPLATE = `<GlobalHeader ref="bar" kind="site" aria-label="Azion" class="
   </GlobalHeader.Middle>
 
   <GlobalHeader.Right>
+    <IconButton icon="pi pi-search" kind="outlined" size="medium" aria-label="Search" class="shrink-0" />
     <div class="hidden xl:flex">
       <Button label="Contact" kind="text" size="medium" href="#" />
     </div>
-    <div class="hidden shrink-0 min-[24rem]:flex">
-      <Button label="Login" kind="secondary" size="medium" href="#" />
-    </div>
+    <Button label="Login" kind="secondary" size="medium" href="#" />
     <Button label="Start for Free" kind="primary" size="medium" class="shrink-0" href="#" />
-    <IconButton icon="pi pi-search" kind="outlined" size="medium" aria-label="Search" class="shrink-0" />
   </GlobalHeader.Right>
 </GlobalHeader>
 

@@ -47,7 +47,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Console application shell composed from `GlobalHeader`, `Sidebar`, `TabView` and `Button`: a global header, a persistent navigation sidebar, a page heading with actions, tabs, and scrollable panel content.'
+          'Console application shell composed from `GlobalHeader`, `Sidebar`, `TabView` and `Button`: a global header, a persistent navigation sidebar, a page heading with actions, tabs, and scrollable panel content. The console carries no page footer: the shell ends on its scroll region, and `Footer` belongs to the docs and site shells (Templates › Shells).'
       },
       canvas: { sourceState: 'shown' }
     }
