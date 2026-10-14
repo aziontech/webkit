@@ -520,7 +520,7 @@ const IMPORTS = [
   '  if (count === 0) {',
   "    return 'The selected Deployment setting will be deleted. No environment publishes with it. Check the'",
   '  }',
-  '  return `The selected Deployment setting will be deleted, and ${reachLabel(count)} will fall back to Azion Default on the next deploy. Check the`',
+  '  return "The selected Deployment setting will be deleted, and " + reachLabel(count) + " will fall back to Azion Default on the next deploy. Check the"',
   '})',
   '',
   'const onSettingAction = (event, value, row) => {',
