@@ -22,6 +22,8 @@
 
   export type HeroesScenePlacement = 'bottom' | 'top'
 
+  export type HeroesTitleLength = 'short' | 'long'
+
   export interface HeroesArt {
     /** Illustration name, also the key of the art's bounds in hero-art.js. */
     name: string
@@ -49,6 +51,8 @@
     eyebrow?: string
     /** Mark set before the eyebrow. */
     eyebrowPrefix?: HeroTitleEyebrowPrefix
+    /** Length of the headline; long widens its column so it breaks into two lines instead of three. */
+    titleLength?: HeroesTitleLength
     /** Opening phrase of the headline, in the brand accent. */
     highlight?: string
     /** The page's h1. */
@@ -74,6 +78,7 @@
     anchor: '',
     eyebrow: '',
     eyebrowPrefix: '',
+    titleLength: 'short',
     highlight: '',
     description: '',
     actions: () => [],
@@ -129,10 +134,22 @@
     'copy-on-top-art': { centered: true }
   } as const
 
+  const LONG_TITLE_WIDTH = {
+    'centered-carousel': '3xl',
+    'centered-band': '3xl'
+  } as const
+
   const hasCarousel = computed(() => props.carouselMarks.length > 0)
 
   const frame = computed(() => FRAMES[props.kind])
-  const titleFrame = computed(() => TITLES[props.kind])
+  const titleFrame = computed(() => {
+    const base = TITLES[props.kind]
+    const widened =
+      props.titleLength === 'long'
+        ? LONG_TITLE_WIDTH[props.kind as keyof typeof LONG_TITLE_WIDTH]
+        : undefined
+    return widened ? { ...base, maxWidth: widened } : base
+  })
   const sceneOnTop = computed(() => Boolean(props.scene) && props.scenePlacement === 'top')
   const sceneOnBottom = computed(() => Boolean(props.scene) && props.scenePlacement === 'bottom')
   const hasArt = computed(() => props.kind === 'copy-beside-art' && Boolean(props.art))
