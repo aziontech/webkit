@@ -2,8 +2,8 @@
   import SectionModule from '@aziontech/webkit/section-module'
 
   import { COMPARISON_SECTIONS, ON_DEMAND_LINK, PLANS } from '../../data/pricing.js'
-  import PlanMatrix from './PlanMatrix.vue'
   import type { PlanMatrixPlan, PlanMatrixSection } from './PlanMatrix.vue'
+  import PlanMatrix from './PlanMatrix.vue'
   import type { SiteAction, SiteLink } from './types'
 
   defineOptions({ name: 'ComparePlans' })

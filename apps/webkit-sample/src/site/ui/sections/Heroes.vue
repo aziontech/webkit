@@ -1,10 +1,10 @@
 <script setup lang="ts">
   import Hero from '@aziontech/webkit/hero-root'
-  import HeroTitle from '@aziontech/webkit/hero-title'
   import type { HeroTitleEyebrowPrefix } from '@aziontech/webkit/hero-title'
+  import HeroTitle from '@aziontech/webkit/hero-title'
   import Illustration from '@aziontech/webkit/illustration'
-  import { computed } from 'vue'
   import type { Component } from 'vue'
+  import { computed } from 'vue'
 
   import { heroArt } from '../../data/hero-art.js'
   import SectionAction from './SectionAction.vue'
@@ -113,6 +113,7 @@
       kind: 'screen',
       align: 'center',
       maxWidth: 'site',
+      padded: false,
       texture: 'dots',
       textureSize: 'small',
       textureFade: 'top'

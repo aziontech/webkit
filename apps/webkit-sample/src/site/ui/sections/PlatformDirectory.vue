@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import ColumnNavigation from '@aziontech/webkit/column-navigation-root'
   import ColumnNavigationColumn from '@aziontech/webkit/column-navigation-column'
   import ColumnNavigationItem from '@aziontech/webkit/column-navigation-item'
+  import ColumnNavigation from '@aziontech/webkit/column-navigation-root'
   import FrameBox from '@aziontech/webkit/frame-box'
   import SectionModule from '@aziontech/webkit/section-module'
   import SectionTitle from '@aziontech/webkit/section-title'

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import CodeBlock from '@aziontech/webkit/code-block'
   import type { CodeBlockTab } from '@aziontech/webkit/code-block'
+  import CodeBlock from '@aziontech/webkit/code-block'
   import FrameBox from '@aziontech/webkit/frame-box'
   import SectionModule from '@aziontech/webkit/section-module'
   import SectionTitle from '@aziontech/webkit/section-title'

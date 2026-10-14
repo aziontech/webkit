@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import BigNumbers from '@aziontech/webkit/big-numbers'
   import type { BigNumberItem } from '@aziontech/webkit/big-numbers'
+  import BigNumbers from '@aziontech/webkit/big-numbers'
   import FrameBox from '@aziontech/webkit/frame-box'
   import SectionModule from '@aziontech/webkit/section-module'
 

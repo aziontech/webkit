@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import CardGrid from '@aziontech/webkit/card-grid-root'
   import CardGridCell from '@aziontech/webkit/card-grid-cell'
+  import CardGrid from '@aziontech/webkit/card-grid-root'
   import MediaSplit from '@aziontech/webkit/media-split'
   import SectionModule from '@aziontech/webkit/section-module'
   import Topic from '@aziontech/webkit/topic'

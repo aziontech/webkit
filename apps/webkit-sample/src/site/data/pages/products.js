@@ -120,6 +120,18 @@ const PRODUCT_DIRECTORY = [
     label: 'Compute',
     items: [
       {
+        icon: 'ai ai-workloads',
+        title: 'Workloads',
+        description: 'Put an application on a hostname, everywhere',
+        href: '/site/products/workloads'
+      },
+      {
+        icon: 'ai ai-edge-application',
+        title: 'Applications',
+        description: 'Decide what happens to every request',
+        href: '/site/products/applications'
+      },
+      {
         icon: 'ai ai-edge-functions',
         title: 'Functions',
         description: 'Run serverless code closer to users',
@@ -163,7 +175,7 @@ const PRODUCT_DIRECTORY = [
         icon: 'ai ai-edge-storage',
         title: 'Object Storage',
         description: 'Scalable, durable storage for unstructured data',
-        href: 'https://www.azion.com/en/products/object-storage/'
+        href: '/site/products/object-storage'
       },
       {
         icon: 'ai ai-edge-sql',

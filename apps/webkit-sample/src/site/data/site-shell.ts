@@ -77,7 +77,11 @@ const PRODUCTS: SiteNavMenu = {
             description: 'Put an application on a hostname, everywhere',
             href: '/site/products/workloads'
           },
-          { label: 'Applications', description: 'Deliver and configure web applications' },
+          {
+            label: 'Applications',
+            description: 'Deliver and configure web applications',
+            href: '/site/products/applications'
+          },
           {
             label: 'Functions',
             description: 'Run serverless code at the edge',
@@ -109,7 +113,11 @@ const PRODUCTS: SiteNavMenu = {
         href: '/site/products#store',
         items: [
           { label: 'SQL Database', description: 'A distributed SQL database' },
-          { label: 'Object Storage', description: 'Store and serve objects at the edge' },
+          {
+            label: 'Object Storage',
+            description: 'Store and serve objects at the edge',
+            href: '/site/products/object-storage'
+          },
           { label: 'KV Store', description: 'Low-latency key-value store' }
         ]
       }

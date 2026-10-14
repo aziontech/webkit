@@ -11,6 +11,8 @@ export interface SceneScriptOptions {
   play: (wait: SceneWait) => Promise<void>
   /** Milliseconds the last frame holds before the pass starts over. */
   hold?: number
+  /** Milliseconds between the reset frame and the first beat. */
+  lead?: number
   /** Whether the scene is the one showing, for scenes that share a frame; on screen alone plays when omitted. */
   active?: () => boolean
 }
@@ -23,7 +25,7 @@ class Cancelled extends Error {}
 
 export function useSceneScript(
   target: Ref<Element | null>,
-  { reset, settle, play, hold = 3200, active = () => true }: SceneScriptOptions
+  { reset, settle, play, hold = 3200, lead = 600, active = () => true }: SceneScriptOptions
 ): UseSceneScriptReturn {
   const playing = ref(false)
   let run = 0
@@ -53,7 +55,7 @@ export function useSceneScript(
     try {
       for (;;) {
         reset()
-        await wait(600)
+        await wait(lead)
         await play(wait)
         await wait(hold)
       }

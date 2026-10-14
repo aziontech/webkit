@@ -2,8 +2,7 @@ import { CLIENTS } from '@aziontech/webkit/assets/client-registry'
 import { CLIENT_STRIP } from '@shared/ui/brand/strips.js'
 
 import { AREZZO, AXUR, CONTABILIZEI, CREFISA } from '../clients.js'
-import { BUILD_CTA } from '../solutions.js'
-import { EARTH_NETWORK } from '../solutions.js'
+import { BUILD_CTA , EARTH_NETWORK } from '../solutions.js'
 
 const byName = (name) => CLIENTS.find((client) => client.name === name)
 

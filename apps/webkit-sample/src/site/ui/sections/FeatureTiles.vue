@@ -84,7 +84,7 @@
           kind="canvas"
           :padded="false"
         >
-          <MediaTile
+          <MediaTile key="media-tile-1"
             v-if="kind === 'artwork'"
             kind="plain"
             :src="tile.src ?? ''"
@@ -92,7 +92,7 @@
             :title="tile.title"
             :description="tile.description"
           />
-          <MediaTile
+          <MediaTile key="media-tile-2"
             v-else
             kind="plain"
             :title="tile.title"

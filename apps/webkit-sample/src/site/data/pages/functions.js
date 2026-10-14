@@ -2,7 +2,7 @@ import contabilizeiTile from '@aziontech/webkit/assets/contabilizei-symbol-color
 import { markRaw } from 'vue'
 
 import FunctionsStartScene from '../../ui/FunctionsStartScene.vue'
-import FunctionsTerminalScene from '../../ui/FunctionsTerminalScene.vue'
+import { cliBand } from '../cli-band.js'
 import { START_TABS } from '../functions-start.js'
 import {
   PRODUCT_CLOSING,
@@ -196,70 +196,6 @@ const CAPABILITIES = [
   }
 ]
 
-const FILE_UPLOAD = `${IMPORT} type { AzionBucketObject, AzionStorageResponse } from "azion/storage";
-${IMPORT} { createObject } from "azion/storage";
-${IMPORT} { Hono } from "hono";
-
-const app = new Hono();
-
-app.post("/upload", async (c) => {
-  const body = await c.req.parseBody();
-  const file = body["file"]; // File | string
-
-  // First check if file is a valid File object
-  if (
-    !file ||
-    typeof file !== "object" ||
-    typeof file.arrayBuffer !== "function"
-  ) {
-    return c.json({ message: "Invalid file" }, 400);
-  }
-
-  const { data: newObject } = (await createObject({
-    bucket: "uploads",
-    key: file.name,
-    content: await file.arrayBuffer(),
-  })) as AzionStorageResponse<AzionBucketObject>;
-
-  return c.json({ key: newObject?.key }, 201, {
-    "Content-Type": file.type,
-    "Content-Disposition": \`attachment; filename="\${newObject?.key}"\`,
-    "Content-Length": newObject?.size?.toString() ?? "0",
-  });
-});
-
-export default app;`
-
-const TRANSACTIONAL_EMAIL = `${IMPORT} { Hono } from "hono";
-
-const app = new Hono();
-
-app.post("/welcome", async (c) => {
-  const { email, name } = await c.req.json();
-
-  // The API key lives in the workload's environment, never in the bundle
-  const sent = await fetch("https://api.provider.com/v1/messages", {
-    method: "POST",
-    headers: {
-      Authorization: \`Bearer \${Azion.env.get("EMAIL_API_KEY")}\`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      to: email,
-      subject: "Welcome aboard",
-      text: \`Hi \${name}, your account is ready.\`,
-    }),
-  });
-
-  if (!sent.ok) {
-    return c.json({ message: "Could not send the email" }, 502);
-  }
-
-  return c.json({ queued: true }, 202);
-});
-
-export default app;`
-
 const PLATFORM_GROUPS = [
   {
     label: 'Compute',
@@ -269,7 +205,12 @@ const PLATFORM_GROUPS = [
         title: 'Functions',
         description: 'Run code globally'
       },
-      { icon: 'pi pi-sitemap', title: 'Rules', description: 'Control traffic routing' },
+      {
+        icon: 'ai ai-edge-application',
+        title: 'Applications',
+        description: 'Decide what happens to every request',
+        href: '/site/products/applications'
+      },
       {
         icon: 'ai ai-load-balancer',
         title: 'Load Balancer',
@@ -288,7 +229,8 @@ const PLATFORM_GROUPS = [
       {
         icon: 'ai ai-edge-ai',
         title: 'AI Inference',
-        description: 'Run low-latency models'
+        description: 'Run low-latency models',
+        href: '/site/products/ai-inference'
       },
       { icon: 'ai ai-gateway', title: 'AI Gateway', description: 'Govern and route LLMs' }
     ]
@@ -299,7 +241,8 @@ const PLATFORM_GROUPS = [
       {
         icon: 'ai ai-edge-storage',
         title: 'Object Storage',
-        description: 'Store and deliver globally'
+        description: 'Store and deliver globally',
+        href: '/site/products/object-storage'
       },
       {
         icon: 'ai ai-edge-sql',
@@ -310,7 +253,8 @@ const PLATFORM_GROUPS = [
       {
         icon: 'ai ai-tiered-cache',
         title: 'Cache',
-        description: 'Accelerate delivery and availability'
+        description: 'Accelerate delivery and availability',
+        href: '/site/products/cache'
       }
     ]
   },
@@ -334,65 +278,6 @@ const PLATFORM_GROUPS = [
       },
       { icon: 'ai ai-edge-dns', title: 'DNS', description: 'High-performance DNS' }
     ]
-  }
-]
-
-const RATE_LIMIT = `export default {
-  async fetch(request) {
-    const kv = await Azion.KV.open('rate-limits')
-    const ip = request.headers.get('x-forwarded-for') ?? ''
-    const key = \`\${ip}:\${Math.floor(Date.now() / 60000)}\`
-
-    const count = Number((await kv.get(key)) ?? 0)
-    if (count >= 100) return new Response(null, { status: 429 })
-
-    await kv.put(key, String(count + 1), { expirationTtl: 120 })
-    return fetch(request)
-  }
-}`
-
-const RECIPE_FILES = [
-  {
-    label: 'Transactional email',
-    value: 'transactional-email',
-    language: 'typescript',
-    code: TRANSACTIONAL_EMAIL,
-    fileName: 'github.com/aziontech/azion-samples',
-    fileIcon: 'pi pi-github'
-  },
-  {
-    label: 'File upload',
-    value: 'file-upload',
-    language: 'typescript',
-    code: FILE_UPLOAD,
-    fileName: 'github.com/aziontech/azion-samples',
-    fileIcon: 'pi pi-github'
-  },
-  {
-    label: 'Rate limit',
-    value: 'rate-limit',
-    language: 'javascript',
-    code: RATE_LIMIT,
-    fileName: 'rate-limit.js',
-    fileIcon: 'ai ai-edge-functions'
-  }
-]
-
-const RECIPES = [
-  {
-    title: 'Send transactional emails',
-    description:
-      'Call your email provider from a function, with the API key kept in the environment and out of the bundle.'
-  },
-  {
-    title: 'Accept file uploads',
-    description:
-      'Parse a multipart form, write the file to Object Storage, and answer with its key.'
-  },
-  {
-    title: 'Rate-limit an API',
-    description:
-      'Count requests per client in KV Store and answer 429 before the request reaches your origin.'
   }
 ]
 
@@ -465,13 +350,6 @@ const FAQ = [
   }
 ]
 
-const READ_DOCS = {
-  label: 'Read the docs',
-  href: PRODUCT_DOCS,
-  kind: 'outlined',
-  icon: 'pi pi-book'
-}
-
 export const FUNCTIONS_PAGE = [
   {
     section: 'Heroes',
@@ -509,17 +387,6 @@ export const FUNCTIONS_PAGE = [
   },
   { section: 'CapabilityGrid', items: CAPABILITIES },
   {
-    section: 'CodeSplit',
-    kind: 'recipes',
-    title: 'From hello world to production APIs',
-    description:
-      'Starting points for the work a function does most: talking to APIs, storing files, and protecting origins.',
-    files: RECIPE_FILES,
-    defaultFile: 'transactional-email',
-    copyAriaLabel: 'Copy the function sample',
-    recipes: RECIPES
-  },
-  {
     section: 'QuoteBand',
     kind: 'highlight',
     text: 'With Azion, Contabilizei improved request delivery at the Edge, reduced infrastructure costs, and gained fast access to support whenever needed.',
@@ -530,20 +397,10 @@ export const FUNCTIONS_PAGE = [
   },
   { ...PRODUCT_DIRECTORY, groups: PLATFORM_GROUPS },
   { section: 'FaqSection', items: FAQ },
-  {
-    section: 'MediaSplitBand',
-    eyebrow: 'Azion CLI',
+  cliBand({
     title: 'Deploy your first function in two commands',
     description:
-      'Link a project, deploy it, and curl the domain the CLI hands back. Builds run on your machine with --local, or on Azion.',
-    scene: {
-      component: markRaw(FunctionsTerminalScene),
-      props: { script: 'deploy', texture: false }
-    },
-    actions: [
-      { label: 'Start free', href: '/signup' },
-      { ...READ_DOCS, label: 'Install the CLI' }
-    ]
-  },
+      'Link a project, deploy it, and curl the domain the CLI hands back. Builds run on your machine with --local, or on Azion.'
+  }),
   PRODUCT_CLOSING
 ]

@@ -13,6 +13,7 @@ import ComparePlans from './ComparePlans.vue'
 import CompareSupportTiers from './CompareSupportTiers.vue'
 import ComparisonTable from './ComparisonTable.vue'
 import ComplianceBadges from './ComplianceBadges.vue'
+import ConsolePanel from './ConsolePanel.vue'
 import FaqSection from './FaqSection.vue'
 import FeatureTabs from './FeatureTabs.vue'
 import FeatureTiles from './FeatureTiles.vue'
@@ -34,6 +35,7 @@ import StatsBand from './StatsBand.vue'
 import StickyScrollCode from './StickyScrollCode.vue'
 import SubjectLibrary from './SubjectLibrary.vue'
 import TemplateGallery from './TemplateGallery.vue'
+import WidgetGrid from './WidgetGrid.vue'
 
 export const SECTIONS: Record<string, Component> = {
   ArticleBody,
@@ -49,6 +51,7 @@ export const SECTIONS: Record<string, Component> = {
   CompareSupportTiers,
   ComparisonTable,
   ComplianceBadges,
+  ConsolePanel,
   FaqSection,
   FeatureTabs,
   FeatureTiles,
@@ -69,7 +72,8 @@ export const SECTIONS: Record<string, Component> = {
   StatsBand,
   StickyScrollCode,
   SubjectLibrary,
-  TemplateGallery
+  TemplateGallery,
+  WidgetGrid
 }
 
 export const HERO_SECTIONS = new Set(['ArticleBody', 'Heroes', 'HeroForm', 'PricingPlans'])

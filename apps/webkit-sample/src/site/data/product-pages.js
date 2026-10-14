@@ -55,3 +55,113 @@ export const withWallClient = (client) => [...CACHE_FAMILY_WALL, wallItem(client
 
 export const foldList = (description, items) =>
   `${description} ${items.map((item) => item.label).join(', ')}.`
+
+export const PRODUCT_GROUPS = [
+  {
+    label: 'Compute',
+    items: [
+      {
+        icon: 'ai ai-workloads',
+        title: 'Workloads',
+        description: 'Put an application on a hostname, everywhere',
+        href: '/site/products/workloads'
+      },
+      {
+        icon: 'ai ai-edge-application',
+        title: 'Applications',
+        description: 'Decide what happens to every request',
+        href: '/site/products/applications'
+      },
+      {
+        icon: 'ai ai-edge-functions',
+        title: 'Functions',
+        description: 'Run serverless code at the edge',
+        href: '/site/products/functions'
+      },
+      {
+        icon: 'ai ai-load-balancer',
+        title: 'Load Balancer',
+        description: 'Distribute traffic for availability'
+      }
+    ]
+  },
+  {
+    label: 'Deliver',
+    items: [
+      {
+        icon: 'ai ai-tiered-cache',
+        title: 'Cache',
+        description: 'Speed up content delivery',
+        href: '/site/products/cache'
+      },
+      {
+        icon: 'ai ai-edge-application',
+        title: 'Application Accelerator',
+        description: 'Optimize dynamic applications',
+        href: '/site/products/application-accelerator'
+      },
+      {
+        icon: 'ai ai-layers',
+        title: 'Image Processor',
+        description: 'Optimize and transform images in real time'
+      },
+      {
+        icon: 'ai ai-edge-dns',
+        title: 'DNS',
+        description: 'Distributed authoritative DNS'
+      }
+    ]
+  },
+  {
+    label: 'Store',
+    items: [
+      {
+        icon: 'ai ai-edge-storage',
+        title: 'Object Storage',
+        description: 'Store and serve objects at the edge',
+        href: '/site/products/object-storage'
+      },
+      {
+        icon: 'ai ai-edge-sql',
+        title: 'SQL Database',
+        description: 'A distributed SQL database'
+      },
+      {
+        icon: 'ai ai-edge-kv',
+        title: 'KV Store',
+        description: 'Low-latency key-value store'
+      },
+      {
+        icon: 'ai ai-edge-ai',
+        title: 'AI Inference',
+        description: 'Run models close to the user',
+        href: '/site/products/ai-inference'
+      }
+    ]
+  },
+  {
+    label: 'Secure',
+    items: [
+      {
+        icon: 'ai ai-edge-firewall',
+        title: 'Firewall',
+        description: 'Filter every request before it reaches your code'
+      },
+      {
+        icon: 'ai ai-waf-rules',
+        title: 'WAF',
+        description: 'Web application firewall'
+      },
+      {
+        icon: 'ai ai-network-lists',
+        title: 'Network Shield',
+        description: 'Network and DDoS protection'
+      },
+      {
+        icon: 'ai ai-real-time-metrics',
+        title: 'Real-Time Metrics',
+        description: 'Watch traffic, errors and latency as they happen'
+      }
+    ]
+  }
+]

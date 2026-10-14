@@ -3,8 +3,8 @@
   import SectionGap from '@aziontech/webkit/section-gap'
   import { computed } from 'vue'
 
-  import { HERO_SECTIONS, SECTIONS } from './sections'
   import type { PageSection } from './sections'
+  import { HERO_SECTIONS, SECTIONS } from './sections'
 
   defineOptions({ name: 'SitePage' })
 

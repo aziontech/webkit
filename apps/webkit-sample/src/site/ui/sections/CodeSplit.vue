@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import CodeBlock from '@aziontech/webkit/code-block'
   import type { CodeBlockTab } from '@aziontech/webkit/code-block'
+  import CodeBlock from '@aziontech/webkit/code-block'
   import FrameBox from '@aziontech/webkit/frame-box'
   import MediaSplit from '@aziontech/webkit/media-split'
   import SectionModule from '@aziontech/webkit/section-module'
@@ -49,7 +49,7 @@
 </script>
 
 <template>
-  <SectionModule
+  <SectionModule key="section-module-1"
     v-if="kind === 'default'"
     :id="anchor || undefined"
     :divided="false"
@@ -90,7 +90,7 @@
     </MediaSplit>
   </SectionModule>
 
-  <SectionModule
+  <SectionModule key="section-module-2"
     v-else
     :id="anchor || undefined"
     :divided="false"

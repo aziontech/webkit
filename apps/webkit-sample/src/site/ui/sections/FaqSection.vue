@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import Faq from '@aziontech/webkit/faq'
   import type { FaqItem } from '@aziontech/webkit/faq'
+  import Faq from '@aziontech/webkit/faq'
   import SectionModule from '@aziontech/webkit/section-module'
 
   import { useSiteLink } from '../../composables/use-site-link'

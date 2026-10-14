@@ -27,6 +27,21 @@ const command = (text) => ({ kind: 'command', text })
 const out = (text) => ({ kind: 'output', text })
 const gap = { kind: 'gap', text: '' }
 
+const deploySession = ({ name, preset, domain, response, after = [] }) => [
+  command(`azion link --preset ${preset} --name ${name} --auto`),
+  out('Project successfully configured'),
+  gap,
+  command('azion deploy --auto'),
+  out('Uploading source files'),
+  out('Upload completed successfully!'),
+  out('Your Application was deployed successfully'),
+  out(`Domain: https://${domain}`),
+  gap,
+  command(`curl https://${domain}/`),
+  out(response),
+  ...after
+]
+
 export const TERMINAL_SCRIPTS = {
   start: [
     command('azion init'),
@@ -44,19 +59,35 @@ export const TERMINAL_SCRIPTS = {
     command(`curl https://${FUNCTION_DOMAIN}/`),
     out('Hello World')
   ],
-  deploy: [
-    command(`azion link --preset javascript --name ${FUNCTION_NAME} --auto`),
-    out('Project successfully configured'),
-    gap,
-    command('azion deploy --auto'),
-    out('Uploading source files'),
-    out('Upload completed successfully!'),
-    out('Your Application was deployed successfully'),
-    out(`Domain: https://${FUNCTION_DOMAIN}`),
-    gap,
-    command(`curl https://${FUNCTION_DOMAIN}/`),
-    out('Hello World')
-  ]
+  deploy: deploySession({
+    name: FUNCTION_NAME,
+    preset: 'javascript',
+    domain: FUNCTION_DOMAIN,
+    response: 'Hello World'
+  }),
+  deployApplication: deploySession({
+    name: 'storefront',
+    preset: 'vue',
+    domain: 'x9d3k2ma1p.map.azionedge.net',
+    response: '<!doctype html>'
+  }),
+  deployWorkload: deploySession({
+    name: 'storefront-prod',
+    preset: 'next',
+    domain: 'w1082318.azion.run',
+    response: '<!doctype html>'
+  }),
+  deployStorage: deploySession({
+    name: 'media-site',
+    preset: 'vue',
+    domain: 'q4m8vz2nte.map.azionedge.net',
+    response: '<!doctype html>',
+    after: [
+      gap,
+      command('azion storage sync ./uploads --bucket media-assets'),
+      out('Upload completed successfully!')
+    ]
+  })
 }
 
 export const AGENT_CLIENTS = [

@@ -7,12 +7,12 @@
 // literally "CpRA" (a source typo); the badge renders it uppercase either way, so the label here
 // is spelled out correctly as CPRA.
 
-import socBadge from '@aziontech/webkit/assets/soc-symbol-color.svg'
-import pciBadge from '@aziontech/webkit/assets/pci-dss-symbol-color.svg'
-import lgpdBadge from '@aziontech/webkit/assets/lgpd-symbol-color.svg'
-import gdprBadge from '@aziontech/webkit/assets/gdpr-symbol-color.svg'
 import ccpaBadge from '@aziontech/webkit/assets/ccpa-symbol-color.svg'
 import cpraBadge from '@aziontech/webkit/assets/cpra-symbol-color.svg'
+import gdprBadge from '@aziontech/webkit/assets/gdpr-symbol-color.svg'
+import lgpdBadge from '@aziontech/webkit/assets/lgpd-symbol-color.svg'
+import pciBadge from '@aziontech/webkit/assets/pci-dss-symbol-color.svg'
+import socBadge from '@aziontech/webkit/assets/soc-symbol-color.svg'
 
 const DOCS = 'https://www.azion.com/pt-br/documentacao'
 

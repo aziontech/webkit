@@ -2,8 +2,8 @@
   import SectionModule from '@aziontech/webkit/section-module'
 
   import { SUPPORT_SECTIONS, SUPPORT_TIERS } from '../../data/support.js'
-  import PlanMatrix from './PlanMatrix.vue'
   import type { PlanMatrixPlan, PlanMatrixSection } from './PlanMatrix.vue'
+  import PlanMatrix from './PlanMatrix.vue'
   import type { SiteAction } from './types'
 
   defineOptions({ name: 'CompareSupportTiers' })

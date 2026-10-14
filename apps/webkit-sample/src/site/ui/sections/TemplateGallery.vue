@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
-  import CardGrid from '@aziontech/webkit/card-grid-root'
   import CardGridCell from '@aziontech/webkit/card-grid-cell'
+  import CardGrid from '@aziontech/webkit/card-grid-root'
   import FrameBox from '@aziontech/webkit/frame-box'
   import MediaSplit from '@aziontech/webkit/media-split'
   import ScrollArea from '@aziontech/webkit/scroll-area'
@@ -10,8 +10,8 @@
   import { DEPLOY_TEMPLATES } from '@shared/lib/deploy-templates.js'
   import { PRODUCT_STACK } from '@shared/ui/brand/strips.js'
   import { computed } from 'vue'
-  import { useRouter } from 'vue-router'
   import type { RouteLocationRaw } from 'vue-router'
+  import { useRouter } from 'vue-router'
 
   import { useSiteLink } from '../../composables/use-site-link'
   import SectionAction from './SectionAction.vue'

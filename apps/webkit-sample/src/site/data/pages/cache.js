@@ -1,3 +1,4 @@
+import { CONTABILIZEI } from '../clients.js'
 import {
   CACHE_FAMILY_WALL,
   foldList,
@@ -7,7 +8,6 @@ import {
   PRODUCT_DOCS,
   PRODUCT_HERO_ACTIONS
 } from '../product-pages.js'
-import { CONTABILIZEI } from '../clients.js'
 
 const PILLARS = [
   {

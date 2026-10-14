@@ -23,17 +23,21 @@
     texture?: boolean
     /** Keeps only the latest lines that fit the frame's height, for a frame of fixed height. */
     fit?: boolean
+    /** Playback rate; 2 types and advances twice as fast. */
+    speed?: number
   }
 
   const props = withDefaults(defineProps<Props>(), {
     script: 'start',
     active: true,
     texture: true,
-    fit: false
+    fit: false,
+    speed: 1
   })
 
   const LINE_HEIGHT = 20
   const CHROME = 72
+  const BLOCK_CHROME = 66
   const MAX_LINES = 14
 
   const lines = computed<TerminalLine[]>(
@@ -64,13 +68,19 @@
 
   const toText = (line: TerminalLine) => (line.kind === 'output' ? `# ${line.text}` : line.text)
 
+  const reservedLines = computed(() => Math.min(capacity.value, lines.value.length))
+
+  const blockStyle = computed(() => ({
+    minHeight: `${reservedLines.value * LINE_HEIGHT + BLOCK_CHROME}px`
+  }))
+
   const tab = computed<CodeBlockTab>(() => ({
     label: 'Terminal',
     value: 'terminal',
     language: 'bash',
     code: shown.value.slice(-capacity.value).map(toText).join('\n') || ' ',
     fileName: 'terminal',
-    fileIcon: 'pi pi-code'
+    fileIcon: 'ai ai-azion-cli'
   }))
 
   const push = (line: TerminalLine) => {
@@ -82,7 +92,8 @@
   }
 
   useSceneScript(root, {
-    hold: 6000,
+    hold: 6000 / props.speed,
+    lead: 0,
     active: () => props.active,
     reset: () => {
       shown.value = []
@@ -90,7 +101,8 @@
     settle: () => {
       shown.value = lines.value
     },
-    play: async (wait) => {
+    play: async (rawWait) => {
+      const wait = (ms: number) => rawWait(ms / props.speed)
       for (const line of lines.value) {
         if (line.kind === 'command') {
           push({ ...line, text: '' })
@@ -127,9 +139,15 @@
         fade="top"
       />
     </div>
-    <div class="relative z-10 w-full min-w-0 rounded-(--shape-elements) shadow-(--shadow-sm)">
+    <div
+      :style="blockStyle"
+      class="relative z-10 flex w-full min-w-0 flex-col rounded-(--shape-elements) shadow-(--shadow-sm)"
+    >
       <CodeBlock
+        class="flex-1"
         :tabs="[tab]"
+        :show-line-numbers="false"
+        animate-lines
         copy-aria-label="Copy the terminal session"
       />
     </div>
