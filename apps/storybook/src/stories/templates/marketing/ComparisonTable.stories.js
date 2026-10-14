@@ -7,6 +7,7 @@ import SectionModule from '@aziontech/webkit/section-module'
 import SectionTitle from '@aziontech/webkit/section-title'
 
 import { COLUMN_IMPORTS, each, inColumn, indent } from '../../_shared/markup'
+import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 
 const IMPORTS = [
@@ -143,16 +144,12 @@ ${each(CAPABILITIES, row, 3)}
 
 const meta = {
   title: 'Templates/Marketing/Content/ComparisonTable',
-  tags: ['autodocs'],
+  excludeStories: ['SITE_SECTION'],
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
     controls: { disable: true },
     docs: {
-      description: {
-        component:
-          'A capability-by-capability matrix of Azion against one competitor, as a real `table` so a screen reader announces each row with its column. A tick marks full support, an em dash marks absence, and anything in between is stated as text; the two glyphs carry their meaning in `sr-only` text. The header row is sticky at `top-14`, the height of the site’s sticky nav, so the column names stay on screen past the first rows. The Vercel Alternative landing page carries it; the Pricing page’s plan matrix is the same form across three plans, and ships as `ComparePlans`. Built from `SectionModule` and `SectionTitle`, with `Brand` for the Azion column and the competitor’s logo asset for the other.'
-      },
       canvas: { sourceState: 'shown' }
     }
   }
@@ -168,11 +165,52 @@ export const AzionVsVercel = {
   }),
   parameters: {
     docs: {
-      description: {
-        story:
-          'All twenty-three rows of the Vercel comparison. The Vercel logo ships as two files, the reversed one for the dark theme and the mono one for light, and CSS shows one per theme.'
-      },
       source: { code: toSfc(IMPORTS, TEMPLATE) }
     }
   }
+}
+
+export const SITE_SECTION = {
+  _id: 'comparison-table',
+  props: {
+    eyebrow: 'Comparison',
+    title: 'How Azion compares with Vercel',
+    caption: 'How Azion compares with Vercel',
+    columnLabel: 'Capability',
+    fullLabel: 'Full support',
+    partialLabel: 'Partial support',
+    noneLabel: 'Not available',
+    competitor: {
+      name: 'Vercel',
+      logo: '/marketing-components/competitors/vercel-extended-reversed.svg',
+      logoLight: '/marketing-components/competitors/vercel-extended-mono.svg'
+    },
+    rows: [
+      {
+        capability: 'Delivery, compute, storage, and security on one platform',
+        azion: 'full',
+        competitor: 'partial'
+      },
+      {
+        capability: 'Git-connected builds and preview deployments',
+        azion: 'full',
+        competitor: 'full'
+      },
+      {
+        capability: 'Delivery rules changed without redeploying the application',
+        azion: 'full',
+        competitor: 'partial'
+      },
+      {
+        capability: 'JavaScript and WebAssembly runtime',
+        azion: 'full',
+        competitor: 'full'
+      }
+    ]
+  }
+}
+
+export const AzionVsVercelJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(SITE_SECTION)
 }

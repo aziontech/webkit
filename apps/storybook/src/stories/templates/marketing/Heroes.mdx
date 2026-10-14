@@ -1,0 +1,171 @@
+import { Canvas, Meta, Source, Title } from '@storybook/blocks'
+
+import * as HeroesStories from './Heroes.stories'
+
+<Meta
+  of={HeroesStories}
+  name="Documentation"
+/>
+
+<Title />
+
+The opening band of a marketing page. It holds the page h1 and its main actions, full width above the page column, framed by a backdrop, a client strip or an illustration.
+
+Each story is the hero one family of pages opens with. The home page and the solution pages use the centered band with the client strip. Learning uses the title band, AI Inference the pixel floor, and Workloads puts its copy on top of a topology.
+
+Built from `Hero`, `Hero.Title`, `Button`, `Illustration` and, for the Workloads scene, `Flow` and `Tag`.
+
+<p
+  style={{
+    margin: 'var(--spacing-lg) 0 0',
+    fontFamily: 'var(--font-code)',
+    fontSize: 'var(--text-label-code-sm-font-size)',
+    color: 'var(--text-muted)',
+    textTransform: 'uppercase',
+    letterSpacing: '0.08em'
+  }}
+>
+  Stories
+</p>
+
+### Centered carousel
+
+The home page hero. It fills one screen, with a dot field fading in from the top, the headline centered and the client strip on the floor. The solution pages use the same band with their own copy and clients.
+
+<Canvas of={HeroesStories.CenteredCarousel} />
+
+##### Use it on the site
+
+Add this entry to the `hero` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `title` is the page h1, and `highlight` paints its opening words in the brand accent. The block renders nothing without a title.
+- `description` is the sentence under the headline.
+- `primaryAction` and `secondaryAction` take a `label`, an `href` and an optional `target`. A button shows only when it has both a label and a link.
+- `carouselLabel` is the overline above the client strip, and `carouselMarks` lists the client marks in order. The strip shows only when it has marks.
+- `headerOffset` takes the site header out of the hero height, so header and hero fill exactly the first screen.
+
+Example:
+
+<div className="sb-site-json">
+  <Source of={HeroesStories.CenteredCarouselJson} dark />
+</div>
+
+<hr
+  style={{
+    margin: 'var(--spacing-xxl) 0 var(--spacing-lg)',
+    border: 0,
+    borderTop: '1px solid var(--border-default)'
+  }}
+/>
+
+### Title band
+
+The Learning Center hero. A padded band instead of a full screen, with the title, one line of description and two actions centered, and the client strip below. Use it on list and catalogue pages, where a full screen of title would push the first entry below the fold.
+
+<Canvas of={HeroesStories.TitleBand} />
+
+##### Use it on the site
+
+Add this entry to the `hero` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `title` is the page h1, and `highlight` paints its opening words in the brand accent. The block renders nothing without a title.
+- `description` is the sentence under the headline.
+- `primaryAction` and `secondaryAction` take a `label`, an `href` and an optional `target`. A button shows only when it has both a label and a link.
+- `carouselLabel` is the overline above the client strip, and `carouselMarks` lists the client marks in order. The strip shows only when it has marks.
+
+Example:
+
+<div className="sb-site-json">
+  <Source of={HeroesStories.TitleBandJson} dark />
+</div>
+
+<hr
+  style={{
+    margin: 'var(--spacing-xxl) 0 var(--spacing-lg)',
+    border: 0,
+    borderTop: '1px solid var(--border-default)'
+  }}
+/>
+
+### Pixel floor
+
+The AI Inference hero. Left-aligned copy over an animated pixel field that stands on the floor under the client strip. The light drifts across the field and stops under reduced motion.
+
+<Canvas of={HeroesStories.PixelFloor} />
+
+##### Use it on the site
+
+Add this entry to the `hero` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `title` is the page h1, and `highlight` paints its opening words in the brand accent. The block renders nothing without a title.
+- `description` is the sentence under the headline.
+- `primaryAction` and `secondaryAction` take a `label`, an `href` and an optional `target`. A button shows only when it has both a label and a link.
+- `carouselLabel` is the overline above the client strip, and `carouselMarks` lists the client marks in order. The strip shows only when it has marks.
+
+Example:
+
+<div className="sb-site-json">
+  <Source of={HeroesStories.PixelFloorJson} dark />
+</div>
+
+<hr
+  style={{
+    margin: 'var(--spacing-xxl) 0 var(--spacing-lg)',
+    border: 0,
+    borderTop: '1px solid var(--border-default)'
+  }}
+/>
+
+### Copy beside art
+
+Copy on one side and a wide illustration on the other, with the client strip on the floor. The illustration bleeds past the column edge from medium widths up. The migration guides open with it.
+
+<Canvas of={HeroesStories.CopyBesideArt} />
+
+##### Use it on the site
+
+Add this entry to the `hero` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `eyebrow` is a short overline above the headline.
+- `title` is the page h1, and `highlight` paints its opening words in the brand accent. The block renders nothing without a title.
+- `description` is the sentence under the headline.
+- `primaryAction` and `secondaryAction` take a `label`, an `href` and an optional `target`. A button shows only when it has both a label and a link.
+- `illustration` names the illustration beside the copy, and `illustrationAlt` describes it for screen readers.
+- `carouselLabel` is the overline above the client strip, and `carouselMarks` lists the client marks in order. The strip shows only when it has marks.
+
+Example:
+
+<div className="sb-site-json">
+  <Source of={HeroesStories.CopyBesideArtJson} dark />
+</div>
+
+<hr
+  style={{
+    margin: 'var(--spacing-xxl) 0 var(--spacing-lg)',
+    border: 0,
+    borderTop: '1px solid var(--border-default)'
+  }}
+/>
+
+### Copy on top of art
+
+The Workloads hero. The copy is centered on top, and a topology sits under it: two domains feed the lit workload, which binds an application and a firewall. The scene shows at every width: the cards narrow on a tablet, and on a phone the sides are cropped and fade out.
+
+<Canvas of={HeroesStories.CopyOnTopArt} />
+
+##### Use it on the site
+
+Add this entry to the `hero` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `eyebrow` is a short overline above the headline.
+- `title` is the page h1, and `highlight` paints its opening words in the brand accent. The block renders nothing without a title.
+- `description` is the sentence under the headline.
+- `primaryAction` and `secondaryAction` take a `label`, an `href` and an optional `target`. A button shows only when it has both a label and a link.
+- `levels` are the columns of the topology, left to right. Each has `nodes`, the cards top to bottom.
+- A card takes `eyebrow`, `icon`, `title`, a status `label` with its `severity`, and `lit` to mark the focus of the scene. A card without `title` is skipped.
+
+Example:
+
+<div className="sb-site-json">
+  <Source of={HeroesStories.CopyOnTopArtJson} dark />
+</div>

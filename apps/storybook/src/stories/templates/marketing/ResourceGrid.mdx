@@ -1,0 +1,49 @@
+import { Canvas, Meta, Source, Title } from '@storybook/blocks'
+
+import * as ResourceGridStories from './ResourceGrid.stories'
+
+<Meta
+  of={ResourceGridStories}
+  name="Documentation"
+/>
+
+<Title />
+
+A band that points readers to further reading on solution pages. Short copy sits beside a grid of linked resource cards, each a title and one sentence. A card that leaves the site opens in a new tab.
+
+Financial Services and Technology use it.
+
+Built from `SectionModule`, `MediaSplit`, `CardGrid`, `Topic` and `Button`.
+
+<p
+  style={{
+    margin: 'var(--spacing-lg) 0 0',
+    fontFamily: 'var(--font-code)',
+    fontSize: 'var(--text-label-code-sm-font-size)',
+    color: 'var(--text-muted)',
+    textTransform: 'uppercase',
+    letterSpacing: '0.08em'
+  }}
+>
+  Stories
+</p>
+
+### Default
+
+The four Financial Services resources under the default Go Deeper eyebrow: two pages on the site and two blog posts that open in a new tab.
+
+<Canvas of={ResourceGridStories.Default} />
+
+##### Use it on the site
+
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `eyebrow`, `title` and `description` fill the copy beside the grid.
+- `items[]` holds the cards: `title`, `description` and `href`. A full `http` link opens in a new tab, and a card without a title is skipped.
+- `action` adds a button under the copy. It is dropped when its label or link is missing.
+
+Example:
+
+<div className="sb-site-json">
+  <Source of={ResourceGridStories.DefaultJson} dark />
+</div>

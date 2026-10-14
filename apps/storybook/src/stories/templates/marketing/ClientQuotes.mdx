@@ -1,0 +1,53 @@
+import { Canvas, Meta, Source, Title } from '@storybook/blocks'
+
+import * as ClientQuotesStories from './ClientQuotes.stories'
+
+<Meta
+  of={ClientQuotesStories}
+  name="Documentation"
+/>
+
+<Title />
+
+The proof band of a solution page: one client quote at a time, picked from a row of client cards, and a link to every success story.
+
+Each solution page leads the row with the client closest to its audience. All eight solution pages use it.
+
+Built from `SectionModule`, `FrameBox`, `QuoteTabs` and `Button`.
+
+<p
+  style={{
+    margin: 'var(--spacing-lg) 0 0',
+    fontFamily: 'var(--font-code)',
+    fontSize: 'var(--text-label-code-sm-font-size)',
+    color: 'var(--text-muted)',
+    textTransform: 'uppercase',
+    letterSpacing: '0.08em'
+  }}
+>
+  Stories
+</p>
+
+### Default
+
+The Retail page's row, led by Dafiti. Magalu, HeroSpark and Zoop use their color logo files; Dafiti, Axur and Contabilizei use a registered `mark` drawn in the theme's ink.
+
+<Canvas of={ClientQuotesStories.Default} />
+
+##### Use it on the site
+
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `items` lists the clients in row order, one card each; six fill the row.
+- `items[].text`, `name` and `jobTitle` make the quote.
+- `items[].logo` is a color logo file and wins over `mark`, a registered logo name drawn in the theme's ink.
+- `clientName` names the card; it is required with a `logo` file.
+- An item without `text`, or with nothing to draw on its card, is skipped.
+- `action` is the button under the quote; it needs both `label` and `href`.
+- No site page uses this block yet, so this entry is built from the Retail story.
+
+Example:
+
+<div className="sb-site-json">
+  <Source of={ClientQuotesStories.DefaultJson} dark />
+</div>

@@ -1,0 +1,53 @@
+import { Canvas, Meta, Source, Title } from '@storybook/blocks'
+
+import * as LogoWallQuoteStories from './LogoWallQuote.stories'
+
+<Meta
+  of={LogoWallQuoteStories}
+  name="Documentation"
+/>
+
+<Title />
+
+A wall of client logos with one of those clients quoted beside it, in one frame. The Solutions page uses it under a section title.
+
+Use it instead of hand-rolling the same split, as Cache, Application Accelerator and Our Network do today. Each logo can be tuned per theme: white artwork flips on light, dark artwork flips on dark, and a client with a file per theme shows the right one.
+
+Built from `SectionModule`, `SectionTitle`, `FrameBox`, `LogoWall`, `Quote` and `Button`.
+
+<p
+  style={{
+    margin: 'var(--spacing-lg) 0 0',
+    fontFamily: 'var(--font-code)',
+    fontSize: 'var(--text-label-code-sm-font-size)',
+    color: 'var(--text-muted)',
+    textTransform: 'uppercase',
+    letterSpacing: '0.08em'
+  }}
+>
+  Stories
+</p>
+
+### Default
+
+From the Solutions page: nine client logos, each linked to its success case, beside a Zoop quote. A linked logo lifts and shows "Read story" on hover and focus.
+
+<Canvas of={LogoWallQuoteStories.Default} />
+
+##### Use it on the site
+
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `eyebrow` and `title` fill the section title.
+- `logos[]` takes a `name`, a `logo` file and an optional `href` to the success case.
+- `logoLight` adds a second file for the light theme.
+- `logoTreatment` set to `monochrome` draws a one-ink logo in the theme's ink.
+- `linkLabel` replaces the "Read story" hover text; left empty, the default shows.
+- `quote` takes `text`, `name`, `jobTitle`, `logo` and `logoAlt`; `quoteAction` is its button.
+- No site page uses this block yet, so this entry is built from the Solutions story.
+
+Example:
+
+<div className="sb-site-json">
+  <Source of={LogoWallQuoteStories.DefaultJson} dark />
+</div>

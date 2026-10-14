@@ -6,7 +6,7 @@ const IMPORT = "import Skeleton from '@aziontech/webkit/skeleton'"
 
 /** @type {import('@storybook/vue3').Meta<typeof Skeleton>} */
 const meta = {
-  title: 'Components/Feedback/Skeleton',
+  title: 'Components/Primitives/Feedback/Skeleton',
   component: Skeleton,
   tags: ['autodocs'],
   parameters: {

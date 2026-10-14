@@ -7,7 +7,7 @@ const IMPORT = "import FieldPhoneNumber from '@aziontech/webkit/field-phone-numb
 
 /** @type {import('@storybook/vue3').Meta<typeof FieldPhoneNumber>} */
 const meta = {
-  title: 'Components/Inputs/FieldPhoneNumber',
+  title: 'Components/Primitives/Inputs/FieldPhoneNumber',
   component: FieldPhoneNumber,
   tags: ['autodocs'],
   parameters: {

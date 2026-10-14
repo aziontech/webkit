@@ -1,0 +1,52 @@
+import { Canvas, Meta, Source, Title } from '@storybook/blocks'
+
+import * as NetworkSectionStories from './NetworkSection.stories'
+
+<Meta
+  of={NetworkSectionStories}
+  name="Documentation"
+/>
+
+<Title />
+
+A framed section that argues for the network: a headline over an animated world map, a lead line, a few infrastructure claims as pills, and a floor of client outcomes that backs the claim up. The Home page uses it.
+
+The headline sits at the top and the claims at the bottom, so the map shows between them. On phones the map moves into its own box between the headline and the claims, so no text ever sits on it.
+
+Built from `SectionModule`, `FrameBox`, `NetworkMap`, `SectionTitle`, and `CardGrid` with a `Quote` per client.
+
+<p
+  style={{
+    margin: 'var(--spacing-lg) 0 0',
+    fontFamily: 'var(--font-code)',
+    fontSize: 'var(--text-label-code-sm-font-size)',
+    color: 'var(--text-muted)',
+    textTransform: 'uppercase',
+    letterSpacing: '0.08em'
+  }}
+>
+  Stories
+</p>
+
+### Default
+
+Four client outcomes, each a quote with its figure highlighted and signed by the client's logo. Dafiti and Fourbank are drawn in one ink that follows the theme; MadeiraMadeira and Renner keep their brand colors.
+
+<Canvas of={NetworkSectionStories.Default} />
+
+##### Use it on the site
+
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `eyebrow` is the short overline above the headline.
+- `title` is the headline over the map.
+- `lead` is the overline sentence above the claims.
+- `claims` are the network figures drawn as pills.
+- `outcomes[]` fill the floor; four fill the row. `highlights` are phrases of `text` kept in full color, copied exactly.
+- `logoTreatment` is `as-is`, `monochrome` or `knockout`. Empty means as-is.
+
+Example:
+
+<div className="sb-site-json">
+  <Source of={NetworkSectionStories.DefaultJson} dark />
+</div>

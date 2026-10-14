@@ -1,0 +1,52 @@
+import { Canvas, Meta, Source, Title } from '@storybook/blocks'
+
+import * as TemplateGalleryStories from './TemplateGallery.stories'
+
+<Meta
+  of={TemplateGalleryStories}
+  name="Documentation"
+/>
+
+<Title />
+
+The templates band of a solution page. Copy on one side invites the reader to start from a template; on the other, a scrolling wall of deployable templates. A ticker of the frameworks and clouds it works with closes the band.
+
+Each template card is a mark, a title, one line and a `Deploy now` action. Retail, Web Apps, AI Workloads, Security, Performance and Streaming use it.
+
+Built from `SectionModule`, `MediaSplit`, `ScrollArea`, `CardGrid`, `Button`, `FrameBox` and `Ticker`.
+
+<p
+  style={{
+    margin: 'var(--spacing-lg) 0 0',
+    fontFamily: 'var(--font-code)',
+    fontSize: 'var(--text-label-code-sm-font-size)',
+    color: 'var(--text-muted)',
+    textTransform: 'uppercase',
+    letterSpacing: '0.08em'
+  }}
+>
+  Stories
+</p>
+
+### Default
+
+The Retail page's band, with its storefront description and the first eight deploy templates. Marks that ship in dark ink invert under the dark theme.
+
+<Canvas of={TemplateGalleryStories.Default} />
+
+##### Use it on the site
+
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `eyebrow`, `title` and `description` fill the copy.
+- `action` is the main button under the copy. It opens in a new tab.
+- `templates[]` fill the wall: `title`, `description`, `icon` and the deploy `href`. Turn on `invertInDark` for a mark that ships in dark ink only.
+- `deployLabel` is the label of the button on each card.
+- `templatesAriaLabel` names the wall for screen readers.
+- `tickerLabel` and `tickerMarks` fill the row of marks. An unknown name renders as a wordmark.
+
+Example:
+
+<div className="sb-site-json">
+  <Source of={TemplateGalleryStories.DefaultJson} dark />
+</div>

@@ -1,0 +1,54 @@
+import { Canvas, Meta, Source, Title } from '@storybook/blocks'
+
+import * as ComparePlansStories from './ComparePlans.stories'
+
+<Meta
+  of={ComparePlansStories}
+  name="Documentation"
+/>
+
+<Title />
+
+A table that compares plans feature by feature, under the plan cards on Pricing. Each plan gets a column, each product gets a band, and each cell says what that plan includes.
+
+A cell shows a tick when the feature is included, a dash when it is not, or the allowance as text. Screen readers hear each value with its row and its plan. The plan header stays on screen while you scroll, and the recommended plan gets an accent bar.
+
+On small screens the table shows one plan at a time, picked from a select in the header.
+
+Built from `SectionModule`, `Select`, `Button`, `Overline`, `Hint`, `Tag` and `Link`.
+
+<p
+  style={{
+    margin: 'var(--spacing-lg) 0 0',
+    fontFamily: 'var(--font-code)',
+    fontSize: 'var(--text-label-code-sm-font-size)',
+    color: 'var(--text-muted)',
+    textTransform: 'uppercase',
+    letterSpacing: '0.08em'
+  }}
+>
+  Stories
+</p>
+
+### Plan Matrix
+
+Hobby, Pro and Enterprise across four of the Pricing product sections. Each plan button repeats the action of its card, and the last row links to the on-demand rates. Narrow the canvas below 1024px to see the plan picker, which opens on Pro.
+
+<Canvas of={ComparePlansStories.PlanMatrix} />
+
+##### Use it on the site
+
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `plans` sets the columns: `name`, `highlighted` for the recommended plan, and an `action` button. A plan without a name is dropped.
+- `sections` sets the product bands: `eyebrow`, `title`, `description` and `rows`.
+- `rows[].values` holds one cell per plan, in plan order: `✓` for included, `—` for not included, any other text as written, empty for a blank cell.
+- `rows[].group` makes the row a group heading. `hint` adds a tooltip and `tag` adds a tag next to the label.
+- `includedLabel`, `excludedLabel` and `planPickerLabel` are the texts screen readers hear.
+- `footerLink` adds the closing link, which opens in a new tab.
+
+Example:
+
+<div className="sb-site-json">
+  <Source of={ComparePlansStories.PlanMatrixJson} dark />
+</div>
