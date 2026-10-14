@@ -16,7 +16,17 @@ export const lineFigures = {
   'dns-lookup': () => import('./dns-lookup').then((m) => m.dnsLookup),
   'metrics-gauge': () => import('./metrics-gauge').then((m) => m.metricsGauge),
   'image-variants': () => import('./image-variants').then((m) => m.imageVariants),
-  'orchestrator-scale': () => import('./orchestrator-scale').then((m) => m.orchestratorScale)
+  'orchestrator-scale': () => import('./orchestrator-scale').then((m) => m.orchestratorScale),
+  'functions-invoke': () => import('./functions-invoke').then((m) => m.functionsInvoke),
+  'applications-rules': () => import('./applications-rules').then((m) => m.applicationsRules),
+  'object-storage-bucket': () =>
+    import('./object-storage-bucket').then((m) => m.objectStorageBucket),
+  'deployments-release': () => import('./deployments-release').then((m) => m.deploymentsRelease),
+  'variables-keys': () => import('./variables-keys').then((m) => m.variablesKeys),
+  'connectors-link': () => import('./connectors-link').then((m) => m.connectorsLink),
+  'custom-pages-status': () => import('./custom-pages-status').then((m) => m.customPagesStatus),
+  'certificates-chain': () => import('./certificates-chain').then((m) => m.certificatesChain),
+  'network-lists-gate': () => import('./network-lists-gate').then((m) => m.networkListsGate)
 } satisfies Record<string, () => Promise<FigureDefinition>>
 
 export type LineFigureName = keyof typeof lineFigures

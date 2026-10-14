@@ -11,6 +11,7 @@
   import { toast } from '@aziontech/webkit/toast'
   import { AGENT_SETUP_PROMPT, AGENT_TOOLS } from '@shared/lib/agent-onboarding'
   import AgentMark from '@shared/ui/brand/AgentMark.vue'
+  import LineFigure from '@shared/ui/line-figure/LineFigure.vue'
   import { computed, ref, watch } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
@@ -97,10 +98,18 @@
     >
       <template #content>
         <EmptyState
-          :icon="product.icon"
+          :icon="product.figure ? '' : product.icon"
           :title="product.headline"
           :description="product.lead"
         >
+          <template
+            v-if="product.figure"
+            #icon
+          >
+            <div class="w-48 max-w-full">
+              <LineFigure :name="product.figure" />
+            </div>
+          </template>
           <template #actions>
             <Link
               label="Documentation"
