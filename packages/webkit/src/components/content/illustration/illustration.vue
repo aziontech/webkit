@@ -1,12 +1,11 @@
 <script setup lang="ts">
-  import { computed, shallowRef, useAttrs, useId, useTemplateRef, watch } from 'vue'
+  import { computed, defineAsyncComponent, defineComponent, h, useAttrs, useId, watch } from 'vue'
 
   import {
-    type IllustrationAssetLoader,
     loadIllustrationPlaceholder,
     resolveIllustrationAsset
   } from '../../../assets/illustrations/registry'
-  import type { IllustrationScene } from '../../../assets/illustrations/scene'
+  import { loadIllustrationScene } from '../../../assets/illustrations/scene'
 
   defineOptions({
     name: 'Illustration',
@@ -27,59 +26,39 @@
 
   const attrs = useAttrs()
   const scope = useId()
-  const root = useTemplateRef<globalThis.SVGSVGElement>('root')
 
-  const scene = shallowRef<IllustrationScene | null>(null)
-  const placeheld = shallowRef(false)
+  const asset = computed(() => (props.name ? resolveIllustrationAsset(props.name) : null))
 
-  const paint = (load: IllustrationAssetLoader) =>
-    Promise.all([load(), import('../../../assets/illustrations/scene')]).then(
-      ([asset, { loadIllustrationScene }]) => loadIllustrationScene(asset.default)
+  const placeheld = computed(() => asset.value === null)
+
+  const Canvas = computed(() => {
+    const key = placeheld.value ? '' : props.name
+    const load = asset.value ?? loadIllustrationPlaceholder
+    return defineAsyncComponent(() =>
+      loadIllustrationScene(key, load)
+        .then((scene) =>
+          defineComponent({
+            inheritAttrs: false,
+            setup: (_, context) => () =>
+              h('svg', { ...context.attrs, viewBox: scene.viewBox, innerHTML: scene.draw(scope) })
+          })
+        )
+        .catch((error: unknown) => {
+          console.warn(`[webkit] <Illustration>: could not load "${props.name}".`, error)
+          return defineComponent({ render: () => null })
+        })
     )
-
-  const warnUnloaded = (error: unknown) => {
-    console.warn(`[webkit] <Illustration>: could not load "${props.name}".`, error)
-  }
+  })
 
   watch(
     () => props.name,
     (name) => {
-      const load = name ? resolveIllustrationAsset(name) : null
-      if (!load) {
-        if (name) {
-          console.warn(`[webkit] <Illustration>: no asset registered under name "${name}".`)
-        }
-        paint(loadIllustrationPlaceholder)
-          .then((painted) => {
-            if (props.name && resolveIllustrationAsset(props.name)) return
-            scene.value = painted
-            placeheld.value = true
-          })
-          .catch(warnUnloaded)
-        return
+      if (name && !resolveIllustrationAsset(name)) {
+        console.warn(`[webkit] <Illustration>: no asset registered under name "${name}".`)
       }
-      paint(load)
-        .then((painted) => {
-          if (props.name !== name) return
-          scene.value = painted
-          placeheld.value = false
-        })
-        .catch(warnUnloaded)
     },
     { immediate: true }
   )
-
-  watch(
-    [root, scene],
-    ([element, painted]) => {
-      if (element && painted) {
-        element.replaceChildren(...painted.draw(scope))
-      }
-    },
-    { flush: 'post' }
-  )
-
-  const viewBox = computed(() => scene.value?.viewBox || '0 0 592 300')
 
   const decorative = computed(() => placeheld.value || props.ariaLabel.length === 0)
 
@@ -95,10 +74,8 @@
 </script>
 
 <template>
-  <svg
-    v-if="scene"
-    ref="root"
-    :viewBox="viewBox"
+  <component
+    :is="Canvas"
     :role="decorative ? undefined : 'img'"
     :aria-label="decorative ? undefined : ariaLabel"
     :aria-hidden="decorative || undefined"

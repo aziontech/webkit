@@ -12,7 +12,7 @@ import {
   loadIllustrationPlaceholder,
   resolveIllustrationAsset
 } from '../../../assets/illustrations/registry'
-import { loadIllustrationScene } from '../../../assets/illustrations/scene'
+import { createIllustrationScene } from '../../../assets/illustrations/scene'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Illustration from './illustration.vue'
 
@@ -23,23 +23,25 @@ const at = (view: ReturnType<typeof render>) => within(view.container)
 const root = (view: ReturnType<typeof render>, testId = 'content-illustration') =>
   at(view).findByTestId(testId)
 
-const urlOf = async (name: string) => (await resolveIllustrationAsset(name)!()).default
+const markupOf = async (name: string) => (await resolveIllustrationAsset(name)!()).default
 
-const placeholderUrl = async () => (await loadIllustrationPlaceholder()).default
+const placeholderMarkup = async () => (await loadIllustrationPlaceholder()).default
 
 const drawnCount = (el: globalThis.Element) => el.querySelectorAll('*').length
 
-const drawnNodes = (nodes: globalThis.Node[]) =>
-  nodes.reduce(
-    (count, node) => (node instanceof globalThis.Element ? count + 1 + drawnCount(node) : count),
-    0
+const parseSvg = (markup: string) =>
+  new globalThis.DOMParser().parseFromString(markup, 'image/svg+xml').documentElement
+
+const countOf = (markup: string) =>
+  drawnCount(
+    parseSvg(
+      `<svg xmlns="http://www.w3.org/2000/svg">${createIllustrationScene(markup).draw('x')}</svg>`
+    )
   )
 
-const countOf = async (url: string) => drawnNodes((await loadIllustrationScene(url)).draw('x'))
+const sceneOf = async (name: string) => countOf(await markupOf(name))
 
-const sceneOf = async (name: string) => countOf(await urlOf(name))
-
-const placeholderScene = async () => countOf(await placeholderUrl())
+const placeholderScene = async () => countOf(await placeholderMarkup())
 
 const drawsScene = async (view: ReturnType<typeof render>, expected: number) =>
   waitFor(async () => expect(drawnCount(await root(view))).toBe(expected))
@@ -82,8 +84,9 @@ describe('Illustration', () => {
 
   it.each(illustrationAssetNames)('renders the registered scene %s', async (name) => {
     const view = render(Illustration, { props: { name } })
-    const scene = await loadIllustrationScene(await urlOf(name))
-    await drawsScene(view, drawnNodes(scene.draw('x')))
+    const markup = await markupOf(name)
+    const scene = createIllustrationScene(markup)
+    await drawsScene(view, countOf(markup))
     const el = await root(view)
     expect(el.tagName).toBe('svg')
     expect(el.getAttribute('viewBox')).toBe(scene.viewBox)
@@ -92,8 +95,7 @@ describe('Illustration', () => {
   it.each(illustrationAssetNames)(
     'gives every colour %s draws with a palette entry',
     async (name) => {
-      const markup = await (await globalThis.fetch(await urlOf(name))).text()
-      const svg = new globalThis.DOMParser().parseFromString(markup, 'image/svg+xml')
+      const svg = parseSvg(await markupOf(name))
       const unlisted = new Set<string>()
       for (const node of svg.querySelectorAll('*')) {
         if (node.closest(UNPAINTED)) continue
