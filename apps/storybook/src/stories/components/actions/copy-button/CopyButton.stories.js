@@ -6,7 +6,7 @@ const IMPORT = "import CopyButton from '@aziontech/webkit/copy-button'"
 
 /** @type {import('@storybook/vue3').Meta<typeof CopyButton>} */
 const meta = {
-  title: 'Components/Actions/CopyButton',
+  title: 'Components/Primitives/Actions/CopyButton',
   component: CopyButton,
   tags: ['autodocs'],
   parameters: {

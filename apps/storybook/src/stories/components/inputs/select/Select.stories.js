@@ -1,7 +1,6 @@
-import Select from '@aziontech/webkit/select'
-import { SelectContent, SelectGroup, SelectOption, SelectTrigger } from '@aziontech/webkit/select'
 import Button from '@aziontech/webkit/button'
 import InputText from '@aziontech/webkit/input-text'
+import Select, { SelectContent, SelectGroup, SelectOption, SelectTrigger } from '@aziontech/webkit/select'
 import Tag from '@aziontech/webkit/tag'
 import { computed, ref, watch } from 'vue'
 
@@ -28,7 +27,7 @@ const components = {
 
 /** @type {import('@storybook/vue3').Meta<typeof Select>} */
 const meta = {
-  title: 'Components/Inputs/Select',
+  title: 'Components/Primitives/Inputs/Select',
   component: Select,
   subcomponents: { SelectTrigger, SelectContent, SelectGroup, SelectOption },
   tags: ['autodocs'],

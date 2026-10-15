@@ -12,7 +12,7 @@ const sampleImage =
 
 /** @type {import('@storybook/vue3').Meta<typeof Avatar>} */
 const meta = {
-  title: 'Components/Content/Avatar',
+  title: 'Components/Primitives/Content/Avatar',
   component: Avatar,
   tags: ['autodocs'],
   parameters: {

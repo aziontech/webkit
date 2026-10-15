@@ -17,7 +17,7 @@ const PANE = 'flex h-full items-center justify-center p-(--spacing-md) text-body
 
 /** @type {import('@storybook/vue3').Meta<typeof ResizablePanel>} */
 const meta = {
-  title: 'Components/Layout/ResizablePanel',
+  title: 'Components/Primitives/Layout/ResizablePanel',
   component: ResizablePanel,
   subcomponents: { ResizablePanelPane, ResizablePanelHandle },
   tags: ['autodocs'],

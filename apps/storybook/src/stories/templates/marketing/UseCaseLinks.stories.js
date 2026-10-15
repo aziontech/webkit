@@ -7,6 +7,7 @@ import SectionTitle from '@aziontech/webkit/section-title'
 import Topic from '@aziontech/webkit/topic'
 
 import { COLUMN_IMPORTS, each, inColumn } from '../../_shared/markup'
+import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 
 const TOPICS_IMPORTS = [
@@ -99,16 +100,12 @@ ${each(
 
 const meta = {
   title: 'Templates/Marketing/Content/UseCaseLinks',
-  tags: ['autodocs'],
+  excludeStories: ['SITE_SECTION'],
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
     controls: { disable: true },
     docs: {
-      description: {
-        component:
-          'A titled grid of use cases where each cell is itself the link, so the band needs no buttons. A product page uses it to point at the ways the product is applied (Application Accelerator). Built from `SectionModule`, `SectionTitle` and `CardGrid kind="divider"`, with a `Topic` per cell.'
-      },
       canvas: { sourceState: 'shown' }
     }
   }
@@ -120,11 +117,41 @@ export const Topics = {
   render: () => ({ components, template: TOPICS_TEMPLATE }),
   parameters: {
     docs: {
-      description: {
-        story:
-          'Six linked `Topic` cells under a start-aligned `SectionTitle`, from the Application Accelerator page. `Topic` draws the arrow on the headline because the cell has an `href`.'
-      },
       source: { code: toSfc(TOPICS_IMPORTS, TOPICS_TEMPLATE) }
     }
   }
+}
+
+export const SITE_SECTION = {
+  _id: 'use-case-links',
+  props: {
+    title: 'See how to use',
+    items: [
+      {
+        icon: 'pi pi-code',
+        title: 'Accelerate REST and GraphQL APIs',
+        description:
+          'Cache API responses with query string and cookie-based segmentation for faster client applications.',
+        href: 'https://www.azion.com/en/solutions/api-gateway/'
+      },
+      {
+        icon: 'pi pi-shopping-cart',
+        title: 'Optimize product catalogs',
+        description:
+          'Segment listings by category, region, and user preferences with cache key rules.',
+        href: 'https://www.azion.com/en/solutions/application-acceleration/'
+      },
+      {
+        icon: 'pi pi-bolt',
+        title: 'Reduce API latency',
+        description: 'Short TTLs for rapidly changing data endpoints and real-time applications.',
+        href: 'https://www.azion.com/en/documentation/products/build/applications/application-accelerator/'
+      }
+    ]
+  }
+}
+
+export const TopicsJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(SITE_SECTION)
 }

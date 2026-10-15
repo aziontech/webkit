@@ -1,0 +1,77 @@
+import { Canvas, Meta, Source, Title } from '@storybook/blocks'
+
+import * as StatsBandStories from './StatsBand.stories'
+
+<Meta
+  of={StatsBandStories}
+  name="Documentation"
+/>
+
+<Title />
+
+A row of big figures that proves the claims around it are measured. Each figure is a number with an optional qualifier and unit, and a one-line caption. Products places it after the platform guarantees; Partners opens with it under the hero form.
+
+Built from `SectionModule`, `FrameBox` and `BigNumbers`, which picks its column count from the number of figures.
+
+<p
+  style={{
+    margin: 'var(--spacing-lg) 0 0',
+    fontFamily: 'var(--font-code)',
+    fontSize: 'var(--text-label-code-sm-font-size)',
+    color: 'var(--text-muted)',
+    textTransform: 'uppercase',
+    letterSpacing: '0.08em'
+  }}
+>
+  Stories
+</p>
+
+### Reach
+
+The Products page's figures: each value has a unit beside it (`ms`, `/7`, `%`) and no qualifier.
+
+<Canvas of={StatsBandStories.Reach} />
+
+##### Use it on the site
+
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `items[].value` is the figure itself.
+- `items[].suffix` is the unit after the figure.
+- `items[].label` says what the figure measures.
+- Three figures fill the row.
+
+Example:
+
+<div className="sb-site-json">
+  <Source of={StatsBandStories.ReachJson} dark />
+</div>
+
+<hr
+  style={{
+    margin: 'var(--spacing-xxl) 0 var(--spacing-lg)',
+    border: 0,
+    borderTop: '1px solid var(--border-default)'
+  }}
+/>
+
+### Partners
+
+The Partners page's figures: two values open with a `+` qualifier and the third ends with a `%` unit.
+
+<Canvas of={StatsBandStories.Partners} />
+
+##### Use it on the site
+
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `items[].prefix` is the qualifier before the figure, in the accent color.
+- `items[].value` is the figure itself.
+- `items[].suffix` is the unit after the figure.
+- `items[].label` says what the figure measures.
+
+Example:
+
+<div className="sb-site-json">
+  <Source of={StatsBandStories.PartnersJson} dark />
+</div>

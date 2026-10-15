@@ -48,7 +48,8 @@ const meta = {
     },
     eyebrow: {
       control: 'text',
-      description: 'Short uppercase overline rendered above the headline, closed by the blinking cursor.',
+      description:
+        'Short uppercase overline rendered above the headline, closed by the blinking cursor.',
       table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "''" } }
     },
     eyebrowPrefix: {

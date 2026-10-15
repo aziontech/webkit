@@ -1,0 +1,77 @@
+import { Canvas, Meta, Source, Title } from '@storybook/blocks'
+
+import * as MediaSplitStackStories from './MediaSplitStack.stories'
+
+<Meta
+  of={MediaSplitStackStories}
+  name="Documentation"
+/>
+
+<Title />
+
+The core of a product page: a run of copy-beside-art bands, each stating one claim. From `lg` up the bands pin under the site header and pile on each other as the page scrolls.
+
+Every band sits on the same small pixelate texture, fading toward the top. A band with a link is a link as a whole. A band whose picture is code is the CodeSplit template.
+
+Built from `BandStack` and `MediaSplit`, with `Illustration` scenes and `Button` actions.
+
+<p
+  style={{
+    margin: 'var(--spacing-lg) 0 0',
+    fontFamily: 'var(--font-code)',
+    fontSize: 'var(--text-label-code-sm-font-size)',
+    color: 'var(--text-muted)',
+    textTransform: 'uppercase',
+    letterSpacing: '0.08em'
+  }}
+>
+  Stories
+</p>
+
+### Solutions
+
+The five solution areas Home stacks inside Why Azion, each a large, centered band with an outlined "Learn more" button. The first band shows an art file as an image; the others use `Illustration` scenes.
+
+<Canvas of={MediaSplitStackStories.Solutions} />
+
+##### Use it on the site
+
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `actionLabel` is the button text every band shares.
+- `bands` are the solutions, each a `title`, a `description`, an `href`, and an `illustration` name or an `image` with `imageAlt`.
+- A band without `href` or without `actionLabel` has no button. A band with no picture renders without its media cell.
+
+Example:
+
+<div className="sb-site-json">
+  <Source of={MediaSplitStackStories.SolutionsJson} dark />
+</div>
+
+<hr
+  style={{
+    margin: 'var(--spacing-xxl) 0 var(--spacing-lg)',
+    border: 0,
+    borderTop: '1px solid var(--border-default)'
+  }}
+/>
+
+### Alternating
+
+From the Our Network page: a centered section title, then four bands alternating media start and end, with no actions.
+
+<Canvas of={MediaSplitStackStories.Alternating} />
+
+##### Use it on the site
+
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `eyebrow` and `title` make the heading. Without a title the heading is left out.
+- `bands` are the claims, each a `title`, a `description`, and an `illustration` with `illustrationLabel` or an `image` with `imageAlt`. The media side alternates on its own.
+- A band with no picture renders without its media cell.
+
+Example:
+
+<div className="sb-site-json">
+  <Source of={MediaSplitStackStories.AlternatingJson} dark />
+</div>

@@ -4,6 +4,7 @@ import SectionGap from '@aziontech/webkit/section-gap'
 import SectionModule from '@aziontech/webkit/section-module'
 
 import { COLUMN_IMPORTS, each, inColumn, indent } from '../../_shared/markup'
+import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 
 const IMPORTS = [
@@ -210,16 +211,12 @@ const PLAIN_TEMPLATE = faqSection(FUNCTIONS)
 
 const meta = {
   title: 'Templates/Marketing/Content/FaqSection',
-  tags: ['autodocs'],
+  excludeStories: ['WITH_LINK_SECTION', 'PLAIN_SECTION'],
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
     controls: { disable: true },
     docs: {
-      description: {
-        component:
-          'The frequently-asked-questions band near the foot of a landing page: a framed panel with the heading on the left and the questions as a single-open disclosure list on the right, every answer closed until the reader opens it. The section carries the `faq` id so a page can link straight to it. Retail, Web Apps, AI Workloads, Security, Performance and Streaming render it through the solution template; the Functions, Cache and Application Accelerator product pages, Pricing and Vercel Alternative render the plain form. Built from `SectionModule` and `Faq`.'
-      },
       canvas: { sourceState: 'shown' }
     }
   }
@@ -231,24 +228,74 @@ export const WithLink = {
   render: () => ({ components, template: WITH_LINK_TEMPLATE }),
   parameters: {
     docs: {
-      description: {
-        story:
-          'The Retail page’s ten questions, rendered through the `answer` slot so an answer can continue into a link and the text after it: the second question ends on a link to the frameworks compatibility list, opened in a new tab, followed by its closing full stop. The link sits inside the answer’s sentence, so it is a plain anchor styled with the `text-link` class: it takes the answer’s size and line height and the link colour, with the underline and focus ring on hover and focus. Answers without a link render as plain text.'
-      },
       source: { code: toSfc(IMPORTS, WITH_LINK_TEMPLATE) }
     }
   }
+}
+
+export const WITH_LINK_SECTION = {
+  _id: 'faq-section',
+  props: {
+    title: 'Frequently Asked Questions',
+    items: [
+      {
+        question: 'What types of storefronts can I build and deploy on Azion?',
+        answer:
+          'You can build and deploy storefronts, marketplaces, marketing campaign pages, and supporting retail apps, but in fact any web app or website runs on Azion. The platform also provides the primitives to build not only the storefront but much of the backend, with support for static and dynamic workloads on a distributed architecture.'
+      },
+      {
+        question: 'Which frameworks are compatible?',
+        answer:
+          'Azion is compatible with modern frameworks such as Next.js, React, Vue, Astro, Angular, Nuxt, Svelte, and others, so you can reuse your current stack without a full rewrite. See the full [frameworks compatibility list](/en/documentation/products/devtools/azion-edge-runtime/frameworks-compatibility/).'
+      },
+      {
+        question: 'How do preview deployments work?',
+        answer:
+          'You can validate storefront changes in preview environments before release, share results across teams, and promote approved versions to production with a controlled workflow.'
+      }
+    ]
+  }
+}
+
+export const WithLinkJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(WITH_LINK_SECTION)
 }
 
 export const Plain = {
   render: () => ({ components, template: PLAIN_TEMPLATE }),
   parameters: {
     docs: {
-      description: {
-        story:
-          'The Functions product page’s ten questions, every answer plain text, so the band passes its items and leaves the `answer` slot out.'
-      },
       source: { code: toSfc(IMPORTS, PLAIN_TEMPLATE) }
     }
   }
+}
+
+export const PLAIN_SECTION = {
+  _id: 'faq-section',
+  props: {
+    title: 'Frequently Asked Questions',
+    items: [
+      {
+        question: 'What are Functions?',
+        answer:
+          'Azion Functions is a serverless platform for running code on distributed infrastructure with up to 5 minutes of CPU time per execution. Key features include: zero cold starts, 20MB bundle size, TypeScript/JavaScript support, WebAssembly runtime, and native framework support for Next.js, React, Vue, and Astro. Deploy API handlers, authentication, data pipelines, and browser automation without managing servers.'
+      },
+      {
+        question: 'How does Functions compare to Cloudflare Workers?',
+        answer:
+          'Both platforms offer serverless compute with zero cold starts. The key difference is CPU time: Azion Functions supports extended execution, while Cloudflare Workers is optimized for lightweight request handlers. This makes Azion suitable for longer-running workloads like data transformation and browser automation. Cloudflare offers broader global distribution and multi-language support (Python, Rust, etc.). Choose Azion for compute-intensive jobs; choose Cloudflare for maximum global distribution.'
+      },
+      {
+        question: 'Which languages and frameworks are supported?',
+        answer:
+          'Functions supports TypeScript and JavaScript natively, plus WebAssembly for compiled extensions. Frameworks with native CLI support include Next.js, Vue, React, Angular, Gatsby, and Astro. The runtime provides web-standard APIs, extended Node.js APIs, and WebAssembly support.'
+      }
+    ]
+  }
+}
+
+export const PlainJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(PLAIN_SECTION)
 }

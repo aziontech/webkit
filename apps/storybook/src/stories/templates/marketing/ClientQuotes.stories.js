@@ -9,6 +9,7 @@ import SectionGap from '@aziontech/webkit/section-gap'
 import SectionModule from '@aziontech/webkit/section-module'
 
 import { COLUMN_IMPORTS, each, inColumn } from '../../_shared/markup'
+import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 
 const IMPORTS = [
@@ -122,16 +123,12 @@ const RETAIL_TEMPLATE = clientQuotes(RETAIL_QUOTES)
 
 const meta = {
   title: 'Templates/Marketing/Social Proof/ClientQuotes',
-  tags: ['autodocs'],
+  excludeStories: ['SITE_SECTION'],
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
     controls: { disable: true },
     docs: {
-      description: {
-        component:
-          'The proof band of a solution page: one client quotation on screen at a time, over a wall of client cards that is the selector itself, framed edge to edge and closed by a link to every success story. Each page leads the wall with the client that speaks to its audience and keeps the rest in one fixed order. All eight solution pages render it: Retail, Web Apps, AI Workloads, Security, Performance, Streaming, Technology and Financial Services. Built from `SectionModule`, `FrameBox`, `QuoteTabs` and `Button`.'
-      },
       canvas: { sourceState: 'shown' }
     }
   }
@@ -143,11 +140,45 @@ export const Default = {
   render: () => ({ components, setup, template: RETAIL_TEMPLATE }),
   parameters: {
     docs: {
-      description: {
-        story:
-          'The Retail page’s wall, led by Dafiti with the wording that page gives its quotation. Magalu, HeroSpark and Zoop pass their colour logo files from `@aziontech/webkit/assets`; Dafiti, Axur and Contabilizei pass a registered `mark` name and draw in the theme’s one ink.'
-      },
       source: { code: toSfc(IMPORTS, RETAIL_TEMPLATE) }
     }
   }
+}
+
+export const SITE_SECTION = {
+  _id: 'client-quotes',
+  props: {
+    ariaLabel: 'Client stories',
+    items: [
+      {
+        mark: 'dafiti',
+        clientName: 'Dafiti',
+        text: "One of the best CDN and WAF solutions I've ever used. Easy to implement and integrate, with speed and low latency that make a real difference for our customers.",
+        name: 'Julian H',
+        jobTitle: 'IT OPS, SRE & SEC Manager at Dafiti Group'
+      },
+      {
+        mark: 'axur',
+        text: 'With Azion, we scale proprietary AI models without managing infrastructure—inspecting millions of websites daily and automating the market’s fastest threat takedown.',
+        name: 'Fabio Ramos',
+        jobTitle: 'CEO at Axur'
+      },
+      {
+        logo: '/marketing-components/logos/magalu-extended-color.svg',
+        clientName: 'Magalu',
+        text: 'Azion shielded us from sophisticated cyberattacks and empowered us to modernize our infrastructure, reduce costs, and deliver the best shopping experiences to millions of customers across Latin America.',
+        name: 'Allan Monteiro',
+        jobTitle: 'CISO & Head of Technology at Magalu'
+      }
+    ],
+    action: {
+      label: 'See success stories',
+      href: '/success-cases'
+    }
+  }
+}
+
+export const DefaultJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(SITE_SECTION)
 }

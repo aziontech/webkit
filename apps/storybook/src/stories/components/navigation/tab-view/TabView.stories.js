@@ -21,7 +21,7 @@ const components = {
 
 /** @type {import('@storybook/vue3').Meta<typeof TabView.Root>} */
 const meta = {
-  title: 'Components/Navigation/TabView',
+  title: 'Components/Primitives/Navigation/TabView',
   component: TabView.Root,
   subcomponents: {
     'TabView.List': TabView.List,

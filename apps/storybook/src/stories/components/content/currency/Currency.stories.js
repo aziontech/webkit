@@ -6,7 +6,7 @@ const IMPORT = "import Currency from '@aziontech/webkit/currency'"
 
 /** @type {import('@storybook/vue3').Meta<typeof Currency>} */
 const meta = {
-  title: 'Components/Content/Currency',
+  title: 'Components/Primitives/Content/Currency',
   component: Currency,
   tags: ['autodocs'],
   parameters: {

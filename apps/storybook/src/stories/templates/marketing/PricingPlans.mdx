@@ -1,0 +1,49 @@
+import { Canvas, Meta, Source, Title } from '@storybook/blocks'
+
+import * as PricingPlansStories from './PricingPlans.stories'
+
+<Meta
+  of={PricingPlansStories}
+  name="Documentation"
+/>
+
+<Title />
+
+The plan cards at the top of Pricing. A toggle picks the billing period, and the plans sit side by side with their price, what they include and one button. The recommended plan is raised and carries a tag.
+
+Built from `SectionModule`, `FrameBox`, `SegmentedButton`, `CardGrid` and `CardPricing`, with a `Button` in each card.
+
+<p
+  style={{
+    margin: 'var(--spacing-lg) 0 0',
+    fontFamily: 'var(--font-code)',
+    fontSize: 'var(--text-label-code-sm-font-size)',
+    color: 'var(--text-muted)',
+    textTransform: 'uppercase',
+    letterSpacing: '0.08em'
+  }}
+>
+  Stories
+</p>
+
+### Plans
+
+Hobby, Pro and Enterprise. Only the Pro price changes with the toggle: 25 a month billed monthly, 20 billed annually. The Enterprise button points at the page's contact band.
+
+<Canvas of={PricingPlansStories.Plans} />
+
+##### Use it on the site
+
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `periods` sets the toggle options. The toggle shows only with two or more periods, and opens on the first.
+- `plans[].prices` holds one price per period, matched by `period`. A price without a period applies to every period.
+- `highlighted` raises the recommended plan, and `tagLabel` sets its tag.
+- `featuresTitle` and `features` (an `icon` and a `label` each) list what the plan includes.
+- `action` is the card button. It is dropped when its label or link is missing, and a plan without a name is dropped.
+
+Example:
+
+<div className="sb-site-json">
+  <Source of={PricingPlansStories.PlansJson} dark />
+</div>

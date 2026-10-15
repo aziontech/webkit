@@ -10,7 +10,7 @@
  * owns pixels. See docs/TESTING_AUDIT_2026-07-02.md §2.0.
  *
  * Baseline naming: the dark-desktop pass keeps the bare story id
- * (`components-actions-button--default.png`) so pre-matrix baselines stay
+ * (`components-primitives-actions-button--default.png`) so pre-matrix baselines stay
  * valid; every other mode is suffixed (`…--default--light-mobile.png`).
  *
  * Baselines are per-platform (font rasterization differs across OSes):
