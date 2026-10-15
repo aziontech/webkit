@@ -16,147 +16,35 @@ import {
 // Every scene the library ships, in the order `name` accepts them. Data lives beside the
 // render so the catalog cannot drift from what it documents.
 const ASSETS = [
-  'ai-agents',
   'ai-applications',
-  'ai-inference',
-  'ai-inference-isometric',
-  'ai-models',
-  'ai-vector-search',
-  'application-accelerator',
-  'application-accelerator-isometric',
-  'applications',
-  'applications-isometric',
   'automate-threat-mitigation',
   'azion-to-akamai',
   'azion-to-aws',
   'azion-to-cloudflare',
   'azion-to-fastly',
   'azion-to-vercel',
-  'bot-manager',
-  'bot-manager-isometric',
   'build-applications',
-  'cache',
-  'cache-isometric',
-  'data-stream',
-  'data-stream-isometric',
-  'database-query',
-  'database-replication',
-  'database-sharding',
-  'ddos-mitigation',
-  'ddos-mitigation-isometric',
   'deploy-secure-mcp-server',
   'distributed-apis',
   'dns-protection',
-  'edge-dns',
-  'edge-dns-isometric',
-  'edge-pulse',
-  'edge-pulse-isometric',
-  'events-funnel',
-  'events-timeline',
   'fastest-path-to-live-website',
-  'firewall',
-  'firewall-isometric',
-  'functions',
-  'functions-invocations',
-  'functions-isometric',
-  'functions-pipeline',
   'global-network',
-  'image-processor',
-  'image-processor-isometric',
   'implement-api-gateway-security',
   'improve-application-performance-and-reliability',
-  'infra-rack',
-  'infra-regions',
-  'infra-scaling',
   'infrastructure-as-code',
-  'kv-store',
-  'kv-store-isometric',
   'live-debugging',
-  'load-balancer',
-  'load-balancer-isometric',
   'low-latency',
-  'metrics-gauge',
-  'metrics-percentiles',
-  'metrics-sparklines',
   'modern-frontends',
-  'network-anycast',
-  'network-latency',
-  'network-shield',
-  'network-shield-isometric',
   'no-idle-no-waste',
-  'object-storage',
-  'object-storage-isometric',
-  'observe-alerts',
-  'observe-logs',
-  'observe-traces',
-  'orchestrator',
-  'orchestrator-isometric',
-  'our-network',
-  'our-network-isometric',
   'preview',
   'programmable-security',
   'protect-financial-applications',
   'quick-start-with-templates',
-  'real-time-events',
-  'real-time-events-isometric',
-  'real-time-metrics',
-  'real-time-metrics-isometric',
   'retail-application-modernization',
   'runtime',
   'saas-platforms',
-  'secure-certificate',
-  'secure-keys',
-  'secure-rules',
-  'secure-tokens',
-  'sql-database',
-  'sql-database-isometric',
   'stay-in-control',
-  'waf',
-  'waf-isometric',
-  'white-gloves-when-it-matters',
-  'workloads',
-  'workloads-hostnames',
-  'workloads-isometric',
-  'workloads-rollout'
-]
-
-const CONCEPT_PREFIXES = [
-  'infra-',
-  'database-',
-  'secure-',
-  'observe-',
-  'metrics-',
-  'events-',
-  'functions-',
-  'network-',
-  'ai-',
-  'workloads-'
-]
-
-const isIsometric = (n) => n.endsWith('-isometric')
-const isComparison = (n) => n.startsWith('azion-to-')
-const isProduct = (n) => ASSETS.includes(`${n}-isometric`)
-const isConcept = (n) =>
-  !isIsometric(n) && !isProduct(n) && CONCEPT_PREFIXES.some((prefix) => n.startsWith(prefix))
-
-const GROUPS = [
-  ['Products', 'One scene per Products-menu item, drawn flat.', ASSETS.filter(isProduct)],
-  [
-    'Products, isometric',
-    'The same product ideas as isometric line figures, named with an -isometric suffix.',
-    ASSETS.filter(isIsometric)
-  ],
-  [
-    'Concepts',
-    'One technical concept each: infrastructure, data, security, observability.',
-    ASSETS.filter(isConcept)
-  ],
-  ['Comparisons', 'Migration pairs, Azion against another vendor.', ASSETS.filter(isComparison)],
-  [
-    'Stories',
-    'Marketing compositions exported from Figma.',
-    ASSETS.filter((n) => !isProduct(n) && !isIsometric(n) && !isConcept(n) && !isComparison(n))
-  ]
+  'white-gloves-when-it-matters'
 ]
 
 const COLOR_ROLES = [
@@ -218,7 +106,7 @@ export const Library = {
   render: () => ({
     components: { PageContainer, PageHeader, SectionHeader, Illustration },
     setup() {
-      return { ASSETS, GROUPS, COLOR_ROLES, FILES, LABEL_CLASS, CELL_CLASS, SECTION_CLASS }
+      return { ASSETS, COLOR_ROLES, FILES, LABEL_CLASS, CELL_CLASS, SECTION_CLASS }
     },
     template: /* html */ `
       <PageContainer>
@@ -231,16 +119,12 @@ export const Library = {
         <section :class="SECTION_CLASS">
           <SectionHeader
             title="The library"
-            description="102 scenes. Every scene is drawn on the same 592×300 frame, so scenes line up with each other in a grid and a cell can reserve the box before the SVG loads. The root fills its container at that aspect ratio, capped at the canvas width."
+            description="Every scene is drawn on the same 592×300 frame, so scenes line up with each other in a grid and a cell can reserve the box before the SVG loads. The root fills its container at that aspect ratio, capped at the canvas width."
           />
-          <div v-for="[title, description, names] in GROUPS" :key="title" :class="SECTION_CLASS">
-            <h3 class="text-heading-sm text-(--text-default)">{{ title }} ({{ names.length }})</h3>
-            <p class="text-body-sm text-(--text-muted) mb-(--spacing-lg)">{{ description }}</p>
-            <div class="grid gap-(--spacing-xl) md:grid-cols-2">
-              <div v-for="asset in names" :key="asset" :class="CELL_CLASS">
-                <code class="font-code text-code text-(--text-default)">{{ asset }}</code>
-                <Illustration :name="asset" />
-              </div>
+          <div class="grid gap-[var(--spacing-xl)] md:grid-cols-2">
+            <div v-for="asset in ASSETS" :key="asset" :class="CELL_CLASS">
+              <code class="font-code text-code text-[var(--text-default)]">{{ asset }}</code>
+              <Illustration :name="asset" />
             </div>
           </div>
         </section>

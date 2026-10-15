@@ -14,113 +14,40 @@ const IMPORT = "import Illustration from '@aziontech/webkit/illustration'"
 // The registered scene names — the values `name` accepts. Keep in step with
 // packages/webkit/src/assets/illustrations/registry.ts.
 const ASSETS = [
-  'ai-agents',
   'ai-applications',
-  'ai-inference',
-  'ai-inference-isometric',
-  'ai-models',
-  'ai-vector-search',
-  'application-accelerator',
-  'application-accelerator-isometric',
-  'applications',
-  'applications-isometric',
   'automate-threat-mitigation',
   'azion-to-akamai',
   'azion-to-aws',
   'azion-to-cloudflare',
   'azion-to-fastly',
   'azion-to-vercel',
-  'bot-manager',
-  'bot-manager-isometric',
   'build-applications',
-  'cache',
-  'cache-isometric',
-  'data-stream',
-  'data-stream-isometric',
-  'database-query',
-  'database-replication',
-  'database-sharding',
-  'ddos-mitigation',
-  'ddos-mitigation-isometric',
   'deploy-secure-mcp-server',
   'distributed-apis',
   'dns-protection',
-  'edge-dns',
-  'edge-dns-isometric',
-  'edge-pulse',
-  'edge-pulse-isometric',
-  'events-funnel',
-  'events-timeline',
   'fastest-path-to-live-website',
-  'firewall',
-  'firewall-isometric',
-  'functions',
-  'functions-invocations',
-  'functions-isometric',
-  'functions-pipeline',
   'global-network',
-  'image-processor',
-  'image-processor-isometric',
   'implement-api-gateway-security',
   'improve-application-performance-and-reliability',
-  'infra-rack',
-  'infra-regions',
-  'infra-scaling',
   'infrastructure-as-code',
-  'kv-store',
-  'kv-store-isometric',
   'live-debugging',
-  'load-balancer',
-  'load-balancer-isometric',
   'low-latency',
-  'metrics-gauge',
-  'metrics-percentiles',
-  'metrics-sparklines',
   'modern-frontends',
-  'network-anycast',
-  'network-latency',
-  'network-shield',
-  'network-shield-isometric',
   'no-idle-no-waste',
-  'object-storage',
-  'object-storage-isometric',
-  'observe-alerts',
-  'observe-logs',
-  'observe-traces',
-  'orchestrator',
-  'orchestrator-isometric',
-  'our-network',
-  'our-network-isometric',
   'preview',
   'programmable-security',
   'protect-financial-applications',
   'quick-start-with-templates',
-  'real-time-events',
-  'real-time-events-isometric',
-  'real-time-metrics',
-  'real-time-metrics-isometric',
   'retail-application-modernization',
   'runtime',
   'saas-platforms',
-  'secure-certificate',
-  'secure-keys',
-  'secure-rules',
-  'secure-tokens',
-  'sql-database',
-  'sql-database-isometric',
   'stay-in-control',
-  'waf',
-  'waf-isometric',
-  'white-gloves-when-it-matters',
-  'workloads',
-  'workloads-hostnames',
-  'workloads-isometric',
-  'workloads-rollout'
+  'white-gloves-when-it-matters'
 ]
 
 /** @type {import('@storybook/vue3').Meta<typeof Illustration>} */
 const meta = {
-  title: 'Components/Content/Illustration',
+  title: 'Components/Primitives/Content/Illustration',
   component: Illustration,
   tags: ['autodocs'],
   parameters: {
@@ -209,75 +136,6 @@ export const Assets = {
           'Every registered scene. These are the only values `name` accepts — a drawing that is not here has to be exported from Figma first.'
       },
       source: { code: toSfc(IMPORT, ASSETS_TEMPLATE) }
-    }
-  }
-}
-
-const CONCEPT_PREFIXES = [
-  'infra-',
-  'database-',
-  'secure-',
-  'observe-',
-  'metrics-',
-  'events-',
-  'functions-',
-  'network-',
-  'ai-',
-  'workloads-'
-]
-
-const isIsometric = (n) => n.endsWith('-isometric')
-const isComparison = (n) => n.startsWith('azion-to-')
-const isProduct = (n) => ASSETS.includes(`${n}-isometric`)
-const isConcept = (n) =>
-  !isIsometric(n) && !isProduct(n) && CONCEPT_PREFIXES.some((prefix) => n.startsWith(prefix))
-
-const GALLERY_GROUPS = [
-  ['Products', ASSETS.filter(isProduct)],
-  ['Products, isometric', ASSETS.filter(isIsometric)],
-  ['Concepts', ASSETS.filter(isConcept)],
-  ['Comparisons', ASSETS.filter(isComparison)],
-  [
-    'Stories',
-    ASSETS.filter((n) => !isProduct(n) && !isIsometric(n) && !isConcept(n) && !isComparison(n))
-  ]
-]
-
-const GALLERY_TEMPLATE = GALLERY_GROUPS.map(
-  ([title, names]) => `<section class="flex flex-col gap-(--spacing-md)">
-  <h3 class="text-heading-sm text-(--text-default)">${title} (${names.length})</h3>
-  <div class="grid grid-cols-3 gap-(--spacing-lg)">
-${names
-  .map(
-    (n) => `    <figure class="flex flex-col gap-(--spacing-xs)">
-      <Illustration name="${n}" />
-      <figcaption class="text-body-sm text-(--text-muted)">${n}</figcaption>
-    </figure>`
-  )
-  .join('\n')}
-  </div>
-</section>`
-).join('\n')
-
-const GALLERY_WRAPPED = `<div class="flex flex-col gap-(--spacing-xl)">
-${GALLERY_TEMPLATE}
-</div>`
-
-export const Gallery = {
-  render: () => ({
-    components: { Illustration },
-    template: GALLERY_WRAPPED
-  }),
-  parameters: {
-    layout: 'padded',
-    controls: { disable: true },
-    docs: {
-      controls: { disable: true },
-      description: {
-        story:
-          'The whole library at once, grouped by family and captioned with the `name` each scene takes: product scenes, their isometric twins, concept scenes, comparisons and story compositions.'
-      },
-      source: { code: toSfc(IMPORT, GALLERY_WRAPPED) }
     }
   }
 }
