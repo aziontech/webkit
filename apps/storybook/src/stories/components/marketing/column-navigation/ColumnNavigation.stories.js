@@ -77,7 +77,7 @@ export default meta
 const DEFAULT_TEMPLATE = `<ColumnNavigation aria-label="Platform" :columns="4" :mobile-columns="2">
   <ColumnNavigationColumn title="Compute">
     <ColumnNavigationItem icon="ai ai-edge-functions" title="Functions" description="Run serverless code closer to users" href="/functions" />
-    <ColumnNavigationItem icon="ai ai-edge-orchestrator" title="Rules Engine" description="Automate request handling with programmable rules" href="/rules-engine" />
+    <ColumnNavigationItem icon="ai ai-rules-engine" title="Rules Engine" description="Automate request handling with programmable rules" href="/rules-engine" />
     <ColumnNavigationItem icon="ai ai-load-balancer" title="Load Balancer" description="Distribute traffic for performance and availability" href="/load-balancer" />
   </ColumnNavigationColumn>
   <ColumnNavigationColumn title="Data">
@@ -174,7 +174,7 @@ const ROWS_TEMPLATE = `<ColumnNavigation aria-label="Row states" :columns="2">
   </ColumnNavigationColumn>
   <ColumnNavigationColumn title="On the way">
     <ColumnNavigationItem icon="ai ai-edge-ai" title="AI Inference" description="Run AI models closer to users" />
-    <ColumnNavigationItem icon="ai ai-gateway" title="AI Gateway" description="Secure, manage, and optimize AI traffic" />
+    <ColumnNavigationItem icon="ai ai-ai-gateway" title="AI Gateway" description="Secure, manage, and optimize AI traffic" />
   </ColumnNavigationColumn>
 </ColumnNavigation>`
 

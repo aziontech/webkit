@@ -53,7 +53,7 @@ const setup = () => ({ azionHighlight, branches, personalTokens, usageChart })
 const REASONS = [
   {
     src: 'branches',
-    title: 'Faster to publish.',
+    title: 'Build at AI speed.',
     description:
       'Go from commit to a live URL in minutes. Test on a preview, promote when you are ready, and roll back without a rebuild.'
   },
@@ -61,19 +61,19 @@ const REASONS = [
     src: 'personalTokens',
     title: 'Secure by default.',
     description:
-      'Every endpoint carries its own keys, rate limits and instant revocation, managed from a single console.'
+      'Every workload in its own isolated environment, with WAF, rate limits, and leading compliance practices, with no configuration required.'
   },
   {
     src: 'azionHighlight',
-    title: 'Simpler to operate.',
+    title: 'No ops required.',
     description:
-      'Deploys, gateways and observability sit on one platform, so there is no second console to reconcile when something breaks.'
+      'A fully autonomous infrastructure on 100+ data centers worldwide, with zero cold starts and instant scale-to-zero, so infrastructure becomes invisible.'
   },
   {
     src: 'usageChart',
-    title: 'Faster applications.',
+    title: 'Faster and more efficient workloads.',
     description:
-      'Caching and image processing run at the edge, so every response is served from the location closest to the request.'
+      "Compute and security are delivered from the location closest to the request, and Azion's runtime is 30x more efficient than containers."
   }
 ]
 
@@ -106,7 +106,7 @@ const ARTWORK_TEMPLATE = inColumn(`<SectionModule :divided="false" :padded="fals
     <SectionTitle
       eyebrow="Why Azion"
       title="From commit to observability, on one platform"
-      description="Build, ship and run an application on the same platform that serves it — one place to deploy from, one place to watch it from."
+      description="Build, ship, and run an application on the same platform that serves it — one place to deploy from, one place to watch it from."
     />
   </template>
 

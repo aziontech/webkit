@@ -1,3 +1,5 @@
+import { fileURLToPath, URL } from 'node:url'
+
 import tailwindcss from '@tailwindcss/vite'
 import vue from '@vitejs/plugin-vue'
 
@@ -57,7 +59,9 @@ const config = {
 
     config.resolve = config.resolve || {}
     config.resolve.alias = {
-      ...(config.resolve.alias || {})
+      ...(config.resolve.alias || {}),
+      '@shared': fileURLToPath(new URL('../../webkit-sample/src/shared', import.meta.url)),
+      '@site': fileURLToPath(new URL('../../webkit-sample/src/site', import.meta.url))
     }
 
     // Enable dependency pre-bundling for faster rebuilds

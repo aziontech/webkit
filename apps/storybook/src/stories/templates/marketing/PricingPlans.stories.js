@@ -35,10 +35,10 @@ const PLANS = [
     },
     featuresTitle: 'All Features Included.',
     features: [
-      { icon: 'pi pi-globe', label: 'Global infrastructure' },
+      { icon: 'ai ai-edge-nodes', label: 'Global infrastructure' },
       { icon: 'ai ai-edge-functions', label: 'Serverless functions' },
       { icon: 'ai ai-edge-storage', label: 'Storage and database' },
-      { icon: 'pi pi-image', label: 'Image optimization' },
+      { icon: 'ai ai-image-processor', label: 'Image optimization' },
       { icon: 'ai ai-edge-firewall', label: 'DDoS mitigation and firewall' }
     ],
     action: { label: 'Start for free', kind: 'outlined', href: '/signup' }

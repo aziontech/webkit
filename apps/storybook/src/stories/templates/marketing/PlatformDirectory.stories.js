@@ -38,7 +38,13 @@ const PLATFORM_PRIMITIVES = [
         href: '/products/functions'
       },
       {
-        icon: 'pi pi-sitemap',
+        icon: 'ai ai-durable-objects',
+        title: 'Durable Objects',
+        description: 'Stateful compute, deployed worldwide',
+        href: 'https://www.azion.com/en/products/durable-objects/'
+      },
+      {
+        icon: 'ai ai-rules-engine',
         title: 'Rules Engine',
         description: 'Automate request handling with programmable rules',
         href: 'https://www.azion.com/en/documentation/products/build/applications/rules-engine/'
@@ -50,7 +56,7 @@ const PLATFORM_PRIMITIVES = [
         href: 'https://www.azion.com/en/products/load-balancer/'
       },
       {
-        icon: 'pi pi-image',
+        icon: 'ai ai-image-processor',
         title: 'Image Processor',
         description: 'Optimize and transform images in real time',
         href: 'https://www.azion.com/en/products/image-processor/'
@@ -67,10 +73,10 @@ const PLATFORM_PRIMITIVES = [
         href: 'https://www.azion.com/en/products/ai-inference/'
       },
       {
-        icon: 'ai ai-gateway',
+        icon: 'ai ai-ai-gateway',
         title: 'AI Gateway',
         description: 'Secure, manage, and optimize AI traffic',
-        href: 'https://www.azion.com/en/solutions#ai'
+        href: 'https://www.azion.com/en/products/ai-gateway/'
       }
     ]
   },
@@ -107,7 +113,7 @@ const PLATFORM_PRIMITIVES = [
     label: 'Security',
     items: [
       {
-        icon: 'ai ai-waf-rules',
+        icon: 'ai ai-edge-firewall',
         title: 'Web Application Firewall',
         description: 'Protect human and AI applications from threats',
         href: 'https://www.azion.com/en/products/web-application-firewall/'
@@ -119,7 +125,7 @@ const PLATFORM_PRIMITIVES = [
         href: 'https://www.azion.com/en/solutions/api-gateway/'
       },
       {
-        icon: 'pi pi-android',
+        icon: 'ai ai-bot-manager',
         title: 'Bot Management',
         description: 'Detect and stop automated threats instantly',
         href: 'https://www.azion.com/en/products/bot-manager/'
@@ -163,7 +169,7 @@ ${each(
 </SectionModule>`)
 
 const PRIMITIVES_TEMPLATE = platformDirectory({
-  heading: '<SectionTitle title="Serverless AI-Native Primitives for Autonomous Workloads" />',
+  heading: '<SectionTitle title="Serverless AI-native primitives for autonomous workloads" />',
   marks: 'all',
   label: 'Platform primitives',
   groups: PLATFORM_PRIMITIVES

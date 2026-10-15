@@ -109,7 +109,7 @@ const RECOGNITIONS = [
     firm: FIRMS.g2
   },
   {
-    text: 'Recognized as a Leader in CDN and a High Performer in Web Security, DDoS Protection, WAF, Bot Detection and Mitigation, SSL & TLS Certificate Tools, and DNS Security Solution.',
+    text: 'Recognized as a Leader in CDN and a High Performer in Web Security, DDoS Protection, WAF, Bot Detection and Mitigation, SSL & TLS Certificate Tools, and DNS Security Solutions.',
     name: 'G2 Reports',
     jobTitle: 'December 2025',
     firm: FIRMS.g2
@@ -136,7 +136,7 @@ const firmMark = (firm) =>
 
 const TEMPLATE = inColumn(`<SectionModule :divided="false" :padded="false">
   <template #header>
-    <SectionTitle title="Recognized as a Market Leader" />
+    <SectionTitle title="Recognized as a market leader" />
   </template>
 
   <FrameBox flush borders="y" marks="all">

@@ -107,14 +107,7 @@ export const DOCS_HEADER_MARKUP = `<GlobalHeader aria-label="Azion documentation
   </GlobalHeader.Right>
 </GlobalHeader>`
 
-export const SITE_LINKS = [
-  'Solutions',
-  'Products',
-  'Developers',
-  'Resources',
-  'Customers',
-  'Pricing'
-]
+export const SITE_LINKS = ['Solutions', 'Products', 'Developer', 'Resources', 'Pricing']
 
 export const SITE_HEADER_IMPORTS = [
   "import Brand from '@aziontech/webkit/brand'",
@@ -169,12 +162,12 @@ export const SITE_HEADER_MARKUP = `<GlobalHeader kind="site" aria-label="Azion" 
   </GlobalHeader.Middle>
 
   <GlobalHeader.Right>
-    ${SEARCH_BUTTON('Search')}
     <div class="hidden xl:flex">
       <Button label="Contact" kind="text" size="medium" href="#" />
     </div>
     <Button label="Login" kind="secondary" size="medium" href="#" />
-    <Button label="Start for Free" kind="primary" size="medium" class="shrink-0" href="#" />
+    <Button label="Start for free" kind="primary" size="medium" class="shrink-0" href="#" />
+    ${SEARCH_BUTTON('Search')}
   </GlobalHeader.Right>
 </GlobalHeader>`
 

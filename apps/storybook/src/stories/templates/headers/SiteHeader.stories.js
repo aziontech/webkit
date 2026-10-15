@@ -29,7 +29,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The marketing bar: a sticky `GlobalHeader` in its `site` placement. The surface runs to the window edges while the regions are capped at the bar’s own measure and centred, so the bar answers to the framed page under it. Start: the navigation trigger below `xl` and the brand. Middle: the navigation, from `xl`. End: search first, then Contact from `xl`, Login and Start for Free last. Search leads the end cluster in every channel, ahead of the buttons, so it never moves between the site, the docs and the console. The mega-menus and the navigation sheet are documented on Templates › Marketing › Shell › SiteNav. Built from `GlobalHeader`, `NavigationMenu`, `IconButton`, `Button` and `Brand`.'
+          'The marketing bar: a sticky `GlobalHeader` in its `site` placement. The surface runs to the window edges while the regions are capped at the bar’s own measure and centred, so the bar answers to the framed page under it. Start: the navigation trigger below `xl` and the brand. Middle: the navigation, from `xl`. End: Contact from `xl`, then Login and Start for free, with search last. The mega-menus and the navigation sheet are documented on Templates › Marketing › Shell › SiteNav. Built from `GlobalHeader`, `NavigationMenu`, `IconButton`, `Button` and `Brand`.'
       },
       canvas: { sourceState: 'shown' }
     }

@@ -59,6 +59,7 @@ const SPECIALIST = {
   href: '#contact',
   trailing: true
 }
+const SPECIALIST_LOWER = { ...SPECIALIST, label: 'Talk to a specialist' }
 const SPECIALIST_PAGE = {
   label: 'Talk to a Specialist',
   kind: 'outlined',
@@ -181,19 +182,29 @@ const CENTERED_CAROUSEL_TEMPLATE = `<Hero
   texture="dots"
   texture-fade="top"
   carousel
-  carousel-label="Trusted by mission-critical workloads"
+  carousel-label="Proven on mission-critical workloads"
   :carousel-marks="${marks(CLIENT_STRIP, 1)}"
 >
   <Hero.Title
     centered
     max-width="xl"
-    highlight="Invisible Infrastructure"
-    title="for the Speed of AI"
+    highlight="Invisible infrastructure"
+    title="for the speed of AI"
     description="Compute, AI, data, security, and observability primitives that run autonomously and scale instantly on 100+ data centers worldwide. One platform, from idea to mission-critical."
   >
-${indent(actions([START_FREE, SPECIALIST]), 2)}
+${indent(actions([START_FREE_LOWER, SPECIALIST_LOWER]), 2)}
   </Hero.Title>
 </Hero>`
+
+const CENTERED_CAROUSEL_LONG_TEMPLATE = CENTERED_CAROUSEL_TEMPLATE.replace(
+  'max-width="xl"',
+  'max-width="3xl"'
+)
+  .replace('highlight="Invisible infrastructure"', 'eyebrow="Functions"')
+  .replace(
+    'title="for the speed of AI"',
+    'title="Funções serverless instantâneas para aplicações modernas"'
+  )
 
 const TITLE_BAND_TEMPLATE = `<Hero
   kind="band"
@@ -209,6 +220,22 @@ const TITLE_BAND_TEMPLATE = `<Hero
     description="Practical knowledge to speed up, secure, and scale applications."
   >
 ${indent(actions([SEE_ARTICLES, SPECIALIST_PAGE]), 2)}
+  </Hero.Title>
+</Hero>`
+
+const TITLE_BAND_SHORT_TEMPLATE = `<Hero
+  kind="band"
+  max-width="5xl"
+  size="large"
+>
+  <Hero.Title
+    centered
+    max-width="xl"
+    eyebrow="Cache"
+    title="Accelerate content delivery globally"
+    description="Serve cached content with fast response times. Reduce origin load and keep applications fast during traffic spikes."
+  >
+${indent(actions([START_FREE, SPECIALIST]), 2)}
   </Hero.Title>
 </Hero>`
 
@@ -346,6 +373,19 @@ export const CenteredCarousel = {
   }
 }
 
+export const CenteredCarouselLongTitle = {
+  render: () => ({ components, template: CENTERED_CAROUSEL_LONG_TEMPLATE }),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The same screen hero for a headline too long for the default column. The title column widens from `xl` to `3xl`, so a headline that would break into three lines breaks into two. Short headlines keep the default column.'
+      },
+      source: { code: toSfc([BUTTON_IMPORT, HERO_IMPORT], CENTERED_CAROUSEL_LONG_TEMPLATE) }
+    }
+  }
+}
+
 export const TitleBand = {
   render: () => ({ components, template: TITLE_BAND_TEMPLATE }),
   parameters: {
@@ -355,6 +395,19 @@ export const TitleBand = {
           'The Learning Center hero: a padded band rather than a screen, at `size="large"` so it opens with twice the band’s usual rhythm above and below, the title, a one-line description and two actions centered, and the client strip on its floor. Use it where the page is a list or a catalogue and a full viewport of title would push the first entry below the fold.'
       },
       source: { code: toSfc([BUTTON_IMPORT, HERO_IMPORT], TITLE_BAND_TEMPLATE) }
+    }
+  }
+}
+
+export const TitleBandShortTitle = {
+  render: () => ({ components, template: TITLE_BAND_SHORT_TEMPLATE }),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The title band for a product page with a short headline. The title column narrows from `4xl` to `xl`, so the headline and description sit in a compact centered block instead of one wide line, and the band has no client strip, so the first section starts right under it.'
+      },
+      source: { code: toSfc([BUTTON_IMPORT, HERO_IMPORT], TITLE_BAND_SHORT_TEMPLATE) }
     }
   }
 }

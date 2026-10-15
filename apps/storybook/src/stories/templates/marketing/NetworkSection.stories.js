@@ -67,7 +67,8 @@ const setup = () => ({
 
 const NETWORK_BAND = {
   eyebrow: 'Region: Earth.',
-  title: 'One distributed infrastructure to build, secure and scale workloads anywhere.',
+  title: 'One distributed infrastructure to build, secure, and scale workloads',
+  titleTail: '— without the complexity of managing or scaling it.',
   lead: 'Built around your users. Distributed around your data.'
 }
 
@@ -120,21 +121,21 @@ const OUTCOMES = [
     src: 'madeiramadeiraExtendedReversed',
     name: 'MadeiraMadeira',
     filter: '',
-    text: '90% lower cloud costs, and faster product delivery at scale.',
+    text: '90% lower cloud costs and faster applications at scale.',
     highlights: ['90% lower cloud costs']
   },
   {
     src: 'rennerExtendedColor',
     name: 'Renner',
     filter: '',
-    text: '67% saved on data transfer costs, through massive traffic spikes.',
+    text: '67% saved on data transfer, even during massive traffic spikes.',
     highlights: ['67% saved']
   },
   {
     src: 'fourbankExtendedReversed',
     name: 'Fourbank',
     filter: MONOCHROME,
-    text: 'DDoS mitigated on applications and APIs, behind a programmable security layer.',
+    text: 'DDoS mitigated on applications and APIs, with a programmable security layer.',
     highlights: ['DDoS mitigated']
   }
 ]
@@ -182,7 +183,8 @@ ${indent(DESKTOP_MAP, 2)}
           size="small"
           eyebrow="${NETWORK_BAND.eyebrow}"
           title="${NETWORK_BAND.title}"
-          class="relative [&_h2]:max-w-[16em]"
+          description="${NETWORK_BAND.titleTail}"
+          class="relative [&_h2]:max-w-[27em] [&_h2]:text-heading-md! [&_h2+p]:-mt-(--spacing-lg) [&_h2+p]:max-w-[27em] [&_h2+p]:text-heading-md [&_h2+p]:text-(--text-default)"
         />
 
 ${indent(MOBILE_MAP, 4)}
@@ -196,7 +198,7 @@ ${indent(MOBILE_MAP, 4)}
 ${each(
   NETWORK_CLAIMS,
   (claim) => `<li
-  class="inline-flex h-6 items-center rounded-(--shape-elements) border border-(--primary) bg-[color-mix(in_srgb,var(--primary)_10%,var(--bg-canvas))] px-(--spacing-xs) text-label-sm text-(--text-default)"
+  class="inline-flex h-7 items-center rounded-(--shape-elements) border border-(--primary) bg-[color-mix(in_srgb,var(--primary)_10%,var(--bg-canvas))] px-(--spacing-sm) text-label-md text-(--text-default)"
 >
   ${claim}
 </li>`,
@@ -275,7 +277,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The network argument as one framed section: an animated world map behind the claim (“Region: Earth.”), a lead line and four infrastructure claims as pills, then a floor that backs the claim up — client quotes, network benefits or figures, one story each. The title is set at the small size and held to 16em, so it wraps in three lines and leaves the map clear. At every width the title holds the top of the band and the lead line, a muted overline, sits with the claims at the bottom; on tablets and phones the band is held taller than on desktop, so the map shows in the space between them. On phones the map is not a backdrop: it gets its own box between the title and the claims, bled to the frame’s edges and faded out at its top and bottom, so no line of copy ever sits on it. It is zoomed in and shifted right to frame the Atlantic: the Americas on the left, western Europe on the right, and only the edge of Africa. The map is two `NetworkMap`s, one behind the band from `md` up and one in its own box on phones. Built from `SectionModule`, `FrameBox`, `NetworkMap`, `SectionTitle` and, on the floor, `CardGrid` with a `Quote` per client or a `Topic` per benefit, or `BigNumbers` for the figures.'
+          'The network argument as one framed section: an animated world map behind the claim (“Region: Earth.”), a lead line and four infrastructure claims as pills, then a floor that backs the claim up — client quotes, network benefits or figures, one story each. The title is set a step below the small size, held to 27em, with the closing clause on a line of its own, so the claim wraps in two lines over its clause and leaves the map clear. At every width the title holds the top of the band and the lead line, a muted overline, sits with the claims at the bottom; on tablets and phones the band is held taller than on desktop, so the map shows in the space between them. On phones the map is not a backdrop: it gets its own box between the title and the claims, bled to the frame’s edges and faded out at its top and bottom, so no line of copy ever sits on it. It is zoomed in and shifted right to frame the Atlantic: the Americas on the left, western Europe on the right, and only the edge of Africa. The map is two `NetworkMap`s, one behind the band from `md` up and one in its own box on phones. Built from `SectionModule`, `FrameBox`, `NetworkMap`, `SectionTitle` and, on the floor, `CardGrid` with a `Quote` per client or a `Topic` per benefit, or `BigNumbers` for the figures.'
       },
       canvas: { sourceState: 'shown' }
     }

@@ -137,7 +137,7 @@ const HEADER_SLOT = `<template #header>
 const MENU_CONTENT = `<Menu role="presentation">
     <MenuBack />
     <MenuGroup>
-      <MenuItem label="Home" icon="ai ai-home" href="/" selected />
+      <MenuItem label="Home" icon="pi pi-home" href="/" selected />
       <MenuItem label="Marketplace" icon="ai ai-marketplace" href="/marketplace" />
     </MenuGroup>
     <MenuGroup label="Build">
