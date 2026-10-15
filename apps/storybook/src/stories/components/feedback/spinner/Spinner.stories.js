@@ -1,6 +1,6 @@
 import Spinner from '@aziontech/webkit/spinner'
 
-import { toSfc } from '../../_shared/story-source'
+import { toSfc } from '../../../_shared/story-source'
 
 const IMPORT = "import Spinner from '@aziontech/webkit/spinner'"
 
