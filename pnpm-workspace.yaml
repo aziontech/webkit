@@ -43,6 +43,7 @@ overrides:
   shell-quote: ">=1.11.0 <2" # GHSA-pqg4-j6r4-53mv (quote() command injection), patched 1.11.0; bounded to 1.x — concurrently (storybook) pins ^1
   source-map-js: ">=1.2.2 <2" # GHSA-68fv-2mgg-jv7q (event-loop DoS), patched 1.2.2; bounded to 1.x — postcss pins ^1
   postcss-selector-parser: ">=7.1.6 <8" # GHSA-rj75-hqrm-r3gf (quadratic selector parsing), patched 7.1.6, no patched 6.x; tailwindcss / @tailwindcss/typography chain pins ^6
+  handlebars: ">=4.7.10 <5" # GHSA-8r5x-fm3f-whwj and GHSA-p8wg-vrv2-v86f (JavaScript injection in compile), GHSA-xw65-4hp5-5hc7, patched 4.7.10; bounded to 4.x — fantasticon (icons) pins ^4
   vue: ">=3.5.42 <4" # GHSA-g2v6-rqmx-r4w6 (@vue/server-renderer XSS via missing CR), patched 3.5.42; already inside the ^3.5.x devDependency range — lockfile was just stale
   "joi@17": ">=17.13.8 <18" # GHSA-wr44-6hxh-3jwq (prototype replacement via messages compilation), patched 17.13.8; supersedes the 17.13.6 floor
   "joi@18": ">=18.2.9 <19" # GHSA-wr44-6hxh-3jwq, patched 18.2.9; supersedes the 18.2.5 floor
