@@ -64,7 +64,7 @@ const MORE_GROUP = {
 export const NAV_FLAT = [
   {
     items: [
-      { id: 'overview', label: 'Overview', icon: 'ai ai-home', path: '/home' },
+      { id: 'overview', label: 'Overview', icon: 'pi pi-home', path: '/home' },
       { id: 'workloads', label: 'Workloads', icon: 'ai ai-workloads', path: '/workloads' },
       {
         id: 'deployments',
@@ -183,7 +183,7 @@ export const NAV_FLAT = [
 export const NAV_LEVELS = [
   {
     items: [
-      { id: 'overview', label: 'Overview', icon: 'ai ai-home', path: '/home' },
+      { id: 'overview', label: 'Overview', icon: 'pi pi-home', path: '/home' },
       {
         id: 'workloads-module',
         label: 'Workloads',

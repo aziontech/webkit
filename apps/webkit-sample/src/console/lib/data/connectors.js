@@ -14,7 +14,7 @@ export const CONNECTOR_TYPES = {
   },
   'live-ingest': {
     label: 'Live Ingest',
-    icon: 'ai ai-real-time-events',
+    icon: 'ai ai-live-ingest',
     description: 'An Azion region a live stream is ingested from.'
   }
 }

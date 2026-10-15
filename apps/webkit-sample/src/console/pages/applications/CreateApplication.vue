@@ -435,7 +435,7 @@
     if (isConfigured.value)
       return {
         verb: 'Provisioning',
-        icon: source.value?.icon || 'ai ai-applications',
+        icon: source.value?.icon || 'ai ai-edge-application',
         from: source.value?.title ?? 'application',
         to: ''
       }
@@ -453,7 +453,7 @@
       {
         key: 'rule',
         kind: 'Rules Engine rule',
-        icon: 'pi pi-sliders-h',
+        icon: 'ai ai-rules-engine',
         name: installedRule.value.name,
         status: 'Active',
         href: `/applications/${application.id}`,

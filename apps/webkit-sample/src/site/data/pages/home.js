@@ -15,12 +15,13 @@ import quickStartWithTemplates from '@aziontech/webkit/assets/quick-start-with-t
 import usageChart from '@aziontech/webkit/assets/usage-chart.svg'
 import { CLIENT_STRIP } from '@shared/ui/brand/strips.js'
 
+import { PLATFORM_DIRECTORY } from '../product-pages.js'
 import { EARTH_NETWORK } from '../solutions.js'
 
 export const HOME_REASONS = [
   {
     src: branches,
-    title: 'Faster to publish.',
+    title: 'Build at AI speed.',
     description:
       'Go from commit to a live URL in minutes. Test on a preview, promote when you are ready, and roll back without a rebuild.'
   },
@@ -28,19 +29,19 @@ export const HOME_REASONS = [
     src: personalTokens,
     title: 'Secure by default.',
     description:
-      'Every endpoint carries its own keys, rate limits and instant revocation, managed from a single console.'
+      'Every workload in its own isolated environment, with WAF, rate limits, and leading compliance practices, with no configuration required.'
   },
   {
     src: azionHighlight,
-    title: 'Simpler to operate.',
+    title: 'No ops required.',
     description:
-      'Deploys, gateways and observability sit on one platform, so there is no second console to reconcile when something breaks.'
+      'A fully autonomous infrastructure on 100+ data centers worldwide, with zero cold starts and instant scale-to-zero, so infrastructure becomes invisible.'
   },
   {
     src: usageChart,
-    title: 'Faster applications.',
+    title: 'Faster and more efficient workloads.',
     description:
-      'Caching and image processing run at the edge, so every response is served from the location closest to the request.'
+      "Compute and security are delivered from the location closest to the request, and Azion's runtime is 30x more efficient than containers."
   }
 ]
 
@@ -50,39 +51,39 @@ const learnMore = (href) => [
 
 export const HOME_SOLUTIONS = [
   {
-    title: 'Build and Run Applications',
+    title: 'Modern applications',
     description:
-      'Deploy applications and static sites straight from Git, and run them on a distributed network with no servers to manage.',
+      'Build static sites, develop serverless applications, or modernize your legacy systems.',
     href: '/site/solutions/web-apps',
     image: { src: quickStartWithTemplates, alt: '', width: 360, height: 165 },
     actions: learnMore('/site/solutions/web-apps')
   },
   {
-    title: 'Improve Application Performance and Reliability',
+    title: 'Optimized workloads',
     description:
-      'Cache, route and optimize every request close to your users, so applications stay fast and available under any load.',
+      'Accelerate applications, optimize content delivery (CDN), and process images on demand efficiently.',
     href: '/site/solutions/performance',
     illustration: 'improve-application-performance-and-reliability',
     actions: learnMore('/site/solutions/performance')
   },
   {
-    title: 'Build and Run AI Workloads',
+    title: 'AI applications',
     description:
-      'Run inference, vector search and AI agents on distributed infrastructure, close to the data and the users that need them.',
+      'Build and deploy AI agents and AI-powered applications on a distributed platform that delivers the best value on the market.',
     href: '/site/solutions/ai',
     illustration: 'ai-applications',
     actions: learnMore('/site/solutions/ai')
   },
   {
-    title: 'Secure Applications and Networks',
+    title: 'Protected applications and APIs',
     description:
-      'Stop DDoS attacks, bots and exploits before they reach your origin, with WAF and network rules managed from one console.',
+      'Protect web applications and APIs (WAAP), manage bots, and modernize your security in a programmable and scalable way.',
     href: '/site/solutions/security',
     illustration: 'automate-threat-mitigation',
     actions: learnMore('/site/solutions/security')
   },
   {
-    title: 'Deliver Media and Streaming Content',
+    title: 'Media and streaming content',
     description:
       'Stream video and deliver large files at low latency to audiences of any size, with media processed at the edge.',
     href: '/site/solutions/streaming',
@@ -137,7 +138,7 @@ export const HOME_RECOGNITIONS = [
     firm: FIRMS.g2
   },
   {
-    text: 'Recognized as a Leader in CDN and a High Performer in Web Security, DDoS Protection, WAF, Bot Detection and Mitigation, SSL & TLS Certificate Tools, and DNS Security Solution.',
+    text: 'Recognized as a Leader in CDN and a High Performer in Web Security, DDoS Protection, WAF, Bot Detection and Mitigation, SSL & TLS Certificate Tools, and DNS Security Solutions.',
     name: 'G2 Reports',
     jobTitle: 'December 2025',
     firm: FIRMS.g2
@@ -187,22 +188,18 @@ export const HOME_PAGE = [
   {
     section: 'Heroes',
     kind: 'centered-carousel',
-    highlight: 'Invisible Infrastructure',
-    title: 'for the Speed of AI',
+    highlight: 'Invisible infrastructure',
+    title: 'for the speed of AI',
     description:
       'Compute, AI, data, security, and observability primitives that run autonomously and scale instantly on 100+ data centers worldwide. One platform, from idea to mission-critical.',
     actions: [
-      { label: 'Start Free', href: '/signup', kind: 'secondary' },
-      { label: 'Talk to a Specialist', href: '#contact', kind: 'outlined', trailing: true }
+      { label: 'Start free', href: '/signup', kind: 'secondary' },
+      { label: 'Talk to a specialist', href: '#contact', kind: 'outlined', trailing: true }
     ],
-    carouselLabel: 'Trusted by mission-critical workloads',
+    carouselLabel: 'Proven on mission-critical workloads',
     carouselMarks: CLIENT_STRIP
   },
-  {
-    section: 'PlatformDirectory',
-    title: 'Serverless AI-Native Primitives for Autonomous Workloads',
-    ariaLabel: 'Platform primitives'
-  },
+  PLATFORM_DIRECTORY,
   { section: 'NetworkSection', ...EARTH_NETWORK },
   {
     section: 'FeatureTiles',
@@ -210,13 +207,13 @@ export const HOME_PAGE = [
     eyebrow: 'Why Azion',
     title: 'From commit to observability, on one platform',
     description:
-      'Build, ship and run an application on the same platform that serves it — one place to deploy from, one place to watch it from.',
+      'Build, ship, and run an application on the same platform that serves it — one place to deploy from, one place to watch it from.',
     tiles: HOME_REASONS
   },
   { section: 'MediaSplitStack', kind: 'solutions', bands: HOME_SOLUTIONS },
   {
     section: 'RecognitionMarquee',
-    title: 'Recognized as a Market Leader',
+    title: 'Recognized as a market leader',
     items: HOME_RECOGNITIONS
   },
   { section: 'ClientMosaic', cells: HOME_CLIENT_CELLS },
@@ -228,7 +225,7 @@ export const HOME_PAGE = [
     titleMuted: 'Everywhere.',
     description:
       'Get faster launches, lower latency, and less infrastructure overhead from day one.',
-    actions: [{ label: 'Start Free', href: '/signup', kind: 'secondary' }],
+    actions: [{ label: 'Start free', href: '/signup', kind: 'secondary' }],
     aside: { label: 'Talk to our team', href: '/site/contact' }
   }
 ]

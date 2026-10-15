@@ -127,7 +127,7 @@
 
   const TITLES = {
     'centered-carousel': { centered: true, maxWidth: 'xl' },
-    'title-band': { centered: true },
+    'title-band': { centered: true, maxWidth: 'xl' },
     'centered-band': { centered: true, maxWidth: '2xl' },
     'pixel-floor': {},
     'copy-beside-art': { maxWidth: 'xl' },
@@ -136,6 +136,7 @@
 
   const LONG_TITLE_WIDTH = {
     'centered-carousel': '3xl',
+    'title-band': '4xl',
     'centered-band': '3xl'
   } as const
 

@@ -7,7 +7,7 @@ export const START_TABS = [
     value: 'agents',
     title: 'Ask your coding agent',
     description:
-      'Connect the Azion MCP servers to Claude Code, Cursor or Copilot, and the agent creates, instances and routes the function, with a dry run before every write.'
+      'Connect the Azion MCP servers to Claude Code, Cursor or ChatGPT, and the agent creates, instances and routes the function, with a dry run before every write.'
   },
   {
     value: 'console',
@@ -25,16 +25,17 @@ export const START_TABS = [
 
 const command = (text) => ({ kind: 'command', text })
 const out = (text) => ({ kind: 'output', text })
+const ask = (text, answer) => ({ kind: 'ask', text, answer })
+const progress = (text, done) => ({ kind: 'progress', text, done })
 const gap = { kind: 'gap', text: '' }
 
 const deploySession = ({ name, preset, domain, response, after = [] }) => [
   command(`azion link --preset ${preset} --name ${name} --auto`),
-  out('Project successfully configured'),
+  progress('Configuring project', 'Project successfully configured'),
   gap,
   command('azion deploy --auto'),
-  out('Uploading source files'),
-  out('Upload completed successfully!'),
-  out('Your Application was deployed successfully'),
+  progress('Uploading source files', 'Upload completed successfully!'),
+  progress('Deploying your application', 'Your Application was deployed successfully'),
   out(`Domain: https://${domain}`),
   gap,
   command(`curl https://${domain}/`),
@@ -45,16 +46,15 @@ const deploySession = ({ name, preset, domain, response, after = [] }) => [
 export const TERMINAL_SCRIPTS = {
   start: [
     command('azion init'),
-    out(`Your application's name: ${FUNCTION_NAME}`),
-    out('Choose a preset: Javascript'),
-    out('Choose a template: Hello World'),
+    ask("Your application's name", FUNCTION_NAME),
+    ask('Choose a preset', 'JavaScript'),
+    ask('Choose a template', 'Hello World'),
     command('azion dev'),
-    out('✔ Build completed successfully'),
-    out('✔ Function running on port 0.0.0.0:3333'),
+    progress('Building your function', 'Build completed successfully'),
+    out('Function running on port 0.0.0.0:3333'),
     command('azion deploy'),
-    out('Uploading source files'),
-    out('Upload completed successfully!'),
-    out('Your Application was deployed successfully'),
+    progress('Uploading source files', 'Upload completed successfully!'),
+    progress('Deploying your application', 'Your Application was deployed successfully'),
     out(`Domain: https://${FUNCTION_DOMAIN}`),
     command(`curl https://${FUNCTION_DOMAIN}/`),
     out('Hello World')
@@ -85,21 +85,23 @@ export const TERMINAL_SCRIPTS = {
     after: [
       gap,
       command('azion storage sync ./uploads --bucket media-assets'),
-      out('Upload completed successfully!')
+      progress('Syncing ./uploads', 'Upload completed successfully!')
     ]
   })
 }
 
 export const AGENT_CLIENTS = [
-  { mark: 'claude', name: 'Claude Code' },
-  { mark: 'cursor', name: 'Cursor' },
-  { mark: 'copilot', name: 'GitHub Copilot' }
+  { mark: 'claude', name: 'Claude Code', label: 'Claude Code' },
+  { mark: 'cursor', name: 'Cursor', label: 'Cursor' },
+  { mark: 'chatgpt', name: 'ChatGPT', label: 'ChatGPT' }
 ]
+
+export const AGENT_PROMPT = `Create a function that answers 401 when a request has no Authorization header, and run it on ${FUNCTION_APPLICATION}.`
 
 export const AGENT_TRANSCRIPT = [
   {
     kind: 'user',
-    text: `Create a function that answers 401 when a request has no Authorization header, and run it on ${FUNCTION_APPLICATION}.`
+    text: AGENT_PROMPT
   },
   {
     kind: 'agent',

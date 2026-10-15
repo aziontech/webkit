@@ -7,6 +7,7 @@
   import Tag from '@aziontech/webkit/tag'
   import type { TextureMaterialKind } from '@aziontech/webkit/texture-material'
 
+  import LegacySwitch from '../LegacySwitch.vue'
   import MockupPart from '../MockupPart.vue'
   import ShellMockup, { type ShellMockupFade } from '../ShellMockup.vue'
 
@@ -299,11 +300,11 @@
                     :key="module.key"
                     class="flex items-start gap-(--spacing-sm) rounded-(--shape-elements) border border-[color-mix(in_srgb,var(--primary)_32%,transparent)] bg-(--bg-surface-raised) p-(--spacing-md)"
                   >
-                    <span
-                      class="mt-0.5 flex h-5 w-9 shrink-0 items-center justify-end rounded-full bg-[color-mix(in_srgb,var(--primary)_40%,transparent)] px-0.5"
-                    >
-                      <span class="size-4 rounded-full bg-(--text-muted)" />
-                    </span>
+                    <LegacySwitch
+                      checked
+                      disabled
+                      class="mt-0.5"
+                    />
                     <span class="flex min-w-0 flex-col gap-(--spacing-xxs)">
                       <span class="text-label-lg text-(--text-default)">{{ module.label }}</span>
                       <span class="text-body-sm text-(--text-muted)">{{ module.description }}</span>

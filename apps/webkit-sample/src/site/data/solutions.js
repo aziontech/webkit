@@ -95,24 +95,25 @@ export const NETWORK_OUTCOMES = [
   },
   {
     client: 'MadeiraMadeira',
-    text: '90% lower cloud costs, and faster product delivery at scale.',
+    text: '90% lower cloud costs and faster applications at scale.',
     highlights: ['90% lower cloud costs']
   },
   {
     client: 'Renner',
-    text: '67% saved on data transfer costs, through massive traffic spikes.',
+    text: '67% saved on data transfer, even during massive traffic spikes.',
     highlights: ['67% saved']
   },
   {
     client: 'Fourbank',
-    text: 'DDoS mitigated on applications and APIs, behind a programmable security layer.',
+    text: 'DDoS mitigated on applications and APIs, with a programmable security layer.',
     highlights: ['DDoS mitigated']
   }
 ]
 
 export const EARTH_NETWORK = {
   eyebrow: 'Region: Earth.',
-  title: 'One distributed infrastructure to build, secure and scale workloads anywhere.',
+  title: 'One distributed infrastructure to build, secure, and scale workloads',
+  titleTail: '— without the complexity of managing or scaling it.',
   lead: 'Built around your users. Distributed around your data.',
   claims: [
     '100+ data centers',

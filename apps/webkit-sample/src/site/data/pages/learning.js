@@ -6,6 +6,7 @@ export const LEARNING_PAGE = [
   {
     section: 'Heroes',
     kind: 'title-band',
+    titleLength: 'long',
     title: 'Learning Center',
     description: 'Practical knowledge to speed up, secure, and scale applications.',
     actions: [

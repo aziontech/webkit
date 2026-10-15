@@ -1,4 +1,3 @@
-import { CLIENT_STRIP } from '@shared/ui/brand/strips.js'
 import { markRaw } from 'vue'
 
 import WorkloadDeployFragment from '../../ui/mockup/widgets/WorkloadDeployFragment.vue'
@@ -6,8 +5,9 @@ import WorkloadDeploymentsWidget from '../../ui/mockup/widgets/WorkloadDeploymen
 import WorkloadDomainFragment from '../../ui/mockup/widgets/WorkloadDomainFragment.vue'
 import WorkloadOverviewWidget from '../../ui/mockup/widgets/WorkloadOverviewWidget.vue'
 import WorkloadsConsoleScene from '../../ui/mockup/WorkloadsConsoleScene.vue'
-import WorkloadTopologyScene from '../../ui/WorkloadTopologyScene.vue'
+import Diagram from '../../ui/diagram/Diagram.vue'
 import { cliBand } from '../cli-band.js'
+import { PLATFORM_REQUEST_PATH } from '../diagrams.js'
 import {
   PRODUCT_CLOSING,
   PRODUCT_DIRECTORY,
@@ -127,16 +127,15 @@ const FAQ = [
 export const WORKLOADS_PAGE = [
   {
     section: 'Heroes',
-    kind: 'copy-on-top-art',
+    kind: 'title-band',
+    titleLength: 'long',
     eyebrow: 'Workloads',
     title: 'Put your application on the edge in seconds',
     description:
       'A workload is the hostname, the certificate and the routing that make an application reachable. Create one and it is live in every Azion location — no servers to size, no regions to pick.',
-    actions: PRODUCT_HERO_ACTIONS,
-    carouselMarks: CLIENT_STRIP,
-    scene: { component: markRaw(WorkloadTopologyScene) },
-    scenePlacement: 'bottom'
+    actions: PRODUCT_HERO_ACTIONS
   },
+  { section: 'CapabilityGrid', gap: false, items: BENEFITS },
   {
     section: 'ConsolePanel',
     anchor: 'overview',
@@ -168,11 +167,18 @@ export const WORKLOADS_PAGE = [
     title: 'Serverless from the ground up: isolates, not containers',
     description:
       'A workload does not reserve a container per deployment. Azion Runtime runs your code in an isolate — a sandbox measured in kilobytes rather than gigabytes — so one location holds thousands of them and starts another the moment a request arrives.',
-    illustration: 'runtime',
-    illustrationLabel: 'One request reaching a workload, which starts an isolate per request',
+    orientation: 'vertical',
+    texture: 'none',
+    scene: {
+      component: markRaw(Diagram),
+      props: {
+        spec: PLATFORM_REQUEST_PATH,
+        label:
+          'A user request passes routing into an Azion data center, where Firewall, Applications, Cache, Application Accelerator, Functions and Image Processor run, then Tiered Cache and Load Balancer before the origin'
+      }
+    },
     actions: [{ label: 'Read the architecture', href: PRODUCT_DOCS }]
   },
-  { section: 'CapabilityGrid', items: BENEFITS },
   { section: 'CapabilityGrid', items: USE_CASES },
   {
     section: 'FeatureTabs',

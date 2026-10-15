@@ -18,7 +18,7 @@
   const resolve = (entry: PageSection) => {
     const component = SECTIONS[entry.section]
     if (!component) throw new Error(`SitePage: no section is registered as "${entry.section}".`)
-    const { section, ...rest } = entry
+    const { section, gap: _gap, ...rest } = entry
     return { key: section, component, props: rest }
   }
 
@@ -31,7 +31,7 @@
       .filter((entry) => !HERO_SECTIONS.has(entry.section))
       .map((entry) => ({
         ...resolve(entry),
-        gap: !(entry.section === 'ClosingCallToAction' && entry.kind === 'frame')
+        gap: entry.gap !== false && !(entry.section === 'ClosingCallToAction' && entry.kind === 'frame')
       }))
   )
 </script>

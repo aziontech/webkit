@@ -65,6 +65,7 @@ import LandingSuccessCases from '@site/views/LandingSuccessCases.vue'
 import LandingSupport from '@site/views/LandingSupport.vue'
 import LandingTechnology from '@site/views/LandingTechnology.vue'
 import LandingVercelAlternative from '@site/views/LandingVercelAlternative.vue'
+import LandingWebApplicationFirewall from '@site/views/LandingWebApplicationFirewall.vue'
 import LandingWebApps from '@site/views/LandingWebApps.vue'
 import LandingWorkloads from '@site/views/LandingWorkloads.vue'
 
@@ -132,6 +133,11 @@ export const siteRoutes = [
   // The one composed entirely from the MARKETING components rather than hand-built bricks —
   // the Products mega-menu's Our Network entry.
   { path: '/site/products/our-network', name: 'site-our-network', component: LandingOurNetwork },
+  {
+    path: '/site/products/web-application-firewall',
+    name: 'site-web-application-firewall',
+    component: LandingWebApplicationFirewall
+  },
 
   // ══ Solutions ═════════════════════════════════════════════════════════════════════
   // The index, and one page per solution under it. A solution page argues a NEED or an

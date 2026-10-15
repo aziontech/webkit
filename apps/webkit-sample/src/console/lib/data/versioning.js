@@ -98,7 +98,7 @@ export const RESOURCES = {
     label: 'Workload',
     one: 'workload',
     many: 'workloads',
-    icon: 'ai ai-domains',
+    icon: 'ai ai-workloads',
     endpoint: 'v4/workspace/workloads',
     path: '/workloads'
   },
@@ -154,7 +154,7 @@ export const RESOURCES = {
     label: 'Deployment',
     one: 'deployment',
     many: 'deployments',
-    icon: 'ai ai-deployments',
+    icon: 'ai ai-deploy-pillar',
     endpoint: '/deployment-api/v6/deployments',
     path: '/deployments'
   }

@@ -1,27 +1,6 @@
-import { CLIENTS } from '@aziontech/webkit/assets/client-registry'
 import { CLIENT_STRIP } from '@shared/ui/brand/strips.js'
 
-import { AREZZO, AXUR, CONTABILIZEI, CREFISA } from '../clients.js'
-import { BUILD_CTA , EARTH_NETWORK } from '../solutions.js'
-
-const byName = (name) => CLIENTS.find((client) => client.name === name)
-
-const wallItem = (client) => ({ alt: client.name, src: client.logo, client })
-
-const STORY_CLIENTS = [
-  byName('NZN'),
-  AXUR,
-  byName('Radware'),
-  AREZZO,
-  CONTABILIZEI,
-  byName('Magalu'),
-  byName('Fourbank'),
-  CREFISA,
-  byName('Netshoes'),
-  byName('Dafiti'),
-  byName('Global Fashion Group'),
-  byName('GPA')
-]
+import { BUILD_CTA, EARTH_NETWORK, quotesLedBy } from '../solutions.js'
 
 const NETWORK_FIGURES = [
   { value: '7', suffix: 'x', label: 'faster pages' },
@@ -83,17 +62,9 @@ export const OUR_NETWORK_PAGE = [
     title: 'Stop managing regions and capacity by hand',
     bands: NETWORK_BANDS
   },
-  {
-    section: 'LogoWallQuote',
-    items: STORY_CLIENTS.map(wallItem),
-    quote: {
-      text: 'Azion shielded us from sophisticated cyberattacks and empowered us to modernize our infrastructure, reduce costs, and deliver the best shopping experiences to millions of customers across Latin America.',
-      name: 'Allan Monteiro',
-      jobTitle: 'CISO & Head of Technology',
-      client: byName('GPA')
-    },
-    actions: [{ label: 'Customers', href: '/site/home', kind: 'outlined', trailing: true }]
-  },
+  { section: 'ClientQuotes', quotes: quotesLedBy('magalu') },
+
+
   {
     section: 'PlatformDirectory',
     eyebrow: 'Platform',

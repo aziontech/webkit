@@ -22,7 +22,7 @@
   /** Console generation the shell draws: the current one with its rail, or the previous one with its top bar only. */
   export type ShellMockupShell = 'console' | 'legacy'
   /** Edge the mockup fades out along, so it blends into the scene behind it. */
-  export type ShellMockupFade = 'none' | 'bottom' | 'top' | 'left' | 'right'
+  export type ShellMockupFade = 'none' | 'bottom' | 'top' | 'left' | 'right' | 'y'
   /** Duration tokens the entrance timing can be set to. */
   export type ShellMockupDuration =
     'fast-01' | 'fast-02' | 'moderate-01' | 'moderate-02' | 'slow-01' | 'slow-02'
@@ -36,7 +36,7 @@
     width?: number
     /** Design width of the frame below `md`. */
     mobileWidth?: number
-    /** Edge the mockup fades out along; tune the ramp with `--mockup-fade-start` / `--mockup-fade-end`. */
+    /** Edge the mockup fades out along; `y` fades top and bottom. Tune the ramp with `--mockup-fade-start` / `--mockup-fade-end`, or `--mockup-fade-edge` for `y`. */
     fade?: ShellMockupFade
     /** Draw the slim console bar over the body. */
     chrome?: boolean
@@ -54,6 +54,8 @@
     beat?: ShellMockupDuration
     /** Whether this mockup is the one showing; parts replay their entrance each time it becomes active. */
     active?: boolean
+    /** Lets the viewer operate the controls inside, instead of drawing them as an inert picture. */
+    interactive?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -69,7 +71,8 @@
     textureFade: 'vignette',
     travel: 'slow-01',
     beat: 'fast-01',
-    active: true
+    active: true,
+    interactive: false
   })
 
   defineSlots<{
@@ -84,7 +87,7 @@
       key: 'start',
       label: '',
       entries: [
-        { key: 'overview', icon: 'ai ai-home', label: 'Overview' },
+        { key: 'overview', icon: 'pi pi-home', label: 'Overview' },
         { key: 'workloads', icon: 'ai ai-workloads', label: 'Workloads' },
         { key: 'deployments', icon: 'ai ai-deploy-pillar', label: 'Deployments' }
       ]
@@ -225,11 +228,12 @@
 <template>
   <figure
     ref="root"
-    inert
-    aria-hidden="true"
+    :inert="interactive ? undefined : true"
+    :aria-hidden="interactive ? undefined : 'true'"
+    :data-interactive="interactive || null"
     :data-kind="kind"
     :data-fade="fade"
-    class="relative m-0 h-full w-full min-w-0 overflow-hidden select-none pointer-events-none data-[kind=window]:rounded-(--shape-card) data-[kind=window]:bg-(--bg-canvas) data-[kind=window]:[background-clip:var(--illustration-rim-boxes)] data-[kind=window]:[background-image:linear-gradient(var(--bg-canvas),var(--bg-canvas)),var(--illustration-rim),linear-gradient(var(--bg-canvas),var(--bg-canvas))] data-[kind=window]:[background-origin:var(--illustration-rim-boxes)] data-[kind=window]:[border:var(--illustration-rim-width-hairline)_solid_transparent]"
+    class="relative m-0 h-full w-full min-w-0 overflow-hidden select-none pointer-events-none data-interactive:pointer-events-auto data-interactive:select-auto data-[kind=bare]:overflow-x-visible data-[kind=bare]:overflow-y-clip data-[kind=window]:rounded-(--shape-card) data-[kind=window]:bg-(--bg-canvas) data-[kind=window]:[background-clip:var(--illustration-rim-boxes)] data-[kind=window]:[background-image:linear-gradient(var(--bg-canvas),var(--bg-canvas)),var(--illustration-rim),linear-gradient(var(--bg-canvas),var(--bg-canvas))] data-[kind=window]:[background-origin:var(--illustration-rim-boxes)] data-[kind=window]:[border:var(--illustration-rim-width-hairline)_solid_transparent]"
   >
     <div
       :data-kind="kind"
@@ -417,7 +421,10 @@
             </div>
           </header>
 
-          <div class="min-h-0 min-w-0 flex-1 overflow-hidden">
+          <div
+            :data-kind="kind"
+            class="min-h-0 min-w-0 flex-1 overflow-hidden data-[kind=bare]:overflow-x-visible data-[kind=bare]:overflow-y-clip"
+          >
             <slot />
           </div>
         </div>
@@ -434,7 +441,7 @@
     <div
       v-if="fade !== 'none'"
       :data-fade="fade"
-      class="pointer-events-none absolute inset-0 z-20 data-[fade=bottom]:[background-image:linear-gradient(to_bottom,transparent_var(--mockup-fade-start,55%),var(--mockup-fade-color,var(--bg-canvas))_var(--mockup-fade-end,100%))] data-[fade=left]:[background-image:linear-gradient(to_left,transparent_var(--mockup-fade-start,55%),var(--mockup-fade-color,var(--bg-canvas))_var(--mockup-fade-end,100%))] data-[fade=right]:[background-image:linear-gradient(to_right,transparent_var(--mockup-fade-start,55%),var(--mockup-fade-color,var(--bg-canvas))_var(--mockup-fade-end,100%))] data-[fade=top]:[background-image:linear-gradient(to_top,transparent_var(--mockup-fade-start,55%),var(--mockup-fade-color,var(--bg-canvas))_var(--mockup-fade-end,100%))]"
+      class="pointer-events-none absolute inset-0 z-20 data-[fade=bottom]:[background-image:linear-gradient(to_bottom,transparent_var(--mockup-fade-start,55%),var(--mockup-fade-color,var(--bg-canvas))_var(--mockup-fade-end,100%))] data-[fade=left]:[background-image:linear-gradient(to_left,transparent_var(--mockup-fade-start,55%),var(--mockup-fade-color,var(--bg-canvas))_var(--mockup-fade-end,100%))] data-[fade=right]:[background-image:linear-gradient(to_right,transparent_var(--mockup-fade-start,55%),var(--mockup-fade-color,var(--bg-canvas))_var(--mockup-fade-end,100%))] data-[fade=top]:[background-image:linear-gradient(to_top,transparent_var(--mockup-fade-start,55%),var(--mockup-fade-color,var(--bg-canvas))_var(--mockup-fade-end,100%))] data-[fade=y]:[background-image:linear-gradient(to_bottom,var(--mockup-fade-color,var(--bg-canvas))_0%,transparent_var(--mockup-fade-edge,22%),transparent_calc(100%-var(--mockup-fade-edge,22%)),var(--mockup-fade-color,var(--bg-canvas))_100%)]"
     />
   </figure>
 </template>

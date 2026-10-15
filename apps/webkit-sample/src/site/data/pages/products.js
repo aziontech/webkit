@@ -138,7 +138,7 @@ const PRODUCT_DIRECTORY = [
         href: '/site/products/functions'
       },
       {
-        icon: 'ai ai-edge-application',
+        icon: 'ai ai-app-accelerator',
         title: 'Application Accelerator',
         description: 'Tune delivery for dynamic and API traffic',
         href: '/site/products/application-accelerator'
@@ -161,7 +161,7 @@ const PRODUCT_DIRECTORY = [
         href: 'https://www.azion.com/en/products/ai-inference/'
       },
       {
-        icon: 'ai ai-gateway',
+        icon: 'ai ai-ai-gateway',
         title: 'AI Gateway',
         description: 'Secure, manage, and optimize AI traffic',
         href: 'https://www.azion.com/en/solutions#ai'
@@ -192,10 +192,10 @@ const PRODUCT_DIRECTORY = [
         icon: 'ai ai-waf-rules',
         title: 'WAF',
         description: 'Filter malicious requests before the origin',
-        href: 'https://www.azion.com/en/products/web-application-firewall/'
+        href: '/site/products/web-application-firewall'
       },
       {
-        icon: 'pi pi-android',
+        icon: 'ai ai-bot-manager',
         title: 'Bot Management',
         description: 'Detect and stop automated threats instantly',
         href: 'https://www.azion.com/en/products/bot-manager/'

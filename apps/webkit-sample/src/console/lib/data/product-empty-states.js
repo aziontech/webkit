@@ -28,7 +28,7 @@ export const productEmptyStates = [
         title: 'Via CLI',
         description: 'Develop locally and deploy from your own repository.',
         command: 'azion create edge-function --name my-function',
-        icon: 'pi pi-desktop'
+        icon: 'ai ai-azion-cli'
       },
       {
         id: 'cli-import',
@@ -112,7 +112,7 @@ export const productEmptyStates = [
         title: 'Via CLI',
         description: 'Run azion deploy and ship the branch you are on.',
         command: 'azion deploy',
-        icon: 'pi pi-desktop'
+        icon: 'ai ai-azion-cli'
       },
       {
         id: 'scratch',
@@ -162,7 +162,7 @@ export const productEmptyStates = [
         title: 'Via CLI',
         description: 'Run azion deploy and ship the branch you are on.',
         command: 'azion deploy',
-        icon: 'pi pi-desktop'
+        icon: 'ai ai-azion-cli'
       },
       {
         id: 'scratch',
@@ -211,7 +211,7 @@ export const productEmptyStates = [
         title: 'Via CLI',
         description: 'Run azion deploy and watch the run appear here.',
         command: 'azion deploy --auto',
-        icon: 'pi pi-desktop'
+        icon: 'ai ai-azion-cli'
       }
     ],
     startFast: {
@@ -260,7 +260,7 @@ export const productEmptyStates = [
         title: 'Via CLI or API',
         description: 'Manage zones and records as code, from your own pipeline.',
         command: 'azion create dns-zone --domain example.com',
-        icon: 'pi pi-desktop'
+        icon: 'ai ai-azion-cli'
       }
     ],
     learnMore: {
@@ -290,7 +290,7 @@ export const productEmptyStates = [
         title: 'Via CLI',
         description: 'Sync a local folder with the Azion CLI, in your own pipeline.',
         command: 'azion storage sync ./dist --bucket my-bucket',
-        icon: 'pi pi-desktop'
+        icon: 'ai ai-azion-cli'
       },
       {
         id: 's3',
@@ -328,7 +328,7 @@ export const productEmptyStates = [
         title: 'From a Function',
         description: 'Query it with the SQL client inside an edge function.',
         action: 'Open editor',
-        icon: 'pi pi-code',
+        icon: 'ai ai-edge-functions',
         route: { path: '/functions/new' }
       },
       {
@@ -336,7 +336,7 @@ export const productEmptyStates = [
         title: 'Via CLI or API',
         description: 'Create databases and run migrations from your own pipeline.',
         command: 'azion sql create my-db',
-        icon: 'pi pi-desktop'
+        icon: 'ai ai-azion-cli'
       }
     ],
     learnMore: {
@@ -375,7 +375,7 @@ export const productEmptyStates = [
         title: 'Via CLI or API',
         description: 'Set variables from your own pipeline, per environment.',
         command: 'azion create variables --key API_TOKEN',
-        icon: 'pi pi-desktop'
+        icon: 'ai ai-azion-cli'
       }
     ],
     learnMore: {
@@ -414,7 +414,7 @@ export const productEmptyStates = [
         title: 'Via CLI or API',
         description: 'Declare connectors as code, alongside the application.',
         command: 'azion create connector --name my-connector',
-        icon: 'pi pi-desktop'
+        icon: 'ai ai-azion-cli'
       }
     ],
     learnMore: {
@@ -453,7 +453,7 @@ export const productEmptyStates = [
         title: 'Via CLI or API',
         description: 'Ship the page set with the rest of your configuration.',
         command: 'azion create custom-page --status-code 404',
-        icon: 'pi pi-desktop'
+        icon: 'ai ai-azion-cli'
       }
     ],
     learnMore: {
@@ -492,7 +492,7 @@ export const productEmptyStates = [
         title: 'Via CLI or API',
         description: 'Declare firewalls and rules as code, from your own pipeline.',
         command: 'azion create firewall --name my-firewall',
-        icon: 'pi pi-desktop'
+        icon: 'ai ai-azion-cli'
       }
     ],
     startFast: {
@@ -508,7 +508,7 @@ export const productEmptyStates = [
           id: 'bot-manager-lite',
           title: 'Azion Bot Manager Lite',
           description: 'Score incoming requests on rules and behaviour, and block bad bots.',
-          icon: 'pi pi-shield',
+          icon: 'ai ai-bot-manager',
           action: 'Create',
           route: { path: '/marketplace', query: { tab: 'integrations', q: 'Bot Manager' } }
         },
@@ -532,7 +532,7 @@ export const productEmptyStates = [
           id: 'send-event-endpoint',
           title: 'Send Event to Endpoint',
           description: 'Stream request data to an endpoint of your own from the edge.',
-          icon: 'pi pi-send',
+          icon: 'ai ai-webhook',
           action: 'Create',
           route: { path: '/marketplace', query: { tab: 'integrations', q: 'Send Event' } }
         }
@@ -574,7 +574,7 @@ export const productEmptyStates = [
         title: 'Via CLI or API',
         description: 'Version the rule set with the rest of your security config.',
         command: 'azion create waf-rule-set --name my-rule-set',
-        icon: 'pi pi-desktop'
+        icon: 'ai ai-azion-cli'
       }
     ],
     learnMore: {
@@ -613,7 +613,7 @@ export const productEmptyStates = [
         title: 'Via CLI or API',
         description: 'Rotate certificates from the pipeline that issues them.',
         command: 'azion create certificate --crt ./fullchain.pem',
-        icon: 'pi pi-desktop'
+        icon: 'ai ai-azion-cli'
       }
     ],
     learnMore: {
@@ -652,7 +652,7 @@ export const productEmptyStates = [
         title: 'Via CLI or API',
         description: 'Keep the list in sync with the source that generates it.',
         command: 'azion create network-list --type ip_cidr',
-        icon: 'pi pi-desktop'
+        icon: 'ai ai-azion-cli'
       }
     ],
     learnMore: {
@@ -691,7 +691,7 @@ export const productEmptyStates = [
         title: 'Via CLI or API',
         description: 'Declare the stream and its endpoint alongside your services.',
         command: 'azion create data-stream --template http',
-        icon: 'pi pi-desktop'
+        icon: 'ai ai-azion-cli'
       }
     ],
     learnMore: {

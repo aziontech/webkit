@@ -1,23 +1,26 @@
-import { CONTABILIZEI } from '../clients.js'
+import { markRaw } from 'vue'
+
+import ApplicationCacheFragment from '../../ui/mockup/widgets/ApplicationCacheFragment.vue'
+import ApplicationFunctionFragment from '../../ui/mockup/widgets/ApplicationFunctionFragment.vue'
+import ApplicationRuleFragment from '../../ui/mockup/widgets/ApplicationRuleFragment.vue'
 import {
-  CACHE_FAMILY_WALL,
   foldList,
+  PLATFORM_DIRECTORY,
   PRODUCT_CLOSING,
-  PRODUCT_CUSTOMERS_ACTION,
-  PRODUCT_DIRECTORY,
   PRODUCT_DOCS,
   PRODUCT_HERO_ACTIONS
 } from '../product-pages.js'
+import { quotesLedBy } from '../solutions.js'
 
 const PILLARS = [
   {
-    icon: 'pi pi-globe',
+    icon: 'ai ai-content-delivery',
     title: 'Global content delivery close to users',
     description:
       "Serve cached websites, APIs, and files from Azion's distributed architecture to reduce latency and absorb demand before it reaches your origin."
   },
   {
-    icon: 'pi pi-bolt',
+    icon: 'ai ai-origin-accelerator',
     title: 'Faster responses with less origin work',
     description:
       'Improve cache-hit performance while cutting repeated origin requests, infrastructure load, and bandwidth pressure during peak traffic.'
@@ -44,78 +47,33 @@ const AVAILABILITY = [
   { icon: 'pi pi-check-circle', label: 'High availability' }
 ]
 
-const CACHE_SETTINGS = `{
-  "browser_cache_settings": {
-    "ttl": 3600,
-    "honor_origin_headers": true
-  },
-  "cdn_cache_settings": {
-    "ttl": 86400,
-    "stale_cache_enabled": true,
-    "tiered_cache_enabled": true
-  },
-  "cache_key_settings": {
-    "query_strings": "all",
-    "cookies": []
-  },
-  "large_file_optimization": {
-    "enabled": true,
-    "fragment_size_kb": 1024
-  }
-}`
-
-const CODE_FILES = [
-  {
-    label: 'cache-settings.json',
-    value: 'cache-settings',
-    language: 'json',
-    code: CACHE_SETTINGS,
-    fileName: 'cache-settings.json',
-    fileIcon: 'ai ai-json'
-  }
-]
-
 const USE_CASES = [
   {
-    icon: 'pi pi-shopping-cart',
-    title: 'Speed up checkout during flash sales',
+    icon: 'ai ai-app-accelerator',
+    title: 'Stay fast through flash sales',
     description:
-      'Handle traffic spikes with intelligent caching that keeps checkout fast under load. E-commerce sites maintain conversion rates during peak events.',
-    href: '/site/home'
+      'Serve catalog and static pages from cache while checkout stays dynamic. Origin traffic drops by up to 90% during peak campaigns, as MadeiraMadeira saw.',
+    href: PRODUCT_DOCS
   },
   {
     icon: 'ai ai-live-ingest',
-    title: 'Stream content without buffering',
+    title: 'Deliver large files and video',
     description:
-      'Deliver video and large files efficiently with large file optimization. Media companies reduce playback interruptions and improve viewer experience.',
-    href: '/site/home'
+      'Large file optimization fragments objects and caches them on demand, so downloads and video segments start sooner and origin bandwidth stays flat.',
+    href: PRODUCT_DOCS
   },
   {
     icon: 'ai ai-azion-api',
-    title: 'Accelerate API responses',
+    title: 'Cache API responses',
     description:
-      'Cache API responses on a distributed architecture to reduce latency and origin load. SaaS applications deliver consistent performance for repeated queries.',
+      'Cache repeated GET responses with cache keys built from the URL, query string, cookies and device group. Mobiauto improved delivery performance by 70%.',
     href: PRODUCT_DOCS
   },
   {
-    icon: 'pi pi-sliders-h',
-    title: 'Configure cache policies',
+    icon: 'ai ai-origin-shield',
+    title: 'Survive an origin outage',
     description:
-      'Set TTL, enable stale cache, and control cache keys for optimal performance. Fine-tune caching behavior for your specific content types.',
-    href: PRODUCT_DOCS
-  },
-  {
-    icon: 'pi pi-clock',
-    title: 'Micro-cache dynamic content',
-    description:
-      'Use short TTLs to cache personalized content while maintaining freshness. Reduce origin load for semi-dynamic pages without sacrificing personalization.',
-    href: '/site/home'
-  },
-  {
-    icon: 'ai ai-layers',
-    title: 'Scale multi-tenant applications',
-    description:
-      'Reduce infrastructure costs with tiered cache for static assets. SaaS platforms serve shared assets efficiently across multiple tenants.',
+      'Stale cache keeps serving the last good copy when the origin returns 5xx errors, times out or is unreachable, so users never see the failure.',
     href: PRODUCT_DOCS
   }
 ]
@@ -197,14 +155,51 @@ const FAQ = [
 export const CACHE_PAGE = [
   {
     section: 'Heroes',
-    kind: 'centered-band',
+    kind: 'title-band',
+    titleLength: 'short',
     eyebrow: 'Cache',
     title: 'Accelerate content delivery globally',
     description:
       'Serve cached content with fast response times. Reduce origin load and keep applications fast during traffic spikes.',
     actions: PRODUCT_HERO_ACTIONS
   },
-  { section: 'CapabilityGrid', items: PILLARS },
+  { section: 'CapabilityGrid', gap: false, items: PILLARS },
+  {
+    section: 'WidgetGrid',
+    anchor: 'built-in',
+    eyebrow: 'Built in',
+    title: 'Every cache control in one application',
+    description:
+      'Cache settings, the rules that apply them and the functions that shape responses live inside the application, versioned and deployed with it.',
+    actions: PRODUCT_HERO_ACTIONS,
+    columns: 3,
+    items: [
+      {
+        icon: 'ai ai-tiered-cache',
+        title: 'Cache settings you reuse',
+        description:
+          'Set the edge TTL, stale cache and large file optimization once, then apply the same setting wherever the application needs it.',
+        scene: { component: markRaw(ApplicationCacheFragment) },
+        href: PRODUCT_DOCS
+      },
+      {
+        icon: 'ai ai-rules-engine',
+        title: 'Rules that decide what is cached',
+        description:
+          'Match a path, a method or a header, and attach a cache setting to just that traffic.',
+        scene: { component: markRaw(ApplicationRuleFragment) },
+        href: PRODUCT_DOCS
+      },
+      {
+        icon: 'ai ai-edge-functions',
+        title: 'Functions for the cases rules miss',
+        description:
+          'Rewrite cache headers on the response in a few lines of JavaScript, running in every location before the response leaves.',
+        scene: { component: markRaw(ApplicationFunctionFragment) },
+        href: PRODUCT_DOCS
+      }
+    ]
+  },
   {
     section: 'MediaSplitStack',
     kind: 'solutions',
@@ -234,28 +229,16 @@ export const CACHE_PAGE = [
     ]
   },
   {
-    section: 'CodeSplit',
-    kind: 'default',
-    title: 'Fine-tune cache policies for your content',
-    description: 'Configure caching policies that match your content strategy.',
-    files: CODE_FILES,
-    defaultFile: 'cache-settings',
-    copyAriaLabel: 'Copy the cache settings sample',
-    actions: [{ label: 'Learn More', href: PRODUCT_DOCS }]
+    section: 'UseCases',
+    eyebrow: 'Use Cases',
+    title: 'What teams use Cache for',
+    description:
+      'Put Cache in front of any origin and serve repeat traffic from Azion’s distributed infrastructure, with the TTLs, cache keys and stale behavior you set. Teams use it to:',
+    action: { label: 'View docs', href: PRODUCT_DOCS, trailing: true },
+    items: USE_CASES
   },
-  { section: 'CapabilityGrid', items: USE_CASES },
-  {
-    section: 'LogoWallQuote',
-    items: CACHE_FAMILY_WALL,
-    quote: {
-      text: '"I really like the depth of cache rules that I can apply at the edge. There are things that we would not be able to do using solutions from other vendors. In terms of performance, compliance to Contabilizei\'s rules and delivery standards, we are very satisfied with Azion\'s performance."',
-      name: 'Marcelo Pacheco',
-      jobTitle: 'DevOps Specialist at Contabilizei',
-      client: CONTABILIZEI
-    },
-    actions: [PRODUCT_CUSTOMERS_ACTION]
-  },
-  PRODUCT_DIRECTORY,
+  { section: 'ClientQuotes', quotes: quotesLedBy('contabilizei') },
+  PLATFORM_DIRECTORY,
   { section: 'FaqSection', items: FAQ },
   PRODUCT_CLOSING
 ]

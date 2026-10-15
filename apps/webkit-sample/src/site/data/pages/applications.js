@@ -103,7 +103,7 @@ const IMAGE_SAMPLE = `export default {
 
 const ANATOMY = [
   {
-    icon: 'pi pi-sitemap',
+    icon: 'ai ai-rules-engine',
     title: 'Rules Engine',
     description:
       'Each request walks your rules in order: criteria match it, behaviors decide where it goes — a bucket, an origin, a function, a redirect.'
@@ -127,7 +127,7 @@ const ANATOMY = [
       'Rules run on the way out too: add security headers, rewrite cookies, or change what the origin answered before the user sees it.'
   },
   {
-    icon: 'ai ai-layers',
+    icon: 'ai ai-image-processor',
     title: 'Image Processor',
     description:
       'Keep one source image and derive every variant on demand with an ims query — fit-in/400x400 — cached like any other response.'
@@ -165,7 +165,7 @@ const CAPABILITIES = [
       'Rules route each path to its own backend — a web server, a cloud service, a bucket — and a load balancer can stand behind any of them.'
   },
   {
-    icon: 'ai ai-edge-application',
+    icon: 'ai ai-app-accelerator',
     title: 'Application Accelerator',
     description:
       'Vary the cache by cookie, query string or device group, cache POST and OPTIONS responses, and hold content for less than a minute when freshness matters.'
@@ -246,13 +246,15 @@ const [DAFITI_QUOTE] = quotesLedBy('dafiti')
 export const APPLICATIONS_PAGE = [
   {
     section: 'Heroes',
-    kind: 'centered-band',
+    kind: 'title-band',
+    titleLength: 'short',
     eyebrow: 'Applications',
     title: 'Decide what happens to every request',
     description:
       'An application is the delivery logic a workload serves: rules that route, cache, transform and run code — written once, applied in every Azion location at the same time.',
     actions: PRODUCT_HERO_ACTIONS
   },
+  { section: 'CapabilityGrid', gap: false, items: CAPABILITIES },
   { section: 'StatsBand', items: FIGURES },
   {
     section: 'ConsolePanel',
@@ -281,7 +283,6 @@ export const APPLICATIONS_PAGE = [
     samples: ANATOMY_SAMPLES,
     action: { label: 'Explore the Rules Engine', href: PRODUCT_DOCS }
   },
-  { section: 'CapabilityGrid', items: CAPABILITIES },
   {
     section: 'QuoteBand',
     kind: 'signed',

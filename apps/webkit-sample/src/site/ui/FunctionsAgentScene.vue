@@ -1,7 +1,9 @@
 <script setup lang="ts">
+  import { curve, duration } from '@aziontech/theme/animations'
+  import IconButton from '@aziontech/webkit/icon-button'
   import Tag from '@aziontech/webkit/tag'
   import AgentMark from '@shared/ui/brand/AgentMark.vue'
-  import { computed, nextTick, ref, shallowRef } from 'vue'
+  import { computed, onMounted, onScopeDispose, ref, shallowRef } from 'vue'
 
   import { typeInto, useSceneScript } from '../composables/use-scene-script'
   import { AGENT_CLIENTS, AGENT_TRANSCRIPT } from '../data/functions-start.js'
@@ -18,74 +20,96 @@
   interface Props {
     /** Whether this scene is the one showing; a scene that shares a frame plays only while it is. */
     active?: boolean
+    /** Mark of the coding agent the transcript runs in — a `mark` of `AGENT_CLIENTS`. */
+    client?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), { active: true })
+  const props = withDefaults(defineProps<Props>(), { active: true, client: 'claude' })
 
   const root = ref<HTMLElement | null>(null)
-  const scroller = ref<HTMLElement | null>(null)
+  const windowEl = ref<HTMLElement | null>(null)
+  const trackEl = ref<HTMLElement | null>(null)
   const shown = shallowRef<TranscriptEntry[]>([])
   const draft = ref('')
-  const pass = ref(0)
 
-  const client = computed(() => AGENT_CLIENTS[pass.value % AGENT_CLIENTS.length])
+  const heights = ref({ window: 0, track: 0 })
+  const glide = ref(false)
 
-  const follow = () =>
-    nextTick(() => {
-      if (scroller.value) scroller.value.scrollTop = scroller.value.scrollHeight
-    })
+  const reduced = globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false
+
+  let observer: globalThis.ResizeObserver | null = null
+
+  const measure = () => {
+    heights.value = {
+      window: windowEl.value?.offsetHeight ?? 0,
+      track: trackEl.value?.offsetHeight ?? 0
+    }
+  }
+
+  onMounted(() => {
+    observer = new globalThis.ResizeObserver(measure)
+    if (windowEl.value) observer.observe(windowEl.value)
+    if (trackEl.value) observer.observe(trackEl.value)
+    measure()
+  })
+
+  onScopeDispose(() => observer?.disconnect())
+
+  const trackStyle = computed(() => ({
+    translate: `0 ${-Math.max(0, heights.value.track - heights.value.window)}px`,
+    transition:
+      reduced || !glide.value
+        ? 'none'
+        : `translate ${duration['moderate-02']} ${curve['productive-entrance']}`
+  }))
+
+  const agent = computed(
+    () => AGENT_CLIENTS.find((entry) => entry.mark === props.client) ?? AGENT_CLIENTS[0]
+  )
 
   const push = (entry: TranscriptEntry) => {
+    glide.value = true
     shown.value = [...shown.value, entry]
-    follow()
   }
 
   const rewrite = (entry: TranscriptEntry) => {
     shown.value = [...shown.value.slice(0, -1), entry]
-    follow()
   }
 
   const transcript = AGENT_TRANSCRIPT as TranscriptEntry[]
-
-  let started = false
+  const [prompt, ...replies] = transcript
 
   useSceneScript(root, {
     active: () => props.active,
     reset: () => {
-      if (started) pass.value += 1
-      started = true
+      glide.value = false
       shown.value = []
-      draft.value = ''
+      draft.value = prompt.text ?? ''
     },
     settle: () => {
+      glide.value = false
       shown.value = transcript
       draft.value = ''
-      follow()
     },
     play: async (wait) => {
-      for (const entry of transcript) {
-        if (entry.kind === 'user') {
-          await typeInto(wait, entry.text ?? '', (text) => (draft.value = text), {
-            step: 3,
-            every: 30
-          })
-          await wait(420)
-          draft.value = ''
-          push(entry)
-          await wait(700)
-        } else if (entry.kind === 'agent') {
-          push({ ...entry, text: '' })
-          await typeInto(wait, entry.text ?? '', (text) => rewrite({ ...entry, text }), {
-            step: 4,
-            every: 24
-          })
-          await wait(420)
-        } else {
+      draft.value = ''
+      push(prompt)
+      await wait(900)
+      for (const entry of replies) {
+        if (entry.kind === 'tool') {
           push({ ...entry, state: 'running' })
           await wait(entry.state === 'preview' ? 900 : 700)
           rewrite(entry)
           await wait(entry.state === 'preview' ? 900 : 380)
+          continue
         }
+        const user = entry.kind === 'user'
+        push({ ...entry, text: '' })
+        await typeInto(wait, entry.text ?? '', (text) => rewrite({ ...entry, text }), {
+          step: user ? 3 : 4,
+          every: user ? 30 : 24
+        })
+        await wait(user ? 900 : 420)
       }
     }
   })
@@ -102,75 +126,65 @@
     ref="root"
     inert
     aria-hidden="true"
-    class="pointer-events-none m-0 flex h-full min-w-0 flex-col overflow-hidden bg-(--bg-canvas) select-none"
+    class="pointer-events-none m-0 flex h-full min-w-0 flex-col gap-(--spacing-md) select-none"
   >
     <div
-      class="flex shrink-0 items-center gap-(--spacing-xs) border-b border-(--border-default) bg-(--bg-surface) px-(--spacing-md) py-(--spacing-xs)"
+      ref="windowEl"
+      class="min-h-0 flex-1 overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,black_24%)] [mask-mode:alpha]"
     >
-      <AgentMark
-        :key="client.mark"
-        :name="client.mark"
-        class="size-4 animate-fade-in motion-reduce:animate-none"
-      />
-      <span class="truncate text-label-sm text-(--text-default)">{{ client.name }}</span>
-      <span
-        class="ms-auto flex shrink-0 items-center gap-(--spacing-xxs) text-label-sm text-(--text-muted)"
+      <ol
+        ref="trackEl"
+        :style="trackStyle"
+        class="m-0 flex list-none flex-col gap-(--spacing-lg) p-0 pt-(--spacing-xl) pb-(--spacing-xxs)"
       >
-        <span class="size-1.5 rounded-full bg-(--success-contrast)" />
-        Azion MCP · docs, build
-      </span>
-    </div>
-
-    <div
-      ref="scroller"
-      class="min-h-0 flex-1 overflow-hidden px-(--spacing-md) py-(--spacing-md)"
-    >
-      <ol class="m-0 flex list-none flex-col gap-(--spacing-sm) p-0">
         <li
           v-for="(entry, index) in shown"
           :key="index"
-          class="animate-fade-in motion-reduce:animate-none"
+          :data-active="index === shown.length - 1 || null"
+          class="animate-fade-in opacity-45 transition-opacity duration-moderate-02 ease-productive-entrance data-active:opacity-100 motion-reduce:animate-none motion-reduce:opacity-100 motion-reduce:transition-none"
         >
           <p
             v-if="entry.kind === 'user'"
-            class="m-0 rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)"
+            class="m-0 ms-(--spacing-xl) rounded-(--shape-elements) [border:var(--illustration-rim-width)_solid_transparent] [background-image:var(--illustration-rim-layers)] [background-origin:var(--illustration-rim-boxes)] [background-clip:var(--illustration-rim-boxes)] px-(--spacing-md) py-(--spacing-sm) text-body-sm text-(--text-default)"
           >
-            <span class="text-(--text-muted)">› </span>{{ entry.text }}
+            {{ entry.text }}
           </p>
 
           <p
             v-else-if="entry.kind === 'agent'"
             class="m-0 flex gap-(--spacing-xs) text-body-sm text-(--text-default)"
           >
-            <span class="mt-[0.45em] size-1.5 shrink-0 rounded-full bg-(--text-default)" />
+            <AgentMark
+              :name="agent.mark"
+              class="mt-[0.2em] size-3.5 shrink-0"
+            />
             <span class="min-w-0">{{ entry.text }}</span>
           </p>
 
           <div
             v-else
-            class="ms-(--spacing-sm) flex flex-col overflow-hidden rounded-(--shape-elements) border border-(--border-default)"
+            class="ms-(--spacing-lg) flex flex-col overflow-hidden rounded-(--shape-elements) [border:var(--illustration-rim-width)_solid_transparent] [background-image:var(--illustration-rim-layers)] [background-origin:var(--illustration-rim-boxes)] [background-clip:var(--illustration-rim-boxes)]"
           >
-            <div
-              class="flex items-center gap-(--spacing-xs) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-xxs)"
-            >
+            <div class="flex items-center gap-(--spacing-xs) px-(--spacing-md) py-(--spacing-xs)">
               <i
                 class="ai ai-azion text-label-sm leading-none text-(--primary)"
                 aria-hidden="true"
               />
               <span class="min-w-0 truncate text-label-sm text-(--text-default)">
-                <span class="text-(--text-muted)">Azion {{ entry.server }} ›</span>
+                <span class="text-(--text-muted)">Azion {{ entry.server }}</span>
                 {{ entry.action }}
               </span>
-              <Tag
-                class="ms-auto shrink-0"
-                size="small"
-                :label="STATES[entry.state ?? 'done'].label"
-                :severity="STATES[entry.state ?? 'done'].severity"
-              />
+              <span class="ms-auto flex shrink-0">
+                <Tag
+                  size="small"
+                  :label="STATES[entry.state ?? 'done'].label"
+                  :severity="STATES[entry.state ?? 'done'].severity"
+                />
+              </span>
             </div>
             <dl
               v-if="entry.state !== 'running'"
-              class="m-0 grid grid-cols-[auto_minmax(0,1fr)] gap-x-(--spacing-md) gap-y-(--spacing-xxs) border-t border-(--border-default) px-(--spacing-sm) py-(--spacing-xs) text-label-code-sm"
+              class="m-0 grid grid-cols-[auto_minmax(0,1fr)] gap-x-(--spacing-md) gap-y-(--spacing-xxs) border-t border-(--border-default) px-(--spacing-md) py-(--spacing-sm) text-label-code-sm"
             >
               <template
                 v-for="[term, value] in entry.detail"
@@ -185,23 +199,28 @@
       </ol>
     </div>
 
-    <div class="shrink-0 border-t border-(--border-default) px-(--spacing-md) py-(--spacing-sm)">
-      <div
-        class="flex min-h-9 items-start gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-xs) text-body-sm"
-      >
-        <span class="text-(--text-muted)">›</span>
+    <div
+      class="flex shrink-0 items-end gap-(--spacing-sm) rounded-(--shape-elements) [border:var(--illustration-rim-width)_solid_transparent] [background-image:var(--illustration-rim-layers)] [background-origin:var(--illustration-rim-boxes)] [background-clip:var(--illustration-rim-boxes)] py-(--spacing-sm) ps-(--spacing-md) pe-(--spacing-sm)"
+    >
+      <p class="m-0 min-h-10 min-w-0 flex-1 self-center text-body-sm">
         <span
           v-if="draft"
-          class="min-w-0 text-(--text-default)"
-          >{{ draft
-          }}<span class="ms-px inline-block h-[1.1em] w-px translate-y-[0.2em] bg-(--text-default)"
-        /></span>
+          class="text-(--text-default)"
+          >{{ draft }}</span
+        >
         <span
           v-else
           class="text-(--text-muted)"
-          >Ask {{ client.name }} to build something</span
+          >Ask {{ agent.name }} to build something</span
         >
-      </div>
+      </p>
+      <IconButton
+        icon="pi pi-arrow-up"
+        kind="primary"
+        size="small"
+        aria-label="Send"
+        :disabled="!draft"
+      />
     </div>
   </figure>
 </template>

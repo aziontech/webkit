@@ -113,7 +113,7 @@
             label="Rules Engine"
             kind="secondary"
             size="medium"
-            icon="pi pi-sort-alt"
+            icon="ai ai-rules-engine"
             @click="emit('rules')"
           />
 

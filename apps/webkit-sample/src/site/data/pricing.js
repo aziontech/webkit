@@ -53,10 +53,10 @@ export const PLANS = [
     },
     featuresTitle: 'All Features Included.',
     features: [
-      { icon: 'pi pi-globe', label: 'Global infrastructure' },
+      { icon: 'ai ai-edge-nodes', label: 'Global infrastructure' },
       { icon: 'ai ai-edge-functions', label: 'Serverless functions' },
       { icon: 'ai ai-edge-storage', label: 'Storage and database' },
-      { icon: 'pi pi-image', label: 'Image optimization' },
+      { icon: 'ai ai-image-processor', label: 'Image optimization' },
       { icon: 'ai ai-edge-firewall', label: 'DDoS mitigation and firewall' }
     ],
     action: { label: 'Start for free', kind: 'outlined', to: '/signup' }
@@ -674,14 +674,14 @@ export const PRIMITIVE_GROUPS = [
         description: 'Run code globally, low latency',
         href: '/site/products/functions'
       },
-      { icon: 'pi pi-sitemap', title: 'Rules', description: 'Control traffic routing' },
+      { icon: 'ai ai-rules-engine', title: 'Rules', description: 'Control traffic routing' },
       {
         icon: 'ai ai-load-balancer',
         title: 'Load Balancer',
         description: 'High availability across origins'
       },
       {
-        icon: 'pi pi-image',
+        icon: 'ai ai-image-processor',
         title: 'Image Processor',
         description: 'Optimize and modify images'
       }
@@ -696,7 +696,7 @@ export const PRIMITIVE_GROUPS = [
         description: 'Low-latency distributed inference'
       },
       {
-        icon: 'ai ai-gateway',
+        icon: 'ai ai-ai-gateway',
         title: 'AI Gateway',
         description: 'Govern and route LLMs'
       }
@@ -741,7 +741,7 @@ export const PRIMITIVE_GROUPS = [
         description: 'Authenticate and protect APIs'
       },
       {
-        icon: 'pi pi-android',
+        icon: 'ai ai-bot-manager',
         title: 'Bot Management',
         description: 'Stop bots, prevent abuse'
       },

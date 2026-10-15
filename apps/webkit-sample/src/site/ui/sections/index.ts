@@ -19,6 +19,7 @@ import FeatureTabs from './FeatureTabs.vue'
 import FeatureTiles from './FeatureTiles.vue'
 import Heroes from './Heroes.vue'
 import HeroForm from './HeroForm.vue'
+import IntegrationCode from './IntegrationCode.vue'
 import ListingBrowser from './ListingBrowser.vue'
 import ListingTable from './ListingTable.vue'
 import LogoWallQuote from './LogoWallQuote.vue'
@@ -35,6 +36,7 @@ import StatsBand from './StatsBand.vue'
 import StickyScrollCode from './StickyScrollCode.vue'
 import SubjectLibrary from './SubjectLibrary.vue'
 import TemplateGallery from './TemplateGallery.vue'
+import UseCases from './UseCases.vue'
 import WidgetGrid from './WidgetGrid.vue'
 
 export const SECTIONS: Record<string, Component> = {
@@ -56,6 +58,7 @@ export const SECTIONS: Record<string, Component> = {
   FeatureTabs,
   FeatureTiles,
   HeroForm,
+  IntegrationCode,
   Heroes,
   ListingBrowser,
   ListingTable,
@@ -73,6 +76,7 @@ export const SECTIONS: Record<string, Component> = {
   StickyScrollCode,
   SubjectLibrary,
   TemplateGallery,
+  UseCases,
   WidgetGrid
 }
 

@@ -230,7 +230,7 @@
           <template #content>
             <EmptyState
               v-if="!rules.length"
-              icon="ai ai-waf"
+              icon="ai ai-waf-rules"
               title="No allowed rules"
               description="Nothing is exempt from this rule set. Add an exception when a rule matches legitimate traffic."
             >

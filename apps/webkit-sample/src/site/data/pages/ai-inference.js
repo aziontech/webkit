@@ -1,8 +1,8 @@
-import { NetworkBanner } from '@shared/ui/banners/index.js'
-import { CLIENT_STRIP } from '@shared/ui/brand/strips.js'
 import { markRaw } from 'vue'
 
+import Diagram from '../../ui/diagram/Diagram.vue'
 import { AI_FAQ } from '../ai.js'
+import { MODEL_ROUTING } from '../diagrams.js'
 import { BUILD_CTA, EARTH_NETWORK, NETWORK_TOPICS, quotesLedBy } from '../solutions.js'
 
 const DOCS = '/site/docs'
@@ -100,17 +100,18 @@ const operateDescription = [
 export const AI_INFERENCE_PAGE = [
   {
     section: 'Heroes',
-    kind: 'pixel-floor',
+    kind: 'title-band',
+    titleLength: 'long',
+    eyebrow: 'AI Inference',
     title: 'Build and deploy AI agents and applications in seconds',
     description:
       'Run AI models close to users on highly distributed infrastructure for scalable, low-latency, and cost-effective inference while preserving data locality.',
     actions: [
       { label: 'Start free', href: '/signup', kind: 'secondary' },
       { label: 'Docs', href: DOCS, kind: 'outlined' }
-    ],
-    carouselMarks: CLIENT_STRIP
+    ]
   },
-  { section: 'CapabilityGrid', items: FEATURES },
+  { section: 'CapabilityGrid', gap: false, items: FEATURES },
   { section: 'CapabilityGrid', items: PLATFORM_CARDS },
   {
     section: 'TemplateGallery',
@@ -126,7 +127,16 @@ export const AI_INFERENCE_PAGE = [
     section: 'MediaSplitBand',
     title: 'Operate AI With Speed, Reliability, and Cost Control',
     description: operateDescription,
-    scene: { component: markRaw(NetworkBanner), props: { kind: 'band' } }
+    orientation: 'vertical',
+    texture: 'none',
+    scene: {
+      component: markRaw(Diagram),
+      props: {
+        spec: MODEL_ROUTING,
+        label:
+          'An AI app routes paid users to OpenAI GPT-5.5 with a fallback to Claude Opus 4.7, and everyone else to Kimi K2.6 or Gemma 4 depending on load'
+      }
+    }
   },
   { section: 'ClientQuotes', quotes: quotesLedBy('axur') },
   { section: 'PlatformDirectory', title: 'All the AI Primitives You Need' },

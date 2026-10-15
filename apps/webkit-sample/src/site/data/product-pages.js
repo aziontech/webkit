@@ -15,6 +15,12 @@ export const PRODUCT_DIRECTORY = {
   title: 'A full-stack platform that scales instantly'
 }
 
+export const PLATFORM_DIRECTORY = {
+  section: 'PlatformDirectory',
+  title: 'Serverless AI-native primitives for autonomous workloads',
+  ariaLabel: 'Platform primitives'
+}
+
 export const PRODUCT_CLOSING = {
   section: 'ClosingCallToAction',
   kind: 'split',
@@ -95,13 +101,13 @@ export const PRODUCT_GROUPS = [
         href: '/site/products/cache'
       },
       {
-        icon: 'ai ai-edge-application',
+        icon: 'ai ai-app-accelerator',
         title: 'Application Accelerator',
         description: 'Optimize dynamic applications',
         href: '/site/products/application-accelerator'
       },
       {
-        icon: 'ai ai-layers',
+        icon: 'ai ai-image-processor',
         title: 'Image Processor',
         description: 'Optimize and transform images in real time'
       },
@@ -150,7 +156,8 @@ export const PRODUCT_GROUPS = [
       {
         icon: 'ai ai-waf-rules',
         title: 'WAF',
-        description: 'Web application firewall'
+        description: 'Web application firewall',
+        href: '/site/products/web-application-firewall'
       },
       {
         icon: 'ai ai-network-lists',

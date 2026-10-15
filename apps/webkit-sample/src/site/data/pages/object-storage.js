@@ -205,13 +205,15 @@ const [HEROSPARK_QUOTE] = quotesLedBy('herospark')
 export const OBJECT_STORAGE_PAGE = [
   {
     section: 'Heroes',
-    kind: 'centered-band',
+    kind: 'title-band',
+    titleLength: 'long',
     eyebrow: 'Object Storage',
     title: 'S3-compatible storage, built into the platform',
     description:
       'Store media, uploads and build output in buckets, and serve them from the same platform that runs your code — with zero egress between Azion services.',
     actions: PRODUCT_HERO_ACTIONS
   },
+  { section: 'CapabilityGrid', gap: false, items: CAPABILITIES },
   { section: 'StatsBand', items: FIGURES },
   {
     section: 'StickyScrollCode',
@@ -223,7 +225,6 @@ export const OBJECT_STORAGE_PAGE = [
     samples: INTERFACE_SAMPLES,
     action: { label: 'Explore the storage APIs', href: PRODUCT_DOCS }
   },
-  { section: 'CapabilityGrid', items: CAPABILITIES },
   {
     section: 'QuoteBand',
     kind: 'signed',

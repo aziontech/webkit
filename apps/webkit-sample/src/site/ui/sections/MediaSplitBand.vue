@@ -1,7 +1,8 @@
 <script setup lang="ts">
   import Illustration from '@aziontech/webkit/illustration'
-  import MediaSplit from '@aziontech/webkit/media-split'
+  import MediaSplit, { type MediaSplitOrientation } from '@aziontech/webkit/media-split'
   import SectionModule from '@aziontech/webkit/section-module'
+  import type { TextureMaterialKind } from '@aziontech/webkit/texture-material'
   import type { Component } from 'vue'
   import { computed } from 'vue'
 
@@ -48,6 +49,10 @@
     scene?: SiteScene | null
     /** One or two medium buttons under the copy; with one, the whole band links to it and hovering the band activates it. */
     actions?: SiteAction[]
+    /** Axis the band splits on; vertical stacks the media under the copy for a wide scene. */
+    orientation?: MediaSplitOrientation
+    /** Texture painted under the media. */
+    texture?: TextureMaterialKind
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -58,7 +63,9 @@
     illustrationLabel: '',
     image: null,
     scene: null,
-    actions: () => []
+    actions: () => [],
+    orientation: 'horizontal',
+    texture: 'pixelate'
   })
 
   const { follow } = useSiteLink()
@@ -92,11 +99,12 @@
   >
     <MediaSplit
       framed
+      :orientation="orientation"
       :media-href="bandHref"
       align="top"
       size="medium"
       media-fill="surface"
-      texture="pixelate"
+      :texture="texture"
       texture-size="small"
       texture-fade="top"
       :eyebrow="eyebrow"

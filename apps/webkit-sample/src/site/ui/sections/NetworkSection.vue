@@ -40,6 +40,8 @@
     eyebrow?: string
     /** The network claim. */
     title: string
+    /** Closing clause of the claim, set in the headline's type on its own line under it. */
+    titleTail?: string
     /** Muted line above the claim chips. */
     lead?: string
     /** Infrastructure claims, one chip each. */
@@ -56,6 +58,7 @@
     kind: 'quotes',
     anchor: '',
     eyebrow: '',
+    titleTail: '',
     lead: '',
     claims: () => [],
     outcomes: () => [],
@@ -103,13 +106,16 @@
         <div
           class="relative flex min-h-[38rem] flex-col justify-between gap-(--spacing-xl) p-(--spacing-xxl) md:min-h-[clamp(36rem,60vh,40rem)] lg:min-h-[clamp(340px,52vh,620px)]"
         >
-          <div class="relative [&_h2]:max-w-[16em]">
+          <div
+            class="relative [&_h2]:max-w-[27em] [&_h2]:text-heading-md! [&_h2+p]:-mt-(--spacing-lg) [&_h2+p]:max-w-[27em] [&_h2+p]:text-heading-md [&_h2+p]:text-(--text-default)"
+          >
             <SectionTitle
               :framed="false"
               kind="left"
               size="small"
               :eyebrow="eyebrow"
               :title="title"
+              :description="titleTail"
             />
           </div>
 
@@ -143,7 +149,7 @@
               <li
                 v-for="claim in claims"
                 :key="claim"
-                class="inline-flex h-6 items-center rounded-(--shape-elements) border border-(--primary) bg-[color-mix(in_srgb,var(--primary)_10%,var(--bg-canvas))] px-(--spacing-xs) text-label-sm text-(--text-default)"
+                class="inline-flex h-7 items-center rounded-(--shape-elements) border border-(--primary) bg-[color-mix(in_srgb,var(--primary)_10%,var(--bg-canvas))] px-(--spacing-sm) text-label-md text-(--text-default)"
               >
                 {{ claim }}
               </li>

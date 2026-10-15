@@ -217,6 +217,12 @@
                       :description="item.description"
                       close-on-click
                     >
+                      <template
+                        v-if="item.icon"
+                        #icon
+                      >
+                        <i :class="item.icon" />
+                      </template>
                       {{ item.label }}
                     </NavigationMenu.Item>
                   </NavigationMenu.List>
@@ -250,13 +256,6 @@
     </GlobalHeader.Middle>
 
     <GlobalHeader.Right>
-      <IconButton
-        icon="pi pi-search"
-        kind="outlined"
-        size="medium"
-        aria-label="Search"
-        class="shrink-0"
-      />
       <div class="hidden xl:flex">
         <Button
           :label="contact.label"
@@ -280,6 +279,13 @@
         class="shrink-0"
         :href="cta.href"
         @click="follow($event, cta.href)"
+      />
+      <IconButton
+        icon="pi pi-search"
+        kind="outlined"
+        size="medium"
+        aria-label="Search"
+        class="shrink-0"
       />
     </GlobalHeader.Right>
   </GlobalHeader>

@@ -23,7 +23,7 @@
       empty: {
         title: 'Edge Firewall',
         description: 'Not bound. Requests reach the application uninspected.',
-        icon: 'pi pi-shield',
+        icon: 'ai ai-edge-firewall',
         ctaLabel: 'Bind Firewall',
         target: true,
         source: true
@@ -35,7 +35,7 @@
       empty: {
         title: 'Custom Page',
         description: 'Not bound. 4xx and 5xx fall back to the default page.',
-        icon: 'pi pi-file',
+        icon: 'ai ai-custom-pages',
         ctaLabel: 'Bind Custom Page',
         target: true,
         source: false

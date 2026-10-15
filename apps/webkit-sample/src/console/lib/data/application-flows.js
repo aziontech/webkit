@@ -15,7 +15,7 @@ export const APPLICATION_FLOWS = {
 
   cli: {
     id: 'cli',
-    icon: 'pi pi-desktop',
+    icon: 'ai ai-azion-cli',
     title: 'Sync with Azion CLI',
     description:
       'Create the application now and push to it from your own terminal. Azion links the local project, builds it with your framework preset, and keeps azion.json in sync. No repository required.',
@@ -79,7 +79,7 @@ export const SCRATCH_SOURCE = {
   title: 'Local project',
   description: 'The Azion application layer, ready for your first `azion deploy`.',
   framework: 'javascript',
-  icon: 'pi pi-desktop',
+  icon: 'ai ai-azion-cli',
   repoOwner: 'aziontech',
   repoPath: 'templates/hello-world',
   defaultName: 'my-application',

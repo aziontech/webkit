@@ -131,7 +131,7 @@
           <template #content>
             <EmptyState
               v-if="!rows.length"
-              icon="ai ai-waf"
+              icon="ai ai-waf-rules"
               title="No matches yet"
               description="This rule set has not matched any request. Matches appear here as traffic arrives."
             />

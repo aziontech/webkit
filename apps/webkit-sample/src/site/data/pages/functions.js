@@ -1,15 +1,15 @@
-import contabilizeiTile from '@aziontech/webkit/assets/contabilizei-symbol-color.png'
 import { markRaw } from 'vue'
 
 import FunctionsStartScene from '../../ui/FunctionsStartScene.vue'
 import { cliBand } from '../cli-band.js'
-import { START_TABS } from '../functions-start.js'
+import { AGENT_PROMPT, START_TABS } from '../functions-start.js'
 import {
+  PLATFORM_DIRECTORY,
   PRODUCT_CLOSING,
-  PRODUCT_DIRECTORY,
   PRODUCT_DOCS,
   PRODUCT_HERO_ACTIONS
 } from '../product-pages.js'
+import { quotesLedBy } from '../solutions.js'
 
 const IMPORT = 'import'
 
@@ -32,11 +32,43 @@ const FRAMEWORK_MARKS = [
   'jekyll'
 ]
 
-const FIGURES = [
-  { value: '100', suffix: '+', label: 'Data centers' },
-  { value: '0', label: 'Cold starts' },
-  { value: '512', suffix: 'MB', label: 'Memory per isolate' },
-  { value: '3', suffix: 'M', label: 'Free requests a month' }
+const BENEFITS = [
+  {
+    icon: 'ai ai-content-delivery',
+    title: 'Close to every user',
+    description:
+      'Functions run across 100+ data centers, so the code executes next to the person making the request, with no region to pick.'
+  },
+  {
+    icon: 'pi pi-bolt',
+    title: 'No cold starts',
+    description:
+      'Each request starts in a V8 isolate, so there is nothing to pre-warm and no first-request penalty to design around.'
+  },
+  {
+    icon: 'pi pi-microchip',
+    title: 'Room for real work',
+    description:
+      'Every isolate gets 512 MB of memory, enough for APIs, authentication and model calls in the same handler.'
+  },
+  {
+    icon: 'pi pi-dollar',
+    title: 'Free to start',
+    description:
+      'Hobby includes 3M function requests and 8 hours of compute time a month, so a first function costs nothing to run.'
+  },
+  {
+    icon: 'pi pi-code',
+    title: 'The code you already have',
+    description:
+      'Web standards and 68 Node.js modules, so most existing handlers move over with small changes.'
+  },
+  {
+    icon: 'pi pi-database',
+    title: 'One platform, no keys to wire',
+    description:
+      'Read from KV Store, query SQL Database and call models from the same function, without credentials to manage.'
+  }
 ]
 
 const KV_SAMPLE = `export default {
@@ -157,127 +189,34 @@ const INTEGRATION_SAMPLES = [
   sample('firewall', 'Firewall', FIREWALL_SAMPLE)
 ]
 
-const CAPABILITIES = [
+const USE_CASES = [
   {
-    icon: 'ai ai-edge-application',
-    title: 'Application or Firewall',
+    icon: 'ai ai-azion-api',
+    title: 'Ship low-latency APIs',
     description:
-      'Run on the requests an application serves, or inside Firewall, where a request can still be refused.'
-  },
-  {
-    icon: 'pi pi-arrow-right-arrow-left',
-    title: 'Request and response phase',
-    description:
-      'Rewrite a request before it reaches the origin, or change a response before it reaches the user.'
-  },
-  {
-    icon: 'pi pi-sliders-h',
-    title: 'Arguments per instance',
-    description:
-      'One function, many instances. Each passes its own JSON arguments, so the code stays the same everywhere it runs.'
+      'Answer API requests in the request flow, next to the user, with no cold starts and no servers to scale for traffic peaks.',
+    href: PRODUCT_DOCS
   },
   {
     icon: 'pi pi-lock',
-    title: 'Variables and secrets',
+    title: 'Authenticate before the origin',
     description:
-      'Read configuration with Azion.env.get(). Keys that name a token, a key or a secret are stored as secrets.'
+      'Validate tokens and sessions in a function and refuse a request before it reaches your application or your origin.',
+    href: PRODUCT_DOCS
   },
   {
-    icon: 'pi pi-globe',
-    title: 'Web standards and Node.js',
+    icon: 'pi pi-sitemap',
+    title: 'Connect services in one handler',
     description:
-      'fetch, Streams and Web Crypto in a V8 isolate, plus 68 Node.js modules for the code you already have.'
+      'Read from KV Store, query SQL Database and write to Object Storage from the same function, with no credentials to wire.',
+    href: PRODUCT_DOCS
   },
   {
-    icon: 'pi pi-code',
-    title: 'WebAssembly',
+    icon: 'ai ai-edge-ai',
+    title: 'Add AI to the request',
     description:
-      'Compile Rust or C to WebAssembly with the Rustwasm and Emscripten presets, and call it from the same handler.'
-  }
-]
-
-const PLATFORM_GROUPS = [
-  {
-    label: 'Compute',
-    items: [
-      {
-        icon: 'ai ai-edge-functions',
-        title: 'Functions',
-        description: 'Run code globally'
-      },
-      {
-        icon: 'ai ai-edge-application',
-        title: 'Applications',
-        description: 'Decide what happens to every request',
-        href: '/site/products/applications'
-      },
-      {
-        icon: 'ai ai-load-balancer',
-        title: 'Load Balancer',
-        description: 'Distribute traffic with high availability'
-      },
-      {
-        icon: 'pi pi-image',
-        title: 'Image Processor',
-        description: 'Optimize and transform images'
-      }
-    ]
-  },
-  {
-    label: 'AI',
-    items: [
-      {
-        icon: 'ai ai-edge-ai',
-        title: 'AI Inference',
-        description: 'Run low-latency models',
-        href: '/site/products/ai-inference'
-      },
-      { icon: 'ai ai-gateway', title: 'AI Gateway', description: 'Govern and route LLMs' }
-    ]
-  },
-  {
-    label: 'Data',
-    items: [
-      {
-        icon: 'ai ai-edge-storage',
-        title: 'Object Storage',
-        description: 'Store and deliver globally',
-        href: '/site/products/object-storage'
-      },
-      {
-        icon: 'ai ai-edge-sql',
-        title: 'SQL Database',
-        description: 'Distributed SQL database'
-      },
-      { icon: 'ai ai-edge-kv', title: 'KV Store', description: 'Key-value data store' },
-      {
-        icon: 'ai ai-tiered-cache',
-        title: 'Cache',
-        description: 'Accelerate delivery and availability',
-        href: '/site/products/cache'
-      }
-    ]
-  },
-  {
-    label: 'Security',
-    items: [
-      {
-        icon: 'ai ai-waf-rules',
-        title: 'Web Application Firewall',
-        description: 'Smart way to block threats'
-      },
-      {
-        icon: 'ai ai-azion-api',
-        title: 'API Gateway',
-        description: 'Authenticate and protect APIs'
-      },
-      {
-        icon: 'pi pi-android',
-        title: 'Bot Management',
-        description: 'Stop bots, prevent abuse'
-      },
-      { icon: 'ai ai-edge-dns', title: 'DNS', description: 'High-performance DNS' }
-    ]
+      'Call a model with AI Inference and return its answer in the same response, close to the user who asked.',
+    href: PRODUCT_DOCS
   }
 ]
 
@@ -350,52 +289,59 @@ const FAQ = [
   }
 ]
 
+const START_TILES = START_TABS.map(({ value, title, description }) => ({
+  title,
+  description,
+  scene: { component: markRaw(FunctionsStartScene), props: { tab: value } },
+  ...(value === 'agents'
+    ? { copy: { label: 'Copy Prompt', text: AGENT_PROMPT } }
+    : { href: PRODUCT_DOCS })
+}))
+
 export const FUNCTIONS_PAGE = [
   {
     section: 'Heroes',
     kind: 'centered-carousel',
     eyebrow: 'Functions',
-    title: 'Run your code in every request',
-    description:
-      'Serverless JavaScript and TypeScript for APIs, auth and AI, running across 100+ data centers with no cold starts.',
+    title: 'Instant serverless functions for modern applications',
+    description: 'Build and scale AI-powered applications on a globally integrated platform.',
     actions: PRODUCT_HERO_ACTIONS,
     carouselLabel: 'Built for your framework',
     carouselMarks: FRAMEWORK_MARKS
   },
-  { section: 'StatsBand', items: FIGURES },
+  { section: 'CapabilityGrid', items: BENEFITS },
   {
-    section: 'FeatureTabs',
+    section: 'WidgetGrid',
     anchor: 'get-started',
     eyebrow: 'Get started',
     title: 'Start where you already work',
     description:
       'The same function, three ways to ship it. Hand it to a coding agent, build it in the Console, or deploy it from the terminal.',
-    tabs: START_TABS,
-    scene: { component: markRaw(FunctionsStartScene) },
-    interval: 14000,
-    action: { label: 'Create your first function', href: PRODUCT_DOCS }
+    actions: PRODUCT_HERO_ACTIONS,
+    columns: 3,
+    items: START_TILES
   },
   {
-    section: 'StickyScrollCode',
-    eyebrow: 'Platform',
-    title: 'Integrates with the Azion Web Platform',
+    section: 'IntegrationCode',
+    title: 'Integrates with the',
+    emphasis: 'Azion Web Platform',
     description:
       'Read data, call models and refuse requests from the same function, with no keys to wire between products.',
     items: INTEGRATIONS,
     samples: INTEGRATION_SAMPLES,
     action: { label: 'Explore the runtime APIs', href: PRODUCT_DOCS }
   },
-  { section: 'CapabilityGrid', items: CAPABILITIES },
   {
-    section: 'QuoteBand',
-    kind: 'highlight',
-    text: 'With Azion, Contabilizei improved request delivery at the Edge, reduced infrastructure costs, and gained fast access to support whenever needed.',
-    name: 'Fabrício Santos',
-    jobTitle: 'DevSecOps Manager at Contabilizei',
-    logo: contabilizeiTile,
-    logoAlt: 'Contabilizei'
+    section: 'UseCases',
+    eyebrow: 'Use Cases',
+    title: 'What teams use Functions for',
+    description:
+      'Run JavaScript and TypeScript in the request flow on Azion’s distributed infrastructure. Teams use it to:',
+    action: { label: 'View docs', href: PRODUCT_DOCS, trailing: true },
+    items: USE_CASES
   },
-  { ...PRODUCT_DIRECTORY, groups: PLATFORM_GROUPS },
+  { section: 'ClientQuotes', quotes: quotesLedBy('contabilizei') },
+  PLATFORM_DIRECTORY,
   { section: 'FaqSection', items: FAQ },
   cliBand({
     title: 'Deploy your first function in two commands',

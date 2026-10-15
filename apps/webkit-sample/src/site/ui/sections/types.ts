@@ -60,6 +60,8 @@ export interface SiteNavEntry {
   description: string
   /** Destination; omitted entries link to `#`. */
   href?: string
+  /** Icon classes for a leading logo sized to the label and description. */
+  icon?: string
 }
 
 export interface SiteNavGroup {
@@ -99,6 +101,8 @@ export interface SiteSocial {
 export interface PageSection {
   /** Registered section name, one per marketing template. */
   section: string
+  /** False drops the hatched gap before this section. */
+  gap?: boolean
   /** Props forwarded to the section. */
   [prop: string]: unknown
 }

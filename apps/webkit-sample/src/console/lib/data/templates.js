@@ -133,7 +133,7 @@ const authored = {
     vendor: 'Azion',
     framework: 'javascript',
     useCases: ['ai'],
-    icon: 'ai ai-edge-functions',
+    icon: 'ai ai-edge-ai',
     repoOwner: 'aziontech',
     repoPath: 'templates/ai-inference',
     defaultRepoName: 'ai-inference-starter-kit',

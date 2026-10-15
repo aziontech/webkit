@@ -1,13 +1,11 @@
 import {
   foldList,
   PRODUCT_CLOSING,
-  PRODUCT_CUSTOMERS_ACTION,
   PRODUCT_DIRECTORY,
   PRODUCT_DOCS,
-  PRODUCT_HERO_ACTIONS,
-  registeredClient,
-  withWallClient
+  PRODUCT_HERO_ACTIONS
 } from '../product-pages.js'
+import { quotesLedBy } from '../solutions.js'
 
 const PILLARS = [
   {
@@ -179,19 +177,18 @@ const FAQ = [
   }
 ]
 
-const ZOOP = registeredClient('Zoop')
-
 export const APPLICATION_ACCELERATOR_PAGE = [
   {
     section: 'Heroes',
-    kind: 'centered-band',
+    kind: 'title-band',
+    titleLength: 'short',
     eyebrow: 'Application Accelerator',
     title: 'Accelerate dynamic APIs and apps',
     description:
       'Speed up web applications with protocol optimizations and advanced cache rules. Cache POST requests and use short TTLs for real-time data.',
     actions: PRODUCT_HERO_ACTIONS
   },
-  { section: 'CapabilityGrid', items: PILLARS },
+  { section: 'CapabilityGrid', gap: false, items: PILLARS },
   {
     section: 'MediaSplitStack',
     kind: 'solutions',
@@ -233,17 +230,9 @@ export const APPLICATION_ACCELERATOR_PAGE = [
     actions: [{ label: 'Learn More', href: PRODUCT_DOCS }]
   },
   { section: 'CapabilityGrid', items: USE_CASES },
-  {
-    section: 'LogoWallQuote',
-    items: withWallClient(ZOOP),
-    quote: {
-      text: '"Azion delivered the advanced protection and superior performance we needed, with fast implementation and immediate results."',
-      name: 'Ismael Aguilar',
-      jobTitle: 'Information Security Manager at Zoop',
-      client: ZOOP
-    },
-    actions: [PRODUCT_CUSTOMERS_ACTION]
-  },
+  { section: 'ClientQuotes', quotes: quotesLedBy('zoop') },
+
+
   PRODUCT_DIRECTORY,
   { section: 'FaqSection', items: FAQ },
   PRODUCT_CLOSING

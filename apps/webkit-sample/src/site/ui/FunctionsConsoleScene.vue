@@ -29,18 +29,19 @@
     FUNCTION_NAME
   } from '../data/functions-start.js'
 
-  const DESKTOP_WIDTH = 860
   const MOBILE_WIDTH = 390
 
   interface Props {
     /** Whether this scene is the one showing; a scene that shares a frame plays only while it is. */
     active?: boolean
+    /** Design width of the console from `md` up; the console scales to fit its host. */
+    width?: number
   }
 
-  const props = withDefaults(defineProps<Props>(), { active: true })
+  const props = withDefaults(defineProps<Props>(), { active: true, width: 860 })
 
   const root = ref<HTMLElement | null>(null)
-  const frame = ref({ width: DESKTOP_WIDTH, height: 600, scale: 1 })
+  const frame = ref({ width: props.width, height: 600, scale: 1 })
 
   let observer: globalThis.ResizeObserver | null = null
 
@@ -48,7 +49,7 @@
     const box = root.value?.getBoundingClientRect()
     if (!box?.width) return
     const mobile = !(minWidthQuery('md')?.matches ?? true)
-    const width = mobile ? MOBILE_WIDTH : DESKTOP_WIDTH
+    const width = mobile ? MOBILE_WIDTH : props.width
     const scale = box.width / width
     frame.value = { width, height: box.height / scale, scale }
   }
