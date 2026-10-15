@@ -55,6 +55,8 @@ export const illustrationPalette: Record<string, IllustrationRole | null> = {
   '#35495E': null,
   '#FF3E00': null,
   '#FE601F': null,
+  '#8A2F02': null,
+  '#401602': null,
   '#4040B2': null,
   '#5C4EE5': null,
   '#0098CC': null,
