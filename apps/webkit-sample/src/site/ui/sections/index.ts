@@ -1,5 +1,6 @@
 import type { Component } from 'vue'
 
+import Architectures from './Architectures.vue'
 import ArticleBody from './ArticleBody.vue'
 import ArticleCards from './ArticleCards.vue'
 import ArticleHighlight from './ArticleHighlight.vue'
@@ -40,6 +41,7 @@ import UseCases from './UseCases.vue'
 import WidgetGrid from './WidgetGrid.vue'
 
 export const SECTIONS: Record<string, Component> = {
+  Architectures,
   ArticleBody,
   ArticleCards,
   ArticleHighlight,

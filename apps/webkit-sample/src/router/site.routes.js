@@ -67,6 +67,7 @@ import LandingTechnology from '@site/views/LandingTechnology.vue'
 import LandingVercelAlternative from '@site/views/LandingVercelAlternative.vue'
 import LandingWebApplicationFirewall from '@site/views/LandingWebApplicationFirewall.vue'
 import LandingWebApps from '@site/views/LandingWebApps.vue'
+import LandingWebsiteBundle from '@site/views/LandingWebsiteBundle.vue'
 import LandingWorkloads from '@site/views/LandingWorkloads.vue'
 
 // Every path this tree served before the pages were grouped. Kept so a link that is
@@ -254,6 +255,11 @@ export const siteRoutes = [
   // component with the props a page would pass. Not an azion.com page — it is the Site's
   // own reference for choosing an opening, so the nav does not link it.
   { path: '/site/azion-heros', name: 'site-azion-heros', component: LandingAzionHeros },
+  {
+    path: '/site/azion-website-bundle',
+    name: 'site-azion-website-bundle',
+    component: LandingWebsiteBundle
+  },
   // The compliance page in the same shell: the certifications and the privacy regulations,
   // one module of cards under a shared responsibility-model intro. Reached by direct URL only,
   // the same way Careers is — neither is a Products/Solutions mega-menu entry.
