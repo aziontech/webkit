@@ -13441,6 +13441,12 @@
       "kind": "asset",
       "treeShakeableImport": "@aziontech/webkit/assets/agibank-extended-reversed.svg"
     },
+    "assets/ai-gateway.svg": {
+      "import": "@aziontech/webkit/assets/ai-gateway.svg",
+      "target": "./src/assets/illustrations/ai-gateway.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/ai-gateway.svg"
+    },
     "assets/akamai-extended-color.svg": {
       "import": "@aziontech/webkit/assets/akamai-extended-color.svg",
       "target": "./src/assets/logos/competitors/akamai-extended-color.svg",
@@ -13602,6 +13608,12 @@
       "target": "./src/assets/illustrations/azion-highlight.svg",
       "kind": "asset",
       "treeShakeableImport": "@aziontech/webkit/assets/azion-highlight.svg"
+    },
+    "assets/azion-rest-api.svg": {
+      "import": "@aziontech/webkit/assets/azion-rest-api.svg",
+      "target": "./src/assets/illustrations/azion-rest-api.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/azion-rest-api.svg"
     },
     "assets/azure-symbol-mono.svg": {
       "import": "@aziontech/webkit/assets/azure-symbol-mono.svg",
@@ -13908,6 +13920,12 @@
       "target": "./src/assets/logos/clients/digiplus-extended-reversed.svg",
       "kind": "asset",
       "treeShakeableImport": "@aziontech/webkit/assets/digiplus-extended-reversed.svg"
+    },
+    "assets/distributed-apis-tile.svg": {
+      "import": "@aziontech/webkit/assets/distributed-apis-tile.svg",
+      "target": "./src/assets/illustrations/distributed-apis-tile.svg",
+      "kind": "asset",
+      "treeShakeableImport": "@aziontech/webkit/assets/distributed-apis-tile.svg"
     },
     "assets/docusaurus-symbol-mono.svg": {
       "import": "@aziontech/webkit/assets/docusaurus-symbol-mono.svg",
