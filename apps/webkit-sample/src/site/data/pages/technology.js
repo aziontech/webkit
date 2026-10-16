@@ -1,5 +1,3 @@
-import { BUILD_CLIENT_STRIP } from '@shared/ui/brand/strips.js'
-
 import { BUILD_CTA, LEARNING_CENTER, quotesLedBy } from '../solutions.js'
 import { solutionPage } from './solution.js'
 
@@ -7,8 +5,7 @@ const HERO = {
   eyebrow: 'Technology',
   title: 'Build high-performance applications',
   description:
-    'Develop modern applications with high-performance APIs and microservices on distributed infrastructure. Ensure low latency, scalability during traffic spikes, and advanced security for serverless applications, reducing operational complexity and bringing processing closer to users.',
-  carouselMarks: BUILD_CLIENT_STRIP
+    'Develop modern applications with high-performance APIs and microservices on distributed infrastructure. Ensure low latency, scalability during traffic spikes, and advanced security for serverless applications, reducing operational complexity and bringing processing closer to users.'
 }
 
 const CAPABILITIES = [

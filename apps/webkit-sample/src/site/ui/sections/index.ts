@@ -20,6 +20,7 @@ import FeatureTabs from './FeatureTabs.vue'
 import FeatureTiles from './FeatureTiles.vue'
 import Heroes from './Heroes.vue'
 import HeroForm from './HeroForm.vue'
+import HeroWithOpening from './HeroWithOpening.vue'
 import IntegrationCode from './IntegrationCode.vue'
 import ListingBrowser from './ListingBrowser.vue'
 import ListingTable from './ListingTable.vue'
@@ -62,6 +63,7 @@ export const SECTIONS: Record<string, Component> = {
   HeroForm,
   IntegrationCode,
   Heroes,
+  HeroWithOpening,
   ListingBrowser,
   ListingTable,
   LogoWallQuote,
@@ -82,6 +84,12 @@ export const SECTIONS: Record<string, Component> = {
   WidgetGrid
 }
 
-export const HERO_SECTIONS = new Set(['ArticleBody', 'Heroes', 'HeroForm', 'PricingPlans'])
+export const HERO_SECTIONS = new Set([
+  'ArticleBody',
+  'Heroes',
+  'HeroForm',
+  'HeroWithOpening',
+  'PricingPlans'
+])
 
 export type { PageSection, SiteAction, SiteFaqItem, SiteLink, SiteTopic } from './types'

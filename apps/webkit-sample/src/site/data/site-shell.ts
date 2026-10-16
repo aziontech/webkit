@@ -97,11 +97,20 @@ const PRODUCTS: SiteNavMenu = {
             description: 'Boost performance, enhance delivery',
             href: '/site/products/application-accelerator'
           },
-          { label: 'Image Processor', description: 'Optimize, transform images instantly' },
+          {
+            label: 'Image Processor',
+            description: 'Optimize, transform images instantly',
+            href: '/site/products/image-processor'
+          },
           {
             label: 'AI Inference',
             description: 'Perform AI inference globally',
             href: '/site/products/ai-inference'
+          },
+          {
+            label: 'AI Gateway',
+            description: 'Route, secure and log every model call',
+            href: '/site/products/ai-gateway'
           },
           { label: 'Durable Objects', description: 'Run stateful compute worldwide' },
           { label: 'Orchestrator', description: 'Deploy, manage, monitor and automate workloads' }
@@ -113,13 +122,21 @@ const PRODUCTS: SiteNavMenu = {
         label: 'Store',
         href: '/site/products#store',
         items: [
-          { label: 'SQL Database', description: 'Store relational and structured data' },
+          {
+            label: 'SQL Database',
+            description: 'Store relational and structured data',
+            href: '/site/products/sql-database'
+          },
           {
             label: 'Object Storage',
             description: 'Store unstructured data in a scalable way',
             href: '/site/products/object-storage'
           },
-          { label: 'KV Store', description: 'Store key-value data instantly' }
+          {
+            label: 'KV Store',
+            description: 'Store key-value data instantly',
+            href: '/site/products/kv-store'
+          }
         ]
       }
     ],
@@ -133,12 +150,35 @@ const PRODUCTS: SiteNavMenu = {
             description: 'Protect apps, block vulnerabilities',
             href: '/site/products/web-application-firewall'
           },
-          { label: 'Bot Manager', description: 'Block bots and protect traffic' },
-          { label: 'Network Shield', description: 'Defend, prevent network-level attacks' },
-          { label: 'Edge DNS', description: 'Resolve DNS quickly and securely' },
+          {
+            label: 'Firewall',
+            description: 'Filter every request before it reaches your code',
+            href: '/site/products/firewall'
+          },
+          {
+            label: 'DDoS Protection',
+            description: 'Stop volumetric attacks automatically',
+            href: '/site/products/ddos-protection'
+          },
+          {
+            label: 'Bot Manager',
+            description: 'Block bots and protect traffic',
+            href: '/site/products/bot-manager'
+          },
+          {
+            label: 'Network Shield',
+            description: 'Defend, prevent network-level attacks',
+            href: '/site/products/network-shield'
+          },
+          {
+            label: 'Edge DNS',
+            description: 'Resolve DNS quickly and securely',
+            href: '/site/products/edge-dns'
+          },
           {
             label: 'Load Balancer',
-            description: 'Distribute loads across servers with security and high performance'
+            description: 'Distribute loads across servers with security and high performance',
+            href: '/site/products/load-balancer'
           }
         ]
       }
@@ -148,11 +188,20 @@ const PRODUCTS: SiteNavMenu = {
         label: 'Observe',
         href: '/site/products#observe',
         items: [
-          { label: 'Data Stream', description: 'Stream data for real-time analysis' },
-          { label: 'Real-Time Events', description: 'Track events, gain operational clarity' },
+          {
+            label: 'Data Stream',
+            description: 'Stream data for real-time analysis',
+            href: '/site/products/data-stream'
+          },
+          {
+            label: 'Real-Time Events',
+            description: 'Track events, gain operational clarity',
+            href: '/site/products/real-time-events'
+          },
           {
             label: 'Real-Time Metrics',
-            description: 'Gain instant insights and operational visibility'
+            description: 'Gain instant insights and operational visibility',
+            href: '/site/products/real-time-metrics'
           },
           { label: 'Edge Pulse', description: 'Monitor, optimize edge performance' }
         ]
@@ -286,13 +335,13 @@ const COLUMNS: SiteFooterColumn[] = [
   {
     title: 'Products',
     links: links([
-      'Functions',
-      'Cache',
-      'Object Storage',
-      'SQL Database',
+      { label: 'Functions', href: '/site/products/functions' },
+      { label: 'Cache', href: '/site/products/cache' },
+      { label: 'Object Storage', href: '/site/products/object-storage' },
+      { label: 'SQL Database', href: '/site/products/sql-database' },
       { label: 'WAF', href: '/site/products/web-application-firewall' },
-      'Edge DNS',
-      'Data Stream'
+      { label: 'Edge DNS', href: '/site/products/edge-dns' },
+      { label: 'Data Stream', href: '/site/products/data-stream' }
     ])
   },
   {

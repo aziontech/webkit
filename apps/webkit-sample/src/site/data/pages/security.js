@@ -1,4 +1,4 @@
-import { PRODUCT_STACK, SECURITY_CLIENT_STRIP } from '@shared/ui/brand/strips.js'
+import { PRODUCT_STACK } from '@shared/ui/brand/strips.js'
 
 import { EARTH_NETWORK, quotesLedBy } from '../solutions.js'
 import { solutionPage } from './solution.js'
@@ -7,8 +7,7 @@ const HERO = {
   eyebrow: 'Application Security',
   title: 'Protect your applications and APIs at the speed of AI',
   description:
-    'A unified, globally distributed security platform that stops DDoS attacks, exploits, malicious bots, fraud, and AI-driven threats before they reach your applications and APIs.',
-  carouselMarks: SECURITY_CLIENT_STRIP
+    'A unified, globally distributed security platform that stops DDoS attacks, exploits, malicious bots, fraud, and AI-driven threats before they reach your applications and APIs.'
 }
 
 const CAPABILITIES = [

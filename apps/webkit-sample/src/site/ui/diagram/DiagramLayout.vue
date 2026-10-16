@@ -1,4 +1,6 @@
 <script setup lang="ts">
+  import FrameBox from '@aziontech/webkit/frame-box'
+
   import DiagramNode from './DiagramNode.vue'
   import type { DiagramLayoutItem, DiagramNode as DiagramNodeData } from './types'
 
@@ -49,7 +51,7 @@
   <div
     v-else-if="'grid' in item"
     :data-columns="item.columns ?? 2"
-    class="grid w-full grid-cols-2 gap-(--spacing-sm) @6xl:data-[columns=3]:grid-cols-3"
+    class="grid w-fit grid-cols-2 gap-(--spacing-xs) data-[columns=3]:grid-cols-3"
   >
     <DiagramLayout
       v-for="(child, index) in item.grid"
@@ -62,13 +64,23 @@
   <div
     v-else-if="'group' in item"
     :data-diagram-node="item.group"
-    :data-kind="item.kind ?? 'solid'"
-    class="flex flex-col gap-(--spacing-md) self-stretch rounded-(--shape-card) border-(length:--border-width-default) border-(--border-default) p-(--spacing-lg) data-[kind=dashed]:border-dashed @6xl:self-auto"
+    class="flex flex-col self-stretch @6xl:self-auto"
   >
-    <span class="text-label-code-sm text-(--text-muted)">{{ item.label }}</span>
-    <DiagramLayout
-      :item="item.content"
-      :nodes="nodes"
-    />
+    <FrameBox
+      borders="none"
+      marks="all"
+    >
+      <div
+        :data-kind="item.kind ?? 'solid'"
+        :data-fill="item.fill ?? 'none'"
+        class="flex flex-col gap-(--spacing-md) rounded-(--shape-flat) border-(length:--border-width-default) border-(--border-default) p-(--spacing-lg) data-[fill=primary]:bg-(--primary-mask) data-[fill=secondary]:bg-(--secondary-mask) data-[kind=dashed]:border-dashed"
+      >
+        <span class="text-label-sm text-(--text-muted)">{{ item.label }}</span>
+        <DiagramLayout
+          :item="item.content"
+          :nodes="nodes"
+        />
+      </div>
+    </FrameBox>
   </div>
 </template>

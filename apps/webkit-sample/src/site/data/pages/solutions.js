@@ -165,8 +165,7 @@ const SOLUTION_DIRECTORY = [
 
 export const SOLUTIONS_PAGE = [
   {
-    section: 'Heroes',
-    kind: 'centered-band',
+    section: 'HeroWithOpening',
     eyebrow: 'Solutions',
     highlight: 'The platform,',
     title: 'argued for your case',
@@ -175,9 +174,9 @@ export const SOLUTIONS_PAGE = [
     actions: [
       { label: 'Start Free', href: '/signup', kind: 'secondary' },
       { label: 'Talk to our team', href: '/site/contact', kind: 'outlined', trailing: true }
-    ]
+    ],
+    items: SOLUTION_GUARANTEES
   },
-  { section: 'CapabilityGrid', items: SOLUTION_GUARANTEES },
   {
     section: 'FeatureTiles',
     kind: 'illustrated',

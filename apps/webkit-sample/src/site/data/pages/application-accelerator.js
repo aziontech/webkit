@@ -1,7 +1,11 @@
+import { markRaw } from 'vue'
+
+import ApplicationAcceleratorCookieFragment from '../../ui/mockup/widgets/ApplicationAcceleratorCookieFragment.vue'
+import ApplicationAcceleratorMethodFragment from '../../ui/mockup/widgets/ApplicationAcceleratorMethodFragment.vue'
+import ApplicationAcceleratorQueryStringFragment from '../../ui/mockup/widgets/ApplicationAcceleratorQueryStringFragment.vue'
 import {
-  foldList,
+  PLATFORM_DIRECTORY,
   PRODUCT_CLOSING,
-  PRODUCT_DIRECTORY,
   PRODUCT_DOCS,
   PRODUCT_HERO_ACTIONS
 } from '../product-pages.js'
@@ -15,102 +19,44 @@ const PILLARS = [
       'Accelerate APIs and web apps with protocol optimizations, connection reuse, and cache rules that reduce latency before requests reach your origin.'
   },
   {
-    icon: 'pi pi-sliders-h',
+    icon: 'pi pi-cog',
     title: 'Fine-grained cache control',
     description:
       'Define how content varies by method, path, query string, cookie, or header so teams can cache dynamic experiences without breaking personalization.'
   },
   {
-    icon: 'pi pi-th-large',
+    icon: 'pi pi-table',
     title: 'Global acceleration without replatforming',
     description:
       'Apply acceleration on a distributed architecture in front of existing origins, improving performance without rewriting applications or changing where data lives.'
   }
 ]
 
-const SURFACES = [
-  { icon: 'ai ai-azion', label: 'Console' },
-  { icon: 'ai ai-azion-cli', label: 'CLI' },
-  { icon: 'ai ai-azion-api', label: 'API' },
-  { icon: 'ai ai-terraform', label: 'Terraform' }
-]
-
-const CACHE_KEY = [
-  { icon: 'ai ai-filter-alt', label: 'Query string rules' },
-  { icon: 'ai ai-variables', label: 'Cookie variation' },
-  { icon: 'ai ai-json', label: 'Header support' },
-  { icon: 'ai ai-tiered-cache', label: '64 cache keys' }
-]
-
-const CACHE_SETTINGS = `{
-  "cache_settings": {
-    "name": "api-cache",
-    "browser_cache_settings": {
-      "ttl": 60
-    },
-    "cdn_cache_settings": {
-      "ttl": 30
-    },
-    "cache_key": {
-      "query_string": "whitelist",
-      "query_string_fields": ["user_id", "category"],
-      "cookie": "whitelist",
-      "cookie_names": ["session_id", "region"]
-    },
-    "methods": ["GET", "POST", "OPTIONS"],
-    "stale_cache": true
-  }
-}`
-
-const CODE_FILES = [
-  {
-    label: 'cache-settings.json',
-    value: 'cache-settings',
-    language: 'json',
-    code: CACHE_SETTINGS,
-    fileName: 'cache-settings.json',
-    fileIcon: 'ai ai-json'
-  }
-]
-
 const USE_CASES = [
   {
-    icon: 'ai ai-azion-api',
+    icon: 'pi pi-code',
     title: 'Accelerate REST and GraphQL APIs',
     description:
       'Cache API responses with query string and cookie-based segmentation for faster client applications.',
-    href: '/site/home'
+    href: '/site/solutions/web-apps'
   },
   {
     icon: 'pi pi-shopping-cart',
     title: 'Optimize product catalogs',
     description: 'Segment listings by category, region, and user preferences with cache key rules.',
-    href: '/site/home'
+    href: '/site/solutions/retail'
   },
   {
-    icon: 'ai ai-layers',
+    icon: 'pi pi-cloud',
     title: 'Personalize multi-tenant apps',
     description: 'Serve tenant-specific content with cookie-based cache variation rules.',
-    href: PRODUCT_DOCS
+    href: '/site/solutions/technology'
   },
   {
-    icon: 'ai ai-live-ingest',
+    icon: 'pi pi-play-circle',
     title: 'Stream content faster',
     description: 'Cache playlists and user preferences while serving browsing content efficiently.',
-    href: PRODUCT_DOCS
-  },
-  {
-    icon: 'pi pi-bolt',
-    title: 'Reduce API latency',
-    description: 'Short TTLs for rapidly changing data endpoints and real-time applications.',
-    href: PRODUCT_DOCS
-  },
-  {
-    icon: 'pi pi-user',
-    title: 'Deliver personalized experiences',
-    description:
-      'Cache user-specific content with session-based cookie variation for tailored delivery.',
-    href: PRODUCT_DOCS
+    href: '/site/solutions/streaming'
   }
 ]
 
@@ -190,50 +136,76 @@ export const APPLICATION_ACCELERATOR_PAGE = [
   },
   { section: 'CapabilityGrid', gap: false, items: PILLARS },
   {
+    section: 'WidgetGrid',
+    anchor: 'built-in',
+    eyebrow: 'Built in',
+    title: 'Advanced Cache Key in every cache setting',
+    description:
+      'Method, query string and cookie variation live in the cache setting the module unlocks, versioned and deployed with the application.',
+    actions: PRODUCT_HERO_ACTIONS,
+    columns: 3,
+    items: [
+      {
+        icon: 'ai ai-azion-api',
+        title: 'Cache POST and OPTIONS requests',
+        description:
+          'Extend caching beyond GET and HEAD. The request body becomes part of the cache key, so different payloads are cached separately.',
+        scene: { component: markRaw(ApplicationAcceleratorMethodFragment) },
+        href: PRODUCT_DOCS
+      },
+      {
+        icon: 'ai ai-filter-alt',
+        title: 'Vary cache by query string',
+        description:
+          'Choose which query string fields segment the cache, and sort them so parameter order never splits it.',
+        scene: { component: markRaw(ApplicationAcceleratorQueryStringFragment) },
+        href: PRODUCT_DOCS
+      },
+      {
+        icon: 'ai ai-variables',
+        title: 'Vary cache by cookie',
+        description:
+          'Name the cookies that segment session-based and personalized content, by user profile, browsing session or access region.',
+        scene: { component: markRaw(ApplicationAcceleratorCookieFragment) },
+        href: PRODUCT_DOCS
+      }
+    ]
+  },
+  {
     section: 'MediaSplitStack',
     kind: 'solutions',
     bands: [
       {
         title: 'Optimize dynamic delivery',
-        description: foldList(
+        description:
           'Define acceleration rules for APIs, personalized content, and dynamic routes without changing your stack. Azion Web Platform helps improve performance, SEO, and reliability across distributed applications.',
-          SURFACES
-        ),
         href: PRODUCT_DOCS,
-        illustration: 'infrastructure-as-code',
-        illustrationLabel:
-          'An Azion provider declared in Terraform, raising the resources beside it',
+        illustration: 'low-latency',
+        illustrationLabel: 'A dynamic request answered close to the user, ahead of the origin',
         actions: [{ label: 'Docs', href: PRODUCT_DOCS }]
       },
       {
         title: 'Advanced Cache Key for personalized content delivery',
-        description: foldList(
+        description:
           'Control how content is segmented in cache beyond the URL path. Configure cache variation rules based on query strings, cookies, and headers—enabling fine-grained control for personalized experiences.',
-          CACHE_KEY
-        ),
-        href: PRODUCT_DOCS,
+        href: '/site/products/cache',
         illustration: 'distributed-apis',
         illustrationLabel: 'One request segmented into cache by query string, cookie and header',
-        actions: [{ label: 'Learn more', href: PRODUCT_DOCS }]
+        actions: [{ label: 'Cache', href: '/site/products/cache' }]
       }
     ]
   },
   {
-    section: 'CodeSplit',
-    kind: 'default',
-    title: 'From basic caching to advanced acceleration',
+    section: 'UseCases',
+    eyebrow: 'Use Cases',
+    title: 'See how to use',
     description:
-      'Application Accelerator extends Cache with protocol optimizations and advanced cache rules for dynamic content.',
-    files: CODE_FILES,
-    defaultFile: 'cache-settings',
-    copyAriaLabel: 'Copy the cache settings sample',
-    actions: [{ label: 'Learn More', href: PRODUCT_DOCS }]
+      'Put Application Accelerator in front of dynamic APIs and apps and cache what standard CDN caching cannot, with the methods, query strings and cookies you choose. Teams use it to:',
+    action: { label: 'View docs', href: PRODUCT_DOCS, trailing: true },
+    items: USE_CASES
   },
-  { section: 'CapabilityGrid', items: USE_CASES },
   { section: 'ClientQuotes', quotes: quotesLedBy('zoop') },
-
-
-  PRODUCT_DIRECTORY,
+  PLATFORM_DIRECTORY,
   { section: 'FaqSection', items: FAQ },
   PRODUCT_CLOSING
 ]

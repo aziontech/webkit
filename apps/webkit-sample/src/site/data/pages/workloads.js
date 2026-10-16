@@ -1,11 +1,13 @@
+import { CLIENT_STRIP } from '@shared/ui/brand/strips.js'
 import { markRaw } from 'vue'
 
+import Diagram from '../../ui/diagram/Diagram.vue'
 import WorkloadDeployFragment from '../../ui/mockup/widgets/WorkloadDeployFragment.vue'
 import WorkloadDeploymentsWidget from '../../ui/mockup/widgets/WorkloadDeploymentsWidget.vue'
 import WorkloadDomainFragment from '../../ui/mockup/widgets/WorkloadDomainFragment.vue'
 import WorkloadOverviewWidget from '../../ui/mockup/widgets/WorkloadOverviewWidget.vue'
 import WorkloadsConsoleScene from '../../ui/mockup/WorkloadsConsoleScene.vue'
-import Diagram from '../../ui/diagram/Diagram.vue'
+import WorkloadTopologyScene from '../../ui/WorkloadTopologyScene.vue'
 import { cliBand } from '../cli-band.js'
 import { PLATFORM_REQUEST_PATH } from '../diagrams.js'
 import {
@@ -127,15 +129,17 @@ const FAQ = [
 export const WORKLOADS_PAGE = [
   {
     section: 'Heroes',
-    kind: 'title-band',
-    titleLength: 'long',
+    kind: 'copy-on-top-art',
     eyebrow: 'Workloads',
     title: 'Put your application on the edge in seconds',
     description:
       'A workload is the hostname, the certificate and the routing that make an application reachable. Create one and it is live in every Azion location — no servers to size, no regions to pick.',
-    actions: PRODUCT_HERO_ACTIONS
+    actions: PRODUCT_HERO_ACTIONS,
+    carouselMarks: CLIENT_STRIP,
+    scene: { component: markRaw(WorkloadTopologyScene) },
+    scenePlacement: 'bottom'
   },
-  { section: 'CapabilityGrid', gap: false, items: BENEFITS },
+  { section: 'CapabilityGrid', items: BENEFITS },
   {
     section: 'ConsolePanel',
     anchor: 'overview',

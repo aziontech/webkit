@@ -24,13 +24,13 @@ export const PLATFORM_PRIMITIVES = [
         icon: 'ai ai-load-balancer',
         title: 'Load Balancer',
         description: 'Distribute traffic for performance and availability',
-        href: 'https://www.azion.com/en/products/load-balancer/'
+        href: '/site/products/load-balancer'
       },
       {
         icon: 'ai ai-image-processor',
         title: 'Image Processor',
         description: 'Optimize and transform images in real time',
-        href: 'https://www.azion.com/en/products/image-processor/'
+        href: '/site/products/image-processor'
       }
     ]
   },
@@ -47,7 +47,7 @@ export const PLATFORM_PRIMITIVES = [
         icon: 'ai ai-ai-gateway',
         title: 'AI Gateway',
         description: 'Secure, manage, and optimize AI traffic',
-        href: 'https://www.azion.com/en/products/ai-gateway/'
+        href: '/site/products/ai-gateway'
       }
     ]
   },
@@ -64,13 +64,13 @@ export const PLATFORM_PRIMITIVES = [
         icon: 'ai ai-edge-sql',
         title: 'SQL Database',
         description: 'Relational database built for distributed applications',
-        href: 'https://www.azion.com/en/products/sql-database/'
+        href: '/site/products/sql-database'
       },
       {
         icon: 'ai ai-edge-kv',
         title: 'KV Store',
         description: 'Globally distributed, low-latency key-value store',
-        href: 'https://www.azion.com/en/products/kv-store/'
+        href: '/site/products/kv-store'
       },
       {
         icon: 'ai ai-tiered-cache',
@@ -99,13 +99,13 @@ export const PLATFORM_PRIMITIVES = [
         icon: 'ai ai-bot-manager',
         title: 'Bot Management',
         description: 'Detect and stop automated threats instantly',
-        href: 'https://www.azion.com/en/products/bot-manager/'
+        href: '/site/products/bot-manager'
       },
       {
         icon: 'ai ai-edge-dns',
         title: 'DNS',
         description: 'Reliably host authoritative DNS zones worldwide',
-        href: 'https://www.azion.com/en/products/edge-dns/'
+        href: '/site/products/edge-dns'
       }
     ]
   }

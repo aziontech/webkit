@@ -2,6 +2,7 @@
   import FrameBox from '@aziontech/webkit/frame-box'
   import MiniButton from '@aziontech/webkit/mini-button'
   import SectionModule from '@aziontech/webkit/section-module'
+  import SectionTitle, { type SectionTitleSize } from '@aziontech/webkit/section-title'
   import SegmentedButton from '@aziontech/webkit/segmented-button'
   import TextureMaterial, { type TextureMaterialKind } from '@aziontech/webkit/texture-material'
   import { type Component, computed, ref } from 'vue'
@@ -10,6 +11,9 @@
   import type { SiteAction } from './types'
 
   defineOptions({ name: 'ConsolePanel' })
+
+  /** console: a console mock at a fixed aspect, cropped and faded; diagram: a scene at its own height. */
+  export type ConsolePanelKind = 'console' | 'diagram'
 
   export interface ConsolePanelTab {
     /** Stable key, handed to the scene as its `tab` prop. */
@@ -26,6 +30,10 @@
   }
 
   interface Props {
+    /** What the panel frames. */
+    kind?: ConsolePanelKind
+    /** Step of the headline on the heading scale. */
+    size?: SectionTitleSize
     /** Id of the band, for in-page links. */
     anchor?: string
     /** Overline above the title. */
@@ -40,6 +48,8 @@
     texture?: TextureMaterialKind
     /** Tabs over the frame; each one plays its own beat of the scene. */
     tabs?: ConsolePanelTab[]
+    /** Accessible name of the tab control. */
+    tabsAriaLabel?: string
     /** Share of the scene's height clipped off its bottom, from 0 to 0.5, on `md` and up. */
     crop?: number
     /** Link under the frame. */
@@ -47,12 +57,15 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
+    kind: 'console',
+    size: 'medium',
     anchor: '',
     eyebrow: '',
     title: '',
     description: '',
     texture: 'pixelate',
     tabs: () => [],
+    tabsAriaLabel: 'Console views',
     crop: 0,
     action: null
   })
@@ -81,21 +94,27 @@
     :id="anchor || undefined"
     :divided="false"
     :padded="false"
-    kind="centered"
-    :eyebrow="eyebrow"
-    :title="title"
-    :description="description"
   >
-    <template
-      v-if="tabs.length"
-      #actions
-    >
-      <SegmentedButton
-        v-model="current"
-        :options="options"
-        size="large"
-        aria-label="Console views"
-      />
+    <template #header>
+      <SectionTitle
+        kind="centered"
+        :size="size"
+        :eyebrow="eyebrow"
+        :title="title"
+        :description="description"
+      >
+        <template
+          v-if="tabs.length"
+          #actions
+        >
+          <SegmentedButton
+            v-model="current"
+            :options="options"
+            size="large"
+            :aria-label="tabsAriaLabel"
+          />
+        </template>
+      </SectionTitle>
     </template>
 
     <FrameBox
@@ -112,7 +131,8 @@
           fade="top"
         />
         <div
-          class="relative z-10 aspect-square w-full md:-mb-(--console-panel-crop) md:aspect-[1.9/1] md:[--mockup-fade-end:var(--console-panel-fade-end)] md:[--mockup-fade-start:var(--console-panel-fade-start)]"
+          :data-kind="kind"
+          class="relative z-10 w-full data-[kind=console]:aspect-square md:data-[kind=console]:-mb-(--console-panel-crop) md:data-[kind=console]:aspect-[1.9/1] md:data-[kind=console]:[--mockup-fade-end:var(--console-panel-fade-end)] md:data-[kind=console]:[--mockup-fade-start:var(--console-panel-fade-start)] data-[kind=diagram]:flex data-[kind=diagram]:min-h-(--size-96) data-[kind=diagram]:items-center data-[kind=diagram]:justify-center"
           :style="cropStyle"
         >
           <component

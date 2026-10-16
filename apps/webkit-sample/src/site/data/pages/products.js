@@ -148,6 +148,18 @@ const PRODUCT_DIRECTORY = [
         title: 'Cache',
         description: 'Hold content at the point closest to the request',
         href: '/site/products/cache'
+      },
+      {
+        icon: 'ai ai-image-processor',
+        title: 'Image Processor',
+        description: 'Optimize and transform images in real time',
+        href: '/site/products/image-processor'
+      },
+      {
+        icon: 'ai ai-load-balancer',
+        title: 'Load Balancer',
+        description: 'Distribute traffic for performance and availability',
+        href: '/site/products/load-balancer'
       }
     ]
   },
@@ -164,7 +176,7 @@ const PRODUCT_DIRECTORY = [
         icon: 'ai ai-ai-gateway',
         title: 'AI Gateway',
         description: 'Secure, manage, and optimize AI traffic',
-        href: 'https://www.azion.com/en/solutions#ai'
+        href: '/site/products/ai-gateway'
       }
     ]
   },
@@ -181,7 +193,13 @@ const PRODUCT_DIRECTORY = [
         icon: 'ai ai-edge-sql',
         title: 'SQL Database',
         description: 'Query relational data at the edge',
-        href: 'https://www.azion.com/en/products/sql-database/'
+        href: '/site/products/sql-database'
+      },
+      {
+        icon: 'ai ai-edge-kv',
+        title: 'KV Store',
+        description: 'Globally distributed, low-latency key-value store',
+        href: '/site/products/kv-store'
       }
     ]
   },
@@ -198,13 +216,54 @@ const PRODUCT_DIRECTORY = [
         icon: 'ai ai-bot-manager',
         title: 'Bot Management',
         description: 'Detect and stop automated threats instantly',
-        href: 'https://www.azion.com/en/products/bot-manager/'
+        href: '/site/products/bot-manager'
       },
       {
         icon: 'ai ai-edge-dns',
         title: 'DNS',
         description: 'Reliably host authoritative DNS zones worldwide',
-        href: 'https://www.azion.com/en/products/edge-dns/'
+        href: '/site/products/edge-dns'
+      },
+      {
+        icon: 'ai ai-edge-firewall',
+        title: 'Firewall',
+        description: 'Filter every request before it reaches your code',
+        href: '/site/products/firewall'
+      },
+      {
+        icon: 'ai ai-network-lists',
+        title: 'Network Shield',
+        description: 'Block threats at the network layer before origin',
+        href: '/site/products/network-shield'
+      },
+      {
+        icon: 'pi pi-shield',
+        title: 'DDoS Protection',
+        description: 'Stop volumetric attacks automatically',
+        href: '/site/products/ddos-protection'
+      }
+    ]
+  },
+  {
+    label: 'Observe',
+    items: [
+      {
+        icon: 'ai ai-data-stream',
+        title: 'Data Stream',
+        description: 'Send logs and events to your SIEM or data lake',
+        href: '/site/products/data-stream'
+      },
+      {
+        icon: 'ai ai-real-time-events',
+        title: 'Real-Time Events',
+        description: 'Investigate every request in seconds',
+        href: '/site/products/real-time-events'
+      },
+      {
+        icon: 'ai ai-real-time-metrics',
+        title: 'Real-Time Metrics',
+        description: 'Watch traffic, errors and latency as they happen',
+        href: '/site/products/real-time-metrics'
       }
     ]
   }

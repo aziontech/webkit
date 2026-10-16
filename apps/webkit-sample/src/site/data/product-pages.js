@@ -87,7 +87,8 @@ export const PRODUCT_GROUPS = [
       {
         icon: 'ai ai-load-balancer',
         title: 'Load Balancer',
-        description: 'Distribute traffic for availability'
+        description: 'Distribute traffic for availability',
+        href: '/site/products/load-balancer'
       }
     ]
   },
@@ -109,12 +110,14 @@ export const PRODUCT_GROUPS = [
       {
         icon: 'ai ai-image-processor',
         title: 'Image Processor',
-        description: 'Optimize and transform images in real time'
+        description: 'Optimize and transform images in real time',
+        href: '/site/products/image-processor'
       },
       {
         icon: 'ai ai-edge-dns',
         title: 'DNS',
-        description: 'Distributed authoritative DNS'
+        description: 'Distributed authoritative DNS',
+        href: '/site/products/edge-dns'
       }
     ]
   },
@@ -130,18 +133,26 @@ export const PRODUCT_GROUPS = [
       {
         icon: 'ai ai-edge-sql',
         title: 'SQL Database',
-        description: 'A distributed SQL database'
+        description: 'A distributed SQL database',
+        href: '/site/products/sql-database'
       },
       {
         icon: 'ai ai-edge-kv',
         title: 'KV Store',
-        description: 'Low-latency key-value store'
+        description: 'Low-latency key-value store',
+        href: '/site/products/kv-store'
       },
       {
         icon: 'ai ai-edge-ai',
         title: 'AI Inference',
         description: 'Run models close to the user',
         href: '/site/products/ai-inference'
+      },
+      {
+        icon: 'ai ai-ai-gateway',
+        title: 'AI Gateway',
+        description: 'Route, secure and log every model call',
+        href: '/site/products/ai-gateway'
       }
     ]
   },
@@ -151,7 +162,8 @@ export const PRODUCT_GROUPS = [
       {
         icon: 'ai ai-edge-firewall',
         title: 'Firewall',
-        description: 'Filter every request before it reaches your code'
+        description: 'Filter every request before it reaches your code',
+        href: '/site/products/firewall'
       },
       {
         icon: 'ai ai-waf-rules',
@@ -162,12 +174,14 @@ export const PRODUCT_GROUPS = [
       {
         icon: 'ai ai-network-lists',
         title: 'Network Shield',
-        description: 'Network and DDoS protection'
+        description: 'Network and DDoS protection',
+        href: '/site/products/network-shield'
       },
       {
         icon: 'ai ai-real-time-metrics',
         title: 'Real-Time Metrics',
-        description: 'Watch traffic, errors and latency as they happen'
+        description: 'Watch traffic, errors and latency as they happen',
+        href: '/site/products/real-time-metrics'
       }
     ]
   }

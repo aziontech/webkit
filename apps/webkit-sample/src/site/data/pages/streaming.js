@@ -1,4 +1,4 @@
-import { PRODUCT_STACK, RETAIL_CLIENT_STRIP } from '@shared/ui/brand/strips.js'
+import { PRODUCT_STACK } from '@shared/ui/brand/strips.js'
 
 import { EARTH_NETWORK, quotesLedBy } from '../solutions.js'
 import { solutionPage } from './solution.js'
@@ -7,8 +7,7 @@ const HERO = {
   eyebrow: 'Media and Streaming Delivery',
   title: 'Stream high-quality media and scale to millions',
   description:
-    "Reach audiences worldwide through Azion's global infrastructure, with low latency, high availability, and lower streaming costs.",
-  carouselMarks: RETAIL_CLIENT_STRIP
+    "Reach audiences worldwide through Azion's global infrastructure, with low latency, high availability, and lower streaming costs."
 }
 
 const CAPABILITIES = [

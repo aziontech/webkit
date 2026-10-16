@@ -1,4 +1,4 @@
-import { AI_CLIENT_STRIP, AI_STACK } from '@shared/ui/brand/strips.js'
+import { AI_STACK } from '@shared/ui/brand/strips.js'
 
 import { AI_FAQ } from '../ai.js'
 import { EARTH_NETWORK, quotesLedBy } from '../solutions.js'
@@ -8,8 +8,7 @@ const HERO = {
   eyebrow: 'Artificial Intelligence (AI)',
   title: 'Build AI-powered applications on distributed architecture',
   description:
-    'Run AI models for real-time text, image, and media generation. Build with AI Inference, Functions, and SQL Database on Azion.',
-  carouselMarks: AI_CLIENT_STRIP
+    'Run AI models for real-time text, image, and media generation. Build with AI Inference, Functions, and SQL Database on Azion.'
 }
 
 const CAPABILITIES = [

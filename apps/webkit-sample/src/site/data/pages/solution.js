@@ -1,5 +1,3 @@
-import { CLIENT_STRIP } from '@shared/ui/brand/strips.js'
-
 import { NETWORK_OUTCOMES } from '../solutions.js'
 
 const DOCS = '/site/docs'
@@ -38,19 +36,16 @@ export function solutionPage(data) {
 
   return [
     {
-      section: 'Heroes',
-      kind: 'centered-carousel',
+      section: 'HeroWithOpening',
       eyebrow: hero.eyebrow,
-      eyebrowPrefix: '//',
       title: hero.title,
       description: hero.description,
       actions: [
         { label: 'Start Free', href: '/signup', kind: 'secondary' },
         { label: 'Talk to a Specialist', href: '#contact', kind: 'outlined', trailing: true }
       ],
-      carouselMarks: hero.carouselMarks ?? CLIENT_STRIP
+      items: capabilities
     },
-    { section: 'CapabilityGrid', items: capabilities },
     useCases && {
       section: 'MediaSplitStack',
       kind: 'solutions',

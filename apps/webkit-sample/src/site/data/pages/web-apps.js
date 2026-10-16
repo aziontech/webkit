@@ -1,4 +1,4 @@
-import { BUILD_CLIENT_STRIP, PRODUCT_STACK } from '@shared/ui/brand/strips.js'
+import { PRODUCT_STACK } from '@shared/ui/brand/strips.js'
 
 import { EARTH_NETWORK, quotesLedBy } from '../solutions.js'
 import { solutionPage } from './solution.js'
@@ -7,8 +7,7 @@ const HERO = {
   eyebrow: 'Application Development',
   title: 'Build lightning-fast websites and web apps and launch globally',
   description:
-    'Deploy serverless web applications, APIs, and AI workloads from your git repository with built-in performance, security, and scalability.',
-  carouselMarks: BUILD_CLIENT_STRIP
+    'Deploy serverless web applications, APIs, and AI workloads from your git repository with built-in performance, security, and scalability.'
 }
 
 const CAPABILITIES = [

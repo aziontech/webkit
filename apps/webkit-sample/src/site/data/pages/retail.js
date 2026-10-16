@@ -1,4 +1,4 @@
-import { PRODUCT_STACK, RETAIL_CLIENT_STRIP } from '@shared/ui/brand/strips.js'
+import { PRODUCT_STACK } from '@shared/ui/brand/strips.js'
 
 import { BUILD_CTA, quotesLedBy } from '../solutions.js'
 import { solutionPage } from './solution.js'
@@ -7,8 +7,7 @@ const HERO = {
   eyebrow: 'Retail',
   title: 'Shopping experiences that convert',
   description:
-    'Deploy fast, secure storefronts on distributed infrastructure designed for high-stakes retail experiences. Handle peak events, prevent fraud, and lower cloud costs without overprovisioning.',
-  carouselMarks: RETAIL_CLIENT_STRIP
+    'Deploy fast, secure storefronts on distributed infrastructure designed for high-stakes retail experiences. Handle peak events, prevent fraud, and lower cloud costs without overprovisioning.'
 }
 
 const CAPABILITIES = [

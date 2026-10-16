@@ -87,7 +87,7 @@ export const HOME_SOLUTIONS = [
     description:
       'Stream video and deliver large files at low latency to audiences of any size, with media processed at the edge.',
     href: '/site/solutions/streaming',
-    illustration: 'low-latency',
+    illustration: 'content-and-media-delivery',
     actions: learnMore('/site/solutions/streaming')
   }
 ]
