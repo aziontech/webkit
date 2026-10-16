@@ -70,6 +70,7 @@ const MEGA_MENUS = [
             },
             { label: 'Image Processor', description: 'Optimize, transform images instantly' },
             { label: 'AI Inference', description: 'Perform AI inference globally' },
+            { label: 'AI Gateway', description: 'Route, secure and log every model call' },
             { label: 'Durable Objects', description: 'Run stateful compute worldwide' },
             { label: 'Orchestrator', description: 'Deploy, manage, monitor and automate workloads' }
           ]
@@ -93,6 +94,11 @@ const MEGA_MENUS = [
               label: 'Web Application Firewall (WAF)',
               description: 'Protect apps, block vulnerabilities'
             },
+            {
+              label: 'Firewall',
+              description: 'Filter every request before it reaches your code'
+            },
+            { label: 'DDoS Protection', description: 'Stop volumetric attacks automatically' },
             { label: 'Bot Manager', description: 'Block bots and protect traffic' },
             { label: 'Network Shield', description: 'Defend, prevent network-level attacks' },
             { label: 'Edge DNS', description: 'Resolve DNS quickly and securely' },
