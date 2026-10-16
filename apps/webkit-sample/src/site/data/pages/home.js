@@ -79,7 +79,7 @@ export const HOME_SOLUTIONS = [
     description:
       'Protect web applications and APIs (WAAP), manage bots, and modernize your security in a programmable and scalable way.',
     href: '/site/solutions/security',
-    illustration: 'automate-threat-mitigation',
+    illustration: 'programmable-security',
     actions: learnMore('/site/solutions/security')
   },
   {

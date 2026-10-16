@@ -45,7 +45,7 @@ const SOLUTIONS = [
     href: '/solutions/ai'
   },
   {
-    illustration: 'automate-threat-mitigation',
+    illustration: 'programmable-security',
     title: 'Protected applications and APIs',
     description:
       'Protect web applications and APIs (WAAP), manage bots, and modernize your security in a programmable and scalable way.',
