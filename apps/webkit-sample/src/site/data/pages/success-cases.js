@@ -1,5 +1,3 @@
-import { CLIENT_STRIP } from '@shared/ui/brand/strips.js'
-
 import { successCaseArticle, successCaseLink, successCaseSlug } from '../success-case-articles.js'
 import { FEATURED_CASES, SUCCESS_CASES } from '../success-cases.js'
 import { HOME_RECOGNITIONS } from './home.js'
@@ -56,17 +54,16 @@ export const SUCCESS_CASES_CLOSING = {
 export const SUCCESS_CASES_PAGE = [
   {
     section: 'Heroes',
-    kind: 'centered-carousel',
+    kind: 'title-band',
     title: 'Trusted by Leading Companies',
     actions: [
       { label: 'See cases', href: '#cases', kind: 'secondary' },
       { label: 'Talk to a Specialist', href: '/site/contact', kind: 'outlined', trailing: true }
-    ],
-    carouselLabel: 'Trusted by mission-critical workloads',
-    carouselMarks: CLIENT_STRIP
+    ]
   },
   {
     section: 'ClientMosaic',
+    gap: false,
     kind: 'columns',
     cells: FEATURED_CELLS,
     ariaLabel: 'Featured success stories',
