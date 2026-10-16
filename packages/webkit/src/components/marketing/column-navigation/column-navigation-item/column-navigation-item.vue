@@ -63,38 +63,31 @@
       :href="linked ? href : undefined"
       :data-linked="linked || null"
       :data-testid="`${testId}__row`"
-      class="group mx-[calc((var(--spacing-xs)+1px)*-1)] flex min-h-11 items-center gap-(--spacing-md) rounded-(--shape-card) border border-transparent p-(--spacing-xs) transition-colors duration-fast-02 ease-productive-entrance focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) focus-visible:outline-none data-[linked]:hover:border-(--border-default) data-[linked]:hover:bg-(--bg-hover) motion-reduce:transition-none"
+      class="group mx-[calc((var(--spacing-md)+1px)*-1)] flex min-h-(--size-11) items-center gap-[calc(var(--spacing-md)+var(--spacing-xxs))] rounded-(--shape-card) border border-transparent px-(--spacing-md) py-(--spacing-sm) transition-colors duration-fast-02 ease-productive-entrance focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) focus-visible:outline-none data-[linked]:hover:border-(--border-default) data-[linked]:hover:bg-(--bg-hover) motion-reduce:transition-none"
       @click="onClick"
     >
-      <!-- The registration frame: a dashed hairline with a 4px inset, the marker the rest
-           of the page language draws around a placed element. It holds still under the
-           pointer — the plate behind the row is what answers it. -->
-      <span
-        class="flex size-10 shrink-0 items-center border border-dashed border-(--border-default) p-(--spacing-xxs)"
+      <!-- The group condition goes INSIDE the bracket. Chaining two group variants
+           (group-data-[linked]:group-hover:) compiles to two separate ancestors and
+           only matches a row nested in a second group — silently never here. -->
+      <i
+        v-if="icon"
+        :class="icon"
+        class="flex size-(--size-5) shrink-0 items-center justify-center text-(length:--size-5) text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance group-[[data-linked]:hover]:text-(--primary) motion-reduce:transition-none"
         aria-hidden="true"
-      >
-        <span class="flex size-full items-center justify-center bg-(--bg-surface-raised)">
-          <!-- The group condition goes INSIDE the bracket. Chaining two group variants
-               (group-data-[linked]:group-hover:) compiles to two separate ancestors and
-               only matches a row nested in a second group — silently never here. -->
-          <i
-            v-if="icon"
-            :class="icon"
-            class="text-body-md text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance group-[[data-linked]:hover]:text-(--primary) motion-reduce:transition-none"
-          />
-        </span>
-      </span>
+      />
 
-      <span class="flex min-w-0 flex-1 flex-col justify-center gap-(--spacing-xxs) break-words">
+      <span
+        class="flex min-w-0 flex-1 flex-col justify-center gap-[calc(var(--spacing-xxs)/2)] break-words"
+      >
         <span
           :data-testid="`${testId}__title`"
-          class="text-label-sm text-(--text-default)"
+          class="text-label-md text-(--text-default)"
           >{{ title }}</span
         >
         <span
           v-if="description"
           :data-testid="`${testId}__description`"
-          class="text-body-xs text-(--text-muted)"
+          class="text-body-sm text-(--text-muted)"
           >{{ description }}</span
         >
       </span>
