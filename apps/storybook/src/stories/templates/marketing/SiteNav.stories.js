@@ -26,30 +26,24 @@ const MEGA_MENUS = [
         {
           label: 'By Need',
           items: [
+            { label: 'Application Development', description: 'Build and run applications' },
             {
-              label: 'Build and Run Applications',
-              description: 'Ship and scale web apps and APIs'
+              label: 'Performance and Reliability',
+              description: 'Improve application performance and reliability'
             },
-            {
-              label: 'Improve Application Performance and Reliability',
-              description: 'Faster, always-on delivery'
-            },
-            { label: 'Build and Run AI Workloads', description: 'Infrastructure for AI workloads' },
-            { label: 'Secure Applications and Networks', description: 'End-to-end security' },
-            {
-              label: 'Deliver Media and Streaming Content',
-              description: 'Low-latency video and live streams'
-            }
+            { label: 'Artificial Intelligence (AI)', description: 'Build and run AI workloads' },
+            { label: 'Application Security', description: 'Secure applications and networks' },
+            { label: 'Media and Streaming', description: 'Deliver media and streaming content' }
           ]
         }
       ],
       [
         {
-          label: 'By Industries',
+          label: 'By Industry',
           items: [
-            { label: 'Financial Services', description: 'Performance and compliance' },
-            { label: 'Technology', description: 'Scale for digital products' },
-            { label: 'Retail', description: 'Shopping experiences you can trust' }
+            { label: 'Financial Services', description: 'Accelerate digital financial services' },
+            { label: 'Technology', description: 'Build high-performance applications' },
+            { label: 'Retail', description: 'Build high-performance shopping experiences' }
           ]
         }
       ]
@@ -65,12 +59,20 @@ const MEGA_MENUS = [
           items: [
             { label: 'Workloads', description: 'Put an application on a hostname, everywhere' },
             { label: 'Applications', description: 'Deliver and configure web applications' },
-            { label: 'Functions', description: 'Run serverless code at the edge' },
-            { label: 'Cache', description: 'Speed up content delivery' },
-            { label: 'Application Accelerator', description: 'Optimize dynamic applications' },
-            { label: 'Image Processor', description: 'Resize and convert images on the fly' },
-            { label: 'AI Inference', description: 'Run AI models close to the user' },
-            { label: 'Orchestrator', description: 'Provision and manage edge nodes' }
+            {
+              label: 'Functions',
+              description: 'Implement serverless functions and scalable applications'
+            },
+            { label: 'Cache', description: 'Accelerate, optimize content delivery' },
+            {
+              label: 'Application Accelerator',
+              description: 'Boost performance, enhance delivery'
+            },
+            { label: 'Image Processor', description: 'Optimize, transform images instantly' },
+            { label: 'AI Inference', description: 'Perform AI inference globally' },
+            { label: 'AI Gateway', description: 'Route, secure and log every model call' },
+            { label: 'Durable Objects', description: 'Run stateful compute worldwide' },
+            { label: 'Orchestrator', description: 'Deploy, manage, monitor and automate workloads' }
           ]
         }
       ],
@@ -78,23 +80,32 @@ const MEGA_MENUS = [
         {
           label: 'Store',
           items: [
-            { label: 'SQL Database', description: 'A distributed SQL database' },
-            { label: 'Object Storage', description: 'Store and serve objects at the edge' },
-            { label: 'KV Store', description: 'Low-latency key-value store' }
+            { label: 'SQL Database', description: 'Store relational and structured data' },
+            { label: 'Object Storage', description: 'Store unstructured data in a scalable way' },
+            { label: 'KV Store', description: 'Store key-value data instantly' }
           ]
         }
       ],
       [
         {
-          label: 'Protect',
+          label: 'Secure',
           items: [
-            { label: 'WAF', description: 'Web application firewall' },
-            { label: 'Firewall', description: 'Filter traffic before it reaches you' },
-            { label: 'DDoS Protection', description: 'Absorb volumetric attacks' },
-            { label: 'Bot Manager', description: 'Detect and block malicious bots' },
-            { label: 'Network Shield', description: 'Control access by network' },
-            { label: 'Edge DNS', description: 'Distributed authoritative DNS' },
-            { label: 'Load Balancer', description: 'Global load balancing' }
+            {
+              label: 'Web Application Firewall (WAF)',
+              description: 'Protect apps, block vulnerabilities'
+            },
+            {
+              label: 'Firewall',
+              description: 'Filter every request before it reaches your code'
+            },
+            { label: 'DDoS Protection', description: 'Stop volumetric attacks automatically' },
+            { label: 'Bot Manager', description: 'Block bots and protect traffic' },
+            { label: 'Network Shield', description: 'Defend, prevent network-level attacks' },
+            { label: 'Edge DNS', description: 'Resolve DNS quickly and securely' },
+            {
+              label: 'Load Balancer',
+              description: 'Distribute loads across servers with security and high performance'
+            }
           ]
         }
       ],
@@ -102,31 +113,50 @@ const MEGA_MENUS = [
         {
           label: 'Observe',
           items: [
-            { label: 'Data Stream', description: 'Real-time event streaming' },
-            { label: 'Real-Time Events', description: 'Query raw request logs' },
-            { label: 'Real-Time Metrics', description: 'Live platform metrics' },
-            { label: 'Edge Pulse', description: 'Real user experience monitoring' }
+            { label: 'Data Stream', description: 'Stream data for real-time analysis' },
+            { label: 'Real-Time Events', description: 'Track events, gain operational clarity' },
+            {
+              label: 'Real-Time Metrics',
+              description: 'Gain instant insights and operational visibility'
+            },
+            { label: 'Edge Pulse', description: 'Monitor, optimize edge performance' }
           ]
         },
         {
           label: 'Platform',
-          items: [{ label: 'Our Network', description: 'The global edge network' }]
+          items: [{ label: 'Our Network', description: 'Global delivery, speed, reliability' }]
         }
       ]
     ]
   },
   {
-    value: 'developers',
-    label: 'Developers',
+    value: 'developer',
+    label: 'Developer',
     columns: [
       [
         {
-          label: 'Developer Resources',
+          label: 'Docs',
           items: [
-            { label: 'Documentation', description: 'Platform guides and reference' },
-            { label: 'Dev Tools', description: 'CLI, SDKs, and integrations' },
-            { label: 'API Reference', description: 'Automate with the Azion API' },
-            { label: 'Release Notes', description: 'What is new and recently changed' }
+            { label: 'Azion Docs', description: 'Documentation, technical support' },
+            { label: 'Guides', description: 'Practical guides, step-by-step' },
+            { label: 'Dev Tools', description: 'Tools, developer support' },
+            { label: 'Release Notes', description: 'Updates, new features' }
+          ]
+        }
+      ],
+      [
+        {
+          label: 'API',
+          items: [{ label: 'API Reference', description: 'API, advanced integration' }]
+        },
+        {
+          label: 'Community',
+          items: [
+            {
+              label: 'Join our community',
+              description: 'Developers and the Azion team on Discord',
+              icon: 'ai-cor ai-discord'
+            }
           ]
         }
       ]
@@ -140,10 +170,19 @@ const MEGA_MENUS = [
         {
           label: 'Content',
           items: [
-            { label: 'Blog', description: 'Technical articles and news' },
+            { label: 'Blog', description: 'Insights, industry trends' },
             { label: 'Learning', description: 'Fundamentals, subject by subject' },
-            { label: 'Resource Hub', description: 'E-books, webinars, and whitepapers' },
-            { label: 'Marketplace', description: 'Ready-made templates and integrations' },
+            { label: 'Resource Hub', description: 'Resources, useful materials' },
+            { label: 'Success Stories', description: 'Real results from our customers' },
+            { label: 'Partners', description: 'Let’s build together' },
+            { label: 'Marketplace', description: 'Apps, ready-made solutions' }
+          ]
+        }
+      ],
+      [
+        {
+          label: 'Services',
+          items: [
             { label: 'Support', description: 'Expert help when you need it' },
             {
               label: 'Professional Services',
@@ -156,10 +195,7 @@ const MEGA_MENUS = [
   }
 ]
 
-const PLAIN_LINKS = [
-  { value: 'customers', label: 'Customers' },
-  { value: 'pricing', label: 'Pricing' }
-]
+const PLAIN_LINKS = [{ value: 'pricing', label: 'Pricing' }]
 
 const slug = (label) => label.toLowerCase().replace(/[^a-z0-9]+/g, '-')
 
@@ -353,6 +389,9 @@ const TEMPLATE = `<GlobalHeader ref="bar" kind="site" aria-label="Azion" class="
                     :description="item.description"
                     close-on-click
                   >
+                    <template v-if="item.icon" #icon>
+                      <i :class="item.icon" />
+                    </template>
                     {{ item.label }}
                   </NavigationMenu.Item>
                 </NavigationMenu.List>
@@ -383,11 +422,11 @@ const TEMPLATE = `<GlobalHeader ref="bar" kind="site" aria-label="Azion" class="
   </GlobalHeader.Middle>
 
   <GlobalHeader.Right>
-    <div class="hidden items-center gap-(--spacing-xs) xl:flex">
+    <div class="hidden xl:flex">
       <Button label="Contact" kind="text" size="medium" href="#" />
-      <Button label="Login" kind="secondary" size="medium" href="#" />
     </div>
-    <Button label="Start for Free" kind="primary" size="medium" class="shrink-0" href="#" />
+    <Button label="Login" kind="secondary" size="medium" href="#" />
+    <Button label="Start for free" kind="primary" size="medium" class="shrink-0" href="#" />
     <IconButton icon="pi pi-search" kind="outlined" size="medium" aria-label="Search" class="shrink-0" />
   </GlobalHeader.Right>
 </GlobalHeader>
@@ -413,8 +452,9 @@ const TEMPLATE = `<GlobalHeader ref="bar" kind="site" aria-label="Azion" class="
         </Menu>
       </ScrollArea>
 
-      <PanelFooter class="w-full px-(--spacing-md)">
-        <Button label="Login" kind="secondary" size="medium" class="w-full" href="#" />
+      <PanelFooter class="w-full flex-col items-stretch px-(--spacing-md)">
+        <Button label="Login" kind="outlined" size="medium" class="w-full" href="#" />
+        <Button label="Start for free" kind="primary" size="medium" class="w-full" href="#" />
       </PanelFooter>
     </DrawerContent>
   </DrawerPortal>
@@ -463,7 +503,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The bar above every marketing page: the Azion mark, the four mega-menus (Solutions, Products, Developers, Resources) and two plain links (Customers, Pricing), then the account actions, the `Start for Free` call to action and a search trigger. `GlobalHeader kind="site"` keeps the surface full bleed and caps the regions at the bar’s own measure, one rung wider than the page frame under it. From `xl` the menus sit in the bar; below it the bar keeps only the menu button, the mark, the call to action and the search trigger, and the same menus open in a `Drawer` where each mega-menu is a drill level behind a Back row. Built from `GlobalHeader`, `NavigationMenu`, `Brand`, `Button`, `IconButton`, `Drawer`, `Menu` and `ScrollArea`.'
+          'The bar above every marketing page: the Azion mark, the four mega-menus (Solutions, Products, Developer, Resources) and one plain link (Pricing), then the account actions, the `Start for free` call to action and a search trigger. `GlobalHeader kind="site"` keeps the surface full bleed and caps the regions at the bar’s own measure, one rung wider than the page frame under it. From `xl` the menus sit in the bar; below it the bar keeps the menu button, the mark, `Login`, the call to action and the search trigger (`Login` steps out under 384px, where it would crowd the mark), and the same menus open in a `Drawer` where each mega-menu is a drill level behind a Back row, with `Login` and `Start for free` stacked full width at its foot. Built from `GlobalHeader`, `NavigationMenu`, `Brand`, `Button`, `IconButton`, `Drawer`, `Menu` and `ScrollArea`.'
       },
       canvas: { sourceState: 'shown' }
     }
