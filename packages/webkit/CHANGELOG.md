@@ -4,6 +4,18 @@
 
 - [Inputs] normalize z-index across all inputs (ENG-46735) ([#783](https://github.com/aziontech/webkit/issues/783)) ([25d201d](https://github.com/aziontech/webkit/commit/25d201d5ae0e6054b9189bc81c76b7d9fc8c5055))
 
+## [5.5.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@5.4.0...@aziontech/webkit@5.5.0) (2026-10-17)
+
+
+### Features
+
+* **webkit:** add AWS, Akamai, Cloudflare and Fastly marks and their migration scenes ([#1060](https://github.com/aziontech/webkit/issues/1060)) ([b219e82](https://github.com/aziontech/webkit/commit/b219e82594d49b98a4101238d1054bf3946e56ca))
+
+
+### Documentation
+
+* **storybook:** reorganize templates and show the site JSON for marketing blocks ([#1073](https://github.com/aziontech/webkit/issues/1073)) ([d8beead](https://github.com/aziontech/webkit/commit/d8beead1ba3f2f17526c5ebf18d88e0d6ccac1bc))
+
 ## [5.4.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@5.3.0...@aziontech/webkit@5.4.0) (2026-10-06)
 
 
