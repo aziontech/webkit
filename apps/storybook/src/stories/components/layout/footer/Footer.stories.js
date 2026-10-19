@@ -38,7 +38,7 @@ const components = {
 
 /** @type {import('@storybook/vue3').Meta<typeof Footer>} */
 const meta = {
-  title: 'Components/Layout/Footer',
+  title: 'Components/Primitives/Layout/Footer',
   component: Footer,
   subcomponents: {
     'Footer.Column': Footer.Column,

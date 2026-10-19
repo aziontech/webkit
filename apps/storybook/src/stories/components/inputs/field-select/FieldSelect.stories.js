@@ -25,7 +25,7 @@ const OPTIONS_LITERAL = `[
 
 /** @type {import('@storybook/vue3').Meta<typeof FieldSelect>} */
 const meta = {
-  title: 'Components/Inputs/FieldSelect',
+  title: 'Components/Primitives/Inputs/FieldSelect',
   component: FieldSelect,
   tags: ['autodocs'],
   parameters: {

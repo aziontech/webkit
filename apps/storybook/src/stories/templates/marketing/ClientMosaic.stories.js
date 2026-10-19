@@ -16,6 +16,7 @@ import SectionGap from '@aziontech/webkit/section-gap'
 import SectionModule from '@aziontech/webkit/section-module'
 
 import { COLUMN_IMPORTS, each, inColumn, indent } from '../../_shared/markup'
+import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 
 const IMPORTS = [
@@ -223,16 +224,12 @@ ${indent(cell.story ? storyFace(cell) : markFace(cell))}
 
 const meta = {
   title: 'Templates/Marketing/Social Proof/ClientMosaic',
-  tags: ['autodocs'],
+  excludeStories: ['SITE_SECTION'],
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
     controls: { disable: true },
     docs: {
-      description: {
-        component:
-          'Client stories as a mosaic of tiles on one hairline grid with no gutter: eight clients, each linking to its success case. Two tiles carry a story headline over the client’s own photograph, under a scrim that ends on the canvas so the headline keeps its contrast, and close on a “Learn more” link; the rest are the client’s logo, centred, and the whole tile is the link. Logos on the canvas are drawn as one flat ink that follows the theme; on the white and orange fills they are pinned to black. Home carries it after the analyst recognitions. Built from `SectionModule`, `FrameBox`, `BentoGrid` (`BentoGrid.Cell`) and `MiniButton`.'
-      },
       canvas: { sourceState: 'shown' }
     }
   }
@@ -244,11 +241,58 @@ export const Default = {
   render: () => ({ components, setup, template: TEMPLATE }),
   parameters: {
     docs: {
-      description: {
-        story:
-          'Home’s mosaic, four columns (two on mobile): Netshoes leads as a two-by-two story tile, GPA runs down two rows as the second, and six logo tiles fill the rest, Dafiti on white and Fourbank and NZN on the brand orange.'
-      },
       source: { code: toSfc(IMPORTS, TEMPLATE) }
     }
   }
+}
+
+export const SITE_SECTION = {
+  _id: 'client-mosaic',
+  props: {
+    ariaLabel: 'Client stories',
+    linkLabel: 'Learn more',
+    stories: [
+      {
+        logo: '/marketing-components/logos/netshoes-extended-color.svg',
+        logoAlt: 'Netshoes',
+        photo: '/marketing-components/photos/netshoes.jpg',
+        text: 'Netshoes automatically blocks more than 4 million threats in six months',
+        href: 'https://www.azion.com/en/success-case/netshoes/'
+      },
+      {
+        logo: '/marketing-components/logos/gpa-extended-reversed.svg',
+        logoAlt: 'GPA',
+        photo: '/marketing-components/photos/gpa.jpg',
+        text: 'Grupo Pão de Açúcar (GPA) stops a cyberattack and reduces costs by 30%',
+        href: 'https://www.azion.com/en/success-case/gpa-solved-cyberattack/'
+      }
+    ],
+    logos: [
+      {
+        logo: '/marketing-components/logos/dafiti-extended-mono.svg',
+        logoAlt: 'Dafiti',
+        href: 'https://www.azion.com/en/success-case/dafiti/dafiti-accelerates-its-e-commerce-by-86-and-saves-45-on-data-transfer-costs-using-azion-edge-application/'
+      },
+      {
+        logo: '/marketing-components/logos/agibank-extended-reversed.svg',
+        logoAlt: 'Agibank',
+        href: 'https://www.azion.com/en/success-case/agibank/'
+      },
+      {
+        logo: '/marketing-components/logos/renner-extended-reversed.svg',
+        logoAlt: 'Renner',
+        href: 'https://www.azion.com/en/success-case/renner/'
+      },
+      {
+        logo: '/marketing-components/logos/fourbank-extended-reversed.svg',
+        logoAlt: 'Fourbank',
+        href: 'https://www.azion.com/en/success-case/fourbank/'
+      }
+    ]
+  }
+}
+
+export const DefaultJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(SITE_SECTION)
 }
