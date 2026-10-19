@@ -7270,25 +7270,11 @@
       "status": "implemented",
       "props": [
         {
-          "name": "modelValue",
-          "type": "string",
-          "default": "''",
-          "required": "false",
-          "doc": "Two-way bound national number as **digits only**, without dial code and without mask characters (e.g. `'11999999999'`). Enables `v-model`."
-        },
-        {
-          "name": "country",
-          "type": "string",
-          "default": "'BR'",
-          "required": "false",
-          "doc": "Two-way bound ISO 3166-1 alpha-2 code of the selected country (e.g. `'BR'`, `'US'`, `'GB'`). Drives the dial code shown in the `Select` and the mask applied to the input. Enables `v-model:country`."
-        },
-        {
           "name": "countries",
-          "type": "Array<{ code: string; dialCode: string; mask: string; label: string }>",
-          "default": "(built-in curated list — see Notes)",
+          "type": "Array<{ code: string; dialCode: string; mask: string | string[]; label: string }>",
+          "default": "(built-in list — see Notes)",
           "required": "false",
-          "doc": "Countries offered by the dial-code `Select`. Each entry: `code` (ISO alpha-2), `dialCode` (e.g. `'+55'`), `mask` (e.g. `'(##) #####-####'` where `#` = digit slot), `label` (e.g. `'Brazil'`, used for the Select's item label / a11y). When omitted, the component uses its built-in list."
+          "doc": "Countries offered by the dial-code `Select`. Each entry: `code` (ISO alpha-2), `dialCode` (e.g. `'+55'`), `mask` (e.g. `'(##) #####-####'` where `#` = digit slot), `label` (e.g. `'Brazil'`, used for the Select's item label / a11y). `mask` is a list when the country allows more than one length (e.g. BR `['(##) ####-####', '(##) #####-####']`). When omitted, the component uses its built-in list."
         },
         {
           "name": "label",
@@ -7302,7 +7288,7 @@
           "type": "string",
           "default": "''",
           "required": "false",
-          "doc": "Placeholder forwarded to the internal `<input>`. When empty, the placeholder falls back to the selected country's mask with each `#` shown as `9` (e.g. `(99) 99999-9999`)."
+          "doc": "Placeholder forwarded to the internal `<input>`. When empty, the placeholder falls back to the selected country's longest mask with each `#` shown as `9` (e.g. `(99) 99999-9999`)."
         },
         {
           "name": "helperText",
@@ -7356,17 +7342,12 @@
       ],
       "events": [
         {
-          "name": "update:modelValue",
-          "payload": "[value: string]",
-          "notes": "Emitted on every native `input` event of the internal `<input>` **and** whenever `country` changes (re-emitted so validators react to dial-code switches). Value is always digits-only (mask characters stripped)."
-        },
-        {
-          "name": "update:country",
-          "payload": "[code: string]",
-          "notes": "Emitted when the user picks a different country in the dial-code `Select`. Enables `v-model:country`."
+          "name": "update:phone",
+          "payload": "[value: PhoneNumber]",
+          "notes": "One-way snapshot of the number, emitted once on mount and again whenever the digits or the country change. `PhoneNumber` (exported from the component) is `{ country: string; dialCode: string; digits: string; number: string; complete: boolean }`: `number` is the full E.164 number (`dialCode + digits`, e.g. `'+5511999999999'`; `''` while empty) and `complete` is true when the digit count is one the selected country allows. Not a v-model — the field never reads it back."
         }
       ],
-      "purpose": "Form field for international phone-number entry that composes `Label`, `InputGroup` (with a leading `Select` for the dial code and a middle `<input>` for the national number), and `HelperText` into a single vertical stack with consistent spacing. Mirrors `FieldInputGroup`'s template shape verbatim — the difference is that the left side of the `InputGroup` is a dial-code `<Select>` (e.g. `+55`, `+1`, `+44`) and the middle `<input>` applies a per-country mask so the user sees a formatted number as they type (e.g. `(11) 99999-9999` for BR). Emits two v-models: `modelValue` for the national digits (no dial code, no mask characters) and `country` for the selected ISO 3166-1 alpha-2 code."
+      "purpose": "Form field for international phone-number entry that composes `Label`, `InputGroup` (with a leading `Select` for the dial code and a middle `<input>` for the national number), and `HelperText` into a single vertical stack with consistent spacing. Mirrors `FieldInputGroup`'s template shape verbatim — the difference is that the left side of the `InputGroup` is a dial-code `<Select>` (e.g. `+55`, `+1`, `+44`) and the middle `<input>` follows the selected country: it applies that country's mask as the user types and accepts exactly the lengths the country allows. A country may allow more than one length — a Brazilian landline (10 digits, `(11) 9999-9999`) and mobile (11 digits, `(11) 99999-9999`) both format correctly, the mask switching as the digits grow. Two v-models (`v-model` for the national digits, `v-model:country` for the ISO 3166-1 alpha-2 code) carry the editable state; the one-way `update:phone` event hands the form everything it would otherwise derive by hand — the full number with its dial code and whether that number is complete — so no form re-implements per-country length rules."
     },
     "helper-text": {
       "import": "@aziontech/webkit/helper-text",
