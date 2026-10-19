@@ -1,6 +1,6 @@
 ---
 name: code-block
-category: data
+category: code
 structure: monolithic
 status: implemented
 spec_version: 4

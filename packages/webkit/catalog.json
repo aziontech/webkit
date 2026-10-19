@@ -3554,10 +3554,10 @@
     },
     "code-block": {
       "import": "@aziontech/webkit/code-block",
-      "target": "./src/components/data/code-block/code-block.vue",
+      "target": "./src/components/code/code-block/code-block.vue",
       "kind": "component",
       "treeShakeableImport": "@aziontech/webkit/code-block",
-      "category": "data",
+      "category": "code",
       "structure": "monolithic",
       "status": "implemented",
       "props": [
@@ -3595,6 +3595,13 @@
           "default": "'Copy code'",
           "required": "false",
           "doc": "Accessible name for the copy control (forwarded to CopyButton's aria-label)."
+        },
+        {
+          "name": "copyable",
+          "type": "boolean",
+          "default": "true",
+          "required": "false",
+          "doc": "Shows the copy control; turn it off for a decorative block nobody copies from."
         },
         {
           "name": "animateLines",

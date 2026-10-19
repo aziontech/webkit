@@ -106,7 +106,7 @@
   const contentRef = ref<HTMLElement | null>(null)
   const panelVersion = ref(0)
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'data-code-block')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'code-code-block')
 
   const normalizedTabs = computed(() =>
     props.tabs.filter((tab): tab is CodeBlockTab => Boolean(tab && tab.value && tab.code))
