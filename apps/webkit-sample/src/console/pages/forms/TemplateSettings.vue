@@ -114,8 +114,9 @@
   const deployKeyEmpty = computed(() => !form.deployKey)
   const deployKeyInvalid = computed(() => form.deployKey.length > 0 && form.deployKey.length < 8)
   const phoneEmpty = computed(() => !form.alertPhone.trim())
+  const alertPhoneNumber = ref({ number: '', complete: false })
   const phoneInvalid = computed(
-    () => form.alertPhone.trim() !== '' && form.alertPhone.replace(/\D/g, '').length < 8
+    () => form.alertPhone.trim() !== '' && !alertPhoneNumber.value.complete
   )
   const acceptEmpty = computed(() => !form.acceptDeploy)
 
@@ -476,6 +477,7 @@
                 :disabled="submitting"
                 :required="phoneWarning"
                 :invalid="phoneError"
+                @update:phone="alertPhoneNumber = $event"
                 :helper-text="
                   phoneError
                     ? 'Enter a valid phone number.'
