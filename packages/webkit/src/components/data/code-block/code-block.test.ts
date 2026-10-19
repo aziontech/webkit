@@ -473,6 +473,34 @@ describe('CodeBlock', () => {
     })
   })
 
+  describe('javascript highlighting', () => {
+    const typeOf = (language: string, line: string, text: string) =>
+      highlightCodeLine(language, line).find((token) => token.text.trim() === text)?.type
+
+    it.each(['javascript', 'js', 'typescript', 'ts'])(
+      'treats a full-line // as a comment in %s',
+      (lang) => {
+        expect(highlightCodeLine(lang, '// Route every request to the origin')).toEqual([
+          { text: '// Route every request to the origin', type: 'comment' }
+        ])
+      }
+    )
+
+    it('keeps a trailing comment separate from the code before it', () => {
+      const line = 'const ttl = 3600 // one hour'
+
+      expect(typeOf('js', line, 'const')).toBe('keyword')
+      expect(typeOf('js', line, '// one hour')).toBe('comment')
+    })
+
+    it('does not read // inside a string as a comment', () => {
+      const line = "fetch('https://api.azion.com/v4')"
+
+      expect(typeOf('js', line, "'https://api.azion.com/v4'")).toBe('string')
+      expect(highlightCodeLine('js', line).some((token) => token.type === 'comment')).toBe(false)
+    })
+  })
+
   // Shell is tokenised so a CLI snippet gets the same code-sintax palette as JS —
   // asserted on the token stream, never on class strings.
   describe('shell highlighting', () => {
