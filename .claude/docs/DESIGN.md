@@ -102,7 +102,12 @@ For anchors **inside** body or heading copy, use the `text-link` typography clas
 
 ```html
 <p class="text-body-md">
-  Read the <a href="/docs" class="text-link">documentation</a>.
+  Read the
+  <a
+    href="/docs"
+    class="text-link"
+    >documentation</a
+  >.
 </p>
 ```
 
@@ -127,8 +132,8 @@ Do not use the primitive scale in `packages/theme/src/tokens/primitives/shape/sp
 Always reference the variable for **padding**, **gap**, and **margin** (including axis-specific utilities). Do not use generated `.p-spacing-*` / `.gap-spacing-*` classes in `components/webkit/`:
 
 ```html
-p-(--spacing-md) px-(--spacing-sm) py-(--spacing-xs) gap-(--spacing-sm)
-gap-x-(--spacing-md) m-(--spacing-lg) mt-(--spacing-xs) mb-(--spacing-md)
+p-(--spacing-md) px-(--spacing-sm) py-(--spacing-xs) gap-(--spacing-sm) gap-x-(--spacing-md)
+m-(--spacing-lg) mt-(--spacing-xs) mb-(--spacing-md)
 ```
 
 Breakpoint growth is baked into the CSS variables; you do not duplicate responsive spacing in components.
@@ -166,27 +171,30 @@ Example from Button — horizontal padding and inner gap:
 
 ### Layout containers (page sections)
 
-A page does **not** pick its own `max-w-*`. It carries one of the four **container types** the layout
-system ships (`semantic/layouts` in `@aziontech/theme`), and the type is chosen by what the page *is*:
+A page does **not** pick its own `max-w-*`. It carries one of the five **container types** the layout
+system ships (`semantic/layouts` in `@aziontech/theme`), and the type is chosen by what the page's
+_payload_ is. `.layout-column` is the default; the others are all narrower:
 
 | Class | Type | Measure token | Today | Use for |
 |---|---|---|---|---|
-| `.layout-column` | Data | `--layout-measure` | 1620px | Lists, detail dashboards |
+| `.layout-column` | Data | `--layout-measure` | 1620px | **The standard page container** — lists, home, overviews, detail dashboards |
 | `.layout-column-focused` | Focused | `--layout-measure-focused` | 1024px | Home, single-task multi-column pages |
 | `.layout-column-form` | Form | `--layout-measure-form` | 1024px | Settings, in-page edit forms |
 | `.layout-form-create` | Create | `--layout-measure-form-create` | 1192px | Dedicated create pages (also retunes `--layout-measure-control`) |
 | `.layout-column-content` | Content | `--layout-measure-content` | 876px | Prose columns — documentation, blog (capped by line length, not by payload) |
 
-The marketing site is measured by two more tokens, used as a plain `max-w-(--token)` rather than
-through a column class: `--layout-measure-site` (1388px) is the page's frame — the hero, every
+The marketing site is measured by two more tokens. `--layout-measure-site` (1388px) is the page's frame — the hero, every
 section, the docs home and the footer share it, which is the only reason the border-x running down
 the page is continuous — and `--layout-measure-site-header` (1620px) is the top bar's own column,
 one rung wider, since a bar's payload is chrome held apart at the two ends of the window rather than
-content read across it. `GlobalHeader kind="site"` is the one consumer of the header token.
+content read across it. `GlobalHeader kind="site"` is the one consumer of the header token. The page
+frame has its own column class, `.layout-column-site`, whose `min()` cap hands off from the measure to
+a window-less-boundary inset below it — so the frame stays inset on a phone, where a bare
+`max-w-(--layout-measure-site)` would land its rules on the window edges.
 
 Full-bleed is the **absence** of all five, never a `w-full`. The unit that picks a class is the **band**,
 not the file: a tab showing a table is measured as data even when the tab beside it is a form. Within one
-band the class is the same everywhere it must align — the scrolling body *and* its sticky action bar — or
+band the class is the same everywhere it must align — the scrolling body _and_ its sticky action bar — or
 the footer's buttons drift right of the form they submit.
 
 **The boundary is not part of the measure.** `.layout-boundary` (all three insets) and
@@ -214,6 +222,10 @@ Defined in `packages/theme/src/tokens/primitives/shape/container.js` (`3xs` … 
 ---
 
 ## Shapes (border radius)
+
+> Radii, border weights, and border colors combine into one visual language — bordered containers
+> and hairline rules. How to compose them (and the six roles a rule plays) is catalogued in
+> [`CONTAINERS.md`](./CONTAINERS.md).
 
 Use **semantic shape** tokens only:
 
@@ -281,19 +293,20 @@ Use **theme semantic** CSS variables so light/dark and brand stay consistent.
 ### Pattern
 
 ```html
-bg-(--primary) text-(--primary-contrast) border-(--border-default)
-bg-(--bg-surface) text-(--text-default) text-(--text-muted) ring-(--ring-color)
+bg-(--primary) text-(--primary-contrast) border-(--border-default) bg-(--bg-surface)
+text-(--text-default) text-(--text-muted) ring-(--ring-color)
 ```
 
 ### Common semantic groups
 
-| Role          | Examples                                                                                                  |
-| ------------- | --------------------------------------------------------------------------------------------------------- |
-| Brand actions | `--primary`, `--primary-contrast`, `--secondary`, `--secondary-contrast`                                  |
-| Surfaces      | `--bg-canvas`, `--bg-surface`, `--bg-surface-raised`, `--bg-surface-overlay`, `--bg-hover`, `--bg-active`, `--bg-selected`, `--bg-disabled`, `--bg-mask` |
-| Placeholders  | `--bg-placeholder`, `--bg-placeholder-highlight` (see § Loading placeholders)                              |
-| Text          | `--text-default`, `--text-muted`, `--text-disabled`                                                       |
-| Borders       | `--border-default`, `--border-muted`, `--border-strong`, `--border-selected`                              |
+| Role          | Examples                                                                                                                                                                                                       |
+| ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Brand actions | `--primary`, `--primary-contrast`, `--secondary`, `--secondary-contrast`                                                                                                                                       |
+| Accent        | `--accent`, `--accent-mask`, `--accent-selected`, `--accent-contrast` — the blue that marks a path or state as _other_, distinct from the brand orange. Mode-invariant.                                        |
+| Surfaces      | `--bg-canvas`, `--bg-surface`, `--bg-surface-raised`, `--bg-surface-overlay`, `--bg-hover`, `--bg-active`, `--bg-selected`, `--bg-disabled`, `--bg-mask`                                                       |
+| Placeholders  | `--bg-placeholder`, `--bg-placeholder-highlight` (see § Loading placeholders)                                                                                                                                  |
+| Text          | `--text-default`, `--text-muted`, `--text-disabled`                                                                                                                                                            |
+| Borders       | `--border-default`, `--border-muted`, `--border-strong`, `--border-selected`                                                                                                                                   |
 | Feedback      | `--success`, `--success-border`, `--success-contrast`, `--warning`, `--warning-border`, `--warning-contrast`, `--danger`, `--danger-border`, `--danger-contrast`, `--info`, `--info-border`, `--info-contrast` |
 | Code syntax   | `--code-sintax-identifier`, `--code-sintax-line-number`, `--code-sintax-keyword`, `--code-sintax-string`, `--code-sintax-function`, `--code-sintax-type`, `--code-sintax-punctuation`, `--code-sintax-comment` |
 
@@ -304,9 +317,9 @@ are opaque and tuned for one background, so a placeholder built from one is only
 picked against — `--bg-surface-overlay` (`#FAFAFA`) on a `--bg-surface` card (`#FFFFFF`) is a contrast ratio of
 **1.02**, effectively invisible. Use the placeholder pair instead:
 
-| Token                        | light                  | dark                   | Role                                          |
-| ---------------------------- | ---------------------- | ---------------------- | --------------------------------------------- |
-| `--bg-placeholder`           | `#00000014` (8% black) | `#FFFFFF1A` (10% white) | The fill that reserves the content's space.   |
+| Token                        | light                   | dark                    | Role                                               |
+| ---------------------------- | ----------------------- | ----------------------- | -------------------------------------------------- |
+| `--bg-placeholder`           | `#00000014` (8% black)  | `#FFFFFF1A` (10% white) | The fill that reserves the content's space.        |
 | `--bg-placeholder-highlight` | `#FFFFFF99` (60% white) | `#FFFFFF1A` (10% white) | The sweep that passes over the fill while loading. |
 
 Both are **translucent by design** — that is what makes one value per mode correct everywhere. The fill
@@ -314,16 +327,15 @@ composites over whatever sits behind it, so the same token holds its contrast on
 `--bg-surface-raised` and `--bg-surface-overlay` alike (ratio `1.19`–`1.32` across all eight combinations)
 instead of being tuned for a single card color.
 
-The highlight is a white alpha in **both** modes: it *lightens* the fill rather than replacing it. Keep the fill
+The highlight is a white alpha in **both** modes: it _lightens_ the fill rather than replacing it. Keep the fill
 as `background-color` and put the sweep in a `background-image` gradient whose other stops are `transparent`, so
 the animated and static states share the same base tone:
 
 ```html
 class="bg-(--bg-placeholder)
-       data-[animated]:motion-safe:bg-[linear-gradient(90deg,transparent_0%,transparent_35%,var(--bg-placeholder-highlight)_50%,transparent_65%,transparent_100%)]
-       data-[animated]:motion-safe:bg-[length:200%_100%]
-       data-[animated]:motion-safe:animate-(--animate-shimmer)
-       motion-reduce:animate-none"
+data-[animated]:motion-safe:bg-[linear-gradient(90deg,transparent_0%,transparent_35%,var(--bg-placeholder-highlight)_50%,transparent_65%,transparent_100%)]
+data-[animated]:motion-safe:bg-[length:200%_100%]
+data-[animated]:motion-safe:animate-(--animate-shimmer) motion-reduce:animate-none"
 ```
 
 Reference: `skeleton.vue`. The sweep pairs with `--animate-shimmer` (see § Motion primitives) and is gated behind
@@ -361,26 +373,33 @@ Reference: `button.vue` kind variants (`bg-(--secondary)`, `text-(--secondary-co
 
 Use **only** the named utilities below; they ship with `motion-safe` / `motion-reduce` variants enabled by the theme plugin. The `--animate-*` presets are defined in `packages/theme/src/tokens/primitives/animations/animate.js` (each with a one-line `useWhen` note) and their `@keyframes` in the sibling `keyframes.js`; `build-tokens.mjs` emits both into `dist/v4/globals.css`.
 
-| Utility                              | Behavior                                     | Duration · Easing                                                             |
-| ------------------------------------ | -------------------------------------------- | ----------------------------------------------------------------------------- |
-| `animate-fade-in`                    | opacity 0 → 1                                | 220ms · `ease-in-out`                                                         |
-| `animate-fade-out`                   | opacity 1 → 0                                | 220ms · `ease-in-out`                                                         |
-| `animate-slide-down`                 | height 0 → auto                              | 220ms · `ease-in-out`                                                         |
-| `animate-popup-scale-in`             | scale 0.9 → 1 + fade in                      | `moderate-01` · `productive-entrance` (origin: `var(--popup-origin, center)`) |
-| `animate-popup-scale-out`            | scale 1 → 0.9 + fade out                     | `fast-02` · `productive-exit`                                                 |
-| `animate-slide-in-left`              | translateX -100% → 0                         | `moderate-02` · `productive-entrance`                                         |
-| `animate-slide-out-left`             | translateX 0 → -100%                         | `moderate-01` · `productive-exit`                                             |
-| `animate-slide-in-right`             | translateX 100% → 0                          | `moderate-02` · `productive-entrance`                                         |
-| `animate-slide-out-right`            | translateX 0 → 100%                          | `moderate-01` · `productive-exit`                                             |
-| `animate-shimmer`                    | `background-position` 200% → -200% sweep      | 1.6s · `linear` infinite                                                      |
-| `animate-blink`                      | opacity 1/0 cycle                            | 1s · `step-end` infinite                                                      |
-| `animate-highlight-fade`             | row-flash highlight, holds then fades out    | `slow-03` · `ease-in` forwards                                                |
-| `animate-progress-indeterminate`     | indeterminate bar, primary sweep             | `slow-04` · `productive-entrance` infinite                                    |
-| `animate-progress-indeterminate-short` | indeterminate bar, secondary short sweep   | `slow-04` · `expressive-entrance` (delay `slow-03`) infinite                  |
-| `animate-flow-dash`                  | marching dashes along an SVG stroke (`stroke-dashoffset` 24 → 0) | `slow-02` · `linear` infinite                            |
-| `animate-spin` · `animate-ping` · `animate-pulse` · `animate-bounce` | Tailwind's stock loading/attention loops, re-registered in `animate.js` | see `animate.js`                    |
+| Utility                                                              | Behavior                                                                                                                          | Duration · Easing                                                                     |
+| -------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| `animate-fade-in`                                                    | opacity 0 → 1                                                                                                                     | 220ms · `ease-in-out`                                                                 |
+| `animate-fade-out`                                                   | opacity 1 → 0                                                                                                                     | 220ms · `ease-in-out`                                                                 |
+| `animate-slide-down`                                                 | height 0 → auto                                                                                                                   | 220ms · `ease-in-out`                                                                 |
+| `animate-popup-scale-in`                                             | scale 0.9 → 1 + fade in                                                                                                           | `moderate-01` · `productive-entrance` (origin: `var(--popup-origin, center)`)         |
+| `animate-popup-scale-out`                                            | scale 1 → 0.9 + fade out                                                                                                          | `fast-02` · `productive-exit`                                                         |
+| `animate-slide-in-left`                                              | translateX -100% → 0                                                                                                              | `moderate-02` · `productive-entrance`                                                 |
+| `animate-slide-out-left`                                             | translateX 0 → -100%                                                                                                              | `moderate-01` · `productive-exit`                                                     |
+| `animate-slide-in-right`                                             | translateX 100% → 0                                                                                                               | `moderate-02` · `productive-entrance`                                                 |
+| `animate-slide-out-right`                                            | translateX 0 → 100%                                                                                                               | `moderate-01` · `productive-exit`                                                     |
+| `animate-shimmer`                                                    | `background-position` 200% → -200% sweep                                                                                          | 1.6s · `linear` infinite                                                              |
+| `animate-blink`                                                      | opacity 1/0 cycle                                                                                                                 | 1s · `step-end` infinite                                                              |
+| `animate-highlight-fade`                                             | row-flash highlight, holds then fades out                                                                                         | `slow-03` · `ease-in` forwards                                                        |
+| `animate-progress-indeterminate`                                     | indeterminate bar, primary sweep                                                                                                  | `slow-04` · `productive-entrance` infinite                                            |
+| `animate-progress-indeterminate-short`                               | indeterminate bar, secondary short sweep                                                                                          | `slow-04` · `expressive-entrance` (delay `slow-03`) infinite                          |
+| `animate-flow-dash`                                                  | marching dashes along an SVG stroke (`stroke-dashoffset` 24 → 0)                                                                  | `slow-02` · `linear` infinite                                                         |
+| `animate-spin` · `animate-ping` · `animate-pulse` · `animate-bounce` | Tailwind's stock loading/attention loops, re-registered in `animate.js`                                                           | see `animate.js`                                                                      |
 
 `animate-shimmer` drives a gradient sweep and expects a `background-image` gradient plus `bg-[length:200%_100%]` — see § Loading placeholders for the canonical class string.
+
+The pop rides the same 9s cycle with a **negative `animation-delay` per message**
+(`-6.75s` / `-4.5s` / `-2.25s` / `0s`), which lands its 4% pop on a step boundary — the moment that
+message stops moving at the bottom. CSS cannot re-trigger an entrance once per pass; phase-locking
+one long loop to another is how you get one anyway. Fade the ends **unevenly**: deep at the top
+where messages leave (`mask-t-from-72%`), shallow at the bottom where they arrive
+(`mask-b-from-92%`) — a deep bottom fade is one message tall and lands every arrival half-faded.
 
 `animate-flow-dash` animates an **SVG stroke** and expects a `stroke-dasharray` whose cycle **divides 24** (`4 4` = 8, `2 4` = 6, `8 4` = 12), because 24 is the keyframe's travel: the pattern lands exactly where it started and the loop has no visible seam. A cycle that does not divide 24 (`5 5` = 10) jumps on every repeat. Like `animate-shimmer` and `animate-spin` it is `linear` — an endlessly looping animation must not accelerate, or the seam between repeats becomes visible.
 
@@ -484,10 +503,10 @@ Use semantic surface tokens from `theme/background.js` — never swap the root `
 
 ```html
 relative before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit]
-before:bg-(--bg-hover) before:opacity-0 before:content-[''] after:pointer-events-none
-after:absolute after:inset-0 after:rounded-[inherit] after:bg-(--bg-active) after:opacity-0
-after:content-[''] hover:before:opacity-100 active:after:opacity-100 focus-visible:outline-none
-focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1
+before:bg-(--bg-hover) before:opacity-0 before:content-[''] after:pointer-events-none after:absolute
+after:inset-0 after:rounded-[inherit] after:bg-(--bg-active) after:opacity-0 after:content-['']
+hover:before:opacity-100 active:after:opacity-100 focus-visible:outline-none focus-visible:ring-2
+focus-visible:ring-(--ring-color) focus-visible:ring-offset-1
 focus-visible:ring-offset-(--bg-canvas) disabled:before:hidden disabled:after:hidden
 ```
 
@@ -544,7 +563,7 @@ The `validate-tokens.mjs` PreToolUse hook enforces these at write time. If a hoo
 - **Typography:** `font-family`, `font-proto-mono`, `font-sora`, `leading-*` (except `leading-none` on icons), `tracking-*`, `text-xs|sm|base|lg`, `text-(length:--text-*-font-size)` when a generated class exists.
 - **Spacing:** primitive `--spacing-1` … `--spacing-96`, legacy `spacing-elements-*`, arbitrary `p-4` / `gap-3` when a `spacings.data.js` token applies.
 - **Container:** Tailwind scale (`max-w-md`, `max-w-5xl`), arbitrary lengths (`max-w-[768px]`), legacy helpers (`.px-container`, `.py-container`, `.max-container-width`), and semantic layout tokens (`--container-px`, `--container-py`, `--container-max-width`). Use `max-w-(--container-<size>)` only (`3xs` … `7xl` from `primitives/shape/container.js`).
-- **Page layout:** a hand-rolled page cap (`max-w-*` on a page root) instead of one of the four container types, a `w-full` standing in for full-bleed, a third rhythm step beside `--layout-section-gap` / `--layout-group-gap`, and a literal length in `semantic/layouts.data.js` — every layout token is a `var()` reference to the spacing or container scale.
+- **Page layout:** a hand-rolled page cap (`max-w-*` on a page root) instead of one of the five container types, a `w-full` standing in for full-bleed, a third rhythm step beside `--layout-section-gap` / `--layout-group-gap`, and a literal length in `semantic/layouts.data.js` — every layout token is a `var()` reference to the spacing or container scale.
 - **Shape:** `rounded-md`, `rounded-lg`, any numeric radius.
 - **Shadow:** legacy `--card-shadow` (SCSS alias), bare Tailwind `shadow-md` without `var(--shadow-*)`, HEX/RGB in elevation.
 - **Animations:** see § Animations § Forbidden in animations.
