@@ -7,9 +7,9 @@ spec_version: 4
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761
   node_id: 4567:33761
-checksum: 5f5b4b0da3b9f873e5b8bc03421de69abc199566b9ed968b6111c74a5c0705cf
+checksum: 9905542e26792c0d93e46e274ce7de6f2fc91e8ed2174b587a69f4cc7e8bebc0
 created: 2026-05-28
-last_updated: 2026-10-15
+last_updated: 2026-10-19
 ---
 
 
@@ -78,6 +78,7 @@ For multiple languages, add one tab per snippet (each with its own `code`). Use 
 | `defaultValue` | `string` | `undefined` | false | Initial active tab when uncontrolled. |
 | `showLineNumbers` | `boolean` | `true` | false | Shows a fixed-width gutter with zero-padded line numbers before each code line. |
 | `copyAriaLabel` | `string` | `'Copy code'` | false | Accessible name for the copy control (forwarded to CopyButton's aria-label). |
+| `copyable` | `boolean` | `true` | false | Shows the copy control; turn it off for a decorative block nobody copies from. |
 | `animateLines` | `boolean` | `false` | false | Staggered line entrance for website layouts: each line slides from `-8px` with opacity `0 → 1`, `40ms` apart. |
 | `border` | `boolean` | `true` | false | Draw the outer card border around the block. On by default; set `:border="false"` to render the block flush when it sits inside a surface that already frames it. Internal dividers (tab header, filename bar) are unaffected. |
 
@@ -134,7 +135,7 @@ When only one tab is provided and it has no `fileName`, the shell is code conten
 
 Code content scrolls inside `@aziontech/webkit/layout/scroll-area` (`orientation="both"`, capped at a `320 px` max height so shorter snippets fit their content and taller ones scroll). Lines never wrap (`whitespace-pre`); on narrow viewports the scroll region grows horizontally so long lines stay on one row.
 
-**The shell is fluid: it takes the width its container gives it and never grows past it.** Long lines are a scroll, never a wider block — so the root is a size container (`@container`, i.e. inline-size containment) and its code width is invisible to the layout above it. Without that, the block's intrinsic width leaks upward: an `auto`-sized grid track or flex row (a one-column `grid` on mobile, a `md:grid-cols-2` panel below its breakpoint) sizes itself to the widest code line and the block overflows the viewport instead of scrolling — a consumer's `min-w-0` on the wrapper cannot fix it, because `min-width` is a floor on the intrinsic contribution, not a cap. The copy control (a `CopyButton`, `kind="outlined"` `size="small"`) is absolutely positioned on the non-scrolling content shell (`__content`) so it stays pinned top-right while lines scroll. **On a single-line block it centres on that row instead** (`data-single-line` on the anchor): the shell is 44 px, the control 28 px, so the `--spacing-sm` top inset would leave it 4 px below the line's own centre. Every line reserves the control's full footprint on its right (`pr-11` = 28 px control + its 12 px inset), so a long line always scrolls clear of it rather than under it.
+**The shell is fluid: it takes the width its container gives it and never grows past it.** Long lines are a scroll, never a wider block — so the root is a size container (`@container`, i.e. inline-size containment) and its code width is invisible to the layout above it. Without that, the block's intrinsic width leaks upward: an `auto`-sized grid track or flex row (a one-column `grid` on mobile, a `md:grid-cols-2` panel below its breakpoint) sizes itself to the widest code line and the block overflows the viewport instead of scrolling — a consumer's `min-w-0` on the wrapper cannot fix it, because `min-width` is a floor on the intrinsic contribution, not a cap. The copy control (a `CopyButton`, `kind="outlined"` `size="small"`) is absolutely positioned on the non-scrolling content shell (`__content`) so it stays pinned top-right while lines scroll. **On a single-line block it centres on that row instead** (`data-single-line` on the anchor): the shell is 44 px, the control 28 px, so the `--spacing-sm` top inset would leave it 4 px below the line's own centre. Every line reserves the control's full footprint on its right (`pr-11` = 28 px control + its 12 px inset), so a long line always scrolls clear of it rather than under it. With `copyable` off (`data-copyable` absent on the root) the control is not rendered and lines reserve only `--spacing-sm` on their right.
 
 ## Motion & Animations
 
@@ -200,6 +201,7 @@ Code content scrolls inside `@aziontech/webkit/layout/scroll-area` (`orientation
 
 - Default — language switcher: two tabs, `fileName` on each tab, JavaScript sample, copy affordance (Figma: Language Switcher).
 - WithoutLineNumbers — same Default sample with `showLineNumbers={false}`.
+- WithoutCopy — same Default sample with `copyable={false}`; the copy control is not rendered and lines reserve only `--spacing-sm` on their right.
 - WithFileName — single tab with `fileName` and no tab header (Figma: Show filename).
 - WithDiff — single tab with `lineChanges` for added/removed rows (Figma: Diff).
 - WithHighlightedLine — single tab with `highlightedLine={6}` (Figma: Highlighted).

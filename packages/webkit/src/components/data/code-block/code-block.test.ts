@@ -307,6 +307,25 @@ describe('CodeBlock', () => {
 
       expect(getByRole('button', { name: 'Copy snippet' }).tagName).toBe('BUTTON')
     })
+
+    it('renders the copy anchor and marks the root copyable by default', () => {
+      const { getByTestId } = render(CodeBlock, { props: { tabs: singleTab } })
+
+      expect(getByTestId('data-code-block').hasAttribute('data-copyable')).toBe(true)
+      expect(getByTestId('data-code-block__copy-anchor')).toBeTruthy()
+      expect(within(getByTestId('data-code-block__copy')).getByRole('button')).toBeTruthy()
+    })
+
+    it('omits the copy anchor and the copyable marker when copyable is false', () => {
+      const { getByTestId, queryByTestId, queryByRole } = render(CodeBlock, {
+        props: { tabs: singleTab, copyable: false, copyAriaLabel: 'Copy snippet' }
+      })
+
+      expect(getByTestId('data-code-block').hasAttribute('data-copyable')).toBe(false)
+      expect(queryByTestId('data-code-block__copy-anchor')).toBeNull()
+      expect(queryByTestId('data-code-block__copy')).toBeNull()
+      expect(queryByRole('button', { name: 'Copy snippet' })).toBeNull()
+    })
   })
 
   describe('line numbers gutter', () => {
@@ -431,6 +450,14 @@ describe('CodeBlock', () => {
     it('filename + diff layout has no violations', async () => {
       const { container } = render(CodeBlock, {
         props: { tabs: diffTab, defaultValue: 'diff' }
+      })
+
+      await expectNoA11yViolations(container)
+    })
+
+    it('non-copyable layout has no violations', async () => {
+      const { container } = render(CodeBlock, {
+        props: { tabs: singleTab, defaultValue: 'only', copyable: false }
       })
 
       await expectNoA11yViolations(container)
