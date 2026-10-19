@@ -460,6 +460,17 @@ describe('FieldPhoneNumber', () => {
       expect(getSearch()?.value).toBe('')
       expect(getOptions()).toHaveLength(defaultCountries.length)
     })
+
+    it('does not open or change the country from a letter typed while readonly', async () => {
+      const { getByTestId, emitted } = render(FieldPhoneNumber, {
+        props: { label: 'Phone', country: 'BR', readonly: true }
+      })
+
+      await fireEvent.keyDown(getByTestId('select-trigger'), { key: 'p' })
+
+      expect(getSearch()).toBeNull()
+      expect(emitted()['update:country']).toBeUndefined()
+    })
   })
 
   describe('suppression (disabled / readonly)', () => {

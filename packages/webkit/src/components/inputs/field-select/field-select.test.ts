@@ -363,5 +363,106 @@ describe('FieldSelect', () => {
         document.body.querySelector('[data-testid="input-field-select__search-empty"]')?.textContent
       ).toContain('Nada')
     })
+
+    it('closes on Tab and returns focus to the trigger', async () => {
+      const { getByTestId } = render(FieldSelect, {
+        props: { label: 'City', options: CITIES, searchable: true }
+      })
+      await fireEvent.click(getByTestId('input-field-select__trigger'))
+      await fireEvent.keyDown(getSearch(), { key: 'Tab' })
+      expect(getSearch()).toBeNull()
+      expect(document.activeElement).toBe(getByTestId('input-field-select__trigger'))
+    })
+
+    it('does not open or pick from a letter typed on a readonly trigger', async () => {
+      const { getByTestId, emitted } = render(FieldSelect, {
+        props: {
+          label: 'City',
+          options: CITIES,
+          searchable: true,
+          readonly: true,
+          modelValue: 'sp'
+        }
+      })
+      await fireEvent.keyDown(getByTestId('input-field-select__trigger'), { key: 'r' })
+      expect(getSearch()).toBeNull()
+      expect(emitted()['update:modelValue']).toBeUndefined()
+    })
+
+    it('renders no search box when the default slot fills the list', async () => {
+      const { getByTestId } = render(FieldSelect, {
+        props: { label: 'City', searchable: true },
+        slots: { default: '<div role="option">Custom</div>' }
+      })
+      await fireEvent.click(getByTestId('input-field-select__trigger'))
+      expect(getSearch()).toBeNull()
+    })
+
+    it('picks the highlighted option when values are objects', async () => {
+      const one = { id: 1 }
+      const two = { id: 2 }
+      const { getByTestId, emitted } = render(FieldSelect, {
+        props: {
+          label: 'Plan',
+          searchable: true,
+          options: [
+            { value: one, label: 'One' },
+            { value: two, label: 'Two' }
+          ]
+        }
+      })
+      await fireEvent.click(getByTestId('input-field-select__trigger'))
+      await fireEvent.update(getSearch(), 'two')
+      expect(visibleLabels()).toEqual(['Two'])
+
+      await fireEvent.keyDown(getSearch(), { key: 'Enter' })
+      expect(emitted()['update:modelValue']).toEqual([[two]])
+    })
+
+    it('highlights the first enabled match when the first one is disabled', async () => {
+      const { getByTestId, emitted } = render(FieldSelect, {
+        props: {
+          label: 'City',
+          searchable: true,
+          options: [
+            { value: 'opo', label: 'Porto', disabled: true },
+            { value: 'ptm', label: 'Portimão' }
+          ]
+        }
+      })
+      await fireEvent.click(getByTestId('input-field-select__trigger'))
+      await fireEvent.update(getSearch(), 'port')
+      expect(activeLabel()).toBe('Portimão')
+
+      await fireEvent.keyDown(getSearch(), { key: 'Enter' })
+      expect(emitted()['update:modelValue']).toEqual([['ptm']])
+    })
+
+    it('highlights nothing when every match is disabled', async () => {
+      const { getByTestId, emitted } = render(FieldSelect, {
+        props: { label: 'City', options: CITIES, searchable: true }
+      })
+      await fireEvent.click(getByTestId('input-field-select__trigger'))
+      await fireEvent.update(getSearch(), 'alegre')
+      expect(visibleLabels()).toEqual(['Porto Alegre'])
+      expect(activeLabel()).toBeUndefined()
+
+      await fireEvent.keyDown(getSearch(), { key: 'Enter' })
+      expect(emitted()['update:modelValue']).toBeUndefined()
+    })
+
+    it('points aria-activedescendant at an id without whitespace', async () => {
+      const { getByTestId } = render(FieldSelect, {
+        props: {
+          label: 'Country',
+          searchable: true,
+          options: [{ value: 'United Kingdom', label: 'United Kingdom' }]
+        }
+      })
+      await fireEvent.click(getByTestId('input-field-select__trigger'))
+      const id = getSearch().getAttribute('aria-activedescendant') ?? ''
+      expect(id).not.toMatch(/\s/)
+      expect(document.getElementById(id)?.textContent?.trim()).toBe('United Kingdom')
+    })
   })
 })

@@ -176,6 +176,7 @@
     selectedKeys: () => [country.value],
     idPrefix: generatedId,
     triggerId,
+    locked: () => props.disabled || props.readonly,
     onPick: onCountryChange,
     onCommit: () => document.getElementById(resolvedInputId.value)?.focus()
   })

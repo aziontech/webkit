@@ -76,7 +76,7 @@
 
   const modelValue = defineModel<FieldSelectValue>({ default: undefined })
 
-  defineSlots<{
+  const slots = defineSlots<{
     default(): unknown
   }>()
 
@@ -104,10 +104,12 @@
   // treatment, and a caller who wants a reason passes one (it renders with the lock).
   const describedBy = computed(() => (props.helperText ? helperId.value : undefined))
 
-  const keyOf = (value: unknown) => String(value)
+  const searchEnabled = computed(() => props.searchable && !slots.default)
+
+  const keyOf = (option: FieldSelectOption) => String(props.options.indexOf(option))
 
   const togglePicked = (key: string) => {
-    const option = props.options.find((o) => keyOf(o.value) === key)
+    const option = props.options[Number(key)]
     if (!option) return
     if (!props.multiple) {
       modelValue.value = option.value as FieldSelectValue
@@ -134,22 +136,27 @@
     onSearchKeydown
   } = useSelectSearch({
     items: () =>
-      props.options.map((o) => ({ key: keyOf(o.value), text: o.label, disabled: o.disabled })),
+      props.options.map((o, index) => ({
+        key: String(index),
+        text: o.label,
+        disabled: o.disabled
+      })),
     selectedKeys: () => {
       const current = modelValue.value
-      if (Array.isArray(current)) return current.map(keyOf)
-      return current === undefined ? [] : [keyOf(current)]
+      const selected = Array.isArray(current) ? current : [current]
+      return props.options.filter((o) => selected.includes(o.value)).map(keyOf)
     },
     idPrefix: generatedId,
     triggerId: resolvedInputId,
     multiple: () => props.multiple,
+    locked: () => props.disabled || props.readonly,
     onPick: togglePicked
   })
 
   const visibleOptions = computed(() => {
-    if (!props.searchable) return props.options
+    if (!searchEnabled.value) return props.options
     const keys = new Set(filtered.value.map((item) => item.key))
-    return props.options.filter((o) => keys.has(keyOf(o.value)))
+    return props.options.filter((o) => keys.has(keyOf(o)))
   })
 </script>
 
@@ -187,14 +194,14 @@
         :id="resolvedInputId"
         :aria-describedby="describedBy"
         :data-testid="`${testId}__trigger`"
-        @keydown="searchable && onTriggerKeydown($event)"
+        @keydown="searchEnabled && onTriggerKeydown($event)"
       />
       <SelectContent
         :data-testid="`${testId}__content`"
-        @keydown="searchable && onContentKeydown($event)"
+        @keydown="searchEnabled && onContentKeydown($event)"
       >
         <template
-          v-if="searchable"
+          v-if="searchEnabled"
           #search
         >
           <InputText
@@ -215,19 +222,19 @@
         <slot>
           <SelectOption
             v-for="(option, index) in visibleOptions"
-            :id="searchable ? optionId(keyOf(option.value)) : undefined"
-            :key="keyOf(option.value)"
+            :id="searchEnabled ? optionId(keyOf(option)) : undefined"
+            :key="String(option.value)"
             :value="option.value"
             :disabled="option.disabled"
-            :data-active="(searchable && index === activeIndex) || null"
+            :data-active="(searchEnabled && index === activeIndex) || null"
             :data-testid="`${testId}__option`"
             class="data-[active]:bg-(--bg-hover)"
-            @mousemove="searchable && setActive(index)"
+            @mousemove="searchEnabled && setActive(index)"
           >
             {{ option.label }}
           </SelectOption>
           <p
-            v-if="searchable && visibleOptions.length === 0"
+            v-if="searchEnabled && visibleOptions.length === 0"
             role="status"
             :data-testid="`${testId}__search-empty`"
             class="px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-muted)"
