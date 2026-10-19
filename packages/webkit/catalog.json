@@ -2002,6 +2002,13 @@
           "default": "'_self'",
           "required": "false",
           "doc": "Link target when `href` is set."
+        },
+        {
+          "name": "type",
+          "type": "'button' | 'submit' | 'reset'",
+          "default": "'button'",
+          "required": "false",
+          "doc": "Native button type. `submit` lets the control submit its form; `disabled` and `loading` still block it. Ignored when `href` is set."
         }
       ],
       "events": [

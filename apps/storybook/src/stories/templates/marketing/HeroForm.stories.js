@@ -158,8 +158,7 @@ const CONTACT_TEMPLATE = `<Hero
         </fieldset>
 
         <div class="flex justify-start">
-          <button type="submit" class="sr-only" tabindex="-1" aria-hidden="true">Send</button>
-          <Button label="Send" kind="secondary" size="large" />
+          <Button type="submit" label="Send" kind="secondary" size="large" />
         </div>
       </form>
     </div>
