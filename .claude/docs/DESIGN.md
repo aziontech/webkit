@@ -60,19 +60,19 @@ Reference: `packages/webkit/src/components/webkit/actions/button/button.vue`.
 
 ### Available text styles
 
-| Class                                                              | Use for                                  |
-| ------------------------------------------------------------------ | ---------------------------------------- |
-| `text-big-number-lg` / `text-big-number-md` / `text-big-number-sm` | Large numeric displays                   |
-| `text-heading-3xl` … `text-heading-sm`                             | Headings                                 |
-| `text-heading-xs` / `text-heading-xxs`                             | Small headings — a flat 16px / 14px, no responsive ladder (a card's title, a wordmark written in type) |
-| `text-body-lg` … `text-body-xxs`                                   | Body copy                                |
-| `text-body-prose-md`                                               | Long-form prose — body copy at `--leading-relaxed` (1.625); the `text-body-*` set is `snug` (1.375) |
-| `text-label-sm` / `text-label-md` / `text-label-lg`                | Labels, compact UI text                  |
-| `text-label-code-sm` / `text-label-code-md` / `text-label-code-lg` | Monospace code labels (filename bar, code lines, line numbers) |
+| Class                                                              | Use for                                                                                                                  |
+| ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------ |
+| `text-big-number-lg` / `text-big-number-md` / `text-big-number-sm` | Large numeric displays                                                                                                   |
+| `text-heading-3xl` … `text-heading-sm`                             | Headings                                                                                                                 |
+| `text-heading-xs` / `text-heading-xxs`                             | Small headings — a flat 16px / 14px, no responsive ladder (a card's title, a wordmark written in type)                   |
+| `text-body-lg` … `text-body-xxs`                                   | Body copy                                                                                                                |
+| `text-body-prose-md`                                               | Long-form prose — body copy at `--leading-relaxed` (1.625); the `text-body-*` set is `snug` (1.375)                      |
+| `text-label-sm` / `text-label-md` / `text-label-lg`                | Labels, compact UI text                                                                                                  |
+| `text-label-code-sm` / `text-label-code-md` / `text-label-code-lg` | Monospace code labels (filename bar, code lines, line numbers)                                                           |
 | `text-body-code-sm`                                                | Monospace prose — a mono paragraph that WRAPS (the `label-code-*` set is `leading-none`, made for one-row-per-line code) |
-| `text-overline-md` / `text-overline-sm` / `text-overline-xs`       | Overlines (uppercase, tracking baked in) |
-| `text-button-lg` / `text-button-md`                                | Button labels                            |
-| `text-link`                                                        | Inline `<a>` inside body/heading copy (inherits parent size; hover underline) |
+| `text-overline-md` / `text-overline-sm` / `text-overline-xs`       | Overlines (uppercase, tracking baked in)                                                                                 |
+| `text-button-lg` / `text-button-md`                                | Button labels                                                                                                            |
+| `text-link`                                                        | Inline `<a>` inside body/heading copy (inherits parent size; hover underline)                                            |
 
 These classes are **mobile-first**: font sizes can change at `sm`, `md`, etc. Do not duplicate breakpoint logic in components.
 
@@ -175,13 +175,13 @@ A page does **not** pick its own `max-w-*`. It carries one of the five **contain
 system ships (`semantic/layouts` in `@aziontech/theme`), and the type is chosen by what the page's
 _payload_ is. `.layout-column` is the default; the others are all narrower:
 
-| Class | Type | Measure token | Today | Use for |
-|---|---|---|---|---|
-| `.layout-column` | Data | `--layout-measure` | 1620px | **The standard page container** — lists, home, overviews, detail dashboards |
-| `.layout-column-focused` | Focused | `--layout-measure-focused` | 1024px | Home, single-task multi-column pages |
-| `.layout-column-form` | Form | `--layout-measure-form` | 1024px | Settings, in-page edit forms |
-| `.layout-form-create` | Create | `--layout-measure-form-create` | 1192px | Dedicated create pages (also retunes `--layout-measure-control`) |
-| `.layout-column-content` | Content | `--layout-measure-content` | 876px | Prose columns — documentation, blog (capped by line length, not by payload) |
+| Class                    | Type    | Measure token                  | Today  | Use for                                                                     |
+| ------------------------ | ------- | ------------------------------ | ------ | --------------------------------------------------------------------------- |
+| `.layout-column`         | Data    | `--layout-measure`             | 1620px | **The standard page container** — lists, home, overviews, detail dashboards |
+| `.layout-column-focused` | Focused | `--layout-measure-focused`     | 1024px | Home, single-task multi-column pages                                        |
+| `.layout-column-form`    | Form    | `--layout-measure-form`        | 1024px | Settings, in-page edit forms                                                |
+| `.layout-form-create`    | Create  | `--layout-measure-form-create` | 1192px | Dedicated create pages (also retunes `--layout-measure-control`)            |
+| `.layout-column-content` | Content | `--layout-measure-content`     | 876px  | Prose columns — documentation, blog (capped by line length, not by payload) |
 
 The marketing site is measured by two more tokens. `--layout-measure-site` (1388px) is the page's frame — the hero, every
 section, the docs home and the footer share it, which is the only reason the border-x running down
@@ -373,24 +373,24 @@ Reference: `button.vue` kind variants (`bg-(--secondary)`, `text-(--secondary-co
 
 Use **only** the named utilities below; they ship with `motion-safe` / `motion-reduce` variants enabled by the theme plugin. The `--animate-*` presets are defined in `packages/theme/src/tokens/primitives/animations/animate.js` (each with a one-line `useWhen` note) and their `@keyframes` in the sibling `keyframes.js`; `build-tokens.mjs` emits both into `dist/v4/globals.css`.
 
-| Utility                                                              | Behavior                                                                                                                          | Duration · Easing                                                                     |
-| -------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
-| `animate-fade-in`                                                    | opacity 0 → 1                                                                                                                     | 220ms · `ease-in-out`                                                                 |
-| `animate-fade-out`                                                   | opacity 1 → 0                                                                                                                     | 220ms · `ease-in-out`                                                                 |
-| `animate-slide-down`                                                 | height 0 → auto                                                                                                                   | 220ms · `ease-in-out`                                                                 |
-| `animate-popup-scale-in`                                             | scale 0.9 → 1 + fade in                                                                                                           | `moderate-01` · `productive-entrance` (origin: `var(--popup-origin, center)`)         |
-| `animate-popup-scale-out`                                            | scale 1 → 0.9 + fade out                                                                                                          | `fast-02` · `productive-exit`                                                         |
-| `animate-slide-in-left`                                              | translateX -100% → 0                                                                                                              | `moderate-02` · `productive-entrance`                                                 |
-| `animate-slide-out-left`                                             | translateX 0 → -100%                                                                                                              | `moderate-01` · `productive-exit`                                                     |
-| `animate-slide-in-right`                                             | translateX 100% → 0                                                                                                               | `moderate-02` · `productive-entrance`                                                 |
-| `animate-slide-out-right`                                            | translateX 0 → 100%                                                                                                               | `moderate-01` · `productive-exit`                                                     |
-| `animate-shimmer`                                                    | `background-position` 200% → -200% sweep                                                                                          | 1.6s · `linear` infinite                                                              |
-| `animate-blink`                                                      | opacity 1/0 cycle                                                                                                                 | 1s · `step-end` infinite                                                              |
-| `animate-highlight-fade`                                             | row-flash highlight, holds then fades out                                                                                         | `slow-03` · `ease-in` forwards                                                        |
-| `animate-progress-indeterminate`                                     | indeterminate bar, primary sweep                                                                                                  | `slow-04` · `productive-entrance` infinite                                            |
-| `animate-progress-indeterminate-short`                               | indeterminate bar, secondary short sweep                                                                                          | `slow-04` · `expressive-entrance` (delay `slow-03`) infinite                          |
-| `animate-flow-dash`                                                  | marching dashes along an SVG stroke (`stroke-dashoffset` 24 → 0)                                                                  | `slow-02` · `linear` infinite                                                         |
-| `animate-spin` · `animate-ping` · `animate-pulse` · `animate-bounce` | Tailwind's stock loading/attention loops, re-registered in `animate.js`                                                           | see `animate.js`                                                                      |
+| Utility                                                              | Behavior                                                                | Duration · Easing                                                             |
+| -------------------------------------------------------------------- | ----------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| `animate-fade-in`                                                    | opacity 0 → 1                                                           | 220ms · `ease-in-out`                                                         |
+| `animate-fade-out`                                                   | opacity 1 → 0                                                           | 220ms · `ease-in-out`                                                         |
+| `animate-slide-down`                                                 | height 0 → auto                                                         | 220ms · `ease-in-out`                                                         |
+| `animate-popup-scale-in`                                             | scale 0.9 → 1 + fade in                                                 | `moderate-01` · `productive-entrance` (origin: `var(--popup-origin, center)`) |
+| `animate-popup-scale-out`                                            | scale 1 → 0.9 + fade out                                                | `fast-02` · `productive-exit`                                                 |
+| `animate-slide-in-left`                                              | translateX -100% → 0                                                    | `moderate-02` · `productive-entrance`                                         |
+| `animate-slide-out-left`                                             | translateX 0 → -100%                                                    | `moderate-01` · `productive-exit`                                             |
+| `animate-slide-in-right`                                             | translateX 100% → 0                                                     | `moderate-02` · `productive-entrance`                                         |
+| `animate-slide-out-right`                                            | translateX 0 → 100%                                                     | `moderate-01` · `productive-exit`                                             |
+| `animate-shimmer`                                                    | `background-position` 200% → -200% sweep                                | 1.6s · `linear` infinite                                                      |
+| `animate-blink`                                                      | opacity 1/0 cycle                                                       | 1s · `step-end` infinite                                                      |
+| `animate-highlight-fade`                                             | row-flash highlight, holds then fades out                               | `slow-03` · `ease-in` forwards                                                |
+| `animate-progress-indeterminate`                                     | indeterminate bar, primary sweep                                        | `slow-04` · `productive-entrance` infinite                                    |
+| `animate-progress-indeterminate-short`                               | indeterminate bar, secondary short sweep                                | `slow-04` · `expressive-entrance` (delay `slow-03`) infinite                  |
+| `animate-flow-dash`                                                  | marching dashes along an SVG stroke (`stroke-dashoffset` 24 → 0)        | `slow-02` · `linear` infinite                                                 |
+| `animate-spin` · `animate-ping` · `animate-pulse` · `animate-bounce` | Tailwind's stock loading/attention loops, re-registered in `animate.js` | see `animate.js`                                                              |
 
 `animate-shimmer` drives a gradient sweep and expects a `background-image` gradient plus `bg-[length:200%_100%]` — see § Loading placeholders for the canonical class string.
 
