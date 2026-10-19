@@ -295,7 +295,7 @@ bg-(--bg-surface) text-(--text-default) text-(--text-muted) ring-(--ring-color)
 | Text          | `--text-default`, `--text-muted`, `--text-disabled`                                                       |
 | Borders       | `--border-default`, `--border-muted`, `--border-strong`, `--border-selected`                              |
 | Feedback      | `--success`, `--success-border`, `--success-contrast`, `--warning`, `--warning-border`, `--warning-contrast`, `--danger`, `--danger-border`, `--danger-contrast`, `--info`, `--info-border`, `--info-contrast` |
-| Code syntax   | `--code-sintax-identifier`, `--code-sintax-line-number`, `--code-sintax-keyword`, `--code-sintax-string`, `--code-sintax-function`, `--code-sintax-type`, `--code-sintax-punctuation` |
+| Code syntax   | `--code-sintax-identifier`, `--code-sintax-line-number`, `--code-sintax-keyword`, `--code-sintax-string`, `--code-sintax-function`, `--code-sintax-type`, `--code-sintax-punctuation`, `--code-sintax-comment` |
 
 ### Loading placeholders
 
