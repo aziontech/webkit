@@ -36,8 +36,8 @@ import magaluReversed from '@aziontech/webkit/assets/magalu-extended-reversed.sv
 import marisa from '@aziontech/webkit/assets/marisa-extended-color.svg'
 import omelete from '@aziontech/webkit/assets/omelete-extended-mono.svg'
 import panvel from '@aziontech/webkit/assets/panvel-extended-color.svg'
-import pernambucanas from '@aziontech/webkit/assets/pernambucanas-extended-mono.svg'
-import queroQuero from '@aziontech/webkit/assets/quero-quero-extended-mono.svg'
+import pernambucanas from '@aziontech/webkit/assets/pernambucanas-extended-reversed.svg'
+import queroQuero from '@aziontech/webkit/assets/queroquero-extended-reversed.svg'
 import todoCartoes from '@aziontech/webkit/assets/todo-cartoes-extended-mono.svg'
 import unicesumar from '@aziontech/webkit/assets/unicesumar-extended-mono.svg'
 import uninter from '@aziontech/webkit/assets/uninter-extended-mono.svg'
@@ -80,7 +80,7 @@ export const SPOTLIGHT_CASES = [
 /**
  * The three stories the source features above the library, in its order. `brand` paints the
  * card; glow equal to base is a flat fill, and `ink: 'dark'` sets the mark and text black
- * for a light fill. Axur's is read off Figma 13224:203120.
+ * for a light fill.
  */
 export const FEATURED_CASES = [
   {
@@ -102,13 +102,13 @@ export const FEATURED_CASES = [
     href: 'https://www.azion.com/en/success-case/dafiti/dafiti-accelerates-its-e-commerce-by-86-and-saves-45-on-data-transfer-costs-using-azion-edge-application/'
   },
   {
-    key: 'case-axur',
-    client: { name: 'Axur', logo: axur, artwork: 'light' },
-    brand: { base: '#e65224', glow: '#ff5824' },
-    tag: 'Tech',
+    key: 'case-madeiramadeira',
+    client: { name: 'MadeiraMadeira', logo: madeiramadeiraWhite, artwork: 'light' },
+    brand: { base: '#ff9014', glow: '#ff9014' },
+    tag: 'Retail',
     description:
-      'Learn how moving AI inference from managed-infrastructure unlocked the fastest automatic takedown in the market.',
-    href: 'https://www.azion.com/en/success-case/axur-reduced-time-to-takedown-with-ai/'
+      'Faster product delivery and scalable infrastructure allowed MadeiraMadeira to support massive traffic growth during major e-commerce campaigns.',
+    href: 'https://www.azion.com/en/success-case/madeiramadeira/'
   }
 ]
 
@@ -300,7 +300,7 @@ export const SUCCESS_CASES = [
   },
   {
     key: 'case-quero-quero',
-    client: { name: 'Quero-Quero', logo: queroQuero, artwork: 'dark' },
+    client: { name: 'Quero-Quero', logo: queroQuero, artwork: 'light' },
     industry: 'Retail',
     solutions: ['Build', 'Secure', 'Observe'],
     products: ['Firewall'],
@@ -355,7 +355,7 @@ export const SUCCESS_CASES = [
   },
   {
     key: 'case-pernambucanas-performance',
-    client: { name: 'Pernambucanas', logo: pernambucanas, artwork: 'dark' },
+    client: { name: 'Pernambucanas', logo: pernambucanas, artwork: 'light' },
     industry: 'Retail',
     solutions: ['Build', 'Secure', 'Observe'],
     products: ['Applications'],
@@ -366,7 +366,7 @@ export const SUCCESS_CASES = [
   },
   {
     key: 'case-pernambucanas-security',
-    client: { name: 'Pernambucanas', logo: pernambucanas, artwork: 'dark' },
+    client: { name: 'Pernambucanas', logo: pernambucanas, artwork: 'light' },
     industry: 'Retail',
     solutions: ['Build', 'Deploy'],
     products: ['Edge Firewall', 'Data Stream'],
@@ -377,7 +377,7 @@ export const SUCCESS_CASES = [
   },
   {
     key: 'case-madeiramadeira',
-    client: byName('MadeiraMadeira'),
+    client: { ...byName('MadeiraMadeira'), logo: madeiramadeiraWhite },
     industry: 'Retail',
     solutions: ['Build', 'Deploy'],
     products: ['Applications'],

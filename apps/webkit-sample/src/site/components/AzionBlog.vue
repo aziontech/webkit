@@ -4,9 +4,8 @@
   //
   // Departures from the source, on purpose:
   //   • The source opens on its featured post as the h1. Ours opens on a band hero titled with
-  //     the page's own name (`Blog`, its document title and nav label, with the nav's
-  //     description); under the filters, the highlight carousel shows the featured post and
-  //     the four newest.
+  //     the page's own name (`Blog`, its document title and nav label); under the filters,
+  //     the highlight carousel shows the featured post and the two newest.
   //   • The category tabs become one segmented control beside a compact search.
   //   • No author name or photo on any post.
   import Avatar from '@aziontech/webkit/avatar'
@@ -75,9 +74,9 @@
     () => selection.category !== BLOG_ALL || selection.query.trim().length > 0
   )
 
-  // The highlight carousel: the featured post and the four newest; the grid skips those four
+  // The highlight carousel: the featured post and the two newest; the grid skips those two
   // while unfiltered.
-  const LEAD_SIDE = BLOG_POSTS.slice(0, 4)
+  const LEAD_SIDE = BLOG_POSTS.slice(0, 2)
   const HIGHLIGHT = [BLOG_FEATURED, ...LEAD_SIDE]
 
   const filtered = computed(() => {
@@ -110,9 +109,10 @@
   >
     <Hero.Title
       centered
+      max-width="xl"
       eyebrow="Resources"
       title="Blog"
-      description="Insights, industry trends"
+      description="Explore Azion news and hands-on content on application development, security, performance, and AI."
     >
       <template #actions>
         <Button
@@ -132,7 +132,7 @@
       :padded="false"
       class="scroll-mt-(--spacing-xxl)"
     >
-      <!-- The highlight articles: the featured post and the four newest, as a carousel — one on
+      <!-- The highlight articles: the featured post and the two newest, as a carousel — one on
            top, the wall under it selects. Always shown: the filters below narrow only the grid. -->
       <FrameBox
         flush
@@ -142,8 +142,11 @@
         <BlogHighlight :posts="HIGHLIGHT" />
       </FrameBox>
 
-      <!-- The page's standard hatched gap between the carousel and the all-articles section. -->
-      <SectionGap hatch />
+      <!-- A short hatched gap between the carousel and the all-articles section. -->
+      <SectionGap
+        hatch
+        size="small"
+      />
 
       <!-- The all-articles section opens on its filters (the hero's "See posts" link lands
            here, under the sticky bar): the categories as one segmented control, scrolling

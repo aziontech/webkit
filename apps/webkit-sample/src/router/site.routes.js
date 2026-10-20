@@ -61,6 +61,7 @@ import LandingSolutions from '@site/views/LandingSolutions.vue'
 import LandingStreaming from '@site/views/LandingStreaming.vue'
 import LandingSuccessCasePost from '@site/views/LandingSuccessCasePost.vue'
 import LandingSuccessCases from '@site/views/LandingSuccessCases.vue'
+import LandingSuccessCasesEmbed from '@site/views/LandingSuccessCasesEmbed.vue'
 import LandingSupport from '@site/views/LandingSupport.vue'
 import LandingTechnology from '@site/views/LandingTechnology.vue'
 import LandingVercelAlternative from '@site/views/LandingVercelAlternative.vue'
@@ -228,6 +229,13 @@ export const siteRoutes = [
   // because azion.com's does not either: its Resources menu lists Blog, Resource Hub,
   // Partners and Marketplace, and reaches the library only from the footer.
   { path: '/site/success-cases', name: 'site-success-cases', component: LandingSuccessCases },
+  // The same library with no site nav or footer, for sharing with stakeholders. Declared before
+  // the `:slug` route so `embed` is not read as a story slug.
+  {
+    path: '/site/success-cases/embed',
+    name: 'site-success-cases-embed',
+    component: LandingSuccessCasesEmbed
+  },
   // One rebuilt story per slug (data/success-case-articles.js), on the blog article's layout.
   {
     path: '/site/success-cases/:slug',

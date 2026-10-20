@@ -11,18 +11,15 @@
   import SectionTitle from '@aziontech/webkit/section-title'
   import Select from '@aziontech/webkit/select'
   import ClientMark from '@shared/ui/brand/ClientMark.vue'
-  import { CLIENT_STRIP } from '@shared/ui/brand/strips.js'
   import FilterButton from '@shared/ui/filter/FilterButton.vue'
   import FilterChips from '@shared/ui/filter/FilterChips.vue'
   import { computed, reactive, ref, watch } from 'vue'
   import { useRoute } from 'vue-router'
 
   import { successCaseLink } from '../data/success-case-articles.js'
-  import { FEATURED_CASES, SPOTLIGHT_CASES, SUCCESS_CASES } from '../data/success-cases.js'
-  import CustomerSpotlight from '../ui/sections/CustomerSpotlight.vue'
+  import { FEATURED_CASES, SUCCESS_CASES } from '../data/success-cases.js'
   import MarketLeader from './MarketLeader.vue'
   import SuccessCaseClosingCta from './SuccessCaseClosingCta.vue'
-
 
   const LABEL = {
     industry: 'Industry',
@@ -40,7 +37,6 @@
 
   // Their dark-surface files are already coloured lockups; their colour files set the
   // wordmark in black, which vanishes on this canvas.
-  const DARK_LOCKUP = new Set(['MadeiraMadeira', 'Mobiauto', 'NZN'])
 
   // The careers listing's filter model: one value per field, `ALL` as the reset.
   const ALL = 'All'
@@ -54,17 +50,26 @@
     {
       key: 'industry',
       label: LABEL.industry,
-      options: optionsOf('All industries', SUCCESS_CASES.map((story) => story.industry))
+      options: optionsOf(
+        'All industries',
+        SUCCESS_CASES.map((story) => story.industry)
+      )
     },
     {
       key: 'solution',
       label: LABEL.solution,
-      options: optionsOf('All solutions', SUCCESS_CASES.flatMap((story) => story.solutions))
+      options: optionsOf(
+        'All solutions',
+        SUCCESS_CASES.flatMap((story) => story.solutions)
+      )
     },
     {
       key: 'product',
       label: LABEL.product,
-      options: optionsOf('All products', SUCCESS_CASES.flatMap((story) => story.products))
+      options: optionsOf(
+        'All products',
+        SUCCESS_CASES.flatMap((story) => story.products)
+      )
     }
   ]
 
@@ -112,6 +117,9 @@
     )
   })
   const visible = computed(() => filtered.value.slice(0, shown.value))
+  // The grid's last row draws no bottom rule; the frame below already closes it.
+  const inLastRow = (index, columns) =>
+    index >= visible.value.length - (((visible.value.length - 1) % columns) + 1)
   const hasMore = computed(() => shown.value < filtered.value.length)
 
   watch(selection, () => {
@@ -151,39 +159,35 @@
     kind="band"
     max-width="5xl"
     size="large"
-    carousel
-    carousel-label="Trusted by mission-critical workloads"
-    :carousel-marks="CLIENT_STRIP"
   >
-    <Hero.Title
-      centered
-      title="Trusted by Leading Companies"
-    >
-      <template #actions>
-        <Button
-          label="See cases"
-          kind="secondary"
-          size="large"
-          href="#cases"
-        />
-        <Button
-          label="Talk to a Specialist"
-          kind="outlined"
-          size="large"
-          href="/site/contact"
-          icon="pi pi-chevron-right"
-          icon-position="trailing"
-          animated
-        />
-      </template>
-    </Hero.Title>
+    <!-- Narrowed on phones only, so the headline breaks into two lines there. -->
+    <div class="mx-auto w-full max-md:max-w-76">
+      <Hero.Title
+        centered
+        title="Trusted by Leading Companies"
+      >
+        <template #actions>
+          <Button
+            label="See cases"
+            kind="secondary"
+            size="large"
+            href="#cases"
+          />
+          <Button
+            label="Talk to a Specialist"
+            kind="outlined"
+            size="large"
+            href="/site/contact"
+            icon="pi pi-chevron-right"
+            icon-position="trailing"
+            animated
+          />
+        </template>
+      </Hero.Title>
+    </div>
   </Hero>
 
   <SectionContainer max-width="site">
-    <CustomerSpotlight :cards="SPOTLIGHT_CASES" />
-
-    <SectionGap hatch />
-
     <SectionModule
       :divided="false"
       :padded="false"
@@ -342,43 +346,46 @@
       >
         <ul
           v-if="visible.length > 0"
-          class="m-0 list-none p-0 max-lg:divide-y max-lg:divide-(--border-default)"
+          class="m-0 grid list-none grid-cols-1 p-0 sm:grid-cols-2 lg:grid-cols-3"
           aria-label="Success stories"
         >
           <li
-            v-for="story in visible"
+            v-for="(story, index) in visible"
             :key="story.key"
+            :data-last-row-sm="inLastRow(index, 2) || null"
+            :data-last-row-lg="inLastRow(index, 3) || null"
+            class="border-b border-(--border-default) last:border-b-0 sm:border-r sm:max-lg:even:border-r-0 sm:max-lg:data-last-row-sm:border-b-0 lg:nth-[3n]:border-r-0 lg:data-last-row-lg:border-b-0"
           >
             <a
               :href="successCaseLink(story).href"
               :target="successCaseLink(story).external ? '_blank' : undefined"
               :rel="successCaseLink(story).external ? 'noopener' : undefined"
               :aria-label="`Read story: ${story.client.name}${successCaseLink(story).external ? ' (opens in a new tab)' : ''}`"
-              class="group/row grid grid-cols-1 items-center gap-(--spacing-lg) px-(--spacing-xl) py-(--spacing-lg) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-surface-raised) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) motion-reduce:transition-none lg:grid-cols-[3fr_6fr_4fr_3fr]"
+              class="group/card flex h-full flex-col gap-(--spacing-lg) p-(--spacing-xl) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-surface-raised) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) motion-reduce:transition-none"
             >
-              <span class="flex h-6 items-center">
+              <span class="flex h-8 items-center">
                 <ClientMark
                   :client="story.client"
-                  :colored="!DARK_LOCKUP.has(story.client.name)"
-                  mark="h-full w-auto max-w-32 object-contain object-left"
+                  monochrome
+                  mark="h-full w-auto max-w-36 object-contain object-left"
                 />
               </span>
 
-              <span class="max-w-md text-balance text-body-sm text-(--text-muted)">
-                {{ story.description }}
+              <span class="text-overline-sm text-(--text-muted)">
+                {{ story.industry }}
               </span>
 
-              <span class="hidden text-overline-sm text-(--text-muted) lg:block lg:text-center">
-                {{ story.industry }}
+              <span class="text-pretty text-body-sm text-(--text-muted)">
+                {{ story.description }}
               </span>
 
               <span
                 aria-hidden="true"
-                class="flex items-center gap-(--spacing-xxs) text-overline-sm text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance group-hover/row:text-(--text-default) motion-reduce:transition-none lg:justify-self-end"
+                class="mt-auto flex items-center gap-(--spacing-xxs) pt-(--spacing-sm) text-overline-sm text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance group-hover/card:text-(--text-default) motion-reduce:transition-none"
               >
                 Read story
                 <i
-                  class="pi pi-arrow-up-right text-[length:inherit] leading-none transition-[translate] duration-moderate-02 ease-expressive-entrance group-hover/row:-translate-y-0.5 group-hover/row:translate-x-0.5 motion-reduce:transition-none"
+                  class="pi pi-arrow-up-right text-[length:inherit] leading-none transition-[translate] duration-moderate-02 ease-expressive-entrance group-hover/card:-translate-y-0.5 group-hover/card:translate-x-0.5 motion-reduce:transition-none"
                 />
               </span>
             </a>
