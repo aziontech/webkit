@@ -199,6 +199,8 @@ const emitTextUtilities = () => {
  *     `text-primary`, `border-primary` interchangeably.
  *   - `code-sintax-*` tokens are consumer-composed via arbitrary values in code
  *     highlighters and don't need a utility (skipped).
+ *   - `chart-*` tokens are bound to SVG fill/stroke by the chart components; text
+ *     never wears a series color, so no `text-chart-*` utility is emitted (skipped).
  */
 const AXIS_BY_PREFIX = {
   'bg-': { utility: (k) => k, prop: 'background-color' },
@@ -209,6 +211,7 @@ const AXIS_BY_PREFIX = {
 
 const isCodeSintax = (key) => key.startsWith('code-sintax-');
 const isIllustration = (key) => key.startsWith('illustration-');
+const isChart = (key) => key.startsWith('chart-');
 
 const emitSemanticColorUtilities = () => {
   const { light } = compileThemeVars();
@@ -220,7 +223,7 @@ const emitSemanticColorUtilities = () => {
   const emitted = new Set(Object.keys(textsData));
 
   for (const key of keys) {
-    if (isCodeSintax(key) || isIllustration(key)) continue;
+    if (isCodeSintax(key) || isIllustration(key) || isChart(key)) continue;
     const prefixEntry = Object.entries(AXIS_BY_PREFIX).find(([prefix]) =>
       key.startsWith(prefix),
     );

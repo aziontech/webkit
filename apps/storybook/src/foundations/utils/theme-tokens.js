@@ -86,6 +86,13 @@ const SECTIONS = [
     match: (n) => /^--code-sintax-/.test(n)
   },
   {
+    id: 'chart',
+    title: 'Data Viz',
+    description:
+      'Chart colors. Six categorical series in a fixed order plus Other, the chart chrome, the inverse tooltip, a sequential ramp, a diverging pair and status aliases. Marks bind these to SVG fill and stroke; text never wears a series color.',
+    match: (n) => /^--chart-/.test(n)
+  },
+  {
     id: 'other',
     title: 'Other',
     description: 'Additional semantic color tokens.',
@@ -156,19 +163,51 @@ const DESCRIPTIONS = {
   '--code-sintax-comment': 'Comments, and prose rendered inside a code block.',
   '--code-sintax-function': 'Function and method names.',
   '--code-sintax-type': 'Types and classes.',
-  '--code-sintax-string': 'String literals.'
+  '--code-sintax-string': 'String literals.',
+
+  '--chart-series-1': 'First categorical series. Assigned in declaration order, never cycled.',
+  '--chart-series-2': 'Second categorical series.',
+  '--chart-series-3': 'Third categorical series.',
+  '--chart-series-4': 'Fourth categorical series.',
+  '--chart-series-5': 'Fifth categorical series.',
+  '--chart-series-6': 'Sixth categorical series. A seventh folds into Other.',
+  '--chart-series-other': 'The folded tail past six series, and de-emphasised context.',
+  '--chart-grid': 'Hairline gridlines inside the plot.',
+  '--chart-axis': 'The baseline and axis rule.',
+  '--chart-label': 'Tick and axis labels.',
+  '--chart-crosshair': 'The vertical hairline that tracks the pointer.',
+  '--chart-tooltip-bg': 'The inverse tooltip surface. Every series clears 3:1 on it.',
+  '--chart-tooltip-text': 'Values and labels inside the tooltip.',
+  '--chart-tooltip-muted': 'Secondary text inside the tooltip.',
+  '--chart-sequential-1': 'Sequential ramp, lowest magnitude.',
+  '--chart-sequential-2': 'Sequential ramp, step 2.',
+  '--chart-sequential-3': 'Sequential ramp, step 3.',
+  '--chart-sequential-4': 'Sequential ramp, step 4.',
+  '--chart-sequential-5': 'Sequential ramp, step 5.',
+  '--chart-sequential-6': 'Sequential ramp, step 6.',
+  '--chart-sequential-7': 'Sequential ramp, highest magnitude.',
+  '--chart-diverging-negative': 'Diverging scale, below the midpoint.',
+  '--chart-diverging-neutral': 'Diverging scale midpoint. Reads as nothing.',
+  '--chart-diverging-positive': 'Diverging scale, above the midpoint.',
+  '--chart-status-success': 'A series whose color means healthy.',
+  '--chart-status-warning': 'A series whose color means degraded.',
+  '--chart-status-danger': 'A series whose color means failed or blocked.',
+  '--chart-status-info': 'A series whose color means informational.'
 }
 
 // A token's swatch style: filled by default; borders draw an outline; foreground
 // (text / -contrast) roles render an "Aa" glyph on the surface (or on their base).
 function swatchKind(name) {
   if (/^--border-/.test(name) || /-border$/.test(name) || name === '--ring-color') return 'border'
+  if (/^--chart-(grid|axis|crosshair)$/.test(name)) return 'border'
   if (/^--text-/.test(name) || /-contrast$/.test(name) || /^--code-sintax-/.test(name)) return 'text'
+  if (/^--chart-(label|tooltip-text|tooltip-muted)$/.test(name)) return 'text'
   return 'fill'
 }
 
 // For -contrast foregrounds, back the glyph with the base fill it sits on.
 function backing(name) {
+  if (/^--chart-tooltip-(text|muted)$/.test(name)) return 'var(--chart-tooltip-bg)'
   const base = name.replace(/-contrast$/, '')
   if (base !== name) return `var(${base})`
   return null
@@ -194,3 +233,5 @@ export function buildThemeColorGroups() {
 }
 
 export const themeColorGroups = buildThemeColorGroups()
+
+export const chartColorGroup = themeColorGroups.find((group) => group.id === 'chart')

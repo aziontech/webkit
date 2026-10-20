@@ -1043,6 +1043,34 @@
   --illustration-warning-surface: #FCE49C;
   --illustration-info: #004799;
   --illustration-info-surface: #CCE4FF;
+  --chart-series-1: #D94A03;
+  --chart-series-3: #16833F;
+  --chart-series-4: #E51A1A;
+  --chart-series-6: #947105;
+  --chart-series-other: #808080;
+  --chart-grid: #ECECEC;
+  --chart-axis: #D1D1D1;
+  --chart-label: #535353;
+  --chart-crosshair: #535353;
+  --chart-tooltip-bg: #141414;
+  --chart-tooltip-text: #FAFAFA;
+  --chart-status-success: #12542B;
+  --chart-status-warning: #634B03;
+  --chart-status-danger: #891010;
+  --chart-status-info: #004799;
+  --chart-series-2: #005FCC;
+  --chart-series-5: #625BD5;
+  --chart-tooltip-muted: #B2B2B2;
+  --chart-sequential-1: #CCE4FF;
+  --chart-sequential-2: #99C9FF;
+  --chart-sequential-3: #66ADFF;
+  --chart-sequential-4: #3392FF;
+  --chart-sequential-5: #0072F5;
+  --chart-sequential-6: #005FCC;
+  --chart-sequential-7: #004799;
+  --chart-diverging-negative: #B71515;
+  --chart-diverging-neutral: #ECECEC;
+  --chart-diverging-positive: #005FCC;
 }
 
 [data-theme=dark], .dark, .azion.azion-dark {
@@ -1141,6 +1169,34 @@
   --illustration-warning-surface: #312602;
   --illustration-info: #66ADFF;
   --illustration-info-surface: #001833;
+  --chart-series-1: #D94A03;
+  --chart-series-3: #16833F;
+  --chart-series-4: #E51A1A;
+  --chart-series-6: #947105;
+  --chart-series-other: #808080;
+  --chart-grid: #242424;
+  --chart-axis: #2B2B2B;
+  --chart-label: #808080;
+  --chart-crosshair: #808080;
+  --chart-tooltip-bg: #FAFAFA;
+  --chart-tooltip-text: #000000;
+  --chart-status-success: #52E086;
+  --chart-status-warning: #F7BD08;
+  --chart-status-danger: #ED7878;
+  --chart-status-info: #66ADFF;
+  --chart-series-2: #0072F5;
+  --chart-series-5: #756FE5;
+  --chart-tooltip-muted: #535353;
+  --chart-sequential-1: #001833;
+  --chart-sequential-2: #003066;
+  --chart-sequential-3: #004799;
+  --chart-sequential-4: #005FCC;
+  --chart-sequential-5: #0072F5;
+  --chart-sequential-6: #3392FF;
+  --chart-sequential-7: #66ADFF;
+  --chart-diverging-negative: #E74B4B;
+  --chart-diverging-neutral: #2B2B2B;
+  --chart-diverging-positive: #3392FF;
 }
 
 @property --illustration-rim-angle {

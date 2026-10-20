@@ -299,6 +299,7 @@ function build() {
 
   function parentCompound(subpath) {
     if (subpath.endsWith('-root')) return null
+    if (compoundRoots.includes(subpath)) return null
     for (const c of compoundByLength) {
       if (subpath !== c && subpath.startsWith(`${c}-`)) return c
     }

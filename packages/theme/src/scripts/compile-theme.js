@@ -2,7 +2,8 @@
  * Compile semantic theme tokens into a light/dark CSS variables stylesheet.
  *
  * Resolves `tokenRef(...)` aliases from `tokens/theme/*` (primary, secondary,
- * accent, surfaces, background, border, text, ring, code-sintax, feedback/*)
+ * accent, surfaces, background, border, text, ring, code-sintax, feedback/*,
+ * illustration, chart)
  * against the
  * primitives + brand + (pre-resolved) surfaces. Emits two blocks (light + dark).
  */
@@ -14,6 +15,7 @@ import {
 import { accent } from '../tokens/theme/accent.js'
 import { background } from '../tokens/theme/background.js'
 import { border } from '../tokens/theme/border.js'
+import { chart } from '../tokens/theme/chart.js'
 import { codeSintax } from '../tokens/theme/code-sintax.js'
 import { danger } from '../tokens/theme/feedback/danger.js'
 import { info } from '../tokens/theme/feedback/info.js'
@@ -114,7 +116,8 @@ const compileVariant = (variant, unresolved) => {
 
   Object.assign(
     vars,
-    resolveGroup(illustration[variant], surfacesResolved, variant, unresolved, semanticResolved)
+    resolveGroup(illustration[variant], surfacesResolved, variant, unresolved, semanticResolved),
+    resolveGroup(chart[variant], surfacesResolved, variant, unresolved, semanticResolved)
   )
   return vars
 }

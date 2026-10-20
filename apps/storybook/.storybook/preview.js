@@ -91,7 +91,7 @@ export const parameters = {
         'Foundations',
         [
           'Design Tokens',
-          ['Color', 'Theme', 'Typography', 'Layout', 'Motion'],
+          ['Color', 'Theme', 'Data Viz', 'Typography', 'Layout', 'Motion'],
           'Assets',
           ['Illustrations', 'Logos', 'Icons', 'Product Widgets']
         ],

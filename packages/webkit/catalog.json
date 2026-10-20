@@ -105,6 +105,34 @@
       "--breakpoint-md",
       "--breakpoint-sm",
       "--breakpoint-xl",
+      "--chart-axis",
+      "--chart-crosshair",
+      "--chart-diverging-negative",
+      "--chart-diverging-neutral",
+      "--chart-diverging-positive",
+      "--chart-grid",
+      "--chart-label",
+      "--chart-sequential-1",
+      "--chart-sequential-2",
+      "--chart-sequential-3",
+      "--chart-sequential-4",
+      "--chart-sequential-5",
+      "--chart-sequential-6",
+      "--chart-sequential-7",
+      "--chart-series-1",
+      "--chart-series-2",
+      "--chart-series-3",
+      "--chart-series-4",
+      "--chart-series-5",
+      "--chart-series-6",
+      "--chart-series-other",
+      "--chart-status-danger",
+      "--chart-status-info",
+      "--chart-status-success",
+      "--chart-status-warning",
+      "--chart-tooltip-bg",
+      "--chart-tooltip-muted",
+      "--chart-tooltip-text",
       "--code-sintax-comment",
       "--code-sintax-function",
       "--code-sintax-identifier",
@@ -936,6 +964,36 @@
         "--breakpoint-md",
         "--breakpoint-sm",
         "--breakpoint-xl"
+      ],
+      "chart": [
+        "--chart-axis",
+        "--chart-crosshair",
+        "--chart-diverging-negative",
+        "--chart-diverging-neutral",
+        "--chart-diverging-positive",
+        "--chart-grid",
+        "--chart-label",
+        "--chart-sequential-1",
+        "--chart-sequential-2",
+        "--chart-sequential-3",
+        "--chart-sequential-4",
+        "--chart-sequential-5",
+        "--chart-sequential-6",
+        "--chart-sequential-7",
+        "--chart-series-1",
+        "--chart-series-2",
+        "--chart-series-3",
+        "--chart-series-4",
+        "--chart-series-5",
+        "--chart-series-6",
+        "--chart-series-other",
+        "--chart-status-danger",
+        "--chart-status-info",
+        "--chart-status-success",
+        "--chart-status-warning",
+        "--chart-tooltip-bg",
+        "--chart-tooltip-muted",
+        "--chart-tooltip-text"
       ],
       "code": [
         "--code-sintax-comment",
@@ -2443,6 +2501,991 @@
         }
       ],
       "purpose": "A primary command button visually joined to a chevron toggle that opens an overlay menu of related actions defined by a `model` array. The primary button runs the default action; the joined toggle composes `navigation/dropdown` to present the remaining actions. Opt into `updateLabelOnSelect` to have the primary segment mirror the last-chosen menu action (label + icon), turning the control into a \"default is the last selection\" pattern; the primary `click` then reports that mirrored action as its second argument, so a single handler can run whichever action is active. Use it when one action is the default and related actions belong in an attached menu; for a single action use `Button`, and for a standalone menu use `Dropdown`."
+    },
+    "chart": {
+      "import": "@aziontech/webkit/chart",
+      "target": "./src/components/chart/chart/index.ts",
+      "kind": "component",
+      "compoundRoot": true,
+      "treeShakeableImport": "@aziontech/webkit/chart-root",
+      "subcomponents": [
+        "@aziontech/webkit/chart-area",
+        "@aziontech/webkit/chart-axis",
+        "@aziontech/webkit/chart-bar",
+        "@aziontech/webkit/chart-crosshair",
+        "@aziontech/webkit/chart-grid",
+        "@aziontech/webkit/chart-legend",
+        "@aziontech/webkit/chart-line",
+        "@aziontech/webkit/chart-tooltip"
+      ],
+      "category": "chart",
+      "structure": "composition",
+      "status": "approved",
+      "props": [
+        {
+          "name": "series",
+          "type": "ChartSeries[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "Series to plot. The first six take the fixed categorical slots in order; the rest fold into Other."
+        },
+        {
+          "name": "labels",
+          "type": "ChartLabel[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "One category label per index: a string, a number, or a Date."
+        },
+        {
+          "name": "orientation",
+          "type": "'vertical' | 'horizontal'",
+          "default": "'vertical'",
+          "required": "false",
+          "doc": "Value axis direction. Horizontal lays categories down the side, for ordered bars."
+        },
+        {
+          "name": "min",
+          "type": "number",
+          "default": "0",
+          "required": "false",
+          "doc": "Floor of the value axis. Marks grow from one baseline."
+        },
+        {
+          "name": "max",
+          "type": "number",
+          "default": "undefined",
+          "required": "false",
+          "doc": "Ceiling of the value axis. When absent, the nice ceiling of the visible data."
+        },
+        {
+          "name": "cap",
+          "type": "number",
+          "default": "6",
+          "required": "false",
+          "doc": "Series kept before the rest fold into Other."
+        },
+        {
+          "name": "otherLabel",
+          "type": "string",
+          "default": "'Other'",
+          "required": "false",
+          "doc": "Name of the folded series."
+        },
+        {
+          "name": "formatValue",
+          "type": "(value: number) => string",
+          "default": "formatCompact",
+          "required": "false",
+          "doc": "Formats ticks, tooltip values and legend totals."
+        },
+        {
+          "name": "formatLabel",
+          "type": "(label: ChartLabel) => string",
+          "default": "formatLabel",
+          "required": "false",
+          "doc": "Formats category labels on the axis and in the tooltip."
+        },
+        {
+          "name": "height",
+          "type": "number",
+          "default": "240",
+          "required": "false",
+          "doc": "Minimum plot height in pixels; the plot grows to fill a taller container."
+        },
+        {
+          "name": "loading",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "Renders a Skeleton sized to the plot and suppresses interaction."
+        },
+        {
+          "name": "refetching",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "Holds the previous render at reduced opacity while new data loads."
+        },
+        {
+          "name": "error",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Error message; when set, the plot renders a danger Message instead of marks."
+        },
+        {
+          "name": "emptyTitle",
+          "type": "string",
+          "default": "'No data available'",
+          "required": "false",
+          "doc": "Title of the empty state shown when no series has a value."
+        },
+        {
+          "name": "tableView",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "Shows the data table in place of the marks. The table is always present for assistive tech."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name of the chart when it is not inside a ChartCard with a title."
+        }
+      ],
+      "events": [
+        {
+          "name": "point-click",
+          "payload": "(event: MouseEvent | KeyboardEvent, point: ChartPoint)",
+          "notes": "Click on the plot, or Enter / Space on the focused chart, at the active index. `point` carries the index, the label and every visible series value."
+        },
+        {
+          "name": "legend-toggle",
+          "payload": "(event: MouseEvent, series: ChartSeries)",
+          "notes": "A legend entry toggled; `series` is the consumer's own series object."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The parts: Grid, Axis, Line, Area, Bar, Crosshair, Tooltip, Legend, in paint order."
+        },
+        {
+          "name": "empty",
+          "scope": "—",
+          "notes": "Replaces the default EmptyState."
+        },
+        {
+          "name": "error",
+          "scope": "—",
+          "notes": "Replaces the default danger Message."
+        }
+      ],
+      "purpose": "A cartesian chart — lines, areas and bars over one category axis — composed from parts the consumer places by hand. The root owns the data model (series + labels), the scales, the hover/keyboard state and the loading / empty / error surface; each part (`Chart.Grid`, `Chart.Axis`, `Chart.Line`, `Chart.Area`, `Chart.Bar`, `Chart.Crosshair`, `Chart.Tooltip`, `Chart.Legend`) reads that state through context, so the consumer wires nothing. Rendering is in-house SVG and every color comes from the `--chart-*` role, so a chart re-themes with no per-theme code and adds no charting dependency.",
+      "useWhen": [
+        "A measure over time — requests, threats, bandwidth per bucket — as one or more lines or areas.",
+        "Comparing magnitudes across ordered categories — top countries, attack families — as vertical or horizontal bars.",
+        "Parts of a total over time — allowed / blocked / logged — as stacked areas or stacked bars.",
+        "Any chart that must read the same as Azion Console Real-Time Metrics: crosshair, one tooltip listing every series, legend toggles, totals."
+      ],
+      "avoidWhen": [
+        "A single headline number with a delta → use `stat-tile`.",
+        "Share of a small whole (six slices or fewer) with the total in the center → use `donut-chart`.",
+        "More than about seven classes that all carry meaning → use `table`; color stops separating past the six series slots.",
+        "Two measures on different scales → two charts side by side; this component never draws a second value axis."
+      ],
+      "related": [
+        "chart-card` — the box a dashboard chart sits in: title, description, controls, drag and resize.",
+        "donut-chart` — part-to-whole at a glance, sharing this chart's palette, legend and states.",
+        "stat-tile` — one figure with a delta and a sparkline, for a KPI row above the charts.",
+        "table` — the exact numbers; a chart's own table view is the accessible twin, a `table` is the primary surface."
+      ],
+      "bestPractices": [
+        "Pass series in a stable order: the slot follows the series position, so color follows the entity. A filter that hides a series keeps the others' colors.",
+        "Keep one value axis. Index two measures to a common base or split them into two charts.",
+        "Let the legend carry identity for two or more series; a single series needs no legend, its title names it.",
+        "Mark a series whose color means a state (blocked, error rate) with `color: 'danger'` and never reuse a status color as series 4.",
+        "Keep filters and the time range in one row above the dashboard, never inside a chart.",
+        "While data reloads, set `refetching` so the previous render holds at reduced opacity instead of flashing a skeleton."
+      ]
+    },
+    "chart-root": {
+      "import": "@aziontech/webkit/chart-root",
+      "target": "./src/components/chart/chart/chart.vue",
+      "kind": "root",
+      "rootOf": "chart",
+      "treeShakeableImport": "@aziontech/webkit/chart-root",
+      "category": "chart",
+      "structure": "composition",
+      "status": "approved",
+      "props": [
+        {
+          "name": "series",
+          "type": "ChartSeries[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "Series to plot. The first six take the fixed categorical slots in order; the rest fold into Other."
+        },
+        {
+          "name": "labels",
+          "type": "ChartLabel[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "One category label per index: a string, a number, or a Date."
+        },
+        {
+          "name": "orientation",
+          "type": "'vertical' | 'horizontal'",
+          "default": "'vertical'",
+          "required": "false",
+          "doc": "Value axis direction. Horizontal lays categories down the side, for ordered bars."
+        },
+        {
+          "name": "min",
+          "type": "number",
+          "default": "0",
+          "required": "false",
+          "doc": "Floor of the value axis. Marks grow from one baseline."
+        },
+        {
+          "name": "max",
+          "type": "number",
+          "default": "undefined",
+          "required": "false",
+          "doc": "Ceiling of the value axis. When absent, the nice ceiling of the visible data."
+        },
+        {
+          "name": "cap",
+          "type": "number",
+          "default": "6",
+          "required": "false",
+          "doc": "Series kept before the rest fold into Other."
+        },
+        {
+          "name": "otherLabel",
+          "type": "string",
+          "default": "'Other'",
+          "required": "false",
+          "doc": "Name of the folded series."
+        },
+        {
+          "name": "formatValue",
+          "type": "(value: number) => string",
+          "default": "formatCompact",
+          "required": "false",
+          "doc": "Formats ticks, tooltip values and legend totals."
+        },
+        {
+          "name": "formatLabel",
+          "type": "(label: ChartLabel) => string",
+          "default": "formatLabel",
+          "required": "false",
+          "doc": "Formats category labels on the axis and in the tooltip."
+        },
+        {
+          "name": "height",
+          "type": "number",
+          "default": "240",
+          "required": "false",
+          "doc": "Minimum plot height in pixels; the plot grows to fill a taller container."
+        },
+        {
+          "name": "loading",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "Renders a Skeleton sized to the plot and suppresses interaction."
+        },
+        {
+          "name": "refetching",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "Holds the previous render at reduced opacity while new data loads."
+        },
+        {
+          "name": "error",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Error message; when set, the plot renders a danger Message instead of marks."
+        },
+        {
+          "name": "emptyTitle",
+          "type": "string",
+          "default": "'No data available'",
+          "required": "false",
+          "doc": "Title of the empty state shown when no series has a value."
+        },
+        {
+          "name": "tableView",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "Shows the data table in place of the marks. The table is always present for assistive tech."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name of the chart when it is not inside a ChartCard with a title."
+        }
+      ],
+      "events": [
+        {
+          "name": "point-click",
+          "payload": "(event: MouseEvent | KeyboardEvent, point: ChartPoint)",
+          "notes": "Click on the plot, or Enter / Space on the focused chart, at the active index. `point` carries the index, the label and every visible series value."
+        },
+        {
+          "name": "legend-toggle",
+          "payload": "(event: MouseEvent, series: ChartSeries)",
+          "notes": "A legend entry toggled; `series` is the consumer's own series object."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The parts: Grid, Axis, Line, Area, Bar, Crosshair, Tooltip, Legend, in paint order."
+        },
+        {
+          "name": "empty",
+          "scope": "—",
+          "notes": "Replaces the default EmptyState."
+        },
+        {
+          "name": "error",
+          "scope": "—",
+          "notes": "Replaces the default danger Message."
+        }
+      ],
+      "purpose": "A cartesian chart — lines, areas and bars over one category axis — composed from parts the consumer places by hand. The root owns the data model (series + labels), the scales, the hover/keyboard state and the loading / empty / error surface; each part (`Chart.Grid`, `Chart.Axis`, `Chart.Line`, `Chart.Area`, `Chart.Bar`, `Chart.Crosshair`, `Chart.Tooltip`, `Chart.Legend`) reads that state through context, so the consumer wires nothing. Rendering is in-house SVG and every color comes from the `--chart-*` role, so a chart re-themes with no per-theme code and adds no charting dependency.",
+      "useWhen": [
+        "A measure over time — requests, threats, bandwidth per bucket — as one or more lines or areas.",
+        "Comparing magnitudes across ordered categories — top countries, attack families — as vertical or horizontal bars.",
+        "Parts of a total over time — allowed / blocked / logged — as stacked areas or stacked bars.",
+        "Any chart that must read the same as Azion Console Real-Time Metrics: crosshair, one tooltip listing every series, legend toggles, totals."
+      ],
+      "avoidWhen": [
+        "A single headline number with a delta → use `stat-tile`.",
+        "Share of a small whole (six slices or fewer) with the total in the center → use `donut-chart`.",
+        "More than about seven classes that all carry meaning → use `table`; color stops separating past the six series slots.",
+        "Two measures on different scales → two charts side by side; this component never draws a second value axis."
+      ],
+      "related": [
+        "chart-card` — the box a dashboard chart sits in: title, description, controls, drag and resize.",
+        "donut-chart` — part-to-whole at a glance, sharing this chart's palette, legend and states.",
+        "stat-tile` — one figure with a delta and a sparkline, for a KPI row above the charts.",
+        "table` — the exact numbers; a chart's own table view is the accessible twin, a `table` is the primary surface."
+      ],
+      "bestPractices": [
+        "Pass series in a stable order: the slot follows the series position, so color follows the entity. A filter that hides a series keeps the others' colors.",
+        "Keep one value axis. Index two measures to a common base or split them into two charts.",
+        "Let the legend carry identity for two or more series; a single series needs no legend, its title names it.",
+        "Mark a series whose color means a state (blocked, error rate) with `color: 'danger'` and never reuse a status color as series 4.",
+        "Keep filters and the time range in one row above the dashboard, never inside a chart.",
+        "While data reloads, set `refetching` so the previous render holds at reduced opacity instead of flashing a skeleton."
+      ]
+    },
+    "chart-area": {
+      "import": "@aziontech/webkit/chart-area",
+      "target": "./src/components/chart/chart/chart-area/chart-area.vue",
+      "kind": "subcomponent",
+      "parent": "chart",
+      "treeShakeableImport": "@aziontech/webkit/chart-area"
+    },
+    "chart-axis": {
+      "import": "@aziontech/webkit/chart-axis",
+      "target": "./src/components/chart/chart/chart-axis/chart-axis.vue",
+      "kind": "subcomponent",
+      "parent": "chart",
+      "treeShakeableImport": "@aziontech/webkit/chart-axis"
+    },
+    "chart-bar": {
+      "import": "@aziontech/webkit/chart-bar",
+      "target": "./src/components/chart/chart/chart-bar/chart-bar.vue",
+      "kind": "subcomponent",
+      "parent": "chart",
+      "treeShakeableImport": "@aziontech/webkit/chart-bar"
+    },
+    "chart-crosshair": {
+      "import": "@aziontech/webkit/chart-crosshair",
+      "target": "./src/components/chart/chart/chart-crosshair/chart-crosshair.vue",
+      "kind": "subcomponent",
+      "parent": "chart",
+      "treeShakeableImport": "@aziontech/webkit/chart-crosshair"
+    },
+    "chart-grid": {
+      "import": "@aziontech/webkit/chart-grid",
+      "target": "./src/components/chart/chart/chart-grid/chart-grid.vue",
+      "kind": "subcomponent",
+      "parent": "chart",
+      "treeShakeableImport": "@aziontech/webkit/chart-grid"
+    },
+    "chart-legend": {
+      "import": "@aziontech/webkit/chart-legend",
+      "target": "./src/components/chart/chart/chart-legend/chart-legend.vue",
+      "kind": "subcomponent",
+      "parent": "chart",
+      "treeShakeableImport": "@aziontech/webkit/chart-legend"
+    },
+    "chart-line": {
+      "import": "@aziontech/webkit/chart-line",
+      "target": "./src/components/chart/chart/chart-line/chart-line.vue",
+      "kind": "subcomponent",
+      "parent": "chart",
+      "treeShakeableImport": "@aziontech/webkit/chart-line"
+    },
+    "chart-tooltip": {
+      "import": "@aziontech/webkit/chart-tooltip",
+      "target": "./src/components/chart/chart/chart-tooltip/chart-tooltip.vue",
+      "kind": "subcomponent",
+      "parent": "chart",
+      "treeShakeableImport": "@aziontech/webkit/chart-tooltip"
+    },
+    "chart-card": {
+      "import": "@aziontech/webkit/chart-card",
+      "target": "./src/components/chart/chart-card/index.ts",
+      "kind": "component",
+      "compoundRoot": true,
+      "treeShakeableImport": "@aziontech/webkit/chart-card-root",
+      "subcomponents": [
+        "@aziontech/webkit/chart-card-content",
+        "@aziontech/webkit/chart-card-controls",
+        "@aziontech/webkit/chart-card-description",
+        "@aziontech/webkit/chart-card-drag-handle",
+        "@aziontech/webkit/chart-card-footer",
+        "@aziontech/webkit/chart-card-header",
+        "@aziontech/webkit/chart-card-resize-handle",
+        "@aziontech/webkit/chart-card-title"
+      ],
+      "category": "chart",
+      "structure": "composition",
+      "status": "approved",
+      "props": [
+        {
+          "name": "draggable",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "Shows the drag handle and lets the card be dragged to a new position."
+        },
+        {
+          "name": "resizable",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "Shows the resize handle."
+        },
+        {
+          "name": "minSpan",
+          "type": "number",
+          "default": "3",
+          "required": "false",
+          "doc": "Fewest grid columns the card may span."
+        },
+        {
+          "name": "maxSpan",
+          "type": "number",
+          "default": "12",
+          "required": "false",
+          "doc": "Most grid columns the card may span."
+        },
+        {
+          "name": "minHeight",
+          "type": "number",
+          "default": "240",
+          "required": "false",
+          "doc": "Smallest height in pixels the resize handle allows."
+        },
+        {
+          "name": "maxHeight",
+          "type": "number",
+          "default": "960",
+          "required": "false",
+          "doc": "Largest height in pixels the resize handle allows."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name of the card when it has no title."
+        }
+      ],
+      "events": [
+        {
+          "name": "move",
+          "payload": "(event: KeyboardEvent, direction: 'up' | 'down' | 'left' | 'right')",
+          "notes": "An arrow key on the drag handle; the page moves the card in its own order."
+        },
+        {
+          "name": "drag-start",
+          "payload": "(event: DragEvent)",
+          "notes": "Native drag began from the handle; the page records the source."
+        },
+        {
+          "name": "drag-end",
+          "payload": "(event: DragEvent)",
+          "notes": "Native drag ended, dropped or cancelled."
+        },
+        {
+          "name": "resize-start",
+          "payload": "(event: PointerEvent)",
+          "notes": "A pointer resize began on the handle."
+        },
+        {
+          "name": "resize-end",
+          "payload": "(event: PointerEvent | KeyboardEvent)",
+          "notes": "A resize finished: pointer released, or a keyboard nudge committed."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The parts: Header, Description, Content, Footer, ResizeHandle."
+        }
+      ],
+      "purpose": "The box a dashboard chart lives in: a header with the title, the description and a controls zone, a content area padded or flush, an optional footer, and two optional handles that let the person move the card and resize it on a dashboard grid. The span (grid columns) and height are two-way models applied through custom properties, so the consumer's grid lays cards out with no script, and the reorder state stays with the page that owns the grid.",
+      "useWhen": [
+        "Every chart on a metrics dashboard, so title, description, menu and size read the same everywhere.",
+        "A dashboard the person arranges: drag a card to reorder it, drag a corner to make it wider or taller."
+      ],
+      "avoidWhen": [
+        "A KPI figure → use `stat-tile`, which is its own surface.",
+        "A general content card with no chart → use `card-box`.",
+        "A chart inline in a page section with its own heading → render `chart` alone."
+      ],
+      "related": [
+        "chart`, `donut-chart` — what goes inside the content area; a chart inside a card takes its accessible name from the card title.",
+        "card-box` — the general-purpose card; ChartCard shares its surface tokens.",
+        "dropdown` — the \"More options\" menu (Copy query, Export CSV) composed into the controls zone."
+      ],
+      "bestPractices": [
+        "Put the aggregation tag (Sum, Average) and the variation tag in `ChartCard.Controls`, before the menu.",
+        "Keep filters and the time range above the grid, never inside a card.",
+        "Use `flush` content for a plot that should run edge to edge, padded for everything else.",
+        "Give the page's grid `--chart-grid-columns` per breakpoint so a 6-column card never overflows a 1-column phone layout.",
+        "Persist `span` and `height` with the dashboard layout; they are plain numbers."
+      ]
+    },
+    "chart-card-root": {
+      "import": "@aziontech/webkit/chart-card-root",
+      "target": "./src/components/chart/chart-card/chart-card.vue",
+      "kind": "root",
+      "rootOf": "chart-card",
+      "treeShakeableImport": "@aziontech/webkit/chart-card-root",
+      "category": "chart",
+      "structure": "composition",
+      "status": "approved",
+      "props": [
+        {
+          "name": "draggable",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "Shows the drag handle and lets the card be dragged to a new position."
+        },
+        {
+          "name": "resizable",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "Shows the resize handle."
+        },
+        {
+          "name": "minSpan",
+          "type": "number",
+          "default": "3",
+          "required": "false",
+          "doc": "Fewest grid columns the card may span."
+        },
+        {
+          "name": "maxSpan",
+          "type": "number",
+          "default": "12",
+          "required": "false",
+          "doc": "Most grid columns the card may span."
+        },
+        {
+          "name": "minHeight",
+          "type": "number",
+          "default": "240",
+          "required": "false",
+          "doc": "Smallest height in pixels the resize handle allows."
+        },
+        {
+          "name": "maxHeight",
+          "type": "number",
+          "default": "960",
+          "required": "false",
+          "doc": "Largest height in pixels the resize handle allows."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name of the card when it has no title."
+        }
+      ],
+      "events": [
+        {
+          "name": "move",
+          "payload": "(event: KeyboardEvent, direction: 'up' | 'down' | 'left' | 'right')",
+          "notes": "An arrow key on the drag handle; the page moves the card in its own order."
+        },
+        {
+          "name": "drag-start",
+          "payload": "(event: DragEvent)",
+          "notes": "Native drag began from the handle; the page records the source."
+        },
+        {
+          "name": "drag-end",
+          "payload": "(event: DragEvent)",
+          "notes": "Native drag ended, dropped or cancelled."
+        },
+        {
+          "name": "resize-start",
+          "payload": "(event: PointerEvent)",
+          "notes": "A pointer resize began on the handle."
+        },
+        {
+          "name": "resize-end",
+          "payload": "(event: PointerEvent | KeyboardEvent)",
+          "notes": "A resize finished: pointer released, or a keyboard nudge committed."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "The parts: Header, Description, Content, Footer, ResizeHandle."
+        }
+      ],
+      "purpose": "The box a dashboard chart lives in: a header with the title, the description and a controls zone, a content area padded or flush, an optional footer, and two optional handles that let the person move the card and resize it on a dashboard grid. The span (grid columns) and height are two-way models applied through custom properties, so the consumer's grid lays cards out with no script, and the reorder state stays with the page that owns the grid.",
+      "useWhen": [
+        "Every chart on a metrics dashboard, so title, description, menu and size read the same everywhere.",
+        "A dashboard the person arranges: drag a card to reorder it, drag a corner to make it wider or taller."
+      ],
+      "avoidWhen": [
+        "A KPI figure → use `stat-tile`, which is its own surface.",
+        "A general content card with no chart → use `card-box`.",
+        "A chart inline in a page section with its own heading → render `chart` alone."
+      ],
+      "related": [
+        "chart`, `donut-chart` — what goes inside the content area; a chart inside a card takes its accessible name from the card title.",
+        "card-box` — the general-purpose card; ChartCard shares its surface tokens.",
+        "dropdown` — the \"More options\" menu (Copy query, Export CSV) composed into the controls zone."
+      ],
+      "bestPractices": [
+        "Put the aggregation tag (Sum, Average) and the variation tag in `ChartCard.Controls`, before the menu.",
+        "Keep filters and the time range above the grid, never inside a card.",
+        "Use `flush` content for a plot that should run edge to edge, padded for everything else.",
+        "Give the page's grid `--chart-grid-columns` per breakpoint so a 6-column card never overflows a 1-column phone layout.",
+        "Persist `span` and `height` with the dashboard layout; they are plain numbers."
+      ]
+    },
+    "chart-card-content": {
+      "import": "@aziontech/webkit/chart-card-content",
+      "target": "./src/components/chart/chart-card/chart-card-content/chart-card-content.vue",
+      "kind": "subcomponent",
+      "parent": "chart-card",
+      "treeShakeableImport": "@aziontech/webkit/chart-card-content"
+    },
+    "chart-card-controls": {
+      "import": "@aziontech/webkit/chart-card-controls",
+      "target": "./src/components/chart/chart-card/chart-card-controls/chart-card-controls.vue",
+      "kind": "subcomponent",
+      "parent": "chart-card",
+      "treeShakeableImport": "@aziontech/webkit/chart-card-controls"
+    },
+    "chart-card-description": {
+      "import": "@aziontech/webkit/chart-card-description",
+      "target": "./src/components/chart/chart-card/chart-card-description/chart-card-description.vue",
+      "kind": "subcomponent",
+      "parent": "chart-card",
+      "treeShakeableImport": "@aziontech/webkit/chart-card-description"
+    },
+    "chart-card-drag-handle": {
+      "import": "@aziontech/webkit/chart-card-drag-handle",
+      "target": "./src/components/chart/chart-card/chart-card-drag-handle/chart-card-drag-handle.vue",
+      "kind": "subcomponent",
+      "parent": "chart-card",
+      "treeShakeableImport": "@aziontech/webkit/chart-card-drag-handle"
+    },
+    "chart-card-footer": {
+      "import": "@aziontech/webkit/chart-card-footer",
+      "target": "./src/components/chart/chart-card/chart-card-footer/chart-card-footer.vue",
+      "kind": "subcomponent",
+      "parent": "chart-card",
+      "treeShakeableImport": "@aziontech/webkit/chart-card-footer"
+    },
+    "chart-card-header": {
+      "import": "@aziontech/webkit/chart-card-header",
+      "target": "./src/components/chart/chart-card/chart-card-header/chart-card-header.vue",
+      "kind": "subcomponent",
+      "parent": "chart-card",
+      "treeShakeableImport": "@aziontech/webkit/chart-card-header"
+    },
+    "chart-card-resize-handle": {
+      "import": "@aziontech/webkit/chart-card-resize-handle",
+      "target": "./src/components/chart/chart-card/chart-card-resize-handle/chart-card-resize-handle.vue",
+      "kind": "subcomponent",
+      "parent": "chart-card",
+      "treeShakeableImport": "@aziontech/webkit/chart-card-resize-handle"
+    },
+    "chart-card-title": {
+      "import": "@aziontech/webkit/chart-card-title",
+      "target": "./src/components/chart/chart-card/chart-card-title/chart-card-title.vue",
+      "kind": "subcomponent",
+      "parent": "chart-card",
+      "treeShakeableImport": "@aziontech/webkit/chart-card-title"
+    },
+    "donut-chart": {
+      "import": "@aziontech/webkit/donut-chart",
+      "target": "./src/components/chart/donut-chart/donut-chart.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/donut-chart",
+      "category": "chart",
+      "structure": "monolithic",
+      "status": "approved",
+      "props": [
+        {
+          "name": "series",
+          "type": "ChartSeries[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "One slice per series; a slice is the sum of its values. The first six take the categorical slots, the rest fold into Other."
+        },
+        {
+          "name": "kind",
+          "type": "'donut' | 'pie'",
+          "default": "'donut'",
+          "required": "false",
+          "doc": "Ring or solid disc."
+        },
+        {
+          "name": "size",
+          "type": "'small' | 'medium' | 'large'",
+          "default": "'medium'",
+          "required": "false",
+          "doc": "Diameter of the ring: 128, 176 or 240 pixels."
+        },
+        {
+          "name": "cap",
+          "type": "number",
+          "default": "6",
+          "required": "false",
+          "doc": "Slices kept before the rest fold into Other."
+        },
+        {
+          "name": "otherLabel",
+          "type": "string",
+          "default": "'Other'",
+          "required": "false",
+          "doc": "Name of the folded slice."
+        },
+        {
+          "name": "totalLabel",
+          "type": "string",
+          "default": "'Total'",
+          "required": "false",
+          "doc": "Caption under the total in the center."
+        },
+        {
+          "name": "formatValue",
+          "type": "(value: number) => string",
+          "default": "formatCompact",
+          "required": "false",
+          "doc": "Formats the center value and legend values."
+        },
+        {
+          "name": "loading",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "Renders a circular Skeleton and suppresses interaction."
+        },
+        {
+          "name": "refetching",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "Holds the previous render at reduced opacity while new data loads."
+        },
+        {
+          "name": "error",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Error message; when set, a danger Message replaces the ring."
+        },
+        {
+          "name": "emptyTitle",
+          "type": "string",
+          "default": "'No data available'",
+          "required": "false",
+          "doc": "Title of the empty state shown when every slice is zero."
+        },
+        {
+          "name": "tableView",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "Shows the data table in place of the ring. The table is always present for assistive tech."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name of the chart."
+        }
+      ],
+      "events": [
+        {
+          "name": "slice-click",
+          "payload": "(event: MouseEvent | KeyboardEvent, series: ChartSeries)",
+          "notes": "Click on a slice, or Enter / Space on the focused chart; `series` is the consumer's own series object."
+        },
+        {
+          "name": "legend-toggle",
+          "payload": "(event: MouseEvent, series: ChartSeries)",
+          "notes": "A legend entry toggled."
+        }
+      ],
+      "slots": [
+        {
+          "name": "center",
+          "scope": "{ total: number; active: ChartSeries",
+          "notes": "null }` | Replaces the center readout."
+        },
+        {
+          "name": "empty",
+          "scope": "—",
+          "notes": "Replaces the default EmptyState."
+        },
+        {
+          "name": "error",
+          "scope": "—",
+          "notes": "Replaces the default danger Message."
+        }
+      ],
+      "purpose": "A part-to-whole chart drawn as a ring (donut) or a disc (pie): one slice per series, the total in the center, a legend beside it. It shares the cartesian chart's data model, palette, legend behavior and loading / empty / error surface, so a dashboard reads as one system. Each slice is the sum of its series values, so a time series passes straight in as its share of the range.",
+      "useWhen": [
+        "Share of a small whole at a glance: top countries by blocked threats, traffic by protocol, cache hit versus miss.",
+        "A dashboard card where the total is the headline and the split is the context."
+      ],
+      "avoidWhen": [
+        "Comparing close values or more than six slices → use `chart` with horizontal bars; angles are hard to compare.",
+        "Two slices → use `stat-tile` with the ratio; a two-slice pie says less than the number.",
+        "Change over time → use `chart`."
+      ],
+      "related": [
+        "chart` — the cartesian sibling; same series model, so a dataset moves between them without reshaping.",
+        "chart-card` — the box a dashboard donut sits in.",
+        "stat-tile` — the total alone, with a delta."
+      ],
+      "bestPractices": [
+        "Keep it to six slices or fewer; the seventh and beyond fold into Other automatically.",
+        "Order series by size so the largest slice starts at the top.",
+        "Use the center for the total and let hover or focus swap it to the active slice.",
+        "Pair it with the bar form of the same data when exact ranks matter (the console's country pie plus ordered bar)."
+      ]
+    },
+    "stat-tile": {
+      "import": "@aziontech/webkit/stat-tile",
+      "target": "./src/components/chart/stat-tile/stat-tile.vue",
+      "kind": "component",
+      "treeShakeableImport": "@aziontech/webkit/stat-tile",
+      "category": "chart",
+      "structure": "monolithic",
+      "status": "approved",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Metric name, in sentence case. Fallback for the default slot."
+        },
+        {
+          "name": "value",
+          "type": "number | null",
+          "default": "null",
+          "required": "false",
+          "doc": "The current value. It counts up from the previous value on change; null renders a dash."
+        },
+        {
+          "name": "formatValue",
+          "type": "(value: number) => string",
+          "default": "formatCompact",
+          "required": "false",
+          "doc": "Formats the figure."
+        },
+        {
+          "name": "delta",
+          "type": "number | null",
+          "default": "null",
+          "required": "false",
+          "doc": "Signed change against the named period, in percent. Null hides the delta."
+        },
+        {
+          "name": "deltaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "The comparison period, read after the delta."
+        },
+        {
+          "name": "inverse",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "A rise is bad for this metric; flips the delta between success and danger."
+        },
+        {
+          "name": "trend",
+          "type": "number[]",
+          "default": "[]",
+          "required": "false",
+          "doc": "Sparkline values, oldest first. Empty hides the sparkline."
+        },
+        {
+          "name": "size",
+          "type": "'small' | 'medium' | 'large'",
+          "default": "'medium'",
+          "required": "false",
+          "doc": "Scale of the figure."
+        },
+        {
+          "name": "loading",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "Renders Skeleton lines in place of the figure, delta and sparkline."
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "scope": "—",
+          "notes": "Replaces the label text."
+        },
+        {
+          "name": "aside",
+          "scope": "—",
+          "notes": "Trailing content beside the label, such as an info icon or a menu."
+        }
+      ],
+      "purpose": "A KPI tile: a label, one big figure that counts up into place, an optional delta against a named period, and an optional sparkline. The delta reads good or bad for the metric, not merely up or down: `inverse` flips the polarity for metrics where a rise is bad (threats, errors, latency). A row of tiles sits above a dashboard's charts.",
+      "useWhen": [
+        "The headline numbers of a dashboard: total requests, blocked threats, cache hit ratio, error rate.",
+        "A single value whose change matters more than its history; the sparkline adds the shape of that history."
+      ],
+      "avoidWhen": [
+        "The history itself is the point → use `chart`.",
+        "A share of a whole → use `donut-chart`.",
+        "Marketing figures on a site band → use `big-numbers`."
+      ],
+      "related": [
+        "chart` — the full history behind a tile.",
+        "chart-card` — the box for a chart; a tile is its own small surface and does not sit in one.",
+        "big-numbers` — the marketing figure band, with no delta and no live data."
+      ],
+      "bestPractices": [
+        "Name the comparison period in `deltaLabel` (\"vs previous 24 hours\"); a bare percentage is ambiguous.",
+        "Set `inverse` on every metric where a rise is bad, so a growing threat count reads as a regression.",
+        "Keep the label in sentence case with no trailing colon.",
+        "Give the sparkline the same buckets as the chart below it, about twelve points."
+      ]
     },
     "tag": {
       "import": "@aziontech/webkit/tag",

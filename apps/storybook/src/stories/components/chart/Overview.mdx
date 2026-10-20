@@ -1,0 +1,125 @@
+import { Meta } from '@storybook/blocks'
+
+<Meta
+  title="Components/Chart/Overview"
+  parameters={{
+    options: { showPanel: false },
+    controls: { disable: true },
+    actions: { disable: true },
+    docs: {
+      description: {
+        component:
+          'How the chart components fit together: which form answers which question, how series get their colors, how the tooltip and legend behave, what to instrument, how to export, and how a dashboard grid is assembled.'
+      }
+    }
+  }}
+/>
+
+# Chart
+
+The chart category is the data surface of the console: the Real-Time Metrics dashboards, the
+security panels, the KPI row over a list. Four components cover it, and they share one data
+model, one palette and one state surface.
+
+- [Chart](?path=/docs/components-chart-chart--documentation) composes lines, areas and bars over one category axis from parts placed by hand.
+- [DonutChart](?path=/docs/components-chart-donutchart--documentation) shows the share of a small whole with the total in the center.
+- [StatTile](?path=/docs/components-chart-stattile--documentation) is one figure, a delta against a named period, and a sparkline.
+- [ChartCard](?path=/docs/components-chart-chartcard--documentation) is the box a dashboard chart lives in, with drag and resize.
+
+Every chart is drawn in SVG by the design system itself, with no charting dependency, and
+every color comes from the `--chart-*` role, so light and dark need no code.
+
+## Which form
+
+Pick the form from the question the reader asks, before any color.
+
+<table>
+  <thead>
+    <tr><th>The reader asks</th><th>Form</th><th>Component</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>How did this measure move over time?</td><td>Line, or area for one series</td><td>Chart with Chart.Line or Chart.Area</td></tr>
+    <tr><td>Which category is biggest?</td><td>Ordered bars, horizontal for long names</td><td>Chart with Chart.Bar, orientation horizontal</td></tr>
+    <tr><td>What is each part of a total over time?</td><td>Stacked areas or stacked bars</td><td>Chart with stacked marks</td></tr>
+    <tr><td>What share of the whole is each part?</td><td>Donut, six slices or fewer</td><td>DonutChart</td></tr>
+    <tr><td>What is the number now, and is it better or worse?</td><td>A figure with a delta</td><td>StatTile</td></tr>
+    <tr><td>What are the exact values?</td><td>A table</td><td>Table, or the chart's table view</td></tr>
+  </tbody>
+</table>
+
+Two measures on different scales never share a chart. Put them in two cards side by side.
+
+## Series colors
+
+Series take `--chart-series-1` to `--chart-series-6` in the order they are passed, never
+cycled. A seventh series and everything after it fold into one Other series in
+`--chart-series-other`. The order is the same in both themes, so a series keeps its hue when
+the theme changes, and hiding a series from the legend never repaints the others.
+
+A series whose color **means** a state wears a status color instead: `color: 'danger'` for
+blocked requests, `'warning'` for logged threats, `'success'` for allowed traffic. Never use a
+status color for a series that is only "the fourth host".
+
+A delta's color is not a choice either. StatTile reads a rise as good, and `inverse` flips it for
+metrics where a rise is bad: threats, errors, latency.
+
+The palette is validated in both themes for color-vision separation and for 3:1 contrast on the
+chart surfaces and on the tooltip. See [Data Viz](?path=/docs/foundations-design-tokens-data-viz--overview).
+
+## Tooltip, legend and keyboard
+
+- The crosshair snaps to the nearest category, so the reader aims at a time, not at a 2px line.
+- One tooltip lists every visible series at that point, value first, on the inverse surface.
+- The legend appears for two or more series. Each entry is a toggle; hovering one dims the others.
+- The plot is one tab stop. Left and Right walk the points, Home and End jump, Enter selects, Escape clears. The tooltip follows the keyboard exactly as it follows the pointer, and a live region reads each point aloud.
+- Every chart keeps a data table twin for assistive tech, and `table-view` shows it on screen.
+
+## States
+
+Every chart renders its own loading, empty and error state inside its own box: a Skeleton the
+size of the plot, an EmptyState, a danger Message. While a new range loads, set `refetching`
+and the previous render holds at reduced opacity instead of flashing a skeleton.
+
+## Telemetry
+
+The design system ships no tracking. Instrument these events in your app:
+
+<table>
+  <thead>
+    <tr><th>Event</th><th>Component</th><th>What it means</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>update:activeIndex</code></td><td>Chart, DonutChart</td><td>The reader is inspecting a point.</td></tr>
+    <tr><td><code>point-click</code></td><td>Chart</td><td>The reader selected a point, usually to drill down.</td></tr>
+    <tr><td><code>slice-click</code></td><td>DonutChart</td><td>The reader selected a slice.</td></tr>
+    <tr><td><code>legend-toggle</code></td><td>Chart, DonutChart</td><td>A series was hidden or shown.</td></tr>
+    <tr><td><code>update:span</code>, <code>update:height</code></td><td>ChartCard</td><td>The dashboard layout changed.</td></tr>
+    <tr><td><code>move</code>, <code>drag-start</code>, <code>drag-end</code></td><td>ChartCard</td><td>A card was moved.</td></tr>
+  </tbody>
+</table>
+
+Activation events carry the DOM event first and the subject second, so one handler shape reads
+every chart.
+
+## Export
+
+A chart takes plain data: `labels` and `series`, each series an `id`, a `name` and its
+`values`. That maps one to one to the rows of the Real-Time Metrics GraphQL API, a `ts` column
+and one column per field, so the card menu needs no reshaping:
+
+- **Export CSV** flattens the same rows with `toCsv` from `@aziontech/webkit/utils/csv`.
+- **Copy query** copies the GraphQL query that produced the series.
+
+Both live in a Dropdown inside `ChartCard.Controls`. For continuous delivery of the raw events
+to a SIEM, a data warehouse or a stream processor, point the reader to Data Stream; the card
+menu is for one chart, not a pipeline.
+
+## Dashboard grid
+
+A dashboard is a 12-column CSS grid of ChartCards. Each card spans `span` columns and is
+`height` pixels tall, both bound with `v-model`, both plain numbers to persist with the layout.
+
+- Set `--chart-grid-columns` on the grid per breakpoint (12 on desktop, 6 on a tablet, 1 on a phone); a card never spans more columns than the grid has.
+- `draggable` shows the drag handle. The card reports `drag-start`, `drag-end` and keyboard `move`; the page owns the order and handles `dragover` and `drop` on the cards.
+- `resizable` shows the corner handle. Dragging it snaps the span to whole columns; the keyboard changes the span by one column and the height by 24 pixels.
+- Keep filters and the time range in one row above the grid. Every card renders the same slice, so the numbers always agree.
