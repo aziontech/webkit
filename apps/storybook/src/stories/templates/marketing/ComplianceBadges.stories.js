@@ -10,6 +10,7 @@ import SectionGap from '@aziontech/webkit/section-gap'
 import SectionModule from '@aziontech/webkit/section-module'
 
 import { COLUMN_IMPORTS, each, inColumn, indent } from '../../_shared/markup'
+import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 
 const IMPORTS = [
@@ -131,16 +132,12 @@ const CERTIFICATIONS_TEMPLATE = complianceBadges(CERTIFICATIONS)
 
 const meta = {
   title: 'Templates/Marketing/Social Proof/ComplianceBadges',
-  tags: ['autodocs'],
+  excludeStories: ['SITE_SECTION'],
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
     controls: { disable: true },
     docs: {
-      description: {
-        component:
-          'The compliance band of a solution page: a framed split that states the platform meets a buyer’s audit requirements, beside a grid of certification badges, each the certifying body’s colour badge over a checked chip with its name, closed by a `See more` cell that links to the compliance page. Three columns on desktop, two on a phone. Retail, Financial Services and Technology render it. Built from `SectionModule`, `MediaSplit` and `CardGrid`, with the badge files from `@aziontech/webkit/assets`.'
-      },
       canvas: { sourceState: 'shown' }
     }
   }
@@ -152,11 +149,48 @@ export const Default = {
   render: () => ({ components, setup, template: CERTIFICATIONS_TEMPLATE }),
   parameters: {
     docs: {
-      description: {
-        story:
-          'The five certifications every one of those pages lists, SOC 2 & 3, PCI DSS, LGPD, GDPR and CCPA, plus the `See more` cell that fills the sixth slot of the grid.'
-      },
       source: { code: toSfc(IMPORTS, CERTIFICATIONS_TEMPLATE) }
     }
   }
+}
+
+export const SITE_SECTION = {
+  _id: 'compliance-badges',
+  props: {
+    eyebrow: 'Scale with Confidence',
+    title: 'Security and Compliance for High-Stakes Digital Experiences',
+    description: '',
+    ariaLabel: 'Security and Compliance for High-Stakes Digital Experiences',
+    certifications: [
+      {
+        label: 'SOC 2 Type 2 & 3',
+        badge: '/assets/logos/clients/SOC-logo.svg',
+        alt: 'AICPA SOC 2 Type 2 badge'
+      },
+      {
+        label: 'PCI DSS',
+        badge: '/assets/logos/clients/PCI-logo.svg',
+        alt: 'PCI DSS badge'
+      },
+      {
+        label: 'GDPR',
+        badge: '/assets/logos/clients/GDPR-logo.svg',
+        alt: 'GDPR'
+      },
+      {
+        label: 'LGPD',
+        badge: '/assets/logos/clients/LGPD-logo.png',
+        alt: 'LGPD badge'
+      }
+    ],
+    moreLink: {
+      label: 'See more',
+      href: '/en/compliance/'
+    }
+  }
+}
+
+export const DefaultJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(SITE_SECTION)
 }

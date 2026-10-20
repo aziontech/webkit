@@ -1,8 +1,7 @@
-import { ref, watch } from 'vue'
-
 import Button from '@aziontech/webkit/button'
 import IconButton from '@aziontech/webkit/icon-button'
 import Tooltip from '@aziontech/webkit/tooltip'
+import { ref, watch } from 'vue'
 
 import { toSfc } from '../../../_shared/story-source'
 
@@ -12,7 +11,7 @@ const IMPORT_ICON_BUTTON = "import IconButton from '@aziontech/webkit/icon-butto
 
 /** @type {import('@storybook/vue3').Meta<typeof Tooltip>} */
 const meta = {
-  title: 'Components/Overlay/Tooltip',
+  title: 'Components/Primitives/Overlay/Tooltip',
   component: Tooltip,
   tags: ['autodocs'],
   parameters: {

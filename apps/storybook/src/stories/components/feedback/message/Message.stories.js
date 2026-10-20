@@ -7,7 +7,7 @@ const IMPORT = "import Message from '@aziontech/webkit/message'"
 
 /** @type {import('@storybook/vue3').Meta<typeof Message>} */
 const meta = {
-  title: 'Components/Feedback/Message',
+  title: 'Components/Primitives/Feedback/Message',
   component: Message,
   tags: ['autodocs'],
   parameters: {
@@ -145,7 +145,9 @@ export const Default = {
   render: Template,
   parameters: {
     docs: {
-      description: { story: 'Default info message: leading icon, one line of copy, and an action.' },
+      description: {
+        story: 'Default info message: leading icon, one line of copy, and an action.'
+      },
       source: { code: toSfc(IMPORT, DEFAULT_MARKUP) }
     }
   }

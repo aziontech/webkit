@@ -13,7 +13,7 @@ official court jester.`
 
 /** @type {import('@storybook/vue3').Meta<typeof ScrollArea>} */
 const meta = {
-  title: 'Components/Layout/ScrollArea',
+  title: 'Components/Primitives/Layout/ScrollArea',
   component: ScrollArea,
   tags: ['autodocs'],
   parameters: {

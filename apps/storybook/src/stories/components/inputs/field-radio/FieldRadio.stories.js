@@ -7,7 +7,7 @@ const IMPORT = "import FieldRadio from '@aziontech/webkit/field-radio'"
 
 /** @type {import('@storybook/vue3').Meta<typeof FieldRadio>} */
 const meta = {
-  title: 'Components/Inputs/FieldRadio',
+  title: 'Components/Primitives/Inputs/FieldRadio',
   component: FieldRadio,
   tags: ['autodocs'],
   parameters: {

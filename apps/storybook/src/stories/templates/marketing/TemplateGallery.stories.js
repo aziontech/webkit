@@ -9,6 +9,7 @@ import SectionModule from '@aziontech/webkit/section-module'
 import Ticker from '@aziontech/webkit/ticker'
 
 import { COLUMN_IMPORTS, each, inColumn } from '../../_shared/markup'
+import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 
 const IMPORTS = [
@@ -244,16 +245,12 @@ const RETAIL_TEMPLATE = templateGallery({
 
 const meta = {
   title: 'Templates/Marketing/Media/TemplateGallery',
-  tags: ['autodocs'],
+  excludeStories: ['SITE_SECTION'],
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
     controls: { disable: true },
     docs: {
-      description: {
-        component:
-          'The templates band of a solution page: a framed split whose copy invites the reader to start from a template, beside a scrolling two-column wall of deployable templates that fades out at its top and bottom edges, closed by a ticker of the frameworks and clouds a workload is already built with. Each template card is a mark, a title, one line and a `Deploy now` action. Retail, Web Apps, AI Workloads, Security, Performance and Streaming render it. Built from `SectionModule`, `MediaSplit`, `ScrollArea`, `CardGrid`, `Button`, `FrameBox` and `Ticker`.'
-      },
       canvas: { sourceState: 'shown' }
     }
   }
@@ -265,11 +262,35 @@ export const Default = {
   render: () => ({ components, template: RETAIL_TEMPLATE }),
   parameters: {
     docs: {
-      description: {
-        story:
-          'The Retail page’s band, with its storefront-specific description and the first eight of the published deploy templates; the other pages keep the default description. The marks that ship in dark ink carry an invert under the dark theme. The ticker runs the thirty-name product stack azion.com shows under every product page.'
-      },
       source: { code: toSfc(IMPORTS, RETAIL_TEMPLATE) }
     }
   }
+}
+
+const RETAIL_DOCS = 'https://www.azion.com/en/documentation/products/guides/#azion-templates'
+
+export const SITE_SECTION = {
+  _id: 'template-gallery',
+  props: {
+    eyebrow: 'Your Stack, Your Way',
+    title: 'Quick Start with Templates',
+    description:
+      'Launch storefronts faster with pre-built templates and starter kits for headless commerce, marketing pages, and product catalogs. Deploy complete projects in seconds with popular frameworks.',
+    action: { label: 'Deploy now', href: RETAIL_DOCS },
+    templates: [
+      { title: 'Next.js', icon: 'ai ai-nextjs', href: RETAIL_DOCS },
+      { title: 'React', icon: 'ai ai-react', href: RETAIL_DOCS },
+      { title: 'Vue', icon: 'ai ai-vue', href: RETAIL_DOCS },
+      { title: 'Astro', icon: 'ai ai-astro', href: RETAIL_DOCS }
+    ],
+    deployLabel: 'Deploy now',
+    templatesAriaLabel: 'Templates you can deploy',
+    tickerLabel: 'Compatible with Your Stack',
+    tickerMarks: ['nextjs', 'astro', 'react', 'vue']
+  }
+}
+
+export const DefaultJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(SITE_SECTION)
 }

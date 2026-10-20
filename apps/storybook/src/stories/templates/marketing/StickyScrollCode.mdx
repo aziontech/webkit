@@ -1,0 +1,47 @@
+import { Canvas, Meta, Source } from '@storybook/blocks'
+
+import * as StickyScrollCodeStories from './StickyScrollCode.stories'
+
+<Meta title="Templates/Marketing/Media/StickyScrollCode" />
+
+# StickyScrollCode
+
+A list of capabilities with the code that proves each one. The band pins under the site header while the page scrolls; as the reader scrolls, the open capability moves on and the code sample beside it changes to match.
+
+Below `lg` it unpins into a plain list with the sample under each capability.
+
+Built from `SectionModule`, `SectionTitle`, `FrameBox`, `StickyStack`, `CodeBlock`, `TextureMaterial` and `Button`.
+
+<p
+  style={{
+    margin: 'var(--spacing-lg) 0 0',
+    fontFamily: 'var(--font-code)',
+    fontSize: 'var(--text-label-code-sm-font-size)',
+    color: 'var(--text-muted)',
+    textTransform: 'uppercase',
+    letterSpacing: '0.08em'
+  }}
+>
+  Stories
+</p>
+
+### Default
+
+The "Everything You Need to Build and Deploy" band for the Web Apps page: five capabilities, from deploying with the CLI to querying metrics over GraphQL, each with a one-file code sample. The docs button sits under the sample from `lg` up and under the title below it.
+
+<Canvas of={StickyScrollCodeStories.Default} />
+
+##### Use it on the site
+
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `eyebrow`, `title` and `description` fill the section title.
+- `action` is the docs button, with `label` and `href`.
+- `items[]` are the capabilities in reading order, each a `title` and a `description`.
+- `items[].code` is the one-file sample: `fileName`, `fileIcon`, `language` and the `code` itself.
+
+Example:
+
+<div className="sb-site-json">
+  <Source of={StickyScrollCodeStories.DefaultJson} dark />
+</div>
