@@ -15,7 +15,7 @@ const IMPORT_TECHNOLOGIES = "import Technologies from '@aziontech/webkit/svg/azi
 
 /** @type {import('@storybook/vue3').Meta<typeof Default>} */
 const meta = {
-  title: 'Components/Content/AzionLogo',
+  title: 'Components/Primitives/Content/AzionLogo',
   component: Default,
   tags: ['autodocs'],
   parameters: {

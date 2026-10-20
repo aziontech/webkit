@@ -8,7 +8,7 @@ const VUE_IMPORT = "import { ref } from 'vue'"
 
 /** @type {import('@storybook/vue3').Meta<typeof FieldText>} */
 const meta = {
-  title: 'Components/Inputs/FieldText',
+  title: 'Components/Primitives/Inputs/FieldText',
   component: FieldText,
   tags: ['autodocs'],
   parameters: {

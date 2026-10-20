@@ -3,9 +3,8 @@
    * CodeBlock - Code snippet display with optional label
    * Used for showing import statements, usage examples, etc.
    */
-  import { computed, ref } from 'vue'
-
   import CopyButton from '@aziontech/webkit/copy-button'
+  import { computed, ref } from 'vue'
 
   const props = defineProps({
     label: {

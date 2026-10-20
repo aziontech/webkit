@@ -14,8 +14,16 @@ const NAME = /^(.+)-(extended|symbol)-(color|reversed|mono)\.(svg|png|webp)$/
 
 const GROUPS = [
   ['clients', 'Clients', 'Customers that run on Azion.'],
-  ['former', 'Former clients', 'Customers that no longer run on Azion; never on a current trust strip.'],
-  ['frameworks', 'Frameworks', 'What a workload is built with: frameworks, clouds, model providers, data tools.'],
+  [
+    'former',
+    'Former clients',
+    'Customers that no longer run on Azion; never on a current trust strip.'
+  ],
+  [
+    'frameworks',
+    'Frameworks',
+    'What a workload is built with: frameworks, clouds, model providers, data tools.'
+  ],
   ['standards', 'Standards', 'Specification bodies and formats a workload is written against.'],
   ['certifications', 'Certifications', 'Compliance badges.'],
   ['analysts', 'Analysts', 'Analyst firms that rank Azion.'],
