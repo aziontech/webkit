@@ -6,9 +6,9 @@ status: implemented
 spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit
-checksum: 9aed985c1d32510446d2bb0b17d15c27ae03b3a856b187aa09df4dd94dd8e500
+checksum: f373458e68e5eb29e3986e0f0d8a3b3481034671b9cd753acd83e73589fabbc8
 created: 2026-05-22
-last_updated: 2026-05-22
+last_updated: 2026-10-20
 ---
 # Scroll Area — Component Spec
 
@@ -59,7 +59,7 @@ _none_
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
 - Keyboard map: `Tab` focuses; `Enter`/`Space` activates; `Escape` closes overlays where applicable.
-- ARIA: root uses appropriate roles (`button`, `dialog`, `status`, etc.) per sub-component.
+- ARIA: the viewport sets only `aria-label` (from the prop) and `tabindex` itself. Every other consumer attribute — `role`, `aria-*`, `id`, listeners — is forwarded to it, so a log body can be `role="log"` with `aria-live`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.

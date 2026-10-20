@@ -141,6 +141,12 @@ describe('LogView (composition: provide/inject over Header/Content/Footer)', () 
       expect(getAllByTestId('code-log-view__line')).toHaveLength(LINES.length)
     })
 
+    it('exposes the log body as a polite live region', () => {
+      const { Host } = makeHost({})
+      const { getByRole } = render(Host)
+      expect(getByRole('log').getAttribute('aria-live')).toBe('polite')
+    })
+
     it('reflects the injected line count and warning-tag label in the header', () => {
       const { Host } = makeHost({})
       const { getByTestId } = render(Host)

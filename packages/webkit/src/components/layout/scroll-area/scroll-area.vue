@@ -116,6 +116,7 @@
 <template>
   <div
     ref="viewportRef"
+    v-bind="$attrs"
     :class="rootClasses"
     :data-orientation="orientation"
     :data-testid="testId"
