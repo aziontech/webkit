@@ -4,9 +4,9 @@ category: actions
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 87127d1d244c485485066a664970df5fe28be552b60544da4b457570aa22334c
+checksum: 9904754c2155331a4b8a1d541fd7116f91961f1ee99f898db661b19f682e7739
 created: 2026-05-22
-last_updated: 2026-09-26
+last_updated: 2026-10-19
 ---
 
 # Button — Component Spec
@@ -29,6 +29,7 @@ Interactive control for user actions. Migrated from the existing implementation 
 | `animated`     | `boolean`                                                      | `false`     | false    | Nudges a trailing icon along its axis on hover. Off by default; marketing CTAs opt in.                                                    |
 | `href`         | `string`                                                       | `''`        | false    | When set, renders as a link (`<a>`).                                                                                                      |
 | `target`       | `'_blank' \| '_self'`                                          | `'_self'`   | false    | Link target when `href` is set.                                                                                                           |
+| `type`         | `'button' \| 'submit' \| 'reset'`                               | `'button'`  | false    | Native button type. `submit` lets the control submit its form; `disabled` and `loading` still block it. Ignored when `href` is set.        |
 
 ## Events
 
@@ -46,6 +47,7 @@ Interactive control for user actions. Migrated from the existing implementation 
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 - `data-disabled` mirrors the `disabled` prop
+- With `type="submit"`, `disabled` (native) and `loading` (the click is cancelled) both stop the form from submitting, including implicit submission on `Enter`
 
 ## Motion & Animations
 
@@ -93,6 +95,7 @@ Interactive control for user actions. Migrated from the existing implementation 
 - Large (size)
 - Icon
 - Disabled
+- Form submit (`type`) — `type` only acts inside a form, so this story renders one with a field, a reset and a submit Button
 
 ## Constraints — DO NOT
 
