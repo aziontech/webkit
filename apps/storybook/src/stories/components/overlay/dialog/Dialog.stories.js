@@ -50,7 +50,7 @@ const dialogStoryComponents = {
 
 /** @type {import('@storybook/vue3').Meta<typeof Dialog>} */
 const meta = {
-  title: 'Components/Overlay/Dialog',
+  title: 'Components/Primitives/Overlay/Dialog',
   component: Dialog,
   subcomponents: {
     DialogTrigger,

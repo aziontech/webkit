@@ -6,6 +6,7 @@ import SectionModule from '@aziontech/webkit/section-module'
 import SectionTitle from '@aziontech/webkit/section-title'
 
 import { COLUMN_IMPORTS, each, inColumn } from '../../_shared/markup'
+import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 
 const IMPORTS = [
@@ -171,16 +172,12 @@ const PRIMITIVES_TEMPLATE = platformDirectory({
 
 const meta = {
   title: 'Templates/Marketing/Content/PlatformDirectory',
-  tags: ['autodocs'],
+  excludeStories: ['SITE_SECTION'],
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
     controls: { disable: true },
     docs: {
-      description: {
-        component:
-          'The platform as a four-column directory of product links under a section title: each column is a product group (Compute, AI, Data, Security) and each row an icon, a product name and one line of what it does, linking to that product. Home opens its column with it right under the hero, and every solution page and Pricing carry the same band. The product pages (Cache, Application Accelerator, AI Inference, Workloads, Our Network) draw the same band with the sample app’s own NavColumn and NavItem; this template replaces those with the design-system components. Built from `SectionModule`, `SectionTitle`, `FrameBox` and `ColumnNavigation` (`ColumnNavigation.Column`, `ColumnNavigation.Item`).'
-      },
       canvas: { sourceState: 'shown' }
     }
   }
@@ -192,11 +189,90 @@ export const Primitives = {
   render: () => ({ components, template: PRIMITIVES_TEMPLATE }),
   parameters: {
     docs: {
-      description: {
-        story:
-          'Home’s band: a title with no eyebrow over the fourteen platform primitives, framed with corner marks on all four corners. Product pages the site hosts link by path (`/products/functions`); the rest go to azion.com.'
-      },
       source: { code: toSfc(IMPORTS, PRIMITIVES_TEMPLATE) }
     }
   }
+}
+
+export const SITE_SECTION = {
+  _id: 'platform-directory',
+  props: {
+    title: 'Serverless AI-Native Primitives for Autonomous Workloads',
+    ariaLabel: 'Platform primitives',
+    groups: [
+      {
+        title: 'Compute',
+        items: [
+          {
+            icon: 'ai ai-edge-functions',
+            title: 'Functions',
+            description: 'Run serverless code closer to users',
+            href: 'https://www.azion.com/en/products/functions/'
+          },
+          {
+            icon: 'pi pi-sitemap',
+            title: 'Rules Engine',
+            description: 'Automate request handling with programmable rules',
+            href: 'https://www.azion.com/en/documentation/products/build/applications/rules-engine/'
+          }
+        ]
+      },
+      {
+        title: 'AI',
+        items: [
+          {
+            icon: 'pi pi-microchip-ai',
+            title: 'AI Inference',
+            description: 'Run AI models closer to users',
+            href: 'https://www.azion.com/en/products/ai-inference/'
+          },
+          {
+            icon: 'pi pi-sitemap',
+            title: 'AI Gateway',
+            description: 'Secure, manage, and optimize AI traffic',
+            href: 'https://www.azion.com/en/solutions#ai'
+          }
+        ]
+      },
+      {
+        title: 'Data',
+        items: [
+          {
+            icon: 'ai ai-edge-storage',
+            title: 'Object Storage',
+            description: 'Scalable, durable storage for unstructured data',
+            href: 'https://www.azion.com/en/products/object-storage/'
+          },
+          {
+            icon: 'ai ai-edge-sql',
+            title: 'SQL Database',
+            description: 'Relational database built for distributed applications',
+            href: 'https://www.azion.com/en/products/sql-database/'
+          }
+        ]
+      },
+      {
+        title: 'Security',
+        items: [
+          {
+            icon: 'ai ai-waf-rules',
+            title: 'Web Application Firewall',
+            description: 'Protect human and AI applications from threats',
+            href: 'https://www.azion.com/en/products/web-application-firewall/'
+          },
+          {
+            icon: 'pi pi-sitemap',
+            title: 'API Gateway',
+            description: 'Secure, manage, and scale API traffic',
+            href: 'https://www.azion.com/en/solutions/api-gateway/'
+          }
+        ]
+      }
+    ]
+  }
+}
+
+export const PrimitivesJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(SITE_SECTION)
 }

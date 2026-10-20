@@ -18,6 +18,7 @@ import SectionModule from '@aziontech/webkit/section-module'
 import SectionTitle from '@aziontech/webkit/section-title'
 
 import { COLUMN_IMPORTS, inColumn } from '../../_shared/markup'
+import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 
 const IMPORTS = [
@@ -160,16 +161,12 @@ const TEMPLATE = inColumn(`<SectionModule :divided="false" :padded="false">
 
 const meta = {
   title: 'Templates/Marketing/Social Proof/LogoWallQuote',
-  tags: ['autodocs'],
+  excludeStories: ['SITE_SECTION'],
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
     controls: { disable: true },
     docs: {
-      description: {
-        component:
-          'Client marks on the start edge and one of those clients speaking on the end edge, in one frame. `LogoWall` draws the grid and its `#aside` slot holds a signed `Quote`. Used by the Solutions page, under a section title. Cache, Application Accelerator and Our Network hand-roll the same split with their own grid; this is the webkit build to use instead. Built from `SectionModule`, `SectionTitle`, `FrameBox`, `LogoWall`, `Quote` and `Button`. Each mark goes through the `#mark` slot so it can be placed per theme: white artwork is inverted on the light theme, dark artwork on the dark one, colour files are shown as drawn, and a client with a file per theme renders both and lets CSS reveal one.'
-      },
       canvas: { sourceState: 'shown' }
     }
   }
@@ -181,11 +178,57 @@ export const Default = {
   render: () => ({ components, setup, template: TEMPLATE }),
   parameters: {
     docs: {
-      description: {
-        story:
-          'From the Solutions page: a `SectionTitle` opens the module, and nine `kind="rectangle"` cells, each linked to that client’s success case, sit beside a Zoop quote. A linked cell lifts its mark and reveals "Read story" on hover and focus.'
-      },
       source: { code: toSfc(IMPORTS, TEMPLATE) }
     }
   }
+}
+
+export const SITE_SECTION = {
+  _id: 'logo-wall-quote',
+  props: {
+    eyebrow: 'Trusted by Industry Leaders',
+    title: "Battle-Tested by the World's Largest Banks and E-commerce Companies",
+    ariaLabel: 'Banks and e-commerce companies running on Azion',
+    logos: [
+      {
+        name: 'Magalu',
+        logo: '/marketing-components/logos/magalu-extended-color.svg',
+        href: 'https://www.azion.com/en/success-case/magalu/'
+      },
+      {
+        name: 'Banco de la Nación',
+        logo: '/marketing-components/logos/banco-de-la-nacion-extended-mono.svg',
+        logoTreatment: 'monochrome',
+        href: 'https://www.azion.com/en/success-case/banco-de-la-nacion-achieves-speed-and-reduces-costs/'
+      },
+      {
+        name: 'Netshoes',
+        logo: '/marketing-components/logos/netshoes-extended-color.svg',
+        href: 'https://www.azion.com/en/success-case/netshoes/'
+      },
+      {
+        name: 'Agibank',
+        logo: '/marketing-components/logos/agibank-extended-reversed.svg',
+        logoLight: '/marketing-components/logos/agibank-extended-color.svg',
+        href: 'https://www.azion.com/en/success-case/agibank/'
+      }
+    ],
+    quote: {
+      text: '"Azion delivered the advanced protection and superior performance we needed, with fast implementation and immediate results."',
+      name: 'Ismael Aguilar',
+      jobTitle: 'Information Security Manager at Zoop',
+      logo: '/marketing-components/logos/zoop-extended-color.svg',
+      logoAlt: 'Zoop'
+    },
+    quoteAction: {
+      label: 'View success story',
+      href: 'https://www.azion.com/en/success-case/zoop-case-performance-at-scale/',
+      target: '_blank'
+    }
+  }
+}
+
+export const DefaultJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(SITE_SECTION)
 }

@@ -7,6 +7,7 @@ import SectionModule from '@aziontech/webkit/section-module'
 import TextureMaterial from '@aziontech/webkit/texture-material'
 
 import { COLUMN_IMPORTS, indent } from '../../_shared/markup'
+import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 
 const IMPORTS = [
@@ -118,16 +119,12 @@ const FRAME_TEMPLATE = `<SectionContainer max-width="site">
 
 const meta = {
   title: 'Templates/Marketing/Content/ClosingCallToAction',
-  tags: ['autodocs'],
+  excludeStories: ['SPLIT_SECTION', 'PANEL_SECTION'],
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
     controls: { disable: true },
     docs: {
-      description: {
-        component:
-          'The close of every landing page: one last ask after a hatched gap, then a closing spacer that draws no rules of its own, because the site footer under it opens with a full-bleed rule. Almost every page ends with the split form, among them Home, Products, Pricing, Success Cases, the Vercel Alternative page and every solution page, and only its copy varies per page (Build / Build once. / Run everywhere. on Retail, Web Apps, AI Workloads, Financial Services, Technology and Success Cases; Secure / Protected by default. / Always on. on Security and the Vercel Alternative page; Performance / Fast everywhere. / Always reliable. on Performance). Careers ends with the single-action panel and a closing frame half that height. Partners, Learning, Compliance and GDPR ask nothing at the end: their last band runs straight into the closing frame alone, with no hatched gap above it. Built from `SectionContainer`, `SectionGap`, `SectionModule`, `CallToAction`, `Button` and `FrameBox`, with `TextureMaterial` ruling each closing frame.'
-      },
       canvas: { sourceState: 'shown' }
     }
   }
@@ -139,36 +136,64 @@ export const Split = {
   render: () => ({ components, template: SPLIT_TEMPLATE }),
   parameters: {
     docs: {
-      description: {
-        story:
-          'The solution pages’ close: a split `CallToAction` with `Start Free` in the lead cell and `Talk to our team` in the aside, then a double-height closing frame with its corner marks and the lines texture. The module’s `id="contact"` is the anchor the page’s other contact links scroll to.'
-      },
       source: { code: toSfc(IMPORTS, SPLIT_TEMPLATE) }
     }
   }
+}
+
+export const SPLIT_SECTION = {
+  _id: 'closing-call-to-action-split',
+  props: {
+    eyebrow: 'Build',
+    title: 'Build once.',
+    titleMuted: 'Run everywhere.',
+    description: 'Get a faster path to launch, lower latency, and less infrastructure overhead.',
+    primaryAction: {
+      label: 'Start Free',
+      href: 'https://console.azion.com/signup?tck=build_cta'
+    },
+    asideAction: {
+      label: 'Talk to our team',
+      href: 'https://www.azion.com/en/contact/'
+    }
+  }
+}
+
+export const SplitJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(SPLIT_SECTION)
 }
 
 export const Panel = {
   render: () => ({ components, template: PANEL_TEMPLATE }),
   parameters: {
     docs: {
-      description: {
-        story:
-          'The Careers page’s close: a panel `CallToAction` with a single action to the job listing, then the small closing frame, one `--spacing-xxl` tall: the same corner marks and lines texture as the split close, at the height of a small `SectionGap`. It draws no rules, because the footer under it opens with its own.'
-      },
       source: { code: toSfc(IMPORTS, PANEL_TEMPLATE) }
     }
   }
+}
+
+export const PANEL_SECTION = {
+  _id: 'closing-call-to-action-panel',
+  props: {
+    title: 'Ready to join us?',
+    description: 'Explore our open positions and find the right fit for you.',
+    action: {
+      label: 'See all available jobs',
+      href: '/en/careers/jobs/'
+    }
+  }
+}
+
+export const PanelJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(PANEL_SECTION)
 }
 
 export const Frame = {
   render: () => ({ components, template: FRAME_TEMPLATE }),
   parameters: {
     docs: {
-      description: {
-        story:
-          'The close of a page that ends without an ask, as Partners, Learning, Compliance and GDPR do: no `CallToAction` and no hatched gap, only the double-height closing frame, set directly under the column’s last band. Its corner marks and lines texture match the split close’s frame, and it draws no rules, because the footer under it opens with its own.'
-      },
       source: { code: toSfc(FRAME_IMPORTS, FRAME_TEMPLATE) }
     }
   }

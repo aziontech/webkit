@@ -10,6 +10,7 @@ import Tag from '@aziontech/webkit/tag'
 import { ref } from 'vue'
 
 import { COLUMN_IMPORTS, inColumn } from '../../_shared/markup'
+import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 
 const PLANS = [
@@ -398,16 +399,12 @@ const TEMPLATE = inColumn(`<SectionModule id="comparison" :divided="false" :padd
 
 const meta = {
   title: 'Templates/Marketing/Content/ComparePlans',
-  tags: ['autodocs'],
+  excludeStories: ['SITE_SECTION'],
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
     controls: { disable: true },
     docs: {
-      description: {
-        component:
-          'The plan-by-plan feature matrix that follows the plan cards on the Pricing page: one column per plan, one band per product, and the allowance each plan includes on every row. It is a real `table` with one `tbody` per product, so a screen reader announces each allowance with its row and its plan. A cell is a tick (included), an em dash (not included) or the stated allowance, and the two glyphs carry their meaning in `sr-only` text; a `Hint` defines the terms a row names but does not explain. The plan header is sticky at `top-14`, the height of the site’s sticky nav, with the recommended plan marked by an accent bar on its top edge. Below `lg` the matrix narrows to the feature column and one plan, picked with a `Select` in the header; the other columns are hidden, not duplicated, which is why the table is `table-auto` until `lg` and `table-fixed` from there. For the Support page’s tier comparison, use CompareSupportTiers. Built from `SectionModule`, `Select`, `Button`, `Overline`, `Hint`, `Tag` and `Link`.'
-      },
       canvas: { sourceState: 'shown' }
     }
   }
@@ -430,11 +427,107 @@ export const PlanMatrix = {
   }),
   parameters: {
     docs: {
-      description: {
-        story:
-          'Hobby, Pro and Enterprise across four of the Pricing page’s nine product sections: Azion Platform, Azion Applications, Compliance, and Commit and Save, which between them use every kind of cell. The rows are data, so a page adds the other sections to `sections` without touching the markup. Each plan’s button repeats the action of its card above the matrix, and the closing row hands off to the on-demand rates. Narrow the canvas below 1024px to see the plan picker; it opens on Pro, the recommended plan.'
-      },
       source: { code: toSfc(IMPORTS, TEMPLATE) }
     }
   }
+}
+
+export const SITE_SECTION = {
+  _id: 'compare-plans',
+  props: {
+    caption: 'Feature and included-usage comparison across the plans.',
+    featureColumnLabel: 'Features',
+    planPickerLabel: 'Plan being compared',
+    includedLabel: 'Included',
+    excludedLabel: 'Not included',
+    plans: [
+      {
+        id: 'hobby',
+        name: 'Hobby',
+        highlighted: false,
+        action: {
+          label: 'Start free',
+          href: 'https://console.azion.com/signup?plan=hobby'
+        }
+      },
+      {
+        id: 'pro',
+        name: 'Pro',
+        highlighted: true,
+        action: {
+          label: 'Start with Pro',
+          href: 'https://console.azion.com/signup?plan=pro&billing-cycle=monthly'
+        }
+      },
+      {
+        id: 'enterprise',
+        name: 'Enterprise',
+        highlighted: false,
+        action: {
+          label: 'Contact us',
+          href: '/en/contact/'
+        }
+      }
+    ],
+    sections: [
+      {
+        eyebrow: 'Managed Infrastructure',
+        title: 'Azion Platform',
+        description: 'Powering modern workloads on global infrastructure.',
+        rows: [
+          {
+            label: 'Global Infrastructure',
+            group: true,
+            values: ['', '', '']
+          },
+          {
+            label: '100+ data centers',
+            values: ['✓', '✓', '✓']
+          },
+          {
+            label: 'Automatic routing with load balancing and failover',
+            values: ['✓', '✓', '✓']
+          },
+          {
+            label: 'Management',
+            group: true,
+            values: ['', '', '']
+          }
+        ]
+      },
+      {
+        eyebrow: 'Build',
+        title: 'Azion Applications',
+        description: 'Build, run, and scale applications globally.',
+        rows: [
+          {
+            label: 'Applications',
+            group: true,
+            values: ['', '', '']
+          },
+          {
+            label: 'Rules Engine',
+            values: ['✓', '✓', '✓']
+          },
+          {
+            label: 'Rules per Application',
+            values: ['10 included', '20 included', 'Custom']
+          },
+          {
+            label: 'Redirects',
+            values: ['✓', '✓', '✓']
+          }
+        ]
+      }
+    ],
+    footerLink: {
+      label: 'See on-demand pricing',
+      href: '/en/documentation/products/pricing/'
+    }
+  }
+}
+
+export const PlanMatrixJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(SITE_SECTION)
 }

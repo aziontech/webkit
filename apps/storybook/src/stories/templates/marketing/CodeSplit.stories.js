@@ -10,6 +10,7 @@ import TextureMaterial from '@aziontech/webkit/texture-material'
 
 import { FUNCTION_SAMPLE_TABS } from '../../_shared/code-samples'
 import { COLUMN_IMPORTS, declareTabs, each, inColumn } from '../../_shared/markup'
+import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 
 const components = {
@@ -231,16 +232,12 @@ ${each(
 
 const meta = {
   title: 'Templates/Marketing/Media/CodeSplit',
-  tags: ['autodocs'],
+  excludeStories: ['SITE_SECTION', 'SITE_SECTION_RECIPES'],
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
     controls: { disable: true },
     docs: {
-      description: {
-        component:
-          'A claim set beside the code that makes it true: copy in one cell, a `CodeBlock` laid on the other, split on one frame. Product pages use it where the argument is configuration or a handler a developer can read (Functions, Cache, Application Accelerator, Workloads). Built from `SectionModule`, a `framed` `MediaSplit` or a `FrameBox`, and `CodeBlock`, with buttons or a recipe list on the copy side. The `CodeBlock` sits in a wrapper at its own radius, so the wrapper casts the shadow the block would clip. The tabs are declared in the script so the code strings stay verbatim.'
-      },
       canvas: { sourceState: 'shown' }
     }
   }
@@ -256,13 +253,30 @@ export const Default = {
   }),
   parameters: {
     docs: {
-      description: {
-        story:
-          'The code split, from the Functions page: a framed `MediaSplit` whose media is a two-tab `CodeBlock`, inset by `media-padded` on the shared small, top-faded pixelate field and run off the frame’s bottom rule so the sample is cut mid-line. It closes on two medium actions, Docs as the secondary button and See GitHub as the outlined one. With two destinations the band sets no `media-href`: it is not a link itself and hovering it lights neither button, so the reader picks one.'
-      },
       source: { code: toSfc(FULL_STACK_IMPORTS, FULL_STACK_TEMPLATE) }
     }
   }
+}
+
+export const SITE_SECTION = {
+  _id: 'code-split',
+  props: {
+    title: 'From hello world to full-stack applications',
+    description:
+      'Run application logic with the resources a full-stack product needs: relational data, low-latency state, object storage, and AI responses through Azion libraries.',
+    codeTabs: FUNCTION_SAMPLE_TABS,
+    copyAriaLabel: 'Copy the code sample',
+    primaryAction: {
+      label: 'Explore Azion Lib',
+      href: 'https://www.azion.com/en/documentation/products/azion-lib/overview/'
+    },
+    secondaryAction: { label: 'See GitHub', href: 'https://github.com/aziontech' }
+  }
+}
+
+export const DefaultJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(SITE_SECTION)
 }
 
 export const Recipes = {
@@ -273,11 +287,24 @@ export const Recipes = {
   }),
   parameters: {
     docs: {
-      description: {
-        story:
-          'From the Workloads page: a horizontal `SectionTitle` opens the module, a three-file `CodeBlock` sits on a faded pixelate `TextureMaterial`, and three recipes run down the end cell, one per file.'
-      },
       source: { code: toSfc(RECIPES_IMPORTS, RECIPES_TEMPLATE) }
     }
   }
+}
+
+export const SITE_SECTION_RECIPES = {
+  _id: 'code-split-recipes',
+  props: {
+    title: 'From a hostname to a full stack, on one platform',
+    description:
+      'Go past hello world: storage, a database, a firewall and a cache policy all bind to the same workload — each one a binding, not another deployment to operate.',
+    codeTabs: WORKLOAD_TABS,
+    copyAriaLabel: 'Copy the workload sample',
+    recipes: RECIPES
+  }
+}
+
+export const RecipesJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(SITE_SECTION_RECIPES)
 }

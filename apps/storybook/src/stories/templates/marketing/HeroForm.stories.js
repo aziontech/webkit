@@ -6,6 +6,7 @@ import FieldTextarea from '@aziontech/webkit/field-textarea'
 import Hero from '@aziontech/webkit/hero'
 import { ref } from 'vue'
 
+import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 
 const components = {
@@ -166,16 +167,12 @@ const CONTACT_TEMPLATE = `<Hero
 
 const meta = {
   title: 'Templates/Marketing/Heroes/HeroForm',
-  tags: ['autodocs'],
+  excludeStories: ['CONTACT_SECTION'],
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
     controls: { disable: true },
     docs: {
-      description: {
-        component:
-          'The opening band of a lead-capture page, where the form IS the page’s purpose: the hero copy on one side and the form on the other, above the fold. The Contact page opens this way. Built from `Hero`, `Hero.Title`, the `Field*` controls and `Button`; the validation, submit and toast wiring the sample pages add is left to the consumer.'
-      },
       canvas: { sourceState: 'shown' }
     }
   }
@@ -198,11 +195,85 @@ export const ContactSplit = {
   }),
   parameters: {
     docs: {
-      description: {
-        story:
-          'The Contact page: a sticky title with the phone line in its description, the form in the second column of the default slot, and the client strip on the band’s floor. The band is unpadded and centred so the two columns sit in the middle of the viewport. `offset` is the sticky site nav’s height: it takes the nav out of the screen height and holds the title that far plus `--spacing-xl` from the top, which is where the form starts, so the headline and the form’s first row sit on one line. The canvas draws an empty bar of that height where the nav would be; without it the title would rest a nav’s height below the form.'
-      },
       source: { code: toSfc(CONTACT_IMPORTS, CONTACT_TEMPLATE) }
     }
   }
+}
+
+export const CONTACT_SECTION = {
+  _id: 'hero-form',
+  props: {
+    highlight: '',
+    title: 'Talk to our specialists',
+    body: 'We are here to help and provide guidance on performance, security and AI-native workloads. Call us at [+1 833-332-9466](tel:+18333329466), use our live chat or send your inquiry on the form.',
+    primaryAction: {
+      label: 'Talk to Support',
+      href: 'https://tickets.azion.com/en/support/login',
+      target: '_blank'
+    },
+    secondaryAction: {
+      label: 'Under cyberattack?',
+      href: 'https://www.azion.com/en/lp/under-attack-mitigation/',
+      target: '_blank'
+    },
+    fields: {
+      firstName: {
+        label: 'First name',
+        placeholder: ''
+      },
+      lastName: {
+        label: 'Last name',
+        placeholder: '',
+        required: true
+      },
+      email: {
+        label: 'Work email',
+        placeholder: 'name@company.com'
+      },
+      role: {
+        label: 'Role',
+        placeholder: 'Select your role',
+        name: 'role',
+        required: true
+      },
+      company: {
+        label: 'Company',
+        placeholder: '',
+        required: true
+      },
+      phone: {
+        label: 'Phone',
+        placeholder: ''
+      },
+      message: {
+        label: 'Message',
+        placeholder: 'How can we help?',
+        required: true
+      }
+    },
+    roleOptions: ['Administrator', 'Advisor', 'Analyst', 'Architect'],
+    submitLabel: 'Send',
+    defaultCountry: 'US',
+    messages: {
+      missing: 'This field is required.',
+      invalidEmail: 'Enter a valid email address.',
+      success: 'We will be in touch.',
+      error: 'We could not send your message. Try again.'
+    },
+    endpoint:
+      'https://api.hsforms.com/submissions/v3/integration/submit/5759082/a22128e2-cd17-4ed2-968a-52aa64800a87',
+    pageName: 'Contact',
+    consentText: '',
+    hiddenFields: {
+      form_action: 'contact_us',
+      voce_gostaria_de_receber_novos_conteudos_por_whatsapp_: 'Não'
+    },
+    carouselLabel: 'Trusted by mission-critical workloads',
+    carouselMarks: ['global-fashion-group', 'herospark', 'itau', 'nzn', 'netshoes', 'caixa']
+  }
+}
+
+export const ContactSplitJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(CONTACT_SECTION)
 }

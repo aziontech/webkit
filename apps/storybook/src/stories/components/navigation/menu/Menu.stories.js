@@ -39,7 +39,7 @@ const HOST_CLASS = 'w-[264px] overflow-hidden'
 
 /** @type {import('@storybook/vue3').Meta<typeof Menu>} */
 const meta = {
-  title: 'Components/Navigation/Menu',
+  title: 'Components/Primitives/Navigation/Menu',
   component: Menu,
   subcomponents: {
     MenuGroup,
@@ -370,7 +370,7 @@ export const Disabled = {
       controls: { disable: true },
       description: {
         story:
-          'A disabled row and a disabled trigger alongside enabled ones. Both carry `aria-disabled`, drop their hover and active ghost layers, and are out of the tab order; a disabled trigger suppresses every control of the row — it neither reveals nor announces — so its children stay collapsed. Its arrow paints no fill either: `IconButton`\'s filled disabled box would make the arrow the brightest thing on a row whose label had dimmed away. A disabled row that would otherwise be a link drops its `href` outright, since an anchor with no destination is not a link.'
+          "A disabled row and a disabled trigger alongside enabled ones. Both carry `aria-disabled`, drop their hover and active ghost layers, and are out of the tab order; a disabled trigger suppresses every control of the row — it neither reveals nor announces — so its children stay collapsed. Its arrow paints no fill either: `IconButton`'s filled disabled box would make the arrow the brightest thing on a row whose label had dimmed away. A disabled row that would otherwise be a link drops its `href` outright, since an anchor with no destination is not a link."
       },
       source: {
         code: toSfc(

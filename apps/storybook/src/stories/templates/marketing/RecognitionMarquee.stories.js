@@ -15,6 +15,7 @@ import SectionModule from '@aziontech/webkit/section-module'
 import SectionTitle from '@aziontech/webkit/section-title'
 
 import { COLUMN_IMPORTS, each, inColumn, indent } from '../../_shared/markup'
+import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 
 const IMPORTS = [
@@ -184,16 +185,12 @@ ${indent(firmMark(recognition.firm), 4)}
 
 const meta = {
   title: 'Templates/Marketing/Social Proof/RecognitionMarquee',
-  tags: ['autodocs'],
+  excludeStories: ['SITE_SECTION'],
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
     controls: { disable: true },
     docs: {
-      description: {
-        component:
-          'The analyst-recognition band: a section title over a marquee of signed quotes, one per report, each signed by the firm’s logo with the report’s name and date. The row runs twice so the loop has no seam; the second copy is hidden from assistive tech, the loop pauses on hover and keyboard focus, and under reduced motion it stops and the row scrolls by hand instead. Home carries it after “Why Azion”. Built from `SectionModule`, `SectionTitle`, `FrameBox` and `Quote`, with the `animate-brand-marquee` utility.'
-      },
       canvas: { sourceState: 'shown' }
     }
   }
@@ -205,11 +202,42 @@ export const Default = {
   render: () => ({ components, setup, template: TEMPLATE }),
   parameters: {
     docs: {
-      description: {
-        story:
-          'The seven recognitions Home runs, at twelve seconds per card (84s per pass). Each firm’s logo is a pair of files, reversed on dark and in colour on light, and the theme shows one of the two; G2 ships one colour file, used on both themes.'
-      },
       source: { code: toSfc(IMPORTS, TEMPLATE) }
     }
   }
+}
+
+export const SITE_SECTION = {
+  _id: 'recognition-marquee',
+  props: {
+    title: 'Recognized as a Market Leader',
+    ariaLabel: 'Analyst recognitions',
+    items: [
+      {
+        text: 'Recognized as a Leader in CDN, Web Security, and DDoS Protection, and a High Performer in Cloud Security, WAF, Bot Detection and Mitigation, SSL & TLS Certificate Tools, and API Security Tools.',
+        reportName: 'G2 Spring 2026 Reports',
+        firmName: 'G2',
+        logo: '/marketing-components/logos/g2-symbol-color.svg'
+      },
+      {
+        text: 'Named a Leader and the only edge platform built specifically for that purpose, whose capabilities meet all key criteria in the report.',
+        reportName: 'GigaOm Radar for Edge Platforms',
+        firmName: 'GigaOm',
+        logo: '/marketing-components/logos/gigaom-extended-reversed.svg',
+        logoLight: '/marketing-components/logos/gigaom-extended-color.svg'
+      },
+      {
+        text: "Awarded in the Edge Serverless Computing category and recognized for consistently exceeding its customers' performance expectations.",
+        reportName: '2023 North American New Product Innovation Award',
+        firmName: 'Frost & Sullivan',
+        logo: '/marketing-components/logos/frost-and-sullivan-extended-reversed.svg',
+        logoLight: '/marketing-components/logos/frost-and-sullivan-extended-color.svg'
+      }
+    ]
+  }
+}
+
+export const DefaultJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(SITE_SECTION)
 }

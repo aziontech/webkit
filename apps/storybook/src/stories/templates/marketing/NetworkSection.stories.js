@@ -14,6 +14,7 @@ import SectionTitle from '@aziontech/webkit/section-title'
 import Topic from '@aziontech/webkit/topic'
 
 import { COLUMN_IMPORTS, each, inColumn, indent } from '../../_shared/markup'
+import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 
 const BAND_IMPORTS = [
@@ -267,16 +268,12 @@ const STATS_TEMPLATE = mapBand(STATS_FLOOR)
 
 const meta = {
   title: 'Templates/Marketing/Network/NetworkSection',
-  tags: ['autodocs'],
+  excludeStories: ['SITE_SECTION'],
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
     controls: { disable: true },
     docs: {
-      description: {
-        component:
-          'The network argument as one framed section: an animated world map behind the claim (“Region: Earth.”), a lead line and four infrastructure claims as pills, then a floor that backs the claim up — client quotes, network benefits or figures, one story each. The title is set at the small size and held to 16em, so it wraps in three lines and leaves the map clear. At every width the title holds the top of the band and the lead line, a muted overline, sits with the claims at the bottom; on tablets and phones the band is held taller than on desktop, so the map shows in the space between them. On phones the map is not a backdrop: it gets its own box between the title and the claims, bled to the frame’s edges and faded out at its top and bottom, so no line of copy ever sits on it. It is zoomed in and shifted right to frame the Atlantic: the Americas on the left, western Europe on the right, and only the edge of Africa. The map is two `NetworkMap`s, one behind the band from `md` up and one in its own box on phones. Built from `SectionModule`, `FrameBox`, `NetworkMap`, `SectionTitle` and, on the floor, `CardGrid` with a `Quote` per client or a `Topic` per benefit, or `BigNumbers` for the figures.'
-      },
       canvas: { sourceState: 'shown' }
     }
   }
@@ -288,23 +285,65 @@ export const ClientQuotes = {
   render: () => ({ components, setup, template: QUOTES_TEMPLATE }),
   parameters: {
     docs: {
-      description: {
-        story:
-          'The Home page and every solution page: four client outcomes as quotes with the figure highlighted, each signed by the client’s logo. Dafiti and Fourbank are drawn as one flat ink that follows the theme; MadeiraMadeira and Renner keep their brand colours.'
-      },
       source: { code: toSfc(QUOTES_IMPORTS, QUOTES_TEMPLATE) }
     }
   }
+}
+
+export const SITE_SECTION = {
+  _id: 'network-section',
+  props: {
+    eyebrow: 'Region: Earth.',
+    title: 'The most reliable infrastructure',
+    lead: 'Built around your users. Distributed around your data.',
+    claims: [
+      '100+ data centers',
+      '100+ Tbps throughput',
+      'High availability',
+      '30 ms median latency'
+    ],
+    outcomes: [
+      {
+        logo: '/marketing-components/logos/dafiti-extended-mono.svg',
+        logoAlt: 'Dafiti',
+        logoTreatment: 'monochrome',
+        text: '86% faster load times, with a 45% cost reduction in data transfer.',
+        highlights: ['86% faster load times', '45% cost reduction']
+      },
+      {
+        logo: '/marketing-components/clients/madeiramadeira.svg',
+        logoAlt: 'MadeiraMadeira',
+        logoTreatment: 'as-is',
+        text: '90% lower cloud costs, and faster product delivery at scale.',
+        highlights: ['90% lower cloud costs']
+      },
+      {
+        logo: '/marketing-components/clients/renner-color.svg',
+        logoAlt: 'Renner',
+        logoTreatment: 'as-is',
+        text: '67% saved on data transfer costs, through massive traffic spikes.',
+        highlights: ['67% saved']
+      },
+      {
+        logo: '/marketing-components/clients/fourbank.svg',
+        logoAlt: 'Fourbank',
+        logoTreatment: 'monochrome',
+        text: 'DDoS mitigated on applications and APIs, behind a programmable security layer.',
+        highlights: ['DDoS mitigated']
+      }
+    ]
+  }
+}
+
+export const ClientQuotesJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(SITE_SECTION)
 }
 
 export const Benefits = {
   render: () => ({ components, template: BENEFITS_TEMPLATE }),
   parameters: {
     docs: {
-      description: {
-        story:
-          'The AI Inference page: three network benefits on the floor, each an icon, a title and one sentence.'
-      },
       source: { code: toSfc(BENEFITS_IMPORTS, BENEFITS_TEMPLATE) }
     }
   }
@@ -314,10 +353,6 @@ export const Stats = {
   render: () => ({ components, template: STATS_TEMPLATE }),
   parameters: {
     docs: {
-      description: {
-        story:
-          'The Our Network page: four figures on the floor, each a big number with its unit and a one-line caption.'
-      },
       source: { code: toSfc(STATS_IMPORTS, STATS_TEMPLATE) }
     }
   }
