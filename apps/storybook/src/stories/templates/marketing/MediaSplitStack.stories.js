@@ -9,6 +9,7 @@ import SectionModule from '@aziontech/webkit/section-module'
 import SectionTitle from '@aziontech/webkit/section-title'
 
 import { COLUMN_IMPORTS, each, inColumn, indent } from '../../_shared/markup'
+import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 
 const components = {
@@ -25,35 +26,35 @@ const components = {
 const SOLUTIONS = [
   {
     art: 'quickStartWithTemplates',
-    title: 'Modern applications',
+    title: 'Build and Run Applications',
     description:
-      'Build static sites, develop serverless applications, or modernize your legacy systems.',
+      'Deploy applications and static sites straight from Git, and run them on a distributed network with no servers to manage.',
     href: '/solutions/web-apps'
   },
   {
     illustration: 'improve-application-performance-and-reliability',
-    title: 'Optimized workloads',
+    title: 'Improve Application Performance and Reliability',
     description:
-      'Accelerate applications, optimize content delivery (CDN), and process images on demand efficiently.',
+      'Cache, route and optimize every request close to your users, so applications stay fast and available under any load.',
     href: '/solutions/performance'
   },
   {
     illustration: 'ai-applications',
-    title: 'AI applications',
+    title: 'Build and Run AI Workloads',
     description:
-      'Build and deploy AI agents and AI-powered applications on a distributed platform that delivers the best value on the market.',
+      'Run inference, vector search and AI agents on distributed infrastructure, close to the data and the users that need them.',
     href: '/solutions/ai'
   },
   {
-    illustration: 'programmable-security',
-    title: 'Protected applications and APIs',
+    illustration: 'automate-threat-mitigation',
+    title: 'Secure Applications and Networks',
     description:
-      'Protect web applications and APIs (WAAP), manage bots, and modernize your security in a programmable and scalable way.',
+      'Stop DDoS attacks, bots and exploits before they reach your origin, with WAF and network rules managed from one console.',
     href: '/solutions/security'
   },
   {
-    illustration: 'content-and-media-delivery',
-    title: 'Media and streaming content',
+    illustration: 'low-latency',
+    title: 'Deliver Media and Streaming Content',
     description:
       'Stream video and deliver large files at low latency to audiences of any size, with media processed at the edge.',
     href: '/solutions/streaming'
@@ -199,16 +200,12 @@ ${each(
 
 const meta = {
   title: 'Templates/Marketing/Media/MediaSplitStack',
-  tags: ['autodocs'],
+  excludeStories: ['SITE_SECTION_SOLUTIONS', 'SITE_SECTION_ALTERNATING'],
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
     controls: { disable: true },
     docs: {
-      description: {
-        component:
-          'The core of a product page: a run of copy-beside-art bands that pin under the site header from `lg` up and pile on each other as the page scrolls. Each band states one claim with its own media and actions, and with `media-href` set the whole band is a link. Every band grounds its media on the same texture: an animated `pixelate` field at the small size, fading out toward the top. Used by Home (inside Why Azion), Application Accelerator, Functions and Our Network. Built from `BandStack` and `MediaSplit`, with `Illustration` scenes and `Button` actions. A band whose media is code is the CodeSplit template.'
-      },
       canvas: { sourceState: 'shown' }
     }
   }
@@ -224,24 +221,70 @@ export const Solutions = {
   }),
   parameters: {
     docs: {
-      description: {
-        story:
-          'The five solution areas the Home page stacks inside Why Azion, each a large, centered band with an outlined "Learn more" button. The first band shows the `quick-start-with-templates` art file as an image; the other four use `Illustration` scenes. Each band titles itself with an `h2`, the level MediaSplit accepts under a page’s `h1`; the Home page passes `1`, which gives it five `h1`s.'
-      },
       source: { code: toSfc(SOLUTIONS_IMPORTS, SOLUTIONS_TEMPLATE) }
     }
   }
+}
+
+export const SITE_SECTION_SOLUTIONS = {
+  _id: 'media-split-stack-solutions',
+  props: {
+    actionLabel: 'Learn more',
+    bands: [
+      {
+        image: '/marketing-components/illustrations/quick-start-with-templates.svg',
+        title: 'Modern Applications',
+        description:
+          'Build static sites, develop serverless applications, or modernize your legacy applications',
+        href: '/en/solutions/web-apps/'
+      },
+      {
+        illustration: 'improve-application-performance-and-reliability',
+        title: 'Optimized workloads',
+        description:
+          'Accelerate applications, optimize content delivery (CDN), and process images on demand efficiently',
+        href: '/en/solutions/performance/'
+      },
+      {
+        illustration: 'ai-applications',
+        title: 'Build AI applications',
+        description:
+          'Build and deploy AI agents and AI-powered applications on a distributed platform that delivers the best value in the market',
+        href: '/en/solutions/ai/'
+      }
+    ]
+  }
+}
+
+export const SolutionsJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(SITE_SECTION_SOLUTIONS)
 }
 
 export const Alternating = {
   render: () => ({ components, template: ALTERNATING_TEMPLATE }),
   parameters: {
     docs: {
-      description: {
-        story:
-          'From the Our Network page: a centered `SectionTitle` set directly in the column, then four bands alternating media start and end, with no actions. The page itself grounds these bands on no texture; the template gives them the stack’s shared pixelate field.'
-      },
       source: { code: toSfc(ALTERNATING_IMPORTS, ALTERNATING_TEMPLATE) }
     }
   }
+}
+
+export const SITE_SECTION_ALTERNATING = {
+  _id: 'media-split-stack-alternating',
+  props: {
+    eyebrow: 'Managed Infrastructure',
+    title: 'Stop managing regions and capacity by hand',
+    bands: NETWORK_BANDS.slice(0, 2).map((band) => ({
+      title: band.title,
+      description: band.description,
+      illustration: band.illustration,
+      illustrationLabel: band.ariaLabel
+    }))
+  }
+}
+
+export const AlternatingJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(SITE_SECTION_ALTERNATING)
 }

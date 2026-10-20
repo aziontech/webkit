@@ -1,6 +1,8 @@
 <script setup>
   import { ref } from 'vue'
 
+  import GroupHeader from './layout/GroupHeader.vue'
+
   defineProps({
     title: { type: String, required: true },
     items: { type: Array, default: () => [] }
@@ -34,14 +36,8 @@
 </script>
 
 <template>
-  <section class="mb-(--spacing-xxl)">
-    <div class="mb-(--spacing-md)">
-      <h2
-        class="m-0 mb-(--spacing-xs) border-b border-(--border-default) pb-(--spacing-xs) text-overline-md! text-(--text-muted)"
-      >
-        {{ title }}
-      </h2>
-    </div>
+  <div class="mb-(--spacing-xl) last:mb-0">
+    <GroupHeader :title="title" />
 
     <div class="flex w-full flex-row flex-wrap gap-(--spacing-sm)">
       <article
@@ -80,5 +76,5 @@
         </div>
       </article>
     </div>
-  </section>
+  </div>
 </template>

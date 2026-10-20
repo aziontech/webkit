@@ -10,6 +10,7 @@ import TextureMaterial from '@aziontech/webkit/texture-material'
 
 import { FUNCTION_SAMPLE_TABS } from '../../_shared/code-samples'
 import { COLUMN_IMPORTS, declareTabs, each, inColumn } from '../../_shared/markup'
+import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 
 const components = {
@@ -23,6 +24,37 @@ const components = {
   SectionTitle,
   TextureMaterial
 }
+
+const CACHE_SETTINGS = `{
+  "cache_settings": {
+    "name": "api-cache",
+    "browser_cache_settings": {
+      "ttl": 60
+    },
+    "cdn_cache_settings": {
+      "ttl": 30
+    },
+    "cache_key": {
+      "query_string": "whitelist",
+      "query_string_fields": ["user_id", "category"],
+      "cookie": "whitelist",
+      "cookie_names": ["session_id", "region"]
+    },
+    "methods": ["GET", "POST", "OPTIONS"],
+    "stale_cache": true
+  }
+}`
+
+const CACHE_TABS = [
+  {
+    label: 'cache-settings.json',
+    value: 'cache-settings',
+    language: 'json',
+    code: CACHE_SETTINGS,
+    fileName: 'cache-settings.json',
+    fileIcon: 'ai ai-json'
+  }
+]
 
 const AZION_CONFIG = `export default {
   build: { preset: 'vue' },
@@ -123,6 +155,16 @@ const FULL_STACK_IMPORTS = [
   declareTabs('codeTabs', FUNCTION_SAMPLE_TABS)
 ]
 
+const ACCELERATOR_IMPORTS = [
+  "import Button from '@aziontech/webkit/button'",
+  "import CodeBlock from '@aziontech/webkit/code-block'",
+  "import FrameBox from '@aziontech/webkit/frame-box'",
+  ...COLUMN_IMPORTS,
+  "import SectionModule from '@aziontech/webkit/section-module'",
+  '',
+  declareTabs('codeTabs', CACHE_TABS)
+]
+
 const RECIPES_IMPORTS = [
   "import CodeBlock from '@aziontech/webkit/code-block'",
   "import FrameBox from '@aziontech/webkit/frame-box'",
@@ -179,6 +221,50 @@ const FULL_STACK_TEMPLATE = inColumn(`<SectionModule :divided="false" :padded="f
   </MediaSplit>
 </SectionModule>`)
 
+const ACCELERATOR_TEMPLATE = inColumn(`<SectionModule :divided="false" :padded="false">
+  <FrameBox flush borders="y" marks="bottom">
+    <div class="grid lg:grid-cols-[4fr_5fr]">
+      <div class="flex flex-col justify-between gap-(--spacing-xxl) p-(--spacing-xl)">
+        <div class="flex flex-col gap-(--spacing-lg)">
+          <h2 class="m-0 text-balance text-heading-md text-(--text-default)">
+            From basic caching to advanced acceleration
+          </h2>
+          <p class="m-0 text-pretty text-body-md text-(--text-muted)">
+            Application Accelerator extends Cache with protocol optimizations and advanced cache
+            rules for dynamic content.
+          </p>
+        </div>
+
+        <div>
+          <Button
+            label="Learn More"
+            kind="text"
+            size="large"
+            href="/docs"
+            icon="pi pi-chevron-right"
+            icon-position="trailing"
+            animated
+          />
+        </div>
+      </div>
+
+      <div
+        class="min-w-0 border-t border-(--border-default) bg-(--bg-surface) p-(--spacing-xl) lg:border-l lg:border-t-0"
+      >
+        <div class="min-w-0 rounded-(--shape-elements) shadow-(--shadow-sm)">
+          <CodeBlock
+            :tabs="codeTabs"
+            default-value="cache-settings"
+            show-line-numbers
+            animate-lines
+            copy-aria-label="Copy the cache settings sample"
+          />
+        </div>
+      </div>
+    </div>
+  </FrameBox>
+</SectionModule>`)
+
 const RECIPES_TEMPLATE = inColumn(`<SectionModule :divided="false" :padded="false">
   <template #header>
     <SectionTitle
@@ -231,16 +317,12 @@ ${each(
 
 const meta = {
   title: 'Templates/Marketing/Media/CodeSplit',
-  tags: ['autodocs'],
+  excludeStories: ['SITE_SECTION', 'SITE_SECTION_ACCELERATOR', 'SITE_SECTION_RECIPES'],
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
     controls: { disable: true },
     docs: {
-      description: {
-        component:
-          'A claim set beside the code that makes it true: copy in one cell, a `CodeBlock` laid on the other, split on one frame. Product pages use it where the argument is configuration or a handler a developer can read (Functions, Cache, Application Accelerator, Workloads). Built from `SectionModule`, a `framed` `MediaSplit` or a `FrameBox`, and `CodeBlock`, with buttons or a recipe list on the copy side. The `CodeBlock` sits in a wrapper at its own radius, so the wrapper casts the shadow the block would clip. The tabs are declared in the script so the code strings stay verbatim.'
-      },
       canvas: { sourceState: 'shown' }
     }
   }
@@ -256,13 +338,63 @@ export const Default = {
   }),
   parameters: {
     docs: {
-      description: {
-        story:
-          'The code split, from the Functions page: a framed `MediaSplit` whose media is a two-tab `CodeBlock`, inset by `media-padded` on the shared small, top-faded pixelate field and run off the frame’s bottom rule so the sample is cut mid-line. It closes on two medium actions, Docs as the secondary button and See GitHub as the outlined one. With two destinations the band sets no `media-href`: it is not a link itself and hovering it lights neither button, so the reader picks one.'
-      },
       source: { code: toSfc(FULL_STACK_IMPORTS, FULL_STACK_TEMPLATE) }
     }
   }
+}
+
+export const SITE_SECTION = {
+  _id: 'code-split',
+  props: {
+    title: 'From hello world to full-stack applications',
+    description:
+      'Run application logic with the resources a full-stack product needs: relational data, low-latency state, object storage, and AI responses through Azion libraries.',
+    codeTabs: FUNCTION_SAMPLE_TABS,
+    copyAriaLabel: 'Copy the code sample',
+    primaryAction: {
+      label: 'Explore Azion Lib',
+      href: 'https://www.azion.com/en/documentation/products/azion-lib/overview/'
+    },
+    secondaryAction: { label: 'See GitHub', href: 'https://github.com/aziontech' }
+  }
+}
+
+export const DefaultJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(SITE_SECTION)
+}
+
+export const Accelerator = {
+  render: () => ({
+    components,
+    setup: () => ({ codeTabs: CACHE_TABS }),
+    template: ACCELERATOR_TEMPLATE
+  }),
+  parameters: {
+    docs: {
+      source: { code: toSfc(ACCELERATOR_IMPORTS, ACCELERATOR_TEMPLATE) }
+    }
+  }
+}
+
+export const SITE_SECTION_ACCELERATOR = {
+  _id: 'code-split-accelerator',
+  props: {
+    title: 'From basic caching to advanced acceleration',
+    description:
+      'Application Accelerator extends Cache with protocol optimizations and advanced cache rules for dynamic content.',
+    codeTabs: CACHE_TABS,
+    copyAriaLabel: 'Copy the code sample',
+    action: {
+      label: 'Learn More',
+      href: 'https://www.azion.com/en/documentation/products/build/applications/application-accelerator/'
+    }
+  }
+}
+
+export const AcceleratorJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(SITE_SECTION_ACCELERATOR)
 }
 
 export const Recipes = {
@@ -273,11 +405,24 @@ export const Recipes = {
   }),
   parameters: {
     docs: {
-      description: {
-        story:
-          'From the Workloads page: a horizontal `SectionTitle` opens the module, a three-file `CodeBlock` sits on a faded pixelate `TextureMaterial`, and three recipes run down the end cell, one per file.'
-      },
       source: { code: toSfc(RECIPES_IMPORTS, RECIPES_TEMPLATE) }
     }
   }
+}
+
+export const SITE_SECTION_RECIPES = {
+  _id: 'code-split-recipes',
+  props: {
+    title: 'From a hostname to a full stack, on one platform',
+    description:
+      'Go past hello world: storage, a database, a firewall and a cache policy all bind to the same workload — each one a binding, not another deployment to operate.',
+    codeTabs: WORKLOAD_TABS,
+    copyAriaLabel: 'Copy the workload sample',
+    recipes: RECIPES
+  }
+}
+
+export const RecipesJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(SITE_SECTION_RECIPES)
 }

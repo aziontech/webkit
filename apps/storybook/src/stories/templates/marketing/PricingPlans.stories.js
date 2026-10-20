@@ -2,11 +2,14 @@ import Button from '@aziontech/webkit/button'
 import CardGrid from '@aziontech/webkit/card-grid'
 import CardPricing from '@aziontech/webkit/card-pricing'
 import FrameBox from '@aziontech/webkit/frame-box'
-import Hero from '@aziontech/webkit/hero'
+import SectionContainer from '@aziontech/webkit/section-container'
+import SectionGap from '@aziontech/webkit/section-gap'
+import SectionModule from '@aziontech/webkit/section-module'
 import SegmentedButton from '@aziontech/webkit/segmented-button'
 import { ref } from 'vue'
 
-import { each } from '../../_shared/markup'
+import { COLUMN_IMPORTS, each, inColumn } from '../../_shared/markup'
+import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 
 const BILLING_PERIODS = [
@@ -35,10 +38,10 @@ const PLANS = [
     },
     featuresTitle: 'All Features Included.',
     features: [
-      { icon: 'ai ai-edge-nodes', label: 'Global infrastructure' },
+      { icon: 'pi pi-globe', label: 'Global infrastructure' },
       { icon: 'ai ai-edge-functions', label: 'Serverless functions' },
       { icon: 'ai ai-edge-storage', label: 'Storage and database' },
-      { icon: 'ai ai-image-processor', label: 'Image optimization' },
+      { icon: 'pi pi-image', label: 'Image optimization' },
       { icon: 'ai ai-edge-firewall', label: 'DDoS mitigation and firewall' }
     ],
     action: { label: 'Start for free', kind: 'outlined', href: '/signup' }
@@ -121,7 +124,8 @@ const IMPORTS = [
   "import CardGrid from '@aziontech/webkit/card-grid'",
   "import CardPricing from '@aziontech/webkit/card-pricing'",
   "import FrameBox from '@aziontech/webkit/frame-box'",
-  "import Hero from '@aziontech/webkit/hero'",
+  ...COLUMN_IMPORTS,
+  "import SectionModule from '@aziontech/webkit/section-module'",
   "import SegmentedButton from '@aziontech/webkit/segmented-button'",
   "import { ref } from 'vue'",
   '',
@@ -136,7 +140,9 @@ const components = {
   CardGrid,
   CardPricing,
   FrameBox,
-  Hero,
+  SectionContainer,
+  SectionGap,
+  SectionModule,
   SegmentedButton
 }
 
@@ -197,8 +203,8 @@ ${each(
 </CardPricing>`
 }
 
-const TEMPLATE = `<Hero id="plans" kind="band" max-width="full" :padded="false">
-  <FrameBox flush class="mx-auto max-w-(--layout-measure-site)" borders="x" marks="bottom">
+const TEMPLATE = inColumn(`<SectionModule id="plans" :divided="false" :padded="false">
+  <FrameBox flush borders="y" marks="bottom">
     <div class="flex justify-center border-b border-(--border-default) p-(--spacing-md)">
       <SegmentedButton v-model="period" :options="billingPeriods" aria-label="Billing period" />
     </div>
@@ -206,7 +212,7 @@ const TEMPLATE = `<Hero id="plans" kind="band" max-width="full" :padded="false">
 ${each(PLANS, card, 3)}
     </CardGrid>
   </FrameBox>
-</Hero>`
+</SectionModule>`)
 
 const priceState = () =>
   Object.fromEntries(
@@ -223,16 +229,12 @@ const priceState = () =>
 
 const meta = {
   title: 'Templates/Marketing/Content/PricingPlans',
-  tags: ['autodocs'],
+  excludeStories: ['SITE_SECTION'],
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
     controls: { disable: true },
     docs: {
-      description: {
-        component:
-          'The plan picker under the Pricing page’s title band: a billing-period toggle over the plans side by side, each with its price, what it includes and one action, and the recommended plan raised on the surface fill with its tag. A `Hero` band that carries the page’s full-bleed rule under the title band and the bottom rule under the cards, with the frame held to the site measure so it lines up with the sections below at every width. Built from `Hero`, `FrameBox`, `SegmentedButton`, `CardGrid` (divider) and `CardPricing`, with `Button` in each card’s actions slot.'
-      },
       canvas: { sourceState: 'shown' }
     }
   }
@@ -252,11 +254,149 @@ export const Plans = {
   }),
   parameters: {
     docs: {
-      description: {
-        story:
-          'Hobby, Pro and Enterprise. The toggle drives `period`; only Pro’s price and terms change with it (25 a month billed monthly, 20 billed annually), so only Pro reads from a per-period object and the other two cards are static. The Enterprise action points at the page’s `#contact` band.'
-      },
       source: { code: toSfc(IMPORTS, TEMPLATE) }
     }
   }
+}
+
+export const SITE_SECTION = {
+  _id: 'pricing-plans',
+  props: {
+    periods: [
+      {
+        label: 'Monthly',
+        value: 'monthly'
+      },
+      {
+        label: 'Annual',
+        value: 'annual'
+      }
+    ],
+    periodsAriaLabel: 'Billing period',
+    plans: [
+      {
+        name: 'Hobby',
+        highlighted: false,
+        prices: [
+          {
+            period: 'monthly',
+            value: 'Free',
+            prefix: '',
+            suffix: '',
+            details: ''
+          },
+          {
+            period: 'annual',
+            value: 'Free',
+            prefix: '',
+            suffix: '',
+            details: ''
+          }
+        ],
+        featuresTitle: 'All features available',
+        features: [
+          {
+            icon: 'pi pi-globe',
+            label: 'Global infrastructure'
+          },
+          {
+            icon: 'ai ai-edge-functions',
+            label: 'Serverless functions'
+          },
+          {
+            icon: 'ai ai-store',
+            label: 'Storage and databases'
+          }
+        ],
+        action: {
+          label: 'Start free',
+          href: 'https://console.azion.com/signup?plan=hobby'
+        }
+      },
+      {
+        name: 'Pro',
+        highlighted: true,
+        prices: [
+          {
+            period: 'monthly',
+            value: '25',
+            prefix: '$',
+            suffix: '/mo',
+            details: 'Billed monthly, cancel anytime'
+          },
+          {
+            period: 'annual',
+            value: '20',
+            prefix: '$',
+            suffix: '/mo',
+            details: 'Billed annually, save 20%'
+          }
+        ],
+        featuresTitle: 'Scale beyond included usage',
+        features: [
+          {
+            icon: 'ai ai-workloads',
+            label: 'Additional workloads'
+          },
+          {
+            icon: 'ai ai-edge-application',
+            label: 'Higher application limits'
+          },
+          {
+            icon: 'ai ai-edge-storage',
+            label: 'More storage capacity'
+          }
+        ],
+        action: {
+          label: 'Start with Pro',
+          href: 'https://console.azion.com/signup?plan=pro&billing-cycle=monthly'
+        },
+        tagLabel: 'Popular'
+      },
+      {
+        name: 'Enterprise',
+        highlighted: false,
+        prices: [
+          {
+            period: 'monthly',
+            value: 'Custom',
+            prefix: '',
+            suffix: '',
+            details: 'Tailored to your usage and payment terms'
+          },
+          {
+            period: 'annual',
+            value: 'Custom',
+            prefix: '',
+            suffix: '',
+            details: 'Tailored to your usage and payment terms'
+          }
+        ],
+        featuresTitle: 'Choose your pricing model',
+        features: [
+          {
+            icon: 'pi pi-wave-pulse',
+            label: 'On-demand pricing'
+          },
+          {
+            icon: 'pi pi-arrow-down',
+            label: 'Lower costs with commitments'
+          },
+          {
+            icon: 'pi pi-objects-column',
+            label: 'Reserved Capacity available'
+          }
+        ],
+        action: {
+          label: 'Contact us',
+          href: '/en/contact/'
+        }
+      }
+    ]
+  }
+}
+
+export const PlansJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(SITE_SECTION)
 }

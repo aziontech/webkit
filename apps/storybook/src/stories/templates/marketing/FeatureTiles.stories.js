@@ -12,6 +12,7 @@ import SectionModule from '@aziontech/webkit/section-module'
 import SectionTitle from '@aziontech/webkit/section-title'
 
 import { COLUMN_IMPORTS, each, inColumn } from '../../_shared/markup'
+import { siteJsonStory } from '../../_shared/site-json'
 import { toSfc } from '../../_shared/story-source'
 
 const ARTWORK_IMPORTS = [
@@ -53,7 +54,7 @@ const setup = () => ({ azionHighlight, branches, personalTokens, usageChart })
 const REASONS = [
   {
     src: 'branches',
-    title: 'Build at AI speed.',
+    title: 'Faster to publish.',
     description:
       'Go from commit to a live URL in minutes. Test on a preview, promote when you are ready, and roll back without a rebuild.'
   },
@@ -61,19 +62,19 @@ const REASONS = [
     src: 'personalTokens',
     title: 'Secure by default.',
     description:
-      'Every workload in its own isolated environment, with WAF, rate limits, and leading compliance practices, with no configuration required.'
+      'Every endpoint carries its own keys, rate limits and instant revocation, managed from a single console.'
   },
   {
     src: 'azionHighlight',
-    title: 'No ops required.',
+    title: 'Simpler to operate.',
     description:
-      'A fully autonomous infrastructure on 100+ data centers worldwide, with zero cold starts and instant scale-to-zero, so infrastructure becomes invisible.'
+      'Deploys, gateways and observability sit on one platform, so there is no second console to reconcile when something breaks.'
   },
   {
     src: 'usageChart',
-    title: 'Faster and more efficient workloads.',
+    title: 'Faster applications.',
     description:
-      "Compute and security are delivered from the location closest to the request, and Azion's runtime is 30x more efficient than containers."
+      'Caching and image processing run at the edge, so every response is served from the location closest to the request.'
   }
 ]
 
@@ -106,7 +107,7 @@ const ARTWORK_TEMPLATE = inColumn(`<SectionModule :divided="false" :padded="fals
     <SectionTitle
       eyebrow="Why Azion"
       title="From commit to observability, on one platform"
-      description="Build, ship, and run an application on the same platform that serves it — one place to deploy from, one place to watch it from."
+      description="Build, ship and run an application on the same platform that serves it — one place to deploy from, one place to watch it from."
     />
   </template>
 
@@ -155,16 +156,12 @@ ${each(
 
 const meta = {
   title: 'Templates/Marketing/Media/FeatureTiles',
-  tags: ['autodocs'],
+  excludeStories: ['SITE_SECTION_ARTWORK', 'SITE_SECTION_ILLUSTRATED'],
   parameters: {
     layout: 'fullscreen',
     backgrounds: { default: 'dark' },
     controls: { disable: true },
     docs: {
-      description: {
-        component:
-          'A row of reasons, each a picture over a short bold title and a sentence, on a hairline frame grid with no padding in the cells so the artwork runs to the rules. Home uses it for “Why Azion” and Pricing for why its pricing works the way it does. Built from `SectionModule`, `FrameBox`, `CardGrid` and `MediaTile`, with `SectionTitle` for the band’s heading and `Illustration` where the picture is a registered illustration.'
-      },
       canvas: { sourceState: 'shown' }
     }
   }
@@ -176,24 +173,76 @@ export const Artwork = {
   render: () => ({ components, setup, template: ARTWORK_TEMPLATE }),
   parameters: {
     docs: {
-      description: {
-        story:
-          'Home’s “Why Azion” band: an eyebrow, a title and a description over four tiles, each picture an SVG file from `@aziontech/webkit/assets` passed to `MediaTile` as `src`. On the page the stacked solution bands follow under a hatched gap; they are a separate template.'
-      },
       source: { code: toSfc(ARTWORK_IMPORTS, ARTWORK_TEMPLATE) }
     }
   }
+}
+
+export const SITE_SECTION_ARTWORK = {
+  _id: 'feature-tiles-artwork',
+  props: {
+    eyebrow: 'Why Azion',
+    title: 'From commit to observability, on one platform',
+    description:
+      'Build, ship and run an application on the same platform that serves it — one place to deploy from, one place to watch it from.',
+    tiles: [
+      {
+        image: '/marketing-components/illustrations/branches.svg',
+        title: 'Faster to publish.',
+        description:
+          'Go from commit to a live URL in minutes. Test on a preview, promote when you are ready, and roll back without a rebuild.'
+      },
+      {
+        image: '/marketing-components/illustrations/personal-tokens.svg',
+        title: 'Secure by default.',
+        description:
+          'Every endpoint carries its own keys, rate limits and instant revocation, managed from a single console.'
+      }
+    ]
+  }
+}
+
+export const ArtworkJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(SITE_SECTION_ARTWORK)
 }
 
 export const Illustrated = {
   render: () => ({ components, template: ILLUSTRATED_TEMPLATE }),
   parameters: {
     docs: {
-      description: {
-        story:
-          'Pricing’s band: three tiles with no heading of their own, each picture a registered `Illustration` in the `media` slot, scaled per tile with `media-scale` and set `fluid` so it fills the tile’s width.'
-      },
       source: { code: toSfc(ILLUSTRATED_IMPORTS, ILLUSTRATED_TEMPLATE) }
     }
   }
+}
+
+export const SITE_SECTION_ILLUSTRATED = {
+  _id: 'feature-tiles-illustrated',
+  props: {
+    tiles: [
+      {
+        illustration: 'no-idle-no-waste',
+        title: 'No idle. No waste',
+        description:
+          'Why pay for infrastructure doing nothing? Azion is built around actual consumption: you pay for what your workloads use, not for idle capacity.'
+      },
+      {
+        illustration: 'stay-in-control',
+        title: 'Stay in control',
+        description:
+          'Scale without losing control of your bill. Track consumption, set spending limits, and keep costs predictable as your applications grow.'
+      },
+      {
+        illustration: 'white-gloves-when-it-matters',
+        title: 'White-glove when it matters',
+        description:
+          'Self-service when you want it. Experts when you need them. Azion specialists and partners help you build, migrate, optimize, and scale with confidence.'
+      }
+    ]
+  }
+}
+
+export const IllustratedJson = {
+  tags: ['!dev'],
+  ...siteJsonStory(SITE_SECTION_ILLUSTRATED)
 }

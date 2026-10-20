@@ -16,7 +16,7 @@ import WorkloadTopologyWidget from '../../../../webkit-sample/src/site/ui/mockup
 import {
   PageContainer,
   PageHeader,
-  SectionHeader
+  PageSection
 } from '../../foundations/components/layout/index.js'
 
 const HOSTS = {
@@ -332,7 +332,7 @@ export const Library = {
   name: 'Library',
   parameters: { options: { showPanel: false } },
   render: () => ({
-    components: { PageContainer, PageHeader, SectionHeader, SegmentedButton },
+    components: { PageContainer, PageHeader, PageSection, SegmentedButton },
     setup() {
       const hovered = ref('')
       const tabs = reactive(
@@ -360,16 +360,7 @@ export const Library = {
           cell that hosts it on the page. Hover the grid fragments to play their beat.
         </PageHeader>
 
-        <section
-          v-for="section in SECTIONS"
-          :key="section.key"
-          class="mb-(--spacing-xxl)"
-        >
-          <SectionHeader
-            :title="section.title"
-            :description="section.description"
-            size="md"
-          />
+        <PageSection v-for="section in SECTIONS" :key="section.key" :title="section.title" :description="section.description">
           <div class="flex flex-wrap items-start gap-(--spacing-lg)">
             <figure
               v-for="entry in section.entries"
@@ -406,7 +397,7 @@ export const Library = {
               </figcaption>
             </figure>
           </div>
-        </section>
+        </PageSection>
       </PageContainer>
     `
   })

@@ -1,0 +1,48 @@
+import { Canvas, Meta, Source } from '@storybook/blocks'
+
+import * as RecognitionMarqueeStories from './RecognitionMarquee.stories'
+
+<Meta title="Templates/Marketing/Social Proof/RecognitionMarquee" />
+
+# RecognitionMarquee
+
+A looping row of analyst recognitions under a section title. Each card is a quote from a report, signed by the firm's logo with the report's name and date. Home shows it after "Why Azion".
+
+The loop pauses on hover and keyboard focus. Under reduced motion it stops, and the row scrolls by hand. Screen readers hear each card once: the copy that closes the loop is hidden from them.
+
+Built from `SectionModule`, `SectionTitle`, `FrameBox` and `Quote`, with the `animate-brand-marquee` utility.
+
+<p
+  style={{
+    margin: 'var(--spacing-lg) 0 0',
+    fontFamily: 'var(--font-code)',
+    fontSize: 'var(--text-label-code-sm-font-size)',
+    color: 'var(--text-muted)',
+    textTransform: 'uppercase',
+    letterSpacing: '0.08em'
+  }}
+>
+  Stories
+</p>
+
+### Default
+
+The seven recognitions Home runs, at twelve seconds per card. Each firm's logo has a reversed file for dark and a color file for light; G2 uses one color file on both.
+
+<Canvas of={RecognitionMarqueeStories.Default} />
+
+##### Use it on the site
+
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `title` is the section title.
+- `items[]` takes the quote `text`, `reportName`, `date`, `firmName` and the firm `logo`.
+- `logoLight` adds a color file for the light theme; without it, `logo` serves both.
+- Each card adds twelve seconds to one pass of the loop.
+- `ariaLabel` names the scrolling region for screen readers.
+
+Example:
+
+<div className="sb-site-json">
+  <Source of={RecognitionMarqueeStories.DefaultJson} dark />
+</div>

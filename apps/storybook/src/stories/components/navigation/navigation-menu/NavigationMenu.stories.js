@@ -1,5 +1,5 @@
-import NavigationMenu from '@aziontech/webkit/navigation-menu'
 import Button from '@aziontech/webkit/button'
+import NavigationMenu from '@aziontech/webkit/navigation-menu'
 
 import { toSfc } from '../../../_shared/story-source'
 
@@ -23,7 +23,7 @@ const subcomponents = {
 
 /** @type {import('@storybook/vue3').Meta<typeof NavigationMenu>} */
 const meta = {
-  title: 'Components/Navigation/NavigationMenu',
+  title: 'Components/Primitives/Navigation/NavigationMenu',
   component: NavigationMenu,
   subcomponents,
   tags: ['autodocs'],

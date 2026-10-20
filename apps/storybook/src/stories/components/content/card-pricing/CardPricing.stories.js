@@ -13,7 +13,7 @@ const defaultPricingDetails = 'Billed annually or $25/mo billed monthly.'
 
 /** @type {import('@storybook/vue3').Meta<typeof CardPricing>} */
 const meta = {
-  title: 'Components/Content/CardPricing',
+  title: 'Components/Primitives/Content/CardPricing',
   component: CardPricing,
   tags: ['autodocs'],
   parameters: {

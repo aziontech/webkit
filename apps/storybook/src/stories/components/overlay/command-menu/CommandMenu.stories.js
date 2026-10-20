@@ -45,7 +45,7 @@ const commandMenuStoryComponents = {
 
 /** @type {import('@storybook/vue3').Meta<typeof CommandMenu>} */
 const meta = {
-  title: 'Components/Overlay/CommandMenu',
+  title: 'Components/Primitives/Overlay/CommandMenu',
   component: CommandMenu,
   subcomponents: {
     CommandMenuInput,

@@ -1,10 +1,7 @@
-import aiGateway from '@aziontech/webkit/assets/ai-gateway.svg'
 import azionHighlight from '@aziontech/webkit/assets/azion-highlight.svg'
-import azionRestApi from '@aziontech/webkit/assets/azion-rest-api.svg'
 import branches from '@aziontech/webkit/assets/branches.svg'
 import combineDataAndVectorSearch from '@aziontech/webkit/assets/combine-data-and-vector-search.svg'
 import ddosProtection from '@aziontech/webkit/assets/ddos-protection.svg'
-import distributedApisTile from '@aziontech/webkit/assets/distributed-apis-tile.svg'
 import personalTokens from '@aziontech/webkit/assets/personal-tokens.svg'
 import quickStartWithTemplates from '@aziontech/webkit/assets/quick-start-with-templates.svg'
 import usageChart from '@aziontech/webkit/assets/usage-chart.svg'
@@ -25,9 +22,6 @@ const ASSETS = [
   'azion-to-fastly',
   'azion-to-vercel',
   'build-applications',
-  'combine-data-and-vector-search',
-  'content-and-media-delivery',
-  'content-and-media-delivery-globe',
   'deploy-secure-mcp-server',
   'distributed-apis',
   'dns-protection',
@@ -183,13 +177,10 @@ export const Labeled = {
 }
 
 const FILES = [
-  ['aiGateway', 'ai-gateway.svg', aiGateway],
   ['azionHighlight', 'azion-highlight.svg', azionHighlight],
-  ['azionRestApi', 'azion-rest-api.svg', azionRestApi],
   ['branches', 'branches.svg', branches],
   ['combineDataAndVectorSearch', 'combine-data-and-vector-search.svg', combineDataAndVectorSearch],
   ['ddosProtection', 'ddos-protection.svg', ddosProtection],
-  ['distributedApisTile', 'distributed-apis-tile.svg', distributedApisTile],
   ['personalTokens', 'personal-tokens.svg', personalTokens],
   ['quickStartWithTemplates', 'quick-start-with-templates.svg', quickStartWithTemplates],
   ['usageChart', 'usage-chart.svg', usageChart]
