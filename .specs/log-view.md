@@ -7,9 +7,9 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3950-34695
   node_id: 3950:34695
-checksum: 7a30da59b3f0a22e063672067c3a84d5ee15060de5ad206a03d558a283a76401
+checksum: 940ad8a90783d998abc1b2c587367a50d90643b549c4e6c41692604ba4a40440
 created: 2026-05-26
-last_updated: 2026-08-04
+last_updated: 2026-10-20
 ---
 
 # Log View — Component Spec
@@ -48,7 +48,7 @@ const warningsOnly = false
 LogView ships flat, individually importable sub-components (each from its own `@aziontech/webkit/log-view-*` entry); every sub-component reads the root's shared state through the injected context, so the consumer wires nothing.
 
 - `log-view-header.vue` — Default 48px toolbar: line count, warning filter, and a search field. Slots: `left`, `right`, `search`.
-- `log-view-content.vue` — Scrollable log body with per-`type` line rendering, search highlighting, a bottom scroll fade, and the copy-to-clipboard control (a `CopyButton` pinned top-right over the log content, shown when `showCopy` is set). When `loading` is set, it replaces the log body with a centered `Spinner` (`@aziontech/webkit/spinner`) and the `loadingLabel` text (`role="status"`). Slot: `empty`.
+- `log-view-content.vue` — Scrollable log body with per-`type` line rendering, search highlighting, `ScrollArea`'s `fade` on the log body (the edges that still have lines beyond them fade out), and the copy-to-clipboard control (a `CopyButton` pinned top-right over the log content, shown when `showCopy` is set). When `loading` is set, it replaces the log body with a centered `Spinner` (`@aziontech/webkit/spinner`) and the `loadingLabel` text (`role="status"`). Slot: `empty`.
 - `log-view-footer.vue` — Optional footer region for actions (download, follow live, pagination). Slot: `default`.
 
 ## Props
@@ -109,7 +109,6 @@ LogView ships flat, individually importable sub-components (each from its own `@
 | Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
 |---|---|---|---|
 | log line hover (LogViewContent) | `transition-colors duration-150 ease-out` | inline (matches catalog) | `motion-reduce:transition-none` |
-| bottom scroll fade (LogViewContent) | `transition-opacity duration-150 ease-out` | inline (matches catalog) | `motion-reduce:transition-none` |
 
 ## Tokens
 
