@@ -34,6 +34,8 @@
     speed?: number
     /** Drops the inset and the shadow and runs the block to the frame's foot; with `fit`, the latest lines stay in its upper three quarters, above a host's fade. */
     flush?: boolean
+    /** Shows the block's copy control. */
+    copyable?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -42,7 +44,8 @@
     texture: true,
     fit: false,
     speed: 1,
-    flush: false
+    flush: false,
+    copyable: true
   })
 
   const LINE_HEIGHT = 20
@@ -201,6 +204,7 @@
         :tabs="[tab]"
         :show-line-numbers="false"
         :border="!flush"
+        :copyable="copyable"
         animate-lines
         copy-aria-label="Copy the terminal session"
       />
