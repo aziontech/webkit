@@ -138,7 +138,7 @@
       v-else
       orientation="both"
       :data-testid="`${testId}__body`"
-      class="h-full min-h-0 bg-(--bg-canvas) sm:overflow-x-hidden"
+      class="h-full min-h-0 bg-(--bg-canvas) sm:data-[orientation=both]:overflow-x-hidden"
       role="log"
       aria-live="polite"
     >

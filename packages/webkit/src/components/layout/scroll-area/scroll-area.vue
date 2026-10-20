@@ -35,26 +35,12 @@
 
   const tabIndex = computed(() => (attrs['tabindex'] as string | number | undefined) ?? 0)
 
-  const overflowClasses: Record<ScrollAreaOrientation, string> = {
-    vertical: 'overflow-y-auto overflow-x-hidden',
-    horizontal: 'overflow-x-auto overflow-y-hidden',
-    both: 'overflow-auto'
-  }
-
   // No overscroll containment here: it stops scroll chaining on EVERY axis, even
   // one the viewport cannot scroll, so a non-overflowing ScrollArea swallowed the
   // wheel and froze the page under the pointer. Chaining is the platform default;
   // an overlay that must lock the page behind it owns that lock itself.
-  const rootClasses = computed(() =>
-    cn(
-      'relative min-h-0 min-w-0',
-      '[scrollbar-width:thin] [scrollbar-color:var(--border-muted)_transparent]',
-      overflowClasses[props.orientation],
-      'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--border-default)',
-      'motion-reduce:scroll-auto',
-      attrs.class
-    )
-  )
+  const ROOT_CLASS =
+    'relative min-h-0 min-w-0 [scrollbar-width:thin] [scrollbar-color:var(--border-muted)_transparent] data-[orientation=vertical]:overflow-y-auto data-[orientation=vertical]:overflow-x-hidden data-[orientation=horizontal]:overflow-x-auto data-[orientation=horizontal]:overflow-y-hidden data-[orientation=both]:overflow-auto focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--border-default) motion-reduce:scroll-auto'
 
   const scrollStep = 40
 
@@ -116,7 +102,7 @@
 <template>
   <div
     ref="viewportRef"
-    :class="rootClasses"
+    :class="cn(ROOT_CLASS, attrs.class as string)"
     :data-orientation="orientation"
     :data-testid="testId"
     :aria-label="ariaLabel || undefined"
