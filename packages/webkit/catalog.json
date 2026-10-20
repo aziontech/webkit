@@ -9834,6 +9834,29 @@
       "category": "layout",
       "structure": "monolithic",
       "status": "implemented",
+      "props": [
+        {
+          "name": "orientation",
+          "type": "'vertical' | 'horizontal' | 'both'",
+          "default": "'vertical'",
+          "required": "false",
+          "doc": "Scroll direction: `vertical` (lists, sidebars), `horizontal` (wide tables), `both` for two-axis overflow."
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "required": "false",
+          "doc": "Accessible name when the region is not labelled by visible text; omit when content provides context."
+        },
+        {
+          "name": "fade",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "Fades the edges that still have content to scroll to, sized by the distance left on each side."
+        }
+      ],
       "slots": [
         {
           "name": "default",
@@ -9841,7 +9864,7 @@
           "notes": "—"
         }
       ],
-      "purpose": "Structural layout primitive for scrolling or regions. Migrated from the existing implementation at `packages/webkit/src/components/webkit/layout/scroll-area/`."
+      "purpose": "Structural layout primitive for scrolling regions: native overflow with themed thin scrollbars and keyboard scrolling. With `fade`, the edges that still have content to scroll to fade out, each sized by the distance left on that side (capped at 64px or a sixth of the viewport), so a list reads as continuing past its frame. A sticky header inside the viewport keeps its full opacity; the top fade starts below it."
     },
     "global-header": {
       "import": "@aziontech/webkit/global-header",

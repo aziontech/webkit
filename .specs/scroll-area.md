@@ -6,19 +6,23 @@ status: implemented
 spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit
-checksum: 9aed985c1d32510446d2bb0b17d15c27ae03b3a856b187aa09df4dd94dd8e500
+checksum: 7380585d5acdc137c586993cf819dfad6fb4cad4a36986b28e50ffdb37b4be62
 created: 2026-05-22
-last_updated: 2026-05-22
+last_updated: 2026-10-20
 ---
 # Scroll Area — Component Spec
 
 ## Purpose
 
-Structural layout primitive for scrolling or regions. Migrated from the existing implementation at `packages/webkit/src/components/webkit/layout/scroll-area/`.
+Structural layout primitive for scrolling regions: native overflow with themed thin scrollbars and keyboard scrolling. With `fade`, the edges that still have content to scroll to fade out, each sized by the distance left on that side (capped at 64px or a sixth of the viewport), so a list reads as continuing past its frame. A sticky header inside the viewport keeps its full opacity; the top fade starts below it.
 
 ## Props
 
-| _none_ | — | — | — | Public API is slots-only. |
+| Prop | Type | Default | Required | JSDoc |
+|---|---|---|---|---|
+| `orientation` | `'vertical' \| 'horizontal' \| 'both'` | `'vertical'` | false | Scroll direction: `vertical` (lists, sidebars), `horizontal` (wide tables), `both` for two-axis overflow. |
+| `ariaLabel` | `string` | `''` | false | Accessible name when the region is not labelled by visible text; omit when content provides context. |
+| `fade` | `boolean` | `false` | false | Fades the edges that still have content to scroll to, sized by the distance left on each side. |
 
 ## Events
 
@@ -33,6 +37,7 @@ Structural layout primitive for scrolling or regions. Migrated from the existing
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
+- `data-fade` is present while `fade` is on and at least one edge has content beyond it; the per-edge fade lengths are exposed as `--scroll-area-fade-top|bottom|left|right` on the root.
 
 ## Motion & Animations
 
@@ -67,6 +72,8 @@ _none_
 ## Stories (Storybook)
 
 - Default
+- Orientations
+- Fade
 
 ## Constraints — DO NOT
 
