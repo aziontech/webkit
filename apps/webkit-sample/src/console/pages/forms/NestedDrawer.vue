@@ -342,16 +342,8 @@
                 kind="primary"
                 size="medium"
                 :loading="submitting"
-                @click="submitParent"
-              />
-              <button
                 type="submit"
-                class="sr-only"
-                tabindex="-1"
-                aria-hidden="true"
-              >
-                Save
-              </button>
+              />
             </PanelFooter>
           </form>
         </DrawerContent>
@@ -496,16 +488,8 @@
                 kind="primary"
                 size="medium"
                 :loading="childSubmitting"
-                @click="submitChild"
-              />
-              <button
                 type="submit"
-                class="sr-only"
-                tabindex="-1"
-                aria-hidden="true"
-              >
-                Save
-              </button>
+              />
             </PanelFooter>
           </form>
         </DrawerContent>

@@ -153,7 +153,7 @@
           :style="fadeStyle"
           class="min-h-0 flex-1 overflow-y-auto scrollbar-gutter-both"
         >
-          <div class="flex flex-col pb-(--layout-section-gap)">
+          <div class="flex min-h-full flex-col pb-(--layout-section-gap)">
             <div
               v-if="heading"
               class="layout-column-form layout-boundary-inline pb-(--spacing-md) pt-(--spacing-lg)"
@@ -200,7 +200,7 @@
 
             <div
               v-else
-              class="layout-column-form layout-boundary-inline flex min-w-0 flex-col pt-(--layout-section-gap)"
+              class="layout-column-form layout-boundary-inline flex min-w-0 flex-1 flex-col pt-(--layout-section-gap)"
             >
               <slot name="terminal" />
             </div>
@@ -241,20 +241,10 @@
               size="medium"
               :disabled="nextDisabled"
               :loading="submitting"
-              @click="emit('next')"
+              type="submit"
             />
           </div>
         </footer>
-
-        <button
-          v-if="nextLabel && !terminal"
-          type="submit"
-          class="sr-only"
-          tabindex="-1"
-          aria-hidden="true"
-        >
-          {{ nextLabel }}
-        </button>
       </form>
       </main>
     </div>

@@ -107,12 +107,6 @@
           novalidate
           @submit.prevent="signUp"
         >
-          <button
-            type="submit"
-            class="sr-only"
-            aria-hidden="true"
-            tabindex="-1"
-          />
           <header class="flex flex-col gap-(--spacing-xxs)">
             <h1 class="text-heading-sm text-(--text-default)">Sign Up for a Free Account</h1>
           </header>
@@ -181,7 +175,7 @@
             class="w-full"
             :loading="submitting"
             :disabled="provider !== ''"
-            @click="signUp"
+            type="submit"
           />
 
           <Divider label="or" />

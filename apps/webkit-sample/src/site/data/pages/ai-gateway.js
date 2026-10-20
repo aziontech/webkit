@@ -220,7 +220,7 @@ export const AI_GATEWAY_PAGE = [
     tabs: ROUTING_TABS,
     tabsAriaLabel: 'Routing policies',
     scene: { component: markRaw(DiagramSet), props: { diagrams: ROUTING_DIAGRAMS } },
-    action: { label: 'Read the docs', href: PRODUCT_DOCS }
+    actions: [{ label: 'Read the docs', href: PRODUCT_DOCS, kind: 'outlined', trailing: true }]
   },
   {
     section: 'UseCases',

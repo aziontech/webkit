@@ -505,26 +505,13 @@
               </div>
             </fieldset>
 
-            <!-- The webkit Button renders a native `type="button"`, so Enter inside a field
-                 would not submit without a real submit control in the form. It is hidden from
-                 the a11y tree and out of the tab order so the reader does not meet the same
-                 action twice; implicit submission does not need it focusable. -->
-            <button
-              type="submit"
-              tabindex="-1"
-              aria-hidden="true"
-              class="sr-only"
-            >
-              {{ CAREERS_JOB_FORM.submit }}
-            </button>
-
             <div class="flex">
               <Button
                 :label="CAREERS_JOB_FORM.submit"
                 kind="primary"
                 size="large"
+                type="submit"
                 :loading="submitting"
-                @click="submit"
               />
             </div>
           </form>

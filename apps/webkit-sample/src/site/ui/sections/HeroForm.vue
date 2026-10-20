@@ -342,20 +342,12 @@
           </fieldset>
 
           <div class="flex justify-start">
-            <button
-              type="submit"
-              class="sr-only"
-              tabindex="-1"
-              aria-hidden="true"
-            >
-              {{ copy.submit }}
-            </button>
             <Button
               :label="copy.submit"
               kind="secondary"
               size="large"
               :loading="submitting"
-              @click="submit"
+              type="submit"
             />
           </div>
         </form>

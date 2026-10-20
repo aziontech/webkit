@@ -1,5 +1,4 @@
 <script setup>
-  import Accordion from '@aziontech/webkit/accordion'
   import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
@@ -21,14 +20,12 @@
   import { useRoute, useRouter } from 'vue-router'
 
   import DomainOverflowPopover from '../../components/list/DomainOverflowPopover.vue'
+  import SummaryBand from '../../components/resource/SummaryBand.vue'
   import AppLayout from '../../components/shell/AppLayout.vue'
-  import {
-    azionDefaultStrategy,
-    bindingPolicyLabel,
-    deploymentPolicyLabel,
-    strategies
-  } from '../../lib/data/deployment-strategies'
+  import DeploymentFooter from '../../components/workload/DeploymentFooter.vue'
+  import { azionDefaultStrategy, strategies } from '../../lib/data/deployment-strategies'
   import { deployPageRecord, resourceMeta, statusMeta } from '../../lib/data/deployments'
+  import { settingsById } from '../../lib/data/releases'
   import { workloadById } from '../../lib/data/workloads'
   import { relativeTime } from '../../lib/format/relative-time'
 
@@ -77,8 +74,6 @@
   const status = computed(() => statusMeta(deploy.value?.status))
 
   const logView = ref('phased')
-
-  const logsOpen = ref(null)
 
   const streamSettled = ref(false)
   const onStreamSettled = () => {
@@ -129,10 +124,7 @@
       azionDefaultStrategy
   )
 
-  const strategyFields = computed(() => [
-    { label: 'Binding Policy', value: bindingPolicyLabel(strategy.value.bindingPolicy) },
-    { label: 'Version Policy', value: deploymentPolicyLabel(strategy.value.deploymentPolicy) }
-  ])
+  const deploymentSetting = computed(() => settingsById(strategy.value.id) ?? strategy.value)
 
   const domains = computed(() => {
     const workload = workloadById(deploy.value?.workload?.id)
@@ -228,7 +220,7 @@
             </template>
           </Message>
 
-          <CardBox class="[&>footer]:min-h-12">
+          <CardBox :padded="false">
             <template #header>
               <p class="text-heading-xs text-(--text-default)">Deployment Details</p>
 
@@ -301,7 +293,9 @@
             </template>
 
             <template #content>
-              <div class="grid grid-cols-1 gap-(--spacing-lg) sm:grid-cols-2 lg:grid-cols-3">
+              <div
+                class="grid grid-cols-1 gap-(--spacing-lg) p-(--spacing-md) sm:grid-cols-2 lg:grid-cols-3"
+              >
                 <div class="flex flex-col gap-(--spacing-xxs)">
                   <span class="text-label-sm text-(--text-muted)">Created</span>
                   <div class="flex min-w-0 items-center gap-(--spacing-xs)">
@@ -368,7 +362,7 @@
                         path: `/workloads/${deploy.workload.id}`,
                         query: { email: userEmail, name: deploy.workload.name }
                       }"
-                      class="group/link inline-flex min-w-0 items-center gap-(--spacing-xxs) text-body-sm text-(--text-default) no-underline"
+                      class="group/link inline-flex min-w-0 items-center gap-(--spacing-xxs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
                     >
                       <span class="truncate underline-offset-2 group-hover/link:underline">
                         {{ deploy.workload.name }}
@@ -389,7 +383,7 @@
                     <component
                       :is="resourceLink ? 'router-link' : 'div'"
                       :to="resourceLink || undefined"
-                      class="group/link inline-flex min-w-0 items-center gap-(--spacing-xxs) text-body-sm text-(--text-default) no-underline"
+                      class="group/link inline-flex min-w-0 items-center gap-(--spacing-xxs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
                     >
                       <span
                         class="truncate underline-offset-2"
@@ -481,7 +475,7 @@
                         :href="`https://${primaryDomain}`"
                         target="_blank"
                         rel="noopener noreferrer"
-                        class="group/link inline-flex min-w-0 items-center gap-(--spacing-xxs) text-body-sm text-(--text-default) no-underline"
+                        class="group/link inline-flex min-w-0 items-center gap-(--spacing-xxs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
                       >
                         <span class="truncate underline-offset-2 group-hover/link:underline">
                           {{ primaryDomain }}
@@ -506,66 +500,17 @@
                   </div>
                 </div>
               </div>
-            </template>
 
-            <template #footer>
-              <Accordion
-                class="@container/band -mx-(--spacing-md) -my-(--spacing-sm) w-[calc(100%+2*var(--spacing-md))] [--accordion-inset:var(--spacing-md)]"
-                type="single"
-                arrow-position="left"
-                collapsible
+              <SummaryBand
+                kind="state"
+                :padded="false"
               >
-                <Accordion.Item value="settings">
-                  <div class="relative">
-                    <Accordion.Trigger>
-                      <span class="flex min-h-12 flex-1 items-center gap-(--spacing-sm)">
-                        <span class="text-label-md text-(--text-default)">Deployment Settings</span>
-                      </span>
-                    </Accordion.Trigger>
-
-                    <div
-                      class="flex flex-wrap items-center gap-x-(--spacing-sm) gap-y-(--spacing-xxs) px-(--spacing-md) pb-(--spacing-md) @lg/band:pointer-events-none @lg/band:absolute @lg/band:inset-y-0 @lg/band:right-0 @lg/band:max-w-[calc(100%-12rem)] @lg/band:justify-end @lg/band:px-0 @lg/band:pr-(--spacing-md) @lg/band:pb-0"
-                    >
-                      <Tooltip
-                        class="pointer-events-auto"
-                        :text="`Open ${strategy.name} in Build & Deployment settings`"
-                      >
-                        <router-link
-                          :to="{
-                            path: '/account/build-deployment',
-                            query: { email: userEmail }
-                          }"
-                          class="group/link inline-flex min-w-0 items-center gap-(--spacing-xxs) text-body-sm text-(--text-default) no-underline"
-                        >
-                          <span class="truncate underline-offset-2 group-hover/link:underline">
-                            {{ strategy.name }}
-                          </span>
-                          <i
-                            class="pi pi-external-link shrink-0 text-body-xs leading-none"
-                            aria-hidden="true"
-                          />
-                        </router-link>
-                      </Tooltip>
-                    </div>
-                  </div>
-                  <Accordion.Content>
-                    <div
-                      class="grid grid-cols-1 gap-(--spacing-lg) px-(--spacing-md) pt-(--spacing-xs) pb-(--spacing-md) sm:grid-cols-2 lg:grid-cols-3"
-                    >
-                      <div
-                        v-for="field in strategyFields"
-                        :key="field.label"
-                        class="flex flex-col gap-(--spacing-xxs)"
-                      >
-                        <span class="text-label-sm text-(--text-muted)">{{ field.label }}</span>
-                        <span class="truncate text-body-sm text-(--text-default)">
-                          {{ field.value }}
-                        </span>
-                      </div>
-                    </div>
-                  </Accordion.Content>
-                </Accordion.Item>
-              </Accordion>
+                <DeploymentFooter
+                  :setting="deploymentSetting"
+                  :workload-id="String(deploy.workload.id)"
+                  :email="userEmail"
+                />
+              </SummaryBand>
             </template>
           </CardBox>
 
@@ -573,80 +518,59 @@
             :padded="false"
             class="w-full"
           >
+            <template #header>
+              <p class="min-w-0 truncate text-heading-xs text-(--text-default)">Deployment Logs</p>
+
+              <div class="flex shrink-0 items-center gap-(--spacing-sm)">
+                <span
+                  v-if="settled && !failed && deploy.duration"
+                  class="text-label-sm text-(--text-muted)"
+                >
+                  {{ deploy.duration }}
+                </span>
+                <StatusIndicator
+                  v-else
+                  :severity="status.severity"
+                  :loading="status.loading"
+                  :label="deploy.status"
+                />
+                <SegmentedButton
+                  v-if="settled"
+                  v-model="logView"
+                  :options="LOG_VIEWS"
+                  size="medium"
+                  aria-label="Log view"
+                />
+              </div>
+            </template>
+
             <template #content>
-              <Accordion
-                v-model:value="logsOpen"
-                class="[--accordion-inset:var(--spacing-md)]"
-                type="single"
-                arrow-position="left"
-                collapsible
-              >
-                <Accordion.Item value="logs">
-                  <div class="relative">
-                    <Accordion.Trigger>
-                      <span class="flex min-h-14 flex-1 items-center gap-(--spacing-sm)">
-                        <span class="text-label-md text-(--text-default)">Deployment Logs</span>
-                        <span
-                          v-if="settled && !failed && deploy.duration"
-                          class="text-label-sm text-(--text-muted)"
-                        >
-                          {{ deploy.duration }}
-                        </span>
-                        <StatusIndicator
-                          v-else
-                          :severity="status.severity"
-                          :loading="status.loading"
-                          :label="deploy.status"
-                        />
-                      </span>
-                    </Accordion.Trigger>
+              <EmptyState
+                v-if="!finished && !running"
+                :bordered="false"
+                class="py-(--spacing-xl)"
+                icon="pi pi-clock"
+                :title="`${deploy.status} — not started`"
+                :description="
+                  deploy.status === 'Draft'
+                    ? 'A draft is prepared and never published, so it has no pipeline to show.'
+                    : 'The steps appear here as soon as the deployment starts running.'
+                "
+              />
 
-                    <div
-                      class="pointer-events-none absolute inset-y-0 right-0 hidden items-center pr-(--spacing-md) sm:flex"
-                    >
-                      <div class="pointer-events-auto flex items-center">
-                        <SegmentedButton
-                          v-if="settled && logsOpen === 'logs'"
-                          v-model="logView"
-                          :options="LOG_VIEWS"
-                          class="shrink-0"
-                          size="medium"
-                          aria-label="Log view"
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  <Accordion.Content>
-                    <EmptyState
-                      v-if="!finished && !running"
-                      :bordered="false"
-                      class="py-(--spacing-xl)"
-                      icon="pi pi-clock"
-                      :title="`${deploy.status} — not started`"
-                      :description="
-                        deploy.status === 'Draft'
-                          ? 'A draft is prepared and never published, so it has no pipeline to show.'
-                          : 'The steps appear here as soon as the deployment starts running.'
-                      "
-                    />
-
-                    <DeploymentLogs
-                      v-else
-                      v-model:view="logView"
-                      :header="false"
-                      :progress-bar="false"
-                      :steps="recorded ? steps : undefined"
-                      :live="!recorded && running"
-                      :fail-at="deploy.failedAt"
-                      :active-at="deploy.activeStep"
-                      :total-label="deploy.duration"
-                      @finished="onStreamSettled"
-                      @failed="onStreamSettled"
-                    />
-                  </Accordion.Content>
-                </Accordion.Item>
-              </Accordion>
+              <DeploymentLogs
+                v-else
+                v-model:view="logView"
+                :header="false"
+                :progress-bar="false"
+                :steps="recorded ? steps : undefined"
+                :live="!recorded && running"
+                :fail-at="deploy.failedAt"
+                :active-at="deploy.activeStep"
+                :total-label="deploy.duration"
+                @finished="onStreamSettled"
+                @failed="onStreamSettled"
+              />
             </template>
           </CardBox>
         </section>
