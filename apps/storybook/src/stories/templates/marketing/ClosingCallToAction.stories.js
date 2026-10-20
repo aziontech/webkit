@@ -19,6 +19,12 @@ const IMPORTS = [
   "import TextureMaterial from '@aziontech/webkit/texture-material'"
 ]
 
+const FRAME_IMPORTS = [
+  "import FrameBox from '@aziontech/webkit/frame-box'",
+  "import SectionContainer from '@aziontech/webkit/section-container'",
+  "import TextureMaterial from '@aziontech/webkit/texture-material'"
+]
+
 const components = {
   Button,
   CallToAction,
@@ -100,6 +106,17 @@ const PANEL_TEMPLATE = closingColumn(`<SectionModule :divided="false" :padded="f
   <TextureMaterial kind="lines" />
 </FrameBox>`)
 
+const FRAME_TEMPLATE = `<SectionContainer max-width="site">
+  <FrameBox
+    borders="none"
+    marks="all"
+    data-hatch="true"
+    class="h-[calc(var(--spacing-xxl)*2)]"
+  >
+    <TextureMaterial kind="lines" />
+  </FrameBox>
+</SectionContainer>`
+
 const meta = {
   title: 'Templates/Marketing/Content/ClosingCallToAction',
   excludeStories: ['SPLIT_SECTION', 'PANEL_SECTION'],
@@ -171,4 +188,13 @@ export const PANEL_SECTION = {
 export const PanelJson = {
   tags: ['!dev'],
   ...siteJsonStory(PANEL_SECTION)
+}
+
+export const Frame = {
+  render: () => ({ components, template: FRAME_TEMPLATE }),
+  parameters: {
+    docs: {
+      source: { code: toSfc(FRAME_IMPORTS, FRAME_TEMPLATE) }
+    }
+  }
 }
