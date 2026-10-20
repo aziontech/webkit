@@ -7,9 +7,9 @@ spec_version: 4
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761
   node_id: 4567:33761
-checksum: 5f5b4b0da3b9f873e5b8bc03421de69abc199566b9ed968b6111c74a5c0705cf
+checksum: b6a14cbabd4ba26cd2a480b706d9fad171cb67d77438599d8bf399b319c31248
 created: 2026-05-28
-last_updated: 2026-09-26
+last_updated: 2026-10-19
 ---
 
 
@@ -30,7 +30,7 @@ Regions render conditionally from tab data — the consumer does not pick a sepa
 
 | `language` | Tokenised as |
 |---|---|
-| `javascript`, `js`, `typescript`, `ts` | Expressions: keywords, strings, function calls, punctuation. |
+| `javascript`, `js`, `typescript`, `ts` | Expressions: keywords, strings, function calls, punctuation. `//` runs to end of line as a `comment`; a `//` inside a quoted string stays part of the `string`. |
 | `bash`, `sh`, `shell`, `zsh`, `console` | **Commands.** A command line has a different shape from an expression, so it is read as one: the **first word is the program** being run (`function`), and so is any program after an operator that starts a new command (`\|`, `&&`, `\|\|`, `;`); every `-f` / `--flag` and every shell language word (`if`, `for`, `export`, …) is a `keyword`; quoted text is a `string`; a `$VAR` / `${VAR}` expansion is a `type` — the one thing on the line that is a value; the operators joining commands are `punctuation`; and sub-commands, paths, URLs and whitespace are `identifier`. A `#` at line start or after whitespace runs to end of line as a `comment`. This adds **no** new syntax token: a CLI snippet gets the same palette a JS snippet does. |
 | `hcl`, `terraform`, `tf` | **Configuration blocks.** The first word of a line that opens a block (`resource`, `data`, a nested `application {`) is a `keyword`; the first word before `=` is the attribute key and takes `function`, the same colour a key gets in a JavaScript config object; a word before `(` is a call (`function`); quoted labels and values are `string`; `true` / `false` / `null` and numbers are `type`; references (`azion_application.storefront.id`) and whitespace are `identifier`; brackets, `=`, `.` and `,` are `punctuation`. `#` and `//` run to end of line as a `comment`. |
 | `graphql`, `gql` | **Operations.** A definition word opening the line (`query`, `mutation`, `fragment`, `type`, …), a `@directive` and a fragment's `on` are `keyword`; the operation name and every field called with arguments (`httpMetrics(`, `sum(`) are `function`; a `$variable`, a capitalised type name (`DateTime`), a number and `true` / `false` / `null` are `type`; quoted text is `string`; plain fields, aliases and argument names are `identifier`; brackets, `:`, `!`, `,` and `...` are `punctuation`. `#` runs to end of line as a `comment`. |
@@ -78,6 +78,7 @@ For multiple languages, add one tab per snippet (each with its own `code`). Use 
 | `defaultValue` | `string` | `undefined` | false | Initial active tab when uncontrolled. |
 | `showLineNumbers` | `boolean` | `true` | false | Shows a fixed-width gutter with zero-padded line numbers before each code line. |
 | `copyAriaLabel` | `string` | `'Copy code'` | false | Accessible name for the copy control (forwarded to CopyButton's aria-label). |
+| `copyable` | `boolean` | `true` | false | Shows the copy control; turn it off for a decorative block nobody copies from. |
 | `animateLines` | `boolean` | `false` | false | Staggered line entrance for website layouts: each line slides from `-8px` with opacity `0 → 1`, `40ms` apart. |
 | `border` | `boolean` | `true` | false | Draw the outer card border around the block. On by default; set `:border="false"` to render the block flush when it sits inside a surface that already frames it. Internal dividers (tab header, filename bar) are unaffected. |
 
@@ -134,7 +135,7 @@ When only one tab is provided and it has no `fileName`, the shell is code conten
 
 Code content scrolls inside `@aziontech/webkit/layout/scroll-area` (`orientation="both"`, capped at a `320 px` max height so shorter snippets fit their content and taller ones scroll). Lines never wrap (`whitespace-pre`); on narrow viewports the scroll region grows horizontally so long lines stay on one row.
 
-**The shell is fluid: it takes the width its container gives it and never grows past it.** Long lines are a scroll, never a wider block — so the root is a size container (`@container`, i.e. inline-size containment) and its code width is invisible to the layout above it. Without that, the block's intrinsic width leaks upward: an `auto`-sized grid track or flex row (a one-column `grid` on mobile, a `md:grid-cols-2` panel below its breakpoint) sizes itself to the widest code line and the block overflows the viewport instead of scrolling — a consumer's `min-w-0` on the wrapper cannot fix it, because `min-width` is a floor on the intrinsic contribution, not a cap. The copy control (a `CopyButton`, `kind="outlined"` `size="small"`) is absolutely positioned on the non-scrolling content shell (`__content`) so it stays pinned top-right while lines scroll. **On a single-line block it centres on that row instead** (`data-single-line` on the anchor): the shell is 44 px, the control 28 px, so the `--spacing-sm` top inset would leave it 4 px below the line's own centre. Every line reserves the control's full footprint on its right (`pr-11` = 28 px control + its 12 px inset), so a long line always scrolls clear of it rather than under it.
+**The shell is fluid: it takes the width its container gives it and never grows past it.** Long lines are a scroll, never a wider block — so the root is a size container (`@container`, i.e. inline-size containment) and its code width is invisible to the layout above it. Without that, the block's intrinsic width leaks upward: an `auto`-sized grid track or flex row (a one-column `grid` on mobile, a `md:grid-cols-2` panel below its breakpoint) sizes itself to the widest code line and the block overflows the viewport instead of scrolling — a consumer's `min-w-0` on the wrapper cannot fix it, because `min-width` is a floor on the intrinsic contribution, not a cap. The copy control (a `CopyButton`, `kind="outlined"` `size="small"`) is absolutely positioned on the non-scrolling content shell (`__content`) so it stays pinned top-right while lines scroll. **On a single-line block it centres on that row instead** (`data-single-line` on the anchor): the shell is 44 px, the control 28 px, so the `--spacing-sm` top inset would leave it 4 px below the line's own centre. Every line reserves the control's full footprint on its right (`pr-11` = 28 px control + its 12 px inset), so a long line always scrolls clear of it rather than under it. With `copyable` off (`data-copyable` absent on the root) the control is not rendered and lines reserve only `--spacing-sm` on their right.
 
 ## Motion & Animations
 
@@ -200,6 +201,7 @@ Code content scrolls inside `@aziontech/webkit/layout/scroll-area` (`orientation
 
 - Default — language switcher: two tabs, `fileName` on each tab, JavaScript sample, copy affordance (Figma: Language Switcher).
 - WithoutLineNumbers — same Default sample with `showLineNumbers={false}`.
+- WithoutCopy — same Default sample with `copyable={false}`; the copy control is not rendered and lines reserve only `--spacing-sm` on their right.
 - WithFileName — single tab with `fileName` and no tab header (Figma: Show filename).
 - WithDiff — single tab with `lineChanges` for added/removed rows (Figma: Diff).
 - WithHighlightedLine — single tab with `highlightedLine={6}` (Figma: Highlighted).

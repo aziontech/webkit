@@ -3738,6 +3738,13 @@
           "doc": "Accessible name for the copy control (forwarded to CopyButton's aria-label)."
         },
         {
+          "name": "copyable",
+          "type": "boolean",
+          "default": "true",
+          "required": "false",
+          "doc": "Shows the copy control; turn it off for a decorative block nobody copies from."
+        },
+        {
           "name": "animateLines",
           "type": "boolean",
           "default": "false",

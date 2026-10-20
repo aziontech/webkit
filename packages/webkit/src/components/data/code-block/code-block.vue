@@ -66,6 +66,8 @@
     showLineNumbers?: boolean
     /** Accessible name for the copy control (forwarded to CopyButton's aria-label). */
     copyAriaLabel?: string
+    /** Shows the copy control; turn it off for a decorative block nobody copies from. */
+    copyable?: boolean
     /** Staggered line entrance for website / marketing layouts (opacity + slide from -8 px). */
     animateLines?: boolean
     /** Draw the outer card border around the block. On by default; set to false to render flush inside a surface that already frames it. */
@@ -78,6 +80,7 @@
     defaultValue: undefined,
     showLineNumbers: true,
     copyAriaLabel: 'Copy code',
+    copyable: true,
     animateLines: false,
     border: true
   })
@@ -565,11 +568,12 @@
   <div
     :class="
       cn(
-        'flex w-full @container flex-col overflow-hidden rounded-(--shape-elements) bg-(--bg-surface) data-[border]:border data-[border]:border-(--border-default)',
+        'group/code-block flex w-full @container flex-col overflow-hidden rounded-(--shape-elements) bg-(--bg-surface) data-[border]:border data-[border]:border-(--border-default)',
         attrs.class as string | undefined
       )
     "
     :data-border="border || null"
+    :data-copyable="copyable || null"
     :data-testid="testId"
   >
     <div
@@ -649,6 +653,7 @@
       @transitionend="onContentTransitionEnd"
     >
       <div
+        v-if="copyable"
         class="absolute right-(--spacing-sm) top-(--spacing-sm) z-2 data-[single-line]:top-1/2 data-[single-line]:-translate-y-1/2"
         :data-single-line="isSingleLine || null"
         :data-testid="`${testId}__copy-anchor`"
@@ -716,7 +721,7 @@
                 {{ formatLineNumber(lineIndex + 1) }}
               </span>
               <code
-                class="text-label-code-sm relative z-1 shrink-0 whitespace-pre pr-11"
+                class="text-label-code-sm relative z-1 shrink-0 whitespace-pre pr-(--spacing-sm) group-data-[copyable]/code-block:pr-11"
                 :data-testid="`${testId}__line-content`"
               >
                 <span
