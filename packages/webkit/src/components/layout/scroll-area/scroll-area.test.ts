@@ -70,6 +70,41 @@ describe('ScrollArea (layout viewport + keyboard scrolling)', () => {
     expect(area(view).getAttribute('tabindex')).toBe('-1')
   })
 
+  it('forwards consumer role and aria attributes to the viewport', () => {
+    const view = render(host({ role: 'log', 'aria-live': 'polite', id: 'build-log' }))
+    const viewport = area(view)
+    expect(viewport.getAttribute('role')).toBe('log')
+    expect(viewport.getAttribute('aria-live')).toBe('polite')
+    expect(viewport.id).toBe('build-log')
+  })
+
+  it('forwards consumer listeners: a scroll handler fires when the viewport scrolls', async () => {
+    const onScroll = vi.fn()
+    const view = render(host({ onScroll }))
+    const viewport = area(view)
+
+    viewport.scrollTop = 60
+    await vi.waitFor(() => expect(onScroll).toHaveBeenCalled())
+  })
+
+  it('keeps its own keyboard handling alongside a consumer keydown listener', async () => {
+    const onKeydown = vi.fn()
+    const view = render(host({ onKeydown }))
+    const viewport = area(view)
+
+    await fireEvent.keyDown(viewport, { key: 'ArrowDown' })
+    expect(onKeydown).toHaveBeenCalledTimes(1)
+    expect(viewport.scrollTop).toBe(40)
+  })
+
+  it('merges a consumer class onto the viewport without losing the component classes', () => {
+    const view = render(host({ class: 'consumer-class' }))
+    const viewport = area(view)
+    expect(viewport.classList.contains('consumer-class')).toBe(true)
+    expect(viewport.classList.contains('scroll-fixture')).toBe(true)
+    expect(viewport.classList.contains('relative')).toBe(true)
+  })
+
   it.each(['vertical', 'horizontal', 'both'] as const)(
     'mirrors orientation=%s onto data-orientation',
     (orientation) => {

@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit
-checksum: 7380585d5acdc137c586993cf819dfad6fb4cad4a36986b28e50ffdb37b4be62
+checksum: 98313759285c0f94d0da1cbfd85c3c96c3e7080bd44bda5803a94d93f02bd70a
 created: 2026-05-22
 last_updated: 2026-10-20
 ---
@@ -64,7 +64,7 @@ _none_
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
 - Keyboard map: `Tab` focuses; `Enter`/`Space` activates; `Escape` closes overlays where applicable.
-- ARIA: root uses appropriate roles (`button`, `dialog`, `status`, etc.) per sub-component.
+- ARIA: the viewport sets only `aria-label` (from the prop) and `tabindex` itself. Every other consumer attribute — `role`, `aria-*`, `id`, listeners — is forwarded to it, so a log body can be `role="log"` with `aria-live`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.
