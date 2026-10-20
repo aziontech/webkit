@@ -357,6 +357,122 @@ describe('FieldPhoneNumber', () => {
     })
   })
 
+  describe('dial-code search', () => {
+    const getSearch = () =>
+      document.body.querySelector(
+        '[data-testid="input-field-phone-number__search"]'
+      ) as HTMLInputElement | null
+
+    it('focuses the search box when the list opens', async () => {
+      const { getByTestId } = render(FieldPhoneNumber, { props: { label: 'Phone' } })
+
+      await fireEvent.click(getByTestId('select-trigger'))
+
+      expect(getSearch()).not.toBeNull()
+      expect(document.activeElement).toBe(getSearch())
+    })
+
+    it('filters by country name ignoring case and accents', async () => {
+      const { getByTestId } = render(FieldPhoneNumber, { props: { label: 'Phone' } })
+
+      await fireEvent.click(getByTestId('select-trigger'))
+      await fireEvent.update(getSearch() as HTMLInputElement, 'MÉX')
+
+      expect(getOptions().map((o) => o.textContent?.trim())).toEqual(['+52 Mexico'])
+    })
+
+    it('filters by dial code with or without the plus sign', async () => {
+      const { getByTestId } = render(FieldPhoneNumber, { props: { label: 'Phone' } })
+
+      await fireEvent.click(getByTestId('select-trigger'))
+      await fireEvent.update(getSearch() as HTMLInputElement, '+55')
+      expect(getOptions().map((o) => o.textContent?.trim())).toEqual(['+55 Brazil'])
+
+      await fireEvent.update(getSearch() as HTMLInputElement, '351')
+      expect(getOptions().map((o) => o.textContent?.trim())).toEqual(['+351 Portugal'])
+    })
+
+    it('shows the empty label when nothing matches', async () => {
+      const { getByTestId } = render(FieldPhoneNumber, {
+        props: { label: 'Phone', searchEmptyLabel: 'Nenhum país' }
+      })
+
+      await fireEvent.click(getByTestId('select-trigger'))
+      await fireEvent.update(getSearch() as HTMLInputElement, 'zzz')
+
+      expect(getOptions()).toHaveLength(0)
+      expect(
+        document.body.querySelector('[data-testid="input-field-phone-number__search-empty"]')
+          ?.textContent
+      ).toContain('Nenhum país')
+    })
+
+    it('picks the first match on Enter and moves focus to the number', async () => {
+      const { getByTestId, getByRole, emitted } = render(FieldPhoneNumber, {
+        props: { label: 'Phone', country: 'US' }
+      })
+
+      await fireEvent.click(getByTestId('select-trigger'))
+      await fireEvent.update(getSearch() as HTMLInputElement, 'bra')
+      await fireEvent.keyDown(getSearch() as HTMLInputElement, { key: 'Enter' })
+
+      expect(emitted()['update:country']).toEqual([['BR']])
+      expect(getContent()).toBeNull()
+      expect(document.activeElement).toBe(getByRole('textbox'))
+    })
+
+    it('moves the highlight with the arrows while focus stays in the search', async () => {
+      const { getByTestId, emitted } = render(FieldPhoneNumber, {
+        props: { label: 'Phone', country: 'BR' }
+      })
+
+      await fireEvent.click(getByTestId('select-trigger'))
+      await fireEvent.keyDown(getSearch() as HTMLInputElement, { key: 'ArrowDown' })
+      await fireEvent.keyDown(getSearch() as HTMLInputElement, { key: 'ArrowDown' })
+
+      expect(document.activeElement).toBe(getSearch())
+      await fireEvent.keyDown(getSearch() as HTMLInputElement, { key: 'Enter' })
+      expect(emitted()['update:country']).toEqual([['GB']])
+    })
+
+    it('opens with the typed letter when typing on the closed trigger', async () => {
+      const { getByTestId } = render(FieldPhoneNumber, { props: { label: 'Phone' } })
+
+      await fireEvent.keyDown(getByTestId('select-trigger'), { key: 'p' })
+
+      expect(getSearch()?.value).toBe('p')
+      expect(getOptions().map((o) => o.textContent?.trim())).toEqual([
+        '+351 Portugal',
+        '+595 Paraguay',
+        '+51 Peru',
+        '+48 Poland'
+      ])
+    })
+
+    it('clears the search when the list closes', async () => {
+      const { getByTestId } = render(FieldPhoneNumber, { props: { label: 'Phone' } })
+
+      await fireEvent.click(getByTestId('select-trigger'))
+      await fireEvent.update(getSearch() as HTMLInputElement, 'chi')
+      await fireEvent.keyDown(getSearch() as HTMLInputElement, { key: 'Escape' })
+      await fireEvent.click(getByTestId('select-trigger'))
+
+      expect(getSearch()?.value).toBe('')
+      expect(getOptions()).toHaveLength(defaultCountries.length)
+    })
+
+    it('does not open or change the country from a letter typed while readonly', async () => {
+      const { getByTestId, emitted } = render(FieldPhoneNumber, {
+        props: { label: 'Phone', country: 'BR', readonly: true }
+      })
+
+      await fireEvent.keyDown(getByTestId('select-trigger'), { key: 'p' })
+
+      expect(getSearch()).toBeNull()
+      expect(emitted()['update:country']).toBeUndefined()
+    })
+  })
+
   describe('suppression (disabled / readonly)', () => {
     it('does not emit update:modelValue when disabled and the user tries to type', async () => {
       const { getByRole, emitted } = render(FieldPhoneNumber, {

@@ -6939,6 +6939,27 @@
           "default": "''",
           "required": "false",
           "doc": "id for the trigger; consumed by `Label` via `for` and by `aria-describedby` wiring. When empty, the component auto-generates an id via `useId()`."
+        },
+        {
+          "name": "searchable",
+          "type": "boolean",
+          "default": "false",
+          "required": "false",
+          "doc": "Adds a search box that filters the options as you type; applies to the `options` prop, not the default slot."
+        },
+        {
+          "name": "searchPlaceholder",
+          "type": "string",
+          "default": "'Search'",
+          "required": "false",
+          "doc": "Placeholder of the search box when `searchable`."
+        },
+        {
+          "name": "searchEmptyLabel",
+          "type": "string",
+          "default": "'No results found'",
+          "required": "false",
+          "doc": "Shown in the list when `searchable` and no option matches."
         }
       ],
       "slots": [
@@ -7338,6 +7359,20 @@
           "default": "''",
           "required": "false",
           "doc": "HTML `name` for the internal `<input>` (form + vee-validate integration)."
+        },
+        {
+          "name": "searchPlaceholder",
+          "type": "string",
+          "default": "'Search country'",
+          "required": "false",
+          "doc": "Placeholder of the search box that filters the dial-code list."
+        },
+        {
+          "name": "searchEmptyLabel",
+          "type": "string",
+          "default": "'No country found'",
+          "required": "false",
+          "doc": "Shown in the dial-code list when no country matches the search."
         }
       ],
       "events": [
